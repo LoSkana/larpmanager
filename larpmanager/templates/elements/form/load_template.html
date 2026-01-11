@@ -1,0 +1,7 @@
+{% if form.load_templates %}
+    {% for item in form.load_templates %}
+        {% with template_name=item|stringformat:"s"|add:".html" %}
+            {% include "elements/info/"|add:template_name %}
+        {% endwith %}
+    {% endfor %}
+{% endif %}

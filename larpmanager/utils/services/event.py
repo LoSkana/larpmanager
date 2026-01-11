@@ -220,6 +220,9 @@ def create_default_event_setup(event: Any) -> None:
         event: Event instance that was saved
 
     """
+    if event.deleted:
+        return
+
     if event.template:
         return
 

@@ -46,12 +46,9 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     login_orga(page, live_server)
     go_to(page, live_server, "test/manage")
 
-    # select in quick
-    page.locator("#id_character").check()
-    submit_confirm(page)
-
     # activate features
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
+    page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Plots").check()
     page.get_by_role("checkbox", name="Factions").check()
     page.get_by_role("checkbox", name="Experience points").check()

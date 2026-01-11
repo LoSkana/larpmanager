@@ -1,15 +1,15 @@
 {% load i18n static %}
-{% trans "Your first event has been created! This page is the dashboard, we'll now show each part" as intro %}
-{% trans "This is the sidebar containing all the functions (it remains visible on every management page)" as sidebar %}
-{% trans "Create and manage events here" as exe_events %}
-{% trans "Here you can select the workspace to use: your organization, and your events once created" as select_workspace %}
-{% trans "Here you can switch between administration pages and user-facing pages" as select_side %}
-{% trans "Show or hide the sidebar containing all the functions" as sidebar_open %}
-{% trans "If you need help, type your request here in English using single keywords" as tutorial_query %}
-{% trans "Here is a list of critical problems to fix" as priorities %}
-{% trans "Here is a to-do list of important actions to complete" as actions %}
-{% trans "And here is a to-do list of suggestions to help you set everything up properly" as suggestions %}
-{% trans "Click the tutorial to open it and follow the step-by-step instructions" as feature_tutorial %}
+{% trans "This is the management dashboard, the interface will now be explained section by section." as intro %}
+{% trans "This is the sidebar, it contains all management functions and remains visible across all admin pages." as sidebar %}
+{% trans "Create, access, and manage your events from here." as exe_events %}
+{% trans "Select the active workspace here: your organization or one of the events." as select_workspace %}
+{% trans "Switch here between administrative views and user-facing pages." as select_side %}
+{% trans "Toggle the visibility of the sidebar." as sidebar_open %}
+{% trans "Search here for settings, features, and configuration options." as wwyltd %}
+{% trans "This section lists critical issues that require immediate attention." as priorities %}
+{% trans "This is the task list of required actions to complete the event setup." as actions %}
+{% trans "This list contains recommended actions to improve and finalize the configuration." as suggestions %}
+{% trans "Open the tutorial to follow guided, step-by-step instructions for this feature." as feature_tutorial %}
 {% trans "Write to us if you need help in setting things up!" as outro %}
 <script src="{% static 'node_modules/driver.js/dist/driver.js.iife.js' %}"
         defer></script>
@@ -90,12 +90,12 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
 
-        if ($('#tutorial_query').is(':visible')) {
+        if ($('#id_wwyltd').is(':visible')) {
           steps.push({
-            element: '#tutorial_query',
+            element: '#id_wwyltd',
             popover: {
               title: 'What would you like to do?',
-              description: '{{ tutorial_query | escapejs }}',
+              description: '{{ wwyltd | escapejs }}',
               side: 'bottom',
               align: 'start'
             }

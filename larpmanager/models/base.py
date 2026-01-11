@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import contextlib
 import os
 import secrets
 import sys
@@ -287,7 +288,11 @@ class PaymentMethod(UuidMixin, BaseModel):
 
         """
         # noinspection PyUnresolvedReferences
-        return {"slug": self.slug, "name": self.name, **({"profile": self.profile_thumb.url} if self.profile else {})}
+        result = {"slug": self.slug, "name": self.name}
+        if self.profile:
+            with contextlib.suppress(FileNotFoundError):
+                result["profile"] = self.profile_thumb.url
+        return result
 
 
 class PublisherApiKey(BaseModel):

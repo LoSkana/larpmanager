@@ -101,27 +101,23 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     # create event
     go_to(page, live_server, "/manage/events/")
     page.get_by_role("link", name="New event").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Test Access")
-    submit_confirm(page)
+    page.locator("#id_form1-name").click()
+    page.locator("#id_form1-name").fill("Test Access")
 
-    # submit for quick
-    submit_confirm(page)
-
-    page.locator("#id_development").select_option("1")
-    page.locator("#id_start").fill("2055-06-11")
+    page.locator("#id_form2-development").select_option("1")
+    page.locator("#id_form2-start").fill("2055-06-11")
     just_wait(page)
-    page.locator("#id_start").click()
-    page.locator("#id_end").fill("2055-06-13")
+    page.locator("#id_form2-start").click()
+    page.locator("#id_form2-end").fill("2055-06-13")
     just_wait(page)
-    page.locator("#id_end").click()
+    page.locator("#id_form2-end").click()
     submit_confirm(page)
 
     # Verify we're on the new event
     go_to(page, live_server, "/testaccess/manage/")
 
     # Enable Characters feature
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     check_feature(page, "Characters")
     submit_confirm(page)
 
@@ -140,7 +136,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     # Test 2: Enable gallery_hide_login and verify non-authenticated users cannot access
     login_orga(page, live_server)
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").check()
     submit_confirm(page)
@@ -162,7 +158,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     logout(page)
     login_orga(page, live_server)
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").uncheck()
     page.locator("#id_gallery_hide_signup").check()
@@ -210,7 +206,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     logout(page)
     login_orga(page, live_server)
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").check()
     page.locator("#id_gallery_hide_signup").check()
@@ -244,7 +240,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Verify both configs are still enabled
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Gallery ").click()
     expect(page.locator("#id_gallery_hide_login")).to_be_checked()
     expect(page.locator("#id_gallery_hide_signup")).to_be_checked()
@@ -261,7 +257,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Cleanup: Disable both configs
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").uncheck()
     page.locator("#id_gallery_hide_signup").uncheck()
@@ -273,15 +269,12 @@ def reset_caches(live_server, page):
 
     # Test event-level reset
     go_to(page, live_server, "/test/manage/")
-    # confirm quick config
-    submit_confirm(page)
 
     page.get_by_role("link", name="Reset Cache").click()
     expect_normalized(page, page.locator("#banner"), "Dashboard")
 
     # Test association-level cache reset
     go_to(page, live_server, "/manage/")
-    # confirm quick config
-    submit_confirm(page)
+
     page.get_by_role("link", name="Reset Cache").click()
     expect_normalized(page, page.locator("#banner"), "Dashboard")

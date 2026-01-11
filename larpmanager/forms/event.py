@@ -1270,7 +1270,7 @@ class OrgaRunForm(ConfigForm):
 
         dl = []
 
-        if not self.instance.pk or not self.instance.event:
+        if not self.params.get("is_creation", False) and (not self.instance.pk or not self.instance.event):
             event_field = forms.ChoiceField(
                 required=True,
                 choices=[
@@ -1286,6 +1286,7 @@ class OrgaRunForm(ConfigForm):
             self.page_info = _("Manage new session for an existing event")
         else:
             self.page_info = _("Manage date settings for this event")
+            self.delete_field("event")
 
         # do not show cancelled or done options for development if date are not set
         if not self.instance.pk or not self.instance.start or not self.instance.end:
@@ -1555,7 +1556,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
     page_title = _("Quick Setup")
 
-    page_info = _("Manage quick setup of the most important settings for your new event")
+    page_info = _("You are choosing the most common features to activate for your event")
 
     class Meta:
         model = Event

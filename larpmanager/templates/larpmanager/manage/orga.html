@@ -5,6 +5,7 @@
 {% endblock title %}
 {% block content %}
     <div id="manage">
+        {% include "larpmanager/manage/sticky_messages.html" %}
         <p>
             <a href="#" id="intro_driver">{% trans "Launch guided interface tour" %}</a>
         </p>
@@ -15,9 +16,6 @@
         </form>
         <hr />
         {% with list=priorities typ="priorities" %}
-            {% include "larpmanager/manage/helpers.html" %}
-        {% endwith %}
-        {% with list=actions typ="actions" %}
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
         <h2>
@@ -98,6 +96,9 @@
                 </tbody>
             </table>
         {% endif %}
+        {% with list=actions typ="actions" %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
         {% with list=suggestions typ="suggestions" %}
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}

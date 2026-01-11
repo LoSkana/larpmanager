@@ -910,7 +910,7 @@ class ExeQuickSetupForm(QuickSetupForm):
 
     page_title = _("Quick Setup")
 
-    page_info = _("Manage quick setup of the most important settings for your new organization")
+    page_info = _("You are choosing the most common features to activate for your organization")
 
     class Meta:
         model = Association

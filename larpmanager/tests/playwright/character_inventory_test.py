@@ -51,7 +51,7 @@ def test_character_inventory(pw_page: Any) -> None:
 def setup(live_server: Any, page: Any) -> None:
     # activate features
     go_to(page, live_server, "/test/manage")
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     # Event
     page.get_by_role("checkbox", name="Player editor").check()
     page.get_by_role("checkbox", name="Character inventory").check()

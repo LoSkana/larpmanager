@@ -1,0 +1,47 @@
+{% load i18n %}
+{% if sticky_messages %}
+    <div class="sticky-messages">
+        {% for message in sticky_messages %}
+            <div class="alert alert-info alert-dismissible fade show sticky-message"
+                 role="alert"
+                 data-message-id="{{ message.id }}">
+                <span class="close">
+                    <a href="#" onclick="dismissStickyMessage('{{ message.id }}', this);">
+                        <i class="fa fa-window-close" aria-hidden="true"></i>
+                    </a>
+                </span>
+                {{ message.text | safe }}
+            </div>
+        {% endfor %}
+    </div>
+    <script>
+    function dismissStickyMessage(messageId, buttonElement) {
+        const messageElement = buttonElement.closest('.sticky-message');
+
+        // Send AJAX request to dismiss the message
+        fetch("{% url 'dismiss_sticky_message' '00000000-0000-0000-0000-000000000000' %}".replace('00000000-0000-0000-0000-000000000000', messageId), {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                // Fade out and remove the message from the DOM
+                if (messageElement) {
+                    messageElement.classList.remove('show');
+                    setTimeout(() => {
+                        messageElement.remove();
+                    }, 150);
+                }
+            } else {
+                console.error('Error dismissing message:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error dismissing sticky message:', error);
+        });
+    }
+    </script>
+{% endif %}
