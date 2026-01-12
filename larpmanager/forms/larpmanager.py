@@ -17,22 +17,26 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any, ClassVar
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import Textarea
-from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
 
-from larpmanager.forms.base import MyForm
+from larpmanager.forms.base import BaseForm, BaseModelForm
 from larpmanager.models.larpmanager import LarpManagerTicket
-from larpmanager.utils.common import get_recaptcha_secrets
+from larpmanager.utils.core.common import get_recaptcha_secrets
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
 
 
-def _get_captcha(form: forms.Form, request: HttpRequest) -> None:
+def _get_captcha(form: forms.Form, request: HttpRequest | None) -> None:
     """Add reCAPTCHA field to form if secrets are configured."""
     # Get reCAPTCHA public and private keys from settings
     recaptcha_public_key, recaptcha_private_key = get_recaptcha_secrets(request)
@@ -48,7 +52,7 @@ def _get_captcha(form: forms.Form, request: HttpRequest) -> None:
     )
 
 
-class LarpManagerCheck(forms.Form):
+class LarpManagerCheck(BaseForm):
     """Represents LarpManagerCheck model."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -90,7 +94,7 @@ class LarpManagerContact(LarpManagerCheck):
         return verification
 
 
-class LarpManagerTicketForm(MyForm):
+class LarpManagerTicketForm(BaseModelForm):
     """Form for LarpManagerTicket."""
 
     class Meta:
@@ -108,4 +112,4 @@ class LarpManagerTicketForm(MyForm):
 
         # Remove screenshot field if reason is provided
         if self.params.get("reason"):
-            del self.fields["screenshot"]
+            self.delete_field("screenshot")

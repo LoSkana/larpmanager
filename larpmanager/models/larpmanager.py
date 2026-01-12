@@ -27,7 +27,7 @@ from imagekit.processors import ResizeToFill, ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import AlphanumericValidator, BaseModel
+from larpmanager.models.base import AlphanumericValidator, BaseModel, UuidMixin
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, show_thumb
 
@@ -94,24 +94,14 @@ class LarpManagerFaq(BaseModel):
     )
 
 
-class LarpManagerShowcase(BaseModel):
-    """Model for displaying showcase items with photos.
-
-    Represents featured content with images, text,
-    and metadata for promotional displays.
-    """
-
-    number = models.IntegerField(blank=True, null=True)
-
-    title = models.CharField(max_length=1000)
-
-    text = HTMLField(blank=True, null=True)
+class LarpManagerHighlight(BaseModel):
+    """Model for storing highlight photos used in showcases."""
 
     info = models.CharField(max_length=1000)
 
     photo = models.ImageField(
         max_length=500,
-        upload_to=UploadToPathAndRename("showcase/"),
+        upload_to=UploadToPathAndRename("highlight/"),
         verbose_name=_("Photo"),
     )
 
@@ -123,43 +113,14 @@ class LarpManagerShowcase(BaseModel):
     )
 
     def show_reduced(self) -> Any:
-        """Generate HTML for displaying reduced-size image.
-
-        Returns:
-            str: HTML string for reduced image display or empty string if no image
-
-        """
+        """Generate HTML for displaying reduced-size image."""
         if self.reduced:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.reduced.url)
         return ""
 
-    def text_red(self) -> Any:
-        """Get truncated version of showcase text.
-
-        Returns:
-            str: First 100 characters of the showcase text
-
-        """
-        return self.text[:100]
-
     def as_dict(self, *, many_to_many: bool = True) -> dict:
-        """Convert model instance to dictionary with image URL.
-
-        Converts the model instance to a dictionary representation, including
-        many-to-many relationships if specified. Additionally includes a reduced
-        image URL if the instance has a reduced image available.
-
-        Args:
-            many_to_many: Whether to include many-to-many relationships in the
-                         resulting dictionary. Defaults to True.
-
-        Returns:
-            Dictionary representation of the model instance with image URLs
-            included if available.
-
-        """
-        # Get base dictionary representation from parent class
+        """Convert model instance to dictionary with image URL."""
         result_dict = super().as_dict(many_to_many=many_to_many)
 
         # Add reduced image URL if available
@@ -168,6 +129,28 @@ class LarpManagerShowcase(BaseModel):
             result_dict["reduced_url"] = self.reduced.url
 
         return result_dict
+
+
+class LarpManagerShowcase(BaseModel):
+    """Model for displaying showcase items with photos."""
+
+    number = models.IntegerField(blank=True, null=True)
+
+    title = models.CharField(max_length=1000)
+
+    text = HTMLField(blank=True, null=True)
+
+    blog = models.ForeignKey(
+        "LarpManagerBlog",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="showcases",
+    )
+
+    def text_red(self) -> Any:
+        """Get truncated version of showcase text."""
+        return self.text[:100]
 
 
 class LarpManagerGuide(BaseModel):
@@ -182,6 +165,8 @@ class LarpManagerGuide(BaseModel):
     title = models.CharField(max_length=1000)
 
     description = models.CharField(max_length=1000, null=True)
+
+    keywords = models.CharField(max_length=1000, null=True)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True)
 
@@ -224,12 +209,29 @@ class LarpManagerGuide(BaseModel):
         return ""
 
     def text_red(self) -> Any:
-        """Get truncated version of text content.
+        """Get truncated version of text content."""
+        return self.text[:100]
 
-        Returns:
-            str: First 100 characters of the guide text
 
-        """
+class LarpManagerBlog(BaseModel):
+    """Model for managing blog posts with published status."""
+
+    number = models.IntegerField(blank=True, null=True)
+
+    title = models.CharField(max_length=1000)
+
+    description = models.CharField(max_length=1000, null=True)
+
+    keywords = models.CharField(max_length=1000, null=True)
+
+    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True)
+
+    text = HTMLField(blank=True, null=True)
+
+    published = models.BooleanField(default=False)
+
+    def text_red(self) -> Any:
+        """Get truncated version of showcase text."""
         return self.text[:100]
 
 
@@ -254,6 +256,10 @@ class LarpManagerProfiler(BaseModel):
     view_func_name = models.CharField(max_length=100, verbose_name="View function")
 
     duration = models.FloatField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        """Return string representation of the profiler entry."""
+        return f"{self.view_func_name} ({self.domain})"
 
     class Meta:
         indexes: ClassVar[list] = [models.Index(fields=["domain", "view_func_name"])]
@@ -282,7 +288,23 @@ class LarpManagerDiscover(BaseModel):
     )
 
 
-class LarpManagerTicket(BaseModel):
+class TicketStatus(models.TextChoices):
+    """Status choices for LarpManagerTicket."""
+
+    OPEN = "open", _("Open")
+    WORKING = "working", _("Working")
+    DONE = "done", _("Done")
+
+
+class TicketPriority(models.TextChoices):
+    """Priority choices for LarpManagerTicket."""
+
+    LOW = "low", _("Low")
+    MEDIUM = "medium", _("Medium")
+    HIGH = "high", _("High")
+
+
+class LarpManagerTicket(UuidMixin, BaseModel):
     """Model for managing support tickets and requests.
 
     Handles user support requests with contact information,
@@ -318,9 +340,19 @@ class LarpManagerTicket(BaseModel):
         options={"quality": 80},
     )
 
-    status = models.BooleanField(default=False)
+    status = models.CharField(
+        max_length=20,
+        choices=TicketStatus.choices,
+        default=TicketStatus.OPEN,
+        verbose_name=_("Status"),
+    )
 
-    priority = models.CharField(max_length=100, verbose_name=_("Priority"), default="")
+    priority = models.CharField(
+        max_length=20,
+        choices=TicketPriority.choices,
+        default=TicketPriority.LOW,
+        verbose_name=_("Priority"),
+    )
 
     analysis = models.CharField(max_length=10000, verbose_name=_("Analysis"), default="")
 
@@ -335,3 +367,7 @@ class LarpManagerTicket(BaseModel):
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.screenshot_reduced.url)
         return ""
+
+    def __str__(self) -> str:
+        """Return string representation of the ticket."""
+        return f"Ticket #{self.id}: {self.reason or 'No reason'}"

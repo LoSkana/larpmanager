@@ -48,9 +48,10 @@ from larpmanager.models.accounting import (
     PaymentStatus,
 )
 from larpmanager.templatetags.show_tags import format_decimal
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.edit import backend_get, orga_edit
-from larpmanager.utils.paginate import orga_paginate
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import get_object_uuid
+from larpmanager.utils.core.paginate import orga_paginate
+from larpmanager.utils.services.edit import backend_get, orga_edit
 
 
 @login_required
@@ -66,9 +67,9 @@ def orga_discounts(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_discounts_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_discounts_edit(request: HttpRequest, event_slug: str, discount_uuid: str) -> HttpResponse:
     """Edit discount for event."""
-    return orga_edit(request, event_slug, "orga_discounts", OrgaDiscountForm, num)
+    return orga_edit(request, event_slug, "orga_discounts", OrgaDiscountForm, discount_uuid)
 
 
 @login_required
@@ -160,12 +161,12 @@ def orga_invoices(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Build optimized query with select_related to prevent N+1 queries
     que = (
-        PaymentInvoice.objects.filter(reg__run=context["run"], status=PaymentStatus.SUBMITTED)
+        PaymentInvoice.objects.filter(registration__run=context["run"], status=PaymentStatus.SUBMITTED)
         .select_related(
             "member",  # For {{ el.member }} in template
             "method",  # For {{ el.method }} in template
-            "reg",  # For confirmation URL generation
-            "reg__run",  # For run.get_slug() in confirmation URL
+            "registration",  # For confirmation URL generation
+            "registration__run",  # For run.get_slug() in confirmation URL
         )
         .order_by("-created")  # Show newest invoices first
     )
@@ -178,7 +179,7 @@ def orga_invoices(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_invoices_confirm(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: str) -> HttpResponse:
     """Confirm a payment invoice for an organization event.
 
     This function allows organizers to confirm payment invoices that are in
@@ -188,7 +189,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, num: int) -> Ht
     Args:
         request: The HTTP request object containing user and session data
         event_slug: Event identifier string for URL routing
-        num: The invoice number/ID to confirm
+        invoice_uuid: The uuid of invoice to confirm
 
     Returns:
         HttpResponse: Redirect to the invoices list page with success/warning message
@@ -202,10 +203,10 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, num: int) -> Ht
     context = check_event_context(request, event_slug, "orga_invoices")
 
     # Retrieve the payment invoice by number
-    backend_get(context, PaymentInvoice, num)
+    backend_get(context, PaymentInvoice, invoice_uuid)
 
     # Verify invoice belongs to the current event run
-    if context["el"].reg.run != context["run"]:
+    if context["el"].registration.run != context["run"]:
         msg = "i'm sorry, what?"
         raise Http404(msg)
 
@@ -239,7 +240,7 @@ def orga_accounting(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_tokens(request: HttpRequest, event_slug: str) -> dict:
+def orga_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display and manage accounting tokens for an organization's events.
 
     This view handles the display of accounting tokens (credits/debits) for events
@@ -289,9 +290,9 @@ def orga_tokens(request: HttpRequest, event_slug: str) -> dict:
 
 
 @login_required
-def orga_tokens_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_tokens_edit(request: HttpRequest, event_slug: str, token_uuid: str) -> HttpResponse:
     """Edit an organization token for a specific event."""
-    return orga_edit(request, event_slug, "orga_tokens", OrgaTokenForm, num)
+    return orga_edit(request, event_slug, "orga_tokens", OrgaTokenForm, token_uuid)
 
 
 @login_required
@@ -336,9 +337,9 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_credits_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_credits_edit(request: HttpRequest, event_slug: str, credit_uuid: str) -> HttpResponse:
     """Edit organization credits."""
-    return orga_edit(request, event_slug, "orga_credits", OrgaCreditForm, num)
+    return orga_edit(request, event_slug, "orga_credits", OrgaCreditForm, credit_uuid)
 
 
 @login_required
@@ -376,12 +377,14 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     context.update(
         {
             # Define select_related fields for efficient database queries
-            "selrel": ("reg__member", "reg__run", "inv", "inv__method"),
-            "afield": "reg",
+            "selrel": ("registration__member", "registration__run", "inv", "inv__method"),
+            "afield": "registration",
             "fields": fields,
             # Define callback functions for data formatting
             "callbacks": {
-                "member": lambda row: str(row.reg.member) if row.reg and row.reg.member else "",
+                "member": lambda row: str(row.registration.member)
+                if row.registration and row.registration.member
+                else "",
                 "method": lambda el: str(el.inv.method) if el.inv else "",
                 "type": lambda el: el.get_pay_display(),
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",
@@ -402,9 +405,9 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_payments_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_payments_edit(request: HttpRequest, event_slug: str, payment_uuid: str) -> HttpResponse:
     """Edit an existing payment for an event."""
-    return orga_edit(request, event_slug, "orga_payments", OrgaPaymentForm, num)
+    return orga_edit(request, event_slug, "orga_payments", OrgaPaymentForm, payment_uuid)
 
 
 @login_required
@@ -460,13 +463,13 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_outflows_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_outflows_edit(request: HttpRequest, event_slug: str, outflow_uuid: str) -> HttpResponse:
     """Edit an outflow entry for an event."""
-    return orga_edit(request, event_slug, "orga_outflows", OrgaOutflowForm, num)
+    return orga_edit(request, event_slug, "orga_outflows", OrgaOutflowForm, outflow_uuid)
 
 
 @login_required
-def orga_inflows(request: HttpRequest, event_slug: str) -> dict:
+def orga_inflows(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display paginated list of accounting inflows for organization event management.
 
     This function handles the organization view for accounting inflows, providing
@@ -514,9 +517,9 @@ def orga_inflows(request: HttpRequest, event_slug: str) -> dict:
 
 
 @login_required
-def orga_inflows_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_inflows_edit(request: HttpRequest, event_slug: str, inflow_uuid: str) -> HttpResponse:
     """Edit an existing inflow entry for an event."""
-    return orga_edit(request, event_slug, "orga_inflows", OrgaInflowForm, num)
+    return orga_edit(request, event_slug, "orga_inflows", OrgaInflowForm, inflow_uuid)
 
 
 @login_required
@@ -588,13 +591,13 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_expenses_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_expenses_edit(request: HttpRequest, event_slug: str, expense_uuid: str) -> HttpResponse:
     """Edit an expense for an event."""
-    return orga_edit(request, event_slug, "orga_expenses", OrgaExpenseForm, num)
+    return orga_edit(request, event_slug, "orga_expenses", OrgaExpenseForm, expense_uuid)
 
 
 @login_required
-def orga_expenses_approve(request: HttpRequest, event_slug: str, num: int) -> HttpResponseRedirect:
+def orga_expenses_approve(request: HttpRequest, event_slug: str, expense_uuid: str) -> HttpResponseRedirect:
     """Approve an expense request for an event.
 
     This function handles the approval of expense requests by organization
@@ -604,7 +607,7 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, num: int) -> Ht
     Args:
         request: The HTTP request object containing user and session data
         event_slug: Event identifier string used for URL routing
-        num: The primary key ID of the expense to be approved
+        expense_uuid: The UUID of the expense to be approved
 
     Returns:
         HttpResponseRedirect: Redirect response to the expenses list page
@@ -618,16 +621,14 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, num: int) -> Ht
     context = check_event_context(request, event_slug, "orga_expenses")
 
     # Verify that expense functionality is enabled for this association
-    if get_association_config(context["event"].association_id, "expense_disable_orga", default_value=False):
+    if get_association_config(
+        context["event"].association_id, "expense_disable_orga", default_value=False, context=context
+    ):
         msg = "eh no caro mio"
         raise Http404(msg)
 
     # Retrieve the expense object or raise 404 if not found
-    try:
-        exp = AccountingItemExpense.objects.get(pk=num)
-    except Exception as err:
-        msg = "no id expense"
-        raise Http404(msg) from err
+    exp = get_object_uuid(AccountingItemExpense, expense_uuid)
 
     # Ensure the expense belongs to the current event
     if exp.run.event != context["event"]:

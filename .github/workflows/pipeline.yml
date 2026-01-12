@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   test:
     name: CI
@@ -13,10 +17,9 @@ jobs:
 
     container:
       image: ghcr.io/loskana/larpmanager-ci:latest
-
       credentials:
-        username: loskana
-        password: ${{ secrets.REPO_TOKEN }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     env:
       CI: true
@@ -54,11 +57,15 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt -q
+        pip install -r requirements.txt -q --break-system-packages
+        playwright install chromium --with-deps
         cd larpmanager/static
         npm install
         cd ../../
+
+    - name: Run ruff linting check
+      run: |
+        ruff check .
 
     - name: Copy media fixtures
       run: |
@@ -76,13 +83,12 @@ jobs:
       run: |
         bash scripts/create_dbs.sh "$WORKERS" larpmanager/tests/test_db.sql
         export PYTEST_CURRENT_TEST="true"
-        export HOME=$(mktemp -d)
 
     - name: Run Unit Django tests
       run: |
         bash scripts/test_unit.sh
 
-    - name: Run Plawright Django tests
+    - name: Run Playwright Django tests
       run: |
         bash scripts/test_playwright.sh
 

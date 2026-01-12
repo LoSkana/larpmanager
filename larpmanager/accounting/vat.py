@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 """VAT calculation utilities for payment accounting."""
 
+from decimal import Decimal
+
 from django.db.models import Sum
 
 from larpmanager.cache.config import get_association_config
@@ -77,33 +79,34 @@ def calculate_payment_vat(instance: AccountingItemPayment) -> None:
     )
 
     # Calculate total ticket cost including both base price and custom amounts
-    ticket_total_cost = 0
-    if instance.reg.pay_what is not None:
-        ticket_total_cost += instance.reg.pay_what
-    if instance.reg.ticket:
-        ticket_total_cost += instance.reg.ticket.price
+    ticket_total_cost = Decimal(0)
+    if instance.registration.pay_what is not None:
+        ticket_total_cost += Decimal(str(instance.registration.pay_what))
+    if instance.registration.ticket:
+        ticket_total_cost += Decimal(str(instance.registration.ticket.price))
 
     # Determine net payment amount after accounting for refund transactions
-    current_payment_amount = instance.value
+    # Ensure we're working with Decimal for monetary calculations
+    current_payment_amount = Decimal(str(instance.value))
     transactions_query = AccountingItemTransaction.objects.filter(inv=instance.inv)
     for transaction in transactions_query:
-        current_payment_amount -= transaction.value
+        current_payment_amount -= Decimal(str(transaction.value))
 
     # Calculate how much of the ticket portion remains unpaid
     # This determines how to split the current payment
-    remaining_ticket_amount = max(0, ticket_total_cost - total_previously_paid)
+    remaining_ticket_amount = max(Decimal(0), ticket_total_cost - Decimal(str(total_previously_paid)))
 
     # Split current payment between ticket portion and options portion
     # Ticket portion is paid first, remainder goes to options
-    payment_allocated_to_ticket = float(min(current_payment_amount, remaining_ticket_amount))
-    payment_allocated_to_options = float(current_payment_amount) - float(payment_allocated_to_ticket)
+    payment_allocated_to_ticket = min(current_payment_amount, remaining_ticket_amount)
+    payment_allocated_to_options = current_payment_amount - payment_allocated_to_ticket
 
     # Update database with calculated VAT amounts for each portion
     updates = {"vat_ticket": payment_allocated_to_ticket, "vat_options": payment_allocated_to_options}
     AccountingItemPayment.objects.filter(pk=instance.pk).update(**updates)
 
 
-def get_previous_sum(aip: AccountingItemPayment, typ: type) -> int:
+def get_previous_sum(aip: AccountingItemPayment, typ: type) -> Decimal:
     """Calculate sum of previous accounting items for the same member and run.
 
     Computes the total value of all accounting items of the specified type
@@ -116,7 +119,7 @@ def get_previous_sum(aip: AccountingItemPayment, typ: type) -> int:
         typ: Model class to query (AccountingItemPayment or AccountingItemTransaction)
 
     Returns:
-        Sum of values from previous items matching the criteria, or 0 if none found
+        Sum of values from previous items matching the criteria, or Decimal(0) if none found
 
     Example:
         >>> previous_total = get_previous_sum(payment_item, AccountingItemPayment)
@@ -124,7 +127,9 @@ def get_previous_sum(aip: AccountingItemPayment, typ: type) -> int:
 
     """
     # Filter items by same member and run, created before reference item
-    previous_items = typ.objects.filter(reg__member=aip.reg.member, reg__run=aip.reg.run, created__lt=aip.created)
+    previous_items = typ.objects.filter(
+        registration__member=aip.registration.member, registration__run=aip.registration.run, created__lt=aip.created
+    )
 
-    # Aggregate the sum of values and return 0 if no items found
-    return previous_items.aggregate(total=Sum("value"))["total"] or 0
+    # Aggregate the sum of values and return Decimal(0) if no items found
+    return previous_items.aggregate(total=Sum("value"))["total"] or Decimal(0)

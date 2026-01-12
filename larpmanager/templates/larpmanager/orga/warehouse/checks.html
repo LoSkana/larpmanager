@@ -39,10 +39,10 @@
                 </thead>
                 <tbody>
                     {% for el in item.assignment_list %}
-                        <tr id="{{ el.id }}">
+                        <tr id="{{ el.uuid }}">
                             <td></td>
                             <td>
-                                <a href="{% url 'orga_warehouse_area_edit' run.get_slug el.area.id %}">{{ el.area }}</a>
+                                <a href="{% url 'orga_warehouse_area_edit' run.get_slug el.area.uuid %}">{{ el.area }}</a>
                             </td>
                             {% if optionals.quantity %}
                                 <td>

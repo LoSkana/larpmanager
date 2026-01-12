@@ -21,15 +21,15 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpRequest, HttpResponse
 
-from larpmanager.utils.base import get_event_context
-from larpmanager.utils.character import get_char_check
-from larpmanager.utils.pdf import (
+from larpmanager.utils.core.base import get_event_context
+from larpmanager.utils.io.pdf import (
     print_character,
     print_character_friendly,
     print_character_rel,
     print_gallery,
     print_profiles,
 )
+from larpmanager.utils.services.character import get_char_check
 
 
 def check_print_pdf(context: dict) -> None:
@@ -40,13 +40,13 @@ def check_print_pdf(context: dict) -> None:
 
 
 @login_required
-def character_pdf_sheet(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def character_pdf_sheet(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Generate PDF character sheet for an event run.
 
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        num: Character number
+        character_uuid: Character uuid
 
     Returns:
         HTTP response containing the PDF character sheet
@@ -59,20 +59,20 @@ def character_pdf_sheet(request: HttpRequest, event_slug: str, num: int) -> Http
     check_print_pdf(context)
 
     # Validate character access and retrieve character data
-    get_char_check(request, context, num, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     # Generate and return the character PDF
     return print_character(context)
 
 
 @login_required
-def character_pdf_sheet_friendly(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def character_pdf_sheet_friendly(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Generate a printer-friendly character sheet PDF.
 
     Args:
         request: The HTTP request object
         event_slug: Event slug identifier
-        num: Character number
+        character_uuid: Character uuid
 
     Returns:
         HttpResponse containing the printer-friendly character PDF
@@ -85,20 +85,20 @@ def character_pdf_sheet_friendly(request: HttpRequest, event_slug: str, num: int
     check_print_pdf(context)
 
     # Retrieve and validate character access
-    get_char_check(request, context, num, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     # Generate and return the printer-friendly PDF
     return print_character_friendly(context)
 
 
 @login_required
-def character_pdf_relationships(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def character_pdf_relationships(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Generate PDF with character relationships for a specific character.
 
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        num: Character number
+        character_uuid: Character uuid
 
     Returns:
         PDF response with character relationships
@@ -111,7 +111,7 @@ def character_pdf_relationships(request: HttpRequest, event_slug: str, num: int)
     check_print_pdf(context)
 
     # Validate character access and retrieve character data
-    get_char_check(request, context, num, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     # Generate and return the relationships PDF
     return print_character_rel(context)

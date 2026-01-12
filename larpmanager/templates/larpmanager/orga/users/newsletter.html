@@ -10,7 +10,7 @@
     <h2>{% trans "Simple list" %}</h2>
     <p>
         {% for el in list %}
-            {% include "elements/comma.html" %}
+            {% include "elements/comma.html" with separator="," %}
             {{ el.1 }}
         {% endfor %}
     </p>

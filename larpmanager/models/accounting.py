@@ -23,11 +23,10 @@ from typing import Any, ClassVar
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
-from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel, PaymentMethod
+from larpmanager.models.base import BaseModel, PaymentMethod, UuidMixin
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
@@ -52,7 +51,7 @@ class PaymentStatus(models.TextChoices):
     CHECKED = "k", "Checked"
 
 
-class PaymentInvoice(BaseModel):
+class PaymentInvoice(UuidMixin, BaseModel):
     """Represents PaymentInvoice model."""
 
     search = models.CharField(max_length=500, editable=False)
@@ -102,7 +101,7 @@ class PaymentInvoice(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    reg = models.ForeignKey(
+    registration = models.ForeignKey(
         Registration,
         on_delete=models.CASCADE,
         related_name="invoices",
@@ -120,7 +119,7 @@ class PaymentInvoice(BaseModel):
         indexes: ClassVar[list] = [
             models.Index(fields=["key", "status"]),
             models.Index(fields=["association", "cod"]),
-            models.Index(fields=["reg", "status", "-created"]),
+            models.Index(fields=["registration", "status", "-created"]),
             models.Index(fields=["status", "-created"]),
         ]
 
@@ -178,7 +177,7 @@ class PaymentInvoice(BaseModel):
         return details_html
 
 
-class ElectronicInvoice(BaseModel):
+class ElectronicInvoice(UuidMixin, BaseModel):
     """Represents ElectronicInvoice model."""
 
     inv = models.OneToOneField(
@@ -200,6 +199,10 @@ class ElectronicInvoice(BaseModel):
     xml = models.TextField(blank=True, null=True)
 
     response = models.TextField(blank=True, null=True)
+
+    def __str__(self) -> str:
+        """Return string representation of the electronic invoice."""
+        return f"{self.number}/{self.year}"
 
     class Meta:
         constraints: ClassVar[list] = [
@@ -275,7 +278,7 @@ class BalanceChoices(models.TextChoices):
     DIVER = "5", _("Miscellaneous operating expenses")
 
 
-class AccountingItem(BaseModel):
+class AccountingItem(UuidMixin, BaseModel):
     """Represents AccountingItem model."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -324,7 +327,7 @@ class AccountingItem(BaseModel):
 class AccountingItemTransaction(AccountingItem):
     """Represents AccountingItemTransaction model."""
 
-    reg = models.ForeignKey(
+    registration = models.ForeignKey(
         Registration,
         on_delete=models.CASCADE,
         related_name="accounting_items_t",
@@ -408,7 +411,7 @@ class AccountingItemPayment(AccountingItem):
 
     pay = models.CharField(max_length=1, choices=PaymentChoices.choices, default=PaymentChoices.MONEY)
 
-    reg = models.ForeignKey(
+    registration = models.ForeignKey(
         Registration,
         on_delete=models.CASCADE,
         related_name="accounting_items_p",
@@ -423,7 +426,7 @@ class AccountingItemPayment(AccountingItem):
     vat_options = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
-        indexes: ClassVar[list] = [models.Index(fields=["pay", "reg"])]
+        indexes: ClassVar[list] = [models.Index(fields=["pay", "registration"])]
 
 
 class AccountingItemExpense(AccountingItem):
@@ -453,7 +456,7 @@ class AccountingItemExpense(AccountingItem):
 
     is_approved = models.BooleanField(default=False)
 
-    def download(self) -> HttpResponse:
+    def download(self) -> str:
         """Download the invoice file."""
         # noinspection PyUnresolvedReferences
         return download(self.invoice.url)
@@ -519,7 +522,7 @@ class DiscountType(models.TextChoices):
     GIFT = "g", _("Gift")
 
 
-class Discount(BaseModel):
+class Discount(UuidMixin, BaseModel):
     """Represents Discount model."""
 
     name = models.CharField(max_length=100, help_text=_("Name of the discount - internal use"))
@@ -653,7 +656,7 @@ class CollectionStatus(models.TextChoices):
     PAYED = "p", _("Delivered")
 
 
-class Collection(BaseModel):
+class Collection(UuidMixin, BaseModel):
     """Represents Collection model."""
 
     name = models.CharField(max_length=100, null=True)
@@ -744,7 +747,7 @@ class RefundStatus(models.TextChoices):
     PAYED = "p", _("Delivered")
 
 
-class RefundRequest(BaseModel):
+class RefundRequest(UuidMixin, BaseModel):
     """Represents RefundRequest model."""
 
     search = models.CharField(max_length=200, editable=False)

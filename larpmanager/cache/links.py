@@ -20,8 +20,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timedelta
-from datetime import timezone as dt_timezone
+from datetime import UTC, datetime, timedelta
 from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
@@ -34,12 +33,13 @@ from django.utils import timezone
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration
-from larpmanager.utils.auth import is_lm_admin
+from larpmanager.utils.auth.admin import is_lm_admin
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
 
     from larpmanager.models.member import Member
+
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +60,7 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
     """
     # Skip if not authenticated or no association
     if not context["member"] or context["association_id"] == 0:
-        return {}
+        return
 
     # Return cached data if available
     cache_links_key = get_cache_event_key(context["member"].id, context["association_id"])
@@ -77,7 +77,7 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
         )
 
     context.update(navigation_context)
-    return None
+    return
 
 
 def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
@@ -157,7 +157,7 @@ def _get_accessible_runs(association_id: int, association_roles: dict, event_rol
             "e": run.event.slug,
             "r": run.number,
             "s": str(run),
-            "k": (run.start if run.start else datetime.max.replace(tzinfo=dt_timezone.utc).date()),
+            "k": (run.start if run.start else datetime.max.replace(tzinfo=UTC).date()),
         }
 
         # Categorize as open or past run
@@ -208,7 +208,7 @@ def clear_run_event_links_cache(event: Event) -> None:
         for member in association_role.members.all():
             reset_event_links(member.id, event.association_id)
     except ObjectDoesNotExist:
-        pass
+        logger.debug("Association role #1 not found for association %s", event.association_id)
 
     # Clear cache for all superusers since they have global access
     superusers = User.objects.filter(is_superuser=True)

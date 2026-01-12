@@ -23,7 +23,7 @@
 from unittest.mock import MagicMock, patch
 
 from larpmanager.tests.unit.base import BaseTestCase
-from larpmanager.utils.experience import (
+from larpmanager.utils.services.experience import (
     _apply_modifier_cost,
     check_available_ability_px,
     get_free_abilities,
@@ -57,7 +57,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
 
         character = MagicMock()
 
-        with patch("larpmanager.utils.experience.save_single_config") as mock_save:
+        with patch("larpmanager.utils.services.experience.save_single_config") as mock_save:
             set_free_abilities(character, [1, 2, 3])
 
             mock_save.assert_called_once()

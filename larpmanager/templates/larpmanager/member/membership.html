@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Member" %}
+    {% trans "Participant" %}
 {% endblock title %}
 {% block content %}
     {% if membership_cf and error_cf %}
@@ -119,7 +119,7 @@
         {% else %}
             <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
             <p>
-                {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'acc_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
+                {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
             </p>
         {% endif %}
     {% endif %}
@@ -132,7 +132,7 @@
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
     $('form').on('submit', function() {
-        return confirm('{% trans "Did you check the required data properly" %}?');
+        return confirm('{% filter escapejs %}{% trans "Did you check the required data properly" %}{% endfilter %}?');
     });
 });
 });

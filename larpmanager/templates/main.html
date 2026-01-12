@@ -239,33 +239,24 @@
     {% if association.id == 0 %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
                 defer></script>
-        {% if association.skin_id == 1 and google_tag %}
-            <!-- Google tag (gtag.js) -->
-            <script async
-                    src="https://www.googletagmanager.com/gtag/js?id={{ google_tag }}"></script>
-            <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '{{ google_tag }}');
-            </script>
-        {% endif %}
     {% else %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
                 defer></script>
     {% endif %}
     {% if association.id == 0 or association.demo %}
-        <!-- Hotjar -->
-        <script>
-        (function(h,o,t,j,a,r){
-            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-            h._hjSettings={hjid:{{ hotjar_siteid }},hjsv:6};
-            a=o.getElementsByTagName('head')[0];
-            r=o.createElement('script');r.async=1;
-            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-        </script>
+        {% if hotjar_siteid %}
+            <!-- Hotjar -->
+            <script>
+            (function(h,o,t,j,a,r){
+                h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                h._hjSettings={hjid:{{ hotjar_siteid }},hjsv:6};
+                a=o.getElementsByTagName('head')[0];
+                r=o.createElement('script');r.async=1;
+                r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+            </script>
+        {% endif %}
     {% endif %}
     <script>
     {% get_current_language as LANGUAGE_CODE %}
@@ -303,7 +294,7 @@
         {% endif %}
 
         {% if form.errors %}
-            txt = '{% trans "Attention! The form contains errors in the fields" %}';
+            txt = '{% filter escapejs %}{% trans "Attention! The form contains errors in the fields" %}{% endfilter %}';
             fls = []
             {% for field in form.visible_fields %}
                 {% if field.errors %}

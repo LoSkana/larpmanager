@@ -50,16 +50,16 @@ class PermissionModuleAdmin(ImportExportModelAdmin):
 
     resource_classes: ClassVar[list] = [PermissionModuleResource]
     list_display = ("name", "icon")
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name")
 
 
 @admin.register(AssociationRole)
 class AssociationRoleAdmin(DefModelAdmin):
     """Django admin for AssociationRole model."""
 
-    list_display = ("name", "association", "number")
+    list_display = ("id", "name", "association", "number", "uuid")
     autocomplete_fields: ClassVar[list] = ["members", "association", "permissions"]
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name", "uuid")
 
 
 class AssociationPermissionResource(resources.ModelResource):
@@ -76,8 +76,8 @@ class AssociationPermissionAdmin(ImportExportModelAdmin):
     """Django admin for AssociationPermission model."""
 
     resource_classes: ClassVar[list] = [AssociationPermissionResource]
-    list_display = ("name", "slug", "number", "descr", "module", "feature")
-    search_fields = ("name",)
+    list_display = ("id", "name", "slug", "number", "descr", "module", "feature")
+    search_fields: ClassVar[tuple] = ("id", "name")
     autocomplete_fields: ClassVar[list] = ["feature", "module"]
 
 
@@ -85,9 +85,9 @@ class AssociationPermissionAdmin(ImportExportModelAdmin):
 class EventRoleAdmin(DefModelAdmin):
     """Django admin for EventRole model."""
 
-    list_display = ("name", "event", "number")
+    list_display = ("id", "name", "event", "number", "uuid")
     autocomplete_fields: ClassVar[list] = ["members", "event", "permissions"]
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name", "uuid")
 
 
 class EventPermissionResource(resources.ModelResource):
@@ -105,5 +105,5 @@ class EventPermissionAdmin(ImportExportModelAdmin):
 
     resource_classes: ClassVar[list] = [EventPermissionResource]
     autocomplete_fields: ClassVar[list] = ["feature", "module"]
-    list_display = ("name", "slug", "number", "descr", "module", "feature")
-    search_fields = ("name",)
+    list_display = ("id", "name", "slug", "number", "descr", "module", "feature")
+    search_fields: ClassVar[tuple] = ("id", "name")

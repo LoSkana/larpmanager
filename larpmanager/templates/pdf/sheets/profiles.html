@@ -62,7 +62,7 @@
                 {% for num, el in chars.items %}
                     <tr class="row">
                         <td class="col">
-                            {% if el.player_id > 0 and el.player_prof %}
+                            {% if el.player_uuid and el.player_prof %}
                                 <img src="{{ el.player_prof }}" alt="player profile" />
                             {% else %}
                                 <img src="{% static 'larpmanager/assets/blank-avatar-bk.png' %}"
@@ -71,12 +71,12 @@
                         </td>
                         <td>
                             <p class="name">
-                                <a href="{% url 'character' run.get_slug el.number %}">{{ el.name }}</a>
+                                <a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a>
                                 {% if el.title and show_character.title %}- <b>{{ el.title }}</b>{% endif %}
                                 {% if el.pronoun %}({{ el.pronoun }}){% endif %}
-                                {% if el.player_id > 0 %}
+                                {% if el.player_uuid %}
                                     <p>
-                                        <a href="{% url 'public' el.player_id %}"><b>{{ el.player }}</b></a>
+                                        <a href="{% url 'public' el.player_uuid %}"><b>{{ el.player }}</b></a>
                                     </p>
                                 {% endif %}
                             </p>

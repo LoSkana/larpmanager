@@ -41,11 +41,11 @@ COMPRESS_URL = STATIC_URL
 
 # Social Account
 
-SOCIALACCOUNT_ADAPTER = 'larpmanager.utils.auth.MySocialAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'larpmanager.utils.auth.adapter.MySocialAccountAdapter'
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
-    'larpmanager.utils.backend.EmailOrUsernameModelBackend',
+    'larpmanager.utils.auth.backend.EmailOrUsernameModelBackend',
 
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend'
@@ -147,3 +147,9 @@ RATELIMIT_IP_META_KEY = 'HTTP_X_FORWARDED_FOR'
 # captcha
 RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC', '')
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE', '')
+
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 31536000
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_BROWSER_XSS_FILTER = True

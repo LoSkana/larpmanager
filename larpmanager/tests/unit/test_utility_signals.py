@@ -53,7 +53,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertEqual(character.name, original_name)
         self.assertIsNotNone(character.id)
 
-    @patch("larpmanager.utils.experience.calculate_character_experience_points")
+    @patch("larpmanager.utils.services.experience.calculate_character_experience_points")
     def test_ability_px_post_save_updates_experience(self, mock_update: Any) -> None:
         """Test that AbilityPx m2m_changed signal updates character experience"""
         character = self.character()
@@ -300,7 +300,7 @@ class TestUtilitySignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=self.get_registration(),
+            registration=self.get_registration(),
             pay=PaymentChoices.TOKEN,
         )
         # Change value to trigger update (signal only runs on update, not create)
@@ -321,7 +321,7 @@ class TestUtilitySignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=self.get_registration(),
+            registration=self.get_registration(),
             pay=PaymentChoices.TOKEN,
         )
         mock_update.reset_mock()
@@ -456,7 +456,7 @@ class TestUtilitySignals(BaseTestCase):
             member=member,
             value=Decimal("0.00"),  # Zero value
             association=self.get_association(),
-            reg=self.get_registration(),
+            registration=self.get_registration(),
             pay=PaymentChoices.MONEY,
         )
         payment.save()
@@ -494,7 +494,7 @@ class TestUtilitySignals(BaseTestCase):
             member=member,
             value=Decimal("100.00"),
             association=self.get_association(),
-            reg=self.get_registration(),
+            registration=self.get_registration(),
             pay=PaymentChoices.MONEY,
         )
         payment.save()
@@ -524,7 +524,7 @@ class TestUtilitySignals(BaseTestCase):
             member=registration.member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         payment.save()

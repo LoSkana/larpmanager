@@ -18,21 +18,25 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.contrib import messages
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
-from django.utils.translation import gettext_lazy as _
+from django.shortcuts import render
+
+from larpmanager.utils.core.sticky import add_sticky_message
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest, HttpResponse
 
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
-from larpmanager.cache.registration import get_reg_counts
+from larpmanager.cache.registration import get_registration_counts
 from larpmanager.forms.event import (
-    ExeEventForm,
     ExeTemplateForm,
     ExeTemplateRolesForm,
-    OrgaAppearanceForm,
     OrgaConfigForm,
     OrgaRunForm,
 )
@@ -41,10 +45,10 @@ from larpmanager.models.event import (
     Event,
     Run,
 )
-from larpmanager.utils.base import check_association_context, get_context
-from larpmanager.utils.common import get_event_template
-from larpmanager.utils.deadlines import check_run_deadlines
-from larpmanager.utils.edit import backend_edit, backend_get, exe_edit
+from larpmanager.utils.core.base import check_association_context, get_context
+from larpmanager.utils.core.common import get_event_template
+from larpmanager.utils.services.edit import backend_get, exe_edit
+from larpmanager.utils.users.deadlines import check_run_deadlines
 from larpmanager.views.manage import _get_registration_status
 from larpmanager.views.orga.event import full_event_edit
 from larpmanager.views.orga.registration import get_pre_registration
@@ -65,22 +69,18 @@ def exe_events(request: HttpRequest) -> HttpResponse:
     # Add registration status and counts to each run
     for run in context["list"]:
         run.registration_status = _get_registration_status(run)
-        run.counts = get_reg_counts(run)
+        run.counts = get_registration_counts(run)
 
     return render(request, "larpmanager/exe/events.html", context)
 
 
 @login_required
-def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
-    """Handle editing of existing events or creation of new executive events.
-
-    This function manages both the creation of new events and the editing of existing events/runs.
-    For new events (num=0), it creates the event and automatically adds the requesting user as an organizer.
-    For existing events (num>0), it delegates to the full event edit functionality.
+def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
+    """Handle editing of existing events or creation of new events.
 
     Args:
         request: HTTP request object containing user session and form data
-        num: Event number identifier (0 for new event creation, >0 for existing event editing)
+        event_uuid: Event number UUID (0 for new event creation)
 
     Returns:
         HttpResponse: Either a redirect to the appropriate page after successful operation
@@ -94,60 +94,60 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
     # Check user has executive events permission for the association
     context = check_association_context(request, "exe_events")
 
-    if num:
-        # Handle editing of existing event or run
-        # Retrieve the run object and set it in context
-        backend_get(context, Run, num, "event")
-        # Delegate to full event edit with executive flag enabled
-        return full_event_edit(context, request, context["el"].event, context["el"], is_executive=True)
+    # Determine if this is creation or editing
+    if event_uuid != "0":
+        # Retrieve the run object for editing
+        backend_get(context, Run, event_uuid, "event")
+        event = context["el"].event
+        run = context["el"]
+        on_created = None
+    else:
+        # Prepare for creation
+        event = None
+        run = None
+        context["exe"] = True
 
-    # Handle creation of new event
-    # Set executive context flag for form rendering
-    context["exe"] = True
+        if context.get("onboarding"):
+            context["welcome_message"] = True
+            context["tutorial"] = None
+            context["config"] = None
 
-    # Process form submission and handle creation logic
-    if backend_edit(request, context, ExeEventForm, num, quiet=True):
-        # Check if event was successfully created (saved context and new event)
-        if "saved" in context and num == 0:
+        # Define callback for post-creation operations
+        def on_created(created_event: Event) -> None:
+            """Post-creation callback for setting up organizer role and sticky message."""
             # Automatically add requesting user as event organizer
-            # Get or create organizer role (number=1 is standard organizer role)
-            (er, _created) = EventRole.objects.get_or_create(event=context["saved"], number=1)
+            (er, _created) = EventRole.objects.get_or_create(event=created_event, number=1)
             if not er.name:
                 er.name = "Organizer"
-            # Add current user's member profile to organizer role
             er.members.add(context["member"])
             er.save()
 
             # Refresh cached event links for user navigation
             reset_event_links(context["member"].id, context["association_id"])
 
-            # Prepare success message encouraging quick setup completion
-            msg = (
-                _("Your event has been created")
-                + "! "
-                + _("Now please complete the quick setup by selecting the features most useful for this event")
+            add_sticky_message(
+                member=context["member"],
+                message="new_event",
+                expires_days=7,
+                element_uuid=str(created_event.uuid),
             )
-            messages.success(request, msg)
-            # Redirect to quick setup page for new event
-            return redirect("orga_quick", event_slug=context["saved"].slug)
-        # Redirect back to events list after successful edit
-        return redirect("exe_events")
 
-    # Configure form context and render edit template
+    # Use unified full_event_edit for both creation and editing
     context["add_another"] = False
-    return render(request, "larpmanager/exe/edit.html", context)
+    return full_event_edit(
+        context,
+        request,
+        event,
+        run,
+        is_executive=True,
+        on_created_callback=on_created,
+    )
 
 
 @login_required
-def exe_runs_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_runs_edit(request: HttpRequest, run_uuid: str) -> HttpResponse:
     """Edit organization-wide run with event field."""
-    return exe_edit(request, OrgaRunForm, num, "exe_events", additional_field="event")
-
-
-@login_required
-def exe_events_appearance(request: HttpRequest, num: int) -> HttpResponse:
-    """Edit organization appearance settings for an event."""
-    return exe_edit(request, OrgaAppearanceForm, num, "exe_events", additional_context={"add_another": False})
+    return exe_edit(request, OrgaRunForm, run_uuid, "exe_events", additional_field="event")
 
 
 @login_required
@@ -173,31 +173,31 @@ def exe_templates(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_templates_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_templates_edit(request: HttpRequest, template_uuid: str) -> HttpResponse:
     """Edit an existing executive template."""
-    return exe_edit(request, ExeTemplateForm, num, "exe_templates")
+    return exe_edit(request, ExeTemplateForm, template_uuid, "exe_templates")
 
 
 @login_required
-def exe_templates_config(request: HttpRequest, num: int) -> HttpResponse:
+def exe_templates_config(request: HttpRequest, template_uuid: str) -> HttpResponse:
     """Configure templates for organization events."""
     # Initialize user context and get event template
     add_ctx = get_context(request)
-    get_event_template(add_ctx, num)
+    get_event_template(add_ctx, template_uuid)
 
     # Update context with event features and configuration
     add_ctx["features"].update(get_event_features(add_ctx["event"].id))
     add_ctx["add_another"] = False
 
-    return exe_edit(request, OrgaConfigForm, num, "exe_templates", additional_context=add_ctx)
+    return exe_edit(request, OrgaConfigForm, template_uuid, "exe_templates", additional_context=add_ctx)
 
 
 @login_required
-def exe_templates_roles(request: HttpRequest, event_id: int, num: int | None) -> HttpResponse:
+def exe_templates_roles(request: HttpRequest, event_uuid: str, role_uuid: str | None) -> HttpResponse:
     """Edit or create template roles for an event."""
     add_ctx = get_context(request)
-    get_event_template(add_ctx, event_id)
-    return exe_edit(request, ExeTemplateRolesForm, num, "exe_templates", additional_context=add_ctx)
+    get_event_template(add_ctx, event_uuid)
+    return exe_edit(request, ExeTemplateRolesForm, role_uuid, "exe_templates", additional_context=add_ctx)
 
 
 @login_required
@@ -224,13 +224,13 @@ def exe_pre_registrations(request: HttpRequest) -> HttpResponse:
 
     # Get preference configuration for the association
     context["preferences"] = get_association_config(
-        context["association_id"], "pre_reg_preferences", default_value=False
+        context["association_id"], "pre_reg_preferences", default_value=False, context=context
     )
 
     # Iterate through all non-template events for this association
     for event in Event.objects.filter(association_id=context["association_id"], template=False):
         # Skip events that don't have pre-registration active
-        if not get_event_config(event.id, "pre_register_active", default_value=False):
+        if not get_event_config(event.id, "pre_register_active", default_value=False, context=context):
             continue
 
         # Get pre-registration data for current event

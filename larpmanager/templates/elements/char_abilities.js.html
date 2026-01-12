@@ -6,7 +6,7 @@ const abilities = {{ available | safe }};
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
         $('form').on('submit', function() {
-            return confirm('{% trans "Are you sure" %}?');
+            return confirm('{% filter escapejs %}{% trans "Are you sure" %}{% endfilter %}?');
         });
 
         $('input[type="submit"]').prop('disabled', true);
@@ -14,7 +14,7 @@ window.addEventListener('DOMContentLoaded', function() {
         $('#ability_type').on('change', function () {
             const typeId = $(this).val();
             const $abilitySelect = $('#ability_select');
-            var selectAbilityLabel = "{% trans 'Select ability' %}";
+            var selectAbilityLabel = "{% filter escapejs %}{% trans 'Select ability' %}{% endfilter %}";
             selectAbilityLabel = selectAbilityLabel.replace(/["']/g, function(m){return m === '"' ? '&quot;' : '&#39;'})
             $abilitySelect.empty().append(
                 '<option value="" disabled selected>--- ' + selectAbilityLabel + '</option>'

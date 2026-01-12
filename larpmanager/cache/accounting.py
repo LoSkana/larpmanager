@@ -128,17 +128,18 @@ def _get_accounting_context(run: Run, member_filter: int | None = None) -> tuple
     # Build cache for token/credit payments if feature is enabled
     payment_cache_by_member = {}
 
-    # Build cache only if token_credit feature is enabled
-    if "token_credit" in features:
+    # Build cache only if tokens or credits feature is enabled
+    payment_types = get_special_payment_types(features)
+    if payment_types:
         # Query accounting item payments for this run
-        payments_query = AccountingItemPayment.objects.filter(reg__run=run)
+        payments_query = AccountingItemPayment.objects.filter(registration__run=run)
 
         # Apply member filter if specified
         if member_filter:
             payments_query = payments_query.filter(member_id=member_filter)
 
         # Filter for token and credit payments only
-        payments_query = payments_query.filter(pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
+        payments_query = payments_query.filter(pay__in=payment_types)
 
         # Aggregate payment data by member and payment type
         for member_id, payment_value, payment_type in payments_query.exclude(hide=True).values_list(
@@ -157,6 +158,84 @@ def _get_accounting_context(run: Run, member_filter: int | None = None) -> tuple
             payment_cache_by_member[member_id][payment_type] += payment_value
 
     return features, registration_tickets_by_id, payment_cache_by_member
+
+
+def get_special_payment_types(features: dict[str, int]) -> list[str]:
+    """Get list of special payment types based on enabled features.
+
+    Returns payment type choices for tokens and/or credits if the
+    corresponding features are enabled in the provided features dictionary.
+
+    Args:
+        features: Dictionary of enabled feature names mapped to their IDs
+
+    Returns:
+        List of PaymentChoices constants for enabled special payment types.
+        Empty list if neither tokens nor credits features are enabled.
+
+    Example:
+        >>> features = {"tokens": 1, "credits": 2, "payment": 3}
+        >>> get_special_payment_types(features)
+        [PaymentChoices.TOKEN, PaymentChoices.CREDIT]
+
+    """
+    payment_types = []
+    if "tokens" in features:
+        payment_types.append(PaymentChoices.TOKEN)
+    if "credits" in features:
+        payment_types.append(PaymentChoices.CREDIT)
+    return payment_types
+
+
+def calculate_payment_breakdown(
+    features: dict[str, int],
+    member_id: int,
+    total_paid: float,
+    payment_cache: dict,
+) -> dict[str, float]:
+    """Calculate payment breakdown by type (cash, tokens, credits).
+
+    Extracts payment amounts for special payment types (tokens/credits) from
+    the cache and calculates the cash payment as the remainder.
+
+    Args:
+        features: Dictionary of enabled feature names mapped to their IDs
+        member_id: ID of the member whose payments to extract
+        total_paid: Total amount paid by the member
+        payment_cache: Cache dictionary containing payment data by member_id
+
+    Returns:
+        Dictionary with payment breakdown:
+            - "pay_a": Cash payment amount
+            - "pay_b": Credit payment amount (if credits enabled)
+            - "pay_c": Token payment amount (if tokens enabled)
+
+    Example:
+        >>> features = {"tokens": 1, "credits": 2}
+        >>> cache = {123: {"b": 10.0, "c": 5.0}}
+        >>> calculate_payment_breakdown(features, 123, 25.0, cache)
+        {"pay_a": 10.0, "pay_b": 10.0, "pay_c": 5.0}
+
+    """
+    payment_breakdown = {}
+    noncash_payments = 0.0
+
+    # Get special payment types based on enabled features
+    payment_types = get_special_payment_types(features)
+
+    # Extract non-cash payments from cache if member has cached data
+    if payment_types and member_id in payment_cache:
+        for payment_type in payment_types:
+            payment_value = 0.0
+            if payment_type in payment_cache[member_id]:
+                payment_value = float(payment_cache[member_id][payment_type])
+            payment_breakdown[f"pay_{payment_type}"] = payment_value
+            noncash_payments += payment_value
+
+    # Calculate cash payment as remainder
+    payment_breakdown["pay_a"] = total_paid - noncash_payments
+
+    return payment_breakdown
 
 
 def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
@@ -189,13 +268,13 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
     # Handle case where member has no active registrations
     if not member_registrations.exists():
         # Clean up any stale cache entries for this member's old registrations
-        for registration_id in list(cached_accounting_data.keys()):
+        for registration_uuid in list(cached_accounting_data.keys()):
             try:
-                registration = Registration.objects.get(id=registration_id, member_id=member_id)
+                registration = Registration.objects.get(uuid=registration_uuid, member_id=member_id)
                 # Remove cache entry if it belongs to this run and member
                 if registration.run_id == run.id:
-                    cached_accounting_data.pop(registration_id, None)
-            except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to skip deleted registrations
+                    cached_accounting_data.pop(registration_uuid, None)
+            except ObjectDoesNotExist:
                 # Skip if registration no longer exists
                 pass
     else:
@@ -211,7 +290,9 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
                 features,
             )
             # Store calculated values as formatted strings in cache
-            cached_accounting_data[registration.id] = {key: f"{value:g}" for key, value in accounting_data.items()}
+            cached_accounting_data[str(registration.uuid)] = {
+                key: f"{value:g}" for key, value in accounting_data.items()
+            }
 
     # Persist the updated cache data with 1-day timeout
     cache.set(cache_key, cached_accounting_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -277,13 +358,14 @@ def update_registration_accounting_cache(run: Run) -> dict[int, dict[str, str]]:
         )
 
         # Format monetary values as strings without trailing zeros
-        accounting_cache[registration.id] = {key: f"{value:g}" for key, value in accounting_data.items()}
+        # Use string UUID as key to ensure consistent JSON serialization
+        accounting_cache[str(registration.uuid)] = {key: f"{value:g}" for key, value in accounting_data.items()}
 
     return accounting_cache
 
 
 def _calculate_registration_accounting(
-    reg: Registration,
+    registration: Registration,
     reg_tickets: dict[int, RegistrationTicket],
     cache_aip: dict[int, dict[str, Decimal]],
     features: dict[str, Any],
@@ -294,7 +376,7 @@ def _calculate_registration_accounting(
     for a registration based on tickets, payments, and enabled features.
 
     Args:
-        reg: Registration instance containing financial data
+        registration: Registration instance containing financial data
         reg_tickets: Dictionary mapping ticket ID to RegistrationTicket objects
         cache_aip: Cached accounting payment data by member ID
         features: Dictionary of enabled features for the event
@@ -311,24 +393,16 @@ def _calculate_registration_accounting(
 
     # Extract and round basic registration financial fields
     for field_name in ["tot_payed", "tot_iscr", "quota", "deadline", "pay_what", "surcharge"]:
-        accounting_data[field_name] = round_to_nearest_cent(getattr(reg, field_name, 0))
+        accounting_data[field_name] = round_to_nearest_cent(getattr(registration, field_name, 0))
 
-    # Process token/credit payments if the feature is enabled
-    if isinstance(features, dict) and "token_credit" in features:
-        if reg.member_id in cache_aip:
-            # Extract credit (b) and token (c) payments from cache
-            for payment_type in ["b", "c"]:  # b=CREDIT, c=TOKEN
-                payment_value = 0
-                if payment_type in cache_aip[reg.member_id]:
-                    payment_value = cache_aip[reg.member_id][payment_type]
-                accounting_data["pay_" + payment_type] = float(payment_value)
-            # Calculate cash payment (a) as remainder
-            accounting_data["pay_a"] = accounting_data["tot_payed"] - (
-                accounting_data["pay_b"] + accounting_data["pay_c"]
-            )
-        else:
-            # No cached payments, all payment is cash
-            accounting_data["pay_a"] = accounting_data["tot_payed"]
+    # Calculate payment breakdown by type (cash, tokens, credits)
+    payment_breakdown = calculate_payment_breakdown(
+        features,
+        registration.member_id,
+        accounting_data["tot_payed"],
+        cache_aip,
+    )
+    accounting_data.update(payment_breakdown)
 
     # Calculate remaining balance and apply rounding threshold
     accounting_data["remaining"] = accounting_data["tot_iscr"] - accounting_data["tot_payed"]
@@ -336,13 +410,13 @@ def _calculate_registration_accounting(
         accounting_data["remaining"] = 0
 
     # Add ticket pricing breakdown if ticket exists
-    if reg.ticket_id in reg_tickets:
-        ticket = reg_tickets[reg.ticket_id]
+    if registration.ticket_id in reg_tickets:
+        ticket = reg_tickets[registration.ticket_id]
         accounting_data["ticket_price"] = ticket.price
         # Add custom payment amount to base ticket price
-        if reg.pay_what:
-            accounting_data["ticket_price"] += reg.pay_what
+        if registration.pay_what:
+            accounting_data["ticket_price"] += registration.pay_what
         # Calculate additional options cost
-        accounting_data["options_price"] = reg.tot_iscr - accounting_data["ticket_price"]
+        accounting_data["options_price"] = registration.tot_iscr - accounting_data["ticket_price"]
 
     return accounting_data

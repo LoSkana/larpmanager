@@ -18,8 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from datetime import datetime, timedelta
-from datetime import timezone as dt_timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from django.contrib import messages
@@ -63,11 +62,11 @@ from larpmanager.models.miscellanea import (
     WorkshopQuestion,
 )
 from larpmanager.models.registration import Registration
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.common import get_album_cod, get_element
-from larpmanager.utils.edit import orga_edit
-from larpmanager.utils.miscellanea import get_warehouse_optionals, upload_albums
-from larpmanager.utils.writing import writing_post
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import get_album_cod, get_element
+from larpmanager.utils.services.edit import orga_edit
+from larpmanager.utils.services.miscellanea import get_warehouse_optionals, upload_albums
+from larpmanager.utils.services.writing import writing_post
 
 
 @login_required
@@ -79,9 +78,9 @@ def orga_albums(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_albums_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_albums_edit(request: HttpRequest, event_slug: str, album_uuid: str) -> HttpResponse:
     """Edit album for an event."""
-    return orga_edit(request, event_slug, "orga_albums", OrgaAlbumForm, num)
+    return orga_edit(request, event_slug, "orga_albums", OrgaAlbumForm, album_uuid)
 
 
 @login_required
@@ -137,9 +136,9 @@ def orga_utils(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_utils_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_utils_edit(request: HttpRequest, event_slug: str, util_uuid: str) -> HttpResponse:
     """Edit utility item for event."""
-    return orga_edit(request, event_slug, "orga_utils", UtilForm, num)
+    return orga_edit(request, event_slug, "orga_utils", UtilForm, util_uuid)
 
 
 @login_required
@@ -172,21 +171,29 @@ def orga_workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["pinocchio"] = []  # Members who haven't completed all workshops
     context["list"] = []  # All registered members with completion counts
 
+    # Pre-fetch all workshop completions
+    registrations = list(Registration.objects.filter(run=context["run"], cancellation_date__isnull=True))
+    member_ids = [registration.member_id for registration in registrations]
+    workshop_ids = [w.id for w in workshops]
+
+    # Create set of (member_id, workshop_id) pairs for completed workshops
+    workshop_completions = set(
+        WorkshopMemberRel.objects.filter(
+            member_id__in=member_ids, workshop_id__in=workshop_ids, created__gte=limit
+        ).values_list("member_id", "workshop_id")
+    )
+
     # Process each active registration for the event run
-    for reg in Registration.objects.filter(run=context["run"], cancellation_date__isnull=True):
-        # Count completed workshops for this member
-        reg.num = 0
-        for w in workshops:
-            # Check if member completed this workshop within time limit
-            if WorkshopMemberRel.objects.filter(member=reg.member, workshop=w, created__gte=limit).count() >= 1:
-                reg.num += 1
+    for registration in registrations:
+        # Count completed workshops for this member using pre-fetched set
+        registration.num = sum(1 for w in workshops if (registration.member_id, w.id) in workshop_completions)
 
         # Add member to pinocchio list if they haven't completed all workshops
-        if reg.num != len(workshops):
-            context["pinocchio"].append(reg.member)
+        if registration.num != len(workshops):
+            context["pinocchio"].append(registration.member)
 
         # Add registration to main list with completion count
-        context["list"].append(reg)
+        context["list"].append(registration)
 
     return render(request, "larpmanager/orga/workshop/workshops.html", context)
 
@@ -213,13 +220,13 @@ def orga_workshop_modules(request: HttpRequest, event_slug: str) -> HttpResponse
 
 
 @login_required
-def orga_workshop_modules_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_workshop_modules_edit(request: HttpRequest, event_slug: str, module_uuid: str) -> HttpResponse:
     """Edit a workshop module for an event."""
-    return orga_edit(request, event_slug, "orga_workshop_modules", WorkshopModuleForm, num)
+    return orga_edit(request, event_slug, "orga_workshop_modules", WorkshopModuleForm, module_uuid)
 
 
 @login_required
-def orga_workshop_questions(request: HttpRequest, event_slug: str) -> HttpResponse:
+def orga_workshop_questions(request: HttpRequest, event_slug: str) -> HttpResponse | None:
     """Handle workshop questions management for organizers."""
     # Check user permissions for workshop questions management
     context = check_event_context(request, event_slug, "orga_workshop_questions")
@@ -238,9 +245,9 @@ def orga_workshop_questions(request: HttpRequest, event_slug: str) -> HttpRespon
 
 
 @login_required
-def orga_workshop_questions_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_workshop_questions_edit(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
     """Edit workshop question."""
-    return orga_edit(request, event_slug, "orga_workshop_questions", WorkshopQuestionForm, num)
+    return orga_edit(request, event_slug, "orga_workshop_questions", WorkshopQuestionForm, question_uuid)
 
 
 @login_required
@@ -274,9 +281,9 @@ def orga_workshop_options(request: HttpRequest, event_slug: str) -> HttpResponse
 
 
 @login_required
-def orga_workshop_options_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_workshop_options_edit(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
     """Edit workshop option for an event."""
-    return orga_edit(request, event_slug, "orga_workshop_options", WorkshopOptionForm, num)
+    return orga_edit(request, event_slug, "orga_workshop_options", WorkshopOptionForm, option_uuid)
 
 
 @login_required
@@ -292,9 +299,9 @@ def orga_problems(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_problems_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_problems_edit(request: HttpRequest, event_slug: str, problem_uuid: str) -> HttpResponse:
     """Delegate to generic edit view for problem editing."""
-    return orga_edit(request, event_slug, "orga_problems", OrgaProblemForm, num)
+    return orga_edit(request, event_slug, "orga_problems", OrgaProblemForm, problem_uuid)
 
 
 @login_required
@@ -310,13 +317,13 @@ def orga_warehouse_area(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_warehouse_area_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_warehouse_area_edit(request: HttpRequest, event_slug: str, area_uuid: str) -> HttpResponse:
     """Edit a warehouse area for an event."""
-    return orga_edit(request, event_slug, "orga_warehouse_area", OrgaWarehouseAreaForm, num)
+    return orga_edit(request, event_slug, "orga_warehouse_area", OrgaWarehouseAreaForm, area_uuid)
 
 
 @login_required
-def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, area_uuid: str) -> HttpResponse:
     """Manage warehouse area item assignments for event organizers.
 
     This function handles the display and management of warehouse item assignments
@@ -327,7 +334,7 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
     Args:
         request: Django HTTP request object containing user session and form data
         event_slug: Event slug identifier used to locate the specific event
-        num: Warehouse area ID number to identify the target warehouse area
+        area_uuid: Warehouse area UUID to identify the target warehouse area
 
     Returns:
         HttpResponse: Rendered warehouse area assignments page with context data
@@ -340,7 +347,7 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
     """
     # Check user permissions and get base context with event and area data
     context = check_event_context(request, event_slug, "orga_warehouse_area")
-    get_element(context, num, "area", WarehouseArea)
+    get_element(context, area_uuid, "area", WarehouseArea)
 
     # Configure optional warehouse display settings for quantity columns
     get_warehouse_optionals(context, [6, 7])
@@ -375,9 +382,9 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
             return (
                 assignment_item.assigned.get("updated")
                 or getattr(assignment_item, "updated", None)
-                or datetime.min.replace(tzinfo=dt_timezone.utc)
+                or datetime.min.replace(tzinfo=UTC)
             )
-        return datetime.min.replace(tzinfo=dt_timezone.utc)
+        return datetime.min.replace(tzinfo=UTC)
 
     # Sort items: assigned items first, then by recent updates, name, and ID
     ordered_items = sorted(
@@ -489,9 +496,9 @@ def orga_warehouse_manifest(request: HttpRequest, event_slug: str) -> HttpRespon
 
 
 @login_required
-def orga_warehouse_assignment_item_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_warehouse_assignment_item_edit(request: HttpRequest, event_slug: str, assignment_uuid: str) -> HttpResponse:
     """Edit warehouse item assignment."""
-    return orga_edit(request, event_slug, "orga_warehouse_manifest", OrgaWarehouseItemAssignmentForm, num)
+    return orga_edit(request, event_slug, "orga_warehouse_manifest", OrgaWarehouseItemAssignmentForm, assignment_uuid)
 
 
 @require_POST
@@ -546,7 +553,7 @@ def orga_warehouse_assignment_manifest(request: HttpRequest, event_slug: str) ->
 
 
 @require_POST
-def orga_warehouse_assignment_area(request: HttpRequest, event_slug: str, num: str) -> JsonResponse:
+def orga_warehouse_assignment_area(request: HttpRequest, event_slug: str, area_uuid: str) -> JsonResponse:
     """Handle warehouse item assignment to a specific area.
 
     Manages the assignment of warehouse items to specific areas within an event.
@@ -555,7 +562,7 @@ def orga_warehouse_assignment_area(request: HttpRequest, event_slug: str, num: s
     Args:
         request (HttpRequest): HTTP request object containing POST data with item assignment details
         event_slug (str): Event slug identifier
-        num (str): Area number identifier
+        area_uuid (str): Area number uuid
 
     Returns:
         JsonResponse: Success confirmation with {"ok": True}
@@ -566,22 +573,23 @@ def orga_warehouse_assignment_area(request: HttpRequest, event_slug: str, num: s
     """
     # Check event permissions and retrieve the warehouse area
     context = check_event_context(request, event_slug, "orga_warehouse_manifest")
-    get_element(context, num, "area", WarehouseArea)
+    get_element(context, area_uuid, "area", WarehouseArea)
 
     # Extract assignment parameters from POST data
     idx = request.POST.get("idx")
     notes = request.POST.get("notes")
     quantity = int(request.POST.get("quantity", "0"))
     selected = request.POST.get("selected").lower() == "true"
+    get_element(context, idx, "item", WarehouseItem)
 
     # Handle item deselection - remove existing assignment
     if not selected:
-        WarehouseItemAssignment.objects.filter(item_id=idx, area=context["area"]).delete()
+        WarehouseItemAssignment.objects.filter(item=context["item"], area=context["area"]).delete()
         return JsonResponse({"ok": True})
 
     # Handle item selection - create or update assignment
     (assign, _cr) = WarehouseItemAssignment.objects.get_or_create(
-        item_id=idx,
+        item=context["item"],
         area=context["area"],
         event=context["event"],
     )
@@ -601,9 +609,9 @@ def orga_onetimes(request: HttpRequest, event_slug: str) -> Any:
 
 
 @login_required
-def orga_onetimes_edit(request: HttpRequest, event_slug: str, num: Any) -> Any:
+def orga_onetimes_edit(request: HttpRequest, event_slug: str, onetime_uuid: str) -> Any:
     """Edit or create a one-time content."""
-    return orga_edit(request, event_slug, "orga_onetimes", OneTimeContentForm, num)
+    return orga_edit(request, event_slug, "orga_onetimes", OneTimeContentForm, onetime_uuid)
 
 
 @login_required
@@ -628,9 +636,9 @@ def orga_onetimes_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_onetimes_tokens_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_onetimes_tokens_edit(request: HttpRequest, event_slug: str, token_uuid: str) -> HttpResponse:
     """Edit one-time access token."""
-    return orga_edit(request, event_slug, "orga_onetimes_tokens", OneTimeAccessTokenForm, num)
+    return orga_edit(request, event_slug, "orga_onetimes_tokens", OneTimeAccessTokenForm, token_uuid)
 
 
 @login_required

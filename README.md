@@ -1,10 +1,9 @@
-#  LarpManager
+# LarpManager
 
-**LarpManager** is the free LARP management platform.
+LarpManager is a free platform to manage live-action roleplaying (LARP) events.
 
-> Not interested in self-hosting? Start using it right away with the fully hosted and free to use instance on [https://larpmanager.com](https://larpmanager.com)!
-
-![License: AGPL or Commercial](https://img.shields.io/badge/license-AGPL%20%2F%20Commercial-blue.svg)
+If you don’t want to self-host, you can use the free hosted instance at:
+https://larpmanager.com
 
 ---
 
@@ -15,7 +14,8 @@
 - **[Configuration System Guide](docs/03-configuration-system.md)** - How to add customizable settings without modifying models
 - **[Localization Guide](docs/04-localization.md)** - How to write translatable code and manage translations
 - **[Playwright Testing Guide](docs/05-playwright-testing.md)** - How to write and run end-to-end tests
-- **[Developer Instructions](CLAUDE.md)** - Project architecture, development commands, and best practices
+- **[Feature Descriptions](docs/06-feature-descriptions.md)** - Complete reference of all available features
+- **[Developer Instructions](#develop)** - Architecture, commands and best practices
 - **[Contributing](#contributing)** - How to contribute to the project
 - **[Deployment](#deploy)** - Production deployment instructions
 
@@ -35,7 +35,7 @@ Refer to the `LICENSE` file for full terms.
 
 ---
 
-## Quick set up
+## Quick start (Docker)
 
 If you want an easy and fast deploy, set the environment variables see below for [instructions](#environment) on their values:
 
@@ -118,12 +118,12 @@ It will perform a graceful restart.
 
 ---
 
-## Cloud
+### Cloud recommendations
 
-For cloud deploy, we suggest the following configuration:
-- OS: Ubuntu 22.04 LTS
-- A "burstable" instance (instead of memory or compute-optimized), as to allow to better handle bursts of user activity
-
+Suggested baseline for cloud VMs:
+- OS: Ubuntu 24.04 LTS (required for Python 3.12)
+- Instance type: burstable instance to handle activity spikes
+-
 Some typical options could be:
 - EC2: t3.small / t3.medium
 - GCP: e2-small / e2-medium
@@ -131,7 +131,7 @@ Some typical options could be:
 
 ---
 
-## Environment
+### Environment variables
 
 Set those values:
 - GUNICORN_WORKERS: Rule of thumb is number of processors * 2 + 1
@@ -144,7 +144,7 @@ Set those values:
 
 ---
 
-## Docker
+### Docker installation
 
 To install everything needed for the quick setup, install some dependencies:
 
@@ -176,63 +176,124 @@ sudo systemctl enable docker
 
 ---
 
-## Install
+## Local Setup
 
-If you're old school, a typical installation requires:
-- **Database**: PostgreSQL
-- **Frontend**: Npm
-- **Caching**: Redis
-- **Deployment**: Gunicorn + Nginx
-- **Email**: Postfix
-- **Utils**: Wkhtmltopdf, Imagemagick
+The typical, recommended setup is to have:
+* On a server the *production* instance, managed with docker, with the real user data, CI pipeline, automated backup and all other devops best practices;
+* On your local machine, a *development* instance, managed with dedicated system installations, dummy test database and local development server.
 
-For a setup on a Debian-like system, install the following packages:
-```
-python3-pip redis-server postfix git postgresql postgresql-contrib
-nginx libpq-dev wkhtmltopdf nodejs build-essential
-libxmlsec1-dev libxmlsec1-openssl libavif16
+Here are the step for a local setup on your machine, required for both *Develop* and *Contributing*.
+
+**Requirements:**
+- Python 3.12 or higher
+- Ubuntu 24.04 LTS recommended
+
+For a Debian-like system: install the following packages:
+
+```bash
+# On Ubuntu 24.04 LTS
+sudo apt install python3.12 python3.12-venv python3.12-dev python3-pip redis-server git \
+  postgresql postgresql-contrib libpq-dev nodejs build-essential libxmlsec1-dev \
+  libxmlsec1-openssl libavif16 libcairo2-dev pkg-config
+
+# On Ubuntu 22.04 or older (requires deadsnakes PPA for Python 3.12)
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install python3.12 python3.12-venv python3.12-dev python3-pip redis-server git \
+  postgresql postgresql-contrib libpq-dev nodejs build-essential libxmlsec1-dev \
+  libxmlsec1-openssl libavif16 libcairo2-dev pkg-config
 ```
 
-Remember to init the database:
-```
-python manage.py migrate
+Create and activate a virtual environment:
+```bash
+python3.12 -m venv venv
+source venv/bin/activate
 ```
 
-Load npm modules:
+Install Python dependencies:
+```bash
+pip install -r requirements.txt
 ```
+
+Install and activate LFS to handle big files:
+   ```bash
+   sudo apt install git-lfs
+   git lfs install
+   git lfs pull
+   ```
+
+### Database Setup
+
+Create the PostgreSQL database and user:
+```bash
+sudo -u postgres psql
+```
+
+Then run the following SQL commands (default credentials: user `larpmanager`, password `larpmanager`):
+```sql
+CREATE DATABASE larpmanager;
+CREATE USER larpmanager WITH PASSWORD 'larpmanager';
+ALTER USER larpmanager CREATEDB;  -- Required for running tests
+ALTER DATABASE larpmanager OWNER TO larpmanager;
+GRANT ALL PRIVILEGES ON DATABASE larpmanager TO larpmanager;
+\q
+```
+
+**Note:** The `CREATEDB` privilege is required for running tests, as pytest creates temporary test databases.
+
+### Django Configuration
+
+1. Copy `main/settings/dev_sample.py` to `main/settings/dev.py`:
+   ```bash
+   cp main/settings/dev_sample.py main/settings/dev.py
+   ```
+
+2. The default database settings should work with the setup above. If you used different credentials, update the `DATABASES` section in `main/settings/dev.py`.
+
+3. In `SLUG_ASSOC`, put the slug of the organization that will be loaded (default is `def`).
+
+
+### Frontend Dependencies
+
+Install npm modules for frontend functionality:
+```bash
 cd larpmanager/static
 npm install
+cd ../..
 ```
 
-And install playwright for tests:
-```
+### Testing Setup
+
+Install Playwright browsers for end-to-end tests:
+```bash
 playwright install
 ```
 
----
-
-## Deploy
-
-In order to deploy:
-1. Copy `main/settings/prod_sample.py` to `main/settings/prod.py`
-2. Set the settings (standard django installation)
-3. Follow the instructions of [django-allauth](https://docs.allauth.org/en/dev/socialaccount/providers/google.html) to setup login with google social provider
-4. Set `postgresql` and `redis` sockets (or with port mapping, your choice)
-4. Load the fixtures with `python manage.py reset`. It will create a test organization with three users, `admin` (superuser), `orga@test.it` (organizer with role access to organization and test event), `user@test.it` (simple user). The password for all of them is `banana`.
-5. In `SLUG_ASSOC`, put the slug of the organization that will be loaded (by default `test`)
-
----
 
 ## Develop
 
 The codebase is based on Django; if you're not already familiar with it, we highly suggest you to follow the tutorials at https://docs.djangoproject.com/.
 
-In order to develop:
+1. Follow the steps outlined in [Local setup](#local-setup) for setting up your local *development* instance
 
-1. Copy `main/settings/dev_sample.py` to `main/settings/dev.py`
-2. In `DATABASES`, put the settings for database connection
-3. In `SLUG_ASSOC`, put the slug of the organization that will be loaded (by default `test`)
-4. Load the fixtures with `python manage.py reset`.
+2. Run migrations to initialize the database:
+   ```bash
+   python manage.py migrate
+   ```
+
+3. Load the initial test data:
+   ```bash
+   python manage.py reset
+   ```
+
+(Since this command is dangerous, we added a check to prevent it to be executed on `main` branch; to execute, just create a new branch before)
+
+4. Now you can run the local server for manual testing and debugging:
+```bash
+python manage.py runserver
+```
+
+5. You can use default users "orga@test.it" and "user@test.it", both with password "banana"
 
 ---
 
@@ -240,17 +301,12 @@ In order to develop:
 
 Thanks in advance for contributing! Here's the steps:
 
-1. Install and activate `pre-commit`:
+1. Follow the steps outlined in [Local setup](#local-setup) for setting up your local *development* instance
+
+2. Install and activate `pre-commit`:
    ```bash
    pip install pre-commit
    pre-commit install
-   ```
-
-2. Install and activate LFS to handle big files (like the test dump):
-   ```bash
-   sudo apt install git-lfs
-   git lfs install
-   git lfs pull
    ```
 
 3. In the `main/settings/dev.py` settings file, add a `DEEPL_API_KEY` value. You can obtain a API key for the *DeepL API Free* (up to 500k characters monthly) [here](https://www.deepl.com/en/pro).
@@ -271,11 +327,16 @@ Thanks in advance for contributing! Here's the steps:
    ./scripts/translate.sh
    ```
    This will updated all your translations, have correct the untranslated / fuzzy ones with Deepl API. In the terminal, take some time to review them before proceeding.
-6. If you're creating a new feature, write a playwright test suite that covers it. Look in the `larpmanager/tests` folder to see how it's done. Run
+6. If you're creating a new feature, write a playwright test suite that covers it. Look in the `larpmanager/tests` folder to see how it's done. (Standard users are "orga@test.it" and "user@test.it", both with password "banana"). Run
    ```bash
    ./scripts/record-test.sh
    ```
    To run an instance of playwright that will record all your actions, in code that can later be inserted into the test.
+   - If you wish to expand an existing test, you can place a `page.pause()` at the end of it, and then run
+   ```bash
+    PWDEBUG=1 pytest larpmanager/tests/playwright/ability_px_test.py --headed -s
+    ```
+   It will execute the text up untile the pause, so you can record the actions after it (remember to remove the `page.pause()` before committing)
 7. If you're changing the model or the fixtures, run:
    ```bash
    python manage.py dump_test
@@ -283,7 +344,7 @@ Thanks in advance for contributing! Here's the steps:
    to update the dump used by tests and ci.
 8. Before pushing make sure that all the tests passes using:
    ```bash
-   pytest
+   ./scripts/test.sh [workers] (default: 4 workers)
    ```
    *Note that the tests will take some time to complete*.
 9. When you're ready to push your new branch, run

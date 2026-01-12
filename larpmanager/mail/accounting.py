@@ -25,7 +25,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features, get_event_features
-from larpmanager.mail.base import notify_organization_exe
+from larpmanager.mail.base import my_send_digest_email, notify_organization_exe
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.accounting import (
     AccountingItemCollection,
@@ -40,8 +40,34 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import get_url, hdr
 from larpmanager.models.event import Run
-from larpmanager.models.member import Member
-from larpmanager.utils.tasks import my_send_mail
+from larpmanager.models.member import Member, Membership, NotificationType
+from larpmanager.utils.larpmanager.tasks import my_send_mail
+
+
+def format_decimal_amount(value: float) -> str:
+    """Format decimal value for display: integers without decimals, decimals with max 2 places.
+
+    Args:
+        value: The decimal/float value to format
+
+    Returns:
+        Formatted string with integers shown without decimals (e.g., "5"),
+        and decimals shown with minimum necessary decimals, max 2 (e.g., "5.5", "5.25")
+
+    Examples:
+        >>> format_decimal_amount(5.0)
+        '5'
+        >>> format_decimal_amount(5.5)
+        '5.5'
+        >>> format_decimal_amount(5.25)
+        '5.25'
+        >>> format_decimal_amount(5.123)
+        '5.12'
+
+    """
+    if value % 1 == 0:
+        return str(int(value))
+    return f"{value:.2f}".rstrip("0").rstrip(".")
 
 
 def send_expense_notification_email(instance: AccountingItemExpense) -> None:
@@ -111,8 +137,9 @@ def get_expense_mail(instance: AccountingItemExpense) -> tuple[str, str]:
     )
 
     # Add document download link if available
-    document_download_url = get_url(instance.download(), instance)
-    email_body += f"<br /><br /><a href='{document_download_url}'>" + _("download document") + "</a>"
+    if instance.invoice:
+        document_download_url = get_url(instance.download(), instance)
+        email_body += f"<br /><br /><a href='{document_download_url}'>" + _("download document") + "</a>"
 
     # Add approval prompt and confirmation link
     email_body += "<br /><br />" + _("Did you check and is it correct") + "?"
@@ -165,12 +192,13 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
     )
 
     # Get token and credit names for the association
-    _token_name, credit_name = get_token_credit_name(expense_item.association_id)
+    _token_name, credits_name = get_token_credit_name(expense_item.association_id)
 
-    # Add credit information if run has token_credit feature enabled
-    if expense_item.run and "token_credit" in get_event_features(expense_item.run.event_id):
+    # Add credit information if run has credits feature enabled
+    event_features = get_event_features(expense_item.run.event_id) if expense_item.run else {}
+    if expense_item.run and "credits" in event_features:
         email_body += (
-            "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s") % {"credits": credit_name} + "."
+            "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s") % {"credits": credits_name} + "."
         )
         email_body += " " + _("This is automatically deducted from the registration of a future event") + "."
 
@@ -199,7 +227,7 @@ def get_token_credit_name(association_id: int) -> tuple[str, str]:
         association_id: ID of the Association to get configuration from.
 
     Returns:
-        A tuple containing (token_name, credit_name) as strings. Returns
+        A tuple containing (tokens_name, credits_name) as strings. Returns
         default translated values if custom names are not configured.
 
     """
@@ -207,20 +235,20 @@ def get_token_credit_name(association_id: int) -> tuple[str, str]:
     association_config_cache = {}
 
     # Retrieve custom token and credit names from association config
-    token_name = get_association_config(
-        association_id, "token_credit_token_name", default_value=None, context=association_config_cache
+    tokens_name = get_association_config(
+        association_id, "tokens_name", default_value=None, context=association_config_cache
     )
-    credit_name = get_association_config(
-        association_id, "token_credit_credit_name", default_value=None, context=association_config_cache
+    credits_name = get_association_config(
+        association_id, "credits_name", default_value=None, context=association_config_cache
     )
 
     # Apply default translated names if custom names not configured
-    if not token_name:
-        token_name = _("Tokens")
-    if not credit_name:
-        credit_name = _("Credits")
+    if not tokens_name:
+        tokens_name = _("Tokens")
+    if not credits_name:
+        credits_name = _("Credits")
 
-    return token_name, credit_name
+    return tokens_name, credits_name
 
 
 def send_payment_confirmation_email(payment_item: AccountingItemPayment) -> None:
@@ -249,15 +277,15 @@ def send_payment_confirmation_email(payment_item: AccountingItemPayment) -> None
         return
 
     # Extract related objects for email context
-    event_run = payment_item.reg.run
-    registered_member = payment_item.reg.member
+    event_run = payment_item.registration.run
+    registered_member = payment_item.registration.member
 
     # Check if payment notifications are enabled for this association
     if not get_association_config(event_run.event.association_id, "mail_payment", default_value=False):
         return
 
     # Get localized names for tokens and credits
-    token_name, credit_name = get_token_credit_name(payment_item.association_id)
+    tokens_name, credits_name = get_token_credit_name(payment_item.association_id)
 
     # Get currency symbol for money payments
     currency_symbol = event_run.event.association.get_currency_symbol()
@@ -268,12 +296,12 @@ def send_payment_confirmation_email(payment_item: AccountingItemPayment) -> None
         if payment_item.pay == PaymentChoices.MONEY:
             notify_pay_money(currency_symbol, payment_item, registered_member, event_run)
         elif payment_item.pay == PaymentChoices.CREDIT:
-            notify_pay_credit(credit_name, payment_item, registered_member, event_run)
+            notify_pay_credit(credits_name, payment_item, registered_member, event_run)
         elif payment_item.pay == PaymentChoices.TOKEN:
-            notify_pay_token(payment_item, registered_member, event_run, token_name)
+            notify_pay_token(payment_item, registered_member, event_run, tokens_name)
 
 
-def notify_pay_token(instance: AccountingItemPayment, member: Member, run: Run, token_name: str) -> None:
+def notify_pay_token(instance: AccountingItemPayment, member: Member, run: Run, tokens_name: str) -> None:
     """Send token payment notifications to user and organizers.
 
     Sends payment confirmation emails to both the paying member and all event
@@ -283,7 +311,7 @@ def notify_pay_token(instance: AccountingItemPayment, member: Member, run: Run, 
         instance: Payment accounting item instance containing payment details
         member: Member who made the payment
         run: Event run object for the payment context
-        token_name: Name of the token currency being paid
+        tokens_name: Name of the token currency being paid
 
     Returns:
         None
@@ -291,43 +319,22 @@ def notify_pay_token(instance: AccountingItemPayment, member: Member, run: Run, 
     """
     # Send notification to the paying user
     activate(member.language)
-    subject, body = get_pay_token_email(instance, run, token_name)
+    subject, body = get_pay_token_email(instance, run, tokens_name)
     my_send_mail(subject, body, member, run)
 
-    # Check if digest mode is enabled for this event
-    from larpmanager.models.notification import (
-        OrganizerNotificationQueue,
-        queue_organizer_notification,
-        should_queue_notification,
-    )
-
-    digest_mode = should_queue_notification(run.event)
-
     # Send notifications to organizers/treasurers
-    if digest_mode:
-        # Queue notification for daily summary (treasurers will be included)
-        queue_organizer_notification(
-            event=run.event,
-            notification_type=OrganizerNotificationQueue.NotificationType.PAYMENT_TOKEN,
-            payment=instance,
-            details={
-                "member_name": member.username,
-                "token_name": token_name,
-            },
+    for organizer in get_event_organizers(run.event):
+        my_send_digest_email(
+            member=organizer,
+            run=run,
+            instance=instance,
+            notification_type=NotificationType.PAYMENT_TOKEN,
+            email_generator=get_pay_token_email,
+            email_generator_args=(instance, run, tokens_name),
         )
-    else:
-        # Send immediate emails to all event organizers
-        for organizer in get_event_organizers(run.event):
-            # Set organizer's preferred language for localized email
-            activate(organizer.language)
-            subject, body = get_pay_token_email(instance, run, token_name)
-
-            # Add member identification to organizer's subject line
-            subject += _(" for %(user)s") % {"user": member}
-            my_send_mail(subject, body, organizer, run)
 
 
-def get_pay_token_email(instance: AccountingItemPayment, run: Run, token_name: str) -> tuple[str, str]:
+def get_pay_token_email(instance: AccountingItemPayment, run: Run, tokens_name: str) -> tuple[str, str]:
     """Generate email content for token payment notifications.
 
     Creates localized email subject and body text for notifications sent when
@@ -336,7 +343,7 @@ def get_pay_token_email(instance: AccountingItemPayment, run: Run, token_name: s
     Args:
         instance: Payment accounting item instance containing token amount
         run: Event run object representing the event
-        token_name: Name of the token currency being used
+        tokens_name: Name of the token currency being used
 
     Returns:
         Tuple containing:
@@ -350,16 +357,16 @@ def get_pay_token_email(instance: AccountingItemPayment, run: Run, token_name: s
     """
     # Generate localized subject line with event and token information
     subject = hdr(instance) + _("Utilisation %(tokens)s per %(event)s") % {
-        "tokens": token_name,
+        "tokens": tokens_name,
         "event": run,
     }
 
     # Create localized body message with token amount and currency
     body = (
-        _("%(amount)d %(tokens)s were used to participate in this event")
+        _("%(amount)s %(tokens)s were used to participate in this event")
         % {
-            "amount": int(instance.value),
-            "tokens": token_name,
+            "amount": format_decimal_amount(instance.value),
+            "tokens": tokens_name,
         }
         + "!"
     )
@@ -367,7 +374,7 @@ def get_pay_token_email(instance: AccountingItemPayment, run: Run, token_name: s
     return subject, body
 
 
-def notify_pay_credit(credit_name: str, instance: AccountingItemPayment, member: Member, run: Run) -> None:
+def notify_pay_credit(credits_name: str, instance: AccountingItemPayment, member: Member, run: Run) -> None:
     """Send credit payment notifications to user and organizers.
 
     Sends payment confirmation emails to both the member who made the payment
@@ -375,7 +382,7 @@ def notify_pay_credit(credit_name: str, instance: AccountingItemPayment, member:
     preferred language.
 
     Args:
-        credit_name: Name of the credit currency being paid
+        credits_name: Name of the credit currency being paid
         instance: Payment accounting item instance containing payment details
         member: Member object who made the payment
         run: Event run object associated with the payment
@@ -386,50 +393,29 @@ def notify_pay_credit(credit_name: str, instance: AccountingItemPayment, member:
     """
     # Send notification to the member who made the payment
     activate(member.language)
-    email_subject, email_body = get_pay_credit_email(credit_name, instance, run)
+    email_subject, email_body = get_pay_credit_email(credits_name, instance, run)
     my_send_mail(email_subject, email_body, member, run)
 
-    # Check if digest mode is enabled for this event
-    from larpmanager.models.notification import (
-        OrganizerNotificationQueue,
-        queue_organizer_notification,
-        should_queue_notification,
-    )
-
-    digest_mode = should_queue_notification(run.event)
-
     # Send notifications to organizers/treasurers
-    if digest_mode:
-        # Queue notification for daily summary (treasurers will be included)
-        queue_organizer_notification(
-            event=run.event,
-            notification_type=OrganizerNotificationQueue.NotificationType.PAYMENT_CREDIT,
-            payment=instance,
-            details={
-                "member_name": member.username,
-                "credit_name": credit_name,
-            },
+    for organizer in get_event_organizers(run.event):
+        my_send_digest_email(
+            member=organizer,
+            run=run,
+            instance=instance,
+            notification_type=NotificationType.PAYMENT_CREDIT,
+            email_generator=get_pay_credit_email,
+            email_generator_args=(credits_name, instance, run),
         )
-    else:
-        # Send immediate emails to all event organizers
-        for organizer in get_event_organizers(run.event):
-            # Activate organizer's preferred language for localized content
-            activate(organizer.language)
-            email_subject, email_body = get_pay_credit_email(credit_name, instance, run)
-
-            # Add member identification to subject line for organizers
-            email_subject += _(" for %(user)s") % {"user": member}
-            my_send_mail(email_subject, email_body, organizer, run)
 
 
-def get_pay_credit_email(credit_name: str, instance: AccountingItemPayment, run: Run) -> tuple[str, str]:
+def get_pay_credit_email(credits_name: str, instance: AccountingItemPayment, run: Run) -> tuple[str, str]:
     """Generate email content for credit payment notifications.
 
     Creates subject and body text for emails sent when credits are used
     to pay for event participation.
 
     Args:
-        credit_name: Name of the credit currency (e.g., "PX", "tokens")
+        credits_name: Name of the credit currency (e.g., "PX", "tokens")
         instance: Payment accounting item instance containing transaction details
         run: Event run object representing the specific event instance
 
@@ -441,16 +427,16 @@ def get_pay_credit_email(credit_name: str, instance: AccountingItemPayment, run:
     """
     # Generate email subject with event header and credit usage message
     email_subject = hdr(instance) + _("Utilisation %(credits)s per %(event)s") % {
-        "credits": credit_name,
+        "credits": credits_name,
         "event": run,
     }
 
     # Create email body describing the credit transaction amount
     email_body = (
-        _("%(amount)d %(credits)s were used to participate in this event")
+        _("%(amount)s %(credits)s were used to participate in this event")
         % {
-            "amount": int(instance.value),
-            "credits": credit_name,
+            "amount": format_decimal_amount(instance.value),
+            "credits": credits_name,
         }
         + "!"
     )
@@ -463,7 +449,7 @@ def notify_pay_money(
     currency_symbol: str,
     payment_instance: AccountingItemPayment,
     paying_member: Member,
-    event_run: Run,
+    run: Run,
 ) -> None:
     """Send money payment notifications to user and organizers.
 
@@ -475,7 +461,7 @@ def notify_pay_money(
         currency_symbol: Currency symbol to display in the notification
         payment_instance: Payment accounting item instance containing payment details
         paying_member: Member object who made the payment
-        event_run: Event run object associated with the payment
+        run: Event run object associated with the payment
 
     Returns:
         None
@@ -483,40 +469,18 @@ def notify_pay_money(
     """
     # Send notification email to the member who made the payment
     activate(paying_member.language)
-    subject, body = get_pay_money_email(currency_symbol, payment_instance, event_run)
-    my_send_mail(subject, body, paying_member, event_run)
-
-    # Check if digest mode is enabled for this event
-    from larpmanager.models.notification import (
-        OrganizerNotificationQueue,
-        queue_organizer_notification,
-        should_queue_notification,
-    )
-
-    digest_mode = should_queue_notification(event_run.event)
+    subject, body = get_pay_money_email(currency_symbol, payment_instance, run)
+    my_send_mail(subject, body, paying_member, run)
 
     # Send notifications to organizers/treasurers
-    if digest_mode:
-        # Queue notification for daily summary (treasurers will be included)
-        queue_organizer_notification(
-            event=event_run.event,
-            notification_type=OrganizerNotificationQueue.NotificationType.PAYMENT_MONEY,
-            payment=payment_instance,
-            details={
-                "member_name": paying_member.username,
-                "currency_symbol": currency_symbol,
-            },
+    for organizer in get_event_organizers(run.event):
+        my_send_digest_email(
+            member=organizer,
+            run=run,
+            notification_type=NotificationType.PAYMENT_MONEY,
+            email_generator=get_pay_money_email,
+            email_generator_args=(currency_symbol, payment_instance, run),
         )
-    else:
-        # Send immediate emails to all event organizers
-        for organizer in get_event_organizers(event_run.event):
-            # Activate organizer's language for localized email content
-            activate(organizer.language)
-            subject, body = get_pay_money_email(currency_symbol, payment_instance, event_run)
-
-            # Add member identification to subject line for organizers
-            subject += _(" for %(user)s") % {"user": paying_member}
-            my_send_mail(subject, body, organizer, event_run)
 
 
 def get_pay_money_email(curr_sym: str, instance: AccountingItemPayment, run: Run) -> tuple[str, str]:
@@ -580,24 +544,24 @@ def send_token_credit_notification_email(accounting_item: AccountingItemOther) -
         return
 
     # Get organization-specific names for tokens and credits
-    token_name, credit_name = get_token_credit_name(accounting_item.association_id)
+    tokens_name, credits_name = get_token_credit_name(accounting_item.association_id)
 
     # Only send notifications for new items (pk is None)
     if not accounting_item.pk:
         # Send appropriate notification based on item type
         if accounting_item.oth == OtherChoices.TOKEN:
-            notify_token(accounting_item, token_name)
+            notify_token(accounting_item, tokens_name)
         elif accounting_item.oth == OtherChoices.CREDIT:
-            notify_credit(credit_name, accounting_item)
+            notify_credit(credits_name, accounting_item)
         elif accounting_item.oth == OtherChoices.REFUND:
-            notify_refund(credit_name, accounting_item)
+            notify_refund(credits_name, accounting_item)
 
 
-def notify_refund(credit_name: str, instance: AccountingItemOther) -> None:
+def notify_refund(credits_name: str, instance: AccountingItemOther) -> None:
     """Send refund notifications to user and organizers.
 
     Args:
-        credit_name: Name of the credit currency
+        credits_name: Name of the credit currency
         instance: Accounting item instance for refund
 
     Returns:
@@ -617,7 +581,7 @@ def notify_refund(credit_name: str, instance: AccountingItemOther) -> None:
         )
         % {
             "amount": instance.value,
-            "elements": credit_name,
+            "elements": credits_name,
             "reason": instance.descr,
         }
         + "."
@@ -627,7 +591,7 @@ def notify_refund(credit_name: str, instance: AccountingItemOther) -> None:
     my_send_mail(email_subject, email_body, instance.member, instance)
 
 
-def notify_credit(credit_name: str, instance: AccountingItemOther) -> None:
+def notify_credit(credits_name: str, instance: AccountingItemOther) -> None:
     """Send credit notification emails to users.
 
     Sends email notifications about credit assignments to both the recipient
@@ -635,7 +599,7 @@ def notify_credit(credit_name: str, instance: AccountingItemOther) -> None:
     recipient's language preference.
 
     Args:
-        credit_name: Name of the credit type being assigned
+        credits_name: Name of the credit type being assigned
         instance: Credit instance containing member and amount information.
                  Must have 'member' attribute and optional 'run' attribute.
 
@@ -650,7 +614,7 @@ def notify_credit(credit_name: str, instance: AccountingItemOther) -> None:
     """
     # Send notification email to the credit recipient
     activate(instance.member.language)
-    email_subject, email_body = get_credit_email(credit_name, instance)
+    email_subject, email_body = get_credit_email(credits_name, instance)
 
     # Build URL for user's accounting page and add usage instructions
     accounting_url = get_url("accounting", instance)
@@ -671,21 +635,21 @@ def notify_credit(credit_name: str, instance: AccountingItemOther) -> None:
         for event_organizer in get_event_organizers(instance.run.event):
             # Localize email content for each organizer
             activate(event_organizer.language)
-            email_subject, email_body = get_credit_email(credit_name, instance)
+            email_subject, email_body = get_credit_email(credits_name, instance)
 
             # Add member information to subject for organizer context
             email_subject += _(" for %(user)s") % {"user": instance.member}
             my_send_mail(email_subject, email_body, event_organizer, instance)
 
 
-def get_credit_email(credit_name: str, instance: AccountingItemOther) -> tuple[str, str]:
+def get_credit_email(credits_name: str, instance: AccountingItemOther) -> tuple[str, str]:
     """Generate email subject and body for credit assignment notification.
 
     Creates localized email content for notifying users about credit assignments,
     including the credit amount, type, and associated event run if applicable.
 
     Args:
-        credit_name: Name of the credit type being assigned (e.g., "tokens", "points")
+        credits_name: Name of the credit type being assigned (e.g., "tokens", "points")
         instance: AccountingItem instance containing credit details including value,
                  description, and optional run information
 
@@ -697,7 +661,7 @@ def get_credit_email(credit_name: str, instance: AccountingItemOther) -> tuple[s
     """
     # Build the base subject line with header and credit assignment text
     subject = hdr(instance) + _("Assignment %(elements)s") % {
-        "elements": credit_name,
+        "elements": credits_name,
     }
 
     # Append run information to subject if available
@@ -709,7 +673,7 @@ def get_credit_email(credit_name: str, instance: AccountingItemOther) -> tuple[s
         _("Assigned %(amount).2f %(elements)s for '%(reason)s'")
         % {
             "amount": instance.value,
-            "elements": credit_name,
+            "elements": credits_name,
             "reason": instance.descr,
         }
         + "."
@@ -718,11 +682,11 @@ def get_credit_email(credit_name: str, instance: AccountingItemOther) -> tuple[s
     return subject, body
 
 
-def notify_token(instance: Any, token_name: str) -> None:
+def notify_token(instance: Any, tokens_name: str) -> None:
     """Send token notification emails to user and event organizers."""
     # Send notification to the token recipient
     activate(instance.member.language)
-    email_subject, email_body = get_token_email(instance, token_name)
+    email_subject, email_body = get_token_email(instance, tokens_name)
     additional_body = (
         "<br /><br /><i>" + _("They will be used automatically when you sign up for a new event") + "!" + "</i>"
     )
@@ -732,12 +696,12 @@ def notify_token(instance: Any, token_name: str) -> None:
     if instance.run:
         for organizer in get_event_organizers(instance.run.event):
             activate(organizer.language)
-            email_subject, email_body = get_token_email(instance, token_name)
+            email_subject, email_body = get_token_email(instance, tokens_name)
             email_subject += _(" for %(user)s") % {"user": instance.member}
             my_send_mail(email_subject, email_body, organizer, instance)
 
 
-def get_token_email(instance: AccountingItemOther, token_name: str) -> tuple[str, str]:
+def get_token_email(instance: AccountingItemOther, tokens_name: str) -> tuple[str, str]:
     """Generate email subject and body for token assignment notification.
 
     Creates a localized email subject and body for notifying users about
@@ -745,7 +709,7 @@ def get_token_email(instance: AccountingItemOther, token_name: str) -> tuple[str
 
     Args:
         instance: AccountingItem instance containing token details
-        token_name: Name of the token type being assigned
+        tokens_name: Name of the token type being assigned
 
     Returns:
         A tuple containing the email subject and body as strings
@@ -758,7 +722,7 @@ def get_token_email(instance: AccountingItemOther, token_name: str) -> tuple[str
     """
     # Generate base subject with header and token assignment message
     email_subject = hdr(instance) + _("Assignment %(elements)s") % {
-        "elements": token_name,
+        "elements": tokens_name,
     }
 
     # Append run information to subject if available
@@ -770,7 +734,7 @@ def get_token_email(instance: AccountingItemOther, token_name: str) -> tuple[str
         _("Assigned %(amount).2f %(elements)s for '%(reason)s'")
         % {
             "amount": int(instance.value),
-            "elements": token_name,
+            "elements": tokens_name,
             "reason": instance.descr,
         }
         + "."
@@ -818,18 +782,7 @@ def send_donation_confirmation_email(instance: AccountingItemDonation) -> None:
 
 
 def send_collection_activation_email(instance: AccountingItemCollection) -> None:
-    """Handle post-save events for collection instances.
-
-    Sends an activation email to the organizer when a new collection instance
-    is created. The email contains a link to manage the collection.
-
-    Args:
-        instance: Collection instance that was saved
-
-    Returns:
-        None
-
-    """
+    """Handle post-save events for collection instances."""
     # Prepare email context with recipient and management URL
     email_context = {
         "recipient": instance.display_member(),
@@ -895,41 +848,42 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
     if not get_association_config(inv.association_id, "mail_payment", default_value=False):
         return
 
-    # For registration invoices, notify event organizers/treasurers
-    if inv.typ == PaymentType.REGISTRATION and inv.reg:
-        # Check if digest mode is enabled for this event
-        from larpmanager.models.notification import (
-            OrganizerNotificationQueue,
-            queue_organizer_notification,
-            should_queue_notification,
-        )
+    # Get organization features to determine notification recipients
+    features = get_association_features(inv.association_id)
 
-        digest_mode = should_queue_notification(inv.reg.run.event)
+    # Build list of members to notify
+    members_to_notify = []
 
-        if digest_mode:
-            # Queue notification for daily summary
-            queue_organizer_notification(
-                event=inv.reg.run.event,
-                notification_type=OrganizerNotificationQueue.NotificationType.INVOICE_APPROVAL,
-                invoice=inv,
-                details={
-                    "member_name": inv.reg.member.username if inv.reg and inv.reg.member else _("Unknown"),
-                    "invoice_number": inv.pk,
-                    "amount": inv.amount if hasattr(inv, "amount") else 0,
-                },
-            )
-        else:
-            # Send immediate emails
-            # Get all organizers for the event associated with this registration
-            for organizer in get_event_organizers(inv.reg.run.event):
-                # Set language context and prepare email content
-                activate(organizer.language)
-                email_subject, email_body = get_invoice_email(inv)
-                my_send_mail(email_subject, email_body, organizer, inv)
-
-    # Fallback: send to main organization email for all other cases
-    else:
+    if inv.typ != PaymentType.REGISTRATION or not inv.registration_id:
+        # For other invoice types send to main organization email
         notify_organization_exe(get_invoice_email, inv.association, inv)
+        return
+
+    members_to_notify = list(get_event_organizers(inv.registration.run.event))
+    run = inv.registration.run
+
+    # If treasurer feature is enabled, add treasurer appointees to the notification list
+    if "treasurer" in features:
+        # Parse comma-separated list of treasurer member IDs
+        treasurer_list = get_association_config(inv.association_id, "treasurer_appointees", default_value="")
+        query = Membership.objects.get(
+            association_id=inv.association_id, member_id__in=treasurer_list.split(",")
+        ).select_related("member")
+        for membership in query:
+            # Avoid duplicates if treasurer is also an organizer
+            if membership.member not in members_to_notify:
+                members_to_notify.append(membership.member)
+
+    # Send notification to each member in the list
+    for member in members_to_notify:
+        my_send_digest_email(
+            member=member,
+            run=run,
+            instance=inv,
+            notification_type=NotificationType.INVOICE_APPROVAL,
+            email_generator=get_invoice_email,
+            email_generator_args=(inv,),
+        )
 
 
 def notify_refund_request(payment: PaymentInvoice) -> None:
@@ -938,18 +892,7 @@ def notify_refund_request(payment: PaymentInvoice) -> None:
 
 
 def get_notify_refund_email(p: AccountingItemOther) -> tuple[str, str]:
-    """Generate email subject and body for refund request notification.
-
-    Args:
-        p: Payment object containing refund request details including member,
-           details, and value attributes
-
-    Returns:
-        tuple[str, str]: A tuple containing:
-            - subject (str): Email subject line with header and user info
-            - body (str): Email body with payment details and amount
-
-    """
+    """Generate email subject and body for refund request notification."""
     # Generate email subject with header prefix and requesting user
     subj = hdr(p) + _("Request refund from: %(user)s") % {"user": p.member}
 
@@ -960,17 +903,7 @@ def get_notify_refund_email(p: AccountingItemOther) -> tuple[str, str]:
 
 
 def get_invoice_email(invoice: Any) -> tuple[str, str]:
-    """Generate email subject and body for invoice payment verification.
-
-    Args:
-        invoice: Invoice object containing payment details and metadata
-
-    Returns:
-        tuple[str, str]: A tuple containing (subject, body) strings for the
-            payment verification email. Subject includes payment description,
-            body contains formatted payment details and action links.
-
-    """
+    """Generate email subject and body for invoice payment verification."""
     # Start building the email body with verification prompt
     body = _("Verify that the data are correct") + ":"
 

@@ -1,20 +1,33 @@
 {% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {{ form1.page_title }}
-    {% if nonum is None %}
-        {% if num %}
+    {% if welcome_message %}
+        {% trans "Welcome to" %} {{ platform }}!
+    {% else %}
+        {{ form1.page_title }}
+        {% if num != "0" %}
             - {% trans "Change" %}
         {% else %}
             - {% trans "New" %}
         {% endif %}
+        {% if run %}- {{ run }}{% endif %}
     {% endif %}
-    - {{ run }}
 {% endblock title %}
 {% block info %}
-    {{ form1.page_info }}
+    {% if welcome_message %}
+        <div id="welcome_message">
+            <p>{% trans "This page will guide you through the creation of your first event, step by step" %}.</p>
+            <p>{% trans "Simply follow the instructions and provide the required information" %}.</p>
+        </div>
+        <hr />
+        <br />
+    {% else %}
+        {{ form1.page_info }}
+    {% endif %}
 {% endblock info %}
 {% block content %}
+    {% include "elements/form/load_template.html" with form=form1 %}
+    {% include "elements/form/load_template.html" with form=form2 %}
     {% include "elements/form/informations.html" with form=form1 %}
     {% include "elements/form/errors.html" with form=form1 %}
     {% include "elements/form/errors.html" with form=form2 %}
@@ -32,6 +45,7 @@
         <input id="form_submit" type="submit" value="{% trans "Confirm" %}">
         <br />
     </form>
+    {% if additional %}{{ additional | safe }}{% endif %}
 {% endblock content %}
 {% block js2 %}
     {{ form1.media }}

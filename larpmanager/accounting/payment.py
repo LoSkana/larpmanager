@@ -25,9 +25,10 @@ from __future__ import annotations
 import logging
 import math
 import re
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -68,9 +69,9 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
-from larpmanager.utils.base import fetch_payment_details, update_payment_details
-from larpmanager.utils.einvoice import process_payment
-from larpmanager.utils.member import assign_badge
+from larpmanager.utils.core.base import fetch_payment_details, update_payment_details
+from larpmanager.utils.services.einvoice import process_payment
+from larpmanager.utils.users.member import assign_badge
 
 if TYPE_CHECKING:
     from decimal import Decimal
@@ -81,6 +82,9 @@ if TYPE_CHECKING:
     from larpmanager.models.member import Member
 
 logger = logging.getLogger(__name__)
+
+# Payment fee constants
+MAX_PAYMENT_FEE_PERCENTAGE = 100  # Maximum allowed payment fee percentage
 
 
 def get_payment_fee(association_id: int, slug: str) -> float:
@@ -99,7 +103,11 @@ def get_payment_fee(association_id: int, slug: str) -> float:
     if fee_key not in payment_details or not payment_details[fee_key]:
         return 0.0
 
-    return float(payment_details[fee_key].replace(",", "."))
+    fee_value = payment_details[fee_key]
+    # Handle both string and numeric fee values
+    if isinstance(fee_value, str):
+        return float(fee_value.replace(",", "."))
+    return float(fee_value)
 
 
 def unique_invoice_cod(length: int = 16) -> str:
@@ -152,8 +160,8 @@ def set_data_invoice(
     if invoice.typ == PaymentType.REGISTRATION:
         invoice.causal = _("Registration fee %(number)d of %(user)s per %(event)s") % {
             "user": member_real_display_name,
-            "event": str(context["reg"].run),
-            "number": context["reg"].num_payments,
+            "event": str(context["registration"].run),
+            "number": context["registration"].num_payments,
         }
         # Apply custom registration reason if applicable
         _custom_reason_reg(context, invoice, member_real_display_name)
@@ -182,7 +190,7 @@ def set_data_invoice(
         }
 
     # Apply special code prefix if configured for this association
-    if get_association_config(association_id, "payment_special_code", default_value=False):
+    if get_association_config(association_id, "payment_special_code", default_value=False, context=context):
         invoice.causal = f"{invoice.cod} - {invoice.causal}"
 
 
@@ -203,11 +211,13 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
 
     """
     # Set invoice registration references
-    invoice.idx = context["reg"].id
-    invoice.reg = context["reg"]
+    invoice.idx = context["registration"].id
+    invoice.registration = context["registration"]
 
     # Get custom reason template from event configuration
-    custom_reason_template = get_event_config(context["reg"].run.event_id, "payment_custom_reason")
+    custom_reason_template = get_event_config(
+        context["registration"].run.event_id, "payment_custom_reason", context=context
+    )
     if not custom_reason_template:
         return
 
@@ -229,7 +239,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
         # Look for a registration question with matching name
         try:
             registration_question = RegistrationQuestion.objects.get(
-                event=context["reg"].run.event,
+                event=context["registration"].run.event,
                 name__iexact=question_name,
             )
 
@@ -237,7 +247,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
             if registration_question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
                 user_choices = RegistrationChoice.objects.filter(
                     question=registration_question,
-                    reg_id=context["reg"].id,
+                    registration_id=context["registration"].id,
                 )
 
                 # Collect all selected option names
@@ -247,10 +257,10 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
                 # Handle text-based questions
                 answer_value = RegistrationAnswer.objects.get(
                     question=registration_question,
-                    reg_id=context["reg"].id,
+                    registration_id=context["registration"].id,
                 ).text
             placeholder_values[question_name] = answer_value
-        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to skip missing questions
+        except ObjectDoesNotExist:
             # Skip missing questions/answers
             pass
 
@@ -295,10 +305,20 @@ def update_invoice_gross_fee(
 
     if payment_fee_percentage is not None:
         if get_association_config(association_id, "payment_fees_user", default_value=False):
-            amount = (amount * 100) / (100 - payment_fee_percentage)
-            amount = round_up_to_two_decimals(amount)
+            # Validate payment fee percentage to prevent division by zero
+            if payment_fee_percentage >= MAX_PAYMENT_FEE_PERCENTAGE:
+                logger.error(
+                    "Invalid payment fee percentage %.2f for association %d (must be < %d)",
+                    payment_fee_percentage,
+                    association_id,
+                    MAX_PAYMENT_FEE_PERCENTAGE,
+                )
+                payment_fee_percentage = 0  # Use 0% fee as fallback
+            else:
+                amount = (amount * MAX_PAYMENT_FEE_PERCENTAGE) / (MAX_PAYMENT_FEE_PERCENTAGE - payment_fee_percentage)
+                amount = round_up_to_two_decimals(amount)
 
-        invoice.mc_fee = round_up_to_two_decimals(amount * payment_fee_percentage / 100.0)
+        invoice.mc_fee = round_up_to_two_decimals(amount * payment_fee_percentage / MAX_PAYMENT_FEE_PERCENTAGE)
 
     invoice.mc_gross = amount
     invoice.save()
@@ -307,7 +327,7 @@ def update_invoice_gross_fee(
 
 def _prepare_gateway_form(
     request: HttpRequest,
-    context: dict[str, Any],
+    context: dict,
     invoice: PaymentInvoice,
     payment_amount: Decimal,
     payment_method_slug: str,
@@ -353,7 +373,7 @@ def get_payment_form(
     request: HttpRequest,
     form: Form,
     payment_type: str,
-    context: dict[str, Any],
+    context: dict,
     invoice_key: str | None = None,
 ) -> None:
     """Create or update payment invoice and prepare gateway-specific form.
@@ -521,12 +541,16 @@ def _process_payment(invoice: PaymentInvoice) -> None:
 
     """
     if not AccountingItemPayment.objects.filter(inv=invoice).exists():
-        registration = Registration.objects.get(pk=invoice.idx)
+        try:
+            registration = Registration.objects.get(pk=invoice.idx)
+        except ObjectDoesNotExist:
+            logger.exception("Registration not found for invoice %s with idx %s", invoice.pk, invoice.idx)
+            return
 
         accounting_item = AccountingItemPayment()
         accounting_item.pay = PaymentChoices.MONEY
         accounting_item.member_id = invoice.member_id
-        accounting_item.reg = registration
+        accounting_item.registration = registration
         accounting_item.inv = invoice
         accounting_item.value = invoice.mc_gross
         accounting_item.association_id = invoice.association_id
@@ -568,9 +592,12 @@ def _process_fee(fee_percentage: float, invoice: PaymentInvoice) -> None:
 
     # For registration payments, link the transaction to the registration
     if invoice.typ == PaymentType.REGISTRATION:
-        registration = Registration.objects.get(pk=invoice.idx)
-        accounting_transaction.reg = registration
-        accounting_transaction.save()
+        try:
+            registration = Registration.objects.get(pk=invoice.idx)
+            accounting_transaction.registration = registration
+            accounting_transaction.save()
+        except ObjectDoesNotExist:
+            logger.exception("Registration not found for invoice %s with idx %s", invoice.pk, invoice.idx)
 
 
 def process_payment_invoice_status_change(invoice: PaymentInvoice) -> None:
@@ -583,18 +610,21 @@ def process_payment_invoice_status_change(invoice: PaymentInvoice) -> None:
     if not invoice.pk:
         return
 
-    try:
-        previous_invoice = PaymentInvoice.objects.get(pk=invoice.pk)
-    except PaymentInvoice.DoesNotExist:
-        return
+    # Use transaction and lock to prevent race conditions during status change
+    with transaction.atomic():
+        try:
+            # Lock the invoice to prevent concurrent modifications
+            previous_invoice = PaymentInvoice.objects.select_for_update().get(pk=invoice.pk)
+        except ObjectDoesNotExist:
+            return
 
-    if previous_invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
-        return
+        if previous_invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
+            return
 
-    if invoice.status not in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
-        return
+        if invoice.status not in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
+            return
 
-    payment_received(invoice)
+        payment_received(invoice)
 
 
 def process_refund_request_status_change(refund_request: HttpRequest) -> None:

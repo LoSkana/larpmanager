@@ -24,6 +24,13 @@ repos:
         language: script
         pass_filenames: false
 
+      - id: check-test-naming
+        name: Check test file naming conventions
+        entry: ./scripts/check-test-naming.sh
+        language: script
+        pass_filenames: false
+        files: ^larpmanager/tests/(playwright|unit)/.*\.py$
+
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.28.0
     hooks:
@@ -47,10 +54,8 @@ repos:
     rev: v0.12.11
     hooks:
       - id: ruff
-        args: [--fix, --unsafe-fixes]
-        exclude: ^(larpmanager/tests/|larpmanager/migrations/|refactor/|scripts/)
+        args: [--fix]
       - id: ruff-format
-        exclude: ^(larpmanager/tests/|larpmanager/migrations/|refactor/|scripts/)
 
   - repo: local
     hooks:

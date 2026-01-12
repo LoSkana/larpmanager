@@ -20,6 +20,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -27,18 +28,21 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.config import get_event_config
 from larpmanager.forms.experience import (
     OrgaAbilityPxForm,
+    OrgaAbilityTemplatePxForm,
     OrgaAbilityTypePxForm,
     OrgaDeliveryPxForm,
     OrgaModifierPxForm,
     OrgaRulePxForm,
 )
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.bulk import handle_bulk_ability
-from larpmanager.utils.common import exchange_order
-from larpmanager.utils.download import export_abilities, zip_exports
-from larpmanager.utils.edit import orga_edit
-from larpmanager.utils.exceptions import ReturnNowError
+from larpmanager.models.event import Run
+from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
+from larpmanager.models.registration import Registration
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import exchange_order, get_object_uuid
+from larpmanager.utils.core.exceptions import ReturnNowError
+from larpmanager.utils.io.download import export_abilities, zip_exports
+from larpmanager.utils.services.bulk import handle_bulk_ability
+from larpmanager.utils.services.edit import orga_edit
 
 
 @login_required
@@ -54,9 +58,66 @@ def orga_px_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_px_deliveries_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
-    """Edit a delivery for an event."""
-    return orga_edit(request, event_slug, "orga_px_deliveries", OrgaDeliveryPxForm, num)
+def orga_px_deliveries_edit(request: HttpRequest, event_slug: str, delivery_uuid: str) -> HttpResponse:
+    """Edit a delivery for an event.
+
+    When creating a new delivery (delivery_uuid == "0"), if a run is selected via the
+    auto_populate_run field, the form will be reloaded with characters from that run's
+    registrations pre-populated in the characters field.
+    """
+    # Check user permissions and get base context for the event
+    context = check_event_context(request, event_slug, "orga_px_deliveries")
+
+    # Handle auto-population from run selection
+    if request.method == "POST" and delivery_uuid == "0":
+        run_uuid = request.POST.get("auto_populate_run")
+
+        # If a run was selected, get all characters from that run's registrations
+        if run_uuid:
+            try:
+                run = get_object_uuid(Run, run_uuid)
+
+                # Get all characters assigned to registrations for this run
+                character_ids = (
+                    Registration.objects.filter(run=run, cancellation_date__isnull=True)
+                    .values_list("characters__id", flat=True)
+                    .distinct()
+                )
+
+                # Filter registrations without characters
+                character_ids = [cid for cid in character_ids if cid is not None]
+
+                # Pass the POST data but override the characters field
+                form_data = request.POST.copy()
+                form_data.setlist("characters", [str(cid) for cid in character_ids])
+
+                # Create the form with pre-populated data
+                form = OrgaDeliveryPxForm(form_data, instance=None, context=context)
+
+                # Hide the auto_populate_run field now that characters are loaded
+                form.fields.pop("auto_populate_run", None)
+
+                # Set up context for rendering
+                context["form"] = form
+                context["num"] = "0"
+                context["add_another"] = True
+                context["continue_add"] = False
+                context["elementTyp"] = DeliveryPx
+
+                # Add success message to inform user
+                messages.info(
+                    request,
+                    _("Characters from event '{run}' have been loaded. Review and confirm to save.").format(run=run),
+                )
+
+                return render(request, "larpmanager/orga/edit.html", context)
+
+            except (ValueError, ObjectDoesNotExist):
+                # If run retrieval fails, continue with normal flow
+                pass
+
+    # Use standard orga_edit for all other cases
+    return orga_edit(request, event_slug, "orga_px_deliveries", OrgaDeliveryPxForm, delivery_uuid)
 
 
 @login_required
@@ -94,6 +155,9 @@ def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Retrieve event configuration for user PX management permissions
     context["px_user"] = get_event_config(context["event"].id, "px_user", default_value=False, context=context)
+    context["px_templates"] = get_event_config(
+        context["event"].id, "px_templates", default_value=False, context=context
+    )
 
     # Query and prepare abilities list with optimized database access
     context["list"] = (
@@ -109,13 +173,13 @@ def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_px_abilities_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_px_abilities_edit(request: HttpRequest, event_slug: str, ability_uuid: str) -> HttpResponse:
     """Edit organization PX abilities with validation for ability types.
 
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        num: Ability ID number for editing
+        ability_uuid: Ability UUID for editing
 
     Returns:
         HTTP response for ability editing or redirect
@@ -128,10 +192,10 @@ def orga_px_abilities_edit(request: HttpRequest, event_slug: str, num: int) -> H
     if not context["event"].get_elements(AbilityTypePx).exists():
         # Warn user and redirect to ability types creation page
         messages.warning(request, _("You must create at least one ability type before you can create abilities"))
-        return redirect("orga_px_ability_types_edit", event_slug=event_slug, num=0)
+        return redirect("orga_px_ability_types_edit", event_slug=event_slug, type_uuid="0")
 
     # Process ability editing with standard organization edit workflow
-    return orga_edit(request, event_slug, "orga_px_abilities", OrgaAbilityPxForm, num)
+    return orga_edit(request, event_slug, "orga_px_abilities", OrgaAbilityPxForm, ability_uuid)
 
 
 @login_required
@@ -147,31 +211,44 @@ def orga_px_ability_types(request: HttpRequest, event_slug: str) -> HttpResponse
 
 
 @login_required
-def orga_px_ability_types_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_px_ability_types_edit(request: HttpRequest, event_slug: str, type_uuid: str) -> HttpResponse:
     """Edit ability type for PX system."""
-    return orga_edit(request, event_slug, "orga_px_ability_types", OrgaAbilityTypePxForm, num)
+    return orga_edit(request, event_slug, "orga_px_ability_types", OrgaAbilityTypePxForm, type_uuid)
 
 
 @login_required
 def orga_px_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display experience rules for an event."""
-    # Check permission and get event context
     context = check_event_context(request, event_slug, "orga_px_rules")
     context["list"] = context["event"].get_elements(RulePx).order_by("order")
     return render(request, "larpmanager/orga/px/rules.html", context)
 
 
 @login_required
-def orga_px_rules_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_px_ability_templates(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display list of ability templates for an event."""
+    context = check_event_context(request, event_slug, "orga_px_ability_templates")
+    context["list"] = context["event"].get_elements(AbilityTemplatePx).order_by("number")
+    return render(request, "larpmanager/orga/px/ability_templates.html", context)
+
+
+@login_required
+def orga_px_ability_templates_edit(request: HttpRequest, event_slug: str, template_uuid: str) -> HttpResponse:
     """Edit a specific rule for an event."""
-    return orga_edit(request, event_slug, "orga_px_rules", OrgaRulePxForm, num)
+    return orga_edit(request, event_slug, "orga_px_ability_templates", OrgaAbilityTemplatePxForm, template_uuid)
+
+
+@login_required
+def orga_px_rules_edit(request: HttpRequest, event_slug: str, rule_uuid: str) -> HttpResponse:
+    """Edit a specific rule for an event."""
+    return orga_edit(request, event_slug, "orga_px_rules", OrgaRulePxForm, rule_uuid)
 
 
 @login_required
 def orga_px_rules_order(
     request: HttpRequest,
     event_slug: str,
-    num: int,
+    rule_uuid: str,
     order: int,
 ) -> HttpResponse:
     """Reorder PX rules for an event."""
@@ -179,7 +256,7 @@ def orga_px_rules_order(
     context = check_event_context(request, event_slug, "orga_px_rules")
 
     # Exchange rule order in database
-    exchange_order(context, RulePx, num, order)
+    exchange_order(context, RulePx, rule_uuid, order)
 
     return redirect("orga_px_rules", event_slug=context["run"].get_slug())
 
@@ -197,16 +274,16 @@ def orga_px_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_px_modifiers_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_px_modifiers_edit(request: HttpRequest, event_slug: str, modifier_uuid: str) -> HttpResponse:
     """Edit experience modifier for an event."""
-    return orga_edit(request, event_slug, "orga_px_modifiers", OrgaModifierPxForm, num)
+    return orga_edit(request, event_slug, "orga_px_modifiers", OrgaModifierPxForm, modifier_uuid)
 
 
 @login_required
 def orga_px_modifiers_order(
     request: HttpRequest,
     event_slug: str,
-    num: int,
+    modifier_uuid: str,
     order: int,
 ) -> HttpResponse:
     """Reorder experience modifiers in the organizer interface."""
@@ -214,6 +291,6 @@ def orga_px_modifiers_order(
     context = check_event_context(request, event_slug, "orga_px_modifiers")
 
     # Exchange modifier order
-    exchange_order(context, ModifierPx, num, order)
+    exchange_order(context, ModifierPx, modifier_uuid, order)
 
     return redirect("orga_px_modifiers", event_slug=context["run"].get_slug())

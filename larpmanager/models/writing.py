@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import Any, ClassVar
 
 from django.db import models
 from django.db.models import Q
@@ -32,16 +32,13 @@ from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config, get_event_config
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_short, show_thumb
 
-if TYPE_CHECKING:
-    from django.http import HttpResponse
 
-
-class Writing(BaseConceptModel):
+class Writing(UuidMixin, BaseConceptModel):
     """Represents Writing model."""
 
     progress = models.ForeignKey(
@@ -84,15 +81,11 @@ class Writing(BaseConceptModel):
         """Return a dictionary representation for red display.
 
         Returns:
-            Dictionary containing id, number, and name attributes.
+            Dictionary containing number, name, and uuid attributes.
 
         """
-        # noinspection PyUnresolvedReferences
-        # Create base dictionary with id and number
-        js = {"id": self.id, "number": self.number}
-
-        # Update dictionary with name attribute
-        for s in ["name"]:
+        js = {}
+        for s in ["number", "name", "uuid"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -127,11 +120,11 @@ class Writing(BaseConceptModel):
         return js
 
     @classmethod
-    def get_example_csv(cls, enabled_features: set[str]) -> list[list[str]]:
+    def get_example_csv(cls, enabled_features: dict[str, int]) -> list[list[str]]:
         """Generate example CSV structure for writing element imports.
 
         Args:
-            enabled_features: Set of enabled feature names to include in the CSV template.
+            enabled_features: Dict of enabled feature names to include in the CSV template.
 
         Returns:
             List of CSV rows: first row contains headers, second row contains example data.
@@ -283,7 +276,7 @@ class Character(Writing):
 
         if self.player:
             # noinspection PyUnresolvedReferences
-            js["owner_id"] = self.player_id
+            js["owner_uuid"] = self.player.uuid
             # noinspection PyUnresolvedReferences
             js["owner"] = self.player.display_member()
 
@@ -315,9 +308,9 @@ class Character(Writing):
     def show_factions(self, event: Event | None, js: dict) -> None:
         """Add faction information to the JavaScript data structure.
 
-        Populates the 'factions' list in the js dictionary with faction numbers
-        from the event. If no primary faction is found, adds 0 as default.
-        Also sets thumbnail URL if primary faction has cover image.
+        Populates the 'factions' list in the js dictionary with faction objects
+        containing UUID and number from the event. If no primary faction is found,
+        adds a default faction object. Also sets thumbnail URL if primary faction has cover image.
 
         Args:
             event: Event object to get factions from. If None, uses self.event.
@@ -332,9 +325,10 @@ class Character(Writing):
         # Track if we find a primary faction
         has_primary_faction = False
 
-        # Process all factions for this event
+        # Process all public factions for this event
         # noinspection PyUnresolvedReferences
-        for faction in self.factions_list.filter(event=faction_event):
+        query = self.factions_list.filter(event=faction_event).exclude(typ=FactionType.SECRET)
+        for faction in query.order_by("order"):
             # Check if this is a primary faction
             if faction.typ == FactionType.PRIM:
                 has_primary_faction = True
@@ -342,7 +336,7 @@ class Character(Writing):
                 if faction.cover:
                     js["thumb"] = faction.thumb.url
 
-            # Add faction number to the list
+            # Add faction object with uuid and number
             js["factions"].append(faction.number)
 
         # Add default faction if no primary found
@@ -408,7 +402,7 @@ class Character(Writing):
         return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot").order_by("order")
 
     @classmethod
-    def get_example_csv(cls, enabled_features: list) -> list[list[str]]:
+    def get_example_csv(cls, enabled_features: dict[str, int]) -> list[list[str]]:
         """Extend Writing CSV example with player assignment column.
 
         Args:
@@ -701,7 +695,7 @@ class Prologue(Writing):
         return f"P{self.number} {self.name} ({self.typ})"
 
 
-class HandoutTemplate(BaseModel):
+class HandoutTemplate(UuidMixin, BaseModel):
     """Represents HandoutTemplate model."""
 
     number = models.IntegerField()
@@ -726,7 +720,7 @@ class HandoutTemplate(BaseModel):
         """Return string representation."""
         return f"HT{self.number} {self.name}"
 
-    def download_template(self) -> HttpResponse:
+    def download_template(self) -> str:
         """Download the template file."""
         # noinspection PyUnresolvedReferences
         return download(self.template.path)
@@ -795,7 +789,7 @@ class TextVersionChoices(models.TextChoices):
     RELATIONSHIP = "l", "Relationship"
 
 
-class TextVersion(BaseModel):
+class TextVersion(UuidMixin, BaseModel):
     """Represents TextVersion model."""
 
     tp = models.CharField(max_length=1, choices=TextVersionChoices.choices)

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load tz show_tags static i18n %}
 {% block title %}
-    {{ member_public.display_member_public }}
+    {{ member_public.display_member }}
 {% endblock title %}
 {% block content %}
     <div class="gallery single">
@@ -23,7 +23,7 @@
             {% endif %}
             {% if 'chat' in association.features %}
                 <p>
-                    <b>{% trans "Private message" %}: </b> <a href="{% url 'chat' member_public.id %}">Chat</a>
+                    <b>{% trans "Private message" %}: </b> <a href="{% url 'chat' member_public.uuid %}">Chat</a>
                 </p>
             {% endif %}
             {% if member_public.pronoun %}
@@ -58,9 +58,9 @@
                                 <a href="{% url 'gallery' el.run.get_slug %}">{{ el.run }}</a>
                             </td>
                             <td>
-                                {% for num, name in el.chars.items %}
+                                {% for uuid, name in el.chars.items %}
                                     {% include "elements/comma.html" %}
-                                    <a href="{% url 'character' el.run.get_slug num %}">{{ name }}</a>
+                                    <a href="{% url 'character' el.run.get_slug uuid %}">{{ name }}</a>
                                 {% endfor %}
                             </td>
                         </tr>

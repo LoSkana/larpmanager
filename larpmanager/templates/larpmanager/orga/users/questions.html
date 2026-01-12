@@ -14,7 +14,7 @@
         <thead>
             <tr>
                 <th>{% trans "Date" %}</th>
-                <th>{% trans "Member" %}</th>
+                <th>{% trans "Participant" %}</th>
                 <th>{% trans "Question" %}</th>
                 <th></th>
                 <th></th>
@@ -29,14 +29,14 @@
                     <td>{{ el.text }}</td>
                     <td>
                         {% if el.attachment %}
-                            <a href="{% url 'help_attachment' el.id %}" target="_blank">{% trans "Attachment" %}</a>
+                            <a href="{% url 'help_attachment' el.uuid %}" target="_blank">{% trans "Attachment" %}</a>
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'orga_questions_answer' run.get_slug el.member_id %}">{% trans "Answer" %}</a>
+                        <a href="{% url 'orga_questions_answer' run.get_slug el.member.uuid %}">{% trans "Answer" %}</a>
                     </td>
                     <td>
-                        <a href="{% url 'orga_questions_close' run.get_slug el.member_id %}">{% trans "Close" %}</a>
+                        <a href="{% url 'orga_questions_close' run.get_slug el.member.uuid %}">{% trans "Close" %}</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -48,7 +48,7 @@
             <thead>
                 <tr>
                     <th>{% trans "Date" %}</th>
-                    <th>{% trans "Member" %}</th>
+                    <th>{% trans "Participant" %}</th>
                     <th>{% trans "Question" %}</th>
                     <th></th>
                 </tr>
@@ -60,7 +60,7 @@
                         <td>{{ el.member }}</td>
                         <td>{{ el.text }}</td>
                         <td>
-                            <a href="{% url 'orga_questions_answer' run.get_slug el.member_id %}">{% trans "Answer" %}</a>
+                            <a href="{% url 'orga_questions_answer' run.get_slug el.member.uuid %}">{% trans "Answer" %}</a>
                         </td>
                     </tr>
                 {% endfor %}

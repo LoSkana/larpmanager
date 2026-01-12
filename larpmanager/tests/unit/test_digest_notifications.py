@@ -29,11 +29,8 @@ from django.utils import timezone
 
 from larpmanager.cache.config import set_event_config
 from larpmanager.mail.digest import generate_summary_email, send_daily_organizer_summaries
-from larpmanager.models.notification import (
-    OrganizerNotificationQueue,
-    queue_organizer_notification,
-    should_queue_notification,
-)
+from larpmanager.utils.users.member import should_queue_notification, queue_organizer_notification
+from larpmanager.models.member import NotificationType, NotificationQueue
 from larpmanager.tests.unit.base import BaseTestCase
 
 
@@ -59,8 +56,8 @@ class DigestNotificationTests(BaseTestCase):
         registration = self.get_registration()
 
         notification = queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_NEW,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_NEW,
             registration=registration,
         )
 
@@ -75,8 +72,8 @@ class DigestNotificationTests(BaseTestCase):
         event = self.get_event()
 
         notification = queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_CANCEL,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_CANCEL,
             details={"member_name": "Test User", "ticket_name": "Standard"},
         )
 
@@ -86,8 +83,8 @@ class DigestNotificationTests(BaseTestCase):
         """Test string representation of notification"""
         event = self.get_event()
         notification = queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_NEW,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_NEW,
         )
 
         str_repr = str(notification)
@@ -100,17 +97,17 @@ class DigestNotificationTests(BaseTestCase):
 
         # Create multiple notifications
         notif1 = queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_NEW,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_NEW,
         )
 
         notif2 = queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.PAYMENT_MONEY,
+            run=event,
+            notification_type=NotificationType.PAYMENT_MONEY,
         )
 
         # Query all notifications
-        notifications = OrganizerNotificationQueue.objects.filter(event=event)
+        notifications = NotificationQueue.objects.filter(event=event)
 
         # Should be ordered newest first
         assert list(notifications) == [notif2, notif1]
@@ -122,12 +119,12 @@ class DigestNotificationTests(BaseTestCase):
 
         # Create notification
         queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_NEW,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_NEW,
             registration=registration,
         )
 
-        notifications = OrganizerNotificationQueue.objects.filter(event=event)
+        notifications = NotificationQueue.objects.filter(event=event)
         email_content = generate_summary_email(event, notifications)
 
         # Check email contains expected sections
@@ -143,24 +140,24 @@ class DigestNotificationTests(BaseTestCase):
 
         # Create various notification types
         queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_NEW,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_NEW,
             registration=registration,
         )
 
         queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_UPDATE,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_UPDATE,
             registration=registration,
         )
 
         queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_CANCEL,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_CANCEL,
             details={"member_name": "Test User", "ticket_name": "Standard"},
         )
 
-        notifications = OrganizerNotificationQueue.objects.filter(event=event)
+        notifications = NotificationQueue.objects.filter(event=event)
         email_content = generate_summary_email(event, notifications)
 
         # Check all sections present
@@ -174,12 +171,12 @@ class DigestNotificationTests(BaseTestCase):
 
         # Create payment notification
         queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.PAYMENT_MONEY,
+            run=event,
+            notification_type=NotificationType.PAYMENT_MONEY,
             details={"member_name": "Test User", "currency_symbol": "€"},
         )
 
-        notifications = OrganizerNotificationQueue.objects.filter(event=event)
+        notifications = NotificationQueue.objects.filter(event=event)
         email_content = generate_summary_email(event, notifications)
 
         assert "Payments Received" in email_content
@@ -191,8 +188,8 @@ class DigestNotificationTests(BaseTestCase):
 
         # Create invoice notification
         queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.INVOICE_APPROVAL,
+            run=event,
+            notification_type=NotificationType.INVOICE_APPROVAL,
             details={
                 "member_name": "Test User",
                 "invoice_number": 123,
@@ -200,7 +197,7 @@ class DigestNotificationTests(BaseTestCase):
             },
         )
 
-        notifications = OrganizerNotificationQueue.objects.filter(event=event)
+        notifications = NotificationQueue.objects.filter(event=event)
         email_content = generate_summary_email(event, notifications)
 
         assert "Invoices Awaiting Approval" in email_content
@@ -213,11 +210,11 @@ class DigestNotificationTests(BaseTestCase):
         event = self.get_event()
 
         queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_NEW,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_NEW,
         )
 
-        notifications = OrganizerNotificationQueue.objects.filter(event=event)
+        notifications = NotificationQueue.objects.filter(event=event)
         email_content = generate_summary_email(event, notifications)
 
         assert "event dashboard" in email_content.lower()
@@ -238,8 +235,8 @@ class DigestNotificationTests(BaseTestCase):
 
         # Create notification
         queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_NEW,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_NEW,
         )
 
         # Run daily summary
@@ -256,15 +253,14 @@ class DigestNotificationTests(BaseTestCase):
     @patch("larpmanager.mail.digest.my_send_mail")
     def test_send_daily_organizer_summaries_marks_as_sent(self, mock_send_mail: Any) -> None:
         """Test that notifications are marked as sent after summary"""
-        from larpmanager.models.access import get_event_organizers
 
         event = self.get_event()
         set_event_config(event.pk, "mail_orga_digest", True)
 
         # Create notification
         notification = queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_NEW,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_NEW,
         )
 
         assert notification.sent is False
@@ -290,8 +286,8 @@ class DigestNotificationTests(BaseTestCase):
 
         # Create notification
         queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_NEW,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_NEW,
         )
 
         # Run daily summary
@@ -310,8 +306,8 @@ class DigestNotificationTests(BaseTestCase):
 
         # Create and mark as sent
         notification = queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_NEW,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_NEW,
         )
         notification.sent = True
         notification.sent_at = timezone.now()
@@ -329,8 +325,8 @@ class DigestNotificationTests(BaseTestCase):
         registration = self.get_registration()
 
         notification = queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_NEW,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_NEW,
             registration=registration,
         )
 
@@ -340,7 +336,7 @@ class DigestNotificationTests(BaseTestCase):
         registration.delete()
 
         # Notification should also be deleted (cascade)
-        assert not OrganizerNotificationQueue.objects.filter(id=notification_id).exists()
+        assert not NotificationQueue.objects.filter(id=notification_id).exists()
 
     def test_notification_survives_when_registration_is_none(self) -> None:
         """Test that notification without registration reference works"""
@@ -348,8 +344,8 @@ class DigestNotificationTests(BaseTestCase):
 
         # Create notification without registration (e.g., for deleted reg)
         notification = queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_CANCEL,
+            run=event,
+            notification_type=NotificationType.REGISTRATION_CANCEL,
             registration=None,
             details={"member_name": "Deleted User", "ticket_name": "Standard"},
         )
@@ -359,7 +355,7 @@ class DigestNotificationTests(BaseTestCase):
         assert notification.details["member_name"] == "Deleted User"
 
         # Email generation should handle None registration
-        notifications = OrganizerNotificationQueue.objects.filter(event=event)
+        notifications = NotificationQueue.objects.filter(event=event)
         email_content = generate_summary_email(event, notifications)
         assert "Deleted User" in email_content
 
@@ -396,7 +392,7 @@ class DigestNotificationTests(BaseTestCase):
         assert mock_send_mail.call_count == 1
 
         # Should create digest notification (treasurer will get digest)
-        notifications = OrganizerNotificationQueue.objects.filter(event=event)
+        notifications = NotificationQueue.objects.filter(event=event)
         assert notifications.count() == 1
         assert notifications.first().notification_type == "payment_money"
 
@@ -428,7 +424,7 @@ class DigestNotificationTests(BaseTestCase):
         assert mock_send_mail.call_count >= 2
 
         # Should NOT create digest notification
-        notifications = OrganizerNotificationQueue.objects.filter(event=event)
+        notifications = NotificationQueue.objects.filter(event=event)
         assert notifications.count() == 0
 
     @patch("larpmanager.mail.digest.my_send_mail")
@@ -457,8 +453,8 @@ class DigestNotificationTests(BaseTestCase):
 
         # Create a notification
         queue_organizer_notification(
-            event=event,
-            notification_type=OrganizerNotificationQueue.NotificationType.PAYMENT_MONEY,
+            run=event,
+            notification_type=NotificationType.PAYMENT_MONEY,
         )
 
         # Send daily summary

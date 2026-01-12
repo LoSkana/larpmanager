@@ -1,0 +1,45 @@
+{% extends "utils.html" %}
+{% load i18n show_tags %}
+{% block title %}
+    {{ member_edit }} - {% trans "Registrations" %}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows all event registrations for the member" %}
+{% endblock info %}
+{% block content %}
+    <h2>{% trans "Registrations" %}</h2>
+    <table class="writing go_datatable">
+        <thead>
+            <tr>
+                <th>{% trans "Event" %}</th>
+                <th>{% trans "Total" %}</th>
+                <th>{% trans "Given" %}</th>
+                <th>{% trans "Status" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in regs %}
+                <tr>
+                    <td>{{ el.run.search }}</td>
+                    <td>{{ el.tot_iscr|format_decimal }}</td>
+                    <td>{{ el.tot_payed|format_decimal }}</td>
+                    <td>
+                        {% if el.tot_iscr == el.tot_payed %}
+                            <span class="success">
+                                <i class="fas fa-check-circle"></i> {% trans "Paid" %}
+                            </span>
+                        {% elif el.tot_payed > 0 %}
+                            <span class="warning">
+                                <i class="fas fa-exclamation-circle"></i> {% trans "Partial" %}
+                            </span>
+                        {% else %}
+                            <span class="error">
+                                <i class="fas fa-times-circle"></i> {% trans "Unpaid" %}
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

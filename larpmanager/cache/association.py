@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -26,9 +27,16 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.accounting.base import get_payment_details
+from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.models.association import Association
+from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration
+
+logger = logging.getLogger(__name__)
+
+# Demo mode threshold (Associations with fewer than this many registrations are considered demo/trial accounts)
+MAX_DEMO_REGISTRATIONS = 10
 
 
 def clear_association_cache(association_slug: str) -> None:
@@ -104,7 +112,7 @@ def init_cache_association(a_slug: str) -> dict | None:
             association_dict["logo"] = association.profile_thumb.url
             association_dict["image"] = association.profile.url
         except FileNotFoundError:
-            pass
+            logger.warning("Profile image files not found for association %s", association.slug)
 
     # Remove sensitive and unnecessary fields from cache
     for m in [
@@ -124,9 +132,24 @@ def init_cache_association(a_slug: str) -> dict | None:
     _init_features(association, association_dict)
     _init_skin(association, association_dict)
 
-    # Determine if association qualifies for demo mode (< 10 registrations)
-    max_demo = 10
-    association_dict["demo"] = Registration.objects.filter(run__event__association_id=association.id).count() < max_demo
+    # Determine if association qualifies for demo mode (< MAX_DEMO_REGISTRATIONS)
+    association_dict["demo"] = (
+        Registration.objects.filter(run__event__association_id=association.id).count() < MAX_DEMO_REGISTRATIONS
+    )
+
+    # Check if association has completed runs (onboarding mode if no runs with start and end dates)
+    association_dict["onboarding"] = not Run.objects.filter(
+        event__association=association,
+        start__isnull=False,
+        end__isnull=False,
+    ).exists()
+
+    # Add configs
+    temp_context = {}
+    for config in ["user_characters_shortcut", "user_registrations_shortcut"]:
+        association_dict[config] = get_association_config(
+            association.id, config, default_value=False, context=temp_context
+        )
 
     return association_dict
 
@@ -172,9 +195,15 @@ def _init_features(association: Association, cache_element: dict) -> None:
             cache_element[config_key] = association.get_config(config_key, default_value="")
 
     # Configure token and credit naming if feature is enabled
-    if "token_credit" in cache_element["features"]:
-        for setting in ["token_name", "credit_name"]:
-            cache_element[setting] = association.get_config("token_credit_" + setting, default_value=None)
+    for setting in ["tokens", "credits"]:
+        if setting in cache_element["features"]:
+            name_key = f"{setting}_name"
+            # Try new config key first, fallback to old token_credit_* key for backward compatibility
+            old_key = f"token_credit_{setting[:-1]}_name"  # tokens->token, credits->credit
+            new_value = association.get_config(name_key, default_value=None)
+            if new_value is None:
+                new_value = association.get_config(old_key, default_value=None)
+            cache_element[name_key] = new_value
 
     # Configure Centauri probability settings if feature is enabled
     if "centauri" in cache_element["features"]:

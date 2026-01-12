@@ -31,7 +31,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.accounting.token_credit import handle_tokes_credits
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
@@ -58,8 +58,8 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.utils import get_sum
-from larpmanager.utils.common import get_time_diff, get_time_diff_today
-from larpmanager.utils.tasks import background_auto
+from larpmanager.utils.core.common import get_time_diff, get_time_diff_today
+from larpmanager.utils.larpmanager.tasks import background_auto
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -70,7 +70,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def get_reg_iscr(registration: Registration) -> int:
+def get_registration_iscr(registration: Registration) -> int:
     """Calculate total registration signup fee including discounts.
 
     Computes the total registration fee by summing base ticket price, additional
@@ -103,7 +103,7 @@ def get_reg_iscr(registration: Registration) -> int:
         total_registration_fee += registration.pay_what
 
     # Add registration choice options (extras, meals, etc.)
-    for choice in RegistrationChoice.objects.filter(reg=registration).select_related("option"):
+    for choice in RegistrationChoice.objects.filter(registration=registration).select_related("option"):
         total_registration_fee += choice.option.price
 
     # Apply discounts only for non-gifted registrations
@@ -122,7 +122,7 @@ def get_reg_iscr(registration: Registration) -> int:
     return max(0, total_registration_fee)
 
 
-def get_reg_payments(
+def get_registration_payments(
     registration: Registration, accounting_payments: QuerySet[AccountingItemPayment] | None = None
 ) -> int:
     """Calculate total payments made for a registration.
@@ -140,7 +140,7 @@ def get_reg_payments(
     """
     if accounting_payments is None:
         accounting_payments = AccountingItemPayment.objects.filter(
-            reg=registration,
+            registration=registration,
         ).exclude(hide=True)
 
     total_paid = 0
@@ -155,7 +155,7 @@ def get_reg_payments(
     return total_paid
 
 
-def get_reg_transactions(registration: Registration) -> int:
+def get_registration_transactions(registration: Registration) -> int:
     """Calculate total transaction fees for a registration.
 
     Args:
@@ -167,7 +167,7 @@ def get_reg_transactions(registration: Registration) -> int:
     """
     total_transaction_fees = 0
 
-    accounting_transactions = AccountingItemTransaction.objects.filter(reg=registration, user_burden=True)
+    accounting_transactions = AccountingItemTransaction.objects.filter(registration=registration, user_burden=True)
 
     for accounting_item_transaction in accounting_transactions:
         total_transaction_fees += accounting_item_transaction.value
@@ -187,30 +187,81 @@ def get_accounting_refund(registration: Registration) -> None:
     """
     registration.refunds = {}
 
-    if not hasattr(registration, "acc_refunds"):
-        registration.acc_refunds = AccountingItemOther.objects.filter(
+    if not hasattr(registration, "accounting_refunds"):
+        registration.accounting_refunds = AccountingItemOther.objects.filter(
             run_id=registration.run_id,
             member_id=registration.member_id,
             cancellation=True,
         )
 
-    if not registration.acc_refunds:
+    if not registration.accounting_refunds:
         return
 
-    for accounting_item_other in registration.acc_refunds:
+    for accounting_item_other in registration.accounting_refunds:
         if accounting_item_other.oth not in registration.refunds:
             registration.refunds[accounting_item_other.oth] = 0
         registration.refunds[accounting_item_other.oth] += accounting_item_other.value
 
 
-def quota_check(reg: Registration, start: date, alert: int, association_id: int) -> None:
+def _calculate_quota_deadline(registration: Registration, quota_count: int, association_id: int) -> int:
+    """Calculate deadline for a specific quota installment.
+
+    Args:
+        registration: Registration instance
+        quota_count: Current quota number (1-indexed)
+        association_id: Association ID for payment deadline calculation
+
+    Returns:
+        Deadline in days from today
+
+    """
+    if quota_count == 1:
+        return get_payment_deadline(registration, 8, association_id)
+    days_left = registration.tot_days * 1.0 * (registration.quotas - (quota_count - 1)) / registration.quotas
+    return math.floor(registration.days_event - days_left)
+
+
+def _calculate_quota_amount(registration: Registration, quota_share_ratio: Decimal, *, is_last_quota: bool) -> float:
+    """Calculate the amount due for a quota installment.
+
+    Args:
+        registration: Registration instance
+        quota_share_ratio: Cumulative share of total payment for this quota
+        is_last_quota: Whether this is the final quota
+
+    Returns:
+        Amount due for this quota
+
+    """
+    if is_last_quota:
+        return registration.tot_iscr - registration.tot_payed
+    quota_amount = registration.tot_iscr * quota_share_ratio - registration.tot_payed
+    return math.floor(quota_amount)
+
+
+def _should_skip_quota(deadline: int, alert: int, quota_amount: float) -> bool:
+    """Determine if a quota should be skipped.
+
+    Args:
+        deadline: Deadline in days
+        alert: Alert threshold in days
+        quota_amount: Amount due for this quota
+
+    Returns:
+        True if quota should be skipped
+
+    """
+    return deadline >= alert or quota_amount <= 0 or not deadline or deadline < 0
+
+
+def quota_check(registration: Registration, start: date, alert: int, association_id: int) -> None:
     """Check payment quotas and deadlines for a registration.
 
     Calculates payment quotas based on event start date and registration timing.
     Sets quota amount and deadline for next payment.
 
     Args:
-        reg: Registration instance to check quotas for
+        registration: Registration instance to check quotas for
         start: Event start date
         alert: Alert threshold in days
         association_id: Association ID for payment deadline calculation
@@ -219,133 +270,194 @@ def quota_check(reg: Registration, start: date, alert: int, association_id: int)
         Sets reg.quota, reg.deadline, and reg.qsr attributes
 
     """
-    if not start:
+    if not start or registration.quotas == 0:
+        if registration.quotas == 0:
+            logger.error("Registration %s has zero quotas, cannot calculate payment schedule", registration.pk)
         return
 
-    reg.days_event = get_time_diff_today(start)
-    reg.tot_days = get_time_diff(start, reg.created.date())
+    registration.days_event = get_time_diff_today(start)
+    registration.tot_days = get_time_diff(start, registration.created.date())
 
-    quota_share = Decimal(1.0 / reg.quotas)
-    quota_count = 0
-    quota_share_ratio = 0
-    first_deadline = True
-    for _i in range(reg.quotas):
+    quota_share = Decimal(1.0 / registration.quotas)
+    quota_share_ratio = Decimal(0)
+    accumulated_overdue_ratio = Decimal(0)
+    first_valid_deadline = None
+    has_distant_quotas = False
+
+    for quota_count in range(1, registration.quotas + 1):
         quota_share_ratio += quota_share
-        quota_count += 1
-
-        # if first, deadline is immediately
-        if quota_count == 1:
-            deadline = get_payment_deadline(reg, 8, association_id)
-        # else, deadline is computed in days to the event
-        else:
-            days_left = reg.tot_days * 1.0 * (reg.quotas - (quota_count - 1)) / reg.quotas
-            deadline = math.floor(reg.days_event - days_left)
+        deadline = _calculate_quota_deadline(registration, quota_count, association_id)
 
         if deadline >= alert:
+            has_distant_quotas = True
             continue
 
-        reg.qsr = quota_share_ratio
+        registration.qsr = quota_share_ratio
+        is_last_quota = quota_count == registration.quotas
+        registration.quota = _calculate_quota_amount(registration, quota_share_ratio, is_last_quota=is_last_quota)
 
-        # if last quota
-        if quota_count == reg.quotas:
-            reg.quota = reg.tot_iscr - reg.tot_payed
-        else:
-            reg.quota = reg.tot_iscr * quota_share_ratio - reg.tot_payed
-            reg.quota = math.floor(reg.quota)
-
-        if reg.quota <= 0:
+        if registration.quota <= 0:
             continue
 
-        if first_deadline and deadline:
-            first_deadline = False
-            reg.deadline = deadline
-
-        # go to next quota if deadline was missed
+        # Handle overdue quotas (deadline in the past)
         if not deadline or deadline < 0:
+            accumulated_overdue_ratio = quota_share_ratio
             continue
 
-        return
+        # Found first valid future deadline
+        if first_valid_deadline is None:
+            first_valid_deadline = deadline
+            # quota_share_ratio already includes any overdue quotas
+            registration.deadline = deadline
+            return
+
+    _quota_fallback(accumulated_overdue_ratio, registration, has_distant_quotas=has_distant_quotas)
 
 
-def installment_check(reg: Registration, alert: int, association_id: int) -> None:
+def _quota_fallback(
+    accumulated_overdue_ratio: Decimal, registration: Registration, *, has_distant_quotas: bool
+) -> None:
+    """Handle fallback logic when no valid quota deadline is found within alert threshold.
+
+    Args:
+        accumulated_overdue_ratio: Cumulative ratio of overdue quotas
+        registration: Registration instance to update
+        has_distant_quotas: Whether quotas exist beyond alert threshold
+
+    Side effects:
+        Sets reg.quota and reg.deadline based on payment status
+
+    """
+    # Fallback: ensure quota is set if payment is due
+    if has_distant_quotas:
+        # Check if we have overdue quotas that need to be paid
+        if accumulated_overdue_ratio > 0:
+            registration.qsr = accumulated_overdue_ratio
+            is_last_quota = False
+            registration.quota = _calculate_quota_amount(
+                registration, accumulated_overdue_ratio, is_last_quota=is_last_quota
+            )
+            registration.deadline = 0  # Immediate payment for overdue
+        else:
+            # All quotas are beyond alert threshold: player is OK for now
+            registration.quota = 0
+            registration.deadline = 0
+    elif registration.tot_iscr > registration.tot_payed:
+        # Outstanding debt but no valid quota deadline found: immediate payment
+        registration.quota = registration.tot_iscr - registration.tot_payed
+        registration.deadline = 0
+
+
+def _is_installment_applicable(installment_tickets: list, registration_ticket_id: int) -> bool:
+    """Check if an installment applies to the registration's ticket type.
+
+    Args:
+        installment_tickets: List of ticket IDs the installment applies to
+        registration_ticket_id: Registration's ticket ID
+
+    Returns:
+        True if installment applies to this ticket type
+
+    """
+    applicable_ticket_ids = [ticket_id for ticket_id in installment_tickets if ticket_id is not None]
+    return not applicable_ticket_ids or registration_ticket_id in applicable_ticket_ids
+
+
+def _calculate_installment_cumulative(installment_amount: float, current_cumulative: float, total: float) -> float:
+    """Calculate cumulative amount due up to this installment.
+
+    Args:
+        installment_amount: Amount for this installment (0 means full amount)
+        current_cumulative: Current cumulative amount
+        total: Total registration amount
+
+    Returns:
+        Updated cumulative amount, capped at total
+
+    """
+    if installment_amount:
+        return min(current_cumulative + installment_amount, total)
+    return total
+
+
+def _set_installment_fallback(
+    registration: Registration, cumulative_amount: float, *, has_distant_installments: bool
+) -> None:
+    """Set fallback quota when no installments were processed.
+
+    Args:
+        registration: Registration instance
+        cumulative_amount: Cumulative amount from installments
+        has_distant_installments: Whether installments exist but are beyond alert threshold
+
+    """
+    if has_distant_installments:
+        # All installments are beyond alert threshold: player is OK for now
+        registration.quota = 0
+        registration.deadline = 0
+    elif not cumulative_amount:
+        # No installments configured at all: use registration date as deadline
+        registration.deadline = get_time_diff_today(registration.created.date())
+        registration.quota = registration.tot_iscr - registration.tot_payed
+    elif registration.tot_iscr > registration.tot_payed and registration.quota == 0:
+        # Outstanding debt but no valid installment deadline found: immediate payment
+        registration.quota = registration.tot_iscr - registration.tot_payed
+        registration.deadline = 0
+
+
+def installment_check(registration: Registration, alert: int, association_id: int) -> None:
     """Check installment payment schedule for a registration.
 
     Processes configured installments for the event and determines
     next payment amount and deadline based on the installment schedule.
-    Updates the registration's quota and deadline fields as side effects.
 
     Args:
-        reg: Registration instance to check installments for
+        registration: Registration instance to check installments for
         alert: Alert threshold in days for deadline filtering
         association_id: Association ID used for payment deadline calculation
 
-    Returns:
-        None
-
     Side Effects:
-        - Sets reg.quota to the amount due for the next installment
-        - Sets reg.deadline to the deadline for the next payment
+        Sets reg.quota and reg.deadline
 
     """
-    # Early return if registration has no ticket
-    if not reg.ticket:
+    if not registration.ticket:
         return
 
     cumulative_amount = 0
-
-    # Get all installments for this event, ordered by sequence
-    installments_query = RegistrationInstallment.objects.filter(event_id=reg.run.event_id)
+    has_distant_installments = False
+    installments_query = RegistrationInstallment.objects.filter(event_id=registration.run.event_id)
     installments_query = installments_query.annotate(tickets_map=ArrayAgg("tickets")).order_by("order")
-
     is_first_deadline = True
 
-    # Process each installment in order
     for installment in installments_query:
-        # Filter installments that apply to this ticket type
-        applicable_ticket_ids = [ticket_id for ticket_id in installment.tickets_map if ticket_id is not None]
-        if applicable_ticket_ids and reg.ticket_id not in applicable_ticket_ids:
+        if not _is_installment_applicable(installment.tickets_map, registration.ticket_id):
             continue
 
-        # Calculate deadline for this installment
-        deadline_days = _get_deadline_installment(association_id, installment, reg)
-
-        # Skip installments that are still within alert threshold
+        deadline_days = _get_deadline_installment(association_id, installment, registration)
         if deadline_days and deadline_days >= alert:
+            has_distant_installments = True
             continue
 
-        # Calculate cumulative amount due up to this installment
-        if installment.amount:
-            cumulative_amount += installment.amount
-        else:
-            cumulative_amount = reg.tot_iscr
+        cumulative_amount = _calculate_installment_cumulative(
+            installment.amount, cumulative_amount, registration.tot_iscr
+        )
 
-        # Ensure total doesn't exceed registration total
-        cumulative_amount = min(cumulative_amount, reg.tot_iscr)
-
-        # Calculate outstanding amount for this installment
-        reg.quota = max(cumulative_amount - reg.tot_payed, 0)
-
-        logger.debug("Registration %s installment quota calculated: %s", reg.id, reg.quota)
-
-        # Skip if nothing is due for this installment
-        if reg.quota <= 0:
-            continue
-
-        # Set deadline for the first applicable installment
-        if is_first_deadline and deadline_days:
-            is_first_deadline = False
-            reg.deadline = deadline_days
-
-        # Skip to next installment if deadline has passed
+        # Skip installments with invalid deadline
         if not deadline_days or deadline_days < 0:
             continue
 
-        return
+        registration.quota = max(cumulative_amount - registration.tot_payed, 0)
 
-    # Fallback: if no installments found, use registration date and full amount
-    if not cumulative_amount:
-        reg.deadline = get_time_diff_today(reg.created.date())
-        reg.quota = reg.tot_iscr - reg.tot_payed
+        logger.debug("Registration %s installment quota calculated: %s", registration.id, registration.quota)
+
+        if registration.quota <= 0:
+            continue
+
+        if is_first_deadline:
+            registration.deadline = deadline_days
+            return
+
+    _set_installment_fallback(registration, cumulative_amount, has_distant_installments=has_distant_installments)
 
 
 def _get_deadline_installment(
@@ -430,15 +542,17 @@ def cancel_run(instance: Run) -> None:
         AccountingItemPayment.objects.filter(
             member_id=r.member_id,
             pay=PaymentChoices.TOKEN,
-            reg__run=instance,
+            registration__run=instance,
         ).delete()
         AccountingItemPayment.objects.filter(
             member_id=r.member_id,
             pay=PaymentChoices.CREDIT,
-            reg__run=instance,
+            registration__run=instance,
         ).delete()
         money = get_sum(
-            AccountingItemPayment.objects.filter(member_id=r.member_id, pay=PaymentChoices.MONEY, reg__run=instance),
+            AccountingItemPayment.objects.filter(
+                member_id=r.member_id, pay=PaymentChoices.MONEY, registration__run=instance
+            ),
         )
         if money > 0:
             AccountingItemOther.objects.create(
@@ -467,7 +581,7 @@ def cancel_reg(registration: Registration) -> None:
     registration.save()
 
     # delete characters related
-    RegistrationCharacterRel.objects.filter(reg=registration).delete()
+    RegistrationCharacterRel.objects.filter(registration=registration).delete()
 
     # delete trait assignments
     AssignmentTrait.objects.filter(run_id=registration.run_id, member_id=registration.member_id).delete()
@@ -594,12 +708,14 @@ def handle_registration_accounting_updates(registration: Registration) -> None:
         # Transfer both payments and transactions from cancelled registrations
         if cancelled_registration_ids:
             for accounting_item_type in [AccountingItemPayment, AccountingItemTransaction]:
-                for accounting_item in accounting_item_type.objects.filter(reg__id__in=cancelled_registration_ids):
-                    accounting_item.reg = registration
+                for accounting_item in accounting_item_type.objects.filter(
+                    registration__id__in=cancelled_registration_ids
+                ):
+                    accounting_item.registration = registration
                     accounting_item.save()
 
     # Store provisional status before accounting updates
-    was_provisional_before_update = is_reg_provisional(registration)
+    was_provisional_before_update = is_registration_provisional(registration)
 
     # Recalculate all accounting fields for this registration
     update_registration_accounting(registration)
@@ -611,7 +727,7 @@ def handle_registration_accounting_updates(registration: Registration) -> None:
     Registration.objects.filter(pk=registration.pk).update(**updated_fields)
 
     # Send confirmation email if registration status changed from provisional to confirmed
-    if was_provisional_before_update and not is_reg_provisional(registration):
+    if was_provisional_before_update and not is_registration_provisional(registration):
         update_registration_status_bkg(registration.id)
 
 
@@ -623,8 +739,8 @@ def process_accounting_discount_post_save(discount_item: AccountingItemDiscount)
 
     """
     if discount_item.run and not discount_item.expires:
-        for reg in Registration.objects.filter(member_id=discount_item.member_id, run_id=discount_item.run_id):
-            reg.save()
+        for registration in Registration.objects.filter(member_id=discount_item.member_id, run_id=discount_item.run_id):
+            registration.save()
 
 
 def log_registration_ticket_saved(ticket: RegistrationTicket) -> None:
@@ -635,7 +751,7 @@ def log_registration_ticket_saved(ticket: RegistrationTicket) -> None:
 
     """
     logger.debug("RegistrationTicket saved: %s at %s", ticket, timezone.now())
-    check_reg_events(ticket.event)
+    check_registration_events(ticket.event)
 
 
 def process_registration_option_post_save(option: RegistrationOption) -> None:
@@ -646,10 +762,10 @@ def process_registration_option_post_save(option: RegistrationOption) -> None:
 
     """
     logger.debug("RegistrationOption saved: %s at %s", option, timezone.now())
-    check_reg_events(option.question.event)
+    check_registration_events(option.question.event)
 
 
-def check_reg_events(event: Event) -> None:
+def check_registration_events(event: Event) -> None:
     """Trigger background accounting updates for all registrations in an event.
 
     Args:
@@ -721,23 +837,23 @@ def trigger_registration_accounting(registration_id: int | None) -> None:
         return
 
 
-def _should_skip_accounting(reg: Registration) -> bool:
+def _should_skip_accounting(registration: Registration) -> bool:
     """Check if accounting should be skipped for this registration.
 
     Args:
-        reg: Registration to check
+        registration: Registration to check
 
     Returns:
         True if accounting should be skipped
     """
-    return reg.run.development in [DevelopStatus.CANC, DevelopStatus.DONE]
+    return registration.run.development in [DevelopStatus.CANC, DevelopStatus.DONE]
 
 
-def _is_payment_complete(reg: Registration, remaining_balance: Decimal, tolerance: float = 0.05) -> bool:
+def _is_payment_complete(registration: Registration, remaining_balance: Decimal, tolerance: float = 0.05) -> bool:
     """Check if payment is complete within rounding tolerance.
 
     Args:
-        reg: Registration to check
+        registration: Registration to check
         remaining_balance: Remaining balance to pay
         tolerance: Maximum rounding tolerance
 
@@ -745,17 +861,17 @@ def _is_payment_complete(reg: Registration, remaining_balance: Decimal, toleranc
         True if payment is complete
     """
     if -tolerance < remaining_balance <= tolerance:
-        if not reg.payment_date:
-            reg.payment_date = timezone.now()
+        if not registration.payment_date:
+            registration.payment_date = timezone.now()
         return True
     return False
 
 
-def _check_membership_requirements(reg: Registration, event_features: dict, association_id: int) -> bool:
+def _check_membership_requirements(registration: Registration, event_features: dict, association_id: int) -> bool:
     """Check membership requirements for registration.
 
     Args:
-        reg: Registration to check
+        registration: Registration to check
         event_features: Event features dictionary
         association_id: Association ID
 
@@ -763,21 +879,21 @@ def _check_membership_requirements(reg: Registration, event_features: dict, asso
         True if membership requirements are met or not applicable
     """
     if "membership" in event_features and "laog" not in event_features:
-        if not hasattr(reg, "membership"):
-            reg.membership = get_user_membership(reg.member, association_id)
-        if reg.membership.status != MembershipStatus.ACCEPTED:
+        if not hasattr(registration, "membership"):
+            registration.membership = get_user_membership(registration.member, association_id)
+        if registration.membership.status != MembershipStatus.ACCEPTED:
             return False
     return True
 
 
-def update_registration_accounting(reg: Registration) -> None:
+def update_registration_accounting(registration: Registration) -> None:
     """Update comprehensive accounting information for a registration.
 
     Calculates total signup fee, payments received, outstanding balance,
     payment quotas, and deadlines based on event configuration.
 
     Args:
-        reg (Registration): Registration instance to update accounting for
+        registration (Registration): Registration instance to update accounting for
 
     Returns:
         None
@@ -793,61 +909,63 @@ def update_registration_accounting(reg: Registration) -> None:
 
     """
     # Skip processing for cancelled or completed runs
-    if _should_skip_accounting(reg):
+    if _should_skip_accounting(registration):
         return
 
     max_rounding_tolerance = 0.05
 
     # Extract basic event information
-    event_start_date = reg.run.start
-    event_features = get_event_features(reg.run.event_id)
-    association_id = reg.run.event.association_id
+    event_start_date = registration.run.start
+    event_features = get_event_features(registration.run.event_id)
+    association_id = registration.run.event.association_id
 
     # Calculate total inscription fee and payments
-    reg.tot_iscr = get_reg_iscr(reg)
-    total_transactions = get_reg_transactions(reg)
-    reg.tot_payed = get_reg_payments(reg)
+    registration.tot_iscr = get_registration_iscr(registration)
+    total_transactions = get_registration_transactions(registration)
+    registration.tot_payed = get_registration_payments(registration)
 
     # Adjust for transactions and round to nearest cent
-    reg.tot_payed -= total_transactions
-    reg.tot_payed = Decimal(round_to_nearest_cent(reg.tot_payed))
+    registration.tot_payed -= total_transactions
+    registration.tot_payed = Decimal(round_to_nearest_cent(registration.tot_payed))
 
     # Initialize payment tracking fields
-    reg.quota = 0
-    reg.deadline = 0
-    reg.alert = False
+    registration.quota = 0
+    registration.deadline = 0
+    registration.alert = False
 
     # Check if payment is complete (within rounding tolerance)
-    remaining_balance = reg.tot_iscr - reg.tot_payed
-    if _is_payment_complete(reg, remaining_balance, max_rounding_tolerance):
+    remaining_balance = registration.tot_iscr - registration.tot_payed
+    if _is_payment_complete(registration, remaining_balance, max_rounding_tolerance):
         return
 
     # Skip further processing if registration is cancelled
-    if reg.cancellation_date:
+    if registration.cancellation_date:
         return
 
     # Handle membership requirements for non-LAOG events
-    if not _check_membership_requirements(reg, event_features, association_id):
+    if not _check_membership_requirements(registration, event_features, association_id):
         return
 
     # Process tokens and credits
-    handle_tokes_credits(association_id, event_features, reg, remaining_balance)
+    handle_tokes_credits(association_id, event_features, registration, remaining_balance)
 
     # Get payment alert threshold from event configuration
-    alert_days_threshold = int(get_event_config(reg.run.event_id, "payment_alert", default_value=30, bypass_cache=True))
+    alert_days_threshold = int(
+        get_event_config(registration.run.event_id, "payment_alert", default_value=30, bypass_cache=True)
+    )
 
     # Calculate payment schedule based on feature flags
     if "reg_installments" in event_features:
-        installment_check(reg, alert_days_threshold, association_id)
+        installment_check(registration, alert_days_threshold, association_id)
     else:
-        quota_check(reg, event_start_date, alert_days_threshold, association_id)
+        quota_check(registration, event_start_date, alert_days_threshold, association_id)
 
     # Skip alert setting if quota is negligible
-    if reg.quota <= max_rounding_tolerance:
+    if registration.quota <= max_rounding_tolerance:
         return
 
     # Set alert flag based on deadline proximity
-    reg.alert = reg.deadline < alert_days_threshold
+    registration.alert = registration.deadline < alert_days_threshold
 
 
 def update_member_registrations(member: Member) -> None:

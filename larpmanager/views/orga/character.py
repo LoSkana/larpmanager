@@ -41,7 +41,7 @@ from larpmanager.forms.character import (
     OrgaWritingOptionForm,
     OrgaWritingQuestionForm,
 )
-from larpmanager.forms.utils import EventCharacterS2Widget
+from larpmanager.forms.utils import EventCharacterS2WidgetUuid
 from larpmanager.forms.writing import FactionForm, PlotForm, QuestForm, TraitForm
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Trait
@@ -66,24 +66,21 @@ from larpmanager.models.writing import (
     SpeedLarp,
     TextVersionChoices,
 )
-from larpmanager.utils.auth import is_lm_admin
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.character import get_chars_relations
-from larpmanager.utils.common import (
-    exchange_order,
-    get_char,
-)
-from larpmanager.utils.download import orga_character_form_download
-from larpmanager.utils.edit import backend_edit, set_suggestion, writing_edit, writing_edit_working_ticket
-from larpmanager.utils.writing import writing_list, writing_versions, writing_view
+from larpmanager.utils.auth.admin import is_lm_admin
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import exchange_order, get_element
+from larpmanager.utils.io.download import orga_character_form_download
+from larpmanager.utils.services.character import get_chars_relations
+from larpmanager.utils.services.edit import backend_edit, set_suggestion, writing_edit, writing_edit_working_ticket
+from larpmanager.utils.services.writing import writing_list, writing_versions, writing_view
 
 
-def get_character_optimized(context: dict[str, Any], num: int) -> None:
+def get_character_optimized(context: dict, character_uuid: str) -> None:
     """Get character with optimized queries for editing.
 
     Args:
         context: Template context dictionary
-        num: Character ID
+        character_uuid: Character UUID
 
     Raises:
         Http404: If character does not exist
@@ -117,7 +114,7 @@ def get_character_optimized(context: dict[str, Any], num: int) -> None:
         if prefetch_fields:
             character_query = character_query.prefetch_related(*prefetch_fields)
 
-        context["character"] = character_query.get(event=parent_event, pk=num)
+        context["character"] = character_query.get(event=parent_event, uuid=character_uuid)
         context["class_name"] = "character"
     except ObjectDoesNotExist as err:
         msg = "character does not exist"
@@ -152,13 +149,13 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_characters_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_characters_edit(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Edit character information in organization context.
 
     Args:
         request: The HTTP request object containing user and session data
         event_slug: The organization/event slug identifier
-        num: The character ID to edit (0 for new character)
+        character_uuid: The character UUID to edit (0 for new character)
 
     Returns:
         HttpResponse: Rendered character edit form page
@@ -174,8 +171,8 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, num: int) -> Htt
 
     # Load specific character data when editing existing character (num != 0)
     # Skip character loading for new character creation
-    if num != 0:
-        get_character_optimized(context, num)
+    if character_uuid != "0":
+        get_character_optimized(context, character_uuid)
 
     # Process character relationships for display and validation
     _characters_relationships(context)
@@ -184,7 +181,7 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, num: int) -> Htt
     return writing_edit(request, context, OrgaCharacterForm, "character", TextVersionChoices.CHARACTER)
 
 
-def _characters_relationships(context: dict[str, Any]) -> None:
+def _characters_relationships(context: dict) -> None:
     """Set up character relationships data and widgets for editing.
 
     Args:
@@ -199,29 +196,29 @@ def _characters_relationships(context: dict[str, Any]) -> None:
         context["rel_tutorial"] = Feature.objects.get(slug="relationships").tutorial
 
     context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
-    widget = EventCharacterS2Widget(attrs={"id": "new_rel_select"})
+    widget = EventCharacterS2WidgetUuid(attrs={"id": "new_rel_select"})
     widget.set_event(context["event"])
     context["new_rel"] = widget.render(name="new_rel_select", value="")
 
     if "character" in context:
-        relationships_by_character_id = {}
+        relationships_by_character_uuid = {}
 
         direct_relationships = Relationship.objects.filter(source=context["character"]).select_related("target")
 
         for relationship in direct_relationships:
-            if relationship.target.id not in relationships_by_character_id:
-                relationships_by_character_id[relationship.target.id] = {"char": relationship.target}
-            relationships_by_character_id[relationship.target.id]["direct"] = relationship.text
+            if relationship.target.uuid not in relationships_by_character_uuid:
+                relationships_by_character_uuid[relationship.target.uuid] = {"char": relationship.target}
+            relationships_by_character_uuid[relationship.target.uuid]["direct"] = relationship.text
 
         inverse_relationships = Relationship.objects.filter(target=context["character"]).select_related("source")
 
         for relationship in inverse_relationships:
-            if relationship.source.id not in relationships_by_character_id:
-                relationships_by_character_id[relationship.source.id] = {"char": relationship.source}
-            relationships_by_character_id[relationship.source.id]["inverse"] = relationship.text
+            if relationship.source.uuid not in relationships_by_character_uuid:
+                relationships_by_character_uuid[relationship.source.uuid] = {"char": relationship.source}
+            relationships_by_character_uuid[relationship.source.uuid]["inverse"] = relationship.text
 
         sorted_relationships = sorted(
-            relationships_by_character_id.items(),
+            relationships_by_character_uuid.items(),
             key=lambda character_entry: len(character_entry[1].get("direct", ""))
             + len(character_entry[1].get("inverse", "")),
             reverse=True,
@@ -249,7 +246,7 @@ def update_relationship(request: HttpRequest, context: dict, nm: str, fl: str) -
 
 
 @login_required
-def orga_characters_relationships(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_characters_relationships(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Display character relationships for organization view.
 
     Shows both direct relationships (where character is source) and inverse
@@ -259,7 +256,7 @@ def orga_characters_relationships(request: HttpRequest, event_slug: str, num: in
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        num: Character number identifier
+        character_uuid: Character uuid
 
     Returns:
         Rendered HTML response with character relationships
@@ -269,7 +266,7 @@ def orga_characters_relationships(request: HttpRequest, event_slug: str, num: in
     context = check_event_context(request, event_slug, "orga_characters")
 
     # Load character data into context
-    get_char(context, num)
+    get_element(context, character_uuid, "character", Character)
 
     # Get relationships where this character is the source
     # Ordered by text length (ascending) then target character number
@@ -292,13 +289,13 @@ def orga_characters_relationships(request: HttpRequest, event_slug: str, num: in
 
 
 @login_required
-def orga_characters_view(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_characters_view(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Display character view for event organizers.
 
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        num: Character number/ID
+        character_uuid: Character uuid
 
     Returns:
         Rendered writing view for character
@@ -308,31 +305,31 @@ def orga_characters_view(request: HttpRequest, event_slug: str, num: int) -> Htt
     context = check_event_context(request, event_slug, ["orga_reading", "orga_characters"])
 
     # Load character and event cache data
-    get_char(context, num)
+    get_element(context, character_uuid, "character", Character)
     get_event_cache_all(context)
 
     return writing_view(request, context, "character")
 
 
 @login_required
-def orga_characters_versions(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_characters_versions(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Display version history for a character's writing content."""
     # Check event permission and get context
     context = check_event_context(request, event_slug, "orga_characters")
 
     # Retrieve the character and render version history
-    get_char(context, num)
+    get_element(context, character_uuid, "character", Character)
     return writing_versions(request, context, "character", TextVersionChoices.CHARACTER)
 
 
 @login_required
-def orga_characters_summary(request: HttpRequest, event_slug: str, num: str) -> HttpResponse:
+def orga_characters_summary(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Display character summary page for organization staff.
 
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        num: Character identifier
+        character_uuid: Character uuid
 
     Returns:
         Rendered HTML response with character summary
@@ -341,21 +338,23 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, num: str) -> 
     # Check permissions and get base context
     context = check_event_context(request, event_slug, "orga_characters")
 
-    # Retrieve character data and add to context
-    get_char(context, num)
+    # Load character with prefetched factions and plots
+    context["character"] = Character.objects.prefetch_related("factions_list__characters", "plots__characters").get(
+        uuid=character_uuid
+    )
 
     # Initialize factions list in context
     context["factions"] = []
 
     # Process character factions with complete data
-    for p in context["character"].factions_list.all().prefetch_related("characters"):
+    for p in context["character"].factions_list.all():
         context["factions"].append(p.show_complete())
 
     # Initialize plots list in context
     context["plots"] = []
 
     # Process character plots with complete data
-    for p in context["character"].plots.all().prefetch_related("characters"):
+    for p in context["character"].plots.all():
         context["plots"].append(p.show_complete())
 
     # Render template with populated context
@@ -393,12 +392,15 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
         event = event.parent
 
     # Get question ID from POST data
-    eid = request.POST.get("num")
+    q_uuid = request.POST.get("q_uuid")
 
     # Determine applicable question type and get related element IDs
     applicable = QuestionApplicable.get_applicable(writing_type)
     element_typ = QuestionApplicable.get_applicable_inverse(applicable)
     element_ids = element_typ.objects.filter(event=event).values_list("id", flat=True)
+
+    # Create id -> uuid mapping
+    element_mapping = dict(element_typ.objects.filter(event=event).values_list("id", "uuid"))
 
     # Initialize response data structures
     res = {}
@@ -406,7 +408,7 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
     max_length = 100
 
     # Get the specific question being processed
-    question = event.get_elements(WritingQuestion).get(pk=eid, applicable=applicable)
+    question = event.get_elements(WritingQuestion).get(uuid=q_uuid, applicable=applicable)
 
     # Handle single/multiple choice questions
     if question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
@@ -415,11 +417,16 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
         for opt in event.get_elements(WritingOption).filter(question=question):
             cho[opt.id] = opt.name
 
-        # Process choices and group by element ID
-        for el in WritingChoice.objects.filter(question=question, element_id__in=element_ids).order_by("option__order"):
-            if el.element_id not in res:
-                res[el.element_id] = []
-            res[el.element_id].append(cho[el.option_id])
+        # Process choices and group by element UUID
+        for el in (
+            WritingChoice.objects.filter(question=question, element_id__in=element_ids)
+            .select_related("option")
+            .order_by("option__order")
+        ):
+            element_uuid = str(element_mapping[el.element_id])
+            if element_uuid not in res:
+                res[element_uuid] = []
+            res[element_uuid].append(cho[el.option_id])
 
     # Handle text, paragraph, and computed questions
     elif question.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, WritingQuestionType.COMPUTED]:
@@ -431,15 +438,16 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
         # Process each answer and mark long texts for popup display
         for el in que:
             answer = el["short_text"]
+            element_uuid = str(element_mapping[el["element_id"]])
             if len(answer) == max_length:
-                popup.append(el["element_id"])
-            res[el["element_id"]] = answer
+                popup.append(element_uuid)
+            res[element_uuid] = answer
 
-    return JsonResponse({"res": res, "popup": popup, "num": question.id})
+    return JsonResponse({"res": res, "popup": popup, "q_uuid": str(question.uuid)})
 
 
 @login_required
-def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type: str) -> JsonResponse:
+def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type: str) -> JsonResponse | None:
     """Generate email data for writing form options by character choices.
 
     This function processes writing form questions and returns email data
@@ -469,8 +477,8 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
         event = event.parent
 
     # Retrieve the specific writing question from POST data
-    eid = request.POST.get("num")
-    q = event.get_elements(WritingQuestion).get(pk=eid)
+    q_uuid = request.POST.get("q_uuid")
+    q = event.get_elements(WritingQuestion).get(uuid=q_uuid)
 
     # Only process single or multiple choice questions
     if q.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
@@ -505,7 +513,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 
         # Add character name and player name if available
         res[el.option_id]["emails"].append(char["name"])
-        if char["player_id"]:
+        if char["player_uuid"]:
             res[el.option_id]["names"].append(char["player"])
 
     # Convert option IDs to option names in final result
@@ -612,7 +620,9 @@ def orga_writing_form(request: HttpRequest, event_slug: str, writing_type: str) 
 
 
 @login_required
-def orga_writing_form_edit(request: HttpRequest, event_slug: str, writing_type: str, num: int) -> HttpResponse:
+def orga_writing_form_edit(
+    request: HttpRequest, event_slug: str, writing_type: str, question_uuid: str
+) -> HttpResponse:
     """Edit writing form questions with validation and option handling.
 
     Handles the editing of writing form questions for LARP events, including
@@ -623,7 +633,7 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, writing_type: 
         request: The HTTP request object containing form data and user info
         event_slug: Event slug identifier for the current event
         writing_type: Writing form type identifier (e.g., 'character', 'background')
-        num: Question number/ID to edit, or 0 for new question
+        question_uuid: Question uuid to edit, or 0 for new question
 
     Returns:
         HttpResponse: Either a rendered form edit template or a redirect to
@@ -642,18 +652,13 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, writing_type: 
     check_writing_form_type(context, writing_type)
 
     # Process form submission using backend edit utility
-    if backend_edit(request, context, OrgaWritingQuestionForm, num, is_association=False):
+    if backend_edit(request, context, OrgaWritingQuestionForm, question_uuid, is_association=False):
         # Set permission suggestion for future operations
         set_suggestion(context, perm)
 
         # Handle "continue editing" button - redirect to new question form
         if "continue" in request.POST:
-            return redirect(
-                request.resolver_match.view_name,
-                event_slug=context["run"].get_slug(),
-                writing_type=writing_type,
-                num=0,
-            )
+            return redirect(request.resolver_match.view_name, context["run"].get_slug(), writing_type, "0")
 
         # Determine if we need to redirect to option editing
         edit_option = False
@@ -678,7 +683,7 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, writing_type: 
                 orga_writing_options_new,
                 event_slug=context["run"].get_slug(),
                 writing_type=writing_type,
-                num=context["saved"].id,
+                question_uuid=context["saved"].uuid,
             )
         return redirect("orga_writing_form", event_slug=context["run"].get_slug(), writing_type=writing_type)
 
@@ -697,7 +702,7 @@ def orga_writing_form_order(
     request: HttpRequest,
     event_slug: str,
     writing_type: str,
-    num: int,
+    question_uuid: str,
     order: int,
 ) -> HttpResponse:
     """Reorder writing form questions by swapping positions.
@@ -706,7 +711,7 @@ def orga_writing_form_order(
         request: The HTTP request object.
         event_slug: Event slug identifier.
         writing_type: The writing form type to reorder questions for.
-        num: The question number to move.
+        question_uuid: The question UUID to move.
         order: The direction to move ('up' or 'down').
 
     Returns:
@@ -720,21 +725,23 @@ def orga_writing_form_order(
     check_writing_form_type(context, writing_type)
 
     # Exchange the order of questions
-    exchange_order(context, WritingQuestion, num, order)
+    exchange_order(context, WritingQuestion, question_uuid, order)
 
     # Redirect back to the writing form page
     return redirect("orga_writing_form", event_slug=context["run"].get_slug(), writing_type=writing_type)
 
 
 @login_required
-def orga_writing_options_edit(request: HttpRequest, event_slug: str, writing_type: str, num: int) -> HttpResponse:
+def orga_writing_options_edit(
+    request: HttpRequest, event_slug: str, writing_type: str, option_uuid: str
+) -> HttpResponse:
     """Edit writing form option for event organizers.
 
     Args:
         request: The HTTP request object
         event_slug: Event slug identifier
         writing_type: Writing form type (background, origin, etc.)
-        num: Option number to edit
+        option_uuid: Option uuid to edit
 
     Returns:
         HTTP response with the option edit form
@@ -747,11 +754,13 @@ def orga_writing_options_edit(request: HttpRequest, event_slug: str, writing_typ
     check_writing_form_type(context, writing_type)
 
     # Process the option edit form and return response
-    return writing_option_edit(context, num, request, writing_type)
+    return writing_option_edit(context, option_uuid, request, writing_type)
 
 
 @login_required
-def orga_writing_options_new(request: HttpRequest, event_slug: str, writing_type: str, num: int) -> HttpResponse:
+def orga_writing_options_new(
+    request: HttpRequest, event_slug: str, writing_type: str, question_uuid: str
+) -> HttpResponse:
     """Create new writing option for character form question.
 
     Validates permissions and creates a new writing option for the specified
@@ -763,15 +772,16 @@ def orga_writing_options_new(request: HttpRequest, event_slug: str, writing_type
     # Ensure the writing form type is valid
     check_writing_form_type(context, writing_type)
 
-    # Set question ID in context and delegate to option editor
-    context["question_id"] = num
-    return writing_option_edit(context, 0, request, writing_type)
+    # Get parent question
+    get_element(context, question_uuid, "question", WritingQuestion)
+
+    return writing_option_edit(context, "0", request, writing_type)
 
 
-def writing_option_edit(context: dict, option_number: int, request: HttpRequest, option_type: str) -> HttpResponse:
+def writing_option_edit(context: dict, option_uuid: str, request: HttpRequest, option_type: str) -> HttpResponse:
     """Edit a writing option and handle form submission with redirect logic."""
     # Process form submission and save changes
-    if backend_edit(request, context, OrgaWritingOptionForm, option_number, is_association=False):
+    if backend_edit(request, context, OrgaWritingOptionForm, option_uuid, is_association=False):
         redirect_target = "orga_writing_form_edit"
 
         # Check if user wants to continue adding more options
@@ -783,7 +793,7 @@ def writing_option_edit(context: dict, option_number: int, request: HttpRequest,
             redirect_target,
             event_slug=context["run"].get_slug(),
             writing_type=option_type,
-            num=context["saved"].question_id,
+            question_uuid=context["saved"].question.uuid,
         )
 
     # Render edit form if no successful submission
@@ -795,7 +805,7 @@ def orga_writing_options_order(
     request: HttpRequest,
     event_slug: str,
     writing_type: str,
-    num: int,
+    option_uuid: str,
     order: int,
 ) -> HttpResponseRedirect:
     """Reorder writing options within a writing form question.
@@ -804,7 +814,7 @@ def orga_writing_options_order(
         request: HTTP request object
         event_slug: Event slug identifier
         writing_type: Writing form type identifier
-        num: Question ID number
+        option_uuid: Option UUID
         order: New order position for the option
 
     Returns:
@@ -818,14 +828,14 @@ def orga_writing_options_order(
     check_writing_form_type(context, writing_type)
 
     # Exchange order positions of WritingOption objects
-    exchange_order(context, WritingOption, num, order)
+    exchange_order(context, WritingOption, option_uuid, order)
 
     # Redirect back to writing form edit view
     return redirect(
         "orga_writing_form_edit",
         event_slug=context["run"].get_slug(),
         writing_type=writing_type,
-        num=context["current"].question_id,
+        question_uuid=context["current"].question.uuid,
     )
 
 
@@ -900,7 +910,7 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 def check_relations(
-    character_cache: Any, validation_checks: Any, character_numbers: Any, context: dict[str, Any], number_to_id_map: Any
+    character_cache: Any, validation_checks: Any, character_numbers: Any, context: dict, number_to_id_map: Any
 ) -> None:
     """Check character relationships for missing and extinct references.
 
@@ -941,7 +951,7 @@ def check_relations(
 
 
 def check_writings(
-    cache: Any, checks: Any, character_numbers: Any, context: dict[str, Any], character_id_to_number_map: Any
+    cache: Any, checks: Any, character_numbers: Any, context: dict, character_id_to_number_map: Any
 ) -> None:
     """Validate writing submissions and requirements for different element types.
 
@@ -987,7 +997,7 @@ def check_writings(
                 checks[element_name + "_interloper"].append((element, interloper_character))
 
 
-def check_speedlarp(checks: Any, context: dict[str, Any], id_number_map: Any) -> None:
+def check_speedlarp(checks: Any, context: dict, id_number_map: Any) -> None:
     """Validate speedlarp character configurations.
 
     Args:
@@ -1044,7 +1054,7 @@ def check_speedlarp_prepare(
 
 
 @require_POST
-def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResponse:
+def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResponse | None:
     """Get the number attribute for a Trait or Character element.
 
     Args:
@@ -1177,8 +1187,8 @@ def orga_writing_excel_submit(request: HttpRequest, event_slug: str, writing_typ
         obj = context["form"].save()
         response = {
             "k": 1,
-            "qid": context["question"].id,
-            "eid": context["element"].id,
+            "question_uuid": context["question"].uuid,
+            "edit_uuid": context["element"].uuid,
             "update": _get_question_update(context, obj),
         }
         return JsonResponse(response)
@@ -1219,8 +1229,8 @@ def _get_excel_form(
 
     # Validate writing form type and extract request parameters
     check_writing_form_type(context, element_type)
-    question_id = int(request.POST.get("qid"))
-    element_id = int(request.POST.get("eid"))
+    question_uuid = str(request.POST.get("question_uuid"))
+    edit_uuid = str(request.POST.get("edit_uuid"))
 
     # Fetch the writing question with proper filtering
     question = (
@@ -1228,12 +1238,12 @@ def _get_excel_form(
         .get_elements(WritingQuestion)
         .select_related("event")
         .filter(applicable=context["writing_typ"])
-        .get(pk=question_id)
+        .get(uuid=question_uuid)
     )
 
     # Setup applicable type context and fetch target element
     context["applicable"] = QuestionApplicable.get_applicable_inverse(context["writing_typ"])
-    element = context["event"].get_elements(context["applicable"]).select_related("event").get(pk=element_id)
+    element = context["event"].get_elements(context["applicable"]).select_related("event").get(uuid=edit_uuid)
     context["elementTyp"] = context["applicable"]
 
     # Map element types to their corresponding form classes
@@ -1252,8 +1262,8 @@ def _get_excel_form(
     else:
         form = form_class(context=context, instance=element)
 
-    # Determine field key based on question type
-    field_key = f"q{question_id}"
+    # Determine field key based on question type (use UUID to avoid exposing numeric IDs in HTML)
+    field_key = f"que_{question.uuid}"
     if question.typ not in BaseQuestionType.get_basic_types():
         field_key = question.typ
 
@@ -1296,9 +1306,9 @@ def _get_question_update(context: dict, element: Any) -> str:
                 </a>
             """
 
-    # Determine question key and slug based on question type
-    question_key = f"q{context['question'].id}"
-    question_slug = str(context["question"].id)
+    # Determine question key and slug based on question type (use UUID to avoid exposing numeric IDs in HTML)
+    question_key = f"que_{context['question'].uuid}"
+    question_slug = str(context["question"].uuid)
     if context["question"].typ not in BaseQuestionType.get_basic_types():
         question_key = context["question"].typ
         question_slug = context["question"].typ
@@ -1313,8 +1323,9 @@ def _get_question_update(context: dict, element: Any) -> str:
     # Handle multiple choice and single choice questions
     if context["question"].typ in [BaseQuestionType.MULTIPLE, BaseQuestionType.SINGLE]:
         # get option names
-        option_ids = [int(option_value) for option_value in display_value]
-        query = context["event"].get_elements(WritingOption).filter(pk__in=option_ids).order_by("order")
+        if not isinstance(display_value, list):
+            display_value = [display_value]
+        query = context["event"].get_elements(WritingOption).filter(uuid__in=display_value).order_by("order")
         display_value = ", ".join(list(query.values_list("name", flat=True)))
     else:
         # check if it is over the character limit

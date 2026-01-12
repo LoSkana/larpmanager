@@ -27,7 +27,7 @@ from django.utils.html import format_html_join
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import save_single_config
-from larpmanager.forms.base import MyForm
+from larpmanager.forms.base import BaseModelForm
 from larpmanager.models.base import Feature, FeatureModule
 
 if TYPE_CHECKING:
@@ -109,7 +109,7 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
         )
 
 
-class FeatureForm(MyForm):
+class FeatureForm(BaseModelForm):
     """Form for Feature."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -188,7 +188,7 @@ class FeatureForm(MyForm):
         self.added_features = new_features - old_features
 
 
-class QuickSetupForm(MyForm):
+class QuickSetupForm(BaseModelForm):
     """Form for QuickSetup."""
 
     setup: ClassVar[dict] = {}
@@ -198,7 +198,7 @@ class QuickSetupForm(MyForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def init_fields(self, features: list[str]) -> None:
+    def init_fields(self, features: dict[str, int]) -> None:
         """Initialize form fields for quick setup configuration.
 
         Args:
@@ -241,7 +241,7 @@ class QuickSetupForm(MyForm):
 
         """
         # Save the base instance first
-        instance = super().save(commit=commit)
+        instance: Association = super().save(commit=commit)
 
         # Process form fields to separate features from configurations
         features = {}

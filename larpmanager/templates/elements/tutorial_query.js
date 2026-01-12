@@ -23,9 +23,9 @@ function slugify(text) {
 }
 
 {% if run %}
-    let run_id = '{{ run.id }}';
+    let run_id = '{{ run.uuid }}';
 {% else %}
-    let run_id = '0';
+    let run_id = '';
 {% endif %}
 
 function search_tutorial() {

@@ -43,7 +43,7 @@ from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.config import get_association_config
-from larpmanager.forms.base import BaseAccForm, MyForm
+from larpmanager.forms.base import BaseAccForm, BaseForm, BaseModelForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     AssociationMemberS2WidgetMulti,
@@ -62,9 +62,9 @@ from larpmanager.models.member import (
     VolunteerRegistry,
     get_user_membership,
 )
-from larpmanager.utils.common import get_recaptcha_secrets
-from larpmanager.utils.tasks import my_send_mail
-from larpmanager.utils.validators import FileTypeValidator
+from larpmanager.utils.core.common import get_recaptcha_secrets
+from larpmanager.utils.core.validators import FileTypeValidator
+from larpmanager.utils.larpmanager.tasks import my_send_mail
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -317,13 +317,13 @@ class MyPasswordResetForm(PasswordResetForm):
         my_send_mail(subject, body, to_email, association)
 
 
-class AvatarForm(forms.Form):
+class AvatarForm(BaseForm):
     """Form for uploading user avatar images."""
 
     image = forms.ImageField(label="Select an image")
 
 
-class LanguageForm(forms.Form):
+class LanguageForm(BaseForm):
     """Form for selecting user interface language."""
 
     language = forms.ChoiceField(
@@ -430,7 +430,7 @@ class ResidenceField(forms.MultiValueField):
         sanitized_values = [value if value is not None else "" for value in values_list]
         return "|".join(sanitized_values)
 
-    def clean(self, value: list | None) -> list:
+    def clean(self, value: list | None) -> str:
         """Clean and validate field values, handling empty values appropriately.
 
         Args:
@@ -461,7 +461,7 @@ class ResidenceField(forms.MultiValueField):
         return self.compress(cleaned_data)
 
 
-class BaseProfileForm(MyForm):
+class BaseProfileForm(BaseModelForm):
     """Form for BaseProfile."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -490,7 +490,7 @@ class BaseProfileForm(MyForm):
 
         # Batch delete fields
         for f in fields_to_delete:
-            del self.fields[f]
+            self.delete_field(f)
 
         # Handle residence address field if needed
         if "residence_address" in self.allowed:
@@ -589,7 +589,7 @@ class ProfileForm(BaseProfileForm):
         # Handle presentation field for voting candidates
         if "presentation" in self.fields:
             vote_cands = get_association_config(
-                self.params["association_id"], "vote_candidates", default_value=""
+                self.params["association_id"], "vote_candidates", default_value="", context=self.params
             ).split(",")
             if not self.instance.pk or str(self.instance.pk) not in vote_cands:
                 self.delete_field("presentation")
@@ -633,7 +633,7 @@ class ProfileForm(BaseProfileForm):
         features = self.params["features"]
 
         if "membership" in features:
-            min_age = get_association_config(association_id, "membership_age", default_value="")
+            min_age = get_association_config(association_id, "membership_age", default_value="", context=self.params)
             if min_age:
                 try:
                     min_age = int(min_age)
@@ -689,7 +689,7 @@ class MembershipRequestForm(forms.ModelForm):
     )
 
 
-class MembershipConfirmForm(forms.Form):
+class MembershipConfirmForm(BaseForm):
     """Form for MembershipConfirm."""
 
     confirm_1 = forms.BooleanField(required=True, initial=False)
@@ -698,7 +698,7 @@ class MembershipConfirmForm(forms.Form):
     confirm_4 = forms.BooleanField(required=True, initial=False)
 
 
-class MembershipResponseForm(forms.Form):
+class MembershipResponseForm(BaseForm):
     """Form for MembershipResponse."""
 
     is_approved = forms.BooleanField(required=False, initial=True)
@@ -711,7 +711,7 @@ class MembershipResponseForm(forms.Form):
     )
 
 
-class ExeVolunteerRegistryForm(MyForm):
+class ExeVolunteerRegistryForm(BaseModelForm):
     """Form for ExeVolunteerRegistry."""
 
     page_title = _("Volounteer data")
@@ -731,7 +731,7 @@ class ExeVolunteerRegistryForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association ID."""
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
 
     def clean_member(self) -> Member:
         """Validate member is not already registered as volunteer for this association."""
@@ -771,7 +771,7 @@ class ExeMemberForm(BaseProfileForm):
             self.fields["profile"].required = False
 
 
-class ExeMembershipForm(MyForm):
+class ExeMembershipForm(BaseModelForm):
     """Form for ExeMembership."""
 
     page_info = _("Manage member membership status")
@@ -781,9 +781,6 @@ class ExeMembershipForm(MyForm):
     class Meta:
         model = Membership
         fields = (
-            "compiled",
-            "credit",
-            "tokens",
             "status",
             "request",
             "document",
@@ -793,7 +790,7 @@ class ExeMembershipForm(MyForm):
         )
 
 
-class ExeMembershipFeeForm(forms.Form):
+class ExeMembershipFeeForm(BaseForm):
     """Form for ExeMembershipFee."""
 
     page_info = _("Manage membership fee invoice upload")
@@ -826,7 +823,7 @@ class ExeMembershipFeeForm(forms.Form):
         association_id = self.params.get("association_id", None)
 
         # Configure member field widget and queryset for the association
-        self.fields["member"].widget.set_association_id(association_id)
+        self.configure_field_association("member", association_id)
         self.fields["member"].queryset = get_members_queryset(association_id)
 
         # Build payment method choices from association's available methods
@@ -850,7 +847,7 @@ class ExeMembershipFeeForm(forms.Form):
         return member
 
 
-class ExeMembershipDocumentForm(forms.Form):
+class ExeMembershipDocumentForm(BaseForm):
     """Form for ExeMembershipDocument."""
 
     page_info = (
@@ -895,7 +892,7 @@ class ExeMembershipDocumentForm(forms.Form):
         self.association_id = self.params.get("association_id", None)
 
         # Configure member field with association-specific queryset and widget
-        self.fields["member"].widget.set_association_id(self.association_id)
+        self.configure_field_association("member", self.association_id)
         self.fields["member"].queryset = get_members_queryset(self.association_id)
 
         # Calculate next available card number for the association
@@ -935,7 +932,7 @@ class ExeMembershipDocumentForm(forms.Form):
         return card_number
 
 
-class ExeBadgeForm(MyForm):
+class ExeBadgeForm(BaseModelForm):
     """Form for ExeBadge."""
 
     page_info = _("Manage badges and user assignments")
@@ -953,10 +950,10 @@ class ExeBadgeForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
-        self.fields["members"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("members", self.params["association_id"])
 
 
-class ExeProfileForm(MyForm):
+class ExeProfileForm(BaseModelForm):
     """Form for ExeProfile."""
 
     page_title = _("Profile")
@@ -1062,7 +1059,7 @@ class ExeProfileForm(MyForm):
             The saved form instance
 
         """
-        instance = super().save(commit=commit)
+        instance: Member = super().save(commit=commit)
 
         mandatory = []
         optional = []

@@ -40,7 +40,7 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import activate, get_language
 from django.utils.translation import gettext_lazy as _
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 
 from larpmanager.accounting.member import info_accounting
 from larpmanager.cache.association_text import get_association_text
@@ -68,15 +68,16 @@ from larpmanager.models.miscellanea import (
     ChatMessage,
     Contact,
 )
-from larpmanager.models.registration import Registration
+from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.models.utils import generate_id
-from larpmanager.utils.base import get_context
-from larpmanager.utils.common import get_badge, get_channel, get_contact, get_member
-from larpmanager.utils.exceptions import check_association_feature
-from larpmanager.utils.fiscal_code import calculate_fiscal_code
-from larpmanager.utils.member import get_leaderboard
-from larpmanager.utils.pdf import get_membership_request
-from larpmanager.utils.registration import registration_status
+from larpmanager.models.writing import CharacterConfig
+from larpmanager.utils.core.base import get_context
+from larpmanager.utils.core.common import get_badge, get_channel, get_contact
+from larpmanager.utils.core.exceptions import check_association_feature
+from larpmanager.utils.io.pdf import get_membership_request
+from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
+from larpmanager.utils.users.member import get_leaderboard, get_member_uuid
+from larpmanager.utils.users.registration import registration_status
 from larpmanager.views.user.event import get_character_rels_dict, get_payment_invoices_dict, get_pre_registrations_dict
 
 logger = logging.getLogger(__name__)
@@ -300,18 +301,22 @@ def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
 
     # Build full filesystem path and open image
     path = str(Path(conf_settings.MEDIA_ROOT) / path)
-    im = Image.open(path)
+    try:
+        im = Image.open(path)
 
-    # Rotate image based on direction parameter (90 degrees clockwise if 1, otherwise counterclockwise)
-    out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
+        # Rotate image based on direction parameter (90 degrees clockwise if 1, otherwise counterclockwise)
+        out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
 
-    # Extract file extension and generate new unique filename
-    ext = path.split(".")[-1]
-    n_path = f"{Path(path).parent}/{request.user.member.pk}_{uuid4().hex}.{ext}"
+        # Extract file extension and generate new unique filename
+        ext = path.split(".")[-1]
+        n_path = f"{Path(path).parent}/{request.user.member.pk}_{uuid4().hex}.{ext}"
 
-    # Save rotated image and update member profile
-    out.save(n_path)
-    request.user.member.profile = n_path
+        # Save rotated image and update member profile
+        out.save(n_path)
+        request.user.member.profile = n_path
+    except (OSError, UnidentifiedImageError):
+        logger.exception("Failed to rotate profile image")
+        return JsonResponse({"res": "ko"})
     request.user.member.save()
 
     # Return success response with thumbnail URL
@@ -503,7 +508,7 @@ def membership_request_test(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def public(request: HttpRequest, member_id: int) -> HttpResponse:  # noqa: C901 - Complex profile view with feature-dependent sections
+def public(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: C901 - Complex profile view with feature-dependent sections
     """Display public member profile information.
 
     Shows publicly visible member data while respecting privacy settings,
@@ -512,18 +517,18 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:  # noqa: C901 
 
     Args:
         request: HTTP request object containing user and association context
-        member_id: Member ID to display profile for
+        slug: Member UUID slug to display profile for
 
     Returns:
         HttpResponse: Rendered public member profile page
 
     Raises:
-        Http404: If member has no membership in the current association
+        Http404: If member not found or has no membership in the current association
 
     """
     # Initialize context with user data and fetch member information
     context = get_context(request)
-    context["member_public"] = get_member(member_id)
+    context["member_public"] = get_member_uuid(slug)
 
     # Verify member has membership in current association
     if not Membership.objects.filter(
@@ -567,7 +572,7 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:  # noqa: C901 
                 name = rcr.character.name
                 if rcr.custom_name:
                     name = rcr.custom_name
-                el.chars[rcr.character.number] = name
+                el.chars[rcr.character.uuid] = name
 
     # Validate and mark social contact as URL if valid
     validate = URLValidator()
@@ -576,7 +581,7 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:  # noqa: C901 
             validate(context["member_public"].social_contact)
             context["member_public"].contact_url = True
         except ValidationError as e:
-            logger.debug("Social contact validation failed for member=%s: %s", member_id, e)
+            logger.debug("Social contact validation failed for member=%s: %s", slug, e)
 
     return render(request, "larpmanager/member/public.html", context)
 
@@ -601,7 +606,7 @@ def chats(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def chat(request: HttpRequest, member_id: Any) -> Any:
+def chat(request: HttpRequest, slug: str) -> Any:
     """Handle chat functionality between members.
 
     Manages message exchange, conversation history, and chat permissions
@@ -609,6 +614,11 @@ def chat(request: HttpRequest, member_id: Any) -> Any:
     """
     context = get_context(request)
     check_association_feature(request, context, "chat")
+
+    # Get other user
+    context["member_public"] = get_member_uuid(slug)
+    member_id = context["member_public"].id
+
     my_member_id = context["member"].id
     if member_id == my_member_id:
         messages.success(request, _("You can't send messages to yourself") + "!")
@@ -677,11 +687,11 @@ def badges(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def badge(request: HttpRequest, badge_id: int) -> HttpResponse:
+def badge(request: HttpRequest, badge_uuid: str) -> HttpResponse:
     """Display a badge with shuffled member list."""
     context = get_context(request)
     check_association_feature(request, context, "badge")
-    badge = get_badge(badge_id, context)
+    badge = get_badge(context, badge_uuid)
 
     # Initialize context with badge data
     context.update({"badge": badge.show(), "list": []})
@@ -801,11 +811,11 @@ def vote(request: HttpRequest) -> HttpResponse:
         que = AccountingItemMembership.objects.filter(association_id=context["association_id"], year=context["year"])
         if not que.filter(member_id=context["member"].id).exists():
             messages.error(request, _("You must complete payment of membership dues in order to vote!"))
-            return redirect("acc_membership")
+            return redirect("accounting_membership")
 
     # Check if user has already voted this year
     que = Vote.objects.filter(member=context["member"], association_id=context["association_id"], year=context["year"])
-    if que.count() > 0:
+    if que.exists():
         context["done"] = True
         return render(request, "larpmanager/member/vote.html", context)
 
@@ -844,7 +854,7 @@ def vote(request: HttpRequest) -> HttpResponse:
         try:
             idx = int(mb)
             context["candidates"].append(Member.objects.get(pk=idx))
-        except (ValueError, Member.DoesNotExist) as e:  # noqa: PERF203 - Need per-item error handling to skip invalid candidates
+        except (ValueError, Member.DoesNotExist) as e:
             # Skip invalid candidate IDs
             logger.debug("Invalid candidate ID or member not found: %s: %s", mb, e)
 
@@ -882,45 +892,33 @@ def delegated(request: HttpRequest) -> HttpResponse:
     context = get_context(request)
     check_association_feature(request, context, "delegated_members")
 
-    # Disable last login update to avoid tracking when switching accounts
-    user_logged_in.disconnect(update_last_login, dispatch_uid="update_last_login")
-    backend = get_user_backend()
-
     # Handle delegated user trying to return to parent account
     if request.user.member.parent:
         if request.method == "POST":
-            # Log back in as parent account
-            login(request, request.user.member.parent.user, backend=backend)
-            messages.success(
-                request,
-                _("You are now logged in with your main account") + ":" + str(request.user.member),
-            )
-            return redirect("home")
+            message = _("You are now logged in with your main account") + ": " + str(request.user.member.parent)
+            return _switch_account(request, request.user.member.parent.user, message)
         # Show option to return to parent account
         return render(request, "larpmanager/member/delegated.html", context)
 
-    # Handle parent account managing delegated accounts
     # Retrieve all delegated child accounts for this parent
     context["list"] = Member.objects.filter(parent=request.user.member)
-    del_dict = {el.id: el for el in context["list"]}
+    del_dict = {el.uuid: el for el in context["list"]}
 
     # Process POST requests for account switching or creation
     if request.method == "POST":
         account_login = request.POST.get("account")
         # Handle switching to an existing delegated account
         if account_login:
-            account_login = int(account_login)
+            account_login = str(account_login)
             if account_login not in del_dict:
                 msg = f"delegated account not found: {account_login}"
                 raise Http404(msg)
             delegated = del_dict[account_login]
-            # Log in as the selected delegated account
-            login(request, delegated.user, backend=backend)
-            messages.success(request, _("You are now logged in with the delegate account") + ":" + str(delegated))
-            return redirect("home")
+            message = _("You are now logged in with the delegate account") + ": " + str(delegated)
+            return _switch_account(request, delegated.user, message)
 
         # Handle creating a new delegated account
-        form = ProfileForm(request.POST, ontext=context)
+        form = ProfileForm(request.POST, context=context)
         if form.is_valid():
             data = form.cleaned_data
             # Generate unique username and email for delegated account
@@ -951,7 +949,11 @@ def delegated(request: HttpRequest) -> HttpResponse:
 
     # Add accounting information for each delegated account
     for el in context["list"]:
-        del_ctx = {"member": el, "association_id": context["association_id"]}
+        del_ctx = {
+            "member": el,
+            "association_id": context["association_id"],
+            "features": context["features"],
+        }
         info_accounting(del_ctx)
         el.context = del_ctx
     return render(request, "larpmanager/member/delegated.html", context)
@@ -960,6 +962,33 @@ def delegated(request: HttpRequest) -> HttpResponse:
 def get_user_backend() -> str:
     """Return the authentication backend path for allauth."""
     return "allauth.account.auth_backends.AuthenticationBackend"
+
+
+def _switch_account(request: HttpRequest, target_user: User, success_message: str) -> HttpResponse:
+    """Switch to a different user account (parent or delegated).
+
+    Args:
+        request: HTTP request from current user
+        target_user: User object to switch to
+        success_message: Message to display after successful switch
+
+    Returns:
+        Redirect to home page after switching accounts
+    """
+    # Disable last login update to avoid tracking when switching accounts
+    user_logged_in.disconnect(update_last_login, dispatch_uid="update_last_login")
+    try:
+        # Log in as the target user using Django's ModelBackend
+        # We use ModelBackend instead of allauth because delegated users don't have EmailAddress records
+        login(request, target_user, backend="django.contrib.auth.backends.ModelBackend")
+        # Explicitly save the session to ensure login persists
+        request.session.save()
+    finally:
+        # Re-enable last login update signal
+        user_logged_in.connect(update_last_login, dispatch_uid="update_last_login")
+
+    messages.success(request, success_message)
+    return redirect("home")
 
 
 @login_required
@@ -981,9 +1010,9 @@ def registrations(request: HttpRequest) -> HttpResponse:
     nt = []
     context = get_context(request)
 
-    # Get user's registrations filtered by association for caching optimization
+    # Get user's registrations in this association
     my_regs = Registration.objects.filter(member=context["member"], run__event_id=context["association_id"])
-    my_regs_dict = {reg.run_id: reg for reg in my_regs}
+    my_regs_dict = {registration.run_id: registration for registration in my_regs}
 
     # Prepare context data
     context.update(
@@ -995,11 +1024,94 @@ def registrations(request: HttpRequest) -> HttpResponse:
     )
 
     # Process each registration to calculate status and append to results
-    for reg in my_regs:
+    for registration in my_regs:
         # Calculate registration status
-        registration_status(reg.run, context["member"], context)
-        nt.append(reg)
+        registration.run.status = registration_status(registration.run, context["member"], context)
+        nt.append(registration)
 
     # Render template with processed registration list
     context["registration_list"] = nt
     return render(request, "larpmanager/member/registrations.html", context)
+
+
+@login_required
+def characters(request: HttpRequest) -> HttpResponse:
+    """Display user's characters grouped by campaign with status and last event.
+
+    Retrieves and displays all characters assigned to the current user within their
+    association, grouped by campaign (event or parent event). Shows character status
+    (active/inactive) and links to the last event where the character was played.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing user and
+            association information.
+
+    Returns:
+        HttpResponse: Rendered template displaying the user's characters
+            grouped by campaign.
+
+    """
+    context = get_context(request)
+
+    # Get all assignments of characters to the user
+    my_character_rels = (
+        RegistrationCharacterRel.objects.filter(
+            reg__member=context["member"],
+            reg__run__event__association_id=context["association_id"],
+            reg__cancellation_date__isnull=True,
+        )
+        .select_related("character", "reg__run")
+        .order_by("-reg__run__end")
+    )
+
+    # Batch load character configs
+    _configs_character_rels(my_character_rels)
+
+    context["oneshots"] = [rel for rel in my_character_rels if not rel.character.player]
+
+    campaigns = {}
+    for rel in my_character_rels:
+        if not rel.character.player:
+            continue
+
+        # Determine campaign: use parent if exists, otherwise the event itself
+        character = rel.character
+        event = character.event
+        campaign = event.parent if event.parent_id else event
+        if campaign.id not in campaigns:
+            campaigns[campaign.id] = {
+                "campaign": campaign,
+                "characters": {},
+                "event": event,
+            }
+
+        if character.id in campaigns[campaign.id]["characters"]:
+            continue
+
+        campaigns[campaign.id]["characters"][character.id] = rel
+
+    context["campaigns"] = campaigns
+
+    return render(request, "larpmanager/member/characters.html", context)
+
+
+def _configs_character_rels(character_rels: list[RegistrationCharacterRel]) -> None:
+    """Batch load character configs."""
+    # Collect all character IDs
+    char_ids = {rel.character.id for rel in character_rels}
+
+    if not char_ids:
+        return
+
+    # Batch query for CharacterConfig
+    configs_mapping = {}
+    configs_query = CharacterConfig.objects.filter(character_id__in=char_ids).values_list(
+        "character_id", "name", "value"
+    )
+    for character_id, name, value in configs_query:
+        if character_id not in configs_mapping:
+            configs_mapping[character_id] = {}
+        configs_mapping[character_id][name] = value
+
+    for rel in character_rels:
+        rel.character.configs_dict = configs_mapping.get(rel.character_id, {})

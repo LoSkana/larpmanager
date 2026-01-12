@@ -141,7 +141,7 @@ def reset_features_cache() -> None:
 
 def _build_guides_cache() -> list[dict]:
     """Build cache data for guides."""
-    published_guides = [
+    return [
         {
             "slug": published_guide.slug,
             "title": published_guide.title,
@@ -149,8 +149,6 @@ def _build_guides_cache() -> list[dict]:
         }
         for published_guide in LarpManagerGuide.objects.filter(published=True).order_by("number")
     ]
-
-    return published_guides
 
 
 def _build_tutorials_cache() -> list[dict]:
@@ -177,7 +175,7 @@ def _build_tutorials_cache() -> list[dict]:
 
 def _build_features_cache() -> list[dict]:
     """Build cache data for features with tutorials."""
-    feature_list = [
+    return [
         {
             "tutorial": feature.tutorial,
             "name": feature.name,
@@ -188,8 +186,6 @@ def _build_features_cache() -> list[dict]:
         .exclude(tutorial__exact="", module__order=0)
         .select_related("module")
     ]
-
-    return feature_list
 
 
 def _extract_h2_sections(content: str) -> list[tuple]:

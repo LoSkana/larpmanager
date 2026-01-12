@@ -200,7 +200,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_tokens_automatic_update_on_token_given(self, mock_features: Any) -> None:
         """Test automatic token balance update when tokens are given"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -228,7 +228,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_tokens_automatic_update_on_token_used(self, mock_features: Any) -> None:
         """Test automatic token balance update when tokens are used"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -246,7 +246,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
 
         # Use tokens
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("3.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.TOKEN, value=Decimal("3.00")
         )
         # Trigger signal by saving again (signal only fires on update, not create)
         payment.save()
@@ -260,7 +260,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_credit_automatic_update_on_credit_given(self, mock_features: Any) -> None:
         """Test automatic credit balance update when credit is given"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -291,7 +291,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_credit_automatic_update_on_credit_used(self, mock_features: Any) -> None:
         """Test automatic credit balance update when credit is used"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -316,7 +316,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
 
         # Use credit
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.CREDIT, value=Decimal("25.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.CREDIT, value=Decimal("25.00")
         )
         # Trigger signal by saving again (signal only fires on update, not create)
         payment.save()
@@ -330,7 +330,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_credit_automatic_update_on_expense_approved(self, mock_features: Any) -> None:
         """Test automatic credit balance update when expense is approved"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -361,7 +361,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_credit_automatic_update_on_refund(self, mock_features: Any) -> None:
         """Test automatic credit balance update when refund is given"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -403,7 +403,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_multiple_token_operations(self, mock_features: Any) -> None:
         """Test automatic token balance with multiple operations"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -428,7 +428,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
 
         # Use some tokens
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("2.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.TOKEN, value=Decimal("2.00")
         )
         # Trigger signal by saving again (signal only fires on update, not create)
         payment.save()
@@ -442,7 +442,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_multiple_credit_operations(self, mock_features: Any) -> None:
         """Test automatic credit balance with multiple operations"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -473,7 +473,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
 
         # Use some credit
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.CREDIT, value=Decimal("30.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.CREDIT, value=Decimal("30.00")
         )
         # Trigger signal by saving again (signal only fires on update, not create)
         payment.save()
@@ -487,7 +487,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_no_update_when_feature_disabled(self, mock_features: Any) -> None:
         """Test that automatic updates don't happen when feature is disabled"""
-        mock_features.return_value = {}  # token_credit feature disabled
+        mock_features.return_value = {}  # tokens and credits feature disabled
 
         member = self.get_member()
         association = self.get_association()
@@ -512,7 +512,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_token_balance_never_negative(self, mock_features: Any) -> None:
         """Test that token balance calculation handles edge cases"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -530,7 +530,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
 
         # Try to use 5 tokens (should work)
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("5.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.TOKEN, value=Decimal("5.00")
         )
         # Trigger signal by saving again (signal only fires on update, not create)
         payment.save()
@@ -544,7 +544,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_delete_token_item_updates_balance(self, mock_features: Any) -> None:
         """Test that deleting a token item updates the balance"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -577,7 +577,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_update_payment_item_recalculates_balance(self, mock_features: Any) -> None:
         """Test that updating a payment item recalculates the balance"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -599,7 +599,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
 
         # Use some tokens
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("3.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.TOKEN, value=Decimal("3.00")
         )
         # Trigger signal for initial creation
         payment.save()

@@ -26,21 +26,21 @@ import holidays
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
-from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import get_event_config, get_member_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.links import reset_event_links
 from larpmanager.models.access import AssociationRole, EventRole, get_association_executives, get_event_organizers
 from larpmanager.models.association import Association, get_association_maintainers, get_url, hdr
 from larpmanager.models.casting import AssignmentTrait, Casting
-from larpmanager.models.event import EventTextType
-from larpmanager.models.member import Member
+from larpmanager.models.event import EventTextType, Run
+from larpmanager.models.member import Member, NotificationType
 from larpmanager.models.writing import Character, CharacterStatus
-from larpmanager.utils.tasks import my_send_mail
+from larpmanager.utils.larpmanager.tasks import my_send_mail
+from larpmanager.utils.users.member import queue_organizer_notification
 
 if TYPE_CHECKING:
     from larpmanager.models.registration import Registration
@@ -269,7 +269,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
                 "role": instance.name,
                 "event": instance.event,
             }
-            url = get_url(f"{instance.event.slug}/1/manage/", instance.event.association)
+            url = get_url(f"{instance.event.slug}/manage/", instance.event.association)
             body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
             my_send_mail(subj, body, mb, instance.event)
 
@@ -289,7 +289,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
                 my_send_mail(subj, body, m, instance.event)
 
 
-def bring_friend_instructions(reg: Registration, context: dict) -> None:
+def bring_friend_instructions(registration: Registration, context: dict) -> None:
     """Send friend invitation instructions to registered user.
 
     This function generates and sends an email to a registered user containing
@@ -297,7 +297,7 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
     to receive mutual discounts on event registration.
 
     Args:
-        reg: Registration instance containing member and event information
+        registration: Registration instance containing member and event information
         context: Context dictionary containing discount amounts and event details.
              Expected keys: 'bring_friend_discount_to', 'bring_friend_discount_from'
 
@@ -310,13 +310,13 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
 
     """
     # Activate user's language for proper email localization
-    activate(reg.member.language)
+    activate(registration.member.language)
 
     # Build email subject with event header and localized message
-    email_subject = hdr(reg.run.event) + _("Bring a friend to %(event)s") % {"event": reg.run} + "!"
+    email_subject = hdr(registration.run.event) + _("Bring a friend to %(event)s") % {"event": registration.run} + "!"
 
     # Start email body with the user's personal discount code
-    email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.special_cod}
+    email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": registration.uuid}
 
     # Add instructions for sharing the code and friend's discount amount
     email_body += (
@@ -329,14 +329,14 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
         )
         % {
             "amount_to": context["bring_friend_discount_to"],
-            "currency": reg.run.event.association.get_currency_symbol(),
+            "currency": registration.run.event.association.get_currency_symbol(),
         }
         + ". "
         # Add information about the user's own discount benefit
         + _("For each of them, you will receive %(amount_from)s %(currency)s off your own event registration")
         % {
             "amount_from": context["bring_friend_discount_from"],
-            "currency": reg.run.event.association.get_currency_symbol(),
+            "currency": registration.run.event.association.get_currency_symbol(),
         }
         + "."
     )
@@ -345,13 +345,13 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
     email_body += (
         "<br /><br />"
         + _("Check the available number of discounts <a href='%(url)s'>on this page</a>")
-        % {"url": f"{reg.run.get_slug()}/limitations/"}
+        % {"url": f"{registration.run.get_slug()}/limitations/"}
         + "."
     )
 
     # Add closing message and send the email
     email_body += "<br /><br />" + _("See you soon") + "!"
-    my_send_mail(email_subject, email_body, reg.member, reg.run)
+    my_send_mail(email_subject, email_body, registration.member, registration.run)
 
 
 def send_trait_assignment_email(instance: AssignmentTrait) -> None:
@@ -515,8 +515,14 @@ def send_character_status_update_email(instance: Character) -> None:
             # Construct email subject with event, character, and status info
             email_subject = f"{hdr(instance.event)} - {instance!s} - {instance.get_status_display()}"
 
+            # Determine context for email
+            email_context = instance.event
+            if instance.event.runs.exists():
+                # Use the last run if the event has any runs
+                email_context = instance.event.runs.last()
+
             # Send the notification email to the player
-            my_send_mail(email_subject, email_body, instance.player, instance.event)
+            my_send_mail(email_subject, email_body, instance.player, email_context)
 
 
 def notify_organization_exe(
@@ -607,6 +613,69 @@ def get_exec_language(association: Association) -> str:
     return max(language_counts, key=language_counts.get) if language_counts else "en"
 
 
+def my_send_digest_email(
+    member: Member,
+    run: Run,
+    instance: Any,
+    notification_type: Any,
+    email_generator: callable,
+    email_generator_args: tuple = (),
+    email_generator_kwargs: dict | None = None,
+) -> None:
+    """Send notification email to a single organizer with digest mode support.
+
+    Centralizes the logic for sending email to an organizer. Checks their personal
+    digest preference:
+    - If digest mode is enabled: queues notification for daily digest
+    - If digest mode is disabled: sends immediate email
+
+    This function standardizes email/notification handling across the codebase,
+    replacing duplicate digest_mode checks.
+
+    Args:
+        member: Member instance to notify
+        run: Run instance for which to send the notification
+        instance: Object of the notification
+        notification_type: Type of notification for the queue (from OrganizerNotificationQueue.NotificationType)
+        email_generator: Callable that generates (subject, body) tuple for the email.
+                        Should accept *email_generator_args and **email_generator_kwargs
+        email_generator_args: Positional arguments to pass to email_generator
+        email_generator_kwargs: Keyword arguments to pass to email_generator
+        run_or_instance: Run or instance object to pass to my_send_mail
+
+    Returns:
+        None
+    """
+    # Initialize optional parameters with defaults
+    if email_generator_kwargs is None:
+        email_generator_kwargs = {}
+
+    should_queue_notification = get_member_config(member.pk, "mail_orga_digest", default_value=False)
+
+    # Check if this organizer has enabled digest mode for their notifications
+    if should_queue_notification(member):
+        object_id = instance.id if instance else 0
+        # Queue notification for daily digest summary for this specific organizer
+        queue_organizer_notification(run=run, member=member, notification_type=notification_type, object_id=object_id)
+    else:
+        # Send immediate email to this organizer
+        # Activate organizer's preferred language for localized content
+        activate(member.language)
+
+        # Generate email subject and body
+        subject, body = email_generator(*email_generator_args, **email_generator_kwargs)
+
+        if notification_type in [
+            NotificationType.PAYMENT_MONEY,
+            NotificationType.PAYMENT_CREDIT,
+            NotificationType.PAYMENT_TOKEN,
+        ]:
+            subject += _(" for %(user)s") % {"user": instance.member}
+
+        # Send the email to this organizer
+        my_send_mail(subject, body, member, instance)
+
+
 def send_support_ticket_email(instance: Any) -> None:
     """Send ticket notification email to admins and association maintainers.
 
@@ -631,14 +700,6 @@ def send_support_ticket_email(instance: Any) -> None:
     # Send to association maintainers
     for maintainer in get_association_maintainers(instance.association):
         my_send_mail(subject, body, maintainer.email)
-
-    # Add analyze button for superusers
-    analyze_path = reverse("exe_ticket_analyze", kwargs={"ticket_id": instance.id})
-    analyze_url = get_url(analyze_path.lstrip("/"), instance.association)
-    body += "<br /><br /><hr /><br />"
-    body += "<p><strong>Start automatic ticket analysis:</strong></p>"
-    body += f"<p><a href='{analyze_url}' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;'>Analyze Ticket</a></p>"
-    body += "<p><small>Note: Only superusers and association maintainers can start the analysis.</small></p>"
 
     # Send to admins
     for _admin_name, admin_email in conf_settings.ADMINS:

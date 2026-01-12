@@ -2,9 +2,11 @@
 name = "larpmanager"
 version = "1.0.0"
 license = "AGPL-3.0-or-later"
+requires-python = ">=3.12"
 classifiers = [
   "License :: OSI Approved :: GNU Affero General Public License v3",
-  "Programming Language :: Python :: 3"
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12"
 ]
 
 [tool.djlint]
@@ -13,7 +15,7 @@ extend_exclude="static/,larpmanager/static/"
 
 [tool.ruff]
 line-length = 120
-extend-exclude = ["main", "*/migrations/*", "*/tests/*"]
+extend-exclude = ["main", "*/migrations/*", "*/tests/*", "scripts/*", "manage.py"]
 
 [tool.ruff.format]
 quote-style = "double"

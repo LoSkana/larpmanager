@@ -7,7 +7,7 @@
     {% trans "This page shows for each participant their completion status of workshops" %}
 {% endblock info %}
 {% block content %}
-    <h2>{{ reg_count }} iscrizioni</h2>
+    <h2>{{ registration_count }} iscrizioni</h2>
     <table id="workshops" class="go_datatable writing">
         <thead>
             <tr>
@@ -17,9 +17,9 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'public' el.member_id %}">{{ el.member }}</a>
+                        <a href="{% url 'public' el.member.uuid %}">{{ el.member }}</a>
                     </td>
                     <td>{{ el.num }}</td>
                 </tr>

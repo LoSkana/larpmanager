@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load tz show_tags static i18n %}
 {% block title %}
-    {% if run.reg and not run.reg.provisional %}
+    {% if registration and not registration.provisional %}
         {% trans "Change registration" %}
     {% else %}
         {% trans "Register" %}
@@ -9,7 +9,7 @@
     - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% if run.reg and not run.reg.provisional %}
+    {% if registration and not registration.provisional %}
         <p>
             {% trans "You can update your registration by simply changing the value of the fields and clicking on confirm" %}.
         </p>
@@ -23,7 +23,7 @@
             <hr />
             <h4>{% trans "Bring a friend" %}!</h4>
             <p>
-                {% trans "Personal code" %}: <b>{{ run.reg.special_cod }}</b>
+                {% trans "Personal code" %}: <b>{{ registration.uuid }}</b>
             </p>
             <p>{% trans "Copy this code and share it with friends" %}!</p>
             <p>
@@ -36,7 +36,7 @@
     {% else %}
         <p>{% trans "To register for the event, please fill in the following form and click on confirm" %}.</p>
     {% endif %}
-    {% if run.reg or not run.status.closed %}
+    {% if registration or not run_status.closed %}
         {% if event.website %}
             <hr />
             <p>
@@ -67,7 +67,7 @@
                     <table class="mob">
                         {% include "elements/form/register.html" %}
                     </table>
-                    {% if features.discount and 'waiting' not in run.status %}
+                    {% if features.discount and 'waiting' not in run_status %}
                         <h1 class="head_discount">
                             <a href="#" class="my_toggle section-link" tog='sec_discount'>
                                 {% trans "Discounts" %} <i class="fa-solid fa-chevron-down"></i>
@@ -129,7 +129,7 @@
                                     </tr>
                                 {% endif %}
                             {% endif %}
-                            {% if not run.reg %}
+                            {% if not registration %}
                                 <tr>
                                     <td>
                                         {% trans "By proceeding with your registration for this event, you are giving us your authorisation to share your data saved on our platform with the organisers of the event" %}.

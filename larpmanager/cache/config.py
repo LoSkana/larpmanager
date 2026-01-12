@@ -29,12 +29,6 @@ if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
 
 
-def clear_config_cache(config_element: BaseModel) -> None:
-    """Clear the cache for a configuration element."""
-    # noinspection PyProtectedMember
-    cache.delete(cache_configs_key(config_element.id, config_element._meta.model_name.lower()))  # noqa: SLF001  # Django model metadata
-
-
 def reset_element_configs(element: BaseModel) -> None:
     """Delete cached configs for the given element."""
     cache_key = cache_configs_key(element.id, element._meta.model_name.lower())  # noqa: SLF001  # Django model metadata
@@ -327,6 +321,20 @@ def get_event_config(
     """Get event configuration value from cache or database."""
     return _get_cached_config(
         event_id, "event", config_name, default_value=default_value, context=context, bypass_cache=bypass_cache
+    )
+
+
+def get_member_config(
+    member_id: int,
+    config_name: str,
+    *,
+    default_value: Any = None,
+    context: dict | None = None,
+    bypass_cache: bool = False,
+) -> Any:
+    """Get member configuration value from cache or database."""
+    return _get_cached_config(
+        member_id, "member", config_name, default_value=default_value, context=context, bypass_cache=bypass_cache
     )
 
 

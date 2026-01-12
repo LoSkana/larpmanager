@@ -18,13 +18,19 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Registration with payment requirement.
+Verifies signup requiring payment, provisional registration status, wire transfer payment,
+receipt upload, payment confirmation by organizer, and character assignment/removal emails.
+"""
+
 import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, submit, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -59,7 +65,7 @@ def prepare(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/manage/methods")
-    page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
+    page.get_by_role("checkbox", name="Wire").check()
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("test wire")
     page.locator("#id_wire_fee").fill("0")
@@ -67,6 +73,7 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#id_wire_payee").fill("test beneficiary")
     page.locator("#id_wire_payee").press("Tab")
     page.locator("#id_wire_iban").fill("test iban")
+    page.locator("#id_wire_bic").fill("test iban")
     submit_confirm(page)
 
     # set ticket price
@@ -81,23 +88,23 @@ def signup(page: Any, live_server: Any) -> None:
     # Signup
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
-    expect(page.locator("#riepilogo")).to_contain_text("provisional status")
+    expect_normalized(page, page.locator("#riepilogo"), "provisional status")
     submit_confirm(page)
 
     # Check we are on payment page
-    expect(page.locator("#header")).to_contain_text("Payment")
-    expect(page.locator("b")).to_contain_text("100")
+    expect_normalized(page, page.locator("#banner"), "Payment")
+    expect_normalized(page, page.locator("b"), "100")
 
     # check reg status
     go_to(page, live_server, "/test/register")
-    expect(page.locator("#one")).to_contain_text("Provisional registration")
-    expect(page.locator("#one")).to_contain_text("to confirm it proceed with payment")
+    expect_normalized(page, page.locator("#one"), "Provisional registration")
+    expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
 
     # pay
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"proceed with payment")).click()
     page.get_by_role("cell", name="Wire", exact=True).click()
-    expect(page.locator("b")).to_contain_text("100")
+    expect_normalized(page, page.locator("b"), "100")
     submit(page)
 
     load_image(page, "#id_invoice")
@@ -111,19 +118,19 @@ def signup(page: Any, live_server: Any) -> None:
 
     # check reg status
     go_to(page, live_server, "/test/register")
-    expect(page.locator("#one")).to_contain_text("Registration confirmed")
-    expect(page.locator("#one")).to_contain_text("please fill in your profile")
+    expect_normalized(page, page.locator("#one"), "Registration confirmed")
+    expect_normalized(page, page.locator("#one"), "please fill in your profile")
     page.get_by_role("link", name=re.compile(r"please fill in your")).click()
 
     # Approve sharing
     page.get_by_role("checkbox", name="Authorisation").check()
-    page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text("Registration confirmed (Standard)")
+    submit_confirm(page)
+    expect_normalized(page, page.locator("#one"), "Registration confirmed (Standard)")
 
 
 def characters(page: Any, live_server: Any) -> None:
     # Activate characters
-    go_to(page, live_server, "/test/1/manage/features/character/on")
+    go_to(page, live_server, "/test/manage/features/character/on")
 
     # Assign character
     go_to(page, live_server, "/test/manage/registrations")

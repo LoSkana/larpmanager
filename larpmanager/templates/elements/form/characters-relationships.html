@@ -13,7 +13,7 @@
     <div id="form_relationships">
         {% for key, item in relationships.items %}
             <h3>
-                <a href="{% url 'orga_characters_edit' run.get_slug item.char.id %}">{{ item.char }}</a>
+                <a href="{% url 'orga_characters_edit' run.get_slug item.char.uuid %}">{{ item.char }}</a>
             </h3>
             <table id="rel_{{ key }}_tr">
                 <tr>

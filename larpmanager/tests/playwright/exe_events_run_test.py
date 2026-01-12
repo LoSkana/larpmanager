@@ -17,12 +17,19 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Event creation and basic setup.
+Verifies creation of new events with slug generation, quick setup workflow,
+date configuration, and event dashboard access.
+"""
+
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, login_orga, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -34,32 +41,28 @@ def test_exe_events_run(pw_page: Any) -> None:
 
     go_to(page, live_server, "/manage/events")
     page.get_by_role("link", name="New event").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Prova Event")
-    page.locator("#id_name").press("Tab")
+    page.locator("#id_form1-name").click()
+    page.locator("#id_form1-name").fill("Prova Event")
+    page.locator("#id_form1-name").press("Tab")
     page.locator("#slug").fill("prova")
 
     frame = page.frame_locator("iframe.tox-edit-area__iframe")
     frame.locator("body").fill("sadsadasdsaas")
-    page.locator("#id_max_pg").click()
-    page.locator("#id_max_pg").fill("10")
+    page.locator("#id_form1-max_pg").click()
+    page.locator("#id_form1-max_pg").fill("10")
+
+    page.locator("#id_form2-development").select_option("1")
+    page.locator("#id_form2-start").fill("2055-06-11")
+    just_wait(page)
+    page.locator("#id_form2-start").click()
+    page.locator("#id_form2-end").fill("2055-06-13")
+    just_wait(page)
+    page.locator("#id_form2-end").click()
     submit_confirm(page)
 
-    # confirm quick setup
-    submit_confirm(page)
+    expect_normalized(page, page.locator("#one"), "Prova Event")
+    go_to(page, live_server, "/prova/manage/")
 
-    page.locator("#id_development").select_option("1")
-    page.locator("#id_start").fill("2055-06-11")
-    page.wait_for_timeout(2000)
-    page.locator("#id_start").click()
-    page.locator("#id_end").fill("2055-06-13")
-    page.wait_for_timeout(2000)
-    page.locator("#id_end").click()
-    submit_confirm(page)
-
-    expect(page.locator("#one")).to_contain_text("Prova Event")
-    go_to(page, live_server, "/prova/1/manage/")
-
-    expect(page.locator("#banner")).to_contain_text("Prova Event")
+    expect_normalized(page, page.locator("#banner"), "Prova Event")
     go_to(page, live_server, "")
-    expect(page.locator("#one")).to_contain_text("Prova Event")
+    expect_normalized(page, page.locator("#one"), "Prova Event")

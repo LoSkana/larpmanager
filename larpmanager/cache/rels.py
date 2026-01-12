@@ -22,9 +22,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-if TYPE_CHECKING:
-    from collections.abc import Callable
-
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
@@ -36,6 +33,9 @@ from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, Faction, Plot, Prologue, Relationship, SpeedLarp
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -198,7 +198,7 @@ def update_m2m_related_characters(
                 try:
                     character = Character.objects.get(id=character_id)
                     affected_characters.append(character)
-                except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to log and continue
+                except ObjectDoesNotExist:
                     logger.warning("Character %s not found during relationship update", character_id)
         elif action == "post_clear":
             # For post_clear, get all characters that were related

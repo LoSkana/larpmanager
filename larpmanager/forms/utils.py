@@ -39,7 +39,7 @@ from larpmanager.models.event import (
     Event,
     Run,
 )
-from larpmanager.models.experience import AbilityPx
+from larpmanager.models.experience import AbilityPx, AbilityTemplatePx
 from larpmanager.models.form import WritingOption
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
@@ -55,7 +55,7 @@ from larpmanager.models.writing import (
 )
 
 if TYPE_CHECKING:
-    from django.forms import Form
+    from larpmanager.forms.base import BaseModelForm
 
 # defer script loaded by form
 
@@ -211,7 +211,7 @@ class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
         return _(obj.name)
 
 
-def prepare_permissions_role(form: Form, typ: type) -> None:
+def prepare_permissions_role(form: BaseModelForm, typ: type) -> None:
     """Prepare permission fields for role forms based on enabled features.
 
     Creates dynamic form fields for permissions organized by modules,
@@ -298,7 +298,7 @@ def prepare_permissions_role(form: Form, typ: type) -> None:
         form.modules.append(field_name)
 
 
-def save_permissions_role(instance: EventRole | AssociationRole, form: Form) -> None:
+def save_permissions_role(instance: EventRole | AssociationRole, form: BaseModelForm) -> None:
     """Save selected permissions for a role instance.
 
     Args:
@@ -511,14 +511,14 @@ def get_run_choices(self: Any, *, past: bool = False) -> None:
     if past:
         reference_date = timezone.now() - timedelta(days=30)
         runs = runs.filter(end__gte=reference_date.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
-    choices.extend([(run.id, str(run)) for run in runs])
+    choices.extend([(run.uuid, str(run)) for run in runs])
 
     if "run" not in self.fields:
         self.fields["run"] = forms.ChoiceField(label=_("Session"))
 
     self.fields["run"].choices = choices
     if "run" in self.params:
-        self.initial["run"] = self.params["run"].id
+        self.initial["run"] = self.params["run"].uuid
 
 
 class EventRegS2Widget(s2forms.ModelSelect2Widget):
@@ -588,6 +588,52 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
         return Run.objects.filter(event__association_id=self.association_id)
 
 
+class RunRegS2Widget(s2forms.ModelSelect2Widget):
+    """Select2 widget for registrations filtered by run."""
+
+    search_fields: ClassVar[list] = [
+        "search__icontains",
+    ]
+
+    def set_run(self, run: Run) -> None:
+        """Set the run for this instance."""
+        self.run = run
+
+    def get_queryset(self) -> QuerySet[Registration]:
+        """Return non-cancelled registrations for the current run."""
+        return (
+            Registration.objects.filter(run=self.run, cancellation_date__isnull=True)
+            .select_related("member", "ticket")
+            .order_by("member__name", "member__surname")
+        )
+
+    def label_from_instance(self, obj: Any) -> str:
+        """Return formatted label for registration instance."""
+        return str(obj)
+
+
+class TransferTargetRunS2Widget(s2forms.ModelSelect2Widget):
+    """Select2 widget for target runs in registration transfers."""
+
+    search_fields: ClassVar[list] = [
+        "search__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the current event to exclude runs from the same event."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet[Run]:
+        """Return runs from different events that are not concluded or cancelled."""
+        return (
+            Run.objects.filter(event__association_id=self.event.association_id)
+            .exclude(event_id=self.event.id)
+            .exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC])
+            .select_related("event")
+            .order_by("-start")
+        )
+
+
 class EventCharacterS2:
     """Represents EventCharacterS2 model."""
 
@@ -606,7 +652,7 @@ class EventCharacterS2:
         """Return optimized queryset of event characters ordered by number."""
         return (
             self.event.get_elements(Character)
-            .only("id", "name", "number", "teaser", "title", "event_id")
+            .only("id", "uuid", "name", "number", "teaser", "title", "event_id")
             .order_by("number")
         )
 
@@ -617,6 +663,56 @@ class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.ModelSelect2Multiple
 
 class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
     """Represents EventCharacterS2Widget model."""
+
+
+class EventCharacterS2WidgetUuid(EventCharacterS2, s2forms.ModelSelect2Widget):
+    """Select2 widget for characters that returns UUID instead of ID as value."""
+
+    def label_from_instance(self, obj: Character) -> str:
+        """Return formatted label for character instance."""
+        return f"#{obj.number} {obj.name}"
+
+    def result_from_instance(self, obj: Character, request: Any = None) -> dict:  # noqa: ARG002
+        """Override to return UUID instead of ID in select2 results."""
+        return {
+            "id": obj.uuid,
+            "text": self.label_from_instance(obj),
+        }
+
+
+class RunCampaignS2:
+    """Manages loading run from a campaign."""
+
+    search_fields: ClassVar[list] = [
+        "search__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the event to look for other campaign events."""
+        if event.parent_id:
+            # Event is in a campaign - get parent and all siblings
+            parent_event = Event.objects.get(id=event.parent_id)
+            # Get all children of the parent (siblings) plus the parent itself
+            event_ids = list(Event.objects.filter(parent_id=parent_event.id).values_list("id", flat=True))
+            event_ids.append(parent_event.id)
+        else:
+            # Event is standalone or parent - get this event and all children
+            event_ids = list(Event.objects.filter(parent_id=event.id).values_list("id", flat=True))
+            event_ids.append(event.id)
+
+        self.event_ids = event_ids
+
+    def get_queryset(self) -> QuerySet[Character]:
+        """Return queryset of runs of allowed event ids."""
+        return Run.objects.filter(event_id__in=self.event_ids).order_by("-end")
+
+
+class RunCampaignS2WidgetMulti(RunCampaignS2, s2forms.ModelSelect2MultipleWidget):
+    """Represents RunCampaignS2WidgetMulti model."""
+
+
+class RunCampaignS2Widget(RunCampaignS2, s2forms.ModelSelect2Widget):
+    """Represents RunCampaignS2Widget model."""
 
 
 class EventPlotS2:
@@ -728,6 +824,26 @@ class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return self.event.get_elements(AbilityPx)
 
 
+class AbilityTemplateS2WidgetMulti(s2forms.ModelSelect2Widget):
+    """Represents AbilityTemplateS2WidgetMulti model."""
+
+    search_fields: ClassVar[list] = [
+        "name__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet[RegistrationTicket]:
+        """Return registration tickets for the event."""
+        return self.event.get_elements(AbilityTemplatePx)
+
+    def label_from_instance(self, obj: Any) -> str:
+        """Return string representation of the given object."""
+        return obj.get_full_name()
+
+
 class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     """Represents TicketS2WidgetMulti model."""
 
@@ -757,7 +873,7 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     def set_event(self, event: Event) -> None:
         """Set the event and compute allowed member IDs from event roles."""
         self.event = event
-        # Query event roles with prefetched members to avoid N+1 queries
+        # Query event roles with prefetched members
         que = EventRole.objects.filter(event_id=event.id).prefetch_related("members")
         # Extract flattened list of member IDs who have roles in this event
         self.allowed_member_ids = que.values_list("members__id", flat=True)
@@ -900,9 +1016,86 @@ def get_members_queryset(association_id: int) -> QuerySet[Member]:
     return queryset.filter(memberships__association_id=association_id, memberships__status__in=allowed_statuses)
 
 
-class WritingTinyMCE(TinyMCE):
-    """Represents WritingTinyMCE model."""
+# CSRF-aware upload handler for TinyMCE
+# This JavaScript function is injected into TinyMCE configuration to handle file uploads
+# with proper CSRF token authentication
+_TINYMCE_CSRF_UPLOAD_HANDLER = """function(blobInfo, progress) {
+    return new Promise(function(resolve, reject) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload_media/');
+
+        // Get CSRF token from cookie or form
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
+                         document.cookie.split('; ').find(row => row.startsWith('csrftoken='))?.split('=')[1];
+
+        if (csrftoken) {
+            xhr.setRequestHeader('X-CSRFToken', csrftoken);
+        }
+
+        xhr.upload.onprogress = function(e) {
+            progress(e.loaded / e.total * 100);
+        };
+
+        xhr.onload = function() {
+            if (xhr.status === 403) {
+                reject('HTTP Error: ' + xhr.status + ' - CSRF verification failed');
+                return;
+            }
+            if (xhr.status < 200 || xhr.status >= 300) {
+                reject('HTTP Error: ' + xhr.status);
+                return;
+            }
+
+            const json = JSON.parse(xhr.responseText);
+            if (!json || typeof json.location !== 'string') {
+                reject('Invalid JSON: ' + xhr.responseText);
+                return;
+            }
+
+            resolve(json.location);
+        };
+
+        xhr.onerror = function() {
+            reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
+        };
+
+        const formData = new FormData();
+        formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+        xhr.send(formData);
+    });
+}"""
+
+
+class CSRFTinyMCE(TinyMCE):
+    """TinyMCE widget with CSRF-aware image upload handler.
+
+    This widget extends the standard TinyMCE widget to include proper CSRF token
+    handling for file uploads, preventing 403 Forbidden errors.
+    """
+
+    def __init__(self, attrs=None, mce_attrs=None) -> None:  # noqa: ANN001
+        """Initialize TinyMCE widget with CSRF-aware upload handler.
+
+        Args:
+            attrs: HTML attributes for the widget
+            mce_attrs: TinyMCE-specific configuration attributes
+
+        """
+        # Merge custom upload handler with any existing mce_attrs
+        mce_attrs = mce_attrs or {}
+        mce_attrs["images_upload_handler"] = _TINYMCE_CSRF_UPLOAD_HANDLER
+
+        super().__init__(attrs=attrs, mce_attrs=mce_attrs)
+
+
+class WritingTinyMCE(CSRFTinyMCE):
+    """TinyMCE widget with custom styling for character markers and CSRF upload support."""
 
     def __init__(self) -> None:
-        """Initialize TinyMCE widget with custom styling for character markers."""
-        super().__init__(attrs={"rows": 20, "content_style": ".char-marker { background: yellow !important; }"})
+        """Initialize TinyMCE widget with custom styling and CSRF-aware upload handler."""
+        mce_attrs = {
+            "rows": 20,
+            "content_style": ".char-marker { background: yellow !important; }",
+        }
+        super().__init__(attrs=mce_attrs)

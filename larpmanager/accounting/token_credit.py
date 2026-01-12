@@ -21,7 +21,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from django.db import transaction
 from django.db.models import Case, F, IntegerField, Q, QuerySet, Value, When
@@ -46,80 +46,159 @@ if TYPE_CHECKING:
     from larpmanager.models.association import Association
 
 
-def registration_tokens_credits_use(reg: Registration, remaining: float, association_id: int) -> None:
-    """Apply available tokens and credits to a registration payment.
-
-    Automatically uses member's available tokens first, then credits
-    to pay for outstanding registration balance.
+def _apply_tokens(
+    registration: Registration,
+    remaining: Decimal,
+    membership: Any,
+    event_id: int,
+    association_id: int,
+) -> Decimal:
+    """Apply tokens to registration payment and return remaining balance.
 
     Args:
-        reg: Registration instance to apply payments to
+        registration: Registration to apply tokens to
+        remaining: Outstanding balance
+        membership: Member's membership with token balance
+        event_id: Event ID for config checks
+        association_id: Association ID
+
+    Returns:
+        Remaining balance after applying tokens
+
+    """
+    disable_tokens = get_event_config(event_id, "tokens_disable", default_value=False)
+    if membership.tokens <= 0 or disable_tokens:
+        return remaining
+
+    tokens_to_use = min(remaining, membership.tokens)
+    registration.tot_payed += tokens_to_use
+    membership.tokens -= tokens_to_use
+    membership.save()
+
+    # Create payment record for token usage
+    AccountingItemPayment.objects.create(
+        pay=PaymentChoices.TOKEN,
+        value=tokens_to_use,
+        member_id=registration.member_id,
+        registration=registration,
+        association_id=association_id,
+    )
+    return remaining - tokens_to_use
+
+
+def _apply_credits(
+    registration: Registration,
+    remaining: Decimal,
+    membership: Any,
+    event_id: int,
+    association_id: int,
+) -> Decimal:
+    """Apply credits to registration payment and return remaining balance.
+
+    Args:
+        registration: Registration to apply credits to
+        remaining: Outstanding balance
+        membership: Member's membership with credit balance
+        event_id: Event ID for config checks
+        association_id: Association ID
+
+    Returns:
+        Remaining balance after applying credits
+
+    """
+    disable_credits = get_event_config(event_id, "credits_disable", default_value=False)
+    if membership.credit <= 0 or disable_credits:
+        return remaining
+
+    credits_to_use = min(remaining, membership.credit)
+    registration.tot_payed += credits_to_use
+    membership.credit -= credits_to_use
+    membership.save()
+
+    # Create payment record for credit usage
+    AccountingItemPayment.objects.create(
+        pay=PaymentChoices.CREDIT,
+        value=credits_to_use,
+        member_id=registration.member_id,
+        registration=registration,
+        association_id=association_id,
+    )
+    return remaining - credits_to_use
+
+
+def registration_tokens_credits_use(
+    registration: Registration, remaining: Decimal, association_id: int, features: dict
+) -> None:
+    """Apply available tokens and credits to a registration payment.
+
+    Applies payment methods in order based on enabled features:
+    - If both enabled: tokens first, then credits
+    - If only one enabled: only that method is applied
+
+    Args:
+        registration: Registration instance to apply payments to
         remaining: Outstanding balance amount
         association_id: Association ID for membership lookup
+        features: Dict of enabled features
 
     Side Effects:
         Creates AccountingItemPayment records and updates membership balances.
-        Updates reg.tot_payed with applied amounts.
+        Updates reg.tot_payed in memory (caller must persist changes).
+
+    Note:
+        This function updates reg.tot_payed in memory but does NOT save the
+        registration to avoid infinite recursion. The caller (typically
+        handle_registration_accounting_updates) is responsible for persisting
+        changes via bulk update to prevent triggering post_save signals.
 
     """
     # Early return if no outstanding balance
-    if remaining < 0:
+    if remaining <= 0:
+        return
+
+    # Get enabled features and check if any payment method is available
+    tokens_enabled = "tokens" in features
+    credits_enabled = "credits" in features
+
+    if not tokens_enabled and not credits_enabled:
         return
 
     with transaction.atomic():
         # Get member and their membership for the association
-        member = reg.member
-        membership = get_user_membership(member, association_id)
+        membership = get_user_membership(registration.member, association_id)
+        event_id = registration.run.event_id
 
-        # Apply tokens first if available
-        if membership.tokens > 0:
-            tokens_to_use = min(remaining, membership.tokens)
-            reg.tot_payed += tokens_to_use
-            membership.tokens -= tokens_to_use
-            membership.save()
+        # Apply tokens first if feature is enabled
+        if tokens_enabled:
+            remaining = _apply_tokens(registration, remaining, membership, event_id, association_id)
 
-            # Create payment record for token usage
-            AccountingItemPayment.objects.create(
-                pay=PaymentChoices.TOKEN,
-                value=tokens_to_use,
-                member_id=reg.member_id,
-                reg=reg,
-                association_id=association_id,
-            )
-            remaining -= tokens_to_use
+        # Apply credits to remaining balance if feature is enabled
+        if credits_enabled and remaining > 0:
+            remaining = _apply_credits(registration, remaining, membership, event_id, association_id)
 
-        # Apply credits if still have remaining balance and credits available
-        if membership.credit > 0:
-            credits_to_use = min(remaining, membership.credit)
-            reg.tot_payed += credits_to_use
-            membership.credit -= credits_to_use
-            membership.save()
-
-            # Create payment record for credit usage
-            AccountingItemPayment.objects.create(
-                pay=PaymentChoices.CREDIT,
-                value=credits_to_use,
-                member_id=reg.member_id,
-                reg=reg,
-                association_id=association_id,
-            )
+        # Note: reg.tot_payed is updated in memory but NOT saved here
+        # to prevent infinite recursion via post_save signal
 
 
-def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, association_id: int) -> None:
+def registration_tokens_credits_overpay(
+    registration: Registration, overpay: Decimal, association_id: int, features: dict
+) -> None:
     """Offsets an overpayment by reducing or deleting AccountingItemPayment rows.
 
     This function handles overpayments by systematically reducing or removing
-    AccountingItemPayment entries with payment types TOKEN or CREDIT. The
-    operation is performed within an atomic transaction to ensure data consistency.
+    AccountingItemPayment entries with payment types TOKEN or CREDIT. Only processes
+    payment types for features that are currently enabled.
 
     Args:
-        reg: Registration instance to adjust payments for.
+        registration: Registration instance to adjust payments for.
         overpay: Positive decimal amount representing the overpayment to reverse.
         association_id: Association ID used to filter relevant payment records.
+        features: Dict of enabled features
 
     Note:
-        Payments are processed in priority order: CREDIT first, then TOKEN,
+        Payments are processed in reverse priority order (CREDIT first, then TOKEN),
         ordered by value (descending) and ID (descending) within each type.
+        Only processes payment types for enabled features.
         Rows are locked during processing to prevent race conditions.
 
     """
@@ -127,15 +206,37 @@ def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, ass
     if overpay <= 0:
         return
 
+    # Get enabled features and determine which payment types to process
+    tokens_enabled = "tokens" in features
+    credits_enabled = "credits" in features
+
+    if not tokens_enabled and not credits_enabled:
+        return
+
+    # Build list of payment types to process based on enabled features
+    payment_types = []
+    priority_cases = []
+    priority_value = 0
+
+    # Credits have higher priority (processed first when reversing overpayments)
+    if credits_enabled:
+        payment_types.append(PaymentChoices.CREDIT)
+        priority_cases.append(When(pay=PaymentChoices.CREDIT, then=Value(priority_value)))
+        priority_value += 1
+
+    # Tokens have lower priority (processed after credits)
+    if tokens_enabled:
+        payment_types.append(PaymentChoices.TOKEN)
+        priority_cases.append(When(pay=PaymentChoices.TOKEN, then=Value(priority_value)))
+
     with transaction.atomic():
         # Build queryset with payment priority annotation and locking
         payment_items_queryset = (
             AccountingItemPayment.objects.select_for_update()
-            .filter(reg=reg, association_id=association_id, pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
+            .filter(registration=registration, association_id=association_id, pay__in=payment_types)
             .annotate(
                 pay_priority=Case(
-                    When(pay=PaymentChoices.CREDIT, then=Value(0)),
-                    When(pay=PaymentChoices.TOKEN, then=Value(1)),
+                    *priority_cases,
                     output_field=IntegerField(),
                 ),
             )
@@ -143,7 +244,6 @@ def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, ass
         )
 
         # Initialize tracking variables
-        reversed_total = 0
         remaining_overpay = overpay
 
         # Process each payment item in priority order
@@ -162,8 +262,7 @@ def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, ass
                 payment_item.value = new_payment_value
                 payment_item.save(update_fields=["value"])
 
-            # Update tracking counters
-            reversed_total += amount_to_cut
+            # Update tracking counter
             remaining_overpay -= amount_to_cut
 
 
@@ -235,35 +334,19 @@ def get_regs(association: Association) -> QuerySet[Registration]:
 
 
 def update_token_credit_on_payment_save(instance: AccountingItemPayment, *, created: bool) -> None:
-    """Handle accounting item payment post-save token/credit updates.
-
-    Args:
-        instance: AccountingItemPayment instance that was saved
-        created: Boolean indicating if instance was created
-
-    """
-    if not created and instance.reg:
+    """Handle accounting item payment post-save token/credit updates."""
+    if not created and instance.registration:
         update_token_credit(instance, token=instance.pay == PaymentChoices.TOKEN)
 
 
 def update_token_credit_on_payment_delete(instance: AccountingItemPayment) -> None:
-    """Handle accounting item payment post-delete token/credit updates.
-
-    Args:
-        instance: AccountingItemPayment instance that was deleted
-
-    """
-    if instance.reg:
+    """Handle accounting item payment post-delete token/credit updates."""
+    if instance.registration:
         update_token_credit(instance, token=instance.pay == PaymentChoices.TOKEN)
 
 
 def update_token_credit_on_other_save(accounting_item: AccountingItemOther) -> None:
-    """Handle accounting item other save for token/credit updates.
-
-    Args:
-        accounting_item: AccountingItemOther instance that was saved
-
-    """
+    """Handle accounting item other save for token/credit updates."""
     if not accounting_item.member:
         return
 
@@ -284,93 +367,117 @@ def update_credit_on_expense_save(expense_item: AccountingItemExpense) -> None:
 
 
 def update_token_credit(
-    instance: AccountingItemOther | AccountingItemPayment | AccountingItemExpense, *, token: bool = True
+    accounting_item: AccountingItemOther | AccountingItemPayment | AccountingItemExpense,
+    *,
+    token: bool,
 ) -> None:
-    """Update member's token or credit balance based on accounting items.
-
-    Recalculates and updates membership token or credit balance by summing
-    all relevant accounting items (given, used, expenses, refunds).
+    """Update member's token or credit balance based on accounting item.
 
     Args:
-        instance: Accounting item instance that triggered the update
-        token: If True, update tokens; if False, update credits. Defaults to True.
+        accounting_item: Accounting item that triggered the update
+        token: True to update tokens, False to update credits
 
-    Returns:
-        None
+    """
+    if token:
+        update_tokens(accounting_item)
+    else:
+        update_credits(accounting_item)
 
-    Side Effects:
-        - Updates membership.tokens or membership.credit
-        - Triggers accounting updates on affected registrations
+
+def update_tokens(instance: AccountingItemOther | AccountingItemPayment | AccountingItemExpense) -> None:
+    """Recalculate and update member's token balance from all token transactions.
+
+    Args:
+        instance: Accounting item that triggered the update
 
     """
     association_id = instance.association_id
-
-    # Skip processing if token_credit feature is not active for this association
-    if "token_credit" not in get_association_features(association_id):
+    features = get_association_features(association_id)
+    if "tokens" not in features:
         return
 
-    # Get the user's membership for this association
+    # Get all tokens given to the member
     membership = get_user_membership(instance.member, association_id)
+    tokens_given = AccountingItemOther.objects.filter(
+        member_id=instance.member_id,
+        oth=OtherChoices.TOKEN,
+        association_id=association_id,
+    )
 
-    # Handle token balance calculation
-    if token:
-        # Get all tokens given to the member
-        tokens_given = AccountingItemOther.objects.filter(
-            member_id=instance.member_id,
-            oth=OtherChoices.TOKEN,
-            association_id=association_id,
-        )
+    # Get all tokens used by the member
+    tokens_used = AccountingItemPayment.objects.filter(
+        member_id=instance.member_id,
+        pay=PaymentChoices.TOKEN,
+        association_id=association_id,
+    )
 
-        # Get all tokens used by the member
-        tokens_used = AccountingItemPayment.objects.filter(
-            member_id=instance.member_id,
-            pay=PaymentChoices.TOKEN,
-            association_id=association_id,
-        )
+    # Calculate and save new token balance
+    membership.tokens = get_sum(tokens_given) - get_sum(tokens_used)
+    membership.save()
 
-        # Calculate and save new token balance
-        membership.tokens = get_sum(tokens_given) - get_sum(tokens_used)
-        membership.save()
+    _save_all_regs(instance)
 
-    # Handle credit balance calculation
-    else:
-        # Get all approved expenses for the member
-        credit_expenses = AccountingItemExpense.objects.filter(
-            member_id=instance.member_id,
-            is_approved=True,
-            association_id=association_id,
-        )
 
-        # Get all credits given to the member
-        credits_given = AccountingItemOther.objects.filter(
-            member_id=instance.member_id,
-            oth=OtherChoices.CREDIT,
-            association_id=association_id,
-        )
+def _save_all_regs(instance: AccountingItemOther | AccountingItemPayment | AccountingItemExpense) -> None:
+    """Trigger accounting recalculation on member's incomplete registrations.
 
-        # Get all credits used by the member
-        credits_used = AccountingItemPayment.objects.filter(
-            member_id=instance.member_id,
-            pay=PaymentChoices.CREDIT,
-            association_id=association_id,
-        )
+    Args:
+        instance: Accounting item whose member's registrations to update
 
-        # Get all refunds given to the member
-        credits_refunded = AccountingItemOther.objects.filter(
-            member_id=instance.member_id,
-            oth=OtherChoices.REFUND,
-            association_id=association_id,
-        )
-
-        # Calculate and save new credit balance (expenses + credits - used - refunds)
-        membership.credit = (
-            get_sum(credit_expenses) + get_sum(credits_given) - (get_sum(credits_used) + get_sum(credits_refunded))
-        )
-        membership.save()
-
+    """
     # Trigger accounting updates on registrations with incomplete payments
     for registration in get_regs_paying_incomplete(instance.association).filter(member_id=instance.member_id):
         registration.save()
+
+
+def update_credits(instance: AccountingItemOther | AccountingItemPayment | AccountingItemExpense) -> None:
+    """Recalculate and update member's credit balance from all credit transactions.
+
+    Args:
+        instance: Accounting item that triggered the update
+
+    """
+    association_id = instance.association_id
+    features = get_association_features(association_id)
+    if "credits" not in features:
+        return
+
+    # Get all approved expenses for the member
+    membership = get_user_membership(instance.member, association_id)
+    credit_expenses = AccountingItemExpense.objects.filter(
+        member_id=instance.member_id,
+        is_approved=True,
+        association_id=association_id,
+    )
+
+    # Get all credits given to the member
+    credits_given = AccountingItemOther.objects.filter(
+        member_id=instance.member_id,
+        oth=OtherChoices.CREDIT,
+        association_id=association_id,
+    )
+
+    # Get all credits used by the member
+    credits_used = AccountingItemPayment.objects.filter(
+        member_id=instance.member_id,
+        pay=PaymentChoices.CREDIT,
+        association_id=association_id,
+    )
+
+    # Get all refunds given to the member
+    credits_refunded = AccountingItemOther.objects.filter(
+        member_id=instance.member_id,
+        oth=OtherChoices.REFUND,
+        association_id=association_id,
+    )
+
+    # Calculate and save new credit balance (expenses + credits - used - refunds)
+    membership.credit = (
+        get_sum(credit_expenses) + get_sum(credits_given) - (get_sum(credits_used) + get_sum(credits_refunded))
+    )
+    membership.save()
+
+    _save_all_regs(instance)
 
 
 def handle_tokes_credits(
@@ -383,20 +490,14 @@ def handle_tokes_credits(
 
     Args:
         association_id: Association ID for token credit operations
-        features: List of enabled feature names
+        features: Dict of enabled features
         registration: Registration object to process
         remaining_balance: Remaining balance (positive = use credits, negative = add credits)
 
     """
-    # Skip if token credits are disabled globally or for this event
-    if "token_credit" not in features or get_event_config(
-        registration.run.event_id, "token_credit_disable_t", default_value=False
-    ):
-        return
-
-    # Handle positive balance by using available token credits
+    # Handle positive balance by using available token and/or credits
     if remaining_balance > 0:
-        registration_tokens_credits_use(registration, remaining_balance, association_id)
-    # Handle negative balance (overpayment) by adding token credits
+        registration_tokens_credits_use(registration, remaining_balance, association_id, features)
+    # Handle negative balance (overpayment) by adding token and/or credits
     else:
-        registration_tokens_credits_overpay(registration, -remaining_balance, association_id)
+        registration_tokens_credits_overpay(registration, -remaining_balance, association_id, features)

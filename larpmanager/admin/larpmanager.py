@@ -22,13 +22,15 @@ from typing import ClassVar
 
 from django.contrib import admin
 
-from larpmanager.admin.base import DefModelAdmin
+from larpmanager.admin.base import CSRFTinyMCEModelAdmin, DefModelAdmin
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.larpmanager import (
+    LarpManagerBlog,
     LarpManagerDiscover,
     LarpManagerFaq,
     LarpManagerFaqType,
     LarpManagerGuide,
+    LarpManagerHighlight,
     LarpManagerProfiler,
     LarpManagerReview,
     LarpManagerShowcase,
@@ -38,7 +40,7 @@ from larpmanager.models.larpmanager import (
 
 
 @admin.register(LarpManagerFaq)
-class LarpManagerFaqAdmin(DefModelAdmin):
+class LarpManagerFaqAdmin(CSRFTinyMCEModelAdmin):
     """Admin interface for LarpManagerFaq model."""
 
     list_display: ClassVar[tuple] = ("question_red", "typ", "number", "answer_red")
@@ -53,7 +55,7 @@ class LarpManagerFaqAdmin(DefModelAdmin):
     @staticmethod
     def answer_red(instance: LarpManagerFaq) -> str:
         """Return truncated answer for admin display."""
-        return instance.answer[:100]
+        return instance.answer[:100] if instance.answer else ""
 
 
 @admin.register(LarpManagerFaqType)
@@ -61,44 +63,64 @@ class LarpManagerFaqTypeAdmin(DefModelAdmin):
     """Admin interface for LarpManagerFaqType model."""
 
     list_display = ("name", "order")
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
 
 
 @admin.register(LarpManagerTutorial)
-class LarpManagerTutorial(DefModelAdmin):
-    """Admin interface for LarpManagerTutorial model."""
+class LarpManagerTutorialAdmin(CSRFTinyMCEModelAdmin):
+    """Admin interface for LarpManagerTutorial model with CSRF-aware TinyMCE."""
 
     list_display = ("name", "slug", "order", "descr_red")
 
     @staticmethod
     def descr_red(instance: LarpManagerTutorial) -> str:
         """Return truncated description for admin display."""
-        return instance.descr[:100]
+        return instance.descr[:100] if instance.descr else ""
 
 
 @admin.register(LarpManagerGuide)
-class LarpManagerBlogAdmin(DefModelAdmin):
+class LarpManagerGuideAdmin(CSRFTinyMCEModelAdmin):
     """Admin interface for LarpManagerGuide model."""
 
     list_display = ("title", "slug", "number", "published", "text_red", "show_thumb")
+    list_filter = ("published",)
+    search_fields = ("title", "description", "slug")
+
+
+@admin.register(LarpManagerBlog)
+class LarpManagerBlogAdmin(CSRFTinyMCEModelAdmin):
+    """Admin interface for LarpManagerBlog model."""
+
+    list_display = ("title", "slug", "number", "published")
+    list_filter = ("published",)
+    search_fields = ("title", "description", "slug", "keywords")
+
+
+@admin.register(LarpManagerHighlight)
+class LarpManagerHighlightAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerHighlight model."""
+
+    list_display = ("info", "show_reduced")
+    search_fields: ClassVar[list] = ["id", "info"]
 
 
 @admin.register(LarpManagerShowcase)
-class LarpManagerShowcaseAdmin(DefModelAdmin):
+class LarpManagerShowcaseAdmin(CSRFTinyMCEModelAdmin):
     """Admin interface for LarpManagerShowcase model."""
 
-    list_display = ("title", "number", "text_red", "show_reduced")
+    list_display = ("title", "number", "text_red", "blog")
+    autocomplete_fields: ClassVar[list] = ["blog"]
 
 
 @admin.register(LarpManagerProfiler)
 class LarpManagerProfilerAdmin(DefModelAdmin):
     """Admin interface for LarpManagerProfiler model."""
 
-    list_display = ("id", "view_func_name", "domain", "duration", "created")
+    list_display = ("id", "view_func_name", "domain", "duration")
 
 
 @admin.register(LarpManagerDiscover)
-class LarpManagerDiscoverAdmin(DefModelAdmin):
+class LarpManagerDiscoverAdmin(CSRFTinyMCEModelAdmin):
     """Admin interface for LarpManagerDiscover model."""
 
     list_display = ("name", "order", "text_red", "text_len")
@@ -106,12 +128,12 @@ class LarpManagerDiscoverAdmin(DefModelAdmin):
     @staticmethod
     def text_red(instance: LarpManagerDiscover) -> str:
         """Return truncated text for admin display."""
-        return instance.text[:100]
+        return instance.text[:100] if instance.text else ""
 
     @staticmethod
     def text_len(instance: LarpManagerDiscover) -> int:
         """Return text length for admin display."""
-        return len(instance.text)
+        return len(instance.text) if instance.text else 0
 
 
 @admin.register(LarpManagerReview)
@@ -125,7 +147,8 @@ class LMReviewAdmin(DefModelAdmin):
 class LarpManagerTicketAdmin(DefModelAdmin):
     """Admin interface for LarpManagerTicket model."""
 
-    list_display = ("id", "reason", "association", "email", "member", "content_red", "show_thumb")
+    list_display = ("id", "reason", "association", "email", "member", "content_red", "show_thumb", "uuid")
+    search_fields: ClassVar[list] = ["id", "uuid"]
 
     @staticmethod
     def content_red(instance: LarpManagerTicket) -> str:
