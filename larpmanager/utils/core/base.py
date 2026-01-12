@@ -113,7 +113,7 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
         context["membership"] = get_user_membership(context["member"], context["association_id"])
 
         # Get association permissions for the user
-        get_index_association_permissions(context, request, context["association_id"], enforce_check=False)
+        get_index_association_permissions(request, context, context["association_id"], enforce_check=False)
 
         # Add user interface preferences and staff status
         context["interface_collapse_sidebar"] = context["member"].get_config(
@@ -211,7 +211,7 @@ def check_association_context(request: HttpRequest, permission_slug: str = "") -
     context["exe_page"] = 1
 
     # Load association permissions and sidebar state
-    get_index_association_permissions(context, request, context["association_id"])
+    get_index_association_permissions(request, context, context["association_id"])
     context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     # Add tutorial information if not already present

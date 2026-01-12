@@ -510,6 +510,11 @@ urlpatterns = [
         name="exe_close_suggestion",
     ),
     path(
+        "sticky-message/dismiss/<slug:message_uuid>/",
+        views_mg.dismiss_sticky_message,
+        name="dismiss_sticky_message",
+    ),
+    path(
         "manage/preferences/",
         views_eas.exe_preferences,
         name="exe_preferences",
@@ -518,5 +523,10 @@ urlpatterns = [
         "manage/working_ticket/",
         views_ed.working_ticket,
         name="working_ticket",
+    ),
+    path(
+        "manage/wwyltd/ajax/",
+        views_mg.wwyltd_ajax,
+        name="wwyltd_ajax",
     ),
 ]

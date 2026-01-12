@@ -51,7 +51,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     # prepare
     page.get_by_role("link", name="").click()
     page.get_by_role("link", name=" Test Larp").click()
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     check_feature(page, "Characters")
     submit_confirm(page)
 
@@ -168,7 +168,7 @@ def excel(page: Any, live_server: Any) -> None:
 
 def external(page: Any, live_server: Any) -> None:
     # enable external access
-    page.get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Writing ").click()
     page.locator("#id_writing_external_access").check()
     submit_confirm(page)

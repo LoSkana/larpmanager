@@ -54,13 +54,13 @@ def test_character_your_accounting_pay_ticket_link(pw_page: Any) -> None:
 def check_direct_ticket_link(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage")
     # Setup NPC ticket
-    page.get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Tickets ").click()
     page.locator("#id_ticket_npc").check()
     submit_confirm(page)
 
     # Create ticket
-    page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
+    page.get_by_role("link", name="Tickets").first.click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_tier").select_option("n")
     page.locator("#id_name").click()
@@ -79,7 +79,7 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
 
     # Test direct link
     go_to(page, live_server, "/test/manage")
-    page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
+    page.get_by_role("link", name="Tickets").first.click()
     page.locator('[id="u2"]').get_by_role("link", name="Link").click()
     expect(page.get_by_label("Ticket (*)")).to_have_value("u2")
     page.get_by_role("button", name="Continue").click()
@@ -90,7 +90,7 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
 def check_character_your_link(page: Any, live_server: Any) -> None:
     # Test character your link
     go_to(page, live_server, "/test/manage")
-    page.get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
     page.get_by_role("link", name="Registrations").click()
@@ -113,7 +113,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage")
 
     # Set ticket price
-    page.get_by_role("link", name="Tickets").click()
+    page.get_by_role("link", name="Tickets").first.click()
     page.locator('[id="u2"]').get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
@@ -130,7 +130,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
 
     # set up payments
     go_to(page, live_server, "/manage")
-    page.get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Payments", exact=True).check()
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
@@ -163,7 +163,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
 def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     # Add first event factions
     go_to(page, live_server, "/test/manage")
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Factions").check()
     submit_confirm(page)
     page.get_by_role("link", name="New").click()
@@ -188,33 +188,32 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
 
     # add second event in campaing
     go_to(page, live_server, "/manage")
-    page.get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Campaign").check()
     submit_confirm(page)
     page.get_by_role("link", name="Events").click()
     page.get_by_role("link", name="New event").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("second")
-    page.locator("#select2-id_parent-container").click()
+    page.locator("#id_form1-name").click()
+    page.locator("#id_form1-name").fill("second")
+    page.locator("#select2-id_form1-parent-container").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="Test Larp").click()
-    submit_confirm(page)
-    submit_confirm(page)
-    page.locator("#id_start").fill("2045-06-11")
+
+    page.locator("#id_form2-start").fill("2045-06-11")
     just_wait(page)
-    page.locator("#id_start").click()
-    page.locator("#id_end").fill("2045-06-13")
+    page.locator("#id_form2-start").click()
+    page.locator("#id_form2-end").fill("2045-06-13")
     just_wait(page)
-    page.locator("#id_end").click()
+    page.locator("#id_form2-end").click()
     submit_confirm(page)
 
     # check we have for now the same factions
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("link", name="Factions").click()
     expect_normalized(page, page.locator("#one"), "primaaa Primary tranver Transversal")
 
     # set independ factions, check
-    page.get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Campaign ").click()
     page.locator("#id_campaign_faction_indep").check()
     submit_confirm(page)
@@ -259,7 +258,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
 def accounting_refund(page: Any, live_server: Any) -> None:
     # activate features
     go_to(page, live_server, "/manage")
-    page.get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Tokens").check()
     page.get_by_role("checkbox", name="Credits").check()
     page.get_by_role("checkbox", name="Refunds").check()
@@ -288,7 +287,7 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Requests open: asdsadsadsa (20.00)")
 
     go_to(page, live_server, "/manage")
-    page.get_by_role("link", name="Refunds").click()
+    page.locator("#exe_refunds").get_by_role("link", name="Refunds").click()
     expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 200 request done")
     page.get_by_role("link", name="Done").click()
     expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 180 delivered")
