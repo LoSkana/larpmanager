@@ -876,29 +876,26 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
     Args:
         request: The HTTP request object
         event_slug: Event identifier string for the current event
-        character_uuid: The character uuid to display abilities for
+        character_uuid: The character uuid to display inventory balances for
 
     Returns:
-        JsonResponse: JSON Object with basic character info, plus an object with each owned ability type uuid as keys and, as the value, the ability type's name and an object with ability uuid's as keys and the ability's name as values
+        JsonResponse: JSON Object with basic character info, plus an object with each pool type's uuid as keys and, as the value, the pool type's name and the integer representing the combined balance across all owned inventories, which defaults to zero (0)
         Example:
         {
             "uuid": "<char_uuid>",
             "name": "<char_name>",
-            "ability_types": {
-                "<type_uuid>": {
-                    "type_name": "<type_name>",
-                    "type_abilities": {
-                        "<ability_uuid>": "<ability_name>",
-                        ...
-                    }
+            "inventory": {
+                "<pool_type_uuid>": {
+                    "name": "<type_name>",
+                    "amount": <combined_inventory_balance_for_pool_type>
                 },
                 ...
             }
         }
 
     Raises:
-        Http404: If character or event is not found (via check_char_abilities)
-        PermissionDenied: If user lacks permission to view character abilities
+        Http404: If character or event is not found (via get_char_check)
+        PermissionDenied: If user lacks permission to view character inventory
 
     """
     # Initialize context with character and permission checks
