@@ -2364,8 +2364,7 @@ msgstr ""
 msgid "Elements you wish to avoid in the assignment"
 msgstr ""
 
-#, python-format
-msgid "Daily Summary - %(event)s"
+msgid "Daily Summary"
 msgstr ""
 
 msgid "Here's what happened in the last 24 hours:"
@@ -2374,33 +2373,28 @@ msgstr ""
 msgid "Go to event dashboard"
 msgstr ""
 
-#, python-format
-msgid "Invoices Awaiting Approval (%(count)d)"
+msgid "Invoices Awaiting Approval"
 msgstr ""
 
 msgid "Approve"
 msgstr ""
 
-#, python-format
-msgid "Payments Received (%(count)d)"
+msgid "Payments Received"
 msgstr ""
 
-#, python-format
-msgid "Cancelled Registrations (%(count)d)"
+msgid "Cancelled Registrations"
 msgstr ""
 
 msgid "No ticket"
 msgstr ""
 
-#, python-format
-msgid "Updated Registrations (%(count)d)"
+msgid "Updated Registrations"
 msgstr ""
 
 msgid "View/Edit"
 msgstr ""
 
-#, python-format
-msgid "New Registrations (%(count)d)"
+msgid "New Registrations"
 msgstr ""
 
 msgid "Request of membership to the Organization"

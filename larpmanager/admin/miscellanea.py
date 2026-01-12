@@ -445,12 +445,12 @@ class NotificationQueueAdmin(DefModelAdmin):
     """Admin interface for NotificationQueue model."""
 
     list_display: ClassVar[tuple] = (
-        "event",
+        "run",
         "member",
         "notification_type",
-        "object_uuid",
+        "object_id",
         "created_at",
         "sent",
         "sent_at",
     )
-    list_filter: ClassVar[tuple] = ("notification_type", "sent", EventFilter)
+    list_filter: ClassVar[tuple] = ("notification_type", "sent", RunFilter)

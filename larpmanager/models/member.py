@@ -785,7 +785,7 @@ class NotificationType(models.TextChoices):
 class NotificationQueue(BaseModel):
     """Queue for batching organizer notifications into daily summaries."""
 
-    Run = models.ForeignKey("Run", on_delete=models.CASCADE)
+    run = models.ForeignKey("Run", on_delete=models.CASCADE)
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     notification_type = models.CharField(max_length=30, choices=NotificationType.choices)
     object_id = models.IntegerField(default=0)

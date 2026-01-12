@@ -79,7 +79,7 @@ def send_daily_organizer_summaries() -> None:
             email_content = generate_summary_email(event, notifications)
 
             # Build email subject
-            email_subject = hdr(event) + _("Daily Summary - %(event)s") % {"event": event.title}
+            email_subject = hdr(event) + _("Daily Summary") + f" - {event.name}"
 
             # Send the email
             my_send_mail(
@@ -116,8 +116,8 @@ def generate_summary_email(event: Event, notifications: QuerySet[NotificationQue
     process = _digest_organize_notifications(notifications)
 
     # Start email body
-    email_body = "<h2>" + str(_("Daily Summary - %(event)s") % {"event": event.title}) + "</h2>"
-    email_body += "<p>" + str(_("Here's what happened in the last 24 hours:")) + "</p>"
+    email_body = "<h2>" + _("Daily Summary") + f" - {event.name}" + "</h2>"
+    email_body += "<p>" + _("Here's what happened in the last 24 hours:") + "</p>"
 
     currency_symbol = event.association.get_currency_symbol()
 
@@ -139,7 +139,7 @@ def generate_summary_email(event: Event, notifications: QuerySet[NotificationQue
     # Footer
     email_body += "<br/><hr/>"
     event_dashboard_url = get_url(f"/{event.slug}/manage/", event)
-    email_body += "<p>" + str(_("Go to event dashboard")) + f': <a href="{event_dashboard_url}">{event.title}</a></p>'
+    email_body += "<p>" + _("Go to event dashboard") + f': <a href="{event_dashboard_url}">{event.title}</a></p>'
 
     return email_body
 
@@ -176,15 +176,13 @@ def _digest_organize_notifications(notifications: QuerySet) -> dict:
 
 def _digest_invoices(event: Event, email_body: str, invoice_approvals: list, currency_symbol: str) -> str:
     """Generate email content for digest invoice to approve."""
-    email_body += (
-        "<h3>" + str(_("Invoices Awaiting Approval (%(count)d)") % {"count": len(invoice_approvals)}) + "</h3>"
-    )
+    email_body += "<h3>" + _("Invoices Awaiting Approval") + f" {len(invoice_approvals)}" + "</h3>"
     email_body += "<ul>"
     invoice_ids = [notification.object_id for notification in invoice_approvals]
     for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association_id=event.association_id):
         email_body += f"<li><b>{invoice.member}</b> - {invoice.causal} - {invoice.amount:.2f} {currency_symbol}"
         approve_url = get_url(f"/{event.slug}/manage/invoices/confirm/{invoice.uuid}/", event)
-        email_body += f' - <a href="{approve_url}">' + str(_("Approve")) + "</a></li>"
+        email_body += f' - <a href="{approve_url}">' + _("Approve") + "</a></li>"
     email_body += "</ul>"
 
     return email_body
@@ -192,7 +190,7 @@ def _digest_invoices(event: Event, email_body: str, invoice_approvals: list, cur
 
 def _digest_payments(event: Event, email_body: str, all_payments: list, currency_symbol: str) -> str:
     """Generate email content for digest payments received."""
-    email_body += "<h3>" + str(_("Payments Received (%(count)d)") % {"count": len(all_payments)}) + "</h3>"
+    email_body += "<h3>" + _("Payments Received") + f" {len(all_payments)}" + "</h3>"
     email_body += "<ul>"
 
     payment_ids = [notification.object_id for notification in all_payments]
@@ -207,9 +205,7 @@ def _digest_payments(event: Event, email_body: str, all_payments: list, currency
 
 def _digest_cancelled_registrations(event: Event, email_body: str, cancelled_registrations: list) -> str:
     """Generate email content for digest cancelled registrations."""
-    email_body += (
-        "<h3>" + str(_("Cancelled Registrations (%(count)d)") % {"count": len(cancelled_registrations)}) + "</h3>"
-    )
+    email_body += "<h3>" + _("Cancelled Registrations") + f" {len(cancelled_registrations)}" + "</h3>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in cancelled_registrations]
     for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event):
@@ -224,7 +220,7 @@ def _digest_updated_registrations(
     event: Event, email_body: str, updated_registrations: list, currency_symbol: str
 ) -> str:
     """Generate email content for digest updated registrations."""
-    email_body += "<h3>" + str(_("Updated Registrations (%(count)d)") % {"count": len(updated_registrations)}) + "</h3>"
+    email_body += "<h3>" + _("Updated Registrations") + f" {len(updated_registrations)}" + "</h3>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in updated_registrations]
     for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event):
@@ -233,7 +229,7 @@ def _digest_updated_registrations(
             f"<li><b>{registration.member.username}</b> - {ticket_name} - {registration.tot_iscr:.2f} {currency_symbol}"
         )
         edit_url = get_url(f"/{event.slug}/manage/registrations/edit/{registration.uuid}/", event)
-        email_body += f' - <a href="{edit_url}">' + str(_("View/Edit")) + "</a></li>"
+        email_body += f' - <a href="{edit_url}">' + _("View/Edit") + "</a></li>"
     email_body += "</ul>"
 
     return email_body
@@ -241,7 +237,7 @@ def _digest_updated_registrations(
 
 def _digest_new_registrations(event: Event, email_body: str, new_registrations: list, currency_symbol: str) -> str:
     """Generate email content for digest updated registrations."""
-    email_body += "<h3>" + str(_("New Registrations (%(count)d)") % {"count": len(new_registrations)}) + "</h3>"
+    email_body += "<h3>" + _("New Registrations") + f" {len(new_registrations)}" + "</h3>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in new_registrations]
     for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event):
@@ -250,7 +246,7 @@ def _digest_new_registrations(event: Event, email_body: str, new_registrations: 
             f"<li><b>{registration.member.username}</b> - {ticket_name} - {registration.tot_iscr:.2f} {currency_symbol}"
         )
         edit_url = get_url(f"/{event.slug}/manage/registrations/edit/{registration.uuid}/", event)
-        email_body += f' - <a href="{edit_url}">' + str(_("View/Edit")) + "</a></li>"
+        email_body += f' - <a href="{edit_url}">' + _("View/Edit") + "</a></li>"
 
     email_body += "</ul>"
     return email_body
