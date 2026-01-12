@@ -221,8 +221,7 @@ def character(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/register")
-    page.locator("#one").get_by_role("link", name="Characters").click()
-    expect_normalized(page, page.locator("#one"), "my character")
+    expect_normalized(page, page.locator("#one"), "Your character is my character")
 
     go_to(page, live_server, "/test")
-    expect_normalized(page, page.locator("#one"), "my character")
+    expect_normalized(page, page.locator("#one"), "Your character is my character")

@@ -999,9 +999,6 @@ msgstr "Toewijzen"
 msgid "Attended"
 msgstr "Bijgewoond"
 
-msgid "Calendar"
-msgstr "Kalender"
-
 msgid "Campaign"
 msgstr "Campagne"
 
@@ -1553,6 +1550,9 @@ msgstr "Beïnvloeder"
 
 msgid "Kicked out"
 msgstr "Opgejaagd"
+
+msgid "Last Event"
+msgstr "Laatste gebeurtenis"
 
 msgid "Legal name"
 msgstr "Juridische naam"
@@ -3314,6 +3314,9 @@ msgstr "Karakterinventaris"
 msgid "Character not found"
 msgstr "Karakter niet gevonden"
 
+msgid "Characters shortcut"
+msgstr "Sneltoets voor tekens"
+
 msgid "Confirmation delete"
 msgstr "Bevestiging verwijderen"
 
@@ -3880,6 +3883,9 @@ msgstr "Toeslag"
 
 msgid "Registrations not open"
 msgstr "De inschrijving is nog niet geopend"
+
+msgid "Registrations shortcut"
+msgstr "Snelkoppeling registraties"
 
 msgid "Reimbursement approved"
 msgstr "Vergoeding goedgekeurd"
@@ -4902,11 +4908,11 @@ msgstr "Handmatig goedgekeurde betalingen verifiëren"
 msgid "View all event information in the"
 msgstr "Bekijk alle evenementinformatie in de"
 
+msgid "You don't have any characters yet"
+msgstr "Je hebt nog geen personages"
+
 msgid "(Optional) The ability description"
 msgstr "(Optioneel) De beschrijving van de vaardigheid"
-
-msgid "Access the list of your characters"
-msgstr "Toegang tot je karakterlijst"
 
 msgid "Date of expiration of the document"
 msgstr "Vervaldatum van het document"
@@ -5180,6 +5186,9 @@ msgstr "Bekijk de volledige lijst van onze evenementen"
 
 msgid "You are currently logged in with the"
 msgstr "U bent momenteel aangemeld met de"
+
+msgid "You don't have any registrations yet"
+msgstr "Je hebt nog geen registraties"
 
 msgid "You have been awarded an achievement"
 msgstr "Je hebt een prestatie geleverd"
@@ -7424,6 +7433,11 @@ msgid "Do you want to manage characters assigned to registered participants"
 msgstr ""
 "Wil je personages beheren die zijn toegewezen aan geregistreerde deelnemers"
 
+msgid "If checked: shows a link in the topbar to view all user's characters"
+msgstr ""
+"Indien aangevinkt: toont een link in de bovenbalk om alle tekens van "
+"gebruikers te bekijken"
+
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Geeft aan of de korting zichtbaar en bruikbaar is voor deelnemers"
 
@@ -7679,6 +7693,12 @@ msgid ""
 msgstr ""
 "Vraag deze gegevens op bij de bank of gelijkwaardig, om de gemarkeerde "
 "boekingen te verifiëren"
+
+msgid ""
+"If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+"Indien aangevinkt: toont een link in de bovenbalk om alle registraties van "
+"gebruikers te bekijken"
 
 msgid ""
 "List of users who have not registered for a future session of the event"

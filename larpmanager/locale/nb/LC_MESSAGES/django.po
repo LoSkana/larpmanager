@@ -999,9 +999,6 @@ msgstr "Tilordne"
 msgid "Attended"
 msgstr "Tilstede"
 
-msgid "Calendar"
-msgstr "Kalender"
-
 msgid "Campaign"
 msgstr "Kampanjen"
 
@@ -1553,6 +1550,9 @@ msgstr "Påvirker"
 
 msgid "Kicked out"
 msgstr "Jaktet"
+
+msgid "Last Event"
+msgstr "Siste hendelse"
 
 msgid "Legal name"
 msgstr "Juridisk navn"
@@ -3314,6 +3314,9 @@ msgstr "Karakterinventar"
 msgid "Character not found"
 msgstr "Tegn ikke funnet"
 
+msgid "Characters shortcut"
+msgstr "Snarvei for tegn"
+
 msgid "Confirmation delete"
 msgstr "Bekreftelse på sletting"
 
@@ -3880,6 +3883,9 @@ msgstr "Inngangsavgift"
 
 msgid "Registrations not open"
 msgstr "Registreringen er ennå ikke åpnet"
+
+msgid "Registrations shortcut"
+msgstr "Snarvei til registreringer"
 
 msgid "Reimbursement approved"
 msgstr "Godkjent refusjon"
@@ -4902,11 +4908,11 @@ msgstr "Bekreft manuelt godkjente betalinger"
 msgid "View all event information in the"
 msgstr "Se all informasjon om arrangementet i"
 
+msgid "You don't have any characters yet"
+msgstr "Du har ingen tegn ennå"
+
 msgid "(Optional) The ability description"
 msgstr "(Valgfritt) Beskrivelse av evnen"
-
-msgid "Access the list of your characters"
-msgstr "Få tilgang til karakterlisten din"
 
 msgid "Date of expiration of the document"
 msgstr "Dokumentets utløpsdato"
@@ -5180,6 +5186,9 @@ msgstr "Se den komplette listen over arrangementene våre"
 
 msgid "You are currently logged in with the"
 msgstr "Du er for øyeblikket logget inn med"
+
+msgid "You don't have any registrations yet"
+msgstr "Du har ingen registreringer ennå"
 
 msgid "You have been awarded an achievement"
 msgstr "Du har blitt tildelt en prestasjon"
@@ -7353,6 +7362,10 @@ msgstr "Dato da medlemskapet ble offisielt godkjent av organisasjonen"
 msgid "Do you want to manage characters assigned to registered participants"
 msgstr "Ønsker du å administrere tegn som er tildelt registrerte deltakere"
 
+msgid "If checked: shows a link in the topbar to view all user's characters"
+msgstr ""
+"Hvis avkrysset: viser en lenke i topplinjen for å se alle brukerens tegn"
+
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Angir om rabatten er synlig og kan brukes av deltakerne"
 
@@ -7590,6 +7603,12 @@ msgid ""
 msgstr ""
 "Få disse dataene fra banken eller tilsvarende, for å verifisere oppføringene"
 " som er merket"
+
+msgid ""
+"If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+"Hvis avkrysset: viser en lenke i topplinjen for å se alle "
+"brukerregistreringer"
 
 msgid ""
 "List of users who have not registered for a future session of the event"

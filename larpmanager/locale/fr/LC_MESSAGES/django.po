@@ -999,9 +999,6 @@ msgstr "Attribuer"
 msgid "Attended"
 msgstr "Présents"
 
-msgid "Calendar"
-msgstr "Calendrier"
-
 msgid "Campaign"
 msgstr "Campagne"
 
@@ -1553,6 +1550,9 @@ msgstr "Influenceur"
 
 msgid "Kicked out"
 msgstr "Chassé"
+
+msgid "Last Event"
+msgstr "Dernier événement"
 
 msgid "Legal name"
 msgstr "Nom légal"
@@ -3314,6 +3314,9 @@ msgstr "Inventaire des personnages"
 msgid "Character not found"
 msgstr "Caractère non trouvé"
 
+msgid "Characters shortcut"
+msgstr "Raccourci des caractères"
+
 msgid "Confirmation delete"
 msgstr "Confirmation de la suppression"
 
@@ -3880,6 +3883,9 @@ msgstr "Supplément d'entrée"
 
 msgid "Registrations not open"
 msgstr "L'inscription n'est pas encore ouverte "
+
+msgid "Registrations shortcut"
+msgstr "Raccourci inscriptions"
 
 msgid "Reimbursement approved"
 msgstr "Remboursement approuvé"
@@ -4903,11 +4909,11 @@ msgid "View all event information in the"
 msgstr ""
 "Consultez toutes les informations relatives à l'événement dans la rubrique"
 
+msgid "You don't have any characters yet"
+msgstr "Vous n'avez pas encore de personnages"
+
 msgid "(Optional) The ability description"
 msgstr "(Facultatif) La description de la capacité"
-
-msgid "Access the list of your characters"
-msgstr "Accédez à votre liste de personnages"
 
 msgid "Date of expiration of the document"
 msgstr "Date d'expiration du document"
@@ -5181,6 +5187,9 @@ msgstr "Consultez la liste complète de nos événements"
 
 msgid "You are currently logged in with the"
 msgstr "Vous êtes actuellement connecté avec le"
+
+msgid "You don't have any registrations yet"
+msgstr "Vous n'avez pas encore d'inscription"
 
 msgid "You have been awarded an achievement"
 msgstr "Vous avez reçu une récompense"
@@ -7508,6 +7517,11 @@ msgid "Do you want to manage characters assigned to registered participants"
 msgstr ""
 "Voulez-vous gérer les personnages attribués aux participants inscrits "
 
+msgid "If checked: shows a link in the topbar to view all user's characters"
+msgstr ""
+"Si coché : affiche un lien dans la barre supérieure pour afficher tous les "
+"caractères de l'utilisateur"
+
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr ""
 "Indique si la réduction est visible et utilisable par les participants"
@@ -7787,6 +7801,12 @@ msgid ""
 msgstr ""
 "Obtenez ces données auprès de la banque ou d'un organisme équivalent, afin "
 "de vérifier les entrées marquées d'un astérisque"
+
+msgid ""
+"If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+"Si coché : affiche un lien dans la barre supérieure pour afficher les "
+"enregistrements de tous les utilisateurs"
 
 msgid ""
 "List of users who have not registered for a future session of the event"

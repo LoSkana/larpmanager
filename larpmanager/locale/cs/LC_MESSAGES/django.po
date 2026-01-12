@@ -999,9 +999,6 @@ msgstr "Přiřaďte"
 msgid "Attended"
 msgstr "Zúčastnil se"
 
-msgid "Calendar"
-msgstr "Kalendář"
-
 msgid "Campaign"
 msgstr "Kampaň"
 
@@ -1553,6 +1550,9 @@ msgstr "Influencer"
 
 msgid "Kicked out"
 msgstr "Hunted"
+
+msgid "Last Event"
+msgstr "Poslední událost"
 
 msgid "Legal name"
 msgstr "Právní název"
@@ -3314,6 +3314,9 @@ msgstr "Soupis postav"
 msgid "Character not found"
 msgstr "Znak nebyl nalezen"
 
+msgid "Characters shortcut"
+msgstr "Zkratka znaků"
+
 msgid "Confirmation delete"
 msgstr "Odstranění potvrzení"
 
@@ -3880,6 +3883,9 @@ msgstr "Vstupní příplatek"
 
 msgid "Registrations not open"
 msgstr "Registrace ještě není otevřena"
+
+msgid "Registrations shortcut"
+msgstr "Zkratka pro registrace"
 
 msgid "Reimbursement approved"
 msgstr "Schválená úhrada"
@@ -4902,11 +4908,11 @@ msgstr "Ověřování ručně schválených plateb"
 msgid "View all event information in the"
 msgstr "Zobrazení všech informací o události v"
 
+msgid "You don't have any characters yet"
+msgstr "Zatím nemáte žádné postavy"
+
 msgid "(Optional) The ability description"
 msgstr "(Nepovinné) Popis schopnosti"
-
-msgid "Access the list of your characters"
-msgstr "Přístup k seznamu postav"
 
 msgid "Date of expiration of the document"
 msgstr "Datum ukončení platnosti dokladu"
@@ -5180,6 +5186,9 @@ msgstr "Prohlédněte si kompletní seznam našich akcí"
 
 msgid "You are currently logged in with the"
 msgstr "V současné době jste přihlášeni pomocí"
+
+msgid "You don't have any registrations yet"
+msgstr "Zatím nemáte žádné registrace"
 
 msgid "You have been awarded an achievement"
 msgstr "Byl vám udělen úspěch"
@@ -7306,6 +7315,11 @@ msgstr "Datum, kdy bylo členství oficiálně schváleno organizací"
 msgid "Do you want to manage characters assigned to registered participants"
 msgstr "Chcete spravovat postavy přiřazené registrovaným účastníkům"
 
+msgid "If checked: shows a link in the topbar to view all user's characters"
+msgstr ""
+"Pokud je zaškrtnuto: zobrazí odkaz na horním panelu pro zobrazení všech "
+"znaků uživatele"
+
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Označuje, zda je sleva viditelná a účastníci ji mohou využít"
 
@@ -7537,6 +7551,12 @@ msgid ""
 msgstr ""
 "Získejte tyto údaje od banky nebo rovnocenného subjektu, abyste ověřili "
 "označené položky"
+
+msgid ""
+"If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+"Pokud je zaškrtnuto: zobrazí odkaz v horním panelu pro zobrazení všech "
+"registrací uživatelů"
 
 msgid ""
 "List of users who have not registered for a future session of the event"

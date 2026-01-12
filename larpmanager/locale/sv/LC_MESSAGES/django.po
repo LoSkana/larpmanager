@@ -999,9 +999,6 @@ msgstr "Tilldela"
 msgid "Attended"
 msgstr "Närvarande"
 
-msgid "Calendar"
-msgstr "Kalender"
-
 msgid "Campaign"
 msgstr "Kampanj"
 
@@ -1553,6 +1550,9 @@ msgstr "Influencer"
 
 msgid "Kicked out"
 msgstr "Jagad"
+
+msgid "Last Event"
+msgstr "Senaste händelse"
 
 msgid "Legal name"
 msgstr "Juridiskt namn"
@@ -3314,6 +3314,9 @@ msgstr "Karaktärsinventering"
 msgid "Character not found"
 msgstr "Tecknet hittades inte"
 
+msgid "Characters shortcut"
+msgstr "Kortkommando för tecken"
+
 msgid "Confirmation delete"
 msgstr "Bekräftelse radera"
 
@@ -3880,6 +3883,9 @@ msgstr "Tillägg för inresa"
 
 msgid "Registrations not open"
 msgstr "Registreringen är ännu inte öppen"
+
+msgid "Registrations shortcut"
+msgstr "Genväg till registreringar"
 
 msgid "Reimbursement approved"
 msgstr "Ersättning godkänd"
@@ -4902,11 +4908,11 @@ msgstr "Verifiera manuellt godkända betalningar"
 msgid "View all event information in the"
 msgstr "Se all information om evenemanget i"
 
+msgid "You don't have any characters yet"
+msgstr "Du har inga karaktärer ännu"
+
 msgid "(Optional) The ability description"
 msgstr "(Valfritt) Beskrivning av förmågan"
-
-msgid "Access the list of your characters"
-msgstr "Öppna din karaktärslista"
 
 msgid "Date of expiration of the document"
 msgstr "Datum då dokumentet upphör att gälla"
@@ -5180,6 +5186,9 @@ msgstr "Se den fullständiga listan över våra evenemang"
 
 msgid "You are currently logged in with the"
 msgstr "Du är för närvarande inloggad med"
+
+msgid "You don't have any registrations yet"
+msgstr "Du har inga registreringar ännu"
 
 msgid "You have been awarded an achievement"
 msgstr "Du har tilldelats en prestation"
@@ -7346,6 +7355,11 @@ msgstr "Datum då medlemskapet officiellt godkändes av organisationen"
 msgid "Do you want to manage characters assigned to registered participants"
 msgstr "Vill du hantera karaktärer som tilldelats registrerade deltagare"
 
+msgid "If checked: shows a link in the topbar to view all user's characters"
+msgstr ""
+"Om markerad: visar en länk i det övre fältet för att visa alla användares "
+"tecken"
+
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Anger om rabatten är synlig och användbar för deltagarna"
 
@@ -7579,6 +7593,12 @@ msgid ""
 msgstr ""
 "Hämta dessa uppgifter från banken eller motsvarande för att verifiera de "
 "poster som är markerade"
+
+msgid ""
+"If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+"Om markerad: visar en länk i toppfältet för att visa alla användares "
+"registreringar"
 
 msgid ""
 "List of users who have not registered for a future session of the event"
