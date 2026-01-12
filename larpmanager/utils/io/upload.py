@@ -332,7 +332,7 @@ def _reg_load(context: dict, csv_row: dict, registration_questions: dict) -> str
 
     # Process each field in the CSV row
     for field_name, field_value in csv_row.items():
-        _reg_field_load(context, registration, field_name, field_value, registration_questions, error_logs)
+        _registration_field_load(context, registration, field_name, field_value, registration_questions, error_logs)
 
     # Save registration and log the action
     registration.save()
@@ -349,7 +349,7 @@ def _reg_load(context: dict, csv_row: dict, registration_questions: dict) -> str
     return status_message
 
 
-def _reg_field_load(
+def _registration_field_load(
     context: dict,
     registration: Registration,
     field_name: str,

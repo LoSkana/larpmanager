@@ -445,11 +445,11 @@ def debug_mail(request: HttpRequest) -> Any:
         raise Http404
 
     # Use iterator() to avoid loading all registrations into memory at once
-    for reg in Registration.objects.all().iterator(chunk_size=1000):
-        remember_profile(reg)
-        remember_membership(reg)
-        remember_membership_fee(reg)
-        remember_pay(reg)
+    for registration in Registration.objects.all().iterator(chunk_size=1000):
+        remember_profile(registration)
+        remember_membership(registration)
+        remember_membership_fee(registration)
+        remember_pay(registration)
 
     return redirect("home")
 

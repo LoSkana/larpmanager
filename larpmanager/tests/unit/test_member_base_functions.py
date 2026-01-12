@@ -24,7 +24,7 @@ from decimal import Decimal
 from typing import Any
 from unittest.mock import patch
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.accounting.member import _info_token_credit, _init_choices, _init_pending
 from larpmanager.models.accounting import (
     AccountingItemExpense,
@@ -96,8 +96,8 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         _info_token_credit(context, member)
 
-        self.assertEqual(context["acc_tokens"], 0)
-        self.assertEqual(context["acc_credits"], 0)
+        self.assertEqual(context["accounting_tokens"], 0)
+        self.assertEqual(context["accounting_credits"], 0)
 
     def test_info_token_credit_with_tokens(self) -> None:
         """Test _info_token_credit with tokens"""
@@ -112,7 +112,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         _info_token_credit(context, member)
 
-        self.assertEqual(context["acc_tokens"], 1)
+        self.assertEqual(context["accounting_tokens"], 1)
 
     def test_info_token_credit_with_credits(self) -> None:
         """Test _info_token_credit with credits"""
@@ -131,7 +131,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         _info_token_credit(context, member)
 
-        self.assertEqual(context["acc_credits"], 2)
+        self.assertEqual(context["accounting_credits"], 2)
 
     def test_info_token_credit_with_both(self) -> None:
         """Test _info_token_credit with both tokens and credits"""
@@ -150,16 +150,16 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         _info_token_credit(context, member)
 
-        self.assertEqual(context["acc_tokens"], 1)
-        self.assertEqual(context["acc_credits"], 1)
+        self.assertEqual(context["accounting_tokens"], 1)
+        self.assertEqual(context["accounting_credits"], 1)
 
 
 class TestBaseUtilityFunctions(BaseTestCase):
     """Test cases for base utility functions"""
 
     @patch("larpmanager.accounting.base.get_event_features")
-    def test_is_reg_provisional_no_payment_feature(self, mock_features: Any) -> None:
-        """Test is_reg_provisional when payment feature is disabled"""
+    def test_is_registration_provisional_no_payment_feature(self, mock_features: Any) -> None:
+        """Test is_registration_provisional when payment feature is disabled"""
         mock_features.return_value = {}
 
         member = self.get_member()
@@ -168,13 +168,13 @@ class TestBaseUtilityFunctions(BaseTestCase):
             member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00")
         )
 
-        result = is_reg_provisional(registration)
+        result = is_registration_provisional(registration)
 
         self.assertFalse(result)
 
     @patch("larpmanager.accounting.base.get_event_features")
-    def test_is_reg_provisional_fully_paid(self, mock_features: Any) -> None:
-        """Test is_reg_provisional when fully paid"""
+    def test_is_registration_provisional_fully_paid(self, mock_features: Any) -> None:
+        """Test is_registration_provisional when fully paid"""
         mock_features.return_value = {"payment": True}
 
         member = self.get_member()
@@ -183,13 +183,13 @@ class TestBaseUtilityFunctions(BaseTestCase):
             member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("100.00")
         )
 
-        result = is_reg_provisional(registration)
+        result = is_registration_provisional(registration)
 
         self.assertFalse(result)
 
     @patch("larpmanager.accounting.base.get_event_features")
-    def test_is_reg_provisional_no_cost(self, mock_features: Any) -> None:
-        """Test is_reg_provisional with no cost registration"""
+    def test_is_registration_provisional_no_cost(self, mock_features: Any) -> None:
+        """Test is_registration_provisional with no cost registration"""
         mock_features.return_value = {"payment": True}
 
         member = self.get_member()
@@ -198,13 +198,13 @@ class TestBaseUtilityFunctions(BaseTestCase):
             member=member, run=run, tot_iscr=Decimal("0.00"), tot_payed=Decimal("0.00")
         )
 
-        result = is_reg_provisional(registration)
+        result = is_registration_provisional(registration)
 
         self.assertFalse(result)
 
     @patch("larpmanager.accounting.base.get_event_features")
-    def test_is_reg_provisional_partial_payment(self, mock_features: Any) -> None:
-        """Test is_reg_provisional with partial payment"""
+    def test_is_registration_provisional_partial_payment(self, mock_features: Any) -> None:
+        """Test is_registration_provisional with partial payment"""
         mock_features.return_value = {"payment": True}
 
         member = self.get_member()
@@ -213,7 +213,7 @@ class TestBaseUtilityFunctions(BaseTestCase):
             member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("50.00")
         )
 
-        result = is_reg_provisional(registration)
+        result = is_registration_provisional(registration)
 
         # Partial payment means not provisional (tot_payed > 0)
         self.assertFalse(result)

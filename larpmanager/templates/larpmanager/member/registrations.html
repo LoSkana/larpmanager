@@ -15,15 +15,15 @@
                 </tr>
             </thead>
             <tbody>
-                {% for reg in registration_list %}
+                {% for registration in registration_list %}
                     <tr>
-                        <td>{{ reg.run.search }}</td>
+                        <td>{{ registration.run.search }}</td>
                         <td>
-                            <i>{{ reg.run.pretty_dates }}</i>
+                            <i>{{ registration.run.pretty_dates }}</i>
                         </td>
-                        <td>{{ reg.run.status.text | safe }}</td>
+                        <td>{{ registration.run.status.text | safe }}</td>
                         <td>
-                            {% if reg.run.status.details %}{{ reg.run.status.details | safe }}{% endif %}
+                            {% if registration.run.status.details %}{{ registration.run.status.details | safe }}{% endif %}
                         </td>
                     </tr>
                 {% endfor %}

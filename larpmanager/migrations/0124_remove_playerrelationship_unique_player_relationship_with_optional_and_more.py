@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0122_remove_plotcharacterrel_uuid_and_more'),
+        ('larpmanager', '0123_alter_run_registration_secret'),
     ]
 
     operations = [

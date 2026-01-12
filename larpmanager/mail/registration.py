@@ -25,7 +25,7 @@ from typing import Any
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.event_text import get_event_text
@@ -80,7 +80,7 @@ def update_registration_status(instance: Any) -> None:
         return
 
     # Skip provisional registrations - wait for confirmation
-    if is_reg_provisional(instance):
+    if is_registration_provisional(instance):
         return
 
     # Prepare common context for email templates
@@ -335,7 +335,7 @@ def update_registration_cancellation(instance: Registration) -> None:
 
     """
     # Skip processing for provisional registrations
-    if is_reg_provisional(instance):
+    if is_registration_provisional(instance):
         return
 
     # Send confirmation email to the user who cancelled
@@ -410,7 +410,7 @@ def send_registration_deletion_email(instance: Registration) -> None:
         return
 
     # Skip notifications for provisional registrations
-    if is_reg_provisional(instance):
+    if is_registration_provisional(instance):
         return
 
     # Prepare context for email templates

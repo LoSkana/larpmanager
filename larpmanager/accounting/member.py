@@ -214,7 +214,7 @@ def _info_token_credit(context: dict, member: Member) -> None:
         member: Member instance to check balances for
 
     Side effects:
-        Updates context with acc_tokens and acc_credits counts
+        Updates context with accounting_tokens and accounting_credits counts
 
     """
     # check if it had any token
@@ -223,7 +223,7 @@ def _info_token_credit(context: dict, member: Member) -> None:
         oth=OtherChoices.TOKEN,
         association_id=context["association_id"],
     )
-    context["acc_tokens"] = token_queryset.count()
+    context["accounting_tokens"] = token_queryset.count()
 
     # check if it had any credits
     expense_queryset = AccountingItemExpense.objects.filter(
@@ -236,7 +236,7 @@ def _info_token_credit(context: dict, member: Member) -> None:
         oth=OtherChoices.CREDIT,
         association_id=context["association_id"],
     )
-    context["acc_credits"] = expense_queryset.count() + credit_queryset.count()
+    context["accounting_credits"] = expense_queryset.count() + credit_queryset.count()
 
 
 def _info_collections(context: dict, member: Member) -> None:

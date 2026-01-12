@@ -687,7 +687,7 @@ msgid "Quick Setup"
 msgstr ""
 
 msgid ""
-"Manage quick setup of the most important settings for your new organization"
+"You are choosing the most common features to activate for your organization"
 msgstr ""
 
 msgid ""
@@ -1550,7 +1550,7 @@ msgstr ""
 msgid "Manage template features (click on a feature to show its description)"
 msgstr ""
 
-msgid "Manage quick setup of the most important settings for your new event"
+msgid "You are choosing the most common features to activate for your event"
 msgstr ""
 
 msgid "Characters"
@@ -4282,17 +4282,6 @@ msgstr ""
 msgid "Attention! The form contains errors in the fields"
 msgstr ""
 
-msgid "Welcome to"
-msgstr ""
-
-msgid ""
-"This page will guide you through the creation of your first event, step by "
-"step"
-msgstr ""
-
-msgid "Simply follow the instructions and provide the required information"
-msgstr ""
-
 msgid "These fields are mandatory"
 msgstr ""
 
@@ -4440,48 +4429,51 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Your first event has been created! This page is the dashboard, we'll now "
-"show each part"
+"This is the management dashboard, the interface will now be explained "
+"section by section."
 msgstr ""
 
 msgid ""
-"This is the sidebar containing all the functions (it remains visible on "
-"every management page)"
+"This is the sidebar, it contains all management functions and remains "
+"visible across all admin pages."
 msgstr ""
 
-msgid "Create and manage events here"
-msgstr ""
-
-msgid ""
-"Here you can select the workspace to use: your organization, and your events "
-"once created"
-msgstr ""
-
-msgid "Here you can switch between administration pages and user-facing pages"
-msgstr ""
-
-msgid "Show or hide the sidebar containing all the functions"
+msgid "Create, access, and manage your events from here."
 msgstr ""
 
 msgid ""
-"If you need help, type your request here in English using single keywords"
+"Select the active workspace here: your organization or one of the events."
 msgstr ""
 
-msgid "Here is a list of critical problems to fix"
+msgid "Switch here between administrative views and user-facing pages."
 msgstr ""
 
-msgid "Here is a to-do list of important actions to complete"
+msgid "Toggle the visibility of the sidebar."
+msgstr ""
+
+msgid "Search here for settings, features, and configuration options."
+msgstr ""
+
+msgid "This section lists critical issues that require immediate attention."
+msgstr ""
+
+msgid "This is the task list of required actions to complete the event setup."
 msgstr ""
 
 msgid ""
-"And here is a to-do list of suggestions to help you set everything up "
-"properly"
+"This list contains recommended actions to improve and finalize the "
+"configuration."
 msgstr ""
 
-msgid "Click the tutorial to open it and follow the step-by-step instructions"
+msgid ""
+"Open the tutorial to follow guided, step-by-step instructions for this "
+"feature."
 msgstr ""
 
 msgid "Write to us if you need help in setting things up!"
+msgstr ""
+
+msgid "Welcome to"
 msgstr ""
 
 msgid "And that is all"
@@ -4738,6 +4730,9 @@ msgid "Role"
 msgstr ""
 
 msgid "Hi"
+msgstr ""
+
+msgid "An error occurred"
 msgstr ""
 
 msgid "No organization found"
@@ -5987,12 +5982,6 @@ msgid ""
 "and events"
 msgstr ""
 
-msgid "Launch guided interface tour"
-msgstr ""
-
-msgid "Go"
-msgstr ""
-
 msgid "Dates"
 msgstr ""
 
@@ -6000,6 +5989,9 @@ msgid "Counts"
 msgstr ""
 
 msgid "registrations"
+msgstr ""
+
+msgid "Launch guided interface tour"
 msgstr ""
 
 msgid "Feature activated"
@@ -6105,116 +6097,6 @@ msgstr ""
 msgid "Organization tax"
 msgstr ""
 
-msgid "Donation"
-msgstr ""
-
-msgid "You are about to perform a donation of"
-msgstr ""
-
-msgid ""
-"Indicate the name of the member for whom you want to activate a new "
-"collection"
-msgstr ""
-
-msgid "Collection for"
-msgstr ""
-
-msgid "The collection was delivered to the user"
-msgstr ""
-
-msgid ""
-"The collection is ready to be delivered, give this link to the recipient"
-msgstr ""
-
-msgid "Collection links"
-msgstr ""
-
-msgid ""
-"The collection is active! To participate click on the following link, or "
-"copy it to whoever you want to get involved"
-msgstr ""
-
-msgid "Link to participate in"
-msgstr ""
-
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
-msgstr ""
-
-msgid "Link to close the collection"
-msgstr ""
-
-msgid "Number of partecipants"
-msgstr ""
-
-msgid "Total collection"
-msgstr ""
-
-msgid "Participants included"
-msgstr ""
-
-msgid "Join the collection for"
-msgstr ""
-
-msgid "The amount of your contribution is"
-msgstr ""
-
-msgid "Redeem collection"
-msgstr ""
-
-msgid ""
-"Your friends wanted to give you a special gift: they gave you the chance to "
-"participate in one of our experiences"
-msgstr ""
-
-msgid ""
-"By pressing confirm, the collection total will be credited to your account, "
-"and will be used automatically when you register for one of our events"
-msgstr ""
-
-msgid "Do you wish to be reimbursed? Open a new one"
-msgstr ""
-
-msgid "refund request"
-msgstr ""
-
-msgid "Access the history"
-msgstr ""
-
-msgid "Refunded"
-msgstr ""
-
-msgid "Consumed"
-msgstr ""
-
-msgid "Returned"
-msgstr ""
-
-msgid "Run"
-msgstr ""
-
-msgid "Indicate the amount of your donation"
-msgstr ""
-
-msgid "Payment membership fee"
-msgstr ""
-
-msgid "Indicates the details of the request"
-msgstr ""
-
-msgid "Go to the tokens history"
-msgstr ""
-
-msgid "Payment processing"
-msgstr ""
-
-msgid "We are processing your payment"
-msgstr ""
-
-msgid "Please wait a moment"
-msgstr ""
-
 msgid "here the conditions of registration"
 msgstr ""
 
@@ -6249,6 +6131,12 @@ msgstr ""
 msgid "by"
 msgstr ""
 
+msgid "Do you wish to be reimbursed? Open a new one"
+msgstr ""
+
+msgid "refund request"
+msgstr ""
+
 msgid "Requests open"
 msgstr ""
 
@@ -6264,6 +6152,9 @@ msgstr ""
 msgid ""
 "You have submitted your dues payment, and it is now being approved by the "
 "staff. You don't have to do anything for the time being"
+msgstr ""
+
+msgid "Payment membership fee"
 msgstr ""
 
 msgid ""
@@ -6345,6 +6236,9 @@ msgstr ""
 msgid "Collection participated"
 msgstr ""
 
+msgid "Donation"
+msgstr ""
+
 msgid "If you would like to make a donation to the Organization"
 msgstr ""
 
@@ -6381,6 +6275,92 @@ msgstr ""
 msgid "click here"
 msgstr ""
 
+msgid "You are about to perform a donation of"
+msgstr ""
+
+msgid ""
+"Indicate the name of the member for whom you want to activate a new "
+"collection"
+msgstr ""
+
+msgid "Collection for"
+msgstr ""
+
+msgid "The collection was delivered to the user"
+msgstr ""
+
+msgid ""
+"The collection is ready to be delivered, give this link to the recipient"
+msgstr ""
+
+msgid "Collection links"
+msgstr ""
+
+msgid ""
+"The collection is active! To participate click on the following link, or "
+"copy it to whoever you want to get involved"
+msgstr ""
+
+msgid "Link to participate in"
+msgstr ""
+
+msgid ""
+"When you want to close the collection, follow the link below. A special "
+"redemption code will be generated"
+msgstr ""
+
+msgid "Link to close the collection"
+msgstr ""
+
+msgid "Number of partecipants"
+msgstr ""
+
+msgid "Total collection"
+msgstr ""
+
+msgid "Participants included"
+msgstr ""
+
+msgid "Join the collection for"
+msgstr ""
+
+msgid "The amount of your contribution is"
+msgstr ""
+
+msgid "Redeem collection"
+msgstr ""
+
+msgid ""
+"Your friends wanted to give you a special gift: they gave you the chance to "
+"participate in one of our experiences"
+msgstr ""
+
+msgid ""
+"By pressing confirm, the collection total will be credited to your account, "
+"and will be used automatically when you register for one of our events"
+msgstr ""
+
+msgid "Access the history"
+msgstr ""
+
+msgid "Refunded"
+msgstr ""
+
+msgid "Consumed"
+msgstr ""
+
+msgid "Returned"
+msgstr ""
+
+msgid "Run"
+msgstr ""
+
+msgid "Indicate the amount of your donation"
+msgstr ""
+
+msgid "Indicates the details of the request"
+msgstr ""
+
 msgid "The total registration fee is"
 msgstr ""
 
@@ -6394,6 +6374,18 @@ msgid "We ask you to pay the remaining amount"
 msgstr ""
 
 msgid "Would you like to pay a different amount"
+msgstr ""
+
+msgid "Go to the tokens history"
+msgstr ""
+
+msgid "Payment processing"
+msgstr ""
+
+msgid "We are processing your payment"
+msgstr ""
+
+msgid "Please wait a moment"
 msgstr ""
 
 msgid "Last Event"
@@ -7016,6 +7008,14 @@ msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 
 msgid "This page shows the deadlines to be met for this event"
+msgstr ""
+
+msgid ""
+"This page will guide you through the creation of your first event, step by "
+"step"
+msgstr ""
+
+msgid "Simply follow the instructions and provide the required information"
 msgstr ""
 
 msgid ""
@@ -8605,9 +8605,7 @@ msgstr ""
 msgid "Containers"
 msgstr ""
 
-msgid ""
-"Create and manage events, setting names, dates, status, and registration "
-"details"
+msgid "Create and manage events and their setting - names, dates, status"
 msgstr ""
 
 msgid "Pre-Registrations"
@@ -8700,7 +8698,7 @@ msgid ""
 "Customize translations of words and phrases in the organization interface"
 msgstr ""
 
-msgid "Manage the event settings: name, description, dates, and other data"
+msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
 
 msgid "Assign crew roles and grant specific access to event functions"
@@ -8978,6 +8976,29 @@ msgid "You must be registered to view this page"
 msgstr ""
 
 msgid "Welcome"
+msgstr ""
+
+#, python-format
+msgid "Your event '%(event_name)s' has been successfully created"
+msgstr ""
+
+msgid ""
+"This page is the event's dashboard, where you can fully manage all it's "
+"settings"
+msgstr ""
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
+"address</a>"
+msgstr ""
+
+msgid ""
+"You can now setup the tickets, the signup form, the registration options"
+msgstr ""
+
+msgid ""
+"In this page you'll find a list of actions and suggestions on the next steps"
 msgstr ""
 
 #, python-format
@@ -9349,14 +9370,6 @@ msgstr ""
 msgid "Cache reset!"
 msgstr ""
 
-msgid "Your event has been created"
-msgstr ""
-
-msgid ""
-"Now please complete the quick setup by selecting the features most useful "
-"for this event"
-msgstr ""
-
 msgid "Member approved!"
 msgstr ""
 
@@ -9423,12 +9436,10 @@ msgstr ""
 msgid "Registrations opening at: %(date)s"
 msgstr ""
 
-msgid ""
-"Before accessing the organization dashboard, please complete the quick setup "
-"by selecting the features most useful for your organization"
+msgid "No events are present, create one"
 msgstr ""
 
-msgid "No events are present, create one"
+msgid "Quickly configure your organization's most important settings"
 msgstr ""
 
 msgid "Set up the payment methods available to participants"
@@ -9501,11 +9512,6 @@ msgstr ""
 
 msgid ""
 "Last step, please complete the event setup by adding the start and end dates"
-msgstr ""
-
-msgid ""
-"Before accessing the event dashboard, please complete the quick setup by "
-"selecting the features most useful for your event"
 msgstr ""
 
 msgid "Create the first character of the event"
@@ -9627,7 +9633,13 @@ msgstr ""
 msgid "Set specific values for configuration of features of the event"
 msgstr ""
 
+msgid "What would you like to do?"
+msgstr ""
+
 msgid "Dashboard"
+msgstr ""
+
+msgid "Invalid request method"
 msgstr ""
 
 msgid "Invalid choice format"

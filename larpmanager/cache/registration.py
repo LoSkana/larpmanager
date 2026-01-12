@@ -22,7 +22,7 @@ from typing import Any
 from django.core.cache import cache
 from django.db.models import Count
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Run
@@ -42,7 +42,7 @@ def cache_registration_counts_key(run_id: int) -> str:
     return f"registration_counts_{run_id}"
 
 
-def get_reg_counts(run: Run, *, reset_cache: bool = False) -> dict:
+def get_registration_counts(run: Run, *, reset_cache: bool = False) -> dict:
     """Get registration counts for a run, with caching support.
 
     Args:
@@ -61,7 +61,7 @@ def get_reg_counts(run: Run, *, reset_cache: bool = False) -> dict:
 
     # Update and cache if not found
     if cached_counts is None:
-        cached_counts = update_reg_counts(run)
+        cached_counts = update_registration_counts(run)
         cache.set(cache_key, cached_counts, timeout=60 * 5)
 
     return cached_counts
@@ -85,7 +85,7 @@ def add_count(counter_dict: dict, parameter_name: str, increment_value: int = 1)
     counter_dict[parameter_name] += increment_value
 
 
-def update_reg_counts(run: Run) -> dict[str, int]:
+def update_registration_counts(run: Run) -> dict[str, int]:
     """Update registration counts cache for the given run.
 
     Calculates and returns registration statistics including counts by ticket tier,
@@ -138,7 +138,7 @@ def update_reg_counts(run: Run) -> dict[str, int]:
                 add_count(counts, "count_player", num_tickets)
 
             # Track provisional registrations separately
-            if is_reg_provisional(registration, event=run.event, features=features, context=context):
+            if is_registration_provisional(registration, event=run.event, features=features, context=context):
                 add_count(counts, "count_provisional", num_tickets)
 
         # Add to total registration count

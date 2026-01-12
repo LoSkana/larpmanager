@@ -3442,7 +3442,7 @@ CREATE TABLE public.larpmanager_run (
     start date,
     "end" date,
     registration_open timestamp with time zone,
-    registration_secret character varying(12) NOT NULL,
+    registration_secret character varying(50) NOT NULL,
     balance numeric(10,2) NOT NULL,
     paid numeric(10,2),
     plan character varying(1),
@@ -4152,14 +4152,15 @@ INSERT INTO public.django_migrations VALUES (160, 'larpmanager', '0119_finish_uu
 INSERT INTO public.django_migrations VALUES (161, 'larpmanager', '0120_alter_larpmanagerticket_priority_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (162, 'larpmanager', '0121_migrate_config_ids_to_uuids', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (163, 'larpmanager', '0122_remove_plotcharacterrel_uuid_and_more', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (164, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (165, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (166, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (167, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (168, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (169, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (170, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (171, 'larpmanager', '0123_remove_playerrelationship_unique_player_relationship_with_optional_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (164, 'larpmanager', '0123_alter_run_registration_secret', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (165, 'larpmanager', '0124_remove_playerrelationship_unique_player_relationship_with_optional_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (166, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (167, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (168, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (169, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (170, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (171, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (172, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
@@ -4185,7 +4186,7 @@ INSERT INTO public.larpmanager_associationpermission VALUES (17, NULL, false, '2
 INSERT INTO public.larpmanager_associationpermission VALUES (18, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Texts', 'exe_texts', 21, 81, 'Customize textual elements of the organization interface', false, NULL, 6, NULL);
 INSERT INTO public.larpmanager_associationpermission VALUES (19, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'URL shortener', 'exe_urlshortner', 11, 63, 'Manage url shortner', false, NULL, 3, NULL);
 INSERT INTO public.larpmanager_associationpermission VALUES (20, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Containers', 'exe_warehouse_containers', 21, 34, 'Manage warehouse containers', false, 'warehouse', 15, NULL);
-INSERT INTO public.larpmanager_associationpermission VALUES (21, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Events', 'exe_events', 11, 80, 'Create and manage events, setting names, dates, status, and registration details', false, NULL, 12, NULL);
+INSERT INTO public.larpmanager_associationpermission VALUES (21, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Events', 'exe_events', 11, 80, 'Create and manage events and their setting - names, dates, status', false, NULL, 12, NULL);
 INSERT INTO public.larpmanager_associationpermission VALUES (22, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Pre-Registrations', 'exe_pre_registrations', 31, 16, 'Manage the pre-registration of all events', false, NULL, 4, NULL);
 INSERT INTO public.larpmanager_associationpermission VALUES (23, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Deadlines', 'exe_deadlines', 41, 44, 'Displays participants overdue for payment or other deadlines for all events', false, 'deadlines', 4, NULL);
 INSERT INTO public.larpmanager_associationpermission VALUES (24, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Send e-mail', 'exe_send_mail', 11, 79, 'Send e-mail', false, 'email', 14, NULL);
@@ -4228,7 +4229,7 @@ INSERT INTO public.larpmanager_event VALUES (1, NULL, false, '2025-01-01 00:00:0
 
 INSERT INTO public.larpmanager_eventconfig VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'has_visible_factions', 'False', 1);
 
-INSERT INTO public.larpmanager_eventpermission VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Event', 'orga_event', 11, 104, 'Manage the event settings: name, description, dates, and other data', false, 'gallery', 7, NULL);
+INSERT INTO public.larpmanager_eventpermission VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Event', 'orga_event', 11, 104, 'Manage the event settings: name, description, dates, status', false, 'gallery', 7, NULL);
 INSERT INTO public.larpmanager_eventpermission VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Roles', 'orga_roles', 31, 102, 'Assign crew roles and grant specific access to event functions', false, NULL, 7, NULL);
 INSERT INTO public.larpmanager_eventpermission VALUES (3, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Configuration', 'orga_config', 41, 101, 'Manage the configuration of the activated features', false, NULL, 7, NULL);
 INSERT INTO public.larpmanager_eventpermission VALUES (4, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Features', 'orga_features', 51, 100, 'Activate features for the event', false, NULL, 7, NULL);
@@ -4549,7 +4550,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 171, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 172, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -8289,4 +8290,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0123_remove_playerrelationship_unique_player_relationship_with_optional_and_more
+-- LARPMANAGER_SCHEMA_VERSION: 0124_remove_playerrelationship_unique_player_relationship_with_optional_and_more

@@ -36,16 +36,16 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from slugify import slugify
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.accounting.registration import (
     cancel_reg,
     check_registration_background,
     get_accounting_refund,
-    get_reg_payments,
+    get_registration_payments,
 )
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_association_config, get_event_config
-from larpmanager.cache.text_fields import get_cache_reg_field
+from larpmanager.cache.text_fields import get_cache_registration_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
     RegistrationCharacterRelForm,
@@ -187,7 +187,9 @@ def _orga_registrations_tickets(registration: Any, context: dict) -> None:
         registration.ticket_show = ticket.name
 
         # Check for provisional status first, then map ticket tier to type
-        if is_reg_provisional(registration, event=context["event"], features=context["features"], context=context):
+        if is_registration_provisional(
+            registration, event=context["event"], features=context["features"], context=context
+        ):
             registration_type = ("0", _("Provisional"))
         elif ticket.tier in ticket_types:
             registration_type = ticket_types[ticket.tier]
@@ -464,7 +466,7 @@ def _orga_registrations_text_fields(context: dict) -> None:
         str(question_id) for question_id in questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True)
     ]
 
-    cached_registration_fields = get_cache_reg_field(context["run"])
+    cached_registration_fields = get_cache_registration_field(context["run"])
     for registration in context["registration_list"]:
         if registration.id not in cached_registration_fields:
             continue
@@ -802,20 +804,20 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
 
         # Process valid form submission
         if form.is_valid():
-            reg = form.save()
+            registration = form.save()
 
             # Handle registration deletion if requested
             if "delete" in request.POST and request.POST["delete"] == "1":
-                cancel_reg(reg)
+                cancel_reg(registration)
                 messages.success(request, _("Registration cancelled"))
                 return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
             # Save registration-specific questions and answers
-            form.save_reg_questions(reg)
+            form.save_registration_questions(registration)
 
             # Process quest builder data if feature is enabled
             if "questbuilder" in context["features"]:
-                _save_questbuilder(context, form, reg)
+                _save_questbuilder(context, form, registration)
 
             # Redirect based on user choice: continue adding or return to list
             if context["continue_add"]:
@@ -838,19 +840,19 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
     return render(request, "larpmanager/orga/edit.html", context)
 
 
-def _save_questbuilder(context: dict, form: object, reg: Any) -> None:
+def _save_questbuilder(context: dict, form: object, registration: Any) -> None:
     """Save quest type assignments from questbuilder form.
 
     Args:
         context: Context dictionary containing event and run data
         form: Form containing quest type selections
-        reg: Registration object for the member
+        registration: Registration object for the member
 
     """
     for qt in QuestType.objects.filter(event=context["event"]):
         qt_uuid = f"qt_{qt.uuid}"
         trait_uuid = form.cleaned_data[qt_uuid]
-        base_kwargs = {"run": context["run"], "member": reg.member, "typ": qt.number}
+        base_kwargs = {"run": context["run"], "member": registration.member, "typ": qt.number}
 
         if trait_uuid and trait_uuid != "0":
             ait = AssignmentTrait.objects.filter(**base_kwargs).first()
@@ -908,7 +910,7 @@ def orga_registrations_reload(request: HttpRequest, event_slug: str) -> HttpResp
     context = check_event_context(request, event_slug, "orga_registrations")
 
     # Collect all registration IDs for the current run
-    registration_ids = [str(reg.id) for reg in Registration.objects.filter(run=context["run"])]
+    registration_ids = [str(registration.id) for registration in Registration.objects.filter(run=context["run"])]
 
     # Trigger background registration checks
     check_registration_background(registration_ids)
@@ -1029,14 +1031,14 @@ def orga_cancellations(request: HttpRequest, event_slug: str) -> Any:
 
     # Check if payed, check if already approved reimburse
     for r in context["list"]:
-        acc_payments = None
+        accounting_payments = None
         if r.id in payments:
-            acc_payments = payments[r.id]
-        get_reg_payments(r, acc_payments)
+            accounting_payments = payments[r.id]
+        get_registration_payments(r, accounting_payments)
 
-        r.acc_refunds = None
+        r.accounting_refunds = None
         if r.id in refunds:
-            r.acc_refunds = refunds[r.id]
+            r.accounting_refunds = refunds[r.id]
         get_accounting_refund(r)
 
         r.days = get_time_diff(context["run"].end, r.cancellation_date.date())
@@ -1108,7 +1110,7 @@ def orga_cancellation_refund(request: HttpRequest, event_slug: str, registration
         return redirect("orga_cancellations", event_slug=context["run"].get_slug())
 
     # Get payment history for display in template
-    get_reg_payments(context["registration"])
+    get_registration_payments(context["registration"])
 
     # Render the refund form template
     return render(request, "larpmanager/orga/accounting/cancellation_refund.html", context)

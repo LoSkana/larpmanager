@@ -45,7 +45,7 @@ if TYPE_CHECKING:
     from larpmanager.models.registration import Registration
 
 
-def is_reg_provisional(
+def is_registration_provisional(
     instance: Registration,
     event: Event | None = None,
     features: dict | None = None,
