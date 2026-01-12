@@ -47,6 +47,8 @@ def test_character_inventory(pw_page: Any) -> None:
 
     character_inventory_transfer(live_server, page)
 
+    test_endpoint(page, live_server)
+
 
 def setup(live_server: Any, page: Any) -> None:
     # activate features
@@ -151,3 +153,11 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     # check row 2
     row2 = page.locator('#transfer_log tbody tr').nth(1)
     expect_normalized(page, row2, "Admin Test	NPC	Test Character's Personal Storage	Credits	3	test")
+
+def test_endpoint(page: Any, live_server: Any) -> None:
+    """Test character abilties endpoint"""
+    # Go to character list endpoint
+    go_to(page, live_server, "/test/character/list/json/")
+
+    # Go to character inventory endpoint
+    go_to(page, live_server, "/test/character/u1/inventory/json/")

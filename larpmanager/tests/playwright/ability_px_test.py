@@ -53,6 +53,8 @@ def test_px(pw_page: Any) -> None:
 
     delivery_auto_populate(page, live_server)
 
+    test_endpoint(page, live_server)
+
 
 def setup(live_server: Any, page: Any) -> None:
     # activate features
@@ -381,3 +383,11 @@ def delivery_auto_populate(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     expect_normalized(page, page.locator('[id="u2"]'), "5 Test Character")
+
+def test_endpoint(page: Any, live_server: Any) -> None:
+    """Test character abilties endpoint"""
+    # Go to character list endpoint
+    go_to(page, live_server, "/test/character/list/json/")
+
+    # Go to character abilities endpoint
+    go_to(page, live_server, "/test/character/u1/abilties/json/")
