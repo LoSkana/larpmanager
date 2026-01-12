@@ -37,7 +37,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
-from larpmanager.models.writing import Character, Faction, FactionType, PlotCharacterRel, Relationship
+from larpmanager.models.writing import Character, FactionType, PlotCharacterRel, Relationship
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.core.exceptions import NotFoundError
 from larpmanager.utils.services.event import has_access_character
@@ -383,11 +383,19 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
     if "faction" not in context["features"]:
         return
 
-    faction_numbers = context["char"].get("factions")
-    if not faction_numbers:
-        return
-
-    faction_ids = [context.get("fac_mapping", {}).get(number) for number in faction_numbers]
+    # If we show all the factions (player / staffer)
+    all_factions = {}
+    if not only_visible:
+        faction_event = context["event"].get_class_parent("faction")
+        faction_ids = []
+        for faction in context["character"].factions_list.filter(event=faction_event).order_by("order"):
+            all_factions[faction.id] = faction.show_complete()
+    # Show only public
+    else:
+        faction_numbers = context["char"].get("factions")
+        for faction_number in faction_numbers:
+            faction_id = context.get("fac_mapping", {}).get(faction_number)
+            all_factions[faction_id] = context["factions"].get(faction_number)
 
     context["sheet_factions"] = []
 
@@ -395,28 +403,17 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
     visible_writing_fields(context, QuestionApplicable.FACTION, only_visible=only_visible)
 
     # Build comprehensive answer mapping: faction_id -> {question_id -> text/choices}
+    faction_ids = all_factions.keys()
     faction_answers_map = _get_factions_answers_choices(context, faction_ids)
 
-    faction_complete = {}
-    if not only_visible:
-        for faction in context["event"].get_elements(Faction).filter(number__in=faction_numbers):
-            faction_complete[faction.number] = faction.show_complete()
-
     # Process each faction and prepare display data
-    for faction_number in faction_numbers:
-        # Get base faction data
-        if only_visible:
-            faction_display_data = context["factions"].get(faction_number)
-        else:
-            faction_display_data = faction_complete.get(faction_number)
-        faction_id = context.get("fac_mapping", {}).get(faction_number)
-
-        if not faction_display_data:
+    for faction_id, faction_data in all_factions.items():
+        if not faction_data:
             continue
 
         # Merge in writing fields from pre-fetched bulk data
         faction_writing_fields = faction_answers_map.get(faction_id, {})
-        faction_display_data.update(
+        faction_data.update(
             {
                 "questions": context.get("questions", {}),
                 "options": context.get("options", {}),
@@ -425,7 +422,7 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
         )
 
         # Add processed faction data to context
-        context["sheet_factions"].append(faction_display_data)
+        context["sheet_factions"].append(faction_data)
 
 
 def _get_factions_answers_choices(context: dict, faction_ids: list) -> dict:
