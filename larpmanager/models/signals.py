@@ -1400,7 +1400,7 @@ def post_save_registration_character_rel_savereg(
     # Auto-assign player if player editor is active and character has no player
     features = get_event_features(instance.character.event_id)
     if "user_character" in features and not instance.character.player:
-        instance.character.player = instance.reg.member
+        instance.character.player = instance.registration.member
         instance.character.save()
 
     if created:

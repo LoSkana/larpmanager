@@ -319,7 +319,7 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
             - 'tok': Tokens breakdown
             - 'cre': Credits breakdown
             - 'dis': Discounts breakdown
-            - 'reg': Registrations breakdown
+            - 'registration': Registrations breakdown
 
     Side effects:
         Updates run.revenue, run.costs, run.balance, and run.tax fields and saves the run
