@@ -2463,34 +2463,6 @@ msgstr ""
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
 msgstr ""
 
-msgid "Ticket selected"
-msgstr ""
-
-#, python-format
-msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>"
-msgstr ""
-
-#, python-format
-msgid "Payments already received: <b>%(amount).2f %(currency)s</b>"
-msgstr ""
-
-msgid "Selected options"
-msgstr ""
-
-#, python-format
-msgid ""
-"You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days. "
-"Make your payment <a href='%(url)s'>on this page</a>. If we do not receive "
-"payment by the deadline, your registration may be cancelled."
-msgstr ""
-
-#, python-format
-msgid ""
-"<i>Payment due</i> - You must pay <b>%(amount).2f %(currency)s</b> as soon "
-"as possible. Make your payment <a href='%(url)s'>on this page</a>. If we do "
-"not receive payment, your registration may be cancelled."
-msgstr ""
-
 #, python-format
 msgid "Character assigned for %(event)s"
 msgstr ""
@@ -2741,6 +2713,34 @@ msgid "Download document"
 msgstr ""
 
 msgid "Payment to check"
+msgstr ""
+
+msgid "Ticket selected"
+msgstr ""
+
+#, python-format
+msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>"
+msgstr ""
+
+#, python-format
+msgid "Payments already received: <b>%(amount).2f %(currency)s</b>"
+msgstr ""
+
+msgid "Selected options"
+msgstr ""
+
+#, python-format
+msgid ""
+"You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days. "
+"Make your payment <a href='%(url)s'>on this page</a>. If we do not receive "
+"payment by the deadline, your registration may be cancelled."
+msgstr ""
+
+#, python-format
+msgid ""
+"<i>Payment due</i> - You must pay <b>%(amount).2f %(currency)s</b> as soon "
+"as possible. Make your payment <a href='%(url)s'>on this page</a>. If we do "
+"not receive payment, your registration may be cancelled."
 msgstr ""
 
 msgid "To access this feature, you must first register"
