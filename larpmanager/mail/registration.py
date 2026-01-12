@@ -30,7 +30,7 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
-from larpmanager.mail.base import my_send_digest_email
+from larpmanager.mail.digest import my_send_digest_email
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssociationTextType, get_url, hdr
 from larpmanager.models.event import DevelopStatus, EventTextType
@@ -123,8 +123,6 @@ def update_registration_status(instance: Any) -> None:
                 run=instance.run,
                 instance=instance,
                 notification_type=NotificationType.REGISTRATION_NEW,
-                email_generator=get_registration_new_organizer_email,
-                email_generator_args=(instance, email_context),
             )
 
     # Handle registration update notifications to organizers
@@ -135,8 +133,6 @@ def update_registration_status(instance: Any) -> None:
                 run=instance.run,
                 instance=instance,
                 notification_type=NotificationType.REGISTRATION_UPDATE,
-                email_generator=get_registration_update_organizer_email,
-                email_generator_args=(instance, email_context),
             )
 
 
@@ -264,56 +260,6 @@ def registration_payments(instance: Registration, currency: str) -> str:
     )
 
 
-def get_registration_new_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
-    """Generate email subject and body for new registration organizer notification.
-
-    Args:
-        instance: Registration instance for which to generate the email
-        email_context: Dictionary containing event and user information
-
-    Returns:
-        Tuple containing email subject and body as strings
-
-    """
-    email_subject = hdr(instance.run.event) + _("Registration to %(event)s by %(user)s") % email_context
-    email_body = _("The user has confirmed its registration for this event") + "!"
-    email_body += registration_options(instance)
-    return email_subject, email_body
-
-
-def get_registration_update_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
-    """Generate email subject and body for registration update organizer notification.
-
-    Args:
-        instance: Registration instance for which to generate the email
-        email_context: Dictionary containing event and user information
-
-    Returns:
-        Tuple containing email subject and body as strings
-
-    """
-    email_subject = hdr(instance.run.event) + _("Registration updated to %(event)s by %(user)s") % email_context
-    email_body = _("The user has updated their registration for this event") + "!"
-    email_body += registration_options(instance)
-    return email_subject, email_body
-
-
-def get_registration_cancel_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
-    """Generate email subject and body for registration cancellation organizer notification.
-
-    Args:
-        instance: Registration instance for which to generate the email
-        email_context: Dictionary containing event and user information
-
-    Returns:
-        Tuple containing email subject and body as strings
-
-    """
-    email_subject = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % email_context
-    email_body = _("The registration for this event has been cancelled") + "."
-    return email_subject, email_body
-
-
 def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
     """Send character assignment email when registration-character relation is created.
 
@@ -413,8 +359,6 @@ def update_registration_cancellation(instance: Registration) -> None:
                 run=instance.run,
                 instance=instance,
                 notification_type=NotificationType.REGISTRATION_CANCEL,
-                email_generator=get_registration_cancel_organizer_email,
-                email_generator_args=(instance, email_context),
             )
 
 
@@ -490,8 +434,6 @@ def send_registration_deletion_email(instance: Registration) -> None:
                 run=instance.run,
                 instance=instance,
                 notification_type=NotificationType.REGISTRATION_CANCEL,
-                email_generator=get_registration_cancel_organizer_email,
-                email_generator_args=(instance, context),
             )
 
 

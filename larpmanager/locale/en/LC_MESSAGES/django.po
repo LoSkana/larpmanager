@@ -2127,27 +2127,6 @@ msgstr ""
 msgid "Speed larp"
 msgstr ""
 
-#, python-format
-msgid "Reimbursement request for %(event)s"
-msgstr ""
-
-#, python-format
-msgid "Staff member %(user)s added a new reimbursement request for %(event)s"
-msgstr ""
-
-#, python-format
-msgid "The sum is %(amount).2f, with reason '%(reason)s'"
-msgstr ""
-
-msgid "download document"
-msgstr ""
-
-msgid "Did you check and is it correct"
-msgstr ""
-
-msgid "Confirmation of expenditure"
-msgstr ""
-
 msgid "Reimbursement approved"
 msgstr ""
 
@@ -2173,30 +2152,6 @@ msgid ""
 "href='%(url)s'>your accounting.</a>."
 msgstr ""
 
-#, python-format
-msgid "Utilisation %(tokens)s per %(event)s"
-msgstr ""
-
-#, python-format
-msgid "%(amount)s %(tokens)s were used to participate in this event"
-msgstr ""
-
-#, python-format
-msgid "Utilisation %(credits)s per %(event)s"
-msgstr ""
-
-#, python-format
-msgid "%(amount)s %(credits)s were used to participate in this event"
-msgstr ""
-
-#, python-format
-msgid "Payment for %(event)s"
-msgstr ""
-
-#, python-format
-msgid "A payment of %(amount).2f %(currency)s was received for this event"
-msgstr ""
-
 msgid "Issued Reimbursement"
 msgstr ""
 
@@ -2217,14 +2172,6 @@ msgstr ""
 
 #, python-format
 msgid " for %(user)s"
-msgstr ""
-
-#, python-format
-msgid "Assignment %(elements)s"
-msgstr ""
-
-#, python-format
-msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr ""
 
 msgid "Donation given"
@@ -2258,29 +2205,6 @@ msgid "New participation in the collection for %(recipient)s by %(user)s"
 msgstr ""
 
 msgid "The collection grows"
-msgstr ""
-
-#, python-format
-msgid "Request refund from: %(user)s"
-msgstr ""
-
-#, python-format
-msgid "Details: %(details)s (<b>%(amount).2f</b>)"
-msgstr ""
-
-msgid "Verify that the data are correct"
-msgstr ""
-
-msgid "Reason for payment"
-msgstr ""
-
-msgid "Amount"
-msgstr ""
-
-msgid "Download document"
-msgstr ""
-
-msgid "Payment to check"
 msgstr ""
 
 msgid "Welcome to LarpManager"
@@ -2568,27 +2492,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "Registration to %(event)s by %(user)s"
-msgstr ""
-
-msgid "The user has confirmed its registration for this event"
-msgstr ""
-
-#, python-format
-msgid "Registration updated to %(event)s by %(user)s"
-msgstr ""
-
-msgid "The user has updated their registration for this event"
-msgstr ""
-
-#, python-format
-msgid "Registration cancelled for %(event)s by %(user)s"
-msgstr ""
-
-msgid "The registration for this event has been cancelled"
-msgstr ""
-
-#, python-format
 msgid "Character assigned for %(event)s"
 msgstr ""
 
@@ -2741,6 +2644,103 @@ msgid "Let us know if you encounter any issues or need assistance"
 msgstr ""
 
 msgid "Review the users that are missing the event's deadlines"
+msgstr ""
+
+#, python-format
+msgid "Registration to %(event)s by %(user)s"
+msgstr ""
+
+msgid "The user has confirmed its registration for this event"
+msgstr ""
+
+#, python-format
+msgid "Registration updated to %(event)s by %(user)s"
+msgstr ""
+
+msgid "The user has updated their registration for this event"
+msgstr ""
+
+#, python-format
+msgid "Registration cancelled for %(event)s by %(user)s"
+msgstr ""
+
+msgid "The registration for this event has been cancelled"
+msgstr ""
+
+#, python-format
+msgid "Reimbursement request for %(event)s"
+msgstr ""
+
+#, python-format
+msgid "Staff member %(user)s added a new reimbursement request for %(event)s"
+msgstr ""
+
+#, python-format
+msgid "The sum is %(amount).2f, with reason '%(reason)s'"
+msgstr ""
+
+msgid "download document"
+msgstr ""
+
+msgid "Did you check and is it correct"
+msgstr ""
+
+msgid "Confirmation of expenditure"
+msgstr ""
+
+#, python-format
+msgid "Utilisation %(tokens)s per %(event)s"
+msgstr ""
+
+#, python-format
+msgid "%(amount)s %(tokens)s were used to participate in this event"
+msgstr ""
+
+#, python-format
+msgid "Utilisation %(credits)s per %(event)s"
+msgstr ""
+
+#, python-format
+msgid "%(amount)s %(credits)s were used to participate in this event"
+msgstr ""
+
+#, python-format
+msgid "Payment for %(event)s"
+msgstr ""
+
+#, python-format
+msgid "A payment of %(amount).2f %(currency)s was received for this event"
+msgstr ""
+
+#, python-format
+msgid "Assignment %(elements)s"
+msgstr ""
+
+#, python-format
+msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
+msgstr ""
+
+#, python-format
+msgid "Request refund from: %(user)s"
+msgstr ""
+
+#, python-format
+msgid "Details: %(details)s (<b>%(amount).2f</b>)"
+msgstr ""
+
+msgid "Verify that the data are correct"
+msgstr ""
+
+msgid "Reason for payment"
+msgstr ""
+
+msgid "Amount"
+msgstr ""
+
+msgid "Download document"
+msgstr ""
+
+msgid "Payment to check"
 msgstr ""
 
 msgid "To access this feature, you must first register"

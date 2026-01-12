@@ -17,22 +17,114 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
+from typing import TYPE_CHECKING, Any
 
-from django.db.models import QuerySet
 from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_member_config
+from larpmanager.mail.templates import (
+    get_invoice_email,
+    get_pay_credit_email,
+    get_pay_money_email,
+    get_pay_token_email,
+    get_registration_cancel_organizer_email,
+    get_registration_new_organizer_email,
+    get_registration_update_organizer_email,
+    get_token_credit_name,
+)
 from larpmanager.models.accounting import AccountingItemPayment, PaymentInvoice
 from larpmanager.models.association import get_url, hdr
-from larpmanager.models.event import Event
 from larpmanager.models.member import Member, NotificationQueue, NotificationType
 from larpmanager.models.registration import Registration
 from larpmanager.utils.larpmanager.tasks import my_send_mail
+from larpmanager.utils.users.member import queue_organizer_notification
+
+if TYPE_CHECKING:
+    from larpmanager.models.event import Event, Run
 
 logger = logging.getLogger(__name__)
+
+
+def my_send_digest_email(
+    member: Member,
+    run: Run,
+    instance: Any,
+    notification_type: Any,
+) -> None:
+    """Send notification email to a single organizer with digest mode support.
+
+    Centralizes the logic for sending email to an organizer. Checks their personal
+    digest preference:
+    - If digest mode is enabled: queues notification for daily digest
+    - If digest mode is disabled: sends immediate email
+
+    This function standardizes email/notification handling across the codebase,
+    replacing duplicate digest_mode checks. The appropriate email generator is
+    selected based on the notification_type.
+
+    Args:
+        member: Member instance to notify
+        run: Run instance for which to send the notification
+        instance: Object of the notification (Registration, AccountingItemPayment, PaymentInvoice, etc.)
+        notification_type: Type of notification for the queue (from NotificationType enum)
+
+    Returns:
+        None
+    """
+    should_queue_notification = get_member_config(member.pk, "mail_orga_digest", default_value=False)
+
+    # Check if this organizer has enabled digest mode for their notifications
+    if should_queue_notification(member):
+        object_id = instance.id if instance else 0
+        # Queue notification for daily digest summary for this specific organizer
+        queue_organizer_notification(run=run, member=member, notification_type=notification_type, object_id=object_id)
+    else:
+        # Activate organizer's preferred language
+        activate(member.language)
+
+        # Determine which email generator to use based on notification type
+        if notification_type == NotificationType.REGISTRATION_NEW:
+            email_context = {"event": instance.run, "user": instance.member}
+            subject, body = get_registration_new_organizer_email(instance, email_context)
+
+        elif notification_type == NotificationType.REGISTRATION_UPDATE:
+            email_context = {"event": instance.run, "user": instance.member}
+            subject, body = get_registration_update_organizer_email(instance, email_context)
+
+        elif notification_type == NotificationType.REGISTRATION_CANCEL:
+            email_context = {"event": instance.run, "user": instance.member}
+            subject, body = get_registration_cancel_organizer_email(instance, email_context)
+
+        elif notification_type == NotificationType.PAYMENT_MONEY:
+            currency_symbol = run.event.association.get_currency_symbol()
+            subject, body = get_pay_money_email(currency_symbol, instance, run)
+            subject += _(" for %(user)s") % {"user": instance.registration.member}
+
+        elif notification_type == NotificationType.PAYMENT_CREDIT:
+            tokens_name, credits_name = get_token_credit_name(instance.registration.run.event.association_id)
+            subject, body = get_pay_credit_email(credits_name, instance, run)
+            subject += _(" for %(user)s") % {"user": instance.registration.member}
+
+        elif notification_type == NotificationType.PAYMENT_TOKEN:
+            tokens_name, credits_name = get_token_credit_name(instance.registration.run.event.association_id)
+            subject, body = get_pay_token_email(instance, run, tokens_name)
+            subject += _(" for %(user)s") % {"user": instance.registration.member}
+
+        elif notification_type == NotificationType.INVOICE_APPROVAL:
+            subject, body = get_invoice_email(instance)
+
+        else:
+            # This should never happen, but just in case
+            msg = f"Unknown notification type: {notification_type}"
+            raise ValueError(msg)
+
+        # Send the email to this organizer
+        my_send_mail(subject, body, member, instance)
 
 
 def send_daily_organizer_summaries() -> None:
@@ -94,21 +186,12 @@ def send_daily_organizer_summaries() -> None:
         logger.info("Daily summary sent to %s", member.username)
 
 
-def generate_summary_email(event: Event, notifications: QuerySet[NotificationQueue]) -> str:
+def generate_summary_email(event: Event, notifications: list) -> str:
     """Generate HTML email content for daily organizer summary.
-
-    Creates a simple text-based summary with sections for:
-    - New registrations
-    - Updated registrations
-    - Cancelled registrations
-    - Payments received
-    - Invoices awaiting approval
-
-    Each section includes relevant details and links to review/edit items.
 
     Args:
         event: Event instance
-        notifications: QuerySet of OrganizerNotificationQueue items to include
+        notifications: List of notifications to include
 
     Returns:
         str: HTML formatted email body
@@ -144,32 +227,28 @@ def generate_summary_email(event: Event, notifications: QuerySet[NotificationQue
     return email_body
 
 
-def _digest_organize_notifications(notifications: QuerySet) -> dict:
+def _digest_organize_notifications(notifications: list) -> dict:
     """Organize notifications to be sent."""
-    # Initialize lists for each notification type
-    process = {
-        "new_registrations": [],
-        "updated_registrations": [],
-        "cancelled_registrations": [],
-        "all_payments": [],
-        "invoice_approvals": [],
+    # Map notification types to their respective dictionary keys
+    type_to_key = {
+        NotificationType.REGISTRATION_NEW: "new_registrations",
+        NotificationType.REGISTRATION_UPDATE: "updated_registrations",
+        NotificationType.REGISTRATION_CANCEL: "cancelled_registrations",
+        NotificationType.PAYMENT_MONEY: "all_payments",
+        NotificationType.PAYMENT_CREDIT: "all_payments",
+        NotificationType.PAYMENT_TOKEN: "all_payments",
+        NotificationType.INVOICE_APPROVAL: "invoice_approvals",
     }
-    # Single loop through all notifications - group by type
-    for notif in notifications:
-        if notif.notification_type == NotificationType.REGISTRATION_NEW:
-            process["new_registrations"].append(notif)
-        elif notif.notification_type == NotificationType.REGISTRATION_UPDATE:
-            process["updated_registrations"].append(notif)
-        elif notif.notification_type == NotificationType.REGISTRATION_CANCEL:
-            process["cancelled_registrations"].append(notif)
-        elif notif.notification_type in [
-            NotificationType.PAYMENT_MONEY,
-            NotificationType.PAYMENT_CREDIT,
-            NotificationType.PAYMENT_TOKEN,
-        ]:
-            process["all_payments"].append(notif)
-        elif notif.notification_type == NotificationType.INVOICE_APPROVAL:
-            process["invoice_approvals"].append(notif)
+
+    # Group notifications by type using the mapping
+    process = {}
+    for notification in notifications:
+        key = type_to_key.get(notification.notification_type)
+        if not key:
+            continue
+        if key not in process:
+            process[key] = []
+        process[key].append(notification)
 
     return process
 

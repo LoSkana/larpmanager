@@ -30,17 +30,16 @@ from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.config import get_event_config, get_member_config
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.links import reset_event_links
 from larpmanager.models.access import AssociationRole, EventRole, get_association_executives, get_event_organizers
 from larpmanager.models.association import Association, get_association_maintainers, get_url, hdr
 from larpmanager.models.casting import AssignmentTrait, Casting
-from larpmanager.models.event import EventTextType, Run
-from larpmanager.models.member import Member, NotificationType
+from larpmanager.models.event import EventTextType
+from larpmanager.models.member import Member
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.larpmanager.tasks import my_send_mail
-from larpmanager.utils.users.member import queue_organizer_notification
 
 if TYPE_CHECKING:
     from larpmanager.models.registration import Registration
@@ -590,11 +589,6 @@ def get_exec_language(association: Association) -> str:
         str: The language code (e.g., 'en', 'it', 'fr') preferred by the majority
              of executives, or 'en' if no executives found or no preferences set
 
-    Example:
-        >>> association = Association.objects.get(slug='myorg')
-        >>> lang = get_exec_language(association)
-        >>> print(lang)  # 'it' if most executives prefer Italian
-
     """
     # Initialize dictionary to count language occurrences
     language_counts = {}
@@ -611,69 +605,6 @@ def get_exec_language(association: Association) -> str:
 
     # Determine the most common language or default to English
     return max(language_counts, key=language_counts.get) if language_counts else "en"
-
-
-def my_send_digest_email(
-    member: Member,
-    run: Run,
-    instance: Any,
-    notification_type: Any,
-    email_generator: callable,
-    email_generator_args: tuple = (),
-    email_generator_kwargs: dict | None = None,
-) -> None:
-    """Send notification email to a single organizer with digest mode support.
-
-    Centralizes the logic for sending email to an organizer. Checks their personal
-    digest preference:
-    - If digest mode is enabled: queues notification for daily digest
-    - If digest mode is disabled: sends immediate email
-
-    This function standardizes email/notification handling across the codebase,
-    replacing duplicate digest_mode checks.
-
-    Args:
-        member: Member instance to notify
-        run: Run instance for which to send the notification
-        instance: Object of the notification
-        notification_type: Type of notification for the queue (from OrganizerNotificationQueue.NotificationType)
-        email_generator: Callable that generates (subject, body) tuple for the email.
-                        Should accept *email_generator_args and **email_generator_kwargs
-        email_generator_args: Positional arguments to pass to email_generator
-        email_generator_kwargs: Keyword arguments to pass to email_generator
-        run_or_instance: Run or instance object to pass to my_send_mail
-
-    Returns:
-        None
-    """
-    # Initialize optional parameters with defaults
-    if email_generator_kwargs is None:
-        email_generator_kwargs = {}
-
-    should_queue_notification = get_member_config(member.pk, "mail_orga_digest", default_value=False)
-
-    # Check if this organizer has enabled digest mode for their notifications
-    if should_queue_notification(member):
-        object_id = instance.id if instance else 0
-        # Queue notification for daily digest summary for this specific organizer
-        queue_organizer_notification(run=run, member=member, notification_type=notification_type, object_id=object_id)
-    else:
-        # Send immediate email to this organizer
-        # Activate organizer's preferred language for localized content
-        activate(member.language)
-
-        # Generate email subject and body
-        subject, body = email_generator(*email_generator_args, **email_generator_kwargs)
-
-        if notification_type in [
-            NotificationType.PAYMENT_MONEY,
-            NotificationType.PAYMENT_CREDIT,
-            NotificationType.PAYMENT_TOKEN,
-        ]:
-            subject += _(" for %(user)s") % {"user": instance.member}
-
-        # Send the email to this organizer
-        my_send_mail(subject, body, member, instance)
 
 
 def send_support_ticket_email(instance: Any) -> None:
