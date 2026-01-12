@@ -8989,8 +8989,8 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
 msgstr ""
 
 msgid ""

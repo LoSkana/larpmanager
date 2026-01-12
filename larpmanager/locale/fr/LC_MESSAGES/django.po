@@ -8849,14 +8849,6 @@ msgstr ""
 "Cette page présente les badges d'adhésion. Vous pouvez les modifier, les "
 "attribuer, en créer de nouveaux"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Les utilisateurs peuvent s'inscrire à l'événement en accédant à <a "
-"href='%(signup_url)s'>cette adresse</a>"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -9932,6 +9924,14 @@ msgid ""
 msgstr ""
 "Une fois le transfert confirmé, demandez le bordereau (le reçu de "
 "confirmation) et téléchargez-le ci-dessous"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Les utilisateurs peuvent s'inscrire à l'événement en accédant à <a "
+"href='%(signup_url)s' target='_blank'>cette adresse</a>"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

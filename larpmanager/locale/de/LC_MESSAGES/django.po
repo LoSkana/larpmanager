@@ -8920,14 +8920,6 @@ msgstr ""
 "Diese Seite zeigt die Mitgliedsausweise. Sie können sie bearbeiten, "
 "zuweisen, neue erstellen"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Nutzer können sich über <a href='%(signup_url)s'>diese Adresse</a> für die "
-"Veranstaltung anmelden"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -10007,6 +9999,14 @@ msgid ""
 msgstr ""
 "Sobald die Überweisung bestätigt ist, fordern Sie den Beleg (die "
 "Bestätigungsquittung) an und laden ihn unten hoch"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Nutzer können sich über <a href='%(signup_url)s' target='_blank'>diese "
+"Adresse</a> für die Veranstaltung anmelden"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

@@ -8573,14 +8573,6 @@ msgstr ""
 "Denne siden viser medlemsmerker. Du kan redigere dem, tildele dem, opprette "
 "nye"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Brukere kan melde seg på arrangementet ved å gå til <a "
-"href='%(signup_url)s'>denne adressen</a>"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -9641,6 +9633,14 @@ msgid ""
 msgstr ""
 "Når overføringen er bekreftet, ber du om kvitteringen "
 "(bekreftelseskvitteringen) og laster den opp nedenfor"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Brukere kan melde seg på arrangementet ved å gå til <a "
+"href='%(signup_url)s'>denne adressen</a>"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

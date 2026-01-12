@@ -8729,14 +8729,6 @@ msgstr ""
 "Deze pagina toont lidmaatschapsbadges. Je kunt ze bewerken, toewijzen, "
 "nieuwe aanmaken"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Gebruikers kunnen zich aanmelden voor het evenement via <a "
-"href='%(signup_url)s'>dit adres</a>"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -9814,6 +9806,14 @@ msgid ""
 msgstr ""
 "Zodra de overboeking is bevestigd, vraag je het bewijs van bevestiging op en"
 " upload je het hieronder"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Gebruikers kunnen zich aanmelden voor het evenement via <a "
+"href='%(signup_url)s'>dit adres</a>"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

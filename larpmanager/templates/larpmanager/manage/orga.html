@@ -20,14 +20,15 @@
                 <p>Status: {{ run.get_development_display }}</p>
                 <p>Signups: {{ registration_status }}</p>
                 <p>
-                    <a href="{% url 'gallery' run.get_slug %}">Event link</a>
+                    <a href="{% url 'gallery' run.get_slug %}" target="_blank">Event link</a>
                 </p>
                 <p>
-                    <a href="{% url 'register' run.get_slug %}">Signup link</a>
+                    <a href="{% url 'register' run.get_slug %}" target="_blank">Signup link</a>
                 </p>
                 {% if features.registration_secret %}
                     <p>
-                        <a href="{% url 'register_exclusive' run.get_slug run.registration_secret %}">{% trans "Secret registration link" %}</a>
+                        <a href="{% url 'register_exclusive' run.get_slug run.registration_secret %}"
+                           target="_blank">{% trans "Secret registration link" %}</a>
                     </p>
                 {% endif %}
                 {% if event.parent %}

@@ -8713,14 +8713,6 @@ msgstr ""
 "Esta página muestra las insignias de afiliación. Puede editarlas, "
 "asignarlas, crear nuevas"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Los usuarios pueden inscribirse en el evento accediendo a <a "
-"href='%(signup_url)s'>esta dirección</a>"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -9795,6 +9787,14 @@ msgid ""
 msgstr ""
 "Una vez confirmada la transferencia, solicite el resguardo (el recibo de "
 "confirmación) y cárguelo a continuación"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Los usuarios pueden inscribirse en el evento accediendo a <a "
+"href='%(signup_url)s'>esta dirección</a>"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

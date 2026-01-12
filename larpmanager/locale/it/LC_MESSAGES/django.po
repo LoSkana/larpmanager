@@ -8746,14 +8746,6 @@ msgstr ""
 "Questa pagina mostra i badge dei soci. È possibile modificarli, assegnarli e"
 " crearne di nuovi"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Gli utenti possono iscriversi all'evento accedendo a <a "
-"href='%(signup_url)s'>questo indirizzo</a>"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -9830,6 +9822,14 @@ msgid ""
 msgstr ""
 "Una volta confermato il bonifico, richiedi la ricevuta di conferma e "
 "caricala qui sotto"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Gli utenti possono iscriversi all'evento accedendo a <a "
+"href='%(signup_url)s'>questo indirizzo</a>"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

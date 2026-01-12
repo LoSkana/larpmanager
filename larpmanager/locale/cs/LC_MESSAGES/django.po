@@ -8486,14 +8486,6 @@ msgstr ""
 "Na této stránce jsou zobrazeny členské odznaky. Můžete je upravovat, "
 "přiřazovat a vytvářet nové"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Uživatelé se mohou na událost přihlásit pomocí <a href='%(signup_url)s'>této"
-" adresy</a>"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -9529,6 +9521,14 @@ msgid ""
 "confirmation) and upload it below"
 msgstr ""
 "Po potvrzení převodu si vyžádejte potvrzení o převodu a nahrajte jej níže"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Uživatelé se mohou na událost přihlásit pomocí <a href='%(signup_url)s' "
+"target='_blank'>této adresy</a>"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "
