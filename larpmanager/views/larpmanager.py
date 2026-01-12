@@ -48,6 +48,7 @@ from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, 
 from larpmanager.forms.miscellanea import SendMailForm
 from larpmanager.forms.utils import RedirectForm
 from larpmanager.mail.base import join_email
+from larpmanager.mail.digest import send_daily_organizer_summaries
 from larpmanager.mail.remind import remember_membership, remember_membership_fee, remember_pay, remember_profile
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.association import Association, AssociationPlan, AssociationTextType
@@ -450,6 +451,31 @@ def debug_mail(request: HttpRequest) -> Any:
         remember_membership(registration)
         remember_membership_fee(registration)
         remember_pay(registration)
+
+    return redirect("home")
+
+
+def debug_send_digests(request: HttpRequest) -> Any:
+    """Send daily organizer digest summaries for debugging.
+
+    Only available in development and test environments.
+    Processes all queued notifications and sends digest summary emails.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Redirect to home page
+
+    Raises:
+        Http404: If not in dev or test environment
+
+    """
+    if request.enviro not in ["dev", "test"]:
+        raise Http404
+
+    # Send all queued digest summaries
+    send_daily_organizer_summaries()
 
     return redirect("home")
 

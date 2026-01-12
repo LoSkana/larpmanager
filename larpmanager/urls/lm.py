@@ -169,6 +169,11 @@ urlpatterns = [
         name="debug_mail",
     ),
     path(
+        "debug/send_digests/",
+        views_lm.debug_send_digests,
+        name="debug_send_digests",
+    ),
+    path(
         "debug/",
         views_lm.debug_slug,
         name="debug_slug",

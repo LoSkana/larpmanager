@@ -71,6 +71,7 @@ def test_orga_digest_notifications_queued(pw_page: Any) -> None:
     # Enable digest mode
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
+    page.locator("#id_mail_orga_digest").wait_for(state="visible")
     page.locator("#id_mail_orga_digest").check()
     submit_confirm(page)
 
@@ -111,6 +112,7 @@ def test_orga_digest_daily_summary(pw_page: Any) -> None:
     # Enable digest mode
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
+    page.locator("#id_mail_orga_digest").wait_for(state="visible")
     page.locator("#id_mail_orga_digest").check()
     submit_confirm(page)
 
@@ -159,6 +161,7 @@ def test_orga_digest_multiple_notification_types(pw_page: Any) -> None:
     # Enable digest mode
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
+    page.locator("#id_mail_orga_digest").wait_for(state="visible")
     page.locator("#id_mail_orga_digest").check()
     submit_confirm(page)
 
@@ -231,6 +234,7 @@ def test_orga_digest_cancellation_queued(pw_page: Any) -> None:
     # Enable digest mode
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
+    page.locator("#id_mail_orga_digest").wait_for(state="visible")
     page.locator("#id_mail_orga_digest").check()
     submit_confirm(page)
 
@@ -332,13 +336,13 @@ def prepare_event_with_payments(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
     page.locator("#id_mail_payment").check()
-    page.get_by_role("link", name="Payments ").click()
+    page.locator('a[tog="sec_payments"]').click()
     page.locator("#id_payment_require_receipt").check()
     submit_confirm(page)
 
     # Configure payment method
     go_to(page, live_server, "/manage/methods")
-    page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
+    page.get_by_role("checkbox", name="Wire").check()
     page.locator("#id_wire_descr").fill("test wire")
     page.locator("#id_wire_fee").fill("0")
     page.locator("#id_wire_payee").fill("test beneficiary")
@@ -362,3 +366,194 @@ def register_user(page: Any, live_server: Any) -> None:
     if "Authorisation" in page.content():
         page.get_by_role("checkbox", name="Authorisation").check()
         page.get_by_role("button", name="Submit").click()
+
+
+def test_orga_digest_all_notification_types_immediate(pw_page: Any) -> None:
+    """Test all notification types generate immediate emails when digest mode is OFF"""
+    page, live_server, _ = pw_page
+
+    login_orga(page, live_server)
+    prepare_event_with_payments(page, live_server)
+
+    # Ensure digest mode is OFF
+    go_to(page, live_server, "/manage/config")
+    page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
+    page.locator("#id_mail_orga_digest").wait_for(state="visible")
+    if page.locator("#id_mail_orga_digest").is_checked():
+        page.locator("#id_mail_orga_digest").uncheck()
+    submit_confirm(page)
+
+    # Clear any existing emails
+    go_to(page, live_server, "/debug/mail")
+
+    # Test 1: Registration created
+    logout(page)
+    login_user(page, live_server)
+    register_user(page, live_server)
+
+    logout(page)
+    login_orga(page, live_server)
+    go_to(page, live_server, "/debug/mail")
+    expect(page.locator("body")).to_contain_text("Registration to")
+
+    # Clear emails
+    go_to(page, live_server, "/debug/mail")
+
+    # Test 2: Registration updated
+    logout(page)
+    login_user(page, live_server)
+    go_to(page, live_server, "/test/register")
+    page.get_by_role("button", name="Continue").click()
+    submit_confirm(page)
+
+    logout(page)
+    login_orga(page, live_server)
+    go_to(page, live_server, "/debug/mail")
+    expect(page.locator("body")).to_contain_text("Registration to")
+
+    # Clear emails
+    go_to(page, live_server, "/debug/mail")
+
+    # Test 3: Payment (invoice approval)
+    logout(page)
+    login_user(page, live_server)
+    go_to(page, live_server, "/test/register")
+    page.get_by_role("link", name=re.compile(r"proceed with payment")).click()
+    page.get_by_role("cell", name="Wire", exact=True).click()
+    submit(page)
+    load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+    submit(page)
+
+    logout(page)
+    login_orga(page, live_server)
+    go_to(page, live_server, "/debug/mail")
+    # Should see invoice approval notification
+    expect(page.locator("body")).to_contain_text("Invoice")
+
+    # Clear emails
+    go_to(page, live_server, "/debug/mail")
+
+    # Test 4: Registration cancelled
+    logout(page)
+    login_user(page, live_server)
+    go_to(page, live_server, "/test/unregister")
+    page.get_by_role("button", name="Confirm").click()
+
+    logout(page)
+    login_orga(page, live_server)
+    go_to(page, live_server, "/debug/mail")
+    expect(page.locator("body")).to_contain_text("Cancellation")
+
+
+def test_orga_digest_all_notification_types_queued_and_sent(pw_page: Any) -> None:
+    """Test all notification types are queued and sent via digest when digest mode is ON"""
+    page, live_server, _ = pw_page
+
+    login_orga(page, live_server)
+    prepare_event_with_payments(page, live_server)
+
+    # Enable digest mode
+    go_to(page, live_server, "/manage/config")
+    page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
+    page.locator("#id_mail_orga_digest").wait_for(state="visible")
+    page.locator("#id_mail_orga_digest").check()
+    submit_confirm(page)
+
+    # Clear any existing emails and notifications
+    go_to(page, live_server, "/debug/mail")
+
+    # Test 1: Registration created
+    logout(page)
+    login_user(page, live_server)
+    register_user(page, live_server)
+
+    # Verify NO immediate email
+    logout(page)
+    login_orga(page, live_server)
+    go_to(page, live_server, "/debug/mail")
+    expect(page.locator("body")).not_to_contain_text("Registration to")
+
+    # Verify notification is queued
+    go_to(page, live_server, "/admin/larpmanager/organizernotificationqueue/")
+    expect(page.locator("body")).to_contain_text("registration_new")
+
+    # Test 2: Registration updated
+    logout(page)
+    login_user(page, live_server)
+    go_to(page, live_server, "/test/register")
+    page.get_by_role("button", name="Continue").click()
+    submit_confirm(page)
+
+    # Verify NO immediate email
+    logout(page)
+    login_orga(page, live_server)
+    go_to(page, live_server, "/debug/mail")
+    expect(page.locator("body")).not_to_contain_text("Registration updated")
+
+    # Verify notification is queued
+    go_to(page, live_server, "/admin/larpmanager/organizernotificationqueue/")
+    expect(page.locator("body")).to_contain_text("registration_update")
+
+    # Test 3: Payment (invoice approval)
+    logout(page)
+    login_user(page, live_server)
+    go_to(page, live_server, "/test/register")
+    page.get_by_role("link", name=re.compile(r"proceed with payment")).click()
+    page.get_by_role("cell", name="Wire", exact=True).click()
+    submit(page)
+    load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+    submit(page)
+
+    # Verify NO immediate email
+    logout(page)
+    login_orga(page, live_server)
+    go_to(page, live_server, "/debug/mail")
+    expect(page.locator("body")).not_to_contain_text("Invoice")
+
+    # Verify notification is queued
+    go_to(page, live_server, "/admin/larpmanager/organizernotificationqueue/")
+    expect(page.locator("body")).to_contain_text("invoice_approval")
+
+    # Test 4: Registration cancelled
+    logout(page)
+    login_user(page, live_server)
+    go_to(page, live_server, "/test/unregister")
+    page.get_by_role("button", name="Confirm").click()
+
+    # Verify NO immediate email
+    logout(page)
+    login_orga(page, live_server)
+    go_to(page, live_server, "/debug/mail")
+    expect(page.locator("body")).not_to_contain_text("Cancellation")
+
+    # Verify notification is queued
+    go_to(page, live_server, "/admin/larpmanager/organizernotificationqueue/")
+    expect(page.locator("body")).to_contain_text("registration_cancel")
+
+    # Verify all notifications are NOT sent yet
+    expect(page.locator("tbody tr")).to_have_count(4)  # 4 notifications total
+
+    # Clear existing emails before triggering digest
+    go_to(page, live_server, "/debug/mail")
+
+    # Trigger digest summary generation (simulates automate command)
+    go_to(page, live_server, "/debug/send_digests/")
+
+    # Verify digest email was sent
+    go_to(page, live_server, "/debug/mail")
+    expect(page.locator("body")).to_contain_text("Daily Summary")
+    expect(page.locator("body")).to_contain_text("Test Event")
+
+    # Verify digest contains all notification types
+    expect(page.locator("body")).to_contain_text("New Registrations")
+    expect(page.locator("body")).to_contain_text("Updated Registrations")
+    expect(page.locator("body")).to_contain_text("Cancelled Registrations")
+    expect(page.locator("body")).to_contain_text("Invoices Awaiting Approval")
+
+    # Verify all notifications are marked as sent
+    go_to(page, live_server, "/admin/larpmanager/organizernotificationqueue/")
+    # All checkboxes should be checked now (sent=True)
+    # The admin interface shows a checkmark when sent=False, and unchecked when sent=True
+    # So after sending, we should NOT see the checkmark icon for "sent" column
