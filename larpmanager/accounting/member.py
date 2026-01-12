@@ -190,17 +190,17 @@ def _init_choices(member: Member) -> dict[int, dict[int, dict[str, RegistrationQ
 
     """
     choices = {}
-    choice_queryset = RegistrationChoice.objects.filter(reg__member_id=member.id)
+    choice_queryset = RegistrationChoice.objects.filter(registration__member_id=member.id)
     choice_queryset = choice_queryset.select_related("option", "question").order_by("question__order")
     for registration_choice in choice_queryset:
-        if registration_choice.reg_id not in choices:
-            choices[registration_choice.reg_id] = {}
-        if registration_choice.question_id not in choices[registration_choice.reg_id]:
-            choices[registration_choice.reg_id][registration_choice.question_id] = {
+        if registration_choice.registration_id not in choices:
+            choices[registration_choice.registration_id] = {}
+        if registration_choice.question_id not in choices[registration_choice.registration_id]:
+            choices[registration_choice.registration_id][registration_choice.question_id] = {
                 "question": registration_choice.question,
                 "selected_options": [],
             }
-        choices[registration_choice.reg_id][registration_choice.question_id]["selected_options"].append(
+        choices[registration_choice.registration_id][registration_choice.question_id]["selected_options"].append(
             registration_choice.option,
         )
     return choices
@@ -214,7 +214,7 @@ def _info_token_credit(context: dict, member: Member) -> None:
         member: Member instance to check balances for
 
     Side effects:
-        Updates context with acc_tokens and acc_credits counts
+        Updates context with accounting_tokens and accounting_credits counts
 
     """
     # check if it had any token
@@ -223,7 +223,7 @@ def _info_token_credit(context: dict, member: Member) -> None:
         oth=OtherChoices.TOKEN,
         association_id=context["association_id"],
     )
-    context["acc_tokens"] = token_queryset.count()
+    context["accounting_tokens"] = token_queryset.count()
 
     # check if it had any credits
     expense_queryset = AccountingItemExpense.objects.filter(
@@ -236,7 +236,7 @@ def _info_token_credit(context: dict, member: Member) -> None:
         oth=OtherChoices.CREDIT,
         association_id=context["association_id"],
     )
-    context["acc_credits"] = expense_queryset.count() + credit_queryset.count()
+    context["accounting_credits"] = expense_queryset.count() + credit_queryset.count()
 
 
 def _info_collections(context: dict, member: Member) -> None:

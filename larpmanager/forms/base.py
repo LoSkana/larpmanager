@@ -508,7 +508,7 @@ class BaseRegistrationForm(BaseModelFormRun):
     choice_class = RegistrationChoice
     option_class = RegistrationOption
     question_class = RegistrationQuestion
-    instance_key = "reg_id"
+    instance_key = "registration_id"
 
     class Meta:
         abstract = True
@@ -521,7 +521,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         # Store form sections organized by category
         self.sections = {}
 
-    def _init_reg_question(self, instance: Any | None, event: Event) -> None:
+    def _init_registration_question(self, instance: Any | None, event: Event) -> None:
         """Initialize registration questions and answers from existing instance.
 
         Loads existing answers and choices from the database for a given registration
@@ -794,7 +794,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         """
         # Get the event from the current run context
         event = self.params["run"].event
-        self._init_reg_question(self.instance, event)
+        self._init_registration_question(self.instance, event)
 
         # Initialize container for field keys that will be created
         field_keys = []
@@ -1219,7 +1219,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         field = self.fields.pop(field_name)
         self.fields[field_name] = field
 
-    def save_reg_questions(self, instance: Any, *, is_organizer: Any = True) -> None:
+    def save_registration_questions(self, instance: Any, *, is_organizer: Any = True) -> None:
         """Save registration question answers to database.
 
         Args:
@@ -1237,13 +1237,13 @@ class BaseRegistrationForm(BaseModelFormRun):
             oid = self.cleaned_data[key]
 
             if question.typ == BaseQuestionType.MULTIPLE:
-                self.save_reg_multiple(instance, oid, question)
+                self.save_registration_multiple(instance, oid, question)
             elif question.typ == BaseQuestionType.SINGLE:
-                self.save_reg_single(instance, oid, question)
+                self.save_registration_single(instance, oid, question)
             elif question.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
-                self.save_reg_text(instance, oid, question)
+                self.save_registration_text(instance, oid, question)
 
-    def save_reg_text(
+    def save_registration_text(
         self,
         instance: Any,
         value: str | None,
@@ -1282,7 +1282,7 @@ class BaseRegistrationForm(BaseModelFormRun):
             # Only create new answers if there's actually content
             self.answer_class.objects.create(**{"question": question, self.instance_key: instance.id, "text": value})
 
-    def save_reg_single(self, instance: Any, option_uuid: str | None, question: Any) -> None:
+    def save_registration_single(self, instance: Any, option_uuid: str | None, question: Any) -> None:
         """Save or update a single-choice question response.
 
         Args:
@@ -1313,7 +1313,7 @@ class BaseRegistrationForm(BaseModelFormRun):
                 **{"question": question, self.instance_key: instance.id, "option_id": option.id}
             )
 
-    def save_reg_multiple(
+    def save_registration_multiple(
         self,
         instance: Any,
         option_uuids: list[str] | None,

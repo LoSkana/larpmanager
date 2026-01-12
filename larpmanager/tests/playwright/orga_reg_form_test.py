@@ -34,7 +34,7 @@ from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normali
 pytestmark = pytest.mark.e2e
 
 
-def test_orga_reg_form(pw_page: Any) -> None:
+def test_orga_registration_form(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)

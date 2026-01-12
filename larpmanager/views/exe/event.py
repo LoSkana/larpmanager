@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
-from larpmanager.cache.registration import get_reg_counts
+from larpmanager.cache.registration import get_registration_counts
 from larpmanager.forms.event import (
     ExeTemplateForm,
     ExeTemplateRolesForm,
@@ -69,7 +69,7 @@ def exe_events(request: HttpRequest) -> HttpResponse:
     # Add registration status and counts to each run
     for run in context["list"]:
         run.registration_status = _get_registration_status(run)
-        run.counts = get_reg_counts(run)
+        run.counts = get_registration_counts(run)
 
     return render(request, "larpmanager/exe/events.html", context)
 

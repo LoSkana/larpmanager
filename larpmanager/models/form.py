@@ -651,7 +651,7 @@ class RegistrationQuestion(UuidMixin, BaseModel):
             allowed_faction_ids = [faction_id for faction_id in self.factions_map if faction_id is not None]
             if len(allowed_faction_ids) > 0:
                 registration_faction_ids = []
-                for character_relation in RegistrationCharacterRel.objects.filter(reg=registration):
+                for character_relation in RegistrationCharacterRel.objects.filter(registration=registration):
                     character_factions = character_relation.character.factions_list.values_list("id", flat=True)
                     registration_faction_ids.extend(character_factions)
 
@@ -770,17 +770,17 @@ class RegistrationChoice(BaseModel):
 
     option = models.ForeignKey(RegistrationOption, on_delete=models.CASCADE, related_name="choices")
 
-    reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="choices")
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="choices")
 
     def __str__(self) -> str:
         """Return string representation showing registration, question and option."""
         # noinspection PyUnresolvedReferences
-        return f"{self.reg} ({self.question.name}) {self.option.name}"
+        return f"{self.registration} ({self.question.name}) {self.option.name}"
 
     class Meta:
         indexes: ClassVar[list] = [
-            models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="rc_reg_q_act"),
-            models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="rc_reg_act"),
+            models.Index(fields=["registration", "question"], condition=Q(deleted__isnull=True), name="rc_reg_q_act"),
+            models.Index(fields=["registration"], condition=Q(deleted__isnull=True), name="rc_reg_act"),
         ]
 
 
@@ -791,17 +791,17 @@ class RegistrationAnswer(BaseModel):
 
     text = models.TextField(max_length=5000)
 
-    reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="answers")
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="answers")
 
     def __str__(self) -> str:
         """Return string representation with registration, question name, and truncated text."""
         # noinspection PyUnresolvedReferences
-        return f"{self.reg} ({self.question.name}) {self.text[:100]}"
+        return f"{self.registration} ({self.question.name}) {self.text[:100]}"
 
     class Meta:
         indexes: ClassVar[list] = [
-            models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="ra_reg_q_act"),
-            models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="ra_reg_act"),
+            models.Index(fields=["registration", "question"], condition=Q(deleted__isnull=True), name="ra_reg_q_act"),
+            models.Index(fields=["registration"], condition=Q(deleted__isnull=True), name="ra_reg_act"),
         ]
 
 

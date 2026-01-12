@@ -94,15 +94,15 @@ def get_event_filter_characters(context: dict, character_filters: Any) -> None: 
 
     character_registrations = {}
     for relation in RegistrationCharacterRel.objects.filter(
-        reg__run=context["run"],
-        reg__cancellation_date__isnull=True,
-    ).select_related("reg", "reg__member"):
-        character_registrations[relation.character_id] = relation.reg
+        registration__run=context["run"],
+        registration__cancellation_date__isnull=True,
+    ).select_related("registration", "registration__member"):
+        character_registrations[relation.character_id] = relation.registration
 
     characters_by_id = {}
     for character in context["event"].get_elements(Character).filter(hide=False):
         if character.id in character_registrations:
-            character.reg = character_registrations[character.id]
+            character.registration = character_registrations[character.id]
             character.member = character_registrations[character.id].member
         characters_by_id[character.id] = character
 
@@ -579,7 +579,12 @@ def assign_previous_campaign_character(registration: Any) -> None:
         return
 
     # Skip if member already has a character assigned to this run
-    if RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=registration.run).count() > 0:
+    if (
+        RegistrationCharacterRel.objects.filter(
+            registration__member=registration.member, registration__run=registration.run
+        ).count()
+        > 0
+    ):
         return
 
     # Find the most recent run from the same campaign series
@@ -596,8 +601,8 @@ def assign_previous_campaign_character(registration: Any) -> None:
 
     # Get character relationship from previous run and create new one
     previous_character_relation = RegistrationCharacterRel.objects.filter(
-        reg__member=registration.member,
-        reg__run=previous_campaign_run,
+        registration__member=registration.member,
+        registration__run=previous_campaign_run,
     ).first()
 
     # Only proceed if previous character exists and is active
@@ -605,7 +610,7 @@ def assign_previous_campaign_character(registration: Any) -> None:
         return
 
     new_character_relation = RegistrationCharacterRel.objects.create(
-        reg=registration,
+        registration=registration,
         character=previous_character_relation.character,
     )
 

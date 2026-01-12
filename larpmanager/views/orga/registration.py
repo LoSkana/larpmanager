@@ -36,16 +36,16 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from slugify import slugify
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.accounting.registration import (
     cancel_reg,
     check_registration_background,
     get_accounting_refund,
-    get_reg_payments,
+    get_registration_payments,
 )
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_association_config, get_event_config
-from larpmanager.cache.text_fields import get_cache_reg_field
+from larpmanager.cache.text_fields import get_cache_registration_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
     RegistrationCharacterRelForm,
@@ -187,7 +187,9 @@ def _orga_registrations_tickets(registration: Any, context: dict) -> None:
         registration.ticket_show = ticket.name
 
         # Check for provisional status first, then map ticket tier to type
-        if is_reg_provisional(registration, event=context["event"], features=context["features"], context=context):
+        if is_registration_provisional(
+            registration, event=context["event"], features=context["features"], context=context
+        ):
             registration_type = ("0", _("Provisional"))
         elif ticket.tier in ticket_types:
             registration_type = ticket_types[ticket.tier]
@@ -350,7 +352,7 @@ def registrations_popup(request: HttpRequest, context: dict) -> Any:
             pk=question_id,
             event=context["event"].get_class_parent(RegistrationQuestion),
         )
-        answer = RegistrationAnswer.objects.get(reg=registration, question=question)
+        answer = RegistrationAnswer.objects.get(registration=registration, question=question)
         html_text = f"<h2>{registration} - {question.name}</h2>" + answer.text
         return JsonResponse({"k": 1, "v": html_text})
     except ObjectDoesNotExist:
@@ -464,7 +466,7 @@ def _orga_registrations_text_fields(context: dict) -> None:
         str(question_id) for question_id in questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True)
     ]
 
-    cached_registration_fields = get_cache_reg_field(context["run"])
+    cached_registration_fields = get_cache_registration_field(context["run"])
     for registration in context["registration_list"]:
         if registration.id not in cached_registration_fields:
             continue
@@ -664,21 +666,23 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
         for opt in RegistrationOption.objects.filter(question=q):
             cho[opt.id] = opt.get_form_text()
 
-        for el in RegistrationChoice.objects.filter(question=q, reg__run=context["run"]).select_related("reg"):
-            reg_uuid = str(el.reg.uuid)
+        for el in RegistrationChoice.objects.filter(question=q, registration__run=context["run"]).select_related(
+            "registration"
+        ):
+            reg_uuid = str(el.registration.uuid)
             if reg_uuid not in res:
                 res[reg_uuid] = []
             res[reg_uuid].append(cho[el.option_id])
 
     elif q.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH]:
-        que = RegistrationAnswer.objects.filter(question=q, reg__run=context["run"])
+        que = RegistrationAnswer.objects.filter(question=q, registration__run=context["run"])
         que = que.annotate(short_text=Substr("text", 1, max_length))
-        que = que.values("reg_id", "short_text", "reg__uuid")
+        que = que.values("registration_id", "short_text", "registration__uuid")
         for el in que:
             answer = el["short_text"]
             if len(answer) == max_length:
-                popup.append(el["reg__uuid"])
-            res[el["reg__uuid"]] = answer
+                popup.append(el["registration__uuid"])
+            res[el["registration__uuid"]] = answer
 
     return JsonResponse({"res": res, "popup": popup, "q_uuid": str(q.uuid)})
 
@@ -732,14 +736,16 @@ def orga_registration_form_email(request: HttpRequest, event_slug: str) -> JsonR
         cho[opt.id] = opt.name
 
     # Query all choices for this question from active registrations
-    que = RegistrationChoice.objects.filter(question=q, reg__run=context["run"], reg__cancellation_date__isnull=True)
+    que = RegistrationChoice.objects.filter(
+        question=q, registration__run=context["run"], registration__cancellation_date__isnull=True
+    )
 
     # Group emails and names by selected option
-    for el in que.select_related("reg", "reg__member"):
+    for el in que.select_related("registration", "registration__member"):
         if el.option_id not in res:
             res[el.option_id] = {"emails": [], "names": []}
-        res[el.option_id]["emails"].append(el.reg.member.email)
-        res[el.option_id]["names"].append(el.reg.member.display_member())
+        res[el.option_id]["emails"].append(el.registration.member.email)
+        res[el.option_id]["names"].append(el.registration.member.display_member())
 
     # Convert option IDs to option names in final result
     n_res = {}
@@ -798,20 +804,20 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
 
         # Process valid form submission
         if form.is_valid():
-            reg = form.save()
+            registration = form.save()
 
             # Handle registration deletion if requested
             if "delete" in request.POST and request.POST["delete"] == "1":
-                cancel_reg(reg)
+                cancel_reg(registration)
                 messages.success(request, _("Registration cancelled"))
                 return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
             # Save registration-specific questions and answers
-            form.save_reg_questions(reg)
+            form.save_registration_questions(registration)
 
             # Process quest builder data if feature is enabled
             if "questbuilder" in context["features"]:
-                _save_questbuilder(context, form, reg)
+                _save_questbuilder(context, form, registration)
 
             # Redirect based on user choice: continue adding or return to list
             if context["continue_add"]:
@@ -834,19 +840,19 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
     return render(request, "larpmanager/orga/edit.html", context)
 
 
-def _save_questbuilder(context: dict, form: object, reg: Any) -> None:
+def _save_questbuilder(context: dict, form: object, registration: Any) -> None:
     """Save quest type assignments from questbuilder form.
 
     Args:
         context: Context dictionary containing event and run data
         form: Form containing quest type selections
-        reg: Registration object for the member
+        registration: Registration object for the member
 
     """
     for qt in QuestType.objects.filter(event=context["event"]):
         qt_uuid = f"qt_{qt.uuid}"
         trait_uuid = form.cleaned_data[qt_uuid]
-        base_kwargs = {"run": context["run"], "member": reg.member, "typ": qt.number}
+        base_kwargs = {"run": context["run"], "member": registration.member, "typ": qt.number}
 
         if trait_uuid and trait_uuid != "0":
             ait = AssignmentTrait.objects.filter(**base_kwargs).first()
@@ -880,8 +886,8 @@ def orga_registrations_customization(request: HttpRequest, event_slug: str, char
     character = get_element_event(context, character_uuid, Character)
     rcr = RegistrationCharacterRel.objects.get(
         character_id=character.id,
-        reg__run_id=context["run"].id,
-        reg__cancellation_date__isnull=True,
+        registration__run_id=context["run"].id,
+        registration__cancellation_date__isnull=True,
     )
 
     if request.method == "POST":
@@ -904,10 +910,10 @@ def orga_registrations_reload(request: HttpRequest, event_slug: str) -> HttpResp
     context = check_event_context(request, event_slug, "orga_registrations")
 
     # Collect all registration IDs for the current run
-    reg_ids = [str(reg.id) for reg in Registration.objects.filter(run=context["run"])]
+    registration_ids = [str(registration.id) for registration in Registration.objects.filter(run=context["run"])]
 
     # Trigger background registration checks
-    check_registration_background(reg_ids)
+    check_registration_background(registration_ids)
     return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
 
@@ -1010,29 +1016,29 @@ def orga_cancellations(request: HttpRequest, event_slug: str) -> Any:
         members_map[r.member_id] = r.id
 
     payments = {}
-    for el in AccountingItemPayment.objects.filter(member_id__in=members_map.keys(), reg__run=context["run"]):
-        reg_id = members_map[el.member_id]
-        if reg_id not in payments:
-            payments[reg_id] = []
-        payments[reg_id].append(el)
+    for el in AccountingItemPayment.objects.filter(member_id__in=members_map.keys(), registration__run=context["run"]):
+        registration_id = members_map[el.member_id]
+        if registration_id not in payments:
+            payments[registration_id] = []
+        payments[registration_id].append(el)
 
     refunds = {}
     for el in AccountingItemOther.objects.filter(run_id=context["run"].id, cancellation=True):
-        reg_id = members_map[el.member_id]
-        if reg_id not in refunds:
-            refunds[reg_id] = []
-        refunds[reg_id].append(el)
+        registration_id = members_map[el.member_id]
+        if registration_id not in refunds:
+            refunds[registration_id] = []
+        refunds[registration_id].append(el)
 
     # Check if payed, check if already approved reimburse
     for r in context["list"]:
-        acc_payments = None
+        accounting_payments = None
         if r.id in payments:
-            acc_payments = payments[r.id]
-        get_reg_payments(r, acc_payments)
+            accounting_payments = payments[r.id]
+        get_registration_payments(r, accounting_payments)
 
-        r.acc_refunds = None
+        r.accounting_refunds = None
         if r.id in refunds:
-            r.acc_refunds = refunds[r.id]
+            r.accounting_refunds = refunds[r.id]
         get_accounting_refund(r)
 
         r.days = get_time_diff(context["run"].end, r.cancellation_date.date())
@@ -1104,7 +1110,7 @@ def orga_cancellation_refund(request: HttpRequest, event_slug: str, registration
         return redirect("orga_cancellations", event_slug=context["run"].get_slug())
 
     # Get payment history for display in template
-    get_reg_payments(context["registration"])
+    get_registration_payments(context["registration"])
 
     # Render the refund form template
     return render(request, "larpmanager/orga/accounting/cancellation_refund.html", context)

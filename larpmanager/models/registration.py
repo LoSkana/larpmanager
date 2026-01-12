@@ -422,7 +422,7 @@ class Registration(UuidMixin, BaseModel):
 class RegistrationCharacterRel(BaseModel):
     """Represents RegistrationCharacterRel model."""
 
-    reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="rcrs")
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="rcrs")
 
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="rcrs")
 

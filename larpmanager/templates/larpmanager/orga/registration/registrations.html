@@ -146,30 +146,32 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for reg in dc.list %}
-                            <tr id="{{ reg.uuid }}">
+                        {% for registration in dc.list %}
+                            <tr id="{{ registration.uuid }}">
                                 <td>
-                                    <a href="{% url 'orga_registrations_edit' run.get_slug reg.uuid %}"
+                                    <a href="{% url 'orga_registrations_edit' run.get_slug registration.uuid %}"
                                        qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                                 </td>
                                 <td>
-                                    {{ reg.member | title }}
-                                    <a href="#" class="post_popup_member" pop="{{ reg.member.uuid }}"><i class="fas fa-eye"></i></a>
+                                    {{ registration.member | title }}
+                                    <a href="#"
+                                       class="post_popup_member"
+                                       pop="{{ registration.member.uuid }}"><i class="fas fa-eye"></i></a>
                                 </td>
-                                {% if registration_reg_que_age %}<td class="age">{{ reg.age }}</td>{% endif %}
-                                <td class="email">{{ reg.member.email }}</td>
+                                {% if registration_reg_que_age %}<td class="age">{{ registration.age }}</td>{% endif %}
+                                <td class="email">{{ registration.member.email }}</td>
                                 {% if features.gift %}
                                     <td class="gift">
-                                        {% if reg.redeem_code %}<i class="fa-solid fa-gift"></i>{% endif %}
+                                        {% if registration.redeem_code %}<i class="fa-solid fa-gift"></i>{% endif %}
                                     </td>
                                 {% endif %}
                                 {% if features.membership %}
-                                    <td class="membership">{{ reg.member.language }}</td>
-                                    <td class="membership">{{ reg.membership }}</td>
+                                    <td class="membership">{{ registration.member.language }}</td>
+                                    <td class="membership">{{ registration.membership }}</td>
                                 {% endif %}
                                 {% if features.character %}
                                     <td>
-                                        {% for el in reg.chars %}
+                                        {% for el in registration.chars %}
                                             {% include "elements/comma.html" %}
                                             <a href="{% url 'orga_characters_edit' run.get_slug el.uuid %}">#{{ el.number }} {{ el.name }}</a>
                                             {% if features.custom_character %}
@@ -180,7 +182,7 @@
                                 {% endif %}
                                 {% if features.faction %}
                                     <td class="factions">
-                                        {% for fnum in reg.factions %}
+                                        {% for fnum in registration.factions %}
                                             {% with factions|get:fnum as ft %}
                                                 {% if ft.id %}
                                                     {% include "elements/comma.html" %}
@@ -192,23 +194,26 @@
                                 {% endif %}
                                 {% if features.questbuilder %}
                                     {% for key, qt in quest_types.items %}
-                                        <td class="qt_{{ qt.uuid }}"  tooltip="{{ qt.name }}">{{ reg.traits | get:qt.uuid }}</td>
+                                        <td class="qt_{{ qt.uuid }}"  tooltip="{{ qt.name }}">{{ registration.traits | get:qt.uuid }}</td>
                                     {% endfor %}
                                 {% endif %}
                                 {% if features.custom_character %}
                                     {% for nm in custom_info %}
                                         <td class="custom" tooltip="{{ nm }}">
-                                            {% if reg.custom|get:nm %}
+                                            {% if registration.custom|get:nm %}
                                                 {% if nm != "profile" %}
-                                                    {{ reg.custom | get:nm | safe | clean_tags | truncatechars:50 }}
+                                                    {{ registration.custom | get:nm | safe | clean_tags | truncatechars:50 }}
                                                 {% else %}
-                                                    {{ reg.custom | get:nm | safe }}
+                                                    {{ registration.custom | get:nm | safe }}
                                                 {% endif %}
-                                                {% if reg.custom|get:nm|length > 50 %}
-                                                    <a href="#" class="show_popup" pop="{{ reg.uuid }}" fie="{{ nm }}"><i class="fas fa-eye"></i></a>
+                                                {% if registration.custom|get:nm|length > 50 %}
+                                                    <a href="#"
+                                                       class="show_popup"
+                                                       pop="{{ registration.uuid }}"
+                                                       fie="{{ nm }}"><i class="fas fa-eye"></i></a>
                                                     <span class="popup_text {{ nm }}">
-                                                        <h2>{{ reg.member }} - {{ nm | capfirst }}</h2>
-                                                    {{ reg.custom | get:nm | safe }}</span>
+                                                        <h2>{{ registration.member }} - {{ nm | capfirst }}</h2>
+                                                    {{ registration.custom | get:nm | safe }}</span>
                                                 {% endif %}
                                             {% endif %}
                                         </td>
@@ -218,28 +223,28 @@
                                     {% if que.typ == 'e' %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
                                             {% with ed_id=key|concat:'_red' %}
-                                                {% lookup reg ed_id as value %}
+                                                {% lookup registration ed_id as value %}
                                                 {{ value | safe }}
                                             {% endwith %}
                                         </td>
                                     {% elif que.typ == 'additional_tickets' %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
-                                            {% if reg.additionals %}{{ reg.additionals }}{% endif %}
+                                            {% if registration.additionals %}{{ registration.additionals }}{% endif %}
                                         </td>
                                     {% elif que.typ == 'pay_what_you_want' %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
-                                            {% if reg.pay_what %}{{ reg.pay_what }}{% endif %}
+                                            {% if registration.pay_what %}{{ registration.pay_what }}{% endif %}
                                         </td>
                                     {% elif que.typ == 'reg_quotas' %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
-                                            {% if reg.quotas %}{{ reg.quotas }}{% endif %}
+                                            {% if registration.quotas %}{{ registration.quotas }}{% endif %}
                                         </td>
                                     {% elif que.typ == 'reg_surcharges' %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
-                                            {% if reg.surcharge %}{{ reg.surcharge }}{% endif %}
+                                            {% if registration.surcharge %}{{ registration.surcharge }}{% endif %}
                                         </td>
                                     {% elif que.typ == 'ticket' %}
-                                        <td class="question q_{{ key }}" tooltip="{{ que.name }}">{{ reg.ticket_show }}</td>
+                                        <td class="question q_{{ key }}" tooltip="{{ que.name }}">{{ registration.ticket_show }}</td>
                                     {% else %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
                                             <!-- filled later -->
@@ -248,17 +253,17 @@
                                 {% endfor %}
                                 {% if features.discount %}
                                     <td class="disc">
-                                        {% for d in reg.discounts %}
+                                        {% for d in registration.discounts %}
                                             {% include "elements/comma.html" %}
                                             {{ d }}
                                         {% endfor %}
-                                        <a href="{% url 'orga_registration_discounts' run.get_slug reg.uuid %}">{% trans "Manage" %}</a>
+                                        <a href="{% url 'orga_registration_discounts' run.get_slug registration.uuid %}">{% trans "Manage" %}</a>
                                     </td>
                                 {% endif %}
-                                <td class="date">{{ reg.created | date:"y/m/d H:i" }}</td>
-                                <td class="date">{{ reg.updated | date:"y/m/d H:i" }}</td>
+                                <td class="date">{{ registration.created | date:"y/m/d H:i" }}</td>
+                                <td class="date">{{ registration.updated | date:"y/m/d H:i" }}</td>
                                 <td class="date">
-                                    {% if reg.payment_date %}{{ reg.payment_date | date:"y/m/d H:i" }}{% endif %}
+                                    {% if registration.payment_date %}{{ registration.payment_date | date:"y/m/d H:i" }}{% endif %}
                                 </td>
                                 {% if features.reg_quotas or features.reg_installments %}
                                     <td class="acc quota"

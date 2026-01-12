@@ -48,7 +48,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def casting_characters(context: dict, reg: Registration) -> None:
+def casting_characters(context: dict, registration: Registration) -> None:
     """Populate context with character choices available for casting based on registration.
 
     This function filters available characters based on registration ticket tier,
@@ -57,7 +57,7 @@ def casting_characters(context: dict, reg: Registration) -> None:
     Args:
         context (dict): Context dictionary to be populated with character choices and factions.
                    Will be modified in-place with 'factions', 'choices', and 'faction_filter' keys.
-        reg: Registration object containing ticket tier information used for filtering.
+        registration: Registration object containing ticket tier information used for filtering.
 
     Returns:
         None: Function modifies the context dictionary in-place.
@@ -69,7 +69,9 @@ def casting_characters(context: dict, reg: Registration) -> None:
 
     """
     # Determine if we should filter out filler characters based on ticket tier
-    filter_filler = hasattr(reg, "ticket") and reg.ticket and reg.ticket.tier != TicketTier.FILLER
+    filter_filler = (
+        hasattr(registration, "ticket") and registration.ticket and registration.ticket.tier != TicketTier.FILLER
+    )
 
     # Set up character filters based on registration type
     filters = {"png": True, "free": True, "mirror": True, "filler": filter_filler, "nonfiller": not filter_filler}
