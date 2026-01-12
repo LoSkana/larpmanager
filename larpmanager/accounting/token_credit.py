@@ -143,10 +143,10 @@ def registration_tokens_credits_use(
 
     Side Effects:
         Creates AccountingItemPayment records and updates membership balances.
-        Updates reg.tot_payed in memory (caller must persist changes).
+        Updates registration.tot_payed in memory (caller must persist changes).
 
     Note:
-        This function updates reg.tot_payed in memory but does NOT save the
+        This function updates registration.tot_payed in memory but does NOT save the
         registration to avoid infinite recursion. The caller (typically
         handle_registration_accounting_updates) is responsible for persisting
         changes via bulk update to prevent triggering post_save signals.
@@ -176,7 +176,7 @@ def registration_tokens_credits_use(
         if credits_enabled and remaining > 0:
             remaining = _apply_credits(registration, remaining, membership, event_id, association_id)
 
-        # Note: reg.tot_payed is updated in memory but NOT saved here
+        # Note: registration.tot_payed is updated in memory but NOT saved here
         # to prevent infinite recursion via post_save signal
 
 

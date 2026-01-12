@@ -43,7 +43,7 @@ def calculate_payment_vat(instance: AccountingItemPayment) -> None:
 
     Args:
         instance: AccountingItemPayment instance to compute VAT for.
-                 Must have valid association_id, pay type, reg, and inv attributes.
+                 Must have valid association_id, pay type, registration, and inv attributes.
 
     Returns:
         None: Function modifies the instance's VAT fields in the database as a side effect.

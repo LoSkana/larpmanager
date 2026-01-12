@@ -202,7 +202,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
     player names and registration question answers.
 
     Args:
-        context: Context dictionary containing registration data with 'reg' key
+        context: Context dictionary containing registration data with 'registration' key
         invoice: PaymentInvoice instance to update with custom reason text
         member_real: Real member instance for the registration
 
