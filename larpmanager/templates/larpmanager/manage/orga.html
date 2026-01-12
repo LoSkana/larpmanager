@@ -6,99 +6,112 @@
 {% block content %}
     <div id="manage">
         {% include "larpmanager/manage/sticky_messages.html" %}
-        <div id="wwyltd">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.wwyltd }}
-            </form>
+        <div class="grid">
+            <div class="grid-item">
+                <h2>
+                    <a><i class="fa-solid fa-calendar-days"></i> {% trans "Event status" %}</a>
+                </h2>
+                <p>
+                    <b>{{ run }}</b>
+                </p>
+                <p>
+                    <i>{{ run.pretty_dates }}</i>
+                </p>
+                <p>Status: {{ run.get_development_display }}</p>
+                <p>Signups: {{ registration_status }}</p>
+                <p>
+                    <a href="{% url 'gallery' run.get_slug %}">Event link</a>
+                </p>
+                <p>
+                    <a href="{% url 'register' run.get_slug %}">Signup link</a>
+                </p>
+                {% if features.registration_secret %}
+                    <p>
+                        <a href="{% url 'register_exclusive' run.get_slug run.registration_secret %}">{% trans "Secret registration link" %}</a>
+                    </p>
+                {% endif %}
+                {% if event.parent %}
+                    <p>
+                        <b>{% trans "Campaign" %}:</b> {{ event.parent }}
+                    </p>
+                {% endif %}
+            </div>
+            {% with list=priorities typ="priorities" %}
+                {% include "larpmanager/manage/helpers.html" %}
+            {% endwith %}
+            <div id="wwyltd" class="grid-item">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.wwyltd }}
+                </form>
+            </div>
+            {% if counts.count_reg %}
+                <div class="grid-item">
+                    <h2>
+                        <a href="{% url 'orga_registrations' run.get_slug %}"><i class="fa-solid fa-clipboard-list"></i> {% trans "Registrations" %}</a>: {{ counts.count_reg }}
+                    </h2>
+                    <table>
+                        <tbody>
+                            {% for key, count in registration_counts.items %}
+                                {% if count %}
+                                    <tr>
+                                        <th>{{ key }}</th>
+                                        <td>{{ count }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+            {% if run.revenue %}
+                <div class="grid-item">
+                    <h2>
+                        <a href="{% url 'orga_accounting' run.get_slug %}"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
+                    </h2>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th descr="{% trans "Total amount of money received for this event, minus commission fees and refunds" %}">
+                                    <a href="#" class="sidebar-link">{% trans "Total revenue" %}</a>
+                                    <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                                </th>
+                                <td>{{ run.revenue }}</td>
+                            </tr>
+                            <tr>
+                                <th descr="{% trans "Total of all expenses incurred for the event, both personal and organizational, including any tokens and credits issued" %}">
+                                    <a href="#" class="sidebar-link">{% trans "Total costs" %}</a>
+                                    <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                                </th>
+                                <td>{{ run.costs }}</td>
+                            </tr>
+                            <tr>
+                                <th descr="{% trans "Net profit of the event, difference between total revenue and total costs" %}">
+                                    <a href="#" class="sidebar-link">{% trans "Net profit" %}</a>
+                                    <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                                </th>
+                                <td>{{ run.balance }}</td>
+                            </tr>
+                            {% if 'organization_tax' in features %}
+                                <tr>
+                                    <th descr="{% trans "Minimum amount of net profit to be retained for the association tax" %}">
+                                        <a href="#" class="sidebar-link">{% trans "Organization tax" %}</a>
+                                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                                    </th>
+                                    <td>{{ run.tax }}</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+            {% with list=actions typ="actions" %}
+                {% include "larpmanager/manage/helpers.html" %}
+            {% endwith %}
+            {% with list=suggestions typ="suggestions" %}
+                {% include "larpmanager/manage/helpers.html" %}
+            {% endwith %}
         </div>
-        {% with list=priorities typ="priorities" %}
-            {% include "larpmanager/manage/helpers.html" %}
-        {% endwith %}
-        <h2>
-            <a href="{% url 'orga_run' run.get_slug %}"><i class="fa-solid fa-calendar-days"></i> {% trans "Event status" %}</a>
-        </h2>
-        <p>
-            <b>{{ run }}</b>
-            (<i>{{ run.pretty_dates }}</i>)
-            - {{ run.get_development_display }}
-            - Status: <a href="{% url 'register' run.get_slug %}">{{ registration_status }}</a>
-        </p>
-        {% if features.registration_secret %}
-            <p>
-                <a href="{% url 'register_exclusive' run.get_slug run.registration_secret %}">{% trans "Secret registration link" %}</a>
-            </p>
-        {% endif %}
-        {% if event.parent %}
-            <p>
-                <b>{% trans "Campaign" %}:</b> {{ event.parent }}
-            </p>
-        {% endif %}
-        {% if counts.count_reg %}
-            <hr />
-            <h2>
-                <a href="{% url 'orga_registrations' run.get_slug %}"><i class="fa-solid fa-clipboard-list"></i> {% trans "Registrations" %}</a>: {{ counts.count_reg }}
-            </h2>
-            <table class="go_datatable" no_header_cols="all">
-                <thead>
-                    <tr>
-                        {% for key, count in registration_counts.items %}
-                            {% if count %}<th>{{ key }}</th>{% endif %}
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        {% for key, count in registration_counts.items %}
-                            {% if count %}<td>{{ count }}</td>{% endif %}
-                        {% endfor %}
-                    </tr>
-                </tbody>
-            </table>
-        {% endif %}
-        {% if run.revenue %}
-            <h2>
-                <a href="{% url 'orga_accounting' run.get_slug %}"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
-            </h2>
-            <table class="go_datatable" no_header_cols="all">
-                <thead>
-                    <tr>
-                        <th descr="{% trans "Total amount of money received for this event, minus commission fees and refunds" %}">
-                            <a href="#" class="sidebar-link">{% trans "Total revenue" %}</a>
-                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                        </th>
-                        <th descr="{% trans "Total of all expenses incurred for the event, both personal and organizational, including any tokens and credits issued" %}">
-                            <a href="#" class="sidebar-link">{% trans "Total costs" %}</a>
-                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                        </th>
-                        <th descr="{% trans "Net profit of the event, difference between total revenue and total costs" %}">
-                            <a href="#" class="sidebar-link">{% trans "Net profit" %}</a>
-                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                        </th>
-                        {% if 'organization_tax' in features %}
-                            <th descr="{% trans "Minimum amount of net profit to be retained for the association tax" %}">
-                                <a href="#" class="sidebar-link">{% trans "Organization tax" %}</a>
-                                <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                            </th>
-                        {% endif %}
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ run.revenue }}</td>
-                        <td>{{ run.costs }}</td>
-                        <td>{{ run.balance }}</td>
-                        {% if 'organization_tax' in features %}<td>{{ run.tax }}</td>{% endif %}
-                    </tr>
-                </tbody>
-            </table>
-        {% endif %}
-        {% with list=actions typ="actions" %}
-            {% include "larpmanager/manage/helpers.html" %}
-        {% endwith %}
-        {% with list=suggestions typ="suggestions" %}
-            {% include "larpmanager/manage/helpers.html" %}
-        {% endwith %}
         <hr />
         <div class="staff-list">
             <div class="orga-buttons">
