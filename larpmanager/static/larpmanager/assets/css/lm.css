@@ -2551,10 +2551,21 @@ input[type="number"] {
   float: right;
 }
 
+#wwyltd {
+  width: 80%;
+  margin: 0 auto;
+  padding-top: 0.5em;
+}
+
+@media (max-width: 768px) {
+  #wwyltd {
+    width: 100%;
+  }
+}
+
 .grid {
   column-count: 3;
   column-gap: 20px;
-  max-width: 1200px;
   margin: 0 auto;
   padding: 10px;
 }
@@ -2562,12 +2573,12 @@ input[type="number"] {
 .grid-item {
   break-inside: avoid;
   margin-bottom: 20px;
-  display: inline-block; /* ✨ Garantisce altezza naturale */
+  display: inline-block;
   width: 100%;
-  background: #f0f0f0;
+  background-color: rgba(var(--pri-rgb), 0.085);
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(var(--pri-rgb), 0.5);
 }
 
 @media (max-width: 768px) {

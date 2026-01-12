@@ -6,10 +6,16 @@
 {% block content %}
     <div id="manage">
         {% include "larpmanager/manage/sticky_messages.html" %}
+        <div id="wwyltd">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.wwyltd }}
+            </form>
+        </div>
         <div class="grid">
             <div class="grid-item">
                 <h2>
-                    <a><i class="fa-solid fa-calendar-days"></i> {% trans "Event status" %}</a>
+                    <a href="{% url 'orga_event' run.get_slug %}"><i class="fa-solid fa-calendar-days"></i> {% trans "Event status" %}</a>
                 </h2>
                 <p>
                     <b>{{ run }}</b>
@@ -18,10 +24,20 @@
                     <i>{{ run.pretty_dates }}</i>
                 </p>
                 <p>Status: {{ run.get_development_display }}</p>
-                <p>Signups: {{ registration_status }}</p>
                 <p>
                     <a href="{% url 'gallery' run.get_slug %}" target="_blank">Event link</a>
                 </p>
+                {% if event.parent %}
+                    <p>
+                        <b>{% trans "Campaign" %}:</b> {{ event.parent }}
+                    </p>
+                {% endif %}
+            </div>
+            <div class="grid-item">
+                <h2>
+                    <a href="{% url 'orga_registrations' run.get_slug %}"><i class="fa-solid fa-clipboard-list"></i> {% trans "Registrations" %}</a>
+                </h2>
+                <p>Status: {{ registration_status }}</p>
                 <p>
                     <a href="{% url 'register' run.get_slug %}" target="_blank">Signup link</a>
                 </p>
@@ -31,26 +47,7 @@
                            target="_blank">{% trans "Secret registration link" %}</a>
                     </p>
                 {% endif %}
-                {% if event.parent %}
-                    <p>
-                        <b>{% trans "Campaign" %}:</b> {{ event.parent }}
-                    </p>
-                {% endif %}
-            </div>
-            {% with list=priorities typ="priorities" %}
-                {% include "larpmanager/manage/helpers.html" %}
-            {% endwith %}
-            <div id="wwyltd" class="grid-item">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.wwyltd }}
-                </form>
-            </div>
-            {% if counts.count_reg %}
-                <div class="grid-item">
-                    <h2>
-                        <a href="{% url 'orga_registrations' run.get_slug %}"><i class="fa-solid fa-clipboard-list"></i> {% trans "Registrations" %}</a>: {{ counts.count_reg }}
-                    </h2>
+                {% if counts.count_reg %}
                     <table>
                         <tbody>
                             {% for key, count in registration_counts.items %}
@@ -63,8 +60,11 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                </div>
-            {% endif %}
+                {% endif %}
+            </div>
+            {% with list=priorities typ="priorities" %}
+                {% include "larpmanager/manage/helpers.html" %}
+            {% endwith %}
             {% if run.revenue %}
                 <div class="grid-item">
                     <h2>
@@ -109,11 +109,10 @@
             {% with list=actions typ="actions" %}
                 {% include "larpmanager/manage/helpers.html" %}
             {% endwith %}
-            {% with list=suggestions typ="suggestions" %}
-                {% include "larpmanager/manage/helpers.html" %}
-            {% endwith %}
         </div>
-        <hr />
+        {% with list=suggestions typ="suggestions" %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
         <div class="staff-list">
             <div class="orga-buttons">
                 <a class="new button" href="{% url 'orga_reload_cache' run.get_slug %}">
