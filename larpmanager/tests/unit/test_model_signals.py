@@ -642,7 +642,7 @@ class TestModelSignals(BaseTestCase):
         registration.save()
 
         # Create RegistrationCharacterRel
-        rel = RegistrationCharacterRel(reg=registration, character=character)
+        rel = RegistrationCharacterRel(registration=registration, character=character)
         rel.save()
 
         # Reload character from database
@@ -680,7 +680,7 @@ class TestModelSignals(BaseTestCase):
         registration.save()
 
         # Create RegistrationCharacterRel
-        rel = RegistrationCharacterRel(reg=registration, character=character)
+        rel = RegistrationCharacterRel(registration=registration, character=character)
         rel.save()
 
         # Reload character from database
@@ -742,7 +742,7 @@ class TestModelSignals(BaseTestCase):
         registration.save()
 
         # Create RegistrationCharacterRel
-        rel = RegistrationCharacterRel(reg=registration, character=character)
+        rel = RegistrationCharacterRel(registration=registration, character=character)
         rel.save()
 
         # Reload character from database
