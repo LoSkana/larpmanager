@@ -292,11 +292,10 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: 
 
     # Add form and entity ID to context for template rendering
     context["form"] = form
-    context["num"] = "0"
+    context["num"] = entity_uuid
 
     if entity_uuid != "0":
         context["name"] = str(context[model_name])
-        context["num"] = context[model_name].number
 
     return False
 
@@ -601,7 +600,7 @@ def writing_edit(
 
     # Configure element identification and naming
     if element_name in context:
-        context["eid"] = context[element_name].id
+        context["edit_uuid"] = context[element_name].uuid
         context["name"] = str(context[element_name])
     else:
         context[element_name] = None
@@ -741,9 +740,9 @@ def _writing_save(
     return redirect("orga_" + nm + "s", event_slug=context["run"].get_slug())
 
 
-def writing_edit_cache_key(event_id: int | str, writing_type: str) -> str:
+def writing_edit_cache_key(element_uuid: str, writing_type: str) -> str:
     """Generate cache key for writing edit operations."""
-    return f"orga_edit_{event_id}_{writing_type}"
+    return f"orga_edit_{element_uuid}_{writing_type}"
 
 
 def writing_edit_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonResponse:
@@ -771,8 +770,8 @@ def writing_edit_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonRes
         return JsonResponse(res)
 
     # Extract and validate element ID from POST data
-    eid = int(request.POST["eid"])
-    if eid <= 0:
+    edit_uuid = request.POST["edit_uuid"]
+    if edit_uuid == "0":
         return JsonResponse(res)
 
     # Get element type and editing token for conflict detection
@@ -780,7 +779,7 @@ def writing_edit_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonRes
     token = request.POST["token"]
 
     # Check for editing conflicts using token-based locking
-    msg = writing_edit_working_ticket(request, tp, eid, token)
+    msg = writing_edit_working_ticket(request, tp, edit_uuid, token)
     if msg:
         res["warn"] = msg
         return JsonResponse(res)
@@ -793,7 +792,7 @@ def writing_edit_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonRes
     return JsonResponse(res)
 
 
-def writing_edit_working_ticket(request: HttpRequest, element_type: str, element_id: int | str, user_token: str) -> str:
+def writing_edit_working_ticket(request: HttpRequest, element_type: str, edit_uuid: str, user_token: str) -> str:
     """Manage working tickets to prevent concurrent editing conflicts.
 
     This function implements a locking mechanism to prevent multiple users from
@@ -803,7 +802,7 @@ def writing_edit_working_ticket(request: HttpRequest, element_type: str, element
     Args:
         request: HTTP request object containing user information
         element_type: Type of element being edited (e.g., 'plot', 'character')
-        element_id: Element ID being edited
+        edit_uuid: Element UUID being edited
         user_token: User's unique editing token for session identification
 
     Returns:
@@ -821,17 +820,17 @@ def writing_edit_working_ticket(request: HttpRequest, element_type: str, element
     # Handle plot objects by recursively checking all related characters
     # This prevents conflicts when editing plots that affect multiple characters
     if element_type == "plot":
-        character_ids = Plot.objects.filter(pk=element_id).values_list("characters__pk", flat=True)
-        for character_id in character_ids:
-            if character_id is None:  # Skip if plot has no characters
+        character_uuids = Plot.objects.filter(uuid=edit_uuid).values_list("characters__uuid", flat=True)
+        for character_uuid in character_uuids:
+            if character_uuid is None:  # Skip if plot has no characters
                 continue
-            warning_message = writing_edit_working_ticket(request, "character", character_id, user_token)
+            warning_message = writing_edit_working_ticket(request, "character", character_uuid, user_token)
             if warning_message:
                 return warning_message
 
     # Get current timestamp and retrieve existing ticket from cache
     current_timestamp = int(time.time())
-    cache_key = writing_edit_cache_key(element_id, element_type)
+    cache_key = writing_edit_cache_key(edit_uuid, element_type)
     active_tickets = cache.get(cache_key)
     if not active_tickets:
         active_tickets = {}
@@ -862,15 +861,7 @@ def writing_edit_working_ticket(request: HttpRequest, element_type: str, element
 
 @require_POST
 def working_ticket(request: HttpRequest) -> Any:
-    """Handle working ticket requests to prevent concurrent editing conflicts.
-
-    Args:
-        request: HTTP POST request with eid, type, and token parameters
-
-    Returns:
-        JsonResponse: Status response with optional warning if other users are editing
-
-    """
+    """Handle working ticket requests to prevent concurrent editing conflicts."""
     if not request.user.is_authenticated:
         return JsonResponse({"warn": "User not logged"})
 
@@ -878,11 +869,11 @@ def working_ticket(request: HttpRequest) -> Any:
     if is_lm_admin(request):
         return JsonResponse(res)
 
-    eid = request.POST.get("eid")
+    edit_uuid = str(request.POST.get("edit_uuid"))
     element_type = request.POST.get("type")
     token = request.POST.get("token")
 
-    msg = writing_edit_working_ticket(request, element_type, eid, token)
+    msg = writing_edit_working_ticket(request, element_type, edit_uuid, token)
     if msg:
         res["warn"] = msg
 

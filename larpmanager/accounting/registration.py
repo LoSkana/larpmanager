@@ -267,7 +267,7 @@ def quota_check(registration: Registration, start: date, alert: int, association
         association_id: Association ID for payment deadline calculation
 
     Side effects:
-        Sets reg.quota, reg.deadline, and reg.qsr attributes
+        Sets registration.quota, registration.deadline, and registration.qsr attributes
 
     """
     if not start or registration.quotas == 0:
@@ -325,7 +325,7 @@ def _quota_fallback(
         has_distant_quotas: Whether quotas exist beyond alert threshold
 
     Side effects:
-        Sets reg.quota and reg.deadline based on payment status
+        Sets registration.quota and registration.deadline based on payment status
 
     """
     # Fallback: ensure quota is set if payment is due
@@ -417,7 +417,7 @@ def installment_check(registration: Registration, alert: int, association_id: in
         association_id: Association ID used for payment deadline calculation
 
     Side Effects:
-        Sets reg.quota and reg.deadline
+        Sets registration.quota and registration.deadline
 
     """
     if not registration.ticket:
@@ -900,12 +900,12 @@ def update_registration_accounting(registration: Registration) -> None:
 
     Side Effects:
         Updates the following registration attributes:
-        - reg.tot_iscr: Total inscription amount
-        - reg.tot_payed: Total amount paid
-        - reg.quota: Payment quota amount
-        - reg.deadline: Payment deadline
-        - reg.alert: Alert flag for upcoming deadlines
-        - reg.payment_date: Date when payment was completed (if applicable)
+        - registration.tot_iscr: Total inscription amount
+        - registration.tot_payed: Total amount paid
+        - registration.quota: Payment quota amount
+        - registration.deadline: Payment deadline
+        - registration.alert: Alert flag for upcoming deadlines
+        - registration.payment_date: Date when payment was completed (if applicable)
 
     """
     # Skip processing for cancelled or completed runs

@@ -2,9 +2,9 @@
 
 <script>
 
-{% if num %}
+{% if num != "0" %}
 
-var w_eid = '{{ num }}';
+var edit_uuid = '{{ edit_uuid }}';
 var w_type = '{{ type }}';
 
 var w_timeout = 1 * 1000;
@@ -15,7 +15,7 @@ function callWorkingTicket() {
     $.ajax({
         type: "POST",
         url: working_ticket_url,
-        data: {eid: w_eid, type: w_type, token: token},
+        data: {edit_uuid: edit_uuid, type: w_type, token: token},
         success: function(msg) {
             if (msg.warn) {
                 $.toast({

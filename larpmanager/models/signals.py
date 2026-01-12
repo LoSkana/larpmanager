@@ -73,7 +73,11 @@ from larpmanager.cache.character import (
 )
 from larpmanager.cache.config import reset_element_configs
 from larpmanager.cache.event_text import reset_event_text, update_event_text_cache_on_save
-from larpmanager.cache.feature import clear_event_features_cache, on_association_post_save_reset_features_cache
+from larpmanager.cache.feature import (
+    clear_event_features_cache,
+    get_event_features,
+    on_association_post_save_reset_features_cache,
+)
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.larpmanager import clear_blog_cache, clear_larpmanager_home_cache
 from larpmanager.cache.links import (
@@ -1392,6 +1396,12 @@ def post_save_registration_character_rel_savereg(
 ) -> None:
     """Reset character cache and send assignment email notification."""
     reset_character_registration_cache(instance)
+
+    # Auto-assign player if player editor is active and character has no player
+    features = get_event_features(instance.character.event_id)
+    if "user_character" in features and not instance.character.player:
+        instance.character.player = instance.registration.member
+        instance.character.save()
 
     if created:
         send_character_assignment_email(instance)

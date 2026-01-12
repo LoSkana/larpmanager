@@ -41,7 +41,7 @@ from larpmanager.forms.character import (
     OrgaWritingOptionForm,
     OrgaWritingQuestionForm,
 )
-from larpmanager.forms.utils import EventCharacterS2Widget
+from larpmanager.forms.utils import EventCharacterS2WidgetUuid
 from larpmanager.forms.writing import FactionForm, PlotForm, QuestForm, TraitForm
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Trait
@@ -196,29 +196,29 @@ def _characters_relationships(context: dict) -> None:
         context["rel_tutorial"] = Feature.objects.get(slug="relationships").tutorial
 
     context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
-    widget = EventCharacterS2Widget(attrs={"id": "new_rel_select"})
+    widget = EventCharacterS2WidgetUuid(attrs={"id": "new_rel_select"})
     widget.set_event(context["event"])
     context["new_rel"] = widget.render(name="new_rel_select", value="")
 
     if "character" in context:
-        relationships_by_character_id = {}
+        relationships_by_character_uuid = {}
 
         direct_relationships = Relationship.objects.filter(source=context["character"]).select_related("target")
 
         for relationship in direct_relationships:
-            if relationship.target.id not in relationships_by_character_id:
-                relationships_by_character_id[relationship.target.id] = {"char": relationship.target}
-            relationships_by_character_id[relationship.target.id]["direct"] = relationship.text
+            if relationship.target.uuid not in relationships_by_character_uuid:
+                relationships_by_character_uuid[relationship.target.uuid] = {"char": relationship.target}
+            relationships_by_character_uuid[relationship.target.uuid]["direct"] = relationship.text
 
         inverse_relationships = Relationship.objects.filter(target=context["character"]).select_related("source")
 
         for relationship in inverse_relationships:
-            if relationship.source.id not in relationships_by_character_id:
-                relationships_by_character_id[relationship.source.id] = {"char": relationship.source}
-            relationships_by_character_id[relationship.source.id]["inverse"] = relationship.text
+            if relationship.source.uuid not in relationships_by_character_uuid:
+                relationships_by_character_uuid[relationship.source.uuid] = {"char": relationship.source}
+            relationships_by_character_uuid[relationship.source.uuid]["inverse"] = relationship.text
 
         sorted_relationships = sorted(
-            relationships_by_character_id.items(),
+            relationships_by_character_uuid.items(),
             key=lambda character_entry: len(character_entry[1].get("direct", ""))
             + len(character_entry[1].get("inverse", "")),
             reverse=True,
@@ -1187,8 +1187,8 @@ def orga_writing_excel_submit(request: HttpRequest, event_slug: str, writing_typ
         obj = context["form"].save()
         response = {
             "k": 1,
-            "qid": context["question"].uuid,
-            "eid": context["element"].uuid,
+            "question_uuid": context["question"].uuid,
+            "edit_uuid": context["element"].uuid,
             "update": _get_question_update(context, obj),
         }
         return JsonResponse(response)
@@ -1229,8 +1229,8 @@ def _get_excel_form(
 
     # Validate writing form type and extract request parameters
     check_writing_form_type(context, element_type)
-    question_uuid = str(request.POST.get("qid"))
-    element_uuid = str(request.POST.get("eid"))
+    question_uuid = str(request.POST.get("question_uuid"))
+    edit_uuid = str(request.POST.get("edit_uuid"))
 
     # Fetch the writing question with proper filtering
     question = (
@@ -1243,7 +1243,7 @@ def _get_excel_form(
 
     # Setup applicable type context and fetch target element
     context["applicable"] = QuestionApplicable.get_applicable_inverse(context["writing_typ"])
-    element = context["event"].get_elements(context["applicable"]).select_related("event").get(uuid=element_uuid)
+    element = context["event"].get_elements(context["applicable"]).select_related("event").get(uuid=edit_uuid)
     context["elementTyp"] = context["applicable"]
 
     # Map element types to their corresponding form classes

@@ -260,7 +260,7 @@ def send_payment_confirmation_email(payment_item: AccountingItemPayment) -> None
 
     Args:
         payment_item: AccountingItemPayment instance being saved. Must have
-            reg (registration), pay (payment type), and association_id attributes.
+            registration (registration), pay (payment type), and association_id attributes.
 
     Returns:
         None
@@ -847,7 +847,7 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
     treasurer appointees, event organizers (for registrations), or main organization email.
 
     Args:
-        inv: Invoice object to send notifications for. Must have association_id, typ, and reg attributes.
+        inv: Invoice object to send notifications for. Must have association_id, typ, and registration attributes.
 
     Returns:
         None

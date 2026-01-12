@@ -595,40 +595,42 @@ class OrgaCharacterForm(CharacterForm):
         if "relationships" not in self.params["features"]:
             return
 
-        chars_ids = self.params["event"].get_elements(Character).values_list("pk", flat=True)
+        uuid_to_id = dict(self.params["event"].get_elements(Character).values_list("uuid", "id"))
 
         rel_data = {k: v for k, v in self.data.items() if k.startswith("rel")}
         # Only process relationships if relationship fields are present in the form
         if not rel_data:
             return
         for key, value in rel_data.items():
-            match = re.match(r"rel_(\d+)", key)
+            match = re.match(r"rel_([a-zA-Z0-9]+)", key)
             if not match:
                 continue
-            ch_id = int(match.group(1))
+            ch_uuid = match.group(1)
             rel_type = "direct"
 
-            # check ch_id is in chars of the event
-            if ch_id not in chars_ids:
-                msg = f"char {ch_id} not recognized"
+            # check character uuid is in chars of the event
+            if ch_uuid not in uuid_to_id:
+                msg = f"char {ch_uuid} not recognized"
                 raise Http404(msg)
+
+            character_id = uuid_to_id[ch_uuid]
 
             # if value is empty
             if not value:
                 # if wasn't present, do nothing
-                if ch_id not in self.params["relationships"] or rel_type not in self.params["relationships"][ch_id]:
+                if ch_uuid not in self.params["relationships"] or rel_type not in self.params["relationships"][ch_uuid]:
                     continue
                 # else delete
-                rel = self._get_rel(ch_id, instance, rel_type)
+                rel = self._get_rel(character_id, instance, rel_type)
                 save_version(rel, TextVersionChoices.RELATIONSHIP, self.params["member"], to_delete=True)
                 rel.delete()
                 continue
 
             # if the value is present, and is the same as before, do nothing
             if (
-                ch_id in self.params["relationships"]
-                and rel_type in self.params["relationships"][ch_id]
-                and value == self.params["relationships"][ch_id][rel_type]
+                ch_uuid in self.params["relationships"]
+                and rel_type in self.params["relationships"][ch_uuid]
+                and value == self.params["relationships"][ch_uuid][rel_type]
             ):
                 continue
 
@@ -636,12 +638,12 @@ class OrgaCharacterForm(CharacterForm):
             # Use strip_tags to get plain text length from HTML content
             plain_text = strip_tags(value)
             if len(plain_text) > self.relationship_max_length:
-                msg = f"Relationship text for character #{ch_id} exceeds maximum length of {self.relationship_max_length} characters. Current length: {len(plain_text)}"
+                msg = f"Relationship text for character {ch_uuid} exceeds maximum length of {self.relationship_max_length} characters. Current length: {len(plain_text)}"
                 raise ValidationError(
                     msg,
                 )
 
-            rel = self._get_rel(ch_id, instance, rel_type)
+            rel = self._get_rel(character_id, instance, rel_type)
             rel.text = value
             rel.save()
 
