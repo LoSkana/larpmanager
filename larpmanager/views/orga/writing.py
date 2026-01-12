@@ -737,7 +737,7 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
     if class_name == "registrations":
         context = check_event_context(request, event_slug, "orga_registrations")
         # Get characters already assigned to registrations in this run
-        taken_characters = RegistrationCharacterRel.objects.filter(reg__run_id=context["run"].id).values_list(
+        taken_characters = RegistrationCharacterRel.objects.filter(registration__run_id=context["run"].id).values_list(
             "character_id",
             flat=True,
         )

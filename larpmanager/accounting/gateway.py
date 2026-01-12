@@ -84,8 +84,8 @@ def get_satispay_form(request: HttpRequest, context: dict, invoice: PaymentInvoi
 
     """
     # Build redirect and callback URLs for payment flow
-    context["redirect"] = request.build_absolute_uri(reverse("acc_payed", args=[invoice.uuid]))
-    context["callback"] = request.build_absolute_uri(reverse("acc_webhook_satispay")) + "?payment_id={uuid}"
+    context["redirect"] = request.build_absolute_uri(reverse("accounting_payed", args=[invoice.uuid]))
+    context["callback"] = request.build_absolute_uri(reverse("accounting_webhook_satispay")) + "?payment_id={uuid}"
 
     # Load Satispay authentication credentials
     satispay_key_id = context["satispay_key_id"]
@@ -268,8 +268,8 @@ def get_paypal_form(request: HttpRequest, context: dict, invoice: PaymentInvoice
         "item_name": invoice.causal,
         "invoice": invoice.cod,
         "notify_url": request.build_absolute_uri(reverse("paypal-ipn")),
-        "return": request.build_absolute_uri(reverse("acc_payed", args=[invoice.uuid])),
-        "cancel_return": request.build_absolute_uri(reverse("acc_cancelled")),
+        "return": request.build_absolute_uri(reverse("accounting_payed", args=[invoice.uuid])),
+        "cancel_return": request.build_absolute_uri(reverse("accounting_cancelled")),
     }
     context["paypal_form"] = PayPalPaymentsForm(initial=paypal_payment_data)
 
@@ -393,8 +393,8 @@ def get_stripe_form(
             },
         ],
         mode="payment",
-        success_url=request.build_absolute_uri(reverse("acc_payed", args=[invoice.uuid])),
-        cancel_url=request.build_absolute_uri(reverse("acc_cancelled")),
+        success_url=request.build_absolute_uri(reverse("accounting_payed", args=[invoice.uuid])),
+        cancel_url=request.build_absolute_uri(reverse("accounting_cancelled")),
     )
 
     # Add checkout session to context for template rendering
@@ -547,8 +547,8 @@ def get_sumup_form(
             "merchant_code": context["sumup_merchant_id"],
             "description": invoice.causal,
             # Configure callback URLs for payment flow
-            "return_url": request.build_absolute_uri(reverse("acc_webhook_sumup")),
-            "redirect_url": request.build_absolute_uri(reverse("acc_payed", args=[invoice.uuid])),
+            "return_url": request.build_absolute_uri(reverse("accounting_webhook_sumup")),
+            "redirect_url": request.build_absolute_uri(reverse("accounting_payed", args=[invoice.uuid])),
             "payment_type": "boleto",
         },
     )
@@ -750,9 +750,9 @@ def get_redsys_form(request: HttpRequest, context: dict, invoice: PaymentInvoice
     # Configure callback URLs for payment flow
     payment_parameters.update(
         {
-            "DS_MERCHANT_MERCHANTURL": request.build_absolute_uri(reverse("acc_webhook_redsys")),
-            "DS_MERCHANT_URLOK": request.build_absolute_uri(reverse("acc_payed", args=[invoice.uuid])),
-            "DS_MERCHANT_URLKO": request.build_absolute_uri(reverse("acc_redsys_ko")),
+            "DS_MERCHANT_MERCHANTURL": request.build_absolute_uri(reverse("accounting_webhook_redsys")),
+            "DS_MERCHANT_URLOK": request.build_absolute_uri(reverse("accounting_payed", args=[invoice.uuid])),
+            "DS_MERCHANT_URLKO": request.build_absolute_uri(reverse("accounting_redsys_ko")),
         },
     )
 

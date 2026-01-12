@@ -23,7 +23,7 @@ from typing import Any
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssociationTextType, get_url, hdr
@@ -122,7 +122,7 @@ def remember_pay(registration: Any) -> None:
     """
     activate(registration.member.language)
 
-    is_provisional = is_reg_provisional(registration)
+    is_provisional = is_registration_provisional(registration)
     email_context = {"event": registration.run}
 
     if is_provisional:

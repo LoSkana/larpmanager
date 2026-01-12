@@ -31,7 +31,7 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.character import (
     get_event_cache_all,
@@ -42,7 +42,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
-from larpmanager.cache.registration import get_reg_counts
+from larpmanager.cache.registration import get_registration_counts
 from larpmanager.models.accounting import PaymentInvoice, PaymentType
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -206,7 +206,7 @@ def get_character_rels_dict(registrations_by_run_dict: dict, member: Any) -> dic
         # Fetch all RegistrationCharacterRel objects for user's registrations in one optimized query
         # Include character data and order by character number for consistent results
         character_relations = (
-            RegistrationCharacterRel.objects.filter(reg_id__in=registration_ids, reg__member=member)
+            RegistrationCharacterRel.objects.filter(registration_id__in=registration_ids, registration__member=member)
             .select_related("character")
             .order_by("character__number")
         )
@@ -214,10 +214,10 @@ def get_character_rels_dict(registrations_by_run_dict: dict, member: Any) -> dic
         # Group character relations by registration ID for efficient lookup
         for character_relation in character_relations:
             # Initialize list for new registration IDs
-            if character_relation.reg_id not in character_relations_by_registration_dict:
-                character_relations_by_registration_dict[character_relation.reg_id] = []
+            if character_relation.registration_id not in character_relations_by_registration_dict:
+                character_relations_by_registration_dict[character_relation.registration_id] = []
             # Add character relation to the appropriate registration group
-            character_relations_by_registration_dict[character_relation.reg_id].append(character_relation)
+            character_relations_by_registration_dict[character_relation.registration_id].append(character_relation)
 
     return character_relations_by_registration_dict
 
@@ -247,7 +247,7 @@ def get_payment_invoices_dict(registrations_by_id: dict, member: Any) -> dict:
         # Fetch all payment invoices for user's registrations in single optimized query
         # Include method relation when accessing invoice.method
         payment_invoices = PaymentInvoice.objects.filter(
-            reg_id__in=registration_ids,
+            registration_id__in=registration_ids,
             member=member,
             typ=PaymentType.REGISTRATION,
         ).select_related("method")
@@ -533,7 +533,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
         ).select_related("ticket", "run")
 
         # Create dictionary mapping run_id to registration for quick lookup
-        my_regs_dict = {reg.run_id: reg for reg in my_regs}
+        my_regs_dict = {registration.run_id: registration for registration in my_regs}
 
         # Build related data dictionaries for character, payment, and pre-registration info
         character_rels_dict = get_character_rels_dict(my_regs_dict, member)
@@ -644,12 +644,12 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
     if not hide_uncasted_players:
         # Get registrations that have assigned characters
-        que = RegistrationCharacterRel.objects.filter(reg__run_id=context["run"].id)
+        que = RegistrationCharacterRel.objects.filter(registration__run_id=context["run"].id)
 
         # Filter by character approval status if required
         if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
             que = que.filter(character__status__in=[CharacterStatus.APPROVED])
-        assigned = que.values_list("reg_id", flat=True)
+        assigned = que.values_list("registration_id", flat=True)
 
         # Pre-filter ticket IDs to exclude from registration without character assigned
         excluded_ticket_ids = RegistrationTicket.objects.filter(
@@ -668,9 +668,11 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
         que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket_id__in=excluded_ticket_ids)
 
         # Add non-provisional registered members to the display list
-        for reg in que_reg.select_related("member"):
-            if not is_reg_provisional(reg, event=context["event"], features=features, context=context):
-                context["registration_list"].append(reg.member)
+        for registration in que_reg.select_related("member"):
+            if not is_registration_provisional(
+                registration, event=context["event"], features=features, context=context
+            ):
+                context["registration_list"].append(registration.member)
 
     return render(request, "larpmanager/event/gallery.html", context)
 
@@ -713,7 +715,9 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Prepare features mapping for registration status checking
     features_map = {context["event"].id: context["features"]}
-    context.update({"my_regs": {reg.run_id: reg for reg in my_regs}, "features_map": features_map})
+    context.update(
+        {"my_regs": {registration.run_id: registration for registration in my_regs}, "features_map": features_map}
+    )
 
     # Process each run to determine registration status and categorize by timing
     for run in runs:
@@ -1031,7 +1035,7 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = get_event_context(request, event_slug, include_status=True)
 
     # Retrieve current registration counts for tickets and options
-    counts = get_reg_counts(context["run"])
+    counts = get_registration_counts(context["run"])
 
     # Build discounts list with visibility filtering
     context["disc"] = []

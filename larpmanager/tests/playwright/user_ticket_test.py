@@ -23,7 +23,7 @@ Test: Technical support ticket system.
 Verifies ticket submission with and without login, with and without screenshots,
 and email change requests through the support system.
 """
-
+import re
 from typing import Any
 
 import pytest
@@ -79,7 +79,7 @@ def test_user_ticket(pw_page: Any) -> None:
     submit_confirm(page)
 
     # change email
-    page.get_by_role("link", name=" Profile").click()
+    page.get_by_role("link", name=re.compile("Profile")).click()
     page.get_by_role("link", name="Would you like to change it?").click()
     page.get_by_role("textbox", name="Email").click()
     page.get_by_role("textbox", name="Email").fill("asdsa@dasasd.it")

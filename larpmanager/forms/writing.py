@@ -106,7 +106,7 @@ class PlayerRelationshipForm(BaseModelForm):
 
     class Meta:
         model = PlayerRelationship
-        exclude: ClassVar[list] = ["reg"]
+        exclude: ClassVar[list] = ["registration"]
         widgets: ClassVar[dict] = {
             "target": EventCharacterS2Widget,
         }
@@ -140,18 +140,18 @@ class PlayerRelationshipForm(BaseModelForm):
         character_id = _get_character_cache_id(self.params)
         if self.cleaned_data["target"].id == character_id:
             self.add_error("target", _("You cannot create a relationship towards yourself") + "!")
-        else:
-            # Check for existing relationships with same target and registration
-            try:
-                rel = PlayerRelationship.objects.get(
-                    reg=self.params["registration"], target=self.cleaned_data["target"]
-                )
-                # Allow editing existing relationship, but prevent duplicates
-                if rel.id != self.instance.id:
-                    self.add_error("target", _("Already existing relationship") + "!")
-            except ObjectDoesNotExist:
-                # No existing relationship found - this is valid
-                pass
+
+        # Check for existing relationships with same target and registration
+        try:
+            rel = PlayerRelationship.objects.get(
+                registration=self.params["registration"], target=self.cleaned_data["target"]
+            )
+            # Allow editing existing relationship, but prevent duplicates
+            if rel.id != self.instance.id:
+                self.add_error("target", _("Already existing relationship") + "!")
+        except ObjectDoesNotExist:
+            # No existing relationship found - this is valid
+            pass
 
         return cleaned_data
 
@@ -169,7 +169,7 @@ class PlayerRelationshipForm(BaseModelForm):
 
         # Set registration for new instances
         if not instance.pk:
-            instance.reg = self.params["registration"]
+            instance.registration = self.params["registration"]
 
         instance.save()
 
@@ -270,7 +270,7 @@ class BaseWritingForm(BaseRegistrationForm):
             orga = True
             if hasattr(self, "orga"):
                 orga = self.orga
-            self.save_reg_questions(instance, is_organizer=orga)
+            self.save_registration_questions(instance, is_organizer=orga)
 
         return instance
 

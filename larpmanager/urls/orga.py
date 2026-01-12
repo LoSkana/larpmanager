@@ -1197,4 +1197,9 @@ urlpatterns = [
         views_mg.orga_redirect,
         name="orga_redirect",
     ),
+    path(
+        "<slug:event_slug>/manage/wwyltd/ajax/",
+        views_mg.wwyltd_ajax,
+        name="wwyltd_ajax",
+    ),
 ]

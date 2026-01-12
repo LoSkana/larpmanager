@@ -62,7 +62,7 @@ def test_permanence_form(pw_page: Any) -> None:
 
 def check_orga_visibility(page: Any) -> None:
     page.get_by_role("link", name="Event").click()
-    page.get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Writing ").click()
     page.locator("#id_writing_field_visibility").check()
     submit_confirm(page)
@@ -86,7 +86,7 @@ def check_orga_preferences(page: Any) -> None:
     expect(page.locator("#id_open_registration_1_1")).not_to_be_checked()
     expect(page.locator("#id_open_registration_1_2")).to_be_checked()
     expect(page.locator("#id_open_registration_1_3")).not_to_be_checked()
-    page.get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     check_feature(page, "Characters")
     submit_confirm(page)
     page.get_by_role("link", name="Preferences", exact=True).click()
@@ -101,7 +101,7 @@ def check_orga_preferences(page: Any) -> None:
 
 
 def check_orga_features(page: Any) -> None:
-    page.get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     checked = ["Participant cancellation", "Character customization", "Secret link", "Sections"]
     for s in checked:
         check_feature(page, s)
@@ -111,18 +111,18 @@ def check_orga_features(page: Any) -> None:
     expect_normalized(page,
         page.locator("#one"), "You have activated the following features, for each here's the links to follow"
     )
-    page.get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     _check_checkboxes(checked, page)
 
 
 def check_orga_config(page: Any) -> None:
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Visualisation ").click()
     page.locator("#id_show_shortcuts_mobile").check()
     page.get_by_text("If checked: Show summary page").click()
     page.locator("#id_show_limitations").check()
     submit_confirm(page)
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_text("Email notifications Disable").click()
     page.get_by_text("If checked, options no longer").click()
     page.get_by_role("link", name="Registrations ").click()
@@ -164,14 +164,14 @@ def _check_checkboxes(checked: Any, page: Any, skip_first: Any = False) -> None:
 
 
 def check_exe_config(page: Any) -> None:
-    page.get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name="Calendar ").click()
+    page.get_by_role("link", name="Configuration").first.click()
+    page.get_by_role("link", name="Interface ").click()
     page.locator("#id_calendar_past_events").check()
     page.locator("#id_calendar_authors").check()
     page.locator("#id_calendar_tagline").check()
     submit_confirm(page)
     page.locator("#exe_config").get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name="Calendar ").click()
+    page.get_by_role("link", name="Interface ").click()
     expect(page.locator("#id_calendar_past_events")).to_be_checked()
     expect(page.locator("#id_calendar_website")).not_to_be_checked()
     expect(page.locator("#id_calendar_where")).not_to_be_checked()
@@ -181,7 +181,7 @@ def check_exe_config(page: Any) -> None:
 
 
 def check_exe_features(page: Any) -> None:
-    page.get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
 
     checked = ["Template", "Treasurer", "Membership", "Badge"]
     for s in checked:
@@ -189,7 +189,7 @@ def check_exe_features(page: Any) -> None:
 
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Now you can create event templates")
-    page.get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     _check_checkboxes(checked, page, True)
 
 

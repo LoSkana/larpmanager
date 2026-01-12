@@ -91,7 +91,7 @@ def update_cache_lm_home() -> dict[str, int | list]:
         context[f"cnt_{model_name}"] = int(round_to_two_significant_digits(model_count))
 
     # Count runs that have more than 5 registrations
-    runs_query = Run.objects.annotate(num_reg=Count("registrations")).filter(num_reg__gt=5)
+    runs_query = Run.objects.annotate(num_registration=Count("registrations")).filter(num_registration__gt=5)
     context["cnt_run"] = int(round_to_two_significant_digits(runs_query.count()))
 
     # Gather additional display data

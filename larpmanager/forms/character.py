@@ -29,7 +29,7 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.registration import get_reg_counts
+from larpmanager.cache.registration import get_registration_counts
 from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
@@ -178,8 +178,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
         fields_custom = set()
 
         # Initialize registration questions and get counts
-        self._init_reg_question(self.instance, event)
-        registration_counts = get_reg_counts(self.params["run"])
+        self._init_registration_question(self.instance, event)
+        registration_counts = get_registration_counts(self.params["run"])
 
         # Process each question to create form fields
         for question in self.questions:

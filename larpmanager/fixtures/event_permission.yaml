@@ -1,7 +1,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Event
-    descr: 'Manage the event settings: name, description, dates, and other data'
+    descr: 'Manage the event settings: name, description, dates, status'
     slug: orga_event
     number: 11
     config: gallery

@@ -256,7 +256,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
 
         # Handle multiple features - show management page
         context["features"] = get_association_features(context["association_id"])
-        get_index_association_permissions(context, request, context["association_id"])
+        get_index_association_permissions(request, context, context["association_id"])
         return render(request, "larpmanager/manage/features.html", context)
 
     # Render edit form for feature selection

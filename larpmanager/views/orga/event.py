@@ -35,6 +35,7 @@ from larpmanager.cache.character import clear_run_cache_and_media
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.run import get_cache_run
 from larpmanager.forms.event import (
+    ExeEventForm,
     OrgaAppearanceForm,
     OrgaConfigForm,
     OrgaEventButtonForm,
@@ -88,23 +89,25 @@ def orga_event(request: HttpRequest, event_slug: str) -> HttpResponse:
 def full_event_edit(
     context: dict,
     request: HttpRequest,
-    event: Event,
-    run: Run,
+    event: Event | None,
+    run: Run | None,
     *,
     is_executive: bool = False,
+    on_created_callback: callable | None = None,
 ) -> HttpResponse:
     """Comprehensive event editing with validation.
 
     Handles both GET requests for displaying edit forms and POST requests for
     processing form submissions. Validates and saves both event and run forms
-    when submitted.
+    when submitted. Supports both creation (event=None, run=None) and editing.
 
     Args:
         context: Context dictionary for template rendering
         request: HTTP request object containing form data
-        event: Event instance to edit
-        run: Run instance associated with the event
+        event: Event instance to edit, or None for creation
+        run: Run instance associated with the event, or None for creation
         is_executive: Whether this is an executive-level edit, defaults to False
+        on_created_callback: Optional callback(event, run) called after creation
 
     Returns:
         HttpResponse: Either the edit form template for GET requests or a
@@ -113,32 +116,46 @@ def full_event_edit(
     """
     # Disable numbering in the template context
     context["nonum"] = 1
+    context["is_creation"] = event is None
+    event_form_class = ExeEventForm if is_executive else OrgaEventForm
 
     if request.method == "POST":
         # Create form instances with POST data and file uploads
-        event_form = OrgaEventForm(request.POST, request.FILES, instance=event, context=context, prefix="form1")
+        event_form = event_form_class(request.POST, request.FILES, instance=event, context=context, prefix="form1")
         run_form = OrgaRunForm(request.POST, request.FILES, instance=run, context=context, prefix="form2")
 
         # Validate both forms before saving
         if event_form.is_valid() and run_form.is_valid():
-            # Save both forms to database
-            event_form.save()
-            run_form.save()
+            # Save event first
+            saved_event = event_form.save()
+
+            if context["is_creation"]:
+                # Get the run created automatically, and update it with form data
+                saved_run = saved_event.runs.first()
+                for field in run_form.cleaned_data:
+                    setattr(saved_run, field, run_form.cleaned_data[field])
+                saved_run.save()
+                if on_created_callback:
+                    on_created_callback(saved_event)
+            else:
+                # For editing, just save the run form normally
+                saved_run = run_form.save()
 
             # Show success message and redirect based on access level
             messages.success(request, _("Operation completed") + "!")
-            if is_executive:
+            if is_executive and not context.get("is_creation"):
                 return redirect("manage")
-            return redirect("manage", event_slug=run.get_slug())
+
+            return redirect("manage", event_slug=saved_run.get_slug())
     else:
         # Create empty forms for GET requests
-        event_form = OrgaEventForm(instance=event, context=context, prefix="form1")
+        event_form = event_form_class(instance=event, context=context, prefix="form1")
         run_form = OrgaRunForm(instance=run, context=context, prefix="form2")
 
     # Add forms and metadata to template context
     context["form1"] = event_form
     context["form2"] = run_form
-    context["num"] = event.uuid
+    context["num"] = event.uuid if event else "0"
     context["type"] = "event"
 
     return render(request, "larpmanager/orga/edit_multi.html", context)
