@@ -149,10 +149,10 @@ def test_faction_all(pw_page: Any) -> None:
 
         submit_confirm(page)
 
-    # Character 1: Primary Faction 1 + all 3 Transversals (will be assigned to user@test.it)
+    # Character 1: Primary Faction 1 + all 3 Transversals (will be assigned to user@test.it) + 1 Secret
     create_character("Character Alpha", "Alpha teaser", "Alpha private text",
                      ["Primary Faction 1", "Transversal Faction 1",
-                      "Transversal Faction 2", "Transversal Faction 3"])
+                      "Transversal Faction 2", "Transversal Faction 3", "Secret Faction 1"])
 
     # Character 2: Primary Faction 1 (shared) + 1 Transversal + 2 Secrets
     create_character("Character Beta", "Beta teaser", "Beta private text",
@@ -193,9 +193,7 @@ def test_faction_all(pw_page: Any) -> None:
     """)
 
     # Verify SECRET factions are NOT visible
-    expect(page.locator("#one")).not_to_contain_text("Secret Faction 1")
-    expect(page.locator("#one")).not_to_contain_text("Secret Faction 2")
-    expect(page.locator("#one")).not_to_contain_text("Secret Faction 3")
+    expect(page.locator("#one")).not_to_contain_text("Secret")
 
     # Open Primary Faction 1 details
     page.get_by_role("link", name="Primary Faction 1").click()
@@ -336,7 +334,18 @@ def test_faction_all(pw_page: Any) -> None:
 
         Private Faction Question: TF3 private answer
 
+        Secret Faction 1
+
         Text
+
+        SF1 private text
+
+        Public Faction Question: SF1 public answer
+
+        Private Faction Question: SF1 private answer
+
+        Text
+
         Alpha private text
       """)
 
@@ -362,12 +371,10 @@ def test_faction_all(pw_page: Any) -> None:
     # Verify Beta PRIVATE TEXT is NOT visible (not assigned)
     expect(page.locator("#one")).not_to_contain_text("private")
 
-    # Verify that Secret Factions are never visible
-    # (Character Alpha doesn't have secret factions)
+    # Verify that Secret Factions are never visible (except for Alpha)
     links = [
         "test/",
         "test/character/u1/",
-        "test/character/u2/",
         "test/character/u3/",
         "test/character/u4/",
         "test/factions/",
