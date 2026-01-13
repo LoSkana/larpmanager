@@ -205,6 +205,11 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     context["exe_page"] = 1
     context["manage"] = 1
 
+    # TODO remove
+    context["old_dashboard"] = get_association_config(
+        context["association_id"], "old_dashboard", default_value=False, context=context
+    )
+
     # Check what would you like form
     what_would_you_like(context, request)
 
@@ -469,6 +474,11 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
     context["manage"] = 1
     features = get_event_features(context["event"].id)
 
+    # TODO remove
+    context["old_dashboard"] = get_association_config(
+        context["association_id"], "old_dashboard", default_value=False, context=context
+    )
+
     # Check what would you like form
     what_would_you_like(context, request)
 
@@ -523,12 +533,25 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
     _check_intro_driver(context)
 
     # Loads widget data
-    context["widgets"] = {}
-    for widget in ["deadline"]:
-        if widget in features:
-            context["widgets"].append(get_widget_cache(context["run"], widget))
+    _orga_widgets(context, features)
 
     return render(request, "larpmanager/manage/orga.html", context)
+
+
+def _orga_widgets(context:dict, features:dict):
+    """Loads widget data into context."""
+
+    widgets_available = []
+    for widget in ["deadlines", "casting"]:
+        if widget in features:
+            widgets_available.append(widget)
+    if "user_character" in features and get_event_config(context["event"].id, "user_character_approval",
+                                                         default_value=False, context=context):
+        widgets_available.append("user_character")
+
+    context["widgets"] = {}
+    for widget in widgets_available:
+        context["widgets"][widget] = get_widget_cache(context["run"], widget)
 
 
 def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict) -> None:  # noqa: C901 - Complex priority determination logic

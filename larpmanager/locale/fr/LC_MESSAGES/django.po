@@ -1785,6 +1785,12 @@ msgstr "Quatre quotas"
 msgid "Gallery Pdf"
 msgstr "Galerie Pdf"
 
+msgid "In creation"
+msgstr "Dans la création"
+
+msgid "In revision"
+msgstr "En révision"
+
 msgid "Information"
 msgstr "Informations"
 
@@ -2268,6 +2274,9 @@ msgstr "Pas terminé"
 
 msgid "Number events"
 msgstr "Nombre d'événements"
+
+msgid "Old dashboard"
+msgstr "Ancien tableau de bord"
 
 msgid "Original text"
 msgstr "Texte original"
@@ -3311,6 +3320,9 @@ msgstr "Inventaire des personnages"
 msgid "Character not found"
 msgstr "Caractère non trouvé"
 
+msgid "Characters assigned"
+msgstr "Caractères attribués"
+
 msgid "Characters shortcut"
 msgstr "Raccourci des caractères"
 
@@ -3615,6 +3627,9 @@ msgstr "Caractère non visible"
 
 msgid "Character sheet intro"
 msgstr "Introduction à la feuille de personnage"
+
+msgid "Characters unassigned"
+msgstr "Caractères non attribués"
 
 msgid "Code 'Bring a friend'"
 msgstr "Apportez un code d'ami"
@@ -4450,6 +4465,9 @@ msgstr "Contenu de la page spéciale"
 msgid "Cover photo fo the character"
 msgstr "Exemple de photo du personnage"
 
+msgid "Delay in profile compilation"
+msgstr "Retard dans la compilation des profils"
+
 msgid "Describe how we can help you"
 msgstr "Décrivez comment nous pouvons vous aider"
 
@@ -4534,6 +4552,9 @@ msgstr "Nombre de billets à tirer"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Code personnel : <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Joueurs en attente d'un personnage"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5770,6 +5791,9 @@ msgstr "(Facultatif) Nombre maximal de places disponibles"
 msgid "Background image used across all event pages"
 msgstr "Image de fond utilisée sur toutes les pages de l'événement"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Annulation pour absence de compilation de profil"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Souhaitez-vous être remboursé ? Ouvrez un nouveau"
 
@@ -6528,6 +6552,9 @@ msgstr ""
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Tout est en ordre pour que nous puissions payer cet événement"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Si coché : affiche le tableau de bord avec l'ancienne interface"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Indiquez une chanson que vous souhaitez dédier à votre personnage"

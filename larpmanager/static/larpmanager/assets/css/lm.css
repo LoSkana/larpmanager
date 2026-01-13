@@ -2557,6 +2557,26 @@ input[type="number"] {
   padding-top: 0.5em;
 }
 
+#wwyltd .select2-selection__arrow {
+  display: none;
+}
+
+#wwyltd .select2-container {
+  position: relative;
+}
+
+#wwyltd .select2-container::after {
+  content: "\f002";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #999;
+}
+
 @media (max-width: 768px) {
   #wwyltd {
     width: 100%;
@@ -2570,25 +2590,31 @@ input[type="number"] {
   padding: 0.5em;
 }
 
-.grid-item {
+.grid .grid-item {
   flex: 0 0 calc(33.333% - 14px);
   background-color: rgba(var(--pri-rgb), 0.085);
   border-radius: 8px;
   padding: 1em;
   box-shadow: 0 2px 5px rgba(var(--pri-rgb), 0.5);
-  height: 15em;
+  height: 13em;
   overflow-y: auto;
   scrollbar-width: auto;
   scrollbar-color: rgba(var(--ter-rgb), 0.5) rgba(var(--pri-rgb), 0.1);
 }
 
-.grid-item h2 {
+.grid .grid-item h2 {
   margin-top: 0;
+  font-size: 1.3em;
+}
+
+.grid .grid-item th,
+.grid .grid-item td {
+  padding: 0.4em;
 }
 
 /* Mobile: 1 column */
 @media (max-width: 768px) {
-  .grid-item {
+  .grid .grid-item {
     flex: 0 0 100%;
     max-height: none;
     overflow-y: visible;
@@ -2597,27 +2623,32 @@ input[type="number"] {
 
 /* Tablet: 2 column */
 @media (min-width: 769px) and (max-width: 1024px) {
-  .grid-item {
+  .grid .grid-item {
     flex: 0 0 calc(50% - 10px);
   }
 }
 
-.grid-item::-webkit-scrollbar {
+.grid .grid-item::-webkit-scrollbar {
   width: 8px;
 }
 
-.grid-item::-webkit-scrollbar-track {
+.grid .grid-item::-webkit-scrollbar-track {
   background: rgba(var(--pri-rgb), 0.1);
   border-radius: 4px;
 }
 
-.grid-item::-webkit-scrollbar-thumb {
+.grid .grid-item::-webkit-scrollbar-thumb {
   background: rgba(var(--ter-rgb), 0.5);
   border-radius: 4px;
 }
 
-.grid-item::-webkit-scrollbar-thumb:hover {
+.grid .grid-item::-webkit-scrollbar-thumb:hover {
   background: rgba(var(--ter-rgb), 0.7);
+}
+
+.old_dashboard .grid-item {
+  margin: 0.2em 0;
+  border-bottom: 1px solid rgba(var(--pri-rgb), 0.9);
 }
 
 .copy-link-btn {

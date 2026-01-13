@@ -1785,6 +1785,12 @@ msgstr "Vier Quoten"
 msgid "Gallery Pdf"
 msgstr "Pdf-Galerie"
 
+msgid "In creation"
+msgstr "In der Schöpfung"
+
+msgid "In revision"
+msgstr "In Überarbeitung"
+
 msgid "Information"
 msgstr "Informationen"
 
@@ -2268,6 +2274,9 @@ msgstr "Nicht abgeschlossen"
 
 msgid "Number events"
 msgstr "Anzahl der Ereignisse"
+
+msgid "Old dashboard"
+msgstr "Altes Armaturenbrett"
 
 msgid "Original text"
 msgstr "Ursprünglicher Text"
@@ -3311,6 +3320,9 @@ msgstr "Charakter-Inventar"
 msgid "Character not found"
 msgstr "Zeichen nicht gefunden"
 
+msgid "Characters assigned"
+msgstr "Zugewiesene Zeichen"
+
 msgid "Characters shortcut"
 msgstr "Abkürzung für Zeichen"
 
@@ -3615,6 +3627,9 @@ msgstr "Zeichen nicht sichtbar"
 
 msgid "Character sheet intro"
 msgstr "Charakterbogen Intro"
+
+msgid "Characters unassigned"
+msgstr "Nicht zugewiesene Zeichen"
 
 msgid "Code 'Bring a friend'"
 msgstr "Bringen Sie einen Freundschaftscode mit"
@@ -4450,6 +4465,9 @@ msgstr "Inhalt der Sonderseite"
 msgid "Cover photo fo the character"
 msgstr "Ein Beispielfoto der Figur"
 
+msgid "Delay in profile compilation"
+msgstr "Verzögerung bei der Profilerstellung"
+
 msgid "Describe how we can help you"
 msgstr "Beschreiben Sie, wie wir Ihnen helfen können"
 
@@ -4534,6 +4552,9 @@ msgstr "Anzahl der zu ziehenden Lose"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Persönlicher Code: <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Spieler warten auf Charakter"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5777,6 +5798,9 @@ msgstr "(fakultativ) Maximale Anzahl der verfügbaren Plätze"
 msgid "Background image used across all event pages"
 msgstr "Hintergrundbild, das auf allen Veranstaltungsseiten verwendet wird"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Annullierung wegen fehlender Profilerstellung"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Möchten Sie eine Rückerstattung erhalten? Öffnen Sie ein neues"
 
@@ -6547,6 +6571,9 @@ msgstr "Jeder Token kann aus Sicherheitsgründen nur einmal verwendet werden."
 msgid "Everything is in order about the payment of this event"
 msgstr ""
 "Alles ist in Ordnung, damit wir für diese Veranstaltung bezahlen können"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Wenn markiert: zeigt das Dashboard mit der alten Schnittstelle an"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Gib einen Song an, den du deiner Figur widmen möchtest"

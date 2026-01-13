@@ -1785,6 +1785,12 @@ msgstr "Fyra kvoter"
 msgid "Gallery Pdf"
 msgstr "Pdf-galleri"
 
+msgid "In creation"
+msgstr "I skapelsen"
+
+msgid "In revision"
+msgstr "I revision"
+
 msgid "Information"
 msgstr "Information om"
 
@@ -2268,6 +2274,9 @@ msgstr "Ej slutfört"
 
 msgid "Number events"
 msgstr "Antal evenemang"
+
+msgid "Old dashboard"
+msgstr "Gammal instrumentpanel"
 
 msgid "Original text"
 msgstr "Originaltext"
@@ -3311,6 +3320,9 @@ msgstr "Karaktärsinventering"
 msgid "Character not found"
 msgstr "Tecknet hittades inte"
 
+msgid "Characters assigned"
+msgstr "Tecken tilldelade"
+
 msgid "Characters shortcut"
 msgstr "Kortkommando för tecken"
 
@@ -3615,6 +3627,9 @@ msgstr "Karaktär inte synlig"
 
 msgid "Character sheet intro"
 msgstr "Introduktion till karaktärsblad"
+
+msgid "Characters unassigned"
+msgstr "Tecken som inte är tilldelade"
 
 msgid "Code 'Bring a friend'"
 msgstr "Ta med en vän kod"
@@ -4450,6 +4465,9 @@ msgstr "Innehåll i den särskilda sidan"
 msgid "Cover photo fo the character"
 msgstr "Ett exempel på foto av karaktären"
 
+msgid "Delay in profile compilation"
+msgstr "Försening i sammanställning av profil"
+
 msgid "Describe how we can help you"
 msgstr "Beskriv hur vi kan hjälpa dig"
 
@@ -4534,6 +4552,9 @@ msgstr "Antal biljetter som skall dras"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Personlig kod: <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Spelare som väntar på karaktär"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5766,6 +5787,9 @@ msgstr "(Valfritt) Maximalt antal tillgängliga platser"
 msgid "Background image used across all event pages"
 msgstr "Bakgrundsbild används på alla evenemangssidor"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Avbokning på grund av utebliven profilsammanställning"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Vill du ha ersättning för dina kostnader? Öppna en ny"
 
@@ -6491,6 +6515,9 @@ msgstr "Av säkerhetsskäl kan varje token endast användas en gång."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Allt är i sin ordning för att vi ska kunna betala för detta evenemang"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Om markerad: visar instrumentpanelen med det gamla gränssnittet"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Ange en sång som du vill tillägna din karaktär"

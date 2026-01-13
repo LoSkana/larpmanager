@@ -1785,6 +1785,12 @@ msgstr "Fire kvoter"
 msgid "Gallery Pdf"
 msgstr "Pdf-galleri"
 
+msgid "In creation"
+msgstr "I skapelsen"
+
+msgid "In revision"
+msgstr "I revisjon"
+
 msgid "Information"
 msgstr "Informasjon"
 
@@ -2268,6 +2274,9 @@ msgstr "Ikke fullført"
 
 msgid "Number events"
 msgstr "Antall hendelser"
+
+msgid "Old dashboard"
+msgstr "Gammelt dashbord"
 
 msgid "Original text"
 msgstr "Opprinnelig tekst"
@@ -3311,6 +3320,9 @@ msgstr "Karakterinventar"
 msgid "Character not found"
 msgstr "Tegn ikke funnet"
 
+msgid "Characters assigned"
+msgstr "Tildelte tegn"
+
 msgid "Characters shortcut"
 msgstr "Snarvei for tegn"
 
@@ -3615,6 +3627,9 @@ msgstr "Tegn ikke synlig"
 
 msgid "Character sheet intro"
 msgstr "Intro til karakterark"
+
+msgid "Characters unassigned"
+msgstr "Tegn som ikke er tilordnet"
 
 msgid "Code 'Bring a friend'"
 msgstr "Ta med en vennekode"
@@ -4450,6 +4465,9 @@ msgstr "Innhold på spesialsiden"
 msgid "Cover photo fo the character"
 msgstr "Et eksempel på et bilde av karakteren"
 
+msgid "Delay in profile compilation"
+msgstr "Forsinkelse i profilkompilering"
+
 msgid "Describe how we can help you"
 msgstr "Beskriv hvordan vi kan hjelpe deg"
 
@@ -4534,6 +4552,9 @@ msgstr "Antall billetter som skal trekkes"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Personlig kode: <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Spillere som venter på karakter"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5767,6 +5788,9 @@ msgstr "(Valgfritt) Maksimalt antall tilgjengelige plasser"
 msgid "Background image used across all event pages"
 msgstr "Bakgrunnsbilde som brukes på alle arrangementssidene"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Avbestilling på grunn av manglende profilkompilering"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Ønsker du å bli refundert? Åpne en ny"
 
@@ -6496,6 +6520,9 @@ msgstr "Hver token kan bare brukes én gang av sikkerhetsmessige årsaker."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Alt er i orden for at vi skal kunne betale for dette arrangementet"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Hvis avkrysset: viser dashbordet med det gamle grensesnittet"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Angi en sang du ønsker å dedikere til karakteren din"

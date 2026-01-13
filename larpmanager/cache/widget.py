@@ -24,7 +24,10 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.http import Http404
 
+from larpmanager.models.casting import Casting
 from larpmanager.models.event import Event, Run
+from larpmanager.models.registration import RegistrationCharacterRel
+from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.users.deadlines import check_run_deadlines
 
 
@@ -45,12 +48,69 @@ def _init_deadline_widget_cache(run: Run) -> dict:
     return counts
 
 
-widget_list = {"deadline": _init_deadline_widget_cache}
+def _init_user_character_widget_cache(run: Run) -> dict:
+    """Compute character counts by status for widget cache."""
+    # Count characters for each status
+    counts = {}
+
+    # Get all characters for this run
+    characters = run.event.get_elements(Character)
+
+    # Count by status
+    counts["creation"] = characters.filter(status=CharacterStatus.CREATION).count()
+    counts["proposed"] = characters.filter(status=CharacterStatus.PROPOSED).count()
+    counts["review"] = characters.filter(status=CharacterStatus.REVIEW).count()
+    counts["approved"] = characters.filter(status=CharacterStatus.APPROVED).count()
+
+    return counts
+
+
+def _init_casting_widget_cache(run: Run) -> dict:
+    """Compute casting statistics for widget cache."""
+    counts = {}
+
+    # Get all characters for this run
+    characters = run.event.get_elements(Character)
+    all_character_ids = set(characters.values_list("id", flat=True))
+
+    # Precompute list of assigned character IDs via RegistrationCharacterRel
+    assigned_character_ids = set(
+        RegistrationCharacterRel.objects.filter(registration__run=run).values_list("character_id", flat=True)
+    )
+
+    # Count assigned and unassigned characters
+    counts["assigned"] = len(assigned_character_ids)
+    counts["unassigned"] = len(all_character_ids - assigned_character_ids)
+
+    # Get members with active casting preferences but no assigned character
+    members_with_casting = set(
+        Casting.objects.filter(run=run, active=True).values_list("member_id", flat=True).distinct()
+    )
+
+    # Get members who already have a character assigned in this run
+    members_with_character = set(
+        RegistrationCharacterRel.objects.filter(registration__run=run)
+        .values_list("registration__member_id", flat=True)
+        .distinct()
+    )
+
+    # Players waiting = those with preferences but no assigned character
+    waiting_members = members_with_casting - members_with_character
+    counts["waiting"] = len(waiting_members)
+
+    return counts
+
+
+widget_list = {
+    "deadlines": _init_deadline_widget_cache,
+    "user_character": _init_user_character_widget_cache,
+    "casting": _init_casting_widget_cache,
+}
 
 
 def get_widget_cache_key(run_id: int, widget_name: str) -> str:
     """Generate cache key for deadline widget data."""
-    return f"deadline_widget_{run_id}_{widget_name}"
+    return f"widget_cache_{run_id}_{widget_name}"
 
 
 def get_widget_cache(run: Run, widget_name: str) -> dict:

@@ -1785,6 +1785,12 @@ msgstr "Čtyři kvóty"
 msgid "Gallery Pdf"
 msgstr "Galerie Pdf"
 
+msgid "In creation"
+msgstr "Při tvorbě"
+
+msgid "In revision"
+msgstr "V revizi"
+
 msgid "Information"
 msgstr "Informace"
 
@@ -2268,6 +2274,9 @@ msgstr "Není dokončeno"
 
 msgid "Number events"
 msgstr "Počet událostí"
+
+msgid "Old dashboard"
+msgstr "Stará přístrojová deska"
 
 msgid "Original text"
 msgstr "Původní text"
@@ -3311,6 +3320,9 @@ msgstr "Soupis postav"
 msgid "Character not found"
 msgstr "Znak nebyl nalezen"
 
+msgid "Characters assigned"
+msgstr "Přidělené znaky"
+
 msgid "Characters shortcut"
 msgstr "Zkratka znaků"
 
@@ -3615,6 +3627,9 @@ msgstr "Znak není viditelný"
 
 msgid "Character sheet intro"
 msgstr "Úvodní list postavy"
+
+msgid "Characters unassigned"
+msgstr "Nepřiřazené znaky"
 
 msgid "Code 'Bring a friend'"
 msgstr "Přineste kód přítele"
@@ -4450,6 +4465,9 @@ msgstr "Obsah speciální stránky"
 msgid "Cover photo fo the character"
 msgstr "Příklad fotografie postavy"
 
+msgid "Delay in profile compilation"
+msgstr "Zpoždění při sestavování profilu"
+
 msgid "Describe how we can help you"
 msgstr "Popište, jak vám můžeme pomoci"
 
@@ -4534,6 +4552,9 @@ msgstr "Počet losovaných vstupenek"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Osobní kód: <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Hráči čekají na postavu"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5764,6 +5785,9 @@ msgstr "(Nepovinné) Maximální počet volných míst"
 msgid "Background image used across all event pages"
 msgstr "Obrázek na pozadí použitý na všech stránkách události"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Zrušení kvůli chybějícímu sestavení profilu"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Chcete, aby vám byly náklady proplaceny? Otevřete novou"
 
@@ -6494,6 +6518,9 @@ msgstr "Každý token lze z bezpečnostních důvodů použít pouze jednou."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Vše je v pořádku, abychom mohli tuto akci zaplatit"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Pokud je zaškrtnuto: zobrazí přístrojovou desku se starým rozhraním"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Uveďte píseň, kterou chcete věnovat své postavě"

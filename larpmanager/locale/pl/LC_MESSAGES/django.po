@@ -1785,6 +1785,12 @@ msgstr "Cztery kwoty"
 msgid "Gallery Pdf"
 msgstr "Galeria Pdf"
 
+msgid "In creation"
+msgstr "W tworzeniu"
+
+msgid "In revision"
+msgstr "W rewizji"
+
 msgid "Information"
 msgstr "Informacje"
 
@@ -2268,6 +2274,9 @@ msgstr "Nieukończone"
 
 msgid "Number events"
 msgstr "Liczba zdarzeń"
+
+msgid "Old dashboard"
+msgstr "Stara deska rozdzielcza"
 
 msgid "Original text"
 msgstr "Tekst oryginalny"
@@ -3311,6 +3320,9 @@ msgstr "Spis postaci"
 msgid "Character not found"
 msgstr "Nie znaleziono znaku"
 
+msgid "Characters assigned"
+msgstr "Przypisane postacie"
+
 msgid "Characters shortcut"
 msgstr "Skrót znaków"
 
@@ -3615,6 +3627,9 @@ msgstr "Postać niewidoczna"
 
 msgid "Character sheet intro"
 msgstr "Wprowadzenie do arkusza postaci"
+
+msgid "Characters unassigned"
+msgstr "Znaki nieprzypisane"
 
 msgid "Code 'Bring a friend'"
 msgstr "Kod 'Przyprowadź znajomego"
@@ -4450,6 +4465,9 @@ msgstr "Zawartość strony specjalnej"
 msgid "Cover photo fo the character"
 msgstr "Zdjęcie postaci na okładce"
 
+msgid "Delay in profile compilation"
+msgstr "Opóźnienie w kompilacji profilu"
+
 msgid "Describe how we can help you"
 msgstr "Opisz, jak możemy Ci pomóc"
 
@@ -4534,6 +4552,9 @@ msgstr "Liczba losów do rozlosowania"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Kod osobisty: <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Gracze czekający na postać"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5764,6 +5785,9 @@ msgstr "(Opcjonalnie) Maksymalna liczba dostępnych miejsc"
 msgid "Background image used across all event pages"
 msgstr "Obraz tła używany na wszystkich stronach wydarzenia"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Anulowanie z powodu braku kompilacji profilu"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Czy chcesz otrzymać zwrot kosztów? Otwórz nowy"
 
@@ -6499,6 +6523,9 @@ msgstr "Ze względów bezpieczeństwa każdy token może być użyty tylko raz."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Wszystko jest w porządku w kwestii płatności za to wydarzenie"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Jeśli zaznaczone: wyświetla pulpit nawigacyjny ze starym interfejsem"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Wskaż piosenkę, którą chcesz zadedykować swojej postaci"

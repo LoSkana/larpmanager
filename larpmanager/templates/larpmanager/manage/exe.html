@@ -6,15 +6,7 @@
 {% block content %}
     <div id="manage">
         {% include "larpmanager/manage/sticky_messages.html" %}
-        <div id="wwyltd">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.wwyltd }}
-            </form>
-        </div>
-        {% with list=priorities typ="priorities" %}
-            {% include "larpmanager/manage/helpers.html" %}
-        {% endwith %}
+        {% include "larpmanager/manage/widgets/wwyltd.html" %}
         {% if ongoing_runs %}
             <h2>
                 <i class="fa-solid fa-calendar-days"></i> {% trans "Events" %}
@@ -52,37 +44,18 @@
                 </tbody>
             </table>
         {% endif %}
-        {% if global_sum or bank_sum %}
-            <h2>
-                <a href="{% url 'exe_accounting' %}" target="_blank"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
-            </h2>
-            <table class="go_datatable" no_header_cols="all">
-                <thead>
-                    <tr>
-                        <th descr="{% trans "This is the associative positive operating margin, taking into account the budgets of completed events, minus credits or tokens issued" %}">
-                            <a href="#" class="sidebar-link">{% trans "Global balance" %}</a>
-                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                        </th>
-                        <th descr="{% trans "This is the overall amount that should be held in the organization’s bank and financial accounts" %}">
-                            <a href="#" class="sidebar-link">{% trans "Overall balance" %}</a>
-                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ global_sum }}</td>
-                        <td>{{ bank_sum }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        {% endif %}
-        {% with list=actions typ="actions" %}
-            {% include "larpmanager/manage/helpers.html" %}
-        {% endwith %}
-        {% with list=suggestions typ="suggestions" %}
-            {% include "larpmanager/manage/helpers.html" %}
-        {% endwith %}
+        <div {% if not old_dashboard %}class="grid"{% else %}class="old_dashboard"{% endif %}>
+            {% include "larpmanager/manage/widgets/exe_accounting.html" %}
+            {% with list=priorities typ="priorities" %}
+                {% include "larpmanager/manage/widgets/helpers.html" %}
+            {% endwith %}
+            {% with list=actions typ="actions" %}
+                {% include "larpmanager/manage/widgets/helpers.html" %}
+            {% endwith %}
+            {% with list=suggestions typ="suggestions" %}
+                {% include "larpmanager/manage/widgets/helpers.html" %}
+            {% endwith %}
+        </div>
         <hr />
         <div class="staff-list">
             <div class="orga-buttons">
