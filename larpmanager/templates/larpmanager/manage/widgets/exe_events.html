@@ -9,7 +9,9 @@
             {% if event.parent %}
                 | {% trans "Campaign" %}: {{ event.parent }}
             {% endif %}
-            | {% trans "Status" %}: {{ run.get_development_display }}
+        </p>
+        <p>
+            {% trans "Status" %}: {{ run.get_development_display }}
             |
             <a href="{% url 'gallery' run.get_slug %}" target="_blank">Event link</a>
             <button class="copy-link-btn"
@@ -26,7 +28,7 @@
                 <i class="fa-solid fa-copy"></i>
             </button>
             {% if run.registration_counts %}
-                {% for key, count in run.registration_counts.items %}| {{ key }}: {{ count }}{% endfor %}
+                {% for key, count in run.registration_counts.items %}&nbsp;| {{ key }}: {{ count }}{% endfor %}
             {% endif %}
         </p>
     </div>
