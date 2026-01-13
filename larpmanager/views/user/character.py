@@ -621,15 +621,6 @@ def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
     Returns:
         JsonResponse: Array of objects containing basic character info
 
-        Example:
-        [
-            {
-                "uuid": "<str: char_uuid>",
-                "name": "<str: char_name>"
-            },
-            ...
-        ]
-
     """
     context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
 
@@ -802,22 +793,6 @@ def character_abilities_json(request: HttpRequest, event_slug: str, character_uu
     Returns:
         JsonResponse: JSON Object with basic character info, plus an object with each owned ability type uuid as keys and, as the value, the ability type's name and an object with ability uuid's as keys and the ability's name as values
 
-        Example:
-        {
-            "uuid": "<str: char_uuid>",
-            "name": "<str: char_name>",
-            "ability_types": {
-                "<type_uuid>": {
-                    "type_name": "<str: type_name>",
-                    "type_abilities": {
-                        "<ability_uuid>": "<str: ability_name>",
-                        ...
-                    }
-                },
-                ...
-            }
-        }
-
     Raises:
         Http404: If character or event is not found (via check_char_abilities)
         PermissionDenied: If user lacks permission to view character abilities
@@ -880,25 +855,6 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
 
     Returns:
         JsonResponse: JSON Object with basic character info, plus an object with each inventory uuid as keys, and then an object with that inventory's name, and another property listing all of the pools. That object has each pool type's uuid as keys and, as the value, an object with the pool type's name and the integer representing the balance of that pool for that specific inventory, which defaults to zero (0)
-
-        Example:
-        {
-            "uuid": "<str: char_uuid>",
-            "name": "<str: char_name>",
-            "inventories": {
-                "<inventory_uuid>": {
-                    "name": "<str: inventory_name>",
-                    "pools": {
-                        "<pool_type_uuid>": {
-                            "name": "<str: type_name>",
-                            "amount": "<int: pool_balance>"
-                        },
-                        ...
-                    }
-                },
-                ...
-            }
-        }
 
     Raises:
         Http404: If character or event is not found (via get_char_check)
