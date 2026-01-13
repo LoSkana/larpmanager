@@ -39,6 +39,7 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_registration_counts
+from larpmanager.cache.widget import get_widget_cache
 from larpmanager.utils.auth.permission import has_association_permission, get_index_association_permissions, \
     has_event_permission, get_index_event_permissions
 from larpmanager.cache.wwyltd import get_features_cache, get_guides_cache, get_tutorials_cache
@@ -466,6 +467,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
     context = get_event_context(request, event_slug)
     context["orga_page"] = 1
     context["manage"] = 1
+    features = get_event_features(context["event"].id)
 
     # Check what would you like form
     what_would_you_like(context, request)
@@ -502,7 +504,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
     if "actions_list" in context:
         del context["actions_list"]
 
-    _orga_actions_priorities(request, context)
+    _orga_actions_priorities(request, context, features)
     _orga_suggestions(context)
     _compile(request, context)
 
@@ -517,12 +519,19 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
             should_open_shortcuts = str(context["run"].id) != origin_id
         context["open_shortcuts"] = should_open_shortcuts
 
+    # Check if intro driver needs to be shown
     _check_intro_driver(context)
+
+    # Loads widget data
+    context["widgets"] = {}
+    for widget in ["deadline"]:
+        if widget in features:
+            context["widgets"].append(get_widget_cache(context["run"], widget))
 
     return render(request, "larpmanager/manage/orga.html", context)
 
 
-def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # noqa: C901 - Complex priority determination logic
+def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict) -> None:  # noqa: C901 - Complex priority determination logic
     """Determine priority actions for event organizers based on event state.
 
     Analyzes event features and configuration to suggest next steps in
@@ -533,17 +542,16 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
         request: Django HTTP request object
         context: Context dictionary containing 'event' and 'run' keys. Will be updated
              with priority and action lists
+        features: Activated features dictionary
 
     Side effects:
         Modifies context by calling _add_priority() and _add_action() which populate
         action lists for the organizer dashboard
 
     """
-    # Load feature flags to determine which checks to perform
-    enabled_features = get_event_features(context["event"].id)
 
     # Check if character feature is properly configured
-    if "character" in enabled_features:
+    if "character" in features:
         # Prompt to create first character if none exist
         if not Character.objects.filter(event=context["event"]).exists():
             _add_priority(
@@ -552,7 +560,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
                 "orga_characters",
             )
     # Check for feature dependencies on character feature
-    elif set(enabled_features) & {
+    elif set(features) & {
         "faction",
         "plot",
         "casting",
@@ -569,7 +577,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
 
     # Check if user_character feature needs configuration
     if (
-        "user_character" in enabled_features
+        "user_character" in features
         and get_event_config(context["event"].id, "user_character_max", default_value="", context=context) == ""
     ):
         _add_priority(
@@ -580,7 +588,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
         )
 
     # Check for features that depend on credits
-    if "credits" not in enabled_features and set(enabled_features) & {"expense", "refund", "collection"}:
+    if "credits" not in features and set(features) & {"expense", "refund", "collection"}:
         _add_priority(
             context,
             _("Some activated features need the 'Credits' feature, but it isn't active"),
@@ -653,15 +661,15 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
         )
 
     # Delegate to sub-functions for additional action checks
-    _orga_user_actions(context, enabled_features, request)
+    _orga_user_actions(context, features, request)
 
-    _orga_registration_accounting_actions(context, enabled_features)
+    _orga_registration_accounting_actions(context, features)
 
-    _orga_registration_actions(context, enabled_features)
+    _orga_registration_actions(context, features)
 
-    _orga_px_actions(context, enabled_features)
+    _orga_px_actions(context, features)
 
-    _orga_casting_actions(context, enabled_features)
+    _orga_casting_actions(context, features)
 
 
 def _orga_user_actions(

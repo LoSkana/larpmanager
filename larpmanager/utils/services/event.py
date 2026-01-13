@@ -39,6 +39,7 @@ from larpmanager.cache.rels import clear_event_relationships_cache
 from larpmanager.cache.role import remove_event_role_cache
 from larpmanager.cache.run import reset_cache_run
 from larpmanager.cache.text_fields import reset_text_fields_cache
+from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.models.access import EventRole, get_event_organizers
 from larpmanager.models.base import Feature, auto_set_uuid, debug_set_uuid
 from larpmanager.models.event import Event, EventConfig, EventText, Run
@@ -669,6 +670,9 @@ def reset_all_run(event: Event, run: Run) -> None:
 
     # Clear text fields cache
     reset_text_fields_cache(run)
+
+    # Clear widgets
+    clear_widget_cache(run.id)
 
 
 def on_event_features_m2m_changed(

@@ -21,7 +21,7 @@
 from datetime import datetime, timedelta
 from typing import Any
 
-from django.db.models import Count, QuerySet
+from django.db.models import Count
 from django.utils import timezone
 
 from larpmanager.cache.config import get_association_config, get_event_config
@@ -72,7 +72,7 @@ def get_membership_fee_year(association_id: int, year: Any = None) -> set:
     )
 
 
-def check_run_deadlines(runs: QuerySet[Run]) -> list:
+def check_run_deadlines(runs: list[Run]) -> list:
     """Check deadline compliance for registrations.
 
     Args:
