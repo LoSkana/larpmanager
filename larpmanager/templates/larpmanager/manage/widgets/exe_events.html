@@ -26,18 +26,12 @@
             </button>
         </p>
         {% if run.registration_counts %}
-            <table>
-                <tbody>
-                    {% for key, count in run.registration_counts.items %}
-                        {% if count %}
-                            <tr>
-                                <th>{{ key }}</th>
-                                <td>{{ count }}</td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
+            <p>
+                {% for key, count in run.registration_counts.items %}
+                    {% include "elements/comma.html" %}
+                    {{ key }}: {{ count }}
+                {% endfor %}
+            </p>
         {% endif %}
     </div>
 {% endfor %}

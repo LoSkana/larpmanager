@@ -2594,6 +2594,10 @@ input[type="number"] {
   display: none;
 }
 
+#wwyltd form {
+  margin: 0 0 0.5em 0;
+}
+
 #wwyltd .select2-container {
   position: relative;
 }

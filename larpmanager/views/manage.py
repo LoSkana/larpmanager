@@ -189,8 +189,9 @@ def _get_registration_counts(run: Run) -> dict:
     registration_counts = {}
     for ticket_id, ticket_name in counts.get("tickets_map", {}).items():
         count_key = f"count_ticket_{ticket_id}"
-        if count_key in counts:
+        if count_key in counts and counts[count_key]:
             registration_counts[ticket_name] = counts[count_key]
+
     return dict(
         sorted(
             registration_counts.items(),
