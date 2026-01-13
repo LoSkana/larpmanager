@@ -25,8 +25,6 @@ from typing import TYPE_CHECKING
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from larpmanager.utils.core.sticky import add_sticky_message
-
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
@@ -124,13 +122,6 @@ def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
 
             # Refresh cached event links for user navigation
             reset_event_links(context["member"].id, context["association_id"])
-
-            add_sticky_message(
-                member=context["member"],
-                message="new_event",
-                expires_days=7,
-                element_uuid=str(created_event.uuid),
-            )
 
     # Use unified full_event_edit for both creation and editing
     context["add_another"] = False

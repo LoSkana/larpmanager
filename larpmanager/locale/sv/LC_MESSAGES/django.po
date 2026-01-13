@@ -2387,9 +2387,6 @@ msgstr "objekt raderade"
 msgid "items updated"
 msgstr "artiklar uppdaterade"
 
-msgid "registrations"
-msgstr "inskrivningar"
-
 msgid "Add to faction"
 msgstr "Lägg till i fraktion"
 

@@ -2387,9 +2387,6 @@ msgstr "elementer slettet"
 msgid "items updated"
 msgstr "elementer oppdatert"
 
-msgid "registrations"
-msgstr "påmeldinger"
-
 msgid "Add to faction"
 msgstr "Legg til i fraksjon"
 

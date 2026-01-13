@@ -2387,9 +2387,6 @@ msgstr "usunięte elementy"
 msgid "items updated"
 msgstr "zaktualizowane elementy"
 
-msgid "registrations"
-msgstr "rejestracje"
-
 msgid "Add to faction"
 msgstr "Dodaj do frakcji"
 

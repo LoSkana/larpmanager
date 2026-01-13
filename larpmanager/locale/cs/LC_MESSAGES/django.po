@@ -2387,9 +2387,6 @@ msgstr "odstraněné položky"
 msgid "items updated"
 msgstr "aktualizované položky"
 
-msgid "registrations"
-msgstr "zápisy"
-
 msgid "Add to faction"
 msgstr "Přidat do frakce"
 

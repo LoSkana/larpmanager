@@ -2387,9 +2387,6 @@ msgstr "éléments supprimés"
 msgid "items updated"
 msgstr "éléments mis à jour"
 
-msgid "registrations"
-msgstr "inscriptions"
-
 msgid "Add to faction"
 msgstr "Ajouter à la faction"
 

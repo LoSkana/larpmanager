@@ -5994,9 +5994,6 @@ msgstr ""
 msgid "Counts"
 msgstr ""
 
-msgid "registrations"
-msgstr ""
-
 msgid "Launch guided interface tour"
 msgstr ""
 
