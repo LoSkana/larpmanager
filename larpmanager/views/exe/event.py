@@ -109,6 +109,7 @@ def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
             context["welcome_message"] = True
             context["tutorial"] = None
             context["config"] = None
+            context["is_sidebar_open"] = False
 
         # Define callback for post-creation operations
         def on_created(created_event: Event) -> None:
