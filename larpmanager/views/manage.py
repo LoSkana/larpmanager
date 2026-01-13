@@ -503,7 +503,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
         context["counts"] = get_registration_counts(context["run"])
         context["registration_counts"] = {}
         for ticket_id, ticket_name in context["counts"].get("tickets_map", {}).items():
-            count_key = f"tk_{ticket_id}"
+            count_key = f"count_ticket_{ticket_id}"
             if count_key in context["counts"]:
                 context["registration_counts"][ticket_name] = context["counts"][count_key]
 
