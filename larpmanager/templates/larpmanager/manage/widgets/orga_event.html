@@ -12,7 +12,7 @@
     <p>
         <i>{{ run.pretty_dates }}</i>
     </p>
-    <p>Status: {{ run.get_development_display }}</p>
+    <p>{% trans "Status" %}: {{ run.get_development_display }}</p>
     <p>
         <a href="{% url 'gallery' run.get_slug %}" target="_blank">Event link</a>
         <button class="copy-link-btn"

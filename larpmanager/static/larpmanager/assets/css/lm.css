@@ -1409,7 +1409,7 @@ th select {
 
 #sidebar a.select,
 #topbar a.select {
-  color: rgba(var(--sec-rgb), 0.8);
+  border-bottom: 1.5px dashed rgba(var(--pri-rgb), 0.8);
 }
 
 #sidebar .close {
@@ -1746,6 +1746,39 @@ a label:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.popup_tutorial_container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.popup_tutorial_close {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 2em;
+  line-height: 1;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10001;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.popup_tutorial_close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
 }
 
 /* Force all TinyMCE elements to stay below popups */
@@ -2616,7 +2649,7 @@ input[type="number"] {
 @media (max-width: 768px) {
   .grid .grid-item {
     flex: 0 0 100%;
-    max-height: none;
+    height: auto;
     overflow-y: visible;
   }
 }

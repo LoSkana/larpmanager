@@ -4,14 +4,14 @@
         <a href="{% url 'orga_registrations' run.get_slug %}" target="_blank"><i class="fa-solid fa-clipboard-list"></i> {% trans "Registrations" %}</a>
     </h2>
     <p>
-        Status: <a href="{% url 'register' run.get_slug %}" target="_blank">{{ registration_status }}</a>
+        {% trans "Status" %}: <a href="{% url 'register' run.get_slug %}" target="_blank">{{ registration_status }}</a>
         <button class="copy-link-btn"
                 data-url="{% url 'register' run.get_slug %}"
                 title="{% trans "Copy link to clipboard" %}">
             <i class="fa-solid fa-copy"></i>
         </button>
     </p>
-    {% if features.registration_secret %}
+    {% if features.registration_secret and not registrations_open %}
         <p>
             <a href="{% url 'register_exclusive' run.get_slug run.registration_secret %}"
                target="_blank">{% trans "Secret registration link" %}</a>

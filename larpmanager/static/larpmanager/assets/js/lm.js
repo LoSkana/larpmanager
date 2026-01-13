@@ -118,7 +118,10 @@ $(document).ready(function() {
             newUrl += '#' + hash;
         }
 
-        frame = "<iframe src='{0}' width='100%' height='100%'></iframe>".format(newUrl);
+        frame = "<div class='popup_tutorial_container'>" +
+                "<button class='popup_tutorial_close' onclick='$.uglipop(\"close\")'>&times;</button>" +
+                "<iframe src='{0}' width='100%' height='100%'></iframe>" +
+                "</div>".format(newUrl);
 
         uglipop({class:'popup_tutorial', source:'html', content: frame});
 

@@ -41,6 +41,7 @@ from larpmanager.forms.utils import (
     EventS2Widget,
     SlugInput,
     TemplateS2Widget,
+    WritingTinyMCE,
     prepare_permissions_role,
     remove_choice,
     save_permissions_role,
@@ -157,7 +158,7 @@ class OrgaEventForm(BaseModelForm):
             "association",
         )
 
-        widgets: ClassVar[dict] = {"slug": SlugInput, "parent": CampaignS2Widget}
+        widgets: ClassVar[dict] = {"slug": SlugInput, "parent": CampaignS2Widget, "description": WritingTinyMCE}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize event form with field configuration based on context.

@@ -28,9 +28,11 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_registration_provisional
+from larpmanager.cache.accounting import clear_registration_accounting_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.registration import get_registration_counts
+from larpmanager.cache.registration import clear_registration_counts_cache, get_registration_counts
+from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
 from larpmanager.models.event import Event, PreRegistration, Run
 from larpmanager.models.form import (
@@ -1061,3 +1063,11 @@ def process_character_ticket_options(instance: Registration) -> None:
     # Process ticket options for all characters owned by the member in this event
     for character in event.get_elements(Character).filter(player=instance.member):
         check_character_ticket_options(instance, character)
+
+
+def reset_registration_ticket(instance: RegistrationTicket) -> None:
+    """Clear accounting cache for all runs in the ticket's event."""
+    for run in instance.event.runs.all():
+        clear_registration_accounting_cache(run.id)
+        clear_widget_cache(run.id)
+        clear_registration_counts_cache(run.id)

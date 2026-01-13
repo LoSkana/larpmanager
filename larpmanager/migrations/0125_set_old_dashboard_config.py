@@ -22,11 +22,11 @@ def set_old_dashboard_config(apps: Any, schema_editor: Any) -> None:
         # Only create if it doesn't already exist
         if not AssociationConfig.objects.filter(
             association=association,
-            key="old_dashboard"
+            name="old_dashboard"
         ).exists():
             AssociationConfig.objects.create(
                 association=association,
-                key="old_dashboard",
+                name="old_dashboard",
                 value="True"
             )
 

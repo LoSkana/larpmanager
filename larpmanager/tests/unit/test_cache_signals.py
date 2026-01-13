@@ -413,7 +413,7 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(run.id)
 
-    @patch("larpmanager.models.signals.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
     def test_registration_ticket_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that RegistrationTicket post_save signal resets accounting cache"""
         # RegistrationTicket signal resets for all runs in the event
@@ -426,7 +426,7 @@ class TestCacheSignals(BaseTestCase):
         # Signal calls reset for event runs
         self.assertTrue(mock_reset.called)
 
-    @patch("larpmanager.models.signals.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
     def test_registration_ticket_post_delete_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that RegistrationTicket post_delete signal resets accounting cache"""
         event = self.get_event()
