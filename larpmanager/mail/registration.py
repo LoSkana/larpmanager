@@ -285,7 +285,7 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
     # Prepare context data for email template
     email_context = {
         "event": instance.registration.run,
-        "character": instance.character,
+        "character": instance.character.name,
     }
 
     # Construct email subject with event header and localized text
