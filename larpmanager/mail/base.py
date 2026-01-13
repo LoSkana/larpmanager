@@ -490,8 +490,8 @@ def send_character_status_update_email(instance: Character) -> None:
     if not get_event_config(instance.event_id, "user_character_approval", default_value=False):
         return
 
-    # Only proceed if character exists in DB and has an assigned player
-    if instance.pk and instance.player:
+    # Skip if this is a new character being created (not yet in database)
+    if instance.pk and instance.player and not instance._state.adding:  # noqa: SLF001
         # Set language context for email content localization
         activate(instance.player.language)
 
