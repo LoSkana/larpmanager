@@ -17,21 +17,17 @@
                     title="{% trans "Copy link to clipboard" %}">
                 <i class="fa-solid fa-copy"></i>
             </button>
-            |
+        </p>
+        <p>
             <a href="{% url 'register' run.get_slug %}" target="_blank">{{ run.registration_status }}</a>
             <button class="copy-link-btn"
                     data-url="{% url 'register' run.get_slug %}"
                     title="{% trans "Copy link to clipboard" %}">
                 <i class="fa-solid fa-copy"></i>
             </button>
+            {% if run.registration_counts %}
+                {% for key, count in run.registration_counts.items %}| {{ key }}: {{ count }}{% endfor %}
+            {% endif %}
         </p>
-        {% if run.registration_counts %}
-            <p>
-                {% for key, count in run.registration_counts.items %}
-                    {% include "elements/comma.html" %}
-                    {{ key }}: {{ count }}
-                {% endfor %}
-            </p>
-        {% endif %}
     </div>
 {% endfor %}
