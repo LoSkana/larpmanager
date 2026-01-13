@@ -1409,7 +1409,7 @@ th select {
 
 #sidebar a.select,
 #topbar a.select {
-  color: rgba(var(--sec-rgb), 0.8);
+  border-bottom: 1.5px dashed rgba(var(--pri-rgb), 0.8);
 }
 
 #sidebar .close {
