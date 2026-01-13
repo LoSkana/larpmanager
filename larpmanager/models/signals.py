@@ -264,7 +264,11 @@ from larpmanager.utils.services.inventory import generate_base_inventories
 from larpmanager.utils.services.miscellanea import auto_rotate_vertical_photos
 from larpmanager.utils.services.writing import replace_character_names_before_save
 from larpmanager.utils.users.member import create_member_profile_for_user, process_membership_status_updates
-from larpmanager.utils.users.registration import process_character_ticket_options, process_registration_event_change
+from larpmanager.utils.users.registration import (
+    process_character_ticket_options,
+    process_registration_event_change,
+    reset_registration_ticket,
+)
 
 log = logging.getLogger(__name__)
 
@@ -1488,22 +1492,17 @@ def post_save_ticket_accounting_cache(
     created: bool,
     **kwargs: Any,
 ) -> None:
-    """Clear accounting cache for all runs when a ticket is saved."""
+    """Clear cache for all runs when a ticket is saved."""
     log_registration_ticket_saved(instance)
 
     # Clear accounting cache for all runs in the ticket's event
-    for run in instance.event.runs.all():
-        clear_registration_accounting_cache(run.id)
-        clear_widget_cache(run.id)
+    reset_registration_ticket(instance)
 
 
 @receiver(post_delete, sender=RegistrationTicket)
 def post_delete_ticket_accounting_cache(sender: type, instance: RegistrationTicket, **kwargs: Any) -> None:
-    """Clear accounting cache for all runs when a ticket is deleted."""
-    # Clear accounting cache for all runs in the ticket's event
-    for run in instance.event.runs.all():
-        clear_registration_accounting_cache(run.id)
-        clear_widget_cache(run.id)
+    """Clear cache for all runs when a ticket is deleted."""
+    reset_registration_ticket(instance)
 
 
 # Relationship signals

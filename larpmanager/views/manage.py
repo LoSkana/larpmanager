@@ -502,13 +502,18 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
     if has_event_permission(request, context, event_slug, "orga_registrations"):
         context["counts"] = get_registration_counts(context["run"])
         context["registration_counts"] = {}
-
-        # Get counts by ticket name
-        tickets = RegistrationTicket.objects.filter(event=context["event"]).order_by("number")
-        for ticket in tickets:
-            count_key = f"tk_{ticket.id}"
+        for ticket_id, ticket_name in context["counts"].get("tickets_map", {}).items():
+            count_key = f"tk_{ticket_id}"
             if count_key in context["counts"]:
-                context["registration_counts"][ticket.name] = context["counts"][count_key]
+                context["registration_counts"][ticket_name] = context["counts"][count_key]
+
+        context["registration_counts"] = dict(
+            sorted(
+                context["registration_counts"].items(),
+                key=lambda item: item[1],
+                reverse=True,
+            )
+        )
 
     # Load accounting if permitted
     if has_event_permission(request, context, event_slug, "orga_accounting"):

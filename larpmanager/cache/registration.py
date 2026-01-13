@@ -101,7 +101,7 @@ def update_registration_counts(run: Run) -> dict[str, int]:
 
     """
     # Initialize base counters
-    counts = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0}
+    counts = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0, "tickets_map": {}}
 
     # Get all non-cancelled registrations for this run
     registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
@@ -119,6 +119,10 @@ def update_registration_counts(run: Run) -> dict[str, int]:
         if not registration.ticket:
             add_count(counts, "count_unknown", num_tickets)
         else:
+            # Count by ticket name
+            add_count(counts, f"count_ticket_{registration.ticket_id}", num_tickets)
+            counts["tickets_map"][registration.ticket_id] = registration.ticket.name
+
             # Map ticket tiers to counter keys
             tier_map = {
                 TicketTier.STAFF: "staff",
