@@ -1,0 +1,43 @@
+{% load i18n %}
+{% for run in ongoing_runs %}
+    <div class="grid-item">
+        <h2>
+            <a href="{% url 'manage' run.get_slug %}" target="_blank">{{ run }}</a>
+        </h2>
+        <p>
+            <i>{{ run.pretty_dates }}</i>
+            {% if event.parent %}
+                | {% trans "Campaign" %}: {{ event.parent }}
+            {% endif %}
+            | {% trans "Status" %}: {{ run.get_development_display }}
+            |
+            <a href="{% url 'gallery' run.get_slug %}" target="_blank">Event link</a>
+            <button class="copy-link-btn"
+                    data-url="{% url 'gallery' run.get_slug %}"
+                    title="{% trans "Copy link to clipboard" %}">
+                <i class="fa-solid fa-copy"></i>
+            </button>
+            |
+            <a href="{% url 'register' run.get_slug %}" target="_blank">{{ run.registration_status }}</a>
+            <button class="copy-link-btn"
+                    data-url="{% url 'register' run.get_slug %}"
+                    title="{% trans "Copy link to clipboard" %}">
+                <i class="fa-solid fa-copy"></i>
+            </button>
+        </p>
+        {% if run.registration_counts %}
+            <table>
+                <tbody>
+                    {% for key, count in run.registration_counts.items %}
+                        {% if count %}
+                            <tr>
+                                <th>{{ key }}</th>
+                                <td>{{ count }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endfor %}

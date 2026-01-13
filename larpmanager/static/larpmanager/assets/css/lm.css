@@ -2631,7 +2631,7 @@ input[type="number"] {
   box-shadow: 0 2px 5px rgba(var(--pri-rgb), 0.5);
   height: 13em;
   overflow-y: auto;
-  scrollbar-width: auto;
+  scrollbar-width: thin;
   scrollbar-color: rgba(var(--ter-rgb), 0.5) rgba(var(--pri-rgb), 0.1);
 }
 
