@@ -612,7 +612,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
 
 @login_required
 def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
-    """Return JSON list of player's characters for an event
+    """Return JSON list of player's characters for an event.
 
     Args:
         request: HTTP request object
@@ -620,11 +620,12 @@ def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
 
     Returns:
         JsonResponse: Array of objects containing basic character info
+
         Example:
         [
             {
-                "uuid": "<char_uuid>",
-                "name": "<char_name>"
+                "uuid": "<str: char_uuid>",
+                "name": "<str: char_name>"
             },
             ...
         ]
@@ -634,10 +635,8 @@ def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
 
     context["list"] = get_player_characters(context["member"], context["event"])
 
-    return_list = []
     # Get character fields info
-    for el in context["list"]:
-        return_list.append({"uuid": el.uuid, "name": el.name})
+    return_list = [{"uuid": el.uuid, "name": el.name} for el in context["list"]]
 
     return JsonResponse(return_list, safe=False)
 
@@ -793,7 +792,7 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
 
 @login_required
 def character_abilities_json(request: HttpRequest, event_slug: str, character_uuid: str) -> JsonResponse:
-    """Return JSON object of a character's abilities, organized by type
+    """Return JSON object of a character's abilities, organized by type.
 
     Args:
         request: The HTTP request object
@@ -802,15 +801,16 @@ def character_abilities_json(request: HttpRequest, event_slug: str, character_uu
 
     Returns:
         JsonResponse: JSON Object with basic character info, plus an object with each owned ability type uuid as keys and, as the value, the ability type's name and an object with ability uuid's as keys and the ability's name as values
+
         Example:
         {
-            "uuid": "<char_uuid>",
-            "name": "<char_name>",
+            "uuid": "<str: char_uuid>",
+            "name": "<str: char_name>",
             "ability_types": {
                 "<type_uuid>": {
-                    "type_name": "<type_name>",
+                    "type_name": "<str: type_name>",
                     "type_abilities": {
-                        "<ability_uuid>": "<ability_name>",
+                        "<ability_uuid>": "<str: ability_name>",
                         ...
                     }
                 },
@@ -871,7 +871,7 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_uuid: 
 
 @login_required
 def character_inventory_json(request: HttpRequest, event_slug: str, character_uuid: str) -> JsonResponse:
-    """Return JSON object of a character's inventory pool balances, broken down by inventory, then by pool type
+    """Return JSON object of a character's inventory pool balances, broken down by inventory, then by pool type.
 
     Args:
         request: The HTTP request object
@@ -880,21 +880,23 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
 
     Returns:
         JsonResponse: JSON Object with basic character info, plus an object with each inventory uuid as keys, and then an object with that inventory's name, and another property listing all of the pools. That object has each pool type's uuid as keys and, as the value, an object with the pool type's name and the integer representing the balance of that pool for that specific inventory, which defaults to zero (0)
+
         Example:
         {
-            "uuid": "<char_uuid>",
-            "name": "<char_name>",
+            "uuid": "<str: char_uuid>",
+            "name": "<str: char_name>",
             "inventories": {
                 "<inventory_uuid>": {
-                    "name": "<inventory_name>",
+                    "name": "<str: inventory_name>",
                     "pools": {
                         "<pool_type_uuid>": {
-                            "name": "<type_name>",
-                            "amount": <pool_balance>
+                            "name": "<str: type_name>",
+                            "amount": "<int: pool_balance>"
                         },
                         ...
                     }
-                }
+                },
+                ...
             }
         }
 
