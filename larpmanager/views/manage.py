@@ -135,14 +135,14 @@ def _get_registration_status_code(run: Run) -> tuple[str, Any]:
     return "closed", None
 
 
-def _get_registration_status(run_instance: Run) -> str:
+def _get_registration_status(run: Run) -> str:
     """Get human-readable registration status for a run.
 
     This function retrieves the registration status code and returns a localized,
     user-friendly message describing the current registration state for the given run.
 
     Args:
-        run_instance: Run instance to check status for. Expected to have registration-related
+        run: Run instance to check status for. Expected to have registration-related
              attributes that can be processed by _get_registration_status_code().
 
     Returns:
@@ -156,7 +156,7 @@ def _get_registration_status(run_instance: Run) -> str:
 
     """
     # Get the current status code and any additional data from the run
-    status_code, opening_datetime = _get_registration_status_code(run_instance)
+    status_code, opening_datetime = _get_registration_status_code(run)
 
     # Define mapping of status codes to localized human-readable messages
     status_messages = {
@@ -180,6 +180,25 @@ def _get_registration_status(run_instance: Run) -> str:
 
     # Return the appropriate status message or default to closed
     return status_messages.get(status_code, _("Registration closed"))
+
+
+def _get_registration_counts(run: Run) -> dict:
+    """Prepares run registration ticket counts."""
+
+    counts = get_registration_counts(run)
+    registration_counts = {}
+    for ticket_id, ticket_name in counts.get("tickets_map", {}).items():
+        count_key = f"count_ticket_{ticket_id}"
+        if count_key in counts and counts[count_key]:
+            registration_counts[ticket_name] = counts[count_key]
+
+    return dict(
+        sorted(
+            registration_counts.items(),
+            key=lambda item: item[1],
+            reverse=True,
+        )
+    )
 
 
 def _exe_manage(request: HttpRequest) -> HttpResponse:
@@ -225,12 +244,12 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         event__association_id=context["association_id"],
         development__in=[DevelopStatus.START, DevelopStatus.SHOW],
     )
-    context["ongoing_runs"] = ongoing_runs_queryset.select_related("event").order_by("-end")
+    context["ongoing_runs"] = ongoing_runs_queryset.select_related("event").order_by("end")
 
     # Add registration status and counts for each ongoing run
     for run in context["ongoing_runs"]:
         run.registration_status = _get_registration_status(run)
-        run.counts = get_registration_counts(run)
+        run.registration_counts = _get_registration_counts(run)
 
     # Add accounting information if user has permission
     if has_association_permission(request, context, "exe_accounting"):
@@ -267,9 +286,6 @@ def _exe_suggestions(context: dict) -> None:
     """
 
     suggestions = {
-        "exe_quick": _("Quickly configure your organization's most important settings"),
-        "exe_methods": _("Set up the payment methods available to participants"),
-        "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
         "exe_roles": _(
             "Grant access to organization management for other users and define roles with specific permissions",
         ),
@@ -378,6 +394,19 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
 
     # Process user-specific actions
     _exe_users_actions(request, context, association_features)
+
+    actions = {
+        "exe_quick": _("Quickly configure your organization's most important settings"),
+        "exe_methods": _("Set up the payment methods available to participants"),
+        "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
+    }
+
+    for permission_key, suggestion_text in actions.items():
+        if get_association_config(
+            context["association_id"], f"{permission_key}_suggestion", default_value=False, context=context
+        ):
+            continue
+        _add_action(context, suggestion_text, permission_key)
 
 
 def _exe_users_actions(request: HttpRequest, context: dict, enabled_features: dict[str, Any]) -> None:
@@ -500,20 +529,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
 
     # Load registration counts if permitted
     if has_event_permission(request, context, event_slug, "orga_registrations"):
-        context["counts"] = get_registration_counts(context["run"])
-        context["registration_counts"] = {}
-        for ticket_id, ticket_name in context["counts"].get("tickets_map", {}).items():
-            count_key = f"count_ticket_{ticket_id}"
-            if count_key in context["counts"]:
-                context["registration_counts"][ticket_name] = context["counts"][count_key]
-
-        context["registration_counts"] = dict(
-            sorted(
-                context["registration_counts"].items(),
-                key=lambda item: item[1],
-                reverse=True,
-            )
-        )
+        context["registration_counts"] = _get_registration_counts(context["run"])
 
     # Load accounting if permitted
     if has_event_permission(request, context, event_slug, "orga_accounting"):

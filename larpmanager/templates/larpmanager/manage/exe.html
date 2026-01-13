@@ -7,44 +7,12 @@
     <div id="manage">
         {% include "larpmanager/manage/sticky_messages.html" %}
         {% include "larpmanager/manage/widgets/wwyltd.html" %}
-        {% if ongoing_runs %}
-            <h2>
-                <i class="fa-solid fa-calendar-days"></i> {% trans "Events" %}
-            </h2>
-            <table class="go_datatable" no_header_cols="all">
-                <thead>
-                    <tr>
-                        <th>{% trans "Event" %}</th>
-                        <th>{% trans "Dates" %}</th>
-                        <th>{% trans "Status" %}</th>
-                        <th>{% trans "Registrations" %}</th>
-                        <th>{% trans "Counts" %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for run in ongoing_runs %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'manage' run.get_slug %}" target="_blank">{{ run }}</a>
-                            </td>
-                            <td>
-                                <i>{{ run.pretty_dates }}</i>
-                            </td>
-                            <td>{{ run.get_development_display }}</td>
-                            <td>
-                                <a href="{% url 'register' run.get_slug %}" target="_blank">{{ run.registration_status }}</a>
-                            </td>
-                            <td>
-                                {% if run.counts.count_reg %}
-                                    {% trans "Registrations" %}: {{ run.counts.count_reg }}
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
         <div {% if not old_dashboard %}class="grid"{% else %}class="old_dashboard"{% endif %}>
+            {% if old_dashboard %}
+                {% include "larpmanager/manage/widgets/exe_events_old.html" %}
+            {% else %}
+                {% include "larpmanager/manage/widgets/exe_events.html" %}
+            {% endif %}
             {% include "larpmanager/manage/widgets/exe_accounting.html" %}
             {% with list=priorities typ="priorities" %}
                 {% include "larpmanager/manage/widgets/helpers.html" %}

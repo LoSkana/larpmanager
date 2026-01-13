@@ -5988,12 +5988,6 @@ msgid ""
 "and events"
 msgstr ""
 
-msgid "Dates"
-msgstr ""
-
-msgid "Counts"
-msgstr ""
-
 msgid "Launch guided interface tour"
 msgstr ""
 
@@ -6056,6 +6050,15 @@ msgstr ""
 msgid "Register to the event"
 msgstr ""
 
+msgid "Copy link to clipboard"
+msgstr ""
+
+msgid "Dates"
+msgstr ""
+
+msgid "Counts"
+msgstr ""
+
 msgid "Priorities"
 msgstr ""
 
@@ -6107,9 +6110,6 @@ msgid "Cancellation for missing profile compilation"
 msgstr ""
 
 msgid "Delay in profile compilation"
-msgstr ""
-
-msgid "Copy link to clipboard"
 msgstr ""
 
 msgid "Secret registration link"
@@ -9463,17 +9463,6 @@ msgstr ""
 msgid "No events are present, create one"
 msgstr ""
 
-msgid "Quickly configure your organization's most important settings"
-msgstr ""
-
-msgid "Set up the payment methods available to participants"
-msgstr ""
-
-msgid ""
-"Define which data will be asked in the profile form to the users once they "
-"sign up"
-msgstr ""
-
 msgid ""
 "Grant access to organization management for other users and define roles "
 "with specific permissions"
@@ -9510,6 +9499,17 @@ msgstr ""
 
 #, python-format
 msgid "There are <b>%(number)s</b> members to approve"
+msgstr ""
+
+msgid "Quickly configure your organization's most important settings"
+msgstr ""
+
+msgid "Set up the payment methods available to participants"
+msgstr ""
+
+msgid ""
+"Define which data will be asked in the profile form to the users once they "
+"sign up"
 msgstr ""
 
 msgid "Set up the membership request text"
