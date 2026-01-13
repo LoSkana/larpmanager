@@ -1,0 +1,82 @@
+{% load i18n %}
+{% if widgets.deadlines %}
+    <div class="grid-item">
+        <h2>
+            <a href="{% url 'orga_deadlines' run.get_slug %}" target="_blank"><i class="fas fa-hourglass-end"></i> {% trans "Deadlines" %}</a>
+        </h2>
+        <table>
+            {% if widgets.deadlines.memb_del %}
+                <tr>
+                    <td>
+                        <b>{% trans "Cancellation for missing organization registration" %}</b>
+                    </td>
+                    <td>{{ widgets.deadlines.memb_del }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.deadlines.fee_del %}
+                <tr>
+                    <td>
+                        <b>{% trans "Cancellation for missing yearly membership fee" %}</b>
+                    </td>
+                    <td>{{ widgets.deadlines.fee_del }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.deadlines.pay_del %}
+                <tr>
+                    <td>
+                        <b>{% trans "Cancellation for missing payment" %}</b>
+                    </td>
+                    <td>{{ widgets.deadlines.pay_del }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.deadlines.profile_del %}
+                <tr>
+                    <td>
+                        <b>{% trans "Cancellation for missing profile compilation" %}</b>
+                    </td>
+                    <td>{{ widgets.deadlines.profile_del }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.deadlines.memb %}
+                <tr>
+                    <td>
+                        <b>{% trans "Delay in organization registration" %}</b>
+                    </td>
+                    <td>{{ widgets.deadlines.memb }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.deadlines.fee %}
+                <tr>
+                    <td>
+                        <b>{% trans "Delay in yearly membership fee" %}</b>
+                    </td>
+                    <td>{{ widgets.deadlines.fee }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.deadlines.pay %}
+                <tr>
+                    <td>
+                        <b>{% trans "Delay in payment" %}</b>
+                    </td>
+                    <td>{{ widgets.deadlines.pay }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.deadlines.profile %}
+                <tr>
+                    <td>
+                        <b>{% trans "Delay in profile compilation" %}</b>
+                    </td>
+                    <td>{{ widgets.deadlines.profile }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.deadlines.cast %}
+                <tr>
+                    <td>
+                        <b>{% trans "Missing casting preferences" %}</b>
+                    </td>
+                    <td>{{ widgets.deadlines.cast }}</td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+{% endif %}

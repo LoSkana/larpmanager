@@ -1785,6 +1785,12 @@ msgstr "Cuatro pagos"
 msgid "Gallery Pdf"
 msgstr "Galería Pdf"
 
+msgid "In creation"
+msgstr "En creación"
+
+msgid "In revision"
+msgstr "En revisión"
+
 msgid "Information"
 msgstr "Información"
 
@@ -1976,9 +1982,6 @@ msgstr "Créditos"
 
 msgid "Event hidden"
 msgstr "Evento oculto"
-
-msgid "Event status"
-msgstr "Estado del evento"
 
 msgid "Experimental"
 msgstr "Experimental"
@@ -2272,6 +2275,9 @@ msgstr "No completado"
 msgid "Number events"
 msgstr "Número de eventos"
 
+msgid "Old dashboard"
+msgstr "Salpicadero antiguo"
+
 msgid "Original text"
 msgstr "Texto original"
 
@@ -2380,9 +2386,6 @@ msgstr "elementos eliminados"
 
 msgid "items updated"
 msgstr "artículos actualizados"
-
-msgid "registrations"
-msgstr "inscripciones"
 
 msgid "Add to faction"
 msgstr "Añadir a la facción"
@@ -3314,6 +3317,9 @@ msgstr "Inventario de personajes"
 msgid "Character not found"
 msgstr "Carácter no encontrado"
 
+msgid "Characters assigned"
+msgstr "Caracteres asignados"
+
 msgid "Characters shortcut"
 msgstr "Atajo de caracteres"
 
@@ -3619,6 +3625,9 @@ msgstr "Carácter no visible"
 msgid "Character sheet intro"
 msgstr "Introducción de la hoja de personaje"
 
+msgid "Characters unassigned"
+msgstr "Caracteres no asignados"
+
 msgid "Code 'Bring a friend'"
 msgstr "Código de “Trae a un amigo”"
 
@@ -3784,6 +3793,9 @@ msgstr "Concluido y archivado"
 
 msgid "Confirm password reset"
 msgstr "Restablecimiento de contraseña confirmado"
+
+msgid "Copy link to clipboard"
+msgstr "Copiar enlace al portapapeles"
 
 msgid "Currencies & Materials"
 msgstr "Divisas y materiales"
@@ -4450,6 +4462,9 @@ msgstr "Contenidos de la página especial"
 msgid "Cover photo fo the character"
 msgstr "Foto de presentación del personaje"
 
+msgid "Delay in profile compilation"
+msgstr "Retraso en la compilación de perfiles"
+
 msgid "Describe how we can help you"
 msgstr "Describa cómo podemos ayudarle"
 
@@ -4534,6 +4549,9 @@ msgstr "Número de entradas que se sortearán"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Código personal: <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Jugadores en espera de personaje"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5764,6 +5782,9 @@ msgstr "(Opcional) Número máximo de plazas disponibles"
 msgid "Background image used across all event pages"
 msgstr "Imagen de fondo utilizada en todas las páginas del evento"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Anulación por falta de compilación de perfiles"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "¿Quieres que se te reembolse? Abrir una nueva"
 
@@ -6506,6 +6527,9 @@ msgstr "Por razones de seguridad, cada ficha sólo puede utilizarse una vez."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "¡Todo está en orden respecto el pago de este evento"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Si está marcada: muestra el salpicadero con la interfaz antigua"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Indica una canción que quieras dedicar a tu personaje"
@@ -8713,14 +8737,6 @@ msgstr ""
 "Esta página muestra las insignias de afiliación. Puede editarlas, "
 "asignarlas, crear nuevas"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Los usuarios pueden inscribirse en el evento accediendo a <a "
-"href='%(signup_url)s'>esta dirección</a>"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -9795,6 +9811,14 @@ msgid ""
 msgstr ""
 "Una vez confirmada la transferencia, solicite el resguardo (el recibo de "
 "confirmación) y cárguelo a continuación"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Los usuarios pueden inscribirse en el evento accediendo a <a "
+"href='%(signup_url)s'>esta dirección</a>"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

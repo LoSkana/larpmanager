@@ -1785,6 +1785,12 @@ msgstr "Cztery kwoty"
 msgid "Gallery Pdf"
 msgstr "Galeria Pdf"
 
+msgid "In creation"
+msgstr "W tworzeniu"
+
+msgid "In revision"
+msgstr "W rewizji"
+
 msgid "Information"
 msgstr "Informacje"
 
@@ -1976,9 +1982,6 @@ msgstr "Nazwa kredytu"
 
 msgid "Event hidden"
 msgstr "Zdarzenie ukryte"
-
-msgid "Event status"
-msgstr "Status zdarzenia"
 
 msgid "Experimental"
 msgstr "Eksperymentalny"
@@ -2272,6 +2275,9 @@ msgstr "Nieukończone"
 msgid "Number events"
 msgstr "Liczba zdarzeń"
 
+msgid "Old dashboard"
+msgstr "Stara deska rozdzielcza"
+
 msgid "Original text"
 msgstr "Tekst oryginalny"
 
@@ -2380,9 +2386,6 @@ msgstr "usunięte elementy"
 
 msgid "items updated"
 msgstr "zaktualizowane elementy"
-
-msgid "registrations"
-msgstr "rejestracje"
 
 msgid "Add to faction"
 msgstr "Dodaj do frakcji"
@@ -3314,6 +3317,9 @@ msgstr "Spis postaci"
 msgid "Character not found"
 msgstr "Nie znaleziono znaku"
 
+msgid "Characters assigned"
+msgstr "Przypisane postacie"
+
 msgid "Characters shortcut"
 msgstr "Skrót znaków"
 
@@ -3619,6 +3625,9 @@ msgstr "Postać niewidoczna"
 msgid "Character sheet intro"
 msgstr "Wprowadzenie do arkusza postaci"
 
+msgid "Characters unassigned"
+msgstr "Znaki nieprzypisane"
+
 msgid "Code 'Bring a friend'"
 msgstr "Kod 'Przyprowadź znajomego"
 
@@ -3784,6 +3793,9 @@ msgstr "Zakończone i zarchiwizowane"
 
 msgid "Confirm password reset"
 msgstr "Potwierdź resetowanie hasła"
+
+msgid "Copy link to clipboard"
+msgstr "Kopiowanie łącza do schowka"
 
 msgid "Currencies & Materials"
 msgstr "Waluty i materiały"
@@ -4450,6 +4462,9 @@ msgstr "Zawartość strony specjalnej"
 msgid "Cover photo fo the character"
 msgstr "Zdjęcie postaci na okładce"
 
+msgid "Delay in profile compilation"
+msgstr "Opóźnienie w kompilacji profilu"
+
 msgid "Describe how we can help you"
 msgstr "Opisz, jak możemy Ci pomóc"
 
@@ -4534,6 +4549,9 @@ msgstr "Liczba losów do rozlosowania"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Kod osobisty: <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Gracze czekający na postać"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5764,6 +5782,9 @@ msgstr "(Opcjonalnie) Maksymalna liczba dostępnych miejsc"
 msgid "Background image used across all event pages"
 msgstr "Obraz tła używany na wszystkich stronach wydarzenia"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Anulowanie z powodu braku kompilacji profilu"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Czy chcesz otrzymać zwrot kosztów? Otwórz nowy"
 
@@ -6499,6 +6520,9 @@ msgstr "Ze względów bezpieczeństwa każdy token może być użyty tylko raz."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Wszystko jest w porządku w kwestii płatności za to wydarzenie"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Jeśli zaznaczone: wyświetla pulpit nawigacyjny ze starym interfejsem"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Wskaż piosenkę, którą chcesz zadedykować swojej postaci"
@@ -8649,14 +8673,6 @@ msgstr ""
 "Ta strona przedstawia odznaki członkowskie. Można je edytować, przypisywać i"
 " tworzyć nowe"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Użytkownicy mogą zapisać się na wydarzenie wchodząc na <a "
-"href='%(signup_url)s'>ten adres</a>"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -9722,6 +9738,14 @@ msgid ""
 msgstr ""
 "Po potwierdzeniu przelewu poproś o odcinek (potwierdzenie przelewu) i "
 "prześlij go poniżej"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Użytkownicy mogą zapisać się na wydarzenie wchodząc na <a "
+"href='%(signup_url)s'>ten adres</a>"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

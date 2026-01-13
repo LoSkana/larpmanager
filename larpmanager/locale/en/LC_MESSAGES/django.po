@@ -279,6 +279,12 @@ msgstr ""
 msgid "Interface"
 msgstr ""
 
+msgid "Old dashboard"
+msgstr ""
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr ""
+
 msgid "Past events"
 msgstr ""
 
@@ -5988,9 +5994,6 @@ msgstr ""
 msgid "Counts"
 msgstr ""
 
-msgid "registrations"
-msgstr ""
-
 msgid "Launch guided interface tour"
 msgstr ""
 
@@ -6000,15 +6003,6 @@ msgstr ""
 msgid ""
 "You have activated the following features, for each here's the links to "
 "follow"
-msgstr ""
-
-msgid "Priorities"
-msgstr ""
-
-msgid "Actions"
-msgstr ""
-
-msgid "Suggestions"
 msgstr ""
 
 msgid "Discover what this event is about"
@@ -6062,10 +6056,13 @@ msgstr ""
 msgid "Register to the event"
 msgstr ""
 
-msgid "Event status"
+msgid "Priorities"
 msgstr ""
 
-msgid "Secret registration link"
+msgid "Actions"
+msgstr ""
+
+msgid "Suggestions"
 msgstr ""
 
 msgid ""
@@ -6095,6 +6092,33 @@ msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 
 msgid "Organization tax"
+msgstr ""
+
+msgid "Characters assigned"
+msgstr ""
+
+msgid "Characters unassigned"
+msgstr ""
+
+msgid "Players waiting for character"
+msgstr ""
+
+msgid "Cancellation for missing profile compilation"
+msgstr ""
+
+msgid "Delay in profile compilation"
+msgstr ""
+
+msgid "Copy link to clipboard"
+msgstr ""
+
+msgid "Secret registration link"
+msgstr ""
+
+msgid "In creation"
+msgstr ""
+
+msgid "In revision"
 msgstr ""
 
 msgid "here the conditions of registration"
@@ -8989,8 +9013,8 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
 msgstr ""
 
 msgid ""

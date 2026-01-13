@@ -1785,6 +1785,12 @@ msgstr "Fire kvoter"
 msgid "Gallery Pdf"
 msgstr "Pdf-galleri"
 
+msgid "In creation"
+msgstr "I skapelsen"
+
+msgid "In revision"
+msgstr "I revisjon"
+
 msgid "Information"
 msgstr "Informasjon"
 
@@ -1976,9 +1982,6 @@ msgstr "Kreditter navn"
 
 msgid "Event hidden"
 msgstr "Hendelse skjult"
-
-msgid "Event status"
-msgstr "Status for hendelsen"
 
 msgid "Experimental"
 msgstr "Eksperimentell"
@@ -2272,6 +2275,9 @@ msgstr "Ikke fullført"
 msgid "Number events"
 msgstr "Antall hendelser"
 
+msgid "Old dashboard"
+msgstr "Gammelt dashbord"
+
 msgid "Original text"
 msgstr "Opprinnelig tekst"
 
@@ -2380,9 +2386,6 @@ msgstr "elementer slettet"
 
 msgid "items updated"
 msgstr "elementer oppdatert"
-
-msgid "registrations"
-msgstr "påmeldinger"
 
 msgid "Add to faction"
 msgstr "Legg til i fraksjon"
@@ -3314,6 +3317,9 @@ msgstr "Karakterinventar"
 msgid "Character not found"
 msgstr "Tegn ikke funnet"
 
+msgid "Characters assigned"
+msgstr "Tildelte tegn"
+
 msgid "Characters shortcut"
 msgstr "Snarvei for tegn"
 
@@ -3619,6 +3625,9 @@ msgstr "Tegn ikke synlig"
 msgid "Character sheet intro"
 msgstr "Intro til karakterark"
 
+msgid "Characters unassigned"
+msgstr "Tegn som ikke er tilordnet"
+
 msgid "Code 'Bring a friend'"
 msgstr "Ta med en vennekode"
 
@@ -3784,6 +3793,9 @@ msgstr "Avsluttet og arkivert"
 
 msgid "Confirm password reset"
 msgstr "Tilbakestilling av passord bekreftet"
+
+msgid "Copy link to clipboard"
+msgstr "Kopier lenke til utklippstavlen"
 
 msgid "Currencies & Materials"
 msgstr "Valutaer og materialer"
@@ -4450,6 +4462,9 @@ msgstr "Innhold på spesialsiden"
 msgid "Cover photo fo the character"
 msgstr "Et eksempel på et bilde av karakteren"
 
+msgid "Delay in profile compilation"
+msgstr "Forsinkelse i profilkompilering"
+
 msgid "Describe how we can help you"
 msgstr "Beskriv hvordan vi kan hjelpe deg"
 
@@ -4534,6 +4549,9 @@ msgstr "Antall billetter som skal trekkes"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Personlig kode: <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Spillere som venter på karakter"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5767,6 +5785,9 @@ msgstr "(Valgfritt) Maksimalt antall tilgjengelige plasser"
 msgid "Background image used across all event pages"
 msgstr "Bakgrunnsbilde som brukes på alle arrangementssidene"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Avbestilling på grunn av manglende profilkompilering"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Ønsker du å bli refundert? Åpne en ny"
 
@@ -6496,6 +6517,9 @@ msgstr "Hver token kan bare brukes én gang av sikkerhetsmessige årsaker."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Alt er i orden for at vi skal kunne betale for dette arrangementet"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Hvis avkrysset: viser dashbordet med det gamle grensesnittet"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Angi en sang du ønsker å dedikere til karakteren din"
@@ -8573,14 +8597,6 @@ msgstr ""
 "Denne siden viser medlemsmerker. Du kan redigere dem, tildele dem, opprette "
 "nye"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Brukere kan melde seg på arrangementet ved å gå til <a "
-"href='%(signup_url)s'>denne adressen</a>"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -9641,6 +9657,14 @@ msgid ""
 msgstr ""
 "Når overføringen er bekreftet, ber du om kvitteringen "
 "(bekreftelseskvitteringen) og laster den opp nedenfor"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Brukere kan melde seg på arrangementet ved å gå til <a "
+"href='%(signup_url)s'>denne adressen</a>"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

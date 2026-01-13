@@ -1785,6 +1785,12 @@ msgstr "Vier quota"
 msgid "Gallery Pdf"
 msgstr "Pdf Galerij"
 
+msgid "In creation"
+msgstr "In de schepping"
+
+msgid "In revision"
+msgstr "In revisie"
+
 msgid "Information"
 msgstr "Informatie"
 
@@ -1976,9 +1982,6 @@ msgstr "Naam Credits"
 
 msgid "Event hidden"
 msgstr "Gebeurtenis verborgen"
-
-msgid "Event status"
-msgstr "Gebeurtenisstatus"
 
 msgid "Experimental"
 msgstr "Experimenteel"
@@ -2272,6 +2275,9 @@ msgstr "Niet voltooid"
 msgid "Number events"
 msgstr "Aantal gebeurtenissen"
 
+msgid "Old dashboard"
+msgstr "Oud dashboard"
+
 msgid "Original text"
 msgstr "Oorspronkelijke tekst"
 
@@ -2380,9 +2386,6 @@ msgstr "verwijderde items"
 
 msgid "items updated"
 msgstr "items bijgewerkt"
-
-msgid "registrations"
-msgstr "inschrijvingen"
 
 msgid "Add to faction"
 msgstr "Toevoegen aan factie"
@@ -3314,6 +3317,9 @@ msgstr "Karakterinventaris"
 msgid "Character not found"
 msgstr "Karakter niet gevonden"
 
+msgid "Characters assigned"
+msgstr "Toegewezen personages"
+
 msgid "Characters shortcut"
 msgstr "Sneltoets voor tekens"
 
@@ -3619,6 +3625,9 @@ msgstr "Karakter niet zichtbaar"
 msgid "Character sheet intro"
 msgstr "Karakterblad intro"
 
+msgid "Characters unassigned"
+msgstr "Niet-toegewezen tekens"
+
 msgid "Code 'Bring a friend'"
 msgstr "Neem een vriendencode mee"
 
@@ -3784,6 +3793,9 @@ msgstr "Afgesloten en gearchiveerd"
 
 msgid "Confirm password reset"
 msgstr "Wachtwoord opnieuw instellen bevestigd"
+
+msgid "Copy link to clipboard"
+msgstr "Koppeling naar klembord kopiëren"
 
 msgid "Currencies & Materials"
 msgstr "Valuta & materialen"
@@ -4450,6 +4462,9 @@ msgstr "Inhoud van de speciale pagina"
 msgid "Cover photo fo the character"
 msgstr "Een voorbeeldfoto van het personage"
 
+msgid "Delay in profile compilation"
+msgstr "Vertraging in profielcompilatie"
+
 msgid "Describe how we can help you"
 msgstr "Beschrijf hoe we je kunnen helpen"
 
@@ -4534,6 +4549,9 @@ msgstr "Aantal te trekken tickets"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Persoonlijke code: <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Spelers wachten op personage"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5767,6 +5785,9 @@ msgstr "(Optioneel) Maximaal aantal beschikbare plaatsen"
 msgid "Background image used across all event pages"
 msgstr "Achtergrondafbeelding gebruikt op alle evenementpagina's"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Annulering wegens ontbrekende profielcompilatie"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Wil je een vergoeding? Open een nieuwe"
 
@@ -6506,6 +6527,9 @@ msgstr "Om veiligheidsredenen kan elk token maar één keer worden gebruikt."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Alles is in orde om dit evenement te betalen"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Indien aangevinkt: toont het dashboard met de oude interface"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Geef een liedje aan dat je aan je personage wilt opdragen"
@@ -8729,14 +8753,6 @@ msgstr ""
 "Deze pagina toont lidmaatschapsbadges. Je kunt ze bewerken, toewijzen, "
 "nieuwe aanmaken"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Gebruikers kunnen zich aanmelden voor het evenement via <a "
-"href='%(signup_url)s'>dit adres</a>"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -9814,6 +9830,14 @@ msgid ""
 msgstr ""
 "Zodra de overboeking is bevestigd, vraag je het bewijs van bevestiging op en"
 " upload je het hieronder"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Gebruikers kunnen zich aanmelden voor het evenement via <a "
+"href='%(signup_url)s'>dit adres</a>"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

@@ -391,6 +391,11 @@ class ExeConfigForm(ConfigForm):
         """
         self.set_section("interface", _("Interface"))
 
+        # Configure old dashboard visualization
+        past_events_label = _("Old dashboard")
+        past_events_help_text = _("If checked: shows the dashboard with the old interface")
+        self.add_configs("old_dashboard", ConfigType.BOOL, past_events_label, past_events_help_text)
+
         # Configure visibility of past events link in calendar
         past_events_label = _("Past events")
         past_events_help_text = _("If checked: shows a link in the calendar to past events")
@@ -432,7 +437,15 @@ class ExeConfigForm(ConfigForm):
         tagline_help_text = _("If checked: shows the tagline for each event")
         self.add_configs("calendar_tagline", ConfigType.BOOL, tagline_label, tagline_help_text)
 
-        # EMAIL SECTION - Configure notification preferences
+        # Add specif sections settings
+        self.set_config_email()
+        self.set_config_members()
+        self.set_config_accounting()
+        self.set_config_einvoice()
+        self.set_config_others()
+
+    def set_config_email(self) -> None:
+        """Configure email notification preferences."""
         self.set_section("email", _("Email notifications"))
 
         # Configure carbon copy setting (only if main_mail exists)
@@ -462,12 +475,6 @@ class ExeConfigForm(ConfigForm):
         payment_received_label = _("Payments received")
         payment_received_help_text = _("If checked: Send an email to the organisers for each payment received")
         self.add_configs("mail_payment", ConfigType.BOOL, payment_received_label, payment_received_help_text)
-
-        # Delegate to specialized configuration methods for other settings
-        self.set_config_members()
-        self.set_config_accounting()
-        self.set_config_einvoice()
-        self.set_config_others()
 
     def set_config_others(self) -> None:
         """Configure miscellaneous association settings.

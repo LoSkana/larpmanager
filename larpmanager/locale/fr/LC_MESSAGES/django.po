@@ -1785,6 +1785,12 @@ msgstr "Quatre quotas"
 msgid "Gallery Pdf"
 msgstr "Galerie Pdf"
 
+msgid "In creation"
+msgstr "Dans la création"
+
+msgid "In revision"
+msgstr "En révision"
+
 msgid "Information"
 msgstr "Informations"
 
@@ -1976,9 +1982,6 @@ msgstr "Nom du crédit"
 
 msgid "Event hidden"
 msgstr "Événement caché"
-
-msgid "Event status"
-msgstr "Statut de l'événement"
 
 msgid "Experimental"
 msgstr "Expérimental"
@@ -2272,6 +2275,9 @@ msgstr "Pas terminé"
 msgid "Number events"
 msgstr "Nombre d'événements"
 
+msgid "Old dashboard"
+msgstr "Ancien tableau de bord"
+
 msgid "Original text"
 msgstr "Texte original"
 
@@ -2380,9 +2386,6 @@ msgstr "éléments supprimés"
 
 msgid "items updated"
 msgstr "éléments mis à jour"
-
-msgid "registrations"
-msgstr "inscriptions"
 
 msgid "Add to faction"
 msgstr "Ajouter à la faction"
@@ -3314,6 +3317,9 @@ msgstr "Inventaire des personnages"
 msgid "Character not found"
 msgstr "Caractère non trouvé"
 
+msgid "Characters assigned"
+msgstr "Caractères attribués"
+
 msgid "Characters shortcut"
 msgstr "Raccourci des caractères"
 
@@ -3619,6 +3625,9 @@ msgstr "Caractère non visible"
 msgid "Character sheet intro"
 msgstr "Introduction à la feuille de personnage"
 
+msgid "Characters unassigned"
+msgstr "Caractères non attribués"
+
 msgid "Code 'Bring a friend'"
 msgstr "Apportez un code d'ami"
 
@@ -3784,6 +3793,9 @@ msgstr "Conclu et archivé"
 
 msgid "Confirm password reset"
 msgstr "Réinitialisation du mot de passe confirmée"
+
+msgid "Copy link to clipboard"
+msgstr "Copier le lien dans le presse-papiers"
 
 msgid "Currencies & Materials"
 msgstr "Devises et matériaux"
@@ -4450,6 +4462,9 @@ msgstr "Contenu de la page spéciale"
 msgid "Cover photo fo the character"
 msgstr "Exemple de photo du personnage"
 
+msgid "Delay in profile compilation"
+msgstr "Retard dans la compilation des profils"
+
 msgid "Describe how we can help you"
 msgstr "Décrivez comment nous pouvons vous aider"
 
@@ -4534,6 +4549,9 @@ msgstr "Nombre de billets à tirer"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Code personnel : <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Joueurs en attente d'un personnage"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5770,6 +5788,9 @@ msgstr "(Facultatif) Nombre maximal de places disponibles"
 msgid "Background image used across all event pages"
 msgstr "Image de fond utilisée sur toutes les pages de l'événement"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Annulation pour absence de compilation de profil"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Souhaitez-vous être remboursé ? Ouvrez un nouveau"
 
@@ -6528,6 +6549,9 @@ msgstr ""
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Tout est en ordre pour que nous puissions payer cet événement"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Si coché : affiche le tableau de bord avec l'ancienne interface"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Indiquez une chanson que vous souhaitez dédier à votre personnage"
@@ -8849,14 +8873,6 @@ msgstr ""
 "Cette page présente les badges d'adhésion. Vous pouvez les modifier, les "
 "attribuer, en créer de nouveaux"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Les utilisateurs peuvent s'inscrire à l'événement en accédant à <a "
-"href='%(signup_url)s'>cette adresse</a>"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -9932,6 +9948,14 @@ msgid ""
 msgstr ""
 "Une fois le transfert confirmé, demandez le bordereau (le reçu de "
 "confirmation) et téléchargez-le ci-dessous"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Les utilisateurs peuvent s'inscrire à l'événement en accédant à <a "
+"href='%(signup_url)s' target='_blank'>cette adresse</a>"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

@@ -505,7 +505,7 @@ msgid "Copied"
 msgstr "Copiato"
 
 msgid "Counts"
-msgstr "Conti"
+msgstr "Conteggi"
 
 msgid "Delete"
 msgstr "Elimina"
@@ -1785,6 +1785,12 @@ msgstr "Quattro quote"
 msgid "Gallery Pdf"
 msgstr "Galleria Pdf"
 
+msgid "In creation"
+msgstr "In creazione"
+
+msgid "In revision"
+msgstr "In revisione"
+
 msgid "Information"
 msgstr "Informazioni"
 
@@ -1976,9 +1982,6 @@ msgstr "Nome dei crediti"
 
 msgid "Event hidden"
 msgstr "Evento nascosto"
-
-msgid "Event status"
-msgstr "Stato dell'evento"
 
 msgid "Experimental"
 msgstr "Experimental"
@@ -2272,6 +2275,9 @@ msgstr "Non completati"
 msgid "Number events"
 msgstr "Numero eventi"
 
+msgid "Old dashboard"
+msgstr "Vecchia dashboard"
+
 msgid "Original text"
 msgstr "Testo originale"
 
@@ -2380,9 +2386,6 @@ msgstr "elementi eliminati"
 
 msgid "items updated"
 msgstr "voci aggiornate"
-
-msgid "registrations"
-msgstr "iscrizioni"
 
 msgid "Add to faction"
 msgstr "Aggiungi alla fazione"
@@ -3314,6 +3317,9 @@ msgstr "Inventario dei personaggi"
 msgid "Character not found"
 msgstr "Personaggio non trovato"
 
+msgid "Characters assigned"
+msgstr "Personaggi assegnati"
+
 msgid "Characters shortcut"
 msgstr "Scorciatoia personaggi"
 
@@ -3619,6 +3625,9 @@ msgstr "Personaggio non visibile"
 msgid "Character sheet intro"
 msgstr "Introduzione alla scheda del personaggio"
 
+msgid "Characters unassigned"
+msgstr "Personaggi non assegnati"
+
 msgid "Code 'Bring a friend'"
 msgstr "Codice porta un amico"
 
@@ -3784,6 +3793,9 @@ msgstr "Concluso e archiviato"
 
 msgid "Confirm password reset"
 msgstr "Password reset confermato"
+
+msgid "Copy link to clipboard"
+msgstr "Copia il link negli appunti"
 
 msgid "Currencies & Materials"
 msgstr "Valute e materiali"
@@ -4450,6 +4462,9 @@ msgstr "Contenuto della pagina speciale"
 msgid "Cover photo fo the character"
 msgstr "Una foto esemplificativa del personaggio"
 
+msgid "Delay in profile compilation"
+msgstr "Ritardo nella compilazione del profilo"
+
 msgid "Describe how we can help you"
 msgstr "Descrivi come possiamo aiutarti"
 
@@ -4534,6 +4549,9 @@ msgstr "Numero di biglietti da estrarre"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Codice personale: <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Giocatori in attesa del personaggio"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5764,6 +5782,9 @@ msgstr "(Facoltativo) Numero massimo di posti disponibili"
 msgid "Background image used across all event pages"
 msgstr "Immagine di sfondo utilizzata in tutte le pagine dell'evento"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Annullamento per mancata compilazione del profilo"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Desideri venire rimborsato? Apri una nuova"
 
@@ -6499,6 +6520,9 @@ msgstr ""
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Tutto ci risulta in regola per il pagamento di questo evento"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Se selezionato: mostra la dashboard con la vecchia interfaccia"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Indica una canzone che vuoi dedicare al tuo personaggio"
@@ -8746,14 +8770,6 @@ msgstr ""
 "Questa pagina mostra i badge dei soci. È possibile modificarli, assegnarli e"
 " crearne di nuovi"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Gli utenti possono iscriversi all'evento accedendo a <a "
-"href='%(signup_url)s'>questo indirizzo</a>"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -9830,6 +9846,14 @@ msgid ""
 msgstr ""
 "Una volta confermato il bonifico, richiedi la ricevuta di conferma e "
 "caricala qui sotto"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Gli utenti possono iscriversi all'evento accedendo a <a "
+"href='%(signup_url)s'>questo indirizzo</a>"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

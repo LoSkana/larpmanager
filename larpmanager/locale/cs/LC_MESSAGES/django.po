@@ -1785,6 +1785,12 @@ msgstr "Čtyři kvóty"
 msgid "Gallery Pdf"
 msgstr "Galerie Pdf"
 
+msgid "In creation"
+msgstr "Při tvorbě"
+
+msgid "In revision"
+msgstr "V revizi"
+
 msgid "Information"
 msgstr "Informace"
 
@@ -1976,9 +1982,6 @@ msgstr "Název úvěru"
 
 msgid "Event hidden"
 msgstr "Skrytá událost"
-
-msgid "Event status"
-msgstr "Stav události"
 
 msgid "Experimental"
 msgstr "Experimentální"
@@ -2272,6 +2275,9 @@ msgstr "Není dokončeno"
 msgid "Number events"
 msgstr "Počet událostí"
 
+msgid "Old dashboard"
+msgstr "Stará přístrojová deska"
+
 msgid "Original text"
 msgstr "Původní text"
 
@@ -2380,9 +2386,6 @@ msgstr "odstraněné položky"
 
 msgid "items updated"
 msgstr "aktualizované položky"
-
-msgid "registrations"
-msgstr "zápisy"
 
 msgid "Add to faction"
 msgstr "Přidat do frakce"
@@ -3314,6 +3317,9 @@ msgstr "Soupis postav"
 msgid "Character not found"
 msgstr "Znak nebyl nalezen"
 
+msgid "Characters assigned"
+msgstr "Přidělené znaky"
+
 msgid "Characters shortcut"
 msgstr "Zkratka znaků"
 
@@ -3619,6 +3625,9 @@ msgstr "Znak není viditelný"
 msgid "Character sheet intro"
 msgstr "Úvodní list postavy"
 
+msgid "Characters unassigned"
+msgstr "Nepřiřazené znaky"
+
 msgid "Code 'Bring a friend'"
 msgstr "Přineste kód přítele"
 
@@ -3784,6 +3793,9 @@ msgstr "Uzavřeno a archivováno"
 
 msgid "Confirm password reset"
 msgstr "Potvrzení obnovení hesla"
+
+msgid "Copy link to clipboard"
+msgstr "Kopírování odkazu do schránky"
 
 msgid "Currencies & Materials"
 msgstr "Měny a materiály"
@@ -4450,6 +4462,9 @@ msgstr "Obsah speciální stránky"
 msgid "Cover photo fo the character"
 msgstr "Příklad fotografie postavy"
 
+msgid "Delay in profile compilation"
+msgstr "Zpoždění při sestavování profilu"
+
 msgid "Describe how we can help you"
 msgstr "Popište, jak vám můžeme pomoci"
 
@@ -4534,6 +4549,9 @@ msgstr "Počet losovaných vstupenek"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Osobní kód: <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Hráči čekají na postavu"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5764,6 +5782,9 @@ msgstr "(Nepovinné) Maximální počet volných míst"
 msgid "Background image used across all event pages"
 msgstr "Obrázek na pozadí použitý na všech stránkách události"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Zrušení kvůli chybějícímu sestavení profilu"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Chcete, aby vám byly náklady proplaceny? Otevřete novou"
 
@@ -6494,6 +6515,9 @@ msgstr "Každý token lze z bezpečnostních důvodů použít pouze jednou."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Vše je v pořádku, abychom mohli tuto akci zaplatit"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Pokud je zaškrtnuto: zobrazí přístrojovou desku se starým rozhraním"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Uveďte píseň, kterou chcete věnovat své postavě"
@@ -8486,14 +8510,6 @@ msgstr ""
 "Na této stránce jsou zobrazeny členské odznaky. Můžete je upravovat, "
 "přiřazovat a vytvářet nové"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Uživatelé se mohou na událost přihlásit pomocí <a href='%(signup_url)s'>této"
-" adresy</a>"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -9529,6 +9545,14 @@ msgid ""
 "confirmation) and upload it below"
 msgstr ""
 "Po potvrzení převodu si vyžádejte potvrzení o převodu a nahrajte jej níže"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Uživatelé se mohou na událost přihlásit pomocí <a href='%(signup_url)s' "
+"target='_blank'>této adresy</a>"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

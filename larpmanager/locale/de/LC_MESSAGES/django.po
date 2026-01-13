@@ -1785,6 +1785,12 @@ msgstr "Vier Quoten"
 msgid "Gallery Pdf"
 msgstr "Pdf-Galerie"
 
+msgid "In creation"
+msgstr "In der Schöpfung"
+
+msgid "In revision"
+msgstr "In Überarbeitung"
+
 msgid "Information"
 msgstr "Informationen"
 
@@ -1976,9 +1982,6 @@ msgstr "Name der Credits"
 
 msgid "Event hidden"
 msgstr "Ereignis versteckt"
-
-msgid "Event status"
-msgstr "Status der Veranstaltung"
 
 msgid "Experimental"
 msgstr "Experimentelle"
@@ -2272,6 +2275,9 @@ msgstr "Nicht abgeschlossen"
 msgid "Number events"
 msgstr "Anzahl der Ereignisse"
 
+msgid "Old dashboard"
+msgstr "Altes Armaturenbrett"
+
 msgid "Original text"
 msgstr "Ursprünglicher Text"
 
@@ -2380,9 +2386,6 @@ msgstr "Elemente gelöscht"
 
 msgid "items updated"
 msgstr "Artikel aktualisiert"
-
-msgid "registrations"
-msgstr "Einschreibungen"
 
 msgid "Add to faction"
 msgstr "Zur Fraktion hinzufügen"
@@ -3314,6 +3317,9 @@ msgstr "Charakter-Inventar"
 msgid "Character not found"
 msgstr "Zeichen nicht gefunden"
 
+msgid "Characters assigned"
+msgstr "Zugewiesene Zeichen"
+
 msgid "Characters shortcut"
 msgstr "Abkürzung für Zeichen"
 
@@ -3619,6 +3625,9 @@ msgstr "Zeichen nicht sichtbar"
 msgid "Character sheet intro"
 msgstr "Charakterbogen Intro"
 
+msgid "Characters unassigned"
+msgstr "Nicht zugewiesene Zeichen"
+
 msgid "Code 'Bring a friend'"
 msgstr "Bringen Sie einen Freundschaftscode mit"
 
@@ -3784,6 +3793,9 @@ msgstr "Abgeschlossen und archiviert"
 
 msgid "Confirm password reset"
 msgstr "Passwort zurücksetzen bestätigt"
+
+msgid "Copy link to clipboard"
+msgstr "Link in die Zwischenablage kopieren"
 
 msgid "Currencies & Materials"
 msgstr "Währungen und Materialien"
@@ -4450,6 +4462,9 @@ msgstr "Inhalt der Sonderseite"
 msgid "Cover photo fo the character"
 msgstr "Ein Beispielfoto der Figur"
 
+msgid "Delay in profile compilation"
+msgstr "Verzögerung bei der Profilerstellung"
+
 msgid "Describe how we can help you"
 msgstr "Beschreiben Sie, wie wir Ihnen helfen können"
 
@@ -4534,6 +4549,9 @@ msgstr "Anzahl der zu ziehenden Lose"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Persönlicher Code: <b>%(cod)s</b>"
+
+msgid "Players waiting for character"
+msgstr "Spieler warten auf Charakter"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -5777,6 +5795,9 @@ msgstr "(fakultativ) Maximale Anzahl der verfügbaren Plätze"
 msgid "Background image used across all event pages"
 msgstr "Hintergrundbild, das auf allen Veranstaltungsseiten verwendet wird"
 
+msgid "Cancellation for missing profile compilation"
+msgstr "Annullierung wegen fehlender Profilerstellung"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Möchten Sie eine Rückerstattung erhalten? Öffnen Sie ein neues"
 
@@ -6547,6 +6568,9 @@ msgstr "Jeder Token kann aus Sicherheitsgründen nur einmal verwendet werden."
 msgid "Everything is in order about the payment of this event"
 msgstr ""
 "Alles ist in Ordnung, damit wir für diese Veranstaltung bezahlen können"
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr "Wenn markiert: zeigt das Dashboard mit der alten Schnittstelle an"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Gib einen Song an, den du deiner Figur widmen möchtest"
@@ -8920,14 +8944,6 @@ msgstr ""
 "Diese Seite zeigt die Mitgliedsausweise. Sie können sie bearbeiten, "
 "zuweisen, neue erstellen"
 
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-"Nutzer können sich über <a href='%(signup_url)s'>diese Adresse</a> für die "
-"Veranstaltung anmelden"
-
 msgid ""
 "You can check and edit the list of organizations that can access your data "
 "on your"
@@ -10007,6 +10023,14 @@ msgid ""
 msgstr ""
 "Sobald die Überweisung bestätigt ist, fordern Sie den Beleg (die "
 "Bestätigungsquittung) an und laden ihn unten hoch"
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
+msgstr ""
+"Nutzer können sich über <a href='%(signup_url)s' target='_blank'>diese "
+"Adresse</a> für die Veranstaltung anmelden"
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "

@@ -1,0 +1,22 @@
+{% load i18n %}
+{% if global_sum or bank_sum %}
+    <div class="grid-item">
+        <h2>
+            <a href="{% url 'exe_accounting' %}" target="_blank"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
+        </h2>
+        <table>
+            <tr>
+                <th descr="{% trans "This is the associative positive operating margin, taking into account the budgets of completed events, minus credits or tokens issued" %}">
+                    <a href="#" class="sidebar-link">{% trans "Global balance" %}</a>
+                    <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    <td>{{ global_sum }}</td>
+                </th>
+                <th descr="{% trans "This is the overall amount that should be held in the organization’s bank and financial accounts" %}">
+                    <a href="#" class="sidebar-link">{% trans "Overall balance" %}</a>
+                    <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    <td>{{ bank_sum }}</td>
+                </th>
+            </tr>
+        </table>
+    </div>
+{% endif %}

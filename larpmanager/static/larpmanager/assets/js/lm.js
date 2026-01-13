@@ -343,6 +343,8 @@ $(document).ready(function() {
 
     show_sidebar_active();
 
+    copyClipboardButton();
+
     $(document).trigger("lm_ready");
 });
 
@@ -457,6 +459,7 @@ function data_tables() {
                 : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
             columnControl: ['order', 'searchDropdown'],
             lengthMenu: [[10, 25, 50, 100, 250, 500, 1000], [10, 25, 50, 100, 250, 500, 1000]],
+            order: [],
             ordering: {
                 indicators: false,
                 handler: false
@@ -836,6 +839,32 @@ function centerMobileIcons() {
             'margin-right': `${ml}px`
         });
     });
+}
+
+function copyClipboardButton() {
+    // Copy link to clipboard functionality (jQuery)
+    $('.copy-link-btn').on('click', function (e) {
+        e.preventDefault();
+
+        const $btn = $(this);
+        const url = window.location.origin + $btn.data('url');
+
+        navigator.clipboard.writeText(url).then(function () {
+            const $icon = $btn.find('i');
+            const originalClass = $icon.attr('class');
+
+            $icon.attr('class', 'fa-solid fa-check');
+            $btn.css('color', '#28a745');
+
+            setTimeout(function () {
+                $icon.attr('class', originalClass);
+                $btn.css('color', '');
+            }, 2000);
+        }).catch(function (err) {
+            console.error('Failed to copy:', err);
+        });
+    });
+
 }
 
 });
