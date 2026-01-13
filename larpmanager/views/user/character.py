@@ -630,7 +630,7 @@ def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
         ]
 
     """
-    context = get_event_context(request, event_slug, include_status=True, signup=True, feature_slug="user_character")
+    context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
 
     context["list"] = get_player_characters(context["member"], context["event"])
 
@@ -871,7 +871,7 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_uuid: 
 
 @login_required
 def character_inventory_json(request: HttpRequest, event_slug: str, character_uuid: str) -> JsonResponse:
-    """Return JSON object of a character's combined inventory pool balances, organized by pool type
+    """Return JSON object of a character's inventory pool balances, broken down by inventory, then by pool type
 
     Args:
         request: The HTTP request object
@@ -879,17 +879,22 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
         character_uuid: The character uuid to display inventory balances for
 
     Returns:
-        JsonResponse: JSON Object with basic character info, plus an object with each pool type's uuid as keys and, as the value, the pool type's name and the integer representing the combined balance across all owned inventories, which defaults to zero (0)
+        JsonResponse: JSON Object with basic character info, plus an object with each inventory uuid as keys, and then an object with that inventory's name, and another property listing all of the pools. That object has each pool type's uuid as keys and, as the value, an object with the pool type's name and the integer representing the balance of that pool for that specific inventory, which defaults to zero (0)
         Example:
         {
             "uuid": "<char_uuid>",
             "name": "<char_name>",
-            "inventory": {
-                "<pool_type_uuid>": {
-                    "name": "<type_name>",
-                    "amount": <combined_inventory_balance_for_pool_type>
-                },
-                ...
+            "inventories": {
+                "<inventory_uuid>": {
+                    "name": "<inventory_name>",
+                    "pools": {
+                        "<pool_type_uuid>": {
+                            "name": "<type_name>",
+                            "amount": <pool_balance>
+                        },
+                        ...
+                    }
+                }
             }
         }
 
@@ -901,9 +906,6 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
     # Initialize context with character and permission checks
     context = get_event_context(request, event_slug, signup=True, include_status=True)
 
-    # Determine the parent event ID for configuration lookup
-    event_id = context["event"].parent_id or context["event"].id
-
     # Check if user inventory is enabled for this event
     if "inventory" not in context["features"]:
         msg = "ehm."
@@ -913,18 +915,19 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
     get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     # Get character data
-    character_query = Character.objects.select_related(*["event"])
-    context["character"] = character_query.get(event=context["event"].get_class_parent(Character), uuid=character_uuid)
+    context["character"] = context["event"].get_elements(Character).get(uuid=character_uuid)
 
-    consolidated_balances = {}
+    inventories = {}
     for inv in context["character"].inventory.all():
+        if inv.uuid not in inventories:
+            inventories[inv.uuid] = {"name":inv.name, "pools":{}}
         pools = inv.get_pool_balances()
         for pool in pools:
-            if pool["type"].uuid not in consolidated_balances:
-                consolidated_balances[pool["type"].uuid] = {"name":pool["type"].name,"amount":0}
-            consolidated_balances[pool["type"].uuid]["amount"] += pool["balance"].amount
+            if pool["type"].uuid not in inventories[inv.uuid]["pools"]:
+                inventories[inv.uuid]["pools"][pool["type"].uuid] = {"name":pool["type"].name,"amount":0}
+            inventories[inv.uuid]["pools"][pool["type"].uuid]["amount"] += pool["balance"].amount
 
-    return JsonResponse({"uuid": context["character"].uuid, "name": context["character"].name, "inventory": consolidated_balances})
+    return JsonResponse({"uuid": context["character"].uuid, "name": context["character"].name, "inventories": inventories})
 
 @login_required
 def character_abilities_del(request: HttpRequest, event_slug: str, character_uuid: str, ability_uuid: str) -> Any:
