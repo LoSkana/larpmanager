@@ -1121,12 +1121,6 @@ class OrgaRegistrationTicketForm(BaseModelForm):
         Returns:
             List of available ticket tier tuples in format (value, label).
             Each tuple represents a selectable ticket tier option.
-
-        Example:
-            >>> tiers = get_tier_available(my_event)
-            >>> print(tiers)
-            [('standard', 'Standard'), ('reduced', 'Reduced Price')]
-
         """
         available_tiers = []
 

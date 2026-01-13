@@ -895,15 +895,7 @@ class FirstAssociationForm(BaseModelForm):
         }
 
     def clean_slug(self) -> str:
-        """Validate that the slug is unique across all associations.
-
-        Returns:
-            str: The validated slug value.
-
-        Raises:
-            ValidationError: If the slug is already in use by another association.
-
-        """
+        """Validate that the slug is unique across all associations."""
         data: str = self.cleaned_data["slug"]
         logger.debug("Validating association slug: %s", data)
 
