@@ -1977,9 +1977,6 @@ msgstr "Naam Credits"
 msgid "Event hidden"
 msgstr "Gebeurtenis verborgen"
 
-msgid "Event status"
-msgstr "Gebeurtenisstatus"
-
 msgid "Experimental"
 msgstr "Experimenteel"
 
@@ -3784,6 +3781,9 @@ msgstr "Afgesloten en gearchiveerd"
 
 msgid "Confirm password reset"
 msgstr "Wachtwoord opnieuw instellen bevestigd"
+
+msgid "Copy link to clipboard"
+msgstr "Koppeling naar klembord kopiëren"
 
 msgid "Currencies & Materials"
 msgstr "Valuta & materialen"

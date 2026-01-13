@@ -1977,9 +1977,6 @@ msgstr "Name der Credits"
 msgid "Event hidden"
 msgstr "Ereignis versteckt"
 
-msgid "Event status"
-msgstr "Status der Veranstaltung"
-
 msgid "Experimental"
 msgstr "Experimentelle"
 
@@ -3784,6 +3781,9 @@ msgstr "Abgeschlossen und archiviert"
 
 msgid "Confirm password reset"
 msgstr "Passwort zurücksetzen bestätigt"
+
+msgid "Copy link to clipboard"
+msgstr "Link in die Zwischenablage kopieren"
 
 msgid "Currencies & Materials"
 msgstr "Währungen und Materialien"

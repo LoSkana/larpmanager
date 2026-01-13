@@ -15,7 +15,7 @@
         <div class="grid">
             <div class="grid-item">
                 <h2>
-                    <a href="{% url 'orga_event' run.get_slug %}"><i class="fa-solid fa-calendar-days"></i> {% trans "Event status" %}</a>
+                    <a href="{% url 'orga_event' run.get_slug %}"><i class="fa-solid fa-calendar-days"></i> {% trans "Event" %}</a>
                 </h2>
                 <p>
                     <b>{{ run }}</b>
@@ -26,6 +26,11 @@
                 <p>Status: {{ run.get_development_display }}</p>
                 <p>
                     <a href="{% url 'gallery' run.get_slug %}" target="_blank">Event link</a>
+                    <button class="copy-link-btn"
+                            data-url="{% url 'gallery' run.get_slug %}"
+                            title="{% trans "Copy link to clipboard" %}">
+                        <i class="fa-solid fa-copy"></i>
+                    </button>
                 </p>
                 {% if event.parent %}
                     <p>
@@ -40,11 +45,21 @@
                 <p>Status: {{ registration_status }}</p>
                 <p>
                     <a href="{% url 'register' run.get_slug %}" target="_blank">Signup link</a>
+                    <button class="copy-link-btn"
+                            data-url="{% url 'register' run.get_slug %}"
+                            title="{% trans "Copy link to clipboard" %}">
+                        <i class="fa-solid fa-copy"></i>
+                    </button>
                 </p>
                 {% if features.registration_secret %}
                     <p>
                         <a href="{% url 'register_exclusive' run.get_slug run.registration_secret %}"
                            target="_blank">{% trans "Secret registration link" %}</a>
+                        <button class="copy-link-btn"
+                                data-url="{% url 'register_exclusive' run.get_slug run.registration_secret %}"
+                                title="{% trans "Copy link to clipboard" %}">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
                     </p>
                 {% endif %}
                 {% if counts.count_reg %}
@@ -62,9 +77,6 @@
                     </table>
                 {% endif %}
             </div>
-            {% with list=priorities typ="priorities" %}
-                {% include "larpmanager/manage/helpers.html" %}
-            {% endwith %}
             {% if run.revenue %}
                 <div class="grid-item">
                     <h2>
@@ -106,13 +118,17 @@
                     </table>
                 </div>
             {% endif %}
+            {% with list=priorities typ="priorities" %}
+                {% include "larpmanager/manage/helpers.html" %}
+            {% endwith %}
             {% with list=actions typ="actions" %}
                 {% include "larpmanager/manage/helpers.html" %}
             {% endwith %}
+            {% with list=suggestions typ="suggestions" %}
+                {% include "larpmanager/manage/helpers.html" %}
+            {% endwith %}
         </div>
-        {% with list=suggestions typ="suggestions" %}
-            {% include "larpmanager/manage/helpers.html" %}
-        {% endwith %}
+        <hr />
         <div class="staff-list">
             <div class="orga-buttons">
                 <a class="new button" href="{% url 'orga_reload_cache' run.get_slug %}">

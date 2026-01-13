@@ -6062,7 +6062,7 @@ msgstr ""
 msgid "Register to the event"
 msgstr ""
 
-msgid "Event status"
+msgid "Copy link to clipboard"
 msgstr ""
 
 msgid "Secret registration link"

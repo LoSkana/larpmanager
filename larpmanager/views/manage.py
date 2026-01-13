@@ -220,7 +220,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         event__association_id=context["association_id"],
         development__in=[DevelopStatus.START, DevelopStatus.SHOW],
     )
-    context["ongoing_runs"] = ongoing_runs_queryset.select_related("event").order_by("end")
+    context["ongoing_runs"] = ongoing_runs_queryset.select_related("event").order_by("-end")
 
     # Add registration status and counts for each ongoing run
     for run in context["ongoing_runs"]:

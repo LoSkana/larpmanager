@@ -33,14 +33,14 @@
                     {% for run in ongoing_runs %}
                         <tr>
                             <td>
-                                <a href="{% url 'manage' run.get_slug %}">{{ run }}</a>
+                                <a href="{% url 'manage' run.get_slug %}" target="_blank">{{ run }}</a>
                             </td>
                             <td>
                                 <i>{{ run.pretty_dates }}</i>
                             </td>
                             <td>{{ run.get_development_display }}</td>
                             <td>
-                                <a href="{% url 'register' run.get_slug %}">{{ run.registration_status }}</a>
+                                <a href="{% url 'register' run.get_slug %}" target="_blank">{{ run.registration_status }}</a>
                             </td>
                             <td>
                                 {% if run.counts.count_reg %}
@@ -54,7 +54,7 @@
         {% endif %}
         {% if global_sum or bank_sum %}
             <h2>
-                <a href="{% url 'exe_accounting' %}"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
+                <a href="{% url 'exe_accounting' %}" target="_blank"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
             </h2>
             <table class="go_datatable" no_header_cols="all">
                 <thead>

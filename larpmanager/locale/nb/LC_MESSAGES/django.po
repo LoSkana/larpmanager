@@ -1977,9 +1977,6 @@ msgstr "Kreditter navn"
 msgid "Event hidden"
 msgstr "Hendelse skjult"
 
-msgid "Event status"
-msgstr "Status for hendelsen"
-
 msgid "Experimental"
 msgstr "Eksperimentell"
 
@@ -3784,6 +3781,9 @@ msgstr "Avsluttet og arkivert"
 
 msgid "Confirm password reset"
 msgstr "Tilbakestilling av passord bekreftet"
+
+msgid "Copy link to clipboard"
+msgstr "Kopier lenke til utklippstavlen"
 
 msgid "Currencies & Materials"
 msgstr "Valutaer og materialer"

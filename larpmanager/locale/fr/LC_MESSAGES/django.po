@@ -1977,9 +1977,6 @@ msgstr "Nom du crédit"
 msgid "Event hidden"
 msgstr "Événement caché"
 
-msgid "Event status"
-msgstr "Statut de l'événement"
-
 msgid "Experimental"
 msgstr "Expérimental"
 
@@ -3784,6 +3781,9 @@ msgstr "Conclu et archivé"
 
 msgid "Confirm password reset"
 msgstr "Réinitialisation du mot de passe confirmée"
+
+msgid "Copy link to clipboard"
+msgstr "Copier le lien dans le presse-papiers"
 
 msgid "Currencies & Materials"
 msgstr "Devises et matériaux"

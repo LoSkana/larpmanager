@@ -1977,9 +1977,6 @@ msgstr "Název úvěru"
 msgid "Event hidden"
 msgstr "Skrytá událost"
 
-msgid "Event status"
-msgstr "Stav události"
-
 msgid "Experimental"
 msgstr "Experimentální"
 
@@ -3784,6 +3781,9 @@ msgstr "Uzavřeno a archivováno"
 
 msgid "Confirm password reset"
 msgstr "Potvrzení obnovení hesla"
+
+msgid "Copy link to clipboard"
+msgstr "Kopírování odkazu do schránky"
 
 msgid "Currencies & Materials"
 msgstr "Měny a materiály"
