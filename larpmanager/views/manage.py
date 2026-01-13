@@ -495,15 +495,20 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
 
     # Load registration status
     context["registration_status"] = _get_registration_status(context["run"])
+    status_code, _ = _get_registration_status_code(context["run"])
+    context["registrations_open"] = status_code in ["primary", "filler", "waiting"]
 
     # Load registration counts if permitted
     if has_event_permission(request, context, event_slug, "orga_registrations"):
         context["counts"] = get_registration_counts(context["run"])
         context["registration_counts"] = {}
-        for tier in ["player", "staff", "wait", "fill", "seller", "npc", "collaborator"]:
-            count_key = f"count_{tier}"
+
+        # Get counts by ticket name
+        tickets = RegistrationTicket.objects.filter(event=context["event"]).order_by("number")
+        for ticket in tickets:
+            count_key = f"tk_{ticket.id}"
             if count_key in context["counts"]:
-                context["registration_counts"][_(tier.capitalize())] = context["counts"][count_key]
+                context["registration_counts"][ticket.name] = context["counts"][count_key]
 
     # Load accounting if permitted
     if has_event_permission(request, context, event_slug, "orga_accounting"):

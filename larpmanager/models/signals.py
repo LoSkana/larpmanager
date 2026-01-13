@@ -113,6 +113,7 @@ from larpmanager.cache.run import (
     on_event_pre_save_invalidate_cache,
     on_run_post_save_reset_config_cache,
     on_run_pre_save_invalidate_cache,
+    reset_cache_config_run,
     update_visible_factions,
 )
 from larpmanager.cache.skin import clear_skin_cache
@@ -863,12 +864,16 @@ def pre_delete_event_button(sender: type, instance: Any, **kwargs: Any) -> None:
 def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset event configuration cache after model save."""
     reset_element_configs(instance.event)
+    for run in instance.event.runs.all():
+        reset_cache_config_run(run)
 
 
 @receiver(post_delete, sender=EventConfig)
 def post_delete_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear event configuration cache after deletion."""
     reset_element_configs(instance.event)
+    for run in instance.event.runs.all():
+        reset_cache_config_run(run)
 
 
 # EventPermission signals

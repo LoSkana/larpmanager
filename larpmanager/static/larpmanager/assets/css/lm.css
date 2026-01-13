@@ -2616,7 +2616,7 @@ input[type="number"] {
 @media (max-width: 768px) {
   .grid .grid-item {
     flex: 0 0 100%;
-    max-height: none;
+    height: auto;
     overflow-y: visible;
   }
 }
