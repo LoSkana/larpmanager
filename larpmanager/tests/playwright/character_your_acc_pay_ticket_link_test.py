@@ -84,8 +84,10 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
         page.locator('[id="u2"]').get_by_role("link", name="Signup link").click()
     new_page = popup_info.value
     expect(new_page.get_by_label("Ticket (*)")).to_have_value("u2")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    new_page.get_by_role("button", name="Continue").click()
+    submit_confirm(new_page)
+
+    go_to(page, live_server, "/test/")
     expect_normalized(page, page.locator("#one"), "Registration confirmed (Staff)")
 
 
