@@ -18,7 +18,7 @@
                 {% if widgets.accounting.revenue != 0 %}
                     <tr>
                         <th descr="{% trans "Total amount of money received for this event, minus commission fees and refunds" %}">
-                            <a href="#" class="sidebar-link">{% trans "Total revenue" %}</a>
+                            <a href="#" class="sidebar-link">{% trans "Realized revenue" %}</a>
                             <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
                         </th>
                         <td>{{ widgets.accounting.revenue }}</td>
@@ -35,7 +35,7 @@
                 {% endif %}
                 {% if widgets.accounting.balance != 0 %}
                     <tr>
-                        <th descr="{% trans "Net profit of the event, difference between total revenue and total costs" %}">
+                        <th descr="{% trans "Net profit of the event, difference between realized revenue and total costs" %}">
                             <a href="#" class="sidebar-link">{% trans "Net profit" %}</a>
                             <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
                         </th>

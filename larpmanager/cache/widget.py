@@ -242,7 +242,7 @@ def get_widget_cache(
 
 def get_orga_widget_cache(run: Run, widget_name: str) -> dict:
     """Get deadline widget data from cache or compute if not cached."""
-    return get_widget_cache(Run, "run", run.id, orga_widget_list, widget_name)
+    return get_widget_cache(run, "run", run.id, orga_widget_list, widget_name)
 
 
 def get_exe_widget_cache(association_id: int, widget_name: str) -> dict:
@@ -289,9 +289,9 @@ def clear_widget_cache_for_association(association_id: int) -> None:
 
 def reset_widgets(instance: Any) -> None:
     """Reset widget cache data for related elements."""
-    if instance.run_id:
+    if hasattr(instance, "run_id") and instance.run_id:
         clear_widget_cache(instance.run_id)
-    if instance.event_id:
+    if hasattr(instance, "event_id") and instance.event_id:
         clear_widget_cache_for_event(instance.event_id)
-    if instance.association_id:
+    if hasattr(instance, "association_id") and instance.association_id:
         clear_widget_cache_association(instance.association_id)

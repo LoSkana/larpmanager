@@ -2359,9 +2359,6 @@ msgstr "Token har löpt ut"
 msgid "Total members"
 msgstr "Totalt antal medlemmar"
 
-msgid "Total revenue"
-msgstr "Summa intäkter"
-
 msgid "URL shortener"
 msgstr "URL-förkortare"
 
@@ -2902,6 +2899,9 @@ msgstr "Val av spelare"
 
 msgid "Pre-registration"
 msgstr "Förhandsanmälan"
+
+msgid "Realized revenue"
+msgstr "Realiserade intäkter"
 
 msgid "Registration fee"
 msgstr "Anmälningsavgift"
@@ -7816,12 +7816,6 @@ msgstr ""
 "registreringsavgifterna för evenemanget"
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
-msgstr ""
-"Evenemangets nettovinst, skillnaden mellan totala intäkter och totala "
-"kostnader"
-
-msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr "Obs: Specialkoden genereras på nytt varje gång du byter presentkort"
 
@@ -8109,6 +8103,12 @@ msgid ""
 msgstr ""
 "Sista steget är att slutföra eventinställningen genom att lägga till start- "
 "och slutdatum"
+
+msgid ""
+"Net profit of the event, difference between realized revenue and total costs"
+msgstr ""
+"Evenemangets nettovinst, skillnaden mellan realiserade intäkter och totala "
+"kostnader"
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"

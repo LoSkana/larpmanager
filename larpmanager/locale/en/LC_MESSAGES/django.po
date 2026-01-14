@@ -6086,7 +6086,7 @@ msgid ""
 "refunds"
 msgstr ""
 
-msgid "Total revenue"
+msgid "Realized revenue"
 msgstr ""
 
 msgid ""
@@ -6098,7 +6098,7 @@ msgid "Total costs"
 msgstr ""
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
+"Net profit of the event, difference between realized revenue and total costs"
 msgstr ""
 
 msgid "Net profit"

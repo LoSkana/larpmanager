@@ -260,7 +260,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         run.registration_counts = _get_registration_counts(run)
 
     # Load widgets
-    _exe_widgets(context, features)
+    _exe_widgets(request, context, features)
 
     # Suggest creating an event if no runs are active
     if not context["ongoing_runs"]:
@@ -284,12 +284,19 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/manage/exe.html", context)
 
 
-def _exe_widgets(context: dict, features: dict) -> None:
+def _exe_widgets(request: HttpRequest, context: dict, features: dict) -> None:
     """Loads widget data into context for executive dashboard."""
-    context["widgets"] = {}
-    for widget in ["accounting", "deadlines"]:
+    widgets_available = []
+    for widget in ["deadlines"]:
         if widget in features:
-            context["widgets"][widget] = get_exe_widget_cache(association_id=context["association_id"], widget_name=widget)
+            widgets_available.append(widget)
+
+    if has_association_permission(request, context, "exe_accounting"):
+        widgets_available.append("accounting")
+
+    context["widgets"] = {}
+    for widget in widgets_available:
+        context["widgets"][widget] = get_exe_widget_cache(association_id=context["association_id"], widget_name=widget)
 
 
 def _exe_suggestions(context: dict) -> None:
@@ -546,10 +553,6 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
     if has_event_permission(request, context, event_slug, "orga_registrations"):
         context["registration_counts"] = _get_registration_counts(context["run"])
 
-    # Load accounting if permitted
-    if has_event_permission(request, context, event_slug, "orga_accounting"):
-        context["dc"] = get_run_accounting(context["run"], context, perform_update=False)
-
     # Build action lists
     _exe_actions(request, context)
     if "actions_list" in context:
@@ -574,21 +577,26 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
     _check_intro_driver(context)
 
     # Loads widget data
-    _orga_widgets(context, features)
+    _orga_widgets(request, context, event_slug, features)
 
     return render(request, "larpmanager/manage/orga.html", context)
 
 
-def _orga_widgets(context:dict, features:dict):
+def _orga_widgets(request: HttpRequest, context:dict, event_slug: str, features:dict):
     """Loads widget data into context."""
 
     widgets_available = []
-    for widget in ["deadlines", "casting", "accounting"]:
+    for widget in ["deadlines", "casting", ]:
         if widget in features:
             widgets_available.append(widget)
-    if "user_character" in features and get_event_config(context["event"].id, "user_character_approval",
-                                                         default_value=False, context=context):
+
+    if "user_character" in features and get_event_config(
+        context["event"].id, "user_character_approval", default_value=False, context=context
+    ):
         widgets_available.append("user_character")
+
+    if has_event_permission(request, context, event_slug, "orga_accounting"):
+        widgets_available.append("accounting")
 
     context["widgets"] = {}
     for widget in widgets_available:

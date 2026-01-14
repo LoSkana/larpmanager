@@ -7,7 +7,7 @@
     {% trans "This page shows the accounting status of the event, divided into the various expense types" %}
 {% endblock info %}
 {% block content %}
-    <h2>{% trans "Total revenue" %}: {{ run.revenue }}</h2>
+    <h2>{% trans "Realized revenue" %}: {{ run.revenue }}</h2>
     <p>
         <i>{% trans "Total amount of money received for this event, minus commission fees and refunds" %}</i>
     </p>
@@ -18,7 +18,7 @@
         </p>
         <h2>{% trans "Net profit" %}: {{ run.balance }}</h2>
         <p>
-            <i>{% trans "Net profit of the event, difference between total revenue and total costs" %}</i>
+            <i>{% trans "Net profit of the event, difference between realized revenue and total costs" %}</i>
         </p>
     {% endif %}
     {% if 'organization_tax' in features %}

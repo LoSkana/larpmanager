@@ -2359,9 +2359,6 @@ msgstr "Token abgelaufen"
 msgid "Total members"
 msgstr "Mitglieder insgesamt"
 
-msgid "Total revenue"
-msgstr "Einnahmen insgesamt"
-
 msgid "URL shortener"
 msgstr "URL-Verkürzer"
 
@@ -2902,6 +2899,9 @@ msgstr "Auswahl der Spieler"
 
 msgid "Pre-registration"
 msgstr "Vorregistrierung"
+
+msgid "Realized revenue"
+msgstr "Realisierte Einnahmen"
 
 msgid "Registration fee"
 msgstr "Eintrittspreis"
@@ -8107,12 +8107,6 @@ msgstr ""
 "Anmeldegebühren für die Veranstaltung verwendet werden"
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
-msgstr ""
-"Nettogewinn der Veranstaltung, Differenz zwischen Gesamteinnahmen und "
-"Gesamtkosten"
-
-msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Hinweis: Der spezielle Code wird jedes Mal neu generiert, wenn Sie die "
@@ -8434,6 +8428,12 @@ msgid ""
 msgstr ""
 "Im letzten Schritt vervollständigen Sie bitte die Einrichtung des "
 "Ereignisses, indem Sie das Start- und Enddatum hinzufügen"
+
+msgid ""
+"Net profit of the event, difference between realized revenue and total costs"
+msgstr ""
+"Nettogewinn der Veranstaltung, Differenz zwischen realisierten Einnahmen und"
+" Gesamtkosten"
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"

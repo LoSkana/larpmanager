@@ -2359,9 +2359,6 @@ msgstr "Gettone scaduto"
 msgid "Total members"
 msgstr "Totale soci"
 
-msgid "Total revenue"
-msgstr "Ricavi totali"
-
 msgid "URL shortener"
 msgstr "Accorcia URL"
 
@@ -2902,6 +2899,9 @@ msgstr "Scelta giocatore"
 
 msgid "Pre-registration"
 msgstr "Pre-iscrizione"
+
+msgid "Realized revenue"
+msgstr "Ricavi realizzati"
 
 msgid "Registration fee"
 msgstr "Quota iscrizione"
@@ -7944,11 +7944,6 @@ msgstr ""
 "iscrizione evento"
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
-msgstr ""
-"Profitto netto dell'evento, differenza tra i ricavi totali e i costi totali"
-
-msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Nota: Il codice speciale viene ri-generato ogni volta che modifichi il "
@@ -8265,6 +8260,11 @@ msgid ""
 msgstr ""
 "Ultimo passo, completa l'impostazione dell'evento aggiungendo le date di "
 "inizio e fine"
+
+msgid ""
+"Net profit of the event, difference between realized revenue and total costs"
+msgstr ""
+"Utile netto dell'evento, differenza tra i ricavi realizzati e i costi totali"
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"

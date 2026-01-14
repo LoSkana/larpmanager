@@ -2359,9 +2359,6 @@ msgstr "Platnost tokenu vypršela"
 msgid "Total members"
 msgstr "Celkový počet členů"
 
-msgid "Total revenue"
-msgstr "Celkové příjmy"
-
 msgid "URL shortener"
 msgstr "Zkracovač URL"
 
@@ -2902,6 +2899,9 @@ msgstr "Výběr hráčů"
 
 msgid "Pre-registration"
 msgstr "Předběžná registrace"
+
+msgid "Realized revenue"
+msgstr "Realizované příjmy"
 
 msgid "Registration fee"
 msgstr "Vstupní poplatek"
@@ -7762,10 +7762,6 @@ msgstr ""
 "za událost"
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
-msgstr "Čistý zisk akce, rozdíl mezi celkovými výnosy a celkovými náklady"
-
-msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Poznámka: Speciální kód se generuje znovu při každé změně dárkové karty"
@@ -8044,6 +8040,10 @@ msgid ""
 "Last step, please complete the event setup by adding the start and end dates"
 msgstr ""
 "V posledním kroku dokončete nastavení události přidáním data začátku a konce"
+
+msgid ""
+"Net profit of the event, difference between realized revenue and total costs"
+msgstr "Čistý zisk akce, rozdíl mezi realizovanými příjmy a celkovými náklady"
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"
