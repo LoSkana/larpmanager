@@ -286,13 +286,10 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
 
 def _exe_widgets(context: dict, features: dict) -> None:
     """Loads widget data into context for executive dashboard."""
-    widgets_available = []
-    if "accounting" in features:
-        widgets_available.append("accounting")
-
     context["widgets"] = {}
-    for widget in widgets_available:
-        context["widgets"][widget] = get_exe_widget_cache(association_id=context["association_id"], widget_name=widget)
+    for widget in ["accounting", "deadlines"]:
+        if widget in features:
+            context["widgets"][widget] = get_exe_widget_cache(association_id=context["association_id"], widget_name=widget)
 
 
 def _exe_suggestions(context: dict) -> None:

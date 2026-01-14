@@ -34,6 +34,7 @@ from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.users.deadlines import check_run_deadlines
+from larpmanager.views.user.event import get_coming_runs
 
 
 def _init_deadline_widget_cache(run: Run) -> dict:
@@ -158,6 +159,23 @@ def _init_exe_accounting_widget_cache(association_id: int) -> dict:
     }
 
 
+def _init_exe_deadline_widget_cache(association_id: int) -> dict:
+    """Compute association deadline statistics for widget cache (aggregates all upcoming runs)."""
+    # Get all upcoming runs for the association
+    runs = get_coming_runs(association_id, future=True)
+
+    # Initialize aggregated counts
+    total_counts = {}
+
+    # Iterate through all runs and aggregate deadline counts
+    for run in runs:
+        run_counts = _init_deadline_widget_cache(run)
+        for category, count in run_counts.items():
+            total_counts[category] = total_counts.get(category, 0) + count
+
+    return total_counts
+
+
 # Widget list for run-level widgets
 orga_widget_list = {
     "deadlines": _init_deadline_widget_cache,
@@ -169,6 +187,7 @@ orga_widget_list = {
 # Widget list for association-level widgets
 exe_widget_list = {
     "accounting": _init_exe_accounting_widget_cache,
+    "deadlines": _init_exe_deadline_widget_cache,
 }
 
 
