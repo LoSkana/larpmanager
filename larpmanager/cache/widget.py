@@ -33,8 +33,8 @@ from larpmanager.models.casting import Casting
 from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, CharacterStatus
+from larpmanager.utils.core.common import get_coming_runs
 from larpmanager.utils.users.deadlines import check_run_deadlines
-from larpmanager.views.user.event import get_coming_runs
 
 
 def _init_deadline_widget_cache(run: Run) -> dict:

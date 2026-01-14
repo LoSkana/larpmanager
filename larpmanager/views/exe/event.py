@@ -43,13 +43,12 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.utils.core.base import check_association_context, get_context
-from larpmanager.utils.core.common import get_event_template
+from larpmanager.utils.core.common import get_coming_runs, get_event_template
 from larpmanager.utils.services.edit import backend_get, exe_edit
 from larpmanager.utils.users.deadlines import check_run_deadlines
 from larpmanager.views.manage import _get_registration_counts, _get_registration_status
 from larpmanager.views.orga.event import full_event_edit
 from larpmanager.views.orga.registration import get_pre_registration
-from larpmanager.views.user.event import get_coming_runs
 
 
 @login_required

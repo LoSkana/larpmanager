@@ -37,7 +37,7 @@ from diff_match_patch import diff_match_patch
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max, Subquery
+from django.db.models import Max, QuerySet, Subquery
 from django.http import Http404, HttpRequest
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -47,7 +47,7 @@ from larpmanager.models.accounting import Collection, Discount
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel, Feature, FeatureModule
 from larpmanager.models.casting import Quest, QuestType, Trait
-from larpmanager.models.event import Event
+from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.member import Badge, Member
 from larpmanager.models.miscellanea import (
     Album,
@@ -1037,3 +1037,52 @@ def get_now() -> object:
         # If timezone.now() returns naive, make it aware
         now = now.replace(tzinfo=UTC)
     return now
+
+
+def get_display_choice(choices: list[tuple[str, str]], key: str) -> str:
+    """Get display name for a choice field value.
+
+    Args:
+        choices: List of (key, display_name) tuples
+        key: Key to look up display name for
+
+    Returns:
+        str: Display name for the key, empty string if not found
+
+    """
+    for choice_key, display_name in choices:
+        if choice_key == key:
+            return display_name
+    return ""
+
+
+def get_coming_runs(association_id: int | None, *, future: bool = True) -> QuerySet[Run]:
+    """Get upcoming or past runs for an association.
+
+    Args:
+        association_id: Association ID to filter by. If None, returns runs for all associations.
+        future: If True, get future runs; if False, get past runs. Defaults to True.
+
+    Returns:
+        QuerySet of Run objects, ordered by end date.
+        Future runs are ordered ascending, past runs descending.
+
+    """
+    # Base queryset: exclude cancelled runs and invisible events, optimize with select_related
+    runs = Run.objects.exclude(development=DevelopStatus.CANC).exclude(event__visible=False).select_related("event")
+
+    # Filter by association if specified
+    if association_id:
+        runs = runs.filter(event__association_id=association_id)
+
+    # Apply date filtering and ordering based on future/past requirement
+    if future:
+        # Get runs ending 3+ days from now, ordered by end date (earliest first)
+        reference_date = timezone.now() - timedelta(days=3)
+        runs = runs.filter(end__gte=reference_date.date()).order_by("end")
+    else:
+        # Get runs that ended 3+ days ago, ordered by end date (latest first)
+        reference_date = timezone.now() + timedelta(days=3)
+        runs = runs.filter(end__lte=reference_date.date()).order_by("-end")
+
+    return runs

@@ -73,7 +73,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context, get_event, get_event_context
-from larpmanager.utils.core.common import get_element
+from larpmanager.utils.core.common import get_coming_runs, get_element
 from larpmanager.utils.core.exceptions import HiddenError
 from larpmanager.utils.users.registration import registration_status
 
@@ -298,38 +298,6 @@ def get_pre_registrations_dict(association_id: int, member: Any) -> dict:
             event_id_to_pre_registration[pre_registration.event_id] = pre_registration
 
     return event_id_to_pre_registration
-
-
-def get_coming_runs(association_id: int | None, *, future: bool = True) -> QuerySet[Run]:
-    """Get upcoming or past runs for an association with optimized queries.
-
-    Args:
-        association_id: Association ID to filter by. If None, returns runs for all associations.
-        future: If True, get future runs; if False, get past runs. Defaults to True.
-
-    Returns:
-        QuerySet of Run objects with optimized select_related, ordered by end date.
-        Future runs are ordered ascending, past runs descending.
-
-    """
-    # Base queryset: exclude cancelled runs and invisible events, optimize with select_related
-    runs = Run.objects.exclude(development=DevelopStatus.CANC).exclude(event__visible=False).select_related("event")
-
-    # Filter by association if specified
-    if association_id:
-        runs = runs.filter(event__association_id=association_id)
-
-    # Apply date filtering and ordering based on future/past requirement
-    if future:
-        # Get runs ending 3+ days from now, ordered by end date (earliest first)
-        reference_date = timezone.now() - timedelta(days=3)
-        runs = runs.filter(end__gte=reference_date.date()).order_by("end")
-    else:
-        # Get runs that ended 3+ days ago, ordered by end date (latest first)
-        reference_date = timezone.now() + timedelta(days=3)
-        runs = runs.filter(end__lte=reference_date.date()).order_by("-end")
-
-    return runs
 
 
 def home_json(request: HttpRequest, lang: str = "it") -> object:

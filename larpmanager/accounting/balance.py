@@ -31,7 +31,6 @@ from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.registration import get_display_choice
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import (
@@ -55,6 +54,7 @@ from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.member import Membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.utils import get_sum
+from larpmanager.utils.core.common import get_display_choice
 
 logger = logging.getLogger(__name__)
 

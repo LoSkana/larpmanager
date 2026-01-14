@@ -596,23 +596,6 @@ def cancel_reg(registration: Registration) -> None:
     reset_event_links(registration.member_id, registration.run.event.association_id)
 
 
-def get_display_choice(choices: list[tuple[str, str]], key: str) -> str:
-    """Get display name for a choice field value.
-
-    Args:
-        choices: List of (key, display_name) tuples
-        key: Key to look up display name for
-
-    Returns:
-        str: Display name for the key, empty string if not found
-
-    """
-    for choice_key, display_name in choices:
-        if choice_key == key:
-            return display_name
-    return ""
-
-
 def round_to_nearest_cent(amount: float) -> float:
     """Round a number to the nearest cent with tolerance for small differences.
 
