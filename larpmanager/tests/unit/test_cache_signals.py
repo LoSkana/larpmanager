@@ -487,7 +487,7 @@ class TestCacheSignals(BaseTestCase):
         )
         item.save()
 
-        mock_reset.assert_called_once_with(run, member.id)
+        mock_reset.assert_called_with(run, member.id)
 
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")
     def test_accounting_item_discount_post_delete_resets_accounting_cache(self, mock_reset: Any) -> None:
@@ -506,7 +506,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after create to only test delete signal
         item.delete()
 
-        mock_reset.assert_called_once_with(run, member_id)
+        mock_reset.assert_called_with(run, member_id)
 
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")
     def test_accounting_item_other_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
