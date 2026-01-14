@@ -225,9 +225,9 @@ class Event(UuidMixin, BaseModel):
 
     class Meta:
         constraints: ClassVar[list] = [
-            UniqueConstraint(fields=["slug", "deleted"], name="unique_event_with_optional"),
+            UniqueConstraint(fields=["association", "slug", "deleted"], name="unique_event_with_optional"),
             UniqueConstraint(
-                fields=["slug"],
+                fields=["association", "slug"],
                 condition=Q(deleted=None),
                 name="unique_event_without_optional",
             ),
