@@ -290,9 +290,11 @@ def clear_widget_cache_for_association(association_id: int) -> None:
 
 def reset_widgets(instance: Any) -> None:
     """Reset widget cache data for related elements."""
-    if hasattr(instance, "run_id") and instance.run_id:
-        clear_widget_cache(instance.run_id)
-    if hasattr(instance, "event_id") and instance.event_id:
-        clear_widget_cache_for_event(instance.event_id)
-    if hasattr(instance, "association_id") and instance.association_id:
+    if hasattr(instance, "run") and instance.run:
+        clear_widget_cache(instance.run.id)
+        clear_widget_cache_association(instance.run.event.association_id)
+    elif hasattr(instance, "event") and instance.event:
+        clear_widget_cache_for_event(instance.event.id)
+        clear_widget_cache_association(instance.event.association_id)
+    elif hasattr(instance, "association_id") and instance.association_id:
         clear_widget_cache_association(instance.association_id)
