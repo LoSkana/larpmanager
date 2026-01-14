@@ -90,13 +90,17 @@ def print_text(page: Any) -> None:
 def go_to(page: Any, live_server: Any, path: Any) -> None:
     go_to_check(page, f"{live_server}/{path}")
 
-
 def go_to_check(page: Any, path: Any) -> None:
     page.goto(path)
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
     ooops_check(page)
 
+def get_request(page: Any, live_server: Any, path: Any) -> dict:
+    api_context = page.get_context().request
+    response = api_context.get(f"{live_server}/{path}")
+    assert response.ok
+    return response.json()
 
 def submit(page: Any) -> None:
     submit_confirm(page)
