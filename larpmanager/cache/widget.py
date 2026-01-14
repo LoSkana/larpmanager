@@ -26,7 +26,10 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.http import Http404
 
-from larpmanager.accounting.balance import association_accounting_data, get_run_accounting
+from larpmanager.accounting.balance import (
+    association_accounting_summary,
+    get_run_accounting,
+)
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.casting import Casting
@@ -149,14 +152,12 @@ def _init_exe_accounting_widget_cache(association_id: int) -> dict:
     """Compute association accounting statistics for widget cache (current year)."""
     context = {"association_id": association_id}
 
-    # Get accounting data
-    association_accounting_data(context)
-
-    # Extract values from context
-    return {
-        "global_sum": context.get("in_sum", 0) - context.get("out_sum", 0),
-        "bank_sum": context.get("bank_sum", 0),
-    }
+    # Get accounting data summary
+    association_accounting_summary(context)
+    data = {}
+    for key in ["global_sum", "bank_sum"]:
+        data[key] = context.get(key, 0)
+    return data
 
 
 def _init_exe_deadline_widget_cache(association_id: int) -> dict:
