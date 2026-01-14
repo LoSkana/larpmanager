@@ -496,6 +496,7 @@ def send_character_status_update_email(instance: Character) -> None:
         return
 
     # Skip if status is the same as the old one
+    old_status = None
     with suppress(ObjectDoesNotExist):
         old_status = Character.objects.get(pk=instance.pk).status
 
