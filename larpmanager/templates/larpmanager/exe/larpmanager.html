@@ -24,8 +24,8 @@
         {% for el in list %}
             <tr>
                 <td>{{ el }}</td>
-                <td>{{ el.start }}</td>
-                <td>{{ el.end }}</td>
+                <td>{{ el.start | date:"Y/m/d" }}</td>
+                <td>{{ el.end | date:"Y/m/d" }}</td>
                 <td>{{ el.features }}</td>
                 <td>{{ el.get_plan_display }}</td>
                 <td>{{ el.active_registrations }}</td>

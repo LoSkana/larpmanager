@@ -57,7 +57,7 @@ from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
 from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, WritingQuestion
 from larpmanager.models.member import Membership, MembershipStatus
-from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota, RegistrationTicket
+from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.core.base import check_association_context, check_event_context, get_context, get_event_context
 from larpmanager.utils.core.common import _get_help_questions, format_datetime
@@ -183,22 +183,30 @@ def _get_registration_status(run: Run) -> str:
 
 
 def _get_registration_counts(run: Run) -> dict:
-    """Prepares run registration ticket counts."""
+    """Prepares run registration ticket counts ordered by ticket order field."""
 
     counts = get_registration_counts(run)
-    registration_counts = {}
+
+    # Create a list of ticket data with name, order, and count
+    ticket_data = []
     for ticket_id, ticket_name in counts.get("tickets_map", {}).items():
         count_key = f"count_ticket_{ticket_id}"
         if count_key in counts and counts[count_key]:
-            registration_counts[ticket_name] = counts[count_key]
+            ticket_order = counts.get("tickets_order", {}).get(ticket_id, 0)
+            ticket_data.append({
+                'name': ticket_name,
+                'order': ticket_order,
+                'count': counts[count_key]
+            })
 
-    return dict(
-        sorted(
-            registration_counts.items(),
-            key=lambda item: item[1],
-            reverse=True,
-        )
+    # Sort by order field, then by name
+    sorted_tickets = sorted(
+        ticket_data,
+        key=lambda x: (x['order'], x['name'])
     )
+
+    # Return as a dict with ticket name as key and count as value
+    return {ticket['name']: ticket['count'] for ticket in sorted_tickets}
 
 
 def _exe_manage(request: HttpRequest) -> HttpResponse:

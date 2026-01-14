@@ -34,14 +34,29 @@
                     </td>
                     <td>{{ el.search }}</td>
                     <td>{{ el.get_development_display }}</td>
-                    <td>{{ el.start }}</td>
-                    <td>{{ el.end }}</td>
-                    <td>{{ el.counts.count_reg }}</td>
+                    <td>{{ el.start | date:"Y/m/d" }}</td>
+                    <td>{{ el.end | date:"Y/m/d" }}</td>
+                    <td>
+                        {% for ticket_name, count in el.registration_counts.items %}
+                            {% include "elements/comma.html" %}
+                            {{ ticket_name }}: {{ count }}
+                        {% endfor %}
+                    </td>
                     <td>
                         <a href="{% url 'register' el.get_slug %}">{{ el.registration_status }}</a>
+                        <button class="copy-link-btn"
+                                data-url="{% url 'register' el.get_slug %}"
+                                title="{% trans "Copy link to clipboard" %}">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
                     </td>
                     <td>
                         <a href="{% url 'gallery' el.get_slug %}">{% trans "Gallery" %}</a>
+                        <button class="copy-link-btn"
+                                data-url="{% url 'gallery' el.get_slug %}"
+                                title="{% trans "Copy link to clipboard" %}">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
                     </td>
                 </tr>
             {% endfor %}

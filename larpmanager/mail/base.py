@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+from contextlib import suppress
 from datetime import timedelta
 from typing import TYPE_CHECKING, Any
 
@@ -490,38 +491,42 @@ def send_character_status_update_email(instance: Character) -> None:
     if not get_event_config(instance.event_id, "user_character_approval", default_value=False):
         return
 
-    # Skip if this is a new character being created (not yet in database)
-    if instance.pk and instance.player and not instance._state.adding:  # noqa: SLF001
-        # Set language context for email content localization
-        activate(instance.player.language)
+    # Skip if it has no player
+    if not instance.player:
+        return
 
-        # Fetch previous state to detect status changes
-        previous_character = Character.objects.get(pk=instance.pk)
-        if previous_character.status != instance.status:
-            # Determine appropriate email body based on new status
-            email_body = None
-            if instance.status == CharacterStatus.PROPOSED:
-                email_body = get_event_text(instance.event_id, EventTextType.CHARACTER_PROPOSED)
-            if instance.status == CharacterStatus.REVIEW:
-                email_body = get_event_text(instance.event_id, EventTextType.CHARACTER_REVIEW)
-            if instance.status == CharacterStatus.APPROVED:
-                email_body = get_event_text(instance.event_id, EventTextType.CHARACTER_APPROVED)
+    # Skip if status is the same as the old one
+    with suppress(ObjectDoesNotExist):
+        old_status = Character.objects.get(pk=instance.pk).status
 
-            # Skip email if no template content found for this status
-            if not email_body:
-                return
+    if old_status == instance.status:
+        return
 
-            # Construct email subject with event, character, and status info
-            email_subject = f"{hdr(instance.event)} - {instance!s} - {instance.get_status_display()}"
+    # Determine appropriate email body based on status
+    activate(instance.player.language)
+    email_body = None
+    if instance.status == CharacterStatus.PROPOSED:
+        email_body = get_event_text(instance.event_id, EventTextType.CHARACTER_PROPOSED)
+    if instance.status == CharacterStatus.REVIEW:
+        email_body = get_event_text(instance.event_id, EventTextType.CHARACTER_REVIEW)
+    if instance.status == CharacterStatus.APPROVED:
+        email_body = get_event_text(instance.event_id, EventTextType.CHARACTER_APPROVED)
 
-            # Determine context for email
-            email_context = instance.event
-            if instance.event.runs.exists():
-                # Use the last run if the event has any runs
-                email_context = instance.event.runs.last()
+    # Skip email if no template content found for this status
+    if not email_body:
+        return
 
-            # Send the notification email to the player
-            my_send_mail(email_subject, email_body, instance.player, email_context)
+    # Construct email subject with event, character, and status info
+    email_subject = f"{hdr(instance.event)} - {instance.name} - {instance.get_status_display()}"
+
+    # Determine context for email
+    email_context = instance.event
+    if instance.event.runs.exists():
+        # Use the last run if the event has any runs
+        email_context = instance.event.runs.last()
+
+    # Send the notification email to the player
+    my_send_mail(email_subject, email_body, instance.player, email_context)
 
 
 def notify_organization_exe(

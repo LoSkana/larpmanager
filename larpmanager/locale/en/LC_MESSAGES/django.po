@@ -5518,6 +5518,9 @@ msgstr ""
 msgid "End"
 msgstr ""
 
+msgid "Copy link to clipboard"
+msgstr ""
+
 msgid ""
 "This page shows larpmanager usage costs, total and divided by individual "
 "event"
@@ -6048,9 +6051,6 @@ msgid "Access your character"
 msgstr ""
 
 msgid "Register to the event"
-msgstr ""
-
-msgid "Copy link to clipboard"
 msgstr ""
 
 msgid "Dates"

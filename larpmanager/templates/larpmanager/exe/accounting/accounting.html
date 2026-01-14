@@ -275,7 +275,7 @@
                     <td>
                         {% if el.development != '9' %}NO{% endif %}
                     </td>
-                    <td>{{ el.start }}</td>
+                    <td>{{ el.start | date:"Y/m/d" }}</td>
                 </tr>
             {% endfor %}
         </table>
