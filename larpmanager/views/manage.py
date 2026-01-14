@@ -39,7 +39,7 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_registration_counts
-from larpmanager.cache.widget import get_widget_cache
+from larpmanager.cache.widget import get_widget_cache, get_exe_widget_cache, get_orga_widget_cache
 from larpmanager.utils.auth.permission import has_association_permission, get_index_association_permissions, \
     has_event_permission, get_index_event_permissions
 from larpmanager.cache.wwyltd import get_features_cache, get_guides_cache, get_tutorials_cache
@@ -57,7 +57,7 @@ from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
 from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, WritingQuestion
 from larpmanager.models.member import Membership, MembershipStatus
-from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota
+from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.core.base import check_association_context, check_event_context, get_context, get_event_context
 from larpmanager.utils.core.common import _get_help_questions, format_datetime
@@ -259,9 +259,8 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         run.registration_status = _get_registration_status(run)
         run.registration_counts = _get_registration_counts(run)
 
-    # Add accounting information if user has permission
-    if has_association_permission(request, context, "exe_accounting"):
-        association_accounting(context)
+    # Load widgets
+    _exe_widgets(context, features)
 
     # Suggest creating an event if no runs are active
     if not context["ongoing_runs"]:
@@ -283,6 +282,17 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     _check_intro_driver(context)
 
     return render(request, "larpmanager/manage/exe.html", context)
+
+
+def _exe_widgets(context: dict, features: dict) -> None:
+    """Loads widget data into context for executive dashboard."""
+    widgets_available = []
+    if "accounting" in features:
+        widgets_available.append("accounting")
+
+    context["widgets"] = {}
+    for widget in widgets_available:
+        context["widgets"][widget] = get_exe_widget_cache(association_id=context["association_id"], widget_name=widget)
 
 
 def _exe_suggestions(context: dict) -> None:
@@ -576,7 +586,7 @@ def _orga_widgets(context:dict, features:dict):
     """Loads widget data into context."""
 
     widgets_available = []
-    for widget in ["deadlines", "casting"]:
+    for widget in ["deadlines", "casting", "accounting"]:
         if widget in features:
             widgets_available.append(widget)
     if "user_character" in features and get_event_config(context["event"].id, "user_character_approval",
@@ -585,7 +595,7 @@ def _orga_widgets(context:dict, features:dict):
 
     context["widgets"] = {}
     for widget in widgets_available:
-        context["widgets"][widget] = get_widget_cache(context["run"], widget)
+        context["widgets"][widget] = get_orga_widget_cache(context["run"], widget)
 
 
 def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict) -> None:  # noqa: C901 - Complex priority determination logic

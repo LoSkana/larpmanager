@@ -6053,6 +6053,11 @@ msgstr ""
 msgid "Register to the event"
 msgstr ""
 
+msgid ""
+"This is the overall amount that should be held in the organization's bank "
+"and financial accounts"
+msgstr ""
+
 msgid "Dates"
 msgstr ""
 
@@ -6066,6 +6071,14 @@ msgid "Actions"
 msgstr ""
 
 msgid "Suggestions"
+msgstr ""
+
+msgid ""
+"Total amount of money expected if all registered participants fully pay "
+"their due amount"
+msgstr ""
+
+msgid "Expected revenue"
 msgstr ""
 
 msgid ""

@@ -20,10 +20,15 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.http import Http404
 
+from larpmanager.accounting.balance import association_accounting_data, get_run_accounting
+from larpmanager.cache.config import get_association_config
+from larpmanager.cache.feature import get_event_features
 from larpmanager.models.casting import Casting
 from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import RegistrationCharacterRel
@@ -101,41 +106,142 @@ def _init_casting_widget_cache(run: Run) -> dict:
     return counts
 
 
-widget_list = {
+def _init_orga_accounting_widget_cache(run: Run) -> dict:
+    """Compute accounting statistics for widget cache."""
+    # Get accounting data for the run
+    accounting_data = get_run_accounting(run, {}, perform_update=False)
+
+    # Extract values from accounting data
+    data = {}
+
+    # Expected total from registrations
+    data["expected"] = accounting_data.get("registration", {}).get("tot", 0)
+
+    # Calculate values directly from accounting_data
+    sum_payments = accounting_data.get("pay", {}).get("tot", 0)
+    sum_inflows = accounting_data.get("in", {}).get("tot", 0)
+    sum_fees = accounting_data.get("trs", {}).get("tot", 0)
+    sum_refund = accounting_data.get("ref", {}).get("tot", 0)
+    sum_outflows = accounting_data.get("out", {}).get("tot", 0)
+    sum_expenses = accounting_data.get("exp", {}).get("tot", 0)
+    sum_tokens = accounting_data.get("tok", {}).get("tot", 0)
+    sum_credits = accounting_data.get("cre", {}).get("tot", 0)
+
+    # Calculate revenue, costs, and balance
+    data["revenue"] = sum_payments + sum_inflows - (sum_fees + sum_refund)
+    data["costs"] = sum_outflows + sum_expenses + sum_tokens + sum_credits
+    data["balance"] = data["revenue"] - data["costs"]
+
+    # Calculate organization tax
+    tax = 0
+    if "organization_tax" in get_event_features(run.event_id):
+        tax_percentage = int(
+            get_association_config(run.event.association_id, "organization_tax_perc", default_value="10")
+        )
+        tax = data["revenue"] * tax_percentage / 100
+    data["tax"] = tax
+
+    return data
+
+
+def _init_exe_accounting_widget_cache(association_id: int) -> dict:
+    """Compute association accounting statistics for widget cache (current year)."""
+    context = {"association_id": association_id}
+
+    # Get accounting data
+    association_accounting_data(context)
+
+    # Extract values from context
+    return {
+        "global_sum": context.get("in_sum", 0) - context.get("out_sum", 0),
+        "bank_sum": context.get("bank_sum", 0),
+    }
+
+
+# Widget list for run-level widgets
+orga_widget_list = {
     "deadlines": _init_deadline_widget_cache,
     "user_character": _init_user_character_widget_cache,
     "casting": _init_casting_widget_cache,
+    "accounting": _init_orga_accounting_widget_cache,
+}
+
+# Widget list for association-level widgets
+exe_widget_list = {
+    "accounting": _init_exe_accounting_widget_cache,
 }
 
 
-def get_widget_cache_key(run_id: int, widget_name: str) -> str:
-    """Generate cache key for deadline widget data."""
-    return f"widget_cache_{run_id}_{widget_name}"
+def get_widget_cache_key(entity_type: str, entity_id: int, widget_name: str) -> str:
+    """Generate cache key for widget data.
+
+    Args:
+        entity_type: Type of entity ('run' or 'association')
+        entity_id: ID of the entity
+        widget_name: Name of the widget
+
+    Returns:
+        str: Cache key for the widget
+    """
+    return f"widget_cache_{entity_type}_{entity_id}_{widget_name}"
 
 
-def get_widget_cache(run: Run, widget_name: str) -> dict:
-    """Get deadline widget data from cache or compute if not cached."""
+def get_widget_cache(
+    entity: Run | int, entity_type: str, entity_id: int, widget_list: dict, widget_name: str = ""
+) -> dict:
+    """Get widget data from cache or compute if not cached.
+
+    Args:
+        entity: Object on which to recover widget (either Run, or
+        entity_type: Type of entity ('run' or 'association')
+        entity_id: ID of the entity
+        widget_list: List of available widgets
+        widget_name: Name of the widget to retrieve
+
+    Returns:
+        dict: Widget data
+
+    Raises:
+        Http404: If widget is not found
+    """
     cached_data_function = widget_list.get(widget_name)
     if not cached_data_function:
-        msg = f"widget {widget_name} not found"
+        msg = f"widget {widget_name} not found in widget list"
         raise Http404(msg)
 
-    cache_key = get_widget_cache_key(run.id, widget_name)
+    cache_key = get_widget_cache_key(entity_type, entity_id, widget_name)
     cached_data = cache.get(cache_key)
 
     # If not in cache, update and get fresh data
     if cached_data is None:
-        cached_data = cached_data_function(run)
+        cached_data = cached_data_function(entity)
         # Cache the result with 1-day timeout
         cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return cached_data
 
 
+def get_orga_widget_cache(run: Run, widget_name: str) -> dict:
+    """Get deadline widget data from cache or compute if not cached."""
+    return get_widget_cache(Run, "run", run.id, orga_widget_list, widget_name)
+
+
+def get_exe_widget_cache(association_id: int, widget_name: str) -> dict:
+    """Get deadline widget data from cache or compute if not cached."""
+    return get_widget_cache(association_id, "association", association_id, exe_widget_list, widget_name)
+
+
 def clear_widget_cache(run_id: int) -> None:
-    """Clear cached deadline widget data for a run."""
-    for widget_name in widget_list:
-        cache_key = get_widget_cache_key(run_id, widget_name)
+    """Clear cached widget data for a run."""
+    for widget_name in orga_widget_list:
+        cache_key = get_widget_cache_key("run", run_id, widget_name)
+        cache.delete(cache_key)
+
+
+def clear_widget_cache_association(association_id: int) -> None:
+    """Clear cached widget data for an association."""
+    for widget_name in exe_widget_list:
+        cache_key = get_widget_cache_key("association", association_id, widget_name)
         cache.delete(cache_key)
 
 
@@ -152,7 +258,21 @@ def clear_widget_cache_for_event(event_id: int) -> None:
 
 
 def clear_widget_cache_for_association(association_id: int) -> None:
-    """Clear widget cache for all runs in an association."""
+    """Clear widget cache for all runs in an association and association-level widgets."""
+    # Clear run-level widgets
     event_ids = Event.objects.filter(association_id=association_id).values_list("id", flat=True)
     run_ids = Run.objects.filter(event_id__in=event_ids).values_list("id", flat=True)
     clear_widget_cache_for_runs(list(run_ids))
+
+    # Clear association-level widgets
+    clear_widget_cache_association(association_id)
+
+
+def reset_widgets(instance: Any) -> None:
+    """Reset widget cache data for related elements."""
+    if instance.run_id:
+        clear_widget_cache(instance.run_id)
+    if instance.event_id:
+        clear_widget_cache_for_event(instance.event_id)
+    if instance.association_id:
+        clear_widget_cache_association(instance.association_id)
