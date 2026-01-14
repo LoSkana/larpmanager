@@ -97,7 +97,7 @@ def go_to_check(page: Any, path: Any) -> None:
     ooops_check(page)
 
 def get_request(page: Any, live_server: Any, path: Any) -> dict:
-    api_context = page.get_context().request
+    api_context = page.request
     response = api_context.get(f"{live_server}/{path}")
     assert response.ok
     return response.json()
