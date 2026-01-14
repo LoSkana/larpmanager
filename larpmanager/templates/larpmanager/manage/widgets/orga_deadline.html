@@ -10,7 +10,7 @@
                     <td>
                         <b>{% trans "Cancellation for missing organization registration" %}</b>
                     </td>
-                    <td>{{ widgets.deadlines.memb_del }}</td>
+                    <td class="warning">{{ widgets.deadlines.memb_del }}</td>
                 </tr>
             {% endif %}
             {% if widgets.deadlines.fee_del %}
@@ -18,7 +18,7 @@
                     <td>
                         <b>{% trans "Cancellation for missing yearly membership fee" %}</b>
                     </td>
-                    <td>{{ widgets.deadlines.fee_del }}</td>
+                    <td class="warning">{{ widgets.deadlines.fee_del }}</td>
                 </tr>
             {% endif %}
             {% if widgets.deadlines.pay_del %}
@@ -26,7 +26,7 @@
                     <td>
                         <b>{% trans "Cancellation for missing payment" %}</b>
                     </td>
-                    <td>{{ widgets.deadlines.pay_del }}</td>
+                    <td class="warning">{{ widgets.deadlines.pay_del }}</td>
                 </tr>
             {% endif %}
             {% if widgets.deadlines.profile_del %}
@@ -34,7 +34,7 @@
                     <td>
                         <b>{% trans "Cancellation for missing profile compilation" %}</b>
                     </td>
-                    <td>{{ widgets.deadlines.profile_del }}</td>
+                    <td class="warning">{{ widgets.deadlines.profile_del }}</td>
                 </tr>
             {% endif %}
             {% if widgets.deadlines.memb %}

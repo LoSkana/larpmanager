@@ -2359,9 +2359,6 @@ msgstr "Gettone scaduto"
 msgid "Total members"
 msgstr "Totale soci"
 
-msgid "Total revenue"
-msgstr "Ricavi totali"
-
 msgid "URL shortener"
 msgstr "Accorcia URL"
 
@@ -2822,6 +2819,9 @@ msgstr "Contabilità evento"
 msgid "Event navigation"
 msgstr "Navigazione evento"
 
+msgid "Expected revenue"
+msgstr "Entrate previste"
+
 msgid "Field visibility"
 msgstr "Visibilità dei campi"
 
@@ -2899,6 +2899,9 @@ msgstr "Scelta giocatore"
 
 msgid "Pre-registration"
 msgstr "Pre-iscrizione"
+
+msgid "Realized revenue"
+msgstr "Ricavi realizzati"
 
 msgid "Registration fee"
 msgstr "Quota iscrizione"
@@ -7941,11 +7944,6 @@ msgstr ""
 "iscrizione evento"
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
-msgstr ""
-"Profitto netto dell'evento, differenza tra i ricavi totali e i costi totali"
-
-msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Nota: Il codice speciale viene ri-generato ogni volta che modifichi il "
@@ -8262,6 +8260,11 @@ msgid ""
 msgstr ""
 "Ultimo passo, completa l'impostazione dell'evento aggiungendo le date di "
 "inizio e fine"
+
+msgid ""
+"Net profit of the event, difference between realized revenue and total costs"
+msgstr ""
+"Utile netto dell'evento, differenza tra i ricavi realizzati e i costi totali"
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"
@@ -9164,6 +9167,13 @@ msgstr ""
 "i punti esperienza"
 
 msgid ""
+"Total amount of money expected if all registered participants fully pay "
+"their due amount"
+msgstr ""
+"Importo totale previsto se tutti i partecipanti registrati pagano "
+"interamente il loro importo dovuto"
+
+msgid ""
 "We inform you that your membership of the Association has not been accepted "
 "by the board"
 msgstr ""
@@ -9748,6 +9758,13 @@ msgid ""
 msgstr ""
 "Opzionale: carica una tua foto associata al tuo personaggio specifica per "
 "questo evento!"
+
+msgid ""
+"This is the overall amount that should be held in the organization's bank "
+"and financial accounts"
+msgstr ""
+"Si tratta dell'importo complessivo che dovrebbe essere detenuto nei conti "
+"bancari e finanziari dell'organizzazione"
 
 msgid ""
 "This is the overall amount that should be held in the organization’s bank "

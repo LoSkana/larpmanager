@@ -34,12 +34,11 @@ from django.utils.translation import gettext_lazy as _
 from django_select2.forms import Select2Widget
 from slugify import slugify
 
-from larpmanager.accounting.balance import association_accounting, get_run_accounting
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_registration_counts
-from larpmanager.cache.widget import get_widget_cache
+from larpmanager.cache.widget import get_exe_widget_cache, get_orga_widget_cache
 from larpmanager.utils.auth.permission import has_association_permission, get_index_association_permissions, \
     has_event_permission, get_index_event_permissions
 from larpmanager.cache.wwyltd import get_features_cache, get_guides_cache, get_tutorials_cache
@@ -63,7 +62,6 @@ from larpmanager.utils.core.base import check_association_context, check_event_c
 from larpmanager.utils.core.common import _get_help_questions, format_datetime
 from larpmanager.utils.core.sticky import get_sticky_messages, dismiss_sticky
 from larpmanager.utils.services.edit import set_suggestion
-from larpmanager.utils.core.exceptions import RedirectError
 from larpmanager.utils.users.registration import registration_available
 
 
@@ -183,22 +181,30 @@ def _get_registration_status(run: Run) -> str:
 
 
 def _get_registration_counts(run: Run) -> dict:
-    """Prepares run registration ticket counts."""
+    """Prepares run registration ticket counts ordered by ticket order field."""
 
     counts = get_registration_counts(run)
-    registration_counts = {}
+
+    # Create a list of ticket data with name, order, and count
+    ticket_data = []
     for ticket_id, ticket_name in counts.get("tickets_map", {}).items():
         count_key = f"count_ticket_{ticket_id}"
         if count_key in counts and counts[count_key]:
-            registration_counts[ticket_name] = counts[count_key]
+            ticket_order = counts.get("tickets_order", {}).get(ticket_id, 0)
+            ticket_data.append({
+                'name': ticket_name,
+                'order': ticket_order,
+                'count': counts[count_key]
+            })
 
-    return dict(
-        sorted(
-            registration_counts.items(),
-            key=lambda item: item[1],
-            reverse=True,
-        )
+    # Sort by order field, then by name
+    sorted_tickets = sorted(
+        ticket_data,
+        key=lambda x: (x['order'], x['name'])
     )
+
+    # Return as a dict with ticket name as key and count as value
+    return {ticket['name']: ticket['count'] for ticket in sorted_tickets}
 
 
 def _exe_manage(request: HttpRequest) -> HttpResponse:
@@ -251,9 +257,8 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         run.registration_status = _get_registration_status(run)
         run.registration_counts = _get_registration_counts(run)
 
-    # Add accounting information if user has permission
-    if has_association_permission(request, context, "exe_accounting"):
-        association_accounting(context)
+    # Load widgets
+    _exe_widgets(request, context, features)
 
     # Suggest creating an event if no runs are active
     if not context["ongoing_runs"]:
@@ -275,6 +280,21 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     _check_intro_driver(context)
 
     return render(request, "larpmanager/manage/exe.html", context)
+
+
+def _exe_widgets(request: HttpRequest, context: dict, features: dict) -> None:
+    """Loads widget data into context for executive dashboard."""
+    widgets_available = []
+    for widget in ["deadlines"]:
+        if widget in features:
+            widgets_available.append(widget)
+
+    if has_association_permission(request, context, "exe_accounting"):
+        widgets_available.append("accounting")
+
+    context["widgets"] = {}
+    for widget in widgets_available:
+        context["widgets"][widget] = get_exe_widget_cache(association_id=context["association_id"], widget_name=widget)
 
 
 def _exe_suggestions(context: dict) -> None:
@@ -486,7 +506,7 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
             )
 
 
-def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa: C901 - Complex dashboard view with feature checks
+def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Event organizer management dashboard view.
 
     Args:
@@ -524,16 +544,12 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
 
     # Load registration status
     context["registration_status"] = _get_registration_status(context["run"])
-    status_code, _ = _get_registration_status_code(context["run"])
+    status_code, __ = _get_registration_status_code(context["run"])
     context["registrations_open"] = status_code in ["primary", "filler", "waiting"]
 
     # Load registration counts if permitted
     if has_event_permission(request, context, event_slug, "orga_registrations"):
         context["registration_counts"] = _get_registration_counts(context["run"])
-
-    # Load accounting if permitted
-    if has_event_permission(request, context, event_slug, "orga_accounting"):
-        context["dc"] = get_run_accounting(context["run"], context, perform_update=False)
 
     # Build action lists
     _exe_actions(request, context)
@@ -559,25 +575,30 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
     _check_intro_driver(context)
 
     # Loads widget data
-    _orga_widgets(context, features)
+    _orga_widgets(request, context, event_slug, features)
 
     return render(request, "larpmanager/manage/orga.html", context)
 
 
-def _orga_widgets(context:dict, features:dict):
+def _orga_widgets(request: HttpRequest, context:dict, event_slug: str, features:dict):
     """Loads widget data into context."""
 
     widgets_available = []
-    for widget in ["deadlines", "casting"]:
+    for widget in ["deadlines", "casting", ]:
         if widget in features:
             widgets_available.append(widget)
-    if "user_character" in features and get_event_config(context["event"].id, "user_character_approval",
-                                                         default_value=False, context=context):
+
+    if "user_character" in features and get_event_config(
+        context["event"].id, "user_character_approval", default_value=False, context=context
+    ):
         widgets_available.append("user_character")
+
+    if has_event_permission(request, context, event_slug, "orga_accounting"):
+        widgets_available.append("accounting")
 
     context["widgets"] = {}
     for widget in widgets_available:
-        context["widgets"][widget] = get_widget_cache(context["run"], widget)
+        context["widgets"][widget] = get_orga_widget_cache(context["run"], widget)
 
 
 def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict) -> None:  # noqa: C901 - Complex priority determination logic

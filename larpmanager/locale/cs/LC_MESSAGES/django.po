@@ -2359,9 +2359,6 @@ msgstr "Platnost tokenu vypršela"
 msgid "Total members"
 msgstr "Celkový počet členů"
 
-msgid "Total revenue"
-msgstr "Celkové příjmy"
-
 msgid "URL shortener"
 msgstr "Zkracovač URL"
 
@@ -2822,6 +2819,9 @@ msgstr "Účtování událostí"
 msgid "Event navigation"
 msgstr "Navigace v událostech"
 
+msgid "Expected revenue"
+msgstr "Očekávané příjmy"
+
 msgid "Field visibility"
 msgstr "Viditelnost v terénu"
 
@@ -2899,6 +2899,9 @@ msgstr "Výběr hráčů"
 
 msgid "Pre-registration"
 msgstr "Předběžná registrace"
+
+msgid "Realized revenue"
+msgstr "Realizované příjmy"
 
 msgid "Registration fee"
 msgstr "Vstupní poplatek"
@@ -7759,10 +7762,6 @@ msgstr ""
 "za událost"
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
-msgstr "Čistý zisk akce, rozdíl mezi celkovými výnosy a celkovými náklady"
-
-msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Poznámka: Speciální kód se generuje znovu při každé změně dárkové karty"
@@ -8041,6 +8040,10 @@ msgid ""
 "Last step, please complete the event setup by adding the start and end dates"
 msgstr ""
 "V posledním kroku dokončete nastavení události přidáním data začátku a konce"
+
+msgid ""
+"Net profit of the event, difference between realized revenue and total costs"
+msgstr "Čistý zisk akce, rozdíl mezi realizovanými příjmy a celkovými náklady"
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"
@@ -8877,6 +8880,13 @@ msgstr ""
 "zkušenostní body"
 
 msgid ""
+"Total amount of money expected if all registered participants fully pay "
+"their due amount"
+msgstr ""
+"Celková očekávaná částka, pokud všichni registrovaní účastníci plně uhradí "
+"svou dlužnou částku"
+
+msgid ""
 "We inform you that your membership of the Association has not been accepted "
 "by the board"
 msgstr ""
@@ -9448,6 +9458,13 @@ msgid ""
 msgstr ""
 "Nepovinné: nahrajte svou fotografii spojenou s vaší postavou speciálně pro "
 "tuto událost!"
+
+msgid ""
+"This is the overall amount that should be held in the organization's bank "
+"and financial accounts"
+msgstr ""
+"Jedná se o celkovou částku, která by měla být uložena na bankovních a "
+"finančních účtech organizace"
 
 msgid ""
 "This is the overall amount that should be held in the organization’s bank "

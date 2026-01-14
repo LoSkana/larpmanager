@@ -2359,9 +2359,6 @@ msgstr "Jeton expiré"
 msgid "Total members"
 msgstr "Nombre total de membres "
 
-msgid "Total revenue"
-msgstr "Recettes totales"
-
 msgid "URL shortener"
 msgstr "Raccourcisseur d'URL"
 
@@ -2822,6 +2819,9 @@ msgstr "Comptabilité des événements"
 msgid "Event navigation"
 msgstr "Navigation pour les événements"
 
+msgid "Expected revenue"
+msgstr "Recettes attendues"
+
 msgid "Field visibility"
 msgstr "Visibilité sur le terrain"
 
@@ -2899,6 +2899,9 @@ msgstr "Sélection des joueurs"
 
 msgid "Pre-registration"
 msgstr "Préinscription"
+
+msgid "Realized revenue"
+msgstr "Recettes réalisées"
 
 msgid "Registration fee"
 msgstr "Frais d'inscription"
@@ -8037,12 +8040,6 @@ msgstr ""
 "d'inscription à l'événement"
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
-msgstr ""
-"Bénéfice net de l'événement, différence entre le total des recettes et le "
-"total des coûts"
-
-msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Note : Le code spécial est généré à nouveau chaque fois que vous changez la "
@@ -8359,6 +8356,12 @@ msgid ""
 msgstr ""
 "Dernière étape, veuillez compléter la configuration de l'événement en "
 "ajoutant les dates de début et de fin"
+
+msgid ""
+"Net profit of the event, difference between realized revenue and total costs"
+msgstr ""
+"Bénéfice net de l'événement, différence entre les recettes réalisées et les "
+"coûts totaux"
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"
@@ -9264,6 +9267,13 @@ msgstr ""
 "des points d'expérience"
 
 msgid ""
+"Total amount of money expected if all registered participants fully pay "
+"their due amount"
+msgstr ""
+"Montant total attendu si tous les participants inscrits s'acquittent "
+"intégralement du montant dû"
+
+msgid ""
 "We inform you that your membership of the Association has not been accepted "
 "by the board"
 msgstr ""
@@ -9849,6 +9859,13 @@ msgid ""
 msgstr ""
 "Facultatif : téléchargez une photo de vous associée à votre personnage "
 "spécifiquement pour cet événement !"
+
+msgid ""
+"This is the overall amount that should be held in the organization's bank "
+"and financial accounts"
+msgstr ""
+"Il s'agit du montant global qui doit être détenu sur les comptes bancaires "
+"et financiers de l'organisation"
 
 msgid ""
 "This is the overall amount that should be held in the organization’s bank "

@@ -2359,9 +2359,6 @@ msgstr "Token har löpt ut"
 msgid "Total members"
 msgstr "Totalt antal medlemmar"
 
-msgid "Total revenue"
-msgstr "Summa intäkter"
-
 msgid "URL shortener"
 msgstr "URL-förkortare"
 
@@ -2822,6 +2819,9 @@ msgstr "Redovisning av evenemang"
 msgid "Event navigation"
 msgstr "Navigation för evenemang"
 
+msgid "Expected revenue"
+msgstr "Förväntade intäkter"
+
 msgid "Field visibility"
 msgstr "Synlighet i fält"
 
@@ -2899,6 +2899,9 @@ msgstr "Val av spelare"
 
 msgid "Pre-registration"
 msgstr "Förhandsanmälan"
+
+msgid "Realized revenue"
+msgstr "Realiserade intäkter"
 
 msgid "Registration fee"
 msgstr "Anmälningsavgift"
@@ -7813,12 +7816,6 @@ msgstr ""
 "registreringsavgifterna för evenemanget"
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
-msgstr ""
-"Evenemangets nettovinst, skillnaden mellan totala intäkter och totala "
-"kostnader"
-
-msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr "Obs: Specialkoden genereras på nytt varje gång du byter presentkort"
 
@@ -8106,6 +8103,12 @@ msgid ""
 msgstr ""
 "Sista steget är att slutföra eventinställningen genom att lägga till start- "
 "och slutdatum"
+
+msgid ""
+"Net profit of the event, difference between realized revenue and total costs"
+msgstr ""
+"Evenemangets nettovinst, skillnaden mellan realiserade intäkter och totala "
+"kostnader"
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"
@@ -8983,6 +8986,13 @@ msgstr ""
 "erfarenhetspoäng"
 
 msgid ""
+"Total amount of money expected if all registered participants fully pay "
+"their due amount"
+msgstr ""
+"Total summa pengar som förväntas om alla registrerade deltagare fullt ut "
+"betalar sitt förfallna belopp"
+
+msgid ""
 "We inform you that your membership of the Association has not been accepted "
 "by the board"
 msgstr ""
@@ -9566,6 +9576,13 @@ msgid ""
 msgstr ""
 "Valfritt: ladda upp ett foto av dig själv tillsammans med din rollfigur "
 "specifikt för detta evenemang!"
+
+msgid ""
+"This is the overall amount that should be held in the organization's bank "
+"and financial accounts"
+msgstr ""
+"Detta är det totala belopp som ska finnas på organisationens bank- och "
+"finanskonton"
 
 msgid ""
 "This is the overall amount that should be held in the organization’s bank "

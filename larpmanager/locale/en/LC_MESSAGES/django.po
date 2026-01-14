@@ -5518,6 +5518,9 @@ msgstr ""
 msgid "End"
 msgstr ""
 
+msgid "Copy link to clipboard"
+msgstr ""
+
 msgid ""
 "This page shows larpmanager usage costs, total and divided by individual "
 "event"
@@ -6050,7 +6053,9 @@ msgstr ""
 msgid "Register to the event"
 msgstr ""
 
-msgid "Copy link to clipboard"
+msgid ""
+"This is the overall amount that should be held in the organization's bank "
+"and financial accounts"
 msgstr ""
 
 msgid "Dates"
@@ -6069,11 +6074,19 @@ msgid "Suggestions"
 msgstr ""
 
 msgid ""
+"Total amount of money expected if all registered participants fully pay "
+"their due amount"
+msgstr ""
+
+msgid "Expected revenue"
+msgstr ""
+
+msgid ""
 "Total amount of money received for this event, minus commission fees and "
 "refunds"
 msgstr ""
 
-msgid "Total revenue"
+msgid "Realized revenue"
 msgstr ""
 
 msgid ""
@@ -6085,7 +6098,7 @@ msgid "Total costs"
 msgstr ""
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
+"Net profit of the event, difference between realized revenue and total costs"
 msgstr ""
 
 msgid "Net profit"

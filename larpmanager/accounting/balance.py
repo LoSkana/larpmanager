@@ -31,7 +31,6 @@ from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.registration import get_display_choice
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import (
@@ -55,6 +54,7 @@ from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.member import Membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.utils import get_sum
+from larpmanager.utils.core.common import get_display_choice
 
 logger = logging.getLogger(__name__)
 
@@ -703,20 +703,7 @@ def association_accounting(context: dict) -> None:
         if run.development == DevelopStatus.DONE:
             context["balance_sum"] += run.balance
 
-    # Fetch detailed accounting data (inflows, outflows, memberships, etc.)
-    association_accounting_data(context)
-
-    # Calculate global financial position
-    # Global sum = (run balances + memberships + donations + exec inflows) - (exec outflows + tokens issued)
-    context["global_sum"] = (
-        context["balance_sum"] + context["membership_sum"] + context["donations_sum"] + context["inflow_exec_sum"]
-    ) - (context["outflow_exec_sum"] + context["tokens_sum"])
-
-    # Calculate bank balance based on actual money movements
-    # Bank sum = (cash payments + memberships + donations + inflows) - (outflows + fees + refunds)
-    context["bank_sum"] = (
-        context["pay_money_sum"] + context["membership_sum"] + context["donations_sum"] + context["inflow_sum"]
-    ) - (context["outflow_sum"] + context["transactions_sum"] + context["refund_sum"])
+    association_accounting_summary(context)
 
     # Build year range dictionary from current year to association creation
     association = Association.objects.only("created").get(pk=context["association_id"])
@@ -726,3 +713,25 @@ def association_accounting(context: dict) -> None:
     while end_year >= start_year:
         context["sum_year"][end_year] = 1
         end_year -= 1
+
+
+def association_accounting_summary(context: dict) -> dict:
+    """Computes association global financial position."""
+    # Fetch detailed accounting data (inflows, outflows, memberships, etc.)
+    association_accounting_data(context)
+
+    # Global sum = (run balances + memberships + donations + exec inflows) - (exec outflows + tokens issued)
+    context["global_sum"] = (
+        context.get("balance_sum", 0)
+        + context.get("membership_sum", 0)
+        + context.get("donations_sum", 0)
+        + context.get("inflow_exec_sum", 0)
+    ) - (context.get("outflow_exec_sum", 0) + context.get("tokens_sum", 0))
+
+    # Bank sum = (cash payments + memberships + donations + inflows) - (outflows + fees + refunds)
+    context["bank_sum"] = (
+        context.get("pay_money_sum", 0)
+        + context.get("membership_sum", 0)
+        + context.get("donations_sum", 0)
+        + context.get("inflow_sum", 0)
+    ) - (context.get("outflow_sum", 0) + context.get("transactions_sum", 0) + context.get("refund_sum", 0))

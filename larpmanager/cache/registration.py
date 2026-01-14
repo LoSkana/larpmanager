@@ -97,11 +97,18 @@ def update_registration_counts(run: Run) -> dict[str, int]:
     Returns:
         Dictionary containing registration counts data by ticket tier and choices.
         Keys include count_reg, count_wait, count_staff, count_fill, tk_{ticket_id},
-        option_{option_id}, and option_char_{option_id}.
+        option_{option_id}, option_char_{option_id}, tickets_map, and tickets_order.
 
     """
     # Initialize base counters
-    counts = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0, "tickets_map": {}}
+    counts = {
+        "count_reg": 0,
+        "count_wait": 0,
+        "count_staff": 0,
+        "count_fill": 0,
+        "tickets_map": {},
+        "tickets_order": {},
+    }
 
     # Get all non-cancelled registrations for this run
     registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
@@ -121,7 +128,10 @@ def update_registration_counts(run: Run) -> dict[str, int]:
         else:
             # Count by ticket name
             add_count(counts, f"count_ticket_{registration.ticket_id}", num_tickets)
-            counts["tickets_map"][registration.ticket_id] = registration.ticket.name
+            if registration.ticket_id not in counts["tickets_map"]:
+                counts["tickets_map"][registration.ticket_id] = registration.ticket.name
+            if registration.ticket_id not in counts["tickets_order"]:
+                counts["tickets_order"][registration.ticket_id] = registration.ticket.order
 
             # Map ticket tiers to counter keys
             tier_map = {

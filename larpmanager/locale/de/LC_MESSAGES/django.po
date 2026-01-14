@@ -2359,9 +2359,6 @@ msgstr "Token abgelaufen"
 msgid "Total members"
 msgstr "Mitglieder insgesamt"
 
-msgid "Total revenue"
-msgstr "Einnahmen insgesamt"
-
 msgid "URL shortener"
 msgstr "URL-Verkürzer"
 
@@ -2822,6 +2819,9 @@ msgstr "Abrechnung von Veranstaltungen"
 msgid "Event navigation"
 msgstr "Ereignis-Navigation"
 
+msgid "Expected revenue"
+msgstr "Erwartete Einnahmen"
+
 msgid "Field visibility"
 msgstr "Sichtbarkeit im Feld"
 
@@ -2899,6 +2899,9 @@ msgstr "Auswahl der Spieler"
 
 msgid "Pre-registration"
 msgstr "Vorregistrierung"
+
+msgid "Realized revenue"
+msgstr "Realisierte Einnahmen"
 
 msgid "Registration fee"
 msgstr "Eintrittspreis"
@@ -8104,12 +8107,6 @@ msgstr ""
 "Anmeldegebühren für die Veranstaltung verwendet werden"
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
-msgstr ""
-"Nettogewinn der Veranstaltung, Differenz zwischen Gesamteinnahmen und "
-"Gesamtkosten"
-
-msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Hinweis: Der spezielle Code wird jedes Mal neu generiert, wenn Sie die "
@@ -8431,6 +8428,12 @@ msgid ""
 msgstr ""
 "Im letzten Schritt vervollständigen Sie bitte die Einrichtung des "
 "Ereignisses, indem Sie das Start- und Enddatum hinzufügen"
+
+msgid ""
+"Net profit of the event, difference between realized revenue and total costs"
+msgstr ""
+"Nettogewinn der Veranstaltung, Differenz zwischen realisierten Einnahmen und"
+" Gesamtkosten"
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"
@@ -9340,6 +9343,13 @@ msgstr ""
 "Erfahrungspunkten erwerben können"
 
 msgid ""
+"Total amount of money expected if all registered participants fully pay "
+"their due amount"
+msgstr ""
+"Erwartete Gesamtsumme, wenn alle angemeldeten Teilnehmer ihren fälligen "
+"Betrag vollständig zahlen"
+
+msgid ""
 "We inform you that your membership of the Association has not been accepted "
 "by the board"
 msgstr ""
@@ -9925,6 +9935,13 @@ msgid ""
 msgstr ""
 "Optional: Laden Sie ein Foto von sich selbst hoch, das mit Ihrem Charakter "
 "speziell für dieses Ereignis verbunden ist!"
+
+msgid ""
+"This is the overall amount that should be held in the organization's bank "
+"and financial accounts"
+msgstr ""
+"Dies ist der Gesamtbetrag, der auf den Bank- und Finanzkonten der "
+"Organisation gehalten werden sollte"
 
 msgid ""
 "This is the overall amount that should be held in the organization’s bank "

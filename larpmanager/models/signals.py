@@ -118,7 +118,9 @@ from larpmanager.cache.run import (
 )
 from larpmanager.cache.skin import clear_skin_cache
 from larpmanager.cache.text_fields import update_text_fields_cache
-from larpmanager.cache.widget import clear_widget_cache, clear_widget_cache_for_association
+from larpmanager.cache.widget import (
+    reset_widgets,
+)
 from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
 from larpmanager.mail.accounting import (
     send_collection_activation_email,
@@ -299,11 +301,29 @@ def post_save_callback(sender: type, instance: object, created: bool, **kwargs: 
     # Set simplified uuid for debug
     debug_set_uuid(instance, created=created)
 
+    # Update cache for accounting items
+    reset_accountingitem_cache(instance)
+
 
 @receiver(post_delete)
 def post_delete_text_fields_callback(sender: type, instance: object, **kwargs: Any) -> None:
-    """Update text fields cache after model instance deletion."""
+    """Handle post-delete operations for all models."""
+    # Update text fields cache after model instance deletion
     update_text_fields_cache(instance)
+
+    # Update cache for accounting items
+    reset_accountingitem_cache(instance)
+
+
+def reset_accountingitem_cache(instance: Any) -> None:
+    """Handle reset cache after accounting item saved."""
+    if not isinstance(instance, AccountingItem):
+        return
+
+    reset_widgets(instance)
+
+    if hasattr(instance, "run") and instance.run and instance.member_id:
+        refresh_member_accounting_cache(instance.run, instance.member_id)
 
 
 # AbilityPx signals
@@ -351,13 +371,6 @@ def post_save_discount_accounting_cache(
         refresh_member_accounting_cache(instance.run, instance.member_id)
 
 
-@receiver(post_delete, sender=AccountingItemDiscount)
-def post_delete_discount_accounting_cache(sender: type, instance: AccountingItemDiscount, **kwargs: Any) -> None:
-    """Refresh member accounting cache after discount deletion."""
-    if instance.run and instance.member_id:
-        refresh_member_accounting_cache(instance.run, instance.member_id)
-
-
 # AccountingItemDonation signals
 @receiver(pre_save, sender=AccountingItemDonation)
 def pre_save_accounting_item_donation(
@@ -394,13 +407,6 @@ def pre_save_accounting_item_membership(sender: type, instance: AccountingItem, 
     send_membership_payment_notification_email(instance)
 
 
-@receiver(post_save, sender=AccountingItemMembership)
-def post_save_accounting_item_membership_cache(sender: type, instance: AccountingItemMembership, **kwargs: Any) -> None:
-    """Clear deadline widget cache when membership fee is paid."""
-    # Clear deadline widget cache for all runs in the association (fee deadline)
-    clear_widget_cache_for_association(instance.association_id)
-
-
 # AccountingItemOther signals
 @receiver(pre_save, sender=AccountingItemOther)
 def pre_save_accounting_item_other(sender: type, instance: AccountingItemOther, **kwargs: Any) -> None:
@@ -418,18 +424,6 @@ def post_save_other_accounting_cache(
     """Update token credit and member accounting cache after OtherAccounting save."""
     # Update token credit based on the OtherAccounting instance
     update_token_credit_on_other_save(instance)
-
-    # Refresh member accounting cache if run and member are present
-    if instance.run and instance.member_id:
-        refresh_member_accounting_cache(instance.run, instance.member_id)
-
-
-@receiver(post_delete, sender=AccountingItemOther)
-def post_delete_other_accounting_cache(sender: type, instance: AccountingItemOther, **kwargs: Any) -> None:
-    """Refresh accounting cache for a member when their accounting entry is deleted."""
-    # Refresh member cache if run and member are present
-    if instance.run and instance.member_id:
-        refresh_member_accounting_cache(instance.run, instance.member_id)
 
 
 # AccountingItemPayment signals
@@ -450,9 +444,6 @@ def post_save_payment_accounting_cache(
         instance.registration.save()
         refresh_member_accounting_cache(instance.registration.run, instance.member_id)
 
-        # Clear deadline widget cache (payment deadline)
-        clear_widget_cache(instance.registration.run_id)
-
     # Update token credits based on payment changes
     update_token_credit_on_payment_save(instance, created=created)
 
@@ -472,9 +463,6 @@ def post_delete_payment_accounting_cache(
     # Refresh member accounting cache if payment is linked to a registration
     if instance.registration and instance.registration.run:
         refresh_member_accounting_cache(instance.registration.run, instance.member_id)
-
-        # Clear deadline widget cache (payment deadline)
-        clear_widget_cache(instance.registration.run_id)
 
 
 # AssignmentTrait signals
@@ -720,16 +708,14 @@ def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs
 def post_save_casting_cache(sender: type, instance: Casting, **kwargs: Any) -> None:
     """Clear deadline widget cache when casting preferences are saved."""
     # Clear deadline widget cache for this run (casting deadline)
-    if instance.run_id:
-        clear_widget_cache(instance.run_id)
+    reset_widgets(instance)
 
 
 @receiver(post_delete, sender=Casting)
 def post_delete_casting_cache(sender: type, instance: Casting, **kwargs: Any) -> None:
     """Clear deadline widget cache when casting preferences are deleted."""
     # Clear deadline widget cache for this run (casting deadline)
-    if instance.run_id:
-        clear_widget_cache(instance.run_id)
+    reset_widgets(instance)
 
 
 # CharacterConfig signals
@@ -1174,8 +1160,13 @@ def pre_save_membership(sender: type, instance: Membership, **kwargs: Any) -> No
 @receiver(post_save, sender=Membership)
 def post_save_membership_cache(sender: type, instance: Membership, **kwargs: Any) -> None:
     """Clear deadline widget cache when membership status changes."""
-    # Clear deadline widget cache for all runs in the association
-    clear_widget_cache_for_association(instance.association_id)
+    reset_widgets(instance)
+
+
+@receiver(post_delete, sender=Membership)
+def post_delete_membership_cache(sender: type, instance: Membership, **kwargs: Any) -> None:
+    """Clear deadline widget cache when membership status changes."""
+    reset_widgets(instance)
 
 
 # ModifierPx signals
@@ -1421,7 +1412,7 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     clear_registration_counts_cache(instance.run_id)
 
     # Clear deadline widget cache for this run
-    clear_widget_cache(instance.run_id)
+    reset_widgets(instance)
 
 
 @receiver(pre_delete, sender=Registration)
@@ -1434,7 +1425,7 @@ def pre_delete_registration(sender: type, instance: Registration, *args: Any, **
 def post_delete_registration_accounting_cache(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear accounting cache for the associated run after registration deletion."""
     clear_registration_accounting_cache(instance.run_id)
-    clear_widget_cache(instance.run_id)
+    reset_widgets(instance)
 
 
 # RegistrationCharacterRel signals
@@ -1449,7 +1440,7 @@ def post_save_registration_character_rel_savereg(
     reset_character_registration_cache(instance)
 
     # Clear deadline widget cache (casting requirements)
-    clear_widget_cache(instance.registration.run_id)
+    reset_widgets(instance.registration)
 
     # Auto-assign player if player editor is active and character has no player
     features = get_event_features(instance.character.event_id)
@@ -1469,7 +1460,7 @@ def post_delete_registration_character_rel_savereg(
     reset_character_registration_cache(instance)
 
     # Clear deadline widget cache (casting requirements)
-    clear_widget_cache(instance.registration.run_id)
+    reset_widgets(instance.registration)
 
 
 # RegistrationOption signals

@@ -2633,7 +2633,7 @@ input[type="number"] {
   border-radius: 8px;
   padding: 1em;
   box-shadow: 0 2px 5px rgba(var(--pri-rgb), 0.5);
-  height: 13em;
+  height: 14em;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(var(--ter-rgb), 0.5) rgba(var(--pri-rgb), 0.1);

@@ -2359,9 +2359,6 @@ msgstr "Token verlopen"
 msgid "Total members"
 msgstr "Totaal aantal leden"
 
-msgid "Total revenue"
-msgstr "Totale inkomsten"
-
 msgid "URL shortener"
 msgstr "URL-verkorter"
 
@@ -2822,6 +2819,9 @@ msgstr "Evenement Boekhouding"
 msgid "Event navigation"
 msgstr "Navigatie op evenementen"
 
+msgid "Expected revenue"
+msgstr "Verwachte inkomsten"
+
 msgid "Field visibility"
 msgstr "Zichtbaarheid in het veld"
 
@@ -2899,6 +2899,9 @@ msgstr "Speler selectie"
 
 msgid "Pre-registration"
 msgstr "Voorinschrijving"
+
+msgid "Realized revenue"
+msgstr "Gerealiseerde omzet"
 
 msgid "Registration fee"
 msgstr "Inschrijfgeld"
@@ -7926,12 +7929,6 @@ msgstr ""
 "het evenement te dekken"
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
-msgstr ""
-"Nettowinst van het evenement, verschil tussen totale inkomsten en totale "
-"kosten"
-
-msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Opmerking: De speciale code wordt elke keer dat je de cadeaubon wijzigt "
@@ -8249,6 +8246,12 @@ msgid ""
 msgstr ""
 "Voltooi als laatste stap de instelling van het evenement door de begin- en "
 "einddatum toe te voegen"
+
+msgid ""
+"Net profit of the event, difference between realized revenue and total costs"
+msgstr ""
+"Nettowinst van het evenement, verschil tussen gerealiseerde inkomsten en "
+"totale kosten"
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"
@@ -9148,6 +9151,13 @@ msgstr ""
 "kopen met ervaringspunten"
 
 msgid ""
+"Total amount of money expected if all registered participants fully pay "
+"their due amount"
+msgstr ""
+"Totaal bedrag dat wordt verwacht als alle geregistreerde deelnemers hun "
+"verschuldigde bedrag volledig betalen"
+
+msgid ""
 "We inform you that your membership of the Association has not been accepted "
 "by the board"
 msgstr ""
@@ -9732,6 +9742,13 @@ msgid ""
 msgstr ""
 "Optioneel: upload een foto van jezelf in combinatie met je personage "
 "speciaal voor dit evenement!"
+
+msgid ""
+"This is the overall amount that should be held in the organization's bank "
+"and financial accounts"
+msgstr ""
+"Dit is het totale bedrag dat op de bank- en financiële rekeningen van de "
+"organisatie moet staan"
 
 msgid ""
 "This is the overall amount that should be held in the organization’s bank "

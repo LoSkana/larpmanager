@@ -962,7 +962,7 @@ def _bulk_factions(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
                     context,
                     "faction",
                     QuestionApplicable.FACTION,
-                    context["sheet_faction"]["id"],
+                    context["faction"].id,
                     only_visible=True,
                 )
 

@@ -2359,9 +2359,6 @@ msgstr "Token utløpt"
 msgid "Total members"
 msgstr "Totalt antall medlemmer"
 
-msgid "Total revenue"
-msgstr "Totale inntekter"
-
 msgid "URL shortener"
 msgstr "URL-forkortelse"
 
@@ -2822,6 +2819,9 @@ msgstr "Regnskap for arrangementer"
 msgid "Event navigation"
 msgstr "Navigering av hendelser"
 
+msgid "Expected revenue"
+msgstr "Forventede inntekter"
+
 msgid "Field visibility"
 msgstr "Synlighet i felt"
 
@@ -2899,6 +2899,9 @@ msgstr "Valg av spiller"
 
 msgid "Pre-registration"
 msgstr "Forhåndsregistrering"
+
+msgid "Realized revenue"
+msgstr "Realiserte inntekter"
 
 msgid "Registration fee"
 msgstr "Deltakeravgift"
@@ -7825,12 +7828,6 @@ msgstr ""
 " til arrangementet"
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
-msgstr ""
-"Nettoresultat av arrangementet, differansen mellom totale inntekter og "
-"totale kostnader"
-
-msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr "Merk: Spesialkoden genereres på nytt hver gang du endrer gavekortet"
 
@@ -8112,6 +8109,12 @@ msgid ""
 msgstr ""
 "Siste trinn er å fullføre oppsettet av arrangementet ved å legge til start- "
 "og sluttdatoer"
+
+msgid ""
+"Net profit of the event, difference between realized revenue and total costs"
+msgstr ""
+"Nettoresultat av arrangementet, differansen mellom realiserte inntekter og "
+"totale kostnader"
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"
@@ -8977,6 +8980,13 @@ msgstr ""
 "Denne siden oppsummerer evnene som deltakerne kan kjøpe med erfaringspoeng"
 
 msgid ""
+"Total amount of money expected if all registered participants fully pay "
+"their due amount"
+msgstr ""
+"Totalt beløp som forventes dersom alle registrerte deltakere betaler hele "
+"beløpet de skal"
+
+msgid ""
 "We inform you that your membership of the Association has not been accepted "
 "by the board"
 msgstr ""
@@ -9559,6 +9569,13 @@ msgid ""
 msgstr ""
 "Valgfritt: Last opp et bilde av deg selv i forbindelse med karakteren din "
 "spesielt for dette arrangementet!"
+
+msgid ""
+"This is the overall amount that should be held in the organization's bank "
+"and financial accounts"
+msgstr ""
+"Dette er det totale beløpet som skal stå på organisasjonens bank- og "
+"finanskontoer"
 
 msgid ""
 "This is the overall amount that should be held in the organization’s bank "
