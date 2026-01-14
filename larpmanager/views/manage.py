@@ -34,12 +34,11 @@ from django.utils.translation import gettext_lazy as _
 from django_select2.forms import Select2Widget
 from slugify import slugify
 
-from larpmanager.accounting.balance import association_accounting, get_run_accounting
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_registration_counts
-from larpmanager.cache.widget import get_widget_cache, get_exe_widget_cache, get_orga_widget_cache
+from larpmanager.cache.widget import get_exe_widget_cache, get_orga_widget_cache
 from larpmanager.utils.auth.permission import has_association_permission, get_index_association_permissions, \
     has_event_permission, get_index_event_permissions
 from larpmanager.cache.wwyltd import get_features_cache, get_guides_cache, get_tutorials_cache
@@ -63,7 +62,6 @@ from larpmanager.utils.core.base import check_association_context, check_event_c
 from larpmanager.utils.core.common import _get_help_questions, format_datetime
 from larpmanager.utils.core.sticky import get_sticky_messages, dismiss_sticky
 from larpmanager.utils.services.edit import set_suggestion
-from larpmanager.utils.core.exceptions import RedirectError
 from larpmanager.utils.users.registration import registration_available
 
 
@@ -508,7 +506,7 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
             )
 
 
-def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa: C901 - Complex dashboard view with feature checks
+def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Event organizer management dashboard view.
 
     Args:
@@ -546,7 +544,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
 
     # Load registration status
     context["registration_status"] = _get_registration_status(context["run"])
-    status_code, _ = _get_registration_status_code(context["run"])
+    status_code, __ = _get_registration_status_code(context["run"])
     context["registrations_open"] = status_code in ["primary", "filler", "waiting"]
 
     # Load registration counts if permitted
