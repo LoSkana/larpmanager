@@ -439,7 +439,8 @@ def get_run_accounting(run: Run, context: dict) -> tuple[dict, dict]:
     # Costs = outflows + expenses + virtual currency issued (tokens + credits)
     summary["costs"] = sum_outflows + sum_expenses + sum_tokens + sum_credits
     # Balance = net profit or loss
-    summary["balance"] = summary["revenue"] - summary["costs"]
+    if summary["revenue"] and summary["costs"]:
+        summary["balance"] = summary["revenue"] - summary["costs"]
 
     # Apply organization tax if enabled
     summary["tax"] = 0

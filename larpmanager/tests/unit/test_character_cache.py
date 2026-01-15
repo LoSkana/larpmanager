@@ -33,17 +33,23 @@ class TestCharacterCache(BaseTestCase):
 
         This is a regression test for a bug where processing text answers before choice answers
         caused an AttributeError when trying to append to a string.
+
+        With type filtering, only answers matching the question type are retrieved.
+        For a SINGLE type question with both text and choice answers (data inconsistency),
+        only choice answers are returned.
         """
         # Create a character
         character = self.character()
         event = character.event
 
         # Create a question that will have both text and choice answers (data inconsistency scenario)
+        # Using SINGLE type (default), which filters for choice answers
         question = WritingQuestion.objects.create(
             event=event,
             name="test_question",
             description="Test Question",
             applicable=QuestionApplicable.CHARACTER,
+            typ="s",  # SINGLE type - should only retrieve choice answers
         )
 
         # Create an option for the question
@@ -91,8 +97,9 @@ class TestCharacterCache(BaseTestCase):
         self.assertIn("questions", result[character.id])
         self.assertIn("options", result[character.id])
 
-        # When both text and choice exist, text answer should take precedence (overwrites)
-        self.assertEqual(result[character.id]["fields"][question.uuid], "Test text answer")
+        # With type filtering, SINGLE type question returns choice answers (list), not text
+        self.assertIsInstance(result[character.id]["fields"][question.uuid], list)
+        self.assertIn(option.uuid, result[character.id]["fields"][question.uuid])
 
     def test_get_writing_element_fields_batch_with_only_choice_answers(self) -> None:
         """Test that choice answers are properly stored as lists."""
@@ -172,6 +179,7 @@ class TestCharacterCache(BaseTestCase):
             name="test_question",
             description="Test Question",
             applicable=QuestionApplicable.CHARACTER,
+            typ="t",  # TEXT type - required for text answers to be retrieved
         )
 
         # Create a text answer

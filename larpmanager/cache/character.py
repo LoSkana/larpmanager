@@ -328,7 +328,7 @@ def get_writing_element_fields_batch(
     for question_uuid in context["questions"]:
         question_config_key = str(question_uuid)
         # Skip questions not marked as visible unless showing all
-        if "show_all" not in context and question_config_key not in context[f"show_{feature_name}"]:
+        if "show_all" not in context and question_config_key not in context.get(f"show_{feature_name}", {}):
             continue
         visible_question_ids.append(question_uuid)
 

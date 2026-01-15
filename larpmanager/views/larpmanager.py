@@ -991,7 +991,7 @@ def get_run_lm_payment(run: Any) -> None:
 
 
 @login_required
-def lm_payments_confirm(request: HttpRequest, run_id: Any) -> Any:
+def lm_payments_confirm(request: HttpRequest, run_uuid: str) -> Any:
     """Confirm payment for a specific run.
 
     Marks a run as paid with calculated total.
@@ -999,14 +999,14 @@ def lm_payments_confirm(request: HttpRequest, run_id: Any) -> Any:
 
     Args:
         request: Django HTTP request object (must be authenticated admin)
-        run_id: Run ID to confirm payment for
+        run_uuid: Run UUID to confirm payment for
 
     Returns:
         HttpResponseRedirect: Redirect to payments list
 
     """
     check_lm_admin(request)
-    run = Run.objects.get(pk=run_id)
+    run = Run.objects.get(uuid=run_uuid)
     get_run_lm_payment(run)
     run.paid = run.total
     run.save()
