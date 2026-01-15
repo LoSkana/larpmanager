@@ -1056,12 +1056,12 @@ def characters(request: HttpRequest) -> HttpResponse:
     # Get all assignments of characters to the user
     my_character_rels = (
         RegistrationCharacterRel.objects.filter(
-            reg__member=context["member"],
-            reg__run__event__association_id=context["association_id"],
-            reg__cancellation_date__isnull=True,
+            registration__member=context["member"],
+            registration__run__event__association_id=context["association_id"],
+            registration__cancellation_date__isnull=True,
         )
-        .select_related("character", "reg__run")
-        .order_by("-reg__run__end")
+        .select_related("character", "registration__run")
+        .order_by("-registration__run__end")
     )
 
     # Batch load character configs

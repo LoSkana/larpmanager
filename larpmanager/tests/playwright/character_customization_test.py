@@ -205,3 +205,33 @@ def verify_field_visibility(page: Any, live_server: Any) -> None:
     # Organizers should be able to see both public and private
     expect_normalized(page, page.locator("body"), "This is my public character description")
     expect_normalized(page, page.locator("body"), "This is my private character note")
+
+
+def verify_characters_shortcut(page: Any, live_server: Any) -> None:
+    """Enable the user_characters_shortcut configuration."""
+
+    # Enable characters shortcut
+    login_orga(page, live_server)
+    go_to(page, live_server, "/manage/config")
+    page.get_by_role("link", name="Interface ").click()
+    page.locator("#id_user_characters_shortcut").check()
+    submit_confirm(page)
+
+    # Verify the Characters link is visible in the topbar
+    login_user(page, live_server)
+    go_to(page, live_server, "/")
+    just_wait(page)
+    characters_link = page.locator("a[href='/characters']").filter(has_text="Characters")
+    expect(characters_link).to_be_visible()
+
+    # Click the characters link
+    characters_link.click()
+    just_wait(page)
+
+    # Verify we're on the characters page
+    expect(page).to_have_url(f"{live_server.url}/characters")
+
+    # Verify the page shows characters content
+    expect_normalized(page, page.locator("#one"), "Character")
+
+    expect_normalized(page, page.locator("#one"), "character active last event character active last event my character test larp")

@@ -23,7 +23,7 @@ Test: Character form editor with player editor feature.
 Verifies dynamic character form creation with single/multiple choice fields, text fields,
 prerequisites, availability limits, and player character creation/approval workflow.
 """
-
+import re
 from typing import Any
 
 import pytest
@@ -48,6 +48,8 @@ def test_user_character_form_editor(pw_page: Any) -> None:
     field_text(page, live_server)
 
     character(page, live_server)
+
+    verify_characters_shortcut(page, live_server)
 
 
 def prepare(page: Any, live_server: Any) -> None:
@@ -225,3 +227,28 @@ def character(page: Any, live_server: Any) -> None:
 
     go_to(page, live_server, "/test")
     expect_normalized(page, page.locator("#one"), "Your character is my character")
+
+def verify_characters_shortcut(page: Any, live_server: Any) -> None:
+    """Enable the user_characters_shortcut configuration."""
+
+    # Enable characters shortcut
+    go_to(page, live_server, "/manage/config")
+    page.get_by_role("link", name="Interface ").click()
+    page.locator("#id_user_characters_shortcut").check()
+    page.locator("#id_user_registrations_shortcut").check()
+    submit_confirm(page)
+
+    # Verify the Characters link is visible in the topbar
+    go_to(page, live_server, "/")
+    just_wait(page)
+    page.get_by_role("link", name=" Characters").click()
+
+    # Verify the page shows characters content
+    expect_normalized(page, page.locator("#one"), "character active last event character active last event my character test larp")
+
+    page.get_by_role("link", name=" Registrations").click()
+    expect_normalized(page, page.locator("#one"), "Registrations")
+
+    expect_normalized(page, page.locator("#one"),
+  """event date status details event date status details test larp 19 march 2050
+            registration confirmed (standard), please fill in your profile. your character is my character""")
