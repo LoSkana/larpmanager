@@ -29,7 +29,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import just_wait, go_to, get_request, login_orga, login_user, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, go_to, get_request, logout, login_orga, login_user, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -46,8 +46,6 @@ def test_character_inventory(pw_page: Any) -> None:
     character_inventory_pools(live_server, page)
 
     character_inventory_transfer(live_server, page)
-
-    login_user(page, live_server)
 
     test_endpoint(page, live_server)
 
@@ -159,6 +157,10 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
 def test_endpoint(page: Any, live_server: Any) -> None:
     """Test character abilties endpoint"""
     # Go to character list endpoint
+    # Ensure test user is logged in
+    logout()
+    login_user(page, live_server)
+
     response = get_request(page, live_server, "/test/character/list/json/")
     char_uuid = response[0]["uuid"]
 
