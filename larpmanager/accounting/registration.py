@@ -47,7 +47,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.casting import AssignmentTrait
 from larpmanager.models.event import DevelopStatus, Event, Run
-from larpmanager.models.form import RegistrationChoice, RegistrationOption
+from larpmanager.models.form import BaseQuestionType, RegistrationChoice, RegistrationOption
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
@@ -103,7 +103,9 @@ def get_registration_iscr(registration: Registration) -> int:
         total_registration_fee += registration.pay_what
 
     # Add registration choice options (extras, meals, etc.)
-    for choice in RegistrationChoice.objects.filter(registration=registration).select_related("option"):
+    for choice in RegistrationChoice.objects.filter(
+        registration=registration, question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+    ).select_related("option"):
         total_registration_fee += choice.option.price
 
     # Apply discounts only for non-gifted registrations

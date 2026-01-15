@@ -32,6 +32,7 @@ from larpmanager.models.accounting import (
     PaymentInvoice,
 )
 from larpmanager.models.form import (
+    BaseQuestionType,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
@@ -179,7 +180,9 @@ def _find_matching_ticket(
 
 def _transfer_choices(source_reg: Registration, target_reg: Registration) -> list[RegistrationChoice]:
     """Transfer multiple choice selections from source registration to destination."""
-    source_choices = RegistrationChoice.objects.filter(registration=source_reg)
+    source_choices = RegistrationChoice.objects.filter(
+        registration=source_reg, question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+    )
     transferred_choices = []
 
     for choice in source_choices:
@@ -204,7 +207,10 @@ def _transfer_choices(source_reg: Registration, target_reg: Registration) -> lis
 
 def _transfer_answers(source_reg: Registration, target_reg: Registration) -> list[RegistrationAnswer]:
     """Transfer text answers from source registration to destination."""
-    source_answers = RegistrationAnswer.objects.filter(registration=source_reg)
+    source_answers = RegistrationAnswer.objects.filter(
+        registration=source_reg,
+        question__typ__in=[BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR],
+    )
     transferred_answers = []
 
     for answer in source_answers:

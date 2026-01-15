@@ -36,6 +36,7 @@ from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
 from larpmanager.models.event import Event, PreRegistration, Run
 from larpmanager.models.form import (
+    BaseQuestionType,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
@@ -771,13 +772,19 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
 
     # Fetch text answers for all relevant questions
     text_answers_by_question = {}
-    for answer in RegistrationAnswer.objects.filter(question_id__in=question_ids_cache, registration=instance):
+    for answer in RegistrationAnswer.objects.filter(
+        question_id__in=question_ids_cache,
+        registration=instance,
+        question__typ__in=[BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR],
+    ):
         text_answers_by_question[answer.question_id] = answer.text
 
     # Fetch choice answers and group by question
     choice_options_by_question = {}
     for choice in RegistrationChoice.objects.filter(
-        question_id__in=question_ids_cache, registration=instance
+        question_id__in=question_ids_cache,
+        registration=instance,
+        question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
     ).select_related(
         "option",
     ):
@@ -965,7 +972,9 @@ def process_registration_event_change(registration: Registration) -> None:
 
     # Process all registration choices (question/option pairs)
     # Try to find matching questions and options in the new event
-    for registration_choice in RegistrationChoice.objects.filter(registration=registration):
+    for registration_choice in RegistrationChoice.objects.filter(
+        registration=registration, question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+    ):
         question_name = registration_choice.question.name
         option_name = registration_choice.option.name
 
@@ -986,7 +995,10 @@ def process_registration_event_change(registration: Registration) -> None:
 
     # Process all registration answers (free-form question responses)
     # Attempt to preserve answers by finding matching questions
-    for registration_answer in RegistrationAnswer.objects.filter(registration=registration):
+    for registration_answer in RegistrationAnswer.objects.filter(
+        registration=registration,
+        question__typ__in=[BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR],
+    ):
         question_name = registration_answer.question.name
 
         try:

@@ -33,6 +33,7 @@ from larpmanager.cache.registration import search_player
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionApplicable,
     WritingAnswer,
     WritingChoice,
@@ -337,7 +338,9 @@ def get_writing_element_fields_batch(
     # Retrieve text answers for all elements
     # Query WritingAnswer model for text-based responses
     text_answers_query = WritingAnswer.objects.filter(
-        element_id__in=element_ids, question__uuid__in=visible_question_ids
+        element_id__in=element_ids,
+        question__uuid__in=visible_question_ids,
+        question__typ__in=[BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR],
     ).select_related("question")
     for element_id, question_uuid, text in text_answers_query.values_list("element_id", "question__uuid", "text"):
         results[element_id][question_uuid] = text
@@ -345,7 +348,9 @@ def get_writing_element_fields_batch(
     # Retrieve choice answers for all elements
     # Group multiple choice options into lists per question
     choice_answers_query = WritingChoice.objects.filter(
-        element_id__in=element_ids, question__uuid__in=visible_question_ids
+        element_id__in=element_ids,
+        question__uuid__in=visible_question_ids,
+        question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
     ).select_related("question", "option")
     for element_id, question_uuid, option_uuid in choice_answers_query.values_list(
         "element_id", "question__uuid", "option__uuid"

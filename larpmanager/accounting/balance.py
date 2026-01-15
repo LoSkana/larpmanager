@@ -296,43 +296,45 @@ def _process_tokens_credits(
     return sum_tokens, sum_credits
 
 
-def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) -> dict:
+def get_run_accounting(run: Run, context: dict) -> tuple[dict, dict]:
     """Generate comprehensive accounting report for a run.
 
     Calculates revenue, costs, and balance for a run based on enabled features.
     Includes payments, expenses, inflows, outflows, refunds, tokens, and credits.
-    The function aggregates various accounting items and updates the run's financial fields.
+    Returns detailed breakdown and summary.
 
     Args:
         run: Run instance to generate accounting for
         context: Context dictionary with optional token/credit names (e.g., 'tokens_name', 'credits_name')
-        perform_update: Whether to update the run with new financial data
 
     Returns:
-        dict: Complete accounting breakdown by category. Keys may include:
-            - 'exp': Expenses breakdown
-            - 'out': Outflows breakdown
-            - 'in': Inflows breakdown
-            - 'pay': Payments breakdown
-            - 'trs': Transactions breakdown
-            - 'ref': Refunds breakdown
-            - 'tok': Tokens breakdown
-            - 'cre': Credits breakdown
-            - 'dis': Discounts breakdown
-            - 'registration': Registrations breakdown
-
-    Side effects:
-        Updates run.revenue, run.costs, run.balance, and run.tax fields and saves the run
+        tuple[dict, dict]: A tuple containing:
+            - summary: Financial summary with keys:
+                - 'revenue': Total revenue
+                - 'costs': Total costs
+                - 'balance': Net balance
+                - 'tax': Organization tax (if enabled)
+            - details: Complete accounting breakdown by category. Keys may include:
+                - 'exp': Expenses breakdown
+                - 'out': Outflows breakdown
+                - 'in': Inflows breakdown
+                - 'pay': Payments breakdown
+                - 'trs': Transactions breakdown
+                - 'ref': Refunds breakdown
+                - 'tok': Tokens breakdown
+                - 'cre': Credits breakdown
+                - 'dis': Discounts breakdown
+                - 'registration': Registrations breakdown
 
     """
-    details_by_category = {}
+    details = {}
     # Fetch feature flags to determine which accounting categories are enabled for this event
     features = get_event_features(run.event_id)
 
     # Process expenses: accumulate all approved expenses submitted by collaborators
     sum_expenses = 0
     if "expense" in features:
-        details_by_category["exp"] = get_accounting_detail(
+        details["exp"] = get_accounting_detail(
             _("Expenses"),
             run,
             _("Total of expenses submitted by collaborators and approved"),
@@ -340,12 +342,12 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
             ExpenseChoices.choices,
             "exp",
         )
-        sum_expenses = details_by_category["exp"]["tot"]
+        sum_expenses = details["exp"]["tot"]
 
     # Process outflows: accumulate all recorded money outflows
     sum_outflows = 0
     if "outflow" in features:
-        details_by_category["out"] = get_accounting_detail(
+        details["out"] = get_accounting_detail(
             _("Outflows"),
             run,
             _("Total of recorded money outflows"),
@@ -353,12 +355,12 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
             ExpenseChoices.choices,
             "exp",
         )
-        sum_outflows = details_by_category["out"]["tot"]
+        sum_outflows = details["out"]["tot"]
 
     # Process inflows: accumulate all recorded money inflows
     sum_inflows = 0
     if "inflow" in features:
-        details_by_category["in"] = get_accounting_detail(
+        details["in"] = get_accounting_detail(
             _("Inflows"),
             run,
             _("Total of recorded money inflows"),
@@ -366,12 +368,12 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
             None,
             None,
         )
-        sum_inflows = details_by_category["in"]["tot"]
+        sum_inflows = details["in"]["tot"]
 
     # Process payments: accumulate all participation fees received from registrations
     sum_payments = 0
     if "payment" in features:
-        details_by_category["pay"] = get_accounting_detail(
+        details["pay"] = get_accounting_detail(
             _("Income"),
             run,
             _("Total participation fees received"),
@@ -380,10 +382,10 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
             "pay",
             filter_by_registration=True,
         )
-        sum_payments = details_by_category["pay"]["tot"]
+        sum_payments = details["pay"]["tot"]
 
     # Process transaction fees: accumulate all transfer commissions withheld
-    details_by_category["trs"] = get_accounting_detail(
+    details["trs"] = get_accounting_detail(
         _("Transactions"),
         run,
         _("Total amount withheld for transfer commissions"),
@@ -392,12 +394,12 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
         None,
         filter_by_registration=True,
     )
-    sum_fees = details_by_category["trs"]["tot"]
+    sum_fees = details["trs"]["tot"]
 
     # Process refunds: accumulate all amounts refunded to participants for cancellations
     sum_refund = 0
     if "refund" in features:
-        details_by_category["ref"] = get_accounting_detail(
+        details["ref"] = get_accounting_detail(
             _("Refunds"),
             run,
             _("Total amount refunded to participants"),
@@ -406,14 +408,14 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
             "oth",
             filters={"cancellation__exact": True},
         )
-        sum_refund = details_by_category["ref"]["tot"]
+        sum_refund = details["ref"]["tot"]
 
     # Process tokens and credits: accumulate all issued tokens and credits
-    sum_tokens, sum_credits = _process_tokens_credits(run, features, context, details_by_category)
+    sum_tokens, sum_credits = _process_tokens_credits(run, features, context, details)
 
     # Process discounts: accumulate all participation fee reductions
     if "discount" in features:
-        details_by_category["dis"] = get_accounting_detail(
+        details["dis"] = get_accounting_detail(
             _("Discount"),
             run,
             _("Total participation fees reduced through discounts"),
@@ -423,32 +425,31 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
         )
 
     # Process registrations: get theoretical total based on selected ticket tiers
-    details_by_category["registration"] = get_accounting_registration_detail(
+    details["registration"] = get_accounting_registration_detail(
         _("Registrations"),
         run,
         _("Theoretical total of income due to participation fees selected by the participants"),
     )
 
     # Calculate final financial figures
+    summary = {}
+    summary["expected"] = details.get("registration", {}).get("tot", 0)
     # Revenue = payments received + inflows - (transaction fees + refunds)
-    run.revenue = sum_payments + sum_inflows - (sum_fees + sum_refund)
+    summary["revenue"] = sum_payments + sum_inflows - (sum_fees + sum_refund)
     # Costs = outflows + expenses + virtual currency issued (tokens + credits)
-    run.costs = sum_outflows + sum_expenses + sum_tokens + sum_credits
+    summary["costs"] = sum_outflows + sum_expenses + sum_tokens + sum_credits
     # Balance = net profit or loss
-    run.balance = run.revenue - run.costs
+    summary["balance"] = summary["revenue"] - summary["costs"]
 
     # Apply organization tax if enabled
+    summary["tax"] = 0
     if "organization_tax" in features:
         tax_percentage = int(
             get_association_config(run.event.association_id, "organization_tax_perc", default_value="10")
         )
-        run.tax = run.revenue * tax_percentage / 100
+        summary["tax"] = summary["revenue"] * tax_percentage / 100
 
-    # Persist the calculated financial data
-    if perform_update:
-        run.save()
-
-    return details_by_category
+    return summary, details
 
 
 def check_accounting(association_id: int) -> None:
@@ -496,18 +497,19 @@ def check_run_accounting(run: Run) -> None:
         None
 
     Side Effects:
-        - Updates run accounting calculations via get_run_accounting
         - Creates a new RecordAccounting entry in the database
 
     """
-    # Perform accounting calculations and update run balance
-    get_run_accounting(run, {})
+    # Perform accounting calculations
+    summary, _details = get_run_accounting(run, {})
 
     # Log the accounting operation for debugging
     logger.debug("Recording accounting for run: %s", run)
 
-    # Create audit record with current balance (bank_sum set to 0 as default)
-    RecordAccounting.objects.create(association=run.event.association, run=run, global_sum=run.balance, bank_sum=0)
+    # Create audit record with calculated balance (bank_sum set to 0 as default)
+    RecordAccounting.objects.create(
+        association=run.event.association, run=run, global_sum=summary["balance"], bank_sum=0
+    )
 
 
 def association_accounting_data(context: dict, year: int | None = None) -> None:
