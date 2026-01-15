@@ -17,11 +17,18 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Access to all organization-level (exe) feature pages.
+Verifies that all organization dashboard links are accessible after enabling/disabling features,
+ensuring no broken links or permission issues across all feature pages.
+"""
+
 from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import _checkboxes, add_links_to_visit, go_to, go_to_check, login_orga
+from larpmanager.tests.utils import just_wait, _checkboxes, add_links_to_visit, go_to, go_to_check, login_orga
 
 pytestmark = pytest.mark.e2e
 

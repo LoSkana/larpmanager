@@ -8,19 +8,19 @@
                     <div class="el">
                         <div class="icon">
                             <div class="img_cover"
-                                 style="background-image:url('{% if el.player_id > 0 %}{{ el.player_prof }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
+                                 style="background-image:url('{% if el.player_uuid %}{{ el.player_prof }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
                             </div>
                         </div>
                     </div>
                     <div class="text">
                         <div class="go-inline">
-                            <span class="character-name"><a href="{% url 'character' run.get_slug el.number %}">{{ el.name }}</a> </span>
+                            <span class="character-name"><a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a> </span>
                             {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                             {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                         </div>
-                        {% if el.player_id > 0 %}
+                        {% if el.player_uuid %}
                             <div class="go-inline">
-                                <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
+                                <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
                             </div>
                         {% endif %}
                         <div class="go-inline">

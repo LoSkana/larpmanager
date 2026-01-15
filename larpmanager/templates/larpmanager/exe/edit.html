@@ -3,13 +3,12 @@
 {% block title %}
     {{ form.page_title }}
     {% if nonum is None %}
-        {% if num %}
+        {% if num != "0" %}
             - {% trans "Change" %}
         {% else %}
             - {% trans "New" %}
         {% endif %}
     {% endif %}
-    - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
     {{ form.page_info }}

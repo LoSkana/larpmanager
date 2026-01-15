@@ -37,11 +37,11 @@ from larpmanager.models.event import PreRegistration
 from larpmanager.models.member import FirstAidChoices, Member, Membership, MembershipStatus, NewsletterChoices
 from larpmanager.models.miscellanea import Email, HelpQuestion
 from larpmanager.models.registration import Registration, TicketTier
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.common import _get_help_questions, format_email_body
-from larpmanager.utils.member import get_mail
-from larpmanager.utils.paginate import orga_paginate
-from larpmanager.utils.tasks import send_mail_exec
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import _get_help_questions, format_email_body, get_member, get_object_uuid
+from larpmanager.utils.core.paginate import orga_paginate
+from larpmanager.utils.larpmanager.tasks import send_mail_exec
+from larpmanager.utils.users.member import get_mail
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
@@ -101,13 +101,13 @@ def orga_safety(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Build mapping of member IDs to their character list
     member_chars = {}
     for el in context["chars"].values():
-        if "player_id" not in el:
+        if "player_uuid" not in el:
             continue
         # Initialize member's character list if not exists
-        if el["player_id"] not in member_chars:
-            member_chars[el["player_id"]] = []
+        if el["player_uuid"] not in member_chars:
+            member_chars[el["player_uuid"]] = []
         # Add formatted character info to member's list
-        member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
+        member_chars[el["player_uuid"]].append(f"#{el['number']} {el['name']}")
 
     # Query registered members with safety information
     context["list"] = []
@@ -120,7 +120,7 @@ def orga_safety(request: HttpRequest, event_slug: str) -> HttpResponse:
         if len(el.member.safety) > min_length:
             # Attach character list to member if available
             if el.member_id in member_chars:
-                el.member.chars = member_chars[el.member_id]
+                el.member.chars = member_chars[el.member.uuid]
             context["list"].append(el.member)
 
     # Sort members alphabetically by display name
@@ -157,11 +157,11 @@ def orga_diet(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Build mapping of member IDs to their character names and numbers
     member_chars = {}
     for el in context["chars"].values():
-        if "player_id" not in el:
+        if "player_uuid" not in el:
             continue
-        if el["player_id"] not in member_chars:
-            member_chars[el["player_id"]] = []
-        member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
+        if el["player_uuid"] not in member_chars:
+            member_chars[el["player_uuid"]] = []
+        member_chars[el["player_uuid"]].append(f"#{el['number']} {el['name']}")
 
     # Query all non-cancelled registrations with dietary preferences
     context["list"] = []
@@ -172,7 +172,7 @@ def orga_diet(request: HttpRequest, event_slug: str) -> HttpResponse:
     for el in que:
         if len(el.member.diet) > min_length:
             if el.member_id in member_chars:
-                el.member.chars = member_chars[el.member_id]
+                el.member.chars = member_chars[el.member.uuid]
             context["list"].append(el.member)
 
     # Sort members alphabetically by display name
@@ -275,23 +275,23 @@ def orga_persuade(request: HttpRequest, event_slug: str) -> HttpResponse:
     pre_regs = set(PreRegistration.objects.filter(event=context["event"]).values_list("member_id", flat=True))
 
     # Calculate registration counts for each member
-    reg_counts = {}
+    registration_counts = {}
     for el in (
         Registration.objects.filter(member_id__in=members, cancellation_date__isnull=True)
         .exclude(member_id__in=already)
         .values("member_id")
         .annotate(Count("member_id"))
     ):
-        reg_counts[el["member_id"]] = el["member_id__count"]
+        registration_counts[el["member_id"]] = el["member_id__count"]
 
     # Build final member list with pre-registration and count data
     context["lst"] = []
     for m in que.values_list("id", "name", "surname", "nickname"):
         pre_reg = m[0] in pre_regs
-        reg_count = 0
-        if m[0] in reg_counts:
-            reg_count = reg_counts[m[0]]
-        context["lst"].append((m[0], m[1], m[2], m[3], pre_reg, reg_count))
+        registration_count = 0
+        if m[0] in registration_counts:
+            registration_count = registration_counts[m[0]]
+        context["lst"].append((m[0], m[1], m[2], m[3], pre_reg, registration_count))
 
     return render(request, "larpmanager/orga/users/persuade.html", context)
 
@@ -313,7 +313,7 @@ def orga_questions(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int) -> HttpResponse:
+def orga_questions_answer(request: HttpRequest, event_slug: str, member_uuid: str) -> HttpResponse:
     """Handle organizer responses to member help questions.
 
     This view allows organizers to respond to help questions submitted by members
@@ -323,7 +323,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int)
     Args:
         request: HTTP request object containing POST data for form submission
         event_slug: Event/run identifier (slug or ID)
-        member_id: Member ID who submitted the question
+        member_uuid: Member UUID who submitted the question
 
     Returns:
         HttpResponse: Rendered template for answering help questions or redirect
@@ -338,7 +338,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int)
     context = check_event_context(request, event_slug, "orga_questions")
 
     # Get the member who submitted the question
-    member = Member.objects.get(pk=member_id)
+    member = get_object_uuid(Member, member_uuid)
 
     # Handle form submission for organizer's answer
     if request.method == "POST":
@@ -371,11 +371,11 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int)
     context["reg_factions"] = []
     for char in context["chars"].values():
         # Skip characters without assigned players
-        if "player_id" not in char:
+        if "player_uuid" not in char:
             continue
 
         # Add character if it belongs to the current member
-        if char["player_id"] == member.id:
+        if char["player_uuid"] == member.uuid:
             context["reg_characters"].append(char)
             # Collect all factions for this member's characters
             for fnum in char["factions"]:
@@ -383,7 +383,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int)
 
     # Get all help questions for this member in this event, newest first
     context["list"] = HelpQuestion.objects.filter(
-        member_id=member_id,
+        member_id=member.id,
         association_id=context["association_id"],
         run_id=context["run"],
     ).order_by("-created")
@@ -392,14 +392,15 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int)
 
 
 @login_required
-def orga_questions_close(request: HttpRequest, event_slug: str, member_id: str) -> HttpResponse:
+def orga_questions_close(request: HttpRequest, event_slug: str, member_uuid: str) -> HttpResponse:
     """Close a help question for an organization event."""
     context = check_event_context(request, event_slug, "orga_questions")
 
+    member = get_member(member_uuid)
     # Get the most recent help question for this member and run
     h = (
         HelpQuestion.objects.filter(
-            member_id=member_id,
+            member_id=member.id,
             association_id=context["association_id"],
             run_id=context["run"],
         )
@@ -519,13 +520,13 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_read_mail(request: HttpRequest, event_slug: str, mail_id: str) -> HttpResponse:
+def orga_read_mail(request: HttpRequest, event_slug: str, mail_uuid: str) -> HttpResponse:
     """Display a specific email from the archive for organization staff.
 
     Args:
         request: The HTTP request object.
         event_slug: Event identifier string.
-        mail_id: The id of the email.
+        mail_uuid: The uuid of the email.
 
     Returns:
         Rendered template with email content.
@@ -535,7 +536,7 @@ def orga_read_mail(request: HttpRequest, event_slug: str, mail_id: str) -> HttpR
     context = check_event_context(request, event_slug, "orga_archive_email")
 
     # Retrieve the specific email for display
-    context["email"] = get_mail(context, mail_id)
+    context["email"] = get_mail(context, mail_uuid)
 
     return render(request, "larpmanager/exe/users/read_mail.html", context)
 
@@ -569,11 +570,11 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Build mapping of member IDs to their character assignments
     member_chars = {}
     for el in context["chars"].values():
-        if "player_id" not in el:
+        if "player_uuid" not in el:
             continue
-        if el["player_id"] not in member_chars:
-            member_chars[el["player_id"]] = []
-        member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
+        if el["player_uuid"] not in member_chars:
+            member_chars[el["player_uuid"]] = []
+        member_chars[el["player_uuid"]].append(f"#{el['number']} {el['name']}")
 
     # Collect all relevant member IDs (registered participants + staff)
     member_list = list(
@@ -592,8 +593,8 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["list"] = Member.objects.filter(id__in=member_list).order_by("created")
     for el in context["list"]:
         # Attach character assignments to each member
-        if el.id in member_chars:
-            el.chars = member_chars[el.id]
+        if el.uuid in member_chars:
+            el.chars = member_chars[el.uuid]
 
         # Apply field corrections/formatting
         member_field_correct(el, member_fields)

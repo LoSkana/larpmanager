@@ -25,12 +25,14 @@ from typing import TYPE_CHECKING
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count
 
 from larpmanager.cache.button import get_event_button_cache
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import get_event_config, save_single_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import _get_writing_mapping
+from larpmanager.models.writing import Faction
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
@@ -47,7 +49,7 @@ def cache_run_key(association_id: int, slug: str) -> str:
     return f"run_{association_id}_{slug}"
 
 
-def get_cache_run(association_id: int, slug: str) -> int:
+def get_cache_run(association_id: int, slug: str) -> str:
     """Get cached run data for association and slug."""
     # Generate cache key for the association and slug
     cache_key = cache_run_key(association_id, slug)
@@ -91,7 +93,7 @@ def init_cache_run(association_id: int, event_slug: str) -> int | None:
     except ObjectDoesNotExist:
         return None
     else:
-        return run.id
+        return run.uuid
 
 
 def on_run_pre_save_invalidate_cache(instance: Run) -> None:
@@ -173,23 +175,24 @@ def init_cache_config_run(run: Run) -> dict:
             - show_addit: Additional display configuration
 
     """
+    event_id = run.event_id
+    parent_id = run.event.parent.id if run.event.parent else run.event_id
+
     # Get event features to determine what functionality is available
-    event_features = get_event_features(run.event_id)
+    event_features = get_event_features(event_id)
 
     # Initialize base context with buttons and core display settings
     context = {
-        "buttons": get_event_button_cache(run.event_id),
+        "buttons": get_event_button_cache(event_id),
     }
-    context["limitations"] = get_event_config(run.event_id, "show_limitations", default_value=False, context=context)
-    context["user_character_max"] = get_event_config(
-        run.event_id, "user_character_max", default_value=0, context=context
-    )
-    context["cover_orig"] = get_event_config(run.event_id, "cover_orig", default_value=False, context=context)
-    context["px_user"] = get_event_config(run.event_id, "px_user", default_value=False, context=context)
-
-    # Handle parent event inheritance for px_user setting
-    if run.event.parent:
-        context["px_user"] = get_event_config(run.event.parent.id, "px_user", default_value=False, context=context)
+    configs = [
+        ("limitations", "show_limitations", event_id, False),
+        ("user_character_max", "user_character_max", event_id, 0),
+        ("cover_orig", "cover_orig", event_id, False),
+        ("px_user", "px_user", parent_id, False),
+    ]
+    for context_key, config_key, event_id, default in configs:
+        context[context_key] = get_event_config(event_id, config_key, default_value=default, context=context)
 
     # Process writing system configurations for enabled features
     mapping = _get_writing_mapping()
@@ -236,3 +239,17 @@ def on_event_post_save_reset_config_cache(instance: Event) -> None:
     if instance.pk:
         for run in instance.runs.all():
             reset_cache_config_run(run)
+
+
+def update_visible_factions(event: Event) -> None:
+    """Check if there are visible factions with characters for nav display."""
+    has_visible_factions = (
+        "faction" in get_event_features(event.id)
+        and event.get_elements(Faction)
+        .prefetch_related("characters")
+        .exclude(name="")
+        .annotate(char_count=Count("characters"))
+        .filter(char_count__gt=0)
+        .exists()
+    )
+    save_single_config(event, "has_visible_factions", has_visible_factions)

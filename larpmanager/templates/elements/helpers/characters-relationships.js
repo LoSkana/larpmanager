@@ -4,10 +4,10 @@
 
 const editUrl = "{% url 'orga_characters_edit' run.get_slug 0 %}";
 
-{% if eid %}
-    var eid = {{ eid }};
+{% if edit_uuid %}
+    var edit_uuid = '{{ edit_uuid }}';
 {% else %}
-    var eid = null;
+    var edit_uuid = '';
 {% endif %}
 
 // Get relationship length limit from form context
@@ -24,9 +24,9 @@ window.addEventListener('DOMContentLoaded', function() {
         setUpMaxLength(editorId, relationshipLimit, "text");
     }
 
-    function add_relationship(ch_id, ch_name) {
+    function add_relationship(ch_uuid, ch_name) {
 
-        charUrl = editUrl.replace(/\/0\/$/, `/${ch_id}/`);;
+        charUrl = editUrl.replace(/\/0\/$/, `/${ch_uuid}/`);;
 
         var html = `
         <h3>
@@ -49,14 +49,14 @@ window.addEventListener('DOMContentLoaded', function() {
                 </td>
             </tr>
         </table>
-        `.format(ch_id, ch_name, charUrl);
+        `.format(ch_uuid, ch_name, charUrl);
 
         $('#form_relationships').prepend(html);
 
-        window.addTinyMCETextarea('.f_rel_{0} textarea'.format(ch_id)).then((editorId) => {
+        window.addTinyMCETextarea('.f_rel_{0} textarea'.format(ch_uuid)).then((editorId) => {
             setupRelationshipEditor(editorId);
         });
-        already.push(ch_id);
+        already.push(ch_uuid);
 
     }
 
@@ -77,7 +77,7 @@ window.addEventListener('DOMContentLoaded', function() {
             var value = $(this).val();
             if (value == null || value == '') return;
 
-            if (value == eid) {
+            if (value == edit_uuid) {
                 alert('You have selected the character you are editing');
             }
             else if (already.includes(value)) {

@@ -7,11 +7,10 @@ from typing import TYPE_CHECKING, Any
 from django import forms
 from django.forms import Textarea
 from django.utils.html import escape, format_html_join
-from tinymce.widgets import TinyMCE
 
 from larpmanager.cache.config import reset_element_configs, save_all_element_configs
-from larpmanager.forms.base import MyForm
-from larpmanager.forms.utils import AssociationMemberS2WidgetMulti, get_members_queryset
+from larpmanager.forms.base import BaseModelForm
+from larpmanager.forms.utils import AssociationMemberS2WidgetMulti, CSRFTinyMCE, get_members_queryset
 
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
@@ -76,7 +75,7 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
         )
 
 
-class ConfigForm(MyForm):
+class ConfigForm(BaseModelForm):
     """Form for Config."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -228,8 +227,10 @@ class ConfigForm(MyForm):
         """
         # Map each configuration type to its corresponding Django form field factory
         field_type_to_form_field = {
-            # Basic text input field for short strings
-            ConfigType.CHAR: lambda: forms.CharField(label=label, help_text=help_text, required=False),
+            # Basic text input field for short strings, with optional validators from extra
+            ConfigType.CHAR: lambda: forms.CharField(
+                label=label, help_text=help_text, required=False, validators=extra if extra else []
+            ),
             # Checkbox field with custom styling for boolean values
             ConfigType.BOOL: lambda: forms.BooleanField(
                 label=label,
@@ -240,7 +241,7 @@ class ConfigForm(MyForm):
             # Rich text editor field for HTML content
             ConfigType.HTML: lambda: forms.CharField(
                 label=label,
-                widget=TinyMCE(),
+                widget=CSRFTinyMCE(),
                 help_text=help_text,
                 required=False,
             ),
@@ -303,14 +304,16 @@ class ConfigForm(MyForm):
 
         # Get field type and extra configuration for specific field types
         field_type = config["type"]
-        extra_config = config["extra"] if field_type in [ConfigType.MEMBERS, ConfigType.MULTI_BOOL] else None
+        extra_config = (
+            config["extra"] if field_type in [ConfigType.MEMBERS, ConfigType.MULTI_BOOL, ConfigType.CHAR] else None
+        )
 
         # Create and add the form field
         self.fields[field_key] = self._get_form_field(field_type, config["label"], config["help_text"], extra_config)
 
         # Configure widget for MEMBERS field type
         if field_type == ConfigType.MEMBERS:
-            self.fields[field_key].widget.set_association_id(config["extra"])
+            self.configure_field_association(field_key, config["extra"])
             if initial_value:
                 initial_value = [s.strip() for s in initial_value.split(",")]
 

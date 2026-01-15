@@ -93,6 +93,7 @@
     profile: ''
     presentation: null
     parent: null
+    uuid: hwCXNm815c9a
 - model: larpmanager.member
   pk: 2
   fields:
@@ -128,6 +129,7 @@
     profile: ''
     presentation: null
     parent: null
+    uuid: GpFgBKP0p482
 - model: larpmanager.member
   pk: 3
   fields:
@@ -163,6 +165,7 @@
     profile: ''
     presentation: null
     parent: null
+    uuid: uIT2O97q9XKA
 - model: larpmanager.member
   pk: 4
   fields:
@@ -198,6 +201,7 @@
     profile: ''
     presentation: null
     parent: null
+    uuid: YngKtqLrb639
 - model: larpmanager.association
   pk: 1
   fields:
@@ -224,8 +228,11 @@
     gdpr_contract: ''
     review_done: false
     images_shared: false
+    key: !!binary |
+      UElkTmZaQ0hJekNvSTRyRlk5anZRTHRPclRyTDFWQjJxd0ZGQ1E2TFZuND0=
     payment_methods: []
     skin: 1
+    uuid: u1
 - model: larpmanager.associationrole
   pk: 1
   fields:
@@ -239,6 +246,7 @@
     members:
     - 2
     permissions: []
+    uuid: u1
 - model: larpmanager.membership
   pk: 1
   fields:
@@ -329,6 +337,7 @@
     ter_rgb: null
     template: false
     features: []
+    uuid: u1
 - model: larpmanager.eventrole
   pk: 1
   fields:
@@ -342,6 +351,7 @@
     members:
     - 2
     permissions: []
+    uuid: u1
 - model: larpmanager.run
   pk: 1
   fields:
@@ -360,6 +370,7 @@
     balance: '0.00'
     paid: null
     plan: f
+    uuid: u1
 - model: larpmanager.registrationticket
   pk: 1
   fields:
@@ -379,6 +390,7 @@
     casting_priority: 1
     giftable: false
     order: 1
+    uuid: u1
 - model: larpmanager.character
   pk: 1
   fields:
@@ -391,14 +403,5 @@
     event: 1
     teaser: <p>Test Teaser</p>
     text: <p>Test Text</p>
-- model: larpmanager.paymentmethod
-  pk: 1
-  fields:
-    deleted: null
-    deleted_by_cascade: false
-    created: 2025-03-21 10:42:36.831317
-    updated: 2025-03-21 10:42:36.841097
-    name: Wire
-    slug: wire
-    instructions: <p>Wire instructions</p>
-    fields: payee, iban
+    uuid: u1
+    access_token: baba

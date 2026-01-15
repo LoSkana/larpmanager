@@ -1,10 +1,11 @@
 {% extends "utils.html" %}
 {% load i18n static show_tags %}
 {% block title %}
-    {% if eid %}
-        {{ name }}
+    {{ form.page_title }}
+    {% if edit_uuid %}
+        - {% trans "Change" %}
     {% else %}
-        {% trans "New" %} {{ form.page_title }}
+        - {% trans "New" %}
     {% endif %}
     - {{ run }}
 {% endblock title %}
@@ -27,7 +28,7 @@ window.addEventListener('DOMContentLoaded', function() {
     $(function() {
 
         $('form').on('submit', function() {
-            return confirm('{% trans "Are you really sure" %}?');
+            return confirm('{% filter escapejs %}{% trans "Are you really sure" %}{% endfilter %}?');
         });
 
         $('option:selected').each(function(){
@@ -50,6 +51,6 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
     </script>
-    {% include "elements/working-ticket.js" with num=eid %}
+    {% include "elements/working-ticket.js" with num=edit_uuid %}
     {% include "elements/auto-save.js" %}
 {% endblock js2 %}

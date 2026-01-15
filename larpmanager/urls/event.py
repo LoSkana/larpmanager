@@ -45,84 +45,19 @@ urlpatterns = [
         name="event_register",
     ),
     path(
-        "<slug:event_slug>/character/<int:num>/",
-        views_uc.character_view,
-        name="character",
-    ),
-    path(
-        "<slug:event_slug>/character/external/<slug:code>/",
-        views_uc.character_external,
-        name="character_external",
-    ),
-    path(
-        "<slug:event_slug>/character/<int:num>/change/",
-        views_uc.character_edit,
-        name="character_change",
-    ),
-    path(
-        "<slug:event_slug>/character/<int:num>/customize/",
-        views_uc.character_customize,
-        name="character_customize",
-    ),
-    path(
-        "<slug:event_slug>/character/<int:num>/profile/rotate/<int:rotation_angle>/",
-        views_uc.character_profile_rotate,
-        name="character_profile_rotate",
-    ),
-    path(
-        "<slug:event_slug>/character/<int:num>/profile/upload/",
-        views_uc.character_profile_upload,
-        name="character_profile_upload",
-    ),
-    path(
         "<slug:event_slug>/character/list/",
         views_uc.character_list,
         name="character_list",
     ),
     path(
+        "<slug:event_slug>/character/list/json/",
+        views_uc.character_list_json,
+        name="character_list_json",
+    ),
+    path(
         "<slug:event_slug>/character/create/",
         views_uc.character_create,
         name="character_create",
-    ),
-    path(
-        "<slug:event_slug>/character/<int:num>/abilities/",
-        views_uc.character_abilities,
-        name="character_abilities",
-    ),
-    path(
-        "<slug:event_slug>/character/<int:num>/abilities/<int:id_del>/",
-        views_uc.character_abilities_del,
-        name="character_abilities_del",
-    ),
-    path(
-        "<slug:event_slug>/character/<int:num>/assign/",
-        views_uc.character_assign,
-        name="character_assign",
-    ),
-    path(
-        "<slug:event_slug>/character/<int:num>/relationships/",
-        views_uc.character_relationships,
-        name="character_relationships",
-    ),
-    path(
-        "<slug:event_slug>/character/<int:num>/relationships/edit/<int:other_character_id>",
-        views_uc.character_relationships_edit,
-        name="character_relationships_edit",
-    ),
-    path(
-        "<slug:event_slug>/character/<int:num>/pdf/sheet/",
-        views_up.character_pdf_sheet,
-        name="character_pdf_sheet",
-    ),
-    path(
-        "<slug:event_slug>/character/<int:num>/pdf/friendly/",
-        views_up.character_pdf_sheet_friendly,
-        name="character_pdf_sheet_friendly",
-    ),
-    path(
-        "<slug:event_slug>/character/<int:num>/pdf/relationships/",
-        views_up.character_pdf_relationships,
-        name="character_pdf_relationships",
     ),
     path(
         "<slug:event_slug>/character/your/",
@@ -133,6 +68,86 @@ urlpatterns = [
         "<slug:event_slug>/character/your/<path:path>",
         views_uc.character_your,
         name="character_your",
+    ),
+    path(
+        "<slug:event_slug>/character/external/<slug:code>/",
+        views_uc.character_external,
+        name="character_external",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/",
+        views_uc.character_view,
+        name="character",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/change/",
+        views_uc.character_edit,
+        name="character_change",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/customize/",
+        views_uc.character_customize,
+        name="character_customize",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/profile/rotate/<int:rotation_angle>/",
+        views_uc.character_profile_rotate,
+        name="character_profile_rotate",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/profile/upload/",
+        views_uc.character_profile_upload,
+        name="character_profile_upload",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/abilities/",
+        views_uc.character_abilities,
+        name="character_abilities",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/abilities/json/",
+        views_uc.character_abilities_json,
+        name="character_abilities_json",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/abilities/<slug:ability_uuid>/",
+        views_uc.character_abilities_del,
+        name="character_abilities_del",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/inventory/json/",
+        views_uc.character_inventory_json,
+        name="character_inventory_json",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/assign/",
+        views_uc.character_assign,
+        name="character_assign",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/relationships/",
+        views_uc.character_relationships,
+        name="character_relationships",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/relationships/edit/<slug:other_character_uuid>",
+        views_uc.character_relationships_edit,
+        name="character_relationships_edit",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/pdf/sheet/",
+        views_up.character_pdf_sheet,
+        name="character_pdf_sheet",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/pdf/friendly/",
+        views_up.character_pdf_sheet_friendly,
+        name="character_pdf_sheet_friendly",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/pdf/relationships/",
+        views_up.character_pdf_relationships,
+        name="character_pdf_relationships",
     ),
     path(
         "<slug:event_slug>/search/",
@@ -150,7 +165,7 @@ urlpatterns = [
         name="gift",
     ),
     path(
-        "<slug:event_slug>/gift/edit/<int:gift_id>/",
+        "<slug:event_slug>/gift/edit/<slug:gift_uuid>/",
         views_ur.gift_edit,
         name="gift_edit",
     ),
@@ -165,7 +180,7 @@ urlpatterns = [
         name="casting",
     ),
     path(
-        "<slug:event_slug>/casting/<int:casting_type>/",
+        "<slug:event_slug>/casting/<str:casting_type>/",
         views_uca.casting,
         name="casting",
     ),
@@ -175,7 +190,7 @@ urlpatterns = [
         name="casting_preferences",
     ),
     path(
-        "<slug:event_slug>/casting/preferences/<int:casting_type>/",
+        "<slug:event_slug>/casting/preferences/<str:casting_type>/",
         views_uca.casting_preferences,
         name="casting_preferences",
     ),
@@ -185,7 +200,7 @@ urlpatterns = [
         name="casting_history",
     ),
     path(
-        "<slug:event_slug>/casting/history/<int:casting_type>/",
+        "<slug:event_slug>/casting/history/<str:casting_type>/",
         views_uca.casting_history,
         name="casting_history",
     ),
@@ -195,7 +210,7 @@ urlpatterns = [
         name="factions",
     ),
     path(
-        "<slug:event_slug>/faction/<int:faction_id>/",
+        "<slug:event_slug>/faction/<slug:faction_uuid>/",
         views_ue.faction,
         name="faction",
     ),
@@ -205,12 +220,12 @@ urlpatterns = [
         name="quests",
     ),
     path(
-        "<slug:event_slug>/quests/<int:quest_type_id>/",
+        "<slug:event_slug>/quests/<slug:quest_type_uuid>/",
         views_ue.quests,
         name="quests",
     ),
     path(
-        "<slug:event_slug>/quest/<int:quest_id>/",
+        "<slug:event_slug>/quest/<slug:quest_uuid>/",
         views_ue.quest,
         name="quest",
     ),
@@ -220,7 +235,7 @@ urlpatterns = [
         name="album",
     ),
     path(
-        "<slug:event_slug>/album/<int:num>/",
+        "<slug:event_slug>/album/<slug:album_uuid>/",
         views_ums.album_sub,
         name="album_sub",
     ),
@@ -265,7 +280,7 @@ urlpatterns = [
         name="register",
     ),
     path(
-        "<slug:event_slug>/register/ticket/<int:ticket_id>/",
+        "<slug:event_slug>/register/ticket/<slug:ticket_uuid>/",
         views_ur.register,
         name="register",
     ),
@@ -305,7 +320,7 @@ urlpatterns = [
         name="workshops",
     ),
     path(
-        "<slug:event_slug>/workshops/answer/<int:workshop_module_id>/",
+        "<slug:event_slug>/workshops/answer/<slug:module_uuid>/",
         views_ums.workshop_answer,
         name="workshop_answer",
     ),

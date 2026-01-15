@@ -23,7 +23,6 @@ import logging
 from typing import Any
 
 from django.contrib.auth.models import User
-from django.core.signals import got_request_exception
 from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
@@ -72,11 +71,15 @@ from larpmanager.cache.character import (
     reset_character_registration_cache,
     update_member_event_character_cache,
 )
-from larpmanager.cache.config import clear_config_cache
-from larpmanager.cache.event_text import clear_event_text_cache_on_delete, update_event_text_cache_on_save
-from larpmanager.cache.feature import clear_event_features_cache, on_association_post_save_reset_features_cache
+from larpmanager.cache.config import reset_element_configs
+from larpmanager.cache.event_text import reset_event_text, update_event_text_cache_on_save
+from larpmanager.cache.feature import (
+    clear_event_features_cache,
+    get_event_features,
+    on_association_post_save_reset_features_cache,
+)
 from larpmanager.cache.fields import clear_event_fields_cache
-from larpmanager.cache.larpmanager import clear_larpmanager_home_cache
+from larpmanager.cache.larpmanager import clear_blog_cache, clear_larpmanager_home_cache
 from larpmanager.cache.links import (
     clear_run_event_links_cache,
     on_registration_post_save_reset_event_links,
@@ -120,9 +123,14 @@ from larpmanager.cache.run import (
     on_event_pre_save_invalidate_cache,
     on_run_post_save_reset_config_cache,
     on_run_pre_save_invalidate_cache,
+    reset_cache_config_run,
+    update_visible_factions,
 )
 from larpmanager.cache.skin import clear_skin_cache
 from larpmanager.cache.text_fields import update_text_fields_cache
+from larpmanager.cache.widget import (
+    reset_widgets,
+)
 from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
 from larpmanager.mail.accounting import (
     send_collection_activation_email,
@@ -178,9 +186,11 @@ from larpmanager.models.base import (
     Feature,
     FeatureModule,
     auto_assign_sequential_numbers,
+    auto_set_uuid,
+    debug_set_uuid,
     update_model_search_field,
 )
-from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait, refresh_all_instance_traits
+from larpmanager.models.casting import AssignmentTrait, Casting, Quest, QuestType, Trait, refresh_all_instance_traits
 from larpmanager.models.event import (
     Event,
     EventButton,
@@ -196,7 +206,16 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
-from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerGuide, LarpManagerTicket, LarpManagerTutorial
+from larpmanager.models.inventory import Inventory, PoolBalanceCI, PoolTypeCI
+from larpmanager.models.larpmanager import (
+    LarpManagerBlog,
+    LarpManagerFaq,
+    LarpManagerGuide,
+    LarpManagerHighlight,
+    LarpManagerShowcase,
+    LarpManagerTicket,
+    LarpManagerTutorial,
+)
 from larpmanager.models.member import Badge, Member, MemberConfig, Membership
 from larpmanager.models.miscellanea import ChatMessage, HelpQuestion, PlayerRelationship, WarehouseItem
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
@@ -212,34 +231,8 @@ from larpmanager.models.writing import (
     SpeedLarp,
     replace_character_names,
 )
-from larpmanager.utils.association import (
-    apply_skin_features_to_association,
-    auto_assign_association_permission_number,
-    generate_association_encryption_key,
-    prepare_association_skin_features,
-)
-from larpmanager.utils.auth import auto_assign_event_permission_number
-from larpmanager.utils.event import (
-    assign_previous_campaign_character,
-    copy_parent_event_to_campaign,
-    create_default_event_setup,
-    prepare_campaign_event_data,
-    update_run_plan_on_event_change,
-)
-from larpmanager.utils.experience import (
-    calculate_character_experience_points,
-    on_experience_characters_m2m_changed,
-    on_modifier_abilities_m2m_changed,
-    on_rule_abilities_m2m_changed,
-    refresh_delivery_characters,
-    update_characters_experience_on_ability_change,
-    update_characters_experience_on_modifier_change,
-    update_characters_experience_on_rule_change,
-)
-from larpmanager.utils.larpmanager import auto_assign_faq_sequential_number, generate_tutorial_url_slug
-from larpmanager.utils.member import create_member_profile_for_user, process_membership_status_updates
-from larpmanager.utils.miscellanea import auto_rotate_vertical_photos
-from larpmanager.utils.pdf import (
+from larpmanager.utils.auth.permission import auto_assign_event_permission_number
+from larpmanager.utils.io.pdf import (
     cleanup_character_pdfs_before_delete,
     cleanup_character_pdfs_on_save,
     cleanup_faction_pdfs_before_delete,
@@ -254,9 +247,40 @@ from larpmanager.utils.pdf import (
     deactivate_castings_and_remove_pdfs,
     delete_character_pdf_files,
 )
-from larpmanager.utils.registration import process_character_ticket_options, process_registration_event_change
-from larpmanager.utils.ticket import create_error_ticket
-from larpmanager.utils.writing import replace_character_names_before_save
+from larpmanager.utils.larpmanager.tutorial import auto_assign_faq_sequential_number, generate_tutorial_url_slug
+from larpmanager.utils.services.association import (
+    apply_skin_features_to_association,
+    auto_assign_association_permission_number,
+    generate_association_encryption_key,
+    prepare_association_skin_features,
+)
+from larpmanager.utils.services.event import (
+    assign_previous_campaign_character,
+    copy_parent_event_to_campaign,
+    create_default_event_setup,
+    on_event_features_m2m_changed,
+    prepare_campaign_event_data,
+    update_run_plan_on_event_change,
+)
+from larpmanager.utils.services.experience import (
+    calculate_character_experience_points,
+    on_experience_characters_m2m_changed,
+    on_modifier_abilities_m2m_changed,
+    on_rule_abilities_m2m_changed,
+    refresh_delivery_characters,
+    update_characters_experience_on_ability_change,
+    update_characters_experience_on_modifier_change,
+    update_characters_experience_on_rule_change,
+)
+from larpmanager.utils.services.inventory import generate_base_inventories
+from larpmanager.utils.services.miscellanea import auto_rotate_vertical_photos
+from larpmanager.utils.services.writing import replace_character_names_before_save
+from larpmanager.utils.users.member import create_member_profile_for_user, process_membership_status_updates
+from larpmanager.utils.users.registration import (
+    process_character_ticket_options,
+    process_registration_event_change,
+    reset_registration_ticket,
+)
 
 log = logging.getLogger(__name__)
 
@@ -267,30 +291,49 @@ log = logging.getLogger(__name__)
 # Generic signal handlers (no specific sender)
 @receiver(pre_save)
 def pre_save_callback(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
-    """Handle pre-save operations for automatic field population.
-
-    Automatically sets number/order fields and updates search fields
-    for models that have them. This function is designed to be used
-    as a Django model signal handler.
-
-    """
+    """Handle pre-save operations for all models."""
     # Auto-assign sequential numbers for models with number/order fields
     auto_assign_sequential_numbers(instance)
 
     # Update search fields for models that implement search functionality
     update_model_search_field(instance)
 
+    # Assign uuid for models that has it
+    auto_set_uuid(instance)
+
 
 @receiver(post_save)
-def post_save_text_fields_callback(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
-    """Update text fields cache after model instance is saved."""
+def post_save_callback(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
+    """Handle post-save operations for all models."""
+    # Update text fields cache after model instance is saved
     update_text_fields_cache(instance)
+
+    # Set simplified uuid for debug
+    debug_set_uuid(instance, created=created)
+
+    # Update cache for accounting items
+    reset_accountingitem_cache(instance)
 
 
 @receiver(post_delete)
 def post_delete_text_fields_callback(sender: type, instance: object, **kwargs: Any) -> None:
-    """Update text fields cache after model instance deletion."""
+    """Handle post-delete operations for all models."""
+    # Update text fields cache after model instance deletion
     update_text_fields_cache(instance)
+
+    # Update cache for accounting items
+    reset_accountingitem_cache(instance)
+
+
+def reset_accountingitem_cache(instance: Any) -> None:
+    """Handle reset cache after accounting item saved."""
+    if not isinstance(instance, AccountingItem):
+        return
+
+    reset_widgets(instance)
+
+    if hasattr(instance, "run") and instance.run and instance.member_id:
+        refresh_member_accounting_cache(instance.run, instance.member_id)
 
 
 # AbilityPx signals
@@ -334,13 +377,6 @@ def post_save_discount_accounting_cache(
     process_accounting_discount_post_save(instance)
 
     # Refresh member's accounting cache if discount is associated with a run and member
-    if instance.run and instance.member_id:
-        refresh_member_accounting_cache(instance.run, instance.member_id)
-
-
-@receiver(post_delete, sender=AccountingItemDiscount)
-def post_delete_discount_accounting_cache(sender: type, instance: AccountingItemDiscount, **kwargs: Any) -> None:
-    """Refresh member accounting cache after discount deletion."""
     if instance.run and instance.member_id:
         refresh_member_accounting_cache(instance.run, instance.member_id)
 
@@ -399,18 +435,6 @@ def post_save_other_accounting_cache(
     # Update token credit based on the OtherAccounting instance
     update_token_credit_on_other_save(instance)
 
-    # Refresh member accounting cache if run and member are present
-    if instance.run and instance.member_id:
-        refresh_member_accounting_cache(instance.run, instance.member_id)
-
-
-@receiver(post_delete, sender=AccountingItemOther)
-def post_delete_other_accounting_cache(sender: type, instance: AccountingItemOther, **kwargs: Any) -> None:
-    """Refresh accounting cache for a member when their accounting entry is deleted."""
-    # Refresh member cache if run and member are present
-    if instance.run and instance.member_id:
-        refresh_member_accounting_cache(instance.run, instance.member_id)
-
 
 # AccountingItemPayment signals
 @receiver(pre_save, sender=AccountingItemPayment)
@@ -426,9 +450,9 @@ def post_save_payment_accounting_cache(
 ) -> None:
     """Update accounting caches and process payment-related calculations after payment save."""
     # Update registration and member accounting cache if payment has associated registration
-    if instance.reg and instance.reg.run:
-        instance.reg.save()
-        refresh_member_accounting_cache(instance.reg.run, instance.member_id)
+    if instance.registration and instance.registration.run:
+        instance.registration.save()
+        refresh_member_accounting_cache(instance.registration.run, instance.member_id)
 
     # Update token credits based on payment changes
     update_token_credit_on_payment_save(instance, created=created)
@@ -447,8 +471,8 @@ def post_delete_payment_accounting_cache(
     update_token_credit_on_payment_delete(instance)
 
     # Refresh member accounting cache if payment is linked to a registration
-    if instance.reg and instance.reg.run:
-        refresh_member_accounting_cache(instance.reg.run, instance.member_id)
+    if instance.registration and instance.registration.run:
+        refresh_member_accounting_cache(instance.registration.run, instance.member_id)
 
 
 # AssignmentTrait signals
@@ -591,13 +615,13 @@ def post_save_association_reset_lm_home(sender: type, instance: object, **kwargs
 @receiver(post_save, sender=AssociationConfig)
 def post_save_reset_association_config(sender: type, instance: object, **kwargs: Any) -> None:
     """Clear association config cache after save."""
-    clear_config_cache(instance.association)
+    reset_element_configs(instance.association)
 
 
 @receiver(post_delete, sender=AssociationConfig)
 def post_delete_reset_association_config(sender: type, instance: object, **kwargs: Any) -> None:
     """Clear association config cache after deletion."""
-    clear_config_cache(instance.association)
+    reset_element_configs(instance.association)
 
 
 # AssociationSkin signals
@@ -635,21 +659,12 @@ def post_character_update_px(sender: type, instance: Character, *args: Any, **kw
 
 
 @receiver(post_save, sender=Character)
-def post_save_character(sender: type, instance: Character, **kwargs: Any) -> None:
+def post_save_character(sender: type, instance: Character, created: bool, **kwargs: Any) -> None:
     """Handle post-save operations for Character model instances.
 
     This signal handler performs several maintenance tasks after a Character
     instance is saved, including PDF cleanup, cache updates, and relationship
     refreshes to maintain data consistency across the application.
-
-    Args:
-        sender: The model class that sent the signal (Character).
-        instance: The Character instance that was saved.
-        **kwargs: Additional keyword arguments from the signal.
-
-    Returns:
-        None
-
     """
     # Clean up any outdated PDF files associated with this character
     cleanup_character_pdfs_on_save(instance)
@@ -666,6 +681,12 @@ def post_save_character(sender: type, instance: Character, **kwargs: Any) -> Non
 
     # Update all other character-related caches (experience, skills, etc.)
     refresh_character_related_caches(instance)
+
+    # Update visible factions
+    update_visible_factions(instance.event)
+
+    # Create a personal inventory for newly created characters
+    generate_base_inventories(instance)
 
 
 @receiver(pre_delete, sender=Character)
@@ -688,18 +709,36 @@ def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs
     for rel in Relationship.objects.filter(target=instance):
         refresh_character_relationships(rel.source)
 
+    # Update visible factions
+    update_visible_factions(instance.event)
+
+
+# Casting signals
+@receiver(post_save, sender=Casting)
+def post_save_casting_cache(sender: type, instance: Casting, **kwargs: Any) -> None:
+    """Clear deadline widget cache when casting preferences are saved."""
+    # Clear deadline widget cache for this run (casting deadline)
+    reset_widgets(instance)
+
+
+@receiver(post_delete, sender=Casting)
+def post_delete_casting_cache(sender: type, instance: Casting, **kwargs: Any) -> None:
+    """Clear deadline widget cache when casting preferences are deleted."""
+    # Clear deadline widget cache for this run (casting deadline)
+    reset_widgets(instance)
+
 
 # CharacterConfig signals
 @receiver(post_save, sender=CharacterConfig)
 def post_save_reset_character_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset character configuration cache after save."""
-    clear_config_cache(instance.character)
+    reset_element_configs(instance.character)
 
 
 @receiver(post_delete, sender=CharacterConfig)
 def post_delete_reset_character_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset character configuration cache after model deletion."""
-    clear_config_cache(instance.character)
+    reset_element_configs(instance.character)
 
 
 # ChatMessage signals
@@ -739,6 +778,16 @@ def post_save_delivery_px(
 ) -> None:
     """Refresh delivery characters after save signal."""
     refresh_delivery_characters(instance)
+
+
+@receiver(post_save, sender=Inventory)
+def create_pools_for_inventory(sender: type, instance: Inventory, created: bool, **kwargs: Any) -> None:
+    """Create pool balances for newly created character inventories based on event pool types."""
+    if created:
+        for pool_type in PoolTypeCI.objects.filter(event=instance.event):
+            PoolBalanceCI.objects.create(
+                inventory=instance, event=instance.event, number=1, name=pool_type.name, pool_type=pool_type, amount=0
+            )
 
 
 @receiver(post_delete, sender=DeliveryPx)
@@ -814,13 +863,17 @@ def pre_delete_event_button(sender: type, instance: Any, **kwargs: Any) -> None:
 @receiver(post_save, sender=EventConfig)
 def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset event configuration cache after model save."""
-    clear_config_cache(instance.event)
+    reset_element_configs(instance.event)
+    for run in instance.event.runs.all():
+        reset_cache_config_run(run)
 
 
 @receiver(post_delete, sender=EventConfig)
 def post_delete_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear event configuration cache after deletion."""
-    clear_config_cache(instance.event)
+    reset_element_configs(instance.event)
+    for run in instance.event.runs.all():
+        reset_cache_config_run(run)
 
 
 # EventPermission signals
@@ -871,7 +924,7 @@ def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any)
 @receiver(pre_delete, sender=EventText)
 def pre_delete_event_text(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear event text cache before deletion."""
-    clear_event_text_cache_on_delete(instance)
+    reset_event_text(instance)
 
 
 @receiver(post_save, sender=EventText)
@@ -908,6 +961,9 @@ def post_save_faction_reset_rels(sender: type, instance: Faction, **kwargs: Any)
     # Clean up faction PDFs after save operation
     cleanup_faction_pdfs_on_save(instance)
 
+    # Update visible factions config
+    update_visible_factions(instance.event)
+
 
 @receiver(pre_delete, sender=Faction)
 def pre_delete_faction(sender: type, instance: Faction, **kwargs: dict) -> None:
@@ -925,6 +981,9 @@ def post_delete_faction_reset_rels(sender: type, instance: object, **kwargs: Any
 
     # Remove faction from cache
     remove_item_from_cache_section(instance.event_id, "factions", instance.id)
+
+    # Update visible factions config
+    update_visible_factions(instance.event)
 
 
 # Feature signals
@@ -1024,6 +1083,13 @@ def post_delete_reset_guides_cache(sender: type, instance: object, **kwargs: dic
     reset_guides_cache()
 
 
+# LarpManagerBlog signals
+@receiver(post_save, sender=LarpManagerBlog)
+def post_save_clear_blog_cache(sender: type, instance: LarpManagerBlog, **kwargs: dict) -> None:
+    """Clear blog content cache when blog is updated."""
+    clear_blog_cache(instance.id)
+
+
 # LarpManagerTicket signals
 @receiver(post_save, sender=LarpManagerTicket)
 def save_larpmanager_ticket(sender: type, instance: LarpManagerTicket, created: bool, **kwargs: Any) -> None:
@@ -1050,6 +1116,30 @@ def post_delete_reset_tutorials_cache(sender: type, instance: Any, **kwargs: Any
     reset_tutorials_cache()
 
 
+@receiver(post_save, sender=LarpManagerShowcase)
+def post_save_reset_lm_home_cache_showcase(sender: type, instance: object, **kwargs: dict) -> None:
+    """Signal handler to reset home cache when showcase content changes."""
+    clear_larpmanager_home_cache()
+
+
+@receiver(post_delete, sender=LarpManagerShowcase)
+def post_delete_reset_lm_home_cache_showcase(sender: type, instance: object, **kwargs: dict) -> None:
+    """Reset home cache after showcase deletion."""
+    clear_larpmanager_home_cache()
+
+
+@receiver(post_save, sender=LarpManagerHighlight)
+def post_save_reset_lm_home_cache_highlight(sender: type, instance: object, **kwargs: dict) -> None:
+    """Signal handler to reset home cache when highlight content changes."""
+    clear_larpmanager_home_cache()
+
+
+@receiver(post_delete, sender=LarpManagerHighlight)
+def post_delete_reset_lm_home_cache_highlight(sender: type, instance: object, **kwargs: dict) -> None:
+    """Reset home cache after highlight deletion."""
+    clear_larpmanager_home_cache()
+
+
 # Member signals
 @receiver(post_save, sender=Member)
 def post_save_member_reset(sender: type, instance: Member, **kwargs: dict) -> None:
@@ -1061,13 +1151,13 @@ def post_save_member_reset(sender: type, instance: Member, **kwargs: dict) -> No
 @receiver(post_save, sender=MemberConfig)
 def post_save_reset_member_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset member configuration cache after save."""
-    clear_config_cache(instance.member)
+    reset_element_configs(instance.member)
 
 
 @receiver(post_delete, sender=MemberConfig)
 def post_delete_reset_member_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear member config cache after deletion."""
-    clear_config_cache(instance.member)
+    reset_element_configs(instance.member)
 
 
 # Membership signals
@@ -1075,6 +1165,18 @@ def post_delete_reset_member_config(sender: type, instance: Any, **kwargs: Any) 
 def pre_save_membership(sender: type, instance: Membership, **kwargs: Any) -> None:
     """Process membership status updates before save."""
     process_membership_status_updates(instance)
+
+
+@receiver(post_save, sender=Membership)
+def post_save_membership_cache(sender: type, instance: Membership, **kwargs: Any) -> None:
+    """Clear deadline widget cache when membership status changes."""
+    reset_widgets(instance)
+
+
+@receiver(post_delete, sender=Membership)
+def post_delete_membership_cache(sender: type, instance: Membership, **kwargs: Any) -> None:
+    """Clear deadline widget cache when membership status changes."""
+    reset_widgets(instance)
 
 
 # ModifierPx signals
@@ -1319,6 +1421,9 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     # Update registration count caches for this run
     clear_registration_counts_cache(instance.run_id)
 
+    # Clear deadline widget cache for this run
+    reset_widgets(instance)
+
 
 @receiver(pre_delete, sender=Registration)
 def pre_delete_registration(sender: type, instance: Registration, *args: Any, **kwargs: Any) -> None:
@@ -1330,6 +1435,7 @@ def pre_delete_registration(sender: type, instance: Registration, *args: Any, **
 def post_delete_registration_accounting_cache(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear accounting cache for the associated run after registration deletion."""
     clear_registration_accounting_cache(instance.run_id)
+    reset_widgets(instance)
 
 
 # RegistrationCharacterRel signals
@@ -1343,6 +1449,15 @@ def post_save_registration_character_rel_savereg(
     """Reset character cache and send assignment email notification."""
     reset_character_registration_cache(instance)
 
+    # Clear deadline widget cache (casting requirements)
+    reset_widgets(instance.registration)
+
+    # Auto-assign player if player editor is active and character has no player
+    features = get_event_features(instance.character.event_id)
+    if "user_character" in features and not instance.character.player:
+        instance.character.player = instance.registration.member
+        instance.character.save()
+
     if created:
         send_character_assignment_email(instance)
 
@@ -1353,6 +1468,9 @@ def post_delete_registration_character_rel_savereg(
 ) -> None:
     """Reset character registration cache after relationship deletion."""
     reset_character_registration_cache(instance)
+
+    # Clear deadline widget cache (casting requirements)
+    reset_widgets(instance.registration)
 
 
 # RegistrationOption signals
@@ -1375,20 +1493,17 @@ def post_save_ticket_accounting_cache(
     created: bool,
     **kwargs: Any,
 ) -> None:
-    """Clear accounting cache for all runs when a ticket is saved."""
+    """Clear cache for all runs when a ticket is saved."""
     log_registration_ticket_saved(instance)
 
     # Clear accounting cache for all runs in the ticket's event
-    for run in instance.event.runs.all():
-        clear_registration_accounting_cache(run.id)
+    reset_registration_ticket(instance)
 
 
 @receiver(post_delete, sender=RegistrationTicket)
 def post_delete_ticket_accounting_cache(sender: type, instance: RegistrationTicket, **kwargs: Any) -> None:
-    """Clear accounting cache for all runs when a ticket is deleted."""
-    # Clear accounting cache for all runs in the ticket's event
-    for run in instance.event.runs.all():
-        clear_registration_accounting_cache(run.id)
+    """Clear cache for all runs when a ticket is deleted."""
+    reset_registration_ticket(instance)
 
 
 # Relationship signals
@@ -1459,6 +1574,9 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
 
     clear_run_event_links_cache(instance.event)
 
+    # Clear association cache to update onboarding status
+    clear_association_cache(instance.event.association.slug)
+
 
 @receiver(pre_delete, sender=Run)
 def pre_delete_run_reset(sender: type, instance: Run, **kwargs: Any) -> None:
@@ -1471,18 +1589,21 @@ def post_delete_run_links(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear event links cache when a run link is deleted."""
     clear_run_event_links_cache(instance.event)
 
+    # Clear association cache to update onboarding status
+    clear_association_cache(instance.event.association.slug)
+
 
 # RunConfig signals
 @receiver(post_save, sender=RunConfig)
 def post_save_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset run config cache when related instance is saved."""
-    clear_config_cache(instance.run)
+    reset_element_configs(instance.run)
 
 
 @receiver(post_delete, sender=RunConfig)
 def post_delete_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear configuration cache after Run deletion."""
-    clear_config_cache(instance.run)
+    reset_element_configs(instance.run)
 
 
 # SpeedLarp signals
@@ -1616,6 +1737,8 @@ m2m_changed.connect(on_modifier_prerequisites_m2m_changed, sender=ModifierPx.pre
 m2m_changed.connect(on_modifier_requirements_m2m_changed, sender=ModifierPx.requirements.through)
 m2m_changed.connect(on_rule_abilities_m2m_changed_cache, sender=RulePx.abilities.through)
 
+m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
+
 
 @receiver(valid_ipn_received)
 def paypal_webhook(sender: type, **kwargs: Any) -> Any:
@@ -1642,23 +1765,3 @@ def paypal_ko_webhook(sender: type, **kwargs: Any) -> None:
 
     """
     handle_invalid_paypal_ipn(sender)
-
-
-@receiver(got_request_exception)
-def handle_request_exception(sender: type, request: object, **kwargs: Any) -> None:
-    """Handle request exceptions and create error tickets automatically.
-
-    This signal handler is triggered when an exception occurs during request processing.
-    It creates an error ticket with the exception details.
-
-    Args:
-        sender: The sender of the signal
-        request: The HttpRequest object
-        **kwargs: Additional keyword arguments (may contain 'exception')
-
-    """
-    try:
-        create_error_ticket(request)
-    except Exception as e:  # noqa: BLE001 - Error handler must never fail and disrupt error reporting
-        # Don't let ticket creation failure break the error handling
-        log.debug("Failed to create error ticket: %s", e)

@@ -17,7 +17,7 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <th>{{ el.competence }}</th>
                     <td>{{ el.exp }}</td>
                     <td>{{ el.info | safe }}</td>

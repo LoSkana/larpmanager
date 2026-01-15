@@ -18,15 +18,15 @@ window.addEventListener('DOMContentLoaded', function() {
             {% endif %}
 
             {% if form.instance.pk %}
-            var eid = {{ form.instance.pk }};
+            var edit_uuid = '{{ form.instance.uuid }}';
             {% else %}
-            var eid = 0;
+            var edit_uuid = "0";
             {% endif %}
 
             request = $.ajax({
                 url: "{% url 'orga_factions_available' run.get_slug %}",
                 method: "POST",
-                data: {'eid': eid, 'orga': orga},
+                data: {'edit_uuid': edit_uuid, 'orga': orga},
                 datatype: "json",
             });
 

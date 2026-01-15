@@ -25,7 +25,7 @@ from typing import Any
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.event_text import get_event_text
@@ -35,8 +35,8 @@ from larpmanager.models.association import AssociationTextType, get_url, hdr
 from larpmanager.models.event import DevelopStatus, EventTextType
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
-from larpmanager.utils.registration import get_registration_options
-from larpmanager.utils.tasks import background_auto, my_send_mail
+from larpmanager.utils.larpmanager.tasks import background_auto, my_send_mail
+from larpmanager.utils.users.registration import get_registration_options
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +80,7 @@ def update_registration_status(instance: Any) -> None:
         return
 
     # Skip provisional registrations - wait for confirmation
-    if is_reg_provisional(instance):
+    if is_registration_provisional(instance):
         return
 
     # Prepare common context for email templates
@@ -102,8 +102,8 @@ def update_registration_status(instance: Any) -> None:
 
     # Add custom messages from event and association configurations
     for custom_message in [
-        get_event_text(instance.run.event_id, EventTextType.SIGNUP),
-        get_association_text(instance.run.event.association_id, AssociationTextType.SIGNUP),
+        get_event_text(instance.run.event_id, EventTextType.SIGNUP, instance.member.language),
+        get_association_text(instance.run.event.association_id, AssociationTextType.SIGNUP, instance.member.language),
     ]:
         if custom_message:
             email_body += "<br />" + custom_message
@@ -272,24 +272,24 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
 
     """
     # Set the language context for email localization
-    activate(instance.reg.member.language)
+    activate(instance.registration.member.language)
 
     # Early return if no character is assigned
     if not instance.character:
         return
 
     # Check if character assignment emails are disabled for this event
-    if get_event_config(instance.reg.run.event_id, "mail_character", default_value=False):
+    if get_event_config(instance.registration.run.event_id, "mail_character", default_value=False):
         return
 
     # Prepare context data for email template
     email_context = {
-        "event": instance.reg.run,
-        "character": instance.character,
+        "event": instance.registration.run,
+        "character": instance.character.name,
     }
 
     # Construct email subject with event header and localized text
-    email_subject = hdr(instance.reg.run.event) + _("Character assigned for %(event)s") % email_context
+    email_subject = hdr(instance.registration.run.event) + _("Character assigned for %(event)s") % email_context
 
     # Build the main email body with character assignment information
     email_body = (
@@ -298,20 +298,20 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
 
     # Generate URL for character access page
     character_url = get_url(
-        f"{instance.reg.run.get_slug()}/character/your",
-        instance.reg.run.event,
+        f"{instance.registration.run.get_slug()}/character/your",
+        instance.registration.run.event,
     )
 
     # Add character access link to email body
     email_body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": character_url} + "!"
 
     # Append custom assignment message if configured for the event
-    custom_assignment_message = get_event_text(instance.reg.run.event_id, EventTextType.ASSIGNMENT)
+    custom_assignment_message = get_event_text(instance.registration.run.event_id, EventTextType.ASSIGNMENT)
     if custom_assignment_message:
         email_body += "<br />" + custom_assignment_message
 
     # Send the email to the registered member
-    my_send_mail(email_subject, email_body, instance.reg.member, instance.reg.run)
+    my_send_mail(email_subject, email_body, instance.registration.member, instance.registration.run)
 
 
 def update_registration_cancellation(instance: Registration) -> None:
@@ -335,7 +335,7 @@ def update_registration_cancellation(instance: Registration) -> None:
 
     """
     # Skip processing for provisional registrations
-    if is_reg_provisional(instance):
+    if is_registration_provisional(instance):
         return
 
     # Send confirmation email to the user who cancelled
@@ -410,7 +410,7 @@ def send_registration_deletion_email(instance: Registration) -> None:
         return
 
     # Skip notifications for provisional registrations
-    if is_reg_provisional(instance):
+    if is_registration_provisional(instance):
         return
 
     # Prepare context for email templates

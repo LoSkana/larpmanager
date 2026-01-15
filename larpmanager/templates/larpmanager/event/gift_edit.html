@@ -9,7 +9,7 @@
     - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% if run.reg or not run.status.closed %}
+    {% if registration or not run_status.closed %}
         {% if event.website %}
             <p>
                 {% trans "View all event information, and any specifics tickets costs, in its" %}

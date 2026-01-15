@@ -65,7 +65,7 @@
         <div class="mt-4">
             <form method="post"
                   action="{% url 'orga_warehouse_commit_quantities' run.get_slug %}"
-                  onsubmit="return confirm('{% trans "Are you sure you want to commit these quantities? This operation cannot be undone!" %}');">
+                  onsubmit="return confirm('{% filter escapejs %}{% trans "Are you sure you want to commit these quantities? This operation cannot be undone!" %}{% endfilter %}');">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger btn-lg">
                     <i class="fas fa-check"></i> {% trans "Confirm and commit quantities" %}

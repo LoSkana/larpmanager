@@ -17,14 +17,17 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
+from tinymce.models import HTMLField
 
+from larpmanager.forms.utils import CSRFTinyMCE
 from larpmanager.models.base import Feature, FeatureModule, PaymentMethod
 from larpmanager.models.member import Log
 
@@ -37,6 +40,34 @@ class DefModelAdmin(ImportExportModelAdmin):
         css: ClassVar[dict] = {"all": ("larpmanager/assets/css/admin.css",)}
 
     ordering: ClassVar[list] = ["-updated"]
+
+
+class CSRFTinyMCEModelAdmin(DefModelAdmin):
+    """Base admin class that uses CSRF-aware TinyMCE for all HTMLField fields.
+
+    This automatically applies CSRFTinyMCE widget to any HTMLField in the model,
+    ensuring proper CSRF token handling for file uploads in TinyMCE editors.
+
+    Use this as the base class for any ModelAdmin that has HTMLField fields.
+    """
+
+    def formfield_for_dbfield(self, db_field: Any, request: Any, **kwargs: Any) -> Any:
+        """Override formfield to use CSRFTinyMCE for HTMLField fields.
+
+        Args:
+            db_field: Database field being rendered
+            request: HTTP request object
+            **kwargs: Additional keyword arguments
+
+        Returns:
+            Form field with CSRFTinyMCE widget for HTMLField, default otherwise
+
+        """
+        # Use CSRFTinyMCE for all HTMLField (TinyMCE) fields
+        if isinstance(db_field, HTMLField):
+            kwargs["widget"] = CSRFTinyMCE()
+            return db_field.formfield(**kwargs)
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
 
 def reduced(value: str | None) -> str:
@@ -119,15 +150,15 @@ class RegistrationFilter(AutocompleteFilter):
     """Admin filter for Registration autocomplete."""
 
     title = "Registration"
-    field_name = "reg"
+    field_name = "registration"
 
 
 @admin.register(Log)
 class LogAdmin(DefModelAdmin):
     """Admin interface for Log model."""
 
-    list_display: ClassVar[tuple] = ("member", "cls", "eid", "created", "dl")
-    search_fields = ("member", "cls", "dl")
+    list_display: ClassVar[tuple] = ("member", "cls", "eid", "dl")
+    search_fields: ClassVar[tuple] = ("id", "member", "cls", "dl")
     autocomplete_fields: ClassVar[list] = ["member"]
 
 
@@ -136,7 +167,7 @@ class FeatureModuleAdmin(DefModelAdmin):
     """Admin interface for FeatureModule model."""
 
     list_display = ("name", "order")
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
 
 
 class FeatureResource(resources.ModelResource):
@@ -150,10 +181,20 @@ class FeatureResource(resources.ModelResource):
 class FeatureAdmin(DefModelAdmin):
     """Admin interface for Feature model."""
 
-    list_display: ClassVar[tuple] = ("name", "overall", "order", "module", "slug", "tutorial", "descr", "placeholder", "after_link")
+    list_display: ClassVar[tuple] = (
+        "name",
+        "overall",
+        "order",
+        "module",
+        "slug",
+        "tutorial",
+        "descr",
+        "placeholder",
+        "after_link",
+    )
     list_filter: ClassVar[tuple] = ("module",)
     autocomplete_fields: ClassVar[list] = ["module", "associations", "events"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
     resource_classes: ClassVar[list] = [FeatureResource]
 
 
@@ -162,4 +203,4 @@ class PaymentMethodAdmin(DefModelAdmin):
     """Admin interface for PaymentMethod model."""
 
     list_display = ("name", "slug")
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]

@@ -11,9 +11,17 @@
         {% if features.questbuilder %}
             <p>
                 {% trans "Casting management for" %}:
-                <a href="{% url 'orga_casting' run.get_slug 0 %}">{% trans "characters" %}</a>
+                {% if typ == 0 %}
+                    <strong>{% trans "characters" %}</strong>
+                {% else %}
+                    <a href="{% url 'orga_casting' run.get_slug 0 %}">{% trans "characters" %}</a>
+                {% endif %}
                 {% for idx, qt in quest_types.items %}
-                    , <a href="{% url 'orga_casting' run.get_slug qt.number %}">{{ qt.name }}</a>
+                    {% if typ == idx %}
+                        | <strong>{{ qt.name }}</strong>
+                    {% else %}
+                        | <a href="{% url 'orga_casting' run.get_slug qt.uuid %}">{{ qt.name }}</a>
+                    {% endif %}
                 {% endfor %}
             </p>
         {% endif %}
@@ -101,10 +109,10 @@
 window['num_pref'] = {{ num_choices }};
 window['choices'] = {{ choices | safe }};
 window['players'] = {{ players | safe }};
-window['chosen'] = {{ chosen }};
-window['not_chosen'] = {{ not_chosen }};
+window['chosen'] = {{ chosen | safe }};
+window['not_chosen'] = {{ not_chosen | safe }};
 window['preferences'] = {{ preferences | safe }};
-window['didnt_choose'] = {{ didnt_choose }};
+window['didnt_choose'] = {{ didnt_choose | safe }};
 window['nopes'] = {{ nopes | safe }};
 window['taken'] = {{ taken | safe }};
 window['mirrors'] = {{ mirrors | safe }};
@@ -120,13 +128,13 @@ window['reg_priority'] = {{ reg_priority }};
 window['pay_priority'] = {{ pay_priority }};
 
 window['trads'] = {
-    'g': '{% trans "Player" %}',
-    'a': '{% trans "Seniority" %}',
-    'p': '{% trans "Priority" %}',
-    'e': '{% trans "Avoid" %}',
-    'ne': '{% trans "Elements NOT chosen" %}',
-    'ge': '{% trans "Participants that DID NOT send preferences" %}',
-    'le': '{% trans "Email list" %}'
+    'g': '{% filter escapejs %}{% trans "Player" %}{% endfilter %}',
+    'a': '{% filter escapejs %}{% trans "Seniority" %}{% endfilter %}',
+    'p': '{% filter escapejs %}{% trans "Priority" %}{% endfilter %}',
+    'e': '{% filter escapejs %}{% trans "Avoid" %}{% endfilter %}',
+    'ne': '{% filter escapejs %}{% trans "Elements NOT chosen" %}{% endfilter %}',
+    'ge': '{% filter escapejs %}{% trans "Participants that DID NOT send preferences" %}{% endfilter %}',
+    'le': '{% filter escapejs %}{% trans "Email list" %}{% endfilter %}'
 }
 
     </script>

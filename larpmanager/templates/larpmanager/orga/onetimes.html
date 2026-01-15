@@ -24,9 +24,9 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_onetimes_edit' run.get_slug el.id %}">{{ el.name }}</a>
+                        <a href="{% url 'orga_onetimes_edit' run.get_slug el.uuid %}">{{ el.name }}</a>
                     </td>
                     <td>{{ el.description|truncatewords:10 }}</td>
                     <td>

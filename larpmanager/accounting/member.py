@@ -22,8 +22,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-from datetime import timezone as dt_timezone
+from datetime import UTC, datetime
 
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
@@ -43,10 +42,10 @@ from larpmanager.models.accounting import (
     RefundStatus,
 )
 from larpmanager.models.event import DevelopStatus
-from larpmanager.models.form import RegistrationChoice, RegistrationOption, RegistrationQuestion
+from larpmanager.models.form import BaseQuestionType, RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.member import Member, get_user_membership
 from larpmanager.models.registration import Registration
-from larpmanager.utils.common import get_now
+from larpmanager.utils.core.common import get_now
 
 
 def info_accounting(context: dict) -> None:
@@ -191,17 +190,19 @@ def _init_choices(member: Member) -> dict[int, dict[int, dict[str, RegistrationQ
 
     """
     choices = {}
-    choice_queryset = RegistrationChoice.objects.filter(reg__member_id=member.id)
+    choice_queryset = RegistrationChoice.objects.filter(
+        registration__member_id=member.id, question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+    )
     choice_queryset = choice_queryset.select_related("option", "question").order_by("question__order")
     for registration_choice in choice_queryset:
-        if registration_choice.reg_id not in choices:
-            choices[registration_choice.reg_id] = {}
-        if registration_choice.question_id not in choices[registration_choice.reg_id]:
-            choices[registration_choice.reg_id][registration_choice.question_id] = {
+        if registration_choice.registration_id not in choices:
+            choices[registration_choice.registration_id] = {}
+        if registration_choice.question_id not in choices[registration_choice.registration_id]:
+            choices[registration_choice.registration_id][registration_choice.question_id] = {
                 "question": registration_choice.question,
                 "selected_options": [],
             }
-        choices[registration_choice.reg_id][registration_choice.question_id]["selected_options"].append(
+        choices[registration_choice.registration_id][registration_choice.question_id]["selected_options"].append(
             registration_choice.option,
         )
     return choices
@@ -215,7 +216,7 @@ def _info_token_credit(context: dict, member: Member) -> None:
         member: Member instance to check balances for
 
     Side effects:
-        Updates context with acc_tokens and acc_credits counts
+        Updates context with accounting_tokens and accounting_credits counts
 
     """
     # check if it had any token
@@ -224,7 +225,7 @@ def _info_token_credit(context: dict, member: Member) -> None:
         oth=OtherChoices.TOKEN,
         association_id=context["association_id"],
     )
-    context["acc_tokens"] = token_queryset.count()
+    context["accounting_tokens"] = token_queryset.count()
 
     # check if it had any credits
     expense_queryset = AccountingItemExpense.objects.filter(
@@ -237,7 +238,7 @@ def _info_token_credit(context: dict, member: Member) -> None:
         oth=OtherChoices.CREDIT,
         association_id=context["association_id"],
     )
-    context["acc_credits"] = expense_queryset.count() + credit_queryset.count()
+    context["accounting_credits"] = expense_queryset.count() + credit_queryset.count()
 
 
 def _info_collections(context: dict, member: Member) -> None:
@@ -347,7 +348,7 @@ def _info_membership(context: dict, member: Member) -> None:
         membership_day += f"-{current_year}"
 
         # Parse and make aware with explicit UTC
-        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(tzinfo=dt_timezone.utc)
+        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(tzinfo=UTC)
 
         # Add grace period months
         membership_deadline_date += relativedelta(months=membership_grace_period_months)

@@ -29,12 +29,6 @@ if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
 
 
-def clear_config_cache(config_element: BaseModel) -> None:
-    """Clear the cache for a configuration element."""
-    # noinspection PyProtectedMember
-    cache.delete(cache_configs_key(config_element.id, config_element._meta.model_name.lower()))  # noqa: SLF001  # Django model metadata
-
-
 def reset_element_configs(element: BaseModel) -> None:
     """Delete cached configs for the given element."""
     cache_key = cache_configs_key(element.id, element._meta.model_name.lower())  # noqa: SLF001  # Django model metadata

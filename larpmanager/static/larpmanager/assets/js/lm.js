@@ -203,37 +203,37 @@ $(document).ready(function() {
         scrollInput : false
     });
 
-        let slugTouched = false;
-        let slugTimeout;
+    let slugTouched = false;
+    let slugTimeout;
 
-        $('#slug').on('input', function (e) {
-            slugTouched = true;
+    $('#slug').on('input', function (e) {
+        slugTouched = true;
 
-            let v = $(this).val();
-            var sl = new RegExp('[^a-z0-9]');
-            if (sl.test(v)) {
-                $('.slug_war').fadeIn(200);
+        let v = $(this).val();
+        var sl = new RegExp('[^a-z0-9]');
+        if (sl.test(v)) {
+            $('.slug_war').fadeIn(200);
 
-                clearTimeout(slugTimeout);
-                slugTimeout = setTimeout(function() {
-                    $('.slug_war').fadeOut(200);
-                }, 3000);
+            clearTimeout(slugTimeout);
+            slugTimeout = setTimeout(function() {
+                $('.slug_war').fadeOut(200);
+            }, 3000);
 
-                v = v.replace(sl, '');
-                $(this).val(v);
-            }
+            v = v.replace(sl, '');
+            $(this).val(v);
+        }
 
-            $(this).trigger('slug:changed', [v]);
-        });
+        $(this).trigger('slug:changed', [v]);
+    });
 
-        $('#id_name').on('input', function (e) {
-            if (!slugTouched) {
-                let nameVal = $(this).val();
-                let autoSlug = slugify(nameVal);
-                autoSlug = autoSlug.replaceAll('-', '');
-                $('#slug').val(autoSlug).trigger('slug:changed', [autoSlug]);
-            }
-        });
+    $('#id_name, #id_form1-name').on('input', function (e) {
+        if (!slugTouched) {
+            let nameVal = $(this).val();
+            let autoSlug = slugify(nameVal);
+            autoSlug = autoSlug.replaceAll('-', '');
+            $('#slug').val(autoSlug).trigger('slug:changed', [autoSlug]);
+        }
+    });
 
     reload_has_char();
 
@@ -342,6 +342,8 @@ $(document).ready(function() {
     $('#footer .inner').fadeIn(100);
 
     show_sidebar_active();
+
+    copyClipboardButton();
 
     $(document).trigger("lm_ready");
 });
@@ -457,6 +459,7 @@ function data_tables() {
                 : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
             columnControl: ['order', 'searchDropdown'],
             lengthMenu: [[10, 25, 50, 100, 250, 500, 1000], [10, 25, 50, 100, 250, 500, 1000]],
+            order: [],
             ordering: {
                 indicators: false,
                 handler: false
@@ -836,6 +839,32 @@ function centerMobileIcons() {
             'margin-right': `${ml}px`
         });
     });
+}
+
+function copyClipboardButton() {
+    // Copy link to clipboard functionality (jQuery)
+    $('.copy-link-btn').on('click', function (e) {
+        e.preventDefault();
+
+        const $btn = $(this);
+        const url = window.location.origin + $btn.data('url');
+
+        navigator.clipboard.writeText(url).then(function () {
+            const $icon = $btn.find('i');
+            const originalClass = $icon.attr('class');
+
+            $icon.attr('class', 'fa-solid fa-check');
+            $btn.css('color', '#28a745');
+
+            setTimeout(function () {
+                $icon.attr('class', originalClass);
+                $btn.css('color', '');
+            }, 2000);
+        }).catch(function (err) {
+            console.error('Failed to copy:', err);
+        });
+    });
+
 }
 
 });

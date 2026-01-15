@@ -57,7 +57,9 @@
                     <br />
                     <br />
                 </div>
-                {% if profile %}<img id="profile" src="{{ profile }}" alt="image profile" />{% endif %}
+                <img id="profile"
+                     {% if profile %} src="{{ profile }}" {% else %} class="hide" {% endif %}
+                     alt="image profile" />
                 <div id="upload_spinner" class="hide">
                     <div class="spinner-border text-primary" role="status">
                         <span class="sr-only">{% trans "Uploading..." %}</span>
@@ -119,6 +121,7 @@
         timestamp = (new Date()).getTime();
         newUrl = src + '?_=' + timestamp;
         $('#profile').attr("src", newUrl);
+        $('#profile').show();
     }
 
 {% endif %}
@@ -172,7 +175,7 @@
                             // Hide spinner and enable submit button on error
                             $('#upload_spinner').addClass('hide');
                             $('input[type="submit"]').prop('disabled', false);
-                            alert('{% trans "Error uploading image. Please try again." %}');
+                            alert('{% filter escapejs %}{% trans "Error uploading image. Please try again." %}{% endfilter %}');
                         }
                     });
 

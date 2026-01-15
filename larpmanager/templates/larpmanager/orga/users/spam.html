@@ -12,7 +12,7 @@
         <h2>{{ key }}</h2>
         <p>
             {% for el in value %}
-                {% include "elements/comma.html" %}
+                {% include "elements/comma.html" with separator="," %}
                 {{ el }}
             {% endfor %}
         </p>

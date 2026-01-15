@@ -1,0 +1,34 @@
+{% load i18n %}
+{% if widgets.casting %}
+    <div class="grid-item">
+        <h2>
+            <a href="{% url 'orga_casting' run.get_slug %}" target="_blank"><i class="fas fa-users"></i> {% trans "Casting" %}</a>
+        </h2>
+        <table>
+            {% if widgets.casting.assigned %}
+                <tr>
+                    <td>
+                        <b>{% trans "Characters assigned" %}</b>
+                    </td>
+                    <td>{{ widgets.casting.assigned }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.casting.unassigned %}
+                <tr>
+                    <td>
+                        <b>{% trans "Characters unassigned" %}</b>
+                    </td>
+                    <td>{{ widgets.casting.unassigned }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.casting.waiting %}
+                <tr>
+                    <td>
+                        <b>{% trans "Players waiting for character" %}</b>
+                    </td>
+                    <td>{{ widgets.casting.waiting }}</td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+{% endif %}

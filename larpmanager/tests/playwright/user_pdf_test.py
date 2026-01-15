@@ -17,11 +17,18 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: PDF generation for character sheets.
+Verifies PDF download functionality for character portraits, profiles, complete sheets,
+light sheets, and relationship documents.
+"""
+
 from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import check_download, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import just_wait, check_download, go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -32,13 +39,13 @@ def test_user_pdf(pw_page: Any) -> None:
     login_orga(page, live_server)
 
     # activate characters
-    go_to(page, live_server, "/test/1/manage/features/character/on")
+    go_to(page, live_server, "/test/manage/features/character/on")
 
     # activate relationships
-    go_to(page, live_server, "/test/1/manage/features/relationships/on")
+    go_to(page, live_server, "/test/manage/features/relationships/on")
 
     # activate pdf
-    go_to(page, live_server, "/test/1/manage/features/print_pdf/on")
+    go_to(page, live_server, "/test/manage/features/print_pdf/on")
 
     # signup
     go_to(page, live_server, "/test/register")
@@ -54,7 +61,7 @@ def test_user_pdf(pw_page: Any) -> None:
     submit_confirm(page)
 
     # Go to character, test download pdf
-    go_to(page, live_server, "/test/character/1")
+    go_to(page, live_server, "/test/character/u1")
 
     check_download(page, "Portraits (PDF)")
 

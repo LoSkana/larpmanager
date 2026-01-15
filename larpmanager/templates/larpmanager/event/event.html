@@ -76,7 +76,7 @@
                         <td data-title="{% trans "Date" %}">
                             <i>{{ run.pretty_dates }} </i>
                         </td>
-                        <td data-title="{% trans "Registrations" %}">{% include "elements/reg_status.html" with run=run %}</td>
+                        <td data-title="{% trans "Registrations" %}">{% include "elements/reg_status.html" with run_status=run.status %}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -121,8 +121,8 @@
                             <a href="{% url 'gallery' run.get_slug %}">{% trans "Gallery" %}</a>
                         </td>
                         <td data-title="{% trans "Character" %}">
-                            {% if run.reg and run.reg.character %}
-                                <a href="{% url 'character' run.get_slug run.reg.character.number %}">{{ run.reg.display_character }}</a>
+                            {% if registration and registration.character %}
+                                <a href="{% url 'character' run.get_slug registration.character.uuid %}">{{ registration.display_character }}</a>
                             {% endif %}
                         </td>
                     </tr>

@@ -70,8 +70,9 @@ admin.site.register(User, MyUserAdmin)
 class MemberAdmin(DefModelAdmin):
     """Admin interface for Member model."""
 
-    search_fields = ("search", "name", "surname", "nickname", "language")
+    search_fields: ClassVar[tuple] = ("id", "search", "name", "surname", "nickname", "language", "uuid")
     list_display = (
+        "id",
         "display_member",
         "name",
         "surname",
@@ -80,6 +81,7 @@ class MemberAdmin(DefModelAdmin):
         "user_link",
         "diet_red",
         "safety_red",
+        "uuid",
     )
 
     list_filter = ("newsletter", "first_aid", "language")
@@ -107,7 +109,7 @@ class MemberConfigAdmin(DefModelAdmin):
     """Admin interface for MemberConfig model."""
 
     list_display = ("member", "name", "value")
-    search_fields: ClassVar[tuple] = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name")
     list_filter = (MemberFilter,)
     autocomplete_fields: ClassVar[list] = ["member"]
 
@@ -116,7 +118,7 @@ class MemberConfigAdmin(DefModelAdmin):
 class MembershipAdmin(DefModelAdmin):
     """Admin interface for Membership model."""
 
-    list_display: ClassVar[tuple] = ("member", "association", "status", "card_number", "date", "created")
+    list_display: ClassVar[tuple] = ("member", "association", "status", "card_number", "date")
     list_filter = (AssociationFilter, MemberFilter)
     autocomplete_fields: ClassVar[list] = ["member", "association"]
 
@@ -143,6 +145,6 @@ class VoteAdmin(DefModelAdmin):
 class BadgeAdmin(DefModelAdmin):
     """Admin interface for Badge model."""
 
-    list_display: ClassVar[tuple] = ("name", "cod", "descr", "number", "thumb")
+    list_display: ClassVar[tuple] = ("id", "name", "cod", "descr", "number", "thumb", "uuid")
     autocomplete_fields: ClassVar[list] = ["members"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]

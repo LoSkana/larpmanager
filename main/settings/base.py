@@ -51,23 +51,37 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # Profiling middleware first to track everything
     'larpmanager.middleware.profiler.ProfilerMiddleware',
+    # CORS to set headers early
     'corsheaders.middleware.CorsMiddleware',
+    # Security middleware
     'django.middleware.security.SecurityMiddleware',
+    # Session middleware needed by auth
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # URL correction before other processing
     'larpmanager.middleware.url.CorrectUrlMiddleware',
+    # Messages depends on sessions
     'django.contrib.messages.middleware.MessageMiddleware',
+    # Token auth (login using social provider) - before standard auth
     'larpmanager.middleware.token.TokenAuthMiddleware',
+    # Authentication (must be before anything that depends on request.user)
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # Custom middleware for exception handling and locale
     'larpmanager.middleware.exception.ExceptionHandlingMiddleware',
     'larpmanager.middleware.broken.BrokenLinkEmailsMiddleware',
     'larpmanager.middleware.locale.LocaleAdvMiddleware',
     'larpmanager.middleware.association.AssociationIdentifyMiddleware',
     'larpmanager.middleware.translation.AssociationTranslationMiddleware',
+    # Debug toolbar
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # Common middleware handles APPEND_SLASH - must be near the end
     'django.middleware.common.CommonMiddleware',
+    # CSRF protection
     'django.middleware.csrf.CsrfViewMiddleware',
+    # Clickjacking protection
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Account middleware last
     'allauth.account.middleware.AccountMiddleware',
 ]
 
@@ -84,7 +98,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'larpmanager.utils.context.cache_association',
+                'larpmanager.utils.core.context_processors.cache_association',
             ],
         },
     },
@@ -174,8 +188,8 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '../../media')
 
-# Tinymce
 
+# Tinymce
 TINYMCE_JS_URL = 'node_modules/tinymce/tinymce.min.js'
 TINYMCE_DEFAULT_CONFIG = {
     'width': '100%',
@@ -189,7 +203,6 @@ TINYMCE_DEFAULT_CONFIG = {
     'license_key': 'gpl',
     'promotion': False,
 
-    'images_upload_url': '/upload_media/',
     'automatic_uploads': True,
     'file_picker_types': 'image media',
     'paste_data_images': False,
@@ -199,6 +212,39 @@ TINYMCE_DEFAULT_CONFIG = {
 TINYMCE_COMPRESSOR = False
 
 SECURE_REFERRER_POLICY = 'origin'
+
+# Demo user password (used for creating demo accounts)
+DEMO_PASSWORD = 'pippo'
+
+# Maximum file upload size (10MB for TinyMCE uploads)
+MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB in bytes
+
+# Allowed file extensions for TinyMCE uploads
+ALLOWED_UPLOAD_EXTENSIONS = {
+    # Images
+    '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp',
+    # Documents
+    '.pdf', '.doc', '.docx', '.odt', '.txt',
+    # Audio/Video
+    '.mp3', '.mp4', '.webm', '.ogg', '.wav',
+}
+
+# Upload rate limiting settings
+UPLOAD_RATE_LIMIT = 10  # Maximum uploads per time window
+UPLOAD_RATE_WINDOW = 60  # Time window in seconds (1 minute)
+UPLOAD_MAX_STORAGE_PER_USER = 100 * 1024 * 1024  # 100MB total per user
+
+# MIME type validation for uploads
+ALLOWED_MIME_TYPES = {
+    # Images
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/bmp',
+    # Documents
+    'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.oasis.opendocument.text', 'text/plain',
+    # Audio/Video
+    'audio/mpeg', 'video/mp4', 'video/webm', 'audio/ogg', 'video/ogg', 'audio/wav', 'audio/wave',
+}
+
 
 # email
 
@@ -234,12 +280,12 @@ CLEAN_DB = [
     "delete from larpmanager_accountingitemdiscount where deleted < CURRENT_DATE - INTERVAL '6 months';",
     "delete from larpmanager_registrationcharacterrel where deleted < CURRENT_DATE - INTERVAL '6 months';",
 
-    "delete from larpmanager_registrationchoice where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
-    "delete from larpmanager_registrationanswer where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
-    "delete from larpmanager_accountingitempayment where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
-    "delete from larpmanager_accountingitemtransaction where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
-    "delete from larpmanager_playerrelationship where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
-    "delete from larpmanager_registrationcharacterrel where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
+    "delete from larpmanager_registrationchoice where registration_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
+    "delete from larpmanager_registrationanswer where registration_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
+    "delete from larpmanager_accountingitempayment where registration_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
+    "delete from larpmanager_accountingitemtransaction where registration_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
+    "delete from larpmanager_playerrelationship where registration_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
+    "delete from larpmanager_registrationcharacterrel where registration_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
     "delete from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months';",
 
     "delete from larpmanager_casting where deleted < CURRENT_DATE - INTERVAL '6 months';",
@@ -290,6 +336,16 @@ IGNORABLE_PROFILER_URLS = [
     re.compile(r'logout'),
     re.compile(r'xyz'),
     re.compile(r'accounts/google/login/callback'),
+]
+
+# 404 ERRORS TO IGNORE
+IGNORABLE_404_URLS = [
+    re.compile(r'/functions/webhook\.js'),
+    re.compile(r'/\.well-known/'),
+    re.compile(r'apple-touch-icon'),
+    re.compile(r'favicon\.ico'),
+    re.compile(r'/wp-'),
+    re.compile(r'/xmlrpc\.php'),
 ]
 
 # PAYMENT SETTINGS

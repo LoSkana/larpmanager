@@ -61,7 +61,7 @@
         </style>
     </head>
     <body>
-        {% if show_character %}
+        {% if show_character and chars %}
             <table>
                 <tr>
                     {% for number, el in chars.items %}
@@ -74,7 +74,7 @@
                 </tr>
             </table>
         {% endif %}
-        {% if first_aid %}
+        {% if first_aid and first_aid|length > 0 %}
             <h2 class="new-page">
                 FIRST AID
                 <img src="{% static 'larpmanager/assets/first-aid.png' %}"
@@ -93,5 +93,6 @@
                 </tr>
             </table>
         {% endif %}
+        {% if not chars and not first_aid %}<h2>No portraits available</h2>{% endif %}
     </body>
 </html>

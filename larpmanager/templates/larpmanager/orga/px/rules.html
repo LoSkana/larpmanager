@@ -22,16 +22,16 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_px_rules_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_px_rules_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>
                         {% if el.cached_rels %}
-                            {% for ab_id, ab_name in el.cached_rels.ability_rels.list %}
+                            {% for ab_uuid, ab_name in el.cached_rels.ability_rels.list %}
                                 {% include "elements/comma.html" %}
-                                <a href="{% url 'orga_px_abilities_edit' run.get_slug ab_id %}">{{ ab_name }}</a>
+                                <a href="{% url 'orga_px_abilities_edit' run.get_slug ab_uuid %}">{{ ab_name }}</a>
                             {% endfor %}
                         {% endif %}
                     </td>
@@ -40,14 +40,14 @@
                     <td>{{ el.amount }}</td>
                     <td>
                         {% if not forloop.first %}
-                            <a href="{% url 'orga_px_rules_order' run.get_slug el.id 0 %}">
+                            <a href="{% url 'orga_px_rules_order' run.get_slug el.uuid 0 %}">
                                 <i class="fa-solid fa-arrow-up"></i>
                             </a>
                         {% endif %}
                     </td>
                     <td>
                         {% if not forloop.last %}
-                            <a href="{% url 'orga_px_rules_order' run.get_slug el.id 1 %}">
+                            <a href="{% url 'orga_px_rules_order' run.get_slug el.uuid 1 %}">
                                 <i class="fa-solid fa-arrow-down"></i>
                             </a>
                         {% endif %}

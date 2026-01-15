@@ -23,7 +23,7 @@
                 {% trans "Go to the quests of type" %}:
                 {% for id, qt in quest_types.items %}
                     {% include "elements/comma.html" %}
-                    <a href="{% url 'quests' run.get_slug qt.number %}">{{ qt.name }}</a>
+                    <a href="{% url 'quests' run.get_slug qt.uuid %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
         {% endif %}
@@ -102,28 +102,30 @@
             <span class="helptext">{% trans "Click on a name to go and view it directly" %}.</span>
         </div>
         <br />
-        <h3>
-            {% trans "Characters list" %} (<span class="num"></span>)
-        </h3>
-        <table>
-            <tr>
-                <th>{% trans "You are including (at least one of these filters)" %}</th>
-                <th>{% trans "You are excluding (none of these filters)" %}</th>
-            </tr>
-            <tr>
-                <td>
-                    <span class="incl"></span>
-                </td>
-                <td>
-                    <span class="escl"></span>
-                </td>
-            </tr>
-        </table>
-        <div id="characters"></div>
+        <div id="search-results">
+            <h3>
+                {% trans "Characters list" %} (<span class="num"></span>)
+            </h3>
+            <table>
+                <tr>
+                    <th>{% trans "You are including (at least one of these filters)" %}</th>
+                    <th>{% trans "You are excluding (none of these filters)" %}</th>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="incl"></span>
+                    </td>
+                    <td>
+                        <span class="escl"></span>
+                    </td>
+                </tr>
+            </table>
+            <div id="characters"></div>
+        </div>
         <div id="teasers" class="hide">
             {% for chnum, el in chars.items %}
                 {% if not el.hide %}
-                    <div class="{{ el.id }}">{% show_char el.teaser run 1 %}</div>
+                    <div class="{{ el.uuid }}">{% show_char el.teaser run 1 %}</div>
                 {% endif %}
             {% endfor %}
         </div>
@@ -137,9 +139,9 @@ window['facs'] = {{ factions_json | safe }};
 
 window['blank'] = "{% static 'larpmanager/assets/blank-avatar.svg' %}";
 
-window['char_url'] = "{% url 'character' run.get_slug 0 %}";
+window['char_url'] = "{% url 'character' run.get_slug '0' %}";
 
-window['prof_url'] = "{% url 'public' 0 %}";
+window['prof_url'] = "{% url 'public' '0' %}";
 
 window['faction_url'] = "{% url 'faction' run.get_slug 0 %}";
 
@@ -152,13 +154,13 @@ window['show_char'] = {% if show_character %} true {% else %} false {% endif %};
 window['show_teaser'] = {% if show_character.teaser %} true {% else %} false {% endif %};
 
 window['texts'] = {
-    'abs': '{% trans "Absent" %}',
-    'pl': '{% trans "Player" %}',
-    'cfields': '{% trans "Additional fields" %}',
-    'factions': '{% trans "Factions" %}',
-    'specs': '{% trans "Features" %}',
-    'none': '{% trans "None" %}',
-    'all': '{% trans "All" %}',
+    'abs': '{% filter escapejs %}{% trans "Absent" %}{% endfilter %}',
+    'pl': '{% filter escapejs %}{% trans "Player" %}{% endfilter %}',
+    'cfields': '{% filter escapejs %}{% trans "Additional fields" %}{% endfilter %}',
+    'factions': '{% filter escapejs %}{% trans "Factions" %}{% endfilter %}',
+    'specs': '{% filter escapejs %}{% trans "Features" %}{% endfilter %}',
+    'none': '{% filter escapejs %}{% trans "None" %}{% endfilter %}',
+    'all': '{% filter escapejs %}{% trans "All" %}{% endfilter %}',
 }
 
 window['fields'] = {}

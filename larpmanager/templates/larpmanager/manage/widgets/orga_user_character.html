@@ -1,0 +1,42 @@
+{% load i18n %}
+{% if widgets.user_character %}
+    <div class="grid-item">
+        <h2>
+            <a href="{% url 'orga_characters' run.get_slug %}" target="_blank"><i class="fas fa-user-edit"></i> {% trans "Characters" %}</a>
+        </h2>
+        <table>
+            {% if widgets.user_character.creation %}
+                <tr>
+                    <td>
+                        <b>{% trans "In creation" %}</b>
+                    </td>
+                    <td>{{ widgets.user_character.creation }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.user_character.proposed %}
+                <tr>
+                    <td>
+                        <b>{% trans "Proposed" %}</b>
+                    </td>
+                    <td>{{ widgets.user_character.proposed }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.user_character.review %}
+                <tr>
+                    <td>
+                        <b>{% trans "In revision" %}</b>
+                    </td>
+                    <td>{{ widgets.user_character.review }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.user_character.approved %}
+                <tr>
+                    <td>
+                        <b>{% trans "Approved" %}</b>
+                    </td>
+                    <td>{{ widgets.user_character.approved }}</td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+{% endif %}
