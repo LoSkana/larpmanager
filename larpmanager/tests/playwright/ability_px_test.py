@@ -387,7 +387,7 @@ def delivery_auto_populate(page: Any, live_server: Any) -> None:
 def test_endpoint(page: Any, live_server: Any) -> None:
     """Test character abilties endpoint"""
     # Ensure test user is logged in
-    logout()
+    logout(page)
     login_user(page, live_server)
 
     # Go to character list endpoint

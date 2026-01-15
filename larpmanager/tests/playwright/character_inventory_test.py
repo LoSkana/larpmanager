@@ -158,7 +158,7 @@ def test_endpoint(page: Any, live_server: Any) -> None:
     """Test character abilties endpoint"""
     # Go to character list endpoint
     # Ensure test user is logged in
-    logout()
+    logout(page)
     login_user(page, live_server)
 
     response = get_request(page, live_server, "/test/character/list/json/")
