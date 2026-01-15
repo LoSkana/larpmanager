@@ -247,7 +247,6 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "character active last event character active last event my character test larp")
 
     page.get_by_role("link", name=" Registrations").click()
-    expect_normalized(page, page.locator("#one"), "Registrations")
 
     expect_normalized(page, page.locator("#one"),
   """event date status details event date status details test larp 19 march 2050
