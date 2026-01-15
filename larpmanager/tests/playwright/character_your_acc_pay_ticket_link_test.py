@@ -68,6 +68,17 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
     page.locator("#id_visible").uncheck()
     submit_confirm(page)
 
+    # Test 1: Direct ticket link bypasses "registration not yet open"
+    ticket_link_bypasses_not_open(page, live_server)
+
+    # Test 2: Direct ticket link bypasses external registration link
+    ticket_link_bypasses_external_link(page, live_server)
+
+    # Test 3: Direct link bypasses ticket not visible
+    ticket_link_bypasses_not_visible(live_server, page)
+
+
+def ticket_link_bypasses_not_visible(live_server, page):
     # Test signup (shouldn't be visible)
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="Registration is open!").click()
@@ -86,9 +97,98 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
     expect(new_page.get_by_label("Ticket (*)")).to_have_value("u2")
     new_page.get_by_role("button", name="Continue").click()
     submit_confirm(new_page)
-
     go_to(page, live_server, "/test/")
     expect_normalized(page, page.locator("#one"), "Registration confirmed (Staff)")
+
+
+def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
+    """Test that direct ticket link works when registration is not yet open."""
+    # Set registration to open in the future
+    go_to(page, live_server, "/test/manage")
+    page.get_by_role("link", name="Features").first.click()
+    page.get_by_role("checkbox", name="Opening date").check()
+    submit_confirm(page)
+
+    page.get_by_role("link", name="Event").first.click()
+    page.locator("#id_form2-registration_open").fill("2099-12-31")
+    just_wait(page)
+    page.locator("#id_form2-registration_open").click()
+    submit_confirm(page)
+
+    # Verify normal registration is blocked
+    go_to(page, live_server, "/test/register/")
+    expect_normalized(page, page.locator("body"), "The registrations to the event Test Larp are not yet open!")
+
+    # Get direct ticket link and verify it still works
+    go_to(page, live_server, "/test/manage")
+    page.get_by_role("link", name="Tickets").first.click()
+
+    # Navigate to direct ticket link - should work despite registration not open
+    with page.expect_popup() as popup_info:
+        page.locator('[id="u2"]').get_by_role("link", name="Signup link").click()
+    new_page = popup_info.value
+    # Should show registration form, not "not open" message
+    expect(new_page.get_by_label("Ticket (*)")).to_have_value("u2")
+    expect(new_page.get_by_label("Ticket (*)")).to_be_visible()
+    new_page.close()
+
+    # Reset registration open date
+    go_to(page, live_server, "/test/manage")
+    page.get_by_role("link", name="Event").first.click()
+    page.locator("#id_form2-registration_open").fill("")
+    just_wait(page)
+    page.locator("#id_form2-registration_open").click()
+    submit_confirm(page)
+
+    go_to(page, live_server, "/test/manage")
+    page.get_by_role("link", name="Features").first.click()
+    page.get_by_role("checkbox", name="Opening date").uncheck()
+    submit_confirm(page)
+
+
+def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
+    """Test that NPC/Staff ticket links bypass external registration link redirect."""
+    # Enable external registration link feature
+    go_to(page, live_server, "/test/manage")
+    page.get_by_role("link", name="Features").first.click()
+    page.get_by_role("checkbox", name="External registration").check()
+    submit_confirm(page)
+
+    # Set an external registration link
+    page.get_by_role("link", name="Event").click()
+    page.locator("#id_form1-register_link").click()
+    page.locator("#id_form1-register_link").fill("https://google.com")
+    submit_confirm(page)
+
+    # Verify normal registration redirects to external link
+    go_to(page, live_server, "/test/register/")
+    # Should be redirected to external site (we can't follow, so just check we're not on our site)
+    expect(page).to_have_url(re.compile(r"google\.com"))
+
+    # Go back and test direct ticket link
+    go_to(page, live_server, "/test/manage")
+    page.get_by_role("link", name="Tickets").first.click()
+
+    # Navigate to direct NPC ticket link - should bypass external redirect
+    with page.expect_popup() as popup_info:
+        page.locator('[id="u2"]').get_by_role("link", name="Signup link").click()
+    new_page = popup_info.value
+    # Should show registration form, not redirect to external site
+    expect(new_page.get_by_label("Ticket (*)")).to_have_value("u2")
+    expect(new_page.get_by_label("Ticket (*)")).to_be_visible()
+    # Verify we're still on our domain
+    expect(new_page).to_have_url(re.compile(r"(localhost|127\.0\.0\.1|testserver)"))
+    new_page.close()
+
+    # Clean up: disable external registration link
+    page.get_by_role("link", name="Event").click()
+    page.locator("#id_form1-register_link").fill("")
+    submit_confirm(page)
+
+    go_to(page, live_server, "/test/manage")
+    page.get_by_role("link", name="Features").first.click()
+    page.get_by_role("checkbox", name="External registration").uncheck()
+    submit_confirm(page)
 
 
 def check_character_your_link(page: Any, live_server: Any) -> None:
