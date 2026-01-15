@@ -6690,6 +6690,9 @@ msgstr "Controleer het adres nogmaals, vooral het begin"
 msgid "Review participants' dietary restrictions and allergies."
 msgstr "Bekijk de dieetbeperkingen en allergieën van deelnemers."
 
+msgid "Set up the payment currency in the organization settings"
+msgstr "Stel de betalingsvaluta in bij de organisatie-instellingen"
+
 msgid "This page shows all expense items recorded in the system"
 msgstr "Deze pagina toont alle uitgaven die in het systeem zijn geregistreerd"
 

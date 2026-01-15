@@ -245,6 +245,9 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     if context.get("onboarding") and "exe_events" in features:
         return redirect("exe_events_edit", event_uuid="0")
 
+    # Check if currency configuration suggestion has been dismissed
+    _check_currency_priority(request, context, features)
+
     # Get ongoing runs (events in START or SHOW development status)
     ongoing_runs_queryset = Run.objects.filter(
         event__association_id=context["association_id"],
@@ -475,6 +478,7 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
         enabled_features: Set of enabled features for the association
 
     """
+
     if "payment" in enabled_features and not context.get("methods", ""):
         _add_priority(
             context,
@@ -619,6 +623,9 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
         action lists for the organizer dashboard
 
     """
+
+    # Check if currency configuration suggestion has been dismissed
+    _check_currency_priority(request, context, features)
 
     # Check if character feature is properly configured
     if "character" in features:
@@ -952,6 +959,18 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
             _("Set up configuration for Patron and Reduced tickets"),
             "orga_registration_tickets",
             "config/reduced",
+        )
+
+
+def _check_currency_priority(request: HttpRequest, context: dict, features:dict) ->Any:
+    """Check if currency has been already set / checked."""
+    if "payment" in features and not get_association_config(
+            context["association_id"], "exe_association_suggestion", default_value=False, context=context
+    ) and has_association_permission(request, context, "exe_association"):
+        _add_priority(
+            context,
+            _("Set up the payment currency in the organization settings"),
+            "exe_association",
         )
 
 

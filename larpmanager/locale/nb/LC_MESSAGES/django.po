@@ -6675,6 +6675,9 @@ msgstr "Vennligst sjekk adressen igjen, spesielt begynnelsen"
 msgid "Review participants' dietary restrictions and allergies."
 msgstr "Gå gjennom deltakernes kostholdsrestriksjoner og allergier."
 
+msgid "Set up the payment currency in the organization settings"
+msgstr "Konfigurer betalingsvalutaen i organisasjonsinnstillingene"
+
 msgid "This page shows all expense items recorded in the system"
 msgstr "Denne siden viser alle utgiftsposter som er registrert i systemet"
 

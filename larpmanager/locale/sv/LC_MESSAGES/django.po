@@ -6670,6 +6670,9 @@ msgstr "Vänligen kontrollera adressen igen, särskilt dess början"
 msgid "Review participants' dietary restrictions and allergies."
 msgstr "Gå igenom deltagarnas kostbegränsningar och allergier."
 
+msgid "Set up the payment currency in the organization settings"
+msgstr "Ställ in betalningsvalutan i organisationsinställningarna"
+
 msgid "This page shows all expense items recorded in the system"
 msgstr "Denna sida visar alla utgiftsposter som registrerats i systemet"
 
