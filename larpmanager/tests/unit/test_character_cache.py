@@ -21,7 +21,8 @@
 """Tests for character cache functions"""
 
 from larpmanager.cache.character import get_writing_element_fields_batch
-from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingOption, WritingQuestion
+from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingOption, WritingQuestion, \
+    BaseQuestionType
 from larpmanager.tests.unit.base import BaseTestCase
 
 
@@ -49,7 +50,7 @@ class TestCharacterCache(BaseTestCase):
             name="test_question",
             description="Test Question",
             applicable=QuestionApplicable.CHARACTER,
-            typ="s",  # SINGLE type - should only retrieve choice answers
+            typ=BaseQuestionType.SINGLE
         )
 
         # Create an option for the question
@@ -77,8 +78,7 @@ class TestCharacterCache(BaseTestCase):
         context = {
             "event": event,
             "features": {"character"},
-            "questions": {question.uuid: {"name": question.name}},
-            "options": {option.uuid: {"name": option.name}},
+            "show_all": True
         }
 
         # This should not raise an AttributeError
@@ -113,6 +113,7 @@ class TestCharacterCache(BaseTestCase):
             name="test_question",
             description="Test Question",
             applicable=QuestionApplicable.CHARACTER,
+            typ=BaseQuestionType.SINGLE
         )
 
         # Create multiple options
@@ -145,11 +146,7 @@ class TestCharacterCache(BaseTestCase):
         context = {
             "event": event,
             "features": {"character"},
-            "questions": {question.uuid: {"name": question.name}},
-            "options": {
-                option1.uuid: {"name": option1.name},
-                option2.uuid: {"name": option2.name},
-            },
+            "show_all": True
         }
 
         # Call the function
@@ -179,7 +176,7 @@ class TestCharacterCache(BaseTestCase):
             name="test_question",
             description="Test Question",
             applicable=QuestionApplicable.CHARACTER,
-            typ="t",  # TEXT type - required for text answers to be retrieved
+            typ=BaseQuestionType.TEXT
         )
 
         # Create a text answer
@@ -193,8 +190,7 @@ class TestCharacterCache(BaseTestCase):
         context = {
             "event": event,
             "features": {"character"},
-            "questions": {question.uuid: {"name": question.name}},
-            "options": {},
+            "show_all": True
         }
 
         # Call the function
