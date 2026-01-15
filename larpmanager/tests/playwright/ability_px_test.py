@@ -392,4 +392,4 @@ def endpoint_test(page: Any, live_server: Any) -> None:
     char_uuid = response[0]["uuid"]
 
     # Go to character abilities endpoint
-    get_request(page, live_server, f"/test/character/{char_uuid}/abilties/json/")
+    get_request(page, live_server, f"/test/character/{char_uuid}/abilities/json/")
