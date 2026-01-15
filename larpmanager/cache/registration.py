@@ -26,7 +26,7 @@ from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Run
-from larpmanager.models.form import RegistrationChoice, WritingChoice
+from larpmanager.models.form import BaseQuestionType, RegistrationChoice, WritingChoice
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import Character
 from larpmanager.utils.core.common import _search_char_reg
@@ -163,7 +163,9 @@ def update_registration_counts(run: Run) -> dict[str, int]:
 
     # Count registration choices (form options selected)
     registration_choices = RegistrationChoice.objects.filter(
-        registration__run=run, registration__cancellation_date__isnull=True
+        registration__run=run,
+        registration__cancellation_date__isnull=True,
+        question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
     )
     for choice_data in registration_choices.values("option_id").annotate(total=Count("option_id")):
         counts[f"option_{choice_data['option_id']}"] = choice_data["total"]

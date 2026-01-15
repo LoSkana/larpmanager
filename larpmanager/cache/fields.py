@@ -186,8 +186,10 @@ def visible_writing_fields(context: dict, applicable: str, *, only_visible: bool
     context["options"] = {}
     context["searchable"] = {}
 
-    # Early return if no writing fields or key not found
-    if "writing_fields" not in context or applicable_type_key not in context["writing_fields"]:
+    # Early return if applicable key not found
+    if "writing_fields" not in context:
+        context["writing_fields"] = get_event_fields_cache(context["event"].id)
+    if applicable_type_key not in context["writing_fields"]:
         return
 
     # Get the relevant writing fields data

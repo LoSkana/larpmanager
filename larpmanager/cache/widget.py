@@ -30,8 +30,6 @@ from larpmanager.accounting.balance import (
     association_accounting_summary,
     get_run_accounting,
 )
-from larpmanager.cache.config import get_association_config
-from larpmanager.cache.feature import get_event_features
 from larpmanager.models.casting import Casting
 from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import RegistrationCharacterRel
@@ -112,40 +110,8 @@ def _init_casting_widget_cache(run: Run) -> dict:
 
 def _init_orga_accounting_widget_cache(run: Run) -> dict:
     """Compute accounting statistics for widget cache."""
-    # Get accounting data for the run
-    accounting_data = get_run_accounting(run, {}, perform_update=False)
-
-    # Extract values from accounting data
-    data = {}
-
-    # Expected total from registrations
-    data["expected"] = accounting_data.get("registration", {}).get("tot", 0)
-
-    # Calculate values directly from accounting_data
-    sum_payments = accounting_data.get("pay", {}).get("tot", 0)
-    sum_inflows = accounting_data.get("in", {}).get("tot", 0)
-    sum_fees = accounting_data.get("trs", {}).get("tot", 0)
-    sum_refund = accounting_data.get("ref", {}).get("tot", 0)
-    sum_outflows = accounting_data.get("out", {}).get("tot", 0)
-    sum_expenses = accounting_data.get("exp", {}).get("tot", 0)
-    sum_tokens = accounting_data.get("tok", {}).get("tot", 0)
-    sum_credits = accounting_data.get("cre", {}).get("tot", 0)
-
-    # Calculate revenue, costs, and balance
-    data["revenue"] = sum_payments + sum_inflows - (sum_fees + sum_refund)
-    data["costs"] = sum_outflows + sum_expenses + sum_tokens + sum_credits
-    data["balance"] = data["revenue"] - data["costs"]
-
-    # Calculate organization tax
-    tax = 0
-    if "organization_tax" in get_event_features(run.event_id):
-        tax_percentage = int(
-            get_association_config(run.event.association_id, "organization_tax_perc", default_value="10")
-        )
-        tax = data["revenue"] * tax_percentage / 100
-    data["tax"] = tax
-
-    return data
+    summary, _accounting_data = get_run_accounting(run, {})
+    return summary
 
 
 def _init_exe_accounting_widget_cache(association_id: int) -> dict:

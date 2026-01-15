@@ -42,7 +42,7 @@ from larpmanager.models.accounting import (
     RefundStatus,
 )
 from larpmanager.models.event import DevelopStatus
-from larpmanager.models.form import RegistrationChoice, RegistrationOption, RegistrationQuestion
+from larpmanager.models.form import BaseQuestionType, RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.member import Member, get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.common import get_now
@@ -190,7 +190,9 @@ def _init_choices(member: Member) -> dict[int, dict[int, dict[str, RegistrationQ
 
     """
     choices = {}
-    choice_queryset = RegistrationChoice.objects.filter(registration__member_id=member.id)
+    choice_queryset = RegistrationChoice.objects.filter(
+        registration__member_id=member.id, question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+    )
     choice_queryset = choice_queryset.select_related("option", "question").order_by("question__order")
     for registration_choice in choice_queryset:
         if registration_choice.registration_id not in choices:

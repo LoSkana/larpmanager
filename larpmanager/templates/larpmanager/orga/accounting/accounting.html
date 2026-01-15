@@ -7,22 +7,32 @@
     {% trans "This page shows the accounting status of the event, divided into the various expense types" %}
 {% endblock info %}
 {% block content %}
-    <h2>{% trans "Realized revenue" %}: {{ run.revenue }}</h2>
-    <p>
-        <i>{% trans "Total amount of money received for this event, minus commission fees and refunds" %}</i>
-    </p>
-    {% if run.costs %}
-        <h2>{% trans "Total costs" %}: {{ run.costs }}</h2>
+    {% if summary.expected %}
+        <h2>{% trans "Expected revenue" %}: {{ summary.expected }}</h2>
+        <p>
+            <i>{% trans "Total amount of money expected if all registered participants fully pay their due amount" %}</i>
+        </p>
+    {% endif %}
+    {% if summary.revenue %}
+        <h2>{% trans "Realized revenue" %}: {{ summary.revenue }}</h2>
+        <p>
+            <i>{% trans "Total amount of money received for this event, minus commission fees and refunds" %}</i>
+        </p>
+    {% endif %}
+    {% if summary.costs %}
+        <h2>{% trans "Total costs" %}: {{ summary.costs }}</h2>
         <p>
             <i>{% trans "Total of all expenses incurred for the event, both personal and organizational, including any tokens and credits issued" %}</i>
         </p>
-        <h2>{% trans "Net profit" %}: {{ run.balance }}</h2>
+    {% endif %}
+    {% if summary.balance %}
+        <h2>{% trans "Net profit" %}: {{ summary.balance }}</h2>
         <p>
             <i>{% trans "Net profit of the event, difference between realized revenue and total costs" %}</i>
         </p>
     {% endif %}
     {% if 'organization_tax' in features %}
-        <h2>{% trans "Organization tax" %}: {{ run.tax }}</h2>
+        <h2>{% trans "Organization tax" %}: {{ summary.tax }}</h2>
         <p>
             <i>{% trans "Minimum amount of net profit to be retained for the association tax" %}</i>
         </p>
@@ -35,7 +45,7 @@
             <th>{% trans "Number" %}</th>
             <th>{% trans "Description" %}</th>
         </tr>
-        {% for k, v in dc.items %}
+        {% for k, v in details.items %}
             <tr>
                 <td>{{ v.name }}</td>
                 <td>{{ v.tot }}</td>
@@ -46,7 +56,7 @@
             </tr>
         {% endfor %}
     </table>
-    {% for k, v in dc.items %}
+    {% for k, v in details.items %}
         <h2>{{ v.name }}: {{ v.tot }}</h2>
         <table class="tablesorter ">
             {% for y, w in v.detail.items %}
