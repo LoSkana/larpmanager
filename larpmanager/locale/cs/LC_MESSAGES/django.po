@@ -6671,6 +6671,9 @@ msgstr "Zkontrolujte prosím znovu adresu, zejména její začátek"
 msgid "Review participants' dietary restrictions and allergies."
 msgstr "Zkontrolujte stravovací omezení a alergie účastníků."
 
+msgid "Set up the payment currency in the organization settings"
+msgstr "Nastavení měny platby v nastavení organizace"
+
 msgid "This page shows all expense items recorded in the system"
 msgstr ""
 "Tato stránka zobrazuje všechny nákladové položky zaznamenané v systému"

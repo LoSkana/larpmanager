@@ -6722,6 +6722,9 @@ msgid "Review participants' dietary restrictions and allergies."
 msgstr ""
 "Examiner les restrictions alimentaires et les allergies des participants."
 
+msgid "Set up the payment currency in the organization settings"
+msgstr "Définir la devise de paiement dans les paramètres de l'organisation"
+
 msgid "This page shows all expense items recorded in the system"
 msgstr ""
 "Cette page présente tous les postes de dépenses enregistrés dans le système"

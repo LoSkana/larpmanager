@@ -9631,6 +9631,9 @@ msgstr ""
 msgid "Set up configuration for Patron and Reduced tickets"
 msgstr ""
 
+msgid "Set up the payment currency in the organization settings"
+msgstr ""
+
 msgid "Set up a value for registration opening date"
 msgstr ""
 
