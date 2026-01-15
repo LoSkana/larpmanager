@@ -90,17 +90,21 @@ from larpmanager.cache.permission import (
     clear_event_permission_cache,
     clear_index_permission_cache,
 )
-from larpmanager.cache.registration import clear_registration_counts_cache, on_character_update_registration_cache
 from larpmanager.cache.px import (
     on_ability_characters_m2m_changed,
     on_ability_prerequisites_m2m_changed,
     on_ability_requirements_m2m_changed,
     on_delivery_characters_m2m_changed,
-    on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
     on_modifier_prerequisites_m2m_changed,
     on_modifier_requirements_m2m_changed,
+)
+from larpmanager.cache.px import (
+    on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
+)
+from larpmanager.cache.px import (
     on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
 )
+from larpmanager.cache.registration import clear_registration_counts_cache, on_character_update_registration_cache
 from larpmanager.cache.rels import (
     clear_event_relationships_cache,
     on_faction_characters_m2m_changed,

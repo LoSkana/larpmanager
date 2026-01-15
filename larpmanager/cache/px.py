@@ -20,14 +20,13 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
-if TYPE_CHECKING:
-    from larpmanager.models.event import Event
-    from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, RulePx
+from larpmanager.models.event import Event
+from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, RulePx
 
 logger = logging.getLogger(__name__)
 
@@ -58,8 +57,6 @@ def clear_event_px_cache(event_id: int) -> None:
         None
 
     """
-    from larpmanager.models.event import Event
-
     # Clear cache for the main event
     cache_key = get_event_px_key(event_id)
     cache.delete(cache_key)
@@ -116,17 +113,17 @@ def get_ability_rels(ability: AbilityPx) -> dict[str, Any]:
     try:
         # Get all characters that have this ability
         ability_characters = ability.characters.all()
-        character_list = [(character.id, character.name) for character in ability_characters]
+        character_list = [(character.uuid, character.name) for character in ability_characters]
         relationships["character_rels"] = build_relationship_dict(character_list)
 
         # Get all prerequisite abilities
         prerequisites = ability.prerequisites.all()
-        prerequisite_list = [(prereq.id, prereq.name) for prereq in prerequisites]
+        prerequisite_list = [(prereq.uuid, prereq.name) for prereq in prerequisites]
         relationships["prerequisite_rels"] = build_relationship_dict(prerequisite_list)
 
         # Get all requirement options
         requirements = ability.requirements.all()
-        requirement_list = [(req.id, req.name) for req in requirements]
+        requirement_list = [(req.uuid, req.name) for req in requirements]
         relationships["requirement_rels"] = build_relationship_dict(requirement_list)
 
     except Exception:
@@ -159,7 +156,7 @@ def get_delivery_rels(delivery: DeliveryPx) -> dict[str, Any]:
     try:
         # Get all characters associated with this delivery
         delivery_characters = delivery.characters.all()
-        character_list = [(character.id, character.name) for character in delivery_characters]
+        character_list = [(character.uuid, character.name) for character in delivery_characters]
         relationships["character_rels"] = build_relationship_dict(character_list)
 
     except Exception:
@@ -201,17 +198,17 @@ def get_modifier_rels(modifier: ModifierPx) -> dict[str, Any]:
     try:
         # Get all abilities this modifier applies to
         modifier_abilities = modifier.abilities.all()
-        ability_list = [(ability.id, ability.name) for ability in modifier_abilities]
+        ability_list = [(ability.uuid, ability.name) for ability in modifier_abilities]
         relationships["ability_rels"] = build_relationship_dict(ability_list)
 
         # Get all prerequisite abilities
         prerequisites = modifier.prerequisites.all()
-        prerequisite_list = [(prereq.id, prereq.name) for prereq in prerequisites]
+        prerequisite_list = [(prereq.uuid, prereq.name) for prereq in prerequisites]
         relationships["prerequisite_rels"] = build_relationship_dict(prerequisite_list)
 
         # Get all requirement options
         requirements = modifier.requirements.all()
-        requirement_list = [(req.id, req.name) for req in requirements]
+        requirement_list = [(req.uuid, req.name) for req in requirements]
         relationships["requirement_rels"] = build_relationship_dict(requirement_list)
 
     except Exception:
@@ -244,7 +241,7 @@ def get_rule_rels(rule: RulePx) -> dict[str, Any]:
     try:
         # Get all abilities this rule applies to
         rule_abilities = rule.abilities.all()
-        ability_list = [(ability.id, ability.name) for ability in rule_abilities]
+        ability_list = [(ability.uuid, ability.name) for ability in rule_abilities]
         relationships["ability_rels"] = build_relationship_dict(ability_list)
 
     except Exception:
@@ -285,8 +282,6 @@ def init_event_px_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
         }
 
     """
-    from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, RulePx
-
     px_cache: dict[str, dict[int, dict[str, Any]]] = {}
 
     try:
@@ -362,8 +357,6 @@ def update_cache_section(event_id: int, section_name: str, section_id: int, data
         data: Data to store for this item
 
     """
-    from larpmanager.models.event import Event
-
     try:
         cache_key = get_event_px_key(event_id)
         cached_event_data = cache.get(cache_key)
