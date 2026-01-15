@@ -62,6 +62,7 @@ from larpmanager.models.larpmanager import (
 )
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
+from larpmanager.models.utils import my_uuid_short
 from larpmanager.utils.auth.admin import check_lm_admin
 from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
 from larpmanager.utils.core.base import get_context, get_event_context
@@ -1201,12 +1202,11 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
 
     """
     # Generate unique primary key for new association
-    new_primary_key = Association.objects.order_by("-pk").values_list("pk", flat=True).first()
-    new_primary_key += 1
+    new_uuid = my_uuid_short()
 
     # Create demo association with unique slug and inherited skin
     demo_association = Association.objects.create(
-        slug=f"test{new_primary_key}",
+        slug=f"test_{new_uuid}",
         name="Demo Organization",
         skin_id=request.association["skin_id"],
         demo=True,
@@ -1214,8 +1214,8 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
 
     # Create test admin user with demo credentials
     (demo_user, _created) = User.objects.get_or_create(
-        email=f"test{new_primary_key}@demo.it",
-        username=f"test{new_primary_key}",
+        email=f"test_{new_uuid}@demo.it",
+        username=f"test_{new_uuid}",
     )
     demo_user.password = conf_settings.DEMO_PASSWORD
     demo_user.save()

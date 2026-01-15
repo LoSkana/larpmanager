@@ -32,6 +32,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import clear_run_cache_and_media
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.run import get_cache_run
 from larpmanager.forms.event import (
@@ -208,6 +209,14 @@ def prepare_roles_list(
         else:
             permissions_by_module = defaultdict(list)
             for permission in role.permissions.all():
+                # Check active_if config for event permissions
+                if permission.active_if and context.get("event"):
+                    config_value = get_event_config(
+                        context["event"].id, permission.active_if, default_value=False, context=context
+                    )
+                    if not config_value:
+                        continue
+
                 permissions_by_module[permission.feature.module].append(permission)
 
             sorted_modules = sorted(
