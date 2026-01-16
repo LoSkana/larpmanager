@@ -22,13 +22,16 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.config import get_member_config
+from larpmanager.cache.config import get_association_config, get_member_config
+from larpmanager.mail.member import get_help_email, get_password_reminder_email, get_password_reset_url
 from larpmanager.mail.templates import (
     get_invoice_email,
+    get_notify_refund_email,
     get_pay_credit_email,
     get_pay_money_email,
     get_pay_token_email,
@@ -37,12 +40,14 @@ from larpmanager.mail.templates import (
     get_registration_update_organizer_email,
     get_token_credit_name,
 )
+from larpmanager.models.access import get_association_executives
 from larpmanager.models.accounting import AccountingItemPayment, PaymentInvoice
-from larpmanager.models.association import get_url, hdr
+from larpmanager.models.association import Association, get_url, hdr
 from larpmanager.models.member import Member, NotificationQueue, NotificationType
+from larpmanager.models.miscellanea import HelpQuestion
 from larpmanager.models.registration import Registration
 from larpmanager.utils.larpmanager.tasks import my_send_mail
-from larpmanager.utils.users.member import queue_organizer_notification
+from larpmanager.utils.users.member import queue_executive_notification, queue_organizer_notification
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Event, Run
@@ -127,63 +132,210 @@ def my_send_digest_email(
         my_send_mail(subject, body, member, instance)
 
 
+def _get_association_notification_generator(notification_type: str) -> callable:
+    """Get notification generator for association-level notifications."""
+    generators = {
+        NotificationType.HELP_QUESTION: get_help_email,
+        NotificationType.PASSWORD_REMINDER: get_password_reminder_email,
+        NotificationType.REFUND_REQUEST: get_notify_refund_email,
+        NotificationType.INVOICE_APPROVAL_EXE: get_invoice_email,
+    }
+
+    notification_generator = generators.get(notification_type)
+    if not notification_generator:
+        msg = f"Unknown notification type: {notification_type}"
+        raise ValueError(msg)
+
+    return notification_generator
+
+
+def my_send_digest_email_exe(
+    member: Member | None,
+    association: Association,
+    instance: Any,
+    notification_type: Any,
+) -> None:
+    """Send notification email to a single recipient with digest mode support.
+
+    Based on personal digest preference (or association digest preference if member is None):
+    - If digest mode is enabled: queues notification for daily digest
+    - If digest mode is disabled: sends immediate email
+
+    Args:
+        member: Member instance to notify (association executive), or None for association main_mail
+        association: Association instance for which to send the notification
+        instance: Object of the notification (HelpQuestion, PaymentInvoice, etc.)
+        notification_type: Type of notification for the queue (from NotificationType enum)
+
+    Returns:
+        None
+    """
+    # Get the notification generator for this type
+    notification_generator = _get_association_notification_generator(notification_type)
+
+    # Determine if we should queue the notification
+    if member:
+        # Check individual executive's digest preference
+        should_queue_notification = get_member_config(member.pk, "mail_exe_digest", default_value=False)
+        should_queue = should_queue_notification(member)
+    else:
+        # Check association-level digest preference for main_mail
+        should_queue = get_association_config(association.pk, "mail_exe_digest", default_value=False)
+
+    if should_queue:
+        object_id = instance.id if instance and hasattr(instance, "id") else 0
+        # Queue notification for daily digest summary
+        queue_executive_notification(
+            association=association, member=member, notification_type=notification_type, object_id=object_id
+        )
+    # Send immediate email
+    elif member:
+        # Send to individual executive
+        activate(member.language)
+        subject, body = notification_generator(instance)
+        my_send_mail(subject, body, member, instance)
+    else:
+        # Send to main_mail
+        activate(get_exec_language(association))
+        subject, body = notification_generator(instance)
+        my_send_mail(subject, body, association.main_mail, instance)
+
+
 def send_daily_organizer_summaries() -> None:
-    """Send daily summary emails to organizers with queued notifications.
+    """Send daily summary emails to organizers and executives with queued notifications.
 
     For each member with unsent notifications, collects all their notifications,
-    groups them by event, generates summary emails, and marks notifications as sent.
+    groups them by event (for event organizers) or association (for executives),
+    generates summary emails, and marks notifications as sent.
 
-    Only sends emails for members who have digest mode enabled in their preferences.
+    Handles both event-level notifications (sent to event organizers) and
+    association-level notifications (sent to association executives or main_mail).
     """
     # Get all members with unsent notifications
     members_with_notifications = Member.objects.filter(organizernotificationqueue__sent=False).distinct()
 
     for member in members_with_notifications:
-        # Collect all unsent notifications for this member
-        member_notifications = NotificationQueue.objects.filter(member=member, sent=False).select_related(
-            "event", "event__association", "registration", "payment", "invoice"
-        )
+        _daily_member_summaries(member)
 
-        if not member_notifications.exists():
+    # Handle association notifications (member is None, sent to association.main_mail)
+    associations_with_main_mail_notifications = Association.objects.filter(
+        organizernotificationqueue__sent=False, organizernotificationqueue__member__isnull=True
+    ).distinct()
+
+    for association in associations_with_main_mail_notifications:
+        # Collect all unsent notifications for this association's main_mail
+        association_notifications = NotificationQueue.objects.filter(
+            association=association, member__isnull=True, sent=False
+        ).select_related("association")
+
+        if not association_notifications.exists():
             continue
 
-        # Group notifications by event
-        events_notifications = {}
-        for notification in member_notifications:
-            event = notification.event
+        logger.info(
+            "Sending daily summary to %s main_mail with %d notifications",
+            association.name,
+            association_notifications.count(),
+        )
+
+        # Activate association's executive language
+        activate(get_exec_language(association))
+
+        # Generate summary email content for this association
+        email_content = generate_association_summary_email(association, list(association_notifications))
+
+        # Build email subject
+        email_subject = f"[{association.name}] " + _("Daily Summary")
+
+        # Send the email to main_mail
+        my_send_mail(
+            email_subject,
+            email_content,
+            association.main_mail,
+            association,
+        )
+
+        # Mark all notifications for this association's main_mail as sent
+        association_notifications.update(sent=True, sent_at=timezone.now())
+        logger.info("Daily summary sent to %s main_mail", association.name)
+
+
+def _daily_member_summaries(member: Member) -> None:
+    """Send a summary of all unsent notifications for a member."""
+    # Collect all unsent notifications for this member
+    member_notifications = NotificationQueue.objects.filter(member=member, sent=False).select_related(
+        "run__event", "run__event__association", "association"
+    )
+
+    if not member_notifications.exists():
+        return
+
+    # Separate event-level and association-level notifications
+    events_notifications = {}
+    associations_notifications = {}
+    for notification in member_notifications:
+        if notification.run:
+            # Event-level notification
+            event = notification.run.event
             if event not in events_notifications:
                 events_notifications[event] = []
             events_notifications[event].append(notification)
 
-        logger.info(
-            "Sending daily summary to %s for %d events with %d total notifications",
-            member.username,
-            len(events_notifications),
-            member_notifications.count(),
+        elif notification.association:
+            # Association-level notification
+            association = notification.association
+            if association not in associations_notifications:
+                associations_notifications[association] = []
+            associations_notifications[association].append(notification)
+
+    logger.info(
+        "Sending daily summary to %s for %d events and %d associations with %d total notifications",
+        member.username,
+        len(events_notifications),
+        len(associations_notifications),
+        member_notifications.count(),
+    )
+
+    # Send a summary email for each event this member has notifications for
+    for event, notifications in events_notifications.items():
+        # Activate member's preferred language
+        activate(member.language)
+
+        # Generate summary email content for this event
+        email_content = generate_summary_email(event, notifications)
+
+        # Build email subject
+        email_subject = hdr(event) + _("Daily Summary") + f" - {event.name}"
+
+        # Send the email
+        my_send_mail(
+            email_subject,
+            email_content,
+            member,
+            event.current_run,
         )
 
-        # Send a summary email for each event this member has notifications for
-        for event, notifications in events_notifications.items():
-            # Activate member's preferred language
-            activate(member.language)
+    # Send a summary email for each association this member has notifications for
+    for association, notifications in associations_notifications.items():
+        # Activate member's preferred language
+        activate(member.language)
 
-            # Generate summary email content for this event
-            email_content = generate_summary_email(event, notifications)
+        # Generate summary email content for this association
+        email_content = generate_association_summary_email(association, notifications)
 
-            # Build email subject
-            email_subject = hdr(event) + _("Daily Summary") + f" - {event.name}"
+        # Build email subject
+        email_subject = f"[{association.name}] " + _("Daily Summary")
 
-            # Send the email
-            my_send_mail(
-                email_subject,
-                email_content,
-                member,
-                event.current_run,
-            )
+        # Send the email
+        my_send_mail(
+            email_subject,
+            email_content,
+            member,
+            association,
+        )
 
-        # Mark all notifications for this member as sent
-        member_notifications.update(sent=True, sent_at=timezone.now())
-        logger.info("Daily summary sent to %s", member.username)
+    # Mark all notifications for this member as sent
+    member_notifications.update(sent=True, sent_at=timezone.now())
+    logger.info("Daily summary sent to %s", member.username)
 
 
 def generate_summary_email(event: Event, notifications: list) -> str:
@@ -221,7 +373,7 @@ def generate_summary_email(event: Event, notifications: list) -> str:
 
     # Footer
     email_body += "<br/><hr/>"
-    event_dashboard_url = get_url(f"/{event.slug}/manage/", event)
+    event_dashboard_url = get_url(reverse("manage", kwargs={"event_slug": event.slug}), event)
     email_body += "<p>" + _("Go to event dashboard") + f': <a href="{event_dashboard_url}">{event.title}</a></p>'
 
     return email_body
@@ -260,7 +412,9 @@ def _digest_invoices(event: Event, email_body: str, invoice_approvals: list, cur
     invoice_ids = [notification.object_id for notification in invoice_approvals]
     for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association_id=event.association_id):
         email_body += f"<li><b>{invoice.member}</b> - {invoice.causal} - {invoice.amount:.2f} {currency_symbol}"
-        approve_url = get_url(f"/{event.slug}/manage/invoices/confirm/{invoice.uuid}/", event)
+        approve_url = get_url(
+            reverse("orga_invoices_confirm", kwargs={"event_slug": event.slug, "invoice_uuid": invoice.uuid}), event
+        )
         email_body += f' - <a href="{approve_url}">' + _("Approve") + "</a></li>"
     email_body += "</ul>"
 
@@ -307,7 +461,12 @@ def _digest_updated_registrations(
         email_body += (
             f"<li><b>{registration.member.username}</b> - {ticket_name} - {registration.tot_iscr:.2f} {currency_symbol}"
         )
-        edit_url = get_url(f"/{event.slug}/manage/registrations/edit/{registration.uuid}/", event)
+        edit_url = get_url(
+            reverse(
+                "orga_registrations_edit", kwargs={"event_slug": event.slug, "registration_uuid": registration.uuid}
+            ),
+            event,
+        )
         email_body += f' - <a href="{edit_url}">' + _("View/Edit") + "</a></li>"
     email_body += "</ul>"
 
@@ -324,8 +483,154 @@ def _digest_new_registrations(event: Event, email_body: str, new_registrations: 
         email_body += (
             f"<li><b>{registration.member.username}</b> - {ticket_name} - {registration.tot_iscr:.2f} {currency_symbol}"
         )
-        edit_url = get_url(f"/{event.slug}/manage/registrations/edit/{registration.uuid}/", event)
+        edit_url = get_url(
+            reverse(
+                "orga_registrations_edit", kwargs={"event_slug": event.slug, "registration_uuid": registration.uuid}
+            ),
+            event,
+        )
         email_body += f' - <a href="{edit_url}">' + _("View/Edit") + "</a></li>"
 
     email_body += "</ul>"
     return email_body
+
+
+def generate_association_summary_email(association: Association, notifications: list) -> str:
+    """Generate HTML email content for daily association executive summary.
+
+    Args:
+        association: Association instance
+        notifications: List of notifications to include
+
+    Returns:
+        str: HTML formatted email body
+    """
+    # Start email body
+    email_body = "<h2>" + _("Daily Summary") + f" - {association.name}" + "</h2>"
+    email_body += "<p>" + _("Here's what happened in the last 24 hours:") + "</p>"
+
+    # Group notifications by type
+    help_questions = []
+    password_reminders = []
+    refund_requests = []
+    invoice_approvals = []
+
+    for notification in notifications:
+        if notification.notification_type == NotificationType.HELP_QUESTION:
+            help_questions.append(notification)
+        elif notification.notification_type == NotificationType.PASSWORD_REMINDER:
+            password_reminders.append(notification)
+        elif notification.notification_type == NotificationType.REFUND_REQUEST:
+            refund_requests.append(notification)
+        elif notification.notification_type == NotificationType.INVOICE_APPROVAL_EXE:
+            invoice_approvals.append(notification)
+
+    # Add help questions section
+    if help_questions:
+        email_body += digest_help_questions(association, help_questions)
+
+    # Add invoice approvals section
+    if invoice_approvals:
+        email_body += digest_invoice_approvals(association, invoice_approvals)
+
+    # Add refund requests section
+    if refund_requests:
+        email_body += digest_refund_request(association, refund_requests)
+
+    # Add password reminders section
+    if password_reminders:
+        email_body += digest_password_reminders(association, password_reminders)
+
+    # Footer
+    email_body += "<br/><hr/>"
+    assoc_url = get_url(reverse("exe_dashboard"), association)
+    email_body += "<p>" + _("Go to association dashboard") + f': <a href="{assoc_url}">{association.name}</a></p>'
+
+    return email_body
+
+
+def digest_password_reminders(association: Association, password_reminders: list[NotificationQueue]) -> str:
+    """Handles password reminders digest summary emails."""
+    content = "<h3>" + _("Password Reset Requests") + f" ({len(password_reminders)})" + "</h3>"
+    content += "<ul>"
+    membership_ids = [notification.object_id for notification in password_reminders]
+    for membership in PaymentInvoice.objects.filter(pk__in=membership_ids, association=association):
+        content += (
+            "<li>"
+            + _("Password reset request url for")
+            + f"""
+             {membership.member}: <a href='{get_password_reset_url(membership)}'>link</a>
+            </li>
+            """
+        )
+    content += "</ul>"
+    return content
+
+
+def digest_refund_request(association: Association, refund_requests: list[NotificationQueue]) -> str:
+    """Handles refund request digest summary emails."""
+    content = "<h3>" + _("Refund Requests") + f" ({len(refund_requests)})" + "</h3>"
+    content += "<ul>"
+    invoice_ids = [notification.object_id for notification in refund_requests]
+    for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association=association):
+        content += f"<li><b>{invoice.member}</b> - {invoice.causal} - {invoice.mc_gross:.2f}"
+        content += " - " + _("Refund requested") + "</li>"
+    content += "</ul>"
+    return content
+
+
+def digest_invoice_approvals(association: Association, invoice_approvals: list[NotificationQueue]) -> str:
+    """Handles invoice approvals digest summary emails."""
+    content = "<h3>" + _("Invoices Awaiting Approval") + f" ({len(invoice_approvals)})" + "</h3>"
+    content += "<ul>"
+    invoice_ids = [notification.object_id for notification in invoice_approvals]
+    for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association=association):
+        content += f"<li><b>{invoice.member}</b> - {invoice.causal} - {invoice.mc_gross:.2f}"
+        content += " - " + _("Awaiting approval") + "</li>"
+    content += "</ul>"
+    return content
+
+
+def digest_help_questions(association: Association, help_questions: list[NotificationQueue]) -> str:
+    """Handles help questions digest summary emails."""
+    content = "<h3>" + _("Help Questions") + f" ({len(help_questions)})" + "</h3>"
+    content += "<ul>"
+    question_ids = [notification.object_id for notification in help_questions]
+    for question in HelpQuestion.objects.filter(pk__in=question_ids, association=association):
+        content += f"<li><b>{question.member}</b>: {question.text[:100]}..."
+        help_url = get_url(reverse("exe_help"), association)
+        content += f' - <a href="{help_url}">' + _("View") + "</a></li>"
+    content += "</ul>"
+    return content
+
+
+def get_exec_language(association: Association) -> str:
+    """Determine the most common language among association executives.
+
+    Analyzes the language preferences of all association executives and returns
+    the most frequently used language code. If no executives are found or no
+    language preferences are set, defaults to English.
+
+    Args:
+        association: Association instance containing executives to analyze
+
+    Returns:
+        str: The language code (e.g., 'en', 'it', 'fr') preferred by the majority
+             of executives, or 'en' if no executives found or no preferences set
+
+    """
+    # Initialize dictionary to count language occurrences
+    language_counts = {}
+
+    # Iterate through all association executives
+    for executive in get_association_executives(association):
+        executive_language = executive.language
+
+        # Count each language preference
+        if executive_language not in language_counts:
+            language_counts[executive_language] = 1
+        else:
+            language_counts[executive_language] += 1
+
+    # Determine the most common language or default to English
+    return max(language_counts, key=language_counts.get) if language_counts else "en"

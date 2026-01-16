@@ -26,6 +26,7 @@ import holidays
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
@@ -33,6 +34,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.links import reset_event_links
+from larpmanager.mail.digest import my_send_digest_email_exe
 from larpmanager.models.access import AssociationRole, EventRole, get_association_executives, get_event_organizers
 from larpmanager.models.association import Association, get_association_maintainers, get_url, hdr
 from larpmanager.models.casting import AssignmentTrait, Casting
@@ -186,7 +188,7 @@ def _add_member_association_role(exes: list[Member], instance: AssociationRole, 
     # Set language context for proper localization
     activate(mb.language)
     subj = hdr(instance.association) + _("Role approval %(role)s") % {"role": instance.name}
-    url = get_url("manage", instance.association)
+    url = get_url(reverse("manage"), instance.association)
     body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
     my_send_mail(subj, body, mb, instance.association)
 
@@ -268,7 +270,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
                 "role": instance.name,
                 "event": instance.event,
             }
-            url = get_url(f"{instance.event.slug}/manage/", instance.event.association)
+            url = get_url(reverse("manage", kwargs={"event_slug": instance.event.slug}), instance.event.association)
             body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
             my_send_mail(subj, body, mb, instance.event)
 
@@ -399,7 +401,7 @@ def send_trait_assignment_email(instance: AssignmentTrait) -> None:
 
     # Add character access link to the email body
     character_url = get_url(
-        f"{instance.run.get_slug()}/character/your",
+        reverse("character_your", kwargs={"event_slug": instance.run.get_slug()}),
         instance.run.event,
     )
     body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": character_url} + "!"
@@ -525,86 +527,38 @@ def send_character_status_update_email(instance: Character) -> None:
 
 
 def notify_organization_exe(
-    notification_generator: callable,
     association: Association,
     context_instance: object,
+    notification_type: str,
 ) -> None:
-    """Send notification to association executives.
-
-    Sends notification emails to either the association's main email address
-    or to all individual executives, depending on configuration. The function
-    activates the appropriate language for each recipient before generating
-    and sending the notification.
+    """Send notification to association executives, with digest mode support.
 
     Args:
-        notification_generator: Callable that generates (subject, body) tuple for the notification.
-              Should accept context_instance as parameter and return (str, str).
         association: Association instance containing executive information and settings.
         context_instance: Context instance passed to notification_generator for generating notification content.
+        notification_type: Notification type for digest queueing (from NotificationType enum)
 
     Returns:
         None
-
-    Side Effects:
-        - Activates language settings for each recipient
-        - Sends notification emails via my_send_mail
-        - May send to main_mail or individual executive emails
-
     """
-    # Check if association has a main email configured
+    # If main_mail is configured first, send do it
     if association.main_mail:
-        # Use executive language for main email notifications
-        activate(get_exec_language(association))
-
-        # Generate subject and body using provided function
-        (subject, body) = notification_generator(context_instance)
-
-        # Send notification to main email address
-        my_send_mail(subject, body, association.main_mail, context_instance)
+        my_send_digest_email_exe(
+            member=None,
+            association=association,
+            instance=context_instance,
+            notification_type=notification_type,
+        )
         return
 
-    # Send individual notifications to each executive
+    # Send to individual executives with their digest preferences
     for executive in get_association_executives(association):
-        # Activate recipient's preferred language
-        activate(executive.language)
-
-        # Generate localized subject and body for this recipient
-        (subject, body) = notification_generator(context_instance)
-
-        # Send personalized notification to executive
-        my_send_mail(subject, body, executive.email, context_instance)
-
-
-def get_exec_language(association: Association) -> str:
-    """Determine the most common language among association executives.
-
-    Analyzes the language preferences of all association executives and returns
-    the most frequently used language code. If no executives are found or no
-    language preferences are set, defaults to English.
-
-    Args:
-        association: Association instance containing executives to analyze
-
-    Returns:
-        str: The language code (e.g., 'en', 'it', 'fr') preferred by the majority
-             of executives, or 'en' if no executives found or no preferences set
-
-    """
-    # Initialize dictionary to count language occurrences
-    language_counts = {}
-
-    # Iterate through all association executives
-    for executive in get_association_executives(association):
-        executive_language = executive.language
-
-        # Count each language preference
-        if executive_language not in language_counts:
-            language_counts[executive_language] = 1
-        else:
-            language_counts[executive_language] += 1
-
-    # Determine the most common language or default to English
-    return max(language_counts, key=language_counts.get) if language_counts else "en"
+        my_send_digest_email_exe(
+            member=executive,
+            association=association,
+            instance=context_instance,
+            notification_type=notification_type,
+        )
 
 
 def send_support_ticket_email(instance: Any) -> None:

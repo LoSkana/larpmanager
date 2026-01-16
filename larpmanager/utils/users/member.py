@@ -35,6 +35,7 @@ from larpmanager.utils.core.common import get_object_uuid
 if TYPE_CHECKING:
     from django.contrib.auth.models import User
 
+    from larpmanager.models.association import Association
     from larpmanager.models.event import Run
 
 
@@ -313,4 +314,29 @@ def queue_organizer_notification(
     """
     return NotificationQueue.objects.create(
         run=run, member=member, notification_type=notification_type, object_id=object_id
+    )
+
+
+def queue_executive_notification(
+    association: Association,
+    member: Member | None,
+    notification_type: str,
+    object_id: int | None = None,
+) -> NotificationQueue:
+    """Add executive notification to queue instead of sending immediately.
+
+    Args:
+        association: Association instance
+        member: Member instance to notify (association executive), or None for main_mail
+        notification_type: Type of notification (use NotificationType enum values)
+        object_id: ID of optional related object
+
+    Returns:
+        NotificationQueue: Created notification instance
+
+    Note:
+        If member is None, the notification will be sent to association.main_mail
+    """
+    return NotificationQueue.objects.create(
+        association=association, member=member, notification_type=notification_type, object_id=object_id
     )

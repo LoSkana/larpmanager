@@ -771,8 +771,9 @@ def get_user_membership(user: Member, association: Association | int) -> Members
 
 
 class NotificationType(models.TextChoices):
-    """Notification types for email sent to organizers."""
+    """Notification types for email sent to organizers and association executives."""
 
+    # Event-level notifications (sent to event organizers)
     REGISTRATION_NEW = "registration_new", "New Registration"
     REGISTRATION_UPDATE = "registration_update", "Updated Registration"
     REGISTRATION_CANCEL = "registration_cancel", "Cancelled Registration"
@@ -781,12 +782,26 @@ class NotificationType(models.TextChoices):
     PAYMENT_TOKEN = "payment_token", "Token Payment"
     INVOICE_APPROVAL = "invoice_approval", "Invoice Awaiting Approval"
 
+    # Association-level notifications (sent to association executives)
+    HELP_QUESTION = "help_question", "Help Question"
+    PASSWORD_REMINDER = "password_reminder", "Password Reminder"
+    REFUND_REQUEST = "refund_request", "Refund Request"
+    INVOICE_APPROVAL_EXE = "invoice_approval_exe", "Invoice Approval (Executive)"
+
 
 class NotificationQueue(BaseModel):
-    """Queue for batching organizer notifications into daily summaries."""
+    """Queue for batching organizer and executive notifications into daily summaries.
 
-    run = models.ForeignKey("Run", on_delete=models.CASCADE)
-    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    Supports both event-level notifications (for event organizers) and association-level
+    notifications (for association executives). Event-level notifications require a run,
+    while association-level notifications require an association.
+
+    If member is None, the notification will be sent to the association's main_mail address.
+    """
+
+    run = models.ForeignKey("Run", on_delete=models.CASCADE, null=True, blank=True)
+    association = models.ForeignKey("Association", on_delete=models.CASCADE, null=True, blank=True)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, null=True, blank=True)
     notification_type = models.CharField(max_length=30, choices=NotificationType.choices)
     object_id = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -795,4 +810,7 @@ class NotificationQueue(BaseModel):
 
     def __str__(self) -> str:
         """String representation for notification in queue."""
-        return f"{self.run.search} - {self.member} - {self.get_notification_type_display()}"
+        member_str = self.member if self.member else "main_mail"
+        if self.run:
+            return f"{self.run.search} - {member_str} - {self.get_notification_type_display()}"
+        return f"{self.association.name} - {member_str} - {self.get_notification_type_display()}"

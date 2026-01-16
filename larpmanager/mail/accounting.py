@@ -30,8 +30,6 @@ from larpmanager.mail.digest import my_send_digest_email
 from larpmanager.mail.templates import (
     get_credit_email,
     get_expense_mail,
-    get_invoice_email,
-    get_notify_refund_email,
     get_pay_credit_email,
     get_pay_money_email,
     get_pay_token_email,
@@ -559,7 +557,7 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
 
     if inv.typ != PaymentType.REGISTRATION or not inv.registration_id:
         # For other invoice types send to main organization email
-        notify_organization_exe(get_invoice_email, inv.association, inv)
+        notify_organization_exe(inv.association, inv, notification_type=NotificationType.INVOICE_APPROVAL_EXE)
         return
 
     members_to_notify = list(get_event_organizers(inv.registration.run.event))
@@ -585,8 +583,3 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
             instance=inv,
             notification_type=NotificationType.INVOICE_APPROVAL,
         )
-
-
-def notify_refund_request(payment: PaymentInvoice) -> None:
-    """Notify organization executives about a refund request."""
-    notify_organization_exe(get_notify_refund_email, payment.association, payment)

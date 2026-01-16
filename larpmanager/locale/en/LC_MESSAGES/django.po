@@ -2321,6 +2321,30 @@ msgstr ""
 msgid "New Registrations"
 msgstr ""
 
+msgid "Go to association dashboard"
+msgstr ""
+
+msgid "Password Reset Requests"
+msgstr ""
+
+msgid "Password reset request url for"
+msgstr ""
+
+msgid "Refund Requests"
+msgstr ""
+
+msgid "Refund requested"
+msgstr ""
+
+msgid "Awaiting approval"
+msgstr ""
+
+msgid "Help Questions"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
 msgid "Request of membership to the Organization"
 msgstr ""
 
@@ -6989,9 +7013,6 @@ msgid "This page summarizes the character inventories"
 msgstr ""
 
 msgid "Inventory"
-msgstr ""
-
-msgid "View"
 msgstr ""
 
 msgid "Character Inventory"

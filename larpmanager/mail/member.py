@@ -33,7 +33,7 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.mail.base import notify_organization_exe
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import get_url, hdr
-from larpmanager.models.member import Badge, Member
+from larpmanager.models.member import Badge, Member, Membership, NotificationType
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 
 if TYPE_CHECKING:
@@ -278,7 +278,7 @@ def send_help_question_notification_email(instance: Any) -> None:
                 my_send_mail(subject, body, organizer, instance.run)
 
         elif instance.association:
-            notify_organization_exe(get_help_email, instance.association, instance)
+            notify_organization_exe(instance.association, instance, notification_type=NotificationType.HELP_QUESTION)
         else:
             subject, body = get_help_email(instance)
             for _name, email in conf_settings.ADMINS:
@@ -386,29 +386,25 @@ def send_password_reset_remainder(membership: Any) -> None:
 
     """
     association = membership.association
-    notify_organization_exe(get_password_reminder_email, association, membership)
+    notify_organization_exe(association, membership, notification_type=NotificationType.PASSWORD_REMINDER)
 
     for _admin_name, admin_email in conf_settings.ADMINS:
         (subject, body) = get_password_reminder_email(membership)
         my_send_mail(subject, body, admin_email, association)
 
 
-def get_password_reminder_email(membership: Any) -> Any:
-    """Generate subject and body for password reset reminder.
-
-    Args:
-        membership: Membership instance with password reset request
-
-    Returns:
-        tuple: (subject, body) for the reminder email
-
-    """
-    association = membership.association
+def get_password_reminder_email(membership: Membership) -> tuple[str, str]:
+    """Generate subject and body for password reset reminder."""
     member = membership.member
-    reset_token_parts = membership.password_reset.split("#")
-    reset_url = get_url(f"reset/{reset_token_parts[0]}/{reset_token_parts[1]}/", association)
+    reset_url = get_password_reset_url(membership)
     subject = _("Password reset of user %(user)s") % {"user": member}
     body = _("The user requested the password reset, but did not complete it. Give them this link: %(url)s") % {
         "url": reset_url,
     }
     return subject, body
+
+
+def get_password_reset_url(membership: Membership) -> str:
+    """Get password reset url."""
+    reset_token_parts = membership.password_reset.split("#")
+    return get_url(f"reset/{reset_token_parts[0]}/{reset_token_parts[1]}/", membership.association)
