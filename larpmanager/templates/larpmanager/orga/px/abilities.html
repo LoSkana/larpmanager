@@ -47,10 +47,12 @@
                         {% endif %}
                     </td>
                     <td>
-                        {% for ab in el.characters.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_characters_edit' run.get_slug ab.uuid %}">{{ ab.name }}</a>
-                        {% endfor %}
+                        {% if el.cached_rels %}
+                            {% for char_uuid, char_name in el.cached_rels.character_rels.list %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_characters_edit' run.get_slug char_uuid %}">{{ char_name }}</a>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     {% if px_templates %}
                         <td>
@@ -60,16 +62,20 @@
                     {% if px_user %}
                         <td>{{ el.visible }}</td>
                         <td>
-                            {% for ab in el.prerequisites.all %}
-                                {% include "elements/comma.html" %}
-                                <a href="{% url 'orga_px_abilities_edit' run.get_slug ab.uuid %}">{{ ab.name }}</a>
-                            {% endfor %}
+                            {% if el.cached_rels %}
+                                {% for prereq_uuid, prereq_name in el.cached_rels.prerequisite_rels.list %}
+                                    {% include "elements/comma.html" %}
+                                    <a href="{% url 'orga_px_abilities_edit' run.get_slug prereq_uuid %}">{{ prereq_name }}</a>
+                                {% endfor %}
+                            {% endif %}
                         </td>
                         <td>
-                            {% for opt in el.requirements.all %}
-                                {% include "elements/comma.html" %}
-                                {{ opt.name }}
-                            {% endfor %}
+                            {% if el.cached_rels %}
+                                {% for req_id, req_name in el.cached_rels.requirement_rels.list %}
+                                    {% include "elements/comma.html" %}
+                                    {{ req_name }}
+                                {% endfor %}
+                            {% endif %}
                         </td>
                     {% endif %}
                 </tr>

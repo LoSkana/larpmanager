@@ -27,10 +27,12 @@
                     <td>{{ el.name }}</td>
                     <td>{{ el.amount }}</td>
                     <td>
-                        {% for ab in el.characters.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_characters_edit' run.get_slug ab.uuid %}">{{ ab.name }}</a>
-                        {% endfor %}
+                        {% if el.cached_rels %}
+                            {% for char_uuid, char_name in el.cached_rels.character_rels.list %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_characters_edit' run.get_slug char_uuid %}">{{ char_name }}</a>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
