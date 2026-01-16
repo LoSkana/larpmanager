@@ -509,7 +509,7 @@ def check_run_accounting(run: Run) -> None:
 
     # Create audit record with calculated balance (bank_sum set to 0 as default)
     RecordAccounting.objects.create(
-        association=run.event.association, run=run, global_sum=summary["balance"], bank_sum=0
+        association=run.event.association, run=run, global_sum=summary.get("balance", 0), bank_sum=0
     )
 
 

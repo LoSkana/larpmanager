@@ -37,6 +37,7 @@ from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     DatePickerInput,
     FactionS2WidgetMulti,
+    RegistrationSectionS2Widget,
     RunRegS2Widget,
     TicketS2WidgetMulti,
     TransferTargetRunS2Widget,
@@ -1192,6 +1193,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
             "factions": FactionS2WidgetMulti,
             "tickets": TicketS2WidgetMulti,
             "allowed": AllowedS2WidgetMulti,
+            "section": RegistrationSectionS2Widget,
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
 
@@ -1212,9 +1214,12 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         if "reg_que_sections" not in self.params["features"]:
             self.delete_field("section")
         else:
-            ch = [(m.uuid, str(m)) for m in RegistrationSection.objects.filter(event=self.params["run"].event)]
-            ch.insert(0, ("", _("--- Empty")))
-            self.fields["section"].choices = ch
+            self.configure_field_event("section", self.params["event"])
+            self.fields["section"].empty_label = _("--- Empty")
+            self.fields["section"].to_field_name = "uuid"
+            # Set initial value to UUID instead of ID for existing instances
+            if self.instance and self.instance.pk and self.instance.section:
+                self.initial["section"] = self.instance.section.uuid
 
         if "reg_que_allowed" not in self.params["features"]:
             self.delete_field("allowed")
