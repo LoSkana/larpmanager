@@ -307,4 +307,4 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("link", name="Registration", exact=True).click()
     expect(page.get_by_role("cell", name="faaaaacc")).to_be_visible()
     expect_normalized(page, page.locator("#register_form"),
-                      "Ticket (*) Standard Your registration ticket faaaaacc")
+                      "ticket (*) standard depends your registration ticket faaaaacc needs preferences")
