@@ -31,7 +31,7 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.db.models import Max
 from django.templatetags.static import static
 from django.urls import reverse
-from django.utils.html import format_html, mark_safe
+from django.utils.html import escape, format_html, mark_safe
 from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 
@@ -40,8 +40,8 @@ from larpmanager.models.association import get_url
 from larpmanager.models.casting import Trait
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, FactionType
-from larpmanager.utils.common import html_clean
-from larpmanager.utils.pdf import get_trait_character
+from larpmanager.utils.core.common import html_clean
+from larpmanager.utils.io.pdf import get_trait_character
 
 if TYPE_CHECKING:
     from django.forms import BoundField, Form
@@ -110,12 +110,18 @@ def get(value: dict[str, Any], arg: str) -> Any:
         any: Dictionary value for key, or empty string if not found
 
     """
-    if arg is not None and value and arg in value:
-        return value[arg]
+    if arg is not None and value:
+        try:
+            if arg in value:
+                return value[arg]
+        except TypeError:
+            # arg is not hashable (e.g., dict), cannot be used as dict key
+            # This can happen when iterating over cached data with dict keys
+            return ""
     return ""
 
 
-def get_tooltip(context: dict[str, Any], character: dict[str, Any]) -> str:
+def get_tooltip(context: dict, character: dict[str, Any]) -> str:
     """Generate HTML tooltip for character display.
 
     Args:
@@ -127,16 +133,16 @@ def get_tooltip(context: dict[str, Any], character: dict[str, Any]) -> str:
 
     """
     avatar_url = static("larpmanager/assets/blank-avatar.svg")
-    if "player_id" in character and character["player_id"] > 0 and character["player_prof"]:
+    if character.get("player_uuid") and character["player_prof"]:
         avatar_url = character["player_prof"]
-    tooltip = f"<img src='{avatar_url}'>"
+    tooltip = f"<img src='{escape(avatar_url)}'>"
 
     tooltip = tooltip_fields(character, tooltip)
 
     tooltip = tooltip_factions(character, context, tooltip)
 
     if character["teaser"]:
-        tooltip += "<span class='teaser'>" + replace_chars(context, character["teaser"]) + " (...)</span>"
+        tooltip += "<span class='teaser'>" + escape(replace_chars(context, character["teaser"])) + " (...)</span>"
 
     return tooltip
 
@@ -152,23 +158,23 @@ def tooltip_fields(character: dict[str, Any], tooltip: str) -> str:
         str: Updated tooltip HTML with character fields
 
     """
-    tooltip += f"<span><b class='name'>{character['name']}</b>"
+    tooltip += f"<span><b class='name'>{escape(character['name'])}</b>"
 
     if character["title"]:
-        tooltip += " - <b class='title'>" + character["title"] + "</b>"
+        tooltip += " - <b class='title'>" + escape(character["title"]) + "</b>"
 
     if character.get("pronoun"):
-        tooltip += " (" + character["pronoun"] + ")"
+        tooltip += " (" + escape(character["pronoun"]) + ")"
 
     tooltip += "</span>"
 
-    if "player_id" in character and character["player_id"] > 0:
-        tooltip += "<span>" + _("Player") + ": <b>" + character["player_full"] + "</b></span>"
+    if character.get("player_uuid"):
+        tooltip += "<span>" + str(_("Player")) + ": <b>" + escape(character["player_full"]) + "</b></span>"
 
     return tooltip
 
 
-def tooltip_factions(character: dict[str, Any], context: dict[str, Any], tooltip: str) -> str:
+def tooltip_factions(character: dict[str, Any], context: dict, tooltip: str) -> str:
     """Add faction information to character tooltip.
 
     Args:
@@ -188,14 +194,14 @@ def tooltip_factions(character: dict[str, Any], context: dict[str, Any], tooltip
         if faction_number in character["factions"]:
             if faction_names:
                 faction_names += ", "
-            faction_names += faction_element["name"]
+            faction_names += escape(faction_element["name"])
     if faction_names:
-        tooltip += "<span>" + _("Factions") + ": " + faction_names + "</span>"
+        tooltip += "<span>" + str(_("Factions")) + ": " + faction_names + "</span>"
     return tooltip
 
 
 @register.simple_tag(takes_context=True)
-def replace_chars(context: dict[str, Any], text: str, limit: int = 200) -> str:
+def replace_chars(context: dict, text: str, limit: int = 200) -> str:
     """Template tag to replace character number references with names.
 
     Replaces #XX, @XX, and ^XX patterns with character names in text.
@@ -273,17 +279,21 @@ def go_character(
     # Get character data from context
     character_data = context["chars"][character_number]
 
-    # Generate character URL using run slug and character number
+    # Generate character URL using run slug and character uuid
     character_url = get_url(
-        reverse("character", args=[run.get_slug(), character_data["number"]]),
+        reverse("character", args=[run.get_slug(), character_data["uuid"]]),
         context["association_slug"],
     ).replace('"', "")
 
     # Create either simple bold name or full link based on simple flag
     if simple:
-        formatted_link = f"<b>{character_data['name'].split()[0]}</b>"
+        name_parts = character_data["name"].split()
+        first_name = name_parts[0] if name_parts else ""
+        formatted_link = f"<b>{escape(first_name)}</b>"
     else:
-        formatted_link = f"<a class='link_show_char' href='{character_url}'>{character_data['name']}</a>"
+        formatted_link = (
+            f"<a class='link_show_char' href='{escape(character_url)}'>{escape(character_data['name'])}</a>"
+        )
 
         # Add tooltip wrapper if tooltips are enabled
         if include_tooltip:
@@ -464,7 +474,9 @@ def go_trait(
     # Generate appropriate output based on simple flag
     if simple:
         # Simple mode: return bold first name only
-        link = f"<b>{character_data['name'].split()[0]}</b>"
+        name_parts = character_data["name"].split()
+        first_name = name_parts[0] if name_parts else ""
+        link = f"<b>{escape(first_name)}</b>"
     else:
         # Full mode: generate clickable link with optional tooltip
         tooltip = ""
@@ -473,13 +485,13 @@ def go_trait(
 
         # Build character page URL
         character_url = get_url(
-            reverse("character", args=[run.get_slug(), character_data["number"]]),
+            reverse("character", args=[run.get_slug(), character_data["uuid"]]),
             context["slug"],
         )
 
         # Create HTML link with hover functionality
         link = (
-            f"<span class='has_show_char'><a href='{character_url}'>{character_data['name']}</a></span>"
+            f"<span class='has_show_char'><a href='{escape(character_url)}'>{escape(character_data['name'])}</a></span>"
             f"<span class='hide show_char'>{tooltip}</span>"
         )
 
@@ -488,7 +500,7 @@ def go_trait(
 
 
 @register.simple_tag(takes_context=True)
-def show_trait(context: dict[str, Any], text: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
+def show_trait(context: dict, text: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
     """Template tag to process text and convert trait references to character links.
 
     Args:
@@ -634,18 +646,18 @@ def lookup(obj: Any, prop: str) -> Any:
 
 
 @register.simple_tag
-def get_registration_option(reg: Any, number: Any) -> Any:
+def get_registration_option(registration: Any, number: Any) -> Any:
     """Template tag to get registration option form text.
 
     Args:
-        reg: Registration instance
+        registration: Registration instance
         number (int): Option number
 
     Returns:
         str: Option form text or empty string
 
     """
-    v = getattr(reg, f"option_{number}")
+    v = getattr(registration, f"option_{number}")
     if v:
         return v.get_form_text()
     return ""
@@ -779,12 +791,23 @@ def hex_to_rgb(hex_color: Any) -> Any:
         hex_color (str): Hex color string (e.g., '#FF0000')
 
     Returns:
-        str: Comma-separated RGB values (e.g., '255,0,0')
+        str: Comma-separated RGB values (e.g., '255,0,0'), or original value if invalid format
 
     """
-    hex_without_hash = hex_color.lstrip("#")
-    rgb_values = [str(int(hex_without_hash[i : i + 2], 16)) for i in (0, 2, 4)]
-    return ",".join(rgb_values)
+    if not hex_color:
+        return ""
+
+    hex_without_hash = str(hex_color).lstrip("#")
+
+    # Validate hex format: exactly 6 hexadecimal characters
+    if not re.match(r"^[0-9A-Fa-f]{6}$", hex_without_hash):
+        return hex_color  # Return original value if invalid format
+
+    try:
+        rgb_values = [str(int(hex_without_hash[i : i + 2], 16)) for i in (0, 2, 4)]
+        return ",".join(rgb_values)
+    except (ValueError, IndexError):
+        return hex_color  # Return original value if conversion fails
 
 
 @register.simple_tag

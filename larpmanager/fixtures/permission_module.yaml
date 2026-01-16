@@ -94,3 +94,9 @@
     slug: onetime
     order: 120
     icon: key
+- model: larpmanager.permissionmodule
+  fields:
+    name: Inventory
+    slug: inventory
+    order: 46
+    icon: box-open

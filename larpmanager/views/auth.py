@@ -31,7 +31,7 @@ from django.utils.translation import gettext_lazy as _
 from django_registration import signals
 from django_registration.backends.one_step.views import RegistrationView
 
-from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
+from larpmanager.models.member import Member, Membership, MembershipStatus
 
 if TYPE_CHECKING:
     from django.forms import Form
@@ -77,9 +77,11 @@ class MyRegistrationView(RegistrationView):
 
         # Set membership status to JOINED for non-default associations
         if self.request.association["id"] > 1:
-            user_membership = get_user_membership(self.request.user.member, self.request.association["id"])
-            user_membership.status = MembershipStatus.JOINED
-            user_membership.save()
+            Membership.objects.update_or_create(
+                member=self.request.user.member,
+                association_id=self.request.association["id"],
+                defaults={"status": MembershipStatus.JOINED},
+            )
 
         return new_user
 

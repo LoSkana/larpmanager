@@ -18,16 +18,16 @@
         <thead>
             <tr>
                 <th></th>
-                <th>{% trans "Member" %}</th>
+                <th>{% trans "Participant" %}</th>
                 <th>{% trans "Start date" %}</th>
                 <th>{% trans "End date" %}</th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'exe_volunteer_registry_edit' el.id %}"
+                        <a href="{% url 'exe_volunteer_registry_edit' el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.member }}</td>

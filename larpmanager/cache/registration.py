@@ -22,14 +22,14 @@ from typing import Any
 from django.core.cache import cache
 from django.db.models import Count
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Run
-from larpmanager.models.form import RegistrationChoice, WritingChoice
+from larpmanager.models.form import BaseQuestionType, RegistrationChoice, WritingChoice
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import Character
-from larpmanager.utils.common import _search_char_reg
+from larpmanager.utils.core.common import _search_char_reg
 
 
 def clear_registration_counts_cache(run_id: int) -> None:
@@ -42,7 +42,7 @@ def cache_registration_counts_key(run_id: int) -> str:
     return f"registration_counts_{run_id}"
 
 
-def get_reg_counts(run: Run, *, reset_cache: bool = False) -> dict:
+def get_registration_counts(run: Run, *, reset_cache: bool = False) -> dict:
     """Get registration counts for a run, with caching support.
 
     Args:
@@ -61,7 +61,7 @@ def get_reg_counts(run: Run, *, reset_cache: bool = False) -> dict:
 
     # Update and cache if not found
     if cached_counts is None:
-        cached_counts = update_reg_counts(run)
+        cached_counts = update_registration_counts(run)
         cache.set(cache_key, cached_counts, timeout=60 * 5)
 
     return cached_counts
@@ -85,7 +85,7 @@ def add_count(counter_dict: dict, parameter_name: str, increment_value: int = 1)
     counter_dict[parameter_name] += increment_value
 
 
-def update_reg_counts(run: Run) -> dict[str, int]:
+def update_registration_counts(run: Run) -> dict[str, int]:
     """Update registration counts cache for the given run.
 
     Calculates and returns registration statistics including counts by ticket tier,
@@ -97,11 +97,18 @@ def update_reg_counts(run: Run) -> dict[str, int]:
     Returns:
         Dictionary containing registration counts data by ticket tier and choices.
         Keys include count_reg, count_wait, count_staff, count_fill, tk_{ticket_id},
-        option_{option_id}, and option_char_{option_id}.
+        option_{option_id}, option_char_{option_id}, tickets_map, and tickets_order.
 
     """
     # Initialize base counters
-    counts = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0}
+    counts = {
+        "count_reg": 0,
+        "count_wait": 0,
+        "count_staff": 0,
+        "count_fill": 0,
+        "tickets_map": {},
+        "tickets_order": {},
+    }
 
     # Get all non-cancelled registrations for this run
     registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
@@ -119,6 +126,13 @@ def update_reg_counts(run: Run) -> dict[str, int]:
         if not registration.ticket:
             add_count(counts, "count_unknown", num_tickets)
         else:
+            # Count by ticket name
+            add_count(counts, f"count_ticket_{registration.ticket_id}", num_tickets)
+            if registration.ticket_id not in counts["tickets_map"]:
+                counts["tickets_map"][registration.ticket_id] = registration.ticket.name
+            if registration.ticket_id not in counts["tickets_order"]:
+                counts["tickets_order"][registration.ticket_id] = registration.ticket.order
+
             # Map ticket tiers to counter keys
             tier_map = {
                 TicketTier.STAFF: "staff",
@@ -138,7 +152,7 @@ def update_reg_counts(run: Run) -> dict[str, int]:
                 add_count(counts, "count_player", num_tickets)
 
             # Track provisional registrations separately
-            if is_reg_provisional(registration, event=run.event, features=features, context=context):
+            if is_registration_provisional(registration, event=run.event, features=features, context=context):
                 add_count(counts, "count_provisional", num_tickets)
 
         # Add to total registration count
@@ -148,7 +162,11 @@ def update_reg_counts(run: Run) -> dict[str, int]:
         add_count(counts, f"tk_{registration.ticket_id}", num_tickets)
 
     # Count registration choices (form options selected)
-    registration_choices = RegistrationChoice.objects.filter(reg__run=run, reg__cancellation_date__isnull=True)
+    registration_choices = RegistrationChoice.objects.filter(
+        registration__run=run,
+        registration__cancellation_date__isnull=True,
+        question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
+    )
     for choice_data in registration_choices.values("option_id").annotate(total=Count("option_id")):
         counts[f"option_{choice_data['option_id']}"] = choice_data["total"]
 
@@ -170,11 +188,11 @@ def on_character_update_registration_cache(instance: Character) -> None:
 
     # Trigger registration updates if character approval is enabled
     if get_event_config(instance.event_id, "user_character_approval", default_value=False):
-        for registration_character_relation in RegistrationCharacterRel.objects.filter(character=instance):
-            registration_character_relation.reg.save()
+        for relation in RegistrationCharacterRel.objects.filter(character=instance):
+            relation.registration.save()
 
 
-def search_player(character: Character, json_output: dict[str, Any], context: dict[str, Any]) -> None:
+def search_player(character: Character, json_output: dict[str, Any], context: dict) -> None:
     """Search for players in registration cache and populate results.
 
     This function attempts to find player registration data for a given character,
@@ -196,32 +214,32 @@ def search_player(character: Character, json_output: dict[str, Any], context: di
         if character.number in context["assignments"]:
             # Populate character with cached registration data
             character.rcr = context["assignments"][character.number]
-            character.reg = character.rcr.reg
-            character.member = character.reg.member
+            character.registration = character.rcr.registration
+            character.member = character.registration.member
         else:
             # Character not found in assignments cache
             character.rcr = None
-            character.reg = None
+            character.registration = None
             character.member = None
     else:
         # No cache available, query database directly
         try:
             # Fetch registration character relationship with related objects
-            character.rcr = RegistrationCharacterRel.objects.select_related("reg", "reg__member").get(
-                reg__run_id=context["run"].id,
+            character.rcr = RegistrationCharacterRel.objects.select_related("registration", "registration__member").get(
+                registration__run_id=context["run"].id,
                 character=character,
             )
-            character.reg = character.rcr.reg
-            character.member = character.reg.member
+            character.registration = character.rcr.registration
+            character.member = character.registration.member
         except RegistrationCharacterRel.DoesNotExist:
             # Registration not found or database error
             character.rcr = None
-            character.reg = None
+            character.registration = None
             character.member = None
 
     # Process character registration data if available
-    if character.reg:
+    if character.registration:
         _search_char_reg(context, character, json_output)
     else:
-        # No registration found, set default player ID
-        json_output["player_id"] = 0
+        # No registration found, set default player ID and UUID
+        json_output["player_uuid"] = None

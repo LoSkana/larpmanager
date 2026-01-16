@@ -3,8 +3,24 @@
 {% block title %}
     Join
 {% endblock title %}
+{% block meta %}
+    <meta name="keywords"
+          content="join larpmanager, create larp account, start larp organization, larp registration platform, free larp signup, larp event setup">
+    <meta name="description"
+          content="Start using LarpManager today! Create your free account and begin managing your LARP events with our comprehensive platform - no installation or setup required.">
+{% endblock meta %}
 {% block content %}
-    <p>Compile the info below to get started immediately with LarpManager!</p>
+    <p>
+        Compile the information below to get started immediately with LarpManager.
+        A dedicated subdomain will be created for your LARP organization, with you as administrator.
+        You will then be guided through creating your first event.
+    </p>
+    <p>
+        <i>
+            <strong>Note:</strong> If you are here as a player looking to participate in an event, this is not the right place.
+            Contact the LARP organization you are interested in to receive the correct link!
+        </i>
+    </p>
     <form action="{{ request.path }}"
           enctype="multipart/form-data"
           method="post">

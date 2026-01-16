@@ -25,7 +25,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.forms.base import BaseRegistrationForm, MyForm
+from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti, WritingTinyMCE
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -49,10 +49,11 @@ from larpmanager.models.writing import (
     PrologueType,
     SpeedLarp,
 )
-from larpmanager.utils.validators import FileTypeValidator
+from larpmanager.utils.core.validators import FileTypeValidator
+from larpmanager.utils.services.character import _get_character_cache_id
 
 
-class WritingForm(MyForm):
+class WritingForm(BaseModelForm):
     """Form for Writing."""
 
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
@@ -78,12 +79,12 @@ class WritingForm(MyForm):
         for question in self.questions:
             question_types.add(question.typ)
 
-        if WritingQuestionType.COVER not in question_types and "cover" in self.fields:
-            del self.fields["cover"]
+        if WritingQuestionType.COVER not in question_types:
+            self.delete_field("cover")
 
         if WritingQuestionType.ASSIGNED in question_types:
             staffer_choices = [
-                (member.id, member.show_nick()) for member in get_event_staffers(self.params["run"].event)
+                (member.uuid, member.show_nick()) for member in get_event_staffers(self.params["run"].event)
             ]
             self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---")), *staffer_choices]
         else:
@@ -91,21 +92,21 @@ class WritingForm(MyForm):
 
         if WritingQuestionType.PROGRESS in question_types:
             self.fields["progress"].choices = [
-                (step.id, str(step))
+                (step.uuid, str(step))
                 for step in ProgressStep.objects.filter(event=self.params["run"].event).order_by("order")
             ]
         else:
             self.delete_field("progress")
 
 
-class PlayerRelationshipForm(MyForm):
+class PlayerRelationshipForm(BaseModelForm):
     """Form for PlayerRelationship."""
 
     page_title = _("Character Relationship")
 
     class Meta:
         model = PlayerRelationship
-        exclude: ClassVar[list] = ["reg"]
+        exclude: ClassVar[list] = ["registration"]
         widgets: ClassVar[dict] = {
             "target": EventCharacterS2Widget,
         }
@@ -114,8 +115,9 @@ class PlayerRelationshipForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure target field for the event."""
         super().__init__(*args, **kwargs)
+
         # Configure target field widget with event from run params
-        self.fields["target"].widget.set_event(self.params["run"].event)
+        self.configure_field_event("target", self.params["run"].event)
         self.fields["target"].required = True
 
     def clean(self) -> dict:
@@ -135,12 +137,15 @@ class PlayerRelationshipForm(MyForm):
         cleaned_data = super().clean()
 
         # Check if user is trying to create relationship with themselves
-        if self.cleaned_data["target"].id == self.params["char"]["id"]:
+        character_id = _get_character_cache_id(self.params)
+        if self.cleaned_data["target"].id == character_id:
             self.add_error("target", _("You cannot create a relationship towards yourself") + "!")
 
         # Check for existing relationships with same target and registration
         try:
-            rel = PlayerRelationship.objects.get(reg=self.params["run"].reg, target=self.cleaned_data["target"])
+            rel = PlayerRelationship.objects.get(
+                registration=self.params["registration"], target=self.cleaned_data["target"]
+            )
             # Allow editing existing relationship, but prevent duplicates
             if rel.id != self.instance.id:
                 self.add_error("target", _("Already existing relationship") + "!")
@@ -164,14 +169,14 @@ class PlayerRelationshipForm(MyForm):
 
         # Set registration for new instances
         if not instance.pk:
-            instance.reg = self.params["run"].reg
+            instance.registration = self.params["registration"]
 
         instance.save()
 
         return instance
 
 
-class UploadElementsForm(forms.Form):
+class UploadElementsForm(BaseForm):
     """Form for UploadElements."""
 
     allowed_types: ClassVar[list] = [
@@ -265,7 +270,7 @@ class BaseWritingForm(BaseRegistrationForm):
             orga = True
             if hasattr(self, "orga"):
                 orga = self.orga
-            self.save_reg_questions(instance, is_organizer=orga)
+            self.save_registration_questions(instance, is_organizer=orga)
 
         return instance
 
@@ -463,7 +468,7 @@ class QuestForm(WritingForm, BaseWritingForm):
 
         # Populate quest type choices from event elements
         que = self.params["run"].event.get_elements(QuestType)
-        self.fields["typ"].choices = [(m.id, m.name) for m in que]
+        self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
 
 class TraitForm(WritingForm, BaseWritingForm):
@@ -487,7 +492,7 @@ class TraitForm(WritingForm, BaseWritingForm):
 
         # Populate quest choices from event elements
         que = self.params["run"].event.get_elements(Quest)
-        self.fields["quest"].choices = [(m.id, m.name) for m in que]
+        self.fields["quest"].choices = [(m.uuid, m.name) for m in que]
 
 
 class HandoutForm(WritingForm):
@@ -506,10 +511,12 @@ class HandoutForm(WritingForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and populate template choices from run's handout templates."""
         super().__init__(*args, **kwargs)
+
         # Retrieve handout templates for the associated run's event
         que = self.params["run"].event.get_elements(HandoutTemplate)
+
         # Populate template field choices with template IDs and names
-        self.fields["template"].choices = [(m.id, m.name) for m in que]
+        self.fields["template"].choices = [(m.uuid, m.name) for m in que]
 
 
 class HandoutTemplateForm(WritingForm):
@@ -558,7 +565,7 @@ class PrologueForm(WritingForm, BaseWritingForm):
 
         # Populate prologue type choices from event elements
         que = self.params["run"].event.get_elements(PrologueType)
-        self.fields["typ"].choices = [(m.id, m.name) for m in que]
+        self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
         # Initialize organization-specific fields and reorder characters
         self.init_orga_fields()

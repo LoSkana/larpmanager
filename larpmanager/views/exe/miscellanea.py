@@ -18,11 +18,9 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, redirect, render
-from django.utils.translation import gettext_lazy as _
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render
 
 from larpmanager.forms.miscellanea import ExeUrlShortnerForm
 from larpmanager.forms.warehouse import (
@@ -31,7 +29,6 @@ from larpmanager.forms.warehouse import (
     ExeWarehouseMovementForm,
     ExeWarehouseTagForm,
 )
-from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.models.miscellanea import (
     UrlShortner,
     WarehouseContainer,
@@ -39,12 +36,10 @@ from larpmanager.models.miscellanea import (
     WarehouseMovement,
     WarehouseTag,
 )
-from larpmanager.utils.auth import is_lm_admin
-from larpmanager.utils.base import check_association_context
-from larpmanager.utils.bulk import handle_bulk_items
-from larpmanager.utils.edit import exe_edit
-from larpmanager.utils.miscellanea import get_warehouse_optionals
-from larpmanager.utils.ticket import analyze_ticket_bgk
+from larpmanager.utils.core.base import check_association_context
+from larpmanager.utils.services.bulk import handle_bulk_items
+from larpmanager.utils.services.edit import exe_edit
+from larpmanager.utils.services.miscellanea import get_warehouse_optionals
 
 
 @login_required
@@ -60,9 +55,9 @@ def exe_urlshortner(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_urlshortner_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_urlshortner_edit(request: HttpRequest, url_uuid: str) -> HttpResponse:
     """Edit an existing URL shortener entry."""
-    return exe_edit(request, ExeUrlShortnerForm, num, "exe_urlshortner")
+    return exe_edit(request, ExeUrlShortnerForm, url_uuid, "exe_urlshortner")
 
 
 @login_required
@@ -78,9 +73,9 @@ def exe_warehouse_containers(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_containers_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_warehouse_containers_edit(request: HttpRequest, container_uuid: str) -> HttpResponse:
     """Edit warehouse container using generic edit handler."""
-    return exe_edit(request, ExeWarehouseContainerForm, num, "exe_warehouse_containers")
+    return exe_edit(request, ExeWarehouseContainerForm, container_uuid, "exe_warehouse_containers")
 
 
 @login_required
@@ -96,9 +91,9 @@ def exe_warehouse_tags(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_tags_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_warehouse_tags_edit(request: HttpRequest, tag_uuid: str) -> HttpResponse:
     """Edit warehouse tag via generic edit view."""
-    return exe_edit(request, ExeWarehouseTagForm, num, "exe_warehouse_tags")
+    return exe_edit(request, ExeWarehouseTagForm, tag_uuid, "exe_warehouse_tags")
 
 
 @login_required
@@ -136,9 +131,9 @@ def exe_warehouse_items(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_items_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_warehouse_items_edit(request: HttpRequest, item_uuid: str) -> HttpResponse:
     """Delegate to exe_edit for warehouse item form handling."""
-    return exe_edit(request, ExeWarehouseItemForm, num, "exe_warehouse_items")
+    return exe_edit(request, ExeWarehouseItemForm, item_uuid, "exe_warehouse_items")
 
 
 @login_required
@@ -157,43 +152,6 @@ def exe_warehouse_movements(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_movements_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_warehouse_movements_edit(request: HttpRequest, movement_uuid: str) -> HttpResponse:
     """Edit a specific warehouse movement by delegating to the generic exe_edit view."""
-    return exe_edit(request, ExeWarehouseMovementForm, num, "exe_warehouse_movements")
-
-
-@login_required
-def exe_ticket_analyze(request: HttpRequest, ticket_id: int) -> HttpResponse:
-    """Trigger automatic analysis for a support ticket.
-
-    Only superusers and association (maintainers) can trigger analysis.
-
-    Args:
-        request: Django HTTP request object (must be authenticated)
-        ticket_id: ID of the ticket to analyze
-
-    Returns:
-        HttpResponse: Redirect to home with success/error message
-        HttpResponseForbidden: If user lacks permissions
-
-    """
-    # Get the ticket
-    ticket = get_object_or_404(LarpManagerTicket, pk=ticket_id)
-
-    # Check if user is superuser or maintainer of the ticket's association
-    is_superuser = is_lm_admin(request)
-    is_maintainer = False
-
-    # Disable for now access to maintainers
-
-    # Deny access if neither superuser nor maintainer
-    if not (is_superuser or is_maintainer):
-        message = _("You don't have permission to analyze this ticket")
-        messages.error(request, message)
-        return HttpResponseForbidden(message)
-
-    # Trigger the background analysis task
-    analyze_ticket_bgk(ticket.id)
-
-    messages.success(request, _("Ticket analysis started. You will receive an email when it's complete"))
-    return redirect("home")
+    return exe_edit(request, ExeWarehouseMovementForm, movement_uuid, "exe_warehouse_movements")

@@ -18,7 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import os
 from collections.abc import Callable
 
 from django.conf import settings as conf_settings
@@ -59,25 +58,18 @@ class LocaleAdvMiddleware:
         Selects the most appropriate language based on a priority hierarchy:
         1. Test environment (forces English)
         2. Authenticated user's language preference
-        3. Browser's Accept-Language header
+        3. Browser's Accept-Language header (validated against supported languages)
         4. Default fallback to English
 
         Args:
             request: Django HTTP request object containing user and metadata
 
         Returns:
-            str: Activated language code (e.g., 'en', 'it', 'es')
-
-        Note:
-            This function has the side effect of activating the selected language
-            globally and modifying the request's HTTP_ACCEPT_LANGUAGE header.
+            str: Language code to be activated (e.g., 'en', 'it', 'es')
 
         """
-        # Force English in test environment to ensure consistent test results
-        if os.getenv("PYTEST_CURRENT_TEST"):
-            selected_language = "en"
         # Check if user is authenticated and has a language preference
-        elif hasattr(request, "user") and hasattr(request.user, "member"):
+        if hasattr(request, "user") and hasattr(request.user, "member"):
             if request.user.member.language:
                 # Use the user's explicitly set language preference
                 selected_language = request.user.member.language
@@ -89,14 +81,11 @@ class LocaleAdvMiddleware:
                 for language_code, _language_name in conf_settings.LANGUAGES:
                     if browser_language == language_code:
                         is_language_supported = True
+                        break
                 # Default to English if detected language is not supported
                 selected_language = "en" if not is_language_supported else browser_language
         else:
             # For anonymous users, rely on browser language detection
             selected_language = translation.get_language_from_request(request)
 
-        # Activate the selected language globally and update request metadata
-        translation.activate(selected_language)
-        request.META["HTTP_ACCEPT_LANGUAGE"] = selected_language
-
-        return translation.get_language()
+        return selected_language

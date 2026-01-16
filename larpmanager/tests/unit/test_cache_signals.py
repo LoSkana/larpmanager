@@ -68,7 +68,7 @@ class TestCacheSignals(BaseTestCase):
         """Test that Character pre_save signal resets character cache"""
         character = self.character()
         mock_reset.reset_mock()  # Reset after character creation
-        # Modify a field that triggers cache reset (player_id)
+        # Modify a field that triggers cache reset (player_uuid)
         character.player = self.get_member()
         character.save()
 
@@ -236,7 +236,7 @@ class TestCacheSignals(BaseTestCase):
         registration = self.get_registration()
         character = self.character()
         mock_reset.reset_mock()  # Reset after fixtures
-        rel = RegistrationCharacterRel(reg=registration, character=character)
+        rel = RegistrationCharacterRel(registration=registration, character=character)
         rel.save()
 
         mock_reset.assert_called_once_with(registration.run)
@@ -246,7 +246,7 @@ class TestCacheSignals(BaseTestCase):
         """Test that RegistrationCharacterRel post_delete signal resets character cache"""
         registration = self.get_registration()
         character = self.character()
-        rel = RegistrationCharacterRel.objects.create(reg=registration, character=character)
+        rel = RegistrationCharacterRel.objects.create(registration=registration, character=character)
         mock_reset.reset_mock()  # Reset after create
         rel.delete()
 
@@ -398,7 +398,7 @@ class TestCacheSignals(BaseTestCase):
     def test_registration_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_save signal resets accounting cache"""
         registration = self.get_registration()
-        mock_reset.reset_mock()  # Reset after get_registration
+        mock_reset.reset_mock()  # Reset after get_accounting_registration
         registration.save()
 
         mock_reset.assert_called_once_with(registration.run_id)
@@ -408,12 +408,12 @@ class TestCacheSignals(BaseTestCase):
         """Test that Registration post_delete signal resets accounting cache"""
         registration = self.get_registration()
         run = registration.run
-        mock_reset.reset_mock()  # Reset after get_registration
+        mock_reset.reset_mock()  # Reset after get_accounting_registration
         registration.delete()
 
         mock_reset.assert_called_once_with(run.id)
 
-    @patch("larpmanager.models.signals.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
     def test_registration_ticket_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that RegistrationTicket post_save signal resets accounting cache"""
         # RegistrationTicket signal resets for all runs in the event
@@ -426,7 +426,7 @@ class TestCacheSignals(BaseTestCase):
         # Signal calls reset for event runs
         self.assertTrue(mock_reset.called)
 
-    @patch("larpmanager.models.signals.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
     def test_registration_ticket_post_delete_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that RegistrationTicket post_delete signal resets accounting cache"""
         event = self.get_event()
@@ -446,7 +446,7 @@ class TestCacheSignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         payment.save()
@@ -462,11 +462,11 @@ class TestCacheSignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         member_id = payment.member_id
-        run = payment.reg.run
+        run = payment.registration.run
         mock_reset.reset_mock()  # Reset after create
         payment.delete()
 
@@ -487,7 +487,7 @@ class TestCacheSignals(BaseTestCase):
         )
         item.save()
 
-        mock_reset.assert_called_once_with(run, member.id)
+        mock_reset.assert_called_with(run, member.id)
 
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")
     def test_accounting_item_discount_post_delete_resets_accounting_cache(self, mock_reset: Any) -> None:
@@ -506,7 +506,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after create to only test delete signal
         item.delete()
 
-        mock_reset.assert_called_once_with(run, member_id)
+        mock_reset.assert_called_with(run, member_id)
 
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")
     def test_accounting_item_other_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
@@ -611,7 +611,7 @@ class TestCacheSignals(BaseTestCase):
     def test_registration_post_save_resets_links_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_save signal resets links cache"""
         registration = self.get_registration()
-        mock_reset.reset_mock()  # Reset after get_registration
+        mock_reset.reset_mock()  # Reset after get_accounting_registration
         registration.save()
 
         # Signal resets for the member
@@ -660,7 +660,7 @@ class TestCacheSignals(BaseTestCase):
     def test_registration_post_save_resets_registration_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_save signal resets registration cache"""
         registration = self.get_registration()
-        mock_reset.reset_mock()  # Reset after get_registration
+        mock_reset.reset_mock()  # Reset after get_accounting_registration
         registration.save()
 
         mock_reset.assert_called_once_with(registration.run_id)

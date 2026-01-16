@@ -26,6 +26,8 @@ import polib
 from django.conf import settings as conf_settings
 from django.core.management.base import BaseCommand
 
+from larpmanager.management.commands.utils import check_virtualenv
+
 
 class DeepLLimitExceededError(Exception):
     """Raised when DeepL API usage limit is exceeded."""
@@ -36,6 +38,8 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
         """Handle the translation command by initializing translator and processing translations."""
+        # Ensure we're running inside a virtual environment
+        check_virtualenv()
         # Initialize DeepL translator and display initial usage
         self.translator = deepl.Translator(conf_settings.DEEPL_API_KEY)
         self.stdout.write(str(self.translator.get_usage()))

@@ -688,18 +688,19 @@ In Italian:
 ```python
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.models.association import AssociationTextType
-from larpmanager.utils.base import get_context
+from larpmanager.utils.core.base import get_context
+
 
 def privacy_policy(request):
     context = get_context(request)
 
     # Try to get organization's custom text, otherwise use default
     context["privacy_content"] = (
-        get_association_text(
-            context["association_id"],
-            AssociationTextType.PRIVACY,
-            request.LANGUAGE_CODE
-        ) or _("Default privacy policy text")
+            get_association_text(
+                context["association_id"],
+                AssociationTextType.PRIVACY,
+                request.LANGUAGE_CODE
+            ) or _("Default privacy policy text")
     )
 
     return render(request, "privacy.html", context)

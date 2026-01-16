@@ -38,7 +38,7 @@ from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association, AssociationPlan
-from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature
+from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, UuidMixin
 from larpmanager.models.member import Member
 from larpmanager.models.utils import (
     UploadToPathAndRename,
@@ -51,7 +51,7 @@ from larpmanager.models.utils import (
 logger = logging.getLogger(__name__)
 
 
-class Event(BaseModel):
+class Event(UuidMixin, BaseModel):
     """Represents Event model."""
 
     slug = models.CharField(
@@ -225,9 +225,9 @@ class Event(BaseModel):
 
     class Meta:
         constraints: ClassVar[list] = [
-            UniqueConstraint(fields=["slug", "deleted"], name="unique_event_with_optional"),
+            UniqueConstraint(fields=["association", "slug", "deleted"], name="unique_event_with_optional"),
             UniqueConstraint(
-                fields=["slug"],
+                fields=["association", "slug"],
                 condition=Q(deleted=None),
                 name="unique_event_without_optional",
             ),
@@ -287,6 +287,7 @@ class Event(BaseModel):
             "abilitypx",
             "deliverypx",
             "abilitytypepx",
+            "pooltypeci",
             "writingquestion",
             "writingoption",
         ]
@@ -449,7 +450,7 @@ class BaseConceptModel(BaseModel):
         return self.name
 
 
-class EventButton(BaseConceptModel):
+class EventButton(UuidMixin, BaseConceptModel):
     """Represents EventButton model."""
 
     tooltip = models.CharField(max_length=200)
@@ -486,7 +487,7 @@ class EventTextType(models.TextChoices):
     CHARACTER_REVIEW = "cr", _("Character review")
 
 
-class EventText(BaseModel):
+class EventText(UuidMixin, BaseModel):
     """Represents EventText model."""
 
     number = models.IntegerField(null=True, blank=True)
@@ -508,6 +509,10 @@ class EventText(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="texts")
 
+    def __str__(self) -> str:
+        """Return string representation of the event text."""
+        return f"{self.get_typ_display()} - {self.get_language_display()}"
+
     class Meta:
         constraints: ClassVar[list] = [
             UniqueConstraint(
@@ -522,7 +527,7 @@ class EventText(BaseModel):
         ]
 
 
-class ProgressStep(BaseConceptModel):
+class ProgressStep(UuidMixin, BaseConceptModel):
     """Represents ProgressStep model."""
 
     order = models.IntegerField(default=0)
@@ -555,7 +560,7 @@ class DevelopStatus(models.TextChoices):
     DONE = "9", _("Concluded")
 
 
-class Run(BaseModel):
+class Run(UuidMixin, BaseModel):
     """Represents Run model."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -584,7 +589,7 @@ class Run(BaseModel):
 
     registration_secret = models.CharField(
         default=my_uuid_short,
-        max_length=12,
+        max_length=50,
         unique=True,
         verbose_name=_("Secret code"),
         help_text=_(

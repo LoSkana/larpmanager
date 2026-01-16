@@ -4,7 +4,7 @@
 {% block title %}
     {{ form.page_title }}
     {% if nonum is None %}
-        {% if num %}
+        {% if num != "0" %}
             - {% trans "Change" %}
         {% else %}
             - {% trans "New" %}
@@ -34,9 +34,9 @@
             </thead>
             <tbody>
                 {% for el in list %}
-                    <tr id="{{ el.id }}">
+                    <tr id="{{ el.uuid }}">
                         <td>
-                            <a href="{% url 'orga_registration_options_edit' run.get_slug el.id %}">
+                            <a href="{% url 'orga_registration_options_edit' run.get_slug el.uuid %}">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
@@ -50,14 +50,14 @@
                         </td>
                         <td>
                             {% if not forloop.first %}
-                                <a href="{% url 'orga_registration_options_order' run.get_slug el.id 0 %}">
+                                <a href="{% url 'orga_registration_options_order' run.get_slug el.uuid 0 %}">
                                     <i class="fa-solid fa-arrow-up"></i>
                                 </a>
                             {% endif %}
                         </td>
                         <td>
                             {% if not forloop.last %}
-                                <a href="{% url 'orga_registration_options_order' run.get_slug el.id 1 %}">
+                                <a href="{% url 'orga_registration_options_order' run.get_slug el.uuid 1 %}">
                                     <i class="fa-solid fa-arrow-down"></i>
                                 </a>
                             {% endif %}
@@ -71,10 +71,5 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>
-    var newUrl = '{% url 'orga_registration_options_new' run.get_slug num %}';
-
-    {% include "elements/question_edit.js" %}
-
-    </script>
+    <script>{% include "elements/question_edit.js" %}</script>
 {% endblock js %}

@@ -17,14 +17,14 @@
         <h2>{% trans "Abilities" %}</h2>
         {% for typ, ls in sheet_abilities.items %}
             <h3>{{ typ }}</h3>
-            <table>
+            <table class="mob">
                 {% for el in ls %}
                     <tr>
                         <th>
                             <h4>
                                 {{ el.name }} ({{ el.cost }})
-                                {% if undo_abilities and el.id in undo_abilities %}
-                                    <a href="{% url 'character_abilities_del' run.get_slug character.number el.id %}"
+                                {% if undo_abilities and el.uuid in undo_abilities %}
+                                    <a href="{% url 'character_abilities_del' run.get_slug character.uuid el.uuid %}"
                                        qtip="{% trans "Remove" %}">
                                         <i class="fa-solid fa-xmark"></i>
                                     </a>
@@ -32,7 +32,7 @@
                             </h4>
                         </th>
                         <td>
-                            {% if el.descr %}{{ el.descr | safe }}{% endif %}
+                            {% if el.get_description %}{{ el.get_description | safe }}{% endif %}
                         </td>
                     </tr>
                 {% endfor %}

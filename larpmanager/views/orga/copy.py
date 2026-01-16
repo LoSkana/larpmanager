@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import logging
+from collections import defaultdict
 from typing import TYPE_CHECKING, Any
 
 from django.contrib import messages
@@ -64,8 +65,8 @@ from larpmanager.models.writing import (
     Relationship,
     SpeedLarp,
 )
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.common import copy_class
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import copy_class
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponseRedirect
@@ -137,6 +138,7 @@ def correct_rels(
         match_value = getattr(parent_obj, matching_field)
         match_value_to_target_id[match_value] = parent_obj.id
 
+    objects_to_update = []
     for child_obj in child_model_class.objects.filter(event_id=target_event_id):
         source_parent_id = getattr(child_obj, relationship_field_id)
         if source_parent_id not in source_id_to_match_value:
@@ -144,7 +146,10 @@ def correct_rels(
         match_value = source_id_to_match_value[source_parent_id]
         target_parent_id = match_value_to_target_id[match_value]
         setattr(child_obj, relationship_field_id, target_parent_id)
-        child_obj.save()
+        objects_to_update.append(child_obj)
+
+    if objects_to_update:
+        child_model_class.objects.bulk_update(objects_to_update, [relationship_field_id])
 
 
 def correct_relationship(e_id: Any, p_id: Any) -> None:
@@ -161,10 +166,12 @@ def correct_relationship(e_id: Any, p_id: Any) -> None:
         source_character_map[character.id] = character.number
     for character in Character.objects.filter(event_id=e_id):
         target_character_map[character.number] = character.id
-    # ~ field = 'character_id'
-    # ~ for obj in Registration.objects.filter(run_id=context['run'].id):
-    # copy complicated
-    # Relationship
+
+    # Pre-fetch existing relationships
+    existing_relationships = set(
+        Relationship.objects.filter(source__event_id=e_id).values_list("source_id", "target_id")
+    )
+
     for relationship in Relationship.objects.filter(source__event_id=p_id):
         new_source_id = relationship.source_id
         if new_source_id not in source_character_map:
@@ -184,7 +191,8 @@ def correct_relationship(e_id: Any, p_id: Any) -> None:
         new_target_id = target_character_map[new_target_id]
         relationship.target_id = new_target_id
 
-        if Relationship.objects.filter(source_id=relationship.source_id, target_id=relationship.target_id).exists():
+        # Check existence using pre-fetched set instead of query
+        if (relationship.source_id, relationship.target_id) in existing_relationships:
             continue
 
         relationship.pk = None
@@ -506,10 +514,17 @@ def correct_plot_character(e_id: Any, p_id: Any) -> None:
         new_plot_id = Plot.objects.values_list("id").get(event_id=e_id, number=old_plot[1])[0]
         plot_id_mapping[old_plot[0]] = new_plot_id
 
+    # Pre-fetch existing plot-character relationships
+    existing_plot_character_rels = set(
+        PlotCharacterRel.objects.filter(character__event_id=e_id).values_list("character_id", "plot_id")
+    )
+
     for relationship in PlotCharacterRel.objects.filter(character__event_id=p_id):
         new_character_id = character_id_mapping[relationship.character_id]
         new_plot_id = plot_id_mapping[relationship.plot_id]
-        if PlotCharacterRel.objects.filter(character_id=new_character_id, plot_id=new_plot_id).exists():
+
+        # Check existence using pre-fetched set instead of query
+        if (new_character_id, new_plot_id) in existing_plot_character_rels:
             continue
 
         relationship.character_id = new_character_id
@@ -531,9 +546,14 @@ def copy_character_config(e_id: Any, p_id: Any) -> None:
     for character in Character.objects.filter(event_id=e_id):
         character_id_by_number[character.number] = character.id
 
+    # Pre-fetch all character configs
+    configs_by_character = defaultdict(list)
+    for config in CharacterConfig.objects.filter(character__event_id=p_id).select_related("character"):
+        configs_by_character[config.character_id].append(config)
+
     for parent_character in Character.objects.filter(event_id=p_id):
         target_character_id = character_id_by_number[parent_character.number]
-        for config in CharacterConfig.objects.filter(character=parent_character):
+        for config in configs_by_character[parent_character.id]:
             for retry_attempt in range(2):
                 try:
                     with transaction.atomic():
@@ -599,7 +619,7 @@ def copy(
 
 
 def copy_event(
-    context: dict[str, Any],
+    context: dict,
     target_event_id: Any,
     elements_to_copy: Any,
     target_event: object,
@@ -634,7 +654,7 @@ def copy_event(
             copy_actions[element_type]()
 
 
-def _copy_event_fields(context: dict[str, Any], event: object, parent_event: object) -> None:
+def _copy_event_fields(context: dict, event: object, parent_event: object) -> None:
     """Copy basic event fields from parent to child event."""
     for field_name in get_all_fields_from_form(OrgaEventForm, context):
         if field_name == "slug":
@@ -644,7 +664,7 @@ def _copy_event_fields(context: dict[str, Any], event: object, parent_event: obj
     event.name = "copy - " + event.name
 
 
-def _copy_appearance_fields(context: dict[str, Any], child_event: object, parent_event: object) -> None:
+def _copy_appearance_fields(context: dict, child_event: object, parent_event: object) -> None:
     """Copy appearance fields from parent to child event."""
     for field_name in get_all_fields_from_form(OrgaAppearanceForm, context):
         if field_name == "event_css":
@@ -768,7 +788,7 @@ def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int)
         correct_workshop(target_event_id, parent_event_id)
 
 
-def copy_css(context: dict[str, Any], event: Event, parent: Any) -> None:
+def copy_css(context: dict, event: Event, parent: Any) -> None:
     """Copy CSS file from parent event to current event.
 
     Args:
@@ -786,12 +806,16 @@ def copy_css(context: dict[str, Any], event: Event, parent: Any) -> None:
         return
 
     # Read CSS content from source file
-    css_content = default_storage.open(source_css_path).read().decode("utf-8")
+    try:
+        css_content = default_storage.open(source_css_path).read().decode("utf-8")
 
-    # Generate new CSS ID and save to target event
-    event.css_code = generate_id(32)
-    target_css_path = appearance_form.get_css_path(event)
-    default_storage.save(target_css_path, ContentFile(css_content))
+        # Generate new CSS ID and save to target event
+        event.css_code = generate_id(32)
+        target_css_path = appearance_form.get_css_path(event)
+        default_storage.save(target_css_path, ContentFile(css_content))
+    except (OSError, UnicodeDecodeError, PermissionError):
+        logger.exception("Failed to copy CSS file from %s", source_css_path)
+        # Continue without copying CSS - event will work without custom CSS
 
 
 @login_required
@@ -825,7 +849,7 @@ def orga_copy(request: HttpRequest, event_slug: str) -> Any:
     return render(request, "larpmanager/orga/copy.html", context)
 
 
-def get_all_fields_from_form(form_class: Any, context: dict[str, Any]) -> Any:
+def get_all_fields_from_form(form_class: Any, context: dict) -> Any:
     """Return names of all available fields from given Form instance."""
     fields = list(form_class(context=context).base_fields)
 

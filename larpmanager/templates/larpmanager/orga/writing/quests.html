@@ -23,22 +23,23 @@
 {% endblock thead %}
 {% block tbody %}
     {% for el in list %}
-        <tr id="{{ el.id }}">
+        <tr id="{{ el.uuid }}">
             <td>
-                <a href="{% url 'orga_quests_edit' run.get_slug el.id %}"
+                <a href="{% url 'orga_quests_edit' run.get_slug el.uuid %}"
                    qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
             </td>
-            <td class="editable" qid="{{ name_que_id }}">{{ el }}</td>
+            <td class="editable" question_uuid="{{ name_que_uuid }}">{{ el }}</td>
             <td>
-                <a href="{% url 'orga_quests_view' run.get_slug el.id %}"
+                <a href="{% url 'orga_quests_view' run.get_slug el.uuid %}"
                    qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
-                <a href="{% url 'orga_quests_versions' run.get_slug el.id %}"
+                <a href="{% url 'orga_quests_versions' run.get_slug el.uuid %}"
                    qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
             </td>
             <td>{{ el.typ }}</td>
             {% include "elements/writing/questions_body.html" %}
             <td class="hide traits dot_links">
                 {% for t in el.trait_rels.list %}
+                    {% include "elements/comma.html" %}
                     <a href="{% url 'orga_traits_edit' run.get_slug t.0 %}">{{ t.1 }}</a>
                 {% endfor %}
             </td>

@@ -23,16 +23,16 @@
             <tr>
                 <th>{{ el }}</th>
                 <td>{{ el.event.association }}</td>
-                <td>{{ el.start | date:"d/m/Y" }}</td>
+                <td>{{ el.start | date:"Y/m/d" }}</td>
                 <td>
-                    {% if el.end %}{{ el.end | date:"d/m/Y" }}{% endif %}
+                    {% if el.end %}{{ el.end | date:"Y/m/d" }}{% endif %}
                 </td>
                 <td>{{ el.features }}</td>
                 <td>{{ el.get_plan_display }}</td>
                 <td>{{ el.active_registrations }}</td>
                 <td>{{ el.total }}</td>
                 <td>
-                    <a href='{% url "lm_payments_confirm" el.id %}' class="confirm-link">Confirm</a>
+                    <a href='{% url "lm_payments_confirm" el.uuid %}' class="confirm-link">Confirm</a>
                 </td>
             {% endfor %}
         </tr>

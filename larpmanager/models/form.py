@@ -29,7 +29,7 @@ from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import Event
 from larpmanager.models.member import Member
 from larpmanager.models.registration import (
@@ -241,7 +241,7 @@ class QuestionApplicable(models.TextChoices):
         return dict(cls.choices)
 
 
-class WritingQuestion(BaseModel):
+class WritingQuestion(UuidMixin, BaseModel):
     """Form questions for character writing and story elements."""
 
     typ = models.CharField(
@@ -324,12 +324,12 @@ class WritingQuestion(BaseModel):
         """Return JSON-serializable dictionary of object attributes.
 
         Returns:
-            Dictionary containing description and name fields.
+            Dictionary containing description, name, and order fields.
 
         """
         js = {}
-        # Update JSON dict with description and name attributes
-        for s in ["description", "name"]:
+        # Update JSON dict with description, name, and order attributes
+        for s in ["description", "name", "order"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -366,7 +366,7 @@ class WritingQuestion(BaseModel):
         ]
 
 
-class WritingOption(BaseModel):
+class WritingOption(UuidMixin, BaseModel):
     """Represents WritingOption model."""
 
     search = models.CharField(max_length=1000, editable=False)
@@ -429,8 +429,8 @@ class WritingOption(BaseModel):
         # Initialize response with max available count
         js = {"max_available": self.max_available}
 
-        # Update with name and description attributes
-        for s in ["name", "description"]:
+        # Update with name, description, and order attributes
+        for s in ["name", "description", "order"]:
             self.upd_js_attr(js, s)
 
         return js
@@ -479,7 +479,7 @@ class WritingAnswer(BaseModel):
         ]
 
 
-class RegistrationQuestion(BaseModel):
+class RegistrationQuestion(UuidMixin, BaseModel):
     """Represents RegistrationQuestion model."""
 
     typ = models.CharField(
@@ -619,11 +619,11 @@ class RegistrationQuestion(BaseModel):
 
         # Conditionally add annotations based on enabled features
         if "reg_que_tickets" in features:
-            questions = questions.annotate(tickets_map=ArrayAgg("tickets"))
+            questions = questions.annotate(tickets_map=ArrayAgg("tickets__uuid"))
         if "reg_que_faction" in features:
-            questions = questions.annotate(factions_map=ArrayAgg("factions"))
+            questions = questions.annotate(factions_map=ArrayAgg("factions__id"))
         if "reg_que_allowed" in features:
-            questions = questions.annotate(allowed_map=ArrayAgg("allowed"))
+            questions = questions.annotate(allowed_map=ArrayAgg("allowed__id"))
 
         return questions
 
@@ -638,12 +638,12 @@ class RegistrationQuestion(BaseModel):
 
         if "reg_que_tickets" in features and registration and registration.pk:
             # noinspection PyUnresolvedReferences
-            allowed_ticket_ids = [ticket_id for ticket_id in self.tickets_map if ticket_id is not None]
-            if len(allowed_ticket_ids) > 0:
+            allowed_ticket_uuids = [ticket_uuid for ticket_uuid in self.tickets_map if ticket_uuid is not None]
+            if len(allowed_ticket_uuids) > 0:
                 if not registration or not registration.ticket:
                     return True
 
-                if registration.ticket_id not in allowed_ticket_ids:
+                if registration.ticket.uuid not in allowed_ticket_uuids:
                     return True
 
         if "reg_que_faction" in features and registration and registration.pk:
@@ -651,7 +651,7 @@ class RegistrationQuestion(BaseModel):
             allowed_faction_ids = [faction_id for faction_id in self.factions_map if faction_id is not None]
             if len(allowed_faction_ids) > 0:
                 registration_faction_ids = []
-                for character_relation in RegistrationCharacterRel.objects.filter(reg=registration):
+                for character_relation in RegistrationCharacterRel.objects.filter(registration=registration):
                     character_factions = character_relation.character.factions_list.values_list("id", flat=True)
                     registration_faction_ids.extend(character_factions)
 
@@ -674,7 +674,7 @@ class RegistrationQuestion(BaseModel):
         ]
 
 
-class RegistrationOption(BaseModel):
+class RegistrationOption(UuidMixin, BaseModel):
     """Represents RegistrationOption model."""
 
     search = models.CharField(max_length=1000, editable=False)
@@ -770,17 +770,17 @@ class RegistrationChoice(BaseModel):
 
     option = models.ForeignKey(RegistrationOption, on_delete=models.CASCADE, related_name="choices")
 
-    reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="choices")
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="choices")
 
     def __str__(self) -> str:
         """Return string representation showing registration, question and option."""
         # noinspection PyUnresolvedReferences
-        return f"{self.reg} ({self.question.name}) {self.option.name}"
+        return f"{self.registration} ({self.question.name}) {self.option.name}"
 
     class Meta:
         indexes: ClassVar[list] = [
-            models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="rc_reg_q_act"),
-            models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="rc_reg_act"),
+            models.Index(fields=["registration", "question"], condition=Q(deleted__isnull=True), name="rc_reg_q_act"),
+            models.Index(fields=["registration"], condition=Q(deleted__isnull=True), name="rc_reg_act"),
         ]
 
 
@@ -791,17 +791,17 @@ class RegistrationAnswer(BaseModel):
 
     text = models.TextField(max_length=5000)
 
-    reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="answers")
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="answers")
 
     def __str__(self) -> str:
         """Return string representation with registration, question name, and truncated text."""
         # noinspection PyUnresolvedReferences
-        return f"{self.reg} ({self.question.name}) {self.text[:100]}"
+        return f"{self.registration} ({self.question.name}) {self.text[:100]}"
 
     class Meta:
         indexes: ClassVar[list] = [
-            models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="ra_reg_q_act"),
-            models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="ra_reg_act"),
+            models.Index(fields=["registration", "question"], condition=Q(deleted__isnull=True), name="ra_reg_q_act"),
+            models.Index(fields=["registration"], condition=Q(deleted__isnull=True), name="ra_reg_act"),
         ]
 
 

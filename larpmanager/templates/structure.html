@@ -24,6 +24,16 @@
             }
         </style>
         {% if association.id == 0 %}
+            {% if google_tag %}
+                <!-- Google Tag Manager -->
+                <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','{{ google_tag }}');
+                </script>
+                <!-- End Google Tag Manager -->
+            {% endif %}
             <link rel="icon" type="image/png" href="{% static 'lm_fav_new.png' %}">
             <link rel="apple-touch-icon" href="{% static 'lm_fav_new.png' %}">
             <meta property="og:site_name" content="{{ association.platform }}">
@@ -113,21 +123,24 @@
     <body class="is-preload" id="{{ association.name | slugify }}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
-            {% if not frame and association.id != 0 %}
-                {% if user.is_authenticated %}
-                    {% if topbar %}
-                        {% include "elements/structure/topbar-admin.html" %}
+            {% if onboarding %}
+            {% else %}
+                {% if not frame and association.id != 0 %}
+                    {% if user.is_authenticated %}
+                        {% if topbar %}
+                            {% include "elements/structure/topbar-admin.html" %}
+                        {% else %}
+                            {% include "elements/structure/topbar-user.html" %}
+                        {% endif %}
                     {% else %}
-                        {% include "elements/structure/topbar-user.html" %}
+                        {% include "elements/structure/topbar.html" %}
                     {% endif %}
-                {% else %}
-                    {% include "elements/structure/topbar.html" %}
                 {% endif %}
+                {% include "elements/structure/sidebar.html" %}
             {% endif %}
-            {% include "elements/structure/sidebar.html" %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class="{% if manage and is_sidebar_open %}sidebar{% endif %} {% if not frame and association.id != 0 %}topbar{% endif %}">
+                 class="{% if manage and is_sidebar_open and not onboarding %}sidebar{% endif %} {% if not frame and association.id != 0 and not onboarding %}topbar{% endif %}">
                 {% block main %}
                 {% endblock main %}
             </div>
@@ -157,6 +170,17 @@
             let url_tutorials = "{% url 'tutorials' %}";
         </script>
         {% if association.id == 0 %}
+            {% if google_tag %}
+                <!-- Google Tag Manager (noscript) -->
+                <noscript>
+                    <iframe src="https://www.googletagmanager.com/ns.html?id={{ google_tag }}"
+                            height="0"
+                            width="0"
+                            class="gtagmanager">
+                    </iframe>
+                </noscript>
+                <!-- End Google Tag Manager (noscript) -->
+            {% endif %}
             {% compress js %}
                 <script defer src="{% static 'alpha/assets/js/jquery.dropotron.min.js' %}"></script>
                 <script defer src="{% static 'alpha/assets/js/util.js' %}"></script>
@@ -261,7 +285,7 @@
 
             // add origin for manage links
             {% if run %}
-                let origin = '{{ run.id }}';
+                let origin = '{{ run.uuid }}';
             {% else %}
                 let origin = '0';
             {% endif %}

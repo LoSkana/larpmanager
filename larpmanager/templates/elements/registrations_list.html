@@ -1,0 +1,212 @@
+{% load show_tags i18n %}
+<h2>{% trans "List" %}</h2>
+<p>
+    <a href="#" class="my_toggle" tog='email_players'>{% trans "Players" %}</a>
+    , <a href="#" class="my_toggle" tog='email_tickets'>{% trans "Tickets" %}</a>
+    {% if features.membership %}
+        , <a href="#" class="my_toggle" tog='email_memb'>{% trans "Membership" %}</a>
+    {% endif %}
+    {% if features.discount %}
+        , <a href="#" class="my_toggle" tog='email_disc'>{% trans "Discounts" %}</a>
+    {% endif %}
+    {% if list_factions %}
+        {% for k, fc in list_factions.items %}
+            {% if fc.name %}, <a href="#" class="my_toggle" tog='email_fc_{{ k }}'>{{ fc.name }}</a>{% endif %}
+        {% endfor %}
+    {% endif %}
+    {% if reg_questions %}
+        {% for key, que in reg_questions.items %}
+            {% if que.typ == 's' or que.typ == 'm' %}
+                , <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
+                <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</p>
+<div class="hide email_players">
+    <br />
+    <h4>{% trans "Players" %}</h4>
+    <table>
+        <tr>
+            <th>{% trans "Players" %}</th>
+            <td>{{ list_all.all.emails | length }}</td>
+            <td>
+                {% for el in list_all.all.emails %}
+                    {% include "elements/comma.html" %}
+                    {{ el }}
+                {% endfor %}
+            </td>
+            <td>
+                {% for el in list_all.all.players %}
+                    {% include "elements/comma.html" %}
+                    {{ el }}
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="hide email_tickets">
+    <br />
+    <h4>{% trans "Tickets" %}</h4>
+    <table>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>Emails</th>
+            <th>Names</th>
+        </tr>
+        {% for key, t in list_tickets.items %}
+            <tr>
+                <th>{{ t.name }}</th>
+                <td>{{ t.emails | length }}</td>
+                <td>
+                    {% for el in t.emails %}
+                        {% include "elements/comma.html" %}
+                        {{ el }}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for el in t.players %}
+                        {% include "elements/comma.html" %}
+                        {{ el }}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+<div class="hide email_type">
+    <br />
+    <h4>Email - {% trans "Registration" %}</h4>
+    <table>
+        <tr>
+            <th>{% trans "Staff" %}</th>
+            <td>{{ ticket_staff }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ ticket_e }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "Player" %}</th>
+            <td>{{ ticket.b }}</td>
+        </tr>
+        {% if features.filler %}
+            <tr>
+                <th>{% trans "Filler" %}</th>
+                <td>{{ ticket.f }}</td>
+            </tr>
+        {% endif %}
+        {% if features.waiting %}
+            <tr>
+                <th>{% trans "Waiting" %}</th>
+                <td>{{ ticket.w }}</td>
+            </tr>
+        {% endif %}
+    </table>
+</div>
+{% if features.membership %}
+    <div class="hide email_memb">
+        <br />
+        <h4>Email - {% trans "Membership" %}</h4>
+        <table>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>Emails</th>
+                <th>Names</th>
+            </tr>
+            {% for key, t in list_membership.items %}
+                <tr>
+                    <th>{{ t.name }}</th>
+                    <td>{{ t.emails | length }}</td>
+                    <td>
+                        {% for el in t.emails %}
+                            {% include "elements/comma.html" %}
+                            {{ el }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for el in t.players %}
+                            {% include "elements/comma.html" %}
+                            {{ el }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}
+{% if features.discount %}
+    <div class="hide email_disc">
+        <br />
+        <h4>Email - {% trans "Discounts" %}</h4>
+        <table>
+            {% for key, t in list_discount.items %}
+                <tr>
+                    <th>{{ t.name }}</th>
+                    <td>{{ t.emails | length }}</td>
+                    <td>
+                        {% for el in t.emails %}
+                            {% include "elements/comma.html" %}
+                            {{ el }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for el in t.players %}
+                            {% include "elements/comma.html" %}
+                            {{ el }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}
+{% if list_factions %}
+    {% for k, fc in list_factions.items %}
+        <div class="hide email_fc_{{ k }}">
+            <h4>{{ fc.name }}</h4>
+            <table>
+                <tr>
+                    <td>{{ fc.emails | length }}</td>
+                    <td>
+                        {% for el in fc.emails %}
+                            {% include "elements/comma.html" %}
+                            {{ el }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for el in fc.players %}
+                            {% include "elements/comma.html" %}
+                            {{ el }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    {% endfor %}
+{% endif %}
+{% if reg_questions %}
+    {% for key, que in reg_questions.items %}
+        {% if que.typ == 's' or que.typ == 'm' %}
+            <div class="hide email_que_{{ key }}">
+                <br />
+                <h4>{{ que.name }}</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Count</th>
+                            <th>Emails</th>
+                            <th>Names</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- loaded after -->
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}

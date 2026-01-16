@@ -28,11 +28,11 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.role import has_association_permission, has_event_permission
 from larpmanager.models.base import Feature
 from larpmanager.models.event import DevelopStatus, Run
-from larpmanager.utils.base import get_context
-from larpmanager.utils.exceptions import (
+from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
+from larpmanager.utils.core.base import get_context
+from larpmanager.utils.core.exceptions import (
     FeatureError,
     HiddenError,
     MainPageError,

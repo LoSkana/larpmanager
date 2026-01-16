@@ -23,23 +23,27 @@ import json
 from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
 from larpmanager.accounting.registration import get_date_surcharge
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.registration import get_reg_counts
-from larpmanager.forms.base import BaseRegistrationForm, MyForm
+from larpmanager.cache.registration import get_registration_counts
+from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm, get_question_key
 from larpmanager.forms.utils import (
     AllowedS2WidgetMulti,
     AssociationMemberS2Widget,
     DatePickerInput,
     FactionS2WidgetMulti,
+    RegistrationSectionS2Widget,
+    RunRegS2Widget,
     TicketS2WidgetMulti,
+    TransferTargetRunS2Widget,
 )
-from larpmanager.models.casting import Trait
+from larpmanager.models.casting import AssignmentTrait, QuestType, Trait
+from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionStatus,
     RegistrationOption,
@@ -57,11 +61,11 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.writing import Character, Faction
-from larpmanager.utils.common import get_time_diff_today
-from larpmanager.utils.registration import get_reduced_available_count
+from larpmanager.utils.core.common import get_time_diff_today
+from larpmanager.utils.users.registration import get_reduced_available_count
 
 if TYPE_CHECKING:
-    from larpmanager.models.event import Event, Run
+    from django.db.models import QuerySet
 
 
 class RegistrationForm(BaseRegistrationForm):
@@ -108,20 +112,21 @@ class RegistrationForm(BaseRegistrationForm):
         run = self.params["run"]
         event = run.event
         self.event = event
+        self.run_status = self.params.get("run_status", {})
 
         # Get current registration counts for quota calculations and availability checks
         # This data determines ticket availability and waiting list status
-        reg_counts = get_reg_counts(run)
+        registration_counts = get_registration_counts(run)
 
         # Initialize ticket selection field and retrieve help text for user guidance
         # Creates the primary ticket selection interface with availability info
-        ticket_help = self.init_ticket(event, reg_counts, run)
+        ticket_help = self.init_ticket(event, registration_counts, run)
 
         # Determine if registration should be placed in waiting list based on instance or run status
         # Checks existing registration status or current run capacity
         self.waiting_check = (
             self.instance and self.instance.ticket and self.instance.ticket.tier == TicketTier.WAITING
-        ) or (not self.instance and "waiting" in run.status)
+        ) or (not self.instance and "waiting" in self.run_status)
 
         # Initialize quota management system and additional registration options
         # Sets up capacity limits and optional registration features
@@ -130,12 +135,12 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Setup payment-related form fields including pricing and surcharges
         # Configures payment options and calculates total costs
-        self.init_pay_what(run)
+        self.init_pay_what()
         self.init_surcharge(event)
 
         # Add dynamic registration questions based on event configuration and requirements
         # Creates custom form fields for event-specific data collection
-        self.init_questions(event, reg_counts)
+        self.init_questions(event, registration_counts)
 
         # Setup friend referral system functionality for social registration features
         # Enables users to invite friends during registration process
@@ -149,7 +154,7 @@ class RegistrationForm(BaseRegistrationForm):
         """Update question requirements based on selected ticket type.
 
         Args:
-            ticket: Selected ticket instance
+            ticket: Selected ticket uuid string
 
         """
         """
@@ -161,12 +166,12 @@ class RegistrationForm(BaseRegistrationForm):
             return
 
         for question in self.questions:
-            k = "q" + str(question.id)
-            if k not in self.fields:
+            key = get_question_key(question)
+            if key not in self.fields:
                 continue
-            tm = [i for i in question.tickets_map if i is not None]
-            if ticket not in tm:
-                self.fields[k].required = False
+            tm = [str(i) for i in question.tickets_map if i is not None]
+            if not ticket or ticket not in tm:
+                self.fields[key].required = False
 
     def init_additionals(self) -> None:
         """Initialize additional tickets field if feature is enabled."""
@@ -174,10 +179,21 @@ class RegistrationForm(BaseRegistrationForm):
         if "additional_tickets" not in self.params["features"]:
             return
 
-        # Create choice field with ticket quantity options (1-5)
+        # Get max_length from additional_tickets question, default to 5
+        max_tickets = 5
+        try:
+            additional_question = RegistrationQuestion.objects.filter(
+                event=self.params["run"].event, typ=RegistrationQuestionType.ADDITIONAL
+            ).first()
+            if additional_question and additional_question.max_length > 0:
+                max_tickets = additional_question.max_length
+        except ObjectDoesNotExist:
+            pass  # Use default value if query fails
+
+        # Create choice field with ticket quantity options (0 to max_tickets)
         self.fields["additionals"] = forms.ChoiceField(
             required=False,
-            choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")],
+            choices=[(i, str(i)) for i in range(max_tickets + 1)],
         )
 
         # Set initial value from instance if available
@@ -203,20 +219,20 @@ class RegistrationForm(BaseRegistrationForm):
             help_text=help_text_message % {"amount": self.params.get("bring_friend_discount_from", 0)},
         )
 
-    def init_questions(self, event: Event, reg_counts: dict[str, Any]) -> None:
+    def init_questions(self, event: Event, registration_counts: dict[str, Any]) -> None:
         """Initialize registration questions and ticket mapping.
 
         Args:
             event: Event instance
-            reg_counts: Registration count data
+            registration_counts: Registration count data
 
         """
         self.tickets_map = {}
         if self.waiting_check:
             return
-        self._init_reg_question(self.instance, event)
-        for q in self.questions:
-            self.init_question(q, reg_counts)
+        self._init_registration_question(self.instance, event)
+        for question in self.questions:
+            self.init_question(question, registration_counts)
         self.tickets_map = json.dumps(self.tickets_map)
 
     def init_question(self, question: Any, registration_counts: Any) -> None:
@@ -243,7 +259,7 @@ class RegistrationForm(BaseRegistrationForm):
                 self.section_descriptions[question.section.name] = question.section.description
 
         if "reg_que_tickets" in self.params["features"]:
-            tm = [i for i in question.tickets_map if i is not None]
+            tm = [str(i) for i in question.tickets_map if i is not None]
             if tm:
                 self.tickets_map[k] = tm
 
@@ -261,19 +277,14 @@ class RegistrationForm(BaseRegistrationForm):
         ch = [(0, f"{surcharge}{self.params['currency_symbol']}")]
         self.fields["surcharge"] = forms.ChoiceField(required=True, choices=ch)
 
-    def init_pay_what(self, run: Run) -> None:
-        """Initialize pay-what-you-want donation field for non-waiting runs.
-
-        Args:
-            run: The Run instance to check status for field initialization.
-
-        """
+    def init_pay_what(self) -> None:
+        """Initialize pay-what-you-want donation field for non-waiting runs."""
         # Skip if pay-what-you-want feature is not enabled
         if "pay_what_you_want" not in self.params["features"]:
             return
 
         # Skip for waiting runs
-        if "waiting" in run.status:
+        if "waiting" in self.run_status:
             return
 
         # Create the pay-what-you-want field with validation (0-1000 range)
@@ -300,7 +311,7 @@ class RegistrationForm(BaseRegistrationForm):
         quota_choices = []
 
         # Check if quota feature is enabled and run is not in waiting status
-        if "reg_quotas" in self.params["features"] and "waiting" not in run.status:
+        if "reg_quotas" in self.params["features"] and "waiting" not in self.run_status:
             # Define labels for different quota options (1-5 quotas)
             quota_labels = [
                 _("Single payment"),
@@ -368,7 +379,7 @@ class RegistrationForm(BaseRegistrationForm):
         for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
             ticket_display_name = ticket.get_form_text(currency_symbol=self.params["currency_symbol"])
-            ticket_choices.append((ticket.id, ticket_display_name))
+            ticket_choices.append((str(ticket.uuid), ticket_display_name))
 
             # Add ticket description to help text if available
             if ticket.description:
@@ -379,7 +390,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Set initial ticket value from existing instance or parameters
         if self.instance and self.instance.ticket:
-            self.initial["ticket"] = self.instance.ticket.id
+            self.initial["ticket"] = str(self.instance.ticket.uuid)
         elif self.params.get("ticket"):
             self.initial["ticket"] = self.params["ticket"]
 
@@ -420,7 +431,7 @@ class RegistrationForm(BaseRegistrationForm):
         if registration_ticket.visible:
             return True
 
-        if "ticket" in self.params and self.params["ticket"] == registration_ticket.id:
+        if "ticket" in self.params and self.params["ticket"] == str(registration_ticket.uuid):
             return True
 
         return bool(self.instance.pk and self.instance.ticket == registration_ticket)
@@ -453,7 +464,7 @@ class RegistrationForm(BaseRegistrationForm):
                 return RegistrationTicket.objects.filter(event=event, tier=tier).order_by("order")
 
         # Prevent new registrations if inscriptions are closed
-        if not self.instance.pk and "closed" in run.status:
+        if not self.instance.pk and "closed" in self.run_status:
             return []
 
         # Build list of available player tickets
@@ -504,11 +515,11 @@ class RegistrationForm(BaseRegistrationForm):
                 return True
         return False
 
-    def skip_ticket_max(self, reg_counts: Any, ticket: Any) -> bool:
+    def skip_ticket_max(self, registration_counts: Any, ticket: Any) -> bool:
         """Check if ticket should be skipped due to maximum limit reached.
 
         Args:
-            reg_counts: Registration count data
+            registration_counts: Registration count data
             ticket: RegistrationTicket instance
 
         Returns:
@@ -519,8 +530,8 @@ class RegistrationForm(BaseRegistrationForm):
         if ticket.max_available > 0 and (not self.instance or ticket != self.instance.ticket):
             ticket.available = ticket.max_available
             key = f"tk_{ticket.id}"
-            if key in reg_counts:
-                ticket.available -= reg_counts[key]
+            if key in registration_counts:
+                ticket.available -= registration_counts[key]
             if ticket.available <= 0:
                 return True
         return False
@@ -545,7 +556,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         """
         # If this ticket is already selected in current registration flow, don't skip it
-        if "ticket" in self.params and self.params["ticket"] == ticket.id:
+        if "ticket" in self.params and self.params["ticket"] == str(ticket.uuid):
             return False
 
         result = False
@@ -560,7 +571,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Show waiting tickets only if run allows waiting or member already has waiting ticket
         elif ticket.tier == TicketTier.WAITING:
-            if "waiting" not in run.status and not self.has_ticket(TicketTier.WAITING):
+            if "waiting" not in self.run_status and not self.has_ticket(TicketTier.WAITING):
                 result = True
 
         # Handle filler ticket visibility based on event config and member status
@@ -569,17 +580,17 @@ class RegistrationForm(BaseRegistrationForm):
             if filler_alway:
                 # With filler_always enabled, show only if run supports filler/primary or member has filler ticket
                 if (
-                    "filler" not in run.status
-                    and "primary" not in run.status
+                    "filler" not in self.run_status
+                    and "primary" not in self.run_status
                     and not self.has_ticket(TicketTier.FILLER)
                 ):
                     result = True
             # Without filler_always, show only if run supports filler or member has filler ticket
-            elif "filler" not in run.status and not self.has_ticket(TicketTier.FILLER):
+            elif "filler" not in self.run_status and not self.has_ticket(TicketTier.FILLER):
                 result = True
 
         # Show primary tickets only if run supports primary registration or member has primary ticket
-        elif "primary" not in run.status and not self.has_ticket_primary():
+        elif "primary" not in self.run_status and not self.has_ticket_primary():
             result = True
 
         return result
@@ -598,7 +609,7 @@ class RegistrationForm(BaseRegistrationForm):
             if cod:
                 try:
                     # Look for registration with matching special code in same event
-                    Registration.objects.get(special_cod=cod, run__event=run.event)
+                    Registration.objects.get(uuid=cod, run__event=run.event)
                 except Registration.DoesNotExist:
                     # Add error if friend code not found
                     self.add_error("bring_friend", "I'm sorry, this friend code was not found")
@@ -617,12 +628,12 @@ class RegistrationGiftForm(RegistrationForm):
 
         # Build list of fields to keep: base fields plus giftable questions
         keep = ["run", "ticket"]
-        keep.extend(["q" + str(q.id) for q in self.questions if q.giftable])
+        keep.extend([get_question_key(question) for question in self.questions if question.giftable])
 
         # Remove fields not in keep list and update mandatory tracking
         list_del = [s for s in self.fields if s not in keep]
         for field in list_del:
-            del self.fields[field]
+            self.delete_field(field)
             key = f"id_{field}"
             if key in self.mandatory:
                 self.mandatory.remove(key)
@@ -688,39 +699,31 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.event = self.params["run"].event
 
         # Configure member widget with association
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
 
         self.allow_run_choice()
 
         # Define form sections for field organization
-        reg_section = _("Registration")
+        registration_section = _("Registration")
         char_section = _("Character")
-        add_section = _("Details")
         main_section = _("Main")
 
         # Assign registration fields to registration section
-        self.sections["id_member"] = reg_section
-        self.sections["id_run"] = reg_section
+        self.sections["id_member"] = registration_section
+        self.sections["id_run"] = registration_section
 
         # Initialize registration-related fields
-        self.init_quotas(reg_section)
+        self.init_quotas(registration_section)
 
-        self.init_ticket(reg_section)
+        self.init_ticket(registration_section)
 
-        self.init_additionals(reg_section)
+        self.init_additionals(registration_section)
 
-        self.init_pay_what(reg_section)
+        self.init_pay_what(registration_section)
 
         # Initialize character fields if feature is enabled
         if "character" in self.params["features"]:
             self.init_character(char_section)
-
-        # Handle unique code field based on feature flag
-        if "unique_code" in self.params["features"]:
-            self.sections["id_special_cod"] = add_section
-            self.reorder_field("special_cod")
-        else:
-            self.delete_field("special_cod")
 
         # Initialize organization-specific fields and clean up unused ones
         keys = self.init_orga_fields(main_section)
@@ -737,6 +740,21 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Check if additional tickets feature is available
         if "additional_tickets" not in self.params["features"]:
             return
+
+        # Get max_length from additional_tickets question, default to 5
+        max_tickets = 5
+        try:
+            additional_question = RegistrationQuestion.objects.filter(
+                event=self.params["run"].event, typ=RegistrationQuestionType.ADDITIONAL
+            ).first()
+            if additional_question and additional_question.max_length > 0:
+                max_tickets = additional_question.max_length
+        except ObjectDoesNotExist:
+            pass  # Use default value if query fails
+
+        # Update field choices if the field exists
+        if "additionals" in self.fields:
+            self.fields["additionals"].widget.choices = [(i, str(i)) for i in range(max_tickets + 1)]
 
         # Register the additional tickets section
         self.sections["id_additionals"] = registration_section
@@ -773,16 +791,24 @@ class OrgaRegistrationForm(BaseRegistrationForm):
     def init_ticket(self, registration_section: Any) -> None:
         """Initialize ticket field choices and set default if only one ticket available."""
         # Fetch and format ticket choices ordered by price (highest first)
-        ticket_choices = [
-            (ticket.id, ticket.get_form_text(currency_symbol=self.params["currency_symbol"]))
-            for ticket in RegistrationTicket.objects.filter(event=self.params["run"].event).order_by("-price")
-        ]
-        self.fields["ticket"].choices = ticket_choices
+        qs = RegistrationTicket.objects.filter(event=self.params["run"].event).order_by("-price")
+
+        self.fields["ticket"] = forms.ChoiceField(
+            required=self.fields["ticket"].required,
+            label=self.fields["ticket"].label,
+            help_text=self.fields["ticket"].help_text,
+            choices=[(ticket.uuid, ticket.get_form_text(self.params["currency_symbol"])) for ticket in qs],
+        )
+
+        # Set initial value if editing existing instance
+        if self.instance.pk and self.instance.ticket:
+            self.initial["ticket"] = self.instance.ticket.uuid
 
         # Hide ticket selection and set default if only one option exists
-        if len(ticket_choices) == 1:
+        if qs.count() == 1:
+            ticket = qs.first()
             self.fields["ticket"].widget = forms.HiddenInput()
-            self.initial["ticket"] = ticket_choices[0][0]
+            self.initial["ticket"] = ticket.uuid
 
         self.sections["id_ticket"] = registration_section
 
@@ -812,13 +838,8 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.initial["quotas"] = self.instance.quotas
         self.sections["id_quotas"] = registration_section
 
-    def init_character(self, char_section: Any) -> None:  # noqa: C901 - Complex character field initialization with feature-dependent logic
-        """Initialize character selection fields in registration forms.
-
-        Manages character assignment options based on event configuration
-        and user permissions for character-based events.
-        """
-        # CHARACTER AND QUESTS
+    def init_character(self, char_section: str) -> None:
+        """Initialize character fields in registration form editing."""
         if "orga_characters" not in self.params or not self.params["orga_characters"]:
             return
 
@@ -827,7 +848,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             self.initial["characters_new"] = self.get_init_multi_character()
             mine.update(list(self.initial["characters_new"]))
         taken_characters = set(
-            RegistrationCharacterRel.objects.filter(reg__run_id=self.params["run"].id).values_list(
+            RegistrationCharacterRel.objects.filter(registration__run_id=self.params["run"].id).values_list(
                 "character_id",
                 flat=True,
             ),
@@ -841,35 +862,63 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         )
         self.sections["id_characters_new"] = char_section
 
-        if "questbuilder" in self.params["features"]:
-            already = []
-            assigned = []
-            char = None
-            char_ids = self.get_init_multi_character()
-            if char_ids:
-                char = Character.objects.get(pk=char_ids[0])
-            for tnum, trait in self.params["traits"].items():
-                if char and char.number == trait["char"]:
-                    assigned.append(tnum)
-                    continue
-                already.append(tnum)
-            available = Trait.objects.filter(event=self.event).exclude(number__in=already)
-            for qtnum, qt in self.params["quest_types"].items():
-                qt_id = f"qt_{qt['number']}"
-                key = "id_" + qt_id
-                self.sections[key] = char_section
-                choices = [("0", _("--- NOT ASSIGNED ---"))]
-                for q in self.params["quests"].values():
-                    if q["typ"] != qtnum:
-                        continue
-                    for t in available:
-                        if t.quest_id != q["id"]:
-                            continue
-                        choices.append((t.id, f"Q{q['number']} {q['name']} - {t}"))
-                        if t.number in assigned:
-                            self.initial[qt_id] = t.id
+        self._init_quest_traits(char_section)
 
-                self.fields[qt_id] = forms.ChoiceField(required=True, choices=choices, label=qt["name"])
+    def _init_quest_traits(self, char_section: str) -> None:
+        """Initialize manual questbuilder assignment in orga registration form editing."""
+        if "questbuilder" not in self.params["features"]:
+            return
+
+        # Get traits already assigned to other members
+        already_assigned_trait_ids = set()
+        member_assignments = {}
+        current_member_id = None
+
+        # If editing existing registration, get assignments for this member
+        if self.instance and self.instance.pk and hasattr(self.instance, "member") and self.instance.member_id:
+            current_member_id = self.instance.member_id
+
+        # Get all assignments for this run
+        all_assignments = AssignmentTrait.objects.filter(run=self.params["run"]).select_related("trait")
+
+        for assignment in all_assignments:
+            if current_member_id and assignment.member_id == current_member_id:
+                # Track this member's assignments by quest type number
+                member_assignments[assignment.typ] = assignment.trait.uuid
+            else:
+                # Track traits assigned to other members
+                already_assigned_trait_ids.add(assignment.trait_id)
+
+        # Get available traits (excluding those assigned to others)
+        available = (
+            Trait.objects.filter(event=self.event).exclude(id__in=already_assigned_trait_ids).select_related("quest")
+        )
+
+        for qt in self.params["quest_types"].values():
+            self._init_traits(available, char_section, member_assignments, qt)
+
+    def _init_traits(
+        self, available: QuerySet, char_section: str, member_assignments: dict, quest_type: QuestType
+    ) -> None:
+        """Init fields for manual trait assignment in orga registration form editing."""
+        qt_uuid = f"qt_{quest_type['uuid']}"
+        qt_number = quest_type["number"]
+        key = "id_" + qt_uuid
+        self.sections[key] = char_section
+        choices = [("0", _("--- NOT ASSIGNED ---"))]
+        for quest in self.params["quests"].values():
+            if quest["typ"] != qt_number:
+                continue
+            for trait in available:
+                if trait.quest.uuid != quest["uuid"]:
+                    continue
+                choices.append((trait.uuid, f"Q{quest['number']} {quest['name']} - {trait}"))
+
+        # Set initial value if this member has an assigned trait for this quest type
+        if qt_number in member_assignments:
+            self.initial[qt_uuid] = member_assignments[qt_number]
+
+        self.fields[qt_uuid] = forms.ChoiceField(required=True, choices=choices, label=quest_type["name"])
 
     def clean_member(self) -> Any:
         """Validate member field to prevent duplicate registrations.
@@ -888,13 +937,13 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             if "delete" in post and post["delete"] == "1":
                 return data
 
-        for reg in Registration.objects.filter(
+        for registration in Registration.objects.filter(
             member=data,
             run=self.params["run"],
             cancellation_date__isnull=True,
             redeem_code__isnull=True,
         ):
-            if reg.pk != self.instance.pk:
+            if registration.pk != self.instance.pk:
                 msg = "User already has a registration for this event!"
                 raise ValidationError(msg)
 
@@ -911,9 +960,18 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Convert None or empty string to 0 to prevent NULL constraint violations
         return data if data is not None else 0
 
+    def clean_ticket(self) -> RegistrationTicket:
+        """Convert UUID from ChoiceField to RegistrationTicket instance."""
+        ticket_value = self.cleaned_data.get("ticket")
+
+        if isinstance(ticket_value, RegistrationTicket):
+            return ticket_value
+
+        return RegistrationTicket.objects.get(uuid=ticket_value)
+
     def get_init_multi_character(self) -> list[int]:
         """Get initial character IDs for multi-character registration."""
-        character_registrations = RegistrationCharacterRel.objects.filter(reg__id=self.instance.pk)
+        character_registrations = RegistrationCharacterRel.objects.filter(registration__id=self.instance.pk)
         return character_registrations.values_list("character_id", flat=True)
 
     def _save_multi(self, field: str, instance: Registration) -> None:
@@ -933,11 +991,11 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         # Remove characters no longer selected
         for ch in old - new:
-            RegistrationCharacterRel.objects.filter(character_id=ch, reg_id=instance.pk).delete()
+            RegistrationCharacterRel.objects.filter(character_id=ch, registration_id=instance.pk).delete()
 
         # Add newly selected characters
         for ch in new - old:
-            RegistrationCharacterRel.objects.create(character_id=ch, reg_id=instance.pk)
+            RegistrationCharacterRel.objects.create(character_id=ch, registration_id=instance.pk)
         return None
 
     def clean_characters_new(self) -> Any:
@@ -951,31 +1009,37 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         """
         data = self.cleaned_data["characters_new"]
+        character_ids = list(data.values_list("pk", flat=True))
 
-        for ch in data.values_list("pk", flat=True):
-            qs = RegistrationCharacterRel.objects.filter(
-                character_id=ch,
-                reg__run=self.params["run"],
-                reg__cancellation_date__isnull=True,
-            )
-            if self.instance.pk:
-                qs = qs.exclude(reg__id=self.instance.pk)
-            if len(qs) > 0:
-                el = qs.first()
-                msg = f"Character '{el.character}' already assigned to the player '{el.reg.member}' for this event!"
-                raise ValidationError(
-                    msg,
-                )
+        # Batch fetch all assigned characters
+        assigned_qs = RegistrationCharacterRel.objects.filter(
+            character_id__in=character_ids,
+            registration__run=self.params["run"],
+            registration__cancellation_date__isnull=True,
+        ).select_related("character", "registration__member")
+
+        if self.instance.pk:
+            assigned_qs = assigned_qs.exclude(registration__id=self.instance.pk)
+
+        # Create dict of assigned characters for fast lookup
+        assigned_chars = {relation.character_id: relation for relation in assigned_qs}
+
+        # Check each character against batch-fetched assignments
+        for ch_id in character_ids:
+            if ch_id in assigned_chars:
+                relation = assigned_chars[ch_id]
+                msg = f"Character '{relation.character}' already assigned to the player '{relation.registration.member}' for this event!"
+                raise ValidationError(msg)
 
         return data
 
 
-class RegistrationCharacterRelForm(MyForm):
+class RegistrationCharacterRelForm(BaseModelForm):
     """Form for RegistrationCharacterRel."""
 
     class Meta:
         model = RegistrationCharacterRel
-        exclude = ("reg", "character")
+        exclude = ("registration", "character")
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with dynamic field configuration based on event settings.
@@ -1008,7 +1072,7 @@ class RegistrationCharacterRelForm(MyForm):
             self.delete_field("custom_" + m)
 
 
-class OrgaRegistrationTicketForm(MyForm):
+class OrgaRegistrationTicketForm(BaseModelForm):
     """Form for OrgaRegistrationTicket."""
 
     page_info = _("Manage ticket types for participant registration")
@@ -1032,7 +1096,7 @@ class OrgaRegistrationTicketForm(MyForm):
         if len(tiers) > 1:
             self.fields["tier"].choices = tiers
         else:
-            del self.fields["tier"]
+            self.delete_field("tier")
 
         # Remove casting priority field if casting feature is disabled
         if "casting" not in self.params["features"]:
@@ -1058,12 +1122,6 @@ class OrgaRegistrationTicketForm(MyForm):
         Returns:
             List of available ticket tier tuples in format (value, label).
             Each tuple represents a selectable ticket tier option.
-
-        Example:
-            >>> tiers = get_tier_available(my_event)
-            >>> print(tiers)
-            [('standard', 'Standard'), ('reduced', 'Reduced Price')]
-
         """
         available_tiers = []
 
@@ -1108,7 +1166,7 @@ class OrgaRegistrationTicketForm(MyForm):
         return available_tiers
 
 
-class OrgaRegistrationSectionForm(MyForm):
+class OrgaRegistrationSectionForm(BaseModelForm):
     """Form for OrgaRegistrationSection."""
 
     page_info = _("Manage signup form sections")
@@ -1120,7 +1178,7 @@ class OrgaRegistrationSectionForm(MyForm):
         exclude: ClassVar[list] = ["order"]
 
 
-class OrgaRegistrationQuestionForm(MyForm):
+class OrgaRegistrationQuestionForm(BaseModelForm):
     """Form for OrgaRegistrationQuestion."""
 
     page_info = _("Manage signup form questions")
@@ -1135,6 +1193,7 @@ class OrgaRegistrationQuestionForm(MyForm):
             "factions": FactionS2WidgetMulti,
             "tickets": TicketS2WidgetMulti,
             "allowed": AllowedS2WidgetMulti,
+            "section": RegistrationSectionS2Widget,
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
 
@@ -1148,32 +1207,35 @@ class OrgaRegistrationQuestionForm(MyForm):
         """
         super().__init__(*args, **kwargs)
 
-        self.fields["factions"].widget.set_event(self.params["event"])
+        self.configure_field_event("factions", self.params["event"])
 
         self._init_type()
 
         if "reg_que_sections" not in self.params["features"]:
             self.delete_field("section")
         else:
-            ch = [(m.id, str(m)) for m in RegistrationSection.objects.filter(event=self.params["run"].event)]
-            ch.insert(0, ("", _("--- Empty")))
-            self.fields["section"].choices = ch
+            self.configure_field_event("section", self.params["event"])
+            self.fields["section"].empty_label = _("--- Empty")
+            self.fields["section"].to_field_name = "uuid"
+            # Set initial value to UUID instead of ID for existing instances
+            if self.instance and self.instance.pk and self.instance.section:
+                self.initial["section"] = self.instance.section.uuid
 
         if "reg_que_allowed" not in self.params["features"]:
             self.delete_field("allowed")
         else:
-            self.fields["allowed"].widget.set_event(self.params["event"])
+            self.configure_field_event("allowed", self.params["event"])
 
         if "reg_que_tickets" not in self.params["features"]:
             self.delete_field("tickets")
         else:
-            self.fields["tickets"].widget.set_event(self.params["event"])
+            self.configure_field_event("tickets", self.params["event"])
 
         if "reg_que_faction" not in self.params["features"]:
             self.delete_field("factions")
         else:
             self.fields["factions"].choices = [
-                (m.id, str(m)) for m in self.params["run"].event.get_elements(Faction).order_by("number")
+                (m.uuid, str(m)) for m in self.params["run"].event.get_elements(Faction).order_by("number")
             ]
 
         if "gift" not in self.params["features"]:
@@ -1223,7 +1285,7 @@ class OrgaRegistrationQuestionForm(MyForm):
         self.fields["typ"].choices = available_choices
 
 
-class OrgaRegistrationOptionForm(MyForm):
+class OrgaRegistrationOptionForm(BaseModelForm):
     """Form for OrgaRegistrationOption."""
 
     page_info = _("Manage signup form question options")
@@ -1232,19 +1294,21 @@ class OrgaRegistrationOptionForm(MyForm):
 
     class Meta:
         model = RegistrationOption
-        exclude: ClassVar[list] = ["order"]
-        widgets: ClassVar[dict] = {"question": forms.HiddenInput()}
+        exclude: ClassVar[list] = ["order", "question"]
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set question field from params if provided."""
         super().__init__(*args, **kwargs)
 
-        # Set initial question value from params if question_id is present
-        if "question_id" in self.params:
-            self.initial["question"] = self.params["question_id"]
+    def save(self, commit: bool = True) -> RegistrationOption:  # noqa: FBT001, FBT002
+        """Save the form instance, setting question for new instances."""
+        if not self.instance.pk and "question" in self.params:
+            self.instance.question = self.params["question"]
+
+        return super().save(commit=commit)
 
 
-class OrgaRegistrationQuotaForm(MyForm):
+class OrgaRegistrationQuotaForm(BaseModelForm):
     """Form for OrgaRegistrationQuota."""
 
     page_info = _("Manage dynamic payment installments for participants")
@@ -1255,8 +1319,29 @@ class OrgaRegistrationQuotaForm(MyForm):
         model = RegistrationQuota
         exclude = ("number",)
 
+    def clean_quotas(self) -> int:
+        """Validate that the number is unique for quotas of this event."""
+        quotas = self.cleaned_data.get("quotas")
+        event = self.cleaned_data.get("event") or (self.instance.event if self.instance.pk else None)
 
-class OrgaRegistrationInstallmentForm(MyForm):
+        if not event or not quotas:
+            return quotas
+
+        # Check if another quota with this number already exists for this event
+        existing_quota = RegistrationQuota.objects.filter(event=event, quotas=quotas)
+
+        # Exclude current instance if we're editing
+        if self.instance.pk:
+            existing_quota = existing_quota.exclude(pk=self.instance.pk)
+
+        if existing_quota.exists():
+            msg = _("A quota with %(quotas)d payments already exists for this event") % {"quotas": quotas}
+            raise ValidationError(msg)
+
+        return quotas
+
+
+class OrgaRegistrationInstallmentForm(BaseModelForm):
     """Form for OrgaRegistrationInstallment."""
 
     page_info = _("Manage fixed payment installments for participants")
@@ -1275,10 +1360,23 @@ class OrgaRegistrationInstallmentForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure event-specific ticket widget."""
         super().__init__(*args, **kwargs)
-        self.fields["tickets"].widget.set_event(self.params["event"])
+        self.configure_field_event("tickets", self.params["event"])
+
+    def clean_order(self) -> int:
+        """Validate that the order is unique for installments of this event.
+
+        Note: This validation only checks the order field. The complete validation
+        that checks for common tickets is done in the clean() method after tickets
+        are available in cleaned_data.
+        """
+        order = self.cleaned_data.get("order")
+        if order is None:
+            return order
+
+        return order
 
     def clean(self) -> dict[str, any]:
-        """Validate that only one deadline type (date or days) is specified."""
+        """Validate that only one deadline type (date or days) is specified and tickets are selected."""
         cleaned_data = super().clean()
 
         # Check if both deadline types are specified
@@ -1290,10 +1388,56 @@ class OrgaRegistrationInstallmentForm(MyForm):
                 "Choose only one deadline for this installment, either by date or number of days!",
             )
 
+        # Check if tickets are selected (tickets is a QuerySet from the form)
+        tickets = cleaned_data.get("tickets")
+        if not tickets or (hasattr(tickets, "count") and tickets.count() == 0):
+            self.add_error(
+                "tickets",
+                _("You must select at least one ticket for this installment"),
+            )
+            # If no tickets, we can't check for conflicts, so return early
+            return cleaned_data
+
+        # Check for duplicate order with common tickets
+        order = cleaned_data.get("order")
+        event = cleaned_data.get("event") or (self.instance.event if self.instance.pk else None)
+
+        if event and order is not None and tickets:
+            # Get all installments with the same order for this event
+            existing_installments = RegistrationInstallment.objects.filter(event=event, order=order).prefetch_related(
+                "tickets"
+            )
+
+            # Exclude current instance if we're editing
+            if self.instance.pk:
+                existing_installments = existing_installments.exclude(pk=self.instance.pk)
+
+            # Get the IDs of tickets we're trying to assign
+            ticket_ids = set(tickets.values_list("id", flat=True))
+
+            # Check each existing installment for common tickets
+            for existing in existing_installments:
+                existing_ticket_ids = set(existing.tickets.values_list("id", flat=True))
+                common_tickets = ticket_ids & existing_ticket_ids
+
+                if common_tickets:
+                    # Get the names of common tickets for error message
+                    common_ticket_objs = RegistrationTicket.objects.filter(id__in=common_tickets)
+                    ticket_names = ", ".join([t.name for t in common_ticket_objs])
+
+                    self.add_error(
+                        "order",
+                        _(
+                            "An installment with order %(order)d already exists with the following common ticket(s): %(tickets)s"
+                        )
+                        % {"order": order, "tickets": ticket_names},
+                    )
+                    break  # Only report the first conflict found
+
         return cleaned_data
 
 
-class OrgaRegistrationSurchargeForm(MyForm):
+class OrgaRegistrationSurchargeForm(BaseModelForm):
     """Form for OrgaRegistrationSurcharge."""
 
     page_info = _("Manage registration surcharges")
@@ -1307,7 +1451,7 @@ class OrgaRegistrationSurchargeForm(MyForm):
         widgets: ClassVar[dict] = {"date": DatePickerInput}
 
 
-class PreRegistrationForm(forms.Form):
+class PreRegistrationForm(BaseForm):
     """Form for PreRegistration."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -1318,13 +1462,12 @@ class PreRegistrationForm(forms.Form):
             **kwargs: Arbitrary keyword arguments including 'context' context data
 
         """
-        super().__init__()
         self.context = kwargs.pop("context")
         super().__init__(*args, **kwargs)
 
         self.pre_reg = 1 + len(self.context["already"])
 
-        cho = [("", "----")] + [(c.id, c.name) for c in self.context["choices"]]
+        cho = [("", "----")] + [(c.uuid, c.name) for c in self.context["choices"]]
         self.fields["new_event"] = forms.ChoiceField(
             required=False,
             choices=cho,
@@ -1360,3 +1503,31 @@ class PreRegistrationForm(forms.Form):
             label=_("Informations"),
             help_text=_("Is there anything else you would like to tell us") + "?",
         )
+
+
+class RegistrationTransferForm(BaseForm):
+    """Form for selecting registration and target for transfer."""
+
+    registration_id = forms.ModelChoiceField(
+        queryset=Registration.objects.none(),
+        label=_("Registration"),
+        required=True,
+        help_text=_("Select the registration you want to transfer"),
+        widget=RunRegS2Widget(),
+    )
+
+    target_run_id = forms.ModelChoiceField(
+        queryset=Run.objects.none(),
+        label=_("Event"),
+        required=False,
+        help_text=_("Select the new event"),
+        widget=TransferTargetRunS2Widget(),
+    )
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with context data."""
+        self.context = kwargs.pop("context")
+        super().__init__(*args, **kwargs)
+
+        self.configure_field_run("registration_id", self.context["run"])
+        self.configure_field_event("target_run_id", self.context["event"])

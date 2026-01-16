@@ -30,16 +30,16 @@
                 <tr>
                     <td>{{ el }}</td>
                     <td>
-                        {% for reg in el.context.registration_list %}
-                            {{ reg.run }}
-                            {% if reg.ticket %}
+                        {% for registration in el.context.registration_list %}
+                            {{ registration.run }}
+                            {% if registration.ticket %}
                                 (
-                                {{ reg.ticket.name }}
-                                {% if reg.ticket.price %}<i><u> {{ reg.ticket.price }}{{ currency_symbol }}</u></i>{% endif %}
+                                {{ registration.ticket.name }}
+                                {% if registration.ticket.price %}<i><u> {{ registration.ticket.price }}{{ currency_symbol }}</u></i>{% endif %}
                                 )
                             {% endif %}
-                            {% if reg.opts %}
-                                {% for k, el in reg.opts.items %}
+                            {% if registration.opts %}
+                                {% for k, el in registration.opts.items %}
                                     {% include "elements/comma.html" %}
                                     <b>{{ el.q.name }}</b> -
                                     {% for opt in el.l %}
@@ -51,18 +51,18 @@
                         {% endfor %}
                     </td>
                     <td>
-                        {% for reg in el.context.payments_todo %}
+                        {% for registration in el.context.payments_todo %}
                             {% include "elements/comma.html" %}
-                            <b>{{ reg.run }} </b> -
-                            {{ reg.quota|format_decimal }}{{ currency_symbol }} {% trans "by" %} {{ reg.deadline }} {% trans "days" %}
+                            <b>{{ registration.run }} </b> -
+                            {{ registration.quota|format_decimal }}{{ currency_symbol }} {% trans "by" %} {{ registration.deadline }} {% trans "days" %}
                         {% endfor %}
                     </td>
                     <td>
-                        <form action="{{ request.path }}" method="post" id="login_{{ el.id }}">
+                        <form action="{{ request.path }}" method="post" id="login_{{ el.uuid }}">
                             {% csrf_token %}
-                            <input type="hidden" name="account" value="{{ el.id }}" />
+                            <input type="hidden" name="account" value="{{ el.uuid }}" />
                         </form>
-                        <a href="#" onclick="submitForm('login_{{ el.id }}'); return false;">{% trans "Login" %}</a>
+                        <a href="#" onclick="submitForm('login_{{ el.uuid }}'); return false;">{% trans "Login" %}</a>
                     </td>
                 </tr>
             {% endfor %}

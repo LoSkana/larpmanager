@@ -25,7 +25,7 @@ from django.core.cache import cache
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 
-from larpmanager.utils.common import welcome_user
+from larpmanager.utils.core.common import welcome_user
 from larpmanager.views.user.member import get_user_backend
 
 

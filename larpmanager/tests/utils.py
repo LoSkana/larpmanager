@@ -21,6 +21,7 @@
 import io
 import logging
 import os
+import re
 import zipfile
 from pathlib import Path
 from typing import Any, NoReturn
@@ -55,7 +56,7 @@ def login(page: Any, live_server: Any, name: Any) -> None:
 
     page.locator("#id_username").fill(name)
     page.locator("#id_password").fill(password)
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect(page.locator("#banner")).not_to_contain_text("Login")
 
 
@@ -89,19 +90,22 @@ def print_text(page: Any) -> None:
 def go_to(page: Any, live_server: Any, path: Any) -> None:
     go_to_check(page, f"{live_server}/{path}")
 
-
 def go_to_check(page: Any, path: Any) -> None:
     page.goto(path)
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
-    page.wait_for_load_state("networkidle")
     ooops_check(page)
 
+def get_request(page: Any, live_server: Any, path: Any) -> dict:
+    api_context = page.request
+    response = api_context.get(f"{live_server}/{path}")
+    assert response.ok
+    return response.json()
 
 def submit(page: Any) -> None:
-    page.get_by_role("button", name="Submit").click()
-    page.wait_for_load_state("networkidle")
+    submit_confirm(page)
     page.wait_for_load_state("load")
+    page.wait_for_load_state("domcontentloaded")
     ooops_check(page)
 
 
@@ -157,7 +161,7 @@ def check_download(page: Any, link: str) -> None:
                 raise
 
 
-def fill_tinymce(page: Any, iframe_id: Any, text: Any, show: Any = True, timeout: Any = 10000) -> None:
+def fill_tinymce(page, iframe_id, text, show = True, timeout = 10000) -> None:
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
 
@@ -167,7 +171,9 @@ def fill_tinymce(page: Any, iframe_id: Any, text: Any, show: Any = True, timeout
         show_link = page.locator(show_link_selector)
         show_link.wait_for(state="attached", timeout=timeout)
         show_link.scroll_into_view_if_needed()
+        just_wait(page)
         show_link.click()
+        just_wait(page)
 
     # Wait for TinyMCE to initialize the editor instance
     page.wait_for_function(
@@ -204,10 +210,14 @@ def _checkboxes(page: Any, check: Any = True) -> None:
 
 
 def submit_confirm(page: Any) -> None:
-    submit_btn = page.get_by_role("button", name="Confirm", exact=True)
+    submit_btn = page.get_by_role(
+        "button",
+        name=re.compile(r"^(Confirm|Submit)$", re.IGNORECASE)
+    )
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
-    submit_btn.click()
+    submit_btn.click(force=True)
+    just_wait(page)
 
 
 def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> None:
@@ -241,3 +251,79 @@ def upload(page: Any, element_id: Any, image_path: Any) -> None:
     inp.scroll_into_view_if_needed()
     expect(inp).to_be_visible(timeout=60000)
     inp.set_input_files(str(image_path))
+
+
+def normalize_whitespace(text: str) -> str:
+    """Normalize whitespace by removing newlines and collapsing multiple spaces."""
+
+    lines = []
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        line_lower = line.lower()
+        # Filter out JavaScript code patterns
+        js_patterns = [
+            "addeventlistener",
+            "preventdefault",
+            "window.location",
+            ".split(",
+            ".href",
+            "let ",
+            "const ",
+            "var ",
+        ]
+        if line_lower.startswith("document.") or any(pattern in line_lower for pattern in js_patterns):
+            continue
+        lines.append(line)
+
+    text = " ".join(" ".join(lines).split())
+
+    # Remove pipes separator
+    text = text.replace("|", "")
+    # Replace newlines and tabs with spaces
+    text = text.replace("\n", " ").replace("\r", " ").replace("\t", " ")
+    # Collapse multiple spaces into single space
+    text = re.sub(r"\s+", " ", text)
+    # Strip leading/trailing whitespace
+    return text.strip().lower()
+
+def expect_normalized(page, locator, expected: str, timeout=10000):
+    locator.wait_for(state="visible", timeout=timeout)
+
+    page.wait_for_load_state("load")
+    page.wait_for_load_state("domcontentloaded")
+    just_wait(page)
+
+    raw_parts = []
+
+    # testo elemento principale
+    raw_parts.append(locator.inner_text() or "")
+
+    # iframe discendenti (same-origin)
+    iframes = locator.locator("iframe")
+    count = iframes.count()
+
+    for i in range(count):
+        frame_locator = iframes.nth(i).frame_locator(":scope")
+        try:
+            raw_parts.append(frame_locator.locator("body").inner_text())
+        except:
+            pass  # iframe non accessibile / cross-origin
+
+    raw = "\n".join(raw_parts)
+
+    actual = normalize_whitespace(raw)
+    exp = normalize_whitespace(expected)
+
+    if exp not in actual:
+        raise AssertionError(
+            "Text mismatch\n\n"
+            f"EXPECTED:\n{exp}\n\n"
+            f"ACTUAL:\n{actual}"
+        )
+
+def just_wait(page):
+    page.wait_for_timeout(500)
+    page.wait_for_load_state("load")
+    page.wait_for_load_state("domcontentloaded")

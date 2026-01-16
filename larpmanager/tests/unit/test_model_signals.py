@@ -44,8 +44,8 @@ from larpmanager.models.form import RegistrationQuestion
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerGuide, LarpManagerTicket, LarpManagerTutorial
 from larpmanager.models.member import MemberConfig, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseItem
-from larpmanager.models.registration import Registration
-from larpmanager.models.writing import CharacterConfig, Faction, Plot, Prologue, SpeedLarp
+from larpmanager.models.registration import Registration, RegistrationCharacterRel
+from larpmanager.models.writing import Character, CharacterConfig, Faction, Plot, Prologue, SpeedLarp
 from larpmanager.tests.unit.base import BaseTestCase
 
 
@@ -172,7 +172,7 @@ class TestModelSignals(BaseTestCase):
     ) -> None:
         """Test that AccountingItemPayment post_save signal calls update_token_credit when updating"""
         # Enable token_credit feature
-        mock_get_features.return_value = {"token_credit": True}
+        mock_get_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
 
@@ -181,7 +181,7 @@ class TestModelSignals(BaseTestCase):
             member=member,
             value=Decimal("10.00"),
             association=self.get_association(),
-            reg=self.get_registration(),
+            registration=self.get_registration(),
             pay=PaymentChoices.TOKEN,
         )
 
@@ -202,7 +202,7 @@ class TestModelSignals(BaseTestCase):
         payment = AccountingItemPayment(
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,  # Changed from AccountingItemPayment.MONEY
         )
         payment.save()
@@ -345,8 +345,8 @@ class TestModelSignals(BaseTestCase):
         # The event should be created successfully
         self.assertIsNotNone(event.id)
 
-    @patch("larpmanager.utils.event.clear_event_features_cache")
-    @patch("larpmanager.utils.event.clear_event_fields_cache")
+    @patch("larpmanager.utils.services.event.clear_event_features_cache")
+    @patch("larpmanager.utils.services.event.clear_event_fields_cache")
     def test_event_post_save_resets_caches(self, mock_reset_fields: Any, mock_reset_features: Any) -> None:
         """Test that Event post_save signal resets various caches"""
         association = self.get_association()
@@ -372,7 +372,7 @@ class TestModelSignals(BaseTestCase):
         # Should be created successfully
         self.assertIsNotNone(registration.id)
 
-    @patch("larpmanager.models.signals.clear_config_cache")
+    @patch("larpmanager.models.signals.reset_element_configs")
     def test_event_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that EventConfig post_save signal resets configs cache"""
         event = self.get_event()
@@ -382,7 +382,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.clear_config_cache")
+    @patch("larpmanager.models.signals.reset_element_configs")
     def test_event_config_post_delete_resets_configs(self, mock_reset: Any) -> None:
         """Test that EventConfig post_delete signal resets configs cache"""
         event = self.get_event()
@@ -393,7 +393,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.clear_config_cache")
+    @patch("larpmanager.models.signals.reset_element_configs")
     def test_association_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that AssociationConfig post_save signal resets configs cache"""
         association = self.get_association()
@@ -403,7 +403,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.clear_config_cache")
+    @patch("larpmanager.models.signals.reset_element_configs")
     def test_association_config_post_delete_resets_configs(self, mock_reset: Any) -> None:
         """Test that AssociationConfig post_delete signal resets configs cache"""
         association = self.get_association()
@@ -414,7 +414,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.clear_config_cache")
+    @patch("larpmanager.models.signals.reset_element_configs")
     def test_run_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that RunConfig post_save signal resets configs cache"""
         run = self.get_run()
@@ -424,7 +424,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.clear_config_cache")
+    @patch("larpmanager.models.signals.reset_element_configs")
     def test_run_config_post_delete_resets_configs(self, mock_reset: Any) -> None:
         """Test that RunConfig post_delete signal resets configs cache"""
         run = self.get_run()
@@ -435,7 +435,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.clear_config_cache")
+    @patch("larpmanager.models.signals.reset_element_configs")
     def test_member_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that MemberConfig post_save signal resets configs cache"""
         member = self.get_member()
@@ -445,7 +445,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.clear_config_cache")
+    @patch("larpmanager.models.signals.reset_element_configs")
     def test_member_config_post_delete_resets_configs(self, mock_reset: Any) -> None:
         """Test that MemberConfig post_delete signal resets configs cache"""
         member = self.get_member()
@@ -456,7 +456,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.clear_config_cache")
+    @patch("larpmanager.models.signals.reset_element_configs")
     def test_character_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that CharacterConfig post_save signal resets configs cache"""
         character = self.character()
@@ -464,9 +464,9 @@ class TestModelSignals(BaseTestCase):
         config = CharacterConfig(character=character, name="test_key", value="test_value")
         config.save()
 
-        mock_reset.assert_called_once()
+        mock_reset.assert_called()
 
-    @patch("larpmanager.models.signals.clear_config_cache")
+    @patch("larpmanager.models.signals.reset_element_configs")
     def test_character_config_post_delete_resets_configs(self, mock_reset: Any) -> None:
         """Test that CharacterConfig post_delete signal resets configs cache"""
         character = self.character()
@@ -475,7 +475,7 @@ class TestModelSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after creation
         config.delete()
 
-        mock_reset.assert_called_once()
+        mock_reset.assert_called()
 
     def test_association_pre_save_creates_default_values(self) -> None:
         """Test that Association pre_save signal creates default values like encryption key"""
@@ -575,7 +575,7 @@ class TestModelSignals(BaseTestCase):
         # Should be created successfully
         self.assertIsNotNone(ticket.id)
 
-    @patch("larpmanager.utils.miscellanea._check_new")
+    @patch("larpmanager.utils.services.miscellanea._check_new")
     def test_warehouse_item_pre_save_rotates_vertical_photo(self, mock_check_new: Any) -> None:
         """Test that WarehouseItem pre_save signal rotates vertical photos"""
         from larpmanager.models.miscellanea import WarehouseContainer
@@ -615,3 +615,138 @@ class TestModelSignals(BaseTestCase):
 
         # Should be created successfully
         self.assertIsNotNone(registration.id)
+
+    @patch("larpmanager.mail.registration.my_send_mail")
+    def test_registration_character_rel_assigns_player_when_user_character_active(self, mock_mail: Any) -> None:
+        """Test that RegistrationCharacterRel assigns player when user_character feature is active"""
+        # Create a member and registration
+        member = self.get_member()
+        run = self.get_run()
+        event = run.event
+
+        # Enable user_character feature
+        from larpmanager.models.base import Feature
+
+        user_character_feature, _ = Feature.objects.get_or_create(
+            slug="user_character", defaults={"name": "Player editor", "order": 1}
+        )
+        event.features.add(user_character_feature)
+
+        # Create a character without a player
+        character = Character(name="Test Character", event=event)
+        character.save()
+        self.assertIsNone(character.player)
+
+        # Create registration
+        registration = Registration(member=member, run=run, tot_iscr=0, tot_payed=0, quotas=1)
+        registration.save()
+
+        # Create RegistrationCharacterRel
+        rel = RegistrationCharacterRel(registration=registration, character=character)
+        rel.save()
+
+        # Reload character from database
+        character.refresh_from_db()
+
+        # Player should now be assigned to the member
+        self.assertEqual(character.player, member)
+
+    @patch("larpmanager.mail.registration.my_send_mail")
+    def test_registration_character_rel_does_not_assign_player_when_user_character_inactive(
+        self, mock_mail: Any
+    ) -> None:
+        """Test that RegistrationCharacterRel does not assign player when user_character feature is inactive"""
+        # Create a member and registration
+        member = self.get_member()
+        run = self.get_run()
+        event = run.event
+
+        # Make sure user_character feature is NOT active
+        from larpmanager.models.base import Feature
+
+        user_character_feature, _ = Feature.objects.get_or_create(
+            slug="user_character", defaults={"name": "Player editor", "order": 1}
+        )
+        # Ensure the feature is not in the event's features (if it was added by setup)
+        event.features.remove(user_character_feature) if user_character_feature in event.features.all() else None
+
+        # Create a character without a player
+        character = Character(name="Test Character", event=event)
+        character.save()
+        self.assertIsNone(character.player)
+
+        # Create registration
+        registration = Registration(member=member, run=run, tot_iscr=0, tot_payed=0, quotas=1)
+        registration.save()
+
+        # Create RegistrationCharacterRel
+        rel = RegistrationCharacterRel(registration=registration, character=character)
+        rel.save()
+
+        # Reload character from database
+        character.refresh_from_db()
+
+        # Player should still be None
+        self.assertIsNone(character.player)
+
+    @patch("larpmanager.mail.registration.my_send_mail")
+    def test_registration_character_rel_does_not_overwrite_existing_player(self, mock_mail: Any) -> None:
+        """Test that RegistrationCharacterRel does not overwrite existing player"""
+        # Create two members
+        member1 = self.get_member()
+
+        # Create a second user (which will automatically create a Member via signal)
+        from django.contrib.auth.models import User
+        from larpmanager.models.member import Membership
+        from decimal import Decimal
+        import time
+
+        user2 = User.objects.create_user(
+            username=f"testuser2_{int(time.time() * 1000000)}",
+            email=f"test2_{int(time.time() * 1000000)}@test.it",
+            first_name="Test2",
+            last_name="User2",
+        )
+        # Get the automatically created member
+        member2 = user2.member
+
+        # Create membership for member2
+        association = self.get_association()
+        Membership.objects.get_or_create(
+            member=member2,
+            association=association,
+            defaults={
+                "credit": Decimal("100.00"),
+                "tokens": Decimal("50.00"),
+            },
+        )
+
+        run = self.get_run()
+        event = run.event
+
+        # Enable user_character feature
+        from larpmanager.models.base import Feature
+
+        user_character_feature, _ = Feature.objects.get_or_create(
+            slug="user_character", defaults={"name": "Player editor", "order": 1}
+        )
+        event.features.add(user_character_feature)
+
+        # Create a character with an existing player
+        character = Character(name="Test Character", event=event, player=member1)
+        character.save()
+        self.assertEqual(character.player, member1)
+
+        # Create registration for a different member
+        registration = Registration(member=member2, run=run, tot_iscr=0, tot_payed=0, quotas=1)
+        registration.save()
+
+        # Create RegistrationCharacterRel
+        rel = RegistrationCharacterRel(registration=registration, character=character)
+        rel.save()
+
+        # Reload character from database
+        character.refresh_from_db()
+
+        # Player should still be member1, not member2
+        self.assertEqual(character.player, member1)

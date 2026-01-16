@@ -23,7 +23,7 @@
                     <td>
                         <i>{{ run.pretty_dates }} </i>
                     </td>
-                    <td>{% include "elements/reg_status.html" with run=run %}</td>
+                    <td>{% include "elements/reg_status.html" with run_status=run.status %}</td>
                 </tr>
             {% endfor %}
         </table>

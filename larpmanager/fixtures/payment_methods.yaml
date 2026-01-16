@@ -3,8 +3,7 @@
     name: Wire
     slug: wire
     instructions: "<p><strong>Beneficiary: </strong>Name of the recipient account\
-      \ holder.&nbsp;</p>\r\n<p><strong>IBAN</strong>: <span data-huuid=\"9902777109390532710\"\
-      >International Bank Account Number</span> of the recipient account (27-character\
+      \ holder.&nbsp;</p>\r\n<p><strong>IBAN</strong>: International Bank Account Number of the recipient account (27-character\
       \ long)</p><p><strong>BIC</strong>: Optional</p>"
     fields: payee, iban, bic
     profile: payment_methods/ac81a0b8942e41a8bbcefa197ccfb3d8.png
@@ -12,7 +11,7 @@
   fields:
     name: Freeform
     slug: any
-    instructions: <p>No need for data; the member will upload a text of any kind.&nbsp;</p>
+    instructions: <p>No need for data; the participant will upload a text of any kind.&nbsp;</p>
     fields: ''
     profile: payment_methods/873326d033b74568bb9e79d1e96762cf.png
 - model: larpmanager.paymentmethod

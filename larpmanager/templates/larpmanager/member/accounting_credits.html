@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Accounting" %} - {% trans "Credits" %}
+{% endblock title %}
+{% block content %}
+    {% if member.credit > 0 %}
+        <p>
+            {% trans "Total" %}: <b>{{ member.credit }}{{ currency_symbol }}</b>. <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
+            <br />
+            {% trans "Do you wish to be reimbursed? Open a new one" %} <a href="{% url 'accounting_refund' %}">{% trans "refund request" %}</a>.
+            {% if refunds %}
+                <b>Richieste aperte: </b>
+                {% for el in refunds %}
+                    {% include "elements/comma.html" %}
+                    {{ el.details }} ({{ el.value }})
+                {% endfor %}
+            {% endif %}
+        </p>
+    {% endif %}
+    <p>
+        {% trans "Access the history" %} {{ credits_name }}:
+        <a href="#" class="my_toggle" tog='given'>{% trans "Delivered" %}</a>,
+        <a href="#" class="my_toggle" tog='exp'>{% trans "Refunded" %}</a>,
+        <a href="#" class="my_toggle" tog='used'>{% trans "Consumed" %}</a>,
+        <a href="#" class="my_toggle" tog='ref'>{% trans "Returned" %}</a>
+    </p>
+    <div class="hide given">
+        <h2>{% trans "Delivered" %}</h2>
+        <div class="no-more-tables mob">
+            <table class="mob tablesorter">
+                <thead>
+                    <tr>
+                        <th>{% trans "Event" %}</th>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Description" %}</th>
+                        <th>{% trans "Amount" %}</th>
+                    </tr>
+                </thead>
+                {% for el in given %}
+                    <tr>
+                        <td data-title="{% trans "Event" %}">
+                            {% if el.run %}{{ el.run }}{% endif %}
+                        </td>
+                        <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
+                        <td data-title="{% trans "Description" %}">{{ el.descr }}</td>
+                        <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="hide used">
+        <h2>{% trans "Consumed" %}</h2>
+        <div class="no-more-tables mob">
+            <table class="mob tablesorter">
+                <thead>
+                    <tr>
+                        <th>{% trans "Event" %}</th>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Amount" %}</th>
+                    </tr>
+                </thead>
+                {% for el in used %}
+                    <tr>
+                        <td data-title="{% trans "Event" %}">{{ el.registration.run }}</td>
+                        <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
+                        <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="hide exp">
+        <h2>{% trans "Refunded" %}</h2>
+        <div class="no-more-tables mob">
+            <table class="mob tablesorter">
+                <thead>
+                    <tr>
+                        <th>{% trans "Run" %}</th>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Description" %}</th>
+                        <th>{% trans "Type" %}</th>
+                        <th>{% trans "Amount" %}</th>
+                    </tr>
+                </thead>
+                {% for el in exp %}
+                    <tr>
+                        <td data-title="{% trans "Run" %}">
+                            {% if el.run %}{{ el.run }}{% endif %}
+                        </td>
+                        <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
+                        <td data-title="{% trans "Description" %}">{{ el.descr }}</td>
+                        <td data-title="{% trans "Type" %}">{{ el.get_exp_display }}</td>
+                        <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="hide ref">
+        <h2>{% trans "Returned" %}</h2>
+        <div class="no-more-tables mob">
+            <table class="mob tablesorter">
+                <thead>
+                    <tr>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Description" %}</th>
+                        <th>{% trans "Amount" %}</th>
+                    </tr>
+                </thead>
+                {% for el in ref %}
+                    <tr>
+                        <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
+                        <td data-title="{% trans "Description" %}">{{ el.descr }}</td>
+                        <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock content %}

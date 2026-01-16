@@ -95,25 +95,25 @@
 {% endblock thead %}
 {% block tbody %}
     {% for el in list %}
-        <tr id="{{ el.id }}">
+        <tr id="{{ el.uuid }}">
             <td>
-                <a href="{% url 'orga_characters_edit' run.get_slug el.id %}"
+                <a href="{% url 'orga_characters_edit' run.get_slug el.uuid %}"
                    qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
             </td>
-            <td class="editable" qid="{{ name_que_id }}">{{ el }}</td>
+            <td class="editable" question_uuid="{{ name_que_uuid }}">{{ el }}</td>
             <td>
-                <a href="{% url 'orga_characters_view' run.get_slug el.id %}"
+                <a href="{% url 'orga_characters_view' run.get_slug el.uuid %}"
                    qtip="{% trans "Read" %}"><i class="fa-solid fa-book-open"></i></a>
-                <a href="{% url 'orga_characters_versions' run.get_slug el.id %}"
+                <a href="{% url 'orga_characters_versions' run.get_slug el.uuid %}"
                    qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
-                <a href="{% url 'character' run.get_slug el.number %}"
+                <a href="{% url 'character' run.get_slug el.uuid %}"
                    qtip="{% trans "Gallery" %}"><i class="fa-solid fa-eye"></i></a>
                 {% if writing_external_access %}
                     <a href="{% url 'character_external' run.get_slug el.access_token %}"
                        qtip="{% trans "External access" %}"><i class="fa-solid fa-key"></i></a>
                 {% endif %}
                 {% if features.print_pdf %}
-                    <a href="{% url 'orga_characters_friendly_pdf' run.get_slug el.id %}"
+                    <a href="{% url 'orga_characters_friendly_pdf' run.get_slug el.uuid %}"
                        download
                        qtip="PDF"><i class="fa-solid fa-file-pdf"></i></a>
                 {% endif %}
@@ -139,6 +139,7 @@
             {% if features.plot %}
                 <td class="plots dot_links">
                     {% for p in el.plot_rels.list %}
+                        {% include "elements/comma.html" %}
                         <a href="{% url 'orga_plots_edit' run.get_slug p.0 %}">{{ p.1 }}</a>
                     {% endfor %}
                 </td>
@@ -148,6 +149,7 @@
             {% if features.prologue %}
                 <td class="prologues dot_links">
                     {% for p in el.prologue_rels.list %}
+                        {% include "elements/comma.html" %}
                         <a href="{% url 'orga_prologues_edit' run.get_slug p.0 %}">{{ p.1 }}</a>
                     {% endfor %}
                 </td>
@@ -156,6 +158,7 @@
             {% if features.relationships %}
                 <td class="relationship_list dot_links">
                     {% for rel in el.relationships_rels.list %}
+                        {% include "elements/comma.html" %}
                         <a href="{% url 'orga_characters_edit' run.get_slug rel.0 %}">{{ rel.1 }}</a>
                     {% endfor %}
                 </td>
@@ -165,6 +168,7 @@
             {% if features.speedlarp %}
                 <td class="speedlarp dot_links">
                     {% for p in el.speedlarp_rels.list %}
+                        {% include "elements/comma.html" %}
                         <a href="{% url 'orga_speedlarps_edit' run.get_slug p.0 %}">{{ p.1 }}</a>
                     {% endfor %}
                 </td>
@@ -183,7 +187,7 @@
             {% for key, que in form_questions.items %}
                 {% if que.typ == 's' or que.typ == 'm' %}
                     <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
-                    <a href="#" class="table_toggle hide" tog='email_que_{{ key }}'>hidden</a>
+                    <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
                 {% endif %}
             {% endfor %}
         </div>

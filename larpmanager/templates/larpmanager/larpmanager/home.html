@@ -5,7 +5,7 @@
 {% endblock maintitle %}
 {% block meta %}
     <meta name="description"
-          content="The free LARP management platform. Manage every aspect of your LARP. No setup, no limits, no cost!">
+          content="Manage LARP events, tickets, registrations, payments, and characters in one place. No setup, no limits, no cost.">
     <meta property="og:title" content="LarpManager">
 {% endblock meta %}
 {% block alpha %}
@@ -50,7 +50,7 @@
                 </section>
                 <hr />
                 <h3>
-                    Manage every aspect of your LARP: registrations, players, characters, payments, logistics, and more.
+                    Manage LARP events, tickets, registrations, payments, and characters in one place.
                     No setup, no limits, no cost.
                 </h3>
                 <hr />
@@ -80,16 +80,24 @@
             {% for el in showcase %}
                 <div class="section">
                     <div class="text">
-                        <h4>{{ el.title }}</h4>
+                        <h4>
+                            {% if el.blog %}
+                                <a href="{% url 'blog' el.blog.slug %}">{{ el.title }}</a>
+                            {% else %}
+                                {{ el.title }}
+                            {% endif %}
+                        </h4>
                         <p>{{ el.text | safe }}</p>
                     </div>
-                    <div class="image-container">
-                        <div class="image-wrapper">
-                            <img src="{% if el.reduced_url %}{{ el.reduced_url }}{% endif %}"
-                                 alt="Image for {{ el.title }}">
+                    {% if el.highlight %}
+                        <div class="image-container">
+                            <div class="image-wrapper">
+                                <img src="{% if el.highlight.reduced_url %}{{ el.highlight.reduced_url }}{% endif %}"
+                                     alt="Image for {{ el.title }}">
+                            </div>
+                            <div class="image-caption">{{ el.highlight.info }}</div>
                         </div>
-                        <div class="image-caption">{{ el.info }}</div>
-                    </div>
+                    {% endif %}
                 </div>
             {% endfor %}
         </section>

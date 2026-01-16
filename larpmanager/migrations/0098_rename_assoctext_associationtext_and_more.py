@@ -4,7 +4,7 @@ import django.db.models.deletion
 from django.db import migrations, models
 
 import larpmanager.models.utils
-import larpmanager.utils.validators
+import larpmanager.utils.core.validators
 
 
 class Migration(migrations.Migration):
@@ -293,7 +293,7 @@ class Migration(migrations.Migration):
                 null=True,
                 upload_to=larpmanager.models.utils.UploadToPathAndRename("association_font/"),
                 validators=[
-                    larpmanager.utils.validators.FileTypeValidator(
+                    larpmanager.utils.core.validators.FileTypeValidator(
                         [
                             "font/ttf",
                             "font/otf",

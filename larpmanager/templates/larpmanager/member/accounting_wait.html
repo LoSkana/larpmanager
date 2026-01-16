@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Payment processing" %}
+{% endblock title %}
+{% block content %}
+    {% trans "We are processing your payment" %}.
+    {% trans "Please wait a moment" %}...
+{% endblock content %}
+{% block js %}
+    <script>
+setInterval(function() {
+    window.location.href = '{% url "accounting_payed" %}';
+}, 5000);
+    </script>
+{% endblock js %}

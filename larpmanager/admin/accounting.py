@@ -31,6 +31,7 @@ from django.contrib import admin
 
 from larpmanager.admin.base import AssociationFilter, DefModelAdmin, MemberFilter, RegistrationFilter, RunFilter
 from larpmanager.models.accounting import (
+    AccountingItem,
     AccountingItemCollection,
     AccountingItemDiscount,
     AccountingItemDonation,
@@ -49,7 +50,6 @@ from larpmanager.models.accounting import (
     RefundRequest,
 )
 from larpmanager.models.event import Run
-from larpmanager.models.registration import Registration
 
 
 class InvoiceFilter(AutocompleteFilter):
@@ -65,20 +65,20 @@ class AccountingItemAdmin(DefModelAdmin):
     exclude = ("search",)
     list_display = ("id", "member", "value")
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association"]
-    search_fields = ("search",)
+    search_fields: ClassVar[tuple] = ("id", "search")
 
-    @admin.display(ordering="reg__run", description="Run")
-    def get_run(self, registration: Registration) -> Run:
-        """Get run from registration for admin display."""
-        return registration.reg.run
+    @admin.display(ordering="registration__run", description="Run")
+    def get_run(self, instance: AccountingItem) -> Run:
+        """Get run from instance for admin display."""
+        return instance.registration.run
 
 
 @admin.register(AccountingItemTransaction)
 class AccountingItemTransactionAdmin(AccountingItemAdmin):
     """Admin interface for payment transaction accounting items."""
 
-    list_display = ("id", "inv", "member", "value", "created", "updated")
-    autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "reg"]
+    list_display = ("id", "inv", "member", "value")
+    autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "registration"]
     list_filter = (MemberFilter, AssociationFilter, RegistrationFilter)
 
 
@@ -86,7 +86,7 @@ class AccountingItemTransactionAdmin(AccountingItemAdmin):
 class AccountingItemDiscountAdmin(AccountingItemAdmin):
     """Admin interface for discount accounting items."""
 
-    list_display = ("id", "disc", "run", "member", "value", "created", "updated")
+    list_display = ("id", "disc", "run", "member", "value")
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "run", "disc"]
     list_filter = (MemberFilter, AssociationFilter, RunFilter)
 
@@ -95,7 +95,7 @@ class AccountingItemDiscountAdmin(AccountingItemAdmin):
 class AccountingItemDonationAdmin(AccountingItemAdmin):
     """Admin interface for donation accounting items."""
 
-    list_display = ("id", "member", "value", "descr", "created", "updated")
+    list_display = ("id", "member", "value", "descr")
     list_filter = (MemberFilter, AssociationFilter)
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association"]
 
@@ -104,7 +104,7 @@ class AccountingItemDonationAdmin(AccountingItemAdmin):
 class AccountingItemCollectionAdmin(AccountingItemAdmin):
     """Admin interface for collection accounting items."""
 
-    list_display = ("id", "member", "value", "created", "updated")
+    list_display = ("id", "member", "value")
     list_filter = (MemberFilter, AssociationFilter)
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association"]
 
@@ -113,90 +113,46 @@ class AccountingItemCollectionAdmin(AccountingItemAdmin):
 class AccountingItemExpenseAdmin(AccountingItemAdmin):
     """Admin interface for expense accounting items."""
 
-    list_display = (
-        "id",
-        "run",
-        "short_descr",
-        "member",
-        "value",
-        "balance",
-        "created",
-        "updated",
-    )
+    list_display = ("id", "run", "short_descr", "member", "value", "balance")
     autocomplete_fields = ("run", "member", "inv", "association")
     list_filter = (RunFilter, MemberFilter, AssociationFilter)
-    search_fields = ("search", "descr")
+    search_fields: ClassVar[tuple] = ("id", "search", "descr")
 
 
 @admin.register(AccountingItemOutflow)
 class AccountingItemOutflowAdmin(AccountingItemAdmin):
     """Admin interface for outflow accounting items."""
 
-    list_display = (
-        "id",
-        "run",
-        "short_descr",
-        "value",
-        "payment_date",
-        "balance",
-        "created",
-        "updated",
-    )
+    list_display = ("id", "run", "short_descr", "value", "payment_date", "balance")
     autocomplete_fields = ("run", "member", "inv", "association")
     list_filter = (RunFilter, AssociationFilter)
-    search_fields = ("search", "descr")
+    search_fields: ClassVar[tuple] = ("id", "search", "descr")
 
 
 @admin.register(AccountingItemInflow)
 class AccountingItemInflowAdmin(AccountingItemAdmin):
     """Admin interface for inflow accounting items."""
 
-    list_display = (
-        "id",
-        "run",
-        "short_descr",
-        "value",
-        "payment_date",
-        "created",
-        "updated",
-    )
+    list_display = ("id", "run", "short_descr", "value", "payment_date")
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "run"]
     list_filter = (RunFilter, AssociationFilter)
-    search_fields = ("search", "descr")
+    search_fields: ClassVar[tuple] = ("id", "search", "descr")
 
 
 @admin.register(AccountingItemPayment)
 class AccountingItemPaymentAdmin(AccountingItemAdmin):
     """Admin interface for payment accounting items linked to registrations."""
 
-    list_display = (
-        "id",
-        "reg",
-        "member",
-        "value",
-        "pay",
-        "created",
-        "updated",
-        "inv",
-    )
-    autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "reg"]
-    list_filter = (MemberFilter, AssociationFilter, RegistrationFilter, "pay", "created")
+    list_display = ("id", "registration", "member", "value")
+    autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "registration"]
+    list_filter = (MemberFilter, AssociationFilter, RegistrationFilter, "pay")
 
 
 @admin.register(AccountingItemMembership)
 class AccountingItemMembershipAdmin(AccountingItemAdmin):
     """Admin interface for membership fee accounting items."""
 
-    list_display = (
-        "id",
-        "year",
-        "member",
-        "value",
-        "created",
-        "updated",
-        "created",
-        "updated",
-    )
+    list_display = ("id", "year", "member", "value")
     list_filter = (MemberFilter, AssociationFilter)
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association"]
 
@@ -205,17 +161,7 @@ class AccountingItemMembershipAdmin(AccountingItemAdmin):
 class AccountingItemOtherAdmin(AccountingItemAdmin):
     """Admin interface for miscellaneous accounting items."""
 
-    list_display = (
-        "id",
-        "run",
-        "member",
-        "short_descr",
-        "created",
-        "value",
-        "oth",
-        "created",
-        "updated",
-    )
+    list_display = ("id", "run", "member", "short_descr", "value", "oth")
     autocomplete_fields = ("run", "member", "inv", "association")
     list_filter = (RunFilter, MemberFilter, AssociationFilter)
 
@@ -225,20 +171,9 @@ class PaymentInvoiceAdmin(DefModelAdmin):
     """Admin interface for payment invoices and transaction records."""
 
     exclude = ("search",)
-    search_fields = ("search", "cod", "causal")
-    list_display = (
-        "id",
-        "key",
-        "causal",
-        "typ",
-        "method",
-        "status",
-        "mc_gross",
-        "mc_fee",
-        "created",
-        "updated",
-    )
-    autocomplete_fields = ("member", "method", "association", "reg")
+    search_fields: ClassVar[tuple] = ("id", "search", "cod", "causal", "uuid")
+    list_display = ("id", "key", "causal", "typ", "method", "status", "mc_gross", "mc_fee", "uuid")
+    autocomplete_fields = ("member", "method", "association", "registration")
     list_filter = ("status", "method", "typ", AssociationFilter, MemberFilter)
 
 
@@ -246,6 +181,8 @@ class PaymentInvoiceAdmin(DefModelAdmin):
 class ElectronicInvoiceAdmin(DefModelAdmin):
     """Admin interface for electronic invoices."""
 
+    list_display = ("id", "inv", "association", "uuid")
+    search_fields: ClassVar[tuple] = ("id", "uuid")
     autocomplete_fields = ("inv", "association")
     list_filter = (AssociationFilter, InvoiceFilter)
 
@@ -254,9 +191,9 @@ class ElectronicInvoiceAdmin(DefModelAdmin):
 class DiscountAdmin(DefModelAdmin):
     """Admin interface for discount codes and vouchers."""
 
-    list_display = ("name", "value", "max_redeem", "cod", "typ", "show_event")
+    list_display = ("name", "value", "max_redeem", "cod", "typ", "show_event", "uuid")
     autocomplete_fields: ClassVar[list] = ["event", "runs", "runs"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
 
 
 @admin.register(RecordAccounting)
@@ -272,7 +209,8 @@ class RecordAccountingAdmin(DefModelAdmin):
 class RefundRequestAdmin(DefModelAdmin):
     """Admin interface for member refund requests."""
 
-    list_display = ("member", "value", "status", "details")
+    list_display = ("member", "value", "status", "details", "uuid")
+    search_fields: ClassVar[tuple] = ("id", "uuid")
     list_filter = (MemberFilter,)
     autocomplete_fields = ("member", "association")
 
@@ -281,6 +219,6 @@ class RefundRequestAdmin(DefModelAdmin):
 class CollectionAdmin(DefModelAdmin):
     """Admin interface for payment collections."""
 
-    list_display = ("id", "member", "organizer", "total")
+    list_display = ("id", "member", "organizer", "total", "uuid")
     autocomplete_fields: ClassVar[list] = ["member", "run", "organizer", "association"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
