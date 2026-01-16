@@ -610,6 +610,26 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
     context["assigned"] = RegistrationCharacterRel.objects.filter(registration_id=context["registration"].id).count()
     return render(request, "larpmanager/event/character/list.html", context)
 
+@login_required
+def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
+    """Return JSON list of player's characters for an event.
+
+    Args:
+        request: HTTP request object
+        event_slug: Event slug
+
+    Returns:
+        JsonResponse: Array of objects containing basic character info
+
+    """
+    context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
+
+    context["list"] = get_player_characters(context["member"], context["event"])
+
+    # Get character fields info
+    return_list = [{"uuid": el.uuid, "name": el.name} for el in context["list"]]
+
+    return JsonResponse(return_list, safe=False)
 
 @login_required
 def character_create(request: HttpRequest, event_slug: str) -> Any:
@@ -761,6 +781,37 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
     # Render the abilities template with all context data
     return render(request, "larpmanager/event/character/abilities.html", context)
 
+@login_required
+def character_abilities_json(request: HttpRequest, event_slug: str, character_uuid: str) -> JsonResponse:
+    """Return JSON object of a character's abilities, organized by type.
+
+    Args:
+        request: The HTTP request object
+        event_slug: Event identifier string for the current event
+        character_uuid: The character uuid to display abilities for
+
+    Returns:
+        JsonResponse: JSON Object with basic character info, plus an object with each owned ability type uuid as keys and, as the value, the ability type's name and an object with ability uuid's as keys and the ability's name as values
+
+    Raises:
+        Http404: If character or event is not found (via check_char_abilities)
+        PermissionDenied: If user lacks permission to view character abilities
+
+    """
+    # Initialize context with character and permission checks
+    context = check_char_abilities(request, event_slug, character_uuid)
+
+    # Build current character abilities organized by type uuid
+    context["sheet_abilities"] = {}
+    for el in get_current_ability_px(context["character"]):
+        # Create type list if it doesn't exist
+        if el.typ.uuid not in context["sheet_abilities"]:
+            context["sheet_abilities"][el.typ.uuid] = {"type_name":el.typ.name, "type_abilities": []}
+        # Add ability to the type's list
+        context["sheet_abilities"][el.typ.uuid]["type_abilities"].append({el.uuid: el.name})
+
+    # Return the abilities object with collected context data
+    return JsonResponse({"uuid": context["char"]["uuid"], "name": context["char"]["name"], "abilities": context["sheet_abilities"]})
 
 def check_char_abilities(request: HttpRequest, event_slug: str, character_uuid: str) -> dict:
     """Check if user can select abilities for a character in an event.
@@ -793,6 +844,48 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_uuid: 
 
     return context
 
+@login_required
+def character_inventory_json(request: HttpRequest, event_slug: str, character_uuid: str) -> JsonResponse:
+    """Return JSON object of a character's inventory pool balances, broken down by inventory, then by pool type.
+
+    Args:
+        request: The HTTP request object
+        event_slug: Event identifier string for the current event
+        character_uuid: The character uuid to display inventory balances for
+
+    Returns:
+        JsonResponse: JSON Object with basic character info, plus an object with each inventory uuid as keys, and then an object with that inventory's name, and another property listing all of the pools. That object has each pool type's uuid as keys and, as the value, an object with the pool type's name and the integer representing the balance of that pool for that specific inventory, which defaults to zero (0)
+
+    Raises:
+        Http404: If character or event is not found (via get_char_check)
+        PermissionDenied: If user lacks permission to view character inventory
+
+    """
+    # Initialize context with character and permission checks
+    context = get_event_context(request, event_slug, signup=True, include_status=True)
+
+    # Check if user inventory is enabled for this event
+    if "inventory" not in context["features"]:
+        msg = "ehm."
+        raise Http404(msg)
+
+    # Validate character access permissions
+    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+
+    # Get character data
+    context["character"] = context["event"].get_elements(Character).get(uuid=character_uuid)
+
+    inventories = {}
+    for inv in context["character"].inventory.all():
+        if inv.uuid not in inventories:
+            inventories[inv.uuid] = {"name":inv.name, "pools":{}}
+        pools = inv.get_pool_balances()
+        for pool in pools:
+            if pool["type"].uuid not in inventories[inv.uuid]["pools"]:
+                inventories[inv.uuid]["pools"][pool["type"].uuid] = {"name":pool["type"].name,"amount":0}
+            inventories[inv.uuid]["pools"][pool["type"].uuid]["amount"] += pool["balance"].amount
+
+    return JsonResponse({"uuid": context["character"].uuid, "name": context["character"].name, "inventories": inventories})
 
 @login_required
 def character_abilities_del(request: HttpRequest, event_slug: str, character_uuid: str, ability_uuid: str) -> Any:

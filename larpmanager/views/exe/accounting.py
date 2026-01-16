@@ -811,7 +811,7 @@ def exe_run_accounting(request: HttpRequest, run_uuid: str) -> HttpResponse:
         raise Http404(msg)
 
     # Get accounting data for this run
-    context["dc"] = get_run_accounting(context["run"], context)
+    context["summary"], context["details"] = get_run_accounting(context["run"], context)
     return render(request, "larpmanager/orga/accounting/accounting.html", context)
 
 

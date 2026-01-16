@@ -94,7 +94,7 @@ urlpatterns = [
         name="lm_payments",
     ),
     path(
-        "lm/payments/<int:run_id>",
+        "lm/payments/<str:run_uuid>",
         views_lm.lm_payments_confirm,
         name="lm_payments_confirm",
     ),

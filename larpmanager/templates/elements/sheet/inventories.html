@@ -9,7 +9,7 @@
                     <ul class="pool-balances">
                         {% for pb in inventory.get_pool_balances %}<li>{{ pb.type.name }}: {{ pb.balance.amount }}</li>{% endfor %}
                     </ul>
-                    <a href="{% url 'orga_ci_inventory_view' event.slug inventory.id %}"
+                    <a href="{% url 'orga_ci_inventory_view' event.slug inventory.uuid %}"
                        class="btn">{% trans "View Details" %}</a>
                 </div>
             {% endfor %}

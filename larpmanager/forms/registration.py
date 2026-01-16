@@ -37,6 +37,7 @@ from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     DatePickerInput,
     FactionS2WidgetMulti,
+    RegistrationSectionS2Widget,
     RunRegS2Widget,
     TicketS2WidgetMulti,
     TransferTargetRunS2Widget,
@@ -153,7 +154,7 @@ class RegistrationForm(BaseRegistrationForm):
         """Update question requirements based on selected ticket type.
 
         Args:
-            ticket: Selected ticket instance
+            ticket: Selected ticket uuid string
 
         """
         """
@@ -168,8 +169,8 @@ class RegistrationForm(BaseRegistrationForm):
             key = get_question_key(question)
             if key not in self.fields:
                 continue
-            tm = [i for i in question.tickets_map if i is not None]
-            if ticket not in tm:
+            tm = [str(i) for i in question.tickets_map if i is not None]
+            if not ticket or ticket not in tm:
                 self.fields[key].required = False
 
     def init_additionals(self) -> None:
@@ -258,7 +259,7 @@ class RegistrationForm(BaseRegistrationForm):
                 self.section_descriptions[question.section.name] = question.section.description
 
         if "reg_que_tickets" in self.params["features"]:
-            tm = [i for i in question.tickets_map if i is not None]
+            tm = [str(i) for i in question.tickets_map if i is not None]
             if tm:
                 self.tickets_map[k] = tm
 
@@ -1121,12 +1122,6 @@ class OrgaRegistrationTicketForm(BaseModelForm):
         Returns:
             List of available ticket tier tuples in format (value, label).
             Each tuple represents a selectable ticket tier option.
-
-        Example:
-            >>> tiers = get_tier_available(my_event)
-            >>> print(tiers)
-            [('standard', 'Standard'), ('reduced', 'Reduced Price')]
-
         """
         available_tiers = []
 
@@ -1198,6 +1193,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
             "factions": FactionS2WidgetMulti,
             "tickets": TicketS2WidgetMulti,
             "allowed": AllowedS2WidgetMulti,
+            "section": RegistrationSectionS2Widget,
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
 
@@ -1218,9 +1214,12 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         if "reg_que_sections" not in self.params["features"]:
             self.delete_field("section")
         else:
-            ch = [(m.uuid, str(m)) for m in RegistrationSection.objects.filter(event=self.params["run"].event)]
-            ch.insert(0, ("", _("--- Empty")))
-            self.fields["section"].choices = ch
+            self.configure_field_event("section", self.params["event"])
+            self.fields["section"].empty_label = _("--- Empty")
+            self.fields["section"].to_field_name = "uuid"
+            # Set initial value to UUID instead of ID for existing instances
+            if self.instance and self.instance.pk and self.instance.section:
+                self.initial["section"] = self.instance.section.uuid
 
         if "reg_que_allowed" not in self.params["features"]:
             self.delete_field("allowed")
@@ -1236,7 +1235,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
             self.delete_field("factions")
         else:
             self.fields["factions"].choices = [
-                (m.uuid, str(m)) for m in self.params["run"].event.get_elements(Faction).order_by("number")
+                (m.id, str(m)) for m in self.params["run"].event.get_elements(Faction).order_by("number")
             ]
 
         if "gift" not in self.params["features"]:

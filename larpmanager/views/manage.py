@@ -34,11 +34,11 @@ from django.utils.translation import gettext_lazy as _
 from django_select2.forms import Select2Widget
 from slugify import slugify
 
-from larpmanager.accounting.balance import association_accounting, get_run_accounting
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_registration_counts
+from larpmanager.cache.widget import get_exe_widget_cache, get_orga_widget_cache
 from larpmanager.utils.auth.permission import has_association_permission, get_index_association_permissions, \
     has_event_permission, get_index_event_permissions
 from larpmanager.cache.wwyltd import get_features_cache, get_guides_cache, get_tutorials_cache
@@ -62,7 +62,6 @@ from larpmanager.utils.core.base import check_association_context, check_event_c
 from larpmanager.utils.core.common import _get_help_questions, format_datetime
 from larpmanager.utils.core.sticky import get_sticky_messages, dismiss_sticky
 from larpmanager.utils.services.edit import set_suggestion
-from larpmanager.utils.core.exceptions import RedirectError
 from larpmanager.utils.users.registration import registration_available
 
 
@@ -134,14 +133,14 @@ def _get_registration_status_code(run: Run) -> tuple[str, Any]:
     return "closed", None
 
 
-def _get_registration_status(run_instance: Run) -> str:
+def _get_registration_status(run: Run) -> str:
     """Get human-readable registration status for a run.
 
     This function retrieves the registration status code and returns a localized,
     user-friendly message describing the current registration state for the given run.
 
     Args:
-        run_instance: Run instance to check status for. Expected to have registration-related
+        run: Run instance to check status for. Expected to have registration-related
              attributes that can be processed by _get_registration_status_code().
 
     Returns:
@@ -155,7 +154,7 @@ def _get_registration_status(run_instance: Run) -> str:
 
     """
     # Get the current status code and any additional data from the run
-    status_code, opening_datetime = _get_registration_status_code(run_instance)
+    status_code, opening_datetime = _get_registration_status_code(run)
 
     # Define mapping of status codes to localized human-readable messages
     status_messages = {
@@ -181,6 +180,33 @@ def _get_registration_status(run_instance: Run) -> str:
     return status_messages.get(status_code, _("Registration closed"))
 
 
+def _get_registration_counts(run: Run) -> dict:
+    """Prepares run registration ticket counts ordered by ticket order field."""
+
+    counts = get_registration_counts(run)
+
+    # Create a list of ticket data with name, order, and count
+    ticket_data = []
+    for ticket_id, ticket_name in counts.get("tickets_map", {}).items():
+        count_key = f"count_ticket_{ticket_id}"
+        if count_key in counts and counts[count_key]:
+            ticket_order = counts.get("tickets_order", {}).get(ticket_id, 0)
+            ticket_data.append({
+                'name': ticket_name,
+                'order': ticket_order,
+                'count': counts[count_key]
+            })
+
+    # Sort by order field, then by name
+    sorted_tickets = sorted(
+        ticket_data,
+        key=lambda x: (x['order'], x['name'])
+    )
+
+    # Return as a dict with ticket name as key and count as value
+    return {ticket['name']: ticket['count'] for ticket in sorted_tickets}
+
+
 def _exe_manage(request: HttpRequest) -> HttpResponse:
     """Display executive management dashboard.
 
@@ -204,6 +230,11 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     context["exe_page"] = 1
     context["manage"] = 1
 
+    # TODO remove
+    context["old_dashboard"] = get_association_config(
+        context["association_id"], "old_dashboard", default_value=False, context=context
+    )
+
     # Check what would you like form
     what_would_you_like(context, request)
 
@@ -213,6 +244,9 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     # Redirect to event creation if no events exist and feature is available
     if context.get("onboarding") and "exe_events" in features:
         return redirect("exe_events_edit", event_uuid="0")
+
+    # Check if currency configuration suggestion has been dismissed
+    _check_currency_priority(request, context, features)
 
     # Get ongoing runs (events in START or SHOW development status)
     ongoing_runs_queryset = Run.objects.filter(
@@ -224,11 +258,10 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     # Add registration status and counts for each ongoing run
     for run in context["ongoing_runs"]:
         run.registration_status = _get_registration_status(run)
-        run.counts = get_registration_counts(run)
+        run.registration_counts = _get_registration_counts(run)
 
-    # Add accounting information if user has permission
-    if has_association_permission(request, context, "exe_accounting"):
-        association_accounting(context)
+    # Load widgets
+    _exe_widgets(request, context, features)
 
     # Suggest creating an event if no runs are active
     if not context["ongoing_runs"]:
@@ -252,6 +285,21 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/manage/exe.html", context)
 
 
+def _exe_widgets(request: HttpRequest, context: dict, features: dict) -> None:
+    """Loads widget data into context for executive dashboard."""
+    widgets_available = []
+    for widget in ["deadlines"]:
+        if widget in features:
+            widgets_available.append(widget)
+
+    if has_association_permission(request, context, "exe_accounting"):
+        widgets_available.append("accounting")
+
+    context["widgets"] = {}
+    for widget in widgets_available:
+        context["widgets"][widget] = get_exe_widget_cache(association_id=context["association_id"], widget_name=widget)
+
+
 def _exe_suggestions(context: dict) -> None:
     """Add priority tasks and suggestions to the executive management context.
 
@@ -261,9 +309,6 @@ def _exe_suggestions(context: dict) -> None:
     """
 
     suggestions = {
-        "exe_quick": _("Quickly configure your organization's most important settings"),
-        "exe_methods": _("Set up the payment methods available to participants"),
-        "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
         "exe_roles": _(
             "Grant access to organization management for other users and define roles with specific permissions",
         ),
@@ -373,6 +418,19 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     # Process user-specific actions
     _exe_users_actions(request, context, association_features)
 
+    actions = {
+        "exe_quick": _("Quickly configure your organization's most important settings"),
+        "exe_methods": _("Set up the payment methods available to participants"),
+        "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
+    }
+
+    for permission_key, suggestion_text in actions.items():
+        if get_association_config(
+            context["association_id"], f"{permission_key}_suggestion", default_value=False, context=context
+        ):
+            continue
+        _add_action(context, suggestion_text, permission_key)
+
 
 def _exe_users_actions(request: HttpRequest, context: dict, enabled_features: dict[str, Any]) -> None:
     """Process user management actions and setup tasks for executives.
@@ -420,6 +478,7 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
         enabled_features: Set of enabled features for the association
 
     """
+
     if "payment" in enabled_features and not context.get("methods", ""):
         _add_priority(
             context,
@@ -451,7 +510,7 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
             )
 
 
-def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa: C901 - Complex dashboard view with feature checks
+def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Event organizer management dashboard view.
 
     Args:
@@ -466,6 +525,12 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
     context = get_event_context(request, event_slug)
     context["orga_page"] = 1
     context["manage"] = 1
+    features = get_event_features(context["event"].id)
+
+    # TODO remove
+    context["old_dashboard"] = get_association_config(
+        context["association_id"], "old_dashboard", default_value=False, context=context
+    )
 
     # Check what would you like form
     what_would_you_like(context, request)
@@ -483,26 +548,19 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
 
     # Load registration status
     context["registration_status"] = _get_registration_status(context["run"])
+    status_code, __ = _get_registration_status_code(context["run"])
+    context["registrations_open"] = status_code in ["primary", "filler", "waiting"]
 
     # Load registration counts if permitted
     if has_event_permission(request, context, event_slug, "orga_registrations"):
-        context["counts"] = get_registration_counts(context["run"])
-        context["registration_counts"] = {}
-        for tier in ["player", "staff", "wait", "fill", "seller", "npc", "collaborator"]:
-            count_key = f"count_{tier}"
-            if count_key in context["counts"]:
-                context["registration_counts"][_(tier.capitalize())] = context["counts"][count_key]
-
-    # Load accounting if permitted
-    if has_event_permission(request, context, event_slug, "orga_accounting"):
-        context["dc"] = get_run_accounting(context["run"], context, perform_update=False)
+        context["registration_counts"] = _get_registration_counts(context["run"])
 
     # Build action lists
     _exe_actions(request, context)
     if "actions_list" in context:
         del context["actions_list"]
 
-    _orga_actions_priorities(request, context)
+    _orga_actions_priorities(request, context, features)
     _orga_suggestions(context)
     _compile(request, context)
 
@@ -517,12 +575,37 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
             should_open_shortcuts = str(context["run"].id) != origin_id
         context["open_shortcuts"] = should_open_shortcuts
 
+    # Check if intro driver needs to be shown
     _check_intro_driver(context)
+
+    # Loads widget data
+    _orga_widgets(request, context, event_slug, features)
 
     return render(request, "larpmanager/manage/orga.html", context)
 
 
-def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # noqa: C901 - Complex priority determination logic
+def _orga_widgets(request: HttpRequest, context:dict, event_slug: str, features:dict):
+    """Loads widget data into context."""
+
+    widgets_available = []
+    for widget in ["deadlines", "casting", ]:
+        if widget in features:
+            widgets_available.append(widget)
+
+    if "user_character" in features and get_event_config(
+        context["event"].id, "user_character_approval", default_value=False, context=context
+    ):
+        widgets_available.append("user_character")
+
+    if has_event_permission(request, context, event_slug, "orga_accounting"):
+        widgets_available.append("accounting")
+
+    context["widgets"] = {}
+    for widget in widgets_available:
+        context["widgets"][widget] = get_orga_widget_cache(context["run"], widget)
+
+
+def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict) -> None:  # noqa: C901 - Complex priority determination logic
     """Determine priority actions for event organizers based on event state.
 
     Analyzes event features and configuration to suggest next steps in
@@ -533,17 +616,19 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
         request: Django HTTP request object
         context: Context dictionary containing 'event' and 'run' keys. Will be updated
              with priority and action lists
+        features: Activated features dictionary
 
     Side effects:
         Modifies context by calling _add_priority() and _add_action() which populate
         action lists for the organizer dashboard
 
     """
-    # Load feature flags to determine which checks to perform
-    enabled_features = get_event_features(context["event"].id)
+
+    # Check if currency configuration suggestion has been dismissed
+    _check_currency_priority(request, context, features)
 
     # Check if character feature is properly configured
-    if "character" in enabled_features:
+    if "character" in features:
         # Prompt to create first character if none exist
         if not Character.objects.filter(event=context["event"]).exists():
             _add_priority(
@@ -552,7 +637,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
                 "orga_characters",
             )
     # Check for feature dependencies on character feature
-    elif set(enabled_features) & {
+    elif set(features) & {
         "faction",
         "plot",
         "casting",
@@ -569,7 +654,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
 
     # Check if user_character feature needs configuration
     if (
-        "user_character" in enabled_features
+        "user_character" in features
         and get_event_config(context["event"].id, "user_character_max", default_value="", context=context) == ""
     ):
         _add_priority(
@@ -580,7 +665,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
         )
 
     # Check for features that depend on credits
-    if "credits" not in enabled_features and set(enabled_features) & {"expense", "refund", "collection"}:
+    if "credits" not in features and set(features) & {"expense", "refund", "collection"}:
         _add_priority(
             context,
             _("Some activated features need the 'Credits' feature, but it isn't active"),
@@ -653,15 +738,15 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
         )
 
     # Delegate to sub-functions for additional action checks
-    _orga_user_actions(context, enabled_features, request)
+    _orga_user_actions(context, features, request)
 
-    _orga_registration_accounting_actions(context, enabled_features)
+    _orga_registration_accounting_actions(context, features)
 
-    _orga_registration_actions(context, enabled_features)
+    _orga_registration_actions(context, features)
 
-    _orga_px_actions(context, enabled_features)
+    _orga_px_actions(context, features)
 
-    _orga_casting_actions(context, enabled_features)
+    _orga_casting_actions(context, features)
 
 
 def _orga_user_actions(
@@ -874,6 +959,18 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
             _("Set up configuration for Patron and Reduced tickets"),
             "orga_registration_tickets",
             "config/reduced",
+        )
+
+
+def _check_currency_priority(request: HttpRequest, context: dict, features:dict) ->Any:
+    """Check if currency has been already set / checked."""
+    if "payment" in features and not get_association_config(
+            context["association_id"], "exe_association_suggestion", default_value=False, context=context
+    ) and has_association_permission(request, context, "exe_association"):
+        _add_priority(
+            context,
+            _("Set up the payment currency in the organization settings"),
+            "exe_association",
         )
 
 

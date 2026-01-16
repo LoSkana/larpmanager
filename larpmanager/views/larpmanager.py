@@ -63,6 +63,7 @@ from larpmanager.models.larpmanager import (
 )
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
+from larpmanager.models.utils import my_uuid_short
 from larpmanager.utils.auth.admin import check_lm_admin
 from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
 from larpmanager.utils.core.base import get_context, get_event_context
@@ -1017,7 +1018,7 @@ def get_run_lm_payment(run: Any) -> None:
 
 
 @login_required
-def lm_payments_confirm(request: HttpRequest, run_id: Any) -> Any:
+def lm_payments_confirm(request: HttpRequest, run_uuid: str) -> Any:
     """Confirm payment for a specific run.
 
     Marks a run as paid with calculated total.
@@ -1025,14 +1026,14 @@ def lm_payments_confirm(request: HttpRequest, run_id: Any) -> Any:
 
     Args:
         request: Django HTTP request object (must be authenticated admin)
-        run_id: Run ID to confirm payment for
+        run_uuid: Run UUID to confirm payment for
 
     Returns:
         HttpResponseRedirect: Redirect to payments list
 
     """
     check_lm_admin(request)
-    run = Run.objects.get(pk=run_id)
+    run = Run.objects.get(uuid=run_uuid)
     get_run_lm_payment(run)
     run.paid = run.total
     run.save()
@@ -1227,12 +1228,11 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
 
     """
     # Generate unique primary key for new association
-    new_primary_key = Association.objects.order_by("-pk").values_list("pk", flat=True).first()
-    new_primary_key += 1
+    new_uuid = my_uuid_short()
 
     # Create demo association with unique slug and inherited skin
     demo_association = Association.objects.create(
-        slug=f"test{new_primary_key}",
+        slug=f"test-{new_uuid}",
         name="Demo Organization",
         skin_id=request.association["skin_id"],
         demo=True,
@@ -1240,8 +1240,8 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
 
     # Create test admin user with demo credentials
     (demo_user, _created) = User.objects.get_or_create(
-        email=f"test{new_primary_key}@demo.it",
-        username=f"test{new_primary_key}",
+        email=f"test-{new_uuid}@demo.it",
+        username=f"test-{new_uuid}",
     )
     demo_user.password = conf_settings.DEMO_PASSWORD
     demo_user.save()

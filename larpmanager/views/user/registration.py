@@ -659,8 +659,8 @@ def register(
     # Prepare new registration or load existing one
     is_new_registration = _register_prepare(context, registration)
 
-    # Handle registration redirects for new registrations
-    if is_new_registration:
+    # Handle registration redirects for new registrations (skipped is a valid ticket link is provided)
+    if is_new_registration and not context.get("ticket"):
         redirect_response = _check_redirect_registration(request, context, current_event, secret_code)
         if redirect_response:
             return redirect_response

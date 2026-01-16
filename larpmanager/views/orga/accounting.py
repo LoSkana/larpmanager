@@ -234,7 +234,7 @@ def orga_accounting(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_accounting")
 
     # Get accounting data for the run
-    context["dc"] = get_run_accounting(context["run"], context)
+    context["summary"], context["details"] = get_run_accounting(context["run"], context)
 
     return render(request, "larpmanager/orga/accounting/accounting.html", context)
 

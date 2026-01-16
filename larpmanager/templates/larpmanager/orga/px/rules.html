@@ -28,10 +28,12 @@
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>
-                        {% for ab in el.abilities.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_px_abilities_edit' run.get_slug ab.uuid %}">{{ ab.name }}</a>
-                        {% endfor %}
+                        {% if el.cached_rels %}
+                            {% for ab_uuid, ab_name in el.cached_rels.ability_rels.list %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_px_abilities_edit' run.get_slug ab_uuid %}">{{ ab_name }}</a>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     <td>{{ el.field }}</td>
                     <td>{{ el.get_operation_display }}</td>

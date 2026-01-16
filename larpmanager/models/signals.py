@@ -90,6 +90,20 @@ from larpmanager.cache.permission import (
     clear_event_permission_cache,
     clear_index_permission_cache,
 )
+from larpmanager.cache.px import (
+    on_ability_characters_m2m_changed,
+    on_ability_prerequisites_m2m_changed,
+    on_ability_requirements_m2m_changed,
+    on_delivery_characters_m2m_changed,
+    on_modifier_prerequisites_m2m_changed,
+    on_modifier_requirements_m2m_changed,
+)
+from larpmanager.cache.px import (
+    on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
+)
+from larpmanager.cache.px import (
+    on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
+)
 from larpmanager.cache.registration import clear_registration_counts_cache, on_character_update_registration_cache
 from larpmanager.cache.rels import (
     clear_event_relationships_cache,
@@ -113,10 +127,13 @@ from larpmanager.cache.run import (
     on_event_pre_save_invalidate_cache,
     on_run_post_save_reset_config_cache,
     on_run_pre_save_invalidate_cache,
+    reset_cache_config_run,
     update_visible_factions,
 )
 from larpmanager.cache.skin import clear_skin_cache
 from larpmanager.cache.text_fields import update_text_fields_cache
+from larpmanager.cache.warehouse import on_warehouse_item_tags_m2m_changed
+from larpmanager.cache.widget import reset_widgets
 from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
 from larpmanager.mail.accounting import (
     send_collection_activation_email,
@@ -176,7 +193,7 @@ from larpmanager.models.base import (
     debug_set_uuid,
     update_model_search_field,
 )
-from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait, refresh_all_instance_traits
+from larpmanager.models.casting import AssignmentTrait, Casting, Quest, QuestType, Trait, refresh_all_instance_traits
 from larpmanager.models.event import (
     Event,
     EventButton,
@@ -262,7 +279,11 @@ from larpmanager.utils.services.inventory import generate_base_inventories
 from larpmanager.utils.services.miscellanea import auto_rotate_vertical_photos
 from larpmanager.utils.services.writing import replace_character_names_before_save
 from larpmanager.utils.users.member import create_member_profile_for_user, process_membership_status_updates
-from larpmanager.utils.users.registration import process_character_ticket_options, process_registration_event_change
+from larpmanager.utils.users.registration import (
+    process_character_ticket_options,
+    process_registration_event_change,
+    reset_registration_ticket,
+)
 
 log = logging.getLogger(__name__)
 
@@ -293,11 +314,29 @@ def post_save_callback(sender: type, instance: object, created: bool, **kwargs: 
     # Set simplified uuid for debug
     debug_set_uuid(instance, created=created)
 
+    # Update cache for accounting items
+    reset_accountingitem_cache(instance)
+
 
 @receiver(post_delete)
 def post_delete_text_fields_callback(sender: type, instance: object, **kwargs: Any) -> None:
-    """Update text fields cache after model instance deletion."""
+    """Handle post-delete operations for all models."""
+    # Update text fields cache after model instance deletion
     update_text_fields_cache(instance)
+
+    # Update cache for accounting items
+    reset_accountingitem_cache(instance)
+
+
+def reset_accountingitem_cache(instance: Any) -> None:
+    """Handle reset cache after accounting item saved."""
+    if not isinstance(instance, AccountingItem):
+        return
+
+    reset_widgets(instance)
+
+    if hasattr(instance, "run") and instance.run and instance.member_id:
+        refresh_member_accounting_cache(instance.run, instance.member_id)
 
 
 # AbilityPx signals
@@ -341,13 +380,6 @@ def post_save_discount_accounting_cache(
     process_accounting_discount_post_save(instance)
 
     # Refresh member's accounting cache if discount is associated with a run and member
-    if instance.run and instance.member_id:
-        refresh_member_accounting_cache(instance.run, instance.member_id)
-
-
-@receiver(post_delete, sender=AccountingItemDiscount)
-def post_delete_discount_accounting_cache(sender: type, instance: AccountingItemDiscount, **kwargs: Any) -> None:
-    """Refresh member accounting cache after discount deletion."""
     if instance.run and instance.member_id:
         refresh_member_accounting_cache(instance.run, instance.member_id)
 
@@ -405,18 +437,6 @@ def post_save_other_accounting_cache(
     """Update token credit and member accounting cache after OtherAccounting save."""
     # Update token credit based on the OtherAccounting instance
     update_token_credit_on_other_save(instance)
-
-    # Refresh member accounting cache if run and member are present
-    if instance.run and instance.member_id:
-        refresh_member_accounting_cache(instance.run, instance.member_id)
-
-
-@receiver(post_delete, sender=AccountingItemOther)
-def post_delete_other_accounting_cache(sender: type, instance: AccountingItemOther, **kwargs: Any) -> None:
-    """Refresh accounting cache for a member when their accounting entry is deleted."""
-    # Refresh member cache if run and member are present
-    if instance.run and instance.member_id:
-        refresh_member_accounting_cache(instance.run, instance.member_id)
 
 
 # AccountingItemPayment signals
@@ -696,6 +716,21 @@ def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs
     update_visible_factions(instance.event)
 
 
+# Casting signals
+@receiver(post_save, sender=Casting)
+def post_save_casting_cache(sender: type, instance: Casting, **kwargs: Any) -> None:
+    """Clear deadline widget cache when casting preferences are saved."""
+    # Clear deadline widget cache for this run (casting deadline)
+    reset_widgets(instance)
+
+
+@receiver(post_delete, sender=Casting)
+def post_delete_casting_cache(sender: type, instance: Casting, **kwargs: Any) -> None:
+    """Clear deadline widget cache when casting preferences are deleted."""
+    # Clear deadline widget cache for this run (casting deadline)
+    reset_widgets(instance)
+
+
 # CharacterConfig signals
 @receiver(post_save, sender=CharacterConfig)
 def post_save_reset_character_config(sender: type, instance: Any, **kwargs: Any) -> None:
@@ -832,12 +867,16 @@ def pre_delete_event_button(sender: type, instance: Any, **kwargs: Any) -> None:
 def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset event configuration cache after model save."""
     reset_element_configs(instance.event)
+    for run in instance.event.runs.all():
+        reset_cache_config_run(run)
 
 
 @receiver(post_delete, sender=EventConfig)
 def post_delete_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear event configuration cache after deletion."""
     reset_element_configs(instance.event)
+    for run in instance.event.runs.all():
+        reset_cache_config_run(run)
 
 
 # EventPermission signals
@@ -1131,6 +1170,18 @@ def pre_save_membership(sender: type, instance: Membership, **kwargs: Any) -> No
     process_membership_status_updates(instance)
 
 
+@receiver(post_save, sender=Membership)
+def post_save_membership_cache(sender: type, instance: Membership, **kwargs: Any) -> None:
+    """Clear deadline widget cache when membership status changes."""
+    reset_widgets(instance)
+
+
+@receiver(post_delete, sender=Membership)
+def post_delete_membership_cache(sender: type, instance: Membership, **kwargs: Any) -> None:
+    """Clear deadline widget cache when membership status changes."""
+    reset_widgets(instance)
+
+
 # ModifierPx signals
 @receiver(post_save, sender=ModifierPx)
 def post_save_modifier_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
@@ -1373,6 +1424,9 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     # Update registration count caches for this run
     clear_registration_counts_cache(instance.run_id)
 
+    # Clear deadline widget cache for this run
+    reset_widgets(instance)
+
 
 @receiver(pre_delete, sender=Registration)
 def pre_delete_registration(sender: type, instance: Registration, *args: Any, **kwargs: Any) -> None:
@@ -1384,6 +1438,7 @@ def pre_delete_registration(sender: type, instance: Registration, *args: Any, **
 def post_delete_registration_accounting_cache(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear accounting cache for the associated run after registration deletion."""
     clear_registration_accounting_cache(instance.run_id)
+    reset_widgets(instance)
 
 
 # RegistrationCharacterRel signals
@@ -1396,6 +1451,9 @@ def post_save_registration_character_rel_savereg(
 ) -> None:
     """Reset character cache and send assignment email notification."""
     reset_character_registration_cache(instance)
+
+    # Clear deadline widget cache (casting requirements)
+    reset_widgets(instance.registration)
 
     # Auto-assign player if player editor is active and character has no player
     features = get_event_features(instance.character.event_id)
@@ -1413,6 +1471,9 @@ def post_delete_registration_character_rel_savereg(
 ) -> None:
     """Reset character registration cache after relationship deletion."""
     reset_character_registration_cache(instance)
+
+    # Clear deadline widget cache (casting requirements)
+    reset_widgets(instance.registration)
 
 
 # RegistrationOption signals
@@ -1435,20 +1496,17 @@ def post_save_ticket_accounting_cache(
     created: bool,
     **kwargs: Any,
 ) -> None:
-    """Clear accounting cache for all runs when a ticket is saved."""
+    """Clear cache for all runs when a ticket is saved."""
     log_registration_ticket_saved(instance)
 
     # Clear accounting cache for all runs in the ticket's event
-    for run in instance.event.runs.all():
-        clear_registration_accounting_cache(run.id)
+    reset_registration_ticket(instance)
 
 
 @receiver(post_delete, sender=RegistrationTicket)
 def post_delete_ticket_accounting_cache(sender: type, instance: RegistrationTicket, **kwargs: Any) -> None:
-    """Clear accounting cache for all runs when a ticket is deleted."""
-    # Clear accounting cache for all runs in the ticket's event
-    for run in instance.event.runs.all():
-        clear_registration_accounting_cache(run.id)
+    """Clear cache for all runs when a ticket is deleted."""
+    reset_registration_ticket(instance)
 
 
 # Relationship signals
@@ -1671,6 +1729,18 @@ m2m_changed.connect(on_association_roles_m2m_changed, sender=AssociationRole.mem
 m2m_changed.connect(on_event_roles_m2m_changed, sender=EventRole.members.through)
 
 m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
+
+m2m_changed.connect(on_warehouse_item_tags_m2m_changed, sender=WarehouseItem.tags.through)
+
+# PX caching signals - cache relationship data in Redis
+m2m_changed.connect(on_ability_characters_m2m_changed, sender=AbilityPx.characters.through)
+m2m_changed.connect(on_ability_prerequisites_m2m_changed, sender=AbilityPx.prerequisites.through)
+m2m_changed.connect(on_ability_requirements_m2m_changed, sender=AbilityPx.requirements.through)
+m2m_changed.connect(on_delivery_characters_m2m_changed, sender=DeliveryPx.characters.through)
+m2m_changed.connect(on_modifier_abilities_m2m_changed_cache, sender=ModifierPx.abilities.through)
+m2m_changed.connect(on_modifier_prerequisites_m2m_changed, sender=ModifierPx.prerequisites.through)
+m2m_changed.connect(on_modifier_requirements_m2m_changed, sender=ModifierPx.requirements.through)
+m2m_changed.connect(on_rule_abilities_m2m_changed_cache, sender=RulePx.abilities.through)
 
 m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
 

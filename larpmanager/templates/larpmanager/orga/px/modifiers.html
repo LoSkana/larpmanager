@@ -28,23 +28,29 @@
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>
-                        {% for ab in el.abilities.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_px_abilities_edit' run.get_slug ab.uuid %}">{{ ab.name }}</a>
-                        {% endfor %}
+                        {% if el.cached_rels %}
+                            {% for ab_uuid, ab_name in el.cached_rels.ability_rels.list %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_px_abilities_edit' run.get_slug ab_uuid %}">{{ ab_name }}</a>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     <td>{{ el.cost }}</td>
                     <td>
-                        {% for ab in el.prerequisites.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_px_abilities_edit' run.get_slug ab.uuid %}">{{ ab.name }}</a>
-                        {% endfor %}
+                        {% if el.cached_rels %}
+                            {% for prereq_uuid, prereq_name in el.cached_rels.prerequisite_rels.list %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_px_abilities_edit' run.get_slug prereq_uuid %}">{{ prereq_name }}</a>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     <td>
-                        {% for rq in el.requirements.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_writing_options_edit' run.get_slug 'character' rq.uuid %}">{{ rq.name }}</a>
-                        {% endfor %}
+                        {% if el.cached_rels %}
+                            {% for req_uuid, req_name in el.cached_rels.requirement_rels.list %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_writing_options_edit' run.get_slug 'character' req_uuid %}">{{ req_name }}</a>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     <td>
                         {% if not forloop.first %}

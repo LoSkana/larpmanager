@@ -50,6 +50,11 @@ urlpatterns = [
         name="character_list",
     ),
     path(
+        "<slug:event_slug>/character/list/json/",
+        views_uc.character_list_json,
+        name="character_list_json",
+    ),
+    path(
         "<slug:event_slug>/character/create/",
         views_uc.character_create,
         name="character_create",
@@ -100,9 +105,19 @@ urlpatterns = [
         name="character_abilities",
     ),
     path(
+        "<slug:event_slug>/character/<slug:character_uuid>/abilities/json/",
+        views_uc.character_abilities_json,
+        name="character_abilities_json",
+    ),
+    path(
         "<slug:event_slug>/character/<slug:character_uuid>/abilities/<slug:ability_uuid>/",
         views_uc.character_abilities_del,
         name="character_abilities_del",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/inventory/json/",
+        views_uc.character_inventory_json,
+        name="character_inventory_json",
     ),
     path(
         "<slug:event_slug>/character/<slug:character_uuid>/assign/",

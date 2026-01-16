@@ -28,10 +28,12 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config, get_member_config
-from larpmanager.mail.member import get_help_email, get_password_reminder_email, get_password_reset_url
 from larpmanager.mail.templates import (
+    get_help_email,
     get_invoice_email,
     get_notify_refund_email,
+    get_password_reminder_email,
+    get_password_reset_url,
     get_pay_credit_email,
     get_pay_money_email,
     get_pay_token_email,

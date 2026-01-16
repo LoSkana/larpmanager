@@ -245,7 +245,7 @@ class BaseWritingForm(BaseRegistrationForm):
         # Get base options query from parent class
         options_queryset = super().get_options_query(event)
         # Annotate with array-aggregated tickets for each option
-        return options_queryset.annotate(tickets_map=ArrayAgg("tickets"))
+        return options_queryset.annotate(tickets_map=ArrayAgg("tickets__id"))
 
     def get_option_key_count(self, option: Any) -> str:
         """Return cache key for tracking option character count."""

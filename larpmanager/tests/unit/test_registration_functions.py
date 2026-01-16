@@ -27,7 +27,6 @@ from decimal import Decimal
 from larpmanager.accounting.registration import (
     cancel_reg,
     get_date_surcharge,
-    get_display_choice,
     get_registration_iscr,
     get_registration_payments,
     get_registration_transactions,
@@ -36,6 +35,7 @@ from larpmanager.accounting.registration import (
     registration_payments_status,
     round_to_nearest_cent,
 )
+from larpmanager.utils.core.common import get_display_choice
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemPayment,

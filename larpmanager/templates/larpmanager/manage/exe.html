@@ -6,83 +6,25 @@
 {% block content %}
     <div id="manage">
         {% include "larpmanager/manage/sticky_messages.html" %}
-        <div id="wwyltd">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.wwyltd }}
-            </form>
+        {% include "larpmanager/manage/widgets/wwyltd.html" %}
+        <div {% if not old_dashboard %}class="grid"{% else %}class="old_dashboard"{% endif %}>
+            {% if old_dashboard %}
+                {% include "larpmanager/manage/widgets/exe_events_old.html" %}
+            {% else %}
+                {% include "larpmanager/manage/widgets/exe_events.html" %}
+            {% endif %}
+            {% include "larpmanager/manage/widgets/exe_accounting.html" %}
+            {% include "larpmanager/manage/widgets/exe_deadlines.html" %}
+            {% with list=priorities typ="priorities" %}
+                {% include "larpmanager/manage/widgets/helpers.html" %}
+            {% endwith %}
+            {% with list=actions typ="actions" %}
+                {% include "larpmanager/manage/widgets/helpers.html" %}
+            {% endwith %}
+            {% with list=suggestions typ="suggestions" %}
+                {% include "larpmanager/manage/widgets/helpers.html" %}
+            {% endwith %}
         </div>
-        {% with list=priorities typ="priorities" %}
-            {% include "larpmanager/manage/helpers.html" %}
-        {% endwith %}
-        {% if ongoing_runs %}
-            <h2>
-                <i class="fa-solid fa-calendar-days"></i> {% trans "Events" %}
-            </h2>
-            <table class="go_datatable" no_header_cols="all">
-                <thead>
-                    <tr>
-                        <th>{% trans "Event" %}</th>
-                        <th>{% trans "Dates" %}</th>
-                        <th>{% trans "Status" %}</th>
-                        <th>{% trans "Registrations" %}</th>
-                        <th>{% trans "Counts" %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for run in ongoing_runs %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'manage' run.get_slug %}">{{ run }}</a>
-                            </td>
-                            <td>
-                                <i>{{ run.pretty_dates }}</i>
-                            </td>
-                            <td>{{ run.get_development_display }}</td>
-                            <td>
-                                <a href="{% url 'register' run.get_slug %}">{{ run.registration_status }}</a>
-                            </td>
-                            <td>
-                                {% if run.counts.count_reg %}
-                                    ({% trans "registrations" %}: {{ run.counts.count_reg }})
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-        {% if global_sum or bank_sum %}
-            <h2>
-                <a href="{% url 'exe_accounting' %}"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
-            </h2>
-            <table class="go_datatable" no_header_cols="all">
-                <thead>
-                    <tr>
-                        <th descr="{% trans "This is the associative positive operating margin, taking into account the budgets of completed events, minus credits or tokens issued" %}">
-                            <a href="#" class="sidebar-link">{% trans "Global balance" %}</a>
-                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                        </th>
-                        <th descr="{% trans "This is the overall amount that should be held in the organization’s bank and financial accounts" %}">
-                            <a href="#" class="sidebar-link">{% trans "Overall balance" %}</a>
-                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ global_sum }}</td>
-                        <td>{{ bank_sum }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        {% endif %}
-        {% with list=actions typ="actions" %}
-            {% include "larpmanager/manage/helpers.html" %}
-        {% endwith %}
-        {% with list=suggestions typ="suggestions" %}
-            {% include "larpmanager/manage/helpers.html" %}
-        {% endwith %}
         <hr />
         <div class="staff-list">
             <div class="orga-buttons">

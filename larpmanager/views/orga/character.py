@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import contextlib
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
@@ -73,6 +73,9 @@ from larpmanager.utils.io.download import orga_character_form_download
 from larpmanager.utils.services.character import get_chars_relations
 from larpmanager.utils.services.edit import backend_edit, set_suggestion, writing_edit, writing_edit_working_ticket
 from larpmanager.utils.services.writing import writing_list, writing_versions, writing_view
+
+if TYPE_CHECKING:
+    from larpmanager.models.event import Event
 
 
 def get_character_optimized(context: dict, character_uuid: str) -> None:
@@ -478,29 +481,40 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 
     # Retrieve the specific writing question from POST data
     q_uuid = request.POST.get("q_uuid")
-    q = event.get_elements(WritingQuestion).get(uuid=q_uuid)
+    question = event.get_elements(WritingQuestion).get(uuid=q_uuid)
 
     # Only process single or multiple choice questions
-    if q.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
+    if question.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
         return None
 
     # Build mapping of option IDs to option names
     cho = {}
-    for opt in event.get_elements(WritingOption).filter(question=q):
+    for opt in event.get_elements(WritingOption).filter(question=question):
         cho[opt.id] = opt.name
 
     # Load event cache and create character ID to number mapping
     get_event_cache_all(context)
     mapping = {}
-    for ch_num, ch in context["chars"].items():
-        mapping[ch["id"]] = ch_num
+    for ch_num in context["chars"]:
+        if ch_num in context["char_mapping"]:
+            mapping[context["char_mapping"][ch_num]] = ch_num
 
     # Initialize result dictionary for organizing choices by option
-    res = {}
+    res = _process_character_choices(context, event, mapping, question)
 
-    # Process all character choices for this question
+    # Convert option IDs to option names in final result
+    n_res = {}
+    for opt_id, value in res.items():
+        n_res[cho[opt_id]] = value
+
+    return JsonResponse(n_res)
+
+
+def _process_character_choices(context: dict, event: Event, mapping: dict, question: WritingQuestion) -> dict:
+    """Process all character choices for a question."""
+    res = {}
     character_ids = Character.objects.filter(event=event).values_list("id", flat=True)
-    for el in WritingChoice.objects.filter(question=q, element_id__in=character_ids):
+    for el in WritingChoice.objects.filter(question=question, element_id__in=character_ids):
         # Skip if character not in current event mapping
         if el.element_id not in mapping:
             continue
@@ -516,12 +530,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
         if char["player_uuid"]:
             res[el.option_id]["names"].append(char["player"])
 
-    # Convert option IDs to option names in final result
-    n_res = {}
-    for opt_id, value in res.items():
-        n_res[cho[opt_id]] = value
-
-    return JsonResponse(n_res)
+    return res
 
 
 @login_required
@@ -978,7 +987,7 @@ def check_writings(
         for element in (
             context["event"]
             .get_elements(element_type)
-            .annotate(characters_map=ArrayAgg("characters"))
+            .annotate(characters_map=ArrayAgg("characters__id"))
             .prefetch_related("characters")
         ):
             (characters_from_text, extinct_characters) = get_chars_relations(element.text, character_numbers)
@@ -1019,7 +1028,9 @@ def check_speedlarp(checks: Any, context: dict, id_number_map: Any) -> None:
         return
 
     speedlarp_assignments = {}
-    for speedlarp_element in context["event"].get_elements(SpeedLarp).annotate(characters_map=ArrayAgg("characters")):
+    for speedlarp_element in (
+        context["event"].get_elements(SpeedLarp).annotate(characters_map=ArrayAgg("characters__id"))
+    ):
         check_speedlarp_prepare(speedlarp_element, id_number_map, speedlarp_assignments)
     for character_number, character in context["chars"].items():
         if character_number not in speedlarp_assignments:

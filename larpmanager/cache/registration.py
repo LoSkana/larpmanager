@@ -26,7 +26,7 @@ from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Run
-from larpmanager.models.form import RegistrationChoice, WritingChoice
+from larpmanager.models.form import BaseQuestionType, RegistrationChoice, WritingChoice
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import Character
 from larpmanager.utils.core.common import _search_char_reg
@@ -97,11 +97,18 @@ def update_registration_counts(run: Run) -> dict[str, int]:
     Returns:
         Dictionary containing registration counts data by ticket tier and choices.
         Keys include count_reg, count_wait, count_staff, count_fill, tk_{ticket_id},
-        option_{option_id}, and option_char_{option_id}.
+        option_{option_id}, option_char_{option_id}, tickets_map, and tickets_order.
 
     """
     # Initialize base counters
-    counts = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0}
+    counts = {
+        "count_reg": 0,
+        "count_wait": 0,
+        "count_staff": 0,
+        "count_fill": 0,
+        "tickets_map": {},
+        "tickets_order": {},
+    }
 
     # Get all non-cancelled registrations for this run
     registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
@@ -119,6 +126,13 @@ def update_registration_counts(run: Run) -> dict[str, int]:
         if not registration.ticket:
             add_count(counts, "count_unknown", num_tickets)
         else:
+            # Count by ticket name
+            add_count(counts, f"count_ticket_{registration.ticket_id}", num_tickets)
+            if registration.ticket_id not in counts["tickets_map"]:
+                counts["tickets_map"][registration.ticket_id] = registration.ticket.name
+            if registration.ticket_id not in counts["tickets_order"]:
+                counts["tickets_order"][registration.ticket_id] = registration.ticket.order
+
             # Map ticket tiers to counter keys
             tier_map = {
                 TicketTier.STAFF: "staff",
@@ -149,7 +163,9 @@ def update_registration_counts(run: Run) -> dict[str, int]:
 
     # Count registration choices (form options selected)
     registration_choices = RegistrationChoice.objects.filter(
-        registration__run=run, registration__cancellation_date__isnull=True
+        registration__run=run,
+        registration__cancellation_date__isnull=True,
+        question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
     )
     for choice_data in registration_choices.values("option_id").annotate(total=Count("option_id")):
         counts[f"option_{choice_data['option_id']}"] = choice_data["total"]

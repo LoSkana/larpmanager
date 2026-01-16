@@ -41,6 +41,7 @@ from larpmanager.forms.utils import (
     EventS2Widget,
     SlugInput,
     TemplateS2Widget,
+    WritingTinyMCE,
     prepare_permissions_role,
     remove_choice,
     save_permissions_role,
@@ -157,7 +158,7 @@ class OrgaEventForm(BaseModelForm):
             "association",
         )
 
-        widgets: ClassVar[dict] = {"slug": SlugInput, "parent": CampaignS2Widget}
+        widgets: ClassVar[dict] = {"slug": SlugInput, "parent": CampaignS2Widget, "description": WritingTinyMCE}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize event form with field configuration based on context.
@@ -229,8 +230,8 @@ class OrgaEventForm(BaseModelForm):
     def clean_slug(self) -> str:
         """Validate event slug for uniqueness and reserved word conflicts.
 
-        Ensures that the slug is unique among all events (excluding current instance
-        during updates) and is not a reserved static prefix.
+        Ensures that the slug is unique among all events within the association
+        (excluding current instance during updates) and is not a reserved static prefix.
 
         Returns:
             str: The validated slug value.
@@ -242,10 +243,10 @@ class OrgaEventForm(BaseModelForm):
         data = self.cleaned_data["slug"]
         logger.debug("Validating event slug: %s", data)
 
-        # Check if slug is already used by another event
+        # Check if slug is already used by another event in this association
         lst = Event.objects.filter(association_id=self.params["association_id"], slug=data)
         if self.instance is not None and self.instance.pk is not None:
-            lst.exclude(pk=self.instance.pk)
+            lst = lst.exclude(pk=self.instance.pk)
         if lst.count() > 0:
             msg = "Slug already used!"
             raise ValidationError(msg)

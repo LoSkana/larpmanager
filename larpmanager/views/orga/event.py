@@ -32,6 +32,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import clear_run_cache_and_media
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.run import get_cache_run
 from larpmanager.forms.event import (
@@ -208,6 +209,14 @@ def prepare_roles_list(
         else:
             permissions_by_module = defaultdict(list)
             for permission in role.permissions.all():
+                # Check active_if config for event permissions
+                if permission.active_if and context.get("event"):
+                    config_value = get_event_config(
+                        context["event"].id, permission.active_if, default_value=False, context=context
+                    )
+                    if not config_value:
+                        continue
+
                 permissions_by_module[permission.feature.module].append(permission)
 
             sorted_modules = sorted(
@@ -677,6 +686,9 @@ def orga_upload_template(request: HttpRequest, event_slug: str, upload_type: str
     elif upload_type == "registration":
         # Generate registration template for event signup data
         exports = _reg_template(context, upload_type, value_mapping)
+    elif upload_type == "registration_ticket":
+        # Generate ticket template for ticket tier definitions
+        exports = _ticket_template(context)
     elif upload_type == "px_abilitie":
         # Generate abilities template for player experience tracking
         exports = _ability_template(context)
@@ -686,6 +698,26 @@ def orga_upload_template(request: HttpRequest, event_slug: str, upload_type: str
 
     # Package exports into ZIP file and return as download response
     return zip_exports(context, exports, "template")
+
+
+def _ticket_template(context: dict) -> Any:
+    """Generate template for ticket tier uploads with example data."""
+    export_data = []
+    field_example_values = {
+        "name": "Basic Ticket",
+        "tier": "1",
+        "description": "Standard admission ticket",
+        "price": "50",
+        "max_available": "100",
+    }
+    column_names = list(context["columns"][0].keys())
+    example_row_values = []
+    for field_name, example_value in field_example_values.items():
+        if field_name not in column_names:
+            continue
+        example_row_values.append(example_value)
+    export_data.append(("tickets", column_names, [example_row_values]))
+    return export_data
 
 
 def _ability_template(context: dict) -> Any:

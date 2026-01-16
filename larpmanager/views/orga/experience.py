@@ -26,6 +26,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.px import get_event_px_cache
 from larpmanager.forms.experience import (
     OrgaAbilityPxForm,
     OrgaAbilityTemplatePxForm,
@@ -52,7 +53,15 @@ def orga_px_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_px_deliveries")
 
     # Get all deliveries ordered by number
-    context["list"] = context["event"].get_elements(DeliveryPx).order_by("number")
+    deliveries = list(context["event"].get_elements(DeliveryPx).order_by("number"))
+
+    # Get cached PX relationship data and enrich delivery objects
+    px_cache = get_event_px_cache(context["event"])
+    for delivery in deliveries:
+        if "deliveries" in px_cache and delivery.id in px_cache["deliveries"]:
+            delivery.cached_rels = px_cache["deliveries"][delivery.id]
+
+    context["list"] = deliveries
 
     return render(request, "larpmanager/orga/px/deliveries.html", context)
 
@@ -160,13 +169,15 @@ def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     # Query and prepare abilities list with optimized database access
-    context["list"] = (
-        context["event"]
-        .get_elements(AbilityPx)
-        .order_by("number")
-        .select_related("typ")
-        .prefetch_related("requirements", "prerequisites")
-    )
+    abilities = list(context["event"].get_elements(AbilityPx).order_by("number").select_related("typ"))
+
+    # Get cached PX relationship data and enrich ability objects
+    px_cache = get_event_px_cache(context["event"])
+    for ability in abilities:
+        if "abilities" in px_cache and ability.id in px_cache["abilities"]:
+            ability.cached_rels = px_cache["abilities"][ability.id]
+
+    context["list"] = abilities
 
     # Render the abilities management template with populated context
     return render(request, "larpmanager/orga/px/abilities.html", context)
@@ -220,7 +231,14 @@ def orga_px_ability_types_edit(request: HttpRequest, event_slug: str, type_uuid:
 def orga_px_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display experience rules for an event."""
     context = check_event_context(request, event_slug, "orga_px_rules")
-    context["list"] = context["event"].get_elements(RulePx).order_by("order")
+    # Get all rules ordered
+    rules = list(context["event"].get_elements(RulePx).order_by("order"))
+    # Get cached PX relationship data and enrich rule objects
+    px_cache = get_event_px_cache(context["event"])
+    for rule in rules:
+        if "rules" in px_cache and rule.id in px_cache["rules"]:
+            rule.cached_rels = px_cache["rules"][rule.id]
+    context["list"] = rules
     return render(request, "larpmanager/orga/px/rules.html", context)
 
 
@@ -268,7 +286,15 @@ def orga_px_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_px_modifiers")
 
     # Retrieve ordered list of experience modifiers
-    context["list"] = context["event"].get_elements(ModifierPx).order_by("order")
+    modifiers = list(context["event"].get_elements(ModifierPx).order_by("order"))
+
+    # Get cached PX relationship data and enrich modifier objects
+    px_cache = get_event_px_cache(context["event"])
+    for modifier in modifiers:
+        if "modifiers" in px_cache and modifier.id in px_cache["modifiers"]:
+            modifier.cached_rels = px_cache["modifiers"][modifier.id]
+
+    context["list"] = modifiers
 
     return render(request, "larpmanager/orga/px/modifiers.html", context)
 

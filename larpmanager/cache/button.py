@@ -25,15 +25,7 @@ from larpmanager.models.event import EventButton
 
 
 def event_button_key(event_id: int) -> str:
-    """Generate cache key for event buttons.
-
-    Args:
-        event_id (int): Event ID
-
-    Returns:
-        str: Cache key for event buttons
-
-    """
+    """Generate cache key for event buttons."""
     return f"event_button_{event_id}"
 
 

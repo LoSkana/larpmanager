@@ -619,11 +619,11 @@ class RegistrationQuestion(UuidMixin, BaseModel):
 
         # Conditionally add annotations based on enabled features
         if "reg_que_tickets" in features:
-            questions = questions.annotate(tickets_map=ArrayAgg("tickets"))
+            questions = questions.annotate(tickets_map=ArrayAgg("tickets__uuid"))
         if "reg_que_faction" in features:
-            questions = questions.annotate(factions_map=ArrayAgg("factions"))
+            questions = questions.annotate(factions_map=ArrayAgg("factions__id"))
         if "reg_que_allowed" in features:
-            questions = questions.annotate(allowed_map=ArrayAgg("allowed"))
+            questions = questions.annotate(allowed_map=ArrayAgg("allowed__id"))
 
         return questions
 
@@ -638,22 +638,23 @@ class RegistrationQuestion(UuidMixin, BaseModel):
 
         if "reg_que_tickets" in features and registration and registration.pk:
             # noinspection PyUnresolvedReferences
-            allowed_ticket_ids = [ticket_id for ticket_id in self.tickets_map if ticket_id is not None]
-            if len(allowed_ticket_ids) > 0:
+            allowed_ticket_uuids = [ticket_uuid for ticket_uuid in self.tickets_map if ticket_uuid is not None]
+            if len(allowed_ticket_uuids) > 0:
                 if not registration or not registration.ticket:
                     return True
 
-                if registration.ticket_id not in allowed_ticket_ids:
+                if registration.ticket.uuid not in allowed_ticket_uuids:
                     return True
 
-        if "reg_que_faction" in features and registration and registration.pk:
+        if "reg_que_faction" in features:
             # noinspection PyUnresolvedReferences
             allowed_faction_ids = [faction_id for faction_id in self.factions_map if faction_id is not None]
             if len(allowed_faction_ids) > 0:
                 registration_faction_ids = []
-                for character_relation in RegistrationCharacterRel.objects.filter(registration=registration):
-                    character_factions = character_relation.character.factions_list.values_list("id", flat=True)
-                    registration_faction_ids.extend(character_factions)
+                if registration and registration.pk:
+                    for character_relation in RegistrationCharacterRel.objects.filter(registration=registration):
+                        character_factions = character_relation.character.factions_list.values_list("id", flat=True)
+                        registration_faction_ids.extend(character_factions)
 
                 if len(set(allowed_faction_ids).intersection(set(registration_faction_ids))) == 0:
                     return True

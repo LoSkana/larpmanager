@@ -56,7 +56,12 @@
                         </td>
                     {% endif %}
                     <td>
-                        <a href="{% url 'register' run.get_slug el.uuid %}">{% trans "Signup link" %}</a>
+                        <a href="{% url 'register' run.get_slug el.uuid %}" target="_blank">{% trans "Signup link" %}</a>
+                        <button class="copy-link-btn"
+                                data-url="{% url 'register' run.get_slug el.uuid %}"
+                                title="{% trans "Copy link to clipboard" %}">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
                     </td>
                     <td>
                         {% if not forloop.first %}

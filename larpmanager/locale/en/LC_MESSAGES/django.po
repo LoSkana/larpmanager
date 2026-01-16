@@ -279,6 +279,12 @@ msgstr ""
 msgid "Interface"
 msgstr ""
 
+msgid "Old dashboard"
+msgstr ""
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr ""
+
 msgid "Past events"
 msgstr ""
 
@@ -2447,28 +2453,10 @@ msgid "Your question has been answered"
 msgstr ""
 
 #, python-format
-msgid "New question by %(user)s"
-msgstr ""
-
-#, python-format
-msgid "A question was asked by: %(user)s"
-msgstr ""
-
-#, python-format
 msgid "New message from %(user)s"
 msgstr ""
 
 msgid "reply here"
-msgstr ""
-
-#, python-format
-msgid "Password reset of user %(user)s"
-msgstr ""
-
-#, python-format
-msgid ""
-"The user requested the password reset, but did not complete it. Give them "
-"this link: %(url)s"
 msgstr ""
 
 #, python-format
@@ -2765,6 +2753,24 @@ msgid ""
 "<i>Payment due</i> - You must pay <b>%(amount).2f %(currency)s</b> as soon "
 "as possible. Make your payment <a href='%(url)s'>on this page</a>. If we do "
 "not receive payment, your registration may be cancelled."
+msgstr ""
+
+#, python-format
+msgid "New question by %(user)s"
+msgstr ""
+
+#, python-format
+msgid "A question was asked by: %(user)s"
+msgstr ""
+
+#, python-format
+msgid "Password reset of user %(user)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"The user requested the password reset, but did not complete it. Give them "
+"this link: %(url)s"
 msgstr ""
 
 msgid "To access this feature, you must first register"
@@ -5577,6 +5583,9 @@ msgstr ""
 msgid "End"
 msgstr ""
 
+msgid "Copy link to clipboard"
+msgstr ""
+
 msgid ""
 "This page shows larpmanager usage costs, total and divided by individual "
 "event"
@@ -6047,15 +6056,6 @@ msgid ""
 "and events"
 msgstr ""
 
-msgid "Dates"
-msgstr ""
-
-msgid "Counts"
-msgstr ""
-
-msgid "registrations"
-msgstr ""
-
 msgid "Launch guided interface tour"
 msgstr ""
 
@@ -6065,15 +6065,6 @@ msgstr ""
 msgid ""
 "You have activated the following features, for each here's the links to "
 "follow"
-msgstr ""
-
-msgid "Priorities"
-msgstr ""
-
-msgid "Actions"
-msgstr ""
-
-msgid "Suggestions"
 msgstr ""
 
 msgid "Discover what this event is about"
@@ -6127,10 +6118,32 @@ msgstr ""
 msgid "Register to the event"
 msgstr ""
 
-msgid "Event status"
+msgid ""
+"This is the overall amount that should be held in the organization's bank "
+"and financial accounts"
 msgstr ""
 
-msgid "Secret registration link"
+msgid "Dates"
+msgstr ""
+
+msgid "Counts"
+msgstr ""
+
+msgid "Priorities"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Suggestions"
+msgstr ""
+
+msgid ""
+"Total amount of money expected if all registered participants fully pay "
+"their due amount"
+msgstr ""
+
+msgid "Expected revenue"
 msgstr ""
 
 msgid ""
@@ -6138,7 +6151,7 @@ msgid ""
 "refunds"
 msgstr ""
 
-msgid "Total revenue"
+msgid "Realized revenue"
 msgstr ""
 
 msgid ""
@@ -6150,7 +6163,7 @@ msgid "Total costs"
 msgstr ""
 
 msgid ""
-"Net profit of the event, difference between total revenue and total costs"
+"Net profit of the event, difference between realized revenue and total costs"
 msgstr ""
 
 msgid "Net profit"
@@ -6160,6 +6173,30 @@ msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 
 msgid "Organization tax"
+msgstr ""
+
+msgid "Characters assigned"
+msgstr ""
+
+msgid "Characters unassigned"
+msgstr ""
+
+msgid "Players waiting for character"
+msgstr ""
+
+msgid "Cancellation for missing profile compilation"
+msgstr ""
+
+msgid "Delay in profile compilation"
+msgstr ""
+
+msgid "Secret registration link"
+msgstr ""
+
+msgid "In creation"
+msgstr ""
+
+msgid "In revision"
 msgstr ""
 
 msgid "here the conditions of registration"
@@ -9051,8 +9088,8 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
+"Users can sign up to the event accessing <a href='%(signup_url)s' "
+"target='_blank'>this address</a>"
 msgstr ""
 
 msgid ""
@@ -9498,17 +9535,6 @@ msgstr ""
 msgid "No events are present, create one"
 msgstr ""
 
-msgid "Quickly configure your organization's most important settings"
-msgstr ""
-
-msgid "Set up the payment methods available to participants"
-msgstr ""
-
-msgid ""
-"Define which data will be asked in the profile form to the users once they "
-"sign up"
-msgstr ""
-
 msgid ""
 "Grant access to organization management for other users and define roles "
 "with specific permissions"
@@ -9545,6 +9571,17 @@ msgstr ""
 
 #, python-format
 msgid "There are <b>%(number)s</b> members to approve"
+msgstr ""
+
+msgid "Quickly configure your organization's most important settings"
+msgstr ""
+
+msgid "Set up the payment methods available to participants"
+msgstr ""
+
+msgid ""
+"Define which data will be asked in the profile form to the users once they "
+"sign up"
 msgstr ""
 
 msgid "Set up the membership request text"
@@ -9651,6 +9688,9 @@ msgid ""
 msgstr ""
 
 msgid "Set up configuration for Patron and Reduced tickets"
+msgstr ""
+
+msgid "Set up the payment currency in the organization settings"
 msgstr ""
 
 msgid "Set up a value for registration opening date"

@@ -47,7 +47,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.casting import AssignmentTrait
 from larpmanager.models.event import DevelopStatus, Event, Run
-from larpmanager.models.form import RegistrationChoice, RegistrationOption
+from larpmanager.models.form import BaseQuestionType, RegistrationChoice, RegistrationOption
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
@@ -103,7 +103,9 @@ def get_registration_iscr(registration: Registration) -> int:
         total_registration_fee += registration.pay_what
 
     # Add registration choice options (extras, meals, etc.)
-    for choice in RegistrationChoice.objects.filter(registration=registration).select_related("option"):
+    for choice in RegistrationChoice.objects.filter(
+        registration=registration, question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+    ).select_related("option"):
         total_registration_fee += choice.option.price
 
     # Apply discounts only for non-gifted registrations
@@ -426,7 +428,7 @@ def installment_check(registration: Registration, alert: int, association_id: in
     cumulative_amount = 0
     has_distant_installments = False
     installments_query = RegistrationInstallment.objects.filter(event_id=registration.run.event_id)
-    installments_query = installments_query.annotate(tickets_map=ArrayAgg("tickets")).order_by("order")
+    installments_query = installments_query.annotate(tickets_map=ArrayAgg("tickets__id")).order_by("order")
     is_first_deadline = True
 
     for installment in installments_query:
@@ -594,23 +596,6 @@ def cancel_reg(registration: Registration) -> None:
 
     # Reset event links
     reset_event_links(registration.member_id, registration.run.event.association_id)
-
-
-def get_display_choice(choices: list[tuple[str, str]], key: str) -> str:
-    """Get display name for a choice field value.
-
-    Args:
-        choices: List of (key, display_name) tuples
-        key: Key to look up display name for
-
-    Returns:
-        str: Display name for the key, empty string if not found
-
-    """
-    for choice_key, display_name in choices:
-        if choice_key == key:
-            return display_name
-    return ""
 
 
 def round_to_nearest_cent(amount: float) -> float:

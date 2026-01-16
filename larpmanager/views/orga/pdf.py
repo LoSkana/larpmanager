@@ -376,7 +376,7 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, faction_uuid:
         context,
         "faction",
         QuestionApplicable.FACTION,
-        context["sheet_faction"]["id"],
+        context["faction"].id,
         only_visible=True,
     )
 

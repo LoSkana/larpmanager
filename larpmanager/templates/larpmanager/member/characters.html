@@ -21,12 +21,12 @@
                             {% for rel in campaign_data.characters.values %}
                                 <tr>
                                     <td>
-                                        <a href="{% url 'character' rel.reg.run.get_slug rel.character.uuid %}">{{ rel.character.name }}</a>
+                                        <a href="{% url 'character' rel.registration.run.get_slug rel.character.uuid %}">{{ rel.character.name }}</a>
                                     </td>
                                     <td>
                                         {% if rel.character.configs_dict.inactive != "True" %}<i class="fa fa-check"></i>{% endif %}
                                     </td>
-                                    <td>{{ rel.reg.run }}</td>
+                                    <td>{{ rel.registration.run }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -46,12 +46,12 @@
                     {% for rel in oneshots %}
                         <tr>
                             <td>
-                                <a href="{% url 'character' rel.reg.run.get_slug rel.character.uuid %}">
+                                <a href="{% url 'character' rel.registration.run.get_slug rel.character.uuid %}">
                                     {{ rel.character.name }}
                                     {% if rel.character.title %}- {{ rel.character.title }}{% endif %}
                                 </a>
                             </td>
-                            <td>{{ rel.reg.run.search }}</td>
+                            <td>{{ rel.registration.run.search }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

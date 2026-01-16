@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, just_wait, login_orga, submit_confirm
+from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, logout, login_orga, login_user, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -52,6 +52,8 @@ def test_px(pw_page: Any) -> None:
     modifiers(page, live_server)
 
     delivery_auto_populate(page, live_server)
+
+    endpoint_test(page, live_server)
 
 
 def setup(live_server: Any, page: Any) -> None:
@@ -381,3 +383,13 @@ def delivery_auto_populate(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     expect_normalized(page, page.locator('[id="u2"]'), "5 Test Character")
+
+def endpoint_test(page: Any, live_server: Any) -> None:
+    """Test character abilties endpoint"""
+
+    # Go to character list endpoint
+    response = get_request(page, live_server, "/test/character/list/json/")
+    char_uuid = response[0]["uuid"]
+
+    # Go to character abilities endpoint
+    get_request(page, live_server, f"/test/character/{char_uuid}/abilities/json/")

@@ -647,7 +647,7 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
 
     q = RegistrationQuestion.objects
     if "reg_que_allowed" in context["features"]:
-        q = q.annotate(allowed_map=ArrayAgg("allowed"))
+        q = q.annotate(allowed_map=ArrayAgg("allowed__id"))
     q = q.get(event=context["event"], uuid=q_uuid)
 
     if "reg_que_allowed" in context["features"] and q.allowed_map[0]:
@@ -714,7 +714,7 @@ def orga_registration_form_email(request: HttpRequest, event_slug: str) -> JsonR
     # Query registration question with optional allowed users annotation
     q = RegistrationQuestion.objects
     if "reg_que_allowed" in context["features"]:
-        q = q.annotate(allowed_map=ArrayAgg("allowed"))
+        q = q.annotate(allowed_map=ArrayAgg("allowed__id"))
     q = q.get(event=context["event"], uuid=q_uuid)
 
     # Check if user has permission to access this specific question

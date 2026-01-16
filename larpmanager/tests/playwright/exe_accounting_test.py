@@ -52,7 +52,7 @@ def test_exe_accounting(pw_page: Any) -> None:
 
 def verify(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/accounting/")
-    expect_normalized(page, page.locator("#one"), "Total revenue: 133.00")
+    expect_normalized(page, page.locator("#one"), "Realized revenue: 133.00")
     expect_normalized(page, page.locator("#one"), "Net profit: 71.00")
     expect_normalized(page, page.locator("#one"), "Organization tax: 17.29")
     expect_normalized(page, page.locator("#one"), "Registrations: 70.00")
