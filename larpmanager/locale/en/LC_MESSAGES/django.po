@@ -2342,13 +2342,13 @@ msgstr ""
 msgid "Refund requested"
 msgstr ""
 
+msgid "View"
+msgstr ""
+
 msgid "Awaiting approval"
 msgstr ""
 
 msgid "Help Questions"
-msgstr ""
-
-msgid "View"
 msgstr ""
 
 msgid "Request of membership to the Organization"

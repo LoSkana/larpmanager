@@ -350,7 +350,8 @@ def generate_summary_email(event: Event, notifications: list) -> str:
     Returns:
         str: HTML formatted email body
     """
-    process = _digest_organize_notifications(notifications)
+    # Group notifications by type
+    grouped_notifications = _digest_organize_notifications(notifications)
 
     # Start email body
     email_body = "<h2>" + _("Daily Summary") + f" - {event.name}" + "</h2>"
@@ -358,20 +359,19 @@ def generate_summary_email(event: Event, notifications: list) -> str:
 
     currency_symbol = event.association.get_currency_symbol()
 
-    if process["new_registrations"]:
-        email_body = _digest_new_registrations(event, email_body, process["new_registrations"], currency_symbol)
+    # Map group keys to their handler functions (in display order)
+    notification_handlers = [
+        ("new_registrations", _digest_new_registrations),
+        ("updated_registrations", _digest_updated_registrations),
+        ("cancelled_registrations", _digest_cancelled_registrations),
+        ("all_payments", _digest_payments),
+        ("invoice_approvals", _digest_invoices),
+    ]
 
-    if process["updated_registrations"]:
-        email_body = _digest_updated_registrations(event, email_body, process["updated_registrations"], currency_symbol)
-
-    if process["cancelled_registrations"]:
-        email_body = _digest_cancelled_registrations(event, email_body, process["cancelled_registrations"])
-
-    if process["all_payments"]:
-        email_body = _digest_payments(event, email_body, process["all_payments"], currency_symbol)
-
-    if process["invoice_approvals"]:
-        email_body = _digest_invoices(event, email_body, process["invoice_approvals"], currency_symbol)
+    # Process each notification group using its handler
+    for group_key, handler_func in notification_handlers:
+        if group_key in grouped_notifications:
+            email_body = handler_func(event, email_body, grouped_notifications[group_key], currency_symbol)
 
     # Footer
     email_body += "<br/><hr/>"
@@ -511,37 +511,27 @@ def generate_association_summary_email(association: Association, notifications: 
     email_body = "<h2>" + _("Daily Summary") + f" - {association.name}" + "</h2>"
     email_body += "<p>" + _("Here's what happened in the last 24 hours:") + "</p>"
 
+    # Map notification types to their handler functions
+    notification_handlers = {
+        NotificationType.HELP_QUESTION: digest_help_questions,
+        NotificationType.INVOICE_APPROVAL_EXE: digest_invoice_approvals,
+        NotificationType.REFUND_REQUEST: digest_refund_request,
+        NotificationType.PASSWORD_REMINDER: digest_password_reminders,
+    }
+
     # Group notifications by type
-    help_questions = []
-    password_reminders = []
-    refund_requests = []
-    invoice_approvals = []
-
+    grouped_notifications = {}
     for notification in notifications:
-        if notification.notification_type == NotificationType.HELP_QUESTION:
-            help_questions.append(notification)
-        elif notification.notification_type == NotificationType.PASSWORD_REMINDER:
-            password_reminders.append(notification)
-        elif notification.notification_type == NotificationType.REFUND_REQUEST:
-            refund_requests.append(notification)
-        elif notification.notification_type == NotificationType.INVOICE_APPROVAL_EXE:
-            invoice_approvals.append(notification)
+        notification_type = notification.notification_type
+        if notification_type in notification_handlers:
+            if notification_type not in grouped_notifications:
+                grouped_notifications[notification_type] = []
+            grouped_notifications[notification_type].append(notification)
 
-    # Add help questions section
-    if help_questions:
-        email_body += digest_help_questions(association, help_questions)
-
-    # Add invoice approvals section
-    if invoice_approvals:
-        email_body += digest_invoice_approvals(association, invoice_approvals)
-
-    # Add refund requests section
-    if refund_requests:
-        email_body += digest_refund_request(association, refund_requests)
-
-    # Add password reminders section
-    if password_reminders:
-        email_body += digest_password_reminders(association, password_reminders)
+    # Process each notification type using its handler
+    for notification_type, handler_func in notification_handlers.items():
+        if notification_type in grouped_notifications:
+            email_body += handler_func(association, grouped_notifications[notification_type])
 
     # Footer
     email_body += "<br/><hr/>"
@@ -576,7 +566,9 @@ def digest_refund_request(association: Association, refund_requests: list[Notifi
     invoice_ids = [notification.object_id for notification in refund_requests]
     for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association=association):
         content += f"<li><b>{invoice.member}</b> - {invoice.causal} - {invoice.mc_gross:.2f}"
-        content += " - " + _("Refund requested") + "</li>"
+        content += " - " + _("Refund requested")
+        view_url = get_url(reverse("exe_invoices"), association)
+        content += f' - <a href="{view_url}">' + _("View") + "</a></li>"
     content += "</ul>"
     return content
 
@@ -588,7 +580,9 @@ def digest_invoice_approvals(association: Association, invoice_approvals: list[N
     invoice_ids = [notification.object_id for notification in invoice_approvals]
     for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association=association):
         content += f"<li><b>{invoice.member}</b> - {invoice.causal} - {invoice.mc_gross:.2f}"
-        content += " - " + _("Awaiting approval") + "</li>"
+        content += " - " + _("Awaiting approval")
+        approve_url = get_url(reverse("exe_invoices_confirm", kwargs={"invoice_uuid": invoice.uuid}), association)
+        content += f' - <a href="{approve_url}">' + _("Approve") + "</a></li>"
     content += "</ul>"
     return content
 
