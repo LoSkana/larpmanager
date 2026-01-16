@@ -26,53 +26,27 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 
 if TYPE_CHECKING:
-    from larpmanager.models.association import Association
     from larpmanager.models.miscellanea import WarehouseItem
 
 logger = logging.getLogger(__name__)
 
 
 def get_association_warehouse_key(association_id: int) -> str:
-    """Generate cache key for association warehouse items.
-
-    Args:
-        association_id: The ID of the association
-
-    Returns:
-        str: Cache key in format 'association__warehouse__{association_id}'
-
-    """
+    """Generate cache key for association warehouse items."""
     return f"association__warehouse__{association_id}"
 
 
 def clear_association_warehouse_cache(association_id: int) -> None:
-    """Reset warehouse cache for given association ID.
+    """Reset warehouse cache for given association ID."""
 
-    This function clears the cache for the specified association's warehouse items
-    to ensure data consistency when warehouse items or tags change.
-
-    Args:
-        association_id: The ID of the association whose cache should be cleared.
-
-    Returns:
-        None
-
-    """
     cache_key = get_association_warehouse_key(association_id)
     cache.delete(cache_key)
     logger.debug("Reset warehouse cache for association %s", association_id)
 
 
 def build_item_data(item: WarehouseItem) -> dict[str, Any]:
-    """Build cached data for a warehouse item.
+    """Build cached data for a warehouse item."""
 
-    Args:
-        item: WarehouseItem instance to build data for
-
-    Returns:
-        Dictionary with cached item data including tags list
-
-    """
     return {
         "id": item.id,
         "name": item.name,
@@ -100,7 +74,6 @@ def init_association_warehouse_cache(association_id: int) -> dict[int, dict[str,
         }
 
     """
-    from larpmanager.models.miscellanea import WarehouseItem
 
     warehouse_cache: dict[int, dict[str, Any]] = {}
 
@@ -166,7 +139,7 @@ def update_warehouse_item_cache(item: WarehouseItem) -> None:
         # Update the specific item's data
         cached_data[item.id] = build_item_data(item)
         cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-        logger.debug("Updated warehouse item %s in cache", item.id)
+        logger.debug("Updated warehouse item %s in cache", item.uui)
 
     except Exception:
         logger.exception("Error updating warehouse item %s cache", item.id)
