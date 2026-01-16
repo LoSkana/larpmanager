@@ -159,7 +159,7 @@ def bulk(page: Any) -> None:
     just_wait(page)
     expect_normalized(page, page.locator("#one"), "item 3sa dsad box a")
     expect_normalized(page, page.locator("#one"), "Item 2 sdsadas Boc B Gru sad")
-    expect_normalized(page, page.locator("#one"), "Item 1 sadsada Boc B Electrical Gru sad")
+    expect_normalized(page, page.locator("#one"), "Item 1 sadsada Boc B Electrical | Gru sad")
 
 
     # add movement

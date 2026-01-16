@@ -43,7 +43,10 @@
                     </td>
                     <td>
                         {% for tag_uuid, tag_name in el.tags_cached %}
-                            <a href="{% url 'exe_warehouse_tags_edit' tag_uuid %}">{{ tag_name }}</a>{% if not forloop.last %}, {% endif %}
+                            <a href="{% url 'exe_warehouse_tags_edit' tag_uuid %}">
+                                {% include "elements/comma.html" %}
+                                {{ tag_name }}
+                            </a>
                         {% endfor %}
                     </td>
                     <td>
