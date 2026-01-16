@@ -132,9 +132,8 @@ from larpmanager.cache.run import (
 )
 from larpmanager.cache.skin import clear_skin_cache
 from larpmanager.cache.text_fields import update_text_fields_cache
-from larpmanager.cache.widget import (
-    reset_widgets,
-)
+from larpmanager.cache.warehouse import on_warehouse_item_tags_m2m_changed
+from larpmanager.cache.widget import reset_widgets
 from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
 from larpmanager.mail.accounting import (
     send_collection_activation_email,
@@ -1730,6 +1729,8 @@ m2m_changed.connect(on_association_roles_m2m_changed, sender=AssociationRole.mem
 m2m_changed.connect(on_event_roles_m2m_changed, sender=EventRole.members.through)
 
 m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
+
+m2m_changed.connect(on_warehouse_item_tags_m2m_changed, sender=WarehouseItem.tags.through)
 
 # PX caching signals - cache relationship data in Redis
 m2m_changed.connect(on_ability_characters_m2m_changed, sender=AbilityPx.characters.through)

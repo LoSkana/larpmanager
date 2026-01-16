@@ -42,8 +42,11 @@
                         <a href="{% url 'exe_warehouse_containers_edit' el.container.uuid %}">{{ el.container }}</a>
                     </td>
                     <td>
-                        {% for tag in el.tags.all %}
-                            <a href="{% url 'exe_warehouse_tags_edit' tag.uuid %}">{{ tag }}</a>
+                        {% for tag_uuid, tag_name in el.tags_cached %}
+                            <a href="{% url 'exe_warehouse_tags_edit' tag_uuid %}">
+                                {% include "elements/comma.html" %}
+                                {{ tag_name }}
+                            </a>
                         {% endfor %}
                     </td>
                     <td>

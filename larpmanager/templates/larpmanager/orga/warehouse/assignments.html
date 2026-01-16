@@ -38,9 +38,9 @@
                     <td>{{ el.description }}</td>
                     <td>{{ el.container }}</td>
                     <td>
-                        {% for tag in el.tags.all %}
+                        {% for tag_id, tag_name in el.tags_cached %}
                             {% include "elements/comma.html" %}
-                            {{ tag }}
+                            {{ tag_name }}
                         {% endfor %}
                     </td>
                     {% if optionals.quantity %}
