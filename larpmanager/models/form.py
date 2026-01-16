@@ -646,14 +646,15 @@ class RegistrationQuestion(UuidMixin, BaseModel):
                 if registration.ticket.uuid not in allowed_ticket_uuids:
                     return True
 
-        if "reg_que_faction" in features and registration and registration.pk:
+        if "reg_que_faction" in features:
             # noinspection PyUnresolvedReferences
             allowed_faction_ids = [faction_id for faction_id in self.factions_map if faction_id is not None]
             if len(allowed_faction_ids) > 0:
                 registration_faction_ids = []
-                for character_relation in RegistrationCharacterRel.objects.filter(registration=registration):
-                    character_factions = character_relation.character.factions_list.values_list("id", flat=True)
-                    registration_faction_ids.extend(character_factions)
+                if registration and registration.pk:
+                    for character_relation in RegistrationCharacterRel.objects.filter(registration=registration):
+                        character_factions = character_relation.character.factions_list.values_list("id", flat=True)
+                        registration_faction_ids.extend(character_factions)
 
                 if len(set(allowed_faction_ids).intersection(set(registration_faction_ids))) == 0:
                     return True

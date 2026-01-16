@@ -55,7 +55,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # Create first section
-    page.get_by_role("link", name="+ New").click()
+    page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Preferences")
     page.locator("#id_name").press("Tab")
@@ -77,7 +77,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Add one question for each section
     page.get_by_role("link", name="Form").click()
-    page.get_by_role("link", name="+ New").click()
+    page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.locator("#id_name").click()
     page.get_by_text("Question type").click()
@@ -139,7 +139,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Create new ticket
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
-    page.get_by_role("link", name="+ New").click()
+    page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Depends")
     page.get_by_role("button", name="Confirm").click()
@@ -184,6 +184,14 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("link", name="Sections").click()
     page.get_by_role("link", name="").click()
 
+    page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
+    page.locator("#registration_questions_Needs").get_by_role("link", name="").click()
+    page.get_by_text("Staff members who are allowed").click()
+    page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").click()
+    page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").fill("ad")
+    page.get_by_role("option", name="Admin Test").click()
+    page.get_by_role("button", name="Confirm").click()
+
     page.get_by_role("link", name="Registrations", exact=True).click()
     page.get_by_role("link", name="Food").click()
     page.get_by_role("link", name="sleep").click()
@@ -204,14 +212,6 @@ def test_orga_section_form(pw_page: Any) -> None:
     check_feature(page, "Registrations")
     submit_confirm(page)
 
-    page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
-    page.locator("#registration_questions_Needs").get_by_role("link", name="").click()
-    page.get_by_text("Staff members who are allowed").click()
-    page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").click()
-    page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").fill("us")
-    page.get_by_role("option", name="User Test").click()
-    page.get_by_role("button", name="Confirm").click()
-
     # login as user
     login_user(page, live_server)
     page.get_by_role("link", name="").click()
@@ -224,3 +224,86 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("link", name="Food").click()
 
     expect_normalized(page, page.locator("#one"), "Admin Test Depends SADSA")
+
+    page.get_by_role("link", name="").click()
+
+    expect(page.get_by_role("link", name="Needs ")).not_to_be_visible()
+    expect(page.get_by_role("cell", name="sleeeep")).not_to_be_visible()
+    expect(page.get_by_text("What you need sleep sleeeep")).not_to_be_visible()
+
+    # test factions
+    login_orga(page, live_server)
+    go_to(page, live_server, "/test/manage")
+    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Registrations ").click()
+    page.locator("#id_registration_reg_que_tickets").check()
+    page.locator("#id_registration_reg_que_allowed").uncheck()
+    page.locator("#id_registration_reg_que_tickets").uncheck()
+    page.get_by_role("button", name="Confirm").click()
+
+    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Registrations ").click()
+    page.locator("#id_registration_reg_que_faction").check()
+    page.get_by_role("button", name="Confirm").click()
+
+    # set up features
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("checkbox", name="Characters").check()
+    check_feature(page, "Factions")
+    page.get_by_role("button", name="Confirm").click()
+
+    # create faction
+    page.get_by_role("link", name="Factions", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("aaaaaccc")
+    page.get_by_role("searchbox").click()
+    page.get_by_role("searchbox").fill("te")
+    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("button", name="Confirm").click()
+
+    # set up question
+    page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("faaaaacc")
+    page.locator("#id_typ").select_option("t")
+    page.get_by_role("searchbox").click()
+    page.get_by_role("searchbox").fill("aa")
+    page.get_by_role("option", name="aaaaaccc (P)").click()
+    page.get_by_role("button", name="Confirm").click()
+
+    # delete sign up
+    page.get_by_role("link", name="Registrations", exact=True).click()
+    just_wait(page)
+    page.get_by_role("link", name="").click()
+    page.get_by_role("link", name="Delete").click()
+    just_wait(page)
+    page.get_by_role("button", name="Confirmation delete").click()
+
+    # check does not show on new sign up
+    go_to(page, live_server, "/test/register")
+    expect(page.get_by_role("cell", name="faaaaacc")).not_to_be_visible()
+    page.get_by_label("Ticket (*)").select_option("u1")
+    page.get_by_role("button", name="Continue").click()
+    submit_confirm(page)
+
+    # check does not show on sign up
+    go_to(page, live_server, "/test/register")
+    expect(page.get_by_role("cell", name="faaaaacc")).not_to_be_visible()
+
+    # assign character
+    go_to(page, live_server, "/test/manage")
+    page.get_by_role("link", name="Registrations", exact=True).click()
+    page.get_by_role("link", name="").click()
+    page.get_by_role("searchbox").click()
+    page.get_by_role("searchbox").fill("te")
+    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("button", name="Confirm").click()
+
+    # check it is visible
+    go_to(page, live_server, "/test/register")
+    page.get_by_role("link", name="Registration", exact=True).click()
+    expect(page.get_by_role("cell", name="faaaaacc")).to_be_visible()
+    expect_normalized(page, page.locator("#register_form"),
+                      "Ticket (*) Standard Your registration ticket faaaaacc")

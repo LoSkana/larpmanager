@@ -987,7 +987,7 @@ def check_writings(
         for element in (
             context["event"]
             .get_elements(element_type)
-            .annotate(characters_map=ArrayAgg("characters"))
+            .annotate(characters_map=ArrayAgg("characters__id"))
             .prefetch_related("characters")
         ):
             (characters_from_text, extinct_characters) = get_chars_relations(element.text, character_numbers)
@@ -1028,7 +1028,9 @@ def check_speedlarp(checks: Any, context: dict, id_number_map: Any) -> None:
         return
 
     speedlarp_assignments = {}
-    for speedlarp_element in context["event"].get_elements(SpeedLarp).annotate(characters_map=ArrayAgg("characters")):
+    for speedlarp_element in (
+        context["event"].get_elements(SpeedLarp).annotate(characters_map=ArrayAgg("characters__id"))
+    ):
         check_speedlarp_prepare(speedlarp_element, id_number_map, speedlarp_assignments)
     for character_number, character in context["chars"].items():
         if character_number not in speedlarp_assignments:

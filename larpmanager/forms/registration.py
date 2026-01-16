@@ -1235,7 +1235,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
             self.delete_field("factions")
         else:
             self.fields["factions"].choices = [
-                (m.uuid, str(m)) for m in self.params["run"].event.get_elements(Faction).order_by("number")
+                (m.id, str(m)) for m in self.params["run"].event.get_elements(Faction).order_by("number")
             ]
 
         if "gift" not in self.params["features"]:

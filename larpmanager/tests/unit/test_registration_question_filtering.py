@@ -334,6 +334,31 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         result = question.skip(registration, features=["reg_que_faction"])
         self.assertFalse(result)
 
+    def test_question_skip_for_new_registration_with_faction_requirement(self) -> None:
+        """Test question is skipped for new registrations (without pk) when faction is required"""
+        from larpmanager.models.registration import Registration
+
+        event = self.get_event()
+        run = self.get_run()
+        member = self.get_member()
+
+        # Create faction and question with faction requirement
+        faction = Faction.objects.create(name="Rebels", event=event)
+        question = self.question(event=event)
+        question.factions.add(faction)
+
+        # Create new registration WITHOUT saving (no pk)
+        registration = Registration(member=member, run=run)
+        # Note: registration.pk is None since we didn't save it
+
+        # Annotate factions_map for the question
+        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_faction"])
+        question = questions.get(id=question.id)
+
+        # Question should be skipped (new registration with faction requirement)
+        result = question.skip(registration, features=["reg_que_faction"])
+        self.assertTrue(result)
+
 
 @pytest.mark.django_db_reset_sequences
 class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
