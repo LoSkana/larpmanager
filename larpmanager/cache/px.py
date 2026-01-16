@@ -452,15 +452,38 @@ def on_ability_characters_m2m_changed(
     sender: type,  # noqa: ARG001
     instance: AbilityPx,
     action: str,
-    pk_set: set[int] | None,  # noqa: ARG001
+    pk_set: set[int] | None,
+    reverse: bool = False,  # noqa: FBT001, FBT002
     **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle ability-character relationship changes.
 
     Updates ability cache when characters are added or removed.
 
+    Args:
+        sender: The M2M through model
+        instance: The AbilityPx (if reverse=False) or Character (if reverse=True)
+        action: The M2M action (pre_add, post_add, etc.)
+        pk_set: Set of related object IDs
+        reverse: True if signal was triggered from Character.px_ability_list
+        **kwargs: Additional keyword arguments
+
     """
-    if action in ("post_add", "post_remove", "post_clear"):
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    if reverse:
+        # Signal came from Character.px_ability_list - instance is a Character
+        # pk_set contains ability IDs, so refresh each ability
+        if pk_set:
+            for ability in AbilityPx.objects.filter(id__in=pk_set):
+                refresh_ability_relationships(ability)
+        elif action == "post_clear":
+            # Clear was called - need to refresh all abilities for this character
+            for ability in AbilityPx.objects.filter(characters=instance):
+                refresh_ability_relationships(ability)
+    else:
+        # Signal came from AbilityPx.characters - instance is an AbilityPx
         refresh_ability_relationships(instance)
 
 
@@ -468,15 +491,40 @@ def on_ability_prerequisites_m2m_changed(
     sender: type,  # noqa: ARG001
     instance: AbilityPx,
     action: str,
-    pk_set: set[int] | None,  # noqa: ARG001
+    pk_set: set[int] | None,
+    reverse: bool = False,  # noqa: FBT001, FBT002
     **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle ability-prerequisite relationship changes.
 
     Updates ability cache when prerequisites are added or removed.
 
+    Args:
+        sender: The M2M through model
+        instance: The AbilityPx being modified
+        action: The M2M action (pre_add, post_add, etc.)
+        pk_set: Set of prerequisite ability IDs
+        reverse: True if signal was triggered from px_ability_unlock
+        **kwargs: Additional keyword arguments
+
     """
-    if action in ("post_add", "post_remove", "post_clear"):
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    if reverse:
+        # Signal came from px_ability_unlock reverse relation
+        # instance is an AbilityPx that is a prerequisite for others
+        # pk_set contains ability IDs that require this prerequisite
+        # We need to refresh those abilities
+        if pk_set:
+            for ability in AbilityPx.objects.filter(id__in=pk_set):
+                refresh_ability_relationships(ability)
+        elif action == "post_clear":
+            # Clear was called - refresh all abilities that had this as prerequisite
+            for ability in AbilityPx.objects.filter(prerequisites=instance):
+                refresh_ability_relationships(ability)
+    else:
+        # Signal came from AbilityPx.prerequisites - instance is the ability being modified
         refresh_ability_relationships(instance)
 
 
@@ -484,15 +532,38 @@ def on_ability_requirements_m2m_changed(
     sender: type,  # noqa: ARG001
     instance: AbilityPx,
     action: str,
-    pk_set: set[int] | None,  # noqa: ARG001
+    pk_set: set[int] | None,
+    reverse: bool = False,  # noqa: FBT001, FBT002
     **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle ability-requirement relationship changes.
 
     Updates ability cache when requirements are added or removed.
 
+    Args:
+        sender: The M2M through model
+        instance: The AbilityPx (if reverse=False) or WritingOption (if reverse=True)
+        action: The M2M action (pre_add, post_add, etc.)
+        pk_set: Set of related object IDs
+        reverse: True if signal was triggered from WritingOption.abilities
+        **kwargs: Additional keyword arguments
+
     """
-    if action in ("post_add", "post_remove", "post_clear"):
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    if reverse:
+        # Signal came from WritingOption.abilities - instance is a WritingOption
+        # pk_set contains ability IDs, so refresh each ability
+        if pk_set:
+            for ability in AbilityPx.objects.filter(id__in=pk_set):
+                refresh_ability_relationships(ability)
+        elif action == "post_clear":
+            # Clear was called - refresh all abilities with this requirement
+            for ability in AbilityPx.objects.filter(requirements=instance):
+                refresh_ability_relationships(ability)
+    else:
+        # Signal came from AbilityPx.requirements - instance is an AbilityPx
         refresh_ability_relationships(instance)
 
 
@@ -500,15 +571,38 @@ def on_delivery_characters_m2m_changed(
     sender: type,  # noqa: ARG001
     instance: DeliveryPx,
     action: str,
-    pk_set: set[int] | None,  # noqa: ARG001
+    pk_set: set[int] | None,
+    reverse: bool = False,  # noqa: FBT001, FBT002
     **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle delivery-character relationship changes.
 
     Updates delivery cache when characters are added or removed.
 
+    Args:
+        sender: The M2M through model
+        instance: The DeliveryPx (if reverse=False) or Character (if reverse=True)
+        action: The M2M action (pre_add, post_add, etc.)
+        pk_set: Set of related object IDs
+        reverse: True if signal was triggered from Character side
+        **kwargs: Additional keyword arguments
+
     """
-    if action in ("post_add", "post_remove", "post_clear"):
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    if reverse:
+        # Signal came from Character - instance is a Character
+        # pk_set contains delivery IDs, so refresh each delivery
+        if pk_set:
+            for delivery in DeliveryPx.objects.filter(id__in=pk_set):
+                refresh_delivery_relationships(delivery)
+        elif action == "post_clear":
+            # Clear was called - refresh all deliveries for this character
+            for delivery in DeliveryPx.objects.filter(characters=instance):
+                refresh_delivery_relationships(delivery)
+    else:
+        # Signal came from DeliveryPx.characters - instance is a DeliveryPx
         refresh_delivery_relationships(instance)
 
 
@@ -516,15 +610,38 @@ def on_modifier_abilities_m2m_changed(
     sender: type,  # noqa: ARG001
     instance: ModifierPx,
     action: str,
-    pk_set: set[int] | None,  # noqa: ARG001
+    pk_set: set[int] | None,
+    reverse: bool = False,  # noqa: FBT001, FBT002
     **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle modifier-ability relationship changes.
 
     Updates modifier cache when abilities are added or removed.
 
+    Args:
+        sender: The M2M through model
+        instance: The ModifierPx (if reverse=False) or AbilityPx (if reverse=True)
+        action: The M2M action (pre_add, post_add, etc.)
+        pk_set: Set of related object IDs
+        reverse: True if signal was triggered from AbilityPx side
+        **kwargs: Additional keyword arguments
+
     """
-    if action in ("post_add", "post_remove", "post_clear"):
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    if reverse:
+        # Signal came from AbilityPx - instance is an AbilityPx
+        # pk_set contains modifier IDs, so refresh each modifier
+        if pk_set:
+            for modifier in ModifierPx.objects.filter(id__in=pk_set):
+                refresh_modifier_relationships(modifier)
+        elif action == "post_clear":
+            # Clear was called - refresh all modifiers for this ability
+            for modifier in ModifierPx.objects.filter(abilities=instance):
+                refresh_modifier_relationships(modifier)
+    else:
+        # Signal came from ModifierPx.abilities - instance is a ModifierPx
         refresh_modifier_relationships(instance)
 
 
@@ -532,15 +649,38 @@ def on_modifier_prerequisites_m2m_changed(
     sender: type,  # noqa: ARG001
     instance: ModifierPx,
     action: str,
-    pk_set: set[int] | None,  # noqa: ARG001
+    pk_set: set[int] | None,
+    reverse: bool = False,  # noqa: FBT001, FBT002
     **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle modifier-prerequisite relationship changes.
 
     Updates modifier cache when prerequisites are added or removed.
 
+    Args:
+        sender: The M2M through model
+        instance: The ModifierPx (if reverse=False) or AbilityPx (if reverse=True)
+        action: The M2M action (pre_add, post_add, etc.)
+        pk_set: Set of related object IDs
+        reverse: True if signal was triggered from AbilityPx side
+        **kwargs: Additional keyword arguments
+
     """
-    if action in ("post_add", "post_remove", "post_clear"):
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    if reverse:
+        # Signal came from AbilityPx - instance is an AbilityPx that is a prerequisite
+        # pk_set contains modifier IDs, so refresh each modifier
+        if pk_set:
+            for modifier in ModifierPx.objects.filter(id__in=pk_set):
+                refresh_modifier_relationships(modifier)
+        elif action == "post_clear":
+            # Clear was called - refresh all modifiers with this prerequisite
+            for modifier in ModifierPx.objects.filter(prerequisites=instance):
+                refresh_modifier_relationships(modifier)
+    else:
+        # Signal came from ModifierPx.prerequisites - instance is a ModifierPx
         refresh_modifier_relationships(instance)
 
 
@@ -548,15 +688,38 @@ def on_modifier_requirements_m2m_changed(
     sender: type,  # noqa: ARG001
     instance: ModifierPx,
     action: str,
-    pk_set: set[int] | None,  # noqa: ARG001
+    pk_set: set[int] | None,
+    reverse: bool = False,  # noqa: FBT001, FBT002
     **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle modifier-requirement relationship changes.
 
     Updates modifier cache when requirements are added or removed.
 
+    Args:
+        sender: The M2M through model
+        instance: The ModifierPx (if reverse=False) or WritingOption (if reverse=True)
+        action: The M2M action (pre_add, post_add, etc.)
+        pk_set: Set of related object IDs
+        reverse: True if signal was triggered from WritingOption side
+        **kwargs: Additional keyword arguments
+
     """
-    if action in ("post_add", "post_remove", "post_clear"):
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    if reverse:
+        # Signal came from WritingOption - instance is a WritingOption
+        # pk_set contains modifier IDs, so refresh each modifier
+        if pk_set:
+            for modifier in ModifierPx.objects.filter(id__in=pk_set):
+                refresh_modifier_relationships(modifier)
+        elif action == "post_clear":
+            # Clear was called - refresh all modifiers with this requirement
+            for modifier in ModifierPx.objects.filter(requirements=instance):
+                refresh_modifier_relationships(modifier)
+    else:
+        # Signal came from ModifierPx.requirements - instance is a ModifierPx
         refresh_modifier_relationships(instance)
 
 
@@ -564,13 +727,36 @@ def on_rule_abilities_m2m_changed(
     sender: type,  # noqa: ARG001
     instance: RulePx,
     action: str,
-    pk_set: set[int] | None,  # noqa: ARG001
+    pk_set: set[int] | None,
+    reverse: bool = False,  # noqa: FBT001, FBT002
     **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle rule-ability relationship changes.
 
     Updates rule cache when abilities are added or removed.
 
+    Args:
+        sender: The M2M through model
+        instance: The RulePx (if reverse=False) or AbilityPx (if reverse=True)
+        action: The M2M action (pre_add, post_add, etc.)
+        pk_set: Set of related object IDs
+        reverse: True if signal was triggered from AbilityPx side
+        **kwargs: Additional keyword arguments
+
     """
-    if action in ("post_add", "post_remove", "post_clear"):
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    if reverse:
+        # Signal came from AbilityPx - instance is an AbilityPx
+        # pk_set contains rule IDs, so refresh each rule
+        if pk_set:
+            for rule in RulePx.objects.filter(id__in=pk_set):
+                refresh_rule_relationships(rule)
+        elif action == "post_clear":
+            # Clear was called - refresh all rules for this ability
+            for rule in RulePx.objects.filter(abilities=instance):
+                refresh_rule_relationships(rule)
+    else:
+        # Signal came from RulePx.abilities - instance is a RulePx
         refresh_rule_relationships(instance)
