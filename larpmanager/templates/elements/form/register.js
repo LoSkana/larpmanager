@@ -315,7 +315,6 @@ function check_tickets_map() {
         }
     });
 
-    if (sel == 0) return;
     $('table.section').each(function(index, value) {
         section = $(this).attr("section");
 

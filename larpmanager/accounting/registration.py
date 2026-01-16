@@ -428,7 +428,7 @@ def installment_check(registration: Registration, alert: int, association_id: in
     cumulative_amount = 0
     has_distant_installments = False
     installments_query = RegistrationInstallment.objects.filter(event_id=registration.run.event_id)
-    installments_query = installments_query.annotate(tickets_map=ArrayAgg("tickets")).order_by("order")
+    installments_query = installments_query.annotate(tickets_map=ArrayAgg("tickets__id")).order_by("order")
     is_first_deadline = True
 
     for installment in installments_query:

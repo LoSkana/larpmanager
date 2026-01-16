@@ -118,7 +118,6 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     page.get_by_text("---------").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="User Test - user@test.it").click()
-    # page.once("dialog", lambda dialog: dialog.dismiss())
     submit_confirm(page)
 
     # log out and log in as the test user
