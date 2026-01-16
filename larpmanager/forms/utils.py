@@ -45,6 +45,7 @@ from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
 from larpmanager.models.registration import (
     Registration,
+    RegistrationSection,
     RegistrationTicket,
 )
 from larpmanager.models.writing import (
@@ -858,6 +859,38 @@ class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     def get_queryset(self) -> QuerySet[RegistrationTicket]:
         """Return registration tickets for the event."""
         return self.event.get_elements(RegistrationTicket)
+
+
+class RegistrationSectionS2Widget(s2forms.ModelSelect2Widget):
+    """Select2 widget for registration sections."""
+
+    search_fields: ClassVar[list] = [
+        "name__icontains",
+        "description__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet:
+        """Return registration sections for the event."""
+        return RegistrationSection.objects.filter(event=self.event).order_by("order")
+
+    def label_from_instance(self, obj: Any) -> str:
+        """Return formatted label for section instance."""
+        return str(obj)
+
+    def value_from_datadict(self, data: dict, files: dict, name: str) -> Any:  # noqa: ARG002
+        """Get value from form data - expects UUID."""
+        return data.get(name)
+
+    def result_from_instance(self, obj: Any, request: Any = None) -> dict:  # noqa: ARG002
+        """Override to return UUID instead of ID in select2 results."""
+        return {
+            "id": str(obj.uuid),
+            "text": self.label_from_instance(obj),
+        }
 
 
 class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):

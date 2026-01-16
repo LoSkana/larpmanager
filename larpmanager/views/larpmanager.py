@@ -1206,7 +1206,7 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
 
     # Create demo association with unique slug and inherited skin
     demo_association = Association.objects.create(
-        slug=f"test_{new_uuid}",
+        slug=f"test-{new_uuid}",
         name="Demo Organization",
         skin_id=request.association["skin_id"],
         demo=True,
@@ -1214,8 +1214,8 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
 
     # Create test admin user with demo credentials
     (demo_user, _created) = User.objects.get_or_create(
-        email=f"test_{new_uuid}@demo.it",
-        username=f"test_{new_uuid}",
+        email=f"test-{new_uuid}@demo.it",
+        username=f"test-{new_uuid}",
     )
     demo_user.password = conf_settings.DEMO_PASSWORD
     demo_user.save()
