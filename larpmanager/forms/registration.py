@@ -154,7 +154,7 @@ class RegistrationForm(BaseRegistrationForm):
         """Update question requirements based on selected ticket type.
 
         Args:
-            ticket: Selected ticket instance
+            ticket: Selected ticket uuid string
 
         """
         """
@@ -169,8 +169,8 @@ class RegistrationForm(BaseRegistrationForm):
             key = get_question_key(question)
             if key not in self.fields:
                 continue
-            tm = [i for i in question.tickets_map if i is not None]
-            if ticket not in tm:
+            tm = [str(i) for i in question.tickets_map if i is not None]
+            if not ticket or ticket not in tm:
                 self.fields[key].required = False
 
     def init_additionals(self) -> None:
@@ -259,7 +259,7 @@ class RegistrationForm(BaseRegistrationForm):
                 self.section_descriptions[question.section.name] = question.section.description
 
         if "reg_que_tickets" in self.params["features"]:
-            tm = [i for i in question.tickets_map if i is not None]
+            tm = [str(i) for i in question.tickets_map if i is not None]
             if tm:
                 self.tickets_map[k] = tm
 

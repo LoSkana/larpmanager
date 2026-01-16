@@ -290,7 +290,7 @@ function check_tickets_map() {
     if( !sel ) sel = 0;
 
     $.each(tickets_map, function(index, value) {
-        var f = $.inArray(parseInt(sel), value) !== -1;
+        var f = $.inArray(sel, value) !== -1;
         var el = $('#id_' + index);
 
         if (f) {
