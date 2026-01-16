@@ -296,6 +296,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage")
     page.get_by_role("link", name="Registrations", exact=True).click()
     page.get_by_role("link", name="").click()
+    page.get_by_role("link", name="Character ").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
