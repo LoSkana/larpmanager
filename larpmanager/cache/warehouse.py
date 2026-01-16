@@ -20,13 +20,12 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
-if TYPE_CHECKING:
-    from larpmanager.models.miscellanea import WarehouseItem
+from larpmanager.models.miscellanea import WarehouseItem
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +37,6 @@ def get_association_warehouse_key(association_id: int) -> str:
 
 def clear_association_warehouse_cache(association_id: int) -> None:
     """Reset warehouse cache for given association ID."""
-
     cache_key = get_association_warehouse_key(association_id)
     cache.delete(cache_key)
     logger.debug("Reset warehouse cache for association %s", association_id)
@@ -46,7 +44,6 @@ def clear_association_warehouse_cache(association_id: int) -> None:
 
 def build_item_data(item: WarehouseItem) -> dict[str, Any]:
     """Build cached data for a warehouse item."""
-
     return {
         "id": item.id,
         "name": item.name,
@@ -74,7 +71,6 @@ def init_association_warehouse_cache(association_id: int) -> dict[int, dict[str,
         }
 
     """
-
     warehouse_cache: dict[int, dict[str, Any]] = {}
 
     try:

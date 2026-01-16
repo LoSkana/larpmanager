@@ -22,6 +22,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
+from larpmanager.cache.warehouse import get_association_warehouse_cache
 from larpmanager.forms.miscellanea import ExeUrlShortnerForm
 from larpmanager.forms.warehouse import (
     ExeWarehouseContainerForm,
@@ -104,9 +105,6 @@ def exe_warehouse_items(request: HttpRequest) -> HttpResponse:
 
     # Handle any bulk operations on items
     handle_bulk_items(request, context)
-
-    # Get cached warehouse data for the association
-    from larpmanager.cache.warehouse import get_association_warehouse_cache
 
     warehouse_cache = get_association_warehouse_cache(context["association_id"])
 

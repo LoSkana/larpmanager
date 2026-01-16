@@ -31,6 +31,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import save_single_config
+from larpmanager.cache.warehouse import get_association_warehouse_cache
 from larpmanager.forms.miscellanea import (
     OneTimeAccessTokenForm,
     OneTimeContentForm,
@@ -353,9 +354,6 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, area_
     get_warehouse_optionals(context, [6, 7])
     if context["optionals"]["quantity"]:
         context["no_header_cols"] = [8, 9]
-
-    # Get cached warehouse data for the association
-    from larpmanager.cache.warehouse import get_association_warehouse_cache
 
     warehouse_cache = get_association_warehouse_cache(context["association_id"])
 
