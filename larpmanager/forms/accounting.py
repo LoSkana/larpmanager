@@ -85,7 +85,7 @@ class OrgaPersonalExpenseForm(BaseModelFormRun):
         super().__init__(*args, **kwargs)
 
         # Remove balance field if Italian balance feature is not enabled
-        if "ita_balance" not in self.params["features"]:
+        if "ita_balance" not in self.params.get("features", {}):
             self.delete_field("balance")
 
 
@@ -113,7 +113,7 @@ class OrgaExpenseForm(BaseModelFormRun):
         self.configure_field_run("member", self.params["run"])
 
         # Remove balance field if Italian balance feature is disabled
-        if "ita_balance" not in self.params["features"]:
+        if "ita_balance" not in self.params.get("features", {}):
             self.delete_field("balance")
 
         # Remove approval field if organization has disabled expense approval
@@ -239,7 +239,7 @@ class ExeOutflowForm(BaseModelForm):
         self.fields["invoice"].required = True
 
         # Remove balance field if Italian balance feature is disabled
-        if "ita_balance" not in self.params["features"]:
+        if "ita_balance" not in self.params.get("features", {}):
             self.delete_field("balance")
 
 
@@ -327,7 +327,7 @@ class ExePaymentForm(BaseModelForm):
         self.configure_field_association("registration", self.params["association_id"])
 
         # Remove VAT field if feature is not enabled
-        if "vat" not in self.params["features"]:
+        if "vat" not in self.params.get("features", {}):
             self.delete_field("vat_ticket")
             self.delete_field("vat_options")
 
@@ -434,7 +434,7 @@ class ExeExpenseForm(BaseModelForm):
         self.configure_field_association("run", self.params["association_id"])
 
         # Remove balance field if feature not enabled
-        if "ita_balance" not in self.params["features"]:
+        if "ita_balance" not in self.params.get("features", {}):
             self.delete_field("balance")
 
 

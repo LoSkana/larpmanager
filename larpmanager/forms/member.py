@@ -635,7 +635,7 @@ class ProfileForm(BaseProfileForm):
         association_id = self.params["association_id"]
 
         # Use cached features
-        features = self.params["features"]
+        features = self.params.get("features", {})
 
         if "membership" in features:
             min_age = get_association_config(association_id, "membership_age", default_value="", context=self.params)

@@ -172,6 +172,7 @@ class TestCrossAssociationIsolation:
             context={
                 "run": data["run_a"],
                 "event": data["event_a"],
+                "association_id": data["assoc_a"].id,
             },
         )
 
@@ -231,6 +232,7 @@ class TestCrossAssociationIsolation:
             context={
                 "event": data["event_a"],
                 "run": data["run_a"],
+                "association_id": data["assoc_a"].id
             },
         )
 

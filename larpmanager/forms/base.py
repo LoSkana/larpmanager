@@ -252,15 +252,15 @@ class BaseModelForm(FormMixin, forms.ModelForm):
             return None
 
         # If it's already a Run instance, return it
-        if isinstance(run_value, Run):
-            return run_value
-
-        # Otherwise, it's a UUID (from ChoiceField), convert to Run instance
-        try:
-            run = Run.objects.select_related("event").get(uuid=run_value)
-        except ObjectDoesNotExist as err:
-            msg = _("Select a valid choice. That choice is not one of the available choices.")
-            raise ValidationError(msg) from err
+        if isinstance(run_value, str):
+            run = run_value
+        else:
+            # Otherwise, it's a UUID (from ChoiceField), convert to Run instance
+            try:
+                run = Run.objects.select_related("event").get(uuid=run_value)
+            except ObjectDoesNotExist as err:
+                msg = _("Select a valid choice. That choice is not one of the available choices.")
+                raise ValidationError(msg) from err
 
         # Validate run belongs to current association
         if "event" in self.params and run.event.association_id != self.params["event"].association_id:
@@ -577,7 +577,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
     def _init_questions(self, event: Event) -> None:
         """Initialize questions for the given event."""
-        self.questions = self.question_class.get_instance_questions(event, self.params["features"])
+        self.questions = self.question_class.get_instance_questions(event, self.params.get("features", {}))
 
     def get_options_query(self, event: Event) -> QuerySet:
         """Return ordered options for questions in the given event."""
@@ -619,7 +619,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         # Process each available option for the question
         for option in available_options:
             # Generate display text with pricing information
-            option_display_name = option.get_form_text(currency_symbol=self.params["currency_symbol"])
+            option_display_name = option.get_form_text(currency_symbol=self.params.get("currency_symbol", ""))
 
             # Check availability constraints if registration counts provided
             if registration_count and option.max_available > 0:
@@ -809,7 +809,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         # Process each registration question for field creation
         for question in self.questions:
             # Skip questions that don't meet visibility/permission criteria
-            if question.skip(self.instance, self.params["features"], self.params, is_organizer=True):
+            if question.skip(self.instance, self.params.get("features", {}), self.params, is_organizer=True):
                 continue
 
             # Create form field for this question (organizer context)
@@ -1235,7 +1235,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         """
         for question in self.questions:
-            if question.skip(instance, self.params["features"], self.params, is_organizer=is_organizer):
+            if question.skip(instance, self.params.get("features", {}), self.params, is_organizer=is_organizer):
                 continue
 
             key = get_question_key(question)
