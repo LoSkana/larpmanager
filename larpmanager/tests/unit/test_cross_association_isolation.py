@@ -15,7 +15,7 @@ from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.registration import OrgaRegistrationForm
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member
+from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import Registration, RegistrationTicket
 from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.views.orga.character import orga_characters_summary
@@ -88,18 +88,18 @@ class TestCrossAssociationIsolation:
         )
 
         # Create users
-        user_a = User.objects.create_user(username="orga_a", password="test123")
-        member_a = Member.objects.create(
-            user=user_a,
+        user_a = User.objects.create_user(username="orga_a", password="test123", email="orga_a@test.com")
+        member_a = user_a.member
+        Membership.objects.create(
+            member=member_a,
             association=assoc_a,
-            email="orga_a@test.com",
         )
 
-        user_b = User.objects.create_user(username="orga_b", password="test123")
-        member_b = Member.objects.create(
-            user=user_b,
+        user_b = User.objects.create_user(username="orga_b", password="test123", email="orga_b@test.com")
+        member_b = user_b.member
+        Membership.objects.create(
+            member=member_b,
             association=assoc_b,
-            email="orga_b@test.com",
         )
 
         return {

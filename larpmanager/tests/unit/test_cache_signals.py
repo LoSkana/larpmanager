@@ -29,7 +29,8 @@ from safedelete import HARD_DELETE
 
 # Import signals module to register signal handlers
 import larpmanager.models.signals  # noqa: F401
-from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole
+from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole, \
+    PermissionModule
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemOther,
@@ -37,6 +38,7 @@ from larpmanager.models.accounting import (
     OtherChoices,
     PaymentChoices,
 )
+from larpmanager.models.base import Feature, FeatureModule
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.registration import RegistrationCharacterRel
@@ -289,69 +291,61 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(run)
 
-    def test_association_permission_post_save_resets_permission_cache(self) -> None:
+    @patch("larpmanager.models.signals.clear_association_permission_cache")
+    def test_association_permission_post_save_resets_permission_cache(self, mock_reset: Any) -> None:
         """Test that AssociationPermission post_save signal resets permission cache"""
-        # This test verifies the signal receiver is connected
-        # The actual cache behavior is tested in integration tests
-        permission = AssociationPermission.objects.first()
-        if not permission:
-            self.skipTest("No AssociationPermission available")
+        mock_reset.reset_mock()  # Reset mock after setup
 
-        # Verify signal doesn't raise an error by updating
-        permission.descr = "Updated description"
+        module = FeatureModule.objects.create(name="Test module", order=100)
+        feature = Feature.objects.create(name="Test Feature", order=100, module=module)
+        perm_module = PermissionModule.objects.create(name="Test module", order=100)
+        permission = AssociationPermission(
+            name="Test Permission", number=100, descr="Test", feature=feature, module=perm_module
+        )
         permission.save()
 
-        # Verify the object was updated successfully
-        permission.refresh_from_db()
-        self.assertEqual(permission.descr, "Updated description")
+        mock_reset.assert_called_once_with(permission)
 
-    def test_association_permission_post_delete_resets_permission_cache(self) -> None:
+    @patch("larpmanager.models.signals.clear_association_permission_cache")
+    def test_association_permission_post_delete_resets_permission_cache(self, mock_reset: Any) -> None:
         """Test that AssociationPermission post_delete signal resets permission cache"""
-        # This test verifies the signal receiver is connected
-        permission = AssociationPermission.objects.first()
-        if not permission:
-            self.skipTest("No AssociationPermission available")
 
-        # Store ID before deletion
-        permission_id = permission.id
-
-        # Delete the permission
+        module = FeatureModule.objects.create(name="Test module", order=100)
+        feature = Feature.objects.create(name="Test Feature", order=100, module=module)
+        perm_module = PermissionModule.objects.create(name="Test module", order=100)
+        permission = AssociationPermission.objects.create(
+            name="Test Permission", number=101, descr="Test", feature=feature, module=perm_module
+        )
+        mock_reset.reset_mock()  # Reset after create
         permission.delete()
 
-        # Verify the object was deleted successfully
-        self.assertFalse(AssociationPermission.objects.filter(id=permission_id).exists())
+        mock_reset.assert_called_once_with(permission)
 
-    def test_event_permission_post_save_resets_permission_cache(self) -> None:
+    @patch("larpmanager.models.signals.clear_event_permission_cache")
+    def test_event_permission_post_save_resets_permission_cache(self, mock_reset: Any) -> None:
         """Test that EventPermission post_save signal resets permission cache"""
-        # This test verifies the signal receiver is connected
-        # The actual cache behavior is tested in integration tests
-        permission = EventPermission.objects.first()
-        if not permission:
-            self.skipTest("No EventPermission available")
+        mock_reset.reset_mock()  # Reset mock after setup
 
-        # Verify signal doesn't raise an error by updating
-        permission.descr = "Updated description"
+        module = FeatureModule.objects.create(name="Test module", order=100)
+        feature = Feature.objects.create(name="Test Feature", order=100, module=module)
+        perm_module = PermissionModule.objects.create(name="Test module", order=100)
+        permission = EventPermission(name="Test Permission", number=100, descr="Test", feature=feature, module=perm_module)
         permission.save()
 
-        # Verify the object was updated successfully
-        permission.refresh_from_db()
-        self.assertEqual(permission.descr, "Updated description")
+        mock_reset.assert_called_once_with(permission)
 
-    def test_event_permission_post_delete_resets_permission_cache(self) -> None:
+    @patch("larpmanager.models.signals.clear_event_permission_cache")
+    def test_event_permission_post_delete_resets_permission_cache(self, mock_reset: Any) -> None:
         """Test that EventPermission post_delete signal resets permission cache"""
-        # This test verifies the signal receiver is connected
-        permission = EventPermission.objects.first()
-        if not permission:
-            self.skipTest("No EventPermission available")
 
-        # Store ID before deletion
-        permission_id = permission.id
-
-        # Delete the permission
+        module = FeatureModule.objects.create(name="Test module", order=100)
+        feature = Feature.objects.create(name="Test Feature", order=100, module=module)
+        perm_module = PermissionModule.objects.create(name="Test module", order=100)
+        permission = EventPermission.objects.create(name="Test Permission", number=101, descr="Test", feature=feature, module=perm_module)
+        mock_reset.reset_mock()  # Reset after create
         permission.delete()
 
-        # Verify the object was deleted successfully
-        self.assertFalse(EventPermission.objects.filter(id=permission_id).exists())
+        mock_reset.assert_called_once_with(permission)
 
     @patch("larpmanager.models.signals.remove_association_role_cache")
     def test_association_role_post_save_resets_role_cache(self, mock_reset: Any) -> None:
