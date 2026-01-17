@@ -45,7 +45,7 @@ from larpmanager.mail.templates import (
 from larpmanager.models.access import get_association_executives
 from larpmanager.models.accounting import AccountingItemPayment, PaymentInvoice
 from larpmanager.models.association import Association, get_url, hdr
-from larpmanager.models.member import Member, NotificationQueue, NotificationType
+from larpmanager.models.member import Member, Membership, NotificationQueue, NotificationType
 from larpmanager.models.miscellanea import HelpQuestion
 from larpmanager.models.registration import Registration
 from larpmanager.utils.larpmanager.tasks import my_send_mail
@@ -291,7 +291,7 @@ def _daily_member_summaries(member: Member) -> None:
 
     logger.info(
         "Sending daily summary to %s for %d events and %d associations with %d total notifications",
-        member.username,
+        str(member),
         len(events_notifications),
         len(associations_notifications),
         member_notifications.count(),
@@ -337,7 +337,7 @@ def _daily_member_summaries(member: Member) -> None:
 
     # Mark all notifications for this member as sent
     member_notifications.update(sent=True, sent_at=timezone.now())
-    logger.info("Daily summary sent to %s", member.username)
+    logger.info("Daily summary sent to %s", str(member))
 
 
 def generate_summary_email(event: Event, notifications: list) -> str:
@@ -376,7 +376,7 @@ def generate_summary_email(event: Event, notifications: list) -> str:
     # Footer
     email_body += "<br/><hr/>"
     event_dashboard_url = get_url(reverse("manage", kwargs={"event_slug": event.slug}), event)
-    email_body += "<p>" + _("Go to event dashboard") + f': <a href="{event_dashboard_url}">{event.title}</a></p>'
+    email_body += "<p>" + _("Go to event dashboard") + f': <a href="{event_dashboard_url}">{event.name}</a></p>'
 
     return email_body
 
@@ -413,7 +413,7 @@ def _digest_invoices(event: Event, email_body: str, invoice_approvals: list, cur
     email_body += "<ul>"
     invoice_ids = [notification.object_id for notification in invoice_approvals]
     for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association_id=event.association_id):
-        email_body += f"<li><b>{invoice.member}</b> - {invoice.causal} - {invoice.amount:.2f} {currency_symbol}"
+        email_body += f"<li><b>{invoice.member}</b> - {invoice.causal} - {invoice.mc_gross:.2f} {currency_symbol}"
         approve_url = get_url(
             reverse("orga_invoices_confirm", kwargs={"event_slug": event.slug, "invoice_uuid": invoice.uuid}), event
         )
@@ -431,21 +431,26 @@ def _digest_payments(event: Event, email_body: str, all_payments: list, currency
     payment_ids = [notification.object_id for notification in all_payments]
     for payment in AccountingItemPayment.objects.filter(pk__in=payment_ids, association_id=event.association_id):
         email_body += (
-            f"<li><b>{payment.member}</b> - {payment.amount:.2f} {currency_symbol} - {payment.get_pay_displa()}</li>"
+            f"<li><b>{payment.member}</b> - {payment.value:.2f} {currency_symbol} - {payment.get_pay_display()}</li>"
         )
     email_body += "</ul>"
 
     return email_body
 
 
-def _digest_cancelled_registrations(event: Event, email_body: str, cancelled_registrations: list) -> str:
+def _digest_cancelled_registrations(
+    event: Event,
+    email_body: str,
+    cancelled_registrations: list,
+    currency_symbol: str,  # noqa: ARG001
+) -> str:
     """Generate email content for digest cancelled registrations."""
     email_body += "<h3>" + _("Cancelled Registrations") + f" {len(cancelled_registrations)}" + "</h3>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in cancelled_registrations]
     for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event):
         ticket_name = registration.ticket.name if registration.ticket else _("No ticket")
-        email_body += f"<li><b>{registration.member.username}</b> - {ticket_name}</li>"
+        email_body += f"<li><b>{registration.member}</b> - {ticket_name}</li>"
     email_body += "</ul>"
 
     return email_body
@@ -461,7 +466,7 @@ def _digest_updated_registrations(
     for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event):
         ticket_name = registration.ticket.name if registration.ticket else _("No ticket")
         email_body += (
-            f"<li><b>{registration.member.username}</b> - {ticket_name} - {registration.tot_iscr:.2f} {currency_symbol}"
+            f"<li><b>{registration.member}</b> - {ticket_name} - {registration.tot_iscr:.2f} {currency_symbol}"
         )
         edit_url = get_url(
             reverse(
@@ -483,7 +488,7 @@ def _digest_new_registrations(event: Event, email_body: str, new_registrations: 
     for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event):
         ticket_name = registration.ticket.name if registration.ticket else _("No ticket")
         email_body += (
-            f"<li><b>{registration.member.username}</b> - {ticket_name} - {registration.tot_iscr:.2f} {currency_symbol}"
+            f"<li><b>{registration.member}</b> - {ticket_name} - {registration.tot_iscr:.2f} {currency_symbol}"
         )
         edit_url = get_url(
             reverse(
@@ -535,7 +540,7 @@ def generate_association_summary_email(association: Association, notifications: 
 
     # Footer
     email_body += "<br/><hr/>"
-    assoc_url = get_url(reverse("exe_dashboard"), association)
+    assoc_url = get_url(reverse("manage"), association)
     email_body += "<p>" + _("Go to association dashboard") + f': <a href="{assoc_url}">{association.name}</a></p>'
 
     return email_body
@@ -546,7 +551,7 @@ def digest_password_reminders(association: Association, password_reminders: list
     content = "<h3>" + _("Password Reset Requests") + f" ({len(password_reminders)})" + "</h3>"
     content += "<ul>"
     membership_ids = [notification.object_id for notification in password_reminders]
-    for membership in PaymentInvoice.objects.filter(pk__in=membership_ids, association=association):
+    for membership in Membership.objects.filter(pk__in=membership_ids, association=association):
         content += (
             "<li>"
             + _("Password reset request url for")
@@ -594,7 +599,7 @@ def digest_help_questions(association: Association, help_questions: list[Notific
     question_ids = [notification.object_id for notification in help_questions]
     for question in HelpQuestion.objects.filter(pk__in=question_ids, association=association):
         content += f"<li><b>{question.member}</b>: {question.text[:100]}..."
-        help_url = get_url(reverse("exe_help"), association)
+        help_url = get_url(reverse("exe_questions"), association)
         content += f' - <a href="{help_url}">' + _("View") + "</a></li>"
     content += "</ul>"
     return content

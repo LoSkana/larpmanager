@@ -52,6 +52,13 @@ class TestDigestFunctions(BaseTestCase):
         self.run = self.get_run()
         self.member = self.get_member()
 
+        # Create executive role for association to avoid DoesNotExist errors
+        from larpmanager.models.access import AssociationRole
+
+        self.executive_role, _ = AssociationRole.objects.get_or_create(
+            association=self.association, number=1, defaults={"name": "Executive"}
+        )
+
     def test_generate_summary_email_with_new_registrations(self) -> None:
         """Test generating summary email with new registrations"""
         # Create a registration
@@ -72,7 +79,7 @@ class TestDigestFunctions(BaseTestCase):
         # Verify content
         self.assertIn("Daily Summary", email_content)
         self.assertIn("New Registrations", email_content)
-        self.assertIn(registration.member.username, email_content)
+        self.assertIn(str(registration.member), email_content)
 
     def test_generate_summary_email_with_updated_registrations(self) -> None:
         """Test generating summary email with updated registrations"""
@@ -90,7 +97,7 @@ class TestDigestFunctions(BaseTestCase):
 
         self.assertIn("Daily Summary", email_content)
         self.assertIn("Updated Registrations", email_content)
-        self.assertIn(registration.member.username, email_content)
+        self.assertIn(str(registration.member), email_content)
 
     def test_generate_summary_email_with_cancelled_registrations(self) -> None:
         """Test generating summary email with cancelled registrations"""
@@ -108,7 +115,7 @@ class TestDigestFunctions(BaseTestCase):
 
         self.assertIn("Daily Summary", email_content)
         self.assertIn("Cancelled Registrations", email_content)
-        self.assertIn(registration.member.username, email_content)
+        self.assertIn(str(registration.member), email_content)
 
     def test_generate_summary_email_with_payments(self) -> None:
         """Test generating summary email with payments"""
@@ -135,16 +142,25 @@ class TestDigestFunctions(BaseTestCase):
 
         self.assertIn("Daily Summary", email_content)
         self.assertIn("Payments Received", email_content)
-        self.assertIn(self.member.username, email_content)
+        self.assertIn(str(self.member), email_content)
 
     def test_generate_summary_email_with_invoice_approvals(self) -> None:
         """Test generating summary email with invoice approvals"""
+        from larpmanager.models.accounting import PaymentStatus, PaymentType
+        from larpmanager.models.base import PaymentMethod
+
+        method, _ = PaymentMethod.objects.get_or_create(
+            slug="test-method", defaults={"name": "Test Method", "fields": "field1"}
+        )
         invoice = PaymentInvoice.objects.create(
             member=self.member,
             association=self.association,
             causal="Test Invoice",
-            amount=Decimal("50.00"),
             mc_gross=Decimal("50.00"),
+            method=method,
+            typ=PaymentType.REGISTRATION,
+            status=PaymentStatus.CREATED,
+            cod=f"TEST-INV-{self.association.id}-1",
         )
 
         notification = NotificationQueue.objects.create(
@@ -159,7 +175,7 @@ class TestDigestFunctions(BaseTestCase):
 
         self.assertIn("Daily Summary", email_content)
         self.assertIn("Invoices Awaiting Approval", email_content)
-        self.assertIn(self.member.username, email_content)
+        self.assertIn(str(self.member), email_content)
         self.assertIn("Approve", email_content)
 
     def test_generate_summary_email_with_multiple_notification_types(self) -> None:
@@ -216,17 +232,26 @@ class TestDigestFunctions(BaseTestCase):
 
         self.assertIn("Daily Summary", email_content)
         self.assertIn("Help Questions", email_content)
-        self.assertIn(self.member.username, email_content)
+        self.assertIn(str(self.member), email_content)
         self.assertIn("View", email_content)
 
     def test_generate_association_summary_email_with_invoice_approvals(self) -> None:
         """Test generating association summary email with invoice approvals"""
+        from larpmanager.models.accounting import PaymentStatus, PaymentType
+        from larpmanager.models.base import PaymentMethod
+
+        method, _ = PaymentMethod.objects.get_or_create(
+            slug="test-method", defaults={"name": "Test Method", "fields": "field1"}
+        )
         invoice = PaymentInvoice.objects.create(
             member=self.member,
             association=self.association,
             causal="Association Invoice",
-            amount=Decimal("150.00"),
             mc_gross=Decimal("150.00"),
+            method=method,
+            typ=PaymentType.REGISTRATION,
+            status=PaymentStatus.CREATED,
+            cod=f"TEST-INV-{self.association.id}-2",
         )
 
         notification = NotificationQueue.objects.create(
@@ -241,17 +266,26 @@ class TestDigestFunctions(BaseTestCase):
 
         self.assertIn("Daily Summary", email_content)
         self.assertIn("Invoices Awaiting Approval", email_content)
-        self.assertIn(self.member.username, email_content)
+        self.assertIn(str(self.member), email_content)
         self.assertIn("Approve", email_content)
 
     def test_generate_association_summary_email_with_refund_requests(self) -> None:
         """Test generating association summary email with refund requests"""
+        from larpmanager.models.accounting import PaymentStatus, PaymentType
+        from larpmanager.models.base import PaymentMethod
+
+        method, _ = PaymentMethod.objects.get_or_create(
+            slug="test-method", defaults={"name": "Test Method", "fields": "field1"}
+        )
         invoice = PaymentInvoice.objects.create(
             member=self.member,
             association=self.association,
             causal="Refund Request",
-            amount=Decimal("75.00"),
             mc_gross=Decimal("75.00"),
+            method=method,
+            typ=PaymentType.REGISTRATION,
+            status=PaymentStatus.CREATED,
+            cod=f"TEST-INV-{self.association.id}-3",
         )
 
         notification = NotificationQueue.objects.create(
@@ -266,24 +300,33 @@ class TestDigestFunctions(BaseTestCase):
 
         self.assertIn("Daily Summary", email_content)
         self.assertIn("Refund Requests", email_content)
-        self.assertIn(self.member.username, email_content)
+        self.assertIn(str(self.member), email_content)
         self.assertIn("View", email_content)
 
     def test_generate_association_summary_email_with_password_reminders(self) -> None:
         """Test generating association summary email with password reminders"""
-        invoice = PaymentInvoice.objects.create(
+        from larpmanager.models.member import Membership
+
+        # Get or create membership for the member
+        membership, created = Membership.objects.get_or_create(
             member=self.member,
             association=self.association,
-            causal="Password Reminder",
-            amount=Decimal("0.00"),
-            mc_gross=Decimal("0.00"),
+            defaults={
+                "credit": Decimal("100.00"),
+                "tokens": Decimal("50.00"),
+                "password_reset": "reset_token_123#hash",
+            },
         )
+        # If membership already existed, set the password_reset field
+        if not created:
+            membership.password_reset = "reset_token_123#hash"
+            membership.save()
 
         notification = NotificationQueue.objects.create(
             association=self.association,
             member=self.member,
             notification_type=NotificationType.PASSWORD_REMINDER,
-            object_id=invoice.id,
+            object_id=membership.id,
             sent=False,
         )
 
@@ -294,16 +337,25 @@ class TestDigestFunctions(BaseTestCase):
 
     def test_generate_association_summary_email_with_multiple_notification_types(self) -> None:
         """Test generating association summary email with multiple notification types"""
+        from larpmanager.models.accounting import PaymentStatus, PaymentType
+        from larpmanager.models.base import PaymentMethod
+
         question = HelpQuestion.objects.create(
             member=self.member, association=self.association, text="Need assistance"
         )
 
+        method, _ = PaymentMethod.objects.get_or_create(
+            slug="test-method", defaults={"name": "Test Method", "fields": "field1"}
+        )
         invoice = PaymentInvoice.objects.create(
             member=self.member,
             association=self.association,
             causal="Multi-type test",
-            amount=Decimal("100.00"),
             mc_gross=Decimal("100.00"),
+            method=method,
+            typ=PaymentType.REGISTRATION,
+            status=PaymentStatus.CREATED,
+            cod=f"TEST-INV-{self.association.id}-5",
         )
 
         notifications = [
@@ -347,17 +399,26 @@ class TestDigestFunctions(BaseTestCase):
 
         self.assertIn("Help Questions", content)
         self.assertIn("(1)", content)
-        self.assertIn(self.member.username, content)
+        self.assertIn(str(self.member), content)
         self.assertIn("View", content)
 
     def test_digest_invoice_approvals_generates_correct_content(self) -> None:
         """Test that digest_invoice_approvals generates correct HTML content"""
+        from larpmanager.models.accounting import PaymentStatus, PaymentType
+        from larpmanager.models.base import PaymentMethod
+
+        method, _ = PaymentMethod.objects.get_or_create(
+            slug="test-method", defaults={"name": "Test Method", "fields": "field1"}
+        )
         invoice = PaymentInvoice.objects.create(
             member=self.member,
             association=self.association,
             causal="Test Invoice",
-            amount=Decimal("200.00"),
             mc_gross=Decimal("200.00"),
+            method=method,
+            typ=PaymentType.REGISTRATION,
+            status=PaymentStatus.CREATED,
+            cod=f"TEST-INV-{self.association.id}-6",
         )
 
         notification = NotificationQueue.objects.create(
@@ -372,17 +433,26 @@ class TestDigestFunctions(BaseTestCase):
 
         self.assertIn("Invoices Awaiting Approval", content)
         self.assertIn("(1)", content)
-        self.assertIn(self.member.username, content)
+        self.assertIn(str(self.member), content)
         self.assertIn("Approve", content)
 
     def test_digest_refund_request_generates_correct_content(self) -> None:
         """Test that digest_refund_request generates correct HTML content"""
+        from larpmanager.models.accounting import PaymentStatus, PaymentType
+        from larpmanager.models.base import PaymentMethod
+
+        method, _ = PaymentMethod.objects.get_or_create(
+            slug="test-method", defaults={"name": "Test Method", "fields": "field1"}
+        )
         invoice = PaymentInvoice.objects.create(
             member=self.member,
             association=self.association,
             causal="Refund Test",
-            amount=Decimal("50.00"),
             mc_gross=Decimal("50.00"),
+            method=method,
+            typ=PaymentType.REGISTRATION,
+            status=PaymentStatus.CREATED,
+            cod=f"TEST-INV-{self.association.id}-7",
         )
 
         notification = NotificationQueue.objects.create(
@@ -397,7 +467,7 @@ class TestDigestFunctions(BaseTestCase):
 
         self.assertIn("Refund Requests", content)
         self.assertIn("(1)", content)
-        self.assertIn(self.member.username, content)
+        self.assertIn(str(self.member), content)
         self.assertIn("View", content)
 
     def test_generate_summary_email_with_empty_notifications(self) -> None:
