@@ -344,7 +344,7 @@ class OrgaCharacterForm(CharacterForm):
 
     page_info = _("Manage characters")
 
-    page_title = _("Character")
+    page_title = _("Characters")
 
     load_templates: ClassVar[list] = ["char"]
 
@@ -721,7 +721,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
 
     page_info = _("Manage form questions for writing elements")
 
-    page_title = _("Writing Question")
+    page_title = _("Writing Questions")
 
     class Meta:
         model = WritingQuestion
@@ -887,7 +887,7 @@ class OrgaWritingOptionForm(BaseModelForm):
 
     page_info = _("Manage options in form questions for writing elements")
 
-    page_title = _("Writing option")
+    page_title = _("Writing options")
 
     class Meta:
         model = WritingOption

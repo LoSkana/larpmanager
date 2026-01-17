@@ -809,6 +809,9 @@ msgstr ""
 msgid "Manage characters"
 msgstr ""
 
+msgid "Characters"
+msgstr ""
+
 msgid "--- NOT ASSIGNED ---"
 msgstr ""
 
@@ -828,13 +831,13 @@ msgstr ""
 msgid "Manage form questions for writing elements"
 msgstr ""
 
-msgid "Writing Question"
+msgid "Writing Questions"
 msgstr ""
 
 msgid "Manage options in form questions for writing elements"
 msgstr ""
 
-msgid "Writing option"
+msgid "Writing options"
 msgstr ""
 
 msgid "Insert the css code to customize the pdf printing"
@@ -1437,6 +1440,9 @@ msgid ""
 "space"
 msgstr ""
 
+msgid "Event Texts"
+msgstr ""
+
 msgid "Manage event texts"
 msgstr ""
 
@@ -1471,7 +1477,7 @@ msgstr ""
 msgid "Manage event access roles"
 msgstr ""
 
-msgid "Navigation"
+msgid "Event Navigation"
 msgstr ""
 
 msgid "Manage event navigation buttons"
@@ -1542,6 +1548,9 @@ msgstr ""
 msgid "Progression"
 msgstr ""
 
+msgid "Events"
+msgstr ""
+
 msgid "Template"
 msgstr ""
 
@@ -1557,9 +1566,6 @@ msgid "Manage template features (click on a feature to show its description)"
 msgstr ""
 
 msgid "You are choosing the most common features to activate for your event"
-msgstr ""
-
-msgid "Characters"
 msgstr ""
 
 msgid "Do you want to manage characters assigned to registered participants"
@@ -1967,7 +1973,7 @@ msgstr ""
 msgid "Manage signup form questions"
 msgstr ""
 
-msgid "Form element"
+msgid "Registration questions"
 msgstr ""
 
 msgid "--- Empty"
@@ -1976,7 +1982,7 @@ msgstr ""
 msgid "Manage signup form question options"
 msgstr ""
 
-msgid "Form Options"
+msgid "Registration options"
 msgstr ""
 
 msgid "Manage dynamic payment installments for participants"
@@ -4873,7 +4879,7 @@ msgstr ""
 msgid "Select the new ability to get"
 msgstr ""
 
-msgid "Character Edit"
+msgid "Edit"
 msgstr ""
 
 msgid "New character"
@@ -4921,9 +4927,6 @@ msgid "XP used"
 msgstr ""
 
 msgid "XP avail"
-msgstr ""
-
-msgid "Edit"
 msgstr ""
 
 msgid "Character relationships"
@@ -5463,9 +5466,6 @@ msgid "Experience"
 msgstr ""
 
 msgid "Number events"
-msgstr ""
-
-msgid "Events"
 msgstr ""
 
 msgid ""
@@ -7176,9 +7176,6 @@ msgid "Discounts active"
 msgstr ""
 
 msgid "Discounts available"
-msgstr ""
-
-msgid "Registration questions"
 msgstr ""
 
 msgid ""
@@ -8937,6 +8934,9 @@ msgid "Manage answers for workshop questions"
 msgstr ""
 
 msgid "Customize specific texts on the event interface"
+msgstr ""
+
+msgid "Navigation"
 msgstr ""
 
 msgid "Customize buttons in the event navigation bar"

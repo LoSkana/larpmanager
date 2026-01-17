@@ -115,10 +115,18 @@ def full_event_edit(
         redirect response after successful form submission
 
     """
-    # Disable numbering in the template context
-    context["nonum"] = 1
-    context["is_creation"] = event is None
-    event_form_class = ExeEventForm if is_executive else OrgaEventForm
+    if event:
+        context["is_creation"] = False
+        context["num"] = event.uuid
+        context["name"] = event.name
+    else:
+        context["is_creation"] = True
+
+    if is_executive:
+        event_form_class = ExeEventForm
+    else:
+        event_form_class = OrgaEventForm
+        context["nonum"] = 1
 
     if request.method == "POST":
         # Create form instances with POST data and file uploads

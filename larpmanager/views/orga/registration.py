@@ -836,6 +836,9 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
     # Prepare final context for template rendering
     context["form"] = form
     context["add_another"] = 1
+    context["num"] = registration_uuid
+    if registration_uuid != "0":
+        context["name"] = str(context["registration"].member)
 
     return render(request, "larpmanager/orga/edit.html", context)
 
@@ -900,6 +903,8 @@ def orga_registrations_customization(request: HttpRequest, event_slug: str, char
         form = RegistrationCharacterRelForm(instance=rcr, context=context)
 
     context["form"] = form
+    context["num"] = character_uuid
+    context["name"] = character.name
     return render(request, "larpmanager/orga/edit.html", context)
 
 

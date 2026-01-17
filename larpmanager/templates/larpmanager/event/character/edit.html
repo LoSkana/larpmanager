@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block title %}
     {% if character %}
-        {% trans "Character Edit" %} -
+        {{ character }} - {% trans "Edit" %} -
     {% else %}
         {% trans "New character" %} -
     {% endif %}

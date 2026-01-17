@@ -4,12 +4,15 @@
     {% if welcome_message %}
         {% trans "Welcome to" %} {{ platform }}!
     {% else %}
-        {{ form1.page_title }}
-        {% if num != "0" %}
-            - {% trans "Change" %}
-        {% else %}
-            - {% trans "New" %}
+        {% if nonum is None %}
+            {% if num != "0" %}
+                {{ name }}
+            {% else %}
+                {% trans "New" %}
+            {% endif %}
+            -
         {% endif %}
+        {{ form1.page_title }}
         {% if run %}- {{ run }}{% endif %}
     {% endif %}
 {% endblock title %}
