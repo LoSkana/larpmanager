@@ -83,10 +83,10 @@ def my_send_digest_email(
     Returns:
         None
     """
-    should_queue_notification = get_member_config(member.pk, "mail_orga_digest", default_value=False)
+    should_queue = get_member_config(member.pk, "mail_orga_digest", default_value=False)
 
     # Check if this organizer has enabled digest mode for their notifications
-    if should_queue_notification(member):
+    if should_queue:
         object_id = instance.id if instance else 0
         # Queue notification for daily digest summary for this specific organizer
         queue_organizer_notification(run=run, member=member, notification_type=notification_type, object_id=object_id)
@@ -178,8 +178,7 @@ def my_send_digest_email_exe(
     # Determine if we should queue the notification
     if member:
         # Check individual executive's digest preference
-        should_queue_notification = get_member_config(member.pk, "mail_exe_digest", default_value=False)
-        should_queue = should_queue_notification(member)
+        should_queue = get_member_config(member.pk, "mail_exe_digest", default_value=False)
     else:
         # Check association-level digest preference for main_mail
         should_queue = get_association_config(association.pk, "mail_exe_digest", default_value=False)
