@@ -133,7 +133,9 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
         # Extract request object and initialize parent form
         self.request = kwargs.pop("request", None)
         super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
-        self.fields["username"].widget = forms.HiddenInput()
+
+        # Remove username field - value will be generated from email in clean_username()
+        self.delete_field("username")
 
         # Configure language selection field
         self.fields["lang"] = forms.ChoiceField(
@@ -197,10 +199,13 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
         self.fields = OrderedDict((key, self.fields[key]) for key in new_order)
 
     def clean_username(self) -> str:
-        """Validate username field and check for duplicate email addresses."""
-        # Extract and normalize username input
-        data = self.cleaned_data["username"].strip()
-        logger.debug("Validating username/email: %s", data)
+        """Generate username from email and validate it's not already used."""
+        # Get email from cleaned data (username = email)
+        email = self.cleaned_data.get("email", "").strip()
+        if not email:
+            raise ValidationError(_("Email is required"))
+
+        data = email  # Username is set to email
 
         # Prevent duplicate email registrations
         if User.objects.filter(email__iexact=data).exists():

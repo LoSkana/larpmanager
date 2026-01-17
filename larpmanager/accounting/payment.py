@@ -111,18 +111,7 @@ def get_payment_fee(association_id: int, slug: str) -> float:
 
 
 def unique_invoice_cod(length: int = 16) -> str:
-    """Generate a unique invoice code.
-
-    Args:
-        length (int): Length of the generated code, defaults to 16
-
-    Returns:
-        str: Unique invoice code
-
-    Raises:
-        Exception: If unable to generate unique code after 5 attempts
-
-    """
+    """Generate a unique invoice code."""
     max_attempts = 5
     for _attempt_number in range(max_attempts):
         invoice_code = generate_id(length)
@@ -347,11 +336,9 @@ def _prepare_gateway_form(
     if payment_method_slug in {"wire", "paypal_nf"}:
         # Wire transfer or non-financial PayPal forms
         context["wire_form"] = WireInvoiceSubmitForm(require_receipt=require_receipt)
-        context["wire_form"].set_initial("cod", invoice.cod)
     elif payment_method_slug == "any":
         # Generic payment method form
         context["any_form"] = AnyInvoiceSubmitForm()
-        context["any_form"].set_initial("cod", invoice.cod)
     elif payment_method_slug == "paypal":
         # PayPal gateway integration
         get_paypal_form(request, context, invoice, payment_amount)

@@ -100,7 +100,7 @@
     <p>
         {% trans "Please indicate below the exact method of payment you made. Remember to submit the form, otherwise your payment will not be processed" %}!
     </p>
-    <form action="{% url 'accounting_submit' 'any' request.path %}"
+    <form action="{% url 'accounting_submit' 'any' invoice.uuid request.path %}"
           method="post"
           class="accounting_submit">
         {% csrf_token %}
@@ -128,7 +128,7 @@
         {% endif %}
     </p>
     <hr />
-    <form action="{% url 'accounting_submit' 'wire' request.path %}"
+    <form action="{% url 'accounting_submit' 'wire' invoice.uuid request.path %}"
           enctype="multipart/form-data"
           method="post"
           class="accounting_submit">
@@ -204,7 +204,7 @@
         {% endif %}
     </p>
     <hr />
-    <form action="{% url 'accounting_submit' 'paypal_nf' request.path %}"
+    <form action="{% url 'accounting_submit' 'paypal_nf' invoice.uuid request.path %}"
           enctype="multipart/form-data"
           method="post">
         {% csrf_token %}

@@ -73,8 +73,7 @@ class RegistrationForm(BaseRegistrationForm):
 
     class Meta:
         model = Registration
-        fields = ("modified",)
-        widgets: ClassVar[dict] = {"modified": forms.HiddenInput()}
+        fields = ()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize registration form with tickets, questions, and event-specific options.
@@ -347,13 +346,12 @@ class RegistrationForm(BaseRegistrationForm):
         # Create the quotas form field with available choices
         self.fields["quotas"] = forms.ChoiceField(required=True, choices=quota_choices)
 
-        # Hide field if only one option available and set initial value
+        # If only one option available, remove field and store value
         if len(quota_choices) == 1:
-            self.fields["quotas"].widget = forms.HiddenInput()
-            self.initial["quotas"] = quota_choices[0][0]
-
+            self._single_quota = quota_choices[0][0]
+            self.delete_field("quotas")
         # Set initial value for existing instances with quota data
-        if self.instance.pk and self.instance.quotas:
+        elif self.instance.pk and self.instance.quotas:
             self.initial["quotas"] = self.instance.quotas
 
     def init_ticket(self, event: Event, registration_counts: dict, run: Run) -> str:
@@ -616,6 +614,12 @@ class RegistrationForm(BaseRegistrationForm):
 
         return form_data
 
+    def clean_quotas(self) -> int:
+        """Return quota value from field or stored single value."""
+        if hasattr(self, "_single_quota"):
+            return self._single_quota
+        return int(self.cleaned_data.get("quotas", 1))
+
 
 class RegistrationGiftForm(RegistrationForm):
     """Form for RegistrationGift."""
@@ -804,11 +808,11 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         if self.instance.pk and self.instance.ticket:
             self.initial["ticket"] = self.instance.ticket.uuid
 
-        # Hide ticket selection and set default if only one option exists
+        # If only one ticket exists, remove field and store ticket for clean_ticket()
         if qs.count() == 1:
             ticket = qs.first()
-            self.fields["ticket"].widget = forms.HiddenInput()
-            self.initial["ticket"] = ticket.uuid
+            self.delete_field("ticket")
+            self._single_ticket = ticket
 
         self.sections["id_ticket"] = registration_section
 
@@ -962,12 +966,23 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     def clean_ticket(self) -> RegistrationTicket:
         """Convert UUID from ChoiceField to RegistrationTicket instance."""
+        # If field was deleted (single ticket), use stored ticket
+        if hasattr(self, "_single_ticket"):
+            return self._single_ticket
+
         ticket_value = self.cleaned_data.get("ticket")
 
         if isinstance(ticket_value, RegistrationTicket):
             return ticket_value
 
-        return RegistrationTicket.objects.get(uuid=ticket_value)
+        # Get ticket and validate it belongs to the current run's event
+        try:
+            ticket = RegistrationTicket.objects.get(uuid=ticket_value, event_id=self.params["run"].event_id)
+        except ObjectDoesNotExist as err:
+            msg = _("Invalid ticket selection")
+            raise ValidationError(msg) from err
+
+        return ticket
 
     def get_init_multi_character(self) -> list[int]:
         """Get initial character IDs for multi-character registration."""
@@ -1495,7 +1510,8 @@ class PreRegistrationForm(BaseForm):
             )
             self.initial["new_pref"] = min(prefs)
         else:
-            self.fields["new_pref"] = forms.CharField(widget=forms.HiddenInput(), initial=min(prefs))
+            # Store default, don't create field
+            self._default_new_pref = min(prefs)
 
         self.fields["new_info"] = forms.CharField(
             required=False,

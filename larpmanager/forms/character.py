@@ -725,7 +725,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
 
     class Meta:
         model = WritingQuestion
-        exclude: ClassVar[list] = ["order"]
+        exclude: ClassVar[list] = ["order", "applicable"]
         widgets: ClassVar[dict] = {
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
@@ -866,20 +866,19 @@ class OrgaWritingQuestionForm(BaseModelForm):
             if self.instance and self.instance.pk:
                 self.initial["editable"] = self.instance.get_editable()
 
-    def _init_applicable(self) -> None:
-        """Initialize the applicable field based on instance state."""
-        # Remove applicable field if instance already exists
-        if self.instance.pk:
-            self.delete_field("applicable")
-            return
-
-        # Hide applicable field and set default value for new instances
-        self.fields["applicable"].widget = forms.HiddenInput()
-        self.initial["applicable"] = self.params["writing_typ"]
-
     def clean_editable(self) -> str:
         """Join editable field values into comma-separated string."""
         return ",".join(self.cleaned_data["editable"])
+
+    def save(self, commit: bool = True) -> WritingQuestion:  # noqa: FBT001, FBT002
+        """Save form with applicable type from context for new instances."""
+        instance = super().save(commit=False)
+        # Only set applicable for new instances
+        if not instance.pk:
+            instance.applicable = self.params["writing_typ"]
+        if commit:
+            instance.save()
+        return instance
 
 
 class OrgaWritingOptionForm(BaseModelForm):

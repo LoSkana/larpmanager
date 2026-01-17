@@ -215,14 +215,10 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         # Handle field visibility based on number of available runs
         if len(available_runs) <= 1:
-            if self.instance.pk:
-                # For existing instances, remove field entirely
-                self.delete_field("run")
-            else:
-                # For new instances, hide the field
-                self.fields["run"].widget = forms.HiddenInput()
-                # Set initial value to current run
-                self.initial["run"] = self.params["run"].uuid
+            # For both existing and new instances, remove field entirely
+            self.delete_field("run")
+            # Store the run value for clean_run()
+            self._auto_run_value = self.params["run"]
         else:
             # Multiple runs available
             self.fields["run"] = forms.ChoiceField(
@@ -245,6 +241,10 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         if hasattr(self, "auto_run"):
             return self.params["run"]
 
+        # If field was deleted (single run case), use stored value
+        if hasattr(self, "_auto_run_value"):
+            return self._auto_run_value
+
         # Get the value from cleaned_data
         run_value = self.cleaned_data["run"]
 
@@ -257,10 +257,17 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         # Otherwise, it's a UUID (from ChoiceField), convert to Run instance
         try:
-            return Run.objects.get(uuid=run_value)
+            run = Run.objects.select_related("event").get(uuid=run_value)
         except ObjectDoesNotExist as err:
             msg = _("Select a valid choice. That choice is not one of the available choices.")
             raise ValidationError(msg) from err
+
+        # Validate run belongs to current association
+        if "event" in self.params and run.event.association_id != self.params["event"].association_id:
+            msg = _("Selected event does not belong to this organization")
+            raise ValidationError(msg)
+
+        return run
 
     def clean_event(self) -> Event:
         """Return the appropriate event based on form configuration.

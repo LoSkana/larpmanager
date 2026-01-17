@@ -766,6 +766,9 @@ msgstr ""
 msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 
+msgid "Selected event does not belong to this organization"
+msgstr ""
+
 msgid "already used"
 msgstr ""
 
@@ -1734,6 +1737,9 @@ msgid ""
 "GDPR and our Privacy Policy"
 msgstr ""
 
+msgid "Email is required"
+msgstr ""
+
 msgid "Select Language"
 msgstr ""
 
@@ -1953,6 +1959,9 @@ msgid "Quotas"
 msgstr ""
 
 msgid "The number of payments to split the fee"
+msgstr ""
+
+msgid "Invalid ticket selection"
 msgstr ""
 
 msgid "Manage ticket types for participant registration"
