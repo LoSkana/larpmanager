@@ -339,7 +339,7 @@ urlpatterns = [
         name="accounting_collection_redeem",
     ),
     path(
-        "accounting/submit/<slug:payment_method>/<uuid:invoice_uuid>/<path:redirect_path>/",
+        "accounting/submit/<slug:payment_method>/<slug:invoice_uuid>/<path:redirect_path>/",
         views_ua.accounting_submit,
         name="accounting_submit",
     ),
