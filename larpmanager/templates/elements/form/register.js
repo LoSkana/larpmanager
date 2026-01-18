@@ -98,7 +98,7 @@ $(document).ready(function(){
         // skip if the value was submitted in a previous POST
         if ((nm in submitted) && submitted[nm]) return;
 
-        $(this).prepend('<option selected="true" disabled="disabled">' + diss + '</option>');
+        $(this).prepend('<option value="" selected="true" disabled="disabled">' + diss + '</option>');
     });
 
     {% if payment_lock %}

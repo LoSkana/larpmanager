@@ -3023,9 +3023,6 @@ msgstr "Dokument herunterladen"
 msgid "Elements uploaded"
 msgstr "Elemente geladen"
 
-msgid "Email is required"
-msgstr "E-Mail ist erforderlich"
-
 msgid "Experience points"
 msgstr "Erfahrungspunkte"
 
@@ -3880,6 +3877,9 @@ msgstr "Token für den einmaligen Zugang"
 
 msgid "Payment membership fee"
 msgstr "Zahlung der Mitgliedsbeiträge"
+
+msgid "Please select a ticket"
+msgstr "Bitte wählen Sie ein Ticket"
 
 msgid "Register of volunteers"
 msgstr "Register der Freiwilligen"

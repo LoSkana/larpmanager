@@ -376,13 +376,16 @@ class RegistrationForm(BaseRegistrationForm):
                 ticket_help_html += f"<p><b>{ticket.name}</b>: {ticket.description}</p>"
 
         # Create the ticket selection field with available choices
-        self.fields["ticket"] = forms.ChoiceField(required=True, choices=ticket_choices)
+        self.fields["ticket"] = forms.ChoiceField(required=False, choices=ticket_choices)
 
         # Set initial ticket value from existing instance or parameters
         if self.instance and self.instance.ticket:
             self.initial["ticket"] = str(self.instance.ticket.uuid)
         elif self.params.get("ticket"):
             self.initial["ticket"] = self.params["ticket"]
+        elif len(ticket_choices) == 1:
+            # Auto-select if only one ticket is available
+            self.initial["ticket"] = ticket_choices[0][0]
 
         return ticket_help_html
 
@@ -921,15 +924,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.fields[qt_uuid] = forms.ChoiceField(required=True, choices=choices, label=quest_type["name"])
 
     def clean_member(self) -> Any:
-        """Validate member field to prevent duplicate registrations.
-
-        Returns:
-            Member: Validated member instance
-
-        Raises:
-            ValidationError: If member already has an active registration for the event
-
-        """
+        """Validate member field to prevent duplicate registrations."""
         data = self.cleaned_data["member"]
 
         if "request" in self.params:
@@ -948,33 +943,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 raise ValidationError(msg)
 
         return data
-
-    def clean_pay_what(self) -> Any:
-        """Ensure pay_what has a valid integer value, defaulting to 0 if None or empty.
-
-        Returns:
-            int: Validated pay_what value (0 if None or empty)
-
-        """
-        data = self.cleaned_data.get("pay_what")
-        # Convert None or empty string to 0 to prevent NULL constraint violations
-        return data if data is not None else 0
-
-    def clean_ticket(self) -> RegistrationTicket:
-        """Convert UUID from ChoiceField to RegistrationTicket instance."""
-        ticket_value = self.cleaned_data.get("ticket")
-
-        if isinstance(ticket_value, RegistrationTicket):
-            return ticket_value
-
-        # Get ticket and validate it belongs to the current run's event
-        try:
-            ticket = RegistrationTicket.objects.get(uuid=ticket_value, event_id=self.params["run"].event_id)
-        except ObjectDoesNotExist as err:
-            msg = _("Invalid ticket selection")
-            raise ValidationError(msg) from err
-
-        return ticket
 
     def get_init_multi_character(self) -> list[int]:
         """Get initial character IDs for multi-character registration."""

@@ -3023,9 +3023,6 @@ msgstr "Stáhnout dokument"
 msgid "Elements uploaded"
 msgstr "Prvky jsou načteny"
 
-msgid "Email is required"
-msgstr "Je vyžadován e-mail"
-
 msgid "Experience points"
 msgstr "Zkušenostní body"
 
@@ -3880,6 +3877,9 @@ msgstr "Jednorázové přístupové tokeny"
 
 msgid "Payment membership fee"
 msgstr "Platba členského poplatku"
+
+msgid "Please select a ticket"
+msgstr "Vyberte prosím jízdenku"
 
 msgid "Register of volunteers"
 msgstr "Rejstřík dobrovolníků"

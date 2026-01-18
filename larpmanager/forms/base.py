@@ -44,6 +44,7 @@ from larpmanager.models.form import (
     WritingQuestionType,
     get_writing_max_length,
 )
+from larpmanager.models.registration import RegistrationTicket
 from larpmanager.models.utils import generate_id, get_attr, strip_tags
 from larpmanager.templatetags.show_tags import hex_to_rgb
 
@@ -350,9 +351,6 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         # Call parent save method to get the instance
         instance = super(forms.ModelForm, self).save(commit=commit)
-
-        # Validate all fields before processing
-        self.full_clean()
 
         # Process each field in the form
         for field in self.fields:
@@ -1348,6 +1346,30 @@ class BaseRegistrationForm(BaseModelFormRun):
                 self.choice_class.objects.create(
                     **{"question": question, self.instance_key: instance.id, "option_id": pkoid}
                 )
+
+    def clean_pay_what(self) -> Any:
+        """Ensure pay_what has a valid integer value, defaulting to 0 if None or empty."""
+        data = self.cleaned_data.get("pay_what")
+        # Convert None or empty string to 0 to prevent NULL constraint violations
+        return data if data is not None else 0
+
+    def clean_ticket(self) -> RegistrationTicket:
+        """Convert UUID from ChoiceField to RegistrationTicket instance."""
+        ticket_value = self.cleaned_data.get("ticket")
+
+        # Check if ticket value is empty or blank
+        if not ticket_value:
+            msg = _("Please select a ticket")
+            raise ValidationError(msg)
+
+        # Get ticket and validate it belongs to the current run's event
+        try:
+            RegistrationTicket.objects.get(uuid=ticket_value, event_id=self.params["run"].event_id)
+        except ObjectDoesNotExist as err:
+            msg = _("Invalid ticket selection")
+            raise ValidationError(msg) from err
+
+        return ticket_value
 
 
 class BaseModelCssForm(BaseModelForm):

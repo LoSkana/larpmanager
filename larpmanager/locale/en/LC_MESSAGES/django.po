@@ -787,6 +787,12 @@ msgstr ""
 msgid "Not selected"
 msgstr ""
 
+msgid "Please select a ticket"
+msgstr ""
+
+msgid "Invalid ticket selection"
+msgstr ""
+
 msgid "Character"
 msgstr ""
 
@@ -1737,9 +1743,6 @@ msgid ""
 "GDPR and our Privacy Policy"
 msgstr ""
 
-msgid "Email is required"
-msgstr ""
-
 msgid "Select Language"
 msgstr ""
 
@@ -1959,9 +1962,6 @@ msgid "Quotas"
 msgstr ""
 
 msgid "The number of payments to split the fee"
-msgstr ""
-
-msgid "Invalid ticket selection"
 msgstr ""
 
 msgid "Manage ticket types for participant registration"
