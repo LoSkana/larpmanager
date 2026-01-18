@@ -768,8 +768,6 @@ class OrgaWritingQuestionForm(BaseModelForm):
 
         self._init_editable()
 
-        self._init_applicable()
-
         # remove visibility from plot
         if self.params["writing_typ"] == QuestionApplicable.PLOT:
             self.delete_field("visibility")
