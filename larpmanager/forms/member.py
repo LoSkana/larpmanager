@@ -135,7 +135,7 @@ class MyRegistrationFormUniqueEmail(FormMixin, RegistrationFormUniqueEmail):
         super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
 
         # Remove username field - value will be generated from email in clean_username()
-        self.delete_field("username")
+        del self.fields["username"]
 
         # Configure language selection field
         self.fields["lang"] = forms.ChoiceField(
