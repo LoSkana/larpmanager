@@ -134,16 +134,16 @@ class ExeAssociationTextForm(BaseModelForm):
         ch = AssociationTextType.choices
         delete_choice = [AssociationTextType.PRIVACY]
 
-        if "legal_notice" not in self.params["features"]:
+        if "legal_notice" not in self.params.get("features", {}):
             delete_choice.append(AssociationTextType.LEGAL)
 
-        if "receipts" not in self.params["features"]:
+        if "receipts" not in self.params.get("features", {}):
             delete_choice.append(AssociationTextType.RECEIPT)
 
-        if "membership" not in self.params["features"]:
+        if "membership" not in self.params.get("features", {}):
             delete_choice.extend([AssociationTextType.MEMBERSHIP, AssociationTextType.STATUTE])
 
-        if "remind" not in self.params["features"]:
+        if "remind" not in self.params.get("features", {}):
             delete_choice.extend(
                 [
                     AssociationTextType.REMINDER_MEMBERSHIP,
@@ -152,7 +152,7 @@ class ExeAssociationTextForm(BaseModelForm):
                     AssociationTextType.REMINDER_PROFILE,
                 ],
             )
-        elif "membership" not in self.params["features"]:
+        elif "membership" not in self.params.get("features", {}):
             delete_choice.extend([AssociationTextType.REMINDER_MEMBERSHIP, AssociationTextType.REMINDER_MEMBERSHIP_FEE])
         else:
             delete_choice.extend([AssociationTextType.REMINDER_PROFILE])
@@ -486,11 +486,11 @@ class ExeConfigForm(ConfigForm):
         - Campaign-specific settings
         - Warehouse management options
 
-        The method checks for available features in self.params["features"] and
+        The method checks for available features in self.params.get("features", {}) and
         creates appropriate configuration sections and fields for each enabled feature.
         """
         # Configure custom mail server settings if feature is enabled
-        if "custom_mail" in self.params["features"]:
+        if "custom_mail" in self.params.get("features", {}):
             self.set_section("custom_mail_server", _("Customised mail server"))
             empty_help_text = ""
 
@@ -512,14 +512,14 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("mail_server_host_password", ConfigType.CHAR, password_label, empty_help_text)
 
         # Configure pre-registration preferences
-        if "pre_register" in self.params["features"]:
+        if "pre_register" in self.params.get("features", {}):
             self.set_section("pre_reg", _("Pre-registration"))
             preferences_label = _("Enable preferences")
             preferences_help_text = _("If checked, participants give a preference value when adding pre-registrations")
             self.add_configs("pre_reg_preferences", ConfigType.BOOL, preferences_label, preferences_help_text)
 
         # Configure easter egg feature (centauri)
-        if "centauri" in self.params["features"]:
+        if "centauri" in self.params.get("features", {}):
             self.set_section("centauri", _("Easter egg"))
 
             # Probability and badge settings
@@ -541,7 +541,7 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("centauri_content", ConfigType.HTML, page_label, page_help_text)
 
         # Configure campaign-specific settings
-        if "campaign" in self.params["features"]:
+        if "campaign" in self.params.get("features", {}):
             self.set_section("campaign", _("Campaign"))
 
             move_registration_label = _("Move registration event")
@@ -549,7 +549,7 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("campaign_switch", ConfigType.BOOL, move_registration_label, move_registration_help_text)
 
         # Configure warehouse management options
-        if "warehouse" in self.params["features"]:
+        if "warehouse" in self.params.get("features", {}):
             self.set_section("warehouse", _("Warehouse"))
 
             quantity_label = _("Quantity")
@@ -575,7 +575,7 @@ class ExeConfigForm(ConfigForm):
         self.add_configs("player_larp_history", ConfigType.BOOL, field_label, field_help_text)
 
         # Configure deadline management if feature is enabled
-        if "deadlines" in self.params["features"]:
+        if "deadlines" in self.params.get("features", {}):
             self.set_section("deadlines", _("Deadline"))
 
             # Tolerance period before automatic cancellation
@@ -591,7 +591,7 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("deadline_days", ConfigType.INT, field_label, field_help_text)
 
         # Configure membership fee and requirements if feature is enabled
-        if "membership" in self.params["features"]:
+        if "membership" in self.params.get("features", {}):
             self.set_section("membership", _("Members"))
 
             # Minimum age requirement for membership
@@ -623,7 +623,7 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("membership_grazing", ConfigType.INT, field_label, field_help_text)
 
         # Configure voting system if feature is enabled
-        if "vote" in self.params["features"]:
+        if "vote" in self.params.get("features", {}):
             self.set_section("vote", _("Voting"))
 
             # Toggle voting availability
@@ -646,7 +646,7 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("vote_max", ConfigType.INT, field_label, field_help_text)
 
         # Configure reminder email system if feature is enabled
-        if "remind" in self.params["features"]:
+        if "remind" in self.params.get("features", {}):
             self.set_section("remind", _("Reminder"))
 
             # Frequency of automated reminder emails
@@ -670,7 +670,7 @@ class ExeConfigForm(ConfigForm):
         treasury management, organization fees, and expenses.
         """
         # Configure payment gateway settings and fee options
-        if "payment" in self.params["features"]:
+        if "payment" in self.params.get("features", {}):
             self.set_section("payment", _("Payments"))
 
             # Payment fee configuration - who pays gateway fees
@@ -722,7 +722,7 @@ class ExeConfigForm(ConfigForm):
             )
 
         # Configure VAT calculation settings for different cost components
-        if "vat" in self.params["features"]:
+        if "vat" in self.params.get("features", {}):
             self.set_section("vat", _("VAT"))
 
             # VAT percentage for base ticket cost
@@ -738,7 +738,7 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("vat_options", ConfigType.INT, label_vat_on_options, help_text_vat_on_options)
 
         # Configure token/credit system naming and display
-        if "tokens" in self.params["features"]:
+        if "tokens" in self.params.get("features", {}):
             self.set_section("tokens", _("Tokens"))
 
             # Customizable token display name
@@ -751,7 +751,7 @@ class ExeConfigForm(ConfigForm):
                 help_text_token_display_name,
             )
 
-        if "credits" in self.params["features"]:
+        if "credits" in self.params.get("features", {}):
             self.set_section("credits", _("Credits"))
 
             # Customizable credit display name
@@ -765,7 +765,7 @@ class ExeConfigForm(ConfigForm):
             )
 
         # Configure treasury management and appointee selection
-        if "treasurer" in self.params["features"]:
+        if "treasurer" in self.params.get("features", {}):
             self.set_section("treasurer", _("Treasury"))
             label_treasury_appointees = _("Appointees")
             help_text_treasury_appointees = _("Treasury appointees")
@@ -778,7 +778,7 @@ class ExeConfigForm(ConfigForm):
             )
 
         # Configure organization infrastructure fee calculation
-        if "organization_tax" in self.params["features"]:
+        if "organization_tax" in self.params.get("features", {}):
             self.set_section("organization_tax", _("Organisation fee"))
             label_organization_fee_percentage = _("Percentage")
             help_text_organization_fee_percentage = _(
@@ -793,7 +793,7 @@ class ExeConfigForm(ConfigForm):
             )
 
         # Configure expense approval workflow settings
-        if "expense" in self.params["features"]:
+        if "expense" in self.params.get("features", {}):
             self.set_section("expense", _("Expenses"))
             label_disable_event_approval = _("Disable event approval")
             help_text_disable_event_approval = _(
@@ -817,7 +817,7 @@ class ExeConfigForm(ConfigForm):
             None
 
         """
-        if "e-invoice" not in self.params["features"]:
+        if "e-invoice" not in self.params.get("features", {}):
             return
 
         self.set_section("einvoice", _("Electronic invoice"))

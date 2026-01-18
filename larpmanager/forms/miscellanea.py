@@ -351,7 +351,7 @@ class OrganizerCastingOptionsForm(BaseForm):
         self.fields["pays"].initial = ("t", "c", "p", "n")
 
         # Configure membership field based on feature availability
-        if "membership" in self.params["features"]:
+        if "membership" in self.params.get("features", {}):
             self.fields["memberships"].initial = ("s", "a", "p", "j", "e")
         else:
             del self.fields["memberships"]
@@ -371,7 +371,7 @@ class OrganizerCastingOptionsForm(BaseForm):
         self.fields["tickets"].initial = [str(el[0]) for el in ticks]
 
         # Configure faction field if faction feature is enabled
-        if "faction" in self.params["features"]:
+        if "faction" in self.params.get("features", {}):
             factions = (
                 self.params["event"]
                 .get_elements(Faction)
