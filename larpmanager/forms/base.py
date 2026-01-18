@@ -241,10 +241,6 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         if hasattr(self, "auto_run"):
             return self.params["run"]
 
-        # If field was deleted (single run case), use stored value
-        if hasattr(self, "_auto_run_value"):
-            return self._auto_run_value
-
         # Get the value from cleaned_data
         run_value = self.cleaned_data["run"]
 
@@ -252,22 +248,20 @@ class BaseModelForm(FormMixin, forms.ModelForm):
             return None
 
         # If it's already a Run instance, return it
-        if isinstance(run_value, str):
-            run = run_value
-        else:
+        if not isinstance(run_value, Run):
             # Otherwise, it's a UUID (from ChoiceField), convert to Run instance
             try:
-                run = Run.objects.select_related("event").get(uuid=run_value)
+                run_value = Run.objects.select_related("event").get(uuid=run_value)
             except ObjectDoesNotExist as err:
                 msg = _("Select a valid choice. That choice is not one of the available choices.")
                 raise ValidationError(msg) from err
 
         # Validate run belongs to current association
-        if "event" in self.params and run.event.association_id != self.params["event"].association_id:
+        if "event" in self.params and run_value.event.association_id != self.params["event"].association_id:
             msg = _("Selected event does not belong to this organization")
             raise ValidationError(msg)
 
-        return run
+        return run_value
 
     def clean_event(self) -> Event:
         """Return the appropriate event based on form configuration.
@@ -349,21 +343,10 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         return field_value
 
     def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
-        """Save form instance with custom field handling.
-
-        Args:
-            commit: Whether to save to database immediately. Defaults to True.
-
-        Returns:
-            The saved model instance.
-
-        """
-        # Handle deleted fields by manually calling their clean methods
-        if hasattr(self, "_auto_run_value") and "run" not in self.fields:
-            self.instance.run = self.clean_run()
-
-        if hasattr(self, "_single_ticket") and "ticket" not in self.fields:
-            self.instance.ticket = self.clean_ticket()
+        """Save form instance with custom field handling."""
+        # Handle auto run
+        if hasattr(self, "_auto_run_value"):
+            self.instance.run = self._auto_run_value
 
         # Call parent save method to get the instance
         instance = super(forms.ModelForm, self).save(commit=commit)

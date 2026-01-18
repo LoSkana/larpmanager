@@ -132,7 +132,7 @@ class OrgaTokenForm(BaseModelFormRun):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit")
+        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
         widgets: ClassVar[dict] = {"member": RunMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -162,7 +162,7 @@ class OrgaCreditForm(BaseModelFormRun):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit")
+        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
         widgets: ClassVar[dict] = {"member": RunMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -358,7 +358,7 @@ class ExeCreditForm(BaseModelForm):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit")
+        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
         widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -387,7 +387,7 @@ class ExeTokenForm(BaseModelForm):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit")
+        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
         widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

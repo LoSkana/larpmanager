@@ -67,6 +67,8 @@ from larpmanager.utils.users.registration import get_reduced_available_count
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 
+    from larpmanager.models.base import BaseModel
+
 
 class RegistrationForm(BaseRegistrationForm):
     """Form for handling event registration with tickets, quotas, and questions."""
@@ -150,17 +152,7 @@ class RegistrationForm(BaseRegistrationForm):
         self.fields["ticket"].help_text += ticket_help
 
     def sel_ticket_map(self, ticket: Any) -> None:
-        """Update question requirements based on selected ticket type.
-
-        Args:
-            ticket: Selected ticket uuid string
-
-        """
-        """
-        Check if given the selected ticket, we need to not require questions reserved
-        to other tickets.
-        """
-
+        """Check if given the selected ticket, we need to not require questions reserved to other tickets."""
         if "reg_que_tickets" not in self.params["features"]:
             return
 
@@ -614,11 +606,14 @@ class RegistrationForm(BaseRegistrationForm):
 
         return form_data
 
-    def clean_quotas(self) -> int:
-        """Return quota value from field or stored single value."""
+    def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
+        """Save form instance with custom field handling."""
+        # Handle single quota
         if hasattr(self, "_single_quota"):
-            return self._single_quota
-        return int(self.cleaned_data.get("quotas", 1))
+            self.instance.quota = self._single_quota
+
+        # Call parent save method to get the instance
+        return super(forms.ModelForm, self).save(commit=commit)
 
 
 class RegistrationGiftForm(RegistrationForm):
@@ -967,10 +962,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     def clean_ticket(self) -> RegistrationTicket:
         """Convert UUID from ChoiceField to RegistrationTicket instance."""
-        # If field was deleted (single ticket), use stored ticket
-        if hasattr(self, "_single_ticket"):
-            return self._single_ticket
-
         ticket_value = self.cleaned_data.get("ticket")
 
         if isinstance(ticket_value, RegistrationTicket):
@@ -1048,6 +1039,15 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 raise ValidationError(msg)
 
         return data
+
+    def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
+        """Save form instance with custom field handling."""
+        # Handle auto ticket
+        if hasattr(self, "_single_ticket"):
+            self.instance.ticket = self._single_ticket
+
+        # Call parent save method to get the instance
+        return super(BaseRegistrationForm, self).save(commit=commit)
 
 
 class RegistrationCharacterRelForm(BaseModelForm):
