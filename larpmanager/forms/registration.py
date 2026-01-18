@@ -75,7 +75,7 @@ class RegistrationForm(BaseRegistrationForm):
 
     class Meta:
         model = Registration
-        fields = ()
+        fields = ("ticket",)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize registration form with tickets, questions, and event-specific options.
@@ -376,16 +376,13 @@ class RegistrationForm(BaseRegistrationForm):
                 ticket_help_html += f"<p><b>{ticket.name}</b>: {ticket.description}</p>"
 
         # Create the ticket selection field with available choices
-        self.fields["ticket"] = forms.ChoiceField(required=False, choices=ticket_choices)
+        self.fields["ticket"] = forms.ChoiceField(required=True, choices=ticket_choices)
 
         # Set initial ticket value from existing instance or parameters
         if self.instance and self.instance.ticket:
             self.initial["ticket"] = str(self.instance.ticket.uuid)
         elif self.params.get("ticket"):
             self.initial["ticket"] = self.params["ticket"]
-        elif len(ticket_choices) == 1:
-            # Auto-select if only one ticket is available
-            self.initial["ticket"] = ticket_choices[0][0]
 
         return ticket_help_html
 
@@ -806,7 +803,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         if self.instance.pk and self.instance.ticket:
             self.initial["ticket"] = self.instance.ticket.uuid
 
-        # If only one ticket exists, remove field and store ticket for clean_ticket()
+        # If only one ticket exists, remove field and store ticket
         if qs.count() == 1:
             ticket = qs.first()
             self.delete_field("ticket")

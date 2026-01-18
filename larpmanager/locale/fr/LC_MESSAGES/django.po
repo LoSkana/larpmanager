@@ -3878,9 +3878,6 @@ msgstr "Jetons d'accès unique"
 msgid "Payment membership fee"
 msgstr "Paiement de la cotisation"
 
-msgid "Please select a ticket"
-msgstr "Veuillez sélectionner un billet"
-
 msgid "Register of volunteers"
 msgstr "Registre des volontaires"
 

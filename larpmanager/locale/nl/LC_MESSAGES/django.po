@@ -3878,9 +3878,6 @@ msgstr "Eenmalige toegangsmunten"
 msgid "Payment membership fee"
 msgstr "Betaling lidmaatschapsgeld"
 
-msgid "Please select a ticket"
-msgstr "Selecteer een ticket"
-
 msgid "Register of volunteers"
 msgstr "Register van vrijwilligers"
 

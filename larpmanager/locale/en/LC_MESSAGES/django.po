@@ -784,13 +784,10 @@ msgstr ""
 msgid "Option no longer available"
 msgstr ""
 
-msgid "Not selected"
-msgstr ""
-
-msgid "Please select a ticket"
-msgstr ""
-
 msgid "Invalid ticket selection"
+msgstr ""
+
+msgid "Not selected"
 msgstr ""
 
 msgid "Character"

@@ -3878,9 +3878,6 @@ msgstr "Engangsadgangstokener"
 msgid "Payment membership fee"
 msgstr "Betaling av medlemsavgift"
 
-msgid "Please select a ticket"
-msgstr "Vennligst velg en billett"
-
 msgid "Register of volunteers"
 msgstr "Register over frivillige"
 

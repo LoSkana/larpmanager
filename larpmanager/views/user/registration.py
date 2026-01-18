@@ -364,7 +364,7 @@ def save_registration_standard(
 
     # Process ticket selection and validation
     if "ticket" in form.cleaned_data:
-        sel = RegistrationTicket.objects.filter(uuid=form.cleaned_data["ticket"]).select_related("event").first()
+        sel = form.cleaned_data["ticket"]
 
         # Validate ticket exists and belongs to correct event
         if not sel:

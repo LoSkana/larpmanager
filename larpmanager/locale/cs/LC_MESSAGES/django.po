@@ -3878,9 +3878,6 @@ msgstr "Jednorázové přístupové tokeny"
 msgid "Payment membership fee"
 msgstr "Platba členského poplatku"
 
-msgid "Please select a ticket"
-msgstr "Vyberte prosím jízdenku"
-
 msgid "Register of volunteers"
 msgstr "Rejstřík dobrovolníků"
 

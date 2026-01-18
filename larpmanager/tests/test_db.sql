@@ -4150,20 +4150,19 @@ INSERT INTO public.django_migrations VALUES (158, 'larpmanager', '0117_merge_202
 INSERT INTO public.django_migrations VALUES (159, 'larpmanager', '0118_everyone_uuid', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (160, 'larpmanager', '0119_finish_uuid', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (161, 'larpmanager', '0120_alter_larpmanagerticket_priority_and_more', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (162, 'larpmanager', '0121_migrate_config_ids_to_uuids', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (163, 'larpmanager', '0122_remove_plotcharacterrel_uuid_and_more', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (164, 'larpmanager', '0123_alter_run_registration_secret', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (165, 'larpmanager', '0124_remove_playerrelationship_unique_player_relationship_with_optional_and_more', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (166, 'larpmanager', '0125_set_old_dashboard_config', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (167, 'larpmanager', '0126_fix_event_slug_unique_constraint', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (168, 'larpmanager', '0127_alter_registration_ticket', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (169, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (170, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (171, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (172, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (173, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (174, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (175, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (162, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (163, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (164, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (165, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (166, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (167, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (168, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (169, 'larpmanager', '0121_migrate_config_ids_to_uuids', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (170, 'larpmanager', '0122_remove_plotcharacterrel_uuid_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (171, 'larpmanager', '0123_alter_run_registration_secret', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (173, 'larpmanager', '0124_remove_playerrelationship_unique_player_relationship_with_optional_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (174, 'larpmanager', '0125_set_old_dashboard_config', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (175, 'larpmanager', '0126_fix_event_slug_unique_constraint', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
@@ -8293,4 +8292,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0127_alter_registration_ticket
+-- LARPMANAGER_SCHEMA_VERSION: 0126_fix_event_slug_unique_constraint

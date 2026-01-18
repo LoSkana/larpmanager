@@ -755,6 +755,15 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         return form_data
 
+    def clean_ticket(self) -> RegistrationTicket:
+        """Get ticket and validate it belongs to the current run's event."""
+        ticket_value = self.cleaned_data.get("ticket")
+        try:
+            return RegistrationTicket.objects.get(uuid=ticket_value, event_id=self.params["run"].event_id)
+        except ObjectDoesNotExist as err:
+            msg = _("Invalid ticket selection")
+            raise ValidationError(msg) from err
+
     def get_option_key_count(self, option: BaseModel) -> str:
         """Generate counting key for option availability tracking.
 
@@ -1352,24 +1361,6 @@ class BaseRegistrationForm(BaseModelFormRun):
         data = self.cleaned_data.get("pay_what")
         # Convert None or empty string to 0 to prevent NULL constraint violations
         return data if data is not None else 0
-
-    def clean_ticket(self) -> RegistrationTicket:
-        """Convert UUID from ChoiceField to RegistrationTicket instance."""
-        ticket_value = self.cleaned_data.get("ticket")
-
-        # Check if ticket value is empty or blank
-        if not ticket_value:
-            msg = _("Please select a ticket")
-            raise ValidationError(msg)
-
-        # Get ticket and validate it belongs to the current run's event
-        try:
-            RegistrationTicket.objects.get(uuid=ticket_value, event_id=self.params["run"].event_id)
-        except ObjectDoesNotExist as err:
-            msg = _("Invalid ticket selection")
-            raise ValidationError(msg) from err
-
-        return ticket_value
 
 
 class BaseModelCssForm(BaseModelForm):

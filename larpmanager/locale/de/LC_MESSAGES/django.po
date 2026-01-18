@@ -3878,9 +3878,6 @@ msgstr "Token für den einmaligen Zugang"
 msgid "Payment membership fee"
 msgstr "Zahlung der Mitgliedsbeiträge"
 
-msgid "Please select a ticket"
-msgstr "Bitte wählen Sie ein Ticket"
-
 msgid "Register of volunteers"
 msgstr "Register der Freiwilligen"
 

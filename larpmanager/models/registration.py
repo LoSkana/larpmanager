@@ -325,7 +325,6 @@ class Registration(UuidMixin, BaseModel):
         on_delete=models.CASCADE,
         related_name="registrations",
         null=True,
-        blank=True,
     )
 
     additionals = models.IntegerField(default=0)
