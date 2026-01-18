@@ -418,7 +418,7 @@ class FactionForm(WritingForm, BaseWritingForm):
         self.reorder_field("characters")
 
         # Handle selectable field based on user_character feature
-        if "user_character" not in self.params.get("features", {}):
+        if "user_character" not in self.params["features"]:
             self.delete_field("selectable")
         else:
             self.reorder_field("selectable")

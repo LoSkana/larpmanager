@@ -153,7 +153,7 @@ class RegistrationForm(BaseRegistrationForm):
 
     def sel_ticket_map(self, ticket: Any) -> None:
         """Check if given the selected ticket, we need to not require questions reserved to other tickets."""
-        if "reg_que_tickets" not in self.params.get("features", {}):
+        if "reg_que_tickets" not in self.params["features"]:
             return
 
         for question in self.questions:
@@ -167,7 +167,7 @@ class RegistrationForm(BaseRegistrationForm):
     def init_additionals(self) -> None:
         """Initialize additional tickets field if feature is enabled."""
         # Skip if additional tickets feature is not enabled
-        if "additional_tickets" not in self.params.get("features", {}):
+        if "additional_tickets" not in self.params["features"]:
             return
 
         # Get max_length from additional_tickets question, default to 5
@@ -193,7 +193,7 @@ class RegistrationForm(BaseRegistrationForm):
 
     def init_bring_friend(self) -> None:
         """Initialize bring-a-friend code field for discounts."""
-        if "bring_friend" not in self.params.get("features", {}):
+        if "bring_friend" not in self.params["features"]:
             return
 
         if self.instance.pk and self.initial["modified"] > 0:
@@ -234,7 +234,7 @@ class RegistrationForm(BaseRegistrationForm):
             registration_counts: Registration count data
 
         """
-        if question.skip(self.instance, self.params.get("features", {})):
+        if question.skip(self.instance, self.params["features"]):
             return
 
         k = self._init_field(question, registration_counts=registration_counts, is_organizer=False)
@@ -249,7 +249,7 @@ class RegistrationForm(BaseRegistrationForm):
             if question.section.description:
                 self.section_descriptions[question.section.name] = question.section.description
 
-        if "reg_que_tickets" in self.params.get("features", {}):
+        if "reg_que_tickets" in self.params["features"]:
             tm = [str(i) for i in question.tickets_map if i is not None]
             if tm:
                 self.tickets_map[k] = tm
@@ -271,7 +271,7 @@ class RegistrationForm(BaseRegistrationForm):
     def init_pay_what(self) -> None:
         """Initialize pay-what-you-want donation field for non-waiting runs."""
         # Skip if pay-what-you-want feature is not enabled
-        if "pay_what_you_want" not in self.params.get("features", {}):
+        if "pay_what_you_want" not in self.params["features"]:
             return
 
         # Skip for waiting runs
@@ -302,7 +302,7 @@ class RegistrationForm(BaseRegistrationForm):
         quota_choices = []
 
         # Check if quota feature is enabled and run is not in waiting status
-        if "reg_quotas" in self.params.get("features", {}) and "waiting" not in self.run_status:
+        if "reg_quotas" in self.params["features"] and "waiting" not in self.run_status:
             # Define labels for different quota options (1-5 quotas)
             quota_labels = [
                 _("Single payment"),
@@ -595,7 +595,7 @@ class RegistrationForm(BaseRegistrationForm):
         run = self.params["run"]
 
         # Check if bring_friend feature is enabled and field exists in form data
-        if "bring_friend" in self.params.get("features", {}) and "bring_friend" in form_data:
+        if "bring_friend" in self.params["features"] and "bring_friend" in form_data:
             cod = form_data["bring_friend"]
 
             # Validate friend code if provided
@@ -724,7 +724,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.init_pay_what(registration_section)
 
         # Initialize character fields if feature is enabled
-        if "character" in self.params.get("features", {}):
+        if "character" in self.params["features"]:
             self.init_character(char_section)
 
         # Initialize organization-specific fields and clean up unused ones
@@ -734,13 +734,13 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             self.delete_field(lbl)
 
         # Control section visibility based on feature flag
-        if "reg_que_sections" not in self.params.get("features", {}):
+        if "reg_que_sections" not in self.params["features"]:
             self.show_sections = True
 
     def init_additionals(self, registration_section: Any) -> None:
         """Initialize additional tickets section if feature is enabled."""
         # Check if additional tickets feature is available
-        if "additional_tickets" not in self.params.get("features", {}):
+        if "additional_tickets" not in self.params["features"]:
             return
 
         # Get max_length from additional_tickets question, default to 5
@@ -764,7 +764,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
     def init_pay_what(self, registration_section: int) -> None:
         """Initialize pay-what-you-want donation field configuration."""
         # Skip initialization if pay-what-you-want feature is not enabled
-        if "pay_what_you_want" not in self.params.get("features", {}):
+        if "pay_what_you_want" not in self.params["features"]:
             # Remove field from form to prevent NULL constraint violations
             self.delete_field("pay_what")
             return
@@ -823,7 +823,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         """
         # Skip if quota feature is not enabled
-        if "reg_quotas" not in self.params.get("features", {}):
+        if "reg_quotas" not in self.params["features"]:
             return
 
         # Define available payment installment options
@@ -869,7 +869,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     def _init_quest_traits(self, char_section: str) -> None:
         """Initialize manual questbuilder assignment in orga registration form editing."""
-        if "questbuilder" not in self.params.get("features", {}):
+        if "questbuilder" not in self.params["features"]:
             return
 
         # Get traits already assigned to other members
@@ -1083,11 +1083,11 @@ class OrgaRegistrationTicketForm(BaseModelForm):
             self.delete_field("tier")
 
         # Remove casting priority field if casting feature is disabled
-        if "casting" not in self.params.get("features", {}):
+        if "casting" not in self.params["features"]:
             self.delete_field("casting_priority")
 
         # Remove giftable field if gift feature is disabled
-        if "gift" not in self.params.get("features", {}):
+        if "gift" not in self.params["features"]:
             self.delete_field("giftable")
 
     @staticmethod
@@ -1195,7 +1195,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
 
         self._init_type()
 
-        if "reg_que_sections" not in self.params.get("features", {}):
+        if "reg_que_sections" not in self.params["features"]:
             self.delete_field("section")
         else:
             self.configure_field_event("section", self.params["event"])
@@ -1205,24 +1205,24 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
             if self.instance and self.instance.pk and self.instance.section:
                 self.initial["section"] = self.instance.section.uuid
 
-        if "reg_que_allowed" not in self.params.get("features", {}):
+        if "reg_que_allowed" not in self.params["features"]:
             self.delete_field("allowed")
         else:
             self.configure_field_event("allowed", self.params["event"])
 
-        if "reg_que_tickets" not in self.params.get("features", {}):
+        if "reg_que_tickets" not in self.params["features"]:
             self.delete_field("tickets")
         else:
             self.configure_field_event("tickets", self.params["event"])
 
-        if "reg_que_faction" not in self.params.get("features", {}):
+        if "reg_que_faction" not in self.params["features"]:
             self.delete_field("factions")
         else:
             self.fields["factions"].choices = [
                 (m.id, str(m)) for m in self.params["run"].event.get_elements(Faction).order_by("number")
             ]
 
-        if "gift" not in self.params.get("features", {}):
+        if "gift" not in self.params["features"]:
             self.delete_field("giftable")
 
         # Set status help
@@ -1262,7 +1262,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
                     continue
 
                 # check the feature is active
-                if choice[0] not in ["ticket"] and choice[0] not in self.params.get("features", {}):
+                if choice[0] not in ["ticket"] and choice[0] not in self.params["features"]:
                     continue
 
             available_choices.append(choice)

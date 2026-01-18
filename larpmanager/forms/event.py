@@ -197,18 +197,18 @@ class OrgaEventForm(BaseModelForm):
         dl = [
             s
             for s in ["visible", "website", "tagline", "where", "authors", "genre", "register_link"]
-            if s not in self.params.get("features", {})
+            if s not in self.params["features"]
         ]
 
         # Initialize campaign parent selection and add to deletion list if disabled
         self.init_campaign(dl)
 
         # Add waiting list configuration field if feature is disabled
-        if "waiting" not in self.params.get("features", {}):
+        if "waiting" not in self.params["features"]:
             dl.append("max_waiting")
 
         # Add filler list configuration field if feature is disabled
-        if "filler" not in self.params.get("features", {}):
+        if "filler" not in self.params["features"]:
             dl.append("max_filler")
 
         # Remove all marked fields from the form
@@ -223,7 +223,7 @@ class OrgaEventForm(BaseModelForm):
             self.fields["parent"].widget.set_exclude(self.instance.pk)
 
         # Remove parent field if campaign feature disabled or no parent options available
-        if "campaign" not in self.params.get("features", {}) or not self.fields["parent"].widget.get_queryset().count():
+        if "campaign" not in self.params["features"] or not self.fields["parent"].widget.get_queryset().count():
             disabled_fields.append("parent")
             return
 
@@ -372,7 +372,7 @@ class OrgaConfigForm(ConfigForm):
 
     def set_config_gallery(self) -> None:
         """Configure gallery settings for event forms."""
-        if "character" not in self.params.get("features", {}):
+        if "character" not in self.params["features"]:
             return
 
         self.set_section("gallery", _("Gallery"))
@@ -387,7 +387,7 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("gallery_hide_signup", ConfigType.BOOL, label, help_text)
 
-        if "character" in self.params.get("features", {}):
+        if "character" in self.params["features"]:
             label = _("Hide unassigned characters")
             help_text = _(
                 "If checked, does not show characters in the gallery who have not been assigned a participant",
@@ -478,7 +478,7 @@ class OrgaConfigForm(ConfigForm):
         Sets up configuration fields for character form behavior including
         visibility options, maximum selections, ticket requirements, and dependencies.
         """
-        if "character" in self.params.get("features", {}):
+        if "character" in self.params["features"]:
             self.set_section("char_form", _("Character form"))
 
             label = _("Hide not available")
@@ -501,13 +501,13 @@ class OrgaConfigForm(ConfigForm):
 
     def set_config_structure(self) -> None:
         """Configure structural event settings including pre-registration, mail server, and cover options."""
-        if "pre_register" in self.params.get("features", {}):
+        if "pre_register" in self.params["features"]:
             self.set_section("pre_reg", _("Pre-registration"))
             field_label = _("Active")
             field_help_text = _("If checked, makes pre-registration for this event available")
             self.add_configs("pre_register_active", ConfigType.BOOL, field_label, field_help_text)
 
-        if "custom_mail" in self.params.get("features", {}):
+        if "custom_mail" in self.params["features"]:
             self.set_section("custom_mail_server", _("Customised mail server"))
             field_help_text = ""
 
@@ -526,7 +526,7 @@ class OrgaConfigForm(ConfigForm):
             field_label = _("Password of account")
             self.add_configs("mail_server_host_password", ConfigType.CHAR, field_label, field_help_text)
 
-        if "cover" in self.params.get("features", {}):
+        if "cover" in self.params["features"]:
             self.set_section("cover", _("Character cover"))
             field_label = _("Desalt thumbnail")
             field_help_text = _("If checked, shows the original image in the cover, not the thumbnail version")
@@ -538,7 +538,7 @@ class OrgaConfigForm(ConfigForm):
         Sets up background writing features, character story elements,
         and writing deadline configurations for character development.
         """
-        if "character" in self.params.get("features", {}):
+        if "character" in self.params["features"]:
             self.set_section("writing", _("Writing"))
 
             config_label = _("Title")
@@ -567,7 +567,7 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_field_visibility", ConfigType.BOOL, config_label, config_help_text)
 
-            if "relationships" in self.params.get("features", {}):
+            if "relationships" in self.params["features"]:
                 config_label = _("Relationships max length")
                 config_help_text = _("Set maximum length on character relationships (default 10000 characters)")
                 self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
@@ -613,16 +613,16 @@ class OrgaConfigForm(ConfigForm):
         and player-managed character creation settings.
 
         The configuration sections are conditionally created based on available features
-        in self.params.get("features", {}). Each section contains relevant boolean, integer,
+        in self.params["features"]. Each section contains relevant boolean, integer,
         and other configuration options with appropriate labels and help text.
 
         Note:
-            Requires self.params.get("features", {}) to contain feature flags and access to
+            Requires self.params["features"] to contain feature flags and access to
             self.set_section() and self.add_configs() methods.
 
         """
         # Configure campaign-related settings if campaign feature is enabled
-        if "campaign" in self.params.get("features", {}):
+        if "campaign" in self.params["features"]:
             self.set_section("campaign", _("Campaign"))
             independent_factions_label = _("Independent factions")
             independent_factions_help_text = _("If checked, do not use the parent event's factions")
@@ -634,7 +634,7 @@ class OrgaConfigForm(ConfigForm):
             )
 
         # Configure experience points system if px feature is enabled
-        if "px" in self.params.get("features", {}):
+        if "px" in self.params["features"]:
             self.set_section("px", _("Experience points"))
 
             # Player selection configuration - allows participants to choose abilities
@@ -684,7 +684,7 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("px_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
 
         # Configure player character editor if user_character feature is enabled
-        if "user_character" in self.params.get("features", {}):
+        if "user_character" in self.params["features"]:
             self.set_section("user_character", _("Player editor"))
 
             # Maximum character limit configuration
@@ -718,7 +718,7 @@ class OrgaConfigForm(ConfigForm):
 
     def set_config_custom(self) -> None:
         """Configure character customization form fields for event settings."""
-        if "custom_character" in self.params.get("features", {}):
+        if "custom_character" in self.params["features"]:
             self.set_section("custom_character", _("Character customisation"))
 
             character_name_label = _("Name")
@@ -782,7 +782,7 @@ class OrgaConfigForm(ConfigForm):
         Sets up casting preferences, assignments, and display options
         when the casting feature is enabled.
         """
-        if "casting" in self.params.get("features", {}):
+        if "casting" in self.params["features"]:
             self.set_section("casting", _("Casting"))
 
             label = _("Minimum preferences")
@@ -840,12 +840,12 @@ class OrgaConfigForm(ConfigForm):
         three main feature areas: payment settings, token/credit controls,
         and bring-a-friend discount system.
 
-        The method checks for specific features in self.params.get("features", {})
+        The method checks for specific features in self.params["features"]
         and adds corresponding configuration sections with their respective
         settings.
         """
         # Configure payment-related settings if payment feature is enabled
-        if "payment" in self.params.get("features", {}):
+        if "payment" in self.params["features"]:
             self.set_section("payment", _("Payments"))
 
             # Payment alert configuration - days before deadline to notify users
@@ -881,7 +881,7 @@ class OrgaConfigForm(ConfigForm):
                 disable_provisional_help_text,
             )
 
-        if "tokens" in self.params.get("features", {}):
+        if "tokens" in self.params["features"]:
             self.set_section("tokens", _("Tokens"))
 
             # Token disabling option for this specific event
@@ -889,7 +889,7 @@ class OrgaConfigForm(ConfigForm):
             disable_tokens_help_text = _("If checked, no tokens will be used in the entries of this event")
             self.add_configs("tokens_disable", ConfigType.BOOL, disable_tokens_label, disable_tokens_help_text)
 
-        if "credits" in self.params.get("features", {}):
+        if "credits" in self.params["features"]:
             self.set_section("credits", _("Credits"))
 
             # Credit disabling option for this specific event
@@ -903,7 +903,7 @@ class OrgaConfigForm(ConfigForm):
             )
 
         # Configure bring-a-friend referral discount system
-        if "bring_friend" in self.params.get("features", {}):
+        if "bring_friend" in self.params["features"]:
             self.set_section("bring_friend", _("Bring a friend"))
 
             # Discount amount for the referring participant
@@ -971,7 +971,7 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("ticket_seller", ConfigType.BOOL, seller_ticket_label, seller_ticket_help_text)
 
         # Configure reduced/patron tickets if feature is enabled
-        if "reduced" in self.params.get("features", {}):
+        if "reduced" in self.params["features"]:
             self.set_section("reduced", _("Patron / Reduced"))
             reduced_ratio_label = "Ratio"
             reduced_ratio_help_text = _(
@@ -982,7 +982,7 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("reduced_ratio", ConfigType.INT, reduced_ratio_label, reduced_ratio_help_text)
 
         # Configure filler ticket options if feature is enabled
-        if "filler" in self.params.get("features", {}):
+        if "filler" in self.params["features"]:
             self.set_section("filler", _("Ticket Filler"))
             filler_free_registration_label = _("Free registration")
             filler_free_registration_help_text = _(
@@ -997,7 +997,7 @@ class OrgaConfigForm(ConfigForm):
             )
 
         # Configure lottery system if feature is enabled
-        if "lottery" in self.params.get("features", {}):
+        if "lottery" in self.params["features"]:
             self.set_section("lottery", _("Lottery"))
 
             # Set number of lottery draws
@@ -1053,7 +1053,7 @@ class OrgaAppearanceForm(BaseModelCssForm):
 
         # Remove carousel fields if feature is disabled
         dl = []
-        if "carousel" not in self.params.get("features", {}):
+        if "carousel" not in self.params["features"]:
             dl.append("carousel_text")
             dl.append("carousel_img")
         else:
@@ -1124,7 +1124,7 @@ class OrgaEventTextForm(BaseModelForm):
         ch = EventTextType.choices
         delete_choice = []
 
-        if "character" not in self.params.get("features", {}):
+        if "character" not in self.params["features"]:
             delete_choice.append(EventTextType.INTRO)
 
         if not get_event_config(
@@ -1311,7 +1311,7 @@ class OrgaRunForm(ConfigForm):
             [
                 s
                 for s in ["registration_open", "registration_secret"]
-                if not self.instance.pk or not self.instance.event or s not in self.params.get("features", {})
+                if not self.instance.pk or not self.instance.event or s not in self.params["features"]
             ]
         )
 
@@ -1326,7 +1326,7 @@ class OrgaRunForm(ConfigForm):
         Sets up various event features and their configuration options
         based on enabled features for character management.
         """
-        if "character" not in self.params.get("features", {}):
+        if "character" not in self.params["features"]:
             return
 
         if not get_event_config(
@@ -1379,7 +1379,7 @@ class OrgaRunForm(ConfigForm):
 
         additional_choices = []
         for element_key, element_display_name in additional_elements_display.items():
-            if self.instance.pk and element_key in self.params.get("features", {}):
+            if self.instance.pk and element_key in self.params["features"]:
                 additional_choices.append((element_key, element_display_name))
         if additional_choices:
             help_text = _("Selected elements will be shown to participants")
@@ -1444,7 +1444,7 @@ class ExeEventForm(OrgaEventForm):
         """Initialize ExeEventForm with template event selection."""
         super().__init__(*args, **kwargs)
 
-        if "template" in self.params.get("features", {}) and not self.instance.pk:
+        if "template" in self.params["features"] and not self.instance.pk:
             qs = Event.objects.filter(association_id=self.params["association_id"], template=True)
             self.fields["template_event"] = forms.ModelChoiceField(
                 required=False,
@@ -1474,11 +1474,7 @@ class ExeEventForm(OrgaEventForm):
         instance: Event = super().save(commit=False)
 
         # Copy template event data if template feature enabled and event is new
-        if (
-            "template" in self.params.get("features", {})
-            and not self.instance.pk
-            and self.cleaned_data.get("template_event")
-        ):
+        if "template" in self.params["features"] and not self.instance.pk and self.cleaned_data.get("template_event"):
             event_id = self.cleaned_data["template_event"].id
             event = Event.objects.get(pk=event_id)
 
@@ -1758,7 +1754,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
         """
         # Get the writing feature mapping and check if feature is available
         feature_mapping = _get_writing_mapping()
-        if feature_mapping.get(writing_section[0]) not in self.params.get("features", {}):
+        if feature_mapping.get(writing_section[0]) not in self.params["features"]:
             return
 
         # Verify writing fields exist for this section
@@ -1803,7 +1799,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             ]
 
             # Add faction field if faction feature is enabled
-            if "faction" in self.params.get("features", {}):
+            if "faction" in self.params["features"]:
                 available_questions = self.params["event"].get_elements(WritingQuestion)
                 faction_question = available_questions.get(
                     applicable=QuestionApplicable.CHARACTER,
@@ -1864,6 +1860,6 @@ class OrgaPreferencesForm(ExePreferencesForm):
             field_id = feature_field_definition[1]
             field_label = feature_field_definition[2]
 
-            if feature and feature not in self.params.get("features", {}):
+            if feature and feature not in self.params["features"]:
                 continue
             extra_fields.append((field_id, field_label))

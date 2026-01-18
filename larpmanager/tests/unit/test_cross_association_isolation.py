@@ -173,6 +173,7 @@ class TestCrossAssociationIsolation:
                 "run": data["run_a"],
                 "event": data["event_a"],
                 "association_id": data["assoc_a"].id,
+                "features": {}
             },
         )
 

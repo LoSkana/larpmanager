@@ -241,7 +241,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         Sets up a multiple choice field for selectable factions if the faction
         feature is enabled for the event.
         """
-        if "faction" not in self.params.get("features", {}):
+        if "faction" not in self.params["features"]:
             return
 
         queryset = self.params["run"].event.get_elements(Faction).filter(selectable=True)
@@ -385,7 +385,7 @@ class OrgaCharacterForm(CharacterForm):
 
         self._init_custom_fields()
 
-        if "user_character" in self.params.get("features", {}):
+        if "user_character" in self.params["features"]:
             self.configure_field_association("player", self.params["association_id"])
         else:
             self.delete_field("player")
@@ -404,7 +404,7 @@ class OrgaCharacterForm(CharacterForm):
             self.delete_field("mirror")
 
         # Add active field for campaign feature
-        if "campaign" in self.params.get("features", {}):
+        if "campaign" in self.params["features"]:
             self.fields["active"] = forms.BooleanField(
                 required=False,
                 label=_("Active"),
@@ -426,7 +426,7 @@ class OrgaCharacterForm(CharacterForm):
         Sets up plot selection options and plot-related character
         attributes for story-driven character development.
         """
-        if "plot" not in self.params.get("features", {}):
+        if "plot" not in self.params["features"]:
             return
 
         self.fields["plots"] = forms.ModelMultipleChoiceField(
@@ -485,7 +485,7 @@ class OrgaCharacterForm(CharacterForm):
             instance: Character instance to save plots for
 
         """
-        if "plot" not in self.params.get("features", {}):
+        if "plot" not in self.params["features"]:
             return
 
         # Only process plots if the plots field is present in the form
@@ -517,7 +517,7 @@ class OrgaCharacterForm(CharacterForm):
 
     def _init_px(self) -> None:
         """Initialize PX (ability/delivery) form fields if PX feature is enabled."""
-        if "px" not in self.params.get("features", {}):
+        if "px" not in self.params["features"]:
             return
 
         # px ability
@@ -545,7 +545,7 @@ class OrgaCharacterForm(CharacterForm):
     def _save_px(self, instance: Any) -> None:
         """Save PX-related data to the instance if PX feature is enabled."""
         # Check if PX feature is available
-        if "px" not in self.params.get("features", {}):
+        if "px" not in self.params["features"]:
             return
 
         # Set ability list if present in cleaned data
@@ -562,7 +562,7 @@ class OrgaCharacterForm(CharacterForm):
         Sets up faction choice fields with proper widget configuration
         when faction feature is enabled.
         """
-        if "faction" not in self.params.get("features", {}):
+        if "faction" not in self.params["features"]:
             return
 
         queryset = self.params["run"].event.get_elements(Faction)
@@ -592,7 +592,7 @@ class OrgaCharacterForm(CharacterForm):
             instance: Character instance being saved
 
         """
-        if "relationships" not in self.params.get("features", {}):
+        if "relationships" not in self.params["features"]:
             return
 
         uuid_to_id = dict(self.params["event"].get_elements(Character).values_list("uuid", "id"))
@@ -693,7 +693,7 @@ class OrgaCharacterForm(CharacterForm):
     def _save_active(self, instance: Any) -> None:
         """Save active status to CharacterConfig if campaign feature is enabled."""
         # Check if campaign feature is available
-        if "campaign" not in self.params.get("features", {}):
+        if "campaign" not in self.params["features"]:
             return
 
         # Only process if active field is present in cleaned data
@@ -743,7 +743,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
         self._init_type()
 
         if (
-            "user_character" not in self.params.get("features", {})
+            "user_character" not in self.params["features"]
             or self.params["writing_typ"] != QuestionApplicable.CHARACTER
         ):
             self.delete_field("status")
@@ -763,7 +763,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
                 if choice.value in visible_choices
             )
 
-        if "print_pdf" not in self.params.get("features", {}) or self.params["writing_typ"] == QuestionApplicable.PLOT:
+        if "print_pdf" not in self.params["features"] or self.params["writing_typ"] == QuestionApplicable.PLOT:
             self.delete_field("printable")
 
         self._init_editable()
@@ -833,7 +833,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
                     continue
 
                 # Check feature activation for non-default types
-                if choice[0] not in ["name", "teaser", "text"] and choice[0] not in self.params.get("features", {}):
+                if choice[0] not in ["name", "teaser", "text"] and choice[0] not in self.params["features"]:
                     continue
 
             # Handle character type 'c' - requires 'px_rules' config
@@ -909,15 +909,15 @@ class OrgaWritingOptionForm(BaseModelForm):
         """
         super().__init__(*args, **kwargs)
 
-        if "wri_que_max" not in self.params.get("features", {}):
+        if "wri_que_max" not in self.params["features"]:
             self.delete_field("max_available")
 
-        if "wri_que_tickets" not in self.params.get("features", {}):
+        if "wri_que_tickets" not in self.params["features"]:
             self.delete_field("tickets")
         else:
             self.configure_field_event("tickets", self.params["event"])
 
-        if "wri_que_requirements" not in self.params.get("features", {}):
+        if "wri_que_requirements" not in self.params["features"]:
             self.delete_field("requirements")
         else:
             self.configure_field_event("requirements", self.params["event"])
