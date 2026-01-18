@@ -43,7 +43,7 @@ from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.config import get_association_config
-from larpmanager.forms.base import BaseAccForm, BaseForm, BaseModelForm
+from larpmanager.forms.base import BaseAccForm, BaseForm, BaseModelForm, FormMixin
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     AssociationMemberS2WidgetMulti,
@@ -109,7 +109,7 @@ class MyAuthForm(AuthenticationForm):
         self.fields["password"].label = False
 
 
-class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
+class MyRegistrationFormUniqueEmail(FormMixin, RegistrationFormUniqueEmail):
     """Custom registration form with unique email validation and GDPR compliance."""
 
     # noinspection PyUnresolvedReferences, PyProtectedMember

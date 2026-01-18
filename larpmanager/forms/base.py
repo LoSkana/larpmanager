@@ -77,6 +77,11 @@ class FormMixin:
         field.widget.set_run(run)
         field.queryset = field.widget.get_queryset()
 
+    def delete_field(self, field_key: str) -> None:
+        """Remove a field from the form if it exists."""
+        if field_key in self.fields:
+            del self.fields[field_key]
+
 
 class BaseForm(FormMixin, forms.Form):
     """Base for all non-models form."""
@@ -400,11 +405,6 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         # Add new relationships that were selected
         for ch in new - old:
             attr.add(ch)
-
-    def delete_field(self, field_key: str) -> None:
-        """Remove a field from the form if it exists."""
-        if field_key in self.fields:
-            del self.fields[field_key]
 
 
 class BaseModelFormRun(BaseModelForm):
