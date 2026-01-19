@@ -21,10 +21,12 @@ import contextlib
 import os
 import secrets
 import sys
+import time
 from itertools import chain
 from typing import Any, ClassVar
 
 from django.conf import settings as conf_settings
+from django.core.cache import cache
 from django.core.validators import RegexValidator
 from django.db import IntegrityError, models, transaction
 from django.urls import reverse
@@ -319,26 +321,55 @@ class PublisherApiKey(BaseModel):
         return f"{self.name} ({'Active' if self.active else 'Inactive'})"
 
 
-def auto_assign_sequential_numbers(instance: Any) -> None:
-    """Auto-populate number and order fields for model instances."""
+def auto_assign_sequential_numbers(instance: Any) -> None:  # noqa: C901
+    """Auto-populate number and order fields for model instances using cache-based locking."""
     for field_name in ["number", "order"]:
         if hasattr(instance, field_name) and not getattr(instance, field_name):
             queryset = None
+            scope_id = None
             if hasattr(instance, "event") and instance.event:
                 queryset = instance.__class__.objects.filter(event=instance.event)
+                scope_id = f"event_{instance.event.id}"
             if hasattr(instance, "association") and instance.association:
                 queryset = instance.__class__.objects.filter(association=instance.association)
+                scope_id = f"assoc_{instance.association.id}"
             if hasattr(instance, "character") and instance.character:
                 queryset = instance.__class__.objects.filter(character=instance.character)
-            if queryset is not None:
-                # Use select_for_update() to lock rows and prevent race conditions
-                with transaction.atomic():
-                    max_instance = queryset.select_for_update().order_by(f"-{field_name}").first()
-                    if not max_instance:
-                        setattr(instance, field_name, 1)
-                    else:
-                        max_value = getattr(max_instance, field_name)
-                        setattr(instance, field_name, max_value + 1)
+                scope_id = f"char_{instance.character.id}"
+
+            if queryset is not None and scope_id is not None:
+                # Create a unique lock key for this model + scope combination
+                model_name = instance.__class__.__name__
+                lock_key = f"auto_number_lock_{model_name}_{field_name}_{scope_id}"
+
+                # Try to acquire lock with retries (max 3 seconds total)
+                max_retries = 30
+                retry_delay = 0.1  # 100ms
+                lock_acquired = False
+
+                for _ in range(max_retries):
+                    # cache.add() is atomic - returns True only if key doesn't exist
+                    if cache.add(lock_key, "locked", timeout=10):
+                        lock_acquired = True
+                        break
+                    time.sleep(retry_delay)
+
+                if not lock_acquired:
+                    # Fallback: force set the lock and continue (prevents indefinite blocking)
+                    cache.set(lock_key, "locked", timeout=10)
+
+                try:
+                    # Now safely query for max number within transaction
+                    with transaction.atomic():
+                        max_instance = queryset.select_for_update().order_by(f"-{field_name}").first()
+                        if not max_instance:
+                            setattr(instance, field_name, 1)
+                        else:
+                            max_value = getattr(max_instance, field_name)
+                            setattr(instance, field_name, max_value + 1)
+                finally:
+                    # Always release the lock
+                    cache.delete(lock_key)
 
 
 def auto_set_uuid(instance: Any) -> None:

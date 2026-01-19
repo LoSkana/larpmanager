@@ -34,7 +34,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -341,15 +341,7 @@ def character_form(
             # Set appropriate success message based on operation type
             success_message = _("Informations saved") + "!" if instance else _("New character created") + "!"
 
-            # Save character data within atomic transaction
-            with transaction.atomic():
-                character = form.save(commit=False)
-                # Update character with additional processing and context
-                success_message = _update_character(context, character, form, success_message)
-                character.save()
-
-                # Handle character assignment logic
-                check_assign_character(context)
+            character, success_message = _save_character(context, form, success_message)
 
             # Display success message to user
             if success_message:
@@ -380,6 +372,38 @@ def character_form(
     )
 
     return render(request, "larpmanager/event/character/edit.html", context)
+
+
+def _save_character(context: dict, form: CharacterForm, success_message: str) -> str:
+    """Saves a character with retry behaviour."""
+    # Retry logic to handle race conditions in character number assignment
+    max_retries = 3
+    for retry_attempt in range(max_retries):
+        try:
+            # Save character data within atomic transaction
+            with transaction.atomic():
+                character = form.save(commit=False)
+                # Update character with additional processing and context
+                success_message = _update_character(context, character, form, success_message)
+                character.save()
+
+                # Handle character assignment logic
+                check_assign_character(context)
+            # Success - break out of retry loop
+            break
+        except IntegrityError as e:
+            # Check if this is a duplicate number error
+            if "unique_character_without_optional" in str(e) and retry_attempt < max_retries - 1:
+                # Reset the number field to trigger re-assignment on next attempt
+                if hasattr(character, "number"):
+                    character.number = None
+                # Small delay before retry to avoid immediate collision
+                time.sleep(0.1 * (retry_attempt + 1))  # Exponential backoff
+                continue
+            # If it's a different error or we've exhausted retries, re-raise
+            raise
+
+    return character, success_message
 
 
 def _update_character(context: dict, character: Any, form: BaseModelForm, message: str) -> str:
@@ -610,6 +634,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
     context["assigned"] = RegistrationCharacterRel.objects.filter(registration_id=context["registration"].id).count()
     return render(request, "larpmanager/event/character/list.html", context)
 
+
 @login_required
 def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Return JSON list of player's characters for an event.
@@ -630,6 +655,7 @@ def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
     return_list = [{"uuid": el.uuid, "name": el.name} for el in context["list"]]
 
     return JsonResponse(return_list, safe=False)
+
 
 @login_required
 def character_create(request: HttpRequest, event_slug: str) -> Any:
@@ -781,6 +807,7 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
     # Render the abilities template with all context data
     return render(request, "larpmanager/event/character/abilities.html", context)
 
+
 @login_required
 def character_abilities_json(request: HttpRequest, event_slug: str, character_uuid: str) -> JsonResponse:
     """Return JSON object of a character's abilities, organized by type.
@@ -806,12 +833,15 @@ def character_abilities_json(request: HttpRequest, event_slug: str, character_uu
     for el in get_current_ability_px(context["character"]):
         # Create type list if it doesn't exist
         if el.typ.uuid not in context["sheet_abilities"]:
-            context["sheet_abilities"][el.typ.uuid] = {"type_name":el.typ.name, "type_abilities": []}
+            context["sheet_abilities"][el.typ.uuid] = {"type_name": el.typ.name, "type_abilities": []}
         # Add ability to the type's list
         context["sheet_abilities"][el.typ.uuid]["type_abilities"].append({el.uuid: el.name})
 
     # Return the abilities object with collected context data
-    return JsonResponse({"uuid": context["char"]["uuid"], "name": context["char"]["name"], "abilities": context["sheet_abilities"]})
+    return JsonResponse(
+        {"uuid": context["char"]["uuid"], "name": context["char"]["name"], "abilities": context["sheet_abilities"]}
+    )
+
 
 def check_char_abilities(request: HttpRequest, event_slug: str, character_uuid: str) -> dict:
     """Check if user can select abilities for a character in an event.
@@ -843,6 +873,7 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_uuid: 
     get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     return context
+
 
 @login_required
 def character_inventory_json(request: HttpRequest, event_slug: str, character_uuid: str) -> JsonResponse:
@@ -878,14 +909,17 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
     inventories = {}
     for inv in context["character"].inventory.all():
         if inv.uuid not in inventories:
-            inventories[inv.uuid] = {"name":inv.name, "pools":{}}
+            inventories[inv.uuid] = {"name": inv.name, "pools": {}}
         pools = inv.get_pool_balances()
         for pool in pools:
             if pool["type"].uuid not in inventories[inv.uuid]["pools"]:
-                inventories[inv.uuid]["pools"][pool["type"].uuid] = {"name":pool["type"].name,"amount":0}
+                inventories[inv.uuid]["pools"][pool["type"].uuid] = {"name": pool["type"].name, "amount": 0}
             inventories[inv.uuid]["pools"][pool["type"].uuid]["amount"] += pool["balance"].amount
 
-    return JsonResponse({"uuid": context["character"].uuid, "name": context["character"].name, "inventories": inventories})
+    return JsonResponse(
+        {"uuid": context["character"].uuid, "name": context["character"].name, "inventories": inventories}
+    )
+
 
 @login_required
 def character_abilities_del(request: HttpRequest, event_slug: str, character_uuid: str, ability_uuid: str) -> Any:
