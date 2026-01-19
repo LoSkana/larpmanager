@@ -211,7 +211,18 @@ def my_send_mail_bkg(email_pk: Any) -> None:
         logger.info("Email already sent!")
         return
 
-    my_send_simple_mail(email.subj, email.body, email.recipient, email.association_id, email.run_id, email.reply_to)
+    body = email.body
+    if email.association_id:
+        # Add organization signature if available
+        signature = get_association_text(email.association_id, AssociationTextType.SIGNATURE, email.language_code)
+        if signature:
+            body += signature
+
+        # Append unsubscribe footer
+        association = Association.objects.get(pk=email.association_id)
+        body += add_unsubscribe_body(association)
+
+    my_send_simple_mail(email.subj, body, email.recipient, email.association_id, email.run_id, email.reply_to)
 
     email.sent = timezone.now()
     email.save()
@@ -419,7 +430,7 @@ def add_unsubscribe_body(association: Any) -> Any:
     return html_footer
 
 
-def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachment handling
+def my_send_mail(
     subject: str,
     body: str,
     recipient: str | Member,
@@ -453,7 +464,7 @@ def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachm
     # Clean up duplicate spaces in subject line
     subject = subject.replace("  ", " ")
 
-    # Determine language for translations (extract before processing body)
+    # Determine language for translations
     language_code = None
     if isinstance(recipient, Member):
         language_code = recipient.language
@@ -481,15 +492,6 @@ def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachm
         elif hasattr(context_object, "event_id") and context_object.event_id:
             association_id = context_object.event.association_id
 
-        # Add organization signature if available
-        if association_id:
-            signature = get_association_text(association_id, AssociationTextType.SIGNATURE, language_code)
-            if signature:
-                body += signature
-
-    # Append unsubscribe footer based on context
-    body += add_unsubscribe_body(context_object)
-
     # Convert Member instance to email string if needed
     if isinstance(recipient, Member):
         recipient = recipient.email
@@ -506,6 +508,7 @@ def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachm
         subj=subject_string,
         body=body_string,
         reply_to=reply_to,
+        language_code=language_code,
     )
 
     # Queue email for background processing

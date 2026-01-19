@@ -820,6 +820,8 @@ class Email(UuidMixin, BaseModel):
 
     search = models.CharField(max_length=500, blank=True)
 
+    language_code = models.CharField(max_length=50, blank=True, null=True)
+
     def __str__(self) -> str:
         """Return string representation."""
         return f"{self.recipient} - {self.subj}"
