@@ -8392,4 +8392,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0129_alter_emailrecipient_language_code
+-- LARPMANAGER_SCHEMA_VERSION: 0128_rename_email_to_emailcontent
