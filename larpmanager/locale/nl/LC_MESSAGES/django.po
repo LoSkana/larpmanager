@@ -879,6 +879,9 @@ msgstr "Verzoek"
 msgid "Section"
 msgstr "Sectie"
 
+msgid "Sent At"
+msgstr "Verzonden op"
+
 msgid "Session"
 msgstr "Sessie"
 
@@ -1196,6 +1199,9 @@ msgstr "Registreer"
 
 msgid "Reminder"
 msgstr "Herinnering"
+
+msgid "Reply To"
+msgstr "Antwoord op"
 
 msgid "Resource"
 msgstr "Bron"
@@ -2221,6 +2227,9 @@ msgstr "Type document"
 msgid "Dynamic rates"
 msgstr "Dynamische tarieven"
 
+msgid "Email Content"
+msgstr "Inhoud e-mail"
+
 msgid "Event balance"
 msgstr "Evenement balans"
 
@@ -2250,6 +2259,9 @@ msgstr "Ongeldig token"
 
 msgid "Invalid token"
 msgstr "Ongeldig token"
+
+msgid "Language Code"
+msgstr "Taalcode"
 
 msgid "Manage albums"
 msgstr "Albums beheren"

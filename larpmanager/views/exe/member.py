@@ -68,7 +68,7 @@ from larpmanager.models.member import (
     Vote,
     get_user_membership,
 )
-from larpmanager.models.miscellanea import Email, HelpQuestion
+from larpmanager.models.miscellanea import EmailRecipient, HelpQuestion
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import (
@@ -955,6 +955,7 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
     # Define table columns for the email archive display
     context.update(
         {
+            "selrel": ("email_content"),
             "fields": [
                 ("run", _("Run")),
                 ("recipient", _("Recipient")),
@@ -973,8 +974,8 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
         },
     )
 
-    # Return paginated view of Email objects
-    return exe_paginate(request, context, Email, "larpmanager/exe/users/archive_mail.html", "exe_read_mail")
+    # Return paginated view of EmailRecipient objects
+    return exe_paginate(request, context, EmailRecipient, "larpmanager/exe/users/archive_mail.html", "exe_read_mail")
 
 
 @login_required

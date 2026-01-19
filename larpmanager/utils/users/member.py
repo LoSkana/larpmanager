@@ -29,7 +29,7 @@ from django.http import Http404
 from django.utils import timezone
 
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus, NotificationQueue
-from larpmanager.models.miscellanea import Email
+from larpmanager.models.miscellanea import EmailRecipient
 from larpmanager.utils.core.common import get_object_uuid
 
 if TYPE_CHECKING:
@@ -189,36 +189,36 @@ def assign_badge(member: Member, badge_code: str) -> None:
         logger.exception("Failed to assign badge %s to member %s", badge_code, member)
 
 
-def get_mail(context: dict, email_uuid: str) -> Email:
-    """Retrieve an email object with proper authorization checks.
+def get_mail(context: dict, email_uuid: str) -> EmailRecipient:
+    """Retrieve an email recipient object with proper authorization checks.
 
     Args:
         context: Context dictionary that may contain run information
-        email_uuid: UUID of the email to retrieve
+        email_uuid: UUID of the email recipient to retrieve
 
     Returns:
-        Email: The requested email object if authorized
+        EmailRecipient: The requested email recipient object if authorized
 
     Raises:
         Http404: If email not found, belongs to different association,
                 or belongs to different run when run context is provided
 
     """
-    # Attempt to retrieve the email by primary key
-    email = get_object_uuid(Email, email_uuid)
+    # Attempt to retrieve the email recipient by UUID
+    email_recipient = get_object_uuid(EmailRecipient, email_uuid)
 
     # Verify email belongs to the requesting association
-    if email.association_id != context["association_id"]:
+    if email_recipient.email_content.association_id != context["association_id"]:
         msg = "not your association"
         raise Http404(msg)
 
     # Check run-specific authorization if run context is provided
     run = context.get("run")
-    if run and email.run_id != run.id:
+    if run and email_recipient.email_content.run_id != run.id:
         msg = "not your run"
         raise Http404(msg)
 
-    return email
+    return email_recipient
 
 
 def create_member_profile_for_user(user: User, *, is_newly_created: bool) -> None:
