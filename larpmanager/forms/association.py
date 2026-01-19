@@ -448,8 +448,15 @@ class ExeConfigForm(ConfigForm):
         """Configure email notification preferences."""
         self.set_section("email", _("Email notifications"))
 
-        # Configure carbon copy setting (only if main_mail exists)
+        # Configure digest notifications carbon copy setting (only if main_mail exists)
         if self.instance.main_mail:
+            digest_label = _("Notifications digest")
+            digest_help_text = _(
+                "If checked: receive a single daily summary email instead of immediate notifications "
+                "for registrations, payments, and invoice approvals"
+            )
+            self.add_configs("mail_exe_digest", ConfigType.BOOL, digest_label, digest_help_text)
+
             carbon_copy_label = _("Carbon copy")
             carbon_copy_help_text = _("If checked: Sends the main mail a copy of all mails sent to participants")
             self.add_configs("mail_cc", ConfigType.BOOL, carbon_copy_label, carbon_copy_help_text)

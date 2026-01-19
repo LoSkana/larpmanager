@@ -338,6 +338,14 @@ msgstr ""
 msgid "Email notifications"
 msgstr ""
 
+msgid "Notifications digest"
+msgstr ""
+
+msgid ""
+"If checked: receive a single daily summary email instead of immediate "
+"notifications for registrations, payments, and invoice approvals"
+msgstr ""
+
 msgid "Carbon copy"
 msgstr ""
 
@@ -761,14 +769,6 @@ msgid "Collapse sidebar"
 msgstr ""
 
 msgid "If checked: collpase sidebars links, and expand on mouse hover"
-msgstr ""
-
-msgid "Notifications digest"
-msgstr ""
-
-msgid ""
-"If checked: receive a single daily summary email instead of immediate "
-"notifications for registrations, payments, and invoice approvals"
 msgstr ""
 
 msgid "Select a valid choice. That choice is not one of the available choices."
