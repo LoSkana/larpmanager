@@ -964,7 +964,7 @@ def accounting_payed(request: HttpRequest, registration_uuid: str = "0") -> Http
 
 
 @login_required
-def accounting_submit(request: HttpRequest, payment_method: str, redirect_path: str) -> HttpResponse:
+def accounting_submit(request: HttpRequest, payment_method: str, invoice_uuid: str, redirect_path: str) -> HttpResponse:
     """Handle payment submission and invoice upload for user accounts.
 
     Processes different payment types (wire transfer, PayPal, any) and handles
@@ -973,6 +973,7 @@ def accounting_submit(request: HttpRequest, payment_method: str, redirect_path: 
     Args:
         request: The HTTP request object containing POST data and files
         payment_method: Payment submission type ('wire', 'paypal_nf', or 'any')
+        invoice_uuid: Invoice UUID from URL
         redirect_path: Redirect path for error cases
 
     Returns:
@@ -1006,9 +1007,9 @@ def accounting_submit(request: HttpRequest, payment_method: str, redirect_path: 
         messages.error(request, mes)
         return redirect("/" + redirect_path)
 
-    # Retrieve the payment invoice using form data
+    # Retrieve the payment invoice using UUID from URL
     try:
-        inv = PaymentInvoice.objects.get(cod=form.cleaned_data["cod"], association_id=context["association_id"])
+        inv = PaymentInvoice.objects.get(uuid=invoice_uuid, association_id=context["association_id"])
     except ObjectDoesNotExist:
         messages.error(request, _("Error processing payment, contact us"))
         return redirect("/" + redirect_path)

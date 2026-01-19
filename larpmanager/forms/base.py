@@ -44,6 +44,7 @@ from larpmanager.models.form import (
     WritingQuestionType,
     get_writing_max_length,
 )
+from larpmanager.models.registration import RegistrationTicket
 from larpmanager.models.utils import generate_id, get_attr, strip_tags
 from larpmanager.templatetags.show_tags import hex_to_rgb
 
@@ -75,6 +76,11 @@ class FormMixin:
         field = self.fields[field_name]
         field.widget.set_run(run)
         field.queryset = field.widget.get_queryset()
+
+    def delete_field(self, field_key: str) -> None:
+        """Remove a field from the form if it exists."""
+        if field_key in self.fields:
+            del self.fields[field_key]
 
 
 class BaseForm(FormMixin, forms.Form):
@@ -215,14 +221,10 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         # Handle field visibility based on number of available runs
         if len(available_runs) <= 1:
-            if self.instance.pk:
-                # For existing instances, remove field entirely
-                self.delete_field("run")
-            else:
-                # For new instances, hide the field
-                self.fields["run"].widget = forms.HiddenInput()
-                # Set initial value to current run
-                self.initial["run"] = self.params["run"].uuid
+            # For both existing and new instances, remove field entirely
+            self.delete_field("run")
+            # Store the run value for clean_run()
+            self._auto_run_value = self.params["run"]
         else:
             # Multiple runs available
             self.fields["run"] = forms.ChoiceField(
@@ -252,15 +254,20 @@ class BaseModelForm(FormMixin, forms.ModelForm):
             return None
 
         # If it's already a Run instance, return it
-        if isinstance(run_value, Run):
-            return run_value
+        if not isinstance(run_value, Run):
+            # Otherwise, it's a UUID (from ChoiceField), convert to Run instance
+            try:
+                run_value = Run.objects.select_related("event").get(uuid=run_value)
+            except ObjectDoesNotExist as err:
+                msg = _("Select a valid choice. That choice is not one of the available choices.")
+                raise ValidationError(msg) from err
 
-        # Otherwise, it's a UUID (from ChoiceField), convert to Run instance
-        try:
-            return Run.objects.get(uuid=run_value)
-        except ObjectDoesNotExist as err:
-            msg = _("Select a valid choice. That choice is not one of the available choices.")
-            raise ValidationError(msg) from err
+        # Validate run belongs to current association
+        if "event" in self.params and run_value.event.association_id != self.params["event"].association_id:
+            msg = _("Selected event does not belong to this organization")
+            raise ValidationError(msg)
+
+        return run_value
 
     def clean_event(self) -> Event:
         """Return the appropriate event based on form configuration.
@@ -342,20 +349,13 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         return field_value
 
     def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
-        """Save form instance with custom field handling.
+        """Save form instance with custom field handling."""
+        # Handle auto run
+        if hasattr(self, "_auto_run_value"):
+            self.instance.run = self._auto_run_value
 
-        Args:
-            commit: Whether to save to database immediately. Defaults to True.
-
-        Returns:
-            The saved model instance.
-
-        """
         # Call parent save method to get the instance
         instance = super(forms.ModelForm, self).save(commit=commit)
-
-        # Validate all fields before processing
-        self.full_clean()
 
         # Process each field in the form
         for field in self.fields:
@@ -405,11 +405,6 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         # Add new relationships that were selected
         for ch in new - old:
             attr.add(ch)
-
-    def delete_field(self, field_key: str) -> None:
-        """Remove a field from the form if it exists."""
-        if field_key in self.fields:
-            del self.fields[field_key]
 
 
 class BaseModelFormRun(BaseModelForm):
@@ -612,7 +607,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         # Process each available option for the question
         for option in available_options:
             # Generate display text with pricing information
-            option_display_name = option.get_form_text(currency_symbol=self.params["currency_symbol"])
+            option_display_name = option.get_form_text(currency_symbol=self.params.get("currency_symbol", ""))
 
             # Check availability constraints if registration counts provided
             if registration_count and option.max_available > 0:
@@ -759,6 +754,15 @@ class BaseRegistrationForm(BaseModelFormRun):
                     self._validate_single_choice(form_data, question, key)
 
         return form_data
+
+    def clean_ticket(self) -> RegistrationTicket:
+        """Get ticket and validate it belongs to the current run's event."""
+        ticket_value = self.cleaned_data.get("ticket")
+        try:
+            return RegistrationTicket.objects.get(uuid=ticket_value, event_id=self.params["run"].event_id)
+        except ObjectDoesNotExist as err:
+            msg = _("Invalid ticket selection")
+            raise ValidationError(msg) from err
 
     def get_option_key_count(self, option: BaseModel) -> str:
         """Generate counting key for option availability tracking.
@@ -1351,6 +1355,12 @@ class BaseRegistrationForm(BaseModelFormRun):
                 self.choice_class.objects.create(
                     **{"question": question, self.instance_key: instance.id, "option_id": pkoid}
                 )
+
+    def clean_pay_what(self) -> Any:
+        """Ensure pay_what has a valid integer value, defaulting to 0 if None or empty."""
+        data = self.cleaned_data.get("pay_what")
+        # Convert None or empty string to 0 to prevent NULL constraint violations
+        return data if data is not None else 0
 
 
 class BaseModelCssForm(BaseModelForm):

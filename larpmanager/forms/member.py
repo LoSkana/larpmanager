@@ -43,7 +43,7 @@ from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.config import get_association_config
-from larpmanager.forms.base import BaseAccForm, BaseForm, BaseModelForm
+from larpmanager.forms.base import BaseAccForm, BaseForm, BaseModelForm, FormMixin
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     AssociationMemberS2WidgetMulti,
@@ -109,7 +109,7 @@ class MyAuthForm(AuthenticationForm):
         self.fields["password"].label = False
 
 
-class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
+class MyRegistrationFormUniqueEmail(FormMixin, RegistrationFormUniqueEmail):
     """Custom registration form with unique email validation and GDPR compliance."""
 
     # noinspection PyUnresolvedReferences, PyProtectedMember
@@ -133,7 +133,9 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
         # Extract request object and initialize parent form
         self.request = kwargs.pop("request", None)
         super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
-        self.fields["username"].widget = forms.HiddenInput()
+
+        # Remove username field - value will be generated from email in clean_username()
+        del self.fields["username"]
 
         # Configure language selection field
         self.fields["lang"] = forms.ChoiceField(
@@ -196,37 +198,22 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
         new_order = ["lang"] + [key for key in self.fields if key != "lang"]
         self.fields = OrderedDict((key, self.fields[key]) for key in new_order)
 
-    def clean_username(self) -> str:
-        """Validate username field and check for duplicate email addresses."""
-        # Extract and normalize username input
-        data = self.cleaned_data["username"].strip()
-        logger.debug("Validating username/email: %s", data)
-
-        # Prevent duplicate email registrations
-        if User.objects.filter(email__iexact=data).exists():
-            msg = "Email already used! It seems you already have an account!"
-            raise ValidationError(msg)
-        return data
-
-    def save(self, commit: bool = True) -> User:  # noqa: FBT001, FBT002, ARG002
-        """Save user and update associated member profile with form data.
-
-        Args:
-            commit: Whether to save to database. Defaults to True.
-
-        Returns:
-            Created user instance with updated member profile.
-
-        """
+    def save(self, commit: bool = True) -> User:  # noqa: FBT001, FBT002
+        """Save user and update associated member profile with form data."""
         # Create user instance from parent form
-        user = super(RegistrationFormUniqueEmail, self).save()
+        user = super(RegistrationFormUniqueEmail, self).save(commit=False)
 
-        # Update member profile with form data
-        user.member.newsletter = self.cleaned_data["newsletter"]
-        user.member.language = self.cleaned_data["lang"]
-        user.member.name = self.cleaned_data["name"]
-        user.member.surname = self.cleaned_data["surname"]
-        user.member.save()
+        # Force username = email
+        user.username = user.email
+
+        if commit:
+            user.save()
+
+            user.member.newsletter = self.cleaned_data["newsletter"]
+            user.member.language = self.cleaned_data["lang"]
+            user.member.name = self.cleaned_data["name"]
+            user.member.surname = self.cleaned_data["surname"]
+            user.member.save()
 
         return user
 

@@ -4139,6 +4139,9 @@ msgstr "Ga naar zoektochten van het type"
 msgid "Go to the tokens history"
 msgstr "Toegang tot PT-geschiedenis"
 
+msgid "Invalid ticket selection"
+msgstr "Ongeldige ticket selectie"
+
 msgid "Lightweight sheet (Test)"
 msgstr "Lichtgewicht plaat (Test)"
 
@@ -6399,6 +6402,9 @@ msgstr "Nu kun je aangepaste organisatievertalingen definiëren"
 
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Kies een duidelijke en gemakkelijk herkenbare foto"
+
+msgid "Selected event does not belong to this organization"
+msgstr "Geselecteerd evenement behoort niet tot deze organisatie"
 
 msgid "Set up configuration for Patron and Reduced tickets"
 msgstr "Configuratie instellen voor Patron en Reduced tickets"

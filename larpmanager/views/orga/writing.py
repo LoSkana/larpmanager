@@ -755,7 +755,10 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
         # Get characters already assigned to the specific entity
         if edit_uuid:
             model_class = apps.get_model("larpmanager", inflection.camelize(class_name))
-            taken_characters = model_class.objects.get(uuid=edit_uuid).characters.values_list("id", flat=True)
+            # Get entity, check parent event to ensure entity belongs to this event
+            parent_event = context["event"].get_class_parent(model_class)
+            entity = model_class.objects.get(event=parent_event, uuid=edit_uuid)
+            taken_characters = entity.characters.values_list("id", flat=True)
 
     # Get all characters for the event, ordered by number
     context["list"] = context["event"].get_elements(Character).order_by("number")
@@ -857,7 +860,6 @@ def orga_version(request: HttpRequest, event_slug: str, name: str, version_uuid:
 
     Returns:
         Rendered HTML response with version details
-
     """
     # Check organization permissions for text type access
     perm = f"orga_{name}s"
@@ -866,8 +868,33 @@ def orga_version(request: HttpRequest, event_slug: str, name: str, version_uuid:
     # Find text type code matching the provided name
     tp = next(code for code, label in TextVersionChoices.choices if label.lower() == name)
 
-    # Retrieve specific version and format text for HTML display
+    # Retrieve specific version
     context["version"] = TextVersion.objects.get(tp=tp, uuid=version_uuid)
+
+    # Map TextVersion type codes to model classes
+    type_to_model = {
+        TextVersionChoices.PLOT: Plot,
+        TextVersionChoices.CHARACTER: Character,
+        TextVersionChoices.FACTION: Faction,
+        TextVersionChoices.QUEST: Quest,
+        TextVersionChoices.TRAIT: Trait,
+        TextVersionChoices.HANDOUT: Handout,
+        TextVersionChoices.PROLOGUE: Prologue,
+        TextVersionChoices.QUEST_TYPE: QuestType,
+        TextVersionChoices.SPEEDLARP: SpeedLarp,
+    }
+
+    # Validate that the version belongs to an entity in this event
+    model_class = type_to_model.get(tp)
+    if model_class:
+        # Get the parent event for this model type
+        parent_event = context["event"].get_class_parent(model_class)
+        # Verify the entity exists in this event
+        if not model_class.objects.filter(event=parent_event, id=context["version"].eid).exists():
+            msg = "Version does not belong to this event"
+            raise Http404(msg)
+
+    # Format text for HTML display
     context["text"] = context["version"].text.replace("\n", "<br />")
 
     return render(request, "larpmanager/orga/version.html", context)

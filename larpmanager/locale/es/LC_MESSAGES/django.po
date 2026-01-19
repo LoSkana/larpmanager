@@ -4139,6 +4139,9 @@ msgstr "Ir a las misiones de tipo"
 msgid "Go to the tokens history"
 msgstr "Acceder al historial de tokens"
 
+msgid "Invalid ticket selection"
+msgstr "Selección de billete no válida"
+
 msgid "Lightweight sheet (Test)"
 msgstr "Chapa ligera (Prueba)"
 
@@ -6396,6 +6399,9 @@ msgstr "Ahora puede definir traducciones personalizadas de la organización"
 
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Elija una foto clara y fácilmente reconocible"
+
+msgid "Selected event does not belong to this organization"
+msgstr "El evento seleccionado no pertenece a esta organización"
 
 msgid "Set up configuration for Patron and Reduced tickets"
 msgstr "Establecer la configuración de las entradas reducidas y con descuento"

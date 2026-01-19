@@ -132,8 +132,8 @@ class OrgaTokenForm(BaseModelFormRun):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit")
-        widgets: ClassVar[dict] = {"member": RunMemberS2Widget, "oth": forms.HiddenInput()}
+        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
+        widgets: ClassVar[dict] = {"member": RunMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with token-specific page information and field configuration."""
@@ -143,9 +143,16 @@ class OrgaTokenForm(BaseModelFormRun):
         self.page_info = _("Manage") + f" {self.params['tokens_name']} " + _("assignments")
         self.page_title = self.params["tokens_name"]
 
-        # Configure initial form values and widget
-        self.initial["oth"] = OtherChoices.TOKEN
+        # Configure field widget
         self.configure_field_run("member", self.params["run"])
+
+    def save(self, commit: bool = True) -> AccountingItemOther:  # noqa: FBT001, FBT002
+        """Save form with TOKEN type."""
+        instance = super().save(commit=False)
+        instance.oth = OtherChoices.TOKEN
+        if commit:
+            instance.save()
+        return instance
 
 
 class OrgaCreditForm(BaseModelFormRun):
@@ -155,8 +162,8 @@ class OrgaCreditForm(BaseModelFormRun):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit")
-        widgets: ClassVar[dict] = {"member": RunMemberS2Widget, "oth": forms.HiddenInput()}
+        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
+        widgets: ClassVar[dict] = {"member": RunMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize credit form with page title and run-specific member field."""
@@ -164,9 +171,16 @@ class OrgaCreditForm(BaseModelFormRun):
         # Set page title from credit name parameter
         self.page_title = self.params["credits_name"]
 
-        # Configure form for credit transaction type
-        self.initial["oth"] = OtherChoices.CREDIT
+        # Configure field widget
         self.configure_field_run("member", self.params["run"])
+
+    def save(self, commit: bool = True) -> AccountingItemOther:  # noqa: FBT001, FBT002
+        """Save form with CREDIT type."""
+        instance = super().save(commit=False)
+        instance.oth = OtherChoices.CREDIT
+        if commit:
+            instance.save()
+        return instance
 
 
 class OrgaPaymentForm(BaseModelFormRun):
@@ -344,7 +358,7 @@ class ExeCreditForm(BaseModelForm):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit")
+        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
         widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -359,9 +373,13 @@ class ExeCreditForm(BaseModelForm):
         self.configure_field_association("member", self.params["association_id"])
         self.configure_field_association("run", self.params["association_id"])
 
-        # Set other field as hidden with credit value
-        self.fields["oth"].widget = forms.HiddenInput()
-        self.initial["oth"] = OtherChoices.CREDIT
+    def save(self, commit: bool = True) -> AccountingItemOther:  # noqa: FBT001, FBT002
+        """Save form with CREDIT type."""
+        instance = super().save(commit=False)
+        instance.oth = OtherChoices.CREDIT
+        if commit:
+            instance.save()
+        return instance
 
 
 class ExeTokenForm(BaseModelForm):
@@ -369,7 +387,7 @@ class ExeTokenForm(BaseModelForm):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit")
+        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
         widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -385,9 +403,13 @@ class ExeTokenForm(BaseModelForm):
         self.configure_field_association("member", self.params["association_id"])
         self.configure_field_association("run", self.params["association_id"])
 
-        # Hide 'oth' field and set default value
-        self.fields["oth"].widget = forms.HiddenInput()
-        self.initial["oth"] = OtherChoices.TOKEN
+    def save(self, commit: bool = True) -> AccountingItemOther:  # noqa: FBT001, FBT002
+        """Save form with TOKEN type."""
+        instance = super().save(commit=False)
+        instance.oth = OtherChoices.TOKEN
+        if commit:
+            instance.save()
+        return instance
 
 
 class ExeExpenseForm(BaseModelForm):
@@ -455,7 +477,6 @@ class CollectionNewForm(BaseModelForm):
     class Meta:
         model = Collection
         fields = ("name",)
-        widgets: ClassVar[dict] = {"cod": forms.HiddenInput()}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize collection new form."""
@@ -519,8 +540,6 @@ class OrgaDiscountForm(BaseModelForm):
 
 class InvoiceSubmitForm(BaseForm):
     """Form for InvoiceSubmit."""
-
-    cod = forms.CharField(widget=forms.HiddenInput())
 
     class Meta:
         abstract = True

@@ -341,9 +341,12 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, character_uui
     # Check permissions and get base context
     context = check_event_context(request, event_slug, "orga_characters")
 
-    # Load character with prefetched factions and plots
+    # Get parent event to ensure character belongs to this event
+    parent_event = context["event"].get_class_parent(Character)
+
+    # Load character with prefetched factions and plots, filtered by event
     context["character"] = Character.objects.prefetch_related("factions_list__characters", "plots__characters").get(
-        uuid=character_uuid
+        event=parent_event, uuid=character_uuid
     )
 
     # Initialize factions list in context

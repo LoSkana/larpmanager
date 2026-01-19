@@ -67,14 +67,15 @@ from larpmanager.utils.users.registration import get_reduced_available_count
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 
+    from larpmanager.models.base import BaseModel
+
 
 class RegistrationForm(BaseRegistrationForm):
     """Form for handling event registration with tickets, quotas, and questions."""
 
     class Meta:
         model = Registration
-        fields = ("modified",)
-        widgets: ClassVar[dict] = {"modified": forms.HiddenInput()}
+        fields = ("ticket",)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize registration form with tickets, questions, and event-specific options.
@@ -151,17 +152,7 @@ class RegistrationForm(BaseRegistrationForm):
         self.fields["ticket"].help_text += ticket_help
 
     def sel_ticket_map(self, ticket: Any) -> None:
-        """Update question requirements based on selected ticket type.
-
-        Args:
-            ticket: Selected ticket uuid string
-
-        """
-        """
-        Check if given the selected ticket, we need to not require questions reserved
-        to other tickets.
-        """
-
+        """Check if given the selected ticket, we need to not require questions reserved to other tickets."""
         if "reg_que_tickets" not in self.params["features"]:
             return
 
@@ -347,13 +338,12 @@ class RegistrationForm(BaseRegistrationForm):
         # Create the quotas form field with available choices
         self.fields["quotas"] = forms.ChoiceField(required=True, choices=quota_choices)
 
-        # Hide field if only one option available and set initial value
+        # If only one option available, remove field and store value
         if len(quota_choices) == 1:
-            self.fields["quotas"].widget = forms.HiddenInput()
-            self.initial["quotas"] = quota_choices[0][0]
-
+            self._single_quota = quota_choices[0][0]
+            self.delete_field("quotas")
         # Set initial value for existing instances with quota data
-        if self.instance.pk and self.instance.quotas:
+        elif self.instance.pk and self.instance.quotas:
             self.initial["quotas"] = self.instance.quotas
 
     def init_ticket(self, event: Event, registration_counts: dict, run: Run) -> str:
@@ -378,7 +368,7 @@ class RegistrationForm(BaseRegistrationForm):
         # Process each available ticket to create form choices and help text
         for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
-            ticket_display_name = ticket.get_form_text(currency_symbol=self.params["currency_symbol"])
+            ticket_display_name = ticket.get_form_text(currency_symbol=self.params.get("currency_symbol", ""))
             ticket_choices.append((str(ticket.uuid), ticket_display_name))
 
             # Add ticket description to help text if available
@@ -616,6 +606,15 @@ class RegistrationForm(BaseRegistrationForm):
 
         return form_data
 
+    def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
+        """Save form instance with custom field handling."""
+        # Handle single quota
+        if hasattr(self, "_single_quota"):
+            self.instance.quota = self._single_quota
+
+        # Call parent save method to get the instance
+        return super(forms.ModelForm, self).save(commit=commit)
+
 
 class RegistrationGiftForm(RegistrationForm):
     """Form for RegistrationGift."""
@@ -797,20 +796,21 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             required=self.fields["ticket"].required,
             label=self.fields["ticket"].label,
             help_text=self.fields["ticket"].help_text,
-            choices=[(ticket.uuid, ticket.get_form_text(self.params["currency_symbol"])) for ticket in qs],
+            choices=[(ticket.uuid, ticket.get_form_text(self.params.get("currency_symbol", ""))) for ticket in qs],
         )
 
         # Set initial value if editing existing instance
         if self.instance.pk and self.instance.ticket:
             self.initial["ticket"] = self.instance.ticket.uuid
 
-        # Hide ticket selection and set default if only one option exists
+        # If only one ticket exists, remove field and store ticket
         if qs.count() == 1:
             ticket = qs.first()
-            self.fields["ticket"].widget = forms.HiddenInput()
-            self.initial["ticket"] = ticket.uuid
-
-        self.sections["id_ticket"] = registration_section
+            self.delete_field("ticket")
+            self._single_ticket = ticket
+        else:
+            # Only add to sections if field wasn't deleted
+            self.sections["id_ticket"] = registration_section
 
     def init_quotas(self, registration_section: int) -> None:
         """Initialize quota selection field for payment installments.
@@ -921,15 +921,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.fields[qt_uuid] = forms.ChoiceField(required=True, choices=choices, label=quest_type["name"])
 
     def clean_member(self) -> Any:
-        """Validate member field to prevent duplicate registrations.
-
-        Returns:
-            Member: Validated member instance
-
-        Raises:
-            ValidationError: If member already has an active registration for the event
-
-        """
+        """Validate member field to prevent duplicate registrations."""
         data = self.cleaned_data["member"]
 
         if "request" in self.params:
@@ -948,26 +940,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 raise ValidationError(msg)
 
         return data
-
-    def clean_pay_what(self) -> Any:
-        """Ensure pay_what has a valid integer value, defaulting to 0 if None or empty.
-
-        Returns:
-            int: Validated pay_what value (0 if None or empty)
-
-        """
-        data = self.cleaned_data.get("pay_what")
-        # Convert None or empty string to 0 to prevent NULL constraint violations
-        return data if data is not None else 0
-
-    def clean_ticket(self) -> RegistrationTicket:
-        """Convert UUID from ChoiceField to RegistrationTicket instance."""
-        ticket_value = self.cleaned_data.get("ticket")
-
-        if isinstance(ticket_value, RegistrationTicket):
-            return ticket_value
-
-        return RegistrationTicket.objects.get(uuid=ticket_value)
 
     def get_init_multi_character(self) -> list[int]:
         """Get initial character IDs for multi-character registration."""
@@ -1032,6 +1004,15 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 raise ValidationError(msg)
 
         return data
+
+    def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
+        """Save form instance with custom field handling."""
+        # Handle auto ticket
+        if hasattr(self, "_single_ticket"):
+            self.instance.ticket = self._single_ticket
+
+        # Call parent save method to get the instance
+        return super(BaseRegistrationForm, self).save(commit=commit)
 
 
 class RegistrationCharacterRelForm(BaseModelForm):
@@ -1495,7 +1476,8 @@ class PreRegistrationForm(BaseForm):
             )
             self.initial["new_pref"] = min(prefs)
         else:
-            self.fields["new_pref"] = forms.CharField(widget=forms.HiddenInput(), initial=min(prefs))
+            # Store default, don't create field
+            self._default_new_pref = min(prefs)
 
         self.fields["new_info"] = forms.CharField(
             required=False,

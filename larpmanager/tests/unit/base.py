@@ -133,9 +133,10 @@ class BaseTestCase(TestCase):
 
         if user is None:
             user = self.create_user()
-        defaults = {"user": user, "name": "Test", "surname": "Member"}
-        defaults.update(kwargs)
-        member = Member.objects.create(**defaults)
+
+        member = user.member
+        member.name = "Test"
+        member.surname = "Member"
 
         # Create a membership for this member
         association = self.get_association()

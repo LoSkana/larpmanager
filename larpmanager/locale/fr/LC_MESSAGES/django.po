@@ -4139,6 +4139,9 @@ msgstr "Aller aux quêtes de type"
 msgid "Go to the tokens history"
 msgstr "Accéder à l'historique des PT"
 
+msgid "Invalid ticket selection"
+msgstr "Sélection de billets invalide"
+
 msgid "Lightweight sheet (Test)"
 msgstr "Feuille légère (Test)"
 
@@ -6417,6 +6420,9 @@ msgstr ""
 
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Choisissez une photo claire et facilement reconnaissable"
+
+msgid "Selected event does not belong to this organization"
+msgstr "L'événement sélectionné n'appartient pas à cette organisation"
 
 msgid "Set up configuration for Patron and Reduced tickets"
 msgstr "Configurer les billets pour les usagers et les billets à tarif réduit"

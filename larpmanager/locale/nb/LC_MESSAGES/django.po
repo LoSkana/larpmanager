@@ -4139,6 +4139,9 @@ msgstr "Gå til oppdrag av typen"
 msgid "Go to the tokens history"
 msgstr "Få tilgang til PT-historikk"
 
+msgid "Invalid ticket selection"
+msgstr "Ugyldig billettvalg"
+
 msgid "Lightweight sheet (Test)"
 msgstr "Lettvektsplate (Test)"
 
@@ -6393,6 +6396,9 @@ msgstr "Nå kan du definere egendefinerte organisasjonsoversettelser"
 
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Velg et tydelig og lett gjenkjennelig bilde"
+
+msgid "Selected event does not belong to this organization"
+msgstr "Valgt arrangement tilhører ikke denne organisasjonen"
 
 msgid "Set up configuration for Patron and Reduced tickets"
 msgstr "Konfigurer konfigurasjon for Patron og reduserte billetter"

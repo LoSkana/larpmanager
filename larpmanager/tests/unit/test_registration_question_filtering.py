@@ -369,16 +369,14 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
     is still tested with existing members.
     """
 
-    @pytest.mark.skip(reason="Requires fixing test database user_id sequence issue")
     def test_question_skip_when_not_organizer_and_members_restricted(self) -> None:
         """Test question is skipped for non-organizers when specific members are allowed"""
         event = self.get_event()
         run = self.get_run()
         member = self.get_member()
         unique_id = uuid.uuid4().hex[:8]
-        other_member = self.create_member(
-            user=self.create_user(username=f"other_{unique_id}", email=f"other_{unique_id}@example.com")
-        )
+        user = self.create_user(username=f"other_{unique_id}", email=f"other_{unique_id}@example.com")
+        other_member = self.create_member(user=user)
 
         # Create question that only allows other_member
         question = self.question(event=event)
@@ -422,7 +420,6 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         result = question.skip(registration, features=["reg_que_allowed"], params=params, is_organizer=True)
         self.assertFalse(result)
 
-    @pytest.mark.skip(reason="Requires fixing test database user_id sequence issue")
     def test_question_shown_when_run_organizer(self) -> None:
         """Test question is always shown to run organizers regardless of allowed list"""
         event = self.get_event()
@@ -474,7 +471,6 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         result = question.skip(registration, features=["reg_que_allowed"], params=params, is_organizer=True)
         self.assertFalse(result)
 
-    @pytest.mark.skip(reason="Requires fixing test database user_id sequence issue")
     def test_question_shown_to_non_organizer_when_no_restriction(self) -> None:
         """Test question is shown to non-organizers when feature is disabled"""
         event = self.get_event()

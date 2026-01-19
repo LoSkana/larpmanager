@@ -187,10 +187,12 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
             if new_event_uuid != "":
                 with transaction.atomic():
                     new_event = get_object_uuid(Event, new_event_uuid)
+                    # Get new_pref from form or stored default if field was removed
+                    new_pref = getattr(form, "_default_new_pref", form.cleaned_data.get("new_pref"))
                     PreRegistration(
                         member=context["member"],
                         event=new_event,
-                        pref=form.cleaned_data["new_pref"],
+                        pref=new_pref,
                         info=form.cleaned_data["new_info"],
                     ).save()
 
@@ -362,7 +364,7 @@ def save_registration_standard(
 
     # Process ticket selection and validation
     if "ticket" in form.cleaned_data:
-        sel = RegistrationTicket.objects.filter(uuid=form.cleaned_data["ticket"]).select_related("event").first()
+        sel = form.cleaned_data["ticket"]
 
         # Validate ticket exists and belongs to correct event
         if not sel:

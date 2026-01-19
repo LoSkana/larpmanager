@@ -774,6 +774,9 @@ msgstr ""
 msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 
+msgid "Selected event does not belong to this organization"
+msgstr ""
+
 msgid "already used"
 msgstr ""
 
@@ -787,6 +790,9 @@ msgid "Available"
 msgstr ""
 
 msgid "Option no longer available"
+msgstr ""
+
+msgid "Invalid ticket selection"
 msgstr ""
 
 msgid "Not selected"
