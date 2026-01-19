@@ -768,3 +768,49 @@ def get_user_membership(user: Member, association: Association | int) -> Members
     # Cache the membership on the user object for future access
     user.membership = membership
     return membership
+
+
+class NotificationType(models.TextChoices):
+    """Notification types for email sent to organizers and association executives."""
+
+    # Event-level notifications (sent to event organizers)
+    REGISTRATION_NEW = "registration_new", "New Registration"
+    REGISTRATION_UPDATE = "registration_update", "Updated Registration"
+    REGISTRATION_CANCEL = "registration_cancel", "Cancelled Registration"
+    PAYMENT_MONEY = "payment_money", "Money Payment"
+    PAYMENT_CREDIT = "payment_credit", "Credit Payment"
+    PAYMENT_TOKEN = "payment_token", "Token Payment"
+    INVOICE_APPROVAL = "invoice_approval", "Invoice Awaiting Approval"
+
+    # Association-level notifications (sent to association executives)
+    HELP_QUESTION = "help_question", "Help Question"
+    PASSWORD_REMINDER = "password_reminder", "Password Reminder"
+    REFUND_REQUEST = "refund_request", "Refund Request"
+    INVOICE_APPROVAL_EXE = "invoice_approval_exe", "Invoice Approval (Executive)"
+
+
+class NotificationQueue(BaseModel):
+    """Queue for batching organizer and executive notifications into daily summaries.
+
+    Supports both event-level notifications (for event organizers) and association-level
+    notifications (for association executives). Event-level notifications require a run,
+    while association-level notifications require an association.
+
+    If member is None, the notification will be sent to the association's main_mail address.
+    """
+
+    run = models.ForeignKey("Run", on_delete=models.CASCADE, null=True, blank=True)
+    association = models.ForeignKey("Association", on_delete=models.CASCADE, null=True, blank=True)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, null=True, blank=True)
+    notification_type = models.CharField(max_length=30, choices=NotificationType.choices)
+    object_id = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    sent = models.BooleanField(default=False)
+    sent_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        """String representation for notification in queue."""
+        member_str = self.member if self.member else "main_mail"
+        if self.run:
+            return f"{self.run.search} - {member_str} - {self.get_notification_type_display()}"
+        return f"{self.association.name} - {member_str} - {self.get_notification_type_display()}"

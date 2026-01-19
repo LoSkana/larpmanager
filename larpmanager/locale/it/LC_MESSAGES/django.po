@@ -1359,6 +1359,9 @@ msgstr "Ti serve aiuto"
 msgid "New event"
 msgstr "Nuovo evento"
 
+msgid "No ticket"
+msgstr "Nessun biglietto"
+
 msgid "Open Link"
 msgstr "Apri il link"
 
@@ -1448,6 +1451,9 @@ msgstr "Traduci"
 
 msgid "Treasurer"
 msgstr "Tesoriere"
+
+msgid "View/Edit"
+msgstr "Visualizza/Modifica"
 
 msgid "Warehouse"
 msgstr "Magazzino"
@@ -2203,6 +2209,9 @@ msgstr "Condizioni di "
 msgid "Configuration"
 msgstr "Configurazione"
 
+msgid "Daily Summary"
+msgstr "Riepilogo giornaliero"
+
 msgid "Deadline date"
 msgstr "Data di deadline"
 
@@ -2462,6 +2471,9 @@ msgstr "Bilancio globale"
 msgid "Handout Models"
 msgstr "Tipo di handout"
 
+msgid "Help Questions"
+msgstr "Domande di aiuto"
+
 msgid "List of voters"
 msgstr "Elenco votanti"
 
@@ -2696,6 +2708,9 @@ msgstr "Stato di avanzamento"
 msgid "Question saved!"
 msgstr "Domanda salvata!"
 
+msgid "Refund Requests"
+msgstr "Richieste di rimborso"
+
 msgid "Remove prologue"
 msgstr "Rimuovi prologo"
 
@@ -2903,6 +2918,9 @@ msgstr "Pre-iscrizione"
 msgid "Realized revenue"
 msgstr "Ricavi realizzati"
 
+msgid "Refund requested"
+msgstr "Richiesta di rimborso"
+
 msgid "Registration fee"
 msgstr "Quota iscrizione"
 
@@ -2990,6 +3008,9 @@ msgstr "Risposta sottomessa!"
 msgid "Assigned quantity"
 msgstr "Quantità assegnata"
 
+msgid "Awaiting approval"
+msgstr "In attesa di approvazione"
+
 msgid "Cancellation date"
 msgstr "Data disiscrizione"
 
@@ -3074,6 +3095,9 @@ msgstr "Mesi quota libera"
 msgid "Move to container"
 msgstr "Sposta in un contenitore"
 
+msgid "New Registrations"
+msgstr "Nuove registrazioni"
+
 msgid "No transfers yet."
 msgstr "Non ci sono ancora trasferimenti."
 
@@ -3088,6 +3112,9 @@ msgstr "Offerta libera"
 
 msgid "Payment confirmed"
 msgstr "Pagamento confermato"
+
+msgid "Payments Received"
+msgstr "Pagamenti ricevuti"
 
 msgid "Payments received"
 msgstr "Pagamenti ricevuti"
@@ -3527,6 +3554,9 @@ msgstr "Non disponibile, ragazzo"
 msgid "Not visible to users"
 msgstr "Non visibile agli utenti"
 
+msgid "Notifications digest"
+msgstr "Digest delle notifiche"
+
 msgid "Number of passengers"
 msgstr "Numero di passeggeri"
 
@@ -3667,6 +3697,9 @@ msgstr "Impossibile aggiungere la galleria"
 msgid "Failed to add handout"
 msgstr "Impossibile aggiungere la dispensa"
 
+msgid "Go to event dashboard"
+msgstr "Vai al cruscotto dell'evento"
+
 msgid "Go to the casting for"
 msgstr "Vai al casting per"
 
@@ -3760,6 +3793,9 @@ msgstr "Token non inizializzato"
 
 msgid "Transfer registration"
 msgstr "Registrazione di trasferimento"
+
+msgid "Updated Registrations"
+msgstr "Registrazioni aggiornate"
 
 msgid "Upload membership fee"
 msgstr "Carica la quota associativa"
@@ -3958,6 +3994,9 @@ msgstr "Associazione Traduzione"
 msgid "Background of web pages"
 msgstr "Sfondo delle pagine web"
 
+msgid "Cancelled Registrations"
+msgstr "Registrazioni annullate"
+
 msgid "Candidates at the polls"
 msgstr "Candidati alle votazioni"
 
@@ -4021,6 +4060,9 @@ msgstr "Sposta l'evento di registrazione"
 
 msgid "One-Time Access Warning"
 msgstr "Avviso di accesso una tantum"
+
+msgid "Password Reset Requests"
+msgstr "Richieste di reimpostazione della password"
 
 msgid "Please check them below"
 msgstr "Controllali qui di seguito"
@@ -4317,6 +4359,9 @@ msgstr "Regala un biglietto ad un tuo amico"
 msgid "Hide unassigned characters"
 msgstr "Nascondi personaggi non assegnati"
 
+msgid "Invoices Awaiting Approval"
+msgstr "Fatture in attesa di approvazione"
+
 msgid "Manage the event prologues"
 msgstr "Gestisci i prologhi degli eventi"
 
@@ -4398,6 +4443,9 @@ msgstr "Indica qui le tue preferenze"
 
 msgid "Event context not available"
 msgstr "Contesto dell'evento non disponibile"
+
+msgid "Go to association dashboard"
+msgstr "Vai al cruscotto dell'associazione"
 
 msgid "Items that will be modified"
 msgstr "Voci che verranno modificate"
@@ -4640,6 +4688,9 @@ msgstr "Gestisci i supplementi di registrazione"
 
 msgid "Manage viewing writing element"
 msgstr "Gestisci la visualizzazione dell'elemento di scrittura"
+
+msgid "Password reset request url for"
+msgstr "URL di richiesta di reimpostazione della password per"
 
 msgid "Registrations on external link"
 msgstr "Iscrizoni su link esterno"
@@ -5614,6 +5665,9 @@ msgstr "Dettagli: %(details)s (<b>%(amount).2f</b>)"
 
 msgid "For which day you will need transportation"
 msgstr "Per quale giorno avrai bisogno del trasporto"
+
+msgid "Here's what happened in the last 24 hours:"
+msgstr "Ecco cosa è successo nelle ultime 24 ore:"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "Codice lingua ISO (ad esempio, 'en', 'it', 'de')"
@@ -10920,6 +10974,13 @@ msgid ""
 msgstr ""
 "questa cifra è il netto che dovrebbe risultare come disponibilità degli "
 "strumenti finanziari - non tiene conto di token e di crediti"
+
+msgid ""
+"If checked: receive a single daily summary email instead of immediate "
+"notifications for registrations, payments, and invoice approvals"
+msgstr ""
+"Se selezionata: ricevere un'unica e-mail di riepilogo giornaliera invece di "
+"notifiche immediate per registrazioni, pagamenti e approvazioni di fatture"
 
 msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "

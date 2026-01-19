@@ -1359,6 +1359,9 @@ msgstr "Behöver du hjälp"
 msgid "New event"
 msgstr "Nytt evenemang"
 
+msgid "No ticket"
+msgstr "Ingen biljett"
+
 msgid "Open Link"
 msgstr "Öppna länk"
 
@@ -1448,6 +1451,9 @@ msgstr "Översätt"
 
 msgid "Treasurer"
 msgstr "Kassör"
+
+msgid "View/Edit"
+msgstr "Visa/redigera"
 
 msgid "Warehouse"
 msgstr "Lagerlokal"
@@ -2203,6 +2209,9 @@ msgstr "Villkor för"
 msgid "Configuration"
 msgstr "Konfiguration"
 
+msgid "Daily Summary"
+msgstr "Daglig sammanfattning"
+
 msgid "Deadline date"
 msgstr "Sista inlämningsdag"
 
@@ -2462,6 +2471,9 @@ msgstr "Global budget"
 msgid "Handout Models"
 msgstr "Handout Modeller"
 
+msgid "Help Questions"
+msgstr "Hjälpfrågor"
+
 msgid "List of voters"
 msgstr "Lista över röstberättigade"
 
@@ -2696,6 +2708,9 @@ msgstr "Framsteg"
 msgid "Question saved!"
 msgstr "Undergiven fråga!"
 
+msgid "Refund Requests"
+msgstr "Begäran om återbetalning"
+
 msgid "Remove prologue"
 msgstr "Ta bort prolog"
 
@@ -2903,6 +2918,9 @@ msgstr "Förhandsanmälan"
 msgid "Realized revenue"
 msgstr "Realiserade intäkter"
 
+msgid "Refund requested"
+msgstr "Återbetalning begärd"
+
 msgid "Registration fee"
 msgstr "Anmälningsavgift"
 
@@ -2990,6 +3008,9 @@ msgstr "Underkastande svar!"
 msgid "Assigned quantity"
 msgstr "Tilldelad kvantitet"
 
+msgid "Awaiting approval"
+msgstr "Avvaktar godkännande"
+
 msgid "Cancellation date"
 msgstr "Datum för avregistrering"
 
@@ -3074,6 +3095,9 @@ msgstr "Månader fri kvot"
 msgid "Move to container"
 msgstr "Flytta till container"
 
+msgid "New Registrations"
+msgstr "Nya registreringar"
+
 msgid "No transfers yet."
 msgstr "Inga överföringar ännu."
 
@@ -3088,6 +3112,9 @@ msgstr "Betala vad du vill"
 
 msgid "Payment confirmed"
 msgstr "Betalning bekräftad"
+
+msgid "Payments Received"
+msgstr "Erhållna betalningar"
 
 msgid "Payments received"
 msgstr "Erhållna betalningar"
@@ -3527,6 +3554,9 @@ msgstr "Inte tillgänglig, grabben"
 msgid "Not visible to users"
 msgstr "Inte synligt för användare"
 
+msgid "Notifications digest"
+msgstr "Sammanställning av meddelanden"
+
 msgid "Number of passengers"
 msgstr "Antal passagerare"
 
@@ -3667,6 +3697,9 @@ msgstr "Misslyckades med att lägga till galleri"
 msgid "Failed to add handout"
 msgstr "Misslyckades med att lägga till handout"
 
+msgid "Go to event dashboard"
+msgstr "Gå till instrumentpanelen för evenemang"
+
 msgid "Go to the casting for"
 msgstr "Gå till casting för"
 
@@ -3760,6 +3793,9 @@ msgstr "Token inte initialiserad"
 
 msgid "Transfer registration"
 msgstr "Registrering av överföring"
+
+msgid "Updated Registrations"
+msgstr "Uppdaterade registreringar"
 
 msgid "Upload membership fee"
 msgstr "Ladda upp medlemsavgift"
@@ -3958,6 +3994,9 @@ msgstr "Förening Översättning"
 msgid "Background of web pages"
 msgstr "Bakgrund för webbsida"
 
+msgid "Cancelled Registrations"
+msgstr "Avbokade registreringar"
+
 msgid "Candidates at the polls"
 msgstr "Kandidater på valsedlarna"
 
@@ -4021,6 +4060,9 @@ msgstr "Flytta registreringshändelse"
 
 msgid "One-Time Access Warning"
 msgstr "Engångstillgång Varning"
+
+msgid "Password Reset Requests"
+msgstr "Begäran om återställning av lösenord"
 
 msgid "Please check them below"
 msgstr "Vänligen kontrollera dem nedan"
@@ -4317,6 +4359,9 @@ msgstr "Ge ett kort till din vän"
 msgid "Hide unassigned characters"
 msgstr "Dölj icke tilldelade tecken"
 
+msgid "Invoices Awaiting Approval"
+msgstr "Fakturor som väntar på godkännande"
+
 msgid "Manage the event prologues"
 msgstr "Hantera evenemangets prologer"
 
@@ -4398,6 +4443,9 @@ msgstr "Ange dina preferenser här"
 
 msgid "Event context not available"
 msgstr "Händelsekontext inte tillgänglig"
+
+msgid "Go to association dashboard"
+msgstr "Gå till föreningens instrumentpanel"
 
 msgid "Items that will be modified"
 msgstr "Objekt som kommer att modifieras"
@@ -4640,6 +4688,9 @@ msgstr "Hantera tilläggsavgifter för registrering"
 
 msgid "Manage viewing writing element"
 msgstr "Hantera visning av skrivelement"
+
+msgid "Password reset request url for"
+msgstr "URL för begäran om återställning av lösenord för"
 
 msgid "Registrations on external link"
 msgstr "Registreringar på extern länk"
@@ -5616,6 +5667,9 @@ msgstr "Detaljerad information: %(details)s (<b>%(amount).2f</b>)"
 
 msgid "For which day you will need transportation"
 msgstr "För vilken dag behöver du transport"
+
+msgid "Here's what happened in the last 24 hours:"
+msgstr "Här är vad som hänt under de senaste 24 timmarna:"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "ISO-språkkod (t.ex. 'en', 'it', 'de')"
@@ -10733,6 +10787,14 @@ msgid ""
 msgstr ""
 "denna siffra är det netto som bör bli resultatet av tillgången till "
 "finansiella instrument - den tar inte hänsyn till tokens och krediter"
+
+msgid ""
+"If checked: receive a single daily summary email instead of immediate "
+"notifications for registrations, payments, and invoice approvals"
+msgstr ""
+"Om markerat: få ett enda e-postmeddelande med en daglig sammanfattning i "
+"stället för omedelbara meddelanden om registreringar, betalningar och "
+"fakturagodkännanden"
 
 msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "

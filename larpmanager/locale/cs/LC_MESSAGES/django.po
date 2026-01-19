@@ -1359,6 +1359,9 @@ msgstr "Potřebujete pomoc"
 msgid "New event"
 msgstr "Nová událost"
 
+msgid "No ticket"
+msgstr "Žádná jízdenka"
+
 msgid "Open Link"
 msgstr "Otevřít odkaz"
 
@@ -1448,6 +1451,9 @@ msgstr "Přeložit"
 
 msgid "Treasurer"
 msgstr "Pokladník"
+
+msgid "View/Edit"
+msgstr "Zobrazit/upravit"
 
 msgid "Warehouse"
 msgstr "Sklad"
@@ -2203,6 +2209,9 @@ msgstr "Podmínky"
 msgid "Configuration"
 msgstr "Konfigurace"
 
+msgid "Daily Summary"
+msgstr "Denní shrnutí"
+
 msgid "Deadline date"
 msgstr "Datum uzávěrky"
 
@@ -2462,6 +2471,9 @@ msgstr "Globální rozpočet"
 msgid "Handout Models"
 msgstr "Modely pro rozdávání"
 
+msgid "Help Questions"
+msgstr "Nápověda Otázky"
+
 msgid "List of voters"
 msgstr "Seznam voličů"
 
@@ -2696,6 +2708,9 @@ msgstr "Progress"
 msgid "Question saved!"
 msgstr "Submisivní otázka!"
 
+msgid "Refund Requests"
+msgstr "Žádosti o vrácení peněz"
+
 msgid "Remove prologue"
 msgstr "Odstranění prologu"
 
@@ -2903,6 +2918,9 @@ msgstr "Předběžná registrace"
 msgid "Realized revenue"
 msgstr "Realizované příjmy"
 
+msgid "Refund requested"
+msgstr "Žádost o vrácení peněz"
+
 msgid "Registration fee"
 msgstr "Vstupní poplatek"
 
@@ -2990,6 +3008,9 @@ msgstr "Submisivní odpověď!"
 msgid "Assigned quantity"
 msgstr "Přiřazené množství"
 
+msgid "Awaiting approval"
+msgstr "Čeká se na schválení"
+
 msgid "Cancellation date"
 msgstr "Datum zrušení předplatného"
 
@@ -3074,6 +3095,9 @@ msgstr "Měsíční volná kvóta"
 msgid "Move to container"
 msgstr "Přesun do kontejneru"
 
+msgid "New Registrations"
+msgstr "Nové registrace"
+
 msgid "No transfers yet."
 msgstr "Zatím žádné přestupy."
 
@@ -3088,6 +3112,9 @@ msgstr "Zaplaťte, kolik chcete"
 
 msgid "Payment confirmed"
 msgstr "Platba potvrzena"
+
+msgid "Payments Received"
+msgstr "Přijaté platby"
 
 msgid "Payments received"
 msgstr "Přijaté platby"
@@ -3527,6 +3554,9 @@ msgstr "Není k dispozici, chlapče"
 msgid "Not visible to users"
 msgstr "Není viditelný pro uživatele"
 
+msgid "Notifications digest"
+msgstr "Sborník oznámení"
+
 msgid "Number of passengers"
 msgstr "Počet cestujících"
 
@@ -3667,6 +3697,9 @@ msgstr "Nepodařilo se přidat galerii"
 msgid "Failed to add handout"
 msgstr "Nepodařilo se přidat leták"
 
+msgid "Go to event dashboard"
+msgstr "Přejít na ovládací panel události"
+
 msgid "Go to the casting for"
 msgstr "Přejděte na casting"
 
@@ -3760,6 +3793,9 @@ msgstr "Token nebyl inicializován"
 
 msgid "Transfer registration"
 msgstr "Registrace převodu"
+
+msgid "Updated Registrations"
+msgstr "Aktualizované registrace"
 
 msgid "Upload membership fee"
 msgstr "Nahrát členský poplatek"
@@ -3958,6 +3994,9 @@ msgstr "Překlad asociace"
 msgid "Background of web pages"
 msgstr "Pozadí webové stránky"
 
+msgid "Cancelled Registrations"
+msgstr "Zrušené registrace"
+
 msgid "Candidates at the polls"
 msgstr "Kandidáti na volebních lístcích"
 
@@ -4021,6 +4060,9 @@ msgstr "Přesun registrační události"
 
 msgid "One-Time Access Warning"
 msgstr "Upozornění na jednorázový přístup"
+
+msgid "Password Reset Requests"
+msgstr "Žádosti o obnovení hesla"
 
 msgid "Please check them below"
 msgstr "Podívejte se na ně níže"
@@ -4317,6 +4359,9 @@ msgstr "Dejte přání svému příteli"
 msgid "Hide unassigned characters"
 msgstr "Skrytí nepřiřazených znaků"
 
+msgid "Invoices Awaiting Approval"
+msgstr "Faktury čekající na schválení"
+
 msgid "Manage the event prologues"
 msgstr "Správa prologů událostí"
 
@@ -4398,6 +4443,9 @@ msgstr "Zde uveďte své preference"
 
 msgid "Event context not available"
 msgstr "Kontext události není k dispozici"
+
+msgid "Go to association dashboard"
+msgstr "Přejděte na ovládací panel asociace"
 
 msgid "Items that will be modified"
 msgstr "Položky, které budou upraveny"
@@ -4640,6 +4688,9 @@ msgstr "Správa registračních příplatků"
 
 msgid "Manage viewing writing element"
 msgstr "Správa zobrazení prvku psaní"
+
+msgid "Password reset request url for"
+msgstr "URL adresa žádosti o reset hesla pro"
 
 msgid "Registrations on external link"
 msgstr "Registrace na externím odkazu"
@@ -5614,6 +5665,9 @@ msgstr "Podrobnosti: %(details)s (<b>%(amount).2f</b>)"
 
 msgid "For which day you will need transportation"
 msgstr "Na který den budete potřebovat dopravu"
+
+msgid "Here's what happened in the last 24 hours:"
+msgstr "Zde je přehled událostí za posledních 24 hodin:"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "kód jazyka ISO (např. \"en\", \"it\", \"de\")"
@@ -10608,6 +10662,13 @@ msgid ""
 msgstr ""
 "tento údaj je čistá hodnota, která by měla být výsledkem dostupnosti "
 "finančních nástrojů - nezohledňuje tokeny a kredity"
+
+msgid ""
+"If checked: receive a single daily summary email instead of immediate "
+"notifications for registrations, payments, and invoice approvals"
+msgstr ""
+"Pokud je zaškrtnuto: místo okamžitých oznámení o registracích, platbách a "
+"schvalování faktur obdržíte jeden souhrnný e-mail denně"
 
 msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "

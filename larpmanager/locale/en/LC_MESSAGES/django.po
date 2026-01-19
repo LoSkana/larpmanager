@@ -763,6 +763,14 @@ msgstr ""
 msgid "If checked: collpase sidebars links, and expand on mouse hover"
 msgstr ""
 
+msgid "Notifications digest"
+msgstr ""
+
+msgid ""
+"If checked: receive a single daily summary email instead of immediate "
+"notifications for registrations, payments, and invoice approvals"
+msgstr ""
+
 msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 
@@ -2125,27 +2133,6 @@ msgstr ""
 msgid "Speed larp"
 msgstr ""
 
-#, python-format
-msgid "Reimbursement request for %(event)s"
-msgstr ""
-
-#, python-format
-msgid "Staff member %(user)s added a new reimbursement request for %(event)s"
-msgstr ""
-
-#, python-format
-msgid "The sum is %(amount).2f, with reason '%(reason)s'"
-msgstr ""
-
-msgid "download document"
-msgstr ""
-
-msgid "Did you check and is it correct"
-msgstr ""
-
-msgid "Confirmation of expenditure"
-msgstr ""
-
 msgid "Reimbursement approved"
 msgstr ""
 
@@ -2171,34 +2158,6 @@ msgid ""
 "href='%(url)s'>your accounting.</a>."
 msgstr ""
 
-#, python-format
-msgid " for %(user)s"
-msgstr ""
-
-#, python-format
-msgid "Utilisation %(tokens)s per %(event)s"
-msgstr ""
-
-#, python-format
-msgid "%(amount)s %(tokens)s were used to participate in this event"
-msgstr ""
-
-#, python-format
-msgid "Utilisation %(credits)s per %(event)s"
-msgstr ""
-
-#, python-format
-msgid "%(amount)s %(credits)s were used to participate in this event"
-msgstr ""
-
-#, python-format
-msgid "Payment for %(event)s"
-msgstr ""
-
-#, python-format
-msgid "A payment of %(amount).2f %(currency)s was received for this event"
-msgstr ""
-
 msgid "Issued Reimbursement"
 msgstr ""
 
@@ -2218,11 +2177,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "Assignment %(elements)s"
-msgstr ""
-
-#, python-format
-msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
+msgid " for %(user)s"
 msgstr ""
 
 msgid "Donation given"
@@ -2256,29 +2211,6 @@ msgid "New participation in the collection for %(recipient)s by %(user)s"
 msgstr ""
 
 msgid "The collection grows"
-msgstr ""
-
-#, python-format
-msgid "Request refund from: %(user)s"
-msgstr ""
-
-#, python-format
-msgid "Details: %(details)s (<b>%(amount).2f</b>)"
-msgstr ""
-
-msgid "Verify that the data are correct"
-msgstr ""
-
-msgid "Reason for payment"
-msgstr ""
-
-msgid "Amount"
-msgstr ""
-
-msgid "Download document"
-msgstr ""
-
-msgid "Payment to check"
 msgstr ""
 
 msgid "Welcome to LarpManager"
@@ -2360,6 +2292,63 @@ msgid "Your preferences have been saved in the system"
 msgstr ""
 
 msgid "Elements you wish to avoid in the assignment"
+msgstr ""
+
+msgid "Daily Summary"
+msgstr ""
+
+msgid "Here's what happened in the last 24 hours:"
+msgstr ""
+
+msgid "Go to event dashboard"
+msgstr ""
+
+msgid "Invoices Awaiting Approval"
+msgstr ""
+
+msgid "Approve"
+msgstr ""
+
+msgid "Payments Received"
+msgstr ""
+
+msgid "Cancelled Registrations"
+msgstr ""
+
+msgid "No ticket"
+msgstr ""
+
+msgid "Updated Registrations"
+msgstr ""
+
+msgid "View/Edit"
+msgstr ""
+
+msgid "New Registrations"
+msgstr ""
+
+msgid "Go to association dashboard"
+msgstr ""
+
+msgid "Password Reset Requests"
+msgstr ""
+
+msgid "Password reset request url for"
+msgstr ""
+
+msgid "Refund Requests"
+msgstr ""
+
+msgid "Refund requested"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Awaiting approval"
+msgstr ""
+
+msgid "Help Questions"
 msgstr ""
 
 msgid "Request of membership to the Organization"
@@ -2464,28 +2453,10 @@ msgid "Your question has been answered"
 msgstr ""
 
 #, python-format
-msgid "New question by %(user)s"
-msgstr ""
-
-#, python-format
-msgid "A question was asked by: %(user)s"
-msgstr ""
-
-#, python-format
 msgid "New message from %(user)s"
 msgstr ""
 
 msgid "reply here"
-msgstr ""
-
-#, python-format
-msgid "Password reset of user %(user)s"
-msgstr ""
-
-#, python-format
-msgid ""
-"The user requested the password reset, but did not complete it. Give them "
-"this link: %(url)s"
 msgstr ""
 
 #, python-format
@@ -2505,48 +2476,6 @@ msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
 msgstr ""
 
 #, python-format
-msgid "Registration to %(event)s by %(user)s"
-msgstr ""
-
-msgid "The user has confirmed its registration for this event"
-msgstr ""
-
-#, python-format
-msgid "Registration updated to %(event)s by %(user)s"
-msgstr ""
-
-msgid "The user has updated their registration for this event"
-msgstr ""
-
-msgid "Ticket selected"
-msgstr ""
-
-#, python-format
-msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>"
-msgstr ""
-
-#, python-format
-msgid "Payments already received: <b>%(amount).2f %(currency)s</b>"
-msgstr ""
-
-msgid "Selected options"
-msgstr ""
-
-#, python-format
-msgid ""
-"You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days. "
-"Make your payment <a href='%(url)s'>on this page</a>. If we do not receive "
-"payment by the deadline, your registration may be cancelled."
-msgstr ""
-
-#, python-format
-msgid ""
-"<i>Payment due</i> - You must pay <b>%(amount).2f %(currency)s</b> as soon "
-"as possible. Make your payment <a href='%(url)s'>on this page</a>. If we do "
-"not receive payment, your registration may be cancelled."
-msgstr ""
-
-#, python-format
 msgid "Character assigned for %(event)s"
 msgstr ""
 
@@ -2563,13 +2492,6 @@ msgstr ""
 msgid ""
 "We confirm that your registration for this event has been cancelled. We are "
 "sorry to see you go"
-msgstr ""
-
-#, python-format
-msgid "Registration cancelled for %(event)s by %(user)s"
-msgstr ""
-
-msgid "The registration for this event has been cancelled"
 msgstr ""
 
 #, python-format
@@ -2706,6 +2628,149 @@ msgid "Let us know if you encounter any issues or need assistance"
 msgstr ""
 
 msgid "Review the users that are missing the event's deadlines"
+msgstr ""
+
+#, python-format
+msgid "Registration to %(event)s by %(user)s"
+msgstr ""
+
+msgid "The user has confirmed its registration for this event"
+msgstr ""
+
+#, python-format
+msgid "Registration updated to %(event)s by %(user)s"
+msgstr ""
+
+msgid "The user has updated their registration for this event"
+msgstr ""
+
+#, python-format
+msgid "Registration cancelled for %(event)s by %(user)s"
+msgstr ""
+
+msgid "The registration for this event has been cancelled"
+msgstr ""
+
+#, python-format
+msgid "Reimbursement request for %(event)s"
+msgstr ""
+
+#, python-format
+msgid "Staff member %(user)s added a new reimbursement request for %(event)s"
+msgstr ""
+
+#, python-format
+msgid "The sum is %(amount).2f, with reason '%(reason)s'"
+msgstr ""
+
+msgid "download document"
+msgstr ""
+
+msgid "Did you check and is it correct"
+msgstr ""
+
+msgid "Confirmation of expenditure"
+msgstr ""
+
+#, python-format
+msgid "Utilisation %(tokens)s per %(event)s"
+msgstr ""
+
+#, python-format
+msgid "%(amount)s %(tokens)s were used to participate in this event"
+msgstr ""
+
+#, python-format
+msgid "Utilisation %(credits)s per %(event)s"
+msgstr ""
+
+#, python-format
+msgid "%(amount)s %(credits)s were used to participate in this event"
+msgstr ""
+
+#, python-format
+msgid "Payment for %(event)s"
+msgstr ""
+
+#, python-format
+msgid "A payment of %(amount).2f %(currency)s was received for this event"
+msgstr ""
+
+#, python-format
+msgid "Assignment %(elements)s"
+msgstr ""
+
+#, python-format
+msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
+msgstr ""
+
+#, python-format
+msgid "Request refund from: %(user)s"
+msgstr ""
+
+#, python-format
+msgid "Details: %(details)s (<b>%(amount).2f</b>)"
+msgstr ""
+
+msgid "Verify that the data are correct"
+msgstr ""
+
+msgid "Reason for payment"
+msgstr ""
+
+msgid "Amount"
+msgstr ""
+
+msgid "Download document"
+msgstr ""
+
+msgid "Payment to check"
+msgstr ""
+
+msgid "Ticket selected"
+msgstr ""
+
+#, python-format
+msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>"
+msgstr ""
+
+#, python-format
+msgid "Payments already received: <b>%(amount).2f %(currency)s</b>"
+msgstr ""
+
+msgid "Selected options"
+msgstr ""
+
+#, python-format
+msgid ""
+"You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days. "
+"Make your payment <a href='%(url)s'>on this page</a>. If we do not receive "
+"payment by the deadline, your registration may be cancelled."
+msgstr ""
+
+#, python-format
+msgid ""
+"<i>Payment due</i> - You must pay <b>%(amount).2f %(currency)s</b> as soon "
+"as possible. Make your payment <a href='%(url)s'>on this page</a>. If we do "
+"not receive payment, your registration may be cancelled."
+msgstr ""
+
+#, python-format
+msgid "New question by %(user)s"
+msgstr ""
+
+#, python-format
+msgid "A question was asked by: %(user)s"
+msgstr ""
+
+#, python-format
+msgid "Password reset of user %(user)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"The user requested the password reset, but did not complete it. Give them "
+"this link: %(url)s"
 msgstr ""
 
 msgid "To access this feature, you must first register"
@@ -6987,9 +7052,6 @@ msgstr ""
 msgid "Inventory"
 msgstr ""
 
-msgid "View"
-msgstr ""
-
 msgid "Character Inventory"
 msgstr ""
 
@@ -9353,9 +9415,6 @@ msgid "Select your character!"
 msgstr ""
 
 msgid "Registration completed successfully!"
-msgstr ""
-
-msgid "Approve"
 msgstr ""
 
 msgid "Request approved"

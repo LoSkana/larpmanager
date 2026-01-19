@@ -55,7 +55,8 @@ from larpmanager.forms.accounting import (
     WireInvoiceSubmitForm,
 )
 from larpmanager.forms.member import MembershipForm
-from larpmanager.mail.accounting import notify_invoice_check, notify_refund_request
+from larpmanager.mail.accounting import notify_invoice_check
+from larpmanager.mail.base import notify_organization_exe
 from larpmanager.models.accounting import (
     AccountingItemCollection,
     AccountingItemExpense,
@@ -71,7 +72,7 @@ from larpmanager.models.accounting import (
     PaymentType,
 )
 from larpmanager.models.association import Association, AssociationTextType
-from larpmanager.models.member import Member, MembershipStatus, get_user_membership
+from larpmanager.models.member import Member, MembershipStatus, NotificationType, get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context, get_context, get_event_context
 from larpmanager.utils.core.common import (
@@ -284,13 +285,13 @@ def accounting_refund(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             # Save refund request with transaction safety
             with transaction.atomic():
-                p: PaymentInvoice = form.save(commit=False)
-                p.member = context["member"]
-                p.association_id = context["association_id"]
-                p.save()
+                payment: PaymentInvoice = form.save(commit=False)
+                payment.member = context["member"]
+                payment.association_id = context["association_id"]
+                payment.save()
 
             # Send notification to administrators about new refund request
-            notify_refund_request(p)
+            notify_organization_exe(payment.association, payment, notification_type=NotificationType.REFUND_REQUEST)
 
             # Show success message and redirect to accounting dashboard
             messages.success(

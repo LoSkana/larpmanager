@@ -1023,3 +1023,16 @@ class ExePreferencesForm(ConfigForm):
             sidebar_collapse_label,
             sidebar_collapse_help_text,
         )
+
+        # Add organizer digest mode toggle option
+        digest_mode_label = _("Notifications digest")
+        digest_mode_help_text = _(
+            "If checked: receive a single daily summary email instead of immediate notifications "
+            "for registrations, payments, and invoice approvals"
+        )
+        self.add_configs(
+            "mail_orga_digest",
+            ConfigType.BOOL,
+            digest_mode_label,
+            digest_mode_help_text,
+        )

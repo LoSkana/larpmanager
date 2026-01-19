@@ -22,8 +22,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
-from django.contrib.sites.shortcuts import get_current_site
-from django.core import signing
 from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
@@ -31,9 +29,10 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.mail.base import notify_organization_exe
+from larpmanager.mail.templates import get_help_email, get_password_reminder_email
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import get_url, hdr
-from larpmanager.models.member import Badge, Member
+from larpmanager.models.member import Badge, Member, NotificationType
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 
 if TYPE_CHECKING:
@@ -278,7 +277,7 @@ def send_help_question_notification_email(instance: Any) -> None:
                 my_send_mail(subject, body, organizer, instance.run)
 
         elif instance.association:
-            notify_organization_exe(get_help_email, instance.association, instance)
+            notify_organization_exe(instance.association, instance, notification_type=NotificationType.HELP_QUESTION)
         else:
             subject, body = get_help_email(instance)
             for _name, email in conf_settings.ADMINS:
@@ -295,22 +294,6 @@ def send_help_question_notification_email(instance: Any) -> None:
         body += "<br /><br />" + _("(<a href='%(url)s'>answer here</a>)") % {"url": url}
 
         my_send_mail(subject, body, member, instance)
-
-
-def get_help_email(help_question: Any) -> Any:
-    """Generate subject and body for help question notification.
-
-    Args:
-        help_question: HelpQuestion instance
-
-    Returns:
-        tuple: (subject, body) for the notification email
-
-    """
-    subject = hdr(help_question) + _("New question by %(user)s") % {"user": help_question.member}
-    email_body = _("A question was asked by: %(user)s") % {"user": help_question.member}
-    email_body += "<br /><br />" + help_question.text
-    return subject, email_body
 
 
 def send_chat_message_notification_email(instance: Any) -> None:
@@ -333,46 +316,6 @@ def send_chat_message_notification_email(instance: Any) -> None:
 
 
 # ACTIVATION ACCOUNT
-REGISTRATION_SALT = getattr(conf_settings, "REGISTRATION_SALT", "registration")
-
-
-def get_activation_key(user: Any) -> Any:
-    """Generate the activation key which will be emailed to the user.
-
-    Args:
-        user: User instance to generate key for
-
-    Returns:
-        str: Signed activation key for email verification
-
-    """
-    """
-    Generate the activation key which will be emailed to the user.
-    """
-    return signing.dumps(obj=user.get_username(), salt=REGISTRATION_SALT)
-
-
-def get_email_context(activation_key: Any, request: Any) -> Any:
-    """Build the template context used for the activation email.
-
-    Args:
-        activation_key (str): Generated activation key
-        request: Django HTTP request object
-
-    Returns:
-        dict: Context dictionary for activation email template
-
-    """
-    """
-    Build the template context used for the activation email.
-    """
-    scheme = "https" if request.is_secure() else "http"
-    return {
-        "scheme": scheme,
-        "activation_key": activation_key,
-        "expiration_days": conf_settings.ACCOUNT_ACTIVATION_DAYS,
-        "site": get_current_site(request),
-    }
 
 
 def send_password_reset_remainder(membership: Any) -> None:
@@ -386,29 +329,8 @@ def send_password_reset_remainder(membership: Any) -> None:
 
     """
     association = membership.association
-    notify_organization_exe(get_password_reminder_email, association, membership)
+    notify_organization_exe(association, membership, notification_type=NotificationType.PASSWORD_REMINDER)
 
     for _admin_name, admin_email in conf_settings.ADMINS:
         (subject, body) = get_password_reminder_email(membership)
         my_send_mail(subject, body, admin_email, association)
-
-
-def get_password_reminder_email(membership: Any) -> Any:
-    """Generate subject and body for password reset reminder.
-
-    Args:
-        membership: Membership instance with password reset request
-
-    Returns:
-        tuple: (subject, body) for the reminder email
-
-    """
-    association = membership.association
-    member = membership.member
-    reset_token_parts = membership.password_reset.split("#")
-    reset_url = get_url(f"reset/{reset_token_parts[0]}/{reset_token_parts[1]}/", association)
-    subject = _("Password reset of user %(user)s") % {"user": member}
-    body = _("The user requested the password reset, but did not complete it. Give them this link: %(url)s") % {
-        "url": reset_url,
-    }
-    return subject, body

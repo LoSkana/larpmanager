@@ -1359,6 +1359,9 @@ msgstr "Hulp nodig"
 msgid "New event"
 msgstr "Nieuw evenement"
 
+msgid "No ticket"
+msgstr "Geen ticket"
+
 msgid "Open Link"
 msgstr "Open Link"
 
@@ -1448,6 +1451,9 @@ msgstr "Vertaal"
 
 msgid "Treasurer"
 msgstr "Penningmeester"
+
+msgid "View/Edit"
+msgstr "Bekijken/bewerken"
 
 msgid "Warehouse"
 msgstr "Magazijn"
@@ -2203,6 +2209,9 @@ msgstr "Voorwaarden van"
 msgid "Configuration"
 msgstr "Configuratie"
 
+msgid "Daily Summary"
+msgstr "Dagelijkse samenvatting"
+
 msgid "Deadline date"
 msgstr "Uiterste datum"
 
@@ -2462,6 +2471,9 @@ msgstr "Globaal budget"
 msgid "Handout Models"
 msgstr "Handout Modellen"
 
+msgid "Help Questions"
+msgstr "Hulp Vragen"
+
 msgid "List of voters"
 msgstr "Lijst van kiezers"
 
@@ -2696,6 +2708,9 @@ msgstr "Vooruitgang"
 msgid "Question saved!"
 msgstr "Onderdanige vraag!"
 
+msgid "Refund Requests"
+msgstr "Verzoeken om terugbetaling"
+
 msgid "Remove prologue"
 msgstr "Proloog verwijderen"
 
@@ -2903,6 +2918,9 @@ msgstr "Voorinschrijving"
 msgid "Realized revenue"
 msgstr "Gerealiseerde omzet"
 
+msgid "Refund requested"
+msgstr "Restitutie aangevraagd"
+
 msgid "Registration fee"
 msgstr "Inschrijfgeld"
 
@@ -2990,6 +3008,9 @@ msgstr "Onderdanig antwoord!"
 msgid "Assigned quantity"
 msgstr "Toegewezen hoeveelheid"
 
+msgid "Awaiting approval"
+msgstr "In afwachting van goedkeuring"
+
 msgid "Cancellation date"
 msgstr "Uitschrijfdatum"
 
@@ -3074,6 +3095,9 @@ msgstr "Maanden vrij quotum"
 msgid "Move to container"
 msgstr "Verplaats naar container"
 
+msgid "New Registrations"
+msgstr "Nieuwe registraties"
+
 msgid "No transfers yet."
 msgstr "Nog geen transfers."
 
@@ -3088,6 +3112,9 @@ msgstr "Betaal wat je wilt"
 
 msgid "Payment confirmed"
 msgstr "Betaling bevestigd"
+
+msgid "Payments Received"
+msgstr "Ontvangen betalingen"
 
 msgid "Payments received"
 msgstr "Ontvangen betalingen"
@@ -3527,6 +3554,9 @@ msgstr "Niet beschikbaar, kiddo"
 msgid "Not visible to users"
 msgstr "Niet zichtbaar voor gebruikers"
 
+msgid "Notifications digest"
+msgstr "Overzicht meldingen"
+
 msgid "Number of passengers"
 msgstr "Aantal passagiers"
 
@@ -3667,6 +3697,9 @@ msgstr "Galerij niet toegevoegd"
 msgid "Failed to add handout"
 msgstr "Hand-out niet toegevoegd"
 
+msgid "Go to event dashboard"
+msgstr "Ga naar het dashboard van het evenement"
+
 msgid "Go to the casting for"
 msgstr "Ga naar casting voor"
 
@@ -3760,6 +3793,9 @@ msgstr "Token niet geïnitialiseerd"
 
 msgid "Transfer registration"
 msgstr "Registratie overdragen"
+
+msgid "Updated Registrations"
+msgstr "Bijgewerkte registraties"
 
 msgid "Upload membership fee"
 msgstr "Lidmaatschap uploaden"
@@ -3958,6 +3994,9 @@ msgstr "Vereniging Vertaling"
 msgid "Background of web pages"
 msgstr "Achtergrond webpagina"
 
+msgid "Cancelled Registrations"
+msgstr "Geannuleerde registraties"
+
 msgid "Candidates at the polls"
 msgstr "Kandidaten op het stembiljet"
 
@@ -4021,6 +4060,9 @@ msgstr "Verhuis registratie evenement"
 
 msgid "One-Time Access Warning"
 msgstr "Waarschuwing voor eenmalige toegang"
+
+msgid "Password Reset Requests"
+msgstr "Wachtwoord opnieuw instellen"
 
 msgid "Please check them below"
 msgstr "Bekijk ze hieronder"
@@ -4317,6 +4359,9 @@ msgstr "Geef een kaart aan je vriend(in)"
 msgid "Hide unassigned characters"
 msgstr "Niet-toegewezen tekens verbergen"
 
+msgid "Invoices Awaiting Approval"
+msgstr "Facturen die wachten op goedkeuring"
+
 msgid "Manage the event prologues"
 msgstr "De prologen van evenementen beheren"
 
@@ -4398,6 +4443,9 @@ msgstr "Geef hier je voorkeuren aan"
 
 msgid "Event context not available"
 msgstr "Gebeurteniscontext niet beschikbaar"
+
+msgid "Go to association dashboard"
+msgstr "Ga naar het verenigingsdashboard"
 
 msgid "Items that will be modified"
 msgstr "Items die worden gewijzigd"
@@ -4640,6 +4688,9 @@ msgstr "Registratietoeslagen beheren"
 
 msgid "Manage viewing writing element"
 msgstr "Weergave schrijfelement beheren"
+
+msgid "Password reset request url for"
+msgstr "Wachtwoord reset verzoek url voor"
 
 msgid "Registrations on external link"
 msgstr "Registraties op externe link"
@@ -5616,6 +5667,9 @@ msgstr "Details: %(details)s (<b>%(amount).2f</b>)"
 
 msgid "For which day you will need transportation"
 msgstr "Voor welke dag heb je vervoer nodig"
+
+msgid "Here's what happened in the last 24 hours:"
+msgstr "Dit is wat er de afgelopen 24 uur is gebeurd:"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "ISO-taalcode (bijv. 'en', 'it', 'de')"
@@ -10912,6 +10966,14 @@ msgstr ""
 "dit cijfer is het nettoresultaat dat zou moeten resulteren uit de "
 "beschikbaarheid van financiële instrumenten - het houdt geen rekening met "
 "tokens en kredieten"
+
+msgid ""
+"If checked: receive a single daily summary email instead of immediate "
+"notifications for registrations, payments, and invoice approvals"
+msgstr ""
+"Indien aangevinkt: ontvang één e-mail met een dagelijks overzicht in plaats "
+"van onmiddellijke meldingen voor registraties, betalingen en goedkeuringen "
+"van facturen"
 
 msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "
