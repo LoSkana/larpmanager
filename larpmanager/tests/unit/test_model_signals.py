@@ -85,7 +85,7 @@ class TestModelSignals(BaseTestCase):
 
     def test_association_pre_save_generates_encryption_key(self) -> None:
         """Test that Association pre_save signal generates Fernet key"""
-        association = Association(name="Test Association Name", email="test@example.com")
+        association = Association(name="Test Association Name", main_mail="test@example.com")
         association.save()
 
         # Should have generated encryption key
@@ -479,7 +479,7 @@ class TestModelSignals(BaseTestCase):
 
     def test_association_pre_save_creates_default_values(self) -> None:
         """Test that Association pre_save signal creates default values like encryption key"""
-        association = Association(name="New Association", email="new@example.com")
+        association = Association(name="New Association", main_mail="new@example.com")
         association.save()
 
         # Should have created encryption key
@@ -491,7 +491,7 @@ class TestModelSignals(BaseTestCase):
         """Test that Association post_save signal updates features"""
         mock_get_features.return_value = {}
 
-        association = Association(name="Test Association", email="test@example.com")
+        association = Association(name="Test Association", main_mail="test@example.com")
         association.save()
 
         # Should call get_association_features to update features
