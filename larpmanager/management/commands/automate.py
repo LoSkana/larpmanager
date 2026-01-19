@@ -34,6 +34,7 @@ from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.mail.accounting import notify_invoice_check
 from larpmanager.mail.base import check_holiday
+from larpmanager.mail.digest import send_daily_organizer_summaries
 from larpmanager.mail.member import send_password_reset_remainder
 from larpmanager.mail.remind import (
     notify_deadlines,
@@ -135,6 +136,9 @@ class Command(BaseCommand):
         self.check_password_reset()
         self.check_payment_not_approved()
         self.check_old_payments()
+
+        # Send daily organizer summaries for events with digest mode enabled
+        self.send_organizer_summaries()
 
         # Process automation tasks for active runs only
         # Skip completed or cancelled runs to avoid unnecessary processing
@@ -790,3 +794,16 @@ class Command(BaseCommand):
 
         # Send deadline notifications for this run
         notify_deadlines(run)
+
+    @staticmethod
+    def send_organizer_summaries() -> None:
+        """Send daily summary emails to organizers for events with digest mode enabled.
+
+        Processes all queued notifications and sends consolidated daily summaries
+        to event organizers. Only sends emails for events that have digest mode
+        enabled via the mail_orga_digest configuration.
+
+        Returns:
+            None
+        """
+        send_daily_organizer_summaries()

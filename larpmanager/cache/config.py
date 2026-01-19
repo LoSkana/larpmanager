@@ -324,6 +324,20 @@ def get_event_config(
     )
 
 
+def get_member_config(
+    member_id: int,
+    config_name: str,
+    *,
+    default_value: Any = None,
+    context: dict | None = None,
+    bypass_cache: bool = False,
+) -> Any:
+    """Get member configuration value from cache or database."""
+    return _get_cached_config(
+        member_id, "member", config_name, default_value=default_value, context=context, bypass_cache=bypass_cache
+    )
+
+
 def evaluate_config(configurations: dict, configuration_name: str, default_value: any) -> any:
     """Evaluate configuration value from element's aux_configs with type conversion.
 

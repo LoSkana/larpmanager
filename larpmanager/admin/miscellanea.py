@@ -27,6 +27,7 @@ from django.utils.html import format_html
 
 from larpmanager.admin.base import AssociationFilter, DefModelAdmin, EventFilter, RunFilter, reduced
 from larpmanager.admin.character import TargetFilter
+from larpmanager.models.member import NotificationQueue
 from larpmanager.models.miscellanea import (
     Album,
     AlbumImage,
@@ -430,3 +431,26 @@ class ProblemAdmin(DefModelAdmin):
     search_fields: ClassVar[tuple] = ("id", "uuid")
     autocomplete_fields: ClassVar[list] = ["event"]
     list_filter = (EventFilter, "severity")
+
+
+class EventFilter(AutocompleteFilter):
+    """Admin filter for Event autocomplete."""
+
+    title = "Event"
+    field_name = "event"
+
+
+@admin.register(NotificationQueue)
+class NotificationQueueAdmin(DefModelAdmin):
+    """Admin interface for NotificationQueue model."""
+
+    list_display: ClassVar[tuple] = (
+        "run",
+        "member",
+        "notification_type",
+        "object_id",
+        "created_at",
+        "sent",
+        "sent_at",
+    )
+    list_filter: ClassVar[tuple] = ("notification_type", "sent", RunFilter)
