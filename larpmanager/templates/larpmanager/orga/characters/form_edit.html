@@ -2,14 +2,15 @@
 {% load i18n %}
 {% load i18n show_tags %}
 {% block title %}
-    {{ form.page_title }}
     {% if nonum is None %}
         {% if num != "0" %}
-            - {% trans "Change" %}
+            {{ name }}
         {% else %}
-            - {% trans "New" %}
+            {% trans "New" %}
         {% endif %}
+        -
     {% endif %}
+    {{ form.page_title }}
     - {{ run }}
 {% endblock title %}
 {% block info %}

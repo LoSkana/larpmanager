@@ -1776,6 +1776,9 @@ msgstr "Popis"
 msgid "Direct link"
 msgstr "Přímý odkaz"
 
+msgid "Event Texts"
+msgstr "Texty událostí"
+
 msgid "Event texts"
 msgstr "Texty událostí"
 
@@ -1997,12 +2000,6 @@ msgstr "Seznam frakcí"
 
 msgid "Faction logo"
 msgstr "Logo skupiny"
-
-msgid "Form Options"
-msgstr "Možnosti formuláře"
-
-msgid "Form element"
-msgstr "Prvek formuláře"
 
 msgid "Form section"
 msgstr "Sekce formuláře"
@@ -2408,9 +2405,6 @@ msgstr "Seznam nákladu"
 msgid "Carousel image"
 msgstr "Kolotoč obrázků"
 
-msgid "Character Edit"
-msgstr "Úprava postavy"
-
 msgid "Character form"
 msgstr "Podoba postavy"
 
@@ -2594,9 +2588,6 @@ msgstr "Oblast skladu"
 msgid "Warehouse tags"
 msgstr "Štítky skladu"
 
-msgid "Writing option"
-msgstr "Možnost psaní"
-
 msgid "Your character"
 msgstr "Vaše postava"
 
@@ -2753,6 +2744,9 @@ msgstr "BUDE AKTUALIZOVÁN"
 msgid "Warehouse items"
 msgstr "Skladové položky"
 
+msgid "Writing options"
+msgstr "Možnosti psaní"
+
 msgid "You can consult"
 msgstr "Můžete konzultovat"
 
@@ -2827,6 +2821,9 @@ msgstr "Schválený prvek"
 
 msgid "Event Appearance"
 msgstr "Vystoupení na akci"
+
+msgid "Event Navigation"
+msgstr "Navigace pro události"
 
 msgid "Event accounting"
 msgstr "Účtování událostí"
@@ -2965,9 +2962,6 @@ msgstr "Náhled transferu"
 
 msgid "Where it is held"
 msgstr "Kde se koná"
-
-msgid "Writing Question"
-msgstr "Psaní otázky"
 
 msgid "are not yet open"
 msgstr "ještě nejsou otevřeny"
@@ -3175,6 +3169,9 @@ msgstr "Ověřené platby"
 
 msgid "Vote not yet open"
 msgstr "Hlasování ještě není otevřeno"
+
+msgid "Writing Questions"
+msgstr "Psaní otázek"
 
 msgid "Your character is"
 msgstr "Vaše postava je"
@@ -3593,6 +3590,9 @@ msgstr "Neplatná předvolba"
 
 msgid "Registration history"
 msgstr "Historie vstupu"
+
+msgid "Registration options"
+msgstr "Možnosti registrace"
 
 msgid "Relationships (Test)"
 msgstr "Vztahy (test)"
@@ -4444,9 +4444,6 @@ msgstr "Zde uveďte své preference"
 msgid "Event context not available"
 msgstr "Kontext události není k dispozici"
 
-msgid "Go to association dashboard"
-msgstr "Přejděte na ovládací panel asociace"
-
 msgid "Items that will be modified"
 msgstr "Položky, které budou upraveny"
 
@@ -4522,6 +4519,9 @@ msgstr "Popište, jak vám můžeme pomoci"
 #, python-format
 msgid "Feature %(name)s deactivated"
 msgstr "Funkce %(name)s deaktivována"
+
+msgid "Go to organization dashboard"
+msgstr "Přejít na řídicí panel organizace"
 
 msgid "If checked: members can vote"
 msgstr "Pokud je zaškrtnuto: členové mohou hlasovat"

@@ -527,6 +527,7 @@ def exe_membership_status(request: HttpRequest, member_uuid: str) -> HttpRespons
     context["form"] = form
 
     context["num"] = member_uuid
+    context["name"] = context["member_edit"].display_real()
 
     context["form"].page_title = str(context["member_edit"]) + " - " + _("Membership")
 
@@ -643,6 +644,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
 
     # Add form to context and render the edit template
     context["form"] = form
+    context["num"] = "0"
     return render(request, "larpmanager/exe/edit.html", context)
 
 
@@ -675,6 +677,7 @@ def exe_membership_document(request: HttpRequest) -> Any:
     else:
         form = ExeMembershipDocumentForm(context=context)
     context["form"] = form
+    context["num"] = "0"
 
     return render(request, "larpmanager/exe/edit.html", context)
 

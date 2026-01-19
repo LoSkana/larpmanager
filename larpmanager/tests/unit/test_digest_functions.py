@@ -484,4 +484,4 @@ class TestDigestFunctions(BaseTestCase):
 
         self.assertIn("Daily Summary", email_content)
         self.assertIn(self.association.name, email_content)
-        self.assertIn("Go to association dashboard", email_content)
+        self.assertIn("Go to organization dashboard", email_content)

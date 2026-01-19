@@ -1183,7 +1183,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
 
     page_info = _("Manage signup form questions")
 
-    page_title = _("Form element")
+    page_title = _("Registration questions")
 
     class Meta:
         model = RegistrationQuestion
@@ -1290,7 +1290,7 @@ class OrgaRegistrationOptionForm(BaseModelForm):
 
     page_info = _("Manage signup form question options")
 
-    page_title = _("Form Options")
+    page_title = _("Registration options")
 
     class Meta:
         model = RegistrationOption

@@ -1776,6 +1776,9 @@ msgstr "Descripción"
 msgid "Direct link"
 msgstr "Enlace directo"
 
+msgid "Event Texts"
+msgstr "Textos de eventos"
+
 msgid "Event texts"
 msgstr "Textos del evento"
 
@@ -1997,12 +2000,6 @@ msgstr "Lista de facciones"
 
 msgid "Faction logo"
 msgstr "Logo de facción"
-
-msgid "Form Options"
-msgstr "Opciones de formulario"
-
-msgid "Form element"
-msgstr "Elemento del formulario"
 
 msgid "Form section"
 msgstr "Sección de formularios"
@@ -2408,9 +2405,6 @@ msgstr "Manifiesto de carga"
 msgid "Carousel image"
 msgstr "Carrusel de imágenes"
 
-msgid "Character Edit"
-msgstr "Edición de personajes"
-
 msgid "Character form"
 msgstr "Forma de carácter"
 
@@ -2594,9 +2588,6 @@ msgstr "Almacén"
 msgid "Warehouse tags"
 msgstr "Etiquetas de almacén"
 
-msgid "Writing option"
-msgstr "Opción de escritura"
-
 msgid "Your character"
 msgstr "Tu personaje"
 
@@ -2753,6 +2744,9 @@ msgstr "SE ACTUALIZARÁ"
 msgid "Warehouse items"
 msgstr "Artículos de almacén"
 
+msgid "Writing options"
+msgstr "Opciones de escritura"
+
 msgid "You can consult"
 msgstr "Puedes consultar"
 
@@ -2827,6 +2821,9 @@ msgstr "¡Elemento aprobado"
 
 msgid "Event Appearance"
 msgstr "Aspecto del evento"
+
+msgid "Event Navigation"
+msgstr "Navegación por eventos"
 
 msgid "Event accounting"
 msgstr "Contabilidad del evento"
@@ -2965,9 +2962,6 @@ msgstr "Previsión de fichajes"
 
 msgid "Where it is held"
 msgstr "Dónde se celebra"
-
-msgid "Writing Question"
-msgstr "Pregunta escrita"
 
 msgid "are not yet open"
 msgstr "¡aún no están abiertas"
@@ -3175,6 +3169,9 @@ msgstr "Pagos verificados"
 
 msgid "Vote not yet open"
 msgstr "La votación aún no está abierta"
+
+msgid "Writing Questions"
+msgstr "Preguntas escritas"
 
 msgid "Your character is"
 msgstr "Tu personaje es"
@@ -3593,6 +3590,9 @@ msgstr "Preferencia no válida"
 
 msgid "Registration history"
 msgstr "Historial de inscripciones"
+
+msgid "Registration options"
+msgstr "Opciones de registro"
 
 msgid "Relationships (Test)"
 msgstr "Relaciones (Test)"
@@ -4444,9 +4444,6 @@ msgstr "Indica aquí tus preferencias"
 msgid "Event context not available"
 msgstr "Contexto de evento no disponible"
 
-msgid "Go to association dashboard"
-msgstr "Ir al cuadro de mandos de la asociación"
-
 msgid "Items that will be modified"
 msgstr "Elementos que se modificarán"
 
@@ -4522,6 +4519,9 @@ msgstr "Describa cómo podemos ayudarle"
 #, python-format
 msgid "Feature %(name)s deactivated"
 msgstr "¡Característica %(name)s desactivada"
+
+msgid "Go to organization dashboard"
+msgstr "Ir al panel de control de la organización"
 
 msgid "If checked: members can vote"
 msgstr "Si está marcada: los miembros pueden votar"

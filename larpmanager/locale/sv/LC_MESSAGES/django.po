@@ -1776,6 +1776,9 @@ msgstr "Beskrivning"
 msgid "Direct link"
 msgstr "Direkt länk"
 
+msgid "Event Texts"
+msgstr "Evenemangstexter"
+
 msgid "Event texts"
 msgstr "Händelsetexter"
 
@@ -1997,12 +2000,6 @@ msgstr "Lista över fraktioner"
 
 msgid "Faction logo"
 msgstr "En grupplogotyp"
-
-msgid "Form Options"
-msgstr "Alternativ för formulär"
-
-msgid "Form element"
-msgstr "Formulärelement"
 
 msgid "Form section"
 msgstr "Formulär sektion"
@@ -2408,9 +2405,6 @@ msgstr "Lastmanifest"
 msgid "Carousel image"
 msgstr "Bildkarusell"
 
-msgid "Character Edit"
-msgstr "Redigera karaktär"
-
 msgid "Character form"
 msgstr "Karaktärsform"
 
@@ -2594,9 +2588,6 @@ msgstr "Lagerområde"
 msgid "Warehouse tags"
 msgstr "Lagertaggar"
 
-msgid "Writing option"
-msgstr "Alternativ för skrivning"
-
 msgid "Your character"
 msgstr "Din karaktär"
 
@@ -2753,6 +2744,9 @@ msgstr "KOMMER ATT UPPDATERAS"
 msgid "Warehouse items"
 msgstr "Lagervaror"
 
+msgid "Writing options"
+msgstr "Alternativ för skrivning"
+
 msgid "You can consult"
 msgstr "Du kan rådfråga"
 
@@ -2827,6 +2821,9 @@ msgstr "Godkänt element"
 
 msgid "Event Appearance"
 msgstr "Evenemangets utseende"
+
+msgid "Event Navigation"
+msgstr "Navigering för evenemang"
 
 msgid "Event accounting"
 msgstr "Redovisning av evenemang"
@@ -2965,9 +2962,6 @@ msgstr "Förhandstitt på övergångar"
 
 msgid "Where it is held"
 msgstr "Var den hålls"
-
-msgid "Writing Question"
-msgstr "Skriva fråga"
 
 msgid "are not yet open"
 msgstr "är ännu inte öppna"
@@ -3175,6 +3169,9 @@ msgstr "Verifierade betalningar"
 
 msgid "Vote not yet open"
 msgstr "Omröstningen är ännu inte inledd"
+
+msgid "Writing Questions"
+msgstr "Skriva frågor"
 
 msgid "Your character is"
 msgstr "Din karaktär är"
@@ -3593,6 +3590,9 @@ msgstr "Ogiltig preferens"
 
 msgid "Registration history"
 msgstr "Ingångshistoria"
+
+msgid "Registration options"
+msgstr "Alternativ för registrering"
 
 msgid "Relationships (Test)"
 msgstr "Relationer (test)"
@@ -4444,9 +4444,6 @@ msgstr "Ange dina preferenser här"
 msgid "Event context not available"
 msgstr "Händelsekontext inte tillgänglig"
 
-msgid "Go to association dashboard"
-msgstr "Gå till föreningens instrumentpanel"
-
 msgid "Items that will be modified"
 msgstr "Objekt som kommer att modifieras"
 
@@ -4522,6 +4519,9 @@ msgstr "Beskriv hur vi kan hjälpa dig"
 #, python-format
 msgid "Feature %(name)s deactivated"
 msgstr "Funktion %(name)s avaktiverad"
+
+msgid "Go to organization dashboard"
+msgstr "Gå till organisationens instrumentpanel"
 
 msgid "If checked: members can vote"
 msgstr "Om markerat: medlemmar kan rösta"

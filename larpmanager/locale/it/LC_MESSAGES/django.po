@@ -1776,6 +1776,9 @@ msgstr "Descrizione"
 msgid "Direct link"
 msgstr "Link diretto"
 
+msgid "Event Texts"
+msgstr "Testi degli eventi"
+
 msgid "Event texts"
 msgstr "Testi evento"
 
@@ -1997,12 +2000,6 @@ msgstr "Elenco delle fazioni"
 
 msgid "Faction logo"
 msgstr "Un logo del gruppo"
-
-msgid "Form Options"
-msgstr "Opzioni form"
-
-msgid "Form element"
-msgstr "Elemento form"
 
 msgid "Form section"
 msgstr "Sezione form"
@@ -2408,9 +2405,6 @@ msgstr "Manifesto di carico"
 msgid "Carousel image"
 msgstr "Immagine carousel"
 
-msgid "Character Edit"
-msgstr "Modifica personaggio"
-
 msgid "Character form"
 msgstr "Form personaggio"
 
@@ -2594,9 +2588,6 @@ msgstr "Area magazzino"
 msgid "Warehouse tags"
 msgstr "Etichette di magazzino"
 
-msgid "Writing option"
-msgstr "Opzione scrittura"
-
 msgid "Your character"
 msgstr "Il tuo personaggio"
 
@@ -2753,6 +2744,9 @@ msgstr "SARÀ AGGIORNATO"
 msgid "Warehouse items"
 msgstr "Articoli di magazzino"
 
+msgid "Writing options"
+msgstr "Opzioni di scrittura"
+
 msgid "You can consult"
 msgstr "Puoi consultare"
 
@@ -2827,6 +2821,9 @@ msgstr "Elemento approvato"
 
 msgid "Event Appearance"
 msgstr "Aspetto Evento"
+
+msgid "Event Navigation"
+msgstr "Navigazione degli eventi"
 
 msgid "Event accounting"
 msgstr "Contabilità evento"
@@ -2965,9 +2962,6 @@ msgstr "Anteprima dei trasferimenti"
 
 msgid "Where it is held"
 msgstr "Dove si tiene"
-
-msgid "Writing Question"
-msgstr "Domanda di scrittura"
 
 msgid "are not yet open"
 msgstr "non sono ancora aperte"
@@ -3175,6 +3169,9 @@ msgstr "Pagamenti verificati"
 
 msgid "Vote not yet open"
 msgstr "La votazione non è ancora stata aperta"
+
+msgid "Writing Questions"
+msgstr "Domande sulla scrittura"
 
 msgid "Your character is"
 msgstr "Il tuo personaggio è"
@@ -3594,6 +3591,9 @@ msgstr "Preferenza non valida"
 msgid "Registration history"
 msgstr "Storico iscrizioni"
 
+msgid "Registration options"
+msgstr "Opzioni di registrazione"
+
 msgid "Relationships (Test)"
 msgstr "Relazioni (Test)"
 
@@ -3698,7 +3698,7 @@ msgid "Failed to add handout"
 msgstr "Impossibile aggiungere la dispensa"
 
 msgid "Go to event dashboard"
-msgstr "Vai al cruscotto dell'evento"
+msgstr "Vai alla dashboard dell'evento"
 
 msgid "Go to the casting for"
 msgstr "Vai al casting per"
@@ -4360,7 +4360,7 @@ msgid "Hide unassigned characters"
 msgstr "Nascondi personaggi non assegnati"
 
 msgid "Invoices Awaiting Approval"
-msgstr "Fatture in attesa di approvazione"
+msgstr "Versamenti in attesa di approvazione"
 
 msgid "Manage the event prologues"
 msgstr "Gestisci i prologhi degli eventi"
@@ -4444,9 +4444,6 @@ msgstr "Indica qui le tue preferenze"
 msgid "Event context not available"
 msgstr "Contesto dell'evento non disponibile"
 
-msgid "Go to association dashboard"
-msgstr "Vai al cruscotto dell'associazione"
-
 msgid "Items that will be modified"
 msgstr "Voci che verranno modificate"
 
@@ -4522,6 +4519,9 @@ msgstr "Descrivi come possiamo aiutarti"
 #, python-format
 msgid "Feature %(name)s deactivated"
 msgstr "Funzionalità %(name)s disattivata"
+
+msgid "Go to organization dashboard"
+msgstr "Vai al cruscotto dell'organizzazione"
 
 msgid "If checked: members can vote"
 msgstr "Se selezionato: i membri possono votare"
@@ -10979,8 +10979,9 @@ msgid ""
 "If checked: receive a single daily summary email instead of immediate "
 "notifications for registrations, payments, and invoice approvals"
 msgstr ""
-"Se selezionata: ricevere un'unica e-mail di riepilogo giornaliera invece di "
-"notifiche immediate per registrazioni, pagamenti e approvazioni di fatture"
+"Se selezionata: riceverai un'unica e-mail di riepilogo giornaliera invece di"
+" notifiche immediate per registrazioni, pagamenti e approvazioni di "
+"pagamenti"
 
 msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "

@@ -46,6 +46,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from larpmanager.forms.base import BaseModelForm
+    from larpmanager.models.base import BaseModel
 
 
 def save_log(member: Member, cls: type, element: Any, *, to_delete: bool = False) -> None:
@@ -295,9 +296,18 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: 
     context["num"] = entity_uuid
 
     if entity_uuid != "0":
-        context["name"] = str(context[model_name])
+        context["name"] = set_form_name(context[model_name])
 
     return False
+
+
+def set_form_name(el: BaseModel) -> str:
+    """Get the name to show on the form."""
+    if hasattr(el, "name"):
+        return el.name
+    if hasattr(el, "title"):
+        return el.title
+    return str(el)
 
 
 def backend_get(context: dict, model_type: type, entity_uuid: str, association_field: str | None = None) -> None:
@@ -325,7 +335,55 @@ def backend_get(context: dict, model_type: type, entity_uuid: str, association_f
     context["name"] = str(element)
 
 
-def backend_edit(  # noqa: C901 - Complex editing logic with form validation and POST processing
+def _resolve_element_uuid(
+    context: dict,
+    element_uuid: str | None,
+    *,
+    is_association: bool,
+) -> str:
+    """Resolve element UUID from context if None."""
+    if element_uuid is not None:
+        return element_uuid
+
+    if is_association:
+        context["exe"] = True
+        context["nonum"] = True
+        return context["uuid"]
+
+    context["nonum"] = True
+    return context["event"].uuid
+
+
+def _handle_form_submission(
+    request: HttpRequest,
+    context: dict,
+    form_type: type[BaseModelForm],
+    *,
+    quiet: bool,
+) -> bool:
+    """Handle form submission and return True if saved successfully."""
+    context["form"] = form_type(request.POST, request.FILES, instance=context["el"], context=context)
+
+    if not context["form"].is_valid():
+        return False
+
+    # Save the form and show success message if not in quiet mode
+    saved_object = context["form"].save()
+    if not quiet:
+        messages.success(request, _("Operation completed") + "!")
+
+    # Handle deletion if delete flag is set in POST data
+    should_delete = request.POST.get("delete") == "1"
+    save_log(context["member"], form_type, saved_object, to_delete=should_delete)
+    if should_delete:
+        saved_object.delete()
+
+    # Store saved object in context and return success
+    context["saved"] = saved_object
+    return True
+
+
+def backend_edit(
     request: HttpRequest,
     context: dict,
     form_type: type[BaseModelForm],
@@ -359,19 +417,13 @@ def backend_edit(  # noqa: C901 - Complex editing logic with form validation and
     context["elementTyp"] = model_type
     context["request"] = request
 
-    # Handle association-based operations vs event-based operations
-    if is_association:
-        context["exe"] = True
-        if element_uuid is None:
-            element_uuid = context["uuid"]
-            context["nonum"] = True
-    elif element_uuid is None:
-        element_uuid = context["event"].uuid
-        context["nonum"] = True
+    # Resolve element UUID from context if needed
+    element_uuid = _resolve_element_uuid(context, element_uuid, is_association=is_association)
 
     # Load existing element or set as None for new objects
     if element_uuid != "0":
         backend_get(context, model_type, element_uuid, additional_field)
+        context["name"] = set_form_name(context["el"])
     else:
         context["el"] = None
 
@@ -379,36 +431,18 @@ def backend_edit(  # noqa: C901 - Complex editing logic with form validation and
     context["num"] = element_uuid
     context["type"] = context["elementTyp"].__name__.lower()
 
-    # Process POST request - form submission and validation
+    # Process form submission
     if request.method == "POST":
-        context["form"] = form_type(request.POST, request.FILES, instance=context["el"], context=context)
-
-        if context["form"].is_valid():
-            # Save the form and show success message if not in quiet mode
-            saved_object = context["form"].save()
-            if not quiet:
-                messages.success(request, _("Operation completed") + "!")
-
-            # Handle deletion if delete flag is set in POST data
-            to_delete = "delete" in request.POST and request.POST["delete"] == "1"
-            save_log(context["member"], form_type, saved_object, to_delete=to_delete)
-            if to_delete:
-                saved_object.delete()
-
-            # Store saved object in context and return success
-            context["saved"] = saved_object
+        if _handle_form_submission(request, context, form_type, quiet=quiet):
             return True
     else:
         # GET request - initialize form with existing instance
         context["form"] = form_type(instance=context["el"], context=context)
 
-    # Set display name for existing objects
-    if element_uuid != "0":
-        context["name"] = str(context["el"])
-
     # Handle "add another" functionality for continuous adding
-    context["add_another"] = "add_another" not in context or context["add_another"]
-    if context["add_another"]:
+    should_add_another = context.get("add_another", True)
+    context["add_another"] = should_add_another
+    if should_add_another:
         context["continue_add"] = "continue" in request.POST
 
     return False
@@ -601,7 +635,7 @@ def writing_edit(
     # Configure element identification and naming
     if element_name in context:
         context["edit_uuid"] = context[element_name].uuid
-        context["name"] = str(context[element_name])
+        context["name"] = set_form_name(context[element_name])
     else:
         context[element_name] = None
 

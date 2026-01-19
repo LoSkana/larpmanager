@@ -1100,7 +1100,7 @@ class OrgaAppearanceForm(BaseModelCssForm):
 class OrgaEventTextForm(BaseModelForm):
     """Form for managing event-specific text content and messages."""
 
-    page_title = _("Texts")
+    page_title = _("Event Texts")
 
     page_info = _("Manage event texts")
 
@@ -1230,7 +1230,7 @@ class OrgaEventRoleForm(BaseModelForm):
 class OrgaEventButtonForm(BaseModelForm):
     """Form for editing event navigation buttons."""
 
-    page_title = _("Navigation")
+    page_title = _("Event Navigation")
 
     page_info = _("Manage event navigation buttons")
 
@@ -1439,6 +1439,8 @@ class OrgaProgressStepForm(BaseModelForm):
 
 class ExeEventForm(OrgaEventForm):
     """Extended event form for executors with template support."""
+
+    page_title = _("Events")
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize ExeEventForm with template event selection."""

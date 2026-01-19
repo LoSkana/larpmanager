@@ -540,7 +540,7 @@ def generate_association_summary_email(association: Association, notifications: 
     # Footer
     email_body += "<br/><hr/>"
     assoc_url = get_url(reverse("manage"), association)
-    email_body += "<p>" + _("Go to association dashboard") + f': <a href="{assoc_url}">{association.name}</a></p>'
+    email_body += "<p>" + _("Go to organization dashboard") + f': <a href="{assoc_url}">{association.name}</a></p>'
 
     return email_body
 

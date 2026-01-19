@@ -1,13 +1,12 @@
 {% extends "utils.html" %}
 {% load i18n static show_tags %}
 {% block title %}
-    {{ form.page_title }}
     {% if edit_uuid %}
-        - {% trans "Change" %}
+        {{ name }}
     {% else %}
-        - {% trans "New" %}
+        {% trans "New" %}
     {% endif %}
-    - {{ run }}
+    - {{ form.page_title }} - {{ run }}
 {% endblock title %}
 {% block info %}
     {{ form.page_info }}

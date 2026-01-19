@@ -1776,6 +1776,9 @@ msgstr "Beschrijving"
 msgid "Direct link"
 msgstr "Directe link"
 
+msgid "Event Texts"
+msgstr "Evenementteksten"
+
 msgid "Event texts"
 msgstr "Evenementteksten"
 
@@ -1997,12 +2000,6 @@ msgstr "Factielijst"
 
 msgid "Faction logo"
 msgstr "Een groepslogo"
-
-msgid "Form Options"
-msgstr "Vorm Opties"
-
-msgid "Form element"
-msgstr "Vorm element"
 
 msgid "Form section"
 msgstr "Formulier sectie"
@@ -2408,9 +2405,6 @@ msgstr "Vrachtmanifest"
 msgid "Carousel image"
 msgstr "Afbeeldingencarrousel"
 
-msgid "Character Edit"
-msgstr "Karakter bewerken"
-
 msgid "Character form"
 msgstr "Karaktervorm"
 
@@ -2594,9 +2588,6 @@ msgstr "Magazijn"
 msgid "Warehouse tags"
 msgstr "Magazijn tags"
 
-msgid "Writing option"
-msgstr "Schrijfoptie"
-
 msgid "Your character"
 msgstr "Je personage"
 
@@ -2753,6 +2744,9 @@ msgstr "ZAL WORDEN BIJGEWERKT"
 msgid "Warehouse items"
 msgstr "Magazijnartikelen"
 
+msgid "Writing options"
+msgstr "Schrijfopties"
+
 msgid "You can consult"
 msgstr "U kunt"
 
@@ -2827,6 +2821,9 @@ msgstr "Goedgekeurd element"
 
 msgid "Event Appearance"
 msgstr "Evenement Verschijning"
+
+msgid "Event Navigation"
+msgstr "Navigatie op evenementen"
 
 msgid "Event accounting"
 msgstr "Evenement Boekhouding"
@@ -2965,9 +2962,6 @@ msgstr "Transfervoorbeschouwing"
 
 msgid "Where it is held"
 msgstr "Waar het wordt gehouden"
-
-msgid "Writing Question"
-msgstr "Schrijfvraag"
 
 msgid "are not yet open"
 msgstr "zijn nog niet open"
@@ -3175,6 +3169,9 @@ msgstr "Geverifieerde betalingen"
 
 msgid "Vote not yet open"
 msgstr "Er kan nog niet gestemd worden"
+
+msgid "Writing Questions"
+msgstr "Vragen schrijven"
 
 msgid "Your character is"
 msgstr "Je personage is"
@@ -3593,6 +3590,9 @@ msgstr "Ongeldige voorkeur"
 
 msgid "Registration history"
 msgstr "Geschiedenis"
+
+msgid "Registration options"
+msgstr "Registratieopties"
 
 msgid "Relationships (Test)"
 msgstr "Relaties (Test)"
@@ -4444,9 +4444,6 @@ msgstr "Geef hier je voorkeuren aan"
 msgid "Event context not available"
 msgstr "Gebeurteniscontext niet beschikbaar"
 
-msgid "Go to association dashboard"
-msgstr "Ga naar het verenigingsdashboard"
-
 msgid "Items that will be modified"
 msgstr "Items die worden gewijzigd"
 
@@ -4522,6 +4519,9 @@ msgstr "Beschrijf hoe we je kunnen helpen"
 #, python-format
 msgid "Feature %(name)s deactivated"
 msgstr "Functie %(name)s gedeactiveerd"
+
+msgid "Go to organization dashboard"
+msgstr "Ga naar het dashboard van de organisatie"
 
 msgid "If checked: members can vote"
 msgstr "Indien aangevinkt: leden kunnen stemmen"

@@ -1776,6 +1776,9 @@ msgstr "Beskrivelse"
 msgid "Direct link"
 msgstr "Direkte lenke"
 
+msgid "Event Texts"
+msgstr "Arrangementstekster"
+
 msgid "Event texts"
 msgstr "Begivenhetstekster"
 
@@ -1997,12 +2000,6 @@ msgstr "Liste over fraksjoner"
 
 msgid "Faction logo"
 msgstr "En gruppelogo"
-
-msgid "Form Options"
-msgstr "Alternativer for skjema"
-
-msgid "Form element"
-msgstr "Skjemaelement"
 
 msgid "Form section"
 msgstr "Skjemadelen"
@@ -2408,9 +2405,6 @@ msgstr "Lastmanifest"
 msgid "Carousel image"
 msgstr "Bildekarusell"
 
-msgid "Character Edit"
-msgstr "Tegnredigering"
-
 msgid "Character form"
 msgstr "Tegnform"
 
@@ -2594,9 +2588,6 @@ msgstr "Lagerområdet"
 msgid "Warehouse tags"
 msgstr "Lageretiketter"
 
-msgid "Writing option"
-msgstr "Mulighet for skriving"
-
 msgid "Your character"
 msgstr "Din karakter"
 
@@ -2753,6 +2744,9 @@ msgstr "VIL BLI OPPDATERT"
 msgid "Warehouse items"
 msgstr "Lagervarer"
 
+msgid "Writing options"
+msgstr "Alternativer for skriving"
+
 msgid "You can consult"
 msgstr "Du kan konsultere"
 
@@ -2827,6 +2821,9 @@ msgstr "Godkjent element"
 
 msgid "Event Appearance"
 msgstr "Arrangementets opptreden"
+
+msgid "Event Navigation"
+msgstr "Hendelsesnavigasjon"
 
 msgid "Event accounting"
 msgstr "Regnskap for arrangementer"
@@ -2965,9 +2962,6 @@ msgstr "Forhåndsvisning av overganger"
 
 msgid "Where it is held"
 msgstr "Hvor den avholdes"
-
-msgid "Writing Question"
-msgstr "Skriving av spørsmål"
 
 msgid "are not yet open"
 msgstr "er ennå ikke åpnet"
@@ -3175,6 +3169,9 @@ msgstr "Verifiserte betalinger"
 
 msgid "Vote not yet open"
 msgstr "Avstemningen er ennå ikke åpnet"
+
+msgid "Writing Questions"
+msgstr "Skriving av spørsmål"
 
 msgid "Your character is"
 msgstr "Karakteren din er"
@@ -3593,6 +3590,9 @@ msgstr "Ugyldig preferanse"
 
 msgid "Registration history"
 msgstr "Oppføringshistorikk"
+
+msgid "Registration options"
+msgstr "Registreringsalternativer"
 
 msgid "Relationships (Test)"
 msgstr "Relasjoner (Test)"
@@ -4444,9 +4444,6 @@ msgstr "Angi dine preferanser her"
 msgid "Event context not available"
 msgstr "Hendelseskontekst ikke tilgjengelig"
 
-msgid "Go to association dashboard"
-msgstr "Gå til foreningens dashbord"
-
 msgid "Items that will be modified"
 msgstr "Elementer som vil bli endret"
 
@@ -4522,6 +4519,9 @@ msgstr "Beskriv hvordan vi kan hjelpe deg"
 #, python-format
 msgid "Feature %(name)s deactivated"
 msgstr "Funksjon %(name)s deaktivert"
+
+msgid "Go to organization dashboard"
+msgstr "Gå til organisasjonens dashbord"
 
 msgid "If checked: members can vote"
 msgstr "Hvis avkrysset: medlemmene kan stemme"
