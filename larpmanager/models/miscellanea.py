@@ -849,7 +849,7 @@ class EmailRecipient(UuidMixin, BaseModel):
 
     sent = models.DateTimeField(blank=True, null=True, verbose_name=_("Sent At"))
 
-    language_code = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("Language Code"))
+    language_code = models.CharField(max_length=10, blank=True, null=True, verbose_name=_("Language Code"))
 
     class Meta:
         indexes: ClassVar[list] = [
