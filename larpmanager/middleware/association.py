@@ -156,10 +156,11 @@ class AssociationIdentifyMiddleware:
             return redirect(request.path)
 
         # Attempt to load association skin for the base domain
-        association_skin = get_cache_skin(base_domain)
-        if association_skin and request.get_host() == base_domain:
-            # Skin found - load the associated organization
-            return cls.load_association(request, association_skin)
+        if request.get_host() == base_domain or request.enviro != "prod":
+            association_skin = get_cache_skin(base_domain)
+            if association_skin:
+                # Skin found - load the associated organization
+                return cls.load_association(request, association_skin)
 
         # Handle larpmanager.com domain redirects to ensure HTTPS
         if request.get_host().endswith(base_domain):
