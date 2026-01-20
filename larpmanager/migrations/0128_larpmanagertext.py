@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0128_rename_email_to_emailcontent'),
+        ('larpmanager', '0127_notificationqueue'),
     ]
 
     operations = [
