@@ -140,6 +140,44 @@ def language(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/member/language.html", {"form": form})
 
 
+def _save_profile(request: HttpRequest, context: dict, form: ProfileForm, member: Member) -> HttpResponseRedirect:
+    """Perform profile save and checks for after-save redirects."""
+    profile = form.save()
+
+    # Update membership status
+    membership = context["membership"]
+    membership.compiled = True
+    if membership.status == MembershipStatus.EMPTY:
+        membership.status = MembershipStatus.JOINED
+    membership.save()
+
+    activate(profile.language)
+
+    message = _("Personal data updated") + "!"
+
+    # Check if membership workflow is needed
+    if "membership" in context["features"] and membership.status in [
+        MembershipStatus.EMPTY,
+        MembershipStatus.JOINED,
+    ]:
+        message += " " + _("Last step, please upload your membership application") + "."
+        messages.success(request, message)
+        return redirect("membership")
+
+    # Redirect to payment page if a registration has outstanding payment alert
+    if "payment" in context["features"]:
+        alert_registrations = Registration.objects.filter(
+            member=member, alert=True, run__event__association_id=context["association_id"]
+        )
+        if alert_registrations:
+            message = _("To confirm your registration, please pay the amount indicated") + "."
+            messages.success(request, message)
+            return redirect("accounting_registration", registration_uuid=alert_registrations.first().uuid)
+
+    messages.success(request, message)
+    return redirect("home")
+
+
 @login_required
 def profile(request: HttpRequest) -> Any:
     """Display and manage user profile information.
@@ -153,37 +191,13 @@ def profile(request: HttpRequest) -> Any:
         return HttpResponseRedirect("/")
 
     member = context["member"]
-    association_features = context["features"]
     members_fields = context["members_fields"]
 
     # Handle POST request (form submission)
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=member, context=context)
         if form.is_valid():
-            prof = form.save()
-
-            # Update membership status
-            membership = context["membership"]
-            membership.compiled = True
-            if membership.status == MembershipStatus.EMPTY:
-                membership.status = MembershipStatus.JOINED
-            membership.save()
-
-            activate(prof.language)
-
-            message = _("Personal data updated") + "!"
-
-            # Check if membership workflow is needed
-            if "membership" in association_features and membership.status in [
-                MembershipStatus.EMPTY,
-                MembershipStatus.JOINED,
-            ]:
-                message += " " + _("Last step, please upload your membership application") + "."
-                messages.success(request, message)
-                return redirect("membership")
-
-            messages.success(request, message)
-            return redirect("home")
+            return _save_profile(request, context, form, member)
 
     # Handle GET request (display form)
     else:
@@ -208,7 +222,7 @@ def profile(request: HttpRequest) -> Any:
         context["profile"] = member.profile_thumb.url
 
     # Add vote configuration only if voting is enabled
-    if "vote" in association_features:
+    if "vote" in context["features"]:
         context["vote_open"] = get_association_config(
             context["membership"].association_id, "vote_open", default_value=False, context=context
         )
