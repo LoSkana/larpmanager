@@ -79,7 +79,7 @@ from larpmanager.cache.feature import (
     on_association_post_save_reset_features_cache,
 )
 from larpmanager.cache.fields import clear_event_fields_cache
-from larpmanager.cache.larpmanager import clear_blog_cache, clear_larpmanager_home_cache
+from larpmanager.cache.larpmanager import clear_blog_cache, clear_larpmanager_home_cache, clear_larpmanager_texts_cache
 from larpmanager.cache.links import (
     clear_run_event_links_cache,
     on_registration_post_save_reset_event_links,
@@ -216,6 +216,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerGuide,
     LarpManagerHighlight,
     LarpManagerShowcase,
+    LarpManagerText,
     LarpManagerTicket,
     LarpManagerTutorial,
 )
@@ -1141,6 +1142,18 @@ def post_save_reset_lm_home_cache_highlight(sender: type, instance: object, **kw
 def post_delete_reset_lm_home_cache_highlight(sender: type, instance: object, **kwargs: dict) -> None:
     """Reset home cache after highlight deletion."""
     clear_larpmanager_home_cache()
+
+
+@receiver(post_save, sender=LarpManagerText)
+def post_save_reset_lm_texts_cache(sender: type, instance: LarpManagerText, **kwargs: dict) -> None:
+    """Signal handler to reset texts cache when text content changes."""
+    clear_larpmanager_texts_cache()
+
+
+@receiver(post_delete, sender=LarpManagerText)
+def post_delete_reset_lm_texts_cache(sender: type, instance: LarpManagerText, **kwargs: dict) -> None:
+    """Reset texts cache after text deletion."""
+    clear_larpmanager_texts_cache()
 
 
 # Member signals

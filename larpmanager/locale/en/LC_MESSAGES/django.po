@@ -3525,6 +3525,9 @@ msgstr ""
 msgid "High"
 msgstr ""
 
+msgid "Value"
+msgstr ""
+
 msgid "How can we contact you"
 msgstr ""
 
@@ -5106,9 +5109,6 @@ msgid ""
 msgstr ""
 
 msgid "Here are the sign up options with limited number"
-msgstr ""
-
-msgid "Value"
 msgstr ""
 
 msgid "Maximum"

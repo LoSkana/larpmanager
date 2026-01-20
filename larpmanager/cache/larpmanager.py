@@ -30,7 +30,7 @@ from django.db.models import Count
 from larpmanager.models.accounting import PaymentInvoice
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
-from larpmanager.models.larpmanager import LarpManagerHighlight, LarpManagerReview, LarpManagerShowcase
+from larpmanager.models.larpmanager import LarpManagerHighlight, LarpManagerReview, LarpManagerShowcase, LarpManagerText
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character
@@ -264,3 +264,30 @@ def clear_blog_cache(blog_id: int) -> None:
 def get_blog_cache_key(blog_id: int) -> str:
     """Get key for a blog content cache."""
     return f"blog_content_{blog_id}_{datetime.now(tz=UTC).date()}"
+
+
+def cache_larpmanager_texts_key() -> str:
+    """Generate cache key for larpmanager texts."""
+    return "cache_lm_texts"
+
+
+def get_larpmanager_texts() -> dict[str, str]:
+    """Get cached LarpManager texts as a dictionary.
+
+    Returns:
+        Dictionary mapping text names to their values.
+
+    """
+    cache_key = cache_larpmanager_texts_key()
+    cached_texts = cache.get(cache_key)
+
+    if cached_texts is None:
+        cached_texts = {text.name: text.value for text in LarpManagerText.objects.all()}
+        cache.set(cache_key, cached_texts, timeout=86400)
+
+    return cached_texts
+
+
+def clear_larpmanager_texts_cache() -> None:
+    """Clear the cached larpmanager texts."""
+    cache.delete(cache_larpmanager_texts_key())
