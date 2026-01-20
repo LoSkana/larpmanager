@@ -4064,6 +4064,9 @@ msgstr "Engångstillgång Varning"
 msgid "Password Reset Requests"
 msgstr "Begäran om återställning av lösenord"
 
+msgid "Player's character form"
+msgstr "Spelarens karaktärsform"
+
 msgid "Please check them below"
 msgstr "Vänligen kontrollera dem nedan"
 

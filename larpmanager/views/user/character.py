@@ -334,6 +334,8 @@ def character_form(
     get_options_dependencies(context)
     context["elementTyp"] = Character
 
+    context["user_character_text"] = get_event_text(context["event"].id, EventTextType.USER_CHARACTER)
+
     if request.method == "POST":
         # Process form submission with uploaded files
         form = form_class(request.POST, request.FILES, instance=instance, context=context)

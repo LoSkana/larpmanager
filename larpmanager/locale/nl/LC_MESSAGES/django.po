@@ -4064,6 +4064,9 @@ msgstr "Waarschuwing voor eenmalige toegang"
 msgid "Password Reset Requests"
 msgstr "Wachtwoord opnieuw instellen"
 
+msgid "Player's character form"
+msgstr "Spelersfiguur vorm"
+
 msgid "Please check them below"
 msgstr "Bekijk ze hieronder"
 
