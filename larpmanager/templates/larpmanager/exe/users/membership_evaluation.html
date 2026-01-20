@@ -33,6 +33,7 @@
              src="{{ member.membership.get_document_filepath }}"
              alt="membership request" />
     {% endif %}
+    <a href="{{ member.membership.get_document_filepath }}" target="_blank">{% trans "Download" %}</a>
     <hr class="c" />
     {% if '.pdf' in req_path %}
         <embed src="{{ member.membership.get_request_filepath }}"
@@ -44,4 +45,5 @@
              src="{{ member.membership.get_request_filepath }}"
              alt="membership request" />
     {% endif %}
+    <a href="{{ member.membership.get_request_filepath }}" target="_blank">{% trans "Download" %}</a>
 {% endblock content %}
