@@ -28,7 +28,7 @@ from typing import TYPE_CHECKING
 
 from cryptography.fernet import Fernet, InvalidToken
 
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import (
     AccountingItemCollection,
@@ -135,6 +135,7 @@ def handle_accounting_item_payment_pre_save(instance: AccountingItemPayment) -> 
     1. Ensure the payment has a member (defaults to registration member)
     2. Track if payment value changed for registration updates
     3. Update related transactions when registration changes
+    4. Check if to send payment confirmation
 
     Args:
         instance (AccountingItemPayment): The payment instance being saved
@@ -147,21 +148,30 @@ def handle_accounting_item_payment_pre_save(instance: AccountingItemPayment) -> 
     if not instance.member:
         instance.member = instance.registration.member
 
-    # Skip further processing for new instances (no pk yet)
-    if not instance.pk:
-        return
+    if instance.pk:
+        # Get previous state to detect changes
+        prev = AccountingItemPayment.objects.get(pk=instance.pk)
 
-    # Get previous state to detect changes
-    prev = AccountingItemPayment.objects.get(pk=instance.pk)
+        # Flag if value changed to trigger registration updates
+        instance._update_reg = prev.value != instance.value  # noqa: SLF001
 
-    # Flag if value changed to trigger registration updates
-    instance._update_reg = prev.value != instance.value  # noqa: SLF001  # Internal flag for registration update
+        # Update all related transactions if registration changed
+        if prev.registration != instance.registration:
+            for trans in AccountingItemTransaction.objects.filter(inv_id=instance.inv_id):
+                trans.registration = instance.registration
+                trans.save()
+    else:
+        # Early return if payment should be hidden from notifications
+        if instance.hide:
+            return
 
-    # Update all related transactions if registration changed
-    if prev.registration != instance.registration:
-        for trans in AccountingItemTransaction.objects.filter(inv_id=instance.inv_id):
-            trans.registration = instance.registration
-            trans.save()
+        # Check if payment notifications are enabled for this association
+        if not get_association_config(
+            instance.registration.run.event.association_id, "mail_payment", default_value=False
+        ):
+            return
+
+        instance._send_confirmation = True  # noqa: SLF001
 
 
 def handle_collection_pre_save(instance: Collection) -> None:
