@@ -444,7 +444,6 @@ def post_save_other_accounting_cache(
 @receiver(pre_save, sender=AccountingItemPayment)
 def pre_save_accounting_item_payment(sender: type, instance: AccountingItemPayment, **kwargs: Any) -> None:
     """Send payment confirmation and handle pre-save operations."""
-    send_payment_confirmation_email(instance)
     handle_accounting_item_payment_pre_save(instance)
 
 
@@ -453,6 +452,9 @@ def post_save_payment_accounting_cache(
     sender: type, instance: AccountingItemPayment, created: bool, **kwargs: Any
 ) -> None:
     """Update accounting caches and process payment-related calculations after payment save."""
+    # Send confirmation payment
+    send_payment_confirmation_email(instance)
+
     # Update registration and member accounting cache if payment has associated registration
     if instance.registration and instance.registration.run:
         instance.registration.save()
