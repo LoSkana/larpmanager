@@ -4064,6 +4064,9 @@ msgstr "Jednorazowe ostrzeżenie o dostępie"
 msgid "Password Reset Requests"
 msgstr "Żądania zresetowania hasła"
 
+msgid "Player's character form"
+msgstr "Postać gracza"
+
 msgid "Please check them below"
 msgstr "Sprawdź je poniżej"
 

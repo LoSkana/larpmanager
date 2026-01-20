@@ -4064,6 +4064,9 @@ msgstr "Upozornění na jednorázový přístup"
 msgid "Password Reset Requests"
 msgstr "Žádosti o obnovení hesla"
 
+msgid "Player's character form"
+msgstr "Formulář postavy hráče"
+
 msgid "Please check them below"
 msgstr "Podívejte se na ně níže"
 

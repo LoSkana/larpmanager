@@ -4064,6 +4064,9 @@ msgstr "Avviso di accesso una tantum"
 msgid "Password Reset Requests"
 msgstr "Richieste di reimpostazione della password"
 
+msgid "Player's character form"
+msgstr "Forma del personaggio del giocatore"
+
 msgid "Please check them below"
 msgstr "Controllali qui di seguito"
 

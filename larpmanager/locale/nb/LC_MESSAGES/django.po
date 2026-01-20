@@ -4064,6 +4064,9 @@ msgstr "Advarsel om engangsadgang"
 msgid "Password Reset Requests"
 msgstr "Forespørsler om tilbakestilling av passord"
 
+msgid "Player's character form"
+msgstr "Spillerens karakterskjema"
+
 msgid "Please check them below"
 msgstr "Vennligst sjekk dem nedenfor"
 
