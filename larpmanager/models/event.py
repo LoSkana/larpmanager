@@ -481,6 +481,7 @@ class EventTextType(models.TextChoices):
     SEARCH = "s", _("Search")
     SIGNUP = "g", _("Registration mail")
     ASSIGNMENT = "a", _("Mail assignment")
+    USER_CHARACTER = "c", _("Player's character form")
 
     CHARACTER_PROPOSED = "cs", _("Proposed character")
     CHARACTER_APPROVED = "ca", _("Approved character")

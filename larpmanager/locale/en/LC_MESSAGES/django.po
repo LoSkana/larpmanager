@@ -3251,6 +3251,9 @@ msgstr ""
 msgid "Mail assignment"
 msgstr ""
 
+msgid "Player's character form"
+msgstr ""
+
 msgid "Proposed character"
 msgstr ""
 

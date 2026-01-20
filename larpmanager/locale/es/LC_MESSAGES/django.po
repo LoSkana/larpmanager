@@ -4064,6 +4064,9 @@ msgstr "Aviso de acceso único"
 msgid "Password Reset Requests"
 msgstr "Solicitudes de restablecimiento de contraseña"
 
+msgid "Player's character form"
+msgstr "Formulario de personaje del jugador"
+
 msgid "Please check them below"
 msgstr "Compruébelos a continuación"
 
