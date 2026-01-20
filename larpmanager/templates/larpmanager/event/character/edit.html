@@ -9,6 +9,10 @@
     {{ run.search }}
 {% endblock title %}
 {% block content %}
+    {% if user_character_text %}
+        {{ user_character_text | safe }}
+        <hr />
+    {% endif %}
     {% if avatar_form %}
         <form action="{{ request.path }}"
               enctype="multipart/form-data"
