@@ -304,6 +304,18 @@ class TicketPriority(models.TextChoices):
     HIGH = "high", _("High")
 
 
+class LarpManagerText(BaseModel):
+    """Model for managing editable text snippets on the LarpManager home page."""
+
+    name = models.CharField(max_length=200, unique=True, verbose_name=_("Name"), db_index=True)
+
+    value = models.TextField(verbose_name=_("Value"))
+
+    def __str__(self) -> str:
+        """Return string representation of the text."""
+        return f"{self.name}: {self.value[:50]}..."
+
+
 class LarpManagerTicket(UuidMixin, BaseModel):
     """Model for managing support tickets and requests.
 
