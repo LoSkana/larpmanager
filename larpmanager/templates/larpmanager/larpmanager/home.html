@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block maintitle %}
-    LarpManager - Free and open-source LARP management
+    {{ texts.page_title }}
 {% endblock maintitle %}
 {% block meta %}
     <meta name="description"
@@ -12,8 +12,8 @@
     <!-- Banner -->
     <section id="banner">
         <!-- <span class="logo"><img src="{% static 'lm_logo.png' %}" alt="Logo"  width="150" height="150" /></span> -->
-        <h2 class="home">LarpManager</h2>
-        <h1 class="home">Free and open-source LARP management</h1>
+        <h2 class="home">{{ texts.banner_title }}</h2>
+        <h1 class="home">{{ texts.banner_subtitle }}</h1>
     </section>
     <!-- Main -->
     <section id="main" class="container">
@@ -49,12 +49,9 @@
                     {% endfor %}
                 </section>
                 <hr />
-                <h3>
-                    Manage LARP events, tickets, registrations, payments, and characters in one place.
-                    No setup, no limits, no cost.
-                </h3>
+                <h3>{{ texts.hero_description }}</h3>
                 <hr />
-                <h3>Trusted by organizers around the world!</h3>
+                <h3>{{ texts.associations_list }}</h3>
                 <br />
                 <section id="promoter-carousel" class="owl-carousel owl-theme">
                     {% for el in promoters %}
@@ -75,7 +72,7 @@
         </section>
         <br />
         <br />
-        <p class="starter">What can LarpManager do for you?</p>
+        <p class="starter">{{ texts.showcase_intro }}</p>
         <section class="box special showcase">
             {% for el in showcase %}
                 <div class="section">
@@ -103,12 +100,8 @@
         </section>
         <!-- CTA -->
         <section id="cta">
-            <h5>Start using LarpManager</h5>
-            <p>
-                Set up your LARP organization and explore the platform live.
-                <br />
-                Full access, no cost!
-            </p>
+            <h5>{{ texts.cta_title }}</h5>
+            <p>{{ texts.cta_description|safe }}</p>
             <ul class="actions special">
                 <li>
                     <a href="{% url 'join' %}" title="Free trial" class="button alt">Get Started</a>
@@ -121,11 +114,11 @@
                     <!--
 								<span class="image featured"><img src="images/pic02.jpg" alt="" /></span>
 -->
-                    <h6>Contact</h6>
-                    <p>Got a question? Get in touch with us, we’re always happy to help!</p>
+                    <h6>{{ texts.contact_title }}</h6>
+                    <p>{{ texts.contact_description }}</p>
                     <ul class="actions special">
                         <li>
-                            <a href="{% url 'contact' %}" title="Contact us" class="button alt">Learn More</a>
+                            <a href="{% url 'contact' %}" title="Contact us" class="button alt">{{ texts.learn_more }}</a>
                         </li>
                     </ul>
                 </section>
@@ -135,11 +128,11 @@
                     <!--
 								<span class="image featured"><img src="images/pic03.jpg" alt="" /></span>
 -->
-                    <h6>Guides</h6>
-                    <p>See how to configure LarpManager to support your workflow and meet your needs.</p>
+                    <h6>{{ texts.guides_title }}</h6>
+                    <p>{{ texts.guides_description }}</p>
                     <ul class="actions special">
                         <li>
-                            <a href="{% url 'guides' %}" title="Read our guides" class="button alt">Learn More</a>
+                            <a href="{% url 'guides' %}" title="Read our guides" class="button alt">{{ texts.learn_more }}</a>
                         </li>
                     </ul>
                 </section>
@@ -149,11 +142,11 @@
                     <!--
 								<span class="image featured"><img src="images/pic03.jpg" alt="" /></span>
 -->
-                    <h6>Usage</h6>
-                    <p>LarpManager is free to use: we want help everyone run their LARP!</p>
+                    <h6>{{ texts.usage_title }}</h6>
+                    <p>{{ texts.usage_description }}</p>
                     <ul class="actions special">
                         <li>
-                            <a href="{% url 'usage' %}" title="Affordable usage" class="button alt">Learn More</a>
+                            <a href="{% url 'usage' %}" title="Affordable usage" class="button alt">{{ texts.learn_more }}</a>
                         </li>
                     </ul>
                 </section>
@@ -163,13 +156,13 @@
                     <!--
 								<span class="image featured"><img src="images/pic02.jpg" alt="" /></span>
 -->
-                    <h6>About us</h6>
-                    <p>Discover the story behind LarpManager and how it helps the LARP community.</p>
+                    <h6>{{ texts.about_us_title }}</h6>
+                    <p>{{ texts.about_us_description }}</p>
                     <ul class="actions special">
                         <li>
                             <a href="{% url 'about_us' %}"
                                title="Organizers reviews"
-                               class="button alt">Learn More</a>
+                               class="button alt">{{ texts.learn_more }}</a>
                         </li>
                     </ul>
                 </section>
