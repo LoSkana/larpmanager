@@ -114,6 +114,60 @@ def paginate(
     )
 
 
+def _get_filter_field(field_names: list[str], target_field: str, context: dict) -> str:
+    """Determine the correct filter path for a field.
+
+    Args:
+        field_names: List of field names available on the model
+        target_field: Target field name to filter by
+        context: Context dictionary containing potential selrel field
+
+    Returns:
+        Filter path string (e.g., 'field' or 'relation__field')
+
+    """
+    if target_field in field_names:
+        return target_field
+
+    # Use select_related field to build the filter path if available
+    if "selrel" in context:
+        selrel = context["selrel"]
+        if isinstance(selrel, tuple):
+            selrel = selrel[0]
+        return f"{selrel}__{target_field}"
+
+    return target_field
+
+
+def _apply_run_filter(query_elements: QuerySet, field_names: list[str], context: dict) -> QuerySet:
+    """Apply run/event filtering to queryset.
+
+    Args:
+        query_elements: Base queryset to filter
+        field_names: List of field names available on the model
+        context: Context dictionary containing run/event information
+
+    Returns:
+        Filtered queryset
+
+    """
+    if "run" in field_names:
+        return query_elements.filter(run=context["run"])
+    if "registration" in field_names:
+        return query_elements.filter(registration__run=context["run"])
+    if "event" in field_names:
+        return query_elements.filter(event=context["event"])
+
+    # Use select_related field if available
+    if "selrel" in context:
+        selrel = context["selrel"]
+        if isinstance(selrel, tuple):
+            selrel = selrel[0]
+        return query_elements.filter(**{f"{selrel}__run": context["run"]})
+
+    return query_elements
+
+
 def _get_elements_query(
     cls: Any, context: dict, request: Any, model_type: Any, *, is_executive: bool = True
 ) -> tuple[Any, int]:
@@ -133,20 +187,17 @@ def _get_elements_query(
     # Extract pagination and filtering parameters from request
     start_index, page_length, order_params, filter_params = _get_query_params(request)
 
-    # Start with base queryset filtered by association
-    query_elements = cls.filter(association_id=context["association_id"])
+    # Check which relation field exists on the model to determine filter path
+    # noinspection PyProtectedMember
+    field_names = [f.name for f in model_type._meta.get_fields()]  # noqa: SLF001  # Django model metadata
+
+    # Determine the correct filter path for association_id and filter
+    association_filter = _get_filter_field(field_names, "association_id", context)
+    query_elements = cls.filter(**{association_filter: context["association_id"]})
 
     # Apply event-specific filtering for non-executive views
     if not is_executive and "run" in context:
-        # Check which relation field exists on the model to filter by run/event
-        # noinspection PyProtectedMember
-        field_names = [f.name for f in model_type._meta.get_fields()]  # noqa: SLF001  # Django model metadata
-        if "run" in field_names:
-            query_elements = query_elements.filter(run=context["run"])
-        elif "registration" in field_names:
-            query_elements = query_elements.filter(registration__run=context["run"])
-        elif "event" in field_names:
-            query_elements = query_elements.filter(event=context["event"])
+        query_elements = _apply_run_filter(query_elements, field_names, context)
 
     # Filter out hidden elements if the model supports it
     # noinspection PyProtectedMember

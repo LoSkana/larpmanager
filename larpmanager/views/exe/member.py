@@ -955,7 +955,7 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
     # Define table columns for the email archive display
     context.update(
         {
-            "selrel": ("email_content"),
+            "selrel": ("email_content",),
             "fields": [
                 ("run", _("Run")),
                 ("recipient", _("Recipient")),

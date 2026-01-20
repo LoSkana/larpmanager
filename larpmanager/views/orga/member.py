@@ -497,7 +497,7 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Each tuple contains (field_name, display_label)
     context.update(
         {
-            "selrel": ("email_content"),
+            "selrel": ("email_content",),
             "fields": [
                 ("recipient", _("Recipient")),
                 ("subj", _("Subject")),
