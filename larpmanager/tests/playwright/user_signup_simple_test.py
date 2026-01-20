@@ -72,6 +72,8 @@ def signup(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
+
+    go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "Registration confirmed")
     expect_normalized(page, page.locator("#one"), "please fill in your profile.")
 

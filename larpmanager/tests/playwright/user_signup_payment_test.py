@@ -91,6 +91,10 @@ def signup(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#riepilogo"), "provisional status")
     submit_confirm(page)
 
+    # submit profile
+    page.get_by_role("checkbox", name="Authorisation").check()
+    submit_confirm(page)
+
     # Check we are on payment page
     expect_normalized(page, page.locator("#banner"), "Payment")
     expect_normalized(page, page.locator("b"), "100")

@@ -185,6 +185,10 @@ def character(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
+
+    page.get_by_role("checkbox", name="Authorisation").check()
+    submit_confirm(page)
+
     expect_normalized(page, page.locator("#one"), "Create your character!")
     page.get_by_role("link", name="Create your character!").click()
     just_wait(page)

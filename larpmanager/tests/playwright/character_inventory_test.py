@@ -137,6 +137,11 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="View Details").first.click()
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
+
+    # submit profile
+    page.get_by_role("checkbox", name="Authorisation").check()
+    submit_confirm(page)
+
     page.get_by_role("link", name="Test Character").nth(1).click()
     page.get_by_role("link", name="View Details").first.click()
     page.get_by_role("row", name="Credits 3 NPC Transfer").get_by_role("spinbutton").click()

@@ -106,6 +106,11 @@ def create_character(page: Any) -> None:
     page.get_by_label("Ticket").select_option("u1")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
+
+    # confirm profile
+    page.get_by_role("checkbox", name="Authorisation").check()
+    submit_confirm(page)
+
     page.get_by_role("link", name="Create your character!").click()
 
     # check only one option
