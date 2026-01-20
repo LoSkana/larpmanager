@@ -91,6 +91,10 @@ def signup(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#riepilogo"), "provisional status")
     submit_confirm(page)
 
+    # submit profile
+    page.get_by_role("checkbox", name="Authorisation").check()
+    submit_confirm(page)
+
     # Check we are on payment page
     expect_normalized(page, page.locator("#banner"), "Payment")
     expect_normalized(page, page.locator("b"), "100")
@@ -118,13 +122,6 @@ def signup(page: Any, live_server: Any) -> None:
 
     # check reg status
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Registration confirmed")
-    expect_normalized(page, page.locator("#one"), "please fill in your profile")
-    page.get_by_role("link", name=re.compile(r"please fill in your")).click()
-
-    # Approve sharing
-    page.get_by_role("checkbox", name="Authorisation").check()
-    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Registration confirmed (Standard)")
 
 

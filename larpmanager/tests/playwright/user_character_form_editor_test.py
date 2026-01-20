@@ -185,6 +185,10 @@ def character(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
+
+    page.get_by_role("checkbox", name="Authorisation").check()
+    submit_confirm(page)
+
     expect_normalized(page, page.locator("#one"), "Create your character!")
     page.get_by_role("link", name="Create your character!").click()
     just_wait(page)
@@ -250,4 +254,4 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
 
     expect_normalized(page, page.locator("#one"),
   """event date status details event date status details test larp 19 march 2050
-            registration confirmed (standard), please fill in your profile. your character is my character""")
+            registration confirmed (standard) your character is my character""")

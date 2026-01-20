@@ -10027,6 +10027,9 @@ msgstr ""
 msgid "Last step, please upload your membership application"
 msgstr ""
 
+msgid "To confirm your registration, please pay the amount indicated"
+msgstr ""
+
 msgid "Data share removed successfully"
 msgstr ""
 
@@ -10111,9 +10114,6 @@ msgstr ""
 
 msgid ""
 "To confirm your registration, apply to become a member of the Association"
-msgstr ""
-
-msgid "To confirm your registration, please pay the amount indicated"
 msgstr ""
 
 #, python-format
