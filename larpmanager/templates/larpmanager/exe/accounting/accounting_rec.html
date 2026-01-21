@@ -92,13 +92,16 @@ document.addEventListener("DOMContentLoaded", function () {
     stockChartOptions(bankDataPoints)
   );
 
-  globalChart.render();
-  bankChart.render();
+    setTimeout(function() {
+        globalChart.render();
+        bankChart.render();
+    }, 1000);
 
   window.addEventListener("resize", function () {
     globalChart.render();
     bankChart.render();
   });
+
 });
     </script>
 {% endblock js %}
