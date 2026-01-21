@@ -3416,6 +3416,9 @@ msgstr "Ny forespørsel om skyttelbuss"
 msgid "Non-cumulative code"
 msgstr "Ikke-kumulativ kode"
 
+msgid "Old form appereance"
+msgstr "Gammelt utseende"
+
 msgid "Operation completed"
 msgstr "Operasjon fullført"
 
@@ -6381,6 +6384,9 @@ msgstr "Tildelt %(amount).2f %(elements)s for '%(reason)s'"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jeg har gjort det noen ganger, jeg har grunnleggende erfaring"
+
+msgid "If checked: shows the forms with the old appearance"
+msgstr "Hvis avkrysset: viser skjemaene med det gamle utseendet"
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Angir hvilken valuta du vil motta betalinger i"

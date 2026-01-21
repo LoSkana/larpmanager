@@ -35,10 +35,23 @@ select {
   padding-right: 3.5em;
 }
 
+.tox-tinymce {
+  min-height: 10em;
+  margin: 0 auto;
+}
+
+/* Remove max-width constraint when TinyMCE is in fullscreen mode */
+.tox-fullscreen,
+.tox.tox-tinymce.tox-fullscreen {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
 .select2-container,
 select,
 textarea,
-input {
+input,
+.tox-tinymce {
   max-width: 70% !important;
 }
 
@@ -51,7 +64,8 @@ input {
   .select2-container,
   select,
   textarea,
-  input {
+  input,
+  .tox-tinymce {
     max-width: 80% !important;
   }
 
@@ -65,12 +79,14 @@ input {
   .select2-container,
   select,
   textarea,
-  input {
+  input,
+  .tox-tinymce {
     max-width: 90% !important;
   }
 
   .select2-container,
-  textarea {
+  textarea,
+  .tox-tinymce {
     width: 90% !important;
     margin: auto;
   }
@@ -1790,8 +1806,15 @@ a label:hover {
 }
 
 /* Force all TinyMCE elements to stay below popups */
-[class*="tox"] {
+[class*="tox"]:not(.tox-fullscreen):not(.tox-tinymce-aux) {
   z-index: 1 !important;
+}
+
+/* Ensure TinyMCE fullscreen is above topbar */
+.tox-fullscreen,
+.tox.tox-tinymce.tox-fullscreen,
+.tox-tinymce-aux {
+  z-index: 10000 !important;
 }
 
 /* Force uglipop elements to be on top */
@@ -2711,4 +2734,40 @@ input[type="number"] {
 }
 .copy-link-btn i {
   font-size: 14px;
+}
+
+/** NEW AND OLD FORM APPEARANCE **/
+
+/*
+th, td {
+  text-align: left !important;
+}
+
+form input,
+form select,
+form .tox-tinymce {
+    margin: 0 !important;
+} */
+
+input {
+  background: rgba(var(--sec-rgb), 0.3) !important;
+}
+
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+button:hover,
+.button:hover {
+  background-color: rgba(var(--pri-rgb), 0.025) !important;
+}
+
+.old_form_appearance th,
+.old_form_appearance td {
+  text-align: center !important;
+}
+
+.old_form_appearance input,
+.old_form_appearance select,
+.old_form_appearance .tox-tinymce {
+  margin: 0 auto;
 }
