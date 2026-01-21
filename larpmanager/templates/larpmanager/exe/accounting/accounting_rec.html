@@ -26,13 +26,7 @@
             defer></script>
     <script type="text/javascript">
 function stockChartOptions(dataPoints) {
-    return {
-    //~ title:{
-      //~ text:"StockChart with Spline Area Chart"
-    //~ },
-    //~ subtitles: [{
-      //~ text: "Litecoin Price (in Eur)"
-    //~ }],
+  return {
     theme: "dark2",
     exportEnabled: true,
     charts: [{
@@ -40,15 +34,14 @@ function stockChartOptions(dataPoints) {
         crosshair: {
           enabled: true,
           snapToDataPoint: true,
-          valueFormatString: "DD MMM YYYY",
+          valueFormatString: "DD MMM YYYY"
         }
       },
       axisY: {
-        //~ title: "Litecoin Price",
         prefix: "{{ currency_symbol }}",
         crosshair: {
           enabled: true,
-          valueFormatString: "{{ currency_symbol }}#,###",
+          valueFormatString: "{{ currency_symbol }}#,###"
         }
       },
       toolTip: {
@@ -57,7 +50,7 @@ function stockChartOptions(dataPoints) {
       data: [{
         type: "splineArea",
         yValueFormatString: "{{ currency_symbol }}#,###.##",
-        dataPoints : dataPoints
+        dataPoints: dataPoints
       }]
     }],
     navigator: {
@@ -66,34 +59,49 @@ function stockChartOptions(dataPoints) {
         labelFontFamily: "Trebuchet MS"
       },
       slider: {
-        minimum: new Date({{ start | date:"U" }} * 1000),
-        maximum: new Date({{ end | date:"U" }} * 1000),
+        minimum: new Date({{ start|date:"U" }} * 1000),
+        maximum: new Date({{ end|date:"U" }} * 1000)
       }
     }
-  }
+  };
 }
 
 
   var globalDataPoints = [
   {% for el in list %}
-    {% include "elements/comma.html" %}
+    {% include "elements/comma.html" with separator="," %}
     {x: new Date({{ el.created | date:"U" }} * 1000), y: parseFloat('{{ el.global_sum }}') }
   {% endfor %}
   ];
 
   var bankDataPoints = [
   {% for el in list %}
-    {% include "elements/comma.html" %}
+    {% include "elements/comma.html" with separator="," %}
     {x: new Date({{ el.created | date:"U" }} * 1000), y: parseFloat('{{ el.bank_sum }}') }
   {% endfor %}
   ];
 
-window.addEventListener('DOMContentLoaded', function() {
-$(function () {
-    $("#globalSumContainer").CanvasJSStockChart(stockChartOptions(globalDataPoints));
+document.addEventListener("DOMContentLoaded", function () {
+  var globalChart = new CanvasJS.StockChart(
+    "globalSumContainer",
+    stockChartOptions(globalDataPoints)
+  );
 
-    $("#bankSumContainer").CanvasJSStockChart(stockChartOptions(bankDataPoints));
-});
+  var bankChart = new CanvasJS.StockChart(
+    "bankSumContainer",
+    stockChartOptions(bankDataPoints)
+  );
+
+    setTimeout(function() {
+        globalChart.render();
+        bankChart.render();
+    }, 1000);
+
+  window.addEventListener("resize", function () {
+    globalChart.render();
+    bankChart.render();
+  });
+
 });
     </script>
 {% endblock js %}

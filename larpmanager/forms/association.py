@@ -1043,3 +1043,13 @@ class ExePreferencesForm(ConfigForm):
             digest_mode_label,
             digest_mode_help_text,
         )
+
+        # Add temporary new dashboard
+        digest_mode_label = _("New Dashboard")
+        digest_mode_help_text = _("If checked: activate new dashbord")
+        self.add_configs(
+            "interface_new_dashboard",
+            ConfigType.BOOL,
+            digest_mode_label,
+            digest_mode_help_text,
+        )

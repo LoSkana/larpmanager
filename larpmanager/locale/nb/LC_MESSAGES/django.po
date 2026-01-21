@@ -1452,9 +1452,6 @@ msgstr "Oversett"
 msgid "Treasurer"
 msgstr "Kasserer"
 
-msgid "View/Edit"
-msgstr "Vis/rediger"
-
 msgid "Warehouse"
 msgstr "Lager"
 
@@ -2268,6 +2265,9 @@ msgstr "Minimum antall stemmer"
 
 msgid "Name of quest"
 msgstr "Navn på oppdraget"
+
+msgid "New Dashboard"
+msgstr "Nytt dashbord"
 
 msgid "New character"
 msgstr "Ny karakter"
@@ -4946,6 +4946,9 @@ msgstr "For mer informasjon, skriv til oss"
 
 msgid "Go to the history preferences for"
 msgstr "Gå til innstillingshistorikken for"
+
+msgid "If checked: activate new dashbord"
+msgstr "Hvis avkrysset: aktiver nytt dashbord"
 
 msgid "Indicate your level of experience"
 msgstr "Angi ditt erfaringsnivå"
