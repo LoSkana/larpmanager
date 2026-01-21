@@ -279,12 +279,6 @@ msgstr ""
 msgid "Interface"
 msgstr ""
 
-msgid "Old dashboard"
-msgstr ""
-
-msgid "If checked: shows the dashboard with the old interface"
-msgstr ""
-
 msgid "Past events"
 msgstr ""
 
@@ -333,6 +327,18 @@ msgid "Tagline"
 msgstr ""
 
 msgid "If checked: shows the tagline for each event"
+msgstr ""
+
+msgid "Old dashboard"
+msgstr ""
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr ""
+
+msgid "Old form appereance"
+msgstr ""
+
+msgid "If checked: shows the forms with the old appearance"
 msgstr ""
 
 msgid "Email notifications"

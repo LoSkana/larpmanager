@@ -228,6 +228,10 @@ def _get_file(context: dict, file: Any, column_id: int | None = None) -> tuple[p
         based on the context configuration.
 
     """
+    # Check if file was provided
+    if not file:
+        return None, ["ERR - No file provided. Please select a file to upload"]
+
     # Get available column names from context
     _get_column_names(context)
     allowed_column_names = []
@@ -246,7 +250,7 @@ def _get_file(context: dict, file: Any, column_id: int | None = None) -> tuple[p
     # Read and parse the uploaded CSV file
     input_dataframe = _read_uploaded_csv(file)
     if input_dataframe is None:
-        return None, ["ERR - Could not read input csv"]
+        return None, ["ERR - Could not parse the uploaded file. Please check the file format and encoding"]
 
     # Normalize column names to lowercase for validation
     input_dataframe.columns = [column.lower() for column in input_dataframe.columns]

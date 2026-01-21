@@ -3416,6 +3416,9 @@ msgstr "Nouvelle demande de navette"
 msgid "Non-cumulative code"
 msgstr "Code non cumulatif"
 
+msgid "Old form appereance"
+msgstr "Apparition de l'ancienne forme"
+
 msgid "Operation completed"
 msgstr "Opération terminée"
 
@@ -6400,6 +6403,9 @@ msgstr "Attribué %(amount).2f %(elements)s pour '%(reason)s'"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Je l'ai fait plusieurs fois, j'ai une expérience de base"
+
+msgid "If checked: shows the forms with the old appearance"
+msgstr "Si coché : affiche les formulaires avec l'ancienne apparence"
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Indique la devise dans laquelle les paiements doivent être reçus"

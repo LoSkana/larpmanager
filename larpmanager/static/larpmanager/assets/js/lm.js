@@ -345,8 +345,33 @@ $(document).ready(function() {
 
     copyClipboardButton();
 
+    setSelectChevronColor();
+
     $(document).trigger("lm_ready");
 });
+
+function setSelectChevronColor() {
+  const priRgb = getComputedStyle(document.documentElement)
+    .getPropertyValue('--ter-rgb')
+    .trim();
+
+  const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <path d="M9.4,12.3l10.4,10.4l10.4-10.4c0.2-0.2,0.5-0.4,0.9-0.4c0.3,0,0.6,0.1,0.9,0.4l3.3,3.3c0.2,0.2,0.4,0.5,0.4,0.9
+  c0,0.4-0.1,0.6-0.4,0.9L20.7,31.9c-0.2,0.2-0.5,0.4-0.9,0.4c-0.3,0-0.6-0.1-0.9-0.4L4.3,17.3c-0.2-0.2-0.4-0.5-0.4-0.9
+  c0-0.4,0.1-0.6,0.4-0.9l3.3-3.3c0.2-0.2,0.5-0.4,0.9-0.4S9.1,12.1,9.4,12.3z"
+  fill="rgba(${priRgb},0.725)"/>
+</svg>`;
+
+  const encoded = encodeURIComponent(svg)
+    .replace(/'/g, "%27")
+    .replace(/"/g, "%22");
+
+  $('select').css(
+    'background-image',
+    `url("data:image/svg+xml,${encoded}")`
+  );
+}
 
 function show_sidebar_active() {
     // set select on sidebar
