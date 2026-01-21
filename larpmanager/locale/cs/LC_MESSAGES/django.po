@@ -1452,9 +1452,6 @@ msgstr "Přeložit"
 msgid "Treasurer"
 msgstr "Pokladník"
 
-msgid "View/Edit"
-msgstr "Zobrazit/upravit"
-
 msgid "Warehouse"
 msgstr "Sklad"
 

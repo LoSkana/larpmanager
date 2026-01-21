@@ -1452,9 +1452,6 @@ msgstr "Vertaal"
 msgid "Treasurer"
 msgstr "Penningmeester"
 
-msgid "View/Edit"
-msgstr "Bekijken/bewerken"
-
 msgid "Warehouse"
 msgstr "Magazijn"
 

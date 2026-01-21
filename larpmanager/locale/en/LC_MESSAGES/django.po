@@ -2339,7 +2339,7 @@ msgstr ""
 msgid "Updated Registrations"
 msgstr ""
 
-msgid "View/Edit"
+msgid "View"
 msgstr ""
 
 msgid "New Registrations"
@@ -2358,9 +2358,6 @@ msgid "Refund Requests"
 msgstr ""
 
 msgid "Refund requested"
-msgstr ""
-
-msgid "View"
 msgstr ""
 
 msgid "Awaiting approval"

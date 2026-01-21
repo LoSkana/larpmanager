@@ -354,8 +354,7 @@ def generate_summary_email(event: Event, notifications: list) -> str:
     grouped_notifications = _digest_organize_notifications(notifications)
 
     # Start email body
-    email_body = "<h2>" + _("Daily Summary") + f" - {event.name}" + "</h2>"
-    email_body += "<p>" + _("Here's what happened in the last 24 hours:") + "</p>"
+    email_body = "<p>" + _("Here's what happened in the last 24 hours:") + "</p>"
 
     currency_symbol = event.association.get_currency_symbol()
 
@@ -474,7 +473,7 @@ def _digest_updated_registrations(
             ),
             event,
         )
-        email_body += f' - <a href="{edit_url}">' + _("View/Edit") + "</a></li>"
+        email_body += f' - <a href="{edit_url}">' + _("View") + "</a></li>"
     email_body += "</ul>"
 
     return email_body
@@ -496,7 +495,7 @@ def _digest_new_registrations(event: Event, email_body: str, new_registrations: 
             ),
             event,
         )
-        email_body += f' - <a href="{edit_url}">' + _("View/Edit") + "</a></li>"
+        email_body += f' - <a href="{edit_url}">' + _("View") + "</a></li>"
 
     email_body += "</ul>"
     return email_body
@@ -513,8 +512,8 @@ def generate_association_summary_email(association: Association, notifications: 
         str: HTML formatted email body
     """
     # Start email body
-    email_body = "<h2>" + _("Daily Summary") + f" - {association.name}" + "</h2>"
-    email_body += "<p>" + _("Here's what happened in the last 24 hours:") + "</p>"
+
+    email_body = "<p>" + _("Here's what happened in the last 24 hours:") + "</p>"
 
     # Map notification types to their handler functions
     notification_handlers = {

@@ -1452,9 +1452,6 @@ msgstr "Oversett"
 msgid "Treasurer"
 msgstr "Kasserer"
 
-msgid "View/Edit"
-msgstr "Vis/rediger"
-
 msgid "Warehouse"
 msgstr "Lager"
 

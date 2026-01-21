@@ -1452,9 +1452,6 @@ msgstr "Översätt"
 msgid "Treasurer"
 msgstr "Kassör"
 
-msgid "View/Edit"
-msgstr "Visa/redigera"
-
 msgid "Warehouse"
 msgstr "Lagerlokal"
 

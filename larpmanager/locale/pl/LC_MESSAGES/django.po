@@ -1452,9 +1452,6 @@ msgstr "Tłumaczenie"
 msgid "Treasurer"
 msgstr "Skarbnik"
 
-msgid "View/Edit"
-msgstr "Wyświetl/Edytuj"
-
 msgid "Warehouse"
 msgstr "Magazyn"
 

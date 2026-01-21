@@ -1452,9 +1452,6 @@ msgstr "Übersetzen Sie"
 msgid "Treasurer"
 msgstr "Schatzmeister"
 
-msgid "View/Edit"
-msgstr "Anzeigen/Bearbeiten"
-
 msgid "Warehouse"
 msgstr "Lagerhaus"
 
