@@ -1739,6 +1739,8 @@ a label:hover {
   scrollbar-width: thin;
   scrollbar-color: rgba(var(--ter-rgb), 0.5) rgba(var(--pri-rgb), 0.1);
 
+  overflow-x: hidden;
+
   text-align: center;
 }
 
