@@ -2738,19 +2738,12 @@ input[type="number"] {
 
 /** NEW AND OLD FORM APPEARANCE **/
 
-/*
-th, td {
-  text-align: left !important;
-}
-
-form input,
-form select,
-form .tox-tinymce {
-    margin: 0 !important;
-} */
-
 input {
   background: rgba(var(--sec-rgb), 0.3) !important;
+}
+
+.select2-search__field {
+  background: none;
 }
 
 input[type="submit"]:hover,
@@ -2761,13 +2754,66 @@ button:hover,
   background-color: rgba(var(--pri-rgb), 0.025) !important;
 }
 
-.old_form_appearance th,
-.old_form_appearance td {
-  text-align: center !important;
+.new_form form {
+  max-width: 1000px;
+  margin: 1rem auto;
 }
 
-.old_form_appearance input,
-.old_form_appearance select,
-.old_form_appearance .tox-tinymce {
-  margin: 0 auto;
+.new_form table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.new_form th,
+.new_form td {
+  padding: 1rem;
+  text-align: left !important;
+}
+
+/*
+.new_form #main_form tr {
+  background: none;
+  border: none;
+} */
+
+.new_form table input {
+  width: 100%;
+  padding: 0.4rem;
+  box-sizing: border-box;
+}
+
+.new_form table input,
+.new_form table select,
+.new_form table .tox-tinymce,
+.new_form table .select2-container,
+.new_form table textarea {
+  margin: 0 !important;
+  max-width: 100% !important;
+  text-align: left;
+}
+
+.new_form table input[type="date_p"],
+.new_form table input[type="time_p"],
+.new_form table input[type="datetime_p"] {
+  width: 30%;
+}
+
+@media (max-width: 500px) {
+  .new_form table,
+  .new_form tbody,
+  .new_form tr,
+  .new_form th,
+  .new_form td {
+    display: block;
+    width: 100%;
+  }
+
+  .new_form th {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+
+  .new_form td {
+    margin-bottom: 1rem;
+  }
 }

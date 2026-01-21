@@ -140,7 +140,7 @@
             {% endif %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class=" {% if manage and is_sidebar_open and not onboarding %}sidebar{% endif %} {% if not frame and association.id != 0 and not onboarding %}topbar{% endif %} {% if old_form_appearance %}old_form_appearance{% endif %} ">
+                 class=" {% if manage and is_sidebar_open and not onboarding %}sidebar{% endif %} {% if not frame and association.id != 0 and not onboarding %}topbar{% endif %} {% if not old_form_appearance %}new_form{% endif %} ">
                 {% block main %}
                 {% endblock main %}
             </div>
