@@ -1706,12 +1706,6 @@ th select {
   height: 5em;
 }
 
-.accounting_record {
-  height: 400px;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
-}
-
 a label {
   color: inherit;
 }
