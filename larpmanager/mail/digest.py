@@ -313,7 +313,7 @@ def _daily_member_summaries(member_id: int, all_notifications: list) -> None:
             email_subject,
             email_content,
             member,
-            event.current_run,
+            event,
         )
 
     # Send a summary email for each association this member has notifications for
