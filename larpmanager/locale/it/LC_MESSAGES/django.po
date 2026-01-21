@@ -2269,6 +2269,9 @@ msgstr "Minimo voti"
 msgid "Name of quest"
 msgstr "Nome della missione"
 
+msgid "New Dashboard"
+msgstr "Nuova dashboard"
+
 msgid "New character"
 msgstr "Nuovo personaggio"
 
@@ -4414,7 +4417,7 @@ msgid "What would you like to do?"
 msgstr "Cosa ti piacerebbe fare?"
 
 msgid "Wrong number of characters"
-msgstr "Numero di personaggi errato"
+msgstr "Numero di caratteri errato"
 
 msgid "You can't access this way!"
 msgstr "Non puoi accedere così!"
@@ -4946,6 +4949,9 @@ msgstr "Per maggiori informazioni, scrivici"
 
 msgid "Go to the history preferences for"
 msgstr "Vai allo storico preferenze per"
+
+msgid "If checked: activate new dashbord"
+msgstr "Se selezionato: attivare la nuova plancia di comando"
 
 msgid "Indicate your level of experience"
 msgstr "Indica il tuo grado di esperienza"

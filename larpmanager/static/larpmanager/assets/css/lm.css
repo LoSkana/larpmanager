@@ -1005,6 +1005,10 @@ header.sec h1 {
   padding-top: 0.5em;
 }
 
+.page_gallery .title {
+  margin-bottom: 0.5em;
+}
+
 .cover-container {
   width: 25%;
 }

@@ -76,14 +76,14 @@ function stockChartOptions(dataPoints) {
 
   var globalDataPoints = [
   {% for el in list %}
-    {% include "elements/comma.html" %}
+    {% include "elements/comma.html" with separator="," %}
     {x: new Date({{ el.created | date:"U" }} * 1000), y: parseFloat('{{ el.global_sum }}') }
   {% endfor %}
   ];
 
   var bankDataPoints = [
   {% for el in list %}
-    {% include "elements/comma.html" %}
+    {% include "elements/comma.html" with separator="," %}
     {x: new Date({{ el.created | date:"U" }} * 1000), y: parseFloat('{{ el.bank_sum }}') }
   {% endfor %}
   ];

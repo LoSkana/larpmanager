@@ -2269,6 +2269,9 @@ msgstr "Minimální počet hlasů"
 msgid "Name of quest"
 msgstr "Název úkolu"
 
+msgid "New Dashboard"
+msgstr "Nový přístrojový panel"
+
 msgid "New character"
 msgstr "Nová postava"
 
@@ -4946,6 +4949,9 @@ msgstr "Pro více informací nám napište"
 
 msgid "Go to the history preferences for"
 msgstr "Přejděte do historie předvoleb pro"
+
+msgid "If checked: activate new dashbord"
+msgstr "Pokud je zaškrtnuto: aktivovat nový přístrojový panel"
 
 msgid "Indicate your level of experience"
 msgstr "Uveďte svou úroveň zkušeností"

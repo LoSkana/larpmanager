@@ -2269,6 +2269,9 @@ msgstr "Minimiantal röster"
 msgid "Name of quest"
 msgstr "Namn på uppdraget"
 
+msgid "New Dashboard"
+msgstr "Ny instrumentpanel"
+
 msgid "New character"
 msgstr "Ny karaktär"
 
@@ -4946,6 +4949,9 @@ msgstr "För mer information, skriv till oss"
 
 msgid "Go to the history preferences for"
 msgstr "Gå till preferenshistoriken för"
+
+msgid "If checked: activate new dashbord"
+msgstr "Om markerat: aktivera nytt instrumentbräde"
 
 msgid "Indicate your level of experience"
 msgstr "Ange din erfarenhetsnivå"

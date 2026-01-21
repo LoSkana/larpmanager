@@ -2269,6 +2269,9 @@ msgstr "Minimalna liczba głosów"
 msgid "Name of quest"
 msgstr "Nazwa zadania"
 
+msgid "New Dashboard"
+msgstr "Nowy pulpit nawigacyjny"
+
 msgid "New character"
 msgstr "Nowa postać"
 
@@ -4946,6 +4949,9 @@ msgstr "Aby uzyskać więcej informacji, napisz do nas"
 
 msgid "Go to the history preferences for"
 msgstr "Przejdź do preferencji historii dla"
+
+msgid "If checked: activate new dashbord"
+msgstr "Jeśli zaznaczone: aktywuj nową tablicę rozdzielczą"
 
 msgid "Indicate your level of experience"
 msgstr "Wskaż swój poziom doświadczenia"

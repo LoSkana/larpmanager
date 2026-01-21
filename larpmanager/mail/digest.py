@@ -213,7 +213,7 @@ def send_daily_organizer_summaries() -> None:
     association-level notifications (sent to association executives or main_mail).
     """
     # Get all unsent notifications
-    notifications = NotificationQueue.objects.filter(sent=False).select_related("run__event", "association_id")
+    notifications = NotificationQueue.objects.filter(sent=False).select_related("run__event", "association")
 
     member_notifications = {}
     association_notifications = {}

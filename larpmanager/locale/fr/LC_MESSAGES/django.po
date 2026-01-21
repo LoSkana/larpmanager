@@ -2269,6 +2269,9 @@ msgstr "Nombre de voix minimum"
 msgid "Name of quest"
 msgstr "Nom de la quête"
 
+msgid "New Dashboard"
+msgstr "Nouveau tableau de bord"
+
 msgid "New character"
 msgstr "Nouveau personnage"
 
@@ -4946,6 +4949,9 @@ msgstr "Pour plus d'informations, écrivez-nous"
 
 msgid "Go to the history preferences for"
 msgstr "Accédez à l'historique des préférences pour"
+
+msgid "If checked: activate new dashbord"
+msgstr "Si la case est cochée : activer le nouveau tableau de bord"
 
 msgid "Indicate your level of experience"
 msgstr "Indiquez votre niveau d'expérience"

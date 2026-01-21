@@ -2269,6 +2269,9 @@ msgstr "Votos mínimos"
 msgid "Name of quest"
 msgstr "Nombre de la búsqueda"
 
+msgid "New Dashboard"
+msgstr "Nuevo panel de control"
+
 msgid "New character"
 msgstr "Nuevo personaje"
 
@@ -4946,6 +4949,9 @@ msgstr "Si desea más información, escríbanos"
 
 msgid "Go to the history preferences for"
 msgstr "Ir al historial de preferencias de"
+
+msgid "If checked: activate new dashbord"
+msgstr "Si está marcada: activar el nuevo salpicadero"
 
 msgid "Indicate your level of experience"
 msgstr "Indica tu nivel de experiencia"

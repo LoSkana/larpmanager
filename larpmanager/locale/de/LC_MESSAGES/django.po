@@ -2269,6 +2269,9 @@ msgstr "Mindeststimmen"
 msgid "Name of quest"
 msgstr "Name der Aufgabe"
 
+msgid "New Dashboard"
+msgstr "Neues Dashboard"
+
 msgid "New character"
 msgstr "Neues Zeichen"
 
@@ -4946,6 +4949,9 @@ msgstr "Für weitere Informationen, schreiben Sie uns"
 
 msgid "Go to the history preferences for"
 msgstr "Rufen Sie die Einstellungshistorie für"
+
+msgid "If checked: activate new dashbord"
+msgstr "Wenn angekreuzt: neues Dashboard aktivieren"
 
 msgid "Indicate your level of experience"
 msgstr "Geben Sie Ihr Erfahrungsniveau an"
