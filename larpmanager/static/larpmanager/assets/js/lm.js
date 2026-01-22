@@ -367,10 +367,10 @@ function setSelectChevronColor() {
     .replace(/'/g, "%27")
     .replace(/"/g, "%22");
 
-  $('select').css(
-    'background-image',
-    `url("data:image/svg+xml,${encoded}")`
-  );
+    $('select:not(.dt-input)').css(
+      'background-image',
+      `url("data:image/svg+xml,${encoded}")`
+    );
 }
 
 function show_sidebar_active() {
