@@ -738,10 +738,10 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
 
     character_link_snippets = [
         f"""
-            <div class="lm_tooltip">
+            <span class="lm_tooltip">
              <a href='{link[0]}'>{link[1]}</a>
-             <div class="lm_tooltiptext">{link[2]}!</div>
-             </div>
+             <span class="lm_tooltiptext">{link[2]}!</span>
+             </span>
          """
         for link in character_links
     ]
