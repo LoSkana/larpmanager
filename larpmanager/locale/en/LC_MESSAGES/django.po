@@ -6213,9 +6213,6 @@ msgstr ""
 msgid "Delay in profile compilation"
 msgstr ""
 
-msgid "User"
-msgstr ""
-
 msgid "Secret registration link"
 msgstr ""
 
@@ -6520,6 +6517,9 @@ msgid "Last Event"
 msgstr ""
 
 msgid "You don't have any characters yet"
+msgstr ""
+
+msgid "User"
 msgstr ""
 
 msgid "Your messages"
