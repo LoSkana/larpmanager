@@ -82,7 +82,7 @@ urlpatterns = [
     path(
         "<slug:event_slug>/character/<slug:character_uuid>/change/",
         views_uc.character_edit,
-        name="character_change",
+        name="character_edit",
     ),
     path(
         "<slug:event_slug>/character/<slug:character_uuid>/customize/",
