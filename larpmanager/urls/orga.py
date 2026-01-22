@@ -418,14 +418,14 @@ urlpatterns = [
         name="orga_writing_form_email",
     ),
     path(
+        "<slug:event_slug>/manage/writing/options/<slug:writing_type>/ajax/<slug:option_uuid>/",
+        views_oc.orga_writing_options_ajax,
+        name="orga_writing_options_ajax",
+    ),
+    path(
         "<slug:event_slug>/manage/writing/options/<slug:writing_type>/edit/<slug:option_uuid>/",
         views_oc.orga_writing_options_edit,
         name="orga_writing_options_edit",
-    ),
-    path(
-        "<slug:event_slug>/manage/writing/options/<slug:writing_type>/new/<slug:question_uuid>/",
-        views_oc.orga_writing_options_new,
-        name="orga_writing_options_new",
     ),
     path(
         "<slug:event_slug>/manage/writing/options/<slug:writing_type>/order/<slug:option_uuid>/<int:order>/",

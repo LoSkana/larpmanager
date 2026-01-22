@@ -20,7 +20,14 @@
     {% include "elements/form/main.html" %}
     <div id="options" class="hide auto_resize">
         <h2>{% trans "Options" %}</h2>
-        {% include "elements/header/edit.html" %}
+        <div class="staff-list">
+            <div class="orga-buttons">
+                <a class="new-option button" href="#">
+                    <i class="fas fa-plus"></i>
+                    {% trans "New" %}
+                </a>
+            </div>
+        </div>
         <table id="character_options" class="go_datatable writing ordering_arrow">
             <thead>
                 <tr>
@@ -44,7 +51,9 @@
                 {% for el in list %}
                     <tr id="{{ el.uuid }}">
                         <td>
-                            <a href="{% url 'orga_writing_options_edit' run.get_slug typ el.uuid %}">
+                            <a href="{% url 'orga_writing_options_edit' run.get_slug typ el.uuid %}"
+                               class="edit-option-ajax"
+                               data-option-uuid="{{ el.uuid }}">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>

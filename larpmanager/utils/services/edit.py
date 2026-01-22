@@ -26,8 +26,9 @@ from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Max
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -35,12 +36,12 @@ from larpmanager.cache.config import _get_fkey_config, get_event_config
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait
-from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
+from larpmanager.models.form import BaseQuestionType, QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log, Member
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_association_context, check_event_context, get_context
-from larpmanager.utils.core.common import get_object_uuid, html_clean
+from larpmanager.utils.core.common import get_element, get_object_uuid, html_clean
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -895,6 +896,192 @@ def writing_edit_working_ticket(request: HttpRequest, element_type: str, edit_uu
     cache.set(cache_key, active_tickets, min(ticket_timeout_seconds, conf_settings.CACHE_TIMEOUT_1_DAY))
 
     return warning_message
+
+
+def form_edit_handler(  # noqa: PLR0913
+    request: HttpRequest,
+    context: dict,
+    question_uuid: str,
+    perm: str,
+    option_model: type[BaseModel],
+    form_class: type[BaseModelForm],
+    redirect_view_name: str,
+    redirect_list_view_name: str,
+    template_name: str,
+    extra_redirect_kwargs: dict | None = None,
+) -> HttpResponse:
+    """Generic handler for question form editing (registration and writing).
+
+    Args:
+        request: HTTP request object
+        context: Event context from check_event_context
+        question_uuid: Question UUID to edit (0 for new questions)
+        perm: Permission name for set_suggestion
+        option_model: Option model class (RegistrationOption or WritingOption)
+        form_class: Form class (OrgaRegistrationQuestionForm or OrgaWritingQuestionForm)
+        redirect_view_name: View name for redirect when options needed
+        redirect_list_view_name: View name for redirect to list
+        template_name: Template to render
+        extra_redirect_kwargs: Extra kwargs for redirect URL (e.g., {"writing_type": writing_type})
+
+    Returns:
+        HttpResponse: Rendered template or redirect
+    """
+    # Check if this is an AJAX request
+    is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+
+    # Process form submission using backend edit utility
+    if backend_edit(request, context, form_class, question_uuid, is_association=False, quiet=True):
+        # Set permission suggestion for future operations
+        set_suggestion(context, perm)
+
+        # If AJAX request, return JSON with question UUID
+        if is_ajax:
+            return JsonResponse(
+                {
+                    "success": True,
+                    "question_uuid": str(context["saved"].uuid),
+                    "message": str(_("Question saved successfully")),
+                }
+            )
+
+        # Handle "continue editing" button - redirect to new question form
+        if "continue" in request.POST:
+            messages.success(request, _("Operation completed") + "!")
+            redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_redirect_kwargs or {})}
+            # Add question_uuid="0" for new question
+            if extra_redirect_kwargs:  # writing form
+                redirect_kwargs["question_uuid"] = "0"
+                return redirect(request.resolver_match.view_name, **redirect_kwargs)
+            # registration form
+            return redirect(request.resolver_match.view_name, context["run"].get_slug(), "0")
+
+        # Check if question is single/multiple choice and needs options
+        is_choice = context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+        if is_choice and not option_model.objects.filter(question_id=context["saved"].id).exists():
+            messages.warning(
+                request,
+                _("You must define at least one option before saving a single-choice or multiple-choice question"),
+            )
+
+            # Redirect with scroll_to parameter to jump to options section
+            redirect_kwargs = {
+                "event_slug": context["run"].get_slug(),
+                "question_uuid": context["saved"].uuid,
+                **(extra_redirect_kwargs or {}),
+            }
+            url = reverse(redirect_view_name, kwargs=redirect_kwargs)
+            return HttpResponseRedirect(f"{url}?scroll_to=options")
+
+        messages.success(request, _("Operation completed") + "!")
+        redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_redirect_kwargs or {})}
+        return redirect(redirect_list_view_name, **redirect_kwargs)
+
+    # Load existing options for the question being edited
+    options_queryset = option_model.objects.filter(question=context["el"])
+    # For WritingOption, also filter by applicable type
+    if hasattr(context, "writing_typ"):
+        options_queryset = options_queryset.filter(question__applicable=context["writing_typ"])
+    context["list"] = options_queryset.order_by("order")
+    return render(request, template_name, context)
+
+
+def options_ajax_handler(
+    request: HttpRequest,
+    context: dict,
+    option_uuid: str,
+    question_model: type[BaseModel],
+    option_model: type[BaseModel],
+    form_class: type[BaseModelForm],
+    extra_context: dict | None = None,
+) -> JsonResponse:
+    """Generic handler for AJAX option form loading (registration and writing).
+
+    Args:
+        request: HTTP request object
+        context: Event context from check_event_context
+        option_uuid: Option UUID to edit (0 for new options)
+        question_model: Question model class (RegistrationQuestion or WritingQuestion)
+        option_model: Option model class (RegistrationOption or WritingOption)
+        form_class: Form class (OrgaRegistrationOptionForm or OrgaWritingOptionForm)
+        extra_context: Additional context to add to form_context (e.g., {"typ": writing_type})
+
+    Returns:
+        JsonResponse with form HTML or error message
+    """
+    # Get question_uuid from request
+    question_uuid = request.GET.get("question_uuid", "")
+
+    # For new options, get the question
+    if option_uuid == "0" and question_uuid:
+        get_element(context, question_uuid, "question", question_model)
+
+    # Get the option element if editing
+    if option_uuid != "0":
+        get_element(context, option_uuid, "el", option_model)
+
+    # Prepare form
+    form = form_class(context=context) if option_uuid == "0" else form_class(instance=context["el"], context=context)
+
+    # Render form HTML
+    form_context = {
+        **context,
+        "form": form,
+        "num": option_uuid,
+        "is_ajax": True,
+        **(extra_context or {}),
+    }
+
+    html = render(request, "elements/option_form_ajax.html", form_context)
+
+    return JsonResponse({"success": True, "html": html.content.decode("utf-8")})
+
+
+def options_edit_handler(
+    request: HttpRequest,
+    context: dict,
+    option_uuid: str,
+    question_model: type[BaseModel],
+    option_model: type[BaseModel],
+    form_class: type[BaseModelForm],
+    extra_context: dict | None = None,
+) -> JsonResponse:
+    """Generic handler for AJAX option form submission (registration and writing).
+
+    Args:
+        request: HTTP request object
+        context: Event context from check_event_context
+        option_uuid: Option UUID to edit (0 for new options)
+        question_model: Question model class (RegistrationQuestion or WritingQuestion)
+        option_model: Option model class (RegistrationOption or WritingOption)
+        form_class: Form class (OrgaRegistrationOptionForm or OrgaWritingOptionForm)
+        extra_context: Additional context to add to form_context (e.g., {"typ": writing_type})
+
+    Returns:
+        JsonResponse with success or form HTML with errors
+    """
+    # For new options, get the question_uuid from request
+    if option_uuid == "0":
+        question_uuid = request.GET.get("question_uuid") or request.POST.get("question_uuid")
+        if question_uuid:
+            get_element(context, question_uuid, "question", question_model)
+    else:
+        # For editing existing option, load the option instance
+        get_element(context, option_uuid, "el", option_model)
+        context["question"] = context["el"].question
+
+    # Try saving it
+    if backend_edit(request, context, form_class, option_uuid, is_association=False):
+        return JsonResponse({"success": True, "message": str(_("Option saved successfully"))})
+
+    # If form validation failed, return form with errors
+    form_context = {
+        **context,
+        "is_ajax": True,
+        **(extra_context or {}),
+    }
+    html = render(request, "elements/option_form_ajax.html", form_context)
+    return JsonResponse({"success": False, "html": html.content.decode("utf-8")})
 
 
 @require_POST

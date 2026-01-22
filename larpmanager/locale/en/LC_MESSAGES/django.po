@@ -4720,6 +4720,15 @@ msgstr ""
 msgid "The tax code matches"
 msgstr ""
 
+msgid "New Option"
+msgstr ""
+
+msgid "Edit Option"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
 msgid "Warning. The form contains errors to the fields"
 msgstr ""
 
@@ -5301,9 +5310,6 @@ msgid "Contact the organizers if you need a new access link later"
 msgstr ""
 
 msgid "I Understand - Access Content"
-msgstr ""
-
-msgid "Cancel"
 msgstr ""
 
 msgid "This content is protected and cannot be downloaded or recorded"
@@ -7410,12 +7416,6 @@ msgstr ""
 msgid "Perform extraction"
 msgstr ""
 
-msgid "New Option"
-msgstr ""
-
-msgid "Edit Option"
-msgstr ""
-
 msgid "This page shows the pre-signups for the event"
 msgstr ""
 
@@ -9444,6 +9444,17 @@ msgstr ""
 msgid "List of other users"
 msgstr ""
 
+msgid "Question saved successfully"
+msgstr ""
+
+msgid ""
+"You must define at least one option before saving a single-choice or "
+"multiple-choice question"
+msgstr ""
+
+msgid "Option saved successfully"
+msgstr ""
+
 msgid "Your registration ticket"
 msgstr ""
 
@@ -9918,11 +9929,6 @@ msgstr ""
 msgid "Results not present"
 msgstr ""
 
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question"
-msgstr ""
-
 msgid "Parent empty"
 msgstr ""
 
@@ -9947,15 +9953,9 @@ msgid ""
 "You must create at least one ability type before you can create abilities"
 msgstr ""
 
-msgid "Question saved successfully"
-msgstr ""
-
 msgid ""
 "You must create at least one registration question before you can create "
 "registration options"
-msgstr ""
-
-msgid "Option saved successfully"
 msgstr ""
 
 msgid "Photos and videos successfully uploaded"

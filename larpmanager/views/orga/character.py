@@ -23,7 +23,6 @@ import contextlib
 from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
@@ -31,6 +30,7 @@ from django.db.models import Max
 from django.db.models.functions import Length, Substr
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -71,7 +71,14 @@ from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order, get_element
 from larpmanager.utils.io.download import orga_character_form_download
 from larpmanager.utils.services.character import get_chars_relations
-from larpmanager.utils.services.edit import backend_edit, set_suggestion, writing_edit, writing_edit_working_ticket
+from larpmanager.utils.services.edit import (
+    backend_edit,
+    form_edit_handler,
+    options_ajax_handler,
+    options_edit_handler,
+    writing_edit,
+    writing_edit_working_ticket,
+)
 from larpmanager.utils.services.writing import writing_list, writing_versions, writing_view
 
 if TYPE_CHECKING:
@@ -663,50 +670,18 @@ def orga_writing_form_edit(
     # Validate the writing form type exists for this event
     check_writing_form_type(context, writing_type)
 
-    # Process form submission using backend edit utility
-    if backend_edit(request, context, OrgaWritingQuestionForm, question_uuid, is_association=False):
-        # Set permission suggestion for future operations
-        set_suggestion(context, perm)
-
-        # Handle "continue editing" button - redirect to new question form
-        if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, context["run"].get_slug(), writing_type, "0")
-
-        # Determine if we need to redirect to option editing
-        edit_option = False
-
-        # Check if user explicitly requested new option creation
-        if str(request.POST.get("new_option", "")) == "1":
-            edit_option = True
-        # For choice questions, ensure at least one option exists
-        elif (
-            context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
-            and not WritingOption.objects.filter(question_id=context["saved"].id).exists()
-        ):
-            edit_option = True
-            messages.warning(
-                request,
-                _("You must define at least one option before saving a single-choice or multiple-choice question"),
-            )
-
-        # Redirect to option editing if needed, otherwise back to form list
-        if edit_option:
-            return redirect(
-                orga_writing_form_edit,
-                event_slug=context["run"].get_slug(),
-                writing_type=writing_type,
-                question_uuid=context["saved"].uuid,
-            )
-        return redirect("orga_writing_form", event_slug=context["run"].get_slug(), writing_type=writing_type)
-
-    # Load existing options for the question being edited
-    context["list"] = WritingOption.objects.filter(
-        question=context["el"],
-        question__applicable=context["writing_typ"],
-    ).order_by("order")
-
-    # Render the form edit template with context
-    return render(request, "larpmanager/orga/characters/form_edit.html", context)
+    return form_edit_handler(
+        request,
+        context,
+        question_uuid,
+        perm,
+        WritingOption,
+        OrgaWritingQuestionForm,
+        "orga_writing_form_edit",
+        "orga_writing_form",
+        "larpmanager/orga/characters/form_edit.html",
+        extra_redirect_kwargs={"writing_type": writing_type},
+    )
 
 
 @login_required
@@ -744,6 +719,41 @@ def orga_writing_form_order(
 
 
 @login_required
+def orga_writing_options_ajax(
+    request: HttpRequest, event_slug: str, writing_type: str, option_uuid: str
+) -> JsonResponse:
+    """Handle AJAX requests for writing option form loading.
+
+    Returns form HTML for creating/editing writing options in a modal.
+    Supports both new options (option_uuid="0") and existing ones.
+
+    Args:
+        request: HTTP request object
+        event_slug: Event slug identifier
+        writing_type: Writing form type (background, origin, etc.)
+        option_uuid: Option UUID to edit (0 for new options)
+
+    Returns:
+        JsonResponse with form HTML or error message
+    """
+    # Check user permissions
+    context = check_event_context(request, event_slug, "orga_character_form")
+
+    # Validate the writing form type exists and is allowed
+    check_writing_form_type(context, writing_type)
+
+    return options_ajax_handler(
+        request,
+        context,
+        option_uuid,
+        WritingQuestion,
+        WritingOption,
+        OrgaWritingOptionForm,
+        extra_context={"typ": writing_type},
+    )
+
+
+@login_required
 def orga_writing_options_edit(
     request: HttpRequest, event_slug: str, writing_type: str, option_uuid: str
 ) -> HttpResponse:
@@ -756,38 +766,29 @@ def orga_writing_options_edit(
         option_uuid: Option uuid to edit
 
     Returns:
-        HTTP response with the option edit form
+        HTTP response with the option edit form, redirect, or JsonResponse for AJAX
 
     """
+    # Check if this is an AJAX request
+    if request.headers.get("X-Requested-With") != "XMLHttpRequest":
+        msg = "AJAX request required"
+        raise Http404(msg)
+
     # Verify user has character form permissions and get event context
     context = check_event_context(request, event_slug, "orga_character_form")
 
     # Validate the writing form type exists and is allowed
     check_writing_form_type(context, writing_type)
 
-    # Process the option edit form and return response
-    return writing_option_edit(context, option_uuid, request, writing_type)
-
-
-@login_required
-def orga_writing_options_new(
-    request: HttpRequest, event_slug: str, writing_type: str, question_uuid: str
-) -> HttpResponse:
-    """Create new writing option for character form question.
-
-    Validates permissions and creates a new writing option for the specified
-    question type and number.
-    """
-    # Validate user has permission to edit character forms
-    context = check_event_context(request, event_slug, "orga_character_form")
-
-    # Ensure the writing form type is valid
-    check_writing_form_type(context, writing_type)
-
-    # Get parent question
-    get_element(context, question_uuid, "question", WritingQuestion)
-
-    return writing_option_edit(context, "0", request, writing_type)
+    return options_edit_handler(
+        request,
+        context,
+        option_uuid,
+        WritingQuestion,
+        WritingOption,
+        OrgaWritingOptionForm,
+        extra_context={"typ": writing_type},
+    )
 
 
 def writing_option_edit(context: dict, option_uuid: str, request: HttpRequest, option_type: str) -> HttpResponse:
@@ -842,13 +843,16 @@ def orga_writing_options_order(
     # Exchange order positions of WritingOption objects
     exchange_order(context, WritingOption, option_uuid, order)
 
-    # Redirect back to writing form edit view
-    return redirect(
+    # Redirect back to writing form edit view with scroll_to parameter
+    url = reverse(
         "orga_writing_form_edit",
-        event_slug=context["run"].get_slug(),
-        writing_type=writing_type,
-        question_uuid=context["current"].question.uuid,
+        kwargs={
+            "event_slug": context["run"].get_slug(),
+            "writing_type": writing_type,
+            "question_uuid": context["current"].question.uuid,
+        },
     )
+    return HttpResponseRedirect(f"{url}?scroll_to=options")
 
 
 @login_required

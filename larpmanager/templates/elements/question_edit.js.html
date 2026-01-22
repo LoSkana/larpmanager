@@ -1,5 +1,15 @@
 {% load i18n static %}
 window.addEventListener('DOMContentLoaded', function() {
+// Detect if we're in writing or registration context
+function isWritingContext() {
+return window.location.pathname.indexOf('/writing/form/') > -1;
+}
+// Extract writing type from URL (for writing forms)
+function getWritingType() {
+var pathParts = window.location.pathname.split('/');
+var formIndex = pathParts.indexOf('form');
+return formIndex >= 0 ? pathParts[formIndex + 1] : null;
+}
 // Extract question UUID from current URL path
 function getQuestionUuidFromUrl() {
 var pathParts = window.location.pathname.split('/');
@@ -15,12 +25,22 @@ return pathParts.slice(0, manageIndex + 1).join('/');
 // Build URL for options AJAX endpoint
 function buildOptionsAjaxUrl(optionUuid, questionUuid) {
 var basePath = getBasePath();
+if (isWritingContext()) {
+var writingType = getWritingType();
+return basePath + '/writing/options/' + writingType + '/ajax/' + optionUuid + '/?question_uuid=' + questionUuid;
+} else {
 return basePath + '/options/ajax/' + optionUuid + '/?question_uuid=' + questionUuid;
+}
 }
 //Build URL for options edit endpoint
 function buildOptionsEditUrl(optionUuid) {
 var basePath = getBasePath();
+if (isWritingContext()) {
+var writingType = getWritingType();
+return basePath + '/writing/options/' + writingType + '/edit/' + optionUuid + '/';
+} else {
 return basePath + '/options/edit/' + optionUuid + '/';
+}
 }
 // Reload page with scroll_to parameter
 function reloadWithScrollToOptions() {
