@@ -10,8 +10,8 @@
     {% include "elements/form/errors.html" %}
     <form id="option_ajax_form" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div id="form_container">
-            <table class="mob">
+        <div class="form_container auto_resize">
+            <table>
                 {% include "elements/form/inner.html" %}
             </table>
         </div>

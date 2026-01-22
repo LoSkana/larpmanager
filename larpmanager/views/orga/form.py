@@ -312,6 +312,9 @@ def orga_registration_options_edit(request: HttpRequest, event_slug: str, option
             )
             # Redirect to registration questions creation page
             return redirect("orga_registration_form_edit", event_slug=event_slug, question_uuid="0")
+    else:
+        # For editing existing option, load the option instance
+        get_element(context, option_uuid, "el", RegistrationOption)
 
     # Try saving it
     if backend_edit(request, context, OrgaRegistrationOptionForm, option_uuid, is_association=False):

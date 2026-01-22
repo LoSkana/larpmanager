@@ -120,7 +120,8 @@
                   href="{% static 'larpmanager/assets/css/noscript.css' %}" />
         </noscript>
     </head>
-    <body class="is-preload" id="{{ association.name | slugify }}">
+    <body id="{{ association.name | slugify }}"
+          class="is-preload {% if lm or not old_form_appearance %}new_form{% endif %}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
             {% if onboarding %}
@@ -140,7 +141,7 @@
             {% endif %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class=" {% if manage and is_sidebar_open and not onboarding %}sidebar{% endif %} {% if not frame and association.id != 0 and not onboarding %}topbar{% endif %} {% if lm or not old_form_appearance %}new_form{% endif %} ">
+                 class=" {% if manage and is_sidebar_open and not onboarding %}sidebar{% endif %} {% if not frame and association.id != 0 and not onboarding %}topbar{% endif %}">
                 {% block main %}
                 {% endblock main %}
             </div>

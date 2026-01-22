@@ -39,7 +39,7 @@
           enctype="multipart/form-data"
           id="main_form">
         {% csrf_token %}
-        <div class="form_container">
+        <div class="form_container auto_resize">
             <table>
                 {% include "elements/form/inner.html" with form=form1 %}
                 {% include "elements/form/inner.html" with form=form2 %}

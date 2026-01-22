@@ -2759,8 +2759,28 @@ input[type="number"] {
   background-color: #a5dee5 !important;
 }
 
-.new_form .form_container {
+.new_form .auto_resize {
   width: 70%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .new_form .auto_resize {
+    width: 80%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .new_form .auto_resize {
+    width: 90%;
+  }
+}
+
+.new_form .auto_resize table {
+  width: 100%;
+}
+
+.new_form .form_container {
   border-collapse: collapse;
   margin: 0 auto;
   margin: 1rem auto;
@@ -2778,7 +2798,7 @@ input[type="number"] {
   }
 }
 
-.new_form table {
+.new_form .form_container table {
   width: 100%;
 }
 
@@ -2794,23 +2814,23 @@ input[type="number"] {
   border: none;
 } */
 
-.new_form table input {
+.new_form .form_container table input {
   width: 100% !important;
   padding: 0.4rem;
   box-sizing: border-box;
 }
 
-.new_form table select {
+.new_form .form_container table select {
   width: 100%;
 }
 
-.new_form table textarea {
+.new_form .form_container table textarea {
   width: 100%;
   height: 8em;
 }
 
-.new_form table input[type="checkbox"],
-.new_form table input[type="radio"] {
+.new_form .form_container table input[type="checkbox"],
+.new_form .form_container table input[type="radio"] {
   width: 1em !important;
 }
 
@@ -2818,7 +2838,7 @@ input[type="number"] {
   width: 100% !important;
 }
 
-.new_form table th {
+.new_form .form_container table th {
   min-width: 25%;
 }
 
@@ -2838,11 +2858,11 @@ input[type="number"] {
   text-align: left;
 }
 
-.new_form table input,
-.new_form table select,
-.new_form table .tox-tinymce,
-.new_form table .select2-container,
-.new_form table textarea {
+.new_form .form_container table input,
+.new_form .form_container table select,
+.new_form .form_container table .tox-tinymce,
+.new_form .form_container table .select2-container,
+.new_form .form_container table textarea {
   margin: 0 !important;
   max-width: 100% !important;
   text-align: left;

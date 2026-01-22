@@ -8,7 +8,7 @@
       id="main_form"
       {% if form.main_class %}class="{{ form.main_class }}"{% endif %}>
     {% csrf_token %}
-    <div class="form_container">
+    <div class="form_container auto_resize">
         <table>
             {% include "elements/form/inner.html" %}
         </table>
