@@ -693,34 +693,60 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
         character_name += f" ({_(character_rel.character.get_status_display())})"
 
     # Create clickable link for character
-    character_url = f"<a href='{character_url}'>{character_name}</a>"
+    character_links = [(character_url, character_name, _("Access you character sheet"))]
 
-    # append other links
     if "user_character" in features:
-        link_url = reverse("character", args=[run.get_slug(), character_uuid])
-        link_name = _("Edit")
-        character_url += f"<a href='{link_url}'>{link_name}</a>"
+        character_links.append(
+            (reverse("character", args=[run.get_slug(), character_uuid]), _("Edit"), _("Edit your character's details"))
+        )
 
-    if "px" in features and context.get("px_user"):
-        link_url = reverse("character_abilities", args=[run.get_slug(), character_uuid])
-        link_name = _("Abilities")
-        character_url += f"<a href='{link_url}'>{link_name}</a>"
+    if "px" in features and get_event_config(context["event"].id, "px_user", default_value=False, context=context):
+        character_links.append(
+            (
+                reverse("character_abilities", args=[run.get_slug(), character_uuid]),
+                _("Abilities"),
+                _("Buy skills for your character"),
+            )
+        )
 
     if "custom_character" in features:
-        link_url = reverse("character_customize", args=[run.get_slug(), character_uuid])
-        link_name = _("Customize")
+        character_links.append(
+            (
+                reverse("character_customize", args=[run.get_slug(), character_uuid]),
+                _("Customize"),
+                _("Modify the character details to make it yours"),
+            )
+        )
 
     if "player_relationships" in features:
-        link_url = reverse("character_relationships", args=[run.get_slug(), character_uuid])
-        link_name = _("Relationships")
-        character_url += f"<a href='{link_url}'>{link_name}</a>"
+        character_links.append(
+            (
+                reverse("character_relationships", args=[run.get_slug(), character_uuid]),
+                _("Relationships"),
+                _("Fill in your character's relationships"),
+            )
+        )
 
     if "help" in features:
-        link_url = reverse("help", args=[run.get_slug()])
-        link_name = _("Questions")
-        character_url += f"<a href='{link_url}'>{link_name}</a>"
+        character_links.append(
+            (
+                reverse("help", args=[run.get_slug()]),
+                _("Questions"),
+                _("Write here questions about your character directly to the authors"),
+            )
+        )
 
-    return character_url
+    character_link_snippets = [
+        f"""
+            <div class="lm_tooltip">
+             <a href='{link[0]}'>{link[1]}</a>
+             <div class="lm_tooltiptext">{link[2]}!</div>
+             </div>
+         """
+        for link in character_links
+    ]
+
+    return " | ".join(character_link_snippets)
 
 
 def _status_approval(

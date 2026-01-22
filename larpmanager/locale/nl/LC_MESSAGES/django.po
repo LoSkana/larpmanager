@@ -495,9 +495,6 @@ msgstr "Annuleren"
 msgid "Causal"
 msgstr "Oorzaak"
 
-msgid "Change"
-msgstr "Bewerk"
-
 msgid "Checks"
 msgstr "Controles"
 
@@ -4346,6 +4343,9 @@ msgstr "keuzewaarde niet opgegeven"
 msgid "Access the event dashboard"
 msgstr "Toegang tot het dashboard van het evenement"
 
+msgid "Access you character sheet"
+msgstr "Toegang tot je karakterblad"
+
 msgid "Can't copy from same event"
 msgstr "Kan niet kopiëren van dezelfde gebeurtenis"
 
@@ -4354,9 +4354,6 @@ msgstr "controleer omgekeerde relatie"
 
 msgid "Discover the game factions"
 msgstr "Ontdek de spelgroepen"
-
-msgid "Edit your character's data"
-msgstr "Bewerk de gegevens van je personage"
 
 #, python-format
 msgid "Feature %(name)s activated"
@@ -4581,6 +4578,9 @@ msgstr "Hoeveelheden bevestigen en vastleggen"
 
 msgid "Date of issue of the document"
 msgstr "Datum van uitgifte van het document"
+
+msgid "Edit your character's details"
+msgstr "De gegevens van je personage bewerken"
 
 msgid "I Understand - Access Content"
 msgstr "Ik begrijp het - Toegang tot inhoud"
@@ -5962,6 +5962,9 @@ msgstr "De registratievragen en -opties beheren"
 msgid "Member who used this token (if authenticated)"
 msgstr "Lid dat dit token heeft gebruikt (indien geverifieerd)"
 
+msgid "Modify the character details to make it yours"
+msgstr "Pas de details van het personage aan om het van jou te maken"
+
 msgid "Now you can copy elements from an other event"
 msgstr "Nu kun je elementen van een andere gebeurtenis kopiëren"
 
@@ -6109,9 +6112,6 @@ msgstr "Beheer de eigenschappen die beschikbaar zijn in de event quests"
 
 msgid "Maximum number of waiting spots (0 = unlimited)"
 msgstr "Maximum aantal wachtplekken (0 = onbeperkt)"
-
-msgid "Modify some character elements to make it yours"
-msgstr "Pas enkele karakterkenmerken aan om er je eigen karakter van te maken"
 
 msgid "Now you can configure the registration question"
 msgstr "Nu kun je de registratievraag configureren"

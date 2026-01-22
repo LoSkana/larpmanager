@@ -495,9 +495,6 @@ msgstr "Zrušit"
 msgid "Causal"
 msgstr "Causale"
 
-msgid "Change"
-msgstr "Upravit"
-
 msgid "Checks"
 msgstr "Kontroly"
 
@@ -4346,6 +4343,9 @@ msgstr "hodnota výběru není uvedena"
 msgid "Access the event dashboard"
 msgstr "Přístup k ovládacímu panelu události"
 
+msgid "Access you character sheet"
+msgstr "Přístup k vašemu listu postavy"
+
 msgid "Can't copy from same event"
 msgstr "Nelze kopírovat ze stejné události"
 
@@ -4354,9 +4354,6 @@ msgstr "kontrola inverzního vztahu"
 
 msgid "Discover the game factions"
 msgstr "Objevte herní skupiny"
-
-msgid "Edit your character's data"
-msgstr "Upravte údaje své postavy"
 
 #, python-format
 msgid "Feature %(name)s activated"
@@ -4581,6 +4578,9 @@ msgstr "Potvrzení a odevzdání množství"
 
 msgid "Date of issue of the document"
 msgstr "Datum vydání dokumentu"
+
+msgid "Edit your character's details"
+msgstr "Úprava údajů o postavě"
 
 msgid "I Understand - Access Content"
 msgstr "Rozumím - Přístup k obsahu"
@@ -5959,6 +5959,9 @@ msgstr "Správa registračních otázek a možností"
 msgid "Member who used this token (if authenticated)"
 msgstr "Člen, který použil tento token (je-li ověřen)"
 
+msgid "Modify the character details to make it yours"
+msgstr "Upravte údaje o postavě tak, aby byla vaše"
+
 msgid "Now you can copy elements from an other event"
 msgstr "Nyní můžete kopírovat prvky z jiné události"
 
@@ -6101,9 +6104,6 @@ msgstr "Správa vlastností dostupných v úkolech událostí"
 
 msgid "Maximum number of waiting spots (0 = unlimited)"
 msgstr "Maximální počet čekajících míst (0 = neomezeně)"
-
-msgid "Modify some character elements to make it yours"
-msgstr "Upravte si některé vlastnosti postavy podle sebe"
 
 msgid "Now you can configure the registration question"
 msgstr "Nyní můžete nakonfigurovat registrační otázku"

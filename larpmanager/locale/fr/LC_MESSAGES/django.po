@@ -495,9 +495,6 @@ msgstr "Annuler"
 msgid "Causal"
 msgstr "Causale"
 
-msgid "Change"
-msgstr "Editer"
-
 msgid "Checks"
 msgstr "Chèques"
 
@@ -4346,6 +4343,9 @@ msgstr "valeur de choix non fournie"
 msgid "Access the event dashboard"
 msgstr "Accéder au tableau de bord de l'événement"
 
+msgid "Access you character sheet"
+msgstr "Accédez à votre feuille de personnage"
+
 msgid "Can't copy from same event"
 msgstr "Impossible de copier le même événement"
 
@@ -4354,9 +4354,6 @@ msgstr "vérifier la relation inverse"
 
 msgid "Discover the game factions"
 msgstr "Découvrez les groupes de jeu"
-
-msgid "Edit your character's data"
-msgstr "Modifiez les données de votre personnage"
 
 #, python-format
 msgid "Feature %(name)s activated"
@@ -4581,6 +4578,9 @@ msgstr "Confirmer et engager les quantités"
 
 msgid "Date of issue of the document"
 msgstr "Date de délivrance du document"
+
+msgid "Edit your character's details"
+msgstr "Modifiez les détails de votre personnage"
 
 msgid "I Understand - Access Content"
 msgstr "Je comprends - Accéder au contenu"
@@ -5966,6 +5966,9 @@ msgstr "Gérer les questions et les options d'inscription"
 msgid "Member who used this token (if authenticated)"
 msgstr "Membre ayant utilisé ce jeton (si authentifié)"
 
+msgid "Modify the character details to make it yours"
+msgstr "Modifiez les détails du personnage pour le faire vôtre"
+
 msgid "Now you can copy elements from an other event"
 msgstr "Vous pouvez maintenant copier des éléments d'un autre événement"
 
@@ -6113,10 +6116,6 @@ msgstr "Gérer les traits disponibles dans les quêtes événementielles"
 
 msgid "Maximum number of waiting spots (0 = unlimited)"
 msgstr "Nombre maximal de places en attente (0 = illimité)"
-
-msgid "Modify some character elements to make it yours"
-msgstr ""
-"Modifiez certaines caractéristiques du personnage pour vous l'approprier"
 
 msgid "Now you can configure the registration question"
 msgstr "Vous pouvez maintenant configurer la question d'enregistrement"
