@@ -495,9 +495,6 @@ msgstr "Zrušit"
 msgid "Causal"
 msgstr "Causale"
 
-msgid "Change"
-msgstr "Upravit"
-
 msgid "Checks"
 msgstr "Kontroly"
 
@@ -764,6 +761,9 @@ msgstr "Kontext"
 
 msgid "Correct"
 msgstr "Správně"
+
+msgid "Country"
+msgstr "Země"
 
 msgid "Created"
 msgstr "Vytvořeno"
@@ -1437,6 +1437,9 @@ msgstr "Počáteční den"
 msgid "Statement"
 msgstr "Odůvodnění"
 
+msgid "Subdomain"
+msgstr "Subdoména"
+
 msgid "Submitted"
 msgstr "Submisivní"
 
@@ -1536,6 +1539,9 @@ msgstr "e-mailový seznam"
 msgid "Event area"
 msgstr "Oblast události"
 
+msgid "Event name"
+msgstr "Název události"
+
 msgid "Experience"
 msgstr "Zkušenosti"
 
@@ -1559,6 +1565,9 @@ msgstr "Poslední událost"
 
 msgid "Legal name"
 msgstr "Právní název"
+
+msgid "Link color"
+msgstr "Barva odkazu"
 
 msgid "Media file"
 msgstr "Mediální soubor"
@@ -1599,6 +1608,9 @@ msgstr "Zpravodaj"
 msgid "Next quota"
 msgstr "Další kvóta"
 
+msgid "Organizers"
+msgstr "Organizátoři"
+
 msgid "Passengers"
 msgstr "Cestující"
 
@@ -1635,6 +1647,9 @@ msgstr "Odstranění štítku"
 msgid "Repertoire"
 msgstr "Repertoár"
 
+msgid "Run number"
+msgstr "Číslo běhu"
+
 msgid "Screenshot"
 msgstr "Snímek obrazovky"
 
@@ -1668,8 +1683,8 @@ msgstr "Tabulka seznamu"
 msgid "Tax regime"
 msgstr "Daňový režim"
 
-msgid "Title font"
-msgstr "Titulní písma"
+msgid "Text color"
+msgstr "Barva textu"
 
 msgid "To be done"
 msgstr "Překonat"
@@ -1731,6 +1746,9 @@ msgstr "Skutečně vyplacené"
 msgid "Add to plot"
 msgstr "Přidat do pozemku"
 
+msgid "Amount paid"
+msgstr "Vyplacená částka"
+
 msgid "Assignments"
 msgstr "Zadání"
 
@@ -1755,17 +1773,14 @@ msgstr "Dárek ke změně"
 msgid "Collections"
 msgstr "Collette"
 
-msgid "Color links"
-msgstr "Barevné odkazy"
-
-msgid "Color texts"
-msgstr "Barva textu"
-
 msgid "Coming soon"
 msgstr "Již brzy"
 
 msgid "Competences"
 msgstr "Odbornost"
+
+msgid "Cover image"
+msgstr "Obrázek na obálce"
 
 msgid "Description"
 msgstr "Popis"
@@ -1815,12 +1830,6 @@ msgstr "Lehké"
 msgid "Limitations"
 msgstr "Omezení"
 
-msgid "Maintainers"
-msgstr "Správci"
-
-msgid "Max fillers"
-msgstr "Max výplně"
-
 msgid "Nationality"
 msgstr "Státní příslušnost"
 
@@ -1868,9 +1877,6 @@ msgstr "Žádost o"
 
 msgid "Rotate left"
 msgstr "Levé kolo"
-
-msgid "Secret code"
-msgstr "Tajný kód"
 
 msgid "Secret link"
 msgstr "Tajný odkaz"
@@ -2024,9 +2030,6 @@ msgstr "Právní upozornění"
 
 msgid "Legal notice"
 msgstr "Právní upozornění"
-
-msgid "Max waitings"
-msgstr "Maximální počet čekání"
 
 msgid "Members list"
 msgstr "Seznam členů"
@@ -2202,6 +2205,9 @@ msgstr "Podmínky"
 
 msgid "Configuration"
 msgstr "Konfigurace"
+
+msgid "Contact email"
+msgstr "Kontaktní e-mail"
 
 msgid "Daily Summary"
 msgstr "Denní shrnutí"
@@ -2621,9 +2627,6 @@ msgstr "Seznam postav"
 msgid "Collected votes"
 msgstr "Obdržené hlasy"
 
-msgid "Color highlight"
-msgstr "Zvýraznění barvy"
-
 msgid "Deadline (date)"
 msgstr "Termín (datum)"
 
@@ -2651,6 +2654,9 @@ msgstr "Externí přístup"
 msgid "Filter factions"
 msgstr "Skupiny filtrů"
 
+msgid "Highlight color"
+msgstr "Barva zvýraznění"
+
 msgid "Invalid request"
 msgstr "Neplatný požadavek"
 
@@ -2665,6 +2671,9 @@ msgstr "Správa pravidel XP"
 
 msgid "Manage invoices"
 msgstr "Správa faktur"
+
+msgid "Maximum fillers"
+msgstr "Maximální množství výplní"
 
 msgid "Member refused!"
 msgstr "Člen odmítl!"
@@ -2681,8 +2690,14 @@ msgstr "Vícenásobná volba"
 msgid "Overall balance"
 msgstr "Peněžní rozpočet"
 
+msgid "Parent campaign"
+msgstr "Rodičovská kampaň"
+
 msgid "Payment Methods"
 msgstr "Způsoby platby"
+
+msgid "Payment methods"
+msgstr "Platební metody"
 
 msgid "Portraits (PDF)"
 msgstr "Portréty (PDF)"
@@ -2771,6 +2786,9 @@ msgstr "Aktivace funkce"
 msgid "Back to manifest"
 msgstr "Zpět na seznam projevů"
 
+msgid "Background color"
+msgstr "Barva pozadí"
+
 msgid "Background image"
 msgstr "Obrázek na pozadí"
 
@@ -2788,9 +2806,6 @@ msgstr "Odkazy na sbírku"
 
 msgid "Collection total"
 msgstr "Celková sbírka"
-
-msgid "Color background"
-msgstr "Textové pozadí"
 
 msgid "Current quantity"
 msgstr "Aktuální množství"
@@ -2834,6 +2849,9 @@ msgstr "Navigace v událostech"
 msgid "Expected revenue"
 msgstr "Očekávané příjmy"
 
+msgid "External website"
+msgstr "Externí webové stránky"
+
 msgid "Field visibility"
 msgstr "Viditelnost v terénu"
 
@@ -2848,9 +2866,6 @@ msgstr "Přiřazení položek"
 
 msgid "Manage discounts"
 msgstr "Správa slev"
-
-msgid "Max participants"
-msgstr "Maximální počet účastníků"
 
 msgid "May the best win"
 msgstr "Ať vyhraje ten nejlepší"
@@ -2960,9 +2975,6 @@ msgstr "Transakční poplatky"
 msgid "Transfer preview"
 msgstr "Náhled transferu"
 
-msgid "Where it is held"
-msgstr "Kde se koná"
-
 msgid "are not yet open"
 msgstr "ještě nejsou otevřeny"
 
@@ -3028,6 +3040,9 @@ msgstr "Konverzní lístek"
 
 msgid "Credit assignment"
 msgstr "Přiřazení zápočtu"
+
+msgid "Custom title font"
+msgstr "Vlastní písmo názvu"
 
 msgid "Disable Auto save"
 msgstr "Zakázat automatické ukládání"
@@ -3098,6 +3113,9 @@ msgstr "Zatím žádné přestupy."
 msgid "One-Time Contents"
 msgstr "Jednorázový obsah"
 
+msgid "Organization name"
+msgstr "Název organizace"
+
 msgid "Paid current year"
 msgstr "Zaplaceno v běžném roce"
 
@@ -3125,6 +3143,9 @@ msgstr "Předběžná registrace zde"
 msgid "Profile completed"
 msgstr "Profil dokončen"
 
+msgid "Promotional image"
+msgstr "Propagační obrázek"
+
 msgid "Quests and Traits"
 msgstr "Úkoly a vlastnosti"
 
@@ -3148,6 +3169,9 @@ msgstr "Adresa bydliště"
 
 msgid "Set progress step"
 msgstr "Nastavení kroku postupu"
+
+msgid "Subscription plan"
+msgstr "Plán předplatného"
 
 msgid "Technical Support"
 msgstr "Technická podpora"
@@ -3455,6 +3479,9 @@ msgstr "Výsledky nejsou k dispozici"
 msgid "Signup cancellation"
 msgstr "Zrušení předplatného"
 
+msgid "Support maintainers"
+msgstr "Správci podpory"
+
 msgid "Treasury appointees"
 msgstr "Úředníci ministerstva financí"
 
@@ -3542,6 +3569,12 @@ msgstr "Správa přihlašování na události"
 msgid "Manage payment items"
 msgstr "Správa platebních položek"
 
+msgid "Maximum participants"
+msgstr "Maximální počet účastníků"
+
+msgid "Maximum waiting list"
+msgstr "Maximální počet čekatelů"
+
 msgid "Membership ID number"
 msgstr "Identifikační číslo členství"
 
@@ -3593,6 +3626,9 @@ msgstr "Neplatná předvolba"
 
 msgid "Registration history"
 msgstr "Historie vstupu"
+
+msgid "Registration opening"
+msgstr "Zahájení registrace"
 
 msgid "Registration options"
 msgstr "Možnosti registrace"
@@ -3860,9 +3896,6 @@ msgstr "Vztahy ke stažení"
 msgid "Expenses collaborators"
 msgstr "Výdaje na zaměstnance"
 
-msgid "External register link"
-msgstr "Odkaz na externí registr"
-
 msgid "Failed to add profiles"
 msgstr "Nepodařilo se přidat profily"
 
@@ -3984,18 +4017,12 @@ msgstr "předejte jim tuto adresu"
 msgid "history of preferences"
 msgstr "historie preferencí"
 
-msgid "A short tagline, slogan"
-msgstr "Krátký slogan, heslo"
-
 #, python-format
 msgid "Assignment %(elements)s"
 msgstr "Přiřazení %(elements)s"
 
 msgid "Association Translation"
 msgstr "Překlad asociace"
-
-msgid "Background of web pages"
-msgstr "Pozadí webové stránky"
 
 msgid "Cancelled Registrations"
 msgstr "Zrušené registrace"
@@ -4203,14 +4230,14 @@ msgstr "pdf regenerace zahájena"
 msgid "Relationships max length"
 msgstr "Maximální délka vztahů"
 
+msgid "Secret registration code"
+msgstr "Tajný registrační kód"
+
 msgid "Secret registration link"
 msgstr "Tajný registrační odkaz"
 
 msgid "Target session not found"
 msgstr "Cílová relace nebyla nalezena"
-
-msgid "The subdomain identifier"
-msgstr "Identifikátor subdomény"
 
 msgid "This event has concluded"
 msgstr "Tato akce byla ukončena"
@@ -4226,6 +4253,9 @@ msgstr "Uživatel je již členem"
 
 msgid "When this token was used"
 msgstr "Když byl tento token použit"
+
+msgid "Your organization's logo"
+msgstr "Logo vaší organizace"
 
 msgid "Your registration ticket"
 msgstr "Vaše vstupenka"
@@ -4358,6 +4388,9 @@ msgstr "Objevte herní skupiny"
 msgid "Edit your character's data"
 msgstr "Upravte údaje své postavy"
 
+msgid "External registration link"
+msgstr "Externí registrační odkaz"
+
 #, python-format
 msgid "Feature %(name)s activated"
 msgstr "Funkce %(name)s aktivována"
@@ -4424,6 +4457,9 @@ msgstr "Takto se přihlásit nelze!"
 
 msgid "You have use a friend code"
 msgstr "Použili jste kód přítele"
+
+msgid "keep it short and engaging"
+msgstr "krátký a poutavý"
 
 msgid "(click on image to enlarge)"
 msgstr "(kliknutím na obrázek jej zvětšíte)"
@@ -4510,6 +4546,9 @@ msgstr "Zadržení jako transakční náklady"
 msgid "Would you like to change it"
 msgstr "Chcete to změnit"
 
+msgid "Your organization's country"
+msgstr "Země vaší organizace"
+
 msgid "please fill in your profile"
 msgstr "vyplňte prosím svůj profil"
 
@@ -4518,6 +4557,9 @@ msgstr "Obsah speciální stránky"
 
 msgid "Cover photo fo the character"
 msgstr "Příklad fotografie postavy"
+
+msgid "Current status of this event"
+msgstr "Aktuální stav této události"
 
 msgid "Delay in profile compilation"
 msgstr "Zpoždění při sestavování profilu"
@@ -4636,6 +4678,9 @@ msgstr "Žádost o vrácení peněz od: %(user)s"
 msgid "Select the new ability to get"
 msgstr "Vyberte novou dovednost, kterou chcete získat"
 
+msgid "The date when this event ends"
+msgstr "Datum ukončení této události"
+
 msgid "The other fields are optional"
 msgstr "Ostatní pole jsou nepovinná"
 
@@ -4676,9 +4721,6 @@ msgstr "Zpoždění ročního členského poplatku"
 
 msgid "Duration in seconds (optional)"
 msgstr "Doba trvání v sekundách (nepovinné)"
-
-msgid "Font to be used in page titles"
-msgstr "písmo, které se má použít v nadpisech"
 
 msgid "Manage issues during the event"
 msgstr "Správa problémů během akce"
@@ -4799,6 +4841,9 @@ msgstr "Dosud jste zaplatili celkem"
 msgid "Surcharge applied to the ticket"
 msgstr "Příplatek k jízdence"
 
+msgid "The date when this event begins"
+msgstr "Datum zahájení této události"
+
 msgid "To log back in with the account"
 msgstr "Opětovné přihlášení pomocí účtu"
 
@@ -4807,6 +4852,9 @@ msgstr "Součet zaznamenaných přílivů peněz"
 
 msgid "Uploading image, please wait..."
 msgstr "Nahrávání obrázku, počkejte prosím..."
+
+msgid "Where the event will take place"
+msgstr "Kde se akce koná"
 
 msgid "You have completed the payment!"
 msgstr "Vklad jste dokončili!"
@@ -4884,11 +4932,11 @@ msgstr "Přidána položka reklamace"
 msgid "Select a file with extension csv"
 msgstr "Vyberte soubor s příponou 'csv'"
 
+msgid "Sequential number for this event"
+msgstr "Pořadové číslo této události"
+
 msgid "Sum of payments received through"
 msgstr "Součet plateb přijatých prostřednictvím"
-
-msgid "The setting / genre of the event"
-msgstr "Prostředí / žánr akce"
 
 msgid "Total of recorded money outflows"
 msgstr "Součet zaznamenaných odlivů peněz"
@@ -4924,9 +4972,6 @@ msgstr "Přiřazení úspěchu: %(badge)s"
 
 msgid "Ask the organisers to activate it"
 msgstr "Požádejte organizátory o aktivaci"
-
-msgid "Complete name of the Organization"
-msgstr "Úplný název organizace"
 
 #, python-format
 msgid "Confirm registration to %(event)s"
@@ -5080,6 +5125,9 @@ msgstr "Sbírka byla doručena!"
 msgid "The form is saved every 30 seconds"
 msgstr "Formulář se ukládá každých 30 sekund"
 
+msgid "The genre or setting of your event"
+msgstr "Žánr nebo prostředí vaší události"
+
 msgid "The payment has not been completed"
 msgstr "Platba nebyla dokončena"
 
@@ -5104,9 +5152,6 @@ msgstr "(<a href='%(url)s'>odpověď zde</a>)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Nepovinné) Popis tipu"
-
-msgid "Image shown on homepage as promoter"
-msgstr "Obrázek zobrazený na domovské stránce jako promotér"
 
 msgid "Indicate the prerequisite abilities"
 msgstr "Uveďte předpokládané schopnosti"
@@ -5176,11 +5221,17 @@ msgstr "Název našeho koníčku, čtyři písmena"
 msgid "This page shows the warehouse items"
 msgstr "Na této stránce jsou uvedeny skladové položky"
 
+msgid "Unique identifier for the event URL"
+msgstr "Jedinečný identifikátor adresy URL události"
+
 msgid "You can't send messages to yourself"
 msgstr "Nemůžete posílat zprávy sami sobě"
 
 msgid "here the conditions of registration"
 msgstr "zde podmínky registrace na akci"
+
+msgid "leave empty to start a new campaign"
+msgstr "nechat prázdné pro zahájení nové kampaně"
 
 msgid "Cast your vote for the new Executive"
 msgstr "Hlasujte pro nového výkonného ředitele"
@@ -5392,6 +5443,9 @@ msgstr "Pozor, daňový kód nesouhlasí"
 msgid "Charge transaction fees to participant"
 msgstr "Účtování transakčních poplatků účastníkovi"
 
+msgid "Color used to highlight important text"
+msgstr "Barva použitá ke zvýraznění důležitého textu"
+
 msgid "Fill in your character's relationships"
 msgstr "Vyplňte vztahy své postavy"
 
@@ -5455,6 +5509,9 @@ msgstr "Pokud potřebujete pomoc, nezapomeňte se podívat na"
 
 msgid "Indicate the required character options"
 msgstr "Uveďte požadované možnosti znaků"
+
+msgid "Link to an external registration system"
+msgstr "Odkaz na externí registrační systém"
 
 msgid "MIME type of the file (e.g., video/mp4)"
 msgstr "Typ MIME souboru (např. video/mp4)"
@@ -5526,6 +5583,9 @@ msgstr "Postavy nejsou v tuto chvíli viditelné"
 
 msgid "Copy this code and share it with friends"
 msgstr "Zkopírujte tento kód a sdílejte ho s přáteli"
+
+msgid "Current financial balance for this event"
+msgstr "Aktuální finanční zůstatek pro tuto akci"
 
 msgid "Describe exactly what condition it is in"
 msgstr "Popište přesně, za jakých podmínek k tomu dochází"
@@ -5606,6 +5666,15 @@ msgstr "Číslo vaší karty je: <b>%(number)03d</b>"
 msgid "if the character belongs to this element"
 msgstr "pokud znak patří k tomuto prvku"
 
+msgid "it will enable country-specific features"
+msgstr "umožní funkce specifické pro danou zemi"
+
+msgid "leave blank to keep registrations closed"
+msgstr "nechte prázdné, aby registrace zůstaly uzavřené"
+
+msgid "will be displayed on the main event page"
+msgstr "se zobrazí na hlavní stránce události"
+
 msgid "Added at the top of the user profile page"
 msgstr "Přidáno v horní části stránky profilu uživatele"
 
@@ -5645,6 +5714,9 @@ msgstr "Existují úkoly bez vlastností: %(list)s"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Tato stránka shrnuje nahraná fotoalba"
+
+msgid "Total amount paid for platform management"
+msgstr "Celková částka zaplacená za správu platformy"
 
 msgid "You are excluding (none of these filters)"
 msgstr "Vylučujete (žádný z těchto filtrů)"
@@ -5812,6 +5884,9 @@ msgstr "Nyní můžete nastavit úpravy přehrávače"
 msgid "Set up a value for registration secret link"
 msgstr "Nastavení hodnoty pro tajný odkaz registrace"
 
+msgid "Text displayed alongside the carousel image"
+msgstr "Text zobrazený vedle obrázku kolotoče"
+
 msgid "The organization this membership belongs to"
 msgstr "Organizace, do které toto členství patří"
 
@@ -5847,9 +5922,6 @@ msgstr "Vaše darovaná registrace byla uplatněna!"
 
 msgid "(Optional) Maximun number of spots available"
 msgstr "(Nepovinné) Maximální počet volných míst"
-
-msgid "Background image used across all event pages"
-msgstr "Obrázek na pozadí použitý na všech stránkách události"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Zrušení kvůli chybějícímu sestavení profilu"
@@ -5941,9 +6013,6 @@ msgstr "(Nepovinné) Výše dobrovolného příspěvku"
 msgid "Customize buttons in the event navigation bar"
 msgstr "Přizpůsobení tlačítek na navigačním panelu události"
 
-msgid "Event description displayed on the event page"
-msgstr "Popis události zobrazený na stránce události"
-
 msgid "If checked: shows the position for each event"
 msgstr "Pokud je zaškrtnuto: zobrazuje pozici pro každou událost"
 
@@ -5990,6 +6059,9 @@ msgstr "Na této stránce jsou zobrazeny předběžné přihlášky na akci"
 msgid "This page shows the settings for PDF printing"
 msgstr "Tato stránka shrnuje nastavení pro tisk PDF"
 
+msgid "keep the auto-generated value or customize it"
+msgstr "ponechat automaticky generovanou hodnotu nebo ji přizpůsobit"
+
 msgid "Amount of the next payment instalment required"
 msgstr "Výše další požadované splátky"
 
@@ -6011,9 +6083,6 @@ msgstr "Uveďte, ke kterému pohlaví se hlásíte"
 msgid "Manage your event expenses and upload receipts"
 msgstr "Správa výdajů na události a nahrávání účtenek"
 
-msgid "Maximum number of filler spots (0 = unlimited)"
-msgstr "Maximální počet výplňových míst (0 = neomezeně)"
-
 msgid "Now you can add warehouse containers and items"
 msgstr "Nyní můžete přidávat skladové kontejnery a položky"
 
@@ -6029,11 +6098,11 @@ msgstr "Nyní můžete nastavit externí registrační odkaz"
 msgid "Optional - Image displayed within the question"
 msgstr "Nepovinné - Obrázek zobrazený v rámci otázky"
 
+msgid "Optional image for homepage carousel/slideshow"
+msgstr "Volitelný obrázek pro karuselovou prezentaci na domovské stránce"
+
 msgid "Please select both a registration and an event"
 msgstr "Vyberte prosím registraci i událost"
-
-msgid "Registered users will be granted normal access"
-msgstr "Registrovaní uživatelé budou mít běžný přístup"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "Nezapomeňte příjemce oddělit čárkami"
@@ -6098,9 +6167,6 @@ msgstr "Řízení vzhledu a prezentace akce"
 
 msgid "Manage the traits available in the event quests"
 msgstr "Správa vlastností dostupných v úkolech událostí"
-
-msgid "Maximum number of waiting spots (0 = unlimited)"
-msgstr "Maximální počet čekajících míst (0 = neomezeně)"
 
 msgid "Modify some character elements to make it yours"
 msgstr "Upravte si některé vlastnosti postavy podle sebe"
@@ -6169,9 +6235,6 @@ msgstr "Přesně popište, kteří účastníci jsou zapojeni"
 msgid "Discounts only applicable with new registrations"
 msgstr "Kód použitelný pouze při nové registraci"
 
-msgid "Font used for title texts across all event pages"
-msgstr "Písmo použité pro texty nadpisů na všech stránkách události"
-
 msgid "Here are the sign up options with limited number"
 msgstr "Zde je omezený počet možností vstupu"
 
@@ -6196,9 +6259,6 @@ msgstr "Správa typů vstupenek pro registraci účastníků"
 msgid "Manage warehouse item assignments to event areas"
 msgstr "Správa přiřazení skladových položek k oblastem událostí"
 
-msgid "Names of the collaborators who are organizing it"
-msgstr "Jména spolupracovníků, kteří ji organizují"
-
 msgid "No additional payments are required at this time"
 msgstr "V tuto chvíli nejsou vyžadovány žádné další platby"
 
@@ -6208,6 +6268,9 @@ msgstr "Zrušení odběru %(event)s pomocí %(user)s"
 
 msgid "Review participants' safety-related informations"
 msgstr "Přezkoumání informací o bezpečnosti účastníků"
+
+msgid "The subscription plan associated with this event"
+msgstr "Volitelná šablona spojená s touto schopností"
 
 msgid "There are no new sessions scheduled at this time"
 msgstr "V tuto chvíli nejsou naplánovány žádné nové schůzky"
@@ -6233,6 +6296,9 @@ msgstr "Již jste zaplatili letošní členský příspěvek"
 msgid "awaiting member approval to proceed with payment"
 msgstr "čeká na souhlas členů s platbou"
 
+msgid "use a subtle pattern or texture for best results"
+msgstr "pro dosažení nejlepších výsledků použijte jemný vzor nebo texturu"
+
 msgid "Added at the top of the search page of characters"
 msgstr "Přidáno v horní části stránky vyhledávání znaků"
 
@@ -6242,6 +6308,12 @@ msgstr "Umožňuje autorům přidávat vztahy k postavám"
 msgid "Attention! The form contains errors in the fields"
 msgstr "Pozor! Formulář obsahuje chyby v polích"
 
+msgid "Background image displayed across all event pages"
+msgstr "Obrázek na pozadí zobrazený na všech stránkách události"
+
+msgid "Color used for text backgrounds and content boxes"
+msgstr "Barva použitá pro pozadí textu a rámečky s obsahem"
+
 msgid "Create, access, and manage your events from here."
 msgstr "Zde můžete vytvářet události, přistupovat k nim a spravovat je."
 
@@ -6250,6 +6322,12 @@ msgstr "Popište přesně, jaká rizika pro událost představuje"
 
 msgid "Displays list of emails of signed-up participants"
 msgstr "Zobrazí seznam e-mailů přihlášených účastníků"
+
+msgid "Featured image displayed on the portal's homepage"
+msgstr "Doporučený obrázek zobrazený na domovské stránce portálu"
+
+msgid "Full event description with all important details"
+msgstr "Úplný popis události se všemi důležitými informacemi"
 
 msgid "Insert the css code to customize the pdf printing"
 msgstr "Zadejte kód css pro přizpůsobení tisku"
@@ -6272,6 +6350,9 @@ msgstr "Suroviny, spotřební materiál a zboží"
 #, python-format
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Připomenutí platby členských příspěvků za %(event)s"
+
+msgid "Select which payment methods participants can use"
+msgstr "Zvolte, které platební metody mohou účastníci používat"
 
 msgid "Select your preferences on the characters to play"
 msgstr "Vyberte si postavy, které chcete hrát"
@@ -6302,6 +6383,9 @@ msgstr "Nemůžete si vytvořit vztah sami k sobě"
 msgid "Cancellation for missing organization registration"
 msgstr "Zrušení registrace pro chybějící organizaci"
 
+msgid "Color for clickable links and interactive elements"
+msgstr "Barva pro klikací odkazy a interaktivní prvky"
+
 msgid "Fill in this field if you have accessibility needs"
 msgstr "Toto pole vyplňte, pokud máte požadavky na přístupnost"
 
@@ -6310,12 +6394,6 @@ msgstr "Pokud je zaškrtnuto, nepoužívejte frakce nadřazené události"
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Pokud si přejete, uveďte zájmeno pro svou postavu"
-
-msgid "Indicate the color that will be used for the links"
-msgstr "Označuje barvu, která bude použita pro odkazy"
-
-msgid "Indicate the color that will be used for the texts"
-msgstr "Označuje barvu, která bude použita pro texty"
 
 msgid "Manage fixed payment installments for participants"
 msgstr "Správa pevných splátek pro účastníky"
@@ -6385,9 +6463,6 @@ msgstr "Několikrát jsem to dělal, mám základní zkušenosti"
 msgid "If checked: shows the forms with the old appearance"
 msgstr "Pokud je zaškrtnuto: zobrazí formuláře se starým vzhledem"
 
-msgid "Indicates the currency in which to receive payments"
-msgstr "Uvádí měnu, ve které se mají přijímat platby"
-
 msgid "It is not possible for you to pay dues at this time"
 msgstr "V tuto chvíli nemůžete zaplatit členský poplatek"
 
@@ -6422,6 +6497,10 @@ msgstr "Existují typy schopností bez schopností: %(list)s"
 
 msgid "This page shows all inflows received for this event"
 msgstr "Tato stránka zobrazuje všechny přítoky přijaté pro tuto událost"
+
+msgid "use high-quality wide images for best visual impact"
+msgstr ""
+"použití vysoce kvalitních širokoúhlých obrázků pro nejlepší vizuální dojem"
 
 msgid " here the conditions of disenrollment for this event"
 msgstr "zde jsou uvedeny podmínky pro odhlášení z této akce"
@@ -6465,9 +6544,6 @@ msgstr "Správa dynamických splátek pro účastníky"
 
 msgid "Manages fixed installment payments for registrations"
 msgstr "Správa pevných splátek za registrace"
-
-msgid "Maximum number of participants spots (0 = unlimited)"
-msgstr "Maximální počet míst pro účastníky (0 = neomezeně)"
 
 msgid "Optional - A screenshot of the error / bug / problem"
 msgstr "Nepovinné - snímek obrazovky s chybou / chybou / problémem"
@@ -6582,6 +6658,15 @@ msgstr "Vstup na tuto událost vám darovali"
 msgid "You have granted data sharing with this organisation!"
 msgstr "S touto organizací jste povolili sdílení dat!"
 
+msgid "Your organization's unique subdomain in the plaftform"
+msgstr "Jedinečná subdoména vaší organizace ve formuláři plaftform"
+
+msgid "A catchy short phrase or slogan to describe your event"
+msgstr "Krátká chytlavá fráze nebo slogan popisující vaši událost"
+
+msgid "Date and time when registrations open for participants"
+msgstr "Datum a čas zahájení registrace účastníků"
+
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Chcete uživatelům umožnit dobrovolné dary"
 
@@ -6674,9 +6759,6 @@ msgstr "Obsah žádosti o členství vyplněný údaji uživatele"
 msgid "If checked: shows a link in the calendar to past events"
 msgstr "Pokud je zaškrtnuto: zobrazí v kalendáři odkaz na minulé události"
 
-msgid "Indicate the color that will be used to highlight texts"
-msgstr "Uveďte barvu, která bude použita ke zvýraznění textů"
-
 msgid "Manage expense submissions from crew and authorize them"
 msgstr "Správa žádostí o výdaje od posádky a jejich schvalování"
 
@@ -6766,6 +6848,9 @@ msgstr ""
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Uveďte zájmena, která si přejete používat pro označení vaší osoby"
 
+msgid "Main color for text content throughout your event's pages"
+msgstr "Hlavní barva pro textový obsah na stránkách události"
+
 msgid "Now you can review the historical accounting informations"
 msgstr "Nyní si můžete prohlédnout historické účetní informace"
 
@@ -6775,8 +6860,14 @@ msgstr "Nepovinné - Další možnosti podle požadavků, oddělené čárkou"
 msgid "Select the faction on which you want to filter characters"
 msgstr "Vyberte skupiny, podle kterých chcete filtrovat znaky"
 
+msgid "Staff members who will receive and manage support tickets"
+msgstr "Zaměstnanci, kteří budou přijímat a spravovat tikety podpory"
+
 msgid "The character field of computed type that will be updated"
 msgstr "Pole znaků vypočteného typu, které bude aktualizováno"
+
+msgid "The currency you want to use for all payments and pricing"
+msgstr "Měna, kterou chcete používat pro všechny platby a ceny"
 
 msgid "This page allows you to add or edit a character inventory"
 msgstr "Na této stránce můžete přidat nebo upravit inventář postavy"
@@ -6790,6 +6881,9 @@ msgstr "Pro potvrzení prosím zaplaťte %(amount)s do %(days)s dnů"
 
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Součet výdajů předložených spolupracovníky a schválených"
+
+msgid "Unique code used to generate the secret registration link"
+msgstr "Jedinečný kód použitý k vygenerování tajného registračního odkazu"
 
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Členství nelze vyměnit, jste již členem!"
@@ -6834,6 +6928,9 @@ msgid "Let us know if you encounter any issues or need assistance"
 msgstr ""
 "Dejte nám vědět, pokud narazíte na nějaké problémy nebo budete potřebovat "
 "pomoc"
+
+msgid "Main event image displayed on your organization's homepage"
+msgstr "Hlavní obrázek události zobrazený na domovské stránce vaší organizace"
 
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Ujistěte se, že máte čas sledovat/poslouchat obsah nyní"
@@ -6913,6 +7010,11 @@ msgstr "Platbu můžete provést <a href='%(url)s'>na této stránce</a>"
 
 msgid "You have chosen the same option in more than one preference"
 msgstr "Stejnou možnost jste uvedli ve více než jedné preferenci"
+
+msgid "use a rectangular image, ideally 4:3 ratio for best results"
+msgstr ""
+"použijte obdélníkový obrázek, nejlépe v poměru 4:3, abyste dosáhli co "
+"nejlepších výsledků"
 
 #, python-format
 msgid "%(amount)s %(tokens)s were used to participate in this event"
@@ -6994,6 +7096,9 @@ msgstr ""
 
 msgid "Indicate here any element you wish to avoid in the assignment"
 msgstr "Zde uveďte všechny prvky, kterým se chcete v zadání vyhnout"
+
+msgid "Link to an external website with additional event information"
+msgstr "Odkaz na externí webovou stránku s dalšími informacemi o události"
 
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
@@ -7077,6 +7182,9 @@ msgstr ""
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Pokud narazíte na nějaké problémy, kontaktujte nás a my vám pomůžeme"
+
+msgid "Names of the people or teams organizing and running this event"
+msgstr "Jména osob nebo týmů, které tuto akci organizují a řídí"
 
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Nepovinné - rozšířený popis (zobrazuje se malým šedým textem)"
@@ -7194,12 +7302,12 @@ msgstr "Chcete umožnit účastníkům vytvořit si vlastní postavy"
 msgid "In the text refer to the other characters solely by their number"
 msgstr "V textu se na ostatní znaky odkazuje pouze jejich číslem"
 
-msgid "Indicate the color that will be used for the background of texts"
-msgstr "Určuje barvu, která bude použita pro pozadí textu"
-
 msgid "Lets staff access the diet information submitted by participants"
 msgstr ""
 "Umožňuje pracovníkům přístup k informacím o stravě předloženým účastníky"
+
+msgid "Main color for text content throughout your organization's pages"
+msgstr "Hlavní barva pro textový obsah na stránkách vaší organizace"
 
 msgid "Manage questions and options for characters and writing elements"
 msgstr "Správa otázek a možností pro postavy a prvky psaní"
@@ -7366,9 +7474,6 @@ msgstr ""
 msgid "If you close the page after accessing, you will lose access forever"
 msgstr "Pokud stránku po přístupu zavřete, ztratíte k ní navždy přístup"
 
-msgid "Indicate an organization contact address for sending communications"
-msgstr "Uveďte kontaktní adresu organizace pro zasílání sdělení"
-
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 "Minimální částka čistého zisku, která má být ponechána pro účely daně ze "
@@ -7381,6 +7486,9 @@ msgstr ""
 
 msgid "Simply follow the instructions and provide the required information"
 msgstr "Stačí postupovat podle pokynů a zadat požadované informace"
+
+msgid "The full name of your event as it will be displayed to participants"
+msgstr "Úplný název vaší akce, jak se bude zobrazovat účastníkům"
 
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr "Hledaný objekt neexistuje, možná byl nedávno odstraněn"
@@ -7522,9 +7630,6 @@ msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
 "Pokud potřebujete přiložit soubor, uveďte jej zde, jinak jej nechte prázdný"
 
-msgid "Indicate the payment methods you wish to be available to participants"
-msgstr "Uveďte způsoby platby, které si přejete mít k dispozici pro účastníky"
-
 msgid "Manage template features (click on a feature to show its description)"
 msgstr "Správa funkcí šablony (kliknutím na funkci zobrazíte její popis)"
 
@@ -7556,11 +7661,6 @@ msgstr "Na této stránce jsou uvedeny informace k provedení losování"
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "Chcete-li nahrát vztahy, přidejte druhý soubor s následujícími sloupci"
-
-msgid "Users who can manage support tickets and receive ticket notifications"
-msgstr ""
-"Uživatelé, kteří mohou spravovat tikety podpory a přijímat oznámení o "
-"tiketech"
 
 msgid "You have indicated more than one preferences towards the same element"
 msgstr "Uvedli jste několik preferencí vůči stejnému prvku"
@@ -7599,6 +7699,11 @@ msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 "Pokud s námi máte uzavřenou samostatnou smlouvu, můžete tento e-mail "
 "ignorovat"
+
+msgid "Maximum number of participant slots available (set to 0 for unlimited)"
+msgstr ""
+"Maximální počet dostupných slotů pro účastníky (pro neomezený počet nastavte"
+" hodnotu 0)"
 
 msgid "The first line of the file are the field names that you want to upload"
 msgstr "Na prvním řádku souboru jsou názvy polí, které chcete nahrát"
@@ -7782,6 +7887,12 @@ msgid ""
 msgstr "Sbírka je připravena k doručení, předejte příjemci tento odkaz"
 
 msgid ""
+"The main email address participants can use to contact your organization"
+msgstr ""
+"Hlavní e-mailová adresa, kterou mohou účastníci používat pro kontaktování "
+"vaší organizace"
+
+msgid ""
 "Upload and manage secure video/audio content with one-time access tokens"
 msgstr ""
 "Nahrávání a správa zabezpečeného video/audio obsahu pomocí jednorázových "
@@ -7892,12 +8003,6 @@ msgstr ""
 "Před vytvořením schopností musíte vytvořit alespoň jeden typ schopnosti"
 
 msgid ""
-"if you leave this empty, this can be the starting event of a new campaign"
-msgstr ""
-"pokud necháte tuto položku prázdnou, může se jednat o počáteční událost nové"
-" kampaně"
-
-msgid ""
 "Added at the bottom of mail notifying participants of character assignment"
 msgstr "Přidáno v dolní části mailu s oznámením o přidělení postavy"
 
@@ -7931,12 +8036,6 @@ msgid ""
 "If checked, it allows participants to customise their characters' pronouns"
 msgstr ""
 "Pokud je zaškrtnuto, umožňuje účastníkům přizpůsobit zájmena svých postav"
-
-msgid ""
-"Indicate the organization nationality to activate nation-specific features"
-msgstr ""
-"Uveďte státní příslušnost organizace, abyste aktivovali funkce specifické "
-"pro danou zemi"
 
 msgid ""
 "Manage content that should be accessed only one time with a specific token"
@@ -8033,6 +8132,17 @@ msgid ""
 msgstr "Uveďte název postavy - zobrazí se společně se jménem"
 
 msgid ""
+"Maximum number of filler character slots available (set to 0 for unlimited)"
+msgstr ""
+"Maximální počet dostupných slotů pro výplňové znaky (pro neomezený počet "
+"nastavte na 0)"
+
+msgid ""
+"Only lowercase letters and numbers allowed, no spaces or special characters"
+msgstr ""
+"Povolena jsou pouze malá písmena a číslice, bez mezer a speciálních znaků"
+
+msgid ""
 "Optional - Indicates whether the ticket can be gifted to other participants"
 msgstr ""
 "Nepovinný údaj - označuje, zda lze vstupenku darovat dalším účastníkům"
@@ -8057,6 +8167,11 @@ msgstr ""
 msgid ""
 "You have some tickets without a final installment (with 0 amount): %(list)s"
 msgstr "Některé tipy jsou bez poslední splátky (s částkou 0): %(list)s"
+
+msgid ""
+"only lowercase letters and numbers allowed, no spaces or special characters"
+msgstr ""
+"povolena jsou pouze malá písmena a číslice, žádné mezery ani speciální znaky"
 
 msgid ""
 "Content of mail notifying participants of their character in approved status"
@@ -8126,6 +8241,10 @@ msgstr ""
 "Část registračního poplatku odvozená pouze od zvolených doplňkových možností"
 
 msgid ""
+"The full name of your organization as it will appear throughout the platform"
+msgstr "Úplný název vaší organizace, jak se bude zobrazovat v celé platformě"
+
+msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
 msgstr ""
 "Na této stránce se připravuje peněžní zůstatek již ve formátu pro roční "
@@ -8156,6 +8275,12 @@ msgstr ""
 msgid ""
 "Your data will be saved in the system, which is used by several associations"
 msgstr "Vaše údaje budou uloženy v systému, který využívá několik sdružení"
+
+msgid ""
+"upload any size, it will be automatically optimized; square images work best"
+msgstr ""
+"nahrajte libovolnou velikost, bude automaticky optimalizována; nejlépe "
+"fungují čtvercové obrázky"
 
 msgid ""
 "Allows participants to add an optional extra amount to their registration "
@@ -8207,6 +8332,13 @@ msgid ""
 "purchased"
 msgstr ""
 "Uveďte, zda je dovednost viditelná pro uživatele a zda ji lze volně zakoupit"
+
+msgid ""
+"Maximum number of people allowed on the waiting list (set to 0 for "
+"unlimited)"
+msgstr ""
+"Maximální počet osob na čekací listině (pro neomezený počet osob nastavte "
+"hodnotu 0)"
 
 msgid ""
 "Presentation visible to all participants, when 'show presentation' is "
@@ -8453,13 +8585,6 @@ msgid ""
 msgstr ""
 "Pokud najdete takové tlačítko, můžete jej stisknout a provést další "
 "filtrování"
-
-msgid ""
-"Cover image shown on the organization's homepage — rectangular, ideally 4:3 "
-"ratio"
-msgstr ""
-"Obrázek na titulní straně zobrazený na domovské stránce organizace - "
-"obdélníkový, ideálně v poměru 4:3"
 
 msgid ""
 "Enables participants to request a refund (a money transfer from the "
@@ -8855,6 +8980,13 @@ msgstr ""
 "odkaz zaslaný e-mailem a aktivujte jej"
 
 msgid ""
+"non-registered users will be redirected here, while registered users get "
+"normal access"
+msgstr ""
+"neregistrovaní uživatelé budou přesměrováni sem, zatímco registrovaní "
+"uživatelé budou mít normální přístup"
+
+msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr "Upozornění: operace je konečná, před odesláním zadání překontrolujte"
@@ -8918,6 +9050,13 @@ msgid ""
 "Indicate the value of the discount, it will be deducted from the total "
 "amount calculated"
 msgstr "Uveďte hodnotu slevy, bude odečtena od celkové vypočtené částky"
+
+msgid ""
+"Link this event to another event to create a campaign series where "
+"characters are shared"
+msgstr ""
+"Propojte tuto událost s jinou událostí a vytvořte sérii kampaní, kde jsou "
+"postavy sdíleny"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -9038,13 +9177,6 @@ msgstr ""
 "registracích (0 = neomezeně)"
 
 msgid ""
-"Optional logo image - you can upload a file of any size, it will be "
-"automatically resized"
-msgstr ""
-"Volitelný obrázek loga - můžete nahrát soubor libovolné velikosti, jeho "
-"velikost se automaticky změní"
-
-msgid ""
 "This is the management dashboard, the interface will now be explained "
 "section by section."
 msgstr ""
@@ -9078,13 +9210,6 @@ msgid ""
 msgstr ""
 "Stisknutím příslušného tlačítka můžete vytvořit nové účty delegátů nebo se s"
 " nimi přihlásit"
-
-msgid ""
-"Enter the date and time when registrations open - leave blank to keep "
-"registrations closed"
-msgstr ""
-"Zadejte datum a čas otevření registrací - pokud chcete, aby byly registrace "
-"uzavřené, nechte prázdné"
 
 msgid ""
 "If checked, participants will be able to view for each character the "
@@ -9605,11 +9730,11 @@ msgstr ""
 " odděleny podle typu"
 
 msgid ""
-"Insert the link to an external tool where users will be redirected if they "
-"are not yet registered"
+"Upload a custom font file for page titles to match your event's theme (TTF, "
+"OTF, or WOFF formats)"
 msgstr ""
-"Vložení odkazu na externí nástroj, kam budou uživatelé přesměrováni, pokud "
-"ještě nejsou zaregistrováni"
+"Nahrání vlastního souboru písma pro názvy stránek, aby odpovídaly tématu "
+"vaší události (formáty TTF, OTF nebo WOFF)"
 
 msgid ""
 "An user with this email address has been created on our website. If you wish"
@@ -9758,13 +9883,6 @@ msgid ""
 msgstr ""
 "Umožňuje nastavení ve stylu 'kampaně', kdy více událostí sdílí stejnou sadu "
 "postav a frakcí"
-
-msgid ""
-"This code is used to generate the secret registration link, you may keep the"
-" default or customize it"
-msgstr ""
-"Tento kód slouží k vygenerování tajného registračního odkazu, můžete jej "
-"ponechat ve výchozím nastavení nebo si jej přizpůsobit"
 
 msgid ""
 "To confirm your event registration, please complete your payment within one "
@@ -10040,13 +10158,6 @@ msgstr ""
 " jako virtuální měnu."
 
 msgid ""
-"If you select another event, it will be considered in the same campaign, and"
-" they will share the characters"
-msgstr ""
-"Pokud vyberete jinou událost, bude považována za součást stejné kampaně a "
-"bude mít společné postavy"
-
-msgid ""
 "No items will be modified. Either no items have assigned quantities, or all "
 "assignments have zero quantity."
 msgstr ""
@@ -10059,6 +10170,13 @@ msgid ""
 msgstr ""
 "Příležitostně zobrazí uživatelům speciální stránku na základě definované "
 "pravděpodobnosti a volitelně přiřadí výsledek"
+
+msgid ""
+"Upload a custom font file for page titles to match your organization's "
+"branding (TTF, OTF, or WOFF formats)"
+msgstr ""
+"Nahrání vlastního souboru písma pro názvy stránek, aby odpovídaly značce "
+"vaší organizace (formáty TTF, OTF nebo WOFF)"
 
 msgid ""
 "If present, it indicates the reason for the payment that the participant "
@@ -10287,6 +10405,13 @@ msgid ""
 msgstr ""
 "Na každou stránku přidává odkaz na právní upozornění a poskytuje odkaz na "
 "panel správy, který umožňuje upravit obsah tohoto upozornění"
+
+msgid ""
+"Background image displayed across all pages of your organization - use a "
+"subtle pattern or texture for best results"
+msgstr ""
+"Obrázek na pozadí zobrazený na všech stránkách vaší organizace - pro "
+"nejlepší výsledky použijte jemný vzor nebo texturu"
 
 msgid ""
 "Do you want to add payment gateway fees to the ticket price, so that the "

@@ -2,7 +2,7 @@
 <div class="nav">
     {% if features.user_character %}
         <div class="lm_tooltip">
-            <a href="{% url 'character_change' run.get_slug char.uuid %}">{% trans "Change" %}</a>
+            <a href="{% url 'character_change' run.get_slug char.uuid %}">{% trans "Edit" %}</a>
             <div class="lm_tooltiptext">{% trans "Edit your character's data" %}!</div>
         </div>
     {% endif %}

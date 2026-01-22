@@ -2757,6 +2757,7 @@ input[type="number"] {
   width: 70%;
   border-collapse: collapse;
   margin: 0 auto;
+  margin: 1rem auto;
 }
 
 @media (max-width: 1200px) {
@@ -2773,7 +2774,6 @@ input[type="number"] {
 
 .new_form table {
   width: 100%;
-  margin: 1rem auto;
 }
 
 .new_form th,
@@ -2789,14 +2789,23 @@ input[type="number"] {
 } */
 
 .new_form table input {
-  width: 100%;
+  width: 100% !important;
   padding: 0.4rem;
   box-sizing: border-box;
 }
 
+.new_form table select {
+  width: 100%;
+}
+
+.new_form table textarea {
+  width: 100%;
+  height: 8em;
+}
+
 .new_form table input[type="checkbox"],
 .new_form table input[type="radio"] {
-  width: 1em;
+  width: 1em !important;
 }
 
 .new_form .select2-container {
@@ -2831,12 +2840,6 @@ input[type="number"] {
   margin: 0 !important;
   max-width: 100% !important;
   text-align: left;
-}
-
-.new_form table input[type="date_p"],
-.new_form table input[type="time_p"],
-.new_form table input[type="datetime_p"] {
-  width: 30%;
 }
 
 @media (max-width: 800px) {
