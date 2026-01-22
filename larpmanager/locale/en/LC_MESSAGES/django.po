@@ -1766,6 +1766,11 @@ msgid ""
 "GDPR and our Privacy Policy"
 msgstr ""
 
+msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+
 msgid "Select Language"
 msgstr ""
 

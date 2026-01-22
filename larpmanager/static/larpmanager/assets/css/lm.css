@@ -2738,27 +2738,12 @@ input[type="number"] {
 
 /** NEW AND OLD FORM APPEARANCE **/
 
-/*
-th, td {
-  text-align: left !important;
-}
-
-form input,
-form select,
-form .tox-tinymce {
-    margin: 0 !important;
-} */
-
-input {
+#form_container input {
   background: rgba(var(--sec-rgb), 0.3) !important;
 }
 
-input[type="submit"]:hover,
-input[type="reset"]:hover,
-input[type="button"]:hover,
-button:hover,
-.button:hover {
-  background-color: rgba(var(--pri-rgb), 0.025) !important;
+.button.learn {
+  background-color: #a5dee5 !important;
 }
 
 .old_form_appearance th,

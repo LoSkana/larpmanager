@@ -9360,6 +9360,13 @@ msgstr ""
 "jednu možnost"
 
 msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+"Uživatel s touto e-mailovou adresou již existuje. Použijte prosím jiný "
+"e-mail nebo se zkuste přihlásit."
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""

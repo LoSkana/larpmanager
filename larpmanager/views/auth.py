@@ -25,6 +25,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordResetConfirmView
+from django.db import IntegrityError
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
@@ -40,6 +41,37 @@ if TYPE_CHECKING:
 
 class MyRegistrationView(RegistrationView):
     """View for MyRegistration."""
+
+    def form_valid(self, form: Form) -> HttpResponse:
+        """Handle valid form submission with IntegrityError protection.
+
+        Catches IntegrityError exceptions that may occur during user creation
+        (e.g., from race conditions) and re-renders the form with a user-friendly
+        error message instead of returning a 500 error.
+
+        Args:
+            form: Validated registration form
+
+        Returns:
+            HttpResponse: Redirect to success URL on successful registration,
+                or re-rendered form on IntegrityError
+
+        """
+        try:
+            # Call parent's form_valid which will call self.register()
+            return super().form_valid(form)
+        except IntegrityError as e:
+            # Catch database integrity errors (e.g., race condition on duplicate username)
+            if "auth_user_username_key" in str(e) or "username" in str(e).lower():
+                form.add_error(
+                    "email",
+                    _("A user with this email address already exists. Please use a different email or try logging in."),
+                )
+            else:
+                # Re-raise if it's a different type of integrity error
+                raise
+            # Re-render the form with the error
+            return self.form_invalid(form)
 
     def register(self, form: Form) -> User:
         """Register a new user and set up membership if needed.
