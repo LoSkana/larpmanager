@@ -1766,6 +1766,11 @@ msgid ""
 "GDPR and our Privacy Policy"
 msgstr ""
 
+msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+
 msgid "Select Language"
 msgstr ""
 
@@ -6208,6 +6213,9 @@ msgstr ""
 msgid "Delay in profile compilation"
 msgstr ""
 
+msgid "User"
+msgstr ""
+
 msgid "Secret registration link"
 msgstr ""
 
@@ -6512,9 +6520,6 @@ msgid "Last Event"
 msgstr ""
 
 msgid "You don't have any characters yet"
-msgstr ""
-
-msgid "User"
 msgstr ""
 
 msgid "Your messages"

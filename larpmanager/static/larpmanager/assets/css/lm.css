@@ -2738,30 +2738,42 @@ input[type="number"] {
 
 /** NEW AND OLD FORM APPEARANCE **/
 
-input {
+.form_container input {
   background: rgba(var(--sec-rgb), 0.3) !important;
 }
 
-.select2-search__field {
-  background: none;
+.form_container .select2-container--default,
+.form_container .select2-search--inline,
+.form_container .select2-search__field,
+.form_container input[type="file"] {
+  background: transparent !important;
 }
 
-input[type="submit"]:hover,
-input[type="reset"]:hover,
-input[type="button"]:hover,
-button:hover,
-.button:hover {
-  background-color: rgba(var(--pri-rgb), 0.025) !important;
+.button.learn {
+  background-color: #a5dee5 !important;
 }
 
-.new_form form {
-  max-width: 1000px;
-  margin: 1rem auto;
+.new_form .form_container {
+  width: 70%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .new_form .form_container {
+    width: 80%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .new_form .form_container {
+    width: 90%;
+  }
 }
 
 .new_form table {
   width: 100%;
-  border-collapse: collapse;
+  margin: 1rem auto;
 }
 
 .new_form th,
@@ -2782,6 +2794,35 @@ button:hover,
   box-sizing: border-box;
 }
 
+.new_form table input[type="checkbox"],
+.new_form table input[type="radio"] {
+  width: 1em;
+}
+
+.new_form .select2-container {
+  width: 100% !important;
+}
+
+.new_form table th {
+  min-width: 25%;
+}
+
+.new_form .grid .grid-item th {
+  min-width: auto;
+}
+
+.new_form .grid .grid-item p {
+  text-align: left;
+}
+
+.new_form form.form_container {
+  text-align: left;
+}
+
+.new_form #search {
+  text-align: left;
+}
+
 .new_form table input,
 .new_form table select,
 .new_form table .tox-tinymce,
@@ -2798,7 +2839,11 @@ button:hover,
   width: 30%;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 800px) {
+  .new_form .form_container {
+    width: 100%;
+  }
+
   .new_form table,
   .new_form tbody,
   .new_form tr,
@@ -2816,4 +2861,8 @@ button:hover,
   .new_form td {
     margin-bottom: 1rem;
   }
+}
+
+#footer td {
+  text-align: center !important;
 }

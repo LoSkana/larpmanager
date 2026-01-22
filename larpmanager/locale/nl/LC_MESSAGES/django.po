@@ -9642,6 +9642,13 @@ msgstr ""
 "meerkeuzevraag opslaat"
 
 msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+"Er bestaat al een gebruiker met dit e-mailadres. Gebruik een ander "
+"e-mailadres of probeer in te loggen."
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""

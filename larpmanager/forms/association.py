@@ -903,7 +903,7 @@ class FirstAssociationForm(BaseModelForm):
 
     class Meta:
         model = Association
-        fields = ("name", "profile", "slug")
+        fields = ("name", "profile", "slug", "payment_currency")
         widgets: ClassVar[dict] = {
             "slug": SlugInput,
         }

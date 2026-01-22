@@ -3,22 +3,37 @@
     <h2>
         <a href="{% url 'orga_event' run.get_slug %}" target="_blank"><i class="fa-solid fa-calendar-days"></i> {% trans "Event" %}</a>
     </h2>
-    <p>
-        <b>{{ run }}</b>
+    <table>
+        <tr>
+            <th>{% trans "Name" %}</th>
+            <td>
+                <b>{{ run }}</b>
+            </td>
+        </tr>
         {% if event.parent %}
-            - {% trans "Campaign" %}: {{ event.parent }}
+            <tr>
+                <th>{% trans "Campaign" %}</th>
+                <td>
+                    <b>{{ event.parent }}</b>
+                </td>
+            </tr>
         {% endif %}
-    </p>
-    <p>
-        <i>{{ run.pretty_dates }}</i>
-    </p>
-    <p>{% trans "Status" %}: {{ run.get_development_display }}</p>
-    <p>
-        <a href="{% url 'gallery' run.get_slug %}" target="_blank">Event link</a>
-        <button class="copy-link-btn"
-                data-url="{% url 'gallery' run.get_slug %}"
-                title="{% trans "Copy link to clipboard" %}">
-            <i class="fa-solid fa-copy"></i>
-        </button>
-    </p>
+        <tr>
+            <th>{% trans "Dates" %}</th>
+            <td>
+                <i>{{ run.pretty_dates }}</i>
+            </td>
+        </tr>
+        <tr>
+            <th>{% trans "Status" %}</th>
+            <td>{{ run.get_development_display }} |
+                <a href="{% url 'gallery' run.get_slug %}" target="_blank">Event link</a>
+                <button class="copy-link-btn"
+                        data-url="{% url 'gallery' run.get_slug %}"
+                        title="{% trans "Copy link to clipboard" %}">
+                    <i class="fa-solid fa-copy"></i>
+                </button>
+            </td>
+        </tr>
+    </table>
 </div>

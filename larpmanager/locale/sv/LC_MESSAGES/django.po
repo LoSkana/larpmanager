@@ -9476,6 +9476,13 @@ msgstr ""
 "flervalsfråga"
 
 msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+"En användare med den här e-postadressen finns redan. Vänligen använd en "
+"annan e-postadress eller försök logga in."
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""

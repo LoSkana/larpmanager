@@ -379,7 +379,8 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_uuid: st
             context["reg_characters"].append(char)
             # Collect all factions for this member's characters
             for fnum in char["factions"]:
-                context["reg_factions"].append(context["factions"][fnum])
+                if fnum in context["factions"]:
+                    context["reg_factions"].append(context["factions"][fnum])
 
     # Get all help questions for this member in this event, newest first
     context["list"] = HelpQuestion.objects.filter(

@@ -9623,6 +9623,13 @@ msgstr ""
 "única o múltiple"
 
 msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+"Ya existe un usuario con esta dirección de correo electrónico. Por favor, "
+"utilice un correo electrónico diferente o intente iniciar sesión."
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""

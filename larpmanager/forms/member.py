@@ -198,6 +198,20 @@ class MyRegistrationFormUniqueEmail(FormMixin, RegistrationFormUniqueEmail):
         new_order = ["lang"] + [key for key in self.fields if key != "lang"]
         self.fields = OrderedDict((key, self.fields[key]) for key in new_order)
 
+    def clean_email(self) -> str:
+        """Validate that the email is not already used as a username."""
+        email = self.cleaned_data.get("email")
+        if not email:
+            return email
+
+        # Check if username already exists
+        if User.objects.filter(username__iexact=email).exists():
+            raise ValidationError(
+                _("A user with this email address already exists. Please use a different email or try logging in."),
+            )
+
+        return email
+
     def save(self, commit: bool = True) -> User:  # noqa: FBT001, FBT002
         """Save user and update associated member profile with form data."""
         # Create user instance from parent form
