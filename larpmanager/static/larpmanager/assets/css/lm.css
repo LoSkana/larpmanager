@@ -2761,6 +2761,14 @@ button:hover,
   background-color: rgba(var(--pri-rgb), 0.025) !important;
 }
 
+#cnt-form input {
+  background: #f7feff !important;
+}
+
+.button.learn {
+  background-color: #a5dee5 !important;
+}
+
 .old_form_appearance th,
 .old_form_appearance td {
   text-align: center !important;
