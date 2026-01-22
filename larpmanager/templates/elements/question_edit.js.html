@@ -1,0 +1,251 @@
+{% load i18n static %}
+window.addEventListener('DOMContentLoaded', function() {
+// Extract question UUID from current URL path
+function getQuestionUuidFromUrl() {
+var pathParts = window.location.pathname.split('/');
+var questionUuidIndex = pathParts.indexOf('edit') + 1;
+return pathParts[questionUuidIndex];
+}
+// Build base path up to /manage/
+function getBasePath() {
+var pathParts = window.location.pathname.split('/');
+var manageIndex = pathParts.indexOf('manage');
+return pathParts.slice(0, manageIndex + 1).join('/');
+}
+// Build URL for options AJAX endpoint
+function buildOptionsAjaxUrl(optionUuid, questionUuid) {
+var basePath = getBasePath();
+return basePath + '/options/ajax/' + optionUuid + '/?question_uuid=' + questionUuid;
+}
+//Build URL for options edit endpoint
+function buildOptionsEditUrl(optionUuid) {
+var basePath = getBasePath();
+return basePath + '/options/edit/' + optionUuid + '/';
+}
+// Reload page with scroll_to parameter
+function reloadWithScrollToOptions() {
+var currentUrl = window.location.href.split('?')[0].split('#')[0];
+window.location.href = currentUrl + '?scroll_to=options';
+}
+// Close option modal popup
+function closeOptionModal() {
+// Simulate click on overlay to close uglipop properly
+var overlay = document.getElementById('uglipop_overlay');
+if (overlay) {
+overlay.click();
+}
+}
+// Make AJAX request with common error handling
+function makeAjaxRequest(config) {
+start_spinner();
+return $.ajax(config)
+.done(function(response) {
+stop_spinner();
+if (config.onSuccess) {
+config.onSuccess(response);
+}
+})
+.fail(function(xhr, status, error) {
+stop_spinner();
+if (config.onError) {
+config.onError(xhr, status, error);
+} else {
+alert('{% trans "An error occurred" %}');
+}
+});
+}
+// Toggle visibility of form fields based on question type
+function toggleOptions() {
+var selectedValue = $('#id_typ').val();
+var speed = 300;
+// Options section visibility
+if (["m", "s"].includes(selectedValue)) {
+if (!$('#options').is(':visible')) {
+$('#options').fadeIn(speed);
+}
+} else {
+if ($('#options').is(':visible')) {
+$('#options').fadeOut(speed);
+}
+}
+// Max length field visibility
+var maxLengtheable = ["m", "t", "p", "e", "name", "teaser", "text", "title", "additional_tickets"];
+$('#id_max_length_tr').toggle(maxLengtheable.includes(selectedValue));
+// Printable and visibility fields
+if (["s", "m", "t", "p", "e", "c"].includes(selectedValue)) {
+$('#id_printable_tr').fadeIn(speed);
+$('#id_visibility_tr').fadeIn(speed);
+} else {
+$('#id_printable_tr').fadeOut(speed);
+$('#id_visibility_tr').fadeOut(speed);
+}
+// Hide visibility for specific types
+if (["name", "teaser", "text", "faction"].includes(selectedValue)) {
+$('#id_visibility_tr').fadeOut(speed);
+}
+// Status field visibility
+if (["ticket", "c"].includes(selectedValue)) {
+$('#id_status_tr').fadeOut(speed);
+} else {
+$('#id_status_tr').fadeIn(speed);
+}
+// Editable field visibility
+if (["c"].includes(selectedValue)) {
+$('#id_editable_tr').fadeOut(speed);
+} else {
+$('#id_editable_tr').fadeIn(speed);
+}
+}
+// Check URL rams and scroll to options if needed
+function checkAndScrollToOptions() {
+var urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('scroll_to') === 'options') {
+// Wait for toggleOptions to complete and options to be visible
+setTimeout(function() {
+toggleOptions();
+// Scroll to options if visible
+if ($('#options').length && $('#options').is(':visible')) {
+window.jump_to('#options');
+}
+}, 400);
+// Remove scroll_to parameter from URL without reloading
+window.history.replaceState({}, document.title, window.location.pathname);
+}
+}
+// Save question via AJAX before adding options
+function saveQuestionBeforeAddingOption(callback) {
+var $mainForm = $('#main_form');
+var formData = new FormData($mainForm[0]);
+makeAjaxRequest({
+url: window.location.pathname,
+method: "POST",
+data: formData,
+processData: false,
+contentType: false,
+headers: {'X-Requested-With': 'XMLHttpRequest'},
+dataType: "json",
+onSuccess: function(response) {
+if (response.success && response.question_uuid) {
+// Update URL with new question UUID
+var newUrl = window.location.pathname.replace('/edit/0', '/edit/' + response.question_uuid);
+window.history.replaceState({}, '', newUrl);
+// Execute callback with question UUID
+if (callback) {
+callback(response.question_uuid);
+}
+} else {
+// Form has validation errors, submit normally to show errors
+$mainForm.off('submit');
+$mainForm.submit();
+}
+},
+onError: function() {
+// AJAX error, submit form normally to show errors
+$mainForm.off('submit');
+$mainForm.submit();
+}
+});
+}
+// Open option modal with form
+function openOptionModal(optionUuid, questionUuid) {
+var ajaxUrl = buildOptionsAjaxUrl(optionUuid, questionUuid);
+makeAjaxRequest({
+url: ajaxUrl,
+method: "GET",
+dataType: "json",
+onSuccess: function(response) {
+if (response.success) {
+uglipop({
+class: 'popup_option',
+source: 'html',
+content: response.html
+});
+setupOptionFormSubmit(optionUuid, questionUuid);
+}
+},
+onError: function() {
+alert('{% trans "Error loading form" %}');
+}
+});
+}
+// Setup form submission handler for option form
+function setupOptionFormSubmit(optionUuid, questionUuid) {
+$('#option_ajax_form').off('submit').on('submit', function(e) {
+e.preventDefault();
+var $form = $(this);
+var formData = new FormData($form[0]);
+// For new options, add question_uuid to form data
+if (optionUuid === '0' && questionUuid) {
+formData.append('question_uuid', questionUuid);
+}
+var submitUrl = buildOptionsEditUrl(optionUuid);
+makeAjaxRequest({
+url: submitUrl,
+method: "POST",
+data: formData,
+processData: false,
+contentType: false,
+headers: {'X-Requested-With': 'XMLHttpRequest'},
+dataType: "json",
+onSuccess: function(response) {
+if (response.success) {
+// Close modal and reload with scroll
+closeOptionModal();
+reloadWithScrollToOptions();
+} else {
+// Form has validation errors, replace content
+$('.popup_option').html(response.html);
+setupOptionFormSubmit(optionUuid, questionUuid);
+}
+},
+onError: function() {
+alert('{% trans "Error saving option" %}');
+}
+});
+return false;
+});
+}
+// Handle "New Option" button click
+function handleNewOptionClick(e) {
+e.preventDefault();
+var questionUuid = getQuestionUuidFromUrl();
+// If question hasn't been saved yet, save it first
+if (questionUuid === "0") {
+saveQuestionBeforeAddingOption(function(savedQuestionUuid) {
+openOptionModal('0', savedQuestionUuid);
+});
+} else {
+openOptionModal('0', questionUuid);
+}
+return false;
+}
+// Handle edit option link click
+function handleEditOptionClick(e) {
+e.preventDefault();
+var optionUuid = $(this).data('option-uuid');
+var questionUuid = getQuestionUuidFromUrl();
+openOptionModal(optionUuid, questionUuid);
+return false;
+}
+// Initialization
+$(document).ready(function() {
+// Move options section before submit button
+$('#options').insertBefore('#form_submit');
+// Initialize visibility toggle
+setTimeout(toggleOptions, 10);
+// Check if we need to scroll to options
+checkAndScrollToOptions();
+// Bind event handlers for question type changes
+$('#id_typ').on('change', toggleOptions);
+$('#id_status').on('change', toggleOptions);
+// Bind event handlers for option management
+$('.new-option').on('click', handleNewOptionClick);
+$(document).on('click', '.edit-option-ajax', handleEditOptionClick);
+// Handle cancel button in option modal (using event delegation for dynamic content)
+$(document).on('click', '.btn-cancel', function(e) {
+e.preventDefault();
+closeOptionModal();
+return false;
+});
+});
+});

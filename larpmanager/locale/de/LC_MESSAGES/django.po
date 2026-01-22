@@ -1581,6 +1581,9 @@ msgstr "Navigation"
 msgid "Net profit"
 msgstr "Reingewinn"
 
+msgid "New Option"
+msgstr "Neue Option"
+
 msgid "New answer"
 msgstr "Neue Antwort"
 
@@ -1769,6 +1772,9 @@ msgstr "Beschreibung"
 
 msgid "Direct link"
 msgstr "Direkter Link"
+
+msgid "Edit Option"
+msgstr "Option bearbeiten"
 
 msgid "Event Texts"
 msgstr "Veranstaltungstexte"
@@ -3221,6 +3227,9 @@ msgstr "Elektronische Rechnung"
 msgid "Enable preferences"
 msgstr "Einstellungen aktivieren"
 
+msgid "Error loading form"
+msgstr "Fehler beim Laden des Formulars"
+
 msgid "Hide not available"
 msgstr "Ausblenden nicht verfügbar"
 
@@ -3373,6 +3382,9 @@ msgstr "NICHT ausgewählte Elemente"
 
 msgid "Email notifications"
 msgstr "E-Mail-Benachrichtigungen"
+
+msgid "Error saving option"
+msgstr "Option Fehlerspeicherung"
 
 msgid "Event Configuration"
 msgstr "Ereignis-Konfiguration"
@@ -4282,6 +4294,9 @@ msgstr "Jetzt können Sie Abzeichen erstellen"
 msgid "Now you can manage events"
 msgstr "Jetzt können Sie Ereignisse verwalten"
 
+msgid "Option saved successfully"
+msgstr "Option erfolgreich gespeichert"
+
 msgid "Optional - email reply to"
 msgstr "Fakultativ - E-Mail-Antwort an"
 
@@ -4485,6 +4500,9 @@ msgstr "Jetzt können Sie Abflüsse erstellen"
 
 msgid "Pre-registration cancelled!"
 msgstr "Vorregistrierung storniert!"
+
+msgid "Question saved successfully"
+msgstr "Registrierung erfolgreich abgeschlossen"
 
 msgid "Reminder membership request"
 msgstr "Erinnerung an den Antrag auf Mitgliedschaft"

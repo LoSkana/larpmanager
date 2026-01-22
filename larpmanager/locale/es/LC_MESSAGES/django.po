@@ -1581,6 +1581,9 @@ msgstr "Navegación"
 msgid "Net profit"
 msgstr "Beneficio neto"
 
+msgid "New Option"
+msgstr "Nueva opción"
+
 msgid "New answer"
 msgstr "¡Nueva respuesta"
 
@@ -1769,6 +1772,9 @@ msgstr "Descripción"
 
 msgid "Direct link"
 msgstr "Enlace directo"
+
+msgid "Edit Option"
+msgstr "Editar opción"
 
 msgid "Event Texts"
 msgstr "Textos de eventos"
@@ -3221,6 +3227,9 @@ msgstr "Factura electrónica"
 msgid "Enable preferences"
 msgstr "Activar preferencias"
 
+msgid "Error loading form"
+msgstr "Error al cargar el formulario"
+
 msgid "Hide not available"
 msgstr "Ocultar no disponible"
 
@@ -3373,6 +3382,9 @@ msgstr "Artículos NO seleccionados"
 
 msgid "Email notifications"
 msgstr "Notificaciones por correo electrónico"
+
+msgid "Error saving option"
+msgstr "Opción de guardar errores"
 
 msgid "Event Configuration"
 msgstr "Configuración de eventos"
@@ -4282,6 +4294,9 @@ msgstr "Ahora puedes crear insignias"
 msgid "Now you can manage events"
 msgstr "Ahora puedes gestionar eventos"
 
+msgid "Option saved successfully"
+msgstr "Opción guardada correctamente"
+
 msgid "Optional - email reply to"
 msgstr "Opcional - respuesta por correo electrónico a"
 
@@ -4485,6 +4500,9 @@ msgstr "Ahora puede crear salidas"
 
 msgid "Pre-registration cancelled!"
 msgstr "Preinscripción anulada"
+
+msgid "Question saved successfully"
+msgstr "¡Cuenta creada correctamente"
 
 msgid "Reminder membership request"
 msgstr "Recordatorio solicitud de adhesión"

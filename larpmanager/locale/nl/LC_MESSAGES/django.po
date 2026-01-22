@@ -1581,6 +1581,9 @@ msgstr "Navigatie"
 msgid "Net profit"
 msgstr "Nettowinst"
 
+msgid "New Option"
+msgstr "Nieuwe optie"
+
 msgid "New answer"
 msgstr "Nieuw antwoord"
 
@@ -1769,6 +1772,9 @@ msgstr "Beschrijving"
 
 msgid "Direct link"
 msgstr "Directe link"
+
+msgid "Edit Option"
+msgstr "Bewerk optie"
 
 msgid "Event Texts"
 msgstr "Evenementteksten"
@@ -3221,6 +3227,9 @@ msgstr "Elektronische factuur"
 msgid "Enable preferences"
 msgstr "Voorkeuren inschakelen"
 
+msgid "Error loading form"
+msgstr "Fout bij het laden van formulier"
+
 msgid "Hide not available"
 msgstr "Verberg niet beschikbaar"
 
@@ -3373,6 +3382,9 @@ msgstr "NIET geselecteerde items"
 
 msgid "Email notifications"
 msgstr "Kennisgevingen per e-mail"
+
+msgid "Error saving option"
+msgstr "Optie voor opslaan van fouten"
 
 msgid "Event Configuration"
 msgstr "Gebeurtenis Configuratie"
@@ -4282,6 +4294,9 @@ msgstr "Nu kun je badges maken"
 msgid "Now you can manage events"
 msgstr "Nu kun je evenementen beheren"
 
+msgid "Option saved successfully"
+msgstr "Optie succesvol opgeslagen"
+
 msgid "Optional - email reply to"
 msgstr "Optioneel - antwoord per e-mail naar"
 
@@ -4485,6 +4500,9 @@ msgstr "Nu kun je uitstromen maken"
 
 msgid "Pre-registration cancelled!"
 msgstr "Voorinschrijving geannuleerd!"
+
+msgid "Question saved successfully"
+msgstr "Registratie succesvol afgerond"
 
 msgid "Reminder membership request"
 msgstr "Herinnering lidmaatschapsverzoek"

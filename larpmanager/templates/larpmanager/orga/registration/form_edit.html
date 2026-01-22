@@ -1,5 +1,4 @@
 {% extends "utils.html" %}
-{% load i18n %}
 {% load i18n show_tags %}
 {% block title %}
     {% if nonum is None %}
@@ -20,7 +19,14 @@
     {% include "elements/form/main.html" %}
     <div id="options" class="hide">
         <h2>{% trans "Options" %}</h2>
-        {% include "elements/header/edit.html" %}
+        <div class="staff-list">
+            <div class="orga-buttons">
+                <a class="new-option button" href="#">
+                    <i class="fas fa-plus"></i>
+                    {% trans "New" %}
+                </a>
+            </div>
+        </div>
         <table id="registration_options" class="go_datatable writing ordering_arrow">
             <thead>
                 <tr>
@@ -37,7 +43,9 @@
                 {% for el in list %}
                     <tr id="{{ el.uuid }}">
                         <td>
-                            <a href="{% url 'orga_registration_options_edit' run.get_slug el.uuid %}">
+                            <a href="{% url 'orga_registration_options_edit' run.get_slug el.uuid %}"
+                               class="edit-option-ajax"
+                               data-option-uuid="{{ el.uuid }}">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
@@ -72,5 +80,5 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>{% include "elements/question_edit.js" %}</script>
+    <script>{% include "elements/question_edit.js.html" %}</script>
 {% endblock js %}

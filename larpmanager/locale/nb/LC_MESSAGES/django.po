@@ -1581,6 +1581,9 @@ msgstr "Navigasjon"
 msgid "Net profit"
 msgstr "Nettoresultat"
 
+msgid "New Option"
+msgstr "Nytt alternativ"
+
 msgid "New answer"
 msgstr "Nytt svar"
 
@@ -1769,6 +1772,9 @@ msgstr "Beskrivelse"
 
 msgid "Direct link"
 msgstr "Direkte lenke"
+
+msgid "Edit Option"
+msgstr "Redigeringsalternativ"
 
 msgid "Event Texts"
 msgstr "Arrangementstekster"
@@ -3221,6 +3227,9 @@ msgstr "Elektronisk faktura"
 msgid "Enable preferences"
 msgstr "Aktiver innstillinger"
 
+msgid "Error loading form"
+msgstr "Feil ved lasting av skjema"
+
 msgid "Hide not available"
 msgstr "Skjul ikke tilgjengelig"
 
@@ -3373,6 +3382,9 @@ msgstr "Elementer som IKKE er valgt"
 
 msgid "Email notifications"
 msgstr "E-postvarsler"
+
+msgid "Error saving option"
+msgstr "Alternativ for lagring av feil"
 
 msgid "Event Configuration"
 msgstr "Hendelseskonfigurasjon"
@@ -4282,6 +4294,9 @@ msgstr "Nå kan du opprette merker"
 msgid "Now you can manage events"
 msgstr "Nå kan du administrere hendelser"
 
+msgid "Option saved successfully"
+msgstr "Alternativet ble lagret"
+
 msgid "Optional - email reply to"
 msgstr "Valgfritt - svar på e-post til"
 
@@ -4485,6 +4500,9 @@ msgstr "Nå kan du opprette utstrømninger"
 
 msgid "Pre-registration cancelled!"
 msgstr "Forhåndsregistrering avlyst!"
+
+msgid "Question saved successfully"
+msgstr "Registreringen er fullført"
 
 msgid "Reminder membership request"
 msgstr "Påminnelse om medlemskap"

@@ -4686,6 +4686,15 @@ msgid ""
 "below to notify us of your payment"
 msgstr ""
 
+msgid "An error occurred"
+msgstr ""
+
+msgid "Error loading form"
+msgstr ""
+
+msgid "Error saving option"
+msgstr ""
+
 msgid "Total registration fee"
 msgstr ""
 
@@ -4809,9 +4818,6 @@ msgid "Role"
 msgstr ""
 
 msgid "Hi"
-msgstr ""
-
-msgid "An error occurred"
 msgstr ""
 
 msgid "No organization found"
@@ -7282,6 +7288,12 @@ msgid ""
 msgstr ""
 
 msgid "Perform extraction"
+msgstr ""
+
+msgid "New Option"
+msgstr ""
+
+msgid "Edit Option"
 msgstr ""
 
 msgid "This page shows the pre-signups for the event"
@@ -9815,9 +9827,15 @@ msgid ""
 "You must create at least one ability type before you can create abilities"
 msgstr ""
 
+msgid "Question saved successfully"
+msgstr ""
+
 msgid ""
 "You must create at least one registration question before you can create "
 "registration options"
+msgstr ""
+
+msgid "Option saved successfully"
 msgstr ""
 
 msgid "Photos and videos successfully uploaded"

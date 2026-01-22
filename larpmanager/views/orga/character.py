@@ -692,7 +692,7 @@ def orga_writing_form_edit(
         # Redirect to option editing if needed, otherwise back to form list
         if edit_option:
             return redirect(
-                orga_writing_options_new,
+                orga_writing_form_edit,
                 event_slug=context["run"].get_slug(),
                 writing_type=writing_type,
                 question_uuid=context["saved"].uuid,

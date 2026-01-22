@@ -1742,9 +1742,10 @@ a label:hover {
 }
 
 .popup,
-.popup_tutorial {
+.popup_tutorial,
+.popup_option {
   border-radius: 2em;
-  background-color: rgba(18, 18, 18, 0.9);
+  background-color: rgba(18, 18, 18, 1);
   color: white !important;
   padding: 1em;
   -webkit-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
@@ -1758,6 +1759,11 @@ a label:hover {
   overflow-x: hidden;
 
   text-align: center;
+}
+
+.popup_option {
+  width: 80vw;
+  height: 80vh;
 }
 
 .popup_tutorial {
@@ -2755,4 +2761,48 @@ input[type="number"] {
 .old_form_appearance select,
 .old_form_appearance .tox-tinymce {
   margin: 0 auto;
+}
+
+/** OPTION EDIT POPUP **/
+
+.ajax-option-form-container {
+  padding: 20px;
+}
+
+.ajax-option-form-container h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.btn-save,
+.btn-cancel {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-save {
+  background-color: rgba(var(--pri-rgb), 0.6);
+  color: white;
+}
+
+.btn-save:hover {
+  background-color: rgba(var(--pri-rgb), 0.9);
+}
+
+.btn-cancel {
+  background-color: rgba(var(--ter-rgb), 0.6);
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: rgba(var(--ter-rgb), 0.9);
 }

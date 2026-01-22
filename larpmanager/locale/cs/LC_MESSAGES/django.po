@@ -1581,6 +1581,9 @@ msgstr "Navigace"
 msgid "Net profit"
 msgstr "Čistý zisk"
 
+msgid "New Option"
+msgstr "Nová možnost"
+
 msgid "New answer"
 msgstr "Nová odpověď"
 
@@ -1769,6 +1772,9 @@ msgstr "Popis"
 
 msgid "Direct link"
 msgstr "Přímý odkaz"
+
+msgid "Edit Option"
+msgstr "Možnost úprav"
 
 msgid "Event Texts"
 msgstr "Texty událostí"
@@ -3221,6 +3227,9 @@ msgstr "Elektronická faktura"
 msgid "Enable preferences"
 msgstr "Povolení předvoleb"
 
+msgid "Error loading form"
+msgstr "Chyba při načítání formuláře"
+
 msgid "Hide not available"
 msgstr "Skrýt není k dispozici"
 
@@ -3373,6 +3382,9 @@ msgstr "Položky, které NEbyly vybrány"
 
 msgid "Email notifications"
 msgstr "E-mailová oznámení"
+
+msgid "Error saving option"
+msgstr "Možnost uložení chyby"
 
 msgid "Event Configuration"
 msgstr "Konfigurace události"
@@ -4282,6 +4294,9 @@ msgstr "Nyní můžete vytvářet odznaky"
 msgid "Now you can manage events"
 msgstr "Nyní můžete spravovat události"
 
+msgid "Option saved successfully"
+msgstr "Možnost úspěšně uložena"
+
 msgid "Optional - email reply to"
 msgstr "Nepovinné - odpověď e-mailem na adresu"
 
@@ -4485,6 +4500,9 @@ msgstr "Nyní můžete vytvářet odtoky"
 
 msgid "Pre-registration cancelled!"
 msgstr "Předběžná registrace zrušena!"
+
+msgid "Question saved successfully"
+msgstr "Registrace byla úspěšně dokončena"
 
 msgid "Reminder membership request"
 msgstr "Připomínka žádosti o členství"

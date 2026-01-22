@@ -198,9 +198,9 @@ urlpatterns = [
         name="orga_registration_options_edit",
     ),
     path(
-        "<slug:event_slug>/manage/options/new/<slug:question_uuid>/",
-        views_of.orga_registration_options_new,
-        name="orga_registration_options_new",
+        "<slug:event_slug>/manage/options/ajax/<slug:option_uuid>/",
+        views_of.orga_registration_options_ajax,
+        name="orga_registration_options_ajax",
     ),
     path(
         "<slug:event_slug>/manage/options/order/<slug:option_uuid>/<int:order>/",
