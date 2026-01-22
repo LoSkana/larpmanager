@@ -697,7 +697,11 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
 
     if "user_character" in features:
         character_links.append(
-            (reverse("character", args=[run.get_slug(), character_uuid]), _("Edit"), _("Edit your character's details"))
+            (
+                reverse("character_edit", args=[run.get_slug(), character_uuid]),
+                _("Edit"),
+                _("Edit your character's details"),
+            )
         )
 
     if "px" in features and get_event_config(context["event"].id, "px_user", default_value=False, context=context):
