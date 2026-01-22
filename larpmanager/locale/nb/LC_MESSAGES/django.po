@@ -9469,6 +9469,13 @@ msgstr ""
 "flervalgsspørsmål"
 
 msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+"Det finnes allerede en bruker med denne e-postadressen. Bruk en annen "
+"e-postadresse eller prøv å logge inn."
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""

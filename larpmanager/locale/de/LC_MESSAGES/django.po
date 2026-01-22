@@ -9835,6 +9835,13 @@ msgstr ""
 "oder Multiple-Choice-Frage speichern"
 
 msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+"Ein Benutzer mit dieser E-Mail-Adresse existiert bereits. Bitte verwenden "
+"Sie eine andere E-Mail-Adresse oder versuchen Sie, sich anzumelden."
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""

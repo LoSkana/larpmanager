@@ -9658,6 +9658,13 @@ msgstr ""
 "scelta singola o multipla"
 
 msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+"Un utente con questo indirizzo e-mail esiste già. Si prega di utilizzare un "
+"altro indirizzo e-mail o di provare ad accedere."
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""

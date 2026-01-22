@@ -9550,6 +9550,13 @@ msgstr ""
 "zdefiniować co najmniej jedną opcję"
 
 msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+"Użytkownik o tym adresie e-mail już istnieje. Użyj innego adresu e-mail lub "
+"spróbuj się zalogować."
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""
