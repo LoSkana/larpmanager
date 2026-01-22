@@ -661,26 +661,10 @@ def registration_status_characters(
         query = RegistrationCharacterRel.objects.filter(registration_id=registration.id)
         registration_character_rels = query.order_by("character__number").select_related("character")
 
-    # Check if character approval is required for this event
-    approval_required = get_event_config(run.event_id, "user_character_approval", default_value=False, context=context)
-
     # Build list of character links with names and approval status
-    character_links = []
-    for character_rel in registration_character_rels:
-        character_url = reverse("character", args=[run.get_slug(), character_rel.character.uuid])
-        character_name = character_rel.character.name
-
-        # Use custom name if provided
-        if character_rel.custom_name:
-            character_name = character_rel.custom_name
-
-        # Add approval status if character approval is enabled and not approved
-        if approval_required and character_rel.character.status != CharacterStatus.APPROVED:
-            character_name += f" ({_(character_rel.character.get_status_display())})"
-
-        # Create clickable link for character
-        character_url = f"<a href='{character_url}'>{character_name}</a>"
-        character_links.append(character_url)
+    character_links = [
+        _get_character_links(run, context, features, character_rel) for character_rel in registration_character_rels
+    ]
 
     # Add character information to status details based on number of characters
     if len(character_links) == 1:
@@ -691,6 +675,52 @@ def registration_status_characters(
     is_assigned = len(character_links) > 0
 
     _status_approval(run, registration, run_status, features, is_character_assigned=is_assigned)
+
+
+def _get_character_links(run: Run, context: dict, features: dict, character_rel: RegistrationCharacterRel) -> str:
+    """Builds list of links for the character quick access bar."""
+    character_url = reverse("character", args=[run.get_slug(), character_rel.character.uuid])
+    character_name = character_rel.character.name
+    character_uuid = character_rel.character.uuid
+
+    # Use custom name if provided
+    if character_rel.custom_name:
+        character_name = character_rel.custom_name
+
+    # Add approval status if character approval is enabled and not approved
+    approval_required = get_event_config(run.event_id, "user_character_approval", default_value=False, context=context)
+    if approval_required and character_rel.character.status != CharacterStatus.APPROVED:
+        character_name += f" ({_(character_rel.character.get_status_display())})"
+
+    # Create clickable link for character
+    character_url = f"<a href='{character_url}'>{character_name}</a>"
+
+    # append other links
+    if "user_character" in features:
+        link_url = reverse("character", args=[run.get_slug(), character_uuid])
+        link_name = _("Edit")
+        character_url += f"<a href='{link_url}'>{link_name}</a>"
+
+    if "px" in features and context.get("px_user"):
+        link_url = reverse("character_abilities", args=[run.get_slug(), character_uuid])
+        link_name = _("Abilities")
+        character_url += f"<a href='{link_url}'>{link_name}</a>"
+
+    if "custom_character" in features:
+        link_url = reverse("character_customize", args=[run.get_slug(), character_uuid])
+        link_name = _("Customize")
+
+    if "player_relationships" in features:
+        link_url = reverse("character_relationships", args=[run.get_slug(), character_uuid])
+        link_name = _("Relationships")
+        character_url += f"<a href='{link_url}'>{link_name}</a>"
+
+    if "help" in features:
+        link_url = reverse("help", args=[run.get_slug()])
+        link_name = _("Questions")
+        character_url += f"<a href='{link_url}'>{link_name}</a>"
+
+    return character_url
 
 
 def _status_approval(
