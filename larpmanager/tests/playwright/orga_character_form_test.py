@@ -145,7 +145,7 @@ def show_chars(page: Any, live_server: Any) -> None:
 
 
 def check_first_char(page: Any, live_server: Any) -> None:
-    page.get_by_role("link", name="Change").click()
+    page.get_by_role("link", name="Edit").click()
     expect(page.locator("#id_que_u4")).to_have_value("aaaaaaaaaa")
     page.get_by_text("bbbbbbbbbb").click()
     expect(page.get_by_text("bbbbbbbbbb")).to_have_value("bbbbbbbbbb")
