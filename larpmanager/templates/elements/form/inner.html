@@ -15,7 +15,7 @@
             <i class="fa-solid fa-chevron-down"></i>
         </a>
     </h1>
-    <div class="{% if not form.show_sections %}hide{% endif %} sec_{{ section | slugify }}">
+    <div class="form_container {% if not form.show_sections %}hide{% endif %} sec_{{ section | slugify }}">
         {% if section in form.section_descriptions %}
             {% get_field form.section_descriptions section as description %}
             {{ description | safe }}

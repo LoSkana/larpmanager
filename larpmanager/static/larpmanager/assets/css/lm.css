@@ -2744,23 +2744,136 @@ input[type="number"] {
 
 /** NEW AND OLD FORM APPEARANCE **/
 
-#form_container input {
+.form_container input {
   background: rgba(var(--sec-rgb), 0.3) !important;
+}
+
+.form_container .select2-container--default,
+.form_container .select2-search--inline,
+.form_container .select2-search__field,
+.form_container input[type="file"] {
+  background: transparent !important;
 }
 
 .button.learn {
   background-color: #a5dee5 !important;
 }
 
-.old_form_appearance th,
-.old_form_appearance td {
-  text-align: center !important;
+.new_form .form_container {
+  width: 70%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  margin: 1rem auto;
 }
 
-.old_form_appearance input,
-.old_form_appearance select,
-.old_form_appearance .tox-tinymce {
-  margin: 0 auto;
+@media (max-width: 1200px) {
+  .new_form .form_container {
+    width: 80%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .new_form .form_container {
+    width: 90%;
+  }
+}
+
+.new_form table {
+  width: 100%;
+}
+
+.new_form th,
+.new_form td {
+  padding: 1rem;
+  text-align: left !important;
+}
+
+/*
+.new_form #main_form tr {
+  background: none;
+  border: none;
+} */
+
+.new_form table input {
+  width: 100% !important;
+  padding: 0.4rem;
+  box-sizing: border-box;
+}
+
+.new_form table select {
+  width: 100%;
+}
+
+.new_form table textarea {
+  width: 100%;
+  height: 8em;
+}
+
+.new_form table input[type="checkbox"],
+.new_form table input[type="radio"] {
+  width: 1em !important;
+}
+
+.new_form .select2-container {
+  width: 100% !important;
+}
+
+.new_form table th {
+  min-width: 25%;
+}
+
+.new_form .grid .grid-item th {
+  min-width: auto;
+}
+
+.new_form .grid .grid-item p {
+  text-align: left;
+}
+
+.new_form form.form_container {
+  text-align: left;
+}
+
+.new_form #search {
+  text-align: left;
+}
+
+.new_form table input,
+.new_form table select,
+.new_form table .tox-tinymce,
+.new_form table .select2-container,
+.new_form table textarea {
+  margin: 0 !important;
+  max-width: 100% !important;
+  text-align: left;
+}
+
+@media (max-width: 800px) {
+  .new_form .form_container {
+    width: 100%;
+  }
+
+  .new_form table,
+  .new_form tbody,
+  .new_form tr,
+  .new_form th,
+  .new_form td {
+    display: block;
+    width: 100%;
+  }
+
+  .new_form th {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+
+  .new_form td {
+    margin-bottom: 1rem;
+  }
+}
+
+#footer td {
+  text-align: center !important;
 }
 
 /** OPTION EDIT POPUP **/

@@ -39,8 +39,8 @@
           enctype="multipart/form-data"
           id="main_form">
         {% csrf_token %}
-        <div id="form_container">
-            <table class="mob">
+        <div class="form_container">
+            <table>
                 {% include "elements/form/inner.html" with form=form1 %}
                 {% include "elements/form/inner.html" with form=form2 %}
             </table>
