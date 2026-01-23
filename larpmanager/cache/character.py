@@ -217,7 +217,7 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
     choice_answers = WritingChoice.objects.filter(question__uuid__in=question_uuids)
     for element_id, question_uuid, option_uuid in choice_answers.values_list(
         "element_id", "question__uuid", "option__uuid"
-    ):
+    ).order_by("question__order", "option__order"):
         # Skip if character not in current event mapping
         if element_id not in character_id_mapping:
             continue

@@ -2755,6 +2755,13 @@ input[type="number"] {
   background: transparent !important;
 }
 
+.form_container p,
+.form_container ol,
+.form_container form,
+.form_container ul {
+  text-align: left;
+}
+
 .button.learn {
   background-color: #a5dee5 !important;
 }
