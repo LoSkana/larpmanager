@@ -9,6 +9,10 @@
     {{ run.search }}
 {% endblock title %}
 {% block content %}
+    {% if user_character_text %}
+        {{ user_character_text | safe }}
+        <hr />
+    {% endif %}
     {% if avatar_form %}
         <form action="{{ request.path }}"
               enctype="multipart/form-data"
@@ -32,7 +36,7 @@
                 <br />
                 <br />
                 <div class="hide change-field">
-                    {% trans "Select the new photo to upload" %}: {{ avatar_form.image }}
+                    {% trans "Select the new photo to upload" %}: {{ avatar_form.image }} (maximum 10 MB)
                     <br />
                     <br />
                 </div>

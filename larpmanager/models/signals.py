@@ -79,7 +79,7 @@ from larpmanager.cache.feature import (
     on_association_post_save_reset_features_cache,
 )
 from larpmanager.cache.fields import clear_event_fields_cache
-from larpmanager.cache.larpmanager import clear_blog_cache, clear_larpmanager_home_cache
+from larpmanager.cache.larpmanager import clear_blog_cache, clear_larpmanager_home_cache, clear_larpmanager_texts_cache
 from larpmanager.cache.links import (
     clear_run_event_links_cache,
     on_registration_post_save_reset_event_links,
@@ -216,6 +216,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerGuide,
     LarpManagerHighlight,
     LarpManagerShowcase,
+    LarpManagerText,
     LarpManagerTicket,
     LarpManagerTutorial,
 )
@@ -270,8 +271,8 @@ from larpmanager.utils.services.experience import (
     on_experience_characters_m2m_changed,
     on_modifier_abilities_m2m_changed,
     on_rule_abilities_m2m_changed,
-    refresh_delivery_characters,
     update_characters_experience_on_ability_change,
+    update_characters_experience_on_delivery_change,
     update_characters_experience_on_modifier_change,
     update_characters_experience_on_rule_change,
 )
@@ -443,7 +444,6 @@ def post_save_other_accounting_cache(
 @receiver(pre_save, sender=AccountingItemPayment)
 def pre_save_accounting_item_payment(sender: type, instance: AccountingItemPayment, **kwargs: Any) -> None:
     """Send payment confirmation and handle pre-save operations."""
-    send_payment_confirmation_email(instance)
     handle_accounting_item_payment_pre_save(instance)
 
 
@@ -452,6 +452,9 @@ def post_save_payment_accounting_cache(
     sender: type, instance: AccountingItemPayment, created: bool, **kwargs: Any
 ) -> None:
     """Update accounting caches and process payment-related calculations after payment save."""
+    # Send confirmation payment
+    send_payment_confirmation_email(instance)
+
     # Update registration and member accounting cache if payment has associated registration
     if instance.registration and instance.registration.run:
         instance.registration.save()
@@ -780,7 +783,7 @@ def post_save_delivery_px(
     **kwargs: Any,
 ) -> None:
     """Refresh delivery characters after save signal."""
-    refresh_delivery_characters(instance)
+    update_characters_experience_on_delivery_change(instance)
 
 
 @receiver(post_save, sender=Inventory)
@@ -796,7 +799,7 @@ def create_pools_for_inventory(sender: type, instance: Inventory, created: bool,
 @receiver(post_delete, sender=DeliveryPx)
 def post_delete_delivery_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Signal handler that refreshes delivery characters after a delivery is deleted."""
-    refresh_delivery_characters(instance)
+    update_characters_experience_on_delivery_change(instance)
 
 
 # Event signals
@@ -1141,6 +1144,18 @@ def post_save_reset_lm_home_cache_highlight(sender: type, instance: object, **kw
 def post_delete_reset_lm_home_cache_highlight(sender: type, instance: object, **kwargs: dict) -> None:
     """Reset home cache after highlight deletion."""
     clear_larpmanager_home_cache()
+
+
+@receiver(post_save, sender=LarpManagerText)
+def post_save_reset_lm_texts_cache(sender: type, instance: LarpManagerText, **kwargs: dict) -> None:
+    """Signal handler to reset texts cache when text content changes."""
+    clear_larpmanager_texts_cache()
+
+
+@receiver(post_delete, sender=LarpManagerText)
+def post_delete_reset_lm_texts_cache(sender: type, instance: LarpManagerText, **kwargs: dict) -> None:
+    """Reset texts cache after text deletion."""
+    clear_larpmanager_texts_cache()
 
 
 # Member signals

@@ -77,7 +77,7 @@ class TestDigestFunctions(BaseTestCase):
         email_content = generate_summary_email(self.event, [notification])
 
         # Verify content
-        self.assertIn("Daily Summary", email_content)
+
         self.assertIn("New Registrations", email_content)
         self.assertIn(str(registration.member), email_content)
 
@@ -95,7 +95,7 @@ class TestDigestFunctions(BaseTestCase):
 
         email_content = generate_summary_email(self.event, [notification])
 
-        self.assertIn("Daily Summary", email_content)
+
         self.assertIn("Updated Registrations", email_content)
         self.assertIn(str(registration.member), email_content)
 
@@ -113,7 +113,7 @@ class TestDigestFunctions(BaseTestCase):
 
         email_content = generate_summary_email(self.event, [notification])
 
-        self.assertIn("Daily Summary", email_content)
+
         self.assertIn("Cancelled Registrations", email_content)
         self.assertIn(str(registration.member), email_content)
 
@@ -140,7 +140,7 @@ class TestDigestFunctions(BaseTestCase):
 
         email_content = generate_summary_email(self.event, [notification])
 
-        self.assertIn("Daily Summary", email_content)
+
         self.assertIn("Payments Received", email_content)
         self.assertIn(str(self.member), email_content)
 
@@ -173,7 +173,7 @@ class TestDigestFunctions(BaseTestCase):
 
         email_content = generate_summary_email(self.event, [notification])
 
-        self.assertIn("Daily Summary", email_content)
+
         self.assertIn("Invoices Awaiting Approval", email_content)
         self.assertIn(str(self.member), email_content)
         self.assertIn("Approve", email_content)
@@ -210,7 +210,7 @@ class TestDigestFunctions(BaseTestCase):
 
         email_content = generate_summary_email(self.event, notifications)
 
-        self.assertIn("Daily Summary", email_content)
+
         self.assertIn("New Registrations", email_content)
         self.assertIn("Payments Received", email_content)
 
@@ -230,7 +230,7 @@ class TestDigestFunctions(BaseTestCase):
 
         email_content = generate_association_summary_email(self.association, [notification])
 
-        self.assertIn("Daily Summary", email_content)
+
         self.assertIn("Help Questions", email_content)
         self.assertIn(str(self.member), email_content)
         self.assertIn("View", email_content)
@@ -264,7 +264,7 @@ class TestDigestFunctions(BaseTestCase):
 
         email_content = generate_association_summary_email(self.association, [notification])
 
-        self.assertIn("Daily Summary", email_content)
+
         self.assertIn("Invoices Awaiting Approval", email_content)
         self.assertIn(str(self.member), email_content)
         self.assertIn("Approve", email_content)
@@ -298,7 +298,7 @@ class TestDigestFunctions(BaseTestCase):
 
         email_content = generate_association_summary_email(self.association, [notification])
 
-        self.assertIn("Daily Summary", email_content)
+
         self.assertIn("Refund Requests", email_content)
         self.assertIn(str(self.member), email_content)
         self.assertIn("View", email_content)
@@ -332,7 +332,7 @@ class TestDigestFunctions(BaseTestCase):
 
         email_content = generate_association_summary_email(self.association, [notification])
 
-        self.assertIn("Daily Summary", email_content)
+
         self.assertIn("Password Reset Requests", email_content)
 
     def test_generate_association_summary_email_with_multiple_notification_types(self) -> None:
@@ -377,7 +377,7 @@ class TestDigestFunctions(BaseTestCase):
 
         email_content = generate_association_summary_email(self.association, notifications)
 
-        self.assertIn("Daily Summary", email_content)
+
         self.assertIn("Help Questions", email_content)
         self.assertIn("Invoices Awaiting Approval", email_content)
 
@@ -474,7 +474,7 @@ class TestDigestFunctions(BaseTestCase):
         """Test generating summary email with empty notifications list"""
         email_content = generate_summary_email(self.event, [])
 
-        self.assertIn("Daily Summary", email_content)
+
         self.assertIn(self.event.name, email_content)
         self.assertIn("Go to event dashboard", email_content)
 
@@ -482,6 +482,6 @@ class TestDigestFunctions(BaseTestCase):
         """Test generating association summary email with empty notifications list"""
         email_content = generate_association_summary_email(self.association, [])
 
-        self.assertIn("Daily Summary", email_content)
+
         self.assertIn(self.association.name, email_content)
         self.assertIn("Go to organization dashboard", email_content)

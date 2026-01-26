@@ -3,6 +3,16 @@
 # Unified test script for LarpManager
 set -euo pipefail
 
+# Activate virtual environment if not already active
+if [[ -z "${VIRTUAL_ENV:-}" ]]; then
+  if [[ -f "venv/bin/activate" ]]; then
+    echo "==> Activating virtual environment..."
+    source venv/bin/activate
+  else
+    echo "WARNING: Virtual environment not found at venv/bin/activate" >&2
+  fi
+fi
+
 check_branch() {
   # Skip check if running in CI environment
   if [[ "${CI:-false}" == "true" ]] || [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then

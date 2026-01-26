@@ -495,9 +495,6 @@ msgstr "Avbryt"
 msgid "Causal"
 msgstr "Årsak"
 
-msgid "Change"
-msgstr "Redigere"
-
 msgid "Checks"
 msgstr "Sjekker"
 
@@ -1458,9 +1455,6 @@ msgstr "Oversett"
 msgid "Treasurer"
 msgstr "Kasserer"
 
-msgid "View/Edit"
-msgstr "Vis/rediger"
-
 msgid "Warehouse"
 msgstr "Lager"
 
@@ -2280,6 +2274,9 @@ msgstr "Minimum antall stemmer"
 
 msgid "Name of quest"
 msgstr "Navn på oppdraget"
+
+msgid "New Dashboard"
+msgstr "Nytt dashbord"
 
 msgid "New character"
 msgstr "Ny karakter"
@@ -3428,6 +3425,9 @@ msgstr "Ny forespørsel om skyttelbuss"
 msgid "Non-cumulative code"
 msgstr "Ikke-kumulativ kode"
 
+msgid "Old form appereance"
+msgstr "Gammelt utseende"
+
 msgid "Operation completed"
 msgstr "Operasjon fullført"
 
@@ -4076,6 +4076,9 @@ msgstr "Advarsel om engangsadgang"
 msgid "Password Reset Requests"
 msgstr "Forespørsler om tilbakestilling av passord"
 
+msgid "Player's character form"
+msgstr "Spillerens karakterskjema"
+
 msgid "Please check them below"
 msgstr "Vennligst sjekk dem nedenfor"
 
@@ -4352,6 +4355,9 @@ msgstr "valgverdi ikke oppgitt"
 msgid "Access the event dashboard"
 msgstr "Få tilgang til hendelsesoversikten"
 
+msgid "Access you character sheet"
+msgstr "Få tilgang til karakterarket ditt"
+
 msgid "Can't copy from same event"
 msgstr "Kan ikke kopiere fra samme hendelse"
 
@@ -4360,9 +4366,6 @@ msgstr "sjekk det omvendte forholdet"
 
 msgid "Discover the game factions"
 msgstr "Oppdag spillgruppene"
-
-msgid "Edit your character's data"
-msgstr "Rediger karakterdataene dine"
 
 #, python-format
 msgid "Feature %(name)s activated"
@@ -4587,6 +4590,9 @@ msgstr "Bekreft og forplikt mengder"
 
 msgid "Date of issue of the document"
 msgstr "Dato for utstedelse av dokumentet"
+
+msgid "Edit your character's details"
+msgstr "Rediger karakterens detaljer"
 
 msgid "I Understand - Access Content"
 msgstr "Jeg forstår - Få tilgang til innhold"
@@ -4955,6 +4961,9 @@ msgstr "For mer informasjon, skriv til oss"
 
 msgid "Go to the history preferences for"
 msgstr "Gå til innstillingshistorikken for"
+
+msgid "If checked: activate new dashbord"
+msgstr "Hvis avkrysset: aktiver nytt dashbord"
 
 msgid "Indicate your level of experience"
 msgstr "Angi ditt erfaringsnivå"
@@ -5965,6 +5974,9 @@ msgstr "Administrer registreringsspørsmål og -alternativer"
 msgid "Member who used this token (if authenticated)"
 msgstr "Medlem som brukte dette tokenet (hvis autentisert)"
 
+msgid "Modify the character details to make it yours"
+msgstr "Endre karakterdetaljene for å gjøre den til din egen"
+
 msgid "Now you can copy elements from an other event"
 msgstr "Nå kan du kopiere elementer fra en annen hendelse"
 
@@ -6107,9 +6119,6 @@ msgstr "Administrer egenskapene som er tilgjengelige i hendelsesoppdragene"
 
 msgid "Maximum number of waiting spots (0 = unlimited)"
 msgstr "Maksimalt antall venteplasser (0 = ubegrenset)"
-
-msgid "Modify some character elements to make it yours"
-msgstr "Endre noen karakteregenskaper for å gjøre den til din egen"
 
 msgid "Now you can configure the registration question"
 msgstr "Nå kan du konfigurere registreringsspørsmålet"
@@ -6387,6 +6396,9 @@ msgstr "Tildelt %(amount).2f %(elements)s for '%(reason)s'"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jeg har gjort det noen ganger, jeg har grunnleggende erfaring"
+
+msgid "If checked: shows the forms with the old appearance"
+msgstr "Hvis avkrysset: viser skjemaene med det gamle utseendet"
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Angir hvilken valuta du vil motta betalinger i"
@@ -9467,6 +9479,13 @@ msgid ""
 msgstr ""
 "Du må definere minst ett alternativ før du lagrer et enkeltvalgs- eller "
 "flervalgsspørsmål"
+
+msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+"Det finnes allerede en bruker med denne e-postadressen. Bruk en annen "
+"e-postadresse eller prøv å logge inn."
 
 msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "

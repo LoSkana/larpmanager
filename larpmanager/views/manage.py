@@ -35,7 +35,7 @@ from django_select2.forms import Select2Widget
 from slugify import slugify
 
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config, get_member_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.cache.widget import get_exe_widget_cache, get_orga_widget_cache
@@ -231,8 +231,13 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     context["manage"] = 1
 
     # TODO remove
-    context["old_dashboard"] = get_association_config(
-        context["association_id"], "old_dashboard", default_value=False, context=context
+    context["old_dashboard"] = (
+            get_association_config(
+                context["association_id"], "old_dashboard", default_value=False, context=context
+            )
+            and not get_member_config(
+                context["member"].id, "interface_new_dashboard", default_value=False, context=context
+            )
     )
 
     # Check what would you like form
@@ -528,8 +533,13 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     features = get_event_features(context["event"].id)
 
     # TODO remove
-    context["old_dashboard"] = get_association_config(
-        context["association_id"], "old_dashboard", default_value=False, context=context
+    context["old_dashboard"] = (
+            get_association_config(
+                context["association_id"], "old_dashboard", default_value=False, context=context
+            )
+            and not get_member_config(
+                context["member"].id, "interface_new_dashboard", default_value=False, context=context
+            )
     )
 
     # Check what would you like form

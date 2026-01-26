@@ -604,8 +604,12 @@ def _writing_field(context: dict, field_name: str, field_names: list, field_valu
             return
 
         # Convert faction IDs to names and join with commas
-        faction_names = [context["factions"][int(faction_id)]["name"] for faction_id in field_value]
-        processed_value = ", ".join(faction_names)
+        faction_names = [
+            context["factions"][int(faction_id)]["name"]
+            for faction_id in field_value
+            if int(faction_id) in context["factions"]
+        ]
+        processed_value = " | ".join(faction_names)
 
     # Clean the processed value and append to output lists
     cleaned_value = _clean(processed_value)

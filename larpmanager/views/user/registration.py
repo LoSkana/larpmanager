@@ -424,14 +424,14 @@ def registration_redirect(
         feature flags and user status to determine the next required action.
 
     """
+    # Redirect to profile if membership data not compiled
+    if not context["membership"].compiled:
+        message = _("To confirm your registration, please fill in your personal profile") + "."
+        messages.success(request, message)
+        return redirect("profile")
+
     # Check if membership feature is enabled and user needs to complete profile
     if "membership" in context["features"]:
-        # Redirect to profile if membership data not compiled
-        if not context["membership"].compiled:
-            message = _("To confirm your registration, please fill in your personal profile") + "."
-            messages.success(request, message)
-            return redirect("profile")
-
         # Check membership status for non-waiting registrations
         membership_status = context["membership"].status
         if (
@@ -442,7 +442,6 @@ def registration_redirect(
             messages.success(request, message)
             return redirect("membership")
 
-    # Check if payment feature is enabled and payment is required
     # Redirect to payment page if registration has outstanding payment alert
     if "payment" in context["features"] and registration.alert:
         message = _("To confirm your registration, please pay the amount indicated") + "."

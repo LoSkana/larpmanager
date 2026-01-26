@@ -710,7 +710,7 @@ def get_fake_request(association_slug: str) -> HttpRequest:
 def print_handout_bkg(association_slug: str, event_slug: str, handout_id: int) -> None:
     """Print handout by creating a fake request and delegating to print_handout_go."""
     request = get_fake_request(association_slug)
-    context = get_event_context(request, event_slug)
+    context = get_event_context(request, event_slug, check_visibility=False)
     print_handout_go(context, handout_id)
 
 
@@ -734,7 +734,7 @@ def print_character_go(context: dict, character_uuid: str) -> None:
 def print_character_bkg(association_slug: str, event_slug: str, character_uuid: str) -> None:
     """Print character background for a given association, event slug, and character."""
     request = get_fake_request(association_slug)
-    context = get_event_context(request, event_slug)
+    context = get_event_context(request, event_slug, check_visibility=False)
     print_character_go(context, character_uuid)
 
 
@@ -752,7 +752,7 @@ def print_run_bkg(association_slug: str, event_slug: str) -> None:
     """
     # Create fake request context and get event run data
     request = get_fake_request(association_slug)
-    context = get_event_context(request, event_slug)
+    context = get_event_context(request, event_slug, check_visibility=False)
 
     # Print gallery and character profiles
     print_gallery(context)

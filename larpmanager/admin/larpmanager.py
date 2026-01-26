@@ -34,6 +34,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerProfiler,
     LarpManagerReview,
     LarpManagerShowcase,
+    LarpManagerText,
     LarpManagerTicket,
     LarpManagerTutorial,
 )
@@ -141,6 +142,19 @@ class LMReviewAdmin(DefModelAdmin):
     """Admin interface for LarpManagerReview model."""
 
     list_display = ("text", "author")
+
+
+@admin.register(LarpManagerText)
+class LarpManagerTextAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerText model."""
+
+    list_display = ("name", "value_red")
+    search_fields: ClassVar[list] = ["name", "value"]
+
+    @staticmethod
+    def value_red(instance: LarpManagerText) -> str:
+        """Return truncated value for admin display."""
+        return instance.value[:100] if instance.value else ""
 
 
 @admin.register(LarpManagerTicket)

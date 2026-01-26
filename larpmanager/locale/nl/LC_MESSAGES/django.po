@@ -495,9 +495,6 @@ msgstr "Annuleren"
 msgid "Causal"
 msgstr "Oorzaak"
 
-msgid "Change"
-msgstr "Bewerk"
-
 msgid "Checks"
 msgstr "Controles"
 
@@ -1458,9 +1455,6 @@ msgstr "Vertaal"
 msgid "Treasurer"
 msgstr "Penningmeester"
 
-msgid "View/Edit"
-msgstr "Bekijken/bewerken"
-
 msgid "Warehouse"
 msgstr "Magazijn"
 
@@ -2280,6 +2274,9 @@ msgstr "Minimum aantal stemmen"
 
 msgid "Name of quest"
 msgstr "Naam van zoektocht"
+
+msgid "New Dashboard"
+msgstr "Nieuw dashboard"
 
 msgid "New character"
 msgstr "Nieuw personage"
@@ -3428,6 +3425,9 @@ msgstr "Nieuw shuttleverzoek"
 msgid "Non-cumulative code"
 msgstr "Niet-cumulatieve code"
 
+msgid "Old form appereance"
+msgstr "Oude vorm verschijning"
+
 msgid "Operation completed"
 msgstr "Operatie voltooid"
 
@@ -4076,6 +4076,9 @@ msgstr "Waarschuwing voor eenmalige toegang"
 msgid "Password Reset Requests"
 msgstr "Wachtwoord opnieuw instellen"
 
+msgid "Player's character form"
+msgstr "Spelersfiguur vorm"
+
 msgid "Please check them below"
 msgstr "Bekijk ze hieronder"
 
@@ -4352,6 +4355,9 @@ msgstr "keuzewaarde niet opgegeven"
 msgid "Access the event dashboard"
 msgstr "Toegang tot het dashboard van het evenement"
 
+msgid "Access you character sheet"
+msgstr "Toegang tot je karakterblad"
+
 msgid "Can't copy from same event"
 msgstr "Kan niet kopiëren van dezelfde gebeurtenis"
 
@@ -4360,9 +4366,6 @@ msgstr "controleer omgekeerde relatie"
 
 msgid "Discover the game factions"
 msgstr "Ontdek de spelgroepen"
-
-msgid "Edit your character's data"
-msgstr "Bewerk de gegevens van je personage"
 
 #, python-format
 msgid "Feature %(name)s activated"
@@ -4587,6 +4590,9 @@ msgstr "Hoeveelheden bevestigen en vastleggen"
 
 msgid "Date of issue of the document"
 msgstr "Datum van uitgifte van het document"
+
+msgid "Edit your character's details"
+msgstr "De gegevens van je personage bewerken"
 
 msgid "I Understand - Access Content"
 msgstr "Ik begrijp het - Toegang tot inhoud"
@@ -4955,6 +4961,9 @@ msgstr "Schrijf ons voor meer informatie"
 
 msgid "Go to the history preferences for"
 msgstr "Ga naar de voorkeurengeschiedenis voor"
+
+msgid "If checked: activate new dashbord"
+msgstr "Indien aangevinkt: nieuw dashbord activeren"
 
 msgid "Indicate your level of experience"
 msgstr "Geef je ervaringsniveau aan"
@@ -5965,6 +5974,9 @@ msgstr "De registratievragen en -opties beheren"
 msgid "Member who used this token (if authenticated)"
 msgstr "Lid dat dit token heeft gebruikt (indien geverifieerd)"
 
+msgid "Modify the character details to make it yours"
+msgstr "Pas de details van het personage aan om het van jou te maken"
+
 msgid "Now you can copy elements from an other event"
 msgstr "Nu kun je elementen van een andere gebeurtenis kopiëren"
 
@@ -6112,9 +6124,6 @@ msgstr "Beheer de eigenschappen die beschikbaar zijn in de event quests"
 
 msgid "Maximum number of waiting spots (0 = unlimited)"
 msgstr "Maximum aantal wachtplekken (0 = onbeperkt)"
-
-msgid "Modify some character elements to make it yours"
-msgstr "Pas enkele karakterkenmerken aan om er je eigen karakter van te maken"
 
 msgid "Now you can configure the registration question"
 msgstr "Nu kun je de registratievraag configureren"
@@ -6393,6 +6402,9 @@ msgstr "Toegewezen %(amount).2f %(elements)s voor '%(reason)s'"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Ik heb het een paar keer gedaan, ik heb basiservaring"
+
+msgid "If checked: shows the forms with the old appearance"
+msgstr "Indien aangevinkt: toont de formulieren met het oude uiterlijk"
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Geeft de valuta aan waarin betalingen moeten worden ontvangen"
@@ -9640,6 +9652,13 @@ msgid ""
 msgstr ""
 "Je moet minstens één optie definiëren voordat je een meerkeuze- of "
 "meerkeuzevraag opslaat"
+
+msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+"Er bestaat al een gebruiker met dit e-mailadres. Gebruik een ander "
+"e-mailadres of probeer in te loggen."
 
 msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "

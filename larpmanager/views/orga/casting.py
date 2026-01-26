@@ -309,7 +309,7 @@ def check_player_skip_quests(registration: Registration, quest_type: QuestType) 
     ).exists()
 
 
-def check_casting_player(
+def skip_casting_player(
     context: dict,
     registration: Any,
     casting_filter_options: dict,
@@ -331,6 +331,10 @@ def check_casting_player(
     Returns:
         True if player should be skipped in casting, False otherwise
     """
+    # If not ticket type - skip
+    if not registration.ticket:
+        return True
+
     # Filter by ticket type - skip if player's ticket not in allowed list
     if "tickets" in casting_filter_options and str(registration.ticket.uuid) not in casting_filter_options["tickets"]:
         return True
@@ -430,7 +434,7 @@ def get_casting_data(
     registrations_query = registrations_query.order_by("created").select_related("ticket", "member")
     for registration in registrations_query:
         # Skip players that don't match filter criteria (ticket, membership, payment)
-        if check_casting_player(context, registration, filter_options, cache_memberships, cache_aim):
+        if skip_casting_player(context, registration, filter_options, cache_memberships, cache_aim):
             continue
 
         # Add player info with ticket priority and registration/payment dates

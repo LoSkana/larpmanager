@@ -29,7 +29,6 @@ jobs:
       POSTGRES_PASSWORD: larpmanager
       POSTGRES_DB: larpmanager_test
       DB_HOST: postgres
-      WORKERS: "4"
 
     services:
       postgres:
@@ -81,15 +80,18 @@ jobs:
 
     - name: Prepare dbs
       run: |
+        export WORKERS=$(( $(nproc) - 1 ))
         bash scripts/create_dbs.sh "$WORKERS" larpmanager/tests/test_db.sql
         export PYTEST_CURRENT_TEST="true"
 
     - name: Run Unit Django tests
       run: |
+        export WORKERS=$(( $(nproc) - 1 ))
         bash scripts/test_unit.sh
 
     - name: Run Playwright Django tests
       run: |
+        export WORKERS=$(( $(nproc) - 1 ))
         bash scripts/test_playwright.sh
 
 

@@ -35,7 +35,7 @@ def reverse_create_recipients(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0127_notificationqueue'),
+        ('larpmanager', '0129_alter_eventtext_typ'),
     ]
 
     operations = [

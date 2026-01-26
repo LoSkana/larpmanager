@@ -495,9 +495,6 @@ msgstr "Zrušit"
 msgid "Causal"
 msgstr "Causale"
 
-msgid "Change"
-msgstr "Upravit"
-
 msgid "Checks"
 msgstr "Kontroly"
 
@@ -1458,9 +1455,6 @@ msgstr "Přeložit"
 msgid "Treasurer"
 msgstr "Pokladník"
 
-msgid "View/Edit"
-msgstr "Zobrazit/upravit"
-
 msgid "Warehouse"
 msgstr "Sklad"
 
@@ -2280,6 +2274,9 @@ msgstr "Minimální počet hlasů"
 
 msgid "Name of quest"
 msgstr "Název úkolu"
+
+msgid "New Dashboard"
+msgstr "Nový přístrojový panel"
 
 msgid "New character"
 msgstr "Nová postava"
@@ -3428,6 +3425,9 @@ msgstr "Nová žádost o kyvadlovou dopravu"
 msgid "Non-cumulative code"
 msgstr "Nekumulativní kód"
 
+msgid "Old form appereance"
+msgstr "Vzhled starého formuláře"
+
 msgid "Operation completed"
 msgstr "Operace dokončena"
 
@@ -4076,6 +4076,9 @@ msgstr "Upozornění na jednorázový přístup"
 msgid "Password Reset Requests"
 msgstr "Žádosti o obnovení hesla"
 
+msgid "Player's character form"
+msgstr "Formulář postavy hráče"
+
 msgid "Please check them below"
 msgstr "Podívejte se na ně níže"
 
@@ -4352,6 +4355,9 @@ msgstr "hodnota výběru není uvedena"
 msgid "Access the event dashboard"
 msgstr "Přístup k ovládacímu panelu události"
 
+msgid "Access you character sheet"
+msgstr "Přístup k vašemu listu postavy"
+
 msgid "Can't copy from same event"
 msgstr "Nelze kopírovat ze stejné události"
 
@@ -4360,9 +4366,6 @@ msgstr "kontrola inverzního vztahu"
 
 msgid "Discover the game factions"
 msgstr "Objevte herní skupiny"
-
-msgid "Edit your character's data"
-msgstr "Upravte údaje své postavy"
 
 #, python-format
 msgid "Feature %(name)s activated"
@@ -4587,6 +4590,9 @@ msgstr "Potvrzení a odevzdání množství"
 
 msgid "Date of issue of the document"
 msgstr "Datum vydání dokumentu"
+
+msgid "Edit your character's details"
+msgstr "Úprava údajů o postavě"
 
 msgid "I Understand - Access Content"
 msgstr "Rozumím - Přístup k obsahu"
@@ -4955,6 +4961,9 @@ msgstr "Pro více informací nám napište"
 
 msgid "Go to the history preferences for"
 msgstr "Přejděte do historie předvoleb pro"
+
+msgid "If checked: activate new dashbord"
+msgstr "Pokud je zaškrtnuto: aktivovat nový přístrojový panel"
 
 msgid "Indicate your level of experience"
 msgstr "Uveďte svou úroveň zkušeností"
@@ -5962,6 +5971,9 @@ msgstr "Správa registračních otázek a možností"
 msgid "Member who used this token (if authenticated)"
 msgstr "Člen, který použil tento token (je-li ověřen)"
 
+msgid "Modify the character details to make it yours"
+msgstr "Upravte údaje o postavě tak, aby byla vaše"
+
 msgid "Now you can copy elements from an other event"
 msgstr "Nyní můžete kopírovat prvky z jiné události"
 
@@ -6104,9 +6116,6 @@ msgstr "Správa vlastností dostupných v úkolech událostí"
 
 msgid "Maximum number of waiting spots (0 = unlimited)"
 msgstr "Maximální počet čekajících míst (0 = neomezeně)"
-
-msgid "Modify some character elements to make it yours"
-msgstr "Upravte si některé vlastnosti postavy podle sebe"
 
 msgid "Now you can configure the registration question"
 msgstr "Nyní můžete nakonfigurovat registrační otázku"
@@ -6384,6 +6393,9 @@ msgstr "Přiřazeno %(amount).2f %(elements)s pro '%(reason)s'"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Několikrát jsem to dělal, mám základní zkušenosti"
+
+msgid "If checked: shows the forms with the old appearance"
+msgstr "Pokud je zaškrtnuto: zobrazí formuláře se starým vzhledem"
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Uvádí měnu, ve které se mají přijímat platby"
@@ -9358,6 +9370,13 @@ msgid ""
 msgstr ""
 "Před uložením otázky s jednou nebo více možnostmi musíte definovat alespoň "
 "jednu možnost"
+
+msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+"Uživatel s touto e-mailovou adresou již existuje. Použijte prosím jiný "
+"e-mail nebo se zkuste přihlásit."
 
 msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "

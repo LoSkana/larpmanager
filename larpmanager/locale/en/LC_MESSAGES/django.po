@@ -279,12 +279,6 @@ msgstr ""
 msgid "Interface"
 msgstr ""
 
-msgid "Old dashboard"
-msgstr ""
-
-msgid "If checked: shows the dashboard with the old interface"
-msgstr ""
-
 msgid "Past events"
 msgstr ""
 
@@ -333,6 +327,18 @@ msgid "Tagline"
 msgstr ""
 
 msgid "If checked: shows the tagline for each event"
+msgstr ""
+
+msgid "Old dashboard"
+msgstr ""
+
+msgid "If checked: shows the dashboard with the old interface"
+msgstr ""
+
+msgid "Old form appereance"
+msgstr ""
+
+msgid "If checked: shows the forms with the old appearance"
 msgstr ""
 
 msgid "Email notifications"
@@ -769,6 +775,12 @@ msgid "Collapse sidebar"
 msgstr ""
 
 msgid "If checked: collpase sidebars links, and expand on mouse hover"
+msgstr ""
+
+msgid "New Dashboard"
+msgstr ""
+
+msgid "If checked: activate new dashbord"
 msgstr ""
 
 msgid "Select a valid choice. That choice is not one of the available choices."
@@ -1754,6 +1766,11 @@ msgid ""
 "GDPR and our Privacy Policy"
 msgstr ""
 
+msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+
 msgid "Select Language"
 msgstr ""
 
@@ -2333,7 +2350,7 @@ msgstr ""
 msgid "Updated Registrations"
 msgstr ""
 
-msgid "View/Edit"
+msgid "View"
 msgstr ""
 
 msgid "New Registrations"
@@ -2352,9 +2369,6 @@ msgid "Refund Requests"
 msgstr ""
 
 msgid "Refund requested"
-msgstr ""
-
-msgid "View"
 msgstr ""
 
 msgid "Awaiting approval"
@@ -3251,6 +3265,9 @@ msgstr ""
 msgid "Mail assignment"
 msgstr ""
 
+msgid "Player's character form"
+msgstr ""
+
 msgid "Proposed character"
 msgstr ""
 
@@ -3520,6 +3537,9 @@ msgid "Medium"
 msgstr ""
 
 msgid "High"
+msgstr ""
+
+msgid "Value"
 msgstr ""
 
 msgid "How can we contact you"
@@ -4726,30 +4746,6 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-msgid "Change"
-msgstr ""
-
-msgid "Edit your character's data"
-msgstr ""
-
-msgid "Buy skills for your character"
-msgstr ""
-
-msgid "Customize"
-msgstr ""
-
-msgid "Modify some character elements to make it yours"
-msgstr ""
-
-msgid "Fill in your character's relationships"
-msgstr ""
-
-msgid "Questions"
-msgstr ""
-
-msgid "Write here questions about your character directly to the authors"
-msgstr ""
-
 msgid "View Details"
 msgstr ""
 
@@ -5124,9 +5120,6 @@ msgid ""
 msgstr ""
 
 msgid "Here are the sign up options with limited number"
-msgstr ""
-
-msgid "Value"
 msgstr ""
 
 msgid "Maximum"
@@ -5794,6 +5787,9 @@ msgid "All comunications"
 msgstr ""
 
 msgid "No comunications"
+msgstr ""
+
+msgid "Questions"
 msgstr ""
 
 msgid ""
@@ -9435,6 +9431,27 @@ msgstr ""
 msgid "Your characters are"
 msgstr ""
 
+msgid "Access you character sheet"
+msgstr ""
+
+msgid "Edit your character's details"
+msgstr ""
+
+msgid "Buy skills for your character"
+msgstr ""
+
+msgid "Customize"
+msgstr ""
+
+msgid "Modify the character details to make it yours"
+msgstr ""
+
+msgid "Fill in your character's relationships"
+msgstr ""
+
+msgid "Write here questions about your character directly to the authors"
+msgstr ""
+
 msgid "Create your character"
 msgstr ""
 
@@ -10036,6 +10053,9 @@ msgstr ""
 msgid "Last step, please upload your membership application"
 msgstr ""
 
+msgid "To confirm your registration, please pay the amount indicated"
+msgstr ""
+
 msgid "Data share removed successfully"
 msgstr ""
 
@@ -10120,9 +10140,6 @@ msgstr ""
 
 msgid ""
 "To confirm your registration, apply to become a member of the Association"
-msgstr ""
-
-msgid "To confirm your registration, please pay the amount indicated"
 msgstr ""
 
 #, python-format

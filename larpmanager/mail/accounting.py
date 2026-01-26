@@ -156,56 +156,23 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
 
 
 def send_payment_confirmation_email(payment_item: AccountingItemPayment) -> None:
-    """Send payment confirmation email to member after payment processing.
-
-    Sends appropriate notification email based on payment type (money, credit, or token)
-    if email notifications are enabled for the association and the payment item
-    is not hidden.
-
-    Args:
-        payment_item: AccountingItemPayment instance being saved. Must have
-            registration (registration), pay (payment type), and association_id attributes.
-
-    Returns:
-        None
-
-    Note:
-        Email is only sent if:
-        - payment_item.hide is False
-        - Association has mail_payment config enabled
-        - payment_item is being created (no existing pk)
-
-    """
-    # Early return if payment should be hidden from notifications
-    if payment_item.hide:
+    """Send payment confirmation email to member after payment processing."""
+    if not hasattr(payment_item, "_send_confirmation"):
         return
 
-    # Extract related objects for email context
-    event_run = payment_item.registration.run
     registered_member = payment_item.registration.member
+    event_run = payment_item.registration.run
 
-    # Check if payment notifications are enabled for this association
-    if not get_association_config(event_run.event.association_id, "mail_payment", default_value=False):
-        return
-
-    # Get localized names for tokens and credits
-    tokens_name, credits_name = get_token_credit_name(payment_item.association_id)
-
-    # Get currency symbol for money payments
-    currency_symbol = event_run.event.association.get_currency_symbol()
-
-    # Only send notification for new payment items (not updates)
-    if not payment_item.pk:
-        # Send appropriate notification based on payment type
-        if payment_item.pay == PaymentChoices.MONEY:
-            notify_pay_money(currency_symbol, payment_item, registered_member, event_run)
-        elif payment_item.pay == PaymentChoices.CREDIT:
-            notify_pay_credit(credits_name, payment_item, registered_member, event_run)
-        elif payment_item.pay == PaymentChoices.TOKEN:
-            notify_pay_token(payment_item, registered_member, event_run, tokens_name)
+    # Send appropriate notification based on payment type
+    if payment_item.pay == PaymentChoices.MONEY:
+        notify_pay_money(payment_item, registered_member, event_run)
+    elif payment_item.pay == PaymentChoices.CREDIT:
+        notify_pay_credit(payment_item, registered_member, event_run)
+    elif payment_item.pay == PaymentChoices.TOKEN:
+        notify_pay_token(payment_item, registered_member, event_run)
 
 
-def notify_pay_token(instance: AccountingItemPayment, member: Member, run: Run, tokens_name: str) -> None:
+def notify_pay_token(instance: AccountingItemPayment, member: Member, run: Run) -> None:
     """Send token payment notifications to user and organizers.
 
     Sends payment confirmation emails to both the paying member and all event
@@ -215,12 +182,14 @@ def notify_pay_token(instance: AccountingItemPayment, member: Member, run: Run, 
         instance: Payment accounting item instance containing payment details
         member: Member who made the payment
         run: Event run object for the payment context
-        tokens_name: Name of the token currency being paid
 
     Returns:
         None
 
     """
+    # Get localized names for tokens
+    tokens_name, _credits_name = get_token_credit_name(instance.association_id)
+
     # Send notification to the paying user
     activate(member.language)
     subject, body = get_pay_token_email(instance, run, tokens_name)
@@ -236,7 +205,7 @@ def notify_pay_token(instance: AccountingItemPayment, member: Member, run: Run, 
         )
 
 
-def notify_pay_credit(credits_name: str, instance: AccountingItemPayment, member: Member, run: Run) -> None:
+def notify_pay_credit(instance: AccountingItemPayment, member: Member, run: Run) -> None:
     """Send credit payment notifications to user and organizers.
 
     Sends payment confirmation emails to both the member who made the payment
@@ -244,7 +213,6 @@ def notify_pay_credit(credits_name: str, instance: AccountingItemPayment, member
     preferred language.
 
     Args:
-        credits_name: Name of the credit currency being paid
         instance: Payment accounting item instance containing payment details
         member: Member object who made the payment
         run: Event run object associated with the payment
@@ -253,6 +221,9 @@ def notify_pay_credit(credits_name: str, instance: AccountingItemPayment, member
         None
 
     """
+    # Get localized names for credits
+    _tokens_name, credits_name = get_token_credit_name(instance.association_id)
+
     # Send notification to the member who made the payment
     activate(member.language)
     email_subject, email_body = get_pay_credit_email(credits_name, instance, run)
@@ -269,7 +240,6 @@ def notify_pay_credit(credits_name: str, instance: AccountingItemPayment, member
 
 
 def notify_pay_money(
-    currency_symbol: str,
     payment_instance: AccountingItemPayment,
     paying_member: Member,
     run: Run,
@@ -281,7 +251,6 @@ def notify_pay_money(
     recipient's language preference.
 
     Args:
-        currency_symbol: Currency symbol to display in the notification
         payment_instance: Payment accounting item instance containing payment details
         paying_member: Member object who made the payment
         run: Event run object associated with the payment
@@ -290,6 +259,9 @@ def notify_pay_money(
         None
 
     """
+    # Get currency symbol for money payments
+    currency_symbol = payment_instance.association.get_currency_symbol()
+
     # Send notification email to the member who made the payment
     activate(paying_member.language)
     subject, body = get_pay_money_email(currency_symbol, payment_instance, run)
@@ -567,7 +539,7 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
     if "treasurer" in features:
         # Parse comma-separated list of treasurer member IDs
         treasurer_list = get_association_config(inv.association_id, "treasurer_appointees", default_value="")
-        query = Membership.objects.get(
+        query = Membership.objects.filter(
             association_id=inv.association_id, member_id__in=treasurer_list.split(",")
         ).select_related("member")
         for membership in query:

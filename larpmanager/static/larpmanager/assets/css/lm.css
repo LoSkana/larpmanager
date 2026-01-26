@@ -35,10 +35,23 @@ select {
   padding-right: 3.5em;
 }
 
+.tox-tinymce {
+  min-height: 10em;
+  margin: 0 auto;
+}
+
+/* Remove max-width constraint when TinyMCE is in fullscreen mode */
+.tox-fullscreen,
+.tox.tox-tinymce.tox-fullscreen {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
 .select2-container,
 select,
 textarea,
-input {
+input,
+.tox-tinymce {
   max-width: 70% !important;
 }
 
@@ -51,7 +64,8 @@ input {
   .select2-container,
   select,
   textarea,
-  input {
+  input,
+  .tox-tinymce {
     max-width: 80% !important;
   }
 
@@ -65,12 +79,14 @@ input {
   .select2-container,
   select,
   textarea,
-  input {
+  input,
+  .tox-tinymce {
     max-width: 90% !important;
   }
 
   .select2-container,
-  textarea {
+  textarea,
+  .tox-tinymce {
     width: 90% !important;
     margin: auto;
   }
@@ -1005,6 +1021,10 @@ header.sec h1 {
   padding-top: 0.5em;
 }
 
+.page_gallery .title {
+  margin-bottom: 0.5em;
+}
+
 .cover-container {
   width: 25%;
 }
@@ -1703,7 +1723,7 @@ th select {
 }
 
 .accounting_record {
-  height: 400px;
+  height: 500px;
   width: 100%;
 }
 
@@ -1730,10 +1750,12 @@ a label:hover {
   -webkit-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
-  overflow: scroll;
 
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--ter-rgb), 0.5) rgba(var(--pri-rgb), 0.1);
+
+  overflow-x: hidden;
 
   text-align: center;
 }
@@ -1746,6 +1768,8 @@ a label:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  overflow: hidden;
 }
 
 .popup_tutorial_container {
@@ -1782,8 +1806,15 @@ a label:hover {
 }
 
 /* Force all TinyMCE elements to stay below popups */
-[class*="tox"] {
+[class*="tox"]:not(.tox-fullscreen):not(.tox-tinymce-aux) {
   z-index: 1 !important;
+}
+
+/* Ensure TinyMCE fullscreen is above topbar */
+.tox-fullscreen,
+.tox.tox-tinymce.tox-fullscreen,
+.tox-tinymce-aux {
+  z-index: 10000 !important;
 }
 
 /* Force uglipop elements to be on top */
@@ -2703,4 +2734,25 @@ input[type="number"] {
 }
 .copy-link-btn i {
   font-size: 14px;
+}
+
+/** NEW AND OLD FORM APPEARANCE **/
+
+#form_container input {
+  background: rgba(var(--sec-rgb), 0.3) !important;
+}
+
+.button.learn {
+  background-color: #a5dee5 !important;
+}
+
+.old_form_appearance th,
+.old_form_appearance td {
+  text-align: center !important;
+}
+
+.old_form_appearance input,
+.old_form_appearance select,
+.old_form_appearance .tox-tinymce {
+  margin: 0 auto;
 }

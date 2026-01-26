@@ -391,11 +391,6 @@ class ExeConfigForm(ConfigForm):
         """
         self.set_section("interface", _("Interface"))
 
-        # Configure old dashboard visualization
-        past_events_label = _("Old dashboard")
-        past_events_help_text = _("If checked: shows the dashboard with the old interface")
-        self.add_configs("old_dashboard", ConfigType.BOOL, past_events_label, past_events_help_text)
-
         # Configure visibility of past events link in calendar
         past_events_label = _("Past events")
         past_events_help_text = _("If checked: shows a link in the calendar to past events")
@@ -443,6 +438,18 @@ class ExeConfigForm(ConfigForm):
         self.set_config_accounting()
         self.set_config_einvoice()
         self.set_config_others()
+
+        self.set_section("legacy", "Legacy")
+
+        # Configure old dashboard visualization
+        past_events_label = _("Old dashboard")
+        past_events_help_text = _("If checked: shows the dashboard with the old interface")
+        self.add_configs("old_dashboard", ConfigType.BOOL, past_events_label, past_events_help_text)
+
+        # Configure old dashboard visualization
+        past_events_label = _("Old form appereance")
+        past_events_help_text = _("If checked: shows the forms with the old appearance")
+        self.add_configs("old_form_appearance", ConfigType.BOOL, past_events_label, past_events_help_text)
 
     def set_config_email(self) -> None:
         """Configure email notification preferences."""
@@ -896,7 +903,7 @@ class FirstAssociationForm(BaseModelForm):
 
     class Meta:
         model = Association
-        fields = ("name", "profile", "slug")
+        fields = ("name", "profile", "slug", "payment_currency")
         widgets: ClassVar[dict] = {
             "slug": SlugInput,
         }
@@ -1039,6 +1046,16 @@ class ExePreferencesForm(ConfigForm):
         )
         self.add_configs(
             "mail_orga_digest",
+            ConfigType.BOOL,
+            digest_mode_label,
+            digest_mode_help_text,
+        )
+
+        # Add temporary new dashboard
+        digest_mode_label = _("New Dashboard")
+        digest_mode_help_text = _("If checked: activate new dashbord")
+        self.add_configs(
+            "interface_new_dashboard",
             ConfigType.BOOL,
             digest_mode_label,
             digest_mode_help_text,

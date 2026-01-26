@@ -495,9 +495,6 @@ msgstr "Annuler"
 msgid "Causal"
 msgstr "Causale"
 
-msgid "Change"
-msgstr "Editer"
-
 msgid "Checks"
 msgstr "Chèques"
 
@@ -1458,9 +1455,6 @@ msgstr "Traduire"
 msgid "Treasurer"
 msgstr "Trésorier"
 
-msgid "View/Edit"
-msgstr "Voir/Modifier"
-
 msgid "Warehouse"
 msgstr "Entrepôt"
 
@@ -2280,6 +2274,9 @@ msgstr "Nombre de voix minimum"
 
 msgid "Name of quest"
 msgstr "Nom de la quête"
+
+msgid "New Dashboard"
+msgstr "Nouveau tableau de bord"
 
 msgid "New character"
 msgstr "Nouveau personnage"
@@ -3428,6 +3425,9 @@ msgstr "Nouvelle demande de navette"
 msgid "Non-cumulative code"
 msgstr "Code non cumulatif"
 
+msgid "Old form appereance"
+msgstr "Apparition de l'ancienne forme"
+
 msgid "Operation completed"
 msgstr "Opération terminée"
 
@@ -4076,6 +4076,9 @@ msgstr "Avertissement relatif à l'accès unique"
 msgid "Password Reset Requests"
 msgstr "Demandes de réinitialisation de mot de passe"
 
+msgid "Player's character form"
+msgstr "Forme du personnage du joueur"
+
 msgid "Please check them below"
 msgstr "Veuillez les consulter ci-dessous"
 
@@ -4352,6 +4355,9 @@ msgstr "valeur de choix non fournie"
 msgid "Access the event dashboard"
 msgstr "Accéder au tableau de bord de l'événement"
 
+msgid "Access you character sheet"
+msgstr "Accédez à votre feuille de personnage"
+
 msgid "Can't copy from same event"
 msgstr "Impossible de copier le même événement"
 
@@ -4360,9 +4366,6 @@ msgstr "vérifier la relation inverse"
 
 msgid "Discover the game factions"
 msgstr "Découvrez les groupes de jeu"
-
-msgid "Edit your character's data"
-msgstr "Modifiez les données de votre personnage"
 
 #, python-format
 msgid "Feature %(name)s activated"
@@ -4587,6 +4590,9 @@ msgstr "Confirmer et engager les quantités"
 
 msgid "Date of issue of the document"
 msgstr "Date de délivrance du document"
+
+msgid "Edit your character's details"
+msgstr "Modifiez les détails de votre personnage"
 
 msgid "I Understand - Access Content"
 msgstr "Je comprends - Accéder au contenu"
@@ -4955,6 +4961,9 @@ msgstr "Pour plus d'informations, écrivez-nous"
 
 msgid "Go to the history preferences for"
 msgstr "Accédez à l'historique des préférences pour"
+
+msgid "If checked: activate new dashbord"
+msgstr "Si la case est cochée : activer le nouveau tableau de bord"
 
 msgid "Indicate your level of experience"
 msgstr "Indiquez votre niveau d'expérience"
@@ -5969,6 +5978,9 @@ msgstr "Gérer les questions et les options d'inscription"
 msgid "Member who used this token (if authenticated)"
 msgstr "Membre ayant utilisé ce jeton (si authentifié)"
 
+msgid "Modify the character details to make it yours"
+msgstr "Modifiez les détails du personnage pour le faire vôtre"
+
 msgid "Now you can copy elements from an other event"
 msgstr "Vous pouvez maintenant copier des éléments d'un autre événement"
 
@@ -6116,10 +6128,6 @@ msgstr "Gérer les traits disponibles dans les quêtes événementielles"
 
 msgid "Maximum number of waiting spots (0 = unlimited)"
 msgstr "Nombre maximal de places en attente (0 = illimité)"
-
-msgid "Modify some character elements to make it yours"
-msgstr ""
-"Modifiez certaines caractéristiques du personnage pour vous l'approprier"
 
 msgid "Now you can configure the registration question"
 msgstr "Vous pouvez maintenant configurer la question d'enregistrement"
@@ -6406,6 +6414,9 @@ msgstr "Attribué %(amount).2f %(elements)s pour '%(reason)s'"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Je l'ai fait plusieurs fois, j'ai une expérience de base"
+
+msgid "If checked: shows the forms with the old appearance"
+msgstr "Si coché : affiche les formulaires avec l'ancienne apparence"
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Indique la devise dans laquelle les paiements doivent être reçus"
@@ -9756,6 +9767,13 @@ msgid ""
 msgstr ""
 "Vous devez définir au moins une option avant d'enregistrer une question à "
 "choix unique ou à choix multiple"
+
+msgid ""
+"A user with this email address already exists. Please use a different email "
+"or try logging in."
+msgstr ""
+"Un utilisateur avec cette adresse e-mail existe déjà. Veuillez utiliser une "
+"autre adresse électronique ou essayer de vous connecter."
 
 msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "

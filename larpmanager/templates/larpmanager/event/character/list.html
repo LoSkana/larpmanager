@@ -40,7 +40,7 @@
                     <td class="hide">{{ el.number }}</td>
                     {% if features.user_character %}
                         <td>
-                            <a href="{% url 'character_change' run.get_slug el.uuid %}"
+                            <a href="{% url 'character_edit' run.get_slug el.uuid %}"
                                qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                         </td>
                     {% endif %}

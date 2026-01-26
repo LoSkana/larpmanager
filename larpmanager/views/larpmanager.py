@@ -42,7 +42,7 @@ from django_ratelimit.decorators import ratelimit
 
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.feature import get_association_features, get_event_features
-from larpmanager.cache.larpmanager import get_blog_content_with_images, get_cache_lm_home
+from larpmanager.cache.larpmanager import get_blog_content_with_images, get_cache_lm_home, get_larpmanager_texts
 from larpmanager.forms.association import FirstAssociationForm
 from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicketForm
 from larpmanager.forms.miscellanea import SendMailForm
@@ -90,6 +90,7 @@ def lm_home(request: HttpRequest) -> Any:
         return ludomanager(template_context, request)
 
     template_context.update(get_cache_lm_home())
+    template_context["texts"] = get_larpmanager_texts()
     random.shuffle(template_context["promoters"])
     random.shuffle(template_context["reviews"])
 

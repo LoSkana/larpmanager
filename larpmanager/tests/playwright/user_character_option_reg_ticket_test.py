@@ -106,6 +106,11 @@ def create_character(page: Any) -> None:
     page.get_by_label("Ticket").select_option("u1")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
+
+    # confirm profile
+    page.get_by_role("checkbox", name="Authorisation").check()
+    submit_confirm(page)
+
     page.get_by_role("link", name="Create your character!").click()
 
     # check only one option
@@ -135,7 +140,7 @@ def create_character(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "The character have missing values in mandatory fields: choose")
     expect_normalized(page, page.locator("#one"), "Player: Admin Test Presentation sdsa Text asadas")
     page.get_by_role("link", name="myyyy").click()
-    page.get_by_role("link", name="Change").click()
+    page.get_by_role("link", name="Edit").click()
 
     # check only one option available
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
@@ -146,7 +151,7 @@ def create_character(page: Any) -> None:
     page.get_by_role("link", name="Registration", exact=True).click()
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
-    page.get_by_role("link", name="Change").click()
+    page.get_by_role("link", name="Edit").click()
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")

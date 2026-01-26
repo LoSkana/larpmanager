@@ -39,7 +39,7 @@ from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingCh
 from larpmanager.models.member import Log, Member
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.auth.admin import is_lm_admin
-from larpmanager.utils.core.base import check_association_context, check_event_context
+from larpmanager.utils.core.base import check_association_context, check_event_context, get_context
 from larpmanager.utils.core.common import get_object_uuid, html_clean
 
 if TYPE_CHECKING:
@@ -774,9 +774,9 @@ def _writing_save(
     return redirect("orga_" + nm + "s", event_slug=context["run"].get_slug())
 
 
-def writing_edit_cache_key(element_uuid: str, writing_type: str) -> str:
+def writing_edit_cache_key(element_uuid: str, writing_type: str, association_id: int) -> str:
     """Generate cache key for writing edit operations."""
-    return f"orga_edit_{element_uuid}_{writing_type}"
+    return f"orga_edit_{association_id}_{element_uuid}_{writing_type}"
 
 
 def writing_edit_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonResponse:
@@ -834,7 +834,7 @@ def writing_edit_working_ticket(request: HttpRequest, element_type: str, edit_uu
     For plot objects, it recursively checks all related characters.
 
     Args:
-        request: HTTP request object containing user information
+        request: HTTP request object containing user information and association context
         element_type: Type of element being edited (e.g., 'plot', 'character')
         edit_uuid: Element UUID being edited
         user_token: User's unique editing token for session identification
@@ -843,13 +843,17 @@ def writing_edit_working_ticket(request: HttpRequest, element_type: str, edit_uu
         Warning message if editing conflicts exist, empty string if safe to edit
 
     Note:
-        Uses Redis cache with a 15-second timeout window to track active editors.
+        Uses Redis cache with a 5-second timeout window to track active editors.
         Cache timeout is set to minimum of ticket_time and 1 day.
+        Each association has its own isolated cache space.
 
     """
     # Superusers bypass all validation checks
     if is_lm_admin(request):
         return ""
+
+    context = get_context(request)
+    association_id = context["association_id"]
 
     # Handle plot objects by recursively checking all related characters
     # This prevents conflicts when editing plots that affect multiple characters
@@ -864,7 +868,7 @@ def writing_edit_working_ticket(request: HttpRequest, element_type: str, edit_uu
 
     # Get current timestamp and retrieve existing ticket from cache
     current_timestamp = int(time.time())
-    cache_key = writing_edit_cache_key(edit_uuid, element_type)
+    cache_key = writing_edit_cache_key(edit_uuid, element_type, association_id)
     active_tickets = cache.get(cache_key)
     if not active_tickets:
         active_tickets = {}

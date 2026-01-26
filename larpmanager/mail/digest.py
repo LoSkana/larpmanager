@@ -212,37 +212,39 @@ def send_daily_organizer_summaries() -> None:
     Handles both event-level notifications (sent to event organizers) and
     association-level notifications (sent to association executives or main_mail).
     """
-    # Get all members with unsent notifications
-    members_with_notifications = Member.objects.filter(organizernotificationqueue__sent=False).distinct()
+    # Get all unsent notifications
+    notifications = NotificationQueue.objects.filter(sent=False).select_related("run__event", "association")
 
-    for member in members_with_notifications:
-        _daily_member_summaries(member)
+    member_notifications = {}
+    association_notifications = {}
+    for notification in notifications:
+        if notification.member_id:
+            if notification.member_id not in member_notifications:
+                member_notifications[notification.member_id] = []
+            member_notifications[notification.member_id].append(notification)
+        else:
+            if notification.association_id not in association_notifications:
+                association_notifications[notification.association_id] = []
+            association_notifications[notification.association_id].append(notification)
+
+    for member_id in member_notifications:
+        _daily_member_summaries(member_id, member_notifications[notification.member_id])
 
     # Handle association notifications (member is None, sent to association.main_mail)
-    associations_with_main_mail_notifications = Association.objects.filter(
-        organizernotificationqueue__sent=False, organizernotificationqueue__member__isnull=True
-    ).distinct()
-
-    for association in associations_with_main_mail_notifications:
-        # Collect all unsent notifications for this association's main_mail
-        association_notifications = NotificationQueue.objects.filter(
-            association=association, member__isnull=True, sent=False
-        ).select_related("association")
-
-        if not association_notifications.exists():
-            continue
+    for association_id, notifications in association_notifications.items():
+        association = Association.objects.get(pk=association_id)
 
         logger.info(
             "Sending daily summary to %s main_mail with %d notifications",
             association.name,
-            association_notifications.count(),
+            len(notifications),
         )
 
         # Activate association's executive language
         activate(get_exec_language(association))
 
         # Generate summary email content for this association
-        email_content = generate_association_summary_email(association, list(association_notifications))
+        email_content = generate_association_summary_email(association, notifications)
 
         # Build email subject
         email_subject = f"[{association.name}] " + _("Daily Summary")
@@ -256,24 +258,23 @@ def send_daily_organizer_summaries() -> None:
         )
 
         # Mark all notifications for this association's main_mail as sent
-        association_notifications.update(sent=True, sent_at=timezone.now())
+        _mark_notifications_sent(notifications)
         logger.info("Daily summary sent to %s main_mail", association.name)
 
 
-def _daily_member_summaries(member: Member) -> None:
-    """Send a summary of all unsent notifications for a member."""
-    # Collect all unsent notifications for this member
-    member_notifications = NotificationQueue.objects.filter(member=member, sent=False).select_related(
-        "run__event", "run__event__association", "association"
-    )
+def _mark_notifications_sent(notifications: list) -> None:
+    """Mark as sent the notifications in the list."""
+    NotificationQueue.objects.filter(id__in=[n.id for n in notifications]).update(sent=True, sent_at=timezone.now())
 
-    if not member_notifications.exists():
-        return
+
+def _daily_member_summaries(member_id: int, all_notifications: list) -> None:
+    """Send a summary of all unsent notifications for a member."""
+    member = Member.objects.get(pk=member_id)
 
     # Separate event-level and association-level notifications
     events_notifications = {}
     associations_notifications = {}
-    for notification in member_notifications:
+    for notification in all_notifications:
         if notification.run:
             # Event-level notification
             event = notification.run.event
@@ -293,7 +294,7 @@ def _daily_member_summaries(member: Member) -> None:
         str(member),
         len(events_notifications),
         len(associations_notifications),
-        member_notifications.count(),
+        len(all_notifications),
     )
 
     # Send a summary email for each event this member has notifications for
@@ -312,7 +313,7 @@ def _daily_member_summaries(member: Member) -> None:
             email_subject,
             email_content,
             member,
-            event.current_run,
+            event,
         )
 
     # Send a summary email for each association this member has notifications for
@@ -335,7 +336,7 @@ def _daily_member_summaries(member: Member) -> None:
         )
 
     # Mark all notifications for this member as sent
-    member_notifications.update(sent=True, sent_at=timezone.now())
+    _mark_notifications_sent(notifications)
     logger.info("Daily summary sent to %s", str(member))
 
 
@@ -353,8 +354,7 @@ def generate_summary_email(event: Event, notifications: list) -> str:
     grouped_notifications = _digest_organize_notifications(notifications)
 
     # Start email body
-    email_body = "<h2>" + _("Daily Summary") + f" - {event.name}" + "</h2>"
-    email_body += "<p>" + _("Here's what happened in the last 24 hours:") + "</p>"
+    email_body = "<p>" + _("Here's what happened in the last 24 hours:") + "</p>"
 
     currency_symbol = event.association.get_currency_symbol()
 
@@ -473,7 +473,7 @@ def _digest_updated_registrations(
             ),
             event,
         )
-        email_body += f' - <a href="{edit_url}">' + _("View/Edit") + "</a></li>"
+        email_body += f' - <a href="{edit_url}">' + _("View") + "</a></li>"
     email_body += "</ul>"
 
     return email_body
@@ -495,7 +495,7 @@ def _digest_new_registrations(event: Event, email_body: str, new_registrations: 
             ),
             event,
         )
-        email_body += f' - <a href="{edit_url}">' + _("View/Edit") + "</a></li>"
+        email_body += f' - <a href="{edit_url}">' + _("View") + "</a></li>"
 
     email_body += "</ul>"
     return email_body
@@ -512,8 +512,8 @@ def generate_association_summary_email(association: Association, notifications: 
         str: HTML formatted email body
     """
     # Start email body
-    email_body = "<h2>" + _("Daily Summary") + f" - {association.name}" + "</h2>"
-    email_body += "<p>" + _("Here's what happened in the last 24 hours:") + "</p>"
+
+    email_body = "<p>" + _("Here's what happened in the last 24 hours:") + "</p>"
 
     # Map notification types to their handler functions
     notification_handlers = {
