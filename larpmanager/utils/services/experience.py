@@ -41,6 +41,7 @@ from larpmanager.models.form import (
     WritingQuestionType,
 )
 from larpmanager.models.writing import Character, CharacterConfig
+from larpmanager.utils.larpmanager.tasks import background_auto
 
 
 def _build_px_context(character: Any) -> tuple[set[int], set[int], dict[int, list[tuple[int, set[int], set[int]]]]]:
@@ -151,12 +152,7 @@ def set_free_abilities(char: Character, frees: list[int]) -> None:
 
 
 def calculate_character_experience_points(character: Any) -> None:
-    """Update character experience points and apply ability calculations.
-
-    Args:
-        character: Character instance to update
-
-    """
+    """Update character experience points and apply ability calculations."""
     if "px" not in get_event_features(character.event_id):
         return
 
@@ -443,12 +439,7 @@ def apply_rules_computed(char: Any) -> None:
 
 
 def add_char_addit(character: Any) -> None:
-    """Add additional configuration data to character object.
-
-    Args:
-        character: Character instance to add additional data to
-
-    """
+    """Add additional configuration data to character object (especially experience points data)."""
     character.addit = {}
     if not CharacterConfig.objects.filter(character__id=character.id).exists():
         calculate_character_experience_points(character)
@@ -459,13 +450,7 @@ def add_char_addit(character: Any) -> None:
 
 
 def remove_char_ability(char: Any, ability_id: Any) -> set:
-    """Remove character ability and all dependent abilities.
-
-    Args:
-        char: Character instance
-        ability_id: ID of ability to remove
-
-    """
+    """Remove character ability and all dependent abilities."""
     ability_ids_to_remove = {ability_id}
 
     while True:
@@ -484,31 +469,42 @@ def remove_char_ability(char: Any, ability_id: Any) -> set:
     return ability_ids_to_remove
 
 
-def update_characters_experience_on_ability_change(instance: AbilityPx) -> None:
-    """Update experience points for all characters with this ability."""
-    # Recalculate experience for each character that has this ability
-    for character in instance.characters.all():
+@background_auto(queue="experience")
+def calculate_character_experience_points_async(character_id: int) -> None:
+    """Update experience points for a character."""
+    try:
+        character = Character.objects.get(pk=character_id)
         calculate_character_experience_points(character)
+    except Character.DoesNotExist:
+        # Character was deleted, nothing to do
+        pass
 
 
-def refresh_delivery_characters(instance: DeliveryPx) -> None:
-    """Refresh all characters associated with this delivery option."""
-    for character in instance.characters.all():
-        character.save()
+def update_characters_experience_on_ability_change(instance: AbilityPx) -> None:
+    """Queues background tasks to update experience points for all characters with this ability."""
+    character_ids = instance.characters.values_list("id", flat=True)
+    for character_id in character_ids:
+        calculate_character_experience_points_async(character_id)
 
 
 def update_characters_experience_on_rule_change(instance: RulePx) -> None:
-    """Update experience points for all characters when experience rules change."""
-    # Get the event containing the rule
+    """Queues background tasks to update experience points for all characters when experience rules change."""
     parent_event = instance.event.get_class_parent(RulePx)
-
-    # Recalculate experience for all characters in the event
-    for character in parent_event.get_elements(Character).all():
-        calculate_character_experience_points(character)
+    character_ids = parent_event.get_elements(Character).values_list("id", flat=True)
+    for character_id in character_ids:
+        calculate_character_experience_points_async(character_id)
 
 
 def update_characters_experience_on_modifier_change(instance: ModifierPx) -> None:
-    """Update experience points for all characters when a modifier changes."""
+    """Queues background tasks to update experience points for all characters when a modifier changes."""
     parent_event = instance.event.get_class_parent(ModifierPx)
-    for character in parent_event.get_elements(Character).all():
-        calculate_character_experience_points(character)
+    character_ids = parent_event.get_elements(Character).values_list("id", flat=True)
+    for character_id in character_ids:
+        calculate_character_experience_points_async(character_id)
+
+
+def update_characters_experience_on_delivery_change(instance: DeliveryPx) -> None:
+    """Queues background tasks to update experience points for all characters when a delivery changes."""
+    character_ids = instance.characters.values_list("id", flat=True)
+    for character_id in character_ids:
+        calculate_character_experience_points_async(character_id)

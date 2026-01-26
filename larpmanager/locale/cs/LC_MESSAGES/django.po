@@ -879,6 +879,9 @@ msgstr "Žádost"
 msgid "Section"
 msgstr "Sekce"
 
+msgid "Sent At"
+msgstr "Odesláno na"
+
 msgid "Session"
 msgstr "Relace"
 
@@ -1196,6 +1199,9 @@ msgstr "Registrace"
 
 msgid "Reminder"
 msgstr "Připomínka"
+
+msgid "Reply To"
+msgstr "Odpovědět na"
 
 msgid "Resource"
 msgstr "Zdroje"
@@ -2230,6 +2236,9 @@ msgstr "Typ dokumentu"
 msgid "Dynamic rates"
 msgstr "Dynamické sazby"
 
+msgid "Email Content"
+msgstr "Obsah e-mailu"
+
 msgid "Event balance"
 msgstr "Bilance události"
 
@@ -2259,6 +2268,9 @@ msgstr "Neplatný token"
 
 msgid "Invalid token"
 msgstr "Neplatný token"
+
+msgid "Language Code"
+msgstr "Kód jazyka"
 
 msgid "Manage albums"
 msgstr "Správa alb"

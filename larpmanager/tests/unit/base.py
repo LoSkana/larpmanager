@@ -115,7 +115,7 @@ class BaseTestCase(TestCase):
     # Helper methods for creating specific test objects when needed
     def create_association(self, **kwargs: Any) -> Any:
         """Create a new association with defaults"""
-        defaults = {"name": "Test Association", "slug": "test-association", "email": "test@example.com"}
+        defaults = {"name": "Test Association", "slug": "test-association", "main_mail": "test@example.com"}
         defaults.update(kwargs)
         return Association.objects.create(**defaults)
 

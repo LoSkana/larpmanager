@@ -218,7 +218,7 @@ def character(page: Any, live_server: Any) -> None:
     # confirm char
     expect_normalized(page, page.locator("#one"), "my character (Creation)")
     page.get_by_role("link", name="my character (Creation)").click()
-    page.get_by_role("link", name="Change").click()
+    page.get_by_role("link", name="Edit").click()
     page.get_by_role("cell", name="Click here to confirm that").click()
     page.get_by_text("Click here to confirm that").click()
     page.locator("#id_propose").check()

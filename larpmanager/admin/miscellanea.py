@@ -34,7 +34,8 @@ from larpmanager.models.miscellanea import (
     AlbumUpload,
     ChatMessage,
     Contact,
-    Email,
+    EmailContent,
+    EmailRecipient,
     HelpQuestion,
     OneTimeAccessToken,
     OneTimeContent,
@@ -257,19 +258,60 @@ class PlayerRelationshipAdmin(DefModelAdmin):
         return f"{instance.registration} ({instance.registration.run.number})"
 
 
-@admin.register(Email)
-class EmailAdmin(DefModelAdmin):
-    """Admin interface for Email model."""
+class EmailRecipientInline(admin.TabularInline):
+    """Inline admin for email recipients."""
 
-    list_display: ClassVar[tuple] = ("id", "association", "run", "recipient", "sent", "subj", "body_red", "uuid")
+    model = EmailRecipient
+    extra = 0
+    readonly_fields = ("recipient", "sent", "language_code")
+    fields = ("recipient", "sent", "language_code")
+    can_delete = False
+
+    def has_add_permission(self, request: object, obj: object | None = None) -> bool:  # noqa: ARG002
+        """Disable adding recipients through inline."""
+        return False
+
+
+@admin.register(EmailContent)
+class EmailContentAdmin(DefModelAdmin):
+    """Admin interface for EmailContent model."""
+
+    list_display: ClassVar[tuple] = (
+        "id",
+        "association",
+        "run",
+        "subj",
+        "body_red",
+        "recipient_count",
+        "sent_count",
+        "uuid",
+    )
     list_filter: ClassVar[tuple] = (AssociationFilter, RunFilter)
     autocomplete_fields: ClassVar[list] = ["association", "run"]
-    search_fields: ClassVar[list] = ["id", "subj", "body", "recipient", "uuid"]
+    search_fields: ClassVar[list] = ["id", "subj", "body", "uuid"]
+    inlines: ClassVar[list] = [EmailRecipientInline]
 
     @staticmethod
-    def body_red(instance: Email) -> str:
+    def body_red(instance: EmailContent) -> str:
         """Return reduced body text for admin display."""
         return reduced(instance.body)
+
+    body_red.short_description = "Body"
+
+
+@admin.register(EmailRecipient)
+class EmailRecipientAdmin(DefModelAdmin):
+    """Admin interface for EmailRecipient model."""
+
+    list_display: ClassVar[tuple] = ("id", "recipient", "email_content", "sent", "language_code", "uuid")
+    list_filter: ClassVar[tuple] = ("sent",)
+    autocomplete_fields: ClassVar[list] = ["email_content"]
+    search_fields: ClassVar[list] = ["id", "recipient", "email_content__subj", "uuid"]
+    readonly_fields: ClassVar[tuple] = ("email_content", "recipient", "sent", "language_code")
+
+    def has_add_permission(self, request: HttpRequest) -> bool:  # noqa: ARG002
+        """Disable manual creation of email recipients."""
+        return False
 
 
 class OneTimeAccessTokenInline(admin.TabularInline):

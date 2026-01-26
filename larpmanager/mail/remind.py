@@ -85,7 +85,8 @@ def get_remember_membership_body(registration: Any) -> str:
         )
         % {"event": registration.run}
         + ". "
-        + _("To complete the process, simply <a href='%(url)s'>click here</a>") % {"url": get_url("membership")}
+        + _("To complete the process, simply <a href='%(url)s'>click here</a>")
+        % {"url": get_url("membership", registration.run.event)}
         + ". "
     )
 

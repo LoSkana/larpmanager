@@ -801,28 +801,105 @@ class PlayerRelationship(BaseModel):
         ]
 
 
-class Email(UuidMixin, BaseModel):
-    """Represents Email model."""
+class EmailContent(UuidMixin, BaseModel):
+    """Email content template shared across multiple recipients."""
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, blank=True, null=True)
 
-    recipient = models.CharField(max_length=170)
+    subj = models.CharField(max_length=500, verbose_name=_("Subject"))
 
-    subj = models.CharField(max_length=500)
+    body = models.TextField(verbose_name=_("Body"))
 
-    body = models.TextField()
+    reply_to = models.CharField(max_length=170, blank=True, null=True, verbose_name=_("Reply To"))
 
-    reply_to = models.CharField(max_length=170, blank=True, null=True)
+    search = models.CharField(max_length=500, blank=True, verbose_name=_("Search"))
 
-    sent = models.DateTimeField(blank=True, null=True)
-
-    search = models.CharField(max_length=500, blank=True)
+    class Meta:
+        indexes: ClassVar[list] = [
+            models.Index(fields=["association"], condition=Q(deleted__isnull=True), name="emailcontent_assoc_act"),
+            models.Index(fields=["run"], condition=Q(deleted__isnull=True), name="emailcontent_run_act"),
+        ]
 
     def __str__(self) -> str:
         """Return string representation."""
-        return f"{self.recipient} - {self.subj}"
+        return self.subj
+
+    def recipient_count(self) -> int:
+        """Return the count of recipients for this email content."""
+        return self.recipients.filter(deleted__isnull=True).count()
+
+    def sent_count(self) -> int:
+        """Return the count of sent emails for this email content."""
+        return self.recipients.filter(deleted__isnull=True, sent__isnull=False).count()
+
+
+class EmailRecipient(UuidMixin, BaseModel):
+    """Individual email recipient instance."""
+
+    email_content = models.ForeignKey(
+        EmailContent,
+        on_delete=models.CASCADE,
+        related_name="recipients",
+        verbose_name=_("Email Content"),
+    )
+
+    recipient = models.CharField(max_length=170, verbose_name=_("Recipient"))
+
+    sent = models.DateTimeField(blank=True, null=True, verbose_name=_("Sent At"))
+
+    language_code = models.CharField(max_length=10, blank=True, null=True, verbose_name=_("Language Code"))
+
+    class Meta:
+        indexes: ClassVar[list] = [
+            models.Index(fields=["email_content"], condition=Q(deleted__isnull=True), name="emailrecip_content_act"),
+            models.Index(fields=["sent"], condition=Q(deleted__isnull=True), name="emailrecip_sent_act"),
+            models.Index(fields=["recipient"], condition=Q(deleted__isnull=True), name="emailrecip_recip_act"),
+        ]
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.recipient} - {self.email_content.subj}"
+
+    @property
+    def association(self) -> Association | None:
+        """Return the association from the email content."""
+        return self.email_content.association
+
+    @property
+    def run(self) -> Run | None:
+        """Return the run from the email content."""
+        return self.email_content.run
+
+    @property
+    def association_id(self) -> int | None:
+        """Return the association ID from the email content."""
+        return self.email_content.association_id
+
+    @property
+    def run_id(self) -> int | None:
+        """Return the run ID from the email content."""
+        return self.email_content.run_id
+
+    @property
+    def subj(self) -> str:
+        """Return the subject from the email content."""
+        return self.email_content.subj
+
+    @property
+    def body(self) -> str:
+        """Return the body from the email content."""
+        return self.email_content.body
+
+    @property
+    def reply_to(self) -> str | None:
+        """Return the reply_to from the email content."""
+        return self.email_content.reply_to
+
+
+# Backward compatibility alias - will be removed after migration is complete
+Email = EmailContent
 
 
 class OneTimeContent(UuidMixin, BaseModel):

@@ -879,6 +879,9 @@ msgstr "Richiesta"
 msgid "Section"
 msgstr "Sezione"
 
+msgid "Sent At"
+msgstr "Inviato a"
+
 msgid "Session"
 msgstr "Sessione"
 
@@ -1196,6 +1199,9 @@ msgstr "Registro"
 
 msgid "Reminder"
 msgstr "Promemoria"
+
+msgid "Reply To"
+msgstr "Rispondi a"
 
 msgid "Resource"
 msgstr "Risorse"
@@ -2230,6 +2236,9 @@ msgstr "Tipo documento"
 msgid "Dynamic rates"
 msgstr "Rate dinamiche"
 
+msgid "Email Content"
+msgstr "Contenuto dell'e-mail"
+
 msgid "Event balance"
 msgstr "Bilancio dell'evento"
 
@@ -2259,6 +2268,9 @@ msgstr "Gettone non valido"
 
 msgid "Invalid token"
 msgstr "Token non valido"
+
+msgid "Language Code"
+msgstr "Codice lingua"
 
 msgid "Manage albums"
 msgstr "Gestione degli album"

@@ -35,7 +35,7 @@ from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.event import PreRegistration
 from larpmanager.models.member import FirstAidChoices, Member, Membership, MembershipStatus, NewsletterChoices
-from larpmanager.models.miscellanea import Email, HelpQuestion
+from larpmanager.models.miscellanea import EmailRecipient, HelpQuestion
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import _get_help_questions, format_email_body, get_member, get_object_uuid
@@ -498,6 +498,7 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Each tuple contains (field_name, display_label)
     context.update(
         {
+            "selrel": ("email_content",),
             "fields": [
                 ("recipient", _("Recipient")),
                 ("subj", _("Subject")),
@@ -516,8 +517,8 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
         },
     )
 
-    # Return paginated email archive using the Email model
-    return orga_paginate(request, context, Email, "larpmanager/exe/users/archive_mail.html", "orga_read_mail")
+    # Return paginated email archive using the EmailRecipient model
+    return orga_paginate(request, context, EmailRecipient, "larpmanager/exe/users/archive_mail.html", "orga_read_mail")
 
 
 @login_required

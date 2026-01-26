@@ -672,13 +672,17 @@ def round_to_two_significant_digits(number: float) -> int:
     # Convert input to Decimal for precise arithmetic
     decimal_number = Decimal(number)
     small_number_threshold = 1000
+    medium_number_threshold = 10000
 
     # Round by 10 for smaller numbers
     if abs(number) < small_number_threshold:
         rounded_decimal = decimal_number.quantize(Decimal("1E1"), rounding=ROUND_DOWN)
-    # Round by 100 for larger numbers
-    else:
+    # Round by 100 for medium numbers
+    elif abs(number) < medium_number_threshold:
         rounded_decimal = decimal_number.quantize(Decimal("1E2"), rounding=ROUND_DOWN)
+    # Round by 1000 otherwise
+    else:
+        rounded_decimal = decimal_number.quantize(Decimal("1E3"), rounding=ROUND_DOWN)
 
     # Convert back to integer and return
     return int(rounded_decimal)

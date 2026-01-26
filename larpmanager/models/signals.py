@@ -271,8 +271,8 @@ from larpmanager.utils.services.experience import (
     on_experience_characters_m2m_changed,
     on_modifier_abilities_m2m_changed,
     on_rule_abilities_m2m_changed,
-    refresh_delivery_characters,
     update_characters_experience_on_ability_change,
+    update_characters_experience_on_delivery_change,
     update_characters_experience_on_modifier_change,
     update_characters_experience_on_rule_change,
 )
@@ -783,7 +783,7 @@ def post_save_delivery_px(
     **kwargs: Any,
 ) -> None:
     """Refresh delivery characters after save signal."""
-    refresh_delivery_characters(instance)
+    update_characters_experience_on_delivery_change(instance)
 
 
 @receiver(post_save, sender=Inventory)
@@ -799,7 +799,7 @@ def create_pools_for_inventory(sender: type, instance: Inventory, created: bool,
 @receiver(post_delete, sender=DeliveryPx)
 def post_delete_delivery_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Signal handler that refreshes delivery characters after a delivery is deleted."""
-    refresh_delivery_characters(instance)
+    update_characters_experience_on_delivery_change(instance)
 
 
 # Event signals
