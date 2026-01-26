@@ -98,23 +98,25 @@ def setup(live_server: Any, page: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Class")
 
-    page.get_by_role("link", name="New").click()
+    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
     just_wait(page)
-    page.locator("iframe").content_frame.locator("#id_name").fill("Mage")
-    page.locator("iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
-
-    page.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("iframe").content_frame.locator("#id_name").fill("Rogue")
-    page.locator("iframe").content_frame.get_by_role("button", name="Confirm").click()
+    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Mage")
+    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
     just_wait(page)
 
-    page.get_by_role("link", name="New").click()
+    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
     just_wait(page)
-    page.locator("iframe").content_frame.locator("#id_name").fill("Cleric")
-    page.locator("iframe").content_frame.get_by_role("button", name="Confirm").click()
+    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Rogue")
+    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
     just_wait(page)
+
+    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
+    just_wait(page)
+    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Cleric")
+    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
+    just_wait(page)
+
+    submit_confirm(page)
 
 
 def ability(live_server: Any, page: Any) -> None:
