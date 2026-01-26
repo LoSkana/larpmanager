@@ -39,13 +39,24 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # Step 1: Rename Email model to EmailContent (reuses existing table)
+        # Step 1: Rename Email model to EmailContent
         migrations.RenameModel(
             old_name='Email',
             new_name='EmailContent',
         ),
 
-        # Step 2: Update field verbose names on EmailContent
+        # Step 2: Rename the database table from larpmanager_email to larpmanager_emailcontent
+        migrations.AlterModelTable(
+            name='emailcontent',
+            table='larpmanager_emailcontent',
+        ),
+
+        migrations.AlterModelTable(
+            name='emailcontent',
+            table=None,
+        ),
+
+        # Step 3: Update field verbose names on EmailContent
         migrations.AlterField(
             model_name='emailcontent',
             name='subj',
@@ -67,7 +78,7 @@ class Migration(migrations.Migration):
             field=models.CharField(blank=True, max_length=500, verbose_name='Search'),
         ),
 
-        # Step 3: Add indexes to EmailContent
+        # Step 4: Add indexes to EmailContent
         migrations.AddIndex(
             model_name='emailcontent',
             index=models.Index(condition=Q(deleted__isnull=True), fields=['association'], name='emailcontent_assoc_act'),
@@ -77,7 +88,7 @@ class Migration(migrations.Migration):
             index=models.Index(condition=Q(deleted__isnull=True), fields=['run'], name='emailcontent_run_act'),
         ),
 
-        # Step 4: Create EmailRecipient model
+        # Step 5: Create EmailRecipient model
         migrations.CreateModel(
             name='EmailRecipient',
             fields=[
@@ -100,7 +111,7 @@ class Migration(migrations.Migration):
             bases=(model_clone.mixin.CloneMixin, models.Model),
         ),
 
-        # Step 5: Add indexes to EmailRecipient
+        # Step 6: Add indexes to EmailRecipient
         migrations.AddIndex(
             model_name='emailrecipient',
             index=models.Index(condition=Q(deleted__isnull=True), fields=['email_content'], name='emailrecip_content_act'),
@@ -114,10 +125,10 @@ class Migration(migrations.Migration):
             index=models.Index(condition=Q(deleted__isnull=True), fields=['recipient'], name='emailrecip_recip_act'),
         ),
 
-        # Step 6: Migrate data - create EmailRecipient for each EmailContent
+        # Step 7: Migrate data - create EmailRecipient for each EmailContent
         migrations.RunPython(create_email_recipients, reverse_create_recipients),
 
-        # Step 7: Remove unused fields
+        # Step 8: Remove unused fields
         migrations.AlterModelOptions(
             name='emailcontent',
             options={},

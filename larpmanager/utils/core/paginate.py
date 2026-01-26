@@ -129,6 +129,13 @@ def _get_filter_field(field_names: list[str], target_field: str, context: dict) 
     if target_field in field_names:
         return target_field
 
+    # Handle ForeignKey _id suffix
+    if target_field.endswith("_id"):
+        base_field = target_field[:-3]  # Remove "_id" suffix
+        if base_field in field_names:
+            # Django allows filtering by ForeignKey ID using _id suffix
+            return target_field
+
     # Use select_related field to build the filter path if available
     if "selrel" in context:
         selrel = context["selrel"]
