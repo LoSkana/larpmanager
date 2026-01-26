@@ -876,6 +876,9 @@ msgstr "Begäran"
 msgid "Section"
 msgstr "Sektion"
 
+msgid "Sent At"
+msgstr "Skickat till"
+
 msgid "Session"
 msgstr "Session"
 
@@ -1193,6 +1196,9 @@ msgstr "Registrera"
 
 msgid "Reminder"
 msgstr "Påminnelse"
+
+msgid "Reply To"
+msgstr "Svara på"
 
 msgid "Resource"
 msgstr "Resurs"
@@ -2215,6 +2221,9 @@ msgstr "Typ av dokument"
 msgid "Dynamic rates"
 msgstr "Dynamiska priser"
 
+msgid "Email Content"
+msgstr "Innehåll i e-post"
+
 msgid "Event balance"
 msgstr "Balans i evenemang"
 
@@ -2244,6 +2253,9 @@ msgstr "Ogiltig Token"
 
 msgid "Invalid token"
 msgstr "Ogiltig token"
+
+msgid "Language Code"
+msgstr "Språk kod"
 
 msgid "Manage albums"
 msgstr "Hantera album"

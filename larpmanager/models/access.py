@@ -20,6 +20,7 @@
 
 from typing import ClassVar
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q, QuerySet, UniqueConstraint
 
@@ -113,11 +114,13 @@ def get_association_executives(association: Association) -> QuerySet[Member]:
         AssociationRole.DoesNotExist: If no executive role (number=1) exists for the association.
 
     """
-    # Get the executive role (number 1) for the association
-    executive_role = AssociationRole.objects.get(association=association, number=1)
-
-    # Return all members assigned to the executive role
-    return executive_role.members.all()
+    try:
+        # Get the executive role (number 1) for the association
+        executive_role = AssociationRole.objects.get(association=association, number=1)
+        # Return all members assigned to the executive role
+        return executive_role.members.all()
+    except ObjectDoesNotExist:
+        return []
 
 
 def get_association_inners(association: Association) -> list[Member]:
@@ -232,11 +235,13 @@ def get_event_organizers(event: Event) -> QuerySet[Member]:
         so it may create a new EventRole if none exists for this event.
 
     """
-    # Get or create the event organizer role (role number 1)
-    (organizer_role, _was_created) = EventRole.objects.get_or_create(event=event, number=1)
-
-    # Return all members assigned to the organizer role
-    return organizer_role.members.all()
+    try:
+        # Get or create the event organizer role (role number 1)
+        (organizer_role, _was_created) = EventRole.objects.get_or_create(event=event, number=1)
+        # Return all members assigned to the organizer role
+        return organizer_role.members.all()
+    except ObjectDoesNotExist:
+        return []
 
 
 def get_event_staffers(event: Event) -> list:

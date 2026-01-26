@@ -37,7 +37,7 @@ from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
-from larpmanager.models.miscellanea import Email
+from larpmanager.models.miscellanea import EmailContent, EmailRecipient
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -139,6 +139,9 @@ def send_mail_exec(
     between sends to prevent spam filtering. Emails are prefixed with the
     organization/run name and scheduled with configurable intervals.
 
+    This function creates a single EmailContent object and multiple EmailRecipient
+    objects to avoid duplicating email content in the database.
+
     Args:
         players: Comma-separated list of email addresses to send to
         subj: Email subject line (will be prefixed with org/run name)
@@ -152,6 +155,7 @@ def send_mail_exec(
         None
 
     Side Effects:
+        - Creates one EmailContent and multiple EmailRecipient records
         - Schedules individual emails with specified interval delays via background tasks
         - Sends notification to admins about bulk email operation
         - Logs warning if neither association_id nor run_id are provided
@@ -177,6 +181,15 @@ def send_mail_exec(
     if sender_context:
         notify_admins(f"Sending {len(recipients)} - [{sender_context}]", f"{subj}")
 
+    # Create a single EmailContent object for all recipients
+    email_content = EmailContent.objects.create(
+        association_id=association_id,
+        run_id=run_id,
+        subj=str(subj),
+        body=str(body),
+        reply_to=reply_to,
+    )
+
     email_count = 0
     # Process each recipient with deduplication
     for email in recipients:
@@ -186,35 +199,65 @@ def send_mail_exec(
             continue
         email_count += 1
         # Schedule email with specified interval delay per recipient to prevent spam filtering
-        # noinspection PyUnboundLocalVariable
-        my_send_mail(subj, body, email.strip(), sender_context, reply_to, schedule=email_count * interval)
+        # Reuse the same email_content for all recipients
+        my_send_mail(
+            subj,
+            body,
+            email.strip(),
+            sender_context,
+            reply_to,
+            schedule=email_count * interval,
+            email_content_id=email_content.id,
+        )
         seen_emails[email] = 1
 
 
 @background_auto(queue="mail")
-def my_send_mail_bkg(email_pk: Any) -> None:
+def my_send_mail_bkg(email_recipient_pk: Any) -> None:
     """Background task to send a queued email.
 
     Args:
-        email_pk (int): Primary key of Email model instance to send
+        email_recipient_pk (int): Primary key of EmailRecipient model instance to send
 
     Side effects:
         Sends the email and marks it as sent in database
 
     """
     try:
-        email = Email.objects.get(pk=email_pk)
+        email_recipient = EmailRecipient.objects.select_related("email_content").get(pk=email_recipient_pk)
     except ObjectDoesNotExist:
         return
 
-    if email.sent:
+    if email_recipient.sent:
         logger.info("Email already sent!")
         return
 
-    my_send_simple_mail(email.subj, email.body, email.recipient, email.association_id, email.run_id, email.reply_to)
+    email_content = email_recipient.email_content
+    body = email_content.body
 
-    email.sent = timezone.now()
-    email.save()
+    if email_content.association_id:
+        # Add organization signature if available
+        signature = get_association_text(
+            email_content.association_id, AssociationTextType.SIGNATURE, email_recipient.language_code
+        )
+        if signature:
+            body += signature
+
+        # Append unsubscribe footer
+        association = Association.objects.get(pk=email_content.association_id)
+        body += add_unsubscribe_body(association)
+
+    my_send_simple_mail(
+        email_content.subj,
+        body,
+        email_recipient.recipient,
+        email_content.association_id,
+        email_content.run_id,
+        email_content.reply_to,
+    )
+
+    email_recipient.sent = timezone.now()
+    email_recipient.save()
 
 
 def clean_sender(sender_name: Any) -> Any:
@@ -419,13 +462,15 @@ def add_unsubscribe_body(association: Any) -> Any:
     return html_footer
 
 
-def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachment handling
+def my_send_mail(
     subject: str,
     body: str,
     recipient: str | Member,
     context_object: Run | Event | Association | Any | None = None,
     reply_to: str | None = None,
     schedule: int = 0,
+    *,
+    email_content_id: int | None = None,
 ) -> None:
     """Queue email for sending with context-aware formatting.
 
@@ -440,12 +485,13 @@ def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachm
              Supports Run, Event, Association, or objects with run_id/association_id/event_id
         reply_to: Custom reply-to email address
         schedule: Delay in seconds before sending email
+        email_content_id: Optional existing EmailContent ID to reuse (for batch sending)
 
     Returns:
         None
 
     Side Effects:
-        - Creates Email record in database
+        - Creates EmailContent and EmailRecipient records in database
         - Schedules background task for email delivery
         - Modifies body with signature and unsubscribe link
 
@@ -453,15 +499,50 @@ def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachm
     # Clean up duplicate spaces in subject line
     subject = subject.replace("  ", " ")
 
-    # Determine language for translations (extract before processing body)
+    # Determine language for translations
     language_code = None
     if isinstance(recipient, Member):
         language_code = recipient.language
 
-    # Initialize context variables for database relationships
-    run_id = None
-    association_id = None
+    # Initialize context variables
+    association_id, run_id = get_context_elements(context_object)
 
+    # Convert Member instance to email string if needed
+    if isinstance(recipient, Member):
+        recipient = recipient.email
+
+    # Ensure string types for database storage
+    subject_string = str(subject)
+    body_string = str(body)
+
+    # Reuse existing EmailContent if provided, otherwise create new one
+    if email_content_id:
+        email_content = EmailContent.objects.get(pk=email_content_id)
+    else:
+        # Create email content record for tracking
+        email_content = EmailContent.objects.create(
+            association_id=association_id,
+            run_id=run_id,
+            subj=subject_string,
+            body=body_string,
+            reply_to=reply_to,
+        )
+
+    # Create email recipient record
+    email_recipient = EmailRecipient.objects.create(
+        email_content=email_content,
+        recipient=recipient,
+        language_code=language_code,
+    )
+
+    # Queue email for background processing
+    my_send_mail_bkg(email_recipient.pk, schedule=schedule)
+
+
+def get_context_elements(context_object: dict) -> tuple[int, int]:
+    """Extract run and association element ids."""
+    association_id = None
+    run_id = None
     # Extract context information from the provided object
     if context_object:
         # Handle direct model instances
@@ -480,36 +561,7 @@ def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachm
             association_id = context_object.association_id
         elif hasattr(context_object, "event_id") and context_object.event_id:
             association_id = context_object.event.association_id
-
-        # Add organization signature if available
-        if association_id:
-            signature = get_association_text(association_id, AssociationTextType.SIGNATURE, language_code)
-            if signature:
-                body += signature
-
-    # Append unsubscribe footer based on context
-    body += add_unsubscribe_body(context_object)
-
-    # Convert Member instance to email string if needed
-    if isinstance(recipient, Member):
-        recipient = recipient.email
-
-    # Ensure string types for database storage
-    subject_string = str(subject)
-    body_string = str(body)
-
-    # Create email record for tracking and delivery
-    email = Email.objects.create(
-        association_id=association_id,
-        run_id=run_id,
-        recipient=recipient,
-        subj=subject_string,
-        body=body_string,
-        reply_to=reply_to,
-    )
-
-    # Queue email for background processing
-    my_send_mail_bkg(email.pk, schedule=schedule)
+    return association_id, run_id
 
 
 def notify_admins(subject: str, message_text: str = "", exception: Exception | None = None) -> None:

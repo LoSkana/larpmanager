@@ -3958,6 +3958,27 @@ msgstr ""
 msgid "Who takes it upon themselves to solve it"
 msgstr ""
 
+msgid "Subject"
+msgstr ""
+
+msgid "Body"
+msgstr ""
+
+msgid "Reply To"
+msgstr ""
+
+msgid "Email Content"
+msgstr ""
+
+msgid "Recipient"
+msgstr ""
+
+msgid "Sent At"
+msgstr ""
+
+msgid "Language Code"
+msgstr ""
+
 msgid "The event this content belongs to"
 msgstr ""
 
@@ -9502,15 +9523,6 @@ msgid "Membership fee of"
 msgstr ""
 
 msgid "Mail added to queue!"
-msgstr ""
-
-msgid "Recipient"
-msgstr ""
-
-msgid "Subject"
-msgstr ""
-
-msgid "Body"
 msgstr ""
 
 msgid "Sent"
