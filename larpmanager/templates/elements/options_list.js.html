@@ -1,0 +1,85 @@
+{% load i18n static %}
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+
+    $(document).ready(function() {
+        // Get question UUID from the iframe's context
+        const questionUuid = '{{ el.uuid }}';
+
+        // Auto-resize iframe based on content
+        function updateIframeHeight() {
+            if (window.parent && window.parent !== window) {
+                // Get the actual content height without accumulating padding
+                const body = document.body;
+                const html = document.documentElement;
+
+                // Calculate the real content height
+                const height = Math.max(
+                    body.scrollHeight,
+                    body.offsetHeight,
+                    html.clientHeight,
+                    html.scrollHeight,
+                    html.offsetHeight
+                );
+
+                window.parent.postMessage({
+                    type: 'iframe_resize',
+                    height: height
+                }, '*');
+            }
+        }
+
+        // Initial height update after content is rendered
+        setTimeout(updateIframeHeight, 250);
+
+        // Handle "New Option" button click - send message to parent
+        $('.new-option').on('click', function(e) {
+            e.preventDefault();
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'open_option_modal',
+                    optionUuid: '0',
+                    questionUuid: questionUuid
+                }, '*');
+            }
+            return false;
+        });
+
+        // Handle "Edit Option" link click - send message to parent
+        $(document).on('click', '.edit-option-ajax', function(e) {
+            e.preventDefault();
+            const optionUuid = $(this).data('option-uuid');
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'open_option_modal',
+                    optionUuid: optionUuid,
+                    questionUuid: questionUuid
+                }, '*');
+            }
+            return false;
+        });
+
+        // Handle ordering links (arrow up/down) - AJAX request then reload iframe
+        $(document).on('click', 'a[href*="/options/"][href*="/order/"]', function(e) {
+            e.preventDefault();
+            const orderUrl = $(this).attr('href');
+
+            $.ajax({
+                url: orderUrl,
+                method: 'GET',
+                success: function() {
+                    // Reload the iframe by reloading itself
+                    window.location.reload();
+                    // Height will be updated after reload via setTimeout
+                },
+                error: function() {
+                    alert('{% trans "An error occurred while reordering" %}');
+                }
+            });
+
+            return false;
+        });
+    });
+
+});
+</script>

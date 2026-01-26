@@ -5073,6 +5073,9 @@ msgstr "Nie masz jeszcze żadnych postaci"
 msgid "(Optional) The ability description"
 msgstr "(Opcjonalnie) Opis umiejętności"
 
+msgid "An error occurred while reordering"
+msgstr "Wystąpił błąd podczas zmiany kolejności"
+
 msgid "Date of expiration of the document"
 msgstr "Data wygaśnięcia ważności dokumentu"
 

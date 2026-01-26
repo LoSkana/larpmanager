@@ -135,7 +135,7 @@ def update_warehouse_item_cache(item: WarehouseItem) -> None:
         # Update the specific item's data
         cached_data[item.id] = build_item_data(item)
         cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-        logger.debug("Updated warehouse item %s in cache", item.uui)
+        logger.debug("Updated warehouse item %s in cache", item.uuid)
 
     except Exception:
         logger.exception("Error updating warehouse item %s cache", item.id)

@@ -5073,6 +5073,9 @@ msgstr "Sie haben noch keine Zeichen"
 msgid "(Optional) The ability description"
 msgstr "(Optional) Die Beschreibung der Fähigkeit"
 
+msgid "An error occurred while reordering"
+msgstr "Bei der Neubestellung ist ein Fehler aufgetreten"
+
 msgid "Date of expiration of the document"
 msgstr "Datum des Ablaufs der Gültigkeit des Dokuments"
 

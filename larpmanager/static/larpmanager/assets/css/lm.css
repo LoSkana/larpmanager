@@ -3003,3 +3003,20 @@ body.floating_iframe .box {
 body.floating_iframe .is-preload {
   padding-top: 0 !important;
 }
+
+/* Ensure .inner is visible in iframe */
+body.floating_iframe .inner {
+  display: block !important;
+  padding: 0 !important;
+}
+
+#options-iframe,
+.floating_iframe .auto_resize {
+  width: 100% !important;
+}
+
+#options-iframe {
+  width: 100%;
+  border: none;
+  min-height: 400px;
+}

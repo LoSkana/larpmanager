@@ -5073,6 +5073,9 @@ msgstr "Du har ingen tegn ennå"
 msgid "(Optional) The ability description"
 msgstr "(Valgfritt) Beskrivelse av evnen"
 
+msgid "An error occurred while reordering"
+msgstr "Det oppstod en feil under omorganisering"
+
 msgid "Date of expiration of the document"
 msgstr "Dokumentets utløpsdato"
 

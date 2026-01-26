@@ -5074,6 +5074,9 @@ msgstr "Vous n'avez pas encore de personnages"
 msgid "(Optional) The ability description"
 msgstr "(Facultatif) La description de la capacité"
 
+msgid "An error occurred while reordering"
+msgstr "Une erreur s'est produite lors de la réorganisation"
+
 msgid "Date of expiration of the document"
 msgstr "Date d'expiration du document"
 

@@ -26,7 +26,7 @@ from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Max
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -964,77 +964,19 @@ def form_edit_handler(  # noqa: PLR0913
                 _("You must define at least one option before saving a single-choice or multiple-choice question"),
             )
 
-            # Redirect with scroll_to parameter to jump to options section
+            # Redirect to question page
             redirect_kwargs = {
                 "event_slug": context["run"].get_slug(),
                 "question_uuid": context["saved"].uuid,
                 **(extra_redirect_kwargs or {}),
             }
-            url = reverse(redirect_view_name, kwargs=redirect_kwargs)
-            return HttpResponseRedirect(f"{url}?scroll_to=options")
+            return reverse(redirect_view_name, kwargs=redirect_kwargs)
 
         messages.success(request, _("Operation completed") + "!")
         redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_redirect_kwargs or {})}
         return redirect(redirect_list_view_name, **redirect_kwargs)
 
-    # Load existing options for the question being edited
-    options_queryset = option_model.objects.filter(question=context["el"])
-    # For WritingOption, also filter by applicable type
-    if hasattr(context, "writing_typ"):
-        options_queryset = options_queryset.filter(question__applicable=context["writing_typ"])
-    context["list"] = options_queryset.order_by("order")
     return render(request, template_name, context)
-
-
-def options_ajax_handler(
-    request: HttpRequest,
-    context: dict,
-    option_uuid: str,
-    question_model: type[BaseModel],
-    option_model: type[BaseModel],
-    form_class: type[BaseModelForm],
-    extra_context: dict | None = None,
-) -> JsonResponse:
-    """Generic handler for AJAX option form loading (registration and writing).
-
-    Args:
-        request: HTTP request object
-        context: Event context from check_event_context
-        option_uuid: Option UUID to edit (0 for new options)
-        question_model: Question model class (RegistrationQuestion or WritingQuestion)
-        option_model: Option model class (RegistrationOption or WritingOption)
-        form_class: Form class (OrgaRegistrationOptionForm or OrgaWritingOptionForm)
-        extra_context: Additional context to add to form_context (e.g., {"typ": writing_type})
-
-    Returns:
-        JsonResponse with form HTML or error message
-    """
-    # Get question_uuid from request
-    question_uuid = request.GET.get("question_uuid", "")
-
-    # For new options, get the question
-    if option_uuid == "0" and question_uuid:
-        get_element(context, question_uuid, "question", question_model)
-
-    # Get the option element if editing
-    if option_uuid != "0":
-        get_element(context, option_uuid, "el", option_model)
-
-    # Prepare form
-    form = form_class(context=context) if option_uuid == "0" else form_class(instance=context["el"], context=context)
-
-    # Render form HTML
-    form_context = {
-        **context,
-        "form": form,
-        "num": option_uuid,
-        "is_ajax": True,
-        **(extra_context or {}),
-    }
-
-    html = render(request, "elements/option_form_ajax.html", form_context)
-
-    return JsonResponse({"success": True, "html": html.content.decode("utf-8")})
 
 
 def options_edit_handler(

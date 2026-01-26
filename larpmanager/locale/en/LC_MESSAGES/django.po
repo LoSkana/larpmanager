@@ -4756,6 +4756,9 @@ msgstr ""
 msgid "Closing"
 msgstr ""
 
+msgid "An error occurred while reordering"
+msgstr ""
+
 msgid "Warning. The form contains errors to the fields"
 msgstr ""
 

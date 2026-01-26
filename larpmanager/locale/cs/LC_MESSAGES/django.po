@@ -5073,6 +5073,9 @@ msgstr "Zatím nemáte žádné postavy"
 msgid "(Optional) The ability description"
 msgstr "(Nepovinné) Popis schopnosti"
 
+msgid "An error occurred while reordering"
+msgstr "Při změně pořadí došlo k chybě"
+
 msgid "Date of expiration of the document"
 msgstr "Datum ukončení platnosti dokladu"
 

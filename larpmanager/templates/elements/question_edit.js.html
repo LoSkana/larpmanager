@@ -60,32 +60,52 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // ========== Page Navigation ==========
 
-    // Reload page with scroll_to parameter
-    function reloadWithScrollToOptions() {
-        const currentUrl = window.location.href.split('?')[0].split('#')[0];
-        window.location.href = currentUrl + '?scroll_to=options';
-    }
-
-    // Check URL params and scroll to options if needed
-    function checkAndScrollToOptions() {
-        const urlParams = new URLSearchParams(window.location.search);
-
-        if (urlParams.get('scroll_to') === 'options') {
-            // Wait for toggleOptions to complete and options to be visible
-            setTimeout(function() {
-                toggleOptions();
-
-                // Scroll to options if visible
-                if ($('#options').length && $('#options').is(':visible')) {
-                    window.jump_to('#options');
-                }
-            }, 400);
-
-            // Remove scroll_to parameter from URL without reloading
-            window.history.replaceState({}, document.title, window.location.pathname);
+    // Reload only the options iframe
+    function reloadOptionsIframe() {
+        const iframe = document.getElementById('options-iframe');
+        if (iframe) {
+            // Reset height to min-height before reload to avoid accumulation
+            iframe.style.height = '400px';
+            iframe.src = iframe.src;
         }
     }
 
+    // Create or update iframe for options list
+    function createOrUpdateOptionsIframe(questionUuid) {
+        const optionsDiv = document.getElementById('options');
+        const existingIframe = document.getElementById('options-iframe');
+
+        if (!optionsDiv || !questionUuid) return;
+
+        // Build iframe URL
+        const basePath = getBasePath();
+        let iframeUrl;
+
+        if (isWritingContext()) {
+            const writingType = getWritingType();
+            iframeUrl = `${basePath}/writing/options/${writingType}/list/${questionUuid}/`;
+        } else {
+            iframeUrl = `${basePath}/options/list/${questionUuid}/`;
+        }
+
+        if (existingIframe) {
+            // Update existing iframe src with new question UUID
+            existingIframe.style.height = '400px'; // Reset height
+            existingIframe.src = iframeUrl;
+        } else {
+            // Create new iframe element
+            const iframe = document.createElement('iframe');
+            iframe.id = 'options-iframe';
+            iframe.src = iframeUrl;
+            iframe.style.width = '100%';
+            iframe.style.border = 'none';
+            iframe.style.minHeight = '400px';
+
+            // Clear any placeholder content
+            optionsDiv.innerHTML = '';
+            optionsDiv.appendChild(iframe);
+        }
+    }
 
     // ========== Modal Management ==========
 
@@ -161,6 +181,9 @@ window.addEventListener('DOMContentLoaded', function() {
                     const newUrl = window.location.pathname.replace('/edit/0', '/edit/' + response.question_uuid);
                     window.history.replaceState({}, '', newUrl);
 
+                    // Create iframe if it doesn't exist yet
+                    createOrUpdateOptionsIframe(response.question_uuid);
+
                     // Execute callback with question UUID
                     if (callback) {
                         callback(response.question_uuid);
@@ -190,11 +213,13 @@ window.addEventListener('DOMContentLoaded', function() {
         // Options section visibility
         if (["m", "s"].includes(selectedValue)) {
             if (!$('#options').is(':visible')) {
-                $('#options').fadeIn(speed);
+                $('#options').removeClass('hide').fadeIn(speed);
             }
         } else {
             if ($('#options').is(':visible')) {
-                $('#options').fadeOut(speed);
+                $('#options').fadeOut(speed, function() {
+                    $(this).addClass('hide');
+                });
             }
         }
 
@@ -265,9 +290,35 @@ window.addEventListener('DOMContentLoaded', function() {
         // Check if message is from our option form
         if (e.data && e.data.type === 'option_saved') {
             closeOptionModal();
-            reloadWithScrollToOptions();
+
+            // Get current question UUID from URL
+            const questionUuid = getQuestionUuidFromUrl();
+
+            // Create iframe if it doesn't exist yet (for newly saved questions)
+            createOrUpdateOptionsIframe(questionUuid);
+
+            // Reload iframe if it already exists
+            reloadOptionsIframe();
         } else if (e.data && e.data.type === 'option_cancelled') {
             closeOptionModal();
+        } else if (e.data && e.data.type === 'open_option_modal') {
+            // Message from options list iframe to open option modal on parent
+            const currentQuestionUuid = getQuestionUuidFromUrl();
+
+            // If question hasn't been saved yet, save it first
+            if (currentQuestionUuid === "0") {
+                saveQuestionBeforeAddingOption(function(savedQuestionUuid) {
+                    openOptionModal(e.data.optionUuid, savedQuestionUuid);
+                });
+            } else {
+                openOptionModal(e.data.optionUuid, e.data.questionUuid);
+            }
+        } else if (e.data && e.data.type === 'iframe_resize') {
+            // Update iframe height based on content
+            const iframe = document.getElementById('options-iframe');
+            if (iframe && e.data.height) {
+                iframe.style.height = e.data.height + 'px';
+            }
         }
     });
 

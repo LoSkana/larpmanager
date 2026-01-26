@@ -97,19 +97,24 @@ def setup(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Class")
+
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Mage")
-    page.locator("#main_form div").filter(has_text="After confirmation, add").click()
-    submit_confirm(page)
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Rogue")
-    page.get_by_role("checkbox", name="After confirmation, add").check()
-    submit_confirm(page)
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Cleric")
-    submit_confirm(page)
-    submit_confirm(page)
+    just_wait(page)
+    page.locator("iframe").content_frame.locator("#id_name").fill("Mage")
+    page.locator("iframe").content_frame.get_by_role("button", name="Confirm").click()
+    just_wait(page)
+
+    page.get_by_role("link", name="New").click()
+    just_wait(page)
+    page.locator("iframe").content_frame.locator("#id_name").fill("Rogue")
+    page.locator("iframe").content_frame.get_by_role("button", name="Confirm").click()
+    just_wait(page)
+
+    page.get_by_role("link", name="New").click()
+    just_wait(page)
+    page.locator("iframe").content_frame.locator("#id_name").fill("Cleric")
+    page.locator("iframe").content_frame.get_by_role("button", name="Confirm").click()
+    just_wait(page)
 
 
 def ability(live_server: Any, page: Any) -> None:

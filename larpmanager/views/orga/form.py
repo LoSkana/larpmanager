@@ -21,7 +21,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -48,11 +48,10 @@ from larpmanager.models.registration import (
     RegistrationTicket,
 )
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import exchange_order
+from larpmanager.utils.core.common import exchange_order, get_element
 from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
 from larpmanager.utils.services.edit import (
     form_edit_handler,
-    options_ajax_handler,
     options_edit_handler,
     orga_edit,
 )
@@ -281,26 +280,33 @@ def orga_registration_options_edit(request: HttpRequest, event_slug: str, option
 
 
 @login_required
-def orga_registration_options_ajax(request: HttpRequest, event_slug: str, option_uuid: str) -> JsonResponse:
-    """Handle AJAX requests for registration option form loading.
+def orga_registration_options_list(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
+    """Display the list of options for a registration form question in an iframe.
 
-    Returns form HTML for creating/editing registration options in a modal.
-    Supports both new options (option_uuid="0") and existing ones.
+    This view shows only the options list section, designed to be loaded in an iframe
+    within the form edit page.
 
     Args:
-        request: HTTP request object
+        request: The HTTP request object
         event_slug: Event slug identifier
-        option_uuid: Option UUID to edit (0 for new options)
+        question_uuid: Question UUID to show options for
 
     Returns:
-        JsonResponse with form HTML or error message
+        HttpResponse with the options list template
     """
-    # Check user permissions
+    # Check user permissions for registration form management
     context = check_event_context(request, event_slug, "orga_registration_form")
+    context["frame"] = 1
 
-    return options_ajax_handler(
-        request, context, option_uuid, RegistrationQuestion, RegistrationOption, OrgaRegistrationOptionForm
-    )
+    if question_uuid and question_uuid != "0":
+        # Get the question
+        get_element(context, question_uuid, "el", RegistrationQuestion)
+
+        # Load existing options for the question
+        options_queryset = RegistrationOption.objects.filter(question=context["el"])
+        context["list"] = options_queryset.order_by("order")
+
+    return render(request, "larpmanager/orga/registration/options_list.html", context)
 
 
 @login_required
@@ -328,7 +334,7 @@ def orga_registration_options_order(
     # Exchange the order of registration options
     exchange_order(context, RegistrationOption, option_uuid, order)
 
-    # Redirect back to the form edit page with scroll_to parameter
+    # Redirect back to the form edit page
     url = reverse(
         "orga_registration_form_edit",
         kwargs={
@@ -336,7 +342,7 @@ def orga_registration_options_order(
             "question_uuid": context["current"].question.uuid,
         },
     )
-    return HttpResponseRedirect(f"{url}?scroll_to=options")
+    return HttpResponseRedirect(url)
 
 
 @login_required

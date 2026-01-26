@@ -74,7 +74,6 @@ from larpmanager.utils.services.character import get_chars_relations
 from larpmanager.utils.services.edit import (
     backend_edit,
     form_edit_handler,
-    options_ajax_handler,
     options_edit_handler,
     writing_edit,
     writing_edit_working_ticket,
@@ -719,41 +718,6 @@ def orga_writing_form_order(
 
 
 @login_required
-def orga_writing_options_ajax(
-    request: HttpRequest, event_slug: str, writing_type: str, option_uuid: str
-) -> JsonResponse:
-    """Handle AJAX requests for writing option form loading.
-
-    Returns form HTML for creating/editing writing options in a modal.
-    Supports both new options (option_uuid="0") and existing ones.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-        writing_type: Writing form type (background, origin, etc.)
-        option_uuid: Option UUID to edit (0 for new options)
-
-    Returns:
-        JsonResponse with form HTML or error message
-    """
-    # Check user permissions
-    context = check_event_context(request, event_slug, "orga_character_form")
-
-    # Validate the writing form type exists and is allowed
-    check_writing_form_type(context, writing_type)
-
-    return options_ajax_handler(
-        request,
-        context,
-        option_uuid,
-        WritingQuestion,
-        WritingOption,
-        OrgaWritingOptionForm,
-        extra_context={"typ": writing_type},
-    )
-
-
-@login_required
 def orga_writing_options_edit(
     request: HttpRequest, event_slug: str, writing_type: str, option_uuid: str
 ) -> HttpResponse:
@@ -785,6 +749,44 @@ def orga_writing_options_edit(
         OrgaWritingOptionForm,
         extra_context={"typ": writing_type},
     )
+
+
+@login_required
+def orga_writing_options_list(
+    request: HttpRequest, event_slug: str, writing_type: str, question_uuid: str
+) -> HttpResponse:
+    """Display the list of options for a writing form question in an iframe.
+
+    This view shows only the options list section, designed to be loaded in an iframe
+    within the form edit page.
+
+    Args:
+        request: The HTTP request object
+        event_slug: Event slug identifier
+        writing_type: Writing form type (background, origin, etc.)
+        question_uuid: Question UUID to show options for
+
+    Returns:
+        HttpResponse with the options list template
+    """
+    # Verify user has character form permissions and get event context
+    context = check_event_context(request, event_slug, "orga_character_form")
+    context["frame"] = 1
+
+    # Validate the writing form type exists and is allowed
+    check_writing_form_type(context, writing_type)
+
+    context["typ"] = writing_type
+
+    if question_uuid and question_uuid != "0":
+        # Get the question
+        get_element(context, question_uuid, "el", WritingQuestion)
+
+        # Load existing options for the question
+        options_queryset = WritingOption.objects.filter(question=context["el"])
+        context["list"] = options_queryset.order_by("order")
+
+    return render(request, "larpmanager/orga/characters/options_list.html", context)
 
 
 def writing_option_edit(context: dict, option_uuid: str, request: HttpRequest, option_type: str) -> HttpResponse:
@@ -839,8 +841,8 @@ def orga_writing_options_order(
     # Exchange order positions of WritingOption objects
     exchange_order(context, WritingOption, option_uuid, order)
 
-    # Redirect back to writing form edit view with scroll_to parameter
-    url = reverse(
+    # Redirect back to writing form edit view
+    return reverse(
         "orga_writing_form_edit",
         kwargs={
             "event_slug": context["run"].get_slug(),
@@ -848,7 +850,6 @@ def orga_writing_options_order(
             "question_uuid": context["current"].question.uuid,
         },
     )
-    return HttpResponseRedirect(f"{url}?scroll_to=options")
 
 
 @login_required
