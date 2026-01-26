@@ -2946,3 +2946,60 @@ input[type="number"] {
 .btn-cancel:hover {
   background-color: rgba(var(--ter-rgb), 0.9);
 }
+
+/** FLOATING IFRAME - Hide structure for iframe popups **/
+
+body.floating_iframe {
+  background: transparent !important;
+  padding: 0px;
+}
+
+/* Hide all structural elements */
+body.floating_iframe #header,
+body.floating_iframe #footer,
+body.floating_iframe #sidebar,
+body.floating_iframe #nav,
+body.floating_iframe #menu,
+body.floating_iframe #banner,
+body.floating_iframe .topbar,
+body.floating_iframe #staging,
+body.floating_iframe .info {
+  display: none !important;
+}
+
+/* Remove page container wrapper styles */
+body.floating_iframe #page-container {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Remove page wrapper styles */
+body.floating_iframe #page-wrapper {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  padding-top: 0 !important;
+  width: 100%;
+}
+
+/* Ensure main content is visible and well formatted */
+body.floating_iframe #main,
+body.floating_iframe .container {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Style form container for iframe */
+body.floating_iframe .box {
+  background: rgba(255, 255, 255, 0.95) !important;
+  padding: 20px !important;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Remove any fixed positioning that might interfere */
+body.floating_iframe .is-preload {
+  padding-top: 0 !important;
+}

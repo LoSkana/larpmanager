@@ -744,6 +744,9 @@ msgstr "Pájka"
 msgid "Casting"
 msgstr "Casting"
 
+msgid "Closing"
+msgstr "Uzavírání"
+
 msgid "Columns"
 msgstr "Sloupce"
 
@@ -3266,9 +3269,6 @@ msgstr "Elektronická faktura"
 msgid "Enable preferences"
 msgstr "Povolení předvoleb"
 
-msgid "Error loading form"
-msgstr "Chyba při načítání formuláře"
-
 msgid "Hide not available"
 msgstr "Skrýt není k dispozici"
 
@@ -3421,9 +3421,6 @@ msgstr "Položky, které NEbyly vybrány"
 
 msgid "Email notifications"
 msgstr "E-mailová oznámení"
-
-msgid "Error saving option"
-msgstr "Možnost uložení chyby"
 
 msgid "Event Configuration"
 msgstr "Konfigurace události"

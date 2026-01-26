@@ -744,6 +744,9 @@ msgstr "Soudure"
 msgid "Casting"
 msgstr "Casting"
 
+msgid "Closing"
+msgstr "Fermeture"
+
 msgid "Columns"
 msgstr "Colonnes"
 
@@ -3266,9 +3269,6 @@ msgstr "Facture électronique"
 msgid "Enable preferences"
 msgstr "Activer les préférences"
 
-msgid "Error loading form"
-msgstr "Erreur de chargement du formulaire"
-
 msgid "Hide not available"
 msgstr "Masquer non disponible"
 
@@ -3421,9 +3421,6 @@ msgstr "Éléments NON sélectionnés"
 
 msgid "Email notifications"
 msgstr "Notifications par courrier électronique"
-
-msgid "Error saving option"
-msgstr "Option de sauvegarde des erreurs"
 
 msgid "Event Configuration"
 msgstr "Configuration des événements"

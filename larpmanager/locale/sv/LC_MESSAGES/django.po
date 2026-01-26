@@ -744,6 +744,9 @@ msgstr "Lödning"
 msgid "Casting"
 msgstr "Gjutning"
 
+msgid "Closing"
+msgstr "Avslutar"
+
 msgid "Columns"
 msgstr "Kolumner"
 
@@ -3266,9 +3269,6 @@ msgstr "Elektronisk faktura"
 msgid "Enable preferences"
 msgstr "Aktivera inställningar"
 
-msgid "Error loading form"
-msgstr "Fel vid laddning av formulär"
-
 msgid "Hide not available"
 msgstr "Dölj inte tillgängligt"
 
@@ -3421,9 +3421,6 @@ msgstr "Objekt som INTE valts"
 
 msgid "Email notifications"
 msgstr "E-postmeddelanden"
-
-msgid "Error saving option"
-msgstr "Alternativ för att spara fel"
 
 msgid "Event Configuration"
 msgstr "Händelsekonfiguration"

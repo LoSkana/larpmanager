@@ -4750,6 +4750,12 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+msgid "Option saved successfully"
+msgstr ""
+
+msgid "Closing"
+msgstr ""
+
 msgid "Warning. The form contains errors to the fields"
 msgstr ""
 
@@ -4840,12 +4846,6 @@ msgid ""
 msgstr ""
 
 msgid "An error occurred"
-msgstr ""
-
-msgid "Error loading form"
-msgstr ""
-
-msgid "Error saving option"
 msgstr ""
 
 msgid "Total registration fee"
@@ -9471,9 +9471,6 @@ msgstr ""
 msgid ""
 "You must define at least one option before saving a single-choice or "
 "multiple-choice question"
-msgstr ""
-
-msgid "Option saved successfully"
 msgstr ""
 
 msgid "Your registration ticket"

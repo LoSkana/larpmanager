@@ -744,6 +744,9 @@ msgstr "Lodding"
 msgid "Casting"
 msgstr "Støping"
 
+msgid "Closing"
+msgstr "Vi stenger"
+
 msgid "Columns"
 msgstr "Spalter"
 
@@ -3266,9 +3269,6 @@ msgstr "Elektronisk faktura"
 msgid "Enable preferences"
 msgstr "Aktiver innstillinger"
 
-msgid "Error loading form"
-msgstr "Feil ved lasting av skjema"
-
 msgid "Hide not available"
 msgstr "Skjul ikke tilgjengelig"
 
@@ -3421,9 +3421,6 @@ msgstr "Elementer som IKKE er valgt"
 
 msgid "Email notifications"
 msgstr "E-postvarsler"
-
-msgid "Error saving option"
-msgstr "Alternativ for lagring av feil"
 
 msgid "Event Configuration"
 msgstr "Hendelseskonfigurasjon"

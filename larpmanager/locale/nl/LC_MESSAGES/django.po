@@ -744,6 +744,9 @@ msgstr "Soldeer"
 msgid "Casting"
 msgstr "Gieten"
 
+msgid "Closing"
+msgstr "Sluiting"
+
 msgid "Columns"
 msgstr "Kolommen"
 
@@ -3266,9 +3269,6 @@ msgstr "Elektronische factuur"
 msgid "Enable preferences"
 msgstr "Voorkeuren inschakelen"
 
-msgid "Error loading form"
-msgstr "Fout bij het laden van formulier"
-
 msgid "Hide not available"
 msgstr "Verberg niet beschikbaar"
 
@@ -3421,9 +3421,6 @@ msgstr "NIET geselecteerde items"
 
 msgid "Email notifications"
 msgstr "Kennisgevingen per e-mail"
-
-msgid "Error saving option"
-msgstr "Optie voor opslaan van fouten"
 
 msgid "Event Configuration"
 msgstr "Gebeurtenis Configuratie"

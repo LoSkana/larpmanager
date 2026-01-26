@@ -744,6 +744,9 @@ msgstr "Równowaga"
 msgid "Casting"
 msgstr "Casting"
 
+msgid "Closing"
+msgstr "Zamknięcie"
+
 msgid "Columns"
 msgstr "Kolumny"
 
@@ -3266,9 +3269,6 @@ msgstr "Faktura elektroniczna"
 msgid "Enable preferences"
 msgstr "Włącz preferencje"
 
-msgid "Error loading form"
-msgstr "Błąd ładowania formularza"
-
 msgid "Hide not available"
 msgstr "Ukryj niedostępne"
 
@@ -3421,9 +3421,6 @@ msgstr "Elementy, których NIE wybrano"
 
 msgid "Email notifications"
 msgstr "Powiadomienia e-mail"
-
-msgid "Error saving option"
-msgstr "Opcja zapisywania błędów"
 
 msgid "Event Configuration"
 msgstr "Konfiguracja zdarzeń"

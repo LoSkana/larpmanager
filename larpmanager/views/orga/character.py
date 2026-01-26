@@ -769,13 +769,9 @@ def orga_writing_options_edit(
         HTTP response with the option edit form, redirect, or JsonResponse for AJAX
 
     """
-    # Check if this is an AJAX request
-    if request.headers.get("X-Requested-With") != "XMLHttpRequest":
-        msg = "AJAX request required"
-        raise Http404(msg)
-
     # Verify user has character form permissions and get event context
     context = check_event_context(request, event_slug, "orga_character_form")
+    context["frame"] = 1
 
     # Validate the writing form type exists and is allowed
     check_writing_form_type(context, writing_type)

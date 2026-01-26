@@ -21,7 +21,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -259,12 +259,9 @@ def orga_registration_options_edit(request: HttpRequest, event_slug: str, option
         HttpResponse: Rendered registration option edit page, redirect, or JsonResponse for AJAX
 
     """
-    # Check if this is an AJAX request
-    if not request.headers.get("X-Requested-With") == "XMLHttpRequest":
-        raise Http404
-
     # Check user permissions for registration form management
     context = check_event_context(request, event_slug, "orga_registration_form")
+    context["frame"] = 1
 
     # For new options without question_uuid, verify that questions exist
     if option_uuid == "0":

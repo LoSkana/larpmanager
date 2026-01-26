@@ -1045,8 +1045,8 @@ def options_edit_handler(
     option_model: type[BaseModel],
     form_class: type[BaseModelForm],
     extra_context: dict | None = None,
-) -> JsonResponse:
-    """Generic handler for AJAX option form submission (registration and writing).
+) -> HttpResponse:
+    """Handler for option form submission (iframe mode).
 
     Args:
         request: HTTP request object
@@ -1058,7 +1058,7 @@ def options_edit_handler(
         extra_context: Additional context to add to form_context (e.g., {"typ": writing_type})
 
     Returns:
-        JsonResponse with success or form HTML with errors
+        HttpResponse with form page (iframe mode)
     """
     # For new options, get the question_uuid from request
     if option_uuid == "0":
@@ -1072,16 +1072,16 @@ def options_edit_handler(
 
     # Try saving it
     if backend_edit(request, context, form_class, option_uuid, is_association=False):
-        return JsonResponse({"success": True, "message": str(_("Option saved successfully"))})
+        return render(request, "elements/option_form_success.html", context)
 
     # If form validation failed, return form with errors
     form_context = {
         **context,
-        "is_ajax": True,
+        "num": option_uuid,
         **(extra_context or {}),
     }
-    html = render(request, "elements/option_form_ajax.html", form_context)
-    return JsonResponse({"success": False, "html": html.content.decode("utf-8")})
+
+    return render(request, "elements/option_form_frame.html", form_context)
 
 
 @require_POST

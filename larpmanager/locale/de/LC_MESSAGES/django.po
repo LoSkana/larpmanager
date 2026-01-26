@@ -744,6 +744,9 @@ msgstr "Lötmittel"
 msgid "Casting"
 msgstr "Gießen"
 
+msgid "Closing"
+msgstr "Schließen"
+
 msgid "Columns"
 msgstr "Rubriken"
 
@@ -3266,9 +3269,6 @@ msgstr "Elektronische Rechnung"
 msgid "Enable preferences"
 msgstr "Einstellungen aktivieren"
 
-msgid "Error loading form"
-msgstr "Fehler beim Laden des Formulars"
-
 msgid "Hide not available"
 msgstr "Ausblenden nicht verfügbar"
 
@@ -3421,9 +3421,6 @@ msgstr "NICHT ausgewählte Elemente"
 
 msgid "Email notifications"
 msgstr "E-Mail-Benachrichtigungen"
-
-msgid "Error saving option"
-msgstr "Option Fehlerspeicherung"
 
 msgid "Event Configuration"
 msgstr "Ereignis-Konfiguration"
