@@ -83,6 +83,7 @@ def prepare(page: Any) -> None:
     page.locator("#id_status").select_option("m")
 
     page.get_by_role("link", name="New").click()
+    just_wait(page)
     page.locator("#uglipop_popbox #id_name").click()
     page.locator("#uglipop_popbox #id_name").fill("st")
     page.locator("#uglipop_popbox").get_by_role("searchbox").click()
@@ -91,6 +92,7 @@ def prepare(page: Any) -> None:
     submit_confirm(page, "uglipop_popbox")
 
     page.get_by_role("link", name="New").click()
+    just_wait(page)
     page.locator("#uglipop_popbox #id_name").click()
     page.locator("#uglipop_popbox #id_name").fill("bmb")
     page.locator("#uglipop_popbox").get_by_role("searchbox").click()

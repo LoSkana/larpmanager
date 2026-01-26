@@ -147,11 +147,13 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#id_name").fill("color")
 
     page.get_by_role("link", name="New").click()
+    just_wait(page)
     page.locator("#uglipop_popbox #id_name").click()
     page.locator("#uglipop_popbox #id_name").fill("red")
     submit_confirm(page, "uglipop_popbox")
 
     page.get_by_role("link", name="New").click()
+    just_wait(page)
     page.locator("#uglipop_popbox #id_name").click()
     page.locator("#uglipop_popbox #id_name").fill("blue")
     submit_confirm(page, "uglipop_popbox")
@@ -163,16 +165,19 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#id_name").fill("tag")
 
     page.get_by_role("link", name="New").click()
+    just_wait(page)
     page.locator("#uglipop_popbox #id_name").click()
     page.locator("#uglipop_popbox #id_name").fill("wunder")
     submit_confirm(page, "uglipop_popbox")
 
     page.get_by_role("link", name="New").click()
+    just_wait(page)
     page.locator("#uglipop_popbox #id_name").click()
     page.locator("#uglipop_popbox #id_name").fill("zapyr")
     submit_confirm(page, "uglipop_popbox")
 
     page.get_by_role("link", name="New").click()
+    just_wait(page)
     page.locator("#uglipop_popbox #id_name").click()
     page.locator("#uglipop_popbox #id_name").fill("qerfi")
     submit_confirm(page, "uglipop_popbox")

@@ -106,6 +106,7 @@ def field_choice(page: Any, live_server: Any) -> None:
     page.locator("#id_giftable").check()
 
     page.get_by_role("link", name="New").click()
+    just_wait(page)
     page.locator("#uglipop_popbox #id_name").click()
     page.locator("#uglipop_popbox #id_name").fill("prima")
     page.locator("#uglipop_popbox #id_name").press("Tab")
@@ -118,6 +119,7 @@ def field_choice(page: Any, live_server: Any) -> None:
     submit_confirm(page, "uglipop_popbox")
 
     page.get_by_role("link", name="New").click()
+    just_wait(page)
     page.locator("#uglipop_popbox #id_name").click()
     page.locator("#uglipop_popbox #id_name").fill("secondas")
     page.locator("#uglipop_popbox #id_description").click()
@@ -141,6 +143,7 @@ def field_multiple(page: Any, live_server: Any) -> None:
     page.locator("#id_giftable").check()
 
     page.get_by_role("link", name="New").click()
+    just_wait(page)
     page.locator("#uglipop_popbox #id_name").click()
     page.locator("#uglipop_popbox #id_name").fill("one")
     page.locator("#uglipop_popbox #id_name").press("Tab")
@@ -148,6 +151,7 @@ def field_multiple(page: Any, live_server: Any) -> None:
     submit_confirm(page, "uglipop_popbox")
 
     page.get_by_role("link", name="New").click()
+    just_wait(page)
     page.locator("#uglipop_popbox #id_name").click()
     page.locator("#uglipop_popbox #id_name").fill("twp")
     page.locator("#uglipop_popbox #id_name").press("Tab")
@@ -160,6 +164,7 @@ def field_multiple(page: Any, live_server: Any) -> None:
     submit_confirm(page, "uglipop_popbox")
 
     page.get_by_role("link", name="New").click()
+    just_wait(page)
     page.locator("#uglipop_popbox #id_name").click()
     page.locator("#uglipop_popbox #id_name").fill("hhasd")
     page.locator("#uglipop_popbox #id_description").click()
