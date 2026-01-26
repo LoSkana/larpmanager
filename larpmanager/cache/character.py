@@ -649,17 +649,23 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
     cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
-def update_event_cache_all_character_reg(character_registration: Any, cache_result: dict, event_run: Any) -> None:
+def update_event_cache_all_character_reg(
+    relation: RegistrationCharacterRel, cache_result: dict, event_run: Any
+) -> None:
     """Update character registration cache data for an event.
 
     Args:
-        character_registration: Character registration instance
+        relation: Character registration relation
         cache_result: Result dictionary to update with character data
         event_run: Event run instance
 
     """
-    # Get character from registration instance
-    character = character_registration.character
+    # Get character from relation instance
+    character = relation.character
+
+    # Only update cache if character belongs to this event
+    if character.event_id != event_run.event_id:
+        return
 
     # Generate character display data
     character_display_data = character.show()
@@ -668,7 +674,7 @@ def update_event_cache_all_character_reg(character_registration: Any, cache_resu
     search_player(
         character,
         character_display_data,
-        {"run": event_run, "assignments": {character.number: character_registration}},
+        {"run": event_run, "assignments": {character.number: relation}},
     )
 
     # Initialize character entry if not exists
@@ -693,6 +699,10 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
         run: Event run context
 
     """
+    # Only update cache if character belongs to this event
+    if instance.event_id != run.event_id:
+        return
+
     # Generate character display data for the specific run
     character_display_data = instance.show(run)
 
