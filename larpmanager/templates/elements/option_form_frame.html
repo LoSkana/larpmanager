@@ -1,0 +1,39 @@
+{% extends "utils.html" %}
+{% load i18n tz show_tags static %}
+{% block body_class %}
+    floating_iframe
+{% endblock body_class %}
+{% block title %}
+{% endblock title %}
+{% block info %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/form/errors.html" %}
+    <form id="option_form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form_container auto_resize">
+            <table>
+                {% include "elements/form/inner.html" %}
+            </table>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="{% trans "Confirm" %}" class="btn-save">
+            <button type="button" class="btn-cancel">{% trans "Cancel" %}</button>
+        </div>
+    </form>
+{% endblock content %}
+{% block js2 %}
+    <script>
+    $(document).ready(function() {
+        // Handle cancel button click
+        $('.btn-cancel').on('click', function(e) {
+            e.preventDefault();
+            // Close the popup by sending message to parent
+            if (window.parent) {
+                window.parent.postMessage({type: 'option_cancelled'}, '*');
+            }
+            return false;
+        });
+    });
+    </script>
+{% endblock js2 %}
