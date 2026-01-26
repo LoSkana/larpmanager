@@ -4725,30 +4725,6 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-msgid "Change"
-msgstr ""
-
-msgid "Edit your character's data"
-msgstr ""
-
-msgid "Buy skills for your character"
-msgstr ""
-
-msgid "Customize"
-msgstr ""
-
-msgid "Modify some character elements to make it yours"
-msgstr ""
-
-msgid "Fill in your character's relationships"
-msgstr ""
-
-msgid "Questions"
-msgstr ""
-
-msgid "Write here questions about your character directly to the authors"
-msgstr ""
-
 msgid "View Details"
 msgstr ""
 
@@ -5790,6 +5766,9 @@ msgid "All comunications"
 msgstr ""
 
 msgid "No comunications"
+msgstr ""
+
+msgid "Questions"
 msgstr ""
 
 msgid ""
@@ -9429,6 +9408,27 @@ msgid "Your character is"
 msgstr ""
 
 msgid "Your characters are"
+msgstr ""
+
+msgid "Access you character sheet"
+msgstr ""
+
+msgid "Edit your character's details"
+msgstr ""
+
+msgid "Buy skills for your character"
+msgstr ""
+
+msgid "Customize"
+msgstr ""
+
+msgid "Modify the character details to make it yours"
+msgstr ""
+
+msgid "Fill in your character's relationships"
+msgstr ""
+
+msgid "Write here questions about your character directly to the authors"
 msgstr ""
 
 msgid "Create your character"
