@@ -24,8 +24,10 @@
                 {% endif %}
             </a>
         {% elif registration.tot_iscr > registration.tot_payed %}
-            {% trans "No additional payments are required at this time" %},
-            <a href="{% url 'accounting_registration' registration.uuid %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
+            {% if run_status.can_pay %}
+                {% trans "No additional payments are required at this time" %},
+                <a href="{% url 'accounting_registration' registration.uuid %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
+            {% endif %}
         {% endif %}
     </span>
 {% endif %}
