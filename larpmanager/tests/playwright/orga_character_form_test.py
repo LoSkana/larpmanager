@@ -335,7 +335,7 @@ def add_field_restricted(page: Any) -> None:
     page.locator('[id="u8"]').get_by_role("link", name="").click()
 
     page.locator("#options-iframe").content_frame.get_by_role("link", name="").click()
-    page.locator("#options-iframe").content_frame.ocator('[id="u7"]').get_by_role("link", name="").click()
+    page.locator("#options-iframe").content_frame.locator('[id="u7"]').get_by_role("link", name="").click()
     just_wait(page, big=True)
     iframe = page.locator("#uglipop_popbox iframe").content_frame
     iframe.locator("#id_name").click()
