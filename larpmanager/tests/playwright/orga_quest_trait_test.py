@@ -126,6 +126,8 @@ def traits(page: Any, live_server: Any) -> None:
     editor.press("#")
     page.get_by_role("searchbox").fill("stru")
     page.locator(".select2-results__option").first.click()
+    just_wait(page)
+
     submit_confirm(page)
 
     # excel char finder

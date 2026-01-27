@@ -26,61 +26,61 @@
         {{ custom_text | safe }}
         <hr />
     {% endif %}
-    <div class="form_container auto_resize">
-        <p>(*) : {% trans "These fields are mandatory" %}</p>
-        <hr />
-        {% if avatar_form %}
-            <form action="{{ request.path }}"
-                  enctype="multipart/form-data"
-                  method="post"
-                  id="avatar_form">
-                {% csrf_token %}
-                <div class="centerized">
-                    <h4>{% trans "Current profile image" %}:</h4>
-                    <div class="helptext avatar_help">
-                        {% trans "Upload your profile photo" %}.
-                        {% trans "It will be shown to other participants" %}.
-                        {% trans "Please choose a clear and easily recognizable photo" %}!
-                    </div>
-                    <br />
-                    <br />
-                    <input type="button"
-                           id="change_photo"
-                           value="{% trans "Change photo" %}"
-                           class="my_toggle"
-                           tog="change-field">
-                    <input type="button" id="rotate_l_btn" value="{% trans "Rotate left" %}" \>
-                    <input type="button" id="rotate_r_btn" value="{% trans "Rotate right" %}" \>
-                    <br />
-                    <br />
-                    <div class="hide change-field">
-                        {% trans "Select the new photo to upload" %}: {{ avatar_form.image }} (maximum 10 MB)
-                        <br />
-                        <br />
-                    </div>
-                    <img id="profile"
-                         {% if profile %} src="{{ profile }}" {% else %} class="hide" {% endif %}
-                         alt="image profile" />
-                    <div id="upload_spinner" class="hide">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="sr-only">{% trans "Uploading..." %}</span>
-                        </div>
-                        <p>{% trans "Uploading image, please wait..." %}</p>
-                    </div>
-                </div>
-            </form>
-            <hr />
-        {% endif %}
+    <p>(*) : {% trans "These fields are mandatory" %}</p>
+    <hr />
+    {% if avatar_form %}
         <form action="{{ request.path }}"
               enctype="multipart/form-data"
-              method="post">
+              method="post"
+              id="avatar_form">
             {% csrf_token %}
-            <table class="mob ">
+            <div class="centerized">
+                <h4>{% trans "Current profile image" %}:</h4>
+                <div class="helptext avatar_help">
+                    {% trans "Upload your profile photo" %}.
+                    {% trans "It will be shown to other participants" %}.
+                    {% trans "Please choose a clear and easily recognizable photo" %}!
+                </div>
+                <br />
+                <br />
+                <input type="button"
+                       id="change_photo"
+                       value="{% trans "Change photo" %}"
+                       class="my_toggle"
+                       tog="change-field">
+                <input type="button" id="rotate_l_btn" value="{% trans "Rotate left" %}" \>
+                <input type="button" id="rotate_r_btn" value="{% trans "Rotate right" %}" \>
+                <br />
+                <br />
+                <div class="hide change-field">
+                    {% trans "Select the new photo to upload" %}: {{ avatar_form.image }} (maximum 10 MB)
+                    <br />
+                    <br />
+                </div>
+                <img id="profile"
+                     {% if profile %} src="{{ profile }}" {% else %} class="hide" {% endif %}
+                     alt="image profile" />
+                <div id="upload_spinner" class="hide">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">{% trans "Uploading..." %}</span>
+                    </div>
+                    <p>{% trans "Uploading image, please wait..." %}</p>
+                </div>
+            </div>
+        </form>
+        <hr />
+    {% endif %}
+    <form action="{{ request.path }}"
+          enctype="multipart/form-data"
+          method="post">
+        {% csrf_token %}
+        <div class="form_container auto_resize">
+            <table>
                 {{ form.as_table }}
             </table>
-            <input type="submit" value="Submit">
-        </form>
-    </div>
+        </div>
+        <input type="submit" value="Submit">
+    </form>
 {% endblock content %}
 {% block js %}
     <script>

@@ -1926,6 +1926,8 @@ input[type="checkbox"].checkbox_single {
   background: none;
   border: none;
   padding: 0 !important;
+  margin: 0 !important;
+  display: revert;
 }
 
 #topbar .left {
@@ -2625,20 +2627,33 @@ input[type="number"] {
   display: none;
 }
 
+#select2-id_wwyltd-container {
+  text-align: left;
+  padding-left: 40px;
+}
+
+#select2-id_wwyltd-results {
+  text-align: left;
+}
+
+#select2-id_wwyltd-results li {
+  padding: 0.5em 1em;
+}
+
 #wwyltd form {
-  margin: 0 0 0.5em 0;
+  margin: 0;
 }
 
 #wwyltd .select2-container {
   position: relative;
 }
 
-#wwyltd .select2-container::after {
+#wwyltd .select2-container::before {
   content: "\f002";
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   position: absolute;
-  right: 12px;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
@@ -2784,7 +2799,7 @@ input[type="number"] {
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1000px) {
   .new_form .auto_resize {
     width: 90%;
   }

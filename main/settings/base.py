@@ -206,6 +206,8 @@ TINYMCE_DEFAULT_CONFIG = {
     'automatic_uploads': True,
     'file_picker_types': 'image media',
     'paste_data_images': False,
+
+    # "skin_url": "/static/larpmanager/assets/tinymce/lm_skin",
 }
 
 

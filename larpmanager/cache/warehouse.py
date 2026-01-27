@@ -25,7 +25,7 @@ from typing import Any
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
-from larpmanager.models.miscellanea import WarehouseItem
+from larpmanager.models.miscellanea import WarehouseItem, WarehouseTag
 
 logger = logging.getLogger(__name__)
 
@@ -166,7 +166,7 @@ def on_warehouse_item_tags_m2m_changed(
     sender: type,  # noqa: ARG001
     instance: WarehouseItem,
     action: str,
-    pk_set: set[int] | None,  # noqa: ARG001
+    pk_set: set[int] | None,
     **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle warehouse item-tag relationship changes.
@@ -175,9 +175,9 @@ def on_warehouse_item_tags_m2m_changed(
 
     Args:
         sender: The through model class that manages the M2M relationship
-        instance: The WarehouseItem instance whose tags are changing
+        instance: The WarehouseItem or WarehouseTag instance involved in the relationship
         action: The type of change being performed on the relationship
-        pk_set: Set of primary keys of the WarehouseTag objects being affected
+        pk_set: Set of primary keys of the related objects being affected
         **kwargs: Additional keyword arguments passed by the Django signal system
 
     Returns:
@@ -185,4 +185,16 @@ def on_warehouse_item_tags_m2m_changed(
 
     """
     if action in ("post_add", "post_remove", "post_clear"):
-        update_warehouse_item_cache(instance)
+        if isinstance(instance, WarehouseTag):
+            # Instance is a WarehouseTag, need to update all affected items
+            if action == "post_clear":
+                # For post_clear on a tag, pk_set is None, so clear entire cache
+                clear_association_warehouse_cache(instance.association_id)
+            elif pk_set:
+                # Update cache for each affected item
+                items_to_update = WarehouseItem.objects.filter(id__in=pk_set)
+                for item in items_to_update:
+                    update_warehouse_item_cache(item)
+        else:
+            # Instance is a WarehouseItem (when item.tags.add/remove is used)
+            update_warehouse_item_cache(instance)
