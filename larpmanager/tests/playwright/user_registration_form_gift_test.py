@@ -115,7 +115,7 @@ def field_choice(page: Any, live_server: Any) -> None:
     page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").click()
     page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").fill("10")
     page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").press("Tab")
-    page.locator("iframe").content_frame.locator("#id_max_available").fill("2")
+    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_max_available").fill("2")
     page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
     just_wait(page)
 
@@ -162,8 +162,8 @@ def field_multiple(page: Any, live_server: Any) -> None:
     page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").click()
     page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").press("Home")
     page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").fill("10")
-    page.locator("iframe").content_frame.locator("#id_max_available").click()
-    page.locator("iframe").content_frame.locator("#id_max_available").fill("2")
+    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_max_available").click()
+    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_max_available").fill("2")
     page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
     just_wait(page)
 
@@ -176,7 +176,8 @@ def field_multiple(page: Any, live_server: Any) -> None:
     page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
     just_wait(page)
 
-    page.locator('[id="u4"]').get_by_role("link", name="").click()
+    page.locator("#options-iframe").content_frame.locator('[id="u4"]').get_by_role("link", name="").click()
+    just_wait(page)
     submit_confirm(page)
     page.locator('[id="u3"]').get_by_role("link", name="").click()
     page.get_by_role("link", name="New").click()

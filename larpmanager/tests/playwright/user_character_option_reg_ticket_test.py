@@ -86,9 +86,9 @@ def prepare(page: Any) -> None:
     just_wait(page)
     page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
     page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("st")
-    page.locator("iframe").content_frame.get_by_role("searchbox").click()
-    page.locator("iframe").content_frame.get_by_role("searchbox").fill("st")
-    page.locator("iframe").content_frame.locator(".select2-results__option").first.click()
+    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("searchbox").click()
+    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("searchbox").fill("st")
+    page.locator("#uglipop_popbox iframe").content_frame.locator(".select2-results__option").first.click()
     page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
     just_wait(page)
 
@@ -97,9 +97,9 @@ def prepare(page: Any) -> None:
 
     page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
     page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("bmb")
-    page.locator("iframe").content_frame.get_by_role("searchbox").click()
-    page.locator("iframe").content_frame.get_by_role("searchbox").fill("bam")
-    page.locator("iframe").content_frame.locator(".select2-results__option").first.click()
+    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("searchbox").click()
+    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("searchbox").fill("bam")
+    page.locator("#uglipop_popbox iframe").content_frame.locator(".select2-results__option").first.click()
     page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
     just_wait(page)
 

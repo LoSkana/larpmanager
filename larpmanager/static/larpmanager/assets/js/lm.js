@@ -37,6 +37,51 @@ window.jump_to = function(target) {
     }, 0);
 }
 
+/**
+ * Open an uglipop modal with an iframe and a close button
+ * @param {string} iframeUrl - The URL to load in the iframe
+ * @param {string} modalClass - CSS class for the modal (default: 'popup_option')
+ * @param {function} onClose - Optional callback function to call when modal is closed
+ */
+window.openIframeModal = function(iframeUrl, modalClass, onClose) {
+    modalClass = modalClass || 'popup_option';
+
+    const frame = `
+        <div class="frame-container">
+            <button class="modal-close-btn">
+                &times;
+            </button>
+            <iframe src="${iframeUrl}" width="100%" height="100%" style="border: none;"></iframe>
+        </div>
+    `;
+
+    uglipop({
+        class: modalClass,
+        source: 'html',
+        content: frame
+    });
+
+    // Attach click handler to close button after modal is opened
+    setTimeout(function() {
+        $('.modal-close-btn').on('click', function(e) {
+            e.preventDefault();
+
+            // Close the popup by clicking overlay
+            const overlay = document.getElementById('uglipop_overlay');
+            if (overlay) {
+                overlay.click();
+            }
+
+            // Call optional callback
+            if (onClose && typeof onClose === 'function') {
+                onClose();
+            }
+
+            return false;
+        });
+    }, 100);
+}
+
 function sidebar_mobile() {
     $('body').toggleClass('is-sidebar-visible');
     $('#sidebar-mobile-open').toggle();
@@ -118,9 +163,7 @@ $(document).ready(function() {
             newUrl += '#' + hash;
         }
 
-        frame = "<iframe src='{0}' width='100%' height='100%'></iframe>".format(newUrl);
-
-        uglipop({class:'popup_tutorial', source:'html', content: frame});
+        window.openIframeModal(newUrl, 'popup_tutorial');
 
     });
 

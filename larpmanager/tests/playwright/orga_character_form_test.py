@@ -311,6 +311,7 @@ def add_field_restricted(page: Any) -> None:
     page.locator("#id_name").fill("restricted")
     page.locator("#id_name").press("Tab")
     page.locator("#id_description").fill("restricted text")
+
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("all")
@@ -318,6 +319,7 @@ def add_field_restricted(page: Any) -> None:
     page.locator("#id_description").fill("all descr")
     page.locator("#id_description").press("Tab")
     submit_confirm(page)
+
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("few")
@@ -326,10 +328,13 @@ def add_field_restricted(page: Any) -> None:
     page.locator("#id_description").press("Tab")
     page.locator("#id_max_available").fill("1")
     submit_confirm(page)
+
     submit_confirm(page)
+
     page.locator('[id="u8"]').get_by_role("link", name="").click()
     page.locator('[id="u8"]').get_by_role("link", name="").click()
     page.get_by_role("link", name="").click()
+
     page.locator('[id="u7"]').get_by_role("link", name="").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("w")
@@ -339,6 +344,7 @@ def add_field_restricted(page: Any) -> None:
     page.locator("#id_description").press("Home")
     page.locator("#id_description").fill("only descr")
     submit_confirm(page)
+
     submit_confirm(page)
 
 

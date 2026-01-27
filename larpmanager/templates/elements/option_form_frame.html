@@ -18,22 +18,6 @@
         </div>
         <div class="form-actions">
             <input type="submit" value="{% trans "Confirm" %}" class="btn-save">
-            <button type="button" class="btn-cancel">{% trans "Cancel" %}</button>
         </div>
     </form>
 {% endblock content %}
-{% block js2 %}
-    <script>
-    $(document).ready(function() {
-        // Handle cancel button click
-        $('.btn-cancel').on('click', function(e) {
-            e.preventDefault();
-            // Close the popup by sending message to parent
-            if (window.parent) {
-                window.parent.postMessage({type: 'option_cancelled'}, '*');
-            }
-            return false;
-        });
-    });
-    </script>
-{% endblock js2 %}
