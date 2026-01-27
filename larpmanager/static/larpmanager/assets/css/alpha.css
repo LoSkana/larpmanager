@@ -207,7 +207,13 @@ h1.home {
 
 @media screen and (max-width: 736px) {
   h1.home {
-    font-size: 1.25em;
+    font-size: 0.9em;
+    padding: 0 3em;
+  }
+
+  h2.home {
+    width: 90%;
+    margin: 0 auto !important;
   }
 
   #main h5 {
@@ -469,6 +475,8 @@ label {
     padding: 1em 0 0.5em 0;
     margin: 0;
     font-size: 80%;
+    display: flex;
+    flex-direction: column-reverse;
   }
 
   header {
