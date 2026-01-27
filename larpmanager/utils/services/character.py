@@ -400,11 +400,11 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
     context["sheet_factions"] = []
 
     # Prepare writing fields query data for faction-applicable questions
-    visible_writing_fields(context, QuestionApplicable.FACTION, only_visible=only_visible)
+    fields_data = visible_writing_fields(context, QuestionApplicable.FACTION, only_visible=only_visible)
 
     # Build comprehensive answer mapping: faction_id -> {question_id -> text/choices}
-    faction_ids = all_factions.keys()
-    faction_answers_map = _get_factions_answers_choices(context, faction_ids)
+    faction_ids = list(all_factions.keys())
+    faction_answers_map = _get_factions_answers_choices(context, fields_data, faction_ids)
 
     # Process each faction and prepare display data
     for faction_id, faction_data in all_factions.items():
@@ -415,8 +415,8 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
         faction_writing_fields = faction_answers_map.get(faction_id, {})
         faction_data.update(
             {
-                "questions": context.get("questions", {}),
-                "options": context.get("options", {}),
+                "questions": fields_data.get("questions", {}),
+                "options": fields_data.get("options", {}),
                 "fields": faction_writing_fields,
             },
         )
@@ -425,12 +425,12 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
         context["sheet_factions"].append(faction_data)
 
 
-def _get_factions_answers_choices(context: dict, faction_ids: list) -> dict:
+def _get_factions_answers_choices(context: dict, fields_data: dict, faction_ids: list) -> dict:
     """Build comprehensive answer mapping: faction_id -> {question_id -> text/choices}."""
     # Determine which questions should be visible based on configuration
     visible_question_ids = []
-    if "questions" in context:
-        for question_id in context["questions"]:
+    if "questions" in fields_data:
+        for question_id in fields_data["questions"]:
             question_config_key = str(question_id)
             # Skip questions that are not configured to show for factions
             if "show_all" not in context and question_config_key not in context.get("show_faction", {}):

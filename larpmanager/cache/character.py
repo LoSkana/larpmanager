@@ -202,12 +202,12 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
         return
 
     # Retrieve visible question IDs and populate context with questions
-    visible_writing_fields(context, QuestionApplicable.CHARACTER, only_visible=only_visible)
-    if "questions" not in context:
+    fields_data = visible_writing_fields(context, QuestionApplicable.CHARACTER, only_visible=only_visible)
+    if "questions" not in fields_data:
         return
 
     # Extract question IDs from context for database filtering
-    question_uuids = context["questions"].keys()
+    question_uuids = fields_data["questions"].keys()
 
     # Query the Character table to get id -> number mapping for the event
     character_id_mapping = dict(context["event"].get_elements(Character).values_list("id", "number"))
@@ -320,12 +320,12 @@ def get_writing_element_fields_batch(
 
     """
     # Apply visibility filtering to populate context with visible fields
-    visible_writing_fields(context, applicable, only_visible=only_visible)
+    fields_data = visible_writing_fields(context, applicable, only_visible=only_visible)
 
     # Filter questions based on visibility configuration
     # Only include questions that are explicitly shown or when show_all is enabled
     visible_question_ids = []
-    for question_uuid in context["questions"]:
+    for question_uuid in fields_data["questions"]:
         question_config_key = str(question_uuid)
         # Skip questions not marked as visible unless showing all
         if "show_all" not in context and question_config_key not in context.get(f"show_{feature_name}", {}):
@@ -363,8 +363,8 @@ def get_writing_element_fields_batch(
     # Return full format for each element
     return {
         element_id: {
-            "questions": context["questions"],
-            "options": context["options"],
+            "questions": fields_data["questions"],
+            "options": fields_data["options"],
             "fields": fields,
         }
         for element_id, fields in results.items()
