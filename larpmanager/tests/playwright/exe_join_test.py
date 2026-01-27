@@ -59,7 +59,7 @@ def test_exe_join(pw_page: Any) -> None:
     go_to(page, live_server, "/join")
 
     # check auto slug
-    name_input = page.get_by_role("textbox", name="Name", exact=True)
+    name_input = page.get_by_role("textbox", name="Organization name", exact=True)
     name_input.fill("prova°°à!* cs")
     expect(page.locator("#slug")).to_have_value("provaacs")
     page.locator("#slug").click()
@@ -78,4 +78,4 @@ def test_exe_join(pw_page: Any) -> None:
     just_wait(page)
     go_to(page, live_server, "/debug/prova")
 
-    expect_normalized(page, page.locator("#banner"), "Prova Larp")
+    expect_normalized(page, page.locator("#banner"), "welcome to larpmanager!")

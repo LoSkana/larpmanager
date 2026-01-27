@@ -29,7 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, logout, login_orga, login_user, submit_confirm
+from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, logout, login_orga, \
+    login_user, submit_confirm, new_option, submit_option
 
 pytestmark = pytest.mark.e2e
 
@@ -98,23 +99,17 @@ def setup(live_server: Any, page: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Class")
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Mage")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Mage")
+    submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Rogue")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Rogue")
+    submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Cleric")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Cleric")
+    submit_option(page, iframe)
 
     submit_confirm(page)
 

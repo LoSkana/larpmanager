@@ -3350,6 +3350,9 @@ msgstr "Dobrovolné dárcovství"
 msgid "Volunteer Registry"
 msgstr "Registr dobrovolníků"
 
+msgid "Your date of birth"
+msgstr "Vaše datum narození"
+
 msgid "by the deadline of"
 msgstr "do termínu"
 
@@ -4736,6 +4739,9 @@ msgstr "Nesmíte se zaregistrovat"
 msgid "Your account is now activated"
 msgstr "Váš účet je nyní aktivní"
 
+msgid "Your last name or family name"
+msgstr "Vaše příjmení nebo rodové jméno"
+
 msgid "check excessive relationships"
 msgstr "zkontrolovat další zprávy"
 
@@ -5268,6 +5274,9 @@ msgstr "nechat prázdné pro zahájení nové kampaně"
 
 msgid "Cast your vote for the new Executive"
 msgstr "Hlasujte pro nového výkonného ředitele"
+
+msgid "City and country where you were born"
+msgstr "Město a země, kde jste se narodili"
 
 msgid "Confirmation of registration request"
 msgstr "Potvrzení žádosti o registraci"
@@ -5866,6 +5875,9 @@ msgstr "Pozor! Tuto položku upravují další uživatelé"
 
 msgid "You can upload data directly from CSV file"
 msgstr "Data můžete nahrát přímo ze souboru CSV"
+
+msgid "Your first name as you prefer to be called"
+msgstr "Vaše křestní jméno, jak si přejete být oslovován"
 
 msgid "main grouping / affiliation for characters"
 msgstr "hlavní seskupení / příslušnost postav"
@@ -6659,6 +6671,9 @@ msgstr "Vyberte, které prvky se mají zkopírovat z které jiné události"
 msgid "The character have missing values in mandatory fields"
 msgstr "Znak má chybějící hodnoty v povinných polích"
 
+msgid "The date when your identification document was issued"
+msgstr "Datum vydání vašeho dokladu totožnosti"
+
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Byl uveden celkový počet losů, které budou vylosovány"
 
@@ -7437,6 +7452,9 @@ msgstr "Tato stránka shrnuje frakce a zápletky uvedené postavy"
 
 msgid "Write here questions about your character directly to the authors"
 msgstr "Napište sem otázky týkající se vaší postavy přímo autorům"
+
+msgid "Your full residential address including street, city, and country"
+msgstr "Úplná adresa bydliště včetně ulice, města a země"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "zda si je postava vědoma identity druhého rysu"

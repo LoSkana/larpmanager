@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, logout, expect_normalized, submit_confirm
+from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, logout, expect_normalized, \
+    submit_confirm, new_option, submit_option
 
 pytestmark = pytest.mark.e2e
 
@@ -82,26 +83,22 @@ def prepare(page: Any) -> None:
     page.locator("#id_name").fill("choose")
     page.locator("#id_status").select_option("m")
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("st")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("searchbox").click()
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("searchbox").fill("st")
-    page.locator("#uglipop_popbox iframe").content_frame.locator(".select2-results__option").first.click()
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("st")
+    iframe.get_by_role("searchbox").click()
+    iframe.get_by_role("searchbox").fill("st")
+    iframe.locator(".select2-results__option").first.click()
+    submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
+    iframe = new_option(page)
 
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("bmb")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("searchbox").click()
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("searchbox").fill("bam")
-    page.locator("#uglipop_popbox iframe").content_frame.locator(".select2-results__option").first.click()
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("bmb")
+    iframe.get_by_role("searchbox").click()
+    iframe.get_by_role("searchbox").fill("bam")
+    iframe.locator(".select2-results__option").first.click()
+    submit_option(page, iframe)
 
     expect_normalized(page, page.locator("#options"), "st Standard bmb bambi")
     submit_confirm(page)

@@ -3350,6 +3350,9 @@ msgstr "Frivillig donasjon"
 msgid "Volunteer Registry"
 msgstr "Frivillighetsregisteret"
 
+msgid "Your date of birth"
+msgstr "Din fødselsdato"
+
 msgid "by the deadline of"
 msgstr "innen fristen"
 
@@ -4736,6 +4739,9 @@ msgstr "Du har ikke lov til å registrere deg"
 msgid "Your account is now activated"
 msgstr "Kontoen din er nå aktiv"
 
+msgid "Your last name or family name"
+msgstr "Etternavnet eller familienavnet ditt"
+
 msgid "check excessive relationships"
 msgstr "sjekk ekstra rapporter"
 
@@ -5268,6 +5274,9 @@ msgstr "la stå tom for å starte en ny kampanje"
 
 msgid "Cast your vote for the new Executive"
 msgstr "Gi din stemme til den nye direktøren"
+
+msgid "City and country where you were born"
+msgstr "By og land der du ble født"
 
 msgid "Confirmation of registration request"
 msgstr "Bekreftelse av registreringsforespørsel"
@@ -5868,6 +5877,9 @@ msgstr "Advarsel! Andre brukere redigerer dette elementet"
 
 msgid "You can upload data directly from CSV file"
 msgstr "Du kan laste opp data direkte fra en CSV-fil"
+
+msgid "Your first name as you prefer to be called"
+msgstr "Fornavnet ditt, slik du foretrekker å bli kalt"
 
 msgid "main grouping / affiliation for characters"
 msgstr "hovedgruppering/tilhørighet for karakterer"
@@ -6661,6 +6673,9 @@ msgstr "Velg hvilke elementer som skal kopieres fra hvilken annen hendelse"
 
 msgid "The character have missing values in mandatory fields"
 msgstr "Tegnet har manglende verdier i obligatoriske felt"
+
+msgid "The date when your identification document was issued"
+msgstr "Datoen da identifikasjonsdokumentet ditt ble utstedt"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Det totale antallet billetter som skal trekkes ut er angitt"
@@ -7475,6 +7490,9 @@ msgstr ""
 
 msgid "Write here questions about your character directly to the authors"
 msgstr "Skriv her spørsmål om karakteren din direkte til forfatterne"
+
+msgid "Your full residential address including street, city, and country"
+msgstr "Fullstendig bostedsadresse, inkludert gate, by og land"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "om karakteren er klar over identiteten til det andre trekket"

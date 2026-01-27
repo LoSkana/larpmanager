@@ -3350,6 +3350,9 @@ msgstr "Freiwillige Spende"
 msgid "Volunteer Registry"
 msgstr "Freiwilligen-Register"
 
+msgid "Your date of birth"
+msgstr "Ihr Geburtsdatum"
+
 msgid "by the deadline of"
 msgstr "innerhalb der Frist von"
 
@@ -4736,6 +4739,9 @@ msgstr "Du darfst dich nicht anmelden"
 msgid "Your account is now activated"
 msgstr "Ihr Konto ist jetzt aktiv"
 
+msgid "Your last name or family name"
+msgstr "Ihr Nachname oder Familienname"
+
 msgid "check excessive relationships"
 msgstr "zusätzliche Berichte prüfen"
 
@@ -5269,6 +5275,9 @@ msgstr "leer lassen, um eine neue Kampagne zu starten"
 
 msgid "Cast your vote for the new Executive"
 msgstr "Geben Sie Ihre Stimme für die neue Exekutive ab"
+
+msgid "City and country where you were born"
+msgstr "Stadt und Land, in dem Sie geboren wurden"
 
 msgid "Confirmation of registration request"
 msgstr "Bestätigung des Registrierungsantrags"
@@ -5870,6 +5879,9 @@ msgstr "Warnung! Dieser Artikel wird von anderen Benutzern bearbeitet"
 
 msgid "You can upload data directly from CSV file"
 msgstr "Sie können Daten direkt aus einer CSV-Datei hochladen"
+
+msgid "Your first name as you prefer to be called"
+msgstr "Ihr Vorname, wie Sie lieber genannt werden möchten"
 
 msgid "main grouping / affiliation for characters"
 msgstr "Hauptgruppierung/Zugehörigkeit für Zeichen"
@@ -6706,6 +6718,9 @@ msgstr ""
 
 msgid "The character have missing values in mandatory fields"
 msgstr "Das Zeichen hat fehlende Werte in Pflichtfeldern"
+
+msgid "The date when your identification document was issued"
+msgstr "Das Datum, an dem Ihr Ausweis ausgestellt wurde"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Die Gesamtzahl der zu verlosenden Lose ist angegeben"
@@ -7663,6 +7678,9 @@ msgstr ""
 
 msgid "Write here questions about your character directly to the authors"
 msgstr "Schreiben Sie hier Fragen zu Ihrer Figur direkt an die Autoren"
+
+msgid "Your full residential address including street, city, and country"
+msgstr "Ihre vollständige Wohnadresse mit Straße, Stadt und Land"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "ob der Charakter die Identität des anderen Merkmals kennt"

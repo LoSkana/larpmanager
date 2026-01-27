@@ -25,10 +25,12 @@
           enctype="multipart/form-data"
           method="post">
         {% csrf_token %}
-        <table class="mob ">
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="{% trans "Submit" %}">
+        <div class="form_container auto_resize">
+            <table>
+                {{ form.as_table }}
+            </table>
+            <input type="submit" id="id_submit" value="{% trans "Submit" %}">
+        </div>
     </form>
     <p>(We strongly recommend using a desktop computer rather than a mobile device)</p>
 {% endblock content %}

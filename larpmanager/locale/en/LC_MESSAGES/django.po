@@ -3707,7 +3707,13 @@ msgstr ""
 msgid "Preferred navigation language"
 msgstr ""
 
+msgid "Your first name as you prefer to be called"
+msgstr ""
+
 msgid "Surname"
+msgstr ""
+
+msgid "Your last name or family name"
 msgstr ""
 
 msgid "Alias"
@@ -3774,7 +3780,13 @@ msgstr ""
 msgid "Birth date"
 msgstr ""
 
+msgid "Your date of birth"
+msgstr ""
+
 msgid "Birth place"
+msgstr ""
+
+msgid "City and country where you were born"
 msgstr ""
 
 msgid ""
@@ -3798,12 +3810,18 @@ msgstr ""
 msgid "Date of issue of the document"
 msgstr ""
 
+msgid "The date when your identification document was issued"
+msgstr ""
+
 msgid "Date of expiration of the document"
 msgstr ""
 
 msgid ""
 "Leave blank if the document has no expiration date - Please check that it "
 "does not expire before the event you want to signup up for."
+msgstr ""
+
+msgid "Your full residential address including street, city, and country"
 msgstr ""
 
 msgid "Accessibility"

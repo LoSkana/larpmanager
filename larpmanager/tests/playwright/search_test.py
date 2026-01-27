@@ -29,7 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, new_option, \
+    submit_option
 
 pytestmark = pytest.mark.e2e
 
@@ -146,19 +147,15 @@ def prepare(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("color")
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("red")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("red")
+    submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("blue")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("blue")
+    submit_option(page, iframe)
 
     page.get_by_text("After confirmation, add").click()
     submit_confirm(page)
@@ -166,26 +163,20 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("tag")
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("wunder")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("wunder")
+    submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("zapyr")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("zapyr")
+    submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("qerfi")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("qerfi")
+    submit_option(page, iframe)
 
     page.locator("#id_visibility").select_option("s")
     submit_confirm(page)

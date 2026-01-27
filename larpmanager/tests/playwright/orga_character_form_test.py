@@ -31,14 +31,14 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait,
-    fill_tinymce,
-    go_to,
-    login_orga,
-    login_user,
-    logout,
-    submit_confirm,
-    expect_normalized,
-)
+                                     fill_tinymce,
+                                     go_to,
+                                     login_orga,
+                                     login_user,
+                                     logout,
+                                     submit_confirm,
+                                     expect_normalized, new_option, submit_option,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -312,38 +312,40 @@ def add_field_restricted(page: Any) -> None:
     page.locator("#id_name").press("Tab")
     page.locator("#id_description").fill("restricted text")
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("all")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_description").fill("all descr")
-    page.locator("#id_description").press("Tab")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("all")
+    iframe.locator("#id_name").press("Tab")
+    iframe.locator("#id_description").fill("all descr")
+    iframe.locator("#id_description").press("Tab")
+    submit_option(page, iframe)
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("few")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_description").fill("few descr")
-    page.locator("#id_description").press("Tab")
-    page.locator("#id_max_available").fill("1")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("few")
+    iframe.locator("#id_name").press("Tab")
+    iframe.locator("#id_description").fill("few descr")
+    iframe.locator("#id_description").press("Tab")
+    iframe.locator("#id_max_available").fill("1")
+    submit_option(page, iframe)
 
     submit_confirm(page)
 
     page.locator('[id="u8"]').get_by_role("link", name="").click()
     page.locator('[id="u8"]').get_by_role("link", name="").click()
-    page.get_by_role("link", name="").click()
 
-    page.locator('[id="u7"]').get_by_role("link", name="").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("w")
-    page.locator("#id_name").press("Home")
-    page.locator("#id_name").fill("only")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_description").press("Home")
-    page.locator("#id_description").fill("only descr")
-    submit_confirm(page)
+    page.locator("#options-iframe").content_frame.get_by_role("link", name="").click()
+    page.locator("#options-iframe").content_frame.ocator('[id="u7"]').get_by_role("link", name="").click()
+    just_wait(page, big=True)
+    iframe = page.locator("#uglipop_popbox iframe").content_frame
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("w")
+    iframe.locator("#id_name").press("Home")
+    iframe.locator("#id_name").fill("only")
+    iframe.locator("#id_name").press("Tab")
+    iframe.locator("#id_description").press("Home")
+    iframe.locator("#id_description").fill("only descr")
+    submit_option(page, iframe)
 
     submit_confirm(page)
 
@@ -357,32 +359,36 @@ def add_field_multiple(page: Any) -> None:
     page.locator("#id_description").fill("multiple descr")
     page.locator("#id_max_length").click()
     page.locator("#id_max_length").fill("2")
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("all")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_description").fill("all descr")
-    submit_confirm(page)
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("many")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_description").fill("many descr")
-    page.locator("#id_description").press("Tab")
-    page.locator("#id_max_available").fill("2")
-    submit_confirm(page)
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("few")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_description").fill("few")
-    page.locator("#id_description").press("Tab")
-    page.locator("#id_description").click()
-    page.locator("#id_description").press("ArrowRight")
-    page.locator("#id_description").fill("few descr")
-    page.locator("#id_description").press("Tab")
-    page.locator("#id_max_available").fill("1")
-    submit_confirm(page)
+
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("all")
+    iframe.locator("#id_name").press("Tab")
+    iframe.locator("#id_description").fill("all descr")
+    submit_option(page, iframe)
+
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("many")
+    iframe.locator("#id_name").press("Tab")
+    iframe.locator("#id_description").fill("many descr")
+    iframe.locator("#id_description").press("Tab")
+    iframe.locator("#id_max_available").fill("2")
+    submit_option(page, iframe)
+
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("few")
+    iframe.locator("#id_name").press("Tab")
+    iframe.locator("#id_description").fill("few")
+    iframe.locator("#id_description").press("Tab")
+    iframe.locator("#id_description").click()
+    iframe.locator("#id_description").press("ArrowRight")
+    iframe.locator("#id_description").fill("few descr")
+    iframe.locator("#id_description").press("Tab")
+    iframe.locator("#id_max_available").fill("1")
+    submit_option(page, iframe)
+
     submit_confirm(page)
 
 
@@ -394,21 +400,24 @@ def add_field_available(page: Any) -> None:
     page.locator("#id_description").fill("available descr")
     page.locator("#id_description").press("Tab")
     page.locator("#id_status").press("Tab")
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("all")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_description").fill("all")
-    page.locator("#id_description").press("Tab")
-    submit_confirm(page)
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("few")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_description").fill("few descr")
-    page.locator("#id_description").press("Tab")
-    page.locator("#id_max_available").fill("2")
-    submit_confirm(page)
+
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("all")
+    iframe.locator("#id_name").press("Tab")
+    iframe.locator("#id_description").fill("all")
+    iframe.locator("#id_description").press("Tab")
+    submit_option(page, iframe)
+
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("few")
+    iframe.locator("#id_name").press("Tab")
+    iframe.locator("#id_description").fill("few descr")
+    iframe.locator("#id_description").press("Tab")
+    iframe.locator("#id_max_available").fill("2")
+    submit_option(page, iframe)
+
     submit_confirm(page)
 
 

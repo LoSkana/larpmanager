@@ -31,14 +31,14 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait,
-    go_to,
-    load_image,
-    login_orga,
-    login_user,
-    submit,
-    submit_confirm,
-    expect_normalized,
-)
+                                     go_to,
+                                     load_image,
+                                     login_orga,
+                                     login_user,
+                                     submit,
+                                     submit_confirm,
+                                     expect_normalized, new_option, submit_option,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -105,28 +105,24 @@ def field_choice(page: Any, live_server: Any) -> None:
     page.locator("#id_description").fill("")
     page.locator("#id_giftable").check()
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("prima")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").press("Tab")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_description").fill("f")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").fill("10")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").press("Tab")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_max_available").fill("2")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("prima")
+    iframe.locator("#id_name").press("Tab")
+    iframe.locator("#id_description").fill("f")
+    iframe.locator("#id_price").click()
+    iframe.locator("#id_price").click()
+    iframe.locator("#id_price").fill("10")
+    iframe.locator("#id_price").press("Tab")
+    iframe.locator("#id_max_available").fill("2")
+    submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("secondas")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_description").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_description").fill("s")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("secondas")
+    iframe.locator("#id_description").click()
+    iframe.locator("#id_description").fill("s")
+    submit_option(page, iframe)
 
     submit_confirm(page)
 
@@ -144,37 +140,31 @@ def field_multiple(page: Any, live_server: Any) -> None:
     page.locator("#id_max_length").fill("1")
     page.locator("#id_giftable").check()
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("one")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").press("Tab")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_description").fill("asdas")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("one")
+    iframe.locator("#id_name").press("Tab")
+    iframe.locator("#id_description").fill("asdas")
+    submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("twp")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").press("Tab")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_description").fill("asdas")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").press("Home")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").fill("10")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_max_available").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_max_available").fill("2")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("twp")
+    iframe.locator("#id_name").press("Tab")
+    iframe.locator("#id_description").fill("asdas")
+    iframe.locator("#id_price").click()
+    iframe.locator("#id_price").press("Home")
+    iframe.locator("#id_price").fill("10")
+    iframe.locator("#id_max_available").click()
+    iframe.locator("#id_max_available").fill("2")
+    submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("hhasd")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_description").click()
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_description").fill("sarrrr")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("hhasd")
+    iframe.locator("#id_description").click()
+    iframe.locator("#id_description").fill("sarrrr")
+    submit_option(page, iframe)
 
     page.locator("#options-iframe").content_frame.locator('[id="u4"]').get_by_role("link", name="").click()
     just_wait(page)

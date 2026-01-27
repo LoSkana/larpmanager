@@ -36,7 +36,7 @@ from larpmanager.tests.utils import (
     fill_tinymce,
     go_to,
     login_orga,
-    submit_confirm,
+    submit_confirm, new_option, submit_option,
 )
 
 pytestmark = pytest.mark.e2e
@@ -99,25 +99,19 @@ def create_character_form(page: Any, live_server: Any) -> None:
     page.locator("#id_description").fill("Choose one option")
 
     # Add option 1
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#id_name").fill("Option A")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Option A")
+    submit_option(page, iframe)
 
     # Add option 2
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Option B")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Option B")
+    submit_option(page, iframe)
 
     # Add option 3
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Option C")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Option C")
+    submit_option(page, iframe)
 
     submit_confirm(page)
 
@@ -129,25 +123,19 @@ def create_character_form(page: Any, live_server: Any) -> None:
     page.locator("#id_max_length").fill("3")
 
     # Add option 1
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Choice X")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Choice X")
+    submit_option(page, iframe)
 
     # Add option 2
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Choice Y")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Choice Y")
+    submit_option(page, iframe)
 
     # Add option 3
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Choice Z")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Choice Z")
+    submit_option(page, iframe)
 
     submit_confirm(page)
 

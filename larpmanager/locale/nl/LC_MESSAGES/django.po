@@ -3350,6 +3350,9 @@ msgstr "Vrijwillige donatie"
 msgid "Volunteer Registry"
 msgstr "Vrijwilligers Register"
 
+msgid "Your date of birth"
+msgstr "Je geboortedatum"
+
 msgid "by the deadline of"
 msgstr "voor de deadline van"
 
@@ -4736,6 +4739,9 @@ msgstr "Je mag je niet aanmelden"
 msgid "Your account is now activated"
 msgstr "Je account is nu actief"
 
+msgid "Your last name or family name"
+msgstr "Je achternaam of familienaam"
+
 msgid "check excessive relationships"
 msgstr "extra rapporten controleren"
 
@@ -5268,6 +5274,9 @@ msgstr "leeg laten om een nieuwe campagne te starten"
 
 msgid "Cast your vote for the new Executive"
 msgstr "Breng je stem uit voor de nieuwe Executive"
+
+msgid "City and country where you were born"
+msgstr "Stad en land waar je geboren bent"
 
 msgid "Confirmation of registration request"
 msgstr "Bevestiging van registratieaanvraag"
@@ -5868,6 +5877,9 @@ msgstr "Waarschuwing! Andere gebruikers bewerken dit item"
 
 msgid "You can upload data directly from CSV file"
 msgstr "Je kunt gegevens rechtstreeks uploaden vanuit een CSV-bestand"
+
+msgid "Your first name as you prefer to be called"
+msgstr "Je voornaam zoals je liever genoemd wilt worden"
 
 msgid "main grouping / affiliation for characters"
 msgstr "hoofdgroepering / affiliatie voor personages"
@@ -6667,6 +6679,9 @@ msgstr ""
 
 msgid "The character have missing values in mandatory fields"
 msgstr "Het teken heeft ontbrekende waarden in verplichte velden"
+
+msgid "The date when your identification document was issued"
+msgstr "De datum waarop je identiteitsbewijs is uitgegeven"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Het totale aantal te verloten tickets is aangegeven"
@@ -7531,6 +7546,9 @@ msgstr ""
 
 msgid "Write here questions about your character directly to the authors"
 msgstr "Schrijf hier vragen over je personage rechtstreeks aan de auteurs"
+
+msgid "Your full residential address including street, city, and country"
+msgstr "Je volledige woonadres inclusief straat, stad en land"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr ""

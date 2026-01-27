@@ -3350,6 +3350,9 @@ msgstr "Donazione volontaria"
 msgid "Volunteer Registry"
 msgstr "Registro Volontari"
 
+msgid "Your date of birth"
+msgstr "Data di nascita"
+
 msgid "by the deadline of"
 msgstr "entro la scadenza di"
 
@@ -4736,6 +4739,9 @@ msgstr "Non è consentito iscriversi"
 msgid "Your account is now activated"
 msgstr "Il tuo account ora è attivo"
 
+msgid "Your last name or family name"
+msgstr "Il tuo cognome o nome di famiglia"
+
 msgid "check excessive relationships"
 msgstr "check relazioni in più"
 
@@ -5268,6 +5274,9 @@ msgstr "lascia vuoto per avviare una nuova campagna"
 
 msgid "Cast your vote for the new Executive"
 msgstr "Fai la tua votazione per il nuovo Direttivo"
+
+msgid "City and country where you were born"
+msgstr "Città e paese di nascita"
 
 msgid "Confirmation of registration request"
 msgstr "Conferma richiesta iscrizione"
@@ -5866,6 +5875,9 @@ msgstr "Attenzione! Altri utenti stanno modificando questo elemento"
 
 msgid "You can upload data directly from CSV file"
 msgstr "È possibile caricare i dati direttamente da un file CSV"
+
+msgid "Your first name as you prefer to be called"
+msgstr "Il tuo nome di battesimo, oppure come preferisci essere chiamato"
 
 msgid "main grouping / affiliation for characters"
 msgstr "raggruppamento/appartenenza principale per i personaggi"
@@ -6664,6 +6676,9 @@ msgstr "Seleziona quali elementi copiare, da quale altro evento"
 
 msgid "The character have missing values in mandatory fields"
 msgstr "Il personaggio ha valori mancanti nei campi obbligatori"
+
+msgid "The date when your identification document was issued"
+msgstr "La data di emissione del documento di identificazione"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "E' stato indicato il numero di biglietti totali da estrarre"
@@ -7539,6 +7554,10 @@ msgstr ""
 
 msgid "Write here questions about your character directly to the authors"
 msgstr "Scrivi qui domande sul tuo personaggio direttamente agli autori"
+
+msgid "Your full residential address including street, city, and country"
+msgstr ""
+"Il tuo indirizzo completo di residenza, comprensivo di via, città e paese"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "se il personaggio è a conoscenza dell'identità dell'altro tratto"

@@ -815,12 +815,6 @@ input[type="radio"] {
   vertical-align: middle;
 }
 
-#id_share {
-  width: 2em;
-  height: 2em;
-  display: block;
-}
-
 table {
   margin-bottom: 1.5em;
 }
@@ -2745,7 +2739,19 @@ input[type="number"] {
 
 /** NEW AND OLD FORM APPEARANCE **/
 
-.form_container input {
+.form_container input[type="slug"],
+.form_container input[type="text"],
+.form_container input[type="password"],
+.form_container input[type="email"],
+.form_container input[type="number"],
+.form_container input[type="tel"],
+.form_container input[type="date"],
+.form_container input[type="date_p"],
+.form_container input[type="datetime_p"],
+.form_container input[type="time_p"],
+.form_container input[type="url"],
+.form_container select,
+.form_container textarea {
   background: rgba(var(--sec-rgb), 0.3) !important;
 }
 
@@ -2816,6 +2822,10 @@ input[type="number"] {
   text-align: left !important;
 }
 
+.new_form th label {
+  text-align: left !important;
+}
+
 /*
 .new_form #main_form tr {
   background: none;
@@ -2847,11 +2857,11 @@ input[type="number"] {
 }
 
 .new_form .form_container table th {
-  min-width: 25%;
+  width: 25%;
 }
 
 .new_form .grid .grid-item th {
-  min-width: auto;
+  width: auto;
 }
 
 .new_form .grid .grid-item p {
@@ -3051,4 +3061,14 @@ body.floating_iframe .inner {
 
 .modal-close-btn:hover {
   background-color: rgba(var(--pri-rgb), 0.55);
+}
+
+#id_share {
+  width: 2em !important;
+  height: 2em !important;
+  display: block;
+}
+
+.platform input#id_submit {
+  background-color: #737373 !important;
 }

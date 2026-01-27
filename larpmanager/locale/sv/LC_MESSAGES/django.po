@@ -3350,6 +3350,9 @@ msgstr "Frivillig donation"
 msgid "Volunteer Registry"
 msgstr "Frivilligregister"
 
+msgid "Your date of birth"
+msgstr "Ditt födelsedatum"
+
 msgid "by the deadline of"
 msgstr "senast den sista"
 
@@ -4736,6 +4739,9 @@ msgstr "Du får inte registrera dig"
 msgid "Your account is now activated"
 msgstr "Ditt konto är nu aktivt"
 
+msgid "Your last name or family name"
+msgstr "Ditt efternamn eller släktnamn"
+
 msgid "check excessive relationships"
 msgstr "kontrollera extra rapporter"
 
@@ -5268,6 +5274,9 @@ msgstr "lämna tomt för att starta en ny kampanj"
 
 msgid "Cast your vote for the new Executive"
 msgstr "Lägg din röst på den nya verkställande direktören"
+
+msgid "City and country where you were born"
+msgstr "Stad och land där du är född"
 
 msgid "Confirmation of registration request"
 msgstr "Bekräftelse på begäran om registrering"
@@ -5868,6 +5877,9 @@ msgstr "Varning, varning! Andra användare redigerar detta objekt"
 
 msgid "You can upload data directly from CSV file"
 msgstr "Du kan ladda upp data direkt från en CSV-fil"
+
+msgid "Your first name as you prefer to be called"
+msgstr "Ditt förnamn som du föredrar att bli kallad"
 
 msgid "main grouping / affiliation for characters"
 msgstr "huvudgruppering / tillhörighet för karaktärer"
@@ -6656,6 +6668,9 @@ msgstr "Välj vilka element som ska kopieras, från vilket annat evenemang"
 
 msgid "The character have missing values in mandatory fields"
 msgstr "Tecknet har saknade värden i obligatoriska fält"
+
+msgid "The date when your identification document was issued"
+msgstr "Datum då din identitetshandling utfärdades"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Det totala antalet lotter som skall dras har angetts"
@@ -7461,6 +7476,9 @@ msgstr ""
 
 msgid "Write here questions about your character directly to the authors"
 msgstr "Skriv här frågor om din karaktär direkt till författarna"
+
+msgid "Your full residential address including street, city, and country"
+msgstr "Din fullständiga bostadsadress, inklusive gata, stad och land"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "om karaktären är medveten om den andra egenskapens identitet"

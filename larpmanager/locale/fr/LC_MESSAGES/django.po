@@ -3350,6 +3350,9 @@ msgstr "Don volontaire"
 msgid "Volunteer Registry"
 msgstr "Registre des volontaires"
 
+msgid "Your date of birth"
+msgstr "Votre date de naissance"
+
 msgid "by the deadline of"
 msgstr "avant la date limite de"
 
@@ -4736,6 +4739,9 @@ msgstr "Vous n'êtes pas autorisé à vous inscrire"
 msgid "Your account is now activated"
 msgstr "Votre compte est maintenant actif"
 
+msgid "Your last name or family name"
+msgstr "Votre nom de famille"
+
 msgid "check excessive relationships"
 msgstr "vérifier les rapports supplémentaires"
 
@@ -5269,6 +5275,9 @@ msgstr "laisser vide pour démarrer une nouvelle campagne"
 
 msgid "Cast your vote for the new Executive"
 msgstr "Votez pour le nouvel exécutif"
+
+msgid "City and country where you were born"
+msgstr "Ville et pays de naissance"
 
 msgid "Confirmation of registration request"
 msgstr "Confirmation de la demande d'enregistrement"
@@ -5873,6 +5882,9 @@ msgstr ""
 msgid "You can upload data directly from CSV file"
 msgstr ""
 "Vous pouvez télécharger des données directement à partir d'un fichier CSV"
+
+msgid "Your first name as you prefer to be called"
+msgstr "Votre prénom tel que vous préférez être appelé"
 
 msgid "main grouping / affiliation for characters"
 msgstr "groupe principal / affiliation des personnages"
@@ -6694,6 +6706,9 @@ msgstr "Sélectionnez les éléments à copier, à partir de quel autre événem
 
 msgid "The character have missing values in mandatory fields"
 msgstr "Le caractère a des valeurs manquantes dans les champs obligatoires"
+
+msgid "The date when your identification document was issued"
+msgstr "La date à laquelle votre document d'identification a été délivré"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Le nombre total de billets à tirer a été indiqué"
@@ -7616,6 +7631,10 @@ msgstr "Cette page résume les factions et les intrigues du personnage indiqué"
 msgid "Write here questions about your character directly to the authors"
 msgstr ""
 "Ecrivez ici des questions sur votre personnage directement aux auteurs"
+
+msgid "Your full residential address including street, city, and country"
+msgstr ""
+"Votre adresse résidentielle complète, y compris la rue, la ville et le pays"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "si le personnage est conscient de l'identité de l'autre trait"

@@ -39,7 +39,7 @@ from larpmanager.tests.utils import (
     login_orga,
     login_user,
     logout,
-    submit_confirm,
+    submit_confirm, new_option, submit_option,
 )
 
 pytestmark = pytest.mark.e2e
@@ -118,29 +118,23 @@ def create_event_a(page: Any, live_server: Any) -> None:
     page.locator("#id_description").fill("Select your t-shirt size")
 
     # Add options
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Small")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_description").fill("Small size")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Small")
+    iframe.locator("#id_description").fill("Small size")
+    submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Medium")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_description").fill("Medium size")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").fill("5.00")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Medium")
+    iframe.locator("#id_description").fill("Medium size")
+    iframe.locator("#id_price").fill("5.00")
+    submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Large")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_description").fill("Large size")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").fill("10.00")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_max_available").fill("5")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Large")
+    iframe.locator("#id_description").fill("Large size")
+    iframe.locator("#id_price").fill("10.00")
+    iframe.locator("#id_max_available").fill("5")
+    submit_option(page, iframe)
 
     submit_confirm(page)
 
@@ -152,29 +146,23 @@ def create_event_a(page: Any, live_server: Any) -> None:
     page.locator("#id_max_length").fill("2")
 
     # Add options
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Combat")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_description").fill("Combat workshop")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").fill("15.00")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Combat")
+    iframe.locator("#id_description").fill("Combat workshop")
+    iframe.locator("#id_price").fill("15.00")
+    submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Makeup")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_description").fill("Makeup workshop")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").fill("20.00")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Makeup")
+    iframe.locator("#id_description").fill("Makeup workshop")
+    iframe.locator("#id_price").fill("20.00")
+    submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_name").fill("Crafting")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_description").fill("Crafting workshop")
-    page.locator("#uglipop_popbox iframe").content_frame.locator("#id_price").fill("10.00")
-    page.locator("#uglipop_popbox iframe").content_frame.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("Crafting")
+    iframe.locator("#id_description").fill("Crafting workshop")
+    iframe.locator("#id_price").fill("10.00")
+    submit_option(page, iframe)
 
     submit_confirm(page)
 
