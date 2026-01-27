@@ -842,7 +842,7 @@ def orga_writing_options_order(
     exchange_order(context, WritingOption, option_uuid, order)
 
     # Redirect back to writing form edit view
-    return reverse(
+    url = reverse(
         "orga_writing_form_edit",
         kwargs={
             "event_slug": context["run"].get_slug(),
@@ -850,6 +850,7 @@ def orga_writing_options_order(
             "question_uuid": context["current"].question.uuid,
         },
     )
+    return HttpResponseRedirect(url)
 
 
 @login_required
