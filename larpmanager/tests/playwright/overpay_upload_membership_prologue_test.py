@@ -213,7 +213,6 @@ def upload_membership(page: Any, live_server: Any) -> None:
     load_image(page, "#id_document")
     page.locator("#id_date").fill("2024-06-11")
     just_wait(page)
-    page.locator("#id_date").click()
     submit_confirm(page)
 
     # Try accessing member form

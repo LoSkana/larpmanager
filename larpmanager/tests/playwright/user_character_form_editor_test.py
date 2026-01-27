@@ -134,8 +134,8 @@ def field_multiple(page: Any, live_server: Any) -> None:
     iframe.locator("#id_name").fill("14")
     iframe.locator("#id_max_available").click()
     iframe.locator("#id_max_available").fill("3")
-    page.locator("#option_form").get_by_role("row", name="Prerequisites").get_by_role("searchbox").fill("ww")
-    page.locator("#option_form").get_by_role("option", name="Test Larp - single wwww").click()
+    iframe.get_by_role("row", name="Prerequisites").get_by_role("searchbox").fill("ww")
+    iframe.get_by_role("option", name="Test Larp - single wwww").click()
     submit_option(page, iframe)
 
     submit_confirm(page)
