@@ -267,11 +267,13 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
             completion_message = _("please upload your membership application to proceed") + "."
             text_url = f", <a href='{membership_url}'>{completion_message}</a>"
             run_status["text"] = registration_text + text_url
+            run_status["can_pay"] = False
             return
 
         # Handle pending membership approval (submitted but not approved)
         if user_membership.status in [MembershipStatus.SUBMITTED]:
             run_status["text"] = registration_text + ", " + _("awaiting member approval to proceed with payment")
+            run_status["can_pay"] = False
             return
 
     # Handle payment feature processing and related status updates
@@ -426,7 +428,7 @@ def registration_status(  # noqa: C901
     if context is None:
         context = {}
 
-    run_status = {"open": True, "details": "", "text": "", "additional": ""}
+    run_status = {"open": True, "details": "", "text": "", "additional": "", "can_pay": True}
 
     # Find user's registration if not already provided
     if registration is None:
