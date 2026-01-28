@@ -1,0 +1,103 @@
+{% load i18n %}
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+
+    // ========== Configuration ==========
+
+    // List of permission slugs that should open in modal
+    const MODAL_PERMISSIONS = [
+        'exe_association',
+        'exe_methods',
+        'orga_event',
+        'orga_quick',
+        'exe_quick',
+        // Add more as needed
+    ];
+
+    // ========== Modal Management ==========
+
+    /**
+     * Open a URL in an iframe modal
+     * @param {string} url - The URL to open
+     */
+    function openDashboardModal(url) {
+        // Add frame=1 parameter to URL
+        const separator = url.includes('?') ? '&' : '?';
+        const frameUrl = url + separator + 'frame=1';
+
+        // Use the common openIframeModal function from lm.js
+        window.openIframeModal(frameUrl, 'popup_dashboard');
+    }
+
+    /**
+     * Close the modal and reload the dashboard
+     */
+    function closeDashboardModal() {
+        const overlay = document.getElementById('uglipop_overlay');
+        if (overlay) {
+            overlay.click();
+        }
+    }
+
+    /**
+     * Reload the current dashboard page
+     */
+    function reloadDashboard() {
+        window.location.reload();
+    }
+
+    // ========== Event Handlers ==========
+
+    /**
+     * Handle click on dashboard action links
+     */
+    function handleDashboardLinkClick(e) {
+        const link = e.currentTarget;
+        const slug = link.getAttribute('data-slug');
+
+        // Check if this permission should open in modal
+        if (MODAL_PERMISSIONS.includes(slug)) {
+            e.preventDefault();
+            openDashboardModal(link.href);
+            return false;
+        }
+    }
+
+    /**
+     * Listen for messages from iframe
+     */
+    window.addEventListener('message', function(e) {
+        if (!e.data || !e.data.type) return;
+
+        switch(e.data.type) {
+            case 'dashboard_form_saved':
+                // Form was saved successfully
+                closeDashboardModal();
+
+                // Reload dashboard after a short delay to show success message
+                setTimeout(function() {
+                    reloadDashboard();
+                }, 300);
+                break;
+
+            case 'dashboard_form_cancelled':
+                // User cancelled the form
+                closeDashboardModal();
+                break;
+
+            case 'iframe_resize':
+                // Resize iframe based on content
+                // Note: We rely on uglipop's default handling for this
+                break;
+        }
+    });
+
+    // ========== Initialization ==========
+
+    $(document).ready(function() {
+        // Attach click handlers to all dashboard action links
+        $('.dashboard-action-link[data-modal-eligible="true"]').on('click', handleDashboardLinkClick);
+    });
+
+});
+</script>
