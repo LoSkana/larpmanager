@@ -336,13 +336,6 @@ window.addEventListener('DOMContentLoaded', function() {
         // Bind event handlers for option management
         $('.new-option').on('click', handleNewOptionClick);
         $(document).on('click', '.edit-option-ajax', handleEditOptionClick);
-
-        // Handle cancel button in option modal (using event delegation for dynamic content)
-        $(document).on('click', '.btn-cancel', function(e) {
-            e.preventDefault();
-            closeOptionModal();
-            return false;
-        });
     });
 
 });

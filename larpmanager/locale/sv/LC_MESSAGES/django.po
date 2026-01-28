@@ -1602,9 +1602,6 @@ msgstr "Navigering"
 msgid "Net profit"
 msgstr "Nettovinst"
 
-msgid "New Option"
-msgstr "Nytt alternativ"
-
 msgid "New answer"
 msgstr "Nytt svar"
 
@@ -1799,9 +1796,6 @@ msgstr "Beskrivning"
 
 msgid "Direct link"
 msgstr "Direkt länk"
-
-msgid "Edit Option"
-msgstr "Redigera alternativ"
 
 msgid "Event Texts"
 msgstr "Evenemangstexter"
@@ -3325,6 +3319,9 @@ msgstr "Registreringar öppna"
 
 msgid "Review all members"
 msgstr "Granska alla medlemmar"
+
+msgid "Saved successfully"
+msgstr "Sparades framgångsrikt"
 
 msgid "Set up quest types"
 msgstr "Ange typer av uppdrag"

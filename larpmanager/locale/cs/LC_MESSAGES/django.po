@@ -1602,9 +1602,6 @@ msgstr "Navigace"
 msgid "Net profit"
 msgstr "Čistý zisk"
 
-msgid "New Option"
-msgstr "Nová možnost"
-
 msgid "New answer"
 msgstr "Nová odpověď"
 
@@ -1799,9 +1796,6 @@ msgstr "Popis"
 
 msgid "Direct link"
 msgstr "Přímý odkaz"
-
-msgid "Edit Option"
-msgstr "Možnost úprav"
 
 msgid "Event Texts"
 msgstr "Texty událostí"
@@ -3325,6 +3319,9 @@ msgstr "Otevření registrací"
 
 msgid "Review all members"
 msgstr "Přezkoumání všech členů"
+
+msgid "Saved successfully"
+msgstr "Úspěšně uloženo"
 
 msgid "Set up quest types"
 msgstr "Nastavení typů úkolů"
