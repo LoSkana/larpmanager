@@ -1735,7 +1735,8 @@ a label:hover {
 
 .popup,
 .popup_tutorial,
-.popup_option {
+.popup_option,
+.popup_dashboard {
   border-radius: 2em;
   background-color: rgba(18, 18, 18, 1);
   color: white !important;
@@ -1753,7 +1754,8 @@ a label:hover {
   text-align: center;
 }
 
-.popup_option {
+.popup_option,
+.popup_dashboard {
   width: 80vw;
   height: 80vh;
 }
@@ -1812,7 +1814,8 @@ a label:hover {
   .popup,
   .popup_tutorial,
   .popup_option,
-  .popup_query {
+  .popup_query,
+  .popup_dashboard {
     width: 95vw;
     height: 90vh;
   }
@@ -2949,7 +2952,7 @@ body.floating_iframe #sidebar,
 body.floating_iframe #nav,
 body.floating_iframe #menu,
 body.floating_iframe #banner,
-body.floating_iframe .topbar,
+body.floating_iframe #topbar,
 body.floating_iframe #staging,
 body.floating_iframe .info {
   display: none !important;

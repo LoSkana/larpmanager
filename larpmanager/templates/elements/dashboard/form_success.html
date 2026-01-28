@@ -1,0 +1,26 @@
+{% extends "utils.html" %}
+{% load i18n tz show_tags static %}
+{% block body_class %}
+    floating_iframe
+{% endblock body_class %}
+{% block title %}
+{% endblock title %}
+{% block info %}
+{% endblock info %}
+{% block content %}
+    <div class="success-message">
+        <strong>{% trans "Saved successfully" %}</strong>
+    </div>
+    <div class="spinner"></div>
+    <p>{% trans "Closing" %}...</p>
+{% endblock content %}
+{% block js2 %}
+    <script>
+    $(document).ready(function() {
+        // Send message to parent window to reload dashboard
+        if (window.parent) {
+            window.parent.postMessage({type: 'dashboard_form_saved'}, '*');
+        }
+    });
+    </script>
+{% endblock js2 %}

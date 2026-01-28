@@ -483,11 +483,18 @@ def orga_edit(
     if additional_context:
         context.update(additional_context)
 
+    # Check if this is an iframe request
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
     # Process the edit operation using backend edit handler
     # Returns True if edit was successful and should redirect
     if backend_edit(request, context, form_type, entity_uuid, additional_field=None, is_association=False):
         # Set suggestion context for successful edit
         set_suggestion(context, permission)
+
+        # Return success template for iframe mode
+        if is_frame:
+            return render(request, "elements/dashboard/form_success.html", context)
 
         # Handle "continue editing" workflow - redirect to new object form
         if "continue" in request.POST:
@@ -501,6 +508,8 @@ def orga_edit(
         return redirect(redirect_view, event_slug=context["run"].get_slug())
 
     # Edit operation failed or is initial load - render edit form
+    if is_frame:
+        return render(request, "elements/dashboard/form_frame.html", context)
     return render(request, "larpmanager/orga/edit.html", context)
 
 
@@ -538,6 +547,9 @@ def exe_edit(
     if additional_context:
         context.update(additional_context)
 
+    # Check if this is an iframe request
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
     # Process the edit operation through backend handler
     if backend_edit(
         request,
@@ -550,6 +562,10 @@ def exe_edit(
         # Set permission suggestion for UI feedback
         set_suggestion(context, permission)
 
+        # Return success template for iframe mode
+        if is_frame:
+            return render(request, "elements/dashboard/form_success.html", context)
+
         # Handle "continue editing" workflow
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, "0")
@@ -559,7 +575,9 @@ def exe_edit(
             redirect_view = permission
         return redirect(redirect_view)
 
-    # Render edit template if edit operation was not successful
+    # Render appropriate template based on mode
+    if is_frame:
+        return render(request, "elements/dashboard/form_frame.html", context)
     return render(request, "larpmanager/exe/edit.html", context)
 
 
@@ -1014,7 +1032,7 @@ def options_edit_handler(
 
     # Try saving it
     if backend_edit(request, context, form_class, option_uuid, is_association=False):
-        return render(request, "elements/option_form_success.html", context)
+        return render(request, "elements/options/form_success.html", context)
 
     # If form validation failed, return form with errors
     form_context = {
@@ -1023,7 +1041,7 @@ def options_edit_handler(
         **(extra_context or {}),
     }
 
-    return render(request, "elements/option_form_frame.html", form_context)
+    return render(request, "elements/options/form_frame.html", form_context)
 
 
 @require_POST

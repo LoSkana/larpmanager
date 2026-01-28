@@ -1602,9 +1602,6 @@ msgstr "Navigatie"
 msgid "Net profit"
 msgstr "Nettowinst"
 
-msgid "New Option"
-msgstr "Nieuwe optie"
-
 msgid "New answer"
 msgstr "Nieuw antwoord"
 
@@ -1799,9 +1796,6 @@ msgstr "Beschrijving"
 
 msgid "Direct link"
 msgstr "Directe link"
-
-msgid "Edit Option"
-msgstr "Bewerk optie"
 
 msgid "Event Texts"
 msgstr "Evenementteksten"
@@ -3325,6 +3319,9 @@ msgstr "Registraties geopend"
 
 msgid "Review all members"
 msgstr "Alle leden beoordelen"
+
+msgid "Saved successfully"
+msgstr "Opgeslagen"
 
 msgid "Set up quest types"
 msgstr "Zoektochttypes instellen"

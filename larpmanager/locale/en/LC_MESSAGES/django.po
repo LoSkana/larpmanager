@@ -4455,6 +4455,69 @@ msgstr ""
 msgid "Select ability"
 msgstr ""
 
+msgid ""
+"This is the management dashboard, the interface will now be explained "
+"section by section."
+msgstr ""
+
+msgid ""
+"This is the sidebar, it contains all management functions and remains "
+"visible across all admin pages."
+msgstr ""
+
+msgid "Create, access, and manage your events from here."
+msgstr ""
+
+msgid ""
+"Select the active workspace here: your organization or one of the events."
+msgstr ""
+
+msgid "Switch here between administrative views and user-facing pages."
+msgstr ""
+
+msgid "Toggle the visibility of the sidebar."
+msgstr ""
+
+msgid "Search here for settings, features, and configuration options."
+msgstr ""
+
+msgid "This section lists critical issues that require immediate attention."
+msgstr ""
+
+msgid "This is the task list of required actions to complete the event setup."
+msgstr ""
+
+msgid ""
+"This list contains recommended actions to improve and finalize the "
+"configuration."
+msgstr ""
+
+msgid ""
+"Open the tutorial to follow guided, step-by-step instructions for this "
+"feature."
+msgstr ""
+
+msgid "Write to us if you need help in setting things up!"
+msgstr ""
+
+msgid "Welcome to"
+msgstr ""
+
+msgid "And that is all"
+msgstr ""
+
+msgid "Confirm"
+msgstr ""
+
+msgid "Saved successfully"
+msgstr ""
+
+msgid "Closing"
+msgstr ""
+
+msgid "An error occurred"
+msgstr ""
+
 msgid "Problem"
 msgstr ""
 
@@ -4557,9 +4620,6 @@ msgid "Original"
 msgstr ""
 
 msgid "options"
-msgstr ""
-
-msgid "Confirm"
 msgstr ""
 
 msgid "After confirmation, add another"
@@ -4693,57 +4753,6 @@ msgid ""
 "always of the same macrotype)"
 msgstr ""
 
-msgid ""
-"This is the management dashboard, the interface will now be explained "
-"section by section."
-msgstr ""
-
-msgid ""
-"This is the sidebar, it contains all management functions and remains "
-"visible across all admin pages."
-msgstr ""
-
-msgid "Create, access, and manage your events from here."
-msgstr ""
-
-msgid ""
-"Select the active workspace here: your organization or one of the events."
-msgstr ""
-
-msgid "Switch here between administrative views and user-facing pages."
-msgstr ""
-
-msgid "Toggle the visibility of the sidebar."
-msgstr ""
-
-msgid "Search here for settings, features, and configuration options."
-msgstr ""
-
-msgid "This section lists critical issues that require immediate attention."
-msgstr ""
-
-msgid "This is the task list of required actions to complete the event setup."
-msgstr ""
-
-msgid ""
-"This list contains recommended actions to improve and finalize the "
-"configuration."
-msgstr ""
-
-msgid ""
-"Open the tutorial to follow guided, step-by-step instructions for this "
-"feature."
-msgstr ""
-
-msgid "Write to us if you need help in setting things up!"
-msgstr ""
-
-msgid "Welcome to"
-msgstr ""
-
-msgid "And that is all"
-msgstr ""
-
 msgid "Tax code verification"
 msgstr ""
 
@@ -4759,19 +4768,7 @@ msgstr ""
 msgid "The tax code matches"
 msgstr ""
 
-msgid "New Option"
-msgstr ""
-
-msgid "Edit Option"
-msgstr ""
-
-msgid "Cancel"
-msgstr ""
-
 msgid "Option saved successfully"
-msgstr ""
-
-msgid "Closing"
 msgstr ""
 
 msgid "An error occurred while reordering"
@@ -4864,9 +4861,6 @@ msgstr ""
 msgid ""
 "Once you have made the payment, return to this page and submit the form "
 "below to notify us of your payment"
-msgstr ""
-
-msgid "An error occurred"
 msgstr ""
 
 msgid "Total registration fee"
@@ -5352,6 +5346,9 @@ msgid "Contact the organizers if you need a new access link later"
 msgstr ""
 
 msgid "I Understand - Access Content"
+msgstr ""
+
+msgid "Cancel"
 msgstr ""
 
 msgid "This content is protected and cannot be downloaded or recorded"

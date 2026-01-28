@@ -1,0 +1,52 @@
+{% extends "utils.html" %}
+{% load i18n tz show_tags static %}
+{% block body_class %}
+    floating_iframe
+{% endblock body_class %}
+{% block title %}
+{% endblock title %}
+{% block info %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/form/errors.html" %}
+    <form id="manage_form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="frame" value="1">
+        <div class="form_container auto_resize">
+            <table>
+                {% include "elements/form/inner.html" %}
+            </table>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="{% trans "Confirm" %}" class="btn-save">
+        </div>
+    </form>
+{% endblock content %}
+{% block js2 %}
+    <script>
+    $(document).ready(function() {
+        // Auto-resize iframe based on content
+        function sendHeight() {
+            if (window.parent) {
+                const height = document.body.scrollHeight + 50; // Add some padding
+                window.parent.postMessage({
+                    type: 'iframe_resize',
+                    height: height
+                }, '*');
+            }
+        }
+
+        // Send height on load and when content changes
+        setTimeout(sendHeight, 100);
+        $(window).on('resize', sendHeight);
+
+        // Watch for dynamic content changes
+        const observer = new MutationObserver(sendHeight);
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true
+        });
+    });
+    </script>
+{% endblock js2 %}

@@ -1602,9 +1602,6 @@ msgstr "Nawigacja"
 msgid "Net profit"
 msgstr "Zysk netto"
 
-msgid "New Option"
-msgstr "Nowa opcja"
-
 msgid "New answer"
 msgstr "Nowa odpowiedź"
 
@@ -1799,9 +1796,6 @@ msgstr "Opis"
 
 msgid "Direct link"
 msgstr "Bezpośrednie łącze"
-
-msgid "Edit Option"
-msgstr "Opcja edycji"
 
 msgid "Event Texts"
 msgstr "Teksty wydarzeń"
@@ -3325,6 +3319,9 @@ msgstr "Rejestracja otwarta"
 
 msgid "Review all members"
 msgstr "Przegląd wszystkich członków"
+
+msgid "Saved successfully"
+msgstr "Zapisane pomyślnie"
 
 msgid "Set up quest types"
 msgstr "Konfigurowanie typów zadań"
