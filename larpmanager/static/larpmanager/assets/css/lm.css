@@ -2744,7 +2744,7 @@ input[type="number"] {
 .form_container input[type="url"],
 .form_container select,
 .form_container textarea {
-  background: rgba(var(--sec-rgb), 0.3) !important;
+  background-color: rgba(var(--sec-rgb), 0.3) !important;
 }
 
 .form_container .select2-container--default,
@@ -2899,6 +2899,10 @@ input[type="number"] {
 
   .new_form td {
     margin-bottom: 1rem;
+  }
+
+  .new_form .form_container table .tox-tinymce {
+    width: 100% !important;
   }
 }
 
