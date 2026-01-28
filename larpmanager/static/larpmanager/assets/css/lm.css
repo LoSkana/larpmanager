@@ -1772,39 +1772,6 @@ a label:hover {
   overflow: hidden;
 }
 
-.popup_tutorial_container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.popup_tutorial_close {
-  position: absolute;
-  top: 0.5em;
-  right: 0.5em;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  font-size: 2em;
-  line-height: 1;
-  width: 1.5em;
-  height: 1.5em;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 10001;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.popup_tutorial_close:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: scale(1.1);
-}
-
 /* Force all TinyMCE elements to stay below popups */
 [class*="tox"]:not(.tox-fullscreen):not(.tox-tinymce-aux) {
   z-index: 1 !important;
@@ -1841,6 +1808,16 @@ a label:hover {
   text-align: center;
 
   font-size: 80%;
+}
+
+@media (max-width: 800px) {
+  .popup,
+  .popup_tutorial,
+  .popup_option,
+  .popup_query {
+    width: 95vw;
+    height: 90vh;
+  }
 }
 
 .reg_profile {
@@ -2620,7 +2597,7 @@ input[type="number"] {
 #wwyltd {
   width: 80%;
   margin: 0 auto;
-  padding-top: 0.5em;
+  padding: 0.5em 0em;
 }
 
 #wwyltd .select2-selection__arrow {
