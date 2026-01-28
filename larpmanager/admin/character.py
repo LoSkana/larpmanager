@@ -53,7 +53,7 @@ class CharacterAdmin(DefModelAdmin):
     list_display = ("id", "number", "name", "teaser", "event", "uuid")
     search_fields: ClassVar[tuple] = ("id", "name", "teaser", "uuid")
     list_filter = (EventFilter,)
-    autocomplete_fields: ClassVar[list] = ["event", "characters", "progress", "assigned"]
+    autocomplete_fields: ClassVar[list] = ["event", "characters", "progress", "assigned", "player"]
 
 
 @admin.register(CharacterConfig)
