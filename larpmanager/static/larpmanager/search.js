@@ -447,7 +447,7 @@ function search(key) {
                     if (Array.isArray(field)) {
                         // Multiple choice - join option names
                         field = field.map(id => escapeHtml(options[id]['name']));
-                        field = field.join(', ');
+                        field = field.join(' | ');
                     } else {
                         // Single value - escape HTML
                         field = escapeHtml(field);
@@ -508,22 +508,22 @@ function get_included_labels() {
 
     // Add faction include filters
     var el = filters['faction']['sel_l'];
-    if (el.size > 0) txt.push(window['texts']['factions'] + ": " + Array.from(el).map(escapeHtml).join(', '));
+    if (el.size > 0) txt.push(window['texts']['factions'] + ": " + Array.from(el).map(escapeHtml).join(' | '));
 
     // Add spec include filters
     el = filters['spec']['sel_l'];
-    if (el.size > 0) txt.push(window['texts']['specs'] + ": " + Array.from(el).map(escapeHtml).join(', '));
+    if (el.size > 0) txt.push(window['texts']['specs'] + ": " + Array.from(el).map(escapeHtml).join(' | '));
 
     // Add standard field include filters
     for (const [cf, value] of Object.entries(fields)) {
         el = filters[cf]['sel_l'];
-        if (el.size > 0) txt.push(escapeHtml(value) + ': ' + Array.from(el).map(escapeHtml).join(', '));
+        if (el.size > 0) txt.push(escapeHtml(value) + ': ' + Array.from(el).map(escapeHtml).join(' | '));
     }
 
     // Add custom field include filters
     for (const [cf, value] of Object.entries(searchable)) {
         el = filters['field_' + cf]['sel_l'];
-        if (el.size > 0) txt.push(escapeHtml(questions[cf]['name']) + ': ' + Array.from(el).map(escapeHtml).join(', '));
+        if (el.size > 0) txt.push(escapeHtml(questions[cf]['name']) + ': ' + Array.from(el).map(escapeHtml).join(' | '));
     }
 
     if (txt.length == 0)
@@ -543,22 +543,22 @@ function get_escluded_labels() {
 
     // Add faction exclude filters
     var el = filters['faction']['nsel_l'];
-    if (el.size > 0) txt.push(window['texts']['factions'] + ": " + Array.from(el).map(escapeHtml).join(', '));
+    if (el.size > 0) txt.push(window['texts']['factions'] + ": " + Array.from(el).map(escapeHtml).join(' | '));
 
     // Add spec exclude filters
     el = filters['spec']['nsel_l'];
-    if (el.size > 0) txt.push(window['texts']['specs'] + ": " + Array.from(el).map(escapeHtml).join(', '));
+    if (el.size > 0) txt.push(window['texts']['specs'] + ": " + Array.from(el).map(escapeHtml).join(' | '));
 
     // Add standard field exclude filters
     for (const [cf, value] of Object.entries(fields)) {
         el = filters[cf]['nsel_l'];
-        if (el.size > 0) txt.push(escapeHtml(value) + ': ' + Array.from(el).map(escapeHtml).join(', '));
+        if (el.size > 0) txt.push(escapeHtml(value) + ': ' + Array.from(el).map(escapeHtml).join(' | '));
     }
 
     // Add custom field exclude filters
     for (const [cf, value] of Object.entries(searchable)) {
         el = filters['field_' + cf]['nsel_l'];
-        if (el.size > 0) txt.push(escapeHtml(questions[cf]['name']) + ': ' + Array.from(el).map(escapeHtml).join(', '));
+        if (el.size > 0) txt.push(escapeHtml(questions[cf]['name']) + ': ' + Array.from(el).map(escapeHtml).join(' | '));
     }
 
     if (txt.length == 0)

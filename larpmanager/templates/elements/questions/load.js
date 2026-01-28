@@ -62,7 +62,7 @@ function load_question(el) {
         // Collect all updates first
         for (let r in data) {
             let vl = data[r];
-            if (vl.constructor === Array) vl = vl.join(", ");
+            if (vl.constructor === Array) vl = vl.join(" | ");
 
             if (popup.has(parseInt(r)))
                 vl += "... <a href='#' class='post_popup' pop='{0}' fie='{1}'><i class='fas fa-eye'></i></a>".format(r, q_uuid);

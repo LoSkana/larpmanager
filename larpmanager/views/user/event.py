@@ -72,6 +72,7 @@ from larpmanager.models.writing import (
     FactionType,
 )
 from larpmanager.utils.auth.admin import is_lm_admin
+from larpmanager.utils.auth.permission import has_association_permission
 from larpmanager.utils.core.base import get_context, get_event, get_event_context
 from larpmanager.utils.core.common import get_coming_runs, get_element
 from larpmanager.utils.core.exceptions import HiddenError
@@ -104,6 +105,9 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
         Anonymous users cannot see START status runs at all.
 
     """
+    if context.get("onboarding") and has_association_permission(request, context, "exe_association"):
+        return redirect("manage")
+
     # Extract association ID from request context
     association_id = context["association_id"]
 

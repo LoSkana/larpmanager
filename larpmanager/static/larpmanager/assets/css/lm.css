@@ -815,12 +815,6 @@ input[type="radio"] {
   vertical-align: middle;
 }
 
-#id_share {
-  width: 2em;
-  height: 2em;
-  display: block;
-}
-
 table {
   margin-bottom: 1.5em;
 }
@@ -1742,9 +1736,10 @@ a label:hover {
 }
 
 .popup,
-.popup_tutorial {
+.popup_tutorial,
+.popup_option {
   border-radius: 2em;
-  background-color: rgba(18, 18, 18, 0.9);
+  background-color: rgba(18, 18, 18, 1);
   color: white !important;
   padding: 1em;
   -webkit-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
@@ -1758,6 +1753,11 @@ a label:hover {
   overflow-x: hidden;
 
   text-align: center;
+}
+
+.popup_option {
+  width: 80vw;
+  height: 80vh;
 }
 
 .popup_tutorial {
@@ -1926,6 +1926,8 @@ input[type="checkbox"].checkbox_single {
   background: none;
   border: none;
   padding: 0 !important;
+  margin: 0 !important;
+  display: revert;
 }
 
 #topbar .left {
@@ -2625,20 +2627,33 @@ input[type="number"] {
   display: none;
 }
 
+#select2-id_wwyltd-container {
+  text-align: left;
+  padding-left: 40px;
+}
+
+#select2-id_wwyltd-results {
+  text-align: left;
+}
+
+#select2-id_wwyltd-results li {
+  padding: 0.5em 1em;
+}
+
 #wwyltd form {
-  margin: 0 0 0.5em 0;
+  margin: 0;
 }
 
 #wwyltd .select2-container {
   position: relative;
 }
 
-#wwyltd .select2-container::after {
+#wwyltd .select2-container::before {
   content: "\f002";
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   position: absolute;
-  right: 12px;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
@@ -2732,27 +2747,343 @@ input[type="number"] {
 .copy-link-btn:hover {
   color: rgba(var(--pri-rgb), 0.85);
 }
+
 .copy-link-btn i {
   font-size: 14px;
 }
 
 /** NEW AND OLD FORM APPEARANCE **/
 
-#form_container input {
+.form_container input[type="slug"],
+.form_container input[type="text"],
+.form_container input[type="password"],
+.form_container input[type="email"],
+.form_container input[type="number"],
+.form_container input[type="tel"],
+.form_container input[type="date"],
+.form_container input[type="date_p"],
+.form_container input[type="datetime_p"],
+.form_container input[type="time_p"],
+.form_container input[type="url"],
+.form_container select,
+.form_container textarea {
   background: rgba(var(--sec-rgb), 0.3) !important;
+}
+
+.form_container .select2-container--default,
+.form_container .select2-search--inline,
+.form_container .select2-search__field,
+.form_container input[type="file"] {
+  background: transparent !important;
+}
+
+.form_container p,
+.form_container ol,
+.form_container form,
+.form_container ul {
+  text-align: left;
 }
 
 .button.learn {
   background-color: #a5dee5 !important;
 }
 
-.old_form_appearance th,
-.old_form_appearance td {
+.new_form .auto_resize {
+  width: 70%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .new_form .auto_resize {
+    width: 80%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .new_form .auto_resize {
+    width: 90%;
+  }
+}
+
+.new_form .auto_resize table {
+  width: 100%;
+}
+
+.new_form .form_container {
+  border-collapse: collapse;
+  margin: 0 auto;
+  margin: 1rem auto;
+}
+
+@media (max-width: 1200px) {
+  .new_form .form_container {
+    width: 80%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .new_form .form_container {
+    width: 90%;
+  }
+}
+
+.new_form .form_container table {
+  width: 100%;
+}
+
+.new_form th,
+.new_form td {
+  padding: 1rem;
+  text-align: left !important;
+}
+
+.new_form th label {
+  text-align: left !important;
+}
+
+/*
+.new_form #main_form tr {
+  background: none;
+  border: none;
+} */
+
+.new_form .form_container table input {
+  width: 100% !important;
+  padding: 0.4rem;
+  box-sizing: border-box;
+}
+
+.new_form .form_container table select {
+  width: 100%;
+}
+
+.new_form .form_container table textarea {
+  width: 100%;
+  height: 8em;
+}
+
+.new_form .form_container table input[type="checkbox"],
+.new_form .form_container table input[type="radio"] {
+  width: 1em !important;
+}
+
+.new_form .select2-container {
+  width: 100% !important;
+}
+
+.new_form .form_container table th {
+  width: 25%;
+}
+
+.new_form .grid .grid-item th {
+  width: auto;
+}
+
+.new_form .grid .grid-item p {
+  text-align: left;
+}
+
+.new_form form.form_container {
+  text-align: left;
+}
+
+.new_form #search {
+  text-align: left;
+}
+
+.new_form .form_container table input,
+.new_form .form_container table select,
+.new_form .form_container table .tox-tinymce,
+.new_form .form_container table .select2-container,
+.new_form .form_container table textarea {
+  margin: 0 !important;
+  max-width: 100% !important;
+  text-align: left;
+}
+
+@media (max-width: 800px) {
+  .new_form .form_container {
+    width: 100%;
+  }
+
+  .new_form table,
+  .new_form tbody,
+  .new_form tr,
+  .new_form th,
+  .new_form td {
+    display: block;
+    width: 100%;
+  }
+
+  .new_form th {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+
+  .new_form td {
+    margin-bottom: 1rem;
+  }
+}
+
+#footer td {
   text-align: center !important;
 }
 
-.old_form_appearance input,
-.old_form_appearance select,
-.old_form_appearance .tox-tinymce {
-  margin: 0 auto;
+/** OPTION EDIT POPUP **/
+
+.ajax-option-form-container {
+  padding: 20px;
+}
+
+.ajax-option-form-container h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.btn-save,
+.btn-cancel {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-save {
+  background-color: rgba(var(--pri-rgb), 0.6);
+  color: white;
+}
+
+.btn-save:hover {
+  background-color: rgba(var(--pri-rgb), 0.9);
+}
+
+.btn-cancel {
+  background-color: rgba(var(--ter-rgb), 0.6);
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: rgba(var(--ter-rgb), 0.9);
+}
+
+/** FLOATING IFRAME - Hide structure for iframe popups **/
+
+body.floating_iframe {
+  background: transparent !important;
+  padding: 0px;
+}
+
+/* Hide all structural elements */
+body.floating_iframe #header,
+body.floating_iframe #footer,
+body.floating_iframe #sidebar,
+body.floating_iframe #nav,
+body.floating_iframe #menu,
+body.floating_iframe #banner,
+body.floating_iframe .topbar,
+body.floating_iframe #staging,
+body.floating_iframe .info {
+  display: none !important;
+}
+
+/* Remove page container wrapper styles */
+body.floating_iframe #page-container {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Remove page wrapper styles */
+body.floating_iframe #page-wrapper {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  padding-top: 0 !important;
+  width: 100%;
+}
+
+/* Ensure main content is visible and well formatted */
+body.floating_iframe #main,
+body.floating_iframe .container {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Style form container for iframe */
+body.floating_iframe .box {
+  background: rgba(255, 255, 255, 0.95) !important;
+  padding: 20px !important;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Remove any fixed positioning that might interfere */
+body.floating_iframe .is-preload {
+  padding-top: 0 !important;
+}
+
+/* Ensure .inner is visible in iframe */
+body.floating_iframe .inner {
+  display: block !important;
+  padding: 0 !important;
+}
+
+#options-iframe,
+.floating_iframe .auto_resize {
+  width: 100% !important;
+}
+
+#options-iframe {
+  width: 100%;
+  border: none;
+  min-height: 400px;
+}
+
+.frame-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: rgba(var(--pri-rgb), 0.85);
+  border: 2px solid #999;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #666;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 1em;
+}
+
+.modal-close-btn:hover {
+  background-color: rgba(var(--pri-rgb), 0.55);
+}
+
+#id_share {
+  width: 2em !important;
+  height: 2em !important;
+  display: block;
+}
+
+.platform input#id_submit {
+  background-color: #737373 !important;
 }

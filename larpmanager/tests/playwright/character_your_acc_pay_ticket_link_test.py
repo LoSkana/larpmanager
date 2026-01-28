@@ -200,7 +200,6 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Registrations").click()
     page.get_by_role("link", name="").click()
     page.get_by_role("cell", name="Show available characters").click()
-    page.get_by_text("Please enter 2 or more").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.locator(".select2-results__option").first.click()

@@ -29,7 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
+    submit_option, new_option
 
 pytestmark = pytest.mark.e2e
 
@@ -83,22 +84,22 @@ def field_single(page: Any, live_server: Any) -> None:
     page.locator("#id_name").press("Tab")
     page.locator("#id_description").fill("sssssingle")
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("ff")
-    page.locator("#id_max_available").click()
-    page.locator("#id_max_available").fill("3")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("ff")
+    iframe.locator("#id_max_available").click()
+    iframe.locator("#id_max_available").fill("3")
+    submit_option(page, iframe)
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("rrrr")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("rrrr")
+    submit_option(page, iframe)
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("wwww")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("wwww")
+    submit_option(page, iframe)
 
     submit_confirm(page)
 
@@ -113,29 +114,29 @@ def field_multiple(page: Any, live_server: Any) -> None:
     page.locator("#id_max_length").click()
     page.locator("#id_max_length").fill("1")
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("q1")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("q1")
+    submit_option(page, iframe)
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("q2")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("q2")
+    submit_option(page, iframe)
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("q3")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("q3")
+    submit_option(page, iframe)
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("14")
-    page.locator("#id_max_available").click()
-    page.locator("#id_max_available").fill("3")
-    page.get_by_role("row", name="Prerequisites").get_by_role("searchbox").fill("ww")
-    page.get_by_role("option", name="Test Larp - single wwww").click()
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("14")
+    iframe.locator("#id_max_available").click()
+    iframe.locator("#id_max_available").fill("3")
+    iframe.get_by_role("row", name="Prerequisites").get_by_role("searchbox").fill("ww")
+    iframe.get_by_role("option", name="Test Larp - single wwww").click()
+    submit_option(page, iframe)
 
     submit_confirm(page)
 

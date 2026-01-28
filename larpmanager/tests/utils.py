@@ -209,8 +209,13 @@ def _checkboxes(page: Any, check: Any = True) -> None:
     submit_confirm(page)
 
 
-def submit_confirm(page: Any) -> None:
-    submit_btn = page.get_by_role(
+
+def submit_confirm(page: Any, container_id: str = None) -> None:
+    scope = page
+    if container_id:
+        scope = page.locator(f"#{container_id}")
+
+    submit_btn = scope.get_by_role(
         "button",
         name=re.compile(r"^(Confirm|Submit)$", re.IGNORECASE)
     )
@@ -323,7 +328,17 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
             f"ACTUAL:\n{actual}"
         )
 
-def just_wait(page):
-    page.wait_for_timeout(500)
+def just_wait(page, big=False):
+    wait = 2000 if big else 500
+    page.wait_for_timeout(wait)
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
+
+def new_option(page):
+    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
+    just_wait(page, big=True)
+    return page.locator("#uglipop_popbox iframe").content_frame
+
+def submit_option(page, iframe):
+    iframe.get_by_role("button", name="Confirm").click()
+    just_wait(page)

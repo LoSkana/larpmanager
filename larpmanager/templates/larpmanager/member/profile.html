@@ -74,9 +74,11 @@
           enctype="multipart/form-data"
           method="post">
         {% csrf_token %}
-        <table class="mob ">
-            {{ form.as_table }}
-        </table>
+        <div class="form_container auto_resize">
+            <table>
+                {{ form.as_table }}
+            </table>
+        </div>
         <input type="submit" value="Submit">
     </form>
 {% endblock content %}

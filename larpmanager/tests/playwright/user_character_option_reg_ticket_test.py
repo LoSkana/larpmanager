@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, logout, expect_normalized, submit_confirm
+from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, logout, expect_normalized, \
+    submit_confirm, new_option, submit_option
 
 pytestmark = pytest.mark.e2e
 
@@ -81,21 +82,24 @@ def prepare(page: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("choose")
     page.locator("#id_status").select_option("m")
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("st")
-    page.get_by_role("list").click()
-    page.get_by_role("searchbox").fill("st")
-    page.locator(".select2-results__option").first.click()
-    page.get_by_role("checkbox", name="After confirmation, add").check()
-    submit_confirm(page)
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("bmb")
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("bam")
-    page.locator(".select2-results__option").first.click()
-    page.locator("#main_form").click()
-    submit_confirm(page)
+
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("st")
+    iframe.get_by_role("searchbox").click()
+    iframe.get_by_role("searchbox").fill("st")
+    iframe.locator(".select2-results__option").first.click()
+    submit_option(page, iframe)
+
+    iframe = new_option(page)
+
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("bmb")
+    iframe.get_by_role("searchbox").click()
+    iframe.get_by_role("searchbox").fill("bam")
+    iframe.locator(".select2-results__option").first.click()
+    submit_option(page, iframe)
+
     expect_normalized(page, page.locator("#options"), "st Standard bmb bambi")
     submit_confirm(page)
 

@@ -18,12 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.registration import (
@@ -36,7 +36,6 @@ from larpmanager.forms.registration import (
     OrgaRegistrationTicketForm,
 )
 from larpmanager.models.form import (
-    BaseQuestionType,
     RegistrationOption,
     RegistrationQuestion,
     get_ordered_registration_questions,
@@ -51,7 +50,11 @@ from larpmanager.models.registration import (
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order, get_element
 from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
-from larpmanager.utils.services.edit import backend_edit, orga_edit, set_suggestion
+from larpmanager.utils.services.edit import (
+    form_edit_handler,
+    options_edit_handler,
+    orga_edit,
+)
 
 
 @login_required
@@ -212,44 +215,17 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, question_
     perm = "orga_registration_form"
     context = check_event_context(request, event_slug, perm)
 
-    # Process form submission using backend edit helper
-    if backend_edit(request, context, OrgaRegistrationQuestionForm, question_uuid, is_association=False):
-        # Set suggestion flag for the current permission
-        set_suggestion(context, perm)
-
-        # Handle "continue editing" action - redirect to create new question
-        if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, context["run"].get_slug(), "0")
-
-        # Determine if we need to redirect to option editing
-        edit_option = False
-
-        # Check if user explicitly requested to add options
-        if str(request.POST.get("new_option", "")) == "1":
-            edit_option = True
-        # For choice questions, ensure at least one option exists
-        elif (
-            context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
-            and not RegistrationOption.objects.filter(question_id=context["saved"].id).exists()
-        ):
-            edit_option = True
-            messages.warning(
-                request,
-                _("You must define at least one option before saving a single-choice or multiple-choice question"),
-            )
-
-        # Redirect to option creation if needed, otherwise back to form list
-        if edit_option:
-            return redirect(
-                orga_registration_options_new,
-                event_slug=context["run"].get_slug(),
-                question_uuid=context["saved"].uuid,
-            )
-        return redirect(perm, event_slug=context["run"].get_slug())
-
-    # Prepare context for rendering the edit form
-    context["list"] = RegistrationOption.objects.filter(question=context["el"]).order_by("order")
-    return render(request, "larpmanager/orga/registration/form_edit.html", context)
+    return form_edit_handler(
+        request,
+        context,
+        question_uuid,
+        perm,
+        RegistrationOption,
+        OrgaRegistrationQuestionForm,
+        "orga_registration_form_edit",
+        perm,
+        "larpmanager/orga/registration/form_edit.html",
+    )
 
 
 @login_required
@@ -271,61 +247,66 @@ def orga_registration_options_edit(request: HttpRequest, event_slug: str, option
     Validates that registration questions exist before allowing creation of
     registration options. Redirects to question creation if none exist.
 
+    For new options (option_uuid="0"), expects question_uuid in GET or POST parameters.
+
     Args:
         request: The HTTP request object
         event_slug: Event slug identifier
-        option_uuid: Registration option UUID to edit
+        option_uuid: Registration option UUID to edit (0 for new options)
 
     Returns:
-        HttpResponse: Rendered registration option edit page or redirect
+        HttpResponse: Rendered registration option edit page, redirect, or JsonResponse for AJAX
 
     """
     # Check user permissions for registration form management
     context = check_event_context(request, event_slug, "orga_registration_form")
+    context["frame"] = 1
 
-    # Verify that registration questions exist before proceeding
-    if not context["event"].get_elements(RegistrationQuestion).exists():
-        # Display warning message to user about missing prerequisites
-        messages.warning(
-            request,
-            _("You must create at least one registration question before you can create registration options"),
-        )
-        # Redirect to registration questions creation page
-        return redirect("orga_registration_form_edit", event_slug=event_slug, question_uuid="0")
+    # For new options without question_uuid, verify that questions exist
+    if option_uuid == "0":
+        question_uuid = request.GET.get("question_uuid") or request.POST.get("question_uuid")
+        if not question_uuid and not context["event"].get_elements(RegistrationQuestion).exists():
+            # Display warning message to user about missing prerequisites
+            messages.warning(
+                request,
+                _("You must create at least one registration question before you can create registration options"),
+            )
+            # Redirect to registration questions creation page
+            return redirect("orga_registration_form_edit", event_slug=event_slug, question_uuid="0")
 
-    # Proceed with registration option editing
-    return registration_option_edit(request, context, option_uuid)
+    return options_edit_handler(
+        request, context, option_uuid, RegistrationQuestion, RegistrationOption, OrgaRegistrationOptionForm
+    )
 
 
 @login_required
-def orga_registration_options_new(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
-    """Create new registration option for specified question."""
-    context = check_event_context(request, event_slug, "orga_registration_form")
-    get_element(context, question_uuid, "question", RegistrationQuestion)
-    return registration_option_edit(request, context, "0")
+def orga_registration_options_list(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
+    """Display the list of options for a registration form question in an iframe.
 
-
-def registration_option_edit(request: HttpRequest, context: dict, option_uuid: str) -> Any:
-    """Handle editing of registration option with form processing and redirect logic.
+    This view shows only the options list section, designed to be loaded in an iframe
+    within the form edit page.
 
     Args:
-        request: HTTP request object
-        context: Context dictionary with event and form data
-        option_uuid: Option UUID being edited
+        request: The HTTP request object
+        event_slug: Event slug identifier
+        question_uuid: Question UUID to show options for
 
     Returns:
-        HttpResponse: Redirect to next step or rendered edit form
-
+        HttpResponse with the options list template
     """
-    if backend_edit(request, context, OrgaRegistrationOptionForm, option_uuid, is_association=False):
-        redirect_target = "orga_registration_form_edit"
-        if "continue" in request.POST:
-            redirect_target = "orga_registration_options_new"
-        return redirect(
-            redirect_target, event_slug=context["run"].get_slug(), question_uuid=context["saved"].question.uuid
-        )
+    # Check user permissions for registration form management
+    context = check_event_context(request, event_slug, "orga_registration_form")
+    context["frame"] = 1
 
-    return render(request, "larpmanager/orga/edit.html", context)
+    if question_uuid and question_uuid != "0":
+        # Get the question
+        get_element(context, question_uuid, "el", RegistrationQuestion)
+
+        # Load existing options for the question
+        options_queryset = RegistrationOption.objects.filter(question=context["el"])
+        context["list"] = options_queryset.order_by("order")
+
+    return render(request, "larpmanager/orga/registration/options_list.html", context)
 
 
 @login_required
@@ -354,11 +335,14 @@ def orga_registration_options_order(
     exchange_order(context, RegistrationOption, option_uuid, order)
 
     # Redirect back to the form edit page
-    return redirect(
+    url = reverse(
         "orga_registration_form_edit",
-        event_slug=context["run"].get_slug(),
-        question_uuid=context["current"].question.uuid,
+        kwargs={
+            "event_slug": context["run"].get_slug(),
+            "question_uuid": context["current"].question.uuid,
+        },
     )
+    return HttpResponseRedirect(url)
 
 
 @login_required

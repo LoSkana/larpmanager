@@ -10,7 +10,7 @@
         </p>
         <p>{{ new_rel }}</p>
     </div>
-    <div id="form_relationships">
+    <div id="form_relationships" class="form_container auto_resize">
         {% for key, item in relationships.items %}
             <h3>
                 <a href="{% url 'orga_characters_edit' run.get_slug item.char.uuid %}">{{ item.char }}</a>

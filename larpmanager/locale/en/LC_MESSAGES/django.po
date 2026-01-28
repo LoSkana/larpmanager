@@ -2993,82 +2993,105 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-msgid "Complete name of the Organization"
+msgid "Organization name"
 msgstr ""
 
-msgid "URL identifier"
+msgid ""
+"The full name of your organization as it will appear throughout the platform"
 msgstr ""
 
-msgid "The subdomain identifier"
+msgid "Subdomain"
 msgstr ""
 
-msgid "Only lowercase characters and numbers are allowed, no spaces or symbols"
+msgid "Your organization's unique subdomain in the plaftform"
+msgstr ""
+
+msgid ""
+"Only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 
 msgid "Logo"
 msgstr ""
 
+msgid "Your organization's logo"
+msgstr ""
+
 msgid ""
-"Optional logo image - you can upload a file of any size, it will be "
-"automatically resized"
+"upload any size, it will be automatically optimized; square images work best"
 msgstr ""
 
-msgid "Indicate an organization contact address for sending communications"
+msgid "Contact email"
 msgstr ""
 
-msgid "Indicate the payment methods you wish to be available to participants"
+msgid ""
+"The main email address participants can use to contact your organization"
+msgstr ""
+
+msgid "Payment methods"
+msgstr ""
+
+msgid "Select which payment methods participants can use"
 msgstr ""
 
 msgid "Payment currency"
 msgstr ""
 
-msgid "Indicates the currency in which to receive payments"
+msgid "The currency you want to use for all payments and pricing"
 msgstr ""
 
-msgid "Image shown on homepage as promoter"
+msgid "Promotional image"
+msgstr ""
+
+msgid "Featured image displayed on the portal's homepage"
 msgstr ""
 
 msgid "Background image"
 msgstr ""
 
-msgid "Background of web pages"
+msgid ""
+"Background image displayed across all pages of your organization - use a "
+"subtle pattern or texture for best results"
 msgstr ""
 
-msgid "Title font"
-msgstr ""
-
-msgid "Font to be used in page titles"
-msgstr ""
-
-msgid "Color texts"
-msgstr ""
-
-msgid "Indicate the color that will be used for the texts"
-msgstr ""
-
-msgid "Color highlight"
-msgstr ""
-
-msgid "Indicate the color that will be used to highlight texts"
-msgstr ""
-
-msgid "Color links"
-msgstr ""
-
-msgid "Indicate the color that will be used for the links"
-msgstr ""
-
-msgid "Nationality"
+msgid "Custom title font"
 msgstr ""
 
 msgid ""
-"Indicate the organization nationality to activate nation-specific features"
+"Upload a custom font file for page titles to match your organization's "
+"branding (TTF, OTF, or WOFF formats)"
 msgstr ""
 
-msgid "Maintainers"
+msgid "Text color"
 msgstr ""
 
-msgid "Users who can manage support tickets and receive ticket notifications"
+msgid "Main color for text content throughout your organization's pages"
+msgstr ""
+
+msgid "Highlight color"
+msgstr ""
+
+msgid "Color used to highlight important text"
+msgstr ""
+
+msgid "Link color"
+msgstr ""
+
+msgid "Color for clickable links and interactive elements"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "Your organization's country"
+msgstr ""
+
+msgid "it will enable country-specific features"
+msgstr ""
+
+msgid "Support maintainers"
+msgstr ""
+
+msgid "Staff members who will receive and manage support tickets"
 msgstr ""
 
 msgid "Home"
@@ -3174,80 +3197,139 @@ msgstr ""
 msgid "Descriptive name for this API key"
 msgstr ""
 
-msgid "A short tagline, slogan"
+msgid "URL identifier"
 msgstr ""
 
-msgid "Where it is held"
-msgstr ""
-
-msgid "Names of the collaborators who are organizing it"
-msgstr ""
-
-msgid "Event description displayed on the event page"
-msgstr ""
-
-msgid "The setting / genre of the event"
+msgid "Unique identifier for the event URL"
 msgstr ""
 
 msgid ""
-"Cover image shown on the organization's homepage — rectangular, ideally 4:3 "
-"ratio"
+"only lowercase letters and numbers allowed, no spaces or special characters"
+msgstr ""
+
+msgid "Event name"
+msgstr ""
+
+msgid "The full name of your event as it will be displayed to participants"
+msgstr ""
+
+msgid "A catchy short phrase or slogan to describe your event"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Where the event will take place"
+msgstr ""
+
+msgid "Organizers"
+msgstr ""
+
+msgid "Names of the people or teams organizing and running this event"
+msgstr ""
+
+msgid "Full event description with all important details"
+msgstr ""
+
+msgid "will be displayed on the main event page"
+msgstr ""
+
+msgid "The genre or setting of your event"
+msgstr ""
+
+msgid "Cover image"
+msgstr ""
+
+msgid "Main event image displayed on your organization's homepage"
+msgstr ""
+
+msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
 
 msgid "Carousel image"
 msgstr ""
 
+msgid "Optional image for homepage carousel/slideshow"
+msgstr ""
+
+msgid "use high-quality wide images for best visual impact"
+msgstr ""
+
 msgid "Carousel description"
 msgstr ""
 
-msgid "External register link"
+msgid "Text displayed alongside the carousel image"
+msgstr ""
+
+msgid "keep it short and engaging"
+msgstr ""
+
+msgid "External website"
+msgstr ""
+
+msgid "Link to an external website with additional event information"
+msgstr ""
+
+msgid "External registration link"
+msgstr ""
+
+msgid "Link to an external registration system"
 msgstr ""
 
 msgid ""
-"Insert the link to an external tool where users will be redirected if they "
-"are not yet registered"
+"non-registered users will be redirected here, while registered users get "
+"normal access"
 msgstr ""
 
-msgid "Registered users will be granted normal access"
+msgid "Maximum participants"
 msgstr ""
 
-msgid "Max participants"
+msgid "Maximum number of participant slots available (set to 0 for unlimited)"
 msgstr ""
 
-msgid "Maximum number of participants spots (0 = unlimited)"
-msgstr ""
-
-msgid "Max fillers"
-msgstr ""
-
-msgid "Maximum number of filler spots (0 = unlimited)"
-msgstr ""
-
-msgid "Max waitings"
-msgstr ""
-
-msgid "Maximum number of waiting spots (0 = unlimited)"
+msgid "Maximum fillers"
 msgstr ""
 
 msgid ""
-"If you select another event, it will be considered in the same campaign, and "
-"they will share the characters"
+"Maximum number of filler character slots available (set to 0 for unlimited)"
+msgstr ""
+
+msgid "Maximum waiting list"
 msgstr ""
 
 msgid ""
-"if you leave this empty, this can be the starting event of a new campaign"
+"Maximum number of people allowed on the waiting list (set to 0 for unlimited)"
 msgstr ""
 
-msgid "Background image used across all event pages"
+msgid "Parent campaign"
 msgstr ""
 
-msgid "Font used for title texts across all event pages"
+msgid ""
+"Link this event to another event to create a campaign series where "
+"characters are shared"
 msgstr ""
 
-msgid "Color background"
+msgid "leave empty to start a new campaign"
 msgstr ""
 
-msgid "Indicate the color that will be used for the background of texts"
+msgid "Background image displayed across all event pages"
+msgstr ""
+
+msgid "use a subtle pattern or texture for best results"
+msgstr ""
+
+msgid ""
+"Upload a custom font file for page titles to match your event's theme (TTF, "
+"OTF, or WOFF formats)"
+msgstr ""
+
+msgid "Main color for text content throughout your event's pages"
+msgstr ""
+
+msgid "Background color"
+msgstr ""
+
+msgid "Color used for text backgrounds and content boxes"
 msgstr ""
 
 msgid "Character sheet intro"
@@ -3289,23 +3371,58 @@ msgstr ""
 msgid "Concluded"
 msgstr ""
 
+msgid "Current status of this event"
+msgstr ""
+
+msgid "Run number"
+msgstr ""
+
+msgid "Sequential number for this event"
+msgstr ""
+
 msgid "Start date"
+msgstr ""
+
+msgid "The date when this event begins"
 msgstr ""
 
 msgid "End date"
 msgstr ""
 
-msgid ""
-"Enter the date and time when registrations open - leave blank to keep "
-"registrations closed"
+msgid "The date when this event ends"
 msgstr ""
 
-msgid "Secret code"
+msgid "Registration opening"
 msgstr ""
 
-msgid ""
-"This code is used to generate the secret registration link, you may keep the "
-"default or customize it"
+msgid "Date and time when registrations open for participants"
+msgstr ""
+
+msgid "leave blank to keep registrations closed"
+msgstr ""
+
+msgid "Secret registration code"
+msgstr ""
+
+msgid "Unique code used to generate the secret registration link"
+msgstr ""
+
+msgid "keep the auto-generated value or customize it"
+msgstr ""
+
+msgid "Current financial balance for this event"
+msgstr ""
+
+msgid "Amount paid"
+msgstr ""
+
+msgid "Total amount paid for platform management"
+msgstr ""
+
+msgid "Subscription plan"
+msgstr ""
+
+msgid "The subscription plan associated with this event"
 msgstr ""
 
 msgid "Optional template associated with this ability."
@@ -3590,7 +3707,13 @@ msgstr ""
 msgid "Preferred navigation language"
 msgstr ""
 
+msgid "Your first name as you prefer to be called"
+msgstr ""
+
 msgid "Surname"
+msgstr ""
+
+msgid "Your last name or family name"
 msgstr ""
 
 msgid "Alias"
@@ -3617,6 +3740,9 @@ msgid "Pronouns"
 msgstr ""
 
 msgid "Indicate the pronouns you wish to be used to refer to you"
+msgstr ""
+
+msgid "Nationality"
 msgstr ""
 
 msgid "Indicate the country of which you are a citizen"
@@ -3654,7 +3780,13 @@ msgstr ""
 msgid "Birth date"
 msgstr ""
 
+msgid "Your date of birth"
+msgstr ""
+
 msgid "Birth place"
+msgstr ""
+
+msgid "City and country where you were born"
 msgstr ""
 
 msgid ""
@@ -3678,12 +3810,18 @@ msgstr ""
 msgid "Date of issue of the document"
 msgstr ""
 
+msgid "The date when your identification document was issued"
+msgstr ""
+
 msgid "Date of expiration of the document"
 msgstr ""
 
 msgid ""
 "Leave blank if the document has no expiration date - Please check that it "
 "does not expire before the event you want to signup up for."
+msgstr ""
+
+msgid "Your full residential address including street, city, and country"
 msgstr ""
 
 msgid "Accessibility"
@@ -4189,6 +4327,9 @@ msgid ""
 "specifically for this event!"
 msgstr ""
 
+msgid "Only lowercase characters and numbers are allowed, no spaces or symbols"
+msgstr ""
+
 msgid "Progress status"
 msgstr ""
 
@@ -4618,6 +4759,24 @@ msgstr ""
 msgid "The tax code matches"
 msgstr ""
 
+msgid "New Option"
+msgstr ""
+
+msgid "Edit Option"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Option saved successfully"
+msgstr ""
+
+msgid "Closing"
+msgstr ""
+
+msgid "An error occurred while reordering"
+msgstr ""
+
 msgid "Warning. The form contains errors to the fields"
 msgstr ""
 
@@ -4707,6 +4866,9 @@ msgid ""
 "below to notify us of your payment"
 msgstr ""
 
+msgid "An error occurred"
+msgstr ""
+
 msgid "Total registration fee"
 msgstr ""
 
@@ -4741,9 +4903,6 @@ msgid "Organization"
 msgstr ""
 
 msgid "Date"
-msgstr ""
-
-msgid "Location"
 msgstr ""
 
 msgid "View Details"
@@ -4830,9 +4989,6 @@ msgid "Role"
 msgstr ""
 
 msgid "Hi"
-msgstr ""
-
-msgid "An error occurred"
 msgstr ""
 
 msgid "No organization found"
@@ -5196,9 +5352,6 @@ msgid "Contact the organizers if you need a new access link later"
 msgstr ""
 
 msgid "I Understand - Access Content"
-msgstr ""
-
-msgid "Cancel"
 msgstr ""
 
 msgid "This content is protected and cannot be downloaded or recorded"
@@ -9333,6 +9486,14 @@ msgstr ""
 msgid "List of other users"
 msgstr ""
 
+msgid "Question saved successfully"
+msgstr ""
+
+msgid ""
+"You must define at least one option before saving a single-choice or "
+"multiple-choice question"
+msgstr ""
+
 msgid "Your registration ticket"
 msgstr ""
 
@@ -9796,11 +9957,6 @@ msgid "Receipt already confirmed"
 msgstr ""
 
 msgid "Results not present"
-msgstr ""
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question"
 msgstr ""
 
 msgid "Parent empty"

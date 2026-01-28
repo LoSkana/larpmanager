@@ -60,11 +60,11 @@
             <hr />
             {{ custom_text | safe }}
         {% endif %}
-        <div class="centerized">
+        <div>
             <form id="register_form" action="{{ request.path }}" method="post">
                 {% csrf_token %}
-                <div>
-                    <table class="mob">
+                <div class="form_container auto_resize">
+                    <table>
                         {% include "elements/form/register.html" %}
                     </table>
                     {% if features.discount and 'waiting' not in run_status %}
@@ -98,7 +98,7 @@
                     {% endif %}
                 </div>
                 <input type="button" id="confirm" value="{% trans "Continue" %}" />
-                <div id="riepilogo" class="hide">
+                <div id="riepilogo" class="hide  form_container auto_resize">
                     <br />
                     <table class="mob">
                         <tbody>

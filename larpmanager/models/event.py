@@ -61,29 +61,42 @@ class Event(UuidMixin, BaseModel):
         blank=True,
         null=True,
         verbose_name=_("URL identifier"),
-        help_text=_("Only lowercase characters and numbers are allowed, no spaces or symbols"),
+        help_text=_("Unique identifier for the event URL")
+        + " ("
+        + _("only lowercase letters and numbers allowed, no spaces or special characters")
+        + ")",
     )
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="events")
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(
+        max_length=100,
+        verbose_name=_("Event name"),
+        help_text=_("The full name of your event as it will be displayed to participants"),
+    )
 
     tagline = models.CharField(
         max_length=500,
         blank=True,
         null=True,
         verbose_name=_("Tagline"),
-        help_text=_("A short tagline, slogan"),
+        help_text=_("A catchy short phrase or slogan to describe your event"),
     )
 
-    where = models.CharField(max_length=500, blank=True, null=True, help_text=_("Where it is held"))
+    where = models.CharField(
+        max_length=500,
+        blank=True,
+        null=True,
+        verbose_name=_("Location"),
+        help_text=_("Where the event will take place"),
+    )
 
     authors = models.CharField(
         max_length=500,
         blank=True,
         null=True,
-        verbose_name=_("Authors"),
-        help_text=_("Names of the collaborators who are organizing it"),
+        verbose_name=_("Organizers"),
+        help_text=_("Names of the people or teams organizing and running this event"),
     )
 
     description = HTMLField(
@@ -91,14 +104,17 @@ class Event(UuidMixin, BaseModel):
         blank=True,
         default="",
         verbose_name=_("Description"),
-        help_text=_("Event description displayed on the event page"),
+        help_text=_("Full event description with all important details")
+        + " ("
+        + _("will be displayed on the main event page")
+        + ")",
     )
 
     genre = models.CharField(
         max_length=100,
         blank=True,
         verbose_name=pgettext_lazy("event", "Genre"),
-        help_text=_("The setting / genre of the event"),
+        help_text=_("The genre or setting of your event"),
     )
 
     visible = models.BooleanField(default=True)
@@ -107,7 +123,11 @@ class Event(UuidMixin, BaseModel):
         max_length=500,
         upload_to="cover/",
         blank=True,
-        help_text=_("Cover image shown on the organization's homepage — rectangular, ideally 4:3 ratio"),
+        verbose_name=_("Cover image"),
+        help_text=_("Main event image displayed on your organization's homepage")
+        + " ("
+        + _("use a rectangular image, ideally 4:3 ratio for best results")
+        + ")",
     )
 
     cover_thumb = ImageSpecField(
@@ -117,7 +137,16 @@ class Event(UuidMixin, BaseModel):
         options={"quality": 70},
     )
 
-    carousel_img = models.ImageField(max_length=500, upload_to="carousel/", blank=True, help_text=_("Carousel image"))
+    carousel_img = models.ImageField(
+        max_length=500,
+        upload_to="carousel/",
+        blank=True,
+        verbose_name=_("Carousel image"),
+        help_text=_("Optional image for homepage carousel/slideshow")
+        + " ("
+        + _("use high-quality wide images for best visual impact")
+        + ")",
+    )
 
     carousel_thumb = ImageSpecField(source="carousel_img", format="JPEG", options={"quality": 70})
 
@@ -125,39 +154,42 @@ class Event(UuidMixin, BaseModel):
         max_length=2000,
         blank=True,
         verbose_name=_("Carousel description"),
+        help_text=_("Text displayed alongside the carousel image") + " (" + _("keep it short and engaging") + ")",
     )
 
     website = models.URLField(
         max_length=100,
         blank=True,
-        verbose_name=_("Website"),
+        verbose_name=_("External website"),
+        help_text=_("Link to an external website with additional event information"),
     )
 
     register_link = models.URLField(
         max_length=150,
         blank=True,
-        verbose_name=_("External register link"),
-        help_text=_("Insert the link to an external tool where users will be redirected if they are not yet registered")
-        + ". "
-        + _("Registered users will be granted normal access"),
+        verbose_name=_("External registration link"),
+        help_text=_("Link to an external registration system")
+        + " ("
+        + _("non-registered users will be redirected here, while registered users get normal access")
+        + ")",
     )
 
     max_pg = models.IntegerField(
         default=0,
-        verbose_name=_("Max participants"),
-        help_text=_("Maximum number of participants spots (0 = unlimited)"),
+        verbose_name=_("Maximum participants"),
+        help_text=_("Maximum number of participant slots available (set to 0 for unlimited)"),
     )
 
     max_filler = models.IntegerField(
         default=0,
-        verbose_name=_("Max fillers"),
-        help_text=_("Maximum number of filler spots (0 = unlimited)"),
+        verbose_name=_("Maximum fillers"),
+        help_text=_("Maximum number of filler character slots available (set to 0 for unlimited)"),
     )
 
     max_waiting = models.IntegerField(
         default=0,
-        verbose_name=_("Max waitings"),
-        help_text=_("Maximum number of waiting spots (0 = unlimited)"),
+        verbose_name=_("Maximum waiting list"),
+        help_text=_("Maximum number of people allowed on the waiting list (set to 0 for unlimited)"),
     )
 
     features = models.ManyToManyField(Feature, related_name="events", blank=True)
@@ -167,12 +199,11 @@ class Event(UuidMixin, BaseModel):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        verbose_name=_("Campaign"),
-        help_text=_(
-            "If you select another event, it will be considered in the same campaign, and they will share the characters",
-        )
-        + " - "
-        + _("if you leave this empty, this can be the starting event of a new campaign"),
+        verbose_name=_("Parent campaign"),
+        help_text=_("Link this event to another event to create a campaign series where characters are shared")
+        + " ("
+        + _("leave empty to start a new campaign")
+        + ")",
     )
 
     background = models.ImageField(
@@ -180,7 +211,10 @@ class Event(UuidMixin, BaseModel):
         upload_to="event_background/",
         verbose_name=_("Background image"),
         blank=True,
-        help_text=_("Background image used across all event pages"),
+        help_text=_("Background image displayed across all event pages")
+        + " ("
+        + _("use a subtle pattern or texture for best results")
+        + ")",
     )
 
     background_red = ImageSpecField(
@@ -192,8 +226,10 @@ class Event(UuidMixin, BaseModel):
 
     font = models.FileField(
         upload_to=UploadToPathAndRename("event_font/"),
-        verbose_name=_("Title font"),
-        help_text=_("Font used for title texts across all event pages"),
+        verbose_name=_("Custom title font"),
+        help_text=_(
+            "Upload a custom font file for page titles to match your event's theme (TTF, OTF, or WOFF formats)"
+        ),
         blank=True,
         null=True,
     )
@@ -201,22 +237,22 @@ class Event(UuidMixin, BaseModel):
     css_code = models.CharField(max_length=32, editable=False, default="")
 
     pri_rgb = ColorField(
-        verbose_name=_("Color texts"),
-        help_text=_("Indicate the color that will be used for the texts"),
+        verbose_name=_("Text color"),
+        help_text=_("Main color for text content throughout your event's pages"),
         blank=True,
         null=True,
     )
 
     sec_rgb = ColorField(
-        verbose_name=_("Color background"),
-        help_text=_("Indicate the color that will be used for the background of texts"),
+        verbose_name=_("Background color"),
+        help_text=_("Color used for text backgrounds and content boxes"),
         blank=True,
         null=True,
     )
 
     ter_rgb = ColorField(
-        verbose_name=_("Color links"),
-        help_text=_("Indicate the color that will be used for the links"),
+        verbose_name=_("Link color"),
+        help_text=_("Color for clickable links and interactive elements"),
         blank=True,
         null=True,
     )
@@ -571,39 +607,78 @@ class Run(UuidMixin, BaseModel):
         choices=DevelopStatus.choices,
         default=DevelopStatus.START,
         verbose_name=_("Status"),
+        help_text=_("Current status of this event"),
     )
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="runs")
 
-    number = models.IntegerField()
+    number = models.IntegerField(
+        verbose_name=_("Run number"),
+        help_text=_("Sequential number for this event"),
+    )
 
-    start = models.DateField(blank=True, null=True, verbose_name=_("Start date"))
+    start = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name=_("Start date"),
+        help_text=_("The date when this event begins"),
+    )
 
-    end = models.DateField(blank=True, null=True, verbose_name=_("End date"), db_index=True)
+    end = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name=_("End date"),
+        help_text=_("The date when this event ends"),
+        db_index=True,
+    )
 
     registration_open = models.DateTimeField(
         blank=True,
         null=True,
-        verbose_name=_("Registration opening date"),
-        help_text=_("Enter the date and time when registrations open - leave blank to keep registrations closed"),
+        verbose_name=_("Registration opening"),
+        help_text=_("Date and time when registrations open for participants")
+        + " ("
+        + _("leave blank to keep registrations closed")
+        + ")",
     )
 
     registration_secret = models.CharField(
         default=my_uuid_short,
         max_length=50,
         unique=True,
-        verbose_name=_("Secret code"),
-        help_text=_(
-            "This code is used to generate the secret registration link, you may keep the default or customize it",
-        ),
+        verbose_name=_("Secret registration code"),
+        help_text=_("Unique code used to generate the secret registration link")
+        + " ("
+        + _("keep the auto-generated value or customize it")
+        + ")",
         db_index=True,
     )
 
-    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    balance = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        verbose_name=_("Balance"),
+        help_text=_("Current financial balance for this event"),
+    )
 
-    paid = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    paid = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        verbose_name=_("Amount paid"),
+        help_text=_("Total amount paid for platform management"),
+    )
 
-    plan = models.CharField(max_length=1, choices=AssociationPlan.choices, blank=True, null=True)
+    plan = models.CharField(
+        max_length=1,
+        choices=AssociationPlan.choices,
+        blank=True,
+        null=True,
+        verbose_name=_("Subscription plan"),
+        help_text=_("The subscription plan associated with this event"),
+    )
 
     class Meta:
         indexes: ClassVar[list] = [

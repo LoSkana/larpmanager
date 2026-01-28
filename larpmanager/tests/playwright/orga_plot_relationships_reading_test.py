@@ -154,7 +154,8 @@ def relationships(live_server: Any, page: Any) -> None:
 
     # check in other char
     go_to(page, live_server, "/test/manage/characters/#")
-    page.locator('[id="u1"]').get_by_role("cell", name="").click()
+    just_wait(page)
+    page.locator('[id="u1"]').get_by_role("link", name="").click()
     just_wait(page)
     page.get_by_role("row", name="Inverse Show How the").get_by_role("link").click()
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")

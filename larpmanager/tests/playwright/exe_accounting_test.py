@@ -29,7 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, submit_confirm, expect_normalized, \
+    new_option, submit_option
 
 pytestmark = pytest.mark.e2e
 
@@ -88,13 +89,13 @@ def sign_up_pay(page: Any, live_server: Any) -> None:
     page.locator("#id_name").fill("pay")
     page.locator("#id_name").press("Tab")
     page.locator("#id_description").fill("pay")
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("ff")
-    page.locator("#id_description").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("20")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("ff")
+    iframe.locator("#id_description").click()
+    iframe.locator("#id_price").click()
+    iframe.locator("#id_price").fill("20")
+    submit_option(page, iframe)
 
     go_to(page, live_server, "/test/register/")
     page.get_by_role("button", name="Continue").click()

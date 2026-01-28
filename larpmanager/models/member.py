@@ -93,9 +93,17 @@ class Member(UuidMixin, BaseModel):
         help_text=_("Preferred navigation language"),
     )
 
-    name = models.CharField(max_length=100, verbose_name=_("Name"))
+    name = models.CharField(
+        max_length=100,
+        verbose_name=_("Name"),
+        help_text=_("Your first name as you prefer to be called"),
+    )
 
-    surname = models.CharField(max_length=100, verbose_name=_("Surname"))
+    surname = models.CharField(
+        max_length=100,
+        verbose_name=_("Surname"),
+        help_text=_("Your last name or family name"),
+    )
 
     nickname = models.CharField(
         max_length=100,
@@ -179,9 +187,20 @@ class Member(UuidMixin, BaseModel):
         null=True,
     )
 
-    birth_date = models.DateField(verbose_name=_("Birth date"), blank=True, null=True)
+    birth_date = models.DateField(
+        verbose_name=_("Birth date"),
+        help_text=_("Your date of birth"),
+        blank=True,
+        null=True,
+    )
 
-    birth_place = models.CharField(max_length=150, verbose_name=_("Birth place"), blank=True, null=True)
+    birth_place = models.CharField(
+        max_length=150,
+        verbose_name=_("Birth place"),
+        help_text=_("City and country where you were born"),
+        blank=True,
+        null=True,
+    )
 
     fiscal_code = models.CharField(
         max_length=16,
@@ -208,7 +227,12 @@ class Member(UuidMixin, BaseModel):
         help_text=_("Enter the number or code of the identification document indicated above"),
     )
 
-    document_issued = models.DateField(verbose_name=_("Date of issue of the document"), blank=True, null=True)
+    document_issued = models.DateField(
+        verbose_name=_("Date of issue of the document"),
+        help_text=_("The date when your identification document was issued"),
+        blank=True,
+        null=True,
+    )
 
     document_expiration = models.DateField(
         blank=True,
@@ -222,6 +246,7 @@ class Member(UuidMixin, BaseModel):
     residence_address = models.CharField(
         max_length=500,
         verbose_name=_("Residence address"),
+        help_text=_("Your full residential address including street, city, and country"),
         blank=True,
         null=True,
     )

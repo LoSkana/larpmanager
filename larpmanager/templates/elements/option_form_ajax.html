@@ -1,0 +1,23 @@
+{% load i18n tz show_tags static %}
+<div class="ajax-option-form-container">
+    <h2>
+        {% if num == "0" %}
+            {% trans "New Option" %}
+        {% else %}
+            {% trans "Edit Option" %}
+        {% endif %}
+    </h2>
+    {% include "elements/form/errors.html" %}
+    <form id="option_ajax_form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form_container auto_resize">
+            <table>
+                {% include "elements/form/inner.html" %}
+            </table>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="{% trans "Confirm" %}" class="btn-save">
+            <button type="button" class="btn-cancel">{% trans "Cancel" %}</button>
+        </div>
+    </form>
+</div>

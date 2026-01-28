@@ -139,7 +139,6 @@ def bulk(page: Any) -> None:
     # Test links not working when bulk active
     page.locator('[id="u1"]').get_by_role("cell", name="Electrical").click()
     page.locator('[id="u1"]').get_by_role("cell", name="Box A").click()
-    page.locator('[id="u1"]').get_by_role("cell", name="sadsada").click()
     page.get_by_role("link", name="Execute").click()
     just_wait(page)
     expect_normalized(page, page.locator("#one"), "item 1 sadsada boc b electrical")
@@ -149,10 +148,8 @@ def bulk(page: Any) -> None:
 
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u2"]').get_by_role("cell", name="Boc B").click()
-    page.locator('[id="u2"] > td:nth-child(5)').click()
     page.locator('[id="u1"]').get_by_role("cell", name="Boc B").click()
     page.get_by_role("cell", name="Electrical").click()
-    page.get_by_role("cell", name="sadsada").click()
     page.locator("#operation").select_option("2")
     page.locator("#objs_2").select_option("u2")
     page.get_by_role("link", name="Execute").click()

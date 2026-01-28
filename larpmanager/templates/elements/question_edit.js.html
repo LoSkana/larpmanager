@@ -1,0 +1,349 @@
+{% load i18n static %}
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+
+    // ========== Context Detection ==========
+
+    // Detect if we're in writing or registration context
+    function isWritingContext() {
+        return window.location.pathname.indexOf('/writing/form/') > -1;
+    }
+
+    // Extract writing type from URL (for writing forms)
+    function getWritingType() {
+        const pathParts = window.location.pathname.split('/');
+        const formIndex = pathParts.indexOf('form');
+        return formIndex >= 0 ? pathParts[formIndex + 1] : null;
+    }
+
+    // Extract question UUID from current URL path
+    function getQuestionUuidFromUrl() {
+        const pathParts = window.location.pathname.split('/');
+        const questionUuidIndex = pathParts.indexOf('edit') + 1;
+        return pathParts[questionUuidIndex];
+    }
+
+    // Build base path up to /manage/
+    function getBasePath() {
+        const pathParts = window.location.pathname.split('/');
+        const manageIndex = pathParts.indexOf('manage');
+        return pathParts.slice(0, manageIndex + 1).join('/');
+    }
+
+
+    // ========== URL Building ==========
+
+    // Build URL for options AJAX endpoint
+    function buildOptionsAjaxUrl(optionUuid, questionUuid) {
+        const basePath = getBasePath();
+
+        if (isWritingContext()) {
+            const writingType = getWritingType();
+            return `${basePath}/writing/options/${writingType}/ajax/${optionUuid}/?question_uuid=${questionUuid}`;
+        } else {
+            return `${basePath}/options/ajax/${optionUuid}/?question_uuid=${questionUuid}`;
+        }
+    }
+
+    // Build URL for options edit endpoint
+    function buildOptionsEditUrl(optionUuid) {
+        const basePath = getBasePath();
+
+        if (isWritingContext()) {
+            const writingType = getWritingType();
+            return `${basePath}/writing/options/${writingType}/edit/${optionUuid}/`;
+        } else {
+            return `${basePath}/options/edit/${optionUuid}/`;
+        }
+    }
+
+
+    // ========== Page Navigation ==========
+
+    // Reload only the options iframe
+    function reloadOptionsIframe() {
+        const iframe = document.getElementById('options-iframe');
+        if (iframe) {
+            // Reset height to min-height before reload to avoid accumulation
+            iframe.style.height = '400px';
+            iframe.src = iframe.src;
+        }
+    }
+
+    // Create or update iframe for options list
+    function createOrUpdateOptionsIframe(questionUuid) {
+        const optionsDiv = document.getElementById('options');
+        const existingIframe = document.getElementById('options-iframe');
+
+        if (!optionsDiv || !questionUuid) return;
+
+        // Build iframe URL
+        const basePath = getBasePath();
+        let iframeUrl;
+
+        if (isWritingContext()) {
+            const writingType = getWritingType();
+            iframeUrl = `${basePath}/writing/options/${writingType}/list/${questionUuid}/`;
+        } else {
+            iframeUrl = `${basePath}/options/list/${questionUuid}/`;
+        }
+
+        if (existingIframe) {
+            // Update existing iframe src with new question UUID
+            existingIframe.style.height = '400px'; // Reset height
+            existingIframe.src = iframeUrl;
+        } else {
+            // Create new iframe element
+            const iframe = document.createElement('iframe');
+            iframe.id = 'options-iframe';
+            iframe.src = iframeUrl;
+            iframe.style.width = '100%';
+            iframe.style.border = 'none';
+            iframe.style.minHeight = '400px';
+
+            // Clear any placeholder content
+            optionsDiv.innerHTML = '';
+            optionsDiv.appendChild(iframe);
+        }
+    }
+
+    // ========== Modal Management ==========
+
+    // Close option modal popup
+    function closeOptionModal() {
+        // Simulate click on overlay to close uglipop properly
+        const overlay = document.getElementById('uglipop_overlay');
+        if (overlay) {
+            overlay.click();
+        }
+    }
+
+    // Open option modal with form in iframe
+    function openOptionModal(optionUuid, questionUuid) {
+        let editUrl = buildOptionsEditUrl(optionUuid);
+
+        if (optionUuid === '0') {
+            editUrl += `?question_uuid=${questionUuid}&frame=1`;
+        } else {
+            editUrl += '?frame=1';
+        }
+
+        // Use common iframe modal function from lm.js
+        window.openIframeModal(editUrl, 'popup_option');
+    }
+
+
+    // ========== AJAX Utilities ==========
+
+    // Make AJAX request with common error handling
+    function makeAjaxRequest(config) {
+        start_spinner();
+
+        return $.ajax(config)
+            .done(function(response) {
+                stop_spinner();
+                if (config.onSuccess) {
+                    config.onSuccess(response);
+                }
+            })
+            .fail(function(xhr, status, error) {
+                stop_spinner();
+                if (config.onError) {
+                    config.onError(xhr, status, error);
+                } else {
+                    alert('{% trans "An error occurred" %}');
+                }
+            });
+    }
+
+    // Save question via AJAX before adding options
+    function saveQuestionBeforeAddingOption(callback) {
+        const $mainForm = $('#main_form');
+        const formData = new FormData($mainForm[0]);
+
+        makeAjaxRequest({
+            url: window.location.pathname,
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            dataType: "json",
+            onSuccess: function(response) {
+                if (response.success && response.question_uuid) {
+                    // Update URL with new question UUID
+                    const newUrl = window.location.pathname.replace('/edit/0', '/edit/' + response.question_uuid);
+                    window.history.replaceState({}, '', newUrl);
+
+                    // Update form action to new UUID path
+                    $mainForm.attr('action', newUrl);
+
+                    // Create iframe if it doesn't exist yet
+                    createOrUpdateOptionsIframe(response.question_uuid);
+
+                    // Execute callback with question UUID
+                    if (callback) {
+                        callback(response.question_uuid);
+                    }
+                } else {
+                    // Form has validation errors, submit normally to show errors
+                    $mainForm.off('submit');
+                    $mainForm.submit();
+                }
+            },
+            onError: function() {
+                // AJAX error, submit form normally to show errors
+                $mainForm.off('submit');
+                $mainForm.submit();
+            }
+        });
+    }
+
+
+    // ========== Form Field Visibility ==========
+
+    // Toggle visibility of form fields based on question type
+    function toggleOptions() {
+        const selectedValue = $('#id_typ').val();
+        const speed = 300;
+
+        // Options section visibility
+        if (["m", "s"].includes(selectedValue)) {
+            if (!$('#options').is(':visible')) {
+                $('#options').removeClass('hide').fadeIn(speed);
+            }
+        } else {
+            if ($('#options').is(':visible')) {
+                $('#options').fadeOut(speed, function() {
+                    $(this).addClass('hide');
+                });
+            }
+        }
+
+        // Max length field visibility
+        const maxLengtheable = ["m", "t", "p", "e", "name", "teaser", "text", "title", "additional_tickets"];
+        $('#id_max_length_tr').toggle(maxLengtheable.includes(selectedValue));
+
+        // Printable and visibility fields
+        if (["s", "m", "t", "p", "e", "c"].includes(selectedValue)) {
+            $('#id_printable_tr').fadeIn(speed);
+            $('#id_visibility_tr').fadeIn(speed);
+        } else {
+            $('#id_printable_tr').fadeOut(speed);
+            $('#id_visibility_tr').fadeOut(speed);
+        }
+
+        // Hide visibility for specific types
+        if (["name", "teaser", "text", "faction"].includes(selectedValue)) {
+            $('#id_visibility_tr').fadeOut(speed);
+        }
+
+        // Status field visibility
+        if (["ticket", "c"].includes(selectedValue)) {
+            $('#id_status_tr').fadeOut(speed);
+        } else {
+            $('#id_status_tr').fadeIn(speed);
+        }
+
+        // Editable field visibility
+        if (["c"].includes(selectedValue)) {
+            $('#id_editable_tr').fadeOut(speed);
+        } else {
+            $('#id_editable_tr').fadeIn(speed);
+        }
+    }
+
+
+    // ========== Event Handlers ==========
+
+    // Handle "New Option" button click
+    function handleNewOptionClick(e) {
+        e.preventDefault();
+        const questionUuid = getQuestionUuidFromUrl();
+
+        // If question hasn't been saved yet, save it first
+        if (questionUuid === "0") {
+            saveQuestionBeforeAddingOption(function(savedQuestionUuid) {
+                openOptionModal('0', savedQuestionUuid);
+            });
+        } else {
+            openOptionModal('0', questionUuid);
+        }
+
+        return false;
+    }
+
+    // Handle edit option link click
+    function handleEditOptionClick(e) {
+        e.preventDefault();
+        const optionUuid = $(this).data('option-uuid');
+        const questionUuid = getQuestionUuidFromUrl();
+        openOptionModal(optionUuid, questionUuid);
+        return false;
+    }
+
+    // Listen for messages from iframe to close modal when option is saved or cancelled
+    window.addEventListener('message', function(e) {
+        // Check if message is from our option form
+        if (e.data && e.data.type === 'option_saved') {
+            closeOptionModal();
+
+            // Get current question UUID from URL
+            const questionUuid = getQuestionUuidFromUrl();
+
+            // Create iframe if it doesn't exist yet (for newly saved questions)
+            createOrUpdateOptionsIframe(questionUuid);
+
+            // Reload iframe if it already exists
+            reloadOptionsIframe();
+        } else if (e.data && e.data.type === 'option_cancelled') {
+            closeOptionModal();
+        } else if (e.data && e.data.type === 'open_option_modal') {
+            // Message from options list iframe to open option modal on parent
+            const currentQuestionUuid = getQuestionUuidFromUrl();
+
+            // If question hasn't been saved yet, save it first
+            if (currentQuestionUuid === "0") {
+                saveQuestionBeforeAddingOption(function(savedQuestionUuid) {
+                    openOptionModal(e.data.optionUuid, savedQuestionUuid);
+                });
+            } else {
+                openOptionModal(e.data.optionUuid, e.data.questionUuid);
+            }
+        } else if (e.data && e.data.type === 'iframe_resize') {
+            // Update iframe height based on content
+            const iframe = document.getElementById('options-iframe');
+            if (iframe && e.data.height) {
+                iframe.style.height = e.data.height + 'px';
+            }
+        }
+    });
+
+
+    // ========== Initialization ==========
+
+    $(document).ready(function() {
+        // Move options section before submit button
+        $('#options').insertBefore('#form_submit');
+
+        // Initialize visibility toggle
+        setTimeout(toggleOptions, 10);
+
+        // Bind event handlers for question type changes
+        $('#id_typ').on('change', toggleOptions);
+        $('#id_status').on('change', toggleOptions);
+
+        // Bind event handlers for option management
+        $('.new-option').on('click', handleNewOptionClick);
+        $(document).on('click', '.edit-option-ajax', handleEditOptionClick);
+
+        // Handle cancel button in option modal (using event delegation for dynamic content)
+        $(document).on('click', '.btn-cancel', function(e) {
+            e.preventDefault();
+            closeOptionModal();
+            return false;
+        });
+    });
+
+});
+</script>
