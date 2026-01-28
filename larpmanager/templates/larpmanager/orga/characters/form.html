@@ -64,7 +64,7 @@
                     <td>
                         {% for ch in el.options_list %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_writing_options_edit' run.get_slug typ ch.uuid %}">{{ ch.name }}</a>
+                            {{ ch.name }}
                         {% endfor %}
                     </td>
                     <td>

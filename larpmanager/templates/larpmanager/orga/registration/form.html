@@ -12,93 +12,93 @@
     {% for el in list %}
         {% if el.section != old_section %}
             {% if el.section %}
-            </table>
-            <h1>
-                <a href="{% url 'orga_registration_sections_edit' run.get_slug el.section.uuid %}">{{ el.section }}</a>
-            </h1>
-        {% endif %}
-        <table id="registration_questions_{{ el.section }}"
-               class="go_datatable writing ordering_arrow">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>{% trans "Name" %}</th>
-                    <th>{% trans "Description" %}</th>
-                    <th>{% trans "Type" %}</th>
-                    <th>{% trans "Status" %}</th>
+                </table>
+                <h1>
+                    <a href="{% url 'orga_registration_sections_edit' run.get_slug el.section.uuid %}">{{ el.section }}</a>
+                </h1>
+            {% endif %}
+            <table id="registration_questions_{{ el.section }}"
+                   class="go_datatable writing ordering_arrow">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Description" %}</th>
+                        <th>{% trans "Type" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        {% if features.gift %}
+                            <th>{% trans "Gift" %}</th>
+                        {% endif %}
+                        <th>{% trans "Options" %}</th>
+                        {% if features.reg_que_faction %}
+                            <th>{% trans "Factions" %}</th>
+                        {% endif %}
+                        {% if features.reg_que_tickets %}
+                            <th>{% trans "Tickets" %}</th>
+                        {% endif %}
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% endif %}
+                <tr id="{{ el.uuid }}">
+                    <td>
+                        <a href="{% url 'orga_registration_form_edit' run.get_slug el.uuid %}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+                    <td>{{ el.name }}</td>
+                    <td>{{ el.description | truncatechars:50 }}</td>
+                    <td>{{ el.get_typ_display }}</td>
+                    <td>
+                        {% if el.typ|not_in:"ticket" %}{{ el.get_status_display }}{% endif %}
+                    </td>
                     {% if features.gift %}
-                        <th>{% trans "Gift" %}</th>
+                        <td>
+                            {% if el.giftable %}<i class="fa-solid fa-check"></i>{% endif %}
+                        </td>
                     {% endif %}
-                    <th>{% trans "Options" %}</th>
+                    <td>
+                        {% for ch in el.options_list %}
+                            {% include "elements/comma.html" %}
+                            {{ ch.name }}
+                        {% endfor %}
+                    </td>
                     {% if features.reg_que_faction %}
-                        <th>{% trans "Factions" %}</th>
+                        <td>
+                            {% for ch in el.factions.all %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_factions_edit' run.get_slug ch.uuid %}">#{{ ch.number }} {{ ch.name }}</a>
+                            {% endfor %}
+                        </td>
                     {% endif %}
                     {% if features.reg_que_tickets %}
-                        <th>{% trans "Tickets" %}</th>
+                        <td>
+                            {% for ch in el.tickets.all %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_registration_tickets_edit' run.get_slug ch.uuid %}">{{ ch.name }}</a>
+                            {% endfor %}
+                        </td>
                     {% endif %}
-                    <th></th>
-                    <th></th>
+                    <td>
+                        {% if el.section != old_section %}
+                            {% define el.section as old_section %}
+                        {% else %}
+                            <a href="{% url 'orga_registration_form_order' run.get_slug el.uuid 0 %}">
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not forloop.last %}
+                            <a href="{% url 'orga_registration_form_order' run.get_slug el.uuid 1 %}">
+                                <i class="fa-solid fa-arrow-down"></i>
+                            </a>
+                        {% endif %}
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-            {% endif %}
-            <tr id="{{ el.uuid }}">
-                <td>
-                    <a href="{% url 'orga_registration_form_edit' run.get_slug el.uuid %}">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                </td>
-                <td>{{ el.name }}</td>
-                <td>{{ el.description | truncatechars:50 }}</td>
-                <td>{{ el.get_typ_display }}</td>
-                <td>
-                    {% if el.typ|not_in:"ticket" %}{{ el.get_status_display }}{% endif %}
-                </td>
-                {% if features.gift %}
-                    <td>
-                        {% if el.giftable %}<i class="fa-solid fa-check"></i>{% endif %}
-                    </td>
-                {% endif %}
-                <td>
-                    {% for ch in el.options_list %}
-                        {% include "elements/comma.html" %}
-                        <a href="{% url 'orga_registration_options_edit' run.get_slug ch.uuid %}">{{ ch.name }}</a>
-                    {% endfor %}
-                </td>
-                {% if features.reg_que_faction %}
-                    <td>
-                        {% for ch in el.factions.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_factions_edit' run.get_slug ch.uuid %}">#{{ ch.number }} {{ ch.name }}</a>
-                        {% endfor %}
-                    </td>
-                {% endif %}
-                {% if features.reg_que_tickets %}
-                    <td>
-                        {% for ch in el.tickets.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_registration_tickets_edit' run.get_slug ch.uuid %}">{{ ch.name }}</a>
-                        {% endfor %}
-                    </td>
-                {% endif %}
-                <td>
-                    {% if el.section != old_section %}
-                        {% define el.section as old_section %}
-                    {% else %}
-                        <a href="{% url 'orga_registration_form_order' run.get_slug el.uuid 0 %}">
-                            <i class="fa-solid fa-arrow-up"></i>
-                        </a>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if not forloop.last %}
-                        <a href="{% url 'orga_registration_form_order' run.get_slug el.uuid 1 %}">
-                            <i class="fa-solid fa-arrow-down"></i>
-                        </a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock content %}
