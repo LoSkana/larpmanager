@@ -750,27 +750,27 @@ def search(request: HttpRequest, event_slug: str) -> HttpResponse:
         context["search_text"] = get_event_text(context["event"].id, EventTextType.SEARCH)
 
         # Determine which writing fields should be visible
-        visible_writing_fields(context, QuestionApplicable.CHARACTER)
+        fields_data = visible_writing_fields(context, QuestionApplicable.CHARACTER)
 
         # Remove fields that shouldn't be shown to current user
         fields_to_remove = [
             question_uuid
-            for question_uuid in context["questions"]
+            for question_uuid in fields_data["questions"]
             if str(question_uuid) not in context.get("show_character", []) and "show_all" not in context
         ]
 
         context["questions"] = {
-            key: value for key, value in context["questions"].items() if key not in fields_to_remove
+            key: value for key, value in fields_data["questions"].items() if key not in fields_to_remove
         }
 
         context["options"] = {
             key: value
-            for key, value in context["options"].items()
+            for key, value in fields_data["options"].items()
             if value.get("question__uuid") not in fields_to_remove
         }
 
         context["searchable"] = {
-            key: value for key, value in context["searchable"].items() if key not in fields_to_remove
+            key: value for key, value in fields_data["searchable"].items() if key not in fields_to_remove
         }
 
         # Filter character fields based on visibility settings
