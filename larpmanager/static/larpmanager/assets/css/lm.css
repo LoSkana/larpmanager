@@ -2878,11 +2878,23 @@ input[type="number"] {
     width: 100%;
   }
 
-  .new_form table,
-  .new_form tbody,
-  .new_form tr {
+  .new_form .form_container table,
+  .new_form .form_container table tbody,
+  .new_form .form_container table tr,
+  .new_form .form_container table td,
+  .new_form .form_container table th {
     display: block;
     width: 100%;
+  }
+
+  .new_form .form_container table th {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    font-weight: 600;
+  }
+
+  .new_form .form_container table td {
+    margin-bottom: 0;
   }
 
   .new_form .form_container table .tox-tinymce {
