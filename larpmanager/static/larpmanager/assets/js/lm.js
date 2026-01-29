@@ -106,7 +106,7 @@ window.addTinyMCETextarea = function(sel) {
 
 $(document).ready(function() {
 
-    $('#banner h1').textfill({
+    $('.association #banner h1').textfill({
     });
 
     $('#sidebar h1').textfill({
