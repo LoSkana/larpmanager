@@ -896,7 +896,7 @@ function centerMobileIcons() {
         }
     });
 
-    var totalSpacing = topbarWidth * 0.95 - totalElWidth;
+    var totalSpacing = topbarWidth * 0.90 - totalElWidth;
     var margin = totalSpacing / elCount;
 
     $visibleElements.each(function (index) {

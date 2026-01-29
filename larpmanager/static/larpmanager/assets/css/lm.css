@@ -1884,6 +1884,104 @@ input[type="checkbox"].checkbox_single {
   width: 100%;
 }
 
+#topbar .left .el span.label,
+#topbar .right .el span.label {
+  display: none;
+}
+
+/* Mobile: topbar at bottom */
+@media (max-width: 840px) {
+  .new_form {
+    --topbar-height: 3.5em;
+  }
+
+  .new_form #topbar {
+    top: auto;
+    bottom: 0;
+    height: var(--topbar-height);
+    border-top: 2px solid rgba(var(--pri-rgb), 0.085);
+    border-bottom: none;
+    padding: 0.5em 0.5em;
+    background-color: rgba(var(--sec-rgb), 0.95);
+    backdrop-filter: blur(10px);
+  }
+
+  .new_form #sidebar.topbar,
+  .new_form #page-wrapper.topbar,
+  .new_form #page-wrapper.topbar header {
+    margin-top: 0;
+    margin-bottom: var(--topbar-height);
+  }
+
+  .new_form #topbar .left .el,
+  .new_form #topbar .right .el {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.3em;
+    text-align: center;
+  }
+
+  .new_form #topbar .left .el a,
+  .new_form #topbar .right .el a,
+  .new_form #topbar .left .el > span,
+  .new_form #topbar .right .el > span {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 0.2em;
+    margin-bottom: 0.1em;
+  }
+
+  .new_form #topbar .left .el i,
+  .new_form #topbar .right .el i {
+    font-size: 1.5em !important;
+    margin: 0;
+    display: block;
+  }
+
+  .new_form #topbar .left .el span.label,
+  .new_form #topbar .right .el span.label {
+    font-size: 0.7em;
+    display: block;
+    white-space: nowrap;
+  }
+
+  .new_form #topbar .dropdown {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .new_form #topbar .dropdown > span {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 0.2em;
+  }
+
+  .new_form #topbar .dropdown .dropdown-button i {
+    font-size: 0.7em;
+  }
+
+  .new_form #topbar table {
+    width: 100%;
+  }
+
+  .new_form #topbar .left {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .new_form #topbar .left .el {
+    margin-right: 0;
+  }
+}
+
 #topbar img {
   height: 1.5em;
   margin-right: 0.5em;
@@ -1974,14 +2072,14 @@ input[type="checkbox"].checkbox_single {
     --topbar-height: 2em;
   }
 
-  #topbar {
+  body:not(.new_form) #topbar {
     margin: 0;
     padding: 0.1em 0;
     flex-shrink: 0;
   }
 
-  #topbar .right,
-  #topbar .left {
+  body:not(.new_form) #topbar .right,
+  body:not(.new_form) #topbar .left {
     text-align: left !important;
     white-space: nowrap;
   }
