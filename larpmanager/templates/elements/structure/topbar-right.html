@@ -43,41 +43,36 @@
 {% else %}
     <td class="right">
         {% if user_characters_shortcut %}
-            <div>
+            <div class="el">
             <a href="{% url 'characters' %}"><i class="fa-solid fa-users"></i>
             <span>{% trans "Characters" %}</span>
         </a>
-        <span class="label">{% trans "Characters" %}</span>
     </div>
 {% endif %}
 {% if user_registrations_shortcut %}
-    <div>
+    <div class="el">
     <a href="{% url 'registrations' %}"><i class="fa-solid fa-clipboard-list"></i>
     <span>{% trans "Registrations" %}</span>
 </a>
-<span class="label">{% trans "Registrations" %}</span>
 </div>
 {% endif %}
-<div>
+<div class="el">
     <a href="{% url 'accounting' %}">
         <i class="fa-solid fa-wallet"></i>
         <span>{% trans "Accounting" %}</span>
     </a>
-    <span class="label">{{ manage }} {% trans "Accounting" %}</span>
 </div>
-<div>
+<div class="el">
     <a href="{% url 'profile' %}">
         <i class="fa-solid fa-user-circle"></i>
         <span>{% trans "Profile" %}</span>
     </a>
-    <span class="label">{{ topbar }}{% trans "Profile" %}</span>
 </div>
 <div class="el">
     <a id="menu-open" href="#menu">
         <i class="fa-solid fa-bars"></i>
         <span>{% trans "Hi" %}, {{ user.member.display_member }}!</span>
     </a>
-    <span class="label">Menu</span>
 </div>
 </td>
 {% endif %}

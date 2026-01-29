@@ -1888,8 +1888,8 @@ input[type="checkbox"].checkbox_single {
   width: 100%;
 }
 
-#topbar .left .el span.label,
-#topbar .right .el span.label {
+#topbar .el span.label,
+#topbar .el span.label {
   display: none;
 }
 
@@ -1917,11 +1917,11 @@ input[type="checkbox"].checkbox_single {
     margin-bottom: var(--topbar-height);
   }
 
-  .new_form #topbar .mobile {
+  #topbar .mobile {
     table-layout: fixed;
   }
 
-  .new_form #topbar .mobile td {
+  #topbar .mobile td {
     text-align: center !important;
     width: auto;
   }
@@ -2082,12 +2082,6 @@ input[type="checkbox"].checkbox_single {
     margin: 0;
     padding: 0.1em 0;
     flex-shrink: 0;
-  }
-
-  body:not(.new_form) #topbar .right,
-  body:not(.new_form) #topbar .left {
-    text-align: left !important;
-    white-space: nowrap;
   }
 
   #topbar .no_mobile,

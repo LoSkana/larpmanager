@@ -121,7 +121,7 @@
         </noscript>
     </head>
     <body id="{{ association.name | slugify }}"
-          class="is-preload {% if lm or not old_form_appearance %}new_form{% endif %} {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %}">
+          class="is-preload {% if lm or not association.old_form_appearance %}new_form{% endif %} {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
             {% if onboarding %}
