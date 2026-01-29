@@ -31,6 +31,25 @@ button,
   }
 }
 
+.password-field-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+.password-toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.password-toggle-icon:hover {
+  opacity: 1;
+}
+
 select {
   padding-right: 3.5em;
 }
