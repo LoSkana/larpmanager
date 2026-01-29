@@ -23,6 +23,7 @@ from typing import Any, ClassVar
 
 from django.apps import apps
 from django.contrib.postgres.aggregates import ArrayAgg
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import F, Q, QuerySet
 from django.utils.translation import gettext_lazy as _
@@ -704,6 +705,7 @@ class RegistrationOption(UuidMixin, BaseModel):
         default=0,
         verbose_name=_("Price"),
         help_text=_("Optional - Amount added to the registration fee if selected (0 = no extra cost)"),
+        validators=[MinValueValidator(0)],
     )
 
     max_available = models.IntegerField(

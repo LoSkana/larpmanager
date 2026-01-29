@@ -13,7 +13,7 @@
             -
         {% endif %}
         {{ form1.page_title }}
-        {% if run %}- {{ run }}{% endif %}
+        {% if run %}- {{ run.search | truncatechars:50 }}{% endif %}
     {% endif %}
 {% endblock title %}
 {% block info %}

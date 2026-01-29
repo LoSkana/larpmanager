@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n static %}
 {% block title %}
-    {% trans "Pdf bulk" %} - {{ run }}
+    {% trans "Pdf bulk" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page allows you to select items to bulk download" %}

@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n static %}
 {% block title %}
-    {% trans "Pdf" %} - {{ run }}
+    {% trans "Pdf" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows the settings for PDF printing" %}

@@ -21,6 +21,7 @@ from __future__ import annotations
 
 from typing import Any, ClassVar
 
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
@@ -99,7 +100,12 @@ class RegistrationTicket(UuidMixin, BaseModel):
         help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
 
-    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        validators=[MinValueValidator(0)],
+    )
 
     max_available = models.IntegerField(
         default=0,

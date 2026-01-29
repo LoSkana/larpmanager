@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans "Ability" %} - {{ run }}
+    {% trans "Ability" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page summarizes the abilities that participants can purchase with experience points" %}

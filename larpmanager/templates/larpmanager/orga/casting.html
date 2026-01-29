@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load show_tags i18n static compress %}
 {% block title %}
-    {% trans "Casting" %} {{ gl_name }} - {{ run }}
+    {% trans "Casting" %} {{ gl_name }} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows the casting preferences expressed by participants, and allows them to be assigned through an optimization algorithm" %}

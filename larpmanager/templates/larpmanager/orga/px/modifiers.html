@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans "Modifiers" %} - {{ run }}
+    {% trans "Modifiers" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page summarizes the modifiers that are applied to abilities based on other abilities, or character fields" %}

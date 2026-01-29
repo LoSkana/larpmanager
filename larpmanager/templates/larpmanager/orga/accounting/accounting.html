@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Event accounting" %} - {{ run }}
+    {% trans "Event accounting" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows the accounting status of the event, divided into the various expense types" %}

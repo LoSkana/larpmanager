@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
-    Dashboard - {{ run }}
+    Dashboard - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block content %}
     <div id="manage">
