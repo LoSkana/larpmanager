@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Delivery" %} - {{ run }}
+    {% trans "Delivery" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page summarizes px delivery to characters" %}

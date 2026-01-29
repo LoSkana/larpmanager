@@ -10,7 +10,7 @@
         -
     {% endif %}
     {{ form.page_title }}
-    - {{ run }}
+    - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {{ form.page_info }}

@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "New refund request" %} - {{ run }}
+    {% trans "New refund request" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "Manage personal expense submission" %}

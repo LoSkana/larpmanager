@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Warehouse assignments" %}  - {{ run }}
+    {% trans "Warehouse assignments" %}  - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {% trans "This page displays cases where the same item has been assigned to multiple areas" %}

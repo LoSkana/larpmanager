@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block title %}
     {% trans "Questions" %}
-    {% if run %}- {{ run }}{% endif %}
+    {% if run %}- {{ run.search | truncatechars:50 }}{% endif %}
 {% endblock title %}
 {% block content %}
     <h2>{% trans "Submit a new question" %}</h2>

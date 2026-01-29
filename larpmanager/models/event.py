@@ -697,6 +697,9 @@ class Run(UuidMixin, BaseModel):
     def __str__(self) -> str:
         """Return string representation of the run with event name and optional number."""
         s = self.event.name
+        max_length = 50
+        if len(s) > max_length:
+            s = f"{s[:max_length]}[...]"
         if self.number and self.number != 1:
             s = f"{s} #{self.number}"
         return s

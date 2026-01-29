@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {% trans "Invoices" %} - {{ run }}
+    {% trans "Invoices" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows all payments received for this event" %}

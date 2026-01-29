@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Expenses" %} - {{ run }}
+    {% trans "Expenses" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows your personal spending items" %}

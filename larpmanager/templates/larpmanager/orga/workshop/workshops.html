@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans "Workshop" %} - {{ run }}
+    {% trans "Workshop" %} - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows for each participant their completion status of workshops" %}

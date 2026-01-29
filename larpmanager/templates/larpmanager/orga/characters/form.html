@@ -2,7 +2,7 @@
 {% load i18n show_tags %}
 {% block title %}
     {% trans label_typ as name %}
-    {% trans "Form questions" %} - {{ name }} - {{ run }}
+    {% trans "Form questions" %} - {{ name }} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page summarises the available questions of the character form" %}

@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {{ credits_name }} - {{ run }}
+    {{ credits_name }} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page summarises the assignments in this event of" %} {{ credits_name }}

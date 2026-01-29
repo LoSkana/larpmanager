@@ -2,7 +2,7 @@
 {% load i18n show_tags %}
 {% block title %}
     {% trans "Feature activated" %}
-    - {{ run }}
+    - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block content %}
     <br />
