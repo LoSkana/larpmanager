@@ -1957,6 +1957,7 @@ input[type="checkbox"].checkbox_single {
     flex-direction: column;
     align-items: center;
     position: relative;
+    width: 100%;
   }
 
   .new_form #topbar .dropdown > span {
@@ -1968,6 +1969,12 @@ input[type="checkbox"].checkbox_single {
 
   .new_form #topbar .dropdown .dropdown-button i {
     font-size: 0.7em;
+  }
+
+  .new_form #topbar .dropdown .dropdown-menu {
+    bottom: 100%;
+    top: auto;
+    margin-bottom: 0.5em;
   }
 
   .new_form #topbar table {
