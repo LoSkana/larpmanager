@@ -169,6 +169,9 @@ def send_mail_exec(
         sender_context = Association.objects.filter(pk=association_id).first()
     elif run_id:
         sender_context = Run.objects.filter(pk=run_id).first()
+        # Extract association_id from run if not provided
+        if sender_context and not association_id:
+            association_id = sender_context.event.association_id
 
     if sender_context:
         # Add organization/run prefix to subject line
