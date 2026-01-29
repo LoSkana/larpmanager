@@ -25,12 +25,12 @@
                                 {% if run and run.event.slug == v.e and run.number == v.r %}
                                     <!-- skip -->
                                 {% else %}
-                                    <a href="{% url 'manage' v.slug %}" class="origin"><i class="fa-solid fa-calendar-days"></i> {{ v.s }}</a>
+                                    <a href="{% url 'manage' v.slug %}" class="origin"><i class="fa-solid fa-calendar-days no_mobile"></i> {{ v.s }}</a>
                                 {% endif %}
                             {% endfor %}
                             {% if association_role %}
                                 {% if run %}
-                                    <a href="{% url 'manage' %}" class="origin"><i class="fa-solid fa-building"></i> {{ association.name }}</a>
+                                    <a href="{% url 'manage' %}" class="origin"><i class="fa-solid fa-building no_mobile"></i> {{ association.name }}</a>
                                 {% endif %}
                             {% endif %}
                         </div>
@@ -38,9 +38,9 @@
                     </div>
                     <div id="select_side" class="el dropdown">
                         {% if manage %}
-                            <span class="no_mobile"><i class="fa-solid fa-toolbox"></i> Admin</span>
+                            <span class="no_mobile"><i class="fa-solid fa-toolbox no_mobile"></i> Admin</span>
                         {% else %}
-                            <span class="no_mobile"><i class="fa-solid fa-users"></i> User</span>
+                            <span class="no_mobile"><i class="fa-solid fa-users no_mobile"></i> User</span>
                         {% endif %}
                         <div class="dropdown-button">
                             <a href="#" class="switch"><i class="fa-solid fa-square-caret-down"></i></a>
