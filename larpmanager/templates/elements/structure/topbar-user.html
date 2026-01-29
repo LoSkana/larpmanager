@@ -1,18 +1,30 @@
 {% load static i18n %}
 <div id="topbar">
     <div class="inner">
-        <table>
+        <table class="desktop">
             <tr>
                 <td class="left">
                     <span class="el">
                         <a href="{% url 'home' %}">
                             <i class="fa-solid fa-house"></i>
-                            <span class="no_mobile">Home</span>
+                            <span>Home</span>
+                        </a>
+                    </span>
+                </td>
+                {% include "elements/structure/topbar-right.html" with mobile=False %}
+            </tr>
+        </table>
+        <table class="mobile">
+            <tr>
+                <td>
+                    <span class="el">
+                        <a href="{% url 'home' %}">
+                            <i class="fa-solid fa-house"></i>
                         </a>
                         <span class="label">Home</span>
                     </span>
                 </td>
-                {% include "elements/structure/topbar-right.html" %}
+                {% include "elements/structure/topbar-right.html" with mobile=True %}
             </tr>
         </table>
     </div>

@@ -1,0 +1,28 @@
+<div class="dropdown-button">
+    <a href="#" class="switch"><i class="fa-solid fa-square-caret-down"></i></a>
+</div>
+<div class="dropdown-menu">
+    {% if run %}
+        {% if manage %}
+            <a href="{% url 'gallery' run.get_slug %}" class="admin-link">
+                <i class="fa-solid fa-users"></i> User
+            </a>
+        {% else %}
+            <a href="{% url 'manage' run.get_slug %}" class="admin-link">
+                <i class="fa-solid fa-toolbox"></i> Admin
+            </a>
+        {% endif %}
+    {% else %}
+        {% if manage %}
+            <a href="{% url 'home' %}" class="admin-link">
+                <i class="fa-solid fa-users"></i> User
+            </a>
+        {% else %}
+            {% if association_role %}
+                <a href="{% url 'manage' %}" class="admin-link">
+                    <i class="fa-solid fa-toolbox"></i> Admin
+                </a>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</div>

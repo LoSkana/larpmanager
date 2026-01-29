@@ -1,0 +1,17 @@
+<div class="dropdown-button">
+    <a href="#" class="switch"><i class="fa-solid fa-circle-chevron-down"></i></a>
+</div>
+<div class="dropdown-menu">
+    {% for rid, v in open_runs.items %}
+        {% if run and run.event.slug == v.e and run.number == v.r %}
+            <!-- skip -->
+        {% else %}
+            <a href="{% url 'manage' v.slug %}" class="origin"><i class="fa-solid fa-calendar-days no_mobile"></i> {{ v.s }}</a>
+        {% endif %}
+    {% endfor %}
+    {% if association_role %}
+        {% if run %}
+            <a href="{% url 'manage' %}" class="origin"><i class="fa-solid fa-building no_mobile"></i> {{ association.name }}</a>
+        {% endif %}
+    {% endif %}
+</div>

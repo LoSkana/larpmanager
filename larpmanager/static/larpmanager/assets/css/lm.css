@@ -1532,7 +1532,7 @@ th select {
     opacity: 0;
     position: relative;
     width: 80%;
-    max-height: 100%;
+    max-height: 90%;
     overflow-y: auto;
     overflow-x: hidden;
     font-size: 110%;
@@ -1917,37 +1917,23 @@ input[type="checkbox"].checkbox_single {
     margin-bottom: var(--topbar-height);
   }
 
-  .new_form #topbar .left .el,
-  .new_form #topbar .right .el {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 0 0.3em;
-    text-align: center;
+  .new_form #topbar .mobile {
+    table-layout: fixed;
   }
 
-  .new_form #topbar .left .el a,
-  .new_form #topbar .right .el a,
-  .new_form #topbar .left .el > span,
-  .new_form #topbar .right .el > span {
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-    gap: 0.2em;
-    margin-bottom: 0.1em;
+  .new_form #topbar .mobile td {
+    text-align: center !important;
+    width: auto;
   }
 
-  .new_form #topbar .left .el i,
-  .new_form #topbar .right .el i {
+  .new_form #topbar .mobile .el i {
     font-size: 1.5em !important;
     margin: 0;
     display: block;
   }
 
-  .new_form #topbar .left .el span.label,
-  .new_form #topbar .right .el span.label {
-    font-size: 0.7em;
+  .new_form #topbar .mobile .el span.label {
+    font-size: 0.6em;
     display: block;
     white-space: nowrap;
   }
@@ -1976,19 +1962,8 @@ input[type="checkbox"].checkbox_single {
     margin-bottom: 0.5em;
   }
 
-  .new_form #topbar table {
+  .new_form #topbar table.mobile {
     width: 100%;
-  }
-
-  .new_form #topbar .left {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-  }
-
-  .new_form #topbar .left .el {
-    margin-right: 0;
   }
 }
 
@@ -2016,6 +1991,11 @@ input[type="checkbox"].checkbox_single {
   display: revert;
 }
 
+/* Desktop: show desktop table, hide mobile table */
+#topbar table.mobile {
+  display: none;
+}
+
 #topbar .left {
   text-align: left !important;
 }
@@ -2026,6 +2006,22 @@ input[type="checkbox"].checkbox_single {
 
 #topbar .right {
   text-align: right !important;
+}
+
+/* Mobile: hide desktop table, show mobile table */
+@media (max-width: 840px) {
+  #topbar table.desktop {
+    display: none;
+  }
+
+  #topbar table.mobile {
+    display: table;
+  }
+
+  #topbar .right,
+  #topbar .left {
+    text-align: center !important;
+  }
 }
 
 #topbar .left .el {
