@@ -330,6 +330,13 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
+# django-allauth settings
+# Enable email-based user matching for social accounts
+# This allows django-allauth to find users by email instead of username
+# when users have username different from email
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+
 # PROFILING
 MIN_DURATION_PROFILER = 1
 IGNORABLE_PROFILER_URLS = [
