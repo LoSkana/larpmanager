@@ -1896,7 +1896,7 @@ input[type="checkbox"].checkbox_single {
 /* Mobile: topbar at bottom */
 @media (max-width: 840px) {
   .new_form {
-    --topbar-height: 3.5em;
+    --topbar-height: 3.7em;
   }
 
   .new_form #topbar {
@@ -1927,7 +1927,7 @@ input[type="checkbox"].checkbox_single {
   }
 
   .new_form #topbar .mobile .el i {
-    font-size: 1.5em !important;
+    font-size: 1.7em !important;
     margin: 0;
     display: block;
   }
