@@ -13,7 +13,10 @@
     <section id="banner">
         <!-- <span class="logo"><img src="{% static 'lm_logo.png' %}" alt="Logo"  width="150" height="150" /></span> -->
         <h2 class="home">{{ texts.banner_title }}</h2>
-        <h1 class="home">{{ texts.banner_subtitle }}</h1>
+        <h1 class="home">
+            <span class="subtitle_pre">{{ texts.banner_subtitle_pre }}</span>
+            <span>{{ texts.banner_subtitle }}</span>
+        </h1>
     </section>
     <!-- Main -->
     <section id="main" class="container">

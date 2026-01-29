@@ -951,6 +951,10 @@ header.sec h1 {
     font-size: 100%;
     margin: 1em !important;
   }
+
+  h1.home .subtitle_pre {
+    display: block;
+  }
 }
 
 @media (max-width: 736px) {
