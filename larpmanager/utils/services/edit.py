@@ -28,7 +28,6 @@ from django.core.cache import cache
 from django.db.models import Max
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -378,6 +377,7 @@ def _handle_form_submission(
     save_log(context["member"], form_type, saved_object, to_delete=should_delete)
     if should_delete:
         saved_object.delete()
+        context["deleted"] = True
 
     # Store saved object in context and return success
     context["saved"] = saved_object
@@ -953,6 +953,12 @@ def form_edit_handler(  # noqa: PLR0913
         # Set permission suggestion for future operations
         set_suggestion(context, perm)
 
+        # If item was deleted, redirect to list view
+        if request.POST.get("delete") == "1":
+            messages.success(request, _("Operation completed") + "!")
+            redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_redirect_kwargs or {})}
+            return redirect(redirect_list_view_name, **redirect_kwargs)
+
         # If AJAX request, return JSON with question UUID
         if is_ajax:
             return JsonResponse(
@@ -966,13 +972,15 @@ def form_edit_handler(  # noqa: PLR0913
         # Handle "continue editing" button - redirect to new question form
         if "continue" in request.POST:
             messages.success(request, _("Operation completed") + "!")
-            redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_redirect_kwargs or {})}
-            # Add question_uuid="0" for new question
             if extra_redirect_kwargs:  # writing form
-                redirect_kwargs["question_uuid"] = "0"
-                return redirect(request.resolver_match.view_name, **redirect_kwargs)
-            # registration form
-            return redirect(request.resolver_match.view_name, context["run"].get_slug(), "0")
+                redirect_kwargs = {
+                    "event_slug": context["run"].get_slug(),
+                    "question_uuid": "0",
+                    **extra_redirect_kwargs,
+                }
+            else:  # registration form
+                redirect_kwargs = {"event_slug": context["run"].get_slug(), "question_uuid": "0"}
+            return redirect(request.resolver_match.view_name, **redirect_kwargs)
 
         # Check if question is single/multiple choice and needs options
         is_choice = context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
@@ -988,7 +996,7 @@ def form_edit_handler(  # noqa: PLR0913
                 "question_uuid": context["saved"].uuid,
                 **(extra_redirect_kwargs or {}),
             }
-            return reverse(redirect_view_name, kwargs=redirect_kwargs)
+            return redirect(redirect_view_name, **redirect_kwargs)
 
         messages.success(request, _("Operation completed") + "!")
         redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_redirect_kwargs or {})}
