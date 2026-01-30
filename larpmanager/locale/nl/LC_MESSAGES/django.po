@@ -3808,6 +3808,9 @@ msgstr "Object bestaat niet"
 msgid "One-Time Access Token"
 msgstr "Eenmalig toegangssymbool"
 
+msgid "Operation not allowed"
+msgstr "Bediening niet toegestaan"
+
 msgid "Participant questions"
 msgstr "Vragen van deelnemers"
 

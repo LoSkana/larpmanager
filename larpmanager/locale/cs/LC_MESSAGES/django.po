@@ -3808,6 +3808,9 @@ msgstr "Objekt neexistuje"
 msgid "One-Time Access Token"
 msgstr "Jednorázový přístupový token"
 
+msgid "Operation not allowed"
+msgstr "Operace není povolena"
+
 msgid "Participant questions"
 msgstr "Otázky účastníků"
 

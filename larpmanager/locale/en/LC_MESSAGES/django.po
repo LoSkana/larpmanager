@@ -9485,6 +9485,9 @@ msgstr ""
 msgid "Operation completed"
 msgstr ""
 
+msgid "Operation not allowed"
+msgstr ""
+
 msgid "Warning! Other users are editing this item"
 msgstr ""
 

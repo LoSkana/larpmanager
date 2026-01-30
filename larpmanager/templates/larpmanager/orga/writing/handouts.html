@@ -22,6 +22,7 @@
                     <th class="hide assign">{% trans "Assigned" %}</th>
                 {% endif %}
                 <th>{% trans "Text" %}</th>
+                <th class="only_new_form"></th>
             </tr>
         </thead>
         <tbody>
@@ -55,6 +56,10 @@
                         </td>
                     {% endif %}
                     <td>{{ el.text_red | safe }}</td>
+                    <td class="only_new_form">
+                        <a href="{% url 'orga_handouts_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

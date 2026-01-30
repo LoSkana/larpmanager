@@ -806,12 +806,6 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
         if form.is_valid():
             registration = form.save()
 
-            # Handle registration deletion if requested
-            if "delete" in request.POST and request.POST["delete"] == "1":
-                cancel_reg(registration)
-                messages.success(request, _("Registration cancelled"))
-                return redirect("orga_registrations", event_slug=context["run"].get_slug())
-
             # Save registration-specific questions and answers
             form.save_registration_questions(registration)
 
@@ -841,6 +835,20 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
         context["name"] = str(context["registration"].member)
 
     return render(request, "larpmanager/orga/edit.html", context)
+
+
+@login_required
+def orga_registrations_delete(request: HttpRequest, event_slug: str, registration_uuid: str) -> HttpResponse:
+    """Delete registration for event - Handle as cancellation."""
+    context = check_event_context(request, event_slug, "orga_registrations")
+
+    get_registration(context, registration_uuid)
+
+    cancel_reg(context["registration"])
+
+    messages.success(request, _("Registration cancelled"))
+
+    return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
 
 def _save_questbuilder(context: dict, form: object, registration: Any) -> None:

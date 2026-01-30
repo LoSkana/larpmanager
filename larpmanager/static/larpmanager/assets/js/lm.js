@@ -482,15 +482,16 @@ function data_tables() {
 
         const tableId = $table.attr('id');
 
-        let disable_sort_columns = [0];
-        if ($table.hasClass('writing_list')) {
-            disable_sort_columns = [0, 2];
-        }
-        if ($table.hasClass('ordering_arrow')) {
-            var thList = $table.find('thead th');
-            var totalColumns = thList.length;
-            disable_sort_columns.push(totalColumns - 2, totalColumns - 1);
-        }
+        var thList = $table.find('thead th');
+        var disable_sort_columns = [];
+
+        // disable sort for empty thead th
+        thList.each(function (index) {
+            if ($(this).text().trim() === '') {
+                disable_sort_columns.push(index);
+            }
+        });
+
         let table_no_header_cols = $table.attr('no_header_cols');
         if (table_no_header_cols) {
             if (table_no_header_cols === "all") {
@@ -842,7 +843,8 @@ function add_icon_tooltips() {
     var iconTooltips = {
         'fa-edit': window['icon_texts']['edit'],
         'fa-arrow-up': window['icon_texts']['up'],
-        'fa-arrow-down': window['icon_texts']['down']
+        'fa-arrow-down': window['icon_texts']['down'],
+        'fa-trash': window['icon_texts']['delete']
     };
 
     // Process each icon type

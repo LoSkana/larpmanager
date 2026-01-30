@@ -16,6 +16,7 @@
                 <th></th>
                 <th>{% trans "Presentation" %}</th>
                 <th>{% trans "Quest" %}</th>
+                <th class="only_new_form"></th>
             </tr>
         </thead>
         <tbody>
@@ -38,6 +39,10 @@
                             {% include "elements/comma.html" %}
                             <a href="{% url 'orga_quests_edit' run.get_slug q.0 %}">{{ q.1 }}</a>
                         {% endfor %}
+                    </td>
+                    <td class="only_new_form">
+                        <a href="{% url 'orga_quest_types_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

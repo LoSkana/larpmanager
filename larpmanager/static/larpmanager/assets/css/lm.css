@@ -2883,6 +2883,18 @@ input[type="number"] {
   background-color: #a5dee5 !important;
 }
 
+.only_new_form {
+  display: none;
+}
+
+.new_form .only_new_form {
+  display: revert;
+}
+
+.new_form .no_new_form {
+  display: none;
+}
+
 .new_form .auto_resize {
   width: 70%;
   margin: 0 auto;

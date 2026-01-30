@@ -3808,6 +3808,9 @@ msgstr "Objektet eksisterer ikke"
 msgid "One-Time Access Token"
 msgstr "Token for engangstilgang"
 
+msgid "Operation not allowed"
+msgstr "Operasjon ikke tillatt"
+
 msgid "Participant questions"
 msgstr "Spørsmål fra deltakerne"
 

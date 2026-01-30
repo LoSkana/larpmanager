@@ -24,6 +24,7 @@
     </th>
     <th></th>
     <th></th>
+    <th class="only_new_form"></th>
 {% endblock thead %}
 {% block tbody %}
     {% for el in list %}
@@ -60,6 +61,10 @@
                         <i class="fa-solid fa-arrow-down"></i>
                     </a>
                 {% endif %}
+            </td>
+            <td class="only_new_form">
+                <a href="{% url 'orga_plots_delete' run.get_slug el.uuid %}"
+                   qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
             </td>
         </tr>
     {% endfor %}

@@ -520,6 +520,7 @@ def orga_delete(
     form_type: type[BaseModelForm],
     entity_uuid: str,
     redirect_view: str | None = None,
+    can_delete: Callable | None = None,
 ) -> HttpResponse:
     """Delete organization event objects through a unified interface.
 
@@ -533,6 +534,7 @@ def orga_delete(
         form_type: Type of form/object to delete
         entity_uuid: Entity UUID to delete
         redirect_view: Optional redirect view name after successful deletion
+        can_delete: Callback to check deletion can be done
 
     Returns:
         HttpResponse: Redirect response on successful deletion
@@ -541,7 +543,10 @@ def orga_delete(
     # Check user permissions and get base context for the event
     context = check_event_context(request, event_slug, permission)
 
-    redirect_view = backend_delete(request, context, form_type, entity_uuid, permission, redirect_view)
+    backend_delete(request, context, form_type, entity_uuid, can_delete)
+
+    if not redirect_view:
+        redirect_view = permission
 
     # Redirect to success page with event slug
     return redirect(redirect_view, event_slug=context["run"].get_slug())
@@ -552,31 +557,23 @@ def backend_delete(
     context: dict,
     form_type: type[BaseModelForm],
     entity_uuid: str,
-    permission: str | None,
-    redirect_view: str | None,
-) -> HttpResponse:
+    can_delete: Callable | None = None,
+) -> None:
     """Delete element from the system."""
-    # Get the element to delete
     model_type = form_type.Meta.model
     backend_get(context, model_type, entity_uuid, None)
 
-    # Get the element instance
     element = context["el"]
 
-    # Log the deletion
+    if can_delete is not None and not can_delete(context, element):
+        messages.error(request, _("Operation not allowed"))
+        return
+
     save_log(context["member"], form_type, element, to_delete=True)
 
-    # Delete the element
     element.delete()
 
-    # Show success message
     messages.success(request, _("Operation completed") + "!")
-
-    # Determine redirect target - use provided or default to permission name
-    if not redirect_view:
-        redirect_view = permission
-
-    return redirect_view
 
 
 def exe_edit(
@@ -653,6 +650,7 @@ def exe_delete(
     entity_uuid: str,
     permission: str,
     redirect_view: str | None = None,
+    can_delete: Callable | None = None,
 ) -> HttpResponse:
     """Delete organization-level entities through a unified interface.
 
@@ -665,6 +663,7 @@ def exe_delete(
         entity_uuid: Entity UUID for the object being deleted
         permission: Permission string required to access this delete functionality
         redirect_view: Optional redirect target after successful deletion (defaults to permission)
+        can_delete: Callback to check if deletion can be done
 
     Returns:
         HttpResponse: Redirect response on successful deletion
@@ -673,7 +672,10 @@ def exe_delete(
     # Check user permissions and get base context
     context = check_association_context(request, permission)
 
-    redirect_view = backend_delete(request, context, form_type, entity_uuid, permission, redirect_view)
+    backend_delete(request, context, form_type, entity_uuid, can_delete)
+
+    if not redirect_view:
+        redirect_view = permission
 
     return redirect(redirect_view)
 

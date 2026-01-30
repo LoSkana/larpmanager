@@ -3808,6 +3808,9 @@ msgstr "Das Objekt existiert nicht"
 msgid "One-Time Access Token"
 msgstr "Token für den einmaligen Zugang"
 
+msgid "Operation not allowed"
+msgstr "Betrieb nicht erlaubt"
+
 msgid "Participant questions"
 msgstr "Fragen der Teilnehmer"
 

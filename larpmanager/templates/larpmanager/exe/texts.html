@@ -16,6 +16,7 @@
                 <th>{% trans "Language" %}</th>
                 <th>{% trans "Default" %}</th>
                 <th>{% trans "Text" %}</th>
+                <th class="only_new_form"></th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +31,10 @@
                         {% if el.default %}<i class="fa-solid fa-check"></i>{% endif %}
                     </td>
                     <td>{{ el.text | safe | striptags | truncatechars:300 }}</td>
+                    <td class="only_new_form">
+                        <a href="{% url 'exe_texts_delete' el.uuid %}"
+                           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

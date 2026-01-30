@@ -22,6 +22,7 @@
                 <th>{% trans "Container" %}</th>
                 <th>{% trans "Tags" %}</th>
                 <th>{% trans "Photo" %}</th>
+                <th class="only_new_form"></th>
             </tr>
         </thead>
         <tbody>
@@ -57,6 +58,10 @@
                                  style="cursor: pointer"
                                  onclick="openImage('{{ el.photo.url }}')" />
                         {% endif %}
+                    </td>
+                    <td class="only_new_form">
+                        <a href="{% url 'exe_warehouse_items_delete' el.uuid %}"
+                           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

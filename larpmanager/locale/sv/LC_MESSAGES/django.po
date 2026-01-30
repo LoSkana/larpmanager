@@ -3808,6 +3808,9 @@ msgstr "Objektet existerar inte"
 msgid "One-Time Access Token"
 msgstr "Token för engångsåtkomst"
 
+msgid "Operation not allowed"
+msgstr "Drift inte tillåten"
+
 msgid "Participant questions"
 msgstr "Frågor från deltagarna"
 

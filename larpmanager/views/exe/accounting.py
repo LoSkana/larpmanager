@@ -77,7 +77,7 @@ from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import exe_paginate
-from larpmanager.utils.services.edit import backend_get, exe_edit
+from larpmanager.utils.services.edit import backend_get, exe_delete, exe_edit
 
 
 @login_required
@@ -123,6 +123,8 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 "type": lambda el: el.get_exp_display(),
             },
+            # Add delete view name for delete button
+            "delete_view": "exe_outflows_delete",
         },
     )
 
@@ -156,6 +158,12 @@ def exe_outflows_edit(request: HttpRequest, outflow_uuid: str) -> HttpResponse:
     """
     # Delegate to generic edit handler with outflow-specific form and redirect
     return exe_edit(request, ExeOutflowForm, outflow_uuid, "exe_outflows")
+
+
+@login_required
+def exe_outflows_delete(request: HttpRequest, outflow_uuid: str) -> HttpResponse:
+    """Delete outflow."""
+    return exe_delete(request, ExeOutflowForm, outflow_uuid, "exe_outflows")
 
 
 @login_required
@@ -195,6 +203,7 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
             "callbacks": {
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
             },
+            "delete_view": "exe_inflows_delete",
         },
     )
 
@@ -212,6 +221,12 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
 def exe_inflows_edit(request: HttpRequest, inflow_uuid: str) -> HttpResponse:
     """Edit an inflow entry for the association."""
     return exe_edit(request, ExeInflowForm, inflow_uuid, "exe_inflows")
+
+
+@login_required
+def exe_inflows_delete(request: HttpRequest, inflow_uuid: str) -> HttpResponse:
+    """Delete inflow."""
+    return exe_delete(request, ExeInflowForm, inflow_uuid, "exe_inflows")
 
 
 @login_required
@@ -247,6 +262,7 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
                 ("value", _("Value")),  # Monetary amount
                 ("created", _("Date")),  # When donation was created
             ],
+            "delete_view": "exe_donations_delete",
         },
     )
 
@@ -264,6 +280,12 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
 def exe_donations_edit(request: HttpRequest, donation_uuid: str) -> HttpResponse:
     """Edit an organization-wide donation entry."""
     return exe_edit(request, ExeDonationForm, donation_uuid, "exe_donations")
+
+
+@login_required
+def exe_donations_delete(request: HttpRequest, donation_uuid: str) -> HttpResponse:
+    """Delete donation."""
+    return exe_delete(request, ExeDonationForm, donation_uuid, "exe_donations")
 
 
 @login_required
@@ -297,6 +319,7 @@ def exe_credits(request: HttpRequest) -> HttpResponse:
                 ("value", _("Value")),
                 ("created", _("Date")),
             ],
+            "delete_view": "exe_credits_delete",
         },
     )
 
@@ -314,6 +337,12 @@ def exe_credits(request: HttpRequest) -> HttpResponse:
 def exe_credits_edit(request: HttpRequest, credit_uuid: str) -> HttpResponse:
     """Simple edit view wrapper for credit management."""
     return exe_edit(request, ExeCreditForm, credit_uuid, "exe_credits")
+
+
+@login_required
+def exe_credits_delete(request: HttpRequest, credit_uuid: str) -> HttpResponse:
+    """Delete credit."""
+    return exe_delete(request, ExeCreditForm, credit_uuid, "exe_credits")
 
 
 @login_required
@@ -351,6 +380,7 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
                 ("value", _("Value")),
                 ("created", _("Date")),
             ],
+            "delete_view": "exe_tokens_delete",
         },
     )
     # Render paginated view with AccountingItemOther model data
@@ -367,6 +397,12 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
 def exe_tokens_edit(request: HttpRequest, token_uuid: str) -> HttpResponse:
     """Edit an existing registration token."""
     return exe_edit(request, ExeTokenForm, token_uuid, "exe_tokens")
+
+
+@login_required
+def exe_tokens_delete(request: HttpRequest, token_uuid: str) -> HttpResponse:
+    """Delete token."""
+    return exe_delete(request, ExeTokenForm, token_uuid, "exe_tokens")
 
 
 @login_required
@@ -414,6 +450,7 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
                 # Display human-readable expense type
                 "type": lambda el: el.get_exp_display(),
             },
+            "delete_view": "exe_expenses_delete",
         },
     )
 
@@ -431,6 +468,12 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
 def exe_expenses_edit(request: HttpRequest, expense_uuid: str) -> HttpResponse:
     """Edit an expense for an association."""
     return exe_edit(request, ExeExpenseForm, expense_uuid, "exe_expenses")
+
+
+@login_required
+def exe_expenses_delete(request: HttpRequest, expense_uuid: str) -> HttpResponse:
+    """Delete expense."""
+    return exe_delete(request, ExeExpenseForm, expense_uuid, "exe_expenses")
 
 
 @login_required
@@ -506,6 +549,7 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
             },
+            "delete_view": "exe_payments_delete",
         },
     )
 
@@ -523,6 +567,12 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
 def exe_payments_edit(request: HttpRequest, payment_uuid: str) -> HttpResponse:
     """Edit organization-wide payment method."""
     return exe_edit(request, ExePaymentForm, payment_uuid, "exe_payments")
+
+
+@login_required
+def exe_payments_delete(request: HttpRequest, payment_uuid: str) -> HttpResponse:
+    """Delete payment."""
+    return exe_delete(request, ExePaymentForm, payment_uuid, "exe_payments")
 
 
 @login_required
@@ -579,6 +629,7 @@ def exe_invoices(request: HttpRequest) -> HttpResponse:
                 if el.status == PaymentStatus.SUBMITTED
                 else "",
             },
+            "delete_view": "exe_invoices_delete",
         },
     )
 
@@ -596,6 +647,12 @@ def exe_invoices(request: HttpRequest) -> HttpResponse:
 def exe_invoices_edit(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
     """Edit an existing invoice."""
     return exe_edit(request, ExeInvoiceForm, invoice_uuid, "exe_invoices")
+
+
+@login_required
+def exe_invoices_delete(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
+    """Delete invoice."""
+    return exe_delete(request, ExeInvoiceForm, invoice_uuid, "exe_invoices")
 
 
 @login_required
@@ -662,6 +719,12 @@ def exe_collections_edit(request: HttpRequest, collection_uuid: str) -> HttpResp
 
 
 @login_required
+def exe_collections_delete(request: HttpRequest, collection_uuid: str) -> HttpResponse:
+    """Delete collection."""
+    return exe_delete(request, ExeCollectionForm, collection_uuid, "exe_collections")
+
+
+@login_required
 def exe_refunds(request: HttpRequest) -> HttpResponse:
     """Handle refund requests management for organization executives.
 
@@ -702,6 +765,7 @@ def exe_refunds(request: HttpRequest) -> HttpResponse:
                 if el.status != RefundStatus.PAYED
                 else "",
             },
+            "delete_view": "exe_refunds_delete",
         },
     )
 
@@ -713,6 +777,12 @@ def exe_refunds(request: HttpRequest) -> HttpResponse:
 def exe_refunds_edit(request: HttpRequest, refund_uuid: str) -> HttpResponse:
     """Single-line wrapper - delegates to exe_edit with refund form."""
     return exe_edit(request, ExeRefundRequestForm, refund_uuid, "exe_refunds")
+
+
+@login_required
+def exe_refunds_delete(request: HttpRequest, refund_uuid: str) -> HttpResponse:
+    """Delete refund."""
+    return exe_delete(request, ExeRefundRequestForm, refund_uuid, "exe_refunds")
 
 
 @login_required

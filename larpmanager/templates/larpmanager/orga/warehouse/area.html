@@ -8,7 +8,7 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
-    <table id="inv_area" class="go_datatable dot_links" no_header_cols="4">
+    <table id="inv_area" class="go_datatable dot_links">
         <thead>
             <tr>
                 <th></th>
@@ -16,6 +16,7 @@
                 <th>{% trans "Position" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th></th>
+                <th class="only_new_form"></th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,10 @@
                     <td>
                         <a href="{% url 'orga_warehouse_area_assignments' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}">{% trans "Item assignments" %}</a>
+                    </td>
+                    <td class="only_new_form">
+                        <a href="{% url 'orga_warehouse_area_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}
