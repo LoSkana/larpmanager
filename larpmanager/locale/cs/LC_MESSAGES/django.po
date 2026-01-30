@@ -825,6 +825,9 @@ msgstr "Metody"
 msgid "Modules"
 msgstr "Moduly"
 
+msgid "Move up"
+msgstr "Posun nahoru"
+
 msgid "Nothing"
 msgstr "Nic"
 
@@ -1358,6 +1361,9 @@ msgstr "Povinné"
 
 msgid "Modifiers"
 msgstr "Modifikátory"
+
+msgid "Move down"
+msgstr "Přesun dolů"
 
 msgid "Movements"
 msgstr "Pohyby"

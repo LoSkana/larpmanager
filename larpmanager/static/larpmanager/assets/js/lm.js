@@ -825,9 +825,9 @@ function reload_has_tooltip(parent='') {
 function add_icon_tooltips() {
     // Dictionary mapping icon classes to their tooltip texts
     var iconTooltips = {
-        'fa-edit': 'Edit',
-        'fa-arrow-up': 'Move up',
-        'fa-arrow-down': 'Move down'
+        'fa-edit': window['icon_texts']['edit'],
+        'fa-arrow-up': window['icon_texts']['up'],
+        'fa-arrow-down': window['icon_texts']['down']
     };
 
     // Process each icon type

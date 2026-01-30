@@ -151,6 +151,12 @@
     var set_internaz = {{ set_internaz | default:"null" }};
     window.interface_collapse_sidebar = {{ interface_collapse_sidebar | yesno:"true,false" }};
     window.enviro = "{{ request.enviro }}";
+
+window['icon_texts'] = {
+    'edit': '{% filter escapejs %}{% trans "Edit" %}{% endfilter %}',
+    'up': '{% filter escapejs %}{% trans "Move up" %}{% endfilter %}',
+    'down': '{% filter escapejs %}{% trans "Move down" %}{% endfilter %}',
+}
         </script>
         <!-- Scripts -->
         {% block js-req %}

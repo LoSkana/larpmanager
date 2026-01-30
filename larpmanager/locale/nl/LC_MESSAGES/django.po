@@ -825,6 +825,9 @@ msgstr "Methoden"
 msgid "Modules"
 msgstr "Modules"
 
+msgid "Move up"
+msgstr "Omhoog"
+
 msgid "Nothing"
 msgstr "Niets"
 
@@ -1358,6 +1361,9 @@ msgstr "Verplicht"
 
 msgid "Modifiers"
 msgstr "Aanpassingen"
+
+msgid "Move down"
+msgstr "Naar beneden"
 
 msgid "Movements"
 msgstr "Bewegingen"

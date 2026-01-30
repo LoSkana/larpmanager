@@ -825,6 +825,9 @@ msgstr "Metoder"
 msgid "Modules"
 msgstr "Moduler"
 
+msgid "Move up"
+msgstr "Flytt opp"
+
 msgid "Nothing"
 msgstr "Ingenting"
 
@@ -1358,6 +1361,9 @@ msgstr "Obligatorisk"
 
 msgid "Modifiers"
 msgstr "Modifikatorer"
+
+msgid "Move down"
+msgstr "Flytt ned"
 
 msgid "Movements"
 msgstr "Bevegelser"
