@@ -26,6 +26,7 @@ from typing import Any, ClassVar
 
 from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Q, QuerySet
 from django.db.models.constraints import UniqueConstraint
@@ -176,18 +177,21 @@ class Event(UuidMixin, BaseModel):
 
     max_pg = models.IntegerField(
         default=0,
+        validators=[MinValueValidator(0)],
         verbose_name=_("Maximum participants"),
         help_text=_("Maximum number of participant slots available (set to 0 for unlimited)"),
     )
 
     max_filler = models.IntegerField(
         default=0,
+        validators=[MinValueValidator(0)],
         verbose_name=_("Maximum fillers"),
         help_text=_("Maximum number of filler character slots available (set to 0 for unlimited)"),
     )
 
     max_waiting = models.IntegerField(
         default=0,
+        validators=[MinValueValidator(0)],
         verbose_name=_("Maximum waiting list"),
         help_text=_("Maximum number of people allowed on the waiting list (set to 0 for unlimited)"),
     )
