@@ -109,6 +109,7 @@ class RegistrationTicket(UuidMixin, BaseModel):
 
     max_available = models.IntegerField(
         default=0,
+        validators=[MinValueValidator(0)],
         help_text=_("Optional - Maximum number of times it can be requested across all signups (0 = unlimited)"),
     )
 
