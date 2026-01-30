@@ -179,8 +179,6 @@ def check_first_char(page: Any, live_server: Any) -> None:
     expect(page.get_by_text("dddddddddd")).to_have_value("dddddddddd")
     expect(page.locator("#id_que_u6")).to_have_value("u2")
     expect(page.locator("#id_que_u8")).to_have_value("u7")
-    expect(page.locator("#id_que_u10")).to_have_value("disabled")
-    expect(page.locator("#id_que_u11")).to_have_value("hidden")
     expect_normalized(page, page.locator("#lbl_id_que_u4"), "short text")
     page.get_by_role("cell", name="long text").dblclick()
     expect_normalized(page, page.locator("#lbl_id_que_u5"), "long text")
@@ -199,7 +197,10 @@ def recheck_char(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     go_to(page, live_server, "/test/character/list")
     page.get_by_role("link", name="").click()
-    expect(page.locator("#id_que_u10")).to_have_value("disabled")
+    expect(page.locator("#id_que_u10")).to_have_count(0)
+    expect_normalized(page, page.locator("#id_que_u10_tr"), "disabled")
+    expect(page.locator("#id_que_u11")).to_have_count(0)
+    expect(page.locator("#one")).not_to_contain_text("Hidden")
     submit_confirm(page)
 
 
