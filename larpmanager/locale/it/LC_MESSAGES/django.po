@@ -2299,6 +2299,9 @@ msgstr "Nuova dashboard"
 msgid "New character"
 msgstr "Nuovo personaggio"
 
+msgid "New interface"
+msgstr "Nuova interfaccia"
+
 msgid "Next sessions"
 msgstr "Prossime sessioni"
 
@@ -2310,6 +2313,9 @@ msgstr "Numero eventi"
 
 msgid "Old dashboard"
 msgstr "Vecchia dashboard"
+
+msgid "Old interface"
+msgstr "Vecchia interfaccia"
 
 msgid "Original text"
 msgstr "Testo originale"
@@ -3466,9 +3472,6 @@ msgstr "Nuova richiesta shuttle"
 
 msgid "Non-cumulative code"
 msgstr "Codice non cumulabile"
-
-msgid "Old form appereance"
-msgstr "Aspetto della vecchia forma"
 
 msgid "Operation completed"
 msgstr "Operazione completata"
@@ -5107,6 +5110,9 @@ msgstr "Scopri le missioni disponibili"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Se selezionata, abilita il livello dei biglietti: PNG"
 
+msgid "If checked: activate new interface"
+msgstr "Se selezionato: attiva la nuova interfaccia"
+
 msgid "Manage badges and user assignments"
 msgstr "Gestisci i badge e le assegnazioni degli utenti"
 
@@ -5194,6 +5200,12 @@ msgstr "(<a href='%(url)s'>rispondere qui</a>)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Facoltativo) La descrizione del biglietto"
+
+msgid "If checked: shows the old dashboard"
+msgstr "Se selezionato: mostra la vecchia dashboard"
+
+msgid "If checked: shows the old interface"
+msgstr "Se selezionato: mostra la vecchia interfaccia"
 
 msgid "Indicate the prerequisite abilities"
 msgstr "Indica le abilità prerequisite"
@@ -6511,9 +6523,6 @@ msgstr "Assegnato %(amount).2f %(elements)s per '%(reason) s'"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "L'ho fatto qualche volta, ho una esperienza di base"
 
-msgid "If checked: shows the forms with the old appearance"
-msgstr "Se selezionato: mostra i moduli con il vecchio aspetto"
-
 msgid "It is not possible for you to pay dues at this time"
 msgstr "Non ti è possibile versare la quota sociale in questo momento"
 
@@ -6734,9 +6743,6 @@ msgstr ""
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Tutto ci risulta in regola per il pagamento di questo evento"
-
-msgid "If checked: shows the dashboard with the old interface"
-msgstr "Se selezionato: mostra la dashboard con la vecchia interfaccia"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Indica una canzone che vuoi dedicare al tuo personaggio"

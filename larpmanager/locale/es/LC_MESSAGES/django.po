@@ -2299,6 +2299,9 @@ msgstr "Nuevo panel de control"
 msgid "New character"
 msgstr "Nuevo personaje"
 
+msgid "New interface"
+msgstr "Nueva interfaz"
+
 msgid "Next sessions"
 msgstr "Próximas sesiones"
 
@@ -2310,6 +2313,9 @@ msgstr "Número de eventos"
 
 msgid "Old dashboard"
 msgstr "Salpicadero antiguo"
+
+msgid "Old interface"
+msgstr "Interfaz antigua"
 
 msgid "Original text"
 msgstr "Texto original"
@@ -3466,9 +3472,6 @@ msgstr "Nueva solicitud de transporte"
 
 msgid "Non-cumulative code"
 msgstr "Código no acumulativo"
-
-msgid "Old form appereance"
-msgstr "Aspecto antiguo"
 
 msgid "Operation completed"
 msgstr "Operación completada"
@@ -5107,6 +5110,9 @@ msgstr "¡Descubre las misiones disponibles"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Si está marcada, permite el nivel de ticket: NPC"
 
+msgid "If checked: activate new interface"
+msgstr "Si está marcada: activar nueva interfaz"
+
 msgid "Manage badges and user assignments"
 msgstr "Gestionar insignias y asignaciones de usuarios"
 
@@ -5194,6 +5200,12 @@ msgstr "(<a href='%(url)s'>responda aquí</a>)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Opcional) Descripción del ticket"
+
+msgid "If checked: shows the old dashboard"
+msgstr "Si está marcada: muestra el salpicadero antiguo"
+
+msgid "If checked: shows the old interface"
+msgstr "Si está marcada: muestra la interfaz antigua"
 
 msgid "Indicate the prerequisite abilities"
 msgstr "Indique los requisitos previos"
@@ -6514,9 +6526,6 @@ msgstr "Asignado %(amount).2f %(elements)s para '%(reason)s'"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Lo he hecho unas cuantas veces, tengo cierta experiencia"
 
-msgid "If checked: shows the forms with the old appearance"
-msgstr "Si está marcada: muestra los formularios con la apariencia antigua"
-
 msgid "It is not possible for you to pay dues at this time"
 msgstr "No puedes hacer tus pagos pendientes en este momento"
 
@@ -6742,9 +6751,6 @@ msgstr "Por razones de seguridad, cada ficha sólo puede utilizarse una vez."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "¡Todo está en orden respecto el pago de este evento"
-
-msgid "If checked: shows the dashboard with the old interface"
-msgstr "Si está marcada: muestra el salpicadero con la interfaz antigua"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Indica una canción que quieras dedicar a tu personaje"

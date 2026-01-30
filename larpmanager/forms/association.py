@@ -443,12 +443,12 @@ class ExeConfigForm(ConfigForm):
 
         # Configure old dashboard visualization
         past_events_label = _("Old dashboard")
-        past_events_help_text = _("If checked: shows the dashboard with the old interface")
+        past_events_help_text = _("If checked: shows the old dashboard")
         self.add_configs("old_dashboard", ConfigType.BOOL, past_events_label, past_events_help_text)
 
         # Configure old dashboard visualization
-        past_events_label = _("Old form appereance")
-        past_events_help_text = _("If checked: shows the forms with the old appearance")
+        past_events_label = _("Old interface")
+        past_events_help_text = _("If checked: shows the old interface")
         self.add_configs("old_form_appearance", ConfigType.BOOL, past_events_label, past_events_help_text)
 
     def set_config_email(self) -> None:
@@ -1056,6 +1056,16 @@ class ExePreferencesForm(ConfigForm):
         digest_mode_help_text = _("If checked: activate new dashbord")
         self.add_configs(
             "interface_new_dashboard",
+            ConfigType.BOOL,
+            digest_mode_label,
+            digest_mode_help_text,
+        )
+
+        # Add temporary new dashboard
+        digest_mode_label = _("New interface")
+        digest_mode_help_text = _("If checked: activate new interface")
+        self.add_configs(
+            "interface_new_ui",
             ConfigType.BOOL,
             digest_mode_label,
             digest_mode_help_text,

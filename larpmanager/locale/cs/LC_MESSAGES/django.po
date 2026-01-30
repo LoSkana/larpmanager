@@ -2299,6 +2299,9 @@ msgstr "Nový přístrojový panel"
 msgid "New character"
 msgstr "Nová postava"
 
+msgid "New interface"
+msgstr "Nové rozhraní"
+
 msgid "Next sessions"
 msgstr "Další zasedání"
 
@@ -2310,6 +2313,9 @@ msgstr "Počet událostí"
 
 msgid "Old dashboard"
 msgstr "Stará přístrojová deska"
+
+msgid "Old interface"
+msgstr "Staré rozhraní"
 
 msgid "Original text"
 msgstr "Původní text"
@@ -3466,9 +3472,6 @@ msgstr "Nová žádost o kyvadlovou dopravu"
 
 msgid "Non-cumulative code"
 msgstr "Nekumulativní kód"
-
-msgid "Old form appereance"
-msgstr "Vzhled starého formuláře"
 
 msgid "Operation completed"
 msgstr "Operace dokončena"
@@ -5107,6 +5110,9 @@ msgstr "Objevte dostupné úkoly"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: NPC"
 
+msgid "If checked: activate new interface"
+msgstr "Pokud je zaškrtnuto: aktivuje nové rozhraní"
+
 msgid "Manage badges and user assignments"
 msgstr "Správa odznaků a přiřazení uživatelů"
 
@@ -5194,6 +5200,12 @@ msgstr "(<a href='%(url)s'>odpověď zde</a>)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Nepovinné) Popis tipu"
+
+msgid "If checked: shows the old dashboard"
+msgstr "Pokud je zaškrtnuto: zobrazí starý přístrojový panel"
+
+msgid "If checked: shows the old interface"
+msgstr "Pokud je zaškrtnuto: zobrazí staré rozhraní"
 
 msgid "Indicate the prerequisite abilities"
 msgstr "Uveďte předpokládané schopnosti"
@@ -6508,9 +6520,6 @@ msgstr "Přiřazeno %(amount).2f %(elements)s pro '%(reason)s'"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Několikrát jsem to dělal, mám základní zkušenosti"
 
-msgid "If checked: shows the forms with the old appearance"
-msgstr "Pokud je zaškrtnuto: zobrazí formuláře se starým vzhledem"
-
 msgid "It is not possible for you to pay dues at this time"
 msgstr "V tuto chvíli nemůžete zaplatit členský poplatek"
 
@@ -6726,9 +6735,6 @@ msgstr "Každý token lze z bezpečnostních důvodů použít pouze jednou."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Vše je v pořádku, abychom mohli tuto akci zaplatit"
-
-msgid "If checked: shows the dashboard with the old interface"
-msgstr "Pokud je zaškrtnuto: zobrazí přístrojovou desku se starým rozhraním"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Uveďte píseň, kterou chcete věnovat své postavě"
