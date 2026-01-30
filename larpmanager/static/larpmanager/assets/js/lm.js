@@ -224,8 +224,10 @@ $(document).ready(function() {
     $('.links td:not(:has(*))').parent().remove();
 
     /* QTIP TOOLTIP */
-    if (window.enviro == "prod")
+    if (window.enviro == "prod") {
         lm_tooltip();
+        add_icon_tooltips();
+    }
 
     $(':input[type="date_p"]').datetimepicker({
         format:'Y-m-d',
@@ -542,6 +544,12 @@ function data_tables() {
         });
 
         table.on('draw.dt', function() {
+            // Add tooltips to edit icons first
+            if (window.enviro == "prod") {
+                add_icon_tooltips();
+            }
+
+            // Then handle any remaining qtip attributes
             $('a[qtip]').each(function() {
                 if (!$(this).data('qtip-initialized')) {
                     $(this).qtip({
@@ -806,6 +814,60 @@ function reload_has_tooltip(parent='') {
         });
     });
 
+}
+
+function add_icon_tooltips() {
+    // Dictionary mapping icon classes to their tooltip texts
+    var iconTooltips = {
+        'fa-edit': window['icon_texts']['edit'],
+        'fa-arrow-up': window['icon_texts']['up'],
+        'fa-arrow-down': window['icon_texts']['down']
+    };
+
+    // Process each icon type
+    Object.keys(iconTooltips).forEach(function(iconClass) {
+        var defaultText = iconTooltips[iconClass];
+
+        // Find all icons with this class (supporting both .fa-* and .fas.fa-*)
+        $('i.' + iconClass + ', i.fa-solid.' + iconClass + ', i.fas.' + iconClass).each(function() {
+            var $icon = $(this);
+            var $link = $icon.closest('a');
+
+            // Only add tooltip if the link doesn't already have qtip attribute and not already initialized
+            if ($link.length && !$link.attr('qtip') && !$link.data('qtip-initialized')) {
+                // Get translation text from data attribute or use default
+                var dataAttr = iconClass.replace('fa-', '') + '-tooltip';
+                var tooltipText = $link.data(dataAttr) || defaultText;
+                $link.attr('qtip', tooltipText);
+
+                // Initialize qtip for this link
+                $link.qtip({
+                    content: {
+                        text: tooltipText
+                    },
+                    style: {
+                        classes: 'qtip-dark qtip-rounded qtip-shadow'
+                    },
+                    hide: {
+                        effect: function(offset) {
+                            $(this).fadeOut(500);
+                        }
+                    },
+                    show: {
+                        effect: function(offset) {
+                            $(this).fadeIn(500);
+                        }
+                    },
+                    position: {
+                        my: 'top center',
+                        at: 'bottom center'
+                    }
+                });
+
+                $link.data('qtip-initialized', true);
+            }
+        });
+    });
 }
 
 

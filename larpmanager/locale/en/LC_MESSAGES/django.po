@@ -8141,6 +8141,12 @@ msgstr ""
 msgid "Sign In"
 msgstr ""
 
+msgid "Move up"
+msgstr ""
+
+msgid "Move down"
+msgstr ""
+
 msgid "Miscellany"
 msgstr ""
 

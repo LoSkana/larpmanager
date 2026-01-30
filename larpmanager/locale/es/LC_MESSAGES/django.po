@@ -825,6 +825,9 @@ msgstr "Métodos"
 msgid "Modules"
 msgstr "Módulos"
 
+msgid "Move up"
+msgstr "Sube"
+
 msgid "Nothing"
 msgstr "Nada"
 
@@ -1358,6 +1361,9 @@ msgstr "Obligatorio"
 
 msgid "Modifiers"
 msgstr "Modificadores"
+
+msgid "Move down"
+msgstr "Baja"
 
 msgid "Movements"
 msgstr "Movimientos"
