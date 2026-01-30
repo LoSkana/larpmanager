@@ -2299,6 +2299,9 @@ msgstr "Nytt dashbord"
 msgid "New character"
 msgstr "Ny karakter"
 
+msgid "New interface"
+msgstr "Nytt grensesnitt"
+
 msgid "Next sessions"
 msgstr "Neste økter"
 
@@ -2310,6 +2313,9 @@ msgstr "Antall hendelser"
 
 msgid "Old dashboard"
 msgstr "Gammelt dashbord"
+
+msgid "Old interface"
+msgstr "Gammelt grensesnitt"
 
 msgid "Original text"
 msgstr "Opprinnelig tekst"
@@ -3466,9 +3472,6 @@ msgstr "Ny forespørsel om skyttelbuss"
 
 msgid "Non-cumulative code"
 msgstr "Ikke-kumulativ kode"
-
-msgid "Old form appereance"
-msgstr "Gammelt utseende"
 
 msgid "Operation completed"
 msgstr "Operasjon fullført"
@@ -5107,6 +5110,9 @@ msgstr "Oppdag de tilgjengelige oppdragene"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Hvis avkrysset, tillat billettnivå: NPC"
 
+msgid "If checked: activate new interface"
+msgstr "Hvis avkrysset: aktiver nytt grensesnitt"
+
 msgid "Manage badges and user assignments"
 msgstr "Administrer merker og brukertildelinger"
 
@@ -5194,6 +5200,12 @@ msgstr "(<a href='%(url)s'>svar her</a>)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Valgfritt) Billettens beskrivelse"
+
+msgid "If checked: shows the old dashboard"
+msgstr "Hvis avkrysset: viser det gamle dashbordet"
+
+msgid "If checked: shows the old interface"
+msgstr "Hvis avkrysset: viser det gamle grensesnittet"
 
 msgid "Indicate the prerequisite abilities"
 msgstr "Angi hvilke evner som kreves"
@@ -6511,9 +6523,6 @@ msgstr "Tildelt %(amount).2f %(elements)s for '%(reason)s'"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jeg har gjort det noen ganger, jeg har grunnleggende erfaring"
 
-msgid "If checked: shows the forms with the old appearance"
-msgstr "Hvis avkrysset: viser skjemaene med det gamle utseendet"
-
 msgid "It is not possible for you to pay dues at this time"
 msgstr "Du kan ikke betale medlemskontingenten på dette tidspunktet"
 
@@ -6728,9 +6737,6 @@ msgstr "Hver token kan bare brukes én gang av sikkerhetsmessige årsaker."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Alt er i orden for at vi skal kunne betale for dette arrangementet"
-
-msgid "If checked: shows the dashboard with the old interface"
-msgstr "Hvis avkrysset: viser dashbordet med det gamle grensesnittet"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Angi en sang du ønsker å dedikere til karakteren din"

@@ -332,13 +332,13 @@ msgstr ""
 msgid "Old dashboard"
 msgstr ""
 
-msgid "If checked: shows the dashboard with the old interface"
+msgid "If checked: shows the old dashboard"
 msgstr ""
 
-msgid "Old form appereance"
+msgid "Old interface"
 msgstr ""
 
-msgid "If checked: shows the forms with the old appearance"
+msgid "If checked: shows the old interface"
 msgstr ""
 
 msgid "Email notifications"
@@ -781,6 +781,12 @@ msgid "New Dashboard"
 msgstr ""
 
 msgid "If checked: activate new dashbord"
+msgstr ""
+
+msgid "New interface"
+msgstr ""
+
+msgid "If checked: activate new interface"
 msgstr ""
 
 msgid "Select a valid choice. That choice is not one of the available choices."
