@@ -24,8 +24,10 @@ from typing import TYPE_CHECKING
 
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 
 if TYPE_CHECKING:
@@ -210,7 +212,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         1. Login on org subdomain: Stay on the same subdomain (return "/")
         2. Login on main domain with 'next' parameter containing after_login URL:
            Use the 'next' parameter to redirect to the organization via after_login
-        3. Login on main domain without 'next': Use default behavior
+        3. Login on main domain without 'next': Use default LOGIN_REDIRECT_URL
 
         The 'next' parameter is set by JavaScript in the login template (login.html:88-92)
         when users initiate OAuth from an organization subdomain. It points to:
@@ -228,8 +230,12 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         # Use common helper method for subdomain-aware redirect logic
         redirect_url = _get_redirect_url_with_subdomain_support(request)
 
-        # If helper returned a URL, use it; otherwise use default behavior
-        return redirect_url if redirect_url is not None else super().get_login_redirect_url(request)
+        # If helper returned a URL, use it; otherwise use LOGIN_REDIRECT_URL setting
+        if redirect_url is not None:
+            return redirect_url
+
+        # Default: use Django's LOGIN_REDIRECT_URL setting or reverse lookup
+        return settings.LOGIN_REDIRECT_URL if hasattr(settings, "LOGIN_REDIRECT_URL") else reverse("home")
 
 
 class MyAccountAdapter(DefaultAccountAdapter):

@@ -232,6 +232,8 @@ class TestSocialAuthAdapter:
             "/accounts/google/login/callback/", {"next": "https://larpmanager.com/after_login/test-org/"}
         )
         request.association = {"id": 0, "slug": "", "name": "LarpManager"}
+        # Add get_host method for URL validation
+        request.get_host = lambda: "larpmanager.com"
 
         # Execute get_login_redirect_url
         adapter = MySocialAccountAdapter()
@@ -292,6 +294,8 @@ class TestAccountAdapter:
             "/accounts/google/login/callback/", {"next": "https://larpmanager.com/after_login/test-org/"}
         )
         request.association = {"id": 0, "slug": "", "name": "LarpManager"}
+        # Add get_host method for URL validation
+        request.get_host = lambda: "larpmanager.com"
 
         # Execute get_signup_redirect_url
         adapter = MyAccountAdapter()
