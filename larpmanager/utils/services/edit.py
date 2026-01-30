@@ -513,6 +513,72 @@ def orga_edit(
     return render(request, "larpmanager/orga/edit.html", context)
 
 
+def orga_delete(
+    request: HttpRequest,
+    event_slug: str,
+    permission: str | None,
+    form_type: type[BaseModelForm],
+    entity_uuid: str,
+    redirect_view: str | None = None,
+) -> HttpResponse:
+    """Delete organization event objects through a unified interface.
+
+    Handles the deletion workflow for various organization event objects,
+    including permission checking, logging, and redirects.
+
+    Args:
+        request: The HTTP request object
+        event_slug: Event slug identifier
+        permission: Permission string to check for access control
+        form_type: Type of form/object to delete
+        entity_uuid: Entity UUID to delete
+        redirect_view: Optional redirect view name after successful deletion
+
+    Returns:
+        HttpResponse: Redirect response on successful deletion
+
+    """
+    # Check user permissions and get base context for the event
+    context = check_event_context(request, event_slug, permission)
+
+    redirect_view = backend_delete(request, context, form_type, entity_uuid, permission, redirect_view)
+
+    # Redirect to success page with event slug
+    return redirect(redirect_view, event_slug=context["run"].get_slug())
+
+
+def backend_delete(
+    request: HttpRequest,
+    context: dict,
+    form_type: type[BaseModelForm],
+    entity_uuid: str,
+    permission: str | None,
+    redirect_view: str | None,
+) -> HttpResponse:
+    """Delete element from the system."""
+    # Get the element to delete
+    model_type = form_type.Meta.model
+    backend_get(context, model_type, entity_uuid, None)
+
+    # Get the element instance
+    element = context["el"]
+
+    # Log the deletion
+    save_log(context["member"], form_type, element, to_delete=True)
+
+    # Delete the element
+    element.delete()
+
+    # Show success message
+    messages.success(request, _("Operation completed") + "!")
+
+    # Determine redirect target - use provided or default to permission name
+    if not redirect_view:
+        redirect_view = permission
+
+    return redirect_view
+
+
 def exe_edit(
     request: HttpRequest,
     form_type: type[BaseModelForm],
@@ -579,6 +645,37 @@ def exe_edit(
     if is_frame:
         return render(request, "elements/dashboard/form_frame.html", context)
     return render(request, "larpmanager/exe/edit.html", context)
+
+
+def exe_delete(
+    request: HttpRequest,
+    form_type: type[BaseModelForm],
+    entity_uuid: str,
+    permission: str,
+    redirect_view: str | None = None,
+) -> HttpResponse:
+    """Delete organization-level entities through a unified interface.
+
+    Handles the deletion workflow for various organization-level entities,
+    including permission checking, logging, and redirects.
+
+    Args:
+        request: HTTP request object containing form data and user information
+        form_type: Type of form/entity being deleted
+        entity_uuid: Entity UUID for the object being deleted
+        permission: Permission string required to access this delete functionality
+        redirect_view: Optional redirect target after successful deletion (defaults to permission)
+
+    Returns:
+        HttpResponse: Redirect response on successful deletion
+
+    """
+    # Check user permissions and get base context
+    context = check_association_context(request, permission)
+
+    redirect_view = backend_delete(request, context, form_type, entity_uuid, permission, redirect_view)
+
+    return redirect(redirect_view)
 
 
 def set_suggestion(context: dict, permission: str) -> None:
