@@ -248,7 +248,7 @@ def signup_first(live_server: Any, page: Any) -> None:
     page.get_by_role("checkbox", name="many (20€) - (Available 2)").check()
     page.get_by_role("checkbox", name="few (30€) - (Available 1)").check()
     expect(page.get_by_role("checkbox", name="all (10€)")).to_be_disabled()
-    expect(page.get_by_role("textbox", name="disabled")).to_be_empty()
+    expect(page.get_by_role("textbox", name="disabled")).to_have_count(0)
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
     # add mandatory

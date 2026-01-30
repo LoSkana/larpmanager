@@ -31,7 +31,7 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
 from larpmanager.cache.config import get_association_config
-from larpmanager.forms.utils import WritingTinyMCE, css_delimeter
+from larpmanager.forms.utils import ReadOnlyWidget, WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -884,7 +884,12 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         # Initialize field type and apply type-specific configuration
         field_key = self.init_type(
-            field_key, question, registration_counts, is_organizer=is_organizer, is_required=is_required
+            field_key,
+            question,
+            registration_counts,
+            is_organizer=is_organizer,
+            is_required=is_required,
+            is_field_active=is_field_active,
         )
         if not field_key:
             return field_key
@@ -916,6 +921,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         *,
         is_organizer: bool,
         is_required: bool,
+        is_field_active: bool = True,
     ) -> str:
         """Initialize form field based on question type.
 
@@ -929,6 +935,7 @@ class BaseRegistrationForm(BaseModelFormRun):
             question: Question object containing type and configuration information
             registration_counts: Dictionary containing registration count data for choices
             is_required: Whether the field should be marked as required
+            is_field_active: Whether the field can be changed by the user
 
         Returns:
             The field key identifier, potentially modified for special question types
@@ -952,15 +959,15 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         # Handle simple text input fields
         elif question.typ == BaseQuestionType.TEXT:
-            self.init_text(field_key, question, is_required=is_required)
+            self.init_text(field_key, question, is_required=is_required, is_field_active=is_field_active)
 
         # Handle multi-line text areas
         elif question.typ == BaseQuestionType.PARAGRAPH:
-            self.init_paragraph(field_key, question, is_required=is_required)
+            self.init_paragraph(field_key, question, is_required=is_required, is_field_active=is_field_active)
 
         # Handle rich text editor fields
         elif question.typ == BaseQuestionType.EDITOR:
-            self.init_editor(field_key, question, is_required=is_required)
+            self.init_editor(field_key, question, is_required=is_required, is_field_active=is_field_active)
 
         # Handle special question types (custom implementations)
         else:
@@ -1021,22 +1028,28 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         return field_key
 
-    def init_editor(self, field_key: str, question: RegistrationQuestion, *, is_required: bool) -> None:
+    def init_editor(
+        self, field_key: str, question: RegistrationQuestion, *, is_required: bool, is_field_active: bool = True
+    ) -> None:
         """Initialize a TinyMCE editor field for a form question.
 
         Args:
             field_key: The field key/name to use in the form
             question: Question object containing field configuration
             is_required: Whether the field is required
+            is_field_active: Whether the field should be editable (if False, shows as read-only HTML)
 
         """
         # Set up validators based on question configuration
         length_validators = [max_length_validator(question.max_length)] if question.max_length else []
 
-        # Create the CharField with TinyMCE widget
+        # Choose widget based on whether field is active
+        widget = WritingTinyMCE() if is_field_active else ReadOnlyWidget()
+
+        # Create the CharField with widget
         self.fields[field_key] = forms.CharField(
             required=is_required,
-            widget=WritingTinyMCE(),
+            widget=widget,
             label=question.name,
             help_text=question.description,
             validators=length_validators,
@@ -1046,25 +1059,32 @@ class BaseRegistrationForm(BaseModelFormRun):
         if question.id in self.answers:
             self.initial[field_key] = self.answers[question.id].text
 
-        # Add field to show_link list for frontend handling
-        self.show_link.append(f"id_{field_key}")
+        # Add field to show_link list for frontend handling only if active
+        if is_field_active:
+            self.show_link.append(f"id_{field_key}")
 
-    def init_paragraph(self, field_key: str, question_config: RegistrationQuestion, *, is_required: bool) -> None:
+    def init_paragraph(
+        self, field_key: str, question_config: RegistrationQuestion, *, is_required: bool, is_field_active: bool = True
+    ) -> None:
         """Initialize a paragraph text field for the form.
 
         Args:
             field_key: Form field key
             question_config: Question object with configuration
             is_required: Whether field is required
+            is_field_active: Whether the field should be editable (if False, shows as read-only HTML)
 
         """
         # Configure validators based on question settings
         length_validators = [max_length_validator(question_config.max_length)] if question_config.max_length else []
 
+        # Choose widget based on whether field is active
+        widget = forms.Textarea(attrs={"rows": 4}) if is_field_active else ReadOnlyWidget()
+
         # Create textarea field with question properties
         self.fields[field_key] = forms.CharField(
             required=is_required,
-            widget=forms.Textarea(attrs={"rows": 4}),
+            widget=widget,
             label=question_config.name,
             help_text=question_config.description,
             validators=length_validators,
@@ -1074,14 +1094,27 @@ class BaseRegistrationForm(BaseModelFormRun):
         if question_config.id in self.answers:
             self.initial[field_key] = self.answers[question_config.id].text
 
-    def init_text(self, field_key: str, form_question: RegistrationQuestion, *, is_required: bool) -> None:
-        """Initialize a text field with validators and initial values."""
+    def init_text(
+        self, field_key: str, form_question: RegistrationQuestion, *, is_required: bool, is_field_active: bool = True
+    ) -> None:
+        """Initialize a text field with validators and initial values.
+
+        Args:
+            field_key: The field key/name to use in the form
+            form_question: Question object containing field configuration
+            is_required: Whether the field is required
+            is_field_active: Whether the field should be editable (if False, shows as read-only text)
+        """
         # Create validators based on max_length constraint
         field_validators = [max_length_validator(form_question.max_length)] if form_question.max_length else []
+
+        # Choose widget based on whether field is active
+        widget = forms.TextInput() if is_field_active else ReadOnlyWidget()
 
         # Create the form field with proper configuration
         self.fields[field_key] = forms.CharField(
             required=is_required,
+            widget=widget,
             label=form_question.name,
             help_text=form_question.description,
             validators=field_validators,
