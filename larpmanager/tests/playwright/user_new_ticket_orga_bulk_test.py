@@ -173,7 +173,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
 
     # test bulk set quest
     page.get_by_role("link", name="Bulk").click()
-    page.locator("td:nth-child(5)").click()
+    page.locator(".writing_list td:nth-child(5)").click()
     page.locator("#objs_9").select_option("u2")
     page.get_by_role("link", name="Execute").click()
     just_wait(page)
@@ -203,14 +203,14 @@ def bulk_px(live_server: Any, page: Any) -> None:
 
     # test bulk set type
     page.get_by_role("link", name="Bulk").click()
-    page.locator("td:nth-child(5)").click()
+    page.locator(".writing td:nth-child(5)").click()
     page.get_by_role("link", name="Execute").click()
     just_wait(page)
     expect_normalized(page, page.locator("#one"), "swor 2 1")
 
     # test bulk change type
     page.get_by_role("link", name="Bulk").click()
-    page.locator("td:nth-child(5)").click()
+    page.locator(".writing td:nth-child(5)").click()
     page.locator("#objs_10").select_option("u1")
     page.get_by_role("link", name="Execute").click()
     just_wait(page)

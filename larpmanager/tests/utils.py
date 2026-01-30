@@ -39,7 +39,7 @@ test_user = "user@test.it"
 
 
 def logout(page: Any) -> None:
-    page.locator("a#menu-open").click()
+    page.locator("a#menu-open").first.click()
     page.get_by_role("link", name="Logout").click()
 
 

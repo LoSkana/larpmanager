@@ -108,7 +108,9 @@ def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     )
 
     # Determine if topbar should be shown
-    navigation_context["topbar"] = bool(navigation_context["event_role"] or navigation_context["association_role"])
+    navigation_context["topbar_admin"] = bool(
+        navigation_context["event_role"] or navigation_context["association_role"]
+    )
 
     return navigation_context
 

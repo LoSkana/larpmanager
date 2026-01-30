@@ -1551,7 +1551,7 @@ th select {
     opacity: 0;
     position: relative;
     width: 80%;
-    max-height: 100%;
+    max-height: 90%;
     overflow-y: auto;
     overflow-x: hidden;
     font-size: 110%;
@@ -1907,6 +1907,85 @@ input[type="checkbox"].checkbox_single {
   width: 100%;
 }
 
+#topbar .el span.label,
+#topbar .el span.label {
+  display: none;
+}
+
+/* Mobile: topbar at bottom */
+@media (max-width: 840px) {
+  .new_form {
+    --topbar-height: 3.7em;
+  }
+
+  .new_form #topbar {
+    top: auto;
+    bottom: 0;
+    height: var(--topbar-height);
+    border-top: 2px solid rgba(var(--pri-rgb), 0.085);
+    border-bottom: none;
+    padding: 0.5em 0.5em;
+    background-color: rgba(var(--sec-rgb), 0.95);
+    backdrop-filter: blur(10px);
+  }
+
+  .new_form #sidebar.topbar,
+  .new_form #page-wrapper.topbar,
+  .new_form #page-wrapper.topbar header {
+    margin-top: 0;
+    margin-bottom: var(--topbar-height);
+  }
+
+  #topbar .mobile {
+    table-layout: fixed;
+  }
+
+  #topbar .mobile td {
+    text-align: center !important;
+    width: auto;
+  }
+
+  .new_form #topbar .mobile .el i {
+    font-size: 1.7em !important;
+    margin: 0;
+    display: block;
+  }
+
+  .new_form #topbar .mobile .el span.label {
+    font-size: 0.6em;
+    display: block;
+    white-space: nowrap;
+  }
+
+  .new_form #topbar .dropdown {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .new_form #topbar .dropdown > span {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 0.2em;
+  }
+
+  .new_form #topbar .dropdown .dropdown-button i {
+    font-size: 0.7em;
+  }
+
+  .new_form #topbar .dropdown .dropdown-menu {
+    bottom: 100%;
+    top: auto;
+    margin-bottom: 0.5em;
+  }
+
+  .new_form #topbar table.mobile {
+    width: 100%;
+  }
+}
+
 #topbar img {
   height: 1.5em;
   margin-right: 0.5em;
@@ -1931,6 +2010,11 @@ input[type="checkbox"].checkbox_single {
   display: revert;
 }
 
+/* Desktop: show desktop table, hide mobile table */
+#topbar table.mobile {
+  display: none;
+}
+
 #topbar .left {
   text-align: left !important;
 }
@@ -1941,6 +2025,22 @@ input[type="checkbox"].checkbox_single {
 
 #topbar .right {
   text-align: right !important;
+}
+
+/* Mobile: hide desktop table, show mobile table */
+@media (max-width: 840px) {
+  #topbar table.desktop {
+    display: none;
+  }
+
+  #topbar table.mobile {
+    display: table;
+  }
+
+  #topbar .right,
+  #topbar .left {
+    text-align: center !important;
+  }
 }
 
 #topbar .left .el {
@@ -1997,16 +2097,10 @@ input[type="checkbox"].checkbox_single {
     --topbar-height: 2em;
   }
 
-  #topbar {
+  body:not(.new_form) #topbar {
     margin: 0;
     padding: 0.1em 0;
     flex-shrink: 0;
-  }
-
-  #topbar .right,
-  #topbar .left {
-    text-align: left !important;
-    white-space: nowrap;
   }
 
   #topbar .no_mobile,

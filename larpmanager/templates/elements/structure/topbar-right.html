@@ -1,22 +1,78 @@
 {% load i18n %}
-<td class="right">
+{% if mobile %}
     {% if user_characters_shortcut %}
-        <div class="el {% if topbar %}no_mobile{% endif %}">
-            <a href="{% url 'characters' %}"><i class="fa-solid fa-users"></i> <span class="no_mobile">{% trans "Characters" %}</span></a>
-        </div>
+        <td class="{% if topbar_admin %}no_mobile{% endif %}">
+            <div class="el">
+                <a href="{% url 'characters' %}"><i class="fa-solid fa-users"></i></a>
+                <span class="label">{% trans "Characters" %}</span>
+            </div>
+        </td>
     {% endif %}
     {% if user_registrations_shortcut %}
-        <div class="el {% if topbar %}no_mobile{% endif %}">
-            <a href="{% url 'registrations' %}"><i class="fa-solid fa-clipboard-list"></i> <span class="no_mobile">{% trans "Registrations" %}</span></a>
-        </div>
+        <td class="{% if topbar_admin %}no_mobile{% endif %}">
+            <div class="el">
+                <a href="{% url 'registrations' %}"><i class="fa-solid fa-clipboard-list"></i></a>
+                <span class="label">{% trans "Registrations" %}</span>
+            </div>
+        </td>
     {% endif %}
-    <div class="el {% if topbar %}no_mobile{% endif %}">
-        <a href="{% url 'accounting' %}"><i class="fa-solid fa-money-bill"></i> <span class="no_mobile">{% trans "Accounting" %}</span></a>
+    <td class="{% if topbar_admin %}no_mobile{% endif %}">
+        <div class="el">
+            <a href="{% url 'accounting' %}">
+                <i class="fa-solid fa-wallet"></i>
+            </a>
+            <span class="label">{% trans "Accounting" %}</span>
+        </div>
+    </td>
+    <td class="{% if topbar_admin %}no_mobile{% endif %}">
+        <div class="el">
+            <a href="{% url 'profile' %}">
+                <i class="fa-solid fa-user-circle"></i>
+            </a>
+            <span class="label">{% trans "Profile" %}</span>
+        </div>
+    </td>
+    <td>
+        <div class="el">
+            <a id="menu-open" href="#menu">
+                <i class="fa-solid fa-bars"></i>
+            </a>
+            <span class="label">Menu</span>
+        </div>
+    </td>
+{% else %}
+    <td class="right">
+        {% if user_characters_shortcut %}
+            <div class="el">
+            <a href="{% url 'characters' %}"><i class="fa-solid fa-users"></i>
+            <span>{% trans "Characters" %}</span>
+        </a>
     </div>
-    <div class="el {% if topbar %}no_mobile{% endif %}">
-        <a href="{% url 'profile' %}"><i class="fa-solid fa-user-circle"></i> <span class="no_mobile">{% trans "Profile" %}</span></a>
-    </div>
+{% endif %}
+{% if user_registrations_shortcut %}
     <div class="el">
-        <a id="menu-open" href="#menu"><i class="fa-solid fa-bars"></i> <span class="no_mobile">{% trans "Hi" %}, {{ user.member.display_member }}!</span></a>
-    </div>
+    <a href="{% url 'registrations' %}"><i class="fa-solid fa-clipboard-list"></i>
+    <span>{% trans "Registrations" %}</span>
+</a>
+</div>
+{% endif %}
+<div class="el">
+    <a href="{% url 'accounting' %}">
+        <i class="fa-solid fa-wallet"></i>
+        <span>{% trans "Accounting" %}</span>
+    </a>
+</div>
+<div class="el">
+    <a href="{% url 'profile' %}">
+        <i class="fa-solid fa-user-circle"></i>
+        <span>{% trans "Profile" %}</span>
+    </a>
+</div>
+<div class="el">
+    <a id="menu-open" href="#menu">
+        <i class="fa-solid fa-bars"></i>
+        <span>{% trans "Hi" %}, {{ user.member.display_member }}!</span>
+    </a>
+</div>
 </td>
+{% endif %}

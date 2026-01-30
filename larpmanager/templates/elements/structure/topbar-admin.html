@@ -1,93 +1,84 @@
 {% load static i18n %}
 <div id="topbar">
     <div class="inner">
-        <table>
+        <table class="desktop">
             <tr>
                 <td class="left">
                     <span class="el">
                         <a href="{% url 'home' %}">
                             <i class="fa-solid fa-house"></i>
-                            <span class="no_mobile">Home</span>
+                            <span>Home</span>
                         </a>
                     </span>
                     <div id="select_workspace" class="el dropdown">
                         {% if run %}
-                            <span class="no_mobile"><i class="fa-solid fa-calendar-days"></i> {{ run }}</span>
+                            <span><i class="fa-solid fa-calendar-days"></i> {{ run }}</span>
                         {% else %}
-                            <span class="no_mobile"><i class="fa-solid fa-building"></i> {{ association.name }}</span>
+                            <span><i class="fa-solid fa-building"></i> {{ association.name }}</span>
                         {% endif %}
-                        <div class="dropdown-button">
-                            <a href="#" class="switch"><i class="fa-solid fa-circle-chevron-down"></i></a>
-                        </div>
-                        <div class="dropdown-menu">
-                            {% for rid, v in open_runs.items %}
-                                {% if run and run.event.slug == v.e and run.number == v.r %}
-                                    <!-- skip -->
-                                {% else %}
-                                    <a href="{% url 'manage' v.slug %}" class="origin"><i class="fa-solid fa-calendar-days"></i> {{ v.s }}</a>
-                                {% endif %}
-                            {% endfor %}
-                            {% if association_role %}
-                                {% if run %}
-                                    <a href="{% url 'manage' %}" class="origin"><i class="fa-solid fa-building"></i> {{ association.name }}</a>
-                                {% endif %}
-                            {% endif %}
-                        </div>
+                        {% include "elements/structure/dropdown_work.html" %}
                     </div>
                     <div id="select_side" class="el dropdown">
                         {% if manage %}
-                            <span class="no_mobile"><i class="fa-solid fa-toolbox"></i> Admin</span>
+                            <span><i class="fa-solid fa-toolbox"></i> Admin</span>
                         {% else %}
-                            <span class="no_mobile"><i class="fa-solid fa-users"></i> User</span>
+                            <span><i class="fa-solid fa-users"></i> User</span>
                         {% endif %}
-                        <div class="dropdown-button">
-                            <a href="#" class="switch"><i class="fa-solid fa-square-caret-down"></i></a>
-                        </div>
-                        <div class="dropdown-menu">
-                            {% if run %}
-                                {% if manage %}
-                                    <a href="{% url 'gallery' run.get_slug %}" class="admin-link">
-                                        <i class="fa-solid fa-users"></i> User
-                                    </a>
-                                {% else %}
-                                    <a href="{% url 'manage' run.get_slug %}" class="admin-link">
-                                        <i class="fa-solid fa-toolbox"></i> Admin
-                                    </a>
-                                {% endif %}
-                            {% else %}
-                                {% if manage %}
-                                    <a href="{% url 'home' %}" class="admin-link">
-                                        <i class="fa-solid fa-users"></i> User
-                                    </a>
-                                {% else %}
-                                    {% if association_role %}
-                                        <a href="{% url 'manage' %}" class="admin-link">
-                                            <i class="fa-solid fa-toolbox"></i> Admin
-                                        </a>
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-                        </div>
+                        {% include "elements/structure/dropdown_side.html" %}
                     </div>
                     {% if manage %}
                         <div class="el">
-                            <a id="sidebar-open"
-                               href="#"
-                               class="no_mobile sidebar_button sidebar_tutorial"><i class="fa-solid fa-toggle-on"></i> <span class="no_mobile">Sidebar</span></a>
-                            <a id="sidebar-close"
-                               href="#"
-                               class="no_mobile sidebar_button sidebar_tutorial"><i class="fa-solid fa-toggle-off"></i> <span class="no_mobile">Sidebar</span></a>
-                            <a id="sidebar-mobile-open"
-                               href="#"
-                               class="only_mobile sidebar_tutorial"><i class="fa-solid fa-toggle-on"></i></a>
-                            <a id="sidebar-mobile-close"
-                               href="#"
-                               class="only_mobile sidebar_tutorial"><i class="fa-solid fa-toggle-off"></i></a>
-                        </div>
-                    {% endif %}
-                </td>
-                {% include "elements/structure/topbar-right.html" %}
-            </tr>
-        </table>
-    </div>
+                        <a id="sidebar-open"
+                           href="#"
+                           class="no_mobile sidebar_button sidebar_tutorial"><i class="fa-solid fa-toggle-on"></i>
+                        <span>Sidebar</span>
+                    </a>
+                <a id="sidebar-close"
+                   href="#"
+                   class="no_mobile sidebar_button sidebar_tutorial"><i class="fa-solid fa-toggle-off"></i>
+                <span>Sidebar</span>
+            </a>
+        </div>
+    {% endif %}
+</td>
+{% include "elements/structure/topbar-right.html" with mobile=False %}
+</tr>
+</table>
+<table class="mobile">
+    <tr>
+        <td>
+            <span class="el">
+                <a href="{% url 'home' %}">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+                <span class="label">Home</span>
+            </span>
+        </td>
+        <td>
+            <div id="select_workspace_mobile" class="el dropdown">
+                {% include "elements/structure/dropdown_work.html" %}
+                <span class="label">Workspace</span>
+            </div>
+        </td>
+        <td>
+            <div id="select_side_mobile" class="el dropdown">
+                {% include "elements/structure/dropdown_side.html" %}
+                <span class="label">Mode</span>
+            </div>
+        </td>
+        {% if manage %}
+            <td>
+                <div class="el">
+                    <a id="sidebar-mobile-open" href="#" class="sidebar_tutorial"><i class="fa-solid fa-toggle-on"></i></a>
+                    <a id="sidebar-mobile-close" href="#" class="sidebar_tutorial"><i class="fa-solid fa-toggle-off"></i></a>
+                    <span class="label">Sidebar</span>
+                </div>
+            </td>
+        {% endif %}
+        {% with topbar_admin=True %}
+            {% include "elements/structure/topbar-right.html" with mobile=True %}
+        {% endwith %}
+    </tr>
+</table>
+</div>
 </div>

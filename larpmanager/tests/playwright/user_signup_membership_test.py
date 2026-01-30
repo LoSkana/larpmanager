@@ -31,14 +31,14 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait,
-    check_download,
-    go_to,
-    load_image,
-    login_orga,
-    submit,
-    submit_confirm,
-    expect_normalized,
-)
+                                     check_download,
+                                     go_to,
+                                     load_image,
+                                     login_orga,
+                                     submit,
+                                     submit_confirm,
+                                     expect_normalized, logout,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -142,8 +142,7 @@ def pay(live_server: Any, page: Any) -> None:
     # check payment
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "Registration confirmed (Standard)")
-    page.locator("a#menu-open").click()
-    page.get_by_role("link", name="Logout").click()
+    logout(page)
     expect_normalized(page, page.locator("#one"), "Registration is open!")
     expect_normalized(page, page.locator("#one"), "Hurry: only 9 tickets available")
     # test mails
