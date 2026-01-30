@@ -4235,6 +4235,7 @@ INSERT INTO public.django_migrations VALUES (179, 'larpmanager', '0131_alter_ema
 INSERT INTO public.django_migrations VALUES (180, 'larpmanager', '0131_alter_association_background_alter_association_font_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (181, 'larpmanager', '0132_alter_member_birth_date_alter_member_birth_place_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (182, 'larpmanager', '0133_alter_registrationoption_price_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (183, 'larpmanager', '0134_alter_event_max_filler_alter_event_max_pg_and_more', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
@@ -4627,7 +4628,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 182, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 183, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -8428,4 +8429,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0133_alter_registrationoption_price_and_more
+-- LARPMANAGER_SCHEMA_VERSION: 0134_alter_event_max_filler_alter_event_max_pg_and_more

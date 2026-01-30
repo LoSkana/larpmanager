@@ -42,6 +42,7 @@ COMPRESS_URL = STATIC_URL
 # Social Account
 
 SOCIALACCOUNT_ADAPTER = 'larpmanager.utils.auth.adapter.MySocialAccountAdapter'
+ACCOUNT_ADAPTER = 'larpmanager.utils.auth.adapter.MyAccountAdapter'
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`

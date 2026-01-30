@@ -392,6 +392,7 @@ class WritingOption(UuidMixin, BaseModel):
 
     max_available = models.IntegerField(
         default=0,
+        validators=[MinValueValidator(0)],
         help_text=_("Optional - Maximum number of times it can be selected across all characters (0 = unlimited)"),
     )
 
@@ -710,6 +711,7 @@ class RegistrationOption(UuidMixin, BaseModel):
 
     max_available = models.IntegerField(
         default=0,
+        validators=[MinValueValidator(0)],
         verbose_name=_("Maximum number"),
         help_text=_("Optional - Maximum number of times it can be selected across all registrations (0 = unlimited)"),
     )
