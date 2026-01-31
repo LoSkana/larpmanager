@@ -2891,6 +2891,9 @@ msgstr "Terminrabatt"
 msgid "Handout template"
 msgstr "Handout-Vorlage"
 
+msgid "Interval sending"
+msgstr "Senden in Intervallen"
+
 msgid "Item assignments"
 msgstr "Artikelzuweisungen"
 
@@ -8560,6 +8563,12 @@ msgid ""
 msgstr ""
 "Wenn angekreuzt: Teilnehmer müssen eine Quittung/Rechnung für manuelle "
 "Zahlungen vorlegen"
+
+msgid ""
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+msgstr ""
+"Zeitspanne in Sekunden zwischen jeder gesendeten E-Mail (Standard: 3, "
+"Minimum: 1)"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"

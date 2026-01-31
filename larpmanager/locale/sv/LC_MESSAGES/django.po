@@ -2891,6 +2891,9 @@ msgstr "Terminsrabatt"
 msgid "Handout template"
 msgstr "Mall för handout"
 
+msgid "Interval sending"
+msgstr "Intervallsändning"
+
 msgid "Item assignments"
 msgstr "Tilldelning av objekt"
 
@@ -8241,6 +8244,12 @@ msgid ""
 "If checked: Participants must provide a receipt/invoice for manual payments"
 msgstr ""
 "Om markerat: Deltagare måste lämna kvitto/faktura för manuella betalningar"
+
+msgid ""
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+msgstr ""
+"I sekunder, tid mellan varje skickat e-postmeddelande (standard: 3, minimum:"
+" 1)"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"

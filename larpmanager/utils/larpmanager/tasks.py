@@ -33,7 +33,7 @@ from django.core.mail import EmailMultiAlternatives, get_connection
 from django.utils import timezone
 
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
@@ -193,7 +193,7 @@ def send_mail_exec(
         body=str(body),
     )
 
-    interval = getattr(conf_settings, "DEFAULT_EMAIL_INTERVAL", 3)
+    interval = max(1, get_association_config(association_id, "mail_interval", default_value=3))
 
     email_count = 0
     # Process each recipient with deduplication

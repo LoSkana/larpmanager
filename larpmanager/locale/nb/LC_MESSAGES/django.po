@@ -2891,6 +2891,9 @@ msgstr "Terminrabatt"
 msgid "Handout template"
 msgstr "Mal for utdeling"
 
+msgid "Interval sending"
+msgstr "Intervallsending"
+
 msgid "Item assignments"
 msgstr "Tildeling av varer"
 
@@ -8245,6 +8248,12 @@ msgid ""
 msgstr ""
 "Hvis avkrysset: Deltakerne må fremlegge kvittering/faktura for manuelle "
 "betalinger"
+
+msgid ""
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+msgstr ""
+"I sekunder, hvor lang tid det går mellom hver e-post som sendes (standard: "
+"3, minimum: 1)"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"

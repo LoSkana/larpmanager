@@ -359,6 +359,13 @@ msgid ""
 "If checked: Sends the main mail a copy of all mails sent to participants"
 msgstr ""
 
+msgid "Interval sending"
+msgstr ""
+
+msgid ""
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+msgstr ""
+
 msgid "New signup"
 msgstr ""
 

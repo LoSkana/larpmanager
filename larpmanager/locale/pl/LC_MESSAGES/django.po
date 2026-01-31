@@ -2891,6 +2891,9 @@ msgstr "Rabat terminowy"
 msgid "Handout template"
 msgstr "Szablon materiałów informacyjnych"
 
+msgid "Interval sending"
+msgstr "Wysyłanie interwałowe"
+
 msgid "Item assignments"
 msgstr "Przypisania przedmiotów"
 
@@ -8307,6 +8310,12 @@ msgid ""
 msgstr ""
 "Jeśli zaznaczono: Uczestnicy muszą dostarczyć paragon/fakturę w przypadku "
 "płatności ręcznych"
+
+msgid ""
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+msgstr ""
+"W sekundach, ilość czasu pomiędzy każdą wysłaną wiadomością e-mail "
+"(domyślnie: 3, minimalnie: 1)"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"

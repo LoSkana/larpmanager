@@ -2891,6 +2891,9 @@ msgstr "Descuento a plazo"
 msgid "Handout template"
 msgstr "Plantilla de documento"
 
+msgid "Interval sending"
+msgstr "Envío a intervalos"
+
 msgid "Item assignments"
 msgstr "Asignación de artículos"
 
@@ -8373,6 +8376,12 @@ msgid ""
 msgstr ""
 "Si está marcada: Los participantes deben presentar un recibo/factura para "
 "los pagos manuales"
+
+msgid ""
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+msgstr ""
+"En segundos, cantidad de tiempo entre cada correo electrónico enviado (por "
+"defecto: 3, mínimo: 1)"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"
