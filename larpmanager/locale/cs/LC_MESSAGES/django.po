@@ -4913,6 +4913,9 @@ msgstr "kontrola neexistujících vztahů"
 msgid "Added to the bottom of all pages"
 msgstr "Přidáno do spodní části všech stránek"
 
+msgid "An error occurred while deleting"
+msgstr "Při odstraňování došlo k chybě"
+
 msgid "Cancellation for missing payment"
 msgstr "Zrušení z důvodu chybějící platby"
 

@@ -879,6 +879,17 @@ def orga_writing_options_order(
 
 
 @login_required
+def orga_writing_options_delete(
+    request: HttpRequest,
+    event_slug: str,
+    writing_type: str,  # noqa: ARG001
+    option_uuid: str,
+) -> HttpResponse:
+    """Delete writing option for an event."""
+    return orga_delete(request, event_slug, "orga_character_form", OrgaWritingOptionForm, option_uuid)
+
+
+@login_required
 def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Perform comprehensive character and writing consistency checks.
 

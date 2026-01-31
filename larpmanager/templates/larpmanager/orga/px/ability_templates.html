@@ -15,7 +15,7 @@
                 <th>{% trans "Template Name" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th>{% trans "Components" %}</th>
-                <th class="only_new_form"></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -37,9 +37,10 @@
                         {% endif %}
                     </td>
                     <td></td>
-                    <td class="only_new_form">
+                    <td>
                         <a href="{% url 'orga_px_ability_templates_delete' run.get_slug el.uuid %}"
-                           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

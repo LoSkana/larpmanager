@@ -15,7 +15,7 @@
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Position" %}</th>
                 <th>{% trans "Description" %}</th>
-                <th class="only_new_form"></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -28,9 +28,10 @@
                     <td>{{ el.name }}</td>
                     <td>{{ el.position }}</td>
                     <td>{{ el.description | truncatechars:200 }}</td>
-                    <td class="only_new_form">
+                    <td>
                         <a href="{% url 'exe_warehouse_containers_delete' el.uuid %}"
-                           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

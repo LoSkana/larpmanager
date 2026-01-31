@@ -16,7 +16,7 @@
                 <th>{% trans "Language" %}</th>
                 <th>{% trans "Default" %}</th>
                 <th>{% trans "Text" %}</th>
-                <th class="only_new_form"></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -32,9 +32,10 @@
                         {% if el.default %}<i class="fa-solid fa-check"></i>{% endif %}
                     </td>
                     <td>{{ el.text | safe | striptags | truncatechars:300 }}</td>
-                    <td class="only_new_form">
+                    <td>
                         <a href="{% url 'orga_texts_delete' run.get_slug el.uuid %}"
-                           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

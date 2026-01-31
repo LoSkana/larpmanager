@@ -4913,6 +4913,9 @@ msgstr "sjekke ikke-eksisterende relasjoner"
 msgid "Added to the bottom of all pages"
 msgstr "Lagt til nederst på alle sider"
 
+msgid "An error occurred while deleting"
+msgstr "Det oppsto en feil under sletting"
+
 msgid "Cancellation for missing payment"
 msgstr "Avbestilling på grunn av manglende betaling"
 

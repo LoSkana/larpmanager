@@ -77,10 +77,7 @@ def test_orga_event_role(pw_page: Any) -> None:
     login_orga(page, live_server)
 
     go_to(page, live_server, "/test/manage/roles")
-    page.get_by_role("row", name=" test role User Test").get_by_role("link").click()
-    page.get_by_role("link", name="Delete").click()
-    just_wait(page)
-    page.get_by_role("button", name="Confirmation delete").click()
+    page.locator('#u2 .fa-trash').click()
 
     logout(page)
     login_user(page, live_server)

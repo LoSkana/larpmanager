@@ -15,7 +15,7 @@
     <th></th>
     <th>{% trans "Quest" %}</th>
     {% include "elements/writing/questions_header.html" %}
-    <th class="only_new_form"></th>
+    <th></th>
 {% endblock thead %}
 {% block tbody %}
     {% for el in list %}
@@ -37,9 +37,10 @@
                 {% endif %}
             </td>
             {% include "elements/writing/questions_body.html" %}
-            <td class="only_new_form">
+            <td>
                 <a href="{% url 'orga_traits_delete' run.get_slug el.uuid %}"
-                   qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                   qtip="{% trans "Delete" %}"
+                   class="only_new_form"><i class="fas fa-trash"></i></a>
             </td>
         </tr>
     {% endfor %}

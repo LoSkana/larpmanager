@@ -275,11 +275,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # delete sign up
     page.get_by_role("link", name="Registrations", exact=True).click()
-    just_wait(page)
-    page.get_by_role("link", name="").click()
-    page.get_by_role("link", name="Delete").click()
-    just_wait(page)
-    page.get_by_role("button", name="Confirmation delete").click()
+    page.locator('.fa-trash').click()
 
     # check does not show on new sign up
     go_to(page, live_server, "/test/register")

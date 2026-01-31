@@ -16,7 +16,7 @@
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Users" %}</th>
                 <th>{% trans "Role" %}</th>
-                <th class="only_new_form"></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -29,10 +29,11 @@
                     <td>{{ el.name }}</td>
                     <td>{{ el.members_list }}</td>
                     <td>{{ el.perms_list | safe }}</td>
-                    <td class="only_new_form">
+                    <td>
                         {% if el.number != 1 %}
                             <a href="{% url 'orga_roles_delete' run.get_slug el.uuid %}"
-                               qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                               qtip="{% trans "Delete" %}"
+                               class="only_new_form"><i class="fas fa-trash"></i></a>
                         {% endif %}
                     </td>
                 </tr>

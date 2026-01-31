@@ -4913,6 +4913,9 @@ msgstr "comprobar relaciones inexistentes"
 msgid "Added to the bottom of all pages"
 msgstr "Añadido al final de todas las páginas"
 
+msgid "An error occurred while deleting"
+msgstr "Se ha producido un error al borrar"
+
 msgid "Cancellation for missing payment"
 msgstr "Anulación por impago"
 

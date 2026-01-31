@@ -20,7 +20,7 @@
     <th class="hide stats">
         <i class="fa fa-hashtag"></i> {% trans "Traits" %}
     </th>
-    <th class="only_new_form"></th>
+    <th></th>
 {% endblock thead %}
 {% block tbody %}
     {% for el in list %}
@@ -45,9 +45,10 @@
                 {% endfor %}
             </td>
             <td class="hide stats">{{ el.trait_rels.count }}</td>
-            <td class="only_new_form">
+            <td>
                 <a href="{% url 'orga_quests_delete' run.get_slug el.uuid %}"
-                   qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                   qtip="{% trans "Delete" %}"
+                   class="only_new_form"><i class="fas fa-trash"></i></a>
             </td>
         </tr>
     {% endfor %}

@@ -18,7 +18,7 @@
                 <th>{% trans "Requirements" %}</th>
                 <th></th>
                 <th></th>
-                <th class="only_new_form"></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -67,9 +67,10 @@
                             </a>
                         {% endif %}
                     </td>
-                    <td class="only_new_form">
+                    <td>
                         <a href="{% url 'orga_px_modifiers_delete' run.get_slug el.uuid %}"
-                           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

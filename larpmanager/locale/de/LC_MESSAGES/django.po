@@ -4913,6 +4913,9 @@ msgstr "Prüfung nicht vorhandener Beziehungen"
 msgid "Added to the bottom of all pages"
 msgstr "Am unteren Rand aller Seiten hinzugefügt"
 
+msgid "An error occurred while deleting"
+msgstr "Beim Löschen ist ein Fehler aufgetreten"
+
 msgid "Cancellation for missing payment"
 msgstr "Stornierung wegen fehlender Zahlung"
 

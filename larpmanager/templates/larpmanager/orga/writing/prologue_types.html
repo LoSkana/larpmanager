@@ -17,7 +17,7 @@
                 <th>
                     <i class="fa fa-hashtag"></i>
                 </th>
-                <th class="only_new_form"></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -34,9 +34,10 @@
                         {% endfor %}
                     </td>
                     <td>{{ el.prologues.all | length }}</td>
-                    <td class="only_new_form">
+                    <td>
                         <a href="{% url 'orga_prologue_types_delete' run.get_slug el.uuid %}"
-                           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

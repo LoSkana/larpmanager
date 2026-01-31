@@ -16,7 +16,7 @@
                 <th>{% trans "Position" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th></th>
-                <th class="only_new_form"></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -33,9 +33,10 @@
                         <a href="{% url 'orga_warehouse_area_assignments' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}">{% trans "Item assignments" %}</a>
                     </td>
-                    <td class="only_new_form">
+                    <td>
                         <a href="{% url 'orga_warehouse_area_delete' run.get_slug el.uuid %}"
-                           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

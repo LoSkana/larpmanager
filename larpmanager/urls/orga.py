@@ -233,6 +233,11 @@ urlpatterns = [
         name="orga_registration_options_order",
     ),
     path(
+        "<slug:event_slug>/manage/options/delete/<slug:option_uuid>/",
+        views_of.orga_registration_options_delete,
+        name="orga_registration_options_delete",
+    ),
+    path(
         "<slug:event_slug>/manage/quotas/",
         views_of.orga_registration_quotas,
         name="orga_registration_quotas",
@@ -486,6 +491,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/writing/options/<slug:writing_type>/order/<slug:option_uuid>/<int:order>/",
         views_oc.orga_writing_options_order,
         name="orga_writing_options_order",
+    ),
+    path(
+        "<slug:event_slug>/manage/writing/options/<slug:writing_type>/delete/<slug:option_uuid>/",
+        views_oc.orga_writing_options_delete,
+        name="orga_writing_options_delete",
     ),
     path(
         "<slug:event_slug>/manage/writing/edit/<slug:writing_type>/",

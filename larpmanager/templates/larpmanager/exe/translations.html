@@ -16,7 +16,7 @@
                 <th>{% trans "Original" %}</th>
                 <th>{% trans "Translation" %}</th>
                 <th>{% trans "Active" %}</th>
-                <th class="only_new_form"></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -32,9 +32,10 @@
                     <td>
                         {% if el.active %}<i class="fa-solid fa-check"></i>{% endif %}
                     </td>
-                    <td class="only_new_form">
+                    <td>
                         <a href="{% url 'exe_translations_delete' run.get_slug el.uuid %}"
-                           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

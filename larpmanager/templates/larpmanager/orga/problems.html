@@ -22,7 +22,7 @@
                 <th>{% trans "What" %}</th>
                 <th>{% trans "Who" %}</th>
                 <th>{% trans "Rensponsable" %}</th>
-                <th class="only_new_form"></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -40,9 +40,10 @@
                     <td>{{ el.what_l }}</td>
                     <td>{{ el.who_l }}</td>
                     <td>{{ el.assigned }}</td>
-                    <td class="only_new_form">
+                    <td>
                         <a href="{% url 'orga_problems_delete' run.get_slug el.uuid %}"
-                           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}
