@@ -188,10 +188,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/testaccess/manage/")
     page.locator("#orga_registrations").get_by_role("link", name="Registrations").click()
     # Find and delete the user's registration
-    page.locator("a:has(i.fas.fa-edit)").click()
-    page.get_by_role("link", name="Delete").click()
-    just_wait(page)
-    page.get_by_role("button", name="Confirmation delete").click()
+    page.locator("a:has(i.fas.fa-trash)").click()
 
     # Logout and login as user - now without registration
     logout(page)

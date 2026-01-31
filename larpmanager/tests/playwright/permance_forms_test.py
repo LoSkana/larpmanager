@@ -145,7 +145,7 @@ def check_orga_roles(page: Any) -> None:
         check_feature(page, s)
     submit_confirm(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Event (Event, Configuration), Appearance (Texts, Navigation)")
-    page.get_by_role("row", name=" testona Admin Test Event (").get_by_role("link").click()
+    page.get_by_role("row", name="testona Admin Test Event (").locator(".fa-edit").click()
     _check_checkboxes(checked, page)
 
 

@@ -42,7 +42,7 @@ from larpmanager.forms.character import (
     OrgaWritingQuestionForm,
 )
 from larpmanager.forms.utils import EventCharacterS2WidgetUuid
-from larpmanager.forms.writing import FactionForm, PlotForm, QuestForm, TraitForm
+from larpmanager.forms.writing import OrgaFactionForm, OrgaPlotForm, OrgaQuestForm, OrgaTraitForm
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
@@ -75,6 +75,7 @@ from larpmanager.utils.services.edit import (
     backend_edit,
     form_edit_handler,
     options_edit_handler,
+    orga_delete,
     writing_edit,
     writing_edit_working_ticket,
 )
@@ -200,6 +201,12 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, character_uuid: 
 
     # Delegate to writing edit system with character-specific form and version type
     return writing_edit(request, context, OrgaCharacterForm, character_uuid, TextVersionChoices.CHARACTER)
+
+
+@login_required
+def orga_characters_delete(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
+    """Deletes a character."""
+    return orga_delete(request, event_slug, "orga_characters", OrgaCharacterForm, character_uuid)
 
 
 def _characters_relationships(context: dict) -> None:
@@ -739,6 +746,24 @@ def orga_writing_form_edit(
 
 
 @login_required
+def orga_writing_form_delete(
+    request: HttpRequest,
+    event_slug: str,
+    writing_type: str,  # noqa: ARG001
+    question_uuid: str,
+) -> HttpResponse:
+    """Deletes a writing form question."""
+    return orga_delete(
+        request,
+        event_slug,
+        "orga_character_form",
+        OrgaWritingQuestionForm,
+        question_uuid,
+        can_delete=lambda _context, element: len(element.typ) == 1,
+    )
+
+
+@login_required
 def orga_writing_form_order(
     request: HttpRequest,
     event_slug: str,
@@ -937,6 +962,17 @@ def orga_writing_options_order(
         },
     )
     return HttpResponseRedirect(url)
+
+
+@login_required
+def orga_writing_options_delete(
+    request: HttpRequest,
+    event_slug: str,
+    writing_type: str,  # noqa: ARG001
+    option_uuid: str,
+) -> HttpResponse:
+    """Delete writing option for an event."""
+    return orga_delete(request, event_slug, "orga_character_form", OrgaWritingOptionForm, option_uuid)
 
 
 @login_required
@@ -1351,10 +1387,10 @@ def _get_excel_form(
     # Map element types to their corresponding form classes
     form_mapping = {
         "character": OrgaCharacterForm,
-        "faction": FactionForm,
-        "plot": PlotForm,
-        "trait": TraitForm,
-        "quest": QuestForm,
+        "faction": OrgaFactionForm,
+        "plot": OrgaPlotForm,
+        "trait": OrgaTraitForm,
+        "quest": OrgaQuestForm,
     }
 
     # Initialize form based on submission state

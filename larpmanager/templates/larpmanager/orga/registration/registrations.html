@@ -143,6 +143,7 @@
                             <th class="acc pay_a">{% trans "Money" %}</th>
                             {% if 'credits' in association.features %}<th class="acc pay_b">{{ credits_name }}</th>{% endif %}
                             {% if 'tokens' in association.features %}<th class="acc pay_c">{{ tokens_name }}</th>{% endif %}
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -313,6 +314,11 @@
                                         <!-- filled later -->
                                     </td>
                                 {% endif %}
+                                <td>
+                                    <a href="{% url 'orga_registrations_delete' run.get_slug registration.uuid %}"
+                                       qtip="{% trans "Delete" %}"
+                                       class="only_new_form"><i class="fas fa-trash"></i></a>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

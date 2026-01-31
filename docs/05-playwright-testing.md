@@ -636,10 +636,7 @@ Tests should be **idempotent** - running them multiple times should produce the 
 ```python
 # Delete previous signup before testing
 go_to(page, live_server, "/test/manage/registrations")
-page.locator("a:has(i.fas.fa-edit)").click()
-page.get_by_role("link", name="Delete").click()
-page.wait_for_timeout(1000)
-page.get_by_role("button", name="Confirmation delete").click()
+page.locator("a:has(i.fas.fa-trash)").click()
 ```
 
 ### 7. Use Regular Expressions for Dynamic Text

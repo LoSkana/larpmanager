@@ -30,7 +30,7 @@ from larpmanager.models.inventory import Inventory, InventoryTransfer, PoolTypeC
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.common import get_element_event
-from larpmanager.utils.services.edit import orga_edit
+from larpmanager.utils.services.edit import orga_delete, orga_edit
 from larpmanager.utils.services.inventory import perform_transfer
 
 logger = logging.getLogger(__name__)
@@ -57,6 +57,12 @@ def orga_ci_inventory_edit(request: HttpRequest, event_slug: str, inventory_uuid
 
 
 @login_required
+def orga_ci_inventory_delete(request: HttpRequest, event_slug: str, inventory_uuid: str) -> HttpResponse:
+    """Delete inventory for event."""
+    return orga_delete(request, event_slug, "orga_ci_inventory", OrgaInventoryForm, inventory_uuid)
+
+
+@login_required
 def orga_ci_pool_types(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of pool types for character inventory."""
     context = check_event_context(request, event_slug, "orga_ci_pool_types")
@@ -74,6 +80,12 @@ def orga_ci_pool_types_new(request: HttpRequest, event_slug: str) -> HttpRespons
 def orga_ci_pool_types_edit(request: HttpRequest, event_slug: str, pool_uuid: str) -> HttpResponse:
     """Edit a pool type for character inventory."""
     return orga_edit(request, event_slug, "orga_ci_pool_types", OrgaPoolTypePxForm, pool_uuid)
+
+
+@login_required
+def orga_ci_pool_types_delete(request: HttpRequest, event_slug: str, pool_uuid: str) -> HttpResponse:
+    """Delete pool for event."""
+    return orga_delete(request, event_slug, "orga_ci_pool_types", OrgaPoolTypePxForm, pool_uuid)
 
 
 @login_required

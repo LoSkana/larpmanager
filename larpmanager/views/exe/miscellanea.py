@@ -39,7 +39,7 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.services.bulk import handle_bulk_items
-from larpmanager.utils.services.edit import exe_edit
+from larpmanager.utils.services.edit import exe_delete, exe_edit
 from larpmanager.utils.services.miscellanea import get_warehouse_optionals
 
 
@@ -68,6 +68,12 @@ def exe_urlshortner_edit(request: HttpRequest, url_uuid: str) -> HttpResponse:
 
 
 @login_required
+def exe_urlshortner_delete(request: HttpRequest, url_uuid: str) -> HttpResponse:
+    """Delete url."""
+    return exe_delete(request, ExeUrlShortnerForm, url_uuid, "exe_urlshortner")
+
+
+@login_required
 def exe_warehouse_containers(request: HttpRequest) -> HttpResponse:
     """Display list of warehouse containers for the current association."""
     # Check user permissions for warehouse container management
@@ -92,6 +98,12 @@ def exe_warehouse_containers_edit(request: HttpRequest, container_uuid: str) -> 
 
 
 @login_required
+def exe_warehouse_containers_delete(request: HttpRequest, container_uuid: str) -> HttpResponse:
+    """Delete container."""
+    return exe_delete(request, ExeWarehouseContainerForm, container_uuid, "exe_warehouse_containers")
+
+
+@login_required
 def exe_warehouse_tags(request: HttpRequest) -> HttpResponse:
     """Display warehouse tags for the current organization."""
     # Check user has permission to view warehouse tags
@@ -113,6 +125,12 @@ def exe_warehouse_tags_new(request: HttpRequest) -> HttpResponse:
 def exe_warehouse_tags_edit(request: HttpRequest, tag_uuid: str) -> HttpResponse:
     """Edit warehouse tag via generic edit view."""
     return exe_edit(request, ExeWarehouseTagForm, tag_uuid, "exe_warehouse_tags")
+
+
+@login_required
+def exe_warehouse_tags_delete(request: HttpRequest, tag_uuid: str) -> HttpResponse:
+    """Delete tag."""
+    return exe_delete(request, ExeWarehouseTagForm, tag_uuid, "exe_warehouse_tags")
 
 
 @login_required
@@ -159,6 +177,12 @@ def exe_warehouse_items_edit(request: HttpRequest, item_uuid: str) -> HttpRespon
 
 
 @login_required
+def exe_warehouse_items_delete(request: HttpRequest, item_uuid: str) -> HttpResponse:
+    """Delete item."""
+    return exe_delete(request, ExeWarehouseItemForm, item_uuid, "exe_warehouse_items")
+
+
+@login_required
 def exe_warehouse_movements(request: HttpRequest) -> HttpResponse:
     """Render warehouse movements list for association."""
     # Check permissions and initialize context
@@ -183,3 +207,9 @@ def exe_warehouse_movements_new(request: HttpRequest) -> HttpResponse:
 def exe_warehouse_movements_edit(request: HttpRequest, movement_uuid: str) -> HttpResponse:
     """Edit a specific warehouse movement by delegating to the generic exe_edit view."""
     return exe_edit(request, ExeWarehouseMovementForm, movement_uuid, "exe_warehouse_movements")
+
+
+@login_required
+def exe_warehouse_movements_delete(request: HttpRequest, movement_uuid: str) -> HttpResponse:
+    """Delete movement."""
+    return exe_delete(request, ExeWarehouseMovementForm, movement_uuid, "exe_warehouse_movements")

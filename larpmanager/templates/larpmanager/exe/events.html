@@ -13,7 +13,7 @@
             <a class="new button" href="{% url 'exe_runs_new' %}">{% trans "New session" %}</a>
         {% endif %}
     </div>
-    <table id="events" class="go_datatable writing gall" no_header_cols="[6,7]">
+    <table id="events" class="go_datatable writing gall">
         <thead>
             <tr>
                 <th></th>
@@ -22,6 +22,7 @@
                 <th>{% trans "Start" %}</th>
                 <th>{% trans "End" %}</th>
                 <th>{% trans "Registrations" %}</th>
+                <th></th>
                 <th></th>
                 <th></th>
             </tr>
@@ -57,6 +58,11 @@
                                 title="{% trans "Copy link to clipboard" %}">
                             <i class="fa-solid fa-copy"></i>
                         </button>
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_events_delete' el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}
