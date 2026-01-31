@@ -17,24 +17,26 @@
     {{ association.name }}
 {% endblock title %}
 {% block content %}
-    <div class="clearer"></div>
-    {% if custom_text %}
-        {{ custom_text | safe }}
-        <hr />
-    {% endif %}
-    {% if open %}
-        {% if future %}
-            <h2>{% trans "upcoming events" %}</h2>
+    <div class="calendar">
+        <div class="clearer"></div>
+        {% if custom_text %}
+            {{ custom_text | safe }}
+            <hr />
         {% endif %}
-        {% include "elements/run_list.html" with list=open %}
-    {% endif %}
-    {% if future %}
-        <h2>{% trans "Next events" %}</h2>
-        {% include "elements/run_list.html" with list=future %}
-    {% endif %}
-    {% if 'past_events' in association.features %}
-        <div class="nav">
-            <a href="{% url 'calendar_past' %}">{% trans "Past events" %}</a>
-        </div>
-    {% endif %}
+        {% if open %}
+            {% if future %}
+                <h2>{% trans "upcoming events" %}</h2>
+            {% endif %}
+            {% include "elements/run_list.html" with list=open %}
+        {% endif %}
+        {% if future %}
+            <h2>{% trans "Next events" %}</h2>
+            {% include "elements/run_list.html" with list=future %}
+        {% endif %}
+        {% if 'past_events' in association.features %}
+            <div class="nav">
+                <a href="{% url 'calendar_past' %}">{% trans "Past events" %}</a>
+            </div>
+        {% endif %}
+    </div>
 {% endblock content %}

@@ -468,6 +468,10 @@ class ExeConfigForm(ConfigForm):
             carbon_copy_help_text = _("If checked: Sends the main mail a copy of all mails sent to participants")
             self.add_configs("mail_cc", ConfigType.BOOL, carbon_copy_label, carbon_copy_help_text)
 
+        mail_interval_label = _("Interval sending")
+        mail_interval_help_text = _("In seconds, amount of time between each sent email (default: 3, minimum: 1)")
+        self.add_configs("mail_interval", ConfigType.INT, mail_interval_label, mail_interval_help_text)
+
         # Configure new signup notification toggle
         new_signup_label = _("New signup")
         new_signup_help_text = _("If checked: Send an email notification to the organisers for new signups")

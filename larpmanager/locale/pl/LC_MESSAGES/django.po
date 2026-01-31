@@ -1650,6 +1650,9 @@ msgstr "Typ zadania"
 msgid "Quest type"
 msgstr "Typ zadania"
 
+msgid "Recipients"
+msgstr "Odbiorcy"
+
 msgid "Refund for"
 msgstr "Zwrot za"
 
@@ -2887,6 +2890,9 @@ msgstr "Rabat terminowy"
 
 msgid "Handout template"
 msgstr "Szablon materiałów informacyjnych"
+
+msgid "Interval sending"
+msgstr "Wysyłanie interwałowe"
 
 msgid "Item assignments"
 msgstr "Przypisania przedmiotów"
@@ -4347,9 +4353,6 @@ msgstr "Teraz możesz zarządzać wydarzeniami"
 
 msgid "Option saved successfully"
 msgstr "Opcja zapisana pomyślnie"
-
-msgid "Optional - email reply to"
-msgstr "Opcjonalnie - wyślij odpowiedź e-mailem na adres"
 
 msgid "Payment already confirmed"
 msgstr "Płatność już potwierdzona"
@@ -6168,9 +6171,6 @@ msgstr "Opcjonalny obraz dla karuzeli/pokazu slajdów na stronie głównej"
 msgid "Please select both a registration and an event"
 msgstr "Wybierz zarówno rejestrację, jak i wydarzenie"
 
-msgid "Remember to put recipients separated by commas"
-msgstr "Pamiętaj, aby oddzielić odbiorców przecinkami"
-
 msgid "Something went wrong in the account activation"
 msgstr "Coś poszło nie tak podczas aktywacji konta"
 
@@ -6307,6 +6307,9 @@ msgstr "Nieaktywne postacie nie mogą być przypisywane do graczy"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "Czy jest coś jeszcze, co chciałbyś nam powiedzieć"
+
+msgid "List of recipient email address, comma separated"
+msgstr "Lista adresów e-mail odbiorców, oddzielonych przecinkami"
 
 msgid "Manage copying event settings from another event"
 msgstr "Zarządzanie kopiowaniem ustawień zdarzenia z innego zdarzenia"
@@ -6520,6 +6523,10 @@ msgstr "Przypisanie dla tego elementu i obszaru już istnieje"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Przydzielono %(amount).2f %(elements)s dla '%(reason)s"
 
+msgid "From this page you can email any list of recipients"
+msgstr ""
+"Z tej strony można wysłać wiadomość e-mail do dowolnej listy odbiorców"
+
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Robiłem to kilka razy, mam podstawowe doświadczenie"
 
@@ -6596,10 +6603,6 @@ msgstr "Wskazuje, czy może zostać wybrany przez uczestników"
 msgid "Input an element name to insert their reference code"
 msgstr "Wprowadź nazwę elementu, aby wstawić jego kod referencyjny"
 
-msgid "Interval in seconds between each email (default: 20)"
-msgstr ""
-"Interwał w sekundach między kolejnymi wiadomościami e-mail (domyślnie: 20)"
-
 msgid "Last step, please upload your membership application"
 msgstr "Ostatnim krokiem jest przesłanie wniosku o członkostwo"
 
@@ -6675,9 +6678,6 @@ msgstr "Teraz można utworzyć bilety patronackie i ulgowe"
 
 msgid "Now you can upload content and generate access tokens"
 msgstr "Teraz możesz przesyłać zawartość i generować tokeny dostępu"
-
-msgid "Optional - ram html code (substitute the text before)"
-msgstr "Opcjonalnie - kod html ramki (zastąp wcześniejszy tekst)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
@@ -7265,10 +7265,6 @@ msgstr ""
 
 msgid "Description of this payment method to be displayed to the user"
 msgstr "Opis tej metody płatności wyświetlany użytkownikowi"
-
-msgid "From this page you can send an email to any list of recipients"
-msgstr ""
-"Z tej strony można wysłać wiadomość e-mail do dowolnej listy odbiorców"
 
 msgid "If checked: collpase sidebars links, and expand on mouse hover"
 msgstr ""
@@ -8314,6 +8310,12 @@ msgid ""
 msgstr ""
 "Jeśli zaznaczono: Uczestnicy muszą dostarczyć paragon/fakturę w przypadku "
 "płatności ręcznych"
+
+msgid ""
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+msgstr ""
+"W sekundach, ilość czasu pomiędzy każdą wysłaną wiadomością e-mail "
+"(domyślnie: 3, minimalnie: 1)"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"

@@ -359,6 +359,13 @@ msgid ""
 "If checked: Sends the main mail a copy of all mails sent to participants"
 msgstr ""
 
+msgid "Interval sending"
+msgstr ""
+
+msgid ""
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+msgstr ""
+
 msgid "New signup"
 msgstr ""
 
@@ -1901,13 +1908,10 @@ msgstr ""
 msgid "Partial"
 msgstr ""
 
-msgid "Optional - email reply to"
+msgid "Recipients"
 msgstr ""
 
-msgid "Optional - ram html code (substitute the text before)"
-msgstr ""
-
-msgid "Interval in seconds between each email (default: 20)"
+msgid "List of recipient email address, comma separated"
 msgstr ""
 
 msgid "Manage participant questions"
@@ -5997,10 +6001,7 @@ msgstr ""
 msgid "Send emails"
 msgstr ""
 
-msgid "From this page you can send an email to any list of recipients"
-msgstr ""
-
-msgid "Remember to put recipients separated by commas"
+msgid "From this page you can email any list of recipients"
 msgstr ""
 
 msgid "Are you really sure"
