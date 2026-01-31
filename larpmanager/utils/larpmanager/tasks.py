@@ -28,7 +28,7 @@ from typing import TYPE_CHECKING, Any
 from background_task import background
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import EmailMultiAlternatives, get_connection
+from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 
 from larpmanager.cache.association_text import get_association_text
@@ -334,9 +334,7 @@ def my_send_simple_mail(
         raise
 
 
-def _prepare_email_metadata(
-    association_id: int | None, run_id: int | None, reply_to: str | None
-) -> dict:
+def _prepare_email_metadata(association_id: int | None, run_id: int | None, reply_to: str | None) -> dict:
     """Extract email metadata from association/event config.
 
     Args:
@@ -348,10 +346,10 @@ def _prepare_email_metadata(
         Dict containing sender_email, sender_name, headers, and bcc_recipients
     """
     metadata = {
-        'sender_email': 'info@larpmanager.com',
-        'sender_name': 'LarpManager',
-        'headers': {},
-        'bcc_recipients': [],
+        "sender_email": "info@larpmanager.com",
+        "sender_name": "LarpManager",
+        "headers": {},
+        "bcc_recipients": [],
     }
 
     cache_context = {}
@@ -370,8 +368,8 @@ def _prepare_email_metadata(
             bypass_cache=True,
         )
         if event_smtp_user:
-            metadata['sender_email'] = event_smtp_user
-            metadata['sender_name'] = event.name
+            metadata["sender_email"] = event_smtp_user
+            metadata["sender_name"] = event.name
             event_settings_applied = True
 
     # Apply association-level metadata
@@ -380,27 +378,27 @@ def _prepare_email_metadata(
 
         # Add BCC if configured
         if association.get_config("mail_cc", default_value=False, bypass_cache=True) and association.main_mail:
-            metadata['bcc_recipients'].append(association.main_mail)
+            metadata["bcc_recipients"].append(association.main_mail)
 
         # Store organization main email for potential Reply-To (used by SES backend)
         if association.main_mail:
-            metadata['org_main_mail'] = association.main_mail
+            metadata["org_main_mail"] = association.main_mail
 
         # Set sender (only if event didn't set it)
         if not event_settings_applied:
             assoc_smtp_user = association.get_config("mail_server_host_user", default_value="", bypass_cache=True)
             if assoc_smtp_user:
-                metadata['sender_email'] = assoc_smtp_user
-                metadata['sender_name'] = association.name
+                metadata["sender_email"] = assoc_smtp_user
+                metadata["sender_name"] = association.name
             else:
                 # Use subdomain sender
-                metadata['sender_email'] = f"{association.slug}@larpmanager.com"
-                metadata['sender_name'] = association.name
+                metadata["sender_email"] = f"{association.slug}@larpmanager.com"
+                metadata["sender_name"] = association.name
 
     # Add headers
     if reply_to:
-        metadata['headers']['Reply-To'] = reply_to
-    metadata['headers']['List-Unsubscribe'] = f"<mailto:{metadata['sender_email']}>"
+        metadata["headers"]["Reply-To"] = reply_to
+    metadata["headers"]["List-Unsubscribe"] = f"<mailto:{metadata['sender_email']}>"
 
     return metadata
 
@@ -425,14 +423,14 @@ def _build_email_message(subj: str, body: str, m_email: str, metadata: dict) -> 
         remove_html_tags(body),
         sender,
         [m_email],
-        bcc=metadata['bcc_recipients'],
-        headers=metadata['headers'],
+        bcc=metadata["bcc_recipients"],
+        headers=metadata["headers"],
     )
     message.attach_alternative(body, "text/html")
 
     # Store organization main email for SES backend to use as Reply-To if needed
-    if 'org_main_mail' in metadata:
-        message.org_main_mail = metadata['org_main_mail']
+    if "org_main_mail" in metadata:
+        message.org_main_mail = metadata["org_main_mail"]
 
     return message
 
