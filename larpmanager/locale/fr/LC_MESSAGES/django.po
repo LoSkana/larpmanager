@@ -6722,7 +6722,7 @@ msgstr ""
 "Vous pouvez maintenant télécharger du contenu et générer des jetons d'accès"
 
 msgid "Optional - ram html code (substitute the text before)"
-msgstr "Facultatif - code html brut (remplace le texte ci-dessus)"
+msgstr "Facultatif - code html ram (remplacer le texte précédent)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
@@ -8165,8 +8165,8 @@ msgstr "Vous ne pourrez plus utiliser ce lien après avoir accédé au contenu"
 msgid ""
 "due to delicacy of the task requested, our team will review it manually"
 msgstr ""
-"en raison de la délicatesse de la tâche demandée, notre équipe l'examinera "
-"manuellement"
+"en raison du caractère délicat de la tâche demandée, notre équipe "
+"l'examinera manuellement"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"

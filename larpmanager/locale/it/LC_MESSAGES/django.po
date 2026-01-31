@@ -3927,7 +3927,7 @@ msgid "Download relationships"
 msgstr "Scarica le relazioni"
 
 msgid "Event deletion request"
-msgstr "Richiesta di cancellazione evento"
+msgstr "Richiesta di cancellazione dell'evento"
 
 msgid "Expenses collaborators"
 msgstr "Spese collaboratori"
@@ -4355,7 +4355,7 @@ msgid "Option saved successfully"
 msgstr "Opzione salvata con successo"
 
 msgid "Optional - email reply to"
-msgstr "Opzionale - email reply to"
+msgstr "Opzionale - risposta via e-mail a"
 
 msgid "Payment already confirmed"
 msgstr "Pagamento già confermato"
@@ -5552,7 +5552,7 @@ msgid "click on the icon to open the tutorial"
 msgstr "fare clic sull'icona per aprire l'esercitazione"
 
 msgid "we'll let you know as soon as possible"
-msgstr "ti faremo sapere il prima possibile"
+msgstr "vi faremo sapere il prima possibile"
 
 msgid "Character are not visible at the moment"
 msgstr "I personaggi non sono visibili al momento"
@@ -6184,7 +6184,7 @@ msgid "Please select both a registration and an event"
 msgstr "Seleziona sia una registrazione che un evento"
 
 msgid "Remember to put recipients separated by commas"
-msgstr "Ricorda di mettere i destinatari separati da virgola"
+msgstr "Ricordarsi di inserire i destinatari separati da virgole"
 
 msgid "Something went wrong in the account activation"
 msgstr "Qualcosa è andato storto nell'attivazione dell'account"
@@ -6692,7 +6692,7 @@ msgid "Now you can upload content and generate access tokens"
 msgstr "Ora puoi caricare i contenuti e generare i token di accesso"
 
 msgid "Optional - ram html code (substitute the text before)"
-msgstr "Opzionale - codice html raw (sostituisce il testo sopra)"
+msgstr "Opzionale - codice html ram (sostituire il testo precedente)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"

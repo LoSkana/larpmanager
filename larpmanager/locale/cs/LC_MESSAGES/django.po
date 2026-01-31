@@ -6183,7 +6183,7 @@ msgid "Please select both a registration and an event"
 msgstr "Vyberte prosím registraci i událost"
 
 msgid "Remember to put recipients separated by commas"
-msgstr "Nezapomeňte příjemce oddělit čárkami"
+msgstr "Nezapomeňte uvést příjemce oddělené čárkami"
 
 msgid "Something went wrong in the account activation"
 msgstr "Něco se pokazilo při aktivaci účtu"
@@ -6686,7 +6686,7 @@ msgid "Now you can upload content and generate access tokens"
 msgstr "Nyní můžete nahrávat obsah a generovat přístupové tokeny"
 
 msgid "Optional - ram html code (substitute the text before)"
-msgstr "Volitelně - nezpracovaný html kód (nahrazuje výše uvedený text)"
+msgstr "Nepovinné - html kód ram (nahraďte text předtím)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"

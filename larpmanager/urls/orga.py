@@ -1513,6 +1513,11 @@ urlpatterns = [
         name="orga_roles",
     ),
     path(
+        "<slug:event_slug>/manage/roles/new/",
+        views_oe.orga_roles_new,
+        name="orga_roles_new",
+    ),
+    path(
         "<slug:event_slug>/manage/roles/edit/<slug:role_uuid>/",
         views_oe.orga_roles_edit,
         name="orga_roles_edit",

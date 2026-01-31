@@ -6698,7 +6698,7 @@ msgid "Now you can upload content and generate access tokens"
 msgstr "Ya puedes subir contenidos y generar tokens de acceso"
 
 msgid "Optional - ram html code (substitute the text before)"
-msgstr "Opcional - código html sin formato (sustituye al texto anterior)"
+msgstr "Opcional - código html ram (sustituir el texto anterior)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"

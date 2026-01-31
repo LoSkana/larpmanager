@@ -42,8 +42,9 @@ from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order, get_object_uuid
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.io.download import export_abilities, zip_exports
+from larpmanager.utils.services.actions import Action, unified_orga
 from larpmanager.utils.services.bulk import handle_bulk_ability
-from larpmanager.utils.services.edit import orga_delete, orga_edit
+from larpmanager.utils.services.edit import orga_edit
 
 
 @login_required
@@ -137,7 +138,7 @@ def orga_px_deliveries_edit(request: HttpRequest, event_slug: str, delivery_uuid
 @login_required
 def orga_px_deliveries_delete(request: HttpRequest, event_slug: str, delivery_uuid: str) -> HttpResponse:
     """Delete delivery for event."""
-    return orga_delete(request, event_slug, "orga_px_deliveries", OrgaDeliveryPxForm, delivery_uuid)
+    return unified_orga(request, event_slug, "orga_px_deliveries", Action.DELETE, delivery_uuid)
 
 
 @login_required
@@ -218,7 +219,7 @@ def orga_px_abilities_edit(request: HttpRequest, event_slug: str, ability_uuid: 
 @login_required
 def orga_px_abilities_delete(request: HttpRequest, event_slug: str, ability_uuid: str) -> HttpResponse:
     """Delete ability for event."""
-    return orga_delete(request, event_slug, "orga_px_abilities", OrgaAbilityPxForm, ability_uuid)
+    return unified_orga(request, event_slug, "orga_px_abilities", Action.DELETE, ability_uuid)
 
 
 @login_required
@@ -248,7 +249,7 @@ def orga_px_ability_types_edit(request: HttpRequest, event_slug: str, type_uuid:
 @login_required
 def orga_px_ability_types_delete(request: HttpRequest, event_slug: str, type_uuid: str) -> HttpResponse:
     """Delete type for event."""
-    return orga_delete(request, event_slug, "orga_px_ability_types", OrgaAbilityTypePxForm, type_uuid)
+    return unified_orga(request, event_slug, "orga_px_ability_types", Action.DELETE, type_uuid)
 
 
 @login_required
@@ -289,7 +290,7 @@ def orga_px_ability_templates_edit(request: HttpRequest, event_slug: str, templa
 @login_required
 def orga_px_ability_templates_delete(request: HttpRequest, event_slug: str, template_uuid: str) -> HttpResponse:
     """Delete template for event."""
-    return orga_delete(request, event_slug, "orga_px_ability_templates", OrgaAbilityTemplatePxForm, template_uuid)
+    return unified_orga(request, event_slug, "orga_px_ability_templates", Action.DELETE, template_uuid)
 
 
 @login_required
@@ -307,7 +308,7 @@ def orga_px_rules_edit(request: HttpRequest, event_slug: str, rule_uuid: str) ->
 @login_required
 def orga_px_rules_delete(request: HttpRequest, event_slug: str, rule_uuid: str) -> HttpResponse:
     """Delete rule for event."""
-    return orga_delete(request, event_slug, "orga_px_rules", OrgaRulePxForm, rule_uuid)
+    return unified_orga(request, event_slug, "orga_px_rules", Action.DELETE, rule_uuid)
 
 
 @login_required
@@ -362,7 +363,7 @@ def orga_px_modifiers_edit(request: HttpRequest, event_slug: str, modifier_uuid:
 @login_required
 def orga_px_modifiers_delete(request: HttpRequest, event_slug: str, modifier_uuid: str) -> HttpResponse:
     """Delete modifier for event."""
-    return orga_delete(request, event_slug, "orga_px_modifiers", OrgaModifierPxForm, modifier_uuid)
+    return unified_orga(request, event_slug, "orga_px_modifiers", Action.DELETE, modifier_uuid)
 
 
 @login_required

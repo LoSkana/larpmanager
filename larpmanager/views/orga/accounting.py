@@ -51,7 +51,8 @@ from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import orga_paginate
-from larpmanager.utils.services.edit import backend_get, orga_delete, orga_edit
+from larpmanager.utils.services.actions import Action, unified_orga
+from larpmanager.utils.services.edit import backend_get, orga_edit
 
 
 @login_required
@@ -81,7 +82,7 @@ def orga_discounts_edit(request: HttpRequest, event_slug: str, discount_uuid: st
 @login_required
 def orga_discounts_delete(request: HttpRequest, event_slug: str, discount_uuid: str) -> HttpResponse:
     """Delete discount for event."""
-    return orga_delete(request, event_slug, "orga_discounts", OrgaDiscountForm, discount_uuid)
+    return unified_orga(request, event_slug, "orga_discounts", Action.DELETE, discount_uuid)
 
 
 @login_required
@@ -317,7 +318,7 @@ def orga_tokens_edit(request: HttpRequest, event_slug: str, token_uuid: str) -> 
 @login_required
 def orga_tokens_delete(request: HttpRequest, event_slug: str, token_uuid: str) -> HttpResponse:
     """Delete token for event."""
-    return orga_delete(request, event_slug, "orga_tokens", OrgaTokenForm, token_uuid)
+    return unified_orga(request, event_slug, "orga_tokens", Action.DELETE, token_uuid)
 
 
 @login_required
@@ -377,7 +378,7 @@ def orga_credits_edit(request: HttpRequest, event_slug: str, credit_uuid: str) -
 @login_required
 def orga_credits_delete(request: HttpRequest, event_slug: str, credit_uuid: str) -> HttpResponse:
     """Delete credit for event."""
-    return orga_delete(request, event_slug, "orga_credits", OrgaCreditForm, credit_uuid)
+    return unified_orga(request, event_slug, "orga_credits", Action.DELETE, credit_uuid)
 
 
 @login_required
@@ -458,7 +459,7 @@ def orga_payments_edit(request: HttpRequest, event_slug: str, payment_uuid: str)
 @login_required
 def orga_payments_delete(request: HttpRequest, event_slug: str, payment_uuid: str) -> HttpResponse:
     """Delete payment for event."""
-    return orga_delete(request, event_slug, "orga_payments", OrgaPaymentForm, payment_uuid)
+    return unified_orga(request, event_slug, "orga_payments", Action.DELETE, payment_uuid)
 
 
 @login_required
@@ -529,7 +530,7 @@ def orga_outflows_edit(request: HttpRequest, event_slug: str, outflow_uuid: str)
 @login_required
 def orga_outflows_delete(request: HttpRequest, event_slug: str, outflow_uuid: str) -> HttpResponse:
     """Delete outflow for event."""
-    return orga_delete(request, event_slug, "orga_outflows", OrgaOutflowForm, outflow_uuid)
+    return unified_orga(request, event_slug, "orga_outflows", Action.DELETE, outflow_uuid)
 
 
 @login_required
@@ -596,7 +597,7 @@ def orga_inflows_edit(request: HttpRequest, event_slug: str, inflow_uuid: str) -
 @login_required
 def orga_inflows_delete(request: HttpRequest, event_slug: str, inflow_uuid: str) -> HttpResponse:
     """Delete inflow for event."""
-    return orga_delete(request, event_slug, "orga_inflows", OrgaInflowForm, inflow_uuid)
+    return unified_orga(request, event_slug, "orga_inflows", Action.DELETE, inflow_uuid)
 
 
 @login_required
@@ -683,7 +684,7 @@ def orga_expenses_edit(request: HttpRequest, event_slug: str, expense_uuid: str)
 @login_required
 def orga_expenses_delete(request: HttpRequest, event_slug: str, expense_uuid: str) -> HttpResponse:
     """Delete expense for event."""
-    return orga_delete(request, event_slug, "orga_expenses", OrgaExpenseForm, expense_uuid)
+    return unified_orga(request, event_slug, "orga_expenses", Action.DELETE, expense_uuid)
 
 
 @login_required

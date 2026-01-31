@@ -4355,7 +4355,7 @@ msgid "Option saved successfully"
 msgstr "Alternativet sparades framgångsrikt"
 
 msgid "Optional - email reply to"
-msgstr "Valfritt - e-posta svaret till"
+msgstr "Valfritt - skicka svaret till"
 
 msgid "Payment already confirmed"
 msgstr "Betalning redan bekräftad"
@@ -6185,7 +6185,7 @@ msgid "Please select both a registration and an event"
 msgstr "Vänligen välj både en registrering och ett evenemang"
 
 msgid "Remember to put recipients separated by commas"
-msgstr "Kom ihåg att ange mottagare separerade med kommatecken"
+msgstr "Kom ihåg att skilja mottagarna åt med kommatecken"
 
 msgid "Something went wrong in the account activation"
 msgstr "Något gick fel vid aktiveringen av kontot"
@@ -6684,7 +6684,7 @@ msgid "Now you can upload content and generate access tokens"
 msgstr "Nu kan du ladda upp innehåll och generera åtkomsttokens"
 
 msgid "Optional - ram html code (substitute the text before)"
-msgstr "Valfritt - rå html-kod (ersätter texten ovan)"
+msgstr "Valfritt - ram html-kod (ersätt texten före)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"

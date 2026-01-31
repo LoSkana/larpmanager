@@ -6732,7 +6732,7 @@ msgid "Now you can upload content and generate access tokens"
 msgstr "Jetzt können Sie Inhalte hochladen und Zugangstoken generieren"
 
 msgid "Optional - ram html code (substitute the text before)"
-msgstr "Optional - Roh-HTML-Code (ersetzt den obigen Text)"
+msgstr "Optional - ram html code (ersetzen Sie den vorherigen Text)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"

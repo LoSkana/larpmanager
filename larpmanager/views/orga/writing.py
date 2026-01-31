@@ -75,7 +75,8 @@ from larpmanager.utils.core.common import (
 )
 from larpmanager.utils.io.download import export_data
 from larpmanager.utils.io.pdf import print_handout
-from larpmanager.utils.services.edit import orga_delete, orga_edit, writing_edit
+from larpmanager.utils.services.actions import Action, unified_orga
+from larpmanager.utils.services.edit import orga_edit, writing_edit
 from larpmanager.utils.services.writing import retrieve_cache_text_field, writing_list, writing_versions, writing_view
 
 
@@ -120,7 +121,7 @@ def orga_plots_edit(request: HttpRequest, event_slug: str, plot_uuid: str) -> Ht
 @login_required
 def orga_plots_delete(request: HttpRequest, event_slug: str, plot_uuid: str) -> HttpResponse:
     """Delete plot for event."""
-    return orga_delete(request, event_slug, "orga_plots", OrgaPlotForm, plot_uuid)
+    return unified_orga(request, event_slug, "orga_plots", Action.DELETE, plot_uuid)
 
 
 @login_required
@@ -239,7 +240,7 @@ def orga_factions_edit(request: HttpRequest, event_slug: str, faction_uuid: str)
 @login_required
 def orga_factions_delete(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
     """Delete faction for event."""
-    return orga_delete(request, event_slug, "orga_factions", OrgaFactionForm, faction_uuid)
+    return unified_orga(request, event_slug, "orga_factions", Action.DELETE, faction_uuid)
 
 
 @login_required
@@ -323,7 +324,7 @@ def orga_quest_types_edit(request: HttpRequest, event_slug: str, quest_type_uuid
 @login_required
 def orga_quest_types_delete(request: HttpRequest, event_slug: str, quest_type_uuid: str) -> HttpResponse:
     """Delete quest type for event."""
-    return orga_delete(request, event_slug, "orga_quest_types", OrgaQuestTypeForm, quest_type_uuid)
+    return unified_orga(request, event_slug, "orga_quest_types", Action.DELETE, quest_type_uuid)
 
 
 @login_required
@@ -402,7 +403,7 @@ def orga_quests_edit(request: HttpRequest, event_slug: str, quest_uuid: str) -> 
 @login_required
 def orga_quests_delete(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpResponse:
     """Delete quest for event."""
-    return orga_delete(request, event_slug, "orga_quests", OrgaQuestForm, quest_uuid)
+    return unified_orga(request, event_slug, "orga_quests", Action.DELETE, quest_uuid)
 
 
 @login_required
@@ -459,7 +460,7 @@ def orga_traits_edit(request: HttpRequest, event_slug: str, trait_uuid: str) -> 
 @login_required
 def orga_traits_delete(request: HttpRequest, event_slug: str, trait_uuid: str) -> HttpResponse:
     """Delete trait for event."""
-    return orga_delete(request, event_slug, "orga_traits", OrgaTraitForm, trait_uuid)
+    return unified_orga(request, event_slug, "orga_traits", Action.DELETE, trait_uuid)
 
 
 @login_required
@@ -555,7 +556,7 @@ def orga_handouts_edit(request: HttpRequest, event_slug: str, handout_uuid: str)
 @login_required
 def orga_handouts_delete(request: HttpRequest, event_slug: str, handout_uuid: str) -> HttpResponse:
     """Delete handout for event."""
-    return orga_delete(request, event_slug, "orga_handouts", OrgaHandoutForm, handout_uuid)
+    return unified_orga(request, event_slug, "orga_handouts", Action.DELETE, handout_uuid)
 
 
 @login_required
@@ -595,7 +596,7 @@ def orga_handout_templates_edit(request: HttpRequest, event_slug: str, handout_t
 @login_required
 def orga_handout_templates_delete(request: HttpRequest, event_slug: str, handout_template_uuid: str) -> HttpResponse:
     """Delete handout template for event."""
-    return orga_delete(request, event_slug, "orga_handout_templates", OrgaHandoutTemplateForm, handout_template_uuid)
+    return unified_orga(request, event_slug, "orga_handout_templates", Action.DELETE, handout_template_uuid)
 
 
 @login_required
@@ -629,7 +630,7 @@ def orga_prologue_types_edit(request: HttpRequest, event_slug: str, prologue_typ
 @login_required
 def orga_prologue_types_delete(request: HttpRequest, event_slug: str, prologue_type_uuid: str) -> HttpResponse:
     """Delete prologue type for event."""
-    return orga_delete(request, event_slug, "orga_prologue_types", OrgaPrologueTypeForm, prologue_type_uuid)
+    return unified_orga(request, event_slug, "orga_prologue_types", Action.DELETE, prologue_type_uuid)
 
 
 @login_required
@@ -680,7 +681,7 @@ def orga_prologues_edit(request: HttpRequest, event_slug: str, prologue_uuid: st
 @login_required
 def orga_prologues_delete(request: HttpRequest, event_slug: str, prologue_uuid: str) -> HttpResponse:
     """Delete prologue for event."""
-    return orga_delete(request, event_slug, "orga_prologues", OrgaPrologueForm, prologue_uuid)
+    return unified_orga(request, event_slug, "orga_prologues", Action.DELETE, prologue_uuid)
 
 
 @login_required
@@ -738,7 +739,7 @@ def orga_speedlarps_edit(request: HttpRequest, event_slug: str, speedlarp_uuid: 
 @login_required
 def orga_speedlarps_delete(request: HttpRequest, event_slug: str, speedlarp_uuid: str) -> HttpResponse:
     """Delete speedlarp for event."""
-    return orga_delete(request, event_slug, "orga_speedlarps", OrgaSpeedLarpForm, speedlarp_uuid)
+    return unified_orga(request, event_slug, "orga_speedlarps", Action.DELETE, speedlarp_uuid)
 
 
 @login_required
@@ -784,7 +785,7 @@ def orga_progress_steps_edit(request: HttpRequest, event_slug: str, step_uuid: s
 @login_required
 def orga_progress_steps_delete(request: HttpRequest, event_slug: str, step_uuid: str) -> HttpResponse:
     """Delete step for event."""
-    return orga_delete(request, event_slug, "orga_progress_steps", OrgaProgressStepForm, step_uuid)
+    return unified_orga(request, "orga_progress_steps", event_slug, Action.DELETE, step_uuid)
 
 
 @login_required
@@ -795,13 +796,7 @@ def orga_progress_steps_order(
     order: int,
 ) -> HttpResponse:
     """Reorder progress steps for an event."""
-    # Verify user has permission to modify progress steps
-    context = check_event_context(request, event_slug, "orga_progress_steps")
-
-    # Update the display order of the specified step
-    exchange_order(context, ProgressStep, step_uuid, order)
-
-    return redirect("orga_progress_steps", event_slug=context["run"].get_slug())
+    return unified_orga(request, "orga_progress_steps", event_slug, Action.ORDER, step_uuid, order)
 
 
 @login_required

@@ -50,10 +50,10 @@ from larpmanager.models.registration import (
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order, get_element
 from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
+from larpmanager.utils.services.actions import Action, unified_orga
 from larpmanager.utils.services.edit import (
     form_edit_handler,
     options_edit_handler,
-    orga_delete,
     orga_edit,
 )
 
@@ -108,7 +108,7 @@ def orga_registration_tickets_edit(request: HttpRequest, event_slug: str, ticket
 @login_required
 def orga_registration_tickets_delete(request: HttpRequest, event_slug: str, ticket_uuid: str) -> HttpResponse:
     """Delete ticket for event."""
-    return orga_delete(request, event_slug, "orga_registration_tickets", OrgaRegistrationTicketForm, ticket_uuid)
+    return unified_orga(request, event_slug, "orga_registration_tickets", Action.DELETE, ticket_uuid)
 
 
 @login_required
@@ -148,7 +148,7 @@ def orga_registration_sections_edit(request: HttpRequest, event_slug: str, secti
 @login_required
 def orga_registration_sections_delete(request: HttpRequest, event_slug: str, section_uuid: str) -> HttpResponse:
     """Delete section for event."""
-    return orga_delete(request, event_slug, "orga_registration_sections", OrgaRegistrationSectionForm, section_uuid)
+    return unified_orga(request, event_slug, "orga_registration_sections", Action.DELETE, section_uuid)
 
 
 @login_required
@@ -276,13 +276,12 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, question_
 @login_required
 def orga_registration_form_delete(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
     """Delete question for event."""
-    return orga_delete(
+    return unified_orga(
         request,
         event_slug,
         "orga_registration_form",
-        OrgaRegistrationQuestionForm,
+        Action.DELETE,
         question_uuid,
-        can_delete=lambda _context, element: len(element.typ) == 1,
     )
 
 
@@ -412,7 +411,7 @@ def orga_registration_options_order(
 @login_required
 def orga_registration_options_delete(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
     """Delete registration option for an event."""
-    return orga_delete(request, event_slug, "orga_registration_form", OrgaRegistrationOptionForm, option_uuid)
+    return unified_orga(request, event_slug, "orga_registration_form", Action.DELETE, option_uuid)
 
 
 @login_required
@@ -442,7 +441,7 @@ def orga_registration_quotas_edit(request: HttpRequest, event_slug: str, quota_u
 @login_required
 def orga_registration_quotas_delete(request: HttpRequest, event_slug: str, quota_uuid: str) -> HttpResponse:
     """Delete quota for event."""
-    return orga_delete(request, event_slug, "orga_registration_quotas", OrgaRegistrationQuotaForm, quota_uuid)
+    return unified_orga(request, event_slug, "orga_registration_quotas", Action.DELETE, quota_uuid)
 
 
 @login_required
@@ -474,9 +473,7 @@ def orga_registration_installments_edit(request: HttpRequest, event_slug: str, i
 @login_required
 def orga_registration_installments_delete(request: HttpRequest, event_slug: str, installment_uuid: str) -> HttpResponse:
     """Delete installment for event."""
-    return orga_delete(
-        request, event_slug, "orga_registration_installments", OrgaRegistrationInstallmentForm, installment_uuid
-    )
+    return unified_orga(request, event_slug, "orga_registration_installments", Action.DELETE, installment_uuid)
 
 
 @login_required
@@ -506,6 +503,4 @@ def orga_registration_surcharges_edit(request: HttpRequest, event_slug: str, sur
 @login_required
 def orga_registration_surcharges_delete(request: HttpRequest, event_slug: str, surcharge_uuid: str) -> HttpResponse:
     """Delete surcharge for event."""
-    return orga_delete(
-        request, event_slug, "orga_registration_surcharges", OrgaRegistrationSurchargeForm, surcharge_uuid
-    )
+    return unified_orga(request, event_slug, "orga_registration_surcharges", Action.DELETE, surcharge_uuid)

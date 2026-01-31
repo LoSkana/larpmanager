@@ -515,45 +515,6 @@ def orga_edit(
     return render(request, "larpmanager/orga/edit.html", context)
 
 
-def orga_delete(
-    request: HttpRequest,
-    event_slug: str,
-    permission: str | None,
-    form_type: type[BaseModelForm],
-    entity_uuid: str,
-    redirect_view: str | None = None,
-    can_delete: Callable | None = None,
-) -> HttpResponse:
-    """Delete organization event objects through a unified interface.
-
-    Handles the deletion workflow for various organization event objects,
-    including permission checking, logging, and redirects.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event slug identifier
-        permission: Permission string to check for access control
-        form_type: Type of form/object to delete
-        entity_uuid: Entity UUID to delete
-        redirect_view: Optional redirect view name after successful deletion
-        can_delete: Callback to check deletion can be done
-
-    Returns:
-        HttpResponse: Redirect response on successful deletion
-
-    """
-    # Check user permissions and get base context for the event
-    context = check_event_context(request, event_slug, permission)
-
-    backend_delete(request, context, form_type, entity_uuid, can_delete)
-
-    if not redirect_view:
-        redirect_view = permission
-
-    # Redirect to success page with event slug
-    return redirect(redirect_view, event_slug=context["run"].get_slug())
-
-
 def backend_delete(
     request: HttpRequest,
     context: dict,

@@ -65,7 +65,8 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_album_cod, get_element
-from larpmanager.utils.services.edit import orga_delete, orga_edit
+from larpmanager.utils.services.actions import Action, unified_orga
+from larpmanager.utils.services.edit import orga_edit
 from larpmanager.utils.services.miscellanea import get_warehouse_optionals, upload_albums
 from larpmanager.utils.services.writing import writing_post
 
@@ -93,7 +94,7 @@ def orga_albums_edit(request: HttpRequest, event_slug: str, album_uuid: str) -> 
 @login_required
 def orga_albums_delete(request: HttpRequest, event_slug: str, album_uuid: str) -> HttpResponse:
     """Delete album for event."""
-    return orga_delete(request, event_slug, "orga_albums", OrgaAlbumForm, album_uuid)
+    return unified_orga(request, event_slug, "orga_albums", Action.DELETE, album_uuid)
 
 
 @login_required
@@ -163,7 +164,7 @@ def orga_utils_edit(request: HttpRequest, event_slug: str, util_uuid: str) -> Ht
 @login_required
 def orga_utils_delete(request: HttpRequest, event_slug: str, util_uuid: str) -> HttpResponse:
     """Delete util for event."""
-    return orga_delete(request, event_slug, "orga_utils", UtilForm, util_uuid)
+    return unified_orga(request, event_slug, "orga_utils", Action.DELETE, util_uuid)
 
 
 @login_required
@@ -259,11 +260,11 @@ def orga_workshop_modules_edit(request: HttpRequest, event_slug: str, module_uui
 @login_required
 def orga_workshop_modules_delete(request: HttpRequest, event_slug: str, module_uuid: str) -> HttpResponse:
     """Delete module for event."""
-    return orga_delete(request, event_slug, "orga_workshop_modules", WorkshopModuleForm, module_uuid)
+    return unified_orga(request, event_slug, "orga_workshop_modules", Action.DELETE, module_uuid)
 
 
 @login_required
-def orga_workshop_questions(request: HttpRequest, event_slug: str) -> HttpResponse | None:
+def orga_workshop_questions(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle workshop questions management for organizers."""
     # Check user permissions for workshop questions management
     context = check_event_context(request, event_slug, "orga_workshop_questions")
@@ -296,7 +297,7 @@ def orga_workshop_questions_edit(request: HttpRequest, event_slug: str, question
 @login_required
 def orga_workshop_questions_delete(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
     """Delete question for event."""
-    return orga_delete(request, event_slug, "orga_workshop_questions", WorkshopQuestionForm, question_uuid)
+    return unified_orga(request, event_slug, "orga_workshop_questions", Action.DELETE, question_uuid)
 
 
 @login_required
@@ -344,7 +345,7 @@ def orga_workshop_options_edit(request: HttpRequest, event_slug: str, option_uui
 @login_required
 def orga_workshop_options_delete(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
     """Delete option for event."""
-    return orga_delete(request, event_slug, "orga_workshop_options", WorkshopOptionForm, option_uuid)
+    return unified_orga(request, event_slug, "orga_workshop_options", Action.DELETE, option_uuid)
 
 
 @login_required
@@ -374,7 +375,7 @@ def orga_problems_edit(request: HttpRequest, event_slug: str, problem_uuid: str)
 @login_required
 def orga_problems_delete(request: HttpRequest, event_slug: str, problem_uuid: str) -> HttpResponse:
     """Delete problem for event."""
-    return orga_delete(request, event_slug, "orga_problems", OrgaProblemForm, problem_uuid)
+    return unified_orga(request, event_slug, "orga_problems", Action.DELETE, problem_uuid)
 
 
 @login_required
@@ -404,7 +405,7 @@ def orga_warehouse_area_edit(request: HttpRequest, event_slug: str, area_uuid: s
 @login_required
 def orga_warehouse_area_delete(request: HttpRequest, event_slug: str, area_uuid: str) -> HttpResponse:
     """Delete area for event."""
-    return orga_delete(request, event_slug, "orga_warehouse_area", OrgaWarehouseAreaForm, area_uuid)
+    return unified_orga(request, event_slug, "orga_warehouse_area", Action.DELETE, area_uuid)
 
 
 @login_required
@@ -602,9 +603,7 @@ def orga_warehouse_assignment_item_edit(request: HttpRequest, event_slug: str, a
 @login_required
 def orga_warehouse_assignment_item_delete(request: HttpRequest, event_slug: str, assignment_uuid: str) -> HttpResponse:
     """Delete assignment for event."""
-    return orga_delete(
-        request, event_slug, "orga_warehouse_assignment_item", OrgaWarehouseItemAssignmentForm, assignment_uuid
-    )
+    return unified_orga(request, event_slug, "orga_warehouse_assignment_item", Action.DELETE, assignment_uuid)
 
 
 @require_POST
@@ -729,7 +728,7 @@ def orga_onetimes_edit(request: HttpRequest, event_slug: str, onetime_uuid: str)
 @login_required
 def orga_onetimes_delete(request: HttpRequest, event_slug: str, onetime_uuid: str) -> HttpResponse:
     """Delete onetime for event."""
-    return orga_delete(request, event_slug, "orga_onetimes", OneTimeContentForm, onetime_uuid)
+    return unified_orga(request, event_slug, "orga_onetimes", Action.DELETE, onetime_uuid)
 
 
 @login_required
@@ -768,7 +767,7 @@ def orga_onetimes_tokens_edit(request: HttpRequest, event_slug: str, token_uuid:
 @login_required
 def orga_onetimes_tokens_delete(request: HttpRequest, event_slug: str, token_uuid: str) -> HttpResponse:
     """Delete onetime token for event."""
-    return orga_delete(request, event_slug, "orga_onetimes_tokens", OneTimeAccessTokenForm, token_uuid)
+    return unified_orga(request, event_slug, "orga_onetimes_tokens", Action.DELETE, token_uuid)
 
 
 @login_required

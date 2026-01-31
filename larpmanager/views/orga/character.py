@@ -70,12 +70,12 @@ from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order, get_element
 from larpmanager.utils.io.download import orga_character_form_download
+from larpmanager.utils.services.actions import Action, unified_orga
 from larpmanager.utils.services.character import get_chars_relations
 from larpmanager.utils.services.edit import (
     backend_edit,
     form_edit_handler,
     options_edit_handler,
-    orga_delete,
     writing_edit,
     writing_edit_working_ticket,
 )
@@ -206,7 +206,7 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, character_uuid: 
 @login_required
 def orga_characters_delete(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Deletes a character."""
-    return orga_delete(request, event_slug, "orga_characters", OrgaCharacterForm, character_uuid)
+    return unified_orga(request, event_slug, "orga_characters", Action.DELETE, character_uuid)
 
 
 def _characters_relationships(context: dict) -> None:
@@ -753,13 +753,12 @@ def orga_writing_form_delete(
     question_uuid: str,
 ) -> HttpResponse:
     """Deletes a writing form question."""
-    return orga_delete(
+    return unified_orga(
         request,
         event_slug,
         "orga_character_form",
-        OrgaWritingQuestionForm,
+        Action.DELETE,
         question_uuid,
-        can_delete=lambda _context, element: len(element.typ) == 1,
     )
 
 
@@ -972,7 +971,7 @@ def orga_writing_options_delete(
     option_uuid: str,
 ) -> HttpResponse:
     """Delete writing option for an event."""
-    return orga_delete(request, event_slug, "orga_character_form", OrgaWritingOptionForm, option_uuid)
+    return unified_orga(request, event_slug, "orga_character_form", Action.DELETE, option_uuid)
 
 
 @login_required

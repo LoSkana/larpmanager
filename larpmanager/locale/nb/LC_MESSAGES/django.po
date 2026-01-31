@@ -6689,7 +6689,7 @@ msgid "Now you can upload content and generate access tokens"
 msgstr "Nå kan du laste opp innhold og generere tilgangstokener"
 
 msgid "Optional - ram html code (substitute the text before)"
-msgstr "Valgfritt - rå html-kode (erstatter teksten ovenfor)"
+msgstr "Valgfritt - ram html-kode (erstatt teksten før)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
