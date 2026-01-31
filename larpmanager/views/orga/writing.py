@@ -32,16 +32,16 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.character import get_event_cache_all, reset_event_cache_all
 from larpmanager.forms.event import OrgaProgressStepForm
 from larpmanager.forms.writing import (
-    FactionForm,
-    HandoutForm,
-    HandoutTemplateForm,
-    PlotForm,
-    PrologueForm,
-    PrologueTypeForm,
-    QuestForm,
-    QuestTypeForm,
-    SpeedLarpForm,
-    TraitForm,
+    OrgaFactionForm,
+    OrgaHandoutForm,
+    OrgaHandoutTemplateForm,
+    OrgaPlotForm,
+    OrgaPrologueForm,
+    OrgaPrologueTypeForm,
+    OrgaQuestForm,
+    OrgaQuestTypeForm,
+    OrgaSpeedLarpForm,
+    OrgaTraitForm,
 )
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
@@ -77,7 +77,7 @@ from larpmanager.utils.core.common import (
 )
 from larpmanager.utils.io.download import export_data
 from larpmanager.utils.io.pdf import print_handout
-from larpmanager.utils.services.edit import orga_edit, writing_edit
+from larpmanager.utils.services.edit import orga_delete, orga_edit, writing_edit
 from larpmanager.utils.services.writing import retrieve_cache_text_field, writing_list, writing_versions, writing_view
 
 
@@ -109,7 +109,13 @@ def orga_plots_edit(request: HttpRequest, event_slug: str, plot_uuid: str) -> Ht
     get_element(context, plot_uuid, "plot", Plot)
 
     # Render the plot editing form
-    return writing_edit(request, context, PlotForm, "plot", TextVersionChoices.PLOT)
+    return writing_edit(request, context, OrgaPlotForm, "plot", TextVersionChoices.PLOT)
+
+
+@login_required
+def orga_plots_delete(request: HttpRequest, event_slug: str, plot_uuid: str) -> HttpResponse:
+    """Delete plot for event."""
+    return orga_delete(request, event_slug, "orga_plots", OrgaPlotForm, plot_uuid)
 
 
 @login_required
@@ -225,7 +231,13 @@ def orga_factions_edit(request: HttpRequest, event_slug: str, faction_uuid: str)
     get_element(context, faction_uuid, "faction", Faction)
 
     # Delegate to generic writing edit view
-    return writing_edit(request, context, FactionForm, "faction", TextVersionChoices.FACTION)
+    return writing_edit(request, context, OrgaFactionForm, "faction", TextVersionChoices.FACTION)
+
+
+@login_required
+def orga_factions_delete(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
+    """Delete faction for event."""
+    return orga_delete(request, event_slug, "orga_factions", OrgaFactionForm, faction_uuid)
 
 
 @login_required
@@ -306,7 +318,13 @@ def orga_quest_types_edit(request: HttpRequest, event_slug: str, quest_type_uuid
     get_quest_type(context, quest_type_uuid)
 
     # Render the writing edit form with quest type configuration
-    return writing_edit(request, context, QuestTypeForm, "quest_type", TextVersionChoices.QUEST_TYPE)
+    return writing_edit(request, context, OrgaQuestTypeForm, "quest_type", TextVersionChoices.QUEST_TYPE)
+
+
+@login_required
+def orga_quest_types_delete(request: HttpRequest, event_slug: str, quest_type_uuid: str) -> HttpResponse:
+    """Delete quest type for event."""
+    return orga_delete(request, event_slug, "orga_quest_types", OrgaQuestTypeForm, quest_type_uuid)
 
 
 @login_required
@@ -372,7 +390,13 @@ def orga_quests_edit(request: HttpRequest, event_slug: str, quest_uuid: str) -> 
     get_element(context, quest_uuid, "quest", Quest)
 
     # Delegate to the generic writing edit handler with quest-specific parameters
-    return writing_edit(request, context, QuestForm, "quest", TextVersionChoices.QUEST)
+    return writing_edit(request, context, OrgaQuestForm, "quest", TextVersionChoices.QUEST)
+
+
+@login_required
+def orga_quests_delete(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpResponse:
+    """Delete quest for event."""
+    return orga_delete(request, event_slug, "orga_quests", OrgaQuestForm, quest_uuid)
 
 
 @login_required
@@ -416,7 +440,13 @@ def orga_traits_edit(request: HttpRequest, event_slug: str, trait_uuid: str) -> 
     get_trait(context, trait_uuid)
 
     # Delegate to generic writing edit handler for trait processing
-    return writing_edit(request, context, TraitForm, "trait", TextVersionChoices.TRAIT)
+    return writing_edit(request, context, OrgaTraitForm, "trait", TextVersionChoices.TRAIT)
+
+
+@login_required
+def orga_traits_delete(request: HttpRequest, event_slug: str, trait_uuid: str) -> HttpResponse:
+    """Delete trait for event."""
+    return orga_delete(request, event_slug, "orga_traits", OrgaTraitForm, trait_uuid)
 
 
 @login_required
@@ -499,7 +529,13 @@ def orga_handouts_edit(request: HttpRequest, event_slug: str, handout_uuid: str)
     get_handout(context, handout_uuid)
 
     # Delegate to generic writing edit handler with handout-specific parameters
-    return writing_edit(request, context, HandoutForm, "handout", TextVersionChoices.HANDOUT)
+    return writing_edit(request, context, OrgaHandoutForm, "handout", TextVersionChoices.HANDOUT)
+
+
+@login_required
+def orga_handouts_delete(request: HttpRequest, event_slug: str, handout_uuid: str) -> HttpResponse:
+    """Delete handout for event."""
+    return orga_delete(request, event_slug, "orga_handouts", OrgaHandoutForm, handout_uuid)
 
 
 @login_required
@@ -537,7 +573,13 @@ def orga_handout_templates_edit(request: HttpRequest, event_slug: str, handout_t
     # Load existing template if num is not 0 (new template)
     get_handout_template(context, handout_template_uuid)
 
-    return writing_edit(request, context, HandoutTemplateForm, "handout_template", None)
+    return writing_edit(request, context, OrgaHandoutTemplateForm, "handout_template", None)
+
+
+@login_required
+def orga_handout_templates_delete(request: HttpRequest, event_slug: str, handout_template_uuid: str) -> HttpResponse:
+    """Delete handout template for event."""
+    return orga_delete(request, event_slug, "orga_handout_templates", OrgaHandoutTemplateForm, handout_template_uuid)
 
 
 @login_required
@@ -568,7 +610,13 @@ def orga_prologue_types_edit(request: HttpRequest, event_slug: str, prologue_typ
     get_prologue_type(context, prologue_type_uuid)
 
     # Render edit form using generic writing_edit handler
-    return writing_edit(request, context, PrologueTypeForm, "prologue_type", None)
+    return writing_edit(request, context, OrgaPrologueTypeForm, "prologue_type", None)
+
+
+@login_required
+def orga_prologue_types_delete(request: HttpRequest, event_slug: str, prologue_type_uuid: str) -> HttpResponse:
+    """Delete prologue type for event."""
+    return orga_delete(request, event_slug, "orga_prologue_types", OrgaPrologueTypeForm, prologue_type_uuid)
 
 
 @login_required
@@ -606,7 +654,13 @@ def orga_prologues_edit(request: HttpRequest, event_slug: str, prologue_uuid: st
     get_prologue(context, prologue_uuid)
 
     # Render the prologue editing form with appropriate configuration
-    return writing_edit(request, context, PrologueForm, "prologue", TextVersionChoices.PROLOGUE)
+    return writing_edit(request, context, OrgaPrologueForm, "prologue", TextVersionChoices.PROLOGUE)
+
+
+@login_required
+def orga_prologues_delete(request: HttpRequest, event_slug: str, prologue_uuid: str) -> HttpResponse:
+    """Delete prologue for event."""
+    return orga_delete(request, event_slug, "orga_prologues", OrgaPrologueForm, prologue_uuid)
 
 
 @login_required
@@ -651,7 +705,13 @@ def orga_speedlarps_edit(request: HttpRequest, event_slug: str, speedlarp_uuid: 
     get_speedlarp(context, speedlarp_uuid)
 
     # Render writing edit form
-    return writing_edit(request, context, SpeedLarpForm, "speedlarp", TextVersionChoices.SPEEDLARP)
+    return writing_edit(request, context, OrgaSpeedLarpForm, "speedlarp", TextVersionChoices.SPEEDLARP)
+
+
+@login_required
+def orga_speedlarps_delete(request: HttpRequest, event_slug: str, speedlarp_uuid: str) -> HttpResponse:
+    """Delete speedlarp for event."""
+    return orga_delete(request, event_slug, "orga_speedlarps", OrgaSpeedLarpForm, speedlarp_uuid)
 
 
 @login_required
@@ -686,6 +746,12 @@ def orga_progress_steps(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_progress_steps_edit(request: HttpRequest, event_slug: str, step_uuid: str) -> HttpResponse:
     """Edit a progress step for an event."""
     return orga_edit(request, event_slug, "orga_progress_steps", OrgaProgressStepForm, step_uuid)
+
+
+@login_required
+def orga_progress_steps_delete(request: HttpRequest, event_slug: str, step_uuid: str) -> HttpResponse:
+    """Delete step for event."""
+    return orga_delete(request, event_slug, "orga_progress_steps", OrgaProgressStepForm, step_uuid)
 
 
 @login_required

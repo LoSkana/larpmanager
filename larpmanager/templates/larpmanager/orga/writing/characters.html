@@ -92,6 +92,7 @@
             <i class="fa fa-hashtag"></i> {% trans "Speedlarp" %}
         </th>
     {% endif %}
+    <th></th>
 {% endblock thead %}
 {% block tbody %}
     {% for el in list %}
@@ -174,6 +175,11 @@
                 </td>
                 <td class="stats">{{ el.speedlarp_rels.count }}</td>
             {% endif %}
+            <td>
+                <a href="{% url 'orga_characters_delete' run.get_slug el.uuid %}"
+                   qtip="{% trans "Delete" %}"
+                   class="only_new_form"><i class="fas fa-trash"></i></a>
+            </td>
         </tr>
     {% endfor %}
 {% endblock tbody %}

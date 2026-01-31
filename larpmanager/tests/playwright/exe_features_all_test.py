@@ -50,9 +50,11 @@ def test_exe_features_all(pw_page: Any) -> None:
 def visit_all(page: Any, live_server: Any) -> None:
     # Visit every link
     visited_links = set()
-    links_to_visit = {live_server + "/manage/"}
+    links_to_visit = [live_server + "/manage/"]
     while links_to_visit:
-        current_link = links_to_visit.pop()
+        # Sort links to visit, putting "delete" links at the end
+        links_to_visit.sort(key=lambda link: ("delete" in link, link))
+        current_link = links_to_visit.pop(0)
         if current_link in visited_links:
             continue
         visited_links.add(current_link)

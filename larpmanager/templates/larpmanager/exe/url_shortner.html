@@ -16,6 +16,7 @@
                 <th>{% trans "Code" %}</th>
                 <th>{% trans "External link" %}</th>
                 <th>{% trans "Short url" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +31,11 @@
                     <td>{{ el.url }}</td>
                     <td>
                         <a href="https://{{ association.main_domain }}/at/{{ el.cod }}">https://{{ association.main_domain }}/at/{{ el.cod }}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_urlshortner_delete' el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

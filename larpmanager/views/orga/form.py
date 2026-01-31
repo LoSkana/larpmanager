@@ -53,6 +53,7 @@ from larpmanager.utils.io.download import orga_registration_form_download, orga_
 from larpmanager.utils.services.edit import (
     form_edit_handler,
     options_edit_handler,
+    orga_delete,
     orga_edit,
 )
 
@@ -99,6 +100,12 @@ def orga_registration_tickets_edit(request: HttpRequest, event_slug: str, ticket
 
 
 @login_required
+def orga_registration_tickets_delete(request: HttpRequest, event_slug: str, ticket_uuid: str) -> HttpResponse:
+    """Delete ticket for event."""
+    return orga_delete(request, event_slug, "orga_registration_tickets", OrgaRegistrationTicketForm, ticket_uuid)
+
+
+@login_required
 def orga_registration_tickets_order(
     request: HttpRequest, event_slug: str, ticket_uuid: str, order: int
 ) -> HttpResponse:
@@ -124,6 +131,12 @@ def orga_registration_sections(request: HttpRequest, event_slug: str) -> HttpRes
 def orga_registration_sections_edit(request: HttpRequest, event_slug: str, section_uuid: str) -> HttpResponse:
     """Edit a specific registration section for an event."""
     return orga_edit(request, event_slug, "orga_registration_sections", OrgaRegistrationSectionForm, section_uuid)
+
+
+@login_required
+def orga_registration_sections_delete(request: HttpRequest, event_slug: str, section_uuid: str) -> HttpResponse:
+    """Delete section for event."""
+    return orga_delete(request, event_slug, "orga_registration_sections", OrgaRegistrationSectionForm, section_uuid)
 
 
 @login_required
@@ -225,6 +238,19 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, question_
         "orga_registration_form_edit",
         perm,
         "larpmanager/orga/registration/form_edit.html",
+    )
+
+
+@login_required
+def orga_registration_form_delete(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
+    """Delete question for event."""
+    return orga_delete(
+        request,
+        event_slug,
+        "orga_registration_form",
+        OrgaRegistrationQuestionForm,
+        question_uuid,
+        can_delete=lambda _context, element: len(element.typ) == 1,
     )
 
 
@@ -346,6 +372,12 @@ def orga_registration_options_order(
 
 
 @login_required
+def orga_registration_options_delete(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
+    """Delete registration option for an event."""
+    return orga_delete(request, event_slug, "orga_registration_form", OrgaRegistrationOptionForm, option_uuid)
+
+
+@login_required
 def orga_registration_quotas(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display and manage registration quotas for an event."""
     # Check event permissions and build context
@@ -361,6 +393,12 @@ def orga_registration_quotas(request: HttpRequest, event_slug: str) -> HttpRespo
 def orga_registration_quotas_edit(request: HttpRequest, event_slug: str, quota_uuid: str) -> HttpResponse:
     """Edit a specific registration quota for an event."""
     return orga_edit(request, event_slug, "orga_registration_quotas", OrgaRegistrationQuotaForm, quota_uuid)
+
+
+@login_required
+def orga_registration_quotas_delete(request: HttpRequest, event_slug: str, quota_uuid: str) -> HttpResponse:
+    """Delete quota for event."""
+    return orga_delete(request, event_slug, "orga_registration_quotas", OrgaRegistrationQuotaForm, quota_uuid)
 
 
 @login_required
@@ -384,6 +422,14 @@ def orga_registration_installments_edit(request: HttpRequest, event_slug: str, i
 
 
 @login_required
+def orga_registration_installments_delete(request: HttpRequest, event_slug: str, installment_uuid: str) -> HttpResponse:
+    """Delete installment for event."""
+    return orga_delete(
+        request, event_slug, "orga_registration_installments", OrgaRegistrationInstallmentForm, installment_uuid
+    )
+
+
+@login_required
 def orga_registration_surcharges(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display registration surcharges for an event."""
     # Check permissions and get event context
@@ -399,3 +445,11 @@ def orga_registration_surcharges(request: HttpRequest, event_slug: str) -> HttpR
 def orga_registration_surcharges_edit(request: HttpRequest, event_slug: str, surcharge_uuid: str) -> HttpResponse:
     """Edit a registration surcharge for an event."""
     return orga_edit(request, event_slug, "orga_registration_surcharges", OrgaRegistrationSurchargeForm, surcharge_uuid)
+
+
+@login_required
+def orga_registration_surcharges_delete(request: HttpRequest, event_slug: str, surcharge_uuid: str) -> HttpResponse:
+    """Delete surcharge for event."""
+    return orga_delete(
+        request, event_slug, "orga_registration_surcharges", OrgaRegistrationSurchargeForm, surcharge_uuid
+    )

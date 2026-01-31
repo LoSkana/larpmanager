@@ -79,6 +79,28 @@ window.addEventListener('DOMContentLoaded', function() {
 
             return false;
         });
+
+        // Handle delete links - AJAX request with confirmation then reload iframe
+        $(document).on('click', '.delete-option-ajax', function(e) {
+            e.preventDefault();
+
+            const deleteUrl = $(this).attr('href');
+
+            $.ajax({
+                url: deleteUrl,
+                method: 'GET',
+                success: function() {
+                    // Reload the iframe by reloading itself
+                    window.location.reload();
+                    // Height will be updated after reload via setTimeout
+                },
+                error: function() {
+                    alert('{% trans "An error occurred while deleting" %}');
+                }
+            });
+
+            return false;
+        });
     });
 
 });

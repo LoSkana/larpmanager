@@ -8,7 +8,7 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
-    <table id="modifiers" class="go_datatable writing" no_header_cols="[5,6]">
+    <table id="modifiers" class="go_datatable writing">
         <thead>
             <tr>
                 <th></th>
@@ -16,6 +16,7 @@
                 <th>{% trans "New cost" %}</th>
                 <th>{% trans "Prerequisites" %}</th>
                 <th>{% trans "Requirements" %}</th>
+                <th></th>
                 <th></th>
                 <th></th>
             </tr>
@@ -65,6 +66,11 @@
                                 <i class="fa-solid fa-arrow-down"></i>
                             </a>
                         {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_px_modifiers_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}
