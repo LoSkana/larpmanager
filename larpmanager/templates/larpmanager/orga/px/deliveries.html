@@ -15,6 +15,7 @@
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Amount" %}</th>
                 <th>{% trans "Participants" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -33,6 +34,11 @@
                                 <a href="{% url 'orga_characters_edit' run.get_slug char_uuid %}">{{ char_name }}</a>
                             {% endfor %}
                         {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_px_deliveries_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

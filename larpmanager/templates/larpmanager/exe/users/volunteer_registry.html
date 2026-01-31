@@ -21,6 +21,7 @@
                 <th>{% trans "Participant" %}</th>
                 <th>{% trans "Start date" %}</th>
                 <th>{% trans "End date" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -33,6 +34,11 @@
                     <td>{{ el.member }}</td>
                     <td>{{ el.start }}</td>
                     <td>{{ el.end }}</td>
+                    <td>
+                        <a href="{% url 'exe_volunteer_registry_delete' el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

@@ -3808,6 +3808,9 @@ msgstr "L'objet n'existe pas"
 msgid "One-Time Access Token"
 msgstr "Jeton d'accès unique"
 
+msgid "Operation not allowed"
+msgstr "Opération non autorisée"
+
 msgid "Participant questions"
 msgstr "Questions des participants"
 
@@ -4909,6 +4912,9 @@ msgstr "vérifier les relations inexistantes"
 
 msgid "Added to the bottom of all pages"
 msgstr "Ajouté au bas de toutes les pages"
+
+msgid "An error occurred while deleting"
+msgstr "Une erreur s'est produite lors de la suppression"
 
 msgid "Cancellation for missing payment"
 msgstr "Annulation pour défaut de paiement"

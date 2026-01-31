@@ -4780,6 +4780,9 @@ msgstr ""
 msgid "An error occurred while reordering"
 msgstr ""
 
+msgid "An error occurred while deleting"
+msgstr ""
+
 msgid "Warning. The form contains errors to the fields"
 msgstr ""
 
@@ -9483,6 +9486,9 @@ msgid "Set ability type"
 msgstr ""
 
 msgid "Operation completed"
+msgstr ""
+
+msgid "Operation not allowed"
 msgstr ""
 
 msgid "Warning! Other users are editing this item"

@@ -3808,6 +3808,9 @@ msgstr "Object bestaat niet"
 msgid "One-Time Access Token"
 msgstr "Eenmalig toegangssymbool"
 
+msgid "Operation not allowed"
+msgstr "Bediening niet toegestaan"
+
 msgid "Participant questions"
 msgstr "Vragen van deelnemers"
 
@@ -4909,6 +4912,9 @@ msgstr "controleer niet-bestaande relaties"
 
 msgid "Added to the bottom of all pages"
 msgstr "Toegevoegd aan de onderkant van alle pagina's"
+
+msgid "An error occurred while deleting"
+msgstr "Er is een fout opgetreden tijdens het verwijderen van"
 
 msgid "Cancellation for missing payment"
 msgstr "Annulering wegens te late betaling"

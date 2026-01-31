@@ -70,7 +70,7 @@ from larpmanager.utils.io.download import (
     zip_exports,
 )
 from larpmanager.utils.io.upload import go_upload
-from larpmanager.utils.services.edit import backend_edit, orga_edit
+from larpmanager.utils.services.edit import backend_edit, orga_delete, orga_edit
 from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.users.deadlines import check_run_deadlines
 
@@ -254,6 +254,19 @@ def orga_roles_edit(request: HttpRequest, event_slug: str, role_uuid: str) -> Ht
 
 
 @login_required
+def orga_roles_delete(request: HttpRequest, event_slug: str, role_uuid: str) -> HttpResponse:
+    """Delete organization event role."""
+    return orga_delete(
+        request,
+        event_slug,
+        "orga_roles",
+        OrgaEventRoleForm,
+        role_uuid,
+        can_delete=lambda _context, element: element.number != 1,
+    )
+
+
+@login_required
 def orga_appearance(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle appearance configuration for an event."""
     return orga_edit(
@@ -298,6 +311,12 @@ def orga_texts_edit(request: HttpRequest, event_slug: str, text_uuid: str) -> Ht
 
 
 @login_required
+def orga_texts_delete(request: HttpRequest, event_slug: str, text_uuid: str) -> HttpResponse:
+    """Delete text for event."""
+    return orga_delete(request, event_slug, "orga_texts", OrgaEventTextForm, text_uuid)
+
+
+@login_required
 def orga_buttons(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display event buttons management page for organizers."""
     context = check_event_context(request, event_slug, "orga_buttons")
@@ -309,6 +328,12 @@ def orga_buttons(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_buttons_edit(request: HttpRequest, event_slug: str, button_uuid: str) -> HttpResponse:
     """Edit a specific button configuration for an event."""
     return orga_edit(request, event_slug, "orga_buttons", OrgaEventButtonForm, button_uuid)
+
+
+@login_required
+def orga_buttons_delete(request: HttpRequest, event_slug: str, button_uuid: str) -> HttpResponse:
+    """Delete button for event."""
+    return orga_delete(request, event_slug, "orga_buttons", OrgaEventButtonForm, button_uuid)
 
 
 @login_required

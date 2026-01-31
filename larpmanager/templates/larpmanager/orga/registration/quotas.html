@@ -24,6 +24,7 @@
                 <th>{% trans "Quotas" %}</th>
                 <th>{% trans "Available days" %}</th>
                 <th>{% trans "Surcharge" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -37,6 +38,11 @@
                     <td>{{ el.days_available }}</td>
                     <td>
                         {% if el.surcharge %}{{ el.surcharge }}{% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_registration_quotas_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

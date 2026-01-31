@@ -44,7 +44,7 @@ def paginate(
     context: dict,
     pagination_model: type[Model],
     template_name: str,
-    view_name: str,
+    edit_view_name: str,
     *,
     is_executive: bool = True,
 ) -> HttpResponse | JsonResponse:
@@ -59,7 +59,7 @@ def paginate(
         context: Template context dictionary containing association/run data
         pagination_model: The Django model class to paginate
         template_name: Template path for initial page rendering
-        view_name: View name used for generating edit URLs
+        edit_view_name: View name used for generating edit URLs
         is_executive: Whether this is an organization-wide view (True) or event-specific (False)
 
     Returns:
@@ -98,10 +98,12 @@ def paginate(
     # Get total count of all records (unfiltered)
     total_records_count = pagination_model.objects.count()
 
-    # Prepare localized edit button text
-    edit_label = _("Edit")
+    # Get delete view name if provided in context
+    delete_view_name = context.get("delete_view")
     # Transform elements into DataTables-compatible format
-    datatables_rows = _prepare_data_json(context, filtered_elements, view_name, edit_label, is_executive=is_executive)
+    datatables_rows = _prepare_data_json(
+        context, filtered_elements, edit_view_name, is_executive=is_executive, delete_view=delete_view_name
+    )
 
     # Return DataTables-expected JSON response
     return JsonResponse(
@@ -389,16 +391,16 @@ def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[s
 
 
 def _prepare_data_json(
-    context: dict, elements: list, view: str, edit: str, *, is_executive: bool = True
+    context: dict, elements: list, edit_view: str, *, is_executive: bool = True, delete_view: str | None = None
 ) -> list[dict[str, str]]:
     """Prepare data for JSON response in DataTables format.
 
     Args:
         context: Context dictionary containing fields, callbacks, and optionally run
         elements: List of model objects to process
-        view: View name for generating edit URLs
-        edit: Tooltip text for edit links
+        edit_view: View name for generating edit URLs
         is_executive: Whether to use executive view URLs (True) or organization view URLs (False)
+        delete_view: Optional view name for generating delete URLs
 
     Returns:
         List of dictionaries where each dict represents a row with string keys
@@ -406,6 +408,10 @@ def _prepare_data_json(
 
     """
     table_rows_data = []
+
+    # Prepare localized button text
+    edit_label = _("Edit")
+    delete_label = _("Delete")
 
     # Map field names to lambda functions for data extraction and formatting
     field_to_formatter = {
@@ -435,14 +441,26 @@ def _prepare_data_json(
     for model_object in elements:
         # Generate edit url (in orga need to add event slug)
         if is_executive:
-            edit_url = reverse(view, args=[model_object.uuid])
+            edit_url = reverse(edit_view, args=[model_object.uuid])
         else:
-            edit_url = reverse(view, args=[context["run"].get_slug(), model_object.uuid])
-        row_data = {"0": f'<a href="{edit_url}" qtip="{edit}"><i class="fas fa-edit"></i></a>'}
+            edit_url = reverse(edit_view, args=[context["run"].get_slug(), model_object.uuid])
+        row_data = {"0": f'<a href="{edit_url}" qtip="{edit_label}"><i class="fas fa-edit"></i></a>'}
 
         # Add data for each configured field, starting from column 1
         for column_index, (field_name, _field_label) in enumerate(context["fields"], start=1):
             row_data[str(column_index)] = field_to_formatter.get(field_name, lambda _model_object: "")(model_object)
+
+        # Add delete button if delete_view is provided
+        if delete_view:
+            if is_executive:
+                delete_url = reverse(delete_view, args=[model_object.uuid])
+            else:
+                delete_url = reverse(delete_view, args=[context["run"].get_slug(), model_object.uuid])
+            # Add delete button in the last column
+            last_column = str(len(context["fields"]) + 1)
+            row_data[last_column] = (
+                f'<a href="{delete_url}" qtip="{delete_label}" class="only_new_form"><i class="fas fa-trash"></i></a>'
+            )
 
         table_rows_data.append(row_data)
 
@@ -537,10 +555,10 @@ def exe_paginate(
     context: dict,
     pagination_model: type[Model],
     template_name: str,
-    view_name: str,
+    edit_view_name: str,
 ) -> HttpResponse:
     """Paginate content for organization-wide executive views."""
-    return paginate(request, context, pagination_model, template_name, view_name, is_executive=True)
+    return paginate(request, context, pagination_model, template_name, edit_view_name, is_executive=True)
 
 
 def orga_paginate(
@@ -548,7 +566,7 @@ def orga_paginate(
     context: dict,
     pagination_model: type[Model],
     template_name: str,
-    view_name: str,
+    edit_view_name: str,
 ) -> HttpResponse:
     """Paginate items for organization views."""
-    return paginate(request, context, pagination_model, template_name, view_name, is_executive=False)
+    return paginate(request, context, pagination_model, template_name, edit_view_name, is_executive=False)

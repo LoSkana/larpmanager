@@ -17,6 +17,7 @@
                 <th>{% trans "Deadline (days)" %}</th>
                 <th>{% trans "Deadline (date)" %}</th>
                 <th>{% trans "Tickets" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -39,6 +40,11 @@
                             {% include "elements/comma.html" %}
                             {{ ticket.name }}
                         {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_registration_installments_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

@@ -44,7 +44,7 @@ from larpmanager.models.event import (
 )
 from larpmanager.utils.core.base import check_association_context, get_context
 from larpmanager.utils.core.common import get_coming_runs, get_event_template
-from larpmanager.utils.services.edit import backend_get, exe_edit
+from larpmanager.utils.services.edit import backend_get, exe_delete, exe_edit
 from larpmanager.utils.users.deadlines import check_run_deadlines
 from larpmanager.views.manage import _get_registration_counts, _get_registration_status
 from larpmanager.views.orga.event import full_event_edit
@@ -166,6 +166,12 @@ def exe_templates(request: HttpRequest) -> HttpResponse:
 def exe_templates_edit(request: HttpRequest, template_uuid: str) -> HttpResponse:
     """Edit an existing executive template."""
     return exe_edit(request, ExeTemplateForm, template_uuid, "exe_templates")
+
+
+@login_required
+def exe_templates_delete(request: HttpRequest, template_uuid: str) -> HttpResponse:
+    """Delete template."""
+    return exe_delete(request, ExeTemplateForm, template_uuid, "exe_templates")
 
 
 @login_required

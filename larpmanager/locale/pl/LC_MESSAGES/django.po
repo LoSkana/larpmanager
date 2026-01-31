@@ -3808,6 +3808,9 @@ msgstr "Obiekt nie istnieje"
 msgid "One-Time Access Token"
 msgstr "Jednorazowy token dostępu"
 
+msgid "Operation not allowed"
+msgstr "Działanie niedozwolone"
+
 msgid "Participant questions"
 msgstr "Pytania uczestników"
 
@@ -4909,6 +4912,9 @@ msgstr "sprawdzić nieistniejące relacje"
 
 msgid "Added to the bottom of all pages"
 msgstr "Dodano na dole wszystkich stron"
+
+msgid "An error occurred while deleting"
+msgstr "Wystąpił błąd podczas usuwania"
 
 msgid "Cancellation for missing payment"
 msgstr "Anulowanie z powodu braku płatności"
