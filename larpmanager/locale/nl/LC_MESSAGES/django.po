@@ -1650,6 +1650,9 @@ msgstr "Zoektocht Type"
 msgid "Quest type"
 msgstr "Zoektocht type"
 
+msgid "Recipients"
+msgstr "Ontvangers"
+
 msgid "Refund for"
 msgstr "Vergoeding voor"
 
@@ -2887,6 +2890,9 @@ msgstr "Termijnkorting"
 
 msgid "Handout template"
 msgstr "Sjabloon voor hand-outs"
+
+msgid "Interval sending"
+msgstr "Interval verzenden"
 
 msgid "Item assignments"
 msgstr "Item toewijzingen"
@@ -4353,9 +4359,6 @@ msgstr "Nu kun je evenementen beheren"
 
 msgid "Option saved successfully"
 msgstr "Optie succesvol opgeslagen"
-
-msgid "Optional - email reply to"
-msgstr "Optioneel - antwoord per e-mail naar"
 
 msgid "Payment already confirmed"
 msgstr "Betaling al bevestigd"
@@ -6187,9 +6190,6 @@ msgstr "Optionele afbeelding voor homepage carrousel/slideshow"
 msgid "Please select both a registration and an event"
 msgstr "Selecteer zowel een registratie als een evenement"
 
-msgid "Remember to put recipients separated by commas"
-msgstr "Vergeet niet ontvangers gescheiden door komma's te plaatsen"
-
 msgid "Something went wrong in the account activation"
 msgstr "Er is iets misgegaan bij het activeren van de account"
 
@@ -6329,6 +6329,9 @@ msgstr "Inactieve personages kunnen niet worden toegewezen aan spelers"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "Is er nog iets dat je ons wilt vertellen"
+
+msgid "List of recipient email address, comma separated"
+msgstr "Lijst met e-mailadressen van ontvangers, door komma's gescheiden"
 
 msgid "Manage copying event settings from another event"
 msgstr "Beheer het kopiëren van evenementinstellingen van een ander evenement"
@@ -6541,6 +6544,9 @@ msgstr "Er bestaat al een opdracht voor dit item en gebied"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Toegewezen %(amount).2f %(elements)s voor '%(reason)s'"
 
+msgid "From this page you can email any list of recipients"
+msgstr "Vanaf deze pagina kunt u een lijst met ontvangers e-mailen"
+
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Ik heb het een paar keer gedaan, ik heb basiservaring"
 
@@ -6613,9 +6619,6 @@ msgstr "Geeft aan of het kan worden geselecteerd door deelnemers"
 
 msgid "Input an element name to insert their reference code"
 msgstr "Voer een elementnaam in om hun referentiecode in te voegen"
-
-msgid "Interval in seconds between each email (default: 20)"
-msgstr "Interval in seconden tussen elke e-mail (standaard: 20)"
 
 msgid "Last step, please upload your membership application"
 msgstr "Upload als laatste stap je lidmaatschapsaanvraag"
@@ -6692,9 +6695,6 @@ msgstr "Nu kun je de 'patron' en 'reduced' tickets maken"
 
 msgid "Now you can upload content and generate access tokens"
 msgstr "Nu kunt u inhoud uploaden en toegangsmunten genereren"
-
-msgid "Optional - ram html code (substitute the text before)"
-msgstr "Optioneel - ram html code (vervang de tekst ervoor)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
@@ -7298,10 +7298,6 @@ msgid "Description of this payment method to be displayed to the user"
 msgstr ""
 "Beschrijving van deze betaalmethode die moet worden weergegeven aan de "
 "gebruiker"
-
-msgid "From this page you can send an email to any list of recipients"
-msgstr ""
-"Vanaf deze pagina kun je een e-mail sturen naar een lijst met ontvangers"
 
 msgid "If checked: collpase sidebars links, and expand on mouse hover"
 msgstr ""
@@ -8401,6 +8397,12 @@ msgid ""
 msgstr ""
 "Indien aangevinkt: Deelnemers moeten een kwitantie/factuur overleggen voor "
 "handmatige betalingen"
+
+msgid ""
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+msgstr ""
+"In seconden, hoeveelheid tijd tussen elke verzonden e-mail (standaard: 3, "
+"minimum: 1)"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"

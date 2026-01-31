@@ -429,16 +429,9 @@ def send_mail_batch(request: HttpRequest, association_id: int | None = None, run
     player_ids = request.POST["players"]
     email_subject = request.POST["subject"]
     email_body = request.POST["body"]
-    raw_html_body = request.POST["raw"]
-    reply_to_address = request.POST["reply_to"]
-    interval = int(request.POST.get("interval", 20))
-
-    # Use raw body if provided, otherwise use formatted body
-    if raw_html_body:
-        email_body = raw_html_body
 
     # Execute the email sending operation
-    send_mail_exec(player_ids, email_subject, email_body, association_id, run_id, reply_to_address, interval)
+    send_mail_exec(player_ids, email_subject, email_body, association_id, run_id)
 
 
 @login_required

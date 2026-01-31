@@ -1650,6 +1650,9 @@ msgstr "Typ av uppdrag"
 msgid "Quest type"
 msgstr "Typ av uppdrag"
 
+msgid "Recipients"
+msgstr "Mottagare"
+
 msgid "Refund for"
 msgstr "Ersättning för"
 
@@ -2887,6 +2890,9 @@ msgstr "Terminsrabatt"
 
 msgid "Handout template"
 msgstr "Mall för handout"
+
+msgid "Interval sending"
+msgstr "Intervallsändning"
 
 msgid "Item assignments"
 msgstr "Tilldelning av objekt"
@@ -4353,9 +4359,6 @@ msgstr "Nu kan du hantera evenemang"
 
 msgid "Option saved successfully"
 msgstr "Alternativet sparades framgångsrikt"
-
-msgid "Optional - email reply to"
-msgstr "Valfritt - skicka svaret till"
 
 msgid "Payment already confirmed"
 msgstr "Betalning redan bekräftad"
@@ -6184,9 +6187,6 @@ msgstr "Valfri bild för karusell/bildspel på startsidan"
 msgid "Please select both a registration and an event"
 msgstr "Vänligen välj både en registrering och ett evenemang"
 
-msgid "Remember to put recipients separated by commas"
-msgstr "Kom ihåg att skilja mottagarna åt med kommatecken"
-
 msgid "Something went wrong in the account activation"
 msgstr "Något gick fel vid aktiveringen av kontot"
 
@@ -6323,6 +6323,9 @@ msgstr "Inaktiva karaktärer kan inte tilldelas spelare"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "Är det något annat du vill berätta för oss"
+
+msgid "List of recipient email address, comma separated"
+msgstr "Lista över mottagarens e-postadresser, kommaseparerade"
 
 msgid "Manage copying event settings from another event"
 msgstr "Hantera kopiering av evenemangsinställningar från ett annat evenemang"
@@ -6533,6 +6536,10 @@ msgstr "Ett uppdrag för detta objekt och område finns redan"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Tilldelad %(amount).2f %(elements)s för '%(reason)s'"
 
+msgid "From this page you can email any list of recipients"
+msgstr ""
+"Från den här sidan kan du skicka e-post till valfri lista med mottagare"
+
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jag har gjort det några gånger, jag har grundläggande erfarenhet"
 
@@ -6603,9 +6610,6 @@ msgstr "Anger om det kan väljas av deltagarna"
 
 msgid "Input an element name to insert their reference code"
 msgstr "Ange ett elementnamn för att infoga dess referenskod"
-
-msgid "Interval in seconds between each email (default: 20)"
-msgstr "Intervall i sekunder mellan varje e-postmeddelande (standard: 20)"
 
 msgid "Last step, please upload your membership application"
 msgstr "Sista steget är att ladda upp din medlemsansökan"
@@ -6682,9 +6686,6 @@ msgstr "Nu kan du skapa biljetterna 'patron' och 'reduced"
 
 msgid "Now you can upload content and generate access tokens"
 msgstr "Nu kan du ladda upp innehåll och generera åtkomsttokens"
-
-msgid "Optional - ram html code (substitute the text before)"
-msgstr "Valfritt - ram html-kod (ersätt texten före)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
@@ -7252,11 +7253,6 @@ msgstr "Innehåll i utskick med påminnelse om att betala anmälningsavgift"
 
 msgid "Description of this payment method to be displayed to the user"
 msgstr "Beskrivning av denna betalningsmetod som ska visas för användaren"
-
-msgid "From this page you can send an email to any list of recipients"
-msgstr ""
-"Från den här sidan kan du skicka ett e-postmeddelande till en valfri lista "
-"med mottagare"
 
 msgid "If checked: collpase sidebars links, and expand on mouse hover"
 msgstr ""
@@ -8269,6 +8265,12 @@ msgid ""
 "If checked: Participants must provide a receipt/invoice for manual payments"
 msgstr ""
 "Om markerat: Deltagare måste lämna kvitto/faktura för manuella betalningar"
+
+msgid ""
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+msgstr ""
+"I sekunder, tid mellan varje skickat e-postmeddelande (standard: 3, minimum:"
+" 1)"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"

@@ -2944,6 +2944,20 @@ body:not(.new_form) .only_new_form {
   text-align: left !important;
 }
 
+@media (max-width: 840px) {
+  .calendar table,
+  .calendar tr,
+  .calendar td,
+  .calendar th {
+    text-align: center !important;
+    width: auto;
+  }
+
+  .calendar td {
+    padding: 0.2em !important;
+  }
+}
+
 .new_form .form_container table input {
   width: 100% !important;
   padding: 0.4rem;
@@ -2951,11 +2965,11 @@ body:not(.new_form) .only_new_form {
 }
 
 .new_form .form_container table select {
-  width: 100%;
+  width: 100% !important;
 }
 
 .new_form .form_container table textarea {
-  width: 100%;
+  width: 100% !important;
   height: 8em;
 }
 

@@ -22,6 +22,7 @@ from __future__ import annotations
 import logging
 import re
 import traceback
+from collections import Counter
 from functools import wraps
 from typing import TYPE_CHECKING, Any
 
@@ -32,7 +33,7 @@ from django.core.mail import EmailMultiAlternatives, get_connection
 from django.utils import timezone
 
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
@@ -123,15 +124,17 @@ def mail_error(subject: Any, email_body: Any, exception: Any = None) -> None:
         my_send_simple_mail(error_notification_subject, error_notification_body, admin_email)
 
 
+def split_players(players: str) -> list:
+    """Split text by most common symbol separator."""
+    separators = [",", ";", "|"]
+    counts = Counter({sep: players.count(sep) for sep in separators})
+    sep = counts.most_common(1)[0][0]
+    return [p.strip() for p in players.split(sep) if p.strip()]
+
+
 @background_auto()
 def send_mail_exec(
-    players: str,
-    subj: str,
-    body: str,
-    association_id: int | None = None,
-    run_id: int | None = None,
-    reply_to: str | None = None,
-    interval: int = 20,
+    players: str, subj: str, body: str, association_id: int | None = None, run_id: int | None = None
 ) -> None:
     """Send bulk emails to multiple recipients with staggered delivery.
 
@@ -148,8 +151,6 @@ def send_mail_exec(
         body: Email body content in HTML or plain text
         association_id: Association ID for determining sender context
         run_id: Run ID for determining sender context (alternative to association_id)
-        reply_to: Custom reply-to email address
-        interval: Interval in seconds between each email (default: 20)
 
     Returns:
         None
@@ -177,8 +178,8 @@ def send_mail_exec(
         # Add organization/run prefix to subject line
         subj = f"[{sender_context}] {subj}"
 
-    # Parse comma-separated email list
-    recipients = players.split(",")
+    # Parse symbol-separated email list
+    recipients = split_players(players)
 
     # Notify administrators about bulk email operation
     if sender_context:
@@ -190,8 +191,9 @@ def send_mail_exec(
         run_id=run_id,
         subj=str(subj),
         body=str(body),
-        reply_to=reply_to,
     )
+
+    interval = max(1, get_association_config(association_id, "mail_interval", default_value=3))
 
     email_count = 0
     # Process each recipient with deduplication
@@ -208,7 +210,6 @@ def send_mail_exec(
             body,
             email.strip(),
             sender_context,
-            reply_to,
             schedule=email_count * interval,
             email_content_id=email_content.id,
         )

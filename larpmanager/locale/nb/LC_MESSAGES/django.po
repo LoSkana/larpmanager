@@ -1650,6 +1650,9 @@ msgstr "Oppdragstype"
 msgid "Quest type"
 msgstr "Type oppdrag"
 
+msgid "Recipients"
+msgstr "Mottakere"
+
 msgid "Refund for"
 msgstr "Refusjon for"
 
@@ -2887,6 +2890,9 @@ msgstr "Terminrabatt"
 
 msgid "Handout template"
 msgstr "Mal for utdeling"
+
+msgid "Interval sending"
+msgstr "Intervallsending"
 
 msgid "Item assignments"
 msgstr "Tildeling av varer"
@@ -4353,9 +4359,6 @@ msgstr "Nå kan du administrere hendelser"
 
 msgid "Option saved successfully"
 msgstr "Alternativet ble lagret"
-
-msgid "Optional - email reply to"
-msgstr "Valgfritt - svar på e-post til"
 
 msgid "Payment already confirmed"
 msgstr "Betaling allerede bekreftet"
@@ -6185,9 +6188,6 @@ msgstr "Valgfritt bilde for karusell/bildefremvisning på hjemmesiden"
 msgid "Please select both a registration and an event"
 msgstr "Vennligst velg både en registrering og et arrangement"
 
-msgid "Remember to put recipients separated by commas"
-msgstr "Husk å sette mottakere atskilt med komma"
-
 msgid "Something went wrong in the account activation"
 msgstr "Noe gikk galt i kontoaktiveringen"
 
@@ -6324,6 +6324,9 @@ msgstr "Inaktive karakterer kan ikke tildeles spillere"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "Er det noe annet du vil fortelle oss"
+
+msgid "List of recipient email address, comma separated"
+msgstr "Liste over mottakerens e-postadresse, kommaseparert"
 
 msgid "Manage copying event settings from another event"
 msgstr ""
@@ -6535,6 +6538,11 @@ msgstr "Det finnes allerede et oppdrag for dette elementet og området"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Tildelt %(amount).2f %(elements)s for '%(reason)s'"
 
+msgid "From this page you can email any list of recipients"
+msgstr ""
+"Fra denne siden kan du sende e-post til en hvilken som helst liste med "
+"mottakere"
+
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jeg har gjort det noen ganger, jeg har grunnleggende erfaring"
 
@@ -6607,9 +6615,6 @@ msgstr "Angir om den kan velges av deltakerne"
 
 msgid "Input an element name to insert their reference code"
 msgstr "Skriv inn et elementnavn for å sette inn referansekoden"
-
-msgid "Interval in seconds between each email (default: 20)"
-msgstr "Intervall i sekunder mellom hver e-post (standard: 20)"
 
 msgid "Last step, please upload your membership application"
 msgstr "Siste trinn er å laste opp medlemssøknaden din"
@@ -6687,9 +6692,6 @@ msgstr "Nå kan du opprette billettene 'låner' og 'redusert"
 
 msgid "Now you can upload content and generate access tokens"
 msgstr "Nå kan du laste opp innhold og generere tilgangstokener"
-
-msgid "Optional - ram html code (substitute the text before)"
-msgstr "Valgfritt - ram html-kode (erstatt teksten før)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
@@ -7258,11 +7260,6 @@ msgstr ""
 
 msgid "Description of this payment method to be displayed to the user"
 msgstr "Beskrivelse av betalingsmåten som skal vises for brukeren"
-
-msgid "From this page you can send an email to any list of recipients"
-msgstr ""
-"Fra denne siden kan du sende en e-post til en hvilken som helst liste over "
-"mottakere"
 
 msgid "If checked: collpase sidebars links, and expand on mouse hover"
 msgstr "Hvis avkrysset: Skjul lenker i sidefelt, og utvid ved musepekeren"
@@ -8271,6 +8268,12 @@ msgid ""
 msgstr ""
 "Hvis avkrysset: Deltakerne må fremlegge kvittering/faktura for manuelle "
 "betalinger"
+
+msgid ""
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+msgstr ""
+"I sekunder, hvor lang tid det går mellom hver e-post som sendes (standard: "
+"3, minimum: 1)"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"
