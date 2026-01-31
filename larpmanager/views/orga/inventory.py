@@ -45,6 +45,12 @@ def orga_ci_inventory(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_ci_inventory_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a character inventory."""
+    return orga_edit(request, event_slug, "orga_ci_inventory", OrgaInventoryForm)
+
+
+@login_required
 def orga_ci_inventory_edit(request: HttpRequest, event_slug: str, inventory_uuid: str) -> HttpResponse:
     """Edit a character inventory."""
     return orga_edit(request, event_slug, "orga_ci_inventory", OrgaInventoryForm, inventory_uuid)
@@ -56,6 +62,12 @@ def orga_ci_pool_types(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_ci_pool_types")
     context["list"] = context["event"].get_elements(PoolTypeCI).order_by("number")
     return render(request, "larpmanager/orga/ci/pool_types.html", context)
+
+
+@login_required
+def orga_ci_pool_types_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a pool type for character inventory."""
+    return orga_edit(request, event_slug, "orga_ci_pool_types", OrgaPoolTypePxForm)
 
 
 @login_required
@@ -116,11 +128,11 @@ def orga_ci_transfer(request: HttpRequest, event_slug: str) -> HttpResponse:
             request, context, event_slug, "orga_ci_inventory"
         ):
             messages.error(request, "Only staff can transfer from this inventory.")
-            redirect_pk = target_inventory.uuid if target_inventory else "0"
+            redirect_pk = target_inventory.uuid if target_inventory else ""
             return redirect("orga_ci_inventory_view", event_slug=context["run"].get_slug(), inventory_uuid=redirect_pk)
     elif not has_event_permission(request, context, event_slug, "orga_ci_inventory"):
         messages.error(request, "Only staff can transfer from NPC.")
-        redirect_pk = target_inventory.uuid if target_inventory else "0"
+        redirect_pk = target_inventory.uuid if target_inventory else ""
         return redirect("orga_ci_inventory_view", event_slug=context["run"].get_slug(), inventory_uuid=redirect_pk)
 
     # Get pool type and amount
@@ -143,5 +155,5 @@ def orga_ci_transfer(request: HttpRequest, event_slug: str) -> HttpResponse:
     except ValueError as e:
         messages.error(request, f"Transfer failed: {e!s}")
 
-    redirect_pk = source_inventory.uuid if source_inventory else (target_inventory.uuid if target_inventory else "0")
+    redirect_pk = source_inventory.uuid if source_inventory else (target_inventory.uuid if target_inventory else "")
     return redirect("orga_ci_inventory_view", event_slug=context["run"].get_slug(), inventory_uuid=redirect_pk)

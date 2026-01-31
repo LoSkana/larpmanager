@@ -5,7 +5,7 @@
         {% trans "Welcome to" %} {{ platform }}!
     {% else %}
         {% if nonum is None %}
-            {% if num != "0" %}
+            {% if num %}
                 {{ name }}
             {% else %}
                 {% trans "New" %}

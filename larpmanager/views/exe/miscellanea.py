@@ -56,6 +56,12 @@ def exe_urlshortner(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+def exe_urlshortner_new(request: HttpRequest) -> HttpResponse:
+    """Create a new URL shortener entry."""
+    return exe_edit(request, ExeUrlShortnerForm, None, "exe_urlshortner")
+
+
+@login_required
 def exe_urlshortner_edit(request: HttpRequest, url_uuid: str) -> HttpResponse:
     """Edit an existing URL shortener entry."""
     return exe_edit(request, ExeUrlShortnerForm, url_uuid, "exe_urlshortner")
@@ -74,6 +80,12 @@ def exe_warehouse_containers(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+def exe_warehouse_containers_new(request: HttpRequest) -> HttpResponse:
+    """Create a new warehouse container."""
+    return exe_edit(request, ExeWarehouseContainerForm, None, "exe_warehouse_containers")
+
+
+@login_required
 def exe_warehouse_containers_edit(request: HttpRequest, container_uuid: str) -> HttpResponse:
     """Edit warehouse container using generic edit handler."""
     return exe_edit(request, ExeWarehouseContainerForm, container_uuid, "exe_warehouse_containers")
@@ -89,6 +101,12 @@ def exe_warehouse_tags(request: HttpRequest) -> HttpResponse:
     context["list"] = WarehouseTag.objects.filter(association_id=context["association_id"]).prefetch_related("items")
 
     return render(request, "larpmanager/exe/warehouse/tags.html", context)
+
+
+@login_required
+def exe_warehouse_tags_new(request: HttpRequest) -> HttpResponse:
+    """Create a new warehouse tag."""
+    return exe_edit(request, ExeWarehouseTagForm, None, "exe_warehouse_tags")
 
 
 @login_required
@@ -129,6 +147,12 @@ def exe_warehouse_items(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+def exe_warehouse_items_new(request: HttpRequest) -> HttpResponse:
+    """Create a new warehouse item."""
+    return exe_edit(request, ExeWarehouseItemForm, None, "exe_warehouse_items")
+
+
+@login_required
 def exe_warehouse_items_edit(request: HttpRequest, item_uuid: str) -> HttpResponse:
     """Delegate to exe_edit for warehouse item form handling."""
     return exe_edit(request, ExeWarehouseItemForm, item_uuid, "exe_warehouse_items")
@@ -147,6 +171,12 @@ def exe_warehouse_movements(request: HttpRequest) -> HttpResponse:
     get_warehouse_optionals(context, [3])
 
     return render(request, "larpmanager/exe/warehouse/movements.html", context)
+
+
+@login_required
+def exe_warehouse_movements_new(request: HttpRequest) -> HttpResponse:
+    """Create a new warehouse movement."""
+    return exe_edit(request, ExeWarehouseMovementForm, None, "exe_warehouse_movements")
 
 
 @login_required

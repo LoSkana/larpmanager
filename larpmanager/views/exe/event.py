@@ -71,67 +71,68 @@ def exe_events(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
-    """Handle editing of existing events or creation of new events.
-
-    Args:
-        request: HTTP request object containing user session and form data
-        event_uuid: Event number UUID (0 for new event creation)
-
-    Returns:
-        HttpResponse: Either a redirect to the appropriate page after successful operation
-                     or a rendered event form template for user input
-
-    Raises:
-        PermissionDenied: If user lacks required association permissions
-        Http404: If specified event number doesn't exist
-
-    """
+def exe_events_new(request: HttpRequest) -> HttpResponse:
+    """Create a new event."""
     # Check user has executive events permission for the association
     context = check_association_context(request, "exe_events")
 
-    # Determine if this is creation or editing
-    if event_uuid != "0":
-        # Retrieve the run object for editing
-        backend_get(context, Run, event_uuid, "event")
-        event = context["el"].event
-        run = context["el"]
-        on_created = None
-    else:
-        # Prepare for creation
-        event = None
-        run = None
-        context["exe"] = True
+    # Prepare for creation
+    context["exe"] = True
+    if context.get("onboarding"):
+        context["welcome_message"] = True
+        context["tutorial"] = None
+        context["config"] = None
+        context["is_sidebar_open"] = False
 
-        if context.get("onboarding"):
-            context["welcome_message"] = True
-            context["tutorial"] = None
-            context["config"] = None
-            context["is_sidebar_open"] = False
+    # Define callback for post-creation operations
+    def on_created(created_event: Event) -> None:
+        """Post-creation callback for setting up organizer role and sticky message."""
+        # Automatically add requesting user as event organizer
+        (er, _created) = EventRole.objects.get_or_create(event=created_event, number=1)
+        if not er.name:
+            er.name = "Organizer"
+        er.members.add(context["member"])
+        er.save()
 
-        # Define callback for post-creation operations
-        def on_created(created_event: Event) -> None:
-            """Post-creation callback for setting up organizer role and sticky message."""
-            # Automatically add requesting user as event organizer
-            (er, _created) = EventRole.objects.get_or_create(event=created_event, number=1)
-            if not er.name:
-                er.name = "Organizer"
-            er.members.add(context["member"])
-            er.save()
+        # Refresh cached event links for user navigation
+        reset_event_links(context["member"].id, context["association_id"])
 
-            # Refresh cached event links for user navigation
-            reset_event_links(context["member"].id, context["association_id"])
-
-    # Use unified full_event_edit for both creation and editing
+    # Use unified full_event_edit
     context["add_another"] = False
     return full_event_edit(
         context,
         request,
-        event,
-        run,
+        None,
+        None,
         is_executive=True,
         on_created_callback=on_created,
     )
+
+
+@login_required
+def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
+    """Edit an event."""
+    # Check user has executive events permission for the association
+    context = check_association_context(request, "exe_events")
+
+    # Retrieve the run object for editing
+    backend_get(context, Run, event_uuid, "event")
+
+    # Use unified full_event_edit
+    context["add_another"] = False
+    return full_event_edit(
+        context,
+        request,
+        context["el"].event,
+        context["el"],
+        is_executive=True,
+    )
+
+
+@login_required
+def exe_runs_new(request: HttpRequest) -> HttpResponse:
+    """Create a new organization-wide run with event field."""
+    return exe_edit(request, OrgaRunForm, None, "exe_events", additional_field="event")
 
 
 @login_required
@@ -160,6 +161,12 @@ def exe_templates(request: HttpRequest) -> HttpResponse:
             el.roles = [EventRole.objects.create(event=el, number=1, name="Organizer")]
 
     return render(request, "larpmanager/exe/templates.html", context)
+
+
+@login_required
+def exe_templates_new(request: HttpRequest) -> HttpResponse:
+    """Create a new executive template."""
+    return exe_edit(request, ExeTemplateForm, None, "exe_templates")
 
 
 @login_required

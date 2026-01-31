@@ -101,6 +101,12 @@ def exe_roles(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+def exe_roles_new(request: HttpRequest) -> Any:
+    """Create a new association role."""
+    return exe_edit(request, ExeAssociationRoleForm, None, "exe_roles")
+
+
+@login_required
 def exe_roles_edit(request: HttpRequest, role_uuid: str) -> Any:
     """Edit specific association role."""
     return exe_edit(request, ExeAssociationRoleForm, role_uuid, "exe_roles")
@@ -138,6 +144,12 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+def exe_texts_new(request: HttpRequest) -> HttpResponse:
+    """Create a new association text."""
+    return exe_edit(request, ExeAssociationTextForm, None, "exe_texts")
+
+
+@login_required
 def exe_texts_edit(request: HttpRequest, text_uuid: str) -> HttpResponse:
     """Edit specific association text."""
     return exe_edit(request, ExeAssociationTextForm, text_uuid, "exe_texts")
@@ -171,6 +183,12 @@ def exe_translations(request: HttpRequest) -> HttpResponse:
     context["list"] = AssociationTranslation.objects.filter(association_id=context["association_id"])
 
     return render(request, "larpmanager/exe/translations.html", context)
+
+
+@login_required
+def exe_translations_new(request: HttpRequest) -> HttpResponse:
+    """Create a new association translation override."""
+    return exe_edit(request, ExeAssociationTranslationForm, None, "exe_translations")
 
 
 @login_required

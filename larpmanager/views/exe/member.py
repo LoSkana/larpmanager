@@ -779,6 +779,12 @@ def exe_volunteer_registry(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+def exe_volunteer_registry_new(request: HttpRequest) -> HttpResponse:
+    """Create a new volunteer registry entry."""
+    return exe_edit(request, ExeVolunteerRegistryForm, None, "exe_volunteer_registry")
+
+
+@login_required
 def exe_volunteer_registry_edit(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Edit volunteer registry entry using standard exe form handling."""
     return exe_edit(request, ExeVolunteerRegistryForm, member_uuid, "exe_volunteer_registry")
@@ -891,6 +897,12 @@ def exe_badges(request: HttpRequest) -> HttpResponse:
     context["list"] = Badge.objects.filter(association_id=context["association_id"]).prefetch_related("members")
 
     return render(request, "larpmanager/exe/users/badges.html", context)
+
+
+@login_required
+def exe_badges_new(request: HttpRequest) -> HttpResponse:
+    """Create a new badge."""
+    return exe_edit(request, ExeBadgeForm, None, "exe_badges")
 
 
 @login_required

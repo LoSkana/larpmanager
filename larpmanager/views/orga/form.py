@@ -93,6 +93,12 @@ def orga_registration_tickets(request: HttpRequest, event_slug: str) -> HttpResp
 
 
 @login_required
+def orga_registration_tickets_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration ticket."""
+    return orga_edit(request, event_slug, "orga_registration_tickets", OrgaRegistrationTicketForm, None)
+
+
+@login_required
 def orga_registration_tickets_edit(request: HttpRequest, event_slug: str, ticket_uuid: str) -> HttpResponse:
     """Edit a specific registration ticket."""
     return orga_edit(request, event_slug, "orga_registration_tickets", OrgaRegistrationTicketForm, ticket_uuid)
@@ -118,6 +124,12 @@ def orga_registration_sections(request: HttpRequest, event_slug: str) -> HttpRes
     context["list"] = RegistrationSection.objects.filter(event=context["event"]).order_by("order")
 
     return render(request, "larpmanager/orga/registration/sections.html", context)
+
+
+@login_required
+def orga_registration_sections_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration section for an event."""
+    return orga_edit(request, event_slug, "orga_registration_sections", OrgaRegistrationSectionForm, None)
 
 
 @login_required
@@ -191,6 +203,26 @@ def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpRespons
 
 
 @login_required
+def orga_registration_form_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration form question."""
+    # Check user permissions for registration form editing
+    perm = "orga_registration_form"
+    context = check_event_context(request, event_slug, perm)
+
+    return form_edit_handler(
+        request,
+        context,
+        None,
+        perm,
+        RegistrationOption,
+        OrgaRegistrationQuestionForm,
+        "orga_registration_form_edit",
+        perm,
+        "larpmanager/orga/registration/form_edit.html",
+    )
+
+
+@login_required
 def orga_registration_form_edit(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
     """Handle registration form question editing for organizers.
 
@@ -241,6 +273,12 @@ def orga_registration_form_order(request: HttpRequest, event_slug: str, question
 
 
 @login_required
+def orga_registration_options_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration option."""
+    return orga_edit(request, event_slug, "orga_registration_options", OrgaRegistrationOptionForm, None)
+
+
+@login_required
 def orga_registration_options_edit(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
     """Edit registration options for an event.
 
@@ -263,7 +301,7 @@ def orga_registration_options_edit(request: HttpRequest, event_slug: str, option
     context["frame"] = 1
 
     # For new options without question_uuid, verify that questions exist
-    if option_uuid == "0":
+    if not option_uuid:
         question_uuid = request.GET.get("question_uuid") or request.POST.get("question_uuid")
         if not question_uuid and not context["event"].get_elements(RegistrationQuestion).exists():
             # Display warning message to user about missing prerequisites
@@ -272,7 +310,7 @@ def orga_registration_options_edit(request: HttpRequest, event_slug: str, option
                 _("You must create at least one registration question before you can create registration options"),
             )
             # Redirect to registration questions creation page
-            return redirect("orga_registration_form_edit", event_slug=event_slug, question_uuid="0")
+            return redirect("orga_registration_form_edit", event_slug=event_slug, question_uuid="")
 
     return options_edit_handler(
         request, context, option_uuid, RegistrationQuestion, RegistrationOption, OrgaRegistrationOptionForm
@@ -298,7 +336,7 @@ def orga_registration_options_list(request: HttpRequest, event_slug: str, questi
     context = check_event_context(request, event_slug, "orga_registration_form")
     context["frame"] = 1
 
-    if question_uuid and question_uuid != "0":
+    if question_uuid:
         # Get the question
         get_element(context, question_uuid, "el", RegistrationQuestion)
 
@@ -358,6 +396,12 @@ def orga_registration_quotas(request: HttpRequest, event_slug: str) -> HttpRespo
 
 
 @login_required
+def orga_registration_quotas_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration quota for an event."""
+    return orga_edit(request, event_slug, "orga_registration_quotas", OrgaRegistrationQuotaForm, None)
+
+
+@login_required
 def orga_registration_quotas_edit(request: HttpRequest, event_slug: str, quota_uuid: str) -> HttpResponse:
     """Edit a specific registration quota for an event."""
     return orga_edit(request, event_slug, "orga_registration_quotas", OrgaRegistrationQuotaForm, quota_uuid)
@@ -373,6 +417,12 @@ def orga_registration_installments(request: HttpRequest, event_slug: str) -> Htt
     context["list"] = RegistrationInstallment.objects.filter(event=context["event"]).order_by("order", "amount")
 
     return render(request, "larpmanager/orga/registration/installments.html", context)
+
+
+@login_required
+def orga_registration_installments_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration installment for an event."""
+    return orga_edit(request, event_slug, "orga_registration_installments", OrgaRegistrationInstallmentForm, None)
 
 
 @login_required
@@ -393,6 +443,12 @@ def orga_registration_surcharges(request: HttpRequest, event_slug: str) -> HttpR
     context["list"] = RegistrationSurcharge.objects.filter(event=context["event"]).order_by("number")
 
     return render(request, "larpmanager/orga/registration/surcharges.html", context)
+
+
+@login_required
+def orga_registration_surcharges_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration surcharge for an event."""
+    return orga_edit(request, event_slug, "orga_registration_surcharges", OrgaRegistrationSurchargeForm, None)
 
 
 @login_required

@@ -48,7 +48,7 @@ urlpatterns = [
         name="orga_quick",
     ),
     path(
-        "<slug:event_slug>/manage/mail/read/<slug:mail_uuid>",
+        "<slug:event_slug>/manage/mail/read/<slug:mail_uuid>/",
         views_om.orga_read_mail,
         name="orga_read_mail",
     ),
@@ -86,6 +86,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/registrations/",
         views_or.orga_registrations,
         name="orga_registrations",
+    ),
+    path(
+        "<slug:event_slug>/manage/registrations/new/",
+        views_or.orga_registrations_new,
+        name="orga_registrations_new",
     ),
     path(
         "<slug:event_slug>/manage/registrations/edit/<slug:registration_uuid>/",
@@ -133,6 +138,11 @@ urlpatterns = [
         name="orga_discounts",
     ),
     path(
+        "<slug:event_slug>/manage/discounts/new/",
+        views_oa.orga_discounts_new,
+        name="orga_discounts_new",
+    ),
+    path(
         "<slug:event_slug>/manage/discounts/edit/<slug:discount_uuid>/",
         views_oa.orga_discounts_edit,
         name="orga_discounts_edit",
@@ -141,6 +151,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/tickets/",
         views_of.orga_registration_tickets,
         name="orga_registration_tickets",
+    ),
+    path(
+        "<slug:event_slug>/manage/tickets/new/",
+        views_of.orga_registration_tickets_new,
+        name="orga_registration_tickets_new",
     ),
     path(
         "<slug:event_slug>/manage/tickets/edit/<slug:ticket_uuid>/",
@@ -158,6 +173,11 @@ urlpatterns = [
         name="orga_registration_sections",
     ),
     path(
+        "<slug:event_slug>/manage/sections/new/",
+        views_of.orga_registration_sections_new,
+        name="orga_registration_sections_new",
+    ),
+    path(
         "<slug:event_slug>/manage/sections/edit/<slug:section_uuid>/",
         views_of.orga_registration_sections_edit,
         name="orga_registration_sections_edit",
@@ -171,6 +191,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/form/",
         views_of.orga_registration_form,
         name="orga_registration_form",
+    ),
+    path(
+        "<slug:event_slug>/manage/form/new/",
+        views_of.orga_registration_form_new,
+        name="orga_registration_form_new",
     ),
     path(
         "<slug:event_slug>/manage/form/edit/<slug:question_uuid>/",
@@ -193,6 +218,11 @@ urlpatterns = [
         name="orga_registration_form_email",
     ),
     path(
+        "<slug:event_slug>/manage/options/new/",
+        views_of.orga_registration_options_new,
+        name="orga_registration_options_new",
+    ),
+    path(
         "<slug:event_slug>/manage/options/edit/<slug:option_uuid>/",
         views_of.orga_registration_options_edit,
         name="orga_registration_options_edit",
@@ -213,6 +243,11 @@ urlpatterns = [
         name="orga_registration_quotas",
     ),
     path(
+        "<slug:event_slug>/manage/quotas/new/",
+        views_of.orga_registration_quotas_new,
+        name="orga_registration_quotas_new",
+    ),
+    path(
         "<slug:event_slug>/manage/quotas/edit/<slug:quota_uuid>/",
         views_of.orga_registration_quotas_edit,
         name="orga_registration_quotas_edit",
@@ -223,6 +258,11 @@ urlpatterns = [
         name="orga_registration_installments",
     ),
     path(
+        "<slug:event_slug>/manage/installments/new/",
+        views_of.orga_registration_installments_new,
+        name="orga_registration_installments_new",
+    ),
+    path(
         "<slug:event_slug>/manage/installments/edit/<slug:installment_uuid>/",
         views_of.orga_registration_installments_edit,
         name="orga_registration_installments_edit",
@@ -231,6 +271,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/surcharges/",
         views_of.orga_registration_surcharges,
         name="orga_registration_surcharges",
+    ),
+    path(
+        "<slug:event_slug>/manage/surcharges/new/",
+        views_of.orga_registration_surcharges_new,
+        name="orga_registration_surcharges_new",
     ),
     path(
         "<slug:event_slug>/manage/surcharges/edit/<slug:surcharge_uuid>/",
@@ -271,6 +316,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/albums/",
         views_oms.orga_albums,
         name="orga_albums",
+    ),
+    path(
+        "<slug:event_slug>/manage/albums/new/",
+        views_oms.orga_albums_new,
+        name="orga_albums_new",
     ),
     path(
         "<slug:event_slug>/manage/albums/edit/<slug:album_uuid>/",
@@ -358,6 +408,11 @@ urlpatterns = [
         name="orga_characters_view",
     ),
     path(
+        "<slug:event_slug>/manage/characters/new/",
+        views_oc.orga_characters_new,
+        name="orga_characters_new",
+    ),
+    path(
         "<slug:event_slug>/manage/characters/edit/<slug:character_uuid>/",
         views_oc.orga_characters_edit,
         name="orga_characters_edit",
@@ -398,6 +453,11 @@ urlpatterns = [
         name="orga_writing_form",
     ),
     path(
+        "<slug:event_slug>/manage/writing/form/<slug:writing_type>/new/",
+        views_oc.orga_writing_form_new,
+        name="orga_writing_form_new",
+    ),
+    path(
         "<slug:event_slug>/manage/writing/form/<slug:writing_type>/edit/<slug:question_uuid>/",
         views_oc.orga_writing_form_edit,
         name="orga_writing_form_edit",
@@ -423,6 +483,11 @@ urlpatterns = [
         name="orga_writing_options_list",
     ),
     path(
+        "<slug:event_slug>/manage/writing/options/<slug:writing_type>/new/",
+        views_oc.orga_writing_options_new,
+        name="orga_writing_options_new",
+    ),
+    path(
         "<slug:event_slug>/manage/writing/options/<slug:writing_type>/edit/<slug:option_uuid>/",
         views_oc.orga_writing_options_edit,
         name="orga_writing_options_edit",
@@ -431,6 +496,12 @@ urlpatterns = [
         "<slug:event_slug>/manage/writing/options/<slug:writing_type>/order/<slug:option_uuid>/<int:order>/",
         views_oc.orga_writing_options_order,
         name="orga_writing_options_order",
+    ),
+    path(
+        "<slug:event_slug>/manage/writing/new/",
+        views_oc.orga_writing_excel_edit,
+        {"writing_type": ""},
+        name="orga_writing_excel_new",
     ),
     path(
         "<slug:event_slug>/manage/writing/edit/<slug:writing_type>/",
@@ -448,6 +519,11 @@ urlpatterns = [
         name="orga_utils",
     ),
     path(
+        "<slug:event_slug>/manage/utils/new/",
+        views_oms.orga_utils_new,
+        name="orga_utils_new",
+    ),
+    path(
         "<slug:event_slug>/manage/utils/edit/<slug:util_uuid>/",
         views_oms.orga_utils_edit,
         name="orga_utils_edit",
@@ -458,6 +534,11 @@ urlpatterns = [
         name="orga_onetimes",
     ),
     path(
+        "<slug:event_slug>/manage/onetimes/content/new/",
+        views_oms.orga_onetimes_new,
+        name="orga_onetimes_new",
+    ),
+    path(
         "<slug:event_slug>/manage/onetimes/content/edit/<slug:onetime_uuid>/",
         views_oms.orga_onetimes_edit,
         name="orga_onetimes_edit",
@@ -466,6 +547,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/onetimes/tokens/",
         views_oms.orga_onetimes_tokens,
         name="orga_onetimes_tokens",
+    ),
+    path(
+        "<slug:event_slug>/manage/onetimes/tokens/new/",
+        views_oms.orga_onetimes_tokens_new,
+        name="orga_onetimes_tokens_new",
     ),
     path(
         "<slug:event_slug>/manage/onetimes/tokens/edit/<slug:token_uuid>/",
@@ -486,6 +572,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/plots/<slug:plot_uuid>/view/",
         views_ow.orga_plots_view,
         name="orga_plots_view",
+    ),
+    path(
+        "<slug:event_slug>/manage/plots/new/",
+        views_ow.orga_plots_new,
+        name="orga_plots_new",
     ),
     path(
         "<slug:event_slug>/manage/plots/edit/<slug:plot_uuid>/",
@@ -518,6 +609,11 @@ urlpatterns = [
         name="orga_factions_view",
     ),
     path(
+        "<slug:event_slug>/manage/factions/new/",
+        views_ow.orga_factions_new,
+        name="orga_factions_new",
+    ),
+    path(
         "<slug:event_slug>/manage/factions/edit/<slug:faction_uuid>/",
         views_ow.orga_factions_edit,
         name="orga_factions_edit",
@@ -548,6 +644,11 @@ urlpatterns = [
         name="orga_quest_types_view",
     ),
     path(
+        "<slug:event_slug>/manage/quest_types/new/",
+        views_ow.orga_quest_types_new,
+        name="orga_quest_types_new",
+    ),
+    path(
         "<slug:event_slug>/manage/quest_types/edit/<slug:quest_type_uuid>/",
         views_ow.orga_quest_types_edit,
         name="orga_quest_types_edit",
@@ -566,6 +667,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/quests/<slug:quest_uuid>/view/",
         views_ow.orga_quests_view,
         name="orga_quests_view",
+    ),
+    path(
+        "<slug:event_slug>/manage/quests/new/",
+        views_ow.orga_quests_new,
+        name="orga_quests_new",
     ),
     path(
         "<slug:event_slug>/manage/quests/edit/<slug:quest_uuid>/",
@@ -588,6 +694,11 @@ urlpatterns = [
         name="orga_traits_view",
     ),
     path(
+        "<slug:event_slug>/manage/traits/new/",
+        views_ow.orga_traits_new,
+        name="orga_traits_new",
+    ),
+    path(
         "<slug:event_slug>/manage/traits/edit/<slug:trait_uuid>/",
         views_ow.orga_traits_edit,
         name="orga_traits_edit",
@@ -603,6 +714,11 @@ urlpatterns = [
         name="orga_handout_templates",
     ),
     path(
+        "<slug:event_slug>/manage/handout_templates/new/",
+        views_ow.orga_handout_templates_new,
+        name="orga_handout_templates_new",
+    ),
+    path(
         "<slug:event_slug>/manage/handout_templates/edit/<slug:handout_template_uuid>/",
         views_ow.orga_handout_templates_edit,
         name="orga_handout_templates_edit",
@@ -616,6 +732,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/handouts/<slug:handout_uuid>/view/",
         views_ow.orga_handouts_view,
         name="orga_handouts_view",
+    ),
+    path(
+        "<slug:event_slug>/manage/handouts/new/",
+        views_ow.orga_handouts_new,
+        name="orga_handouts_new",
     ),
     path(
         "<slug:event_slug>/manage/handouts/edit/<slug:handout_uuid>/",
@@ -643,6 +764,11 @@ urlpatterns = [
         name="orga_prologue_types",
     ),
     path(
+        "<slug:event_slug>/manage/prologue_types/new/",
+        views_ow.orga_prologue_types_new,
+        name="orga_prologue_types_new",
+    ),
+    path(
         "<slug:event_slug>/manage/prologue_types/edit/<slug:prologue_type_uuid>/",
         views_ow.orga_prologue_types_edit,
         name="orga_prologue_types_edit",
@@ -656,6 +782,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/prologues/<slug:prologue_uuid>/view/",
         views_ow.orga_prologues_view,
         name="orga_prologues_view",
+    ),
+    path(
+        "<slug:event_slug>/manage/prologues/new/",
+        views_ow.orga_prologues_new,
+        name="orga_prologues_new",
     ),
     path(
         "<slug:event_slug>/manage/prologues/edit/<slug:prologue_uuid>/",
@@ -678,6 +809,11 @@ urlpatterns = [
         name="orga_speedlarps_view",
     ),
     path(
+        "<slug:event_slug>/manage/speedlarps/new/",
+        views_ow.orga_speedlarps_new,
+        name="orga_speedlarps_new",
+    ),
+    path(
         "<slug:event_slug>/manage/speedlarps/edit/<slug:speedlarp_uuid>/",
         views_ow.orga_speedlarps_edit,
         name="orga_speedlarps_edit",
@@ -698,7 +834,7 @@ urlpatterns = [
         name="orga_expenses_my",
     ),
     path(
-        "<slug:event_slug>/manage/upload_expenses/edit/0",
+        "<slug:event_slug>/manage/upload_expenses/new",
         views_oa.orga_expenses_my_new,
         name="orga_expenses_my_new",
     ),
@@ -723,6 +859,11 @@ urlpatterns = [
         name="orga_workshop_modules",
     ),
     path(
+        "<slug:event_slug>/manage/workshops/modules/new/",
+        views_oms.orga_workshop_modules_new,
+        name="orga_workshop_modules_new",
+    ),
+    path(
         "<slug:event_slug>/manage/workshops/modules/edit/<slug:module_uuid>/",
         views_oms.orga_workshop_modules_edit,
         name="orga_workshop_modules_edit",
@@ -731,6 +872,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/workshops/questions/",
         views_oms.orga_workshop_questions,
         name="orga_workshop_questions",
+    ),
+    path(
+        "<slug:event_slug>/manage/workshops/questions/new/",
+        views_oms.orga_workshop_questions_new,
+        name="orga_workshop_questions_new",
     ),
     path(
         "<slug:event_slug>/manage/workshops/questions/edit/<slug:question_uuid>/",
@@ -743,6 +889,11 @@ urlpatterns = [
         name="orga_workshop_options",
     ),
     path(
+        "<slug:event_slug>/manage/workshops/options/new/",
+        views_oms.orga_workshop_options_new,
+        name="orga_workshop_options_new",
+    ),
+    path(
         "<slug:event_slug>/manage/workshops/options/edit/<slug:option_uuid>/",
         views_oms.orga_workshop_options_edit,
         name="orga_workshop_options_edit",
@@ -753,6 +904,11 @@ urlpatterns = [
         name="orga_problems",
     ),
     path(
+        "<slug:event_slug>/manage/problems/new/",
+        views_oms.orga_problems_new,
+        name="orga_problems_new",
+    ),
+    path(
         "<slug:event_slug>/manage/problems/edit/<slug:problem_uuid>/",
         views_oms.orga_problems_edit,
         name="orga_problems_edit",
@@ -761,6 +917,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/progress_steps/",
         views_ow.orga_progress_steps,
         name="orga_progress_steps",
+    ),
+    path(
+        "<slug:event_slug>/manage/progress_steps/new/",
+        views_ow.orga_progress_steps_new,
+        name="orga_progress_steps_new",
     ),
     path(
         "<slug:event_slug>/manage/progress_steps/edit/<slug:step_uuid>/",
@@ -778,6 +939,11 @@ urlpatterns = [
         name="orga_px_deliveries",
     ),
     path(
+        "<slug:event_slug>/manage/px/deliveries/new/",
+        views_ox.orga_px_deliveries_new,
+        name="orga_px_deliveries_new",
+    ),
+    path(
         "<slug:event_slug>/manage/px/deliveries/edit/<slug:delivery_uuid>/",
         views_ox.orga_px_deliveries_edit,
         name="orga_px_deliveries_edit",
@@ -786,6 +952,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/px/abilities/",
         views_ox.orga_px_abilities,
         name="orga_px_abilities",
+    ),
+    path(
+        "<slug:event_slug>/manage/px/abilities/new/",
+        views_ox.orga_px_abilities_new,
+        name="orga_px_abilities_new",
     ),
     path(
         "<slug:event_slug>/manage/px/abilities/edit/<slug:ability_uuid>/",
@@ -798,6 +969,11 @@ urlpatterns = [
         name="orga_px_ability_types",
     ),
     path(
+        "<slug:event_slug>/manage/px/ability_types/new/",
+        views_ox.orga_px_ability_types_new,
+        name="orga_px_ability_types_new",
+    ),
+    path(
         "<slug:event_slug>/manage/px/ability_types/edit/<slug:type_uuid>/",
         views_ox.orga_px_ability_types_edit,
         name="orga_px_ability_types_edit",
@@ -808,6 +984,11 @@ urlpatterns = [
         name="orga_px_ability_templates",
     ),
     path(
+        "<slug:event_slug>/manage/px/ability_templates/new/",
+        views_ox.orga_px_ability_templates_new,
+        name="orga_px_ability_templates_new",
+    ),
+    path(
         "<slug:event_slug>/manage/px/ability_templates/edit/<slug:template_uuid>/",
         views_ox.orga_px_ability_templates_edit,
         name="orga_px_ability_templates_edit",
@@ -816,6 +997,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/px/rules/",
         views_ox.orga_px_rules,
         name="orga_px_rules",
+    ),
+    path(
+        "<slug:event_slug>/manage/px/rules/new/",
+        views_ox.orga_px_rules_new,
+        name="orga_px_rules_new",
     ),
     path(
         "<slug:event_slug>/manage/px/rules/edit/<slug:rule_uuid>/",
@@ -831,6 +1017,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/ci/inventory/",
         views_ci.orga_ci_inventory,
         name="orga_ci_inventory",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/inventory/new/",
+        views_ci.orga_ci_inventory_new,
+        name="orga_ci_inventory_new",
     ),
     path(
         "<slug:event_slug>/manage/ci/inventory/edit/<slug:inventory_uuid>/",
@@ -853,6 +1044,11 @@ urlpatterns = [
         name="orga_ci_pool_types",
     ),
     path(
+        "<slug:event_slug>/manage/ci/pool_types/new/",
+        views_ci.orga_ci_pool_types_new,
+        name="orga_ci_pool_types_new",
+    ),
+    path(
         "<slug:event_slug>/manage/ci/pool_types/edit/<slug:pool_uuid>/",
         views_ci.orga_ci_pool_types_edit,
         name="orga_ci_pool_types_edit",
@@ -861,6 +1057,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/px/modifiers/",
         views_ox.orga_px_modifiers,
         name="orga_px_modifiers",
+    ),
+    path(
+        "<slug:event_slug>/manage/px/modifiers/new/",
+        views_ox.orga_px_modifiers_new,
+        name="orga_px_modifiers_new",
     ),
     path(
         "<slug:event_slug>/manage/px/modifiers/edit/<slug:modifier_uuid>/",
@@ -913,6 +1114,11 @@ urlpatterns = [
         name="orga_expenses",
     ),
     path(
+        "<slug:event_slug>/manage/expenses/new/",
+        views_oa.orga_expenses_new,
+        name="orga_expenses_new",
+    ),
+    path(
         "<slug:event_slug>/manage/expenses/edit/<slug:expense_uuid>/",
         views_oa.orga_expenses_edit,
         name="orga_expenses_edit",
@@ -928,6 +1134,11 @@ urlpatterns = [
         name="orga_payments",
     ),
     path(
+        "<slug:event_slug>/manage/payments/new/",
+        views_oa.orga_payments_new,
+        name="orga_payments_new",
+    ),
+    path(
         "<slug:event_slug>/manage/payments/edit/<slug:payment_uuid>/",
         views_oa.orga_payments_edit,
         name="orga_payments_edit",
@@ -936,6 +1147,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/credits/",
         views_oa.orga_credits,
         name="orga_credits",
+    ),
+    path(
+        "<slug:event_slug>/manage/credits/new/",
+        views_oa.orga_credits_new,
+        name="orga_credits_new",
     ),
     path(
         "<slug:event_slug>/manage/credits/edit/<slug:credit_uuid>/",
@@ -948,6 +1164,11 @@ urlpatterns = [
         name="orga_tokens",
     ),
     path(
+        "<slug:event_slug>/manage/tokens/new/",
+        views_oa.orga_tokens_new,
+        name="orga_tokens_new",
+    ),
+    path(
         "<slug:event_slug>/manage/tokens/edit/<slug:token_uuid>/",
         views_oa.orga_tokens_edit,
         name="orga_tokens_edit",
@@ -958,6 +1179,11 @@ urlpatterns = [
         name="orga_outflows",
     ),
     path(
+        "<slug:event_slug>/manage/outflows/new/",
+        views_oa.orga_outflows_new,
+        name="orga_outflows_new",
+    ),
+    path(
         "<slug:event_slug>/manage/outflows/edit/<slug:outflow_uuid>/",
         views_oa.orga_outflows_edit,
         name="orga_outflows_edit",
@@ -966,6 +1192,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/inflows/",
         views_oa.orga_inflows,
         name="orga_inflows",
+    ),
+    path(
+        "<slug:event_slug>/manage/inflows/new/",
+        views_oa.orga_inflows_new,
+        name="orga_inflows_new",
     ),
     path(
         "<slug:event_slug>/manage/inflows/edit/<slug:inflow_uuid>/",
@@ -1018,6 +1249,11 @@ urlpatterns = [
         name="orga_texts",
     ),
     path(
+        "<slug:event_slug>/manage/texts/new/",
+        views_oe.orga_texts_new,
+        name="orga_texts_new",
+    ),
+    path(
         "<slug:event_slug>/manage/texts/edit/<slug:text_uuid>/",
         views_oe.orga_texts_edit,
         name="orga_texts_edit",
@@ -1026,6 +1262,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/buttons/",
         views_oe.orga_buttons,
         name="orga_buttons",
+    ),
+    path(
+        "<slug:event_slug>/manage/buttons/new/",
+        views_oe.orga_buttons_new,
+        name="orga_buttons_new",
     ),
     path(
         "<slug:event_slug>/manage/buttons/edit/<slug:button_uuid>/",
@@ -1043,7 +1284,7 @@ urlpatterns = [
         name="orga_roles",
     ),
     path(
-        "<slug:event_slug>/manage/roles/edit/<slug:role_uuid>",
+        "<slug:event_slug>/manage/roles/edit/<slug:role_uuid>/",
         views_oe.orga_roles_edit,
         name="orga_roles_edit",
     ),
@@ -1123,7 +1364,7 @@ urlpatterns = [
         name="orga_factions_available",
     ),
     path(
-        "<slug:event_slug>/manage/export/<slug:export_name>",
+        "<slug:event_slug>/manage/export/<slug:export_name>/",
         views_ow.orga_export,
         name="orga_export",
     ),
@@ -1141,6 +1382,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/warehouse/area/",
         views_oms.orga_warehouse_area,
         name="orga_warehouse_area",
+    ),
+    path(
+        "<slug:event_slug>/manage/warehouse/area/new/",
+        views_oms.orga_warehouse_area_new,
+        name="orga_warehouse_area_new",
     ),
     path(
         "<slug:event_slug>/manage/warehouse/area/edit/<slug:area_uuid>/",
@@ -1173,6 +1419,11 @@ urlpatterns = [
         name="orga_warehouse_assignment_area",
     ),
     path(
+        "<slug:event_slug>/manage/warehouse/assignment/new/",
+        views_oms.orga_warehouse_assignment_item_new,
+        name="orga_warehouse_assignment_item_new",
+    ),
+    path(
         "<slug:event_slug>/manage/warehouse/assignment/edit/<slug:assignment_uuid>/",
         views_oms.orga_warehouse_assignment_item_edit,
         name="orga_warehouse_assignment_item_edit",
@@ -1193,7 +1444,7 @@ urlpatterns = [
         name="orga_redirect",
     ),
     path(
-        "<slug:event_slug>/<int:run_number>/<path:path>",
+        "<slug:event_slug>/<int:run_number>/<path:path>/",
         views_mg.orga_redirect,
         name="orga_redirect",
     ),

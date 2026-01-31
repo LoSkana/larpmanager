@@ -79,6 +79,12 @@ def orga_albums(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_albums_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new album for an event."""
+    return orga_edit(request, event_slug, "orga_albums", OrgaAlbumForm, None)
+
+
+@login_required
 def orga_albums_edit(request: HttpRequest, event_slug: str, album_uuid: str) -> HttpResponse:
     """Edit album for an event."""
     return orga_edit(request, event_slug, "orga_albums", OrgaAlbumForm, album_uuid)
@@ -134,6 +140,12 @@ def orga_utils(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_utils")
     context["list"] = Util.objects.filter(event=context["event"]).order_by("number")
     return render(request, "larpmanager/orga/utils.html", context)
+
+
+@login_required
+def orga_utils_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new utility item for event."""
+    return orga_edit(request, event_slug, "orga_utils", UtilForm, None)
 
 
 @login_required
@@ -221,6 +233,12 @@ def orga_workshop_modules(request: HttpRequest, event_slug: str) -> HttpResponse
 
 
 @login_required
+def orga_workshop_modules_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new workshop module for an event."""
+    return orga_edit(request, event_slug, "orga_workshop_modules", WorkshopModuleForm, None)
+
+
+@login_required
 def orga_workshop_modules_edit(request: HttpRequest, event_slug: str, module_uuid: str) -> HttpResponse:
     """Edit a workshop module for an event."""
     return orga_edit(request, event_slug, "orga_workshop_modules", WorkshopModuleForm, module_uuid)
@@ -243,6 +261,12 @@ def orga_workshop_questions(request: HttpRequest, event_slug: str) -> HttpRespon
     )
 
     return render(request, "larpmanager/orga/workshop/questions.html", context)
+
+
+@login_required
+def orga_workshop_questions_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new workshop question."""
+    return orga_edit(request, event_slug, "orga_workshop_questions", WorkshopQuestionForm, None)
 
 
 @login_required
@@ -282,6 +306,12 @@ def orga_workshop_options(request: HttpRequest, event_slug: str) -> HttpResponse
 
 
 @login_required
+def orga_workshop_options_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new workshop option for an event."""
+    return orga_edit(request, event_slug, "orga_workshop_options", WorkshopOptionForm, None)
+
+
+@login_required
 def orga_workshop_options_edit(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
     """Edit workshop option for an event."""
     return orga_edit(request, event_slug, "orga_workshop_options", WorkshopOptionForm, option_uuid)
@@ -300,6 +330,12 @@ def orga_problems(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_problems_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new problem."""
+    return orga_edit(request, event_slug, "orga_problems", OrgaProblemForm, None)
+
+
+@login_required
 def orga_problems_edit(request: HttpRequest, event_slug: str, problem_uuid: str) -> HttpResponse:
     """Delegate to generic edit view for problem editing."""
     return orga_edit(request, event_slug, "orga_problems", OrgaProblemForm, problem_uuid)
@@ -315,6 +351,12 @@ def orga_warehouse_area(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["list"] = context["event"].get_elements(WarehouseArea)
 
     return render(request, "larpmanager/orga/warehouse/area.html", context)
+
+
+@login_required
+def orga_warehouse_area_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new warehouse area for an event."""
+    return orga_edit(request, event_slug, "orga_warehouse_area", OrgaWarehouseAreaForm, None)
 
 
 @login_required
@@ -504,6 +546,12 @@ def orga_warehouse_manifest(request: HttpRequest, event_slug: str) -> HttpRespon
 
 
 @login_required
+def orga_warehouse_assignment_item_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new warehouse item assignment."""
+    return orga_edit(request, event_slug, "orga_warehouse_manifest", OrgaWarehouseItemAssignmentForm, None)
+
+
+@login_required
 def orga_warehouse_assignment_item_edit(request: HttpRequest, event_slug: str, assignment_uuid: str) -> HttpResponse:
     """Edit warehouse item assignment."""
     return orga_edit(request, event_slug, "orga_warehouse_manifest", OrgaWarehouseItemAssignmentForm, assignment_uuid)
@@ -617,6 +665,12 @@ def orga_onetimes(request: HttpRequest, event_slug: str) -> Any:
 
 
 @login_required
+def orga_onetimes_new(request: HttpRequest, event_slug: str) -> Any:
+    """Create a new one-time content."""
+    return orga_edit(request, event_slug, "orga_onetimes", OneTimeContentForm, None)
+
+
+@login_required
 def orga_onetimes_edit(request: HttpRequest, event_slug: str, onetime_uuid: str) -> Any:
     """Edit or create a one-time content."""
     return orga_edit(request, event_slug, "orga_onetimes", OneTimeContentForm, onetime_uuid)
@@ -641,6 +695,12 @@ def orga_onetimes_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["list"] = OneTimeAccessToken.objects.filter(content__event=context["event"]).order_by("-created")
 
     return render(request, "larpmanager/orga/onetimes_tokens.html", context)
+
+
+@login_required
+def orga_onetimes_tokens_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new one-time access token."""
+    return orga_edit(request, event_slug, "orga_onetimes_tokens", OneTimeAccessTokenForm, None)
 
 
 @login_required

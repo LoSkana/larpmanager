@@ -158,6 +158,21 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_characters_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Edit character information in organization context."""
+    # Check user permissions for character organization features
+    context = check_event_context(request, event_slug, "orga_characters")
+
+    # Load full event cache only when specific features require relationship data
+    # This optimization avoids expensive cache operations for basic character editing
+    if "relationships" in context["features"] or "character_finder" in context.get("features", []):
+        get_event_cache_all(context)
+
+    # Delegate to writing edit system with character-specific form and version type
+    return writing_edit(request, context, OrgaCharacterForm, None, TextVersionChoices.CHARACTER)
+
+
+@login_required
 def orga_characters_edit(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Edit character information in organization context.
 
@@ -173,21 +188,18 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, character_uuid: 
     # Check user permissions for character organization features
     context = check_event_context(request, event_slug, "orga_characters")
 
-    # Load full event cache only when specific features require relationship data
-    # This optimization avoids expensive cache operations for basic character editing
+    # Load full event cache for relationships finding
     if "relationships" in context["features"] or "character_finder" in context.get("features", []):
         get_event_cache_all(context)
 
-    # Load specific character data when editing existing character (num != 0)
-    # Skip character loading for new character creation
-    if character_uuid != "0":
-        get_character_optimized(context, character_uuid)
+    # Load specific character data when editing existing character
+    get_character_optimized(context, character_uuid)
 
     # Process character relationships for display and validation
     _characters_relationships(context)
 
     # Delegate to writing edit system with character-specific form and version type
-    return writing_edit(request, context, OrgaCharacterForm, "character", TextVersionChoices.CHARACTER)
+    return writing_edit(request, context, OrgaCharacterForm, character_uuid, TextVersionChoices.CHARACTER)
 
 
 def _characters_relationships(context: dict) -> None:
@@ -638,6 +650,49 @@ def orga_writing_form(request: HttpRequest, event_slug: str, writing_type: str) 
 
 
 @login_required
+def orga_writing_form_new(request: HttpRequest, event_slug: str, writing_type: str) -> HttpResponse:
+    """Edit writing form questions with validation and option handling.
+
+    Handles the editing of writing form questions for LARP events, including
+    validation of question types and automatic redirection to option editing
+    for single/multiple choice questions.
+
+    Args:
+        request: The HTTP request object containing form data and user info
+        event_slug: Event slug identifier for the current event
+        writing_type: Writing form type identifier (e.g., 'character', 'background')
+
+    Returns:
+        HttpResponse: Either a rendered form edit template or a redirect to
+            options editing or form list depending on form submission result
+
+    Raises:
+        PermissionDenied: If user lacks 'orga_character_form' permission
+        Http404: If writing form type is invalid for the event
+
+    """
+    # Check user permissions for editing character forms
+    perm = "orga_character_form"
+    context = check_event_context(request, event_slug, perm)
+
+    # Validate the writing form type exists for this event
+    check_writing_form_type(context, writing_type)
+
+    return form_edit_handler(
+        request,
+        context,
+        None,
+        perm,
+        WritingOption,
+        OrgaWritingQuestionForm,
+        "orga_writing_form_edit",
+        "orga_writing_form",
+        "larpmanager/orga/characters/form_edit.html",
+        extra_redirect_kwargs={"writing_type": writing_type},
+    )
+
+
+@login_required
 def orga_writing_form_edit(
     request: HttpRequest, event_slug: str, writing_type: str, question_uuid: str
 ) -> HttpResponse:
@@ -718,6 +773,37 @@ def orga_writing_form_order(
 
 
 @login_required
+def orga_writing_options_new(request: HttpRequest, event_slug: str, writing_type: str) -> HttpResponse:
+    """Edit writing form option for event organizers.
+
+    Args:
+        request: The HTTP request object
+        event_slug: Event slug identifier
+        writing_type: Writing form type (background, origin, etc.)
+
+    Returns:
+        HTTP response with the option edit form, redirect, or JsonResponse for AJAX
+
+    """
+    # Verify user has character form permissions and get event context
+    context = check_event_context(request, event_slug, "orga_character_form")
+    context["frame"] = 1
+
+    # Validate the writing form type exists and is allowed
+    check_writing_form_type(context, writing_type)
+
+    return options_edit_handler(
+        request,
+        context,
+        None,
+        WritingQuestion,
+        WritingOption,
+        OrgaWritingOptionForm,
+        extra_context={"typ": writing_type},
+    )
+
+
+@login_required
 def orga_writing_options_edit(
     request: HttpRequest, event_slug: str, writing_type: str, option_uuid: str
 ) -> HttpResponse:
@@ -778,7 +864,7 @@ def orga_writing_options_list(
 
     context["typ"] = writing_type
 
-    if question_uuid and question_uuid != "0":
+    if question_uuid:
         # Get the question
         get_element(context, question_uuid, "el", WritingQuestion)
 

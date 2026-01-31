@@ -248,7 +248,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
 
     # Redirect to event creation if no events exist and feature is available
     if context.get("onboarding") and "exe_events" in features:
-        return redirect("exe_events_edit", event_uuid="0")
+        return redirect("exe_events_new")
 
     # Check if currency configuration suggestion has been dismissed
     _check_currency_priority(request, context, features)

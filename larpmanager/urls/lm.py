@@ -94,7 +94,7 @@ urlpatterns = [
         name="lm_payments",
     ),
     path(
-        "lm/payments/<str:run_uuid>",
+        "lm/payments/<str:run_uuid>/",
         views_lm.lm_payments_confirm,
         name="lm_payments_confirm",
     ),
@@ -114,12 +114,12 @@ urlpatterns = [
         name="lm_reset",
     ),
     path(
-        "redirect/<path:path>",
+        "redirect/<path:path>/",
         views_lm.redr,
         name="redr",
     ),
     path(
-        "activate/<slug:feature_slug>/next/<path:path>",
+        "activate/<slug:feature_slug>/next/<path:path>/",
         views_lm.activate_feature_association,
         name="activate_feature_assoc",
     ),
@@ -129,7 +129,7 @@ urlpatterns = [
         name="activate_feature_assoc",
     ),
     path(
-        "<slug:event_slug>/activate/<slug:feature_slug>/next/<path:path>",
+        "<slug:event_slug>/activate/<slug:feature_slug>/next/<path:path>/",
         views_lm.activate_feature_event,
         name="activate_feature_event",
     ),

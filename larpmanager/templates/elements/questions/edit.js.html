@@ -122,7 +122,7 @@ window.addEventListener('DOMContentLoaded', function() {
     function openOptionModal(optionUuid, questionUuid) {
         let editUrl = buildOptionsEditUrl(optionUuid);
 
-        if (optionUuid === '0') {
+        if (!optionUuid) {
             editUrl += `?question_uuid=${questionUuid}&frame=1`;
         } else {
             editUrl += '?frame=1';
@@ -172,7 +172,7 @@ window.addEventListener('DOMContentLoaded', function() {
             onSuccess: function(response) {
                 if (response.success && response.question_uuid) {
                     // Update URL with new question UUID
-                    const newUrl = window.location.pathname.replace('/edit/0', '/edit/' + response.question_uuid);
+                    const newUrl = window.location.pathname.replace('/new/', '/edit/' + response.question_uuid + '/');
                     window.history.replaceState({}, '', newUrl);
 
                     // Update form action to new UUID path
@@ -262,12 +262,12 @@ window.addEventListener('DOMContentLoaded', function() {
         const questionUuid = getQuestionUuidFromUrl();
 
         // If question hasn't been saved yet, save it first
-        if (questionUuid === "0") {
+        if (!questionUuid) {
             saveQuestionBeforeAddingOption(function(savedQuestionUuid) {
-                openOptionModal('0', savedQuestionUuid);
+                openOptionModal('', savedQuestionUuid);
             });
         } else {
-            openOptionModal('0', questionUuid);
+            openOptionModal('', questionUuid);
         }
 
         return false;
@@ -303,7 +303,7 @@ window.addEventListener('DOMContentLoaded', function() {
             const currentQuestionUuid = getQuestionUuidFromUrl();
 
             // If question hasn't been saved yet, save it first
-            if (currentQuestionUuid === "0") {
+            if (!currentQuestionUuid) {
                 saveQuestionBeforeAddingOption(function(savedQuestionUuid) {
                     openOptionModal(e.data.optionUuid, savedQuestionUuid);
                 });

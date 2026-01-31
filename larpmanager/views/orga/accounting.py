@@ -67,6 +67,12 @@ def orga_discounts(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_discounts_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new discount for event."""
+    return orga_edit(request, event_slug, "orga_discounts", OrgaDiscountForm, None)
+
+
+@login_required
 def orga_discounts_edit(request: HttpRequest, event_slug: str, discount_uuid: str) -> HttpResponse:
     """Edit discount for event."""
     return orga_edit(request, event_slug, "orga_discounts", OrgaDiscountForm, discount_uuid)
@@ -290,6 +296,12 @@ def orga_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_tokens_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new organization token for a specific event."""
+    return orga_edit(request, event_slug, "orga_tokens", OrgaTokenForm, None)
+
+
+@login_required
 def orga_tokens_edit(request: HttpRequest, event_slug: str, token_uuid: str) -> HttpResponse:
     """Edit an organization token for a specific event."""
     return orga_edit(request, event_slug, "orga_tokens", OrgaTokenForm, token_uuid)
@@ -334,6 +346,12 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
         "larpmanager/orga/accounting/credits.html",
         "orga_credits_edit",
     )
+
+
+@login_required
+def orga_credits_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create new organization credits."""
+    return orga_edit(request, event_slug, "orga_credits", OrgaCreditForm, None)
 
 
 @login_required
@@ -405,6 +423,12 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_payments_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new payment for an event."""
+    return orga_edit(request, event_slug, "orga_payments", OrgaPaymentForm, None)
+
+
+@login_required
 def orga_payments_edit(request: HttpRequest, event_slug: str, payment_uuid: str) -> HttpResponse:
     """Edit an existing payment for an event."""
     return orga_edit(request, event_slug, "orga_payments", OrgaPaymentForm, payment_uuid)
@@ -463,6 +487,12 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_outflows_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new outflow entry for an event."""
+    return orga_edit(request, event_slug, "orga_outflows", OrgaOutflowForm, None)
+
+
+@login_required
 def orga_outflows_edit(request: HttpRequest, event_slug: str, outflow_uuid: str) -> HttpResponse:
     """Edit an outflow entry for an event."""
     return orga_edit(request, event_slug, "orga_outflows", OrgaOutflowForm, outflow_uuid)
@@ -514,6 +544,12 @@ def orga_inflows(request: HttpRequest, event_slug: str) -> HttpResponse:
         "larpmanager/orga/accounting/inflows.html",
         "orga_inflows_edit",
     )
+
+
+@login_required
+def orga_inflows_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new inflow entry for an event."""
+    return orga_edit(request, event_slug, "orga_inflows", OrgaInflowForm, None)
 
 
 @login_required
@@ -588,6 +624,12 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
         "larpmanager/orga/accounting/expenses.html",
         "orga_expenses_edit",
     )
+
+
+@login_required
+def orga_expenses_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new expense for an event."""
+    return orga_edit(request, event_slug, "orga_expenses", OrgaExpenseForm, None)
 
 
 @login_required

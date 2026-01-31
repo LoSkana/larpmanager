@@ -292,8 +292,14 @@ def orga_texts(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_texts_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create an organization event text entry."""
+    return orga_edit(request, event_slug, "orga_texts", OrgaEventTextForm)
+
+
+@login_required
 def orga_texts_edit(request: HttpRequest, event_slug: str, text_uuid: str) -> HttpResponse:
-    """Edit organization event text entry."""
+    """Edit an organization event text entry."""
     return orga_edit(request, event_slug, "orga_texts", OrgaEventTextForm, text_uuid)
 
 
@@ -303,6 +309,12 @@ def orga_buttons(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_buttons")
     context["list"] = EventButton.objects.filter(event_id=context["event"].id).order_by("number")
     return render(request, "larpmanager/orga/buttons.html", context)
+
+
+@login_required
+def orga_buttons_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a specific button configuration for an event."""
+    return orga_edit(request, event_slug, "orga_buttons", OrgaEventButtonForm)
 
 
 @login_required

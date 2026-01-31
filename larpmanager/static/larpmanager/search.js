@@ -465,7 +465,7 @@ function search(key) {
                     if (fac.number == 0) continue;      // Skip faction 0
                     if (fac.typ == 'g') continue;       // Skip groups
                     if (j != 0) gr += ", ";
-                    gr += '<a href="{0}">{1}</a></h3>'.format(faction_url.replace("/0", "/" + fac.uuid), escapeHtml(fac.name));
+                    gr += '<a href="{0}">{1}</a></h3>'.format(faction_url.replace("/new", "/" + fac.uuid), escapeHtml(fac.name));
                 }
 
                 if (gr) characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(gr, window['texts']['factions']);

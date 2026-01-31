@@ -1068,34 +1068,35 @@ def character_relationships(request: HttpRequest, event_slug: str, character_uui
     return render(request, "larpmanager/event/character/relationships.html", context)
 
 
-@login_required
-def character_relationships_edit(
-    request: HttpRequest, event_slug: str, character_uuid: str, other_character_uuid: str
+def _character_relationship(
+    request: HttpRequest, event_slug: str, character_uuid: str, other_character_uuid: str | None = None
 ) -> HttpResponse:
-    """Handle editing of character relationship with another character.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug
-        character_uuid: Character UUID
-        other_character_uuid: Other character UUID
-
-    Returns:
-        HttpResponse: Relationship edit form or redirect
-
-    """
+    """Handle creation / editing of character relationship."""
     context = get_event_context(request, event_slug, include_status=True, signup=True)
     get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     context["relationship"] = None
-    if other_character_uuid != "0":
+    if other_character_uuid:
         get_player_relationship(context, other_character_uuid)
-
     if user_edit(request, context, PlayerRelationshipForm, "relationship", other_character_uuid):
         return redirect(
             "character_relationships", event_slug=context["run"].get_slug(), character_uuid=context["char"]["uuid"]
         )
     return render(request, "larpmanager/orga/edit.html", context)
+
+
+@login_required
+def character_relationships_new(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
+    """Handle creation of character relationship with another character."""
+    return _character_relationship(request, event_slug, character_uuid)
+
+
+@login_required
+def character_relationships_edit(
+    request: HttpRequest, event_slug: str, character_uuid: str, other_character_uuid: str
+) -> HttpResponse:
+    """Handle editing of character relationship with another character."""
+    return _character_relationship(request, event_slug, character_uuid, other_character_uuid)
 
 
 @require_POST

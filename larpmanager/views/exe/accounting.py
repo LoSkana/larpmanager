@@ -137,23 +137,14 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+def exe_outflows_new(request: HttpRequest) -> HttpResponse:
+    """Create a new accounting outflow record."""
+    return exe_edit(request, ExeOutflowForm, None, "exe_outflows")
+
+
+@login_required
 def exe_outflows_edit(request: HttpRequest, outflow_uuid: str) -> HttpResponse:
-    """Edit accounting outflow record.
-
-    Args:
-        request: Django HTTP request object containing user authentication
-                and form data for editing the outflow record
-        outflow_uuid: UUID of the outflow record to edit
-
-    Returns:
-        HttpResponse: Rendered edit form on GET request or redirect
-                     to outflows list on successful POST save
-
-    Raises:
-        Http404: If outflow record with given ID does not exist
-        PermissionDenied: If user lacks permission to edit outflows
-
-    """
+    """Edit accounting outflow record."""
     # Delegate to generic edit handler with outflow-specific form and redirect
     return exe_edit(request, ExeOutflowForm, outflow_uuid, "exe_outflows")
 
@@ -209,6 +200,12 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+def exe_inflows_new(request: HttpRequest) -> HttpResponse:
+    """Create a new inflow entry for the association."""
+    return exe_edit(request, ExeInflowForm, None, "exe_inflows")
+
+
+@login_required
 def exe_inflows_edit(request: HttpRequest, inflow_uuid: str) -> HttpResponse:
     """Edit an inflow entry for the association."""
     return exe_edit(request, ExeInflowForm, inflow_uuid, "exe_inflows")
@@ -258,6 +255,12 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
         "larpmanager/exe/accounting/donations.html",
         "exe_donations_edit",
     )
+
+
+@login_required
+def exe_donations_new(request: HttpRequest) -> HttpResponse:
+    """Create a new organization-wide donation entry."""
+    return exe_edit(request, ExeDonationForm, None, "exe_donations")
 
 
 @login_required
@@ -311,6 +314,12 @@ def exe_credits(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+def exe_credits_new(request: HttpRequest) -> HttpResponse:
+    """Create a new credit entry."""
+    return exe_edit(request, ExeCreditForm, None, "exe_credits")
+
+
+@login_required
 def exe_credits_edit(request: HttpRequest, credit_uuid: str) -> HttpResponse:
     """Simple edit view wrapper for credit management."""
     return exe_edit(request, ExeCreditForm, credit_uuid, "exe_credits")
@@ -361,6 +370,12 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
         "larpmanager/exe/accounting/tokens.html",
         "exe_tokens_edit",
     )
+
+
+@login_required
+def exe_tokens_new(request: HttpRequest) -> HttpResponse:
+    """Create a new registration token."""
+    return exe_edit(request, ExeTokenForm, None, "exe_tokens")
 
 
 @login_required
@@ -425,6 +440,12 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
         "larpmanager/exe/accounting/expenses.html",
         "exe_expenses_edit",
     )
+
+
+@login_required
+def exe_expenses_new(request: HttpRequest) -> HttpResponse:
+    """Create a new expense for an association."""
+    return exe_edit(request, ExeExpenseForm, None, "exe_expenses")
 
 
 @login_required
@@ -520,6 +541,12 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+def exe_payments_new(request: HttpRequest) -> HttpResponse:
+    """Create a new organization-wide payment method."""
+    return exe_edit(request, ExePaymentForm, None, "exe_payments")
+
+
+@login_required
 def exe_payments_edit(request: HttpRequest, payment_uuid: str) -> HttpResponse:
     """Edit organization-wide payment method."""
     return exe_edit(request, ExePaymentForm, payment_uuid, "exe_payments")
@@ -590,6 +617,12 @@ def exe_invoices(request: HttpRequest) -> HttpResponse:
         "larpmanager/exe/accounting/invoices.html",
         "exe_invoices_edit",
     )
+
+
+@login_required
+def exe_invoices_new(request: HttpRequest) -> HttpResponse:
+    """Create a new invoice."""
+    return exe_edit(request, ExeInvoiceForm, None, "exe_invoices")
 
 
 @login_required
@@ -707,6 +740,12 @@ def exe_refunds(request: HttpRequest) -> HttpResponse:
 
     # Return paginated refund requests with template context
     return exe_paginate(request, context, RefundRequest, "larpmanager/exe/accounting/refunds.html", "exe_refunds_edit")
+
+
+@login_required
+def exe_refunds_new(request: HttpRequest) -> HttpResponse:
+    """Create a new refund request."""
+    return exe_edit(request, ExeRefundRequestForm, None, "exe_refunds")
 
 
 @login_required

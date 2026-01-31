@@ -5,7 +5,7 @@
 {% if edit_uuid %}
 var edit_uuid = '{{ edit_uuid }}';
 {% else %}
-var edit_uuid = "0";
+var edit_uuid = "";
 {% endif %}
 var type = '{{ type }}';
 
@@ -14,7 +14,7 @@ var post_url = '{{ request.path }}';
 
 function submitForm(auto) {
     return new Promise(function(resolve, reject) {
-        if (edit_uuid == "0") {
+        if (!edit_uuid) {
             $.toast({
                 text: 'Not available for new elements',
                 showHideTransition: 'slide',
@@ -32,7 +32,7 @@ function submitForm(auto) {
         }
 
         var formData = $('form').serialize() + "&ajax=1";
-        if (edit_uuid && edit_uuid != "0") {
+        if (edit_uuid) {
             formData += "&edit_uuid=" + edit_uuid + "&type=" + type + "&token=" + token;
         }
 
@@ -123,7 +123,7 @@ function setUpAutoSave(key) {
 
 window.addEventListener('DOMContentLoaded', function() {
     {% if auto_save %}
-    if (edit_uuid && edit_uuid != "0") {
+    if (edit_uuid) {
         $(function() {
             submitForm(true);
         });
