@@ -3926,6 +3926,9 @@ msgstr "Czy chcesz kontynuować"
 msgid "Download relationships"
 msgstr "Pobieranie relacji"
 
+msgid "Event deletion request"
+msgstr "Żądanie usunięcia zdarzenia"
+
 msgid "Expenses collaborators"
 msgstr "Współpracownicy ds. wydatków"
 
@@ -4643,6 +4646,9 @@ msgstr "Jedyną obowiązkową kolumną jest"
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Cecha przypisana do %(event)s"
+
+msgid "Your request has been logged"
+msgstr "Twoje żądanie zostało zarejestrowane"
 
 msgid "payment pending confirmation"
 msgstr "płatność oczekuje na potwierdzenie"
@@ -5544,6 +5550,9 @@ msgstr "Zamierzasz dokonać darowizny"
 
 msgid "click on the icon to open the tutorial"
 msgstr "Kliknij ikonę, aby otworzyć samouczek"
+
+msgid "we'll let you know as soon as possible"
+msgstr "Poinformujemy cię tak szybko, jak to możliwe"
 
 msgid "Character are not visible at the moment"
 msgstr "Postacie nie są obecnie widoczne"
@@ -7985,6 +7994,12 @@ msgid ""
 "You will not be able to use this link again after accessing the content"
 msgstr ""
 "Po uzyskaniu dostępu do treści nie będzie można ponownie użyć tego łącza"
+
+msgid ""
+"due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+"ze względu na delikatność żądanego zadania, nasz zespół przeanalizuje je "
+"ręcznie"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"

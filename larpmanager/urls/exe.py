@@ -440,6 +440,11 @@ urlpatterns = [
         name="exe_events_edit",
     ),
     path(
+        "manage/events/delete/<slug:run_uuid>/",
+        views_ee.exe_events_delete,
+        name="exe_events_delete",
+    ),
+    path(
         "manage/template/",
         views_ee.exe_templates,
         name="exe_templates",

@@ -3926,6 +3926,9 @@ msgstr "Wil je doorgaan"
 msgid "Download relationships"
 msgstr "Relaties downloaden"
 
+msgid "Event deletion request"
+msgstr "Verzoek om verwijdering van gebeurtenissen"
+
 msgid "Expenses collaborators"
 msgstr "Personeelskosten"
 
@@ -4643,6 +4646,9 @@ msgstr "De enige verplichte kolom is"
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Toegewezen kenmerk voor %(event)s"
+
+msgid "Your request has been logged"
+msgstr "Uw verzoek is geregistreerd"
 
 msgid "payment pending confirmation"
 msgstr "betaling in afwachting van bevestiging"
@@ -5546,6 +5552,9 @@ msgstr "Je doet een donatie van"
 
 msgid "click on the icon to open the tutorial"
 msgstr "klik op het pictogram om de zelfstudie te openen"
+
+msgid "we'll let you know as soon as possible"
+msgstr "we laten het je zo snel mogelijk weten"
 
 msgid "Character are not visible at the moment"
 msgstr "Karakters zijn momenteel niet zichtbaar"
@@ -8034,6 +8043,12 @@ msgid ""
 msgstr ""
 "Je zult deze link niet meer kunnen gebruiken nadat je toegang hebt gekregen "
 "tot de inhoud"
+
+msgid ""
+"due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+"vanwege de complexiteit van de gevraagde taak zal ons team deze handmatig "
+"beoordelen"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"

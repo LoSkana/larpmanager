@@ -3926,6 +3926,9 @@ msgstr "Vuoi procedere"
 msgid "Download relationships"
 msgstr "Scarica le relazioni"
 
+msgid "Event deletion request"
+msgstr "Richiesta di cancellazione evento"
+
 msgid "Expenses collaborators"
 msgstr "Spese collaboratori"
 
@@ -4643,6 +4646,9 @@ msgstr "L'unica colonna obbligatoria è"
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Tratto assegnato per %(event)s"
+
+msgid "Your request has been logged"
+msgstr "La richiesta è stata registrata"
 
 msgid "payment pending confirmation"
 msgstr "pagamento in attesa di conferma"
@@ -5544,6 +5550,9 @@ msgstr "Stai per effettuare una donazione di"
 
 msgid "click on the icon to open the tutorial"
 msgstr "fare clic sull'icona per aprire l'esercitazione"
+
+msgid "we'll let you know as soon as possible"
+msgstr "ti faremo sapere il prima possibile"
 
 msgid "Character are not visible at the moment"
 msgstr "I personaggi non sono visibili al momento"
@@ -8057,6 +8066,12 @@ msgid ""
 "You will not be able to use this link again after accessing the content"
 msgstr ""
 "Non sarà più possibile utilizzare questo link dopo l'accesso al contenuto"
+
+msgid ""
+"due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+"a causa della delicatezza del compito richiesto, il nostro team lo esaminerà"
+" manualmente"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"

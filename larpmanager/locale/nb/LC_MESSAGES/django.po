@@ -3926,6 +3926,9 @@ msgstr "Vil du fortsette"
 msgid "Download relationships"
 msgstr "Last ned relasjoner"
 
+msgid "Event deletion request"
+msgstr "Forespørsel om sletting av hendelse"
+
 msgid "Expenses collaborators"
 msgstr "Utgifter til ansatte"
 
@@ -4643,6 +4646,9 @@ msgstr "Den eneste obligatoriske kolonnen er"
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Egenskap tildelt for %(event)s"
+
+msgid "Your request has been logged"
+msgstr "Forespørselen din har blitt loggført"
 
 msgid "payment pending confirmation"
 msgstr "betaling i påvente av bekreftelse"
@@ -5546,6 +5552,9 @@ msgstr "Du gir en donasjon på"
 
 msgid "click on the icon to open the tutorial"
 msgstr "klikk på ikonet for å åpne veiledningen"
+
+msgid "we'll let you know as soon as possible"
+msgstr "vi gir deg beskjed så snart som mulig"
 
 msgid "Character are not visible at the moment"
 msgstr "Tegnene er ikke synlige for øyeblikket"
@@ -7942,6 +7951,11 @@ msgid ""
 msgstr ""
 "Du vil ikke kunne bruke denne lenken igjen etter at du har fått tilgang til "
 "innholdet"
+
+msgid ""
+"due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+"på grunn av oppgavens delikatesse, vil teamet vårt gjennomgå den manuelt"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"

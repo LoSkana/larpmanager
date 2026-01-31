@@ -3926,6 +3926,9 @@ msgstr "Vill du fortsätta"
 msgid "Download relationships"
 msgstr "Ladda ner relationer"
 
+msgid "Event deletion request"
+msgstr "Begäran om radering av händelse"
+
 msgid "Expenses collaborators"
 msgstr "Kostnader för anställda"
 
@@ -4643,6 +4646,9 @@ msgstr "Den enda obligatoriska kolumnen är"
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Egenskap tilldelad för %(event)s"
+
+msgid "Your request has been logged"
+msgstr "Din förfrågan har loggats"
 
 msgid "payment pending confirmation"
 msgstr "bekräftelse på avvaktande betalning"
@@ -5546,6 +5552,9 @@ msgstr "Du gör en donation på"
 
 msgid "click on the icon to open the tutorial"
 msgstr "klicka på ikonen för att öppna handledningen"
+
+msgid "we'll let you know as soon as possible"
+msgstr "vi meddelar dig så snart som möjligt"
 
 msgid "Character are not visible at the moment"
 msgstr "Tecknen är inte synliga för tillfället"
@@ -7933,6 +7942,12 @@ msgid ""
 msgstr ""
 "Du kommer inte att kunna använda den här länken igen efter att du har fått "
 "tillgång till innehållet"
+
+msgid ""
+"due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+"på grund av den begärda uppgiftens känslighet kommer vårt team att granska "
+"den manuellt"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"

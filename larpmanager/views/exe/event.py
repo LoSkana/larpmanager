@@ -22,8 +22,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.utils.translation import gettext_lazy as _
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
@@ -42,6 +44,7 @@ from larpmanager.models.event import (
     Event,
     Run,
 )
+from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.core.base import check_association_context, get_context
 from larpmanager.utils.core.common import get_coming_runs, get_event_template
 from larpmanager.utils.services.edit import backend_get, exe_delete, exe_edit
@@ -261,3 +264,57 @@ def exe_deadlines(request: HttpRequest) -> HttpResponse:
     context["list"] = check_run_deadlines(runs)
 
     return render(request, "larpmanager/exe/deadlines.html", context)
+
+
+@login_required
+def exe_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
+    """Handle run deletion request by creating a support ticket.
+
+    Instead of actually deleting the run, this creates a support ticket
+    with the run's information for manual review.
+
+    Args:
+        request: HTTP request object containing user session
+        run_uuid: Run UUID to request deletion for
+
+    Returns:
+        HttpResponse: Redirect to exe_events page with success message
+
+    """
+    # Check user has executive events permission
+    context = check_association_context(request, "exe_events")
+
+    # Get the run object
+    backend_get(context, Run, run_uuid, "event")
+    run = context["el"]
+
+    # Create support ticket with run information
+    ticket_content = f"""
+        Deletion request for run:\n\n
+        UUID: {run.uuid}\n
+        Name: {run.search}\n
+        Number: {run.number}\n
+        Event: {run.event.name}\n
+        Start: {run.start}\n
+        End: {run.end}
+    """
+
+    LarpManagerTicket.objects.create(
+        association_id=context["association_id"],
+        member=context["member"],
+        reason=_("Event deletion request"),
+        email=context["member"].user.email if context["member"] else "",
+        content=ticket_content,
+    )
+
+    # Inform user
+    messages.success(
+        request,
+        _("Your request has been logged")
+        + "; "
+        + _("due to delicacy of the task requested, our team will review it manually")
+        + "; "
+        + _("we'll let you know as soon as possible"),
+    )
+
+    return redirect("exe_events")

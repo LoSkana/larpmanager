@@ -9686,6 +9686,18 @@ msgstr ""
 msgid "Cache reset!"
 msgstr ""
 
+msgid "Event deletion request"
+msgstr ""
+
+msgid "Your request has been logged"
+msgstr ""
+
+msgid "due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+
+msgid "we'll let you know as soon as possible"
+msgstr ""
+
 msgid "Member approved!"
 msgstr ""
 
