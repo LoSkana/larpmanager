@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
 from typing import Any, ClassVar
 
 from django import forms
@@ -68,21 +67,15 @@ PAY_CHOICES = (
 class SendMailForm(BaseForm):
     """Form for SendMail."""
 
-    players = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))
+    players = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 3}),
+        label=_("Recipients"),
+        help_text=_("List of recipient email address, comma separated"),
+    )
+
     subject = forms.CharField()
+
     body = forms.CharField(widget=CSRFTinyMCE(attrs={"rows": 30}))
-    reply_to = forms.EmailField(help_text=_("Optional - email reply to"), required=False)
-    raw = forms.CharField(
-        widget=forms.Textarea(attrs={"rows": 2}),
-        help_text=_("Optional - ram html code (substitute the text before)"),
-        required=False,
-    )
-    interval = forms.IntegerField(
-        initial=20,
-        min_value=20,
-        help_text=_("Interval in seconds between each email (default: 20)"),
-        required=False,
-    )
 
     def __init__(self, *args: object, **kwargs: object) -> None:
         """Initialize the form with show_link configuration.

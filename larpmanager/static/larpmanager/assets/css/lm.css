@@ -1945,6 +1945,14 @@ input[type="checkbox"].checkbox_single {
     width: auto;
   }
 
+  .calendar table,
+  .calendar tr,
+  .calendar td,
+  .calendar th {
+    text-align: center !important;
+    width: auto;
+  }
+
   .new_form #topbar .mobile .el i {
     font-size: 1.7em !important;
     margin: 0;

@@ -1650,6 +1650,9 @@ msgstr "Tipo di missione"
 msgid "Quest type"
 msgstr "Tipo di missione"
 
+msgid "Recipients"
+msgstr "Destinatari"
+
 msgid "Refund for"
 msgstr "Rimborso per"
 
@@ -4348,9 +4351,6 @@ msgstr "Ora puoi gestire gli eventi"
 msgid "Option saved successfully"
 msgstr "Opzione salvata con successo"
 
-msgid "Optional - email reply to"
-msgstr "Opzionale - email reply to"
-
 msgid "Payment already confirmed"
 msgstr "Pagamento già confermato"
 
@@ -6168,9 +6168,6 @@ msgstr "Immagine opzionale per il carosello/slideshow della homepage"
 msgid "Please select both a registration and an event"
 msgstr "Seleziona sia una registrazione che un evento"
 
-msgid "Remember to put recipients separated by commas"
-msgstr "Ricorda di mettere i destinatari separati da virgola"
-
 msgid "Something went wrong in the account activation"
 msgstr "Qualcosa è andato storto nell'attivazione dell'account"
 
@@ -6309,6 +6306,9 @@ msgstr "I personaggi inattivi non possono essere assegnati"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "C'è qualcos'altro che vorresti dirci"
+
+msgid "List of recipient email address, comma separated"
+msgstr "Elenco degli indirizzi e-mail dei destinatari, separati da virgole"
 
 msgid "Manage copying event settings from another event"
 msgstr "Gestisci la copia delle impostazioni dell'evento da un altro evento"
@@ -6520,6 +6520,11 @@ msgstr "Esiste già un'assegnazione per questo oggetto e area"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Assegnato %(amount).2f %(elements)s per '%(reason) s'"
 
+msgid "From this page you can email any list of recipients"
+msgstr ""
+"Da questa pagina è possibile inviare e-mail a qualsiasi elenco di "
+"destinatari"
+
 msgid "I've done it a few times, I have a basic experience"
 msgstr "L'ho fatto qualche volta, ho una esperienza di base"
 
@@ -6594,10 +6599,6 @@ msgstr "Indica se può essere selezionato dai partecipanti"
 msgid "Input an element name to insert their reference code"
 msgstr ""
 "Scrivi il nome di un elemento per inserire il suo codice di riferimento"
-
-msgid "Interval in seconds between each email (default: 20)"
-msgstr ""
-"Intervallo in secondi tra un'e-mail e l'altra (valore predefinito: 20)"
 
 msgid "Last step, please upload your membership application"
 msgstr "Ultimo passaggio, per favore carica la tua richiesta di socio"
@@ -6675,9 +6676,6 @@ msgstr "Ora puoi creare i biglietti 'Mecenate' e 'Ridotto'"
 
 msgid "Now you can upload content and generate access tokens"
 msgstr "Ora puoi caricare i contenuti e generare i token di accesso"
-
-msgid "Optional - ram html code (substitute the text before)"
-msgstr "Opzionale - codice html raw (sostituisce il testo sopra)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
@@ -7284,11 +7282,6 @@ msgstr ""
 
 msgid "Description of this payment method to be displayed to the user"
 msgstr "Descrizione di questo metodo di pagamento da mostrare all'utente"
-
-msgid "From this page you can send an email to any list of recipients"
-msgstr ""
-"Da questa pagina è possibile inviare un'e-mail a qualsiasi elenco di "
-"destinatari"
 
 msgid "If checked: collpase sidebars links, and expand on mouse hover"
 msgstr ""

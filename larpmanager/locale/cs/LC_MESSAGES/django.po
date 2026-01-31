@@ -1650,6 +1650,9 @@ msgstr "Typ úkolu"
 msgid "Quest type"
 msgstr "Typ úkolu"
 
+msgid "Recipients"
+msgstr "Příjemci"
+
 msgid "Refund for"
 msgstr "Úhrada za"
 
@@ -4348,9 +4351,6 @@ msgstr "Nyní můžete spravovat události"
 msgid "Option saved successfully"
 msgstr "Možnost úspěšně uložena"
 
-msgid "Optional - email reply to"
-msgstr "Nepovinné - odpověď e-mailem na adresu"
-
 msgid "Payment already confirmed"
 msgstr "Platba již potvrzena"
 
@@ -6167,9 +6167,6 @@ msgstr "Volitelný obrázek pro karuselovou prezentaci na domovské stránce"
 msgid "Please select both a registration and an event"
 msgstr "Vyberte prosím registraci i událost"
 
-msgid "Remember to put recipients separated by commas"
-msgstr "Nezapomeňte příjemce oddělit čárkami"
-
 msgid "Something went wrong in the account activation"
 msgstr "Něco se pokazilo při aktivaci účtu"
 
@@ -6306,6 +6303,9 @@ msgstr "Neaktivní postavy nelze přiřadit k hráčům"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "Chcete nám ještě něco říct"
+
+msgid "List of recipient email address, comma separated"
+msgstr "Seznam e-mailových adres příjemce oddělených čárkou"
 
 msgid "Manage copying event settings from another event"
 msgstr "Správa kopírování nastavení události z jiné události"
@@ -6517,6 +6517,9 @@ msgstr "Pro tuto položku a oblast již existuje přiřazení"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Přiřazeno %(amount).2f %(elements)s pro '%(reason)s'"
 
+msgid "From this page you can email any list of recipients"
+msgstr "Na této stránce můžete odeslat e-mail libovolnému seznamu příjemců"
+
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Několikrát jsem to dělal, mám základní zkušenosti"
 
@@ -6589,9 +6592,6 @@ msgstr "Označuje, zda jej mohou vybrat účastníci"
 
 msgid "Input an element name to insert their reference code"
 msgstr "Zadáním názvu prvku vložíte jeho referenční kód"
-
-msgid "Interval in seconds between each email (default: 20)"
-msgstr "Interval v sekundách mezi jednotlivými e-maily (výchozí: 20)"
 
 msgid "Last step, please upload your membership application"
 msgstr "V posledním kroku nahrajte přihlášku ke členství"
@@ -6669,9 +6669,6 @@ msgstr "Nyní můžete vytvořit tipy 'patron' a 'snížený'"
 
 msgid "Now you can upload content and generate access tokens"
 msgstr "Nyní můžete nahrávat obsah a generovat přístupové tokeny"
-
-msgid "Optional - ram html code (substitute the text before)"
-msgstr "Volitelně - nezpracovaný html kód (nahrazuje výše uvedený text)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
@@ -7228,9 +7225,6 @@ msgstr ""
 
 msgid "Description of this payment method to be displayed to the user"
 msgstr "Popis tohoto způsobu platby, který se zobrazí uživateli"
-
-msgid "From this page you can send an email to any list of recipients"
-msgstr "Na této stránce můžete odeslat e-mail na libovolný seznam příjemců"
 
 msgid "If checked: collpase sidebars links, and expand on mouse hover"
 msgstr ""
