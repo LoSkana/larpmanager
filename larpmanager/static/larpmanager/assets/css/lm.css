@@ -1945,18 +1945,6 @@ input[type="checkbox"].checkbox_single {
     width: auto;
   }
 
-  .calendar table,
-  .calendar tr,
-  .calendar td,
-  .calendar th {
-    text-align: center !important;
-    width: auto;
-  }
-
-  .calendar td {
-    padding: 0.2em;
-  }
-
   .new_form #topbar .mobile .el i {
     font-size: 1.7em !important;
     margin: 0;
@@ -2946,6 +2934,20 @@ input[type="number"] {
 
 .new_form th label {
   text-align: left !important;
+}
+
+@media (max-width: 840px) {
+  .calendar table,
+  .calendar tr,
+  .calendar td,
+  .calendar th {
+    text-align: center !important;
+    width: auto;
+  }
+
+  .calendar td {
+    padding: 0.2em !important;
+  }
 }
 
 .new_form .form_container table input {
