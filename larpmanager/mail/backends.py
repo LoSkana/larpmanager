@@ -1,7 +1,6 @@
 """Email backend implementations for different sending methods."""
 
 import logging
-import time
 from abc import ABC, abstractmethod
 
 import boto3
@@ -66,68 +65,26 @@ class SESEmailBackend(EmailBackend):
 
     def send_message(self, email_message: EmailMultiAlternatives) -> None:
         """Send email via Amazon SES using raw email API."""
-        max_retries = 3
-        retry_delay = 1  # seconds
+        # Add organization main email as Reply-To if not already set
+        if hasattr(email_message, "org_main_mail") and "Reply-To" not in email_message.extra_headers:
+            email_message.extra_headers["Reply-To"] = email_message.org_main_mail
+            logger.debug("SES: Added Reply-To header: %s", email_message.org_main_mail)
 
-        for attempt in range(max_retries):
-            try:
-                # Add organization main email as Reply-To if not already set
-                if hasattr(email_message, "org_main_mail") and "Reply-To" not in email_message.extra_headers:
-                    email_message.extra_headers["Reply-To"] = email_message.org_main_mail
-                    logger.debug("SES: Added Reply-To header: %s", email_message.org_main_mail)
+        # Convert EmailMultiAlternatives to raw MIME message
+        raw_message = email_message.message().as_bytes()
 
-                # Convert EmailMultiAlternatives to raw MIME message
-                raw_message = email_message.message().as_bytes()
+        # Prepare destinations (to + bcc)
+        destinations = list(email_message.to)
+        if email_message.bcc:
+            destinations.extend(email_message.bcc)
 
-                # Prepare destinations (to + bcc)
-                destinations = list(email_message.to)
-                if email_message.bcc:
-                    destinations.extend(email_message.bcc)
+        # Send via SES
+        response = self.client.send_raw_email(
+            Source=email_message.from_email, Destinations=destinations, RawMessage={"Data": raw_message}
+        )
 
-                # Send via SES
-                response = self.client.send_raw_email(
-                    Source=email_message.from_email, Destinations=destinations, RawMessage={"Data": raw_message}
-                )
-
-                message_id = response.get("MessageId", "unknown")
-                logger.info("SES email sent: MessageId=%s", message_id)
-
-            except self.ClientError as e:
-                error_code = e.response["Error"]["Code"]
-                error_message = e.response["Error"]["Message"]
-
-                # Handle throttling with exponential backoff
-                if error_code in ["Throttling", "ServiceUnavailable"]:
-                    if attempt < max_retries - 1:
-                        wait_time = retry_delay * (2**attempt)
-                        logger.warning(
-                            "SES %s error (attempt %d/%d). Retrying in %d s...",
-                            error_code,
-                            attempt + 1,
-                            max_retries,
-                            wait_time,
-                        )
-                        time.sleep(wait_time)
-                        continue
-                    logger.exception("SES max retries exceeded after %s", error_code)
-                    raise
-
-                # Handle permanent failures (don't retry)
-                if error_code == "MessageRejected":
-                    logger.exception("SES message rejected: %s", error_message)
-                    raise
-
-                if error_code == "InvalidParameterValue":
-                    logger.exception("SES invalid parameter: %s", error_message)
-                    raise
-
-                if error_code == "AccountSendingPausedException":
-                    logger.critical("SES account suspended: %s", error_message)
-                    raise
-
-                # Unknown error - log and raise
-                logger.exception("SES error {error_code}: %s", error_message)
-                raise
+        message_id = response.get("MessageId", "unknown")
+        logger.info("SES email sent: MessageId=%s", message_id)
 
 
 class DefaultEmailBackend(EmailBackend):
