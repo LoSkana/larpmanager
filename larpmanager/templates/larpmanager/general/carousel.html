@@ -166,7 +166,7 @@ function show(index) {
     }
 
     if (el['coming']) {
-        $('#register').attr("href", base_url.replace("0", el['slug']));
+        $('#register').attr("href", base_url.replace("new", el['slug']));
          $('#register').show();
     } else {
         $('#register').hide();

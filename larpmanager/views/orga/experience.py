@@ -42,6 +42,7 @@ from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order, get_object_uuid
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.io.download import export_abilities, zip_exports
+from larpmanager.utils.services.actions import orga_delete
 from larpmanager.utils.services.bulk import handle_bulk_ability
 from larpmanager.utils.services.edit import orga_edit
 
@@ -67,18 +68,17 @@ def orga_px_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_px_deliveries_edit(request: HttpRequest, event_slug: str, delivery_uuid: str) -> HttpResponse:
-    """Edit a delivery for an event.
+def orga_px_deliveries_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new delivery of experience points.
 
-    When creating a new delivery (delivery_uuid == "0"), if a run is selected via the
-    auto_populate_run field, the form will be reloaded with characters from that run's
-    registrations pre-populated in the characters field.
+    If a run is selected via the auto_populate_run field, the form will be reloaded with characters
+    from that run's registrations pre-populated in the characters field.
     """
     # Check user permissions and get base context for the event
     context = check_event_context(request, event_slug, "orga_px_deliveries")
 
     # Handle auto-population from run selection
-    if request.method == "POST" and delivery_uuid == "0":
+    if request.method == "POST":
         run_uuid = request.POST.get("auto_populate_run")
 
         # If a run was selected, get all characters from that run's registrations
@@ -126,7 +126,19 @@ def orga_px_deliveries_edit(request: HttpRequest, event_slug: str, delivery_uuid
                 pass
 
     # Use standard orga_edit for all other cases
+    return orga_edit(request, event_slug, "orga_px_deliveries", OrgaDeliveryPxForm, None)
+
+
+@login_required
+def orga_px_deliveries_edit(request: HttpRequest, event_slug: str, delivery_uuid: str) -> HttpResponse:
+    """Edit a delivery for an event."""
     return orga_edit(request, event_slug, "orga_px_deliveries", OrgaDeliveryPxForm, delivery_uuid)
+
+
+@login_required
+def orga_px_deliveries_delete(request: HttpRequest, event_slug: str, delivery_uuid: str) -> HttpResponse:
+    """Delete delivery for event."""
+    return orga_delete(request, event_slug, "orga_px_deliveries", delivery_uuid)
 
 
 @login_required
@@ -184,18 +196,8 @@ def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_px_abilities_edit(request: HttpRequest, event_slug: str, ability_uuid: str) -> HttpResponse:
-    """Edit organization PX abilities with validation for ability types.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-        ability_uuid: Ability UUID for editing
-
-    Returns:
-        HTTP response for ability editing or redirect
-
-    """
+def orga_px_abilities_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create organization PX abilities."""
     # Check user permissions for PX abilities management
     context = check_event_context(request, event_slug, "orga_px_abilities")
 
@@ -203,10 +205,21 @@ def orga_px_abilities_edit(request: HttpRequest, event_slug: str, ability_uuid: 
     if not context["event"].get_elements(AbilityTypePx).exists():
         # Warn user and redirect to ability types creation page
         messages.warning(request, _("You must create at least one ability type before you can create abilities"))
-        return redirect("orga_px_ability_types_edit", event_slug=event_slug, type_uuid="0")
+        return redirect("orga_px_ability_types_new", event_slug=event_slug)
 
-    # Process ability editing with standard organization edit workflow
+    return orga_edit(request, event_slug, "orga_px_abilities", OrgaAbilityPxForm)
+
+
+@login_required
+def orga_px_abilities_edit(request: HttpRequest, event_slug: str, ability_uuid: str) -> HttpResponse:
+    """Edit organization PX abilities."""
     return orga_edit(request, event_slug, "orga_px_abilities", OrgaAbilityPxForm, ability_uuid)
+
+
+@login_required
+def orga_px_abilities_delete(request: HttpRequest, event_slug: str, ability_uuid: str) -> HttpResponse:
+    """Delete ability for event."""
+    return orga_delete(request, event_slug, "orga_px_abilities", ability_uuid)
 
 
 @login_required
@@ -222,9 +235,21 @@ def orga_px_ability_types(request: HttpRequest, event_slug: str) -> HttpResponse
 
 
 @login_required
+def orga_px_ability_types_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create ability type for PX system."""
+    return orga_edit(request, event_slug, "orga_px_ability_types", OrgaAbilityTypePxForm)
+
+
+@login_required
 def orga_px_ability_types_edit(request: HttpRequest, event_slug: str, type_uuid: str) -> HttpResponse:
     """Edit ability type for PX system."""
     return orga_edit(request, event_slug, "orga_px_ability_types", OrgaAbilityTypePxForm, type_uuid)
+
+
+@login_required
+def orga_px_ability_types_delete(request: HttpRequest, event_slug: str, type_uuid: str) -> HttpResponse:
+    """Delete type for event."""
+    return orga_delete(request, event_slug, "orga_px_ability_types", type_uuid)
 
 
 @login_required
@@ -251,15 +276,39 @@ def orga_px_ability_templates(request: HttpRequest, event_slug: str) -> HttpResp
 
 
 @login_required
+def orga_px_ability_templates_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a specific rule for an event."""
+    return orga_edit(request, event_slug, "orga_px_ability_templates", OrgaAbilityTemplatePxForm)
+
+
+@login_required
 def orga_px_ability_templates_edit(request: HttpRequest, event_slug: str, template_uuid: str) -> HttpResponse:
     """Edit a specific rule for an event."""
     return orga_edit(request, event_slug, "orga_px_ability_templates", OrgaAbilityTemplatePxForm, template_uuid)
 
 
 @login_required
+def orga_px_ability_templates_delete(request: HttpRequest, event_slug: str, template_uuid: str) -> HttpResponse:
+    """Delete template for event."""
+    return orga_delete(request, event_slug, "orga_px_ability_templates", template_uuid)
+
+
+@login_required
+def orga_px_rules_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a specific rule for an event."""
+    return orga_edit(request, event_slug, "orga_px_rules", OrgaRulePxForm)
+
+
+@login_required
 def orga_px_rules_edit(request: HttpRequest, event_slug: str, rule_uuid: str) -> HttpResponse:
     """Edit a specific rule for an event."""
     return orga_edit(request, event_slug, "orga_px_rules", OrgaRulePxForm, rule_uuid)
+
+
+@login_required
+def orga_px_rules_delete(request: HttpRequest, event_slug: str, rule_uuid: str) -> HttpResponse:
+    """Delete rule for event."""
+    return orga_delete(request, event_slug, "orga_px_rules", rule_uuid)
 
 
 @login_required
@@ -300,9 +349,21 @@ def orga_px_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_px_modifiers_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create experience modifier for an event."""
+    return orga_edit(request, event_slug, "orga_px_modifiers", OrgaModifierPxForm)
+
+
+@login_required
 def orga_px_modifiers_edit(request: HttpRequest, event_slug: str, modifier_uuid: str) -> HttpResponse:
     """Edit experience modifier for an event."""
     return orga_edit(request, event_slug, "orga_px_modifiers", OrgaModifierPxForm, modifier_uuid)
+
+
+@login_required
+def orga_px_modifiers_delete(request: HttpRequest, event_slug: str, modifier_uuid: str) -> HttpResponse:
+    """Delete modifier for event."""
+    return orga_delete(request, event_slug, "orga_px_modifiers", modifier_uuid)
 
 
 @login_required

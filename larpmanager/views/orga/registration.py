@@ -756,6 +756,12 @@ def orga_registration_form_email(request: HttpRequest, event_slug: str) -> JsonR
 
 
 @login_required
+def orga_registrations_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration for an event."""
+    return orga_registrations_edit(request, event_slug, None)
+
+
+@login_required
 def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_uuid: str) -> HttpResponse:
     """Edit or create a registration for an event.
 
@@ -786,13 +792,13 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
     context["continue_add"] = "continue" in request.POST
 
     # Load existing registration if editing (num != 0)
-    if registration_uuid != "0":
+    if registration_uuid:
         get_registration(context, registration_uuid)
 
     # Handle form submission (POST request)
     if request.method == "POST":
         # Initialize form with existing instance for editing or new instance for creation
-        if registration_uuid != "0":
+        if registration_uuid:
             form = OrgaRegistrationForm(
                 request.POST,
                 instance=context["registration"],
@@ -806,12 +812,6 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
         if form.is_valid():
             registration = form.save()
 
-            # Handle registration deletion if requested
-            if "delete" in request.POST and request.POST["delete"] == "1":
-                cancel_reg(registration)
-                messages.success(request, _("Registration cancelled"))
-                return redirect("orga_registrations", event_slug=context["run"].get_slug())
-
             # Save registration-specific questions and answers
             form.save_registration_questions(registration)
 
@@ -821,12 +821,12 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
 
             # Redirect based on user choice: continue adding or return to list
             if context["continue_add"]:
-                return redirect("orga_registrations_edit", context["run"].get_slug(), "0")
+                return redirect("orga_registrations_edit", context["run"].get_slug(), "")
 
             return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
     # Handle GET request: initialize form for display
-    elif registration_uuid != "0":
+    elif registration_uuid:
         # Load form with existing registration data for editing
         form = OrgaRegistrationForm(instance=context["registration"], context=context)
     else:
@@ -837,10 +837,24 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
     context["form"] = form
     context["add_another"] = 1
     context["num"] = registration_uuid
-    if registration_uuid != "0":
+    if registration_uuid:
         context["name"] = str(context["registration"].member)
 
     return render(request, "larpmanager/orga/edit.html", context)
+
+
+@login_required
+def orga_registrations_delete(request: HttpRequest, event_slug: str, registration_uuid: str) -> HttpResponse:
+    """Delete registration for event - Handle as cancellation."""
+    context = check_event_context(request, event_slug, "orga_registrations")
+
+    get_registration(context, registration_uuid)
+
+    cancel_reg(context["registration"])
+
+    messages.success(request, _("Registration cancelled"))
+
+    return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
 
 def _save_questbuilder(context: dict, form: object, registration: Any) -> None:
@@ -857,7 +871,7 @@ def _save_questbuilder(context: dict, form: object, registration: Any) -> None:
         trait_uuid = form.cleaned_data[qt_uuid]
         base_kwargs = {"run": context["run"], "member": registration.member, "typ": qt.number}
 
-        if trait_uuid and trait_uuid != "0":
+        if trait_uuid:
             ait = AssignmentTrait.objects.filter(**base_kwargs).first()
             trait = get_element_event(context, trait_uuid, Trait)
 

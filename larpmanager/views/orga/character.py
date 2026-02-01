@@ -39,10 +39,9 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.forms.character import (
     OrgaCharacterForm,
     OrgaWritingOptionForm,
-    OrgaWritingQuestionForm,
 )
 from larpmanager.forms.utils import EventCharacterS2WidgetUuid
-from larpmanager.forms.writing import FactionForm, PlotForm, QuestForm, TraitForm
+from larpmanager.forms.writing import OrgaFactionForm, OrgaPlotForm, OrgaQuestForm, OrgaTraitForm
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
@@ -53,7 +52,6 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
     WritingQuestionType,
-    _get_writing_mapping,
 )
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
@@ -70,11 +68,15 @@ from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order, get_element
 from larpmanager.utils.io.download import orga_character_form_download
+from larpmanager.utils.services.actions import (
+    check_writing_form_type,
+    form_edit_handler,
+    options_edit_handler,
+    orga_delete,
+)
 from larpmanager.utils.services.character import get_chars_relations
 from larpmanager.utils.services.edit import (
     backend_edit,
-    form_edit_handler,
-    options_edit_handler,
     writing_edit,
     writing_edit_working_ticket,
 )
@@ -158,6 +160,21 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_characters_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Edit character information in organization context."""
+    # Check user permissions for character organization features
+    context = check_event_context(request, event_slug, "orga_characters")
+
+    # Load full event cache only when specific features require relationship data
+    # This optimization avoids expensive cache operations for basic character editing
+    if "relationships" in context["features"] or "character_finder" in context.get("features", []):
+        get_event_cache_all(context)
+
+    # Delegate to writing edit system with character-specific form and version type
+    return writing_edit(request, context, OrgaCharacterForm, None, TextVersionChoices.CHARACTER)
+
+
+@login_required
 def orga_characters_edit(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Edit character information in organization context.
 
@@ -173,21 +190,24 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, character_uuid: 
     # Check user permissions for character organization features
     context = check_event_context(request, event_slug, "orga_characters")
 
-    # Load full event cache only when specific features require relationship data
-    # This optimization avoids expensive cache operations for basic character editing
+    # Load full event cache for relationships finding
     if "relationships" in context["features"] or "character_finder" in context.get("features", []):
         get_event_cache_all(context)
 
-    # Load specific character data when editing existing character (num != 0)
-    # Skip character loading for new character creation
-    if character_uuid != "0":
-        get_character_optimized(context, character_uuid)
+    # Load specific character data when editing existing character
+    get_character_optimized(context, character_uuid)
 
     # Process character relationships for display and validation
     _characters_relationships(context)
 
     # Delegate to writing edit system with character-specific form and version type
-    return writing_edit(request, context, OrgaCharacterForm, "character", TextVersionChoices.CHARACTER)
+    return writing_edit(request, context, OrgaCharacterForm, character_uuid, TextVersionChoices.CHARACTER)
+
+
+@login_required
+def orga_characters_delete(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
+    """Deletes a character."""
+    return orga_delete(request, event_slug, "orga_characters", character_uuid)
 
 
 def _characters_relationships(context: dict) -> None:
@@ -548,37 +568,6 @@ def orga_character_form(request: HttpRequest, event_slug: str) -> HttpResponseRe
     return redirect("orga_writing_form", event_slug=event_slug, writing_type="character")
 
 
-def check_writing_form_type(context: dict, form_type: str) -> None:
-    """Validate writing form type and update context with type information.
-
-    Args:
-        context: Context dictionary to update with type information
-        form_type: Writing form type to validate
-
-    Raises:
-        Http404: If the writing form type is not available
-
-    """
-    form_type = form_type.lower()
-    writing_type_mapping = _get_writing_mapping()
-
-    # Build available types from choices that have corresponding features
-    available_types = {
-        value: key for key, value in QuestionApplicable.choices if writing_type_mapping[value] in context["features"]
-    }
-
-    # Validate the requested type is available
-    if form_type not in available_types:
-        msg = f"unknown writing form type: {form_type}"
-        raise Http404(msg)
-
-    # Update context with type information
-    context["typ"] = form_type
-    context["writing_typ"] = available_types[form_type]
-    context["label_typ"] = form_type.capitalize()
-    context["available_typ"] = {key.capitalize(): value for key, value in available_types.items()}
-
-
 @login_required
 def orga_writing_form(request: HttpRequest, event_slug: str, writing_type: str) -> HttpResponse:
     """Display and manage writing form questions for character creation.
@@ -638,48 +627,44 @@ def orga_writing_form(request: HttpRequest, event_slug: str, writing_type: str) 
 
 
 @login_required
+def orga_writing_form_new(request: HttpRequest, event_slug: str, writing_type: str) -> HttpResponse:
+    """Create writing form questions."""
+    return form_edit_handler(
+        request,
+        event_slug,
+        "orga_character_form",
+        None,
+        extra_context={"typ": writing_type},
+    )
+
+
+@login_required
 def orga_writing_form_edit(
     request: HttpRequest, event_slug: str, writing_type: str, question_uuid: str
 ) -> HttpResponse:
-    """Edit writing form questions with validation and option handling.
-
-    Handles the editing of writing form questions for LARP events, including
-    validation of question types and automatic redirection to option editing
-    for single/multiple choice questions.
-
-    Args:
-        request: The HTTP request object containing form data and user info
-        event_slug: Event slug identifier for the current event
-        writing_type: Writing form type identifier (e.g., 'character', 'background')
-        question_uuid: Question uuid to edit, or 0 for new question
-
-    Returns:
-        HttpResponse: Either a rendered form edit template or a redirect to
-            options editing or form list depending on form submission result
-
-    Raises:
-        PermissionDenied: If user lacks 'orga_character_form' permission
-        Http404: If writing form type is invalid for the event
-
-    """
-    # Check user permissions for editing character forms
-    perm = "orga_character_form"
-    context = check_event_context(request, event_slug, perm)
-
-    # Validate the writing form type exists for this event
-    check_writing_form_type(context, writing_type)
-
+    """Edit writing form questions."""
     return form_edit_handler(
         request,
-        context,
+        event_slug,
+        "orga_character_form",
         question_uuid,
-        perm,
-        WritingOption,
-        OrgaWritingQuestionForm,
-        "orga_writing_form_edit",
-        "orga_writing_form",
-        "larpmanager/orga/characters/form_edit.html",
-        extra_redirect_kwargs={"writing_type": writing_type},
+        extra_context={"typ": writing_type},
+    )
+
+
+@login_required
+def orga_writing_form_delete(
+    request: HttpRequest,
+    event_slug: str,
+    writing_type: str,  # noqa: ARG001
+    question_uuid: str,
+) -> HttpResponse:
+    """Deletes a writing form question."""
+    return orga_delete(
+        request,
+        event_slug,
+        "orga_character_form",
+        question_uuid,
     )
 
 
@@ -718,42 +703,24 @@ def orga_writing_form_order(
 
 
 @login_required
+def orga_writing_options_new(request: HttpRequest, event_slug: str, writing_type: str) -> HttpResponse:
+    """Edit writing form option for event organizers."""
+    return options_edit_handler(request, event_slug, "orga_character_form", None, extra_context={"typ": writing_type})
+
+
+@login_required
 def orga_writing_options_edit(
     request: HttpRequest, event_slug: str, writing_type: str, option_uuid: str
 ) -> HttpResponse:
-    """Edit writing form option for event organizers.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event slug identifier
-        writing_type: Writing form type (background, origin, etc.)
-        option_uuid: Option uuid to edit
-
-    Returns:
-        HTTP response with the option edit form, redirect, or JsonResponse for AJAX
-
-    """
-    # Verify user has character form permissions and get event context
-    context = check_event_context(request, event_slug, "orga_character_form")
-    context["frame"] = 1
-
-    # Validate the writing form type exists and is allowed
-    check_writing_form_type(context, writing_type)
-
+    """Edit writing form option for event organizers."""
     return options_edit_handler(
-        request,
-        context,
-        option_uuid,
-        WritingQuestion,
-        WritingOption,
-        OrgaWritingOptionForm,
-        extra_context={"typ": writing_type},
+        request, event_slug, "orga_character_form", option_uuid, extra_context={"typ": writing_type}
     )
 
 
 @login_required
 def orga_writing_options_list(
-    request: HttpRequest, event_slug: str, writing_type: str, question_uuid: str
+    request: HttpRequest, event_slug: str, writing_type: str, question_uuid: str | None = None
 ) -> HttpResponse:
     """Display the list of options for a writing form question in an iframe.
 
@@ -778,7 +745,7 @@ def orga_writing_options_list(
 
     context["typ"] = writing_type
 
-    if question_uuid and question_uuid != "0":
+    if question_uuid:
         # Get the question
         get_element(context, question_uuid, "el", WritingQuestion)
 
@@ -792,7 +759,7 @@ def orga_writing_options_list(
 def writing_option_edit(context: dict, option_uuid: str, request: HttpRequest, option_type: str) -> HttpResponse:
     """Edit a writing option and handle form submission with redirect logic."""
     # Process form submission and save changes
-    if backend_edit(request, context, OrgaWritingOptionForm, option_uuid, is_association=False):
+    if backend_edit(request, context, OrgaWritingOptionForm, option_uuid):
         redirect_target = "orga_writing_form_edit"
 
         # Check if user wants to continue adding more options
@@ -851,6 +818,17 @@ def orga_writing_options_order(
         },
     )
     return HttpResponseRedirect(url)
+
+
+@login_required
+def orga_writing_options_delete(
+    request: HttpRequest,
+    event_slug: str,
+    writing_type: str,  # noqa: ARG001
+    option_uuid: str,
+) -> HttpResponse:
+    """Delete writing option for an event."""
+    return orga_delete(request, event_slug, "orga_character_form_option", option_uuid)
 
 
 @login_required
@@ -1265,10 +1243,10 @@ def _get_excel_form(
     # Map element types to their corresponding form classes
     form_mapping = {
         "character": OrgaCharacterForm,
-        "faction": FactionForm,
-        "plot": PlotForm,
-        "trait": TraitForm,
-        "quest": QuestForm,
+        "faction": OrgaFactionForm,
+        "plot": OrgaPlotForm,
+        "trait": OrgaTraitForm,
+        "quest": OrgaQuestForm,
     }
 
     # Initialize form based on submission state

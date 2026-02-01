@@ -2,7 +2,7 @@
 {% load i18n tz show_tags static %}
 {% block title %}
     {% if nonum is None %}
-        {% if num != "0" %}
+        {% if num %}
             {{ name }}
         {% else %}
             {% trans "New" %}

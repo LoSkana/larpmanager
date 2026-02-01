@@ -85,7 +85,7 @@ from larpmanager.utils.io.pdf import (
     print_volunteer_registry,
     return_pdf,
 )
-from larpmanager.utils.services.edit import exe_edit
+from larpmanager.utils.services.edit import exe_delete, exe_edit
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_mail
 from larpmanager.views.orga.member import send_mail_batch
@@ -779,9 +779,21 @@ def exe_volunteer_registry(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+def exe_volunteer_registry_new(request: HttpRequest) -> HttpResponse:
+    """Create a new volunteer registry entry."""
+    return exe_edit(request, ExeVolunteerRegistryForm, None, "exe_volunteer_registry")
+
+
+@login_required
 def exe_volunteer_registry_edit(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Edit volunteer registry entry using standard exe form handling."""
     return exe_edit(request, ExeVolunteerRegistryForm, member_uuid, "exe_volunteer_registry")
+
+
+@login_required
+def exe_volunteer_registry_delete(request: HttpRequest, member_uuid: str) -> HttpResponse:
+    """Delete member."""
+    return exe_delete(request, ExeVolunteerRegistryForm, member_uuid, "exe_volunteer_registry")
 
 
 @login_required
@@ -894,9 +906,21 @@ def exe_badges(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+def exe_badges_new(request: HttpRequest) -> HttpResponse:
+    """Create a new badge."""
+    return exe_edit(request, ExeBadgeForm, None, "exe_badges")
+
+
+@login_required
 def exe_badges_edit(request: HttpRequest, badge_uuid: str) -> HttpResponse:
     """Delegate to generic edit view for badge editing."""
     return exe_edit(request, ExeBadgeForm, badge_uuid, "exe_badges")
+
+
+@login_required
+def exe_badges_delete(request: HttpRequest, badge_uuid: str) -> HttpResponse:
+    """Delete badge."""
+    return exe_delete(request, ExeBadgeForm, badge_uuid, "exe_badges")
 
 
 @login_required

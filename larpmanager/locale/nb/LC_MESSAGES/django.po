@@ -3814,6 +3814,9 @@ msgstr "Objektet eksisterer ikke"
 msgid "One-Time Access Token"
 msgstr "Token for engangstilgang"
 
+msgid "Operation not allowed"
+msgstr "Operasjon ikke tillatt"
+
 msgid "Participant questions"
 msgstr "Spørsmål fra deltakerne"
 
@@ -3928,6 +3931,9 @@ msgstr "Vil du fortsette"
 
 msgid "Download relationships"
 msgstr "Last ned relasjoner"
+
+msgid "Event deletion request"
+msgstr "Forespørsel om sletting av hendelse"
 
 msgid "Expenses collaborators"
 msgstr "Utgifter til ansatte"
@@ -4644,6 +4650,9 @@ msgstr "Den eneste obligatoriske kolonnen er"
 msgid "Trait assigned for %(event)s"
 msgstr "Egenskap tildelt for %(event)s"
 
+msgid "Your request has been logged"
+msgstr "Forespørselen din har blitt loggført"
+
 msgid "payment pending confirmation"
 msgstr "betaling i påvente av bekreftelse"
 
@@ -4912,6 +4921,9 @@ msgstr "sjekke ikke-eksisterende relasjoner"
 
 msgid "Added to the bottom of all pages"
 msgstr "Lagt til nederst på alle sider"
+
+msgid "An error occurred while deleting"
+msgstr "Det oppsto en feil under sletting"
 
 msgid "Cancellation for missing payment"
 msgstr "Avbestilling på grunn av manglende betaling"
@@ -5543,6 +5555,9 @@ msgstr "Du gir en donasjon på"
 
 msgid "click on the icon to open the tutorial"
 msgstr "klikk på ikonet for å åpne veiledningen"
+
+msgid "we'll let you know as soon as possible"
+msgstr "vi gir deg beskjed så snart som mulig"
 
 msgid "Character are not visible at the moment"
 msgstr "Tegnene er ikke synlige for øyeblikket"
@@ -7935,6 +7950,11 @@ msgstr ""
 "innholdet"
 
 msgid ""
+"due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+"på grunn av oppgavens delikatesse, vil teamet vårt gjennomgå den manuelt"
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
 msgstr ""
 "Gjør det mulig for organisasjonen å tildele merker og aktivere en offentlig "
@@ -9642,13 +9662,6 @@ msgid ""
 msgstr ""
 "Behandler dette arrangementet som en digital/nettbasert hendelse som ikke "
 "krever personlig påmelding"
-
-msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"Du må opprette minst ett registreringsspørsmål før du kan opprette "
-"registreringsalternativer"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "

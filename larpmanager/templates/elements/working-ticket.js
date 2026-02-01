@@ -2,7 +2,7 @@
 
 <script>
 
-{% if num != "0" %}
+{% if num %}
 
 var edit_uuid = '{{ edit_uuid }}';
 var w_type = '{{ type }}';

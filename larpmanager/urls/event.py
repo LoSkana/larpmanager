@@ -65,7 +65,7 @@ urlpatterns = [
         name="character_your",
     ),
     path(
-        "<slug:event_slug>/character/your/<path:path>",
+        "<slug:event_slug>/character/your/<path:path>/",
         views_uc.character_your,
         name="character_your",
     ),
@@ -130,7 +130,12 @@ urlpatterns = [
         name="character_relationships",
     ),
     path(
-        "<slug:event_slug>/character/<slug:character_uuid>/relationships/edit/<slug:other_character_uuid>",
+        "<slug:event_slug>/character/<slug:character_uuid>/relationships/new/",
+        views_uc.character_relationships_new,
+        name="character_relationships_new",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/relationships/edit/<slug:other_character_uuid>/",
         views_uc.character_relationships_edit,
         name="character_relationships_edit",
     ),

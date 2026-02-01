@@ -35,7 +35,7 @@ from larpmanager.cache.config import _get_fkey_config, get_event_config
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait
-from larpmanager.models.form import BaseQuestionType, QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
+from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log, Member
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.auth.admin import is_lm_admin
@@ -239,7 +239,9 @@ def check_association(element: object, context: dict, attribute_field: str | Non
         raise Http404(msg)
 
 
-def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: str, entity_uuid: str) -> bool:
+def user_edit(
+    request: HttpRequest, context: dict, form_type: type, model_name: str, entity_uuid: str | None = None
+) -> bool:
     """Edit user data with validation.
 
     Handle both GET and POST requests for editing user data. On POST, validate
@@ -295,7 +297,7 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: 
     context["form"] = form
     context["num"] = entity_uuid
 
-    if entity_uuid != "0":
+    if entity_uuid:
         context["name"] = set_form_name(context[model_name])
 
     return False
@@ -338,20 +340,21 @@ def backend_get(context: dict, model_type: type, entity_uuid: str, association_f
 def _resolve_element_uuid(
     context: dict,
     element_uuid: str | None,
-    *,
-    is_association: bool,
-) -> str:
+) -> str | None:
     """Resolve element UUID from context if None."""
     if element_uuid is not None:
         return element_uuid
 
-    if is_association:
+    if context.get("assoc_form"):
         context["exe"] = True
         context["nonum"] = True
         return context["uuid"]
 
-    context["nonum"] = True
-    return context["event"].uuid
+    if context.get("event_form"):
+        context["nonum"] = True
+        return context["event"].uuid
+
+    return None
 
 
 def _handle_form_submission(
@@ -388,10 +391,9 @@ def backend_edit(
     request: HttpRequest,
     context: dict,
     form_type: type[BaseModelForm],
-    element_uuid: str | None,
+    element_uuid: str | None = None,
     additional_field: str | None = None,
     *,
-    is_association: bool = False,
     quiet: bool = False,
 ) -> bool:
     """Handle backend editing operations for various content types.
@@ -406,7 +408,6 @@ def backend_edit(
         form_type: Django ModelForm class for handling the specific model
         element_uuid: Element UUID for editing existing objects, None for new objects
         additional_field: Optional additional field parameter for specialized handling
-        is_association: Flag indicating association-based vs event-based operation
         quiet: Flag to suppress success messages when True
 
     Returns:
@@ -419,10 +420,10 @@ def backend_edit(
     context["request"] = request
 
     # Resolve element UUID from context if needed
-    element_uuid = _resolve_element_uuid(context, element_uuid, is_association=is_association)
+    element_uuid = _resolve_element_uuid(context, element_uuid)
 
     # Load existing element or set as None for new objects
-    if element_uuid != "0":
+    if element_uuid:
         backend_get(context, model_type, element_uuid, additional_field)
         context["name"] = set_form_name(context["el"])
     else:
@@ -481,14 +482,15 @@ def orga_edit(
 
     # Merge any additional context provided by caller
     if additional_context:
+        if additional_context.get("event_form"):
+            additional_context["add_another"] = False
         context.update(additional_context)
 
     # Check if this is an iframe request
     is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
 
     # Process the edit operation using backend edit handler
-    # Returns True if edit was successful and should redirect
-    if backend_edit(request, context, form_type, entity_uuid, additional_field=None, is_association=False):
+    if backend_edit(request, context, form_type, entity_uuid):
         # Set suggestion context for successful edit
         set_suggestion(context, permission)
 
@@ -498,7 +500,7 @@ def orga_edit(
 
         # Handle "continue editing" workflow - redirect to new object form
         if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, context["run"].get_slug(), "0")
+            return redirect(request.resolver_match.view_name, context["run"].get_slug(), "")
 
         # Determine redirect target - use provided or default to permission name
         if not redirect_view:
@@ -511,6 +513,30 @@ def orga_edit(
     if is_frame:
         return render(request, "elements/dashboard/form_frame.html", context)
     return render(request, "larpmanager/orga/edit.html", context)
+
+
+def backend_delete(
+    request: HttpRequest,
+    context: dict,
+    form_type: type[BaseModelForm],
+    entity_uuid: str,
+    can_delete: Callable | None = None,
+) -> None:
+    """Delete element from the system."""
+    model_type = form_type.Meta.model
+    backend_get(context, model_type, entity_uuid, None)
+
+    element = context["el"]
+
+    if can_delete is not None and not can_delete(context, element):
+        messages.error(request, _("Operation not allowed"))
+        return
+
+    save_log(context["member"], form_type, element, to_delete=True)
+
+    element.delete()
+
+    messages.success(request, _("Operation completed") + "!")
 
 
 def exe_edit(
@@ -545,20 +571,17 @@ def exe_edit(
 
     # Merge additional context if provided
     if additional_context:
+        if additional_context.get("assoc_form") or additional_context.get("event_form"):
+            additional_context["add_another"] = False
         context.update(additional_context)
 
     # Check if this is an iframe request
     is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
 
+    context["exe"] = True
+
     # Process the edit operation through backend handler
-    if backend_edit(
-        request,
-        context,
-        form_type,
-        entity_uuid,
-        additional_field=additional_field,
-        is_association=True,
-    ):
+    if backend_edit(request, context, form_type, entity_uuid, additional_field=additional_field):
         # Set permission suggestion for UI feedback
         set_suggestion(context, permission)
 
@@ -568,7 +591,7 @@ def exe_edit(
 
         # Handle "continue editing" workflow
         if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, "0")
+            return redirect(request.resolver_match.view_name, "")
 
         # Determine redirect target and perform redirect
         if not redirect_view:
@@ -579,6 +602,42 @@ def exe_edit(
     if is_frame:
         return render(request, "elements/dashboard/form_frame.html", context)
     return render(request, "larpmanager/exe/edit.html", context)
+
+
+def exe_delete(
+    request: HttpRequest,
+    form_type: type[BaseModelForm],
+    entity_uuid: str,
+    permission: str,
+    redirect_view: str | None = None,
+    can_delete: Callable | None = None,
+) -> HttpResponse:
+    """Delete organization-level entities through a unified interface.
+
+    Handles the deletion workflow for various organization-level entities,
+    including permission checking, logging, and redirects.
+
+    Args:
+        request: HTTP request object containing form data and user information
+        form_type: Type of form/entity being deleted
+        entity_uuid: Entity UUID for the object being deleted
+        permission: Permission string required to access this delete functionality
+        redirect_view: Optional redirect target after successful deletion (defaults to permission)
+        can_delete: Callback to check if deletion can be done
+
+    Returns:
+        HttpResponse: Redirect response on successful deletion
+
+    """
+    # Check user permissions and get base context
+    context = check_association_context(request, permission)
+
+    backend_delete(request, context, form_type, entity_uuid, can_delete)
+
+    if not redirect_view:
+        redirect_view = permission
+
+    return redirect(redirect_view)
 
 
 def set_suggestion(context: dict, permission: str) -> None:
@@ -622,7 +681,7 @@ def writing_edit(
     request: HttpRequest,
     context: dict,
     form_type: type[BaseModelForm],
-    element_name: str,
+    element_uuid: str | None,
     element_type: str | None,
     redirect_url: str | None = None,
 ) -> HttpResponse | None:
@@ -636,7 +695,7 @@ def writing_edit(
         request: The HTTP request object containing method and form data
         context: Context dictionary containing element data and template variables
         form_type: Django form class to instantiate for editing the element
-        element_name: Name key of the element in the context dictionary
+        element_uuid: UUID of the element to be edited (null if new)
         element_type: Type identifier for the writing element being edited
         redirect_url: Optional redirect URL to use after successful form save
 
@@ -650,31 +709,32 @@ def writing_edit(
     """
     # Set up element type metadata for template rendering
     context["elementTyp"] = form_type.Meta.model
+    element_name = context["elementTyp"].__name__.lower()
 
-    # Configure element identification and naming
-    if element_name in context:
-        context["edit_uuid"] = context[element_name].uuid
-        context["name"] = set_form_name(context[element_name])
+    if element_uuid:
+        get_element(context, element_uuid, "el", context["elementTyp"])
+        context["edit_uuid"] = element_uuid
+        context["name"] = set_form_name(context["el"])
     else:
-        context[element_name] = None
+        context["el"] = None
 
     # Set type information for template display
-    context["type"] = context["elementTyp"].__name__.lower()
+    context["type"] = element_name
     context["label_typ"] = context["type"]
 
     # Handle form submission (POST request)
     if request.method == "POST":
-        form = form_type(request.POST, request.FILES, instance=context[element_name], context=context)
+        form = form_type(request.POST, request.FILES, instance=context["el"], context=context)
 
         # Process valid form data and potentially redirect
         if form.is_valid():
             return _writing_save(context, form, form_type, element_name, redirect_url, request, element_type)
     else:
         # Initialize form for GET request
-        form = form_type(instance=context[element_name], context=context)
+        form = form_type(instance=context["el"], context=context)
 
     # Configure template context for form rendering
-    context["nm"] = element_name
+    context["nm"] = context["type"]
     context["form"] = form
     context["add_another"] = True
     context["continue_add"] = "continue" in request.POST
@@ -727,7 +787,7 @@ def _writing_save(
     context: dict,
     form: BaseModelForm,
     form_type: type,
-    nm: str,
+    type_name: str,
     redirect_func: Callable | None,
     request: HttpRequest,
     tp: str | None,
@@ -742,7 +802,7 @@ def _writing_save(
         context: Context dictionary containing element data and run information
         form: Validated form instance ready for saving
         form_type: Form class type used for logging operations
-        nm: Name of the element in context (used for redirects)
+        type_name: Name of the element in context (used for redirects)
         redirect_func: Optional redirect callable that takes context as parameter
         request: HTTP request object containing POST data and user info
         tp: Type of writing element for version tracking (None disables versioning)
@@ -754,7 +814,7 @@ def _writing_save(
     # Handle AJAX auto-save requests
     if "ajax" in request.POST:
         # Check if element exists in context before processing
-        if nm in context:
+        if context["el"]:
             return writing_edit_save_ajax(form, request)
         return JsonResponse({"res": "ko"})
 
@@ -782,7 +842,7 @@ def _writing_save(
 
     # Handle continue editing request
     if "continue" in request.POST:
-        return redirect(request.resolver_match.view_name, context["run"].get_slug(), "0")
+        return redirect(request.resolver_match.view_name, context["run"].get_slug(), "")
 
     # Handle custom redirect function if provided
     if redirect_func:
@@ -790,7 +850,7 @@ def _writing_save(
         return redirect_func(context)
 
     # Default redirect to list view
-    return redirect("orga_" + nm + "s", event_slug=context["run"].get_slug())
+    return redirect("orga_" + type_name + "s", event_slug=context["run"].get_slug())
 
 
 def writing_edit_cache_key(element_uuid: str, writing_type: str, association_id: int) -> str:
@@ -824,7 +884,7 @@ def writing_edit_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonRes
 
     # Extract and validate element ID from POST data
     edit_uuid = request.POST["edit_uuid"]
-    if edit_uuid == "0":
+    if not edit_uuid:
         return JsonResponse(res)
 
     # Get element type and editing token for conflict detection
@@ -914,142 +974,6 @@ def writing_edit_working_ticket(request: HttpRequest, element_type: str, edit_uu
     cache.set(cache_key, active_tickets, min(ticket_timeout_seconds, conf_settings.CACHE_TIMEOUT_1_DAY))
 
     return warning_message
-
-
-def form_edit_handler(  # noqa: PLR0913
-    request: HttpRequest,
-    context: dict,
-    question_uuid: str,
-    perm: str,
-    option_model: type[BaseModel],
-    form_class: type[BaseModelForm],
-    redirect_view_name: str,
-    redirect_list_view_name: str,
-    template_name: str,
-    extra_redirect_kwargs: dict | None = None,
-) -> HttpResponse:
-    """Generic handler for question form editing (registration and writing).
-
-    Args:
-        request: HTTP request object
-        context: Event context from check_event_context
-        question_uuid: Question UUID to edit (0 for new questions)
-        perm: Permission name for set_suggestion
-        option_model: Option model class (RegistrationOption or WritingOption)
-        form_class: Form class (OrgaRegistrationQuestionForm or OrgaWritingQuestionForm)
-        redirect_view_name: View name for redirect when options needed
-        redirect_list_view_name: View name for redirect to list
-        template_name: Template to render
-        extra_redirect_kwargs: Extra kwargs for redirect URL (e.g., {"writing_type": writing_type})
-
-    Returns:
-        HttpResponse: Rendered template or redirect
-    """
-    # Check if this is an AJAX request
-    is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
-
-    # Process form submission using backend edit utility
-    if backend_edit(request, context, form_class, question_uuid, is_association=False, quiet=True):
-        # Set permission suggestion for future operations
-        set_suggestion(context, perm)
-
-        # If item was deleted, redirect to list view
-        if request.POST.get("delete") == "1":
-            messages.success(request, _("Operation completed") + "!")
-            redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_redirect_kwargs or {})}
-            return redirect(redirect_list_view_name, **redirect_kwargs)
-
-        # If AJAX request, return JSON with question UUID
-        if is_ajax:
-            return JsonResponse(
-                {
-                    "success": True,
-                    "question_uuid": str(context["saved"].uuid),
-                    "message": str(_("Question saved successfully")),
-                }
-            )
-
-        # Handle "continue editing" button - redirect to new question form
-        if "continue" in request.POST:
-            messages.success(request, _("Operation completed") + "!")
-            if extra_redirect_kwargs:  # writing form
-                redirect_kwargs = {
-                    "event_slug": context["run"].get_slug(),
-                    "question_uuid": "0",
-                    **extra_redirect_kwargs,
-                }
-            else:  # registration form
-                redirect_kwargs = {"event_slug": context["run"].get_slug(), "question_uuid": "0"}
-            return redirect(request.resolver_match.view_name, **redirect_kwargs)
-
-        # Check if question is single/multiple choice and needs options
-        is_choice = context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
-        if is_choice and not option_model.objects.filter(question_id=context["saved"].id).exists():
-            messages.warning(
-                request,
-                _("You must define at least one option before saving a single-choice or multiple-choice question"),
-            )
-
-            # Redirect to question page
-            redirect_kwargs = {
-                "event_slug": context["run"].get_slug(),
-                "question_uuid": context["saved"].uuid,
-                **(extra_redirect_kwargs or {}),
-            }
-            return redirect(redirect_view_name, **redirect_kwargs)
-
-        messages.success(request, _("Operation completed") + "!")
-        redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_redirect_kwargs or {})}
-        return redirect(redirect_list_view_name, **redirect_kwargs)
-
-    return render(request, template_name, context)
-
-
-def options_edit_handler(
-    request: HttpRequest,
-    context: dict,
-    option_uuid: str,
-    question_model: type[BaseModel],
-    option_model: type[BaseModel],
-    form_class: type[BaseModelForm],
-    extra_context: dict | None = None,
-) -> HttpResponse:
-    """Handler for option form submission (iframe mode).
-
-    Args:
-        request: HTTP request object
-        context: Event context from check_event_context
-        option_uuid: Option UUID to edit (0 for new options)
-        question_model: Question model class (RegistrationQuestion or WritingQuestion)
-        option_model: Option model class (RegistrationOption or WritingOption)
-        form_class: Form class (OrgaRegistrationOptionForm or OrgaWritingOptionForm)
-        extra_context: Additional context to add to form_context (e.g., {"typ": writing_type})
-
-    Returns:
-        HttpResponse with form page (iframe mode)
-    """
-    # For new options, get the question_uuid from request
-    if option_uuid == "0":
-        question_uuid = request.GET.get("question_uuid") or request.POST.get("question_uuid")
-        if question_uuid:
-            get_element(context, question_uuid, "question", question_model)
-    else:
-        # For editing existing option, load the option instance
-        get_element(context, option_uuid, "el", option_model)
-        context["question"] = context["el"].question
-
-    # Try saving it
-    if backend_edit(request, context, form_class, option_uuid, is_association=False):
-        return render(request, "elements/options/form_success.html", context)
-
-    # If form validation failed, return form with errors
-    form_context = {
-        **context,
-        "num": option_uuid,
-        **(extra_context or {}),
-    }
-
-    return render(request, "elements/options/form_frame.html", form_context)
 
 
 @require_POST

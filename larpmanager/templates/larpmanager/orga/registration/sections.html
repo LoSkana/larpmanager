@@ -17,6 +17,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -47,6 +48,11 @@
                                 <i class="fa-solid fa-arrow-down"></i>
                             </a>
                         {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_registration_sections_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

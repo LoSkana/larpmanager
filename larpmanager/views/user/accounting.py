@@ -924,7 +924,7 @@ def accounting_redirect(invoice: PaymentInvoice) -> HttpResponseRedirect:
 
 
 @login_required
-def accounting_payed(request: HttpRequest, registration_uuid: str = "0") -> HttpResponse:
+def accounting_payed(request: HttpRequest, registration_uuid: str | None = None) -> HttpResponse:
     """Handle payment completion and redirect to profile check.
 
     Args:
@@ -940,7 +940,7 @@ def accounting_payed(request: HttpRequest, registration_uuid: str = "0") -> Http
     """
     # Check if a specific payment invoice ID was provided
     context = get_context(request)
-    if registration_uuid != "0":
+    if registration_uuid:
         try:
             # Retrieve the payment invoice for the current user and association
             inv = PaymentInvoice.objects.get(

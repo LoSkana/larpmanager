@@ -1283,7 +1283,7 @@ def gift_edit(request: HttpRequest, event_slug: str, gift_uuid: str) -> HttpResp
 
 def get_registration_gift(context: dict, gift_uuid: str) -> Registration | None:
     """Get a registration with gift redeem code for the current user."""
-    if gift_uuid == "0":
+    if not gift_uuid:
         return None
 
     try:

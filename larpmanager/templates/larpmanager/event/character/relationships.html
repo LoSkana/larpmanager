@@ -7,7 +7,7 @@
     <div class="staff-list">
         <div class="orga-buttons">
             <a class="new button"
-               href="{% url 'character_relationships_edit' run.get_slug char.uuid 0 %}">{% trans "New" %}</a>
+               href="{% url 'character_relationships_new' run.get_slug char.uuid %}">{% trans "New" %}</a>
         </div>
     </div>
     <h3>{% trans "Relationships of your character" %}</h3>

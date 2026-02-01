@@ -924,11 +924,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         """Validate member field to prevent duplicate registrations."""
         data = self.cleaned_data["member"]
 
-        if "request" in self.params:
-            post = self.params["request"].POST
-            if "delete" in post and post["delete"] == "1":
-                return data
-
         for registration in Registration.objects.filter(
             member=data,
             run=self.params["run"],

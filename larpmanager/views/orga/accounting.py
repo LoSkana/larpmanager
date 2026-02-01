@@ -51,6 +51,7 @@ from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import orga_paginate
+from larpmanager.utils.services.actions import orga_delete
 from larpmanager.utils.services.edit import backend_get, orga_edit
 
 
@@ -67,9 +68,21 @@ def orga_discounts(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_discounts_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new discount for event."""
+    return orga_edit(request, event_slug, "orga_discounts", OrgaDiscountForm, None)
+
+
+@login_required
 def orga_discounts_edit(request: HttpRequest, event_slug: str, discount_uuid: str) -> HttpResponse:
     """Edit discount for event."""
     return orga_edit(request, event_slug, "orga_discounts", OrgaDiscountForm, discount_uuid)
+
+
+@login_required
+def orga_discounts_delete(request: HttpRequest, event_slug: str, discount_uuid: str) -> HttpResponse:
+    """Delete discount for event."""
+    return orga_delete(request, event_slug, "orga_discounts", discount_uuid)
 
 
 @login_required
@@ -275,6 +288,7 @@ def orga_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
                 ("value", _("Value")),  # Token monetary value
                 ("created", _("Date")),  # Token creation timestamp
             ],
+            "delete_view": "orga_tokens_delete",
         },
     )
 
@@ -290,9 +304,21 @@ def orga_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_tokens_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new organization token for a specific event."""
+    return orga_edit(request, event_slug, "orga_tokens", OrgaTokenForm, None)
+
+
+@login_required
 def orga_tokens_edit(request: HttpRequest, event_slug: str, token_uuid: str) -> HttpResponse:
     """Edit an organization token for a specific event."""
     return orga_edit(request, event_slug, "orga_tokens", OrgaTokenForm, token_uuid)
+
+
+@login_required
+def orga_tokens_delete(request: HttpRequest, event_slug: str, token_uuid: str) -> HttpResponse:
+    """Delete token for event."""
+    return orga_delete(request, event_slug, "orga_tokens", token_uuid)
 
 
 @login_required
@@ -323,6 +349,7 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
                 ("value", _("Value")),
                 ("created", _("Date")),
             ],
+            "delete_view": "orga_credits_delete",
         },
     )
 
@@ -337,9 +364,21 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_credits_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create new organization credits."""
+    return orga_edit(request, event_slug, "orga_credits", OrgaCreditForm, None)
+
+
+@login_required
 def orga_credits_edit(request: HttpRequest, event_slug: str, credit_uuid: str) -> HttpResponse:
     """Edit organization credits."""
     return orga_edit(request, event_slug, "orga_credits", OrgaCreditForm, credit_uuid)
+
+
+@login_required
+def orga_credits_delete(request: HttpRequest, event_slug: str, credit_uuid: str) -> HttpResponse:
+    """Delete credit for event."""
+    return orga_delete(request, event_slug, "orga_credits", credit_uuid)
 
 
 @login_required
@@ -391,6 +430,7 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
             },
+            "delete_view": "orga_payments_delete",
         },
     )
 
@@ -405,9 +445,21 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_payments_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new payment for an event."""
+    return orga_edit(request, event_slug, "orga_payments", OrgaPaymentForm, None)
+
+
+@login_required
 def orga_payments_edit(request: HttpRequest, event_slug: str, payment_uuid: str) -> HttpResponse:
     """Edit an existing payment for an event."""
     return orga_edit(request, event_slug, "orga_payments", OrgaPaymentForm, payment_uuid)
+
+
+@login_required
+def orga_payments_delete(request: HttpRequest, event_slug: str, payment_uuid: str) -> HttpResponse:
+    """Delete payment for event."""
+    return orga_delete(request, event_slug, "orga_payments", payment_uuid)
 
 
 @login_required
@@ -449,6 +501,7 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
                 # Display human-readable type labels
                 "type": lambda el: el.get_exp_display(),
             },
+            "delete_view": "orga_outflows_delete",
         },
     )
 
@@ -463,9 +516,21 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_outflows_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new outflow entry for an event."""
+    return orga_edit(request, event_slug, "orga_outflows", OrgaOutflowForm, None)
+
+
+@login_required
 def orga_outflows_edit(request: HttpRequest, event_slug: str, outflow_uuid: str) -> HttpResponse:
     """Edit an outflow entry for an event."""
     return orga_edit(request, event_slug, "orga_outflows", OrgaOutflowForm, outflow_uuid)
+
+
+@login_required
+def orga_outflows_delete(request: HttpRequest, event_slug: str, outflow_uuid: str) -> HttpResponse:
+    """Delete outflow for event."""
+    return orga_delete(request, event_slug, "orga_outflows", outflow_uuid)
 
 
 @login_required
@@ -503,6 +568,7 @@ def orga_inflows(request: HttpRequest, event_slug: str) -> HttpResponse:
             "callbacks": {
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
             },
+            "delete_view": "orga_inflows_delete",
         },
     )
 
@@ -517,9 +583,21 @@ def orga_inflows(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_inflows_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new inflow entry for an event."""
+    return orga_edit(request, event_slug, "orga_inflows", OrgaInflowForm, None)
+
+
+@login_required
 def orga_inflows_edit(request: HttpRequest, event_slug: str, inflow_uuid: str) -> HttpResponse:
     """Edit an existing inflow entry for an event."""
     return orga_edit(request, event_slug, "orga_inflows", OrgaInflowForm, inflow_uuid)
+
+
+@login_required
+def orga_inflows_delete(request: HttpRequest, event_slug: str, inflow_uuid: str) -> HttpResponse:
+    """Delete inflow for event."""
+    return orga_delete(request, event_slug, "orga_inflows", inflow_uuid)
 
 
 @login_required
@@ -577,6 +655,7 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
                 # Display human-readable expense type from model choices
                 "type": lambda el: el.get_exp_display(),
             },
+            "delete_view": "orga_expenses_delete",
         },
     )
 
@@ -591,9 +670,21 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_expenses_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new expense for an event."""
+    return orga_edit(request, event_slug, "orga_expenses", OrgaExpenseForm, None)
+
+
+@login_required
 def orga_expenses_edit(request: HttpRequest, event_slug: str, expense_uuid: str) -> HttpResponse:
     """Edit an expense for an event."""
     return orga_edit(request, event_slug, "orga_expenses", OrgaExpenseForm, expense_uuid)
+
+
+@login_required
+def orga_expenses_delete(request: HttpRequest, event_slug: str, expense_uuid: str) -> HttpResponse:
+    """Delete expense for event."""
+    return orga_delete(request, event_slug, "orga_expenses", expense_uuid)
 
 
 @login_required

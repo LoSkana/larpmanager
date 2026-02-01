@@ -20,6 +20,7 @@
                 <th>{% trans "Organizer" %}</th>
                 <th>{% trans "Status" %}</th>
                 <th>{% trans "Total" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -35,6 +36,11 @@
                     <td>{{ el.organizer }}</td>
                     <td>{{ el.get_status_display }}</td>
                     <td>{{ el.total }}</td>
+                    <td>
+                        <a href="{% url 'exe_collections_delete' el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

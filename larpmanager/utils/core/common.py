@@ -461,7 +461,7 @@ def get_element(
     Raises:
         Http404: If the requested object does not exist in the database.
     """
-    if element_uuid is None or element_uuid == "0":
+    if not element_uuid:
         return
 
     context[context_key_name] = get_element_event(context, element_uuid, model_class)

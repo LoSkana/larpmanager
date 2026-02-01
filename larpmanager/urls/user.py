@@ -254,6 +254,11 @@ urlpatterns = [
         name="accounting_cancelled",
     ),
     path(
+        "accounting/payed/",
+        views_ua.accounting_payed,
+        name="accounting_payed",
+    ),
+    path(
         "accounting/payed/<slug:registration_uuid>/",
         views_ua.accounting_payed,
         name="accounting_payed",
@@ -412,7 +417,7 @@ urlpatterns = [
         name="after_login",
     ),
     path(
-        "after_login/<slug:subdomain>/<path:path>",
+        "after_login/<slug:subdomain>/<path:path>/",
         views_base.after_login,
         name="after_login",
     ),

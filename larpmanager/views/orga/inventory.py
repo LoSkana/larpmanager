@@ -30,6 +30,7 @@ from larpmanager.models.inventory import Inventory, InventoryTransfer, PoolTypeC
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.common import get_element_event
+from larpmanager.utils.services.actions import orga_delete
 from larpmanager.utils.services.edit import orga_edit
 from larpmanager.utils.services.inventory import perform_transfer
 
@@ -45,9 +46,21 @@ def orga_ci_inventory(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_ci_inventory_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a character inventory."""
+    return orga_edit(request, event_slug, "orga_ci_inventory", OrgaInventoryForm)
+
+
+@login_required
 def orga_ci_inventory_edit(request: HttpRequest, event_slug: str, inventory_uuid: str) -> HttpResponse:
     """Edit a character inventory."""
     return orga_edit(request, event_slug, "orga_ci_inventory", OrgaInventoryForm, inventory_uuid)
+
+
+@login_required
+def orga_ci_inventory_delete(request: HttpRequest, event_slug: str, inventory_uuid: str) -> HttpResponse:
+    """Delete inventory for event."""
+    return orga_delete(request, event_slug, "orga_ci_inventory", inventory_uuid)
 
 
 @login_required
@@ -59,9 +72,21 @@ def orga_ci_pool_types(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_ci_pool_types_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a pool type for character inventory."""
+    return orga_edit(request, event_slug, "orga_ci_pool_types", OrgaPoolTypePxForm)
+
+
+@login_required
 def orga_ci_pool_types_edit(request: HttpRequest, event_slug: str, pool_uuid: str) -> HttpResponse:
     """Edit a pool type for character inventory."""
     return orga_edit(request, event_slug, "orga_ci_pool_types", OrgaPoolTypePxForm, pool_uuid)
+
+
+@login_required
+def orga_ci_pool_types_delete(request: HttpRequest, event_slug: str, pool_uuid: str) -> HttpResponse:
+    """Delete pool for event."""
+    return orga_delete(request, event_slug, "orga_ci_pool_types", pool_uuid)
 
 
 @login_required
@@ -116,11 +141,11 @@ def orga_ci_transfer(request: HttpRequest, event_slug: str) -> HttpResponse:
             request, context, event_slug, "orga_ci_inventory"
         ):
             messages.error(request, "Only staff can transfer from this inventory.")
-            redirect_pk = target_inventory.uuid if target_inventory else "0"
+            redirect_pk = target_inventory.uuid if target_inventory else ""
             return redirect("orga_ci_inventory_view", event_slug=context["run"].get_slug(), inventory_uuid=redirect_pk)
     elif not has_event_permission(request, context, event_slug, "orga_ci_inventory"):
         messages.error(request, "Only staff can transfer from NPC.")
-        redirect_pk = target_inventory.uuid if target_inventory else "0"
+        redirect_pk = target_inventory.uuid if target_inventory else ""
         return redirect("orga_ci_inventory_view", event_slug=context["run"].get_slug(), inventory_uuid=redirect_pk)
 
     # Get pool type and amount
@@ -143,5 +168,5 @@ def orga_ci_transfer(request: HttpRequest, event_slug: str) -> HttpResponse:
     except ValueError as e:
         messages.error(request, f"Transfer failed: {e!s}")
 
-    redirect_pk = source_inventory.uuid if source_inventory else (target_inventory.uuid if target_inventory else "0")
+    redirect_pk = source_inventory.uuid if source_inventory else (target_inventory.uuid if target_inventory else "")
     return redirect("orga_ci_inventory_view", event_slug=context["run"].get_slug(), inventory_uuid=redirect_pk)

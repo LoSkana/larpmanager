@@ -3814,6 +3814,9 @@ msgstr "Oggetto non esiste"
 msgid "One-Time Access Token"
 msgstr "Gettone di accesso una tantum"
 
+msgid "Operation not allowed"
+msgstr "Operazione non consentita"
+
 msgid "Participant questions"
 msgstr "Domande dei partecipanti"
 
@@ -3928,6 +3931,9 @@ msgstr "Vuoi procedere"
 
 msgid "Download relationships"
 msgstr "Scarica le relazioni"
+
+msgid "Event deletion request"
+msgstr "Richiesta di cancellazione dell'evento"
 
 msgid "Expenses collaborators"
 msgstr "Spese collaboratori"
@@ -4644,6 +4650,9 @@ msgstr "L'unica colonna obbligatoria è"
 msgid "Trait assigned for %(event)s"
 msgstr "Tratto assegnato per %(event)s"
 
+msgid "Your request has been logged"
+msgstr "La richiesta è stata registrata"
+
 msgid "payment pending confirmation"
 msgstr "pagamento in attesa di conferma"
 
@@ -4912,6 +4921,9 @@ msgstr "check relazioni inesistenti"
 
 msgid "Added to the bottom of all pages"
 msgstr "Aggiunto in fondo a tutte le pagine"
+
+msgid "An error occurred while deleting"
+msgstr "Si è verificato un errore durante l'eliminazione di"
 
 msgid "Cancellation for missing payment"
 msgstr "Cancellazione per mancato pagamento"
@@ -5541,6 +5553,9 @@ msgstr "Stai per effettuare una donazione di"
 
 msgid "click on the icon to open the tutorial"
 msgstr "fare clic sull'icona per aprire l'esercitazione"
+
+msgid "we'll let you know as soon as possible"
+msgstr "vi faremo sapere il prima possibile"
 
 msgid "Character are not visible at the moment"
 msgstr "I personaggi non sono visibili al momento"
@@ -8049,6 +8064,12 @@ msgstr ""
 "Non sarà più possibile utilizzare questo link dopo l'accesso al contenuto"
 
 msgid ""
+"due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+"a causa della delicatezza del compito richiesto, il nostro team lo esaminerà"
+" manualmente"
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
 msgstr ""
 "Permette all'organizzazione di assegnare badge e di attivare una classifica "
@@ -9840,13 +9861,6 @@ msgid ""
 msgstr ""
 "Tratta questo evento come un evento digitale/online che non richiede la "
 "registrazione di persona"
-
-msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"È necessario creare almeno una domanda di registrazione prima di poter "
-"creare opzioni di registrazione"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "

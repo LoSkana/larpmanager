@@ -28,6 +28,7 @@
                     <th>{% trans "Maximum" %}</th>
                     <th></th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -61,6 +62,13 @@
                                     <i class="fa-solid fa-arrow-down"></i>
                                 </a>
                             {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'orga_registration_options_delete' run.get_slug el.uuid %}"
+                               class="delete-option-ajax"
+                               data-option-uuid="{{ el.uuid }}">
+                                <i class="fas fa-trash"></i>
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}

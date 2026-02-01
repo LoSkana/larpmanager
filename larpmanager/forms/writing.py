@@ -275,7 +275,7 @@ class BaseWritingForm(BaseRegistrationForm):
         return instance
 
 
-class PlotForm(WritingForm, BaseWritingForm):
+class OrgaPlotForm(WritingForm, BaseWritingForm):
     """Form for Plot."""
 
     load_templates: ClassVar[list] = ["plot"]
@@ -391,7 +391,7 @@ class PlotForm(WritingForm, BaseWritingForm):
         return instance
 
 
-class FactionForm(WritingForm, BaseWritingForm):
+class OrgaFactionForm(WritingForm, BaseWritingForm):
     """Form for Faction."""
 
     load_templates: ClassVar[list] = ["faction"]
@@ -434,7 +434,7 @@ class FactionForm(WritingForm, BaseWritingForm):
         self.fields["typ"].help_text = ", ".join([f"<b>{key}</b>: {value}" for key, value in help_texts.items()])
 
 
-class QuestTypeForm(WritingForm):
+class OrgaQuestTypeForm(WritingForm):
     """Form for QuestType."""
 
     page_title = _("Quest type")
@@ -449,7 +449,7 @@ class QuestTypeForm(WritingForm):
         }
 
 
-class QuestForm(WritingForm, BaseWritingForm):
+class OrgaQuestForm(WritingForm, BaseWritingForm):
     """Form for Quest."""
 
     page_title = _("Quest")
@@ -471,7 +471,7 @@ class QuestForm(WritingForm, BaseWritingForm):
         self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
 
-class TraitForm(WritingForm, BaseWritingForm):
+class OrgaTraitForm(WritingForm, BaseWritingForm):
     """Form for Trait."""
 
     page_title = _("Trait")
@@ -495,7 +495,7 @@ class TraitForm(WritingForm, BaseWritingForm):
         self.fields["quest"].choices = [(m.uuid, m.name) for m in que]
 
 
-class HandoutForm(WritingForm):
+class OrgaHandoutForm(WritingForm):
     """Form for Handout."""
 
     page_title = _("Handout")
@@ -519,7 +519,7 @@ class HandoutForm(WritingForm):
         self.fields["template"].choices = [(m.uuid, m.name) for m in que]
 
 
-class HandoutTemplateForm(WritingForm):
+class OrgaHandoutTemplateForm(WritingForm):
     """Form for HandoutTemplate."""
 
     load_templates: ClassVar[list] = ["handout-template"]
@@ -533,7 +533,7 @@ class HandoutTemplateForm(WritingForm):
         }
 
 
-class PrologueTypeForm(WritingForm):
+class OrgaPrologueTypeForm(WritingForm):
     """Form for PrologueType."""
 
     page_title = _("Prologue type")
@@ -543,7 +543,7 @@ class PrologueTypeForm(WritingForm):
         fields: ClassVar[list] = ["name", "event"]
 
 
-class PrologueForm(WritingForm, BaseWritingForm):
+class OrgaPrologueForm(WritingForm, BaseWritingForm):
     """Form for Prologue."""
 
     page_title = _("Prologue")
@@ -573,7 +573,7 @@ class PrologueForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
 
-class SpeedLarpForm(WritingForm):
+class OrgaSpeedLarpForm(WritingForm):
     """Form for SpeedLarp."""
 
     page_title = _("Speed larp")
