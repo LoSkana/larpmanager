@@ -51,10 +51,18 @@ window.addEventListener('DOMContentLoaded', function() {
 
         if (isWritingContext()) {
             const writingType = getWritingType();
-            return `${basePath}/writing/options/${writingType}/edit/${optionUuid}/`;
+            path = `${basePath}/writing/options/${writingType}/`;
         } else {
-            return `${basePath}/options/edit/${optionUuid}/`;
+            path = `${basePath}/options/`;
         }
+
+        if (optionUuid) {
+            path += `edit/${optionUuid}/`;
+        } else {
+            path += `new/`;
+        }
+
+        return path;
     }
 
 

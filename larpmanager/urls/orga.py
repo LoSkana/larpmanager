@@ -253,6 +253,11 @@ urlpatterns = [
         name="orga_registration_options_edit",
     ),
     path(
+        "<slug:event_slug>/manage/options/list/",
+        views_of.orga_registration_options_list,
+        name="orga_registration_options_list",
+    ),
+    path(
         "<slug:event_slug>/manage/options/list/<slug:question_uuid>/",
         views_of.orga_registration_options_list,
         name="orga_registration_options_list",
@@ -536,6 +541,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/writing/form/<slug:writing_type>/email",
         views_oc.orga_writing_form_email,
         name="orga_writing_form_email",
+    ),
+    path(
+        "<slug:event_slug>/manage/writing/options/<slug:writing_type>/list/",
+        views_oc.orga_writing_options_list,
+        name="orga_writing_options_list",
     ),
     path(
         "<slug:event_slug>/manage/writing/options/<slug:writing_type>/list/<slug:question_uuid>/",

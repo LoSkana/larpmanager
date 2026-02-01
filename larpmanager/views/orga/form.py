@@ -19,17 +19,13 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.registration import (
     OrgaRegistrationInstallmentForm,
-    OrgaRegistrationOptionForm,
-    OrgaRegistrationQuestionForm,
     OrgaRegistrationQuotaForm,
     OrgaRegistrationSectionForm,
     OrgaRegistrationSurchargeForm,
@@ -50,10 +46,8 @@ from larpmanager.models.registration import (
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order, get_element
 from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
-from larpmanager.utils.services.actions import Action, unified_orga
+from larpmanager.utils.services.actions import form_edit_handler, options_edit_handler, orga_delete
 from larpmanager.utils.services.edit import (
-    form_edit_handler,
-    options_edit_handler,
     orga_edit,
 )
 
@@ -108,7 +102,7 @@ def orga_registration_tickets_edit(request: HttpRequest, event_slug: str, ticket
 @login_required
 def orga_registration_tickets_delete(request: HttpRequest, event_slug: str, ticket_uuid: str) -> HttpResponse:
     """Delete ticket for event."""
-    return unified_orga(request, event_slug, "orga_registration_tickets", Action.DELETE, ticket_uuid)
+    return orga_delete(request, event_slug, "orga_registration_tickets", ticket_uuid)
 
 
 @login_required
@@ -148,7 +142,7 @@ def orga_registration_sections_edit(request: HttpRequest, event_slug: str, secti
 @login_required
 def orga_registration_sections_delete(request: HttpRequest, event_slug: str, section_uuid: str) -> HttpResponse:
     """Delete section for event."""
-    return unified_orga(request, event_slug, "orga_registration_sections", Action.DELETE, section_uuid)
+    return orga_delete(request, event_slug, "orga_registration_sections", section_uuid)
 
 
 @login_required
@@ -218,69 +212,32 @@ def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpRespons
 @login_required
 def orga_registration_form_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new registration form question."""
-    # Check user permissions for registration form editing
-    perm = "orga_registration_form"
-    context = check_event_context(request, event_slug, perm)
-
     return form_edit_handler(
         request,
-        context,
+        event_slug,
+        "orga_registration_form",
         None,
-        perm,
-        RegistrationOption,
-        OrgaRegistrationQuestionForm,
-        "orga_registration_form_edit",
-        perm,
-        "larpmanager/orga/registration/form_edit.html",
     )
 
 
 @login_required
 def orga_registration_form_edit(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
-    """Handle registration form question editing for organizers.
-
-    This view allows organizers to edit registration questions, handle form submissions,
-    and redirect to appropriate pages based on the question type and user actions.
-
-    Args:
-        request: The HTTP request object containing form data and user information
-        event_slug: Event slug identifier for the specific event
-        question_uuid: Question UUID to edit (0 for new questions)
-
-    Returns:
-        Either a rendered form edit page or a redirect response after successful save
-
-    Notes:
-        - Handles both creation (num=0) and editing of existing questions
-        - Automatically redirects to option creation for single/multiple choice questions
-        - Validates that choice questions have at least one option defined
-
-    """
-    # Check user permissions for registration form editing
-    perm = "orga_registration_form"
-    context = check_event_context(request, event_slug, perm)
-
+    """Edit registration form question for organizers."""
     return form_edit_handler(
         request,
-        context,
+        event_slug,
+        "orga_registration_form",
         question_uuid,
-        perm,
-        RegistrationOption,
-        OrgaRegistrationQuestionForm,
-        "orga_registration_form_edit",
-        perm,
-        "larpmanager/orga/registration/form_edit.html",
     )
 
 
 @login_required
 def orga_registration_form_delete(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
     """Delete question for event."""
-    return unified_orga(
+    return orga_delete(
         request,
         event_slug,
         "orga_registration_form",
-        Action.DELETE,
         question_uuid,
     )
 
@@ -300,50 +257,19 @@ def orga_registration_form_order(request: HttpRequest, event_slug: str, question
 @login_required
 def orga_registration_options_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new registration option."""
-    return orga_edit(request, event_slug, "orga_registration_options", OrgaRegistrationOptionForm, None)
+    return options_edit_handler(request, event_slug, "orga_registration_form", None)
 
 
 @login_required
 def orga_registration_options_edit(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
-    """Edit registration options for an event.
-
-    Validates that registration questions exist before allowing creation of
-    registration options. Redirects to question creation if none exist.
-
-    For new options (option_uuid="0"), expects question_uuid in GET or POST parameters.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event slug identifier
-        option_uuid: Registration option UUID to edit (0 for new options)
-
-    Returns:
-        HttpResponse: Rendered registration option edit page, redirect, or JsonResponse for AJAX
-
-    """
-    # Check user permissions for registration form management
-    context = check_event_context(request, event_slug, "orga_registration_form")
-    context["frame"] = 1
-
-    # For new options without question_uuid, verify that questions exist
-    if not option_uuid:
-        question_uuid = request.GET.get("question_uuid") or request.POST.get("question_uuid")
-        if not question_uuid and not context["event"].get_elements(RegistrationQuestion).exists():
-            # Display warning message to user about missing prerequisites
-            messages.warning(
-                request,
-                _("You must create at least one registration question before you can create registration options"),
-            )
-            # Redirect to registration questions creation page
-            return redirect("orga_registration_form_edit", event_slug=event_slug, question_uuid="")
-
-    return options_edit_handler(
-        request, context, option_uuid, RegistrationQuestion, RegistrationOption, OrgaRegistrationOptionForm
-    )
+    """Edit registration options for an event."""
+    return options_edit_handler(request, event_slug, "orga_registration_form", option_uuid)
 
 
 @login_required
-def orga_registration_options_list(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
+def orga_registration_options_list(
+    request: HttpRequest, event_slug: str, question_uuid: str | None = None
+) -> HttpResponse:
     """Display the list of options for a registration form question in an iframe.
 
     This view shows only the options list section, designed to be loaded in an iframe
@@ -411,7 +337,7 @@ def orga_registration_options_order(
 @login_required
 def orga_registration_options_delete(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
     """Delete registration option for an event."""
-    return unified_orga(request, event_slug, "orga_registration_form", Action.DELETE, option_uuid)
+    return orga_delete(request, event_slug, "orga_registration_form_option", option_uuid)
 
 
 @login_required
@@ -441,7 +367,7 @@ def orga_registration_quotas_edit(request: HttpRequest, event_slug: str, quota_u
 @login_required
 def orga_registration_quotas_delete(request: HttpRequest, event_slug: str, quota_uuid: str) -> HttpResponse:
     """Delete quota for event."""
-    return unified_orga(request, event_slug, "orga_registration_quotas", Action.DELETE, quota_uuid)
+    return orga_delete(request, event_slug, "orga_registration_quotas", quota_uuid)
 
 
 @login_required
@@ -473,7 +399,7 @@ def orga_registration_installments_edit(request: HttpRequest, event_slug: str, i
 @login_required
 def orga_registration_installments_delete(request: HttpRequest, event_slug: str, installment_uuid: str) -> HttpResponse:
     """Delete installment for event."""
-    return unified_orga(request, event_slug, "orga_registration_installments", Action.DELETE, installment_uuid)
+    return orga_delete(request, event_slug, "orga_registration_installments", installment_uuid)
 
 
 @login_required
@@ -503,4 +429,4 @@ def orga_registration_surcharges_edit(request: HttpRequest, event_slug: str, sur
 @login_required
 def orga_registration_surcharges_delete(request: HttpRequest, event_slug: str, surcharge_uuid: str) -> HttpResponse:
     """Delete surcharge for event."""
-    return unified_orga(request, event_slug, "orga_registration_surcharges", Action.DELETE, surcharge_uuid)
+    return orga_delete(request, event_slug, "orga_registration_surcharges", surcharge_uuid)

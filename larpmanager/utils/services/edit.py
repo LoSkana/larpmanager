@@ -35,7 +35,7 @@ from larpmanager.cache.config import _get_fkey_config, get_event_config
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait
-from larpmanager.models.form import BaseQuestionType, QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
+from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log, Member
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.auth.admin import is_lm_admin
@@ -340,20 +340,21 @@ def backend_get(context: dict, model_type: type, entity_uuid: str, association_f
 def _resolve_element_uuid(
     context: dict,
     element_uuid: str | None,
-    *,
-    is_association: bool,
-) -> str:
+) -> str | None:
     """Resolve element UUID from context if None."""
     if element_uuid is not None:
         return element_uuid
 
-    if is_association:
+    if context.get("assoc_form"):
         context["exe"] = True
         context["nonum"] = True
         return context["uuid"]
 
-    context["nonum"] = True
-    return context["event"].uuid
+    if context.get("event_form"):
+        context["nonum"] = True
+        return context["event"].uuid
+
+    return None
 
 
 def _handle_form_submission(
@@ -390,10 +391,9 @@ def backend_edit(
     request: HttpRequest,
     context: dict,
     form_type: type[BaseModelForm],
-    element_uuid: str | None,
+    element_uuid: str | None = None,
     additional_field: str | None = None,
     *,
-    is_association: bool = False,
     quiet: bool = False,
 ) -> bool:
     """Handle backend editing operations for various content types.
@@ -408,7 +408,6 @@ def backend_edit(
         form_type: Django ModelForm class for handling the specific model
         element_uuid: Element UUID for editing existing objects, None for new objects
         additional_field: Optional additional field parameter for specialized handling
-        is_association: Flag indicating association-based vs event-based operation
         quiet: Flag to suppress success messages when True
 
     Returns:
@@ -421,7 +420,7 @@ def backend_edit(
     context["request"] = request
 
     # Resolve element UUID from context if needed
-    element_uuid = _resolve_element_uuid(context, element_uuid, is_association=is_association)
+    element_uuid = _resolve_element_uuid(context, element_uuid)
 
     # Load existing element or set as None for new objects
     if element_uuid:
@@ -483,14 +482,15 @@ def orga_edit(
 
     # Merge any additional context provided by caller
     if additional_context:
+        if additional_context.get("event_form"):
+            additional_context["add_another"] = False
         context.update(additional_context)
 
     # Check if this is an iframe request
     is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
 
     # Process the edit operation using backend edit handler
-    # Returns True if edit was successful and should redirect
-    if backend_edit(request, context, form_type, entity_uuid, additional_field=None, is_association=False):
+    if backend_edit(request, context, form_type, entity_uuid):
         # Set suggestion context for successful edit
         set_suggestion(context, permission)
 
@@ -571,20 +571,17 @@ def exe_edit(
 
     # Merge additional context if provided
     if additional_context:
+        if additional_context.get("assoc_form") or additional_context.get("event_form"):
+            additional_context["add_another"] = False
         context.update(additional_context)
 
     # Check if this is an iframe request
     is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
 
+    context["exe"] = True
+
     # Process the edit operation through backend handler
-    if backend_edit(
-        request,
-        context,
-        form_type,
-        entity_uuid,
-        additional_field=additional_field,
-        is_association=True,
-    ):
+    if backend_edit(request, context, form_type, entity_uuid, additional_field=additional_field):
         # Set permission suggestion for UI feedback
         set_suggestion(context, permission)
 
@@ -977,142 +974,6 @@ def writing_edit_working_ticket(request: HttpRequest, element_type: str, edit_uu
     cache.set(cache_key, active_tickets, min(ticket_timeout_seconds, conf_settings.CACHE_TIMEOUT_1_DAY))
 
     return warning_message
-
-
-def form_edit_handler(  # noqa: PLR0913
-    request: HttpRequest,
-    context: dict,
-    question_uuid: str | None,
-    perm: str,
-    option_model: type[BaseModel],
-    form_class: type[BaseModelForm],
-    redirect_view_name: str,
-    redirect_list_view_name: str,
-    template_name: str,
-    extra_redirect_kwargs: dict | None = None,
-) -> HttpResponse:
-    """Generic handler for question form editing (registration and writing).
-
-    Args:
-        request: HTTP request object
-        context: Event context from check_event_context
-        question_uuid: Question UUID to edit (0 for new questions)
-        perm: Permission name for set_suggestion
-        option_model: Option model class (RegistrationOption or WritingOption)
-        form_class: Form class (OrgaRegistrationQuestionForm or OrgaWritingQuestionForm)
-        redirect_view_name: View name for redirect when options needed
-        redirect_list_view_name: View name for redirect to list
-        template_name: Template to render
-        extra_redirect_kwargs: Extra kwargs for redirect URL (e.g., {"writing_type": writing_type})
-
-    Returns:
-        HttpResponse: Rendered template or redirect
-    """
-    # Check if this is an AJAX request
-    is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
-
-    # Process form submission using backend edit utility
-    if backend_edit(request, context, form_class, question_uuid, is_association=False, quiet=True):
-        # Set permission suggestion for future operations
-        set_suggestion(context, perm)
-
-        # If item was deleted, redirect to list view
-        if request.POST.get("delete") == "1":
-            messages.success(request, _("Operation completed") + "!")
-            redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_redirect_kwargs or {})}
-            return redirect(redirect_list_view_name, **redirect_kwargs)
-
-        # If AJAX request, return JSON with question UUID
-        if is_ajax:
-            return JsonResponse(
-                {
-                    "success": True,
-                    "question_uuid": str(context["saved"].uuid),
-                    "message": str(_("Question saved successfully")),
-                }
-            )
-
-        # Handle "continue editing" button - redirect to new question form
-        if "continue" in request.POST:
-            messages.success(request, _("Operation completed") + "!")
-            if extra_redirect_kwargs:  # writing form
-                redirect_kwargs = {
-                    "event_slug": context["run"].get_slug(),
-                    "question_uuid": "",
-                    **extra_redirect_kwargs,
-                }
-            else:  # registration form
-                redirect_kwargs = {"event_slug": context["run"].get_slug(), "question_uuid": ""}
-            return redirect(request.resolver_match.view_name, **redirect_kwargs)
-
-        # Check if question is single/multiple choice and needs options
-        is_choice = context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
-        if is_choice and not option_model.objects.filter(question_id=context["saved"].id).exists():
-            messages.warning(
-                request,
-                _("You must define at least one option before saving a single-choice or multiple-choice question"),
-            )
-
-            # Redirect to question page
-            redirect_kwargs = {
-                "event_slug": context["run"].get_slug(),
-                "question_uuid": context["saved"].uuid,
-                **(extra_redirect_kwargs or {}),
-            }
-            return redirect(redirect_view_name, **redirect_kwargs)
-
-        messages.success(request, _("Operation completed") + "!")
-        redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_redirect_kwargs or {})}
-        return redirect(redirect_list_view_name, **redirect_kwargs)
-
-    return render(request, template_name, context)
-
-
-def options_edit_handler(
-    request: HttpRequest,
-    context: dict,
-    option_uuid: str | None,
-    question_model: type[BaseModel],
-    option_model: type[BaseModel],
-    form_class: type[BaseModelForm],
-    extra_context: dict | None = None,
-) -> HttpResponse:
-    """Handler for option form submission (iframe mode).
-
-    Args:
-        request: HTTP request object
-        context: Event context from check_event_context
-        option_uuid: Option UUID to edit (0 for new options)
-        question_model: Question model class (RegistrationQuestion or WritingQuestion)
-        option_model: Option model class (RegistrationOption or WritingOption)
-        form_class: Form class (OrgaRegistrationOptionForm or OrgaWritingOptionForm)
-        extra_context: Additional context to add to form_context (e.g., {"typ": writing_type})
-
-    Returns:
-        HttpResponse with form page (iframe mode)
-    """
-    # For new options, get the question_uuid from request
-    if not option_uuid:
-        question_uuid = request.GET.get("question_uuid") or request.POST.get("question_uuid")
-        if question_uuid:
-            get_element(context, question_uuid, "question", question_model)
-    else:
-        # For editing existing option, load the option instance
-        get_element(context, option_uuid, "el", option_model)
-        context["question"] = context["el"].question
-
-    # Try saving it
-    if backend_edit(request, context, form_class, option_uuid, is_association=False):
-        return render(request, "elements/options/form_success.html", context)
-
-    # If form validation failed, return form with errors
-    form_context = {
-        **context,
-        "num": option_uuid,
-        **(extra_context or {}),
-    }
-
-    return render(request, "elements/options/form_frame.html", form_context)
 
 
 @require_POST

@@ -19,7 +19,7 @@
     {% include "elements/form/main.html" %}
     <div id="options" class="hide auto_resize">
         <iframe id="options-iframe"
-                src="{% url 'orga_registration_options_list' run.get_slug num %}">
+                {% if num %} src="{% url 'orga_registration_options_list' run.get_slug num %}" {% else %} src="{% url 'orga_registration_options_list' run.get_slug %}" {% endif %}>
         </iframe>
     </div>
 {% endblock content %}

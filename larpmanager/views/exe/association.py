@@ -67,7 +67,7 @@ def exe_association(request: HttpRequest) -> Any:
         None,
         "exe_association",
         "manage",
-        additional_context={"add_another": False},
+        additional_context={"assoc_form": True},
     )
 
 
@@ -129,14 +129,14 @@ def exe_config(request: HttpRequest, section: str | None = None) -> HttpResponse
     """Handle organization configuration editing with optional section jump."""
     # Prepare context with section jump if specified
     add_ctx = {"jump_section": section} if section else {}
-    add_ctx["add_another"] = False
+    add_ctx["assoc_form"] = True
     return exe_edit(request, ExeConfigForm, None, "exe_config", "manage", additional_context=add_ctx)
 
 
 @login_required
 def exe_profile(request: HttpRequest) -> Any:
     """Edit user profile settings."""
-    return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", additional_context={"add_another": False})
+    return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", additional_context={"assoc_form": True})
 
 
 @login_required
@@ -230,7 +230,7 @@ def exe_methods(request: HttpRequest) -> Any:
         None,
         "exe_methods",
         "manage",
-        additional_context={"add_another": False},
+        additional_context={"assoc_form": True},
     )
 
 
@@ -243,7 +243,7 @@ def exe_appearance(request: HttpRequest) -> Any:
         None,
         "exe_appearance",
         "manage",
-        additional_context={"add_another": False},
+        additional_context={"assoc_form": True},
     )
 
 
@@ -270,10 +270,10 @@ def exe_features(request: HttpRequest) -> HttpResponse:
     """
     # Check user permissions and get initial context
     context = check_association_context(request, "exe_features")
-    context["add_another"] = False
+    context["assoc_form"] = True
 
     # Process form submission and handle feature activation
-    if backend_edit(request, context, ExeFeatureForm, None, additional_field=None, is_association=True):
+    if backend_edit(request, context, ExeFeatureForm):
         # Get newly activated features that have after-links
         context["new_features"] = Feature.objects.filter(
             pk__in=context["form"].added_features,
@@ -491,7 +491,7 @@ def feature_description(request: HttpRequest) -> JsonResponse:
 @login_required
 def exe_quick(request: HttpRequest) -> Any:
     """Edit quick setup configuration."""
-    return exe_edit(request, ExeQuickSetupForm, None, "exe_quick", "manage", additional_context={"add_another": False})
+    return exe_edit(request, ExeQuickSetupForm, None, "exe_quick", "manage", additional_context={"assoc_form": True})
 
 
 @login_required

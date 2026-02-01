@@ -9554,13 +9554,6 @@ msgstr ""
 "registraci"
 
 msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"Před vytvořením možností registrace musíte vytvořit alespoň jednu "
-"registrační otázku"
-
-msgid ""
 "You must define at least one option before saving a single-choice or "
 "multiple-choice question"
 msgstr ""

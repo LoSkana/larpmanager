@@ -9839,13 +9839,6 @@ msgstr ""
 "persoonlijke registratie nodig is"
 
 msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"Je moet minstens één registratievraag maken voordat je registratieopties "
-"kunt maken"
-
-msgid ""
 "You must define at least one option before saving a single-choice or "
 "multiple-choice question"
 msgstr ""

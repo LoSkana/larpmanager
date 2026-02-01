@@ -70,7 +70,7 @@ from larpmanager.utils.io.download import (
     zip_exports,
 )
 from larpmanager.utils.io.upload import go_upload
-from larpmanager.utils.services.actions import Action, unified_orga
+from larpmanager.utils.services.actions import orga_delete
 from larpmanager.utils.services.edit import backend_edit, orga_edit
 from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.users.deadlines import check_run_deadlines
@@ -263,11 +263,10 @@ def orga_roles_edit(request: HttpRequest, event_slug: str, role_uuid: str) -> Ht
 @login_required
 def orga_roles_delete(request: HttpRequest, event_slug: str, role_uuid: str) -> HttpResponse:
     """Delete organization event role."""
-    return unified_orga(
+    return orga_delete(
         request,
         event_slug,
         "orga_roles",
-        Action.DELETE,
         role_uuid,
     )
 
@@ -282,7 +281,7 @@ def orga_appearance(request: HttpRequest, event_slug: str) -> HttpResponse:
         OrgaAppearanceForm,
         None,
         "manage",
-        additional_context={"add_another": False},
+        additional_context={"event_form": True},
     )
 
 
@@ -298,7 +297,7 @@ def orga_run(request: HttpRequest, event_slug: str) -> HttpResponse:
         OrgaRunForm,
         run_uuid,
         "manage",
-        additional_context={"add_another": False},
+        additional_context={"event_form": True},
     )
 
 
@@ -325,7 +324,7 @@ def orga_texts_edit(request: HttpRequest, event_slug: str, text_uuid: str) -> Ht
 @login_required
 def orga_texts_delete(request: HttpRequest, event_slug: str, text_uuid: str) -> HttpResponse:
     """Delete text for event."""
-    return unified_orga(request, event_slug, "orga_texts", Action.DELETE, text_uuid)
+    return orga_delete(request, event_slug, "orga_texts", text_uuid)
 
 
 @login_required
@@ -351,7 +350,7 @@ def orga_buttons_edit(request: HttpRequest, event_slug: str, button_uuid: str) -
 @login_required
 def orga_buttons_delete(request: HttpRequest, event_slug: str, button_uuid: str) -> HttpResponse:
     """Delete button for event."""
-    return unified_orga(request, event_slug, "orga_buttons", Action.DELETE, button_uuid)
+    return orga_delete(request, event_slug, "orga_buttons", button_uuid)
 
 
 @login_required
@@ -362,7 +361,7 @@ def orga_config(
 ) -> HttpResponse:
     """Configure organization settings with optional section navigation."""
     add_ctx = {"jump_section": section} if section else {}
-    add_ctx["add_another"] = False
+    add_ctx["event_form"] = True
     return orga_edit(request, event_slug, "orga_config", OrgaConfigForm, None, "manage", additional_context=add_ctx)
 
 
@@ -379,8 +378,8 @@ def orga_features(request: HttpRequest, event_slug: str) -> Any:
 
     """
     context = check_event_context(request, event_slug, "orga_features")
-    context["add_another"] = False
-    if backend_edit(request, context, OrgaFeatureForm, None, additional_field=None, is_association=False):
+    context["event_form"] = True
+    if backend_edit(request, context, OrgaFeatureForm):
         context["new_features"] = Feature.objects.filter(
             pk__in=context["form"].added_features,
             after_link__isnull=False,
@@ -529,7 +528,7 @@ def orga_quick(request: HttpRequest, event_slug: str) -> HttpResponse:
         OrgaQuickSetupForm,
         None,
         "manage",
-        additional_context={"add_another": False},
+        additional_context={"event_form": True},
     )
 
 

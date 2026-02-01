@@ -30,7 +30,7 @@ from larpmanager.models.inventory import Inventory, InventoryTransfer, PoolTypeC
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.common import get_element_event
-from larpmanager.utils.services.actions import Action, unified_orga
+from larpmanager.utils.services.actions import orga_delete
 from larpmanager.utils.services.edit import orga_edit
 from larpmanager.utils.services.inventory import perform_transfer
 
@@ -60,7 +60,7 @@ def orga_ci_inventory_edit(request: HttpRequest, event_slug: str, inventory_uuid
 @login_required
 def orga_ci_inventory_delete(request: HttpRequest, event_slug: str, inventory_uuid: str) -> HttpResponse:
     """Delete inventory for event."""
-    return unified_orga(request, event_slug, "orga_ci_inventory", Action.DELETE, inventory_uuid)
+    return orga_delete(request, event_slug, "orga_ci_inventory", inventory_uuid)
 
 
 @login_required
@@ -86,7 +86,7 @@ def orga_ci_pool_types_edit(request: HttpRequest, event_slug: str, pool_uuid: st
 @login_required
 def orga_ci_pool_types_delete(request: HttpRequest, event_slug: str, pool_uuid: str) -> HttpResponse:
     """Delete pool for event."""
-    return unified_orga(request, event_slug, "orga_ci_pool_types", Action.DELETE, pool_uuid)
+    return orga_delete(request, event_slug, "orga_ci_pool_types", pool_uuid)
 
 
 @login_required

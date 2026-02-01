@@ -9664,13 +9664,6 @@ msgstr ""
 "krever personlig påmelding"
 
 msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"Du må opprette minst ett registreringsspørsmål før du kan opprette "
-"registreringsalternativer"
-
-msgid ""
 "You must define at least one option before saving a single-choice or "
 "multiple-choice question"
 msgstr ""

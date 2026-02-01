@@ -9435,6 +9435,17 @@ msgstr ""
 msgid "Failed to add gallery"
 msgstr ""
 
+msgid "Operation completed"
+msgstr ""
+
+msgid "Question saved successfully"
+msgstr ""
+
+msgid ""
+"You must define at least one option before saving a single-choice or "
+"multiple-choice question"
+msgstr ""
+
 msgid "Move to container"
 msgstr ""
 
@@ -9486,9 +9497,6 @@ msgstr ""
 msgid "Set ability type"
 msgstr ""
 
-msgid "Operation completed"
-msgstr ""
-
 msgid "Operation not allowed"
 msgstr ""
 
@@ -9500,14 +9508,6 @@ msgid ""
 msgstr ""
 
 msgid "List of other users"
-msgstr ""
-
-msgid "Question saved successfully"
-msgstr ""
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question"
 msgstr ""
 
 msgid "Your registration ticket"
@@ -10009,11 +10009,6 @@ msgstr ""
 
 msgid ""
 "You must create at least one ability type before you can create abilities"
-msgstr ""
-
-msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
 msgstr ""
 
 msgid "Photos and videos successfully uploaded"
