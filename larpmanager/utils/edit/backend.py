@@ -395,13 +395,13 @@ def _backend_save(
         return JsonResponse({"res": "ko"})
 
     # Save the form
-    saved_object = context["form"].save(commit=False)
+    saved_object = context["form"].save()
 
     # For writing elements, manage temp flag
     if writing_type:
         saved_object.temp = False
+        saved_object.save(update_fields=["temp"])
 
-    saved_object.save()
     model_type = form_type.Meta.model
 
     # Show success message if not in quiet mode
@@ -414,8 +414,8 @@ def _backend_save(
     # Use versioning for writing elements, logging for others
     if writing_type:
         save_version(saved_object, writing_type, context["member"], to_delete=should_delete)
-    else:
-        save_log(context["member"], model_type, saved_object, to_delete=should_delete)
+
+    save_log(context["member"], model_type, saved_object, to_delete=should_delete)
 
     if should_delete:
         saved_object.delete()
