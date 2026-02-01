@@ -360,7 +360,7 @@ def _resolve_element_uuid(
         return element_uuid
 
     if context.get("member_form"):
-        return context["member_id"]
+        return context["member"].id
 
     if context.get("assoc_form"):
         context["exe"] = True

@@ -263,12 +263,12 @@ def _action_change(
 
     if action_data.get("event_form"):
         context["add_another"] = False
-        context["event_form"] = False
+        context["event_form"] = True
         redirect_view = "manage"
 
     if action_data.get("member_form"):
         context["add_another"] = False
-        context["member_form"] = False
+        context["member_form"] = True
         redirect_view = "manage"
 
     # Extract section parameter from URL if present (for jump_section in forms)
