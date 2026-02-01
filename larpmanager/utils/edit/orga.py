@@ -503,7 +503,7 @@ def _orga_actions(
         return _action_change(request, context, event_slug, permission, action_data, element_uuid)
 
     if action in [Action.ORDER, Action.DELETE]:
-        return _action_redirect(request, context, event_slug, action, action_data, element_uuid, additional)
+        return _action_redirect(request, context, permission, action, action_data, element_uuid, additional)
 
     return _action_show(request, context, action, action_data, element_uuid)
 

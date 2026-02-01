@@ -204,7 +204,7 @@ def upload_membership(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Upload membership
-    page.get_by_role("link", name="Membership").click()
+    page.get_by_role("link", name="Members").click()
     page.get_by_role("link", name="Upload membership document").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").fill("adm")
