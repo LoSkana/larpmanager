@@ -821,7 +821,7 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
 
             # Redirect based on user choice: continue adding or return to list
             if context["continue_add"]:
-                return redirect("orga_registrations_edit", context["run"].get_slug(), "")
+                return redirect("orga_registrations_new", context["run"].get_slug())
 
             return redirect("orga_registrations", event_slug=context["run"].get_slug())
 

@@ -252,7 +252,7 @@ def form_edit_handler(
         redirect_list_view_name = "orga_writing_form"
         template_name = "larpmanager/orga/characters/form_edit.html"
 
-    writing_type = extra_context.get("typ") if extra_context else None
+    writing_type = extra_context.get("writing_type") if extra_context else None
     if writing_type:
         # Validate the writing form type exists and is allowed
         check_writing_form_type(context, writing_type)
@@ -287,12 +287,11 @@ def form_edit_handler(
             if extra_context:  # writing form
                 redirect_kwargs = {
                     "event_slug": context["run"].get_slug(),
-                    "question_uuid": "",
                     **extra_context,
                 }
             else:  # registration form
-                redirect_kwargs = {"event_slug": context["run"].get_slug(), "question_uuid": ""}
-            return redirect(request.resolver_match.view_name, **redirect_kwargs)
+                redirect_kwargs = {"event_slug": context["run"].get_slug()}
+            return redirect(redirect_view_name.replace("_edit", "_new"), **redirect_kwargs)
 
         # Check if question is single/multiple choice and needs options
         is_choice = context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
@@ -347,7 +346,7 @@ def options_edit_handler(
         option_model = WritingOption
         form_class = OrgaWritingOptionForm
 
-    writing_type = extra_context.get("typ") if extra_context else None
+    writing_type = extra_context.get("writing_type") if extra_context else None
     if writing_type:
         # Validate the writing form type exists and is allowed
         check_writing_form_type(context, writing_type)

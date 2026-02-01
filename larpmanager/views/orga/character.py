@@ -38,7 +38,6 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.forms.character import (
     OrgaCharacterForm,
-    OrgaWritingOptionForm,
 )
 from larpmanager.forms.utils import EventCharacterS2WidgetUuid
 from larpmanager.forms.writing import OrgaFactionForm, OrgaPlotForm, OrgaQuestForm, OrgaTraitForm
@@ -76,7 +75,6 @@ from larpmanager.utils.services.actions import (
 )
 from larpmanager.utils.services.character import get_chars_relations
 from larpmanager.utils.services.edit import (
-    backend_edit,
     writing_edit,
     writing_edit_working_ticket,
 )
@@ -634,7 +632,7 @@ def orga_writing_form_new(request: HttpRequest, event_slug: str, writing_type: s
         event_slug,
         "orga_character_form",
         None,
-        extra_context={"typ": writing_type},
+        extra_context={"writing_type": writing_type},
     )
 
 
@@ -648,7 +646,7 @@ def orga_writing_form_edit(
         event_slug,
         "orga_character_form",
         question_uuid,
-        extra_context={"typ": writing_type},
+        extra_context={"writing_type": writing_type},
     )
 
 
@@ -705,7 +703,9 @@ def orga_writing_form_order(
 @login_required
 def orga_writing_options_new(request: HttpRequest, event_slug: str, writing_type: str) -> HttpResponse:
     """Edit writing form option for event organizers."""
-    return options_edit_handler(request, event_slug, "orga_character_form", None, extra_context={"typ": writing_type})
+    return options_edit_handler(
+        request, event_slug, "orga_character_form", None, extra_context={"writing_type": writing_type}
+    )
 
 
 @login_required
@@ -714,7 +714,7 @@ def orga_writing_options_edit(
 ) -> HttpResponse:
     """Edit writing form option for event organizers."""
     return options_edit_handler(
-        request, event_slug, "orga_character_form", option_uuid, extra_context={"typ": writing_type}
+        request, event_slug, "orga_character_form", option_uuid, extra_context={"writing_type": writing_type}
     )
 
 
@@ -754,28 +754,6 @@ def orga_writing_options_list(
         context["list"] = options_queryset.order_by("order")
 
     return render(request, "larpmanager/orga/characters/options_list.html", context)
-
-
-def writing_option_edit(context: dict, option_uuid: str, request: HttpRequest, option_type: str) -> HttpResponse:
-    """Edit a writing option and handle form submission with redirect logic."""
-    # Process form submission and save changes
-    if backend_edit(request, context, OrgaWritingOptionForm, option_uuid):
-        redirect_target = "orga_writing_form_edit"
-
-        # Check if user wants to continue adding more options
-        if "continue" in request.POST:
-            redirect_target = "orga_writing_options_new"
-
-        # Redirect to appropriate target with context parameters
-        return redirect(
-            redirect_target,
-            event_slug=context["run"].get_slug(),
-            writing_type=option_type,
-            question_uuid=context["saved"].question.uuid,
-        )
-
-    # Render edit form if no successful submission
-    return render(request, "larpmanager/orga/edit.html", context)
 
 
 @login_required
