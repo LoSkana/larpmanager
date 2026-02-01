@@ -227,8 +227,8 @@ def send_daily_organizer_summaries() -> None:
                 association_notifications[notification.association_id] = []
             association_notifications[notification.association_id].append(notification)
 
-    for member_id in member_notifications:
-        _daily_member_summaries(member_id, member_notifications[notification.member_id])
+    for member_id, notifications in member_notifications.items():
+        _daily_member_summaries(member_id, notifications)
 
     # Handle association notifications (member is None, sent to association.main_mail)
     for association_id, notifications in association_notifications.items():
@@ -336,7 +336,7 @@ def _daily_member_summaries(member_id: int, all_notifications: list) -> None:
         )
 
     # Mark all notifications for this member as sent
-    _mark_notifications_sent(notifications)
+    _mark_notifications_sent(all_notifications)
     logger.info("Daily summary sent to %s", str(member))
 
 
@@ -353,9 +353,7 @@ def generate_summary_email(event: Event, notifications: list) -> str:
     # Group notifications by type
     grouped_notifications = _digest_organize_notifications(notifications)
 
-    # Start email body
-    email_body = "<p>" + _("Here's what happened in the last 24 hours:") + "</p>"
-
+    email_body = ""
     currency_symbol = event.association.get_currency_symbol()
 
     # Map group keys to their handler functions (in display order)
@@ -408,7 +406,7 @@ def _digest_organize_notifications(notifications: list) -> dict:
 
 def _digest_invoices(event: Event, email_body: str, invoice_approvals: list, currency_symbol: str) -> str:
     """Generate email content for digest invoice to approve."""
-    email_body += "<h3>" + _("Invoices Awaiting Approval") + f" {len(invoice_approvals)}" + "</h3>"
+    email_body += "<h4>" + _("Invoices Awaiting Approval") + f": {len(invoice_approvals)}" + "</h4>"
     email_body += "<ul>"
     invoice_ids = [notification.object_id for notification in invoice_approvals]
     for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association_id=event.association_id):
@@ -424,7 +422,7 @@ def _digest_invoices(event: Event, email_body: str, invoice_approvals: list, cur
 
 def _digest_payments(event: Event, email_body: str, all_payments: list, currency_symbol: str) -> str:
     """Generate email content for digest payments received."""
-    email_body += "<h3>" + _("Payments Received") + f" {len(all_payments)}" + "</h3>"
+    email_body += "<h4>" + _("Payments Received") + f": {len(all_payments)}" + "</h4>"
     email_body += "<ul>"
 
     payment_ids = [notification.object_id for notification in all_payments]
@@ -444,7 +442,7 @@ def _digest_cancelled_registrations(
     currency_symbol: str,  # noqa: ARG001
 ) -> str:
     """Generate email content for digest cancelled registrations."""
-    email_body += "<h3>" + _("Cancelled Registrations") + f" {len(cancelled_registrations)}" + "</h3>"
+    email_body += "<h4>" + _("Cancelled Registrations") + f": {len(cancelled_registrations)}" + "</h4>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in cancelled_registrations]
     for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event):
@@ -459,7 +457,7 @@ def _digest_updated_registrations(
     event: Event, email_body: str, updated_registrations: list, currency_symbol: str
 ) -> str:
     """Generate email content for digest updated registrations."""
-    email_body += "<h3>" + _("Updated Registrations") + f" {len(updated_registrations)}" + "</h3>"
+    email_body += "<h4>" + _("Updated Registrations") + f": {len(updated_registrations)}" + "</h4>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in updated_registrations]
     for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event):
@@ -481,7 +479,7 @@ def _digest_updated_registrations(
 
 def _digest_new_registrations(event: Event, email_body: str, new_registrations: list, currency_symbol: str) -> str:
     """Generate email content for digest updated registrations."""
-    email_body += "<h3>" + _("New Registrations") + f" {len(new_registrations)}" + "</h3>"
+    email_body += "<h4>" + _("New Registrations") + f": {len(new_registrations)}" + "</h4>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in new_registrations]
     for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event):
@@ -511,9 +509,7 @@ def generate_association_summary_email(association: Association, notifications: 
     Returns:
         str: HTML formatted email body
     """
-    # Start email body
-
-    email_body = "<p>" + _("Here's what happened in the last 24 hours:") + "</p>"
+    email_body = ""
 
     # Map notification types to their handler functions
     notification_handlers = {
@@ -547,7 +543,7 @@ def generate_association_summary_email(association: Association, notifications: 
 
 def digest_password_reminders(association: Association, password_reminders: list[NotificationQueue]) -> str:
     """Handles password reminders digest summary emails."""
-    content = "<h3>" + _("Password Reset Requests") + f" ({len(password_reminders)})" + "</h3>"
+    content = "<h4>" + _("Password Reset Requests") + f": ({len(password_reminders)})" + "</h4>"
     content += "<ul>"
     membership_ids = [notification.object_id for notification in password_reminders]
     for membership in Membership.objects.filter(pk__in=membership_ids, association=association):
@@ -565,7 +561,7 @@ def digest_password_reminders(association: Association, password_reminders: list
 
 def digest_refund_request(association: Association, refund_requests: list[NotificationQueue]) -> str:
     """Handles refund request digest summary emails."""
-    content = "<h3>" + _("Refund Requests") + f" ({len(refund_requests)})" + "</h3>"
+    content = "<h4>" + _("Refund Requests") + f": ({len(refund_requests)})" + "</h4>"
     content += "<ul>"
     invoice_ids = [notification.object_id for notification in refund_requests]
     for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association=association):
@@ -579,7 +575,7 @@ def digest_refund_request(association: Association, refund_requests: list[Notifi
 
 def digest_invoice_approvals(association: Association, invoice_approvals: list[NotificationQueue]) -> str:
     """Handles invoice approvals digest summary emails."""
-    content = "<h3>" + _("Invoices Awaiting Approval") + f" ({len(invoice_approvals)})" + "</h3>"
+    content = "<h4>" + _("Invoices Awaiting Approval") + f": ({len(invoice_approvals)})" + "</h4>"
     content += "<ul>"
     invoice_ids = [notification.object_id for notification in invoice_approvals]
     for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association=association):
@@ -593,7 +589,7 @@ def digest_invoice_approvals(association: Association, invoice_approvals: list[N
 
 def digest_help_questions(association: Association, help_questions: list[NotificationQueue]) -> str:
     """Handles help questions digest summary emails."""
-    content = "<h3>" + _("Help Questions") + f" ({len(help_questions)})" + "</h3>"
+    content = "<h4>" + _("Help Questions") + f": ({len(help_questions)})" + "</h4>"
     content += "<ul>"
     question_ids = [notification.object_id for notification in help_questions]
     for question in HelpQuestion.objects.filter(pk__in=question_ids, association=association):

@@ -5810,9 +5810,6 @@ msgstr "Podrobnosti: %(details)s (<b>%(amount).2f</b>)"
 msgid "For which day you will need transportation"
 msgstr "Na který den budete potřebovat dopravu"
 
-msgid "Here's what happened in the last 24 hours:"
-msgstr "Zde je přehled událostí za posledních 24 hodin:"
-
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "kód jazyka ISO (např. \"en\", \"it\", \"de\")"
 
