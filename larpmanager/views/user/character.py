@@ -69,6 +69,7 @@ from larpmanager.models.writing import (
 from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.common import get_element, get_element_event, get_player_relationship
+from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.services.character import (
     _get_character_cache_id,
     check_missing_mandatory,
@@ -77,7 +78,6 @@ from larpmanager.utils.services.character import (
     get_character_sheet,
     get_character_sheet_factions,
 )
-from larpmanager.utils.services.edit import user_edit
 from larpmanager.utils.services.experience import get_available_ability_px, get_current_ability_px, remove_char_ability
 from larpmanager.utils.services.writing import char_add_addit
 from larpmanager.utils.users.registration import (

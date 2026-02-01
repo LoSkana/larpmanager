@@ -728,7 +728,7 @@ def writing_edit(
 
         # Process valid form data and potentially redirect
         if form.is_valid():
-            return _writing_save(context, form, form_type, element_name, redirect_url, request, element_type)
+            return _writing_save(context, form, form_type, redirect_url, request, element_type)
     else:
         # Initialize form for GET request
         form = form_type(instance=context["el"], context=context)
@@ -787,7 +787,6 @@ def _writing_save(
     context: dict,
     form: BaseModelForm,
     form_type: type,
-    type_name: str,
     redirect_func: Callable | None,
     request: HttpRequest,
     tp: str | None,
@@ -802,7 +801,6 @@ def _writing_save(
         context: Context dictionary containing element data and run information
         form: Validated form instance ready for saving
         form_type: Form class type used for logging operations
-        type_name: Name of the element in context (used for redirects)
         redirect_func: Optional redirect callable that takes context as parameter
         request: HTTP request object containing POST data and user info
         tp: Type of writing element for version tracking (None disables versioning)
@@ -850,7 +848,11 @@ def _writing_save(
         return redirect_func(context)
 
     # Default redirect to list view
-    return redirect("orga_" + type_name + "s", event_slug=context["run"].get_slug())
+    base_view = request.resolver_match.view_name
+    for view_types in ["_edit", "_new"]:
+        if base_view.endswith(view_types):
+            base_view = base_view.replace(view_types, "")
+    return redirect(base_view, event_slug=context["run"].get_slug())
 
 
 def writing_edit_cache_key(element_uuid: str, writing_type: str, association_id: int) -> str:

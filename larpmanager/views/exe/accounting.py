@@ -77,7 +77,7 @@ from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import exe_paginate
-from larpmanager.utils.services.edit import backend_get, exe_delete, exe_edit
+from larpmanager.utils.edit.backend import backend_get, exe_delete, exe_edit
 
 
 @login_required

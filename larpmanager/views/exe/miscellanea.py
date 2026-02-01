@@ -38,8 +38,8 @@ from larpmanager.models.miscellanea import (
     WarehouseTag,
 )
 from larpmanager.utils.core.base import check_association_context
+from larpmanager.utils.edit.backend import exe_delete, exe_edit
 from larpmanager.utils.services.bulk import handle_bulk_items
-from larpmanager.utils.services.edit import exe_delete, exe_edit
 from larpmanager.utils.services.miscellanea import get_warehouse_optionals
 
 

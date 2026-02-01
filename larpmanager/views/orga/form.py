@@ -45,11 +45,11 @@ from larpmanager.models.registration import (
 )
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order, get_element
-from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
-from larpmanager.utils.services.actions import form_edit_handler, options_edit_handler, orga_delete
-from larpmanager.utils.services.edit import (
+from larpmanager.utils.edit.backend import (
     orga_edit,
 )
+from larpmanager.utils.edit.orga import form_edit_handler, options_edit_handler, orga_delete
+from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
 
 
 @login_required

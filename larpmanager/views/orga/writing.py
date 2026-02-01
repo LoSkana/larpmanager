@@ -73,10 +73,10 @@ from larpmanager.utils.core.common import (
     get_speedlarp,
     get_trait,
 )
+from larpmanager.utils.edit.backend import orga_edit, writing_edit
+from larpmanager.utils.edit.orga import orga_delete, orga_order
 from larpmanager.utils.io.download import export_data
 from larpmanager.utils.io.pdf import print_handout
-from larpmanager.utils.services.actions import orga_delete, orga_order
-from larpmanager.utils.services.edit import orga_edit, writing_edit
 from larpmanager.utils.services.writing import retrieve_cache_text_field, writing_list, writing_versions, writing_view
 
 

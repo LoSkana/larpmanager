@@ -59,6 +59,8 @@ from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.auth.permission import get_index_event_permissions
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import clear_messages, get_feature
+from larpmanager.utils.edit.backend import backend_edit, orga_edit
+from larpmanager.utils.edit.orga import orga_delete
 from larpmanager.utils.io.download import (
     _get_column_names,
     export_abilities,
@@ -70,8 +72,6 @@ from larpmanager.utils.io.download import (
     zip_exports,
 )
 from larpmanager.utils.io.upload import go_upload
-from larpmanager.utils.services.actions import orga_delete
-from larpmanager.utils.services.edit import backend_edit, orga_edit
 from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.users.deadlines import check_run_deadlines
 

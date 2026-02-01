@@ -65,8 +65,8 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_album_cod, get_element
-from larpmanager.utils.services.actions import orga_delete
-from larpmanager.utils.services.edit import orga_edit
+from larpmanager.utils.edit.backend import orga_edit
+from larpmanager.utils.edit.orga import orga_delete
 from larpmanager.utils.services.miscellanea import get_warehouse_optionals, upload_albums
 from larpmanager.utils.services.writing import writing_post
 

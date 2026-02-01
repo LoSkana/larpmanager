@@ -30,8 +30,8 @@ from larpmanager.models.inventory import Inventory, InventoryTransfer, PoolTypeC
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.common import get_element_event
-from larpmanager.utils.services.actions import orga_delete
-from larpmanager.utils.services.edit import orga_edit
+from larpmanager.utils.edit.backend import orga_edit
+from larpmanager.utils.edit.orga import orga_delete
 from larpmanager.utils.services.inventory import perform_transfer
 
 logger = logging.getLogger(__name__)

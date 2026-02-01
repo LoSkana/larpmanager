@@ -80,12 +80,12 @@ from larpmanager.utils.core.common import (
     normalize_string,
 )
 from larpmanager.utils.core.paginate import exe_paginate
+from larpmanager.utils.edit.backend import exe_delete, exe_edit
 from larpmanager.utils.io.pdf import (
     get_membership_request,
     print_volunteer_registry,
     return_pdf,
 )
-from larpmanager.utils.services.edit import exe_delete, exe_edit
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_mail
 from larpmanager.views.orga.member import send_mail_batch

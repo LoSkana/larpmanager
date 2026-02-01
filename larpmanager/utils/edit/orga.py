@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from enum import Enum
 from typing import Any
 
 from django.contrib import messages
@@ -88,7 +87,8 @@ from larpmanager.models.form import (
 )
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order, get_element
-from larpmanager.utils.services.edit import backend_delete, backend_edit, set_suggestion
+from larpmanager.utils.edit.backend import backend_delete, backend_edit, set_suggestion
+from larpmanager.utils.edit.base import Action
 
 # "form": form used for creation / editing
 # "can_delete": callback used to check if the element can be deleted
@@ -154,18 +154,7 @@ alls = {
 }
 
 
-class Action(Enum):
-    """Action to be executed upon element."""
-
-    NEW = "new"
-    EDIT = "edit"
-    DELETE = "delete"
-    VIEW = "view"
-    VERSIONS = "versions"
-    ORDER = "order"
-
-
-def unified_orga(
+def _orga_actions(
     request: HttpRequest,
     event_slug: str,
     permission: str,
@@ -204,7 +193,7 @@ def unified_orga(
 
 def orga_delete(request: HttpRequest, event_slug: str, permission: str, element_uuid: str) -> HttpResponse:
     """Delete an element from an orga view."""
-    return unified_orga(request, event_slug, permission, Action.DELETE, element_uuid)
+    return _orga_actions(request, event_slug, permission, Action.DELETE, element_uuid)
 
 
 def orga_order(
@@ -215,7 +204,7 @@ def orga_order(
     additional: int,
 ) -> HttpResponse:
     """Order an element from an orga view."""
-    return unified_orga(request, event_slug, permission, Action.ORDER, element_uuid, additional)
+    return _orga_actions(request, event_slug, permission, Action.ORDER, element_uuid, additional)
 
 
 def form_edit_handler(

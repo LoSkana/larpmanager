@@ -9307,6 +9307,30 @@ msgid ""
 "assignments/media-types/media-types.xhtml"
 msgstr ""
 
+msgid "Operation completed"
+msgstr ""
+
+msgid "Operation not allowed"
+msgstr ""
+
+msgid "Warning! Other users are editing this item"
+msgstr ""
+
+msgid ""
+"You cannot work on it at the same time: the work of one of you would be lost"
+msgstr ""
+
+msgid "List of other users"
+msgstr ""
+
+msgid "Question saved successfully"
+msgstr ""
+
+msgid ""
+"You must define at least one option before saving a single-choice or "
+"multiple-choice question"
+msgstr ""
+
 msgid "The participant's email"
 msgstr ""
 
@@ -9435,17 +9459,6 @@ msgstr ""
 msgid "Failed to add gallery"
 msgstr ""
 
-msgid "Operation completed"
-msgstr ""
-
-msgid "Question saved successfully"
-msgstr ""
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question"
-msgstr ""
-
 msgid "Move to container"
 msgstr ""
 
@@ -9495,19 +9508,6 @@ msgid "Set quest"
 msgstr ""
 
 msgid "Set ability type"
-msgstr ""
-
-msgid "Operation not allowed"
-msgstr ""
-
-msgid "Warning! Other users are editing this item"
-msgstr ""
-
-msgid ""
-"You cannot work on it at the same time: the work of one of you would be lost"
-msgstr ""
-
-msgid "List of other users"
 msgstr ""
 
 msgid "Your registration ticket"

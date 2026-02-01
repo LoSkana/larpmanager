@@ -66,18 +66,18 @@ from larpmanager.models.writing import (
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order, get_element
-from larpmanager.utils.io.download import orga_character_form_download
-from larpmanager.utils.services.actions import (
+from larpmanager.utils.edit.backend import (
+    writing_edit,
+    writing_edit_working_ticket,
+)
+from larpmanager.utils.edit.orga import (
     check_writing_form_type,
     form_edit_handler,
     options_edit_handler,
     orga_delete,
 )
+from larpmanager.utils.io.download import orga_character_form_download
 from larpmanager.utils.services.character import get_chars_relations
-from larpmanager.utils.services.edit import (
-    writing_edit,
-    writing_edit_working_ticket,
-)
 from larpmanager.utils.services.writing import writing_list, writing_versions, writing_view
 
 if TYPE_CHECKING:

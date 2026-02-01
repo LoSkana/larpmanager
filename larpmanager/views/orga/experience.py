@@ -41,10 +41,10 @@ from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order, get_object_uuid
 from larpmanager.utils.core.exceptions import ReturnNowError
+from larpmanager.utils.edit.backend import orga_edit
+from larpmanager.utils.edit.orga import orga_delete
 from larpmanager.utils.io.download import export_abilities, zip_exports
-from larpmanager.utils.services.actions import orga_delete
 from larpmanager.utils.services.bulk import handle_bulk_ability
-from larpmanager.utils.services.edit import orga_edit
 
 
 @login_required
