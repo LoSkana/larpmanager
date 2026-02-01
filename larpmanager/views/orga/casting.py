@@ -58,7 +58,7 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def orga_casting_preferences(request: HttpRequest, event_slug: str, casting_type: str = "0") -> HttpResponse:
+def orga_casting_preferences(request: HttpRequest, event_slug: str, casting_type: str | None = None) -> HttpResponse:
     """Handle casting preferences for characters or traits based on type."""
     # Check user permissions for casting preferences
     context = check_event_context(request, event_slug, "orga_casting_preferences")
@@ -77,7 +77,7 @@ def orga_casting_preferences(request: HttpRequest, event_slug: str, casting_type
 
 
 @login_required
-def orga_casting_history(request: HttpRequest, event_slug: str, casting_type: str = "0") -> HttpResponse:
+def orga_casting_history(request: HttpRequest, event_slug: str, casting_type: str | None = None) -> HttpResponse:
     """Render casting history page with characters or traits based on type.
 
     Args:

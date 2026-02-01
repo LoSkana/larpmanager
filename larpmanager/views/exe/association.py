@@ -32,19 +32,9 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.feature import get_association_features
-from larpmanager.forms.accounting import ExePaymentSettingsForm
 from larpmanager.forms.association import (
-    ExeAppearanceForm,
-    ExeAssociationForm,
-    ExeAssociationRoleForm,
-    ExeAssociationTextForm,
-    ExeAssociationTranslationForm,
-    ExeConfigForm,
     ExeFeatureForm,
-    ExePreferencesForm,
-    ExeQuickSetupForm,
 )
-from larpmanager.forms.member import ExeProfileForm
 from larpmanager.models.access import AssociationPermission, AssociationRole
 from larpmanager.models.association import Association, AssociationText, AssociationTranslation
 from larpmanager.models.base import Feature
@@ -52,8 +42,8 @@ from larpmanager.models.event import Run
 from larpmanager.utils.auth.permission import get_index_association_permissions
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import clear_messages, get_feature
-from larpmanager.utils.edit.backend import backend_edit, exe_edit
-from larpmanager.utils.edit.exe import exe_delete
+from larpmanager.utils.edit.backend import backend_edit
+from larpmanager.utils.edit.exe import exe_delete, exe_edit, exe_new
 from larpmanager.utils.services.association import _reset_all_association
 from larpmanager.views.larpmanager import get_run_lm_payment
 from larpmanager.views.orga.event import prepare_roles_list
@@ -62,27 +52,12 @@ from larpmanager.views.orga.event import prepare_roles_list
 @login_required
 def exe_association(request: HttpRequest) -> Any:
     """Edit association details."""
-    return exe_edit(
-        request,
-        ExeAssociationForm,
-        None,
-        "exe_association",
-        "manage",
-        additional_context={"assoc_form": True},
-    )
+    return exe_edit(request, "exe_association")
 
 
 @login_required
 def exe_roles(request: HttpRequest) -> HttpResponse:
-    """Handle association roles management page.
-
-    Args:
-        request: HTTP request object
-
-    Returns:
-        Rendered roles management template
-
-    """
+    """Handle association roles management page."""
     # Check user permissions for role management
     context = check_association_context(request, "exe_roles")
 
@@ -104,13 +79,13 @@ def exe_roles(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_roles_new(request: HttpRequest) -> Any:
     """Create a new association role."""
-    return exe_edit(request, ExeAssociationRoleForm, None, "exe_roles")
+    return exe_new(request, "exe_roles")
 
 
 @login_required
 def exe_roles_edit(request: HttpRequest, role_uuid: str) -> Any:
     """Edit specific association role."""
-    return exe_edit(request, ExeAssociationRoleForm, role_uuid, "exe_roles")
+    return exe_edit(request, "exe_roles", role_uuid)
 
 
 @login_required
@@ -120,18 +95,15 @@ def exe_roles_delete(request: HttpRequest, role_uuid: str) -> HttpResponse:
 
 
 @login_required
-def exe_config(request: HttpRequest, section: str | None = None) -> HttpResponse:
+def exe_config(request: HttpRequest, section: str | None = None) -> HttpResponse:  # noqa: ARG001
     """Handle organization configuration editing with optional section jump."""
-    # Prepare context with section jump if specified
-    add_ctx = {"jump_section": section} if section else {}
-    add_ctx["assoc_form"] = True
-    return exe_edit(request, ExeConfigForm, None, "exe_config", "manage", additional_context=add_ctx)
+    return exe_edit(request, "exe_config")
 
 
 @login_required
 def exe_profile(request: HttpRequest) -> Any:
     """Edit user profile settings."""
-    return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", additional_context={"assoc_form": True})
+    return exe_edit(request, "exe_profile")
 
 
 @login_required
@@ -153,13 +125,13 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_texts_new(request: HttpRequest) -> HttpResponse:
     """Create a new association text."""
-    return exe_edit(request, ExeAssociationTextForm, None, "exe_texts")
+    return exe_new(request, "exe_texts")
 
 
 @login_required
 def exe_texts_edit(request: HttpRequest, text_uuid: str) -> HttpResponse:
     """Edit specific association text."""
-    return exe_edit(request, ExeAssociationTextForm, text_uuid, "exe_texts")
+    return exe_edit(request, "exe_texts", text_uuid)
 
 
 @login_required
@@ -201,13 +173,13 @@ def exe_translations(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_translations_new(request: HttpRequest) -> HttpResponse:
     """Create a new association translation override."""
-    return exe_edit(request, ExeAssociationTranslationForm, None, "exe_translations")
+    return exe_new(request, "exe_translations")
 
 
 @login_required
 def exe_translations_edit(request: HttpRequest, translation_uuid: str) -> HttpResponse:
     """Handle creation and editing of association translation overrides."""
-    return exe_edit(request, ExeAssociationTranslationForm, translation_uuid, "exe_translations")
+    return exe_edit(request, "exe_translations", translation_uuid)
 
 
 @login_required
@@ -219,32 +191,13 @@ def exe_translations_delete(request: HttpRequest, translation_uuid: str) -> Http
 @login_required
 def exe_methods(request: HttpRequest) -> Any:
     """Edit payment methods settings."""
-    return exe_edit(
-        request,
-        ExePaymentSettingsForm,
-        None,
-        "exe_methods",
-        "manage",
-        additional_context={"assoc_form": True},
-    )
+    return exe_edit(request, "exe_methods")
 
 
 @login_required
 def exe_appearance(request: HttpRequest) -> Any:
     """Edit association appearance settings."""
-    return exe_edit(
-        request,
-        ExeAppearanceForm,
-        None,
-        "exe_appearance",
-        "manage",
-        additional_context={"assoc_form": True},
-    )
-
-
-def f_k_exe(f_id: Any, r_id: Any) -> str:
-    """Generate feature key for association role."""
-    return f"feature_{f_id}_exe_{r_id}_key"
+    return exe_edit(request, "exe_appearance")
 
 
 @login_required
@@ -486,20 +439,13 @@ def feature_description(request: HttpRequest) -> JsonResponse:
 @login_required
 def exe_quick(request: HttpRequest) -> Any:
     """Edit quick setup configuration."""
-    return exe_edit(request, ExeQuickSetupForm, None, "exe_quick", "manage", additional_context={"assoc_form": True})
+    return exe_edit(request, "exe_quick")
 
 
 @login_required
 def exe_preferences(request: HttpRequest) -> Any:
     """Edit user preferences."""
-    return exe_edit(
-        request,
-        ExePreferencesForm,
-        request.user.member.id,
-        None,
-        "manage",
-        additional_context={"add_another": False},
-    )
+    return exe_edit(request, "")
 
 
 @login_required

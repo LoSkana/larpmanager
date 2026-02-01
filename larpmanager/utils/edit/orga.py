@@ -109,7 +109,7 @@ from larpmanager.utils.edit.backend import (
     backend_order,
     set_suggestion,
 )
-from larpmanager.utils.edit.base import Action
+from larpmanager.utils.edit.base import Action, prepare_change
 from larpmanager.utils.services.character import get_character_relationships, get_character_sheet
 
 
@@ -259,23 +259,7 @@ def _action_change(
     if check_callback:
         check_callback(request, context, event_slug)
 
-    redirect_view = None
-
-    if action_data.get("event_form"):
-        context["add_another"] = False
-        context["event_form"] = True
-        redirect_view = "manage"
-
-    if action_data.get("member_form"):
-        context["add_another"] = False
-        context["member_form"] = True
-        redirect_view = "manage"
-
-    # Extract section parameter from URL if present (for jump_section in forms)
-    if hasattr(request, "resolver_match") and request.resolver_match:
-        section = request.resolver_match.kwargs.get("section")
-        if section:
-            context["jump_section"] = section
+    redirect_view = prepare_change(request, context, action_data)
 
     # Check if this is an iframe request
     is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"

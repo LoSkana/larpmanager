@@ -20,6 +20,10 @@
 from __future__ import annotations
 
 from enum import Enum
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
 
 
 class Action(Enum):
@@ -31,3 +35,44 @@ class Action(Enum):
     VIEW = "view"
     VERSIONS = "versions"
     ORDER = "order"
+
+
+def prepare_change(request: HttpRequest, context: dict, action_data: dict) -> str:
+    """Prepare context and redirect view for create/edit actions.
+
+    Configures the context dictionary based on the type of form being processed
+    (association, event, or member) and determines the appropriate redirect view.
+    Also extracts section navigation parameters from the URL for form jump functionality.
+
+    Args:
+        request: HTTP request object containing resolver match data
+        context: Context dictionary to update with form configuration
+        action_data: Dictionary containing form metadata (assoc_form, event_form, member_form flags)
+
+    Returns:
+        str | None: Redirect view name ("manage" for special forms, None otherwise)
+    """
+    redirect_view = None
+
+    if action_data.get("assoc_form"):
+        context["add_another"] = False
+        context["assoc_form"] = True
+        redirect_view = "manage"
+
+    if action_data.get("event_form"):
+        context["add_another"] = False
+        context["event_form"] = True
+        redirect_view = "manage"
+
+    if action_data.get("member_form"):
+        context["add_another"] = False
+        context["member_form"] = True
+        redirect_view = "manage"
+
+    # Extract section parameter from URL if present (for jump_section in forms)
+    if hasattr(request, "resolver_match") and request.resolver_match:
+        section = request.resolver_match.kwargs.get("section")
+        if section:
+            context["jump_section"] = section
+
+    return redirect_view

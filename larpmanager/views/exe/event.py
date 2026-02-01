@@ -34,10 +34,8 @@ from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.forms.event import (
-    ExeTemplateForm,
     ExeTemplateRolesForm,
     OrgaConfigForm,
-    OrgaRunForm,
 )
 from larpmanager.models.access import EventRole
 from larpmanager.models.event import (
@@ -47,8 +45,8 @@ from larpmanager.models.event import (
 from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.core.base import check_association_context, get_context
 from larpmanager.utils.core.common import get_coming_runs, get_event_template
-from larpmanager.utils.edit.backend import backend_get, exe_edit
-from larpmanager.utils.edit.exe import exe_delete
+from larpmanager.utils.edit.backend import backend_get
+from larpmanager.utils.edit.exe import exe_delete, exe_edit, exe_form, exe_new
 from larpmanager.utils.users.deadlines import check_run_deadlines
 from larpmanager.views.manage import _get_registration_counts, _get_registration_status
 from larpmanager.views.orga.event import full_event_edit
@@ -136,13 +134,13 @@ def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
 @login_required
 def exe_runs_new(request: HttpRequest) -> HttpResponse:
     """Create a new organization-wide run with event field."""
-    return exe_edit(request, OrgaRunForm, None, "exe_events", additional_field="event")
+    return exe_new(request, "exe_events")
 
 
 @login_required
 def exe_runs_edit(request: HttpRequest, run_uuid: str) -> HttpResponse:
     """Edit organization-wide run with event field."""
-    return exe_edit(request, OrgaRunForm, run_uuid, "exe_events", additional_field="event")
+    return exe_edit(request, "exe_events", run_uuid)
 
 
 @login_required
@@ -170,13 +168,13 @@ def exe_templates(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_templates_new(request: HttpRequest) -> HttpResponse:
     """Create a new executive template."""
-    return exe_edit(request, ExeTemplateForm, None, "exe_templates")
+    return exe_new(request, "exe_templates")
 
 
 @login_required
 def exe_templates_edit(request: HttpRequest, template_uuid: str) -> HttpResponse:
     """Edit an existing executive template."""
-    return exe_edit(request, ExeTemplateForm, template_uuid, "exe_templates")
+    return exe_edit(request, "exe_templates", template_uuid)
 
 
 @login_required
@@ -196,7 +194,7 @@ def exe_templates_config(request: HttpRequest, template_uuid: str) -> HttpRespon
     add_ctx["features"].update(get_event_features(add_ctx["event"].id))
     add_ctx["add_another"] = False
 
-    return exe_edit(request, OrgaConfigForm, template_uuid, "exe_templates", additional_context=add_ctx)
+    return exe_form(request, add_ctx, "exe_templates", {}, OrgaConfigForm, template_uuid)
 
 
 @login_required
@@ -204,7 +202,7 @@ def exe_templates_roles_new(request: HttpRequest, template_uuid: str) -> HttpRes
     """Edit or create template roles for an event."""
     add_ctx = get_context(request)
     get_event_template(add_ctx, template_uuid)
-    return exe_edit(request, ExeTemplateRolesForm, None, "exe_templates", additional_context=add_ctx)
+    return exe_form(request, add_ctx, "exe_templates", {}, ExeTemplateRolesForm)
 
 
 @login_required
@@ -212,7 +210,7 @@ def exe_templates_roles_edit(request: HttpRequest, template_uuid: str, role_uuid
     """Edit or create template roles for an event."""
     add_ctx = get_context(request)
     get_event_template(add_ctx, template_uuid)
-    return exe_edit(request, ExeTemplateRolesForm, role_uuid, "exe_templates", additional_context=add_ctx)
+    return exe_form(request, add_ctx, "exe_templates", {}, ExeTemplateRolesForm, role_uuid)
 
 
 @login_required

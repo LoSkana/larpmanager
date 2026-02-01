@@ -27,7 +27,6 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Max
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -39,7 +38,7 @@ from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingCh
 from larpmanager.models.member import Log, Member
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.auth.admin import is_lm_admin
-from larpmanager.utils.core.base import check_association_context, get_context
+from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.common import get_element, get_object_uuid, html_clean
 
 if TYPE_CHECKING:
@@ -391,7 +390,7 @@ def _backend_save(
     # Handle AJAX auto-save for writing elements
     if writing_type and "ajax" in request.POST:
         if context["el"]:
-            return writing_edit_save_ajax(context["form"], request)
+            return backend_save_ajax(context["form"], request)
         return JsonResponse({"res": "ko"})
 
     # Save the form
@@ -424,6 +423,53 @@ def _backend_save(
     # Store saved object in context and return success
     context["saved"] = saved_object
     return True
+
+
+def backend_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonResponse:
+    """Handle AJAX save requests for writing elements with locking validation.
+
+    This function processes AJAX requests to save writing elements while validating
+    user permissions and checking for editing conflicts through a token-based
+    locking mechanism.
+
+    Args:
+        form: Django form instance containing the data to save
+        request: HTTP request object containing POST data and user information
+
+    Returns:
+        JsonResponse: JSON response containing either success status or warning message
+            - On success: {"res": "ok"}
+            - On warning: {"res": "ok", "warn": "warning message"}
+
+    """
+    # Initialize default success response
+    res = {"res": "ok"}
+
+    # Superusers bypass all validation checks
+    if is_lm_admin(request):
+        return JsonResponse(res)
+
+    # Extract and validate element ID from POST data
+    edit_uuid = request.POST["edit_uuid"]
+    if not edit_uuid:
+        return JsonResponse(res)
+
+    # Get element type and editing token for conflict detection
+    tp = request.POST["type"]
+    token = request.POST["token"]
+
+    # Check for editing conflicts using token-based locking
+    msg = _process_working_ticket(request, tp, edit_uuid, token)
+    if msg:
+        res["warn"] = msg
+        return JsonResponse(res)
+
+    # Save form data as temporary version
+    saved_object = form.save()
+    saved_object.temp = True
+    saved_object.save(update_fields=["temp"])
+
+    return JsonResponse(res)
 
 
 def backend_edit(
@@ -534,71 +580,6 @@ def backend_delete(
     messages.success(request, _("Operation completed") + "!")
 
 
-def exe_edit(
-    request: HttpRequest,
-    form_type: type[BaseModelForm],
-    entity_uuid: str | None,
-    permission: str,
-    redirect_view: str | None = None,
-    additional_field: str | None = None,
-    additional_context: dict | None = None,
-) -> HttpResponse:
-    """Handle editing operations for organization-level entities.
-
-    Manages the edit workflow for various entity types at the organization level,
-    including permission checking, form processing, and appropriate redirects.
-
-    Args:
-        request: HTTP request object containing form data and user information
-        form_type: Type of form/entity being edited (e.g., 'member', 'event')
-        entity_uuid: Entity UUID for the object being edited
-        permission: Permission string required to access this edit functionality
-        redirect_view: Optional redirect target after successful edit (defaults to permission)
-        additional_field: Optional additional field parameter for the backend edit
-        additional_context: Optional additional context dictionary to merge with base context
-
-    Returns:
-        HttpResponse: Redirect response on successful edit, or rendered edit template
-
-    """
-    # Check user permissions and get base context
-    context = check_association_context(request, permission)
-
-    # Merge additional context if provided
-    if additional_context:
-        if additional_context.get("assoc_form") or additional_context.get("event_form"):
-            additional_context["add_another"] = False
-        context.update(additional_context)
-
-    # Check if this is an iframe request
-    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
-
-    context["exe"] = True
-
-    # Process the edit operation through backend handler
-    if backend_edit(request, context, form_type, entity_uuid, additional_field=additional_field):
-        # Set permission suggestion for UI feedback
-        set_suggestion(context, permission)
-
-        # Return success template for iframe mode
-        if is_frame:
-            return render(request, "elements/dashboard/form_success.html", context)
-
-        # Handle "continue editing" workflow
-        if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name.replace("_edit", "_new"))
-
-        # Determine redirect target and perform redirect
-        if not redirect_view:
-            redirect_view = permission
-        return redirect(redirect_view)
-
-    # Render appropriate template based on mode
-    if is_frame:
-        return render(request, "elements/dashboard/form_frame.html", context)
-    return render(request, "larpmanager/exe/edit.html", context)
-
-
 def set_suggestion(context: dict, permission: str) -> None:
     """Set a suggestion flag for a given permission in the configuration.
 
@@ -668,130 +649,9 @@ def _setup_char_finder(context: dict, model_type: type) -> None:
     context["char_finder_media"] = widget.media
 
 
-def _writing_save(
-    context: dict,
-    form: BaseModelForm,
-    form_type: type,
-    redirect_func: Callable | None,
-    request: HttpRequest,
-    tp: str | None,
-) -> HttpResponse:
-    """Save writing form data with AJAX and normal save handling.
-
-    Handles both AJAX auto-save requests and normal form submissions. For normal saves,
-    creates version history if type is provided, otherwise logs the operation. Supports
-    deletion via POST parameter and various redirect behaviors.
-
-    Args:
-        context: Context dictionary containing element data and run information
-        form: Validated form instance ready for saving
-        form_type: Form class type used for logging operations
-        redirect_func: Optional redirect callable that takes context as parameter
-        request: HTTP request object containing POST data and user info
-        tp: Type of writing element for version tracking (None disables versioning)
-
-    Returns:
-        HttpResponse: AJAX JSON response for auto-save or HTTP redirect after normal save
-
-    """
-    # Handle AJAX auto-save requests
-    if "ajax" in request.POST:
-        # Check if element exists in context before processing
-        if context["el"]:
-            return writing_edit_save_ajax(form, request)
-        return JsonResponse({"res": "ko"})
-
-    # Process normal form submission
-    # Save form data but keep as temporary until processing complete
-    p = form.save(commit=False)
-    p.temp = False
-    p.save()
-
-    # Check if deletion was requested via POST parameter
-    dl = "delete" in request.POST and request.POST["delete"] == "1"
-
-    model_type = form_type.Meta.model
-
-    # Create version history or log operation based on type parameter
-    if tp:
-        save_version(p, tp, context["member"], to_delete=dl)
-    else:
-        save_log(context["member"], model_type, p, to_delete=dl)
-
-    # Execute deletion if requested after logging/versioning
-    if dl:
-        p.delete()
-
-    # Display success message to user
-    messages.success(request, _("Operation completed") + "!")
-
-    # Handle continue editing request
-    if "continue" in request.POST:
-        return redirect(request.resolver_match.view_name.replace("_edit", "_new"), context["run"].get_slug())
-
-    # Handle custom redirect function if provided
-    if redirect_func:
-        context["element"] = p
-        return redirect_func(context)
-
-    # Default redirect to list view
-    base_view = request.resolver_match.view_name
-    for view_types in ["_edit", "_new"]:
-        if base_view.endswith(view_types):
-            base_view = base_view.replace(view_types, "")
-    return redirect(base_view, event_slug=context["run"].get_slug())
-
-
-def writing_edit_cache_key(element_uuid: str, writing_type: str, association_id: int) -> str:
+def working_ticket_cache_key(element_uuid: str, writing_type: str, association_id: int) -> str:
     """Generate cache key for writing edit operations."""
     return f"orga_edit_{association_id}_{element_uuid}_{writing_type}"
-
-
-def writing_edit_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonResponse:
-    """Handle AJAX save requests for writing elements with locking validation.
-
-    This function processes AJAX requests to save writing elements while validating
-    user permissions and checking for editing conflicts through a token-based
-    locking mechanism.
-
-    Args:
-        form: Django form instance containing the data to save
-        request: HTTP request object containing POST data and user information
-
-    Returns:
-        JsonResponse: JSON response containing either success status or warning message
-            - On success: {"res": "ok"}
-            - On warning: {"res": "ok", "warn": "warning message"}
-
-    """
-    # Initialize default success response
-    res = {"res": "ok"}
-
-    # Superusers bypass all validation checks
-    if is_lm_admin(request):
-        return JsonResponse(res)
-
-    # Extract and validate element ID from POST data
-    edit_uuid = request.POST["edit_uuid"]
-    if not edit_uuid:
-        return JsonResponse(res)
-
-    # Get element type and editing token for conflict detection
-    tp = request.POST["type"]
-    token = request.POST["token"]
-
-    # Check for editing conflicts using token-based locking
-    msg = _process_working_ticket(request, tp, edit_uuid, token)
-    if msg:
-        res["warn"] = msg
-        return JsonResponse(res)
-
-    # Save form data as temporary version
-    p = form.save(commit=False)
-    p.temp = True
-    p.save()
-
-    return JsonResponse(res)
 
 
 def _process_working_ticket(request: HttpRequest, element_type: str, edit_uuid: str, user_token: str) -> str:
@@ -836,7 +696,7 @@ def _process_working_ticket(request: HttpRequest, element_type: str, edit_uuid: 
 
     # Get current timestamp and retrieve existing ticket from cache
     current_timestamp = int(time.time())
-    cache_key = writing_edit_cache_key(edit_uuid, element_type, association_id)
+    cache_key = working_ticket_cache_key(edit_uuid, element_type, association_id)
     active_tickets = cache.get(cache_key)
     if not active_tickets:
         active_tickets = {}

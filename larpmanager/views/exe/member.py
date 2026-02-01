@@ -36,12 +36,10 @@ from larpmanager.accounting.payment import unique_invoice_cod
 from larpmanager.accounting.registration import update_member_registrations
 from larpmanager.cache.config import get_association_config
 from larpmanager.forms.member import (
-    ExeBadgeForm,
     ExeMemberForm,
     ExeMembershipDocumentForm,
     ExeMembershipFeeForm,
     ExeMembershipForm,
-    ExeVolunteerRegistryForm,
     MembershipResponseForm,
 )
 from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
@@ -80,8 +78,7 @@ from larpmanager.utils.core.common import (
     normalize_string,
 )
 from larpmanager.utils.core.paginate import exe_paginate
-from larpmanager.utils.edit.backend import exe_edit
-from larpmanager.utils.edit.exe import exe_delete
+from larpmanager.utils.edit.exe import exe_delete, exe_edit, exe_new
 from larpmanager.utils.io.pdf import (
     get_membership_request,
     print_volunteer_registry,
@@ -782,13 +779,13 @@ def exe_volunteer_registry(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_volunteer_registry_new(request: HttpRequest) -> HttpResponse:
     """Create a new volunteer registry entry."""
-    return exe_edit(request, ExeVolunteerRegistryForm, None, "exe_volunteer_registry")
+    return exe_new(request, "exe_volunteer_registry")
 
 
 @login_required
 def exe_volunteer_registry_edit(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Edit volunteer registry entry using standard exe form handling."""
-    return exe_edit(request, ExeVolunteerRegistryForm, member_uuid, "exe_volunteer_registry")
+    return exe_edit(request, "exe_volunteer_registry", member_uuid)
 
 
 @login_required
@@ -909,13 +906,13 @@ def exe_badges(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_badges_new(request: HttpRequest) -> HttpResponse:
     """Create a new badge."""
-    return exe_edit(request, ExeBadgeForm, None, "exe_badges")
+    return exe_new(request, "exe_badges")
 
 
 @login_required
 def exe_badges_edit(request: HttpRequest, badge_uuid: str) -> HttpResponse:
     """Delegate to generic edit view for badge editing."""
-    return exe_edit(request, ExeBadgeForm, badge_uuid, "exe_badges")
+    return exe_edit(request, "exe_badges", badge_uuid)
 
 
 @login_required
