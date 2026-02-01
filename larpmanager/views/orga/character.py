@@ -58,7 +58,6 @@ from larpmanager.models.writing import (
     Prologue,
     Relationship,
     SpeedLarp,
-    TextVersionChoices,
 )
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_event_context
@@ -71,10 +70,12 @@ from larpmanager.utils.edit.orga import (
     orga_delete,
     orga_edit,
     orga_new,
+    orga_versions,
+    orga_view,
 )
 from larpmanager.utils.io.download import orga_character_form_download
 from larpmanager.utils.services.character import get_chars_relations
-from larpmanager.utils.services.writing import writing_list, writing_versions, writing_view
+from larpmanager.utils.services.writing import writing_list
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Event
@@ -189,36 +190,14 @@ def orga_characters_relationships(request: HttpRequest, event_slug: str, charact
 
 @login_required
 def orga_characters_view(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
-    """Display character view for event organizers.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-        character_uuid: Character uuid
-
-    Returns:
-        Rendered writing view for character
-
-    """
-    # Check permissions and initialize context
-    context = check_event_context(request, event_slug, ["orga_reading", "orga_characters"])
-
-    # Load character and event cache data
-    get_element(context, character_uuid, "character", Character)
-    get_event_cache_all(context)
-
-    return writing_view(request, context, "character")
+    """Display character view for event organizers."""
+    return orga_view(request, event_slug, "orga_characters", character_uuid)
 
 
 @login_required
 def orga_characters_versions(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Display version history for a character's writing content."""
-    # Check event permission and get context
-    context = check_event_context(request, event_slug, "orga_characters")
-
-    # Retrieve the character and render version history
-    get_element(context, character_uuid, "character", Character)
-    return writing_versions(request, context, "character", TextVersionChoices.CHARACTER)
+    return orga_versions(request, event_slug, "orga_characters", character_uuid)
 
 
 @login_required

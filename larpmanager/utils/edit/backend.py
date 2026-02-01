@@ -49,7 +49,7 @@ if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
 
 
-def save_log(member: Member, cls: type, element: Any, *, to_delete: bool = False) -> None:
+def save_log(member: Member, cls: BaseModel, element: Any, *, to_delete: bool = False) -> None:
     """Create a log entry for model instance changes."""
     Log.objects.create(member=member, cls=cls.__name__, eid=element.id, dl=to_delete, dct=element.as_dict())
 
@@ -279,7 +279,8 @@ def user_edit(
             should_delete = "delete" in request.POST and request.POST["delete"] == "1"
 
             # Log the operation (save or delete)
-            save_log(context["member"], form_type, saved_instance, to_delete=should_delete)
+            model_type = form_type.Meta.model
+            save_log(context["member"], model_type, saved_instance, to_delete=should_delete)
 
             # Delete the instance if deletion was requested
             if should_delete:
@@ -314,7 +315,7 @@ def set_form_name(el: BaseModel) -> str:
 
 def backend_get(
     context: dict,
-    model_type: type,
+    model_type: BaseModel,
     entity_uuid: str,
     association_field: str | None = None,
     *,
@@ -401,6 +402,7 @@ def _backend_save(
         saved_object.temp = False
 
     saved_object.save()
+    model_type = form_type.Meta.model
 
     # Show success message if not in quiet mode
     if not quiet:
@@ -413,7 +415,7 @@ def _backend_save(
     if writing_type:
         save_version(saved_object, writing_type, context["member"], to_delete=should_delete)
     else:
-        save_log(context["member"], form_type, saved_object, to_delete=should_delete)
+        save_log(context["member"], model_type, saved_object, to_delete=should_delete)
 
     if should_delete:
         saved_object.delete()
@@ -512,12 +514,11 @@ def backend_edit(
 def backend_delete(
     request: HttpRequest,
     context: dict,
-    form_type: type[BaseModelForm],
+    model_type: BaseModel,
     entity_uuid: str,
     can_delete: Callable | None = None,
 ) -> None:
     """Delete element from the system."""
-    model_type = form_type.Meta.model
     backend_get(context, model_type, entity_uuid, None)
 
     element = context["el"]
@@ -526,7 +527,7 @@ def backend_delete(
         messages.error(request, _("Operation not allowed"))
         return
 
-    save_log(context["member"], form_type, element, to_delete=True)
+    save_log(context["member"], model_type, element, to_delete=True)
 
     element.delete()
 
@@ -709,11 +710,13 @@ def _writing_save(
     # Check if deletion was requested via POST parameter
     dl = "delete" in request.POST and request.POST["delete"] == "1"
 
+    model_type = form_type.Meta.model
+
     # Create version history or log operation based on type parameter
     if tp:
         save_version(p, tp, context["member"], to_delete=dl)
     else:
-        save_log(context["member"], form_type, p, to_delete=dl)
+        save_log(context["member"], model_type, p, to_delete=dl)
 
     # Execute deletion if requested after logging/versioning
     if dl:

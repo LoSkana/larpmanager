@@ -26,7 +26,7 @@ from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import reset_event_cache_all
+from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields, reset_event_cache_all
 from larpmanager.forms.accounting import (
     OrgaCreditForm,
     OrgaDiscountForm,
@@ -98,17 +98,19 @@ from larpmanager.models.form import (
     WritingQuestion,
     _get_writing_mapping,
 )
-from larpmanager.models.writing import HandoutTemplate, PrologueType, TextVersionChoices
+from larpmanager.models.writing import HandoutTemplate, PlotCharacterRel, PrologueType, TextVersion, TextVersionChoices
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_element
+from larpmanager.utils.core.common import compute_diff, get_element
 from larpmanager.utils.core.exceptions import RedirectError
 from larpmanager.utils.edit.backend import (
     backend_delete,
     backend_edit,
+    backend_get,
     backend_order,
     set_suggestion,
 )
 from larpmanager.utils.edit.base import Action
+from larpmanager.utils.services.character import get_character_relationships, get_character_sheet
 
 
 def validate_ability_px(request: HttpRequest, context: dict, event_slug: str) -> None:
@@ -232,7 +234,6 @@ def _action_change(
     permission: str,
     action_data: dict,
     element_uuid: str | None = None,
-    redirect_view: str | None = None,
 ) -> HttpResponse | None:
     """Handle create/edit actions for organization elements.
 
@@ -247,7 +248,6 @@ def _action_change(
         permission: Permission string identifying the action type
         action_data: Dictionary from 'alls' containing form class, checks, and metadata
         element_uuid: UUID of element to edit (None for new elements)
-        redirect_view: Optional view name to redirect to on success
 
     Returns:
         HttpResponse: Rendered template or redirect response, or None
@@ -258,6 +258,8 @@ def _action_change(
     check_callback = action_data.get("check")
     if check_callback:
         check_callback(request, context, event_slug)
+
+    redirect_view = None
 
     if action_data.get("event_form"):
         context["add_another"] = False
@@ -346,6 +348,132 @@ def _evaluate_action_result(
     return render(request, "larpmanager/orga/edit.html", context)
 
 
+def _action_redirect(
+    request: HttpRequest,
+    context: dict,
+    permission: str,
+    action: Action,
+    action_data: dict,
+    element_uuid: str,
+    additional: Any = None,
+) -> HttpResponse:
+    """Handle ORDER and DELETE actions that result in redirects.
+
+    Processes reordering or deletion of organization elements and redirects to
+    the permission's list view. For writing elements, clears event cache after reordering.
+
+    Args:
+        request: HTTP request object
+        context: Context dictionary with event, run, and permission data
+        permission: Permission string identifying the action type
+        action: Action type (ORDER or DELETE)
+        action_data: Dictionary from 'alls' containing form class, checks, and metadata
+        element_uuid: UUID of element to operate on
+        additional: Position offset for ORDER action (ignored for DELETE)
+
+    Returns:
+        HttpResponse: Redirect to permission's list view with event slug
+    """
+    form_type = action_data.get("form")
+    writing = action_data.get("writing")
+    model_type = form_type.Meta.model
+
+    if action == Action.ORDER:
+        backend_order(context, model_type, element_uuid, additional)
+        if writing:
+            reset_event_cache_all(context["run"])
+
+    elif action == Action.DELETE:
+        backend_delete(request, context, model_type, element_uuid, action_data.get("can_delete"))
+
+    # Redirect to success page with event slug
+    return redirect(permission, context["run"].get_slug())
+
+
+def _action_show(
+    request: HttpRequest, context: dict, action: Action, action_data: dict, element_uuid: str
+) -> HttpResponse:
+    """Handle display actions for organization elements.
+
+    Retrieves an element and renders specialized views. Currently supports VERSIONS action
+    to display version history with diff comparison for writing elements.
+
+    Args:
+        request: HTTP request object
+        context: Context dictionary with event, run, and permission data
+        action: Action type (currently supports VERSIONS)
+        action_data: Dictionary from 'alls' containing form class, checks, and metadata
+        element_uuid: UUID of element to display
+
+    Returns:
+        HttpResponse: Rendered template showing element details or version history
+    """
+    form_type = action_data.get("form")
+    writing = action_data.get("writing")
+    model_type = form_type.Meta.model
+    element_type_name = model_type.__name__
+
+    # Get the element
+    backend_get(context, model_type, element_uuid, is_writing=bool(writing))
+
+    if action == Action.VERSIONS:
+        # Collect versions to show
+        context["versions"] = (
+            TextVersion.objects.filter(tp=writing, eid=context["el"].id).order_by("version").select_related("member")
+        )
+        previous_version = None
+        for current_version in context["versions"]:
+            if previous_version is not None:
+                compute_diff(current_version, previous_version)
+            else:
+                current_version.diff = current_version.text.replace("\n", "<br />")
+            previous_version = current_version
+
+        context["element"] = context["el"]
+        context["typ"] = element_type_name
+        return render(request, "larpmanager/orga/writing/versions.html", context)
+
+    # Only type of action is Action.VIEW
+    # Set up base element data and context
+    context["el"].data = context["el"].show_complete()
+    context["nm"] = element_type_name
+
+    # Load event cache data for all related elements
+    get_event_cache_all(context)
+
+    # Handle character-specific data and relationships
+    if element_type_name == "character":
+        if context["el"].number in context["chars"]:
+            context["char"] = context["chars"][context["el"].number]
+        context["character"] = context["el"]
+
+        # Get character sheet and relationship data
+        get_character_sheet(context)
+        get_character_relationships(context)
+    else:
+        # Handle non-character writing elements with applicable questions
+        applicable_questions = QuestionApplicable.get_applicable(element_type_name)
+        if applicable_questions:
+            context["element"] = get_writing_element_fields(
+                context,
+                element_type_name,
+                applicable_questions,
+                context["el"].id,
+                only_visible=False,
+            )
+        context["sheet_char"] = context["el"].show_complete()
+
+    # Add plot-specific character relationships
+    if element_type_name == "plot":
+        context["sheet_plots"] = (
+            PlotCharacterRel.objects.filter(plot=context["el"])
+            .order_by("character__number")
+            .select_related("character")
+        )
+
+    return render(request, "larpmanager/orga/writing/view.html", context)
+
+
 def _orga_actions(
     request: HttpRequest,
     event_slug: str,
@@ -374,38 +502,26 @@ def _orga_actions(
     Raises:
         Http404: If permission is not found in 'alls' dictionary
     """
-    if permission not in alls:
+    # Get permission data
+    action_data = alls.get(permission)
+    if not action_data:
         msg = "permission unknown"
         raise Http404(msg)
-
-    action_data = alls[permission]
-    form_type = action_data.get("form")
-    writing = action_data.get("writing")
 
     # Verify user has permission
     if permission.endswith("form_option"):
         permission = permission.replace("form_option", "form")
+    if action == Action.VIEW:
+        permission = ["orga_reading", permission]
     context = check_event_context(request, event_slug, permission)
 
-    model_type = form_type.Meta.model
-    redirect_view = None
-
     if action in [Action.EDIT, Action.NEW]:
-        return _action_change(request, context, event_slug, permission, action_data, element_uuid, redirect_view)
+        return _action_change(request, context, event_slug, permission, action_data, element_uuid)
 
-    if action == Action.ORDER:
-        backend_order(context, model_type, element_uuid, additional)
-        if writing:
-            reset_event_cache_all(context["run"])
+    if action in [Action.ORDER, Action.DELETE]:
+        return _action_redirect(request, context, event_slug, action, action_data, element_uuid, additional)
 
-    elif action == Action.DELETE:
-        backend_delete(request, context, form_type, element_uuid, action_data.get("can_delete"))
-
-    if not redirect_view:
-        redirect_view = permission
-
-    # Redirect to success page with event slug
-    return redirect(redirect_view, event_slug=context["run"].get_slug())
+    return _action_show(request, context, action, action_data, element_uuid)
 
 
 def orga_new(request: HttpRequest, event_slug: str, permission: str) -> HttpResponse:
@@ -421,6 +537,26 @@ def orga_edit(
 ) -> HttpResponse:
     """Edit organization event objects through a unified interface."""
     return _orga_actions(request, event_slug, permission, Action.EDIT, element_uuid)
+
+
+def orga_versions(
+    request: HttpRequest,
+    event_slug: str,
+    permission: str,
+    element_uuid: str | None = None,
+) -> HttpResponse:
+    """Display text versions with diff comparison for writing elements."""
+    return _orga_actions(request, event_slug, permission, Action.VERSIONS, element_uuid)
+
+
+def orga_view(
+    request: HttpRequest,
+    event_slug: str,
+    permission: str,
+    element_uuid: str | None = None,
+) -> HttpResponse:
+    """Display writing element view."""
+    return _orga_actions(request, event_slug, permission, Action.VIEW, element_uuid)
 
 
 def orga_delete(request: HttpRequest, event_slug: str, permission: str, element_uuid: str) -> HttpResponse:

@@ -94,12 +94,12 @@ def _exe_actions(
 
     action_data = alls[permission]
     form_type = action_data.get("form")
-
+    model_type = form_type.Meta.model
     # Verify user has permission
     context = check_association_context(request, permission)
 
     if action == Action.DELETE:
-        backend_delete(request, context, form_type, element_uuid, action_data.get("can_delete"))
+        backend_delete(request, context, model_type, element_uuid, action_data.get("can_delete"))
 
     redirect_view = action_data.get("redirect_view")
     if not redirect_view:

@@ -47,22 +47,12 @@ from larpmanager.models.writing import (
     TextVersionChoices,
 )
 from larpmanager.utils.core.base import check_event_context, get_event_context
-from larpmanager.utils.core.common import (
-    get_element,
-    get_handout,
-    get_object_uuid,
-    get_plot,
-    get_prologue,
-    get_quest,
-    get_quest_type,
-    get_speedlarp,
-    get_trait,
-)
+from larpmanager.utils.core.common import get_handout, get_object_uuid
 from larpmanager.utils.edit.backend import backend_order
-from larpmanager.utils.edit.orga import orga_delete, orga_edit, orga_new, orga_order
+from larpmanager.utils.edit.orga import orga_delete, orga_edit, orga_new, orga_order, orga_versions, orga_view
 from larpmanager.utils.io.download import export_data
 from larpmanager.utils.io.pdf import print_handout
-from larpmanager.utils.services.writing import retrieve_cache_text_field, writing_list, writing_versions, writing_view
+from larpmanager.utils.services.writing import retrieve_cache_text_field, writing_list
 
 
 @login_required
@@ -75,12 +65,7 @@ def orga_plots(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_plots_view(request: HttpRequest, event_slug: str, plot_uuid: str) -> HttpResponse:
     """View for displaying a specific plot in the organizer interface."""
-    # Check user permissions for reading/managing plots
-    context = check_event_context(request, event_slug, ["orga_reading", "orga_plots"])
-    get_plot(context, plot_uuid)
-
-    # Render the plot view with the retrieved context
-    return writing_view(request, context, "plot")
+    return orga_view(request, event_slug, "orga_plots", plot_uuid)
 
 
 @login_required
@@ -158,14 +143,7 @@ def orga_plots_versions(request: HttpRequest, event_slug: str, plot_uuid: str) -
         HttpResponse: Rendered versions page
 
     """
-    # Check event permissions and get event context
-    context = check_event_context(request, event_slug, "orga_plots")
-
-    # Retrieve the specific plot
-    get_plot(context, plot_uuid)
-
-    # Display text versions for the plot
-    return writing_versions(request, context, "plot", TextVersionChoices.PLOT)
+    return orga_versions(request, event_slug, "orga_plots", plot_uuid)
 
 
 @login_required
@@ -179,13 +157,7 @@ def orga_factions(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_factions_view(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
     """View displaying a specific faction for organizers."""
-    # Check permissions and setup context
-    context = check_event_context(request, event_slug, ["orga_reading", "orga_factions"])
-
-    # Retrieve the faction element
-    get_element(context, faction_uuid, "faction", Faction)
-
-    return writing_view(request, context, "faction")
+    return orga_view(request, event_slug, "orga_factions", faction_uuid)
 
 
 @login_required
@@ -214,25 +186,8 @@ def orga_factions_order(request: HttpRequest, event_slug: str, faction_uuid: str
 
 @login_required
 def orga_factions_versions(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
-    """Display version history for a faction's description.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug
-        faction_uuid: Faction uuid
-
-    Returns:
-        Rendered template showing faction text version history
-
-    """
-    # Check user has permission to manage factions for this event
-    context = check_event_context(request, event_slug, "orga_factions")
-
-    # Load the faction object into context
-    get_element(context, faction_uuid, "faction", Faction)
-
-    # Render the version history for this faction's text
-    return writing_versions(request, context, "faction", TextVersionChoices.FACTION)
+    """Display version history for a faction's description."""
+    return orga_versions(request, event_slug, "orga_factions", faction_uuid)
 
 
 @login_required
@@ -246,13 +201,7 @@ def orga_quest_types(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_quest_types_view(request: HttpRequest, event_slug: str, quest_type_uuid: str) -> HttpResponse:
     """View quest type details for organizers."""
-    # Check permissions and get base context
-    context = check_event_context(request, event_slug, ["orga_reading", "orga_quest_types"])
-
-    # Load specific quest type into context
-    get_quest_type(context, quest_type_uuid)
-
-    return writing_view(request, context, "quest_type")
+    return orga_view(request, event_slug, "orga_quest_types", quest_type_uuid)
 
 
 @login_required
@@ -274,30 +223,9 @@ def orga_quest_types_delete(request: HttpRequest, event_slug: str, quest_type_uu
 
 
 @login_required
-def orga_quest_types_versions(
-    request: HttpRequest,
-    event_slug: str,
-    quest_type_uuid: str,
-) -> HttpResponse:
-    """Display version history for a quest type.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event slug identifier
-        quest_type_uuid: Quest type UUID
-
-    Returns:
-        Rendered template with quest type version history
-
-    """
-    # Verify user has permission to access quest types for this event
-    context = check_event_context(request, event_slug, "orga_quest_types")
-
-    # Load the quest type and add it to context
-    get_quest_type(context, quest_type_uuid)
-
-    # Render version history using the generic writing versions view
-    return writing_versions(request, context, "quest_type", TextVersionChoices.QUEST_TYPE)
+def orga_quest_types_versions(request: HttpRequest, event_slug: str, quest_type_uuid: str) -> HttpResponse:
+    """Display version history for a quest type."""
+    return orga_versions(request, event_slug, "orga_quest_types", quest_type_uuid)
 
 
 @login_required
@@ -311,13 +239,7 @@ def orga_quests(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_quests_view(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpResponse:
     """View for managing quest content in the organization interface."""
-    # Check permissions and prepare context
-    context = check_event_context(request, event_slug, ["orga_reading", "orga_quests"])
-
-    # Load specific quest data
-    get_quest(context, quest_uuid)
-
-    return writing_view(request, context, "quest")
+    return orga_view(request, event_slug, "orga_quests", quest_uuid)
 
 
 @login_required
@@ -341,11 +263,7 @@ def orga_quests_delete(request: HttpRequest, event_slug: str, quest_uuid: str) -
 @login_required
 def orga_quests_versions(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpResponse:
     """Display version history for a quest."""
-    # Check user has permission to access quest versions
-    context = check_event_context(request, event_slug, "orga_quests")
-    get_quest(context, quest_uuid)
-    # Render versions page with quest-specific template
-    return writing_versions(request, context, "quest", TextVersionChoices.QUEST)
+    return orga_versions(request, event_slug, "orga_quests", quest_uuid)
 
 
 @login_required
@@ -358,9 +276,7 @@ def orga_traits(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_traits_view(request: HttpRequest, event_slug: str, trait_uuid: str) -> HttpResponse:
     """Display and manage trait details for event organizers."""
-    context = check_event_context(request, event_slug, ["orga_reading", "orga_traits"])
-    get_trait(context, trait_uuid)
-    return writing_view(request, context, "trait")
+    return orga_view(request, event_slug, "orga_traits", trait_uuid)
 
 
 @login_required
@@ -382,15 +298,9 @@ def orga_traits_delete(request: HttpRequest, event_slug: str, trait_uuid: str) -
 
 
 @login_required
-def orga_traits_versions(
-    request: HttpRequest,
-    event_slug: str,
-    trait_uuid: str,
-) -> HttpResponse:
+def orga_traits_versions(request: HttpRequest, event_slug: str, trait_uuid: str) -> HttpResponse:
     """Display version history for a specific trait."""
-    context = check_event_context(request, event_slug, "orga_traits")
-    get_trait(context, trait_uuid)
-    return writing_versions(request, context, "trait", TextVersionChoices.TRAIT)
+    return orga_versions(request, event_slug, "orga_traits", trait_uuid)
 
 
 @login_required
@@ -466,9 +376,7 @@ def orga_handouts_delete(request: HttpRequest, event_slug: str, handout_uuid: st
 @login_required
 def orga_handouts_versions(request: HttpRequest, event_slug: str, handout_uuid: str) -> HttpResponse:
     """Get version history for a specific handout."""
-    context = check_event_context(request, event_slug, "orga_handouts")
-    get_handout(context, handout_uuid)
-    return writing_versions(request, context, "handout", TextVersionChoices.HANDOUT)
+    return orga_versions(request, event_slug, "orga_handouts", handout_uuid)
 
 
 @login_required
@@ -533,13 +441,7 @@ def orga_prologues(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_prologues_view(request: HttpRequest, event_slug: str, prologue_uuid: str) -> HttpResponse:
     """Render prologue view for event organizers."""
-    # Check organizer permissions for prologue/reading access
-    context = check_event_context(request, event_slug, ["orga_reading", "orga_prologues"])
-
-    # Load specific prologue into context
-    get_prologue(context, prologue_uuid)
-
-    return writing_view(request, context, "prologue")
+    return orga_view(request, event_slug, "orga_prologues", prologue_uuid)
 
 
 @login_required
@@ -561,20 +463,9 @@ def orga_prologues_delete(request: HttpRequest, event_slug: str, prologue_uuid: 
 
 
 @login_required
-def orga_prologues_versions(
-    request: HttpRequest,
-    event_slug: str,
-    prologue_uuid: str,
-) -> HttpResponse:
+def orga_prologues_versions(request: HttpRequest, event_slug: str, prologue_uuid: str) -> HttpResponse:
     """Display version history for a specific prologue."""
-    # Check permissions and get event context
-    context = check_event_context(request, event_slug, "orga_prologues")
-
-    # Retrieve the prologue and add to context
-    get_prologue(context, prologue_uuid)
-
-    # Display version history for the prologue
-    return writing_versions(request, context, "prologue", TextVersionChoices.PROLOGUE)
+    return orga_versions(request, event_slug, "orga_prologues", prologue_uuid)
 
 
 @login_required
@@ -587,9 +478,7 @@ def orga_speedlarps(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_speedlarps_view(request: HttpRequest, event_slug: str, speedlarp_uuid: str) -> HttpResponse:
     """View a specific speedlarp for organizers."""
-    context = check_event_context(request, event_slug, ["orga_reading", "orga_speedlarps"])
-    get_speedlarp(context, speedlarp_uuid)
-    return writing_view(request, context, "speedlarp")
+    return orga_view(request, event_slug, "orga_speedlarps", speedlarp_uuid)
 
 
 @login_required
@@ -613,12 +502,7 @@ def orga_speedlarps_delete(request: HttpRequest, event_slug: str, speedlarp_uuid
 @login_required
 def orga_speedlarps_versions(request: HttpRequest, event_slug: str, speedlarp_uuid: str) -> HttpResponse:
     """Display version history for a speedlarp."""
-    # Check permissions and load speedlarp
-    context = check_event_context(request, event_slug, "orga_speedlarps")
-    get_speedlarp(context, speedlarp_uuid)
-
-    # Return version history view
-    return writing_versions(request, context, "speedlarp", TextVersionChoices.SPEEDLARP)
+    return orga_versions(request, event_slug, "orga_speedlarps", speedlarp_uuid)
 
 
 @login_required
