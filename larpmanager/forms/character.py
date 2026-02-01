@@ -362,8 +362,29 @@ class OrgaCharacterForm(CharacterForm):
         """Initialize form with event-specific writing configuration and conditional setup."""
         super().__init__(*args, **kwargs)
 
-        if "relationships" in self.params["features"] or "character_finder" in self.params.get("features", []):
+        # Init relationships
+        self._init_relationships()
+
+        # Skip additional initialization for new instances
+        if not self.instance.pk:
+            return
+
+        # Initialize experience points configuration
+        self._init_px()
+
+        # Initialize plot-related fields
+        self._init_plots()
+
+    def _init_relationships(self) -> None:
+        """Init relationships data."""
+        if "relationships" not in self.params["features"]:
+            return
+
+        if "character_finder" in self.params.get("features", []):
             get_event_cache_all(self.params)
+
+        # Process character relationships for display and validation
+        self._characters_relationships()
 
         # Load relationship field max length from event configuration
         self.relationship_max_length = int(
@@ -372,67 +393,11 @@ class OrgaCharacterForm(CharacterForm):
             ),
         )
 
-        # Skip additional initialization for new instances
-        if not self.instance.pk:
-            return
-
-        # Load specific character data when editing existing character
-        self._get_character_optimized()
-
-        # Process character relationships for display and validation
-        self._characters_relationships()
-
-        # Initialize experience points configuration
-        self._init_px()
-
-        # Initialize plot-related fields
-        self._init_plots()
-
-    def _get_character_optimized(self) -> None:
-        """Get character with optimized queries for editing."""
-        context = self.params
-
-        try:
-            parent_event = context["event"].get_class_parent(Character)
-            enabled_features = context.get("features", [])
-
-            select_related_fields = ["event"]
-
-            # Add other select_related fields based on features
-            if "user_character" in enabled_features:
-                select_related_fields.append("player")
-            if "progress" in enabled_features:
-                select_related_fields.append("progress")
-            if "assigned" in enabled_features:
-                select_related_fields.append("assigned")
-            if "mirror" in enabled_features:
-                select_related_fields.append("mirror")
-
-            character_query = Character.objects.select_related(*select_related_fields)
-
-            # Only prefetch factions and plots if their features are enabled
-            prefetch_fields = []
-            if "faction" in enabled_features:
-                prefetch_fields.append("factions_list")
-            if "plot" in enabled_features:
-                prefetch_fields.append("plots")
-
-            if prefetch_fields:
-                character_query = character_query.prefetch_related(*prefetch_fields)
-
-            context["character"] = character_query.get(event=parent_event, uuid=self.instance.uuid)
-            context["class_name"] = "character"
-        except ObjectDoesNotExist as err:
-            msg = "character does not exist"
-            raise Http404(msg) from err
-
     def _characters_relationships(self) -> None:
         """Set up character relationships data and widgets for editing."""
         context = self.params
 
         context["relationships"] = {}
-        if "relationships" not in context["features"]:
-            return
 
         with contextlib.suppress(ObjectDoesNotExist):
             context["rel_tutorial"] = Feature.objects.get(slug="relationships").tutorial
@@ -442,30 +407,32 @@ class OrgaCharacterForm(CharacterForm):
         widget.set_event(context["event"])
         context["new_rel"] = widget.render(name="new_rel_select", value="")
 
-        if "character" in context:
-            relationships_by_character_uuid = {}
+        if not self.instance.pk:
+            return
 
-            direct_relationships = Relationship.objects.filter(source=context["character"]).select_related("target")
+        relationships_by_character_uuid = {}
 
-            for relationship in direct_relationships:
-                if relationship.target.uuid not in relationships_by_character_uuid:
-                    relationships_by_character_uuid[relationship.target.uuid] = {"char": relationship.target}
-                relationships_by_character_uuid[relationship.target.uuid]["direct"] = relationship.text
+        direct_relationships = Relationship.objects.filter(source=self.instance).select_related("target")
 
-            inverse_relationships = Relationship.objects.filter(target=context["character"]).select_related("source")
+        for relationship in direct_relationships:
+            if relationship.target.uuid not in relationships_by_character_uuid:
+                relationships_by_character_uuid[relationship.target.uuid] = {"char": relationship.target}
+            relationships_by_character_uuid[relationship.target.uuid]["direct"] = relationship.text
 
-            for relationship in inverse_relationships:
-                if relationship.source.uuid not in relationships_by_character_uuid:
-                    relationships_by_character_uuid[relationship.source.uuid] = {"char": relationship.source}
-                relationships_by_character_uuid[relationship.source.uuid]["inverse"] = relationship.text
+        inverse_relationships = Relationship.objects.filter(target=self.instance).select_related("source")
 
-            sorted_relationships = sorted(
-                relationships_by_character_uuid.items(),
-                key=lambda character_entry: len(character_entry[1].get("direct", ""))
-                + len(character_entry[1].get("inverse", "")),
-                reverse=True,
-            )
-            context["relationships"] = dict(sorted_relationships)
+        for relationship in inverse_relationships:
+            if relationship.source.uuid not in relationships_by_character_uuid:
+                relationships_by_character_uuid[relationship.source.uuid] = {"char": relationship.source}
+            relationships_by_character_uuid[relationship.source.uuid]["inverse"] = relationship.text
+
+        sorted_relationships = sorted(
+            relationships_by_character_uuid.items(),
+            key=lambda character_entry: len(character_entry[1].get("direct", ""))
+            + len(character_entry[1].get("inverse", "")),
+            reverse=True,
+        )
+        context["relationships"] = dict(sorted_relationships)
 
     def _init_character(self) -> None:
         """Initialize character form fields based on features and event configuration.

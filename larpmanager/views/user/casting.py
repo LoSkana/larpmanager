@@ -208,7 +208,7 @@ def casting_details(context: dict) -> dict:
 
 
 @login_required
-def casting(request: HttpRequest, event_slug: str, quest_type_uuid: str | None = None) -> HttpResponse:
+def casting(request: HttpRequest, event_slug: str, casting_type: str | None = None) -> HttpResponse:
     """Handle user casting preferences for LARP events.
 
     This view manages the casting preference selection process for registered users,
@@ -217,7 +217,7 @@ def casting(request: HttpRequest, event_slug: str, quest_type_uuid: str | None =
     Args:
         request: Django HTTP request object containing user session and POST data
         event_slug: Event slug identifier used to retrieve the specific event run
-        quest_type_uuid: UUID of quest type (None for characters)
+        casting_type: UUID of quest type (None for characters)
 
     Returns:
         HttpResponse: Rendered casting form template or redirect response to appropriate page
@@ -248,7 +248,7 @@ def casting(request: HttpRequest, event_slug: str, quest_type_uuid: str | None =
         )
         return redirect("gallery", event_slug=context["run"].get_slug())
 
-    get_element(context, quest_type_uuid, "quest_type", QuestType)
+    get_element(context, casting_type, "quest_type", QuestType)
 
     # Load casting details and options for the specified type
     casting_details(context)
@@ -294,7 +294,7 @@ def casting(request: HttpRequest, event_slug: str, quest_type_uuid: str | None =
 
         # Handle validation errors or save preferences
         if validation_error:
-            return redirect("casting", event_slug=context["run"].get_slug(), casting_type=quest_type_uuid)
+            return redirect("casting", event_slug=context["run"].get_slug(), casting_type=casting_type)
 
         # Save preferences and redirect to refresh page
         _casting_update(request, context, prefs)
