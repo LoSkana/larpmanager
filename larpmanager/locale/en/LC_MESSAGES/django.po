@@ -9323,6 +9323,24 @@ msgstr ""
 msgid "List of other users"
 msgstr ""
 
+msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr ""
+
+msgid "You must create at least one quest type before you can create quests"
+msgstr ""
+
+msgid "You must create at least one quest before you can create traits"
+msgstr ""
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr ""
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
+msgstr ""
+
 msgid "Question saved successfully"
 msgstr ""
 
@@ -10007,10 +10025,6 @@ msgid ""
 "Characters from event '{run}' have been loaded. Review and confirm to save."
 msgstr ""
 
-msgid ""
-"You must create at least one ability type before you can create abilities"
-msgstr ""
-
 msgid "Photos and videos successfully uploaded"
 msgstr ""
 
@@ -10067,20 +10081,6 @@ msgstr ""
 
 #, python-format
 msgid "Registration for %(member)s successfully %(action)s to %(run)s"
-msgstr ""
-
-msgid "You must create at least one quest type before you can create quests"
-msgstr ""
-
-msgid "You must create at least one quest before you can create traits"
-msgstr ""
-
-msgid ""
-"You must create at least one handout template before you can create handouts"
-msgstr ""
-
-msgid ""
-"You must create at least one prologue type before you can create prologues"
 msgstr ""
 
 msgid ""

@@ -25,10 +25,6 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from larpmanager.forms.registration import (
-    OrgaRegistrationInstallmentForm,
-    OrgaRegistrationQuotaForm,
-    OrgaRegistrationSectionForm,
-    OrgaRegistrationSurchargeForm,
     OrgaRegistrationTicketForm,
 )
 from larpmanager.models.form import (
@@ -47,9 +43,15 @@ from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import (
     backend_order,
-    orga_edit,
 )
-from larpmanager.utils.edit.orga import form_edit_handler, options_edit_handler, orga_delete, orga_order
+from larpmanager.utils.edit.orga import (
+    form_edit_handler,
+    options_edit_handler,
+    orga_delete,
+    orga_edit,
+    orga_new,
+    orga_order,
+)
 from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
 
 
@@ -91,13 +93,13 @@ def orga_registration_tickets(request: HttpRequest, event_slug: str) -> HttpResp
 @login_required
 def orga_registration_tickets_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new registration ticket."""
-    return orga_edit(request, event_slug, "orga_registration_tickets", OrgaRegistrationTicketForm, None)
+    return orga_new(request, event_slug, "orga_registration_tickets")
 
 
 @login_required
 def orga_registration_tickets_edit(request: HttpRequest, event_slug: str, ticket_uuid: str) -> HttpResponse:
     """Edit a specific registration ticket."""
-    return orga_edit(request, event_slug, "orga_registration_tickets", OrgaRegistrationTicketForm, ticket_uuid)
+    return orga_edit(request, event_slug, "orga_registration_tickets", ticket_uuid)
 
 
 @login_required
@@ -129,13 +131,13 @@ def orga_registration_sections(request: HttpRequest, event_slug: str) -> HttpRes
 @login_required
 def orga_registration_sections_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new registration section for an event."""
-    return orga_edit(request, event_slug, "orga_registration_sections", OrgaRegistrationSectionForm, None)
+    return orga_new(request, event_slug, "orga_registration_sections")
 
 
 @login_required
 def orga_registration_sections_edit(request: HttpRequest, event_slug: str, section_uuid: str) -> HttpResponse:
     """Edit a specific registration section for an event."""
-    return orga_edit(request, event_slug, "orga_registration_sections", OrgaRegistrationSectionForm, section_uuid)
+    return orga_edit(request, event_slug, "orga_registration_sections", section_uuid)
 
 
 @login_required
@@ -342,13 +344,13 @@ def orga_registration_quotas(request: HttpRequest, event_slug: str) -> HttpRespo
 @login_required
 def orga_registration_quotas_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new registration quota for an event."""
-    return orga_edit(request, event_slug, "orga_registration_quotas", OrgaRegistrationQuotaForm, None)
+    return orga_new(request, event_slug, "orga_registration_quotas")
 
 
 @login_required
 def orga_registration_quotas_edit(request: HttpRequest, event_slug: str, quota_uuid: str) -> HttpResponse:
     """Edit a specific registration quota for an event."""
-    return orga_edit(request, event_slug, "orga_registration_quotas", OrgaRegistrationQuotaForm, quota_uuid)
+    return orga_edit(request, event_slug, "orga_registration_quotas", quota_uuid)
 
 
 @login_required
@@ -372,15 +374,13 @@ def orga_registration_installments(request: HttpRequest, event_slug: str) -> Htt
 @login_required
 def orga_registration_installments_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new registration installment for an event."""
-    return orga_edit(request, event_slug, "orga_registration_installments", OrgaRegistrationInstallmentForm, None)
+    return orga_new(request, event_slug, "orga_registration_installments")
 
 
 @login_required
 def orga_registration_installments_edit(request: HttpRequest, event_slug: str, installment_uuid: str) -> HttpResponse:
     """Edit a specific registration installment for an event."""
-    return orga_edit(
-        request, event_slug, "orga_registration_installments", OrgaRegistrationInstallmentForm, installment_uuid
-    )
+    return orga_edit(request, event_slug, "orga_registration_installments", installment_uuid)
 
 
 @login_required
@@ -404,13 +404,13 @@ def orga_registration_surcharges(request: HttpRequest, event_slug: str) -> HttpR
 @login_required
 def orga_registration_surcharges_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new registration surcharge for an event."""
-    return orga_edit(request, event_slug, "orga_registration_surcharges", OrgaRegistrationSurchargeForm, None)
+    return orga_new(request, event_slug, "orga_registration_surcharges")
 
 
 @login_required
 def orga_registration_surcharges_edit(request: HttpRequest, event_slug: str, surcharge_uuid: str) -> HttpResponse:
     """Edit a registration surcharge for an event."""
-    return orga_edit(request, event_slug, "orga_registration_surcharges", OrgaRegistrationSurchargeForm, surcharge_uuid)
+    return orga_edit(request, event_slug, "orga_registration_surcharges", surcharge_uuid)
 
 
 @login_required

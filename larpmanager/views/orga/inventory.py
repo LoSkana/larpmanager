@@ -25,13 +25,11 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from larpmanager.forms.inventory import OrgaInventoryForm, OrgaPoolTypePxForm
 from larpmanager.models.inventory import Inventory, InventoryTransfer, PoolTypeCI
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.common import get_element_event
-from larpmanager.utils.edit.backend import orga_edit
-from larpmanager.utils.edit.orga import orga_delete
+from larpmanager.utils.edit.orga import orga_delete, orga_edit, orga_new
 from larpmanager.utils.services.inventory import perform_transfer
 
 logger = logging.getLogger(__name__)
@@ -48,13 +46,13 @@ def orga_ci_inventory(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_ci_inventory_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a character inventory."""
-    return orga_edit(request, event_slug, "orga_ci_inventory", OrgaInventoryForm)
+    return orga_new(request, event_slug, "orga_ci_inventory")
 
 
 @login_required
 def orga_ci_inventory_edit(request: HttpRequest, event_slug: str, inventory_uuid: str) -> HttpResponse:
     """Edit a character inventory."""
-    return orga_edit(request, event_slug, "orga_ci_inventory", OrgaInventoryForm, inventory_uuid)
+    return orga_edit(request, event_slug, "orga_ci_inventory", inventory_uuid)
 
 
 @login_required
@@ -74,13 +72,13 @@ def orga_ci_pool_types(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_ci_pool_types_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a pool type for character inventory."""
-    return orga_edit(request, event_slug, "orga_ci_pool_types", OrgaPoolTypePxForm)
+    return orga_new(request, event_slug, "orga_ci_pool_types")
 
 
 @login_required
 def orga_ci_pool_types_edit(request: HttpRequest, event_slug: str, pool_uuid: str) -> HttpResponse:
     """Edit a pool type for character inventory."""
-    return orga_edit(request, event_slug, "orga_ci_pool_types", OrgaPoolTypePxForm, pool_uuid)
+    return orga_edit(request, event_slug, "orga_ci_pool_types", pool_uuid)
 
 
 @login_required

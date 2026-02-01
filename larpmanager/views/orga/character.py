@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-import contextlib
 from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
@@ -28,7 +27,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.db.models.functions import Length, Substr
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -39,9 +38,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.forms.character import (
     OrgaCharacterForm,
 )
-from larpmanager.forms.utils import EventCharacterS2WidgetUuid
 from larpmanager.forms.writing import OrgaFactionForm, OrgaPlotForm, OrgaQuestForm, OrgaTraitForm
-from larpmanager.models.base import Feature
 from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -66,16 +63,14 @@ from larpmanager.models.writing import (
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_element
-from larpmanager.utils.edit.backend import (
-    backend_order,
-    writing_edit,
-    writing_edit_working_ticket,
-)
+from larpmanager.utils.edit.backend import _process_working_ticket, backend_order
 from larpmanager.utils.edit.orga import (
     check_writing_form_type,
     form_edit_handler,
     options_edit_handler,
     orga_delete,
+    orga_edit,
+    orga_new,
 )
 from larpmanager.utils.io.download import orga_character_form_download
 from larpmanager.utils.services.character import get_chars_relations
@@ -83,52 +78,6 @@ from larpmanager.utils.services.writing import writing_list, writing_versions, w
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Event
-
-
-def get_character_optimized(context: dict, character_uuid: str) -> None:
-    """Get character with optimized queries for editing.
-
-    Args:
-        context: Template context dictionary
-        character_uuid: Character UUID
-
-    Raises:
-        Http404: If character does not exist
-
-    """
-    try:
-        parent_event = context["event"].get_class_parent(Character)
-        enabled_features = context.get("features", [])
-
-        select_related_fields = ["event"]
-
-        # Add other select_related fields based on features
-        if "user_character" in enabled_features:
-            select_related_fields.append("player")
-        if "progress" in enabled_features:
-            select_related_fields.append("progress")
-        if "assigned" in enabled_features:
-            select_related_fields.append("assigned")
-        if "mirror" in enabled_features:
-            select_related_fields.append("mirror")
-
-        character_query = Character.objects.select_related(*select_related_fields)
-
-        # Only prefetch factions and plots if their features are enabled
-        prefetch_fields = []
-        if "faction" in enabled_features:
-            prefetch_fields.append("factions_list")
-        if "plot" in enabled_features:
-            prefetch_fields.append("plots")
-
-        if prefetch_fields:
-            character_query = character_query.prefetch_related(*prefetch_fields)
-
-        context["character"] = character_query.get(event=parent_event, uuid=character_uuid)
-        context["class_name"] = "character"
-    except ObjectDoesNotExist as err:
-        msg = "character does not exist"
-        raise Http404(msg) from err
 
 
 @login_required
@@ -160,98 +109,20 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 @login_required
 def orga_characters_new(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Edit character information in organization context."""
-    # Check user permissions for character organization features
-    context = check_event_context(request, event_slug, "orga_characters")
-
-    # Load full event cache only when specific features require relationship data
-    # This optimization avoids expensive cache operations for basic character editing
-    if "relationships" in context["features"] or "character_finder" in context.get("features", []):
-        get_event_cache_all(context)
-
-    # Delegate to writing edit system with character-specific form and version type
-    return writing_edit(request, context, OrgaCharacterForm, None, TextVersionChoices.CHARACTER)
+    """Create new character in organization context."""
+    return orga_new(request, event_slug, "orga_characters")
 
 
 @login_required
 def orga_characters_edit(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
-    """Edit character information in organization context.
-
-    Args:
-        request: The HTTP request object containing user and session data
-        event_slug: The organization/event slug identifier
-        character_uuid: The character UUID to edit (0 for new character)
-
-    Returns:
-        HttpResponse: Rendered character edit form page
-
-    """
-    # Check user permissions for character organization features
-    context = check_event_context(request, event_slug, "orga_characters")
-
-    # Load full event cache for relationships finding
-    if "relationships" in context["features"] or "character_finder" in context.get("features", []):
-        get_event_cache_all(context)
-
-    # Load specific character data when editing existing character
-    get_character_optimized(context, character_uuid)
-
-    # Process character relationships for display and validation
-    _characters_relationships(context)
-
-    # Delegate to writing edit system with character-specific form and version type
-    return writing_edit(request, context, OrgaCharacterForm, character_uuid, TextVersionChoices.CHARACTER)
+    """Edit character information in organization context."""
+    return orga_edit(request, event_slug, "orga_characters", character_uuid)
 
 
 @login_required
 def orga_characters_delete(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Deletes a character."""
     return orga_delete(request, event_slug, "orga_characters", character_uuid)
-
-
-def _characters_relationships(context: dict) -> None:
-    """Set up character relationships data and widgets for editing.
-
-    Args:
-        context: Context dictionary to populate with relationship data
-
-    """
-    context["relationships"] = {}
-    if "relationships" not in context["features"]:
-        return
-
-    with contextlib.suppress(ObjectDoesNotExist):
-        context["rel_tutorial"] = Feature.objects.get(slug="relationships").tutorial
-
-    context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
-    widget = EventCharacterS2WidgetUuid(attrs={"id": "new_rel_select"})
-    widget.set_event(context["event"])
-    context["new_rel"] = widget.render(name="new_rel_select", value="")
-
-    if "character" in context:
-        relationships_by_character_uuid = {}
-
-        direct_relationships = Relationship.objects.filter(source=context["character"]).select_related("target")
-
-        for relationship in direct_relationships:
-            if relationship.target.uuid not in relationships_by_character_uuid:
-                relationships_by_character_uuid[relationship.target.uuid] = {"char": relationship.target}
-            relationships_by_character_uuid[relationship.target.uuid]["direct"] = relationship.text
-
-        inverse_relationships = Relationship.objects.filter(target=context["character"]).select_related("source")
-
-        for relationship in inverse_relationships:
-            if relationship.source.uuid not in relationships_by_character_uuid:
-                relationships_by_character_uuid[relationship.source.uuid] = {"char": relationship.source}
-            relationships_by_character_uuid[relationship.source.uuid]["inverse"] = relationship.text
-
-        sorted_relationships = sorted(
-            relationships_by_character_uuid.items(),
-            key=lambda character_entry: len(character_entry[1].get("direct", ""))
-            + len(character_entry[1].get("inverse", "")),
-            reverse=True,
-        )
-        context["relationships"] = dict(sorted_relationships)
 
 
 def update_relationship(request: HttpRequest, context: dict, nm: str, fl: str) -> None:
@@ -1326,11 +1197,11 @@ def _check_working_ticket(request: HttpRequest, context: dict, working_ticket_to
 
     """
     # Check if somebody else has opened the character to edit it
-    error_message = writing_edit_working_ticket(request, context["typ"], context["element"].id, working_ticket_token)
+    error_message = _process_working_ticket(request, context["typ"], context["element"].id, working_ticket_token)
 
     # Check if somebody has opened the same field to edit it
     if not error_message:
-        error_message = writing_edit_working_ticket(
+        error_message = _process_working_ticket(
             request,
             context["typ"],
             f"{context['element'].id}_{context['question'].id}",

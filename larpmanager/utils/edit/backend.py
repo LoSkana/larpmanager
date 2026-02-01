@@ -39,7 +39,7 @@ from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingCh
 from larpmanager.models.member import Log, Member
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.auth.admin import is_lm_admin
-from larpmanager.utils.core.base import check_association_context, check_event_context, get_context
+from larpmanager.utils.core.base import check_association_context, get_context
 from larpmanager.utils.core.common import get_element, get_object_uuid, html_clean
 
 if TYPE_CHECKING:
@@ -312,7 +312,14 @@ def set_form_name(el: BaseModel) -> str:
     return str(el)
 
 
-def backend_get(context: dict, model_type: type, entity_uuid: str, association_field: str | None = None) -> None:
+def backend_get(
+    context: dict,
+    model_type: type,
+    entity_uuid: str,
+    association_field: str | None = None,
+    *,
+    is_writing: bool = False,
+) -> None:
     """Retrieve an object by ID and perform security checks.
 
     Args:
@@ -320,21 +327,27 @@ def backend_get(context: dict, model_type: type, entity_uuid: str, association_f
         model_type: Model class to query
         entity_uuid: UUID of the object to retrieve
         association_field: Optional field name for additional checks
+        is_writing: If True, use writing-specific loading and naming
 
     Raises:
         Http404: If object with given ID doesn't exist
 
     """
-    # Retrieve object by UUID
-    element = get_object_uuid(model_type, entity_uuid)
-
-    # Store object in context and perform security validations
-    context["el"] = element
-    check_run(element, context, association_field)
-    check_association(element, context, association_field)
+    # Retrieve object by UUID using appropriate method
+    if is_writing:
+        # For writing elements, use get_element with proper checks
+        get_element(context, entity_uuid, "el", model_type)
+        context["edit_uuid"] = entity_uuid
+    else:
+        # Standard retrieval
+        element = get_object_uuid(model_type, entity_uuid)
+        context["el"] = element
+        # Perform security validations
+        check_run(element, context, association_field)
+        check_association(element, context, association_field)
 
     # Set display name for the object
-    context["name"] = str(element)
+    context["name"] = set_form_name(context["el"])
 
 
 def _resolve_element_uuid(
@@ -344,6 +357,9 @@ def _resolve_element_uuid(
     """Resolve element UUID from context if None."""
     if element_uuid is not None:
         return element_uuid
+
+    if context.get("member_form"):
+        return context["member_id"]
 
     if context.get("assoc_form"):
         context["exe"] = True
@@ -357,27 +373,48 @@ def _resolve_element_uuid(
     return None
 
 
-def _handle_form_submission(
+def _backend_save(
     request: HttpRequest,
     context: dict,
     form_type: type[BaseModelForm],
     *,
     quiet: bool,
-) -> bool:
-    """Handle form submission and return True if saved successfully."""
+    writing_type: str | None = None,
+) -> bool | HttpResponse:
+    """Handle form submission and return True if saved successfully, or HttpResponse for AJAX."""
     context["form"] = form_type(request.POST, request.FILES, instance=context["el"], context=context)
 
     if not context["form"].is_valid():
         return False
 
-    # Save the form and show success message if not in quiet mode
-    saved_object = context["form"].save()
+    # Handle AJAX auto-save for writing elements
+    if writing_type and "ajax" in request.POST:
+        if context["el"]:
+            return writing_edit_save_ajax(context["form"], request)
+        return JsonResponse({"res": "ko"})
+
+    # Save the form
+    saved_object = context["form"].save(commit=False)
+
+    # For writing elements, manage temp flag
+    if writing_type:
+        saved_object.temp = False
+
+    saved_object.save()
+
+    # Show success message if not in quiet mode
     if not quiet:
         messages.success(request, _("Operation completed") + "!")
 
     # Handle deletion if delete flag is set in POST data
     should_delete = request.POST.get("delete") == "1"
-    save_log(context["member"], form_type, saved_object, to_delete=should_delete)
+
+    # Use versioning for writing elements, logging for others
+    if writing_type:
+        save_version(saved_object, writing_type, context["member"], to_delete=should_delete)
+    else:
+        save_log(context["member"], form_type, saved_object, to_delete=should_delete)
+
     if should_delete:
         saved_object.delete()
         context["deleted"] = True
@@ -395,7 +432,8 @@ def backend_edit(
     additional_field: str | None = None,
     *,
     quiet: bool = False,
-) -> bool:
+    writing_type: str | None = None,
+) -> bool | HttpResponse:
     """Handle backend editing operations for various content types.
 
     Provides unified interface for editing different model types including
@@ -409,9 +447,11 @@ def backend_edit(
         element_uuid: Element UUID for editing existing objects, None for new objects
         additional_field: Optional additional field parameter for specialized handling
         quiet: Flag to suppress success messages when True
+        writing_type: Optional writing type for versioning (enables writing-specific features)
 
     Returns:
-        bool: True if form was successfully processed and saved, False otherwise
+        bool | HttpResponse: True if form was successfully processed and saved,
+                            False otherwise, or HttpResponse for AJAX requests
 
     """
     # Extract model type and set up basic context variables
@@ -424,8 +464,7 @@ def backend_edit(
 
     # Load existing element or set as None for new objects
     if element_uuid:
-        backend_get(context, model_type, element_uuid, additional_field)
-        context["name"] = set_form_name(context["el"])
+        backend_get(context, model_type, element_uuid, additional_field, is_writing=bool(writing_type))
     else:
         context["el"] = None
 
@@ -433,12 +472,32 @@ def backend_edit(
     context["num"] = element_uuid
     context["type"] = context["elementTyp"].__name__.lower()
 
+    # Configure writing-specific context if this is a writing element
+    if writing_type:
+        context["label_typ"] = context["type"]
+        context["nm"] = context["type"]
+        context["is_writing"] = True  # Flag to indicate writing element
+
+        # Set auto-save behavior based on event configuration
+        if "event" in context:
+            context["auto_save"] = not get_event_config(
+                context["event"].id, "writing_disable_auto", default_value=False, context=context
+            )
+            context["download"] = 1
+
+            # Set up character finder functionality
+            _setup_char_finder(context, model_type)
+
     # Process form submission
     if request.method == "POST":
-        if _handle_form_submission(request, context, form_type, quiet=quiet):
+        result = _backend_save(request, context, form_type, quiet=quiet, writing_type=writing_type)
+        # If it's an HttpResponse (AJAX), return it directly
+        if isinstance(result, HttpResponse):
+            return result
+        if result:
             return True
     else:
-        # GET request - initialize form with existing instance
+        # Initialize form with existing instance
         context["form"] = form_type(instance=context["el"], context=context)
 
     # Handle "add another" functionality for continuous adding
@@ -448,71 +507,6 @@ def backend_edit(
         context["continue_add"] = "continue" in request.POST
 
     return False
-
-
-def orga_edit(
-    request: HttpRequest,
-    event_slug: str,
-    permission: str | None,
-    form_type: type[BaseModelForm],
-    entity_uuid: str | None = None,
-    redirect_view: str | None = None,
-    additional_context: dict | None = None,
-) -> HttpResponse:
-    """Edit organization event objects through a unified interface.
-
-    Handles the editing workflow for various organization event objects,
-    including permission checking, form processing, and redirects.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event slug identifier
-        permission: Permission string to check for access control
-        form_type: Type of form/object to edit
-        entity_uuid: Entity UUID to edit
-        redirect_view: Optional redirect view name after successful edit
-        additional_context: Optional additional context to merge into template context
-
-    Returns:
-        HttpResponse: Redirect response on successful edit, or rendered edit template
-
-    """
-    # Check user permissions and get base context for the event
-    context = check_event_context(request, event_slug, permission)
-
-    # Merge any additional context provided by caller
-    if additional_context:
-        if additional_context.get("event_form"):
-            additional_context["add_another"] = False
-        context.update(additional_context)
-
-    # Check if this is an iframe request
-    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
-
-    # Process the edit operation using backend edit handler
-    if backend_edit(request, context, form_type, entity_uuid):
-        # Set suggestion context for successful edit
-        set_suggestion(context, permission)
-
-        # Return success template for iframe mode
-        if is_frame:
-            return render(request, "elements/dashboard/form_success.html", context)
-
-        # Handle "continue editing" workflow - redirect to new object form
-        if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name.replace("_edit", "_new"), context["run"].get_slug())
-
-        # Determine redirect target - use provided or default to permission name
-        if not redirect_view:
-            redirect_view = permission
-
-        # Redirect to success page with event slug
-        return redirect(redirect_view, event_slug=context["run"].get_slug())
-
-    # Edit operation failed or is initial load - render edit form
-    if is_frame:
-        return render(request, "elements/dashboard/form_frame.html", context)
-    return render(request, "larpmanager/orga/edit.html", context)
 
 
 def backend_delete(
@@ -641,80 +635,6 @@ def set_suggestion(context: dict, permission: str) -> None:
     config.save()
 
 
-def writing_edit(
-    request: HttpRequest,
-    context: dict,
-    form_type: type[BaseModelForm],
-    element_uuid: str | None,
-    element_type: str | None,
-    redirect_url: str | None = None,
-) -> HttpResponse | None:
-    """Handle editing of writing elements with form processing.
-
-    Manages the creation and editing of writing elements (characters, backgrounds, etc.)
-    through a dynamic form system. Handles both GET requests for form display and
-    POST requests for form submission and validation.
-
-    Args:
-        request: The HTTP request object containing method and form data
-        context: Context dictionary containing element data and template variables
-        form_type: Django form class to instantiate for editing the element
-        element_uuid: UUID of the element to be edited (null if new)
-        element_type: Type identifier for the writing element being edited
-        redirect_url: Optional redirect URL to use after successful form save
-
-    Returns:
-        HttpResponse object for redirect after successful save, None otherwise
-        to continue with template rendering
-
-    Note:
-        Function modifies the context dictionary in-place to add form and display data.
-
-    """
-    # Set up element type metadata for template rendering
-    context["elementTyp"] = form_type.Meta.model
-    element_name = context["elementTyp"].__name__.lower()
-
-    if element_uuid:
-        get_element(context, element_uuid, "el", context["elementTyp"])
-        context["edit_uuid"] = element_uuid
-        context["name"] = set_form_name(context["el"])
-    else:
-        context["el"] = None
-
-    # Set type information for template display
-    context["type"] = element_name
-    context["label_typ"] = context["type"]
-
-    # Handle form submission (POST request)
-    if request.method == "POST":
-        form = form_type(request.POST, request.FILES, instance=context["el"], context=context)
-
-        # Process valid form data and potentially redirect
-        if form.is_valid():
-            return _writing_save(context, form, form_type, redirect_url, request, element_type)
-    else:
-        # Initialize form for GET request
-        form = form_type(instance=context["el"], context=context)
-
-    # Configure template context for form rendering
-    context["nm"] = context["type"]
-    context["form"] = form
-    context["add_another"] = True
-    context["continue_add"] = "continue" in request.POST
-
-    # Set auto-save behavior based on event configuration
-    context["auto_save"] = not get_event_config(
-        context["event"].id, "writing_disable_auto", default_value=False, context=context
-    )
-    context["download"] = 1
-
-    # Set up character finder functionality for the element type
-    _setup_char_finder(context, context["elementTyp"])
-
-    return render(request, "larpmanager/orga/writing/writing.html", context)
-
-
 def _setup_char_finder(context: dict, model_type: type) -> None:
     """Set up character finder widget for the given context and type.
 
@@ -793,7 +713,7 @@ def _writing_save(
     if tp:
         save_version(p, tp, context["member"], to_delete=dl)
     else:
-        save_log(context["member"], form_type, p)
+        save_log(context["member"], form_type, p, to_delete=dl)
 
     # Execute deletion if requested after logging/versioning
     if dl:
@@ -858,7 +778,7 @@ def writing_edit_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonRes
     token = request.POST["token"]
 
     # Check for editing conflicts using token-based locking
-    msg = writing_edit_working_ticket(request, tp, edit_uuid, token)
+    msg = _process_working_ticket(request, tp, edit_uuid, token)
     if msg:
         res["warn"] = msg
         return JsonResponse(res)
@@ -871,7 +791,7 @@ def writing_edit_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonRes
     return JsonResponse(res)
 
 
-def writing_edit_working_ticket(request: HttpRequest, element_type: str, edit_uuid: str, user_token: str) -> str:
+def _process_working_ticket(request: HttpRequest, element_type: str, edit_uuid: str, user_token: str) -> str:
     """Manage working tickets to prevent concurrent editing conflicts.
 
     This function implements a locking mechanism to prevent multiple users from
@@ -907,7 +827,7 @@ def writing_edit_working_ticket(request: HttpRequest, element_type: str, edit_uu
         for character_uuid in character_uuids:
             if character_uuid is None:  # Skip if plot has no characters
                 continue
-            warning_message = writing_edit_working_ticket(request, "character", character_uuid, user_token)
+            warning_message = _process_working_ticket(request, "character", character_uuid, user_token)
             if warning_message:
                 return warning_message
 
@@ -956,7 +876,7 @@ def working_ticket(request: HttpRequest) -> Any:
     element_type = request.POST.get("type")
     token = request.POST.get("token")
 
-    msg = writing_edit_working_ticket(request, element_type, edit_uuid, token)
+    msg = _process_working_ticket(request, element_type, edit_uuid, token)
     if msg:
         res["warn"] = msg
 

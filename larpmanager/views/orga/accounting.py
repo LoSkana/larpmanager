@@ -28,14 +28,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.balance import get_run_accounting
 from larpmanager.cache.config import get_association_config
 from larpmanager.forms.accounting import (
-    OrgaCreditForm,
-    OrgaDiscountForm,
-    OrgaExpenseForm,
-    OrgaInflowForm,
-    OrgaOutflowForm,
-    OrgaPaymentForm,
     OrgaPersonalExpenseForm,
-    OrgaTokenForm,
 )
 from larpmanager.models.accounting import (
     AccountingItemExpense,
@@ -51,8 +44,8 @@ from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import orga_paginate
-from larpmanager.utils.edit.backend import backend_get, orga_edit
-from larpmanager.utils.edit.orga import orga_delete
+from larpmanager.utils.edit.backend import backend_get
+from larpmanager.utils.edit.orga import orga_delete, orga_edit, orga_new
 
 
 @login_required
@@ -70,13 +63,13 @@ def orga_discounts(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_discounts_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new discount for event."""
-    return orga_edit(request, event_slug, "orga_discounts", OrgaDiscountForm, None)
+    return orga_new(request, event_slug, "orga_discounts")
 
 
 @login_required
 def orga_discounts_edit(request: HttpRequest, event_slug: str, discount_uuid: str) -> HttpResponse:
     """Edit discount for event."""
-    return orga_edit(request, event_slug, "orga_discounts", OrgaDiscountForm, discount_uuid)
+    return orga_edit(request, event_slug, "orga_discounts", discount_uuid)
 
 
 @login_required
@@ -306,13 +299,13 @@ def orga_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_tokens_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new organization token for a specific event."""
-    return orga_edit(request, event_slug, "orga_tokens", OrgaTokenForm, None)
+    return orga_new(request, event_slug, "orga_tokens")
 
 
 @login_required
 def orga_tokens_edit(request: HttpRequest, event_slug: str, token_uuid: str) -> HttpResponse:
     """Edit an organization token for a specific event."""
-    return orga_edit(request, event_slug, "orga_tokens", OrgaTokenForm, token_uuid)
+    return orga_edit(request, event_slug, "orga_tokens", token_uuid)
 
 
 @login_required
@@ -366,13 +359,13 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_credits_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create new organization credits."""
-    return orga_edit(request, event_slug, "orga_credits", OrgaCreditForm, None)
+    return orga_new(request, event_slug, "orga_credits")
 
 
 @login_required
 def orga_credits_edit(request: HttpRequest, event_slug: str, credit_uuid: str) -> HttpResponse:
     """Edit organization credits."""
-    return orga_edit(request, event_slug, "orga_credits", OrgaCreditForm, credit_uuid)
+    return orga_edit(request, event_slug, "orga_credits", credit_uuid)
 
 
 @login_required
@@ -447,13 +440,13 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_payments_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new payment for an event."""
-    return orga_edit(request, event_slug, "orga_payments", OrgaPaymentForm, None)
+    return orga_new(request, event_slug, "orga_payments")
 
 
 @login_required
 def orga_payments_edit(request: HttpRequest, event_slug: str, payment_uuid: str) -> HttpResponse:
     """Edit an existing payment for an event."""
-    return orga_edit(request, event_slug, "orga_payments", OrgaPaymentForm, payment_uuid)
+    return orga_edit(request, event_slug, "orga_payments", payment_uuid)
 
 
 @login_required
@@ -518,13 +511,13 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_outflows_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new outflow entry for an event."""
-    return orga_edit(request, event_slug, "orga_outflows", OrgaOutflowForm, None)
+    return orga_new(request, event_slug, "orga_outflows")
 
 
 @login_required
 def orga_outflows_edit(request: HttpRequest, event_slug: str, outflow_uuid: str) -> HttpResponse:
     """Edit an outflow entry for an event."""
-    return orga_edit(request, event_slug, "orga_outflows", OrgaOutflowForm, outflow_uuid)
+    return orga_edit(request, event_slug, "orga_outflows", outflow_uuid)
 
 
 @login_required
@@ -585,13 +578,13 @@ def orga_inflows(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_inflows_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new inflow entry for an event."""
-    return orga_edit(request, event_slug, "orga_inflows", OrgaInflowForm, None)
+    return orga_new(request, event_slug, "orga_inflows")
 
 
 @login_required
 def orga_inflows_edit(request: HttpRequest, event_slug: str, inflow_uuid: str) -> HttpResponse:
     """Edit an existing inflow entry for an event."""
-    return orga_edit(request, event_slug, "orga_inflows", OrgaInflowForm, inflow_uuid)
+    return orga_edit(request, event_slug, "orga_inflows", inflow_uuid)
 
 
 @login_required
@@ -672,13 +665,13 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_expenses_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new expense for an event."""
-    return orga_edit(request, event_slug, "orga_expenses", OrgaExpenseForm, None)
+    return orga_new(request, event_slug, "orga_expenses")
 
 
 @login_required
 def orga_expenses_edit(request: HttpRequest, event_slug: str, expense_uuid: str) -> HttpResponse:
     """Edit an expense for an event."""
-    return orga_edit(request, event_slug, "orga_expenses", OrgaExpenseForm, expense_uuid)
+    return orga_edit(request, event_slug, "orga_expenses", expense_uuid)
 
 
 @login_required

@@ -37,7 +37,17 @@ from larpmanager.forms.accounting import (
     OrgaTokenForm,
 )
 from larpmanager.forms.character import OrgaCharacterForm, OrgaWritingOptionForm, OrgaWritingQuestionForm
-from larpmanager.forms.event import OrgaEventButtonForm, OrgaEventRoleForm, OrgaEventTextForm, OrgaProgressStepForm
+from larpmanager.forms.event import (
+    OrgaAppearanceForm,
+    OrgaConfigForm,
+    OrgaEventButtonForm,
+    OrgaEventRoleForm,
+    OrgaEventTextForm,
+    OrgaPreferencesForm,
+    OrgaProgressStepForm,
+    OrgaQuickSetupForm,
+    OrgaRunForm,
+)
 from larpmanager.forms.experience import (
     OrgaAbilityPxForm,
     OrgaAbilityTemplatePxForm,
@@ -77,6 +87,8 @@ from larpmanager.forms.writing import (
     OrgaSpeedLarpForm,
     OrgaTraitForm,
 )
+from larpmanager.models.casting import Quest, QuestType
+from larpmanager.models.experience import AbilityTypePx
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -86,18 +98,76 @@ from larpmanager.models.form import (
     WritingQuestion,
     _get_writing_mapping,
 )
+from larpmanager.models.writing import HandoutTemplate, PrologueType, TextVersionChoices
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_element
-from larpmanager.utils.edit.backend import backend_delete, backend_edit, backend_order, set_suggestion
+from larpmanager.utils.core.exceptions import RedirectError
+from larpmanager.utils.edit.backend import (
+    backend_delete,
+    backend_edit,
+    backend_order,
+    set_suggestion,
+)
 from larpmanager.utils.edit.base import Action
+
+
+def validate_ability_px(request: HttpRequest, context: dict, event_slug: str) -> None:
+    """Validate that ability types exist before allowing ability creation."""
+    if not context["event"].get_elements(AbilityTypePx).exists():
+        # Warn user and redirect to ability types creation page
+        messages.warning(request, _("You must create at least one ability type before you can create abilities"))
+        msg = "orga_px_ability_types_new"
+        raise RedirectError(msg, args=[event_slug])
+
+
+def validate_quest(request: HttpRequest, context: dict, event_slug: str) -> None:
+    """Verify that quest types are available before allowing quest creation."""
+    if not context["event"].get_elements(QuestType).exists():
+        # Add warning message and redirect to quest types adding page
+        messages.warning(request, _("You must create at least one quest type before you can create quests"))
+        msg = "orga_quest_types_new"
+        raise RedirectError(msg, args=[event_slug])
+
+
+def validate_trait(request: HttpRequest, context: dict, event_slug: str) -> None:
+    """Validate prerequisite: at least one quest must exist."""
+    if not context["event"].get_elements(Quest).exists():
+        # Add warning message and redirect to quests adding page
+        messages.warning(request, _("You must create at least one quest before you can create traits"))
+        msg = "orga_quests_new"
+        raise RedirectError(msg, args=[event_slug])
+
+
+def validate_handout(request: HttpRequest, context: dict, event_slug: str) -> None:
+    """Validate handout templates exist before allowing handout creation."""
+    if not context["event"].get_elements(HandoutTemplate).exists():
+        # Display warning and redirect to template creation page
+        messages.warning(request, _("You must create at least one handout template before you can create handouts"))
+        msg = "orga_handout_templates_new"
+        raise RedirectError(msg, args=[event_slug])
+
+
+def validate_prologue(request: HttpRequest, context: dict, event_slug: str) -> None:
+    """Validate prologue type exist before allowing prologue creation."""
+    if not context["event"].get_elements(PrologueType).exists():
+        # Display warning and redirect to template creation page
+        messages.warning(request, _("You must create at least one prologue type before you can create prologues"))
+        msg = "orga_prologue_types_new"
+        raise RedirectError(msg, args=[event_slug])
+
 
 # "form": form used for creation / editing
 # "can_delete": callback used to check if the element can be deleted
-# "redirect_view": view to redirect, if different than permission
+# "check": if a check must be performed before creating / editing
 
 alls = {
+    "": {"form": OrgaPreferencesForm, "member_form": True},
+    "orga_event": {"form": OrgaRunForm, "event_form": True},
+    "orga_config": {"form": OrgaConfigForm, "event_form": True},
+    "orga_quick": {"form": OrgaQuickSetupForm, "event_form": True},
+    "orga_appearance": {"form": OrgaAppearanceForm, "event_form": True},
     "orga_roles": {"form": OrgaEventRoleForm, "can_delete": lambda _context, element: element.number != 1},
-    "orga_characters": {"form": OrgaCharacterForm},
+    "orga_characters": {"form": OrgaCharacterForm, "writing": TextVersionChoices.CHARACTER},
     "orga_character_form": {
         "form": OrgaWritingQuestionForm,
         "can_delete": lambda _context, element: len(element.typ) == 1,
@@ -105,16 +175,16 @@ alls = {
     "orga_character_form_option": {
         "form": OrgaWritingOptionForm,
     },
-    "orga_plots": {"form": OrgaPlotForm},
-    "orga_factions": {"form": OrgaFactionForm, "writing": True},
-    "orga_quest_types": {"form": OrgaQuestTypeForm},
-    "orga_quests": {"form": OrgaQuestForm},
-    "orga_traits": {"form": OrgaTraitForm},
-    "orga_handouts": {"form": OrgaHandoutForm},
-    "orga_handout_templates": {"form": OrgaHandoutTemplateForm},
+    "orga_plots": {"form": OrgaPlotForm, "writing": TextVersionChoices.PLOT},
+    "orga_factions": {"form": OrgaFactionForm, "writing": TextVersionChoices.FACTION},
+    "orga_quest_types": {"form": OrgaQuestTypeForm, "writing": TextVersionChoices.QUEST_TYPE},
+    "orga_quests": {"form": OrgaQuestForm, "writing": TextVersionChoices.QUEST, "check": validate_quest},
+    "orga_traits": {"form": OrgaTraitForm, "writing": TextVersionChoices.TRAIT, "check": validate_trait},
+    "orga_handouts": {"form": OrgaHandoutForm, "writing": TextVersionChoices.HANDOUT},
+    "orga_handout_templates": {"form": OrgaHandoutTemplateForm, "check": validate_handout},
     "orga_prologue_types": {"form": OrgaPrologueTypeForm},
-    "orga_prologues": {"form": OrgaPrologueForm},
-    "orga_speedlarps": {"form": OrgaSpeedLarpForm},
+    "orga_prologues": {"form": OrgaPrologueForm, "writing": TextVersionChoices.PROLOGUE, "check": validate_prologue},
+    "orga_speedlarps": {"form": OrgaSpeedLarpForm, "writing": TextVersionChoices.SPEEDLARP},
     "orga_texts": {"form": OrgaEventTextForm},
     "orga_buttons": {"form": OrgaEventButtonForm},
     "orga_registration_tickets": {"form": OrgaRegistrationTicketForm},
@@ -128,7 +198,7 @@ alls = {
     },
     "orga_registration_quotas": {"form": OrgaRegistrationQuotaForm},
     "orga_px_deliveries": {"form": OrgaDeliveryPxForm},
-    "orga_px_abilities": {"form": OrgaAbilityPxForm},
+    "orga_px_abilities": {"form": OrgaAbilityPxForm, "check": validate_ability_px},
     "orga_px_ability_types": {"form": OrgaAbilityTypePxForm},
     "orga_px_ability_templates": {"form": OrgaAbilityTemplatePxForm},
     "orga_px_rules": {"form": OrgaRulePxForm},
@@ -155,6 +225,127 @@ alls = {
 }
 
 
+def _action_change(
+    request: HttpRequest,
+    context: dict,
+    event_slug: str,
+    permission: str,
+    action_data: dict,
+    element_uuid: str | None = None,
+    redirect_view: str | None = None,
+) -> HttpResponse | None:
+    """Handle create/edit actions for organization elements.
+
+    Processes form submissions for creating or editing organization elements.
+    Handles validation callbacks, special form types (event/member forms), section navigation,
+    and iframe mode rendering.
+
+    Args:
+        request: HTTP request object
+        context: Context dictionary with event, run, and permission data
+        event_slug: Event slug identifier
+        permission: Permission string identifying the action type
+        action_data: Dictionary from 'alls' containing form class, checks, and metadata
+        element_uuid: UUID of element to edit (None for new elements)
+        redirect_view: Optional view name to redirect to on success
+
+    Returns:
+        HttpResponse: Rendered template or redirect response, or None
+    """
+    form_type = action_data.get("form")
+    writing = action_data.get("writing")
+
+    check_callback = action_data.get("check")
+    if check_callback:
+        check_callback(request, context, event_slug)
+
+    if action_data.get("event_form"):
+        context["add_another"] = False
+        context["event_form"] = False
+        redirect_view = "manage"
+
+    if action_data.get("member_form"):
+        context["add_another"] = False
+        context["member_form"] = False
+        redirect_view = "manage"
+
+    # Extract section parameter from URL if present (for jump_section in forms)
+    if hasattr(request, "resolver_match") and request.resolver_match:
+        section = request.resolver_match.kwargs.get("section")
+        if section:
+            context["jump_section"] = section
+
+    # Check if this is an iframe request
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
+    # Process the edit operation using unified backend_edit handler
+    result = backend_edit(request, context, form_type, element_uuid, writing_type=writing)
+
+    return _evaluate_action_result(request, context, permission, result, is_frame, redirect_view)
+
+
+def _evaluate_action_result(
+    request: HttpRequest,
+    context: dict,
+    permission: str,
+    result: bool | HttpResponse,  # noqa: FBT001
+    is_frame: bool,  # noqa: FBT001
+    redirect_view: str,
+) -> HttpResponse | None:
+    """Evaluate the result of an action and return appropriate HTTP response.
+
+    Handles the outcome of edit/create operations by either returning AJAX responses,
+    rendering templates for failed validations, or redirecting on success. Supports
+    both standard and iframe rendering modes, as well as "continue editing" workflow.
+
+    Args:
+        request: HTTP request object
+        context: Context dictionary with event, run, and form data
+        permission: Permission string identifying the action type
+        result: Result from backend_edit - either bool (success/failure) or HttpResponse (AJAX)
+        is_frame: Whether the request is in iframe mode
+        redirect_view: Optional view name to redirect to on success (defaults to permission)
+
+    Returns:
+        HttpResponse: AJAX response, rendered template, or redirect response, or None
+    """
+    # If result is an HttpResponse (AJAX), return it directly
+    if isinstance(result, HttpResponse):
+        return result
+
+    # If edit was successful
+    if result:
+        # Set suggestion context for successful edit
+        set_suggestion(context, permission)
+
+        # Return success template for iframe mode
+        if is_frame:
+            return render(request, "elements/dashboard/form_success.html", context)
+
+        # Determine redirect target - use provided or default to permission name
+        if not redirect_view:
+            redirect_view = permission
+
+        # Handle "continue editing" workflow - redirect to new object form
+        if "continue" in request.POST:
+            redirect_view += "_new"
+
+        # Redirect to success page with event slug
+        return redirect(redirect_view, context["run"].get_slug())
+
+    # Edit operation failed or is initial load - render appropriate template
+
+    # Writing elements use a different template
+    if context.get("is_writing"):
+        return render(request, "larpmanager/orga/writing/writing.html", context)
+
+    # Standard elements use iframe or standard edit template
+    if is_frame:
+        return render(request, "elements/dashboard/form_frame.html", context)
+
+    return render(request, "larpmanager/orga/edit.html", context)
+
+
 def _orga_actions(
     request: HttpRequest,
     event_slug: str,
@@ -162,8 +353,27 @@ def _orga_actions(
     action: Action,
     element_uuid: str | None = None,
     additional: Any = None,
-) -> HttpResponse:
-    """Unified entry for operation on orga elements."""
+) -> HttpResponse | None:
+    """Unified entry point for all operations on organization elements.
+
+    Routes CRUD operations (create, edit, delete, reorder) to appropriate handlers
+    based on the action type. Validates permissions, retrieves action configuration
+    from the 'alls' dictionary, and delegates to specialized handlers.
+
+    Args:
+        request: HTTP request object
+        event_slug: Event slug identifier
+        permission: Permission string that maps to an entry in 'alls' dictionary
+        action: Action type (EDIT, NEW, DELETE, or ORDER)
+        element_uuid: UUID of element to operate on (None for new elements)
+        additional: Additional parameter for ORDER action (position offset)
+
+    Returns:
+        HttpResponse: Redirect to success page or result from action handler
+
+    Raises:
+        Http404: If permission is not found in 'alls' dictionary
+    """
     if permission not in alls:
         msg = "permission unknown"
         raise Http404(msg)
@@ -178,21 +388,39 @@ def _orga_actions(
     context = check_event_context(request, event_slug, permission)
 
     model_type = form_type.Meta.model
+    redirect_view = None
+
+    if action in [Action.EDIT, Action.NEW]:
+        return _action_change(request, context, event_slug, permission, action_data, element_uuid, redirect_view)
 
     if action == Action.ORDER:
         backend_order(context, model_type, element_uuid, additional)
         if writing:
             reset_event_cache_all(context["run"])
 
-    if action == Action.DELETE:
+    elif action == Action.DELETE:
         backend_delete(request, context, form_type, element_uuid, action_data.get("can_delete"))
 
-    redirect_view = action_data.get("redirect_view")
     if not redirect_view:
         redirect_view = permission
 
     # Redirect to success page with event slug
     return redirect(redirect_view, event_slug=context["run"].get_slug())
+
+
+def orga_new(request: HttpRequest, event_slug: str, permission: str) -> HttpResponse:
+    """Create organization event objects through a unified interface."""
+    return _orga_actions(request, event_slug, permission, Action.EDIT)
+
+
+def orga_edit(
+    request: HttpRequest,
+    event_slug: str,
+    permission: str,
+    element_uuid: str | None = None,
+) -> HttpResponse:
+    """Edit organization event objects through a unified interface."""
+    return _orga_actions(request, event_slug, permission, Action.EDIT, element_uuid)
 
 
 def orga_delete(request: HttpRequest, event_slug: str, permission: str, element_uuid: str) -> HttpResponse:
