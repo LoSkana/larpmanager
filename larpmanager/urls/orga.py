@@ -968,7 +968,7 @@ urlpatterns = [
         name="orga_expenses_my",
     ),
     path(
-        "<slug:event_slug>/manage/upload_expenses/new",
+        "<slug:event_slug>/manage/upload_expenses/new/",
         views_oa.orga_expenses_my_new,
         name="orga_expenses_my_new",
     ),
@@ -1278,9 +1278,19 @@ urlpatterns = [
         name="orga_casting",
     ),
     path(
+        "<slug:event_slug>/manage/casting/",
+        views_oca.orga_casting,
+        name="orga_casting",
+    ),
+    path(
         "<slug:event_slug>/manage/casting/<str:casting_type>/",
         views_oca.orga_casting,
         name="orga_casting",
+    ),
+    path(
+        "<slug:event_slug>/manage/casting/toggle/",
+        views_oca.orga_casting_toggle,
+        name="orga_casting_toggle",
     ),
     path(
         "<slug:event_slug>/manage/casting/toggle/<str:casting_type>/",

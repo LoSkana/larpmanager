@@ -80,7 +80,8 @@ from larpmanager.utils.core.common import (
     normalize_string,
 )
 from larpmanager.utils.core.paginate import exe_paginate
-from larpmanager.utils.edit.backend import exe_delete, exe_edit
+from larpmanager.utils.edit.backend import exe_edit
+from larpmanager.utils.edit.exe import exe_delete
 from larpmanager.utils.io.pdf import (
     get_membership_request,
     print_volunteer_registry,
@@ -793,7 +794,7 @@ def exe_volunteer_registry_edit(request: HttpRequest, member_uuid: str) -> HttpR
 @login_required
 def exe_volunteer_registry_delete(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Delete member."""
-    return exe_delete(request, ExeVolunteerRegistryForm, member_uuid, "exe_volunteer_registry")
+    return exe_delete(request, "exe_volunteer_registry", member_uuid)
 
 
 @login_required
@@ -920,7 +921,7 @@ def exe_badges_edit(request: HttpRequest, badge_uuid: str) -> HttpResponse:
 @login_required
 def exe_badges_delete(request: HttpRequest, badge_uuid: str) -> HttpResponse:
     """Delete badge."""
-    return exe_delete(request, ExeBadgeForm, badge_uuid, "exe_badges")
+    return exe_delete(request, "exe_badges", badge_uuid)
 
 
 @login_required

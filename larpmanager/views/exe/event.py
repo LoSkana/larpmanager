@@ -47,7 +47,8 @@ from larpmanager.models.event import (
 from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.core.base import check_association_context, get_context
 from larpmanager.utils.core.common import get_coming_runs, get_event_template
-from larpmanager.utils.edit.backend import backend_get, exe_delete, exe_edit
+from larpmanager.utils.edit.backend import backend_get, exe_edit
+from larpmanager.utils.edit.exe import exe_delete
 from larpmanager.utils.users.deadlines import check_run_deadlines
 from larpmanager.views.manage import _get_registration_counts, _get_registration_status
 from larpmanager.views.orga.event import full_event_edit
@@ -181,7 +182,7 @@ def exe_templates_edit(request: HttpRequest, template_uuid: str) -> HttpResponse
 @login_required
 def exe_templates_delete(request: HttpRequest, template_uuid: str) -> HttpResponse:
     """Delete template."""
-    return exe_delete(request, ExeTemplateForm, template_uuid, "exe_templates")
+    return exe_delete(request, "exe_templates", template_uuid)
 
 
 @login_required
@@ -199,10 +200,18 @@ def exe_templates_config(request: HttpRequest, template_uuid: str) -> HttpRespon
 
 
 @login_required
-def exe_templates_roles(request: HttpRequest, event_uuid: str, role_uuid: str | None) -> HttpResponse:
+def exe_templates_roles_new(request: HttpRequest, template_uuid: str) -> HttpResponse:
     """Edit or create template roles for an event."""
     add_ctx = get_context(request)
-    get_event_template(add_ctx, event_uuid)
+    get_event_template(add_ctx, template_uuid)
+    return exe_edit(request, ExeTemplateRolesForm, None, "exe_templates", additional_context=add_ctx)
+
+
+@login_required
+def exe_templates_roles_edit(request: HttpRequest, template_uuid: str, role_uuid: str | None) -> HttpResponse:
+    """Edit or create template roles for an event."""
+    add_ctx = get_context(request)
+    get_event_template(add_ctx, template_uuid)
     return exe_edit(request, ExeTemplateRolesForm, role_uuid, "exe_templates", additional_context=add_ctx)
 
 

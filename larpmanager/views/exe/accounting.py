@@ -77,7 +77,8 @@ from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import exe_paginate
-from larpmanager.utils.edit.backend import backend_get, exe_delete, exe_edit
+from larpmanager.utils.edit.backend import backend_get, exe_edit
+from larpmanager.utils.edit.exe import exe_delete
 
 
 @login_required
@@ -154,7 +155,7 @@ def exe_outflows_edit(request: HttpRequest, outflow_uuid: str) -> HttpResponse:
 @login_required
 def exe_outflows_delete(request: HttpRequest, outflow_uuid: str) -> HttpResponse:
     """Delete outflow."""
-    return exe_delete(request, ExeOutflowForm, outflow_uuid, "exe_outflows")
+    return exe_delete(request, "exe_outflows", outflow_uuid)
 
 
 @login_required
@@ -223,7 +224,7 @@ def exe_inflows_edit(request: HttpRequest, inflow_uuid: str) -> HttpResponse:
 @login_required
 def exe_inflows_delete(request: HttpRequest, inflow_uuid: str) -> HttpResponse:
     """Delete inflow."""
-    return exe_delete(request, ExeInflowForm, inflow_uuid, "exe_inflows")
+    return exe_delete(request, "exe_inflows", inflow_uuid)
 
 
 @login_required
@@ -288,7 +289,7 @@ def exe_donations_edit(request: HttpRequest, donation_uuid: str) -> HttpResponse
 @login_required
 def exe_donations_delete(request: HttpRequest, donation_uuid: str) -> HttpResponse:
     """Delete donation."""
-    return exe_delete(request, ExeDonationForm, donation_uuid, "exe_donations")
+    return exe_delete(request, "exe_donations", donation_uuid)
 
 
 @login_required
@@ -351,7 +352,7 @@ def exe_credits_edit(request: HttpRequest, credit_uuid: str) -> HttpResponse:
 @login_required
 def exe_credits_delete(request: HttpRequest, credit_uuid: str) -> HttpResponse:
     """Delete credit."""
-    return exe_delete(request, ExeCreditForm, credit_uuid, "exe_credits")
+    return exe_delete(request, "exe_credits", credit_uuid)
 
 
 @login_required
@@ -417,7 +418,7 @@ def exe_tokens_edit(request: HttpRequest, token_uuid: str) -> HttpResponse:
 @login_required
 def exe_tokens_delete(request: HttpRequest, token_uuid: str) -> HttpResponse:
     """Delete token."""
-    return exe_delete(request, ExeTokenForm, token_uuid, "exe_tokens")
+    return exe_delete(request, "exe_tokens", token_uuid)
 
 
 @login_required
@@ -494,7 +495,7 @@ def exe_expenses_edit(request: HttpRequest, expense_uuid: str) -> HttpResponse:
 @login_required
 def exe_expenses_delete(request: HttpRequest, expense_uuid: str) -> HttpResponse:
     """Delete expense."""
-    return exe_delete(request, ExeExpenseForm, expense_uuid, "exe_expenses")
+    return exe_delete(request, "exe_expenses", expense_uuid)
 
 
 @login_required
@@ -599,7 +600,7 @@ def exe_payments_edit(request: HttpRequest, payment_uuid: str) -> HttpResponse:
 @login_required
 def exe_payments_delete(request: HttpRequest, payment_uuid: str) -> HttpResponse:
     """Delete payment."""
-    return exe_delete(request, ExePaymentForm, payment_uuid, "exe_payments")
+    return exe_delete(request, "exe_payments", payment_uuid)
 
 
 @login_required
@@ -685,7 +686,7 @@ def exe_invoices_edit(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
 @login_required
 def exe_invoices_delete(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
     """Delete invoice."""
-    return exe_delete(request, ExeInvoiceForm, invoice_uuid, "exe_invoices")
+    return exe_delete(request, "exe_invoices", invoice_uuid)
 
 
 @login_required
@@ -754,7 +755,7 @@ def exe_collections_edit(request: HttpRequest, collection_uuid: str) -> HttpResp
 @login_required
 def exe_collections_delete(request: HttpRequest, collection_uuid: str) -> HttpResponse:
     """Delete collection."""
-    return exe_delete(request, ExeCollectionForm, collection_uuid, "exe_collections")
+    return exe_delete(request, "exe_collections", collection_uuid)
 
 
 @login_required
@@ -821,7 +822,7 @@ def exe_refunds_edit(request: HttpRequest, refund_uuid: str) -> HttpResponse:
 @login_required
 def exe_refunds_delete(request: HttpRequest, refund_uuid: str) -> HttpResponse:
     """Delete refund."""
-    return exe_delete(request, ExeRefundRequestForm, refund_uuid, "exe_refunds")
+    return exe_delete(request, "exe_refunds", refund_uuid)
 
 
 @login_required

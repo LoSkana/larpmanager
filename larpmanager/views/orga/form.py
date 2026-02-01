@@ -21,7 +21,7 @@
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import reverse
 
 from larpmanager.forms.registration import (
@@ -44,11 +44,12 @@ from larpmanager.models.registration import (
     RegistrationTicket,
 )
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import exchange_order, get_element
+from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import (
+    backend_order,
     orga_edit,
 )
-from larpmanager.utils.edit.orga import form_edit_handler, options_edit_handler, orga_delete
+from larpmanager.utils.edit.orga import form_edit_handler, options_edit_handler, orga_delete, orga_order
 from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
 
 
@@ -110,9 +111,7 @@ def orga_registration_tickets_order(
     request: HttpRequest, event_slug: str, ticket_uuid: str, order: int
 ) -> HttpResponse:
     """Reorder registration tickets for an event."""
-    context = check_event_context(request, event_slug, "orga_registration_tickets")
-    exchange_order(context, RegistrationTicket, ticket_uuid, order)
-    return redirect("orga_registration_tickets", event_slug=context["run"].get_slug())
+    return orga_order(request, event_slug, "orga_registration_tickets", ticket_uuid, order)
 
 
 @login_required
@@ -164,13 +163,7 @@ def orga_registration_sections_order(
         Redirect to registration sections page
 
     """
-    # Verify user has permission to manage registration sections
-    context = check_event_context(request, event_slug, "orga_registration_sections")
-
-    # Exchange order of sections and save changes
-    exchange_order(context, RegistrationSection, section_uuid, order)
-
-    return redirect("orga_registration_sections", event_slug=context["run"].get_slug())
+    return orga_order(request, event_slug, "orga_registration_sections", section_uuid, order)
 
 
 @login_required
@@ -245,13 +238,7 @@ def orga_registration_form_delete(request: HttpRequest, event_slug: str, questio
 @login_required
 def orga_registration_form_order(request: HttpRequest, event_slug: str, question_uuid: str, order: int) -> HttpResponse:
     """Reorders registration form questions for an event."""
-    # Check permissions and get event context
-    context = check_event_context(request, event_slug, "orga_registration_form")
-
-    # Update question order in database
-    exchange_order(context, RegistrationQuestion, question_uuid, order)
-
-    return redirect("orga_registration_form", event_slug=context["run"].get_slug())
+    return orga_order(request, event_slug, "orga_registration_form", question_uuid, order)
 
 
 @login_required
@@ -321,7 +308,7 @@ def orga_registration_options_order(
     context = check_event_context(request, event_slug, "orga_registration_form")
 
     # Exchange the order of registration options
-    exchange_order(context, RegistrationOption, option_uuid, order)
+    backend_order(context, RegistrationOption, option_uuid, order)
 
     # Redirect back to the form edit page
     url = reverse(

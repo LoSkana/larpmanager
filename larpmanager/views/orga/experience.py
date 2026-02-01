@@ -39,10 +39,10 @@ from larpmanager.models.event import Run
 from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import exchange_order, get_object_uuid
+from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.edit.backend import orga_edit
-from larpmanager.utils.edit.orga import orga_delete
+from larpmanager.utils.edit.orga import orga_delete, orga_order
 from larpmanager.utils.io.download import export_abilities, zip_exports
 from larpmanager.utils.services.bulk import handle_bulk_ability
 
@@ -319,13 +319,7 @@ def orga_px_rules_order(
     order: int,
 ) -> HttpResponse:
     """Reorder PX rules for an event."""
-    # Check permissions and get event context
-    context = check_event_context(request, event_slug, "orga_px_rules")
-
-    # Exchange rule order in database
-    exchange_order(context, RulePx, rule_uuid, order)
-
-    return redirect("orga_px_rules", event_slug=context["run"].get_slug())
+    return orga_order(request, event_slug, "orga_px_rules", rule_uuid, order)
 
 
 @login_required
@@ -374,10 +368,4 @@ def orga_px_modifiers_order(
     order: int,
 ) -> HttpResponse:
     """Reorder experience modifiers in the organizer interface."""
-    # Check permissions and get context
-    context = check_event_context(request, event_slug, "orga_px_modifiers")
-
-    # Exchange modifier order
-    exchange_order(context, ModifierPx, modifier_uuid, order)
-
-    return redirect("orga_px_modifiers", event_slug=context["run"].get_slug())
+    return orga_order(request, event_slug, "orga_px_modifiers", modifier_uuid, order)

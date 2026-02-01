@@ -38,7 +38,8 @@ from larpmanager.models.miscellanea import (
     WarehouseTag,
 )
 from larpmanager.utils.core.base import check_association_context
-from larpmanager.utils.edit.backend import exe_delete, exe_edit
+from larpmanager.utils.edit.backend import exe_edit
+from larpmanager.utils.edit.exe import exe_delete
 from larpmanager.utils.services.bulk import handle_bulk_items
 from larpmanager.utils.services.miscellanea import get_warehouse_optionals
 
@@ -70,7 +71,7 @@ def exe_urlshortner_edit(request: HttpRequest, url_uuid: str) -> HttpResponse:
 @login_required
 def exe_urlshortner_delete(request: HttpRequest, url_uuid: str) -> HttpResponse:
     """Delete url."""
-    return exe_delete(request, ExeUrlShortnerForm, url_uuid, "exe_urlshortner")
+    return exe_delete(request, "exe_urlshortner", url_uuid)
 
 
 @login_required
@@ -100,7 +101,7 @@ def exe_warehouse_containers_edit(request: HttpRequest, container_uuid: str) -> 
 @login_required
 def exe_warehouse_containers_delete(request: HttpRequest, container_uuid: str) -> HttpResponse:
     """Delete container."""
-    return exe_delete(request, ExeWarehouseContainerForm, container_uuid, "exe_warehouse_containers")
+    return exe_delete(request, "exe_warehouse_containers", container_uuid)
 
 
 @login_required
@@ -130,7 +131,7 @@ def exe_warehouse_tags_edit(request: HttpRequest, tag_uuid: str) -> HttpResponse
 @login_required
 def exe_warehouse_tags_delete(request: HttpRequest, tag_uuid: str) -> HttpResponse:
     """Delete tag."""
-    return exe_delete(request, ExeWarehouseTagForm, tag_uuid, "exe_warehouse_tags")
+    return exe_delete(request, "exe_warehouse_tags", tag_uuid)
 
 
 @login_required
@@ -179,7 +180,7 @@ def exe_warehouse_items_edit(request: HttpRequest, item_uuid: str) -> HttpRespon
 @login_required
 def exe_warehouse_items_delete(request: HttpRequest, item_uuid: str) -> HttpResponse:
     """Delete item."""
-    return exe_delete(request, ExeWarehouseItemForm, item_uuid, "exe_warehouse_items")
+    return exe_delete(request, "exe_warehouse_items", item_uuid)
 
 
 @login_required
@@ -212,4 +213,4 @@ def exe_warehouse_movements_edit(request: HttpRequest, movement_uuid: str) -> Ht
 @login_required
 def exe_warehouse_movements_delete(request: HttpRequest, movement_uuid: str) -> HttpResponse:
     """Delete movement."""
-    return exe_delete(request, ExeWarehouseMovementForm, movement_uuid, "exe_warehouse_movements")
+    return exe_delete(request, "exe_warehouse_movements", movement_uuid)

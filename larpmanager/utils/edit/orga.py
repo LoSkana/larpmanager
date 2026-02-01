@@ -26,6 +26,7 @@ from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.character import reset_event_cache_all
 from larpmanager.forms.accounting import (
     OrgaCreditForm,
     OrgaDiscountForm,
@@ -86,8 +87,8 @@ from larpmanager.models.form import (
     _get_writing_mapping,
 )
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import exchange_order, get_element
-from larpmanager.utils.edit.backend import backend_delete, backend_edit, set_suggestion
+from larpmanager.utils.core.common import get_element
+from larpmanager.utils.edit.backend import backend_delete, backend_edit, backend_order, set_suggestion
 from larpmanager.utils.edit.base import Action
 
 # "form": form used for creation / editing
@@ -105,7 +106,7 @@ alls = {
         "form": OrgaWritingOptionForm,
     },
     "orga_plots": {"form": OrgaPlotForm},
-    "orga_factions": {"form": OrgaFactionForm},
+    "orga_factions": {"form": OrgaFactionForm, "writing": True},
     "orga_quest_types": {"form": OrgaQuestTypeForm},
     "orga_quests": {"form": OrgaQuestForm},
     "orga_traits": {"form": OrgaTraitForm},
@@ -162,15 +163,16 @@ def _orga_actions(
     element_uuid: str | None = None,
     additional: Any = None,
 ) -> HttpResponse:
-    """Unified entry for operation on elements."""
+    """Unified entry for operation on orga elements."""
     if permission not in alls:
         msg = "permission unknown"
         raise Http404(msg)
 
     action_data = alls[permission]
     form_type = action_data.get("form")
+    writing = action_data.get("writing")
 
-    # Verify user has permission to modify progress steps
+    # Verify user has permission
     if permission.endswith("form_option"):
         permission = permission.replace("form_option", "form")
     context = check_event_context(request, event_slug, permission)
@@ -178,7 +180,9 @@ def _orga_actions(
     model_type = form_type.Meta.model
 
     if action == Action.ORDER:
-        exchange_order(context, model_type, element_uuid, additional)
+        backend_order(context, model_type, element_uuid, additional)
+        if writing:
+            reset_event_cache_all(context["run"])
 
     if action == Action.DELETE:
         backend_delete(request, context, form_type, element_uuid, action_data.get("can_delete"))

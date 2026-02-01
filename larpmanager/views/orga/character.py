@@ -65,8 +65,9 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import exchange_order, get_element
+from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import (
+    backend_order,
     writing_edit,
     writing_edit_working_ticket,
 )
@@ -694,7 +695,7 @@ def orga_writing_form_order(
     check_writing_form_type(context, writing_type)
 
     # Exchange the order of questions
-    exchange_order(context, WritingQuestion, question_uuid, order)
+    backend_order(context, WritingQuestion, question_uuid, order)
 
     # Redirect back to the writing form page
     return redirect("orga_writing_form", event_slug=context["run"].get_slug(), writing_type=writing_type)
@@ -784,7 +785,7 @@ def orga_writing_options_order(
     check_writing_form_type(context, writing_type)
 
     # Exchange order positions of WritingOption objects
-    exchange_order(context, WritingOption, option_uuid, order)
+    backend_order(context, WritingOption, option_uuid, order)
 
     # Redirect back to writing form edit view
     url = reverse(

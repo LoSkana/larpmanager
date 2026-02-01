@@ -604,42 +604,6 @@ def exe_edit(
     return render(request, "larpmanager/exe/edit.html", context)
 
 
-def exe_delete(
-    request: HttpRequest,
-    form_type: type[BaseModelForm],
-    entity_uuid: str,
-    permission: str,
-    redirect_view: str | None = None,
-    can_delete: Callable | None = None,
-) -> HttpResponse:
-    """Delete organization-level entities through a unified interface.
-
-    Handles the deletion workflow for various organization-level entities,
-    including permission checking, logging, and redirects.
-
-    Args:
-        request: HTTP request object containing form data and user information
-        form_type: Type of form/entity being deleted
-        entity_uuid: Entity UUID for the object being deleted
-        permission: Permission string required to access this delete functionality
-        redirect_view: Optional redirect target after successful deletion (defaults to permission)
-        can_delete: Callback to check if deletion can be done
-
-    Returns:
-        HttpResponse: Redirect response on successful deletion
-
-    """
-    # Check user permissions and get base context
-    context = check_association_context(request, permission)
-
-    backend_delete(request, context, form_type, entity_uuid, can_delete)
-
-    if not redirect_view:
-        redirect_view = permission
-
-    return redirect(redirect_view)
-
-
 def set_suggestion(context: dict, permission: str) -> None:
     """Set a suggestion flag for a given permission in the configuration.
 
@@ -997,3 +961,68 @@ def working_ticket(request: HttpRequest) -> Any:
         res["warn"] = msg
 
     return JsonResponse(res)
+
+
+def backend_order(
+    context: dict, model_class: type, element_uuid: str, move_up: int, elements: object | None = None
+) -> None:
+    """Exchange ordering positions between two elements in a sequence.
+
+    This function moves an element up or down in the ordering sequence by swapping
+    its order value with an adjacent element. If no adjacent element exists,
+    it simply increments or decrements the order value.
+
+    Args:
+        context: Context dictionary to store the current element after operation.
+        model_class: Model class of elements to reorder.
+        element_uuid: UUID of the element to move.
+        move_up: Direction to move - 1 for up (increase order), 0 for down (decrease order).
+        elements: Optional queryset of elements. Defaults to event elements if None.
+
+    Returns:
+        None: Function modifies elements in-place and updates context['current'].
+
+    Note:
+        The function handles edge cases where elements have the same order value
+        by adjusting one of them to maintain proper ordering.
+
+    """
+    # Get elements queryset, defaulting to event elements if not provided
+    elements = elements or context["event"].get_elements(model_class)
+    current_element = elements.get(uuid=element_uuid)
+
+    # Determine direction: move_up=True means move up (increase order), False means down
+    queryset = (
+        elements.filter(order__gt=current_element.order)
+        if move_up
+        else elements.filter(order__lt=current_element.order)
+    )
+    queryset = queryset.order_by("order" if move_up else "-order")
+
+    # Apply additional filters based on current element's attributes
+    # This ensures we only swap within the same logical group
+    for attribute_name in ("question", "section", "applicable"):
+        if hasattr(current_element, attribute_name):
+            queryset = queryset.filter(**{attribute_name: getattr(current_element, attribute_name)})
+
+    # Get the next element in the desired direction
+    adjacent_element = queryset.first()
+
+    # If no adjacent element found, just increment/decrement order
+    if not adjacent_element:
+        current_element.order += 1 if move_up else -1
+        current_element.save()
+        context["current"] = current_element
+        return
+
+    # Exchange ordering values between current and adjacent element
+    current_element.order, adjacent_element.order = adjacent_element.order, current_element.order
+
+    # Handle edge case where both elements have same order (data inconsistency)
+    if current_element.order == adjacent_element.order:
+        adjacent_element.order += -1 if move_up else 1
+
+    # Save both elements and update context
+    current_element.save()
+    adjacent_element.save()
+    context["current"] = current_element

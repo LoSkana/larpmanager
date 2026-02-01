@@ -540,14 +540,19 @@ urlpatterns = [
         name="exe_templates_delete",
     ),
     path(
-        "manage/template/config/<slug:template_uuid>/",
+        "manage/template/<slug:template_uuid>/config/",
         views_ee.exe_templates_config,
         name="exe_templates_config",
     ),
     path(
-        "manage/template/roles/<slug:event_uuid>/<slug:role_uuid>/",
-        views_ee.exe_templates_roles,
-        name="exe_templates_roles",
+        "manage/template/<slug:template_uuid>/roles/new/",
+        views_ee.exe_templates_roles_new,
+        name="exe_templates_roles_new",
+    ),
+    path(
+        "manage/template/<slug:template_uuid>/roles/<slug:role_uuid>/edit/",
+        views_ee.exe_templates_roles_edit,
+        name="exe_templates_roles_edit",
     ),
     path(
         "manage/vote/",

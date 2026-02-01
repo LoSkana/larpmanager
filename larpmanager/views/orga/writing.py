@@ -24,12 +24,12 @@ from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all, reset_event_cache_all
+from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.event import OrgaProgressStepForm
 from larpmanager.forms.writing import (
     OrgaFactionForm,
@@ -62,7 +62,6 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.common import (
-    exchange_order,
     get_element,
     get_handout,
     get_object_uuid,
@@ -73,7 +72,7 @@ from larpmanager.utils.core.common import (
     get_speedlarp,
     get_trait,
 )
-from larpmanager.utils.edit.backend import orga_edit, writing_edit
+from larpmanager.utils.edit.backend import backend_order, orga_edit, writing_edit
 from larpmanager.utils.edit.orga import orga_delete, orga_order
 from larpmanager.utils.io.download import export_data
 from larpmanager.utils.io.pdf import print_handout
@@ -125,15 +124,9 @@ def orga_plots_delete(request: HttpRequest, event_slug: str, plot_uuid: str) -> 
 
 
 @login_required
-def orga_plots_order(request: HttpRequest, event_slug: str, plot_uuid: str, order: int) -> HttpResponseRedirect:
+def orga_plots_order(request: HttpRequest, event_slug: str, plot_uuid: str, order: int) -> HttpResponse:
     """Reorder plots in event's plot list."""
-    # Verify user has permission to manage plots
-    context = check_event_context(request, event_slug, "orga_plots")
-
-    # Swap plot order positions
-    exchange_order(context, Plot, plot_uuid, order)
-
-    return redirect("orga_plots", event_slug=context["run"].get_slug())
+    return orga_order(request, event_slug, "orga_plots", plot_uuid, order)
 
 
 @login_required
@@ -168,7 +161,7 @@ def orga_plots_rels_order(request: HttpRequest, event_slug: str, plot_rel_uuid: 
     elements = PlotCharacterRel.objects.filter(character_id=rel.character_id)
 
     # Execute the order exchange operation
-    exchange_order(context, PlotCharacterRel, plot_rel_uuid, order, elements)
+    backend_order(context, PlotCharacterRel, plot_rel_uuid, order, elements)
 
     # Redirect back to character edit page
     return redirect("orga_characters_edit", event_slug=context["run"].get_slug(), character_uuid=rel.character.uuid)
@@ -244,18 +237,9 @@ def orga_factions_delete(request: HttpRequest, event_slug: str, faction_uuid: st
 
 
 @login_required
-def orga_factions_order(request: HttpRequest, event_slug: str, faction_uuid: str, order: int) -> HttpResponseRedirect:
+def orga_factions_order(request: HttpRequest, event_slug: str, faction_uuid: str, order: int) -> HttpResponse:
     """Reorder factions within an event run."""
-    # Verify event access and permissions
-    context = check_event_context(request, event_slug, "orga_factions")
-
-    # Exchange faction positions
-    exchange_order(context, Faction, faction_uuid, order)
-
-    # Reset cache to be re-organized
-    reset_event_cache_all(context["run"])
-
-    return redirect("orga_factions", event_slug=context["run"].get_slug())
+    return orga_order(request, event_slug, "orga_factions", faction_uuid, order)
 
 
 @login_required

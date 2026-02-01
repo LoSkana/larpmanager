@@ -52,7 +52,8 @@ from larpmanager.models.event import Run
 from larpmanager.utils.auth.permission import get_index_association_permissions
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import clear_messages, get_feature
-from larpmanager.utils.edit.backend import backend_edit, exe_delete, exe_edit
+from larpmanager.utils.edit.backend import backend_edit, exe_edit
+from larpmanager.utils.edit.exe import exe_delete
 from larpmanager.utils.services.association import _reset_all_association
 from larpmanager.views.larpmanager import get_run_lm_payment
 from larpmanager.views.orga.event import prepare_roles_list
@@ -115,13 +116,7 @@ def exe_roles_edit(request: HttpRequest, role_uuid: str) -> Any:
 @login_required
 def exe_roles_delete(request: HttpRequest, role_uuid: str) -> HttpResponse:
     """Delete role."""
-    return exe_delete(
-        request,
-        ExeAssociationRoleForm,
-        role_uuid,
-        "exe_roles",
-        can_delete=lambda _context, element: element.number != 1,
-    )
+    return exe_delete(request, "exe_roles", role_uuid)
 
 
 @login_required
@@ -170,7 +165,7 @@ def exe_texts_edit(request: HttpRequest, text_uuid: str) -> HttpResponse:
 @login_required
 def exe_texts_delete(request: HttpRequest, text_uuid: str) -> HttpResponse:
     """Delete text."""
-    return exe_delete(request, ExeAssociationTextForm, text_uuid, "exe_texts")
+    return exe_delete(request, "exe_texts", text_uuid)
 
 
 @login_required
@@ -218,7 +213,7 @@ def exe_translations_edit(request: HttpRequest, translation_uuid: str) -> HttpRe
 @login_required
 def exe_translations_delete(request: HttpRequest, translation_uuid: str) -> HttpResponse:
     """Delete association translation overrides."""
-    return exe_delete(request, ExeAssociationTranslationForm, translation_uuid, "exe_translations")
+    return exe_delete(request, "exe_translations", translation_uuid)
 
 
 @login_required

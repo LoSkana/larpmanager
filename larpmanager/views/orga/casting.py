@@ -671,10 +671,6 @@ def orga_casting(
     # Check user permissions for accessing casting functionality
     context = check_event_context(request, event_slug, "orga_casting")
 
-    # Redirect to default casting type if none specified
-    if casting_type is None:
-        return redirect("orga_casting", event_slug=context["run"].get_slug(), casting_type=0)
-
     # Set context variables for template rendering
     context["typ"] = casting_type
     context["tick"] = ticket
@@ -709,7 +705,7 @@ def orga_casting(
 
 
 @login_required
-def orga_casting_toggle(request: HttpRequest, event_slug: str, casting_type: str) -> JsonResponse:
+def orga_casting_toggle(request: HttpRequest, event_slug: str, casting_type: str | None) -> JsonResponse:
     """Toggle the 'nope' status of a casting entry."""
     context = check_event_context(request, event_slug, "orga_casting")
     get_element(context, casting_type, "quest_type", QuestType)
