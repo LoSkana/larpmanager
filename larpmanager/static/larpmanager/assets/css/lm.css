@@ -3161,6 +3161,7 @@ body.floating_iframe .inner {
   width: 100%;
   border: none;
   min-height: 400px;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .frame-container {
