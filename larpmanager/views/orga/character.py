@@ -64,6 +64,7 @@ from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import _process_working_ticket, backend_order
 from larpmanager.utils.edit.orga import (
+    OrgaAction,
     check_writing_form_type,
     form_edit_handler,
     options_edit_handler,
@@ -111,19 +112,19 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_characters_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create new character in organization context."""
-    return orga_new(request, event_slug, "orga_characters")
+    return orga_new(request, event_slug, OrgaAction.CHARACTERS)
 
 
 @login_required
 def orga_characters_edit(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Edit character information in organization context."""
-    return orga_edit(request, event_slug, "orga_characters", character_uuid)
+    return orga_edit(request, event_slug, OrgaAction.CHARACTERS, character_uuid)
 
 
 @login_required
 def orga_characters_delete(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Deletes a character."""
-    return orga_delete(request, event_slug, "orga_characters", character_uuid)
+    return orga_delete(request, event_slug, OrgaAction.CHARACTERS, character_uuid)
 
 
 def update_relationship(request: HttpRequest, context: dict, nm: str, fl: str) -> None:
@@ -191,13 +192,13 @@ def orga_characters_relationships(request: HttpRequest, event_slug: str, charact
 @login_required
 def orga_characters_view(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Display character view for event organizers."""
-    return orga_view(request, event_slug, "orga_characters", character_uuid)
+    return orga_view(request, event_slug, OrgaAction.CHARACTERS, character_uuid)
 
 
 @login_required
 def orga_characters_versions(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Display version history for a character's writing content."""
-    return orga_versions(request, event_slug, "orga_characters", character_uuid)
+    return orga_versions(request, event_slug, OrgaAction.CHARACTERS, character_uuid)
 
 
 @login_required
@@ -512,7 +513,7 @@ def orga_writing_form_delete(
     return orga_delete(
         request,
         event_slug,
-        "orga_character_form",
+        OrgaAction.CHARACTER_FORM,
         question_uuid,
     )
 
@@ -657,7 +658,7 @@ def orga_writing_options_delete(
     option_uuid: str,
 ) -> HttpResponse:
     """Delete writing option for an event."""
-    return orga_delete(request, event_slug, "orga_character_form_option", option_uuid)
+    return orga_delete(request, event_slug, OrgaAction.CHARACTER_FORM_OPTION, option_uuid)
 
 
 @login_required

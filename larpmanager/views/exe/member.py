@@ -78,7 +78,7 @@ from larpmanager.utils.core.common import (
     normalize_string,
 )
 from larpmanager.utils.core.paginate import exe_paginate
-from larpmanager.utils.edit.exe import exe_delete, exe_edit, exe_new
+from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 from larpmanager.utils.io.pdf import (
     get_membership_request,
     print_volunteer_registry,
@@ -779,19 +779,19 @@ def exe_volunteer_registry(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_volunteer_registry_new(request: HttpRequest) -> HttpResponse:
     """Create a new volunteer registry entry."""
-    return exe_new(request, "exe_volunteer_registry")
+    return exe_new(request, ExeAction.VOLUNTEER_REGISTRY)
 
 
 @login_required
 def exe_volunteer_registry_edit(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Edit volunteer registry entry using standard exe form handling."""
-    return exe_edit(request, "exe_volunteer_registry", member_uuid)
+    return exe_edit(request, ExeAction.VOLUNTEER_REGISTRY, member_uuid)
 
 
 @login_required
 def exe_volunteer_registry_delete(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Delete member."""
-    return exe_delete(request, "exe_volunteer_registry", member_uuid)
+    return exe_delete(request, ExeAction.VOLUNTEER_REGISTRY, member_uuid)
 
 
 @login_required
@@ -906,19 +906,19 @@ def exe_badges(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_badges_new(request: HttpRequest) -> HttpResponse:
     """Create a new badge."""
-    return exe_new(request, "exe_badges")
+    return exe_new(request, ExeAction.BADGES)
 
 
 @login_required
 def exe_badges_edit(request: HttpRequest, badge_uuid: str) -> HttpResponse:
     """Delegate to generic edit view for badge editing."""
-    return exe_edit(request, "exe_badges", badge_uuid)
+    return exe_edit(request, ExeAction.BADGES, badge_uuid)
 
 
 @login_required
 def exe_badges_delete(request: HttpRequest, badge_uuid: str) -> HttpResponse:
     """Delete badge."""
-    return exe_delete(request, "exe_badges", badge_uuid)
+    return exe_delete(request, ExeAction.BADGES, badge_uuid)
 
 
 @login_required

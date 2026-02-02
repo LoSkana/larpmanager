@@ -31,7 +31,7 @@ from larpmanager.models.miscellanea import (
     WarehouseTag,
 )
 from larpmanager.utils.core.base import check_association_context
-from larpmanager.utils.edit.exe import exe_delete, exe_edit, exe_new
+from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 from larpmanager.utils.services.bulk import handle_bulk_items
 from larpmanager.utils.services.miscellanea import get_warehouse_optionals
 
@@ -51,19 +51,19 @@ def exe_urlshortner(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_urlshortner_new(request: HttpRequest) -> HttpResponse:
     """Create a new URL shortener entry."""
-    return exe_new(request, "exe_urlshortner")
+    return exe_new(request, ExeAction.URLSHORTNER)
 
 
 @login_required
 def exe_urlshortner_edit(request: HttpRequest, url_uuid: str) -> HttpResponse:
     """Edit an existing URL shortener entry."""
-    return exe_edit(request, "exe_urlshortner", url_uuid)
+    return exe_edit(request, ExeAction.URLSHORTNER, url_uuid)
 
 
 @login_required
 def exe_urlshortner_delete(request: HttpRequest, url_uuid: str) -> HttpResponse:
     """Delete url."""
-    return exe_delete(request, "exe_urlshortner", url_uuid)
+    return exe_delete(request, ExeAction.URLSHORTNER, url_uuid)
 
 
 @login_required
@@ -81,19 +81,19 @@ def exe_warehouse_containers(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_warehouse_containers_new(request: HttpRequest) -> HttpResponse:
     """Create a new warehouse container."""
-    return exe_new(request, "exe_warehouse_containers")
+    return exe_new(request, ExeAction.WAREHOUSE_CONTAINERS)
 
 
 @login_required
 def exe_warehouse_containers_edit(request: HttpRequest, container_uuid: str) -> HttpResponse:
     """Edit warehouse container using generic edit handler."""
-    return exe_edit(request, "exe_warehouse_containers", container_uuid)
+    return exe_edit(request, ExeAction.WAREHOUSE_CONTAINERS, container_uuid)
 
 
 @login_required
 def exe_warehouse_containers_delete(request: HttpRequest, container_uuid: str) -> HttpResponse:
     """Delete container."""
-    return exe_delete(request, "exe_warehouse_containers", container_uuid)
+    return exe_delete(request, ExeAction.WAREHOUSE_CONTAINERS, container_uuid)
 
 
 @login_required
@@ -111,19 +111,19 @@ def exe_warehouse_tags(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_warehouse_tags_new(request: HttpRequest) -> HttpResponse:
     """Create a new warehouse tag."""
-    return exe_new(request, "exe_warehouse_tags")
+    return exe_new(request, ExeAction.WAREHOUSE_TAGS)
 
 
 @login_required
 def exe_warehouse_tags_edit(request: HttpRequest, tag_uuid: str) -> HttpResponse:
     """Edit warehouse tag via generic edit view."""
-    return exe_edit(request, "exe_warehouse_tags", tag_uuid)
+    return exe_edit(request, ExeAction.WAREHOUSE_TAGS, tag_uuid)
 
 
 @login_required
 def exe_warehouse_tags_delete(request: HttpRequest, tag_uuid: str) -> HttpResponse:
     """Delete tag."""
-    return exe_delete(request, "exe_warehouse_tags", tag_uuid)
+    return exe_delete(request, ExeAction.WAREHOUSE_TAGS, tag_uuid)
 
 
 @login_required
@@ -160,19 +160,19 @@ def exe_warehouse_items(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_warehouse_items_new(request: HttpRequest) -> HttpResponse:
     """Create a new warehouse item."""
-    return exe_new(request, "exe_warehouse_items")
+    return exe_new(request, ExeAction.WAREHOUSE_ITEMS)
 
 
 @login_required
 def exe_warehouse_items_edit(request: HttpRequest, item_uuid: str) -> HttpResponse:
     """Delegate to exe_edit for warehouse item form handling."""
-    return exe_edit(request, "exe_warehouse_items", item_uuid)
+    return exe_edit(request, ExeAction.WAREHOUSE_ITEMS, item_uuid)
 
 
 @login_required
 def exe_warehouse_items_delete(request: HttpRequest, item_uuid: str) -> HttpResponse:
     """Delete item."""
-    return exe_delete(request, "exe_warehouse_items", item_uuid)
+    return exe_delete(request, ExeAction.WAREHOUSE_ITEMS, item_uuid)
 
 
 @login_required
@@ -193,16 +193,16 @@ def exe_warehouse_movements(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_warehouse_movements_new(request: HttpRequest) -> HttpResponse:
     """Create a new warehouse movement."""
-    return exe_new(request, "exe_warehouse_movements")
+    return exe_new(request, ExeAction.WAREHOUSE_MOVEMENTS)
 
 
 @login_required
 def exe_warehouse_movements_edit(request: HttpRequest, movement_uuid: str) -> HttpResponse:
     """Edit a specific warehouse movement by delegating to the generic exe_edit view."""
-    return exe_edit(request, "exe_warehouse_movements", movement_uuid)
+    return exe_edit(request, ExeAction.WAREHOUSE_MOVEMENTS, movement_uuid)
 
 
 @login_required
 def exe_warehouse_movements_delete(request: HttpRequest, movement_uuid: str) -> HttpResponse:
     """Delete movement."""
-    return exe_delete(request, "exe_warehouse_movements", movement_uuid)
+    return exe_delete(request, ExeAction.WAREHOUSE_MOVEMENTS, movement_uuid)
