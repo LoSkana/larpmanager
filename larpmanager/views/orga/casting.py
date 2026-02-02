@@ -68,10 +68,10 @@ def orga_casting_preferences(request: HttpRequest, event_slug: str, casting_type
     casting_details(context)
 
     # Load preferences based on type
-    if casting_type == "0":
-        casting_preferences_characters(context)
-    else:
+    if casting_type:
         casting_preferences_traits(context)
+    else:
+        casting_preferences_characters(context)
 
     return render(request, "larpmanager/event/casting/preferences.html", context)
 
