@@ -3814,6 +3814,9 @@ msgstr "L'objet n'existe pas"
 msgid "One-Time Access Token"
 msgstr "Jeton d'accès unique"
 
+msgid "Operation not allowed"
+msgstr "Opération non autorisée"
+
 msgid "Participant questions"
 msgstr "Questions des participants"
 
@@ -3928,6 +3931,9 @@ msgstr "Voulez-vous continuer"
 
 msgid "Download relationships"
 msgstr "Télécharger les relations"
+
+msgid "Event deletion request"
+msgstr "Demande de suppression d'un événement"
 
 msgid "Expenses collaborators"
 msgstr "Frais de personnel"
@@ -4644,6 +4650,9 @@ msgstr "La seule colonne obligatoire est"
 msgid "Trait assigned for %(event)s"
 msgstr "Trait attribué aux %(event)s"
 
+msgid "Your request has been logged"
+msgstr "Votre demande a été enregistrée"
+
 msgid "payment pending confirmation"
 msgstr "confirmation du paiement en attente"
 
@@ -4912,6 +4921,9 @@ msgstr "vérifier les relations inexistantes"
 
 msgid "Added to the bottom of all pages"
 msgstr "Ajouté au bas de toutes les pages"
+
+msgid "An error occurred while deleting"
+msgstr "Une erreur s'est produite lors de la suppression"
 
 msgid "Cancellation for missing payment"
 msgstr "Annulation pour défaut de paiement"
@@ -5544,6 +5556,9 @@ msgstr "Vous faites un don de"
 
 msgid "click on the icon to open the tutorial"
 msgstr "cliquez sur l'icône pour ouvrir le tutoriel"
+
+msgid "we'll let you know as soon as possible"
+msgstr "nous vous en informerons dès que possible"
 
 msgid "Character are not visible at the moment"
 msgstr "Les caractères ne sont pas visibles pour le moment"
@@ -8142,6 +8157,12 @@ msgstr ""
 msgid ""
 "You will not be able to use this link again after accessing the content"
 msgstr "Vous ne pourrez plus utiliser ce lien après avoir accédé au contenu"
+
+msgid ""
+"due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+"en raison de la délicatesse de la tâche demandée, notre équipe l'examinera "
+"manuellement"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"

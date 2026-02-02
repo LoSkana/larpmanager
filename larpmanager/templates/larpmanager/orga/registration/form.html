@@ -38,6 +38,7 @@
                     {% endif %}
                     <th></th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -95,6 +96,13 @@
                         <a href="{% url 'orga_registration_form_order' run.get_slug el.uuid 1 %}">
                             <i class="fa-solid fa-arrow-down"></i>
                         </a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if el.typ|length == 1 %}
+                        <a href="{% url 'orga_registration_form_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     {% endif %}
                 </td>
             </tr>

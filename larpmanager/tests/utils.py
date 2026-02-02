@@ -112,6 +112,9 @@ def submit(page: Any) -> None:
 def ooops_check(page: Any) -> None:
     banner = page.locator("#banner")
     if banner.count() > 0:
+        text = banner.inner_text()
+        if "Oops!" in text or "404" in text:
+            print(page.url)
         expect(banner).not_to_contain_text("Oops!")
         expect(banner).not_to_contain_text("404")
 
@@ -237,8 +240,8 @@ def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> No
         parsed_url = urlparse(link)
         if parsed_url.hostname not in ("localhost", "127.0.0.1"):
             continue
-        if link not in visited_links:
-            links_to_visit.add(link)
+        if link not in visited_links and link not in links_to_visit:
+            links_to_visit.append(link)
 
 
 def check_feature(page: Any, name: Any) -> None:

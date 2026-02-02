@@ -15,6 +15,7 @@
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th>{% trans "Items" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +31,11 @@
                         {% for item in el.items.all %}
                             <a href="{% url 'exe_warehouse_items_edit' item.uuid %}">{{ item }}</a>
                         {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_warehouse_tags_delete' el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

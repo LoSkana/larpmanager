@@ -3814,6 +3814,9 @@ msgstr "Das Objekt existiert nicht"
 msgid "One-Time Access Token"
 msgstr "Token für den einmaligen Zugang"
 
+msgid "Operation not allowed"
+msgstr "Betrieb nicht erlaubt"
+
 msgid "Participant questions"
 msgstr "Fragen der Teilnehmer"
 
@@ -3928,6 +3931,9 @@ msgstr "Möchten Sie fortfahren"
 
 msgid "Download relationships"
 msgstr "Beziehungen herunterladen"
+
+msgid "Event deletion request"
+msgstr "Antrag auf Löschung eines Ereignisses"
 
 msgid "Expenses collaborators"
 msgstr "Ausgaben für Mitarbeiter"
@@ -4644,6 +4650,9 @@ msgstr "Die einzige obligatorische Spalte ist"
 msgid "Trait assigned for %(event)s"
 msgstr "Zugeordnete Eigenschaft für %(event)s"
 
+msgid "Your request has been logged"
+msgstr "Ihre Anfrage wurde protokolliert"
+
 msgid "payment pending confirmation"
 msgstr "Zahlung bis zur Bestätigung"
 
@@ -4912,6 +4921,9 @@ msgstr "Prüfung nicht vorhandener Beziehungen"
 
 msgid "Added to the bottom of all pages"
 msgstr "Am unteren Rand aller Seiten hinzugefügt"
+
+msgid "An error occurred while deleting"
+msgstr "Beim Löschen ist ein Fehler aufgetreten"
 
 msgid "Cancellation for missing payment"
 msgstr "Stornierung wegen fehlender Zahlung"
@@ -5545,6 +5557,9 @@ msgstr "Sie machen eine Spende von"
 
 msgid "click on the icon to open the tutorial"
 msgstr "Klicken Sie auf das Symbol, um das Tutorial zu öffnen"
+
+msgid "we'll let you know as soon as possible"
+msgstr "Wir werden Sie so schnell wie möglich informieren"
 
 msgid "Character are not visible at the moment"
 msgstr "Zeichen sind im Moment nicht sichtbar"
@@ -8198,6 +8213,12 @@ msgid ""
 "You will not be able to use this link again after accessing the content"
 msgstr ""
 "Nach dem Zugriff auf den Inhalt können Sie diesen Link nicht mehr verwenden"
+
+msgid ""
+"due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+"Aufgrund der Schwierigkeit der Aufgabe wird unser Team diese manuell "
+"überprüfen"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"

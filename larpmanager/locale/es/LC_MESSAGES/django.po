@@ -3814,6 +3814,9 @@ msgstr "El objeto no existe"
 msgid "One-Time Access Token"
 msgstr "Token de acceso único"
 
+msgid "Operation not allowed"
+msgstr "Operación no permitida"
+
 msgid "Participant questions"
 msgstr "Preguntas de los participantes"
 
@@ -3928,6 +3931,9 @@ msgstr "¿Quieres continuar"
 
 msgid "Download relationships"
 msgstr "Descargar relaciones"
+
+msgid "Event deletion request"
+msgstr "Solicitud de eliminación de eventos"
 
 msgid "Expenses collaborators"
 msgstr "Gastos de colaboradores"
@@ -4644,6 +4650,9 @@ msgstr "La única columna obligatoria es"
 msgid "Trait assigned for %(event)s"
 msgstr "Rasgo asignado para %(event)s"
 
+msgid "Your request has been logged"
+msgstr "Su solicitud ha sido registrada"
+
 msgid "payment pending confirmation"
 msgstr "pago pendiente de confirmación"
 
@@ -4912,6 +4921,9 @@ msgstr "comprobar relaciones inexistentes"
 
 msgid "Added to the bottom of all pages"
 msgstr "Añadido al final de todas las páginas"
+
+msgid "An error occurred while deleting"
+msgstr "Se ha producido un error al borrar"
 
 msgid "Cancellation for missing payment"
 msgstr "Anulación por impago"
@@ -5541,6 +5553,9 @@ msgstr "Estas a punto de hacer una donación de"
 
 msgid "click on the icon to open the tutorial"
 msgstr "haga clic en el icono para abrir el tutorial"
+
+msgid "we'll let you know as soon as possible"
+msgstr "le informaremos lo antes posible"
 
 msgid "Character are not visible at the moment"
 msgstr "Los caracteres no son visibles por el momento"
@@ -8025,6 +8040,12 @@ msgid ""
 "You will not be able to use this link again after accessing the content"
 msgstr ""
 "No podrá volver a utilizar este enlace después de acceder al contenido"
+
+msgid ""
+"due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+"debido a la delicadeza de la tarea solicitada, nuestro equipo la revisará "
+"manualmente"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"

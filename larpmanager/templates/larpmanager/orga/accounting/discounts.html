@@ -18,6 +18,7 @@
                 <th>{% trans "Max uses" %}</th>
                 <th>{% trans "Code" %}</th>
                 <th>{% trans "Session active" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -37,6 +38,11 @@
                             {% include "elements/comma.html" %}
                             {{ ch }}
                         {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_discounts_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

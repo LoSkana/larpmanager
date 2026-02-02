@@ -320,8 +320,13 @@ $(document).ready(function() {
 
     $('.tablesorter').tablesorter();
 
-    $('.delete').click(function(){
-        return confirm('Are you sure?');
+    // Confirmation for delete icons (fa-trash)
+    $(document).on('click', 'a:has(i.fa-trash), a:has(i.fa-solid.fa-trash), a:has(i.fas.fa-trash)', function(e) {
+        if (!confirm('Are you sure you want to delete this item?')) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
     });
 
     $('.show_popup').on( "click", function() {
@@ -482,15 +487,16 @@ function data_tables() {
 
         const tableId = $table.attr('id');
 
-        let disable_sort_columns = [0];
-        if ($table.hasClass('writing_list')) {
-            disable_sort_columns = [0, 2];
-        }
-        if ($table.hasClass('ordering_arrow')) {
-            var thList = $table.find('thead th');
-            var totalColumns = thList.length;
-            disable_sort_columns.push(totalColumns - 2, totalColumns - 1);
-        }
+        var thList = $table.find('thead th');
+        var disable_sort_columns = [];
+
+        // disable sort for empty thead th
+        thList.each(function (index) {
+            if ($(this).text().trim() === '') {
+                disable_sort_columns.push(index);
+            }
+        });
+
         let table_no_header_cols = $table.attr('no_header_cols');
         if (table_no_header_cols) {
             if (table_no_header_cols === "all") {
@@ -602,6 +608,16 @@ function data_tables() {
 
         const url = $table.attr('url');
 
+        var thList = $table.find('thead th');
+        var disable_sort_columns = [];
+
+        // disable sort for empty thead th
+        thList.each(function (index) {
+            if ($(this).text().trim() === '') {
+                disable_sort_columns.push(index);
+            }
+        });
+
         const table = new DataTable('#' + tableId, {
             lengthMenu: [[10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000], [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]],
             ajax: {
@@ -621,9 +637,9 @@ function data_tables() {
                 handler: false
             },
             columnDefs: [
-                { orderable: false, targets: [0] },
-                { searcheable: false, targets: [0] },
-                { columnControl: [], targets: [0] }
+                { orderable: false, targets: disable_sort_columns },
+                { searcheable: false, targets: disable_sort_columns },
+                { columnControl: [], targets: disable_sort_columns }
             ],
             layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } },
             /*
@@ -842,7 +858,8 @@ function add_icon_tooltips() {
     var iconTooltips = {
         'fa-edit': window['icon_texts']['edit'],
         'fa-arrow-up': window['icon_texts']['up'],
-        'fa-arrow-down': window['icon_texts']['down']
+        'fa-arrow-down': window['icon_texts']['down'],
+        'fa-trash': window['icon_texts']['delete']
     };
 
     // Process each icon type

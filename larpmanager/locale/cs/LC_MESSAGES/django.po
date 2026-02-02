@@ -3814,6 +3814,9 @@ msgstr "Objekt neexistuje"
 msgid "One-Time Access Token"
 msgstr "Jednorázový přístupový token"
 
+msgid "Operation not allowed"
+msgstr "Operace není povolena"
+
 msgid "Participant questions"
 msgstr "Otázky účastníků"
 
@@ -3928,6 +3931,9 @@ msgstr "Chcete pokračovat"
 
 msgid "Download relationships"
 msgstr "Vztahy ke stažení"
+
+msgid "Event deletion request"
+msgstr "Žádost o odstranění události"
 
 msgid "Expenses collaborators"
 msgstr "Výdaje na zaměstnance"
@@ -4644,6 +4650,9 @@ msgstr "Jediný povinný sloupec je"
 msgid "Trait assigned for %(event)s"
 msgstr "Známka přiřazená pro %(event)s"
 
+msgid "Your request has been logged"
+msgstr "Váš požadavek byl zaznamenán"
+
 msgid "payment pending confirmation"
 msgstr "platba čeká na potvrzení"
 
@@ -4912,6 +4921,9 @@ msgstr "kontrola neexistujících vztahů"
 
 msgid "Added to the bottom of all pages"
 msgstr "Přidáno do spodní části všech stránek"
+
+msgid "An error occurred while deleting"
+msgstr "Při odstraňování došlo k chybě"
 
 msgid "Cancellation for missing payment"
 msgstr "Zrušení z důvodu chybějící platby"
@@ -5541,6 +5553,9 @@ msgstr "Přispíváte částkou"
 
 msgid "click on the icon to open the tutorial"
 msgstr "kliknutím na ikonu otevřete výukový program"
+
+msgid "we'll let you know as soon as possible"
+msgstr "dáme vám co nejdříve vědět"
 
 msgid "Character are not visible at the moment"
 msgstr "Znaky nejsou v tuto chvíli viditelné"
@@ -7869,6 +7884,11 @@ msgstr ""
 msgid ""
 "You will not be able to use this link again after accessing the content"
 msgstr "Po přístupu k obsahu již nebudete moci tento odkaz použít"
+
+msgid ""
+"due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+"vzhledem k delikátnosti požadovaného úkolu jej náš tým zkontroluje ručně"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"

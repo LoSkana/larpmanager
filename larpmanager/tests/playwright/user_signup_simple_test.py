@@ -63,10 +63,7 @@ def signup(live_server: Any, page: Any) -> None:
 
     # delete sign up
     go_to(page, live_server, "/test/manage/registrations")
-    page.locator("a:has(i.fas.fa-edit)").click()
-    page.get_by_role("link", name="Delete").click()
-    just_wait(page)
-    page.get_by_role("button", name="Confirmation delete").click()
+    page.locator("a:has(i.fas.fa-trash)").click()
 
     # sign up, confirm profile
     go_to(page, live_server, "/test/register")

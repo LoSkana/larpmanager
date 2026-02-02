@@ -50,6 +50,7 @@
                     <th>{% trans "Notes" %}</th>
                     <th>{% trans "Photo" %}</th>
                     <th>{% trans "Deployed" %}</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -88,6 +89,11 @@
                             class="ajax-toggle"
                             tp="depl">
                             <span class="value {% if not el.deployed %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
+                        </td>
+                        <td>
+                            <a href="{% url 'orga_warehouse_assignment_item_delete' run.get_slug el.uuid %}"
+                               qtip="{% trans "Delete" %}"
+                               class="only_new_form"><i class="fas fa-trash"></i></a>
                         </td>
                     </tr>
                 {% endfor %}

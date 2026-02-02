@@ -63,31 +63,24 @@ def check_delete(live_server: Any, page: Any) -> None:
 
     # cancel signup
     go_to(page, live_server, "/test/manage/registrations")
-    page.wait_for_selector("table.go_datatable")
-    page.wait_for_selector("a:has(i.fas.fa-edit)", timeout=100)
-    page.locator("a:has(i.fas.fa-edit)").click(force=True)
-    page.get_by_role("link", name="Delete").click()
     just_wait(page)
-    page.get_by_role("button", name="Confirmation delete").click()
-    go_to(page, live_server, "/test/manage/cancellations")
-    expect(page.get_by_role("row", name="100 52 24 4 Admin Test")).to_contain_text("orga@test.it")
+    page.locator("a:has(i.fas.fa-trash)").click(force=True)
+    just_wait(page)
+    expect(page.locator("#one")).not_to_contain_text("Admin Test")
 
     # delete payments
     go_to(page, live_server, "/test/manage/tokens")
-    page.get_by_role("row", name="Admin Test Test Larp teeest").get_by_role("link").click()
-    page.get_by_role("link", name="Delete").click()
     just_wait(page)
-    page.get_by_role("button", name="Confirmation delete").click()
+    page.get_by_role("row", name="Admin Test Test Larp teeest").locator('.fa-trash').click()
+
     go_to(page, live_server, "/test/manage/credits")
-    page.get_by_role("row", name="Admin Test Test Larp testet").get_by_role("link").click()
-    page.get_by_role("link", name="Delete").click()
     just_wait(page)
-    page.get_by_role("button", name="Confirmation delete").click()
+    page.get_by_role("row", name="Admin Test Test Larp testet").locator('.fa-trash').click()
+
     go_to(page, live_server, "/test/manage/payments")
-    page.get_by_role("row", name="Admin Test Wire Money").get_by_role("link").click()
-    page.get_by_role("link", name="Delete").click()
     just_wait(page)
-    page.get_by_role("button", name="Confirmation delete").click()
+    page.get_by_role("row", name="Admin Test Wire Money").locator('.fa-trash').click()
+
 
 
 def discount(live_server: Any, page: Any) -> None:

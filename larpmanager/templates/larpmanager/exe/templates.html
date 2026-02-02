@@ -15,6 +15,7 @@
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Role" %}</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -37,6 +38,11 @@
                     </td>
                     <td>
                         <a href="{% url 'exe_templates_config' el.uuid %}">{% trans "Configuration" %}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_templates_delete' el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}
