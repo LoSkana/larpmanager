@@ -505,7 +505,7 @@ def orga_quick(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_preferences(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle organizer preferences editing form."""
-    return orga_edit(request, event_slug, "")
+    return orga_edit(request, event_slug, OrgaAction.PREFERENCES)
 
 
 @login_required
