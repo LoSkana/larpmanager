@@ -427,8 +427,13 @@ def _digest_payments(event: Event, email_body: str, all_payments: list, currency
 
     payment_ids = [notification.object_id for notification in all_payments]
     for payment in AccountingItemPayment.objects.filter(pk__in=payment_ids, association_id=event.association_id):
+        # Calculate net value (without transaction fees)
+        net_value = payment.value
+        if payment.inv and payment.inv.mc_fee:
+            net_value = payment.value - payment.inv.mc_fee
+
         email_body += (
-            f"<li><b>{payment.member}</b> - {payment.value:.2f} {currency_symbol} - {payment.get_pay_display()}</li>"
+            f"<li><b>{payment.member}</b> - {net_value:.2f} {currency_symbol} - {payment.get_pay_display()}</li>"
         )
     email_body += "</ul>"
 
