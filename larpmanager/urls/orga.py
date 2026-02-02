@@ -1468,14 +1468,14 @@ urlpatterns = [
         name="orga_backup",
     ),
     path(
-        "<slug:event_slug>/manage/upload/<slug:upload_type>/",
-        views_oe.orga_upload,
-        name="orga_upload",
-    ),
-    path(
         "<slug:event_slug>/manage/upload/<slug:upload_type>/template/",
         views_oe.orga_upload_template,
         name="orga_upload_template",
+    ),
+    path(
+        "<slug:event_slug>/manage/upload/<slug:upload_type>/",
+        views_oe.orga_upload,
+        name="orga_upload",
     ),
     path(
         "<slug:event_slug>/manage/preferences/",
