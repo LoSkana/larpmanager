@@ -162,7 +162,7 @@ def _exe_actions(
     """
     # Get permission data from enum
     exe_action = ExeAction.from_string(permission)
-    if not exe_action:
+    if exe_action is None:
         msg = f"permission unknown: {permission}"
         raise Http404(msg)
 

@@ -525,7 +525,7 @@ def _orga_actions(
     """
     # Get permission data from enum
     orga_action = OrgaAction.from_string(permission)
-    if not orga_action:
+    if orga_action is None:
         msg = f"permission unknown: {permission}"
         raise Http404(msg)
 
