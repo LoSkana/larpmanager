@@ -202,7 +202,7 @@ window.addEventListener('DOMContentLoaded', function() {
             onSuccess: function(response) {
                 if (response.success && response.question_uuid) {
                     // Update URL with new question UUID
-                    const newUrl = window.location.pathname.replace('/new/', '/edit/' + response.question_uuid + '/');
+                    const newUrl = window.location.pathname.replace('/new/', '/' + response.question_uuid + '/edit/');
                     window.history.replaceState({}, '', newUrl);
 
                     // Update form action to new UUID path
