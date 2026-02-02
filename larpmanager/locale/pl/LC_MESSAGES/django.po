@@ -5822,9 +5822,6 @@ msgstr "Szczegóły: %(details)s (<b>%(amount).2f</b>)"
 msgid "For which day you will need transportation"
 msgstr "Którego dnia będziesz potrzebować transportu"
 
-msgid "Here's what happened in the last 24 hours:"
-msgstr "Oto, co wydarzyło się w ciągu ostatnich 24 godzin:"
-
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "Kod języka ISO (np. 'en', 'it', 'de')"
 

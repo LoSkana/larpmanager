@@ -2336,9 +2336,6 @@ msgstr ""
 msgid "Daily Summary"
 msgstr ""
 
-msgid "Here's what happened in the last 24 hours:"
-msgstr ""
-
 msgid "Go to event dashboard"
 msgstr ""
 
