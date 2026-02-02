@@ -113,8 +113,12 @@ def ooops_check(page: Any) -> None:
     banner = page.locator("#banner")
     if banner.count() > 0:
         text = banner.inner_text()
-        if "Oops!" in text or "404" in text:
-            print(page.url)
+        if "Oops!" in text:
+            raise Exception("Page error on or %s", page.url)
+
+        if "404!" in text:
+            raise Exception("Page not found on or %s", page.url)
+
         expect(banner).not_to_contain_text("Oops!")
         expect(banner).not_to_contain_text("404")
 

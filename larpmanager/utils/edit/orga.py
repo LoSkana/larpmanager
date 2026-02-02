@@ -72,6 +72,7 @@ from larpmanager.forms.registration import (
     OrgaRegistrationQuestionForm,
     OrgaRegistrationQuotaForm,
     OrgaRegistrationSectionForm,
+    OrgaRegistrationSurchargeForm,
     OrgaRegistrationTicketForm,
 )
 from larpmanager.forms.warehouse import OrgaWarehouseAreaForm
@@ -199,6 +200,7 @@ alls = {
         "form": OrgaRegistrationOptionForm,
     },
     "orga_registration_quotas": {"form": OrgaRegistrationQuotaForm},
+    "orga_registration_surcharges": {"form": OrgaRegistrationSurchargeForm},
     "orga_px_deliveries": {"form": OrgaDeliveryPxForm},
     "orga_px_abilities": {"form": OrgaAbilityPxForm, "check": validate_ability_px},
     "orga_px_ability_types": {"form": OrgaAbilityTypePxForm},
@@ -395,7 +397,7 @@ def _action_show(
     form_type = action_data.get("form")
     writing = action_data.get("writing")
     model_type = form_type.Meta.model
-    element_type_name = model_type.__name__
+    element_type_name = model_type.__name__.lower()
 
     # Get the element
     backend_get(context, model_type, element_uuid, is_writing=bool(writing))

@@ -252,7 +252,7 @@ def upload_membership_fee(page: Any, live_server: Any) -> None:
     page.locator("#id_wire_bic").fill("test iban")
     submit_confirm(page)
 
-    page.get_by_role("link", name="Membership").click()
+    page.get_by_role("link", name="Members").click()
     page.get_by_role("link", name="Upload membership fee").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").fill("adm")
