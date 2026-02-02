@@ -170,6 +170,11 @@ urlpatterns = [
         name="gift",
     ),
     path(
+        "<slug:event_slug>/gift/new/",
+        views_ur.gift_new,
+        name="gift_new",
+    ),
+    path(
         "<slug:event_slug>/gift/edit/<slug:gift_uuid>/",
         views_ur.gift_edit,
         name="gift_edit",

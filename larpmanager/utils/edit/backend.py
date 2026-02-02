@@ -239,7 +239,13 @@ def check_association(element: object, context: dict, attribute_field: str | Non
 
 
 def user_edit(
-    request: HttpRequest, context: dict, form_type: type, model_name: str, entity_uuid: str | None = None
+    request: HttpRequest,
+    context: dict,
+    form_type: type,
+    model_name: str,
+    entity_uuid: str | None = None,
+    save_callback: Callable[[Any, dict], Any] | None = None,
+    delete_callback: Callable[[Any], None] | None = None,
 ) -> bool:
     """Edit user data with validation.
 
@@ -253,6 +259,8 @@ def user_edit(
         form_type: Django form class to use for data validation and editing
         model_name: Name key for accessing the model instance in context dictionary
         entity_uuid: Entity ID for editing, used for form numbering (0 for new instances)
+        save_callback: Optional custom save function (form, context) -> instance
+        delete_callback: Optional custom delete function (instance) -> None
 
     Returns:
         True if form was successfully processed and saved, False if form
@@ -260,7 +268,7 @@ def user_edit(
 
     Side Effects:
         - Adds success message to request on successful save
-        - Logs the operation using save_log function
+        - Logs the operation using save_log function (unless custom callbacks used)
         - Deletes instance if delete flag is set
         - Updates context with 'saved', 'form', 'num', and optionally 'name' keys
 
@@ -270,24 +278,34 @@ def user_edit(
         form = form_type(request.POST, request.FILES, instance=context[model_name], context=context)
 
         if form.is_valid():
-            # Save the form and get the updated instance
-            saved_instance = form.save()
-            messages.success(request, _("Operation completed") + "!")
-
             # Check if delete operation was requested
             should_delete = "delete" in request.POST and request.POST["delete"] == "1"
 
-            # Log the operation (save or delete)
-            model_type = form_type.Meta.model
-            save_log(context["member"], model_type, saved_instance, to_delete=should_delete)
-
-            # Delete the instance if deletion was requested
             if should_delete:
-                saved_instance.delete()
+                # Use delete callback if provided
+                if delete_callback:
+                    delete_callback(context[model_name])
+                else:
+                    # Default delete behavior
+                    model_type = form_type.Meta.model
+                    save_log(context["member"], model_type, context[model_name], to_delete=True)
+                    context[model_name].delete()
 
-            # Store saved instance in context for template access
+                messages.success(request, _("Operation completed") + "!")
+                context["saved"] = context[model_name]
+                return True
+
+            # Use save callback if provided
+            if save_callback:
+                saved_instance = save_callback(form, context)
+            else:
+                # Default save behavior
+                saved_instance = form.save()
+                model_type = form_type.Meta.model
+                save_log(context["member"], model_type, saved_instance, to_delete=False)
+
+            messages.success(request, _("Operation completed") + "!")
             context["saved"] = saved_instance
-
             return True
     else:
         # Initialize empty form for GET request, bind to existing instance

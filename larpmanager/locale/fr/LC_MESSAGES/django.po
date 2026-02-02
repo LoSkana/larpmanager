@@ -3581,9 +3581,6 @@ msgstr "Champ d'exclusion"
 msgid "Filler registrations"
 msgstr "Enregistrements de remplissage"
 
-msgid "Gift card cancelled!"
-msgstr "Carte cadeau annulée !"
-
 msgid "Independent factions"
 msgstr "Les factions indépendantes"
 

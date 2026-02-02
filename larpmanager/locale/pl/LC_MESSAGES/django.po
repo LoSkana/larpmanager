@@ -3581,9 +3581,6 @@ msgstr "Pole wykluczeń"
 msgid "Filler registrations"
 msgstr "Rejestracje wypełniaczy"
 
-msgid "Gift card cancelled!"
-msgstr "Karta podarunkowa anulowana!"
-
 msgid "Independent factions"
 msgstr "Niezależne frakcje"
 

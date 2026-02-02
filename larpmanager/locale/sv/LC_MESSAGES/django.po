@@ -3581,9 +3581,6 @@ msgstr "Fält för undantag"
 msgid "Filler registrations"
 msgstr "Registreringar av fyllnadsmaterial"
 
-msgid "Gift card cancelled!"
-msgstr "Presentkortet är annullerat!"
-
 msgid "Independent factions"
 msgstr "Oberoende fraktioner"
 

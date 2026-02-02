@@ -97,14 +97,11 @@ def prepare(page: Any, live_server: Any) -> None:
 def field_choice(page: Any, live_server: Any) -> None:
     # create single choice
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
     page.locator("#id_name").fill("choice")
-    page.locator("#id_name").press("Tab")
     page.locator("#id_description").fill("asd")
-    page.locator("#id_description").press("Shift+Home")
-    page.locator("#id_description").fill("")
     page.locator("#id_giftable").check()
 
+    iframe = new_option(page)
     iframe = new_option(page)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("prima")

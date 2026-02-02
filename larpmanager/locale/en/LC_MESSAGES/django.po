@@ -10379,9 +10379,6 @@ msgstr ""
 msgid "Registrations not open!"
 msgstr ""
 
-msgid "Gift card cancelled!"
-msgstr ""
-
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr ""
 

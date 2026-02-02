@@ -3581,9 +3581,6 @@ msgstr "Veld voor uitsluitingen"
 msgid "Filler registrations"
 msgstr "Filler-registraties"
 
-msgid "Gift card cancelled!"
-msgstr "Cadeaubon geannuleerd!"
-
 msgid "Independent factions"
 msgstr "Onafhankelijke facties"
 

@@ -3581,9 +3581,6 @@ msgstr "Pole pro vyloučení"
 msgid "Filler registrations"
 msgstr "Výplňové registrace"
 
-msgid "Gift card cancelled!"
-msgstr "Dárková karta zrušena!"
-
 msgid "Independent factions"
 msgstr "Nezávislé frakce"
 

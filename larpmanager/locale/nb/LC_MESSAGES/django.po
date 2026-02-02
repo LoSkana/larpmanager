@@ -3581,9 +3581,6 @@ msgstr "Felt for utelukkelser"
 msgid "Filler registrations"
 msgstr "Fyllstoffregistreringer"
 
-msgid "Gift card cancelled!"
-msgstr "Gavekortet er kansellert!"
-
 msgid "Independent factions"
 msgstr "Uavhengige fraksjoner"
 
