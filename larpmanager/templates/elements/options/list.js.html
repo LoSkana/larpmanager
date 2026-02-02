@@ -38,7 +38,7 @@ window.addEventListener('DOMContentLoaded', function() {
             if (window.parent && window.parent !== window) {
                 window.parent.postMessage({
                     type: 'open_option_modal',
-                    optionUuid: '0',
+                    optionUuid: '',
                     questionUuid: questionUuid
                 }, '*');
             }

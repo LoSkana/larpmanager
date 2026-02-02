@@ -33,19 +33,7 @@ from django.views.decorators.http import require_POST
 from larpmanager.cache.config import save_single_config
 from larpmanager.cache.warehouse import get_association_warehouse_cache
 from larpmanager.forms.miscellanea import (
-    OneTimeAccessTokenForm,
-    OneTimeContentForm,
-    OrgaAlbumForm,
-    OrgaProblemForm,
     UploadAlbumsForm,
-    UtilForm,
-    WorkshopModuleForm,
-    WorkshopOptionForm,
-    WorkshopQuestionForm,
-)
-from larpmanager.forms.warehouse import (
-    OrgaWarehouseAreaForm,
-    OrgaWarehouseItemAssignmentForm,
 )
 from larpmanager.models.member import Log
 from larpmanager.models.miscellanea import (
@@ -65,7 +53,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_album_cod, get_element
-from larpmanager.utils.services.edit import orga_delete, orga_edit
+from larpmanager.utils.edit.orga import orga_delete, orga_edit, orga_new
 from larpmanager.utils.services.miscellanea import get_warehouse_optionals, upload_albums
 from larpmanager.utils.services.writing import writing_post
 
@@ -79,15 +67,21 @@ def orga_albums(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_albums_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new album for an event."""
+    return orga_new(request, event_slug, "orga_albums")
+
+
+@login_required
 def orga_albums_edit(request: HttpRequest, event_slug: str, album_uuid: str) -> HttpResponse:
     """Edit album for an event."""
-    return orga_edit(request, event_slug, "orga_albums", OrgaAlbumForm, album_uuid)
+    return orga_edit(request, event_slug, "orga_albums", album_uuid)
 
 
 @login_required
 def orga_albums_delete(request: HttpRequest, event_slug: str, album_uuid: str) -> HttpResponse:
     """Delete album for event."""
-    return orga_delete(request, event_slug, "orga_albums", OrgaAlbumForm, album_uuid)
+    return orga_delete(request, event_slug, "orga_albums", album_uuid)
 
 
 @login_required
@@ -143,15 +137,21 @@ def orga_utils(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_utils_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new utility item for event."""
+    return orga_new(request, event_slug, "orga_utils")
+
+
+@login_required
 def orga_utils_edit(request: HttpRequest, event_slug: str, util_uuid: str) -> HttpResponse:
     """Edit utility item for event."""
-    return orga_edit(request, event_slug, "orga_utils", UtilForm, util_uuid)
+    return orga_edit(request, event_slug, "orga_utils", util_uuid)
 
 
 @login_required
 def orga_utils_delete(request: HttpRequest, event_slug: str, util_uuid: str) -> HttpResponse:
     """Delete util for event."""
-    return orga_delete(request, event_slug, "orga_utils", UtilForm, util_uuid)
+    return orga_delete(request, event_slug, "orga_utils", util_uuid)
 
 
 @login_required
@@ -233,19 +233,25 @@ def orga_workshop_modules(request: HttpRequest, event_slug: str) -> HttpResponse
 
 
 @login_required
+def orga_workshop_modules_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new workshop module for an event."""
+    return orga_new(request, event_slug, "orga_workshop_modules")
+
+
+@login_required
 def orga_workshop_modules_edit(request: HttpRequest, event_slug: str, module_uuid: str) -> HttpResponse:
     """Edit a workshop module for an event."""
-    return orga_edit(request, event_slug, "orga_workshop_modules", WorkshopModuleForm, module_uuid)
+    return orga_edit(request, event_slug, "orga_workshop_modules", module_uuid)
 
 
 @login_required
 def orga_workshop_modules_delete(request: HttpRequest, event_slug: str, module_uuid: str) -> HttpResponse:
     """Delete module for event."""
-    return orga_delete(request, event_slug, "orga_workshop_modules", WorkshopModuleForm, module_uuid)
+    return orga_delete(request, event_slug, "orga_workshop_modules", module_uuid)
 
 
 @login_required
-def orga_workshop_questions(request: HttpRequest, event_slug: str) -> HttpResponse | None:
+def orga_workshop_questions(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle workshop questions management for organizers."""
     # Check user permissions for workshop questions management
     context = check_event_context(request, event_slug, "orga_workshop_questions")
@@ -264,15 +270,21 @@ def orga_workshop_questions(request: HttpRequest, event_slug: str) -> HttpRespon
 
 
 @login_required
+def orga_workshop_questions_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new workshop question."""
+    return orga_new(request, event_slug, "orga_workshop_questions")
+
+
+@login_required
 def orga_workshop_questions_edit(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
     """Edit workshop question."""
-    return orga_edit(request, event_slug, "orga_workshop_questions", WorkshopQuestionForm, question_uuid)
+    return orga_edit(request, event_slug, "orga_workshop_questions", question_uuid)
 
 
 @login_required
 def orga_workshop_questions_delete(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
     """Delete question for event."""
-    return orga_delete(request, event_slug, "orga_workshop_questions", WorkshopQuestionForm, question_uuid)
+    return orga_delete(request, event_slug, "orga_workshop_questions", question_uuid)
 
 
 @login_required
@@ -306,15 +318,21 @@ def orga_workshop_options(request: HttpRequest, event_slug: str) -> HttpResponse
 
 
 @login_required
+def orga_workshop_options_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new workshop option for an event."""
+    return orga_new(request, event_slug, "orga_workshop_options")
+
+
+@login_required
 def orga_workshop_options_edit(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
     """Edit workshop option for an event."""
-    return orga_edit(request, event_slug, "orga_workshop_options", WorkshopOptionForm, option_uuid)
+    return orga_edit(request, event_slug, "orga_workshop_options", option_uuid)
 
 
 @login_required
 def orga_workshop_options_delete(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
     """Delete option for event."""
-    return orga_delete(request, event_slug, "orga_workshop_options", WorkshopOptionForm, option_uuid)
+    return orga_delete(request, event_slug, "orga_workshop_options", option_uuid)
 
 
 @login_required
@@ -330,15 +348,21 @@ def orga_problems(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_problems_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new problem."""
+    return orga_new(request, event_slug, "orga_problems")
+
+
+@login_required
 def orga_problems_edit(request: HttpRequest, event_slug: str, problem_uuid: str) -> HttpResponse:
     """Delegate to generic edit view for problem editing."""
-    return orga_edit(request, event_slug, "orga_problems", OrgaProblemForm, problem_uuid)
+    return orga_edit(request, event_slug, "orga_problems", problem_uuid)
 
 
 @login_required
 def orga_problems_delete(request: HttpRequest, event_slug: str, problem_uuid: str) -> HttpResponse:
     """Delete problem for event."""
-    return orga_delete(request, event_slug, "orga_problems", OrgaProblemForm, problem_uuid)
+    return orga_delete(request, event_slug, "orga_problems", problem_uuid)
 
 
 @login_required
@@ -354,15 +378,21 @@ def orga_warehouse_area(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_warehouse_area_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new warehouse area for an event."""
+    return orga_new(request, event_slug, "orga_warehouse_area")
+
+
+@login_required
 def orga_warehouse_area_edit(request: HttpRequest, event_slug: str, area_uuid: str) -> HttpResponse:
     """Edit a warehouse area for an event."""
-    return orga_edit(request, event_slug, "orga_warehouse_area", OrgaWarehouseAreaForm, area_uuid)
+    return orga_edit(request, event_slug, "orga_warehouse_area", area_uuid)
 
 
 @login_required
 def orga_warehouse_area_delete(request: HttpRequest, event_slug: str, area_uuid: str) -> HttpResponse:
     """Delete area for event."""
-    return orga_delete(request, event_slug, "orga_warehouse_area", OrgaWarehouseAreaForm, area_uuid)
+    return orga_delete(request, event_slug, "orga_warehouse_area", area_uuid)
 
 
 @login_required
@@ -546,17 +576,21 @@ def orga_warehouse_manifest(request: HttpRequest, event_slug: str) -> HttpRespon
 
 
 @login_required
+def orga_warehouse_assignment_item_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new warehouse item assignment."""
+    return orga_new(request, event_slug, "orga_warehouse_manifest")
+
+
+@login_required
 def orga_warehouse_assignment_item_edit(request: HttpRequest, event_slug: str, assignment_uuid: str) -> HttpResponse:
     """Edit warehouse item assignment."""
-    return orga_edit(request, event_slug, "orga_warehouse_manifest", OrgaWarehouseItemAssignmentForm, assignment_uuid)
+    return orga_edit(request, event_slug, "orga_warehouse_manifest", assignment_uuid)
 
 
 @login_required
 def orga_warehouse_assignment_item_delete(request: HttpRequest, event_slug: str, assignment_uuid: str) -> HttpResponse:
     """Delete assignment for event."""
-    return orga_delete(
-        request, event_slug, "orga_warehouse_assignment_item", OrgaWarehouseItemAssignmentForm, assignment_uuid
-    )
+    return orga_delete(request, event_slug, "orga_warehouse_assignment_item", assignment_uuid)
 
 
 @require_POST
@@ -667,15 +701,21 @@ def orga_onetimes(request: HttpRequest, event_slug: str) -> Any:
 
 
 @login_required
+def orga_onetimes_new(request: HttpRequest, event_slug: str) -> Any:
+    """Create a new one-time content."""
+    return orga_new(request, event_slug, "orga_onetimes")
+
+
+@login_required
 def orga_onetimes_edit(request: HttpRequest, event_slug: str, onetime_uuid: str) -> Any:
     """Edit or create a one-time content."""
-    return orga_edit(request, event_slug, "orga_onetimes", OneTimeContentForm, onetime_uuid)
+    return orga_edit(request, event_slug, "orga_onetimes", onetime_uuid)
 
 
 @login_required
 def orga_onetimes_delete(request: HttpRequest, event_slug: str, onetime_uuid: str) -> HttpResponse:
     """Delete onetime for event."""
-    return orga_delete(request, event_slug, "orga_onetimes", OneTimeContentForm, onetime_uuid)
+    return orga_delete(request, event_slug, "orga_onetimes", onetime_uuid)
 
 
 @login_required
@@ -700,15 +740,21 @@ def orga_onetimes_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_onetimes_tokens_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new one-time access token."""
+    return orga_new(request, event_slug, "orga_onetimes_tokens")
+
+
+@login_required
 def orga_onetimes_tokens_edit(request: HttpRequest, event_slug: str, token_uuid: str) -> HttpResponse:
     """Edit one-time access token."""
-    return orga_edit(request, event_slug, "orga_onetimes_tokens", OneTimeAccessTokenForm, token_uuid)
+    return orga_edit(request, event_slug, "orga_onetimes_tokens", token_uuid)
 
 
 @login_required
 def orga_onetimes_tokens_delete(request: HttpRequest, event_slug: str, token_uuid: str) -> HttpResponse:
     """Delete onetime token for event."""
-    return orga_delete(request, event_slug, "orga_onetimes_tokens", OneTimeAccessTokenForm, token_uuid)
+    return orga_delete(request, event_slug, "orga_onetimes_tokens", token_uuid)
 
 
 @login_required

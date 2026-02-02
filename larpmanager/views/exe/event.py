@@ -34,10 +34,8 @@ from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.forms.event import (
-    ExeTemplateForm,
     ExeTemplateRolesForm,
     OrgaConfigForm,
-    OrgaRunForm,
 )
 from larpmanager.models.access import EventRole
 from larpmanager.models.event import (
@@ -47,7 +45,8 @@ from larpmanager.models.event import (
 from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.core.base import check_association_context, get_context
 from larpmanager.utils.core.common import get_coming_runs, get_event_template
-from larpmanager.utils.services.edit import backend_get, exe_delete, exe_edit
+from larpmanager.utils.edit.backend import backend_get
+from larpmanager.utils.edit.exe import exe_delete, exe_edit, exe_form, exe_new
 from larpmanager.utils.users.deadlines import check_run_deadlines
 from larpmanager.views.manage import _get_registration_counts, _get_registration_status
 from larpmanager.views.orga.event import full_event_edit
@@ -74,73 +73,74 @@ def exe_events(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
-    """Handle editing of existing events or creation of new events.
-
-    Args:
-        request: HTTP request object containing user session and form data
-        event_uuid: Event number UUID (0 for new event creation)
-
-    Returns:
-        HttpResponse: Either a redirect to the appropriate page after successful operation
-                     or a rendered event form template for user input
-
-    Raises:
-        PermissionDenied: If user lacks required association permissions
-        Http404: If specified event number doesn't exist
-
-    """
+def exe_events_new(request: HttpRequest) -> HttpResponse:
+    """Create a new event."""
     # Check user has executive events permission for the association
     context = check_association_context(request, "exe_events")
 
-    # Determine if this is creation or editing
-    if event_uuid != "0":
-        # Retrieve the run object for editing
-        backend_get(context, Run, event_uuid, "event")
-        event = context["el"].event
-        run = context["el"]
-        on_created = None
-    else:
-        # Prepare for creation
-        event = None
-        run = None
-        context["exe"] = True
+    # Prepare for creation
+    context["exe"] = True
+    if context.get("onboarding"):
+        context["welcome_message"] = True
+        context["tutorial"] = None
+        context["config"] = None
+        context["is_sidebar_open"] = False
 
-        if context.get("onboarding"):
-            context["welcome_message"] = True
-            context["tutorial"] = None
-            context["config"] = None
-            context["is_sidebar_open"] = False
+    # Define callback for post-creation operations
+    def on_created(created_event: Event) -> None:
+        """Post-creation callback for setting up organizer role and sticky message."""
+        # Automatically add requesting user as event organizer
+        (er, _created) = EventRole.objects.get_or_create(event=created_event, number=1)
+        if not er.name:
+            er.name = "Organizer"
+        er.members.add(context["member"])
+        er.save()
 
-        # Define callback for post-creation operations
-        def on_created(created_event: Event) -> None:
-            """Post-creation callback for setting up organizer role and sticky message."""
-            # Automatically add requesting user as event organizer
-            (er, _created) = EventRole.objects.get_or_create(event=created_event, number=1)
-            if not er.name:
-                er.name = "Organizer"
-            er.members.add(context["member"])
-            er.save()
+        # Refresh cached event links for user navigation
+        reset_event_links(context["member"].id, context["association_id"])
 
-            # Refresh cached event links for user navigation
-            reset_event_links(context["member"].id, context["association_id"])
-
-    # Use unified full_event_edit for both creation and editing
+    # Use unified full_event_edit
     context["add_another"] = False
     return full_event_edit(
         context,
         request,
-        event,
-        run,
+        None,
+        None,
         is_executive=True,
         on_created_callback=on_created,
     )
 
 
 @login_required
+def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
+    """Edit an event."""
+    # Check user has executive events permission for the association
+    context = check_association_context(request, "exe_events")
+
+    # Retrieve the run object for editing
+    backend_get(context, Run, event_uuid, "event")
+
+    # Use unified full_event_edit
+    context["add_another"] = False
+    return full_event_edit(
+        context,
+        request,
+        context["el"].event,
+        context["el"],
+        is_executive=True,
+    )
+
+
+@login_required
+def exe_runs_new(request: HttpRequest) -> HttpResponse:
+    """Create a new organization-wide run with event field."""
+    return exe_new(request, "exe_events")
+
+
+@login_required
 def exe_runs_edit(request: HttpRequest, run_uuid: str) -> HttpResponse:
     """Edit organization-wide run with event field."""
-    return exe_edit(request, OrgaRunForm, run_uuid, "exe_events", additional_field="event")
+    return exe_edit(request, "exe_events", run_uuid)
 
 
 @login_required
@@ -166,15 +166,21 @@ def exe_templates(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+def exe_templates_new(request: HttpRequest) -> HttpResponse:
+    """Create a new executive template."""
+    return exe_new(request, "exe_templates")
+
+
+@login_required
 def exe_templates_edit(request: HttpRequest, template_uuid: str) -> HttpResponse:
     """Edit an existing executive template."""
-    return exe_edit(request, ExeTemplateForm, template_uuid, "exe_templates")
+    return exe_edit(request, "exe_templates", template_uuid)
 
 
 @login_required
 def exe_templates_delete(request: HttpRequest, template_uuid: str) -> HttpResponse:
     """Delete template."""
-    return exe_delete(request, ExeTemplateForm, template_uuid, "exe_templates")
+    return exe_delete(request, "exe_templates", template_uuid)
 
 
 @login_required
@@ -188,15 +194,23 @@ def exe_templates_config(request: HttpRequest, template_uuid: str) -> HttpRespon
     add_ctx["features"].update(get_event_features(add_ctx["event"].id))
     add_ctx["add_another"] = False
 
-    return exe_edit(request, OrgaConfigForm, template_uuid, "exe_templates", additional_context=add_ctx)
+    return exe_form(request, add_ctx, "exe_templates", {}, OrgaConfigForm, template_uuid)
 
 
 @login_required
-def exe_templates_roles(request: HttpRequest, event_uuid: str, role_uuid: str | None) -> HttpResponse:
+def exe_templates_roles_new(request: HttpRequest, template_uuid: str) -> HttpResponse:
     """Edit or create template roles for an event."""
     add_ctx = get_context(request)
-    get_event_template(add_ctx, event_uuid)
-    return exe_edit(request, ExeTemplateRolesForm, role_uuid, "exe_templates", additional_context=add_ctx)
+    get_event_template(add_ctx, template_uuid)
+    return exe_form(request, add_ctx, "exe_templates", {}, ExeTemplateRolesForm)
+
+
+@login_required
+def exe_templates_roles_edit(request: HttpRequest, template_uuid: str, role_uuid: str | None) -> HttpResponse:
+    """Edit or create template roles for an event."""
+    add_ctx = get_context(request)
+    get_event_template(add_ctx, template_uuid)
+    return exe_form(request, add_ctx, "exe_templates", {}, ExeTemplateRolesForm, role_uuid)
 
 
 @login_required

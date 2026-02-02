@@ -3581,9 +3581,6 @@ msgstr "Pole wykluczeń"
 msgid "Filler registrations"
 msgstr "Rejestracje wypełniaczy"
 
-msgid "Gift card cancelled!"
-msgstr "Karta podarunkowa anulowana!"
-
 msgid "Independent factions"
 msgstr "Niezależne frakcje"
 
@@ -9745,13 +9742,6 @@ msgid ""
 msgstr ""
 "Traktuje to wydarzenie jako wydarzenie cyfrowe/internetowe, które nie wymaga"
 " osobistej rejestracji"
-
-msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"Przed utworzeniem opcji rejestracji należy utworzyć co najmniej jedno "
-"pytanie rejestracyjne"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "

@@ -3581,9 +3581,6 @@ msgstr "Veld voor uitsluitingen"
 msgid "Filler registrations"
 msgstr "Filler-registraties"
 
-msgid "Gift card cancelled!"
-msgstr "Cadeaubon geannuleerd!"
-
 msgid "Independent factions"
 msgstr "Onafhankelijke facties"
 
@@ -9834,13 +9831,6 @@ msgid ""
 msgstr ""
 "Behandelt dit evenement als een digitale/online gebeurtenis waarvoor geen "
 "persoonlijke registratie nodig is"
-
-msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"Je moet minstens één registratievraag maken voordat je registratieopties "
-"kunt maken"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "

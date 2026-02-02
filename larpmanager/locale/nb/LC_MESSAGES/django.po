@@ -3581,9 +3581,6 @@ msgstr "Felt for utelukkelser"
 msgid "Filler registrations"
 msgstr "Fyllstoffregistreringer"
 
-msgid "Gift card cancelled!"
-msgstr "Gavekortet er kansellert!"
-
 msgid "Independent factions"
 msgstr "Uavhengige fraksjoner"
 
@@ -9659,13 +9656,6 @@ msgid ""
 msgstr ""
 "Behandler dette arrangementet som en digital/nettbasert hendelse som ikke "
 "krever personlig påmelding"
-
-msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"Du må opprette minst ett registreringsspørsmål før du kan opprette "
-"registreringsalternativer"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "

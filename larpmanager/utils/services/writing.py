@@ -30,7 +30,7 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
+from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.rels import get_event_rels_cache
 from larpmanager.cache.text_fields import get_cache_text_field
@@ -51,20 +51,17 @@ from larpmanager.models.writing import (
     CharacterConfig,
     Faction,
     Plot,
-    PlotCharacterRel,
     Prologue,
     SpeedLarp,
-    TextVersion,
     Writing,
     replace_character_names,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
-from larpmanager.utils.core.common import check_field, compute_diff
+from larpmanager.utils.core.common import check_field
 from larpmanager.utils.core.exceptions import ReturnNowError
+from larpmanager.utils.edit.backend import _setup_char_finder
 from larpmanager.utils.io.download import download
 from larpmanager.utils.services.bulk import handle_bulk_characters, handle_bulk_quest, handle_bulk_trait
-from larpmanager.utils.services.character import get_character_relationships, get_character_sheet
-from larpmanager.utils.services.edit import _setup_char_finder
 
 logger = logging.getLogger(__name__)
 
@@ -670,94 +667,6 @@ def char_add_addit(context: dict) -> None:
 
     for character in context["list"]:
         character.addit = character_configs_by_id.get(character.id, {})
-
-
-def writing_view(request: HttpRequest, context: dict, element_type_name: str) -> HttpResponse:
-    """Display writing element view with character data and relationships.
-
-    Args:
-        request: HTTP request object containing user session and request data
-        context: Context dictionary containing element data and cached information
-        element_type_name: Name of the writing element type (e.g., 'character', 'plot')
-
-    Returns:
-        HttpResponse: Rendered writing view template with populated context data
-
-    Note:
-        This function handles different writing element types and populates the context
-        with appropriate data for rendering. Special handling is provided for character
-        and plot elements.
-
-    """
-    # Set up base element data and context
-    context["el"] = context[element_type_name]
-    context["el"].data = context["el"].show_complete()
-    context["nm"] = element_type_name
-
-    # Load event cache data for all related elements
-    get_event_cache_all(context)
-
-    # Handle character-specific data and relationships
-    if element_type_name == "character":
-        if context["el"].number in context["chars"]:
-            context["char"] = context["chars"][context["el"].number]
-        context["character"] = context["el"]
-
-        # Get character sheet and relationship data
-        get_character_sheet(context)
-        get_character_relationships(context)
-    else:
-        # Handle non-character writing elements with applicable questions
-        applicable_questions = QuestionApplicable.get_applicable(element_type_name)
-        if applicable_questions:
-            context["element"] = get_writing_element_fields(
-                context,
-                element_type_name,
-                applicable_questions,
-                context["el"].id,
-                only_visible=False,
-            )
-        context["sheet_char"] = context["el"].show_complete()
-
-    # Add plot-specific character relationships
-    if element_type_name == "plot":
-        context["sheet_plots"] = (
-            PlotCharacterRel.objects.filter(plot=context["el"])
-            .order_by("character__number")
-            .select_related("character")
-        )
-
-    return render(request, "larpmanager/orga/writing/view.html", context)
-
-
-def writing_versions(request: HttpRequest, context: dict, element_name: Any, version_type: Any) -> Any:
-    """Display text versions with diff comparison for writing elements.
-
-    Args:
-        request: HTTP request object
-        context: Context dictionary with writing element data
-        element_name: Name of the writing element
-        version_type: Type identifier for text versions
-
-    Returns:
-        HttpResponse: Rendered versions template with diff data
-
-    """
-    context["versions"] = (
-        TextVersion.objects.filter(tp=version_type, eid=context[element_name].id)
-        .order_by("version")
-        .select_related("member")
-    )
-    previous_version = None
-    for current_version in context["versions"]:
-        if previous_version is not None:
-            compute_diff(current_version, previous_version)
-        else:
-            current_version.diff = current_version.text.replace("\n", "<br />")
-        previous_version = current_version
-    context["element"] = context[element_name]
-    context["typ"] = element_name
-    return render(request, "larpmanager/orga/writing/versions.html", context)
 
 
 def replace_character_names_before_save(instance: object) -> None:

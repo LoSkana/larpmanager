@@ -8,9 +8,9 @@
 {% endblock info %}
 {% block content %}
     <div class="staff-list">
-        <a class="new button" href="{% url 'exe_events_edit' 0 %}">{% trans "New event" %}</a>
+        <a class="new button" href="{% url 'exe_events_new' %}">{% trans "New event" %}</a>
         {% if list %}
-            <a class="new button" href="{% url 'exe_runs_edit' 0 %}">{% trans "New session" %}</a>
+            <a class="new button" href="{% url 'exe_runs_new' %}">{% trans "New session" %}</a>
         {% endif %}
     </div>
     <table id="events" class="go_datatable writing gall">

@@ -45,8 +45,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import Collection, Discount
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel, Feature, FeatureModule
-from larpmanager.models.casting import Quest, QuestType, Trait
+from larpmanager.models.base import BaseModel, Feature
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.member import Badge, Member
 from larpmanager.models.miscellanea import (
@@ -60,12 +59,7 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.utils import my_uuid_short, strip_tags
 from larpmanager.models.writing import (
     Handout,
-    HandoutTemplate,
-    Plot,
-    Prologue,
-    PrologueType,
     Relationship,
-    SpeedLarp,
 )
 
 if TYPE_CHECKING:
@@ -305,80 +299,11 @@ def get_feature(context: dict, feature_slug: str) -> None:
         raise Http404(msg) from err
 
 
-def get_feature_module(context: dict, num: int) -> None:
-    """Retrieve FeatureModule by ID and add it to context, or raise 404 if not found."""
-    try:
-        context["feature_module"] = FeatureModule.objects.get(pk=num)
-    except ObjectDoesNotExist as err:
-        msg = "FeatureModule does not exist"
-        raise Http404(msg) from err
-
-
-def get_plot(context: dict, plot_uuid: str) -> None:
-    """Fetch and add plot to context with related data.
-
-    Args:
-        context: View context dictionary to update
-        plot_uuid: Primary key of the plot to retrieve
-
-    Raises:
-        Http404: If plot does not exist for the event
-
-    """
-    try:
-        # Fetch plot with optimized queries for related objects and characters
-        context["plot"] = (
-            Plot.objects.select_related("event", "progress", "assigned")
-            .prefetch_related("characters", "plotcharacterrel_set__character")
-            .get(event=context["event"], uuid=plot_uuid)
-        )
-        # Set plot name in context for template display
-        context["name"] = context["plot"].name
-    except ObjectDoesNotExist as err:
-        msg = "Plot does not exist"
-        raise Http404(msg) from err
-
-
-def get_quest_type(context: dict, quest_type_uuid: str) -> None:
-    """Get quest type from context by number."""
-    get_element(context, quest_type_uuid, "quest_type", QuestType)
-
-
-def get_quest(context: dict, quest_uuid: str) -> None:
-    """Get a quest element and add it to the context."""
-    get_element(context, quest_uuid, "quest", Quest)
-
-
-def get_trait(character_context: dict, trait_uuid: str) -> None:
-    """Get trait from character context by name."""
-    get_element(character_context, trait_uuid, "trait", Trait)
-
-
 def get_handout(context: dict, handout_uuid: str) -> None:
     """Fetch handout from database and populate context with its data."""
     get_element(context, handout_uuid, "handout", Handout)
     if "handout" in context:
         context["handout"].data = context["handout"].show()
-
-
-def get_handout_template(context: dict, handout_template_uuid: str) -> dict:
-    """Add handout template to context dict."""
-    get_element(context, handout_template_uuid, "handout_template", HandoutTemplate)
-
-
-def get_prologue(context: dict, prologue_uuid: str) -> None:
-    """Retrieve prologue element and add it to the context."""
-    get_element(context, prologue_uuid, "prologue", Prologue)
-
-
-def get_prologue_type(context: dict, prologue_type_uuid: str) -> None:
-    """Fetch prologue type and add it to context with its name."""
-    get_element(context, prologue_type_uuid, "prologue_type", PrologueType)
-
-
-def get_speedlarp(context: dict, speedlarp_uuid: str) -> None:
-    """Get speedlarp object and add it to context with its name."""
-    get_element(context, speedlarp_uuid, "speedlarp", SpeedLarp)
 
 
 def get_badge(context: dict, badge_uuid: str) -> Badge:
@@ -461,7 +386,7 @@ def get_element(
     Raises:
         Http404: If the requested object does not exist in the database.
     """
-    if element_uuid is None or element_uuid == "0":
+    if not element_uuid:
         return
 
     context[context_key_name] = get_element_event(context, element_uuid, model_class)
@@ -686,71 +611,6 @@ def round_to_two_significant_digits(number: float) -> int:
 
     # Convert back to integer and return
     return int(rounded_decimal)
-
-
-def exchange_order(
-    context: dict, model_class: type, element_uuid: str, move_up: int, elements: object | None = None
-) -> None:
-    """Exchange ordering positions between two elements in a sequence.
-
-    This function moves an element up or down in the ordering sequence by swapping
-    its order value with an adjacent element. If no adjacent element exists,
-    it simply increments or decrements the order value.
-
-    Args:
-        context: Context dictionary to store the current element after operation.
-        model_class: Model class of elements to reorder.
-        element_uuid: UUID of the element to move.
-        move_up: Direction to move - 1 for up (increase order), 0 for down (decrease order).
-        elements: Optional queryset of elements. Defaults to event elements if None.
-
-    Returns:
-        None: Function modifies elements in-place and updates context['current'].
-
-    Note:
-        The function handles edge cases where elements have the same order value
-        by adjusting one of them to maintain proper ordering.
-
-    """
-    # Get elements queryset, defaulting to event elements if not provided
-    elements = elements or context["event"].get_elements(model_class)
-    current_element = elements.get(uuid=element_uuid)
-
-    # Determine direction: move_up=True means move up (increase order), False means down
-    queryset = (
-        elements.filter(order__gt=current_element.order)
-        if move_up
-        else elements.filter(order__lt=current_element.order)
-    )
-    queryset = queryset.order_by("order" if move_up else "-order")
-
-    # Apply additional filters based on current element's attributes
-    # This ensures we only swap within the same logical group
-    for attribute_name in ("question", "section", "applicable"):
-        if hasattr(current_element, attribute_name):
-            queryset = queryset.filter(**{attribute_name: getattr(current_element, attribute_name)})
-
-    # Get the next element in the desired direction
-    adjacent_element = queryset.first()
-
-    # If no adjacent element found, just increment/decrement order
-    if not adjacent_element:
-        current_element.order += 1 if move_up else -1
-        current_element.save()
-        context["current"] = current_element
-        return
-
-    # Exchange ordering values between current and adjacent element
-    current_element.order, adjacent_element.order = adjacent_element.order, current_element.order
-
-    # Handle edge case where both elements have same order (data inconsistency)
-    if current_element.order == adjacent_element.order:
-        adjacent_element.order += -1 if move_up else 1
-
-    # Save both elements and update context
-    current_element.save()
-    adjacent_element.save()
-    context["current"] = current_element
 
 
 def normalize_string(input_string: str) -> str:

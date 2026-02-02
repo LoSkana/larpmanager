@@ -131,7 +131,7 @@ class ExceptionHandlingMiddleware:
                 ),
             ),
             # Flow control exceptions - handle redirects and early returns
-            (RedirectError, lambda ex: redirect(ex.view)),
+            (RedirectError, lambda ex: redirect(ex.view, *ex.args, **ex.kwargs)),
             (ReturnNowError, lambda ex: ex.value),
             # Domain and membership management errors
             (

@@ -3581,9 +3581,6 @@ msgstr "Feld für Ausschlüsse"
 msgid "Filler registrations"
 msgstr "Registrierungen zum Ausfüllen"
 
-msgid "Gift card cancelled!"
-msgstr "Geschenkkarte storniert!"
-
 msgid "Independent factions"
 msgstr "Unabhängige Fraktionen"
 
@@ -10030,13 +10027,6 @@ msgid ""
 msgstr ""
 "Behandelt diese Veranstaltung als digitales/online Ereignis, für das keine "
 "persönliche Anmeldung erforderlich ist"
-
-msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"Sie müssen mindestens eine Registrierungsfrage erstellen, bevor Sie "
-"Registrierungsoptionen erstellen können"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "

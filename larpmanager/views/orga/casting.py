@@ -58,7 +58,7 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def orga_casting_preferences(request: HttpRequest, event_slug: str, casting_type: str = "0") -> HttpResponse:
+def orga_casting_preferences(request: HttpRequest, event_slug: str, casting_type: str | None = None) -> HttpResponse:
     """Handle casting preferences for characters or traits based on type."""
     # Check user permissions for casting preferences
     context = check_event_context(request, event_slug, "orga_casting_preferences")
@@ -68,16 +68,16 @@ def orga_casting_preferences(request: HttpRequest, event_slug: str, casting_type
     casting_details(context)
 
     # Load preferences based on type
-    if casting_type == "0":
-        casting_preferences_characters(context)
-    else:
+    if casting_type:
         casting_preferences_traits(context)
+    else:
+        casting_preferences_characters(context)
 
     return render(request, "larpmanager/event/casting/preferences.html", context)
 
 
 @login_required
-def orga_casting_history(request: HttpRequest, event_slug: str, casting_type: str = "0") -> HttpResponse:
+def orga_casting_history(request: HttpRequest, event_slug: str, casting_type: str | None = None) -> HttpResponse:
     """Render casting history page with characters or traits based on type.
 
     Args:
@@ -671,10 +671,6 @@ def orga_casting(
     # Check user permissions for accessing casting functionality
     context = check_event_context(request, event_slug, "orga_casting")
 
-    # Redirect to default casting type if none specified
-    if casting_type is None:
-        return redirect("orga_casting", event_slug=context["run"].get_slug(), casting_type=0)
-
     # Set context variables for template rendering
     context["typ"] = casting_type
     context["tick"] = ticket
@@ -709,7 +705,7 @@ def orga_casting(
 
 
 @login_required
-def orga_casting_toggle(request: HttpRequest, event_slug: str, casting_type: str) -> JsonResponse:
+def orga_casting_toggle(request: HttpRequest, event_slug: str, casting_type: str | None) -> JsonResponse:
     """Toggle the 'nope' status of a casting entry."""
     context = check_event_context(request, event_slug, "orga_casting")
     get_element(context, casting_type, "quest_type", QuestType)

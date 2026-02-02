@@ -68,7 +68,7 @@ def test_faction_all(pw_page: Any) -> None:
 
     # ========== SECTION 2: Create WritingQuestions for Factions ==========
     # Navigate to Factions form (WritingQuestions applicable to factions)
-    go_to(page, live_server, "test/manage/writing/form/faction/")
+    go_to(page, live_server, "test/manage/writing/faction/form/")
 
     # Create PUBLIC WritingQuestion
     page.get_by_role("link", name="New").click()

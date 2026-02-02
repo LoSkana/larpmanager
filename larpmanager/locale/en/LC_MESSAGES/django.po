@@ -9304,6 +9304,48 @@ msgid ""
 "assignments/media-types/media-types.xhtml"
 msgstr ""
 
+msgid "Operation completed"
+msgstr ""
+
+msgid "Operation not allowed"
+msgstr ""
+
+msgid "Warning! Other users are editing this item"
+msgstr ""
+
+msgid ""
+"You cannot work on it at the same time: the work of one of you would be lost"
+msgstr ""
+
+msgid "List of other users"
+msgstr ""
+
+msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr ""
+
+msgid "You must create at least one quest type before you can create quests"
+msgstr ""
+
+msgid "You must create at least one quest before you can create traits"
+msgstr ""
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr ""
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
+msgstr ""
+
+msgid "Question saved successfully"
+msgstr ""
+
+msgid ""
+"You must define at least one option before saving a single-choice or "
+"multiple-choice question"
+msgstr ""
+
 msgid "The participant's email"
 msgstr ""
 
@@ -9481,30 +9523,6 @@ msgid "Set quest"
 msgstr ""
 
 msgid "Set ability type"
-msgstr ""
-
-msgid "Operation completed"
-msgstr ""
-
-msgid "Operation not allowed"
-msgstr ""
-
-msgid "Warning! Other users are editing this item"
-msgstr ""
-
-msgid ""
-"You cannot work on it at the same time: the work of one of you would be lost"
-msgstr ""
-
-msgid "List of other users"
-msgstr ""
-
-msgid "Question saved successfully"
-msgstr ""
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question"
 msgstr ""
 
 msgid "Your registration ticket"
@@ -10004,15 +10022,6 @@ msgid ""
 "Characters from event '{run}' have been loaded. Review and confirm to save."
 msgstr ""
 
-msgid ""
-"You must create at least one ability type before you can create abilities"
-msgstr ""
-
-msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-
 msgid "Photos and videos successfully uploaded"
 msgstr ""
 
@@ -10069,20 +10078,6 @@ msgstr ""
 
 #, python-format
 msgid "Registration for %(member)s successfully %(action)s to %(run)s"
-msgstr ""
-
-msgid "You must create at least one quest type before you can create quests"
-msgstr ""
-
-msgid "You must create at least one quest before you can create traits"
-msgstr ""
-
-msgid ""
-"You must create at least one handout template before you can create handouts"
-msgstr ""
-
-msgid ""
-"You must create at least one prologue type before you can create prologues"
 msgstr ""
 
 msgid ""
@@ -10379,9 +10374,6 @@ msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr ""
 
 msgid "Registrations not open!"
-msgstr ""
-
-msgid "Gift card cancelled!"
 msgstr ""
 
 msgid "You cannot redeem a membership, you are already a member!"

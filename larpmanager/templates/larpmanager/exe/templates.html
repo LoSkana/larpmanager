@@ -27,12 +27,12 @@
                     </td>
                     <td>{{ el }}</td>
                     <td>
-                        <a href="{% url 'exe_templates_roles' el.uuid 0 %}">{% trans "Add" %}</a>
+                        <a href="{% url 'exe_templates_roles_new' el.uuid %}">{% trans "Add" %}</a>
                         {% if el.roles %}
                             -
                             {% for rl in el.roles %}
                                 {% include "elements/comma.html" %}
-                                <a href="{% url 'exe_templates_roles' el.uuid rl.uuid %}">{{ rl.name }}</a>
+                                <a href="{% url 'exe_templates_roles_edit' el.uuid rl.uuid %}">{{ rl.name }}</a>
                             {% endfor %}
                         {% endif %}
                     </td>

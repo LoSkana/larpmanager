@@ -83,7 +83,7 @@ def reading(live_server: Any, page: Any) -> None:
     page.get_by_role("row", name=" prova character pppresssent").get_by_role("link").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Test Larp Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character ciaaoooooo",
+        "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character ciaaoooooo",
     )
 
     # test reading with factions
@@ -115,7 +115,7 @@ def reading(live_server: Any, page: Any) -> None:
     page.get_by_role("row", name=" prova character pppresssent").get_by_role("link").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Test Larp Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character Factions: only for testt ciaaoooooo",
+        "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character Factions: only for testt ciaaoooooo",
     )
 
     # check reading plot
@@ -150,6 +150,7 @@ def relationships(live_server: Any, page: Any) -> None:
     page.locator('[id="u2"]').get_by_role("link", name="").click()
     just_wait(page)
     page.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
+    just_wait(page)
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
     # check in other char
@@ -158,6 +159,7 @@ def relationships(live_server: Any, page: Any) -> None:
     page.locator('[id="u1"]').get_by_role("link", name="").click()
     just_wait(page)
     page.get_by_role("row", name="Inverse Show How the").get_by_role("link").click()
+    just_wait(page)
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
     # check in gallery

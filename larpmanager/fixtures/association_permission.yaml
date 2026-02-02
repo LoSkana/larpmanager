@@ -240,7 +240,7 @@
     module: communications
 - model: larpmanager.associationpermission
   fields:
-    name: Membership
+    name: Members
     descr: Review all members
     slug: exe_membership
     number: 15

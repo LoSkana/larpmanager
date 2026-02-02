@@ -3581,9 +3581,6 @@ msgstr "Fält för undantag"
 msgid "Filler registrations"
 msgstr "Registreringar av fyllnadsmaterial"
 
-msgid "Gift card cancelled!"
-msgstr "Presentkortet är annullerat!"
-
 msgid "Independent factions"
 msgstr "Oberoende fraktioner"
 
@@ -9669,13 +9666,6 @@ msgid ""
 msgstr ""
 "Behandlar detta evenemang som en digital/online-händelse som inte kräver "
 "personlig registrering"
-
-msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"Du måste skapa minst en registreringsfråga innan du kan skapa "
-"registreringsalternativ"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "

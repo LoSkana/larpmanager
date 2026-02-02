@@ -3581,9 +3581,6 @@ msgstr "Pole pro vyloučení"
 msgid "Filler registrations"
 msgstr "Výplňové registrace"
 
-msgid "Gift card cancelled!"
-msgstr "Dárková karta zrušena!"
-
 msgid "Independent factions"
 msgstr "Nezávislé frakce"
 
@@ -9549,13 +9546,6 @@ msgid ""
 msgstr ""
 "Tuto událost považuje za digitální/online událost, která nevyžaduje osobní "
 "registraci"
-
-msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"Před vytvořením možností registrace musíte vytvořit alespoň jednu "
-"registrační otázku"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "

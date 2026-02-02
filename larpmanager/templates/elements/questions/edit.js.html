@@ -6,14 +6,14 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // Detect if we're in writing or registration context
     function isWritingContext() {
-        return window.location.pathname.indexOf('/writing/form/') > -1;
+        return window.location.pathname.indexOf('/writing/') > -1;
     }
 
     // Extract writing type from URL (for writing forms)
     function getWritingType() {
         const pathParts = window.location.pathname.split('/');
         const formIndex = pathParts.indexOf('form');
-        return formIndex >= 0 ? pathParts[formIndex + 1] : null;
+        return formIndex >= 0 ? pathParts[formIndex - 1] : null;
     }
 
     // Extract question UUID from current URL path
@@ -39,9 +39,9 @@ window.addEventListener('DOMContentLoaded', function() {
 
         if (isWritingContext()) {
             const writingType = getWritingType();
-            return `${basePath}/writing/options/${writingType}/ajax/${optionUuid}/?question_uuid=${questionUuid}`;
+            return `${basePath}/writing/${writingType}/options/${optionUuid}/edit/`;
         } else {
-            return `${basePath}/options/ajax/${optionUuid}/?question_uuid=${questionUuid}`;
+            return `${basePath}/options/${optionUuid}/edit/`;
         }
     }
 
@@ -51,10 +51,18 @@ window.addEventListener('DOMContentLoaded', function() {
 
         if (isWritingContext()) {
             const writingType = getWritingType();
-            return `${basePath}/writing/options/${writingType}/edit/${optionUuid}/`;
+            path = `${basePath}/writing/${writingType}/options/`;
         } else {
-            return `${basePath}/options/edit/${optionUuid}/`;
+            path = `${basePath}/options/`;
         }
+
+        if (optionUuid) {
+            path += `${optionUuid}/edit/`;
+        } else {
+            path += `new/`;
+        }
+
+        return path;
     }
 
 
@@ -64,8 +72,20 @@ window.addEventListener('DOMContentLoaded', function() {
     function reloadOptionsIframe() {
         const iframe = document.getElementById('options-iframe');
         if (iframe) {
+            // Fade out iframe before reload to avoid flickering
+            iframe.style.opacity = '0';
+
             // Reset height to min-height before reload to avoid accumulation
             iframe.style.height = '400px';
+
+            // Add load event listener to fade in when content is ready
+            const onLoad = function() {
+                iframe.style.opacity = '1';
+                iframe.removeEventListener('load', onLoad);
+            };
+            iframe.addEventListener('load', onLoad);
+
+            // Trigger reload
             iframe.src = iframe.src;
         }
     }
@@ -83,14 +103,24 @@ window.addEventListener('DOMContentLoaded', function() {
 
         if (isWritingContext()) {
             const writingType = getWritingType();
-            iframeUrl = `${basePath}/writing/options/${writingType}/list/${questionUuid}/`;
+            iframeUrl = `${basePath}/writing/${writingType}/options/list/${questionUuid}/`;
         } else {
             iframeUrl = `${basePath}/options/list/${questionUuid}/`;
         }
 
         if (existingIframe) {
             // Update existing iframe src with new question UUID
+            // Fade out iframe before reload to avoid flickering
+            existingIframe.style.opacity = '0';
             existingIframe.style.height = '400px'; // Reset height
+
+            // Add load event listener to fade in when content is ready
+            const onLoad = function() {
+                existingIframe.style.opacity = '1';
+                existingIframe.removeEventListener('load', onLoad);
+            };
+            existingIframe.addEventListener('load', onLoad);
+
             existingIframe.src = iframeUrl;
         } else {
             // Create new iframe element
@@ -122,7 +152,7 @@ window.addEventListener('DOMContentLoaded', function() {
     function openOptionModal(optionUuid, questionUuid) {
         let editUrl = buildOptionsEditUrl(optionUuid);
 
-        if (optionUuid === '0') {
+        if (!optionUuid) {
             editUrl += `?question_uuid=${questionUuid}&frame=1`;
         } else {
             editUrl += '?frame=1';
@@ -172,7 +202,7 @@ window.addEventListener('DOMContentLoaded', function() {
             onSuccess: function(response) {
                 if (response.success && response.question_uuid) {
                     // Update URL with new question UUID
-                    const newUrl = window.location.pathname.replace('/edit/0', '/edit/' + response.question_uuid);
+                    const newUrl = window.location.pathname.replace('/new/', '/' + response.question_uuid + '/edit/');
                     window.history.replaceState({}, '', newUrl);
 
                     // Update form action to new UUID path
@@ -262,12 +292,12 @@ window.addEventListener('DOMContentLoaded', function() {
         const questionUuid = getQuestionUuidFromUrl();
 
         // If question hasn't been saved yet, save it first
-        if (questionUuid === "0") {
+        if (!questionUuid) {
             saveQuestionBeforeAddingOption(function(savedQuestionUuid) {
-                openOptionModal('0', savedQuestionUuid);
+                openOptionModal('', savedQuestionUuid);
             });
         } else {
-            openOptionModal('0', questionUuid);
+            openOptionModal('', questionUuid);
         }
 
         return false;
@@ -303,7 +333,7 @@ window.addEventListener('DOMContentLoaded', function() {
             const currentQuestionUuid = getQuestionUuidFromUrl();
 
             // If question hasn't been saved yet, save it first
-            if (currentQuestionUuid === "0") {
+            if (!currentQuestionUuid) {
                 saveQuestionBeforeAddingOption(function(savedQuestionUuid) {
                     openOptionModal(e.data.optionUuid, savedQuestionUuid);
                 });

@@ -61,7 +61,7 @@ from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.core.base import check_association_context, check_event_context, get_context, get_event_context
 from larpmanager.utils.core.common import _get_help_questions, format_datetime
 from larpmanager.utils.core.sticky import get_sticky_messages, dismiss_sticky
-from larpmanager.utils.services.edit import set_suggestion
+from larpmanager.utils.edit.backend import set_suggestion
 from larpmanager.utils.users.registration import registration_available
 
 
@@ -248,7 +248,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
 
     # Redirect to event creation if no events exist and feature is available
     if context.get("onboarding") and "exe_events" in features:
-        return redirect("exe_events_edit", event_uuid="0")
+        return redirect("exe_events_new")
 
     # Check if currency configuration suggestion has been dismissed
     _check_currency_priority(request, context, features)

@@ -3581,9 +3581,6 @@ msgstr "Campo per esclusioni"
 msgid "Filler registrations"
 msgstr "Iscrizioni filler"
 
-msgid "Gift card cancelled!"
-msgstr "Biglietto regalo cancellato!"
-
 msgid "Independent factions"
 msgstr "Fazioni indipendenti"
 
@@ -3933,7 +3930,7 @@ msgid "Download relationships"
 msgstr "Scarica le relazioni"
 
 msgid "Event deletion request"
-msgstr "Richiesta di cancellazione evento"
+msgstr "Richiesta di cancellazione dell'evento"
 
 msgid "Expenses collaborators"
 msgstr "Spese collaboratori"
@@ -5555,7 +5552,7 @@ msgid "click on the icon to open the tutorial"
 msgstr "fare clic sull'icona per aprire l'esercitazione"
 
 msgid "we'll let you know as soon as possible"
-msgstr "ti faremo sapere il prima possibile"
+msgstr "vi faremo sapere il prima possibile"
 
 msgid "Character are not visible at the moment"
 msgstr "I personaggi non sono visibili al momento"
@@ -6973,8 +6970,7 @@ msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Totale delle spese presentate dai collaboratori e approvate"
 
 msgid "Unique code used to generate the secret registration link"
-msgstr ""
-"Codice univoco utilizzato per generare il link segreto di iscrizione"
+msgstr "Codice univoco utilizzato per generare il link segreto di iscrizione"
 
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Non puoi riscattare una iscrizione, risulti già iscritto!"
@@ -9858,13 +9854,6 @@ msgid ""
 msgstr ""
 "Tratta questo evento come un evento digitale/online che non richiede la "
 "registrazione di persona"
-
-msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"È necessario creare almeno una domanda di registrazione prima di poter "
-"creare opzioni di registrazione"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "

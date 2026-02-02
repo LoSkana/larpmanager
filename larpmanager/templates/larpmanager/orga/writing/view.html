@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {{ name }} - {% trans "View" %}
+    {{ name }} - {% trans "View" %} - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {% trans "Manage viewing writing element" %}
