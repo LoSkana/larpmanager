@@ -209,6 +209,13 @@ window.addEventListener('DOMContentLoaded', function() {
                     submitExcelForm(false);
                 });
 
+                // Prevent form submission on Enter, use our custom submit instead
+                $('#excel-edit form').on("submit", function(e) {
+                    e.preventDefault();
+                    submitExcelForm(false);
+                    return false;
+                });
+
                 $('#excel-edit').addClass('visible');
 
                 $('#excel-edit .close').on( "click", closeEdit );

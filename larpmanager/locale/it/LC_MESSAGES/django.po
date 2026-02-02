@@ -6970,8 +6970,7 @@ msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Totale delle spese presentate dai collaboratori e approvate"
 
 msgid "Unique code used to generate the secret registration link"
-msgstr ""
-"Codice univoco utilizzato per generare il link segreto di iscrizione"
+msgstr "Codice univoco utilizzato per generare il link segreto di iscrizione"
 
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Non puoi riscattare una iscrizione, risulti già iscritto!"

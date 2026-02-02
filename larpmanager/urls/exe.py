@@ -60,12 +60,12 @@ urlpatterns = [
         name="exe_urlshortner_new",
     ),
     path(
-        "manage/urlshortner/edit/<slug:url_uuid>/",
+        "manage/urlshortner/<slug:url_uuid>/edit/",
         views_ems.exe_urlshortner_edit,
         name="exe_urlshortner_edit",
     ),
     path(
-        "manage/urlshortner/delete/<slug:url_uuid>/",
+        "manage/urlshortner/<slug:url_uuid>/delete/",
         views_ems.exe_urlshortner_delete,
         name="exe_urlshortner_delete",
     ),
@@ -80,12 +80,12 @@ urlpatterns = [
         name="exe_warehouse_containers_new",
     ),
     path(
-        "manage/warehouse/containers/edit/<slug:container_uuid>/",
+        "manage/warehouse/containers/<slug:container_uuid>/edit/",
         views_ems.exe_warehouse_containers_edit,
         name="exe_warehouse_containers_edit",
     ),
     path(
-        "manage/warehouse/containers/delete/<slug:container_uuid>/",
+        "manage/warehouse/containers/<slug:container_uuid>/delete/",
         views_ems.exe_warehouse_containers_delete,
         name="exe_warehouse_containers_delete",
     ),
@@ -100,12 +100,12 @@ urlpatterns = [
         name="exe_warehouse_tags_new",
     ),
     path(
-        "manage/warehouse/tags/edit/<slug:tag_uuid>/",
+        "manage/warehouse/tags/<slug:tag_uuid>/edit/",
         views_ems.exe_warehouse_tags_edit,
         name="exe_warehouse_tags_edit",
     ),
     path(
-        "manage/warehouse/tags/delete/<slug:tag_uuid>/",
+        "manage/warehouse/tags/<slug:tag_uuid>/delete/",
         views_ems.exe_warehouse_tags_delete,
         name="exe_warehouse_tags_delete",
     ),
@@ -120,12 +120,12 @@ urlpatterns = [
         name="exe_warehouse_items_new",
     ),
     path(
-        "manage/warehouse/items/edit/<slug:item_uuid>/",
+        "manage/warehouse/items/<slug:item_uuid>/edit/",
         views_ems.exe_warehouse_items_edit,
         name="exe_warehouse_items_edit",
     ),
     path(
-        "manage/warehouse/items/delete/<slug:item_uuid>/",
+        "manage/warehouse/items/<slug:item_uuid>/delete/",
         views_ems.exe_warehouse_items_delete,
         name="exe_warehouse_items_delete",
     ),
@@ -140,12 +140,12 @@ urlpatterns = [
         name="exe_warehouse_movements_new",
     ),
     path(
-        "manage/warehouse/movements/edit/<slug:movement_uuid>/",
+        "manage/warehouse/movements/<slug:movement_uuid>/edit/",
         views_ems.exe_warehouse_movements_edit,
         name="exe_warehouse_movements_edit",
     ),
     path(
-        "manage/warehouse/movements/delete/<slug:movement_uuid>/",
+        "manage/warehouse/movements/<slug:movement_uuid>/delete/",
         views_ems.exe_warehouse_movements_delete,
         name="exe_warehouse_movements_delete",
     ),
@@ -160,12 +160,12 @@ urlpatterns = [
         name="exe_badges_new",
     ),
     path(
-        "manage/badges/edit/<slug:badge_uuid>/",
+        "manage/badges/<slug:badge_uuid>/edit/",
         views_em.exe_badges_edit,
         name="exe_badges_edit",
     ),
     path(
-        "manage/users/badges/delete/<slug:badge_uuid>/",
+        "manage/users/badges/<slug:badge_uuid>/delete/",
         views_em.exe_badges_delete,
         name="exe_badges_delete",
     ),
@@ -180,7 +180,7 @@ urlpatterns = [
         name="exe_archive_email",
     ),
     path(
-        "manage/mail/read/<slug:mail_uuid>/",
+        "manage/mail/<slug:mail_uuid>/read/",
         views_em.exe_read_mail,
         name="exe_read_mail",
     ),
@@ -250,12 +250,12 @@ urlpatterns = [
         name="exe_texts_new",
     ),
     path(
-        "manage/texts/edit/<slug:text_uuid>/",
+        "manage/texts/<slug:text_uuid>/edit/",
         views_eas.exe_texts_edit,
         name="exe_texts_edit",
     ),
     path(
-        "manage/texts/delete/<slug:text_uuid>/",
+        "manage/texts/<slug:text_uuid>/delete/",
         views_eas.exe_texts_delete,
         name="exe_texts_delete",
     ),
@@ -270,12 +270,12 @@ urlpatterns = [
         name="exe_translations_new",
     ),
     path(
-        "manage/translations/edit/<slug:translation_uuid>/",
+        "manage/translations/<slug:translation_uuid>/edit/",
         views_eas.exe_translations_edit,
         name="exe_translations_edit",
     ),
     path(
-        "manage/translations/delete/<slug:translation_uuid>/",
+        "manage/translations/<slug:translation_uuid>/delete/",
         views_eas.exe_translations_delete,
         name="exe_translations_delete",
     ),
@@ -290,12 +290,12 @@ urlpatterns = [
         name="exe_roles_new",
     ),
     path(
-        "manage/roles/edit/<slug:role_uuid>/",
+        "manage/roles/<slug:role_uuid>/edit/",
         views_eas.exe_roles_edit,
         name="exe_roles_edit",
     ),
     path(
-        "manage/roles/delete/<slug:role_uuid>/",
+        "manage/roles/<slug:role_uuid>/delete/",
         views_eas.exe_roles_delete,
         name="exe_roles_delete",
     ),
@@ -345,12 +345,12 @@ urlpatterns = [
         name="exe_credits_new",
     ),
     path(
-        "manage/credits/edit/<slug:credit_uuid>/",
+        "manage/credits/<slug:credit_uuid>/edit/",
         views_ea.exe_credits_edit,
         name="exe_credits_edit",
     ),
     path(
-        "manage/credits/delete/<slug:credit_uuid>/",
+        "manage/credits/<slug:credit_uuid>/delete/",
         views_ea.exe_credits_delete,
         name="exe_credits_delete",
     ),
@@ -365,12 +365,12 @@ urlpatterns = [
         name="exe_tokens_new",
     ),
     path(
-        "manage/tokens/edit/<slug:token_uuid>/",
+        "manage/tokens/<slug:token_uuid>/edit/",
         views_ea.exe_tokens_edit,
         name="exe_tokens_edit",
     ),
     path(
-        "manage/tokens/delete/<slug:token_uuid>/",
+        "manage/tokens/<slug:token_uuid>/delete/",
         views_ea.exe_tokens_delete,
         name="exe_tokens_delete",
     ),
@@ -385,12 +385,12 @@ urlpatterns = [
         name="exe_payments_new",
     ),
     path(
-        "manage/payments/edit/<slug:payment_uuid>/",
+        "manage/payments/<slug:payment_uuid>/edit/",
         views_ea.exe_payments_edit,
         name="exe_payments_edit",
     ),
     path(
-        "manage/payments/delete/<slug:payment_uuid>/",
+        "manage/payments/<slug:payment_uuid>/delete/",
         views_ea.exe_payments_delete,
         name="exe_payments_delete",
     ),
@@ -405,17 +405,17 @@ urlpatterns = [
         name="exe_invoices_new",
     ),
     path(
-        "manage/invoices/edit/<slug:invoice_uuid>/",
+        "manage/invoices/<slug:invoice_uuid>/edit/",
         views_ea.exe_invoices_edit,
         name="exe_invoices_edit",
     ),
     path(
-        "manage/invoices/delete/<slug:invoice_uuid>/",
+        "manage/invoices/<slug:invoice_uuid>/delete/",
         views_ea.exe_invoices_delete,
         name="exe_invoices_delete",
     ),
     path(
-        "manage/invoices/confirm/<slug:invoice_uuid>/",
+        "manage/invoices/<slug:invoice_uuid>/confirm/",
         views_ea.exe_invoices_confirm,
         name="exe_invoices_confirm",
     ),
@@ -430,17 +430,17 @@ urlpatterns = [
         name="exe_expenses_new",
     ),
     path(
-        "manage/expenses/edit/<slug:expense_uuid>/",
+        "manage/expenses/<slug:expense_uuid>/edit/",
         views_ea.exe_expenses_edit,
         name="exe_expenses_edit",
     ),
     path(
-        "manage/expenses/delete/<slug:expense_uuid>/",
+        "manage/expenses/<slug:expense_uuid>/delete/",
         views_ea.exe_expenses_delete,
         name="exe_expenses_delete",
     ),
     path(
-        "manage/expenses/approve/<slug:expense_uuid>/",
+        "manage/expenses/<slug:expense_uuid>/approve/",
         views_ea.exe_expenses_approve,
         name="exe_expenses_approve",
     ),
@@ -475,17 +475,17 @@ urlpatterns = [
         name="exe_member_registrations",
     ),
     path(
-        "manage/membership/evaluation/<slug:member_uuid>/",
+        "manage/membership/<slug:member_uuid>/evaluation/",
         views_em.exe_membership_evaluation,
         name="exe_membership_evaluation",
     ),
     path(
-        "manage/membership/status/<slug:member_uuid>/",
+        "manage/membership/<slug:member_uuid>/status/",
         views_em.exe_membership_status,
         name="exe_membership_status",
     ),
     path(
-        "manage/membership/request/<slug:member_uuid>/",
+        "manage/membership/<slug:member_uuid>/request/",
         views_em.exe_membership_request,
         name="exe_membership_request",
     ),
@@ -510,12 +510,12 @@ urlpatterns = [
         name="exe_events_new",
     ),
     path(
-        "manage/events/edit/<slug:event_uuid>/",
+        "manage/events/<slug:event_uuid>/edit/",
         views_ee.exe_events_edit,
         name="exe_events_edit",
     ),
     path(
-        "manage/events/delete/<slug:run_uuid>/",
+        "manage/events/<slug:run_uuid>/delete/",
         views_ee.exe_events_delete,
         name="exe_events_delete",
     ),
@@ -530,12 +530,12 @@ urlpatterns = [
         name="exe_templates_new",
     ),
     path(
-        "manage/template/edit/<slug:template_uuid>/",
+        "manage/template/<slug:template_uuid>/edit/",
         views_ee.exe_templates_edit,
         name="exe_templates_edit",
     ),
     path(
-        "manage/templates/delete/<slug:template_uuid>/",
+        "manage/templates/<slug:template_uuid>/delete/",
         views_ee.exe_templates_delete,
         name="exe_templates_delete",
     ),
@@ -565,7 +565,7 @@ urlpatterns = [
         name="exe_runs_new",
     ),
     path(
-        "manage/runs/edit/<slug:run_uuid>/",
+        "manage/runs/<slug:run_uuid>/edit/",
         views_ee.exe_runs_edit,
         name="exe_runs_edit",
     ),
@@ -580,12 +580,12 @@ urlpatterns = [
         name="exe_outflows_new",
     ),
     path(
-        "manage/outflows/edit/<slug:outflow_uuid>/",
+        "manage/outflows/<slug:outflow_uuid>/edit/",
         views_ea.exe_outflows_edit,
         name="exe_outflows_edit",
     ),
     path(
-        "manage/outflows/delete/<slug:outflow_uuid>/",
+        "manage/outflows/<slug:outflow_uuid>/delete/",
         views_ea.exe_outflows_delete,
         name="exe_outflows_delete",
     ),
@@ -600,12 +600,12 @@ urlpatterns = [
         name="exe_inflows_new",
     ),
     path(
-        "manage/inflows/edit/<slug:inflow_uuid>/",
+        "manage/inflows/<slug:inflow_uuid>/edit/",
         views_ea.exe_inflows_edit,
         name="exe_inflows_edit",
     ),
     path(
-        "manage/inflows/delete/<slug:inflow_uuid>/",
+        "manage/inflows/<slug:inflow_uuid>/delete/",
         views_ea.exe_inflows_delete,
         name="exe_inflows_delete",
     ),
@@ -615,12 +615,12 @@ urlpatterns = [
         name="exe_collections",
     ),
     path(
-        "manage/collections/edit/<slug:collection_uuid>/",
+        "manage/collections/<slug:collection_uuid>/edit/",
         views_ea.exe_collections_edit,
         name="exe_collections_edit",
     ),
     path(
-        "manage/collections/delete/<slug:collection_uuid>/",
+        "manage/collections/<slug:collection_uuid>/delete/",
         views_ea.exe_collections_delete,
         name="exe_collections_delete",
     ),
@@ -635,12 +635,12 @@ urlpatterns = [
         name="exe_donations_new",
     ),
     path(
-        "manage/donations/edit/<slug:donation_uuid>/",
+        "manage/donations/<slug:donation_uuid>/edit/",
         views_ea.exe_donations_edit,
         name="exe_donations_edit",
     ),
     path(
-        "manage/donations/delete/<slug:donation_uuid>/",
+        "manage/donations/<slug:donation_uuid>/delete/",
         views_ea.exe_donations_delete,
         name="exe_donations_delete",
     ),
@@ -655,17 +655,17 @@ urlpatterns = [
         name="exe_refunds_new",
     ),
     path(
-        "manage/refunds/edit/<slug:refund_uuid>/",
+        "manage/refunds/<slug:refund_uuid>/edit/",
         views_ea.exe_refunds_edit,
         name="exe_refunds_edit",
     ),
     path(
-        "manage/refunds/delete/<slug:refund_uuid>/",
+        "manage/refunds/<slug:refund_uuid>/delete/",
         views_ea.exe_refunds_delete,
         name="exe_refunds_delete",
     ),
     path(
-        "manage/refunds/confirm/<slug:refund_uuid>/",
+        "manage/refunds/<slug:refund_uuid>/confirm/",
         views_ea.exe_refunds_confirm,
         name="exe_refunds_confirm",
     ),
@@ -705,12 +705,12 @@ urlpatterns = [
         name="exe_volunteer_registry_new",
     ),
     path(
-        "manage/volunteer_registry/edit/<slug:member_uuid>/",
+        "manage/volunteer_registry/<slug:member_uuid>/edit/",
         views_em.exe_volunteer_registry_edit,
         name="exe_volunteer_registry_edit",
     ),
     path(
-        "manage/users/volunteer_registry/delete/<slug:member_uuid>/",
+        "manage/users/volunteer_registry/<slug:member_uuid>/delete/",
         views_em.exe_volunteer_registry_delete,
         name="exe_volunteer_registry_delete",
     ),

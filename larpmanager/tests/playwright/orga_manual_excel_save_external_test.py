@@ -193,7 +193,7 @@ def working_ticket(page: Any, server: Any, context: Any) -> None:
     page.get_by_role("link", name="Characters").click()
     page.locator('[id="u1"]').get_by_role("link", name="").click(button="right")
     page1 = context.new_page()
-    page1.goto(server + "/test/manage/characters/edit/u1/")
+    page1.goto(server + "/test/manage/characters/u1/edit/")
     page.locator('[id="u1"]').get_by_role("link", name="").click()
     just_wait(page)
     expect_normalized(page,
