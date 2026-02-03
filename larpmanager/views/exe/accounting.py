@@ -66,7 +66,7 @@ from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import exe_paginate
 from larpmanager.utils.edit.backend import backend_get
-from larpmanager.utils.edit.exe import exe_delete, exe_edit, exe_new
+from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 
 
 @login_required
@@ -130,20 +130,20 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_outflows_new(request: HttpRequest) -> HttpResponse:
     """Create a new accounting outflow record."""
-    return exe_new(request, "exe_outflows")
+    return exe_new(request, ExeAction.OUTFLOWS)
 
 
 @login_required
 def exe_outflows_edit(request: HttpRequest, outflow_uuid: str) -> HttpResponse:
     """Edit accounting outflow record."""
     # Delegate to generic edit handler with outflow-specific form and redirect
-    return exe_edit(request, "exe_outflows", outflow_uuid)
+    return exe_edit(request, ExeAction.OUTFLOWS, outflow_uuid)
 
 
 @login_required
 def exe_outflows_delete(request: HttpRequest, outflow_uuid: str) -> HttpResponse:
     """Delete outflow."""
-    return exe_delete(request, "exe_outflows", outflow_uuid)
+    return exe_delete(request, ExeAction.OUTFLOWS, outflow_uuid)
 
 
 @login_required
@@ -200,19 +200,19 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_inflows_new(request: HttpRequest) -> HttpResponse:
     """Create a new inflow entry for the association."""
-    return exe_new(request, "exe_inflows")
+    return exe_new(request, ExeAction.INFLOWS)
 
 
 @login_required
 def exe_inflows_edit(request: HttpRequest, inflow_uuid: str) -> HttpResponse:
     """Edit an inflow entry for the association."""
-    return exe_edit(request, "exe_inflows", inflow_uuid)
+    return exe_edit(request, ExeAction.INFLOWS, inflow_uuid)
 
 
 @login_required
 def exe_inflows_delete(request: HttpRequest, inflow_uuid: str) -> HttpResponse:
     """Delete inflow."""
-    return exe_delete(request, "exe_inflows", inflow_uuid)
+    return exe_delete(request, ExeAction.INFLOWS, inflow_uuid)
 
 
 @login_required
@@ -265,19 +265,19 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_donations_new(request: HttpRequest) -> HttpResponse:
     """Create a new organization-wide donation entry."""
-    return exe_new(request, "exe_donations")
+    return exe_new(request, ExeAction.DONATIONS)
 
 
 @login_required
 def exe_donations_edit(request: HttpRequest, donation_uuid: str) -> HttpResponse:
     """Edit an organization-wide donation entry."""
-    return exe_edit(request, "exe_donations", donation_uuid)
+    return exe_edit(request, ExeAction.DONATIONS, donation_uuid)
 
 
 @login_required
 def exe_donations_delete(request: HttpRequest, donation_uuid: str) -> HttpResponse:
     """Delete donation."""
-    return exe_delete(request, "exe_donations", donation_uuid)
+    return exe_delete(request, ExeAction.DONATIONS, donation_uuid)
 
 
 @login_required
@@ -328,19 +328,19 @@ def exe_credits(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_credits_new(request: HttpRequest) -> HttpResponse:
     """Create a new credit entry."""
-    return exe_new(request, "exe_credits")
+    return exe_new(request, ExeAction.CREDITS)
 
 
 @login_required
 def exe_credits_edit(request: HttpRequest, credit_uuid: str) -> HttpResponse:
     """Simple edit view wrapper for credit management."""
-    return exe_edit(request, "exe_credits", credit_uuid)
+    return exe_edit(request, ExeAction.CREDITS, credit_uuid)
 
 
 @login_required
 def exe_credits_delete(request: HttpRequest, credit_uuid: str) -> HttpResponse:
     """Delete credit."""
-    return exe_delete(request, "exe_credits", credit_uuid)
+    return exe_delete(request, ExeAction.CREDITS, credit_uuid)
 
 
 @login_required
@@ -394,19 +394,19 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_tokens_new(request: HttpRequest) -> HttpResponse:
     """Create a new registration token."""
-    return exe_new(request, "exe_tokens")
+    return exe_new(request, ExeAction.TOKENS)
 
 
 @login_required
 def exe_tokens_edit(request: HttpRequest, token_uuid: str) -> HttpResponse:
     """Edit an existing registration token."""
-    return exe_edit(request, "exe_tokens", token_uuid)
+    return exe_edit(request, ExeAction.TOKENS, token_uuid)
 
 
 @login_required
 def exe_tokens_delete(request: HttpRequest, token_uuid: str) -> HttpResponse:
     """Delete token."""
-    return exe_delete(request, "exe_tokens", token_uuid)
+    return exe_delete(request, ExeAction.TOKENS, token_uuid)
 
 
 @login_required
@@ -471,19 +471,19 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_expenses_new(request: HttpRequest) -> HttpResponse:
     """Create a new expense for an association."""
-    return exe_new(request, "exe_expenses")
+    return exe_new(request, ExeAction.EXPENSES)
 
 
 @login_required
 def exe_expenses_edit(request: HttpRequest, expense_uuid: str) -> HttpResponse:
     """Edit an expense for an association."""
-    return exe_edit(request, "exe_expenses", expense_uuid)
+    return exe_edit(request, ExeAction.EXPENSES, expense_uuid)
 
 
 @login_required
 def exe_expenses_delete(request: HttpRequest, expense_uuid: str) -> HttpResponse:
     """Delete expense."""
-    return exe_delete(request, "exe_expenses", expense_uuid)
+    return exe_delete(request, ExeAction.EXPENSES, expense_uuid)
 
 
 @login_required
@@ -576,19 +576,19 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_payments_new(request: HttpRequest) -> HttpResponse:
     """Create a new organization-wide payment method."""
-    return exe_new(request, "exe_payments")
+    return exe_new(request, ExeAction.PAYMENTS)
 
 
 @login_required
 def exe_payments_edit(request: HttpRequest, payment_uuid: str) -> HttpResponse:
     """Edit organization-wide payment method."""
-    return exe_edit(request, "exe_payments", payment_uuid)
+    return exe_edit(request, ExeAction.PAYMENTS, payment_uuid)
 
 
 @login_required
 def exe_payments_delete(request: HttpRequest, payment_uuid: str) -> HttpResponse:
     """Delete payment."""
-    return exe_delete(request, "exe_payments", payment_uuid)
+    return exe_delete(request, ExeAction.PAYMENTS, payment_uuid)
 
 
 @login_required
@@ -662,19 +662,19 @@ def exe_invoices(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_invoices_new(request: HttpRequest) -> HttpResponse:
     """Create a new invoice."""
-    return exe_new(request, "exe_invoices")
+    return exe_new(request, ExeAction.INVOICES)
 
 
 @login_required
 def exe_invoices_edit(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
     """Edit an existing invoice."""
-    return exe_edit(request, "exe_invoices", invoice_uuid)
+    return exe_edit(request, ExeAction.INVOICES, invoice_uuid)
 
 
 @login_required
 def exe_invoices_delete(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
     """Delete invoice."""
-    return exe_delete(request, "exe_invoices", invoice_uuid)
+    return exe_delete(request, ExeAction.INVOICES, invoice_uuid)
 
 
 @login_required
@@ -737,13 +737,13 @@ def exe_collections(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_collections_edit(request: HttpRequest, collection_uuid: str) -> HttpResponse:
     """Edit an existing collection."""
-    return exe_edit(request, "exe_collections", collection_uuid)
+    return exe_edit(request, ExeAction.COLLECTIONS, collection_uuid)
 
 
 @login_required
 def exe_collections_delete(request: HttpRequest, collection_uuid: str) -> HttpResponse:
     """Delete collection."""
-    return exe_delete(request, "exe_collections", collection_uuid)
+    return exe_delete(request, ExeAction.COLLECTIONS, collection_uuid)
 
 
 @login_required
@@ -798,19 +798,19 @@ def exe_refunds(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_refunds_new(request: HttpRequest) -> HttpResponse:
     """Create a new refund request."""
-    return exe_new(request, "exe_refunds")
+    return exe_new(request, ExeAction.REFUNDS)
 
 
 @login_required
 def exe_refunds_edit(request: HttpRequest, refund_uuid: str) -> HttpResponse:
     """Single-line wrapper - delegates to exe_edit with refund form."""
-    return exe_edit(request, "exe_refunds", refund_uuid)
+    return exe_edit(request, ExeAction.REFUNDS, refund_uuid)
 
 
 @login_required
 def exe_refunds_delete(request: HttpRequest, refund_uuid: str) -> HttpResponse:
     """Delete refund."""
-    return exe_delete(request, "exe_refunds", refund_uuid)
+    return exe_delete(request, ExeAction.REFUNDS, refund_uuid)
 
 
 @login_required

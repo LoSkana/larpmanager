@@ -46,7 +46,7 @@ from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.core.base import check_association_context, get_context
 from larpmanager.utils.core.common import get_coming_runs, get_event_template
 from larpmanager.utils.edit.backend import backend_get
-from larpmanager.utils.edit.exe import exe_delete, exe_edit, exe_form, exe_new
+from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_form, exe_new
 from larpmanager.utils.users.deadlines import check_run_deadlines
 from larpmanager.views.manage import _get_registration_counts, _get_registration_status
 from larpmanager.views.orga.event import full_event_edit
@@ -134,13 +134,13 @@ def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
 @login_required
 def exe_runs_new(request: HttpRequest) -> HttpResponse:
     """Create a new organization-wide run with event field."""
-    return exe_new(request, "exe_events")
+    return exe_new(request, ExeAction.EVENTS)
 
 
 @login_required
 def exe_runs_edit(request: HttpRequest, run_uuid: str) -> HttpResponse:
     """Edit organization-wide run with event field."""
-    return exe_edit(request, "exe_events", run_uuid)
+    return exe_edit(request, ExeAction.EVENTS, run_uuid)
 
 
 @login_required
@@ -168,19 +168,19 @@ def exe_templates(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_templates_new(request: HttpRequest) -> HttpResponse:
     """Create a new executive template."""
-    return exe_new(request, "exe_templates")
+    return exe_new(request, ExeAction.TEMPLATES)
 
 
 @login_required
 def exe_templates_edit(request: HttpRequest, template_uuid: str) -> HttpResponse:
     """Edit an existing executive template."""
-    return exe_edit(request, "exe_templates", template_uuid)
+    return exe_edit(request, ExeAction.TEMPLATES, template_uuid)
 
 
 @login_required
 def exe_templates_delete(request: HttpRequest, template_uuid: str) -> HttpResponse:
     """Delete template."""
-    return exe_delete(request, "exe_templates", template_uuid)
+    return exe_delete(request, ExeAction.TEMPLATES, template_uuid)
 
 
 @login_required

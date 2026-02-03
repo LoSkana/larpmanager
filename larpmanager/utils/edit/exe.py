@@ -19,7 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from enum import Enum
+from typing import TYPE_CHECKING, Any
 
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
@@ -68,41 +69,71 @@ from larpmanager.utils.edit.base import Action
 if TYPE_CHECKING:
     from larpmanager.forms.base import BaseModelForm
 
-# "form": form used for creation / editing
-# "can_delete": callback used to check if the element can be deleted
-# "redirect_view": view to redirect, if different than permission
 
-alls = {
-    "": {"form": ExePreferencesForm, "member_form": True},
-    "exe_events": {"form": OrgaRunForm, "additional_field": "event"},
-    "exe_methods": {"form": ExePaymentSettingsForm, "assoc_form": True},
-    "exe_association": {"form": ExeAssociationForm, "assoc_form": True},
-    "exe_config": {"form": ExeConfigForm, "assoc_form": True},
-    "exe_profile": {"form": ExeProfileForm, "assoc_form": True},
-    "exe_quick": {"form": ExeQuickSetupForm, "assoc_form": True},
-    "exe_appearance": {"form": ExeAppearanceForm, "assoc_form": True},
-    "exe_roles": {"form": ExeAssociationRoleForm, "can_delete": lambda _context, element: element.number != 1},
-    "exe_texts": {"form": ExeAssociationTextForm},
-    "exe_translations": {"form": ExeAssociationTranslationForm},
-    "exe_volunteer_registry": {"form": ExeVolunteerRegistryForm},
-    "exe_badges": {"form": ExeBadgeForm},
-    "exe_templates": {"form": ExeTemplateForm},
-    "exe_urlshortner": {"form": ExeUrlShortnerForm},
-    "exe_warehouse_containers": {"form": ExeWarehouseContainerForm},
-    "exe_warehouse_tags": {"form": ExeWarehouseTagForm},
-    "exe_warehouse_items": {"form": ExeWarehouseItemForm},
-    "exe_warehouse_movements": {"form": ExeWarehouseMovementForm},
-    "exe_outflows": {"form": ExeOutflowForm},
-    "exe_inflows": {"form": ExeInflowForm},
-    "exe_donations": {"form": ExeDonationForm},
-    "exe_credits": {"form": ExeCreditForm},
-    "exe_tokens": {"form": ExeTokenForm},
-    "exe_expenses": {"form": ExeExpenseForm},
-    "exe_payments": {"form": ExePaymentForm},
-    "exe_invoices": {"form": ExeInvoiceForm},
-    "exe_collections": {"form": ExeCollectionForm},
-    "exe_refunds": {"form": ExeRefundRequestForm},
-}
+class ExeAction(str, Enum):
+    """Enum for executive action types used in edit/create/delete operations.
+
+    Each enum member has a string value (the permission string) and a config attribute
+    containing the form class and optional metadata.
+    """
+
+    def __new__(cls, value: str, config: dict[str, Any]) -> Any:
+        """Create a new enum member with value and config."""
+        obj = str.__new__(cls, value)
+        obj._value_ = value
+        obj.config = config
+        return obj
+
+    @classmethod
+    def from_string(cls, permission: str) -> ExeAction | None:
+        """Look up an ExeAction by its permission string value."""
+        for member in cls:
+            if member.value == permission:
+                return member
+        return None
+
+    # User preferences and association settings
+    PREFERENCES = ("", {"form": ExePreferencesForm, "member_form": True})
+    METHODS = ("exe_methods", {"form": ExePaymentSettingsForm, "assoc_form": True})
+    ASSOCIATION = ("exe_association", {"form": ExeAssociationForm, "assoc_form": True})
+    ROLES = ("exe_roles", {"form": ExeAssociationRoleForm, "can_delete": lambda _context, element: element.number != 1})
+    CONFIG = ("exe_config", {"form": ExeConfigForm, "assoc_form": True})
+    PROFILE = ("exe_profile", {"form": ExeProfileForm, "assoc_form": True})
+    QUICK = ("exe_quick", {"form": ExeQuickSetupForm, "assoc_form": True})
+
+    # Appearance
+    APPEARANCE = ("exe_appearance", {"form": ExeAppearanceForm, "assoc_form": True})
+    TEXTS = ("exe_texts", {"form": ExeAssociationTextForm})
+    TRANSLATIONS = ("exe_translations", {"form": ExeAssociationTranslationForm})
+
+    # Event
+    EVENTS = ("exe_events", {"form": OrgaRunForm, "additional_field": "event"})
+    TEMPLATES = ("exe_templates", {"form": ExeTemplateForm})
+
+    # Member management
+    VOLUNTEER_REGISTRY = ("exe_volunteer_registry", {"form": ExeVolunteerRegistryForm})
+    BADGES = ("exe_badges", {"form": ExeBadgeForm})
+
+    # Warehouse management
+    WAREHOUSE_CONTAINERS = ("exe_warehouse_containers", {"form": ExeWarehouseContainerForm})
+    WAREHOUSE_TAGS = ("exe_warehouse_tags", {"form": ExeWarehouseTagForm})
+    WAREHOUSE_ITEMS = ("exe_warehouse_items", {"form": ExeWarehouseItemForm})
+    WAREHOUSE_MOVEMENTS = ("exe_warehouse_movements", {"form": ExeWarehouseMovementForm})
+
+    # Accounting
+    OUTFLOWS = ("exe_outflows", {"form": ExeOutflowForm})
+    INFLOWS = ("exe_inflows", {"form": ExeInflowForm})
+    DONATIONS = ("exe_donations", {"form": ExeDonationForm})
+    CREDITS = ("exe_credits", {"form": ExeCreditForm})
+    TOKENS = ("exe_tokens", {"form": ExeTokenForm})
+    EXPENSES = ("exe_expenses", {"form": ExeExpenseForm})
+    PAYMENTS = ("exe_payments", {"form": ExePaymentForm})
+    INVOICES = ("exe_invoices", {"form": ExeInvoiceForm})
+    COLLECTIONS = ("exe_collections", {"form": ExeCollectionForm})
+    REFUNDS = ("exe_refunds", {"form": ExeRefundRequestForm})
+
+    # Miscellaneous
+    URLSHORTNER = ("exe_urlshortner", {"form": ExeUrlShortnerForm})
 
 
 def _exe_actions(
@@ -119,7 +150,7 @@ def _exe_actions(
 
     Args:
         request: HTTP request object
-        permission: Permission string that maps to an entry in 'alls' dictionary
+        permission: Permission string that maps to an ExeAction enum member
         action: Action type (EDIT, NEW, or DELETE)
         element_uuid: UUID of element to operate on (None for new elements)
 
@@ -127,13 +158,15 @@ def _exe_actions(
         HttpResponse: Redirect to success page or result from exe_form handler
 
     Raises:
-        Http404: If permission is not found in 'alls' dictionary
+        Http404: If permission is not found in ExeAction enum
     """
-    if permission not in alls:
-        msg = "permission unknown"
+    # Get permission data from enum
+    exe_action = ExeAction.from_string(permission)
+    if exe_action is None:
+        msg = f"permission unknown: {permission}"
         raise Http404(msg)
 
-    action_data = alls[permission]
+    action_data = exe_action.config
     form_type = action_data.get("form")
     model_type = form_type.Meta.model
 

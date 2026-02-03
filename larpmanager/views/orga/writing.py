@@ -49,7 +49,15 @@ from larpmanager.models.writing import (
 from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.common import get_handout, get_object_uuid
 from larpmanager.utils.edit.backend import backend_order
-from larpmanager.utils.edit.orga import orga_delete, orga_edit, orga_new, orga_order, orga_versions, orga_view
+from larpmanager.utils.edit.orga import (
+    OrgaAction,
+    orga_delete,
+    orga_edit,
+    orga_new,
+    orga_order,
+    orga_versions,
+    orga_view,
+)
 from larpmanager.utils.io.download import export_data
 from larpmanager.utils.io.pdf import print_handout
 from larpmanager.utils.services.writing import retrieve_cache_text_field, writing_list
@@ -65,31 +73,31 @@ def orga_plots(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_plots_view(request: HttpRequest, event_slug: str, plot_uuid: str) -> HttpResponse:
     """View for displaying a specific plot in the organizer interface."""
-    return orga_view(request, event_slug, "orga_plots", plot_uuid)
+    return orga_view(request, event_slug, OrgaAction.PLOTS, plot_uuid)
 
 
 @login_required
 def orga_plots_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a plot for an event."""
-    return orga_new(request, event_slug, "orga_plots")
+    return orga_new(request, event_slug, OrgaAction.PLOTS)
 
 
 @login_required
 def orga_plots_edit(request: HttpRequest, event_slug: str, plot_uuid: str) -> HttpResponse:
     """Edit or create a plot for an event."""
-    return orga_edit(request, event_slug, "orga_plots", plot_uuid)
+    return orga_edit(request, event_slug, OrgaAction.PLOTS, plot_uuid)
 
 
 @login_required
 def orga_plots_delete(request: HttpRequest, event_slug: str, plot_uuid: str) -> HttpResponse:
     """Delete plot for event."""
-    return orga_delete(request, event_slug, "orga_plots", plot_uuid)
+    return orga_delete(request, event_slug, OrgaAction.PLOTS, plot_uuid)
 
 
 @login_required
 def orga_plots_order(request: HttpRequest, event_slug: str, plot_uuid: str, order: int) -> HttpResponse:
     """Reorder plots in event's plot list."""
-    return orga_order(request, event_slug, "orga_plots", plot_uuid, order)
+    return orga_order(request, event_slug, OrgaAction.PLOTS, plot_uuid, order)
 
 
 @login_required
@@ -143,7 +151,7 @@ def orga_plots_versions(request: HttpRequest, event_slug: str, plot_uuid: str) -
         HttpResponse: Rendered versions page
 
     """
-    return orga_versions(request, event_slug, "orga_plots", plot_uuid)
+    return orga_versions(request, event_slug, OrgaAction.PLOTS, plot_uuid)
 
 
 @login_required
@@ -157,37 +165,37 @@ def orga_factions(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_factions_view(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
     """View displaying a specific faction for organizers."""
-    return orga_view(request, event_slug, "orga_factions", faction_uuid)
+    return orga_view(request, event_slug, OrgaAction.FACTIONS, faction_uuid)
 
 
 @login_required
 def orga_factions_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle faction editing for event organizers."""
-    return orga_new(request, event_slug, "orga_factions")
+    return orga_new(request, event_slug, OrgaAction.FACTIONS)
 
 
 @login_required
 def orga_factions_edit(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
     """Handle faction editing for event organizers."""
-    return orga_edit(request, event_slug, "orga_factions", faction_uuid)
+    return orga_edit(request, event_slug, OrgaAction.FACTIONS, faction_uuid)
 
 
 @login_required
 def orga_factions_delete(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
     """Delete faction for event."""
-    return orga_delete(request, event_slug, "orga_factions", faction_uuid)
+    return orga_delete(request, event_slug, OrgaAction.FACTIONS, faction_uuid)
 
 
 @login_required
 def orga_factions_order(request: HttpRequest, event_slug: str, faction_uuid: str, order: int) -> HttpResponse:
     """Reorder factions within an event run."""
-    return orga_order(request, event_slug, "orga_factions", faction_uuid, order)
+    return orga_order(request, event_slug, OrgaAction.FACTIONS, faction_uuid, order)
 
 
 @login_required
 def orga_factions_versions(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
     """Display version history for a faction's description."""
-    return orga_versions(request, event_slug, "orga_factions", faction_uuid)
+    return orga_versions(request, event_slug, OrgaAction.FACTIONS, faction_uuid)
 
 
 @login_required
@@ -201,31 +209,31 @@ def orga_quest_types(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_quest_types_view(request: HttpRequest, event_slug: str, quest_type_uuid: str) -> HttpResponse:
     """View quest type details for organizers."""
-    return orga_view(request, event_slug, "orga_quest_types", quest_type_uuid)
+    return orga_view(request, event_slug, OrgaAction.QUEST_TYPES, quest_type_uuid)
 
 
 @login_required
 def orga_quest_types_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create quest types for an event."""
-    return orga_new(request, event_slug, "orga_quest_types")
+    return orga_new(request, event_slug, OrgaAction.QUEST_TYPES)
 
 
 @login_required
 def orga_quest_types_edit(request: HttpRequest, event_slug: str, quest_type_uuid: str) -> HttpResponse:
     """Edit quest types for an event."""
-    return orga_edit(request, event_slug, "orga_quest_types", quest_type_uuid)
+    return orga_edit(request, event_slug, OrgaAction.QUEST_TYPES, quest_type_uuid)
 
 
 @login_required
 def orga_quest_types_delete(request: HttpRequest, event_slug: str, quest_type_uuid: str) -> HttpResponse:
     """Delete quest type for event."""
-    return orga_delete(request, event_slug, "orga_quest_types", quest_type_uuid)
+    return orga_delete(request, event_slug, OrgaAction.QUEST_TYPES, quest_type_uuid)
 
 
 @login_required
 def orga_quest_types_versions(request: HttpRequest, event_slug: str, quest_type_uuid: str) -> HttpResponse:
     """Display version history for a quest type."""
-    return orga_versions(request, event_slug, "orga_quest_types", quest_type_uuid)
+    return orga_versions(request, event_slug, OrgaAction.QUEST_TYPES, quest_type_uuid)
 
 
 @login_required
@@ -239,31 +247,31 @@ def orga_quests(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_quests_view(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpResponse:
     """View for managing quest content in the organization interface."""
-    return orga_view(request, event_slug, "orga_quests", quest_uuid)
+    return orga_view(request, event_slug, OrgaAction.QUESTS, quest_uuid)
 
 
 @login_required
 def orga_quests_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a quest for an event."""
-    return orga_new(request, event_slug, "orga_quests")
+    return orga_new(request, event_slug, OrgaAction.QUESTS)
 
 
 @login_required
 def orga_quests_edit(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpResponse:
     """Create a quest for an event."""
-    return orga_edit(request, event_slug, "orga_quests", quest_uuid)
+    return orga_edit(request, event_slug, OrgaAction.QUESTS, quest_uuid)
 
 
 @login_required
 def orga_quests_delete(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpResponse:
     """Delete quest for event."""
-    return orga_delete(request, event_slug, "orga_quests", quest_uuid)
+    return orga_delete(request, event_slug, OrgaAction.QUESTS, quest_uuid)
 
 
 @login_required
 def orga_quests_versions(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpResponse:
     """Display version history for a quest."""
-    return orga_versions(request, event_slug, "orga_quests", quest_uuid)
+    return orga_versions(request, event_slug, OrgaAction.QUESTS, quest_uuid)
 
 
 @login_required
@@ -276,31 +284,31 @@ def orga_traits(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_traits_view(request: HttpRequest, event_slug: str, trait_uuid: str) -> HttpResponse:
     """Display and manage trait details for event organizers."""
-    return orga_view(request, event_slug, "orga_traits", trait_uuid)
+    return orga_view(request, event_slug, OrgaAction.TRAITS, trait_uuid)
 
 
 @login_required
 def orga_traits_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle creation of trait objects for organization events."""
-    return orga_new(request, event_slug, "orga_traits")
+    return orga_new(request, event_slug, OrgaAction.TRAITS)
 
 
 @login_required
 def orga_traits_edit(request: HttpRequest, event_slug: str, trait_uuid: str) -> HttpResponse:
     """Handle editing of trait objects for organization events."""
-    return orga_edit(request, event_slug, "orga_traits", trait_uuid)
+    return orga_edit(request, event_slug, OrgaAction.TRAITS, trait_uuid)
 
 
 @login_required
 def orga_traits_delete(request: HttpRequest, event_slug: str, trait_uuid: str) -> HttpResponse:
     """Delete trait for event."""
-    return orga_delete(request, event_slug, "orga_traits", trait_uuid)
+    return orga_delete(request, event_slug, OrgaAction.TRAITS, trait_uuid)
 
 
 @login_required
 def orga_traits_versions(request: HttpRequest, event_slug: str, trait_uuid: str) -> HttpResponse:
     """Display version history for a specific trait."""
-    return orga_versions(request, event_slug, "orga_traits", trait_uuid)
+    return orga_versions(request, event_slug, OrgaAction.TRAITS, trait_uuid)
 
 
 @login_required
@@ -358,25 +366,25 @@ def orga_handouts_view(request: HttpRequest, event_slug: str, handout_uuid: str)
 @login_required
 def orga_handouts_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Edit handouts for an event."""
-    return orga_new(request, event_slug, "orga_handouts")
+    return orga_new(request, event_slug, OrgaAction.HANDOUTS)
 
 
 @login_required
 def orga_handouts_edit(request: HttpRequest, event_slug: str, handout_uuid: str) -> HttpResponse:
     """Edit handouts for an event."""
-    return orga_edit(request, event_slug, "orga_handouts", handout_uuid)
+    return orga_edit(request, event_slug, OrgaAction.HANDOUTS, handout_uuid)
 
 
 @login_required
 def orga_handouts_delete(request: HttpRequest, event_slug: str, handout_uuid: str) -> HttpResponse:
     """Delete handout for event."""
-    return orga_delete(request, event_slug, "orga_handouts", handout_uuid)
+    return orga_delete(request, event_slug, OrgaAction.HANDOUTS, handout_uuid)
 
 
 @login_required
 def orga_handouts_versions(request: HttpRequest, event_slug: str, handout_uuid: str) -> HttpResponse:
     """Get version history for a specific handout."""
-    return orga_versions(request, event_slug, "orga_handouts", handout_uuid)
+    return orga_versions(request, event_slug, OrgaAction.HANDOUTS, handout_uuid)
 
 
 @login_required
@@ -390,19 +398,19 @@ def orga_handout_templates(request: HttpRequest, event_slug: str) -> HttpRespons
 @login_required
 def orga_handout_templates_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create handout template for an event."""
-    return orga_new(request, event_slug, "orga_handout_templates")
+    return orga_new(request, event_slug, OrgaAction.HANDOUT_TEMPLATES)
 
 
 @login_required
 def orga_handout_templates_edit(request: HttpRequest, event_slug: str, handout_template_uuid: str) -> HttpResponse:
     """Edit handout template for an event."""
-    return orga_edit(request, event_slug, "orga_handout_templates", handout_template_uuid)
+    return orga_edit(request, event_slug, OrgaAction.HANDOUT_TEMPLATES, handout_template_uuid)
 
 
 @login_required
 def orga_handout_templates_delete(request: HttpRequest, event_slug: str, handout_template_uuid: str) -> HttpResponse:
     """Delete handout template for event."""
-    return orga_delete(request, event_slug, "orga_handout_templates", handout_template_uuid)
+    return orga_delete(request, event_slug, OrgaAction.HANDOUT_TEMPLATES, handout_template_uuid)
 
 
 @login_required
@@ -416,19 +424,19 @@ def orga_prologue_types(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_prologue_types_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a prologue type for an event."""
-    return orga_new(request, event_slug, "orga_prologue_types")
+    return orga_new(request, event_slug, OrgaAction.PROLOGUE_TYPES)
 
 
 @login_required
 def orga_prologue_types_edit(request: HttpRequest, event_slug: str, prologue_type_uuid: str) -> HttpResponse:
     """Edit or a prologue type for an event."""
-    return orga_edit(request, event_slug, "orga_prologue_types", prologue_type_uuid)
+    return orga_edit(request, event_slug, OrgaAction.PROLOGUE_TYPES, prologue_type_uuid)
 
 
 @login_required
 def orga_prologue_types_delete(request: HttpRequest, event_slug: str, prologue_type_uuid: str) -> HttpResponse:
     """Delete prologue type for event."""
-    return orga_delete(request, event_slug, "orga_prologue_types", prologue_type_uuid)
+    return orga_delete(request, event_slug, OrgaAction.PROLOGUE_TYPES, prologue_type_uuid)
 
 
 @login_required
@@ -441,31 +449,31 @@ def orga_prologues(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_prologues_view(request: HttpRequest, event_slug: str, prologue_uuid: str) -> HttpResponse:
     """Render prologue view for event organizers."""
-    return orga_view(request, event_slug, "orga_prologues", prologue_uuid)
+    return orga_view(request, event_slug, OrgaAction.PROLOGUES, prologue_uuid)
 
 
 @login_required
 def orga_prologues_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create prologues for an event."""
-    return orga_new(request, event_slug, "orga_prologues")
+    return orga_new(request, event_slug, OrgaAction.PROLOGUES)
 
 
 @login_required
 def orga_prologues_edit(request: HttpRequest, event_slug: str, prologue_uuid: str) -> HttpResponse:
     """Edit prologues for an event."""
-    return orga_edit(request, event_slug, "orga_prologues", prologue_uuid)
+    return orga_edit(request, event_slug, OrgaAction.PROLOGUES, prologue_uuid)
 
 
 @login_required
 def orga_prologues_delete(request: HttpRequest, event_slug: str, prologue_uuid: str) -> HttpResponse:
     """Delete prologue for event."""
-    return orga_delete(request, event_slug, "orga_prologues", prologue_uuid)
+    return orga_delete(request, event_slug, OrgaAction.PROLOGUES, prologue_uuid)
 
 
 @login_required
 def orga_prologues_versions(request: HttpRequest, event_slug: str, prologue_uuid: str) -> HttpResponse:
     """Display version history for a specific prologue."""
-    return orga_versions(request, event_slug, "orga_prologues", prologue_uuid)
+    return orga_versions(request, event_slug, OrgaAction.PROLOGUES, prologue_uuid)
 
 
 @login_required
@@ -478,31 +486,31 @@ def orga_speedlarps(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_speedlarps_view(request: HttpRequest, event_slug: str, speedlarp_uuid: str) -> HttpResponse:
     """View a specific speedlarp for organizers."""
-    return orga_view(request, event_slug, "orga_speedlarps", speedlarp_uuid)
+    return orga_view(request, event_slug, OrgaAction.SPEEDLARPS, speedlarp_uuid)
 
 
 @login_required
 def orga_speedlarps_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create speedlarp writing content for an event."""
-    return orga_new(request, event_slug, "orga_speedlarps")
+    return orga_new(request, event_slug, OrgaAction.SPEEDLARPS)
 
 
 @login_required
 def orga_speedlarps_edit(request: HttpRequest, event_slug: str, speedlarp_uuid: str) -> HttpResponse:
     """Edit speedlarp writing content for an event."""
-    return orga_edit(request, event_slug, "orga_speedlarps", speedlarp_uuid)
+    return orga_edit(request, event_slug, OrgaAction.SPEEDLARPS, speedlarp_uuid)
 
 
 @login_required
 def orga_speedlarps_delete(request: HttpRequest, event_slug: str, speedlarp_uuid: str) -> HttpResponse:
     """Delete speedlarp for event."""
-    return orga_delete(request, event_slug, "orga_speedlarps", speedlarp_uuid)
+    return orga_delete(request, event_slug, OrgaAction.SPEEDLARPS, speedlarp_uuid)
 
 
 @login_required
 def orga_speedlarps_versions(request: HttpRequest, event_slug: str, speedlarp_uuid: str) -> HttpResponse:
     """Display version history for a speedlarp."""
-    return orga_versions(request, event_slug, "orga_speedlarps", speedlarp_uuid)
+    return orga_versions(request, event_slug, OrgaAction.SPEEDLARPS, speedlarp_uuid)
 
 
 @login_required
@@ -525,19 +533,19 @@ def orga_progress_steps(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_progress_steps_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a progress step for an event."""
-    return orga_new(request, event_slug, "orga_progress_steps")
+    return orga_new(request, event_slug, OrgaAction.PROGRESS_STEPS)
 
 
 @login_required
 def orga_progress_steps_edit(request: HttpRequest, event_slug: str, step_uuid: str) -> HttpResponse:
     """Edit a progress step for an event."""
-    return orga_edit(request, event_slug, "orga_progress_steps", step_uuid)
+    return orga_edit(request, event_slug, OrgaAction.PROGRESS_STEPS, step_uuid)
 
 
 @login_required
 def orga_progress_steps_delete(request: HttpRequest, event_slug: str, step_uuid: str) -> HttpResponse:
     """Delete step for event."""
-    return orga_delete(request, event_slug, "orga_progress_steps", step_uuid)
+    return orga_delete(request, event_slug, OrgaAction.PROGRESS_STEPS, step_uuid)
 
 
 @login_required
@@ -548,7 +556,7 @@ def orga_progress_steps_order(
     order: int,
 ) -> HttpResponse:
     """Reorder progress steps for an event."""
-    return orga_order(request, event_slug, "orga_progress_steps", step_uuid, order)
+    return orga_order(request, event_slug, OrgaAction.PROGRESS_STEPS, step_uuid, order)
 
 
 @login_required

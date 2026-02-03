@@ -43,7 +43,7 @@ from larpmanager.utils.auth.permission import get_index_association_permissions
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import clear_messages, get_feature
 from larpmanager.utils.edit.backend import backend_edit
-from larpmanager.utils.edit.exe import exe_delete, exe_edit, exe_new
+from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 from larpmanager.utils.services.association import _reset_all_association
 from larpmanager.views.larpmanager import get_run_lm_payment
 from larpmanager.views.orga.event import prepare_roles_list
@@ -52,7 +52,7 @@ from larpmanager.views.orga.event import prepare_roles_list
 @login_required
 def exe_association(request: HttpRequest) -> Any:
     """Edit association details."""
-    return exe_edit(request, "exe_association")
+    return exe_edit(request, ExeAction.ASSOCIATION)
 
 
 @login_required
@@ -79,31 +79,31 @@ def exe_roles(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_roles_new(request: HttpRequest) -> Any:
     """Create a new association role."""
-    return exe_new(request, "exe_roles")
+    return exe_new(request, ExeAction.ROLES)
 
 
 @login_required
 def exe_roles_edit(request: HttpRequest, role_uuid: str) -> Any:
     """Edit specific association role."""
-    return exe_edit(request, "exe_roles", role_uuid)
+    return exe_edit(request, ExeAction.ROLES, role_uuid)
 
 
 @login_required
 def exe_roles_delete(request: HttpRequest, role_uuid: str) -> HttpResponse:
     """Delete role."""
-    return exe_delete(request, "exe_roles", role_uuid)
+    return exe_delete(request, ExeAction.ROLES, role_uuid)
 
 
 @login_required
 def exe_config(request: HttpRequest, section: str | None = None) -> HttpResponse:  # noqa: ARG001
     """Handle organization configuration editing with optional section jump."""
-    return exe_edit(request, "exe_config")
+    return exe_edit(request, ExeAction.CONFIG)
 
 
 @login_required
 def exe_profile(request: HttpRequest) -> Any:
     """Edit user profile settings."""
-    return exe_edit(request, "exe_profile")
+    return exe_edit(request, ExeAction.PROFILE)
 
 
 @login_required
@@ -125,19 +125,19 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_texts_new(request: HttpRequest) -> HttpResponse:
     """Create a new association text."""
-    return exe_new(request, "exe_texts")
+    return exe_new(request, ExeAction.TEXTS)
 
 
 @login_required
 def exe_texts_edit(request: HttpRequest, text_uuid: str) -> HttpResponse:
     """Edit specific association text."""
-    return exe_edit(request, "exe_texts", text_uuid)
+    return exe_edit(request, ExeAction.TEXTS, text_uuid)
 
 
 @login_required
 def exe_texts_delete(request: HttpRequest, text_uuid: str) -> HttpResponse:
     """Delete text."""
-    return exe_delete(request, "exe_texts", text_uuid)
+    return exe_delete(request, ExeAction.TEXTS, text_uuid)
 
 
 @login_required
@@ -173,31 +173,31 @@ def exe_translations(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_translations_new(request: HttpRequest) -> HttpResponse:
     """Create a new association translation override."""
-    return exe_new(request, "exe_translations")
+    return exe_new(request, ExeAction.TRANSLATIONS)
 
 
 @login_required
 def exe_translations_edit(request: HttpRequest, translation_uuid: str) -> HttpResponse:
     """Handle creation and editing of association translation overrides."""
-    return exe_edit(request, "exe_translations", translation_uuid)
+    return exe_edit(request, ExeAction.TRANSLATIONS, translation_uuid)
 
 
 @login_required
 def exe_translations_delete(request: HttpRequest, translation_uuid: str) -> HttpResponse:
     """Delete association translation overrides."""
-    return exe_delete(request, "exe_translations", translation_uuid)
+    return exe_delete(request, ExeAction.TRANSLATIONS, translation_uuid)
 
 
 @login_required
 def exe_methods(request: HttpRequest) -> Any:
     """Edit payment methods settings."""
-    return exe_edit(request, "exe_methods")
+    return exe_edit(request, ExeAction.METHODS)
 
 
 @login_required
 def exe_appearance(request: HttpRequest) -> Any:
     """Edit association appearance settings."""
-    return exe_edit(request, "exe_appearance")
+    return exe_edit(request, ExeAction.APPEARANCE)
 
 
 @login_required
@@ -439,13 +439,13 @@ def feature_description(request: HttpRequest) -> JsonResponse:
 @login_required
 def exe_quick(request: HttpRequest) -> Any:
     """Edit quick setup configuration."""
-    return exe_edit(request, "exe_quick")
+    return exe_edit(request, ExeAction.QUICK)
 
 
 @login_required
 def exe_preferences(request: HttpRequest) -> Any:
     """Edit user preferences."""
-    return exe_edit(request, "")
+    return exe_edit(request, ExeAction.PREFERENCES)
 
 
 @login_required

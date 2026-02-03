@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+from enum import Enum
 from typing import Any
 
 from django.contrib import messages
@@ -68,6 +69,7 @@ from larpmanager.forms.miscellanea import (
     WorkshopQuestionForm,
 )
 from larpmanager.forms.registration import (
+    OrgaRegistrationInstallmentForm,
     OrgaRegistrationOptionForm,
     OrgaRegistrationQuestionForm,
     OrgaRegistrationQuotaForm,
@@ -75,7 +77,7 @@ from larpmanager.forms.registration import (
     OrgaRegistrationSurchargeForm,
     OrgaRegistrationTicketForm,
 )
-from larpmanager.forms.warehouse import OrgaWarehouseAreaForm
+from larpmanager.forms.warehouse import OrgaWarehouseAreaForm, OrgaWarehouseItemAssignmentForm
 from larpmanager.forms.writing import (
     OrgaFactionForm,
     OrgaHandoutForm,
@@ -159,74 +161,107 @@ def validate_prologue(request: HttpRequest, context: dict, event_slug: str) -> N
         raise RedirectError(msg, args=[event_slug])
 
 
-# "form": form used for creation / editing
-# "can_delete": callback used to check if the element can be deleted
-# "check": if a check must be performed before creating / editing
+class OrgaAction(str, Enum):
+    """Enum for organization action types used in edit/create/delete operations."""
 
-alls = {
-    "": {"form": OrgaPreferencesForm, "member_form": True},
-    "orga_event": {"form": OrgaRunForm, "event_form": True},
-    "orga_config": {"form": OrgaConfigForm, "event_form": True},
-    "orga_quick": {"form": OrgaQuickSetupForm, "event_form": True},
-    "orga_appearance": {"form": OrgaAppearanceForm, "event_form": True},
-    "orga_roles": {"form": OrgaEventRoleForm, "can_delete": lambda _context, element: element.number != 1},
-    "orga_characters": {"form": OrgaCharacterForm, "writing": TextVersionChoices.CHARACTER},
-    "orga_character_form": {
-        "form": OrgaWritingQuestionForm,
-        "can_delete": lambda _context, element: len(element.typ) == 1,
-    },
-    "orga_character_form_option": {
-        "form": OrgaWritingOptionForm,
-    },
-    "orga_plots": {"form": OrgaPlotForm, "writing": TextVersionChoices.PLOT},
-    "orga_factions": {"form": OrgaFactionForm, "writing": TextVersionChoices.FACTION},
-    "orga_quest_types": {"form": OrgaQuestTypeForm, "writing": TextVersionChoices.QUEST_TYPE},
-    "orga_quests": {"form": OrgaQuestForm, "writing": TextVersionChoices.QUEST, "check": validate_quest},
-    "orga_traits": {"form": OrgaTraitForm, "writing": TextVersionChoices.TRAIT, "check": validate_trait},
-    "orga_handouts": {"form": OrgaHandoutForm, "writing": TextVersionChoices.HANDOUT},
-    "orga_handout_templates": {"form": OrgaHandoutTemplateForm, "check": validate_handout},
-    "orga_prologue_types": {"form": OrgaPrologueTypeForm},
-    "orga_prologues": {"form": OrgaPrologueForm, "writing": TextVersionChoices.PROLOGUE, "check": validate_prologue},
-    "orga_speedlarps": {"form": OrgaSpeedLarpForm, "writing": TextVersionChoices.SPEEDLARP},
-    "orga_texts": {"form": OrgaEventTextForm},
-    "orga_buttons": {"form": OrgaEventButtonForm},
-    "orga_registration_tickets": {"form": OrgaRegistrationTicketForm},
-    "orga_registration_sections": {"form": OrgaRegistrationSectionForm},
-    "orga_registration_form": {
-        "form": OrgaRegistrationQuestionForm,
-        "can_delete": lambda _context, element: len(element.typ) == 1,
-    },
-    "orga_registration_form_option": {
-        "form": OrgaRegistrationOptionForm,
-    },
-    "orga_registration_quotas": {"form": OrgaRegistrationQuotaForm},
-    "orga_registration_surcharges": {"form": OrgaRegistrationSurchargeForm},
-    "orga_px_deliveries": {"form": OrgaDeliveryPxForm},
-    "orga_px_abilities": {"form": OrgaAbilityPxForm, "check": validate_ability_px},
-    "orga_px_ability_types": {"form": OrgaAbilityTypePxForm},
-    "orga_px_ability_templates": {"form": OrgaAbilityTemplatePxForm},
-    "orga_px_rules": {"form": OrgaRulePxForm},
-    "orga_px_modifiers": {"form": OrgaModifierPxForm},
-    "orga_ci_inventory": {"form": OrgaInventoryForm},
-    "orga_ci_pool_types": {"form": OrgaPoolTypePxForm},
-    "orga_albums": {"form": OrgaAlbumForm},
-    "orga_utils": {"form": UtilForm},
-    "orga_workshop_modules": {"form": WorkshopModuleForm},
-    "orga_workshop_questions": {"form": WorkshopQuestionForm},
-    "orga_workshop_options": {"form": WorkshopOptionForm},
-    "orga_problems": {"form": OrgaProblemForm},
-    "orga_warehouse_area": {"form": OrgaWarehouseAreaForm},
-    "orga_onetimes": {"form": OneTimeContentForm},
-    "orga_onetimes_tokens": {"form": OneTimeAccessTokenForm},
-    "orga_discounts": {"form": OrgaDiscountForm},
-    "orga_tokens": {"form": OrgaTokenForm},
-    "orga_credits": {"form": OrgaCreditForm},
-    "orga_payments": {"form": OrgaPaymentForm},
-    "orga_outflows": {"form": OrgaOutflowForm},
-    "orga_inflows": {"form": OrgaInflowForm},
-    "orga_expenses": {"form": OrgaExpenseForm},
-    "orga_progress_steps": {"form": OrgaProgressStepForm},
-}
+    def __new__(cls, value: str, config: dict[str, Any]) -> Any:
+        """Create a new enum member with value and config."""
+        obj = str.__new__(cls, value)
+        obj._value_ = value
+        obj.config = config
+        return obj
+
+    @classmethod
+    def from_string(cls, permission: str) -> OrgaAction | None:
+        """Look up an OrgaAction by its permission string value."""
+        for member in cls:
+            if member.value == permission:
+                return member
+        return None
+
+    # Event configuration
+    PREFERENCES = ("", {"form": OrgaPreferencesForm, "member_form": True})
+    EVENT = ("orga_event", {"form": OrgaRunForm, "event_form": True})
+    CONFIG = ("orga_config", {"form": OrgaConfigForm, "event_form": True})
+    QUICK = ("orga_quick", {"form": OrgaQuickSetupForm, "event_form": True})
+    APPEARANCE = ("orga_appearance", {"form": OrgaAppearanceForm, "event_form": True})
+    ROLES = ("orga_roles", {"form": OrgaEventRoleForm, "can_delete": lambda _context, element: element.number != 1})
+    TEXTS = ("orga_texts", {"form": OrgaEventTextForm})
+    BUTTONS = ("orga_buttons", {"form": OrgaEventButtonForm})
+
+    # Characters and writing forms
+    CHARACTERS = ("orga_characters", {"form": OrgaCharacterForm, "writing": TextVersionChoices.CHARACTER})
+    CHARACTER_FORM = (
+        "orga_character_form",
+        {"form": OrgaWritingQuestionForm, "can_delete": lambda _context, element: len(element.typ) == 1},
+    )
+    CHARACTER_FORM_OPTION = ("orga_character_form_option", {"form": OrgaWritingOptionForm})
+
+    # Writing elements
+    PLOTS = ("orga_plots", {"form": OrgaPlotForm, "writing": TextVersionChoices.PLOT})
+    FACTIONS = ("orga_factions", {"form": OrgaFactionForm, "writing": TextVersionChoices.FACTION})
+    QUEST_TYPES = ("orga_quest_types", {"form": OrgaQuestTypeForm, "writing": TextVersionChoices.QUEST_TYPE})
+    QUESTS = ("orga_quests", {"form": OrgaQuestForm, "writing": TextVersionChoices.QUEST, "check": validate_quest})
+    TRAITS = ("orga_traits", {"form": OrgaTraitForm, "writing": TextVersionChoices.TRAIT, "check": validate_trait})
+    HANDOUTS = ("orga_handouts", {"form": OrgaHandoutForm, "writing": TextVersionChoices.HANDOUT})
+    HANDOUT_TEMPLATES = ("orga_handout_templates", {"form": OrgaHandoutTemplateForm, "check": validate_handout})
+    PROLOGUE_TYPES = ("orga_prologue_types", {"form": OrgaPrologueTypeForm})
+    PROLOGUES = (
+        "orga_prologues",
+        {"form": OrgaPrologueForm, "writing": TextVersionChoices.PROLOGUE, "check": validate_prologue},
+    )
+    SPEEDLARPS = ("orga_speedlarps", {"form": OrgaSpeedLarpForm, "writing": TextVersionChoices.SPEEDLARP})
+    PROGRESS_STEPS = ("orga_progress_steps", {"form": OrgaProgressStepForm})
+
+    # Registration
+    REGISTRATION_TICKETS = ("orga_registration_tickets", {"form": OrgaRegistrationTicketForm})
+    REGISTRATION_SECTIONS = ("orga_registration_sections", {"form": OrgaRegistrationSectionForm})
+    REGISTRATION_FORM = (
+        "orga_registration_form",
+        {"form": OrgaRegistrationQuestionForm, "can_delete": lambda _context, element: len(element.typ) == 1},
+    )
+    REGISTRATION_FORM_OPTION = ("orga_registration_form_option", {"form": OrgaRegistrationOptionForm})
+    REGISTRATION_QUOTAS = ("orga_registration_quotas", {"form": OrgaRegistrationQuotaForm})
+    REGISTRATION_INSTALLMENTS = ("orga_registration_installments", {"form": OrgaRegistrationInstallmentForm})
+    REGISTRATION_SURCHARGES = ("orga_registration_surcharges", {"form": OrgaRegistrationSurchargeForm})
+
+    # Experience/PX system
+    PX_DELIVERIES = ("orga_px_deliveries", {"form": OrgaDeliveryPxForm})
+    PX_ABILITIES = ("orga_px_abilities", {"form": OrgaAbilityPxForm, "check": validate_ability_px})
+    PX_ABILITY_TYPES = ("orga_px_ability_types", {"form": OrgaAbilityTypePxForm})
+    PX_ABILITY_TEMPLATES = ("orga_px_ability_templates", {"form": OrgaAbilityTemplatePxForm})
+    PX_RULES = ("orga_px_rules", {"form": OrgaRulePxForm})
+    PX_MODIFIERS = ("orga_px_modifiers", {"form": OrgaModifierPxForm})
+
+    # Inventory
+    CI_INVENTORY = ("orga_ci_inventory", {"form": OrgaInventoryForm})
+    CI_POOL_TYPES = ("orga_ci_pool_types", {"form": OrgaPoolTypePxForm})
+
+    # Miscellaneous
+    ALBUMS = ("orga_albums", {"form": OrgaAlbumForm})
+    UTILS = ("orga_utils", {"form": UtilForm})
+    WORKSHOP_MODULES = ("orga_workshop_modules", {"form": WorkshopModuleForm})
+    WORKSHOP_QUESTIONS = ("orga_workshop_questions", {"form": WorkshopQuestionForm})
+    WORKSHOP_OPTIONS = ("orga_workshop_options", {"form": WorkshopOptionForm})
+    PROBLEMS = ("orga_problems", {"form": OrgaProblemForm})
+
+    # Warehouse
+    WAREHOUSE_AREA = ("orga_warehouse_area", {"form": OrgaWarehouseAreaForm})
+    WAREHOUSE_MANIFEST = ("orga_warehouse_manifest", {"form": OrgaWarehouseItemAssignmentForm})
+    WAREHOUSE_ASSIGNMENT_ITEM = ("orga_warehouse_assignment_item", {})
+
+    # One-time content
+    ONETIMES = ("orga_onetimes", {"form": OneTimeContentForm})
+    ONETIMES_TOKENS = ("orga_onetimes_tokens", {"form": OneTimeAccessTokenForm})
+
+    # Accounting
+    DISCOUNTS = ("orga_discounts", {"form": OrgaDiscountForm})
+    TOKENS = ("orga_tokens", {"form": OrgaTokenForm})
+    CREDITS = ("orga_credits", {"form": OrgaCreditForm})
+    PAYMENTS = ("orga_payments", {"form": OrgaPaymentForm})
+    OUTFLOWS = ("orga_outflows", {"form": OrgaOutflowForm})
+    INFLOWS = ("orga_inflows", {"form": OrgaInflowForm})
+    EXPENSES = ("orga_expenses", {"form": OrgaExpenseForm})
 
 
 def _action_change(
@@ -472,12 +507,12 @@ def _orga_actions(
 
     Routes CRUD operations (create, edit, delete, reorder) to appropriate handlers
     based on the action type. Validates permissions, retrieves action configuration
-    from the 'alls' dictionary, and delegates to specialized handlers.
+    from the OrgaAction enum, and delegates to specialized handlers.
 
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        permission: Permission string that maps to an entry in 'alls' dictionary
+        permission: Permission string that maps to an OrgaAction enum member
         action: Action type (EDIT, NEW, DELETE, or ORDER)
         element_uuid: UUID of element to operate on (None for new elements)
         additional: Additional parameter for ORDER action (position offset)
@@ -486,13 +521,15 @@ def _orga_actions(
         HttpResponse: Redirect to success page or result from action handler
 
     Raises:
-        Http404: If permission is not found in 'alls' dictionary
+        Http404: If permission is not found in OrgaAction enum
     """
-    # Get permission data
-    action_data = alls.get(permission)
-    if not action_data:
-        msg = "permission unknown"
+    # Get permission data from enum
+    orga_action = OrgaAction.from_string(permission)
+    if orga_action is None:
+        msg = f"permission unknown: {permission}"
         raise Http404(msg)
+
+    action_data = orga_action.config
 
     # Verify user has permission
     if permission.endswith("form_option"):
