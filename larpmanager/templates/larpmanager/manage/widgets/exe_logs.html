@@ -1,0 +1,39 @@
+{% load i18n %}
+{% if widgets.logs %}
+    <div class="grid-item">
+        <h2>
+            <a href="{% url 'exe_log' %}" target="_blank">
+                <i class="fas fa-list"></i> {% trans "Logs" %}
+            </a>
+        </h2>
+        <table>
+            <tbody>
+                {% if widgets.logs.total_count %}
+                    <tr>
+                        <th>{% trans "Total logs" %}</th>
+                        <td>{{ widgets.logs.total_count }}</td>
+                    </tr>
+                {% endif %}
+                {% for op_type, data in widgets.logs.operation_counts.items %}
+                    <tr>
+                        <th>{{ data.label }}</th>
+                        <td>{{ data.count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if widgets.logs.recent_logs %}
+            <div>
+                <strong>{% trans "Recent" %}:</strong>
+                <ul>
+                    {% for log in widgets.logs.recent_logs %}
+                        <li>
+                            {{ log.get_operation_type_display }} - {{ log.element_name|default:log.cls }}
+                            <small>({{ log.member }})</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

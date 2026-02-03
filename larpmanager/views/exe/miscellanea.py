@@ -21,9 +21,11 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.warehouse import get_association_warehouse_cache
 from larpmanager.models.miscellanea import (
+    Log,
     UrlShortner,
     WarehouseContainer,
     WarehouseItem,
@@ -31,6 +33,7 @@ from larpmanager.models.miscellanea import (
     WarehouseTag,
 )
 from larpmanager.utils.core.base import check_association_context
+from larpmanager.utils.core.paginate import exe_paginate
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 from larpmanager.utils.services.bulk import handle_bulk_items
 from larpmanager.utils.services.miscellanea import get_warehouse_optionals
@@ -206,3 +209,33 @@ def exe_warehouse_movements_edit(request: HttpRequest, movement_uuid: str) -> Ht
 def exe_warehouse_movements_delete(request: HttpRequest, movement_uuid: str) -> HttpResponse:
     """Delete movement."""
     return exe_delete(request, ExeAction.WAREHOUSE_MOVEMENTS, movement_uuid)
+
+
+@login_required
+def exe_log(request: HttpRequest) -> HttpResponse:
+    """Display paginated list of logs for organization."""
+    context = check_association_context(request, "exe_log")
+
+    context.update(
+        {
+            "selrel": ("member", "run__event"),
+            "fields": [
+                ("member", _("Member")),
+                ("operation_type", _("Operation")),
+                ("element_name", _("Element")),
+                ("info", _("Info")),
+                ("created", _("Date")),
+            ],
+            "callbacks": {
+                "operation_type": lambda el: el.get_operation_type_display(),
+            },
+        }
+    )
+
+    return exe_paginate(
+        request,
+        context,
+        Log,
+        "larpmanager/exe/logs.html",
+        None,  # No edit view for logs (read-only)
+    )

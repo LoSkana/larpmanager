@@ -170,6 +170,9 @@ msgstr "Liste"
 msgid "Logo"
 msgstr "Logo"
 
+msgid "Logs"
+msgstr "Logger"
+
 msgid "Mail"
 msgstr "Post"
 
@@ -624,6 +627,9 @@ msgstr "Sitat"
 msgid "Reason"
 msgstr "Årsak"
 
+msgid "Recent"
+msgstr "Nylig"
+
 msgid "Refund"
 msgstr "Refusjon"
 
@@ -779,6 +785,9 @@ msgstr "Standardinnstilling"
 
 msgid "Details"
 msgstr "Detaljer"
+
+msgid "Element"
+msgstr "Element"
 
 msgid "Example"
 msgstr "Eksempel"
@@ -1710,6 +1719,9 @@ msgstr "For å overvinne"
 msgid "Token name"
 msgstr "Token-navn"
 
+msgid "Total logs"
+msgstr "Totalt antall tømmerstokker"
+
 msgid "Two quotas"
 msgstr "To kvoter"
 
@@ -1970,6 +1982,9 @@ msgstr "Ferdighetstype"
 
 msgid "Achievements"
 msgstr "Prestasjoner"
+
+msgid "Activity Log"
+msgstr "Aktivitetslogg"
 
 msgid "Add from NPC"
 msgstr "Legg til fra NPC"
@@ -2434,6 +2449,9 @@ msgstr "Tilgjengelige dager"
 
 msgid "Bring a friend"
 msgstr "Ta med en venn"
+
+msgid "Bulk operation"
+msgstr "Bulkoperasjon"
 
 msgid "Cargo manifest"
 msgstr "Lastmanifest"
@@ -6203,6 +6221,9 @@ msgstr "Det er <b>%(number)s</b> refusjoner som skal leveres"
 msgid "There are quest types without quests: %(list)s"
 msgstr "Det finnes oppdragstyper uten oppdrag: %(list)s"
 
+msgid "This page shows all log entries for this event"
+msgstr "Denne siden viser alle loggoppføringer for denne hendelsen"
+
 msgid "This page shows the email lists of subscribers"
 msgstr "Denne siden viser e-postlistene til abonnentene"
 
@@ -6633,6 +6654,9 @@ msgstr "Den første kolonnen beløpet, den andre inntektene"
 
 msgid "This page shows all donations recorded in the system"
 msgstr "Denne siden viser alle donasjoner som er registrert i systemet"
+
+msgid "This page shows all log entries for the organization"
+msgstr "Denne siden viser alle loggoppføringer for organisasjonen"
 
 msgid "This page shows all payments received for this event"
 msgstr ""
@@ -7596,6 +7620,11 @@ msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "Nå kan du gå gjennom sikkerhetsinformasjonen som deltakerne har sendt inn"
 
+msgid "Show detailed activity log on entities created, updated or deleted."
+msgstr ""
+"Vis detaljert aktivitetslogg over enheter som er opprettet, oppdatert eller "
+"slettet."
+
 msgid "Simply follow the instructions and provide the required information"
 msgstr "Følg instruksjonene og oppgi den nødvendige informasjonen"
 
@@ -7693,6 +7722,11 @@ msgstr ""
 #, python-format
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
 msgstr "Denne teksten vil bli lagt til i arket, i plottavsnittet %(name)s"
+
+msgid "View detailed activity log of all changes made for this organization"
+msgstr ""
+"Se detaljert aktivitetslogg over alle endringer som er gjort for denne "
+"organisasjonen"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Vi sender deg en bekreftelse på e-post når endringen er gjennomført"
@@ -7846,6 +7880,11 @@ msgstr "Denne siden oppsummerer reglene som gjelder for de beregnede feltene"
 msgid "This page summarizes the types of pools that a character inventory has"
 msgstr ""
 "Denne siden oppsummerer hvilke typer bassenger et karakterinventar har"
+
+msgid "View detailed activity log of all changes made for this specific event"
+msgstr ""
+"Se detaljert aktivitetslogg over alle endringer som er gjort for denne "
+"spesifikke hendelsen"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""

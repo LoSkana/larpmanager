@@ -34,8 +34,10 @@ from larpmanager.cache.config import _get_fkey_config, get_event_config
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait
+from larpmanager.models.event import Run
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
-from larpmanager.models.member import Log, Member
+from larpmanager.models.member import LogOperationType, Member
+from larpmanager.models.miscellanea import Log
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context
@@ -48,9 +50,58 @@ if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
 
 
-def save_log(member: Member, cls: BaseModel, element: Any, *, to_delete: bool = False) -> None:
-    """Create a log entry for model instance changes."""
-    Log.objects.create(member=member, cls=cls.__name__, eid=element.id, dl=to_delete, dct=element.as_dict())
+def save_log(
+    context: dict,
+    cls: BaseModel,
+    element: Any,
+    element_uuid: str | None = None,
+    *,
+    operation_type: str | None = None,
+    info: str | None = None,
+) -> None:
+    """Create a log entry for model instance changes.
+
+    Args:
+        context: Dict context
+        cls: Model class of the element
+        element: The element being logged
+        element_uuid: UUID of element (None = new, non-None = update)
+        operation_type: Type of operation (NEW/UPDATE/DELETE/BULK). If None, auto-detect from element_uuid
+        info: Additional informations
+
+    """
+    # Auto-detect operation type if not specified
+    if operation_type is None:
+        operation_type = LogOperationType.NEW if element_uuid is None else LogOperationType.UPDATE
+
+    # Extract element name
+    element_name = ""
+    if hasattr(element, "name") and element.name:
+        element_name = str(element.name)
+    elif hasattr(element, "title") and element.title:
+        element_name = str(element.title)
+    else:
+        element_name = str(element)
+
+    instance = context.get("run", context["association_id"])
+    if isinstance(instance, Run):
+        run_id = instance.id
+        association_id = instance.event.association_id
+    else:
+        run_id = None
+        association_id = instance
+
+    Log.objects.create(
+        member=context["member"],
+        cls=cls.__name__,
+        eid=element.id,
+        dct=element.as_dict(),
+        operation_type=operation_type,
+        element_name=element_name[:500],
+        info=info[:500],
+        run_id=run_id,
+        association_id=association_id,
+    )
 
 
 def save_version(element: Any, model_type: str, member: Member, *, to_delete: bool = False) -> None:  # noqa: C901 - Complex versioning logic with multiple model types
@@ -288,7 +339,7 @@ def user_edit(
                 else:
                     # Default delete behavior
                     model_type = form_type.Meta.model
-                    save_log(context["member"], model_type, context[model_name], to_delete=True)
+                    save_log(context, model_type, context[model_name], operation_type=LogOperationType.DELETE)
                     context[model_name].delete()
 
                 messages.success(request, _("Operation completed") + "!")
@@ -302,7 +353,8 @@ def user_edit(
                 # Default save behavior
                 saved_instance = form.save()
                 model_type = form_type.Meta.model
-                save_log(context["member"], model_type, saved_instance, to_delete=False)
+                element_uuid = None if context["el"] is None else context["el"].uuid
+                save_log(context, model_type, saved_instance, element_uuid)
 
             messages.success(request, _("Operation completed") + "!")
             context["saved"] = saved_instance
@@ -432,7 +484,13 @@ def _backend_save(
     if writing_type:
         save_version(saved_object, writing_type, context["member"], to_delete=should_delete)
 
-    save_log(context["member"], model_type, saved_object, to_delete=should_delete)
+    # Log with appropriate operation type
+    if should_delete:
+        save_log(context, model_type, saved_object, operation_type=LogOperationType.DELETE)
+    else:
+        # Detect NEW vs UPDATE based on whether element existed before
+        element_uuid = None if context["el"] is None else context["el"].uuid
+        save_log(context, model_type, saved_object, element_uuid=element_uuid)
 
     if should_delete:
         saved_object.delete()
@@ -591,7 +649,7 @@ def backend_delete(
         messages.error(request, _("Operation not allowed"))
         return
 
-    save_log(context["member"], model_type, element, to_delete=True)
+    save_log(context, model_type, element, operation_type=LogOperationType.DELETE)
 
     element.delete()
 

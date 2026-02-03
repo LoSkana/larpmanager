@@ -438,3 +438,13 @@
     hidden: false
     feature: translation
     module: appearance
+- model: larpmanager.associationpermission
+  fields:
+    name: Activity Log
+    descr: View detailed activity log of all changes made for this organization
+    slug: exe_log
+    number: 1
+    config: null
+    hidden: false
+    feature: log
+    module: miscellany

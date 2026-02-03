@@ -781,3 +781,13 @@
     hidden: false
     feature: inventory
     module: inventory
+- model: larpmanager.eventpermission
+  fields:
+    name: Activity Log
+    descr: View detailed activity log of all changes made for this specific event
+    slug: orga_log
+    number: 1
+    config: null
+    hidden: false
+    feature: log
+    module: miscellany

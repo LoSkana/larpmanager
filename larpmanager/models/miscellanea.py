@@ -17,15 +17,15 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import random
 import secrets
 from pathlib import Path
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
-from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
@@ -35,11 +35,14 @@ from tinymce.models import HTMLField
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member
+from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_miny, show_thumb
 from larpmanager.models.writing import Character
 from larpmanager.utils.core.validators import FileTypeValidator
+
+if TYPE_CHECKING:
+    from django.http import HttpResponse
 
 
 class HelpQuestion(UuidMixin, BaseModel):
@@ -1120,3 +1123,42 @@ class OneTimeAccessToken(UuidMixin, BaseModel):
             self.user_agent = http_request.META.get("HTTP_USER_AGENT", "")[:500]
 
         self.save()
+
+
+class Log(BaseModel):
+    """Represents Log model."""
+
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+
+    eid = models.IntegerField()
+
+    cls = models.CharField(max_length=100)
+
+    dct = models.TextField()
+
+    operation_type = models.CharField(
+        max_length=10,
+        choices=LogOperationType.choices,
+        default=LogOperationType.UPDATE,
+        db_index=True,
+    )
+
+    element_name = models.CharField(max_length=500, blank=True)
+
+    info = models.CharField(max_length=500, blank=True)
+
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
+
+    run = models.ForeignKey(Run, on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        """Meta options for Log model."""
+
+        indexes = [  # noqa: RUF012
+            models.Index(fields=["member", "-created"]),  # For widget queries
+            models.Index(fields=["-created"]),  # For general ordering
+        ]
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.cls} {self.eid}"
