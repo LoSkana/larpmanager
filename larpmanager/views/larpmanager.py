@@ -1145,7 +1145,9 @@ def donate(request: HttpRequest) -> Any:
         HttpResponseForbidden: If bot detected
 
     """
-    context = get_lm_contact(request)
+    context = get_context(request)
+    if context["association_id"] != 1:
+        return redirect("accounting_donate")
 
     user_agent = request.META.get("HTTP_USER_AGENT", "")
     if is_suspicious_user_agent(user_agent):
