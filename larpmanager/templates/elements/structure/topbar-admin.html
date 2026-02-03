@@ -18,14 +18,7 @@
                         {% endif %}
                         {% include "elements/structure/dropdown_work.html" %}
                     </div>
-                    <div id="select_side" class="el dropdown">
-                        {% if manage %}
-                            <span><i class="fa-solid fa-toolbox"></i> Admin</span>
-                        {% else %}
-                            <span><i class="fa-solid fa-users"></i> User</span>
-                        {% endif %}
-                        {% include "elements/structure/dropdown_side.html" %}
-                    </div>
+                    <div class="el">{% include "elements/structure/dropdown_side.html" %}</div>
                     {% if manage %}
                         <div class="el">
                         <a id="sidebar-open"
@@ -61,10 +54,7 @@
             </div>
         </td>
         <td>
-            <div id="select_side_mobile" class="el dropdown">
-                {% include "elements/structure/dropdown_side.html" %}
-                <span class="label">Mode</span>
-            </div>
+            <div class="el">{% include "elements/structure/dropdown_side.html" %}</div>
         </td>
         {% if manage %}
             <td>
