@@ -15,6 +15,7 @@
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Role" %}</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -26,17 +27,22 @@
                     </td>
                     <td>{{ el }}</td>
                     <td>
-                        <a href="{% url 'exe_templates_roles' el.uuid 0 %}">{% trans "Add" %}</a>
+                        <a href="{% url 'exe_templates_roles_new' el.uuid %}">{% trans "Add" %}</a>
                         {% if el.roles %}
                             -
                             {% for rl in el.roles %}
                                 {% include "elements/comma.html" %}
-                                <a href="{% url 'exe_templates_roles' el.uuid rl.uuid %}">{{ rl.name }}</a>
+                                <a href="{% url 'exe_templates_roles_edit' el.uuid rl.uuid %}">{{ rl.name }}</a>
                             {% endfor %}
                         {% endif %}
                     </td>
                     <td>
                         <a href="{% url 'exe_templates_config' el.uuid %}">{% trans "Configuration" %}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_templates_delete' el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

@@ -1,132 +1,134 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Participant" %}
+    {% trans "Membership" %}
 {% endblock title %}
 {% block content %}
-    {% if membership_cf and error_cf %}
-        <div id="membership_cf">
-            <h3>{% trans "Tax code check" %}</h3>
-            <p class="warning">
-                <i>{% trans "We encountered a problem with the tax code you provided" %}: {{ error_cf }}</i>
-            </p>
-            <p>{% trans "Supplied" %}: {{ supplied_cf }}</p>
-            <p>{% trans "Expected" %}: {{ calculated_cf }}</p>
-            <p>
-                {% trans "Update your data in the" %} <a href="{% url 'profile' %}">{% trans "user profile" %}</a>.
-            </p>
-            <hr />
-        </div>
-    {% endif %}
-    {% if member.membership.status == 'e' or member.membership.status == 'j' %}
-        <h3>{% trans "You are not yet a Member of the Organization" %}!</h3>
-        <p>{% trans "In order to subscribe to the Organization's events you must apply to be admitted as a Member" %}.</p>
-        <p>
-            {% trans "We have pre-filled the application form based on the data you provided us" %}: <a href="{% url 'membership_request' %}" download>{% trans "download it here" %}</a>.
-            <br />
-            ({% trans "If there are wrong data you can update your" %} <a href="{% url 'profile' %}">{% trans "user profile" %}</a>. {% trans "The registration request will be updated automatically" %}.)
-        </p>
-        <hr />
-        <p>
-            {% trans "Once downloaded you must print it, sign it, take a digital scan, and upload it to the form below" %}.
-            {% trans "Your request will be considered at the next meeting of the Board" %}.
-            {% trans "You will receive confirmation of the outcome of its  evaluation" %}.
-        </p>
-        <hr />
-        <p>{% trans "Upload the scan of both your signed request, and your document (image or pdf document)" %}:</p>
-        <form action="{{ request.path }}"
-              enctype="multipart/form-data"
-              method="post">
-            {% csrf_token %}
-            <table class="mob ">
-                {{ form.as_table }}
-            </table>
-            <input type="submit" value="{% trans "Submit" %}">
-        </form>
-    {% elif member.membership.status == 'u' %}
-        <h3>{% trans "Confirmation of registration request" %}</h3>
-        <p>
-            {% trans "We only ask for a moment of your time to check the documents you have uploaded, it won't take long" %}!
-        </p>
-        <form action="{{ request.path }}"
-              enctype="multipart/form-data"
-              method="post">
-            {% csrf_token %}
-            <hr />
-            {% if '.pdf' in doc_path %}
-                <embed class="membership_request"
-                       src="{{ member.membership.get_document_filepath }}"
-                       type="application/pdf"
-                       width="100%"
-                       height="500px">
-            {% else %}
-                <img class="membership_request"
-                     src="{{ member.membership.get_document_filepath }}"
-                     alt="membership request" />
-            {% endif %}
-            <hr />
-            {{ form.confirm_1 }} {% trans "I confirm that I have uploaded a valid document issued by the state of my nationality" %}
-            <hr />
-            {{ form.confirm_2 }} {% trans "I confirm that my face and name are clearly visible in the document" %}
-            <hr />
-            {% trans "If instead you wish to upload a new photo of your document" %}, <a href="{% url 'membership' %}">{% trans "click here" %}</a>.
-            <hr />
-            {% if '.pdf' in req_path %}
-                <embed class="membership_request"
-                       src="{{ member.membership.get_request_filepath }}"
-                       type="application/pdf"
-                       width="100%"
-                       height="500px">
-            {% else %}
-                <img class="membership_request"
-                     src="{{ member.membership.get_request_filepath }}"
-                     alt="membership request" />
-            {% endif %}
-            <hr />
-            {{ form.confirm_3 }} {% trans "I confirm that all my required personal data have been filled in correctly" %}
-            <hr />
-            {% trans "If you wish to update your personal data" %}, <a href="{% url 'profile' %}">{% trans "click here" %}</a>.
-            <hr />
-            {{ form.confirm_4 }} {% trans "I confirm that I have affixed the date and my signature wherever required" %}
-            <hr />
-            {% trans "If you wish to upload a new scan of your application instead" %}, <a href="{% url 'membership' %}">{% trans "click here" %}</a>.
-            <hr />
-            <input type="submit" value="{% trans "Submit" %}">
-        </form>
-    {% elif member.membership.status == 's' %}
-        <h3>{% trans "Request sent for approval" %}</h3>
-        <p>
-            {% trans "Your request will be approved at the next Board meeting. You will receive confirmation of the outcome of its evaluation very soon" %}.
-        </p>
-        <p>
-            {% trans "Request submitted" %}: <a href="{{ member.membership.get_request_filepath }}" download>{% trans "download it here" %}</a>.
-        </p>
-    {% elif member.membership.status == 'r' %}
-        <h3>{% trans "Member revoked" %}</h3>
-        <p>{% trans "I am not good what to say. I never thought it would happen" %}.</p>
-    {% else %}
-        <h3>{% trans "Members of the Organization" %}</h3>
-        <p>
-            {% trans "You are a regular member of our Organization. You can subscribe to events organized for our members" %}!
-        </p>
-        <p>
-            {% trans "In the membership book the number of your membership card is" %}:  <b>{{ member.membership.card_number|stringformat:"04d" }}</b>
-        </p>
-        {% if fee_payed %}
-            <p>
-                {% trans "The payment of your membership fee for this year has been received. You have the right to participate to the organization events" %}.
-            </p>
-        {% else %}
-            <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
-            <p>
-                {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
-            </p>
+    <div class="form_container auto_resize platform">
+        {% if membership_cf and error_cf %}
+            <div id="membership_cf">
+                <h3>{% trans "Tax code check" %}</h3>
+                <p class="warning">
+                    <i>{% trans "We encountered a problem with the tax code you provided" %}: {{ error_cf }}</i>
+                </p>
+                <p>{% trans "Supplied" %}: {{ supplied_cf }}</p>
+                <p>{% trans "Expected" %}: {{ calculated_cf }}</p>
+                <p>
+                    {% trans "Update your data in the" %} <a href="{% url 'profile' %}">{% trans "user profile" %}</a>.
+                </p>
+                <hr />
+            </div>
         {% endif %}
-    {% endif %}
-    {% if statute %}
-        <hr />
-        {{ statute | safe }}
-    {% endif %}
+        {% if member.membership.status == 'e' or member.membership.status == 'j' %}
+            <h3>{% trans "You are not yet a Member of the Organization" %}!</h3>
+            <p>{% trans "In order to subscribe to the Organization's events you must apply to be admitted as a Member" %}.</p>
+            <p>
+                {% trans "We have pre-filled the application form based on the data you provided us" %}: <a href="{% url 'membership_request' %}" download>{% trans "download it here" %}</a>.
+                <br />
+                ({% trans "If there are wrong data you can update your" %} <a href="{% url 'profile' %}">{% trans "user profile" %}</a>. {% trans "The registration request will be updated automatically" %}.)
+            </p>
+            <hr />
+            <p>
+                {% trans "Once downloaded you must print it, sign it, take a digital scan, and upload it to the form below" %}.
+                {% trans "Your request will be considered at the next meeting of the Board" %}.
+                {% trans "You will receive confirmation of the outcome of its  evaluation" %}.
+            </p>
+            <hr />
+            <p>{% trans "Upload the scan of both your signed request, and your document (image or pdf document)" %}:</p>
+            <form action="{{ request.path }}"
+                  enctype="multipart/form-data"
+                  method="post">
+                {% csrf_token %}
+                <table class="mob ">
+                    {{ form.as_table }}
+                </table>
+                <input type="submit" value="{% trans "Submit" %}">
+            </form>
+        {% elif member.membership.status == 'u' %}
+            <h3>{% trans "Confirmation of registration request" %}</h3>
+            <p>
+                {% trans "We only ask for a moment of your time to check the documents you have uploaded, it won't take long" %}!
+            </p>
+            <form action="{{ request.path }}"
+                  enctype="multipart/form-data"
+                  method="post">
+                {% csrf_token %}
+                <hr />
+                {% if '.pdf' in doc_path %}
+                    <embed class="membership_request"
+                           src="{{ member.membership.get_document_filepath }}"
+                           type="application/pdf"
+                           width="100%"
+                           height="500px">
+                {% else %}
+                    <img class="membership_request"
+                         src="{{ member.membership.get_document_filepath }}"
+                         alt="membership request" />
+                {% endif %}
+                <hr />
+                {{ form.confirm_1 }} {% trans "I confirm that I have uploaded a valid document issued by the state of my nationality" %}
+                <hr />
+                {{ form.confirm_2 }} {% trans "I confirm that my face and name are clearly visible in the document" %}
+                <hr />
+                {% trans "If instead you wish to upload a new photo of your document" %}, <a href="{% url 'membership' %}">{% trans "click here" %}</a>.
+                <hr />
+                {% if '.pdf' in req_path %}
+                    <embed class="membership_request"
+                           src="{{ member.membership.get_request_filepath }}"
+                           type="application/pdf"
+                           width="100%"
+                           height="500px">
+                {% else %}
+                    <img class="membership_request"
+                         src="{{ member.membership.get_request_filepath }}"
+                         alt="membership request" />
+                {% endif %}
+                <hr />
+                {{ form.confirm_3 }} {% trans "I confirm that all my required personal data have been filled in correctly" %}
+                <hr />
+                {% trans "If you wish to update your personal data" %}, <a href="{% url 'profile' %}">{% trans "click here" %}</a>.
+                <hr />
+                {{ form.confirm_4 }} {% trans "I confirm that I have affixed the date and my signature wherever required" %}
+                <hr />
+                {% trans "If you wish to upload a new scan of your application instead" %}, <a href="{% url 'membership' %}">{% trans "click here" %}</a>.
+                <hr />
+                <input type="submit" value="{% trans "Submit" %}">
+            </form>
+        {% elif member.membership.status == 's' %}
+            <h3>{% trans "Request sent for approval" %}</h3>
+            <p>
+                {% trans "Your request will be approved at the next Board meeting. You will receive confirmation of the outcome of its evaluation very soon" %}.
+            </p>
+            <p>
+                {% trans "Request submitted" %}: <a href="{{ member.membership.get_request_filepath }}" download>{% trans "download it here" %}</a>.
+            </p>
+        {% elif member.membership.status == 'r' %}
+            <h3>{% trans "Member revoked" %}</h3>
+            <p>{% trans "I am not good what to say. I never thought it would happen" %}.</p>
+        {% else %}
+            <h3>{% trans "Members of the Organization" %}</h3>
+            <p>
+                {% trans "You are a regular member of our Organization. You can subscribe to events organized for our members" %}!
+            </p>
+            <p>
+                {% trans "In the membership book the number of your membership card is" %}:  <b>{{ member.membership.card_number|stringformat:"04d" }}</b>
+            </p>
+            {% if fee_payed %}
+                <p>
+                    {% trans "The payment of your membership fee for this year has been received. You have the right to participate to the organization events" %}.
+                </p>
+            {% else %}
+                <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
+                <p>
+                    {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
+                </p>
+            {% endif %}
+        {% endif %}
+        {% if statute %}
+            <hr />
+            {{ statute | safe }}
+        {% endif %}
+    </div>
 {% endblock content %}
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {

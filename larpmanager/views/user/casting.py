@@ -208,7 +208,7 @@ def casting_details(context: dict) -> dict:
 
 
 @login_required
-def casting(request: HttpRequest, event_slug: str, casting_type: str = "0") -> HttpResponse:
+def casting(request: HttpRequest, event_slug: str, casting_type: str | None = None) -> HttpResponse:
     """Handle user casting preferences for LARP events.
 
     This view manages the casting preference selection process for registered users,
@@ -217,7 +217,7 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str = "0") -> H
     Args:
         request: Django HTTP request object containing user session and POST data
         event_slug: Event slug identifier used to retrieve the specific event run
-        casting_type: Casting type identifier for different casting categories (default: 0)
+        casting_type: UUID of quest type (None for characters)
 
     Returns:
         HttpResponse: Rendered casting form template or redirect response to appropriate page
@@ -682,7 +682,7 @@ def casting_preferences_traits(context: dict) -> None:
 
 
 @login_required
-def casting_preferences(request: HttpRequest, event_slug: str, casting_type: str = "0") -> HttpResponse:
+def casting_preferences(request: HttpRequest, event_slug: str, casting_type: str | None = None) -> HttpResponse:
     """Display casting preferences interface for characters or traits.
 
     Provides a web interface for users to set their casting preferences during
@@ -873,7 +873,7 @@ def casting_history_traits(context: dict) -> None:
 
 
 @login_required
-def casting_history(request: HttpRequest, event_slug: str, casting_type: str = "0") -> HttpResponse:
+def casting_history(request: HttpRequest, event_slug: str, casting_type: str | None = None) -> HttpResponse:
     """Display casting history for characters or traits.
 
     This view provides access to casting history data for events, allowing users

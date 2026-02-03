@@ -37,15 +37,8 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.run import get_cache_run
 from larpmanager.forms.event import (
     ExeEventForm,
-    OrgaAppearanceForm,
-    OrgaConfigForm,
-    OrgaEventButtonForm,
     OrgaEventForm,
-    OrgaEventRoleForm,
-    OrgaEventTextForm,
     OrgaFeatureForm,
-    OrgaPreferencesForm,
-    OrgaQuickSetupForm,
     OrgaRunForm,
 )
 from larpmanager.forms.writing import UploadElementsForm
@@ -59,6 +52,8 @@ from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.auth.permission import get_index_event_permissions
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import clear_messages, get_feature
+from larpmanager.utils.edit.backend import backend_edit
+from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.io.download import (
     _get_column_names,
     export_abilities,
@@ -70,7 +65,6 @@ from larpmanager.utils.io.download import (
     zip_exports,
 )
 from larpmanager.utils.io.upload import go_upload
-from larpmanager.utils.services.edit import backend_edit, orga_edit
 from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.users.deadlines import check_run_deadlines
 
@@ -248,23 +242,32 @@ def prepare_roles_list(
 
 
 @login_required
+def orga_roles_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Edit organization event role."""
+    return orga_new(request, event_slug, OrgaAction.ROLES)
+
+
+@login_required
 def orga_roles_edit(request: HttpRequest, event_slug: str, role_uuid: str) -> HttpResponse:
     """Edit organization event role."""
-    return orga_edit(request, event_slug, "orga_roles", OrgaEventRoleForm, role_uuid)
+    return orga_edit(request, event_slug, OrgaAction.ROLES, role_uuid)
+
+
+@login_required
+def orga_roles_delete(request: HttpRequest, event_slug: str, role_uuid: str) -> HttpResponse:
+    """Delete organization event role."""
+    return orga_delete(
+        request,
+        event_slug,
+        OrgaAction.ROLES,
+        role_uuid,
+    )
 
 
 @login_required
 def orga_appearance(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle appearance configuration for an event."""
-    return orga_edit(
-        request,
-        event_slug,
-        "orga_appearance",
-        OrgaAppearanceForm,
-        None,
-        "manage",
-        additional_context={"add_another": False},
-    )
+    return orga_edit(request, event_slug, OrgaAction.APPEARANCE)
 
 
 @login_required
@@ -272,15 +275,7 @@ def orga_run(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Render the event run edit form with cached run data."""
     # Retrieve cached run data and render edit form
     run_uuid = get_cache_run(request.association["id"], event_slug)
-    return orga_edit(
-        request,
-        event_slug,
-        "orga_event",
-        OrgaRunForm,
-        run_uuid,
-        "manage",
-        additional_context={"add_another": False},
-    )
+    return orga_edit(request, event_slug, OrgaAction.EVENT, run_uuid)
 
 
 @login_required
@@ -292,9 +287,21 @@ def orga_texts(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_texts_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create an organization event text entry."""
+    return orga_new(request, event_slug, OrgaAction.TEXTS)
+
+
+@login_required
 def orga_texts_edit(request: HttpRequest, event_slug: str, text_uuid: str) -> HttpResponse:
-    """Edit organization event text entry."""
-    return orga_edit(request, event_slug, "orga_texts", OrgaEventTextForm, text_uuid)
+    """Edit an organization event text entry."""
+    return orga_edit(request, event_slug, OrgaAction.TEXTS, text_uuid)
+
+
+@login_required
+def orga_texts_delete(request: HttpRequest, event_slug: str, text_uuid: str) -> HttpResponse:
+    """Delete text for event."""
+    return orga_delete(request, event_slug, OrgaAction.TEXTS, text_uuid)
 
 
 @login_required
@@ -306,21 +313,35 @@ def orga_buttons(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_buttons_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a specific button configuration for an event."""
+    return orga_new(request, event_slug, OrgaAction.BUTTONS)
+
+
+@login_required
 def orga_buttons_edit(request: HttpRequest, event_slug: str, button_uuid: str) -> HttpResponse:
     """Edit a specific button configuration for an event."""
-    return orga_edit(request, event_slug, "orga_buttons", OrgaEventButtonForm, button_uuid)
+    return orga_edit(request, event_slug, OrgaAction.BUTTONS, button_uuid)
+
+
+@login_required
+def orga_buttons_delete(request: HttpRequest, event_slug: str, button_uuid: str) -> HttpResponse:
+    """Delete button for event."""
+    return orga_delete(request, event_slug, OrgaAction.BUTTONS, button_uuid)
 
 
 @login_required
 def orga_config(
     request: HttpRequest,
     event_slug: str,
-    section: str | None = None,
+    section: str | None = None,  # noqa: ARG001
 ) -> HttpResponse:
-    """Configure organization settings with optional section navigation."""
-    add_ctx = {"jump_section": section} if section else {}
-    add_ctx["add_another"] = False
-    return orga_edit(request, event_slug, "orga_config", OrgaConfigForm, None, "manage", additional_context=add_ctx)
+    """Configure organization settings with optional section navigation.
+
+    The section parameter is automatically extracted from the URL and passed
+    to the form via the context in _action_change().
+    """
+    return orga_edit(request, event_slug, OrgaAction.CONFIG)
 
 
 @login_required
@@ -336,8 +357,8 @@ def orga_features(request: HttpRequest, event_slug: str) -> Any:
 
     """
     context = check_event_context(request, event_slug, "orga_features")
-    context["add_another"] = False
-    if backend_edit(request, context, OrgaFeatureForm, None, additional_field=None, is_association=False):
+    context["event_form"] = True
+    if backend_edit(request, context, OrgaFeatureForm):
         context["new_features"] = Feature.objects.filter(
             pk__in=context["form"].added_features,
             after_link__isnull=False,
@@ -478,32 +499,13 @@ def orga_deadlines(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_quick(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle quick event setup form."""
-    # Delegate to orga_edit with quick setup form configuration
-    return orga_edit(
-        request,
-        event_slug,
-        "orga_quick",
-        OrgaQuickSetupForm,
-        None,
-        "manage",
-        additional_context={"add_another": False},
-    )
+    return orga_edit(request, event_slug, OrgaAction.QUICK)
 
 
 @login_required
 def orga_preferences(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Render organizer preferences editing form."""
-    # Get current member ID and delegate to orga_edit
-    m_id = request.user.member.id
-    return orga_edit(
-        request,
-        event_slug,
-        None,
-        OrgaPreferencesForm,
-        m_id,
-        "manage",
-        additional_context={"add_another": False},
-    )
+    """Handle organizer preferences editing form."""
+    return orga_edit(request, event_slug, OrgaAction.PREFERENCES)
 
 
 @login_required

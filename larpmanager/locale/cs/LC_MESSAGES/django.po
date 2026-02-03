@@ -1650,6 +1650,9 @@ msgstr "Typ úkolu"
 msgid "Quest type"
 msgstr "Typ úkolu"
 
+msgid "Recipients"
+msgstr "Příjemci"
+
 msgid "Refund for"
 msgstr "Úhrada za"
 
@@ -2888,6 +2891,9 @@ msgstr "Forwardová sleva"
 msgid "Handout template"
 msgstr "Šablona letáku"
 
+msgid "Interval sending"
+msgstr "Intervalové odesílání"
+
 msgid "Item assignments"
 msgstr "Přiřazení položek"
 
@@ -3575,9 +3581,6 @@ msgstr "Pole pro vyloučení"
 msgid "Filler registrations"
 msgstr "Výplňové registrace"
 
-msgid "Gift card cancelled!"
-msgstr "Dárková karta zrušena!"
-
 msgid "Independent factions"
 msgstr "Nezávislé frakce"
 
@@ -3808,6 +3811,9 @@ msgstr "Objekt neexistuje"
 msgid "One-Time Access Token"
 msgstr "Jednorázový přístupový token"
 
+msgid "Operation not allowed"
+msgstr "Operace není povolena"
+
 msgid "Participant questions"
 msgstr "Otázky účastníků"
 
@@ -3922,6 +3928,9 @@ msgstr "Chcete pokračovat"
 
 msgid "Download relationships"
 msgstr "Vztahy ke stažení"
+
+msgid "Event deletion request"
+msgstr "Žádost o odstranění události"
 
 msgid "Expenses collaborators"
 msgstr "Výdaje na zaměstnance"
@@ -4348,9 +4357,6 @@ msgstr "Nyní můžete spravovat události"
 msgid "Option saved successfully"
 msgstr "Možnost úspěšně uložena"
 
-msgid "Optional - email reply to"
-msgstr "Nepovinné - odpověď e-mailem na adresu"
-
 msgid "Payment already confirmed"
 msgstr "Platba již potvrzena"
 
@@ -4641,6 +4647,9 @@ msgstr "Jediný povinný sloupec je"
 msgid "Trait assigned for %(event)s"
 msgstr "Známka přiřazená pro %(event)s"
 
+msgid "Your request has been logged"
+msgstr "Váš požadavek byl zaznamenán"
+
 msgid "payment pending confirmation"
 msgstr "platba čeká na potvrzení"
 
@@ -4909,6 +4918,9 @@ msgstr "kontrola neexistujících vztahů"
 
 msgid "Added to the bottom of all pages"
 msgstr "Přidáno do spodní části všech stránek"
+
+msgid "An error occurred while deleting"
+msgstr "Při odstraňování došlo k chybě"
 
 msgid "Cancellation for missing payment"
 msgstr "Zrušení z důvodu chybějící platby"
@@ -5539,6 +5551,9 @@ msgstr "Přispíváte částkou"
 msgid "click on the icon to open the tutorial"
 msgstr "kliknutím na ikonu otevřete výukový program"
 
+msgid "we'll let you know as soon as possible"
+msgstr "dáme vám co nejdříve vědět"
+
 msgid "Character are not visible at the moment"
 msgstr "Znaky nejsou v tuto chvíli viditelné"
 
@@ -5806,9 +5821,6 @@ msgstr "Podrobnosti: %(details)s (<b>%(amount).2f</b>)"
 
 msgid "For which day you will need transportation"
 msgstr "Na který den budete potřebovat dopravu"
-
-msgid "Here's what happened in the last 24 hours:"
-msgstr "Zde je přehled událostí za posledních 24 hodin:"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "kód jazyka ISO (např. \"en\", \"it\", \"de\")"
@@ -6167,9 +6179,6 @@ msgstr "Volitelný obrázek pro karuselovou prezentaci na domovské stránce"
 msgid "Please select both a registration and an event"
 msgstr "Vyberte prosím registraci i událost"
 
-msgid "Remember to put recipients separated by commas"
-msgstr "Nezapomeňte příjemce oddělit čárkami"
-
 msgid "Something went wrong in the account activation"
 msgstr "Něco se pokazilo při aktivaci účtu"
 
@@ -6306,6 +6315,9 @@ msgstr "Neaktivní postavy nelze přiřadit k hráčům"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "Chcete nám ještě něco říct"
+
+msgid "List of recipient email address, comma separated"
+msgstr "Seznam e-mailových adres příjemce oddělených čárkou"
 
 msgid "Manage copying event settings from another event"
 msgstr "Správa kopírování nastavení události z jiné události"
@@ -6517,6 +6529,9 @@ msgstr "Pro tuto položku a oblast již existuje přiřazení"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Přiřazeno %(amount).2f %(elements)s pro '%(reason)s'"
 
+msgid "From this page you can email any list of recipients"
+msgstr "Na této stránce můžete odeslat e-mail libovolnému seznamu příjemců"
+
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Několikrát jsem to dělal, mám základní zkušenosti"
 
@@ -6589,9 +6604,6 @@ msgstr "Označuje, zda jej mohou vybrat účastníci"
 
 msgid "Input an element name to insert their reference code"
 msgstr "Zadáním názvu prvku vložíte jeho referenční kód"
-
-msgid "Interval in seconds between each email (default: 20)"
-msgstr "Interval v sekundách mezi jednotlivými e-maily (výchozí: 20)"
 
 msgid "Last step, please upload your membership application"
 msgstr "V posledním kroku nahrajte přihlášku ke členství"
@@ -6669,9 +6681,6 @@ msgstr "Nyní můžete vytvořit tipy 'patron' a 'snížený'"
 
 msgid "Now you can upload content and generate access tokens"
 msgstr "Nyní můžete nahrávat obsah a generovat přístupové tokeny"
-
-msgid "Optional - ram html code (substitute the text before)"
-msgstr "Volitelně - nezpracovaný html kód (nahrazuje výše uvedený text)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
@@ -7228,9 +7237,6 @@ msgstr ""
 
 msgid "Description of this payment method to be displayed to the user"
 msgstr "Popis tohoto způsobu platby, který se zobrazí uživateli"
-
-msgid "From this page you can send an email to any list of recipients"
-msgstr "Na této stránce můžete odeslat e-mail na libovolný seznam příjemců"
 
 msgid "If checked: collpase sidebars links, and expand on mouse hover"
 msgstr ""
@@ -7877,6 +7883,11 @@ msgid ""
 msgstr "Po přístupu k obsahu již nebudete moci tento odkaz použít"
 
 msgid ""
+"due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+"vzhledem k delikátnosti požadovaného úkolu jej náš tým zkontroluje ručně"
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
 msgstr "Umožňuje organizaci udělovat odznaky a umožňuje veřejný žebříček"
 
@@ -8186,6 +8197,12 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto: Účastníci musí předložit potvrzení/fakturu pro ruční "
 "platby"
+
+msgid ""
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+msgstr ""
+"Doba mezi jednotlivými odeslanými e-maily v sekundách (výchozí: 3, "
+"minimální: 1)"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"
@@ -9529,13 +9546,6 @@ msgid ""
 msgstr ""
 "Tuto událost považuje za digitální/online událost, která nevyžaduje osobní "
 "registraci"
-
-msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"Před vytvořením možností registrace musíte vytvořit alespoň jednu "
-"registrační otázku"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "

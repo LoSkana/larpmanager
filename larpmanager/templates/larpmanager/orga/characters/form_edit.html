@@ -3,7 +3,7 @@
 {% load i18n show_tags %}
 {% block title %}
     {% if nonum is None %}
-        {% if num != "0" %}
+        {% if num %}
             {{ name }}
         {% else %}
             {% trans "New" %}
@@ -20,7 +20,7 @@
     {% include "elements/form/main.html" %}
     <div id="options" class="hide auto_resize">
         <iframe id="options-iframe"
-                src="{% url 'orga_writing_options_list' run.get_slug typ num %}">
+                {% if num %} src="{% url 'orga_writing_options_list' run.get_slug typ num %}" {% else %} src="{% url 'orga_writing_options_list' run.get_slug typ %}" {% endif %}>
         </iframe>
     </div>
 {% endblock content %}

@@ -4,7 +4,7 @@
     Casting {{ gl_name }} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    <div class="centerized">
+    <div class="form_container auto_resize platform">
         {% if features.questbuilder %}
             <p>
                 {% trans "Go to the casting for" %}:
@@ -21,7 +21,6 @@
                     {% endif %}
                 {% endfor %}
             </p>
-            <h3>Casting {{ gl_name }}</h3>
         {% endif %}
         {% if casting_history %}
             <p>
@@ -59,9 +58,9 @@
                 {% csrf_token %}
                 <table id="casting" class="no-more-tables">
                     <tr>
-                        <th>{% trans "Preference" %}</th>
-                        <th>{{ cl_name }}</th>
-                        <th>{{ el_name }}</th>
+                        <td>{% trans "Preference" %}</td>
+                        <td>{{ cl_name }}</td>
+                        <td>{{ el_name }}</td>
                     </tr>
                     <tr>
                         <!-- filled later -->

@@ -1650,6 +1650,9 @@ msgstr "Type de quête"
 msgid "Quest type"
 msgstr "Type de quête"
 
+msgid "Recipients"
+msgstr "Bénéficiaires"
+
 msgid "Refund for"
 msgstr "Remboursement des"
 
@@ -2888,6 +2891,9 @@ msgstr "Escompte à terme"
 msgid "Handout template"
 msgstr "Modèle de document"
 
+msgid "Interval sending"
+msgstr "Envoi à intervalles"
+
 msgid "Item assignments"
 msgstr "Affectation des postes"
 
@@ -3575,9 +3581,6 @@ msgstr "Champ d'exclusion"
 msgid "Filler registrations"
 msgstr "Enregistrements de remplissage"
 
-msgid "Gift card cancelled!"
-msgstr "Carte cadeau annulée !"
-
 msgid "Independent factions"
 msgstr "Les factions indépendantes"
 
@@ -3808,6 +3811,9 @@ msgstr "L'objet n'existe pas"
 msgid "One-Time Access Token"
 msgstr "Jeton d'accès unique"
 
+msgid "Operation not allowed"
+msgstr "Opération non autorisée"
+
 msgid "Participant questions"
 msgstr "Questions des participants"
 
@@ -3922,6 +3928,9 @@ msgstr "Voulez-vous continuer"
 
 msgid "Download relationships"
 msgstr "Télécharger les relations"
+
+msgid "Event deletion request"
+msgstr "Demande de suppression d'un événement"
 
 msgid "Expenses collaborators"
 msgstr "Frais de personnel"
@@ -4348,9 +4357,6 @@ msgstr "Vous pouvez désormais gérer des événements"
 msgid "Option saved successfully"
 msgstr "Option sauvegardée avec succès"
 
-msgid "Optional - email reply to"
-msgstr "Facultatif - réponse par courriel à"
-
 msgid "Payment already confirmed"
 msgstr "Paiement déjà confirmé"
 
@@ -4641,6 +4647,9 @@ msgstr "La seule colonne obligatoire est"
 msgid "Trait assigned for %(event)s"
 msgstr "Trait attribué aux %(event)s"
 
+msgid "Your request has been logged"
+msgstr "Votre demande a été enregistrée"
+
 msgid "payment pending confirmation"
 msgstr "confirmation du paiement en attente"
 
@@ -4909,6 +4918,9 @@ msgstr "vérifier les relations inexistantes"
 
 msgid "Added to the bottom of all pages"
 msgstr "Ajouté au bas de toutes les pages"
+
+msgid "An error occurred while deleting"
+msgstr "Une erreur s'est produite lors de la suppression"
 
 msgid "Cancellation for missing payment"
 msgstr "Annulation pour défaut de paiement"
@@ -5542,6 +5554,9 @@ msgstr "Vous faites un don de"
 msgid "click on the icon to open the tutorial"
 msgstr "cliquez sur l'icône pour ouvrir le tutoriel"
 
+msgid "we'll let you know as soon as possible"
+msgstr "nous vous en informerons dès que possible"
+
 msgid "Character are not visible at the moment"
 msgstr "Les caractères ne sont pas visibles pour le moment"
 
@@ -5811,9 +5826,6 @@ msgstr "Détails : %(details)s (<b>%(amount).2f</b>)"
 
 msgid "For which day you will need transportation"
 msgstr "Pour quel jour avez-vous besoin d'un transport"
-
-msgid "Here's what happened in the last 24 hours:"
-msgstr "Voici ce qui s'est passé au cours des dernières 24 heures :"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "Code ISO de la langue (par exemple, \"en\", \"it\", \"de\")"
@@ -6179,9 +6191,6 @@ msgstr "Image facultative pour le carrousel/diaporama de la page d'accueil"
 msgid "Please select both a registration and an event"
 msgstr "Veuillez sélectionner à la fois une inscription et un événement"
 
-msgid "Remember to put recipients separated by commas"
-msgstr "N'oubliez pas de séparer les destinataires par des virgules"
-
 msgid "Something went wrong in the account activation"
 msgstr "Un problème s'est produit lors de l'activation du compte"
 
@@ -6320,6 +6329,11 @@ msgstr "Les personnages inactifs ne peuvent pas être assignés à des joueurs"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "Y a-t-il autre chose que vous aimeriez nous dire"
+
+msgid "List of recipient email address, comma separated"
+msgstr ""
+"Liste des adresses électroniques des destinataires, séparées par des "
+"virgules"
 
 msgid "Manage copying event settings from another event"
 msgstr ""
@@ -6543,6 +6557,11 @@ msgstr "Une affectation pour ce poste et ce domaine existe déjà"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Attribué %(amount).2f %(elements)s pour '%(reason)s'"
 
+msgid "From this page you can email any list of recipients"
+msgstr ""
+"À partir de cette page, vous pouvez envoyer des courriels à n'importe quelle"
+" liste de destinataires"
+
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Je l'ai fait plusieurs fois, j'ai une expérience de base"
 
@@ -6621,9 +6640,6 @@ msgstr "Indique s'il peut être sélectionné par les participants"
 
 msgid "Input an element name to insert their reference code"
 msgstr "Saisir le nom d'un élément pour insérer son code de référence"
-
-msgid "Interval in seconds between each email (default: 20)"
-msgstr "Intervalle en secondes entre chaque e-mail (par défaut : 20)"
 
 msgid "Last step, please upload your membership application"
 msgstr "Dernière étape, veuillez télécharger votre demande d'adhésion"
@@ -6705,9 +6721,6 @@ msgstr "Vous pouvez maintenant créer les billets 'patron' et 'réduit'"
 msgid "Now you can upload content and generate access tokens"
 msgstr ""
 "Vous pouvez maintenant télécharger du contenu et générer des jetons d'accès"
-
-msgid "Optional - ram html code (substitute the text before)"
-msgstr "Facultatif - code html brut (remplace le texte ci-dessus)"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
@@ -7347,11 +7360,6 @@ msgstr ""
 
 msgid "Description of this payment method to be displayed to the user"
 msgstr "Description de ce mode de paiement à afficher à l'utilisateur"
-
-msgid "From this page you can send an email to any list of recipients"
-msgstr ""
-"À partir de cette page, vous pouvez envoyer un courrier électronique à "
-"n'importe quelle liste de destinataires"
 
 msgid "If checked: collpase sidebars links, and expand on mouse hover"
 msgstr ""
@@ -8148,6 +8156,12 @@ msgid ""
 msgstr "Vous ne pourrez plus utiliser ce lien après avoir accédé au contenu"
 
 msgid ""
+"due to delicacy of the task requested, our team will review it manually"
+msgstr ""
+"en raison du caractère délicat de la tâche demandée, notre équipe "
+"l'examinera manuellement"
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
 msgstr ""
 "Permet à l'organisation d'attribuer des badges et d'activer un classement "
@@ -8504,6 +8518,12 @@ msgid ""
 msgstr ""
 "Si coché : Les participants doivent fournir un reçu/une facture pour les "
 "paiements manuels"
+
+msgid ""
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+msgstr ""
+"En secondes, durée entre chaque envoi de courrier électronique (par défaut :"
+" 3, minimum : 1)"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"
@@ -9941,13 +9961,6 @@ msgid ""
 msgstr ""
 "Traite cet événement comme un événement numérique/en ligne qui ne nécessite "
 "pas d'inscription en personne"
-
-msgid ""
-"You must create at least one registration question before you can create "
-"registration options"
-msgstr ""
-"Vous devez créer au moins une question d'enregistrement avant de pouvoir "
-"créer des options d'enregistrement"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "

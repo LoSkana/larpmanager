@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-import contextlib
 from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
@@ -28,7 +27,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.db.models.functions import Length, Substr
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -38,12 +37,8 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.forms.character import (
     OrgaCharacterForm,
-    OrgaWritingOptionForm,
-    OrgaWritingQuestionForm,
 )
-from larpmanager.forms.utils import EventCharacterS2WidgetUuid
-from larpmanager.forms.writing import FactionForm, PlotForm, QuestForm, TraitForm
-from larpmanager.models.base import Feature
+from larpmanager.forms.writing import OrgaFactionForm, OrgaPlotForm, OrgaQuestForm, OrgaTraitForm
 from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -53,7 +48,6 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
     WritingQuestionType,
-    _get_writing_mapping,
 )
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
@@ -64,70 +58,28 @@ from larpmanager.models.writing import (
     Prologue,
     Relationship,
     SpeedLarp,
-    TextVersionChoices,
 )
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import exchange_order, get_element
-from larpmanager.utils.io.download import orga_character_form_download
-from larpmanager.utils.services.character import get_chars_relations
-from larpmanager.utils.services.edit import (
-    backend_edit,
+from larpmanager.utils.core.common import get_element
+from larpmanager.utils.edit.backend import _process_working_ticket, backend_order
+from larpmanager.utils.edit.orga import (
+    OrgaAction,
+    check_writing_form_type,
     form_edit_handler,
     options_edit_handler,
-    writing_edit,
-    writing_edit_working_ticket,
+    orga_delete,
+    orga_edit,
+    orga_new,
+    orga_versions,
+    orga_view,
 )
-from larpmanager.utils.services.writing import writing_list, writing_versions, writing_view
+from larpmanager.utils.io.download import orga_character_form_download
+from larpmanager.utils.services.character import get_chars_relations
+from larpmanager.utils.services.writing import writing_list
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Event
-
-
-def get_character_optimized(context: dict, character_uuid: str) -> None:
-    """Get character with optimized queries for editing.
-
-    Args:
-        context: Template context dictionary
-        character_uuid: Character UUID
-
-    Raises:
-        Http404: If character does not exist
-
-    """
-    try:
-        parent_event = context["event"].get_class_parent(Character)
-        enabled_features = context.get("features", [])
-
-        select_related_fields = ["event"]
-
-        # Add other select_related fields based on features
-        if "user_character" in enabled_features:
-            select_related_fields.append("player")
-        if "progress" in enabled_features:
-            select_related_fields.append("progress")
-        if "assigned" in enabled_features:
-            select_related_fields.append("assigned")
-        if "mirror" in enabled_features:
-            select_related_fields.append("mirror")
-
-        character_query = Character.objects.select_related(*select_related_fields)
-
-        # Only prefetch factions and plots if their features are enabled
-        prefetch_fields = []
-        if "faction" in enabled_features:
-            prefetch_fields.append("factions_list")
-        if "plot" in enabled_features:
-            prefetch_fields.append("plots")
-
-        if prefetch_fields:
-            character_query = character_query.prefetch_related(*prefetch_fields)
-
-        context["character"] = character_query.get(event=parent_event, uuid=character_uuid)
-        context["class_name"] = "character"
-    except ObjectDoesNotExist as err:
-        msg = "character does not exist"
-        raise Http404(msg) from err
 
 
 @login_required
@@ -158,81 +110,21 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+def orga_characters_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create new character in organization context."""
+    return orga_new(request, event_slug, OrgaAction.CHARACTERS)
+
+
+@login_required
 def orga_characters_edit(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
-    """Edit character information in organization context.
-
-    Args:
-        request: The HTTP request object containing user and session data
-        event_slug: The organization/event slug identifier
-        character_uuid: The character UUID to edit (0 for new character)
-
-    Returns:
-        HttpResponse: Rendered character edit form page
-
-    """
-    # Check user permissions for character organization features
-    context = check_event_context(request, event_slug, "orga_characters")
-
-    # Load full event cache only when specific features require relationship data
-    # This optimization avoids expensive cache operations for basic character editing
-    if "relationships" in context["features"] or "character_finder" in context.get("features", []):
-        get_event_cache_all(context)
-
-    # Load specific character data when editing existing character (num != 0)
-    # Skip character loading for new character creation
-    if character_uuid != "0":
-        get_character_optimized(context, character_uuid)
-
-    # Process character relationships for display and validation
-    _characters_relationships(context)
-
-    # Delegate to writing edit system with character-specific form and version type
-    return writing_edit(request, context, OrgaCharacterForm, "character", TextVersionChoices.CHARACTER)
+    """Edit character information in organization context."""
+    return orga_edit(request, event_slug, OrgaAction.CHARACTERS, character_uuid)
 
 
-def _characters_relationships(context: dict) -> None:
-    """Set up character relationships data and widgets for editing.
-
-    Args:
-        context: Context dictionary to populate with relationship data
-
-    """
-    context["relationships"] = {}
-    if "relationships" not in context["features"]:
-        return
-
-    with contextlib.suppress(ObjectDoesNotExist):
-        context["rel_tutorial"] = Feature.objects.get(slug="relationships").tutorial
-
-    context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
-    widget = EventCharacterS2WidgetUuid(attrs={"id": "new_rel_select"})
-    widget.set_event(context["event"])
-    context["new_rel"] = widget.render(name="new_rel_select", value="")
-
-    if "character" in context:
-        relationships_by_character_uuid = {}
-
-        direct_relationships = Relationship.objects.filter(source=context["character"]).select_related("target")
-
-        for relationship in direct_relationships:
-            if relationship.target.uuid not in relationships_by_character_uuid:
-                relationships_by_character_uuid[relationship.target.uuid] = {"char": relationship.target}
-            relationships_by_character_uuid[relationship.target.uuid]["direct"] = relationship.text
-
-        inverse_relationships = Relationship.objects.filter(target=context["character"]).select_related("source")
-
-        for relationship in inverse_relationships:
-            if relationship.source.uuid not in relationships_by_character_uuid:
-                relationships_by_character_uuid[relationship.source.uuid] = {"char": relationship.source}
-            relationships_by_character_uuid[relationship.source.uuid]["inverse"] = relationship.text
-
-        sorted_relationships = sorted(
-            relationships_by_character_uuid.items(),
-            key=lambda character_entry: len(character_entry[1].get("direct", ""))
-            + len(character_entry[1].get("inverse", "")),
-            reverse=True,
-        )
-        context["relationships"] = dict(sorted_relationships)
+@login_required
+def orga_characters_delete(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
+    """Deletes a character."""
+    return orga_delete(request, event_slug, OrgaAction.CHARACTERS, character_uuid)
 
 
 def update_relationship(request: HttpRequest, context: dict, nm: str, fl: str) -> None:
@@ -299,36 +191,14 @@ def orga_characters_relationships(request: HttpRequest, event_slug: str, charact
 
 @login_required
 def orga_characters_view(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
-    """Display character view for event organizers.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-        character_uuid: Character uuid
-
-    Returns:
-        Rendered writing view for character
-
-    """
-    # Check permissions and initialize context
-    context = check_event_context(request, event_slug, ["orga_reading", "orga_characters"])
-
-    # Load character and event cache data
-    get_element(context, character_uuid, "character", Character)
-    get_event_cache_all(context)
-
-    return writing_view(request, context, "character")
+    """Display character view for event organizers."""
+    return orga_view(request, event_slug, OrgaAction.CHARACTERS, character_uuid)
 
 
 @login_required
 def orga_characters_versions(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Display version history for a character's writing content."""
-    # Check event permission and get context
-    context = check_event_context(request, event_slug, "orga_characters")
-
-    # Retrieve the character and render version history
-    get_element(context, character_uuid, "character", Character)
-    return writing_versions(request, context, "character", TextVersionChoices.CHARACTER)
+    return orga_versions(request, event_slug, OrgaAction.CHARACTERS, character_uuid)
 
 
 @login_required
@@ -548,37 +418,6 @@ def orga_character_form(request: HttpRequest, event_slug: str) -> HttpResponseRe
     return redirect("orga_writing_form", event_slug=event_slug, writing_type="character")
 
 
-def check_writing_form_type(context: dict, form_type: str) -> None:
-    """Validate writing form type and update context with type information.
-
-    Args:
-        context: Context dictionary to update with type information
-        form_type: Writing form type to validate
-
-    Raises:
-        Http404: If the writing form type is not available
-
-    """
-    form_type = form_type.lower()
-    writing_type_mapping = _get_writing_mapping()
-
-    # Build available types from choices that have corresponding features
-    available_types = {
-        value: key for key, value in QuestionApplicable.choices if writing_type_mapping[value] in context["features"]
-    }
-
-    # Validate the requested type is available
-    if form_type not in available_types:
-        msg = f"unknown writing form type: {form_type}"
-        raise Http404(msg)
-
-    # Update context with type information
-    context["typ"] = form_type
-    context["writing_typ"] = available_types[form_type]
-    context["label_typ"] = form_type.capitalize()
-    context["available_typ"] = {key.capitalize(): value for key, value in available_types.items()}
-
-
 @login_required
 def orga_writing_form(request: HttpRequest, event_slug: str, writing_type: str) -> HttpResponse:
     """Display and manage writing form questions for character creation.
@@ -638,48 +477,44 @@ def orga_writing_form(request: HttpRequest, event_slug: str, writing_type: str) 
 
 
 @login_required
+def orga_writing_form_new(request: HttpRequest, event_slug: str, writing_type: str) -> HttpResponse:
+    """Create writing form questions."""
+    return form_edit_handler(
+        request,
+        event_slug,
+        "orga_character_form",
+        None,
+        extra_context={"writing_type": writing_type},
+    )
+
+
+@login_required
 def orga_writing_form_edit(
     request: HttpRequest, event_slug: str, writing_type: str, question_uuid: str
 ) -> HttpResponse:
-    """Edit writing form questions with validation and option handling.
-
-    Handles the editing of writing form questions for LARP events, including
-    validation of question types and automatic redirection to option editing
-    for single/multiple choice questions.
-
-    Args:
-        request: The HTTP request object containing form data and user info
-        event_slug: Event slug identifier for the current event
-        writing_type: Writing form type identifier (e.g., 'character', 'background')
-        question_uuid: Question uuid to edit, or 0 for new question
-
-    Returns:
-        HttpResponse: Either a rendered form edit template or a redirect to
-            options editing or form list depending on form submission result
-
-    Raises:
-        PermissionDenied: If user lacks 'orga_character_form' permission
-        Http404: If writing form type is invalid for the event
-
-    """
-    # Check user permissions for editing character forms
-    perm = "orga_character_form"
-    context = check_event_context(request, event_slug, perm)
-
-    # Validate the writing form type exists for this event
-    check_writing_form_type(context, writing_type)
-
+    """Edit writing form questions."""
     return form_edit_handler(
         request,
-        context,
+        event_slug,
+        "orga_character_form",
         question_uuid,
-        perm,
-        WritingOption,
-        OrgaWritingQuestionForm,
-        "orga_writing_form_edit",
-        "orga_writing_form",
-        "larpmanager/orga/characters/form_edit.html",
-        extra_redirect_kwargs={"writing_type": writing_type},
+        extra_context={"writing_type": writing_type},
+    )
+
+
+@login_required
+def orga_writing_form_delete(
+    request: HttpRequest,
+    event_slug: str,
+    writing_type: str,  # noqa: ARG001
+    question_uuid: str,
+) -> HttpResponse:
+    """Deletes a writing form question."""
+    return orga_delete(
+        request,
+        event_slug,
+        OrgaAction.CHARACTER_FORM,
+        question_uuid,
     )
 
 
@@ -711,49 +546,33 @@ def orga_writing_form_order(
     check_writing_form_type(context, writing_type)
 
     # Exchange the order of questions
-    exchange_order(context, WritingQuestion, question_uuid, order)
+    backend_order(context, WritingQuestion, question_uuid, order)
 
     # Redirect back to the writing form page
     return redirect("orga_writing_form", event_slug=context["run"].get_slug(), writing_type=writing_type)
 
 
 @login_required
+def orga_writing_options_new(request: HttpRequest, event_slug: str, writing_type: str) -> HttpResponse:
+    """Edit writing form option for event organizers."""
+    return options_edit_handler(
+        request, event_slug, "orga_character_form", None, extra_context={"writing_type": writing_type}
+    )
+
+
+@login_required
 def orga_writing_options_edit(
     request: HttpRequest, event_slug: str, writing_type: str, option_uuid: str
 ) -> HttpResponse:
-    """Edit writing form option for event organizers.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event slug identifier
-        writing_type: Writing form type (background, origin, etc.)
-        option_uuid: Option uuid to edit
-
-    Returns:
-        HTTP response with the option edit form, redirect, or JsonResponse for AJAX
-
-    """
-    # Verify user has character form permissions and get event context
-    context = check_event_context(request, event_slug, "orga_character_form")
-    context["frame"] = 1
-
-    # Validate the writing form type exists and is allowed
-    check_writing_form_type(context, writing_type)
-
+    """Edit writing form option for event organizers."""
     return options_edit_handler(
-        request,
-        context,
-        option_uuid,
-        WritingQuestion,
-        WritingOption,
-        OrgaWritingOptionForm,
-        extra_context={"typ": writing_type},
+        request, event_slug, "orga_character_form", option_uuid, extra_context={"writing_type": writing_type}
     )
 
 
 @login_required
 def orga_writing_options_list(
-    request: HttpRequest, event_slug: str, writing_type: str, question_uuid: str
+    request: HttpRequest, event_slug: str, writing_type: str, question_uuid: str | None = None
 ) -> HttpResponse:
     """Display the list of options for a writing form question in an iframe.
 
@@ -778,7 +597,7 @@ def orga_writing_options_list(
 
     context["typ"] = writing_type
 
-    if question_uuid and question_uuid != "0":
+    if question_uuid:
         # Get the question
         get_element(context, question_uuid, "el", WritingQuestion)
 
@@ -787,28 +606,6 @@ def orga_writing_options_list(
         context["list"] = options_queryset.order_by("order")
 
     return render(request, "larpmanager/orga/characters/options_list.html", context)
-
-
-def writing_option_edit(context: dict, option_uuid: str, request: HttpRequest, option_type: str) -> HttpResponse:
-    """Edit a writing option and handle form submission with redirect logic."""
-    # Process form submission and save changes
-    if backend_edit(request, context, OrgaWritingOptionForm, option_uuid, is_association=False):
-        redirect_target = "orga_writing_form_edit"
-
-        # Check if user wants to continue adding more options
-        if "continue" in request.POST:
-            redirect_target = "orga_writing_options_new"
-
-        # Redirect to appropriate target with context parameters
-        return redirect(
-            redirect_target,
-            event_slug=context["run"].get_slug(),
-            writing_type=option_type,
-            question_uuid=context["saved"].question.uuid,
-        )
-
-    # Render edit form if no successful submission
-    return render(request, "larpmanager/orga/edit.html", context)
 
 
 @login_required
@@ -839,7 +636,7 @@ def orga_writing_options_order(
     check_writing_form_type(context, writing_type)
 
     # Exchange order positions of WritingOption objects
-    exchange_order(context, WritingOption, option_uuid, order)
+    backend_order(context, WritingOption, option_uuid, order)
 
     # Redirect back to writing form edit view
     url = reverse(
@@ -851,6 +648,17 @@ def orga_writing_options_order(
         },
     )
     return HttpResponseRedirect(url)
+
+
+@login_required
+def orga_writing_options_delete(
+    request: HttpRequest,
+    event_slug: str,
+    writing_type: str,  # noqa: ARG001
+    option_uuid: str,
+) -> HttpResponse:
+    """Delete writing option for an event."""
+    return orga_delete(request, event_slug, OrgaAction.CHARACTER_FORM_OPTION, option_uuid)
 
 
 @login_required
@@ -1265,10 +1073,10 @@ def _get_excel_form(
     # Map element types to their corresponding form classes
     form_mapping = {
         "character": OrgaCharacterForm,
-        "faction": FactionForm,
-        "plot": PlotForm,
-        "trait": TraitForm,
-        "quest": QuestForm,
+        "faction": OrgaFactionForm,
+        "plot": OrgaPlotForm,
+        "trait": OrgaTraitForm,
+        "quest": OrgaQuestForm,
     }
 
     # Initialize form based on submission state
@@ -1369,11 +1177,11 @@ def _check_working_ticket(request: HttpRequest, context: dict, working_ticket_to
 
     """
     # Check if somebody else has opened the character to edit it
-    error_message = writing_edit_working_ticket(request, context["typ"], context["element"].id, working_ticket_token)
+    error_message = _process_working_ticket(request, context["typ"], context["element"].id, working_ticket_token)
 
     # Check if somebody has opened the same field to edit it
     if not error_message:
-        error_message = writing_edit_working_ticket(
+        error_message = _process_working_ticket(
             request,
             context["typ"],
             f"{context['element'].id}_{context['question'].id}",

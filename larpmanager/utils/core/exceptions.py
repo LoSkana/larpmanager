@@ -22,6 +22,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable, Mapping
+
     from django.http import HttpRequest
 
 
@@ -54,17 +56,19 @@ class FeatureError(Exception):
 
 
 class RedirectError(Exception):
-    """Exception used to trigger view redirects.
+    """Trigger a redirect from middleware."""
 
-    Attributes:
-        view (str): View name to redirect to
-
-    """
-
-    def __init__(self, view: Any) -> None:
-        """Initialize with the given view."""
+    def __init__(
+        self,
+        view: Any,
+        args: Iterable[Any] | None = None,
+        kwargs: Mapping[str, Any] | None = None,
+    ) -> None:
+        """Init exception with redirect params."""
         super().__init__()
         self.view = view
+        self.args = tuple(args or ())
+        self.kwargs = dict(kwargs or {})
 
 
 class SignupError(Exception):

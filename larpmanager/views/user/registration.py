@@ -83,6 +83,7 @@ from larpmanager.utils.core.exceptions import (
     RewokedMembershipError,
     check_event_feature,
 )
+from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.users.registration import check_assign_character, get_reduced_available_count
 
 logger = logging.getLogger(__name__)
@@ -666,9 +667,6 @@ def register(
         if redirect_response:
             return redirect_response
 
-    # Add any available bring-a-friend discounts
-    _add_bring_friend_discounts(context)
-
     # Verify user membership status and permissions
     current_membership = context["membership"]
     if current_membership.status in [MembershipStatus.REWOKED]:
@@ -830,6 +828,8 @@ def _register_prepare(context: dict, registration: Any) -> Any:
             > 0
         )
         context["payment_lock"] = has_pending_payment or registration.tot_payed > 0
+
+    _add_bring_friend_discounts(context)
 
     return is_new_registration
 
@@ -1221,7 +1221,18 @@ def check_registration_open(context: dict, request: HttpRequest) -> None:
 
 
 @login_required
+def gift_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create new gift registration."""
+    return _form_gift(request, event_slug)
+
+
+@login_required
 def gift_edit(request: HttpRequest, event_slug: str, gift_uuid: str) -> HttpResponse:
+    """Edit a gift registration."""
+    return _form_gift(request, event_slug, gift_uuid)
+
+
+def _form_gift(request: HttpRequest, event_slug: str, gift_uuid: str | None = None) -> HttpResponse:
     """Handle gift registration modifications.
 
     This function manages the editing of gift registrations, allowing users to
@@ -1248,42 +1259,44 @@ def gift_edit(request: HttpRequest, event_slug: str, gift_uuid: str) -> HttpResp
 
     # Retrieve the specific gift registration and prepare form context
     registration = get_registration_gift(context, gift_uuid)
+    context["registration"] = registration
     _register_prepare(context, registration)
 
-    # Handle POST requests for form submission (save or delete operations)
-    if request.method == "POST":
-        form = RegistrationGiftForm(request.POST, context=context, instance=registration)
+    # Define custom save callback for gift registrations
+    def save_gift_callback(form: RegistrationGiftForm, ctx: dict) -> Registration:
+        """Save gift registration using the specialized save_registration function."""
+        return save_registration(ctx, form, ctx["run"], ctx["event"], registration, gifted=True)
 
-        # Validate form data before processing
-        if form.is_valid():
-            # Check if this is a deletion request
-            if "delete" in request.POST and request.POST["delete"] == "1":
-                cancel_reg(registration)
-                messages.success(request, _("Gift card cancelled!"))
-            else:
-                # Save the updated registration data
-                save_registration(context, form, context["run"], context["event"], registration, gifted=True)
-                messages.success(request, _("Operation completed") + "!")
+    # Define custom delete callback for gift registrations
+    def delete_gift_callback(reg: Registration) -> None:
+        """Cancel gift registration using the specialized cancel_reg function."""
+        cancel_reg(reg)
 
-            # Redirect back to gift list after successful operation
-            return redirect("gift", event_slug=event_slug)
-    else:
-        # Handle GET requests by creating a new form with existing data
-        form = RegistrationGiftForm(context=context, instance=registration)
+    # Use user_edit to handle form processing with custom callbacks
+    if user_edit(
+        request,
+        context,
+        RegistrationGiftForm,
+        "registration",
+        gift_uuid,
+        save_callback=save_gift_callback,
+        delete_callback=delete_gift_callback,
+    ):
+        # Redirect back to gift list after successful operation
+        return redirect("gift", event_slug=event_slug)
 
     # Prepare context for template rendering
-    context["form"] = form
     context["gift"] = True
 
     # Initialize form submission state and validation
-    init_form_submitted(context, form, request, registration)
+    init_form_submitted(context, context["form"], request, registration)
 
     return render(request, "larpmanager/event/gift_edit.html", context)
 
 
 def get_registration_gift(context: dict, gift_uuid: str) -> Registration | None:
     """Get a registration with gift redeem code for the current user."""
-    if gift_uuid == "0":
+    if not gift_uuid:
         return None
 
     try:
