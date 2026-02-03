@@ -1,10 +1,17 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
-    Just a quick check
+    LarpManager Donation
 {% endblock title %}
 {% block content %}
-    <p>Just a quick check to verify you're not a bot!</p>
+    <h3>Thank you so much!</h3>
+    <p>
+        <!-- linter, it's ok! -->
+    </p>
+    <p>
+        Your support helps us sustain and improve the LarpManager project, allowing us to keep building tools for the community.
+    </p>
+    <p>To proceed, simply click the confirmation button and you will be redirected to PayPal to complete your donation.</p>
     <form action="{{ request.path }}"
           method="post"
           enctype="multipart/form-data">
