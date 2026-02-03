@@ -1146,7 +1146,7 @@ def donate(request: HttpRequest) -> Any:
 
     """
     context = get_context(request)
-    if context["association_id"] != 1:
+    if context["association_id"] != 0:
         return redirect("accounting_donate")
 
     user_agent = request.META.get("HTTP_USER_AGENT", "")
