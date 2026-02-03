@@ -806,6 +806,12 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
         if form.is_valid():
             registration = form.save()
 
+            # Handle registration deletion if requested
+            if "delete" in request.POST and request.POST["delete"] == "1":
+                cancel_reg(registration)
+                messages.success(request, _("Registration cancelled"))
+                return redirect("orga_registrations", event_slug=context["run"].get_slug())
+
             # Save registration-specific questions and answers
             form.save_registration_questions(registration)
 
