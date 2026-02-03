@@ -1145,6 +1145,8 @@ def donate(request: HttpRequest) -> Any:
         HttpResponseForbidden: If bot detected
 
     """
+    context = get_lm_contact(request)
+
     user_agent = request.META.get("HTTP_USER_AGENT", "")
     if is_suspicious_user_agent(user_agent):
         return HttpResponseForbidden("Bots not allowed.")
@@ -1155,7 +1157,8 @@ def donate(request: HttpRequest) -> Any:
             return redirect("https://www.paypal.com/paypalme/mscanagatta")
     else:
         form = LarpManagerCheck(request=request)
-    context = {"form": form}
+
+    context["form"] = form
     return render(request, "larpmanager/larpmanager/donate.html", context)
 
 
