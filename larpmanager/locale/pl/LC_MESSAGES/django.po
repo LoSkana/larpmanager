@@ -6089,9 +6089,6 @@ msgstr "Dostosowywanie przycisków na pasku nawigacji wydarzeń"
 msgid "If checked: shows the position for each event"
 msgstr "Jeśli zaznaczone: pokazuje pozycję dla każdego zdarzenia"
 
-msgid "Indicates the amount of reimbursement desired"
-msgstr "Wskazuje żądaną kwotę zwrotu"
-
 msgid "Manage badges and assign them to participants"
 msgstr "Zarządzanie odznakami i przypisywanie ich do uczestników"
 
@@ -9410,6 +9407,12 @@ msgid ""
 msgstr ""
 "Wskazać maksymalną liczbę takich rabatów, o które można wnioskować (0 dla "
 "nieskończonej liczby zastosowań)"
+
+msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Wskazuje żądaną kwotę zwrotu (nie może być wyższa niż bieżące kredyty)"
 
 msgid ""
 "Items marked in red will be deleted because their final quantity will be "
