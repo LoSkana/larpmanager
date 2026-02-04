@@ -627,9 +627,6 @@ msgstr "Precio"
 msgid "Reason"
 msgstr "Razón"
 
-msgid "Recent"
-msgstr "Recientes"
-
 msgid "Refund"
 msgstr "Reembolso"
 
@@ -1719,9 +1716,6 @@ msgstr "Por hacer"
 msgid "Token name"
 msgstr "Nombre del token"
 
-msgid "Total logs"
-msgstr "Total troncos"
-
 msgid "Two quotas"
 msgstr "Dos plazos"
 
@@ -2620,6 +2614,9 @@ msgstr "Pago único"
 
 msgid "Tax code check"
 msgstr "Comprobación de CIF"
+
+msgid "Today activity"
+msgstr "Actividad de hoy"
 
 msgid "Total payments"
 msgstr "Pagos totales"

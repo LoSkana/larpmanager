@@ -627,9 +627,6 @@ msgstr "Citation"
 msgid "Reason"
 msgstr "Raison"
 
-msgid "Recent"
-msgstr "Récents"
-
 msgid "Refund"
 msgstr "Remboursement"
 
@@ -1719,9 +1716,6 @@ msgstr "Pour surmonter"
 msgid "Token name"
 msgstr "Nom du jeton"
 
-msgid "Total logs"
-msgstr "Total des grumes"
-
 msgid "Two quotas"
 msgstr "Deux quotas"
 
@@ -2620,6 +2614,9 @@ msgstr "Paiement unique"
 
 msgid "Tax code check"
 msgstr "Vérification du code fiscal"
+
+msgid "Today activity"
+msgstr "Activité d'aujourd'hui"
 
 msgid "Total payments"
 msgstr "Total des paiements"

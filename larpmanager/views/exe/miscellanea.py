@@ -237,5 +237,5 @@ def exe_log(request: HttpRequest) -> HttpResponse:
         context,
         Log,
         "larpmanager/exe/logs.html",
-        None,  # No edit view for logs (read-only)
+        None,
     )

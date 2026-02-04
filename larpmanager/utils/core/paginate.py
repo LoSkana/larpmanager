@@ -431,6 +431,8 @@ def _prepare_data_json(
         "info": lambda model_object: str(model_object.info) if model_object.info else "",
         "vat_ticket": lambda model_object: round(float(model_object.vat_ticket), 2),
         "vat_options": lambda model_object: round(float(model_object.vat_options), 2),
+        "operation_type": lambda model_object: str(model_object.operation_type),
+        "element_name": lambda model_object: str(model_object.element_name),
     }
 
     # Allow custom field callbacks to override default mappings
@@ -439,12 +441,15 @@ def _prepare_data_json(
 
     # Process each element and build row data
     for model_object in elements:
-        # Generate edit url (in orga need to add event slug)
-        if is_executive:
-            edit_url = reverse(edit_view, args=[model_object.uuid])
-        else:
-            edit_url = reverse(edit_view, args=[context["run"].get_slug(), model_object.uuid])
-        row_data = {"0": f'<a href="{edit_url}" qtip="{edit_label}"><i class="fas fa-edit"></i></a>'}
+        edit_text = ""
+        if hasattr(model_object, "uuid"):
+            # Generate edit url (in orga need to add event slug)
+            if is_executive:
+                edit_url = reverse(edit_view, args=[model_object.uuid])
+            else:
+                edit_url = reverse(edit_view, args=[context["run"].get_slug(), model_object.uuid])
+            edit_text = f'<a href="{edit_url}" qtip="{edit_label}"><i class="fas fa-edit"></i></a>'
+        row_data = {"0": edit_text}
 
         # Add data for each configured field, starting from column 1
         for column_index, (field_name, _field_label) in enumerate(context["fields"], start=1):

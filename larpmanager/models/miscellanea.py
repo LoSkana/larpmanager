@@ -1145,7 +1145,7 @@ class Log(BaseModel):
 
     element_name = models.CharField(max_length=500, blank=True)
 
-    info = models.CharField(max_length=500, blank=True)
+    info = models.CharField(max_length=500, blank=True, null=True)
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
 

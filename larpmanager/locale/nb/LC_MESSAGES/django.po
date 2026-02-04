@@ -627,9 +627,6 @@ msgstr "Sitat"
 msgid "Reason"
 msgstr "Årsak"
 
-msgid "Recent"
-msgstr "Nylig"
-
 msgid "Refund"
 msgstr "Refusjon"
 
@@ -1719,9 +1716,6 @@ msgstr "For å overvinne"
 msgid "Token name"
 msgstr "Token-navn"
 
-msgid "Total logs"
-msgstr "Totalt antall tømmerstokker"
-
 msgid "Two quotas"
 msgstr "To kvoter"
 
@@ -2620,6 +2614,9 @@ msgstr "Engangsutbetaling"
 
 msgid "Tax code check"
 msgstr "Kontroll av skattekode"
+
+msgid "Today activity"
+msgstr "Dagens aktivitet"
 
 msgid "Total payments"
 msgstr "Betalinger totalt"

@@ -627,9 +627,6 @@ msgstr "Zitat"
 msgid "Reason"
 msgstr "Grund"
 
-msgid "Recent"
-msgstr "Neueste"
-
 msgid "Refund"
 msgstr "Erstattung"
 
@@ -1719,9 +1716,6 @@ msgstr "Zur Überwindung"
 msgid "Token name"
 msgstr "Token-Name"
 
-msgid "Total logs"
-msgstr "Logs insgesamt"
-
 msgid "Two quotas"
 msgstr "Zwei Quoten"
 
@@ -2620,6 +2614,9 @@ msgstr "Einmalige Zahlung"
 
 msgid "Tax code check"
 msgstr "Prüfung der Steuernummer"
+
+msgid "Today activity"
+msgstr "Aktivität heute"
 
 msgid "Total payments"
 msgstr "Zahlungen insgesamt"

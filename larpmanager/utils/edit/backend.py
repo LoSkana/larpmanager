@@ -91,6 +91,9 @@ def save_log(
         run_id = None
         association_id = instance
 
+    if info:
+        info = info[:500]
+
     Log.objects.create(
         member=context["member"],
         cls=cls.__name__,
@@ -98,7 +101,7 @@ def save_log(
         dct=element.as_dict(),
         operation_type=operation_type,
         element_name=element_name[:500],
-        info=info[:500],
+        info=info,
         run_id=run_id,
         association_id=association_id,
     )

@@ -39,7 +39,7 @@ class TestUploadFunctions(BaseTestCase):
 
         # Prepare context for character upload
         context = {
-            "association_id": 1,
+            "association_id": self.get_association().id,
             "event": event,
             "typ": "character",
             "field_name": "name",
@@ -73,7 +73,7 @@ class TestUploadFunctions(BaseTestCase):
 
         # Prepare context for character upload to child event
         context = {
-            "association_id": 1,
+            "association_id": self.get_association().id,
             "event": child_event,
             "typ": "character",
             "field_name": "name",
@@ -113,7 +113,7 @@ class TestUploadFunctions(BaseTestCase):
 
         # Prepare context for character upload to child event
         context = {
-            "association_id": 1,
+            "association_id": self.get_association().id,
             "event": child_event,
             "typ": "character",
             "field_name": "name",
@@ -151,7 +151,7 @@ class TestUploadFunctions(BaseTestCase):
 
         # Prepare context for character upload to child event
         context = {
-            "association_id": 1,
+            "association_id": self.get_association().id,
             "event": child_event,
             "typ": "character",
             "field_name": "name",

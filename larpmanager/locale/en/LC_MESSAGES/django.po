@@ -6321,10 +6321,7 @@ msgstr ""
 msgid "Counts"
 msgstr ""
 
-msgid "Total logs"
-msgstr ""
-
-msgid "Recent"
+msgid "Today activity"
 msgstr ""
 
 msgid "Priorities"

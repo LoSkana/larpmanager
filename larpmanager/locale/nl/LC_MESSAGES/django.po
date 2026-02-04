@@ -627,9 +627,6 @@ msgstr "Citaat"
 msgid "Reason"
 msgstr "Reden"
 
-msgid "Recent"
-msgstr "Recent"
-
 msgid "Refund"
 msgstr "Terugbetaling"
 
@@ -1719,9 +1716,6 @@ msgstr "Om te overwinnen"
 msgid "Token name"
 msgstr "Token naam"
 
-msgid "Total logs"
-msgstr "Totaal houtblokken"
-
 msgid "Two quotas"
 msgstr "Twee quota"
 
@@ -2620,6 +2614,9 @@ msgstr "Eenmalige betaling"
 
 msgid "Tax code check"
 msgstr "Belastingcode controleren"
+
+msgid "Today activity"
+msgstr "Vandaag activiteit"
 
 msgid "Total payments"
 msgstr "Totaal betalingen"

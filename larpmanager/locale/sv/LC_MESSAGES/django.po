@@ -627,9 +627,6 @@ msgstr "Citat"
 msgid "Reason"
 msgstr "Anledning"
 
-msgid "Recent"
-msgstr "Nyligen"
-
 msgid "Refund"
 msgstr "Återbetalning"
 
@@ -1719,9 +1716,6 @@ msgstr "Att övervinna"
 msgid "Token name"
 msgstr "Tokenens namn"
 
-msgid "Total logs"
-msgstr "Totalt antal stockar"
-
 msgid "Two quotas"
 msgstr "Två kvoter"
 
@@ -2620,6 +2614,9 @@ msgstr "Enstaka betalning"
 
 msgid "Tax code check"
 msgstr "Kontroll av skattekod"
+
+msgid "Today activity"
+msgstr "Dagens aktivitet"
 
 msgid "Total payments"
 msgstr "Totala betalningar"

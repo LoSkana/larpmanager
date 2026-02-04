@@ -627,9 +627,6 @@ msgstr "Kwoty"
 msgid "Reason"
 msgstr "Powód"
 
-msgid "Recent"
-msgstr "Najnowsze"
-
 msgid "Refund"
 msgstr "Zwrot kosztów"
 
@@ -1719,9 +1716,6 @@ msgstr "Do zrobienia"
 msgid "Token name"
 msgstr "Nazwa tokena"
 
-msgid "Total logs"
-msgstr "Łączna liczba dzienników"
-
 msgid "Two quotas"
 msgstr "Dwa limity"
 
@@ -2620,6 +2614,9 @@ msgstr "Płatność jednorazowa"
 
 msgid "Tax code check"
 msgstr "Sprawdzenie kodu podatkowego"
+
+msgid "Today activity"
+msgstr "Dzisiejsza aktywność"
 
 msgid "Total payments"
 msgstr "Płatności ogółem"

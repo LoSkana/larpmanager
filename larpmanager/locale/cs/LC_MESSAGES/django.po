@@ -627,9 +627,6 @@ msgstr "Citace"
 msgid "Reason"
 msgstr "Důvod"
 
-msgid "Recent"
-msgstr "Nedávné"
-
 msgid "Refund"
 msgstr "Vrácení peněz"
 
@@ -1719,9 +1716,6 @@ msgstr "Překonat"
 msgid "Token name"
 msgstr "Název tokenu"
 
-msgid "Total logs"
-msgstr "Dřevěné klády celkem"
-
 msgid "Two quotas"
 msgstr "Dvě kvóty"
 
@@ -2620,6 +2614,9 @@ msgstr "Jednorázová platba"
 
 msgid "Tax code check"
 msgstr "Kontrola daňového kódu"
+
+msgid "Today activity"
+msgstr "Dnešní aktivita"
 
 msgid "Total payments"
 msgstr "Platby celkem"

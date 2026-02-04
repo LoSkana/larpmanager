@@ -627,9 +627,6 @@ msgstr "Quote"
 msgid "Reason"
 msgstr "Motivo"
 
-msgid "Recent"
-msgstr "Recente"
-
 msgid "Refund"
 msgstr "Rimborso"
 
@@ -1719,9 +1716,6 @@ msgstr "Da superare"
 msgid "Token name"
 msgstr "Nome gettoni"
 
-msgid "Total logs"
-msgstr "Logs totali"
-
 msgid "Two quotas"
 msgstr "Due quote"
 
@@ -2620,6 +2614,9 @@ msgstr "Pagamento unico"
 
 msgid "Tax code check"
 msgstr "Controllo codice fiscale"
+
+msgid "Today activity"
+msgstr "Attività di oggi"
 
 msgid "Total payments"
 msgstr "Pagamenti totali"

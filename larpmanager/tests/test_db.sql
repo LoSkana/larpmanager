@@ -2384,7 +2384,7 @@ CREATE TABLE public.larpmanager_log (
     member_id integer NOT NULL,
     association_id integer,
     element_name character varying(500) NOT NULL,
-    info character varying(500) NOT NULL,
+    info character varying(500),
     operation_type character varying(10) NOT NULL,
     run_id integer
 );

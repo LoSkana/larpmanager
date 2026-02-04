@@ -1451,5 +1451,5 @@
     order: 1
     after_text: ''
     after_link: ''
-    hidden: true
+    hidden: false
     module: miscellany

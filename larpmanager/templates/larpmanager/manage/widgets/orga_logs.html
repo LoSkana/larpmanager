@@ -6,34 +6,24 @@
                 <i class="fas fa-list"></i> {% trans "Logs" %}
             </a>
         </h2>
-        <table>
-            <tbody>
-                {% if widgets.logs.total_count %}
-                    <tr>
-                        <th>{% trans "Total logs" %}</th>
-                        <td>{{ widgets.logs.total_count }}</td>
-                    </tr>
-                {% endif %}
-                {% for op_type, data in widgets.logs.operation_counts.items %}
-                    <tr>
-                        <th>{{ data.label }}</th>
-                        <td>{{ data.count }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <p>
+            {% if widgets.logs.total_count %}
+                {% trans "Today activity" %}: {{ widgets.logs.total_count }}
+                {% for op_type, data in widgets.logs.operation_counts.items %}| {{ data.label }}: {{ data.count }}{% endfor %}
+            {% endif %}
+        </p>
         {% if widgets.logs.recent_logs %}
-            <div>
-                <strong>{% trans "Recent" %}:</strong>
-                <ul>
+            <table>
+                <tbody>
                     {% for log in widgets.logs.recent_logs %}
-                        <li>
-                            {{ log.get_operation_type_display }} - {{ log.element_name|default:log.cls }}
-                            <small>({{ log.member }})</small>
-                        </li>
+                        <tr>
+                            <td>{{ log.get_operation_type_display }}</td>
+                            <td>{{ log.element_name|default:log.cls }}</td>
+                            <td>{{ log.member }}</td>
+                        </tr>
                     {% endfor %}
-                </ul>
-            </div>
+                </tbody>
+            </table>
         {% endif %}
     </div>
 {% endif %}
