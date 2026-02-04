@@ -6097,9 +6097,6 @@ msgstr "Personnaliser les boutons de la barre de navigation de l'événement"
 msgid "If checked: shows the position for each event"
 msgstr "Si coché : indique la position pour chaque événement"
 
-msgid "Indicates the amount of reimbursement desired"
-msgstr "Indique le montant du remboursement souhaité"
-
 msgid "Manage badges and assign them to participants"
 msgstr "Gérer les badges et les attribuer aux participants"
 
@@ -9629,6 +9626,13 @@ msgid ""
 msgstr ""
 "Indiquer le nombre maximum de remises qui peuvent être demandées (0 pour une"
 " utilisation illimitée)"
+
+msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Indique le montant du remboursement souhaité (ne peut être supérieur à vos "
+"crédits actuels)"
 
 msgid ""
 "Items marked in red will be deleted because their final quantity will be "
