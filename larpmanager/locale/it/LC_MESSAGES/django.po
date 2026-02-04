@@ -1417,7 +1417,7 @@ msgid "Recipient"
 msgstr "Destinatario"
 
 msgid "Recompute"
-msgstr "Ricompilare"
+msgstr "Ricalcola"
 
 msgid "Reminders"
 msgstr "Promemoria"
