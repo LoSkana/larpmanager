@@ -6088,9 +6088,6 @@ msgstr "Přizpůsobení tlačítek na navigačním panelu události"
 msgid "If checked: shows the position for each event"
 msgstr "Pokud je zaškrtnuto: zobrazuje pozici pro každou událost"
 
-msgid "Indicates the amount of reimbursement desired"
-msgstr "Uvádí požadovanou výši úhrady"
-
 msgid "Manage badges and assign them to participants"
 msgstr "Správa odznaků a jejich přiřazování účastníkům"
 
@@ -9224,6 +9221,12 @@ msgid ""
 msgstr ""
 "Uveďte maximální počet těchto slev, které lze uplatnit (0 pro nekonečné "
 "použití)"
+
+msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Uvádí požadovanou výši úhrady (nesmí být vyšší než vaše současné kredity)"
 
 msgid ""
 "Items marked in red will be deleted because their final quantity will be "
