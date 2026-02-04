@@ -6089,9 +6089,6 @@ msgstr ""
 msgid "If checked: shows the position for each event"
 msgstr "Se checkato: mostra la posizione per ogni evento"
 
-msgid "Indicates the amount of reimbursement desired"
-msgstr "Indica l'entità del rimborso desiderato"
-
 msgid "Manage badges and assign them to participants"
 msgstr "Gestisci i badge e assegnali ai partecipanti"
 
@@ -9522,6 +9519,13 @@ msgid ""
 msgstr ""
 "Indicare il massimo numero di sconti di questo tipo che possono venire "
 "richiesti (0 per usi infiniti)"
+
+msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Indica l'importo del rimborso desiderato (non può essere superiore ai "
+"crediti attuali)"
 
 msgid ""
 "Items marked in red will be deleted because their final quantity will be "
