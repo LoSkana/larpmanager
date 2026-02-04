@@ -29,12 +29,13 @@ from typing import TYPE_CHECKING, Any
 from background_task import background
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import EmailMultiAlternatives, get_connection
+from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
+from larpmanager.mail.factory import EmailConnectionFactory
 from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
@@ -280,7 +281,7 @@ def clean_sender(sender_name: Any) -> Any:
     return re.sub(r"\s+", " ", sender_name).strip()
 
 
-def my_send_simple_mail(  # noqa: C901 - Complex email sending with multiple format and attachment options
+def my_send_simple_mail(
     subj: str,
     body: str,
     m_email: str,
@@ -289,6 +290,8 @@ def my_send_simple_mail(  # noqa: C901 - Complex email sending with multiple for
     reply_to: str | None = None,
 ) -> None:
     """Send email with association/event-specific configuration.
+
+    Uses priority order: Custom SMTP → Amazon SES → Default backend
 
     Handles custom SMTP settings, sender addresses, BCC lists, and email formatting
     based on association and event configuration. Prioritizes event-level settings
@@ -306,140 +309,21 @@ def my_send_simple_mail(  # noqa: C901 - Complex email sending with multiple for
         Exception: Re-raises email sending exceptions after logging error details
 
     Note:
-        Sends email using configured SMTP settings or default connection.
+        Sends email using configured backend (Custom SMTP, SES, or default).
         Logs email details in debug mode for troubleshooting.
-
     """
-    # Initialize email headers and BCC list
-    email_headers = {}
-    bcc_recipients = []
-
-    # Initialize with default LarpManager sender configuration
-    smtp_connection = None
-    sender_email = "info@larpmanager.com"
-    sender = f"LarpManager <{sender_email}>"
-    event_settings_applied = False
-
-    cache_context = {}
-
     try:
-        # Apply event-level configuration if run_id is provided and SMTP is configured
-        if run_id:
-            run = Run.objects.get(pk=run_id)
-            event = run.event
+        # Gather metadata (sender, BCC, headers)
+        metadata = _prepare_email_metadata(association_id, run_id, reply_to)
 
-            # Check if event has custom SMTP configuration
-            event_smtp_host_user = get_event_config(
-                event.id,
-                "mail_server_host_user",
-                default_value="",
-                context=cache_context,
-                bypass_cache=True,
-            )
+        # Build email message
+        email_message = _build_email_message(subj, body, m_email, metadata)
 
-            # Only apply event settings if SMTP host user is configured
-            if event_smtp_host_user:
-                sender_email = event_smtp_host_user
-                sender = f"{clean_sender(event.name)} <{sender_email}>"
+        # Get backend and send
+        backend = EmailConnectionFactory.get_backend(association_id, run_id)
+        backend.send_message(email_message)
 
-                # Create custom SMTP connection for event
-                smtp_connection = get_connection(
-                    host=get_event_config(
-                        event.id, "mail_server_host", default_value="", context=cache_context, bypass_cache=True
-                    ),
-                    port=get_event_config(
-                        event.id, "mail_server_port", default_value="", context=cache_context, bypass_cache=True
-                    ),
-                    username=get_event_config(
-                        event.id,
-                        "mail_server_host_user",
-                        default_value="",
-                        context=cache_context,
-                        bypass_cache=True,
-                    ),
-                    password=get_event_config(
-                        event.id,
-                        "mail_server_host_password",
-                        default_value="",
-                        context=cache_context,
-                        bypass_cache=True,
-                    ),
-                    use_tls=get_event_config(
-                        event.id,
-                        "mail_server_use_tls",
-                        default_value=False,
-                        context=cache_context,
-                        bypass_cache=True,
-                    ),
-                )
-                event_settings_applied = True
-
-        # Apply association-level configuration if association_id is provided
-        if association_id:
-            association = Association.objects.get(pk=association_id)
-
-            # Add association main email to BCC if configured
-            if association.get_config("mail_cc", default_value=False, bypass_cache=True) and association.main_mail:
-                bcc_recipients.append(association.main_mail)
-
-            # Apply custom SMTP settings if configured (only if event settings not already applied)
-            association_smtp_host_user = association.get_config(
-                "mail_server_host_user", default_value="", bypass_cache=True
-            )
-
-            # Check if association has custom SMTP and event settings aren't active
-            if association_smtp_host_user:
-                if not event_settings_applied:
-                    sender_email = association_smtp_host_user
-                    sender = f"{clean_sender(association.name)} <{sender_email}>"
-
-                    # Create custom SMTP connection for association
-                    smtp_connection = get_connection(
-                        host=association.get_config("mail_server_host", default_value="", bypass_cache=True),
-                        port=association.get_config("mail_server_port", default_value="", bypass_cache=True),
-                        username=association.get_config("mail_server_host_user", default_value="", bypass_cache=True),
-                        password=association.get_config(
-                            "mail_server_host_password", default_value="", bypass_cache=True
-                        ),
-                        use_tls=association.get_config("mail_server_use_tls", default_value=False, bypass_cache=True),
-                    )
-            # Use standard LarpManager subdomain sender if no custom SMTP configured
-            elif not event_settings_applied:
-                sender_email = f"{association.slug}@larpmanager.com"
-                sender = f"{clean_sender(association.name)} <{sender_email}>"
-
-        # Fall back to default SMTP connection if no custom connection configured
-        if not smtp_connection:
-            smtp_connection = get_connection()
-
-        # Set custom Reply-To header if provided
-        if reply_to:
-            email_headers["Reply-To"] = reply_to
-
-        # Add RFC-compliant unsubscribe header
-        email_headers["List-Unsubscribe"] = f"<mailto:{sender_email}>"
-
-        # Store HTML body for multipart email
-        body_html = body
-
-        # Build multipart email with both plain text and HTML versions
-        email_message = EmailMultiAlternatives(
-            subj,
-            remove_html_tags(body),
-            sender,
-            [m_email],
-            bcc=bcc_recipients,
-            headers=email_headers,
-            connection=smtp_connection,
-        )
-
-        # Attach HTML alternative to the email
-        email_message.attach_alternative(body_html, "text/html")
-
-        # Send the email
-        email_message.send()
-
-        # Log email details in debug mode for troubleshooting
+        # Debug logging
         if conf_settings.DEBUG:
             logger.info("Sending email to: %s", m_email)
             logger.info("Subject: %s", subj)
@@ -449,6 +333,107 @@ def my_send_simple_mail(  # noqa: C901 - Complex email sending with multiple for
         # Log the error and re-raise for caller handling
         mail_error(subj, body, email_sending_exception)
         raise
+
+
+def _prepare_email_metadata(association_id: int | None, run_id: int | None, reply_to: str | None) -> dict:
+    """Extract email metadata from association/event config.
+
+    Args:
+        association_id: Association ID for metadata extraction
+        run_id: Run ID for event-specific metadata
+        reply_to: Custom Reply-To email address
+
+    Returns:
+        Dict containing sender_email, sender_name, headers, and bcc_recipients
+    """
+    metadata = {
+        "sender_email": "info@larpmanager.com",
+        "sender_name": "LarpManager",
+        "headers": {},
+        "bcc_recipients": [],
+    }
+
+    cache_context = {}
+    event_settings_applied = False
+
+    # Apply event-level metadata
+    if run_id:
+        run = Run.objects.get(pk=run_id)
+        event = run.event
+
+        event_smtp_user = get_event_config(
+            event.id,
+            "mail_server_host_user",
+            default_value="",
+            context=cache_context,
+            bypass_cache=True,
+        )
+        if event_smtp_user:
+            metadata["sender_email"] = event_smtp_user
+            metadata["sender_name"] = event.name
+            event_settings_applied = True
+
+    # Apply association-level metadata
+    if association_id:
+        association = Association.objects.get(pk=association_id)
+
+        # Add BCC if configured
+        if association.get_config("mail_cc", default_value=False, bypass_cache=True) and association.main_mail:
+            metadata["bcc_recipients"].append(association.main_mail)
+
+        # Store organization main email for potential Reply-To (used by SES backend)
+        if association.main_mail:
+            metadata["org_main_mail"] = association.main_mail
+
+        # Set sender (only if event didn't set it)
+        if not event_settings_applied:
+            assoc_smtp_user = association.get_config("mail_server_host_user", default_value="", bypass_cache=True)
+            if assoc_smtp_user:
+                metadata["sender_email"] = assoc_smtp_user
+                metadata["sender_name"] = association.name
+            else:
+                # Use subdomain sender
+                metadata["sender_email"] = f"{association.slug}@larpmanager.com"
+                metadata["sender_name"] = association.name
+
+    # Add headers
+    if reply_to:
+        metadata["headers"]["Reply-To"] = reply_to
+    metadata["headers"]["List-Unsubscribe"] = f"<mailto:{metadata['sender_email']}>"
+
+    return metadata
+
+
+def _build_email_message(subj: str, body: str, m_email: str, metadata: dict) -> EmailMultiAlternatives:
+    """Build EmailMultiAlternatives from components.
+
+    Args:
+        subj: Email subject
+        body: Email body (HTML format)
+        m_email: Recipient email address
+        metadata: Dict with sender_email, sender_name, headers, bcc_recipients, org_main_mail (optional)
+
+    Returns:
+        EmailMultiAlternatives instance ready to send
+    """
+    sender = f"{clean_sender(metadata['sender_name'])} <{metadata['sender_email']}>"
+
+    # Note: Connection is NOT set here - backend handles sending
+    message = EmailMultiAlternatives(
+        subj,
+        remove_html_tags(body),
+        sender,
+        [m_email],
+        bcc=metadata["bcc_recipients"],
+        headers=metadata["headers"],
+    )
+    message.attach_alternative(body, "text/html")
+
+    # Store organization main email for SES backend to use as Reply-To if needed
+    if "org_main_mail" in metadata:
+        message.org_main_mail = metadata["org_main_mail"]
+
+    return message
 
 
 def add_unsubscribe_body(association: Any) -> Any:

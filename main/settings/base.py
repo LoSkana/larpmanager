@@ -256,6 +256,11 @@ ALLOWED_MIME_TYPES = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Amazon SES Configuration (optional - fallback when custom SMTP not configured)
+AWS_SES_ACCESS_KEY_ID = None
+AWS_SES_SECRET_ACCESS_KEY = None
+AWS_SES_REGION_NAME = 'us-east-1'
+
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
