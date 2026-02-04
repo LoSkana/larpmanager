@@ -6090,9 +6090,6 @@ msgstr "Anpassa knapparna i navigeringsfältet för evenemang"
 msgid "If checked: shows the position for each event"
 msgstr "Om markerat: visar positionen för varje evenemang"
 
-msgid "Indicates the amount of reimbursement desired"
-msgstr "Anger önskat belopp för återbetalning"
-
 msgid "Manage badges and assign them to participants"
 msgstr "Hantera badges och tilldela dem till deltagare"
 
@@ -9335,6 +9332,13 @@ msgid ""
 msgstr ""
 "Ange det maximala antalet sådana rabatter som kan åberopas (0 för oändlig "
 "användning)"
+
+msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Anger det önskade ersättningsbeloppet (kan inte vara högre än dina nuvarande"
+" krediter)"
 
 msgid ""
 "Items marked in red will be deleted because their final quantity will be "
