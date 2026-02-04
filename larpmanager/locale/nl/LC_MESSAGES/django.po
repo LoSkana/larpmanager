@@ -6091,9 +6091,6 @@ msgstr "Knoppen in de evenementnavigatiebalk aanpassen"
 msgid "If checked: shows the position for each event"
 msgstr "Indien aangevinkt: toont de positie voor elke gebeurtenis"
 
-msgid "Indicates the amount of reimbursement desired"
-msgstr "Geeft het gewenste terugbetalingsbedrag aan"
-
 msgid "Manage badges and assign them to participants"
 msgstr "Badges beheren en toewijzen aan deelnemers"
 
@@ -9499,6 +9496,13 @@ msgid ""
 msgstr ""
 "Vermeld het maximum aantal van dergelijke kortingen dat kan worden geclaimd "
 "(0 voor oneindig gebruik)"
+
+msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Geeft het gewenste terugbetalingsbedrag aan (kan niet hoger zijn dan je "
+"huidige credits)"
 
 msgid ""
 "Items marked in red will be deleted because their final quantity will be "
