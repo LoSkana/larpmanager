@@ -21,6 +21,7 @@
 from datetime import datetime, timedelta
 from typing import Any
 
+from django.conf import settings as conf_settings
 from django.db.models import Count
 from django.utils import timezone
 
@@ -289,9 +290,13 @@ def deadlines_payment(deadline_violations: Any, event_features: Any, registratio
     if "payment" not in event_features:
         return
 
+    # Skip alert setting if quota is negligible
+    if registration.quota <= conf_settings.MAX_ROUNDING_TOLERANCE:
+        return
+
     if registration.deadline < -tolerance_days:
         deadline_violations["pay_del"].append(registration.member_id)
-    elif registration.deadline < 0:
+    elif registration.deadline <= 0:
         deadline_violations["pay"].append(registration.member_id)
 
 
