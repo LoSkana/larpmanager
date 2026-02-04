@@ -6101,9 +6101,6 @@ msgstr "Anpassen von Schaltflächen in der Ereignis-Navigationsleiste"
 msgid "If checked: shows the position for each event"
 msgstr "Wenn markiert: zeigt die Position für jedes Ereignis an"
 
-msgid "Indicates the amount of reimbursement desired"
-msgstr "Gibt die Höhe der gewünschten Erstattung an"
-
 msgid "Manage badges and assign them to participants"
 msgstr "Verwalten Sie Abzeichen und weisen Sie sie Teilnehmern zu"
 
@@ -9694,6 +9691,13 @@ msgid ""
 msgstr ""
 "Geben Sie die maximale Anzahl solcher Rabatte an, die in Anspruch genommen "
 "werden können (0 für unendliche Nutzung)"
+
+msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Gibt den gewünschten Erstattungsbetrag an (kann nicht höher sein als Ihr "
+"aktuelles Guthaben)"
 
 msgid ""
 "Items marked in red will be deleted because their final quantity will be "
