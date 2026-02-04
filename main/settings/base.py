@@ -215,6 +215,10 @@ TINYMCE_COMPRESSOR = False
 
 SECURE_REFERRER_POLICY = 'origin'
 
+# Accounting
+
+MAX_ROUNDING_TOLERANCE = 0.05
+
 # Demo user password (used for creating demo accounts)
 DEMO_PASSWORD = 'pippo'
 

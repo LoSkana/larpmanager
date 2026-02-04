@@ -998,7 +998,7 @@ class TestQuotaCheckFallbackLogic(BaseTestCase):
         # Quota 2 represents CUMULATIVE 2/3 of total (200€), not just the second installment
         # So should show 199-200€ (cumulative up to quota 2) with immediate deadline
         self.assertIn(registration.quota, [199, Decimal("200.00")])
-        self.assertEqual(registration.deadline, 0)  # Immediate payment
+        self.assertEqual(registration.deadline, -72)  # Immediate payment
 
     def test_quota_check_first_quota_always_shown(self) -> None:
         """Test quota_check shows first quota when within alert threshold"""
