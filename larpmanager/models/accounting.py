@@ -770,7 +770,7 @@ class RefundRequest(UuidMixin, BaseModel):
         decimal_places=2,
         default=0,
         verbose_name=_("Refund"),
-        help_text=_("Indicates the amount of reimbursement desired"),
+        help_text=_("Indicates the amount of reimbursement desired (can't be higher than your current credits)"),
     )
 
     hide = models.BooleanField(default=False)
