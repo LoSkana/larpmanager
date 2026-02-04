@@ -6091,9 +6091,6 @@ msgstr "Tilpass knappene i navigasjonsfeltet for hendelser"
 msgid "If checked: shows the position for each event"
 msgstr "Hvis avkrysset: viser posisjonen for hver hendelse"
 
-msgid "Indicates the amount of reimbursement desired"
-msgstr "Angir beløpet som ønskes refundert"
-
 msgid "Manage badges and assign them to participants"
 msgstr "Administrer merker og tildel dem til deltakerne"
 
@@ -9325,6 +9322,13 @@ msgid ""
 "infinite uses)"
 msgstr ""
 "Angi maksimalt antall slike rabatter som kan kreves (0 for uendelig bruk)"
+
+msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Angir hvor mye du ønsker å få refundert (kan ikke være høyere enn dine "
+"nåværende studiepoeng)"
 
 msgid ""
 "Items marked in red will be deleted because their final quantity will be "
