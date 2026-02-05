@@ -5,7 +5,7 @@
         <tr>
             <th></th>
             {% for field in fields %}<th>{{ field.1 }}</th>{% endfor %}
-            <th></th>
+            {% if delete_view %}<th></th>{% endif %}
         </tr>
     </thead>
 </table>
