@@ -716,6 +716,7 @@ def association_accounting_summary(context: dict) -> dict:
     )
 
     # Accumulate balance from all completed runs
+    context["balance_sum"] = 0
     for run in context["runs"]:
         if run.development == DevelopStatus.DONE:
             context["balance_sum"] += run.balance
