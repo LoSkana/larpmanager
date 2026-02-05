@@ -27,6 +27,7 @@ import math
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
+from django.conf import settings as conf_settings
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
@@ -274,7 +275,7 @@ def quota_check(registration: Registration, start: date, alert: int, association
     """
     if not start or registration.quotas == 0:
         if registration.quotas == 0:
-            logger.error("Registration %s has zero quotas, cannot calculate payment schedule", registration.pk)
+            logger.error("Registration %s has zero quotas", registration.pk)
         return
 
     registration.days_event = get_time_diff_today(start)
@@ -283,71 +284,70 @@ def quota_check(registration: Registration, start: date, alert: int, association
     quota_share = Decimal(1.0 / registration.quotas)
     quota_share_ratio = Decimal(0)
     accumulated_overdue_ratio = Decimal(0)
+
     first_valid_deadline = None
+    oldest_overdue_deadline = None
     has_distant_quotas = False
 
     for quota_count in range(1, registration.quotas + 1):
         quota_share_ratio += quota_share
         deadline = _calculate_quota_deadline(registration, quota_count, association_id)
 
+        # Quota is too far in the future
         if deadline >= alert:
             has_distant_quotas = True
             continue
 
-        registration.qsr = quota_share_ratio
         is_last_quota = quota_count == registration.quotas
-        registration.quota = _calculate_quota_amount(registration, quota_share_ratio, is_last_quota=is_last_quota)
+        current_quota_amount = _calculate_quota_amount(registration, quota_share_ratio, is_last_quota=is_last_quota)
 
-        if registration.quota <= 0:
+        if current_quota_amount <= 0:
             continue
 
-        # Handle overdue quotas (deadline in the past)
-        if not deadline or deadline < 0:
+        # Handle Overdue Quotas
+        if deadline < 0:
             accumulated_overdue_ratio = quota_share_ratio
+            if oldest_overdue_deadline is None or deadline < oldest_overdue_deadline:
+                oldest_overdue_deadline = deadline
             continue
 
         # Found first valid future deadline
         if first_valid_deadline is None:
-            first_valid_deadline = deadline
-            # quota_share_ratio already includes any overdue quotas
+            registration.qsr = quota_share_ratio
+            registration.quota = current_quota_amount
             registration.deadline = deadline
             return
 
-    _quota_fallback(accumulated_overdue_ratio, registration, has_distant_quotas=has_distant_quotas)
+    _quota_fallback(
+        accumulated_overdue_ratio,
+        registration,
+        has_distant_quotas=has_distant_quotas,
+        overdue_deadline=oldest_overdue_deadline,
+    )
 
 
 def _quota_fallback(
-    accumulated_overdue_ratio: Decimal, registration: Registration, *, has_distant_quotas: bool
+    accumulated_overdue_ratio: Decimal,
+    registration: Registration,
+    *,
+    has_distant_quotas: bool,
+    overdue_deadline: int = 0,
 ) -> None:
-    """Handle fallback logic when no valid quota deadline is found within alert threshold.
-
-    Args:
-        accumulated_overdue_ratio: Cumulative ratio of overdue quotas
-        registration: Registration instance to update
-        has_distant_quotas: Whether quotas exist beyond alert threshold
-
-    Side effects:
-        Sets registration.quota and registration.deadline based on payment status
-
-    """
-    # Fallback: ensure quota is set if payment is due
+    """Handle fallback logic preserving negative deadlines for overdue payments."""
     if has_distant_quotas:
-        # Check if we have overdue quotas that need to be paid
         if accumulated_overdue_ratio > 0:
             registration.qsr = accumulated_overdue_ratio
-            is_last_quota = False
-            registration.quota = _calculate_quota_amount(
-                registration, accumulated_overdue_ratio, is_last_quota=is_last_quota
-            )
-            registration.deadline = 0  # Immediate payment for overdue
+            registration.quota = _calculate_quota_amount(registration, accumulated_overdue_ratio, is_last_quota=False)
+            # Preserve the negative deadline indicating days late
+            registration.deadline = overdue_deadline
         else:
-            # All quotas are beyond alert threshold: player is OK for now
             registration.quota = 0
             registration.deadline = 0
+
     elif registration.tot_iscr > registration.tot_payed:
-        # Outstanding debt but no valid quota deadline found: immediate payment
+        # Total debt remaining with no future valid deadlines
         registration.quota = registration.tot_iscr - registration.tot_payed
-        registration.deadline = 0
+        registration.deadline = overdue_deadline
 
 
 def _is_installment_applicable(installment_tickets: list, registration_ticket_id: int) -> bool:
@@ -397,10 +397,12 @@ def _set_installment_fallback(
         # All installments are beyond alert threshold: player is OK for now
         registration.quota = 0
         registration.deadline = 0
+
     elif not cumulative_amount:
         # No installments configured at all: use registration date as deadline
         registration.deadline = get_time_diff_today(registration.created.date())
         registration.quota = registration.tot_iscr - registration.tot_payed
+
     elif registration.tot_iscr > registration.tot_payed and registration.quota == 0:
         # Outstanding debt but no valid installment deadline found: immediate payment
         registration.quota = registration.tot_iscr - registration.tot_payed
@@ -897,8 +899,6 @@ def update_registration_accounting(registration: Registration) -> None:
     if _should_skip_accounting(registration):
         return
 
-    max_rounding_tolerance = 0.05
-
     # Extract basic event information
     event_start_date = registration.run.start
     event_features = get_event_features(registration.run.event_id)
@@ -920,7 +920,7 @@ def update_registration_accounting(registration: Registration) -> None:
 
     # Check if payment is complete (within rounding tolerance)
     remaining_balance = registration.tot_iscr - registration.tot_payed
-    if _is_payment_complete(registration, remaining_balance, max_rounding_tolerance):
+    if _is_payment_complete(registration, remaining_balance, conf_settings.MAX_ROUNDING_TOLERANCE):
         return
 
     # Skip further processing if registration is cancelled
@@ -946,7 +946,7 @@ def update_registration_accounting(registration: Registration) -> None:
         quota_check(registration, event_start_date, alert_days_threshold, association_id)
 
     # Skip alert setting if quota is negligible
-    if registration.quota <= max_rounding_tolerance:
+    if registration.quota <= conf_settings.MAX_ROUNDING_TOLERANCE:
         return
 
     # Set alert flag based on deadline proximity

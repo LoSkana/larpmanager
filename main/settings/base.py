@@ -215,6 +215,10 @@ TINYMCE_COMPRESSOR = False
 
 SECURE_REFERRER_POLICY = 'origin'
 
+# Accounting
+
+MAX_ROUNDING_TOLERANCE = 0.05
+
 # Demo user password (used for creating demo accounts)
 DEMO_PASSWORD = 'pippo'
 
@@ -251,6 +255,11 @@ ALLOWED_MIME_TYPES = {
 # email
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Amazon SES Configuration (optional - fallback when custom SMTP not configured)
+AWS_SES_ACCESS_KEY_ID = None
+AWS_SES_SECRET_ACCESS_KEY = None
+AWS_SES_REGION_NAME = 'us-east-1'
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
