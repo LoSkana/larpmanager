@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import re
 import time
 from typing import TYPE_CHECKING, Any
 
@@ -331,6 +332,8 @@ def user_edit(
         # Initialize form with POST data and files, bind to existing instance
         form = form_type(request.POST, request.FILES, instance=context[model_name], context=context)
 
+        info = re.sub(r"^(Exe|Orga)|Form$", "", form_type.__name__)
+
         if form.is_valid():
             # Check if delete operation was requested
             should_delete = "delete" in request.POST and request.POST["delete"] == "1"
@@ -342,7 +345,9 @@ def user_edit(
                 else:
                     # Default delete behavior
                     model_type = form_type.Meta.model
-                    save_log(context, model_type, context[model_name], operation_type=LogOperationType.DELETE)
+                    save_log(
+                        context, model_type, context[model_name], operation_type=LogOperationType.DELETE, info=info
+                    )
                     context[model_name].delete()
 
                 messages.success(request, _("Operation completed") + "!")
@@ -357,7 +362,7 @@ def user_edit(
                 saved_instance = form.save()
                 model_type = form_type.Meta.model
                 element_uuid = None if context["el"] is None else context["el"].uuid
-                save_log(context, model_type, saved_instance, element_uuid)
+                save_log(context, model_type, saved_instance, element_uuid, info=info)
 
             messages.success(request, _("Operation completed") + "!")
             context["saved"] = saved_instance
@@ -488,12 +493,13 @@ def _backend_save(
         save_version(saved_object, writing_type, context["member"], to_delete=should_delete)
 
     # Log with appropriate operation type
+    log_info = re.sub(r"^(Exe|Orga)|Form$", "", form_type.__name__)
     if should_delete:
-        save_log(context, model_type, saved_object, operation_type=LogOperationType.DELETE)
+        save_log(context, model_type, saved_object, operation_type=LogOperationType.DELETE, info=log_info)
     else:
         # Detect NEW vs UPDATE based on whether element existed before
         element_uuid = None if context["el"] is None else context["el"].uuid
-        save_log(context, model_type, saved_object, element_uuid=element_uuid)
+        save_log(context, model_type, saved_object, element_uuid=element_uuid, info=log_info)
 
     if should_delete:
         saved_object.delete()

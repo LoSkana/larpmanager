@@ -789,5 +789,5 @@
     number: 1
     config: null
     hidden: false
-    feature: log
+    feature: logs
     module: miscellany

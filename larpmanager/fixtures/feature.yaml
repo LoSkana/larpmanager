@@ -1445,7 +1445,7 @@
   fields:
     name: Activity Log
     descr: Show detailed activity log on entities created, updated or deleted.
-    slug: log
+    slug: logs
     overall: true
     placeholder: false
     order: 1
