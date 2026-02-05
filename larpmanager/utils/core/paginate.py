@@ -223,7 +223,7 @@ def _get_elements_query(
     query_elements = _apply_custom_queries(context, query_elements, model_type)
 
     # Apply user-defined filters from the request
-    query_elements = _set_filtering(context, query_elements, filter_params)
+    query_elements = _set_filtering(context, query_elements, filter_params, field_names)
 
     # Count filtered records before applying pagination
     filtered_records_count = query_elements.count()
@@ -239,13 +239,16 @@ def _get_elements_query(
     return query_elements, filtered_records_count
 
 
-def _set_filtering(context: dict, queryset: QuerySet[Any], column_filters: dict) -> QuerySet[Any]:
+def _set_filtering(
+    context: dict, queryset: QuerySet[Any], column_filters: dict, field_names: list[str]
+) -> QuerySet[Any]:
     """Apply filtering to queryset elements based on provided filters.
 
     Args:
         context: Context dictionary containing fields and optional callbacks/afield
         queryset: Django queryset to filter
         column_filters: Dictionary mapping column indices to filter values
+        field_names: List of field names available on the model
 
     Returns:
         Filtered queryset with applied search conditions
@@ -275,8 +278,11 @@ def _set_filtering(context: dict, queryset: QuerySet[Any], column_filters: dict)
         elif field_name in context.get("callbacks", {}):
             continue
 
+        # Get the correct filter path (handles related fields via selrel)
+        filter_field = _get_filter_field(field_names, field_name, context)
+
         # Map field to search fields using field_map or use as single field
-        search_fields = field_map.get(field_name, [field_name])
+        search_fields = field_map.get(filter_field, [filter_field])
 
         # Build OR query for all mapped fields with case-insensitive search
         q_filter = Q()
@@ -448,7 +454,12 @@ def _prepare_data_json(
 
         # Add data for each configured field, starting from column 1
         for column_index, (field_name, _field_label) in enumerate(context["fields"], start=1):
-            row_data[str(column_index)] = field_to_formatter.get(field_name, lambda _model_object: "")(model_object)
+            if field_name in field_to_formatter:
+                row_data[str(column_index)] = field_to_formatter[field_name](model_object)
+            else:
+                # Default: try to get attribute from model, convert to string
+                value = getattr(model_object, field_name, "")
+                row_data[str(column_index)] = str(value) if value is not None else ""
 
         # Add delete button if delete_view is provided
         if delete_view:
