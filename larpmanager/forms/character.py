@@ -301,7 +301,11 @@ class CharacterForm(WritingForm, BaseWritingForm):
         faction_event = self.params["run"].event.get_class_parent(Faction)
 
         # Get current faction IDs associated with the instance
-        old = set(instance.factions_list.filter(event=faction_event).values_list("id", flat=True))
+        # For non-orga users, only consider selectable factions to preserve staff-assigned non-selectable factions
+        old_query = instance.factions_list.filter(event=faction_event)
+        if not self.orga:
+            old_query = old_query.filter(selectable=True)
+        old = set(old_query.values_list("id", flat=True))
 
         # Remove factions that are no longer selected
         for ch in old - new:
