@@ -672,6 +672,20 @@ def association_accounting(context: dict) -> None:
         Plus all fields from association_accounting_data()
 
     """
+    association_accounting_summary(context)
+
+    # Build year range dictionary from current year to association creation
+    association = Association.objects.only("created").get(pk=context["association_id"])
+    start_year = int(association.created.year)
+    end_year = int(timezone.now().date().year)
+    context["sum_year"] = {}
+    while end_year >= start_year:
+        context["sum_year"][end_year] = 1
+        end_year -= 1
+
+
+def association_accounting_summary(context: dict) -> dict:
+    """Computes association global financial position."""
     # Initialize member balance tracking
     context.update({"list": [], "tokens_sum": 0, "credits_sum": 0, "balance_sum": 0})
 
@@ -692,20 +706,6 @@ def association_accounting(context: dict) -> None:
         context["tokens_sum"] += membership.tokens
         context["credits_sum"] += membership.credit
 
-    association_accounting_summary(context)
-
-    # Build year range dictionary from current year to association creation
-    association = Association.objects.only("created").get(pk=context["association_id"])
-    start_year = int(association.created.year)
-    end_year = int(timezone.now().date().year)
-    context["sum_year"] = {}
-    while end_year >= start_year:
-        context["sum_year"][end_year] = 1
-        end_year -= 1
-
-
-def association_accounting_summary(context: dict) -> dict:
-    """Computes association global financial position."""
     # Fetch all non-draft, non-cancelled runs for the association
     context["runs"] = (
         Run.objects.filter(event__association_id=context["association_id"])
@@ -716,7 +716,6 @@ def association_accounting_summary(context: dict) -> dict:
     )
 
     # Accumulate balance from all completed runs
-    context["balance_sum"] = 0
     for run in context["runs"]:
         if run.development == DevelopStatus.DONE:
             context["balance_sum"] += run.balance
