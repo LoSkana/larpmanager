@@ -44,7 +44,7 @@ def set_registration_status(apps: Any, schema_editor: Any) -> None:
         # Check if pre_register_active config is True
         pre_register_active = EventConfig.objects.filter(
             event_id=run.event_id,
-            key="pre_register_active",
+            name="pre_register_active",
             value="true",
         ).exists()
 
@@ -73,6 +73,12 @@ def remove_features(apps: Any, schema_editor: Any) -> None:
     """Remove the registration_open and register_link features."""
     Feature = apps.get_model("larpmanager", "Feature")
     Feature.objects.filter(slug__in=["registration_open", "register_link"]).delete()
+
+
+def remove_pre_register_active_configs(apps: Any, schema_editor: Any) -> None:
+    """Remove the pre_register_active config values."""
+    EventConfig = apps.get_model("larpmanager", "EventConfig")
+    EventConfig.objects.filter(name="pre_register_active").delete()
 
 
 class Migration(migrations.Migration):
@@ -121,4 +127,20 @@ class Migration(migrations.Migration):
         ),
         # Remove the features
         migrations.RunPython(remove_features),
+        # Remove pre_register_active configs
+        migrations.RunPython(remove_pre_register_active_configs),
+        migrations.AlterField(
+            model_name='run',
+            name='registration_open',
+            field=models.DateTimeField(blank=True, help_text='Date and time when registrations open for participants',
+                                       null=True, verbose_name='Registration opening'),
+        ),
+        migrations.AlterField(
+            model_name='run',
+            name='registration_status',
+            field=models.CharField(
+                choices=[('p', 'Pre-registration'), ('c', 'Closed'), ('o', 'Open'), ('e', 'External site'),
+                         ('f', 'Open on date')], default='c', help_text='Registrations status for this event',
+                max_length=1, verbose_name='Registrations status'),
+        ),
     ]

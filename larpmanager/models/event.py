@@ -606,6 +606,21 @@ class Run(UuidMixin, BaseModel):
 
     search = models.CharField(max_length=150, editable=False)
 
+    start = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name=_("Start date"),
+        help_text=_("The date when this event begins"),
+    )
+
+    end = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name=_("End date"),
+        help_text=_("The date when this event ends"),
+        db_index=True,
+    )
+
     development = models.CharField(
         max_length=1,
         choices=DevelopStatus.choices,
@@ -627,21 +642,6 @@ class Run(UuidMixin, BaseModel):
     number = models.IntegerField(
         verbose_name=_("Run number"),
         help_text=_("Sequential number for this event"),
-    )
-
-    start = models.DateField(
-        blank=True,
-        null=True,
-        verbose_name=_("Start date"),
-        help_text=_("The date when this event begins"),
-    )
-
-    end = models.DateField(
-        blank=True,
-        null=True,
-        verbose_name=_("End date"),
-        help_text=_("The date when this event ends"),
-        db_index=True,
     )
 
     registration_open = models.DateTimeField(

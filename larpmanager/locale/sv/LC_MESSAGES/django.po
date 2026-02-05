@@ -2624,6 +2624,9 @@ msgstr "Typ av prolog"
 msgid "URL identifier"
 msgstr "Idenominativ URL"
 
+msgid "Value required"
+msgstr "Värde krävs"
+
 msgid "Warehouse area"
 msgstr "Lagerområde"
 
@@ -7043,9 +7046,6 @@ msgstr "Öppna hanteringspanelen <a href= %(url)s'>från här</a>"
 msgid "Do you want to accept payments processed through the system"
 msgstr "Vill du acceptera betalningar som behandlas via systemet"
 
-msgid "If checked, makes pre-registration for this event available"
-msgstr "Om markerad, gör förregistrering för detta evenemang tillgängligt"
-
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
 "Hantera inställningarna för evenemanget: namn, beskrivning, datum, status"
@@ -7599,9 +7599,6 @@ msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "Nu kan du granska den säkerhetsinformation som deltagarna har lämnat in"
 
-msgid "Registration opening date is required when status is 'Open on date'"
-msgstr "Öppningsdatum för registrering krävs när status är \"Öppet på datum"
-
 msgid "Simply follow the instructions and provide the required information"
 msgstr "Följ bara instruktionerna och fyll i den information som krävs"
 
@@ -7735,9 +7732,6 @@ msgid "Enter any useful information for the organizers to verify the payment"
 msgstr ""
 "Ange alla uppgifter som kan vara till hjälp för organisatörerna för att "
 "kontrollera betalningen"
-
-msgid "External registration link is required when status is 'External site'"
-msgstr "Extern registreringslänk krävs när status är \"Extern webbplats"
 
 msgid "Follow the link below to complete your payment on the Paypal platform"
 msgstr ""

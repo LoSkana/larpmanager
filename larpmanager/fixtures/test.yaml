@@ -324,7 +324,6 @@
     carousel_img: ''
     carousel_text: ''
     website: ''
-    register_link: ''
     max_pg: 10
     max_filler: 0
     max_waiting: 0

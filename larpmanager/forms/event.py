@@ -500,13 +500,7 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
     def set_config_structure(self) -> None:
-        """Configure structural event settings including pre-registration, mail server, and cover options."""
-        if "pre_register" in self.params["features"]:
-            self.set_section("pre_reg", _("Pre-registration"))
-            field_label = _("Active")
-            field_help_text = _("If checked, makes pre-registration for this event available")
-            self.add_configs("pre_register_active", ConfigType.BOOL, field_label, field_help_text)
-
+        """Configure structural event settings including mail server and cover options."""
         if "custom_mail" in self.params["features"]:
             self.set_section("custom_mail_server", _("Customised mail server"))
             field_help_text = ""
@@ -1473,16 +1467,12 @@ class OrgaRunForm(ConfigForm):
         if registration_status == RegistrationStatus.EXTERNAL:
             register_link = cleaned_data.get("register_link")
             if not register_link:
-                raise ValidationError(
-                    {"register_link": _("External registration link is required when status is 'External site'")}
-                )
+                raise ValidationError({"register_link": _("Value required") + "!"})
 
         if registration_status == RegistrationStatus.FUTURE:
             registration_open = cleaned_data.get("registration_open")
             if not registration_open:
-                raise ValidationError(
-                    {"registration_open": _("Registration opening date is required when status is 'Open on date'")}
-                )
+                raise ValidationError({"registration_open": _("Value required") + "!"})
 
         return cleaned_data
 

@@ -2624,6 +2624,9 @@ msgstr "Type proloog"
 msgid "URL identifier"
 msgstr "Idenominatieve URL"
 
+msgid "Value required"
+msgstr "Vereiste waarde"
+
 msgid "Warehouse area"
 msgstr "Magazijn"
 
@@ -7072,9 +7075,6 @@ msgstr "Ga naar het beheerpaneel <a href= %(url)s'>van hier</a>"
 msgid "Do you want to accept payments processed through the system"
 msgstr "Wil je via het systeem verwerkte betalingen accepteren"
 
-msgid "If checked, makes pre-registration for this event available"
-msgstr "Indien aangevinkt, is voorregistratie voor dit evenement beschikbaar"
-
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
 "Beheer de instellingen van het evenement: naam, beschrijving, data, status"
@@ -7677,11 +7677,6 @@ msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "U kunt nu de veiligheidsinformatie bekijken die deelnemers hebben ingediend"
 
-msgid "Registration opening date is required when status is 'Open on date'"
-msgstr ""
-"De openingsdatum van de registratie is vereist als de status 'Open op datum'"
-" is"
-
 msgid "Simply follow the instructions and provide the required information"
 msgstr "Volg gewoon de instructies en geef de vereiste informatie"
 
@@ -7821,10 +7816,6 @@ msgid "Enter any useful information for the organizers to verify the payment"
 msgstr ""
 "Voer alle informatie in die nuttig is voor de organisatoren om de betaling "
 "te verifiëren"
-
-msgid "External registration link is required when status is 'External site'"
-msgstr ""
-"Externe registratielink is vereist wanneer de status 'Externe site' is"
 
 msgid "Follow the link below to complete your payment on the Paypal platform"
 msgstr ""

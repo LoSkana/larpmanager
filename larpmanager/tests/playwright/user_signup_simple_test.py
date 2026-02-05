@@ -125,14 +125,12 @@ def pre_register(live_server: Any, page: Any) -> None:
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
 
-    # Activate pre-register
+    # Activate pre-register feature (enables PRE option in registration_status)
     go_to(page, live_server, "/manage/features/pre_register/on")
-    # Activate registration open
-    go_to(page, live_server, "/test/manage/features/registration_open/on")
 
-    go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Pre-registration\s.+")).click()
-    page.locator("#id_pre_register_active").check()
+    # Set registration_status to PRE (Pre-registration)
+    go_to(page, live_server, "/test/manage/run")
+    page.locator("#id_registration_status").select_option("p")
     submit_confirm(page)
 
     go_to(page, live_server, "/")
@@ -147,8 +145,7 @@ def pre_register(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "bauuu")
 
-    # disable preregistration, sign up really
-    go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Pre-registration\s.+")).click()
-    page.locator("#id_pre_register_active").uncheck()
+    # Change registration_status to OPEN for normal registration
+    go_to(page, live_server, "/test/manage/run")
+    page.locator("#id_registration_status").select_option("o")
     submit_confirm(page)

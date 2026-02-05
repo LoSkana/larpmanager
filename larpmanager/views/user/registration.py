@@ -168,17 +168,23 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
         ch[el.event_id] = True
         context["already"].append(el)
 
-    # Find events available for pre-registration
-    for r in Event.objects.filter(association_id=context["association_id"], template=False):
-        # Skip if pre-registration not active for this event
-        if not get_event_config(r.id, "pre_register_active", default_value=False):
+    # Find events available for pre-registration (events with at least one run in PRE status)
+    seen_events = set()
+    for run in Run.objects.filter(
+        event__association_id=context["association_id"],
+        event__template=False,
+        registration_status=RegistrationStatus.PRE,
+    ).select_related("event"):
+        # Skip if we've already processed this event
+        if run.event_id in seen_events:
             continue
+        seen_events.add(run.event_id)
 
         # Skip if user already pre-registered
-        if r.id in ch:
+        if run.event_id in ch:
             continue
 
-        context["choices"].append(r)
+        context["choices"].append(run.event)
 
     # Handle form submission for new pre-registration
     if request.method == "POST":
@@ -664,7 +670,7 @@ def register(
 
     # Handle registration redirects for new registrations (skipped is a valid ticket link is provided)
     if is_new_registration and not context.get("ticket"):
-        redirect_response = _check_redirect_registration(request, context, current_event, secret_code)
+        redirect_response = _check_redirect_registration(request, context, secret_code)
         if redirect_response:
             return redirect_response
 
@@ -727,9 +733,7 @@ def _apply_ticket(context: dict, ticket_uuid: str | None, event_id: int) -> None
         pass
 
 
-def _check_redirect_registration(  # noqa: PLR0911
-    request: HttpRequest, context: dict, event: Any, secret_code: str | None
-) -> HttpResponse | None:
+def _check_redirect_registration(request: HttpRequest, context: dict, secret_code: str | None) -> HttpResponse | None:  # noqa: PLR0911
     """Check if registration should be redirected based on event status and settings.
 
     This function performs various checks to determine if a user's registration
@@ -786,11 +790,6 @@ def _check_redirect_registration(  # noqa: PLR0911
     if registration_status == RegistrationStatus.FUTURE and (
         not context["run"].registration_open or context["run"].registration_open > timezone.now()
     ):
-        # Redirect to pre-registration if available and active
-        if "pre_register" in context["features"] and get_event_config(
-            event.id, "pre_register_active", default_value=False
-        ):
-            return redirect("pre_register", event_slug=context["event"].slug)
         return render(request, "larpmanager/event/not_open.html", context)
 
     # Handle pre-registration status - redirect to pre-register page

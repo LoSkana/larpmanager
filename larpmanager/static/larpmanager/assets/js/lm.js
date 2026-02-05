@@ -391,8 +391,45 @@ $(document).ready(function() {
 
     setSelectChevronColor();
 
+    setupConditionalFields();
+
     $(document).trigger("lm_ready");
 });
+
+/**
+ * Sets up conditional field visibility based on data attributes.
+ * Fields with data-conditional-controller control visibility of fields
+ * with data-conditional-show that match the controller's value.
+ */
+function setupConditionalFields() {
+    $('[data-conditional-controller]').each(function() {
+        var $controller = $(this);
+        var controllerName = $controller.attr('data-conditional-controller');
+
+        function updateVisibility() {
+            var selectedValue = $controller.val();
+
+            // Find all fields that depend on this controller
+            $('[data-conditional-show]').each(function() {
+                var $field = $(this);
+                var showForValue = $field.attr('data-conditional-show');
+                var $row = $field.closest('tr');
+
+                if (selectedValue === showForValue) {
+                    $row.show();
+                } else {
+                    $row.hide();
+                }
+            });
+        }
+
+        // Initial state
+        updateVisibility();
+
+        // Update on change
+        $controller.on('change', updateVisibility);
+    });
+}
 
 function setSelectChevronColor() {
   const priRgb = getComputedStyle(document.documentElement)

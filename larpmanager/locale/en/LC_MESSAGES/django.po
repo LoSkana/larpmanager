@@ -1053,9 +1053,6 @@ msgid ""
 "If checked, allows a option to be visible only if other options are selected"
 msgstr ""
 
-msgid "If checked, makes pre-registration for this event available"
-msgstr ""
-
 msgid "Character cover"
 msgstr ""
 
@@ -1599,10 +1596,7 @@ msgstr ""
 msgid "End date cannot be before start date!"
 msgstr ""
 
-msgid "External registration link is required when status is 'External site'"
-msgstr ""
-
-msgid "Registration opening date is required when status is 'Open on date'"
+msgid "Value required"
 msgstr ""
 
 msgid "Progression"
@@ -3389,6 +3383,18 @@ msgstr ""
 msgid "Open on date"
 msgstr ""
 
+msgid "Start date"
+msgstr ""
+
+msgid "The date when this event begins"
+msgstr ""
+
+msgid "End date"
+msgstr ""
+
+msgid "The date when this event ends"
+msgstr ""
+
 msgid "Current status of this event"
 msgstr ""
 
@@ -3402,18 +3408,6 @@ msgid "Run number"
 msgstr ""
 
 msgid "Sequential number for this event"
-msgstr ""
-
-msgid "Start date"
-msgstr ""
-
-msgid "The date when this event begins"
-msgstr ""
-
-msgid "End date"
-msgstr ""
-
-msgid "The date when this event ends"
 msgstr ""
 
 msgid "Registration opening"

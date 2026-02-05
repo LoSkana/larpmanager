@@ -2624,6 +2624,9 @@ msgstr "Tipo prologhi"
 msgid "URL identifier"
 msgstr "Idenficativo URL"
 
+msgid "Value required"
+msgstr "Valore richiesto"
+
 msgid "Warehouse area"
 msgstr "Area magazzino"
 
@@ -7071,9 +7074,6 @@ msgstr "Accedi al pannello di gestione <a href= %(url)s'>da qui</a>"
 msgid "Do you want to accept payments processed through the system"
 msgstr "Vuoi accettare pagamenti elaborati attraverso il sistema"
 
-msgid "If checked, makes pre-registration for this event available"
-msgstr "Se checkato, rende disponibile la pre-iscrizione per questo evento"
-
 msgid "Manage the event settings: name, description, dates, status"
 msgstr "Gestisci le impostazioni dell'evento: nome, descrizione, date, stato"
 
@@ -7684,11 +7684,6 @@ msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "Ora puoi esaminare le informazioni sulla sicurezza fornite dai partecipanti"
 
-msgid "Registration opening date is required when status is 'Open on date'"
-msgstr ""
-"La data di apertura della registrazione è richiesta quando lo stato è "
-"\"Aperto alla data\""
-
 msgid "Simply follow the instructions and provide the required information"
 msgstr ""
 "Segui semplicemente le istruzioni e fornisci le informazioni richieste"
@@ -7834,11 +7829,6 @@ msgid "Enter any useful information for the organizers to verify the payment"
 msgstr ""
 "Inserisci ogni informazione utile agli organizzatori per verificare il "
 "pagamento"
-
-msgid "External registration link is required when status is 'External site'"
-msgstr ""
-"Il link di registrazione esterno è richiesto quando lo stato è \"Sito "
-"esterno\""
 
 msgid "Follow the link below to complete your payment on the Paypal platform"
 msgstr ""

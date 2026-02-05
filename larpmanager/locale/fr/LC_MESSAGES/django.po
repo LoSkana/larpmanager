@@ -2624,6 +2624,9 @@ msgstr "Type de prologue"
 msgid "URL identifier"
 msgstr "Idenominative URL"
 
+msgid "Value required"
+msgstr "Valeur requise"
+
 msgid "Warehouse area"
 msgstr "Zone d'entreposage"
 
@@ -7130,9 +7133,6 @@ msgstr "Accéder au panneau de gestion <a href= %(url)s'>à partir d'ici</a>"
 msgid "Do you want to accept payments processed through the system"
 msgstr "Souhaitez-vous accepter les paiements traités par le biais du système"
 
-msgid "If checked, makes pre-registration for this event available"
-msgstr "Si coché, permet de s'inscrire à l'avance à cet événement"
-
 msgid "Manage the event settings: name, description, dates, status"
 msgstr "Gérer les paramètres de l'événement : nom, description, dates, statut"
 
@@ -7771,11 +7771,6 @@ msgstr ""
 "Vous pouvez maintenant passer en revue les informations de sécurité soumises"
 " par les participants"
 
-msgid "Registration opening date is required when status is 'Open on date'"
-msgstr ""
-"La date d'ouverture de l'enregistrement est requise lorsque le statut est "
-"\"Ouvert le\""
-
 msgid "Simply follow the instructions and provide the required information"
 msgstr ""
 "Il suffit de suivre les instructions et de fournir les informations requises"
@@ -7928,11 +7923,6 @@ msgstr ""
 msgid "Enter any useful information for the organizers to verify the payment"
 msgstr ""
 "Saisir toute information utile à l'organisateur pour vérifier le paiement"
-
-msgid "External registration link is required when status is 'External site'"
-msgstr ""
-"Un lien d'enregistrement externe est requis lorsque le statut est \"Site "
-"externe\""
 
 msgid "Follow the link below to complete your payment on the Paypal platform"
 msgstr ""
