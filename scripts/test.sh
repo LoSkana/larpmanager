@@ -45,14 +45,14 @@ check_schema_version() {
   latest_migration=$(ls -1 larpmanager/migrations/[0-9]*.py 2>/dev/null | sort -V | tail -1 | xargs basename -s .py 2>/dev/null || echo "")
 
   if [[ -z "$dump_version" ]]; then
-    echo "WARNING: Could not find schema version in $sql_file" >&2
+    echo "ERROR: Could not find schema version in $sql_file" >&2
     echo "The dump may be outdated. Run 'python manage.py dump_test' to update it." >&2
-    return 1
+    exit 1
   fi
 
   if [[ -z "$latest_migration" ]]; then
-    echo "WARNING: Could not find migration files" >&2
-    return 1
+    echo "ERROR: Could not find migration files" >&2
+    exit 1
   fi
 
   if [[ "$dump_version" != "$latest_migration" ]]; then
