@@ -227,7 +227,7 @@ def handle_bulk_items(request: HttpRequest, context: dict) -> None:
             Operations.MOVE_ITEM_BOX: exec_move_item_box,
         }
         # Execute the bulk operation and raise ReturnNowError with results
-        raise ReturnNowError(exec_bulk(request, context, operation_type_to_handler))
+        raise ReturnNowError(exec_bulk(request, context, operation_type_to_handler, WarehouseItem))
 
     # Fetch available containers for the current association
     available_containers = (
@@ -365,7 +365,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
             Operations.SET_CHAR_STATUS: exec_set_char_status,
         }
         # Execute the bulk operation and raise exception to return result
-        raise ReturnNowError(exec_bulk(request, context, mapping))
+        raise ReturnNowError(exec_bulk(request, context, mapping, Character))
 
     # Initialize bulk operations list for GET requests
     context["bulk"] = []
@@ -454,7 +454,7 @@ def handle_bulk_quest(request: HttpRequest, context: dict) -> None:
     """
     # Handle POST request - execute bulk operations
     if request.POST:
-        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_QUEST_TYPE: exec_set_quest_type}))
+        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_QUEST_TYPE: exec_set_quest_type}, Quest))
 
     # Get available quest types for the event, ordered by name
     quest_types = context["event"].get_elements(QuestType).values("uuid", "name").order_by("name")
@@ -481,7 +481,7 @@ def handle_bulk_trait(request: HttpRequest, context: dict) -> None:
     """Handle bulk trait operations for quest assignment."""
     if request.POST:
         # Execute bulk operation for setting quest traits
-        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_TRAIT_QUEST: exec_set_quest}))
+        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_TRAIT_QUEST: exec_set_quest}, Trait))
 
     # Get available quests for the current event
     quests = context["event"].get_elements(Quest).values("uuid", "name").order_by("name")
@@ -514,7 +514,9 @@ def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
     """
     if request.POST:
         # Execute bulk operation and return early if POST request
-        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
+        raise ReturnNowError(
+            exec_bulk(request, context, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}, AbilityPx)
+        )
 
     # Get ability types for the event, ordered by name
     ability_types = context["event"].get_elements(AbilityTypePx).values("uuid", "name").order_by("name")
