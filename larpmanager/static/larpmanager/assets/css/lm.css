@@ -3204,3 +3204,8 @@ body.floating_iframe .inner {
 .platform input#id_submit {
   background-color: #737373 !important;
 }
+
+div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
+  right: 1.3em;
+  bottom: 0.4em;
+}
