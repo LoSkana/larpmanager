@@ -692,20 +692,6 @@ def association_accounting(context: dict) -> None:
         context["tokens_sum"] += membership.tokens
         context["credits_sum"] += membership.credit
 
-    # Fetch all non-draft, non-cancelled runs for the association
-    context["runs"] = (
-        Run.objects.filter(event__association_id=context["association_id"])
-        .exclude(development=DevelopStatus.START)
-        .exclude(development=DevelopStatus.CANC)
-        .select_related("event")
-        .order_by("-end")
-    )
-
-    # Accumulate balance from all completed runs
-    for run in context["runs"]:
-        if run.development == DevelopStatus.DONE:
-            context["balance_sum"] += run.balance
-
     association_accounting_summary(context)
 
     # Build year range dictionary from current year to association creation
@@ -720,6 +706,20 @@ def association_accounting(context: dict) -> None:
 
 def association_accounting_summary(context: dict) -> dict:
     """Computes association global financial position."""
+    # Fetch all non-draft, non-cancelled runs for the association
+    context["runs"] = (
+        Run.objects.filter(event__association_id=context["association_id"])
+        .exclude(development=DevelopStatus.START)
+        .exclude(development=DevelopStatus.CANC)
+        .select_related("event")
+        .order_by("-end")
+    )
+
+    # Accumulate balance from all completed runs
+    for run in context["runs"]:
+        if run.development == DevelopStatus.DONE:
+            context["balance_sum"] += run.balance
+
     # Fetch detailed accounting data (inflows, outflows, memberships, etc.)
     association_accounting_data(context)
 
