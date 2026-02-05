@@ -1546,6 +1546,21 @@ msgstr ""
 msgid "Not active anymore"
 msgstr ""
 
+msgid "Registrations are not available"
+msgstr ""
+
+msgid "Registrations are open for participants"
+msgstr ""
+
+msgid "Pre-registration is available"
+msgstr ""
+
+msgid "Redirects to an external registration link"
+msgstr ""
+
+msgid "Registrations will open at the specified date and time"
+msgstr ""
+
 msgid ""
 "Selected fields will be displayed as follows: public fields visible to all "
 "participants, private fields visible only to assigned participants"
@@ -1584,6 +1599,12 @@ msgstr ""
 msgid "End date cannot be before start date!"
 msgstr ""
 
+msgid "External registration link is required when status is 'External site'"
+msgstr ""
+
+msgid "Registration opening date is required when status is 'Open on date'"
+msgstr ""
+
 msgid "Progression"
 msgstr ""
 
@@ -1620,14 +1641,6 @@ msgid "Do you want to allow participants to create their own characters"
 msgstr ""
 
 msgid "Do you want to manage character progression through abilities"
-msgstr ""
-
-msgid "Registration opening date"
-msgstr ""
-
-msgid ""
-"Do you want to open registrations at a specific date and time instead of "
-"immediately"
 msgstr ""
 
 msgid "Early registration link"
@@ -3277,17 +3290,6 @@ msgstr ""
 msgid "Link to an external website with additional event information"
 msgstr ""
 
-msgid "External registration link"
-msgstr ""
-
-msgid "Link to an external registration system"
-msgstr ""
-
-msgid ""
-"non-registered users will be redirected here, while registered users get "
-"normal access"
-msgstr ""
-
 msgid "Maximum participants"
 msgstr ""
 
@@ -3378,7 +3380,22 @@ msgstr ""
 msgid "Concluded"
 msgstr ""
 
+msgid "Closed"
+msgstr ""
+
+msgid "External site"
+msgstr ""
+
+msgid "Open on date"
+msgstr ""
+
 msgid "Current status of this event"
+msgstr ""
+
+msgid "Registrations status"
+msgstr ""
+
+msgid "Registrations status for this event"
 msgstr ""
 
 msgid "Run number"
@@ -3405,7 +3422,15 @@ msgstr ""
 msgid "Date and time when registrations open for participants"
 msgstr ""
 
-msgid "leave blank to keep registrations closed"
+msgid "External registration link"
+msgstr ""
+
+msgid "Link to an external registration system"
+msgstr ""
+
+msgid ""
+"non-registered users will be redirected here, while registered users get "
+"normal access"
 msgstr ""
 
 msgid "Secret registration code"
@@ -8391,17 +8416,6 @@ msgstr ""
 msgid "Allows participants to cancel their own registrations at any time"
 msgstr ""
 
-msgid "External registration"
-msgstr ""
-
-msgid ""
-"Instead of using an internal registration form, redirects the participant to "
-"an external registration link"
-msgstr ""
-
-msgid "Now you can set the external registration link"
-msgstr ""
-
 msgid ""
 "Enables a ticket-like system for issues during the event, where staff can "
 "log issues, assign severity/urgency, and track them"
@@ -8615,17 +8629,6 @@ msgid ""
 msgstr ""
 
 msgid "Now participants can create refund requests, and you can review them"
-msgstr ""
-
-msgid "Opening date"
-msgstr ""
-
-msgid ""
-"Lets you specify a date (and time) on which registration will open, keeping "
-"it closed until then"
-msgstr ""
-
-msgid "Now you can set the registration opening date"
 msgstr ""
 
 msgid ""
@@ -9595,11 +9598,7 @@ msgid ""
 "If you have made a transfer, please upload the receipt for it to be processed"
 msgstr ""
 
-msgid "Registrations not open"
-msgstr ""
-
-#, python-format
-msgid "Opening at: %(date)s"
+msgid "External registration"
 msgstr ""
 
 msgid "Registration is open!"
@@ -9609,6 +9608,13 @@ msgid "Sign up as a filler!"
 msgstr ""
 
 msgid "Join the waiting list!"
+msgstr ""
+
+msgid "Registrations not open"
+msgstr ""
+
+#, python-format
+msgid "Opening at: %(date)s"
 msgstr ""
 
 msgid "Pre-registration confirmed"

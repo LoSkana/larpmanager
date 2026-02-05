@@ -67,6 +67,7 @@ from larpmanager.models.event import (
     Event,
     EventTextType,
     PreRegistration,
+    RegistrationStatus,
     Run,
 )
 from larpmanager.models.member import Member, MembershipStatus
@@ -100,11 +101,11 @@ def _check_pre_register_redirect(context: dict, event_slug: str) -> HttpResponse
         HttpResponse redirect if should redirect, None otherwise
 
     """
-    # Check if pre-registration is active for this specific event
-    if not get_event_config(context["event"].id, "pre_register_active", default_value=False):
+    # Check if pre-registration is active
+    status = context["run"].registration_status
+    if status == RegistrationStatus.PRE:
         return redirect("register", event_slug=event_slug)
 
-    # Check if registration is open and we're past the open date
     if (
         "registration_open" in context["features"]
         and context["run"].registration_open
@@ -765,17 +766,24 @@ def _check_redirect_registration(  # noqa: PLR0911
         # Secret code is correct, allow registration bypassing other checks
         return None
 
+    # Get registration status from run
+    registration_status = context["run"].registration_status
+
+    # Handle closed status
+    if registration_status == RegistrationStatus.CLOSED:
+        return render(request, "larpmanager/event/not_open.html", context)
+
     # Redirect to external registration link if configured
     # Skip redirect for staff and NPC tiers who register internally
     if (
-        "register_link" in context["features"]
-        and event.register_link
+        registration_status == RegistrationStatus.EXTERNAL
+        and context["run"].register_link
         and ("tier" not in context or context["tier"] not in [TicketTier.STAFF, TicketTier.NPC])
     ):
-        return redirect(event.register_link)
+        return redirect(context["run"].register_link)
 
-    # Check registration timing and pre-registration options
-    if "registration_open" in context["features"] and (
+    # Check registration timing for future opening
+    if registration_status == RegistrationStatus.FUTURE and (
         not context["run"].registration_open or context["run"].registration_open > timezone.now()
     ):
         # Redirect to pre-registration if available and active
@@ -784,6 +792,10 @@ def _check_redirect_registration(  # noqa: PLR0911
         ):
             return redirect("pre_register", event_slug=context["event"].slug)
         return render(request, "larpmanager/event/not_open.html", context)
+
+    # Handle pre-registration status - redirect to pre-register page
+    if registration_status == RegistrationStatus.PRE:
+        return redirect("pre_register", event_slug=context["event"].slug)
 
     return None
 

@@ -52,7 +52,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import Quest, QuestType
-from larpmanager.models.event import DevelopStatus, Run
+from larpmanager.models.event import DevelopStatus, RegistrationStatus, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
 from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, WritingQuestion
 from larpmanager.models.member import Membership, MembershipStatus
@@ -104,23 +104,30 @@ def _get_registration_status_code(run: Run) -> tuple[str, Any]:
     """
     features = get_event_features(run.event_id)
 
+    # Use the registration_status field
+    status = run.registration_status
+
     # Check external registration link
-    if "register_link" in features and run.event.register_link:
-        return "external", run.event.register_link
+    if status == RegistrationStatus.EXTERNAL:
+        return "external", run.register_link
 
     # Check pre-registration
-    if not run.registration_open and get_event_config(run.event_id, "pre_register_active", default_value=False):
+    if status == RegistrationStatus.PRE:
         return "preregister", None
 
-    # Check registration opening time
-    current_datetime = timezone.now()
-    if "registration_open" in features:
+    # Check closed status
+    if status == RegistrationStatus.CLOSED:
+        return "closed", None
+
+    # Check registration opening time (future status)
+    if status == RegistrationStatus.FUTURE:
         if not run.registration_open:
             return "not_set", None
-        if run.registration_open > current_datetime:
+        current_datetime = timezone.now()
+        if run.registration_open and run.registration_open > current_datetime:
             return "future", run.registration_open
 
-    # Check registration availability
+    # For OPEN status or FUTURE with past opening time, check registration availability
     run_status = {}
     registration_available(run, features, run_status)
 
@@ -990,7 +997,7 @@ def _orga_registration_actions(context: dict, enabled_features: dict[str, Any]) 
     Checks registration status, required tickets, and registration features
     to provide guidance for event organizers.
     """
-    if "registration_open" in enabled_features and not context["run"].registration_open:
+    if context["run"].registration_status == RegistrationStatus.FUTURE and not context["run"].registration_open:
         _add_priority(
             context,
             _("Set up a value for registration opening date"),
@@ -1004,7 +1011,7 @@ def _orga_registration_actions(context: dict, enabled_features: dict[str, Any]) 
             "orga_event",
         )
 
-    if "register_link" in enabled_features and not context["event"].register_link:
+    if context["run"].registration_status == RegistrationStatus.EXTERNAL and not context["run"].register_link:
         _add_priority(
             context,
             _("Set up a value for registration external link"),

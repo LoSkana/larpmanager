@@ -498,6 +498,9 @@ msgstr "Causale"
 msgid "Checks"
 msgstr "Controlli"
 
+msgid "Closed"
+msgstr "Chiuso"
+
 msgid "Copied"
 msgstr "Copiato"
 
@@ -2064,8 +2067,8 @@ msgstr "Prossimo pagamento"
 msgid "Not selected"
 msgstr "Non selezionato"
 
-msgid "Opening date"
-msgstr "Data di apertura"
+msgid "Open on date"
+msgstr "Aperto alla data"
 
 msgid "Organization"
 msgstr "Associazione"
@@ -2253,6 +2256,9 @@ msgstr "Storico eventi"
 
 msgid "External link"
 msgstr "Url esterno"
+
+msgid "External site"
+msgstr "Sito esterno"
 
 msgid "Faction cover"
 msgstr "Copertina gruppo"
@@ -3357,7 +3363,7 @@ msgid "Transaction totals"
 msgstr "Transazione totali"
 
 msgid "View registrations"
-msgstr "Visualizza le registrazioni"
+msgstr "Visualizza le iscrizioni"
 
 msgid "Voluntary donation"
 msgstr "Donazione volontaria"
@@ -3665,6 +3671,9 @@ msgstr "Apertura delle iscrizioni"
 
 msgid "Registration options"
 msgstr "Opzioni di registrazione"
+
+msgid "Registrations status"
+msgstr "Stato delle iscrizioni"
 
 msgid "Relationships (Test)"
 msgstr "Relazioni (Test)"
@@ -4011,7 +4020,7 @@ msgid "Registrations not open"
 msgstr "Le iscrizioni non sono ancora aperte"
 
 msgid "Registrations shortcut"
-msgstr "Scorciatoia registrazioni"
+msgstr "Scorciatoia iscrizioni"
 
 msgid "Reimbursement approved"
 msgstr "Rimborso approvato"
@@ -4369,9 +4378,6 @@ msgstr "Leggere gli elementi di scrittura"
 msgid "Receipt already confirmed"
 msgstr "Ricevuta già confermata"
 
-msgid "Registration opening date"
-msgstr "Data apertura iscrizioni"
-
 #, python-format
 msgid "Registration to %(event)s"
 msgstr "Iscrizione a %(event)s"
@@ -4707,6 +4713,9 @@ msgstr "Giocatori in attesa del personaggio"
 msgid "Pre-registration at %(event)s"
 msgstr "Pre-iscrizione a %(event)s"
 
+msgid "Pre-registration is available"
+msgstr "La pre-registrazione è disponibile"
+
 msgid "Preferred navigation language"
 msgstr "Lingua preferita di navigazione"
 
@@ -4868,6 +4877,9 @@ msgstr "Nome da visualizzare per i gettoni"
 msgid "Password reset of user %(user)s"
 msgstr "Ripristino della password dell'utente %(user)s"
 
+msgid "Registrations are not available"
+msgstr "Le iscrizioni non sono disponibili"
+
 msgid "Relationships of your character"
 msgstr "Legami del tuo personaggio"
 
@@ -4951,7 +4963,7 @@ msgid "Manage expenses for contributors"
 msgstr "Gestisci le spese per i collaboratori"
 
 msgid "Manage participant registrations"
-msgstr "Gestisci le registrazioni dei partecipanti"
+msgstr "Gestisci le iscrizioni dei partecipanti"
 
 msgid "Manage rules for computed fields"
 msgstr "Gestisci le regole per i campi calcolati"
@@ -5264,6 +5276,9 @@ msgstr "Descrizione facoltativa del contenuto"
 
 msgid "Payments pending delegated accounts"
 msgstr "Pagamenti in attesa di account delegati"
+
+msgid "Registrations status for this event"
+msgstr "Stato delle iscrizioni per questo evento"
 
 #, python-format
 msgid "Reimbursement request for %(event)s"
@@ -5623,6 +5638,9 @@ msgstr "Foto e video caricate con successo"
 msgid "Registration cancellation for %(event)s"
 msgstr "Disdetta iscrizione a %(event)s"
 
+msgid "Registrations are open for participants"
+msgstr "Sono aperte le iscrizioni per i partecipanti"
+
 msgid "Set the experience points configuration"
 msgstr "Imposta la configurazione dei punti esperienza"
 
@@ -5740,9 +5758,6 @@ msgstr "se il personaggio appartiene a questo elemento"
 
 msgid "it will enable country-specific features"
 msgstr "abiliterà le caratteristiche specifiche del paese"
-
-msgid "leave blank to keep registrations closed"
-msgstr "lasciare vuoto per mantenere le registrazioni chiuse"
 
 msgid "will be displayed on the main event page"
 msgstr "sarà visualizzato nella pagina principale dell'evento"
@@ -5871,6 +5886,9 @@ msgstr "Partecipanti che NON hanno inviato preferenze"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Reminder compilazione profilo per %(event)s"
+
+msgid "Redirects to an external registration link"
+msgstr "Reindirizza a un link di registrazione esterno"
 
 msgid "Reserve additional tickets beyond your own"
 msgstr "Prenota altri biglietti oltre al tuo"
@@ -6110,9 +6128,6 @@ msgstr "Ora puoi copiare elementi da un altro evento"
 msgid "Now you can define registration form sections"
 msgstr "Ora puoi definire le sezioni del modulo di iscrizione"
 
-msgid "Now you can set the registration opening date"
-msgstr "Ora puoi impostare la data di apertura delle iscrizioni"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Luogo di nascita non presente nell'elenco ISTAT"
 
@@ -6167,9 +6182,6 @@ msgstr "Ora puoi selezionare quali biglietti possono essere regalati"
 
 msgid "Now you can set the experience points settings"
 msgstr "Ora puoi impostare i punti esperienza"
-
-msgid "Now you can set the external registration link"
-msgstr "Ora puoi impostare il link di iscrizione esterno"
 
 msgid "Optional - Image displayed within the question"
 msgstr "Opzionale - Immagine visualizzata all'interno della domanda"
@@ -6784,6 +6796,9 @@ msgid "Quantity tracking is not enabled for this organization"
 msgstr ""
 "Il monitoraggio della quantità non è abilitato per questa organizzazione"
 
+msgid "Registrations will open at the specified date and time"
+msgstr "Le iscrizioni si apriranno alla data e all'ora specificate"
+
 msgid "The registration request will be updated automatically"
 msgstr "La richiesta di iscrizione verrà aggiornata automaticamente"
 
@@ -6794,7 +6809,7 @@ msgid "The user has updated their registration for this event"
 msgstr "L'utente ha aggiornato la sua iscrizione a questo evento"
 
 msgid "This page shows all event registrations for the member"
-msgstr "Questa pagina mostra tutte le registrazioni agli eventi per il socio"
+msgstr "Questa pagina mostra tutte le iscrizioni agli eventi per il socio"
 
 msgid "This page shows the collections opened by participants"
 msgstr "Questa pagina mostra le collezioni aperte dai partecipanti"
@@ -7279,7 +7294,7 @@ msgstr ""
 
 msgid "Available token balance for event registrations and activities"
 msgstr ""
-"Saldo gettoni disponibile per le registrazioni agli eventi ed i pagamenti"
+"Saldo gettoni disponibile per le iscrizioni agli eventi ed i pagamenti"
 
 msgid "Content of legal notice page linked at the bottom of all pages"
 msgstr ""
@@ -7669,6 +7684,11 @@ msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "Ora puoi esaminare le informazioni sulla sicurezza fornite dai partecipanti"
 
+msgid "Registration opening date is required when status is 'Open on date'"
+msgstr ""
+"La data di apertura della registrazione è richiesta quando lo stato è "
+"\"Aperto alla data\""
+
 msgid "Simply follow the instructions and provide the required information"
 msgstr ""
 "Segui semplicemente le istruzioni e fornisci le informazioni richieste"
@@ -7804,7 +7824,7 @@ msgstr "Descrivilo nel campo qui sotto e lo sistemeremo appena possibile"
 
 msgid "Do you want to allow users to cancel their registrations on their own"
 msgstr ""
-"Vuoi consentire agli utenti di cancellare le proprie registrazioni da soli"
+"Vuoi consentire agli utenti di cancellare le proprie iscrizioni da soli"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr ""
@@ -7814,6 +7834,11 @@ msgid "Enter any useful information for the organizers to verify the payment"
 msgstr ""
 "Inserisci ogni informazione utile agli organizzatori per verificare il "
 "pagamento"
+
+msgid "External registration link is required when status is 'External site'"
+msgstr ""
+"Il link di registrazione esterno è richiesto quando lo stato è \"Sito "
+"esterno\""
 
 msgid "Follow the link below to complete your payment on the Paypal platform"
 msgstr ""
@@ -7841,7 +7866,7 @@ msgstr ""
 
 msgid "Now participants can submit preregistrations, and you can review them"
 msgstr ""
-"Ora i partecipanti possono inviare le preregistrazioni e tu puoi esaminarle"
+"Ora i partecipanti possono inviare le pre-iscrizioni e tu puoi esaminarle"
 
 msgid "Optional - Maximum number of times it can be selected (0 = unlimited)"
 msgstr ""
@@ -7991,7 +8016,7 @@ msgid ""
 "If checked: shows a link in the topbar to view all user's registrations"
 msgstr ""
 "Se selezionato: mostra un link nella barra in alto per visualizzare tutte le"
-" registrazioni di un utente"
+" iscrizioni di un utente"
 
 msgid ""
 "List of users who have not registered for a future session of the event"
@@ -8711,7 +8736,7 @@ msgid ""
 "registrations"
 msgstr ""
 "Se è selezionata, i partecipanti danno un valore di preferenza quando "
-"aggiungono le pre-registrazioni"
+"aggiungono le pre-iscrizioni"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
@@ -8856,8 +8881,8 @@ msgid ""
 "If checked, all registrations are confirmed even if no payment has been "
 "received"
 msgstr ""
-"Se è selezionata, tutte le registrazioni sono confermate anche se non è "
-"stato ricevuto alcun pagamento"
+"Se è selezionata, tutte le iscrizioni sono confermate anche se non è stato "
+"ricevuto alcun pagamento"
 
 msgid ""
 "If checked, automatic saving during editing will be disable for writing "
@@ -9165,13 +9190,6 @@ msgid ""
 msgstr ""
 "Permette di definire in dettaglio il modo in cui parole e frasi vengono "
 "tradotte nello spazio dell'organizzazione"
-
-msgid ""
-"Do you want to open registrations at a specific date and time instead of "
-"immediately"
-msgstr ""
-"Vuoi aprire le registrazioni a una data e a un'ora specifiche invece che "
-"immediatamente"
 
 #, python-format
 msgid ""
@@ -9895,7 +9913,7 @@ msgid ""
 "registrations (0 = unlimited)"
 msgstr ""
 "Opzionale - Numero massimo di volte che può essere selezionato in tutte le "
-"registrazioni (0 = illimitato)"
+"iscrizioni (0 = illimitato)"
 
 msgid ""
 "The following items will have their quantities reduced based on the "
@@ -10026,13 +10044,6 @@ msgstr ""
 "tutti gli altri partecipanti"
 
 msgid ""
-"Lets you specify a date (and time) on which registration will open, keeping "
-"it closed until then"
-msgstr ""
-"Permette di specificare una data (e un'ora) in cui si aprirà la "
-"registrazione, mantenendola chiusa fino a quel momento"
-
-msgid ""
 "Once downloaded you must print it, sign it, take a digital scan, and upload "
 "it to the form below"
 msgstr ""
@@ -10106,8 +10117,8 @@ msgid ""
 "If checked, all registrations are displayed in a single table rather than "
 "being separated by type"
 msgstr ""
-"Se selezionata, tutte le registrazioni vengono visualizzate in un'unica "
-"tabella anziché essere separate per tipo"
+"Se selezionata, tutte le iscrizioni vengono visualizzate in un'unica tabella"
+" anziché essere separate per tipo"
 
 msgid ""
 "Upload a custom font file for page titles to match your event's theme (TTF, "
@@ -10213,7 +10224,7 @@ msgid ""
 "If you select an event, all characters from that event's registrations will "
 "be automatically loaded"
 msgstr ""
-"Se si seleziona un evento, tutti i personaggi delle registrazioni di "
+"Se si seleziona un evento, tutti i personaggi delle iscrizioni di "
 "quell'evento verranno caricati automaticamente"
 
 msgid ""
@@ -10327,7 +10338,7 @@ msgid ""
 " participant registrations"
 msgstr ""
 "Consente di gestire l'inserimento di entrate per un evento che non "
-"provengono dalle registrazioni dei partecipanti"
+"provengono dalle iscrizioni dei partecipanti"
 
 msgid ""
 "Manage features activated for this event and all its runs (click on a "
@@ -10498,13 +10509,6 @@ msgstr ""
 " stimata del tuo arrivo"
 
 msgid ""
-"Instead of using an internal registration form, redirects the participant to"
-" an external registration link"
-msgstr ""
-"Invece di utilizzare un modulo di registrazione interno, reindirizza il "
-"partecipante a un link di registrazione esterno"
-
-msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
 "displaying trend graphs over time"
 msgstr ""
@@ -10571,7 +10575,7 @@ msgid ""
 "Note that existing registrations with the same participant email, will be "
 "overwritten with the uploaded data"
 msgstr ""
-"Nota che le registrazioni esistenti con lo stesso indirizzo e-mail del "
+"Nota che le iscrizioni esistenti con lo stesso indirizzo e-mail del "
 "partecipante saranno sovrascritte con i dati caricati"
 
 msgid ""
@@ -11035,7 +11039,7 @@ msgid ""
 "system to match them with registrations in the system"
 msgstr ""
 "Gestisci la verifica dei pagamenti. Caricate i pagamenti dal vostro sistema "
-"di pagamento verificato per abbinarli alle registrazioni nel sistema"
+"di pagamento verificato per abbinarli alle iscrizioni nel sistema"
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
@@ -11210,8 +11214,7 @@ msgid ""
 "notifications for registrations, payments, and invoice approvals"
 msgstr ""
 "Se selezionata: riceverai un'unica e-mail di riepilogo giornaliera invece di"
-" notifiche immediate per registrazioni, pagamenti e approvazioni di "
-"pagamenti"
+" notifiche immediate per iscrizioni, pagamenti e approvazioni di pagamenti"
 
 msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "

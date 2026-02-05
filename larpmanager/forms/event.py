@@ -55,6 +55,7 @@ from larpmanager.models.event import (
     EventText,
     EventTextType,
     ProgressStep,
+    RegistrationStatus,
     Run,
 )
 from larpmanager.models.form import (
@@ -153,7 +154,6 @@ class OrgaEventForm(BaseModelForm):
             "max_waiting",
             "max_filler",
             "website",
-            "register_link",
             "parent",
             "association",
         )
@@ -196,7 +196,7 @@ class OrgaEventForm(BaseModelForm):
         # Check each display-related feature and mark fields for removal if disabled
         dl = [
             s
-            for s in ["visible", "website", "tagline", "where", "authors", "genre", "register_link"]
+            for s in ["visible", "website", "tagline", "where", "authors", "genre"]
             if s not in self.params["features"]
         ]
 
@@ -1307,18 +1307,61 @@ class OrgaRunForm(ConfigForm):
             for value, label in self.fields["development"].choices
         )
 
-        dl.extend(
-            [
-                s
-                for s in ["registration_open", "registration_secret"]
-                if not self.instance.pk or not self.instance.event or s not in self.params["features"]
-            ]
-        )
+        # Configure registration_status field
+        self._configure_registration_status()
+
+        # Handle registration_secret visibility
+        if not self.instance.pk or not self.instance.event or "registration_secret" not in self.params["features"]:
+            dl.append("registration_secret")
 
         for s in dl:
             self.delete_field(s)
 
         self.show_sections = True
+
+    def _configure_registration_status(self) -> None:
+        """Configure registration_status field with dynamic choices and help text."""
+        # Build choices - PRE only available if pre_register feature is active globally
+        choices = [
+            (RegistrationStatus.CLOSED.value, RegistrationStatus.CLOSED.label),
+            (RegistrationStatus.OPEN.value, RegistrationStatus.OPEN.label),
+        ]
+
+        # Add PRE only if pre_register feature is active
+        if "pre_register" in self.params.get("features", []):
+            choices.append((RegistrationStatus.PRE.value, RegistrationStatus.PRE.label))
+
+        choices.extend(
+            [
+                (RegistrationStatus.EXTERNAL.value, RegistrationStatus.EXTERNAL.label),
+                (RegistrationStatus.FUTURE.value, RegistrationStatus.FUTURE.label),
+            ]
+        )
+
+        self.fields["registration_status"].choices = choices
+
+        # Build help text explaining each status
+        status_help = {
+            RegistrationStatus.CLOSED: _("Registrations are not available"),
+            RegistrationStatus.OPEN: _("Registrations are open for participants"),
+            RegistrationStatus.PRE: _("Pre-registration is available"),
+            RegistrationStatus.EXTERNAL: _("Redirects to an external registration link"),
+            RegistrationStatus.FUTURE: _("Registrations will open at the specified date and time"),
+        }
+
+        help_parts = []
+        for value, label in choices:
+            status_enum = RegistrationStatus(value)
+            help_parts.append(f"<b>{label}</b>: {status_help[status_enum]}")
+
+        self.fields["registration_status"].help_text = ", ".join(help_parts)
+
+        # Add data attributes for JavaScript conditional display
+        self.fields["registration_status"].widget.attrs["data-conditional-controller"] = "registration_status"
+        if "registration_open" in self.fields:
+            self.fields["registration_open"].widget.attrs["data-conditional-show"] = RegistrationStatus.FUTURE.value
+        if "register_link" in self.fields:
+            self.fields["register_link"].widget.attrs["data-conditional-show"] = RegistrationStatus.EXTERNAL.value
 
     def set_configs(self) -> None:  # noqa: C901 - Complex form configuration with feature-dependent field setup
         """Configure event-specific form fields and sections.
@@ -1423,6 +1466,23 @@ class OrgaRunForm(ConfigForm):
         # Ensure end date is not before start date
         if cleaned_data["end"] < cleaned_data["start"]:
             raise ValidationError({"end": _("End date cannot be before start date!")})
+
+        # Validate registration status requirements
+        registration_status = cleaned_data.get("registration_status")
+
+        if registration_status == RegistrationStatus.EXTERNAL:
+            register_link = cleaned_data.get("register_link")
+            if not register_link:
+                raise ValidationError(
+                    {"register_link": _("External registration link is required when status is 'External site'")}
+                )
+
+        if registration_status == RegistrationStatus.FUTURE:
+            registration_open = cleaned_data.get("registration_open")
+            if not registration_open:
+                raise ValidationError(
+                    {"registration_open": _("Registration opening date is required when status is 'Open on date'")}
+                )
 
         return cleaned_data
 
@@ -1605,11 +1665,6 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
         self.setup.update(
             {
-                "registration_open": (
-                    True,
-                    _("Registration opening date"),
-                    _("Do you want to open registrations at a specific date and time instead of immediately"),
-                ),
                 "registration_secret": (
                     True,
                     _("Early registration link"),
