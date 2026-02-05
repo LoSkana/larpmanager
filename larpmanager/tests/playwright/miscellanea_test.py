@@ -105,6 +105,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     page.locator("#id_form1-name").fill("Test Access")
 
     page.locator("#id_form2-development").select_option("1")
+    page.locator("#id_form2-registration_status").select_option("o")
     page.locator("#id_form2-start").fill("2055-06-11")
     just_wait(page)
     page.locator("#id_form2-start").click()

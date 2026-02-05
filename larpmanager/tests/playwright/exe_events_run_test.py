@@ -52,6 +52,7 @@ def test_exe_events_run(pw_page: Any) -> None:
     page.locator("#id_form1-max_pg").fill("10")
 
     page.locator("#id_form2-development").select_option("1")
+    page.locator("#id_form2-registration_status").select_option("o")
     page.locator("#id_form2-start").fill("2055-06-11")
     just_wait(page)
     page.locator("#id_form2-start").click()

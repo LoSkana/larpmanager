@@ -48,9 +48,6 @@ def test_user_signup_simple(pw_page: Any) -> None:
 
 
 def signup(live_server: Any, page: Any) -> None:
-    # deactivate registration open
-    go_to(page, live_server, "/test/manage/features/registration_open/off")
-
     # sign up
     go_to(page, live_server, "/")
     expect_normalized(page, page.locator("#one"), "Registration is open!")

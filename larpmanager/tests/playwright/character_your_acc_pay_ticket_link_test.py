@@ -103,13 +103,9 @@ def ticket_link_bypasses_not_visible(live_server, page):
 
 def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     """Test that direct ticket link works when registration is not yet open."""
-    # Set registration to open in the future
-    go_to(page, live_server, "/test/manage")
-    page.get_by_role("link", name="Features").first.click()
-    page.get_by_role("checkbox", name="Opening date").check()
-    submit_confirm(page)
 
     page.get_by_role("link", name="Event").first.click()
+    page.locator("#id_form2-registration_status").select_option("f")
     page.locator("#id_form2-registration_open").fill("2099-12-31")
     just_wait(page)
     page.locator("#id_form2-registration_open").click()
@@ -135,9 +131,7 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     # Reset registration open date
     go_to(page, live_server, "/test/manage")
     page.get_by_role("link", name="Event").first.click()
-    page.locator("#id_form2-registration_open").fill("")
-    just_wait(page)
-    page.locator("#id_form2-registration_open").click()
+    page.locator("#id_form2-registration_status").select_option("o")
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage")
@@ -148,14 +142,10 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
 
 def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
     """Test that NPC/Staff ticket links bypass external registration link redirect."""
-    # Enable external registration link feature
-    go_to(page, live_server, "/test/manage")
-    page.get_by_role("link", name="Features").first.click()
-    page.get_by_role("checkbox", name="External registration").check()
-    submit_confirm(page)
 
     # Set an external registration link
     page.get_by_role("link", name="Event").click()
+    page.locator("#id_form2-registration_status").select_option("e")
     page.locator("#id_form1-register_link").click()
     page.locator("#id_form1-register_link").fill("https://google.com")
     submit_confirm(page)
@@ -182,12 +172,7 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
 
     # Clean up: disable external registration link
     page.get_by_role("link", name="Event").click()
-    page.locator("#id_form1-register_link").fill("")
-    submit_confirm(page)
-
-    go_to(page, live_server, "/test/manage")
-    page.get_by_role("link", name="Features").first.click()
-    page.get_by_role("checkbox", name="External registration").uncheck()
+    page.locator("#id_form2-registration_status").select_option("o")
     submit_confirm(page)
 
 
