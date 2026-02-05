@@ -522,13 +522,13 @@ function data_tables() {
 
         const table = new DataTable('#' + tableId, {
             scrollX: true,
-            stateSave: true,
+            stateSave: false,
             paging: full_layout,
             layout: full_layout
                 ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } }
                 : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
             columnControl: ['order', 'searchDropdown'],
-            lengthMenu: [[10, 25, 50, 100, 250, 500, 1000], [10, 25, 50, 100, 250, 500, 1000]],
+            lengthMenu: [[25, 50, 100, 250, 500, 1000], [10, 25, 50, 100, 250, 500, 1000]],
             order: [],
             ordering: {
                 indicators: false,
@@ -619,13 +619,13 @@ function data_tables() {
         });
 
         const table = new DataTable('#' + tableId, {
-            lengthMenu: [[10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000], [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]],
+            lengthMenu: [[25, 50, 100, 250, 500, 1000, 2500, 5000, 10000], [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]],
             ajax: {
                 url: url,
                 type: 'POST'
             },
             serverSide: true,
-            stateSave: true,
+            stateSave: false,
             columnControl: [
                 {
                     target: 0,
