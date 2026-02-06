@@ -35,9 +35,9 @@ from larpmanager.cache.warehouse import get_association_warehouse_cache
 from larpmanager.forms.miscellanea import (
     UploadAlbumsForm,
 )
-from larpmanager.models.member import Log
 from larpmanager.models.miscellanea import (
     Album,
+    Log,
     OneTimeAccessToken,
     OneTimeContent,
     Problem,
@@ -53,6 +53,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_album_cod, get_element
+from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.services.miscellanea import get_warehouse_optionals, upload_albums
 from larpmanager.utils.services.writing import writing_post
@@ -949,3 +950,33 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
     )
 
     return redirect("orga_warehouse_manifest", event_slug=event_slug)
+
+
+@login_required
+def orga_log(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display paginated list of logs for event."""
+    context = check_event_context(request, event_slug, "orga_log")
+
+    context.update(
+        {
+            "selrel": ("member",),
+            "fields": [
+                ("member", _("Member")),
+                ("operation_type", _("Operation")),
+                ("element_name", _("Element")),
+                ("info", _("Info")),
+                ("created", _("Date")),
+            ],
+            "callbacks": {
+                "operation_type": lambda el: el.get_operation_type_display(),
+            },
+        }
+    )
+
+    return orga_paginate(
+        request,
+        context,
+        Log,
+        "larpmanager/orga/logs.html",
+        None,  # No edit view for logs (read-only)
+    )

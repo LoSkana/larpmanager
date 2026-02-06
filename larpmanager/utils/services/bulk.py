@@ -25,15 +25,19 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.utils.edit.backend import save_log
+
 if TYPE_CHECKING:
     from django.db.models import QuerySet
+
+    from larpmanager.models.base import BaseModel
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
-from larpmanager.models.member import Log, Member
+from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.miscellanea import (
     WarehouseContainer,
     WarehouseItem,
@@ -43,7 +47,7 @@ from larpmanager.models.writing import Character, CharacterStatus, Faction, Plot
 from larpmanager.utils.core.exceptions import ReturnNowError
 
 
-def _get_bulk_params(request: HttpRequest, context: dict) -> tuple[list[str], int, int]:
+def _get_bulk_params(request: HttpRequest) -> tuple[list[str], int, int]:
     """Extract and validate bulk operation parameters from request.
 
     Extracts operation ID, target ID, and a list of entity UUIDs from the request,
@@ -51,7 +55,6 @@ def _get_bulk_params(request: HttpRequest, context: dict) -> tuple[list[str], in
 
     Args:
         request: HTTP request object containing POST data with operation parameters
-        context: Context dictionary containing event/run information and association ID
 
     Returns:
         :tuple[list[str], int, int]: A tuple containing:
@@ -81,19 +84,7 @@ def _get_bulk_params(request: HttpRequest, context: dict) -> tuple[list[str], in
     if not entity_uuids:
         raise ReturnNowError(JsonResponse({"error": "no uuids"}, status=400))
 
-    # Determine entity ID for logging (use run ID if available, otherwise association ID)
-    entity_id_for_log = context["association_id"]
-    if "run" in context:
-        entity_id_for_log = context["run"].id
-
-    # Log the bulk operation attempt with all relevant parameters
-    Log.objects.create(
-        member=context["member"],
-        cls=f"bulk {operation_code} {target_code}",
-        eid=entity_id_for_log,
-        dct={"operation": operation_code, "target": target_code, "uuids": entity_uuids},
-    )
-
+    # Return parameters
     return entity_uuids, operation_code, target_code
 
 
@@ -119,13 +110,32 @@ class Operations:
     SET_CHAR_STATUS = 17
 
 
-def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict) -> JsonResponse:
+def _create_bulk_logs(
+    context: dict, operation_name: int, operation_target: str | int, object_uuids: list[str], model_class: BaseModel
+) -> None:
+    """Create individual log entries for each element in a bulk operation."""
+    # Get all objects that were affected by the bulk operation
+    objects = model_class.objects.filter(uuid__in=object_uuids)
+
+    # Create a log entry for each affected object
+    for obj in objects:
+        save_log(
+            context=context,
+            cls=model_class,
+            element=obj,
+            operation_type=LogOperationType.BULK,
+            info=f"operation_name: {operation_name}, operation_target: {operation_target}",
+        )
+
+
+def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict, model_class: type) -> JsonResponse:
     """Execute bulk operations on a collection of objects.
 
     Args:
         request: HTTP request object containing bulk operation parameters
         context: Context dictionary with operation-specific data
         operation_mapping: Dictionary mapping operation names to their handler functions
+        model_class: Django model class of the objects being modified (for logging)
 
     Returns:
         JsonResponse: Success response with "ok" status or error response with
@@ -136,7 +146,7 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict) -> J
 
     """
     # Extract bulk operation parameters from request
-    object_uuids, operation_name, operation_target = _get_bulk_params(request, context)
+    object_uuids, operation_name, operation_target = _get_bulk_params(request)
 
     # Validate that the requested operation is supported
     if operation_name not in operation_mapping:
@@ -145,6 +155,9 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict) -> J
     try:
         # Execute the bulk operation using the mapped handler function
         operation_mapping[operation_name](context, operation_target, object_uuids)
+
+        # Create log entries for each affected element
+        _create_bulk_logs(context, operation_name, operation_target, object_uuids, model_class)
     except ObjectDoesNotExist:
         # Handle case where target objects don't exist
         return JsonResponse({"error": "not found"}, status=400)
@@ -214,7 +227,7 @@ def handle_bulk_items(request: HttpRequest, context: dict) -> None:
             Operations.MOVE_ITEM_BOX: exec_move_item_box,
         }
         # Execute the bulk operation and raise ReturnNowError with results
-        raise ReturnNowError(exec_bulk(request, context, operation_type_to_handler))
+        raise ReturnNowError(exec_bulk(request, context, operation_type_to_handler, WarehouseItem))
 
     # Fetch available containers for the current association
     available_containers = (
@@ -352,7 +365,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
             Operations.SET_CHAR_STATUS: exec_set_char_status,
         }
         # Execute the bulk operation and raise exception to return result
-        raise ReturnNowError(exec_bulk(request, context, mapping))
+        raise ReturnNowError(exec_bulk(request, context, mapping, Character))
 
     # Initialize bulk operations list for GET requests
     context["bulk"] = []
@@ -441,7 +454,7 @@ def handle_bulk_quest(request: HttpRequest, context: dict) -> None:
     """
     # Handle POST request - execute bulk operations
     if request.POST:
-        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_QUEST_TYPE: exec_set_quest_type}))
+        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_QUEST_TYPE: exec_set_quest_type}, Quest))
 
     # Get available quest types for the event, ordered by name
     quest_types = context["event"].get_elements(QuestType).values("uuid", "name").order_by("name")
@@ -468,7 +481,7 @@ def handle_bulk_trait(request: HttpRequest, context: dict) -> None:
     """Handle bulk trait operations for quest assignment."""
     if request.POST:
         # Execute bulk operation for setting quest traits
-        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_TRAIT_QUEST: exec_set_quest}))
+        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_TRAIT_QUEST: exec_set_quest}, Trait))
 
     # Get available quests for the current event
     quests = context["event"].get_elements(Quest).values("uuid", "name").order_by("name")
@@ -501,7 +514,9 @@ def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
     """
     if request.POST:
         # Execute bulk operation and return early if POST request
-        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
+        raise ReturnNowError(
+            exec_bulk(request, context, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}, AbilityPx)
+        )
 
     # Get ability types for the event, ordered by name
     ability_types = context["event"].get_elements(AbilityTypePx).values("uuid", "name").order_by("name")

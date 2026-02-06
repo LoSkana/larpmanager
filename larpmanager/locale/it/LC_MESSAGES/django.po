@@ -170,6 +170,9 @@ msgstr "Lista"
 msgid "Logo"
 msgstr "Logo"
 
+msgid "Logs"
+msgstr "Logs"
+
 msgid "Mail"
 msgstr "Mail"
 
@@ -779,6 +782,9 @@ msgstr "Default"
 
 msgid "Details"
 msgstr "Dettagli"
+
+msgid "Element"
+msgstr "Elemento"
 
 msgid "Example"
 msgstr "Esempio"
@@ -1971,6 +1977,9 @@ msgstr "Tipo abilità"
 msgid "Achievements"
 msgstr "Achievements"
 
+msgid "Activity Log"
+msgstr "Log di attività"
+
 msgid "Add from NPC"
 msgstr "Aggiungi da PNG"
 
@@ -2435,6 +2444,9 @@ msgstr "Giorni disponibili"
 msgid "Bring a friend"
 msgstr "Porta un amico"
 
+msgid "Bulk operation"
+msgstr "Operazione massiva"
+
 msgid "Cargo manifest"
 msgstr "Manifesto di carico"
 
@@ -2602,6 +2614,9 @@ msgstr "Pagamento unico"
 
 msgid "Tax code check"
 msgstr "Controllo codice fiscale"
+
+msgid "Today activity"
+msgstr "Attività di oggi"
 
 msgid "Total payments"
 msgstr "Pagamenti totali"
@@ -6201,6 +6216,9 @@ msgstr "Ci sono <b>%(number)s</b> rimborsi da consegnare"
 msgid "There are quest types without quests: %(list)s"
 msgstr "Ci sono tipi di missioni senza missioni: %(list)s"
 
+msgid "This page shows all log entries for this event"
+msgstr "Questa pagina mostra tutte le voci di attività per questo evento"
+
 msgid "This page shows the email lists of subscribers"
 msgstr "Questa pagina mostra gli elenchi di e-mail degli abbonati"
 
@@ -6635,6 +6653,9 @@ msgstr "La prima colonna indica l'importo, la seconda gli incassi"
 
 msgid "This page shows all donations recorded in the system"
 msgstr "Questa pagina mostra tutte le donazioni registrate nel sistema"
+
+msgid "This page shows all log entries for the organization"
+msgstr "Questa pagina mostra tutte le voci di attività dell'organizzazione"
 
 msgid "This page shows all payments received for this event"
 msgstr "Questa pagina mostra tutti i pagamenti ricevuti per questo evento"
@@ -7669,6 +7690,11 @@ msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "Ora puoi esaminare le informazioni sulla sicurezza fornite dai partecipanti"
 
+msgid "Show detailed activity log on entities created, updated or deleted."
+msgstr ""
+"Mostra un registro dettagliato delle attività sulle entità create, "
+"aggiornate o eliminate."
+
 msgid "Simply follow the instructions and provide the required information"
 msgstr ""
 "Segui semplicemente le istruzioni e fornisci le informazioni richieste"
@@ -7775,6 +7801,11 @@ msgstr ""
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
 msgstr ""
 "Questo testo verrà aggiunto al foglio, nel paragrafo della trama %(name)s"
+
+msgid "View detailed activity log of all changes made for this organization"
+msgstr ""
+"Visualizza il registro dettagliato delle attività di tutte le modifiche "
+"apportate a questa organizzazione"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
@@ -7952,6 +7983,11 @@ msgid "This page summarizes the types of pools that a character inventory has"
 msgstr ""
 "Questa pagina riassume i tipi di pool di cui dispone l'inventario di un "
 "personaggio"
+
+msgid "View detailed activity log of all changes made for this specific event"
+msgstr ""
+"Visualizza il registro dettagliato delle attività di tutte le modifiche "
+"apportate per questo evento specifico"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""

@@ -3977,6 +3977,21 @@ msgid ""
 "or strange symbols"
 msgstr ""
 
+msgid "New"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Bulk operation"
+msgstr ""
+
+msgid "Upload"
+msgstr ""
+
 msgid ""
 "If your question is about a specific event, please select it! If  is a "
 "general question instead, please leave it blank."
@@ -4603,9 +4618,6 @@ msgid ""
 "next item"
 msgstr ""
 
-msgid "Delete"
-msgstr ""
-
 msgid ""
 "If you are absolutely certain that you want to delete this item, click on "
 "this button"
@@ -4656,12 +4668,6 @@ msgid "Select year"
 msgstr ""
 
 msgid "Select"
-msgstr ""
-
-msgid "New"
-msgstr ""
-
-msgid "Upload"
 msgstr ""
 
 msgid "Download"
@@ -5777,6 +5783,12 @@ msgstr ""
 msgid "Payed"
 msgstr ""
 
+msgid "Logs"
+msgstr ""
+
+msgid "This page shows all log entries for the organization"
+msgstr ""
+
 msgid "Pre registrations"
 msgstr ""
 
@@ -6307,6 +6319,9 @@ msgid "Dates"
 msgstr ""
 
 msgid "Counts"
+msgstr ""
+
+msgid "Today activity"
 msgstr ""
 
 msgid "Priorities"
@@ -7102,9 +7117,6 @@ msgstr ""
 msgid "Tier"
 msgstr ""
 
-msgid "Update"
-msgstr ""
-
 msgid "Participants"
 msgstr ""
 
@@ -7295,6 +7307,9 @@ msgid ""
 msgstr ""
 
 msgid "Simply follow the instructions and provide the required information"
+msgstr ""
+
+msgid "This page shows all log entries for this event"
 msgstr ""
 
 msgid ""
@@ -8826,6 +8841,12 @@ msgstr ""
 msgid "Now you can define custom organization translations"
 msgstr ""
 
+msgid "Activity Log"
+msgstr ""
+
+msgid "Show detailed activity log on entities created, updated or deleted."
+msgstr ""
+
 msgid "Manage the organization main settings"
 msgstr ""
 
@@ -8978,6 +8999,9 @@ msgstr ""
 
 msgid ""
 "Customize translations of words and phrases in the organization interface"
+msgstr ""
+
+msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
 
 msgid "Manage the event settings: name, description, dates, status"
@@ -9237,6 +9261,9 @@ msgid "Pool Types"
 msgstr ""
 
 msgid "Manage character inventory pool types"
+msgstr ""
+
+msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 
 msgid "Communications"
@@ -9733,6 +9760,9 @@ msgid "Sent"
 msgstr ""
 
 msgid "Answer submitted!"
+msgstr ""
+
+msgid "Element"
 msgstr ""
 
 msgid "Your request has been sent, we will reply as soon as possible!"

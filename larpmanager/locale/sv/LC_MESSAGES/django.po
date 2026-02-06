@@ -170,6 +170,9 @@ msgstr "Lista"
 msgid "Logo"
 msgstr "Logotyp"
 
+msgid "Logs"
+msgstr "Loggar"
+
 msgid "Mail"
 msgstr "Post"
 
@@ -779,6 +782,9 @@ msgstr "Standard"
 
 msgid "Details"
 msgstr "Detaljer"
+
+msgid "Element"
+msgstr "Element"
 
 msgid "Example"
 msgstr "Exempel"
@@ -1971,6 +1977,9 @@ msgstr "Typ av färdighet"
 msgid "Achievements"
 msgstr "Prestationer"
 
+msgid "Activity Log"
+msgstr "Aktivitetslogg"
+
 msgid "Add from NPC"
 msgstr "Lägg till från NPC"
 
@@ -2435,6 +2444,9 @@ msgstr "Tillgängliga dagar"
 msgid "Bring a friend"
 msgstr "Ta med en vän"
 
+msgid "Bulk operation"
+msgstr "Bulkoperation"
+
 msgid "Cargo manifest"
 msgstr "Lastmanifest"
 
@@ -2602,6 +2614,9 @@ msgstr "Enstaka betalning"
 
 msgid "Tax code check"
 msgstr "Kontroll av skattekod"
+
+msgid "Today activity"
+msgstr "Dagens aktivitet"
 
 msgid "Total payments"
 msgstr "Totala betalningar"
@@ -6202,6 +6217,9 @@ msgstr "Det finns <b>%(number)s</b> återbetalningar att leverera"
 msgid "There are quest types without quests: %(list)s"
 msgstr "Det finns uppdragstyper utan uppdrag: %(list)s"
 
+msgid "This page shows all log entries for this event"
+msgstr "På den här sidan visas alla loggposter för den här händelsen"
+
 msgid "This page shows the email lists of subscribers"
 msgstr "På den här sidan visas e-postlistorna för prenumeranterna"
 
@@ -6628,6 +6646,9 @@ msgstr "Den första kolumnen beloppet, den andra kvitton"
 
 msgid "This page shows all donations recorded in the system"
 msgstr "På den här sidan visas alla donationer som registrerats i systemet"
+
+msgid "This page shows all log entries for the organization"
+msgstr "På den här sidan visas alla loggposter för organisationen"
 
 msgid "This page shows all payments received for this event"
 msgstr "Denna sida visar alla betalningar som mottagits för detta evenemang"
@@ -7584,6 +7605,11 @@ msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "Nu kan du granska den säkerhetsinformation som deltagarna har lämnat in"
 
+msgid "Show detailed activity log on entities created, updated or deleted."
+msgstr ""
+"Visa detaljerad aktivitetslogg över enheter som skapats, uppdaterats eller "
+"tagits bort."
+
 msgid "Simply follow the instructions and provide the required information"
 msgstr "Följ bara instruktionerna och fyll i den information som krävs"
 
@@ -7682,6 +7708,11 @@ msgstr ""
 #, python-format
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
 msgstr "Denna text kommer att läggas till på arket, i plotparagrafen %(name)s"
+
+msgid "View detailed activity log of all changes made for this organization"
+msgstr ""
+"Visa detaljerad aktivitetslogg över alla ändringar som gjorts för den här "
+"organisationen"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
@@ -7836,6 +7867,11 @@ msgid "This page summarizes the types of pools that a character inventory has"
 msgstr ""
 "På den här sidan sammanfattas de typer av pooler som en karaktärsinventering"
 " har"
+
+msgid "View detailed activity log of all changes made for this specific event"
+msgstr ""
+"Visa detaljerad aktivitetslogg över alla ändringar som gjorts för den här "
+"specifika händelsen"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""

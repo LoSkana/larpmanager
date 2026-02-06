@@ -221,7 +221,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerTutorial,
 )
 from larpmanager.models.member import Badge, Member, MemberConfig, Membership
-from larpmanager.models.miscellanea import ChatMessage, HelpQuestion, PlayerRelationship, WarehouseItem
+from larpmanager.models.miscellanea import ChatMessage, HelpQuestion, Log, PlayerRelationship, WarehouseItem
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
 from larpmanager.models.writing import (
     Character,
@@ -731,6 +731,13 @@ def post_save_casting_cache(sender: type, instance: Casting, **kwargs: Any) -> N
 def post_delete_casting_cache(sender: type, instance: Casting, **kwargs: Any) -> None:
     """Clear deadline widget cache when casting preferences are deleted."""
     # Clear deadline widget cache for this run (casting deadline)
+    reset_widgets(instance)
+
+
+# Log signals
+@receiver(post_save, sender=Log)
+def post_save_log_cache(sender: type, instance: Log, **kwargs: Any) -> None:
+    """Clear log widget cache when log entries are saved."""
     reset_widgets(instance)
 
 
