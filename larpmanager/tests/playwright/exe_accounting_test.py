@@ -77,7 +77,7 @@ def verify(page: Any, live_server: Any) -> None:
 
 def sign_up_pay(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/tickets/")
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
     page.locator("#id_price").fill("50.00")

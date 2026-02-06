@@ -81,7 +81,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
         page.locator("#one"),
         "Additional Reserve additional tickets beyond your own Additional Optional Ticket Your registration ticket2 Ticket Rate Number of installments to split the fee: payments… Rate Optional Pay what you want Freely indicate the amount of your donation Pay what you want Optional Surcharge Registration surcharge Surcharge Optional",
     )
-    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').locator("a:has(i.fas.fa-edit)").click()
     page.get_by_text("Reserve additional tickets").click()
     page.get_by_text("Reserve additional tickets").fill("Reserve additional tickets beyond your own2")
     submit_confirm(page)
@@ -89,7 +89,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
 
     # change ticket price
     page.get_by_role("link", name="Tickets").first.click()
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("5")
     page.locator("#id_description").click()

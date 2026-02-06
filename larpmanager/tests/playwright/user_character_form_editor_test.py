@@ -223,7 +223,7 @@ def character(page: Any, live_server: Any) -> None:
 
     # approve char
     go_to(page, live_server, "/test/manage/characters")
-    page.locator('[id="u3"]').get_by_role("link", name="").click()
+    page.locator('[id="u3"]').locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_status").select_option("a")
     submit_confirm(page)
 

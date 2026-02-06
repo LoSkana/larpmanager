@@ -198,7 +198,7 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
     page.get_by_role("link", name="Registrations").click()
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("cell", name="Show available characters").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
@@ -217,7 +217,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
 
     # Set ticket price
     page.get_by_role("link", name="Tickets").first.click()
-    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
     page.locator("#id_price").fill("100.00")

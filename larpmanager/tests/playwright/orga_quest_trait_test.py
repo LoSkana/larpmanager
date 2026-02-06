@@ -236,7 +236,7 @@ def casting(page: Any, live_server: Any) -> None:
     )
 
     # manual trait assignments
-    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_qt_u1").select_option("u1")
     submit_confirm(page)
 

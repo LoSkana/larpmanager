@@ -155,7 +155,7 @@ def plots(live_server: Any, page: Any) -> None:
     )
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(page, page.locator("#one"), "plott conceptt textt")
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("cell", name="Show This text will be added").get_by_role("link").click()
     expect_normalized(page, page.locator("#id_char_role_2_tr"), "#2 characcter")
     expect_normalized(page, page.locator("#id_char_role_2_tr"), "super start")

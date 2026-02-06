@@ -116,7 +116,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("link", name="Form").click()
 
     # check section is still available
-    page.locator("#registration_questions_Needs").get_by_role("link", name="").click()
+    page.locator("#registration_questions_Needs").locator("a:has(i.fas.fa-edit)").click()
     expect(page.locator("#select2-id_section-container")).to_match_aria_snapshot("- textbox \"Needs\"")
 
     # Reorder sections, check they are updated
@@ -146,7 +146,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Select ticket as dependent
     page.get_by_role("link", name="Form").click()
-    page.locator("#registration_questions_Preferences").get_by_role("link", name="").click()
+    page.locator("#registration_questions_Preferences").locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("row", name="Ticket list If you select one").get_by_role("searchbox").click()
     page.get_by_role("row", name="Ticket list If you select one").get_by_role("searchbox").fill("de")
     page.get_by_role("option", name="Test Larp (Standard) Depends").click()
@@ -185,7 +185,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("link", name="").click()
 
     page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
-    page.locator("#registration_questions_Needs").get_by_role("link", name="").click()
+    page.locator("#registration_questions_Needs").locator("a:has(i.fas.fa-edit)").click()
     page.get_by_text("Staff members who are allowed").click()
     page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").click()
     page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").fill("ad")
@@ -225,7 +225,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     expect_normalized(page, page.locator("#one"), "Admin Test Depends SADSA")
 
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
 
     expect(page.get_by_role("link", name="Needs ")).not_to_be_visible()
     expect(page.get_by_role("cell", name="sleeeep")).not_to_be_visible()
@@ -291,7 +291,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     # assign character
     go_to(page, live_server, "/test/manage")
     page.get_by_role("link", name="Registrations", exact=True).click()
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("link", name="Character ").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")

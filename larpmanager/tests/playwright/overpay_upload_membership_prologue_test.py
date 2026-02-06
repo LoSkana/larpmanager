@@ -60,7 +60,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
     # Set ticket price
     go_to(page, live_server, "/test/manage")
     page.get_by_role("link", name="Tickets").first.click()
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
     submit_confirm(page)
@@ -113,7 +113,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     # Change ticket price
     go_to(page, live_server, "/test/manage")
     page.get_by_role("link", name="Tickets").first.click()
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("80.00")
     submit_confirm(page)
@@ -124,7 +124,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Admin Test Standard -20 100 80 20 40 40")
 
     # Perform save
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     submit_confirm(page)
     page.get_by_role("link", name="accounting", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 80 80 40 40")
@@ -151,7 +151,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     submit_confirm(page)
     page.get_by_role("link", name="Registrations", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     expect_normalized(page,
         page.locator("#main_form"),
         "Registration Member Admin Test - orga@test.it Admin Test - orga@test.it",
@@ -217,7 +217,7 @@ def upload_membership(page: Any, live_server: Any) -> None:
 
     # Try accessing member form
     expect_normalized(page, page.locator("#one"), "Test Admin orga@test.it Accepted 1")
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
 
     # Check result
     go_to(page, live_server, "/membership")

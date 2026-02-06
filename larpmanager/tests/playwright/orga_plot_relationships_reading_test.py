@@ -70,7 +70,7 @@ def reading(live_server: Any, page: Any) -> None:
 
     # set prova presentation and text
     page.get_by_role("link", name="Characters").click()
-    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').locator("a:has(i.fas.fa-edit)").click()
 
     fill_tinymce(page, "id_teaser", "pppresssent")
 
@@ -147,7 +147,7 @@ def relationships(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text #2 prova Test Character")
 
     # check in char
-    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').locator("a:has(i.fas.fa-edit)").click()
     just_wait(page)
     page.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
     just_wait(page)
@@ -156,7 +156,7 @@ def relationships(live_server: Any, page: Any) -> None:
     # check in other char
     go_to(page, live_server, "/test/manage/characters/#")
     just_wait(page)
-    page.locator('[id="u1"]').get_by_role("link", name="").click()
+    page.locator('[id="u1"]').locator("a:has(i.fas.fa-edit)").click()
     just_wait(page)
     page.get_by_role("row", name="Inverse Show How the").get_by_role("link").click()
     just_wait(page)
@@ -211,7 +211,7 @@ def plots(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character prova")
 
     # check it is the same
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     # Wait for the toggle element to be ready
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
@@ -226,7 +226,7 @@ def plots(live_server: Any, page: Any) -> None:
     # check it
     page.locator("#one").get_by_role("link", name="Characters").click()
     expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character prova")
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     # Wait for the toggle element to be ready
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
@@ -249,7 +249,7 @@ def plots(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww prova")
 
     # set text
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     fill_tinymce(page, "id_char_role_2", "bruuuu")
     submit_confirm(page)
 
@@ -273,7 +273,7 @@ def plots_character(live_server: Any, page: Any) -> None:
 
     # test adding them to character
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
-    page.locator('[id="u1"]').get_by_role("link", name="").click()
+    page.locator('[id="u1"]').locator("a:has(i.fas.fa-edit)").click()
     searchbox = page.get_by_role("searchbox")
     searchbox.click()
     searchbox.fill("gag")
@@ -293,7 +293,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     page.locator("#one").get_by_role("link", name="Plots").click()
     expect_normalized(page, page.locator('[id="u1"]'), "gaga bibi")
 
-    page.locator('[id="u1"]').get_by_role("link", name="").click()
+    page.locator('[id="u1"]').locator("a:has(i.fas.fa-edit)").click()
 
     # remove third
     page.get_by_role("listitem", name="bibi").locator("span").click()
@@ -304,7 +304,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # check
-    page.locator('[id="u1"]').get_by_role("link", name="").click()
+    page.locator('[id="u1"]').locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show")
     expect_normalized(page, page.locator("#id_pl_2_tr"), "gaga ffff")
     submit_confirm(page)
@@ -314,7 +314,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     expect(page.locator('[id="u1"]')).not_to_contain_text("bibi")
 
     # check second, then remove
-    page.locator('[id="u1"]').get_by_role("link", name="").click()
+    page.locator('[id="u1"]').locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("listitem", name="gaga").locator("span").click()
     page.get_by_role("link", name="Instructions").click()
     submit_confirm(page)

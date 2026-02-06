@@ -156,7 +156,7 @@ def ability(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Ability", exact=True).click()
     page.wait_for_load_state("load")
     just_wait(page)
-    page.locator("[id='u2']").get_by_role("link", name="").click()
+    page.locator("[id='u2']").locator("a:has(i.fas.fa-edit)").click()
     page.get_by_text("---------").click()
     page.get_by_role("searchbox").nth(3).fill("test_template")
     page.get_by_role("option", name="test_template").click()
@@ -183,7 +183,7 @@ def delivery(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator('[id="u1"]'), "12")
     expect_normalized(page, page.locator('[id="u1"]'), "12")
     expect_normalized(page, page.locator('[id="u1"]'), "0")
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     page.wait_for_load_state("load")
     just_wait(page)
     row = page.get_by_role("row", name="Abilities Show")
@@ -225,7 +225,7 @@ def rules(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text 6")
 
     # remove ability
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("row", name="Abilities Show").get_by_role("link").click()
     just_wait(page)
     btn = page.locator(".select2-selection__choice:has-text('sword1') .select2-selection__choice__remove")
@@ -238,7 +238,7 @@ def rules(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text 2")
 
     # readd ability
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     page.wait_for_load_state("load")
     just_wait(page)
     row = page.get_by_role("row", name="Abilities Show")
@@ -259,7 +259,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     # Assign char
     go_to(page, live_server, "/test/manage")
     page.get_by_role("link", name="Registrations", exact=True).click()
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()

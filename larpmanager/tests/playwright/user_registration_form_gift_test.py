@@ -217,7 +217,7 @@ def field_text(page: Any, live_server: Any) -> None:
 def gift(page: Any, live_server: Any) -> None:
     # make ticket giftable
     go_to(page, live_server, "/test/manage/tickets/")
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_text("Indicates whether the ticket").click()
     page.locator("#id_giftable").check()
     submit_confirm(page)

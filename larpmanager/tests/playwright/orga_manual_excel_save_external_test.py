@@ -146,7 +146,7 @@ def excel(page: Any, live_server: Any) -> None:
     )
 
     # test manual save
-    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').locator("a:has(i.fas.fa-edit)").click()
     fill_tinymce(page, "id_text", "ciaoooo")
     frame_locator = page.frame_locator("iframe#id_text_ifr")
     editor = frame_locator.locator("body#tinymce")
@@ -161,7 +161,7 @@ def excel(page: Any, live_server: Any) -> None:
     )
 
     # check in page
-    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').locator("a:has(i.fas.fa-edit)").click()
     page.locator('a.my_toggle[tog="f_id_text"]').click()
     expect_normalized(page, page.locator("#one"), "good friends with #1 ciaoooo")
 
@@ -191,10 +191,10 @@ def working_ticket(page: Any, server: Any, context: Any) -> None:
 
     go_to(page, server, "/test/manage")
     page.get_by_role("link", name="Characters").click()
-    page.locator('[id="u1"]').get_by_role("link", name="").click(button="right")
+    page.locator('[id="u1"]').locator("a:has(i.fas.fa-edit)").click(button="right")
     page1 = context.new_page()
     page1.goto(server + "/test/manage/characters/u1/edit/")
-    page.locator('[id="u1"]').get_by_role("link", name="").click()
+    page.locator('[id="u1"]').locator("a:has(i.fas.fa-edit)").click()
     just_wait(page)
     expect_normalized(page,
         page.locator("#test-larp"),

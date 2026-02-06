@@ -114,7 +114,7 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     # give ownership of a character to the test user account (and thus the inventory)
     go_to(page, live_server, "/test/manage/quick/")
     page.get_by_role("link", name="Characters").click()
-    page.get_by_role("link", name="").click()
+    page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_text("---------").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="User Test - user@test.it").click()
