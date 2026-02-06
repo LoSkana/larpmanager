@@ -39,7 +39,10 @@ from larpmanager.forms.event import (
     ExeEventForm,
     OrgaEventForm,
     OrgaFeatureForm,
+    OrgaRunDatesForm,
+    OrgaRunDevelopmentForm,
     OrgaRunForm,
+    OrgaRunRegistrationForm,
 )
 from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole
@@ -958,3 +961,59 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Notify user of successful cache reset
     messages.success(request, _("Cache reset!"))
     return redirect("manage", event_slug=context["run"].get_slug())
+
+
+def _orga_run_quick_edit(
+    request: HttpRequest,
+    event_slug: str,
+    form_class: type[OrgaRunForm],
+    success_message: str,
+) -> HttpResponse:
+    """Generic quick edit handler for run fields in a modal.
+
+    Args:
+        request: HTTP request object
+        event_slug: Event slug identifier
+        form_class: Form class to use for editing
+        success_message: Message to display on successful save
+
+    Returns:
+        HttpResponse: Rendered form or redirect after save
+
+    """
+    context = check_event_context(request, event_slug, "orga_event")
+    context["is_modal"] = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
+    if request.method == "POST":
+        form = form_class(request.POST, instance=context["run"], context=context)
+        if form.is_valid():
+            form.save()
+            messages.success(request, success_message)
+            if context["is_modal"]:
+                return render(request, "elements/dashboard/form_success.html", context)
+            return redirect("manage", event_slug=event_slug)
+    else:
+        form = form_class(instance=context["run"], context=context)
+
+    context["form"] = form
+    if context["is_modal"]:
+        return render(request, "elements/dashboard/form_frame.html", context)
+    return render(request, "larpmanager/orga/edit.html", context)
+
+
+@login_required
+def orga_run_quick_edit_dates(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Quick edit for run dates in a modal."""
+    return _orga_run_quick_edit(request, event_slug, OrgaRunDatesForm, _("Dates updated") + "!")
+
+
+@login_required
+def orga_run_quick_edit_development(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Quick edit for run development status in a modal."""
+    return _orga_run_quick_edit(request, event_slug, OrgaRunDevelopmentForm, _("Status updated") + "!")
+
+
+@login_required
+def orga_run_quick_edit_registration(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Quick edit for run registration status in a modal."""
+    return _orga_run_quick_edit(request, event_slug, OrgaRunRegistrationForm, _("Registration settings updated") + "!")

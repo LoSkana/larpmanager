@@ -1454,6 +1454,21 @@ urlpatterns = [
         name="orga_event",
     ),
     path(
+        "<slug:event_slug>/manage/event/quick-dates/",
+        views_oe.orga_run_quick_edit_dates,
+        name="orga_run_quick_edit_dates",
+    ),
+    path(
+        "<slug:event_slug>/manage/event/quick-development/",
+        views_oe.orga_run_quick_edit_development,
+        name="orga_run_quick_edit_development",
+    ),
+    path(
+        "<slug:event_slug>/manage/event/quick-registration/",
+        views_oe.orga_run_quick_edit_registration,
+        name="orga_run_quick_edit_registration",
+    ),
+    path(
         "<slug:event_slug>/manage/appearance/",
         views_oe.orga_appearance,
         name="orga_appearance",

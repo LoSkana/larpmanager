@@ -501,6 +501,9 @@ msgstr "Causale"
 msgid "Checks"
 msgstr "Kontroller"
 
+msgid "Closed"
+msgstr "Stängt"
+
 msgid "Copied"
 msgstr "Kopierad"
 
@@ -1554,6 +1557,9 @@ msgstr "Leveranser"
 msgid "Easter egg"
 msgstr "Påskägg"
 
+msgid "Edit dates"
+msgstr "Ändra datum"
+
 msgid "Email list"
 msgstr "e-postlista"
 
@@ -1811,6 +1817,9 @@ msgstr "Beskrivning"
 
 msgid "Direct link"
 msgstr "Direkt länk"
+
+msgid "Edit status"
+msgstr "Redigera status"
 
 msgid "Event Texts"
 msgstr "Evenemangstexter"
@@ -2073,8 +2082,8 @@ msgstr "Nästa betalning"
 msgid "Not selected"
 msgstr "Ej vald"
 
-msgid "Opening date"
-msgstr "Öppningsdatum"
+msgid "Open on date"
+msgstr "Öppet på datum"
 
 msgid "Organization"
 msgstr "Förening"
@@ -2239,6 +2248,9 @@ msgstr "Kontakta oss via e-post"
 msgid "Daily Summary"
 msgstr "Daglig sammanfattning"
 
+msgid "Dates updated"
+msgstr "Uppdaterade datum"
+
 msgid "Deadline date"
 msgstr "Sista inlämningsdag"
 
@@ -2262,6 +2274,9 @@ msgstr "Händelsehistorik"
 
 msgid "External link"
 msgstr "Extern webbadress"
+
+msgid "External site"
+msgstr "Extern webbplats"
 
 msgid "Faction cover"
 msgstr "Gruppens täckning"
@@ -2612,6 +2627,9 @@ msgstr "Visa genvägar"
 msgid "Single payment"
 msgstr "Enstaka betalning"
 
+msgid "Status updated"
+msgstr "Status uppdaterad"
+
 msgid "Tax code check"
 msgstr "Kontroll av skattekod"
 
@@ -2632,6 +2650,9 @@ msgstr "Typ av prolog"
 
 msgid "URL identifier"
 msgstr "Idenominativ URL"
+
+msgid "Value required"
+msgstr "Värde krävs"
 
 msgid "Warehouse area"
 msgstr "Lagerområde"
@@ -3681,6 +3702,9 @@ msgstr "Öppnande av registrering"
 msgid "Registration options"
 msgstr "Alternativ för registrering"
 
+msgid "Registrations status"
+msgstr "Status för registreringar"
+
 msgid "Relationships (Test)"
 msgstr "Relationer (test)"
 
@@ -3768,9 +3792,6 @@ msgstr "Inaktivera ändring av belopp"
 
 msgid "Discover the web site"
 msgstr "Upptäck webbplatsen"
-
-msgid "External registration"
-msgstr "Extern registrering"
 
 msgid "Failed password reset"
 msgstr "Återställning av lösenord misslyckades"
@@ -4220,6 +4241,9 @@ msgstr "Inaktivera teckensökare"
 msgid "Display all sent e-mails"
 msgstr "Visa alla skickade e-postmeddelanden"
 
+msgid "Edit registration status"
+msgstr "Ändra registreringsstatus"
+
 msgid "Go to the quests of type"
 msgstr "Gå till uppdrag av typen"
 
@@ -4383,9 +4407,6 @@ msgstr "Läs de skrivande elementen"
 
 msgid "Receipt already confirmed"
 msgstr "Kvittot är redan bekräftat"
-
-msgid "Registration opening date"
-msgstr "Öppningsdatum för registrering"
 
 #, python-format
 msgid "Registration to %(event)s"
@@ -4722,6 +4743,9 @@ msgstr "Spelare som väntar på karaktär"
 msgid "Pre-registration at %(event)s"
 msgstr "Förhandsregistrering på %(event)s"
 
+msgid "Pre-registration is available"
+msgstr "Förhandsanmälan är tillgänglig"
+
 msgid "Preferred navigation language"
 msgstr "Förvalt navigationsspråk"
 
@@ -4730,6 +4754,9 @@ msgstr "Marknadsföring - webbplats, reklam"
 
 msgid "Question name (keep it short)"
 msgstr "Frågans namn (håll det kort)"
+
+msgid "Registration settings updated"
+msgstr "Uppdatering av registreringsinställningar"
 
 msgid "Registrations opening not set"
 msgstr "Registreringsöppning ej fastställd"
@@ -4882,6 +4909,9 @@ msgstr "Namn som ska visas för polletter"
 #, python-format
 msgid "Password reset of user %(user)s"
 msgstr "Lösenordsåterställning för användare %(user)s"
+
+msgid "Registrations are not available"
+msgstr "Registreringar är inte tillgängliga"
 
 msgid "Relationships of your character"
 msgstr "Länkar till din karaktär"
@@ -5280,6 +5310,9 @@ msgstr "Valfri beskrivning av innehållet"
 msgid "Payments pending delegated accounts"
 msgstr "Betalningar i avvaktan på delegerade konton"
 
+msgid "Registrations status for this event"
+msgstr "Registreringsstatus för detta evenemang"
+
 #, python-format
 msgid "Reimbursement request for %(event)s"
 msgstr "Krav på %(event)s"
@@ -5640,6 +5673,9 @@ msgstr "Foton och videor har laddats upp framgångsrikt"
 msgid "Registration cancellation for %(event)s"
 msgstr "Avsluta prenumerationen på %(event)s"
 
+msgid "Registrations are open for participants"
+msgstr "Anmälan är öppen för deltagare"
+
 msgid "Set the experience points configuration"
 msgstr "Ställ in konfigurationen för erfarenhetspoäng"
 
@@ -5757,9 +5793,6 @@ msgstr "om karaktären hör till detta element"
 
 msgid "it will enable country-specific features"
 msgstr "det kommer att möjliggöra landsspecifika funktioner"
-
-msgid "leave blank to keep registrations closed"
-msgstr "lämna tomt för att hålla registreringarna stängda"
 
 msgid "will be displayed on the main event page"
 msgstr "kommer att visas på huvudsidan för evenemanget"
@@ -5888,6 +5921,9 @@ msgstr "Deltagare som INTE skickade preferenser"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Påminnelse om sammanställning av profiler för %(event)s"
+
+msgid "Redirects to an external registration link"
+msgstr "Omdirigeringar till en extern registreringslänk"
 
 msgid "Reserve additional tickets beyond your own"
 msgstr "Reservera ytterligare biljetter utöver din egen"
@@ -6126,9 +6162,6 @@ msgstr "Nu kan du kopiera element från ett annat evenemang"
 msgid "Now you can define registration form sections"
 msgstr "Nu kan du definiera sektioner för registreringsformuläret"
 
-msgid "Now you can set the registration opening date"
-msgstr "Nu kan du ställa in öppningsdatum för registrering"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Födelseort som inte finns med i ISTAT:s förteckning"
 
@@ -6183,9 +6216,6 @@ msgstr "Nu kan du välja vilka biljetter som kan ges i gåva"
 
 msgid "Now you can set the experience points settings"
 msgstr "Nu kan du ange inställningar för erfarenhetspoäng"
-
-msgid "Now you can set the external registration link"
-msgstr "Nu kan du ange den externa registreringslänken"
 
 msgid "Optional - Image displayed within the question"
 msgstr "Valfritt - Bild som visas i frågan"
@@ -6790,6 +6820,9 @@ msgstr "Nu kan du lägga till relationer när du redigerar en karaktär"
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Kvantitetsspårning är inte aktiverad för den här organisationen"
 
+msgid "Registrations will open at the specified date and time"
+msgstr "Registreringen öppnar på angivet datum och klockslag"
+
 msgid "The registration request will be updated automatically"
 msgstr "Ansökan kommer att uppdateras automatiskt"
 
@@ -7048,9 +7081,6 @@ msgstr "Öppna hanteringspanelen <a href= %(url)s'>från här</a>"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "Vill du acceptera betalningar som behandlas via systemet"
-
-msgid "If checked, makes pre-registration for this event available"
-msgstr "Om markerad, gör förregistrering för detta evenemang tillgängligt"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
@@ -9017,13 +9047,6 @@ msgstr ""
 "Gör det möjligt att finjustera hur ord och fraser översätts i "
 "organisationens utrymme"
 
-msgid ""
-"Do you want to open registrations at a specific date and time instead of "
-"immediately"
-msgstr ""
-"Vill du öppna registreringar vid ett visst datum och en viss tid istället "
-"för omedelbart"
-
 #, python-format
 msgid ""
 "File type '%(detected_type)s' is not allowed.Allowed types are: "
@@ -9874,13 +9897,6 @@ msgstr ""
 "andra deltagare"
 
 msgid ""
-"Lets you specify a date (and time) on which registration will open, keeping "
-"it closed until then"
-msgstr ""
-"Låter dig ange ett datum (och en tid) då registreringen ska öppnas och "
-"håller den stängd fram till dess"
-
-msgid ""
 "Once downloaded you must print it, sign it, take a digital scan, and upload "
 "it to the form below"
 msgstr ""
@@ -10344,13 +10360,6 @@ msgid ""
 msgstr ""
 "Visar användbar information för passagerare, t.ex. färgen på din bil, "
 "beräknad ankomsttid"
-
-msgid ""
-"Instead of using an internal registration form, redirects the participant to"
-" an external registration link"
-msgstr ""
-"I stället för att använda ett internt registreringsformulär omdirigeras "
-"deltagaren till en extern registreringslänk"
 
 msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "

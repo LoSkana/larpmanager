@@ -21,7 +21,7 @@
             </button>
         </p>
         <p>
-            <a href="{% url 'register' run.get_slug %}" target="_blank">{{ run.registration_status }}</a>
+            <a href="{% url 'register' run.get_slug %}" target="_blank">{{ run.get_registration_status_display }}</a>
             <button class="copy-link-btn"
                     data-url="{% url 'register' run.get_slug %}"
                     title="{% trans "Copy link to clipboard" %}">
