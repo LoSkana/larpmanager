@@ -80,7 +80,7 @@ def reading(live_server: Any, page: Any) -> None:
 
     # now read it
     page.get_by_role("link", name="Reading").click()
-    page.locator('[id="u2"]').locator(".fa-book-open").click()
+    page.locator('[id="character_u2"]').locator(".fa-book-open").click()
     expect_normalized(page,
         page.locator("#one"),
         "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character ciaaoooooo",
@@ -112,7 +112,7 @@ def reading(live_server: Any, page: Any) -> None:
 
     # check reading for prova
     page.get_by_role("link", name="Reading").click()
-    page.get_by_role("row", re.compile(" prova character pppresssent")).get_by_role("link").click()
+    page.locator('[id="character_u2"]').locator(".fa-book-open").click()
     expect_normalized(page,
         page.locator("#one"),
         "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character Factions: only for testt ciaaoooooo",
@@ -120,7 +120,7 @@ def reading(live_server: Any, page: Any) -> None:
 
     # check reading plot
     page.get_by_role("link", name="Reading").click()
-    page.get_by_role("row", re.compile(" testona plot asadsadas wwwww")).get_by_role("link").click()
+    page.locator('[id="plot_u1"]').locator(".fa-book-open").click()
     expect_normalized(page, page.locator("#one"), "testona Text wwwww prova bruuuu")
 
 
