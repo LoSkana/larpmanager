@@ -25,7 +25,8 @@
         {% endif %}
     {% endif %}
     <tr id="{{ field.auto_id }}_tr"
-        {% if field.field.custom_class %}class="{{ field.field.custom_class }}"{% endif %}>
+        {% if field.field.custom_class %}class="{{ field.field.custom_class }}"{% endif %}
+        {% if field.field.custom_style %}style="{{ field.field.custom_style }}"{% endif %}>
         <th>
             {% if form.field_link and field.auto_id in form.field_link %}
                 {% get_field form.field_link field.auto_id as link %}
@@ -46,7 +47,6 @@
                 <br />
                 <a onclick="return translate('{{ field.auto_id }}');">{% trans "Translate" %}</a>
             {% endif %}
-            {{ field.custom_class }}
         </th>
         <td>
             {% if field.errors %}{{ field.errors }}{% endif %}
