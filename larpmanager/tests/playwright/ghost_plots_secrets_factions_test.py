@@ -76,7 +76,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.locator(".select2-results__option").first.click()
     submit_confirm(page)
     page.get_by_role("link", name="Ability", exact=True).click()
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-edit").click()
     page.locator("#id_cost").click()
     page.locator("#id_cost").fill("1")
     page.get_by_role("searchbox").click()

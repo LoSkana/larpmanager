@@ -59,7 +59,7 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
 
-    page.get_by_role("link", name="Payments ").click()
+    page.get_by_role("link", name=re.compile(r"^Payments ")).click()
     page.locator("#id_payment_require_receipt").check()
 
     submit_confirm(page)
@@ -78,7 +78,7 @@ def prepare(page: Any, live_server: Any) -> None:
 
     # set ticket price
     go_to(page, live_server, "/test/manage/tickets")
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator(".fa-edit").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
     submit_confirm(page)
@@ -131,7 +131,7 @@ def characters(page: Any, live_server: Any) -> None:
 
     # Assign character
     go_to(page, live_server, "/test/manage/registrations")
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator(".fa-edit").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
@@ -142,7 +142,7 @@ def characters(page: Any, live_server: Any) -> None:
 
     # Remove character
     go_to(page, live_server, "/test/manage/registrations")
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator(".fa-edit").click()
     page.get_by_role("listitem", name="#1 Test Character").locator("span").click()
     submit_confirm(page)
 

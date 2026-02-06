@@ -23,7 +23,7 @@ Test: Overpayments with tokens/credits, membership uploads, and special codes.
 Verifies overpayment handling with tokens and credits, registration accounting adjustments,
 membership document/fee uploads, and special payment code configuration.
 """
-
+import re
 from typing import Any
 
 import pytest
@@ -58,9 +58,9 @@ def check_overpay(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Set ticket price
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Tickets").first.click()
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-edit").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
     submit_confirm(page)
@@ -73,7 +73,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Add credits
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Credits").click()
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
@@ -111,9 +111,9 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Tokens Total: 20.00")
 
     # Change ticket price
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Tickets").first.click()
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-edit").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("80.00")
     submit_confirm(page)
@@ -124,7 +124,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Admin Test Standard -20 100 80 20 40 40")
 
     # Perform save
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-edit").click()
     submit_confirm(page)
     page.get_by_role("link", name="accounting", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 80 80 40 40")
@@ -143,15 +143,15 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
 
 
 def check_special_cod(page: Any, live_server: Any) -> None:
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name="Registrations ").click()
+    page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
     page.locator("#id_registration_no_grouping").check()
     page.locator("#id_registration_reg_que_allowed").check()
     submit_confirm(page)
     page.get_by_role("link", name="Registrations", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-edit").click()
     expect_normalized(page,
         page.locator("#main_form"),
         "Registration Member Admin Test - orga@test.it Admin Test - orga@test.it",
@@ -217,7 +217,7 @@ def upload_membership(page: Any, live_server: Any) -> None:
 
     # Try accessing member form
     expect_normalized(page, page.locator("#one"), "Test Admin orga@test.it Accepted 1")
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-edit").click()
 
     # Check result
     go_to(page, live_server, "/membership")

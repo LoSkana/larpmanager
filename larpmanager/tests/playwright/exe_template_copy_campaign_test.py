@@ -69,7 +69,7 @@ def template(live_server: Any, page: Any) -> None:
     check_feature(page, "Texts")
     submit_confirm(page)
     page.locator("#one").get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name="Gallery ").click()
+    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
     page.locator("#id_gallery_hide_signup").check()
     submit_confirm(page)
     # create new event from template
@@ -96,7 +96,7 @@ def template(live_server: Any, page: Any) -> None:
     expect_normalized(page, row, "Texts")
     # check configuration
     go_to(page, live_server, "/fromtemplate/manage/config/")
-    page.get_by_role("link", name="Gallery ").click()
+    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
     expect(page.locator("#id_gallery_hide_signup")).to_be_checked()
     # check features
     go_to(page, live_server, "/fromtemplate/manage/features")
@@ -112,7 +112,7 @@ def setup(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/features/character/on")
     # configure test larp
     go_to(page, live_server, "/test/manage/config/")
-    page.get_by_role("link", name="Gallery ").click()
+    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
     page.locator("#id_gallery_hide_login").check()
     page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
     page.locator("#id_px_start").click()
@@ -200,7 +200,7 @@ def copy(live_server: Any, page: Any) -> None:
     expect_normalized(page, row, "Appearance (Navigation), Writing (Factions) ")
 
     go_to(page, live_server, "/copy/manage/config/")
-    page.get_by_role("link", name="Gallery ").click()
+    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
     expect(page.locator("#id_gallery_hide_login")).to_be_checked()
     page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
     expect(page.locator("#id_px_start")).to_have_value("10")

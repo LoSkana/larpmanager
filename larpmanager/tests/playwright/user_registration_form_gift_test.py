@@ -71,7 +71,7 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
 
-    page.get_by_role("link", name="Payments ").click()
+    page.get_by_role("link", name=re.compile(r"^Payments ")).click()
     page.locator("#id_payment_require_receipt").check()
 
     submit_confirm(page)
@@ -163,10 +163,10 @@ def field_multiple(page: Any, live_server: Any) -> None:
     iframe.locator("#id_description").fill("sarrrr")
     submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.locator('[id="u4"]').get_by_role("link", name="").click()
+    page.locator("#options-iframe").content_frame.locator('[id="u4"]').locator(".fa-arrow-up").click()
     just_wait(page)
     submit_confirm(page)
-    page.locator('[id="u3"]').get_by_role("link", name="").click()
+    page.locator('[id="u3"]').locator(".fa-arrow-up").click()
     page.get_by_role("link", name="New").click()
 
 
@@ -217,7 +217,7 @@ def field_text(page: Any, live_server: Any) -> None:
 def gift(page: Any, live_server: Any) -> None:
     # make ticket giftable
     go_to(page, live_server, "/test/manage/tickets/")
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-edit").click()
     page.get_by_text("Indicates whether the ticket").click()
     page.locator("#id_giftable").check()
     submit_confirm(page)

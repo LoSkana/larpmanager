@@ -21,7 +21,7 @@
 """
 Test: Registration form with section, ticket selection, allowed selection.
 """
-
+import re
 from typing import Any
 
 import pytest
@@ -46,8 +46,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     login_orga(page, live_server)
 
     # Go to event
-    page.get_by_role("link", name="").click()
-    page.get_by_role("link", name=" Test Larp").click()
+    go_to(page, live_server, "/test/manage/")
 
     # Activate section feature
     page.locator("#orga_features").get_by_role("link", name="Features").click()
@@ -72,7 +71,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Check reordering
     expect_normalized(page, page.locator("#registration_sections_wrapper"), "Preferences Needs")
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-arrow-up").click()
     expect_normalized(page, page.locator("#one"), "Needs Preferences")
 
     # Add one question for each section
@@ -106,8 +105,8 @@ def test_orga_section_form(pw_page: Any) -> None:
     # Check signup
     go_to(page, live_server, "/test/register")
 
-    page.get_by_role("link", name="Needs ").click()
-    page.get_by_role("link", name="Preferences ").click()
+    page.get_by_role("link", name=re.compile(r"^Needs ")).click()
+    page.get_by_role("link", name=re.compile(r"^Preferences ")).click()
 
     expect_normalized(page, page.locator("#register_form"),
     "Ticket (*) Standard Your registration ticket Needs What you need sleep sleeeep Preferences What you prefer Food fooood")
@@ -116,23 +115,23 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("link", name="Form").click()
 
     # check section is still available
-    page.locator("#registration_questions_Needs").get_by_role("link", name="").click()
+    page.locator("#registration_questions_Needs").locator(".fa-edit").click()
     expect(page.locator("#select2-id_section-container")).to_match_aria_snapshot("- textbox \"Needs\"")
 
     # Reorder sections, check they are updated
     page.get_by_role("link", name="Sections").click()
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-arrow-up").click()
 
     go_to(page, live_server, "/test/register")
-    page.get_by_role("link", name="Needs ").click()
-    page.get_by_role("link", name="Preferences ").click()
+    page.get_by_role("link", name=re.compile(r"^Needs ")).click()
+    page.get_by_role("link", name=re.compile(r"^Preferences ")).click()
     expect_normalized(page, page.locator("#register_form"),
     "Ticket (*) Standard Your registration ticket Preferences What you prefer Food fooood Needs What you need sleep sleeeep")
 
     # Activate ticket selection / allowed selection
     go_to(page, live_server, "/test/manage/")
     page.locator("#orga_config").get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name="Registrations ").click()
+    page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
     page.locator("#id_registration_reg_que_allowed").check()
     page.locator("#id_registration_reg_que_tickets").check()
     page.get_by_role("button", name="Confirm").click()
@@ -146,7 +145,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Select ticket as dependent
     page.get_by_role("link", name="Form").click()
-    page.locator("#registration_questions_Preferences").get_by_role("link", name="").click()
+    page.locator("#registration_questions_Preferences").locator(".fa-edit").click()
     page.get_by_role("row", name="Ticket list If you select one").get_by_role("searchbox").click()
     page.get_by_role("row", name="Ticket list If you select one").get_by_role("searchbox").fill("de")
     page.get_by_role("option", name="Test Larp (Standard) Depends").click()
@@ -156,7 +155,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     go_to(page, live_server, "/test/register/")
 
     # whole section not visible
-    expect(page.get_by_role("link", name="Preferences ")).not_to_be_visible()
+    expect(page.get_by_role("link", name=re.compile(r"^Preferences "))).not_to_be_visible()
     expect(page.get_by_role("cell", name="fooood")).not_to_be_visible()
     expect(page.get_by_text("What you prefer Food fooood")).not_to_be_visible()
 
@@ -164,8 +163,8 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_label("Ticket (*)").select_option("u2")
 
     # section and field are visible
-    expect(page.get_by_role("link", name="Preferences ")).to_be_visible()
-    page.get_by_role("link", name="Preferences ").click()
+    expect(page.get_by_role("link", name=re.compile(r"^Preferences "))).to_be_visible()
+    page.get_by_role("link", name=re.compile(r"^Preferences ")).click()
     expect(page.get_by_role("cell", name="fooood")).to_be_visible()
     expect(page.get_by_text("What you prefer Food fooood")).to_be_visible()
 
@@ -173,19 +172,19 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_label("Ticket (*)").select_option("u2")
     page.get_by_role("textbox", name="Food").click()
     page.get_by_role("textbox", name="Food").fill("SADSA")
-    page.get_by_role("link", name="Needs ").click()
+    page.get_by_role("link", name=re.compile(r"^Needs ")).click()
     page.get_by_role("textbox", name="sleep").click()
     page.get_by_role("textbox", name="sleep").fill("WWWW")
     page.get_by_role("button", name="Continue").click()
     page.get_by_role("button", name="Confirm").click()
 
     # check allowed
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Sections").click()
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-arrow-up").click()
 
     page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
-    page.locator("#registration_questions_Needs").get_by_role("link", name="").click()
+    page.locator("#registration_questions_Needs").locator(".fa-edit").click()
     page.get_by_text("Staff members who are allowed").click()
     page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").click()
     page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").fill("ad")
@@ -214,8 +213,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # login as user
     login_user(page, live_server)
-    page.get_by_role("link", name="").click()
-    page.get_by_role("link", name=" Test Larp").click()
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Registrations", exact=True).click()
 
     expect(page.get_by_role("link", name="Food")).to_be_visible()
@@ -225,24 +223,24 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     expect_normalized(page, page.locator("#one"), "Admin Test Depends SADSA")
 
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-edit").click()
 
-    expect(page.get_by_role("link", name="Needs ")).not_to_be_visible()
+    expect(page.get_by_role("link", name=re.compile(r"^Needs "))).not_to_be_visible()
     expect(page.get_by_role("cell", name="sleeeep")).not_to_be_visible()
     expect(page.get_by_text("What you need sleep sleeeep")).not_to_be_visible()
 
     # test factions
     login_orga(page, live_server)
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.locator("#orga_config").get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name="Registrations ").click()
+    page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
     page.locator("#id_registration_reg_que_tickets").check()
     page.locator("#id_registration_reg_que_allowed").uncheck()
     page.locator("#id_registration_reg_que_tickets").uncheck()
     page.get_by_role("button", name="Confirm").click()
 
     page.locator("#orga_config").get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name="Registrations ").click()
+    page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
     page.locator("#id_registration_reg_que_faction").check()
     page.get_by_role("button", name="Confirm").click()
 
@@ -289,10 +287,10 @@ def test_orga_section_form(pw_page: Any) -> None:
     expect(page.get_by_role("cell", name="faaaaacc")).not_to_be_visible()
 
     # assign character
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Registrations", exact=True).click()
-    page.get_by_role("link", name="").click()
-    page.get_by_role("link", name="Character ").click()
+    page.locator(".fa-edit").click()
+    page.get_by_role("link", name=re.compile(r"^Character ")).click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()

@@ -23,7 +23,7 @@ Test: Quests and Traits system with casting integration.
 Verifies quest types, quest creation, trait creation with character references,
 and casting algorithm integration with quest/trait assignments.
 """
-
+import re
 from typing import Any
 
 import pytest
@@ -72,8 +72,7 @@ def test_quest_trait(pw_page: Any) -> None:
 
 def quests(page: Any, live_server: Any) -> None:
     # Activate features
-    page.get_by_role("link", name="").click()
-    page.get_by_role("link", name=" Test Larp").click()
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Features").first.click()
     check_feature(page, "Characters")
     check_feature(page, "Casting algorithm")
@@ -197,7 +196,7 @@ def signups(page: Any, live_server: Any) -> None:
 def casting(page: Any, live_server: Any) -> None:
     # config casting
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name="Casting ").click()
+    page.get_by_role("link", name=re.compile(r"^Casting ")).click()
     page.get_by_text("Maximum number of preferences").click()
     page.locator("#id_casting_max").click()
     page.locator("#id_casting_max").fill("3")
@@ -236,7 +235,7 @@ def casting(page: Any, live_server: Any) -> None:
     )
 
     # manual trait assignments
-    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').locator(".fa-edit").click()
     page.locator("#id_qt_u1").select_option("u1")
     submit_confirm(page)
 

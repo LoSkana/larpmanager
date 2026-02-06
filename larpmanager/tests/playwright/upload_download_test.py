@@ -23,7 +23,7 @@ Test: CSV upload and download functionality for all features.
 Verifies bulk upload/download for character forms, factions, characters, registration forms,
 registrations, quests/traits, plots, relationships, abilities, and full backup.
 """
-
+import re
 from pathlib import Path
 from typing import Any
 
@@ -90,7 +90,7 @@ def abilities(page: Any) -> None:
     submit_confirm(page)
 
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name="Experience points ").click()
+    page.get_by_role("link", name=re.compile(r"^Experience points ")).click()
     page.locator("#id_px_user").check()
     submit_confirm(page)
 
@@ -155,7 +155,7 @@ def plots(live_server: Any, page: Any) -> None:
     )
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(page, page.locator("#one"), "plott conceptt textt")
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-edit").click()
     page.get_by_role("cell", name="Show This text will be added").get_by_role("link").click()
     expect_normalized(page, page.locator("#id_char_role_2_tr"), "#2 characcter")
     expect_normalized(page, page.locator("#id_char_role_2_tr"), "super start")

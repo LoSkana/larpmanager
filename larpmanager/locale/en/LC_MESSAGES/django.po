@@ -4708,7 +4708,7 @@ msgstr ""
 
 msgid ""
 "When the text is displayed to the participant, the number is automatically "
-"replaced with the character’s name and a link to their profile"
+"replaced with the character's name and a link to their profile"
 msgstr ""
 
 msgid "Use these formats"
@@ -4730,7 +4730,7 @@ msgstr ""
 msgid ""
 "When you press one of the special reference symbols, a popup will help you "
 "get the reference number of a character; you can also select a reference "
-"number to see the character’s name"
+"number to see the character's name"
 msgstr ""
 
 msgid ""
@@ -5617,7 +5617,7 @@ msgid "issued"
 msgstr ""
 
 msgid ""
-"This is the overall amount that should be held in the organization’s bank "
+"This is the overall amount that should be held in the organization's bank "
 "and financial accounts"
 msgstr ""
 
@@ -6327,11 +6327,6 @@ msgid "Access your character"
 msgstr ""
 
 msgid "Register to the event"
-msgstr ""
-
-msgid ""
-"This is the overall amount that should be held in the organization's bank "
-"and financial accounts"
 msgstr ""
 
 msgid "Dates"
@@ -8972,7 +8967,7 @@ msgstr ""
 msgid "Check data"
 msgstr ""
 
-msgid "Check consistency of the participants’ personal data"
+msgid "Check consistency of the participants' personal data"
 msgstr ""
 
 msgid ""
@@ -8982,7 +8977,7 @@ msgstr ""
 msgid "Display all participants data as registry"
 msgstr ""
 
-msgid "Manage fields that track participants’ data"
+msgid "Manage fields that track participants' data"
 msgstr ""
 
 msgid "Manage event templates used as starting points for new events"

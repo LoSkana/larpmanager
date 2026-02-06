@@ -301,7 +301,7 @@ def signup_check(live_server: Any, page: Any) -> None:
 def orga_check(live_server: Any, page: Any) -> None:
     # check signups
     go_to(page, live_server, "/test/manage/registrations/")
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-edit").click()
     expect(page.locator("#id_que_u2")).to_have_value("aaaaaaaaaa")
     expect(page.get_by_text("BBBBBBBBBB")).to_have_value("BBBBBBBBBB")
     expect(page.locator("#id_que_u4")).to_have_value("u2")
@@ -318,7 +318,7 @@ def orga_check(live_server: Any, page: Any) -> None:
     page.locator("#id_que_u8").fill("asdsadsa")
     expect(page.locator("#id_que_u9")).to_have_value("ggggg")
     submit_confirm(page)
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-edit").click()
     expect(page.locator("#id_que_u7")).to_have_value("dsadsadsa")
     expect(page.locator("#id_que_u8")).to_have_value("asdsadsa")
 

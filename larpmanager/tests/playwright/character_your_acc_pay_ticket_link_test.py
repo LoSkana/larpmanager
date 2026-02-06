@@ -52,10 +52,10 @@ def test_character_your_accounting_pay_ticket_link(pw_page: Any) -> None:
 
 
 def check_direct_ticket_link(page: Any, live_server: Any) -> None:
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     # Setup NPC ticket
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name="Tickets ").click()
+    page.get_by_role("link", name=re.compile(r"^Tickets ")).click()
     page.locator("#id_ticket_npc").check()
     submit_confirm(page)
 
@@ -89,7 +89,7 @@ def ticket_link_bypasses_not_visible(live_server, page):
     )
 
     # Test direct link
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Tickets").first.click()
     with page.expect_popup() as popup_info:
         page.locator('[id="u2"]').get_by_role("link", name="Signup link").click()
@@ -117,7 +117,7 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("body"), "The registrations to the event Test Larp are not yet open!")
 
     # Get direct ticket link and verify it still works
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Tickets").first.click()
 
     # Navigate to direct ticket link - should work despite registration not open
@@ -130,7 +130,7 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     new_page.close()
 
     # Reset registration open date
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Event").first.click()
     page.locator("#id_form2-registration_status").select_option("o")
     submit_confirm(page)
@@ -153,7 +153,7 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
     expect(page).to_have_url(re.compile(r"google\.com"))
 
     # Go back and test direct ticket link
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Tickets").first.click()
 
     # Navigate to direct NPC ticket link - should bypass external redirect
@@ -175,12 +175,12 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
 
 def check_character_your_link(page: Any, live_server: Any) -> None:
     # Test character your link
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
     page.get_by_role("link", name="Registrations").click()
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-edit").click()
     page.get_by_role("cell", name="Show available characters").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
@@ -195,11 +195,11 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
 
 def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     # Test acc pay link
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
 
     # Set ticket price
     page.get_by_role("link", name="Tickets").first.click()
-    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').locator(".fa-edit").click()
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
     page.locator("#id_price").fill("100.00")
@@ -247,7 +247,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
 
 def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     # Add first event factions
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Factions").check()
     submit_confirm(page)
@@ -299,7 +299,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
 
     # set independ factions, check
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name="Campaign ").click()
+    page.get_by_role("link", name=re.compile(r"^Campaign ")).click()
     page.locator("#id_campaign_faction_indep").check()
     submit_confirm(page)
     page.get_by_role("link", name="Factions").click()
@@ -331,7 +331,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text PRIMAAAA TRANVERSA")
 
     # check situation in first event
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Factions").click()
     page.locator("#one").get_by_role("link", name="Characters").click()
     expect_normalized(page, page.locator("#one"), "primaaa Primary Test Character tranver Transversal Test Character")
@@ -362,7 +362,7 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # open request
-    page.get_by_role("link", name=" Accounting").click()
+    page.get_by_role("link", name=re.compile(" Accounting$")).click()
     page.get_by_role("link", name="refund request").click()
     page.get_by_role("textbox", name="Details").click()
     page.get_by_role("textbox", name="Details").fill("asdsadsadsa")

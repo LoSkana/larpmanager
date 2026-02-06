@@ -89,7 +89,7 @@ def create_event_a(page: Any, live_server: Any) -> None:
 
     # Create ticket with price and limit
     go_to(page, live_server, "/eventa/manage/tickets/")
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator(".fa-edit").click()
     page.locator("#id_name").fill("Premium Ticket")
     page.locator("#id_price").fill("100.00")
     page.locator("#id_max_available").fill("10")
@@ -286,7 +286,7 @@ def verify_transfer(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "User Test")
 
     # Click to edit and verify details
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator(".fa-edit").click()
 
     # Verify ticket type is maintained (Standard Ticket)
     expect(page.locator("#id_ticket option:checked")).to_have_text("Standard Ticket - 50€")

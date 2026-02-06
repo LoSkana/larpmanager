@@ -23,7 +23,7 @@ Test: Manual editing, Excel-style editing, external access, and working tickets.
 Verifies character editing via modal and Excel-style interface, character finder,
 auto-save functionality, external access URLs, and concurrent editing warnings.
 """
-
+import re
 from typing import Any
 
 import pytest
@@ -44,13 +44,12 @@ pytestmark = pytest.mark.e2e
 
 
 def test_manual_excel_save_external(pw_page: Any) -> None:
-    page, server, context = pw_page
+    page, live_server, context = pw_page
 
-    login_orga(page, server)
+    login_orga(page, live_server)
 
     # prepare
-    page.get_by_role("link", name="").click()
-    page.get_by_role("link", name=" Test Larp").click()
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Features").first.click()
     check_feature(page, "Characters")
     submit_confirm(page)
@@ -118,13 +117,13 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
         "#1 Test Character2 Test Teaser + 2 Test Text ff #2 Another good friends with #1",
     )
 
-    excel(page, server)
+    excel(page, live_server)
 
-    external(page, server)
+    external(page, live_server)
 
-    working_ticket(page, server, context)
+    working_ticket(page, live_server, context)
 
-    working_ticket_event(page, server, context)
+    working_ticket_event(page, live_server, context)
 
 
 def excel(page: Any, live_server: Any) -> None:
@@ -146,7 +145,7 @@ def excel(page: Any, live_server: Any) -> None:
     )
 
     # test manual save
-    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').locator(".fa-edit").click()
     fill_tinymce(page, "id_text", "ciaoooo")
     frame_locator = page.frame_locator("iframe#id_text_ifr")
     editor = frame_locator.locator("body#tinymce")
@@ -161,7 +160,7 @@ def excel(page: Any, live_server: Any) -> None:
     )
 
     # check in page
-    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').locator(".fa-edit").click()
     page.locator('a.my_toggle[tog="f_id_text"]').click()
     expect_normalized(page, page.locator("#one"), "good friends with #1 ciaoooo")
 
@@ -169,13 +168,13 @@ def excel(page: Any, live_server: Any) -> None:
 def external(page: Any, live_server: Any) -> None:
     # enable external access
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name="Writing ").click()
+    page.get_by_role("link", name=re.compile(r"^Writing ")).click()
     page.locator("#id_writing_external_access").check()
     submit_confirm(page)
 
     # get url
     page.get_by_role("link", name="Characters").click()
-    url = page.locator('[id="u2"]').get_by_role("link", name="").get_attribute("href")
+    url = page.locator('[id="u2"]').locator(".fa-key").locator('..').get_attribute("href")
 
     # logout, then go to the page
     logout(page)
@@ -191,10 +190,10 @@ def working_ticket(page: Any, server: Any, context: Any) -> None:
 
     go_to(page, server, "/test/manage")
     page.get_by_role("link", name="Characters").click()
-    page.locator('[id="u1"]').get_by_role("link", name="").click(button="right")
+    page.locator('[id="u1"]').locator(".fa-edit").click(button="right")
     page1 = context.new_page()
     page1.goto(server + "/test/manage/characters/u1/edit/")
-    page.locator('[id="u1"]').get_by_role("link", name="").click()
+    page.locator('[id="u1"]').locator(".fa-edit").click()
     just_wait(page)
     expect_normalized(page,
         page.locator("#test-larp"),
