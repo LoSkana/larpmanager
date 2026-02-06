@@ -1557,6 +1557,9 @@ msgstr "Leveranser"
 msgid "Easter egg"
 msgstr "Påskeegg"
 
+msgid "Edit dates"
+msgstr "Rediger datoer"
+
 msgid "Email list"
 msgstr "e-postliste"
 
@@ -1814,6 +1817,9 @@ msgstr "Beskrivelse"
 
 msgid "Direct link"
 msgstr "Direkte lenke"
+
+msgid "Edit status"
+msgstr "Rediger status"
 
 msgid "Event Texts"
 msgstr "Arrangementstekster"
@@ -2242,6 +2248,9 @@ msgstr "Kontakt e-post"
 msgid "Daily Summary"
 msgstr "Daglig sammendrag"
 
+msgid "Dates updated"
+msgstr "Oppdaterte datoer"
+
 msgid "Deadline date"
 msgstr "Frist"
 
@@ -2617,6 +2626,9 @@ msgstr "Vis snarveier"
 
 msgid "Single payment"
 msgstr "Engangsutbetaling"
+
+msgid "Status updated"
+msgstr "Status oppdatert"
 
 msgid "Tax code check"
 msgstr "Kontroll av skattekode"
@@ -4232,6 +4244,9 @@ msgstr "Deaktiver tegnfinner"
 msgid "Display all sent e-mails"
 msgstr "Vis alle sendte e-poster"
 
+msgid "Edit registration status"
+msgstr "Rediger registreringsstatus"
+
 msgid "Go to the quests of type"
 msgstr "Gå til oppdrag av typen"
 
@@ -4742,6 +4757,9 @@ msgstr "Markedsføring - nettsted, reklame"
 
 msgid "Question name (keep it short)"
 msgstr "Navn på spørsmålet (hold det kort)"
+
+msgid "Registration settings updated"
+msgstr "Oppdaterte registreringsinnstillinger"
 
 msgid "Registrations opening not set"
 msgstr "Registreringsåpning ikke satt"

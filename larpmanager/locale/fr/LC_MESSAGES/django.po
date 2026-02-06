@@ -1557,6 +1557,9 @@ msgstr "Livraisons"
 msgid "Easter egg"
 msgstr "Oeuf de Pâques"
 
+msgid "Edit dates"
+msgstr "Modifier les dates"
+
 msgid "Email list"
 msgstr "liste d'adresses électroniques"
 
@@ -1814,6 +1817,9 @@ msgstr "Description"
 
 msgid "Direct link"
 msgstr "Lien direct"
+
+msgid "Edit status"
+msgstr "Modifier le statut"
 
 msgid "Event Texts"
 msgstr "Textes de l'événement"
@@ -2242,6 +2248,9 @@ msgstr "Courriel de contact"
 msgid "Daily Summary"
 msgstr "Résumé quotidien"
 
+msgid "Dates updated"
+msgstr "Dates mises à jour"
+
 msgid "Deadline date"
 msgstr "Date limite"
 
@@ -2617,6 +2626,9 @@ msgstr "Afficher les raccourcis"
 
 msgid "Single payment"
 msgstr "Paiement unique"
+
+msgid "Status updated"
+msgstr "Statut mis à jour"
 
 msgid "Tax code check"
 msgstr "Vérification du code fiscal"
@@ -4232,6 +4244,9 @@ msgstr "Désactiver la recherche de caractères"
 msgid "Display all sent e-mails"
 msgstr "Afficher tous les courriels envoyés"
 
+msgid "Edit registration status"
+msgstr "Modifier le statut de l'enregistrement"
+
 msgid "Go to the quests of type"
 msgstr "Aller aux quêtes de type"
 
@@ -4742,6 +4757,9 @@ msgstr "Promotion - site, publicité"
 
 msgid "Question name (keep it short)"
 msgstr "Nom de la question (court)"
+
+msgid "Registration settings updated"
+msgstr "Mise à jour des paramètres d'enregistrement"
 
 msgid "Registrations opening not set"
 msgstr "Ouverture des inscriptions non fixée"

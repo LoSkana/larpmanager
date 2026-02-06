@@ -6404,6 +6404,15 @@ msgstr ""
 msgid "Delay in profile compilation"
 msgstr ""
 
+msgid "Edit dates"
+msgstr ""
+
+msgid "Edit status"
+msgstr ""
+
+msgid "Edit registration status"
+msgstr ""
+
 msgid "Secret registration link"
 msgstr ""
 
@@ -10045,6 +10054,15 @@ msgid "Elements uploaded"
 msgstr ""
 
 msgid "Unknow error on upload"
+msgstr ""
+
+msgid "Dates updated"
+msgstr ""
+
+msgid "Status updated"
+msgstr ""
+
+msgid "Registration settings updated"
 msgstr ""
 
 #, python-brace-format

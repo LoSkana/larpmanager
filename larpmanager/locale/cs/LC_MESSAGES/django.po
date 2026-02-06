@@ -1557,6 +1557,9 @@ msgstr "Dodávky"
 msgid "Easter egg"
 msgstr "Velikonoční vajíčko"
 
+msgid "Edit dates"
+msgstr "Upravit data"
+
 msgid "Email list"
 msgstr "e-mailový seznam"
 
@@ -1814,6 +1817,9 @@ msgstr "Popis"
 
 msgid "Direct link"
 msgstr "Přímý odkaz"
+
+msgid "Edit status"
+msgstr "Upravit stav"
 
 msgid "Event Texts"
 msgstr "Texty událostí"
@@ -2242,6 +2248,9 @@ msgstr "Kontaktní e-mail"
 msgid "Daily Summary"
 msgstr "Denní shrnutí"
 
+msgid "Dates updated"
+msgstr "Aktualizovaná data"
+
 msgid "Deadline date"
 msgstr "Datum uzávěrky"
 
@@ -2617,6 +2626,9 @@ msgstr "Zobrazit zkratky"
 
 msgid "Single payment"
 msgstr "Jednorázová platba"
+
+msgid "Status updated"
+msgstr "Stav aktualizován"
 
 msgid "Tax code check"
 msgstr "Kontrola daňového kódu"
@@ -4232,6 +4244,9 @@ msgstr "Zakázat vyhledávač znaků"
 msgid "Display all sent e-mails"
 msgstr "Zobrazení všech odeslaných e-mailů"
 
+msgid "Edit registration status"
+msgstr "Upravit stav registrace"
+
 msgid "Go to the quests of type"
 msgstr "Přejít na úkoly typu"
 
@@ -4742,6 +4757,9 @@ msgstr "Propagace - stránky, reklama"
 
 msgid "Question name (keep it short)"
 msgstr "Název otázky (ať je krátký)"
+
+msgid "Registration settings updated"
+msgstr "Aktualizace nastavení registrace"
 
 msgid "Registrations opening not set"
 msgstr "Otevření registrací není nastaveno"

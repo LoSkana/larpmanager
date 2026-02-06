@@ -1686,6 +1686,64 @@ class OrgaQuickSetupForm(QuickSetupForm):
         self.init_fields(get_event_features(self.instance.pk))
 
 
+class OrgaRunDatesForm(OrgaRunForm):
+    """Form for quick editing of run dates in modal."""
+
+    class Meta(OrgaRunForm.Meta):
+        model = Run
+        fields = ("start", "end")
+        widgets: ClassVar[dict] = {
+            "start": DatePickerInput,
+            "end": DatePickerInput,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize dates form with minimal fields."""
+        super().__init__(*args, **kwargs)
+        self.show_sections = False
+        self.main_class = ""
+
+    def set_configs(self) -> None:
+        """Override to disable config sections for quick edit form."""
+
+
+class OrgaRunDevelopmentForm(OrgaRunForm):
+    """Form for quick editing of run development status in modal."""
+
+    class Meta(OrgaRunForm.Meta):
+        model = Run
+        fields = ("development",)
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize development status form with minimal fields."""
+        super().__init__(*args, **kwargs)
+        self.show_sections = False
+        self.main_class = ""
+
+    def set_configs(self) -> None:
+        """Override to disable config sections for quick edit form."""
+
+
+class OrgaRunRegistrationForm(OrgaRunForm):
+    """Form for quick editing of run registration status in modal."""
+
+    class Meta(OrgaRunForm.Meta):
+        model = Run
+        fields = ("registration_status", "registration_open", "register_link")
+        widgets: ClassVar[dict] = {
+            "registration_open": DateTimePickerInput,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize registration status form with minimal fields."""
+        super().__init__(*args, **kwargs)
+        self.show_sections = False
+        self.main_class = ""
+
+    def set_configs(self) -> None:
+        """Override to disable config sections for quick edit form."""
+
+
 class OrgaPreferencesForm(ExePreferencesForm):
     """Form for setting event organizer preferences and field visibility."""
 

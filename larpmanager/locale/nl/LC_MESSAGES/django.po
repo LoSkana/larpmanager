@@ -1557,6 +1557,9 @@ msgstr "Leveringen"
 msgid "Easter egg"
 msgstr "Paasei"
 
+msgid "Edit dates"
+msgstr "Data bewerken"
+
 msgid "Email list"
 msgstr "e-maillijst"
 
@@ -1814,6 +1817,9 @@ msgstr "Beschrijving"
 
 msgid "Direct link"
 msgstr "Directe link"
+
+msgid "Edit status"
+msgstr "Status bewerken"
 
 msgid "Event Texts"
 msgstr "Evenementteksten"
@@ -2242,6 +2248,9 @@ msgstr "Contact e-mail"
 msgid "Daily Summary"
 msgstr "Dagelijkse samenvatting"
 
+msgid "Dates updated"
+msgstr "Data bijgewerkt"
+
 msgid "Deadline date"
 msgstr "Uiterste datum"
 
@@ -2617,6 +2626,9 @@ msgstr "Snelkoppelingen weergeven"
 
 msgid "Single payment"
 msgstr "Eenmalige betaling"
+
+msgid "Status updated"
+msgstr "Status bijgewerkt"
 
 msgid "Tax code check"
 msgstr "Belastingcode controleren"
@@ -4232,6 +4244,9 @@ msgstr "Tekenzoeker uitschakelen"
 msgid "Display all sent e-mails"
 msgstr "Alle verzonden e-mails weergeven"
 
+msgid "Edit registration status"
+msgstr "Registratiestatus bewerken"
+
 msgid "Go to the quests of type"
 msgstr "Ga naar zoektochten van het type"
 
@@ -4742,6 +4757,9 @@ msgstr "Promotie - site, reclame"
 
 msgid "Question name (keep it short)"
 msgstr "Vraagnaam (houd het kort)"
+
+msgid "Registration settings updated"
+msgstr "Registratie-instellingen bijgewerkt"
 
 msgid "Registrations opening not set"
 msgstr "Registraties openen niet ingesteld"
