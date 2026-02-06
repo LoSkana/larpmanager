@@ -19,7 +19,7 @@
         </thead>
         <tbody>
             {% for el in alls %}
-                <tr>
+                <tr id="{{ el.uuid }}">
                     <td>
                         <a href="{{ el.url }}" qtip="{% trans "Read" %}"><i class="fas fa-book-open"></i> </a>
                     </td>

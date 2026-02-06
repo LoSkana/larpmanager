@@ -102,6 +102,8 @@ def character_inventory_pools(live_server: Any, page: Any) -> None:
 
 
 def character_inventory_transfer(live_server: Any, page: Any) -> None:
+    page.locator('[id="u1"]').locator(".fa-book-open").click()
+
     # transfer credits to the test character's storage
     page.get_by_role("row", name="Credits 0 NPC Transfer Add").get_by_placeholder("Amount").click()
     page.get_by_role("row", name="Credits 0 NPC Transfer Add").get_by_placeholder("Amount").fill("3")

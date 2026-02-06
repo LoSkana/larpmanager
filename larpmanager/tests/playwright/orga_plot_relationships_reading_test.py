@@ -80,7 +80,7 @@ def reading(live_server: Any, page: Any) -> None:
 
     # now read it
     page.get_by_role("link", name="Reading").click()
-    page.get_by_role("row", name=re.compile(" prova character pppresssent$")).get_by_role("link").click()
+    page.locator('[id="u2"]').locator(".fa-book-open").click()
     expect_normalized(page,
         page.locator("#one"),
         "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character ciaaoooooo",
