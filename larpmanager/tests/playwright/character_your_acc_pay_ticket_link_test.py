@@ -81,7 +81,7 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
 def ticket_link_bypasses_not_visible(live_server, page):
     # Test signup (shouldn't be visible)
     go_to(page, live_server, "/test/")
-    page.get_by_role("link", name="Registration is open!").click()
+    page.get_by_role("link", name="Registration is open!").first.click()
     page.get_by_label("Ticket (*)").click()
     expect(page.get_by_label("Ticket (*)")).to_have_value("u1")
     expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot(
