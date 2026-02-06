@@ -4151,6 +4151,7 @@ INSERT INTO public.django_migrations VALUES (90, 'larpmanager', '0052_set_unique
 INSERT INTO public.django_migrations VALUES (91, 'larpmanager', '0053_alter_character_access_token', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (92, 'larpmanager', '0054_rename_details_registrationoption_description_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (93, 'larpmanager', '0055_rename_display_registrationoption_name_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (179, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (94, 'larpmanager', '0056_assocpermission_config_eventpermission_config', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (95, 'larpmanager', '0057_clean_runs', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (96, 'larpmanager', '0058_alter_association_payment_methods_and_more', '2025-01-01 00:00:00.000000+01');
@@ -4234,14 +4235,13 @@ INSERT INTO public.django_migrations VALUES (173, 'larpmanager', '0132_alter_mem
 INSERT INTO public.django_migrations VALUES (174, 'larpmanager', '0133_alter_registrationoption_price_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (175, 'larpmanager', '0134_alter_event_max_filler_alter_event_max_pg_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (176, 'larpmanager', '0135_alter_log_options_remove_log_dl_log_association_and_more', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (177, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (178, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (179, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (180, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (181, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (182, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (183, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (184, 'larpmanager', '0135_add_registration_status', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (177, 'larpmanager', '0136_add_registration_status', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (178, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (180, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (181, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (182, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (183, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (184, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
@@ -4291,6 +4291,7 @@ INSERT INTO public.larpmanager_associationpermission VALUES (41, NULL, false, '2
 INSERT INTO public.larpmanager_associationpermission VALUES (42, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Movements', 'exe_warehouse_movements', 66, 33, 'Manage warehouse movements', false, 'warehouse', 15, NULL);
 INSERT INTO public.larpmanager_associationpermission VALUES (43, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Tags', 'exe_warehouse_tags', 36, 33, 'Manage warehouse tags', false, 'warehouse', 15, NULL);
 INSERT INTO public.larpmanager_associationpermission VALUES (44, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Translations', 'exe_translations', 31, 107, 'Customize translations of words and phrases in the organization interface', false, NULL, 6, NULL);
+INSERT INTO public.larpmanager_associationpermission VALUES (45, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activity Log', 'exe_log', 1, 114, 'View detailed activity log of all changes made for this organization', false, NULL, 3, NULL);
 
 INSERT INTO public.larpmanager_associationrole VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Admin', 1, 1, 'u1');
 
@@ -4391,6 +4392,7 @@ INSERT INTO public.larpmanager_eventpermission VALUES (75, NULL, false, '2025-01
 INSERT INTO public.larpmanager_eventpermission VALUES (76, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Ability Templates', 'orga_px_ability_templates', 41, 113, 'Manage ability templates', false, 'px', 11, 'px_templates');
 INSERT INTO public.larpmanager_eventpermission VALUES (77, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Character Inventory', 'orga_ci_inventory', 51, 58, 'Manage character inventories and their items', false, NULL, 17, NULL);
 INSERT INTO public.larpmanager_eventpermission VALUES (78, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Pool Types', 'orga_ci_pool_types', 53, 58, 'Manage character inventory pool types', false, NULL, 17, NULL);
+INSERT INTO public.larpmanager_eventpermission VALUES (79, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activity Log', 'orga_log', 1, 114, 'View detailed activity log of all changes made for this specific event', false, NULL, 3, NULL);
 
 INSERT INTO public.larpmanager_eventrole VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Organizer', 1, 'u1');
 
@@ -4509,6 +4511,7 @@ INSERT INTO public.larpmanager_feature VALUES (110, NULL, false, '2025-01-01 00:
 INSERT INTO public.larpmanager_feature VALUES (111, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Rules', 'Pseudo-feature activated by px_rules configuration', 'rules', 0, false, '', true, 3, '', '', true);
 INSERT INTO public.larpmanager_feature VALUES (112, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Modifiers', 'Pseudo-feature activated by px_modifiers configuration', 'modifiers', 0, false, '', true, 3, '', '', true);
 INSERT INTO public.larpmanager_feature VALUES (113, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Templates', 'Pseudo-feature activated by px_templates configuration', 'templates', 0, false, '', true, 3, '', '', true);
+INSERT INTO public.larpmanager_feature VALUES (114, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activity Log', 'Show detailed activity log on entities created, updated or deleted.', 'logs', 1, true, '', false, 3, '', '', false);
 
 INSERT INTO public.larpmanager_featuremodule VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Writing', 50, NULL, 'pen-nib', 'writing');
 INSERT INTO public.larpmanager_featuremodule VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Accounting', 40, NULL, 'calculator', 'accounting');
@@ -4524,9 +4527,6 @@ INSERT INTO public.larpmanager_featuremodule VALUES (10, NULL, false, '2025-01-0
 INSERT INTO public.larpmanager_inventory VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Test Character''s Personal Storage', 1, 'u1');
 
 INSERT INTO public.larpmanager_inventory_owners VALUES (1, 1, 1);
-
-INSERT INTO public.larpmanager_larpmanagerprofiler VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 0, 0, '127.0.0.1:8087', 'working_ticket', 0.776582, 'POST', '/manage/working_ticket/', '');
-INSERT INTO public.larpmanager_larpmanagerprofiler VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 0, 0, '127.0.0.1:8087', 'working_ticket', 1.78506, 'POST', '/manage/working_ticket/', '');
 
 INSERT INTO public.larpmanager_member VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', '', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 1, 'hwCXNm815c9a');
 INSERT INTO public.larpmanager_member VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'orga@test.it', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 2, 'GpFgBKP0p482');
@@ -4609,7 +4609,7 @@ INSERT INTO public.larpmanager_registrationquestion VALUES (1, NULL, false, '202
 
 INSERT INTO public.larpmanager_registrationticket VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp (Standard) Standard (0.00€)', 1, 'b', 'Standard', NULL, 0.00, 0, true, 1, false, 1, 1, 'u1');
 
-INSERT INTO public.larpmanager_run VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', '1', 1, '2050-03-19', '2050-03-19', NULL, '1d71c0a4a727', 0.00, NULL, 'f', 1, 'u1', '', 'c');
+INSERT INTO public.larpmanager_run VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', '1', 1, '2050-03-19', '2050-03-19', NULL, '1d71c0a4a727', 0.00, NULL, 'f', 1, 'u1', '', 'o');
 
 SELECT pg_catalog.setval('public.account_emailaddress_id_seq', 1, false);
 
@@ -4693,7 +4693,7 @@ SELECT pg_catalog.setval('public.larpmanager_associationskin_id_seq', 1, true);
 
 SELECT pg_catalog.setval('public.larpmanager_associationtranslation_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.larpmanager_assocpermission_id_seq', 44, true);
+SELECT pg_catalog.setval('public.larpmanager_assocpermission_id_seq', 45, true);
 
 SELECT pg_catalog.setval('public.larpmanager_assocrole_id_seq', 1, true);
 
@@ -4763,7 +4763,7 @@ SELECT pg_catalog.setval('public.larpmanager_eventbutton_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.larpmanager_eventconfig_id_seq', 1, true);
 
-SELECT pg_catalog.setval('public.larpmanager_eventpermission_id_seq', 78, true);
+SELECT pg_catalog.setval('public.larpmanager_eventpermission_id_seq', 79, true);
 
 SELECT pg_catalog.setval('public.larpmanager_eventrole_id_seq', 1, true);
 
@@ -4777,7 +4777,7 @@ SELECT pg_catalog.setval('public.larpmanager_faction_characters_id_seq', 1, fals
 
 SELECT pg_catalog.setval('public.larpmanager_faction_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.larpmanager_feature_id_seq', 113, true);
+SELECT pg_catalog.setval('public.larpmanager_feature_id_seq', 114, true);
 
 SELECT pg_catalog.setval('public.larpmanager_featuremodule_id_seq', 10, true);
 
@@ -4815,7 +4815,7 @@ SELECT pg_catalog.setval('public.larpmanager_larpmanagerfaqtype_id_seq', 1, fals
 
 SELECT pg_catalog.setval('public.larpmanager_larpmanagerhighlight_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.larpmanager_larpmanagerprofiler_id_seq', 2, true);
+SELECT pg_catalog.setval('public.larpmanager_larpmanagerprofiler_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.larpmanager_larpmanagerreview_id_seq', 1, false);
 
@@ -8454,4 +8454,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0135_add_registration_status
+-- LARPMANAGER_SCHEMA_VERSION: 0136_add_registration_status

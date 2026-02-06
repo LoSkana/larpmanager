@@ -1,0 +1,12 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Logs" %} - {% trans "Organization" %}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows all log entries for the organization" %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/header/edit.html" %}
+    {% include "elements/paginate.html" %}
+{% endblock content %}

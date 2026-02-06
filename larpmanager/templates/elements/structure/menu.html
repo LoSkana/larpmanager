@@ -8,10 +8,10 @@
             </li>
             {% if user.is_authenticated %}
                 <li>
-                    <a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> {% trans "Profile"}</a>
+                    <a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> {% trans "Profile" %}</a>
                 </li>
                 <li>
-                    <a href="{% url 'accounting' %}"><i class="fa-solid fa-money-bill"></i> {% trans "Accounting"}</a>
+                    <a href="{% url 'accounting' %}"><i class="fa-solid fa-money-bill"></i> {% trans "Accounting" %}</a>
                 </li>
                 {% if 'membership' in association.features %}
                     <li>

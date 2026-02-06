@@ -29,7 +29,7 @@ from tinymce.models import HTMLField
 
 from larpmanager.forms.utils import CSRFTinyMCE
 from larpmanager.models.base import Feature, FeatureModule, PaymentMethod
-from larpmanager.models.member import Log
+from larpmanager.models.miscellanea import Log
 
 
 # SET JQUERY
@@ -157,8 +157,9 @@ class RegistrationFilter(AutocompleteFilter):
 class LogAdmin(DefModelAdmin):
     """Admin interface for Log model."""
 
-    list_display: ClassVar[tuple] = ("member", "cls", "eid", "dl")
-    search_fields: ClassVar[tuple] = ("id", "member", "cls", "dl")
+    list_display: ClassVar[tuple] = ("member", "cls", "eid", "operation_type", "element_name", "info")
+    search_fields: ClassVar[tuple] = ("id", "member", "cls", "operation_type", "element_name")
+    list_filter: ClassVar[tuple] = ("operation_type", "member", "run", "association")
     autocomplete_fields: ClassVar[list] = ["member"]
 
 

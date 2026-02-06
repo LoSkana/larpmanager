@@ -83,7 +83,7 @@ def remove_pre_register_active_configs(apps: Any, schema_editor: Any) -> None:
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0134_alter_event_max_filler_alter_event_max_pg_and_more"),
+        ("larpmanager", "0135_alter_log_options_remove_log_dl_log_association_and_more"),
     ]
 
     operations = [

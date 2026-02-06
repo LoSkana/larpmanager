@@ -170,6 +170,9 @@ msgstr "Seznam"
 msgid "Logo"
 msgstr "Logo"
 
+msgid "Logs"
+msgstr "Protokoly"
+
 msgid "Mail"
 msgstr "Mail"
 
@@ -782,6 +785,9 @@ msgstr "Výchozí"
 
 msgid "Details"
 msgstr "Podrobnosti na"
+
+msgid "Element"
+msgstr "Prvek"
 
 msgid "Example"
 msgstr "Příklad"
@@ -1974,6 +1980,9 @@ msgstr "Typ dovednosti"
 msgid "Achievements"
 msgstr "Úspěchy"
 
+msgid "Activity Log"
+msgstr "Záznam o činnosti"
+
 msgid "Add from NPC"
 msgstr "Přidat z NPC"
 
@@ -2441,6 +2450,9 @@ msgstr "Dostupné dny"
 msgid "Bring a friend"
 msgstr "Přiveďte kamaráda"
 
+msgid "Bulk operation"
+msgstr "Hromadná operace"
+
 msgid "Cargo manifest"
 msgstr "Seznam nákladu"
 
@@ -2608,6 +2620,9 @@ msgstr "Jednorázová platba"
 
 msgid "Tax code check"
 msgstr "Kontrola daňového kódu"
+
+msgid "Today activity"
+msgstr "Dnešní aktivita"
 
 msgid "Total payments"
 msgstr "Platby celkem"
@@ -6215,6 +6230,10 @@ msgstr "Je třeba doručit <b>%(number)s</b> náhrad"
 msgid "There are quest types without quests: %(list)s"
 msgstr "Existují typy úkolů bez úkolů: %(list)s"
 
+msgid "This page shows all log entries for this event"
+msgstr ""
+"Na této stránce jsou zobrazeny všechny záznamy protokolu pro tuto událost"
+
 msgid "This page shows the email lists of subscribers"
 msgstr "Tato stránka zobrazuje seznamy e-mailových odběratelů"
 
@@ -6643,6 +6662,11 @@ msgstr "V prvním sloupci je částka, ve druhém příjem"
 
 msgid "This page shows all donations recorded in the system"
 msgstr "Tato stránka zobrazuje všechny dary zaznamenané v systému"
+
+msgid "This page shows all log entries for the organization"
+msgstr ""
+"Na této stránce jsou zobrazeny všechny záznamy protokolu pro danou "
+"organizaci"
 
 msgid "This page shows all payments received for this event"
 msgstr "Na této stránce jsou zobrazeny všechny platby přijaté za tuto událost"
@@ -7565,6 +7589,11 @@ msgstr ""
 "Nyní si můžete prohlédnout bezpečnostní informace, které účastníci "
 "předložili"
 
+msgid "Show detailed activity log on entities created, updated or deleted."
+msgstr ""
+"Zobrazení podrobného záznamu činnosti o vytvořených, aktualizovaných nebo "
+"odstraněných entitách."
+
 msgid "Simply follow the instructions and provide the required information"
 msgstr "Stačí postupovat podle pokynů a zadat požadované informace"
 
@@ -7663,6 +7692,11 @@ msgstr ""
 #, python-format
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
 msgstr "Tento text bude přidán do listu do odstavce grafu %(name)s"
+
+msgid "View detailed activity log of all changes made for this organization"
+msgstr ""
+"Zobrazení podrobného protokolu aktivit všech změn provedených pro tuto "
+"organizaci"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Po provedení změny vám zašleme potvrzující e-mail"
@@ -7809,6 +7843,11 @@ msgstr ""
 msgid "This page summarizes the types of pools that a character inventory has"
 msgstr ""
 "Tato stránka shrnuje typy fondů, které má inventář postavy k dispozici"
+
+msgid "View detailed activity log of all changes made for this specific event"
+msgstr ""
+"Zobrazení podrobného protokolu aktivit všech změn provedených pro tuto "
+"konkrétní událost"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""

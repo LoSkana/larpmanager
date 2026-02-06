@@ -1415,3 +1415,15 @@
     after_link: ''
     hidden: true
     module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Activity Log
+    descr: Show detailed activity log on entities created, updated or deleted.
+    slug: logs
+    overall: true
+    placeholder: false
+    order: 1
+    after_text: ''
+    after_link: ''
+    hidden: false
+    module: miscellany

@@ -53,7 +53,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
-from larpmanager.models.member import Membership, MembershipStatus
+from larpmanager.models.member import LogOperationType, Membership, MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -340,7 +340,7 @@ def _reg_load(context: dict, csv_row: dict, registration_questions: dict) -> str
 
     # Save registration and log the action
     registration.save()
-    save_log(context["member"], Registration, registration)
+    save_log(context, Registration, registration, operation_type=LogOperationType.UPLOAD)
 
     # Generate appropriate status message
     if error_logs:
@@ -910,7 +910,7 @@ def element_load(context: dict, csv_row: dict, element_questions: dict) -> str:
 
     # Save the element and log the operation
     element.save()
-    save_log(context["member"], writing_model_class, element)
+    save_log(context, writing_model_class, element, operation_type=LogOperationType.UPLOAD)
 
     # Return appropriate status message based on processing results
     if error_logs:
@@ -1578,7 +1578,7 @@ def _ticket_load(context: dict, csv_row: dict) -> str:
 
     # Save the ticket and log the operation
     ticket.save()
-    save_log(context["member"], RegistrationTicket, ticket)
+    save_log(context, RegistrationTicket, ticket, operation_type=LogOperationType.UPLOAD)
 
     # Return appropriate success message
     return f"OK - Created {ticket}" if was_created else f"OK - Updated {ticket}"
@@ -1673,7 +1673,7 @@ def _ability_load(context: dict, csv_row: dict) -> str:
     ability_element.save()
 
     # Log the operation for audit trail
-    save_log(context["member"], AbilityPx, ability_element)
+    save_log(context, AbilityPx, ability_element, operation_type=LogOperationType.UPLOAD)
 
     # Return appropriate success message
     return f"OK - Created {ability_element}" if was_created else f"OK - Updated {ability_element}"

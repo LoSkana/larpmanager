@@ -170,6 +170,9 @@ msgstr "Lijst"
 msgid "Logo"
 msgstr "Logo"
 
+msgid "Logs"
+msgstr "Logboeken"
+
 msgid "Mail"
 msgstr "Mail"
 
@@ -782,6 +785,9 @@ msgstr "Standaard"
 
 msgid "Details"
 msgstr "Details"
+
+msgid "Element"
+msgstr "Element"
 
 msgid "Example"
 msgstr "Voorbeeld"
@@ -1974,6 +1980,9 @@ msgstr "Type vaardigheid"
 msgid "Achievements"
 msgstr "Prestaties"
 
+msgid "Activity Log"
+msgstr "Activiteitenlogboek"
+
 msgid "Add from NPC"
 msgstr "Toevoegen van NPC"
 
@@ -2441,6 +2450,9 @@ msgstr "Beschikbare dagen"
 msgid "Bring a friend"
 msgstr "Breng een vriend mee"
 
+msgid "Bulk operation"
+msgstr "Bulkverrichting"
+
 msgid "Cargo manifest"
 msgstr "Vrachtmanifest"
 
@@ -2608,6 +2620,9 @@ msgstr "Eenmalige betaling"
 
 msgid "Tax code check"
 msgstr "Belastingcode controleren"
+
+msgid "Today activity"
+msgstr "Vandaag activiteit"
 
 msgid "Total payments"
 msgstr "Totaal betalingen"
@@ -6220,6 +6235,9 @@ msgstr "Er zijn <b>%(number)s</b> restituties te leveren"
 msgid "There are quest types without quests: %(list)s"
 msgstr "Er zijn quest types zonder quests: %(list)s"
 
+msgid "This page shows all log entries for this event"
+msgstr "Deze pagina toont alle logboekvermeldingen voor deze gebeurtenis"
+
 msgid "This page shows the email lists of subscribers"
 msgstr "Deze pagina toont de e-maillijsten van abonnees"
 
@@ -6652,6 +6670,9 @@ msgstr "De eerste kolom het bedrag, de tweede de ontvangsten"
 
 msgid "This page shows all donations recorded in the system"
 msgstr "Deze pagina toont alle in het systeem geregistreerde donaties"
+
+msgid "This page shows all log entries for the organization"
+msgstr "Deze pagina toont alle logboekvermeldingen voor de organisatie"
 
 msgid "This page shows all payments received for this event"
 msgstr "Deze pagina toont alle ontvangen betalingen voor dit evenement"
@@ -7677,6 +7698,11 @@ msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "U kunt nu de veiligheidsinformatie bekijken die deelnemers hebben ingediend"
 
+msgid "Show detailed activity log on entities created, updated or deleted."
+msgstr ""
+"Toon gedetailleerd activiteitenlogboek over entiteiten die zijn aangemaakt, "
+"bijgewerkt of verwijderd."
+
 msgid "Simply follow the instructions and provide the required information"
 msgstr "Volg gewoon de instructies en geef de vereiste informatie"
 
@@ -7781,6 +7807,11 @@ msgstr ""
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
 msgstr ""
 "Deze tekst wordt toegevoegd aan het blad, in de plotparagraaf %(name)s"
+
+msgid "View detailed activity log of all changes made for this organization"
+msgstr ""
+"Gedetailleerd activiteitenlogboek bekijken van alle wijzigingen die voor "
+"deze organisatie zijn gemaakt"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
@@ -7949,6 +7980,11 @@ msgid "This page summarizes the types of pools that a character inventory has"
 msgstr ""
 "Deze pagina geeft een overzicht van de typen pools die een "
 "karakterinventaris heeft"
+
+msgid "View detailed activity log of all changes made for this specific event"
+msgstr ""
+"Gedetailleerd activiteitenlogboek bekijken van alle wijzigingen die voor "
+"deze specifieke gebeurtenis zijn gemaakt"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""
