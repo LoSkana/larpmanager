@@ -159,7 +159,7 @@ class LogAdmin(DefModelAdmin):
 
     list_display: ClassVar[tuple] = ("member", "cls", "eid", "operation_type", "element_name", "info")
     search_fields: ClassVar[tuple] = ("id", "member", "cls", "operation_type", "element_name")
-    list_filter: ClassVar[tuple] = ("operation_type", "member", "run", "association")
+    list_filter: ClassVar[tuple] = ("operation_type", MemberFilter, RunFilter, AssociationFilter)
     autocomplete_fields: ClassVar[list] = ["member"]
 
 

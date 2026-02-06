@@ -300,17 +300,17 @@ class AccountingItem(UuidMixin, BaseModel):
             String with ID, class name, and member info if available.
 
         """
-        # Build base string with class name
-        s = "Voce contabile"
-        # noinspection PyUnresolvedReferences
-        if self.id:
-            # noinspection PyUnresolvedReferences
-            s += f" &{self.id}"
-        s += f" - {self.__class__.__name__}"
+        s = self.__class__.__name__.replace("AccountingItem", "")
 
-        # Append member info if present
         if self.member:
             s += f" - {self.member}"
+
+        if self.value:
+            s += f" - {self.value}"
+
+        if hasattr(self, "descr"):
+            s += f" - {self.descr[:50]}"
+
         return s
 
     class Meta:
