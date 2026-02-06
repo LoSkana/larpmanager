@@ -477,15 +477,28 @@ def _check_run_status(context: dict, run: Run, member: Member, run_status: dict,
     if status == RegistrationStatus.PRE:
         return _status_preregister(run, member, run_status, context)
 
-    # Handle future registration opening
-    if status == RegistrationStatus.FUTURE:
-        return _status_future(run, run_status)
-
-    return _status_open(register_url, run_status)
+    # Handle future registration opening, or normal open
+    return _status_future_open(register_url, run_status)
 
 
-def _status_open(register_url: str, run_status: dict) -> dict:
+def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
     """Update run status based on availability."""
+    if run.registration_status == RegistrationStatus.FUTURE:
+        current_datetime = timezone.now()
+
+        if not run.registration_open:
+            run_status["open"] = False
+            run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
+            return run_status
+
+        if run.registration_open > current_datetime:
+            run_status["open"] = False
+            run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
+            run_status["details"] = _("Opening at: %(date)s") % {
+                "date": run.registration_open.strftime(format_datetime),
+            }
+            return run_status
+
     # signup open, not already signed in
     messages = {
         "primary": _("Registration is open!"),
@@ -508,29 +521,13 @@ def _status_open(register_url: str, run_status: dict) -> dict:
     return run_status
 
 
-def _status_future(run: Run, run_status: dict) -> dict:
-    """Update run status based on current date."""
-    current_datetime = timezone.now()
-
-    if not run.registration_open:
-        run_status["open"] = False
-        run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
-
-    elif run.registration_open > current_datetime:
-        run_status["open"] = False
-        run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
-        run_status["details"] = _("Opening at: %(date)s") % {
-            "date": run.registration_open.strftime(format_datetime),
-        }
-
-    return run_status
-
-
 def _status_preregister(run: Run, member: Member, run_status: dict, context: dict | None = None) -> dict:
     """Update run status based on user's pre-registration state."""
     # Extract values from context dictionary if provided
     if context is None:
         context = {}
+
+    run_status["open"] = False
 
     # Get cached pre-registrations dictionary from context
     pre_registrations_dict = context.get("pre_registrations_dict")

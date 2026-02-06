@@ -9631,17 +9631,17 @@ msgstr ""
 msgid "Registration is open!"
 msgstr ""
 
-msgid "Sign up as a filler!"
-msgstr ""
-
-msgid "Join the waiting list!"
-msgstr ""
-
 msgid "Registrations not open"
 msgstr ""
 
 #, python-format
 msgid "Opening at: %(date)s"
+msgstr ""
+
+msgid "Sign up as a filler!"
+msgstr ""
+
+msgid "Join the waiting list!"
 msgstr ""
 
 msgid "Pre-registration confirmed"
