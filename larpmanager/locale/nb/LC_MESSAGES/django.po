@@ -501,6 +501,9 @@ msgstr "Årsak"
 msgid "Checks"
 msgstr "Sjekker"
 
+msgid "Closed"
+msgstr "Stengt"
+
 msgid "Copied"
 msgstr "Kopiert"
 
@@ -2073,8 +2076,8 @@ msgstr "Neste betaling"
 msgid "Not selected"
 msgstr "Ikke valgt"
 
-msgid "Opening date"
-msgstr "Åpningsdato"
+msgid "Open on date"
+msgstr "Åpent på dato"
 
 msgid "Organization"
 msgstr "Forening"
@@ -2262,6 +2265,9 @@ msgstr "Hendelseshistorikk"
 
 msgid "External link"
 msgstr "Ekstern url"
+
+msgid "External site"
+msgstr "Eksternt nettsted"
 
 msgid "Faction cover"
 msgstr "Gruppedekning"
@@ -2632,6 +2638,9 @@ msgstr "Type prolog"
 
 msgid "URL identifier"
 msgstr "Idenominativ URL"
+
+msgid "Value required"
+msgstr "Nødvendig verdi"
 
 msgid "Warehouse area"
 msgstr "Lagerområdet"
@@ -3681,6 +3690,9 @@ msgstr "Åpning av registrering"
 msgid "Registration options"
 msgstr "Registreringsalternativer"
 
+msgid "Registrations status"
+msgstr "Status for registreringer"
+
 msgid "Relationships (Test)"
 msgstr "Relasjoner (Test)"
 
@@ -4384,9 +4396,6 @@ msgstr "Les skriveelementene"
 msgid "Receipt already confirmed"
 msgstr "Kvitteringen er allerede bekreftet"
 
-msgid "Registration opening date"
-msgstr "Åpningsdato for registrering"
-
 #, python-format
 msgid "Registration to %(event)s"
 msgstr "Registrering på %(event)s"
@@ -4722,6 +4731,9 @@ msgstr "Spillere som venter på karakter"
 msgid "Pre-registration at %(event)s"
 msgstr "Forhåndsregistrering på %(event)s"
 
+msgid "Pre-registration is available"
+msgstr "Forhåndsregistrering er tilgjengelig"
+
 msgid "Preferred navigation language"
 msgstr "Foretrukket navigasjonsspråk"
 
@@ -4882,6 +4894,9 @@ msgstr "Navn som skal vises for tokens"
 #, python-format
 msgid "Password reset of user %(user)s"
 msgstr "Tilbakestilling av passord for bruker %(user)s"
+
+msgid "Registrations are not available"
+msgstr "Registreringer er ikke tilgjengelige"
 
 msgid "Relationships of your character"
 msgstr "Lenker til karakteren din"
@@ -5280,6 +5295,9 @@ msgstr "Valgfri beskrivelse av innholdet"
 msgid "Payments pending delegated accounts"
 msgstr "Betalinger i påvente av delegerte konti"
 
+msgid "Registrations status for this event"
+msgstr "Påmeldingsstatus for dette arrangementet"
+
 #, python-format
 msgid "Reimbursement request for %(event)s"
 msgstr "Krav for %(event)s"
@@ -5640,6 +5658,9 @@ msgstr "Bilder og videoer er lastet opp"
 msgid "Registration cancellation for %(event)s"
 msgstr "Avslutte abonnementet på %(event)s"
 
+msgid "Registrations are open for participants"
+msgstr "Det er åpent for påmelding for deltakere"
+
 msgid "Set the experience points configuration"
 msgstr "Angi konfigurasjonen for erfaringspoeng"
 
@@ -5757,9 +5778,6 @@ msgstr "hvis tegnet tilhører dette elementet"
 
 msgid "it will enable country-specific features"
 msgstr "det vil aktivere landsspesifikke funksjoner"
-
-msgid "leave blank to keep registrations closed"
-msgstr "la stå tomt for å holde registreringene stengt"
 
 msgid "will be displayed on the main event page"
 msgstr "vil bli vist på hovedsiden for arrangementet"
@@ -5888,6 +5906,9 @@ msgstr "Deltakere som IKKE sendte preferanser"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Påminnelse om profilkompilering for %(event)s"
+
+msgid "Redirects to an external registration link"
+msgstr "Omdirigerer til en ekstern registreringslenke"
 
 msgid "Reserve additional tickets beyond your own"
 msgstr "Reserver flere billetter utover dine egne"
@@ -6127,9 +6148,6 @@ msgstr "Nå kan du kopiere elementer fra en annen hendelse"
 msgid "Now you can define registration form sections"
 msgstr "Nå kan du definere seksjoner i registreringsskjemaet"
 
-msgid "Now you can set the registration opening date"
-msgstr "Nå kan du angi åpningsdato for registrering"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Fødested ikke inkludert i ISTAT-listen"
 
@@ -6184,9 +6202,6 @@ msgstr "Nå kan du velge hvilke billetter som kan gis i gave"
 
 msgid "Now you can set the experience points settings"
 msgstr "Nå kan du angi innstillingene for erfaringspoeng"
-
-msgid "Now you can set the external registration link"
-msgstr "Nå kan du angi den eksterne registreringslenken"
 
 msgid "Optional - Image displayed within the question"
 msgstr "Valgfritt - Bilde som vises i spørsmålet"
@@ -6797,6 +6812,9 @@ msgstr "Nå kan du legge til relasjoner når du redigerer et tegn"
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Mengdesporing er ikke aktivert for denne organisasjonen"
 
+msgid "Registrations will open at the specified date and time"
+msgstr "Registreringen åpner på angitt dato og klokkeslett"
+
 msgid "The registration request will be updated automatically"
 msgstr "Søknaden oppdateres automatisk"
 
@@ -7056,11 +7074,6 @@ msgstr "Få tilgang til administrasjonspanelet <a href= %(url)s'>herfra</a>"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "Ønsker du å akseptere betalinger som behandles gjennom systemet"
-
-msgid "If checked, makes pre-registration for this event available"
-msgstr ""
-"Hvis avkrysset, gjør forhåndsregistrering for dette arrangementet "
-"tilgjengelig"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
@@ -9015,13 +9028,6 @@ msgstr ""
 "Gjør det mulig å finjustere hvordan ord og uttrykk oversettes i "
 "organisasjonens rom"
 
-msgid ""
-"Do you want to open registrations at a specific date and time instead of "
-"immediately"
-msgstr ""
-"Ønsker du å åpne registreringer på en bestemt dato og et bestemt klokkeslett"
-" i stedet for umiddelbart"
-
 #, python-format
 msgid ""
 "File type '%(detected_type)s' is not allowed.Allowed types are: "
@@ -9864,13 +9870,6 @@ msgstr ""
 "andre deltakere"
 
 msgid ""
-"Lets you specify a date (and time) on which registration will open, keeping "
-"it closed until then"
-msgstr ""
-"Her kan du angi en dato (og et klokkeslett) for når registreringen skal "
-"åpnes, og holde den stengt frem til da"
-
-msgid ""
 "Once downloaded you must print it, sign it, take a digital scan, and upload "
 "it to the form below"
 msgstr ""
@@ -10334,13 +10333,6 @@ msgid ""
 msgstr ""
 "Viser nyttig informasjon for passasjerene, for eksempel fargen på bilen din "
 "og beregnet ankomsttid"
-
-msgid ""
-"Instead of using an internal registration form, redirects the participant to"
-" an external registration link"
-msgstr ""
-"I stedet for å bruke et internt registreringsskjema, omdirigerer du "
-"deltakeren til en ekstern registreringslenke"
 
 msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "

@@ -165,16 +165,6 @@ class Event(UuidMixin, BaseModel):
         help_text=_("Link to an external website with additional event information"),
     )
 
-    register_link = models.URLField(
-        max_length=150,
-        blank=True,
-        verbose_name=_("External registration link"),
-        help_text=_("Link to an external registration system")
-        + " ("
-        + _("non-registered users will be redirected here, while registered users get normal access")
-        + ")",
-    )
-
     max_pg = models.IntegerField(
         default=0,
         validators=[MinValueValidator(0)],
@@ -601,25 +591,20 @@ class DevelopStatus(models.TextChoices):
     DONE = "9", _("Concluded")
 
 
+class RegistrationStatus(models.TextChoices):
+    """Registration status for event runs."""
+
+    PRE = "p", _("Pre-registration")
+    CLOSED = "c", _("Closed")
+    OPEN = "o", _("Open")
+    EXTERNAL = "e", _("External site")
+    FUTURE = "f", _("Open on date")
+
+
 class Run(UuidMixin, BaseModel):
     """Represents Run model."""
 
     search = models.CharField(max_length=150, editable=False)
-
-    development = models.CharField(
-        max_length=1,
-        choices=DevelopStatus.choices,
-        default=DevelopStatus.START,
-        verbose_name=_("Status"),
-        help_text=_("Current status of this event"),
-    )
-
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="runs")
-
-    number = models.IntegerField(
-        verbose_name=_("Run number"),
-        help_text=_("Sequential number for this event"),
-    )
 
     start = models.DateField(
         blank=True,
@@ -636,13 +621,43 @@ class Run(UuidMixin, BaseModel):
         db_index=True,
     )
 
+    development = models.CharField(
+        max_length=1,
+        choices=DevelopStatus.choices,
+        default=DevelopStatus.START,
+        verbose_name=_("Status"),
+        help_text=_("Current status of this event"),
+    )
+
+    registration_status = models.CharField(
+        max_length=1,
+        choices=RegistrationStatus.choices,
+        default=RegistrationStatus.CLOSED,
+        verbose_name=_("Registrations status"),
+        help_text=_("Registrations status for this event"),
+    )
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="runs")
+
+    number = models.IntegerField(
+        verbose_name=_("Run number"),
+        help_text=_("Sequential number for this event"),
+    )
+
     registration_open = models.DateTimeField(
         blank=True,
         null=True,
         verbose_name=_("Registration opening"),
-        help_text=_("Date and time when registrations open for participants")
+        help_text=_("Date and time when registrations open for participants"),
+    )
+
+    register_link = models.URLField(
+        max_length=150,
+        blank=True,
+        verbose_name=_("External registration link"),
+        help_text=_("Link to an external registration system")
         + " ("
-        + _("leave blank to keep registrations closed")
+        + _("non-registered users will be redirected here, while registered users get normal access")
         + ")",
     )
 

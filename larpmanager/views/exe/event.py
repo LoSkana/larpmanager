@@ -30,7 +30,7 @@ from django.utils.translation import gettext_lazy as _
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
-from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.forms.event import (
@@ -40,6 +40,7 @@ from larpmanager.forms.event import (
 from larpmanager.models.access import EventRole
 from larpmanager.models.event import (
     Event,
+    RegistrationStatus,
     Run,
 )
 from larpmanager.models.larpmanager import LarpManagerTicket
@@ -240,11 +241,21 @@ def exe_pre_registrations(request: HttpRequest) -> HttpResponse:
         context["association_id"], "pre_reg_preferences", default_value=False, context=context
     )
 
-    # Iterate through all non-template events for this association
-    for event in Event.objects.filter(association_id=context["association_id"], template=False):
-        # Skip events that don't have pre-registration active
-        if not get_event_config(event.id, "pre_register_active", default_value=False, context=context):
+    # Track which events we've already processed
+    seen_events = set()
+
+    # Iterate through all runs with pre-registration status for this association
+    for run in Run.objects.filter(
+        event__association_id=context["association_id"],
+        event__template=False,
+        registration_status=RegistrationStatus.PRE,
+    ).select_related("event"):
+        # Skip if we've already processed this event
+        if run.event_id in seen_events:
             continue
+        seen_events.add(run.event_id)
+
+        event = run.event
 
         # Get pre-registration data for current event
         pr = get_pre_registration(event)

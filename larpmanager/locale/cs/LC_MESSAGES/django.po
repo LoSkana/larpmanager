@@ -501,6 +501,9 @@ msgstr "Causale"
 msgid "Checks"
 msgstr "Kontroly"
 
+msgid "Closed"
+msgstr "Uzavřeno"
+
 msgid "Copied"
 msgstr "Zkopírováno"
 
@@ -2073,8 +2076,8 @@ msgstr "Další platba"
 msgid "Not selected"
 msgstr "Nevybráno"
 
-msgid "Opening date"
-msgstr "Datum otevření"
+msgid "Open on date"
+msgstr "Otevřeno k datu"
 
 msgid "Organization"
 msgstr "Sdružení"
@@ -2262,6 +2265,9 @@ msgstr "Historie událostí"
 
 msgid "External link"
 msgstr "Externí url"
+
+msgid "External site"
+msgstr "Externí stránka"
 
 msgid "Faction cover"
 msgstr "Skupinové krytí"
@@ -2632,6 +2638,9 @@ msgstr "Typ prologu"
 
 msgid "URL identifier"
 msgstr "Idenominativní adresa URL"
+
+msgid "Value required"
+msgstr "Požadovaná hodnota"
 
 msgid "Warehouse area"
 msgstr "Oblast skladu"
@@ -3681,6 +3690,9 @@ msgstr "Zahájení registrace"
 msgid "Registration options"
 msgstr "Možnosti registrace"
 
+msgid "Registrations status"
+msgstr "Stav registrací"
+
 msgid "Relationships (Test)"
 msgstr "Vztahy (test)"
 
@@ -4384,9 +4396,6 @@ msgstr "Přečtěte si prvky psaní"
 msgid "Receipt already confirmed"
 msgstr "Příjem již potvrzen"
 
-msgid "Registration opening date"
-msgstr "Datum zahájení registrace"
-
 #, python-format
 msgid "Registration to %(event)s"
 msgstr "Registrace v %(event)s"
@@ -4722,6 +4731,9 @@ msgstr "Hráči čekají na postavu"
 msgid "Pre-registration at %(event)s"
 msgstr "Předběžná registrace na %(event)s"
 
+msgid "Pre-registration is available"
+msgstr "Předběžná registrace je k dispozici"
+
 msgid "Preferred navigation language"
 msgstr "Preferovaný jazyk navigace"
 
@@ -4882,6 +4894,9 @@ msgstr "Název, který se má zobrazit u žetonů"
 #, python-format
 msgid "Password reset of user %(user)s"
 msgstr "Obnovení hesla uživatele %(user)s"
+
+msgid "Registrations are not available"
+msgstr "Registrace nejsou k dispozici"
 
 msgid "Relationships of your character"
 msgstr "Odkazy vaší postavy"
@@ -5280,6 +5295,9 @@ msgstr "Nepovinný popis obsahu"
 msgid "Payments pending delegated accounts"
 msgstr "Nevyřízené platby na delegovaných účtech"
 
+msgid "Registrations status for this event"
+msgstr "Stav registrací pro tuto událost"
+
 #, python-format
 msgid "Reimbursement request for %(event)s"
 msgstr "Nárok na %(event)s"
@@ -5638,6 +5656,9 @@ msgstr "Fotografie a videa byly úspěšně nahrány"
 msgid "Registration cancellation for %(event)s"
 msgstr "Odhlášení odběru %(event)s"
 
+msgid "Registrations are open for participants"
+msgstr "Registrace účastníků jsou otevřeny"
+
 msgid "Set the experience points configuration"
 msgstr "Nastavení konfigurace zkušenostních bodů"
 
@@ -5755,9 +5776,6 @@ msgstr "pokud znak patří k tomuto prvku"
 
 msgid "it will enable country-specific features"
 msgstr "umožní funkce specifické pro danou zemi"
-
-msgid "leave blank to keep registrations closed"
-msgstr "nechte prázdné, aby registrace zůstaly uzavřené"
 
 msgid "will be displayed on the main event page"
 msgstr "se zobrazí na hlavní stránce události"
@@ -5886,6 +5904,9 @@ msgstr "Účastníci, kteří NEZASLALI preference"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Připomenutí sestavení profilu pro %(event)s"
+
+msgid "Redirects to an external registration link"
+msgstr "Přesměrování na externí registrační odkaz"
 
 msgid "Reserve additional tickets beyond your own"
 msgstr "Rezervace dalších vstupenek nad rámec vlastních"
@@ -6124,9 +6145,6 @@ msgstr "Nyní můžete kopírovat prvky z jiné události"
 msgid "Now you can define registration form sections"
 msgstr "Nyní můžete definovat sekce registračního formuláře"
 
-msgid "Now you can set the registration opening date"
-msgstr "Nyní můžete nastavit datum zahájení registrace"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Místo narození neuvedené v seznamu ISTAT"
 
@@ -6181,9 +6199,6 @@ msgstr "Nyní můžete vybrat, které vstupenky lze darovat"
 
 msgid "Now you can set the experience points settings"
 msgstr "Nyní můžete nastavit body zkušeností"
-
-msgid "Now you can set the external registration link"
-msgstr "Nyní můžete nastavit externí registrační odkaz"
 
 msgid "Optional - Image displayed within the question"
 msgstr "Nepovinné - Obrázek zobrazený v rámci otázky"
@@ -6796,6 +6811,9 @@ msgstr "Nyní můžete při úpravě postavy přidávat vztahy"
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Sledování množství není pro tuto organizaci povoleno"
 
+msgid "Registrations will open at the specified date and time"
+msgstr "Registrace budou otevřeny v uvedeném termínu a čase"
+
 msgid "The registration request will be updated automatically"
 msgstr "Aplikace se automaticky aktualizuje"
 
@@ -7055,9 +7073,6 @@ msgstr "Přístup k panelu správy <a href= %(url)s'>zde</a>"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "Chcete přijímat platby zpracované prostřednictvím systému"
-
-msgid "If checked, makes pre-registration for this event available"
-msgstr "Pokud je zaškrtnuto, zpřístupní předběžnou registraci na tuto událost"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr "Správa nastavení události: název, popis, data, stav"
@@ -8929,11 +8944,6 @@ msgid ""
 "organization's space"
 msgstr "Umožňuje vyladit způsob překladu slov a frází v prostoru organizace"
 
-msgid ""
-"Do you want to open registrations at a specific date and time instead of "
-"immediately"
-msgstr "Chcete otevřít registrace v určitý den a čas, nikoli okamžitě"
-
 #, python-format
 msgid ""
 "File type '%(detected_type)s' is not allowed.Allowed types are: "
@@ -9755,13 +9765,6 @@ msgstr ""
 "účastníkům"
 
 msgid ""
-"Lets you specify a date (and time) on which registration will open, keeping "
-"it closed until then"
-msgstr ""
-"Umožňuje zadat datum (a čas), kdy bude registrace otevřena, a do té doby "
-"zůstane uzavřena"
-
-msgid ""
 "Once downloaded you must print it, sign it, take a digital scan, and upload "
 "it to the form below"
 msgstr ""
@@ -10223,13 +10226,6 @@ msgid ""
 msgstr ""
 "Uvádí užitečné informace pro cestující, například barvu vozu, předpokládaný "
 "čas příjezdu"
-
-msgid ""
-"Instead of using an internal registration form, redirects the participant to"
-" an external registration link"
-msgstr ""
-"Místo interního registračního formuláře přesměruje účastníka na externí "
-"registrační odkaz"
 
 msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "

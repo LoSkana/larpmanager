@@ -67,6 +67,7 @@ from larpmanager.models.event import (
     Event,
     EventTextType,
     PreRegistration,
+    RegistrationStatus,
     Run,
 )
 from larpmanager.models.member import Member, MembershipStatus
@@ -87,32 +88,6 @@ from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.users.registration import check_assign_character, get_reduced_available_count
 
 logger = logging.getLogger(__name__)
-
-
-def _check_pre_register_redirect(context: dict, event_slug: str) -> HttpResponse | None:
-    """Check if pre-registration should redirect to regular registration.
-
-    Args:
-        context: Event context dictionary
-        event_slug: Event slug for redirect URL
-
-    Returns:
-        HttpResponse redirect if should redirect, None otherwise
-
-    """
-    # Check if pre-registration is active for this specific event
-    if not get_event_config(context["event"].id, "pre_register_active", default_value=False):
-        return redirect("register", event_slug=event_slug)
-
-    # Check if registration is open and we're past the open date
-    if (
-        "registration_open" in context["features"]
-        and context["run"].registration_open
-        and context["run"].registration_open <= timezone.now()
-    ):
-        return redirect("register", event_slug=event_slug)
-
-    return None
 
 
 @login_required
@@ -142,10 +117,10 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
         context["sel"] = context["event"].uuid
         check_event_feature(request, context, "pre_register")
 
-        # Check if we should redirect to regular registration
-        redirect_response = _check_pre_register_redirect(context, event_slug)
-        if redirect_response:
-            return redirect_response
+        status = context["run"].registration_status
+        if status != RegistrationStatus.PRE:
+            return redirect("register", event_slug=event_slug)
+
     else:
         # Show all available events for pre-registration
         context = get_context(request)
@@ -167,17 +142,23 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
         ch[el.event_id] = True
         context["already"].append(el)
 
-    # Find events available for pre-registration
-    for r in Event.objects.filter(association_id=context["association_id"], template=False):
-        # Skip if pre-registration not active for this event
-        if not get_event_config(r.id, "pre_register_active", default_value=False):
+    # Find events available for pre-registration (events with at least one run in PRE status)
+    seen_events = set()
+    for run in Run.objects.filter(
+        event__association_id=context["association_id"],
+        event__template=False,
+        registration_status=RegistrationStatus.PRE,
+    ).select_related("event"):
+        # Skip if we've already processed this event
+        if run.event_id in seen_events:
             continue
+        seen_events.add(run.event_id)
 
         # Skip if user already pre-registered
-        if r.id in ch:
+        if run.event_id in ch:
             continue
 
-        context["choices"].append(r)
+        context["choices"].append(run.event)
 
     # Handle form submission for new pre-registration
     if request.method == "POST":
@@ -663,7 +644,7 @@ def register(
 
     # Handle registration redirects for new registrations (skipped is a valid ticket link is provided)
     if is_new_registration and not context.get("ticket"):
-        redirect_response = _check_redirect_registration(request, context, current_event, secret_code)
+        redirect_response = _check_redirect_registration(request, context, secret_code)
         if redirect_response:
             return redirect_response
 
@@ -726,9 +707,7 @@ def _apply_ticket(context: dict, ticket_uuid: str | None, event_id: int) -> None
         pass
 
 
-def _check_redirect_registration(  # noqa: PLR0911
-    request: HttpRequest, context: dict, event: Any, secret_code: str | None
-) -> HttpResponse | None:
+def _check_redirect_registration(request: HttpRequest, context: dict, secret_code: str | None) -> HttpResponse | None:  # noqa: PLR0911
     """Check if registration should be redirected based on event status and settings.
 
     This function performs various checks to determine if a user's registration
@@ -765,25 +744,31 @@ def _check_redirect_registration(  # noqa: PLR0911
         # Secret code is correct, allow registration bypassing other checks
         return None
 
+    # Get registration status from run
+    registration_status = context["run"].registration_status
+
+    # Handle closed status
+    if registration_status == RegistrationStatus.CLOSED:
+        return render(request, "larpmanager/event/not_open.html", context)
+
     # Redirect to external registration link if configured
     # Skip redirect for staff and NPC tiers who register internally
     if (
-        "register_link" in context["features"]
-        and event.register_link
+        registration_status == RegistrationStatus.EXTERNAL
+        and context["run"].register_link
         and ("tier" not in context or context["tier"] not in [TicketTier.STAFF, TicketTier.NPC])
     ):
-        return redirect(event.register_link)
+        return redirect(context["run"].register_link)
 
-    # Check registration timing and pre-registration options
-    if "registration_open" in context["features"] and (
+    # Check registration timing for future opening
+    if registration_status == RegistrationStatus.FUTURE and (
         not context["run"].registration_open or context["run"].registration_open > timezone.now()
     ):
-        # Redirect to pre-registration if available and active
-        if "pre_register" in context["features"] and get_event_config(
-            event.id, "pre_register_active", default_value=False
-        ):
-            return redirect("pre_register", event_slug=context["event"].slug)
         return render(request, "larpmanager/event/not_open.html", context)
+
+    # Handle pre-registration status - redirect to pre-register page
+    if registration_status == RegistrationStatus.PRE:
+        return redirect("pre_register", event_slug=context["event"].slug)
 
     return None
 

@@ -34,7 +34,7 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import clear_registration_counts_cache, get_registration_counts
 from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
-from larpmanager.models.event import Event, PreRegistration, Run
+from larpmanager.models.event import Event, PreRegistration, RegistrationStatus, Run
 from larpmanager.models.form import (
     BaseQuestionType,
     RegistrationAnswer,
@@ -397,7 +397,7 @@ def _status_payment(
     return False
 
 
-def registration_status(  # noqa: C901
+def registration_status(
     run: Run,
     member: Member,
     context: dict,
@@ -452,25 +452,39 @@ def registration_status(  # noqa: C901
     if run.end and get_time_diff_today(run.end) < 0:
         return run_status
 
-    # check pre-register
-    if get_event_config(run.event_id, "pre_register_active", default_value=False, context=context):
-        _status_preregister(run, member, run_status, context)
+    return _check_run_status(context, run, member, run_status, register_url)
 
-    current_datetime = timezone.now()
-    # check registration open
-    if "registration_open" in features:
-        if not run.registration_open:
-            run_status["open"] = False
-            run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
-            return run_status
-        if run.registration_open > current_datetime:
-            run_status["open"] = False
-            run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
-            run_status["details"] = _("Opening at: %(date)s") % {
-                "date": run.registration_open.strftime(format_datetime),
-            }
-            return run_status
 
+def _check_run_status(context: dict, run: Run, member: Member, run_status: dict, register_url: str) -> dict:
+    """Fill run status dict based on run registrations status field."""
+    # Check registration status field
+    status = run.registration_status
+
+    # Handle closed status
+    if status == RegistrationStatus.CLOSED:
+        run_status["open"] = False
+        run_status["text"] = _("Registration closed") + "."
+        return run_status
+
+    # Handle external registration - redirect is handled in view layer
+    if status == RegistrationStatus.EXTERNAL:
+        run_status["open"] = False
+        run_status["text"] = _("External registration")
+        return run_status
+
+    # Handle pre-registration status
+    if status == RegistrationStatus.PRE:
+        return _status_preregister(run, member, run_status, context)
+
+    # Handle future registration opening
+    if status == RegistrationStatus.FUTURE:
+        return _status_future(run, run_status)
+
+    return _status_open(register_url, run_status)
+
+
+def _status_open(register_url: str, run_status: dict) -> dict:
+    """Update run status based on availability."""
     # signup open, not already signed in
     messages = {
         "primary": _("Registration is open!"),
@@ -493,19 +507,26 @@ def registration_status(  # noqa: C901
     return run_status
 
 
-def _status_preregister(run: Run, member: Member, run_status: dict, context: dict | None = None) -> None:
-    """Update run status based on user's pre-registration state.
+def _status_future(run: Run, run_status: dict) -> dict:
+    """Update run status based on current date."""
+    current_datetime = timezone.now()
 
-    Sets the run status text to either confirm existing pre-registration
-    or provide a link to pre-register for the event.
+    if not run.registration_open:
+        run_status["open"] = False
+        run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
 
-    Args:
-        run: Event run object to update status for
-        member: Member object to check pre-registration status
-        run_status: Dictionary with run status
-        context: Optional context dictionary containing cached pre-registration data
+    elif run.registration_open > current_datetime:
+        run_status["open"] = False
+        run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
+        run_status["details"] = _("Opening at: %(date)s") % {
+            "date": run.registration_open.strftime(format_datetime),
+        }
 
-    """
+    return run_status
+
+
+def _status_preregister(run: Run, member: Member, run_status: dict, context: dict | None = None) -> dict:
+    """Update run status based on user's pre-registration state."""
     # Extract values from context dictionary if provided
     if context is None:
         context = {}
@@ -532,11 +553,14 @@ def _status_preregister(run: Run, member: Member, run_status: dict, context: dic
     if has_pre_registration:
         status_message = _("Pre-registration confirmed") + "!"
         run_status["text"] = status_message
+
     else:
         # Create pre-registration link for unauthenticated or non-pre-registered users
         status_message = _("Pre-register to the event") + "!"
         preregister_url = reverse("pre_register", args=[run.event.slug])
         run_status["text"] = f"<a href='{preregister_url}'>{status_message}</a>"
+
+    return run_status
 
 
 def _get_features_map(run: Run, context: dict) -> Any:

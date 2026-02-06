@@ -4,7 +4,7 @@
         <a href="{% url 'orga_registrations' run.get_slug %}" target="_blank"><i class="fa-solid fa-clipboard-list"></i> {% trans "Registrations" %}</a>
     </h2>
     <p>
-        {% trans "Status" %}: <a href="{% url 'register' run.get_slug %}" target="_blank">{{ registration_status }}</a>
+        {% trans "Status" %}: <a href="{% url 'register' run.get_slug %}" target="_blank">{{ run.get_registration_status_display }}</a>
         <button class="copy-link-btn"
                 data-url="{% url 'register' run.get_slug %}"
                 title="{% trans "Copy link to clipboard" %}">

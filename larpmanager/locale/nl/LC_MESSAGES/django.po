@@ -501,6 +501,9 @@ msgstr "Oorzaak"
 msgid "Checks"
 msgstr "Controles"
 
+msgid "Closed"
+msgstr "Gesloten"
+
 msgid "Copied"
 msgstr "Gekopieerd"
 
@@ -2073,8 +2076,8 @@ msgstr "Volgende betaling"
 msgid "Not selected"
 msgstr "Niet geselecteerd"
 
-msgid "Opening date"
-msgstr "Openingsdatum"
+msgid "Open on date"
+msgstr "Open op datum"
 
 msgid "Organization"
 msgstr "Vereniging"
@@ -2262,6 +2265,9 @@ msgstr "Gebeurtenis geschiedenis"
 
 msgid "External link"
 msgstr "Externe url"
+
+msgid "External site"
+msgstr "Externe site"
 
 msgid "Faction cover"
 msgstr "Groepsdekking"
@@ -2632,6 +2638,9 @@ msgstr "Type proloog"
 
 msgid "URL identifier"
 msgstr "Idenominatieve URL"
+
+msgid "Value required"
+msgstr "Vereiste waarde"
 
 msgid "Warehouse area"
 msgstr "Magazijn"
@@ -3681,6 +3690,9 @@ msgstr "Opening registratie"
 msgid "Registration options"
 msgstr "Registratieopties"
 
+msgid "Registrations status"
+msgstr "Status registraties"
+
 msgid "Relationships (Test)"
 msgstr "Relaties (Test)"
 
@@ -4384,9 +4396,6 @@ msgstr "Lees de schrijfelementen"
 msgid "Receipt already confirmed"
 msgstr "Ontvangst al bevestigd"
 
-msgid "Registration opening date"
-msgstr "Datum opening registratie"
-
 #, python-format
 msgid "Registration to %(event)s"
 msgstr "Registratie bij %(event)s"
@@ -4722,6 +4731,9 @@ msgstr "Spelers wachten op personage"
 msgid "Pre-registration at %(event)s"
 msgstr "Voorinschrijving bij %(event)s"
 
+msgid "Pre-registration is available"
+msgstr "Voorinschrijving is beschikbaar"
+
 msgid "Preferred navigation language"
 msgstr "Gewenste navigatietaal"
 
@@ -4882,6 +4894,9 @@ msgstr "Naam die moet worden weergegeven voor tokens"
 #, python-format
 msgid "Password reset of user %(user)s"
 msgstr "Wachtwoord reset van gebruiker %(user)s"
+
+msgid "Registrations are not available"
+msgstr "Registraties zijn niet beschikbaar"
 
 msgid "Relationships of your character"
 msgstr "Links van je personage"
@@ -5280,6 +5295,9 @@ msgstr "Optionele beschrijving van de inhoud"
 msgid "Payments pending delegated accounts"
 msgstr "Betalingen in afwachting van gedelegeerde rekeningen"
 
+msgid "Registrations status for this event"
+msgstr "Registratiestatus voor dit evenement"
+
 #, python-format
 msgid "Reimbursement request for %(event)s"
 msgstr "Vordering voor %(event)s"
@@ -5640,6 +5658,9 @@ msgstr "Foto's en video's succesvol geüpload"
 msgid "Registration cancellation for %(event)s"
 msgstr "Uitschrijven op %(event)s"
 
+msgid "Registrations are open for participants"
+msgstr "Inschrijvingen zijn geopend voor deelnemers"
+
 msgid "Set the experience points configuration"
 msgstr "Stel de configuratie van de ervaringspunten in"
 
@@ -5757,9 +5778,6 @@ msgstr "als het teken bij dit element hoort"
 
 msgid "it will enable country-specific features"
 msgstr "het zal landspecifieke functies mogelijk maken"
-
-msgid "leave blank to keep registrations closed"
-msgstr "leeg laten om registraties gesloten te houden"
 
 msgid "will be displayed on the main event page"
 msgstr "wordt weergegeven op de hoofdpagina van het evenement"
@@ -5888,6 +5906,9 @@ msgstr "Deelnemers die GEEN voorkeuren hebben verzonden"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Herinnering profielcompilatie voor %(event)s"
+
+msgid "Redirects to an external registration link"
+msgstr "Leidt door naar een externe registratielink"
 
 msgid "Reserve additional tickets beyond your own"
 msgstr "Reserveer extra tickets naast je eigen tickets"
@@ -6127,9 +6148,6 @@ msgstr "Nu kun je elementen van een andere gebeurtenis kopiëren"
 msgid "Now you can define registration form sections"
 msgstr "Nu kun je delen van registratieformulieren definiëren"
 
-msgid "Now you can set the registration opening date"
-msgstr "Nu kun je de openingsdatum van de registratie instellen"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Geboorteplaats niet opgenomen in de ISTAT-lijst"
 
@@ -6186,9 +6204,6 @@ msgstr "Nu kun je selecteren welke tickets kunnen worden geschonken"
 
 msgid "Now you can set the experience points settings"
 msgstr "Nu kun je de ervaringspunten instellen"
-
-msgid "Now you can set the external registration link"
-msgstr "Nu kun je de externe registratielink instellen"
 
 msgid "Optional - Image displayed within the question"
 msgstr "Optioneel - Afbeelding weergegeven in de vraag"
@@ -6807,6 +6822,9 @@ msgid "Quantity tracking is not enabled for this organization"
 msgstr ""
 "Het bijhouden van hoeveelheden is niet ingeschakeld voor deze organisatie"
 
+msgid "Registrations will open at the specified date and time"
+msgstr "De inschrijvingen gaan open op de aangegeven datum en tijd"
+
 msgid "The registration request will be updated automatically"
 msgstr "De toepassing wordt automatisch bijgewerkt"
 
@@ -7077,9 +7095,6 @@ msgstr "Ga naar het beheerpaneel <a href= %(url)s'>van hier</a>"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "Wil je via het systeem verwerkte betalingen accepteren"
-
-msgid "If checked, makes pre-registration for this event available"
-msgstr "Indien aangevinkt, is voorregistratie voor dit evenement beschikbaar"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
@@ -9178,13 +9193,6 @@ msgstr ""
 "Hiermee kunt u nauwkeurig afstemmen hoe woorden en zinnen worden vertaald in"
 " de ruimte van de organisatie"
 
-msgid ""
-"Do you want to open registrations at a specific date and time instead of "
-"immediately"
-msgstr ""
-"Wilt u registraties openen op een specifieke datum en tijd in plaats van "
-"onmiddellijk"
-
 #, python-format
 msgid ""
 "File type '%(detected_type)s' is not allowed.Allowed types are: "
@@ -10039,13 +10047,6 @@ msgstr ""
 "andere deelnemers"
 
 msgid ""
-"Lets you specify a date (and time) on which registration will open, keeping "
-"it closed until then"
-msgstr ""
-"Hiermee kun je een datum (en tijd) opgeven waarop de registratie wordt "
-"geopend en tot die tijd gesloten blijft"
-
-msgid ""
 "Once downloaded you must print it, sign it, take a digital scan, and upload "
 "it to the form below"
 msgstr ""
@@ -10510,13 +10511,6 @@ msgid ""
 msgstr ""
 "Geeft nuttige informatie voor passagiers, zoals de kleur van je auto, de "
 "geschatte aankomsttijd"
-
-msgid ""
-"Instead of using an internal registration form, redirects the participant to"
-" an external registration link"
-msgstr ""
-"In plaats van een intern registratieformulier te gebruiken, wordt de "
-"deelnemer omgeleid naar een externe registratielink"
 
 msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "

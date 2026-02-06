@@ -501,6 +501,9 @@ msgstr "Concepto"
 msgid "Checks"
 msgstr "Comprobaciones"
 
+msgid "Closed"
+msgstr "Cerrado"
+
 msgid "Copied"
 msgstr "Copiado"
 
@@ -2073,8 +2076,8 @@ msgstr "Próximo pago"
 msgid "Not selected"
 msgstr "No seleccionado"
 
-msgid "Opening date"
-msgstr "Fecha de apertura"
+msgid "Open on date"
+msgstr "Abierto en fecha"
 
 msgid "Organization"
 msgstr "Asociación"
@@ -2262,6 +2265,9 @@ msgstr "Historia del evento"
 
 msgid "External link"
 msgstr "URL externa"
+
+msgid "External site"
+msgstr "Sitio web externo"
 
 msgid "Faction cover"
 msgstr "imagen de facción"
@@ -2632,6 +2638,9 @@ msgstr "Tipo de prólogo"
 
 msgid "URL identifier"
 msgstr "Identificador de URL"
+
+msgid "Value required"
+msgstr "Valor requerido"
 
 msgid "Warehouse area"
 msgstr "Almacén"
@@ -3681,6 +3690,9 @@ msgstr "Apertura de inscripciones"
 msgid "Registration options"
 msgstr "Opciones de registro"
 
+msgid "Registrations status"
+msgstr "Estado de las inscripciones"
+
 msgid "Relationships (Test)"
 msgstr "Relaciones (Test)"
 
@@ -4384,9 +4396,6 @@ msgstr "Leer los elementos de escritura"
 msgid "Receipt already confirmed"
 msgstr "Recibo ya confirmado"
 
-msgid "Registration opening date"
-msgstr "Fecha de apertura de las inscripciones"
-
 #, python-format
 msgid "Registration to %(event)s"
 msgstr "Inscripción en %(event)s"
@@ -4722,6 +4731,9 @@ msgstr "Jugadores en espera de personaje"
 msgid "Pre-registration at %(event)s"
 msgstr "Preinscripción en %(event)s"
 
+msgid "Pre-registration is available"
+msgstr "Preinscripción disponible"
+
 msgid "Preferred navigation language"
 msgstr "Idioma de navegación preferido"
 
@@ -4882,6 +4894,9 @@ msgstr "Nombre que se mostrará para las fichas"
 #, python-format
 msgid "Password reset of user %(user)s"
 msgstr "Restablecimiento de contraseña del usuario %(user)s"
+
+msgid "Registrations are not available"
+msgstr "Las inscripciones no están disponibles"
 
 msgid "Relationships of your character"
 msgstr "Enlaces de su personaje"
@@ -5280,6 +5295,9 @@ msgstr "Descripción opcional del contenido"
 msgid "Payments pending delegated accounts"
 msgstr "Pagos pendientes de cuentas delegadas"
 
+msgid "Registrations status for this event"
+msgstr "Estado de las inscripciones para este acto"
+
 #, python-format
 msgid "Reimbursement request for %(event)s"
 msgstr "Reclamación de %(event)s"
@@ -5638,6 +5656,9 @@ msgstr "¡Fotos y vídeos cargados correctamente"
 msgid "Registration cancellation for %(event)s"
 msgstr "Darse de baja de %(event)s"
 
+msgid "Registrations are open for participants"
+msgstr "Las inscripciones están abiertas para los participantes"
+
 msgid "Set the experience points configuration"
 msgstr "Establecer la configuración de los puntos de experiencia"
 
@@ -5755,9 +5776,6 @@ msgstr "si el carácter pertenece a este elemento"
 
 msgid "it will enable country-specific features"
 msgstr "permitirá funciones específicas para cada país"
-
-msgid "leave blank to keep registrations closed"
-msgstr "dejar en blanco para mantener las inscripciones cerradas"
 
 msgid "will be displayed on the main event page"
 msgstr "se mostrará en la página principal del evento"
@@ -5886,6 +5904,9 @@ msgstr "Participantes que NO enviaron preferencias"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Recordatorio de compilación de perfiles para %(event)s"
+
+msgid "Redirects to an external registration link"
+msgstr "Redirige a un enlace de registro externo"
 
 msgid "Reserve additional tickets beyond your own"
 msgstr "Reservar entradas adicionales"
@@ -6124,9 +6145,6 @@ msgstr "Ahora puedes copiar elementos de otro evento"
 msgid "Now you can define registration form sections"
 msgstr "Ahora puede definir las secciones del formulario de inscripción"
 
-msgid "Now you can set the registration opening date"
-msgstr "Ahora puede fijar la fecha de apertura de la inscripción"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Lugar de nacimiento no incluido en la lista ISTAT"
 
@@ -6181,9 +6199,6 @@ msgstr "Ahora puede seleccionar qué entradas pueden regalarse"
 
 msgid "Now you can set the experience points settings"
 msgstr "Ahora puedes configurar los puntos de experiencia"
-
-msgid "Now you can set the external registration link"
-msgstr "Ahora puede establecer el enlace de registro externo"
 
 msgid "Optional - Image displayed within the question"
 msgstr "Opcional - Imagen mostrada en la pregunta"
@@ -6815,6 +6830,9 @@ msgstr "Ahora puedes añadir relaciones al editar un personaje"
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "El seguimiento de cantidades no está activado para esta organización"
 
+msgid "Registrations will open at the specified date and time"
+msgstr "Las inscripciones se abrirán en la fecha y hora especificadas"
+
 msgid "The registration request will be updated automatically"
 msgstr "La solicitud de inscipción se actualizará automáticamente"
 
@@ -7084,9 +7102,6 @@ msgstr "Accede al panel de gestión <a href= %(url)s'>desde aquí</a>"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "¿Desea aceptar pagos procesados a través del sistema"
-
-msgid "If checked, makes pre-registration for this event available"
-msgstr "Si está marcada, permite la preinscripción a este evento"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
@@ -9170,13 +9185,6 @@ msgstr ""
 "Permite afinar cómo se traducen las palabras y frases en el espacio de la "
 "organización"
 
-msgid ""
-"Do you want to open registrations at a specific date and time instead of "
-"immediately"
-msgstr ""
-"¿Desea abrir las inscripciones en una fecha y hora determinadas en lugar de "
-"hacerlo inmediatamente"
-
 #, python-format
 msgid ""
 "File type '%(detected_type)s' is not allowed.Allowed types are: "
@@ -10028,13 +10036,6 @@ msgstr ""
 "los demás participantes"
 
 msgid ""
-"Lets you specify a date (and time) on which registration will open, keeping "
-"it closed until then"
-msgstr ""
-"Le permite especificar una fecha (y hora) en la que se abrirá el registro, "
-"manteniéndolo cerrado hasta entonces"
-
-msgid ""
 "Once downloaded you must print it, sign it, take a digital scan, and upload "
 "it to the form below"
 msgstr ""
@@ -10498,13 +10499,6 @@ msgid ""
 msgstr ""
 "Indica información útil para los pasajeros, como el color de tu coche o la "
 "hora estimada de llegada"
-
-msgid ""
-"Instead of using an internal registration form, redirects the participant to"
-" an external registration link"
-msgstr ""
-"En lugar de utilizar un formulario de inscripción interno, redirige al "
-"participante a un enlace de inscripción externo"
 
 msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
