@@ -478,7 +478,7 @@ def _check_run_status(context: dict, run: Run, member: Member, run_status: dict,
         return _status_preregister(run, member, run_status, context)
 
     # Handle future registration opening, or normal open
-    return _status_future_open(register_url, run_status)
+    return _status_future_open(run, register_url, run_status)
 
 
 def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
