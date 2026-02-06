@@ -107,6 +107,9 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Event").first.click()
     page.locator("#id_form2-registration_status").select_option("f")
     page.locator("#id_form2-registration_open").fill("2099-12-31")
+    just_wait(page)
+    page.locator("#id_form2-registration_open").click()
+    just_wait(page)
     submit_confirm(page)
 
     # Verify normal registration is blocked
@@ -138,10 +141,10 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
     """Test that NPC/Staff ticket links bypass external registration link redirect."""
 
     # Set an external registration link
-    page.get_by_role("link", name="Event").click()
+    page.get_by_role("link", name="Event", exact=True).click()
     page.locator("#id_form2-registration_status").select_option("e")
-    page.locator("#id_form1-register_link").click()
-    page.locator("#id_form1-register_link").fill("https://google.com")
+    page.locator("#id_form2-register_link").click()
+    page.locator("#id_form2-register_link").fill("https://google.com")
     submit_confirm(page)
 
     # Verify normal registration redirects to external link
@@ -370,6 +373,8 @@ def accounting_refund(page: Any, live_server: Any) -> None:
 
     go_to(page, live_server, "/manage")
     page.locator("#exe_refunds").get_by_role("link", name="Refunds").click()
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 200 request done")
     page.get_by_role("link", name="Done").click()
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 180 delivered")
