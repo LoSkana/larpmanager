@@ -3793,9 +3793,6 @@ msgstr "Desactivar el cambio de importe"
 msgid "Discover the web site"
 msgstr "¡Descubre el sitio web"
 
-msgid "External registration"
-msgstr "Registro externo"
-
 msgid "Failed password reset"
 msgstr "Error al restablecer la contraseña"
 

@@ -3793,9 +3793,6 @@ msgstr "Zakázat změnu částky"
 msgid "Discover the web site"
 msgstr "Objevte webové stránky"
 
-msgid "External registration"
-msgstr "Externí registrace"
-
 msgid "Failed password reset"
 msgstr "Obnovení hesla se nezdařilo"
 

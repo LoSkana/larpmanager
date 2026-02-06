@@ -3793,9 +3793,6 @@ msgstr "Betragsänderung deaktivieren"
 msgid "Discover the web site"
 msgstr "Entdecken Sie die Website"
 
-msgid "External registration"
-msgstr "Externe Registrierung"
-
 msgid "Failed password reset"
 msgstr "Passwort zurücksetzen fehlgeschlagen"
 

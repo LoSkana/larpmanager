@@ -3793,9 +3793,6 @@ msgstr "Inaktivera ändring av belopp"
 msgid "Discover the web site"
 msgstr "Upptäck webbplatsen"
 
-msgid "External registration"
-msgstr "Extern registrering"
-
 msgid "Failed password reset"
 msgstr "Återställning av lösenord misslyckades"
 

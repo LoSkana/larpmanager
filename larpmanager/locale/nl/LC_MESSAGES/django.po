@@ -3793,9 +3793,6 @@ msgstr "Bedrag wijzigen uitschakelen"
 msgid "Discover the web site"
 msgstr "Ontdek de website"
 
-msgid "External registration"
-msgstr "Externe registratie"
-
 msgid "Failed password reset"
 msgstr "Wachtwoord resetten mislukt"
 

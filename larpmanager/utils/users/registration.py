@@ -463,13 +463,14 @@ def _check_run_status(context: dict, run: Run, member: Member, run_status: dict,
     # Handle closed status
     if status == RegistrationStatus.CLOSED:
         run_status["open"] = False
-        run_status["text"] = _("Registration closed") + "."
+        run_status["text"] = _("Registration closed")
         return run_status
 
     # Handle external registration - redirect is handled in view layer
     if status == RegistrationStatus.EXTERNAL:
-        run_status["open"] = False
-        run_status["text"] = _("External registration")
+        run_status["open"] = True
+        msg = _("Registration is open!")
+        run_status["text"] = f"<a href='{register_url}'>{msg}</a>"
         return run_status
 
     # Handle pre-registration status
@@ -501,7 +502,7 @@ def _status_open(register_url: str, run_status: dict) -> dict:
 
     # wrap in a link if we have a message, otherwise show closed
     run_status["text"] = (
-        f"<a href='{register_url}'>{selected_message}</a>" if selected_message else _("Registration closed") + "."
+        f"<a href='{register_url}'>{selected_message}</a>" if selected_message else _("Registration closed")
     )
 
     return run_status

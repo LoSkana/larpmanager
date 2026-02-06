@@ -3793,9 +3793,6 @@ msgstr "Disabilita cambio ammontare"
 msgid "Discover the web site"
 msgstr "Scopri il sito web"
 
-msgid "External registration"
-msgstr "Registrazione esterna"
-
 msgid "Failed password reset"
 msgstr "Password reset fallito"
 

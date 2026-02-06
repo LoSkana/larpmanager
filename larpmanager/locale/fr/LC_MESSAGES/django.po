@@ -3793,9 +3793,6 @@ msgstr "Désactiver la modification du montant"
 msgid "Discover the web site"
 msgstr "Découvrez le site web"
 
-msgid "External registration"
-msgstr "Inscription externe"
-
 msgid "Failed password reset"
 msgstr "La réinitialisation du mot de passe a échoué"
 
