@@ -22,11 +22,27 @@
             <th>{% trans "Dates" %}</th>
             <td>
                 <i>{{ run.pretty_dates }}</i>
+                <a href="{% url 'orga_run_quick_edit_dates' run.get_slug %}"
+                   class="btn btn-sm btn-primary dashboard-action-link"
+                   data-slug="orga_event"
+                   data-modal-eligible="true"
+                   title="{% trans "Edit dates" %}">
+                    <i class="fa-solid fa-pencil"></i>
+                </a>
             </td>
         </tr>
         <tr>
             <th>{% trans "Status" %}</th>
-            <td>{{ run.get_development_display }} |
+            <td>
+                {{ run.get_development_display }}
+                <a href="{% url 'orga_run_quick_edit_development' run.get_slug %}"
+                   class="btn btn-sm btn-primary dashboard-action-link"
+                   data-slug="orga_event"
+                   data-modal-eligible="true"
+                   title="{% trans "Edit status" %}">
+                    <i class="fa-solid fa-pencil"></i>
+                </a>
+                |
                 <a href="{% url 'gallery' run.get_slug %}" target="_blank">Event link</a>
                 <button class="copy-link-btn"
                         data-url="{% url 'gallery' run.get_slug %}"

@@ -1284,22 +1284,23 @@ class OrgaRunForm(ConfigForm):
             self.delete_field("event")
 
         # do not show cancelled or done options for development if date are not set
-        if not self.instance.pk or not self.instance.start or not self.instance.end:
-            self.fields["development"].choices = [
-                (choice.value, choice.label)
-                for choice in DevelopStatus
-                if choice not in [DevelopStatus.CANC, DevelopStatus.DONE]
-            ]
-        status_text = {
-            DevelopStatus.START: _("Not visible to users"),
-            DevelopStatus.SHOW: _("Visible in the homepage"),
-            DevelopStatus.DONE: _("Concluded and archived"),
-            DevelopStatus.CANC: _("Not active anymore"),
-        }
-        self.fields["development"].help_text = ", ".join(
-            f"<b>{label}</b>: {status_text[DevelopStatus(value)]}"
-            for value, label in self.fields["development"].choices
-        )
+        if "development" in self.fields:
+            if not self.instance.pk or not self.instance.start or not self.instance.end:
+                self.fields["development"].choices = [
+                    (choice.value, choice.label)
+                    for choice in DevelopStatus
+                    if choice not in [DevelopStatus.CANC, DevelopStatus.DONE]
+                ]
+            status_text = {
+                DevelopStatus.START: _("Not visible to users"),
+                DevelopStatus.SHOW: _("Visible in the homepage"),
+                DevelopStatus.DONE: _("Concluded and archived"),
+                DevelopStatus.CANC: _("Not active anymore"),
+            }
+            self.fields["development"].help_text = ", ".join(
+                f"<b>{label}</b>: {status_text[DevelopStatus(value)]}"
+                for value, label in self.fields["development"].choices
+            )
 
         # Configure registration_status field
         self._configure_registration_status()
@@ -1315,6 +1316,9 @@ class OrgaRunForm(ConfigForm):
 
     def _configure_registration_status(self) -> None:
         """Configure registration_status field with dynamic choices and help text."""
+        if "registration_status" not in self.fields:
+            return
+
         # Build choices - PRE only available if pre_register feature is active globally
         choices = [
             (RegistrationStatus.CLOSED.value, RegistrationStatus.CLOSED.label),
@@ -1450,15 +1454,17 @@ class OrgaRunForm(ConfigForm):
         cleaned_data = super().clean()
 
         # Validate end date is present
-        if "end" not in cleaned_data or not cleaned_data["end"]:
+        end = cleaned_data.get("end")
+        if "end" in self.fields and not end:
             raise ValidationError({"end": _("You need to define the end date!")})
 
         # Validate start date is present
-        if "start" not in cleaned_data or not cleaned_data["start"]:
+        start = cleaned_data.get("start")
+        if "start" in self.fields and not start:
             raise ValidationError({"start": _("You need to define the start date!")})
 
         # Ensure end date is not before start date
-        if cleaned_data["end"] < cleaned_data["start"]:
+        if start and end and end < start:
             raise ValidationError({"end": _("End date cannot be before start date!")})
 
         # Validate registration status requirements
@@ -1684,6 +1690,64 @@ class OrgaQuickSetupForm(QuickSetupForm):
         )
 
         self.init_fields(get_event_features(self.instance.pk))
+
+
+class OrgaRunDatesForm(OrgaRunForm):
+    """Form for quick editing of run dates in modal."""
+
+    class Meta(OrgaRunForm.Meta):
+        model = Run
+        fields = ("start", "end")
+        widgets: ClassVar[dict] = {
+            "start": DatePickerInput,
+            "end": DatePickerInput,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize dates form with minimal fields."""
+        super().__init__(*args, **kwargs)
+        self.show_sections = False
+        self.main_class = ""
+
+    def set_configs(self) -> None:
+        """Override to disable config sections for quick edit form."""
+
+
+class OrgaRunDevelopmentForm(OrgaRunForm):
+    """Form for quick editing of run development status in modal."""
+
+    class Meta(OrgaRunForm.Meta):
+        model = Run
+        fields = ("development",)
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize development status form with minimal fields."""
+        super().__init__(*args, **kwargs)
+        self.show_sections = False
+        self.main_class = ""
+
+    def set_configs(self) -> None:
+        """Override to disable config sections for quick edit form."""
+
+
+class OrgaRunRegistrationForm(OrgaRunForm):
+    """Form for quick editing of run registration status in modal."""
+
+    class Meta(OrgaRunForm.Meta):
+        model = Run
+        fields = ("registration_status", "registration_open", "register_link")
+        widgets: ClassVar[dict] = {
+            "registration_open": DateTimePickerInput,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize registration status form with minimal fields."""
+        super().__init__(*args, **kwargs)
+        self.show_sections = False
+        self.main_class = ""
+
+    def set_configs(self) -> None:
+        """Override to disable config sections for quick edit form."""
 
 
 class OrgaPreferencesForm(ExePreferencesForm):

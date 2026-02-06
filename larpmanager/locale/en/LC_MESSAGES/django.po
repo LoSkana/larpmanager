@@ -6404,6 +6404,15 @@ msgstr ""
 msgid "Delay in profile compilation"
 msgstr ""
 
+msgid "Edit dates"
+msgstr ""
+
+msgid "Edit status"
+msgstr ""
+
+msgid "Edit registration status"
+msgstr ""
+
 msgid "Secret registration link"
 msgstr ""
 
@@ -9619,16 +9628,7 @@ msgid ""
 "If you have made a transfer, please upload the receipt for it to be processed"
 msgstr ""
 
-msgid "External registration"
-msgstr ""
-
 msgid "Registration is open!"
-msgstr ""
-
-msgid "Sign up as a filler!"
-msgstr ""
-
-msgid "Join the waiting list!"
 msgstr ""
 
 msgid "Registrations not open"
@@ -9636,6 +9636,12 @@ msgstr ""
 
 #, python-format
 msgid "Opening at: %(date)s"
+msgstr ""
+
+msgid "Sign up as a filler!"
+msgstr ""
+
+msgid "Join the waiting list!"
 msgstr ""
 
 msgid "Pre-registration confirmed"
@@ -10045,6 +10051,15 @@ msgid "Elements uploaded"
 msgstr ""
 
 msgid "Unknow error on upload"
+msgstr ""
+
+msgid "Dates updated"
+msgstr ""
+
+msgid "Status updated"
+msgstr ""
+
+msgid "Registration settings updated"
 msgstr ""
 
 #, python-brace-format

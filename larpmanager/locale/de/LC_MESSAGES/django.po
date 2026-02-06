@@ -1557,6 +1557,9 @@ msgstr "Lieferungen"
 msgid "Easter egg"
 msgstr "Osterei"
 
+msgid "Edit dates"
+msgstr "Daten bearbeiten"
+
 msgid "Email list"
 msgstr "E-Mail-Liste"
 
@@ -1814,6 +1817,9 @@ msgstr "Beschreibung"
 
 msgid "Direct link"
 msgstr "Direkter Link"
+
+msgid "Edit status"
+msgstr "Status bearbeiten"
 
 msgid "Event Texts"
 msgstr "Veranstaltungstexte"
@@ -2242,6 +2248,9 @@ msgstr "Kontakt E-Mail"
 msgid "Daily Summary"
 msgstr "Tägliche Zusammenfassung"
 
+msgid "Dates updated"
+msgstr "Daten aktualisiert"
+
 msgid "Deadline date"
 msgstr "Datum der Frist"
 
@@ -2617,6 +2626,9 @@ msgstr "Abkürzungen anzeigen"
 
 msgid "Single payment"
 msgstr "Einmalige Zahlung"
+
+msgid "Status updated"
+msgstr "Status aktualisiert"
 
 msgid "Tax code check"
 msgstr "Prüfung der Steuernummer"
@@ -3781,9 +3793,6 @@ msgstr "Betragsänderung deaktivieren"
 msgid "Discover the web site"
 msgstr "Entdecken Sie die Website"
 
-msgid "External registration"
-msgstr "Externe Registrierung"
-
 msgid "Failed password reset"
 msgstr "Passwort zurücksetzen fehlgeschlagen"
 
@@ -4231,6 +4240,9 @@ msgstr "Zeichenfinder deaktivieren"
 
 msgid "Display all sent e-mails"
 msgstr "Alle gesendeten E-Mails anzeigen"
+
+msgid "Edit registration status"
+msgstr "Registrierungsstatus bearbeiten"
 
 msgid "Go to the quests of type"
 msgstr "Gehe zu Quests des Typs"
@@ -4742,6 +4754,9 @@ msgstr "Förderung - Website, Werbung"
 
 msgid "Question name (keep it short)"
 msgstr "Name der Frage (kurz halten)"
+
+msgid "Registration settings updated"
+msgstr "Registrierungseinstellungen aktualisiert"
 
 msgid "Registrations opening not set"
 msgstr "Öffnung der Registrierungen nicht festgelegt"

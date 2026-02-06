@@ -1557,6 +1557,9 @@ msgstr "Leveranser"
 msgid "Easter egg"
 msgstr "Påskägg"
 
+msgid "Edit dates"
+msgstr "Ändra datum"
+
 msgid "Email list"
 msgstr "e-postlista"
 
@@ -1814,6 +1817,9 @@ msgstr "Beskrivning"
 
 msgid "Direct link"
 msgstr "Direkt länk"
+
+msgid "Edit status"
+msgstr "Redigera status"
 
 msgid "Event Texts"
 msgstr "Evenemangstexter"
@@ -2242,6 +2248,9 @@ msgstr "Kontakta oss via e-post"
 msgid "Daily Summary"
 msgstr "Daglig sammanfattning"
 
+msgid "Dates updated"
+msgstr "Uppdaterade datum"
+
 msgid "Deadline date"
 msgstr "Sista inlämningsdag"
 
@@ -2617,6 +2626,9 @@ msgstr "Visa genvägar"
 
 msgid "Single payment"
 msgstr "Enstaka betalning"
+
+msgid "Status updated"
+msgstr "Status uppdaterad"
 
 msgid "Tax code check"
 msgstr "Kontroll av skattekod"
@@ -3781,9 +3793,6 @@ msgstr "Inaktivera ändring av belopp"
 msgid "Discover the web site"
 msgstr "Upptäck webbplatsen"
 
-msgid "External registration"
-msgstr "Extern registrering"
-
 msgid "Failed password reset"
 msgstr "Återställning av lösenord misslyckades"
 
@@ -4231,6 +4240,9 @@ msgstr "Inaktivera teckensökare"
 
 msgid "Display all sent e-mails"
 msgstr "Visa alla skickade e-postmeddelanden"
+
+msgid "Edit registration status"
+msgstr "Ändra registreringsstatus"
 
 msgid "Go to the quests of type"
 msgstr "Gå till uppdrag av typen"
@@ -4742,6 +4754,9 @@ msgstr "Marknadsföring - webbplats, reklam"
 
 msgid "Question name (keep it short)"
 msgstr "Frågans namn (håll det kort)"
+
+msgid "Registration settings updated"
+msgstr "Uppdatering av registreringsinställningar"
 
 msgid "Registrations opening not set"
 msgstr "Registreringsöppning ej fastställd"
