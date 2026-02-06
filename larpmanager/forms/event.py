@@ -1023,6 +1023,8 @@ class OrgaAppearanceForm(BaseModelCssForm):
 
     page_info = _("Manage appearance and presentation of the event")
 
+    load_js: ClassVar[list] = ["appearance-colors"]
+
     class Meta:
         model = Event
         fields = (

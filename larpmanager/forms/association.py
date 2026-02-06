@@ -297,6 +297,8 @@ class ExeAppearanceForm(BaseModelCssForm):
 
     page_info = _("Manage appearance settings and presentation of the organization")
 
+    load_js: ClassVar[list] = ["appearance-colors"]
+
     class Meta:
         model = Association
         fields = ("background", "font", "pri_rgb", "sec_rgb", "ter_rgb")
