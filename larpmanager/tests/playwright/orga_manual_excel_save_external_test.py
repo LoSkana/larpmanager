@@ -174,7 +174,7 @@ def external(page: Any, live_server: Any) -> None:
 
     # get url
     page.get_by_role("link", name="Characters").click()
-    url = page.locator('[id="u2"]').locator(".fa-key").get_attribute("href")
+    url = page.locator('[id="u2"]').locator(".fa-key").locator('..').get_attribute("href")
 
     # logout, then go to the page
     logout(page)

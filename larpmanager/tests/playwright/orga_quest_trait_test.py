@@ -23,7 +23,7 @@ Test: Quests and Traits system with casting integration.
 Verifies quest types, quest creation, trait creation with character references,
 and casting algorithm integration with quest/trait assignments.
 """
-
+import re
 from typing import Any
 
 import pytest

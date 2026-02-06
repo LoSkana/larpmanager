@@ -284,7 +284,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     expect(page.locator("#ability_select")).not_to_contain_text("double shield")
 
     # remove ability
-    page.get_by_role("heading", name=re.compile("^double shield (2)")).get_by_role("link").click()
+    page.get_by_role("heading", name=re.compile("^double shield")).get_by_role("link").click()
     expect_normalized(page,
         page.locator("#one"),
         "Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get base ability --- Select ability double shield - 2",
