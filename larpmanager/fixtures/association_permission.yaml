@@ -331,7 +331,7 @@
 - model: larpmanager.associationpermission
   fields:
     name: Check data
-    descr: Check consistency of the participants’ personal data
+    descr: Check consistency of the participants' personal data
     slug: exe_membership_check
     number: 99
     config: null
@@ -361,7 +361,7 @@
 - model: larpmanager.associationpermission
   fields:
     name: Profile
-    descr: Manage fields that track participants’ data
+    descr: Manage fields that track participants' data
     slug: exe_profile
     number: 1
     config: users

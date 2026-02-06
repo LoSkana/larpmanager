@@ -118,10 +118,8 @@
                 {% endif %}
             </div>
             <hr />
-            {% if registration and run_status %}
-                <div class="reg_status">
-                    <p>{% include "elements/reg_status.html" with registration=registration %}</p>
-                </div>
+            {% if run_status %}
+                <div class="reg_status">{% include "elements/reg_status.html" with registration=registration %}</div>
                 <hr />
             {% endif %}
         {% else %}

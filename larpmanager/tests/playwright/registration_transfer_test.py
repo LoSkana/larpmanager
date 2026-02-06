@@ -78,6 +78,7 @@ def create_event_a(page: Any, live_server: Any) -> None:
     page.locator("#id_form1-name").fill("Event A")
 
     page.locator("#id_form2-development").select_option("1")
+    page.locator("#id_form2-registration_status").select_option("o")
     page.locator("#id_form2-start").fill("2055-06-11")
     page.locator("#id_form2-start").click()
     just_wait(page)
@@ -174,6 +175,7 @@ def create_event_b(page: Any, live_server: Any) -> None:
     page.locator("#id_form1-name").fill("Event B")
 
     page.locator("#id_form2-development").select_option("1")
+    page.locator("#id_form2-registration_status").select_option("o")
     page.locator("#id_form2-start").fill("2055-07-11")
     just_wait(page)
     page.locator("#id_form2-start").click()

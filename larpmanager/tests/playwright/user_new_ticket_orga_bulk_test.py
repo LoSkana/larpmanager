@@ -349,6 +349,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     # don't set slug, let it be auto filled
 
     page.locator("#id_form2-development").select_option("1")
+    page.locator("#id_form2-registration_status").select_option("o")
     page.locator("#id_form2-start").fill("2045-06-11")
     just_wait(page)
     page.locator("#id_form2-start").click()

@@ -360,19 +360,6 @@
     module: event
 - model: larpmanager.feature
   fields:
-    name: External registration
-    descr: Instead of using an internal registration form, redirects the participant
-      to an external registration link
-    slug: register_link
-    overall: false
-    placeholder: false
-    order: 30
-    after_text: Now you can set the external registration link
-    after_link: orga_event
-    hidden: false
-    module: registration
-- model: larpmanager.feature
-  fields:
     name: Problems
     descr: Enables a ticket-like system for issues during the event, where staff can
       log issues, assign severity/urgency, and track them
@@ -703,19 +690,6 @@
     after_link: exe_refunds
     hidden: false
     module: accounting
-- model: larpmanager.feature
-  fields:
-    name: Opening date
-    descr: Lets you specify a date (and time) on which registration will open, keeping
-      it closed until then
-    slug: registration_open
-    overall: false
-    placeholder: false
-    order: 10
-    after_text: Now you can set the registration opening date
-    after_link: orga_run
-    hidden: false
-    module: registration
 - model: larpmanager.feature
   fields:
     name: Legal Notice

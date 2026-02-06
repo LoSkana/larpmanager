@@ -55,6 +55,7 @@ from larpmanager.models.event import (
     EventText,
     EventTextType,
     ProgressStep,
+    RegistrationStatus,
     Run,
 )
 from larpmanager.models.form import (
@@ -153,7 +154,6 @@ class OrgaEventForm(BaseModelForm):
             "max_waiting",
             "max_filler",
             "website",
-            "register_link",
             "parent",
             "association",
         )
@@ -196,7 +196,7 @@ class OrgaEventForm(BaseModelForm):
         # Check each display-related feature and mark fields for removal if disabled
         dl = [
             s
-            for s in ["visible", "website", "tagline", "where", "authors", "genre", "register_link"]
+            for s in ["visible", "website", "tagline", "where", "authors", "genre"]
             if s not in self.params["features"]
         ]
 
@@ -500,13 +500,7 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
     def set_config_structure(self) -> None:
-        """Configure structural event settings including pre-registration, mail server, and cover options."""
-        if "pre_register" in self.params["features"]:
-            self.set_section("pre_reg", _("Pre-registration"))
-            field_label = _("Active")
-            field_help_text = _("If checked, makes pre-registration for this event available")
-            self.add_configs("pre_register_active", ConfigType.BOOL, field_label, field_help_text)
-
+        """Configure structural event settings including mail server and cover options."""
         if "custom_mail" in self.params["features"]:
             self.set_section("custom_mail_server", _("Customised mail server"))
             field_help_text = ""
@@ -1290,35 +1284,82 @@ class OrgaRunForm(ConfigForm):
             self.delete_field("event")
 
         # do not show cancelled or done options for development if date are not set
-        if not self.instance.pk or not self.instance.start or not self.instance.end:
-            self.fields["development"].choices = [
-                (choice.value, choice.label)
-                for choice in DevelopStatus
-                if choice not in [DevelopStatus.CANC, DevelopStatus.DONE]
-            ]
-        status_text = {
-            DevelopStatus.START: _("Not visible to users"),
-            DevelopStatus.SHOW: _("Visible in the homepage"),
-            DevelopStatus.DONE: _("Concluded and archived"),
-            DevelopStatus.CANC: _("Not active anymore"),
-        }
-        self.fields["development"].help_text = ", ".join(
-            f"<b>{label}</b>: {status_text[DevelopStatus(value)]}"
-            for value, label in self.fields["development"].choices
-        )
+        if "development" in self.fields:
+            if not self.instance.pk or not self.instance.start or not self.instance.end:
+                self.fields["development"].choices = [
+                    (choice.value, choice.label)
+                    for choice in DevelopStatus
+                    if choice not in [DevelopStatus.CANC, DevelopStatus.DONE]
+                ]
+            status_text = {
+                DevelopStatus.START: _("Not visible to users"),
+                DevelopStatus.SHOW: _("Visible in the homepage"),
+                DevelopStatus.DONE: _("Concluded and archived"),
+                DevelopStatus.CANC: _("Not active anymore"),
+            }
+            self.fields["development"].help_text = ", ".join(
+                f"<b>{label}</b>: {status_text[DevelopStatus(value)]}"
+                for value, label in self.fields["development"].choices
+            )
 
-        dl.extend(
-            [
-                s
-                for s in ["registration_open", "registration_secret"]
-                if not self.instance.pk or not self.instance.event or s not in self.params["features"]
-            ]
-        )
+        # Configure registration_status field
+        self._configure_registration_status()
+
+        # Handle registration_secret visibility
+        if not self.instance.pk or not self.instance.event or "registration_secret" not in self.params["features"]:
+            dl.append("registration_secret")
 
         for s in dl:
             self.delete_field(s)
 
         self.show_sections = True
+
+    def _configure_registration_status(self) -> None:
+        """Configure registration_status field with dynamic choices and help text."""
+        if "registration_status" not in self.fields:
+            return
+
+        # Build choices - PRE only available if pre_register feature is active globally
+        choices = [
+            (RegistrationStatus.CLOSED.value, RegistrationStatus.CLOSED.label),
+            (RegistrationStatus.OPEN.value, RegistrationStatus.OPEN.label),
+        ]
+
+        # Add PRE only if pre_register feature is active
+        if "pre_register" in self.params.get("features", []):
+            choices.append((RegistrationStatus.PRE.value, RegistrationStatus.PRE.label))
+
+        choices.extend(
+            [
+                (RegistrationStatus.EXTERNAL.value, RegistrationStatus.EXTERNAL.label),
+                (RegistrationStatus.FUTURE.value, RegistrationStatus.FUTURE.label),
+            ]
+        )
+
+        self.fields["registration_status"].choices = choices
+
+        # Build help text explaining each status
+        status_help = {
+            RegistrationStatus.CLOSED: _("Registrations are not available"),
+            RegistrationStatus.OPEN: _("Registrations are open for participants"),
+            RegistrationStatus.PRE: _("Pre-registration is available"),
+            RegistrationStatus.EXTERNAL: _("Redirects to an external registration link"),
+            RegistrationStatus.FUTURE: _("Registrations will open at the specified date and time"),
+        }
+
+        help_parts = []
+        for value, label in choices:
+            status_enum = RegistrationStatus(value)
+            help_parts.append(f"<b>{label}</b>: {status_help[status_enum]}")
+
+        self.fields["registration_status"].help_text = ", ".join(help_parts)
+
+        # Add data attributes for JavaScript conditional display
+        self.fields["registration_status"].widget.attrs["data-conditional-controller"] = "registration_status"
+        if "registration_open" in self.fields:
+            self.fields["registration_open"].widget.attrs["data-conditional-show"] = RegistrationStatus.FUTURE.value
+        if "register_link" in self.fields:
+            self.fields["register_link"].widget.attrs["data-conditional-show"] = RegistrationStatus.EXTERNAL.value
 
     def set_configs(self) -> None:  # noqa: C901 - Complex form configuration with feature-dependent field setup
         """Configure event-specific form fields and sections.
@@ -1413,16 +1454,31 @@ class OrgaRunForm(ConfigForm):
         cleaned_data = super().clean()
 
         # Validate end date is present
-        if "end" not in cleaned_data or not cleaned_data["end"]:
+        end = cleaned_data.get("end")
+        if "end" in self.fields and not end:
             raise ValidationError({"end": _("You need to define the end date!")})
 
         # Validate start date is present
-        if "start" not in cleaned_data or not cleaned_data["start"]:
+        start = cleaned_data.get("start")
+        if "start" in self.fields and not start:
             raise ValidationError({"start": _("You need to define the start date!")})
 
         # Ensure end date is not before start date
-        if cleaned_data["end"] < cleaned_data["start"]:
+        if start and end and end < start:
             raise ValidationError({"end": _("End date cannot be before start date!")})
+
+        # Validate registration status requirements
+        registration_status = cleaned_data.get("registration_status")
+
+        if registration_status == RegistrationStatus.EXTERNAL:
+            register_link = cleaned_data.get("register_link")
+            if not register_link:
+                raise ValidationError({"register_link": _("Value required") + "!"})
+
+        if registration_status == RegistrationStatus.FUTURE:
+            registration_open = cleaned_data.get("registration_open")
+            if not registration_open:
+                raise ValidationError({"registration_open": _("Value required") + "!"})
 
         return cleaned_data
 
@@ -1605,11 +1661,6 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
         self.setup.update(
             {
-                "registration_open": (
-                    True,
-                    _("Registration opening date"),
-                    _("Do you want to open registrations at a specific date and time instead of immediately"),
-                ),
                 "registration_secret": (
                     True,
                     _("Early registration link"),
@@ -1639,6 +1690,64 @@ class OrgaQuickSetupForm(QuickSetupForm):
         )
 
         self.init_fields(get_event_features(self.instance.pk))
+
+
+class OrgaRunDatesForm(OrgaRunForm):
+    """Form for quick editing of run dates in modal."""
+
+    class Meta(OrgaRunForm.Meta):
+        model = Run
+        fields = ("start", "end")
+        widgets: ClassVar[dict] = {
+            "start": DatePickerInput,
+            "end": DatePickerInput,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize dates form with minimal fields."""
+        super().__init__(*args, **kwargs)
+        self.show_sections = False
+        self.main_class = ""
+
+    def set_configs(self) -> None:
+        """Override to disable config sections for quick edit form."""
+
+
+class OrgaRunDevelopmentForm(OrgaRunForm):
+    """Form for quick editing of run development status in modal."""
+
+    class Meta(OrgaRunForm.Meta):
+        model = Run
+        fields = ("development",)
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize development status form with minimal fields."""
+        super().__init__(*args, **kwargs)
+        self.show_sections = False
+        self.main_class = ""
+
+    def set_configs(self) -> None:
+        """Override to disable config sections for quick edit form."""
+
+
+class OrgaRunRegistrationForm(OrgaRunForm):
+    """Form for quick editing of run registration status in modal."""
+
+    class Meta(OrgaRunForm.Meta):
+        model = Run
+        fields = ("registration_status", "registration_open", "register_link")
+        widgets: ClassVar[dict] = {
+            "registration_open": DateTimePickerInput,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize registration status form with minimal fields."""
+        super().__init__(*args, **kwargs)
+        self.show_sections = False
+        self.main_class = ""
+
+    def set_configs(self) -> None:
+        """Override to disable config sections for quick edit form."""
 
 
 class OrgaPreferencesForm(ExePreferencesForm):
