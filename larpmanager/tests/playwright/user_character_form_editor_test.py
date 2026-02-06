@@ -61,11 +61,11 @@ def prepare(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/features/user_character/on")
 
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name="Player editor ").click()
+    page.get_by_role("link", name=re.compile(r"^Player editor ")).click()
     page.locator("#id_user_character_approval").check()
     page.get_by_role("cell", name="Maximum number of characters").click()
     page.locator("#id_user_character_max").fill("1")
-    page.get_by_role("link", name="Character form ").click()
+    page.get_by_role("link", name=re.compile(r"^Character form ")).click()
     page.locator("#id_character_form_wri_que_max").check()
     page.locator("#id_character_form_wri_que_requirements").check()
     submit_confirm(page)
@@ -223,7 +223,7 @@ def character(page: Any, live_server: Any) -> None:
 
     # approve char
     go_to(page, live_server, "/test/manage/characters")
-    page.locator('[id="u3"]').locator("a:has(i.fas.fa-edit)").click()
+    page.locator('[id="u3"]').locator(".fa-edit").click()
     page.locator("#id_status").select_option("a")
     submit_confirm(page)
 
@@ -246,12 +246,12 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
     # Verify the Characters link is visible in the topbar
     go_to(page, live_server, "/")
     just_wait(page)
-    page.get_by_role("link", name=" Characters").click()
+    page.get_by_role("link", name=re.compile(" Characters$")).click()
 
     # Verify the page shows characters content
     expect_normalized(page, page.locator("#one"), "character active last event character active last event my character test larp")
 
-    page.get_by_role("link", name=" Registrations").click()
+    page.get_by_role("link", name=re.compile(" Registrations$")).click()
 
     expect_normalized(page, page.locator("#one"),
   """event date status details event date status details test larp 19 march 2050

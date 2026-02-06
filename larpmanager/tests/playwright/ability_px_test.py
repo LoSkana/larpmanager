@@ -59,7 +59,7 @@ def test_px(pw_page: Any) -> None:
 
 def setup(live_server: Any, page: Any) -> None:
     # activate features
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Player editor").check()
     page.get_by_role("checkbox", name="Experience points").check()
@@ -156,7 +156,7 @@ def ability(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Ability", exact=True).click()
     page.wait_for_load_state("load")
     just_wait(page)
-    page.locator("[id='u2']").locator("a:has(i.fas.fa-edit)").click()
+    page.locator("[id='u2']").locator(".fa-edit").click()
     page.get_by_text("---------").click()
     page.get_by_role("searchbox").nth(3).fill("test_template")
     page.get_by_role("option", name="test_template").click()
@@ -183,7 +183,7 @@ def delivery(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator('[id="u1"]'), "12")
     expect_normalized(page, page.locator('[id="u1"]'), "12")
     expect_normalized(page, page.locator('[id="u1"]'), "0")
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator(".fa-edit").click()
     page.wait_for_load_state("load")
     just_wait(page)
     row = page.get_by_role("row", name="Abilities Show")
@@ -225,7 +225,7 @@ def rules(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text 6")
 
     # remove ability
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator(".fa-edit").click()
     page.get_by_role("row", name="Abilities Show").get_by_role("link").click()
     just_wait(page)
     btn = page.locator(".select2-selection__choice:has-text('sword1') .select2-selection__choice__remove")
@@ -238,7 +238,7 @@ def rules(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text 2")
 
     # readd ability
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator(".fa-edit").click()
     page.wait_for_load_state("load")
     just_wait(page)
     row = page.get_by_role("row", name="Abilities Show")
@@ -257,9 +257,9 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Assign char
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Registrations", exact=True).click()
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator(".fa-edit").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
@@ -284,7 +284,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     expect(page.locator("#ability_select")).not_to_contain_text("double shield")
 
     # remove ability
-    page.get_by_role("heading", name="double shield (2) ").get_by_role("link").click()
+    page.get_by_role("heading", name=re.compile("^double shield (2)")).get_by_role("link").click()
     expect_normalized(page,
         page.locator("#one"),
         "Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get base ability --- Select ability double shield - 2",
@@ -293,7 +293,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
 
 
 def modifiers(page: Any, live_server: Any) -> None:
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     # add modifier on ability
     page.get_by_role("link", name="Modifiers").click()
     page.get_by_role("link", name="New").click()
@@ -337,7 +337,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     )
 
     # now test increase cost modifiers
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Modifiers").click()
     page.get_by_role("link", name="New").click()
     page.get_by_role("row", name="Abilities", exact=True).get_by_role("searchbox").click()

@@ -52,7 +52,7 @@ def test_character_inventory(pw_page: Any) -> None:
 
 def setup(live_server: Any, page: Any) -> None:
     # activate features
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Features").first.click()
     # Event
     page.get_by_role("checkbox", name="Player editor").check()
@@ -99,7 +99,6 @@ def character_inventory_pools(live_server: Any, page: Any) -> None:
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
     submit_confirm(page)
-    page.locator('[id="u1"]').get_by_role("link", name="").click()
 
 
 def character_inventory_transfer(live_server: Any, page: Any) -> None:
@@ -114,22 +113,15 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     # give ownership of a character to the test user account (and thus the inventory)
     go_to(page, live_server, "/test/manage/quick/")
     page.get_by_role("link", name="Characters").click()
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator(".fa-edit").click()
     page.get_by_text("---------").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="User Test - user@test.it").click()
     submit_confirm(page)
 
     # log out and log in as the test user
-    page.get_by_role("link", name=" Hi, Admin Test!").click()
-    page.get_by_role("link", name=" Logout").click()
-    page.get_by_role("link", name=" Menu").click()
-    page.get_by_role("link", name=" Log In").click()
-    page.get_by_role("textbox", name="email").click()
-    page.get_by_role("textbox", name="email").fill("user@test.it")
-    page.get_by_role("textbox", name="email").press("Tab")
-    page.get_by_role("textbox", name="password").fill("banana")
-    submit_confirm(page)
+    login_user(page, live_server)
+
     page.get_by_role("link", name="Test Larp").click()
     page.get_by_role("link", name="Test Character").click()
 

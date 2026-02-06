@@ -57,8 +57,8 @@ def check_delete(live_server: Any, page: Any) -> None:
     # update signup - orga
     go_to(page, live_server, "/test/manage/registrations")
     page.wait_for_selector("table.go_datatable")
-    page.wait_for_selector("a:has(i.fas.fa-edit)", timeout=100)
-    page.locator("a:has(i.fas.fa-edit)").click(force=True)
+    page.wait_for_selector(".fa-edit", timeout=100)
+    page.locator(".fa-edit").click(force=True)
     submit_confirm(page)
 
     # cancel signup
@@ -119,7 +119,7 @@ def discount(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("link", name="Discounts ").click()
+    page.get_by_role("link", name=re.compile(r"^Discounts ")).click()
     page.locator("#id_discount").click()
     page.locator("#id_discount").fill("code")
     page.locator("#discount_go").click()
@@ -253,7 +253,7 @@ def setup_payment(live_server: Any, page: Any) -> None:
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
 
-    page.get_by_role("link", name="Payments ").click()
+    page.get_by_role("link", name=re.compile(r"^Payments ")).click()
     page.locator("#id_payment_require_receipt").check()
 
     submit_confirm(page)
@@ -272,8 +272,8 @@ def setup_payment(live_server: Any, page: Any) -> None:
     # set ticket price
     go_to(page, live_server, "/test/manage/tickets")
     page.wait_for_selector("table.go_datatable")
-    page.wait_for_selector("a:has(i.fas.fa-edit)", timeout=10000)
-    page.locator("a:has(i.fas.fa-edit)").click(force=True)
+    page.wait_for_selector(".fa-edit", timeout=10000)
+    page.locator(".fa-edit").click(force=True)
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
     submit_confirm(page)

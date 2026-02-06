@@ -25,7 +25,7 @@ Test: Miscellanea tests that don't fit a single test suite
 - Check that organizers can access gallery regardless of restrictions
 - Check reset cache
 """
-
+import re
 from typing import Any
 
 import pytest
@@ -82,10 +82,10 @@ def check_user_fee(live_server: Any, page: Any) -> None:
     check_feature(page, "Donation")
     submit_confirm(page)
     page.locator("#exe_config").get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name="Payments ").click()
+    page.get_by_role("link", name=re.compile(r"^Payments ")).click()
     page.locator("#id_payment_fees_user").check()
     submit_confirm(page)
-    page.get_by_role("link", name=" Accounting").click()
+    page.get_by_role("link", name=re.compile(" Accounting$")).click()
     page.get_by_role("link", name="follow this link").click()
     expect_normalized(
         page,

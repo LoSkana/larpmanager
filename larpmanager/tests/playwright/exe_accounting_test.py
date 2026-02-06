@@ -23,7 +23,7 @@ Test: Organization accounting with payments, taxes, inflows, and outflows.
 Verifies organization and event-level accounting entries, VAT calculations,
 organization tax percentages, payment tracking, and consolidated accounting reports.
 """
-
+import re
 from typing import Any
 
 import pytest
@@ -77,7 +77,7 @@ def verify(page: Any, live_server: Any) -> None:
 
 def sign_up_pay(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/tickets/")
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator(".fa-edit").click()
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
     page.locator("#id_price").fill("50.00")
@@ -146,7 +146,7 @@ def add_exe(page: Any, live_server: Any) -> None:
     page.locator("#select2-id_run-container").click()
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="Test Larp").click()
-    page.get_by_role("combobox", name="×Test Larp").press("Tab")
+    page.get_by_role("combobox", name=re.compile("Test Larp$")).press("Tab")
     page.locator("#id_descr").fill("ggg")
     load_image(page, "#id_invoice")
     submit_confirm(page)
@@ -198,14 +198,14 @@ def config(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/manage/features/outflow/on")
 
     go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name="Payments ").click()
+    page.get_by_role("link", name=re.compile(r"^Payments ")).click()
     page.locator("#id_payment_special_code").check()
-    page.get_by_role("link", name="VAT ").click()
+    page.get_by_role("link", name=re.compile(r"^VAT ")).click()
     page.locator("#id_vat_ticket").click()
     page.locator("#id_vat_ticket").fill("7")
     page.locator("#id_vat_options").click()
     page.locator("#id_vat_options").fill("11")
-    page.get_by_role("link", name="Organisation fee ").click()
+    page.get_by_role("link", name=re.compile(r"^Organisation fee ")).click()
     page.get_by_role("cell", name="Percentage of takings").click()
     page.locator("#id_organization_tax_perc").fill("13")
     submit_confirm(page)

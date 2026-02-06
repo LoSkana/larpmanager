@@ -228,7 +228,7 @@ def test_faction_all(pw_page: Any) -> None:
     first_row = page.locator(".writing_list tbody tr").first
     expect(first_row).to_contain_text("Primary Faction 1")
 
-    page.locator(".writing_list tbody tr").get_by_role("link", name="").first.click()
+    page.locator(".writing_list tbody tr").locator(".fa-arrow-up").first.click()
 
     # Wait for page reload
     page.wait_for_load_state("networkidle")

@@ -23,7 +23,7 @@ Test: Persistence of form configurations.
 Verifies that organization and event roles, features, configuration settings,
 and preferences persist correctly across page reloads and navigation.
 """
-
+import re
 from typing import Any
 
 import pytest
@@ -47,7 +47,7 @@ def test_permanence_form(pw_page: Any) -> None:
 
     check_exe_config(page)
 
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
 
     check_orga_roles(page)
 
@@ -63,7 +63,7 @@ def test_permanence_form(pw_page: Any) -> None:
 def check_orga_visibility(page: Any) -> None:
     page.get_by_role("link", name="Event").click()
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name="Writing ").click()
+    page.get_by_role("link", name=re.compile(r"^Writing ")).click()
     page.locator("#id_writing_field_visibility").check()
     submit_confirm(page)
     page.get_by_role("link", name="Event", exact=True).click()
@@ -117,7 +117,7 @@ def check_orga_features(page: Any) -> None:
 
 def check_orga_config(page: Any) -> None:
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name="Visualisation ").click()
+    page.get_by_role("link", name=re.compile(r"^Visualisation ")).click()
     page.locator("#id_show_shortcuts_mobile").check()
     page.get_by_text("If checked: Show summary page").click()
     page.locator("#id_show_limitations").check()
@@ -125,8 +125,8 @@ def check_orga_config(page: Any) -> None:
     page.get_by_role("link", name="Configuration").first.click()
     page.get_by_text("Email notifications Disable").click()
     page.get_by_text("If checked, options no longer").click()
-    page.get_by_role("link", name="Registrations ").click()
-    page.get_by_role("link", name="Visualisation ").click()
+    page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
+    page.get_by_role("link", name=re.compile(r"^Visualisation ")).click()
     expect(page.locator("#id_show_shortcuts_mobile")).to_be_checked()
     expect(page.locator("#id_show_export")).not_to_be_checked()
     expect(page.locator("#id_show_limitations")).to_be_checked()
@@ -165,13 +165,13 @@ def _check_checkboxes(checked: Any, page: Any, skip_first: Any = False) -> None:
 
 def check_exe_config(page: Any) -> None:
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name="Interface ").click()
+    page.get_by_role("link", name=re.compile(r"^Interface ")).click()
     page.locator("#id_calendar_past_events").check()
     page.locator("#id_calendar_authors").check()
     page.locator("#id_calendar_tagline").check()
     submit_confirm(page)
     page.locator("#exe_config").get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name="Interface ").click()
+    page.get_by_role("link", name=re.compile(r"^Interface ")).click()
     expect(page.locator("#id_calendar_past_events")).to_be_checked()
     expect(page.locator("#id_calendar_website")).not_to_be_checked()
     expect(page.locator("#id_calendar_where")).not_to_be_checked()
@@ -208,5 +208,5 @@ def check_exe_roles(page: Any) -> None:
     expect(page.locator('[id="u2"]')).to_contain_text(
         "Organization (Organization, Configuration), Events (Events), Appearance (Texts)"
     )
-    page.locator('[id="u2"]').get_by_role("cell", name="").click()
+    page.locator('[id="u2"]').locator(".fa-edit").click()
     _check_checkboxes(checked, page)

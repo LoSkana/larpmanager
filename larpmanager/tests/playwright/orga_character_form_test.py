@@ -56,11 +56,11 @@ def test_orga_character_form(pw_page: Any) -> None:
 
     # set config
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name="Player editor ").click()
+    page.get_by_role("link", name=re.compile(r"^Player editor ")).click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     page.locator("#id_user_character_approval").check()
-    page.get_by_role("link", name="Character form ").click()
+    page.get_by_role("link", name=re.compile(r"^Character form ")).click()
     page.locator("#id_character_form_wri_que_max").check()
     submit_confirm(page)
 
@@ -160,7 +160,7 @@ def check_first_char(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/characters/")
-    page.locator('[id="u2"]').locator("a:has(i.fas.fa-edit)").click()
+    page.locator('[id="u2"]').locator(".fa-edit").click()
     page.locator("#id_que_u4").click()
     page.locator("#id_que_u4").fill("cccccccccc")
     page.locator("#id_que_u4").press("Tab")
@@ -174,7 +174,7 @@ def check_first_char(page: Any, live_server: Any) -> None:
     page.locator("#id_que_u11").fill("hidden")
     page.locator("#id_status").select_option("a")
     submit_confirm(page)
-    page.locator('[id="u2"]').locator("a:has(i.fas.fa-edit)").click()
+    page.locator('[id="u2"]').locator(".fa-edit").click()
     expect(page.locator("#id_que_u4")).to_have_value("cccccccccc")
     expect(page.get_by_text("dddddddddd")).to_have_value("dddddddddd")
     expect(page.locator("#id_que_u6")).to_have_value("u2")
@@ -196,7 +196,7 @@ def recheck_char(live_server: Any, page: Any) -> None:
     )
     submit_confirm(page)
     go_to(page, live_server, "/test/character/list")
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator(".fa-edit").click()
     expect(page.locator("#id_que_u10")).to_have_count(0)
     expect_normalized(page, page.locator("#id_que_u10_tr"), "disabled")
     expect(page.locator("#id_que_u11")).to_have_count(0)
@@ -332,11 +332,11 @@ def add_field_restricted(page: Any) -> None:
 
     submit_confirm(page)
 
-    page.locator('[id="u8"]').get_by_role("link", name="").click()
-    page.locator('[id="u8"]').locator("a:has(i.fas.fa-edit)").click()
+    page.locator('[id="u8"]').locator(".fa-arrow-up").click()
+    page.locator('[id="u8"]').locator(".fa-edit").click()
 
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="").click()
-    page.locator("#options-iframe").content_frame.locator('[id="u7"]').locator("a:has(i.fas.fa-edit)").click()
+    page.locator("#options-iframe").content_frame.locator(".fa-arrow-up").click()
+    page.locator("#options-iframe").content_frame.locator('[id="u7"]').locator(".fa-edit").click()
     just_wait(page, big=True)
     iframe = page.locator("#uglipop_popbox iframe").content_frame
     iframe.locator("#id_name").click()

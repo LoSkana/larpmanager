@@ -23,7 +23,7 @@ Test: Warehouse inventory management system.
 Verifies container creation, item management with tags, item movements between containers,
 area assignments, external item tracking, and historical movement records.
 """
-
+import re
 from typing import Any
 
 import pytest
@@ -43,7 +43,7 @@ def test_warehouse(pw_page: Any) -> None:
     add_items(page)
     bulk(page)
 
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     area_assigmenents(page)
     checks(page)
 
@@ -200,11 +200,11 @@ def area_assigmenents(page: Any) -> None:
     # assign items
     page.locator('[id="u2"]').get_by_role("link", name="Item assignments").click()
     page.locator(".selected").first.click()
-    page.get_by_role("row", name=" item 3sa dsad box a").get_by_role("textbox").click()
-    page.get_by_role("row", name=" item 3sa dsad box a").get_by_role("textbox").fill("sss")
+    page.get_by_role("row", name=re.compile(" item 3sa dsad box a")).get_by_role("textbox").click()
+    page.get_by_role("row", name=re.compile(" item 3sa dsad box a")).get_by_role("textbox").fill("sss")
     page.locator('[id="u1"] > .selected').click()
-    page.get_by_role("row", name=" Item 1 sadsada Boc B Electrical | Gru sad").get_by_role("textbox").click()
-    page.get_by_role("row", name=" Item 1 sadsada Boc B Electrical | Gru sad").get_by_role("textbox").fill("ffff")
+    page.get_by_role("row", name=re.compile(" Item 1 sadsada Boc B Electrical | Gru sad")).get_by_role("textbox").click()
+    page.get_by_role("row", name=re.compile(" Item 1 sadsada Boc B Electrical | Gru sad")).get_by_role("textbox").fill("ffff")
     page.get_by_role("cell", name="ffff").get_by_role("textbox").click()
     just_wait(page)
 

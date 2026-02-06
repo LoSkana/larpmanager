@@ -25,7 +25,7 @@ Verifies activation of character customization, configuration of all custom fiel
 to user, user filling customization form including image upload via AJAX, and verification
 of public and private field visibility for both regular users and organizers.
 """
-
+import re
 from typing import Any
 
 import pytest
@@ -79,7 +79,7 @@ def configure_customization_fields(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/config")
 
     # Navigate to character customization section
-    page.get_by_role("link", name="Character customisation ").click()
+    page.get_by_role("link", name=re.compile(r"^Character customisation ")).click()
 
     # Enable all custom character fields
     page.locator("#id_custom_character_name").check()
@@ -98,7 +98,7 @@ def create_and_assign_character(page: Any, live_server: Any) -> None:
     just_wait(page)
 
     # Edit character
-    page.locator("a:has(i.fas.fa-edit)").click(force=True)
+    page.locator(".fa-edit").click(force=True)
 
     # Assign to user test
     page.locator("#select2-id_player-container").click()

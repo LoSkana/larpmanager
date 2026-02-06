@@ -129,7 +129,7 @@ def filter_faction(page: Any) -> None:
 def prepare(page: Any, live_server: Any) -> None:
     # prepare
     login_orga(page, live_server)
-    go_to(page, live_server, "/test/manage")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Factions").check()
@@ -181,7 +181,7 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#id_visibility").select_option("s")
     submit_confirm(page)
 
-    page.locator('[id="u8"]').locator("a:has(i.fas.fa-edit)").click()
+    page.locator('[id="u8"]').locator(".fa-edit").click()
     page.locator("#id_visibility").select_option("s")
     submit_confirm(page)
 
@@ -189,7 +189,7 @@ def prepare(page: Any, live_server: Any) -> None:
 def characters(page: Any, live_server: Any) -> None:
     # create characters
     page.get_by_role("link", name="Characters").click()
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator(".fa-edit").click()
     page.get_by_role("list").click()
     page.get_by_role("searchbox").fill("fas")
     page.get_by_role("option", name="fassione (P)").click()

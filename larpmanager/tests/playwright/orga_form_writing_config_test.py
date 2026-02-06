@@ -58,12 +58,12 @@ def feature_fields(page: Any) -> None:
     # reorder test
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
     expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
-    page.locator('[id="u3"]').get_by_role("link", name="").click()
+    page.locator('[id="u3"]').locator(".fa-arrow-up").click()
     expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation")
 
     # add config fields - title
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name="Writing ").click()
+    page.get_by_role("link", name=re.compile(r"^Writing ")).click()
     page.locator("#id_writing_title").check()
     submit_confirm(page)
 
@@ -73,7 +73,7 @@ def feature_fields(page: Any) -> None:
 
     # add config fields - cover, assigned
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name="Writing ").click()
+    page.get_by_role("link", name=re.compile(r"^Writing ")).click()
     page.locator("#id_writing_title").uncheck()
     page.locator("#id_writing_cover").check()
     page.locator("#id_writing_assigned").check()
@@ -90,7 +90,7 @@ def feature_fields(page: Any) -> None:
 def feature_fields2(page: Any, live_server: Any) -> None:
     # add config hide, assigned
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name="Writing ").click()
+    page.get_by_role("link", name=re.compile(r"^Writing ")).click()
     page.locator("#id_writing_assigned").uncheck()
     page.locator("#id_writing_cover").uncheck()
     page.locator("#id_writing_hide").check()

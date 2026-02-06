@@ -73,11 +73,12 @@ for file in $STAGED_FILES; do
         continue
     fi
 
-    # Check for non-ASCII characters
-    if grep -P -n '[^\x00-\x7F]' "$file" > /dev/null 2>&1; then
+    # Check for non-ASCII characters (excluding currency symbols)
+    # Currency symbols to allow: € £ ¥ ¢ ₹ ₽ ₩ ₪ ₦ ₨ ₱ ₴ ₵ ₸ ₺ ₼ ₾
+    if grep -P -n '[^\x00-\x7F]' "$file" | grep -Pv '[€£¥¢₹₽₩₪₦₨₱₴₵₸₺₼₾]' > /dev/null 2>&1; then
         echo "Non-ASCII characters found in: $file"
-        grep -P -n '[^\x00-\x7F]' "$file" | head -5
-        if [ $(grep -P -c '[^\x00-\x7F]' "$file") -gt 5 ]; then
+        grep -P -n '[^\x00-\x7F]' "$file" | grep -Pv '[€£¥¢₹₽₩₪₦₨₱₴₵₸₺₼₾]' | head -5
+        if [ $(grep -P -c '[^\x00-\x7F]' "$file" | grep -Pv '[€£¥¢₹₽₩₪₦₨₱₴₵₸₺₼₾]') -gt 5 ]; then
             echo "   ... and more"
         fi
         FOUND_NON_ASCII=1
