@@ -1360,8 +1360,10 @@ class OrgaRunForm(ConfigForm):
         self.fields["registration_status"].widget.attrs["data-conditional-controller"] = "registration_status"
         if "registration_open" in self.fields:
             self.fields["registration_open"].widget.attrs["data-conditional-show"] = RegistrationStatus.FUTURE.value
+            self.fields["registration_open"].widget.attrs["class"] = "hide"
         if "register_link" in self.fields:
             self.fields["register_link"].widget.attrs["data-conditional-show"] = RegistrationStatus.EXTERNAL.value
+            self.fields["register_link"].widget.attrs["class"] = "hide"
 
     def set_configs(self) -> None:  # noqa: C901 - Complex form configuration with feature-dependent field setup
         """Configure event-specific form fields and sections.
