@@ -930,8 +930,8 @@ def exe_accounting_rec(request: HttpRequest) -> HttpResponse:
         return redirect("exe_accounting_rec")
 
     # Set date range based on first and last records
-    context["start"] = context["list"][0].created
-    context["end"] = context["list"].reverse()[0].created
+    context["start"] = context["list"].first().created
+    context["end"] = context["list"].last().created
 
     return render(request, "larpmanager/exe/accounting/accounting_rec.html", context)
 
