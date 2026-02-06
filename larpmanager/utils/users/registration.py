@@ -672,7 +672,7 @@ def registration_status_characters(
     if len(character_links) == 1:
         run_status["details"] += _("Your character is") + " " + character_links[0]
     elif len(character_links) > 1:
-        run_status["details"] += _("Your characters are") + ": " + ", ".join(character_links)
+        run_status["details"] += _("Your characters are") + ": " + " • ".join(character_links)
 
     is_assigned = len(character_links) > 0
 
