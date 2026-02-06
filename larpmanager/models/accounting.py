@@ -309,7 +309,7 @@ class AccountingItem(UuidMixin, BaseModel):
             s += f" - {self.value}"
 
         if hasattr(self, "descr"):
-            s += f" - {self.value[:50]}"
+            s += f" - {self.descr[:50]}"
 
         return s
 
