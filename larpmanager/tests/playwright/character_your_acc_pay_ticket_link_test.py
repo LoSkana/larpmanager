@@ -107,8 +107,6 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Event").first.click()
     page.locator("#id_form2-registration_status").select_option("f")
     page.locator("#id_form2-registration_open").fill("2099-12-31")
-    just_wait(page)
-    page.locator("#id_form2-registration_open").click()
     submit_confirm(page)
 
     # Verify normal registration is blocked
@@ -134,10 +132,6 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     page.locator("#id_form2-registration_status").select_option("o")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/manage")
-    page.get_by_role("link", name="Features").first.click()
-    page.get_by_role("checkbox", name="Opening date").uncheck()
-    submit_confirm(page)
 
 
 def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
