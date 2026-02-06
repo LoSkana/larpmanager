@@ -292,18 +292,23 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
 
 def _exe_widgets(request: HttpRequest, context: dict, features: dict) -> None:
     """Loads widget data into context for executive dashboard."""
-    widgets_available = []
-    for widget in ["deadlines"]:
-        if widget in features:
-            widgets_available.append(widget)
 
-    if has_association_permission(request, context, "exe_accounting"):
-        widgets_available.append("accounting")
+    permissions = [
+        ("exe_accounting", "accounting", False),
+        ("exe_deadlines", "deadlines", True),
+        ("exe_log", "logs", True)
+    ]
 
-    context["widgets"] = {}
-    for widget in widgets_available:
-        context["widgets"][widget] = get_exe_widget_cache(association_id=context["association_id"], widget_name=widget)
+    widgets_available = [
+        widget for perm, widget, require_feature in permissions
+        if has_association_permission(request, context, perm)
+           and (not require_feature or widget in features)
+    ]
 
+    context["widgets"] = {
+        widget: get_exe_widget_cache(association_id=context["association_id"], widget_name=widget)
+        for widget in widgets_available
+    }
 
 def _exe_suggestions(context: dict) -> None:
     """Add priority tasks and suggestions to the executive management context.
@@ -589,30 +594,36 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     _check_intro_driver(context)
 
     # Loads widget data
-    _orga_widgets(request, context, event_slug, features)
+    _orga_widgets(request, context, features)
 
     return render(request, "larpmanager/manage/orga.html", context)
 
 
-def _orga_widgets(request: HttpRequest, context:dict, event_slug: str, features:dict):
+def _orga_widgets(request: HttpRequest, context:dict, features:dict):
     """Loads widget data into context."""
 
-    widgets_available = []
-    for widget in ["deadlines", "casting", ]:
-        if widget in features:
-            widgets_available.append(widget)
+    permissions = [
+        ("orga_accounting", "accounting", False),
+        ("orga_deadlines", "deadlines", True),
+        ("orga_casting", "casting", True),
+        ("orga_log", "logs", True)
+    ]
+
+    widgets_available = [
+        widget for perm, widget, require_feature in permissions
+        if has_association_permission(request, context, perm)
+           and (not require_feature or widget in context["features"])
+    ]
 
     if "user_character" in features and get_event_config(
         context["event"].id, "user_character_approval", default_value=False, context=context
     ):
         widgets_available.append("user_character")
 
-    if has_event_permission(request, context, event_slug, "orga_accounting"):
-        widgets_available.append("accounting")
-
-    context["widgets"] = {}
-    for widget in widgets_available:
-        context["widgets"][widget] = get_orga_widget_cache(context["run"], widget)
+    context["widgets"] = {
+        widget: get_orga_widget_cache(context["run"], widget)
+        for widget in widgets_available
+    }
 
 
 def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict) -> None:  # noqa: C901 - Complex priority determination logic

@@ -20,6 +20,7 @@
 from django.urls import path
 
 import larpmanager.views.orga.event
+import larpmanager.views.orga.miscellanea
 from larpmanager.views import manage as views_mg
 from larpmanager.views.orga import accounting as views_oa
 from larpmanager.views.orga import casting as views_oca
@@ -46,6 +47,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/quick/",
         views_oe.orga_quick,
         name="orga_quick",
+    ),
+    path(
+        "<slug:event_slug>/manage/logs/",
+        larpmanager.views.orga.miscellanea.orga_log,
+        name="orga_log",
     ),
     path(
         "<slug:event_slug>/manage/mail/<slug:mail_uuid>/read/",

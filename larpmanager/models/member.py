@@ -707,22 +707,14 @@ class Badge(UuidMixin, BaseModel):
         return js
 
 
-class Log(BaseModel):
-    """Represents Log model."""
+class LogOperationType(models.TextChoices):
+    """Log operation types."""
 
-    member = models.ForeignKey(Member, on_delete=models.CASCADE)
-
-    eid = models.IntegerField()
-
-    cls = models.CharField(max_length=100)
-
-    dct = models.TextField()
-
-    dl = models.BooleanField(default=False)
-
-    def __str__(self) -> str:
-        """Return string representation."""
-        return f"{self.cls} {self.eid}"
+    NEW = "new", _("New")
+    UPDATE = "update", _("Update")
+    DELETE = "delete", _("Delete")
+    BULK = "bulk", _("Bulk operation")
+    UPLOAD = "upload", _("Upload")
 
 
 class Vote(BaseModel):

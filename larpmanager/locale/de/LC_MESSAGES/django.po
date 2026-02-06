@@ -170,6 +170,9 @@ msgstr "Liste"
 msgid "Logo"
 msgstr "Logo"
 
+msgid "Logs"
+msgstr "Protokolle"
+
 msgid "Mail"
 msgstr "E-Mail"
 
@@ -779,6 +782,9 @@ msgstr "Standard"
 
 msgid "Details"
 msgstr "Einzelheiten"
+
+msgid "Element"
+msgstr "Element"
 
 msgid "Example"
 msgstr "Beispiel"
@@ -1971,6 +1977,9 @@ msgstr "Art der Fertigkeit"
 msgid "Achievements"
 msgstr "Errungenschaften"
 
+msgid "Activity Log"
+msgstr "Aktivitätsprotokoll"
+
 msgid "Add from NPC"
 msgstr "Von NPC hinzufügen"
 
@@ -2435,6 +2444,9 @@ msgstr "Verfügbare Tage"
 msgid "Bring a friend"
 msgstr "Bringen Sie einen Freund mit"
 
+msgid "Bulk operation"
+msgstr "Massenbetrieb"
+
 msgid "Cargo manifest"
 msgstr "Ladungsverzeichnis"
 
@@ -2602,6 +2614,9 @@ msgstr "Einmalige Zahlung"
 
 msgid "Tax code check"
 msgstr "Prüfung der Steuernummer"
+
+msgid "Today activity"
+msgstr "Aktivität heute"
 
 msgid "Total payments"
 msgstr "Zahlungen insgesamt"
@@ -6216,6 +6231,9 @@ msgstr "Es sind <b>%(number)s</b> Erstattungen zu leisten"
 msgid "There are quest types without quests: %(list)s"
 msgstr "Es gibt Questtypen ohne Quests: %(list)s"
 
+msgid "This page shows all log entries for this event"
+msgstr "Diese Seite zeigt alle Protokolleinträge für dieses Ereignis"
+
 msgid "This page shows the email lists of subscribers"
 msgstr "Diese Seite zeigt die E-Mail-Listen der Abonnenten"
 
@@ -6670,6 +6688,9 @@ msgstr "In der ersten Spalte der Betrag, in der zweiten die Einnahmen"
 
 msgid "This page shows all donations recorded in the system"
 msgstr "Diese Seite zeigt alle im System erfassten Spenden"
+
+msgid "This page shows all log entries for the organization"
+msgstr "Diese Seite zeigt alle Protokolleinträge für die Organisation"
 
 msgid "This page shows all payments received for this event"
 msgstr ""
@@ -7803,6 +7824,11 @@ msgstr ""
 "Jetzt können Sie die von den Teilnehmern eingereichten "
 "Sicherheitsinformationen einsehen"
 
+msgid "Show detailed activity log on entities created, updated or deleted."
+msgstr ""
+"Detailliertes Aktivitätsprotokoll über erstellte, aktualisierte oder "
+"gelöschte Entitäten anzeigen."
+
 msgid "Simply follow the instructions and provide the required information"
 msgstr ""
 "Folgen Sie einfach den Anweisungen und geben Sie die erforderlichen "
@@ -7923,6 +7949,11 @@ msgstr ""
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
 msgstr ""
 "Dieser Text wird dem Blatt hinzugefügt, und zwar in dem Absatz %(name)s"
+
+msgid "View detailed activity log of all changes made for this organization"
+msgstr ""
+"Detailliertes Aktivitätsprotokoll aller für diese Organisation vorgenommenen"
+" Änderungen anzeigen"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
@@ -8109,6 +8140,11 @@ msgid "This page summarizes the types of pools that a character inventory has"
 msgstr ""
 "Diese Seite fasst die Arten von Pools zusammen, die ein Charakterinventar "
 "hat"
+
+msgid "View detailed activity log of all changes made for this specific event"
+msgstr ""
+"Detailliertes Aktivitätsprotokoll aller Änderungen, die für dieses "
+"spezifische Ereignis vorgenommen wurden, anzeigen"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""

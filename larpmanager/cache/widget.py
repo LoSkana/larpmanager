@@ -32,6 +32,8 @@ from larpmanager.accounting.balance import (
 )
 from larpmanager.models.casting import Casting
 from larpmanager.models.event import Event, Run
+from larpmanager.models.member import LogOperationType
+from larpmanager.models.miscellanea import Log
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.core.common import get_coming_runs
@@ -143,18 +145,54 @@ def _init_exe_deadline_widget_cache(association_id: int) -> dict:
     return total_counts
 
 
+def _init_orga_log_widget_cache(run: Run) -> dict:
+    """Compute log statistics and recent logs for event dashboard."""
+    base_query = Log.objects.filter(run_id=run.id)
+
+    # Count logs by operation type
+    operation_counts = {}
+    for op_type, op_label in LogOperationType.choices:
+        count = base_query.filter(operation_type=op_type).count()
+        if count > 0:
+            operation_counts[op_type] = {"label": op_label, "count": count}
+
+    # Get recent logs (last 5)
+    recent_logs = base_query.select_related("member").order_by("-created")[:5]
+
+    return {"operation_counts": operation_counts, "recent_logs": list(recent_logs), "total_count": base_query.count()}
+
+
+def _init_exe_log_widget_cache(association_id: int) -> dict:
+    """Compute log statistics and recent logs for organization dashboard."""
+    base_query = Log.objects.filter(association_id=association_id)
+
+    # Count logs by operation type
+    operation_counts = {}
+    for op_type, op_label in LogOperationType.choices:
+        count = base_query.filter(operation_type=op_type).count()
+        if count > 0:
+            operation_counts[op_type] = {"label": op_label, "count": count}
+
+    # Get recent logs (last 5)
+    recent_logs = base_query.select_related("member", "run__event").order_by("-created")[:5]
+
+    return {"operation_counts": operation_counts, "recent_logs": list(recent_logs), "total_count": base_query.count()}
+
+
 # Widget list for run-level widgets
 orga_widget_list = {
     "deadlines": _init_deadline_widget_cache,
     "user_character": _init_user_character_widget_cache,
     "casting": _init_casting_widget_cache,
     "accounting": _init_orga_accounting_widget_cache,
+    "logs": _init_orga_log_widget_cache,
 }
 
 # Widget list for association-level widgets
 exe_widget_list = {
     "accounting": _init_exe_accounting_widget_cache,
     "deadlines": _init_exe_deadline_widget_cache,
+    "logs": _init_exe_log_widget_cache,
 }
 
 

@@ -20,6 +20,7 @@
 
 from django.urls import path
 
+import larpmanager.views.exe.miscellanea
 from larpmanager.utils.edit import backend as views_ed
 from larpmanager.views import manage as views_mg
 from larpmanager.views.exe import accounting as views_ea
@@ -48,6 +49,11 @@ urlpatterns = [
         "manage/deadlines/",
         views_ee.exe_deadlines,
         name="exe_deadlines",
+    ),
+    path(
+        "manage/logs/",
+        larpmanager.views.exe.miscellanea.exe_log,
+        name="exe_log",
     ),
     path(
         "manage/urlshortner/",
