@@ -26,7 +26,7 @@
 <div class="hide email_players">
     <br />
     <h4>{% trans "Players" %}</h4>
-    <table class="go_datatable">
+    <table class="mob">
         <tr>
             <th>{% trans "Players" %}</th>
             <td>{{ list_all.all.emails | length }}</td>
@@ -48,7 +48,7 @@
 <div class="hide email_tickets">
     <br />
     <h4>{% trans "Tickets" %}</h4>
-    <table class="go_datatable">
+    <table class="mob">
         <tr>
             <th></th>
             <th></th>
@@ -78,7 +78,7 @@
 <div class="hide email_type">
     <br />
     <h4>Email - {% trans "Registration" %}</h4>
-    <table class="go_datatable">
+    <table class="mob">
         <tr>
             <th>{% trans "Staff" %}</th>
             <td>{{ ticket_staff }}</td>
@@ -109,7 +109,7 @@
     <div class="hide email_memb">
         <br />
         <h4>Email - {% trans "Membership" %}</h4>
-        <table class="go_datatable">
+        <table class="mob">
             <tr>
                 <th></th>
                 <th></th>
@@ -141,7 +141,7 @@
     <div class="hide email_disc">
         <br />
         <h4>Email - {% trans "Discounts" %}</h4>
-        <table class="go_datatable">
+        <table class="mob">
             {% for key, t in list_discount.items %}
                 <tr>
                     <th>{{ t.name }}</th>
@@ -167,7 +167,7 @@
     {% for k, fc in list_factions.items %}
         <div class="hide email_fc_{{ k }}">
             <h4>{{ fc.name }}</h4>
-            <table class="go_datatable">
+            <table class="mob">
                 <tr>
                     <td>{{ fc.emails | length }}</td>
                     <td>
@@ -193,7 +193,7 @@
             <div class="hide email_que_{{ key }}">
                 <br />
                 <h4>{{ que.name }}</h4>
-                <table class="go_datatable">
+                <table class="mob">
                     <thead>
                         <tr>
                             <th>Option</th>
