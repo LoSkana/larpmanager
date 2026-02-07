@@ -11,6 +11,7 @@ window.addEventListener('DOMContentLoaded', function() {
         'orga_event',
         'orga_quick',
         'exe_quick',
+        'config'
         // Add more as needed
     ];
 
@@ -96,7 +97,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     $(document).ready(function() {
         // Attach click handlers to all dashboard action links
-        $('.dashboard-action-link[data-modal-eligible="true"]').on('click', handleDashboardLinkClick);
+        $('.action-link[data-modal-eligible="true"]').on('click', handleDashboardLinkClick);
     });
 
 });

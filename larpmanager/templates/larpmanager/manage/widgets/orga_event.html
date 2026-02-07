@@ -23,7 +23,7 @@
             <td>
                 <i>{{ run.pretty_dates }}</i>
                 <a href="{% url 'orga_run_quick_edit_dates' run.get_slug %}"
-                   class="btn btn-sm btn-primary dashboard-action-link"
+                   class="btn btn-sm btn-primary action-link"
                    data-slug="orga_event"
                    data-modal-eligible="true"
                    title="{% trans "Edit dates" %}">
@@ -36,7 +36,7 @@
             <td>
                 {{ run.get_development_display }}
                 <a href="{% url 'orga_run_quick_edit_development' run.get_slug %}"
-                   class="btn btn-sm btn-primary dashboard-action-link"
+                   class="btn btn-sm btn-primary action-link"
                    data-slug="orga_event"
                    data-modal-eligible="true"
                    title="{% trans "Edit status" %}">

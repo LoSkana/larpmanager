@@ -197,6 +197,10 @@ def _exe_actions(
         if section:
             context["jump_section"] = section
 
+    # Pass frame parameter to context for modal rendering
+    if request.GET.get("frame") == "1" or request.POST.get("frame") == "1":
+        context["frame"] = True
+
     return exe_form(request, context, permission, action_data, form_type, element_uuid, redirect_view)
 
 

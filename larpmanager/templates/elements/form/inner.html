@@ -7,14 +7,16 @@
         {% if section != old_section %}
         </table>
     </div>
-    <h1>
-        <a href="#"
-           class="my_toggle section-link"
-           tog='sec_{{ section | slugify }}'>
-            {{ section | template_trans }}
-            <i class="fa-solid fa-chevron-down"></i>
-        </a>
-    </h1>
+    {% if not form.hide_section_headers %}
+        <h1>
+            <a href="#"
+               class="my_toggle section-link"
+               tog='sec_{{ section | slugify }}'>
+                {{ section | template_trans }}
+                <i class="fa-solid fa-chevron-down"></i>
+            </a>
+        </h1>
+    {% endif %}
     <div class="form_container auto_resize {% if not form.show_sections %}hide{% endif %} sec_{{ section | slugify }}">
         {% if section in form.section_descriptions %}
             {% get_field form.section_descriptions section as description %}

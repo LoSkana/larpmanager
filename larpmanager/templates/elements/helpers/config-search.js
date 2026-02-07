@@ -37,6 +37,11 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     $(function() {
+        // Don't add search bar if we're in frame mode (modal)
+        if ($('body').hasClass('floating_iframe')) {
+            return;
+        }
+
         var input_search = '<input type="text" name="search" id="search" placeholder="Search" />';
         $('.page_orga_config').prepend(input_search);
         $('.page_exe_config').prepend(input_search);

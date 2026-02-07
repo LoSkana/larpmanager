@@ -177,6 +177,7 @@ window['icon_texts'] = {
             let url_feature_description = "{% url 'feature_description' %}";
             let url_tutorials = "{% url 'tutorials' %}";
         </script>
+        {% include "elements/dashboard/modal.js.html" %}
         {% if association.id == 0 %}
             {% if google_tag %}
                 <!-- Google Tag Manager (noscript) -->
