@@ -101,9 +101,47 @@ class ConfigForm(BaseModelForm):
         for el in self.config_fields:
             self._add_custom_field(el, res)
 
+        # If in frame mode with a specific section, remove fields from other sections
+        if self.params.get("frame") and self.jump_section:
+            self._filter_fields_by_section()
+
     @abstractmethod
     def set_configs(self) -> None:
         """No-op method placeholder."""
+
+    def _filter_fields_by_section(self) -> None:
+        """Remove all fields that don't belong to jump_section when in frame mode.
+
+        This method filters out configuration fields from other sections when
+        the form is being displayed in a modal frame focused on a specific section.
+
+        Side effects:
+            - Removes fields from self.fields that don't belong to jump_section
+            - Updates self.sections to only contain fields from jump_section
+            - Updates self.config_fields to only contain configs from jump_section
+            - Sets show_sections to True to auto-open the section
+
+        """
+        # Filter config_fields to keep only those in the target section
+        self.config_fields = [cf for cf in self.config_fields if cf["section"] == self.jump_section]
+
+        # Get keys of fields to keep
+        fields_to_keep = {cf["key"] for cf in self.config_fields}
+
+        # Remove fields not in the target section
+        fields_to_remove = [key for key in self.fields if key not in fields_to_keep]
+        for key in fields_to_remove:
+            del self.fields[key]
+
+        # Update sections dict to only contain fields from target section
+        if hasattr(self, "sections"):
+            self.sections = {k: v for k, v in self.sections.items() if v == self.jump_section}
+
+        # Auto-open the section in frame mode
+        self.show_sections = True
+
+        # Flag to hide section headers in frame mode
+        self.hide_section_headers = True
 
     def set_section(self, section_slug: str, section_name: str) -> None:
         """Set the current section for grouping configuration fields.

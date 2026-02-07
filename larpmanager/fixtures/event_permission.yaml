@@ -314,7 +314,7 @@
     descr: Manage participant registrations
     slug: orga_registrations
     number: 11
-    config: null
+    config: registrations
     hidden: false
     feature: orga_registrations
     module: registration
@@ -344,7 +344,7 @@
     descr: Manage the registration questions and options
     slug: orga_registration_form
     number: 41
-    config: reg_form
+    config: registrations
     hidden: false
     feature: orga_registration_form
     module: registration
