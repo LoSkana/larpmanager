@@ -958,6 +958,9 @@ def check_year(request: HttpRequest, context: dict) -> int:
     association = Association.objects.get(pk=context["association_id"])
     context["years"] = list(range(timezone.now().year, association.created.year - 1, -1))
 
+    if not context["years"]:
+        context["years"] = [timezone.now().year]
+
     # Process POST data if present
     if request.POST:
         try:
