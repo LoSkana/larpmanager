@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, load_image, submit, expect_normalized
+from larpmanager.tests.utils import just_wait, go_to, load_image, submit, expect_normalized, login_orga
 
 pytestmark = pytest.mark.e2e
 
@@ -37,10 +37,10 @@ pytestmark = pytest.mark.e2e
 def test_exe_join(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
+    login_orga(page, live_server)
     go_to(page, live_server, "/debug")
 
-    go_to(page, live_server, "/join")
-    page.get_by_role("link", name="Register").click()
+    go_to(page, live_server, "/register")
     page.get_by_role("textbox", name="Email address").click()
     page.get_by_role("textbox", name="Email address").fill("orga@prova.it")
     page.get_by_role("textbox", name="Email address").press("Tab")
@@ -56,6 +56,7 @@ def test_exe_join(pw_page: Any) -> None:
     page.get_by_role("checkbox", name="Authorisation").check()
     submit(page)
 
+    go_to(page, live_server, "/debug")
     go_to(page, live_server, "/join")
 
     # check auto slug
