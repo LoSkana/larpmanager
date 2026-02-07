@@ -380,6 +380,7 @@ def _save_character(context: dict, form: CharacterForm, success_message: str) ->
     """Saves a character with retry behaviour."""
     # Retry logic to handle race conditions in character number assignment
     max_retries = 3
+    character = None
     for retry_attempt in range(max_retries):
         try:
             # Save character data within atomic transaction
@@ -551,7 +552,7 @@ def character_profile_rotate(
         request (HttpRequest): HTTP request object containing user session
         event_slug (str): Event slug identifier
         character_uuid (str): Character uuid
-        rotation_angle (int): Rotation direction (1 for 90°, else -90°)
+        rotation_angle (int): Rotation direction (1 for clockwise, else counter-clockwise)
 
     Returns:
         JsonResponse: Dictionary with 'res' status ('ok'/'ko') and 'src' URL if successful
