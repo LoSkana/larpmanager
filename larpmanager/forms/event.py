@@ -411,7 +411,7 @@ class OrgaConfigForm(ConfigForm):
         how registration forms are displayed and processed.
         """
         # Create the registration configuration section
-        self.set_section("reg_form", _("Registrations"))
+        self.set_section("registrations", _("Registrations"))
 
         # Configure table grouping behavior
         grouping_label = _("Disable grouping")

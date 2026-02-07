@@ -305,6 +305,9 @@ class AccountingItem(UuidMixin, BaseModel):
         if self.member:
             s += f" - {self.member}"
 
+        if hasattr(self, "run") and self.run:
+            s += f" - {self.run}"
+
         if self.value:
             s += f" - {self.value}"
 

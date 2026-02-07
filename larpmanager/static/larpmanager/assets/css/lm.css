@@ -1779,8 +1779,22 @@ a label:hover {
 
 .popup_option,
 .popup_dashboard {
-  width: 80vw;
-  height: 80vh;
+  width: 70vw;
+  height: 50vh;
+}
+
+@media (max-width: 1200px) {
+  .popup_option,
+  .popup_dashboard {
+    width: 80vw;
+  }
+}
+
+@media (max-width: 1000px) {
+  .popup_option,
+  .popup_dashboard {
+    width: 90vw;
+  }
 }
 
 .popup_tutorial {
@@ -1840,7 +1854,6 @@ a label:hover {
   .popup_query,
   .popup_dashboard {
     width: 95vw;
-    height: 90vh;
   }
 }
 
@@ -3172,8 +3185,8 @@ body.floating_iframe .inner {
 
 .modal-close-btn {
   position: absolute;
-  top: 10px;
-  right: 30px;
+  top: 0px;
+  right: 0px;
   width: 30px;
   height: 30px;
   border-radius: 50%;

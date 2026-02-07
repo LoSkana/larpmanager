@@ -109,7 +109,12 @@
                             {% block info %}
                             {% endblock info %}
                             {% if tutorial %}- <a href="#" class="feature_tutorial" tut="{{ tutorial }}">Tutorial</a>{% endif %}
-                            {% if config %}- <a href="{{ config }}">Config</a>{% endif %}
+                            {% if config %}
+                                - <a href="{{ config }}"
+    class="action-link"
+    data-modal-eligible="true"
+    data-slug="config">Config</a>
+                            {% endif %}
                         </div>
                         <div class="page_{{ request_func_name }} {% block special %}{% endblock special %}">
                             {% block content %}

@@ -75,4 +75,8 @@ def prepare_change(request: HttpRequest, context: dict, action_data: dict) -> st
         if section:
             context["jump_section"] = section
 
+    # Pass frame parameter to context for modal rendering
+    if request.GET.get("frame") == "1" or request.POST.get("frame") == "1":
+        context["frame"] = True
+
     return redirect_view
