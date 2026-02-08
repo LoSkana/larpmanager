@@ -999,7 +999,7 @@ def orga_writing_excel_submit(request: HttpRequest, event_slug: str, writing_typ
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
-    context["auto"] = int(request.POST.get("auto"))
+    context["auto"] = int(request.POST.get("auto", 0) or 0)
     if context["auto"]:
         if is_lm_admin(request):
             return JsonResponse({"k": 1})

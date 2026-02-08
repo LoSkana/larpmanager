@@ -248,7 +248,7 @@ def satispay_webhook(request: HttpRequest) -> None:
     satispay_verify(context, payment_id)
 
 
-def get_paypal_form(request: HttpRequest, context: dict, invoice: PaymentInvoice, amount: float) -> None:
+def get_paypal_form(request: HttpRequest, context: dict, invoice: PaymentInvoice, amount: Decimal) -> None:
     """Create PayPal payment form.
 
     Args:
@@ -263,7 +263,7 @@ def get_paypal_form(request: HttpRequest, context: dict, invoice: PaymentInvoice
     """
     paypal_payment_data = {
         "business": context["paypal_id"],
-        "amount": float(amount),
+        "amount": amount,
         "currency_code": context["payment_currency"],
         "item_name": invoice.causal,
         "invoice": invoice.cod,
@@ -351,7 +351,7 @@ def get_stripe_form(
     request: HttpRequest,
     context: dict,
     invoice: PaymentInvoice,
-    amount: float,
+    amount: Decimal,
 ) -> None:
     """Create Stripe payment form and session.
 
@@ -379,7 +379,7 @@ def get_stripe_form(
     # Create price object with amount converted to cents
     # Stripe requires amounts in smallest currency unit (cents for EUR/USD)
     stripe_price = stripe.Price.create(
-        unit_amount=str(int(round(amount, 2) * CURRENCY_TO_CENTS_MULTIPLIER)),
+        unit_amount=str(int(amount.quantize(Decimal("0.01")) * CURRENCY_TO_CENTS_MULTIPLIER)),
         currency=context["payment_currency"],
         product=stripe_product.id,
     )
@@ -476,7 +476,7 @@ def get_sumup_form(
     request: HttpRequest,
     context: dict,
     invoice: PaymentInvoice,
-    amount: float,
+    amount: Decimal,
 ) -> None:
     """Generate SumUp payment form for invoice processing.
 
@@ -542,7 +542,7 @@ def get_sumup_form(
     checkout_payload = json.dumps(
         {
             "checkout_reference": invoice.cod,
-            "amount": float(amount),
+            "amount": float(amount.quantize(Decimal("0.01"))),
             "currency": context["payment_currency"],
             "merchant_code": context["sumup_merchant_id"],
             "description": invoice.causal,
@@ -701,7 +701,7 @@ def redsys_invoice_cod() -> str:
     raise ValueError(msg)
 
 
-def get_redsys_form(request: HttpRequest, context: dict, invoice: PaymentInvoice, amount: float) -> None:
+def get_redsys_form(request: HttpRequest, context: dict, invoice: PaymentInvoice, amount: Decimal) -> None:
     """Create Redsys payment form with encrypted parameters.
 
     Generates a secure payment form for Redsys payment gateway by creating
@@ -730,7 +730,7 @@ def get_redsys_form(request: HttpRequest, context: dict, invoice: PaymentInvoice
 
     # Prepare basic payment parameters for Redsys gateway
     payment_parameters = {
-        "DS_MERCHANT_AMOUNT": float(amount),
+        "DS_MERCHANT_AMOUNT": amount,
         "DS_MERCHANT_CURRENCY": int(context["redsys_merchant_currency"]),
         "DS_MERCHANT_ORDER": invoice.cod,
         "DS_MERCHANT_PRODUCTDESCRIPTION": invoice.causal,
@@ -948,7 +948,9 @@ class RedSysClient:
         :return dict url, signature, parameters and type signature.
         """
         merchant_parameters = {
-            "DS_MERCHANT_AMOUNT": int(params["DS_MERCHANT_AMOUNT"] * CURRENCY_TO_CENTS_MULTIPLIER),
+            "DS_MERCHANT_AMOUNT": int(
+                params["DS_MERCHANT_AMOUNT"].quantize(Decimal("0.01")) * CURRENCY_TO_CENTS_MULTIPLIER
+            ),
             "DS_MERCHANT_ORDER": params["DS_MERCHANT_ORDER"].zfill(10),
             "DS_MERCHANT_MERCHANTCODE": params["DS_MERCHANT_MERCHANTCODE"][:9],
             "DS_MERCHANT_CURRENCY": params["DS_MERCHANT_CURRENCY"] or 978,  # EUR

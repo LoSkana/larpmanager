@@ -640,7 +640,7 @@ def chat(request: HttpRequest, slug: str) -> Any:
 
     channel = get_channel(member_id, my_member_id)
     if request.method == "POST":
-        tx = request.POST["text"]
+        tx = request.POST.get("text", "")
         if len(tx) > 0:
             ChatMessage(
                 sender_id=my_member_id,
