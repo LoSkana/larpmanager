@@ -410,6 +410,7 @@ def activate_feature_event(
     return redirect("gallery", event_slug=event_slug)
 
 
+@login_required
 def toggle_sidebar(request: HttpRequest) -> Any:
     """Toggle the sidebar open/closed state in user session.
 
@@ -428,6 +429,7 @@ def toggle_sidebar(request: HttpRequest) -> Any:
     return JsonResponse({"status": "success"})
 
 
+@login_required
 def debug_mail(request: HttpRequest) -> Any:
     """Send reminder emails to all registrations for debugging.
 
@@ -457,6 +459,7 @@ def debug_mail(request: HttpRequest) -> Any:
     return redirect("home")
 
 
+@login_required
 def debug_send_digests(request: HttpRequest) -> Any:
     """Send daily organizer digest summaries for debugging.
 
@@ -482,6 +485,7 @@ def debug_send_digests(request: HttpRequest) -> Any:
     return redirect("home")
 
 
+@login_required
 def debug_slug(request: HttpRequest, association_slug: Any = "") -> Any:
     """Set debug slug in session for development testing.
 

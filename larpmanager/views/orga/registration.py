@@ -421,7 +421,7 @@ def _get_registration_fields(context: dict, member: Any) -> dict:
 
     for question in event_questions:
         # Check if question has access restrictions enabled
-        if "reg_que_allowed" in context["features"] and question.allowed_map[0]:
+        if "reg_que_allowed" in context["features"] and question.allowed_map and question.allowed_map[0]:
             current_run_id = context["run"].id
 
             # Check if user is an organizer for this run
@@ -651,7 +651,7 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
         q = q.annotate(allowed_map=ArrayAgg("allowed__id"))
     q = q.get(event=context["event"], uuid=q_uuid)
 
-    if "reg_que_allowed" in context["features"] and q.allowed_map[0]:
+    if "reg_que_allowed" in context["features"] and q.allowed_map and q.allowed_map[0]:
         run_id = context["run"].id
         organizer = run_id in context["all_runs"] and 1 in context["all_runs"][run_id]
         if not organizer and context["member"].id not in q.allowed_map:
@@ -719,7 +719,7 @@ def orga_registration_form_email(request: HttpRequest, event_slug: str) -> JsonR
     q = q.get(event=context["event"], uuid=q_uuid)
 
     # Check if user has permission to access this specific question
-    if "reg_que_allowed" in context["features"] and q.allowed_map[0]:
+    if "reg_que_allowed" in context["features"] and q.allowed_map and q.allowed_map[0]:
         run_id = context["run"].id
         organizer = run_id in context["all_runs"] and 1 in context["all_runs"][run_id]
         if not organizer and context["member"].id not in q.allowed_map:

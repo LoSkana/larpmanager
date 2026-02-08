@@ -471,8 +471,14 @@ def payment_received(invoice: PaymentInvoice) -> bool:
 
 def _process_collection(features: dict, invoice: PaymentInvoice) -> None:
     """Process collection item creation for an invoice if it doesn't exist."""
-    # Check if collection item already exists for this invoice
-    if not AccountingItemCollection.objects.filter(inv=invoice).exists():
+    # Use atomic transaction with lock to prevent race conditions
+    with transaction.atomic():
+        invoice = PaymentInvoice.objects.select_for_update().get(pk=invoice.pk)
+
+        # Check does not exists already
+        if AccountingItemCollection.objects.filter(inv=invoice).exists():
+            return
+
         # Create new collection item from invoice data
         collection_item = AccountingItemCollection()
         collection_item.member_id = invoice.member_id
@@ -489,15 +495,20 @@ def _process_collection(features: dict, invoice: PaymentInvoice) -> None:
 
 def _process_donate(features: dict, invoice: PaymentInvoice) -> None:
     """Create donation accounting item and assign badge if enabled."""
-    # Check if donation accounting item already exists for this invoice
-    if not AccountingItemDonation.objects.filter(inv=invoice).exists():
+    # Use atomic transaction with lock to prevent race conditions
+    with transaction.atomic():
+        invoice = PaymentInvoice.objects.select_for_update().get(pk=invoice.pk)
+
+        # Check does not exists already
+        if AccountingItemDonation.objects.filter(inv=invoice).exists():
+            return
+
         # Create and populate new donation accounting item
         accounting_item = AccountingItemDonation()
         accounting_item.member_id = invoice.member_id
         accounting_item.inv = invoice
         accounting_item.value = invoice.mc_gross
         accounting_item.association_id = invoice.association_id
-        accounting_item.inv = invoice
         accounting_item.descr = invoice.causal
         accounting_item.save()
 
@@ -508,8 +519,14 @@ def _process_donate(features: dict, invoice: PaymentInvoice) -> None:
 
 def _process_membership(invoice: PaymentInvoice) -> None:
     """Create membership accounting item if not already exists for the invoice."""
-    # Check if membership item already exists for this invoice
-    if not AccountingItemMembership.objects.filter(inv=invoice).exists():
+    # Use atomic transaction with lock to prevent race conditions
+    with transaction.atomic():
+        invoice = PaymentInvoice.objects.select_for_update().get(pk=invoice.pk)
+
+        # Check does not exists already
+        if AccountingItemMembership.objects.filter(inv=invoice).exists():
+            return
+
         # Create and populate new membership accounting item
         accounting_item = AccountingItemMembership()
         accounting_item.year = timezone.now().year
@@ -521,13 +538,15 @@ def _process_membership(invoice: PaymentInvoice) -> None:
 
 
 def _process_payment(invoice: PaymentInvoice) -> None:
-    """Process a payment from an invoice and create accounting entries.
+    """Process a payment from an invoice and create accounting entries."""
+    # Use atomic transaction with lock to prevent race conditions
+    with transaction.atomic():
+        invoice = PaymentInvoice.objects.select_for_update().get(pk=invoice.pk)
 
-    Args:
-        invoice: Invoice object to process payment for
+        # Check does not exists already
+        if AccountingItemPayment.objects.filter(inv=invoice).exists():
+            return
 
-    """
-    if not AccountingItemPayment.objects.filter(inv=invoice).exists():
         try:
             registration = Registration.objects.get(pk=invoice.idx)
         except ObjectDoesNotExist:
@@ -623,6 +642,10 @@ def process_refund_request_status_change(refund_request: HttpRequest) -> None:
     Side effects:
         Creates accounting item when refund status changes to PAYED
 
+    Note:
+        Uses idempotency check to prevent duplicate accounting entries
+        if signal fires multiple times.
+
     """
     if not refund_request.pk:
         return
@@ -636,6 +659,18 @@ def process_refund_request_status_change(refund_request: HttpRequest) -> None:
         return
 
     if refund_request.status != RefundStatus.PAYED:
+        return
+
+    # Check if accounting item already exists for this refund (idempotency)
+    existing_item = AccountingItemOther.objects.filter(
+        member_id=refund_request.member_id,
+        value=refund_request.value,
+        oth=OtherChoices.REFUND,
+        association_id=refund_request.association_id,
+        descr=f"Delivered refund of {refund_request.value:.2f}",
+    ).exists()
+
+    if existing_item:
         return
 
     accounting_item = AccountingItemOther()

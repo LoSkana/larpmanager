@@ -422,6 +422,11 @@ class Member(UuidMixin, BaseModel):
         # noinspection PyUnresolvedReferences
         address_components = self.residence_address.split("|")
 
+        expected_parts = 6
+        if len(address_components) < expected_parts:
+            # Return raw address if format is unexpected
+            return self.residence_address
+
         # Format: street number, city (province), country_code (country)
         return f"{address_components[4]} {address_components[5]}, {address_components[2]} ({address_components[3]}), {address_components[1].replace('IT-', '')} ({address_components[0]})"
 

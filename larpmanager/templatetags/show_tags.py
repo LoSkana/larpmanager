@@ -220,7 +220,8 @@ def replace_chars(context: dict, text: str, limit: int = 200) -> str:
     for character_number in range(context["max_ch_number"], 0, -1):
         if character_number not in context["chars"]:
             continue
-        character_name = context["chars"][character_number]["name"]
+        # Escape character name to prevent XSS when used in HTML contexts
+        character_name = escape(context["chars"][character_number]["name"])
         text = text.replace(f"#{character_number}", character_name)
         text = text.replace(f"@{character_number}", character_name)
 
