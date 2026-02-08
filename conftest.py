@@ -175,7 +175,11 @@ def pw_page(
         video_dir = Path(__file__).parent / "test_videos"
         video_dir.mkdir(exist_ok=True)
 
-    browser = browser_type.launch(headless=not headed, slow_mo=50)
+    browser = browser_type.launch(
+        headless=not headed,
+        slow_mo=50,
+        args=["--disable-popup-blocking"],
+    )
     context = browser.new_context(
         storage_state=None,
         viewport={"width": 1280, "height": 800},
