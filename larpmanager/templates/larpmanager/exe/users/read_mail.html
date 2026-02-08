@@ -1,5 +1,5 @@
 {% extends "utils.html" %}
-{% load i18n %}
+{% load i18n show_tags %}
 {% block title %}
     {% trans "Read mail" %} -
     {% if exe %}
@@ -12,5 +12,5 @@
     {% trans "This page shows an email sent by the system" %}
 {% endblock info %}
 {% block content %}
-    {{ email.body | safe }}
+    {{ email.body | sanitize_html }}
 {% endblock content %}

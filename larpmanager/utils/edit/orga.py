@@ -25,6 +25,7 @@ from typing import Any
 from django.contrib import messages
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields, reset_event_cache_all
@@ -447,7 +448,7 @@ def _action_show(
             if previous_version is not None:
                 compute_diff(current_version, previous_version)
             else:
-                current_version.diff = current_version.text.replace("\n", "<br />")
+                current_version.diff = escape(current_version.text).replace("\n", "<br />")
             previous_version = current_version
 
         context["element"] = context["el"]

@@ -22,6 +22,7 @@ from __future__ import annotations
 import contextlib
 import logging
 import re
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -382,11 +383,11 @@ def show_char(context: dict, element: dict | str | None, run: Run, include_toolt
         tags removed
 
     """
-    # Extract text content from various input types
+    # Extract text content from various input types and sanitize to prevent XSS
     if isinstance(element, dict) and "text" in element:
-        text = element["text"] + " "
+        text = _sanitize_html(element["text"]) + " "
     elif element is not None:
-        text = str(element) + " "
+        text = _sanitize_html(str(element)) + " "
     else:
         text = ""
 
@@ -513,6 +514,9 @@ def show_trait(context: dict, text: str, run: Run, tooltip: bool) -> str:  # noq
         str: Safe HTML with trait references converted to character links
 
     """
+    # Sanitize input text to prevent XSS
+    text = _sanitize_html(text)
+
     if "max_trait" not in context:
         context["max_trait"] = Trait.objects.filter(event_id=run.event_id).aggregate(Max("number"))["number__max"]
 
@@ -570,6 +574,107 @@ def get_field(form: Form, field_name: str) -> BoundField | str:
     return ""
 
 
+_ALLOWED_HTML_TAGS = {
+    "p",
+    "div",
+    "span",
+    "br",
+    "hr",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "ul",
+    "ol",
+    "li",
+    "blockquote",
+    "pre",
+    "code",
+    "strong",
+    "em",
+    "b",
+    "i",
+    "u",
+    "s",
+    "sub",
+    "sup",
+    "a",
+    "img",
+    "table",
+    "thead",
+    "tbody",
+    "tr",
+    "th",
+    "td",
+}
+
+_ALLOWED_HTML_ATTRS: dict[str, set[str]] = {
+    "*": {"class", "id"},
+    "a": {"href", "title", "target"},
+    "img": {"src", "alt", "width", "height"},
+    "td": {"colspan", "rowspan"},
+    "th": {"colspan", "rowspan", "scope"},
+}
+
+_DANGEROUS_CSS_PATTERN = re.compile(r"javascript:|expression\s*\(|url\s*\(", re.IGNORECASE)
+
+
+class _HtmlSanitizer(HTMLParser):
+    """HTML sanitizer that strips dangerous tags and attributes to prevent XSS."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=False)
+        self._parts: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag not in _ALLOWED_HTML_TAGS:
+            return
+        allowed = _ALLOWED_HTML_ATTRS.get("*", set()) | _ALLOWED_HTML_ATTRS.get(tag, set())
+        safe_attrs = []
+        for attr, val in attrs:
+            if attr not in allowed or val is None:
+                continue
+            if attr in ("href", "src") and re.match(r"^\s*javascript:", val, re.IGNORECASE):
+                continue
+            if attr == "style" and _DANGEROUS_CSS_PATTERN.search(val):
+                continue
+            safe_attrs.append(f' {attr}="{escape(val)}"')
+        self._parts.append(f"<{tag}{''.join(safe_attrs)}>")
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in _ALLOWED_HTML_TAGS:
+            self._parts.append(f"</{tag}>")
+
+    def handle_data(self, data: str) -> None:
+        self._parts.append(escape(data))
+
+    def handle_entityref(self, name: str) -> None:
+        self._parts.append(f"&{name};")
+
+    def handle_charref(self, name: str) -> None:
+        self._parts.append(f"&#{name};")
+
+    def get_html(self) -> str:
+        return "".join(self._parts)
+
+
+def _sanitize_html(text: str) -> str:
+    """Sanitize HTML to prevent XSS while preserving safe formatting tags."""
+    if not text:
+        return text
+    sanitizer = _HtmlSanitizer()
+    sanitizer.feed(text)
+    return sanitizer.get_html()
+
+
+@register.filter
+def sanitize_html(text: str) -> str:
+    """Template filter to sanitize HTML and return safe string."""
+    return mark_safe(_sanitize_html(str(text)) if text else "")  # noqa: S308
+
+
 @register.simple_tag(takes_context=True)
 def get_field_show_char(context: dict, form: Form, name: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
     """Template tag to get form field and process character references.
@@ -587,6 +692,10 @@ def get_field_show_char(context: dict, form: Form, name: str, run: Run, tooltip:
     """
     if name in form:
         v = form[name]
+        if isinstance(v, dict) and "text" in v:
+            v = {**v, "text": _sanitize_html(v["text"])}
+        elif v is not None:
+            v = _sanitize_html(str(v))
         return show_char(context, v, run, include_tooltip=tooltip)
     return ""
 

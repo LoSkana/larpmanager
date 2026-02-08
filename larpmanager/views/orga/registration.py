@@ -32,6 +32,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.functions import Substr
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from slugify import slugify
@@ -327,7 +328,7 @@ def orga_registrations_custom(registration: Any, context: dict, character_data: 
         if custom_field_slug in character_data:
             field_value = character_data[custom_field_slug]
         if custom_field_slug == "profile" and field_value:
-            field_value = f"<img src='{field_value}' class='reg_profile' />"
+            field_value = f"<img src='{escape(field_value)}' class='reg_profile' />"
         if field_value:
             registration.custom[custom_field_slug].append(field_value)
 
