@@ -5716,9 +5716,6 @@ msgstr "Opisz dokładnie, w jakim jest stanie"
 msgid "Did you check the required data properly"
 msgstr "Czy poprawnie sprawdziłeś wymagane dane"
 
-msgid "Error uploading image. Please try again."
-msgstr "Błąd przesyłania obrazu. Spróbuj ponownie."
-
 msgid "IP address from which the token was used"
 msgstr "Adres IP, z którego token został użyty"
 
@@ -7047,6 +7044,9 @@ msgstr ""
 
 msgid "Do you want to assign characters using a casting algorithm"
 msgstr "Czy chcesz przydzielać postacie przy użyciu algorytmu rzutowania"
+
+msgid "Error uploading image. Please retry or use a smaller file."
+msgstr "Błąd przesyłania obrazu. Spróbuj ponownie lub użyj mniejszego pliku."
 
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"

@@ -5716,9 +5716,6 @@ msgstr "Popište přesně, za jakých podmínek k tomu dochází"
 msgid "Did you check the required data properly"
 msgstr "Zkontrolovali jste správně požadované údaje"
 
-msgid "Error uploading image. Please try again."
-msgstr "Chyba při nahrávání obrázku. Zkuste to prosím znovu."
-
 msgid "IP address from which the token was used"
 msgstr "IP adresa, ze které byl token použit"
 
@@ -7030,6 +7027,11 @@ msgstr ""
 
 msgid "Do you want to assign characters using a casting algorithm"
 msgstr "Chcete přiřadit znaky pomocí algoritmu obsazování"
+
+msgid "Error uploading image. Please retry or use a smaller file."
+msgstr ""
+"Chyba při nahrávání obrázku. Zkuste to prosím znovu nebo použijte menší "
+"soubor."
 
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
