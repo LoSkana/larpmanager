@@ -582,13 +582,13 @@ def character_profile_rotate(
     # Open and rotate the image based on direction parameter
     path = str(Path(conf_settings.MEDIA_ROOT) / path)
     try:
-        im = Image.open(path)
-        out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
+        with Image.open(path) as im:
+            out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
 
-        # Generate unique filename and save rotated image
-        ext = path.split(".")[-1]
-        n_path = f"{Path(path).parent}/{rgr.pk}_{uuid4().hex}.{ext}"
-        out.save(n_path)
+            # Generate unique filename and save rotated image
+            ext = path.split(".")[-1]
+            n_path = f"{Path(path).parent}/{rgr.pk}_{uuid4().hex}.{ext}"
+            out.save(n_path)
 
         # Update database with new image path atomically
         with transaction.atomic():

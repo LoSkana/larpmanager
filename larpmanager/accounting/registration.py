@@ -30,6 +30,7 @@ from typing import TYPE_CHECKING
 from django.conf import settings as conf_settings
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.utils import timezone
 
 from larpmanager.accounting.base import is_registration_provisional
@@ -58,7 +59,6 @@ from larpmanager.models.registration import (
     RegistrationTicket,
     TicketTier,
 )
-from larpmanager.models.utils import get_sum
 from larpmanager.utils.core.common import get_time_diff, get_time_diff_today
 from larpmanager.utils.larpmanager.tasks import background_auto
 
@@ -542,34 +542,61 @@ def cancel_run(instance: Run) -> None:
         for non-refunded registrations
 
     """
+    # Cancel all non-cancelled registrations
     for r in Registration.objects.filter(cancellation_date__isnull=True, run=instance):
         cancel_reg(r)
-    for r in Registration.objects.filter(refunded=False, run=instance):
+
+    # Process refunds for non-refunded registrations
+    non_refunded_regs = Registration.objects.filter(refunded=False, run=instance)
+
+    # Collect member IDs for bulk operations
+    member_ids = list(non_refunded_regs.values_list("member_id", flat=True))
+
+    if not member_ids:
+        return
+
+    # Bulk delete token and credit payments
+    AccountingItemPayment.objects.filter(
+        member_id__in=member_ids,
+        pay=PaymentChoices.TOKEN,
+        registration__run=instance,
+    ).delete()
+
+    AccountingItemPayment.objects.filter(
+        member_id__in=member_ids,
+        pay=PaymentChoices.CREDIT,
+        registration__run=instance,
+    ).delete()
+
+    # Process money payments and create refund credits
+    money_payments = (
         AccountingItemPayment.objects.filter(
-            member_id=r.member_id,
-            pay=PaymentChoices.TOKEN,
+            member_id__in=member_ids,
+            pay=PaymentChoices.MONEY,
             registration__run=instance,
-        ).delete()
-        AccountingItemPayment.objects.filter(
-            member_id=r.member_id,
-            pay=PaymentChoices.CREDIT,
-            registration__run=instance,
-        ).delete()
-        money = get_sum(
-            AccountingItemPayment.objects.filter(
-                member_id=r.member_id, pay=PaymentChoices.MONEY, registration__run=instance
-            ),
         )
-        if money > 0:
-            AccountingItemOther.objects.create(
-                member_id=r.member_id,
-                oth=OtherChoices.CREDIT,
-                descr=f"Refund per {instance}",
-                run=instance,
-                value=money,
-            )
-        r.refunded = True
-        r.save()
+        .values("member_id")
+        .annotate(total=models.Sum("value"))
+    )
+
+    # Create refund credits for members with money payments
+    refund_credits = [
+        AccountingItemOther(
+            member_id=payment["member_id"],
+            oth=OtherChoices.CREDIT,
+            descr=f"Refund per {instance}",
+            run=instance,
+            value=payment["total"],
+        )
+        for payment in money_payments
+        if payment["total"] > 0
+    ]
+
+    if refund_credits:
+        AccountingItemOther.objects.bulk_create(refund_credits)
+
+    # Mark all registrations as refunded
+    non_refunded_regs.update(refunded=True)
 
 
 def cancel_reg(registration: Registration) -> None:
