@@ -91,6 +91,7 @@ def ticket_link_bypasses_not_visible(live_server, page):
     # Test direct link
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Tickets").first.click()
+    just_wait(page)
     with page.expect_popup() as popup_info:
         page.locator('[id="u2"]').get_by_role("link", name="Signup link").click()
     new_page = popup_info.value
@@ -121,6 +122,7 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Tickets").first.click()
 
     # Navigate to direct ticket link - should work despite registration not open
+    just_wait(page)
     with page.expect_popup() as popup_info:
         page.locator('[id="u2"]').get_by_role("link", name="Signup link").click()
     new_page = popup_info.value
