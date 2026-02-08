@@ -24,7 +24,6 @@ from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.character import update_event_cache_all
 from larpmanager.cache.config import get_event_config
@@ -193,13 +192,14 @@ def update_m2m_related_characters(
         # Collect all affected characters
         affected_characters = []
         if character_ids:
-            # Get characters from provided IDs
-            for character_id in character_ids:
-                try:
-                    character = Character.objects.get(id=character_id)
-                    affected_characters.append(character)
-                except ObjectDoesNotExist:
-                    logger.warning("Character %s not found during relationship update", character_id)
+            # Get characters from provided IDs using bulk query
+            affected_characters = list(Character.objects.filter(id__in=character_ids))
+
+            # Log warning if some characters not found
+            found_ids = {char.id for char in affected_characters}
+            missing_ids = set(character_ids) - found_ids
+            if missing_ids:
+                logger.warning("Characters %s not found during relationship update", missing_ids)
         elif action == "post_clear":
             # For post_clear, get all characters that were related
             if hasattr(instance, "characters"):

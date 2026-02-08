@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import time
 from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
@@ -303,6 +304,8 @@ def get_registration_accounting_cache(run: Run) -> dict:
 
     Retrieves cached registration accounting data for the given run. If the cache
     is empty or expired, regenerates the data and stores it in cache with a 1-day timeout.
+    Uses a lock-based pattern to prevent cache stampede when multiple requests try to
+    regenerate the cache simultaneously.
 
     Args:
         run (Run): The Run instance to get accounting data for.
@@ -314,14 +317,40 @@ def get_registration_accounting_cache(run: Run) -> dict:
     """
     # Generate the cache key for this specific run
     cache_key = get_registration_accounting_cache_key(run.id)
+    lock_key = f"{cache_key}_lock"
 
     # Attempt to retrieve cached data
     cached_data = cache.get(cache_key)
 
-    # If cache miss, regenerate and store the data
+    # If cache miss, regenerate with lock to prevent stampede
     if cached_data is None:
-        cached_data = update_registration_accounting_cache(run)
-        cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        # Try to acquire lock with 30-second timeout
+        lock_acquired = cache.add(lock_key, "locked", timeout=30)
+
+        if lock_acquired:
+            # This process acquired the lock - regenerate the cache
+            try:
+                cached_data = update_registration_accounting_cache(run)
+                cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+            finally:
+                # Always release the lock
+                cache.delete(lock_key)
+        else:
+            # Another process is regenerating - retry multiple times
+            max_retries = 10
+            for _attempt in range(max_retries):
+                # Wait briefly for regeneration to complete
+                time.sleep(0.1)
+
+                # Check if cache is now available
+                cached_data = cache.get(cache_key)
+                if cached_data is not None:
+                    break
+
+            # If still no data after retries, regenerate without lock as fallback
+            if cached_data is None:
+                cached_data = update_registration_accounting_cache(run)
+                cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return cached_data
 

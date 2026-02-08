@@ -426,7 +426,11 @@ def _save_all_regs(instance: AccountingItemOther | AccountingItemPayment | Accou
 
     """
     # Trigger accounting updates on registrations with incomplete payments
-    for registration in get_regs_paying_incomplete(instance.association).filter(member_id=instance.member_id):
+    for registration in (
+        get_regs_paying_incomplete(instance.association)
+        .filter(member_id=instance.member_id)
+        .select_related("run", "run__event", "ticket", "member")
+    ):
         registration.save()
 
 

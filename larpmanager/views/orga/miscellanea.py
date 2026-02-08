@@ -185,8 +185,10 @@ def orga_workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["pinocchio"] = []  # Members who haven't completed all workshops
     context["list"] = []  # All registered members with completion counts
 
-    # Pre-fetch all workshop completions
-    registrations = list(Registration.objects.filter(run=context["run"], cancellation_date__isnull=True))
+    # Pre-fetch all workshop completions with related data
+    registrations = list(
+        Registration.objects.filter(run=context["run"], cancellation_date__isnull=True).select_related("member")
+    )
     member_ids = [registration.member_id for registration in registrations]
     workshop_ids = [w.id for w in workshops]
 
@@ -920,7 +922,7 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
             else:
                 # Reduce item quantity by the assigned amount
                 items_modified.append(
-                    f"UPDATED: {item.name} ({current_quantity} → {final_quantity}, assigned {assigned_quantity})",
+                    f"UPDATED: {item.name} ({current_quantity} -> {final_quantity}, assigned {assigned_quantity})",
                 )
                 item.quantity = final_quantity
                 item.save()

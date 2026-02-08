@@ -726,14 +726,12 @@ def handle_registration_accounting_updates(registration: Registration) -> None:
         )
         cancelled_registration_ids = list(cancelled_registrations.values_list("pk", flat=True))
 
-        # Transfer both payments and transactions from cancelled registrations
+        # Transfer both payments and transactions from cancelled registrations using bulk update
         if cancelled_registration_ids:
             for accounting_item_type in [AccountingItemPayment, AccountingItemTransaction]:
-                for accounting_item in accounting_item_type.objects.filter(
-                    registration__id__in=cancelled_registration_ids
-                ):
-                    accounting_item.registration = registration
-                    accounting_item.save()
+                accounting_item_type.objects.filter(registration__id__in=cancelled_registration_ids).update(
+                    registration=registration
+                )
 
     # Store provisional status before accounting updates
     was_provisional_before_update = is_registration_provisional(registration)
@@ -760,7 +758,12 @@ def process_accounting_discount_post_save(discount_item: AccountingItemDiscount)
 
     """
     if discount_item.run and not discount_item.expires:
-        for registration in Registration.objects.filter(member_id=discount_item.member_id, run_id=discount_item.run_id):
+        # Note: Using .save() to trigger accounting recalculation signals
+        # Cannot use bulk_update as it bypasses signals needed for accounting
+        registrations = Registration.objects.filter(
+            member_id=discount_item.member_id, run_id=discount_item.run_id
+        ).select_related("run", "run__event", "ticket", "member")
+        for registration in registrations:
             registration.save()
 
 
@@ -997,5 +1000,6 @@ def update_member_registrations(member: Member) -> None:
         Saves all registrations to trigger accounting recalculation
 
     """
-    for registration in Registration.objects.filter(member=member):
+    registrations = Registration.objects.filter(member=member).select_related("run", "run__event", "ticket", "member")
+    for registration in registrations:
         registration.save()
