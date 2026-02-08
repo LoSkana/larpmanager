@@ -256,6 +256,10 @@ ALLOWED_MIME_TYPES = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+MAIL_BATCH_SIZE = 10
+
+MAIL_BATCH_INTERVAL = 1
+
 # Amazon SES Configuration (optional - fallback when custom SMTP not configured)
 AWS_SES_ACCESS_KEY_ID = None
 AWS_SES_SECRET_ACCESS_KEY = None
