@@ -25,6 +25,7 @@ from typing import TYPE_CHECKING, Any
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.html import escape
 
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -69,8 +70,8 @@ def get_single_cache_text_field(element_id: str, field_name: str, text_value: st
     if text_value is None:
         text_value = ""
 
-    # Remove HTML tags from the text value
-    cleaned_text = remove_html_tags(text_value)
+    # Remove HTML tags and escape remaining content to prevent XSS
+    cleaned_text = escape(remove_html_tags(text_value))
 
     # Get the length of the cleaned text
     original_length = len(cleaned_text)

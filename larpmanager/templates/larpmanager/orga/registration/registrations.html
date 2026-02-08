@@ -203,7 +203,7 @@
                                         <td class="custom" tooltip="{{ nm }}">
                                             {% if registration.custom|get:nm %}
                                                 {% if nm != "profile" %}
-                                                    {{ registration.custom | get:nm | safe | clean_tags | truncatechars:50 }}
+                                                    {{ registration.custom | get:nm | clean_tags | truncatechars:50 }}
                                                 {% else %}
                                                     {{ registration.custom | get:nm | safe }}
                                                 {% endif %}
@@ -214,7 +214,12 @@
                                                        fie="{{ nm }}"><i class="fas fa-eye"></i></a>
                                                     <span class="popup_text {{ nm }}">
                                                         <h2>{{ registration.member }} - {{ nm | capfirst }}</h2>
-                                                    {{ registration.custom | get:nm | safe }}</span>
+                                                        {% if nm == "profile" %}
+                                                            {{ registration.custom | get:nm | safe }}
+                                                        {% else %}
+                                                            {{ registration.custom | get:nm | clean_tags }}
+                                                        {% endif %}
+                                                    </span>
                                                 {% endif %}
                                             {% endif %}
                                         </td>
