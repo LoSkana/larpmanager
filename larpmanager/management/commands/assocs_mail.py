@@ -42,5 +42,6 @@ class Command(BaseCommand):
                 self.stdout.write(f"{el[0]}@larpmanager.com {el[1]}")
 
         # Output admin email mapping
-        _name, email = conf_settings.ADMINS[0]
-        self.stdout.write(f"@larpmanager.com {email}")
+        if conf_settings.ADMINS:
+            _name, email = conf_settings.ADMINS[0]
+            self.stdout.write(f"@larpmanager.com {email}")

@@ -930,8 +930,8 @@ def exe_accounting_rec(request: HttpRequest) -> HttpResponse:
         return redirect("exe_accounting_rec")
 
     # Set date range based on first and last records
-    context["start"] = context["list"][0].created
-    context["end"] = context["list"].reverse()[0].created
+    context["start"] = context["list"].first().created
+    context["end"] = context["list"].last().created
 
     return render(request, "larpmanager/exe/accounting/accounting_rec.html", context)
 
@@ -957,6 +957,9 @@ def check_year(request: HttpRequest, context: dict) -> int:
     # Get association and generate valid years range
     association = Association.objects.get(pk=context["association_id"])
     context["years"] = list(range(timezone.now().year, association.created.year - 1, -1))
+
+    if not context["years"]:
+        context["years"] = [timezone.now().year]
 
     # Process POST data if present
     if request.POST:

@@ -304,7 +304,12 @@ class AlbumImage(BaseModel):
         # noinspection PyUnresolvedReferences
         s = self.original.url
         # Split by /media/ and take the third part (after two splits)
-        return "/media/" + s.split("/media/")[2]
+        parts = s.split("/media/")
+        expected_parts = 3
+        if len(parts) >= expected_parts:
+            return "/media/" + parts[2]
+        # Fallback: return the URL as-is if it doesn't have expected structure
+        return s
 
 
 class Competence(BaseModel):
