@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import logging
 import math
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
@@ -69,6 +69,8 @@ if TYPE_CHECKING:
     from django.db.models import QuerySet
 
 logger = logging.getLogger(__name__)
+
+PRECISION = Decimal("0.01")
 
 
 def get_registration_iscr(registration: Registration) -> int:
@@ -158,7 +160,7 @@ def get_registration_payments(
     return total_paid
 
 
-def get_registration_transactions(registration: Registration) -> int:
+def get_registration_transactions(registration: Registration) -> Decimal:
     """Calculate total transaction fees for a registration.
 
     Args:
@@ -600,6 +602,11 @@ def cancel_reg(registration: Registration) -> None:
     reset_event_links(registration.member_id, registration.run.event.association_id)
 
 
+def round_decimal(amount: Decimal) -> Decimal:
+    """Round decimal value."""
+    return amount.quantize(PRECISION, rounding=ROUND_HALF_UP)
+
+
 def round_to_nearest_cent(amount: float) -> float:
     """Round a number to the nearest cent with tolerance for small differences.
 
@@ -610,7 +617,7 @@ def round_to_nearest_cent(amount: float) -> float:
         float: Rounded number, original if difference exceeds tolerance
 
     """
-    rounded_amount = round(amount * 10) / 10
+    rounded_amount = round(amount * 100) / 100
     rounding_tolerance = 0.03
     if abs(float(amount) - rounded_amount) <= rounding_tolerance:
         return rounded_amount

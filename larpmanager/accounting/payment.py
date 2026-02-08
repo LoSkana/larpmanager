@@ -25,6 +25,7 @@ from __future__ import annotations
 import logging
 import math
 import re
+from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -40,6 +41,7 @@ from larpmanager.accounting.gateway import (
     get_stripe_form,
     get_sumup_form,
 )
+from larpmanager.accounting.registration import round_decimal
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.accounting import AnyInvoiceSubmitForm, WireInvoiceSubmitForm
@@ -74,8 +76,6 @@ from larpmanager.utils.services.einvoice import process_payment
 from larpmanager.utils.users.member import assign_badge
 
 if TYPE_CHECKING:
-    from decimal import Decimal
-
     from django.forms import Form
     from django.http import HttpRequest
 
@@ -84,7 +84,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 # Payment fee constants
-MAX_PAYMENT_FEE_PERCENTAGE = 100  # Maximum allowed payment fee percentage
+MAX_PAYMENT_FEE_PERCENTAGE = Decimal(100)  # Maximum allowed payment fee percentage
 
 
 def get_payment_fee(association_id: int, slug: str) -> float:
@@ -278,39 +278,37 @@ def round_up_to_two_decimals(value_to_round: float) -> float:
 
 def update_invoice_gross_fee(
     invoice: PaymentInvoice, amount: Decimal, association_id: int, payment_method: PaymentMethod
-) -> float:
-    """Update invoice with gross amount including payment processing fees.
+) -> Decimal:
+    """Update invoice with gross amount including payment processing fees using Decimal arithmetic."""
+    # Ensure initial amount is Decimal and rounded
+    amount = round_decimal(amount)
 
-    Args:
-        invoice: PaymentInvoice instance to update
-        amount (Decimal): Base amount before fees
-        association_id: Association instance ID
-        payment_method (str): Payment method slug
-
-    """
-    # add fee for paymentmethod
-    amount = float(amount)
     payment_fee_percentage = get_payment_fee(association_id, payment_method.slug)
 
     if payment_fee_percentage is not None:
-        if get_association_config(association_id, "payment_fees_user", default_value=False):
-            # Validate payment fee percentage to prevent division by zero
-            if payment_fee_percentage >= MAX_PAYMENT_FEE_PERCENTAGE:
-                logger.error(
-                    "Invalid payment fee percentage %.2f for association %d (must be < %d)",
-                    payment_fee_percentage,
-                    association_id,
-                    MAX_PAYMENT_FEE_PERCENTAGE,
-                )
-                payment_fee_percentage = 0  # Use 0% fee as fallback
-            else:
-                amount = (amount * MAX_PAYMENT_FEE_PERCENTAGE) / (MAX_PAYMENT_FEE_PERCENTAGE - payment_fee_percentage)
-                amount = round_up_to_two_decimals(amount)
+        fee_pct = Decimal(str(payment_fee_percentage))
 
-        invoice.mc_fee = round_up_to_two_decimals(amount * payment_fee_percentage / MAX_PAYMENT_FEE_PERCENTAGE)
+        if get_association_config(association_id, "payment_fees_user", default_value=False):
+            if fee_pct >= MAX_PAYMENT_FEE_PERCENTAGE:
+                logger.error(
+                    "Invalid payment fee percentage %s for association %d",
+                    fee_pct,
+                    association_id,
+                )
+                fee_pct = Decimal(0)
+            else:
+                # Calculate gross amount so that net equals the original amount after fee deduction
+                amount = (amount * MAX_PAYMENT_FEE_PERCENTAGE) / (MAX_PAYMENT_FEE_PERCENTAGE - fee_pct)
+                amount = round_decimal(amount)
+
+        # Calculate fee based on the final gross amount
+        invoice.mc_fee = round_decimal(amount * fee_pct / MAX_PAYMENT_FEE_PERCENTAGE)
+    else:
+        invoice.mc_fee = Decimal("0.00")
 
     invoice.mc_gross = amount
     invoice.save()
+
     return amount
 
 
@@ -402,7 +400,7 @@ def get_payment_form(
     if invoice_key is not None:
         try:
             invoice = PaymentInvoice.objects.get(key=invoice_key, status=PaymentStatus.CREATED)
-        except PaymentInvoice.DoesNotExist as e:
+        except ObjectDoesNotExist as e:
             # Invoice not found or invalid, will create new one
             logger.debug("Invoice %s not found or invalid: %s", invoice_key, e)
 
@@ -652,7 +650,7 @@ def process_refund_request_status_change(refund_request: HttpRequest) -> None:
 
     try:
         previous_refund_request = RefundRequest.objects.get(pk=refund_request.pk)
-    except RefundRequest.DoesNotExist:
+    except ObjectDoesNotExist:
         return
 
     if previous_refund_request.status == RefundStatus.PAYED:
@@ -712,7 +710,7 @@ def process_collection_status_change(collection: Collection) -> None:
     # Attempt to fetch the previous state of the collection
     try:
         previous_collection = Collection.objects.get(pk=collection.pk)
-    except Collection.DoesNotExist:
+    except ObjectDoesNotExist:
         # If we can't fetch previous state, safely return to avoid errors
         return
 

@@ -344,7 +344,7 @@ def registrations_popup(request: HttpRequest, context: dict) -> Any:
         dict: Response data for popup
 
     """
-    registration_id = int(request.POST.get("idx", ""))
+    registration_id = int(request.POST.get("idx", 0) or 0)
     question_id = request.POST.get("tp", "")
 
     try:
@@ -1101,8 +1101,12 @@ def orga_cancellation_refund(request: HttpRequest, event_slug: str, registration
     # Process refund form submission
     if request.method == "POST":
         # Extract refund amounts from form data
-        ref_token = int(request.POST["inp_token"])
-        ref_credit = int(request.POST["inp_credit"])
+        try:
+            ref_token = int(request.POST.get("inp_token", 0) or 0)
+            ref_credit = int(request.POST.get("inp_credit", 0) or 0)
+        except (ValueError, TypeError):
+            ref_token = 0
+            ref_credit = 0
 
         # Create token refund accounting entry if amount > 0
         if ref_token > 0:
