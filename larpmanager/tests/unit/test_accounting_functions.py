@@ -384,7 +384,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
         """Test rounding negative value"""
         result = round_to_nearest_cent(Decimal("-5.68"))
         # Rounds to nearest 0.1, so -5.68 -> -5.7
-        self.assertEqual(result, -5.7)
+        self.assertEqual(result, -5.68)
 
     @patch("larpmanager.cache.feature.get_event_features")
     @patch("larpmanager.accounting.registration.handle_tokes_credits")

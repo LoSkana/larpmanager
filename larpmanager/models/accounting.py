@@ -308,6 +308,9 @@ class AccountingItem(UuidMixin, BaseModel):
         if hasattr(self, "run") and self.run:
             s += f" - {self.run}"
 
+        if hasattr(self, "registration") and self.registration:
+            s += f" - {self.registration.run}"
+
         if self.value:
             s += f" - {self.value}"
 
