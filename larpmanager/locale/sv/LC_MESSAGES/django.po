@@ -5718,9 +5718,6 @@ msgstr "Beskriv exakt under vilka förhållanden den förekommer"
 msgid "Did you check the required data properly"
 msgstr "Har du kontrollerat de nödvändiga uppgifterna på rätt sätt"
 
-msgid "Error uploading image. Please try again."
-msgstr "Fel vid uppladdning av bild. Vänligen försök igen."
-
 msgid "IP address from which the token was used"
 msgstr "IP-adress från vilken token användes"
 
@@ -7024,6 +7021,11 @@ msgstr "Kontakta arrangörerna om du behöver en ny accesslänk senare"
 
 msgid "Do you want to assign characters using a casting algorithm"
 msgstr "Vill du tilldela tecken med hjälp av en casting-algoritm"
+
+msgid "Error uploading image. Please retry or use a smaller file."
+msgstr ""
+"Fel vid uppladdning av bild. Vänligen försök igen eller använd en mindre "
+"fil."
 
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
