@@ -20,7 +20,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -89,14 +89,14 @@ def orga_registration_transfer_preview(request: HttpRequest, event_slug: str) ->
         registration = Registration.objects.select_related("member", "ticket", "run").get(
             pk=registration_id, run=context["run"]
         )
-    except Registration.DoesNotExist:
+    except ObjectDoesNotExist:
         messages.error(request, _("Registration not found"))
         return redirect("orga_registration_transfer", event_slug=event_slug)
 
     # Get the target run
     try:
         target_run = Run.objects.select_related("event").get(pk=target_run_id)
-    except Run.DoesNotExist:
+    except ObjectDoesNotExist:
         messages.error(request, _("Target event not found"))
         return redirect("orga_registration_transfer", event_slug=event_slug)
 
@@ -142,14 +142,14 @@ def orga_registration_transfer_confirm(request: HttpRequest, event_slug: str) ->
         registration = Registration.objects.select_related("member", "ticket", "run").get(
             pk=registration_id, run=context["run"]
         )
-    except Registration.DoesNotExist:
+    except ObjectDoesNotExist:
         messages.error(request, _("Registration not found"))
         return redirect("orga_registration_transfer", event_slug=event_slug)
 
     # Get the target run
     try:
         target_run = Run.objects.select_related("event").get(pk=target_run_id)
-    except Run.DoesNotExist:
+    except ObjectDoesNotExist:
         messages.error(request, _("Target session not found"))
         return redirect("orga_registration_transfer", event_slug=event_slug)
 

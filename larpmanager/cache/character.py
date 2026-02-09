@@ -25,6 +25,7 @@ from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
@@ -794,7 +795,7 @@ def on_character_pre_save_update_cache(char: Character) -> None:
         else:
             # Update cache with new character data
             update_event_cache_all_runs(char.event, char)
-    except Character.DoesNotExist:
+    except ObjectDoesNotExist:
         # Fallback: clear cache if character not found
         clear_event_cache_all_runs(char.event)
 

@@ -31,6 +31,7 @@ from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.db import models
 from django.shortcuts import render
@@ -470,7 +471,7 @@ def _check_new(file_field: Any, instance: Any, sender: Any) -> bool:
                 # Compare file names and check if no new file data is present
                 if file_field.name == existing_file_name and not getattr(file_field, "file", None):
                     return True
-        except (sender.DoesNotExist, AttributeError) as e:
+        except (ObjectDoesNotExist, AttributeError) as e:
             # Silently handle any database or attribute errors
             logger.debug("Error checking file field for instance pk=%s: %s", instance.pk, e)
 

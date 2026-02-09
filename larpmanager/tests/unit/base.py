@@ -25,6 +25,7 @@ from typing import Any
 import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
+from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.models.accounting import DiscountType
 from larpmanager.models.association import Association
@@ -66,7 +67,7 @@ class BaseTestCase(TestCase):
             # Check if this user already has a member
             try:
                 member = user.member
-            except Member.DoesNotExist:
+            except ObjectDoesNotExist:
                 member = self.create_member(user=user)
 
         # Ensure the member has a membership attribute set
@@ -421,7 +422,7 @@ class BaseTestCase(TestCase):
             # Check if this user already has a member
             try:
                 organizer = organizer_user.member
-            except Member.DoesNotExist:
+            except ObjectDoesNotExist:
                 organizer = Member.objects.create(user=organizer_user, name="Organizer", surname="Test", language="en")
         return organizer
 

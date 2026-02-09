@@ -22,6 +22,7 @@ import io
 import xml.etree.ElementTree as ET
 from typing import IO, Any
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
 from larpmanager.cache.config import get_association_config
@@ -47,7 +48,7 @@ def process_payment(invoice_id: int) -> None:
     # Get or create electronic invoice record
     try:
         electronic_invoice = payment_invoice.electronicinvoice
-    except ElectronicInvoice.DoesNotExist:
+    except ObjectDoesNotExist:
         # Create new electronic invoice if none exists
         electronic_invoice = ElectronicInvoice(
             inv=payment_invoice,

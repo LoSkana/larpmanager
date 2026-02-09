@@ -42,7 +42,7 @@ from larpmanager.forms.utils import (
     TicketS2WidgetMulti,
     TransferTargetRunS2Widget,
 )
-from larpmanager.models.casting import AssignmentTrait, QuestType, Trait
+from larpmanager.models.casting import AssignmentTrait, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionStatus,
@@ -600,7 +600,7 @@ class RegistrationForm(BaseRegistrationForm):
                 try:
                     # Look for registration with matching special code in same event
                     Registration.objects.get(uuid=cod, run__event=run.event)
-                except Registration.DoesNotExist:
+                except ObjectDoesNotExist:
                     # Add error if friend code not found
                     self.add_error("bring_friend", "I'm sorry, this friend code was not found")
 
@@ -897,9 +897,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         for qt in self.params["quest_types"].values():
             self._init_traits(available, char_section, member_assignments, qt)
 
-    def _init_traits(
-        self, available: QuerySet, char_section: str, member_assignments: dict, quest_type: QuestType
-    ) -> None:
+    def _init_traits(self, available: QuerySet, char_section: str, member_assignments: dict, quest_type: dict) -> None:
         """Init fields for manual trait assignment in orga registration form editing."""
         qt_uuid = f"qt_{quest_type['uuid']}"
         qt_number = quest_type["number"]

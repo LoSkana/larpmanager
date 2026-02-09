@@ -3,6 +3,7 @@
 import logging
 
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.mail.backends import DefaultEmailBackend, EmailBackend, SESEmailBackend, SMTPEmailBackend
@@ -102,7 +103,7 @@ def _get_event_smtp_config(run_id: int) -> dict | None:
             ),
         }
 
-    except Run.DoesNotExist:
+    except ObjectDoesNotExist:
         logger.warning("Run with id=%s not found", run_id)
         return None
 
@@ -134,7 +135,7 @@ def _get_association_smtp_config(association_id: int) -> dict | None:
             "use_tls": association.get_config("mail_server_use_tls", default_value=False, bypass_cache=True),
         }
 
-    except Association.DoesNotExist:
+    except ObjectDoesNotExist:
         logger.warning("Association with id=%s not found", association_id)
         return None
 

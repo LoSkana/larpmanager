@@ -25,6 +25,7 @@ from collections import defaultdict
 from decimal import Decimal
 from typing import Any
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db.models import Prefetch, Q, Sum
 from django.db.models.functions import Coalesce
@@ -475,7 +476,7 @@ def calculate_character_experience_points_async(character_id: int) -> None:
     try:
         character = Character.objects.get(pk=character_id)
         calculate_character_experience_points(character)
-    except Character.DoesNotExist:
+    except ObjectDoesNotExist:
         # Character was deleted, nothing to do
         pass
 

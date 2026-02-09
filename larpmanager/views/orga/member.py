@@ -330,7 +330,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_uuid: st
             to questions list after successful submission
 
     Raises:
-        Member.DoesNotExist: If the specified member ID doesn't exist
+        ObjectDoesNotExist: If the specified member ID doesn't exist
         PermissionDenied: If user lacks required event permissions
 
     """

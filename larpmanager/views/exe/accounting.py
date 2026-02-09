@@ -951,7 +951,7 @@ def check_year(request: HttpRequest, context: dict) -> int:
         int: The validated year value, defaults to current year if invalid
 
     Raises:
-        Association.DoesNotExist: If association with given ID doesn't exist
+        ObjectDoesNotExist: If association with given ID doesn't exist
 
     """
     # Get association and generate valid years range
