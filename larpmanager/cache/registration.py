@@ -20,6 +20,7 @@
 from typing import Any
 
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 
 from larpmanager.accounting.base import is_registration_provisional
@@ -233,7 +234,7 @@ def search_player(character: Character, json_output: dict[str, Any], context: di
             )
             character.registration = character.rcr.registration
             character.member = character.registration.member
-        except RegistrationCharacterRel.DoesNotExist:
+        except ObjectDoesNotExist:
             # Registration not found or database error
             character.rcr = None
             character.registration = None

@@ -806,7 +806,7 @@ def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks exe_volunteer_registry permission.
-        Association.DoesNotExist: If association not found.
+        ObjectDoesNotExist: If association not found.
 
     """
     # Check user permissions and get association context
@@ -1061,7 +1061,7 @@ def exe_questions_answer(request: HttpRequest, member_uuid: str) -> HttpResponse
             after successful form submission
 
     Raises:
-        Member.DoesNotExist: If the member with the given ID doesn't exist
+        ObjectDoesNotExist: If the member with the given ID doesn't exist
 
     """
     # Check executive permissions for question management

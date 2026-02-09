@@ -111,7 +111,7 @@ def get_association_executives(association: Association) -> QuerySet[Member]:
             (role number 1) for the specified association.
 
     Raises:
-        AssociationRole.DoesNotExist: If no executive role (number=1) exists for the association.
+        ObjectDoesNotExist: If no executive role (number=1) exists for the association.
 
     """
     try:

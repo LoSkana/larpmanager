@@ -22,6 +22,7 @@ import logging
 import time
 from typing import Any
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -259,7 +260,7 @@ def send_registration_cancellation_email(instance: Registration) -> None:
     if instance.pk:
         try:
             previous_registration = Registration.objects.get(pk=instance.pk)
-        except Registration.DoesNotExist as e:
+        except ObjectDoesNotExist as e:
             logger.debug("Registration pk=%s not found in pre-save: %s", instance.pk, e)
 
     # Send cancellation email only when registration is newly cancelled

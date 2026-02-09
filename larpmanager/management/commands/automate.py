@@ -347,7 +347,7 @@ class Command(BaseCommand):
 
             # Return cached badge instance
             return badge_cache["badges"][badge_code]
-        except Badge.DoesNotExist:
+        except ObjectDoesNotExist:
             # Return None if badge not found
             return None
 

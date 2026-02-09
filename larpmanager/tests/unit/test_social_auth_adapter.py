@@ -32,6 +32,7 @@ import pytest
 from allauth.socialaccount.models import SocialAccount, SocialLogin
 from django.contrib.auth.models import User
 from django.test import RequestFactory
+from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.models.member import Member
 from larpmanager.utils.auth.adapter import MyAccountAdapter, MySocialAccountAdapter
@@ -142,7 +143,7 @@ class TestSocialAuthAdapter:
             member.name = ""
             member.surname = ""
             member.save()
-        except Member.DoesNotExist:
+        except ObjectDoesNotExist:
             member = Member.objects.create(user=user, name="", surname="")
 
         # Create mock social login with name data
@@ -180,7 +181,7 @@ class TestSocialAuthAdapter:
             member.name = existing_name
             member.surname = existing_surname
             member.save()
-        except Member.DoesNotExist:
+        except ObjectDoesNotExist:
             member = Member.objects.create(user=user, name=existing_name, surname=existing_surname)
 
         # Create mock social login with different name data

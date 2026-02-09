@@ -525,7 +525,7 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
         )
         messages.success(request, _("You have already paid this year's membership fee"))
         return redirect("accounting")
-    except AccountingItemMembership.DoesNotExist as e:
+    except ObjectDoesNotExist as e:
         logger.debug("Membership fee not found for member=%s, year=%s: %s", context["member"].id, year, e)
 
     # Set up context variables for template rendering
