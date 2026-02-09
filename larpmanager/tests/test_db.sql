@@ -4151,7 +4151,6 @@ INSERT INTO public.django_migrations VALUES (90, 'larpmanager', '0052_set_unique
 INSERT INTO public.django_migrations VALUES (91, 'larpmanager', '0053_alter_character_access_token', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (92, 'larpmanager', '0054_rename_details_registrationoption_description_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (93, 'larpmanager', '0055_rename_display_registrationoption_name_and_more', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (179, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (94, 'larpmanager', '0056_assocpermission_config_eventpermission_config', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (95, 'larpmanager', '0057_clean_runs', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (96, 'larpmanager', '0058_alter_association_payment_methods_and_more', '2025-01-01 00:00:00.000000+01');
@@ -4235,13 +4234,16 @@ INSERT INTO public.django_migrations VALUES (173, 'larpmanager', '0132_alter_mem
 INSERT INTO public.django_migrations VALUES (174, 'larpmanager', '0133_alter_registrationoption_price_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (175, 'larpmanager', '0134_alter_event_max_filler_alter_event_max_pg_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (176, 'larpmanager', '0135_alter_log_options_remove_log_dl_log_association_and_more', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (177, 'larpmanager', '0136_add_registration_status', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (178, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (180, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (181, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (182, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (183, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (184, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (177, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (178, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (179, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (180, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (181, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (182, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (183, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (184, 'larpmanager', '0136_add_registration_status', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (185, 'larpmanager', '0137_performance_indexes', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (186, 'larpmanager', '0138_remove_member_member_email_idx_and_more', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
@@ -4345,10 +4347,10 @@ INSERT INTO public.larpmanager_eventpermission VALUES (28, NULL, false, '2025-01
 INSERT INTO public.larpmanager_eventpermission VALUES (29, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Speed larp', 'orga_speedlarps', 21, 11, 'Manage the event speed-larps', false, NULL, 3, NULL);
 INSERT INTO public.larpmanager_eventpermission VALUES (30, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Check', 'orga_check', 81, 72, 'Perform check on the consistency of character sheets', false, NULL, 1, NULL);
 INSERT INTO public.larpmanager_eventpermission VALUES (31, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Progress', 'orga_progress_steps', 91, 41, 'Manage the progress steps for the writing elements', false, NULL, 1, NULL);
-INSERT INTO public.larpmanager_eventpermission VALUES (32, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Registrations', 'orga_registrations', 11, 94, 'Manage participant registrations', false, NULL, 4, NULL);
+INSERT INTO public.larpmanager_eventpermission VALUES (32, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Registrations', 'orga_registrations', 11, 94, 'Manage participant registrations', false, 'registrations', 4, NULL);
 INSERT INTO public.larpmanager_eventpermission VALUES (33, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Tickets', 'orga_registration_tickets', 21, 93, 'Manage the registration tickets', false, 'tickets', 4, NULL);
 INSERT INTO public.larpmanager_eventpermission VALUES (34, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Sections', 'orga_registration_sections', 31, 37, 'Manage the registration sections', false, NULL, 4, NULL);
-INSERT INTO public.larpmanager_eventpermission VALUES (35, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Form', 'orga_registration_form', 41, 92, 'Manage the registration questions and options', false, 'reg_form', 4, NULL);
+INSERT INTO public.larpmanager_eventpermission VALUES (35, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Form', 'orga_registration_form', 41, 92, 'Manage the registration questions and options', false, 'registrations', 4, NULL);
 INSERT INTO public.larpmanager_eventpermission VALUES (36, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Surcharges', 'orga_registration_surcharges', 61, 62, 'Manage the registration surcharges', false, NULL, 2, NULL);
 INSERT INTO public.larpmanager_eventpermission VALUES (37, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Dynamic rates', 'orga_registration_quotas', 71, 30, 'Manage dynamic installment payments for registrations', false, NULL, 2, NULL);
 INSERT INTO public.larpmanager_eventpermission VALUES (38, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Fixed instalments', 'orga_registration_installments', 81, 35, 'Manages fixed installment payments for registrations', false, NULL, 2, NULL);
@@ -4635,7 +4637,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 184, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 186, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -8454,4 +8456,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0136_add_registration_status
+-- LARPMANAGER_SCHEMA_VERSION: 0138_remove_member_member_email_idx_and_more
