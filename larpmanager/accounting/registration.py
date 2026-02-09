@@ -721,7 +721,10 @@ def handle_registration_accounting_updates(registration: Registration) -> None:
     # Use atomic transaction to prevent race conditions
     with transaction.atomic():
         # Lock the registration to prevent concurrent accounting updates
-        registration = Registration.objects.select_for_update().get(pk=registration.pk)
+        try:
+            registration = Registration.objects.select_for_update().get(pk=registration.pk)
+        except ObjectDoesNotExist:
+            return
 
         # Transfer payments from cancelled registrations to this active one
         if not registration.cancellation_date:
