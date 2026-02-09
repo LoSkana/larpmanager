@@ -134,7 +134,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         """
         # If character approval is disabled, all questions are editable
         character_approval_enabled = get_event_config(
-            self.params["event"].id,
+            self.params.get("event").id,
             "user_character_approval",
             default_value=False,
             context=self.params,
@@ -173,7 +173,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         """
         # Get event, preferring parent event if available
-        event = self.params["event"]
+        event = self.params.get("event")
         if event.parent:
             event = event.parent
 
@@ -183,7 +183,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         # Initialize registration questions and get counts
         self._init_registration_question(self.instance, event)
-        registration_counts = get_registration_counts(self.params["run"])
+        registration_counts = get_registration_counts(self.params.get("run"))
 
         # Process each question to create form fields
         for question in self.questions:
@@ -245,10 +245,10 @@ class CharacterForm(WritingForm, BaseWritingForm):
         Sets up a multiple choice field for selectable factions if the faction
         feature is enabled for the event.
         """
-        if "faction" not in self.params["features"]:
+        if "faction" not in self.params.get("features"):
             return
 
-        queryset = self.params["run"].event.get_elements(Faction).filter(selectable=True)
+        queryset = self.params.get("run").event.get_elements(Faction).filter(selectable=True)
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
@@ -298,7 +298,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         new = set(self.cleaned_data["factions_list"].values_list("pk", flat=True))
 
         # Get the faction event context for filtering existing factions
-        faction_event = self.params["run"].event.get_class_parent(Faction)
+        faction_event = self.params.get("run").event.get_class_parent(Faction)
 
         # Get current faction IDs associated with the instance
         # For non-orga users, only consider selectable factions to preserve staff-assigned non-selectable factions
@@ -381,7 +381,7 @@ class OrgaCharacterForm(CharacterForm):
 
     def _init_relationships(self) -> None:
         """Init relationships data."""
-        if "relationships" not in self.params["features"]:
+        if "relationships" not in self.params.get("features"):
             return
 
         if "character_finder" in self.params.get("features", []):

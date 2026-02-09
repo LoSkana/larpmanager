@@ -580,28 +580,36 @@ def _process_fee(fee_percentage: float, invoice: PaymentInvoice) -> None:
         invoice: Invoice object containing payment details
 
     """
-    # Create new accounting transaction for the processing fee
-    accounting_transaction = AccountingItemTransaction()
-    accounting_transaction.member_id = invoice.member_id
-    accounting_transaction.inv = invoice
+    # Use atomic transaction to prevent race conditions
+    with transaction.atomic():
+        invoice = PaymentInvoice.objects.select_for_update().get(pk=invoice.pk)
 
-    # Calculate fee amount as percentage of gross invoice value
-    accounting_transaction.value = (float(invoice.mc_gross) * fee_percentage) / 100
-    accounting_transaction.association_id = invoice.association_id
+        # Check if fee transaction already exists
+        if AccountingItemTransaction.objects.filter(inv=invoice, user_burden__isnull=False).exists():
+            return
 
-    # Check if payment fees should be charged to user instead of organization
-    if get_association_config(invoice.association_id, "payment_fees_user", default_value=False):
-        accounting_transaction.user_burden = True
-    accounting_transaction.save()
+        # Create new accounting transaction for the processing fee
+        accounting_transaction = AccountingItemTransaction()
+        accounting_transaction.member_id = invoice.member_id
+        accounting_transaction.inv = invoice
 
-    # For registration payments, link the transaction to the registration
-    if invoice.typ == PaymentType.REGISTRATION:
-        try:
-            registration = Registration.objects.get(pk=invoice.idx)
-            accounting_transaction.registration = registration
-            accounting_transaction.save()
-        except ObjectDoesNotExist:
-            logger.exception("Registration not found for invoice %s with idx %s", invoice.pk, invoice.idx)
+        # Calculate fee amount as percentage of gross invoice value
+        accounting_transaction.value = (float(invoice.mc_gross) * fee_percentage) / 100
+        accounting_transaction.association_id = invoice.association_id
+
+        # Check if payment fees should be charged to user instead of organization
+        if get_association_config(invoice.association_id, "payment_fees_user", default_value=False):
+            accounting_transaction.user_burden = True
+        accounting_transaction.save()
+
+        # For registration payments, link the transaction to the registration
+        if invoice.typ == PaymentType.REGISTRATION:
+            try:
+                registration = Registration.objects.get(pk=invoice.idx)
+                accounting_transaction.registration = registration
+                accounting_transaction.save()
+            except ObjectDoesNotExist:
+                logger.exception("Registration not found for invoice %s with idx %s", invoice.pk, invoice.idx)
 
 
 def process_payment_invoice_status_change(invoice: PaymentInvoice) -> None:
@@ -701,35 +709,38 @@ def process_collection_status_change(collection: Collection) -> None:
     Note:
         Function returns early if collection has no primary key or if the
         previous status was already PAYED to prevent duplicate credits.
+        Uses database-level locking to prevent race conditions.
 
     """
     # Early return if collection hasn't been saved to database yet
     if not collection.pk:
         return
 
-    # Attempt to fetch the previous state of the collection
-    try:
-        previous_collection = Collection.objects.get(pk=collection.pk)
-    except ObjectDoesNotExist:
-        # If we can't fetch previous state, safely return to avoid errors
-        return
+    # Use atomic transaction to prevent race conditions
+    with transaction.atomic():
+        # Attempt to fetch the previous state of the collection with row lock
+        try:
+            previous_collection = Collection.objects.select_for_update().get(pk=collection.pk)
+        except ObjectDoesNotExist:
+            # If we can't fetch previous state, safely return to avoid errors
+            return
 
-    # Skip processing if collection was already marked as PAYED
-    if previous_collection.status == CollectionStatus.PAYED:
-        return
+        # Skip processing if collection was already marked as PAYED
+        if previous_collection.status == CollectionStatus.PAYED:
+            return
 
-    # Only proceed if current status is PAYED (status change occurred)
-    if collection.status != CollectionStatus.PAYED:
-        return
+        # Only proceed if current status is PAYED (status change occurred)
+        if collection.status != CollectionStatus.PAYED:
+            return
 
-    # Create accounting credit item for the newly paid collection
-    accounting_item = AccountingItemOther()
-    accounting_item.association_id = collection.association_id
-    accounting_item.member_id = collection.member_id
-    accounting_item.run_id = collection.run_id
-    accounting_item.value = collection.total
+        # Create accounting credit item for the newly paid collection
+        accounting_item = AccountingItemOther()
+        accounting_item.association_id = collection.association_id
+        accounting_item.member_id = collection.member_id
+        accounting_item.run_id = collection.run_id
+        accounting_item.value = collection.total
 
-    # Set the accounting item type to credit and add descriptive text
-    accounting_item.oth = OtherChoices.CREDIT
-    accounting_item.descr = f"Collection of {collection.organizer}"
-    accounting_item.save()
+        # Set the accounting item type to credit and add descriptive text
+        accounting_item.oth = OtherChoices.CREDIT
+        accounting_item.descr = f"Collection of {collection.organizer}"
+        accounting_item.save()

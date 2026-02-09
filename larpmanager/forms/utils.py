@@ -507,7 +507,9 @@ def get_run_choices(self: Any, *, past: bool = False) -> None:
     """
     choices = [("", "-----")]
     runs = (
-        Run.objects.filter(event__association_id=self.params["association_id"]).select_related("event").order_by("-end")
+        Run.objects.filter(event__association_id=self.params.get("association_id"))
+        .select_related("event")
+        .order_by("-end")
     )
     if past:
         reference_date = timezone.now() - timedelta(days=30)
@@ -519,7 +521,7 @@ def get_run_choices(self: Any, *, past: bool = False) -> None:
 
     self.fields["run"].choices = choices
     if "run" in self.params:
-        self.initial["run"] = self.params["run"].uuid
+        self.initial["run"] = self.params.get("run").uuid
 
 
 class EventRegS2Widget(s2forms.ModelSelect2Widget):

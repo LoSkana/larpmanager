@@ -144,7 +144,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         # Configure characters field widget with event context
         if "characters" in self.fields:
-            self.configure_field_event("characters", self.params["event"])
+            self.configure_field_event("characters", self.params.get("event"))
 
         # Handle automatic fields based on instance state
         self.handle_automatic()
@@ -191,22 +191,22 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         """
         # Get base runs for the current event
-        available_runs = Run.objects.filter(event=self.params["event"])
+        available_runs = Run.objects.filter(event=self.params.get("event"))
 
         # If campaign switch is active, expand to include related events
         if get_association_config(
-            self.params["event"].association_id, "campaign_switch", default_value=False, context=self.params
+            self.params.get("event").association_id, "campaign_switch", default_value=False, context=self.params
         ):
             # Start with current event ID
-            related_event_ids = {self.params["event"].id}
+            related_event_ids = {self.params.get("event").id}
 
             # Add child events
-            child_event_ids = Event.objects.filter(parent_id=self.params["event"].id).values_list("pk", flat=True)
+            child_event_ids = Event.objects.filter(parent_id=self.params.get("event").id).values_list("pk", flat=True)
             related_event_ids.update(child_event_ids)
 
             # Add parent and sibling events if current event has a parent
-            if self.params["event"].parent_id:
-                related_event_ids.add(self.params["event"].parent_id)
+            if self.params.get("event").parent_id:
+                related_event_ids.add(self.params.get("event").parent_id)
                 sibling_event_ids = Event.objects.filter(parent_id=self.params["event"].parent_id).values_list(
                     "pk",
                     flat=True,

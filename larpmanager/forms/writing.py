@@ -84,7 +84,7 @@ class WritingForm(BaseModelForm):
 
         if WritingQuestionType.ASSIGNED in question_types:
             staffer_choices = [
-                (member.uuid, member.show_nick()) for member in get_event_staffers(self.params["run"].event)
+                (member.uuid, member.show_nick()) for member in get_event_staffers(self.params.get("run").event)
             ]
             self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---")), *staffer_choices]
         else:
@@ -93,7 +93,7 @@ class WritingForm(BaseModelForm):
         if WritingQuestionType.PROGRESS in question_types:
             self.fields["progress"].choices = [
                 (step.uuid, str(step))
-                for step in ProgressStep.objects.filter(event=self.params["run"].event).order_by("order")
+                for step in ProgressStep.objects.filter(event=self.params.get("run").event).order_by("order")
             ]
         else:
             self.delete_field("progress")
@@ -117,7 +117,7 @@ class PlayerRelationshipForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         # Configure target field widget with event from run params
-        self.configure_field_event("target", self.params["run"].event)
+        self.configure_field_event("target", self.params.get("run").event)
         self.fields["target"].required = True
 
     def clean(self) -> dict:
@@ -144,7 +144,7 @@ class PlayerRelationshipForm(BaseModelForm):
         # Check for existing relationships with same target and registration
         try:
             rel = PlayerRelationship.objects.get(
-                registration=self.params["registration"], target=self.cleaned_data["target"]
+                registration=self.params.get("registration"), target=self.cleaned_data["target"]
             )
             # Allow editing existing relationship, but prevent duplicates
             if rel.id != self.instance.id:
@@ -169,7 +169,7 @@ class PlayerRelationshipForm(BaseModelForm):
 
         # Set registration for new instances
         if not instance.pk:
-            instance.registration = self.params["registration"]
+            instance.registration = self.params.get("registration")
 
         instance.save()
 
@@ -346,7 +346,7 @@ class OrgaPlotForm(WritingForm, BaseWritingForm):
 
                 self.show_link.append(id_field)
                 self.add_char_finder.append(id_field)
-                reverse_args = [self.params["run"].get_slug(), ch[0]]
+                reverse_args = [self.params.get("run").get_slug(), ch[0]]
                 self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
 
     def _save_multi(self, field: str, instance: Plot) -> None:  # noqa: ARG002
@@ -418,7 +418,7 @@ class OrgaFactionForm(WritingForm, BaseWritingForm):
         self.reorder_field("characters")
 
         # Handle selectable field based on user_character feature
-        if "user_character" not in self.params["features"]:
+        if "user_character" not in self.params.get("features"):
             self.delete_field("selectable")
         else:
             self.reorder_field("selectable")
@@ -467,7 +467,7 @@ class OrgaQuestForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
         # Populate quest type choices from event elements
-        que = self.params["run"].event.get_elements(QuestType)
+        que = self.params.get("run").event.get_elements(QuestType)
         self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
 
@@ -491,7 +491,7 @@ class OrgaTraitForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
         # Populate quest choices from event elements
-        que = self.params["run"].event.get_elements(Quest)
+        que = self.params.get("run").event.get_elements(Quest)
         self.fields["quest"].choices = [(m.uuid, m.name) for m in que]
 
 
@@ -513,7 +513,7 @@ class OrgaHandoutForm(WritingForm):
         super().__init__(*args, **kwargs)
 
         # Retrieve handout templates for the associated run's event
-        que = self.params["run"].event.get_elements(HandoutTemplate)
+        que = self.params.get("run").event.get_elements(HandoutTemplate)
 
         # Populate template field choices with template IDs and names
         self.fields["template"].choices = [(m.uuid, m.name) for m in que]
@@ -564,7 +564,7 @@ class OrgaPrologueForm(WritingForm, BaseWritingForm):
         super().__init__(*args, **kwargs)
 
         # Populate prologue type choices from event elements
-        que = self.params["run"].event.get_elements(PrologueType)
+        que = self.params.get("run").event.get_elements(PrologueType)
         self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
         # Initialize organization-specific fields and reorder characters

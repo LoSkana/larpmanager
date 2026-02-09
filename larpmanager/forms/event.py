@@ -197,18 +197,18 @@ class OrgaEventForm(BaseModelForm):
         dl = [
             s
             for s in ["visible", "website", "tagline", "where", "authors", "genre"]
-            if s not in self.params["features"]
+            if s not in self.params.get("features")
         ]
 
         # Initialize campaign parent selection and add to deletion list if disabled
         self.init_campaign(dl)
 
         # Add waiting list configuration field if feature is disabled
-        if "waiting" not in self.params["features"]:
+        if "waiting" not in self.params.get("features"):
             dl.append("max_waiting")
 
         # Add filler list configuration field if feature is disabled
-        if "filler" not in self.params["features"]:
+        if "filler" not in self.params.get("features"):
             dl.append("max_filler")
 
         # Remove all marked fields from the form
@@ -218,12 +218,12 @@ class OrgaEventForm(BaseModelForm):
     def init_campaign(self, disabled_fields: list) -> None:
         """Initialize campaign field by setting association and exclusions."""
         # Set association for parent widget and exclude current instance if editing
-        self.configure_field_association("parent", self.params["association_id"])
+        self.configure_field_association("parent", self.params.get("association_id"))
         if self.instance and self.instance.pk:
             self.fields["parent"].widget.set_exclude(self.instance.pk)
 
         # Remove parent field if campaign feature disabled or no parent options available
-        if "campaign" not in self.params["features"] or not self.fields["parent"].widget.get_queryset().count():
+        if "campaign" not in self.params.get("features") or not self.fields["parent"].widget.get_queryset().count():
             disabled_fields.append("parent")
             return
 
@@ -244,7 +244,7 @@ class OrgaEventForm(BaseModelForm):
         logger.debug("Validating event slug: %s", data)
 
         # Check if slug is already used by another event in this association
-        lst = Event.objects.filter(association_id=self.params["association_id"], slug=data)
+        lst = Event.objects.filter(association_id=self.params.get("association_id"), slug=data)
         if self.instance is not None and self.instance.pk is not None:
             lst = lst.exclude(pk=self.instance.pk)
         if lst.count() > 0:
@@ -372,7 +372,7 @@ class OrgaConfigForm(ConfigForm):
 
     def set_config_gallery(self) -> None:
         """Configure gallery settings for event forms."""
-        if "character" not in self.params["features"]:
+        if "character" not in self.params.get("features"):
             return
 
         self.set_section("gallery", _("Gallery"))
@@ -387,7 +387,7 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("gallery_hide_signup", ConfigType.BOOL, label, help_text)
 
-        if "character" in self.params["features"]:
+        if "character" in self.params.get("features"):
             label = _("Hide unassigned characters")
             help_text = _(
                 "If checked, does not show characters in the gallery who have not been assigned a participant",
@@ -478,7 +478,7 @@ class OrgaConfigForm(ConfigForm):
         Sets up configuration fields for character form behavior including
         visibility options, maximum selections, ticket requirements, and dependencies.
         """
-        if "character" in self.params["features"]:
+        if "character" in self.params.get("features"):
             self.set_section("char_form", _("Character form"))
 
             label = _("Hide not available")
@@ -501,7 +501,7 @@ class OrgaConfigForm(ConfigForm):
 
     def set_config_structure(self) -> None:
         """Configure structural event settings including mail server and cover options."""
-        if "custom_mail" in self.params["features"]:
+        if "custom_mail" in self.params.get("features"):
             self.set_section("custom_mail_server", _("Customised mail server"))
             field_help_text = ""
 
@@ -520,7 +520,7 @@ class OrgaConfigForm(ConfigForm):
             field_label = _("Password of account")
             self.add_configs("mail_server_host_password", ConfigType.CHAR, field_label, field_help_text)
 
-        if "cover" in self.params["features"]:
+        if "cover" in self.params.get("features"):
             self.set_section("cover", _("Character cover"))
             field_label = _("Desalt thumbnail")
             field_help_text = _("If checked, shows the original image in the cover, not the thumbnail version")
@@ -532,7 +532,7 @@ class OrgaConfigForm(ConfigForm):
         Sets up background writing features, character story elements,
         and writing deadline configurations for character development.
         """
-        if "character" in self.params["features"]:
+        if "character" in self.params.get("features"):
             self.set_section("writing", _("Writing"))
 
             config_label = _("Title")
@@ -561,7 +561,7 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_field_visibility", ConfigType.BOOL, config_label, config_help_text)
 
-            if "relationships" in self.params["features"]:
+            if "relationships" in self.params.get("features"):
                 config_label = _("Relationships max length")
                 config_help_text = _("Set maximum length on character relationships (default 10000 characters)")
                 self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
@@ -607,11 +607,11 @@ class OrgaConfigForm(ConfigForm):
         and player-managed character creation settings.
 
         The configuration sections are conditionally created based on available features
-        in self.params["features"]. Each section contains relevant boolean, integer,
+        in self.params.get("features"). Each section contains relevant boolean, integer,
         and other configuration options with appropriate labels and help text.
 
         Note:
-            Requires self.params["features"] to contain feature flags and access to
+            Requires self.params.get("features") to contain feature flags and access to
             self.set_section() and self.add_configs() methods.
 
         """
