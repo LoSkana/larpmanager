@@ -76,12 +76,13 @@ def _apply_tokens(
     membership.save()
 
     # Create payment record for token usage
-    AccountingItemPayment.objects.create(
+    AccountingItemPayment.objects.get_or_create(
         pay=PaymentChoices.TOKEN,
         value=tokens_to_use,
         member_id=registration.member_id,
         registration=registration,
         association_id=association_id,
+        defaults={},
     )
     return remaining - tokens_to_use
 
@@ -115,13 +116,14 @@ def _apply_credits(
     membership.credit -= credits_to_use
     membership.save()
 
-    # Create payment record for credit usage
-    AccountingItemPayment.objects.create(
+    # Create payment record for credit usage with get_or_create for idempotency
+    AccountingItemPayment.objects.get_or_create(
         pay=PaymentChoices.CREDIT,
         value=credits_to_use,
         member_id=registration.member_id,
         registration=registration,
         association_id=association_id,
+        defaults={},
     )
     return remaining - credits_to_use
 

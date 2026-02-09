@@ -29,6 +29,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models.functions import Substr
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -1108,33 +1109,39 @@ def orga_cancellation_refund(request: HttpRequest, event_slug: str, registration
             ref_token = 0
             ref_credit = 0
 
-        # Create token refund accounting entry if amount > 0
-        if ref_token > 0:
-            AccountingItemOther.objects.create(
-                oth=OtherChoices.TOKEN,
-                run=context["run"],
-                descr="Refund",
-                member=context["registration"].member,
-                association_id=context["association_id"],
-                value=ref_token,
-                cancellation=True,
-            )
+        # Wrap refund operations in atomic transaction to prevent partial refunds
+        with transaction.atomic():
+            # Check if already refunded to prevent duplicate refunds
+            if context["registration"].refunded:
+                # Create token refund accounting entry if amount > 0
+                if ref_token > 0:
+                    AccountingItemOther.objects.get_or_create(
+                        oth=OtherChoices.TOKEN,
+                        run=context["run"],
+                        descr="Refund",
+                        member=context["registration"].member,
+                        association_id=context["association_id"],
+                        value=ref_token,
+                        cancellation=True,
+                        defaults={},
+                    )
 
-        # Create credit refund accounting entry if amount > 0
-        if ref_credit > 0:
-            AccountingItemOther.objects.create(
-                oth=OtherChoices.CREDIT,
-                run=context["run"],
-                descr="Refund",
-                member=context["registration"].member,
-                association_id=context["association_id"],
-                value=ref_credit,
-                cancellation=True,
-            )
+                # Create credit refund accounting entry if amount > 0
+                if ref_credit > 0:
+                    AccountingItemOther.objects.get_or_create(
+                        oth=OtherChoices.CREDIT,
+                        run=context["run"],
+                        descr="Refund",
+                        member=context["registration"].member,
+                        association_id=context["association_id"],
+                        value=ref_credit,
+                        cancellation=True,
+                        defaults={},
+                    )
 
-        # Mark registration as refunded and save changes
-        context["registration"].refunded = True
-        context["registration"].save()
+                # Mark registration as refunded and save changes
+                context["registration"].refunded = True
+                context["registration"].save()
 
         # Redirect back to cancellations overview
         return redirect("orga_cancellations", event_slug=context["run"].get_slug())

@@ -30,7 +30,7 @@ from typing import TYPE_CHECKING
 from django.conf import settings as conf_settings
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
 
 from larpmanager.accounting.base import is_registration_provisional
@@ -542,61 +542,63 @@ def cancel_run(instance: Run) -> None:
         for non-refunded registrations
 
     """
-    # Cancel all non-cancelled registrations
-    for r in Registration.objects.filter(cancellation_date__isnull=True, run=instance):
-        cancel_reg(r)
+    # Use atomic transaction to prevent interferences
+    with transaction.atomic():
+        # Cancel all non-cancelled registrations
+        for r in Registration.objects.filter(cancellation_date__isnull=True, run=instance).select_for_update():
+            cancel_reg(r)
 
-    # Process refunds for non-refunded registrations
-    non_refunded_regs = Registration.objects.filter(refunded=False, run=instance)
+        # Process refunds for non-refunded registrations
+        non_refunded_regs = Registration.objects.select_for_update().filter(refunded=False, run=instance)
 
-    # Collect member IDs for bulk operations
-    member_ids = list(non_refunded_regs.values_list("member_id", flat=True))
+        # Collect member IDs for bulk operations
+        member_ids = list(non_refunded_regs.values_list("member_id", flat=True))
 
-    if not member_ids:
-        return
+        if not member_ids:
+            return
 
-    # Bulk delete token and credit payments
-    AccountingItemPayment.objects.filter(
-        member_id__in=member_ids,
-        pay=PaymentChoices.TOKEN,
-        registration__run=instance,
-    ).delete()
-
-    AccountingItemPayment.objects.filter(
-        member_id__in=member_ids,
-        pay=PaymentChoices.CREDIT,
-        registration__run=instance,
-    ).delete()
-
-    # Process money payments and create refund credits
-    money_payments = (
+        # Bulk delete token and credit payments
         AccountingItemPayment.objects.filter(
             member_id__in=member_ids,
-            pay=PaymentChoices.MONEY,
+            pay=PaymentChoices.TOKEN,
             registration__run=instance,
+        ).delete()
+
+        AccountingItemPayment.objects.filter(
+            member_id__in=member_ids,
+            pay=PaymentChoices.CREDIT,
+            registration__run=instance,
+        ).delete()
+
+        # Process money payments and create refund credits
+        money_payments = (
+            AccountingItemPayment.objects.filter(
+                member_id__in=member_ids,
+                pay=PaymentChoices.MONEY,
+                registration__run=instance,
+            )
+            .values("member_id")
+            .annotate(total=models.Sum("value"))
         )
-        .values("member_id")
-        .annotate(total=models.Sum("value"))
-    )
 
-    # Create refund credits for members with money payments
-    refund_credits = [
-        AccountingItemOther(
-            member_id=payment["member_id"],
-            oth=OtherChoices.CREDIT,
-            descr=f"Refund per {instance}",
-            run=instance,
-            value=payment["total"],
-        )
-        for payment in money_payments
-        if payment["total"] > 0
-    ]
+        # Create refund credits for members with money payments
+        refund_credits = [
+            AccountingItemOther(
+                member_id=payment["member_id"],
+                oth=OtherChoices.CREDIT,
+                descr=f"Refund per {instance}",
+                run=instance,
+                value=payment["total"],
+            )
+            for payment in money_payments
+            if payment["total"] > 0
+        ]
 
-    if refund_credits:
-        AccountingItemOther.objects.bulk_create(refund_credits)
+        if refund_credits:
+            AccountingItemOther.objects.bulk_create(refund_credits)
 
-    # Mark all registrations as refunded
-    non_refunded_regs.update(refunded=True)
+        # Mark all registrations as refunded
+        non_refunded_regs.update(refunded=True)
 
 
 def cancel_reg(registration: Registration) -> None:
@@ -716,38 +718,43 @@ def handle_registration_accounting_updates(registration: Registration) -> None:
     if not registration.member:
         return
 
-    # Transfer payments from cancelled registrations to this active one
-    if not registration.cancellation_date:
-        # Find all cancelled registrations for same run and member
-        cancelled_registrations = Registration.objects.filter(
-            run_id=registration.run_id,
-            member_id=registration.member_id,
-            cancellation_date__isnull=False,
-        )
-        cancelled_registration_ids = list(cancelled_registrations.values_list("pk", flat=True))
+    # Use atomic transaction to prevent race conditions
+    with transaction.atomic():
+        # Lock the registration to prevent concurrent accounting updates
+        registration = Registration.objects.select_for_update().get(pk=registration.pk)
 
-        # Transfer both payments and transactions from cancelled registrations using bulk update
-        if cancelled_registration_ids:
-            for accounting_item_type in [AccountingItemPayment, AccountingItemTransaction]:
-                accounting_item_type.objects.filter(registration__id__in=cancelled_registration_ids).update(
-                    registration=registration
-                )
+        # Transfer payments from cancelled registrations to this active one
+        if not registration.cancellation_date:
+            # Find all cancelled registrations for same run and member
+            cancelled_registrations = Registration.objects.filter(
+                run_id=registration.run_id,
+                member_id=registration.member_id,
+                cancellation_date__isnull=False,
+            )
+            cancelled_registration_ids = list(cancelled_registrations.values_list("pk", flat=True))
 
-    # Store provisional status before accounting updates
-    was_provisional_before_update = is_registration_provisional(registration)
+            # Transfer both payments and transactions from cancelled registrations using bulk update
+            if cancelled_registration_ids:
+                for accounting_item_type in [AccountingItemPayment, AccountingItemTransaction]:
+                    accounting_item_type.objects.filter(registration__id__in=cancelled_registration_ids).update(
+                        registration=registration
+                    )
 
-    # Recalculate all accounting fields for this registration
-    update_registration_accounting(registration)
+        # Store provisional status before accounting updates
+        was_provisional_before_update = is_registration_provisional(registration)
 
-    # Bulk update accounting fields without triggering model save signals
-    updated_fields = {}
-    for field_name in ["tot_payed", "tot_iscr", "quota", "alert", "deadline", "payment_date"]:
-        updated_fields[field_name] = getattr(registration, field_name)
-    Registration.objects.filter(pk=registration.pk).update(**updated_fields)
+        # Recalculate all accounting fields for this registration
+        update_registration_accounting(registration)
 
-    # Send confirmation email if registration status changed from provisional to confirmed
-    if was_provisional_before_update and not is_registration_provisional(registration):
-        update_registration_status_bkg(registration.id)
+        # Bulk update accounting fields without triggering model save signals
+        updated_fields = {}
+        for field_name in ["tot_payed", "tot_iscr", "quota", "alert", "deadline", "payment_date"]:
+            updated_fields[field_name] = getattr(registration, field_name)
+        Registration.objects.filter(pk=registration.pk).update(**updated_fields)
+
+        # Send confirmation email if registration status changed from provisional to confirmed
+        if was_provisional_before_update and not is_registration_provisional(registration):
+            update_registration_status_bkg(registration.id)
 
 
 def process_accounting_discount_post_save(discount_item: AccountingItemDiscount) -> None:

@@ -20,7 +20,7 @@
 
 from typing import Any, ClassVar
 
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
@@ -238,19 +238,25 @@ class ElectronicInvoice(UuidMixin, BaseModel):
             **kwargs: Arbitrary keyword arguments passed to parent save method.
 
         """
-        # Auto-generate progressive number if not set (global counter)
-        if not self.progressive:
-            highest_progressive = ElectronicInvoice.objects.aggregate(models.Max("progressive"))["progressive__max"]
-            self.progressive = highest_progressive + 1 if highest_progressive else 1
+        # Use atomic transaction to prevent race conditions
+        with transaction.atomic():
+            # Auto-generate progressive number if not set (global counter)
+            if not self.progressive:
+                # Lock all electronic invoices to prevent concurrent progressive number generation
+                highest_progressive = ElectronicInvoice.objects.select_for_update().aggregate(
+                    models.Max("progressive")
+                )["progressive__max"]
+                self.progressive = highest_progressive + 1 if highest_progressive else 1
 
-        # Auto-generate invoice number if not set (per year/association counter)
-        if not self.number:
-            que = ElectronicInvoice.objects.filter(year=self.year, association=self.association)
-            highest_number = que.aggregate(models.Max("number"))["number__max"]
-            self.number = highest_number + 1 if highest_number else 1
+            # Auto-generate invoice number if not set (per year/association counter)
+            if not self.number:
+                # Lock relevant invoices for this year/association
+                que = ElectronicInvoice.objects.select_for_update().filter(year=self.year, association=self.association)
+                highest_number = que.aggregate(models.Max("number"))["number__max"]
+                self.number = highest_number + 1 if highest_number else 1
 
-        # Call parent save method to persist the instance
-        super().save(*args, **kwargs)
+            # Call parent save method to persist the instance
+            super().save(*args, **kwargs)
 
 
 class ExpenseChoices(models.TextChoices):
