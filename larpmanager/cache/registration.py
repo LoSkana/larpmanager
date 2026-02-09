@@ -189,7 +189,7 @@ def on_character_update_registration_cache(instance: Character) -> None:
     # Trigger registration updates if character approval is enabled
     if get_event_config(instance.event_id, "user_character_approval", default_value=False):
         for relation in RegistrationCharacterRel.objects.filter(character=instance).select_related(
-            "run", "run__event", "ticket", "member"
+            "registration__run", "registration__run__event", "registration__ticket", "registration__member"
         ):
             relation.registration.save()
 
