@@ -1512,6 +1512,9 @@ msgstr "Tillämplig"
 msgid "Appointees"
 msgstr "Utnämningar"
 
+msgid "Approve it"
+msgstr "Godkänna det"
+
 msgid "Assignment"
 msgstr "Uppdrag"
 
@@ -3272,9 +3275,6 @@ msgstr "Din karaktär är"
 msgid "already delivered"
 msgstr "redan levererat"
 
-msgid "download document"
-msgstr "ladda ner dokument"
-
 msgid "this is important"
 msgstr "detta är viktigt"
 
@@ -4545,9 +4545,6 @@ msgstr "Ta med en vän till %(event)s"
 
 msgid "Commit warehouse quantities"
 msgstr "Binda lagerkvantiteter"
-
-msgid "Confirmation of expenditure"
-msgstr "Bekräftelse av utgifter"
 
 msgid "Date of membership approval"
 msgstr "Datum för godkännande av medlemskap"

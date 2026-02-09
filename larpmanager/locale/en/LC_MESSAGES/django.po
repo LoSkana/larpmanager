@@ -2703,13 +2703,13 @@ msgstr ""
 msgid "The sum is %(amount).2f, with reason '%(reason)s'"
 msgstr ""
 
-msgid "download document"
+msgid "Download document"
 msgstr ""
 
 msgid "Did you check and is it correct"
 msgstr ""
 
-msgid "Confirmation of expenditure"
+msgid "Approve it"
 msgstr ""
 
 #, python-format
@@ -2759,9 +2759,6 @@ msgid "Reason for payment"
 msgstr ""
 
 msgid "Amount"
-msgstr ""
-
-msgid "Download document"
 msgstr ""
 
 msgid "Payment to check"

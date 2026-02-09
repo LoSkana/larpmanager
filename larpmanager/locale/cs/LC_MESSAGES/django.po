@@ -1512,6 +1512,9 @@ msgstr "Použitelné"
 msgid "Appointees"
 msgstr "Jmenovaní"
 
+msgid "Approve it"
+msgstr "Schválit ji"
+
 msgid "Assignment"
 msgstr "Zadání"
 
@@ -3272,9 +3275,6 @@ msgstr "Vaše postava je"
 msgid "already delivered"
 msgstr "již dodané"
 
-msgid "download document"
-msgstr "stáhnout dokument"
-
 msgid "this is important"
 msgstr "to je důležité"
 
@@ -4545,9 +4545,6 @@ msgstr "Přiveďte na %(event)s kamaráda"
 
 msgid "Commit warehouse quantities"
 msgstr "Závazné skladové množství"
-
-msgid "Confirmation of expenditure"
-msgstr "Potvrzení výdajů"
 
 msgid "Date of membership approval"
 msgstr "Datum schválení členství"
