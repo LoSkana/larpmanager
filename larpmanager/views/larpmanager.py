@@ -410,6 +410,7 @@ def activate_feature_event(
     return redirect("gallery", event_slug=event_slug)
 
 
+@login_required
 def toggle_sidebar(request: HttpRequest) -> Any:
     """Toggle the sidebar open/closed state in user session.
 
@@ -428,6 +429,7 @@ def toggle_sidebar(request: HttpRequest) -> Any:
     return JsonResponse({"status": "success"})
 
 
+@login_required
 def debug_mail(request: HttpRequest) -> Any:
     """Send reminder emails to all registrations for debugging.
 
@@ -457,6 +459,7 @@ def debug_mail(request: HttpRequest) -> Any:
     return redirect("home")
 
 
+@login_required
 def debug_send_digests(request: HttpRequest) -> Any:
     """Send daily organizer digest summaries for debugging.
 
@@ -482,6 +485,7 @@ def debug_send_digests(request: HttpRequest) -> Any:
     return redirect("home")
 
 
+@login_required
 def debug_slug(request: HttpRequest, association_slug: Any = "") -> Any:
     """Set debug slug in session for development testing.
 
@@ -1164,23 +1168,12 @@ def donate(request: HttpRequest) -> Any:
     return render(request, "larpmanager/larpmanager/donate.html", context)
 
 
-def debug_user(request: HttpRequest, member_id: Any) -> None:
-    """Login as a specific user for debugging purposes.
-
-    Allows admin users to login as another user for debugging.
-    Requires admin permissions.
-
-    Args:
-        request: Django HTTP request object
-        member_id: Member ID to login as
-
-    Side effects:
-        Logs in as the specified user
-
-    """
+def debug_user(request: HttpRequest, member_id: Any) -> HttpResponse:
+    """Login as a specific user for debugging purposes."""
     check_lm_admin(request)
     member = Member.objects.get(pk=member_id)
     login(request, member.user, backend=get_user_backend())
+    return redirect("/")
 
 
 @ratelimit(key="ip", rate="5/m", block=True)

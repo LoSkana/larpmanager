@@ -32,6 +32,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.functions import Substr
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from slugify import slugify
@@ -327,7 +328,7 @@ def orga_registrations_custom(registration: Any, context: dict, character_data: 
         if custom_field_slug in character_data:
             field_value = character_data[custom_field_slug]
         if custom_field_slug == "profile" and field_value:
-            field_value = f"<img src='{field_value}' class='reg_profile' />"
+            field_value = f"<img src='{escape(field_value)}' class='reg_profile' />"
         if field_value:
             registration.custom[custom_field_slug].append(field_value)
 
@@ -343,7 +344,7 @@ def registrations_popup(request: HttpRequest, context: dict) -> Any:
         dict: Response data for popup
 
     """
-    registration_id = int(request.POST.get("idx", ""))
+    registration_id = int(request.POST.get("idx", 0) or 0)
     question_id = request.POST.get("tp", "")
 
     try:
@@ -420,7 +421,7 @@ def _get_registration_fields(context: dict, member: Any) -> dict:
 
     for question in event_questions:
         # Check if question has access restrictions enabled
-        if "reg_que_allowed" in context["features"] and question.allowed_map[0]:
+        if "reg_que_allowed" in context["features"] and question.allowed_map and question.allowed_map[0]:
             current_run_id = context["run"].id
 
             # Check if user is an organizer for this run
@@ -650,7 +651,7 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
         q = q.annotate(allowed_map=ArrayAgg("allowed__id"))
     q = q.get(event=context["event"], uuid=q_uuid)
 
-    if "reg_que_allowed" in context["features"] and q.allowed_map[0]:
+    if "reg_que_allowed" in context["features"] and q.allowed_map and q.allowed_map[0]:
         run_id = context["run"].id
         organizer = run_id in context["all_runs"] and 1 in context["all_runs"][run_id]
         if not organizer and context["member"].id not in q.allowed_map:
@@ -718,7 +719,7 @@ def orga_registration_form_email(request: HttpRequest, event_slug: str) -> JsonR
     q = q.get(event=context["event"], uuid=q_uuid)
 
     # Check if user has permission to access this specific question
-    if "reg_que_allowed" in context["features"] and q.allowed_map[0]:
+    if "reg_que_allowed" in context["features"] and q.allowed_map and q.allowed_map[0]:
         run_id = context["run"].id
         organizer = run_id in context["all_runs"] and 1 in context["all_runs"][run_id]
         if not organizer and context["member"].id not in q.allowed_map:
@@ -1100,8 +1101,12 @@ def orga_cancellation_refund(request: HttpRequest, event_slug: str, registration
     # Process refund form submission
     if request.method == "POST":
         # Extract refund amounts from form data
-        ref_token = int(request.POST["inp_token"])
-        ref_credit = int(request.POST["inp_credit"])
+        try:
+            ref_token = int(request.POST.get("inp_token", 0) or 0)
+            ref_credit = int(request.POST.get("inp_credit", 0) or 0)
+        except (ValueError, TypeError):
+            ref_token = 0
+            ref_credit = 0
 
         # Create token refund accounting entry if amount > 0
         if ref_token > 0:

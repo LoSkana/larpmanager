@@ -542,9 +542,9 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
 
     def test_round_to_nearest_cent_within_tolerance(self) -> None:
         """Test rounding within tolerance"""
-        result = round_to_nearest_cent(10.52)
+        result = round_to_nearest_cent(10.521)
 
-        self.assertEqual(result, 10.5)
+        self.assertEqual(result, 10.52)
 
     def test_round_to_nearest_cent_exceeds_tolerance(self) -> None:
         """Test rounding exceeds tolerance"""

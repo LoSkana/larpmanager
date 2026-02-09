@@ -535,13 +535,13 @@ def backend_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonResponse
         return JsonResponse(res)
 
     # Extract and validate element ID from POST data
-    edit_uuid = request.POST["edit_uuid"]
+    edit_uuid = request.POST.get("edit_uuid", "")
     if not edit_uuid:
         return JsonResponse(res)
 
     # Get element type and editing token for conflict detection
-    tp = request.POST["type"]
-    token = request.POST["token"]
+    tp = request.POST.get("type", "")
+    token = request.POST.get("token", "")
 
     # Check for editing conflicts using token-based locking
     msg = _process_working_ticket(request, tp, edit_uuid, token)

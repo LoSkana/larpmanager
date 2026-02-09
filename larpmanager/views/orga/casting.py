@@ -722,5 +722,5 @@ def orga_casting_toggle(request: HttpRequest, event_slug: str, casting_type: str
         c.save()
 
         return JsonResponse({"res": "ok"})
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, KeyError):
         return JsonResponse({"res": "ko"})

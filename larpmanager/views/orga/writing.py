@@ -26,6 +26,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
@@ -748,8 +749,8 @@ def orga_version(request: HttpRequest, event_slug: str, name: str, version_uuid:
             msg = "Version does not belong to this event"
             raise Http404(msg)
 
-    # Format text for HTML display
-    context["text"] = context["version"].text.replace("\n", "<br />")
+    # Format text for HTML display, escaping user content first
+    context["text"] = escape(context["version"].text).replace("\n", "<br />")
 
     return render(request, "larpmanager/orga/version.html", context)
 
