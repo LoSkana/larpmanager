@@ -5184,7 +5184,7 @@ msgstr ""
 msgid "Uploading image, please wait..."
 msgstr ""
 
-msgid "Error uploading image. Please try again."
+msgid "Error uploading image. Please retry or use a smaller file."
 msgstr ""
 
 msgid "Your characters"
