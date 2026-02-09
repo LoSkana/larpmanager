@@ -376,39 +376,38 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     file_object = getattr(photo_file, "file", None) or photo_file
     try:
         file_object.seek(0)
-        image = PILImage.open(file_object)
+        with PILImage.open(file_object) as img:
+            # Apply EXIF orientation and get image dimensions
+            oriented_img = ImageOps.exif_transpose(img)
+            width, height = oriented_img.size
+
+            # Skip rotation if image is already landscape or square
+            if height <= width:
+                return
+
+            # Rotate the image 90 degrees clockwise to make it landscape
+            rotated_img = oriented_img.rotate(90, expand=True)
+
+            # Determine the appropriate file format for saving
+            file_format = _get_extension(photo_file, rotated_img)
+
+            # Convert incompatible color modes for JPEG format
+            if file_format == "JPEG" and rotated_img.mode in ("RGBA", "LA", "P"):
+                rotated_img = rotated_img.convert("RGB")
+
+            # Save the rotated image to a BytesIO buffer with optimization
+            with BytesIO() as output_buffer:
+                save_kwargs = {"optimize": True}
+                if file_format == "JPEG":
+                    save_kwargs["quality"] = 88
+                rotated_img.save(output_buffer, format=file_format, **save_kwargs)
+                output_buffer.seek(0)
+
+                # Replace the original photo with the rotated version
+                original_filename = Path(photo_file.name).name or photo_file.name
+                instance.photo = ContentFile(output_buffer.read(), name=original_filename)
     except (OSError, AttributeError):
         return
-
-    # Apply EXIF orientation and get image dimensions
-    image = ImageOps.exif_transpose(image)
-    width, height = image.size
-
-    # Skip rotation if image is already landscape or square
-    if height <= width:
-        return
-
-    # Rotate the image 90 degrees clockwise to make it landscape
-    image = image.rotate(90, expand=True)
-
-    # Determine the appropriate file format for saving
-    file_format = _get_extension(photo_file, image)
-
-    # Convert incompatible color modes for JPEG format
-    if file_format == "JPEG" and image.mode in ("RGBA", "LA", "P"):
-        image = image.convert("RGB")
-
-    # Save the rotated image to a BytesIO buffer with optimization
-    output_buffer = BytesIO()
-    save_kwargs = {"optimize": True}
-    if file_format == "JPEG":
-        save_kwargs["quality"] = 88
-    image.save(output_buffer, format=file_format, **save_kwargs)
-    output_buffer.seek(0)
-
-    # Replace the original photo with the rotated version
-    original_filename = Path(photo_file.name).name or photo_file.name
-    instance.photo = ContentFile(output_buffer.read(), name=original_filename)
 
 
 def _get_extension(uploaded_file: Any, image: Any) -> str:

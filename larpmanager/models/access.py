@@ -123,43 +123,6 @@ def get_association_executives(association: Association) -> QuerySet[Member]:
         return []
 
 
-def get_association_inners(association: Association) -> list[Member]:
-    """Get all non-executive members with association roles.
-
-    Retrieves all members that have roles in the given association, excluding
-    executive members (role number 1). Ensures each member appears only once
-    in the returned list, even if they have multiple roles.
-
-    Args:
-        association (Association): The association instance to get members from.
-
-    Returns:
-        list[Member]: List of unique Member instances with non-executive roles
-            in the association. Returns empty list if no qualifying members found.
-
-    Example:
-        >>> association = Association.objects.get(name="My Association")
-        >>> members = get_association_inners(association)
-        >>> len(members)
-        5
-
-    """
-    lst = []
-    already = {}
-
-    # Get all non-executive roles (exclude role number 1) for this association
-    for role in AssociationRole.objects.filter(association=association).exclude(number=1):
-        # Iterate through all members assigned to this role
-        for mb in role.members.all():
-            # Skip if member already processed to avoid duplicates
-            if mb.id in already:
-                continue
-            # Mark member as processed and add to results
-            already[mb.id] = 1
-            lst.append(mb)
-    return lst
-
-
 class EventPermission(BaseModel):
     """Represents EventPermission model."""
 

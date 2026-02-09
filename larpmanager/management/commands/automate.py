@@ -111,7 +111,9 @@ class Command(BaseCommand):
         # Update accounting for all registrations with incomplete payments
         # Process each registration to recalculate totals and payment status
         registrations_with_incomplete_payments = get_regs_paying_incomplete()
-        for registration in registrations_with_incomplete_payments.select_related("run"):
+        for registration in registrations_with_incomplete_payments.select_related(
+            "run", "run__event", "ticket", "member"
+        ):
             registration.save()
 
         # Process feature-specific checks for each association
@@ -163,11 +165,9 @@ class Command(BaseCommand):
 
         Cleans up abandoned payment attempts to prevent database bloat.
         """
-        # delete old payment invoice
+        # Bulk delete old payment invoices in a single query
         reference_date = timezone.now() - timedelta(days=60)
-        payment_invoices_query = PaymentInvoice.objects.filter(status=PaymentStatus.CREATED)
-        for payment_invoice in payment_invoices_query.filter(created__lte=reference_date.date()):
-            payment_invoice.delete()
+        PaymentInvoice.objects.filter(status=PaymentStatus.CREATED, created__lte=reference_date.date()).delete()
 
     @staticmethod
     def check_payment_not_approved() -> None:

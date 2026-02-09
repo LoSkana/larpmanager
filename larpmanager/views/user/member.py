@@ -316,18 +316,17 @@ def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
     # Build full filesystem path and open image
     path = str(Path(conf_settings.MEDIA_ROOT) / path)
     try:
-        im = Image.open(path)
+        with Image.open(path) as im:
+            # Rotate image based on direction parameter (90 degrees clockwise if 1, otherwise counterclockwise)
+            out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
 
-        # Rotate image based on direction parameter (90 degrees clockwise if 1, otherwise counterclockwise)
-        out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
+            # Extract file extension and generate new unique filename
+            ext = path.split(".")[-1]
+            n_path = f"{Path(path).parent}/{request.user.member.pk}_{uuid4().hex}.{ext}"
 
-        # Extract file extension and generate new unique filename
-        ext = path.split(".")[-1]
-        n_path = f"{Path(path).parent}/{request.user.member.pk}_{uuid4().hex}.{ext}"
-
-        # Save rotated image and update member profile
-        out.save(n_path)
-        request.user.member.profile = n_path
+            # Save rotated image and update member profile
+            out.save(n_path)
+            request.user.member.profile = n_path
     except (OSError, UnidentifiedImageError):
         logger.exception("Failed to rotate profile image")
         return JsonResponse({"res": "ko"})
