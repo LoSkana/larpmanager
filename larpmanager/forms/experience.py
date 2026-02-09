@@ -82,7 +82,7 @@ class OrgaDeliveryPxForm(PxBaseForm):
         """Initialize form with event configuration."""
         super().__init__(*args, **kwargs)
 
-        self.configure_field_event("auto_populate_run", self.params["event"])
+        self.configure_field_event("auto_populate_run", self.params.get("event"))
 
 
 class OrgaAbilityTemplatePxForm(BaseModelForm):
@@ -124,16 +124,16 @@ class OrgaAbilityPxForm(PxBaseForm):
         # Configure event-specific widgets
         for field_name in ["characters", "prerequisites", "requirements", "template", "dependents"]:
             if field_name in self.fields and hasattr(self.fields[field_name].widget, "set_event"):
-                self.configure_field_event(field_name, self.params["event"])
+                self.configure_field_event(field_name, self.params.get("event"))
 
-        px_user = get_event_config(self.params["event"].id, "px_user", default_value=False, context=self.params)
+        px_user = get_event_config(self.params.get("event").id, "px_user", default_value=False, context=self.params)
         px_templates = get_event_config(
-            self.params["event"].id, "px_templates", default_value=False, context=self.params
+            self.params.get("event").id, "px_templates", default_value=False, context=self.params
         )
 
         # Set ability type choices from event-specific elements
         self.fields["typ"].choices = [
-            (el[0], el[1]) for el in self.params["event"].get_elements(AbilityTypePx).values_list("uuid", "name")
+            (el[0], el[1]) for el in self.params.get("event").get_elements(AbilityTypePx).values_list("uuid", "name")
         ]
 
         # Remove template field if px_templates is disabled
@@ -177,10 +177,10 @@ class OrgaRulePxForm(BaseModelForm):
         self.delete_field("name")
 
         # Configure abilities widget with event context
-        self.configure_field_event("abilities", self.params["event"])
+        self.configure_field_event("abilities", self.params.get("event"))
 
         # Filter writing questions to computed type only
-        qs = WritingQuestion.objects.filter(event=self.params["event"], typ=WritingQuestionType.COMPUTED)
+        qs = WritingQuestion.objects.filter(event=self.params.get("event"), typ=WritingQuestionType.COMPUTED)
         self.fields["field"].queryset = qs
 
 
@@ -210,7 +210,7 @@ class OrgaModifierPxForm(BaseModelForm):
 
         # Configure event-specific widgets
         for field in ["abilities", "prerequisites", "requirements"]:
-            self.configure_field_event(field, self.params["event"])
+            self.configure_field_event(field, self.params.get("event"))
 
 
 class SelectNewAbility(BaseForm):

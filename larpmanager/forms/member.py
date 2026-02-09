@@ -476,10 +476,10 @@ class BaseProfileForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         # Cache frequently accessed request data
-        self.allowed = self.params["members_fields"]
+        self.allowed = self.params.get("members_fields")
 
         # Use cached association data
-        association = Association.objects.get(pk=self.params["association_id"])
+        association = Association.objects.get(pk=self.params.get("association_id"))
 
         # Pre-split and cache field sets
         self.mandatory = set(association.mandatory_fields.split(","))
@@ -590,7 +590,7 @@ class ProfileForm(BaseProfileForm):
         # Handle presentation field for voting candidates
         if "presentation" in self.fields:
             vote_cands = get_association_config(
-                self.params["association_id"], "vote_candidates", default_value="", context=self.params
+                self.params.get("association_id"), "vote_candidates", default_value="", context=self.params
             ).split(",")
             if not self.instance.pk or str(self.instance.pk) not in vote_cands:
                 self.delete_field("presentation")
@@ -608,7 +608,7 @@ class ProfileForm(BaseProfileForm):
         # Membership checking
         share = False
         if self.instance.pk:
-            membership = self.params["membership"]
+            membership = self.params.get("membership")
             share = membership.compiled
 
         # Add consent field only if needed
