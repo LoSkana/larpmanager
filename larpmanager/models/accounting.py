@@ -121,6 +121,11 @@ class PaymentInvoice(UuidMixin, BaseModel):
             models.Index(fields=["association", "cod"]),
             models.Index(fields=["registration", "status", "-created"]),
             models.Index(fields=["status", "-created"]),
+            # Performance index from migration 0137
+            models.Index(
+                fields=["status", "created"],
+                name="payinv_status_created_idx",
+            ),
         ]
 
     def __str__(self) -> str:
