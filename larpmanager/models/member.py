@@ -331,6 +331,13 @@ class Member(UuidMixin, BaseModel):
 
     class Meta:
         ordering: ClassVar[list] = ["surname", "name"]
+        indexes: ClassVar[list] = [
+            # Performance index from migration 0137
+            models.Index(
+                fields=["email"],
+                name="member_email_idx",
+            ),
+        ]
 
     def __str__(self) -> str:
         """Return string representation."""

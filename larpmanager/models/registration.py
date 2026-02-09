@@ -409,6 +409,21 @@ class Registration(UuidMixin, BaseModel):
                 condition=Q(deleted__isnull=True, cancellation_date__isnull=True),
                 name="reg_run_active_only",
             ),
+            # Performance indexes from migration 0137
+            models.Index(
+                fields=["cancellation_date"],
+                name="reg_cancel_date_idx",
+                condition=Q(cancellation_date__isnull=False),
+            ),
+            models.Index(
+                fields=["refunded"],
+                name="reg_refunded_idx",
+                condition=Q(refunded=True),
+            ),
+            models.Index(
+                fields=["run", "cancellation_date"],
+                name="reg_run_cancel_idx",
+            ),
         ]
 
         ordering: ClassVar[list] = ["-created"]
