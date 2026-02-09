@@ -107,8 +107,8 @@ class LarpManagerTicketForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         # Add captcha field for unauthenticated users
-        if not self.params["request"].user.is_authenticated:
-            _get_captcha(self, self.params["request"])
+        if not self.params.get("request").user.is_authenticated:
+            _get_captcha(self, self.params.get("request"))
 
         # Remove screenshot field if reason is provided
         if self.params.get("reason"):

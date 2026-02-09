@@ -134,16 +134,16 @@ class ExeAssociationTextForm(BaseModelForm):
         ch = AssociationTextType.choices
         delete_choice = [AssociationTextType.PRIVACY]
 
-        if "legal_notice" not in self.params["features"]:
+        if "legal_notice" not in self.params.get("features"):
             delete_choice.append(AssociationTextType.LEGAL)
 
-        if "receipts" not in self.params["features"]:
+        if "receipts" not in self.params.get("features"):
             delete_choice.append(AssociationTextType.RECEIPT)
 
-        if "membership" not in self.params["features"]:
+        if "membership" not in self.params.get("features"):
             delete_choice.extend([AssociationTextType.MEMBERSHIP, AssociationTextType.STATUTE])
 
-        if "remind" not in self.params["features"]:
+        if "remind" not in self.params.get("features"):
             delete_choice.extend(
                 [
                     AssociationTextType.REMINDER_MEMBERSHIP,
@@ -152,7 +152,7 @@ class ExeAssociationTextForm(BaseModelForm):
                     AssociationTextType.REMINDER_PROFILE,
                 ],
             )
-        elif "membership" not in self.params["features"]:
+        elif "membership" not in self.params.get("features"):
             delete_choice.extend([AssociationTextType.REMINDER_MEMBERSHIP, AssociationTextType.REMINDER_MEMBERSHIP_FEE])
         else:
             delete_choice.extend([AssociationTextType.REMINDER_PROFILE])
@@ -216,13 +216,17 @@ class ExeAssociationTextForm(BaseModelForm):
 
         # Check for duplicate default text of the same type
         if default:
-            res = AssociationText.objects.filter(association_id=self.params["association_id"], default=True, typ=typ)
+            res = AssociationText.objects.filter(
+                association_id=self.params.get("association_id"), default=True, typ=typ
+            )
             # Ensure we're not comparing against the current instance
             if res.count() > 0 and res.first().pk != self.instance.pk:
                 self.add_error("default", "There is already a language set as default!")
 
         # Check for duplicate language-type combination
-        res = AssociationText.objects.filter(association_id=self.params["association_id"], language=language, typ=typ)
+        res = AssociationText.objects.filter(
+            association_id=self.params.get("association_id"), language=language, typ=typ
+        )
         if res.count() > 0:
             first = res.first()
             # Ensure we're not comparing against the current instance
@@ -279,7 +283,7 @@ class ExeAssociationRoleForm(BaseModelForm):
         """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
         # Configure member widget with association context
-        self.configure_field_association("members", self.params["association_id"])
+        self.configure_field_association("members", self.params.get("association_id"))
         # Prepare role-based permissions for association
         prepare_permissions_role(self, AssociationPermission)
 

@@ -189,6 +189,12 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     page.locator(".select2-results__option").first.click()
     submit_confirm(page)
 
+    # Checkout member data
+    page.locator(".fa-eye").click()
+    just_wait(page)
+    expect_normalized(page, page.locator("#uglipop_content_fixed"), "Admin Test Email: orga@test.it")
+
+
     # Go to your character, check result
     go_to(page, live_server, "/test/character/your")
     expect_normalized(page, page.locator("#banner"), "Test Character - Test Larp")

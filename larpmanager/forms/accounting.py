@@ -85,7 +85,7 @@ class OrgaPersonalExpenseForm(BaseModelFormRun):
         super().__init__(*args, **kwargs)
 
         # Remove balance field if Italian balance feature is not enabled
-        if "ita_balance" not in self.params["features"]:
+        if "ita_balance" not in self.params.get("features"):
             self.delete_field("balance")
 
 
@@ -110,15 +110,15 @@ class OrgaExpenseForm(BaseModelFormRun):
         super().__init__(*args, **kwargs)
 
         # Configure member widget with run context
-        self.configure_field_run("member", self.params["run"])
+        self.configure_field_run("member", self.params.get("run"))
 
         # Remove balance field if Italian balance feature is disabled
-        if "ita_balance" not in self.params["features"]:
+        if "ita_balance" not in self.params.get("features"):
             self.delete_field("balance")
 
         # Remove approval field if organization has disabled expense approval
         if get_association_config(
-            self.params["event"].association_id, "expense_disable_orga", default_value=False, context=self.params
+            self.params.get("event").association_id, "expense_disable_orga", default_value=False, context=self.params
         ):
             self.delete_field("is_approved")
 
@@ -141,10 +141,10 @@ class OrgaTokenForm(BaseModelFormRun):
 
         # Set page metadata with token name
         self.page_info = _("Manage") + f" {self.params['tokens_name']} " + _("assignments")
-        self.page_title = self.params["tokens_name"]
+        self.page_title = self.params.get("tokens_name")
 
         # Configure field widget
-        self.configure_field_run("member", self.params["run"])
+        self.configure_field_run("member", self.params.get("run"))
 
     def save(self, commit: bool = True) -> AccountingItemOther:  # noqa: FBT001, FBT002
         """Save form with TOKEN type."""
@@ -169,10 +169,10 @@ class OrgaCreditForm(BaseModelFormRun):
         """Initialize credit form with page title and run-specific member field."""
         super().__init__(*args, **kwargs)
         # Set page title from credit name parameter
-        self.page_title = self.params["credits_name"]
+        self.page_title = self.params.get("credits_name")
 
         # Configure field widget
-        self.configure_field_run("member", self.params["run"])
+        self.configure_field_run("member", self.params.get("run"))
 
     def save(self, commit: bool = True) -> AccountingItemOther:  # noqa: FBT001, FBT002
         """Save form with CREDIT type."""
@@ -204,7 +204,7 @@ class OrgaPaymentForm(BaseModelFormRun):
         super().__init__(*args, **kwargs)
 
         # Configure registration widget with event context and make field required
-        self.configure_field_event("registration", self.params["event"])
+        self.configure_field_event("registration", self.params.get("event"))
         self.fields["registration"].required = True
 
 
@@ -227,7 +227,7 @@ class ExeOutflowForm(BaseModelForm):
 
         # Configure run widget with association context if not auto-populated
         if not hasattr(self, "auto_run"):
-            self.configure_field_association("run", self.params["association_id"])
+            self.configure_field_association("run", self.params.get("association_id"))
 
         # Set default payment date to today if not already provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
@@ -239,7 +239,7 @@ class ExeOutflowForm(BaseModelForm):
         self.fields["invoice"].required = True
 
         # Remove balance field if Italian balance feature is disabled
-        if "ita_balance" not in self.params["features"]:
+        if "ita_balance" not in self.params.get("features"):
             self.delete_field("balance")
 
 
@@ -271,7 +271,7 @@ class ExeInflowForm(BaseModelForm):
 
         # Set association for run field if not auto-run mode
         if not hasattr(self, "auto_run"):
-            self.configure_field_association("run", self.params["association_id"])
+            self.configure_field_association("run", self.params.get("association_id"))
 
         # Set default payment date to today if not provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
@@ -304,7 +304,7 @@ class ExeDonationForm(BaseModelForm):
         """Initialize form and set association for member field widget."""
         super().__init__(*args, **kwargs)
 
-        self.configure_field_association("member", self.params["association_id"])
+        self.configure_field_association("member", self.params.get("association_id"))
 
 
 class ExePaymentForm(BaseModelForm):
@@ -324,10 +324,10 @@ class ExePaymentForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         # Configure registration field widget with association context
-        self.configure_field_association("registration", self.params["association_id"])
+        self.configure_field_association("registration", self.params.get("association_id"))
 
         # Remove VAT field if feature is not enabled
-        if "vat" not in self.params["features"]:
+        if "vat" not in self.params.get("features"):
             self.delete_field("vat_ticket")
             self.delete_field("vat_options")
 
@@ -348,7 +348,7 @@ class ExeInvoiceForm(BaseModelForm):
         """Initialize form and configure member widget with association."""
         super().__init__(*args, **kwargs)
 
-        self.configure_field_association("member", self.params["association_id"])
+        self.configure_field_association("member", self.params.get("association_id"))
 
 
 class ExeCreditForm(BaseModelForm):
@@ -370,8 +370,8 @@ class ExeCreditForm(BaseModelForm):
 
         # Configure run choices and association widgets
         get_run_choices(self)
-        self.configure_field_association("member", self.params["association_id"])
-        self.configure_field_association("run", self.params["association_id"])
+        self.configure_field_association("member", self.params.get("association_id"))
+        self.configure_field_association("run", self.params.get("association_id"))
 
     def save(self, commit: bool = True) -> AccountingItemOther:  # noqa: FBT001, FBT002
         """Save form with CREDIT type."""
@@ -400,8 +400,8 @@ class ExeTokenForm(BaseModelForm):
 
         # Configure run choices and association filtering
         get_run_choices(self)
-        self.configure_field_association("member", self.params["association_id"])
-        self.configure_field_association("run", self.params["association_id"])
+        self.configure_field_association("member", self.params.get("association_id"))
+        self.configure_field_association("run", self.params.get("association_id"))
 
     def save(self, commit: bool = True) -> AccountingItemOther:  # noqa: FBT001, FBT002
         """Save form with TOKEN type."""
@@ -430,7 +430,7 @@ class ExeExpenseForm(BaseModelForm):
 
         # Configure run choices and set association context for widgets
         get_run_choices(self)
-        self.configure_field_association("member", self.params["association_id"])
+        self.configure_field_association("member", self.params.get("association_id"))
         self.configure_field_association("run", self.params["association_id"])
 
         # Remove balance field if feature not enabled

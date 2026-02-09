@@ -110,7 +110,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Extract run and event objects from parameters for form configuration
         # These provide context for all subsequent form setup operations
-        run = self.params["run"]
+        run = self.params.get("run")
         event = run.event
         self.event = event
         self.run_status = self.params.get("run_status", {})
@@ -153,7 +153,7 @@ class RegistrationForm(BaseRegistrationForm):
 
     def sel_ticket_map(self, ticket: Any) -> None:
         """Check if given the selected ticket, we need to not require questions reserved to other tickets."""
-        if "reg_que_tickets" not in self.params["features"]:
+        if "reg_que_tickets" not in self.params.get("features"):
             return
 
         for question in self.questions:
@@ -167,14 +167,14 @@ class RegistrationForm(BaseRegistrationForm):
     def init_additionals(self) -> None:
         """Initialize additional tickets field if feature is enabled."""
         # Skip if additional tickets feature is not enabled
-        if "additional_tickets" not in self.params["features"]:
+        if "additional_tickets" not in self.params.get("features"):
             return
 
         # Get max_length from additional_tickets question, default to 5
         max_tickets = 5
         try:
             additional_question = RegistrationQuestion.objects.filter(
-                event=self.params["run"].event, typ=RegistrationQuestionType.ADDITIONAL
+                event=self.params.get("run").event, typ=RegistrationQuestionType.ADDITIONAL
             ).first()
             if additional_question and additional_question.max_length > 0:
                 max_tickets = additional_question.max_length
@@ -193,7 +193,7 @@ class RegistrationForm(BaseRegistrationForm):
 
     def init_bring_friend(self) -> None:
         """Initialize bring-a-friend code field for discounts."""
-        if "bring_friend" not in self.params["features"]:
+        if "bring_friend" not in self.params.get("features"):
             return
 
         if self.instance.pk and self.initial["modified"] > 0:

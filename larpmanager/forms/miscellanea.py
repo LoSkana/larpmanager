@@ -132,7 +132,7 @@ class HelpQuestionForm(BaseModelForm):
 
         # Set initial run value from params if provided
         if "run" in self.params:
-            self.initial["run"] = self.params["run"]
+            self.initial["run"] = self.params.get("run")
 
 
 class OrgaHelpQuestionForm(BaseModelForm):
@@ -171,7 +171,7 @@ class WorkshopQuestionForm(BaseModelForm):
         super().__init__(*args, **kwargs)
         # Filter workshop modules by event and populate dropdown choices
         self.fields["module"].choices = [
-            (m.uuid, m.name) for m in WorkshopModule.objects.filter(event=self.params["event"])
+            (m.uuid, m.name) for m in WorkshopModule.objects.filter(event=self.params.get("event"))
         ]
 
 
@@ -187,7 +187,7 @@ class WorkshopOptionForm(BaseModelForm):
         super().__init__(*args, **kwargs)
         # Filter workshop questions by event and populate choices
         self.fields["question"].choices = [
-            (m.uuid, m.name) for m in WorkshopQuestion.objects.filter(module__event=self.params["event"])
+            (m.uuid, m.name) for m in WorkshopQuestion.objects.filter(module__event=self.params.get("event"))
         ]
 
 
