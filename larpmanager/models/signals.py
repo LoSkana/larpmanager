@@ -1502,7 +1502,6 @@ def post_delete_registration_character_rel_savereg(
 @receiver(post_save, sender=RegistrationQuestion)
 def post_save_registration_question(sender: type, instance: RegistrationQuestion, **kwargs: dict) -> None:
     """Process registration question post-save signal."""
-    process_registration_option_post_save(instance)
     clear_registration_questions_cache(instance.event_id)
 
 
