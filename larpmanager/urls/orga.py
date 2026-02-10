@@ -1279,6 +1279,16 @@ urlpatterns = [
         name="orga_px_modifiers_order",
     ),
     path(
+        "<slug:event_slug>/manage/casting/toggle/",
+        views_oca.orga_casting_toggle,
+        name="orga_casting_toggle",
+    ),
+    path(
+        "<slug:event_slug>/manage/casting/toggle/<str:casting_type>/",
+        views_oca.orga_casting_toggle,
+        name="orga_casting_toggle",
+    ),
+    path(
         "<slug:event_slug>/manage/casting/",
         views_oca.orga_casting,
         name="orga_casting",
@@ -1292,16 +1302,6 @@ urlpatterns = [
         "<slug:event_slug>/manage/casting/<str:casting_type>/",
         views_oca.orga_casting,
         name="orga_casting",
-    ),
-    path(
-        "<slug:event_slug>/manage/casting/toggle/",
-        views_oca.orga_casting_toggle,
-        name="orga_casting_toggle",
-    ),
-    path(
-        "<slug:event_slug>/manage/casting/toggle/<str:casting_type>/",
-        views_oca.orga_casting_toggle,
-        name="orga_casting_toggle",
     ),
     path(
         "<slug:event_slug>/manage/casting/<str:casting_type>/<slug:ticket>/",
