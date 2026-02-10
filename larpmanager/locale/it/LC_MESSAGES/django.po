@@ -1512,6 +1512,9 @@ msgstr "Applicabile"
 msgid "Appointees"
 msgstr "Incaricati"
 
+msgid "Approve it"
+msgstr "Approva"
+
 msgid "Assignment"
 msgstr "Assegnazione"
 
@@ -3272,9 +3275,6 @@ msgstr "Il tuo personaggio è"
 msgid "already delivered"
 msgstr "già consegnato"
 
-msgid "download document"
-msgstr "scarica documento"
-
 msgid "this is important"
 msgstr "è importante"
 
@@ -3594,7 +3594,7 @@ msgid "Create new character"
 msgstr "Crea nuovo personaggio"
 
 msgid "Display sent e-mails"
-msgstr "Visualizzare le e-mail inviate"
+msgstr "Visualizzale e-mail inviate"
 
 msgid "Download light sheet"
 msgstr "Scarica il foglio luminoso"
@@ -3715,7 +3715,7 @@ msgid "Returning percentage"
 msgstr "Percentuale restituzione"
 
 msgid "Select the new event"
-msgstr "Selezionare il nuovo evento"
+msgstr "Selezionail nuovo evento"
 
 msgid "Set character status"
 msgstr "Imposta lo stato dei personaggi"
@@ -3812,7 +3812,7 @@ msgid "Go to the casting for"
 msgstr "Vai al casting per"
 
 msgid "If absent, indicate 0"
-msgstr "Se assente, indicare 0"
+msgstr "Se assente, indica0"
 
 msgid "Invalid choice format"
 msgstr "Formato di scelta non valido"
@@ -4087,7 +4087,7 @@ msgid "Workshop already done!"
 msgstr "Workshop già superato!"
 
 msgid "give them this address"
-msgstr "dare loro questo indirizzo"
+msgstr "dai loro questo indirizzo"
 
 msgid "history of preferences"
 msgstr "storico delle preferenze"
@@ -4443,7 +4443,7 @@ msgid "We're sorry to see you go"
 msgstr "Ci dispiace vederti andare via"
 
 msgid "cancel your registrations"
-msgstr "cancellare la tua iscrizione"
+msgstr "cancellala tua iscrizione"
 
 msgid "choice value not provided"
 msgstr "valore di scelta non fornito"
@@ -4544,10 +4544,7 @@ msgid "Bring a friend to %(event)s"
 msgstr "Portate un amico a %(event)s"
 
 msgid "Commit warehouse quantities"
-msgstr "Impegnare le quantità di magazzino"
-
-msgid "Confirmation of expenditure"
-msgstr "Conferma spesa"
+msgstr "Impegnale quantità di magazzino"
 
 msgid "Date of membership approval"
 msgstr "Data di approvazione dell'iscrizione"
@@ -4885,7 +4882,7 @@ msgid "Discover the coming soon events"
 msgstr "Scopri gli eventi in lavorazione"
 
 msgid "Filter or search the characters"
-msgstr "Filtrare o cercare i personaggi"
+msgstr "Filtrao cercai personaggi"
 
 msgid "Manage event navigation buttons"
 msgstr "Gestione dei pulsanti di navigazione degli eventi"
@@ -5095,7 +5092,7 @@ msgid "Go to the history preferences for"
 msgstr "Vai allo storico preferenze per"
 
 msgid "If checked: activate new dashbord"
-msgstr "Se selezionato: attivare la nuova plancia di comando"
+msgstr "Se selezionato: attivala nuova plancia di comando"
 
 msgid "Indicate your level of experience"
 msgstr "Indica il tuo grado di esperienza"
@@ -5516,7 +5513,7 @@ msgid "Registration to %(event)s by %(user)s"
 msgstr "Iscrizione a %(event)s di %(user)s"
 
 msgid "Review the transfer before confirming"
-msgstr "Esaminare il trasferimento prima di confermarlo"
+msgstr "Esaminail trasferimento prima di confermarlo"
 
 msgid "Select the organisation to proceed to"
 msgstr "Seleziona l'organizzazione verso cui procedere"
@@ -5558,7 +5555,7 @@ msgid "Attention, the tax code does not match"
 msgstr "Attenzione, il codice fiscale non corrisponde"
 
 msgid "Charge transaction fees to participant"
-msgstr "Addebitare al partecipante le commissioni di transazione"
+msgstr "Addebitaal partecipante le commissioni di transazione"
 
 msgid "Color used to highlight important text"
 msgstr "Colore utilizzato per evidenziare il testo importante"
@@ -5597,7 +5594,7 @@ msgid "You are about to perform a donation of"
 msgstr "Stai per effettuare una donazione di"
 
 msgid "click on the icon to open the tutorial"
-msgstr "fare clic sull'icona per aprire l'esercitazione"
+msgstr "fai clic sull'icona per aprire l'esercitazione"
 
 msgid "we'll let you know as soon as possible"
 msgstr "vi faremo sapere il prima possibile"
@@ -6455,7 +6452,7 @@ msgid "Manage refund for a participant who has cancelled"
 msgstr "Gestisci il rimborso per un partecipante che si è cancellato"
 
 msgid "Minimum age of members (leave empty for no limit)"
-msgstr "Età minima dei membri (lasciare vuoto per non avere limiti)"
+msgstr "Età minima dei membri (lasciavuoto per non avere limiti)"
 
 msgid "Now you can peform the fiscal code validity check"
 msgstr "Ora puoi effettuare il controllo della validità del codice fiscale"
@@ -6931,7 +6928,7 @@ msgstr "La tua richiesta di socio è stata inviata con successo!"
 
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr ""
-"Fare clic sull'immagine sottostante (Paypal.me) per aprire il pagamento"
+"Fai clic sull'immagine sottostante (Paypal.me) per aprire il pagamento"
 
 msgid "Customize textual elements of the organization interface"
 msgstr ""
@@ -7050,8 +7047,7 @@ msgstr "Vuoi assegnare i personaggi utilizzando un algoritmo di casting"
 
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr ""
-"Errore nel caricamento dell'immagine. Riprovare o utilizzare un file più "
-"piccolo."
+"Errore nel caricamento dell'immagine. Riprovao utilizzaun file più piccolo."
 
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
@@ -7222,7 +7218,7 @@ msgid "This page shows the factions (character groups) of the event"
 msgstr "Questa pagina riepiloga le fazioni (gruppi di personaggi) dell'evento"
 
 msgid "Upload the signed membership application form (PDF or image)"
-msgstr "Caricare il modulo di richiesta di adesione firmato (PDF o immagine)"
+msgstr "Caricail modulo di richiesta di adesione firmato (PDF o immagine)"
 
 msgid "You have already granted data sharing with this organisation"
 msgstr "Hai già concesso la condivisione dei dati con questa organizzazione"

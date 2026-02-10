@@ -1512,6 +1512,9 @@ msgstr "Dotyczy"
 msgid "Appointees"
 msgstr "Mianowani"
 
+msgid "Approve it"
+msgstr "Zatwierdzić"
+
 msgid "Assignment"
 msgstr "Przydział"
 
@@ -3272,9 +3275,6 @@ msgstr "Twoja postać to"
 msgid "already delivered"
 msgstr "już dostarczony"
 
-msgid "download document"
-msgstr "pobierz dokument"
-
 msgid "this is important"
 msgstr "to jest ważne"
 
@@ -4545,9 +4545,6 @@ msgstr "Przyprowadź znajomego na %(event)s"
 
 msgid "Commit warehouse quantities"
 msgstr "Zaangażowanie ilości magazynowych"
-
-msgid "Confirmation of expenditure"
-msgstr "Potwierdzenie wydatków"
 
 msgid "Date of membership approval"
 msgstr "Data zatwierdzenia członkostwa"
