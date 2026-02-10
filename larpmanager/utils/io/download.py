@@ -33,6 +33,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.accounting import get_registration_accounting_cache
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_configs
+from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.association import Association
 from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import (
@@ -43,7 +44,6 @@ from larpmanager.models.form import (
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
-    RegistrationQuestion,
     WritingAnswer,
     WritingChoice,
     WritingOption,
@@ -255,7 +255,6 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
     if applicable_questions or model == "registration":
         # Determine model-specific classes and field names
         is_registration_model = model == "registration"
-        question_class = RegistrationQuestion if is_registration_model else WritingQuestion
         choices_class = RegistrationChoice if is_registration_model else WritingChoice
         answers_class = RegistrationAnswer if is_registration_model else WritingAnswer
         reference_field_name = "registration_id" if is_registration_model else "element_id"
@@ -263,10 +262,11 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
         # Extract element IDs from query for filtering related objects
         element_ids = {element.id for element in query}
 
-        # Get applicable questions for the event and features
-        applicable_question_list = question_class.get_instance_questions(context["event"], context["features"])
-        if model != "registration":
-            applicable_question_list = applicable_question_list.filter(applicable=applicable_questions)
+        # Get applicable questions for the event
+        if is_registration_model:
+            applicable_question_list = get_cached_registration_questions(context["event"], context["features"])
+        else:
+            applicable_question_list = get_cached_writing_questions(context["event"], applicable_questions)
 
         # Extract question IDs for efficient database filtering
         question_ids = {question.id for question in applicable_question_list}

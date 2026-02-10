@@ -31,6 +31,7 @@ from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.accounting import clear_registration_accounting_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.cache.registration import clear_registration_counts_cache, get_registration_counts
 from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
@@ -848,7 +849,7 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
 
     # Get event features and filter applicable questions
     event_features = get_event_features(instance.run.event_id)
-    for question in RegistrationQuestion.get_instance_questions(instance.run.event, event_features):
+    for question in get_cached_registration_questions(instance.run.event, event_features):
         if question.skip(instance, event_features):
             continue
         applicable_questions.append(question)
