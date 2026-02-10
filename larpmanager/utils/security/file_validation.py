@@ -131,10 +131,11 @@ def safe_filename(filename: str, max_length: int = 255) -> str:
     if len(normalized) > max_length:
         path = Path(normalized)
         stem = path.stem
-        suffix = path.suffix
+        suffix = path.suffix  # Includes the dot (e.g., ".txt")
 
         # Calculate how much we can keep of the stem
-        max_stem_length = max_length - len(suffix) - 1  # -1 for the dot
+        # suffix already includes the dot, so no need to subtract 1
+        max_stem_length = max_length - len(suffix)
         if max_stem_length > 0:
             truncated_stem = stem[:max_stem_length]
             normalized = truncated_stem + suffix

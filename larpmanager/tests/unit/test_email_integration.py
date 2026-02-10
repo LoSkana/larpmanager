@@ -1,10 +1,34 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 """Integration tests for email sending system."""
 
 from unittest.mock import Mock, patch
 
 import pytest
 
-from larpmanager.utils.email import EmailConnectionFactory, SESEmailBackend, SMTPEmailBackend
+from larpmanager.cache import config as lm_config
+from larpmanager.mail.backends import SMTPEmailBackend, SESEmailBackend
+from larpmanager.mail.factory import EmailConnectionFactory
+from larpmanager.models.association import Association, AssociationConfig
+from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.larpmanager.tasks import (
     _build_email_message,
     _prepare_email_metadata,
@@ -12,10 +36,9 @@ from larpmanager.utils.larpmanager.tasks import (
 )
 
 
-class TestEmailMetadataPreparation:
+class TestEmailMetadataPreparation(BaseTestCase):
     """Tests for email metadata extraction."""
 
-    @pytest.mark.django_db
     def test_prepare_metadata_default(self):
         """Test metadata preparation with no config."""
         metadata = _prepare_email_metadata(None, None, None)
@@ -25,7 +48,6 @@ class TestEmailMetadataPreparation:
         assert metadata['headers']['List-Unsubscribe'] == '<mailto:info@larpmanager.com>'
         assert metadata['bcc_recipients'] == []
 
-    @pytest.mark.django_db
     def test_prepare_metadata_with_reply_to(self):
         """Test metadata preparation with reply-to header."""
         metadata = _prepare_email_metadata(None, None, 'reply@example.com')
@@ -33,10 +55,9 @@ class TestEmailMetadataPreparation:
         assert metadata['headers']['Reply-To'] == 'reply@example.com'
         assert metadata['headers']['List-Unsubscribe'] == '<mailto:info@larpmanager.com>'
 
-    @pytest.mark.django_db
-    def test_prepare_metadata_with_association(self, association_factory):
+    def test_prepare_metadata_with_association(self):
         """Test metadata preparation with association config."""
-        association = association_factory(slug='testassoc', name='Test Association')
+        association = self.create_association(slug='testassoc', name='Test Association')
 
         metadata = _prepare_email_metadata(association.id, None, None)
 
@@ -45,21 +66,20 @@ class TestEmailMetadataPreparation:
         assert metadata['sender_name'] == 'Test Association'
         assert 'testassoc@larpmanager.com' in metadata['headers']['List-Unsubscribe']
 
-    @pytest.mark.django_db
-    def test_prepare_metadata_with_association_bcc(self, association_factory):
+    def test_prepare_metadata_with_association_bcc(self):
         """Test metadata includes BCC when association has mail_cc enabled."""
-        association = association_factory(slug='testassoc', main_mail='admin@testassoc.com')
+        association = self.get_association()
+        association.main_mail = "admin@testassoc.com"
+        association.save()
 
-        # Mock the config to return True for mail_cc
-        with patch.object(association, 'get_config', return_value=True):
-            metadata = _prepare_email_metadata(association.id, None, None)
+        AssociationConfig.objects.create(association_id = association.id, name="mail_cc", value="True")
+        metadata = _prepare_email_metadata(association.id, None, None)
 
-            assert 'admin@testassoc.com' in metadata['bcc_recipients']
+        assert 'admin@testassoc.com' in metadata['bcc_recipients']
 
-    @pytest.mark.django_db
-    def test_prepare_metadata_stores_org_main_mail(self, association_factory):
+    def test_prepare_metadata_stores_org_main_mail(self):
         """Test metadata stores organization main_mail for SES backend."""
-        association = association_factory(slug='testassoc', name='Test Org', main_mail='contact@testassoc.com')
+        association = self.create_association(slug='testassoc', name='Test Org', main_mail='contact@testassoc.com')
 
         metadata = _prepare_email_metadata(association.id, None, None)
 
@@ -68,22 +88,19 @@ class TestEmailMetadataPreparation:
         # Should NOT have Reply-To in headers yet (SES will add it)
         assert 'Reply-To' not in metadata['headers']
 
-    @pytest.mark.django_db
-    def test_prepare_metadata_custom_reply_to_in_headers(self, association_factory):
+    def test_prepare_metadata_custom_reply_to_in_headers(self):
         """Test custom reply_to is added to headers."""
-        association = association_factory(slug='testassoc', main_mail='contact@testassoc.com')
+        association = self.create_association(slug='testassoc', main_mail='contact@testassoc.com')
 
         metadata = _prepare_email_metadata(association.id, None, 'custom@example.com')
 
         # Custom reply_to should be in headers
         assert metadata['headers']['Reply-To'] == 'custom@example.com'
 
-    @pytest.mark.django_db
-    def test_prepare_metadata_event_overrides_association(self, run_factory, event_factory, association_factory):
+    def test_prepare_metadata_event_overrides_association(self):
         """Test event metadata overrides association metadata."""
-        association = association_factory(slug='assoc', name='Association')
-        event = event_factory(association=association, name='Test Event')
-        run = run_factory(event=event)
+        association = self.get_association()
+        run = self.get_run()
 
         # Mock event config to return SMTP user
         with patch('larpmanager.utils.larpmanager.tasks.get_event_config') as mock_get_config:
@@ -96,7 +113,7 @@ class TestEmailMetadataPreparation:
             assert metadata['sender_name'] == 'Test Event'
 
 
-class TestEmailMessageBuilding:
+class TestEmailMessageBuilding(BaseTestCase):
     """Tests for email message construction."""
 
     def test_build_email_message_basic(self):
@@ -184,10 +201,9 @@ class TestEmailMessageBuilding:
         assert not hasattr(message, 'org_main_mail')
 
 
-class TestMySendSimpleMail:
+class TestMySendSimpleMail(BaseTestCase):
     """Integration tests for my_send_simple_mail function."""
 
-    @pytest.mark.django_db
     def test_send_simple_mail_with_default_backend(self):
         """Test sending email with default backend."""
         with patch.object(EmailConnectionFactory, 'get_backend') as mock_get_backend:
@@ -207,7 +223,6 @@ class TestMySendSimpleMail:
             assert sent_message.subject == 'Test Subject'
             assert sent_message.to == ['test@example.com']
 
-    @pytest.mark.django_db
     def test_send_simple_mail_with_ses_backend(self):
         """Test sending email via SES backend."""
         with patch.object(EmailConnectionFactory, 'get_backend') as mock_get_backend:
@@ -219,10 +234,9 @@ class TestMySendSimpleMail:
             # Verify SES backend was used
             mock_backend.send_message.assert_called_once()
 
-    @pytest.mark.django_db
-    def test_send_simple_mail_custom_smtp_priority(self, association_factory):
+    def test_send_simple_mail_custom_smtp_priority(self):
         """Test custom SMTP takes priority over SES."""
-        association = association_factory()
+        association = self.get_association()
 
         # Mock factory to return SMTP backend
         with patch.object(EmailConnectionFactory, 'get_backend') as mock_get_backend:
@@ -237,7 +251,6 @@ class TestMySendSimpleMail:
             mock_get_backend.assert_called_once_with(association.id, None)
             mock_smtp_backend.send_message.assert_called_once()
 
-    @pytest.mark.django_db
     def test_send_simple_mail_with_reply_to(self):
         """Test email includes Reply-To header."""
         with patch.object(EmailConnectionFactory, 'get_backend') as mock_get_backend:
@@ -252,10 +265,9 @@ class TestMySendSimpleMail:
             sent_message = mock_backend.send_message.call_args[0][0]
             assert sent_message.extra_headers['Reply-To'] == 'reply@example.com'
 
-    @pytest.mark.django_db
-    def test_send_simple_mail_ses_adds_org_reply_to(self, association_factory):
+    def test_send_simple_mail_ses_adds_org_reply_to(self):
         """Test SES backend adds org main_mail as Reply-To."""
-        association = association_factory(slug='testorg', main_mail='contact@testorg.com')
+        association = self.create_association(slug='testorg', main_mail='contact@testorg.com')
 
         with patch.object(EmailConnectionFactory, 'get_backend') as mock_get_backend:
             mock_ses_backend = Mock(spec=SESEmailBackend)
@@ -270,10 +282,9 @@ class TestMySendSimpleMail:
             assert hasattr(sent_message, 'org_main_mail')
             assert sent_message.org_main_mail == 'contact@testorg.com'
 
-    @pytest.mark.django_db
-    def test_send_simple_mail_ses_custom_reply_to_overrides(self, association_factory):
+    def test_send_simple_mail_ses_custom_reply_to_overrides(self):
         """Test custom Reply-To overrides org main_mail even with SES."""
-        association = association_factory(slug='testorg', main_mail='contact@testorg.com')
+        association = self.create_association(slug='testorg', main_mail='contact@testorg.com')
 
         with patch.object(EmailConnectionFactory, 'get_backend') as mock_get_backend:
             mock_ses_backend = Mock(spec=SESEmailBackend)
@@ -291,7 +302,6 @@ class TestMySendSimpleMail:
             sent_message = mock_ses_backend.send_message.call_args[0][0]
             assert sent_message.extra_headers['Reply-To'] == 'custom@example.com'
 
-    @pytest.mark.django_db
     def test_send_simple_mail_error_handling(self):
         """Test error handling in send_simple_mail."""
         with patch.object(EmailConnectionFactory, 'get_backend') as mock_get_backend:
@@ -309,15 +319,14 @@ class TestMySendSimpleMail:
                 mock_mail_error.assert_called_once()
 
 
-class TestBackendSelection:
+class TestBackendSelection(BaseTestCase):
     """Integration tests for backend selection logic."""
 
-    @pytest.mark.django_db
-    def test_backend_selection_priority_order(self, run_factory, event_factory, association_factory):
+    def test_backend_selection_priority_order(self):
         """Test backend selection follows priority order."""
-        association = association_factory()
-        event = event_factory(association=association)
-        run = run_factory(event=event)
+        association = self.get_association()
+        event = self.create_event(association=association)
+        run = self.create_run(event=event)
 
         # Test with event SMTP configured
         with patch('larpmanager.utils.email.factory._get_event_smtp_config') as mock_event:
