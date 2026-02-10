@@ -624,7 +624,13 @@ class RefundRequestForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         # Set value field with max value constraint from member's credit
-        self.fields["value"] = forms.DecimalField(max_value=self.params["membership"].credit, decimal_places=2)
+        self.fields["value"] = forms.DecimalField(
+            max_value=self.params["membership"].credit,
+            max_digits=10,
+            decimal_places=2,
+            initial=self.params["membership"].credit,
+            help_text=_("Indicates the amount of reimbursement desired (can't be higher than your current credits)"),
+        )
 
 
 class ExeRefundRequestForm(BaseModelForm):
