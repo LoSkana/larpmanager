@@ -47,6 +47,7 @@ from larpmanager.accounting.registration import (
 )
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.cache.text_fields import get_cache_registration_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
@@ -417,8 +418,8 @@ def _get_registration_fields(context: dict, member: Any) -> dict:
     """
     registration_questions = {}
 
-    # Get all registration questions for the event based on available features
-    event_questions = RegistrationQuestion.get_instance_questions(context["event"], context["features"])
+    # Get all registration questions for the event
+    event_questions = get_cached_registration_questions(context["event"])
 
     for question in event_questions:
         # Check if question has access restrictions enabled

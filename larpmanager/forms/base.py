@@ -31,6 +31,7 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
 from larpmanager.cache.config import get_association_config
+from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.forms.utils import ReadOnlyWidget, WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
@@ -565,7 +566,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
     def _init_questions(self, event: Event) -> None:
         """Initialize questions for the given event."""
-        self.questions = self.question_class.get_instance_questions(event, self.params["features"])
+        self.questions = get_cached_registration_questions(event)
 
     def get_options_query(self, event: Event) -> QuerySet:
         """Return ordered options for questions in the given event."""

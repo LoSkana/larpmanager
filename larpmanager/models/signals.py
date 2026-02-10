@@ -104,6 +104,7 @@ from larpmanager.cache.px import (
 from larpmanager.cache.px import (
     on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
 )
+from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
 from larpmanager.cache.registration import clear_registration_counts_cache, on_character_update_registration_cache
 from larpmanager.cache.rels import (
     clear_event_relationships_cache,
@@ -185,7 +186,6 @@ from larpmanager.models.association import (
     AssociationTranslation,
 )
 from larpmanager.models.base import (
-    BaseModel,
     Feature,
     FeatureModule,
     auto_assign_sequential_numbers,
@@ -206,6 +206,7 @@ from larpmanager.models.event import (
 from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.models.form import (
     RegistrationOption,
+    RegistrationQuestion,
     WritingOption,
     WritingQuestion,
 )
@@ -222,7 +223,12 @@ from larpmanager.models.larpmanager import (
 )
 from larpmanager.models.member import Badge, Member, MemberConfig, Membership
 from larpmanager.models.miscellanea import ChatMessage, HelpQuestion, Log, PlayerRelationship, WarehouseItem
-from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.registration import (
+    Registration,
+    RegistrationCharacterRel,
+    RegistrationSection,
+    RegistrationTicket,
+)
 from larpmanager.models.writing import (
     Character,
     CharacterConfig,
@@ -1498,16 +1504,42 @@ def post_delete_registration_character_rel_savereg(
     reset_widgets(instance.registration)
 
 
+@receiver(post_save, sender=RegistrationSection)
+def post_save_registration_section(sender: type, instance: RegistrationSection, **kwargs: dict) -> None:
+    """Process registration section post-save signal."""
+    clear_registration_questions_cache(instance.event_id)
+
+
+@receiver(post_delete, sender=RegistrationSection)
+def post_delete_registration_section(sender: type, instance: RegistrationSection, **kwargs: Any) -> None:
+    """Process registration section post-delete signal."""
+    clear_registration_questions_cache(instance.event_id)
+
+
+@receiver(post_save, sender=RegistrationQuestion)
+def post_save_registration_question(sender: type, instance: RegistrationQuestion, **kwargs: dict) -> None:
+    """Process registration question post-save signal."""
+    clear_registration_questions_cache(instance.event_id)
+
+
+@receiver(post_delete, sender=RegistrationQuestion)
+def post_delete_registration_question(sender: type, instance: RegistrationTicket, **kwargs: Any) -> None:
+    """Process registration question post-delete signal."""
+    clear_registration_questions_cache(instance.event_id)
+
+
 # RegistrationOption signals
 @receiver(post_save, sender=RegistrationOption)
-def post_save_registration_option(
-    sender: type[BaseModel],
-    instance: RegistrationOption,
-    created: bool,
-    **kwargs: dict,
-) -> None:
+def post_save_registration_option(sender: type, instance: RegistrationOption, **kwargs: dict) -> None:
     """Process registration option post-save signal."""
     process_registration_option_post_save(instance)
+    clear_registration_questions_cache(instance.question.event_id)
+
+
+@receiver(post_delete, sender=RegistrationOption)
+def post_delete_registration_option(sender: type, instance: RegistrationOption, **kwargs: Any) -> None:
+    """Process registration option post-delete signal."""
+    clear_registration_questions_cache(instance.question.event_id)
 
 
 # RegistrationTicket signals
@@ -1712,6 +1744,7 @@ def post_save_writing_option_reset(sender: type, instance: Any, **kwargs: Any) -
     """Clear caches when WritingOption is saved."""
     clear_event_fields_cache(instance.question.event_id)
     clear_event_cache_all_runs(instance.question.event)
+    clear_writing_questions_cache(instance.event_id)
 
 
 @receiver(pre_delete, sender=WritingOption)
@@ -1719,6 +1752,7 @@ def pre_delete_character_option_reset(sender: type, instance: Any, **kwargs: Any
     """Clear character-related caches when a character option is deleted."""
     clear_event_cache_all_runs(instance.question.event)
     clear_event_fields_cache(instance.question.event_id)
+    clear_writing_questions_cache(instance.event_id)
 
 
 # WritingQuestion signals
@@ -1727,6 +1761,7 @@ def pre_delete_writing_question_reset(sender: type, instance: WritingQuestion, *
     """Clear caches when a writing question is deleted."""
     clear_event_fields_cache(instance.event_id)
     clear_event_cache_all_runs(instance.event)
+    clear_writing_questions_cache(instance.event_id)
 
 
 @receiver(post_save, sender=WritingQuestion)
@@ -1734,6 +1769,7 @@ def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any)
     """Clear cache for event fields and all runs when writing question changes."""
     clear_event_fields_cache(instance.event_id)
     clear_event_cache_all_runs(instance.event)
+    clear_writing_questions_cache(instance.event_id)
 
 
 # m2m_changed signals

@@ -25,6 +25,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti, WritingTinyMCE
 from larpmanager.models.access import get_event_staffers
@@ -234,11 +235,9 @@ class BaseWritingForm(BaseRegistrationForm):
         self.applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)  # noqa: SLF001  # Django model metadata
 
     def _init_questions(self, event: Event) -> None:
-        """Initialize questions filtered by applicable type."""
-        super()._init_questions(event)
-        # Filter questions to only include those matching this form's applicable type
-        # noinspection PyProtectedMember
-        self.questions = self.questions.filter(applicable=self.applicable)
+        """Initialize questions filtered by applicable type using cache."""
+        self.params.get("features", [])
+        self.questions = get_cached_writing_questions(event, self.applicable)
 
     def get_options_query(self, event: Event) -> Any:
         """Get annotated queryset of options with ticket mappings."""

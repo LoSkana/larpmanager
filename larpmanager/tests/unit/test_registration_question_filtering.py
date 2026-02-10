@@ -25,6 +25,7 @@ from decimal import Decimal
 
 import pytest
 
+from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.forms.registration import RegistrationForm
 from larpmanager.models.form import QuestionStatus, RegistrationQuestion
 from larpmanager.models.member import Member
@@ -32,6 +33,12 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Faction
 from larpmanager.tests.unit.base import BaseTestCase
 
+
+def get_question(questions: list, id: int):
+    for question in questions:
+        if question.id == id:
+            return question
+    return None
 
 class TestRegistrationQuestionTicketFiltering(BaseTestCase):
     """Test cases for reg_que_tickets feature - filtering questions by ticket type"""
@@ -52,8 +59,8 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run, ticket=None)
 
         # Annotate tickets_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_tickets"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Question should be skipped (no ticket selected)
         result = question.skip(registration, features=["reg_que_tickets"])
@@ -75,8 +82,8 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run, ticket=ticket2)
 
         # Annotate tickets_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_tickets"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Question should be skipped (wrong ticket)
         result = question.skip(registration, features=["reg_que_tickets"])
@@ -97,8 +104,8 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run, ticket=ticket1)
 
         # Annotate tickets_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_tickets"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Question should NOT be skipped (correct ticket)
         result = question.skip(registration, features=["reg_que_tickets"])
@@ -121,8 +128,8 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run, ticket=ticket2)
 
         # Annotate tickets_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_tickets"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Question should NOT be skipped (ticket2 is allowed)
         result = question.skip(registration, features=["reg_que_tickets"])
@@ -142,8 +149,8 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run, ticket=ticket)
 
         # Annotate tickets_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_tickets"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Question should NOT be skipped (no ticket restriction)
         result = question.skip(registration, features=["reg_que_tickets"])
@@ -203,8 +210,8 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Annotate factions_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_faction"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Question should be skipped (no character)
         result = question.skip(registration, features=["reg_que_faction"])
@@ -235,8 +242,8 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         RegistrationCharacterRel.objects.create(registration=registration, character=character)
 
         # Annotate factions_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_faction"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Question should be skipped (wrong faction)
         result = question.skip(registration, features=["reg_que_faction"])
@@ -266,8 +273,8 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         RegistrationCharacterRel.objects.create(registration=registration, character=character)
 
         # Annotate factions_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_faction"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Question should NOT be skipped (correct faction)
         result = question.skip(registration, features=["reg_que_faction"])
@@ -299,8 +306,8 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         RegistrationCharacterRel.objects.create(registration=registration, character=character)
 
         # Annotate factions_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_faction"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Question should NOT be skipped (faction2 is allowed)
         result = question.skip(registration, features=["reg_que_faction"])
@@ -327,8 +334,8 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         RegistrationCharacterRel.objects.create(registration=registration, character=character)
 
         # Annotate factions_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_faction"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Question should NOT be skipped (no faction restriction)
         result = question.skip(registration, features=["reg_que_faction"])
@@ -352,8 +359,8 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         # Note: registration.pk is None since we didn't save it
 
         # Annotate factions_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_faction"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Question should be skipped (new registration with faction requirement)
         result = question.skip(registration, features=["reg_que_faction"])
@@ -386,8 +393,8 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Annotate allowed_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_allowed"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Prepare params for organizer context
         params = {"run": run, "all_runs": {}, "member": member}
@@ -410,8 +417,8 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Annotate allowed_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_allowed"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Prepare params for organizer context
         params = {"run": run, "all_runs": {}, "member": member}
@@ -438,8 +445,8 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Annotate allowed_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_allowed"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Prepare params indicating member is run organizer (permission level 1)
         params = {"run": run, "all_runs": {run.id: {1: True}}, "member": member}
@@ -461,8 +468,8 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Annotate allowed_map for the question
-        questions = RegistrationQuestion.get_instance_questions(event=event, features=["reg_que_allowed"])
-        question = questions.get(id=question.id)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Prepare params for organizer context
         params = {"run": run, "all_runs": {}, "member": member}

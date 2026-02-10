@@ -22,7 +22,6 @@ from __future__ import annotations
 from typing import Any, ClassVar
 
 from django.apps import apps
-from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import F, Q, QuerySet
@@ -335,11 +334,6 @@ class WritingQuestion(UuidMixin, BaseModel):
         return js
 
     @staticmethod
-    def get_instance_questions(event_instance: Any, enabled_features: Any) -> Any:  # noqa: ARG004
-        """Get all writing questions for the event instance ordered by order field."""
-        return event_instance.get_elements(WritingQuestion).order_by("order")
-
-    @staticmethod
     def skip(registration: Any, features: Any, params: Any = None, *, is_organizer: Any = False) -> bool:  # noqa: ARG004
         """Default behavior: never skip processing."""
         return False
@@ -600,34 +594,6 @@ class RegistrationQuestion(UuidMixin, BaseModel):
         for s in ["description", "name"]:
             self.upd_js_attr(js, s)
         return js
-
-    @staticmethod
-    def get_instance_questions(event: Event, features: list[str]) -> QuerySet:
-        """Get registration questions for an event with optional feature-specific annotations.
-
-        Args:
-            event: Event instance to filter questions for
-            features: List of feature flag strings to determine which annotations to add
-
-        Returns:
-            QuerySet of RegistrationQuestion objects ordered by section and question order
-
-        """
-        # Get all questions for the event, ordered by section first, then by question order
-        questions = RegistrationQuestion.objects.filter(event=event).order_by(
-            F("section__order").asc(nulls_first=True),
-            "order",
-        )
-
-        # Conditionally add annotations based on enabled features
-        if "reg_que_tickets" in features:
-            questions = questions.annotate(tickets_map=ArrayAgg("tickets__uuid"))
-        if "reg_que_faction" in features:
-            questions = questions.annotate(factions_map=ArrayAgg("factions__id"))
-        if "reg_que_allowed" in features:
-            questions = questions.annotate(allowed_map=ArrayAgg("allowed__id"))
-
-        return questions
 
     def skip(self, registration: Any, features: Any, params: Any = None, *, is_organizer: Any = False) -> bool:  # noqa: C901 - Complex question skip logic with feature checks
         """Determine if a question should be skipped based on context and features.
