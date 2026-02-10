@@ -361,8 +361,7 @@ def user_edit(
                 # Default save behavior
                 saved_instance = form.save()
                 model_type = form_type.Meta.model
-                element_uuid = None if context["el"] is None else context["el"].uuid
-                save_log(context, model_type, saved_instance, element_uuid, info=info)
+                save_log(context, model_type, saved_instance, entity_uuid, info=info)
 
             messages.success(request, _("Operation completed") + "!")
             context["saved"] = saved_instance
