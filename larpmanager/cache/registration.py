@@ -20,7 +20,6 @@
 from typing import Any
 
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 
 from larpmanager.accounting.base import is_registration_provisional
@@ -226,15 +225,16 @@ def search_player(character: Character, json_output: dict[str, Any], context: di
             character.member = None
     else:
         # No cache available, query database directly
-        try:
+        query = RegistrationCharacterRel.objects.select_related("registration", "registration__member").filter(
+            registration__run_id=context["run"].id,
+            character=character,
+        )
+        if query:
             # Fetch registration character relationship with related objects
-            character.rcr = RegistrationCharacterRel.objects.select_related("registration", "registration__member").get(
-                registration__run_id=context["run"].id,
-                character=character,
-            )
+            character.rcr = query.first()
             character.registration = character.rcr.registration
             character.member = character.registration.member
-        except ObjectDoesNotExist:
+        else:
             # Registration not found or database error
             character.rcr = None
             character.registration = None
