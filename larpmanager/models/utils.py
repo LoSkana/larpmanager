@@ -42,6 +42,8 @@ from django.utils.deconstruct import deconstructible
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.utils.security import normalize_filename
+
 if TYPE_CHECKING:
     from decimal import Decimal
 
@@ -249,6 +251,9 @@ class UploadToPathAndRename:
             Backup files are stored in 'bkp/' subdirectory with timestamp suffix.
 
         """
+        # Normalize Unicode to prevent lookalike attacks
+        filename = normalize_filename(filename)
+
         # Extract file extension and generate unique filename
         ext = filename.split(".")[-1].lower()
         filename = f"{uuid4().hex}.{ext}"

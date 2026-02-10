@@ -226,9 +226,10 @@ DEMO_PASSWORD = 'pippo'
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB in bytes
 
 # Allowed file extensions for TinyMCE uploads
+# SECURITY: SVG files are excluded due to XSS risk (can contain JavaScript)
 ALLOWED_UPLOAD_EXTENSIONS = {
     # Images
-    '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp',
+    '.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp',
     # Documents
     '.pdf', '.doc', '.docx', '.odt', '.txt',
     # Audio/Video
@@ -241,9 +242,10 @@ UPLOAD_RATE_WINDOW = 60  # Time window in seconds (1 minute)
 UPLOAD_MAX_STORAGE_PER_USER = 100 * 1024 * 1024  # 100MB total per user
 
 # MIME type validation for uploads
+# SECURITY: image/svg+xml is excluded due to XSS risk (SVGs can contain JavaScript)
 ALLOWED_MIME_TYPES = {
     # Images
-    'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/bmp',
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp',
     # Documents
     'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/vnd.oasis.opendocument.text', 'text/plain',

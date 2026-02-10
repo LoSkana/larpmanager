@@ -379,6 +379,11 @@ def get_event_context(
     # Check if the user is staff
     is_staff = has_event_permission(request, context, event_slug)
 
+    # Configure staff permissions for character management access
+    if has_event_permission(request, context, event_slug, "orga_characters"):
+        context["staff"] = "1"
+        context["skip"] = "1"
+
     # Validate the signup if requested
     if signup:
         check_signup(context)
@@ -401,11 +406,6 @@ def get_event_context(
         context["association_slug"] = request.association["slug"]
     else:
         context["association_slug"] = context["event"].association.slug
-
-    # Configure staff permissions for character management access
-    if has_event_permission(request, context, event_slug, "orga_characters"):
-        context["staff"] = "1"
-        context["skip"] = "1"
 
     # Finalize run context preparation and return complete context
     prepare_run(context)
