@@ -61,24 +61,44 @@ def init_writing_questions_cache(event: Event) -> dict:
     return questions_by_applicable
 
 
-def init_registration_questions_cache(event: Event, features: list[str]) -> list:
-    """Initialize cache for registration questions."""
+def init_registration_questions_cache(event: Event) -> list:
+    """Initialize cache for registration questions.
+
+    Returns a list of tuples (question_instance, annotations_dict) where annotations_dict
+    contains the aggregated data that needs to be preserved through cache serialization.
+
+    Note: We always compute all annotations regardless of enabled features to ensure
+    cache consistency across different feature configurations.
+    """
     # Get all questions for the event, ordered by section first, then by question order
     questions = RegistrationQuestion.objects.filter(event=event).order_by(
         F("section__order").asc(nulls_first=True),
         "order",
     )
 
-    # Conditionally add annotations based on enabled features
-    if "reg_que_tickets" in features:
-        questions = questions.annotate(tickets_map=ArrayAgg("tickets__uuid"))
-    if "reg_que_faction" in features:
-        questions = questions.annotate(factions_map=ArrayAgg("factions__id"))
-    if "reg_que_allowed" in features:
-        questions = questions.annotate(allowed_map=ArrayAgg("allowed__id"))
+    # Add all annotations to ensure cache consistency
+    questions = questions.annotate(
+        tickets_map=ArrayAgg("tickets__uuid"),
+        factions_map=ArrayAgg("factions__id"),
+        allowed_map=ArrayAgg("allowed__id"),
+    )
 
     # Prefetch options to avoid N+1 queries
-    return questions.prefetch_related(Prefetch("options", queryset=RegistrationOption.objects.order_by("order")))
+    questions = questions.prefetch_related(Prefetch("options", queryset=RegistrationOption.objects.order_by("order")))
+
+    # Evaluate queryset and store annotations separately for cache serialization
+    questions_with_annotations = []
+
+    for question in questions:
+        annotations = {
+            "tickets_map": getattr(question, "tickets_map", []),
+            "factions_map": getattr(question, "factions_map", []),
+            "allowed_map": getattr(question, "allowed_map", []),
+        }
+
+        questions_with_annotations.append((question, annotations))
+
+    return questions_with_annotations
 
 
 def get_cached_writing_questions(event: Event, applicable: str) -> list:
@@ -106,19 +126,26 @@ def get_cached_writing_questions(event: Event, applicable: str) -> list:
     return cached_questions.get(applicable, [])
 
 
-def get_cached_registration_questions(event: Event, features: list[str]) -> list:
+def get_cached_registration_questions(event: Event) -> list:
     """Get cached registration questions."""
     cache_key = get_event_questions_cache_key(event.id, "registration")
 
     # Try to get from cache
-    cached_questions = cache.get(cache_key)
+    cached_data = cache.get(cache_key)
 
-    if cached_questions is None:
+    if cached_data is None:
         # Initialize cache
-        cached_questions = init_registration_questions_cache(event, features)
-        cache.set(cache_key, cached_questions, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cached_data = init_registration_questions_cache(event)
+        cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return cached_questions
+    # Restore annotations as attributes on question instances
+    questions_list = []
+    for question, annotated_values in cached_data:
+        for key, value in annotated_values.items():
+            setattr(question, key, value)
+        questions_list.append(question)
+
+    return questions_list
 
 
 def clear_writing_questions_cache(event_id: int) -> None:

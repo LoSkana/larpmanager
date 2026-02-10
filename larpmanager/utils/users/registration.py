@@ -849,7 +849,7 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
 
     # Get event features and filter applicable questions
     event_features = get_event_features(instance.run.event_id)
-    for question in get_cached_registration_questions(instance.run.event, event_features):
+    for question in get_cached_registration_questions(instance.run.event):
         if question.skip(instance, event_features):
             continue
         applicable_questions.append(question)

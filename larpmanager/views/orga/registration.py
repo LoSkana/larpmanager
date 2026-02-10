@@ -419,7 +419,7 @@ def _get_registration_fields(context: dict, member: Any) -> dict:
     registration_questions = {}
 
     # Get all registration questions for the event
-    event_questions = get_cached_registration_questions(context["event"], context["features"])
+    event_questions = get_cached_registration_questions(context["event"])
 
     for question in event_questions:
         # Check if question has access restrictions enabled

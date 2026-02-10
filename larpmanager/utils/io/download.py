@@ -264,7 +264,7 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
 
         # Get applicable questions for the event
         if is_registration_model:
-            applicable_question_list = get_cached_registration_questions(context["event"], context["features"])
+            applicable_question_list = get_cached_registration_questions(context["event"])
         else:
             applicable_question_list = get_cached_writing_questions(context["event"], applicable_questions)
 

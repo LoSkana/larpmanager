@@ -223,7 +223,12 @@ from larpmanager.models.larpmanager import (
 )
 from larpmanager.models.member import Badge, Member, MemberConfig, Membership
 from larpmanager.models.miscellanea import ChatMessage, HelpQuestion, Log, PlayerRelationship, WarehouseItem
-from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.registration import (
+    Registration,
+    RegistrationCharacterRel,
+    RegistrationSection,
+    RegistrationTicket,
+)
 from larpmanager.models.writing import (
     Character,
     CharacterConfig,
@@ -1497,6 +1502,18 @@ def post_delete_registration_character_rel_savereg(
 
     # Clear deadline widget cache (casting requirements)
     reset_widgets(instance.registration)
+
+
+@receiver(post_save, sender=RegistrationSection)
+def post_save_registration_section(sender: type, instance: RegistrationSection, **kwargs: dict) -> None:
+    """Process registration section post-save signal."""
+    clear_registration_questions_cache(instance.event_id)
+
+
+@receiver(post_delete, sender=RegistrationSection)
+def post_delete_registration_section(sender: type, instance: RegistrationSection, **kwargs: Any) -> None:
+    """Process registration section post-delete signal."""
+    clear_registration_questions_cache(instance.event_id)
 
 
 @receiver(post_save, sender=RegistrationQuestion)
