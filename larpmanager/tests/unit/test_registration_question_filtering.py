@@ -53,7 +53,7 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run, ticket=None)
 
         # Annotate tickets_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_tickets"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Question should be skipped (no ticket selected)
@@ -76,7 +76,7 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run, ticket=ticket2)
 
         # Annotate tickets_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_tickets"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Question should be skipped (wrong ticket)
@@ -98,7 +98,7 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run, ticket=ticket1)
 
         # Annotate tickets_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_tickets"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Question should NOT be skipped (correct ticket)
@@ -122,7 +122,7 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run, ticket=ticket2)
 
         # Annotate tickets_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_tickets"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Question should NOT be skipped (ticket2 is allowed)
@@ -143,7 +143,7 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run, ticket=ticket)
 
         # Annotate tickets_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_tickets"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Question should NOT be skipped (no ticket restriction)
@@ -204,7 +204,7 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Annotate factions_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_faction"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Question should be skipped (no character)
@@ -236,7 +236,7 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         RegistrationCharacterRel.objects.create(registration=registration, character=character)
 
         # Annotate factions_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_faction"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Question should be skipped (wrong faction)
@@ -267,7 +267,7 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         RegistrationCharacterRel.objects.create(registration=registration, character=character)
 
         # Annotate factions_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_faction"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Question should NOT be skipped (correct faction)
@@ -300,7 +300,7 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         RegistrationCharacterRel.objects.create(registration=registration, character=character)
 
         # Annotate factions_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_faction"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Question should NOT be skipped (faction2 is allowed)
@@ -328,7 +328,7 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         RegistrationCharacterRel.objects.create(registration=registration, character=character)
 
         # Annotate factions_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_faction"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Question should NOT be skipped (no faction restriction)
@@ -353,7 +353,7 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         # Note: registration.pk is None since we didn't save it
 
         # Annotate factions_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_faction"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Question should be skipped (new registration with faction requirement)
@@ -387,7 +387,7 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Annotate allowed_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_allowed"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Prepare params for organizer context
@@ -411,7 +411,7 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Annotate allowed_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_allowed"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Prepare params for organizer context
@@ -439,7 +439,7 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Annotate allowed_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_allowed"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Prepare params indicating member is run organizer (permission level 1)
@@ -462,7 +462,7 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Annotate allowed_map for the question
-        questions = init_registration_questions_cache(event=event, features=["reg_que_allowed"])
+        questions = init_registration_questions_cache(event=event)
         question = questions.get(id=question.id)
 
         # Prepare params for organizer context
