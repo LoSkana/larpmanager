@@ -627,7 +627,7 @@ class Membership(BaseModel):
             return ""
 
 
-class VolunteerRegistry(BaseModel):
+class VolunteerRegistry(UuidMixin, BaseModel):
     """Represents VolunteerRegistry model."""
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="volunteer")
