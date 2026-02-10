@@ -916,16 +916,11 @@ def get_player_signup(context: dict) -> Registration | None:
 
 
 def check_signup(context: dict) -> None:
-    """Check if player signup is valid and not in waiting status.
+    """Check if player signup is valid and not in waiting status."""
+    # Skip signup check for event staff (admins/organizers)
+    if context.get("staff"):
+        return
 
-    Args:
-        context: Context dictionary containing run information
-
-    Raises:
-        SignupError: If no valid signup found
-        WaitingError: If signup ticket is in waiting tier
-
-    """
     # Get registration
     registration = get_player_signup(context)
     if not registration:

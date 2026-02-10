@@ -70,6 +70,12 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.download import _get_column_names
+from larpmanager.utils.security import (
+    FileSecurityError,
+    safe_extract_zip,
+    sanitize_dataframe,
+    validate_file_size,
+)
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -167,12 +173,16 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
         pandas.DataFrame or None: Parsed CSV data with all columns as strings,
             or None if parsing failed with all attempted encodings.
 
-    Raises:
-        None: All exceptions are caught and handled internally.
-
     """
     # Early return if no file provided
     if not uploaded_file:
+        return None
+
+    # SECURITY: Validate file size to prevent memory exhaustion
+    try:
+        validate_file_size(uploaded_file)
+    except FileSecurityError:
+        logger.exception("File size validation failed: %s")
         return None
 
     # Define encoding priority list - most common first
@@ -195,12 +205,19 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
             # Reset file pointer to beginning
             uploaded_file.seek(0)
 
+            # Read with size limit already validated above (prevent issues with compressed data)
+            file_content = uploaded_file.read()
+
             # Decode file content with current encoding
-            decoded_content = uploaded_file.read().decode(encoding)
+            decoded_content = file_content.decode(encoding)
             string_buffer = io.StringIO(decoded_content)
 
             # Parse CSV with automatic delimiter detection
-            return pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
+            df = pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
+
+            # Sanitize all values to prevent formula injection
+            return sanitize_dataframe(df)
+
         except Exception as parsing_error:  # noqa: BLE001 - Must try all encodings on any parsing error
             # Log error and continue to next encoding
             logger.debug("Failed to parse CSV with encoding %s: %s", encoding, parsing_error)
@@ -1473,7 +1490,6 @@ def cover_load(context: dict, z_obj: Any) -> None:
     Side effects:
         Extracts ZIP contents, processes images, updates character cover fields,
         and moves files to proper media directory structure
-
     """
     # extract images
     fpath = str(Path(conf_settings.MEDIA_ROOT) / "cover_load")
@@ -1481,7 +1497,8 @@ def cover_load(context: dict, z_obj: Any) -> None:
     fpath = str(Path(fpath) / str(context["run"].number))
     if Path(fpath).exists():
         shutil.rmtree(fpath)
-    z_obj.extractall(path=fpath)
+
+    safe_extract_zip(z_obj, fpath)
     covers = {}
     # get images
     for root, _dirnames, filenames in os.walk(fpath):
