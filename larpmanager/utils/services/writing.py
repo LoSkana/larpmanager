@@ -618,6 +618,9 @@ def writing_list_char(context: dict) -> None:  # noqa: C901 - Complex character 
             ),
         )
 
+    # Add character configs (last point where we modify the query, first point where we manipulate the list)
+    char_add_addit(context)
+
     # Get cached relationship data for the event
     event_relationships = get_event_rels_cache(context["event"]).get("characters", {})
 
@@ -645,9 +648,6 @@ def writing_list_char(context: dict) -> None:  # noqa: C901 - Complex character 
     if "prologue" in context["features"]:
         for character in context["list"]:
             character.prologue_rels = event_relationships.get(character.id, {}).get("prologue_rels", [])
-
-    # add character configs
-    char_add_addit(context)
 
 
 def char_add_addit(context: dict) -> None:
