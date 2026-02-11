@@ -170,7 +170,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     # Process each run to determine registration status and categorize
     for run in runs:
         # Calculate registration status (open, closed, full, etc.)
-        run.status = registration_status(run, context["member"], context)
+        run.status = registration_status(context, run, context["member"])
 
         # Categorize runs based on registration availability
         if run.status["open"]:
@@ -459,7 +459,7 @@ def event_register(request: HttpRequest, event_slug: str) -> Any:
     context["list"] = []
     context.update({"features_map": {context["event"].id: context["features"]}})
     for run in runs:
-        run.status = registration_status(run, context["member"], context)
+        run.status = registration_status(context, run, context["member"])
         context["list"].append(run)
     return render(request, "larpmanager/general/event_register.html", context)
 
@@ -528,7 +528,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     # Process each run to add registration status information
     for run in runs_list:
         # Update run object with registration status data
-        run.status = registration_status(run, context["member"], context)
+        run.status = registration_status(context, run, context["member"])
 
         # Add processed run to context list
         context["list"].append(run)
@@ -697,7 +697,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
             continue
 
         # Update run with registration status information
-        run.status = registration_status(run, context["member"], context)
+        run.status = registration_status(context, run, context["member"])
 
         # Categorize run as coming (recent) or past based on end date
         if run.end > ref.date():
