@@ -346,13 +346,13 @@ def registrations_popup(request: HttpRequest, context: dict) -> Any:
         dict: Response data for popup
 
     """
-    registration_id = int(request.POST.get("idx", 0) or 0)
-    question_id = request.POST.get("tp", "")
+    registration_uuid = request.POST.get("idx", "")
+    question_uuid = request.POST.get("tp", "")
 
     try:
-        registration = Registration.objects.get(pk=registration_id, run=context["run"])
+        registration = Registration.objects.get(uuid=registration_uuid, run=context["run"])
         question = RegistrationQuestion.objects.get(
-            pk=question_id,
+            uuid=question_uuid,
             event=context["event"].get_class_parent(RegistrationQuestion),
         )
         answer = RegistrationAnswer.objects.get(registration=registration, question=question)
@@ -463,22 +463,21 @@ def _orga_registrations_text_fields(context: dict) -> None:
         context: Context dictionary containing event and registration data
 
     """
-    # add editor type questions
-    questions = RegistrationQuestion.objects.filter(event=context["event"])
-    text_field_ids = [
-        str(question_id) for question_id in questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True)
-    ]
+    # add editor type questions using cached version
+    questions = get_cached_registration_questions(context["event"])
+    text_field_uuids = [str(q.uuid) for q in questions if q.typ == BaseQuestionType.EDITOR]
 
     cached_registration_fields = get_cache_registration_field(context["run"])
     for registration in context["registration_list"]:
-        if registration.id not in cached_registration_fields:
+        registration_uuid = str(registration.uuid)
+        if registration_uuid not in cached_registration_fields:
             continue
-        for field_id in text_field_ids:
-            if field_id not in cached_registration_fields[registration.id]:
+        for field_uuid in text_field_uuids:
+            if field_uuid not in cached_registration_fields[registration_uuid]:
                 continue
-            (is_redacted, line_number) = cached_registration_fields[registration.id][field_id]
-            setattr(registration, field_id + "_red", is_redacted)
-            setattr(registration, field_id + "_ln", line_number)
+            (is_redacted, line_number) = cached_registration_fields[registration_uuid][field_uuid]
+            setattr(registration, field_uuid + "_red", is_redacted)
+            setattr(registration, field_uuid + "_ln", line_number)
 
 
 @login_required

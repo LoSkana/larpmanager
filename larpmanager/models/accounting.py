@@ -409,9 +409,15 @@ class AccountingItemOther(AccountingItem):
         elif self.oth == OtherChoices.REFUND:
             s = _("Refund")
 
-        # Append member information if present
         if self.member:
             s += f" - {self.member}"
+
+        if self.value:
+            s += f" - {self.value}"
+
+        if self.run:
+            s += f" - {self.run}"
+
         return s
 
 
