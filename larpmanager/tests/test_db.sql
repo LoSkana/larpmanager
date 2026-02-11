@@ -4245,6 +4245,7 @@ INSERT INTO public.django_migrations VALUES (183, 'socialaccount', '0003_extra_d
 INSERT INTO public.django_migrations VALUES (184, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (185, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (186, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (187, 'larpmanager', '0139_add_membership_performance_index', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
@@ -4638,7 +4639,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 186, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 187, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -7354,6 +7355,8 @@ CREATE INDEX larpmanager_writingoption_uuid_2f6599f6_like ON public.larpmanager_
 
 CREATE INDEX larpmanager_writingquestion_uuid_a483cd93_like ON public.larpmanager_writingquestion USING btree (uuid varchar_pattern_ops);
 
+CREATE INDEX memb_assoc_stat_mem_act ON public.larpmanager_membership USING btree (association_id, status, member_id) WHERE (deleted IS NULL);
+
 CREATE INDEX memb_association_mem_act ON public.larpmanager_membership USING btree (association_id, member_id) WHERE (deleted IS NULL);
 
 CREATE INDEX memb_association_stat_act ON public.larpmanager_membership USING btree (association_id, status) WHERE (deleted IS NULL);
@@ -8472,4 +8475,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0138_add_uuid_to_volunteerregistry
+-- LARPMANAGER_SCHEMA_VERSION: 0139_add_membership_performance_index

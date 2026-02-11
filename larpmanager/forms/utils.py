@@ -1059,18 +1059,9 @@ class RedirectForm(forms.Form):
 
 
 def get_members_queryset(association_id: int) -> QuerySet[Member]:
-    """Get queryset of members for an association with accepted status.
-
-    Args:
-        association_id: Association ID to filter members for
-
-    Returns:
-        QuerySet: Members with accepted, submitted, or joined membership status
-
-    """
+    """Get queryset of members for an association with accepted status."""
     allowed_statuses = [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.JOINED]
-    queryset = Member.objects.prefetch_related("memberships")
-    return queryset.filter(memberships__association_id=association_id, memberships__status__in=allowed_statuses)
+    return Member.objects.filter(memberships__association_id=association_id, memberships__status__in=allowed_statuses)
 
 
 # CSRF-aware upload handler for TinyMCE
