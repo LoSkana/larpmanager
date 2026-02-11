@@ -432,7 +432,7 @@ class AssociationMemberS2Widget(AssocMS2, s2forms.ModelSelect2Widget):
 
 
 class RunMemberS2Widget(s2forms.ModelSelect2Widget):
-    """Represents RunMemberS2Widget model."""
+    """Widget to select only members that have signed up to that run."""
 
     search_fields: ClassVar[list] = [
         "name__icontains",
@@ -465,17 +465,39 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
         return Member.objects.filter(pk__in=self.allowed_member_ids)
 
     def label_from_instance(self, obj: Any) -> str:
-        """Generate label combining object display name and email.
-
-        Args:
-            obj: Object with display_real() method and email attribute.
-
-        Returns:
-            Formatted string with display name and email.
-
-        """
+        """Generate label combining object display name and email."""
         # noinspection PyUnresolvedReferences
         return f"{obj.display_real()} - {obj.email}"
+
+
+class RunStaffS2Widget(s2forms.ModelSelect2Widget):
+    """Widget to select only staff of a run."""
+
+    search_fields: ClassVar[list] = [
+        "name__icontains",
+        "surname__icontains",
+        "nickname__icontains",
+        "user__email__icontains",
+    ]
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and set allowed attribute to None."""
+        super().__init__(*args, **kwargs)
+        self.allowed_member_ids = None
+
+    def set_run(self, run: Run) -> None:
+        """Set allowed members for a run based on event roles."""
+        event_role_queryset = EventRole.objects.filter(event_id=run.event_id).prefetch_related("members")
+        self.allowed_member_ids = set(event_role_queryset.values_list("members__id", flat=True))
+
+    def get_queryset(self) -> QuerySet[Member]:
+        """Return members filtered by allowed IDs."""
+        return Member.objects.filter(pk__in=self.allowed_member_ids)
+
+    def label_from_instance(self, obj: Any) -> str:
+        """Generate label combining object display name and email."""
+        # noinspection PyUnresolvedReferences
+        return f"{obj.show_nick()}"
 
 
 def get_association_people(association_id: int) -> list[tuple[int, str]]:

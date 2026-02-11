@@ -541,6 +541,7 @@ class BaseRegistrationForm(BaseModelFormRun):
             # Populate choice dictionaries with existing single/multiple choice answers
             for choice_answer in self.choice_class.objects.filter(**{self.instance_key: instance.id}).select_related(
                 "question",
+                "option",
             ):
                 # Handle single choice questions - store the selected choice
                 if choice_answer.question.typ == BaseQuestionType.SINGLE:

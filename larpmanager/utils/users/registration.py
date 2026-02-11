@@ -398,12 +398,7 @@ def _status_payment(
     return False
 
 
-def registration_status(
-    run: Run,
-    member: Member,
-    context: dict,
-    registration: Registration | None = None,
-) -> dict:
+def registration_status(context: dict, run: Run, member: Member) -> dict:
     """Determine registration status and availability for users.
 
     Checks registration constraints, deadlines, and feature requirements
@@ -419,7 +414,6 @@ def registration_status(
             - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
             - pre_registrations_dict: Dictionary mapping event IDs to PreRegistration objects
-        registration: Optional provided registration
 
     Returns:
         Dict with run status informations
@@ -432,7 +426,9 @@ def registration_status(
     run_status = {"open": True, "details": "", "text": "", "additional": "", "can_pay": True}
 
     # Find user's registration if not already provided
-    if registration is None:
+    if "registration" in context:
+        registration = context["registration"]
+    else:
         registration = registration_find(run, member, context)
         context["registration"] = registration
 

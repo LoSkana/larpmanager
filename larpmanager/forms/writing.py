@@ -27,8 +27,12 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm
-from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti, WritingTinyMCE
-from larpmanager.models.access import get_event_staffers
+from larpmanager.forms.utils import (
+    EventCharacterS2Widget,
+    EventCharacterS2WidgetMulti,
+    RunStaffS2Widget,
+    WritingTinyMCE,
+)
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, ProgressStep
 from larpmanager.models.form import (
@@ -84,10 +88,8 @@ class WritingForm(BaseModelForm):
             self.delete_field("cover")
 
         if WritingQuestionType.ASSIGNED in question_types:
-            staffer_choices = [
-                (member.uuid, member.show_nick()) for member in get_event_staffers(self.params.get("run").event)
-            ]
-            self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---")), *staffer_choices]
+            self.configure_field_run("assigned", self.params.get("run"))
+            self.fields["assigned"].required = False
         else:
             self.delete_field("assigned")
 
@@ -288,9 +290,7 @@ class OrgaPlotForm(WritingForm, BaseWritingForm):
 
         exclude = ("number", "temp", "hide", "order")
 
-        widgets: ClassVar[dict] = {
-            "characters": EventCharacterS2WidgetMulti,
-        }
+        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti, "assigned": RunStaffS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize plot form with character relationships and dynamic fields.
@@ -404,9 +404,7 @@ class OrgaFactionForm(WritingForm, BaseWritingForm):
 
         exclude = ("number", "temp", "hide", "order")
 
-        widgets: ClassVar[dict] = {
-            "characters": EventCharacterS2WidgetMulti,
-        }
+        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti, "assigned": RunStaffS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize faction form with field configuration and help text."""
@@ -442,10 +440,7 @@ class OrgaQuestTypeForm(WritingForm):
         model = QuestType
         fields: ClassVar[list] = ["name", "teaser", "event"]
 
-        widgets: ClassVar[dict] = {
-            "teaser": WritingTinyMCE(),
-            "text": WritingTinyMCE(),
-        }
+        widgets: ClassVar[dict] = {"teaser": WritingTinyMCE(), "text": WritingTinyMCE(), "assigned": RunStaffS2Widget}
 
 
 class OrgaQuestForm(WritingForm, BaseWritingForm):
@@ -456,6 +451,8 @@ class OrgaQuestForm(WritingForm, BaseWritingForm):
     class Meta:
         model = Quest
         exclude = ("number", "temp", "hide", "order")
+
+        widgets: ClassVar[dict] = {"assigned": RunStaffS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form with organization fields and quest type choices."""
@@ -481,6 +478,8 @@ class OrgaTraitForm(WritingForm, BaseWritingForm):
         model = Trait
         exclude = ("number", "temp", "hide", "order", "traits")
 
+        widgets: ClassVar[dict] = {"assigned": RunStaffS2Widget}
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure quest field choices."""
         super().__init__(*args, **kwargs)
@@ -503,9 +502,7 @@ class OrgaHandoutForm(WritingForm):
         model = Handout
         fields: ClassVar[list] = ["template", "name", "text", "event"]
 
-        widgets: ClassVar[dict] = {
-            "text": WritingTinyMCE(),
-        }
+        widgets: ClassVar[dict] = {"text": WritingTinyMCE(), "assigned": RunStaffS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and populate template choices from run's handout templates."""
@@ -528,7 +525,8 @@ class OrgaHandoutTemplateForm(WritingForm):
         exclude: ClassVar[list] = ["number"]
 
         widgets: ClassVar[dict] = {
-            "template": forms.FileInput(attrs={"accept": "application/vnd.oasis.opendocument.text"})
+            "template": forms.FileInput(attrs={"accept": "application/vnd.oasis.opendocument.text"}),
+            "assigned": RunStaffS2Widget,
         }
 
 
@@ -554,9 +552,7 @@ class OrgaPrologueForm(WritingForm, BaseWritingForm):
 
         exclude = ("number", "teaser", "temp", "hide")
 
-        widgets: ClassVar[dict] = {
-            "characters": EventCharacterS2WidgetMulti,
-        }
+        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti, "assigned": RunStaffS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with prologue choices and field configuration."""
@@ -586,6 +582,7 @@ class OrgaSpeedLarpForm(WritingForm):
         widgets: ClassVar[dict] = {
             "characters": EventCharacterS2WidgetMulti,
             "text": WritingTinyMCE(),
+            "assigned": RunStaffS2Widget,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

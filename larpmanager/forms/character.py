@@ -40,6 +40,7 @@ from larpmanager.forms.utils import (
     EventPlotS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     FactionS2WidgetMulti,
+    RunStaffS2Widget,
     TicketS2WidgetMulti,
     WritingTinyMCE,
 )
@@ -99,6 +100,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "text": WritingTinyMCE(),
             "player": AssociationMemberS2Widget,
             "characters": EventCharacterS2WidgetMulti,
+            "assigned": RunStaffS2Widget,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

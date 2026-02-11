@@ -394,7 +394,7 @@ def get_event_context(
 
     # Add registration status details to context
     if include_status:
-        context["run_status"] = registration_status(context["run"], context["member"], context, registration)
+        context["run_status"] = registration_status(context, context["run"], context["member"])
 
     # Configure user permissions and sidebar for authorized users
     if is_staff:
@@ -491,7 +491,6 @@ def get_run(context: Any, event_slug: Any) -> None:
         run_uuid = get_cache_run(context["association_id"], event_slug)
         que = Run.objects.select_related("event")
         fields = [
-            "search",
             "balance",
             "event__tagline",
             "event__where",
