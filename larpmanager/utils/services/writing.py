@@ -32,6 +32,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.rels import get_event_rels_cache
 from larpmanager.cache.text_fields import get_cache_text_field
 from larpmanager.models.access import get_event_staffers
@@ -136,31 +137,6 @@ def orga_list_progress_assign(context: dict, typ: type[Model]) -> None:
     context["typ"] = str(typ._meta).replace("larpmanager.", "")  # type: ignore[attr-defined]  # noqa: SLF001  # Django model metadata
 
 
-def writing_popup_question(context: dict, idx: Any, question_idx: Any) -> Any:
-    """Get writing question data for popup display.
-
-    Args:
-        context: Context dictionary with event and writing element data
-        idx (int): Writing element ID
-        question_idx (int): Question index
-
-    Returns:
-        dict: Question data for popup rendering
-
-    """
-    try:
-        character = Character.objects.get(pk=idx, event=context["event"].get_class_parent(Character))
-        question = WritingQuestion.objects.get(
-            pk=question_idx,
-            event=context["event"].get_class_parent(WritingQuestion),
-        )
-        writing_answer = WritingAnswer.objects.get(element_id=character.id, question=question)
-        html_text = f"<h2>{character} - {question.name}</h2>" + writing_answer.text
-        return JsonResponse({"k": 1, "v": html_text})
-    except ObjectDoesNotExist:
-        return JsonResponse({"k": 0})
-
-
 def writing_popup(request: HttpRequest, context: dict, typ: type[Model]) -> JsonResponse:
     """Handle writing element popup requests.
 
@@ -182,28 +158,34 @@ def writing_popup(request: HttpRequest, context: dict, typ: type[Model]) -> Json
     # Load all cached event data into context
     get_event_cache_all(context)
 
-    # Parse and validate the index parameter from POST data
-    try:
-        element_id = int(request.POST.get("idx", ""))
-    except (ValueError, TypeError):
+    # Parse and validate the index parameter from POST data (UUID string)
+    element_uuid = request.POST.get("idx", "")
+    if not element_uuid:
         return JsonResponse({"error": "Invalid idx parameter"}, status=400)
 
     # Extract the type parameter for attribute lookup
     attribute_type = request.POST.get("tp", "")
 
-    # Check if this is a character question request (numeric tp indicates question)
-    try:
-        question_id = int(attribute_type)
-        return writing_popup_question(context, element_id, question_id)
-    except ValueError:
-        # Not a question, continue with regular element handling
-        pass
+    applicable = QuestionApplicable.get_applicable(typ._meta.model_name)  # noqa: SLF001  # Django model metadata
+    questions_list = get_cached_writing_questions(context["event"], applicable)
+    # Convert questions list to dict keyed by UUID for lookup
+    questions = {str(q.uuid): q for q in questions_list}
 
     # Retrieve the writing element from database using parent event context
     try:
-        writing_element = typ.objects.get(pk=element_id, event=context["event"].get_class_parent(typ))
+        writing_element = typ.objects.get(uuid=element_uuid, event=context["event"].get_class_parent(typ))
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
+
+    # Check if this is a character question request
+    if attribute_type in questions:
+        question = questions[attribute_type]
+        try:
+            writing_answer = WritingAnswer.objects.get(element_id=writing_element.id, question=question)
+            html_text = f"<h2>{writing_element} - {question.name}</h2>" + writing_answer.text
+            return JsonResponse({"k": 1, "v": html_text})
+        except ObjectDoesNotExist:
+            return JsonResponse({"k": 0})
 
     # Verify the requested attribute exists on the element
     if not hasattr(writing_element, attribute_type):
@@ -458,9 +440,8 @@ def writing_list_text_fields(context: dict, text_fields: Any, writing_element_ty
         writing_element_type: Writing element model class
 
     """
-    # add editor type questions
-    writing_questions = context["event"].get_elements(WritingQuestion).filter(applicable=context["writing_typ"])
-    text_fields.extend(writing_questions.filter(typ=BaseQuestionType.EDITOR).values_list("uuid", flat=True))
+    writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+    text_fields.extend([q.uuid for q in writing_questions if q.typ == BaseQuestionType.EDITOR])
 
     retrieve_cache_text_field(context, text_fields, writing_element_type)
 
@@ -476,12 +457,12 @@ def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any
     """
     cached_text_fields = get_cache_text_field(element_type, context["event"])
     for element in context["list"]:
-        if element.id not in cached_text_fields:
+        if element.uuid not in cached_text_fields:
             continue
         for field_name in text_fields:
-            if field_name not in cached_text_fields[element.id]:
+            if field_name not in cached_text_fields[element.uuid]:
                 continue
-            (rendered_text, line_count) = cached_text_fields[element.id][field_name]
+            (rendered_text, line_count) = cached_text_fields[element.uuid][field_name]
             setattr(element, field_name + "_red", rendered_text)
             setattr(element, field_name + "_ln", line_count)
 

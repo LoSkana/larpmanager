@@ -739,8 +739,9 @@ function post_popup() {
         });
 
         request.done(function(res) {
-            if (res.k == 0) return;
             stop_spinner();
+
+            if (res.k == 0) return;
 
             uglipop({class:'popup', source:'html', content: res.v});
 
@@ -748,6 +749,10 @@ function post_popup() {
 
             $('.popup').scrollTop( 0 );
             $(".popup .hide").hide();
+        });
+
+        request.fail(function(res) {
+            stop_spinner();
         });
 
         return false;

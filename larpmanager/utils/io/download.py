@@ -1041,12 +1041,12 @@ def _get_writing_names(context: dict) -> None:
     context["fields"] = {}
 
     # Retrieve and process writing questions for the event
-    writing_questions = context["event"].get_elements(WritingQuestion).filter(applicable=context["writing_typ"])
-    for field in writing_questions.order_by("order").values("name", "typ"):
-        context["fields"][field["name"]] = field["typ"]
+    writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+    for question in writing_questions:
+        context["fields"][question.name] = question.typ
         # Store the name field for special handling
-        if field["typ"] == "name":
-            context["field_name"] = field["name"]
+        if question.typ == "name":
+            context["field_name"] = question.name
 
     # Initialize base column configuration
     context["columns"] = [{}]
