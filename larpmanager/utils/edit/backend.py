@@ -616,8 +616,10 @@ def backend_edit(
     context["num"] = element_uuid
     context["type"] = context["elementTyp"].__name__.lower()
 
+    is_ajax_save = request.method == "POST" and request.POST.get("ajax") == "1"
+
     # Configure writing-specific context if this is a writing element
-    if writing_type:
+    if writing_type and not is_ajax_save:
         context["label_typ"] = context["type"]
         context["nm"] = context["type"]
         context["is_writing"] = True  # Flag to indicate writing element
