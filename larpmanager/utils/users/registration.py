@@ -34,7 +34,7 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.cache.registration import clear_registration_counts_cache, get_registration_counts
 from larpmanager.cache.widget import clear_widget_cache
-from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
+from larpmanager.models.accounting import AccountingItemMembership, PaymentInvoice, PaymentStatus, PaymentType
 from larpmanager.models.event import Event, PreRegistration, RegistrationStatus, Run
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -44,7 +44,7 @@ from larpmanager.models.form import (
     RegistrationQuestion,
     WritingChoice,
 )
-from larpmanager.models.member import Member, MembershipStatus, get_user_membership
+from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus
 from larpmanager.utils.core.common import format_datetime, get_time_diff_today
@@ -207,6 +207,46 @@ def get_match_reg(r: Run, my_regs: list[Registration]) -> Registration | None:
     return None
 
 
+def _status_membership_fee(
+    run: Run, member: Member, user_membership: Membership, run_status: dict, registration_text: str
+) -> bool:
+    """Check if we need to show text regarding membership payment."""
+    if user_membership.status != MembershipStatus.ACCEPTED:
+        return False
+
+    current_year = timezone.now().year
+    # Check if event is in current year and if membership fee has been paid
+    if not run.start or run.start.year != current_year:
+        return False
+
+    # Check if membership fee exists for current year
+    membership_fee_exists = AccountingItemMembership.objects.filter(
+        member=member,
+        association_id=run.event.association_id,
+        year=current_year,
+    ).exists()
+
+    if membership_fee_exists:
+        return False
+
+    # Check if there's a pending membership payment
+    pending_membership_payment = PaymentInvoice.objects.filter(
+        member=member,
+        association_id=run.event.association_id,
+        status=PaymentStatus.SUBMITTED,
+        typ=PaymentType.MEMBERSHIP,
+    ).exists()
+
+    if pending_membership_payment:
+        return False
+
+    membership_url = reverse("accounting_membership")
+    membership_message = _("please pay the annual membership fee to attend the event") + "."
+    text_url = f", <a href='{membership_url}'>{membership_message}</a>"
+    run_status["text"] = registration_text + text_url
+    return True
+
+
 def registration_status_signed(  # noqa: C901 - Complex registration status logic with feature checks
     run: Run,
     registration: Registration,
@@ -277,9 +317,12 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
             run_status["can_pay"] = False
             return
 
-    # Handle payment feature processing and related status updates
-    # Process payment status and return if payment handling is complete
+    # Check payment status and return if payment handling is complete
     if "payment" in features and _status_payment(registration_text, registration, run_status, context):
+        return
+
+    # Check for missing membership fee if membership feature is enabled
+    if "membership" in features and _status_membership_fee(run, member, user_membership, run_status, registration_text):
         return
 
     # Check for incomplete user profile and prompt completion
