@@ -972,10 +972,11 @@ def check_signup(context: dict) -> None:
 
 
 def check_assign_character(context: dict) -> None:
-    """Check and assign a character to player signup if conditions are met.
+    """Check and assign characters to player signup.
 
-    Automatically assigns the first available character to a player's signup
-    if they have exactly one character and no existing character assignments.
+    Automatically assigns available characters to a player's signup up to the
+    maximum allowed by user_character_max configuration, skipping characters
+    that are inactive or already assigned to this registration.
 
     Args:
         context: Context dictionary containing event data
@@ -989,8 +990,14 @@ def check_assign_character(context: dict) -> None:
     if not registration:
         return
 
-    # Skip if player already has character assignments
-    if registration.rcrs.exists():
+    # Get the maximum number of characters a user can have assigned
+    user_character_max = max(1, int(get_event_config(context["event"].id, "user_character_max", default_value=0)))
+
+    # Get currently assigned character IDs for this registration
+    assigned_character_ids = set(registration.rcrs.values_list("character_id", flat=True))
+
+    # Skip if player already has maximum character assignments
+    if len(assigned_character_ids) >= user_character_max:
         return
 
     # Get all characters belonging to this player for the event
@@ -1007,13 +1014,17 @@ def check_assign_character(context: dict) -> None:
         ),
     )
 
-    # Filter out inactive characters
-    active_characters = [char for char in characters if char.id not in inactive_character_ids]
-    if not active_characters:
+    # Filter to get assignable characters (active and not already assigned)
+    assignable_characters = [
+        char for char in characters if char.id not in inactive_character_ids and char.id not in assigned_character_ids
+    ]
+    if not assignable_characters:
         return
 
-    # Auto-assign the first active character to the registration
-    RegistrationCharacterRel.objects.create(character_id=active_characters[0].id, registration=registration)
+    # Auto-assign characters up to the user_character_max limit
+    characters_to_assign = user_character_max - len(assigned_character_ids)
+    for character in assignable_characters[:characters_to_assign]:
+        RegistrationCharacterRel.objects.create(character_id=character.id, registration=registration)
 
 
 def get_reduced_available_count(run: Any) -> int:

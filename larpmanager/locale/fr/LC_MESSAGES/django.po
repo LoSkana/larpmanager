@@ -7008,6 +7008,9 @@ msgstr ""
 msgid "You must select at least one ticket for this installment"
 msgstr "Vous devez sélectionner au moins un billet pour cette tranche"
 
+msgid "please pay the annual membership fee to attend the event"
+msgstr "veuillez payer la cotisation annuelle pour participer à l'événement"
+
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(Facultatif) Autres compétences préalables, séparées par des virgules"
 
