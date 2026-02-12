@@ -159,6 +159,7 @@ def check_diff(self: object, old_text: str, new_text: str) -> None:
 def get_object_uuid(
     model_class: type[BaseModel],
     identifier: str | int,
+    queryset_base: Any = None,
     **filters: Any,
 ) -> BaseModel:
     """Get object by UUID or ID with fallback.
@@ -169,6 +170,7 @@ def get_object_uuid(
     Args:
         model_class: Django model class to query
         identifier: UUID string to look up
+        queryset_base: Optional queryset to use instead of model_class.objects (for optimizations like prefetch_related)
         **filters: Additional filter kwargs (e.g., event=event, association_id=123)
 
     Returns:
@@ -178,13 +180,16 @@ def get_object_uuid(
         Http404: If object not found by UUID or ID (after 2 second wait)
 
     """
+    # Use provided queryset or default to model objects
+    queryset = queryset_base if queryset_base is not None else model_class.objects
+
     try:
-        return model_class.objects.get(uuid=identifier, **filters)
+        return queryset.get(uuid=identifier, **filters)
     except (ObjectDoesNotExist, ValueError, AttributeError) as err:
         # TEMPORARY Fallback to ID lookup ONLY if UUID lookup fails and identifier is numeric
         if str(identifier).isdigit():
             try:
-                return model_class.objects.get(pk=identifier, **filters)
+                return queryset.get(pk=identifier, **filters)
             except ObjectDoesNotExist:
                 # Wait 2 seconds before raising 404 to handle race conditions
                 time.sleep(2)
@@ -367,6 +372,7 @@ def get_element(
     element_uuid: str,
     context_key_name: str,
     model_class: type[BaseModel],
+    queryset_base: Any = None,
 ) -> None:
     """Retrieve a model instance and add it to the context dictionary.
 
@@ -382,6 +388,7 @@ def get_element(
             in the context dictionary. Also used in error messages.
         model_class: The Django model class to query. Must have a foreign key relationship
             to an 'event' and optionally a 'number' field if `by_number=True`.
+        queryset_base: Optional optimized queryset to use instead of model_class.objects
 
     Raises:
         Http404: If the requested object does not exist in the database.
@@ -389,12 +396,21 @@ def get_element(
     if not element_uuid:
         return
 
-    context[context_key_name] = get_element_event(context, element_uuid, model_class)
+    context[context_key_name] = get_element_event(context, element_uuid, model_class, queryset_base)
     context["class_name"] = context_key_name
 
 
-def get_element_event(context: dict, element_uuid: str, model_class: type[BaseModel]) -> BaseModel:
-    """Retrieves an element by UUID taking into account association /event hierarchy."""
+def get_element_event(
+    context: dict, element_uuid: str, model_class: type[BaseModel], queryset_base: Any = None
+) -> BaseModel:
+    """Retrieves an element by UUID taking into account association /event hierarchy.
+
+    Args:
+        context: Context dictionary with event/association data
+        element_uuid: UUID of element to retrieve
+        model_class: Model class to query
+        queryset_base: Optional optimized queryset to use instead of model_class.objects
+    """
     filters = {}
     # Add association filter / event filter
     if hasattr(model_class, "association"):
@@ -405,6 +421,7 @@ def get_element_event(context: dict, element_uuid: str, model_class: type[BaseMo
     return get_object_uuid(
         model_class,
         element_uuid,
+        queryset_base=queryset_base,
         **filters,
     )
 

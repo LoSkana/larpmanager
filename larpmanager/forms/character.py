@@ -24,12 +24,12 @@ from typing import Any, ClassVar
 from django import forms
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db.models import Q
 from django.http import Http404
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.registration import get_registration_counts
@@ -391,9 +391,6 @@ class OrgaCharacterForm(CharacterForm):
         if self.params.get("request") and self.params["request"].POST.get("ajax") == "1":
             return
 
-        if "character_finder" in self.params.get("features", []):
-            get_event_cache_all(self.params)
-
         # Process character relationships for display and validation
         self._characters_relationships()
 
@@ -423,19 +420,24 @@ class OrgaCharacterForm(CharacterForm):
 
         relationships_by_character_uuid = {}
 
-        direct_relationships = Relationship.objects.filter(source=self.instance).select_related("target")
+        # Unified query for both direct and inverse relationships
+        all_relationships = Relationship.objects.filter(
+            Q(source=self.instance) | Q(target=self.instance)
+        ).select_related("source", "target")
 
-        for relationship in direct_relationships:
-            if relationship.target.uuid not in relationships_by_character_uuid:
-                relationships_by_character_uuid[relationship.target.uuid] = {"char": relationship.target}
-            relationships_by_character_uuid[relationship.target.uuid]["direct"] = relationship.text
-
-        inverse_relationships = Relationship.objects.filter(target=self.instance).select_related("source")
-
-        for relationship in inverse_relationships:
-            if relationship.source.uuid not in relationships_by_character_uuid:
-                relationships_by_character_uuid[relationship.source.uuid] = {"char": relationship.source}
-            relationships_by_character_uuid[relationship.source.uuid]["inverse"] = relationship.text
+        for relationship in all_relationships:
+            if relationship.source == self.instance:
+                # This is a direct relationship (current character is source)
+                other_char = relationship.target
+                if other_char.uuid not in relationships_by_character_uuid:
+                    relationships_by_character_uuid[other_char.uuid] = {"char": other_char}
+                relationships_by_character_uuid[other_char.uuid]["direct"] = relationship.text
+            else:
+                # This is an inverse relationship (current character is target)
+                other_char = relationship.source
+                if other_char.uuid not in relationships_by_character_uuid:
+                    relationships_by_character_uuid[other_char.uuid] = {"char": other_char}
+                relationships_by_character_uuid[other_char.uuid]["inverse"] = relationship.text
 
         sorted_relationships = sorted(
             relationships_by_character_uuid.items(),
