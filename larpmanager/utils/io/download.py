@@ -772,7 +772,15 @@ def _extract_values(field_names: list, objects: list, field_mappings: dict) -> l
 
         # Process each field-value pair in the current row
         for field_name in field_names:
-            field_value = getattr(row, field_name)
+            # Handle Django's double-underscore notation for related fields
+            if "__" in field_name:
+                # Traverse the relationship chain (e.g., "question__name" -> row.question.name)
+                field_value = row
+                for part in field_name.split("__"):
+                    field_value = getattr(field_value, part)
+            else:
+                field_value = getattr(row, field_name)
+
             # Apply mapping transformation if field and value exist in mappings
             if field_name in field_mappings and field_value in field_mappings[field_name]:
                 transformed_value = field_mappings[field_name][field_value]
