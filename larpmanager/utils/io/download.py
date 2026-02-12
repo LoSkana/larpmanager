@@ -752,12 +752,12 @@ def export_registration_form(context: dict) -> list[tuple[str, list, list]]:
     return excel_exports
 
 
-def _extract_values(field_names: list, queryset: object, field_mappings: dict) -> list[list]:
+def _extract_values(field_names: list, objects: list, field_mappings: dict) -> list[list]:
     """Extract and transform values from queryset based on field mappings.
 
     Args:
         field_names: List of field names to extract from queryset
-        queryset: Django queryset object to extract values from
+        objects: List of items to extract values from
         field_mappings: Dictionary mapping field names to value transformation dictionaries
 
     Returns:
@@ -766,12 +766,13 @@ def _extract_values(field_names: list, queryset: object, field_mappings: dict) -
     """
     all_values = []
 
-    # Iterate through each row in the queryset values
-    for row in queryset.values(*field_names):
+    # Iterate through each row in the question list
+    for row in objects:
         row_values = []
 
         # Process each field-value pair in the current row
-        for field_name, field_value in row.items():
+        for field_name in field_names:
+            field_value = getattr(row, field_name)
             # Apply mapping transformation if field and value exist in mappings
             if field_name in field_mappings and field_value in field_mappings[field_name]:
                 transformed_value = field_mappings[field_name][field_value]
