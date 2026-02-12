@@ -6952,6 +6952,10 @@ msgstr ""
 msgid "You must select at least one ticket for this installment"
 msgstr "Pro tuto část musíte vybrat alespoň jeden tip"
 
+msgid "please pay the annual membership fee to attend the event"
+msgstr ""
+"zaplaťte prosím roční členský poplatek, abyste se mohli akce zúčastnit"
+
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(Nepovinné) Jiná schopnost jako předpoklad, oddělená čárkou"
 

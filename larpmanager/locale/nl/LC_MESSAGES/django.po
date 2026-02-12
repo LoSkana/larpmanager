@@ -6967,6 +6967,10 @@ msgstr "Deze pagina toont alle uitgaven die in het systeem zijn geregistreerd"
 msgid "You must select at least one ticket for this installment"
 msgstr "Je moet minstens één ticket voor deze aflevering selecteren"
 
+msgid "please pay the annual membership fee to attend the event"
+msgstr ""
+"betaal de jaarlijkse lidmaatschapsbijdrage om het evenement bij te wonen"
+
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr ""
 "(Optioneel) Andere vaardigheid als voorwaarde, door komma's gescheiden"

@@ -6967,6 +6967,10 @@ msgstr "Questa pagina mostra tutte le voci di spesa registrate nel sistema"
 msgid "You must select at least one ticket for this installment"
 msgstr "È necessario selezionare almeno un biglietto per questa puntata"
 
+msgid "please pay the annual membership fee to attend the event"
+msgstr ""
+"per partecipare all'evento per favore paga la quota associativa annuale"
+
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(Facoltativo) Altre abilità come prerequisito, separate da virgola"
 
