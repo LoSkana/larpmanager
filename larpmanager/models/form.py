@@ -439,7 +439,7 @@ class WritingChoice(BaseModel):
 
     option = models.ForeignKey(WritingOption, on_delete=models.CASCADE, related_name="choices")
 
-    element_id = models.IntegerField(blank=True, null=True)
+    element_id = models.IntegerField()
 
     def __str__(self) -> str:
         """Return string representation."""
@@ -452,6 +452,13 @@ class WritingChoice(BaseModel):
             models.Index(fields=["element_id", "question"], condition=Q(deleted__isnull=True), name="wch_elem_q_act"),
             models.Index(fields=["element_id"], condition=Q(deleted__isnull=True), name="wch_elem_act"),
         ]
+        constraints: ClassVar[list] = [
+            models.UniqueConstraint(
+                fields=["element_id", "option"],
+                condition=Q(deleted__isnull=True),
+                name="unique_writing_choice",
+            ),
+        ]
 
 
 class WritingAnswer(BaseModel):
@@ -461,7 +468,7 @@ class WritingAnswer(BaseModel):
 
     text = models.TextField(max_length=100000)
 
-    element_id = models.IntegerField(blank=True, null=True)
+    element_id = models.IntegerField()
 
     def __str__(self) -> str:
         """Return string representation with element ID, question name, and text preview."""
@@ -472,6 +479,13 @@ class WritingAnswer(BaseModel):
         indexes: ClassVar[list] = [
             models.Index(fields=["element_id", "question"], condition=Q(deleted__isnull=True), name="wan_elem_q_act"),
             models.Index(fields=["element_id"], condition=Q(deleted__isnull=True), name="wan_elem_act"),
+        ]
+        constraints: ClassVar[list] = [
+            models.UniqueConstraint(
+                fields=["element_id", "question"],
+                condition=Q(deleted__isnull=True),
+                name="unique_writing_answer",
+            ),
         ]
 
 
@@ -758,6 +772,13 @@ class RegistrationChoice(BaseModel):
             models.Index(fields=["registration", "question"], condition=Q(deleted__isnull=True), name="rc_reg_q_act"),
             models.Index(fields=["registration"], condition=Q(deleted__isnull=True), name="rc_reg_act"),
         ]
+        constraints: ClassVar[list] = [
+            models.UniqueConstraint(
+                fields=["registration", "option"],
+                condition=Q(deleted__isnull=True),
+                name="unique_registration_choice",
+            ),
+        ]
 
 
 class RegistrationAnswer(BaseModel):
@@ -778,6 +799,13 @@ class RegistrationAnswer(BaseModel):
         indexes: ClassVar[list] = [
             models.Index(fields=["registration", "question"], condition=Q(deleted__isnull=True), name="ra_reg_q_act"),
             models.Index(fields=["registration"], condition=Q(deleted__isnull=True), name="ra_reg_act"),
+        ]
+        constraints: ClassVar[list] = [
+            models.UniqueConstraint(
+                fields=["registration", "question"],
+                condition=Q(deleted__isnull=True),
+                name="unique_registration_answer",
+            ),
         ]
 
 
