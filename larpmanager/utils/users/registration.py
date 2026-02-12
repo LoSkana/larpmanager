@@ -41,7 +41,6 @@ from larpmanager.models.form import (
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
-    RegistrationQuestion,
     WritingChoice,
 )
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
@@ -1046,6 +1045,8 @@ def process_registration_event_change(registration: Registration) -> None:
     except ObjectDoesNotExist:
         registration.ticket = None
 
+    cached_questions = get_cached_registration_questions(registration.run.event)
+
     # Process all registration choices (question/option pairs)
     # Try to find matching questions and options in the new event
     for registration_choice in RegistrationChoice.objects.filter(
@@ -1056,15 +1057,13 @@ def process_registration_event_change(registration: Registration) -> None:
 
         try:
             # Find matching question and option in the new event
-            registration_choice.question = registration.run.event.get_elements(RegistrationQuestion).get(
-                name__iexact=question_name,
-            )
+            registration_choice.question = next(q for q in cached_questions if q.name.lower() == question_name.lower())
             registration_choice.option = registration.run.event.get_elements(RegistrationOption).get(
                 question=registration_choice.question,
                 name__iexact=option_name,
             )
             registration_choice.save()
-        except ObjectDoesNotExist:
+        except (StopIteration, ObjectDoesNotExist):
             # Clear the choice if no matching question/option found
             registration_choice.question = None
             registration_choice.option = None
@@ -1079,11 +1078,9 @@ def process_registration_event_change(registration: Registration) -> None:
 
         try:
             # Find matching question in the new event to preserve the answer
-            registration_answer.question = registration.run.event.get_elements(RegistrationQuestion).get(
-                name__iexact=question_name,
-            )
+            registration_answer.question = next(q for q in cached_questions if q.name.lower() == question_name.lower())
             registration_answer.save()
-        except ObjectDoesNotExist:
+        except StopIteration:
             # Clear the answer if no matching question found
             registration_answer.question = None
 

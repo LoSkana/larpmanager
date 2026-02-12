@@ -24,14 +24,9 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from larpmanager.forms.registration import (
-    OrgaRegistrationTicketForm,
-)
-from larpmanager.models.form import (
-    RegistrationOption,
-    RegistrationQuestion,
-    get_ordered_registration_questions,
-)
+from larpmanager.cache.question import get_cached_registration_questions
+from larpmanager.forms.registration import OrgaRegistrationTicketForm
+from larpmanager.models.form import RegistrationOption, RegistrationQuestion
 from larpmanager.models.registration import (
     RegistrationInstallment,
     RegistrationQuota,
@@ -196,7 +191,7 @@ def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpRespons
     context["download"] = 1
 
     # Fetch ordered registration questions with their options
-    context["list"] = get_ordered_registration_questions(context).prefetch_related("options")
+    context["list"] = get_cached_registration_questions(context["event"])
 
     # Sort options by order field for each question
     for el in context["list"]:

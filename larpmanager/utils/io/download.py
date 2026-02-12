@@ -48,7 +48,6 @@ from larpmanager.models.form import (
     WritingChoice,
     WritingOption,
     WritingQuestion,
-    get_ordered_registration_questions,
 )
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
@@ -732,7 +731,7 @@ def export_registration_form(context: dict) -> list[tuple[str, list, list]]:
 
     # Extract registration questions data
     column_headers = context["columns"][0].keys()
-    questions = get_ordered_registration_questions(context)
+    questions = get_cached_registration_questions(context["event"])
     question_values = _extract_values(column_headers, questions, mappings)
 
     # Initialize exports list with registration questions sheet
@@ -914,8 +913,8 @@ def _get_column_names(context: dict) -> None:
             },
         ]
         # Build field type mapping from registration questions for validation
-        questions = get_ordered_registration_questions(context).values("name", "typ")
-        context["fields"] = {question["name"]: question["typ"] for question in questions}
+        questions = get_cached_registration_questions(context["event"])
+        context["fields"] = {question.name: question.typ for question in questions}
 
         # Remove donation column if pay-what-you-want feature is disabled
         if "pay_what_you_want" not in context["features"]:

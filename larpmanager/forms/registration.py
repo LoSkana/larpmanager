@@ -30,6 +30,7 @@ from django_select2 import forms as s2forms
 from larpmanager.accounting.registration import get_date_surcharge
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm, get_question_key
 from larpmanager.forms.utils import (
@@ -1235,8 +1236,8 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         Filters question types based on existing usage and prevents duplicates.
         """
         # Add type of registration question to the available types
-        registration_questions = self.params["event"].get_elements(RegistrationQuestion)
-        already_used_types = list(registration_questions.values_list("typ", flat=True).distinct())
+        registration_questions = get_cached_registration_questions(self.params["event"])
+        already_used_types = list({question.typ for question in registration_questions})
 
         if self.instance.pk and self.instance.typ:
             already_used_types.remove(self.instance.typ)

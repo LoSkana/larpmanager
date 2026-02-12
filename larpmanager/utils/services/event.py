@@ -34,7 +34,10 @@ from larpmanager.cache.event_text import reset_event_text
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.links import clear_run_event_links_cache
-from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
+from larpmanager.cache.question import (
+    clear_registration_questions_cache,
+    clear_writing_questions_cache,
+)
 from larpmanager.cache.registration import clear_registration_counts_cache
 from larpmanager.cache.rels import clear_event_relationships_cache
 from larpmanager.cache.role import remove_event_role_cache

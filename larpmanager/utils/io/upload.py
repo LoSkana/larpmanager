@@ -34,6 +34,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
+from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import EventConfig
@@ -293,7 +294,7 @@ def registrations_load(context: dict, uploaded_file_form: Form) -> list[str]:
     """
     (input_dataframe, processing_logs) = _get_file(context, uploaded_file_form.cleaned_data["first"], 0)
 
-    registration_questions = context["event"].get_elements(RegistrationQuestion).prefetch_related("options")
+    registration_questions = get_cached_registration_questions(context["event"])
     questions_mapping = _get_questions(registration_questions)
 
     if input_dataframe is not None:
@@ -628,12 +629,7 @@ def writing_load(context: dict, form: Form) -> list[str]:
         (input_dataframe, logs) = _get_file(context, uploaded_file, 0)
 
         # Get questions for the writing type with their options
-        writing_questions = (
-            context["event"]
-            .get_elements(WritingQuestion)
-            .filter(applicable=context["writing_typ"])
-            .prefetch_related("options")
-        )
+        writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
         questions_dict = _get_questions(writing_questions)
 
         # Activate features based on uploaded columns
