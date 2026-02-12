@@ -922,15 +922,15 @@ def quests(request: HttpRequest, event_slug: str, quest_type_uuid: str | None = 
 
     # Get specific quest type and build list of visible quests
     get_element(context, quest_type_uuid, "quest_type", QuestType)
-    context["list"] = []
 
     # Filter quests by event, visibility, and type, then add complete quest data
-    for el in (
+    quest_queryset = (
         Quest.objects.filter(event=context["event"], hide=False, typ=context["quest_type"])
         .prefetch_related("traits")
         .order_by("number")
-    ):
-        context["list"].append(el.show_complete())
+    )
+
+    context["list"] = [quest.show_complete() for quest in quest_queryset]
 
     return render(request, "larpmanager/event/quests.html", context)
 
@@ -950,10 +950,8 @@ def quest(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpRespons
     context = get_event_context(request, event_slug, include_status=True)
     check_visibility(context, "quest", _("Quest"))
 
-    get_element(context, quest_uuid, "quest", Quest)
-
-    # Reload quest with prefetched traits
-    context["quest"] = Quest.objects.prefetch_related("traits").get(pk=context["quest"].id)
+    # Fetch quest with prefetched traits
+    context["quest"] = Quest.objects.prefetch_related("traits").get(uuid=quest_uuid, event=context["event"])
 
     context["quest_fields"] = get_writing_element_fields(
         context,
@@ -963,16 +961,20 @@ def quest(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpRespons
         only_visible=True,
     )
 
-    # Get traits fields
-    trait_list = list(context["quest"].traits.order_by("number"))
-    trait_ids = [t.id for t in trait_list]
+    # Get traits ordered by number and extract IDs
+    trait_queryset = context["quest"].traits.order_by("number")
+    trait_ids = list(trait_queryset.values_list("id", flat=True))
+
+    # Get fields for all traits
     fields_batch = get_writing_element_fields_batch(
         context, "trait", QuestionApplicable.TRAIT, trait_ids, only_visible=True
     )
+
+    # Build traits list with fields
     traits = []
-    for el in trait_list:
-        res = fields_batch.get(el.id, {"questions": {}, "options": {}, "fields": {}})
-        res.update(el.show())
+    for trait in trait_queryset:
+        res = fields_batch.get(trait.id, {"questions": {}, "options": {}, "fields": {}})
+        res.update(trait.show())
         traits.append(res)
     context["traits"] = traits
 
