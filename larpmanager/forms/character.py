@@ -386,6 +386,10 @@ class OrgaCharacterForm(CharacterForm):
         if "relationships" not in self.params.get("features"):
             return
 
+        # Skip if AJAX auto-save
+        if self.params.get("request") and self.params["request"].POST.get("ajax") == "1":
+            return
+
         if "character_finder" in self.params.get("features", []):
             get_event_cache_all(self.params)
 
