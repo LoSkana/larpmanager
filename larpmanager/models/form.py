@@ -24,7 +24,7 @@ from typing import Any, ClassVar
 from django.apps import apps
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import F, Q, QuerySet
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
@@ -807,12 +807,6 @@ class RegistrationAnswer(BaseModel):
                 name="unique_registration_answer",
             ),
         ]
-
-
-def get_ordered_registration_questions(context: dict) -> QuerySet[RegistrationQuestion]:
-    """Get registration questions ordered by section and question order."""
-    questions = context["event"].get_elements(RegistrationQuestion)
-    return questions.order_by(F("section__order").asc(nulls_first=True), "order")
 
 
 def _get_writing_elements() -> list[tuple[str, str, QuestionApplicable]]:

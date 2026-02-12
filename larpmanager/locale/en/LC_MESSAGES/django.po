@@ -1702,6 +1702,9 @@ msgstr ""
 msgid "Discounts"
 msgstr ""
 
+msgid "Traits"
+msgstr ""
+
 msgid "Player"
 msgstr ""
 
@@ -1712,9 +1715,6 @@ msgid "XP"
 msgstr ""
 
 msgid "Prologue"
-msgstr ""
-
-msgid "Traits"
 msgstr ""
 
 msgid "Manage experience point deliveries"

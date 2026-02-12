@@ -35,6 +35,7 @@ from django.views.decorators.http import require_POST
 
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.character import (
     OrgaCharacterForm,
 )
@@ -455,17 +456,11 @@ def orga_writing_form(request: HttpRequest, event_slug: str, writing_type: str) 
     context["download"] = 1
 
     # Retrieve and order writing questions for the specified form type
-    context["list"] = (
-        context["event"]
-        .get_elements(WritingQuestion)
-        .filter(applicable=context["writing_typ"])
-        .order_by("order")
-        .prefetch_related("options")
-    )
+    context["list"] = get_cached_writing_questions(context["event"], context["writing_typ"])
 
     # Pre-process question options to ensure proper ordering
     for el in context["list"]:
-        el.options_list = el.options.order_by("order")
+        el.options_list = list(el.options.all())
 
     # Set approval configuration and status flags for template rendering
     context["approval"] = get_event_config(

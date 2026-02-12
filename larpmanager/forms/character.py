@@ -31,6 +31,7 @@ from django_select2 import forms as s2forms
 
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import (
@@ -874,11 +875,10 @@ class OrgaWritingQuestionForm(BaseModelForm):
             - Sets self.prevent_canc based on instance type length
         """
         # Get writing questions applicable to current writing type
-        writing_questions = self.params["event"].get_elements(WritingQuestion)
-        writing_questions = writing_questions.filter(applicable=self.params["writing_typ"])
+        writing_questions = get_cached_writing_questions(self.params["event"], self.params["writing_typ"])
 
         # Extract already used question types to avoid duplicates
-        already_used_types = list(writing_questions.values_list("typ", flat=True).distinct())
+        already_used_types = list({q.typ for q in writing_questions})
 
         # Handle existing instance - allow editing current type
         if self.instance.pk and self.instance.typ:

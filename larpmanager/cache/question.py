@@ -109,7 +109,7 @@ def get_cached_writing_questions(event: Event, applicable: str) -> list:
         applicable: Question applicable type (e.g., QuestionApplicable.CHARACTER)
 
     Returns:
-        list: List of WritingQuestion objects filtered by applicable type
+        list: List of WritingQuestion objects filtered by applicable type, ordered by 'order' field
 
     """
     cache_key = get_event_questions_cache_key(event.id, "writing")
@@ -122,12 +122,16 @@ def get_cached_writing_questions(event: Event, applicable: str) -> list:
         cached_questions = init_writing_questions_cache(event)
         cache.set(cache_key, cached_questions, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    # Return questions for the requested applicable type
-    return cached_questions.get(applicable, [])
+    # Explicitly sort to ensure order is preserved after cache deserialization
+    questions = cached_questions.get(applicable, [])
+    return sorted(questions, key=lambda q: q.order)
 
 
 def get_cached_registration_questions(event: Event) -> list:
-    """Get cached registration questions."""
+    """Get cached registration questions.
+
+    Returns questions ordered by section order (nulls first) then by question order.
+    """
     cache_key = get_event_questions_cache_key(event.id, "registration")
 
     # Try to get from cache
@@ -145,7 +149,8 @@ def get_cached_registration_questions(event: Event) -> list:
             setattr(question, key, value)
         questions_list.append(question)
 
-    return questions_list
+    # Explicitly sort to ensure order is preserved after cache deserialization
+    return sorted(questions_list, key=lambda q: (q.section.order if q.section else -1, q.order))
 
 
 def clear_writing_questions_cache(event_id: int) -> None:

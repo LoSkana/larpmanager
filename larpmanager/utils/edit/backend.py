@@ -32,11 +32,12 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import _get_fkey_config, get_event_config
+from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import Run
-from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
+from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice
 from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.miscellanea import Log
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
@@ -143,10 +144,9 @@ def save_version(element: Any, model_type: str, member: Member, *, to_delete: bo
     # Handle question-based content types by aggregating answers
     if model_type in QuestionApplicable.values:
         texts = []
-        query = element.event.get_elements(WritingQuestion)
 
         # Collect all applicable questions and their values
-        for que in query.filter(applicable=model_type).order_by("order"):
+        for que in get_cached_writing_questions(element.event, model_type):
             value = _get_field_value(element, que)
             if not value:
                 continue

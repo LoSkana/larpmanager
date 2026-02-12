@@ -48,7 +48,6 @@ from larpmanager.models.form import (
     WritingChoice,
     WritingOption,
     WritingQuestion,
-    get_ordered_registration_questions,
 )
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
@@ -732,7 +731,7 @@ def export_registration_form(context: dict) -> list[tuple[str, list, list]]:
 
     # Extract registration questions data
     column_headers = context["columns"][0].keys()
-    questions = get_ordered_registration_questions(context)
+    questions = get_cached_registration_questions(context["event"])
     question_values = _extract_values(column_headers, questions, mappings)
 
     # Initialize exports list with registration questions sheet
@@ -753,12 +752,12 @@ def export_registration_form(context: dict) -> list[tuple[str, list, list]]:
     return excel_exports
 
 
-def _extract_values(field_names: list, queryset: object, field_mappings: dict) -> list[list]:
+def _extract_values(field_names: list, objects: list, field_mappings: dict) -> list[list]:
     """Extract and transform values from queryset based on field mappings.
 
     Args:
         field_names: List of field names to extract from queryset
-        queryset: Django queryset object to extract values from
+        objects: List of items to extract values from
         field_mappings: Dictionary mapping field names to value transformation dictionaries
 
     Returns:
@@ -767,12 +766,21 @@ def _extract_values(field_names: list, queryset: object, field_mappings: dict) -
     """
     all_values = []
 
-    # Iterate through each row in the queryset values
-    for row in queryset.values(*field_names):
+    # Iterate through each row in the question list
+    for row in objects:
         row_values = []
 
         # Process each field-value pair in the current row
-        for field_name, field_value in row.items():
+        for field_name in field_names:
+            # Handle Django's double-underscore notation for related fields
+            if "__" in field_name:
+                # Traverse the relationship chain (e.g., "question__name" -> row.question.name)
+                field_value = row
+                for part in field_name.split("__"):
+                    field_value = getattr(field_value, part)
+            else:
+                field_value = getattr(row, field_name)
+
             # Apply mapping transformation if field and value exist in mappings
             if field_name in field_mappings and field_value in field_mappings[field_name]:
                 transformed_value = field_mappings[field_name][field_value]
@@ -914,8 +922,8 @@ def _get_column_names(context: dict) -> None:
             },
         ]
         # Build field type mapping from registration questions for validation
-        questions = get_ordered_registration_questions(context).values("name", "typ")
-        context["fields"] = {question["name"]: question["typ"] for question in questions}
+        questions = get_cached_registration_questions(context["event"])
+        context["fields"] = {question.name: question.typ for question in questions}
 
         # Remove donation column if pay-what-you-want feature is disabled
         if "pay_what_you_want" not in context["features"]:
