@@ -26,6 +26,8 @@ function load_question(el) {
     if ($('.lq_{0}'.format(key)).hasClass('select')) {
         el.next().trigger('click');
         $( '.lq_{0}'.format(key) ).removeClass('select');
+        // Remove from done to allow reloading when reopened
+        delete done[key];
         return;
     }
 
