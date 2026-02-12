@@ -662,7 +662,7 @@ class OrgaCharacterForm(CharacterForm):
             instance: Character instance being saved
 
         """
-        if "relationships" not in self.params["features"]:
+        if "relationships" not in self.params["features"] or "relationships" not in self.params["features"]:
             return
 
         uuid_to_id = dict(self.params["event"].get_elements(Character).values_list("uuid", "id"))
