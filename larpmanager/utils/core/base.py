@@ -373,7 +373,7 @@ def get_event_context(
     context = get_event(request, event_slug)
 
     # Find user's registration and store in context
-    registration = registration_find(context["run"], context["member"], context)
+    registration = registration_find(context["run"], context["member"])
     context["registration"] = registration
 
     # Check if the user is staff
