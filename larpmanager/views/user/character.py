@@ -49,6 +49,7 @@ from larpmanager.cache.character import (
 )
 from larpmanager.cache.config import get_event_config, save_single_config
 from larpmanager.cache.event_text import get_event_text
+from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.character import CharacterForm
 from larpmanager.forms.member import AvatarForm
 from larpmanager.forms.registration import RegistrationCharacterRelForm
@@ -58,7 +59,6 @@ from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingOption,
-    WritingQuestion,
 )
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.registration import RegistrationCharacterRel
@@ -711,9 +711,8 @@ def get_options_dependencies(context: dict) -> None:
         return
 
     # Get all character-applicable writing questions ordered by their sequence
-    character_questions = context["event"].get_elements(WritingQuestion).order_by("order")
-    character_questions = character_questions.filter(applicable=QuestionApplicable.CHARACTER)
-    question_ids = character_questions.values_list("id", flat=True)
+    character_questions = get_cached_writing_questions(context["event"], QuestionApplicable.CHARACTER)
+    question_ids = [q.id for q in character_questions]
 
     # Find all writing options belonging to character questions
     writing_options = context["event"].get_elements(WritingOption).filter(question_id__in=question_ids)

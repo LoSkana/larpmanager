@@ -43,7 +43,6 @@ from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
     WritingAnswer,
-    WritingQuestion,
     WritingQuestionType,
 )
 from larpmanager.models.registration import RegistrationCharacterRel
@@ -377,8 +376,7 @@ def _get_custom_form(context: dict) -> None:
     # default name for fields
     context["fields_name"] = {WritingQuestionType.NAME.value: _("Name")}
 
-    questions = context["event"].get_elements(WritingQuestion).order_by("order")
-    questions = questions.filter(applicable=context["writing_typ"])
+    questions = get_cached_writing_questions(context["event"], context["writing_typ"])
     context["form_questions"] = {}
     for question in questions:
         question.basic_typ = question.typ in BaseQuestionType.get_basic_types()
@@ -470,13 +468,10 @@ def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any
 def _prepare_writing_list(context: dict) -> None:
     """Prepare context data for writing list display and configuration."""
     try:
-        name_question = (
-            context["event"]
-            .get_elements(WritingQuestion)
-            .filter(applicable=context["writing_typ"], typ=WritingQuestionType.NAME)
-        )
-        context["name_que_uuid"] = name_question.values_list("uuid", flat=True)[0]
-    except IndexError as e:
+        questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+        name_question = next(q for q in questions if q.typ == WritingQuestionType.NAME)
+        context["name_que_uuid"] = name_question.uuid
+    except StopIteration as e:
         logger.debug("Name question not found for writing type %s: %s", context["writing_typ"], e)
 
     model_name = context["label_typ"].lower()

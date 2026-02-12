@@ -26,6 +26,7 @@ from django.http import Http404
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
 from larpmanager.cache.fields import visible_writing_fields
+from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -33,7 +34,6 @@ from larpmanager.models.form import (
     QuestionStatus,
     WritingAnswer,
     WritingChoice,
-    WritingQuestion,
 )
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
@@ -600,9 +600,11 @@ def check_missing_mandatory(context: dict) -> None:
         **dict.fromkeys(BaseQuestionType.get_choice_types(), WritingChoice),
     }
 
-    questions = context["event"].get_elements(WritingQuestion)
+    questions = get_cached_writing_questions(context["event"], QuestionApplicable.CHARACTER)
     character_id = _get_character_cache_id(context)
-    for question in questions.filter(applicable=QuestionApplicable.CHARACTER, status=QuestionStatus.MANDATORY):
+    for question in questions:
+        if question.status != QuestionStatus.MANDATORY:
+            continue
         model = question_type_to_model.get(question.typ)
         if model and not model.objects.filter(element_id=character_id, question=question).exists():
             missing_question_names.append(question.name)

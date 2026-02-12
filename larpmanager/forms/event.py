@@ -29,6 +29,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
+from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.association import ExePreferencesForm
 from larpmanager.forms.base import BaseModelCssForm, BaseModelForm
 from larpmanager.forms.config import ConfigForm, ConfigType
@@ -1896,35 +1897,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
         # Add character-specific configuration options
         if writing_section[0] == "character":
-            # Add player field if character limit is set
-            if get_event_config(self.params["event"].id, "user_character_max", default_value=0, context=self.params):
-                extra_config_options.append(("player", _("Player")))
-
-            # Add status field if character approval is enabled
-            if get_event_config(
-                self.params["event"].id, "user_character_approval", default_value=False, context=self.params
-            ):
-                extra_config_options.append(("status", _("Status")))
-
-            # Define character feature fields with their config keys and labels
-            feature_fields = [
-                ("px", "px", _("XP")),
-                ("plot", "plots", _("Plots")),
-                ("relationships", "relationships", _("Relationships")),
-                ("speedlarp", "speedlarp", _("Speedlarp")),
-                ("prologue", "prologues", _("Prologue")),
-            ]
-
-            # Add faction field if faction feature is enabled
-            if "faction" in self.params["features"]:
-                available_questions = self.params["event"].get_elements(WritingQuestion)
-                faction_question = available_questions.get(
-                    applicable=QuestionApplicable.CHARACTER,
-                    typ=WritingQuestionType.FACTIONS,
-                )
-                feature_fields.insert(0, ("faction", f"q_{faction_question.uuid}", _("Factions")))
-
-            self.add_feature_extra(extra_config_options, feature_fields)
+            self.character_configs(extra_config_options)
 
         # Add characters field for faction and plot sections
         elif writing_section[0] in ["faction", "plot"]:
@@ -1945,6 +1918,38 @@ class OrgaPreferencesForm(ExePreferencesForm):
             help_text,
             extra_data=extra_config_options,
         )
+
+    def character_configs(self, extra_config_options: list) -> None:
+        """Add configs relative to characters."""
+        # Add player field if character limit is set
+        if get_event_config(self.params["event"].id, "user_character_max", default_value=0, context=self.params):
+            extra_config_options.append(("player", _("Player")))
+
+        # Add status field if character approval is enabled
+        if get_event_config(
+            self.params["event"].id, "user_character_approval", default_value=False, context=self.params
+        ):
+            extra_config_options.append(("status", _("Status")))
+
+        # Define character feature fields with their config keys and labels
+        feature_fields = [
+            ("px", "px", _("XP")),
+            ("plot", "plots", _("Plots")),
+            ("relationships", "relationships", _("Relationships")),
+            ("speedlarp", "speedlarp", _("Speedlarp")),
+            ("prologue", "prologues", _("Prologue")),
+        ]
+
+        # Add faction field if faction feature is enabled
+        if "faction" in self.params["features"]:
+            questions = get_cached_writing_questions(self.params["event"], QuestionApplicable.CHARACTER)
+            try:
+                faction_question = next(q for q in questions if q.typ == WritingQuestionType.FACTIONS)
+            except StopIteration:
+                raise WritingQuestion.DoesNotExist from None
+            feature_fields.insert(0, ("faction", f"q_{faction_question.uuid}", _("Factions")))
+
+        self.add_feature_extra(extra_config_options, feature_fields)
 
     @staticmethod
     def _compile_configs(basic_question_types: set, compiled_options: list, field_definitions: dict) -> None:

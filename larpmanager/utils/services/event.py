@@ -34,7 +34,10 @@ from larpmanager.cache.event_text import reset_event_text
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.links import clear_run_event_links_cache
-from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
+from larpmanager.cache.question import (
+    clear_registration_questions_cache,
+    clear_writing_questions_cache,
+)
 from larpmanager.cache.registration import clear_registration_counts_cache
 from larpmanager.cache.rels import clear_event_relationships_cache
 from larpmanager.cache.role import remove_event_role_cache
@@ -299,9 +302,9 @@ def save_event_character_form(features: dict, instance: object) -> None:
 
     # Define default question types with their properties
     def_tps = {
-        WritingQuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 1000),
-        WritingQuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 10000),
-        WritingQuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 50000),
+        WritingQuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 1000, 1),
+        WritingQuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 10000, 2),
+        WritingQuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 50000, 3),
     }
 
     # Get basic custom question types from the system
@@ -326,12 +329,7 @@ def save_event_character_form(features: dict, instance: object) -> None:
     if "plot" in features:
         # Create a copy of default types with modified teaser for plot concept
         plot_tps = dict(def_tps)
-        plot_tps[WritingQuestionType.TEASER] = (
-            "Concept",
-            QuestionStatus.MANDATORY,
-            QuestionVisibility.PUBLIC,
-            3000,
-        )
+        plot_tps[WritingQuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000, 2)
         _init_writing_element(instance, plot_tps, [QuestionApplicable.PLOT])
 
 
@@ -358,6 +356,7 @@ def _init_writing_element(instance: object, default_question_types: Any, questio
                 visibility=config[2],
                 max_length=config[3],
                 applicable=applicable,
+                order=config[4],
             )
             for question_type, config in default_question_types.items()
         ]

@@ -25,6 +25,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from larpmanager.cache.accounting import refresh_member_accounting_cache
+from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
@@ -236,10 +237,11 @@ def _find_matching_question(source_question: RegistrationQuestion, target_event:
     2. Match by type only (if it's a special type like TICKET, QUOTA, etc.)
     3. Match by name only
     """
-    # Exact match by type and name
-    exact_match = RegistrationQuestion.objects.filter(
-        event=target_event, typ=source_question.typ, name=source_question.name
-    ).first()
+    # Get question by type and name
+    target_questions = get_cached_registration_questions(target_event)
+    exact_match = next(
+        (q for q in target_questions if q.typ == source_question.typ and q.name == source_question.name), None
+    )
 
     if exact_match:
         return exact_match
@@ -254,13 +256,13 @@ def _find_matching_question(source_question: RegistrationQuestion, target_event:
     ]
 
     if source_question.typ in special_types:
-        type_match = RegistrationQuestion.objects.filter(event=target_event, typ=source_question.typ).first()
+        type_match = next((q for q in target_questions if q.typ == source_question.typ), None)
 
         if type_match:
             return type_match
 
     # Match by name
-    return RegistrationQuestion.objects.filter(event=target_event, name=source_question.name).first()
+    return next((q for q in target_questions if q.name == source_question.name), None)
 
 
 def _find_matching_option(
@@ -458,12 +460,12 @@ def validate_transfer_feasibility(registration: Registration, target_run: Run) -
     _validate_ticket(registration, result, target_run)
 
     # Check question matching
-    source_questions = RegistrationQuestion.objects.filter(event=registration.run.event).count()
+    source_questions = len(get_cached_registration_questions(registration.run.event))
 
-    target_questions = RegistrationQuestion.objects.filter(event=target_run.event).count()
+    target_questions = len(get_cached_registration_questions(target_run.event))
 
     if source_questions != target_questions:
-        result["info"].append(f"Number of questions differs: {source_questions} → {target_questions}")
+        result["info"].append(f"Number of questions differs: {source_questions} -> {target_questions}")
 
     _validate_character(registration, result, target_run)
 
