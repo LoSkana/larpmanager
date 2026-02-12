@@ -991,9 +991,7 @@ def check_assign_character(context: dict) -> None:
         return
 
     # Get the maximum number of characters a user can have assigned
-    user_character_max = int(get_event_config(context["event"].id, "user_character_max", default_value=0))
-    if user_character_max == 0:
-        return
+    user_character_max = max(1, int(get_event_config(context["event"].id, "user_character_max", default_value=0)))
 
     # Get currently assigned character IDs for this registration
     assigned_character_ids = set(registration.rcrs.values_list("character_id", flat=True))
