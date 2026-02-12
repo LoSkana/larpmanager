@@ -6954,6 +6954,10 @@ msgstr "Denne siden viser alle utgiftsposter som er registrert i systemet"
 msgid "You must select at least one ticket for this installment"
 msgstr "Du må velge minst én billett til denne delbetalingen"
 
+msgid "please pay the annual membership fee to attend the event"
+msgstr ""
+"vennligst betal den årlige medlemsavgiften for å delta på arrangementet"
+
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(Valgfritt) Annen evne som forutsetning, kommaseparert"
 

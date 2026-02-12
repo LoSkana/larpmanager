@@ -9592,6 +9592,9 @@ msgstr ""
 msgid " Hurry: only %(num)d tickets available"
 msgstr ""
 
+msgid "please pay the annual membership fee to attend the event"
+msgstr ""
+
 msgid "Registration confirmed"
 msgstr ""
 
