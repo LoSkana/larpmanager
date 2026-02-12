@@ -469,10 +469,14 @@ def registration_status(context: dict, run: Run, member: Member) -> dict:
     run_status = {"open": True, "details": "", "text": "", "additional": "", "can_pay": True}
 
     # Find user's registration if not already provided
-    if "registration" in context:
+    cached_registrations = context.get("my_regs")
+    if cached_registrations is not None:
+        registration = cached_registrations.get(run.id)
+        context["registration"] = registration
+    elif "registration" in context:
         registration = context["registration"]
     else:
-        registration = registration_find(run, member, context)
+        registration = registration_find(run, member)
         context["registration"] = registration
 
     features = _get_features_map(run, context)
@@ -623,7 +627,7 @@ def _get_features_map(run: Run, context: dict) -> Any:
     return features_map[run.event_id]
 
 
-def registration_find(run: Run, member: Member, context: dict | None = None) -> Registration | None:
+def registration_find(run: Run, member: Member) -> Registration | None:
     """Find registration for a user to a run.
 
     Searches for an active registration (non-cancelled, non-redeemed) for the given
@@ -632,8 +636,6 @@ def registration_find(run: Run, member: Member, context: dict | None = None) -> 
     Args:
         run: The Run object to find registration for
         member: The Member object to search registration for
-        context: Optional context dictionary containing cached data:
-            - my_regs: Pre-fetched registrations queryset for performance optimization
 
     Returns:
         Registration | None: The found registration or None if not found
@@ -642,13 +644,6 @@ def registration_find(run: Run, member: Member, context: dict | None = None) -> 
     # Early return if user is not authenticated
     if not member:
         return None
-
-    # Use pre-fetched registrations if provided
-    if context is None:
-        context = {}
-    cached_registrations = context.get("my_regs")
-    if cached_registrations is not None:
-        return cached_registrations.get(run.id)
 
     # Query database for active registration (non-cancelled, non-redeemed)
     try:
