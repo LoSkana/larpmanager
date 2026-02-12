@@ -25,6 +25,7 @@ from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
@@ -951,7 +952,10 @@ def quest(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpRespons
     check_visibility(context, "quest", _("Quest"))
 
     # Fetch quest with prefetched traits
-    context["quest"] = Quest.objects.prefetch_related("traits").get(uuid=quest_uuid, event=context["event"])
+    try:
+        context["quest"] = Quest.objects.prefetch_related("traits").get(uuid=quest_uuid, event=context["event"])
+    except ObjectDoesNotExist as err:
+        raise Http404 from err
 
     context["quest_fields"] = get_writing_element_fields(
         context,
