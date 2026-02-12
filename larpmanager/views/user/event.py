@@ -114,11 +114,24 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     # Get upcoming runs with optimized queries using select_related and prefetch_related
     runs = get_coming_runs(association_id)
 
-    # Initialize user registration tracking
-    user_registrations_by_run_id = {}
-    character_relations_by_registration_id = {}
-    payment_invoices_by_registration_id = {}
-    pre_registrations_by_event_id = {}
+    # Initialize context with default user context
+    context = get_context(request)
+    context.update(
+        {
+            "open": [],
+            "future": [],
+            "langs": [],
+            "page": "calendar",
+            "my_regs": {},
+            "character_rels_dict": {},
+            "payment_invoices_dict": {},
+            "pre_registrations_dict": {},
+        },
+    )
+
+    # Add language filter to context if specified
+    if lang:
+        context["lang"] = lang
 
     if "member" in context:
         # Define cutoff date (3 days ago) for filtering relevant registrations
@@ -136,36 +149,19 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
         ).select_related("ticket", "run")
 
         # Create lookup dictionary for O(1) access to user registrations
-        user_registrations_by_run_id = {registration.run_id: registration for registration in user_registrations}
-        user_registered_run_ids = list(user_registrations_by_run_id.keys())
+        context["my_regs"] = {registration.run_id: registration for registration in user_registrations}
+        user_registered_run_ids = list(context["my_regs"].keys())
 
         # Filter runs: authenticated users can see START development runs they're registered for
         runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=user_registered_run_ids))
 
         # Precompute character rels, payment invoices, and pre-registrations objects
-        character_relations_by_registration_id = get_character_rels_dict(user_registrations_by_run_id, member)
-        payment_invoices_by_registration_id = get_payment_invoices_dict(user_registrations_by_run_id, member)
-        pre_registrations_by_event_id = get_pre_registrations_dict(association_id, member)
+        context["character_rels_dict"] = get_character_rels_dict(context["my_regs"], member)
+        context["payment_invoices_dict"] = get_payment_invoices_dict(context["my_regs"], member)
+        context["pre_registrations_dict"] = get_pre_registrations_dict(association_id, member)
     else:
         # Anonymous users cannot see runs in START development status
         runs = runs.exclude(development=DevelopStatus.START)
-
-    # Initialize context with default user context and empty collections
-    context = get_context(request)
-    context.update({"open": [], "future": [], "langs": [], "page": "calendar"})
-
-    # Add language filter to context if specified
-    if lang:
-        context["lang"] = lang
-
-    context.update(
-        {
-            "my_regs": user_registrations_by_run_id,
-            "character_rels_dict": character_relations_by_registration_id,
-            "payment_invoices_dict": payment_invoices_by_registration_id,
-            "pre_registrations_dict": pre_registrations_by_event_id,
-        },
-    )
 
     # Process each run to determine registration status and categorize
     for run in runs:
@@ -457,7 +453,9 @@ def event_register(request: HttpRequest, event_slug: str) -> Any:
         run = runs.first()
         return redirect("register", event_slug=run.get_slug())
     context["list"] = []
-    context.update({"features_map": {context["event"].id: context["features"]}})
+    context.update(
+        {"features_map": {context["event"].id: context["features"]}, "my_regs": get_event_signups(request, context)}
+    )
     for run in runs:
         run.status = registration_status(context, run, context["member"])
         context["list"].append(run)
@@ -487,11 +485,16 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     # Get all past runs for this association
     runs = get_coming_runs(aid, future=False)
 
-    # Initialize dictionaries for user-specific data
-    my_regs_dict = {}
-    character_rels_dict = {}
-    payment_invoices_dict = {}
-    pre_registrations_dict = {}
+    # Initialize context with user-specific data dictionaries
+    context.update(
+        {
+            "list": [],
+            "my_regs": {},
+            "character_rels_dict": {},
+            "payment_invoices_dict": {},
+            "pre_registrations_dict": {},
+        },
+    )
 
     # Fetch user-specific registration data if authenticated
     if "member" in context:
@@ -505,28 +508,15 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
         ).select_related("ticket", "run")
 
         # Create dictionary mapping run_id to registration for quick lookup
-        my_regs_dict = {registration.run_id: registration for registration in my_regs}
+        context["my_regs"] = {registration.run_id: registration for registration in my_regs}
 
         # Build related data dictionaries for character, payment, and pre-registration info
-        character_rels_dict = get_character_rels_dict(my_regs_dict, member)
-        payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, member)
-        pre_registrations_dict = get_pre_registrations_dict(aid, member)
-
-    # Convert runs queryset to list and initialize context list
-    runs_list = list(runs)
-    context["list"] = []
-
-    context.update(
-        {
-            "my_regs": my_regs_dict,
-            "character_rels_dict": character_rels_dict,
-            "payment_invoices_dict": payment_invoices_dict,
-            "pre_registrations_dict": pre_registrations_dict,
-        },
-    )
+        context["character_rels_dict"] = get_character_rels_dict(context["my_regs"], member)
+        context["payment_invoices_dict"] = get_payment_invoices_dict(context["my_regs"], member)
+        context["pre_registrations_dict"] = get_pre_registrations_dict(aid, member)
 
     # Process each run to add registration status information
-    for run in runs_list:
+    for run in runs:
         # Update run object with registration status data
         run.status = registration_status(context, run, context["member"])
 
@@ -671,25 +661,13 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["coming"] = []
     context["past"] = []
 
-    # Retrieve user's registrations for this event if authenticated
-    my_regs = []
-    if request.user.is_authenticated:
-        my_regs = Registration.objects.filter(
-            run__event=context["event"],
-            redeem_code__isnull=True,
-            cancellation_date__isnull=True,
-            member=context["member"],
-        )
-
     # Get all runs for the event and set reference date (3 days ago)
     runs = Run.objects.filter(event=context["event"])
     ref = timezone.now() - timedelta(days=3)
 
     # Prepare features mapping for registration status checking
     features_map = {context["event"].id: context["features"]}
-    context.update(
-        {"my_regs": {registration.run_id: registration for registration in my_regs}, "features_map": features_map}
-    )
+    context.update({"features_map": features_map, "my_regs": get_event_signups(request, context)})
 
     # Process each run to determine registration status and categorize by timing
     for run in runs:
@@ -716,6 +694,20 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     return render(request, "larpmanager/event/event.html", context)
+
+
+def get_event_signups(request: HttpRequest, context: dict) -> dict:
+    """Retrieve user's registrations for this event."""
+    if not request.user.is_authenticated:
+        return {}
+
+    my_regs = Registration.objects.filter(
+        run__event=context["event"],
+        redeem_code__isnull=True,
+        cancellation_date__isnull=True,
+        member=context["member"],
+    )
+    return {registration.run_id: registration for registration in my_regs}
 
 
 def event_redirect(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:  # noqa: ARG001
