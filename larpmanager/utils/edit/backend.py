@@ -26,7 +26,7 @@ from typing import TYPE_CHECKING, Any
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.cache import cache
-from django.db.models import Max
+from django.db.models import Max, Prefetch
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -412,8 +412,20 @@ def backend_get(
     """
     # Retrieve object by UUID using appropriate method
     if is_writing:
+        # Optimize queryset for Character model
+        queryset_base = None
+        if model_type.__name__ == "Character":
+            queryset_base = model_type.objects.prefetch_related(
+                "factions_list",
+                "plotcharacterrel_set__plot",
+                "px_ability_list",
+                "px_delivery_list",
+                Prefetch("source", queryset=Relationship.objects.select_related("target")),
+                Prefetch("target", queryset=Relationship.objects.select_related("source")),
+            )
+
         # For writing elements, use get_element with proper checks
-        get_element(context, entity_uuid, "el", model_type)
+        get_element(context, entity_uuid, "el", model_type, queryset_base)
         context["edit_uuid"] = entity_uuid
     else:
         # Standard retrieval
