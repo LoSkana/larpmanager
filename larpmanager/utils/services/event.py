@@ -329,12 +329,7 @@ def save_event_character_form(features: dict, instance: object) -> None:
     if "plot" in features:
         # Create a copy of default types with modified teaser for plot concept
         plot_tps = dict(def_tps)
-        plot_tps[WritingQuestionType.TEASER] = (
-            "Concept",
-            QuestionStatus.MANDATORY,
-            QuestionVisibility.PUBLIC,
-            3000,
-        )
+        plot_tps[WritingQuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000, 2)
         _init_writing_element(instance, plot_tps, [QuestionApplicable.PLOT])
 
 
