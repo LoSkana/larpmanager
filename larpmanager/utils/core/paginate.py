@@ -274,12 +274,14 @@ def _set_filtering(
             additional_field = context.get("afield")
             if additional_field:
                 field_name = f"{additional_field}__{field_name}"
+            # Use the constructed path directly, don't apply _get_filter_field
+            filter_field = field_name
         # Skip fields that have custom callback handlers
         elif field_name in context.get("callbacks", {}):
             continue
-
-        # Get the correct filter path (handles related fields via selrel)
-        filter_field = _get_filter_field(field_names, field_name, context)
+        else:
+            # Get the correct filter path (handles related fields via selrel)
+            filter_field = _get_filter_field(field_names, field_name, context)
 
         # Map field to search fields using field_map or use as single field
         search_fields = field_map.get(filter_field, [filter_field])
