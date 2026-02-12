@@ -302,9 +302,9 @@ def save_event_character_form(features: dict, instance: object) -> None:
 
     # Define default question types with their properties
     def_tps = {
-        WritingQuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 1000),
-        WritingQuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 10000),
-        WritingQuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 50000),
+        WritingQuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 1000, 1),
+        WritingQuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 10000, 2),
+        WritingQuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 50000, 3),
     }
 
     # Get basic custom question types from the system
@@ -361,6 +361,7 @@ def _init_writing_element(instance: object, default_question_types: Any, questio
                 visibility=config[2],
                 max_length=config[3],
                 applicable=applicable,
+                order=config[4],
             )
             for question_type, config in default_question_types.items()
         ]
