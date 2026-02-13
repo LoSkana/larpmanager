@@ -120,7 +120,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         {% for question in form.questions %}
             {% if question.typ == 'e' %}
-                setUpCharFinder('id_q{{ question.id }}');
+                setUpCharFinder('id_que_{{ question.uuid }}');
             {% elif question.typ == 'text' %}
                 setUpCharFinder('id_text');
             {% elif question.typ == 'teaser' %}

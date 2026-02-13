@@ -139,7 +139,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     {% for question in form.questions %}
         {% if question.typ == 'e' %}
-            setUpAutoSave('id_q{{ question.id }}');
+            setUpAutoSave('id_que_{{ question.uuid }}');
         {% elif question.typ == 'text' %}
             setUpAutoSave('id_text');
         {% elif question.typ == 'teaser' %}
