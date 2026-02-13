@@ -44,6 +44,7 @@ from larpmanager.models.form import (
     QuestionApplicable,
     WritingAnswer,
     WritingQuestionType,
+    get_def_writing_types,
 )
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
@@ -478,10 +479,11 @@ def _prepare_writing_list(context: dict) -> None:
     context["default_fields"] = context["member"].get_config(
         f"open_{model_name}_{context['event'].id}", default_value="[]"
     )
-    if context["default_fields"] == "[]" and model_name in context["writing_fields"]:
-        question_field_list = [
-            f"q_{question_uuid}" for name, question_uuid in context["writing_fields"][model_name]["uuids"].items()
-        ]
+    if context["default_fields"] == "[]":
+        # Get default writing type questions (name, teaser, sheet, title)
+        questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+        default_types = get_def_writing_types()
+        question_field_list = [f"q_{question.uuid}" for question in questions if question.typ in default_types]
         context["default_fields"] = json.dumps(question_field_list)
 
     context["auto_save"] = not get_event_config(

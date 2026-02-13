@@ -1392,19 +1392,22 @@ class OrgaRunForm(ConfigForm):
         basic_types = BaseQuestionType.get_basic_types()
         basic_types.add(WritingQuestionType.COMPUTED)
         self.set_section("visibility", _("Visibility"))
-        for writing_element_key, writing_element_label, _writing_element_type in writing_elements:
-            if "writing_fields" not in self.params or writing_element_key not in self.params["writing_fields"]:
-                continue
+
+        for writing_element_key, writing_element_label, applicable in writing_elements:
             if writing_element_key in ["plot", "prologue"]:
                 continue
-            questions = self.params["writing_fields"][writing_element_key]["questions"]
-            field_choices = []
-            for question_field in questions.values():
-                question_type = question_field["typ"]
-                if question_type in basic_types:
-                    question_type = str(question_field["uuid"])
 
-                field_choices.append((question_type, question_field["name"]))
+            questions = get_cached_writing_questions(self.params["event"], applicable)
+            if not questions:
+                continue
+
+            field_choices = []
+            for question in questions:
+                question_type = question.typ
+                if question_type in basic_types:
+                    question_type = str(question.uuid)
+
+                field_choices.append((question_type, question.name))
 
             self.add_configs(
                 f"show_{writing_element_key}",
@@ -1864,19 +1867,19 @@ class OrgaPreferencesForm(ExePreferencesForm):
             basics: Basic configuration settings dictionary
             event_id: Unique identifier for the event
             help_text: Descriptive text to help users understand the configuration
-            writing_section: Writing section configuration tuple containing (section_name, display_name)
+            writing_section: Writing section configuration tuple containing (section_name, display_name, applicable)
 
         Returns:
             None: Method modifies the form in place
 
         """
+        # Extract section key, label, and applicable type from tuple
+        section_key = writing_section[0]
+        applicable = writing_section[2]
+
         # Get the writing feature mapping and check if feature is available
         feature_mapping = _get_writing_mapping()
-        if feature_mapping.get(writing_section[0]) not in self.params["features"]:
-            return
-
-        # Verify writing fields exist for this section
-        if "writing_fields" not in self.params or writing_section[0] not in self.params["writing_fields"]:
+        if feature_mapping.get(section_key) not in self.params["features"]:
             return
 
         # Check user permissions for this writing section
@@ -1884,16 +1887,19 @@ class OrgaPreferencesForm(ExePreferencesForm):
             self.params["request"],
             self.params,
             self.params["event"].slug,
-            f"orga_{writing_section[0]}s",
+            f"orga_{section_key}s",
         ):
             return
 
-        # Extract field configurations and prepare extra options
-        section_fields = self.params["writing_fields"][writing_section[0]]["questions"]
+        # Get questions from cache
+        section_questions = get_cached_writing_questions(self.params["event"], applicable)
+        if not section_questions:
+            return
+
         extra_config_options = []
 
         # Compile basic field configurations
-        self._compile_configs(basics, extra_config_options, section_fields)
+        self._compile_configs(basics, extra_config_options, section_questions)
 
         # Add character-specific configuration options
         if writing_section[0] == "character":
@@ -1952,22 +1958,23 @@ class OrgaPreferencesForm(ExePreferencesForm):
         self.add_feature_extra(extra_config_options, feature_fields)
 
     @staticmethod
-    def _compile_configs(basic_question_types: set, compiled_options: list, field_definitions: dict) -> None:
-        """Compile configuration options from field definitions.
+    def _compile_configs(basic_question_types: set, compiled_options: list, questions: list) -> None:
+        """Compile configuration options from WritingQuestion objects.
 
         Args:
             basic_question_types: Set of basic question types
             compiled_options: List to append compiled configurations
-            field_definitions: Dictionary of field definitions
+            questions: List of WritingQuestion objects
 
         """
-        for field in field_definitions.values():
-            if field["typ"] == "name":
+        for question in questions:
+            # Skip name field type
+            if question.typ == "name":
                 continue
 
-            toggle_key = f".lq_{field['uuid']}" if field["typ"] in basic_question_types else f"q_{field['uuid']}"
+            toggle_key = f".lq_{question.uuid}" if question.typ in basic_question_types else f"q_{question.uuid}"
 
-            compiled_options.append((toggle_key, field["name"]))
+            compiled_options.append((toggle_key, question.name))
 
     def add_feature_extra(self, extra_fields: list, feature_field_definitions: list) -> None:
         """Add feature-specific extra fields to configuration.
