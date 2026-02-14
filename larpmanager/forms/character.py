@@ -864,7 +864,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
         writing_questions = get_cached_writing_questions(self.params["event"], self.params["writing_typ"])
 
         # Extract already used question types to avoid duplicates
-        already_used_types = list({q.typ for q in writing_questions})
+        already_used_types = list({q["typ"] for q in writing_questions})
 
         # Handle existing instance - allow editing current type
         if self.instance.pk and self.instance.typ:

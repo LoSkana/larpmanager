@@ -455,7 +455,7 @@ def _activate_features_from_columns(context: dict, column_names: list[str], writ
 
     """
     # Build mapping of question names to question types
-    question_name_to_type = {q.name.lower(): q.typ for q in writing_questions}
+    question_name_to_type = {q["name"].lower(): q["typ"] for q in writing_questions}
 
     # Collect features and configs that need to be activated
     features_to_activate = set()

@@ -146,12 +146,12 @@ def save_version(element: Any, model_type: str, member: Member, *, to_delete: bo
         texts = []
 
         # Collect all applicable questions and their values
-        for que in get_cached_writing_questions(element.event, model_type):
-            value = _get_field_value(element, que)
+        for question in get_cached_writing_questions(element.event, model_type):
+            value = _get_field_value(element, question)
             if not value:
                 continue
             value = html_clean(value)
-            texts.append(f"{que.name}: {value}")
+            texts.append(f"{question.get('name')}: {value}")
 
         tv.text = "\n".join(texts)
     else:

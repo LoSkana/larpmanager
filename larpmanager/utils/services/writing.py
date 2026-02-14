@@ -168,7 +168,7 @@ def writing_popup(request: HttpRequest, context: dict, typ: type[Model]) -> Json
     applicable = QuestionApplicable.get_applicable(typ._meta.model_name)  # noqa: SLF001  # Django model metadata
     questions_list = get_cached_writing_questions(context["event"], applicable)
     # Convert questions list to dict keyed by UUID for lookup
-    questions = {str(q.uuid): q for q in questions_list}
+    questions = {str(q["uuid"]): q for q in questions_list}
 
     # Retrieve the writing element from database using parent event context
     try:

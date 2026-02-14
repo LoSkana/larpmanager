@@ -182,10 +182,6 @@ def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpRespons
     # Fetch ordered registration questions with their options
     context["list"] = get_cached_registration_questions(context["event"])
 
-    # Sort options by order field for each question
-    for el in context["list"]:
-        el.options_list = el.options.order_by("order")
-
     return render(request, "larpmanager/orga/registration/form.html", context)
 
 

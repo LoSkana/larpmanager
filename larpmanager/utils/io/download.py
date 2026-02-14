@@ -740,9 +740,11 @@ def _extract_values(field_names: list, objects: list, field_mappings: dict) -> l
                 # Traverse the relationship chain (e.g., "question__name" -> row.question.name)
                 field_value = row
                 for part in field_name.split("__"):
-                    field_value = getattr(field_value, part)
+                    # Support both dict and object access
+                    field_value = field_value[part] if isinstance(field_value, dict) else getattr(field_value, part)
             else:
-                field_value = getattr(row, field_name)
+                # Support both dict and object access
+                field_value = row[field_name] if isinstance(row, dict) else getattr(row, field_name)
 
             # Apply mapping transformation if field and value exist in mappings
             if field_name in field_mappings and field_value in field_mappings[field_name]:
