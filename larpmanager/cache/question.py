@@ -85,9 +85,13 @@ def _skip_question_allowed(features: dict, question: dict, params: dict, *, is_o
     if "reg_que_allowed" not in features or not is_organizer or not params:
         return False
 
+    allowed_map = [a for a in question.get("allowed_map", []) if a is not None]
+    if not allowed_map:
+        return False
+
     run_id = params["run"].id
     is_run_organizer = run_id in params["all_runs"] and 1 in params["all_runs"][run_id]
-    allowed_map = question.get("allowed_map", [])
+
     return bool(not is_run_organizer and params["member"].id not in allowed_map)
 
 
@@ -96,7 +100,7 @@ def _skip_question_tickets(features: dict, registration: Registration, question:
     if "reg_que_tickets" not in features:
         return False
 
-    allowed_ticket_uuids = [ticket_uuid for ticket_uuid in question.get("tickets_map", []) if ticket_uuid]
+    allowed_ticket_uuids = [ticket_uuid for ticket_uuid in question.get("tickets_map", []) if ticket_uuid is not None]
     if allowed_ticket_uuids:
         if not registration or not registration.ticket:
             return True
@@ -112,7 +116,7 @@ def _skip_question_factions(features: dict, registration: Registration, question
     if "reg_que_faction" not in features:
         return False
 
-    allowed_faction_ids = [faction_id for faction_id in question.get("factions_map", []) if faction_id]
+    allowed_faction_ids = [faction_id for faction_id in question.get("factions_map", []) if faction_id is not None]
     if allowed_faction_ids:
         registration_faction_ids = []
         if registration and registration.pk:
@@ -214,6 +218,16 @@ def init_registration_questions_cache(event: Event) -> list:
     serialized_questions = []
 
     for question in questions:
+        # Filter out None values from ArrayAgg results (PostgreSQL returns [None] for empty relations)
+        tickets_map = getattr(question, "tickets_map", []) or []
+        tickets_map = [t for t in tickets_map if t is not None]
+
+        factions_map = getattr(question, "factions_map", []) or []
+        factions_map = [f for f in factions_map if f is not None]
+
+        allowed_map = getattr(question, "allowed_map", []) or []
+        allowed_map = [a for a in allowed_map if a is not None]
+
         question_dict = {
             "id": question.id,
             "pk": question.pk,
@@ -226,11 +240,16 @@ def init_registration_questions_cache(event: Event) -> list:
             "max_length": question.max_length,
             "section_id": question.section_id,
             "section_order": question.section.order if question.section else None,
+            "section_name": question.section.name if question.section else None,
+            "section_description": question.section.description if question.section else None,
             "event_id": question.event_id,
-            # Store annotations
-            "tickets_map": getattr(question, "tickets_map", []),
-            "factions_map": getattr(question, "factions_map", []),
-            "allowed_map": getattr(question, "allowed_map", []),
+            "giftable": question.giftable,
+            "profile_url": question.profile.url if question.profile else None,
+            "profile_thumb_url": question.profile_thumb.url if question.profile else None,
+            # Store annotations (filtered to remove None values)
+            "tickets_map": tickets_map,
+            "factions_map": factions_map,
+            "allowed_map": allowed_map,
             # Serialize prefetched options as list of dicts
             "options": [
                 {

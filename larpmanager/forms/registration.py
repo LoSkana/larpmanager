@@ -30,7 +30,7 @@ from django_select2 import forms as s2forms
 from larpmanager.accounting.registration import get_date_surcharge
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.question import get_cached_registration_questions
+from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm, get_question_key
 from larpmanager.forms.utils import (
@@ -162,7 +162,7 @@ class RegistrationForm(BaseRegistrationForm):
             key = get_question_key(question)
             if key not in self.fields:
                 continue
-            tm = [str(i) for i in question.tickets_map if i is not None]
+            tm = [str(i) for i in question.get("tickets_map", []) if i is not None]
             if not ticket or ticket not in tm:
                 self.fields[key].required = False
 
@@ -226,27 +226,27 @@ class RegistrationForm(BaseRegistrationForm):
         """Initialize a single registration question field.
 
         Args:
-            question: Registration question instance
+            question: Registration question dict (from cache)
             registration_counts: Registration count data
 
         """
-        if question.skip(self.instance, self.params["features"]):
+        if skip_registration_question(question, self.instance, self.params["features"]):
             return
 
         k = self._init_field(question, registration_counts=registration_counts, is_organizer=False)
         if not k:
             return
 
-        if question.profile:
-            self.profiles["id_" + k] = question.profile_thumb.url
+        if question.get("profile_thumb_url"):
+            self.profiles["id_" + k] = question["profile_thumb_url"]
 
-        if question.section:
-            self.sections["id_" + k] = question.section.name
-            if question.section.description:
-                self.section_descriptions[question.section.name] = question.section.description
+        if question.get("section_name"):
+            self.sections["id_" + k] = question["section_name"]
+            if question.get("section_description"):
+                self.section_descriptions[question["section_name"]] = question["section_description"]
 
         if "reg_que_tickets" in self.params["features"]:
-            tm = [str(i) for i in question.tickets_map if i is not None]
+            tm = [str(i) for i in question.get("tickets_map", []) if i is not None]
             if tm:
                 self.tickets_map[k] = tm
 
@@ -583,7 +583,7 @@ class RegistrationGiftForm(RegistrationForm):
 
         # Build list of fields to keep: base fields plus giftable questions
         keep = ["run", "ticket"]
-        keep.extend([get_question_key(question) for question in self.questions if question.giftable])
+        keep.extend([get_question_key(question) for question in self.questions if question.get("giftable", False)])
 
         # Remove fields not in keep list and update mandatory tracking
         list_del = [s for s in self.fields if s not in keep]

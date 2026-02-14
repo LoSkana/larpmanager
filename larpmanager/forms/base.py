@@ -790,8 +790,8 @@ class BaseRegistrationForm(BaseModelFormRun):
 
             # Determine section name for field grouping
             section_name = registration_section
-            if hasattr(question, "section") and question.section:
-                section_name = question.section.name
+            if question.get("section_name"):
+                section_name = question["section_name"]
 
             # Assign field to section if section name is available
             if section_name:

@@ -414,14 +414,15 @@ def _get_registration_fields(context: dict, member: Any) -> dict:
 
     for question in event_questions:
         # Check if question has access restrictions enabled
-        if "reg_que_allowed" in context["features"] and question.allowed_map and question.allowed_map[0]:
+        allowed_map = question.get("allowed_map", [])
+        if "reg_que_allowed" in context["features"] and allowed_map and allowed_map[0]:
             current_run_id = context["run"].id
 
             # Check if user is an organizer for this run
             is_organizer = current_run_id in context["all_runs"] and 1 in context["all_runs"][current_run_id]
 
             # Skip question if user is not organizer and not in allowed list
-            if not is_organizer and member.id not in question.allowed_map:
+            if not is_organizer and member.id not in allowed_map:
                 continue
 
         # Add accessible question to results
