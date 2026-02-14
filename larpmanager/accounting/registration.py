@@ -161,15 +161,7 @@ def get_registration_payments(
 
 
 def get_registration_transactions(registration: Registration) -> Decimal:
-    """Calculate total transaction fees for a registration.
-
-    Args:
-        registration: Registration instance to calculate fees for
-
-    Returns:
-        int: Total transaction fees that are user burden
-
-    """
+    """Calculate total transaction fees for a registration."""
     total_transaction_fees = 0
 
     accounting_transactions = AccountingItemTransaction.objects.filter(registration=registration, user_burden=True)
@@ -209,17 +201,7 @@ def get_accounting_refund(registration: Registration) -> None:
 
 
 def _calculate_quota_deadline(registration: Registration, quota_count: int, association_id: int) -> int:
-    """Calculate deadline for a specific quota installment.
-
-    Args:
-        registration: Registration instance
-        quota_count: Current quota number (1-indexed)
-        association_id: Association ID for payment deadline calculation
-
-    Returns:
-        Deadline in days from today
-
-    """
+    """Calculate deadline for a specific quota installment."""
     if quota_count == 1:
         return get_payment_deadline(registration, 8, association_id)
     days_left = registration.tot_days * 1.0 * (registration.quotas - (quota_count - 1)) / registration.quotas
@@ -227,17 +209,7 @@ def _calculate_quota_deadline(registration: Registration, quota_count: int, asso
 
 
 def _calculate_quota_amount(registration: Registration, quota_share_ratio: Decimal, *, is_last_quota: bool) -> float:
-    """Calculate the amount due for a quota installment.
-
-    Args:
-        registration: Registration instance
-        quota_share_ratio: Cumulative share of total payment for this quota
-        is_last_quota: Whether this is the final quota
-
-    Returns:
-        Amount due for this quota
-
-    """
+    """Calculate the amount due for a quota installment."""
     if is_last_quota:
         return registration.tot_iscr - registration.tot_payed
     quota_amount = registration.tot_iscr * quota_share_ratio - registration.tot_payed
@@ -245,17 +217,7 @@ def _calculate_quota_amount(registration: Registration, quota_share_ratio: Decim
 
 
 def _should_skip_quota(deadline: int, alert: int, quota_amount: float) -> bool:
-    """Determine if a quota should be skipped.
-
-    Args:
-        deadline: Deadline in days
-        alert: Alert threshold in days
-        quota_amount: Amount due for this quota
-
-    Returns:
-        True if quota should be skipped
-
-    """
+    """Determine if a quota should be skipped."""
     return deadline >= alert or quota_amount <= 0 or not deadline or deadline < 0
 
 
@@ -353,32 +315,13 @@ def _quota_fallback(
 
 
 def _is_installment_applicable(installment_tickets: list, registration_ticket_id: int) -> bool:
-    """Check if an installment applies to the registration's ticket type.
-
-    Args:
-        installment_tickets: List of ticket IDs the installment applies to
-        registration_ticket_id: Registration's ticket ID
-
-    Returns:
-        True if installment applies to this ticket type
-
-    """
+    """Check if an installment applies to the registration's ticket type."""
     applicable_ticket_ids = [ticket_id for ticket_id in installment_tickets if ticket_id is not None]
     return not applicable_ticket_ids or registration_ticket_id in applicable_ticket_ids
 
 
 def _calculate_installment_cumulative(installment_amount: float, current_cumulative: float, total: float) -> float:
-    """Calculate cumulative amount due up to this installment.
-
-    Args:
-        installment_amount: Amount for this installment (0 means full amount)
-        current_cumulative: Current cumulative amount
-        total: Total registration amount
-
-    Returns:
-        Updated cumulative amount, capped at total
-
-    """
+    """Calculate cumulative amount due up to this installment."""
     if installment_amount:
         return min(current_cumulative + installment_amount, total)
     return total
@@ -469,17 +412,7 @@ def installment_check(registration: Registration, alert: int, association_id: in
 def _get_deadline_installment(
     association_id: int, installment: RegistrationInstallment, registration: Registration
 ) -> int | None:
-    """Calculate deadline for a specific installment.
-
-    Args:
-        association_id: Association ID for payment deadline calculation
-        installment: RegistrationInstallment instance
-        registration: Registration instance
-
-    Returns:
-        int or None: Days until deadline, None if no deadline configured
-
-    """
+    """Calculate deadline for a specific installment."""
     if installment.days_deadline:
         deadline = get_payment_deadline(registration, installment.days_deadline, association_id)
     elif installment.date_deadline:
@@ -490,17 +423,7 @@ def _get_deadline_installment(
 
 
 def get_payment_deadline(registration: Registration, days_to_add: int, association_id: int) -> int:
-    """Calculate payment deadline based on registration and membership dates.
-
-    Args:
-        registration: Registration instance
-        days_to_add: Number of days to add to base date
-        association_id: Association ID for membership lookup
-
-    Returns:
-        int: Days until payment deadline
-
-    """
+    """Calculate payment deadline based on registration and membership dates."""
     days_since_registration = get_time_diff_today(registration.created.date())
     if not hasattr(registration, "membership"):
         registration.membership = get_user_membership(registration.member, association_id)
@@ -637,15 +560,7 @@ def round_decimal(amount: Decimal) -> Decimal:
 
 
 def round_to_nearest_cent(amount: float) -> float:
-    """Round a number to the nearest cent with tolerance for small differences.
-
-    Args:
-        amount: Number to round
-
-    Returns:
-        float: Rounded number, original if difference exceeds tolerance
-
-    """
+    """Round a number to the nearest cent with tolerance for small differences."""
     rounded_amount = round(amount * 100) / 100
     rounding_tolerance = 0.03
     if abs(float(amount) - rounded_amount) <= rounding_tolerance:
@@ -654,12 +569,7 @@ def round_to_nearest_cent(amount: float) -> float:
 
 
 def process_registration_pre_save(registration: Registration) -> None:
-    """Process registration before saving.
-
-    Args:
-        registration: Registration instance being saved
-
-    """
+    """Process registration before saving."""
     registration.surcharge = get_date_surcharge(registration, registration.run.event)
     registration.member.join(registration.run.event.association)
 
@@ -778,37 +688,19 @@ def process_accounting_discount_post_save(discount_item: AccountingItemDiscount)
 
 
 def log_registration_ticket_saved(ticket: RegistrationTicket) -> None:
-    """Process registration ticket after save.
-
-    Args:
-        ticket: RegistrationTicket instance that was saved
-
-    """
+    """Process registration ticket after save."""
     logger.debug("RegistrationTicket saved: %s at %s", ticket, timezone.now())
     check_registration_events(ticket.event)
 
 
 def process_registration_option_post_save(option: RegistrationOption) -> None:
-    """Process registration option after save.
-
-    Args:
-        option: RegistrationOption instance that was saved
-
-    """
+    """Process registration option after save."""
     logger.debug("RegistrationOption saved: %s at %s", option, timezone.now())
     check_registration_events(option.question.event)
 
 
 def check_registration_events(event: Event) -> None:
-    """Trigger background accounting updates for all registrations in an event.
-
-    Args:
-        event: Event instance to update registrations for
-
-    Side effects:
-        Queues background task to update accounting for all registrations
-
-    """
+    """Trigger background accounting updates for all registrations in an event."""
     registration_ids = [
         str(registration_id)
         for run in event.runs.all()
@@ -853,15 +745,7 @@ def check_registration_background(registration_ids: int | str | Iterable[int]) -
 
 
 def trigger_registration_accounting(registration_id: int | None) -> None:
-    """Update accounting for a single registration in background task.
-
-    Args:
-        registration_id: Registration ID to update
-
-    Side effects:
-        Triggers registration save to update accounting if registration exists
-
-    """
+    """Update accounting for a single registration in background task."""
     if not registration_id:
         return
     try:
@@ -872,28 +756,12 @@ def trigger_registration_accounting(registration_id: int | None) -> None:
 
 
 def _should_skip_accounting(registration: Registration) -> bool:
-    """Check if accounting should be skipped for this registration.
-
-    Args:
-        registration: Registration to check
-
-    Returns:
-        True if accounting should be skipped
-    """
+    """Check if accounting should be skipped for this registration."""
     return registration.run.development in [DevelopStatus.CANC, DevelopStatus.DONE]
 
 
 def _is_payment_complete(registration: Registration, remaining_balance: Decimal, tolerance: float = 0.05) -> bool:
-    """Check if payment is complete within rounding tolerance.
-
-    Args:
-        registration: Registration to check
-        remaining_balance: Remaining balance to pay
-        tolerance: Maximum rounding tolerance
-
-    Returns:
-        True if payment is complete
-    """
+    """Check if payment is complete within rounding tolerance."""
     if -tolerance < remaining_balance <= tolerance:
         if not registration.payment_date:
             registration.payment_date = timezone.now()
@@ -902,16 +770,7 @@ def _is_payment_complete(registration: Registration, remaining_balance: Decimal,
 
 
 def _check_membership_requirements(registration: Registration, event_features: dict, association_id: int) -> bool:
-    """Check membership requirements for registration.
-
-    Args:
-        registration: Registration to check
-        event_features: Event features dictionary
-        association_id: Association ID
-
-    Returns:
-        True if membership requirements are met or not applicable
-    """
+    """Check membership requirements for registration."""
     if "membership" in event_features and "laog" not in event_features:
         if not hasattr(registration, "membership"):
             registration.membership = get_user_membership(registration.member, association_id)
@@ -1001,15 +860,7 @@ def update_registration_accounting(registration: Registration) -> None:
 
 
 def update_member_registrations(member: Member) -> None:
-    """Trigger accounting updates for all registrations of a member.
-
-    Args:
-        member: Member instance to update registrations for
-
-    Side effects:
-        Saves all registrations to trigger accounting recalculation
-
-    """
+    """Trigger accounting updates for all registrations of a member."""
     registrations = Registration.objects.filter(member=member).select_related("run", "run__event", "ticket", "member")
     for registration in registrations:
         registration.save()

@@ -26,12 +26,7 @@ from larpmanager.models.larpmanager import LarpManagerFaq
 
 
 def generate_tutorial_url_slug(tutorial: Any) -> None:
-    """Generate slug for tutorial if not already set.
-
-    Args:
-        tutorial: LarpManagerTutorial instance being saved
-
-    """
+    """Generate slug for tutorial if not already set."""
     if not tutorial.slug:
         tutorial.slug = slugify(tutorial.name)
 

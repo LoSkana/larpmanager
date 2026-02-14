@@ -67,19 +67,7 @@ from larpmanager.utils.users.registration import registration_available
 
 @login_required
 def manage(request: HttpRequest, event_slug: str | None = None) -> HttpResponse | HttpResponseRedirect:
-    """Route to the appropriate management dashboard.
-
-    Routes to either executive management or organizer management
-    based on whether an event slug is provided.
-
-    Args:
-        request: Django HTTP request object (must be authenticated)
-        event_slug: Optional event slug for organizer management
-
-    Returns:
-        HttpResponse: Redirect to home or appropriate management view
-
-    """
+    """Route to the appropriate management dashboard."""
     if request.association["id"] == 0:
         return redirect("home")
 
@@ -1082,16 +1070,7 @@ def _orga_suggestions(context: dict) -> None:
 def _add_item(
     context: dict, list_name: str, message_text: str, permission_key: str, custom_link: str | None
 ) -> None:
-    """Add item to specific list in management context.
-
-    Args:
-        context: Context dictionary to modify
-        list_name: Name of list to add item to
-        message_text: Item message text
-        permission_key: Permission key
-        custom_link: Optional custom link
-
-    """
+    """Add item to specific list in management context."""
     if list_name not in context:
         context[list_name] = []
 
@@ -1101,58 +1080,24 @@ def _add_item(
 def _add_priority(
     context: dict, priority_text: str, permission_key: str, custom_link: str | None = None
 ) -> None:
-    """Add priority item to management dashboard.
-
-    Args:
-        context: Context dictionary to modify
-        priority_text: Priority message text
-        permission_key: Permission key for the action
-        custom_link: Optional custom link
-
-    """
+    """Add priority item to management dashboard."""
     _add_item(context, "priorities_list", priority_text, permission_key, custom_link)
 
 
 def _add_action(context: dict, action_text: str, permission_key: str, custom_link: str | None = None) -> None:
-    """Add action item to management dashboard.
-
-    Args:
-        context: Context dictionary to modify
-        action_text: Action message text
-        permission_key: Permission key for the action
-        custom_link: Optional custom link
-
-    """
+    """Add action item to management dashboard."""
     _add_item(context, "actions_list", action_text, permission_key, custom_link)
 
 
 def _add_suggestion(
     context: dict, suggestion_text: str, permission_key: str, custom_link: str | None = None
 ) -> None:
-    """Add suggestion item to management dashboard.
-
-    Args:
-        context: Context dictionary to modify
-        suggestion_text: Suggestion message text
-        permission_key: Permission key for the action
-        custom_link: Optional custom link
-
-    """
+    """Add suggestion item to management dashboard."""
     _add_item(context, "suggestions_list", suggestion_text, permission_key, custom_link)
 
 
 def _has_permission(request: HttpRequest, context: dict, permission: str) -> bool:
-    """Check if user has required permission for action.
-
-    Args:
-        request: Django HTTP request object
-        context: Context dictionary
-        permission: Permission string to check
-
-    Returns:
-        bool: True if user has permission
-
-    """
+    """Check if user has required permission for action."""
     if permission.startswith("exe"):
         return has_association_permission(request, context, permission)
     return has_event_permission(request, context, context["event"].slug, permission)
@@ -1161,18 +1106,7 @@ def _has_permission(request: HttpRequest, context: dict, permission: str) -> boo
 def _get_href(
     context: dict, permission: str, display_name: str, custom_link_suffix: str | None
 ) -> tuple[str, str]:
-    """Generate href and title for management dashboard links.
-
-    Args:
-        context: Context dictionary
-        permission: Permission string
-        display_name: Display name
-        custom_link_suffix: Optional custom link suffix
-
-    Returns:
-        tuple: (title, href) for dashboard link
-
-    """
+    """Generate href and title for management dashboard links."""
     if custom_link_suffix:
         return _("Configuration"), _get_perm_link(context, permission, "manage") + custom_link_suffix
 
@@ -1468,15 +1402,7 @@ class WhatWouldYouLikeForm(Form):
 
 
 def what_would_you_like(context: dict, request: HttpRequest) -> None:
-    """Handle "What would you like to do?" form display.
-
-    Displays the form for GET requests. POST handling is done via AJAX.
-
-    Args:
-        context: Template context dictionary to store form data
-        request: HTTP request object containing POST data or GET request
-
-    """
+    """Handle "What would you like to do?" form display."""
     # Display form
     form = WhatWouldYouLikeForm(context=context)
 

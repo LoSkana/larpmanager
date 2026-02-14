@@ -264,15 +264,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
 
 
 def round_up_to_two_decimals(value_to_round: float) -> float:
-    """Round number up to two decimal places.
-
-    Args:
-        value_to_round (float): Number to round
-
-    Returns:
-        float: Number rounded up to 2 decimal places
-
-    """
+    """Round number up to two decimal places."""
     return math.ceil(value_to_round * 100) / 100
 
 

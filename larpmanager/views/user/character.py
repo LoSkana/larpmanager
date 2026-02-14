@@ -95,17 +95,7 @@ if TYPE_CHECKING:
 
 
 def character_view(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
-    """Return character sheet for specified character in event run.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event run slug identifier
-        character_uuid: Character uuid
-
-    Returns:
-        Rendered character sheet response
-
-    """
+    """Return character sheet for specified character in event run."""
     # Get event run context and verify status
     context = get_event_context(request, event_slug, include_status=True)
 
@@ -640,16 +630,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
 
 @login_required
 def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
-    """Return JSON list of player's characters for an event.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug
-
-    Returns:
-        JsonResponse: Array of objects containing basic character info
-
-    """
+    """Return JSON list of player's characters for an event."""
     context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
 
     context["list"] = get_player_characters(context["member"], context["event"])
@@ -662,16 +643,7 @@ def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
 
 @login_required
 def character_create(request: HttpRequest, event_slug: str) -> Any:
-    """Handle character creation with maximum character validation.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug
-
-    Returns:
-        HttpResponse: Character creation form or redirect
-
-    """
+    """Handle character creation with maximum character validation."""
     context = get_event_context(request, event_slug, include_status=True, signup=True, feature_slug="user_character")
 
     check, _max_chars = check_character_maximum(context["event"], context["member"])

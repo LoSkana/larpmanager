@@ -197,12 +197,7 @@ class LarpManagerGuide(BaseModel):
     published = models.BooleanField(default=False)
 
     def show_thumb(self) -> Any:
-        """Generate HTML for displaying thumbnail image.
-
-        Returns:
-            str: HTML string for thumbnail display or empty string if no image
-
-        """
+        """Generate HTML for displaying thumbnail image."""
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(thumbnail_size=100, image_url=self.thumb.url)
@@ -369,12 +364,7 @@ class LarpManagerTicket(UuidMixin, BaseModel):
     analysis = models.CharField(max_length=10000, verbose_name=_("Analysis"), default="")
 
     def show_thumb(self) -> Any:
-        """Generate HTML for displaying screenshot thumbnail.
-
-        Returns:
-            str: HTML string for screenshot thumbnail or empty string if no image
-
-        """
+        """Generate HTML for displaying screenshot thumbnail."""
         if self.screenshot_reduced:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.screenshot_reduced.url)

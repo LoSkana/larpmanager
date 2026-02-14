@@ -74,13 +74,7 @@ class Command(BaseCommand):
     help = "Automate processes "
 
     def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
-        """Handle command execution with exception handling.
-
-        Args:
-            *args: Command arguments
-            **options: Command options
-
-        """
+        """Handle command execution with exception handling."""
         try:
             self.go()
         except Exception as e:  # noqa: BLE001 - Top-level handler must catch all errors to notify admins
@@ -161,10 +155,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def check_old_payments() -> None:
-        """Delete payment invoices older than 60 days with CREATED status.
-
-        Cleans up abandoned payment attempts to prevent database bloat.
-        """
+        """Delete payment invoices older than 60 days with CREATED status."""
         # Bulk delete old payment invoices in a single query
         reference_date = timezone.now() - timedelta(days=60)
         PaymentInvoice.objects.filter(status=PaymentStatus.CREATED, created__lte=reference_date.date()).delete()
@@ -187,11 +178,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def check_password_reset() -> None:
-        """Send password reset reminders and clear processed requests.
-
-        Processes pending password reset requests by sending reminder emails
-        and clearing the reset flags from membership records.
-        """
+        """Send password reset reminders and clear processed requests."""
         # check password reset
         pending_reset_memberships = Membership.objects.exclude(password_reset__exact="")
         for membership in pending_reset_memberships.exclude(password_reset__isnull=True):
@@ -201,11 +188,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def clean_db() -> None:
-        """Execute configured database cleanup operations.
-
-        Runs SQL cleanup commands defined in CLEAN_DB setting to maintain
-        database performance and remove stale data.
-        """
+        """Execute configured database cleanup operations."""
         with connection.cursor() as database_cursor:
             for cleanup_sql_query in conf_settings.CLEAN_DB:
                 database_cursor.execute(cleanup_sql_query)
@@ -281,34 +264,12 @@ class Command(BaseCommand):
         badge.members.add(member)
 
     def check_event_badge(self, event: Event, m: Member, cache: dict[str, Any]) -> None:
-        """Award event-specific badge to member.
-
-        Args:
-            event: Event instance to derive badge from
-            m: Member instance to award badge to
-            cache: Badge cache for performance
-
-        """
+        """Award event-specific badge to member."""
         self.add_member_badge(event.slug, m, cache)
 
     @staticmethod
     def get_cache_badges_player(cache: dict, member: Member) -> list:
-        """Get cached list of badge codes for a member.
-
-        Retrieves badge codes from cache if available, otherwise queries the database
-        to build the cache entry for the member's badges.
-
-        Args:
-            cache (dict): Player badge cache containing 'players' key with member IDs
-            member: Member instance to get badges for
-
-        Returns:
-            list: Badge codes already possessed by member
-
-        Note:
-            Modifies the cache dictionary by adding member badge data if not present.
-
-        """
+        """Get cached list of badge codes for a member."""
         # Check if member's badges are already cached
         if member.id not in cache["players"]:
             # Build list of badge codes from member's badges
@@ -797,13 +758,5 @@ class Command(BaseCommand):
 
     @staticmethod
     def send_organizer_summaries() -> None:
-        """Send daily summary emails to organizers for events with digest mode enabled.
-
-        Processes all queued notifications and sends consolidated daily summaries
-        to event organizers. Only sends emails for events that have digest mode
-        enabled via the mail_orga_digest configuration.
-
-        Returns:
-            None
-        """
+        """Send daily summary emails to organizers for events with digest mode enabled."""
         send_daily_organizer_summaries()

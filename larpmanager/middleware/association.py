@@ -50,15 +50,7 @@ class AssociationIdentifyMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        """Process request through association middleware.
-
-        Args:
-            request: Django HTTP request object
-
-        Returns:
-            HttpResponse: Either a redirect or the normal response
-
-        """
+        """Process request through association middleware."""
         return self.get_association_info(request) or self.get_response(request)
 
     @classmethod

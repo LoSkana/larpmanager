@@ -246,13 +246,7 @@ class MyPasswordResetForm(PasswordResetForm):
     """Custom password reset form with association-specific handling."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form with email field constraints.
-
-        Args:
-            *args: Variable length argument list
-            **kwargs: Arbitrary keyword arguments
-
-        """
+        """Initialize form with email field constraints."""
         super().__init__(*args, **kwargs)
         self.fields["email"].widget.attrs["maxlength"] = 70
 

@@ -62,13 +62,7 @@ class WritingForm(BaseModelForm):
     """Form for Writing."""
 
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
-        """Initialize the form with default show_link configuration.
-
-        Args:
-            *args: Variable length argument list passed to parent class.
-            **kwargs: Arbitrary keyword arguments passed to parent class.
-
-        """
+        """Initialize the form with default show_link configuration."""
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
@@ -159,15 +153,7 @@ class PlayerRelationshipForm(BaseModelForm):
         return cleaned_data
 
     def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
-        """Save the form instance, setting registration if new.
-
-        Args:
-            commit: Whether to save the instance to the database.
-
-        Returns:
-            The saved instance.
-
-        """
+        """Save the form instance, setting registration if new."""
         instance = super().save(commit=False)
 
         # Set registration for new instances
@@ -195,14 +181,7 @@ class UploadElementsForm(BaseForm):
     second = forms.FileField(validators=[validator], required=False)
 
     def __init__(self, *args: Any, only_one: bool = False, **kwargs: Any) -> None:
-        """Initialize form, optionally removing the 'second' field.
-
-        Args:
-            *args: Positional arguments passed to parent class.
-            only_one: If True, removes 'second' field if present.
-            **kwargs: Keyword arguments passed to parent class.
-
-        """
+        """Initialize form, optionally removing the 'second' field."""
         only_one = kwargs.pop("only_one", False)
         super().__init__(*args, **kwargs)
 
@@ -222,13 +201,7 @@ class BaseWritingForm(BaseRegistrationForm):
     instance_key = "element_id"
 
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
-        """Initialize form with applicable questions configuration.
-
-        Args:
-            *args: Variable length argument list passed to parent class.
-            **kwargs: Arbitrary keyword arguments passed to parent class.
-
-        """
+        """Initialize form with applicable questions configuration."""
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 

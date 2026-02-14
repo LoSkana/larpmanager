@@ -277,15 +277,7 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
 
 
 def clean_sender(sender_name: Any) -> Any:
-    """Clean sender name for email headers by removing special characters.
-
-    Args:
-        sender_name (str): Original sender name
-
-    Returns:
-        str: Sanitized sender name safe for email headers
-
-    """
+    """Clean sender name for email headers by removing special characters."""
     sender_name = sender_name.replace(":", " ")
     sender_name = sender_name.split(",")[0]
     sender_name = re.sub(r"[^a-zA-Z0-9\s\-\']", "", sender_name)
@@ -448,15 +440,7 @@ def _build_email_message(subj: str, body: str, m_email: str, metadata: dict) -> 
 
 
 def add_unsubscribe_body(association: Any) -> Any:
-    """Add unsubscribe footer to email body.
-
-    Args:
-        association: Association instance for unsubscribe URL
-
-    Returns:
-        str: HTML footer with unsubscribe link
-
-    """
+    """Add unsubscribe footer to email body."""
     html_footer = "<br /><br />-<br />"
     html_footer += f"<a href='{get_url('unsubscribe', association)}'>Unsubscribe</a>"
     return html_footer
@@ -558,17 +542,7 @@ def get_context_elements(context_object: dict) -> tuple[int, int]:
 
 
 def notify_admins(subject: str, message_text: str = "", exception: Exception | None = None) -> None:
-    """Send notification email to system administrators.
-
-    Args:
-        subject (str): Notification subject
-        message_text (str): Notification message
-        exception (Exception, optional): Exception to include in notification
-
-    Side effects:
-        Sends notification emails to all configured ADMINS
-
-    """
+    """Send notification email to system administrators."""
     # Ensure message_text is a string to prevent type errors during concatenation
     message_text = str(message_text)
 

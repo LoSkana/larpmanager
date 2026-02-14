@@ -222,19 +222,7 @@ def get_mail(context: dict, email_uuid: str) -> EmailRecipient:
 
 
 def create_member_profile_for_user(user: User, *, is_newly_created: bool) -> None:
-    """Create member profile and sync email when user is saved.
-
-    This function handles the creation of a Member profile for newly created users
-    and ensures email synchronization between User and Member models.
-
-    Args:
-        user: User instance that was saved
-        is_newly_created: Whether this is a new user (True for new users, False for updates)
-
-    Returns:
-        None
-
-    """
+    """Create member profile and sync email when user is saved."""
     # Create new Member profile for newly registered users
     if is_newly_created:
         Member.objects.create(user=user)
@@ -301,17 +289,7 @@ def queue_organizer_notification(
     notification_type: str,
     object_id: int | None = None,
 ) -> NotificationQueue:
-    """Add notification to queue instead of sending immediately.
-
-    Args:
-        run: Run instance
-        member: Member instance to notify
-        notification_type: Type of notification (use NotificationType enum values)
-        object_id: UUID of optional related object
-
-    Returns:
-        NotificationQueue: Created notification instance
-    """
+    """Add notification to queue instead of sending immediately."""
     return NotificationQueue.objects.create(
         run=run, member=member, notification_type=notification_type, object_id=object_id
     )
@@ -323,20 +301,7 @@ def queue_executive_notification(
     notification_type: str,
     object_id: int | None = None,
 ) -> NotificationQueue:
-    """Add executive notification to queue instead of sending immediately.
-
-    Args:
-        association: Association instance
-        member: Member instance to notify (association executive), or None for main_mail
-        notification_type: Type of notification (use NotificationType enum values)
-        object_id: ID of optional related object
-
-    Returns:
-        NotificationQueue: Created notification instance
-
-    Note:
-        If member is None, the notification will be sent to association.main_mail
-    """
+    """Add executive notification to queue instead of sending immediately."""
     return NotificationQueue.objects.create(
         association=association, member=member, notification_type=notification_type, object_id=object_id
     )

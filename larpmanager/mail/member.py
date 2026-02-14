@@ -88,15 +88,7 @@ def send_membership_confirm(request: HttpRequest, membership: Any) -> None:
 
 
 def send_membership_payment_notification_email(membership_item: Any) -> None:
-    """Send notification when membership fee payment is received.
-
-    Args:
-        membership_item: AccountingItemMembership instance being saved
-
-    Side effects:
-        Sends payment confirmation email to member
-
-    """
+    """Send notification when membership fee payment is received."""
     if membership_item.hide:
         return
     if membership_item.pk:
@@ -132,16 +124,7 @@ def handle_badge_assignment_notifications(instance: Any, pk_set: Any) -> None:
 
 
 def on_member_badges_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noqa: ARG001
-    """Handle badge assignment notifications.
-
-    Args:
-        sender: Signal sender
-        **kwargs: Signal arguments including action, instance, pk_set
-
-    Side effects:
-        Sends badge achievement notification emails to members
-
-    """
+    """Handle badge assignment notifications."""
     action = kwargs.pop("action", None)
     if action != "post_add":
         return
@@ -228,16 +211,7 @@ def notify_membership_approved(member: Member, resp: str) -> None:
 
 
 def notify_membership_reject(member: Any, resp: Any) -> None:
-    """Send notification when membership application is rejected.
-
-    Args:
-        member: Member instance whose membership was rejected
-        resp (str): Optional response message explaining rejection
-
-    Side effects:
-        Sends rejection notification email
-
-    """
+    """Send notification when membership application is rejected."""
     # Manda Mail
     activate(member.language)
     subject = hdr(member.membership) + _("Membership of the Organization refused") + "!"
@@ -297,15 +271,7 @@ def send_help_question_notification_email(instance: Any) -> None:
 
 
 def send_chat_message_notification_email(instance: Any) -> None:
-    """Send notification for new chat messages.
-
-    Args:
-        instance: ChatMessage instance being saved
-
-    Side effects:
-        Sends notification email to message receiver
-
-    """
+    """Send notification for new chat messages."""
     if instance.pk:
         return
     activate(instance.receiver.language)
@@ -319,15 +285,7 @@ def send_chat_message_notification_email(instance: Any) -> None:
 
 
 def send_password_reset_remainder(membership: Any) -> None:
-    """Send password reset reminder to association executives and admins.
-
-    Args:
-        membership: Membership instance with pending password reset
-
-    Side effects:
-        Sends reminder emails to association executives and system admins
-
-    """
+    """Send password reset reminder to association executives and admins."""
     association = membership.association
     notify_organization_exe(association, membership, notification_type=NotificationType.PASSWORD_REMINDER)
 

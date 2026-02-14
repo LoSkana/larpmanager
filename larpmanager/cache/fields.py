@@ -42,13 +42,7 @@ def clear_event_fields_cache(event_id: int) -> None:
 
 
 def _ensure_cache_structure(cached_fields: dict, applicable_label: str, section: str) -> None:
-    """Ensure the nested cache structure exists for given applicability and section.
-
-    Args:
-        cached_fields: The cache dictionary to update
-        applicable_label: The applicability label key
-        section: The section name (e.g., 'questions', 'options', 'names', 'ids')
-    """
+    """Ensure the nested cache structure exists for given applicability and section."""
     if applicable_label not in cached_fields:
         cached_fields[applicable_label] = {}
     if section not in cached_fields[applicable_label]:

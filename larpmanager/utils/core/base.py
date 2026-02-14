@@ -155,15 +155,7 @@ def update_payment_details(context: dict) -> None:
 
 
 def fetch_payment_details(association_id: int) -> dict:
-    """Retrieve payment configuration details for an association.
-
-    Args:
-        association_id: Primary key of the association
-
-    Returns:
-        Dictionary containing payment gateway configuration
-
-    """
+    """Retrieve payment configuration details for an association."""
     # Fetch association with only required fields for efficiency
     association = Association.objects.only("slug", "key").get(pk=association_id)
     return get_payment_details(association)

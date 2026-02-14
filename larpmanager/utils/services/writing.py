@@ -343,17 +343,7 @@ def writing_list(  # noqa: C901 - Complex writing list building with feature-dep
 
 
 def writing_bulk(context: dict, request: HttpRequest, typ: Any) -> None:
-    """Handle bulk operations for different writing element types.
-
-    Args:
-        context: Context dictionary with event data
-        request: Django HTTP request object
-        typ: Writing element type class
-
-    Side effects:
-        Executes bulk operations through type-specific handlers
-
-    """
+    """Handle bulk operations for different writing element types."""
     type_to_bulk_handler = {Character: handle_bulk_characters, Quest: handle_bulk_quest, Trait: handle_bulk_trait}
 
     if typ in type_to_bulk_handler:
@@ -430,14 +420,7 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
 
 
 def writing_list_text_fields(context: dict, text_fields: Any, writing_element_type: Any) -> None:
-    """Add editor-type question fields to text fields list and retrieve cached data.
-
-    Args:
-        context: Context dictionary with event and writing type information
-        text_fields: List of text field names to extend
-        writing_element_type: Writing element model class
-
-    """
+    """Add editor-type question fields to text fields list and retrieve cached data."""
     writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
     text_fields.extend([q.uuid for q in writing_questions if q.typ == BaseQuestionType.EDITOR])
 
@@ -494,15 +477,7 @@ def _prepare_writing_list(context: dict) -> None:
 
 
 def writing_list_plot(context: dict) -> None:
-    """Build character associations for plot list display.
-
-    Args:
-        context: Context dictionary with list of plots and event data
-
-    Side effects:
-        Adds chars dictionary to context and attaches character lists to plot objects
-
-    """
+    """Build character associations for plot list display."""
     event_relationships = get_event_rels_cache(context["event"]).get("plots", {})
 
     for plot in context["list"]:

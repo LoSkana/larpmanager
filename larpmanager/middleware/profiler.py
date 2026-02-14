@@ -99,15 +99,7 @@ class ProfilerMiddleware:
 
     @staticmethod
     def _extract_view_func_name(view_function: Callable[..., HttpResponse]) -> str:
-        """Extract the name from a Django view function or class-based view.
-
-        Args:
-            view_function: Django view function or class-based view
-
-        Returns:
-            Name of the view class or function
-
-        """
+        """Extract the name from a Django view function or class-based view."""
         # Check if it's a class-based view with view_class attribute
         if hasattr(view_function, "view_class"):
             return view_function.view_class.__name__

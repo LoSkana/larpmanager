@@ -68,15 +68,7 @@ logger = logging.getLogger(__name__)
 
 
 def fix_filename(filename: Any) -> Any:
-    """Remove special characters from filename for safe PDF generation.
-
-    Args:
-        filename (str): Original filename string
-
-    Returns:
-        str: Sanitized filename with only alphanumeric characters and spaces
-
-    """
+    """Remove special characters from filename for safe PDF generation."""
     return re.sub(r"[^A-Za-z0-9 ]+", "", filename)
 
 
@@ -105,19 +97,7 @@ def reprint(file_path: Any) -> Any:
 
 
 def return_pdf(file_path: Any, filename: Any) -> Any:
-    """Return PDF file as HTTP response.
-
-    Args:
-        file_path (str): File path to PDF file
-        filename (str): Filename for download
-
-    Returns:
-        HttpResponse: PDF file response with appropriate headers
-
-    Raises:
-        Http404: If PDF file is not found
-
-    """
+    """Return PDF file as HTTP response."""
     try:
         with Path(file_path).open("rb") as pdf_file:
             response = HttpResponse(pdf_file.read(), content_type="application/pdf")
@@ -474,16 +454,7 @@ def print_profiles(context: dict, *, force: bool = False) -> HttpResponse:
 
 
 def print_handout(context: dict, *, force: bool = True) -> Any:
-    """Generate and return a PDF handout for the given context.
-
-    Args:
-        context: Context dictionary containing handout and run information
-        force: Whether to force regeneration of the PDF
-
-    Returns:
-        PDF response for the handout
-
-    """
+    """Generate and return a PDF handout for the given context."""
     # Get the file path for the handout PDF
     file_path = context["handout"].get_filepath(context["run"])
 
@@ -511,45 +482,25 @@ def print_volunteer_registry(context: dict) -> str:
 
 
 def cleanup_handout_pdfs_before_delete(handout: Any) -> None:
-    """Handle handout pre-delete PDF cleanup.
-
-    Args:
-        handout: Handout instance being deleted
-
-    """
+    """Handle handout pre-delete PDF cleanup."""
     for event_run in handout.event.runs.all():
         safe_remove(handout.get_filepath(event_run))
 
 
 def cleanup_handout_pdfs_after_save(instance: object) -> None:
-    """Handle handout post-save PDF cleanup.
-
-    Args:
-        instance: Handout instance that was saved
-
-    """
+    """Handle handout post-save PDF cleanup."""
     for run in instance.event.runs.all():
         safe_remove(instance.get_filepath(run))
 
 
 def cleanup_handout_template_pdfs_before_delete(handout_template: Any) -> None:
-    """Handle handout template pre-delete PDF cleanup.
-
-    Args:
-        handout_template: HandoutTemplate instance being deleted
-
-    """
+    """Handle handout template pre-delete PDF cleanup."""
     for event_run in handout_template.event.runs.all():
         safe_remove(handout_template.get_filepath(event_run))
 
 
 def cleanup_handout_template_pdfs_after_save(instance: object) -> None:
-    """Handle handout template post-save PDF cleanup.
-
-    Args:
-        instance: HandoutTemplate instance that was saved
-
-    """
+    """Handle handout template post-save PDF cleanup."""
     for run in instance.event.runs.all():
         for el in instance.handouts.all():
             safe_remove(el.get_filepath(run))
@@ -592,67 +543,37 @@ def delete_character_pdf_files(instance: object, single: Any = None, runs: Any =
 
 
 def cleanup_character_pdfs_before_delete(character: Any) -> None:
-    """Handle character pre-delete PDF cleanup.
-
-    Args:
-        character: Character instance being deleted
-
-    """
+    """Handle character pre-delete PDF cleanup."""
     remove_run_pdf(character.event)
     delete_character_pdf_files(character)
 
 
 def cleanup_character_pdfs_on_save(instance: object) -> None:
-    """Handle character post-save PDF cleanup.
-
-    Args:
-        instance: Character instance that was saved
-
-    """
+    """Handle character post-save PDF cleanup."""
     remove_run_pdf(instance.event)
     delete_character_pdf_files(instance)
 
 
 def cleanup_relationship_pdfs_before_delete(instance: object) -> None:
-    """Handle player relationship pre-delete PDF cleanup.
-
-    Args:
-        instance: PlayerRelationship instance being deleted
-
-    """
+    """Handle player relationship pre-delete PDF cleanup."""
     for relationship_character_run in instance.registration.rcrs.all():
         delete_character_pdf_files(relationship_character_run.character, instance.registration.run)
 
 
 def cleanup_relationship_pdfs_after_save(instance: object) -> None:
-    """Handle player relationship post-save PDF cleanup.
-
-    Args:
-        instance: PlayerRelationship instance that was saved
-
-    """
+    """Handle player relationship post-save PDF cleanup."""
     for el in instance.registration.rcrs.all():
         delete_character_pdf_files(el.character, instance.registration.run)
 
 
 def cleanup_faction_pdfs_before_delete(instance: object) -> None:
-    """Handle faction pre-delete PDF cleanup.
-
-    Args:
-        instance: Faction instance being deleted
-
-    """
+    """Handle faction pre-delete PDF cleanup."""
     for character in instance.event.character_set.all():
         delete_character_pdf_files(character)
 
 
 def cleanup_faction_pdfs_on_save(instance: object) -> None:
-    """Handle faction post-save PDF cleanup.
-
-    Args:
-        instance: Faction instance that was saved
-
-    """
+    """Handle faction post-save PDF cleanup."""
     runs = instance.event.runs.all()
     for char in instance.characters.all():
         delete_character_pdf_files(char, runs=runs)
@@ -689,15 +610,7 @@ def print_handout_go(context: dict, handout_id: int) -> HttpResponse:
 
 
 def get_fake_request(association_slug: str) -> HttpRequest:
-    """Create a fake HTTP request with association and anonymous user.
-
-    Args:
-        association_slug: The association slug to attach to the request.
-
-    Returns:
-        HttpRequest object with association and user attributes set.
-
-    """
+    """Create a fake HTTP request with association and anonymous user."""
     request = HttpRequest()
     # Attach association from cache
     request.association = get_cache_association(association_slug)
@@ -768,15 +681,7 @@ def print_run_bkg(association_slug: str, event_slug: str) -> None:
 
 
 def clean_tag(tag: Any) -> Any:
-    """Clean XML tag by removing namespace prefix.
-
-    Args:
-        tag: XML tag string to clean
-
-    Returns:
-        str: Cleaned tag without namespace prefix
-
-    """
+    """Clean XML tag by removing namespace prefix."""
     closing_brace_index = tag.find("}")
     if closing_brace_index >= 0:
         tag = tag[closing_brace_index + 1 :]

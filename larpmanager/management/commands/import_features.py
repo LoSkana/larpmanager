@@ -144,15 +144,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def prepare_m2m(field_definitions: dict) -> dict:
-        """Extract many-to-many fields from the fields dictionary.
-
-        Args:
-            field_definitions: Dictionary of field names and values
-
-        Returns:
-            Dictionary containing only the many-to-many fields (list values)
-
-        """
+        """Extract many-to-many fields from the fields dictionary."""
         many_to_many_fields = {}
         # Iterate through a copy of keys to safely modify the original dict
         for field_name in list(field_definitions.keys()):

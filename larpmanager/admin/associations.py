@@ -85,30 +85,14 @@ class AssociationTranslationAdmin(DefModelAdmin):
     list_editable = ("active",)
 
     def msgid_preview(self, obj: AssociationTranslation) -> str:
-        """Display a truncated preview of the original text for list view.
-
-        Args:
-            obj: The AssociationTranslation instance
-
-        Returns:
-            The original text truncated to 50 characters with ellipsis if needed
-
-        """
+        """Display a truncated preview of the original text for list view."""
         max_length = 50
         return obj.msgid[:max_length] + "..." if len(obj.msgid) > max_length else obj.msgid
 
     msgid_preview.short_description = "Original text"
 
     def msgstr_preview(self, obj: AssociationTranslation) -> str:
-        """Display a truncated preview of the translated text for list view.
-
-        Args:
-            obj: The AssociationTranslation instance
-
-        Returns:
-            The translated text truncated to 50 characters with ellipsis if needed
-
-        """
+        """Display a truncated preview of the translated text for list view."""
         max_length = 50
         return obj.msgstr[:max_length] + "..." if len(obj.msgstr) > max_length else obj.msgstr
 

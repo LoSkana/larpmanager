@@ -25,24 +25,7 @@ from django.http import Http404, HttpRequest
 
 
 def is_lm_admin(request: HttpRequest) -> bool:
-    """Check if user is a LarpManager administrator.
-
-    This function determines if the authenticated user has administrator
-    privileges within the LarpManager system by checking superuser status
-    and admin group membership.
-
-    Args:
-        request: Django HTTP request object containing authenticated user data.
-                Must have a 'user' attribute with potential 'member' relationship.
-
-    Returns:
-        bool: True if user is a superuser or belongs to LM admin group,
-              False otherwise or if user lacks member relationship.
-
-    Note:
-        Admin group checking is currently not implemented (TODO).
-
-    """
+    """Check if user is a LarpManager administrator."""
     # Check if user has associated member profile
     if not hasattr(request.user, "member"):
         return False
@@ -54,29 +37,7 @@ def is_lm_admin(request: HttpRequest) -> bool:
 
 
 def check_lm_admin(request: HttpRequest) -> dict[str, Any]:
-    """Verify user is LM admin and return admin context.
-
-    This function validates that the current user has LM (LarpManager) administrator
-    privileges and returns a context dictionary containing association information
-    and admin status flag.
-
-    Args:
-        request: Django HTTP request object containing user and association data.
-
-    Returns:
-        A dictionary containing:
-            - association_id (int): The association ID from the request
-            - lm_admin (int): Admin flag set to 1 indicating LM admin status
-
-    Raises:
-        Http404: If the user does not have LM administrator privileges.
-
-    Example:
-        >>> context = check_lm_admin(request)
-        >>> print(context)
-        {'association_id': 123, 'lm_admin': 1}
-
-    """
+    """Verify user is LM admin and return admin context."""
     # Check if the current user has LM administrator privileges
     if not is_lm_admin(request):
         msg = "Not lm admin"

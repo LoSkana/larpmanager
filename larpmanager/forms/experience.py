@@ -43,13 +43,7 @@ class PxBaseForm(BaseModelForm):
         abstract = True
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the instance with variable arguments.
-
-        Args:
-            *args: Variable length argument list passed to parent class.
-            **kwargs: Arbitrary keyword arguments passed to parent class.
-
-        """
+        """Initialize the instance with variable arguments."""
         super().__init__(*args, **kwargs)
 
 

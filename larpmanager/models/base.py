@@ -73,18 +73,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         ordering: ClassVar[list] = ["-updated"]
 
     def upd_js_attr(self, dict_object: dict, attribute_name: str) -> dict:
-        """Update dict object with model attribute value.
-
-        Retrieves the value of the specified attribute from the model instance
-        and adds it to the provided object dictionary.
-
-        Args:
-            dict_object: object dictionary to update
-            attribute_name: Name of the model attribute to retrieve and add
-
-        Returns:
-            Updated dict object dictionary with the new attribute
-        """
+        """Update dict object with model attribute value."""
         dict_object[attribute_name] = get_attr(self, attribute_name)
         return dict_object
 
@@ -127,22 +116,12 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         return super().__str__()
 
     def get_absolute_url(self) -> Any:
-        """Get absolute URL for the model instance.
-
-        Returns:
-            str: URL for the event view using model slug
-
-        """
+        """Get absolute URL for the model instance."""
         # noinspection PyUnresolvedReferences
         return reverse("event", kwargs={"event_slug": self.slug})
 
     def small_text(self) -> Any:
-        """Get truncated text preview.
-
-        Returns:
-            str: First 100 characters of text field or empty string
-
-        """
+        """Get truncated text preview."""
         if hasattr(self, "text"):
             return self.text[:100]
         return ""
@@ -244,12 +223,7 @@ class Feature(BaseModel):
         ordering: ClassVar[list] = ["module", "order"]
 
     def __str__(self) -> str:
-        """Return string representation of the feature.
-
-        Returns:
-            str: Feature name and module combination
-
-        """
+        """Return string representation of the feature."""
         return f"{self.name} - {self.module}"
 
 
@@ -280,15 +254,7 @@ class PaymentMethod(UuidMixin, BaseModel):
     )
 
     def as_dict(self, **kwargs: Any) -> Any:  # noqa: ARG002
-        """Convert payment method to dictionary with profile image.
-
-        Args:
-            **kwargs: Additional keyword arguments
-
-        Returns:
-            dict: Payment method data with slug, name, and optional profile URL
-
-        """
+        """Convert payment method to dictionary with profile image."""
         # noinspection PyUnresolvedReferences
         result = {"slug": self.slug, "name": self.name}
         if self.profile:

@@ -63,17 +63,7 @@ def update_event_text(event_id: int, text_type: str, language: str) -> str:
 
 
 def get_event_text_cache(event_id: int, typ: str, lang: str) -> str:
-    """Get cached event text or update cache if missing.
-
-    Args:
-        event_id: The event identifier
-        typ: The text type
-        lang: The language code
-
-    Returns:
-        The cached or newly updated event text
-
-    """
+    """Get cached event text or update cache if missing."""
     # Try to get text from cache
     res = cache.get(event_text_key(event_id, typ, lang))
 
@@ -114,16 +104,7 @@ def update_event_text_def(event_id: int, typ: str) -> str:
 
 
 def get_event_text_cache_def(event_id: int, typ: str) -> str:
-    """Get cached event text or update cache if missing.
-
-    Args:
-        event_id: The event identifier
-        typ: The text type to retrieve
-
-    Returns:
-        The cached or newly generated event text
-
-    """
+    """Get cached event text or update cache if missing."""
     # Try to get cached result
     res = cache.get(event_text_key_def(event_id, typ))
     if res is None:

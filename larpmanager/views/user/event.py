@@ -820,18 +820,7 @@ def get_factions(context: dict) -> None:
 
 
 def check_visibility(context: dict, writing_type: str, writing_name: str) -> None:
-    """Check if a writing type is visible and accessible to the current user.
-
-    Args:
-        context: Context dictionary containing features, staff status, and visibility flags
-        writing_type: Type of writing content to check
-        writing_name: Name identifier for error reporting
-
-    Raises:
-        Http404: If the writing type is not active in current features
-        HiddenError: If user lacks permission to view the content
-
-    """
+    """Check if a writing type is visible and accessible to the current user."""
     # Get the mapping of writing types to features
     writing_type_to_feature_mapping = _get_writing_mapping()
 

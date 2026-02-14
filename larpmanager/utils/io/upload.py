@@ -89,41 +89,17 @@ logger = logging.getLogger(__name__)
 
 
 def _normalize_numeric(value: str) -> str:
-    """Normalize numeric string by replacing comma decimal separator with dot.
-
-    Args:
-        value: Numeric string that may use comma or dot as decimal separator
-
-    Returns:
-        Normalized string with dot as decimal separator
-
-    """
+    """Normalize numeric string by replacing comma decimal separator with dot."""
     return str(value).replace(",", ".")
 
 
 def _to_int(value: str) -> int:
-    """Convert numeric string to integer, handling both comma and dot decimal separators.
-
-    Args:
-        value: Numeric string that may use comma or dot as decimal separator
-
-    Returns:
-        Integer value (decimals are truncated)
-
-    """
+    """Convert numeric string to integer, handling both comma and dot decimal separators."""
     return int(float(_normalize_numeric(value)))
 
 
 def _to_decimal(value: str) -> Decimal:
-    """Convert numeric string to Decimal, handling both comma and dot decimal separators.
-
-    Args:
-        value: Numeric string that may use comma or dot as decimal separator
-
-    Returns:
-        Decimal value
-
-    """
+    """Convert numeric string to Decimal, handling both comma and dot decimal separators."""
     return Decimal(_normalize_numeric(value))
 
 
@@ -282,16 +258,7 @@ def _get_file(context: dict, file: Any, column_id: int | None = None) -> tuple[p
 
 
 def registrations_load(context: dict, uploaded_file_form: Form) -> list[str]:
-    """Load registration data from uploaded CSV file.
-
-    Args:
-        context: Context dictionary with event and form settings
-        uploaded_file_form: Form data containing uploaded CSV file
-
-    Returns:
-        list[str]: Processing log messages with statistics
-
-    """
+    """Load registration data from uploaded CSV file."""
     (input_dataframe, processing_logs) = _get_file(context, uploaded_file_form.cleaned_data["first"], 0)
 
     registration_questions = get_cached_registration_questions(context["event"])
@@ -793,15 +760,7 @@ def _relationships_load(row: dict, chars: dict) -> str:
 
 
 def _get_questions(questions_queryset: QuerySet) -> dict:
-    """Build a dictionary mapping question names to their metadata.
-
-    Args:
-        questions_queryset: QuerySet of question objects with name, id, typ, and options attributes.
-
-    Returns:
-        Dictionary with lowercase question names as keys and question metadata as values.
-
-    """
+    """Build a dictionary mapping question names to their metadata."""
     questions_by_name = {}
     for question in questions_queryset:
         # Extract options as name->id mapping
@@ -1515,16 +1474,7 @@ def cover_load(context: dict, z_obj: Any) -> None:
 
 
 def tickets_load(context: dict, form: Form) -> list[str]:
-    """Load tickets from uploaded file data.
-
-    Args:
-        context: Context dictionary containing processing state
-        form: Form containing cleaned file data
-
-    Returns:
-        List of log messages from the loading process
-
-    """
+    """Load tickets from uploaded file data."""
     # Extract and validate file data from form
     (uploaded_dataframe, log_messages) = _get_file(context, form.cleaned_data["first"], 0)
 
@@ -1598,16 +1548,7 @@ def _ticket_load(context: dict, csv_row: dict) -> str:
 
 
 def abilities_load(context: dict, form: Form) -> list[str]:
-    """Load abilities from uploaded file and process each row.
-
-    Args:
-        context: Context dictionary containing processing state
-        form: Form object with cleaned data containing file reference
-
-    Returns:
-        List of processing logs from ability loading operations
-
-    """
+    """Load abilities from uploaded file and process each row."""
     # Extract and validate input file data
     (input_dataframe, processing_logs) = _get_file(context, form.cleaned_data["first"], 0)
 
@@ -1698,15 +1639,7 @@ def _assign_type(
     error_logs: list[str],
     ability_type_name: str,
 ) -> None:
-    """Assign ability type to element from event context.
-
-    Args:
-        context: Dict containing event with ability types
-        ability_element: Ability element to assign type to
-        error_logs: List to append error messages to
-        ability_type_name: Name of ability type to find
-
-    """
+    """Assign ability type to element from event context."""
     # Query ability type by name from event context
     ability_type = context["event"].get_elements(AbilityTypePx).filter(name__iexact=ability_type_name).first()
     if ability_type:

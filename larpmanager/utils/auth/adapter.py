@@ -174,29 +174,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             )
 
     def save_user(self, request: HttpRequest, sociallogin: SocialLogin, form: Form | None = None) -> User:
-        """Save new user from social login.
-
-        Creates a new user account from social authentication data and updates
-        the associated member profile with information from the social provider.
-
-        Args:
-            request: Django HTTP request object containing session and user data
-            sociallogin: Social login instance containing provider authentication data
-            form: Optional form data for additional user information
-
-        Returns:
-            User: The newly created and configured user instance
-
-        Raises:
-            ValidationError: If user data from social login is invalid
-            IntegrityError: If user already exists or conflicts with existing data
-
-        Side Effects:
-            - Creates new User instance in database
-            - Updates associated Member profile with social login data
-            - May trigger user creation signals
-
-        """
+        """Save new user from social login."""
         # Create the base user instance using parent implementation
         user = super().save_user(request, sociallogin, form)
 
@@ -206,27 +184,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         return user
 
     def get_login_redirect_url(self, request: HttpRequest) -> str:
-        """Get redirect URL after social login with proper subdomain handling.
-
-        This method handles three scenarios:
-        1. Login on org subdomain: Stay on the same subdomain (return "/")
-        2. Login on main domain with 'next' parameter containing after_login URL:
-           Use the 'next' parameter to redirect to the organization via after_login
-        3. Login on main domain without 'next': Use default LOGIN_REDIRECT_URL
-
-        The 'next' parameter is set by JavaScript in the login template (login.html:88-92)
-        when users initiate OAuth from an organization subdomain. It points to:
-        https://larpmanager.com/after_login/{slug}/
-
-        The after_login view then generates a token and redirects to the org subdomain.
-
-        Args:
-            request: Django HTTP request object containing association and user data
-
-        Returns:
-            str: Redirect URL path
-
-        """
+        """Get redirect URL after social login with proper subdomain handling."""
         # Use common helper method for subdomain-aware redirect logic
         redirect_url = _get_redirect_url_with_subdomain_support(request)
 
@@ -247,19 +205,7 @@ class MyAccountAdapter(DefaultAccountAdapter):
     """
 
     def get_signup_redirect_url(self, request: HttpRequest) -> str:
-        """Get redirect URL after signup (first-time social login).
-
-        This method is called for first-time social OAuth signups.
-        It uses the same logic as MySocialAccountAdapter.get_login_redirect_url()
-        to properly handle the 'next' parameter and redirect to organization subdomains.
-
-        Args:
-            request: Django HTTP request object
-
-        Returns:
-            str: Redirect URL path
-
-        """
+        """Get redirect URL after signup (first-time social login)."""
         # Use common helper method for subdomain-aware redirect logic
         redirect_url = _get_redirect_url_with_subdomain_support(request)
 

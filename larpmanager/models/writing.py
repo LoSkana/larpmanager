@@ -78,33 +78,14 @@ class Writing(UuidMixin, BaseConceptModel):
         abstract = True
 
     def show_red(self) -> dict[str, Any]:
-        """Return a dictionary representation for red display.
-
-        Returns:
-            Dictionary containing number, name, and uuid attributes.
-
-        """
+        """Return a dictionary representation for red display."""
         js = {}
         for s in ["number", "name", "uuid"]:
             self.upd_js_attr(js, s)
         return js
 
     def show(self, run: Run | None = None) -> dict[str, Any]:  # noqa: ARG002
-        """Generate a display dictionary with basic writing information and teaser.
-
-        Builds upon the reduced representation from show_red() by adding the teaser
-        field to provide a more complete view of the writing object for display
-        purposes.
-
-        Args:
-            run: Optional run instance for context-specific display modifications.
-                 Defaults to None if no specific run context is needed.
-
-        Returns:
-            Dict containing writing object data with id, number, name, and teaser
-            fields suitable for JSON serialization and frontend display.
-
-        """
+        """Generate a display dictionary with basic writing information and teaser."""
         # Get base dictionary with id, number, and name fields
         js = self.show_red()
 
@@ -254,12 +235,7 @@ class Character(Writing):
 
     @property
     def is_active(self) -> bool:
-        """Check if character is active (not marked as inactive in CharacterConfig).
-
-        Returns:
-            True if character is active (no inactive config), False otherwise.
-
-        """
+        """Check if character is active (not marked as inactive in CharacterConfig)."""
         is_inactive = self.get_config("inactive", default_value=False)
         return not (is_inactive == "True" or is_inactive is True)
 
@@ -345,15 +321,7 @@ class Character(Writing):
 
     @staticmethod
     def get_character_filepath(run: Run) -> str:
-        """Get the directory path for storing character files for a given run.
-
-        Args:
-            run: The run instance for which to get the character filepath.
-
-        Returns:
-            The absolute path to the character files directory.
-
-        """
+        """Get the directory path for storing character files for a given run."""
         # Build the path to the characters directory for this run
         directory_path = str(Path(run.event.get_media_filepath()) / "characters" / f"{run.number}/")
         # Ensure the directory exists
@@ -361,15 +329,7 @@ class Character(Writing):
         return directory_path
 
     def get_sheet_filepath(self, run: Run) -> str:
-        """Get the path to this character's PDF sheet file.
-
-        Args:
-            run: The Run instance for which to get the sheet filepath.
-
-        Returns:
-            The full filesystem path to the character's PDF sheet file.
-
-        """
+        """Get the path to this character's PDF sheet file."""
         # Build the character's directory path
         character_directory = self.get_character_filepath(run)
 
@@ -403,15 +363,7 @@ class Character(Writing):
 
     @classmethod
     def get_example_csv(cls, enabled_features: dict[str, int]) -> list[list[str]]:
-        """Extend Writing CSV example with player assignment column.
-
-        Args:
-            enabled_features: List of enabled features for the organization.
-
-        Returns:
-            List of CSV rows with headers and examples including player column.
-
-        """
+        """Extend Writing CSV example with player assignment column."""
         # Get base CSV structure from parent Writing class
         csv_rows = Writing.get_example_csv(enabled_features)
 
@@ -574,26 +526,7 @@ class Faction(Writing):
 
     @staticmethod
     def get_faction_filepath(run: Run) -> str:
-        """Get the directory path for storing faction PDF files for a specific run.
-
-        Creates the faction directory structure within the event's media directory
-        if it doesn't already exist. The directory structure follows the pattern:
-        {event_media}/factions/{run_number}/
-
-        This static method can be called without a faction instance, useful for
-        batch operations or directory initialization.
-
-        Args:
-            run: The Run model instance for which to get the faction files directory
-
-        Returns:
-            Absolute filesystem path to the faction files directory for this run.
-            The directory is guaranteed to exist after this call.
-
-        Side Effects:
-            Creates the faction directory structure if it doesn't exist
-
-        """
+        """Get the directory path for storing faction PDF files for a specific run."""
         # Build directory path: event_media/factions/run_number/
         directory_path = str(Path(run.event.get_media_filepath()) / "factions" / f"{run.number}/")
 
@@ -603,24 +536,7 @@ class Faction(Writing):
         return directory_path
 
     def get_sheet_filepath(self, run: Run) -> str:
-        """Get the complete file path for this faction's PDF sheet.
-
-        Constructs the full filesystem path where the faction sheet PDF should be
-        stored or retrieved from. The filename includes the faction number for
-        easy identification: #{faction_number}.pdf
-
-        Args:
-            run: The Run model instance for which to get the sheet file path
-
-        Returns:
-            Absolute filesystem path to the faction sheet PDF file, in the format:
-            {event_media}/factions/{run_number}/#{faction_number}.pdf
-
-        Example:
-            For faction #5 in run #2:
-            /path/to/media/event_123/factions/2/#5.pdf
-
-        """
+        """Get the complete file path for this faction's PDF sheet."""
         # Get the faction directory for this run
         faction_directory = self.get_faction_filepath(run)
 
@@ -755,15 +671,7 @@ class Handout(Writing):
         return f"H{self.number} {self.name}"
 
     def get_filepath(self, run: Run) -> str:
-        """Build the file path for this handout's PDF within the event's media directory.
-
-        Args:
-            run: The Run instance to determine the event directory.
-
-        Returns:
-            Absolute path to the handout PDF file.
-
-        """
+        """Build the file path for this handout's PDF within the event's media directory."""
         # Build handouts directory path within event media
         handouts_directory = str(Path(run.event.get_media_filepath()) / "handouts")
         Path(handouts_directory).mkdir(parents=True, exist_ok=True)

@@ -94,17 +94,7 @@ logger = logging.getLogger(__name__)
 
 
 def check_time(times: Any, step: Any, start: Any = None) -> Any:
-    """Record timing information for performance monitoring.
-
-    Args:
-        times: Dictionary to store timing data
-        step: Current step name
-        start: Start time reference
-
-    Returns:
-        float: Current time
-
-    """
+    """Record timing information for performance monitoring."""
     if step not in times:
         times[step] = []
     now = time.time()
@@ -232,15 +222,7 @@ def orga_registrations_membership(registration: Any, context: dict) -> None:
 
 
 def regs_list_add(context_dict: Any, category_list_key: Any, category_name: Any, member: Any) -> None:
-    """Add member to categorized registration lists.
-
-    Args:
-        context_dict: Context dictionary containing lists
-        category_list_key: List key to add to
-        category_name: Category name
-        member: Member instance to add
-
-    """
+    """Add member to categorized registration lists."""
     slugified_key = slugify(category_name)
     if category_list_key not in context_dict:
         context_dict[category_list_key] = {}

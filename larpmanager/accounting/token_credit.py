@@ -269,27 +269,7 @@ def registration_tokens_credits_overpay(
 
 
 def get_regs_paying_incomplete(association: Association = None) -> QuerySet[Registration]:
-    """Get registrations with incomplete payments (excluding small differences).
-
-    This function identifies registrations where the total amount paid differs
-    from the total registration amount by more than 0.05 (either overpaid or underpaid).
-    Small differences within the 0.05 threshold are considered complete payments
-    to account for rounding errors or minor discrepancies.
-
-    Args:
-        association (Optional[Association]): Association to filter registrations by.
-            If None, returns registrations from all associations.
-
-    Returns:
-        QuerySet: Django QuerySet of Registration objects with payment
-            differences greater than 0.05 in absolute value. Each registration
-            includes an annotated 'diff' field showing the payment difference.
-
-    Examples:
-        >>> incomplete_regs = get_regs_paying_incomplete()
-        >>> association_incomplete = get_regs_paying_incomplete(my_association)
-
-    """
+    """Get registrations with incomplete payments (excluding small differences)."""
     # Get base registration queryset, optionally filtered by association
     registration_queryset = get_regs(association)
 
@@ -356,12 +336,7 @@ def update_token_credit_on_other_save(accounting_item: AccountingItemOther) -> N
 
 
 def update_credit_on_expense_save(expense_item: AccountingItemExpense) -> None:
-    """Handle accounting item expense save for credit updates.
-
-    Args:
-        expense_item: AccountingItemExpense instance that was saved
-
-    """
+    """Handle accounting item expense save for credit updates."""
     if not expense_item.member or not expense_item.is_approved:
         return
 
@@ -373,13 +348,7 @@ def update_token_credit(
     *,
     token: bool,
 ) -> None:
-    """Update member's token or credit balance based on accounting item.
-
-    Args:
-        accounting_item: Accounting item that triggered the update
-        token: True to update tokens, False to update credits
-
-    """
+    """Update member's token or credit balance based on accounting item."""
     if token:
         update_tokens(accounting_item)
     else:
@@ -421,12 +390,7 @@ def update_tokens(instance: AccountingItemOther | AccountingItemPayment | Accoun
 
 
 def _save_all_regs(instance: AccountingItemOther | AccountingItemPayment | AccountingItemExpense) -> None:
-    """Trigger accounting recalculation on member's incomplete registrations.
-
-    Args:
-        instance: Accounting item whose member's registrations to update
-
-    """
+    """Trigger accounting recalculation on member's incomplete registrations."""
     # Trigger accounting updates on registrations with incomplete payments
     for registration in (
         get_regs_paying_incomplete(instance.association)
@@ -492,15 +456,7 @@ def handle_tokes_credits(
     registration: Registration,
     remaining_balance: Decimal,
 ) -> None:
-    """Handle token credits for a registration based on remaining balance.
-
-    Args:
-        association_id: Association ID for token credit operations
-        features: Dict of enabled features
-        registration: Registration object to process
-        remaining_balance: Remaining balance (positive = use credits, negative = add credits)
-
-    """
+    """Handle token credits for a registration based on remaining balance."""
     # Handle positive balance by using available token and/or credits
     if remaining_balance > 0:
         registration_tokens_credits_use(registration, remaining_balance, association_id, features)

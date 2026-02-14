@@ -40,16 +40,7 @@ from larpmanager.utils.services.transfer import (
 
 @login_required
 def orga_registration_transfer(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Display form to select registration and target run for transfer.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-
-    Returns:
-        HttpResponse: Rendered transfer form template
-
-    """
+    """Display form to select registration and target run for transfer."""
     context = check_event_context(request, event_slug, "orga_registrations")
 
     # Initialize the form with context data

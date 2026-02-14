@@ -216,16 +216,7 @@ def orga_workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 @login_required
 def orga_workshop_modules(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Display workshop modules for event organizers.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-
-    Returns:
-        Rendered workshop modules page
-
-    """
+    """Display workshop modules for event organizers."""
     # Check permissions and get event context
     context = check_event_context(request, event_slug, "orga_workshop_modules")
 
@@ -723,16 +714,7 @@ def orga_onetimes_delete(request: HttpRequest, event_slug: str, onetime_uuid: st
 
 @login_required
 def orga_onetimes_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Display one-time access tokens for an event.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-
-    Returns:
-        Rendered template with token list
-
-    """
+    """Display one-time access tokens for an event."""
     # Check user has permission to view one-time tokens for this event
     context = check_event_context(request, event_slug, "orga_onetimes")
 

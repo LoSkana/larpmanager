@@ -189,16 +189,7 @@ def _available_filler(run: Run, run_status: dict, registration_counts: Any) -> b
 
 
 def get_match_reg(r: Run, my_regs: list[Registration]) -> Registration | None:
-    """Find registration matching the given run ID.
-
-    Args:
-        r: Run object to match against
-        my_regs: List of registration objects to search
-
-    Returns:
-        Matching registration or None if not found
-
-    """
+    """Find registration matching the given run ID."""
     # Iterate through registrations to find matching run
     for m in my_regs:
         if m and m.run_id == r.id:
@@ -605,16 +596,7 @@ def _status_preregister(run: Run, member: Member, run_status: dict, context: dic
 
 
 def _get_features_map(run: Run, context: dict) -> Any:
-    """Get features map from context or create it if not available.
-
-    Args:
-        run: Run object to get features for
-        context: Context dictionary that may contain 'features_map'
-
-    Returns:
-        dict: Features dictionary for the run's event
-
-    """
+    """Get features map from context or create it if not available."""
     if context is None:
         context = {}
 

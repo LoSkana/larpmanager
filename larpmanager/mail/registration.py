@@ -44,12 +44,7 @@ logger = logging.getLogger(__name__)
 
 @background_auto(queue="acc")
 def update_registration_status_bkg(registration_id: Any) -> None:
-    """Background task to update registration status with delay.
-
-    Args:
-        registration_id: ID of the registration to update
-
-    """
+    """Background task to update registration status with delay."""
     time.sleep(1)
     registration = Registration.objects.get(pk=registration_id)
     update_registration_status(registration)
@@ -314,12 +309,7 @@ def send_registration_deletion_email(instance: Registration) -> None:
 
 
 def send_pre_registration_confirmation_email(pre_registration: Any) -> None:
-    """Handle pre-registration pre-save notifications.
-
-    Args:
-        pre_registration: PreRegistration instance being saved
-
-    """
+    """Handle pre-registration pre-save notifications."""
     context = {"event": pre_registration.event}
     if not pre_registration.pk:
         subject = hdr(pre_registration.event) + _("Pre-registration at %(event)s") % context

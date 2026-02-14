@@ -94,18 +94,7 @@ def init_association_warehouse_cache(association_id: int) -> dict[int, dict[str,
 
 
 def get_association_warehouse_cache(association_id: int) -> dict[int, dict[str, Any]]:
-    """Get warehouse cache for an association, initializing if not present.
-
-    Retrieves cached warehouse data for the specified association. If no cached
-    data exists, initializes the cache with fresh data.
-
-    Args:
-        association_id: The Association ID to get warehouse cache for
-
-    Returns:
-        dict[int, dict[str, Any]]: Dictionary containing cached warehouse data
-
-    """
+    """Get warehouse cache for an association, initializing if not present."""
     cache_key = get_association_warehouse_key(association_id)
     cached_warehouse = cache.get(cache_key)
 

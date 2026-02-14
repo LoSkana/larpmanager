@@ -417,14 +417,7 @@ def orga_questions_close(request: HttpRequest, event_slug: str, member_uuid: str
 
 
 def send_mail_batch(request: HttpRequest, association_id: int | None = None, run_id: int | None = None) -> None:
-    """Send batch email to players with specified subject and body.
-
-    Args:
-        request: HTTP request containing POST data with email details
-        association_id: Optional association ID for context
-        run_id: Optional run ID for context
-
-    """
+    """Send batch email to players with specified subject and body."""
     # Extract email parameters from POST data
     player_ids = request.POST["players"]
     email_subject = request.POST["subject"]
@@ -514,17 +507,7 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 @login_required
 def orga_read_mail(request: HttpRequest, event_slug: str, mail_uuid: str) -> HttpResponse:
-    """Display a specific email from the archive for organization staff.
-
-    Args:
-        request: The HTTP request object.
-        event_slug: Event identifier string.
-        mail_uuid: The uuid of the email.
-
-    Returns:
-        Rendered template with email content.
-
-    """
+    """Display a specific email from the archive for organization staff."""
     # Check permissions and get event context
     context = check_event_context(request, event_slug, "orga_archive_email")
 
