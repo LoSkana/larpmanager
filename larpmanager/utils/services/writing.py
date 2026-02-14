@@ -422,8 +422,9 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
 def writing_list_text_fields(context: dict, text_fields: Any, writing_element_type: Any) -> None:
     """Add editor-type question fields to text fields list and retrieve cached data."""
     writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
-    text_fields.extend([q.uuid for q in writing_questions if q.typ == BaseQuestionType.EDITOR])
-
+    text_fields.extend(
+        [question["uuid"] for question in writing_questions if question["typ"] == BaseQuestionType.EDITOR]
+    )
     retrieve_cache_text_field(context, text_fields, writing_element_type)
 
 
