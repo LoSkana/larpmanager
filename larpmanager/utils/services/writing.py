@@ -180,8 +180,8 @@ def writing_popup(request: HttpRequest, context: dict, typ: type[Model]) -> Json
     if attribute_type in questions:
         question = questions[attribute_type]
         try:
-            writing_answer = WritingAnswer.objects.get(element_id=writing_element.id, question=question)
-            html_text = f"<h2>{writing_element} - {question.name}</h2>" + writing_answer.text
+            writing_answer = WritingAnswer.objects.get(element_id=writing_element.id, question_id=question["id"])
+            html_text = f"<h2>{writing_element} - {question['name']}</h2>" + writing_answer.text
             return JsonResponse({"k": 1, "v": html_text})
         except ObjectDoesNotExist:
             return JsonResponse({"k": 0})
@@ -379,11 +379,11 @@ def _get_custom_form(context: dict) -> None:
     questions = get_cached_writing_questions(context["event"], context["writing_typ"])
     context["form_questions"] = {}
     for question in questions:
-        question.basic_typ = question.typ in BaseQuestionType.get_basic_types()
-        if question.typ in context["fields_name"]:
-            context["fields_name"][question.typ] = question.name
+        question["basic_typ"] = question["typ"] in BaseQuestionType.get_basic_types()
+        if question["typ"] in context["fields_name"]:
+            context["fields_name"][question["typ"]] = question["name"]
         else:
-            context["form_questions"][question.uuid] = question
+            context["form_questions"][question["uuid"]] = question
 
 
 def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list[str], bool]:
@@ -469,8 +469,8 @@ def _prepare_writing_list(context: dict) -> None:
     """Prepare context data for writing list display and configuration."""
     try:
         questions = get_cached_writing_questions(context["event"], context["writing_typ"])
-        name_question = next(q for q in questions if q.typ == WritingQuestionType.NAME)
-        context["name_que_uuid"] = name_question.uuid
+        name_question = next(q for q in questions if q["typ"] == WritingQuestionType.NAME)
+        context["name_que_uuid"] = name_question["uuid"]
     except StopIteration as e:
         logger.debug("Name question not found for writing type %s: %s", context["writing_typ"], e)
 

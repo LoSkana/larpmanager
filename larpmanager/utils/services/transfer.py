@@ -240,7 +240,7 @@ def _find_matching_question(source_question: RegistrationQuestion, target_event:
     # Get question by type and name
     target_questions = get_cached_registration_questions(target_event)
     exact_match = next(
-        (q for q in target_questions if q.typ == source_question.typ and q.name == source_question.name), None
+        (q for q in target_questions if q["typ"] == source_question.typ and q["name"] == source_question.name), None
     )
 
     if exact_match:
@@ -256,13 +256,13 @@ def _find_matching_question(source_question: RegistrationQuestion, target_event:
     ]
 
     if source_question.typ in special_types:
-        type_match = next((q for q in target_questions if q.typ == source_question.typ), None)
+        type_match = next((q for q in target_questions if q["typ"] == source_question.typ), None)
 
         if type_match:
             return type_match
 
     # Match by name
-    return next((q for q in target_questions if q.name == source_question.name), None)
+    return next((q for q in target_questions if q["name"] == source_question.name), None)
 
 
 def _find_matching_option(

@@ -82,7 +82,7 @@ class WritingForm(BaseModelForm):
         """
         question_types = set()
         for question in self.questions:
-            question_types.add(question.typ)
+            question_types.add(question["typ"])
 
         if WritingQuestionType.COVER not in question_types:
             self.delete_field("cover")

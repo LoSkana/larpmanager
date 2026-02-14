@@ -39,7 +39,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.models.association import get_url
 from larpmanager.models.casting import Trait
-from larpmanager.models.utils import strip_tags
+from larpmanager.models.utils import get_option_form_text, strip_tags
 from larpmanager.models.writing import Character, FactionType
 from larpmanager.utils.core.common import html_clean
 from larpmanager.utils.io.pdf import get_trait_character
@@ -769,7 +769,7 @@ def get_registration_option(registration: Any, number: Any) -> Any:
     """
     v = getattr(registration, f"option_{number}")
     if v:
-        return v.get_form_text()
+        return get_option_form_text(v)
     return ""
 
 

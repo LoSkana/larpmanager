@@ -31,7 +31,7 @@ from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.accounting import clear_registration_accounting_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.question import get_cached_registration_questions
+from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.cache.registration import clear_registration_counts_cache, get_registration_counts
 from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.models.accounting import AccountingItemMembership, PaymentInvoice, PaymentStatus, PaymentType
@@ -883,10 +883,10 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
     # Get event features and filter applicable questions
     event_features = get_event_features(instance.run.event_id)
     for question in get_cached_registration_questions(instance.run.event):
-        if question.skip(instance, event_features):
+        if skip_registration_question(question, instance, event_features):
             continue
         applicable_questions.append(question)
-        question_ids_cache.append(question.id)
+        question_ids_cache.append(question["id"])
 
     # Fetch text answers for all relevant questions
     text_answers_by_question = {}
@@ -914,13 +914,13 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
     if len(applicable_questions) > 0:
         for question in applicable_questions:
             # Handle multiple choice questions
-            if question.id in choice_options_by_question:
-                formatted_choices = ",".join([option.name for option in choice_options_by_question[question.id]])
-                formatted_results.append((question.name, formatted_choices))
+            if question["id"] in choice_options_by_question:
+                formatted_choices = ",".join([option.name for option in choice_options_by_question[question["id"]]])
+                formatted_results.append((question["name"], formatted_choices))
 
             # Handle text answer questions
-            if question.id in text_answers_by_question:
-                formatted_results.append((question.name, text_answers_by_question[question.id]))
+            if question["id"] in text_answers_by_question:
+                formatted_results.append((question["name"], text_answers_by_question[question["id"]]))
 
     return formatted_results
 
@@ -1106,9 +1106,10 @@ def process_registration_event_change(registration: Registration) -> None:
 
         try:
             # Find matching question and option in the new event
-            registration_choice.question = next(q for q in cached_questions if q.name.lower() == question_name.lower())
+            matched_question = next(q for q in cached_questions if q["name"].lower() == question_name.lower())
+            registration_choice.question_id = matched_question["id"]
             registration_choice.option = registration.run.event.get_elements(RegistrationOption).get(
-                question=registration_choice.question,
+                question_id=matched_question["id"],
                 name__iexact=option_name,
             )
             registration_choice.save()
@@ -1127,7 +1128,8 @@ def process_registration_event_change(registration: Registration) -> None:
 
         try:
             # Find matching question in the new event to preserve the answer
-            registration_answer.question = next(q for q in cached_questions if q.name.lower() == question_name.lower())
+            matched_question = next(q for q in cached_questions if q["name"].lower() == question_name.lower())
+            registration_answer.question_id = matched_question["id"]
             registration_answer.save()
         except StopIteration:
             # Clear the answer if no matching question found

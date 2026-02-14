@@ -27,6 +27,7 @@ import os
 import random
 import secrets
 import string
+from decimal import Decimal
 from html.parser import HTMLParser
 from io import StringIO
 from pathlib import Path
@@ -45,8 +46,6 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.utils.security import normalize_filename
 
 if TYPE_CHECKING:
-    from decimal import Decimal
-
     from django.utils.safestring import SafeString
 
     from larpmanager.models.association import Association
@@ -92,6 +91,71 @@ def decimal_to_str(decimal_value: Decimal) -> str:
     string_representation = str(decimal_value)
     # Remove trailing .00 for cleaner display of whole numbers
     return string_representation.replace(".00", "")
+
+
+def get_option_form_text(option: dict, currency_symbol: str | None = None, event_association: Any = None) -> str:
+    """Generate form display text for an option dict or ORM object.
+
+    Args:
+        option: Option dict or ORM object with name and price fields
+        currency_symbol: Currency symbol to append to price (optional)
+        event_association: Association object to get currency from (optional)
+
+    Returns:
+        Formatted text with name and optional price
+
+    """
+    # Get name and price from dict or ORM object
+    name = option["name"] if isinstance(option, dict) else option.name
+    price = option.get("price", 0) if isinstance(option, dict) else option.price
+
+    formatted_text = name
+
+    # Append formatted price with currency symbol if applicable
+    if price and ((isinstance(price, Decimal) and price > 0) or (isinstance(price, (int, float)) and price > 0)):
+        if not currency_symbol and event_association:
+            currency_symbol = event_association.get_currency_symbol()
+        if currency_symbol:
+            formatted_text += f" ({decimal_to_str(price)}{currency_symbol})"
+
+    return formatted_text
+
+
+def get_ticket_form_text(ticket: dict, currency_symbol: str | None = None, event_association: Any = None) -> str:
+    """Generate form display text for a ticket dict or ORM object.
+
+    Creates a text string combining the ticket name, price (if available),
+    and availability count (if the ticket has an available attribute).
+
+    Args:
+        ticket: Ticket dict or ORM object with name, price, and optional available fields
+        currency_symbol: Currency symbol string. If not provided, will be fetched from event_association
+        event_association: Association object to get currency from (optional)
+
+    Returns:
+        Formatted text with ticket name, price and availability
+
+    """
+    # Get fields from dict or ORM object
+    name = ticket["name"] if isinstance(ticket, dict) else ticket.name
+    price = ticket.get("price", 0) if isinstance(ticket, dict) else ticket.price
+    formatted_text = name
+
+    # Add price information if available
+    if price and ((isinstance(price, Decimal) and price > 0) or (isinstance(price, (int, float)) and price > 0)):
+        if not currency_symbol and event_association:
+            currency_symbol = event_association.get_currency_symbol()
+        if currency_symbol:
+            formatted_text += f" - {decimal_to_str(price)}{currency_symbol}"
+
+    # Add availability count if ticket has available attribute
+    if isinstance(ticket, dict):
+        if "available" in ticket:
+            formatted_text += f" - ({_('Available')}: {ticket['available']})"
+    elif hasattr(ticket, "available"):
+        formatted_text += f" - ({_('Available')}: {ticket.available})"
+
+    return formatted_text
 
 
 def slug_url_validator(val: Any) -> None:

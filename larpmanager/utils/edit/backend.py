@@ -193,20 +193,21 @@ def _get_field_value(element: Any, question: Any) -> str | None:
     mapping = _get_values_mapping(element)
 
     # Check if question type has a direct mapping function
-    if question.typ in mapping:
-        return mapping[question.typ]()
+    if question["typ"] in mapping:
+        return mapping[question["typ"]]()
 
     # Handle text-based question types (paragraph, text, email)
-    if question.typ in {"p", "t", "e"}:
-        answers = WritingAnswer.objects.filter(question=question, element_id=element.id)
+    if question["typ"] in {"p", "t", "e"}:
+        answers = WritingAnswer.objects.filter(question_id=question["id"], element_id=element.id)
         if answers:
             return answers.first().text
         return ""
 
     # Handle selection-based question types (single, multiple choice)
-    if question.typ in {"s", "m"}:
+    if question["typ"] in {"s", "m"}:
         return ", ".join(
-            choice.option.name for choice in WritingChoice.objects.filter(question=question, element_id=element.id)
+            choice.option.name
+            for choice in WritingChoice.objects.filter(question_id=question["id"], element_id=element.id)
         )
 
     return None

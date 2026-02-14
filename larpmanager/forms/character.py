@@ -195,7 +195,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
                 continue
 
             # Categorize fields based on question type length
-            if len(question.typ) == 1:
+            if len(question["typ"]) == 1:
                 fields_custom.add(field_key)
             else:
                 fields_default.add(field_key)

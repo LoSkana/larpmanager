@@ -61,6 +61,7 @@ from larpmanager.models.registration import (
     RegistrationTicket,
     TicketTier,
 )
+from larpmanager.models.utils import get_ticket_form_text
 from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.users.registration import get_reduced_available_count
@@ -369,7 +370,11 @@ class RegistrationForm(BaseRegistrationForm):
         # Process each available ticket to create form choices and help text
         for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
-            ticket_display_name = ticket.get_form_text(currency_symbol=self.params.get("currency_symbol", ""))
+            currency_symbol = self.params.get("currency_symbol")
+            event_association = run.event.association if not currency_symbol else None
+            ticket_display_name = get_ticket_form_text(
+                ticket, currency_symbol=currency_symbol, event_association=event_association
+            )
             ticket_choices.append((str(ticket.uuid), ticket_display_name))
 
             # Add ticket description to help text if available
@@ -432,7 +437,7 @@ class RegistrationForm(BaseRegistrationForm):
         event: Event,
         registration_counts: dict,
         run: Run,
-    ) -> list[RegistrationTicket] | list:
+    ) -> list[RegistrationTicket]:
         """Get list of available tickets for registration.
 
         Returns tickets available for the current user based on their status,
@@ -793,11 +798,20 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Fetch and format ticket choices ordered by price (highest first)
         qs = RegistrationTicket.objects.filter(event=self.params["run"].event).order_by("-price")
 
+        currency_symbol = self.params.get("currency_symbol")
+        event_association = self.params["run"].event.association if not currency_symbol else None
+
         self.fields["ticket"] = forms.ChoiceField(
             required=self.fields["ticket"].required,
             label=self.fields["ticket"].label,
             help_text=self.fields["ticket"].help_text,
-            choices=[(ticket.uuid, ticket.get_form_text(self.params.get("currency_symbol", ""))) for ticket in qs],
+            choices=[
+                (
+                    ticket.uuid,
+                    get_ticket_form_text(ticket, currency_symbol=currency_symbol, event_association=event_association),
+                )
+                for ticket in qs
+            ],
         )
 
         # Set initial value if editing existing instance
@@ -1237,7 +1251,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         """
         # Add type of registration question to the available types
         registration_questions = get_cached_registration_questions(self.params["event"])
-        already_used_types = list({question.typ for question in registration_questions})
+        already_used_types = list({question["typ"] for question in registration_questions})
 
         if self.instance.pk and self.instance.typ:
             already_used_types.remove(self.instance.typ)
