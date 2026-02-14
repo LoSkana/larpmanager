@@ -246,6 +246,7 @@ def init_registration_questions_cache(event: Event) -> list:
             "giftable": question.giftable,
             "profile_url": question.profile.url if question.profile else None,
             "profile_thumb_url": question.profile_thumb.url if question.profile else None,
+            "editable": question.get_editable(),
             # Store annotations (filtered to remove None values)
             "tickets_map": tickets_map,
             "factions_map": factions_map,

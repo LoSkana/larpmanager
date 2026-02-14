@@ -115,7 +115,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Set up character-specific fields including factions and custom questions
         self._init_character()
 
-    def check_editable(self, question: WritingQuestion) -> bool:
+    def check_editable(self, question: dict) -> bool:
         """Check if a question is editable based on event config and instance status.
 
         Args:
@@ -136,7 +136,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             return True
 
         # Get allowed statuses for editing this question
-        allowed_editable_statuses = question.get_editable()
+        allowed_editable_statuses = question.get("editable", [])
 
         # If no status restrictions, question is always editable
         if not allowed_editable_statuses:
