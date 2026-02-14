@@ -149,38 +149,8 @@ def init_writing_questions_cache(event: Event) -> dict:
         .prefetch_related(Prefetch("options", queryset=WritingOption.objects.order_by("order")))
     )
 
-    # Serialize questions to dicts with options as list
-    serialized_questions = []
-    for q in all_questions:
-        question_dict = {
-            "id": q.id,
-            "pk": q.pk,
-            "uuid": q.uuid,
-            "name": q.name,
-            "typ": q.typ,
-            "order": q.order,
-            "status": q.status,
-            "visibility": q.visibility,
-            "description": q.description,
-            "max_length": q.max_length,
-            "printable": q.printable,
-            "applicable": q.applicable,
-            "editable": q.editable,
-            "event_id": q.event_id,
-            # Serialize prefetched options as list of dicts
-            "options": [
-                {
-                    "id": opt.id,
-                    "uuid": opt.uuid,
-                    "name": opt.name,
-                    "order": opt.order,
-                    "description": opt.description,
-                    "question_id": opt.question_id,
-                }
-                for opt in q.options.all()
-            ],
-        }
-        serialized_questions.append(question_dict)
+    # Serialize questions to dicts
+    serialized_questions = [q.as_dict() for q in all_questions]
 
     # Group questions by applicable type
     questions_by_applicable = {}
@@ -211,64 +181,13 @@ def init_registration_questions_cache(event: Event) -> list:
         allowed_map=ArrayAgg("allowed__id"),
     )
 
-    # Prefetch options to avoid N+1 queries
-    questions = questions.prefetch_related(Prefetch("options", queryset=RegistrationOption.objects.order_by("order")))
+    # Prefetch section and options
+    questions = questions.select_related("section").prefetch_related(
+        Prefetch("options", queryset=RegistrationOption.objects.order_by("order"))
+    )
 
     # Serialize questions to dicts
-    serialized_questions = []
-
-    for question in questions:
-        # Filter out None values from ArrayAgg results (PostgreSQL returns [None] for empty relations)
-        tickets_map = getattr(question, "tickets_map", []) or []
-        tickets_map = [t for t in tickets_map if t is not None]
-
-        factions_map = getattr(question, "factions_map", []) or []
-        factions_map = [f for f in factions_map if f is not None]
-
-        allowed_map = getattr(question, "allowed_map", []) or []
-        allowed_map = [a for a in allowed_map if a is not None]
-
-        question_dict = {
-            "id": question.id,
-            "pk": question.pk,
-            "uuid": question.uuid,
-            "name": question.name,
-            "typ": question.typ,
-            "order": question.order,
-            "status": question.status,
-            "description": question.description,
-            "max_length": question.max_length,
-            "section_id": question.section_id,
-            "section_order": question.section.order if question.section else None,
-            "section_name": question.section.name if question.section else None,
-            "section_description": question.section.description if question.section else None,
-            "event_id": question.event_id,
-            "giftable": question.giftable,
-            "profile_url": question.profile.url if question.profile else None,
-            "profile_thumb_url": question.profile_thumb.url if question.profile else None,
-            "editable": question.get_editable(),
-            # Store annotations (filtered to remove None values)
-            "tickets_map": tickets_map,
-            "factions_map": factions_map,
-            "allowed_map": allowed_map,
-            # Serialize prefetched options as list of dicts
-            "options": [
-                {
-                    "id": opt.id,
-                    "uuid": opt.uuid,
-                    "name": opt.name,
-                    "order": opt.order,
-                    "description": opt.description,
-                    "price": opt.price,
-                    "max_available": opt.max_available,
-                    "question_id": opt.question_id,
-                }
-                for opt in question.options.all()
-            ],
-        }
-        serialized_questions.append(question_dict)
-
-    return serialized_questions
+    return [question.as_dict() for question in questions]
 
 
 def get_cached_writing_questions(event: Event, applicable: str) -> list:
