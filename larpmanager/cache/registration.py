@@ -68,14 +68,7 @@ def get_registration_counts(run: Run, *, reset_cache: bool = False) -> dict:
 
 
 def add_count(counter_dict: dict, parameter_name: str, increment_value: int = 1) -> None:
-    """Add or increment a counter value in a dictionary.
-
-    Args:
-        counter_dict: Dictionary to modify
-        parameter_name: Key to add or increment
-        increment_value: Value to add (default: 1)
-
-    """
+    """Add or increment a counter value in a dictionary."""
     # Initialize parameter if not present
     if parameter_name not in counter_dict:
         counter_dict[parameter_name] = increment_value

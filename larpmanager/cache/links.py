@@ -219,22 +219,7 @@ def clear_run_event_links_cache(event: Event) -> None:
 
 
 def on_registration_post_save_reset_event_links(instance: Registration) -> None:
-    """Handle registration post-save event link reset.
-
-    This function is triggered after a Registration model instance is saved.
-    It clears the cached event links for the registered member to ensure
-    fresh data is displayed after registration changes.
-
-    Args:
-        instance: Registration instance that was saved
-
-    Returns:
-        None
-
-    Side Effects:
-        Clears event link cache for the registered member and associated event
-
-    """
+    """Handle registration post-save event link reset."""
     # Early return if no member is associated with the registration
     if not instance.member:
         return
@@ -244,23 +229,7 @@ def on_registration_post_save_reset_event_links(instance: Registration) -> None:
 
 
 def reset_event_links(member_id: int, association_id: int) -> None:
-    """Clear event link cache for a specific member and association.
-
-    This function removes cached event links from the cache system to ensure
-    fresh data is loaded on the next request.
-
-    Args:
-        member_id: Member ID to clear cache for
-        association_id: Association ID to clear cache for
-
-    Returns:
-        None
-
-    Side Effects:
-        Removes cached event links from the cache system using the generated
-        cache key for the specified member and association combination.
-
-    """
+    """Clear event link cache for a specific member and association."""
     # Generate cache key for the specific member-association combination
     cache_key = get_cache_event_key(member_id, association_id)
 
@@ -269,22 +238,6 @@ def reset_event_links(member_id: int, association_id: int) -> None:
 
 
 def get_cache_event_key(member_id: int, association_id: int) -> str:
-    """Generate cache key for member event links.
-
-    Creates a unique cache key string for storing member-specific event links
-    based on member ID and association ID combination.
-
-    Args:
-        member_id: Member ID for cache key generation
-        association_id: Association ID for cache key generation
-
-    Returns:
-        Formatted cache key string for member event links storage
-
-    Example:
-        >>> get_cache_event_key(123, 456)
-        'ctx_event_links_123_456'
-
-    """
+    """Generate cache key for member event links."""
     # Generate cache key using member and association IDs
     return f"ctx_event_links_{member_id}_{association_id}"

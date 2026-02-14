@@ -179,17 +179,7 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 @login_required
 def orga_characters_sheet_pdf(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
-    """Generate PDF character sheet for organizers.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-        character_uuid: Character uuid/ID
-
-    Returns:
-        HTTP response containing the generated PDF
-
-    """
+    """Generate PDF character sheet for organizers."""
     # Check organizer permissions for PDF access
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
@@ -242,17 +232,7 @@ def orga_characters_friendly_pdf(request: HttpRequest, event_slug: str, characte
 
 @login_required
 def orga_characters_friendly_test(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
-    """Generate friendly test character sheet PDF.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug
-        character_uuid: Character uuid
-
-    Returns:
-        Rendered PDF template for friendly test sheet
-
-    """
+    """Generate friendly test character sheet PDF."""
     # Verify user has permission to access character PDFs
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 

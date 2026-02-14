@@ -74,13 +74,7 @@ class OrgaPersonalExpenseForm(BaseModelFormRun):
         exclude = ("member", "is_approved", "inv", "hide")
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form and conditionally remove balance field based on feature flag.
-
-        Args:
-            *args: Variable length argument list passed to parent constructor.
-            **kwargs: Arbitrary keyword arguments passed to parent constructor.
-
-        """
+        """Initialize form and conditionally remove balance field based on feature flag."""
         # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
 
@@ -612,14 +606,7 @@ class RefundRequestForm(BaseModelForm):
         fields = ("details", "value")
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form with member-specific credit validation.
-
-        Args:
-            member: Member instance to extract credit limit from
-            *args: Variable length argument list passed to parent
-            **kwargs: Arbitrary keyword arguments passed to parent
-
-        """
+        """Initialize form with member-specific credit validation."""
         # Extract member from kwargs and initialize parent form
         super().__init__(*args, **kwargs)
 

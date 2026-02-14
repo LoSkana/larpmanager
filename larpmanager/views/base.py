@@ -55,24 +55,7 @@ class MyLoginView(LoginView):
     authentication_form = MyAuthForm
 
     def form_valid(self, authentication_form: Form) -> HttpResponse:
-        """Handle valid login form submission.
-
-        Processes a successfully validated authentication form by welcoming the user
-        and delegating to the parent class for standard login handling.
-
-        Args:
-            authentication_form (AuthenticationForm): Valid authentication form containing user credentials
-                and authentication state.
-
-        Returns:
-            HttpResponse: HTTP response after successful login processing, typically
-                a redirect to the next page or default landing page.
-
-        Note:
-            This method is called only after form validation has passed. The welcome_user
-            function handles user greeting logic and session setup.
-
-        """
+        """Handle valid login form submission."""
         # Welcome the authenticated user and set up session state
         welcome_user(self.request, authentication_form.get_user())
 
@@ -81,23 +64,7 @@ class MyLoginView(LoginView):
 
 
 def home(request: HttpRequest, lang: str | None = None) -> HttpResponse:
-    """Handle home page routing based on association.
-
-    Routes users to appropriate home page view depending on their association ID.
-    For association ID 0, shows the main landing page. Otherwise, checks for
-    Centauri-specific handling or displays the calendar view.
-
-    Args:
-        request: HTTP request object containing user and association data
-        lang: Optional language code for localization, defaults to None
-
-    Returns:
-        HttpResponse: Rendered home page, calendar view, or Centauri-specific response
-
-    Note:
-        Association ID 0 is reserved for the main/default organization.
-
-    """
+    """Handle home page routing based on association."""
     # Check if this is the default/main association (ID 0)
     if request.association["id"] == 0:
         return lm_home(request)
@@ -108,37 +75,14 @@ def home(request: HttpRequest, lang: str | None = None) -> HttpResponse:
 
 
 def error_404(request: HttpRequest, exception: Exception) -> HttpResponse:
-    """Handle 404 errors with custom template.
-
-    Renders a custom 404 error page when a requested resource is not found.
-    The exception details are passed to the template context for debugging
-    purposes in development environments.
-
-    Args:
-        request (HttpRequest): The HTTP request object that triggered the 404 error.
-        exception (Exception): The exception instance that caused the 404 error,
-                              typically a Http404 exception.
-
-    Returns:
-        HttpResponse: A rendered HTTP response containing the 404 error page
-                     with the exception context.
-
-    """
+    """Handle 404 errors with custom template."""
     # Render the custom 404 template with exception context
     # The 'exe' variable provides exception details to the template
     return render(request, "404.html", {"exe": exception})
 
 
 def error_500(request: HttpRequest) -> Any:
-    """Handle 500 errors with custom template.
-
-    Args:
-        request: HTTP request object
-
-    Returns:
-        HttpResponse: Rendered 500 error page
-
-    """
+    """Handle 500 errors with custom template."""
     return render(request, "500.html")
 
 
@@ -179,15 +123,7 @@ def after_login(request: HttpRequest, subdomain: str, path: str = "") -> HttpRes
 
 
 def get_base_domain(request: HttpRequest) -> str:
-    """Extract the base domain from the request host.
-
-    Args:
-        request: Django HTTP request object.
-
-    Returns:
-        Base domain (e.g., 'example.com' from 'subdomain.example.com').
-
-    """
+    """Extract the base domain from the request host."""
     host = request.get_host()
     host_parts = host.split(".")
 

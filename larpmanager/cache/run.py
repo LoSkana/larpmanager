@@ -97,23 +97,13 @@ def init_cache_run(association_id: int, event_slug: str) -> int | None:
 
 
 def on_run_pre_save_invalidate_cache(instance: Run) -> None:
-    """Handle run pre-save cache invalidation.
-
-    Args:
-        instance: Run instance being saved
-
-    """
+    """Handle run pre-save cache invalidation."""
     if instance.pk:
         reset_cache_run(instance.event.association_id, instance.get_slug())
 
 
 def on_event_pre_save_invalidate_cache(instance: Event) -> None:
-    """Handle event pre-save cache invalidation.
-
-    Args:
-        instance: Event instance being saved
-
-    """
+    """Handle event pre-save cache invalidation."""
     if instance.pk:
         for run in instance.runs.all():
             reset_cache_run(instance.association_id, run.get_slug())
@@ -219,23 +209,13 @@ def init_cache_config_run(run: Run) -> dict:
 
 
 def on_run_post_save_reset_config_cache(instance: Run) -> None:
-    """Handle run post-save cache reset.
-
-    Args:
-        instance: Run instance that was saved
-
-    """
+    """Handle run post-save cache reset."""
     if instance.pk:
         reset_cache_config_run(instance)
 
 
 def on_event_post_save_reset_config_cache(instance: Event) -> None:
-    """Handle event post-save cache reset.
-
-    Args:
-        instance: Event instance that was saved
-
-    """
+    """Handle event post-save cache reset."""
     if instance.pk:
         for run in instance.runs.all():
             reset_cache_config_run(run)

@@ -75,25 +75,12 @@ def round_to_nearest_cent(amount: float) -> float:
 
 
 def get_registration_accounting_cache_key(run_id: int) -> str:
-    """Generate cache key for registration accounting data.
-
-    Args:
-        run_id: id of Run instance
-
-    Returns:
-        str: Cache key for registration accounting data
-
-    """
+    """Generate cache key for registration accounting data."""
     return f"registration_accounting_{run_id}"
 
 
 def clear_registration_accounting_cache(run_id: int) -> None:
-    """Reset registration accounting cache for a run.
-
-    Args:
-        run_id: id of Run instance to reset cache for
-
-    """
+    """Reset registration accounting cache for a run."""
     cache_key = get_registration_accounting_cache_key(run_id)
     cache.delete(cache_key)
 
@@ -162,24 +149,7 @@ def _get_accounting_context(run: Run, member_filter: int | None = None) -> tuple
 
 
 def get_special_payment_types(features: dict[str, int]) -> list[str]:
-    """Get list of special payment types based on enabled features.
-
-    Returns payment type choices for tokens and/or credits if the
-    corresponding features are enabled in the provided features dictionary.
-
-    Args:
-        features: Dictionary of enabled feature names mapped to their IDs
-
-    Returns:
-        List of PaymentChoices constants for enabled special payment types.
-        Empty list if neither tokens nor credits features are enabled.
-
-    Example:
-        >>> features = {"tokens": 1, "credits": 2, "payment": 3}
-        >>> get_special_payment_types(features)
-        [PaymentChoices.TOKEN, PaymentChoices.CREDIT]
-
-    """
+    """Get list of special payment types based on enabled features."""
     payment_types = []
     if "tokens" in features:
         payment_types.append(PaymentChoices.TOKEN)

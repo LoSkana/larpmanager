@@ -35,15 +35,7 @@ from larpmanager.models.registration import Registration, TicketTier
 
 
 def get_users_data(member_ids: Any) -> Any:
-    """Get user display names and emails for deadline notifications.
-
-    Args:
-        member_ids (list): List of member IDs
-
-    Returns:
-        list: List of (display_name, email) tuples
-
-    """
+    """Get user display names and emails for deadline notifications."""
     return [
         (str(member), member.email)
         for member in Member.objects.filter(pk__in=member_ids)
@@ -53,16 +45,7 @@ def get_users_data(member_ids: Any) -> Any:
 
 
 def get_membership_fee_year(association_id: int, year: Any = None) -> set:
-    """Get set of member IDs who paid membership fee for given year.
-
-    Args:
-        association_id (int): Association ID
-        year (int, optional): Year to check, defaults to current year
-
-    Returns:
-        set: Set of member IDs who paid fee for the year
-
-    """
+    """Get set of member IDs who paid membership fee for given year."""
     if not year:
         year = timezone.now().year
     return set(

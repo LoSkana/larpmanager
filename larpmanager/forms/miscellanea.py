@@ -78,19 +78,7 @@ class SendMailForm(BaseForm):
     body = forms.CharField(widget=CSRFTinyMCE(attrs={"rows": 30}))
 
     def __init__(self, *args: object, **kwargs: object) -> None:
-        """Initialize the form with show_link configuration.
-
-        Initializes the parent form class and configures specific fields to be
-        displayed as clickable links in the form interface.
-
-        Args:
-            *args: Variable length argument list passed to parent class.
-            **kwargs: Arbitrary keyword arguments passed to parent class.
-
-        Returns:
-            None: This method doesn't return a value.
-
-        """
+        """Initialize the form with show_link configuration."""
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
@@ -242,13 +230,7 @@ class CompetencesForm(BaseForm):
     """Form for Competences."""
 
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
-        """Initialize form with dynamic fields for each element in the provided list.
-
-        Args:
-            *args: Variable positional arguments passed to parent class.
-            **kwargs: Variable keyword arguments. Must contain 'list' key with iterable of objects.
-
-        """
+        """Initialize form with dynamic fields for each element in the provided list."""
         self.list = kwargs.pop("list")
         super().__init__(*args, **kwargs)
 
@@ -279,15 +261,7 @@ class ExeUrlShortnerForm(BaseModelForm):
 
 
 def _delete_optionals_warehouse(warehouse_form: BaseModelForm) -> None:
-    """Remove optional warehouse fields not enabled in association configuration.
-
-    Args:
-        warehouse_form: Form instance to modify by removing disabled optional fields
-
-    Side effects:
-        Deletes form fields for warehouse options not enabled in config
-
-    """
+    """Remove optional warehouse fields not enabled in association configuration."""
     for optional_field_name in WarehouseItem.get_optional_fields():
         if not get_association_config(
             warehouse_form.params["association_id"],

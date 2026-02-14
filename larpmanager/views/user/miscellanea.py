@@ -161,17 +161,7 @@ def help_attachment(request: HttpRequest, attachment_uuid: str) -> HttpResponseR
 
 
 def handout_ext(request: HttpRequest, event_slug: str, code: str) -> HttpResponse:
-    """Generate and return a PDF for a specific event handout.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-        code: Handout code identifier
-
-    Returns:
-        PDF file response with the handout content
-
-    """
+    """Generate and return a PDF for a specific event handout."""
     # Retrieve event/run context and fetch handout by code
     context = get_event_context(request, event_slug)
     context["handout"] = get_object_or_404(Handout, event=context["event"], cod=code)

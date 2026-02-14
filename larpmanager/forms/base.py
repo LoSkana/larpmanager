@@ -422,30 +422,7 @@ class BaseModelFormRun(BaseModelForm):
 
 
 def max_selections_validator(max_choices: int) -> callable:
-    """Create a validator that limits the number of selectable options.
-
-    This function returns a validator that can be used with Django form fields
-    to ensure that users don't select more than the specified maximum number
-    of options in multi-choice fields.
-
-    Args:
-        max_choices: Maximum number of options that can be selected.
-            Must be a positive integer.
-
-    Returns:
-        A validator function that takes a value and raises ValidationError
-        if the number of selected options exceeds max_choices.
-
-    Raises:
-        ValidationError: When the validator is called and the number of
-            selected options exceeds the maximum allowed.
-
-    Example:
-        >>> validator = max_selections_validator(3)
-        >>> validator(['option1', 'option2'])  # OK
-        >>> validator(['option1', 'option2', 'option3', 'option4'])  # Raises ValidationError
-
-    """
+    """Create a validator that limits the number of selectable options."""
 
     def validator(selected_values: list) -> None:
         """Validate that selected values do not exceed maximum allowed choices."""
@@ -706,13 +683,7 @@ class BaseRegistrationForm(BaseModelFormRun):
                 self.add_error(field_key, _("Option no longer available"))
 
     def _validate_single_choice(self, form_data: dict, question: BaseModel, field_key: str) -> None:
-        """Validate single choice question selection.
-
-        Args:
-            form_data: Form data dictionary
-            question: Question to validate
-            field_key: Form field key for this question
-        """
+        """Validate single choice question selection."""
         # Skip empty selections
         if not form_data[field_key]:
             return
@@ -767,19 +738,7 @@ class BaseRegistrationForm(BaseModelFormRun):
             raise ValidationError(msg) from err
 
     def get_option_key_count(self, option: BaseModel) -> str:
-        """Generate counting key for option availability tracking.
-
-        This method creates a unique identifier string used to track the usage
-        count of a specific option in the system's availability monitoring.
-
-        Args:
-            option: The option instance for which to generate the tracking key.
-
-        Returns:
-            str: A formatted key string in the format "option_{id}" used for
-            tracking option usage counts.
-
-        """
+        """Generate counting key for option availability tracking."""
         # Generate unique key using option ID for tracking purposes
         return f"option_{option.id}"
 
@@ -1427,15 +1386,7 @@ class BaseModelCssForm(BaseModelForm):
                 # Continue without loading CSS - form will work with empty CSS
 
     def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
-        """Save form instance with generated CSS code and custom CSS file.
-
-        Args:
-            commit: Whether to save the instance to the database.
-
-        Returns:
-            The saved model instance.
-
-        """
+        """Save form instance with generated CSS code and custom CSS file."""
         # Generate unique CSS identifier
         self.instance.css_code = generate_id(32)
 

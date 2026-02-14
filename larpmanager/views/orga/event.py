@@ -339,11 +339,7 @@ def orga_config(
     event_slug: str,
     section: str | None = None,  # noqa: ARG001
 ) -> HttpResponse:
-    """Configure organization settings with optional section navigation.
-
-    The section parameter is automatically extracted from the URL and passed
-    to the form via the context in _action_change().
-    """
+    """Configure organization settings with optional section navigation."""
     return orga_edit(request, event_slug, OrgaAction.CONFIG)
 
 
@@ -442,16 +438,7 @@ def orga_features_go(request: HttpRequest, context: dict, slug: str, *, to_activ
 
 
 def _orga_feature_after_link(feature: Feature, event_slug: str) -> str:
-    """Build redirect URL after feature interaction.
-
-    Args:
-        feature: Feature object with after_link attribute
-        event_slug: Event slug identifier
-
-    Returns:
-        Full URL path for redirect
-
-    """
+    """Build redirect URL after feature interaction."""
     after_link = feature.after_link
 
     # Use reverse if after_link is a named URL pattern starting with "orga"
@@ -939,19 +926,7 @@ def _writing_template(
 
 @login_required
 def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Reset all cache entries for the specified event run.
-
-    Clears multiple cache layers including run media, event features,
-    registration counts, and relationship caches to ensure fresh data.
-
-    Args:
-        request: The HTTP request object containing user and session data
-        event_slug: String identifier for the event run slug
-
-    Returns:
-        HttpResponse: Redirect to the manage page for the event run
-
-    """
+    """Reset all cache entries for the specified event run."""
     # Verify user permissions and get event context
     context = check_event_context(request, event_slug)
 

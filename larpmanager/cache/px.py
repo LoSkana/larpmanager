@@ -32,31 +32,12 @@ logger = logging.getLogger(__name__)
 
 
 def get_event_px_key(event_id: int) -> str:
-    """Generate cache key for event PX relationships.
-
-    Args:
-        event_id: The ID of the event
-
-    Returns:
-        str: Cache key in format 'event__px__{event_id}'
-
-    """
+    """Generate cache key for event PX relationships."""
     return f"event__px__{event_id}"
 
 
 def clear_event_px_cache(event_id: int) -> None:
-    """Reset event PX cache for given event ID.
-
-    This function clears the cache for the specified event and all its child events
-    to ensure data consistency when PX relationships change.
-
-    Args:
-        event_id: The ID of the event whose cache should be cleared.
-
-    Returns:
-        None
-
-    """
+    """Reset event PX cache for given event ID."""
     # Clear cache for the main event
     cache_key = get_event_px_key(event_id)
     cache.delete(cache_key)
@@ -69,15 +50,7 @@ def clear_event_px_cache(event_id: int) -> None:
 
 
 def build_relationship_dict(relationship_items: list) -> dict[str, Any]:
-    """Build relationship dictionary with list and count.
-
-    Args:
-        relationship_items: List of (id, name) tuples
-
-    Returns:
-        Dict with "list" and "count" keys
-
-    """
+    """Build relationship dictionary with list and count."""
     return {"list": relationship_items, "count": len(relationship_items)}
 
 
@@ -402,45 +375,25 @@ def remove_item_from_cache_section(event_id: int, section_name: str, section_id:
 
 
 def refresh_ability_relationships(ability: AbilityPx) -> None:
-    """Update ability relationships in cache.
-
-    Args:
-        ability: The AbilityPx instance to update relationships for
-
-    """
+    """Update ability relationships in cache."""
     ability_relationship_data = get_ability_rels(ability)
     update_cache_section(ability.event_id, "abilities", ability.id, ability_relationship_data)
 
 
 def refresh_delivery_relationships(delivery: DeliveryPx) -> None:
-    """Update delivery relationships in cache.
-
-    Args:
-        delivery: The DeliveryPx instance to update relationships for
-
-    """
+    """Update delivery relationships in cache."""
     delivery_relationship_data = get_delivery_rels(delivery)
     update_cache_section(delivery.event_id, "deliveries", delivery.id, delivery_relationship_data)
 
 
 def refresh_modifier_relationships(modifier: ModifierPx) -> None:
-    """Update modifier relationships in cache.
-
-    Args:
-        modifier: The ModifierPx instance to update relationships for
-
-    """
+    """Update modifier relationships in cache."""
     modifier_relationship_data = get_modifier_rels(modifier)
     update_cache_section(modifier.event_id, "modifiers", modifier.id, modifier_relationship_data)
 
 
 def refresh_rule_relationships(rule: RulePx) -> None:
-    """Update rule relationships in cache.
-
-    Args:
-        rule: The RulePx instance to update relationships for
-
-    """
+    """Update rule relationships in cache."""
     rule_relationship_data = get_rule_rels(rule)
     update_cache_section(rule.event_id, "rules", rule.id, rule_relationship_data)
 

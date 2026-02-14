@@ -6,15 +6,7 @@ from django.db import migrations
 
 
 def remove_token_credit_feature(apps: Any, schema_editor: Any) -> None:
-    """Remove the deprecated token_credit feature.
-
-    The token_credit feature has been replaced by two separate features:
-    - tokens: for token management
-    - credits: for credit management
-
-    This migration removes the old token_credit feature and any associated permissions.
-    Associated permissions will be automatically deleted due to CASCADE foreign key.
-    """
+    """Remove the deprecated token_credit feature."""
     Feature = apps.get_model("larpmanager", "Feature")
 
     # Delete the token_credit feature if it exists

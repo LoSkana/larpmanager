@@ -52,17 +52,7 @@ class CSRFTinyMCEModelAdmin(DefModelAdmin):
     """
 
     def formfield_for_dbfield(self, db_field: Any, request: Any, **kwargs: Any) -> Any:
-        """Override formfield to use CSRFTinyMCE for HTMLField fields.
-
-        Args:
-            db_field: Database field being rendered
-            request: HTTP request object
-            **kwargs: Additional keyword arguments
-
-        Returns:
-            Form field with CSRFTinyMCE widget for HTMLField, default otherwise
-
-        """
+        """Override formfield to use CSRFTinyMCE for HTMLField fields."""
         # Use CSRFTinyMCE for all HTMLField (TinyMCE) fields
         if isinstance(db_field, HTMLField):
             kwargs["widget"] = CSRFTinyMCE()
@@ -71,28 +61,7 @@ class CSRFTinyMCEModelAdmin(DefModelAdmin):
 
 
 def reduced(value: str | None) -> str:
-    """Truncate string to maximum length with ellipsis.
-
-    Truncates the input string to a maximum of 50 characters. If the string
-    is longer than the limit, it's cut off and "[...]" is appended to indicate
-    truncation.
-
-    Args:
-        value: String to potentially truncate. Can be None or empty.
-
-    Returns:
-        Original string if under 50 chars, otherwise truncated with [...] suffix.
-        Returns empty string or None as-is if input is falsy.
-
-    Examples:
-        >>> reduced("short")
-        'short'
-        >>> reduced("a" * 60)
-        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa[...]'
-        >>> reduced(None)
-        None
-
-    """
+    """Truncate string to maximum length with ellipsis."""
     # Define maximum allowed length before truncation
     max_length = 50
 

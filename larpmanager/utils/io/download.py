@@ -56,16 +56,7 @@ from larpmanager.utils.edit.backend import _get_values_mapping
 
 
 def _temp_csv_file(column_headers: Any, data_rows: Any) -> Any:
-    """Create CSV content from keys and values.
-
-    Args:
-        column_headers: Column headers
-        data_rows: Data rows
-
-    Returns:
-        str: CSV formatted string
-
-    """
+    """Create CSV content from keys and values."""
     df = pd.DataFrame(data_rows, columns=column_headers)
     buffer = io.StringIO()
     df.to_csv(buffer, index=False)
@@ -98,17 +89,7 @@ def zip_exports(context: Any, exports: Any, filename: Any) -> Any:
 
 
 def download(context: Any, typ: Any, nm: Any) -> Any:
-    """Generate downloadable ZIP export for model type.
-
-    Args:
-        context: Context dictionary with event data
-        typ: Model class to export
-        nm: Name prefix for file
-
-    Returns:
-        HttpResponse: ZIP download response
-
-    """
+    """Generate downloadable ZIP export for model type."""
     exports = export_data(context, typ)
     return zip_exports(context, exports, nm.capitalize())
 
@@ -528,16 +509,7 @@ def _header_regs(context: dict, registration: object, column_headers: list, colu
 
 
 def _get_standard_row(context: dict, element: object) -> tuple[list, list]:
-    """Extract values and keys from element's complete data.
-
-    Args:
-        context: Context dictionary for processing
-        element: Element object with show_complete method
-
-    Returns:
-        Tuple of (values list, keys list)
-
-    """
+    """Extract values and keys from element's complete data."""
     values = []
     keys = []
 
@@ -676,16 +648,7 @@ def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], m
 
 
 def get_writer(context: dict, nm: str) -> tuple[HttpResponse, csv.writer]:
-    """Create CSV writer with proper headers for file download.
-
-    Args:
-        context: Context dictionary containing event information
-        nm: Name component for the filename
-
-    Returns:
-        Tuple of HTTP response and CSV writer objects
-
-    """
+    """Create CSV writer with proper headers for file download."""
     # Create HTTP response with CSV content type and download headers
     response = HttpResponse(
         content_type="text/csv",

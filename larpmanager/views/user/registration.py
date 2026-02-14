@@ -189,16 +189,7 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
 
 @login_required
 def pre_register_remove(request: HttpRequest, event_slug: str) -> Any:
-    """Remove user's pre-registration for an event.
-
-    Args:
-        request: Django HTTP request object (must be authenticated)
-        event_slug: Event slug to remove pre-registration from
-
-    Returns:
-        HttpResponse: Redirect to pre-registration list
-
-    """
+    """Remove user's pre-registration for an event."""
     context = get_event(request, event_slug)
     element = PreRegistration.objects.get(member=context["member"], event=context["event"])
     element.delete()
@@ -208,18 +199,7 @@ def pre_register_remove(request: HttpRequest, event_slug: str) -> Any:
 
 @login_required
 def register_exclusive(request: HttpRequest, event_slug: str, secret_code: Any = "", discount_code: Any = "") -> Any:
-    """Handle exclusive event registration (delegates to main register function).
-
-    Args:
-        request: Django HTTP request object
-        event_slug: Event slug
-        secret_code: Secret code (optional)
-        discount_code: Discount code (optional)
-
-    Returns:
-        HttpResponse: Result from register function
-
-    """
+    """Handle exclusive event registration (delegates to main register function)."""
     return register(request, event_slug, secret_code, discount_code)
 
 

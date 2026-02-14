@@ -93,16 +93,7 @@ def get_single_cache_text_field(element_uuid: str, field_name: str, text_value: 
 
 
 def init_cache_text_field(model_class: type[BaseModel], event: Event) -> dict:
-    """Initialize cache for text fields of model instances related to an event.
-
-    Args:
-        model_class: Model class to filter instances from.
-        event: Event instance to get the parent class from.
-
-    Returns:
-        Dictionary mapping instance identifiers to cached text field data.
-
-    """
+    """Initialize cache for text fields of model instances related to an event."""
     cache_result = {}
     # Iterate through all instances of the given type for the event's parent
     for instance in model_class.objects.filter(event=event.get_class_parent(model_class)):
@@ -205,18 +196,7 @@ def update_cache_text_fields(el: object) -> None:
 
 
 def _update_cache_text_fields(cache_key: str, el: object, element_type: type[BaseModel], event: Event) -> None:
-    """Update cache for text fields - internal helper.
-
-    This is a helper function used by update_cache_text_fields to avoid
-    code duplication in the lock try-except block.
-
-    Args:
-        cache_key: The cache key to update
-        el: Element object to update cache for
-        element_type: Element type class for determining applicable questions
-        event: Event instance associated with the element
-
-    """
+    """Update cache for text fields - internal helper."""
     # Retrieve current cache data inside lock
     cached_data = get_cache_text_field(element_type, event)
     # Initialize element cache and update cache storage
@@ -306,15 +286,7 @@ def _update_cache_text_fields_answer(
 
 
 def init_cache_registration_field(run: Run) -> dict:
-    """Initialize registration field cache for all registrations in a run.
-
-    Args:
-        run: The Run instance to initialize cache for.
-
-    Returns:
-        Dictionary mapping registration field cache data.
-
-    """
+    """Initialize registration field cache for all registrations in a run."""
     cache_data = {}
     # Iterate through all registrations for this run and populate cache
     for registration in Registration.objects.filter(run=run):

@@ -65,15 +65,7 @@ def delete_all_in_path(path: str) -> None:
 
 
 def get_event_cache_all_key(event_run: Run) -> str:
-    """Generate cache key for event data.
-
-    Args:
-        event_run: Run instance
-
-    Returns:
-        str: Cache key for event factions and characters
-
-    """
+    """Generate cache key for event data."""
     return f"event_factions_characters_{event_run.event.slug}_{event_run.number}"
 
 
@@ -593,13 +585,7 @@ def reset_event_cache_all(run: Run) -> None:
 
 
 def update_character_fields(character: Character, character_data: dict) -> None:
-    """Update character fields with event-specific data if character features are enabled.
-
-    Args:
-        character: Character instance with event_id attribute
-        character_data: Dictionary to update with character element fields
-
-    """
+    """Update character fields with event-specific data if character features are enabled."""
     # Check if character features are enabled for this event
     enabled_features = get_event_features(character.event_id)
     if "character" not in enabled_features:

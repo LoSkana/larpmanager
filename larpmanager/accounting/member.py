@@ -242,16 +242,7 @@ def _info_token_credit(context: dict, member: Member) -> None:
 
 
 def _info_collections(context: dict, member: Member) -> None:
-    """Get collection information if collections feature is enabled.
-
-    Args:
-        context: Context dictionary with association ID to update
-        member: Member instance to get collections for
-
-    Side effects:
-        Updates context with collections and collection_gifts if feature enabled
-
-    """
+    """Get collection information if collections feature is enabled."""
     if "collection" not in context["features"]:
         return
 
@@ -263,16 +254,7 @@ def _info_collections(context: dict, member: Member) -> None:
 
 
 def _info_donations(context: dict, member: Member) -> None:
-    """Get donation history if donations feature is enabled.
-
-    Args:
-        context: Context dictionary with association ID to update
-        member: Member instance to get donations for
-
-    Side effects:
-        Updates context with donations list if feature enabled
-
-    """
+    """Get donation history if donations feature is enabled."""
     if "donate" not in context["features"]:
         return
 

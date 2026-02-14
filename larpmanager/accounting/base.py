@@ -201,11 +201,6 @@ def handle_collection_pre_save(instance: Collection) -> None:
 
 
 def handle_accounting_item_collection_post_save(instance: AccountingItemCollection) -> None:
-    """Update collection total when items are added.
-
-    Args:
-        instance: AccountingItemCollection instance that was saved
-
-    """
+    """Update collection total when items are added."""
     if instance.collection:
         instance.collection.save()

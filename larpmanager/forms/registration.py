@@ -212,13 +212,7 @@ class RegistrationForm(BaseRegistrationForm):
         )
 
     def init_questions(self, event: Event, registration_counts: dict[str, Any]) -> None:
-        """Initialize registration questions and ticket mapping.
-
-        Args:
-            event: Event instance
-            registration_counts: Registration count data
-
-        """
+        """Initialize registration questions and ticket mapping."""
         self.tickets_map = {}
         if self.waiting_check:
             return
@@ -256,12 +250,7 @@ class RegistrationForm(BaseRegistrationForm):
                 self.tickets_map[k] = tm
 
     def init_surcharge(self, event: Event) -> None:
-        """Initialize date-based surcharge field if applicable.
-
-        Args:
-            event: Event instance
-
-        """
+        """Initialize date-based surcharge field if applicable."""
         # date surcharge
         surcharge = get_date_surcharge(self.instance, event)
         if surcharge == 0:
@@ -388,37 +377,16 @@ class RegistrationForm(BaseRegistrationForm):
         return ticket_help_html
 
     def has_ticket(self, ticket_tier: Any) -> Any:
-        """Check if registration has ticket of specified tier.
-
-        Args:
-            ticket_tier: TicketTier to check
-
-        Returns:
-            bool: True if registration has ticket of given tier
-
-        """
+        """Check if registration has ticket of specified tier."""
         return self.instance.pk and self.instance.ticket and self.instance.ticket.tier == ticket_tier
 
     def has_ticket_primary(self) -> Any:
-        """Check if registration has a primary (non-waiting/filler) ticket.
-
-        Returns:
-            bool: True if registration has primary ticket
-
-        """
+        """Check if registration has a primary (non-waiting/filler) ticket."""
         excluded_ticket_tiers = [TicketTier.WAITING, TicketTier.FILLER]
         return self.instance.pk and self.instance.ticket and self.instance.ticket.tier not in excluded_ticket_tiers
 
     def check_ticket_visibility(self, registration_ticket: Any) -> bool:
-        """Check if ticket should be visible to current user.
-
-        Args:
-            registration_ticket: RegistrationTicket instance
-
-        Returns:
-            bool: True if ticket should be visible
-
-        """
+        """Check if ticket should be visible to current user."""
         if registration_ticket.visible:
             return True
 
@@ -489,16 +457,7 @@ class RegistrationForm(BaseRegistrationForm):
         return available_tickets
 
     def skip_ticket_reduced(self, run: Run, ticket: RegistrationTicket) -> bool:
-        """Check if reduced ticket should be skipped due to availability.
-
-        Args:
-            run: Run instance
-            ticket: RegistrationTicket instance
-
-        Returns:
-            bool: True if ticket should be skipped
-
-        """
+        """Check if reduced ticket should be skipped due to availability."""
         # if this reduced, check count
         if ticket.tier == TicketTier.REDUCED and (not self.instance or ticket != self.instance.ticket):
             ticket.available = get_reduced_available_count(run)
@@ -507,16 +466,7 @@ class RegistrationForm(BaseRegistrationForm):
         return False
 
     def skip_ticket_max(self, registration_counts: Any, ticket: Any) -> bool:
-        """Check if ticket should be skipped due to maximum limit reached.
-
-        Args:
-            registration_counts: Registration count data
-            ticket: RegistrationTicket instance
-
-        Returns:
-            bool: True if ticket should be skipped
-
-        """
+        """Check if ticket should be skipped due to maximum limit reached."""
         # If the option has a maximum roof, check has not been reached
         if ticket.max_available > 0 and (not self.instance or ticket != self.instance.ticket):
             ticket.available = ticket.max_available
@@ -1338,12 +1288,7 @@ class OrgaRegistrationInstallmentForm(BaseModelForm):
         self.configure_field_event("tickets", self.params["event"])
 
     def clean_order(self) -> int:
-        """Validate that the order is unique for installments of this event.
-
-        Note: This validation only checks the order field. The complete validation
-        that checks for common tickets is done in the clean() method after tickets
-        are available in cleaned_data.
-        """
+        """Validate that the order is unique for installments of this event."""
         order = self.cleaned_data.get("order")
         if order is None:
             return order

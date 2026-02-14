@@ -81,31 +81,13 @@ utc = pytz.UTC
 
 # ## PROFILING CHECK
 def check_already(nm: str, params: str) -> bool:
-    """Check if a background task is already queued.
-
-    Args:
-        nm (str): Task name
-        params: Task parameters
-
-    Returns:
-        bool: True if task already exists in queue
-
-    """
+    """Check if a background task is already queued."""
     q = Task.objects.filter(task_name=nm, task_params=params)
     return q.exists()
 
 
 def get_channel(first_entity_id: int, second_entity_id: int) -> int:
-    """Generate unique channel ID for two entities.
-
-    Args:
-        first_entity_id (int): First entity ID
-        second_entity_id (int): Second entity ID
-
-    Returns:
-        int: Unique channel ID using Cantor pairing
-
-    """
+    """Generate unique channel ID for two entities."""
     first_entity_id = int(first_entity_id)
     second_entity_id = int(second_entity_id)
     if first_entity_id > second_entity_id:
@@ -114,39 +96,17 @@ def get_channel(first_entity_id: int, second_entity_id: int) -> int:
 
 
 def cantor(first_integer: int, second_integer: int) -> float:
-    """Cantor pairing function to map two integers to a unique integer.
-
-    Args:
-        first_integer (int): First integer
-        second_integer (int): Second integer
-
-    Returns:
-        float: Unique pairing result
-
-    """
+    """Cantor pairing function to map two integers to a unique integer."""
     return ((first_integer + second_integer) * (first_integer + second_integer + 1) / 2) + second_integer
 
 
 def compute_diff(self: object, other: object) -> None:
-    """Compute differences between this instance and another.
-
-    Args:
-        self: Current instance
-        other: Other instance to compare against
-
-    """
+    """Compute differences between this instance and another."""
     check_diff(self, other.text, self.text)
 
 
 def check_diff(self: object, old_text: str, new_text: str) -> None:
-    """Generate HTML diff between two text strings.
-
-    Args:
-        self: Instance to store diff result
-        old_text: First text string
-        new_text: Second text string
-
-    """
+    """Generate HTML diff between two text strings."""
     if old_text == new_text:
         self.diff = None
         return
@@ -210,20 +170,7 @@ def add_context_by_uuid(
     set_name: bool = False,
     **filters: Any,
 ) -> None:
-    """Get object by UUID and add to context.
-
-    Args:
-        context: Context dictionary to update
-        context_key: Key name to store the object in context
-        model_class: Django model class to query
-        identifier: UUID string or ID to look up
-        set_name: If True, also set context["name"] = str(object)
-        **filters: Additional filter kwargs for get_object_uuid
-
-    Raises:
-        Http404: If object not found
-
-    """
+    """Get object by UUID and add to context."""
     obj = get_object_uuid(model_class, identifier, **filters)
     context[context_key] = obj
     if set_name:
@@ -236,16 +183,7 @@ def get_member(member_uuid: str) -> Member:
 
 
 def get_contact(member_id: int, other_member_id: int) -> object | None:
-    """Get contact relationship between two members.
-
-    Args:
-        member_id: ID of first member
-        other_member_id: ID of second member
-
-    Returns:
-        Contact: Contact instance or None if not found
-
-    """
+    """Get contact relationship between two members."""
     try:
         return Contact.objects.get(me_id=member_id, you_id=other_member_id)
     except ObjectDoesNotExist:
@@ -321,19 +259,7 @@ def get_badge(context: dict, badge_uuid: str) -> Badge:
 
 
 def get_collection_partecipate(context: dict, contribution_code: str) -> Collection:
-    """Retrieve collection by contribution code for the current association.
-
-    Args:
-        context: View context containing association_id
-        contribution_code: Unique contribution code for the collection
-
-    Returns:
-        Collection object matching the criteria
-
-    Raises:
-        Http404: If collection does not exist
-
-    """
+    """Retrieve collection by contribution code for the current association."""
     try:
         return Collection.objects.get(contribute_code=contribution_code, association_id=context["association_id"])
     except ObjectDoesNotExist as err:
@@ -342,19 +268,7 @@ def get_collection_partecipate(context: dict, contribution_code: str) -> Collect
 
 
 def get_collection_redeem(context: dict, redeem_code: str) -> Collection:
-    """Get Collection by redeem code and association from context.
-
-    Args:
-        context: View context containing association_id
-        redeem_code: Unique redemption code for the collection
-
-    Returns:
-        Collection: The matching Collection instance
-
-    Raises:
-        Http404: If collection not found for given code and association
-
-    """
+    """Get Collection by redeem code and association from context."""
     try:
         return Collection.objects.get(redeem_code=redeem_code, association_id=context["association_id"])
     except ObjectDoesNotExist as error:
@@ -374,25 +288,7 @@ def get_element(
     model_class: type[BaseModel],
     queryset_base: Any = None,
 ) -> None:
-    """Retrieve a model instance and add it to the context dictionary.
-
-    Fetches a model instance related to a parent event and stores it in the provided
-    context dictionary
-
-    Args:
-        context: Context dictionary that must contain an 'event' key with a model
-            instance that has a `get_class_parent()` method. The retrieved object
-            will be added to this dictionary under the key specified by `context_key_name`.
-        element_uuid: The element uuid used to look up the model instance.
-        context_key_name: The key name under which the retrieved object will be stored
-            in the context dictionary. Also used in error messages.
-        model_class: The Django model class to query. Must have a foreign key relationship
-            to an 'event' and optionally a 'number' field if `by_number=True`.
-        queryset_base: Optional optimized queryset to use instead of model_class.objects
-
-    Raises:
-        Http404: If the requested object does not exist in the database.
-    """
+    """Retrieve a model instance and add it to the context dictionary."""
     if not element_uuid:
         return
 
@@ -454,18 +350,7 @@ def get_player_relationship(context: dict, other_character_uuid: str) -> None:
 
 
 def ensure_timezone_aware(dt: datetime) -> datetime:
-    """Ensure a datetime object is timezone-aware.
-
-    Converts timezone-naive datetime objects to timezone-aware using the
-    default timezone. Already timezone-aware datetimes are returned unchanged.
-
-    Args:
-        dt: Datetime object to check and potentially convert
-
-    Returns:
-        Timezone-aware datetime object
-
-    """
+    """Ensure a datetime object is timezone-aware."""
     return dt if timezone.is_aware(dt) else timezone.make_aware(dt)
 
 
@@ -475,15 +360,7 @@ def get_time_diff(start_datetime: date, end_datetime: date) -> int:
 
 
 def get_time_diff_today(target_date: datetime | date | None) -> int:
-    """Calculate time difference between given date and today.
-
-    Args:
-        target_date: Date to compare with today
-
-    Returns:
-        Time difference in days, or -1 if target_date is None
-
-    """
+    """Calculate time difference between given date and today."""
     if not target_date:
         return -1
 
@@ -500,15 +377,7 @@ def generate_number(length: int) -> str:
 
 
 def html_clean(text: str | None) -> str:
-    """Clean HTML tags and unescape HTML entities from text.
-
-    Args:
-        text: Input text that may contain HTML tags and entities.
-
-    Returns:
-        Cleaned text with HTML tags removed and entities unescaped.
-
-    """
+    """Clean HTML tags and unescape HTML entities from text."""
     if not text:
         return ""
     # Remove all HTML tags from the text
@@ -583,16 +452,7 @@ def remove_choice(choices: list[tuple], term_to_remove: str) -> list[tuple]:
 
 
 def check_field(model_class: type, field_name: str) -> bool:
-    """Check if a field exists in the Django model class.
-
-    Args:
-        model_class: The Django model class to check
-        field_name: The name of the field to look for
-
-    Returns:
-        True if field exists, False otherwise
-
-    """
+    """Check if a field exists in the Django model class."""
     # Iterate through all fields including hidden ones
     return any(field.name == field_name for field in model_class._meta.get_fields(include_hidden=True))  # noqa: SLF001  # Django model metadata
 
@@ -631,15 +491,7 @@ def round_to_two_significant_digits(number: float) -> int:
 
 
 def normalize_string(input_string: str) -> str:
-    """Normalize a string by converting to lowercase, removing spaces and accents.
-
-    Args:
-        input_string: Input string to normalize.
-
-    Returns:
-        Normalized string with lowercase, no spaces, and no accented characters.
-
-    """
+    """Normalize a string by converting to lowercase, removing spaces and accents."""
     # Convert to lowercase
     normalized_string = input_string.lower()
 
@@ -693,31 +545,12 @@ def copy_class(target_event_id: int, source_event_id: int, model_class: type) ->
 
 
 def get_payment_methods_ids(context: dict) -> set[int]:
-    """Get set of payment method IDs for an association.
-
-    Args:
-        context: Context dictionary containing association ID
-
-    Returns:
-        set: Set of payment method primary keys
-
-    """
+    """Get set of payment method IDs for an association."""
     return set(Association.objects.get(pk=context["association_id"]).payment_methods.values_list("pk", flat=True))
 
 
 def detect_delimiter(content: str) -> str:
-    """Detect CSV delimiter from content header line.
-
-    Args:
-        content: CSV content string
-
-    Returns:
-        str: Detected delimiter character
-
-    Raises:
-        DelimiterNotFoundError: If no delimiter is found
-
-    """
+    """Detect CSV delimiter from content header line."""
     header_line = content.split("\n")[0]
     for delimiter in ["\t", ";", ","]:
         if delimiter in header_line:
@@ -727,15 +560,7 @@ def detect_delimiter(content: str) -> str:
 
 
 def clean(s: str) -> str:
-    """Clean and normalize string by removing symbols, spaces, and accents.
-
-    Args:
-        s: String to clean
-
-    Returns:
-        str: Cleaned string with normalized characters
-
-    """
+    """Clean and normalize string by removing symbols, spaces, and accents."""
     s = s.lower()
     s = re.sub(r"[^\w]", " ", s)  # remove symbols
     s = re.sub(r"\s", " ", s)  # replace whitespaces with spaces
@@ -921,16 +746,7 @@ def get_now() -> object:
 
 
 def get_display_choice(choices: list[tuple[str, str]], key: str) -> str:
-    """Get display name for a choice field value.
-
-    Args:
-        choices: List of (key, display_name) tuples
-        key: Key to look up display name for
-
-    Returns:
-        str: Display name for the key, empty string if not found
-
-    """
+    """Get display name for a choice field value."""
     for choice_key, display_name in choices:
         if choice_key == key:
             return display_name
