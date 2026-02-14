@@ -101,19 +101,7 @@ class AssociationRole(UuidMixin, BaseModel):
 
 
 def get_association_executives(association: Association) -> QuerySet[Member]:
-    """Get all executive members of an association.
-
-    Args:
-        association (Association): The association instance to get executives from.
-
-    Returns:
-        QuerySet[Member]: A queryset containing all members with executive role
-            (role number 1) for the specified association.
-
-    Raises:
-        ObjectDoesNotExist: If no executive role (number=1) exists for the association.
-
-    """
+    """Get all executive members of an association."""
     try:
         # Get the executive role (number 1) for the association
         executive_role = AssociationRole.objects.get(association=association, number=1)
@@ -181,23 +169,7 @@ class EventRole(UuidMixin, BaseConceptModel):
 
 
 def get_event_organizers(event: Event) -> QuerySet[Member]:
-    """Get all organizer members of an event.
-
-    Retrieves the event organizer role (role number 1) and returns all members
-    assigned to that role. Creates the organizer role if it doesn't exist.
-
-    Args:
-        event (Event): The event instance to get organizers for.
-
-    Returns:
-        QuerySet[Member]: QuerySet containing all members with event organizer
-            role (role number 1).
-
-    Note:
-        This function uses get_or_create to ensure the organizer role exists,
-        so it may create a new EventRole if none exists for this event.
-
-    """
+    """Get all organizer members of an event."""
     try:
         # Get or create the event organizer role (role number 1)
         (organizer_role, _was_created) = EventRole.objects.get_or_create(event=event, number=1)

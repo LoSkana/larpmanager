@@ -40,31 +40,12 @@ logger = logging.getLogger(__name__)
 
 
 def get_event_rels_key(event_id: int) -> str:
-    """Generate cache key for event relationships.
-
-    Args:
-        event_id: The ID of the event
-
-    Returns:
-        str: Cache key in format 'event__rels__{event_id}'
-
-    """
+    """Generate cache key for event relationships."""
     return f"event__rels__{event_id}"
 
 
 def clear_event_relationships_cache(event_id: int) -> None:
-    """Reset event relationships cache for given event ID.
-
-    This function clears the cache for the specified event and all its child events
-    to ensure data consistency when event relationships change.
-
-    Args:
-        event_id: The ID of the event whose cache should be cleared.
-
-    Returns:
-        None
-
-    """
+    """Reset event relationships cache for given event ID."""
     # Clear cache for the main event
     cache_key = get_event_rels_key(event_id)
     cache.delete(cache_key)
@@ -77,15 +58,7 @@ def clear_event_relationships_cache(event_id: int) -> None:
 
 
 def build_relationship_dict(relationship_items: list) -> dict[str, Any]:
-    """Build relationship dictionary with list and count.
-
-    Args:
-        relationship_items: List of (id, name) tuples
-
-    Returns:
-        Dict with "list" and "count" keys
-
-    """
+    """Build relationship dictionary with list and count."""
     return {"list": relationship_items, "count": len(relationship_items)}
 
 
@@ -819,18 +792,7 @@ def get_event_questtype_rels(questtype: QuestType) -> dict[str, Any]:
 
 
 def refresh_event_faction_relationships(faction: Faction) -> None:
-    """Update faction relationships in cache.
-
-    Updates the cached relationship data for a specific faction.
-    If the cache doesn't exist, it will be initialized for the entire event.
-
-    Args:
-        faction (Faction): The Faction instance to update relationships for
-
-    Returns:
-        None
-
-    """
+    """Update faction relationships in cache."""
     # Get the current faction relationship data from the event
     faction_relationship_data = get_event_faction_rels(faction)
 
@@ -839,23 +801,7 @@ def refresh_event_faction_relationships(faction: Faction) -> None:
 
 
 def refresh_event_plot_relationships(plot: Plot) -> None:
-    """Update plot relationships in cache.
-
-    Updates the cached relationship data for a specific plot within an event.
-    If the cache doesn't exist, it will be initialized for the entire event.
-
-    Args:
-        plot (Plot): The Plot instance to update relationships for.
-
-    Returns:
-        None
-
-    Note:
-        This function modifies the cache in-place and does not return any value.
-        The cache is organized by event_id with a "plots" section containing
-        plot-specific relationship data.
-
-    """
+    """Update plot relationships in cache."""
     # Retrieve the current plot relationship data from the event
     plot_relationship_data = get_event_plot_rels(plot)
 
@@ -865,24 +811,7 @@ def refresh_event_plot_relationships(plot: Plot) -> None:
 
 
 def refresh_event_speedlarp_relationships(speedlarp: SpeedLarp) -> None:
-    """Update speedlarp relationships in cache.
-
-    Updates the cached relationship data for a specific speedlarp by retrieving
-    fresh data and updating the cache section. If the cache doesn't exist for
-    the event, it will be initialized for the entire event.
-
-    Args:
-        speedlarp (SpeedLarp): The SpeedLarp instance to update relationships for.
-            Must have a valid event_id and id.
-
-    Returns:
-        None: This function performs cache updates and does not return a value.
-
-    Note:
-        This function depends on get_event_speedlarp_rels() and update_cache_section()
-        being available in the current scope.
-
-    """
+    """Update speedlarp relationships in cache."""
     # Retrieve fresh speedlarp relationship data from the database
     speedlarp_relationships_data = get_event_speedlarp_rels(speedlarp)
 
@@ -891,18 +820,7 @@ def refresh_event_speedlarp_relationships(speedlarp: SpeedLarp) -> None:
 
 
 def refresh_event_prologue_relationships(prologue: Prologue) -> None:
-    """Update prologue relationships in cache.
-
-    Updates the cached relationship data for a specific prologue.
-    If the cache doesn't exist, it will be initialized for the entire event.
-
-    Args:
-        prologue (Prologue): The Prologue instance to update relationships for
-
-    Returns:
-        None
-
-    """
+    """Update prologue relationships in cache."""
     # Get the prologue relationship data for caching
     prologue_relationship_data = get_event_prologue_rels(prologue)
 
@@ -911,18 +829,7 @@ def refresh_event_prologue_relationships(prologue: Prologue) -> None:
 
 
 def refresh_event_quest_relationships(quest: Quest) -> None:
-    """Update quest relationships in cache.
-
-    Updates the cached relationship data for a specific quest.
-    If the cache doesn't exist, it will be initialized for the entire event.
-
-    Args:
-        quest (Quest): The Quest instance to update relationships for
-
-    Returns:
-        None
-
-    """
+    """Update quest relationships in cache."""
     # Get the current quest relationship data
     quest_relationship_data = get_event_quest_rels(quest)
 
@@ -931,18 +838,7 @@ def refresh_event_quest_relationships(quest: Quest) -> None:
 
 
 def refresh_event_questtype_relationships(quest_type: QuestType) -> None:
-    """Update questtype relationships in cache.
-
-    Updates the cached relationship data for a specific questtype.
-    If the cache doesn't exist, it will be initialized for the entire event.
-
-    Args:
-        quest_type (QuestType): The QuestType instance to update relationships for.
-
-    Returns:
-        None
-
-    """
+    """Update questtype relationships in cache."""
     # Get the current questtype relationship data from the database
     quest_type_relationship_data = get_event_questtype_rels(quest_type)
 
@@ -957,29 +853,7 @@ def on_faction_characters_m2m_changed(
     pk_set: set[int] | None,
     **kwargs: object,  # noqa: ARG001
 ) -> None:
-    """Handle faction-character relationship changes.
-
-    Updates both faction cache and character caches when relationships change.
-    This signal handler is triggered when characters are added to or removed
-    from a faction's characters many-to-many relationship.
-
-    Args:
-        sender: The through model class that manages the M2M relationship
-        instance: The Faction instance whose relationships are changing
-        action: The type of change being performed on the relationship.
-            Common values include 'post_add', 'post_remove', 'post_clear'
-        pk_set: Set of primary keys of the Character objects being affected.
-            May be None for certain actions like 'post_clear'
-        **kwargs: Additional keyword arguments passed by the Django signal system
-
-    Returns:
-        None
-
-    Note:
-        This function delegates the actual cache update logic to the generic
-        update_m2m_related_characters helper function.
-
-    """
+    """Handle faction-character relationship changes."""
     # Delegate to the generic M2M character update handler
     # This will handle cache invalidation for both the faction and related characters
     update_m2m_related_characters(instance, pk_set, action, refresh_event_faction_relationships)
@@ -992,13 +866,7 @@ def on_plot_characters_m2m_changed(
     pk_set: set[int] | None,
     **kwargs: object,  # noqa: ARG001
 ) -> None:
-    """Handle plot-character relationship changes.
-
-    Updates both plot cache and character caches when relationships change.
-    This signal handler is triggered when characters are added, removed, or
-    cleared from a plot's character relationships.
-
-    """
+    """Handle plot-character relationship changes."""
     # Delegate to the generic M2M relationship handler for character updates
     # This ensures both plot and character caches are properly invalidated
     update_m2m_related_characters(instance, pk_set, action, refresh_event_plot_relationships)
@@ -1011,30 +879,7 @@ def on_speedlarp_characters_m2m_changed(
     pk_set: set[int] | None,
     **kwargs: object,  # noqa: ARG001
 ) -> None:
-    """Handle speedlarp-character relationship changes.
-
-    Updates both speedlarp cache and character caches when relationships change.
-    This signal handler is triggered when characters are added, removed, or cleared
-    from a speedlarp's character relationships.
-
-    Args:
-        sender: The through model class for the many-to-many relationship
-        instance: The SpeedLarp instance whose relationships are changing
-        action: The type of change being performed on the relationship.
-            Common values include 'post_add', 'post_remove', 'post_clear'
-        pk_set: Set of primary keys of the Character objects being affected.
-            May be None for actions like 'post_clear'
-        **kwargs: Additional keyword arguments passed by Django's m2m_changed signal
-
-    Returns:
-        None
-
-    Note:
-        This function delegates the actual cache update logic to the generic
-        update_m2m_related_characters function with the speedlarp-specific
-        refresh callback.
-
-    """
+    """Handle speedlarp-character relationship changes."""
     # Delegate to the generic M2M relationship handler with speedlarp-specific refresh function
     update_m2m_related_characters(instance, pk_set, action, refresh_event_speedlarp_relationships)
 
@@ -1046,13 +891,7 @@ def on_prologue_characters_m2m_changed(
     pk_set: set[int] | None,
     **kwargs: object,  # noqa: ARG001
 ) -> None:
-    """Handle prologue-character relationship changes.
-
-    Updates both prologue cache and character caches when relationships change.
-    This signal handler is triggered when characters are added, removed, or cleared
-    from a prologue's character relationships.
-
-    """
+    """Handle prologue-character relationship changes."""
     # Delegate to utility function that handles m2m relationship cache updates
     # This ensures consistent cache invalidation for both prologue and character caches
     update_m2m_related_characters(instance, pk_set, action, refresh_event_prologue_relationships)

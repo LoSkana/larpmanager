@@ -215,16 +215,7 @@ def upload_albums(main: Any, el: Any) -> None:
 
 
 def zipdir(path: Any, ziph: Any) -> None:
-    """Recursively add directory contents to zip file.
-
-    Args:
-        path (str): Directory path to compress
-        ziph: Zip file handle to write to
-
-    Side effects:
-        Adds all files in directory tree to zip archive
-
-    """
+    """Recursively add directory contents to zip file."""
     for root, _dirs, files in os.walk(path):
         for file in files:
             file_path = Path(root) / file

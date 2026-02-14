@@ -232,17 +232,7 @@ def get_current_ability_px(character: Character) -> list[AbilityPx]:
 
 
 def check_available_ability_px(ability: Any, current_char_abilities: Any, current_char_choices: Any) -> bool:
-    """Check if an ability is available based on prerequisites and requirements.
-
-    Args:
-        ability: Ability to check availability for
-        current_char_abilities: Set of current character abilities
-        current_char_choices: Set of current character choices
-
-    Returns:
-        True if all prerequisites and requirements are met, False otherwise
-
-    """
+    """Check if an ability is available based on prerequisites and requirements."""
     # Extract prerequisite IDs from the ability
     prerequisite_ids = {ability.id for ability in ability.prerequisites.all()}
 

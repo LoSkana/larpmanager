@@ -485,22 +485,7 @@ def check_accounting(association_id: int) -> None:
 
 
 def check_run_accounting(run: Run) -> None:
-    """Perform run-specific accounting check and record results.
-
-    This function performs accounting calculations for a specific run and records
-    the results in the database for audit purposes.
-
-    Args:
-        run: Run instance to check accounting for. Must have an associated event
-             with an organization (association).
-
-    Returns:
-        None
-
-    Side Effects:
-        - Creates a new RecordAccounting entry in the database
-
-    """
+    """Perform run-specific accounting check and record results."""
     # Perform accounting calculations
     summary, _details = get_run_accounting(run, {})
 

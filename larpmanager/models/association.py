@@ -492,12 +492,7 @@ class AssociationTranslation(UuidMixin, BaseModel):
     )
 
     def __str__(self) -> str:
-        """Return a human-readable string representation of the translation.
-
-        Returns:
-            A formatted string showing association, language, and truncated original text
-
-        """
+        """Return a human-readable string representation of the translation."""
         return f"{self.association.name} - {self.get_language_display()}: {self.msgid[:50]}"
 
     class Meta:
@@ -536,15 +531,7 @@ def hdr(association_or_related_object: Association | Any) -> str:
 
 
 def get_association_maintainers(association: Association) -> Any:
-    """Get all maintainers for an association.
-
-    Args:
-        association: Association instance
-
-    Returns:
-        QuerySet of Member instances who are maintainers for this association
-
-    """
+    """Get all maintainers for an association."""
     return association.maintainers.all()
 
 

@@ -44,12 +44,7 @@ from larpmanager.utils.services.event import reset_all_run
 
 
 def generate_association_encryption_key(association: Any) -> None:
-    """Generate Fernet encryption key for new associations.
-
-    Args:
-        association: Association instance being saved
-
-    """
+    """Generate Fernet encryption key for new associations."""
     if not association.key:
         association.key = Fernet.generate_key()
 

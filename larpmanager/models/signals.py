@@ -646,14 +646,7 @@ def post_save_association_skin_reset_cache(sender: type, instance: Association, 
 # Character signals
 @receiver(pre_save, sender=Character)
 def pre_save_character_update_status(sender: type, instance: Character, **kwargs: Any) -> None:
-    """Update character status and cache before saving.
-
-    Args:
-        sender: Model class sending the signal.
-        instance: Character instance being saved.
-        **kwargs: Additional signal arguments.
-
-    """
+    """Update character status and cache before saving."""
     # Send email notification for character status changes
     send_character_status_update_email(instance)
 
@@ -1334,14 +1327,7 @@ def pre_delete_quest_reset(sender: type, instance: Any, **kwargs: Any) -> None:
 
 @receiver(post_delete, sender=Quest)
 def post_delete_quest_reset_rels(sender: type, instance: object, **kwargs: Any) -> None:
-    """Reset quest relationships after quest deletion.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The quest instance being deleted
-        **kwargs: Additional keyword arguments from the signal
-
-    """
+    """Reset quest relationships after quest deletion."""
     # Update questtype cache if quest had a type
     if instance.typ:
         refresh_event_questtype_relationships(instance.typ)
@@ -1363,14 +1349,7 @@ def post_save_questtype_reset_rels(
     instance: QuestType,
     **kwargs: Any,
 ) -> None:
-    """Reset quest type and related quest caches after save.
-
-    Args:
-        sender: The model class that sent the signal.
-        instance: The QuestType instance being saved.
-        **kwargs: Additional keyword arguments from the signal.
-
-    """
+    """Reset quest type and related quest caches after save."""
     # Update questtype cache
     refresh_event_questtype_relationships(instance)
 
@@ -1805,26 +1784,11 @@ m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through
 
 @receiver(valid_ipn_received)
 def paypal_webhook(sender: type, **kwargs: Any) -> Any:
-    """Handle valid PayPal IPN notifications.
-
-    Args:
-        sender: IPN object from PayPal
-        **kwargs: Additional keyword arguments
-
-    Returns:
-        Result from invoice_received_money or None
-
-    """
+    """Handle valid PayPal IPN notifications."""
     return handle_valid_paypal_ipn(sender)
 
 
 @receiver(invalid_ipn_received)
 def paypal_ko_webhook(sender: type, **kwargs: Any) -> None:
-    """Handle invalid PayPal IPN notifications.
-
-    Args:
-        sender: Invalid IPN object from PayPal
-        **kwargs: Additional keyword arguments
-
-    """
+    """Handle invalid PayPal IPN notifications."""
     handle_invalid_paypal_ipn(sender)

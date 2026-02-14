@@ -62,17 +62,7 @@ def update_association_text(association_id: int, typ: str, lang: str) -> str:
 
 
 def get_association_text_cache(association_id: int, typ: str, lang: str) -> str:
-    """Get cached association text or update cache if missing.
-
-    Args:
-        association_id: Association ID
-        typ: Text type identifier
-        lang: Language code
-
-    Returns:
-        Cached or freshly updated association text
-
-    """
+    """Get cached association text or update cache if missing."""
     # Try to get cached text
     cache_key = association_text_key(association_id, typ, lang)
     cached_text = cache.get(cache_key)
@@ -119,16 +109,7 @@ def update_association_text_def(association_id: int, text_type: str) -> str:
 
 
 def get_association_text_cache_def(association_id: int, typ: str) -> str:
-    """Get association text from cache or update if not found.
-
-    Args:
-        association_id: Association ID
-        typ: Text type identifier
-
-    Returns:
-        Association text content
-
-    """
+    """Get association text from cache or update if not found."""
     # Try to retrieve from cache first
     cached_text = cache.get(association_text_key_def(association_id, typ))
 

@@ -237,12 +237,7 @@ def satispay_verify(context: dict, payment_code: str) -> None:
 
 
 def satispay_webhook(request: HttpRequest) -> None:
-    """Handle Satispay webhook notifications.
-
-    Args:
-        request: Django HTTP request with payment_id parameter
-
-    """
+    """Handle Satispay webhook notifications."""
     payment_id = request.GET.get("payment_id", "")
     context = get_context(request)
     satispay_verify(context, payment_id)
@@ -334,12 +329,7 @@ def handle_valid_paypal_ipn(ipn_obj: Any) -> bool | None:
 
 
 def handle_invalid_paypal_ipn(invalid_ipn_object: Any) -> None:
-    """Handle invalid PayPal IPN notifications.
-
-    Args:
-        invalid_ipn_object: Invalid IPN object from PayPal
-
-    """
+    """Handle invalid PayPal IPN notifications."""
     if invalid_ipn_object:
         logger.error("PayPal IPN object: %s", invalid_ipn_object)
 

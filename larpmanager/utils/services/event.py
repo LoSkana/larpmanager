@@ -68,17 +68,7 @@ if TYPE_CHECKING:
 
 
 def get_character_filter(character: Any, character_registrations: Any, active_filters: Any) -> bool:
-    """Check if character should be included based on filter criteria.
-
-    Args:
-        character: Character instance to check
-        character_registrations (dict): Mapping of character IDs to registrations
-        active_filters (list): Filter criteria ('free', 'mirror', etc.)
-
-    Returns:
-        bool: True if character passes all filters
-
-    """
+    """Check if character should be included based on filter criteria."""
     if "free" in active_filters and character.id in character_registrations:
         return False
     return not ("mirror" in active_filters and character.mirror_id and character.mirror_id in character_registrations)
@@ -146,16 +136,7 @@ def get_event_filter_characters(context: dict, character_filters: Any) -> None: 
 
 
 def has_access_character(request: HttpRequest, context: dict) -> bool:
-    """Check if user has access to view/edit a specific character.
-
-    Args:
-        request: Django HTTP request object
-        context (dict): Context with character information
-
-    Returns:
-        bool: True if user has access (organizer, owner, or player)
-
-    """
+    """Check if user has access to view/edit a specific character."""
     if has_event_permission(request, context, context["event"].slug, "orga_characters"):
         return True
 
@@ -168,12 +149,7 @@ def has_access_character(request: HttpRequest, context: dict) -> bool:
 
 
 def update_run_plan_on_event_change(run_instance: Any) -> None:
-    """Set run plan from association default if not already set.
-
-    Args:
-        run_instance: Run instance that was saved
-
-    """
+    """Set run plan from association default if not already set."""
     if not run_instance.plan and run_instance.event:
         plan_updates = {"plan": run_instance.event.association.plan}
         Run.objects.filter(pk=run_instance.pk).update(**plan_updates)
@@ -686,19 +662,7 @@ def on_event_features_m2m_changed(
     pk_set: set[int] | None,
     **kwargs: Any,  # noqa: ARG001
 ) -> None:
-    """Handle event-feature m2m relationship changes.
-
-    Called when features are added/removed from an event via the m2m_changed signal.
-    Uses a single bulk query to fetch all feature slugs and passes them to init_features.
-
-    Args:
-        sender: The through model class
-        instance: The Event instance
-        action: The m2m action (post_add, post_remove, post_clear)
-        pk_set: Set of Feature PKs being added/removed
-        **kwargs: Additional signal arguments
-
-    """
+    """Handle event-feature m2m relationship changes."""
     # Only process post_add actions for newly activated features
     if action != "post_add" or not pk_set:
         return

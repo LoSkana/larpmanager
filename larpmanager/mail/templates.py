@@ -386,15 +386,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
 
 
 def get_help_email(help_question: Any) -> Any:
-    """Generate subject and body for help question notification.
-
-    Args:
-        help_question: HelpQuestion instance
-
-    Returns:
-        tuple: (subject, body) for the notification email
-
-    """
+    """Generate subject and body for help question notification."""
     subject = hdr(help_question) + _("New question by %(user)s") % {"user": help_question.member}
     email_body = _("A question was asked by: %(user)s") % {"user": help_question.member}
     email_body += "<br /><br />" + help_question.text
@@ -405,15 +397,7 @@ REGISTRATION_SALT = getattr(conf_settings, "REGISTRATION_SALT", "registration")
 
 
 def get_activation_key(user: Any) -> Any:
-    """Generate the activation key which will be emailed to the user.
-
-    Args:
-        user: User instance to generate key for
-
-    Returns:
-        str: Signed activation key for email verification
-
-    """
+    """Generate the activation key which will be emailed to the user."""
     """
     Generate the activation key which will be emailed to the user.
     """

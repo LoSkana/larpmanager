@@ -214,15 +214,7 @@ def _get_field_value(element: Any, question: Any) -> str | None:
 
 
 def _get_values_mapping(element: Any) -> dict[str, callable]:
-    """Return a mapping of field names to their value extraction functions.
-
-    Args:
-        element: The element object to extract values from.
-
-    Returns:
-        Dictionary mapping field names to lambda functions that extract values.
-
-    """
+    """Return a mapping of field names to their value extraction functions."""
     # Basic text and content fields
     return {
         "text": lambda: element.text,

@@ -118,25 +118,7 @@ class MyRegistrationView(RegistrationView):
         return new_user
 
     def get_success_url(self, user: Member | None = None) -> str:  # noqa: ARG002
-        """Get URL to redirect to after successful registration.
-
-        Determines the appropriate redirect URL after a user successfully completes
-        registration. Prioritizes 'next' parameter from POST/GET data if it's safe,
-        otherwise falls back to the configured success_url or home page.
-
-        Args:
-            user: User instance, typically a Member model instance. Optional parameter
-                that may be used for user-specific redirect logic.
-
-        Returns:
-            A valid URL string for redirection. Will be either the 'next' parameter
-            (if safe), the instance's success_url attribute, or the 'home' URL as fallback.
-
-        Note:
-            The 'next' URL is validated for security using Django's
-            url_has_allowed_host_and_scheme to prevent open redirect vulnerabilities.
-
-        """
+        """Get URL to redirect to after successful registration."""
         # Check for 'next' parameter in POST data first, then GET data
         next_url = self.request.POST.get("next") or self.request.GET.get("next")
 
@@ -148,12 +130,7 @@ class MyRegistrationView(RegistrationView):
         return self.success_url or reverse("home")
 
     def get_form_kwargs(self) -> Any:
-        """Get keyword arguments for form initialization.
-
-        Returns:
-            dict: Form kwargs including request object
-
-        """
+        """Get keyword arguments for form initialization."""
         form_kwargs = super().get_form_kwargs()
         form_kwargs["request"] = self.request
         return form_kwargs

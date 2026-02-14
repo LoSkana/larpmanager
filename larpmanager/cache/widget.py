@@ -197,16 +197,7 @@ exe_widget_list = {
 
 
 def get_widget_cache_key(entity_type: str, entity_id: int, widget_name: str) -> str:
-    """Generate cache key for widget data.
-
-    Args:
-        entity_type: Type of entity ('run' or 'association')
-        entity_id: ID of the entity
-        widget_name: Name of the widget
-
-    Returns:
-        str: Cache key for the widget
-    """
+    """Generate cache key for widget data."""
     return f"widget_cache_{entity_type}_{entity_id}_{widget_name}"
 
 

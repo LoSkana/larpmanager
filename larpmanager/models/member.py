@@ -397,12 +397,7 @@ class Member(UuidMixin, BaseModel):
         return str(self)
 
     def get_member_filepath(self) -> str:
-        """Get the file path for member PDF storage.
-
-        Returns:
-            The absolute path to the member's PDF directory.
-
-        """
+        """Get the file path for member PDF storage."""
         # Build base PDF members directory path
         member_pdf_directory = str(Path(conf_settings.MEDIA_ROOT) / "pdf/members" / str(self.id))
         # Ensure directory exists

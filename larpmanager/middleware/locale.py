@@ -38,15 +38,7 @@ class LocaleAdvMiddleware:
         # One-time configuration and initialization.
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        """Activate language for request based on user/browser preferences.
-
-        Args:
-            request: Django HTTP request object
-
-        Returns:
-            HttpResponse: Response with activated language
-
-        """
+        """Activate language for request based on user/browser preferences."""
         request.LANGUAGE_CODE = self.get_lang(request)
         translation.activate(request.LANGUAGE_CODE)
         return self.get_response(request)

@@ -149,18 +149,7 @@ def orga_registration_sections_order(
     section_uuid: str,
     order: int,
 ) -> HttpResponse:
-    """Reorder registration sections within an event.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-        section_uuid: Section UUID
-        order: Direction to move ('up' or 'down')
-
-    Returns:
-        Redirect to registration sections page
-
-    """
+    """Reorder registration sections within an event."""
     return orga_order(request, event_slug, OrgaAction.REGISTRATION_SECTIONS, section_uuid, order)
 
 

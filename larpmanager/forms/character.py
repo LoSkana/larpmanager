@@ -105,17 +105,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize character form with custom fields and configuration.
-
-        Args:
-            *args: Positional arguments passed to parent form class.
-            **kwargs: Keyword arguments including 'params' dict with event, run,
-                and features configuration.
-
-        Raises:
-            KeyError: If required 'params' key is missing from kwargs.
-
-        """
+        """Initialize character form with custom fields and configuration."""
         # Initialize parent form class with all provided arguments
         super().__init__(*args, **kwargs)
 
@@ -721,17 +711,7 @@ class OrgaCharacterForm(CharacterForm):
 
     @staticmethod
     def _get_rel(character_id: int, instance: Any, relationship_type: str) -> Relationship:
-        """Get or create a relationship between characters based on type.
-
-        Args:
-            character_id: Character ID for the relationship
-            instance: Source or target instance depending on relationship_type
-            relationship_type: Either "direct" or reverse relationship type
-
-        Returns:
-            The relationship object
-
-        """
+        """Get or create a relationship between characters based on type."""
         # Create direct relationship (instance -> character)
         if relationship_type == "direct":
             (relationship, _created) = Relationship.objects.get_or_create(source_id=instance.pk, target_id=character_id)

@@ -103,12 +103,7 @@ def update_cache_lm_home() -> dict[str, int | list]:
 
 
 def _get_reviews() -> list[dict]:
-    """Get all LARP manager reviews as dictionaries.
-
-    Returns:
-        List of review dictionaries.
-
-    """
+    """Get all LARP manager reviews as dictionaries."""
     # Convert each review object to dictionary representation
     return [review.as_dict() for review in LarpManagerReview.objects.all()]
 
@@ -153,12 +148,7 @@ def _get_showcases() -> list[dict]:
 
 
 def _get_promoters() -> list[dict]:
-    """Get all promoters from associations that have promoter data.
-
-    Returns:
-        List of promoter dictionaries from associations with valid promoter data.
-
-    """
+    """Get all promoters from associations that have promoter data."""
     # Filter associations that have promoter data
     associations_queryset = Association.objects.exclude(promoter__isnull=True)
     associations_queryset = associations_queryset.exclude(promoter__exact="")

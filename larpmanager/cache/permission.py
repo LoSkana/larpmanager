@@ -31,15 +31,7 @@ logger = logging.getLogger(__name__)
 
 
 def association_permission_feature_key(permission_slug: str) -> str:
-    """Generate cache key for association permission features.
-
-    Args:
-        permission_slug (str): Permission slug
-
-    Returns:
-        str: Cache key for association permission feature
-
-    """
+    """Generate cache key for association permission features."""
     return f"association_permission_feature_{permission_slug}"
 
 
@@ -115,15 +107,7 @@ def clear_association_permission_cache(association: AssociationPermission) -> No
 
 
 def event_permission_feature_key(permission_slug: str) -> str:
-    """Generate cache key for event permission features.
-
-    Args:
-        permission_slug (str): Permission slug
-
-    Returns:
-        str: Cache key for event permission feature
-
-    """
+    """Generate cache key for event permission features."""
     return f"event_permission_feature_{permission_slug}"
 
 
@@ -247,15 +231,7 @@ def update_index_permission(permission_type: str) -> list[dict]:
 
 
 def get_cache_index_permission(permission_type: str) -> list:
-    """Get or update cached permission index for a given type.
-
-    Args:
-        permission_type: The permission type to retrieve from cache.
-
-    Returns:
-        The cached or freshly updated permission index.
-
-    """
+    """Get or update cached permission index for a given type."""
     # Attempt to retrieve from cache
     cached_result = cache.get(index_permission_key(permission_type))
 

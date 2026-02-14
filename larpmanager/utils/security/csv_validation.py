@@ -82,15 +82,7 @@ def sanitize_csv_value(value: Any) -> Any:
 
 
 def sanitize_dataframe(df: pd.DataFrame) -> pd.DataFrame:
-    """Sanitize all string values in a pandas DataFrame to prevent formula injection.
-
-    Args:
-        df: pandas DataFrame with potentially unsafe CSV data
-
-    Returns:
-        DataFrame with all string values sanitized
-
-    """
+    """Sanitize all string values in a pandas DataFrame to prevent formula injection."""
     # Apply sanitization to all cells in the dataframe
     return df.map(sanitize_csv_value)
 

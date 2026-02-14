@@ -64,15 +64,7 @@ css_delimeter = "/*@#§*/"
 
 
 def render_js(cls: Any) -> list[str]:
-    """Render JavaScript includes with defer attribute for forms.
-
-    Args:
-        cls: Media class containing JavaScript paths
-
-    Returns:
-        list: HTML script tags with defer attributes
-
-    """
+    """Render JavaScript includes with defer attribute for forms."""
     return [format_html('<script defer src="{}"></script>', cls.absolute_path(path)) for path in cls._js]
 
 
@@ -118,13 +110,7 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
     """Custom checkbox widget for role permission selection with help text."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize widget with feature help text and mapping.
-
-        Args:
-            *args: Variable positional arguments
-            **kwargs: Arbitrary keyword arguments including help_text and feature_map
-
-        """
+        """Initialize widget with feature help text and mapping."""
         self.feature_help = kwargs.pop("help_text", {})
         self.feature_map = kwargs.pop("feature_map", {})
         super().__init__(*args, **kwargs)
@@ -200,15 +186,7 @@ class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
     """Model multiple choice field with translated labels."""
 
     def label_from_instance(self, obj: Any) -> str:
-        """Get translated label for model instance.
-
-        Args:
-            obj: Model instance
-
-        Returns:
-            str: Translated name of the instance
-
-        """
+        """Get translated label for model instance."""
         return _(obj.name)
 
 
@@ -501,15 +479,7 @@ class RunStaffS2Widget(s2forms.ModelSelect2Widget):
 
 
 def get_association_people(association_id: int) -> list[tuple[int, str]]:
-    """Get list of people associated with an association for form choices.
-
-    Args:
-        association_id: Association ID to get members for
-
-    Returns:
-        list: List of (member_id, display_string) tuples
-
-    """
+    """Get list of people associated with an association for form choices."""
     que = Membership.objects.select_related("member").filter(association_id=association_id)
     que = que.exclude(status=MembershipStatus.EMPTY).exclude(status=MembershipStatus.REWOKED)
     return [(f.member_id, f"{f.member!s} - {f.member.email}") for f in que]
@@ -1025,16 +995,7 @@ class WarehouseTagS2Widget(WarehouseTagS2, s2forms.ModelSelect2Widget):
 
 
 def remove_choice(choices: list[tuple[str, str]], type_to_remove: str) -> list[tuple[str, str]]:
-    """Remove a specific choice from a list of choices.
-
-    Args:
-        choices: List of (key, value) choice tuples
-        type_to_remove: Choice key to remove
-
-    Returns:
-        list: New choice list without the specified type
-
-    """
+    """Remove a specific choice from a list of choices."""
     filtered_choices = []
     for key, value in choices:
         if key == type_to_remove:
@@ -1123,13 +1084,7 @@ class CSRFTinyMCE(TinyMCE):
     """
 
     def __init__(self, attrs=None, mce_attrs=None) -> None:  # noqa: ANN001
-        """Initialize TinyMCE widget with CSRF-aware upload handler.
-
-        Args:
-            attrs: HTML attributes for the widget
-            mce_attrs: TinyMCE-specific configuration attributes
-
-        """
+        """Initialize TinyMCE widget with CSRF-aware upload handler."""
         # Merge custom upload handler with any existing mce_attrs
         mce_attrs = mce_attrs or {}
         mce_attrs["images_upload_handler"] = _TINYMCE_CSRF_UPLOAD_HANDLER

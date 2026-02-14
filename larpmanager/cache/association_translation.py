@@ -24,49 +24,17 @@ from larpmanager.models.association import AssociationTranslation
 
 
 def association_translation_key(association_id: int, language_code: str) -> str:
-    """Generate a unique cache key for association translation dictionary.
-
-    Args:
-        association_id: The unique identifier of the association
-        language_code: ISO language code (e.g., 'en', 'it', 'de')
-
-    Returns:
-        A formatted cache key string for storing/retrieving translations
-
-    """
+    """Generate a unique cache key for association translation dictionary."""
     return f"association_translation_{association_id}_{language_code}"
 
 
 def clear_association_translation_cache(association_id: int, language_code: str) -> None:
-    """Clear the cached translation dictionary for a specific association and language.
-
-    This should be called when translation entries are modified to ensure
-    the cache stays in sync with the database.
-
-    Args:
-        association_id: The unique identifier of the association
-        language_code: ISO language code for the translation to clear
-
-    """
+    """Clear the cached translation dictionary for a specific association and language."""
     cache.delete(association_translation_key(association_id, language_code))
 
 
 def update_association_translation(association_id: int, language_code: str) -> dict[str, str]:
-    """Fetch and build translation dictionary from database for an association.
-
-    Retrieves all active custom translations for the specified association and language,
-    constructing a dictionary that maps original text (msgid) to translated text (msgstr).
-    This dictionary is used to override default Django translations at runtime.
-
-    Args:
-        association_id: The unique identifier of the association
-        language_code: ISO language code for the translations to fetch
-
-    Returns:
-        Dictionary mapping original text strings to their custom translations.
-        Empty dict if no translations exist for this association/language combination.
-
-    """
+    """Fetch and build translation dictionary from database for an association."""
     res: dict[str, str] = {}
 
     # Query all active custom translations for this association and language

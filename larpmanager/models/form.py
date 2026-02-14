@@ -53,32 +53,17 @@ class BaseQuestionType(models.TextChoices):
 
     @staticmethod
     def get_answer_types() -> Any:
-        """Get question types that use text answers.
-
-        Returns:
-            set: Question types requiring text input
-
-        """
+        """Get question types that use text answers."""
         return {BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR}
 
     @staticmethod
     def get_choice_types() -> Any:
-        """Get question types that use choice options.
-
-        Returns:
-            set: Question types with predefined choices
-
-        """
+        """Get question types that use choice options."""
         return {BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE}
 
     @staticmethod
     def get_basic_types() -> Any:
-        """Get all basic question types.
-
-        Returns:
-            set: All basic question type values
-
-        """
+        """Get all basic question types."""
         return BaseQuestionType.get_answer_types() | BaseQuestionType.get_choice_types()
 
     @classmethod
@@ -94,17 +79,7 @@ class BaseQuestionType(models.TextChoices):
 
 
 def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]) -> Any:
-    """Extend Django TextChoices with additional options.
-
-    Args:
-        name: Name for the new TextChoices class
-        base: Base TextChoices to extend
-        extra: List of (name, value, label) tuples to add
-
-    Returns:
-        models.TextChoices: Extended choices class
-
-    """
+    """Extend Django TextChoices with additional options."""
     members = [(m.name, (m.value, m.label)) for m in base] + [(n, (v, lbl)) for (n, v, lbl) in extra]
     return models.TextChoices(name, members)
 
@@ -129,12 +104,7 @@ WritingQuestionType = extend_textchoices(
 
 
 def get_def_writing_types() -> Any:
-    """Get default writing question types.
-
-    Returns:
-        set: Set of default WritingQuestionType values
-
-    """
+    """Get default writing question types."""
     return {WritingQuestionType.NAME, WritingQuestionType.TEASER, WritingQuestionType.SHEET, WritingQuestionType.TITLE}
 
 
@@ -321,12 +291,7 @@ class WritingQuestion(UuidMixin, BaseModel):
         return f"{self.event} - {self.name[:30]}"
 
     def show(self) -> dict[str, Any]:
-        """Return JSON-serializable dictionary of object attributes.
-
-        Returns:
-            Dictionary containing description, name, and order fields.
-
-        """
+        """Return JSON-serializable dictionary of object attributes."""
         js = {}
         # Update JSON dict with description, name, and order attributes
         for s in ["description", "name", "order"]:

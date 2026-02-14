@@ -16,14 +16,7 @@ class EmailBackend(ABC):
 
     @abstractmethod
     def send_message(self, email_message: EmailMultiAlternatives) -> None:
-        """Send email message.
-
-        Args:
-            email_message: Django EmailMultiAlternatives instance to send
-
-        Raises:
-            Exception: If sending fails
-        """
+        """Send email message."""
 
 
 class SMTPEmailBackend(EmailBackend):

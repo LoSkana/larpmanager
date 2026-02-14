@@ -543,24 +543,7 @@ def move_registration_between_runs(
     preserve_answers: bool = True,
     preserve_accounting: bool = True,
 ) -> Registration:
-    """Move a registration from one run to another, deleting the original.
-
-    This is a convenience wrapper around transfer_registration_between_runs with move_registration=True.
-
-    Args:
-        registration: The registration to move
-        target_run: The destination run
-        ticket_mapping: Manual mapping between ticket IDs (source_ticket_id -> target_ticket_id)
-        preserve_choices: Whether to preserve multiple choice selections
-        preserve_answers: Whether to preserve text answers
-        preserve_accounting: Whether to preserve accounting items (payments and other items)
-
-    Returns:
-        The new registration created in the target run
-
-    Raises:
-        ValidationError: If the move is not possible
-    """
+    """Move a registration from one run to another, deleting the original."""
     return transfer_registration_between_runs(
         registration=registration,
         target_run=target_run,

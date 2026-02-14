@@ -22,15 +22,7 @@ from django.http import HttpRequest
 
 
 def is_ajax(http_request: HttpRequest) -> bool:
-    """Check if request is an AJAX request.
-
-    Args:
-        http_request: HTTP request object
-
-    Returns:
-        bool: True if request is AJAX, False otherwise
-
-    """
+    """Check if request is an AJAX request."""
     return http_request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest"
 
 

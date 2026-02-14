@@ -83,19 +83,7 @@ class EventCharactersPdfForm(ConfigForm):
         fields = ()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the instance with cancellation prevention.
-
-        Initializes the parent class with all provided arguments and sets up
-        the instance to prevent cancellation operations.
-
-        Args:
-            *args: Variable length argument list passed to parent class.
-            **kwargs: Arbitrary keyword arguments passed to parent class.
-
-        Returns:
-            None
-
-        """
+        """Initialize the instance with cancellation prevention."""
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
@@ -281,15 +269,7 @@ class OrgaFeatureForm(FeatureForm):
         self._init_features(is_association=False)
 
     def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
-        """Save the form instance and update event features cache.
-
-        Args:
-            commit: Whether to save the instance to database.
-
-        Returns:
-            The saved EventConfig instance.
-
-        """
+        """Save the form instance and update event features cache."""
         # Save form without committing to database yet
         instance: Event = super().save(commit=False)
 
@@ -1072,25 +1052,12 @@ class OrgaAppearanceForm(BaseModelCssForm):
 
     @staticmethod
     def get_input_css() -> str:
-        """Get the CSS input field name.
-
-        Returns:
-            str: CSS input field identifier
-
-        """
+        """Get the CSS input field name."""
         return "event_css"
 
     @staticmethod
     def get_css_path(event_instance: Event) -> str:
-        """Generate CSS file path for event styling.
-
-        Args:
-            event_instance: Event instance
-
-        Returns:
-            str: Path to CSS file
-
-        """
+        """Generate CSS file path for event styling."""
         return f"css/{event_instance.association.slug}_{event_instance.slug}_{event_instance.css_code}.css"
 
 
@@ -1606,13 +1573,7 @@ class ExeTemplateRolesForm(OrgaEventRoleForm):
     """Form for managing template event roles with optional members."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize template roles form with optional member requirement.
-
-        Args:
-            *args: Variable length argument list
-            **kwargs: Arbitrary keyword arguments
-
-        """
+        """Initialize template roles form with optional member requirement."""
         super().__init__(*args, **kwargs)
         self.fields["members"].required = False
 
@@ -1953,14 +1914,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
     @staticmethod
     def _compile_configs(basic_question_types: set, compiled_options: list, field_definitions: dict) -> None:
-        """Compile configuration options from field definitions.
-
-        Args:
-            basic_question_types: Set of basic question types
-            compiled_options: List to append compiled configurations
-            field_definitions: Dictionary of field definitions
-
-        """
+        """Compile configuration options from field definitions."""
         for field in field_definitions.values():
             if field["typ"] == "name":
                 continue

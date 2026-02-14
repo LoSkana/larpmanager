@@ -464,12 +464,7 @@ def _get_factions_answers_choices(context: dict, fields_data: dict, faction_ids:
 
 
 def get_character_sheet_fields(context: dict) -> None:
-    """Update character sheet context with character element fields.
-
-    Args:
-        context: Context dictionary containing features and sheet_char data.
-
-    """
+    """Update character sheet context with character element fields."""
     # Check if character feature is enabled
     if "character" not in context["features"]:
         return

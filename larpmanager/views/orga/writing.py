@@ -141,17 +141,7 @@ def orga_plots_rels_order(request: HttpRequest, event_slug: str, plot_rel_uuid: 
 
 @login_required
 def orga_plots_versions(request: HttpRequest, event_slug: str, plot_uuid: str) -> HttpResponse:
-    """View for managing plot versions.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug
-        plot_uuid: Plot UUID
-
-    Returns:
-        HttpResponse: Rendered versions page
-
-    """
+    """View for managing plot versions."""
     return orga_versions(request, event_slug, OrgaAction.PLOTS, plot_uuid)
 
 
@@ -343,17 +333,7 @@ def orga_handouts_print(request: HttpRequest, event_slug: str, handout_uuid: str
 
 @login_required
 def orga_handouts_view(request: HttpRequest, event_slug: str, handout_uuid: str) -> HttpResponse:
-    """View for displaying a specific handout document for organizers.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event slug identifier
-        handout_uuid: Handout UUID to retrieve
-
-    Returns:
-        HTTP response with the rendered handout
-
-    """
+    """View for displaying a specific handout document for organizers."""
     # Check organizer permissions for handouts feature
     context = check_event_context(request, event_slug, "orga_handouts")
 

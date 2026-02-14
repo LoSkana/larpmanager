@@ -27,38 +27,17 @@ from larpmanager.models.event import Event
 
 
 def reset_association_features(association_id: int) -> None:
-    """Clear cached association features.
-
-    Args:
-        association_id (int): Association ID to clear cache for
-
-    """
+    """Clear cached association features."""
     cache.delete(cache_association_features_key(association_id))
 
 
 def cache_association_features_key(association_id: int) -> str:
-    """Generate cache key for association features.
-
-    Args:
-        association_id (int): Association ID
-
-    Returns:
-        str: Cache key for association features
-
-    """
+    """Generate cache key for association features."""
     return f"association_features_{association_id}"
 
 
 def get_association_features(association_id: int) -> dict[str, int]:
-    """Get cached association features, updating cache if needed.
-
-    Args:
-        association_id (int): Association ID
-
-    Returns:
-        dict: Dictionary of enabled features {feature_slug: 1}
-
-    """
+    """Get cached association features, updating cache if needed."""
     cache_key = cache_association_features_key(association_id)
     cached_features = cache.get(cache_key)
     if cached_features is None:
@@ -131,15 +110,7 @@ def cache_event_features_key(event_id: int) -> str:
 
 
 def get_event_features(event_id: int) -> dict[str, int]:
-    """Get cached event features, updating cache if needed.
-
-    Args:
-        event_id (int): Event ID
-
-    Returns:
-        dict: Dictionary of enabled event features {feature_slug: 1}
-
-    """
+    """Get cached event features, updating cache if needed."""
     cache_key = cache_event_features_key(event_id)
     cached_features = cache.get(cache_key)
     if cached_features is None:
@@ -183,12 +154,7 @@ def update_event_features(ev_id: int) -> dict[str, int]:
 
 
 def on_association_post_save_reset_features_cache(instance: Association) -> None:
-    """Handle association post-save feature cache reset.
-
-    Args:
-        instance: Association instance that was saved
-
-    """
+    """Handle association post-save feature cache reset."""
     reset_association_features(instance.id)
     for ev_id in instance.events.values_list("pk", flat=True):
         clear_event_features_cache(ev_id)

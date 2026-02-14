@@ -142,29 +142,11 @@ def exe_texts_delete(request: HttpRequest, text_uuid: str) -> HttpResponse:
 
 @login_required
 def exe_translations(request: HttpRequest) -> HttpResponse:
-    """Display the list of custom translation overrides for an association.
-
-    This view renders the management interface for organization-specific translation
-    overrides. It shows all custom translations (active and inactive) that have been
-    configured for the association, allowing administrators to review, edit, and
-    manage their translation customizations.
-
-    Args:
-        request: HTTP request object containing user authentication and session data
-
-    Returns:
-        HttpResponse: Rendered template showing the list of translation overrides
-            with options to add, edit, or delete translations
-
-    Raises:
-        PermissionDenied: If user lacks exe_translations permission for the association
-
-    """
+    """Display the list of custom translation overrides for an association."""
     # Verify user has permission to manage translations for this association
     context = check_association_context(request, "exe_translations")
 
-    # Fetch all custom translations for this association
-    # Results include both active and inactive translations for full visibility
+    # Fetch all custom translations for this association (both active and inactive)
     context["list"] = AssociationTranslation.objects.filter(association_id=context["association_id"])
 
     return render(request, "larpmanager/exe/translations.html", context)
@@ -308,15 +290,7 @@ def exe_features_go(request: HttpRequest, slug: str, *, to_active: bool = True) 
 
 
 def _exe_feature_after_link(feature: Feature) -> str:
-    """Generate the appropriate redirect URL after feature setup.
-
-    Args:
-        feature: Feature object containing after_link configuration
-
-    Returns:
-        Full URL path for redirection
-
-    """
+    """Generate the appropriate redirect URL after feature setup."""
     redirect_url_or_fragment = feature.after_link
 
     # Check if redirect_url_or_fragment is a named URL pattern starting with "exe"

@@ -234,15 +234,7 @@ def remember_profile(registration: Any) -> None:
 
 
 def get_remember_profile_body(email_context: Any) -> Any:
-    """Generate default profile completion reminder email body text.
-
-    Args:
-        email_context (dict): Email context with event and URL information
-
-    Returns:
-        str: HTML formatted email body for profile reminder
-
-    """
+    """Generate default profile completion reminder email body text."""
     return (
         _("Hello! You signed up for %(event)s but haven't completed your profile yet") % email_context
         + ". "

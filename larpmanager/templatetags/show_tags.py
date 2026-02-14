@@ -55,30 +55,13 @@ logger = logging.getLogger(__name__)
 
 @register.filter
 def modulo(num: int, val: int) -> int:
-    """Template filter to calculate modulo operation.
-
-    Args:
-        num (int): Number to divide
-        val (int): Divisor
-
-    Returns:
-        int: Remainder of num divided by val
-
-    """
+    """Template filter to calculate modulo operation."""
     return num % val
 
 
 @register.filter
 def basename(file_path: str | Path) -> str:
-    """Template filter to extract basename from file path.
-
-    Args:
-        file_path (str): File path
-
-    Returns:
-        str: Basename of the file path (filename without directory)
-
-    """
+    """Template filter to extract basename from file path."""
     if not file_path:
         return ""
     return Path(file_path).name
@@ -86,31 +69,14 @@ def basename(file_path: str | Path) -> str:
 
 @register.filter
 def clean_tags(tx: str) -> str:
-    """Template filter to clean HTML tags from text.
-
-    Args:
-        tx (str): Text containing HTML tags
-
-    Returns:
-        str: Text with HTML tags removed and br tags replaced with spaces
-
-    """
+    """Template filter to clean HTML tags from text."""
     tx = tx.replace("<br />", " ")
     return strip_tags(tx)
 
 
 @register.filter
 def get(value: dict[str, Any], arg: str) -> Any:
-    """Template filter to get dictionary value by key.
-
-    Args:
-        value (dict): Dictionary to look up
-        arg (str): Key to retrieve
-
-    Returns:
-        any: Dictionary value for key, or empty string if not found
-
-    """
+    """Template filter to get dictionary value by key."""
     if arg is not None and value:
         try:
             if arg in value:
@@ -560,16 +526,7 @@ def key(d: Any, key_name: Any, s_key_name: Any = None) -> Any:
 
 @register.simple_tag
 def get_field(form: Form, field_name: str) -> BoundField | str:
-    """Template tag to safely get form field by name.
-
-    Args:
-        form: Django form instance
-        field_name (str): Field name to retrieve
-
-    Returns:
-        Field: Form field or empty string if not found
-
-    """
+    """Template tag to safely get form field by name."""
     if field_name in form:
         return form[field_name]
     return ""
@@ -678,19 +635,7 @@ def sanitize_html(text: str) -> str:
 
 @register.simple_tag(takes_context=True)
 def get_field_show_char(context: dict, form: Form, name: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
-    """Template tag to get form field and process character references.
-
-    Args:
-        context: Template context
-        form: Django form instance
-        name (str): Field name to retrieve
-        run: Run instance for character processing
-        tooltip (bool): Whether to include tooltips
-
-    Returns:
-        str: Processed field value with character links
-
-    """
+    """Template tag to get form field and process character references."""
     if name in form:
         v = form[name]
         if isinstance(v, dict) and "text" in v:
@@ -703,17 +648,7 @@ def get_field_show_char(context: dict, form: Form, name: str, run: Run, tooltip:
 
 @register.simple_tag
 def get_deep_field(form: Form | dict, key1: str, key2: str) -> Any:
-    """Template tag to get nested form field value.
-
-    Args:
-        form: Form or dictionary
-        key1: First level key
-        key2: Second level key
-
-    Returns:
-        any: Nested value or empty string if not found
-
-    """
+    """Template tag to get nested form field value."""
     if key1 in form and key2 in form[key1]:
         return form[key1][key2]
     return ""
@@ -721,16 +656,7 @@ def get_deep_field(form: Form | dict, key1: str, key2: str) -> Any:
 
 @register.filter
 def get_form_field(form: Form, name: str) -> BoundField | str:
-    """Template filter to get form field by name.
-
-    Args:
-        form: Django form instance
-        name (str): Field name
-
-    Returns:
-        Field: Form field or empty string if not found
-
-    """
+    """Template filter to get form field by name."""
     if name in form.fields:
         return form[name]
     return ""
@@ -738,16 +664,7 @@ def get_form_field(form: Form, name: str) -> BoundField | str:
 
 @register.simple_tag
 def lookup(obj: Any, prop: str) -> Any:
-    """Template tag to safely get object attribute.
-
-    Args:
-        obj: Object to inspect
-        prop (str): Property name to retrieve
-
-    Returns:
-        any: Property value or empty string if not found
-
-    """
+    """Template tag to safely get object attribute."""
     if hasattr(obj, prop):
         value = getattr(obj, prop)
         if value:
@@ -757,16 +674,7 @@ def lookup(obj: Any, prop: str) -> Any:
 
 @register.simple_tag
 def get_registration_option(registration: Any, number: Any) -> Any:
-    """Template tag to get registration option form text.
-
-    Args:
-        registration: Registration instance
-        number (int): Option number
-
-    Returns:
-        str: Option form text or empty string
-
-    """
+    """Template tag to get registration option form text."""
     v = getattr(registration, f"option_{number}")
     if v:
         return get_option_form_text(v)
@@ -775,121 +683,49 @@ def get_registration_option(registration: Any, number: Any) -> Any:
 
 @register.simple_tag
 def gt(value: Any, arg: Any) -> Any:
-    """Template tag for greater than comparison.
-
-    Args:
-        value: Value to compare
-        arg: Comparison value
-
-    Returns:
-        bool: True if value > arg
-
-    """
+    """Template tag for greater than comparison."""
     return value > int(arg)
 
 
 @register.simple_tag
 def lt(value: Any, arg: Any) -> Any:
-    """Template tag for less than comparison.
-
-    Args:
-        value: Value to compare
-        arg: Comparison value
-
-    Returns:
-        bool: True if value < arg
-
-    """
+    """Template tag for less than comparison."""
     return value < int(arg)
 
 
 @register.simple_tag
 def gte(value: Any, arg: Any) -> Any:
-    """Template tag for greater than or equal comparison.
-
-    Args:
-        value: Value to compare
-        arg: Comparison value
-
-    Returns:
-        bool: True if value >= arg
-
-    """
+    """Template tag for greater than or equal comparison."""
     return value >= int(arg)
 
 
 @register.simple_tag
 def lte(value: Any, arg: Any) -> Any:
-    """Template tag for less than or equal comparison.
-
-    Args:
-        value: Value to compare
-        arg: Comparison value
-
-    Returns:
-        bool: True if value <= arg
-
-    """
+    """Template tag for less than or equal comparison."""
     return value <= int(arg)
 
 
 @register.simple_tag
 def length_gt(value: Any, arg: Any) -> Any:
-    """Template tag for length greater than comparison.
-
-    Args:
-        value: Collection to check length
-        arg: Length to compare against
-
-    Returns:
-        bool: True if len(value) > arg
-
-    """
+    """Template tag for length greater than comparison."""
     return len(value) > int(arg)
 
 
 @register.simple_tag
 def length_lt(value: Any, arg: Any) -> Any:
-    """Template tag for length less than comparison.
-
-    Args:
-        value: Collection to check length
-        arg: Length to compare against
-
-    Returns:
-        bool: True if len(value) < arg
-
-    """
+    """Template tag for length less than comparison."""
     return len(value) < int(arg)
 
 
 @register.simple_tag
 def length_gte(value: Any, arg: Any) -> Any:
-    """Template tag for length greater than or equal comparison.
-
-    Args:
-        value: Collection to check length
-        arg: Length to compare against
-
-    Returns:
-        bool: True if len(value) >= arg
-
-    """
+    """Template tag for length greater than or equal comparison."""
     return len(value) >= int(arg)
 
 
 @register.simple_tag
 def length_lte(value: Any, arg: Any) -> Any:
-    """Template tag for length less than or equal comparison.
-
-    Args:
-        value: Collection to check length
-        arg: Length to compare against
-
-    Returns:
-        bool: True if len(value) <= arg
-
-    """
+    """Template tag for length less than or equal comparison."""
     return len(value) <= int(arg)
 
 
@@ -922,29 +758,13 @@ def hex_to_rgb(hex_color: Any) -> Any:
 
 @register.simple_tag
 def define(val: Any = None) -> Any:
-    """Template tag to define/store a value in templates.
-
-    Args:
-        val: Value to store
-
-    Returns:
-        any: The input value unchanged
-
-    """
+    """Template tag to define/store a value in templates."""
     return val
 
 
 @register.filter(name="template_trans")
 def template_trans(text: Any) -> Any:
-    """Template filter for safe translation of text.
-
-    Args:
-        text (str): Text to translate
-
-    Returns:
-        str: Translated text or original text if translation fails
-
-    """
+    """Template filter for safe translation of text."""
     try:
         return _(text)
     except (TypeError, ValueError, AttributeError) as e:
@@ -954,16 +774,7 @@ def template_trans(text: Any) -> Any:
 
 @register.simple_tag(takes_context=True)
 def get_char_profile(context: Any, char: Any) -> Any:
-    """Template tag to get character profile image URL.
-
-    Args:
-        context: Template context with features
-        char (dict): Character data dictionary
-
-    Returns:
-        str: URL to character profile image or default avatar
-
-    """
+    """Template tag to get character profile image URL."""
     if char.get("player_prof"):
         return char["player_prof"]
     if "cover" in context["features"]:
@@ -1028,30 +839,13 @@ def get_login_url(context: dict, provider: str, **params: Any) -> str:
 
 @register.filter
 def replace_underscore(value: Any) -> Any:
-    """Template filter to replace underscores with spaces.
-
-    Args:
-        value (str): String to process
-
-    Returns:
-        str: String with underscores replaced by spaces
-
-    """
+    """Template filter to replace underscores with spaces."""
     return value.replace("_", " ")
 
 
 @register.filter
 def remove(value: Any, args: Any) -> Any:
-    """Template filter to remove specific text from string.
-
-    Args:
-        value (str): Source string
-        args (str): Text to remove (underscores replaced with spaces)
-
-    Returns:
-        str: String with specified text removed (case-insensitive)
-
-    """
+    """Template filter to remove specific text from string."""
     args = args.replace("_", " ")
     txt = re.sub(re.escape(args), "", value, flags=re.IGNORECASE)
     return txt.strip()
@@ -1059,16 +853,7 @@ def remove(value: Any, args: Any) -> Any:
 
 @register.simple_tag
 def get_character_field(value: Any, options: Any) -> Any:
-    """Template tag to format character field values using options.
-
-    Args:
-        value: Field value (string or list of indices)
-        options (dict): Options mapping indices to data
-
-    Returns:
-        str: Formatted field value or comma-separated option names
-
-    """
+    """Template tag to format character field values using options."""
     if isinstance(value, str):
         return value
     result = []
@@ -1080,15 +865,7 @@ def get_character_field(value: Any, options: Any) -> Any:
 
 @register.filter
 def format_decimal(decimal_value: Any) -> Any:
-    """Template filter to format decimal values for display.
-
-    Args:
-        decimal_value: Numeric value to format
-
-    Returns:
-        str: Formatted decimal string, empty for zero, integer format when possible
-
-    """
+    """Template filter to format decimal values for display."""
     try:
         rounded_value = round_to_nearest_cent(float(decimal_value))
         if rounded_value == 0:
@@ -1102,44 +879,19 @@ def format_decimal(decimal_value: Any) -> Any:
 
 @register.filter
 def get_attributes(obj: Any) -> dict[str, Any]:
-    """Template filter to get object attributes as dictionary.
-
-    Args:
-        obj: Object to inspect
-
-    Returns:
-        dict: Dictionary of non-private attributes
-
-    """
+    """Template filter to get object attributes as dictionary."""
     return {k: v for k, v in vars(obj).items() if not k.startswith("_")}
 
 
 @register.filter
 def not_in(value: Any, arg: Any) -> Any:
-    """Template filter to check if value is not in comma-separated list.
-
-    Args:
-        value: Value to check
-        arg (str): Comma-separated list of values
-
-    Returns:
-        bool: True if value not in the list
-
-    """
+    """Template filter to check if value is not in comma-separated list."""
     return value not in arg.split(",")
 
 
 @register.filter
 def abs_value(value: Any) -> Any:
-    """Template filter to get absolute value.
-
-    Args:
-        value: Numeric value
-
-    Returns:
-        Absolute value or original value if conversion fails
-
-    """
+    """Template filter to get absolute value."""
     try:
         return abs(value)
     except (TypeError, ValueError):
@@ -1148,14 +900,5 @@ def abs_value(value: Any) -> Any:
 
 @register.filter
 def concat(val1: Any, val2: Any) -> str:
-    """Template filter to concatenate two values.
-
-    Args:
-        val1: First value to concatenate
-        val2: Second value to concatenate
-
-    Returns:
-        str: Concatenated string
-
-    """
+    """Template filter to concatenate two values."""
     return f"{val1}{val2}"

@@ -445,12 +445,7 @@ class WorkshopOption(UuidMixin, BaseModel):
         return f"{self.question} {self.name} ({self.is_correct})"
 
     def show(self) -> dict[str, Any]:
-        """Return JSON-serializable dict with answer option data.
-
-        Returns:
-            Dictionary with uuid, correctness flag, and name if present.
-
-        """
+        """Return JSON-serializable dict with answer option data."""
         # noinspection PyUnresolvedReferences
         # Build base dict with uuid and correctness status
         js = {"uuid": str(self.uuid), "is_correct": self.is_correct}
@@ -997,24 +992,11 @@ class OneTimeContent(UuidMixin, BaseModel):
         super().save(*args, **kwargs)
 
     def generate_token(self, note: Any = "") -> Any:
-        """Generate a new access token for this content.
-
-        Args:
-            note (str): Optional note describing the purpose of this token
-
-        Returns:
-            OneTimeAccessToken: The newly created token
-
-        """
+        """Generate a new access token for this content."""
         return OneTimeAccessToken.objects.create(content=self, note=note)
 
     def get_token_stats(self) -> Any:
-        """Get statistics about tokens for this content.
-
-        Returns:
-            dict: Dictionary with token statistics
-
-        """
+        """Get statistics about tokens for this content."""
         access_tokens = self.access_tokens.all()
         return {
             "total": access_tokens.count(),

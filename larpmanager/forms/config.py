@@ -144,16 +144,7 @@ class ConfigForm(BaseModelForm):
         self.hide_section_headers = True
 
     def set_section(self, section_slug: str, section_name: str) -> None:
-        """Set the current section for grouping configuration fields.
-
-        Args:
-            section_slug: Section slug identifier
-            section_name: Display name for the section
-
-        Side effects:
-            Sets internal section state and jump_section if matches params
-
-        """
+        """Set the current section for grouping configuration fields."""
         self._section = section_name
         if self.params.get("jump_section", "") == section_slug:
             self.jump_section = section_name
@@ -367,12 +358,7 @@ class ConfigForm(BaseModelForm):
             self.initial[field_key] = initial_value
 
     def _get_all_element_configs(self) -> dict[str, str]:
-        """Get all existing configuration values for the instance.
-
-        Returns:
-            dict: Mapping of configuration names to their current values
-
-        """
+        """Get all existing configuration values for the instance."""
         config_mapping = {}
         if self.instance.pk:
             for config in self.instance.configs.all():

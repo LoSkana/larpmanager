@@ -268,15 +268,7 @@ class Event(UuidMixin, BaseModel):
         return self.name
 
     def get_elements(self, element_model_class: type[BaseModel]) -> QuerySet:
-        """Get ordered elements of specified type for the parent event.
-
-        Args:
-            element_model_class: Model class to query elements from
-
-        Returns:
-            Ordered queryset of elements
-
-        """
+        """Get ordered elements of specified type for the parent event."""
         # Get all elements for the parent event
         queryset = element_model_class.objects.filter(event=self.get_class_parent(element_model_class))
 
@@ -775,12 +767,7 @@ class Run(UuidMixin, BaseModel):
         return f"{self.start.day} - {formats.date_format(self.end, 'j E Y')}"
 
     def get_media_filepath(self) -> str:
-        """Return the media file path for this run, creating the directory if needed.
-
-        Returns:
-            The absolute path to the run's media directory.
-
-        """
+        """Return the media file path for this run, creating the directory if needed."""
         # Build path by combining event media path with run number
         # noinspection PyUnresolvedReferences
         run_media_path = str(Path(self.event.get_media_filepath()) / f"{self.number}/")
