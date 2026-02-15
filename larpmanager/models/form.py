@@ -644,6 +644,9 @@ class RegistrationQuestion(UuidMixin, BaseModel):
         # Add nested options
         data["options"] = [opt.as_dict() for opt in self.options.all()]
 
+        # Add options_list for backward compatibility with templates
+        data["options_list"] = data["options"]
+
         # Preserve annotations if they exist (added by cache queries)
         for annotation in ["tickets_map", "factions_map", "allowed_map"]:
             if hasattr(self, annotation):
