@@ -75,6 +75,7 @@ from larpmanager.models.registration import (
     RegistrationTicket,
     TicketTier,
 )
+from larpmanager.models.utils import get_option_form_text
 from larpmanager.models.writing import Character
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import check_event_context
@@ -333,12 +334,20 @@ def registrations_popup(request: HttpRequest, context: dict) -> Any:
 
     try:
         registration = Registration.objects.get(uuid=registration_uuid, run=context["run"])
-        question = RegistrationQuestion.objects.get(
-            uuid=question_uuid,
-            event=context["event"].get_class_parent(RegistrationQuestion),
-        )
-        answer = RegistrationAnswer.objects.get(registration=registration, question=question)
-        html_text = f"<h2>{registration} - {question.name}</h2>" + answer.text
+
+        # Get question from cache instead of DB
+        cached_questions = get_cached_registration_questions(context["event"].get_class_parent(RegistrationQuestion))
+        question = None
+        for q in cached_questions:
+            if str(q["uuid"]) == str(question_uuid):
+                question = q
+                break
+
+        if not question:
+            return JsonResponse({"k": 0})
+
+        answer = RegistrationAnswer.objects.get(registration=registration, question_id=question["id"])
+        html_text = f"<h2>{registration} - {question['name']}</h2>" + answer.text
         return JsonResponse({"k": 1, "v": html_text})
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
@@ -405,18 +414,19 @@ def _get_registration_fields(context: dict, member: Any) -> dict:
 
     for question in event_questions:
         # Check if question has access restrictions enabled
-        if "reg_que_allowed" in context["features"] and question.allowed_map and question.allowed_map[0]:
+        allowed_map = question.get("allowed_map", [])
+        if "reg_que_allowed" in context["features"] and allowed_map and allowed_map[0]:
             current_run_id = context["run"].id
 
             # Check if user is an organizer for this run
             is_organizer = current_run_id in context["all_runs"] and 1 in context["all_runs"][current_run_id]
 
             # Skip question if user is not organizer and not in allowed list
-            if not is_organizer and member.id not in question.allowed_map:
+            if not is_organizer and member.id not in allowed_map:
                 continue
 
         # Add accessible question to results
-        registration_questions[question.uuid] = question
+        registration_questions[question["uuid"]] = question
 
     return registration_questions
 
@@ -447,7 +457,7 @@ def _orga_registrations_text_fields(context: dict) -> None:
     """
     # add editor type questions using cached version
     questions = get_cached_registration_questions(context["event"])
-    text_field_uuids = [str(q.uuid) for q in questions if q.typ == BaseQuestionType.EDITOR]
+    text_field_uuids = [str(question["uuid"]) for question in questions if question["typ"] == BaseQuestionType.EDITOR]
 
     cached_registration_fields = get_cache_registration_field(context["run"])
     for registration in context["registration_list"]:
@@ -598,7 +608,7 @@ def _load_preferences_columns(context: dict) -> None:
     if not default_fields:
         # Find the ticket question ID to add to default fields
         for question_uuid, question in context["reg_questions"].items():
-            if question.typ == "ticket":
+            if question["typ"] == "ticket":
                 default_fields.append(f".lq_{question_uuid}")
                 break
 
@@ -629,15 +639,22 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
 
     q_uuid = request.POST.get("q_uuid")
 
-    q = RegistrationQuestion.objects
-    if "reg_que_allowed" in context["features"]:
-        q = q.annotate(allowed_map=ArrayAgg("allowed__id"))
-    q = q.get(event=context["event"], uuid=q_uuid)
+    # Get question from cache instead of DB query
+    cached_questions = get_cached_registration_questions(context["event"])
+    q = None
+    for question in cached_questions:
+        if str(question["uuid"]) == str(q_uuid):
+            q = question
+            break
 
-    if "reg_que_allowed" in context["features"] and q.allowed_map and q.allowed_map[0]:
+    if not q:
+        return None
+
+    # Check allowed permissions
+    if "reg_que_allowed" in context["features"] and q.get("allowed_map") and q["allowed_map"][0]:
         run_id = context["run"].id
         organizer = run_id in context["all_runs"] and 1 in context["all_runs"][run_id]
-        if not organizer and context["member"].id not in q.allowed_map:
+        if not organizer and context["member"].id not in q["allowed_map"]:
             return None
 
     res = {}
@@ -645,21 +662,23 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
 
     max_length = 100
 
-    if q.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
+    if q["typ"] in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
+        # Use cached options instead of DB query
         cho = {}
-        for opt in RegistrationOption.objects.filter(question=q):
-            cho[opt.id] = opt.get_form_text()
+        for opt in q.get("options", []):
+            cho[opt["id"]] = get_option_form_text(opt)
 
-        for el in RegistrationChoice.objects.filter(question=q, registration__run=context["run"]).select_related(
-            "registration"
-        ):
+        # Still need to query choices as they're registration-specific
+        for el in RegistrationChoice.objects.filter(
+            question_id=q["id"], registration__run=context["run"]
+        ).select_related("registration"):
             reg_uuid = str(el.registration.uuid)
             if reg_uuid not in res:
                 res[reg_uuid] = []
             res[reg_uuid].append(cho[el.option_id])
 
-    elif q.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH]:
-        que = RegistrationAnswer.objects.filter(question=q, registration__run=context["run"])
+    elif q["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH]:
+        que = RegistrationAnswer.objects.filter(question_id=q["id"], registration__run=context["run"])
         que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("registration_id", "short_text", "registration__uuid")
         for el in que:
@@ -668,7 +687,7 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
                 popup.append(el["registration__uuid"])
             res[el["registration__uuid"]] = answer
 
-    return JsonResponse({"res": res, "popup": popup, "q_uuid": str(q.uuid)})
+    return JsonResponse({"res": res, "popup": popup, "q_uuid": str(q["uuid"])})
 
 
 @login_required

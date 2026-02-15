@@ -103,8 +103,14 @@ class Quest(Writing):
             js["typ"] = self.typ.number
 
         # Serialize visible traits
+        # Use prefetched data if available, otherwise query
         # noinspection PyUnresolvedReferences
-        js["traits"] = [t.show() for t in self.traits.filter(hide=False)]
+        if hasattr(self, "_prefetched_objects_cache") and "traits" in self._prefetched_objects_cache:
+            # Use prefetched data (assumes already filtered for hide=False)
+            js["traits"] = [t.show() for t in self.traits.all() if not t.hide]
+        else:
+            # Fall back to query
+            js["traits"] = [t.show() for t in self.traits.filter(hide=False)]
 
         return js
 

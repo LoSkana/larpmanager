@@ -25,7 +25,7 @@ from decimal import Decimal
 
 import pytest
 
-from larpmanager.cache.question import get_cached_registration_questions
+from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.forms.registration import RegistrationForm
 from larpmanager.models.form import QuestionStatus, RegistrationQuestion
 from larpmanager.models.member import Member
@@ -36,7 +36,7 @@ from larpmanager.tests.unit.base import BaseTestCase
 
 def get_question(questions: list, id: int):
     for question in questions:
-        if question.id == id:
+        if question["id"] == id:
             return question
     return None
 
@@ -63,7 +63,7 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         question = get_question(questions, question.id)
 
         # Question should be skipped (no ticket selected)
-        result = question.skip(registration, features=["reg_que_tickets"])
+        result = skip_registration_question(question, registration, features=["reg_que_tickets"])
         self.assertTrue(result)
 
     def test_question_skip_when_wrong_ticket_selected(self) -> None:
@@ -86,7 +86,7 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         question = get_question(questions, question.id)
 
         # Question should be skipped (wrong ticket)
-        result = question.skip(registration, features=["reg_que_tickets"])
+        result = skip_registration_question(question, registration, features=["reg_que_tickets"])
         self.assertTrue(result)
 
     def test_question_shown_when_correct_ticket_selected(self) -> None:
@@ -108,7 +108,7 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         question = get_question(questions, question.id)
 
         # Question should NOT be skipped (correct ticket)
-        result = question.skip(registration, features=["reg_que_tickets"])
+        result = skip_registration_question(question, registration, features=["reg_que_tickets"])
         self.assertFalse(result)
 
     def test_question_shown_when_one_of_multiple_tickets_selected(self) -> None:
@@ -132,7 +132,7 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         question = get_question(questions, question.id)
 
         # Question should NOT be skipped (ticket2 is allowed)
-        result = question.skip(registration, features=["reg_que_tickets"])
+        result = skip_registration_question(question, registration, features=["reg_que_tickets"])
         self.assertFalse(result)
 
     def test_question_shown_when_no_tickets_required(self) -> None:
@@ -153,7 +153,7 @@ class TestRegistrationQuestionTicketFiltering(BaseTestCase):
         question = get_question(questions, question.id)
 
         # Question should NOT be skipped (no ticket restriction)
-        result = question.skip(registration, features=["reg_que_tickets"])
+        result = skip_registration_question(question, registration, features=["reg_que_tickets"])
         self.assertFalse(result)
 
     def test_form_field_not_required_for_wrong_ticket(self) -> None:
@@ -214,7 +214,7 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         question = get_question(questions, question.id)
 
         # Question should be skipped (no character)
-        result = question.skip(registration, features=["reg_que_faction"])
+        result = skip_registration_question(question, registration, features=["reg_que_faction"])
         self.assertTrue(result)
 
     def test_question_skip_when_character_has_wrong_faction(self) -> None:
@@ -246,7 +246,7 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         question = get_question(questions, question.id)
 
         # Question should be skipped (wrong faction)
-        result = question.skip(registration, features=["reg_que_faction"])
+        result = skip_registration_question(question, registration, features=["reg_que_faction"])
         self.assertTrue(result)
 
     def test_question_shown_when_character_has_correct_faction(self) -> None:
@@ -277,7 +277,7 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         question = get_question(questions, question.id)
 
         # Question should NOT be skipped (correct faction)
-        result = question.skip(registration, features=["reg_que_faction"])
+        result = skip_registration_question(question, registration, features=["reg_que_faction"])
         self.assertFalse(result)
 
     def test_question_shown_when_character_has_one_of_multiple_factions(self) -> None:
@@ -310,7 +310,7 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         question = get_question(questions, question.id)
 
         # Question should NOT be skipped (faction2 is allowed)
-        result = question.skip(registration, features=["reg_que_faction"])
+        result = skip_registration_question(question, registration, features=["reg_que_faction"])
         self.assertFalse(result)
 
     def test_question_shown_when_no_faction_required(self) -> None:
@@ -338,7 +338,7 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         question = get_question(questions, question.id)
 
         # Question should NOT be skipped (no faction restriction)
-        result = question.skip(registration, features=["reg_que_faction"])
+        result = skip_registration_question(question, registration, features=["reg_que_faction"])
         self.assertFalse(result)
 
     def test_question_skip_for_new_registration_with_faction_requirement(self) -> None:
@@ -363,7 +363,7 @@ class TestRegistrationQuestionFactionFiltering(BaseTestCase):
         question = get_question(questions, question.id)
 
         # Question should be skipped (new registration with faction requirement)
-        result = question.skip(registration, features=["reg_que_faction"])
+        result = skip_registration_question(question, registration, features=["reg_que_faction"])
         self.assertTrue(result)
 
 
@@ -400,7 +400,7 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         params = {"run": run, "all_runs": {}, "member": member}
 
         # Question should be skipped for non-organizer (not in allowed list)
-        result = question.skip(registration, features=["reg_que_allowed"], params=params, is_organizer=True)
+        result = skip_registration_question(question, registration, features=["reg_que_allowed"], params=params, is_organizer=True)
         self.assertTrue(result)
 
     def test_question_shown_when_member_in_allowed_list(self) -> None:
@@ -424,7 +424,7 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         params = {"run": run, "all_runs": {}, "member": member}
 
         # Question should NOT be skipped (member in allowed list)
-        result = question.skip(registration, features=["reg_que_allowed"], params=params, is_organizer=True)
+        result = skip_registration_question(question, registration, features=["reg_que_allowed"], params=params, is_organizer=True)
         self.assertFalse(result)
 
     def test_question_shown_when_run_organizer(self) -> None:
@@ -452,7 +452,7 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         params = {"run": run, "all_runs": {run.id: {1: True}}, "member": member}
 
         # Question should NOT be skipped (run organizer sees all)
-        result = question.skip(registration, features=["reg_que_allowed"], params=params, is_organizer=True)
+        result = skip_registration_question(question, registration, features=["reg_que_allowed"], params=params, is_organizer=True)
         self.assertFalse(result)
 
     def test_question_shown_when_no_allowed_members_set(self) -> None:
@@ -475,7 +475,7 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
         params = {"run": run, "all_runs": {}, "member": member}
 
         # Question should NOT be skipped (no restriction)
-        result = question.skip(registration, features=["reg_que_allowed"], params=params, is_organizer=True)
+        result = skip_registration_question(question, registration, features=["reg_que_allowed"], params=params, is_organizer=True)
         self.assertFalse(result)
 
     def test_question_shown_to_non_organizer_when_no_restriction(self) -> None:
@@ -491,10 +491,13 @@ class TestRegistrationQuestionAllowedMembersFiltering(BaseTestCase):
             user=self.create_user(username=f"other_{unique_id}", email=f"other_{unique_id}@example.com")
         )
         question.allowed.add(other_member)
+        question.save()
 
         # Create registration
         registration = self.create_registration(member=member, run=run)
+        questions = get_cached_registration_questions(event=event)
+        question = get_question(questions, question.id)
 
         # Question should NOT be skipped when feature is not enabled
-        result = question.skip(registration, features=[], params=None, is_organizer=False)
+        result = skip_registration_question(question, registration, features=[], params=None, is_organizer=False)
         self.assertFalse(result)

@@ -598,11 +598,11 @@ def check_missing_mandatory(context: dict) -> None:
     questions = get_cached_writing_questions(context["event"], QuestionApplicable.CHARACTER)
     character_id = _get_character_cache_id(context)
     for question in questions:
-        if question.status != QuestionStatus.MANDATORY:
+        if question["status"] != QuestionStatus.MANDATORY:
             continue
-        model = question_type_to_model.get(question.typ)
-        if model and not model.objects.filter(element_id=character_id, question=question).exists():
-            missing_question_names.append(question.name)
+        model = question_type_to_model.get(question["typ"])
+        if model and not model.objects.filter(element_id=character_id, question_id=question["id"]).exists():
+            missing_question_names.append(question["name"])
 
     context["missing_fields"] = ", ".join(missing_question_names)
 

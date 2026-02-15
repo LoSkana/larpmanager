@@ -115,7 +115,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Set up character-specific fields including factions and custom questions
         self._init_character()
 
-    def check_editable(self, question: WritingQuestion) -> bool:
+    def check_editable(self, question: dict) -> bool:
         """Check if a question is editable based on event config and instance status.
 
         Args:
@@ -136,7 +136,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             return True
 
         # Get allowed statuses for editing this question
-        allowed_editable_statuses = question.get_editable()
+        allowed_editable_statuses = question.get("editable", [])
 
         # If no status restrictions, question is always editable
         if not allowed_editable_statuses:
@@ -185,7 +185,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
                 continue
 
             # Categorize fields based on question type length
-            if len(question.typ) == 1:
+            if len(question["typ"]) == 1:
                 fields_custom.add(field_key)
             else:
                 fields_default.add(field_key)
@@ -864,7 +864,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
         writing_questions = get_cached_writing_questions(self.params["event"], self.params["writing_typ"])
 
         # Extract already used question types to avoid duplicates
-        already_used_types = list({q.typ for q in writing_questions})
+        already_used_types = list({q["typ"] for q in writing_questions})
 
         # Handle existing instance - allow editing current type
         if self.instance.pk and self.instance.typ:

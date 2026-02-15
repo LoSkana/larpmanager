@@ -146,12 +146,12 @@ def save_version(element: Any, model_type: str, member: Member, *, to_delete: bo
         texts = []
 
         # Collect all applicable questions and their values
-        for que in get_cached_writing_questions(element.event, model_type):
-            value = _get_field_value(element, que)
+        for question in get_cached_writing_questions(element.event, model_type):
+            value = _get_field_value(element, question)
             if not value:
                 continue
             value = html_clean(value)
-            texts.append(f"{que.name}: {value}")
+            texts.append(f"{question.get('name')}: {value}")
 
         tv.text = "\n".join(texts)
     else:
@@ -193,20 +193,21 @@ def _get_field_value(element: Any, question: Any) -> str | None:
     mapping = _get_values_mapping(element)
 
     # Check if question type has a direct mapping function
-    if question.typ in mapping:
-        return mapping[question.typ]()
+    if question["typ"] in mapping:
+        return mapping[question["typ"]]()
 
     # Handle text-based question types (paragraph, text, email)
-    if question.typ in {"p", "t", "e"}:
-        answers = WritingAnswer.objects.filter(question=question, element_id=element.id)
+    if question["typ"] in {"p", "t", "e"}:
+        answers = WritingAnswer.objects.filter(question_id=question["id"], element_id=element.id)
         if answers:
             return answers.first().text
         return ""
 
     # Handle selection-based question types (single, multiple choice)
-    if question.typ in {"s", "m"}:
+    if question["typ"] in {"s", "m"}:
         return ", ".join(
-            choice.option.name for choice in WritingChoice.objects.filter(question=question, element_id=element.id)
+            choice.option.name
+            for choice in WritingChoice.objects.filter(question_id=question["id"], element_id=element.id)
         )
 
     return None

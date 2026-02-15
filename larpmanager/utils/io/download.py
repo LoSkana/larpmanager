@@ -249,7 +249,7 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
             applicable_question_list = get_cached_writing_questions(context["event"], applicable_questions)
 
         # Extract question IDs for efficient database filtering
-        question_ids = {question.id for question in applicable_question_list}
+        question_ids = {question["id"] for question in applicable_question_list}
         filter_kwargs = {"question_id__in": question_ids, f"{reference_field_name}__in": element_ids}
 
         # Process multiple choice answers and organize by question and element
@@ -327,26 +327,26 @@ def _get_applicable_row(context: dict, element: object, model: str, *, member_co
 
     # Process each question and extract corresponding values
     for question in context["questions"]:
-        column_headers.append(question.name)
+        column_headers.append(question["name"])
 
         # Get element-specific value mapping for special question types
         question_type_mapping = _get_values_mapping(element)
         cell_value = ""
 
         # Handle mapped question types (direct element attributes)
-        if question.typ in question_type_mapping:
-            cell_value = question_type_mapping[question.typ]()
+        if question["typ"] in question_type_mapping:
+            cell_value = question_type_mapping[question["typ"]]()
         # Handle text-based question types (paragraph, text, email)
-        elif question.typ in {"p", "t", "e"}:
-            if question.id in question_answers and element.id in question_answers[question.id]:
-                cell_value = question_answers[question.id][element.id]
+        elif question["typ"] in {"p", "t", "e"}:
+            if question["id"] in question_answers and element.id in question_answers[question["id"]]:
+                cell_value = question_answers[question["id"]][element.id]
         # Handle choice-based question types (single, multiple)
         elif (
-            question.typ in {"s", "m"}
-            and question.id in question_choices
-            and element.id in question_choices[question.id]
+            question["typ"] in {"s", "m"}
+            and question["id"] in question_choices
+            and element.id in question_choices[question["id"]]
         ):
-            cell_value = ", ".join(question_choices[question.id][element.id])
+            cell_value = ", ".join(question_choices[question["id"]][element.id])
 
         # Clean value for export format (remove tabs, convert newlines)
         cell_value = cell_value.replace("\t", "").replace("\n", "<br />")
@@ -740,9 +740,11 @@ def _extract_values(field_names: list, objects: list, field_mappings: dict) -> l
                 # Traverse the relationship chain (e.g., "question__name" -> row.question.name)
                 field_value = row
                 for part in field_name.split("__"):
-                    field_value = getattr(field_value, part)
+                    # Support both dict and object access
+                    field_value = field_value[part] if isinstance(field_value, dict) else getattr(field_value, part)
             else:
-                field_value = getattr(row, field_name)
+                # Support both dict and object access
+                field_value = row[field_name] if isinstance(row, dict) else getattr(row, field_name)
 
             # Apply mapping transformation if field and value exist in mappings
             if field_name in field_mappings and field_value in field_mappings[field_name]:
@@ -886,7 +888,7 @@ def _get_column_names(context: dict) -> None:
         ]
         # Build field type mapping from registration questions for validation
         questions = get_cached_registration_questions(context["event"])
-        context["fields"] = {question.name: question.typ for question in questions}
+        context["fields"] = {question["name"]: question["typ"] for question in questions}
 
         # Remove donation column if pay-what-you-want feature is disabled
         if "pay_what_you_want" not in context["features"]:
@@ -1014,10 +1016,10 @@ def _get_writing_names(context: dict) -> None:
     # Retrieve and process writing questions for the event
     writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
     for question in writing_questions:
-        context["fields"][question.name] = question.typ
+        context["fields"][question["name"]] = question["typ"]
         # Store the name field for special handling
-        if question.typ == "name":
-            context["field_name"] = question.name
+        if question["typ"] == "name":
+            context["field_name"] = question["name"]
 
     # Initialize base column configuration
     context["columns"] = [{}]

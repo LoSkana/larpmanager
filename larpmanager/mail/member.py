@@ -218,7 +218,7 @@ def notify_membership_reject(member: Any, resp: Any) -> None:
     body = _("We inform you that your membership of the Association has not been accepted by the board") + "."
     if resp:
         body += " " + _("Motivation") + f": {resp}"
-    body += _("For more information, write to us") + "!"
+    body += " " + _("For more information, write to us") + "!"
     my_send_mail(subject, body, member, member.membership)
 
 

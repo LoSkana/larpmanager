@@ -26,6 +26,7 @@ from typing import Any
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.db.models import Q, QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
@@ -916,7 +917,8 @@ def quests(request: HttpRequest, event_slug: str, quest_type_uuid: str | None = 
     # Filter quests by event, visibility, and type, then add complete quest data
     quest_queryset = (
         Quest.objects.filter(event=context["event"], hide=False, typ=context["quest_type"])
-        .prefetch_related("traits")
+        .select_related("typ")
+        .prefetch_related(models.Prefetch("traits", queryset=Trait.objects.filter(hide=False)))
         .order_by("number")
     )
 
