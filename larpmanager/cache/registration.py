@@ -29,9 +29,9 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Run
 from larpmanager.models.form import BaseQuestionType, RegistrationChoice, WritingChoice
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
+from larpmanager.models.utils import decimal_to_str
 from larpmanager.models.writing import Character
 from larpmanager.utils.core.common import _search_char_reg
-from larpmanager.utils.core.string import decimal_to_str
 from main.settings import CACHE_TIMEOUT_1_DAY
 
 
