@@ -48,6 +48,7 @@ from larpmanager.accounting.registration import (
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions
+from larpmanager.cache.registration import get_registration_tickets
 from larpmanager.cache.text_fields import get_cache_registration_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
@@ -376,10 +377,13 @@ def _orga_registrations_prepare(context: dict) -> None:
         if character["player_uuid"] not in context["reg_chars"]:
             context["reg_chars"][character["player_uuid"]] = []
         context["reg_chars"][character["player_uuid"]].append(character)
+
     context["reg_tickets"] = {}
-    for ticket in RegistrationTicket.objects.filter(event=context["event"]).order_by("-price"):
-        ticket.emails = []
-        context["reg_tickets"][ticket.id] = ticket
+    # Get tickets from cache and sort by price descending
+    tickets = sorted(get_registration_tickets(context["event"].id), key=lambda t: t["price"], reverse=True)
+    for ticket in tickets:
+        ticket["emails"] = []
+        context["reg_tickets"][ticket["id"]] = ticket
     context["reg_questions"] = _get_registration_fields(context, context["member"])
 
     context["no_grouping"] = get_event_config(
