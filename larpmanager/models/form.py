@@ -318,14 +318,27 @@ class WritingQuestion(UuidMixin, BaseModel):
         """Serialize question to dictionary for caching with nested options."""
         data = super().as_dict(many_to_many=False)
 
-        # Ensure description is always included (even if empty string)
+        # Ensure fields with falsy defaults are always included
         data["description"] = self.description
+        data["order"] = self.order
+        data["max_length"] = self.max_length
+        data["printable"] = self.printable
+
+        # Add display values for choice fields (for template rendering)
+        data["get_typ_display"] = self.get_typ_display()
+        data["get_status_display"] = self.get_status_display()
+        data["get_visibility_display"] = self.get_visibility_display()
+        data["get_editable_display"] = self.get_editable_display()
 
         # Add editable as computed field
         data["editable"] = self.get_editable()
 
         # Add nested options
         data["options"] = [opt.as_dict() for opt in self.options.all()]
+
+        # Add options_list for backward compatibility with templates
+        data["options_list"] = data["options"]
+
         return data
 
     class Meta:
@@ -419,6 +432,12 @@ class WritingOption(UuidMixin, BaseModel):
         # Ensure fields with falsy defaults are always included
         data["description"] = self.description
         data["order"] = self.order
+        data["max_available"] = self.max_available
+
+        # Preserve tickets_map annotation if it exists (added by cache queries)
+        if hasattr(self, "tickets_map"):
+            value = self.tickets_map or []
+            data["tickets_map"] = [item for item in value if item is not None]
 
         return data
 
@@ -604,8 +623,14 @@ class RegistrationQuestion(UuidMixin, BaseModel):
         """Serialize question to dictionary for caching with nested options and computed fields."""
         data = super().as_dict(many_to_many=False)
 
-        # Ensure description is always included (even if empty string)
+        # Ensure fields with falsy defaults are always included
         data["description"] = self.description
+        data["order"] = self.order
+        data["max_length"] = self.max_length
+
+        # Add display values for choice fields (for template rendering)
+        data["get_typ_display"] = self.get_typ_display()
+        data["get_status_display"] = self.get_status_display()
 
         # Add section-related computed fields
         data["section_order"] = self.section.order if self.section else None

@@ -68,21 +68,23 @@ def skip_registration_question(
     if question["status"] == QuestionStatus.HIDDEN and not is_organizer:
         return True
 
-    if _skip_question_factions(features, registration, question):
-        return True
-
+    # Check ticket restrictions
     if _skip_question_tickets(features, registration, question):
         return True
 
-    if not registration or not registration.pk:
-        return False
+    # Check faction restrictions
+    if _skip_question_factions(features, registration, question):
+        return True
 
-    return bool(_skip_question_allowed(features, question, params, is_organizer=is_organizer))
+    # Check allowed organizer restrictions
+    return bool(_skip_question_allowed(features, registration, question, params, is_organizer=is_organizer))
 
 
-def _skip_question_allowed(features: dict, question: dict, params: dict, *, is_organizer: bool) -> bool:
+def _skip_question_allowed(
+    features: dict, registration: Registration, question: dict, params: dict, *, is_organizer: bool
+) -> bool:
     """Check if skip showing question due to staff member not allowed."""
-    if "reg_que_allowed" not in features or not is_organizer or not params:
+    if "reg_que_allowed" not in features or not registration or not registration.pk or not is_organizer or not params:
         return False
 
     allowed_map = [a for a in question.get("allowed_map", []) if a is not None]
@@ -97,12 +99,12 @@ def _skip_question_allowed(features: dict, question: dict, params: dict, *, is_o
 
 def _skip_question_tickets(features: dict, registration: Registration, question: dict) -> bool:
     """Check if skip showing question if the correct ticket is not selected."""
-    if "reg_que_tickets" not in features:
+    if "reg_que_tickets" not in features or not registration or not registration.pk:
         return False
 
     allowed_ticket_uuids = [ticket_uuid for ticket_uuid in question.get("tickets_map", []) if ticket_uuid is not None]
     if allowed_ticket_uuids:
-        if not registration or not registration.ticket:
+        if not registration.ticket:
             return True
 
         if registration.ticket.uuid not in allowed_ticket_uuids:
@@ -142,11 +144,13 @@ def init_writing_questions_cache(event: Event) -> dict:
         Dict mapping applicable types to lists of question dicts with serialized options
 
     """
-    # Load all writing questions with prefetched options
+    # Load all writing questions with options annotated with tickets_map
+    options_queryset = WritingOption.objects.order_by("order").annotate(tickets_map=ArrayAgg("tickets__id"))
+
     all_questions = (
         event.get_elements(WritingQuestion)
         .order_by("order")
-        .prefetch_related(Prefetch("options", queryset=WritingOption.objects.order_by("order")))
+        .prefetch_related(Prefetch("options", queryset=options_queryset))
     )
 
     # Serialize questions to dicts
