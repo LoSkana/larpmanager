@@ -1797,9 +1797,9 @@ class OrgaPreferencesForm(ExePreferencesForm):
                 [
                     (
                         f".lq_{field_uuid}",
-                        registration_field.name
-                        if len(registration_field.name) <= field_name_max_length
-                        else registration_field.name[: field_name_max_length - 5] + " [...]",
+                        registration_field["name"]
+                        if len(registration_field["name"]) <= field_name_max_length
+                        else registration_field["name"][: field_name_max_length - 5] + " [...]",
                     )
                     for field_uuid, registration_field in registration_fields.items()
                 ],
