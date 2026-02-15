@@ -146,7 +146,7 @@ def _init_element_cache_text_field(
         if field_key in result_cache[element_uuid]:
             continue
 
-        answers = WritingAnswer.objects.filter(question_id=question["pk"], element_id=element.id).order_by("-updated")
+        answers = WritingAnswer.objects.filter(question_id=question["id"], element_id=element.id).order_by("-updated")
         if not answers:
             continue
 
