@@ -990,7 +990,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         """Save form instance with custom field handling."""
         # Handle auto ticket
         if hasattr(self, "_single_ticket"):
-            self.instance.ticket = self._single_ticket
+            self.instance.ticket_id = self._single_ticket["id"]
 
         # Call parent save method to get the instance
         return super(BaseRegistrationForm, self).save(commit=commit)
