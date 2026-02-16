@@ -33,7 +33,6 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.cache.registration import clear_registration_counts_cache, get_registration_counts
-from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.models.accounting import AccountingItemMembership, PaymentInvoice, PaymentStatus, PaymentType
 from larpmanager.models.event import Event, PreRegistration, RegistrationStatus, Run
 from larpmanager.models.form import (
@@ -1185,5 +1184,4 @@ def reset_registration_ticket(instance: RegistrationTicket) -> None:
     """Clear accounting cache for all runs in the ticket's event."""
     for run in instance.event.runs.all():
         clear_registration_accounting_cache(run.id)
-        clear_widget_cache(run.id)
         clear_registration_counts_cache(run.id)

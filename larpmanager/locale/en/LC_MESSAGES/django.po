@@ -79,6 +79,31 @@ msgstr ""
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr ""
 
+msgid "Registrations on external link"
+msgstr ""
+
+msgid "Pre-registration active"
+msgstr ""
+
+msgid "Registrations opening not set"
+msgstr ""
+
+msgid "Registrations open"
+msgstr ""
+
+msgid "Filler registrations"
+msgstr ""
+
+msgid "Waiting list registrations"
+msgstr ""
+
+msgid "Registration closed"
+msgstr ""
+
+#, python-format
+msgid "Registrations opening at: %(date)s"
+msgstr ""
+
 msgid "Manage expense items for contributors"
 msgstr ""
 
@@ -4456,9 +4481,6 @@ msgid "Account activation"
 msgstr ""
 
 msgid "Something went wrong in the account activation"
-msgstr ""
-
-msgid "Registration closed"
 msgstr ""
 
 msgid "Registration complete"
@@ -9778,28 +9800,6 @@ msgstr ""
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
-msgstr ""
-
-msgid "Registrations on external link"
-msgstr ""
-
-msgid "Pre-registration active"
-msgstr ""
-
-msgid "Registrations opening not set"
-msgstr ""
-
-msgid "Registrations open"
-msgstr ""
-
-msgid "Filler registrations"
-msgstr ""
-
-msgid "Waiting list registrations"
-msgstr ""
-
-#, python-format
-msgid "Registrations opening at: %(date)s"
 msgstr ""
 
 msgid "No events are present, create one"

@@ -2793,6 +2793,10 @@ input[type="number"] {
   scrollbar-color: rgba(var(--ter-rgb), 0.5) rgba(var(--pri-rgb), 0.1);
 }
 
+.grid .grid-line {
+  flex: 0 0 100% !important;
+}
+
 .grid .grid-item h2 {
   margin-top: 0;
   font-size: 1.3em;
