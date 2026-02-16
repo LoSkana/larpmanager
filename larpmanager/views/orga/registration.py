@@ -187,7 +187,7 @@ def _orga_registrations_tickets(registration: Any, context: dict) -> None:
         ):
             registration_type = ("0", _("Provisional"))
         elif ticket.get("tier") in ticket_types:
-            registration_type = ticket_types[ticket.tier]
+            registration_type = ticket_types[ticket.get("tier")]
 
     # Ensure both default and current type categories exist in context
     for type_key in [default_ticket_type, registration_type]:
