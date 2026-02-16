@@ -141,12 +141,12 @@ def _init_element_cache_text_field(
     questions = get_cached_writing_questions(element.event, applicable)
 
     # Process editor-type questions and cache their answers
-    for question in [q for q in questions if q.typ == BaseQuestionType.EDITOR]:
-        field_key = question.uuid
+    for question in [q for q in questions if q["typ"] == BaseQuestionType.EDITOR]:
+        field_key = question["uuid"]
         if field_key in result_cache[element_uuid]:
             continue
 
-        answers = WritingAnswer.objects.filter(question_id=question.pk, element_id=element.id).order_by("-updated")
+        answers = WritingAnswer.objects.filter(question_id=question["id"], element_id=element.id).order_by("-updated")
         if not answers:
             continue
 
@@ -313,14 +313,16 @@ def _init_element_cache_registration_field(registration: Registration, cache_res
     questions = [
         question
         for question in get_cached_registration_questions(registration.run.event)
-        if question.typ == BaseQuestionType.EDITOR
+        if question["typ"] == BaseQuestionType.EDITOR
     ]
 
     # Process each editor question and cache the answer text
     for question in questions:
         try:
-            answer_text = RegistrationAnswer.objects.get(question=question, registration_id=registration.id).text
-            field_key = str(question.uuid)
+            answer_text = RegistrationAnswer.objects.get(
+                question_id=question["id"], registration_id=registration.id
+            ).text
+            field_key = str(question["uuid"])
             cache_result[registration_uuid][field_key] = get_single_cache_text_field(
                 registration_uuid,
                 field_key,

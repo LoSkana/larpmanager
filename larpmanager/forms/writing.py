@@ -76,7 +76,7 @@ class WritingForm(BaseModelForm):
         """
         question_types = set()
         for question in self.questions:
-            question_types.add(question.typ)
+            question_types.add(question["typ"])
 
         if WritingQuestionType.COVER not in question_types:
             self.delete_field("cover")
@@ -223,7 +223,7 @@ class BaseWritingForm(BaseRegistrationForm):
 
     def get_option_key_count(self, option: Any) -> str:
         """Return cache key for tracking option character count."""
-        return f"option_char_{option.id}"
+        return f"option_char_{option['id']}"
 
     def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
         """Save the form and handle registration questions if present.

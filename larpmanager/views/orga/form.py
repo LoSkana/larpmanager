@@ -17,14 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from __future__ import annotations
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import F, QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.forms.registration import OrgaRegistrationTicketForm
 from larpmanager.models.form import RegistrationOption, RegistrationQuestion
 from larpmanager.models.registration import (
@@ -153,6 +153,12 @@ def orga_registration_sections_order(
     return orga_order(request, event_slug, OrgaAction.REGISTRATION_SECTIONS, section_uuid, order)
 
 
+def get_ordered_registration_questions(context: dict) -> QuerySet[RegistrationQuestion]:
+    """Get registration questions ordered by section and question order."""
+    questions = context["event"].get_elements(RegistrationQuestion)
+    return questions.order_by(F("section__order").asc(nulls_first=True), "order")
+
+
 @login_required
 def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle the organization registration form view.
@@ -180,11 +186,7 @@ def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpRespons
     context["download"] = 1
 
     # Fetch ordered registration questions with their options
-    context["list"] = get_cached_registration_questions(context["event"])
-
-    # Sort options by order field for each question
-    for el in context["list"]:
-        el.options_list = el.options.order_by("order")
+    context["list"] = get_ordered_registration_questions(context).prefetch_related("options")
 
     return render(request, "larpmanager/orga/registration/form.html", context)
 
