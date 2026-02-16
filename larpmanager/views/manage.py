@@ -248,17 +248,9 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     # Check if currency configuration suggestion has been dismissed
     _check_currency_priority(request, context, features)
 
-    # Get ongoing runs (events in START or SHOW development status)
-    ongoing_runs_queryset = Run.objects.filter(
-        event__association_id=context["association_id"],
-        development__in=[DevelopStatus.START, DevelopStatus.SHOW],
-    )
-    context["ongoing_runs"] = ongoing_runs_queryset.select_related("event").order_by("end")
-
-    # Add registration status and counts for each ongoing run
-    for run in context["ongoing_runs"]:
-        run.registration_status = _get_registration_status(run)
-        run.registration_counts = _get_registration_counts(run)
+    # Get ongoing runs directly from cache (already contains all data needed by template)
+    actions_data_exe = get_exe_widget_cache(context["association_id"], "actions")
+    context["ongoing_runs"] = actions_data_exe.get("ongoing_runs", [])
 
     # Load widgets
     _exe_widgets(request, context, features)
@@ -301,7 +293,7 @@ def _exe_widgets(request: HttpRequest, context: dict, features: dict) -> None:
     ]
 
     context["widgets"] = {
-        widget: get_exe_widget_cache(association_id=context["association_id"], widget_name=widget)
+        widget: get_exe_widget_cache(context["association_id"], widget)
         for widget in widgets_available
     }
 
@@ -351,15 +343,12 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     if not association_features:
         association_features = get_association_features(context["association_id"])
 
-    # Check for runs that should be concluded
-    runs_to_conclude = Run.objects.filter(
-        event__association_id=context["association_id"],
-        development__in=[DevelopStatus.START, DevelopStatus.SHOW],
-        end__lt=timezone.now().date(),
-    ).values_list("search", flat=True)
+    # Get cached actions data
+    actions_data = get_exe_widget_cache(context["association_id"], "actions")
 
     # Add action for past runs still open
-    if runs_to_conclude:
+    if actions_data.get("past_runs", {}).get("count", 0) > 0:
+        runs_to_conclude = actions_data["past_runs"]["runs"]
         _add_action(
             context,
             _(
@@ -370,50 +359,34 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
         )
 
     # Check for pending expense approvals
-    pending_expenses_count = AccountingItemExpense.objects.filter(
-        run__event__association_id=context["association_id"],
-        is_approved=False,
-    ).count()
-    if pending_expenses_count:
+    if actions_data.get("pending_expenses", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> expenses to approve") % {"number": pending_expenses_count},
+            _("There are <b>%(number)s</b> expenses to approve") % {"number": actions_data["pending_expenses"]["count"]},
             "exe_expenses",
         )
 
     # Check for pending payment approvals
-    pending_payments_count = PaymentInvoice.objects.filter(
-        association_id=context["association_id"],
-        status=PaymentStatus.SUBMITTED,
-    ).count()
-    if pending_payments_count:
+    if actions_data.get("pending_payments", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> payments to approve") % {"number": pending_payments_count},
+            _("There are <b>%(number)s</b> payments to approve") % {"number": actions_data["pending_payments"]["count"]},
             "exe_invoices",
         )
 
     # Check for pending refund approvals
-    pending_refunds_count = RefundRequest.objects.filter(
-        association_id=context["association_id"],
-        status=RefundStatus.REQUEST,
-    ).count()
-    if pending_refunds_count:
+    if actions_data.get("pending_refunds", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> refunds to deliver") % {"number": pending_refunds_count},
+            _("There are <b>%(number)s</b> refunds to deliver") % {"number": actions_data["pending_refunds"]["count"]},
             "exe_refunds",
         )
 
     # Check for pending member approvals
-    pending_members_count = Membership.objects.filter(
-        association_id=context["association_id"],
-        status=MembershipStatus.SUBMITTED,
-    ).count()
-    if pending_members_count:
+    if actions_data.get("pending_members", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> members to approve") % {"number": pending_members_count},
+            _("There are <b>%(number)s</b> members to approve") % {"number": actions_data["pending_members"]["count"]},
             "exe_membership",
         )
 
@@ -421,7 +394,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     _exe_accounting_actions(context, association_features)
 
     # Process user-specific actions
-    _exe_users_actions(request, context, association_features)
+    _exe_users_actions(request, context, association_features, actions_data)
 
     actions = {
         "exe_quick": _("Quickly configure your organization's most important settings"),
@@ -437,13 +410,14 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
         _add_action(context, suggestion_text, permission_key)
 
 
-def _exe_users_actions(request: HttpRequest, context: dict, enabled_features: dict[str, Any]) -> None:
+def _exe_users_actions(request: HttpRequest, context: dict, enabled_features: dict[str, Any], actions_data: dict) -> None:
     """Process user management actions and setup tasks for executives.
 
     Args:
         request: HTTP request object
         context: Context dictionary to populate with actions
         enabled_features: Set of enabled features
+        actions_data: Cached actions data dictionary
 
     """
     if "membership" in enabled_features:
@@ -465,14 +439,12 @@ def _exe_users_actions(request: HttpRequest, context: dict, enabled_features: di
             "exe_config",
         )
 
-    if "help" in enabled_features:
-        _closed_questions, open_questions = _get_help_questions(context, request)
-        if open_questions:
-            _add_action(
-                context,
-                _("There are <b>%(number)s</b> questions to answer") % {"number": len(open_questions)},
-                "exe_questions",
-            )
+    if "help" in enabled_features and actions_data.get("open_help_questions", {}).get("count", 0) > 0:
+        _add_action(
+            context,
+            _("There are <b>%(number)s</b> questions to answer") % {"number": actions_data["open_help_questions"]["count"]},
+            "exe_questions",
+        )
 
 
 def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> None:
@@ -643,10 +615,13 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
     # Check if currency configuration suggestion has been dismissed
     _check_currency_priority(request, context, features)
 
+    # Get cached actions data
+    actions_data = get_orga_widget_cache(context["run"], "actions")
+
     # Check if character feature is properly configured
     if "character" in features:
         # Prompt to create first character if none exist
-        if not Character.objects.filter(event=context["event"]).exists():
+        if not actions_data.get("has_characters", False):
             _add_priority(
                 context,
                 _("Create the first character of the event"),
@@ -689,11 +664,10 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
         )
 
     # Check for pending character approvals
-    proposed_characters_count = context["event"].get_elements(Character).filter(status=CharacterStatus.PROPOSED).count()
-    if proposed_characters_count:
+    if actions_data.get("proposed_characters", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> characters to approve") % {"number": proposed_characters_count},
+            _("There are <b>%(number)s</b> characters to approve") % {"number": actions_data["proposed_characters"]["count"]},
             "orga_characters",
         )
 
@@ -701,74 +675,58 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
     if not get_association_config(
         context["event"].association_id, "expense_disable_orga", default_value=False, context=context
     ):
-        pending_expenses_count = AccountingItemExpense.objects.filter(run=context["run"], is_approved=False).count()
-        if pending_expenses_count:
+        if actions_data.get("pending_expenses", {}).get("count", 0) > 0:
             _add_action(
                 context,
-                _("There are <b>%(number)s</b> expenses to approve") % {"number": pending_expenses_count},
+                _("There are <b>%(number)s</b> expenses to approve") % {"number": actions_data["pending_expenses"]["count"]},
                 "orga_expenses",
             )
 
     # Check for pending payment approvals
-    pending_payments_count = PaymentInvoice.objects.filter(
-        registration__run=context["run"],
-        status=PaymentStatus.SUBMITTED,
-    ).count()
-    if pending_payments_count:
+    if actions_data.get("pending_payments", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> payments to approve") % {"number": pending_payments_count},
+            _("There are <b>%(number)s</b> payments to approve") % {"number": actions_data["pending_payments"]["count"]},
             "orga_invoices",
         )
 
     # Check for incomplete registration form questions (missing options)
-    registration_questions_without_options = list(
-        context["event"]
-        .get_elements(RegistrationQuestion)
-        .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
-        .annotate(quest_count=Count("options"))
-        .filter(quest_count=0)
-    )
-    if registration_questions_without_options:
+    if actions_data.get("registration_questions_incomplete", {}).get("count", 0) > 0:
+        registration_questions_without_options = actions_data["registration_questions_incomplete"]["names"]
         _add_priority(
             context,
             _("There are registration questions without options: %(list)s")
-            % {"list": ", ".join([question.name for question in registration_questions_without_options])},
+            % {"list": ", ".join(registration_questions_without_options)},
             "orga_registration_form",
         )
 
     # Check for incomplete writing form questions (missing options)
-    writing_questions_without_options = list(
-        context["event"]
-        .get_elements(WritingQuestion)
-        .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
-        .annotate(quest_count=Count("options"))
-        .filter(quest_count=0)
-    )
-    if writing_questions_without_options:
+    if actions_data.get("writing_questions_incomplete", {}).get("count", 0) > 0:
+        writing_questions_without_options = actions_data["writing_questions_incomplete"]["names"]
         _add_priority(
             context,
             _("There are writing fields without options: %(list)s")
-            % {"list": ", ".join([question.name for question in writing_questions_without_options])},
+            % {"list": ", ".join(writing_questions_without_options)},
             "orga_character_form",
         )
 
     # Delegate to sub-functions for additional action checks
-    _orga_user_actions(context, features, request)
+    _orga_user_actions(context, features, request, actions_data)
 
-    _orga_registration_accounting_actions(context, features)
+    _orga_registration_accounting_actions(context, features, actions_data)
 
     _orga_registration_actions(context, features)
 
-    _orga_px_actions(context, features)
+    _orga_px_actions(context, features, actions_data)
 
-    _orga_casting_actions(context, features)
+    _orga_casting_actions(context, features, actions_data)
 
 
 def _orga_user_actions(
     context: dict,
     features: dict[str, int],
     request: HttpRequest,
+    actions_data: dict,
 ) -> None:
     """Add action to context if there are unanswered help questions.
 
@@ -776,26 +734,28 @@ def _orga_user_actions(
         context: Template context dictionary to update with actions.
         features: List of enabled feature names for the organization.
         request: The current HTTP request object.
+        actions_data: Cached actions data from get_orga_widget_cache.
 
     """
     # Check if help feature is enabled
-    if "help" in features:
-        _closed_questions, open_questions = _get_help_questions(context, request)
-
-        # Add action notification if there are open questions
-        if open_questions:
-            _add_action(
-                context,
-                _("There are <b>%(number)s</b> questions to answer") % {"number": len(open_questions)},
-                "exe_questions",
-            )
+    if "help" in features and actions_data.get("open_help_questions", {}).get("count", 0) > 0:
+        _add_action(
+            context,
+            _("There are <b>%(number)s</b> questions to answer") % {"number": actions_data["open_help_questions"]["count"]},
+            "exe_questions",
+        )
 
 
-def _orga_casting_actions(context: dict, enabled_features: dict[str, Any]) -> None:
+def _orga_casting_actions(context: dict, enabled_features: dict[str, Any], actions_data: dict) -> None:
     """Add priority actions related to casting and quest builder setup.
 
     Checks for missing casting configurations and quest/trait relationships,
     adding appropriate priority suggestions for event organizers.
+
+    Args:
+        context: Context dictionary containing event and other data.
+        enabled_features: Dictionary of enabled features.
+        actions_data: Cached actions data from get_orga_widget_cache.
     """
     if "casting" in enabled_features and not get_event_config(
         context["event"].id, "casting_min", default_value=0, context=context
@@ -808,37 +768,33 @@ def _orga_casting_actions(context: dict, enabled_features: dict[str, Any]) -> No
         )
 
     if "questbuilder" in enabled_features:
-        if not context["event"].get_elements(QuestType).exists():
+        if not actions_data.get("has_quest_types", False):
             _add_priority(
                 context,
                 _("Set up quest types"),
                 "orga_quest_types",
             )
 
-        unused_quest_types = list(
-            context["event"].get_elements(QuestType).annotate(quest_count=Count("quests")).filter(quest_count=0)
-        )
-        if unused_quest_types:
+        if actions_data.get("quest_types_without_quests", {}).get("count", 0) > 0:
+            quest_type_names = actions_data["quest_types_without_quests"]["names"]
             _add_priority(
                 context,
                 _("There are quest types without quests: %(list)s")
-                % {"list": ", ".join([quest_type.name for quest_type in unused_quest_types])},
+                % {"list": ", ".join(quest_type_names)},
                 "orga_quests",
             )
 
-        unused_quests = list(
-            context["event"].get_elements(Quest).annotate(trait_count=Count("traits")).filter(trait_count=0)
-        )
-        if unused_quests:
+        if actions_data.get("quests_without_traits", {}).get("count", 0) > 0:
+            quest_names = actions_data["quests_without_traits"]["names"]
             _add_priority(
                 context,
                 _("There are quests without traits: %(list)s")
-                % {"list": ", ".join([quest.name for quest in unused_quests])},
+                % {"list": ", ".join(quest_names)},
                 "orga_traits",
             )
 
 
-def _orga_px_actions(context: dict, enabled_features: dict) -> None:
+def _orga_px_actions(context: dict, enabled_features: dict, actions_data: dict) -> None:
     """Add priority actions for experience points system setup.
 
     Checks for missing PX configurations, ability types, and deliveries,
@@ -847,6 +803,7 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
     Args:
         context: Context dictionary containing event and other relevant data
         enabled_features: Dictionary of enabled features for the current context
+        actions_data: Cached actions data from get_orga_widget_cache
 
     Returns:
         None: Function modifies context in place by adding priority suggestions
@@ -866,7 +823,7 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
         )
 
     # Verify that ability types have been set up
-    if not context["event"].get_elements(AbilityTypePx).exists():
+    if not actions_data.get("has_ability_types", False):
         _add_priority(
             context,
             _("Set up ability types"),
@@ -874,20 +831,17 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
         )
 
     # Find ability types that don't have any associated abilities
-    ability_types_without_abilities = list(
-        context["event"].get_elements(AbilityTypePx).annotate(ability_count=Count("abilities")).filter(ability_count=0)
-    )
-    # Add priority if there are unused ability types
-    if ability_types_without_abilities:
+    if actions_data.get("ability_types_without_abilities", {}).get("count", 0) > 0:
+        ability_type_names = actions_data["ability_types_without_abilities"]["names"]
         _add_priority(
             context,
             _("There are ability types without abilities: %(list)s")
-            % {"list": ", ".join([ability_type.name for ability_type in ability_types_without_abilities])},
+            % {"list": ", ".join(ability_type_names)},
             "orga_px_abilities",
         )
 
     # Check if delivery methods for experience points are configured
-    if not context["event"].get_elements(DeliveryPx).exists():
+    if not actions_data.get("has_delivery_px", False):
         _add_priority(
             context,
             _("Set up delivery for experience points"),
@@ -895,7 +849,7 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
         )
 
 
-def _orga_registration_accounting_actions(context: dict, enabled_features: dict[str, int]) -> None:
+def _orga_registration_accounting_actions(context: dict, enabled_features: dict[str, int], actions_data: dict) -> None:
     """Add priority actions related to registration and accounting setup.
 
     Checks for required configurations when certain features are enabled,
@@ -904,6 +858,7 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
     Args:
         context: Context dictionary containing event and other data
         enabled_features: List of enabled feature names
+        actions_data: Cached actions data from get_orga_widget_cache
 
     Returns:
         None: Modifies context in place by adding priority actions
@@ -921,7 +876,7 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
         )
 
     # Handle dynamic installments (quotas) setup
-    if "reg_quotas" in enabled_features and not context["event"].get_elements(RegistrationQuota).exists():
+    if "reg_quotas" in enabled_features and not actions_data.get("has_registration_quotas", False):
         _add_priority(
             context,
             _("Set up dynamic installments"),
@@ -931,7 +886,7 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
     # Handle fixed installments feature
     if "reg_installments" in enabled_features:
         # Check if installments are configured
-        if not context["event"].get_elements(RegistrationInstallment).exists():
+        if not actions_data.get("has_registration_installments", False):
             _add_priority(
                 context,
                 _("Set up fixed installments"),
@@ -939,30 +894,24 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
             )
         else:
             # Validate installment configuration - check for conflicting deadline settings
-            installments_with_both_deadlines = (
-                context["event"]
-                .get_elements(RegistrationInstallment)
-                .filter(date_deadline__isnull=False, days_deadline__isnull=False)
-            )
-            if installments_with_both_deadlines:
+            if actions_data.get("installments_both_deadlines", {}).get("count", 0) > 0:
+                installments_names = actions_data["installments_both_deadlines"]["names"]
                 _add_priority(
                     context,
                     _(
                         "You have some fixed installments with both date and days set, but those values cannot be set at the same time: %(list)s",
                     )
-                    % {"list": ", ".join([str(installment) for installment in installments_with_both_deadlines])},
+                    % {"list": ", ".join(installments_names)},
                     "orga_registration_installments",
                 )
 
             # Check for missing final installments (amount = 0)
-            tickets_missing_final_installment = (
-                context["event"].get_elements(RegistrationTicket).exclude(installments__amount=0)
-            )
-            if tickets_missing_final_installment:
+            if actions_data.get("tickets_missing_final_installment", {}).get("count", 0) > 0:
+                tickets_names = actions_data["tickets_missing_final_installment"]["names"]
                 _add_priority(
                     context,
                     _("You have some tickets without a final installment (with 0 amount): %(list)s")
-                    % {"list": ", ".join([ticket.name for ticket in tickets_missing_final_installment])},
+                    % {"list": ", ".join(tickets_names)},
                     "orga_registration_installments",
                 )
 

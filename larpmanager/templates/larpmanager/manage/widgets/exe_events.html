@@ -2,28 +2,28 @@
 {% for run in ongoing_runs %}
     <div class="grid-item">
         <h2>
-            <a href="{% url 'manage' run.get_slug %}" target="_blank">{{ run }}</a>
+            <a href="{% url 'manage' run.slug %}" target="_blank">{{ run.name }}</a>
         </h2>
         <p>
             <i>{{ run.pretty_dates }}</i>
-            {% if event.parent %}
-                | {% trans "Campaign" %}: {{ event.parent }}
+            {% if run.parent %}
+                | {% trans "Campaign" %}: {{ run.parent }}
             {% endif %}
         </p>
         <p>
-            {% trans "Status" %}: {{ run.get_development_display }}
+            {% trans "Status" %}: {{ run.development_display }}
             |
-            <a href="{% url 'gallery' run.get_slug %}" target="_blank">Event link</a>
+            <a href="{% url 'gallery' run.slug %}" target="_blank">Event link</a>
             <button class="copy-link-btn"
-                    data-url="{% url 'gallery' run.get_slug %}"
+                    data-url="{% url 'gallery' run.slug %}"
                     title="{% trans "Copy link to clipboard" %}">
                 <i class="fa-solid fa-copy"></i>
             </button>
         </p>
         <p>
-            <a href="{% url 'register' run.get_slug %}" target="_blank">{{ run.get_registration_status_display }}</a>
+            <a href="{% url 'register' run.slug %}" target="_blank">{{ run.registration_status }}</a>
             <button class="copy-link-btn"
-                    data-url="{% url 'register' run.get_slug %}"
+                    data-url="{% url 'register' run.slug %}"
                     title="{% trans "Copy link to clipboard" %}">
                 <i class="fa-solid fa-copy"></i>
             </button>
