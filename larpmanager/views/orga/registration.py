@@ -178,15 +178,15 @@ def _orga_registrations_tickets(registration: Any, context: dict) -> None:
     else:
         # Process valid ticket and determine registration type
         ticket = context["reg_tickets"][registration.ticket_id]
-        regs_list_add(context, "list_tickets", ticket.name, registration.member)
-        registration.ticket_show = ticket.name
+        regs_list_add(context, "list_tickets", ticket.get("name"), registration.member)
+        registration.ticket_show = ticket.get("name")
 
         # Check for provisional status first, then map ticket tier to type
         if is_registration_provisional(
             registration, event=context["event"], features=context["features"], context=context
         ):
             registration_type = ("0", _("Provisional"))
-        elif ticket.tier in ticket_types:
+        elif ticket.get("tier") in ticket_types:
             registration_type = ticket_types[ticket.tier]
 
     # Ensure both default and current type categories exist in context
