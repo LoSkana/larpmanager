@@ -783,3 +783,28 @@ def get_coming_runs(association_id: int | None, *, future: bool = True) -> Query
         runs = runs.filter(end__lte=reference_date.date()).order_by("-end")
 
     return runs
+
+
+def _validate_and_fetch_objects(model_class: type, ids: int | list[int], model_name: str) -> list:
+    """Validate IDs and fetch objects, logging warnings for missing IDs.
+
+    Args:
+        model_class: The Django model class to query
+        ids: Single ID or list of IDs to fetch
+        model_name: Name of the model for logging purposes
+
+    Returns:
+        List of model instances found
+    """
+    # Normalize to list
+    if isinstance(ids, int):
+        ids = [ids]
+
+    objects = model_class.objects.filter(id__in=ids)
+    found_ids = set(objects.values_list("id", flat=True))
+    missing_ids = set(ids) - found_ids
+
+    if missing_ids:
+        logger.warning("%s IDs %s not found for cache refresh", model_name, missing_ids)
+
+    return list(objects)
