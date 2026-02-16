@@ -359,15 +359,12 @@ class RegistrationForm(BaseRegistrationForm):
         for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
             currency_symbol = self.params.get("currency_symbol")
-            event_association = run.event.association if not currency_symbol else None
-            ticket_display_name = get_ticket_form_text(
-                ticket, currency_symbol=currency_symbol, event_association=event_association
-            )
-            ticket_choices.append((str(ticket.uuid), ticket_display_name))
+            ticket_display_name = get_ticket_form_text(ticket, currency_symbol)
+            ticket_choices.append((str(ticket.get("uuid")), ticket_display_name))
 
             # Add ticket description to help text if available
-            if ticket.description:
-                ticket_help_html += f"<p><b>{ticket.name}</b>: {ticket.description}</p>"
+            if ticket.get("description"):
+                ticket_help_html += f"<p><b>{ticket.get('name')}</b>: {ticket.get('description')}</p>"
 
         # Create the ticket selection field with available choices
         self.fields["ticket"] = forms.ChoiceField(required=True, choices=ticket_choices)
@@ -403,7 +400,7 @@ class RegistrationForm(BaseRegistrationForm):
         event: Event,
         registration_counts: dict,
         run: Run,
-    ) -> list[RegistrationTicket]:
+    ) -> list[dict]:
         """Get list of available tickets for registration.
 
         Returns tickets available for the current user based on their status,
@@ -415,8 +412,7 @@ class RegistrationForm(BaseRegistrationForm):
             run: Run instance associated with the event
 
         Returns:
-            List of RegistrationTicket objects available for registration,
-            or empty list if no tickets are available
+            List of dict with ticktes info
 
         """
         # Check if user has staff or NPC tickets - these take priority

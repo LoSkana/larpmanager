@@ -408,10 +408,10 @@ def _calculate_registration_accounting(
     if abs(accounting_data["remaining"]) < max_rounding:
         accounting_data["remaining"] = 0
 
-    # Add ticket pricing breakdown if ticket exists
+    # Add ticket pricing
     if registration.ticket_id in reg_tickets:
         ticket = reg_tickets[registration.ticket_id]
-        accounting_data["ticket_price"] = ticket.price
+        accounting_data["ticket_price"] = ticket["price"]
         # Add custom payment amount to base ticket price
         if registration.pay_what:
             accounting_data["ticket_price"] += registration.pay_what
