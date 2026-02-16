@@ -207,7 +207,7 @@ def _transfer_choices(source_reg: Registration, target_reg: Registration) -> lis
 
         # Create the new choice
         new_choice = RegistrationChoice.objects.create(
-            question=target_question, option=target_option, registration=target_reg
+            question_id=target_question["id"], option=target_option, registration=target_reg
         )
         transferred_choices.append(new_choice)
 
@@ -230,7 +230,7 @@ def _transfer_answers(source_reg: Registration, target_reg: Registration) -> lis
 
         # Create the new answer
         new_answer = RegistrationAnswer.objects.create(
-            question=target_question, text=answer.text, registration=target_reg
+            question_id=target_question["id"], text=answer.text, registration=target_reg
         )
         transferred_answers.append(new_answer)
 
@@ -248,7 +248,7 @@ def _find_matching_question(source_question: RegistrationQuestion, target_event:
     # Get question by type and name
     target_questions = get_cached_registration_questions(target_event)
     exact_match = next(
-        (q for q in target_questions if q.typ == source_question.typ and q.name == source_question.name), None
+        (q for q in target_questions if q["typ"] == source_question.typ and q["name"] == source_question.name), None
     )
 
     if exact_match:
@@ -264,13 +264,13 @@ def _find_matching_question(source_question: RegistrationQuestion, target_event:
     ]
 
     if source_question.typ in special_types:
-        type_match = next((q for q in target_questions if q.typ == source_question.typ), None)
+        type_match = next((q for q in target_questions if q["typ"] == source_question.typ), None)
 
         if type_match:
             return type_match
 
     # Match by name
-    return next((q for q in target_questions if q.name == source_question.name), None)
+    return next((q for q in target_questions if q["name"] == source_question.name), None)
 
 
 def _find_matching_option(
@@ -278,13 +278,15 @@ def _find_matching_option(
 ) -> RegistrationOption | None:
     """Find the corresponding option in the destination question."""
     # Match by exact name
-    exact_match = RegistrationOption.objects.filter(question=target_question, name=source_option.name).first()
+    exact_match = RegistrationOption.objects.filter(question_id=target_question["id"], name=source_option.name).first()
 
     if exact_match:
         return exact_match
 
     # Match by description if name doesn't match
-    return RegistrationOption.objects.filter(question=target_question, description=source_option.description).first()
+    return RegistrationOption.objects.filter(
+        question_id=target_question["id"], description=source_option.description
+    ).first()
 
 
 def _transfer_character_relations(source_reg: Registration, target_reg: Registration) -> None:

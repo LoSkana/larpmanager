@@ -61,7 +61,7 @@
                     </td>
                 {% endif %}
                 <td>
-                    {% for ch in el.options_list %}
+                    {% for ch in el.options.all %}
                         {% include "elements/comma.html" %}
                         {{ ch.name }}
                     {% endfor %}

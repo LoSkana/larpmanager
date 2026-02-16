@@ -1797,9 +1797,9 @@ class OrgaPreferencesForm(ExePreferencesForm):
                 [
                     (
                         f".lq_{field_uuid}",
-                        registration_field.name
-                        if len(registration_field.name) <= field_name_max_length
-                        else registration_field.name[: field_name_max_length - 5] + " [...]",
+                        registration_field["name"]
+                        if len(registration_field["name"]) <= field_name_max_length
+                        else registration_field["name"][: field_name_max_length - 5] + " [...]",
                     )
                     for field_uuid, registration_field in registration_fields.items()
                 ],
@@ -1905,10 +1905,10 @@ class OrgaPreferencesForm(ExePreferencesForm):
         if "faction" in self.params["features"]:
             questions = get_cached_writing_questions(self.params["event"], QuestionApplicable.CHARACTER)
             try:
-                faction_question = next(q for q in questions if q.typ == WritingQuestionType.FACTIONS)
+                faction_question = next(q for q in questions if q["typ"] == WritingQuestionType.FACTIONS)
             except StopIteration:
                 raise WritingQuestion.DoesNotExist from None
-            feature_fields.insert(0, ("faction", f"q_{faction_question.uuid}", _("Factions")))
+            feature_fields.insert(0, ("faction", f"q_{faction_question['uuid']}", _("Factions")))
 
         self.add_feature_extra(extra_config_options, feature_fields)
 

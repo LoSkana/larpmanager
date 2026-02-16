@@ -455,7 +455,7 @@ def _activate_features_from_columns(context: dict, column_names: list[str], writ
 
     """
     # Build mapping of question names to question types
-    question_name_to_type = {q.name.lower(): q.typ for q in writing_questions}
+    question_name_to_type = {q["name"].lower(): q["typ"] for q in writing_questions}
 
     # Collect features and configs that need to be activated
     features_to_activate = set()
@@ -764,10 +764,14 @@ def _get_questions(questions_queryset: QuerySet) -> dict:
     questions_by_name = {}
     for question in questions_queryset:
         # Extract options as name->id mapping
-        options_by_name = {option.name.lower(): option.id for option in question.options.all()}
+        options_by_name = {option["name"].lower(): option["id"] for option in question["options"]}
 
         # Store question metadata with lowercase name as key
-        questions_by_name[question.name.lower()] = {"id": question.id, "typ": question.typ, "options": options_by_name}
+        questions_by_name[question["name"].lower()] = {
+            "id": question["id"],
+            "typ": question["typ"],
+            "options": options_by_name,
+        }
     return questions_by_name
 
 
