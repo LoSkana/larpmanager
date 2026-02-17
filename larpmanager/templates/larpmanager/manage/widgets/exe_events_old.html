@@ -17,18 +17,21 @@
             {% for run in ongoing_runs %}
                 <tr>
                     <td>
-                        <a href="{% url 'manage' run.get_slug %}" target="_blank">{{ run }}</a>
+                        <a href="{% url 'manage' run.slug %}" target="_blank">{{ run.name }}</a>
                     </td>
                     <td>
                         <i>{{ run.pretty_dates }}</i>
                     </td>
-                    <td>{{ run.get_development_display }}</td>
+                    <td>{{ run.development_display }}</td>
                     <td>
-                        <a href="{% url 'register' run.get_slug %}" target="_blank">{{ run.registration_status }}</a>
+                        <a href="{% url 'register' run.slug %}" target="_blank">{{ run.registration_status }}</a>
                     </td>
                     <td>
-                        {% if run.counts.count_reg %}
-                            {% trans "Registrations" %}: {{ run.counts.count_reg }}
+                        {% if run.registration_counts %}
+                            {% for key, count in run.registration_counts.items %}
+                                {% if not forloop.first %}|{% endif %}
+                                {{ key }}: {{ count }}
+                            {% endfor %}
                         {% endif %}
                     </td>
                 </tr>

@@ -1,35 +1,66 @@
 {% load i18n %}
-{% for run in ongoing_runs %}
-    <div class="grid-item">
+{% if ongoing_runs %}
+    <div class="grid-item grid-line ">
         <h2>
-            <a href="{% url 'manage' run.get_slug %}" target="_blank">{{ run }}</a>
+            <i class="fa-solid fa-calendar-days"></i> {% trans "Events" %}
         </h2>
-        <p>
-            <i>{{ run.pretty_dates }}</i>
-            {% if event.parent %}
-                | {% trans "Campaign" %}: {{ event.parent }}
-            {% endif %}
-        </p>
-        <p>
-            {% trans "Status" %}: {{ run.get_development_display }}
-            |
-            <a href="{% url 'gallery' run.get_slug %}" target="_blank">Event link</a>
-            <button class="copy-link-btn"
-                    data-url="{% url 'gallery' run.get_slug %}"
-                    title="{% trans "Copy link to clipboard" %}">
-                <i class="fa-solid fa-copy"></i>
-            </button>
-        </p>
-        <p>
-            <a href="{% url 'register' run.get_slug %}" target="_blank">{{ run.get_registration_status_display }}</a>
-            <button class="copy-link-btn"
-                    data-url="{% url 'register' run.get_slug %}"
-                    title="{% trans "Copy link to clipboard" %}">
-                <i class="fa-solid fa-copy"></i>
-            </button>
-            {% if run.registration_counts %}
-                {% for key, count in run.registration_counts.items %}&nbsp;| {{ key }}: {{ count }}{% endfor %}
-            {% endif %}
-        </p>
+        <table class="go_datatable" no_header_cols="all">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{% trans "Event" %}</th>
+                    <th>{% trans "Dates" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Registrations" %}</th>
+                    <th>{% trans "Counts" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for run in ongoing_runs %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'manage' run.slug %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                        </td>
+                        <th>
+                            {{ run.name }}
+                            {% if run.parent %}
+                                | {% trans "Campaign" %}: {{ run.parent }}
+                            {% endif %}
+                        </th>
+                        <td>
+                            <p>
+                                <i>{{ run.pretty_dates }}</i>
+                            </p>
+                        </td>
+                        <td>
+                            <a href="{% url 'gallery' run.slug %}" target="_blank">{{ run.development_display }}</a>
+                            <button class="copy-link-btn"
+                                    data-url="{% url 'gallery' run.slug %}"
+                                    title="{% trans "Copy link to clipboard" %}">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <p>
+                                <a href="{% url 'register' run.slug %}" target="_blank">{{ run.registration_status }}</a>
+                                <button class="copy-link-btn"
+                                        data-url="{% url 'register' run.slug %}"
+                                        title="{% trans "Copy link to clipboard" %}">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                            </p>
+                        </td>
+                        <td>
+                            {% if run.registration_counts %}
+                                {% for key, count in run.registration_counts.items %}
+                                    {% include "elements/comma.html" %}
+                                    {{ key }}: {{ count }}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-{% endfor %}
+{% endif %}
