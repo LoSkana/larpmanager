@@ -245,17 +245,7 @@ def get_cached_registration_questions(event: Event) -> list:
 
 
 def get_writing_field_names(event: Event, applicable: str) -> dict:
-    """Get a mapping of default field type to field name for an applicable type.
-
-    Args:
-        event: Event instance
-        applicable: Question applicable type (e.g., QuestionApplicable.CHARACTER)
-
-    Returns:
-        dict: Mapping of question type to question name for default writing types,
-              e.g. {'name': 'Name', 'teaser': 'Presentation', 'title': 'Title'}
-
-    """
+    """Get a mapping of default field type to field name for an applicable type."""
     def_types = get_def_writing_types()
     questions = get_cached_writing_questions(event, applicable)
     return {q["typ"]: q["name"] for q in questions if q["typ"] in def_types}

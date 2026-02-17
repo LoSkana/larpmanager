@@ -1839,10 +1839,6 @@ class OrgaPreferencesForm(ExePreferencesForm):
         if feature_mapping.get(writing_section[0]) not in self.params["features"]:
             return
 
-        # Verify writing fields exist for this section
-        if "writing_fields" not in self.params or writing_section[0] not in self.params["writing_fields"]:
-            return
-
         # Check user permissions for this writing section
         if not has_event_permission(
             self.params["request"],
@@ -1853,7 +1849,8 @@ class OrgaPreferencesForm(ExePreferencesForm):
             return
 
         # Extract field configurations and prepare extra options
-        section_fields = self.params["writing_fields"][writing_section[0]]["questions"]
+        applicable = QuestionApplicable.get_applicable(writing_section[0])
+        section_fields = get_cached_writing_questions(self.params["event"], applicable)
         extra_config_options = []
 
         # Compile basic field configurations
@@ -1916,9 +1913,9 @@ class OrgaPreferencesForm(ExePreferencesForm):
         self.add_feature_extra(extra_config_options, feature_fields)
 
     @staticmethod
-    def _compile_configs(basic_question_types: set, compiled_options: list, field_definitions: dict) -> None:
+    def _compile_configs(basic_question_types: set, compiled_options: list, field_definitions: list) -> None:
         """Compile configuration options from field definitions."""
-        for field in field_definitions.values():
+        for field in field_definitions:
             if field["typ"] == "name":
                 continue
 
