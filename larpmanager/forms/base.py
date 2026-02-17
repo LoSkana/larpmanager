@@ -697,7 +697,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         question_uuid = question["uuid"]
         # Check if selected option is unavailable
-        if question_uuid in self.unavail and form_data[field_key] in self.unavail[question_uuid]:
+        if form_data[field_key] in self.unavail.get(question_uuid, {}):
             self.add_error(field_key, _("Option no longer available"))
 
     def clean(self) -> dict:

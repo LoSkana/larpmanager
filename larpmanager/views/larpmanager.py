@@ -909,8 +909,7 @@ def lm_send(request: HttpRequest) -> Any:
             players = request.POST["players"]
             subj = request.POST["subject"]
             body = request.POST["body"]
-            interval = int(request.POST.get("interval", 20))
-            send_mail_exec(players, subj, body, interval=interval)
+            send_mail_exec(players, subj, body)
             messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:

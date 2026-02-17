@@ -338,7 +338,7 @@ def _get_applicable_row(context: dict, element: object, model: str, *, member_co
             cell_value = question_type_mapping[question["typ"]]()
         # Handle text-based question types (paragraph, text, email)
         elif question["typ"] in {"p", "t", "e"}:
-            if question["id"] in question_answers and element.id in question_answers[question["id"]]:
+            if element.id in question_answers.get(question["id"], {}):
                 cell_value = question_answers[question["id"]][element.id]
         # Handle choice-based question types (single, multiple)
         elif (
@@ -747,7 +747,7 @@ def _extract_values(field_names: list, objects: list, field_mappings: dict) -> l
                 field_value = row[field_name] if isinstance(row, dict) else getattr(row, field_name)
 
             # Apply mapping transformation if field and value exist in mappings
-            if field_name in field_mappings and field_value in field_mappings[field_name]:
+            if field_value in field_mappings.get(field_name, {}):
                 transformed_value = field_mappings[field_name][field_value]
             else:
                 transformed_value = field_value

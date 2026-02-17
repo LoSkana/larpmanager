@@ -187,7 +187,7 @@ def _build_relationships_mappings(context: dict, character_data_mapping: dict, r
     queryset = Relationship.objects.values_list("target__number", "text").filter(source=context["character"])
     for target_character_number, relationship_text in queryset:
         # Check if character data is already cached in context
-        if "chars" in context and target_character_number in context["chars"]:
+        if target_character_number in context.get("chars", {}):
             character_data = context["chars"][target_character_number]
         else:
             # Fetch character data from database if not cached

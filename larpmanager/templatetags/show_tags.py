@@ -649,7 +649,7 @@ def get_field_show_char(context: dict, form: Form, name: str, run: Run, tooltip:
 @register.simple_tag
 def get_deep_field(form: Form | dict, key1: str, key2: str) -> Any:
     """Template tag to get nested form field value."""
-    if key1 in form and key2 in form[key1]:
+    if key2 in form.get(key1, {}):
         return form[key1][key2]
     return ""
 

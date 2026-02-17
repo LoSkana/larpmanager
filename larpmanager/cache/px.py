@@ -379,7 +379,7 @@ def remove_item_from_cache_section(event_id: int, section_name: str, section_id:
     try:
         cache_key = get_event_px_key(event_id)
         cached_data = cache.get(cache_key)
-        if cached_data and section_name in cached_data and section_id in cached_data[section_name]:
+        if cached_data and section_id in cached_data.get(section_name, {}):
             del cached_data[section_name][section_id]
             cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
             logger.debug("Removed %s %s from PX cache", section_name, section_id)
