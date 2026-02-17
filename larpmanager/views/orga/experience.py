@@ -180,8 +180,7 @@ def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Get cached PX relationship data and enrich ability objects
     px_cache = get_event_px_cache(context["event"])
     for ability in abilities:
-        if "abilities" in px_cache and ability.id in px_cache["abilities"]:
-            ability.cached_rels = px_cache["abilities"][ability.id]
+        ability.cached_rels = px_cache.get("abilities", {}).get(ability.id, [])
 
     context["list"] = abilities
 
