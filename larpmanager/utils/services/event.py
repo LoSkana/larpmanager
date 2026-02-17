@@ -38,7 +38,11 @@ from larpmanager.cache.question import (
     clear_registration_questions_cache,
     clear_writing_questions_cache,
 )
-from larpmanager.cache.registration import clear_registration_counts_cache
+from larpmanager.cache.registration import (
+    clear_registration_counts_cache,
+    clear_registration_tickets_cache,
+    get_registration_tickets,
+)
 from larpmanager.cache.rels import clear_event_relationships_cache
 from larpmanager.cache.role import remove_event_role_cache
 from larpmanager.cache.run import reset_cache_run
@@ -237,10 +241,12 @@ def save_event_tickets(features: Any, instance: object) -> None:
         ("waiting", TicketTier.WAITING, "Waiting"),
         ("filler", TicketTier.FILLER, "Filler"),
     ]
+
+    existing_tiers = {t["tier"] for t in get_registration_tickets(instance.id)}
     for ticket in tickets:
         if ticket[0] and ticket[0] not in features:
             continue
-        if not RegistrationTicket.objects.filter(event=instance, tier=ticket[1]).exists():
+        if ticket[1] not in existing_tiers:
             RegistrationTicket.objects.create(event=instance, tier=ticket[1], name=ticket[2])
 
 
@@ -637,6 +643,7 @@ def reset_all_run(event: Event, run: Run) -> None:
     clear_registration_accounting_cache(run.id)
     clear_event_fields_cache(event.id)
     clear_event_relationships_cache(event.id)
+    clear_registration_tickets_cache(event.id)
 
     # Clear event text caches for all EventText instances
     for event_text in EventText.objects.filter(event_id=event.id):

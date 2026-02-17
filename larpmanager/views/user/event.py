@@ -26,6 +26,7 @@ from typing import Any
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.db.models import Q, QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
@@ -43,7 +44,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
-from larpmanager.cache.registration import get_registration_counts
+from larpmanager.cache.registration import get_registration_counts, get_registration_tickets
 from larpmanager.models.accounting import PaymentInvoice, PaymentType
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -63,7 +64,6 @@ from larpmanager.models.member import MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
-    RegistrationTicket,
     TicketTier,
 )
 from larpmanager.models.writing import (
@@ -615,16 +615,16 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
         assigned = que.values_list("registration_id", flat=True)
 
         # Pre-filter ticket IDs to exclude from registration without character assigned
-        excluded_ticket_ids = RegistrationTicket.objects.filter(
-            event_id=context["event"].id,
-            tier__in=[
-                TicketTier.WAITING,
-                TicketTier.STAFF,
-                TicketTier.NPC,
-                TicketTier.COLLABORATOR,
-                TicketTier.SELLER,
-            ],
-        ).values_list("id", flat=True)
+        excluded_tiers = [
+            TicketTier.WAITING,
+            TicketTier.STAFF,
+            TicketTier.NPC,
+            TicketTier.COLLABORATOR,
+            TicketTier.SELLER,
+        ]
+        excluded_ticket_ids = [
+            ticket["id"] for ticket in get_registration_tickets(context["event"].id) if ticket["tier"] in excluded_tiers
+        ]
 
         # Get registrations without assigned characters
         que_reg = Registration.objects.filter(run_id=context["run"].id, cancellation_date__isnull=True)
@@ -916,7 +916,8 @@ def quests(request: HttpRequest, event_slug: str, quest_type_uuid: str | None = 
     # Filter quests by event, visibility, and type, then add complete quest data
     quest_queryset = (
         Quest.objects.filter(event=context["event"], hide=False, typ=context["quest_type"])
-        .prefetch_related("traits")
+        .select_related("typ")
+        .prefetch_related(models.Prefetch("traits", queryset=Trait.objects.filter(hide=False)))
         .order_by("number")
     )
 
@@ -1001,13 +1002,22 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     for discount in context["run"].discounts.exclude(visible=False):
         context["disc"].append(discount.show())
 
-    # Build tickets list with availability and usage data
     context["tickets"] = []
-    for ticket in RegistrationTicket.objects.filter(
-        event=context["event"], max_available__gt=0, visible=True
-    ).select_related("event"):
-        dt = ticket.show()
-        key = f"tk_{ticket.id}"
+    # Filter cached tickets for max_available > 0 and visible
+    filtered_tickets = [
+        ticket
+        for ticket in get_registration_tickets(context["event"].id)
+        if ticket["max_available"] > 0 and ticket["visible"]
+    ]
+    for ticket in filtered_tickets:
+        # Build show() equivalent dict
+        dt = {
+            "max_available": ticket["max_available"],
+            "name": ticket["name"],
+            "price": ticket["price"],
+            "description": ticket["description"],
+        }
+        key = f"tk_{ticket['id']}"
         # Add usage count if available in registration counts
         if key in counts:
             dt["used"] = counts[key]

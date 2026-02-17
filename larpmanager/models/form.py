@@ -34,11 +34,10 @@ from larpmanager.models.event import Event
 from larpmanager.models.member import Member
 from larpmanager.models.registration import (
     Registration,
-    RegistrationCharacterRel,
     RegistrationSection,
     RegistrationTicket,
 )
-from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str
+from larpmanager.models.utils import UploadToPathAndRename
 from larpmanager.models.writing import CharacterStatus, Faction
 
 
@@ -315,6 +314,33 @@ class WritingQuestion(UuidMixin, BaseModel):
         """Return comma-separated display of editable character statuses."""
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
 
+    def as_dict(self, **kwargs: Any) -> dict[str, Any]:  # noqa: ARG002
+        """Serialize question to dictionary for caching with nested options."""
+        data = super().as_dict(many_to_many=False)
+
+        # Ensure fields with falsy defaults are always included
+        data["description"] = self.description
+        data["order"] = self.order
+        data["max_length"] = self.max_length
+        data["printable"] = self.printable
+
+        # Add display values for choice fields (for template rendering)
+        data["get_typ_display"] = self.get_typ_display()
+        data["get_status_display"] = self.get_status_display()
+        data["get_visibility_display"] = self.get_visibility_display()
+        data["get_editable_display"] = self.get_editable_display()
+
+        # Add editable as computed field
+        data["editable"] = self.get_editable()
+
+        # Add nested options
+        data["options"] = [opt.as_dict() for opt in self.options.all()]
+
+        # Add options_list for backward compatibility with templates
+        data["options_list"] = data["options"]
+
+        return data
+
     class Meta:
         indexes: ClassVar[list] = [
             models.Index(
@@ -380,11 +406,6 @@ class WritingOption(UuidMixin, BaseModel):
         """Return string representation."""
         return f"{self.question} {self.name}"
 
-    def get_form_text(self, currency_symbol: str | None = None) -> str:  # noqa: ARG002
-        """Return the display name for this ticket tier."""
-        show_data = self.show()
-        return show_data["name"]
-
     def show(self) -> dict[str, Any]:
         """Return JSON representation with available fields and attributes."""
         # Initialize response with max available count
@@ -395,6 +416,25 @@ class WritingOption(UuidMixin, BaseModel):
             self.upd_js_attr(js, s)
 
         return js
+
+    def as_dict(self, **kwargs: Any) -> dict[str, Any]:  # noqa: ARG002
+        """Serialize option to dictionary for caching.
+
+        Explicitly includes fields with falsy defaults (description="", order=0, max_available=0).
+        """
+        data = super().as_dict(many_to_many=False)
+
+        # Ensure fields with falsy defaults are always included
+        data["description"] = self.description
+        data["order"] = self.order
+        data["max_available"] = self.max_available
+
+        # Preserve tickets_map annotation if it exists (added by cache queries)
+        if hasattr(self, "tickets_map"):
+            value = self.tickets_map or []
+            data["tickets_map"] = [item for item in value if item is not None]
+
+        return data
 
 
 class WritingChoice(BaseModel):
@@ -574,51 +614,36 @@ class RegistrationQuestion(UuidMixin, BaseModel):
             self.upd_js_attr(js, s)
         return js
 
-    def skip(self, registration: Any, features: Any, params: Any = None, *, is_organizer: Any = False) -> bool:  # noqa: C901 - Complex question skip logic with feature checks
-        """Determine if a question should be skipped based on context and features.
+    def as_dict(self, **kwargs: Any) -> dict[str, Any]:  # noqa: ARG002
+        """Serialize question to dictionary for caching with nested options and computed fields."""
+        data = super().as_dict(many_to_many=False)
 
-        Evaluates question visibility rules including hidden status, ticket restrictions,
-        faction filtering, and organizer permissions to decide if question should be shown.
-        """
-        if self.status == QuestionStatus.HIDDEN and not is_organizer:
-            return True
+        # Add display values for choice fields (for template rendering)
+        data["get_typ_display"] = self.get_typ_display()
+        data["get_status_display"] = self.get_status_display()
 
-        if "reg_que_tickets" in features and registration and registration.pk:
-            # noinspection PyUnresolvedReferences
-            allowed_ticket_uuids = [ticket_uuid for ticket_uuid in self.tickets_map if ticket_uuid is not None]
-            if len(allowed_ticket_uuids) > 0:
-                if not registration or not registration.ticket:
-                    return True
+        # Add section-related computed fields
+        data["section_order"] = self.section.order if self.section else None
+        data["section_name"] = self.section.name if self.section else None
+        data["section_description"] = self.section.description if self.section else None
 
-                if registration.ticket.uuid not in allowed_ticket_uuids:
-                    return True
+        # Add image URLs if available
+        data["profile_url"] = self.profile.url if self.profile else None
+        data["profile_thumb_url"] = self.profile_thumb.url if self.profile_thumb else None
 
-        if "reg_que_faction" in features:
-            # noinspection PyUnresolvedReferences
-            allowed_faction_ids = [faction_id for faction_id in self.factions_map if faction_id is not None]
-            if len(allowed_faction_ids) > 0:
-                registration_faction_ids = []
-                if registration and registration.pk:
-                    for character_relation in RegistrationCharacterRel.objects.filter(registration=registration):
-                        character_factions = character_relation.character.factions_list.values_list("id", flat=True)
-                        registration_faction_ids.extend(character_factions)
+        # Add nested options
+        data["options"] = [opt.as_dict() for opt in self.options.all()]
 
-                if len(set(allowed_faction_ids).intersection(set(registration_faction_ids))) == 0:
-                    return True
+        # Add options_list for backward compatibility with templates
+        data["options_list"] = data["options"]
 
-        if "reg_que_allowed" in features and registration and registration.pk and is_organizer and params:
-            run_id = params["run"].id
-            is_run_organizer = run_id in params["all_runs"] and 1 in params["all_runs"][run_id]
-            # noinspection PyUnresolvedReferences
-            if (
-                not is_run_organizer
-                and self.allowed_map
-                and self.allowed_map[0]
-                and params["member"].id not in self.allowed_map
-            ):
-                return True
+        # Preserve annotations if they exist (added by cache queries)
+        for annotation in ["tickets_map", "factions_map", "allowed_map"]:
+            if hasattr(self, annotation):
+                value = getattr(self, annotation) or []
+                data[annotation] = [item for item in value if item is not None]
 
-        return False
+        return data
 
     class Meta:
         indexes: ClassVar[list] = [
@@ -675,21 +700,6 @@ class RegistrationOption(UuidMixin, BaseModel):
     def get_price(self) -> Any:
         """Return the option price."""
         return self.price
-
-    def get_form_text(self, currency_symbol: str | None = None) -> str:
-        """Return formatted text with name and optional price."""
-        # Get display data for the current instance
-        display_data = self.show()
-        formatted_text = display_data["name"]
-
-        # Append formatted price with currency symbol if applicable
-        if display_data["price"] and int(display_data["price"]) > 0:
-            if not currency_symbol:
-                # noinspection PyUnresolvedReferences
-                currency_symbol = self.event.association.get_currency_symbol()
-            formatted_text += f" ({decimal_to_str(display_data['price'])}{currency_symbol})"
-
-        return formatted_text
 
     def show(self) -> dict[str, Any]:
         """Return ticket tier display data as dictionary.

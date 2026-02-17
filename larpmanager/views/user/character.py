@@ -684,7 +684,7 @@ def get_options_dependencies(context: dict) -> None:
 
     # Get all character-applicable writing questions ordered by their sequence
     character_questions = get_cached_writing_questions(context["event"], QuestionApplicable.CHARACTER)
-    question_ids = [q.id for q in character_questions]
+    question_ids = [question["id"] for question in character_questions]
 
     # Find all writing options belonging to character questions
     writing_options = context["event"].get_elements(WritingOption).filter(question_id__in=question_ids)
