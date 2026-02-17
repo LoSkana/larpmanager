@@ -1779,6 +1779,9 @@ msgstr "Werkelijk betaald"
 msgid "Add to plot"
 msgstr "Toevoegen aan perceel"
 
+msgid "Additionals"
+msgstr "Toevoegingen"
+
 msgid "Amount paid"
 msgstr "Betaald bedrag"
 
@@ -2157,6 +2160,9 @@ msgstr "Test galerij"
 msgid "Three quotas"
 msgstr "Drie quota"
 
+msgid "Ticket price"
+msgstr "Ticketprijs"
+
 msgid "Total issued"
 msgstr "Totaal uitgegeven"
 
@@ -2251,14 +2257,23 @@ msgstr "Contact e-mail"
 msgid "Daily Summary"
 msgstr "Dagelijkse samenvatting"
 
+msgid "Date deadline"
+msgstr "Uiterste datum"
+
 msgid "Dates updated"
 msgstr "Data bijgewerkt"
+
+msgid "Days deadline"
+msgstr "Dagen deadline"
 
 msgid "Deadline date"
 msgstr "Uiterste datum"
 
 msgid "Discount back"
 msgstr "Korting terug"
+
+msgid "Display order"
+msgstr "Volgorde weergeven"
 
 msgid "Document type"
 msgstr "Type document"
@@ -2491,6 +2506,9 @@ msgstr "Kredietsaldo"
 
 msgid "Customisations"
 msgstr "Aanpassingen"
+
+msgid "Days available"
+msgstr "Beschikbare dagen"
 
 msgid "Default fields"
 msgstr "Standaardvelden"
@@ -3385,6 +3403,9 @@ msgstr "Show annuleringen"
 
 msgid "Token Already Used"
 msgstr "Reeds gebruikt token"
+
+msgid "Total availability"
+msgstr "Totale beschikbaarheid"
 
 msgid "Total payment sent"
 msgstr "Totaal verzonden betaling"
@@ -5115,6 +5136,9 @@ msgstr "Er zijn geen gebeurtenissen aanwezig, maak er een aan"
 msgid "Now you can set the taxes options"
 msgstr "Nu kun je de belastingopties instellen"
 
+msgid "Number of additional participants"
+msgstr "Aantal extra deelnemers"
+
 msgid "The event this content belongs to"
 msgstr "Het evenement waartoe deze inhoud behoort"
 
@@ -5809,6 +5833,9 @@ msgstr "Beschrijf precies waar het zich voordoet"
 msgid "Display all participants data as registry"
 msgstr "Alle deelnemersgegevens weergeven als register"
 
+msgid "Donation amount chosen by the participant"
+msgstr "Donatiebedrag gekozen door de deelnemer"
+
 msgid "I do it routinely, I have good experience"
 msgstr "Ik doe het regelmatig, ik heb goede ervaring"
 
@@ -6132,6 +6159,9 @@ msgstr "(Optioneel) Het bedrag van een vrijwillige donatie"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Knoppen in de evenementnavigatiebalk aanpassen"
+
+msgid "Extra price applied when this quota is active"
+msgstr "Extra prijs toegepast wanneer dit quotum actief is"
 
 msgid "If checked: shows the position for each event"
 msgstr "Indien aangevinkt: toont de positie voor elke gebeurtenis"
