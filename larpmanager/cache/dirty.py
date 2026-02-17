@@ -27,6 +27,7 @@ aliases so existing code keeps the original private-looking names.
 from __future__ import annotations
 
 import logging
+import time
 from typing import TYPE_CHECKING, Any
 
 from django.core.cache import cache
@@ -97,7 +98,7 @@ def mark_dirty(cache_ns: str, section: str, item_ids: list[int], event_id: int |
     """
     for item_id in item_ids:
         cache.set(get_dirty_key(cache_ns, section, item_id), "1")
-        logger.debug("marking %s %s %s", cache_ns, section, item_id)
+        logger.debug("%s marking %s %s %s", time.strftime("%Y-%m-%d %H:%M:%S"), cache_ns, section, item_id)
     if event_id is not None:
         cache.set(get_has_dirty_key(cache_ns, event_id), "1")
 
