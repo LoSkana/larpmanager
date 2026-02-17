@@ -32,6 +32,7 @@ from django.db.models.functions import Coalesce
 
 from larpmanager.cache.config import get_event_config, save_all_element_configs, save_single_config
 from larpmanager.cache.feature import get_event_features
+from larpmanager.models.event import Event
 from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, Operation, RulePx
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -462,8 +463,19 @@ def calculate_character_experience_points_bgk(character_ids: int | list) -> None
             pass
 
 
+@background_auto(queue="experience")
+def calculate_event_experience_points_bgk(event_id: int) -> None:
+    """Update experience points for all event characters."""
+    try:
+        event = Event.objects.get(pk=event_id)
+    except ObjectDoesNotExist:
+        # Event was deleted, nothing to do
+        return
+
+    for character in event.get_elements(Character).all():
+        calculate_character_experience_points(character)
+
+
 def _recalcuate_characters_experience_points(instance: Any) -> None:
     """Handle recomputing experience points of characters."""
-    parent_event = instance.event.get_class_parent(instance.__class__)
-    character_ids = parent_event.get_elements(Character).values_list("id", flat=True)
-    calculate_character_experience_points_bgk(list(character_ids))
+    calculate_event_experience_points_bgk(instance.event.get_class_parent(instance.__class__).id)
