@@ -1020,7 +1020,7 @@ def character_relationships(request: HttpRequest, event_slug: str, character_uui
     # Process each relationship and build display data
     for tg_num, text in que.values_list("target__number", "text"):
         # Try to get character data from cache first for performance
-        if "chars" in context and tg_num in context["chars"]:
+        if tg_num in context.get("chars", {}):
             show = context["chars"][tg_num]
         else:
             # Fallback to database query if not in cache

@@ -423,7 +423,7 @@ def _get_registration_fields(context: dict, member: Any) -> dict:
             current_run_id = context["run"].id
 
             # Check if user is an organizer for this run
-            is_organizer = current_run_id in context["all_runs"] and 1 in context["all_runs"][current_run_id]
+            is_organizer = 1 in context["all_runs"].get(current_run_id, {})
 
             # Skip question if user is not organizer and not in allowed list
             if not is_organizer and member.id not in allowed_map:
@@ -657,7 +657,7 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
     # Check allowed permissions
     if "reg_que_allowed" in context["features"] and q.get("allowed_map") and q["allowed_map"][0]:
         run_id = context["run"].id
-        organizer = run_id in context["all_runs"] and 1 in context["all_runs"][run_id]
+        organizer = 1 in context["all_runs"].get(run_id, {})
         if not organizer and context["member"].id not in q["allowed_map"]:
             return None
 
@@ -727,7 +727,7 @@ def orga_registration_form_email(request: HttpRequest, event_slug: str) -> JsonR
     # Check if user has permission to access this specific question
     if "reg_que_allowed" in context["features"] and q.allowed_map and q.allowed_map[0]:
         run_id = context["run"].id
-        organizer = run_id in context["all_runs"] and 1 in context["all_runs"][run_id]
+        organizer = 1 in context["all_runs"].get(run_id, {})
         if not organizer and context["member"].id not in q.allowed_map:
             return None
 

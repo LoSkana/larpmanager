@@ -263,7 +263,7 @@ def has_event_permission(
         return False
 
     # Check if user has admin role in association (role 1)
-    if "association_role" in context and 1 in context["association_role"]:
+    if 1 in context.get("association_role", {}):
         return True
 
     # Get event-specific roles and permissions for the user
@@ -304,7 +304,7 @@ def get_index_event_permissions(
 
     """
     (is_organizer, user_event_permissions, role_names) = get_event_roles(request, context, event_slug)
-    if "association_role" in context and 1 in context["association_role"]:
+    if 1 in context.get("association_role", {}):
         is_organizer = True
     if enforce_check and not role_names and not is_organizer:
         raise UserPermissionError

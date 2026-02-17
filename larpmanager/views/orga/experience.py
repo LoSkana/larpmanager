@@ -53,7 +53,7 @@ def orga_px_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Get cached PX relationship data and enrich delivery objects
     px_cache = get_event_px_cache(context["event"])
     for delivery in deliveries:
-        if "deliveries" in px_cache and delivery.id in px_cache["deliveries"]:
+        if delivery.id in px_cache.get("deliveries", {}):
             delivery.cached_rels = px_cache["deliveries"][delivery.id]
 
     context["list"] = deliveries
@@ -245,7 +245,7 @@ def orga_px_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Get cached PX relationship data and enrich rule objects
     px_cache = get_event_px_cache(context["event"])
     for rule in rules:
-        if "rules" in px_cache and rule.id in px_cache["rules"]:
+        if rule.id in px_cache.get("rules", {}):
             rule.cached_rels = px_cache["rules"][rule.id]
     context["list"] = rules
     return render(request, "larpmanager/orga/px/rules.html", context)
@@ -318,7 +318,7 @@ def orga_px_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Get cached PX relationship data and enrich modifier objects
     px_cache = get_event_px_cache(context["event"])
     for modifier in modifiers:
-        if "modifiers" in px_cache and modifier.id in px_cache["modifiers"]:
+        if modifier.id in px_cache.get("modifiers", {}):
             modifier.cached_rels = px_cache["modifiers"][modifier.id]
 
     context["list"] = modifiers

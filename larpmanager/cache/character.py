@@ -408,7 +408,7 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
         if character_data["hide"]:
             continue
 
-        if "factions" in character_data and 0 in character_data["factions"]:
+        if 0 in character_data.get("factions", {}):
             characters_without_primary_faction.append(character_number)
 
     # Create fake faction for characters without primary faction

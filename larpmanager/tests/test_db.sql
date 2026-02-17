@@ -4058,6 +4058,7 @@ INSERT INTO public.background_task VALUES (1, 'larpmanager.utils.larpmanager.tas
 INSERT INTO public.background_task VALUES (2, 'larpmanager.accounting.registration.check_registration_background', '[[""], {}]', '66e630687098ebf80d330c8477d5b89c927dd363', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'acc', 0, NULL, '', NULL, NULL, NULL, NULL);
 INSERT INTO public.background_task VALUES (3, 'larpmanager.utils.larpmanager.tasks.my_send_mail_bkg', '[[2], {}]', 'e99d51b68475f7e5a284b9bc6eb13ce0ecc73347', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'mail', 0, NULL, '', NULL, NULL, NULL, NULL);
 INSERT INTO public.background_task VALUES (4, 'larpmanager.accounting.registration.check_registration_background', '[[""], {}]', '66e630687098ebf80d330c8477d5b89c927dd363', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'acc', 0, NULL, '', NULL, NULL, NULL, NULL);
+INSERT INTO public.background_task VALUES (5, 'larpmanager.cache.rels.refresh_character_relationships_background', '[[1], {}]', '811345ec5719b8e384fa47d586fead117b85b98d', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'cache-rels', 0, NULL, '', NULL, NULL, NULL, NULL);
 
 INSERT INTO public.django_migrations VALUES (1, 'contenttypes', '0001_initial', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (2, 'auth', '0001_initial', '2025-01-01 00:00:00.000000+01');
@@ -4247,6 +4248,7 @@ INSERT INTO public.django_migrations VALUES (185, 'socialaccount', '0004_app_pro
 INSERT INTO public.django_migrations VALUES (186, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (187, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (188, 'larpmanager', '0140_alter_writinganswer_element_id_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (189, 'larpmanager', '0141_alter_registration_additionals_and_more', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
@@ -4634,13 +4636,13 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.background_task_completedtask_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.background_task_id_seq', 4, true);
+SELECT pg_catalog.setval('public.background_task_id_seq', 5, true);
 
 SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 188, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 189, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -8484,4 +8486,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0140_alter_writinganswer_element_id_and_more
+-- LARPMANAGER_SCHEMA_VERSION: 0141_alter_registration_additionals_and_more

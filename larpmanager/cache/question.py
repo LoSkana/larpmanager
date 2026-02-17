@@ -92,7 +92,7 @@ def _skip_question_allowed(
         return False
 
     run_id = params["run"].id
-    is_run_organizer = run_id in params["all_runs"] and 1 in params["all_runs"][run_id]
+    is_run_organizer = 1 in params["all_runs"].get(run_id, {})
 
     return bool(not is_run_organizer and params["member"].id not in allowed_map)
 

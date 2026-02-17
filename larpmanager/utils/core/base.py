@@ -145,7 +145,7 @@ def is_shuttle(request: HttpRequest) -> bool:
         return False
 
     # Verify user is in association's shuttle operators list
-    return "shuttle" in request.association and request.user.member.id in request.association["shuttle"]
+    return request.user.member.id in request.association.get("shuttle", {})
 
 
 def update_payment_details(context: dict) -> None:
