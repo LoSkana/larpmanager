@@ -62,6 +62,7 @@ from larpmanager.models.event import (
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
+    QuestionVisibility,
     WritingQuestion,
     WritingQuestionType,
     _get_writing_elements,
@@ -1359,14 +1360,16 @@ class OrgaRunForm(ConfigForm):
         basic_types = BaseQuestionType.get_basic_types()
         basic_types.add(WritingQuestionType.COMPUTED)
         self.set_section("visibility", _("Visibility"))
-        for writing_element_key, writing_element_label, _writing_element_type in writing_elements:
-            if "writing_fields" not in self.params or writing_element_key not in self.params["writing_fields"]:
-                continue
+        for writing_element_key, writing_element_label, writing_element_type in writing_elements:
             if writing_element_key in ["plot", "prologue"]:
                 continue
-            questions = self.params["writing_fields"][writing_element_key]["questions"]
+            questions = [
+                q
+                for q in get_cached_writing_questions(self.params["event"], writing_element_type)
+                if q["visibility"] != QuestionVisibility.HIDDEN
+            ]
             field_choices = []
-            for question_field in questions.values():
+            for question_field in questions:
                 question_type = question_field["typ"]
                 if question_type in basic_types:
                     question_type = str(question_field["uuid"])
