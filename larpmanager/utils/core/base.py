@@ -31,7 +31,6 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.fields import get_event_fields_cache
 from larpmanager.cache.links import cache_event_links
 from larpmanager.cache.permission import get_association_permission_feature, get_event_permission_feature
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
@@ -461,8 +460,6 @@ def prepare_run(context: Any) -> None:
                 run_configuration[additional_config_name][additional_feature] = True
 
     context.update(run_configuration)
-
-    context["writing_fields"] = get_event_fields_cache(event_id)
 
 
 def get_run(context: Any, event_slug: Any) -> None:

@@ -49,7 +49,7 @@ from larpmanager.cache.character import (
 )
 from larpmanager.cache.config import get_event_config, save_single_config
 from larpmanager.cache.event_text import get_event_text
-from larpmanager.cache.question import get_cached_writing_questions
+from larpmanager.cache.question import get_cached_writing_questions, get_writing_field_names
 from larpmanager.forms.character import CharacterForm
 from larpmanager.forms.member import AvatarForm
 from larpmanager.forms.registration import RegistrationCharacterRelForm
@@ -604,6 +604,8 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
 
     """
     context = get_event_context(request, event_slug, include_status=True, signup=True, feature_slug="user_character")
+
+    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.CHARACTER)
 
     context["list"] = get_player_characters(context["member"], context["event"])
     # add character configs

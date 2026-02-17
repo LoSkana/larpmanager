@@ -44,6 +44,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
+from larpmanager.cache.question import get_writing_field_names
 from larpmanager.cache.registration import get_registration_counts, get_registration_tickets
 from larpmanager.models.accounting import PaymentInvoice, PaymentType
 from larpmanager.models.association import AssociationTextType
@@ -844,6 +845,8 @@ def factions(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Load all event cache data into context
     get_event_cache_all(context)
 
+    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.FACTION)
+
     return render(request, "larpmanager/event/factions.html", context)
 
 
@@ -923,6 +926,8 @@ def quests(request: HttpRequest, event_slug: str, quest_type_uuid: str | None = 
 
     context["list"] = [quest.show_complete() for quest in quest_queryset]
 
+    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.QUEST)
+
     return render(request, "larpmanager/event/quests.html", context)
 
 
@@ -971,6 +976,8 @@ def quest(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpRespons
         res.update(trait.show())
         traits.append(res)
     context["traits"] = traits
+
+    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.QUEST)
 
     return render(request, "larpmanager/event/quest.html", context)
 

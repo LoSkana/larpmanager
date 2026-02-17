@@ -44,6 +44,7 @@ from larpmanager.models.form import (
     QuestionApplicable,
     WritingAnswer,
     WritingQuestionType,
+    get_def_writing_types,
 )
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
@@ -451,8 +452,9 @@ def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any
 
 def _prepare_writing_list(context: dict) -> None:
     """Prepare context data for writing list display and configuration."""
+    questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+
     try:
-        questions = get_cached_writing_questions(context["event"], context["writing_typ"])
         name_question = next(q for q in questions if q["typ"] == WritingQuestionType.NAME)
         context["name_que_uuid"] = name_question["uuid"]
     except StopIteration as e:
@@ -462,11 +464,11 @@ def _prepare_writing_list(context: dict) -> None:
     context["default_fields"] = context["member"].get_config(
         f"open_{model_name}_{context['event'].id}", default_value="[]"
     )
-    if context["default_fields"] == "[]" and model_name in context["writing_fields"]:
-        question_field_list = [
-            f"q_{question_uuid}" for name, question_uuid in context["writing_fields"][model_name]["uuids"].items()
-        ]
-        context["default_fields"] = json.dumps(question_field_list)
+    if context["default_fields"] == "[]" and context.get("writing_typ"):
+        def_types = get_def_writing_types()
+        question_field_list = [f"q_{q['uuid']}" for q in questions if q["typ"] in def_types]
+        if question_field_list:
+            context["default_fields"] = json.dumps(question_field_list)
 
     context["auto_save"] = not get_event_config(
         context["event"].id, "writing_disable_auto", default_value=False, context=context
