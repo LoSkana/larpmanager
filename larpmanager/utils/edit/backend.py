@@ -838,7 +838,7 @@ def working_ticket(request: HttpRequest) -> Any:
 
 
 def backend_order(
-    context: dict, model_class: type, element_uuid: str, move_up: int, elements: object | None = None
+    context: dict, model_class: type, element: str | BaseModel, move_up: int, elements: object | None = None
 ) -> None:
     """Exchange ordering positions between two elements in a sequence.
 
@@ -849,7 +849,7 @@ def backend_order(
     Args:
         context: Context dictionary to store the current element after operation.
         model_class: Model class of elements to reorder.
-        element_uuid: UUID of the element to move.
+        element: either the element to move, or it's UUID.
         move_up: Direction to move - 1 for up (increase order), 0 for down (decrease order).
         elements: Optional queryset of elements. Defaults to event elements if None.
 
@@ -863,7 +863,8 @@ def backend_order(
     """
     # Get elements queryset, defaulting to event elements if not provided
     elements = elements or context["event"].get_elements(model_class)
-    current_element = elements.get(uuid=element_uuid)
+
+    current_element = elements.get(uuid=element) if isinstance(element, str) else element
 
     # Determine direction: move_up=True means move up (increase order), False means down
     queryset = (

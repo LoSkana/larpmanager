@@ -689,7 +689,7 @@ urlpatterns = [
         name="orga_plots_versions",
     ),
     path(
-        "<slug:event_slug>/manage/plots/rels/<slug:plot_rel_uuid>/order/<int:order>/",
+        "<slug:event_slug>/manage/plots/<slug:plot_uuid>/rels/<slug:character_uuid>/order/<int:order>/",
         views_ow.orga_plots_rels_order,
         name="orga_plots_rels_order",
     ),
