@@ -105,7 +105,11 @@ from larpmanager.cache.px import (
     on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
 )
 from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
-from larpmanager.cache.registration import clear_registration_counts_cache, on_character_update_registration_cache
+from larpmanager.cache.registration import (
+    clear_registration_counts_cache,
+    clear_registration_tickets_cache,
+    on_character_update_registration_cache,
+)
 from larpmanager.cache.rels import (
     clear_event_relationships_cache,
     on_faction_characters_m2m_changed,
@@ -1532,15 +1536,15 @@ def post_save_ticket_accounting_cache(
 ) -> None:
     """Clear cache for all runs when a ticket is saved."""
     log_registration_ticket_saved(instance)
-
-    # Clear accounting cache for all runs in the ticket's event
     reset_registration_ticket(instance)
+    clear_registration_tickets_cache(instance.event_id)
 
 
 @receiver(post_delete, sender=RegistrationTicket)
 def post_delete_ticket_accounting_cache(sender: type, instance: RegistrationTicket, **kwargs: Any) -> None:
     """Clear cache for all runs when a ticket is deleted."""
     reset_registration_ticket(instance)
+    clear_registration_tickets_cache(instance.event_id)
 
 
 # Relationship signals

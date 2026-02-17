@@ -48,6 +48,7 @@ from larpmanager.accounting.registration import (
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions
+from larpmanager.cache.registration import get_registration_tickets
 from larpmanager.cache.text_fields import get_cache_registration_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
@@ -177,16 +178,16 @@ def _orga_registrations_tickets(registration: Any, context: dict) -> None:
     else:
         # Process valid ticket and determine registration type
         ticket = context["reg_tickets"][registration.ticket_id]
-        regs_list_add(context, "list_tickets", ticket.name, registration.member)
-        registration.ticket_show = ticket.name
+        regs_list_add(context, "list_tickets", ticket.get("name"), registration.member)
+        registration.ticket_show = ticket.get("name")
 
         # Check for provisional status first, then map ticket tier to type
         if is_registration_provisional(
             registration, event=context["event"], features=context["features"], context=context
         ):
             registration_type = ("0", _("Provisional"))
-        elif ticket.tier in ticket_types:
-            registration_type = ticket_types[ticket.tier]
+        elif ticket.get("tier") in ticket_types:
+            registration_type = ticket_types[ticket.get("tier")]
 
     # Ensure both default and current type categories exist in context
     for type_key in [default_ticket_type, registration_type]:
@@ -385,10 +386,13 @@ def _orga_registrations_prepare(context: dict) -> None:
         if character["player_uuid"] not in context["reg_chars"]:
             context["reg_chars"][character["player_uuid"]] = []
         context["reg_chars"][character["player_uuid"]].append(character)
+
     context["reg_tickets"] = {}
-    for ticket in RegistrationTicket.objects.filter(event=context["event"]).order_by("-price"):
-        ticket.emails = []
-        context["reg_tickets"][ticket.id] = ticket
+    # Get tickets from cache and sort by price descending
+    tickets = sorted(get_registration_tickets(context["event"].id), key=lambda t: t["price"], reverse=True)
+    for ticket in tickets:
+        ticket["emails"] = []
+        context["reg_tickets"][ticket["id"]] = ticket
     context["reg_questions"] = _get_registration_fields(context, context["member"])
 
     context["no_grouping"] = get_event_config(

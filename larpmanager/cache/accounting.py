@@ -27,6 +27,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.registration import get_registration_tickets
 from larpmanager.models.accounting import (
     AccountingItemPayment,
     PaymentChoices,
@@ -109,9 +110,8 @@ def _get_accounting_context(run: Run, member_filter: int | None = None) -> tuple
         features = {}
 
     # Get all registration tickets for this event, ordered by price (highest first)
-    registration_tickets_by_id = {}
-    for ticket in RegistrationTicket.objects.filter(event_id=run.event_id).order_by("-price"):
-        registration_tickets_by_id[ticket.id] = ticket
+    all_tickets = sorted(get_registration_tickets(run.event_id), key=lambda t: t["price"], reverse=True)
+    registration_tickets_by_id = {ticket["id"]: ticket for ticket in all_tickets}
 
     # Build cache for token/credit payments if feature is enabled
     payment_cache_by_member = {}
@@ -408,10 +408,10 @@ def _calculate_registration_accounting(
     if abs(accounting_data["remaining"]) < max_rounding:
         accounting_data["remaining"] = 0
 
-    # Add ticket pricing breakdown if ticket exists
+    # Add ticket pricing
     if registration.ticket_id in reg_tickets:
         ticket = reg_tickets[registration.ticket_id]
-        accounting_data["ticket_price"] = ticket.price
+        accounting_data["ticket_price"] = ticket["price"]
         # Add custom payment amount to base ticket price
         if registration.pay_what:
             accounting_data["ticket_price"] += registration.pay_what

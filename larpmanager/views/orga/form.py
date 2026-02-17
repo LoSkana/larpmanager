@@ -25,6 +25,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+from larpmanager.cache.registration import get_registration_tickets
 from larpmanager.forms.registration import OrgaRegistrationTicketForm
 from larpmanager.models.form import RegistrationOption, RegistrationQuestion
 from larpmanager.models.registration import (
@@ -32,7 +33,6 @@ from larpmanager.models.registration import (
     RegistrationQuota,
     RegistrationSection,
     RegistrationSurcharge,
-    RegistrationTicket,
 )
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_element
@@ -79,7 +79,7 @@ def orga_registration_tickets(request: HttpRequest, event_slug: str) -> HttpResp
     context["download"] = 1
 
     # Fetch registration tickets ordered by their sequence number
-    context["list"] = RegistrationTicket.objects.filter(event=context["event"]).order_by("order")
+    context["list"] = get_registration_tickets(context["event"].id)
     # Get available ticket tiers for the current event
     context["tiers"] = OrgaRegistrationTicketForm.get_tier_available(context["event"], context)
 
