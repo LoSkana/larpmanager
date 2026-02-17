@@ -23,14 +23,16 @@ import logging
 from datetime import timedelta
 from typing import Any
 
+import jwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_association_config
 from larpmanager.forms.miscellanea import (
     HelpQuestionForm,
     ShuttleServiceEditForm,
@@ -452,3 +454,45 @@ def shuttle_edit(request: HttpRequest, shuttle_uuid: Any) -> Any:
         "larpmanager/general/writing.html",
         {"form": form, "name": _("Modify shuttle request")},
     )
+
+
+_ALLOWED_ALGORITHMS = {"HS256", "HS384", "HS512"}
+_SSO_TOKEN_TTL_SECONDS = 300
+
+
+@login_required
+def app_integration_redirect(request: HttpRequest) -> HttpResponse:
+    """Generate a signed JWT and redirect to the configured external application.
+
+    Reads the shared secret, algorithm, and redirect URL from the association config,
+    builds a short-lived JWT containing the user's identity, and redirects to the
+    external application as ``<redirect_url>?token=<jwt>``.
+    """
+    context = get_context(request)
+    check_association_feature(request, context, "app_integration")
+
+    association_id = context["association_id"]
+
+    secret = get_association_config(association_id, "app_integration_secret", default_value="")
+    redirect_url = get_association_config(association_id, "app_integration_redirect_url", default_value="")
+    algorithm = get_association_config(association_id, "app_integration_algorithm", default_value="HS256")
+
+    if not secret or not redirect_url:
+        return HttpResponseForbidden("App integration is not fully configured.")
+
+    if algorithm not in _ALLOWED_ALGORITHMS:
+        algorithm = "HS256"
+
+    now = timezone.now()
+    payload = {
+        "sub": request.user.email,
+        "email": request.user.email,
+        "name": str(request.user.member.display_member),
+        "iat": int(now.timestamp()),
+        "exp": int((now + timedelta(seconds=_SSO_TOKEN_TTL_SECONDS)).timestamp()),
+    }
+
+    token = jwt.encode(payload, secret, algorithm=algorithm)
+
+    separator = "&" if "?" in redirect_url else "?"
+    return redirect(f"{redirect_url}{separator}token={token}")

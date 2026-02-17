@@ -444,6 +444,7 @@ class ExeConfigForm(ConfigForm):
         self.set_config_accounting()
         self.set_config_einvoice()
         self.set_config_others()
+        self.set_config_integration()
 
         self.set_section("legacy", "Legacy")
 
@@ -830,17 +831,33 @@ class ExeConfigForm(ConfigForm):
                 help_text_disable_event_approval,
             )
 
+    def set_config_integration(self) -> None:
+        """Configure app integration redirect settings for associations."""
+        if "app_integration" not in self.params["features"]:
+            return
+
+        self.set_section("app_integration", _("App Integration"))
+
+        field_label = _("Button text")
+        field_help_text = _("Label shown on the topbar button to access the external application")
+        self.add_configs("app_integration_button_text", ConfigType.CHAR, field_label, field_help_text)
+
+        field_label = _("Redirect URL")
+        field_help_text = _("URL of the external application where the user will be redirected")
+        self.add_configs("app_integration_redirect_url", ConfigType.CHAR, field_label, field_help_text)
+
+        field_label = _("Shared secret")
+        field_help_text = _(
+            "Secret key used to sign the JWT token for SSO authentication with the external application",
+        )
+        self.add_configs("app_integration_secret", ConfigType.CHAR, field_label, field_help_text)
+
+        field_label = _("Algorithm")
+        field_help_text = _("Signing algorithm for the JWT token (default: HS256)")
+        self.add_configs("app_integration_algorithm", ConfigType.CHAR, field_label, field_help_text)
+
     def set_config_einvoice(self) -> None:
-        """Configure electronic invoice settings for associations.
-
-        Sets up Italian e-invoice system parameters and business information
-        for electronic billing compliance. Only processes if 'e-invoice'
-        feature is enabled in params.
-
-        Returns:
-            None
-
-        """
+        """Configure electronic invoice settings for associations."""
         if "e-invoice" not in self.params["features"]:
             return
 

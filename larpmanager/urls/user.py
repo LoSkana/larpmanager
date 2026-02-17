@@ -442,4 +442,9 @@ urlpatterns = [
         views_onetime.onetime_stream,
         name="onetime_stream",
     ),
+    path(
+        "integration/redirect/",
+        views_ums.app_integration_redirect,
+        name="app_integration_redirect",
+    ),
 ]
