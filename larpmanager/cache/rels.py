@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import logging
+from functools import partial
 from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
@@ -27,6 +28,7 @@ from django.core.cache import cache
 
 from larpmanager.cache.character import update_event_cache_all
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.dirty import get_has_dirty_key, mark_dirty, refresh_if_dirty, resolve_dirty_section
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
@@ -39,6 +41,12 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
+
+_RELS_NS = "rels"
+_get_rels_has_dirty_key = partial(get_has_dirty_key, _RELS_NS)
+_mark_rels_dirty = partial(mark_dirty, _RELS_NS)
+_refresh_rels_if_dirty = partial(refresh_if_dirty, _RELS_NS)
+_resolve_dirty_rels_section = partial(resolve_dirty_section, _RELS_NS)
 
 
 def get_event_rels_key(event_id: int) -> str:
@@ -118,6 +126,26 @@ def remove_item_from_cache_section(event_id: int, section_name: str, section_id:
         clear_event_relationships_cache(event_id)
 
 
+def _make_char_rels_func(event: Event) -> Callable:
+    """Return a closure that computes character rels within a specific event.
+
+    Fetches event features once so the closure can be called for many
+    characters without repeating the features lookup.
+    """
+    features = get_event_features(event.id)
+    return lambda char: get_event_char_rels(char, features, event)
+
+
+def _get_section_rels_dirty_bg_func(section: str) -> Callable:
+    """Return the dirty-aware background task for a given section."""
+    return {
+        "factions": refresh_faction_rels_dirty_background,
+        "plots": refresh_plot_rels_dirty_background,
+        "speedlarps": refresh_speedlarp_rels_dirty_background,
+        "prologues": refresh_prologue_rels_dirty_background,
+    }[section]
+
+
 def refresh_character_related_caches(character: Character) -> None:
     """Update all caches that are related to a character.
 
@@ -157,7 +185,7 @@ def update_m2m_related_characters(
     instance: Plot | Faction | SpeedLarp | Prologue,
     character_ids: set[int],
     action: str,
-    background_update_func: Callable,
+    section: str,
 ) -> None:
     """Update character caches for M2M relationship changes.
 
@@ -165,17 +193,13 @@ def update_m2m_related_characters(
         instance: The instance that changed (Plot, Faction, SpeedLarp, Prologue)
         character_ids: Set of character primary keys affected
         action: The M2M action type
-        background_update_func: Background function to update the instance cache
+        section: Cache section name for the instance
 
     """
     if action in ("post_add", "post_remove", "post_clear"):
-        # Schedule background task to update the instance cache (relationship cache)
-        background_update_func(instance.id)
-
         # Collect all affected character IDs
         affected_character_ids = []
         if character_ids:
-            # Use the provided character IDs
             affected_character_ids = list(character_ids)
         elif action == "post_clear":
             # For post_clear, get all characters that were related
@@ -190,10 +214,13 @@ def update_m2m_related_characters(
         events_id.append(event.id)
         run_ids = list(Run.objects.filter(event_id__in=events_id).values_list("id", flat=True))
 
-        # Schedule background tasks for affected characters
+        # Mark instance and affected characters dirty, then schedule background tasks
+        _mark_rels_dirty(section, [instance.id], event.id)
+        _get_section_rels_dirty_bg_func(section)(instance.id)
+
         if affected_character_ids:
-            # Update relationship cache in background (single task for all characters)
-            refresh_character_relationships_background(affected_character_ids)
+            _mark_rels_dirty("characters", affected_character_ids, event.id)
+            refresh_character_rels_dirty_background(affected_character_ids)
 
             # Update event cache for all runs and characters in background (single task)
             if run_ids:
@@ -227,7 +254,25 @@ def get_event_rels_cache(event: Event) -> dict[str, Any]:
     # Initialize cache if no data found
     if cached_relationships is None:
         logger.debug("Cache miss for event %s, initializing", event.id)
-        cached_relationships = init_event_rels_all(event)
+        return init_event_rels_all(event)
+
+    # Resolve any items marked still dirty by M2M signal
+    any_resolved = False
+    if cache.get(_get_rels_has_dirty_key(event.id)):
+        char_rels_func = _make_char_rels_func(event)
+        for _section, _model, _rels_func in (
+            ("characters", Character, char_rels_func),
+            ("factions", Faction, get_event_faction_rels),
+            ("plots", Plot, get_event_plot_rels),
+            ("speedlarps", SpeedLarp, get_event_speedlarp_rels),
+            ("prologues", Prologue, get_event_prologue_rels),
+            ("quests", Quest, get_event_quest_rels),
+            ("questtypes", QuestType, get_event_questtype_rels),
+        ):
+            if _resolve_dirty_rels_section(event.id, cached_relationships, _section, _model, _rels_func):
+                any_resolved = True
+    if any_resolved:
+        cache.set(cache_key, cached_relationships, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return cached_relationships
 
@@ -963,6 +1008,44 @@ def update_event_cache_all_background(run_ids: int | list[int], character_ids: i
             update_event_cache_all(run, character)
 
 
+# Dirty-aware background tasks (skip items already resolved on-demand)
+
+
+@background_auto(queue="cache-rels")
+def refresh_character_rels_dirty_background(character_ids: int | list[int]) -> None:
+    """Update character relationships in cache (dirty-aware background task)."""
+    characters = _validate_and_fetch_objects(Character, character_ids, "Character")
+    _refresh_rels_if_dirty("characters", characters, refresh_character_relationships)
+
+
+@background_auto(queue="cache-rels")
+def refresh_faction_rels_dirty_background(faction_ids: int | list[int]) -> None:
+    """Update faction relationships in cache (dirty-aware background task)."""
+    factions = _validate_and_fetch_objects(Faction, faction_ids, "Faction")
+    _refresh_rels_if_dirty("factions", factions, refresh_event_faction_relationships)
+
+
+@background_auto(queue="cache-rels")
+def refresh_plot_rels_dirty_background(plot_ids: int | list[int]) -> None:
+    """Update plot relationships in cache (dirty-aware background task)."""
+    plots = _validate_and_fetch_objects(Plot, plot_ids, "Plot")
+    _refresh_rels_if_dirty("plots", plots, refresh_event_plot_relationships)
+
+
+@background_auto(queue="cache-rels")
+def refresh_speedlarp_rels_dirty_background(speedlarp_ids: int | list[int]) -> None:
+    """Update speedlarp relationships in cache (dirty-aware background task)."""
+    speedlarps = _validate_and_fetch_objects(SpeedLarp, speedlarp_ids, "SpeedLarp")
+    _refresh_rels_if_dirty("speedlarps", speedlarps, refresh_event_speedlarp_relationships)
+
+
+@background_auto(queue="cache-rels")
+def refresh_prologue_rels_dirty_background(prologue_ids: int | list[int]) -> None:
+    """Update prologue relationships in cache (dirty-aware background task)."""
+    prologues = _validate_and_fetch_objects(Prologue, prologue_ids, "Prologue")
+    _refresh_rels_if_dirty("prologues", prologues, refresh_event_prologue_relationships)
+
+
 # Signal handlers for M2M changes
 
 
@@ -976,7 +1059,7 @@ def on_faction_characters_m2m_changed(
     """Handle faction-character relationship changes."""
     # Delegate to the generic M2M character update handler
     # This will schedule background tasks for cache invalidation
-    update_m2m_related_characters(instance, pk_set, action, refresh_event_faction_relationships_background)
+    update_m2m_related_characters(instance, pk_set, action, "factions")
 
 
 def on_plot_characters_m2m_changed(
@@ -989,7 +1072,7 @@ def on_plot_characters_m2m_changed(
     """Handle plot-character relationship changes."""
     # Delegate to the generic M2M relationship handler for character updates
     # This schedules background tasks for both plot and character cache updates
-    update_m2m_related_characters(instance, pk_set, action, refresh_event_plot_relationships_background)
+    update_m2m_related_characters(instance, pk_set, action, "plots")
 
 
 def on_speedlarp_characters_m2m_changed(
@@ -1001,7 +1084,7 @@ def on_speedlarp_characters_m2m_changed(
 ) -> None:
     """Handle speedlarp-character relationship changes."""
     # Delegate to the generic M2M relationship handler with speedlarp-specific background refresh
-    update_m2m_related_characters(instance, pk_set, action, refresh_event_speedlarp_relationships_background)
+    update_m2m_related_characters(instance, pk_set, action, "speedlarps")
 
 
 def on_prologue_characters_m2m_changed(
@@ -1014,4 +1097,4 @@ def on_prologue_characters_m2m_changed(
     """Handle prologue-character relationship changes."""
     # Delegate to utility function that schedules background tasks for cache updates
     # This ensures consistent cache invalidation for both prologue and character caches
-    update_m2m_related_characters(instance, pk_set, action, refresh_event_prologue_relationships_background)
+    update_m2m_related_characters(instance, pk_set, action, "prologues")
