@@ -96,9 +96,9 @@ def mark_dirty(cache_ns: str, section: str, item_ids: list[int], event_id: int |
         event_id: Event the items belong to; ``None`` skips the hint.
     """
     for item_id in item_ids:
-        cache.set(get_dirty_key(cache_ns, section, item_id))
+        cache.set(get_dirty_key(cache_ns, section, item_id), "1")
     if event_id is not None:
-        cache.set(get_has_dirty_key(cache_ns, event_id))
+        cache.set(get_has_dirty_key(cache_ns, event_id), "1")
 
 
 def refresh_if_dirty(cache_ns: str, section: str, items: list, refresh_func: Callable) -> None:
