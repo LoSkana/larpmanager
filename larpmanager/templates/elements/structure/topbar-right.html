@@ -32,6 +32,16 @@
             <span class="label">{% trans "Profile" %}</span>
         </div>
     </td>
+    {% if app_integration_redirect_url %}
+        <td class="{% if topbar_admin %}no_mobile{% endif %}">
+            <div class="el">
+                <a href="{% url 'app_integration_redirect' %}" target="_blank">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+                <span class="label">{{ app_integration_button_text|default:"App" }}</span>
+            </div>
+        </td>
+    {% endif %}
     <td>
         <div class="el">
             <a id="menu-open" href="#menu">
@@ -68,6 +78,14 @@
         <span>{% trans "Profile" %}</span>
     </a>
 </div>
+{% if app_integration_redirect_url %}
+    <div class="el">
+        <a href="{% url 'app_integration_redirect' %}" target="_blank">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            <span>{{ app_integration_button_text|default:"App" }}</span>
+        </a>
+    </div>
+{% endif %}
 <div class="el">
     <a id="menu-open" href="#menu">
         <i class="fa-solid fa-bars"></i>

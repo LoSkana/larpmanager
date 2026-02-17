@@ -1427,3 +1427,17 @@
     after_link: ''
     hidden: false
     module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: App Integration
+    descr: Enables a button in the topbar to redirect authenticated users to an external
+      application, using a configurable URL and optional JWT-based SSO
+    slug: app_integration
+    overall: true
+    placeholder: false
+    order: 90
+    after_text: Now you can configure the integration button and the external application
+      settings
+    after_link: config/app_integration
+    hidden: false
+    module: miscellany

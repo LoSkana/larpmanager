@@ -151,6 +151,12 @@ def init_cache_association(a_slug: str) -> dict | None:
             association.id, config, default_value=False, context=temp_context
         )
 
+    if "app_integration" in association_dict.get("features", {}):
+        for config in ["app_integration_button_text", "app_integration_redirect_url"]:
+            association_dict[config] = get_association_config(
+                association.id, config, default_value="", context=temp_context
+            )
+
     return association_dict
 
 
