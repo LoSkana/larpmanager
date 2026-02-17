@@ -146,12 +146,9 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         serialized_data = {}
 
         # Process concrete and private fields (standard model fields)
-        # Extract field values using Django's field value accessor
         for field in chain(model_options.concrete_fields, model_options.private_fields):
             field_value = field.value_from_object(self)
-            # Only include fields with truthy values to keep dict clean
-            if field_value:
-                serialized_data[field.name] = field_value
+            serialized_data[field.name] = field_value
 
         # Process many-to-many relationships if requested
         if many_to_many:

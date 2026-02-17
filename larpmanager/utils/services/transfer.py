@@ -26,6 +26,7 @@ from django.db import transaction
 
 from larpmanager.cache.accounting import refresh_member_accounting_cache
 from larpmanager.cache.question import get_cached_registration_questions
+from larpmanager.cache.registration import get_registration_tickets
 from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
@@ -161,22 +162,29 @@ def _find_matching_ticket(
         return None
 
     target_event = target_run.event
+    target_tickets = get_registration_tickets(target_event.id)
 
     # Manual mapping
     if ticket_mapping and source_ticket.id in ticket_mapping:
         target_ticket_id = ticket_mapping[source_ticket.id]
-        return RegistrationTicket.objects.filter(id=target_ticket_id, event=target_event).first()
+        matched_ticket = next((t for t in target_tickets if t["id"] == target_ticket_id), None)
+        if matched_ticket:
+            return RegistrationTicket.objects.get(id=matched_ticket["id"])
+        return None
 
     # Match by tier and name
-    exact_match = RegistrationTicket.objects.filter(
-        event=target_event, tier=source_ticket.tier, name=source_ticket.name
-    ).first()
-
+    exact_match = next(
+        (t for t in target_tickets if t["tier"] == source_ticket.tier and t["name"] == source_ticket.name), None
+    )
     if exact_match:
-        return exact_match
+        return RegistrationTicket.objects.get(id=exact_match["id"])
 
     # Match by tier only
-    return RegistrationTicket.objects.filter(event=target_event, tier=source_ticket.tier).first()
+    tier_match = next((t for t in target_tickets if t["tier"] == source_ticket.tier), None)
+    if tier_match:
+        return RegistrationTicket.objects.get(id=tier_match["id"])
+
+    return None
 
 
 def _transfer_choices(source_reg: Registration, target_reg: Registration) -> list[RegistrationChoice]:
@@ -413,23 +421,26 @@ def get_suggested_ticket_mapping(source_run: Run, target_run: Run) -> dict[int, 
     Returns:
         Dictionary mapping source ticket IDs to target ticket IDs
     """
-    source_tickets = RegistrationTicket.objects.filter(event=source_run.event)
-    target_tickets = RegistrationTicket.objects.filter(event=target_run.event)
+    source_tickets = get_registration_tickets(source_run.event_id)
+    target_tickets = get_registration_tickets(target_run.event_id)
 
     mapping = {}
 
     for source_ticket in source_tickets:
         # Look for exact match
-        exact_match = target_tickets.filter(tier=source_ticket.tier, name=source_ticket.name).first()
+        exact_match = next(
+            (t for t in target_tickets if t["tier"] == source_ticket["tier"] and t["name"] == source_ticket["name"]),
+            None,
+        )
 
         if exact_match:
-            mapping[source_ticket.id] = exact_match.id
+            mapping[source_ticket["id"]] = exact_match["id"]
             continue
 
         # Look for tier match
-        tier_match = target_tickets.filter(tier=source_ticket.tier).first()
+        tier_match = next((t for t in target_tickets if t["tier"] == source_ticket["tier"]), None)
         if tier_match:
-            mapping[source_ticket.id] = tier_match.id
+            mapping[source_ticket["id"]] = tier_match["id"]
 
     return mapping
 

@@ -25,6 +25,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config
+from larpmanager.cache.registration import get_registration_tickets
 from larpmanager.forms.base import BaseForm, BaseModelForm
 from larpmanager.forms.member import MEMBERSHIP_CHOICES
 from larpmanager.forms.utils import (
@@ -51,7 +52,7 @@ from larpmanager.models.miscellanea import (
     WorkshopOption,
     WorkshopQuestion,
 )
-from larpmanager.models.registration import RegistrationTicket, TicketTier
+from larpmanager.models.registration import TicketTier
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import Faction, FactionType
 from larpmanager.utils.core.validators import FileTypeValidator
@@ -323,19 +324,17 @@ class OrganizerCastingOptionsForm(BaseForm):
         else:
             del self.fields["memberships"]
 
-        # Fetch available tickets excluding waiting list, staff, and NPC tiers
-        ticks = (
-            RegistrationTicket.objects.filter(event=self.params["event"])
-            .exclude(tier__in=[TicketTier.WAITING])
-            .values_list("uuid", "name")
-        )
+        # Fetch available tickets excluding waiting list tiers
+        all_tickets = get_registration_tickets(self.params["event"].id)
+        filtered_tickets = [t for t in all_tickets if t["tier"] != TicketTier.WAITING]
+        ticks = [(str(t["uuid"]), t["name"]) for t in filtered_tickets]
 
         # Create ticket selection field with all available tickets
         self.fields["tickets"] = forms.MultipleChoiceField(
             choices=ticks,
             widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
         )
-        self.fields["tickets"].initial = [str(el[0]) for el in ticks]
+        self.fields["tickets"].initial = [el[0] for el in ticks]
 
         # Configure faction field if faction feature is enabled
         if "faction" in self.params["features"]:

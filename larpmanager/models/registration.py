@@ -33,7 +33,7 @@ from tinymce.models import HTMLField
 from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
-from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str
+from larpmanager.models.utils import UploadToPathAndRename
 from larpmanager.models.writing import Character
 
 
@@ -146,37 +146,6 @@ class RegistrationTicket(UuidMixin, BaseModel):
     def get_price(self) -> Any:
         """Return the tier price."""
         return self.price
-
-    def get_form_text(self, currency_symbol: str | None = None) -> str:
-        """Generate formatted text representation for form display.
-
-        Creates a text string combining the ticket name, price (if available),
-        and availability count (if the ticket has an available attribute).
-
-        Args:
-            currency_symbol: Currency symbol string. If not provided, will be fetched
-                from the event's association
-
-        Returns:
-            Formatted string containing ticket information for display
-
-        """
-        # Get ticket display information from show method
-        ticket_data = self.show()
-        formatted_text = ticket_data["name"]
-
-        # Add price information if available
-        if ticket_data["price"]:
-            if not currency_symbol:
-                # noinspection PyUnresolvedReferences
-                currency_symbol = self.event.association.get_currency_symbol()
-            formatted_text += f" - {decimal_to_str(ticket_data['price'])}{currency_symbol}"
-
-        # Add availability count if ticket has available attribute
-        if hasattr(self, "available"):
-            formatted_text += f" - ({_('Available')}: {self.available})"
-
-        return formatted_text
 
 
 class RegistrationSection(UuidMixin, BaseModel):

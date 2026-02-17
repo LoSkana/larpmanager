@@ -37,7 +37,7 @@ from larpmanager.models.registration import (
     RegistrationSection,
     RegistrationTicket,
 )
-from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str
+from larpmanager.models.utils import UploadToPathAndRename
 from larpmanager.models.writing import CharacterStatus, Faction
 
 
@@ -406,11 +406,6 @@ class WritingOption(UuidMixin, BaseModel):
         """Return string representation."""
         return f"{self.question} {self.name}"
 
-    def get_form_text(self, currency_symbol: str | None = None) -> str:  # noqa: ARG002
-        """Return the display name for this ticket tier."""
-        show_data = self.show()
-        return show_data["name"]
-
     def show(self) -> dict[str, Any]:
         """Return JSON representation with available fields and attributes."""
         # Initialize response with max available count
@@ -623,11 +618,6 @@ class RegistrationQuestion(UuidMixin, BaseModel):
         """Serialize question to dictionary for caching with nested options and computed fields."""
         data = super().as_dict(many_to_many=False)
 
-        # Ensure fields with falsy defaults are always included
-        data["description"] = self.description
-        data["order"] = self.order
-        data["max_length"] = self.max_length
-
         # Add display values for choice fields (for template rendering)
         data["get_typ_display"] = self.get_typ_display()
         data["get_status_display"] = self.get_status_display()
@@ -711,21 +701,6 @@ class RegistrationOption(UuidMixin, BaseModel):
         """Return the option price."""
         return self.price
 
-    def get_form_text(self, currency_symbol: str | None = None) -> str:
-        """Return formatted text with name and optional price."""
-        # Get display data for the current instance
-        display_data = self.show()
-        formatted_text = display_data["name"]
-
-        # Append formatted price with currency symbol if applicable
-        if display_data["price"] and int(display_data["price"]) > 0:
-            if not currency_symbol:
-                # noinspection PyUnresolvedReferences
-                currency_symbol = self.event.association.get_currency_symbol()
-            formatted_text += f" ({decimal_to_str(display_data['price'])}{currency_symbol})"
-
-        return formatted_text
-
     def show(self) -> dict[str, Any]:
         """Return ticket tier display data as dictionary.
 
@@ -745,21 +720,6 @@ class RegistrationOption(UuidMixin, BaseModel):
         js["question"] = self.question.name
 
         return js
-
-    def as_dict(self, **kwargs: Any) -> dict[str, Any]:  # noqa: ARG002
-        """Serialize option to dictionary for caching.
-
-        Explicitly includes fields with falsy defaults (description="", order=0, price=0, max_available=0).
-        """
-        data = super().as_dict(many_to_many=False)
-
-        # Ensure fields with falsy defaults are always included
-        data["description"] = self.description
-        data["order"] = self.order
-        data["price"] = self.price
-        data["max_available"] = self.max_available
-
-        return data
 
     class Meta:
         indexes: ClassVar[list] = [

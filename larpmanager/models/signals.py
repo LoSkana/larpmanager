@@ -105,7 +105,11 @@ from larpmanager.cache.px import (
     on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
 )
 from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
-from larpmanager.cache.registration import clear_registration_counts_cache, on_character_update_registration_cache
+from larpmanager.cache.registration import (
+    clear_registration_counts_cache,
+    clear_registration_tickets_cache,
+    on_character_update_registration_cache,
+)
 from larpmanager.cache.rels import (
     clear_event_relationships_cache,
     on_faction_characters_m2m_changed,
@@ -227,6 +231,8 @@ from larpmanager.models.miscellanea import ChatMessage, HelpQuestion, Log, Playe
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
+    RegistrationInstallment,
+    RegistrationQuota,
     RegistrationSection,
     RegistrationTicket,
 )
@@ -352,12 +358,14 @@ def reset_accountingitem_cache(instance: Any) -> None:
 def post_save_ability_px(sender: type, instance: AbilityPx, *args: Any, **kwargs: Any) -> None:
     """Update character experience when ability changes."""
     update_characters_experience_on_ability_change(instance)
+    reset_widgets(instance)
 
 
 @receiver(post_delete, sender=AbilityPx)
 def post_delete_ability_px(sender: type, instance: AbilityPx, *args: Any, **kwargs: Any) -> None:
     """Update character experience when ability is deleted."""
     update_characters_experience_on_ability_change(instance)
+    reset_widgets(instance)
 
 
 # AccountingItemCollection signals
@@ -694,6 +702,9 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
     # Create a personal inventory for newly created characters
     generate_base_inventories(instance)
 
+    # Clear actions cache
+    reset_widgets(instance)
+
 
 @receiver(pre_delete, sender=Character)
 def pre_delete_character_reset(sender: type, instance: Character, **kwargs: Any) -> None:
@@ -717,6 +728,9 @@ def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs
 
     # Update visible factions
     update_visible_factions(instance.event)
+
+    # Clear actions cache
+    reset_widgets(instance)
 
 
 # Casting signals
@@ -791,6 +805,7 @@ def post_save_delivery_px(
 ) -> None:
     """Refresh delivery characters after save signal."""
     update_characters_experience_on_delivery_change(instance)
+    reset_widgets(instance)
 
 
 @receiver(post_save, sender=Inventory)
@@ -807,6 +822,7 @@ def create_pools_for_inventory(sender: type, instance: Inventory, created: bool,
 def post_delete_delivery_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Signal handler that refreshes delivery characters after a delivery is deleted."""
     update_characters_experience_on_delivery_change(instance)
+    reset_widgets(instance)
 
 
 # Event signals
@@ -1319,6 +1335,8 @@ def post_save_quest_reset_rels(sender: type, instance: Quest, **kwargs: Any) -> 
     if instance.typ:
         refresh_event_questtype_relationships_background(instance.typ_id)
 
+    reset_widgets(instance)
+
 
 @receiver(pre_delete, sender=Quest)
 def pre_delete_quest_reset(sender: type, instance: Any, **kwargs: Any) -> None:
@@ -1335,6 +1353,8 @@ def post_delete_quest_reset_rels(sender: type, instance: object, **kwargs: Any) 
 
     # Remove quest from cache
     remove_item_from_cache_section(instance.event_id, "quests", instance.id)
+
+    reset_widgets(instance)
 
 
 # QuestType signals
@@ -1358,6 +1378,8 @@ def post_save_questtype_reset_rels(
     for quest in instance.quests.all():
         refresh_event_quest_relationships_background(quest.id)
 
+    reset_widgets(instance)
+
 
 @receiver(pre_delete, sender=QuestType)
 def pre_delete_quest_type_reset(sender: type, instance: QuestType, **kwargs: dict) -> None:
@@ -1374,6 +1396,8 @@ def post_delete_questtype_reset_rels(sender: type, instance: QuestType, **kwargs
 
     # Remove questtype from cache
     remove_item_from_cache_section(instance.event_id, "questtypes", instance.id)
+
+    reset_widgets(instance)
 
 
 # RefundRequest signals
@@ -1500,12 +1524,14 @@ def post_delete_registration_section(sender: type, instance: RegistrationSection
 def post_save_registration_question(sender: type, instance: RegistrationQuestion, **kwargs: dict) -> None:
     """Process registration question post-save signal."""
     clear_registration_questions_cache(instance.event_id)
+    reset_widgets(instance)
 
 
 @receiver(post_delete, sender=RegistrationQuestion)
 def post_delete_registration_question(sender: type, instance: RegistrationTicket, **kwargs: Any) -> None:
     """Process registration question post-delete signal."""
     clear_registration_questions_cache(instance.event_id)
+    reset_widgets(instance)
 
 
 # RegistrationOption signals
@@ -1532,15 +1558,44 @@ def post_save_ticket_accounting_cache(
 ) -> None:
     """Clear cache for all runs when a ticket is saved."""
     log_registration_ticket_saved(instance)
-
-    # Clear accounting cache for all runs in the ticket's event
     reset_registration_ticket(instance)
+    clear_registration_tickets_cache(instance.event_id)
+    reset_widgets(instance)
 
 
 @receiver(post_delete, sender=RegistrationTicket)
 def post_delete_ticket_accounting_cache(sender: type, instance: RegistrationTicket, **kwargs: Any) -> None:
     """Clear cache for all runs when a ticket is deleted."""
     reset_registration_ticket(instance)
+    reset_widgets(instance)
+
+
+# RegistrationInstallment signals
+@receiver(post_save, sender=RegistrationInstallment)
+def post_save_registration_installment(sender: type, instance: RegistrationInstallment, **kwargs: Any) -> None:
+    """Clear actions cache when installment is saved."""
+    reset_widgets(instance)
+
+
+@receiver(post_delete, sender=RegistrationInstallment)
+def post_delete_registration_installment(sender: type, instance: RegistrationInstallment, **kwargs: Any) -> None:
+    """Clear actions cache when installment is deleted."""
+    reset_widgets(instance)
+
+
+# RegistrationQuota signals
+@receiver(post_save, sender=RegistrationQuota)
+def post_save_registration_quota(sender: type, instance: RegistrationQuota, **kwargs: Any) -> None:
+    """Clear actions cache when quota is saved."""
+    reset_widgets(instance)
+
+
+@receiver(post_delete, sender=RegistrationQuota)
+def post_delete_registration_quota(sender: type, instance: RegistrationQuota, **kwargs: Any) -> None:
+    """Clear actions cache when quota is deleted."""
+    reset_widgets(instance)
+    clear_registration_tickets_cache(instance.event_id)
+    reset_widgets(instance)
 
 
 # Relationship signals
@@ -1689,6 +1744,9 @@ def post_save_trait_reset_rels(sender: type, instance: Trait, **kwargs: Any) -> 
     # Refresh all trait relationships for this instance
     refresh_all_instance_traits(instance)
 
+    # Clear actions cache
+    reset_widgets(instance)
+
 
 @receiver(pre_delete, sender=Trait)
 def pre_delete_trait_reset(sender: type, instance: Any, **kwargs: Any) -> None:
@@ -1702,6 +1760,8 @@ def post_delete_trait_reset_rels(sender: type, instance: Any, **kwargs: Any) -> 
     # Update quest cache if trait had a quest
     if instance.quest:
         refresh_event_quest_relationships_background(instance.quest_id)
+
+    reset_widgets(instance)
 
 
 # User signals
@@ -1742,6 +1802,7 @@ def pre_delete_writing_question_reset(sender: type, instance: WritingQuestion, *
     clear_event_fields_cache(instance.event_id)
     clear_event_cache_all_runs(instance.event)
     clear_writing_questions_cache(instance.event_id)
+    reset_widgets(instance)
 
 
 @receiver(post_save, sender=WritingQuestion)
@@ -1750,6 +1811,7 @@ def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any)
     clear_event_fields_cache(instance.event_id)
     clear_event_cache_all_runs(instance.event)
     clear_writing_questions_cache(instance.event_id)
+    reset_widgets(instance)
 
 
 # m2m_changed signals
