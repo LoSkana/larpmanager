@@ -34,6 +34,7 @@ from larpmanager.models.form import (
     RegistrationQuestion,
     WritingOption,
     WritingQuestion,
+    get_def_writing_types,
 )
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
 
@@ -241,6 +242,23 @@ def get_cached_registration_questions(event: Event) -> list:
 
     # Explicitly sort to ensure order is preserved after cache deserialization
     return sorted(cached_data, key=lambda q: (q.get("section_order") or -1, q["order"]))
+
+
+def get_writing_field_names(event: Event, applicable: str) -> dict:
+    """Get a mapping of default field type to field name for an applicable type.
+
+    Args:
+        event: Event instance
+        applicable: Question applicable type (e.g., QuestionApplicable.CHARACTER)
+
+    Returns:
+        dict: Mapping of question type to question name for default writing types,
+              e.g. {'name': 'Name', 'teaser': 'Presentation', 'title': 'Title'}
+
+    """
+    def_types = get_def_writing_types()
+    questions = get_cached_writing_questions(event, applicable)
+    return {q["typ"]: q["name"] for q in questions if q["typ"] in def_types}
 
 
 def clear_writing_questions_cache(event_id: int) -> None:
