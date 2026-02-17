@@ -4300,10 +4300,19 @@ msgstr ""
 msgid "Seller"
 msgstr ""
 
+msgid "Tier"
+msgstr ""
+
 msgid "Type of ticket"
 msgstr ""
 
 msgid "Ticket name (keep it short)"
+msgstr ""
+
+msgid "Ticket price"
+msgstr ""
+
+msgid "Total availability"
 msgstr ""
 
 msgid ""
@@ -4312,6 +4321,9 @@ msgid ""
 msgstr ""
 
 msgid "Is it selectable by participants"
+msgstr ""
+
+msgid "Casting priority"
 msgstr ""
 
 msgid ""
@@ -4323,15 +4335,27 @@ msgid ""
 "Optional - Indicates whether the ticket can be gifted to other participants"
 msgstr ""
 
+msgid "Order"
+msgstr ""
+
+msgid "Display order"
+msgstr ""
+
 msgid "Description - will be displayed at the beginning of the section"
 msgstr ""
 
 msgid "Quotas total number"
 msgstr ""
 
+msgid "Days available"
+msgstr ""
+
 msgid ""
 "Minimum number of days before the event for which it is made available (0  = "
 "always)"
+msgstr ""
+
+msgid "Extra price applied when this quota is active"
 msgstr ""
 
 msgid "Payment order"
@@ -4341,9 +4365,15 @@ msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
 msgstr ""
 
+msgid "Days deadline"
+msgstr ""
+
 msgid ""
 "Deadline in the measure of days from enrollment (fill in one between the "
 "fixed deadline and the deadline in days)"
+msgstr ""
+
+msgid "Date deadline"
 msgstr ""
 
 msgid "Deadline date"
@@ -4355,7 +4385,22 @@ msgstr ""
 msgid "Surcharge applied to the ticket"
 msgstr ""
 
+msgid "Date"
+msgstr ""
+
 msgid "Date from when the surcharge is applied"
+msgstr ""
+
+msgid "Additionals"
+msgstr ""
+
+msgid "Number of additional participants"
+msgstr ""
+
+msgid "Donation"
+msgstr ""
+
+msgid "Donation amount chosen by the participant"
 msgstr ""
 
 msgid "Character name"
@@ -4948,9 +4993,6 @@ msgid "Players"
 msgstr ""
 
 msgid "Organization"
-msgstr ""
-
-msgid "Date"
 msgstr ""
 
 msgid "View Details"
@@ -5904,9 +5946,6 @@ msgstr ""
 msgid "Last membership date"
 msgstr ""
 
-msgid "Order"
-msgstr ""
-
 msgid ""
 "This page shows all information about the individual member available in the "
 "system"
@@ -6575,9 +6614,6 @@ msgstr ""
 msgid "Collection participated"
 msgstr ""
 
-msgid "Donation"
-msgstr ""
-
 msgid "If you would like to make a donation to the Organization"
 msgstr ""
 
@@ -7156,9 +7192,6 @@ msgstr ""
 msgid "Casting management for"
 msgstr ""
 
-msgid "Tier"
-msgstr ""
-
 msgid "Participants"
 msgstr ""
 
@@ -7647,9 +7680,6 @@ msgstr ""
 msgid ""
 "This page shows the different tickets with which participants can register "
 "for the event"
-msgstr ""
-
-msgid "Casting priority"
 msgstr ""
 
 msgid "Direct link"

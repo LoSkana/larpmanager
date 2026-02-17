@@ -1779,6 +1779,9 @@ msgstr "Paiement effectif"
 msgid "Add to plot"
 msgstr "Ajouter à la parcelle"
 
+msgid "Additionals"
+msgstr "Additionnels"
+
 msgid "Amount paid"
 msgstr "Montant payé"
 
@@ -2157,6 +2160,9 @@ msgstr "Galerie de test"
 msgid "Three quotas"
 msgstr "Trois quotas"
 
+msgid "Ticket price"
+msgstr "Prix du billet"
+
 msgid "Total issued"
 msgstr "Total émis"
 
@@ -2251,14 +2257,23 @@ msgstr "Courriel de contact"
 msgid "Daily Summary"
 msgstr "Résumé quotidien"
 
+msgid "Date deadline"
+msgstr "Date limite"
+
 msgid "Dates updated"
 msgstr "Dates mises à jour"
+
+msgid "Days deadline"
+msgstr "Délai en jours"
 
 msgid "Deadline date"
 msgstr "Date limite"
 
 msgid "Discount back"
 msgstr "Remise"
+
+msgid "Display order"
+msgstr "Ordre d'affichage"
 
 msgid "Document type"
 msgstr "Type de document"
@@ -2491,6 +2506,9 @@ msgstr "Solde créditeur"
 
 msgid "Customisations"
 msgstr "Personnalisations"
+
+msgid "Days available"
+msgstr "Jours disponibles"
 
 msgid "Default fields"
 msgstr "Champs par défaut"
@@ -3385,6 +3403,9 @@ msgstr "Annulation d'un spectacle"
 
 msgid "Token Already Used"
 msgstr "Jeton déjà utilisé"
+
+msgid "Total availability"
+msgstr "Disponibilité totale"
 
 msgid "Total payment sent"
 msgstr "Paiement total envoyé"
@@ -5115,6 +5136,9 @@ msgstr "Aucun événement n'est présent, en créer un"
 msgid "Now you can set the taxes options"
 msgstr "Vous pouvez maintenant définir les options de taxation"
 
+msgid "Number of additional participants"
+msgstr "Nombre de participants supplémentaires"
+
 msgid "The event this content belongs to"
 msgstr "L'événement auquel ce contenu appartient"
 
@@ -5812,6 +5836,9 @@ msgstr "Décrire exactement l'endroit où elle se produit"
 msgid "Display all participants data as registry"
 msgstr "Afficher les données de tous les participants sous forme de registre"
 
+msgid "Donation amount chosen by the participant"
+msgstr "Montant du don choisi par le participant"
+
 msgid "I do it routinely, I have good experience"
 msgstr "Je le fais régulièrement, j'ai une bonne expérience"
 
@@ -6138,6 +6165,9 @@ msgstr "(Facultatif) Le montant d'un don volontaire"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Personnaliser les boutons de la barre de navigation de l'événement"
+
+msgid "Extra price applied when this quota is active"
+msgstr "Prix supplémentaire appliqué lorsque ce quota est actif"
 
 msgid "If checked: shows the position for each event"
 msgstr "Si coché : indique la position pour chaque événement"
