@@ -313,14 +313,11 @@ def on_experience_characters_m2m_changed(
 
     # Handle direct Character instance updates
     if isinstance(instance, Character):
-        calculate_character_experience_points(instance)
+        calculate_character_experience_points_bgk(instance.id)
     else:
-        # Get characters from pk_set or instance relationship
-        characters = Character.objects.filter(pk__in=pk_set) if pk_set else instance.characters.all()
-
-        # Update experience points for each affected character
-        for char in characters:
-            calculate_character_experience_points(char)
+        # Get character IDs from pk_set or instance relationship
+        char_ids = list(pk_set) if pk_set else list(instance.characters.values_list("id", flat=True))
+        calculate_character_experience_points_bgk(char_ids)
 
 
 def on_rule_abilities_m2m_changed(
@@ -339,12 +336,7 @@ def on_rule_abilities_m2m_changed(
     if action not in {"post_add", "post_remove", "post_clear"}:
         return
 
-    # Get the parent event containing this rule
-    event = instance.event.get_class_parent(RulePx)
-
-    # Recalculate experience for all characters in the event
-    for char in event.get_elements(Character).all():
-        calculate_character_experience_points(char)
+    _recalcuate_characters_experience_points(instance)
 
 
 def on_modifier_abilities_m2m_changed(
@@ -359,12 +351,7 @@ def on_modifier_abilities_m2m_changed(
     if action not in {"post_add", "post_remove", "post_clear"}:
         return
 
-    # Get the event containing this modifier
-    event = instance.event.get_class_parent(ModifierPx)
-
-    # Recalculate experience for all characters in the event
-    for char in event.get_elements(Character).all():
-        calculate_character_experience_points(char)
+    _recalcuate_characters_experience_points(instance)
 
 
 def apply_rules_computed(char: Any) -> None:
@@ -461,41 +448,22 @@ def remove_char_ability(char: Any, ability_id: Any) -> set:
 
 
 @background_auto(queue="experience")
-def calculate_character_experience_points_async(character_id: int) -> None:
+def calculate_character_experience_points_bgk(character_ids: int | list) -> None:
     """Update experience points for a character."""
-    try:
-        character = Character.objects.get(pk=character_id)
-        calculate_character_experience_points(character)
-    except ObjectDoesNotExist:
-        # Character was deleted, nothing to do
-        pass
+    if not isinstance(character_ids, list):
+        character_ids = [character_ids]
 
-
-def update_characters_experience_on_ability_change(instance: AbilityPx) -> None:
-    """Queues background tasks to update experience points for all characters with this ability."""
-    character_ids = instance.characters.values_list("id", flat=True)
     for character_id in character_ids:
-        calculate_character_experience_points_async(character_id)
+        try:
+            character = Character.objects.get(pk=character_id)
+            calculate_character_experience_points(character)
+        except ObjectDoesNotExist:
+            # Character was deleted, nothing to do
+            pass
 
 
-def update_characters_experience_on_rule_change(instance: RulePx) -> None:
-    """Queues background tasks to update experience points for all characters when experience rules change."""
-    parent_event = instance.event.get_class_parent(RulePx)
+def _recalcuate_characters_experience_points(instance: Any) -> None:
+    """Handle recomputing experience points of characters."""
+    parent_event = instance.event.get_class_parent(instance.__class__)
     character_ids = parent_event.get_elements(Character).values_list("id", flat=True)
-    for character_id in character_ids:
-        calculate_character_experience_points_async(character_id)
-
-
-def update_characters_experience_on_modifier_change(instance: ModifierPx) -> None:
-    """Queues background tasks to update experience points for all characters when a modifier changes."""
-    parent_event = instance.event.get_class_parent(ModifierPx)
-    character_ids = parent_event.get_elements(Character).values_list("id", flat=True)
-    for character_id in character_ids:
-        calculate_character_experience_points_async(character_id)
-
-
-def update_characters_experience_on_delivery_change(instance: DeliveryPx) -> None:
-    """Queues background tasks to update experience points for all characters when a delivery changes."""
-    character_ids = instance.characters.values_list("id", flat=True)
-    for character_id in character_ids:
-        calculate_character_experience_points_async(character_id)
+    calculate_character_experience_points_bgk(list(character_ids))

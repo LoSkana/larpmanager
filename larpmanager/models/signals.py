@@ -280,14 +280,11 @@ from larpmanager.utils.services.event import (
     update_run_plan_on_event_change,
 )
 from larpmanager.utils.services.experience import (
+    _recalcuate_characters_experience_points,
     calculate_character_experience_points,
     on_experience_characters_m2m_changed,
     on_modifier_abilities_m2m_changed,
     on_rule_abilities_m2m_changed,
-    update_characters_experience_on_ability_change,
-    update_characters_experience_on_delivery_change,
-    update_characters_experience_on_modifier_change,
-    update_characters_experience_on_rule_change,
 )
 from larpmanager.utils.services.inventory import generate_base_inventories
 from larpmanager.utils.services.miscellanea import auto_rotate_vertical_photos
@@ -357,14 +354,14 @@ def reset_accountingitem_cache(instance: Any) -> None:
 @receiver(post_save, sender=AbilityPx)
 def post_save_ability_px(sender: type, instance: AbilityPx, *args: Any, **kwargs: Any) -> None:
     """Update character experience when ability changes."""
-    update_characters_experience_on_ability_change(instance)
+    _recalcuate_characters_experience_points(instance)
     reset_widgets(instance)
 
 
 @receiver(post_delete, sender=AbilityPx)
 def post_delete_ability_px(sender: type, instance: AbilityPx, *args: Any, **kwargs: Any) -> None:
     """Update character experience when ability is deleted."""
-    update_characters_experience_on_ability_change(instance)
+    _recalcuate_characters_experience_points(instance)
     reset_widgets(instance)
 
 
@@ -804,7 +801,14 @@ def post_save_delivery_px(
     **kwargs: Any,
 ) -> None:
     """Refresh delivery characters after save signal."""
-    update_characters_experience_on_delivery_change(instance)
+    _recalcuate_characters_experience_points(instance)
+    reset_widgets(instance)
+
+
+@receiver(post_delete, sender=DeliveryPx)
+def post_delete_delivery_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Signal handler that refreshes delivery characters after a delivery is deleted."""
+    _recalcuate_characters_experience_points(instance)
     reset_widgets(instance)
 
 
@@ -816,13 +820,6 @@ def create_pools_for_inventory(sender: type, instance: Inventory, created: bool,
             PoolBalanceCI.objects.create(
                 inventory=instance, event=instance.event, number=1, name=pool_type.name, pool_type=pool_type, amount=0
             )
-
-
-@receiver(post_delete, sender=DeliveryPx)
-def post_delete_delivery_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
-    """Signal handler that refreshes delivery characters after a delivery is deleted."""
-    update_characters_experience_on_delivery_change(instance)
-    reset_widgets(instance)
 
 
 # Event signals
@@ -1224,13 +1221,13 @@ def post_delete_membership_cache(sender: type, instance: Membership, **kwargs: A
 @receiver(post_save, sender=ModifierPx)
 def post_save_modifier_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update character experience when a modifier is saved."""
-    update_characters_experience_on_modifier_change(instance)
+    _recalcuate_characters_experience_points(instance)
 
 
 @receiver(post_delete, sender=ModifierPx)
 def post_delete_modifier_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update character experience after modifier deletion."""
-    update_characters_experience_on_modifier_change(instance)
+    _recalcuate_characters_experience_points(instance)
 
 
 # PaymentInvoice signals
@@ -1622,13 +1619,13 @@ def post_delete_relationship_reset_rels(sender: type, instance: Any, **kwargs: A
 @receiver(post_save, sender=RulePx)
 def post_save_rule_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update characters experience when rule changes."""
-    update_characters_experience_on_rule_change(instance)
+    _recalcuate_characters_experience_points(instance)
 
 
 @receiver(post_delete, sender=RulePx)
 def post_delete_rule_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update character experience when a rule is deleted."""
-    update_characters_experience_on_rule_change(instance)
+    _recalcuate_characters_experience_points(instance)
 
 
 # Run signals
