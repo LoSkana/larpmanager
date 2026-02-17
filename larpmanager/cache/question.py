@@ -206,6 +206,9 @@ def get_cached_writing_questions(event: Event, applicable: str) -> list:
               Each dict contains question fields and 'options' list with serialized options.
 
     """
+    if event.parent:
+        event = event.parent
+
     cache_key = get_event_questions_cache_key(event.id, "writing")
 
     # Try to get from cache
