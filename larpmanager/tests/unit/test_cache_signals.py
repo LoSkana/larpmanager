@@ -559,14 +559,14 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(event_id)
 
-    @patch("larpmanager.models.signals.refresh_event_faction_relationships")
+    @patch("larpmanager.models.signals.refresh_event_faction_relationships_background")
     def test_faction_post_save_resets_rels_cache(self, mock_reset: Any) -> None:
         """Test that Faction post_save signal resets rels cache"""
         event = self.get_event()
         faction = Faction(name="Test Faction", event=event)
         faction.save()
 
-        mock_reset.assert_called_once_with(faction)
+        mock_reset.assert_called_once_with(faction.id)
 
     @patch("larpmanager.cache.rels.refresh_character_related_caches")
     def test_faction_post_delete_resets_rels_cache(self, mock_reset: Any) -> None:
@@ -580,14 +580,14 @@ class TestCacheSignals(BaseTestCase):
         # Verify faction was deleted
         self.assertFalse(Faction.objects.filter(id=faction_id).exists())
 
-    @patch("larpmanager.models.signals.refresh_event_plot_relationships")
+    @patch("larpmanager.models.signals.refresh_event_plot_relationships_background")
     def test_plot_post_save_resets_rels_cache(self, mock_reset: Any) -> None:
         """Test that Plot post_save signal resets rels cache"""
         event = self.get_event()
         plot = Plot(name="Test Plot", event=event)
         plot.save()
 
-        mock_reset.assert_called_once_with(plot)
+        mock_reset.assert_called_once_with(plot.id)
 
     @patch("larpmanager.cache.rels.refresh_character_related_caches")
     def test_plot_post_delete_resets_rels_cache(self, mock_reset: Any) -> None:

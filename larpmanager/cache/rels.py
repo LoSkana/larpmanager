@@ -32,6 +32,8 @@ from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, Faction, Plot, Prologue, Relationship, SpeedLarp
+from larpmanager.utils.core.common import _validate_and_fetch_objects
+from larpmanager.utils.larpmanager.tasks import background_auto
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -119,8 +121,9 @@ def remove_item_from_cache_section(event_id: int, section_name: str, section_id:
 def refresh_character_related_caches(character: Character) -> None:
     """Update all caches that are related to a character.
 
-    This function refreshes caches for all entities that have relationships
-    with the given character, including plots, factions, speedlarps, and prologues.
+    This function schedules background tasks to refresh caches for all entities
+    that have relationships with the given character, including plots, factions,
+    speedlarps, and prologues.
 
     Args:
         character (Character): The Character instance whose related caches need to be refreshed.
@@ -129,71 +132,72 @@ def refresh_character_related_caches(character: Character) -> None:
         None
 
     """
-    # Update plots that this character is part of
-    for plot_character_relationship in character.get_plot_characters():
-        refresh_event_plot_relationships(plot_character_relationship.plot)
+    # Schedule background task to update all plots that this character is part of
+    plot_ids = list(character.get_plot_characters().values_list("plot_id", flat=True))
+    if plot_ids:
+        refresh_event_plot_relationships_background(plot_ids)
 
-    # Update factions that this character is part of
-    for faction in character.factions_list.all():
-        refresh_event_faction_relationships(faction)
+    # Schedule background task to update all factions that this character is part of
+    faction_ids = list(character.factions_list.values_list("id", flat=True))
+    if faction_ids:
+        refresh_event_faction_relationships_background(faction_ids)
 
-    # Update speedlarps that this character is part of
-    for speedlarp in character.speedlarps_list.all():
-        refresh_event_speedlarp_relationships(speedlarp)
+    # Schedule background task to update all speedlarps that this character is part of
+    speedlarp_ids = list(character.speedlarps_list.values_list("id", flat=True))
+    if speedlarp_ids:
+        refresh_event_speedlarp_relationships_background(speedlarp_ids)
 
-    # Update prologues that this character is part of
-    for prologue in character.prologues_list.all():
-        refresh_event_prologue_relationships(prologue)
+    # Schedule background task to update all prologues that this character is part of
+    prologue_ids = list(character.prologues_list.values_list("id", flat=True))
+    if prologue_ids:
+        refresh_event_prologue_relationships_background(prologue_ids)
 
 
 def update_m2m_related_characters(
-    instance: Plot | Faction | SpeedLarp, character_ids: set[int], action: str, update_func: Callable
+    instance: Plot | Faction | SpeedLarp | Prologue,
+    character_ids: set[int],
+    action: str,
+    background_update_func: Callable,
 ) -> None:
     """Update character caches for M2M relationship changes.
 
     Args:
-        instance: The instance that changed (Plot, Faction, SpeedLarp)
+        instance: The instance that changed (Plot, Faction, SpeedLarp, Prologue)
         character_ids: Set of character primary keys affected
         action: The M2M action type
-        update_func: Function to update the instance cache
+        background_update_func: Background function to update the instance cache
 
     """
     if action in ("post_add", "post_remove", "post_clear"):
-        # Update the instance cache (relationship cache)
-        update_func(instance)
+        # Schedule background task to update the instance cache (relationship cache)
+        background_update_func(instance.id)
 
-        # Collect all affected characters
-        affected_characters = []
+        # Collect all affected character IDs
+        affected_character_ids = []
         if character_ids:
-            # Get characters from provided IDs using bulk query
-            affected_characters = list(Character.objects.filter(id__in=character_ids))
-
-            # Log warning if some characters not found
-            found_ids = {char.id for char in affected_characters}
-            missing_ids = set(character_ids) - found_ids
-            if missing_ids:
-                logger.warning("Characters %s not found during relationship update", missing_ids)
+            # Use the provided character IDs
+            affected_character_ids = list(character_ids)
         elif action == "post_clear":
             # For post_clear, get all characters that were related
             if hasattr(instance, "characters"):
-                affected_characters = list(instance.characters.all())
+                affected_character_ids = list(instance.characters.values_list("id", flat=True))
             elif hasattr(instance, "get_plot_characters"):
-                affected_characters = [rel.character for rel in instance.get_plot_characters()]
+                affected_character_ids = [rel.character_id for rel in instance.get_plot_characters()]
 
-        # Get all runs to update (event and child events)
+        # Get all run IDs to update (event and child events)
         event = instance.event
         events_id = list(Event.objects.filter(parent=event).values_list("pk", flat=True))
         events_id.append(event.id)
-        runs = Run.objects.filter(event_id__in=events_id)
+        run_ids = list(Run.objects.filter(event_id__in=events_id).values_list("id", flat=True))
 
-        # Update event cache selectively for each affected character
-        for character in affected_characters:
-            # Update relationship cache
-            refresh_character_relationships(character)
+        # Schedule background tasks for affected characters
+        if affected_character_ids:
+            # Update relationship cache in background (single task for all characters)
+            refresh_character_relationships_background(affected_character_ids)
 
-            # Update event cache for all runs
-            for run in runs:
-                update_event_cache_all(run, character)
+            # Update event cache for all runs and characters in background (single task)
+            if run_ids:
+                update_event_cache_all_background(run_ids, affected_character_ids)
 
 
 def get_event_rels_cache(event: Event) -> dict[str, Any]:
@@ -846,6 +850,122 @@ def refresh_event_questtype_relationships(quest_type: QuestType) -> None:
     update_cache_section(quest_type.event_id, "questtypes", quest_type.id, quest_type_relationship_data)
 
 
+# Background tasks for cache updates
+
+
+@background_auto(queue="cache-rels")
+def refresh_character_relationships_background(character_ids: int | list[int]) -> None:
+    """Update character relationships in cache (background task).
+
+    Args:
+        character_ids: Single ID or list of IDs of Characters to refresh
+    """
+    characters = _validate_and_fetch_objects(Character, character_ids, "Character")
+    for character in characters:
+        refresh_character_relationships(character)
+
+
+@background_auto(queue="cache-rels")
+def refresh_event_faction_relationships_background(faction_ids: int | list[int]) -> None:
+    """Update faction relationships in cache (background task).
+
+    Args:
+        faction_ids: Single ID or list of IDs of Factions to refresh
+    """
+    factions = _validate_and_fetch_objects(Faction, faction_ids, "Faction")
+    for faction in factions:
+        refresh_event_faction_relationships(faction)
+
+
+@background_auto(queue="cache-rels")
+def refresh_event_plot_relationships_background(plot_ids: int | list[int]) -> None:
+    """Update plot relationships in cache (background task).
+
+    Args:
+        plot_ids: Single ID or list of IDs of Plots to refresh
+    """
+    plots = _validate_and_fetch_objects(Plot, plot_ids, "Plot")
+    for plot in plots:
+        refresh_event_plot_relationships(plot)
+
+
+@background_auto(queue="cache-rels")
+def refresh_event_speedlarp_relationships_background(speedlarp_ids: int | list[int]) -> None:
+    """Update speedlarp relationships in cache (background task).
+
+    Args:
+        speedlarp_ids: Single ID or list of IDs of SpeedLarps to refresh
+    """
+    speedlarps = _validate_and_fetch_objects(SpeedLarp, speedlarp_ids, "SpeedLarp")
+    for speedlarp in speedlarps:
+        refresh_event_speedlarp_relationships(speedlarp)
+
+
+@background_auto(queue="cache-rels")
+def refresh_event_prologue_relationships_background(prologue_ids: int | list[int]) -> None:
+    """Update prologue relationships in cache (background task).
+
+    Args:
+        prologue_ids: Single ID or list of IDs of Prologues to refresh
+    """
+    prologues = _validate_and_fetch_objects(Prologue, prologue_ids, "Prologue")
+    for prologue in prologues:
+        refresh_event_prologue_relationships(prologue)
+
+
+@background_auto(queue="cache-rels")
+def refresh_event_quest_relationships_background(quest_ids: int | list[int]) -> None:
+    """Update quest relationships in cache (background task).
+
+    Args:
+        quest_ids: Single ID or list of IDs of Quests to refresh
+    """
+    quests = _validate_and_fetch_objects(Quest, quest_ids, "Quest")
+    for quest in quests:
+        refresh_event_quest_relationships(quest)
+
+
+@background_auto(queue="cache-rels")
+def refresh_event_questtype_relationships_background(questtype_ids: int | list[int]) -> None:
+    """Update questtype relationships in cache (background task).
+
+    Args:
+        questtype_ids: Single ID or list of IDs of QuestTypes to refresh
+    """
+    questtypes = _validate_and_fetch_objects(QuestType, questtype_ids, "QuestType")
+    for questtype in questtypes:
+        refresh_event_questtype_relationships(questtype)
+
+
+@background_auto(queue="cache-rels")
+def update_event_cache_all_background(run_ids: int | list[int], character_ids: int | list[int]) -> None:
+    """Update event cache for characters and runs (background task).
+
+    Args:
+        run_ids: Single ID or list of IDs of Runs
+        character_ids: Single ID or list of IDs of Characters
+    """
+    # Normalize to lists
+    if isinstance(run_ids, int):
+        run_ids = [run_ids]
+    if isinstance(character_ids, int):
+        character_ids = [character_ids]
+
+    # Fetch and validate runs
+    runs = _validate_and_fetch_objects(Run, run_ids, "Run")
+
+    # Fetch and validate characters
+    characters = _validate_and_fetch_objects(Character, character_ids, "Character")
+
+    # Update cache for all combinations
+    for run in runs:
+        for character in characters:
+            update_event_cache_all(run, character)
+
+
+# Signal handlers for M2M changes
+
+
 def on_faction_characters_m2m_changed(
     sender: type,  # noqa: ARG001
     instance: Faction,
@@ -855,8 +975,8 @@ def on_faction_characters_m2m_changed(
 ) -> None:
     """Handle faction-character relationship changes."""
     # Delegate to the generic M2M character update handler
-    # This will handle cache invalidation for both the faction and related characters
-    update_m2m_related_characters(instance, pk_set, action, refresh_event_faction_relationships)
+    # This will schedule background tasks for cache invalidation
+    update_m2m_related_characters(instance, pk_set, action, refresh_event_faction_relationships_background)
 
 
 def on_plot_characters_m2m_changed(
@@ -868,8 +988,8 @@ def on_plot_characters_m2m_changed(
 ) -> None:
     """Handle plot-character relationship changes."""
     # Delegate to the generic M2M relationship handler for character updates
-    # This ensures both plot and character caches are properly invalidated
-    update_m2m_related_characters(instance, pk_set, action, refresh_event_plot_relationships)
+    # This schedules background tasks for both plot and character cache updates
+    update_m2m_related_characters(instance, pk_set, action, refresh_event_plot_relationships_background)
 
 
 def on_speedlarp_characters_m2m_changed(
@@ -880,8 +1000,8 @@ def on_speedlarp_characters_m2m_changed(
     **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle speedlarp-character relationship changes."""
-    # Delegate to the generic M2M relationship handler with speedlarp-specific refresh function
-    update_m2m_related_characters(instance, pk_set, action, refresh_event_speedlarp_relationships)
+    # Delegate to the generic M2M relationship handler with speedlarp-specific background refresh
+    update_m2m_related_characters(instance, pk_set, action, refresh_event_speedlarp_relationships_background)
 
 
 def on_prologue_characters_m2m_changed(
@@ -892,6 +1012,6 @@ def on_prologue_characters_m2m_changed(
     **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle prologue-character relationship changes."""
-    # Delegate to utility function that handles m2m relationship cache updates
+    # Delegate to utility function that schedules background tasks for cache updates
     # This ensures consistent cache invalidation for both prologue and character caches
-    update_m2m_related_characters(instance, pk_set, action, refresh_event_prologue_relationships)
+    update_m2m_related_characters(instance, pk_set, action, refresh_event_prologue_relationships_background)

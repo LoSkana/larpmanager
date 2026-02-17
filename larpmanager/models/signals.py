@@ -118,12 +118,13 @@ from larpmanager.cache.rels import (
     on_speedlarp_characters_m2m_changed,
     refresh_character_related_caches,
     refresh_character_relationships,
-    refresh_event_faction_relationships,
-    refresh_event_plot_relationships,
-    refresh_event_prologue_relationships,
-    refresh_event_quest_relationships,
-    refresh_event_questtype_relationships,
-    refresh_event_speedlarp_relationships,
+    refresh_character_relationships_background,
+    refresh_event_faction_relationships_background,
+    refresh_event_plot_relationships_background,
+    refresh_event_prologue_relationships_background,
+    refresh_event_quest_relationships_background,
+    refresh_event_questtype_relationships_background,
+    refresh_event_speedlarp_relationships_background,
     remove_item_from_cache_section,
 )
 from larpmanager.cache.role import remove_association_role_cache, remove_event_role_cache
@@ -686,11 +687,11 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
     on_character_update_registration_cache(instance)
 
     # Refresh the character's own relationship cache
-    refresh_character_relationships(instance)
+    refresh_character_relationships_background(instance.id)
 
     # Update relationship caches for all characters that have this character as a target
     for rel in Relationship.objects.filter(target=instance):
-        refresh_character_relationships(rel.source)
+        refresh_character_relationships_background(rel.source_id)
 
     # Update all other character-related caches (experience, skills, etc.)
     refresh_character_related_caches(instance)
@@ -723,7 +724,7 @@ def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs
 
     # Refresh cache for characters that had this character as target
     for rel in Relationship.objects.filter(target=instance):
-        refresh_character_relationships(rel.source)
+        refresh_character_relationships_background(rel.source_id)
 
     # Update visible factions
     update_visible_factions(instance.event)
@@ -980,11 +981,11 @@ def post_save_faction_reset_rels(sender: type, instance: Faction, **kwargs: Any)
 
     """
     # Update faction cache for event relationships
-    refresh_event_faction_relationships(instance)
+    refresh_event_faction_relationships_background(instance.id)
 
     # Update cache for all characters belonging to this faction
     for char in instance.characters.all():
-        refresh_character_relationships(char)
+        refresh_character_relationships_background(char.id)
 
     # Clean up faction PDFs after save operation
     cleanup_faction_pdfs_on_save(instance)
@@ -1005,7 +1006,7 @@ def post_delete_faction_reset_rels(sender: type, instance: object, **kwargs: Any
     """Reset character relationships when a faction is deleted."""
     # Update cache for all characters that were in this faction
     for char in instance.characters.all():
-        refresh_character_relationships(char)
+        refresh_character_relationships_background(char.id)
 
     # Remove faction from cache
     remove_item_from_cache_section(instance.event_id, "factions", instance.id)
@@ -1263,11 +1264,11 @@ def pre_save_plot(sender: type, instance: object, *args: Any, **kwargs: Any) -> 
 def post_save_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> None:
     """Update plot and character relationship caches after plot save."""
     # Update plot cache
-    refresh_event_plot_relationships(instance)
+    refresh_event_plot_relationships_background(instance.id)
 
     # Update cache for all characters in this plot
     for char_rel in instance.get_plot_characters():
-        refresh_character_relationships(char_rel.character)
+        refresh_character_relationships_background(char_rel.character_id)
 
 
 @receiver(post_delete, sender=Plot)
@@ -1275,7 +1276,7 @@ def post_delete_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> 
     """Reset character relationships and cache when a plot is deleted."""
     # Update cache for all characters that were in this plot
     for char_rel in instance.get_plot_characters():
-        refresh_character_relationships(char_rel.character)
+        refresh_character_relationships_background(char_rel.character_id)
 
     # Remove plot from cache
     remove_item_from_cache_section(instance.event_id, "plots", instance.id)
@@ -1299,11 +1300,11 @@ def pre_save_prologue(sender: type, instance: object, *args: Any, **kwargs: Any)
 def post_save_prologue_reset_rels(sender: type, instance: Prologue, **kwargs: Any) -> None:
     """Reset relationship cache for prologue and associated characters."""
     # Update prologue cache
-    refresh_event_prologue_relationships(instance)
+    refresh_event_prologue_relationships_background(instance.id)
 
     # Update cache for all characters in this prologue
     for char in instance.characters.all():
-        refresh_character_relationships(char)
+        refresh_character_relationships_background(char.id)
 
 
 @receiver(post_delete, sender=Prologue)
@@ -1311,7 +1312,7 @@ def post_delete_prologue_reset_rels(sender: type, instance: object, **kwargs: An
     """Reset character relationships and cache when prologue is deleted."""
     # Update cache for all characters that were in this prologue
     for char in instance.characters.all():
-        refresh_character_relationships(char)
+        refresh_character_relationships_background(char.id)
 
     # Remove prologue from cache
     remove_item_from_cache_section(instance.event_id, "prologues", instance.id)
@@ -1328,11 +1329,11 @@ def pre_save_quest_reset(sender: type, instance: Any, **kwargs: Any) -> None:
 def post_save_quest_reset_rels(sender: type, instance: Quest, **kwargs: Any) -> None:
     """Update quest and questtype cache relationships after quest save."""
     # Update quest cache
-    refresh_event_quest_relationships(instance)
+    refresh_event_quest_relationships_background(instance.id)
 
     # Update questtype cache if quest has a type
     if instance.typ:
-        refresh_event_questtype_relationships(instance.typ)
+        refresh_event_questtype_relationships_background(instance.typ_id)
 
     reset_widgets(instance)
 
@@ -1348,7 +1349,7 @@ def post_delete_quest_reset_rels(sender: type, instance: object, **kwargs: Any) 
     """Reset quest relationships after quest deletion."""
     # Update questtype cache if quest had a type
     if instance.typ:
-        refresh_event_questtype_relationships(instance.typ)
+        refresh_event_questtype_relationships_background(instance.typ_id)
 
     # Remove quest from cache
     remove_item_from_cache_section(instance.event_id, "quests", instance.id)
@@ -1371,11 +1372,11 @@ def post_save_questtype_reset_rels(
 ) -> None:
     """Reset quest type and related quest caches after save."""
     # Update questtype cache
-    refresh_event_questtype_relationships(instance)
+    refresh_event_questtype_relationships_background(instance.id)
 
     # Update cache for all quests of this type
     for quest in instance.quests.all():
-        refresh_event_quest_relationships(quest)
+        refresh_event_quest_relationships_background(quest.id)
 
     reset_widgets(instance)
 
@@ -1391,7 +1392,7 @@ def post_delete_questtype_reset_rels(sender: type, instance: QuestType, **kwargs
     """Reset quest relationships when a quest type is deleted."""
     # Update cache for all quests that were of this type
     for quest in instance.quests.all():
-        refresh_event_quest_relationships(quest)
+        refresh_event_quest_relationships_background(quest.id)
 
     # Remove questtype from cache
     remove_item_from_cache_section(instance.event_id, "questtypes", instance.id)
@@ -1708,11 +1709,11 @@ def pre_save_speed_larp(sender: type, instance: object, *args: Any, **kwargs: An
 def post_save_speedlarp_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset speedlarp and character relationship caches after speedlarp save."""
     # Update speedlarp cache
-    refresh_event_speedlarp_relationships(instance)
+    refresh_event_speedlarp_relationships_background(instance.id)
 
     # Update cache for all characters in this speedlarp
     for char in instance.characters.all():
-        refresh_character_relationships(char)
+        refresh_character_relationships_background(char.id)
 
 
 @receiver(post_delete, sender=SpeedLarp)
@@ -1720,7 +1721,7 @@ def post_delete_speedlarp_reset_rels(sender: type, instance: SpeedLarp, **kwargs
     """Reset character relationships and cache when speedlarp is deleted."""
     # Update cache for all characters that were in this speedlarp
     for char in instance.characters.all():
-        refresh_character_relationships(char)
+        refresh_character_relationships_background(char.id)
 
     # Remove speedlarp from cache
     remove_item_from_cache_section(instance.event_id, "speedlarps", instance.id)
@@ -1738,7 +1739,7 @@ def post_save_trait_reset_rels(sender: type, instance: Trait, **kwargs: Any) -> 
     """Update quest relationships and trait cache when a trait is saved."""
     # Update quest cache if trait has a quest
     if instance.quest:
-        refresh_event_quest_relationships(instance.quest)
+        refresh_event_quest_relationships_background(instance.quest_id)
 
     # Refresh all trait relationships for this instance
     refresh_all_instance_traits(instance)
@@ -1758,7 +1759,7 @@ def post_delete_trait_reset_rels(sender: type, instance: Any, **kwargs: Any) -> 
     """Reset quest relationships after trait deletion."""
     # Update quest cache if trait had a quest
     if instance.quest:
-        refresh_event_quest_relationships(instance.quest)
+        refresh_event_quest_relationships_background(instance.quest_id)
 
     reset_widgets(instance)
 
