@@ -48,7 +48,7 @@ from larpmanager.models.writing import (
     TextVersionChoices,
 )
 from larpmanager.utils.core.base import check_event_context, get_event_context
-from larpmanager.utils.core.common import get_handout, get_object_uuid
+from larpmanager.utils.core.common import get_handout
 from larpmanager.utils.edit.backend import backend_order
 from larpmanager.utils.edit.orga import (
     OrgaAction,
@@ -102,13 +102,16 @@ def orga_plots_order(request: HttpRequest, event_slug: str, plot_uuid: str, orde
 
 
 @login_required
-def orga_plots_rels_order(request: HttpRequest, event_slug: str, plot_rel_uuid: str, order: int) -> HttpResponse:
+def orga_plots_rels_order(
+    request: HttpRequest, event_slug: str, plot_uuid: str, character_uuid: str, order: int
+) -> HttpResponse:
     """Reorder plot character relationships for event organization.
 
     Args:
         request: HTTP request object containing user and session data
         event_slug: Event slug identifier for URL routing
-        plot_rel_uuid: UUID the PlotCharacterRel to reorder
+        plot_uuid: UUID of the plot
+        character_uuid: UUID of the character
         order: Direction of reordering ('up' or 'down')
 
     Returns:
@@ -122,7 +125,10 @@ def orga_plots_rels_order(request: HttpRequest, event_slug: str, plot_rel_uuid: 
     context = check_event_context(request, event_slug, "orga_plots")
 
     # Retrieve the specific plot-character relationship
-    rel = get_object_uuid(PlotCharacterRel, plot_rel_uuid)
+    try:
+        rel = PlotCharacterRel.objects.get(plot__uuid=plot_uuid, character__uuid=character_uuid)
+    except ObjectDoesNotExist as err:
+        raise Http404 from err
 
     # Validate relationship belongs to current event
     if rel.character.event != context["event"]:
@@ -133,7 +139,7 @@ def orga_plots_rels_order(request: HttpRequest, event_slug: str, plot_rel_uuid: 
     elements = PlotCharacterRel.objects.filter(character_id=rel.character_id)
 
     # Execute the order exchange operation
-    backend_order(context, PlotCharacterRel, plot_rel_uuid, order, elements)
+    backend_order(context, PlotCharacterRel, rel, order, elements)
 
     # Redirect back to character edit page
     return redirect("orga_characters_edit", event_slug=context["run"].get_slug(), character_uuid=rel.character.uuid)

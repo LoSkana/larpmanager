@@ -527,17 +527,27 @@ class OrgaCharacterForm(CharacterForm):
             self.show_link.append(plot_field_id)
             self.add_char_finder.append(plot_field_id)
 
-            reverse_args = [self.params["run"].get_slug(), plot_character.plot_id]
+            reverse_args = [self.params["run"].get_slug(), plot_character.plot.uuid]
             self.field_link[plot_field_id] = reverse("orga_plots_edit", args=reverse_args)
 
             # if not first, add to ordering up
             if index != 0:
-                reverse_args = [self.params["run"].get_slug(), plot_character.id, "0"]
+                reverse_args = [
+                    self.params["run"].get_slug(),
+                    plot_character.plot.uuid,
+                    plot_character.character.uuid,
+                    "0",
+                ]
                 self.ordering_up[plot_field_id] = reverse("orga_plots_rels_order", args=reverse_args)
 
             # if not last, add to ordering down
             if index != total_plots - 1:
-                reverse_args = [self.params["run"].get_slug(), plot_character.id, "1"]
+                reverse_args = [
+                    self.params["run"].get_slug(),
+                    plot_character.plot.uuid,
+                    plot_character.character.uuid,
+                    "1",
+                ]
                 self.ordering_down[plot_field_id] = reverse("orga_plots_rels_order", args=reverse_args)
 
     def _save_plot(self, instance: Any) -> None:
