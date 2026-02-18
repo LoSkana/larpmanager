@@ -7642,7 +7642,7 @@ msgstr "Partie des droits d'inscription provenant uniquement du billet choisi"
 
 #, python-format
 msgid "Registration for %(member)s successfully %(action)s to %(event)s"
-msgstr "Inscription des %(member)s avec succès %(action)s aux %(event)"
+msgstr "Inscription des %(member)s avec succès %(action)s aux %(event)s"
 
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
