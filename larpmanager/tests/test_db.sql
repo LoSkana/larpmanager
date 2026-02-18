@@ -4240,17 +4240,18 @@ INSERT INTO public.django_migrations VALUES (177, 'larpmanager', '0136_add_regis
 INSERT INTO public.django_migrations VALUES (178, 'larpmanager', '0137_performance_indexes', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (179, 'larpmanager', '0138_add_uuid_to_volunteerregistry', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (180, 'larpmanager', '0139_add_membership_performance_index', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (181, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (182, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (183, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (184, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (185, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (186, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (187, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (188, 'larpmanager', '0140_alter_writinganswer_element_id_and_more', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (189, 'larpmanager', '0141_alter_registration_additionals_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (181, 'larpmanager', '0140_alter_writinganswer_element_id_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (182, 'larpmanager', '0141_alter_registration_additionals_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (183, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (184, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (185, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (186, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (187, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (188, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (189, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (190, 'larpmanager', '0142_demo_default_true', '2025-01-01 00:00:00.000000+01');
 
-INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
+INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, true, 'u1');
 
 INSERT INTO public.larpmanager_association_features VALUES (1, 1, 78);
 
@@ -4519,6 +4520,7 @@ INSERT INTO public.larpmanager_feature VALUES (111, NULL, false, '2025-01-01 00:
 INSERT INTO public.larpmanager_feature VALUES (112, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Modifiers', 'Pseudo-feature activated by px_modifiers configuration', 'modifiers', 0, false, '', true, 3, '', '', true);
 INSERT INTO public.larpmanager_feature VALUES (113, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Templates', 'Pseudo-feature activated by px_templates configuration', 'templates', 0, false, '', true, 3, '', '', true);
 INSERT INTO public.larpmanager_feature VALUES (114, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activity Log', 'Show detailed activity log on entities created, updated or deleted.', 'logs', 1, true, '', false, 3, '', '', false);
+INSERT INTO public.larpmanager_feature VALUES (115, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'App Integration', 'Enables a button in the topbar to redirect authenticated users to an external application, using a configurable URL and optional JWT-based SSO', 'app_integration', 90, true, '', false, 3, 'config/app_integration', 'Now you can configure the integration button and the external application settings', false);
 
 INSERT INTO public.larpmanager_featuremodule VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Writing', 50, NULL, 'pen-nib', 'writing');
 INSERT INTO public.larpmanager_featuremodule VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Accounting', 40, NULL, 'calculator', 'accounting');
@@ -4642,7 +4644,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 189, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 190, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -4784,7 +4786,7 @@ SELECT pg_catalog.setval('public.larpmanager_faction_characters_id_seq', 1, fals
 
 SELECT pg_catalog.setval('public.larpmanager_faction_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.larpmanager_feature_id_seq', 114, true);
+SELECT pg_catalog.setval('public.larpmanager_feature_id_seq', 115, true);
 
 SELECT pg_catalog.setval('public.larpmanager_featuremodule_id_seq', 10, true);
 
@@ -8486,4 +8488,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0141_alter_registration_additionals_and_more
+-- LARPMANAGER_SCHEMA_VERSION: 0142_demo_default_true

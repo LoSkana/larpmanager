@@ -249,6 +249,7 @@ from larpmanager.models.writing import (
     replace_character_names,
 )
 from larpmanager.utils.auth.permission import auto_assign_event_permission_number
+from larpmanager.utils.core.base import update_association_demo
 from larpmanager.utils.io.pdf import (
     cleanup_character_pdfs_before_delete,
     cleanup_character_pdfs_on_save,
@@ -1455,6 +1456,9 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
 
     # Clear deadline widget cache for this run
     reset_widgets(instance)
+
+    # Check if disable demo of association
+    update_association_demo(instance)
 
 
 @receiver(pre_delete, sender=Registration)

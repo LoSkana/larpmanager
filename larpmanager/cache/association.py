@@ -31,12 +31,8 @@ from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
-from larpmanager.models.registration import Registration
 
 logger = logging.getLogger(__name__)
-
-# Demo mode threshold (Associations with fewer than this many registrations are considered demo/trial accounts)
-MAX_DEMO_REGISTRATIONS = 10
 
 
 def clear_association_cache(association_slug: str) -> None:
@@ -131,11 +127,6 @@ def init_cache_association(a_slug: str) -> dict | None:
     # Initialize feature flags and skin configuration
     _init_features(association, association_dict)
     _init_skin(association, association_dict)
-
-    # Determine if association qualifies for demo mode (< MAX_DEMO_REGISTRATIONS)
-    association_dict["demo"] = (
-        Registration.objects.filter(run__event__association_id=association.id).count() < MAX_DEMO_REGISTRATIONS
-    )
 
     # Check if association has completed runs (onboarding mode if no runs with start and end dates)
     association_dict["onboarding"] = not Run.objects.filter(
