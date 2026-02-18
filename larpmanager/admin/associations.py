@@ -24,7 +24,7 @@ This module provides admin interfaces for managing associations, their
 configurations, custom texts, translations, and visual themes.
 """
 
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from django.contrib import admin
 
@@ -42,10 +42,16 @@ from larpmanager.models.association import (
 class AssociationAdmin(DefModelAdmin):
     """Admin interface for LARP organizations and associations."""
 
-    list_display = ("id", "name", "slug", "uuid")
+    list_display = ("id", "name", "slug", "uuid", "demo")
     search_fields: ClassVar[tuple] = ("id", "name", "uuid")
 
     autocomplete_fields: ClassVar[list] = ["payment_methods", "features", "maintainers"]
+
+    def has_delete_permission(self, request: Any, obj: Any | None = None) -> bool:
+        """Prevent delete if not demo."""
+        if obj is not None and not obj.demo:
+            return False
+        return super().has_delete_permission(request, obj)
 
 
 @admin.register(AssociationConfig)

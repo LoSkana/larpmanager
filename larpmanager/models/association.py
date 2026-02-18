@@ -284,7 +284,7 @@ class Association(UuidMixin, BaseModel):
         help_text=_("Your organization's country") + " (" + _("it will enable country-specific features") + ")",
     )
 
-    demo = models.BooleanField(default=False)
+    demo = models.BooleanField(default=True)
 
     maintainers = models.ManyToManyField(
         "larpmanager.Member",
