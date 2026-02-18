@@ -325,8 +325,13 @@ def _get_applicable_row(context: dict, element: object, model: str, *, member_co
     question_answers = context["answers"]
     question_choices = context["choices"]
 
+    # Registration question types that are already handled
+    handled_reg_types = {"ticket", "additional_tickets", "pay_what_you_want", "reg_quotas", "reg_surcharges"}
+
     # Process each question and extract corresponding values
     for question in context["questions"]:
+        if model == "registration" and question["typ"] in handled_reg_types:
+            continue
         column_headers.append(question["name"])
 
         # Get element-specific value mapping for special question types
@@ -397,17 +402,17 @@ def _row_header(
             profile_url = member.profile_thumb.url
         row_values.append(profile_url)
 
-    # Add participant and email columns for relevant models
-    if model in ["registration", "character"]:
+    # Add participant and email columns for registrations
+    if model in ["registration"]:
         # Add participant display name
-        header_columns.append(_("Participant"))
+        header_columns.append("Participant")
         display_name = ""
         if member:
             display_name = member.display_real()
         row_values.append(display_name)
 
         # Add participant email
-        header_columns.append(_("Email"))
+        header_columns.append("Email")
         email_address = ""
         if member:
             email_address = member.email
@@ -415,12 +420,20 @@ def _row_header(
 
     # Add registration-specific columns
     if model == "registration":
+        type_names = _get_reg_type_names(context.get("questions", []))
+
         # Add ticket information
         row_values.append(el.ticket.name if el.ticket is not None else "")
-        header_columns.append(_("Ticket"))
+        header_columns.append(type_names.get("ticket", _("Ticket")))
 
         # Process additional registration headers
-        _header_regs(context, el, header_columns, row_values)
+        _header_regs(context, el, header_columns, row_values, type_names)
+
+
+def _get_reg_type_names(questions: list) -> dict[str, str]:
+    """Return mapping of special registration question type to question name."""
+    special_types = {"ticket", "additional_tickets", "pay_what_you_want", "reg_quotas", "reg_surcharges"}
+    return {q["typ"]: q["name"] for q in questions if q["typ"] in special_types}
 
 
 def _expand_val(values: list, element: object, field_name: str) -> None:
@@ -437,7 +450,13 @@ def _expand_val(values: list, element: object, field_name: str) -> None:
     values.append("")
 
 
-def _header_regs(context: dict, registration: object, column_headers: list, column_values: list) -> None:
+def _header_regs(
+    context: dict,
+    registration: object,
+    column_headers: list,
+    column_values: list,
+    type_names: dict | None = None,
+) -> None:
     """Generate header row data for registration download with feature-based columns.
 
     This function dynamically builds column headers and values for registration data
@@ -449,11 +468,20 @@ def _header_regs(context: dict, registration: object, column_headers: list, colu
         registration: Registration element object with registration data and relationships
         column_headers: List to append column headers to (modified in-place)
         column_values: List to append column values to (modified in-place)
+        type_names: Mapping of special question type to question name (modified in-place)
 
     Returns:
         None: Function modifies key and val lists in-place
 
     """
+    if type_names is None:
+        type_names = {}
+
+    # Add additional registrations if question exists
+    if "additional_tickets" in type_names:
+        column_headers.append(type_names["additional_tickets"], _("Additionals"))
+        column_values.append(registration.additionals)
+
     # Handle character-related data if character feature is enabled
     if "character" in context["features"]:
         column_headers.append(_("Characters"))
@@ -462,17 +490,17 @@ def _header_regs(context: dict, registration: object, column_headers: list, colu
     # Add pay-what-you-want pricing if enabled
     if "pay_what_you_want" in context["features"]:
         column_values.append(registration.pay_what)
-        column_headers.append("PWYW")
+        column_headers.append(type_names.get("pay_what_you_want", "PWYW"))
 
     # Include surcharge information if feature is active
     if "surcharge" in context["features"]:
         column_values.append(registration.surcharge)
-        column_headers.append(_("Surcharge"))
+        column_headers.append(type_names.get("reg_surcharges", _("Surcharge")))
 
     # Add quota information for installment or quota-based registrations
     if "reg_quotas" in context["features"] or "reg_installments" in context["features"]:
         column_values.append(registration.quota)
-        column_headers.append(_("Next quota"))
+        column_headers.append(type_names.get("reg_quotas", _("Next quota")))
 
     # Core payment and deadline information (always included)
     column_values.append(registration.deadline)
@@ -490,10 +518,10 @@ def _header_regs(context: dict, registration: object, column_headers: list, colu
     # VAT-related pricing breakdown if VAT feature is enabled
     if "vat" in context["features"]:
         column_values.append(registration.ticket_price)
-        column_headers.append(_("Ticket"))
+        column_headers.append(_("Ticket price"))
 
         column_values.append(registration.options_price)
-        column_headers.append(_("Options"))
+        column_headers.append(_("Options price"))
 
     # Token and credit payment methods if tokens or credits feature is enabled
     _expand_val(column_values, registration, "pay_a")
@@ -875,24 +903,7 @@ def _get_column_names(context: dict) -> None:
     """
     # Handle registration data export with participant, ticket, and question columns
     if context["typ"] == "registration":
-        context["columns"] = [
-            {
-                "email": _("The participant's email"),
-                "ticket": _("The name of the ticket")
-                + " <i>("
-                + (_("if it doesn't exist, it will be created"))
-                + ")</i>",
-                "characters": _("(Optional) The character names to assign to the player, separated by commas"),
-                "donation": _("(Optional) The amount of a voluntary donation"),
-            },
-        ]
-        # Build field type mapping from registration questions for validation
-        questions = get_cached_registration_questions(context["event"])
-        context["fields"] = {question["name"]: question["typ"] for question in questions}
-
-        # Remove donation column if pay-what-you-want feature is disabled
-        if "pay_what_you_want" not in context["features"]:
-            del context["columns"][0]["donation"]
+        _registration_column_names(context)
 
     # Handle ticket tier definition export
     elif context["typ"] == "registration_ticket":
@@ -987,6 +998,38 @@ def _get_column_names(context: dict) -> None:
     # Handle writing element types (character, plot, faction, quest, trait)
     else:
         _get_writing_names(context)
+
+
+def _registration_column_names(context: dict) -> None:
+    """Build field type mapping from registration questions for validation."""
+    questions = get_cached_registration_questions(context["event"])
+    context["fields"] = {question["name"]: question["typ"] for question in questions}
+
+    # Build mapping of special question type to question name
+    type_names = _get_reg_type_names(questions)
+
+    # Build columns dict dynamically using question names where available
+    ticket_key = type_names.get("ticket", "ticket")
+    columns = {
+        "email": _("The participant's email"),
+        ticket_key: _("The name of the ticket") + " <i>(" + (_("if it doesn't exist, it will be created")) + ")</i>",
+    }
+
+    if "additional_tickets" in type_names:
+        columns[type_names["additional_tickets"]] = _("(Optional) The number of additional registrations")
+
+    columns["characters"] = _("(Optional) The character names to assign to the player, separated by commas")
+
+    if "pay_what_you_want" in context["features"] and "pay_what_you_want" in type_names:
+        columns[type_names["pay_what_you_want"]] = _("(Optional) The amount of voluntary donation")
+
+    if "surcharge" in context["features"] and "reg_surcharges" in type_names:
+        columns[type_names["reg_surcharges"]] = _("(Optional) The surcharge amount")
+
+    if "reg_quotas" in context["features"] and "reg_quotas" in type_names:
+        columns[type_names["reg_quotas"]] = _("(Optional) The number of quotas")
+
+    context["columns"] = [columns]
 
 
 def _get_writing_names(context: dict) -> None:

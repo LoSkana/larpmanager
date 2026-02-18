@@ -250,11 +250,12 @@ def _get_file(context: dict, file: Any, column_id: int | None = None) -> tuple[p
     input_dataframe.columns = [column.lower() for column in input_dataframe.columns]
 
     # Validate that all columns are recognized
-    for column in input_dataframe.columns:
-        if column.lower() not in allowed_column_names:
-            return None, [f"ERR - column not recognized: {column}"]
+    not_recognized = [column for column in input_dataframe.columns if column.lower() not in allowed_column_names]
+    logs = []
+    if not_recognized:
+        logs.append("WARN - columns ignored: %s", ", ".join(not_recognized))
 
-    return input_dataframe, []
+    return input_dataframe, logs
 
 
 def registrations_load(context: dict, uploaded_file_form: Form) -> list[str]:
@@ -363,12 +364,21 @@ def _registration_field_load(
     if not field_value or pd.isna(field_value):
         return
 
-    if field_name == "ticket":
-        _assign_elem(context, registration, field_name, field_value, RegistrationTicket, error_logs)
+    question_info = registration_questions.get(field_name)
+    field_type = question_info["typ"] if question_info else None
+
+    if field_type == "ticket":
+        _assign_elem(context, registration, "ticket", field_value, RegistrationTicket, error_logs)
     elif field_name == "characters":
         _reg_assign_characters(context, registration, field_value, error_logs)
-    elif field_name == "pwyw":
+    elif field_type == "pay_what_you_want":
         registration.pay_what = _to_decimal(field_value)
+    elif field_type == "reg_surcharges":
+        registration.surcharge = _to_decimal(field_value)
+    elif field_type == "reg_quotas":
+        registration.quota = _to_decimal(field_value)
+    elif field_type == "additional_tickets":
+        registration.additionals = _to_int(field_value)
     else:
         _assign_choice_answer(
             registration,
@@ -791,7 +801,6 @@ def _assign_choice_answer(
     """
     field_name = field_name.lower()
     if field_name not in available_questions:
-        error_logs.append(f"ERR - question not found {field_name}")
         return
 
     question = available_questions[field_name]
