@@ -681,6 +681,35 @@ msgid ""
 "panel"
 msgstr ""
 
+msgid "App Integration"
+msgstr ""
+
+msgid "Button text"
+msgstr ""
+
+msgid "Label shown on the topbar button to access the external application"
+msgstr ""
+
+msgid "Redirect URL"
+msgstr ""
+
+msgid "URL of the external application where the user will be redirected"
+msgstr ""
+
+msgid "Shared secret"
+msgstr ""
+
+msgid ""
+"Secret key used to sign the JWT token for SSO authentication with the "
+"external application"
+msgstr ""
+
+msgid "Algorithm"
+msgstr ""
+
+msgid "Signing algorithm for the JWT token (default: HS256)"
+msgstr ""
+
 msgid "Electronic invoice"
 msgstr ""
 
@@ -8897,6 +8926,16 @@ msgstr ""
 msgid "Show detailed activity log on entities created, updated or deleted."
 msgstr ""
 
+msgid ""
+"Enables a button in the topbar to redirect authenticated users to an "
+"external application, using a configurable URL and optional JWT-based SSO"
+msgstr ""
+
+msgid ""
+"Now you can configure the integration button and the external application "
+"settings"
+msgstr ""
+
 msgid "Manage the organization main settings"
 msgstr ""
 
@@ -10147,7 +10186,7 @@ msgid "copied"
 msgstr ""
 
 #, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(run)s"
+msgid "Registration for %(member)s successfully %(action)s to %(event)s"
 msgstr ""
 
 msgid ""

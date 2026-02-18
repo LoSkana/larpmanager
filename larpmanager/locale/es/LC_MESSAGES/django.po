@@ -1299,6 +1299,9 @@ msgstr "--- Vacío"
 msgid "Abilities"
 msgstr "Habilidades"
 
+msgid "Algorithm"
+msgstr "Algoritmo"
+
 msgid "Approvals"
 msgstr "Homologaciones"
 
@@ -1797,6 +1800,9 @@ msgstr "Beneficiario"
 msgid "Birth place"
 msgstr "Lugar de nacimiento"
 
+msgid "Button text"
+msgstr "Texto del botón"
+
 msgid "Carbon copy"
 msgstr "Duplicado"
 
@@ -2115,6 +2121,9 @@ msgstr "Presentación"
 msgid "Questions WS"
 msgstr "Preguntas taller"
 
+msgid "Redirect URL"
+msgstr "Redirigir URL"
+
 msgid "Refund given"
 msgstr "Reembolsos efectuados"
 
@@ -2413,6 +2422,9 @@ msgstr "Peticiones abiertas"
 msgid "Require login"
 msgstr "Inicio de sesión obligatorio"
 
+msgid "Shared secret"
+msgstr "Secreto compartido"
+
 msgid "Show inactive"
 msgstr "Mostrar inactivo"
 
@@ -2698,6 +2710,9 @@ msgstr "Capacidad eliminada"
 
 msgid "And that is all"
 msgstr "Y eso es todo"
+
+msgid "App Integration"
+msgstr "Integración de aplicaciones"
 
 msgid "Change password"
 msgstr "Recuperación de contraseñas"
@@ -6708,6 +6723,9 @@ msgstr "Comprobación de la coherencia de las hojas de personaje"
 msgid "Set up the payment methods available to participants"
 msgstr "Establecer los métodos de pago disponibles para los participantes"
 
+msgid "Signing algorithm for the JWT token (default: HS256)"
+msgstr "Algoritmo de firma para el token JWT (por defecto: HS256)"
+
 msgid "The first column the amount, the second the receipts"
 msgstr "La primera columna el importe, la segunda los ingresos"
 
@@ -7400,10 +7418,6 @@ msgstr ""
 "Nota opcional sobre este token (por ejemplo, nombre del destinatario, "
 "propósito)"
 
-#, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(run)s"
-msgstr "Registro para %(member)s con éxito %(action)s a %(run)s"
-
 msgid "Search here for settings, features, and configuration options."
 msgstr "Busque aquí ajustes, funciones y opciones de configuración."
 
@@ -7543,6 +7557,10 @@ msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr ""
 "Parte de la cuota de inscripción derivada únicamente del billete elegido"
 
+#, python-format
+msgid "Registration for %(member)s successfully %(action)s to %(event)s"
+msgstr "Inscripción de %(member)s con éxito %(action)s a %(event)s"
+
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
 "El pago no se ha completado. Póngase en contacto con nosotros para saber por"
@@ -7638,6 +7656,9 @@ msgstr "Esta página muestra todos los eventos; puede editarlos o crear nuevos"
 msgid "This page shows the factions and plots of the indicated character"
 msgstr "Esta página muestra las facciones y tramas del personaje indicado"
 
+msgid "URL of the external application where the user will be redirected"
+msgstr "URL de la aplicación externa a la que se redirigirá al usuario"
+
 msgid "Write here questions about your character directly to the authors"
 msgstr ""
 "¡Escribe aquí tus preguntas sobre tu personaje directamente a los masters"
@@ -7732,6 +7753,11 @@ msgstr ""
 msgid "If you close the page after accessing, you will lose access forever"
 msgstr ""
 "Si cierra la página después de acceder, perderá el acceso para siempre"
+
+msgid "Label shown on the topbar button to access the external application"
+msgstr ""
+"Etiqueta que aparece en el botón de la barra superior para acceder a la "
+"aplicación externa"
 
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
@@ -9106,6 +9132,13 @@ msgstr ""
 "habilidad esté disponible"
 
 msgid ""
+"Now you can configure the integration button and the external application "
+"settings"
+msgstr ""
+"Ahora puede configurar el botón de integración y los ajustes de la "
+"aplicación externa"
+
+msgid ""
 "Once the transfer is confirmed, submit the form below to notify us of your "
 "payment"
 msgstr ""
@@ -9663,6 +9696,13 @@ msgid ""
 msgstr ""
 "Tenga en cuenta que los elementos existentes con el mismo nombre se "
 "sobrescribirán con los datos cargados"
+
+msgid ""
+"Secret key used to sign the JWT token for SSO authentication with the "
+"external application"
+msgstr ""
+"Clave secreta utilizada para firmar el token JWT para la autenticación SSO "
+"con la aplicación externa"
 
 msgid ""
 "This page shows the accounting status of the event, divided into the various"
@@ -11349,6 +11389,14 @@ msgid ""
 msgstr ""
 "Haz clic en los cargos en los que deseas colaborar, introduce a continuación"
 " tu grado de experiencia y, por último, indica tus experiencias relacionadas"
+
+msgid ""
+"Enables a button in the topbar to redirect authenticated users to an "
+"external application, using a configurable URL and optional JWT-based SSO"
+msgstr ""
+"Habilita un botón en la barra superior para redirigir a los usuarios "
+"autenticados a una aplicación externa, utilizando una URL configurable y un "
+"SSO basado en JWT opcional"
 
 msgid ""
 "Manages pre-larp 'mini-scenes.' You can create any number of scenes and "

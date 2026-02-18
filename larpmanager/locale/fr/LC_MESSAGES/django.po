@@ -1299,6 +1299,9 @@ msgstr "--- Vide"
 msgid "Abilities"
 msgstr "Capacités"
 
+msgid "Algorithm"
+msgstr "Algorithme"
+
 msgid "Approvals"
 msgstr "Agréments"
 
@@ -1797,6 +1800,9 @@ msgstr "Bénéficiaire"
 msgid "Birth place"
 msgstr "Lieu de naissance"
 
+msgid "Button text"
+msgstr "Texte du bouton"
+
 msgid "Carbon copy"
 msgstr "Copie carbone"
 
@@ -2115,6 +2121,9 @@ msgstr "Présentation"
 msgid "Questions WS"
 msgstr "Questions sur le SM"
 
+msgid "Redirect URL"
+msgstr "URL de redirection"
+
 msgid "Refund given"
 msgstr "Remboursements émis"
 
@@ -2413,6 +2422,9 @@ msgstr "Enquêtes ouvertes"
 msgid "Require login"
 msgstr "Exiger une connexion"
 
+msgid "Shared secret"
+msgstr "Secret partagé"
+
 msgid "Show inactive"
 msgstr "Montrer inactif"
 
@@ -2698,6 +2710,9 @@ msgstr "Capacité supprimée"
 
 msgid "And that is all"
 msgstr "Et c'est tout"
+
+msgid "App Integration"
+msgstr "Intégration des applications"
 
 msgid "Change password"
 msgstr "Récupération du mot de passe"
@@ -5897,7 +5912,7 @@ msgid "For which day you will need transportation"
 msgstr "Pour quel jour avez-vous besoin d'un transport"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
-msgstr "Code ISO de la langue (par exemple, \"en\", \"it\", \"de\")"
+msgstr "Code ISO de la langue (par exemple, 'en', 'it', 'de')"
 
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
@@ -6731,6 +6746,9 @@ msgstr "Vérification de la cohérence des feuilles de personnage"
 msgid "Set up the payment methods available to participants"
 msgstr "Définir les méthodes de paiement disponibles pour les participants"
 
+msgid "Signing algorithm for the JWT token (default: HS256)"
+msgstr "Algorithme de signature du jeton JWT (par défaut : HS256)"
+
 msgid "The first column the amount, the second the receipts"
 msgstr "La première colonne indique le montant, la seconde les recettes"
 
@@ -7465,10 +7483,6 @@ msgstr ""
 "Note facultative concernant ce jeton (par exemple, le nom du destinataire, "
 "l'objectif)"
 
-#, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(run)s"
-msgstr "Inscription pour les %(member)s avec succès %(action)s à %(run)s"
-
 msgid "Search here for settings, features, and configuration options."
 msgstr ""
 "Recherchez ici les paramètres, les fonctions et les options de "
@@ -7626,6 +7640,10 @@ msgstr ""
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Partie des droits d'inscription provenant uniquement du billet choisi"
 
+#, python-format
+msgid "Registration for %(member)s successfully %(action)s to %(event)s"
+msgstr "Inscription des %(member)s avec succès %(action)s aux %(event)"
+
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
 "Le paiement n'a pas été effectué. Veuillez nous contacter pour en connaître "
@@ -7728,6 +7746,9 @@ msgstr ""
 msgid "This page shows the factions and plots of the indicated character"
 msgstr "Cette page résume les factions et les intrigues du personnage indiqué"
 
+msgid "URL of the external application where the user will be redirected"
+msgstr "URL de l'application externe où l'utilisateur sera redirigé"
+
 msgid "Write here questions about your character directly to the authors"
 msgstr ""
 "Ecrivez ici des questions sur votre personnage directement aux auteurs"
@@ -7829,6 +7850,11 @@ msgid "If you close the page after accessing, you will lose access forever"
 msgstr ""
 "Si vous fermez la page après avoir accédé au site, vous perdrez l'accès pour"
 " toujours"
+
+msgid "Label shown on the topbar button to access the external application"
+msgstr ""
+"Etiquette affichée sur le bouton de la barre supérieure permettant d'accéder"
+" à l'application externe"
 
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
@@ -8076,8 +8102,8 @@ msgstr "si le personnage n'est PAS conscient de l'identité de l'autre trait"
 
 msgid "Cannot process refund: Neither tokens nor credits features are enabled"
 msgstr ""
-"Impossible de traiter le remboursement : Les fonctions \"jetons\" et "
-"\"crédits\" ne sont pas activées"
+"Impossible de traiter le remboursement : Les fonctions 'jetons' et 'crédits'"
+" ne sont pas activées"
 
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr ""
@@ -8231,8 +8257,8 @@ msgstr ""
 msgid ""
 "Some activated features need the 'Credits' feature, but it isn't active"
 msgstr ""
-"Certaines fonctions activées nécessitent la fonction \"Crédits\", mais "
-"celle-ci n'est pas active"
+"Certaines fonctions activées nécessitent la fonction 'Crédits', mais celle-"
+"ci n'est pas active"
 
 msgid ""
 "The request of removal from further communication has been successfull!"
@@ -9248,6 +9274,13 @@ msgstr ""
 " compétence soit disponible"
 
 msgid ""
+"Now you can configure the integration button and the external application "
+"settings"
+msgstr ""
+"Vous pouvez maintenant configurer le bouton d'intégration et les paramètres "
+"de l'application externe"
+
+msgid ""
 "Once the transfer is confirmed, submit the form below to notify us of your "
 "payment"
 msgstr ""
@@ -9804,6 +9837,13 @@ msgid ""
 msgstr ""
 "Notez que les éléments existants portant le même nom seront remplacés par "
 "les données téléchargées"
+
+msgid ""
+"Secret key used to sign the JWT token for SSO authentication with the "
+"external application"
+msgstr ""
+"Clé secrète utilisée pour signer le jeton JWT pour l'authentification SSO "
+"avec l'application externe"
 
 msgid ""
 "This page shows the accounting status of the event, divided into the various"
@@ -11242,7 +11282,7 @@ msgid ""
 "Enter the 'bring a friend' code provided by a registered participant to "
 "receive a %(amount)d discount on your registration fee"
 msgstr ""
-"Saisissez le code \"Amenez un ami\" fourni par un participant inscrit pour "
+"Saisissez le code 'Amenez un ami' fourni par un participant inscrit pour "
 "bénéficier d'une réduction de %(amount)d sur vos frais d'inscription"
 
 msgid ""
@@ -11511,6 +11551,14 @@ msgstr ""
 "Cliquez sur les rôles sur lesquels vous souhaitez collaborer, puis entrez "
 "votre niveau d'expérience, et enfin indiquez précisément votre domaine "
 "d'expertise"
+
+msgid ""
+"Enables a button in the topbar to redirect authenticated users to an "
+"external application, using a configurable URL and optional JWT-based SSO"
+msgstr ""
+"Permet d'activer un bouton dans la barre supérieure pour rediriger les "
+"utilisateurs authentifiés vers une application externe, à l'aide d'une URL "
+"configurable et d'un SSO optionnel basé sur JWT"
 
 msgid ""
 "Manages pre-larp 'mini-scenes.' You can create any number of scenes and "

@@ -158,8 +158,8 @@ def orga_registration_transfer_confirm(request: HttpRequest, event_slug: str) ->
         member_name = registration.member.display_member()
         messages.success(
             request,
-            _("Registration for %(member)s successfully %(action)s to %(run)s")
-            % {"member": member_name, "action": action, "run": target_run},
+            _("Registration for %(member)s successfully %(action)s to %(event)s")
+            % {"member": member_name, "action": action, "event": target_run},
         )
 
         # Clear all relevant caches for both source and target runs
