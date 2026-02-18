@@ -840,22 +840,19 @@ def _reg_template(
     """
     # Extract existing column keys from context
     column_keys = list(context["columns"][0].keys())
-    row_values = []
+    column_keys.extend([key for key in context["fields"] if key not in column_keys])
 
     # Define default values for common registration fields
-    default_values = {"email": "user@test.it", "ticket": "Standard", "characters": "Test Character", "donation": "5"}
+    default_values = {"email": "user@test.it", "characters": "Test Character"}
 
-    # Add default values for existing fields only
-    for field_name, default_value in default_values.items():
-        if field_name not in column_keys:
-            continue
-        row_values.append(default_value)
-
-    # Extend keys with additional context fields
-    column_keys.extend(context["fields"])
-
-    # Add values for dynamic fields based on field type mapping
-    row_values.extend([value_mapping[field_type] for field_type in context["fields"].values()])
+    # Create row values
+    row_values = []
+    for key in column_keys:
+        if key in default_values:
+            row_values.append(default_values[key])
+        else:
+            field_type = context["fields"][key]
+            row_values.append(value_mapping[field_type])
 
     # Create export tuple with template name, keys, and values
     return [(f"{template_type} - template", column_keys, [row_values])]
