@@ -4107,9 +4107,6 @@ msgstr "Doelgebeurtenis niet gevonden"
 msgid "The name of the option"
 msgstr "De naam van de optie"
 
-msgid "The name of the ticket"
-msgstr "De naam van het ticket"
-
 msgid "The tier of the ticket"
 msgstr "Het niveau van het ticket"
 
@@ -5100,6 +5097,9 @@ msgstr "Je moet de einddatum definiëren!"
 msgid "(Optional) The cost of the ticket"
 msgstr "(Optioneel) De kosten van het ticket"
 
+msgid "(Optional) The name of the ticket"
+msgstr "(Optioneel) De naam van het ticket"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Er is een vraag gesteld door: %(user)s"
@@ -5744,9 +5744,6 @@ msgstr "U bent aangemeld met een e-mailadres"
 
 msgid "You must be logged in to view this page"
 msgstr "U moet ingelogd zijn om deze pagina te bekijken"
-
-msgid "if it doesn't exist, it will be created"
-msgstr "als het niet bestaat, wordt het aangemaakt"
 
 msgid "Characters are not visible at the moment"
 msgstr "Personages zijn momenteel niet zichtbaar"

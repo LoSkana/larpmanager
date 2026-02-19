@@ -4107,9 +4107,6 @@ msgstr "Zielereignis nicht gefunden"
 msgid "The name of the option"
 msgstr "Der Name der Option"
 
-msgid "The name of the ticket"
-msgstr "Der Name des Tickets"
-
 msgid "The tier of the ticket"
 msgstr "Die Stufe der Fahrkarte"
 
@@ -5100,6 +5097,9 @@ msgstr "Sie müssen das Enddatum festlegen!"
 msgid "(Optional) The cost of the ticket"
 msgstr "(fakultativ) Der Preis der Fahrkarte"
 
+msgid "(Optional) The name of the ticket"
+msgstr "(Optional) Der Name des Tickets"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Eine Frage wurde gestellt von: %(user)s"
@@ -5746,9 +5746,6 @@ msgstr "Sie sind mit einer E-Mail-Adresse eingeloggt"
 
 msgid "You must be logged in to view this page"
 msgstr "Sie müssen eingeloggt sein, um diese Seite zu sehen"
-
-msgid "if it doesn't exist, it will be created"
-msgstr "wenn sie nicht existiert, wird sie erstellt"
 
 msgid "Characters are not visible at the moment"
 msgstr "Die Zeichen sind im Moment nicht sichtbar"

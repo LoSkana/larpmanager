@@ -4107,9 +4107,6 @@ msgstr "Kohdetapahtumaa ei löydy"
 msgid "The name of the option"
 msgstr "Vaihtoehdon nimi"
 
-msgid "The name of the ticket"
-msgstr "Lipun nimi"
-
 msgid "The tier of the ticket"
 msgstr "Lipun taso"
 
@@ -5100,6 +5097,9 @@ msgstr "Sinun on määriteltävä päättymispäivä!"
 msgid "(Optional) The cost of the ticket"
 msgstr "(Valinnainen) Lipun hinta"
 
+msgid "(Optional) The name of the ticket"
+msgstr "(Valinnainen) Lipun nimi"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Kysymyksen esitti: %(user)s"
@@ -5742,9 +5742,6 @@ msgstr "Olet kirjautunut sisään sähköpostiosoitteella"
 
 msgid "You must be logged in to view this page"
 msgstr "Sinun täytyy olla kirjautuneena sisään nähdäksesi tämän sivun"
-
-msgid "if it doesn't exist, it will be created"
-msgstr "jos sitä ei ole olemassa, se luodaan"
 
 msgid "Characters are not visible at the moment"
 msgstr "Merkit eivät näy tällä hetkellä"

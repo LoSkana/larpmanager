@@ -4107,9 +4107,6 @@ msgstr "Nie znaleziono zdarzenia docelowego"
 msgid "The name of the option"
 msgstr "Nazwa opcji"
 
-msgid "The name of the ticket"
-msgstr "Nazwa biletu"
-
 msgid "The tier of the ticket"
 msgstr "Poziom biletu"
 
@@ -5100,6 +5097,9 @@ msgstr "Musisz określić datę końcową!"
 msgid "(Optional) The cost of the ticket"
 msgstr "(Opcjonalnie) Koszt biletu"
 
+msgid "(Optional) The name of the ticket"
+msgstr "(Opcjonalnie) Nazwa biletu"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Pytanie zostało zadane przez: %(user)s"
@@ -5742,9 +5742,6 @@ msgstr "Jesteś zalogowany przy użyciu adresu e-mail"
 
 msgid "You must be logged in to view this page"
 msgstr "Musisz być zalogowany, aby wyświetlić tę stronę"
-
-msgid "if it doesn't exist, it will be created"
-msgstr "jeśli nie istnieje, zostanie utworzony"
 
 msgid "Characters are not visible at the moment"
 msgstr "Postacie nie są obecnie widoczne"

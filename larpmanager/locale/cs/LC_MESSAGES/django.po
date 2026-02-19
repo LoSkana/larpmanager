@@ -4107,9 +4107,6 @@ msgstr "Cílová událost nebyla nalezena"
 msgid "The name of the option"
 msgstr "Název možnosti"
 
-msgid "The name of the ticket"
-msgstr "Název tipu"
-
 msgid "The tier of the ticket"
 msgstr "Stupeň vstupenky"
 
@@ -5100,6 +5097,9 @@ msgstr "Je třeba určit datum ukončení!"
 msgid "(Optional) The cost of the ticket"
 msgstr "(Nepovinné) Cena letenky"
 
+msgid "(Optional) The name of the ticket"
+msgstr "(Nepovinné) Název tipu"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Otázku položil: %(user)s"
@@ -5742,9 +5742,6 @@ msgstr "Jste přihlášeni pomocí e-mailové adresy"
 
 msgid "You must be logged in to view this page"
 msgstr "Pro zobrazení této stránky musíte být přihlášeni"
-
-msgid "if it doesn't exist, it will be created"
-msgstr "pokud neexistuje, bude vytvořen"
 
 msgid "Characters are not visible at the moment"
 msgstr "Postavy nejsou v tuto chvíli viditelné"

@@ -1020,7 +1020,7 @@ def _registration_column_names(context: dict) -> None:
     ticket_key = type_names.get("ticket", "ticket")
     columns = {
         "email": _("The participant's email"),
-        ticket_key: _("The name of the ticket") + " <i>(" + (_("if it doesn't exist, it will be created")) + ")</i>",
+        ticket_key: _("(Optional) The name of the ticket"),
     }
 
     if "additional_tickets" in type_names:
