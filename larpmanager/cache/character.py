@@ -133,11 +133,8 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
         context["event"].id, "gallery_hide_uncasted_characters", default_value=False, context=context
     )
 
-    # Get list of assigned character IDs for mirror filtering
-    assigned_character_ids = RegistrationCharacterRel.objects.filter(registration__run=context["run"]).values_list(
-        "character_id",
-        flat=True,
-    )
+    # Derive assigned character IDs from already-loaded assignments
+    assigned_character_ids = {rel.character_id for rel in context["assignments"].values()}
 
     # Process each character for the event cache
     characters_query = context["event"].get_elements(Character).filter(hide=False).order_by("number")
