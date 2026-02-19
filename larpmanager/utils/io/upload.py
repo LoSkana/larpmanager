@@ -561,7 +561,7 @@ def _reg_assign_characters(
             continue
 
         # Find character by name in the current event
-        character = Character.objects.filter(event=context["event"], name__iexact=character_name).first()
+        character = context["event"].get_elements(Character).filter(name__iexact=character_name).first()
         if not character:
             error_logs.append(f"ERR - Character not found: {character_name}")
             continue

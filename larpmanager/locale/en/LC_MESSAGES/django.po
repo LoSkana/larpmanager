@@ -9528,10 +9528,7 @@ msgstr ""
 msgid "The participant's email"
 msgstr ""
 
-msgid "The name of the ticket"
-msgstr ""
-
-msgid "if it doesn't exist, it will be created"
+msgid "(Optional) The name of the ticket"
 msgstr ""
 
 msgid "(Optional) The number of additional registrations"

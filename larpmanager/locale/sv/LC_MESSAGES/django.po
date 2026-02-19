@@ -4107,9 +4107,6 @@ msgstr "Målhändelsen hittades inte"
 msgid "The name of the option"
 msgstr "Namnet på alternativet"
 
-msgid "The name of the ticket"
-msgstr "Biljettens namn"
-
 msgid "The tier of the ticket"
 msgstr "Biljettens nivå"
 
@@ -5100,6 +5097,9 @@ msgstr "Du måste definiera slutdatumet!"
 msgid "(Optional) The cost of the ticket"
 msgstr "(Valfritt) Kostnaden för biljetten"
 
+msgid "(Optional) The name of the ticket"
+msgstr "(Valfritt) Namnet på biljetten"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "En fråga ställdes av: %(user)s"
@@ -5744,9 +5744,6 @@ msgstr "Du är inloggad med en e-postadress"
 
 msgid "You must be logged in to view this page"
 msgstr "Du måste vara inloggad för att se denna sida"
-
-msgid "if it doesn't exist, it will be created"
-msgstr "om den inte finns, kommer den att skapas"
 
 msgid "Characters are not visible at the moment"
 msgstr "Tecknen är inte synliga för tillfället"

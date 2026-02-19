@@ -4107,9 +4107,6 @@ msgstr "Evento objetivo no encontrado"
 msgid "The name of the option"
 msgstr "El nombre de la opción"
 
-msgid "The name of the ticket"
-msgstr "El nombre del billete"
-
 msgid "The tier of the ticket"
 msgstr "El nivel del billete"
 
@@ -5100,6 +5097,9 @@ msgstr "Debe definir la fecha de finalización."
 msgid "(Optional) The cost of the ticket"
 msgstr "(Opcional) El coste del billete"
 
+msgid "(Optional) The name of the ticket"
+msgstr "(Opcional) El nombre del billete"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Una pregunta fue hecha por: %(user)s"
@@ -5742,9 +5742,6 @@ msgstr "Ha iniciado sesión con una dirección de correo electrónico"
 
 msgid "You must be logged in to view this page"
 msgstr "Debe iniciar sesión para ver esta página"
-
-msgid "if it doesn't exist, it will be created"
-msgstr "si no existe, se creará"
 
 msgid "Characters are not visible at the moment"
 msgstr "Los personajes no son visibles por el momento"
