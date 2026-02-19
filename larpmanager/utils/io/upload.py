@@ -1158,10 +1158,25 @@ def _get_or_create_writing_question(
     if applicable_value not in field_mappings["applicable"]:
         return "ERR - unknown applicable"
 
+    applicable = field_mappings["applicable"][applicable_value]
+
+    # For special (non-basic) WritingQuestionTypes, look up by type+applicable.
+    # These questions are auto-created by configuration and are unique per type.
+    raw_typ = str(row_data.get("typ", "")).lower().strip()
+    typ_value = field_mappings.get("typ", {}).get(raw_typ, "")
+    if typ_value and typ_value not in BaseQuestionType.get_basic_types():
+        matching_by_type = WritingQuestion.objects.filter(
+            event=context["event"],
+            typ=typ_value,
+            applicable=applicable,
+        )
+        if matching_by_type.exists():
+            return matching_by_type.first(), False
+
     matching_questions = WritingQuestion.objects.filter(
         event=context["event"],
         name__iexact=question_name,
-        applicable=field_mappings["applicable"][applicable_value],
+        applicable=applicable,
     )
     if matching_questions.exists():
         return matching_questions.first(), False
@@ -1170,7 +1185,7 @@ def _get_or_create_writing_question(
         WritingQuestion.objects.create(
             event=context["event"],
             name=question_name,
-            applicable=field_mappings["applicable"][applicable_value],
+            applicable=applicable,
         ),
         True,
     )
@@ -1258,6 +1273,15 @@ def _questions_load(context: dict, row_data: dict, *, is_registration: bool) -> 
     # Save the configured instance to database
     question_instance.save()
 
+    # For writing questions, activate required features/configs based on question type
+    if not is_registration:
+        feature_slug = _get_feature_from_question_type(question_instance.typ)
+        if feature_slug:
+            activate_features(context, {feature_slug})
+        config_name = _get_config_from_question_type(question_instance.typ)
+        if config_name:
+            activate_configs(context, {config_name})
+
     # Return appropriate success message based on operation
     return f"OK - Created {question_name}" if was_created else f"OK - Updated {question_name}"
 
@@ -1266,8 +1290,8 @@ def _get_mappings(*, is_registration: bool) -> dict[str, dict[str, str]]:
     """Generate mappings for question field types and attributes.
 
     Args:
-        is_registration: Whether to include additional registration-specific
-                        question types in the type mapping.
+        is_registration: When False (character form), includes additional
+                        WritingQuestionType values in the type mapping.
 
     Returns:
         Dictionary containing inverted mappings for question types, status,
@@ -1282,9 +1306,9 @@ def _get_mappings(*, is_registration: bool) -> dict[str, dict[str, str]]:
         "visibility": invert_dict(QuestionVisibility.get_mapping()),
     }
 
-    # Add registration-specific question types if needed
-    if is_registration:
-        # update typ with new types
+    # Add writing-specific question types if needed (character form upload)
+    if not is_registration:
+        # update typ with WritingQuestionType values not covered by BaseQuestionType mapping
         question_type_mapping = mappings["typ"]
 
         # Iterate through writing question type choices
