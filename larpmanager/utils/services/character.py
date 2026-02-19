@@ -21,7 +21,6 @@
 import logging
 from typing import Any
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
@@ -185,20 +184,29 @@ def _build_relationships_mappings(context: dict, character_data_mapping: dict, r
     """
     # Process character relationships from the source
     queryset = Relationship.objects.values_list("target__number", "text").filter(source=context["character"])
-    for target_character_number, relationship_text in queryset:
+    relationship_rows = list(queryset)
+
+    # Collect numbers of characters not already in cache
+    cached_chars = context.get("chars", {})
+    missing_numbers = [num for num, _ in relationship_rows if num not in cached_chars]
+
+    # Bulk fetch missing characters
+    bulk_fetched: dict = {}
+    if missing_numbers:
+        for target_character in Character.objects.select_related("event", "player").filter(
+            event=context["event"],
+            number__in=missing_numbers,
+        ):
+            bulk_fetched[target_character.number] = target_character
+
+    for target_character_number, relationship_text in relationship_rows:
         # Check if character data is already cached in context
-        if target_character_number in context.get("chars", {}):
-            character_data = context["chars"][target_character_number]
+        if target_character_number in cached_chars:
+            character_data = cached_chars[target_character_number]
+        elif target_character_number in bulk_fetched:
+            character_data = bulk_fetched[target_character_number].show(context["run"])
         else:
-            # Fetch character data from database if not cached
-            try:
-                target_character = Character.objects.select_related("event", "player").get(
-                    event=context["event"],
-                    number=target_character_number,
-                )
-                character_data = target_character.show(context["run"])
-            except ObjectDoesNotExist:
-                continue
+            continue
 
         # Build faction list for display purposes
         character_data["factions_list"] = []
@@ -266,7 +274,7 @@ def get_character_sheet_px(context: dict) -> None:
     context["sheet_abilities"] = {}
 
     # Group abilities by their type name
-    for ability in context["character"].px_ability_list.all():
+    for ability in context["character"].px_ability_list.select_related("typ").all():
         # Ensure ability has valid type and name before processing
         if ability.typ and ability.typ.name and ability.typ.name not in context["sheet_abilities"]:
             context["sheet_abilities"][ability.typ.name] = []
@@ -324,9 +332,22 @@ def get_character_sheet_questbuilder(context: dict) -> None:
         return
 
     context["sheet_traits"] = []
+    trait_numbers = [context["traits"][tn]["number"] for tn in context["char"]["traits"]]
+
+    # Bulk fetch all needed traits
+    trait_objects_by_number = {
+        t.number: t
+        for t in Trait.objects.select_related("quest").filter(
+            event=context["event"],
+            number__in=trait_numbers,
+        )
+    }
+
     for trait_number in context["char"]["traits"]:
         trait_element = context["traits"][trait_number]
-        trait_object = Trait.objects.get(event=context["event"], number=trait_element["number"])
+        trait_object = trait_objects_by_number.get(trait_element["number"])
+        if not trait_object:
+            continue
         trait_data = trait_object.show_complete()
         trait_data["quest"] = trait_object.quest.show_complete()
 
@@ -348,7 +369,7 @@ def get_character_sheet_plots(context: dict) -> None:
     context["sheet_plots"] = []
 
     # Get all plot relations for the character ordered by sequence
-    plot_relations = PlotCharacterRel.objects.filter(character=context["character"])
+    plot_relations = PlotCharacterRel.objects.select_related("plot").filter(character=context["character"])
 
     for plot_relation in plot_relations.order_by("order"):
         # Start with the base plot text
@@ -597,12 +618,32 @@ def check_missing_mandatory(context: dict) -> None:
 
     questions = get_cached_writing_questions(context["event"], QuestionApplicable.CHARACTER)
     character_id = _get_character_cache_id(context)
+
+    # Collect mandatory questions grouped by model
+    mandatory_by_model: dict = {WritingAnswer: [], WritingChoice: []}
+    mandatory_question_names: dict = {}
     for question in questions:
         if question["status"] != QuestionStatus.MANDATORY:
             continue
         model = question_type_to_model.get(question["typ"])
-        if model and not model.objects.filter(element_id=character_id, question_id=question["id"]).exists():
-            missing_question_names.append(question["name"])
+        if model:
+            mandatory_by_model[model].append(question["id"])
+            mandatory_question_names[question["id"]] = question["name"]
+
+    # Bulk fetch answered question ids for each model
+    answered_ids: set = set()
+    for model, question_ids in mandatory_by_model.items():
+        if question_ids:
+            answered_ids.update(
+                model.objects.filter(
+                    element_id=character_id,
+                    question_id__in=question_ids,
+                ).values_list("question_id", flat=True)
+            )
+
+    for question_id, question_name in mandatory_question_names.items():
+        if question_id not in answered_ids:
+            missing_question_names.append(question_name)
 
     context["missing_fields"] = ", ".join(missing_question_names)
 
