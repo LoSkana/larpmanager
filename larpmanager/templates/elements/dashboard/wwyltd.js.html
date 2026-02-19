@@ -38,11 +38,11 @@ $('#id_wwyltd').on('change', function() {
                 $('#id_wwyltd').val('').trigger('change');
             } else {
                 console.error('Invalid response:', response);
-                alert('{% trans "An error occurred" %}');
+                alert('{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}');
             }
         },
         error: function(xhr) {
-            let errorMessage = '{% trans "An error occurred" %}';
+            let errorMessage = '{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}';
 
             try {
                 const response = JSON.parse(xhr.responseText);
