@@ -2371,6 +2371,9 @@ msgstr "Vanha kojelauta"
 msgid "Old interface"
 msgstr "Vanha käyttöliittymä"
 
+msgid "Options price"
+msgstr "Optioiden hinta"
+
 msgid "Original text"
 msgstr "Alkuperäinen teksti"
 
@@ -4896,6 +4899,12 @@ msgstr "Ystäväkoodisi on käytetty"
 msgid "commit quantities to warehouse"
 msgstr "sitovat määriä varastoon"
 
+msgid "(Optional) The number of quotas"
+msgstr "(Valinnainen) Kiintiöiden määrä"
+
+msgid "(Optional) The surcharge amount"
+msgstr "(Valinnainen) Lisämaksun määrä"
+
 msgid "Activate features for the event"
 msgstr "Aktivoi tapahtuman ominaisuudet"
 
@@ -5999,6 +6008,9 @@ msgstr "hahmojen pääasiallinen ryhmittely / kuuluminen"
 msgid "secondary grouping across primary factions"
 msgstr "toissijainen ryhmittyminen ensisijaisten ryhmittymien välillä"
 
+msgid "(Optional) The amount of voluntary donation"
+msgstr "(vapaaehtoinen) Vapaaehtoisen lahjoituksen määrä"
+
 msgid "Allow to switch registration between events"
 msgstr "Mahdollistaa rekisteröinnin vaihtamisen tapahtumien välillä"
 
@@ -6165,9 +6177,6 @@ msgstr "Et ole vielä järjestön jäsen"
 
 msgid "You are now logged in with your main account"
 msgstr "Olet nyt kirjautuneena sisään päätililläsi"
-
-msgid "(Optional) The amount of a voluntary donation"
-msgstr "(Vapaaehtoinen) Vapaaehtoisen lahjoituksen määrä"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Tapahtuman navigointipalkin painikkeiden mukauttaminen"
@@ -6457,6 +6466,9 @@ msgstr "odottaa jäsenten hyväksyntää maksun suorittamiseksi"
 msgid "use a subtle pattern or texture for best results"
 msgstr ""
 "Käytä hienovaraista kuviota tai tekstuuria saadaksesi parhaan tuloksen"
+
+msgid "(Optional) The number of additional registrations"
+msgstr "(Valinnainen) Lisärekisteröintien määrä"
 
 msgid "Added at the top of the search page of characters"
 msgstr "Lisätty merkkien hakusivun yläosaan"

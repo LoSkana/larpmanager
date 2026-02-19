@@ -2371,6 +2371,9 @@ msgstr "Oud dashboard"
 msgid "Old interface"
 msgstr "Oude interface"
 
+msgid "Options price"
+msgstr "Optieprijs"
+
 msgid "Original text"
 msgstr "Oorspronkelijke tekst"
 
@@ -4896,6 +4899,12 @@ msgstr "Uw vriendencode is gebruikt"
 msgid "commit quantities to warehouse"
 msgstr "hoeveelheden vastleggen in magazijn"
 
+msgid "(Optional) The number of quotas"
+msgstr "(Optioneel) Het aantal quota"
+
+msgid "(Optional) The surcharge amount"
+msgstr "(Optioneel) Het toeslagbedrag"
+
 msgid "Activate features for the event"
 msgstr "Functies voor het evenement activeren"
 
@@ -6001,6 +6010,9 @@ msgstr "hoofdgroepering / affiliatie voor personages"
 msgid "secondary grouping across primary factions"
 msgstr "secundaire groepering over primaire facties"
 
+msgid "(Optional) The amount of voluntary donation"
+msgstr "(Optioneel) Het bedrag van de vrijwillige donatie"
+
 msgid "Allow to switch registration between events"
 msgstr "Registratie schakelen tussen evenementen toestaan"
 
@@ -6168,9 +6180,6 @@ msgstr "Je bent nog geen lid van de vereniging"
 
 msgid "You are now logged in with your main account"
 msgstr "Je bent nu ingelogd met je hoofdaccount"
-
-msgid "(Optional) The amount of a voluntary donation"
-msgstr "(Optioneel) Het bedrag van een vrijwillige donatie"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Knoppen in de evenementnavigatiebalk aanpassen"
@@ -6464,6 +6473,9 @@ msgstr "in afwachting van goedkeuring door leden om door te gaan met betaling"
 
 msgid "use a subtle pattern or texture for best results"
 msgstr "gebruik een subtiel patroon of textuur voor de beste resultaten"
+
+msgid "(Optional) The number of additional registrations"
+msgstr "(Optioneel) Het aantal extra registraties"
 
 msgid "Added at the top of the search page of characters"
 msgstr "Bovenaan de zoekpagina van tekens toegevoegd"

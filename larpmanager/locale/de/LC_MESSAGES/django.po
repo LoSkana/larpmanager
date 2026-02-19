@@ -2371,6 +2371,9 @@ msgstr "Altes Armaturenbrett"
 msgid "Old interface"
 msgstr "Alte Schnittstelle"
 
+msgid "Options price"
+msgstr "Preis der Optionen"
+
 msgid "Original text"
 msgstr "Ursprünglicher Text"
 
@@ -4896,6 +4899,12 @@ msgstr "Ihr Freundschaftscode wurde bereits verwendet"
 msgid "commit quantities to warehouse"
 msgstr "Mengen an das Lager binden"
 
+msgid "(Optional) The number of quotas"
+msgstr "(fakultativ) Die Anzahl der Kontingente"
+
+msgid "(Optional) The surcharge amount"
+msgstr "(fakultativ) Der Betrag des Zuschlags"
+
 msgid "Activate features for the event"
 msgstr "Aktivieren Sie Funktionen für das Ereignis"
 
@@ -6003,6 +6012,9 @@ msgstr "Hauptgruppierung/Zugehörigkeit für Zeichen"
 msgid "secondary grouping across primary factions"
 msgstr "sekundäre Gruppierung über primäre Fraktionen hinweg"
 
+msgid "(Optional) The amount of voluntary donation"
+msgstr "(fakultativ) Der Betrag der freiwilligen Spende"
+
 msgid "Allow to switch registration between events"
 msgstr "Umschalten der Registrierung zwischen den Veranstaltungen ermöglichen"
 
@@ -6178,9 +6190,6 @@ msgstr "Sie sind noch nicht Mitglied der Vereinigung"
 
 msgid "You are now logged in with your main account"
 msgstr "Sie sind jetzt mit Ihrem Hauptkonto eingeloggt"
-
-msgid "(Optional) The amount of a voluntary donation"
-msgstr "(fakultativ) Der Betrag einer freiwilligen Spende"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Anpassen von Schaltflächen in der Ereignis-Navigationsleiste"
@@ -6480,6 +6489,9 @@ msgstr ""
 msgid "use a subtle pattern or texture for best results"
 msgstr ""
 "Verwenden Sie ein dezentes Muster oder eine Textur für beste Ergebnisse"
+
+msgid "(Optional) The number of additional registrations"
+msgstr "(fakultativ) Die Anzahl der zusätzlichen Registrierungen"
 
 msgid "Added at the top of the search page of characters"
 msgstr "Oben auf der Suchseite der Zeichen hinzugefügt"

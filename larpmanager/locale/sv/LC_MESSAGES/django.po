@@ -2371,6 +2371,9 @@ msgstr "Gammal instrumentpanel"
 msgid "Old interface"
 msgstr "Gammalt gränssnitt"
 
+msgid "Options price"
+msgstr "Pris på optioner"
+
 msgid "Original text"
 msgstr "Originaltext"
 
@@ -4896,6 +4899,12 @@ msgstr "Din vänkod har använts"
 msgid "commit quantities to warehouse"
 msgstr "överföra kvantiteter till lagret"
 
+msgid "(Optional) The number of quotas"
+msgstr "(Valfritt) Antalet kvoter"
+
+msgid "(Optional) The surcharge amount"
+msgstr "(Valfritt) Tilläggsavgiftens belopp"
+
 msgid "Activate features for the event"
 msgstr "Aktivera funktioner för evenemanget"
 
@@ -6001,6 +6010,9 @@ msgstr "huvudgruppering / tillhörighet för karaktärer"
 msgid "secondary grouping across primary factions"
 msgstr "sekundär gruppering över primära fraktioner"
 
+msgid "(Optional) The amount of voluntary donation"
+msgstr "(Frivillig uppgift) Beloppet för den frivilliga donationen"
+
 msgid "Allow to switch registration between events"
 msgstr "Möjlighet att byta registrering mellan evenemang"
 
@@ -6167,9 +6179,6 @@ msgstr "Du är ännu inte medlem i föreningen"
 
 msgid "You are now logged in with your main account"
 msgstr "Du är nu inloggad med ditt huvudkonto"
-
-msgid "(Optional) The amount of a voluntary donation"
-msgstr "(Frivillig uppgift) Beloppet för en frivillig donation"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Anpassa knapparna i navigeringsfältet för evenemang"
@@ -6457,6 +6466,9 @@ msgstr "inväntar medlemsgodkännande för att gå vidare med betalningen"
 
 msgid "use a subtle pattern or texture for best results"
 msgstr "använd ett subtilt mönster eller textur för bästa resultat"
+
+msgid "(Optional) The number of additional registrations"
+msgstr "(Valfritt) Antalet ytterligare registreringar"
 
 msgid "Added at the top of the search page of characters"
 msgstr "Tillagt högst upp på söksidan för tecken"
