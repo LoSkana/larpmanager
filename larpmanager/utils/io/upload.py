@@ -253,7 +253,7 @@ def _get_file(context: dict, file: Any, column_id: int | None = None) -> tuple[p
     not_recognized = [column for column in input_dataframe.columns if column.lower() not in allowed_column_names]
     logs = []
     if not_recognized:
-        logs.append("WARN - columns ignored: %s", ", ".join(not_recognized))
+        logs.append(f"WARN - columns ignored: {', '.join(not_recognized)}")
 
     return input_dataframe, logs
 
@@ -867,8 +867,12 @@ def element_load(context: dict, csv_row: dict, element_questions: dict) -> str:
     # Extract element name and determine the appropriate model class
     element_name = csv_row[primary_field_name]
 
+    # Handle NaN or empty element names (e.g. blank rows in CSV)
+    if pd.isna(element_name) or not str(element_name).strip():
+        return "ERR - empty name"
+
     # Remove initial "#number " pattern from name
-    element_name = _strip_number_prefix(element_name)
+    element_name = _strip_number_prefix(str(element_name))
     question_applicable_type = QuestionApplicable.get_applicable(context["typ"])
     writing_model_class = QuestionApplicable.get_applicable_inverse(question_applicable_type)
 
