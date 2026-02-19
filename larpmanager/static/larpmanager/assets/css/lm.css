@@ -2795,6 +2795,7 @@ input[type="number"] {
 
 .grid .grid-line {
   flex: 0 0 100% !important;
+  height: auto !important;
 }
 
 .grid .grid-item h2 {
