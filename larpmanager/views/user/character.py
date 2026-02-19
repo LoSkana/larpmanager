@@ -423,9 +423,14 @@ def _update_character(context: dict, character: Any, form: BaseModelForm, messag
     # Check if character approval is enabled for this event
     # Update status to proposed if character is in creation/review and user clicked propose
     if (
-        get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context)
+        get_event_config(
+            (context["event"].parent or context["event"]).id,
+            "user_character_approval",
+            default_value=False,
+            context=context,
+        )
         and character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]
-        and form.cleaned_data["propose"]
+        and form.cleaned_data.get("propose", False)
     ):
         character.status = CharacterStatus.PROPOSED
         message = _(
