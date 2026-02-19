@@ -1299,6 +1299,9 @@ msgstr "--- Tom"
 msgid "Abilities"
 msgstr "Förmågor"
 
+msgid "Algorithm"
+msgstr "Algoritm"
+
 msgid "Approvals"
 msgstr "Godkännande"
 
@@ -1797,6 +1800,9 @@ msgstr "Förmånstagare"
 msgid "Birth place"
 msgstr "Födelseort"
 
+msgid "Button text"
+msgstr "Knapptext"
+
 msgid "Carbon copy"
 msgstr "Karbonkopia"
 
@@ -2115,6 +2121,9 @@ msgstr "Presentation"
 msgid "Questions WS"
 msgstr "Frågor om WS"
 
+msgid "Redirect URL"
+msgstr "URL för omdirigering"
+
 msgid "Refund given"
 msgstr "Utfärdade återbetalningar"
 
@@ -2413,6 +2422,9 @@ msgstr "Öppna förfrågningar"
 msgid "Require login"
 msgstr "Kräver inloggning"
 
+msgid "Shared secret"
+msgstr "Delad hemlighet"
+
 msgid "Show inactive"
 msgstr "Visa inaktiv"
 
@@ -2698,6 +2710,9 @@ msgstr "Förmåga borttagen"
 
 msgid "And that is all"
 msgstr "Och det är allt"
+
+msgid "App Integration"
+msgstr "App-integration"
 
 msgid "Change password"
 msgstr "Återställning av lösenord"
@@ -6695,6 +6710,9 @@ msgstr "Utför kontroll av konsekvensen av karaktärsblad"
 msgid "Set up the payment methods available to participants"
 msgstr "Ställ in de betalningsmetoder som är tillgängliga för deltagarna"
 
+msgid "Signing algorithm for the JWT token (default: HS256)"
+msgstr "Signeringsalgoritm för JWT-token (standard: HS256)"
+
 msgid "The first column the amount, the second the receipts"
 msgstr "Den första kolumnen beloppet, den andra kvitton"
 
@@ -7348,10 +7366,6 @@ msgstr "Valfritt - Utökad beskrivning (visas i liten grå text)"
 msgid "Optional note about this token (e.g., recipient name, purpose)"
 msgstr "Valfri notering om denna token (t.ex. mottagarens namn, syfte)"
 
-#, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(run)s"
-msgstr "Registrering för %(member)s framgångsrikt %(action)s till %(run)s"
-
 msgid "Search here for settings, features, and configuration options."
 msgstr "Sök här efter inställningar, funktioner och konfigurationsalternativ."
 
@@ -7487,6 +7501,10 @@ msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr ""
 "Del av registreringsavgiften som endast härrör från den valda biljetten"
 
+#, python-format
+msgid "Registration for %(member)s successfully %(action)s to %(event)s"
+msgstr "Registrering för %(member)s framgångsrikt %(action)s till %(event)s"
+
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr "Betalningen slutfördes inte. Kontakta oss för att ta reda på varför"
 
@@ -7571,6 +7589,9 @@ msgstr ""
 msgid "This page shows the factions and plots of the indicated character"
 msgstr ""
 "Denna sida sammanfattar den angivna karaktärens fraktioner och intriger"
+
+msgid "URL of the external application where the user will be redirected"
+msgstr "URL för den externa applikation dit användaren kommer att omdirigeras"
 
 msgid "Write here questions about your character directly to the authors"
 msgstr "Skriv här frågor om din karaktär direkt till författarna"
@@ -7660,6 +7681,11 @@ msgid "If you close the page after accessing, you will lose access forever"
 msgstr ""
 "Om du stänger sidan efter att du har öppnat den förlorar du åtkomsten för "
 "alltid"
+
+msgid "Label shown on the topbar button to access the external application"
+msgstr ""
+"Etikett som visas på knappen i toppfältet för att komma åt den externa "
+"applikationen"
 
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr "Minsta belopp av nettovinsten som ska behållas för föreningsskatten"
@@ -8958,6 +8984,13 @@ msgstr ""
 "tillgänglig"
 
 msgid ""
+"Now you can configure the integration button and the external application "
+"settings"
+msgstr ""
+"Nu kan du konfigurera integrationsknappen och inställningarna för den "
+"externa applikationen"
+
+msgid ""
 "Once the transfer is confirmed, submit the form below to notify us of your "
 "payment"
 msgstr ""
@@ -9510,6 +9543,13 @@ msgid ""
 msgstr ""
 "Observera att befintliga element med samma namn kommer att skrivas över med "
 "de uppladdade uppgifterna"
+
+msgid ""
+"Secret key used to sign the JWT token for SSO authentication with the "
+"external application"
+msgstr ""
+"Hemlig nyckel som används för att signera JWT-token för SSO-autentisering "
+"med den externa applikationen"
 
 msgid ""
 "This page shows the accounting status of the event, divided into the various"
@@ -11185,6 +11225,14 @@ msgid ""
 msgstr ""
 "Klicka på de roller som du vill samarbeta med, ange sedan din "
 "erfarenhetsnivå och slutligen ditt expertområde"
+
+msgid ""
+"Enables a button in the topbar to redirect authenticated users to an "
+"external application, using a configurable URL and optional JWT-based SSO"
+msgstr ""
+"Aktiverar en knapp i toppfältet för att omdirigera autentiserade användare "
+"till en extern applikation med hjälp av en konfigurerbar URL och valfri JWT-"
+"baserad SSO"
 
 msgid ""
 "Manages pre-larp 'mini-scenes.' You can create any number of scenes and "

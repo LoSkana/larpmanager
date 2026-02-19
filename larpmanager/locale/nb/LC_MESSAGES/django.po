@@ -1299,6 +1299,9 @@ msgstr "--- Tom"
 msgid "Abilities"
 msgstr "Evner"
 
+msgid "Algorithm"
+msgstr "Algoritme"
+
 msgid "Approvals"
 msgstr "Godkjenninger"
 
@@ -1797,6 +1800,9 @@ msgstr "Mottaker"
 msgid "Birth place"
 msgstr "Fødested"
 
+msgid "Button text"
+msgstr "Knappenes tekst"
+
 msgid "Carbon copy"
 msgstr "Karbonkopi"
 
@@ -2115,6 +2121,9 @@ msgstr "Presentasjon"
 msgid "Questions WS"
 msgstr "WS-spørsmål"
 
+msgid "Redirect URL"
+msgstr "Omdirigere URL"
+
 msgid "Refund given"
 msgstr "Utstedte refusjoner"
 
@@ -2413,6 +2422,9 @@ msgstr "Åpne forespørsler"
 msgid "Require login"
 msgstr "Krever innlogging"
 
+msgid "Shared secret"
+msgstr "Delt hemmelighet"
+
 msgid "Show inactive"
 msgstr "Vis inaktiv"
 
@@ -2698,6 +2710,9 @@ msgstr "Evne fjernet"
 
 msgid "And that is all"
 msgstr "Og det er alt"
+
+msgid "App Integration"
+msgstr "App-integrasjon"
 
 msgid "Change password"
 msgstr "Gjenoppretting av passord"
@@ -6700,6 +6715,9 @@ msgstr "Utfør kontroll av konsistensen i karakterarkene"
 msgid "Set up the payment methods available to participants"
 msgstr "Konfigurer betalingsmåtene som er tilgjengelige for deltakerne"
 
+msgid "Signing algorithm for the JWT token (default: HS256)"
+msgstr "Signeringsalgoritme for JWT-tokenet (standard: HS256)"
+
 msgid "The first column the amount, the second the receipts"
 msgstr "Den første kolonnen beløpet, den andre inntektene"
 
@@ -7352,10 +7370,6 @@ msgstr "Valgfritt - Utvidet beskrivelse (vises med liten grå tekst)"
 msgid "Optional note about this token (e.g., recipient name, purpose)"
 msgstr "Valgfri merknad om dette tokenet (f.eks. mottakerens navn, formål)"
 
-#, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(run)s"
-msgstr "Registrering for %(member)s vellykket %(action)s til %(run)s"
-
 msgid "Search here for settings, features, and configuration options."
 msgstr ""
 "Søk her etter innstillinger, funksjoner og konfigurasjonsalternativer."
@@ -7492,6 +7506,10 @@ msgstr "Nå kan deltakerne sende inn innsamlinger, og du kan gå gjennom dem"
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "En del av registreringsavgiften stammer kun fra den valgte billetten"
 
+#, python-format
+msgid "Registration for %(member)s successfully %(action)s to %(event)s"
+msgstr "Registrering for %(member)s vellykket %(action)s til %(event)s"
+
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
 "Betalingen ble ikke fullført. Vennligst kontakt oss for å finne ut hvorfor"
@@ -7583,6 +7601,11 @@ msgstr ""
 "Denne siden oppsummerer fraksjonene og handlingene til den angitte "
 "karakteren"
 
+msgid "URL of the external application where the user will be redirected"
+msgstr ""
+"URL-adressen til den eksterne applikasjonen som brukeren skal omdirigeres "
+"til"
+
 msgid "Write here questions about your character directly to the authors"
 msgstr "Skriv her spørsmål om karakteren din direkte til forfatterne"
 
@@ -7667,6 +7690,11 @@ msgid "If you close the page after accessing, you will lose access forever"
 msgstr ""
 "Hvis du lukker siden etter at du har åpnet den, mister du tilgangen for "
 "alltid"
+
+msgid "Label shown on the topbar button to access the external application"
+msgstr ""
+"Etikett som vises på knappen på topplinjen for å få tilgang til den eksterne"
+" applikasjonen"
 
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
@@ -8954,6 +8982,13 @@ msgstr ""
 "Angi tegnalternativene som må velges for å gjøre ferdigheten tilgjengelig"
 
 msgid ""
+"Now you can configure the integration button and the external application "
+"settings"
+msgstr ""
+"Nå kan du konfigurere integrasjonsknappen og innstillingene for den eksterne"
+" applikasjonen"
+
+msgid ""
 "Once the transfer is confirmed, submit the form below to notify us of your "
 "payment"
 msgstr ""
@@ -9497,6 +9532,13 @@ msgid ""
 msgstr ""
 "Merk at eksisterende elementer med samme navn vil bli overskrevet med de "
 "opplastede dataene"
+
+msgid ""
+"Secret key used to sign the JWT token for SSO authentication with the "
+"external application"
+msgstr ""
+"Hemmelig nøkkel som brukes til å signere JWT-tokenet for SSO-autentisering "
+"med den eksterne applikasjonen"
 
 msgid ""
 "This page shows the accounting status of the event, divided into the various"
@@ -11171,6 +11213,14 @@ msgid ""
 msgstr ""
 "Klikk på de rollene du ønsker å samarbeide om, skriv deretter inn "
 "erfaringsnivået ditt, og angi til slutt nøyaktig hvilket fagområde du har"
+
+msgid ""
+"Enables a button in the topbar to redirect authenticated users to an "
+"external application, using a configurable URL and optional JWT-based SSO"
+msgstr ""
+"Aktiverer en knapp i topplinjen for å omdirigere autentiserte brukere til en"
+" ekstern applikasjon, ved hjelp av en konfigurerbar URL og valgfri JWT-"
+"basert SSO"
 
 msgid ""
 "Manages pre-larp 'mini-scenes.' You can create any number of scenes and "

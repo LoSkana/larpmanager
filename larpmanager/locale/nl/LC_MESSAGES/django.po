@@ -1299,6 +1299,9 @@ msgstr "--- Leeg"
 msgid "Abilities"
 msgstr "Capaciteiten"
 
+msgid "Algorithm"
+msgstr "Algoritme"
+
 msgid "Approvals"
 msgstr "Goedkeuringen"
 
@@ -1797,6 +1800,9 @@ msgstr "Begunstigde"
 msgid "Birth place"
 msgstr "Geboorteplaats"
 
+msgid "Button text"
+msgstr "Knoptekst"
+
 msgid "Carbon copy"
 msgstr "Kopie"
 
@@ -2115,6 +2121,9 @@ msgstr "Presentatie"
 msgid "Questions WS"
 msgstr "WS Vragen"
 
+msgid "Redirect URL"
+msgstr "URL omleiden"
+
 msgid "Refund given"
 msgstr "Uitgegeven restituties"
 
@@ -2413,6 +2422,9 @@ msgstr "Open vragen"
 msgid "Require login"
 msgstr "Aanmelden vereist"
 
+msgid "Shared secret"
+msgstr "Gedeeld geheim"
+
 msgid "Show inactive"
 msgstr "Niet actief tonen"
 
@@ -2698,6 +2710,9 @@ msgstr "Vermogen verwijderd"
 
 msgid "And that is all"
 msgstr "En dat is alles"
+
+msgid "App Integration"
+msgstr "App integratie"
 
 msgid "Change password"
 msgstr "Wachtwoord herstel"
@@ -6704,6 +6719,9 @@ msgstr "Voer een controle uit op de consistentie van karaktersheets"
 msgid "Set up the payment methods available to participants"
 msgstr "De betalingsmethoden voor deelnemers instellen"
 
+msgid "Signing algorithm for the JWT token (default: HS256)"
+msgstr "Ondertekeningsalgoritme voor het JWT-token (standaard: HS256)"
+
 msgid "The first column the amount, the second the receipts"
 msgstr "De eerste kolom het bedrag, de tweede de ontvangsten"
 
@@ -7397,10 +7415,6 @@ msgstr ""
 msgid "Optional note about this token (e.g., recipient name, purpose)"
 msgstr "Optionele opmerking over dit token (bijv. naam ontvanger, doel)"
 
-#, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(run)s"
-msgstr "Registratie voor %(member)s met succes %(action)s naar %(run)s"
-
 msgid "Search here for settings, features, and configuration options."
 msgstr "Zoek hier naar instellingen, functies en configuratieopties."
 
@@ -7542,6 +7556,10 @@ msgstr "Deelnemers kunnen nu collecties indienen en jij kunt ze bekijken"
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Deel van het inschrijvingsgeld alleen afgeleid van het gekozen ticket"
 
+#, python-format
+msgid "Registration for %(member)s successfully %(action)s to %(event)s"
+msgstr "Registratie voor %(member)s met succes %(action)s naar %(event)s"
+
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
 "De betaling is niet voltooid. Neem contact met ons op om uit te zoeken "
@@ -7642,6 +7660,10 @@ msgstr ""
 "Deze pagina geeft een overzicht van de facties en complotten van het "
 "aangegeven personage"
 
+msgid "URL of the external application where the user will be redirected"
+msgstr ""
+"URL van de externe toepassing waar de gebruiker naartoe wordt doorgestuurd"
+
 msgid "Write here questions about your character directly to the authors"
 msgstr "Schrijf hier vragen over je personage rechtstreeks aan de auteurs"
 
@@ -7736,6 +7758,10 @@ msgstr ""
 msgid "If you close the page after accessing, you will lose access forever"
 msgstr ""
 "Als je de pagina sluit na het openen, verlies je voor altijd de toegang"
+
+msgid "Label shown on the topbar button to access the external application"
+msgstr ""
+"Label op de knop op de bovenste balk om de externe toepassing te openen"
 
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
@@ -9115,6 +9141,13 @@ msgstr ""
 "beschikbaar te maken"
 
 msgid ""
+"Now you can configure the integration button and the external application "
+"settings"
+msgstr ""
+"Nu kunt u de integratieknop en de instellingen van de externe toepassing "
+"configureren"
+
+msgid ""
 "Once the transfer is confirmed, submit the form below to notify us of your "
 "payment"
 msgstr ""
@@ -9675,6 +9708,13 @@ msgid ""
 msgstr ""
 "Merk op dat bestaande elementen met dezelfde naam worden overschreven met de"
 " geüploade gegevens"
+
+msgid ""
+"Secret key used to sign the JWT token for SSO authentication with the "
+"external application"
+msgstr ""
+"Geheime sleutel die wordt gebruikt om het JWT-token te ondertekenen voor "
+"SSO-authenticatie met de externe applicatie"
 
 msgid ""
 "This page shows the accounting status of the event, divided into the various"
@@ -11368,6 +11408,14 @@ msgid ""
 msgstr ""
 "Klik op de rollen waaraan je wilt meewerken, voer dan je ervaringsniveau in "
 "en geef tot slot precies aan wat je vakgebied is"
+
+msgid ""
+"Enables a button in the topbar to redirect authenticated users to an "
+"external application, using a configurable URL and optional JWT-based SSO"
+msgstr ""
+"Maakt een knop in de bovenbalk mogelijk om geverifieerde gebruikers om te "
+"leiden naar een externe applicatie, met behulp van een configureerbare URL "
+"en optionele JWT-gebaseerde SSO"
 
 msgid ""
 "Manages pre-larp 'mini-scenes.' You can create any number of scenes and "
