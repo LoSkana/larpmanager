@@ -360,7 +360,7 @@ def _get_applicable_row(context: dict, element: object, model: str, *, member_co
     return row_values, column_headers
 
 
-def _row_header(
+def _row_header(  # noqa: C901
     context: dict,
     el: object,
     header_columns: list,
@@ -417,6 +417,14 @@ def _row_header(
         if member:
             email_address = member.email
         row_values.append(email_address)
+
+    # Add player email column for characters if player editor is active
+    elif model == "character" and "user_character" in context.get("features", {}):
+        header_columns.append("player")
+        player_email = ""
+        if member:
+            player_email = member.email
+        row_values.append(player_email)
 
     # Add registration-specific columns
     if model == "registration":
@@ -479,7 +487,7 @@ def _header_regs(
 
     # Add additional registrations if question exists
     if "additional_tickets" in type_names:
-        column_headers.append(type_names["additional_tickets"], _("Additionals"))
+        column_headers.append(type_names.get("additional_tickets", _("Additionals")))
         column_values.append(registration.additionals)
 
     # Handle character-related data if character feature is enabled
