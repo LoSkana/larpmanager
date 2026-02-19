@@ -650,7 +650,7 @@ def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], m
     """
     # Apply event-based filtering if specified in type configuration
     if check_field(model_type, "event"):
-        queryset = queryset.filter(event=context["event"])
+        queryset = queryset.filter(event=context["event"].get_class_parent(model_name))
 
     # Apply run-based filtering if specified in type configuration
     elif check_field(model_type, "run"):

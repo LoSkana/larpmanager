@@ -2371,6 +2371,9 @@ msgstr "Ancien tableau de bord"
 msgid "Old interface"
 msgstr "Ancienne interface"
 
+msgid "Options price"
+msgstr "Prix des options"
+
 msgid "Original text"
 msgstr "Texte original"
 
@@ -4896,6 +4899,12 @@ msgstr "Votre code d'ami a été utilisé"
 msgid "commit quantities to warehouse"
 msgstr "engager des quantités dans l'entrepôt"
 
+msgid "(Optional) The number of quotas"
+msgstr "(Facultatif) Le nombre de quotas"
+
+msgid "(Optional) The surcharge amount"
+msgstr "(Facultatif) Le montant de la surtaxe"
+
 msgid "Activate features for the event"
 msgstr "Activer les fonctionnalités de l'événement"
 
@@ -6006,6 +6015,9 @@ msgstr "groupe principal / affiliation des personnages"
 msgid "secondary grouping across primary factions"
 msgstr "groupe secondaire à travers les factions primaires"
 
+msgid "(Optional) The amount of voluntary donation"
+msgstr "(Facultatif) Le montant du don volontaire"
+
 msgid "Allow to switch registration between events"
 msgstr "Permettre de passer d'une inscription à l'autre entre les événements"
 
@@ -6174,9 +6186,6 @@ msgstr "Vous n'êtes pas encore membre de l'Association"
 
 msgid "You are now logged in with your main account"
 msgstr "Vous êtes maintenant connecté avec votre compte principal "
-
-msgid "(Optional) The amount of a voluntary donation"
-msgstr "(Facultatif) Le montant d'un don volontaire"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Personnaliser les boutons de la barre de navigation de l'événement"
@@ -6476,6 +6485,9 @@ msgstr "en attente de l'approbation des membres pour procéder au paiement"
 msgid "use a subtle pattern or texture for best results"
 msgstr ""
 "utiliser un motif ou une texture subtile pour obtenir de meilleurs résultats"
+
+msgid "(Optional) The number of additional registrations"
+msgstr "(Facultatif) Le nombre d'enregistrements supplémentaires"
 
 msgid "Added at the top of the search page of characters"
 msgstr "Ajouté en haut de la page de recherche de caractères"

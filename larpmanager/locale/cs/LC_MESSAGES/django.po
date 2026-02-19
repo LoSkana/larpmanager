@@ -2371,6 +2371,9 @@ msgstr "Stará přístrojová deska"
 msgid "Old interface"
 msgstr "Staré rozhraní"
 
+msgid "Options price"
+msgstr "Cena opce"
+
 msgid "Original text"
 msgstr "Původní text"
 
@@ -4896,6 +4899,12 @@ msgstr "Váš kód přítele byl použit"
 msgid "commit quantities to warehouse"
 msgstr "odevzdat množství na sklad"
 
+msgid "(Optional) The number of quotas"
+msgstr "(Nepovinné) Počet kvót"
+
+msgid "(Optional) The surcharge amount"
+msgstr "(Nepovinné) Výše příplatku"
+
 msgid "Activate features for the event"
 msgstr "Aktivace funkcí pro událost"
 
@@ -5999,6 +6008,9 @@ msgstr "hlavní seskupení / příslušnost postav"
 msgid "secondary grouping across primary factions"
 msgstr "sekundární seskupení napříč primárními frakcemi"
 
+msgid "(Optional) The amount of voluntary donation"
+msgstr "(Nepovinné) Výše dobrovolného příspěvku"
+
 msgid "Allow to switch registration between events"
 msgstr "Umožnit přepínání registrace mezi událostmi"
 
@@ -6165,9 +6177,6 @@ msgstr "Ještě nejste členem asociace"
 
 msgid "You are now logged in with your main account"
 msgstr "Nyní jste přihlášeni pomocí svého hlavního účtu"
-
-msgid "(Optional) The amount of a voluntary donation"
-msgstr "(Nepovinné) Výše dobrovolného příspěvku"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Přizpůsobení tlačítek na navigačním panelu události"
@@ -6458,6 +6467,9 @@ msgstr "čeká na souhlas členů s platbou"
 
 msgid "use a subtle pattern or texture for best results"
 msgstr "pro dosažení nejlepších výsledků použijte jemný vzor nebo texturu"
+
+msgid "(Optional) The number of additional registrations"
+msgstr "(Nepovinné) Počet dalších registrací"
 
 msgid "Added at the top of the search page of characters"
 msgstr "Přidáno v horní části stránky vyhledávání znaků"

@@ -2371,6 +2371,9 @@ msgstr "Vecchia dashboard"
 msgid "Old interface"
 msgstr "Vecchia interfaccia"
 
+msgid "Options price"
+msgstr "Prezzo delle opzioni"
+
 msgid "Original text"
 msgstr "Testo originale"
 
@@ -4896,6 +4899,12 @@ msgstr "Il tuo codice amico è stato usato"
 msgid "commit quantities to warehouse"
 msgstr "impegna le quantità in magazzino"
 
+msgid "(Optional) The number of quotas"
+msgstr "(Facoltativo) Il numero di quote"
+
+msgid "(Optional) The surcharge amount"
+msgstr "(Facoltativo) L'importo del sovrapprezzo"
+
 msgid "Activate features for the event"
 msgstr "Attiva funzionalità aggiuntive per l'evento"
 
@@ -5999,6 +6008,9 @@ msgstr "raggruppamento/appartenenza principale per i personaggi"
 msgid "secondary grouping across primary factions"
 msgstr "raggruppamento secondario attraverso le fazioni primarie"
 
+msgid "(Optional) The amount of voluntary donation"
+msgstr "(Facoltativo) L'importo della donazione volontaria"
+
 msgid "Allow to switch registration between events"
 msgstr "Permette di cambiare l'iscrizione tra gli eventi"
 
@@ -6165,9 +6177,6 @@ msgstr "Non sei ancora iscritto all'Associazione"
 
 msgid "You are now logged in with your main account"
 msgstr "Ora sei loggato con l'account principale"
-
-msgid "(Optional) The amount of a voluntary donation"
-msgstr "(Facoltativo) L'importo di una donazione volontaria"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr ""
@@ -6459,6 +6468,9 @@ msgstr "in attesa di approvazione socio per procedere col pagamento"
 msgid "use a subtle pattern or texture for best results"
 msgstr ""
 "per ottenere i migliori risultati, utilizza un motivo o una texture sottile"
+
+msgid "(Optional) The number of additional registrations"
+msgstr "(Facoltativo) Il numero di registrazioni aggiuntive"
 
 msgid "Added at the top of the search page of characters"
 msgstr "Aggiunto all'inizio della pagina di ricerca dei personaggi"

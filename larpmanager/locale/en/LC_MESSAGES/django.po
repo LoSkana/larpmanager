@@ -9462,20 +9462,7 @@ msgid ""
 "multiple-choice question"
 msgstr ""
 
-msgid "The participant's email"
-msgstr ""
-
-msgid "The name of the ticket"
-msgstr ""
-
-msgid "if it doesn't exist, it will be created"
-msgstr ""
-
-msgid ""
-"(Optional) The character names to assign to the player, separated by commas"
-msgstr ""
-
-msgid "(Optional) The amount of a voluntary donation"
+msgid "Options price"
 msgstr ""
 
 msgid "The ticket's name"
@@ -9536,6 +9523,31 @@ msgid "Optional - Maximum number of times it can be selected (0 = unlimited)"
 msgstr ""
 
 msgid "Optional - Other options as requirements, comma-separated"
+msgstr ""
+
+msgid "The participant's email"
+msgstr ""
+
+msgid "The name of the ticket"
+msgstr ""
+
+msgid "if it doesn't exist, it will be created"
+msgstr ""
+
+msgid "(Optional) The number of additional registrations"
+msgstr ""
+
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
+msgstr ""
+
+msgid "(Optional) The amount of voluntary donation"
+msgstr ""
+
+msgid "(Optional) The surcharge amount"
+msgstr ""
+
+msgid "(Optional) The number of quotas"
 msgstr ""
 
 msgid "First character in the relationship (origin)"

@@ -2371,6 +2371,9 @@ msgstr "Salpicadero antiguo"
 msgid "Old interface"
 msgstr "Interfaz antigua"
 
+msgid "Options price"
+msgstr "Precio de las opciones"
+
 msgid "Original text"
 msgstr "Texto original"
 
@@ -4896,6 +4899,12 @@ msgstr "Tu código de amigo ha sido utilizado"
 msgid "commit quantities to warehouse"
 msgstr "comprometer cantidades en almacén"
 
+msgid "(Optional) The number of quotas"
+msgstr "(Opcional) El número de cuotas"
+
+msgid "(Optional) The surcharge amount"
+msgstr "(Opcional) Importe del recargo"
+
 msgid "Activate features for the event"
 msgstr "Activar funciones para el evento"
 
@@ -5999,6 +6008,9 @@ msgstr "agrupación principal / afiliación de los personajes"
 msgid "secondary grouping across primary factions"
 msgstr "agrupación secundaria entre facciones primarias"
 
+msgid "(Optional) The amount of voluntary donation"
+msgstr "(Optativo) Importe de la donación voluntaria"
+
 msgid "Allow to switch registration between events"
 msgstr "Permitir cambiar de registro entre eventos"
 
@@ -6165,9 +6177,6 @@ msgstr "¡Aún no eres miembro de la Organización"
 
 msgid "You are now logged in with your main account"
 msgstr "Ya has iniciado sesión con tu cuenta principal"
-
-msgid "(Optional) The amount of a voluntary donation"
-msgstr "(Optativo) Importe de una donación voluntaria"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Personalizar los botones de la barra de navegación de eventos"
@@ -6463,6 +6472,9 @@ msgstr "a la espera de la aprobación de los miembros para proceder al pago"
 
 msgid "use a subtle pattern or texture for best results"
 msgstr "utilice un dibujo o textura sutil para obtener mejores resultados"
+
+msgid "(Optional) The number of additional registrations"
+msgstr "(Opcional) El número de registros adicionales"
 
 msgid "Added at the top of the search page of characters"
 msgstr "Añadido en la parte superior de la página de búsqueda de caracteres"
