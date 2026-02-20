@@ -6187,9 +6187,6 @@ msgstr "Precio extra aplicado cuando esta cuota está activa"
 msgid "If checked: shows the position for each event"
 msgstr "Si está marcada: muestra la posición de cada evento"
 
-msgid "Indicates the amount of reimbursement desired"
-msgstr "Indica el importe de reembolso deseado"
-
 msgid "Manage badges and assign them to participants"
 msgstr "Gestionar insignias y asignarlas a los participantes"
 
@@ -9631,6 +9628,13 @@ msgid ""
 msgstr ""
 "Indica el número máximo de descuentos de este tipo que pueden solicitarse (0"
 " para uso infinito)"
+
+msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Indica el importe de reembolso deseado (no puede ser superior a tus créditos"
+" actuales)"
 
 msgid ""
 "Items marked in red will be deleted because their final quantity will be "

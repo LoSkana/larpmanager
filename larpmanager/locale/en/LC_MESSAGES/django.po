@@ -197,6 +197,11 @@ msgstr ""
 msgid "Enter any useful information for the organizers to verify the payment"
 msgstr ""
 
+msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+
 msgid "Request refund"
 msgstr ""
 
@@ -3061,9 +3066,6 @@ msgstr ""
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "
 "and full bank details, paypal link, etc)"
-msgstr ""
-
-msgid "Indicates the amount of reimbursement desired"
 msgstr ""
 
 msgid "Global balance"
