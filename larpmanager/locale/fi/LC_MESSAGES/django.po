@@ -9211,6 +9211,13 @@ msgstr ""
 "Jos olet täysin varma, että haluat poistaa kohteen, napsauta tätä painiketta"
 
 msgid ""
+"The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
+"underscores."
+msgstr ""
+"Salainen koodi saa sisältää vain kirjaimia (a-z, A-Z), numeroita, "
+"väliviivoja ja alleviivauksia."
+
+msgid ""
 "This page displays the conversation with a participant regarding their "
 "expressed need"
 msgstr ""

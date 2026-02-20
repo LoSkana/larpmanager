@@ -9370,6 +9370,13 @@ msgstr ""
 " knop"
 
 msgid ""
+"The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
+"underscores."
+msgstr ""
+"De geheime code mag alleen letters (a-z, A-Z), cijfers, koppeltekens en "
+"onderstrepingen bevatten."
+
+msgid ""
 "This page displays the conversation with a participant regarding their "
 "expressed need"
 msgstr ""

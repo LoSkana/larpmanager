@@ -1722,6 +1722,11 @@ msgid ""
 "fee"
 msgstr ""
 
+msgid ""
+"The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
+"underscores."
+msgstr ""
+
 msgid "Default fields"
 msgstr ""
 

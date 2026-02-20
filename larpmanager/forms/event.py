@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
+import re
 from typing import Any, ClassVar
 
 from django import forms
@@ -1661,6 +1662,15 @@ class OrgaQuickSetupForm(QuickSetupForm):
         )
 
         self.init_fields(get_event_features(self.instance.pk))
+
+    def clean_registration_secret(self) -> str:
+        """Validate that registration_secret only contains URL slug-safe characters."""
+        value = self.cleaned_data.get("registration_secret", "")
+        if value and not re.match(r"^[-a-zA-Z0-9_]+$", value):
+            raise ValidationError(
+                _("The secret code may only contain letters (a-z, A-Z), digits, hyphens and underscores.")
+            )
+        return value
 
 
 class OrgaRunDatesForm(OrgaRunForm):

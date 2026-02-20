@@ -9286,6 +9286,13 @@ msgstr ""
 "przycisk"
 
 msgid ""
+"The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
+"underscores."
+msgstr ""
+"Tajny kod może zawierać wyłącznie litery (a-z, A-Z), cyfry, myślniki i "
+"podkreślniki."
+
+msgid ""
 "This page displays the conversation with a participant regarding their "
 "expressed need"
 msgstr ""
