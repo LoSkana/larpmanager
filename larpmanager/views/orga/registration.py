@@ -578,7 +578,7 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
 def _registrations_prepare_membership(context: dict) -> None:
     """Batch-load membership statuses for all registered members."""
     context["memberships"] = {}
-    if "membership" in context["features"]:
+    if "membership" not in context["features"]:
         return
 
     # Create lookup dictionary for efficient membership access
