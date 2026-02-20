@@ -351,7 +351,6 @@ def reset_accountingitem_cache(instance: Any) -> None:
         refresh_member_accounting_cache(instance.run, instance.member_id)
 
 
-# AbilityPx signals
 @receiver(post_save, sender=AbilityPx)
 def post_save_ability_px(sender: type, instance: AbilityPx, *args: Any, **kwargs: Any) -> None:
     """Update character experience when ability changes."""
@@ -366,7 +365,6 @@ def post_delete_ability_px(sender: type, instance: AbilityPx, *args: Any, **kwar
     reset_widgets(instance)
 
 
-# AccountingItemCollection signals
 @receiver(pre_save, sender=AccountingItemCollection)
 def pre_save_collection_gift(sender: type, instance: AccountingItemCollection, **kwargs: Any) -> None:
     """Send gift collection notification email before saving."""
@@ -384,7 +382,6 @@ def post_save_accounting_item_collection(
     handle_accounting_item_collection_post_save(instance)
 
 
-# AccountingItemDiscount signals
 @receiver(post_save, sender=AccountingItemDiscount)
 def post_save_discount_accounting_cache(
     sender: type, instance: AccountingItemDiscount, created: bool, **kwargs: Any
@@ -398,7 +395,6 @@ def post_save_discount_accounting_cache(
         refresh_member_accounting_cache(instance.run, instance.member_id)
 
 
-# AccountingItemDonation signals
 @receiver(pre_save, sender=AccountingItemDonation)
 def pre_save_accounting_item_donation(
     sender: type, instance: AccountingItemDonation, *args: Any, **kwargs: Any
@@ -407,7 +403,6 @@ def pre_save_accounting_item_donation(
     send_donation_confirmation_email(instance)
 
 
-# AccountingItemExpense signals
 @receiver(pre_save, sender=AccountingItemExpense)
 def pre_save_accounting_item_expense(sender: type, instance: AccountingItemExpense, **kwargs: Any) -> None:
     """Send approval email when expense is saved."""
@@ -427,14 +422,12 @@ def post_save_accounting_item_expense(
     update_credit_on_expense_save(instance)
 
 
-# AccountingItemMembership signals
 @receiver(pre_save, sender=AccountingItemMembership)
 def pre_save_accounting_item_membership(sender: type, instance: AccountingItem, *args: Any, **kwargs: Any) -> None:
     """Send payment notification email when membership accounting item is saved."""
     send_membership_payment_notification_email(instance)
 
 
-# AccountingItemOther signals
 @receiver(pre_save, sender=AccountingItemOther)
 def pre_save_accounting_item_other(sender: type, instance: AccountingItemOther, **kwargs: Any) -> None:
     """Send token credit notification email when accounting item is saved."""
@@ -453,7 +446,6 @@ def post_save_other_accounting_cache(
     update_token_credit_on_other_save(instance)
 
 
-# AccountingItemPayment signals
 @receiver(pre_save, sender=AccountingItemPayment)
 def pre_save_accounting_item_payment(sender: type, instance: AccountingItemPayment, **kwargs: Any) -> None:
     """Send payment confirmation and handle pre-save operations."""
@@ -494,7 +486,6 @@ def post_delete_payment_accounting_cache(
         refresh_member_accounting_cache(instance.registration.run, instance.member_id)
 
 
-# AssignmentTrait signals
 @receiver(pre_delete, sender=AssignmentTrait)
 def pre_delete_assignment_trait(sender: type, instance: AssignmentTrait, **kwargs: Any) -> None:
     """Signal handler to deactivate castings and remove PDFs when an assignment trait is deleted."""
@@ -528,7 +519,6 @@ def post_delete_assignment_trait_reset(sender: type, instance: AssignmentTrait, 
     clear_run_cache_and_media(instance.run)
 
 
-# AssociationPermission signals
 @receiver(pre_save, sender=AssociationPermission)
 def pre_save_association_permission(sender: type, instance: object, **kwargs: Any) -> None:
     """Auto-assign number to association permission before save."""
@@ -557,7 +547,6 @@ def post_delete_association_permission_index_permission(
     clear_association_permission_cache(instance)
 
 
-# AssociationRole signals
 @receiver(pre_delete, sender=AssociationRole)
 def pre_delete_association_role_reset(sender: type, instance: AssociationRole, **kwargs: dict) -> None:
     """Clean up cache and event links when an association role is deleted."""
@@ -580,7 +569,6 @@ def post_save_association_role_reset(sender: type, instance: AssociationRole, **
         reset_event_links(member.id, instance.association_id)
 
 
-# AssocText signals
 @receiver(pre_delete, sender=AssociationText)
 def pre_delete_association_text(sender: type, instance: object, **kwargs: Any) -> None:
     """Clear association text cache before deletion."""
@@ -593,7 +581,6 @@ def post_save_association_text(sender: type, instance: object, created: bool, **
     update_association_text_cache_on_save(instance)
 
 
-# AssociationTranslation signals
 @receiver(post_save, sender=AssociationTranslation)
 def post_save_association_translation(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
     """Clear cache when association translation is saved."""
@@ -606,7 +593,6 @@ def pre_delete_association_translation(sender: type, instance: object, **kwargs:
     clear_association_translation_cache(instance.association_id, instance.language)
 
 
-# Association signals
 @receiver(pre_save, sender=Association)
 def pre_save_association_set_skin_features(sender: type, instance: Association, **kwargs: Any) -> None:
     """Prepare association skin features and encryption key before saving."""
@@ -630,7 +616,6 @@ def post_save_association_reset_lm_home(sender: type, instance: object, **kwargs
     on_association_post_save_reset_features_cache(instance)
 
 
-# AssociationConfig signals
 @receiver(post_save, sender=AssociationConfig)
 def post_save_reset_association_config(sender: type, instance: object, **kwargs: Any) -> None:
     """Clear association config cache after save."""
@@ -643,14 +628,12 @@ def post_delete_reset_association_config(sender: type, instance: object, **kwarg
     reset_element_configs(instance.association)
 
 
-# AssociationSkin signals
 @receiver(post_save, sender=AssociationSkin)
 def post_save_association_skin_reset_cache(sender: type, instance: Association, **kwargs: Any) -> None:
     """Clear skin cache when association is saved."""
     clear_skin_cache(instance.domain)
 
 
-# Character signals
 @receiver(pre_save, sender=Character)
 def pre_save_character_update_status(sender: type, instance: Character, **kwargs: Any) -> None:
     """Update character status and cache before saving."""
@@ -731,7 +714,6 @@ def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs
     reset_widgets(instance)
 
 
-# Casting signals
 @receiver(post_save, sender=Casting)
 def post_save_casting_cache(sender: type, instance: Casting, **kwargs: Any) -> None:
     """Clear deadline widget cache when casting preferences are saved."""
@@ -746,14 +728,12 @@ def post_delete_casting_cache(sender: type, instance: Casting, **kwargs: Any) ->
     reset_widgets(instance)
 
 
-# Log signals
 @receiver(post_save, sender=Log)
 def post_save_log_cache(sender: type, instance: Log, **kwargs: Any) -> None:
     """Clear log widget cache when log entries are saved."""
     reset_widgets(instance)
 
 
-# CharacterConfig signals
 @receiver(post_save, sender=CharacterConfig)
 def post_save_reset_character_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset character configuration cache after save."""
@@ -766,14 +746,12 @@ def post_delete_reset_character_config(sender: type, instance: Any, **kwargs: An
     reset_element_configs(instance.character)
 
 
-# ChatMessage signals
 @receiver(pre_save, sender=ChatMessage)
 def pre_save_notify_chat_message(sender: type[ChatMessage], instance: ChatMessage, **kwargs: Any) -> None:
     """Notify users via email when a new chat message is created."""
     send_chat_message_notification_email(instance)
 
 
-# Collection signals
 @receiver(pre_save, sender=Collection)
 def pre_save_collection(sender: type, instance: Any, **kwargs: Any) -> None:
     """Pre-save signal handler for collection instances."""
@@ -793,7 +771,6 @@ def post_save_collection_activation_email(
         send_collection_activation_email(instance)
 
 
-# DeliveryPx signals
 @receiver(post_save, sender=DeliveryPx)
 def post_save_delivery_px(
     sender: type,
@@ -823,7 +800,6 @@ def create_pools_for_inventory(sender: type, instance: Inventory, created: bool,
             )
 
 
-# Event signals
 @receiver(pre_save, sender=Event)
 def pre_save_event(sender: type, instance: Event, **kwargs: Any) -> None:
     """Invalidate cache and prepare campaign data before saving an Event."""
@@ -873,7 +849,6 @@ def post_delete_event_links(sender: type, instance: Any, **kwargs: Any) -> None:
     clear_run_event_links_cache(instance)
 
 
-# EventButton signals
 @receiver(post_save, sender=EventButton)
 def post_save_event_button(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
     """Clear event button cache after save."""
@@ -886,7 +861,6 @@ def pre_delete_event_button(sender: type, instance: Any, **kwargs: Any) -> None:
     clear_event_button_cache(instance.event_id)
 
 
-# EventConfig signals
 @receiver(post_save, sender=EventConfig)
 def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset event configuration cache after model save."""
@@ -903,7 +877,6 @@ def post_delete_reset_event_config(sender: type, instance: Any, **kwargs: Any) -
         reset_cache_config_run(run)
 
 
-# EventPermission signals
 @receiver(pre_save, sender=EventPermission)
 def pre_save_event_permission(sender: type, instance: EventPermission, **kwargs: Any) -> None:
     """Auto-assign permission number before saving EventPermission."""
@@ -924,7 +897,6 @@ def post_delete_event_permission_reset(sender: type, instance: Any, **kwargs: An
     clear_index_permission_cache("event")
 
 
-# EventRole signals
 @receiver(pre_delete, sender=EventRole)
 def pre_delete_event_role_reset(sender: type, instance: EventRole, **kwargs: Any) -> None:
     """Reset caches and event links when an EventRole is deleted."""
@@ -947,7 +919,6 @@ def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any)
         reset_event_links(member.id, instance.event.association_id)
 
 
-# EventText signals
 @receiver(pre_delete, sender=EventText)
 def pre_delete_event_text(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear event text cache before deletion."""
@@ -960,7 +931,6 @@ def post_save_event_text(sender: type, instance: EventText, created: bool, **kwa
     update_event_text_cache_on_save(instance)
 
 
-# Faction signals
 @receiver(pre_save, sender=Faction)
 def pre_save_faction(sender: type, instance: Faction, *args: Any, **kwargs: Any) -> None:
     """Signal handler that updates faction before saving."""
@@ -1013,7 +983,6 @@ def post_delete_faction_reset_rels(sender: type, instance: object, **kwargs: Any
     update_visible_factions(instance.event)
 
 
-# Feature signals
 @receiver(post_save, sender=Feature)
 def post_save_feature_index_permission(sender: type, instance: object, **kwargs: dict) -> None:
     """Clear permission and feature caches after feature/permission save."""
@@ -1033,7 +1002,6 @@ def post_delete_feature_index_permission(sender: type, instance: Any, **kwargs: 
     reset_features_cache()
 
 
-# FeatureModule signals
 @receiver(post_save, sender=FeatureModule)
 def post_save_feature_module_index_permission(sender: type, instance: object, **kwargs: object) -> None:
     """Clear cached permissions and features after feature/module/permission changes."""
@@ -1057,7 +1025,6 @@ def post_delete_feature_module_index_permission(
     reset_features_cache()
 
 
-# Handout signals
 @receiver(pre_delete, sender=Handout)
 def pre_delete_handout(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clean up handout PDFs before deletion."""
@@ -1070,7 +1037,6 @@ def post_save_handout(sender: type, instance: Any, **kwargs: Any) -> None:
     cleanup_handout_pdfs_after_save(instance)
 
 
-# HandoutTemplate signals
 @receiver(pre_delete, sender=HandoutTemplate)
 def pre_delete_handout_template(sender: type, instance: Any, **kwargs: Any) -> None:
     """Delete associated PDF files before deleting handout template."""
@@ -1083,21 +1049,18 @@ def post_save_handout_template(sender: type, instance: Any, **kwargs: Any) -> No
     cleanup_handout_template_pdfs_after_save(instance)
 
 
-# HelpQuestion signals
 @receiver(pre_save, sender=HelpQuestion)
 def pre_save_notify_help_question(sender: type, instance: Any, **kwargs: Any) -> None:
     """Notify about help question before saving."""
     send_help_question_notification_email(instance)
 
 
-# LarpManagerFaq signals
 @receiver(pre_save, sender=LarpManagerFaq)
 def pre_save_larp_manager_faq(sender: type, instance: LarpManagerFaq, *args: Any, **kwargs: Any) -> None:
     """Signal handler that auto-assigns sequential FAQ numbers before saving."""
     auto_assign_faq_sequential_number(instance)
 
 
-# LarpManagerGuide signals
 @receiver(post_save, sender=LarpManagerGuide)
 def post_save_reset_guides_cache(sender: type, instance: object, **kwargs: dict) -> None:
     """Signal handler to reset guides cache when guide content changes."""
@@ -1110,21 +1073,18 @@ def post_delete_reset_guides_cache(sender: type, instance: object, **kwargs: dic
     reset_guides_cache()
 
 
-# LarpManagerBlog signals
 @receiver(post_save, sender=LarpManagerBlog)
 def post_save_clear_blog_cache(sender: type, instance: LarpManagerBlog, **kwargs: dict) -> None:
     """Clear blog content cache when blog is updated."""
     clear_blog_cache(instance.id)
 
 
-# LarpManagerTicket signals
 @receiver(post_save, sender=LarpManagerTicket)
 def save_larpmanager_ticket(sender: type, instance: LarpManagerTicket, created: bool, **kwargs: Any) -> None:
     """Send email notification when a support ticket is saved."""
     send_support_ticket_email(instance)
 
 
-# LarpManagerTutorial signals
 @receiver(pre_save, sender=LarpManagerTutorial)
 def pre_save_larp_manager_tutorial(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Generate URL slug for tutorial instance before saving."""
@@ -1179,14 +1139,12 @@ def post_delete_reset_lm_texts_cache(sender: type, instance: LarpManagerText, **
     clear_larpmanager_texts_cache()
 
 
-# Member signals
 @receiver(post_save, sender=Member)
 def post_save_member_reset(sender: type, instance: Member, **kwargs: dict) -> None:
     """Update cached event character data when member changes."""
     update_member_event_character_cache(instance)
 
 
-# MemberConfig signals
 @receiver(post_save, sender=MemberConfig)
 def post_save_reset_member_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset member configuration cache after save."""
@@ -1199,7 +1157,6 @@ def post_delete_reset_member_config(sender: type, instance: Any, **kwargs: Any) 
     reset_element_configs(instance.member)
 
 
-# Membership signals
 @receiver(pre_save, sender=Membership)
 def pre_save_membership(sender: type, instance: Membership, **kwargs: Any) -> None:
     """Process membership status updates before save."""
@@ -1218,7 +1175,6 @@ def post_delete_membership_cache(sender: type, instance: Membership, **kwargs: A
     reset_widgets(instance)
 
 
-# ModifierPx signals
 @receiver(post_save, sender=ModifierPx)
 def post_save_modifier_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update character experience when a modifier is saved."""
@@ -1231,14 +1187,12 @@ def post_delete_modifier_px(sender: type, instance: object, *args: Any, **kwargs
     _recalcuate_characters_experience_points(instance)
 
 
-# PaymentInvoice signals
 @receiver(pre_save, sender=PaymentInvoice)
 def pre_save_payment_invoice(sender: type[PaymentInvoice], instance: PaymentInvoice, **kwargs: Any) -> None:
     """Process payment invoice status changes before saving."""
     process_payment_invoice_status_change(instance)
 
 
-# PlayerRelationship signals
 @receiver(pre_delete, sender=PlayerRelationship)
 def pre_delete_player_relationship(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clean up relationship PDFs before deleting instance."""
@@ -1251,7 +1205,6 @@ def post_save_player_relationship(sender: type, instance: Any, **kwargs: Any) ->
     cleanup_relationship_pdfs_after_save(instance)
 
 
-# Plot signals
 @receiver(pre_save, sender=Plot)
 def pre_save_plot(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Replace character names in plot instance before saving."""
@@ -1280,14 +1233,12 @@ def post_delete_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> 
     remove_item_from_cache_section(instance.event_id, "plots", instance.id)
 
 
-# PreRegistration signals
 @receiver(pre_save, sender=PreRegistration)
 def pre_save_pre_registration(sender: type, instance: Any, **kwargs: Any) -> None:
     """Send confirmation email for the pre-registration."""
     send_pre_registration_confirmation_email(instance)
 
 
-# Prologue signals
 @receiver(pre_save, sender=Prologue)
 def pre_save_prologue(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Replace character names in prologue before saving."""
@@ -1316,7 +1267,6 @@ def post_delete_prologue_reset_rels(sender: type, instance: object, **kwargs: An
     remove_item_from_cache_section(instance.event_id, "prologues", instance.id)
 
 
-# Quest signals
 @receiver(pre_save, sender=Quest)
 def pre_save_quest_reset(sender: type, instance: Any, **kwargs: Any) -> None:
     """Update cache before saving quest instance."""
@@ -1355,7 +1305,6 @@ def post_delete_quest_reset_rels(sender: type, instance: object, **kwargs: Any) 
     reset_widgets(instance)
 
 
-# QuestType signals
 @receiver(pre_save, sender=QuestType)
 def pre_save_questtype_reset(sender: type, instance: QuestType, **kwargs: dict) -> None:
     """Signal handler that updates cache when a quest type is modified."""
@@ -1398,14 +1347,12 @@ def post_delete_questtype_reset_rels(sender: type, instance: QuestType, **kwargs
     reset_widgets(instance)
 
 
-# RefundRequest signals
 @receiver(pre_save, sender=RefundRequest)
 def pre_save_refund_request(sender: type, instance: Any, **kwargs: Any) -> None:
     """Process refund request status changes before saving."""
     process_refund_request_status_change(instance)
 
 
-# Registration signals
 @receiver(pre_save, sender=Registration)
 def pre_save_registration_switch_event(sender: type, instance: Registration, **kwargs: Any) -> None:
     """Handle registration updates when switching events."""
@@ -1474,7 +1421,6 @@ def post_delete_registration_accounting_cache(sender: type, instance: Any, **kwa
     reset_widgets(instance)
 
 
-# RegistrationCharacterRel signals
 @receiver(post_save, sender=RegistrationCharacterRel)
 def post_save_registration_character_rel_savereg(
     sender: type,
@@ -1535,7 +1481,6 @@ def post_delete_registration_question(sender: type, instance: RegistrationTicket
     reset_widgets(instance)
 
 
-# RegistrationOption signals
 @receiver(post_save, sender=RegistrationOption)
 def post_save_registration_option(sender: type, instance: RegistrationOption, **kwargs: dict) -> None:
     """Process registration option post-save signal."""
@@ -1549,7 +1494,6 @@ def post_delete_registration_option(sender: type, instance: RegistrationOption, 
     clear_registration_questions_cache(instance.question.event_id)
 
 
-# RegistrationTicket signals
 @receiver(post_save, sender=RegistrationTicket)
 def post_save_ticket_accounting_cache(
     sender: type,
@@ -1571,7 +1515,6 @@ def post_delete_ticket_accounting_cache(sender: type, instance: RegistrationTick
     reset_widgets(instance)
 
 
-# RegistrationInstallment signals
 @receiver(post_save, sender=RegistrationInstallment)
 def post_save_registration_installment(sender: type, instance: RegistrationInstallment, **kwargs: Any) -> None:
     """Clear actions cache when installment is saved."""
@@ -1584,7 +1527,6 @@ def post_delete_registration_installment(sender: type, instance: RegistrationIns
     reset_widgets(instance)
 
 
-# RegistrationQuota signals
 @receiver(post_save, sender=RegistrationQuota)
 def post_save_registration_quota(sender: type, instance: RegistrationQuota, **kwargs: Any) -> None:
     """Clear actions cache when quota is saved."""
@@ -1599,7 +1541,6 @@ def post_delete_registration_quota(sender: type, instance: RegistrationQuota, **
     reset_widgets(instance)
 
 
-# Relationship signals
 @receiver(pre_delete, sender=Relationship)
 def pre_delete_relationship(sender: type, instance: Any, **kwargs: Any) -> None:
     """Delete character PDF files before relationship deletion."""
@@ -1619,7 +1560,6 @@ def post_delete_relationship_reset_rels(sender: type, instance: Any, **kwargs: A
     refresh_character_relationships(instance.source)
 
 
-# RulePx signals
 @receiver(post_save, sender=RulePx)
 def post_save_rule_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update characters experience when rule changes."""
@@ -1632,7 +1572,6 @@ def post_delete_rule_px(sender: type, instance: object, *args: Any, **kwargs: An
     _recalcuate_characters_experience_points(instance)
 
 
-# Run signals
 @receiver(pre_save, sender=Run)
 def pre_save_run(sender: type, instance: Any, **kwargs: Any) -> None:
     """Invalidate cache on run pre-save signal."""
@@ -1686,7 +1625,6 @@ def post_delete_run_links(sender: type, instance: Any, **kwargs: Any) -> None:
     clear_association_cache(instance.event.association.slug)
 
 
-# RunConfig signals
 @receiver(post_save, sender=RunConfig)
 def post_save_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset run config cache when related instance is saved."""
@@ -1699,7 +1637,6 @@ def post_delete_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> 
     reset_element_configs(instance.run)
 
 
-# SpeedLarp signals
 @receiver(pre_save, sender=SpeedLarp)
 def pre_save_speed_larp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Pre-save signal handler that replaces character names in the instance."""
@@ -1728,7 +1665,6 @@ def post_delete_speedlarp_reset_rels(sender: type, instance: SpeedLarp, **kwargs
     remove_item_from_cache_section(instance.event_id, "speedlarps", instance.id)
 
 
-# Trait signals
 @receiver(pre_save, sender=Trait)
 def pre_save_trait_reset(sender: type, instance: Trait, **kwargs: dict) -> None:
     """Update cache before saving trait."""
@@ -1765,21 +1701,18 @@ def post_delete_trait_reset_rels(sender: type, instance: Any, **kwargs: Any) -> 
     reset_widgets(instance)
 
 
-# User signals
 @receiver(post_save, sender=User)
 def post_save_user_profile(sender: type, instance: User, created: bool, **kwargs: Any) -> None:
     """Create member profile when user is created."""
     create_member_profile_for_user(instance, is_newly_created=created)
 
 
-# WarehouseItem signals
 @receiver(pre_save, sender=WarehouseItem, dispatch_uid="warehouseitem_rotate_vertical_photo")
 def pre_save_warehouse_item(sender: type[WarehouseItem], instance: WarehouseItem, **kwargs: Any) -> None:
     """Rotate vertical photos before saving warehouse item."""
     auto_rotate_vertical_photos(instance, sender)
 
 
-# WritingOption signals
 @receiver(post_save, sender=WritingOption)
 def post_save_writing_option_reset(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear caches when WritingOption is saved."""
@@ -1796,7 +1729,6 @@ def pre_delete_character_option_reset(sender: type, instance: Any, **kwargs: Any
     clear_writing_questions_cache(instance.event_id)
 
 
-# WritingQuestion signals
 @receiver(pre_delete, sender=WritingQuestion)
 def pre_delete_writing_question_reset(sender: type, instance: WritingQuestion, **kwargs: Any) -> None:
     """Clear caches when a writing question is deleted."""
@@ -1815,7 +1747,6 @@ def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any)
     reset_widgets(instance)
 
 
-# m2m_changed signals
 m2m_changed.connect(on_experience_characters_m2m_changed, sender=DeliveryPx.characters.through)
 m2m_changed.connect(on_experience_characters_m2m_changed, sender=AbilityPx.characters.through)
 m2m_changed.connect(on_modifier_abilities_m2m_changed, sender=ModifierPx.abilities.through)
@@ -1833,7 +1764,7 @@ m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
 
 m2m_changed.connect(on_warehouse_item_tags_m2m_changed, sender=WarehouseItem.tags.through)
 
-# PX caching signals - cache relationship data in Redis
+
 m2m_changed.connect(on_ability_characters_m2m_changed, sender=AbilityPx.characters.through)
 m2m_changed.connect(on_ability_prerequisites_m2m_changed, sender=AbilityPx.prerequisites.through)
 m2m_changed.connect(on_ability_requirements_m2m_changed, sender=AbilityPx.requirements.through)
