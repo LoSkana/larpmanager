@@ -9209,6 +9209,13 @@ msgstr ""
 "den här knappen"
 
 msgid ""
+"The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
+"underscores."
+msgstr ""
+"Den hemliga koden får endast innehålla bokstäver (a-z, A-Z), siffror, "
+"bindestreck och understreck."
+
+msgid ""
 "This page displays the conversation with a participant regarding their "
 "expressed need"
 msgstr ""
