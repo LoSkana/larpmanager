@@ -244,14 +244,14 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
             continue
 
         if "@" not in email_recipient.recipient:
-            logger.warning("Email recipient invalid: %s", email_recipient.recipient)
+            logger.info("Email recipient invalid: %s", email_recipient.recipient)
             continue
 
         domain = email_recipient.recipient.split("@")[-1].lower()
 
         forbidden = ["demo", "test"]
         if any(keyword in domain for keyword in forbidden):
-            logger.warning("Email recipient forbidden: %s", email_recipient.recipient)
+            logger.info("Email recipient forbidden: %s", email_recipient.recipient)
             continue
 
         if email_recipient.sent:
