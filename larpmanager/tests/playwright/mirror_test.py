@@ -107,8 +107,20 @@ def casting(live_server: Any, page: Any) -> None:
     page.locator("#choice0").select_option("u2")
     submit(page)
 
-    # perform casting
+    # test toggle casting
     go_to(page, live_server, "/test/manage/casting")
+    just_wait(page)
+    expect_normalized(page, page.locator(".change").first, "YES")
+    page.locator(".change").first.click()
+    just_wait(page)
+
+    go_to(page, live_server, "/test/manage/casting")
+    just_wait(page)
+    expect_normalized(page, page.locator(".change").first, "NO")
+    page.locator(".change").first.click()
+    just_wait(page)
+
+    # perform casting
     page.get_by_role("button", name="Start algorithm").click()
     expect_normalized(page, page.locator("#assegnazioni"), "#1 Test Character")
     expect_normalized(page, page.locator("#assegnazioni"), "-> #2 Mirror")
