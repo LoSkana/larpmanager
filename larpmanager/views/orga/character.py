@@ -311,8 +311,8 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
                 res[element_uuid] = []
             res[element_uuid].append(cho[el.option_id])
 
-    # Handle text, paragraph, and computed questions
-    elif question.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, WritingQuestionType.COMPUTED]:
+    # Handle text and computed questions
+    elif question.typ in [BaseQuestionType.TEXT, WritingQuestionType.COMPUTED]:
         # Query answers with text truncation for preview
         que = WritingAnswer.objects.filter(question=question, element_id__in=element_ids)
         que = que.annotate(short_text=Substr("text", 1, max_length))

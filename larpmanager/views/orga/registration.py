@@ -461,7 +461,11 @@ def _orga_registrations_text_fields(context: dict) -> None:
     """
     # add editor type questions using cached version
     questions = get_cached_registration_questions(context["event"])
-    text_field_uuids = [str(question["uuid"]) for question in questions if question["typ"] == BaseQuestionType.EDITOR]
+    text_field_uuids = [
+        str(question["uuid"])
+        for question in questions
+        if question["typ"] in [BaseQuestionType.EDITOR, BaseQuestionType.PARAGRAPH]
+    ]
 
     cached_registration_fields = get_cache_registration_field(context["run"])
     for registration in context["registration_list"]:
