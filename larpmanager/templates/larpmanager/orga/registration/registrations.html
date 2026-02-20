@@ -69,7 +69,7 @@
                 <div class="nav">
                     {% trans "Questions" %}:
                     {% for key, que in reg_questions.items %}
-                        {% if que.typ == 'e' %}
+                        {% if que.typ == 'e' or que.typ == 'p' %}
                             <a href="#" class="table_toggle no_jump" tog='q_{{ key }}'>{{ que.name | truncatechars:25 }}</a>
                         {% else %}
                             <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
@@ -226,7 +226,7 @@
                                     {% endfor %}
                                 {% endif %}
                                 {% for key, que in reg_questions.items %}
-                                    {% if que.typ == 'e' %}
+                                    {% if que.typ == 'e' or que.typ == 'p' %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
                                             {% with ed_id=key|concat:'_red' %}
                                                 {% lookup registration ed_id as value %}

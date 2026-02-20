@@ -34,7 +34,7 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.rels import get_event_rels_cache
-from larpmanager.cache.text_fields import get_cache_text_field
+from larpmanager.cache.text_fields import ALLOWED_TYPES, get_cache_text_field
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
@@ -421,11 +421,9 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
 
 
 def writing_list_text_fields(context: dict, text_fields: Any, writing_element_type: Any) -> None:
-    """Add editor-type question fields to text fields list and retrieve cached data."""
+    """Add editor/paragraph-type question fields to text fields list and retrieve cached data."""
     writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
-    text_fields.extend(
-        [question["uuid"] for question in writing_questions if question["typ"] == BaseQuestionType.EDITOR]
-    )
+    text_fields.extend([question["uuid"] for question in writing_questions if question["typ"] in ALLOWED_TYPES])
     retrieve_cache_text_field(context, text_fields, writing_element_type)
 
 
