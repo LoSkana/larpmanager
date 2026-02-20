@@ -74,15 +74,15 @@ def test_orga_post_popup(pw_page: Any) -> None:
     # Enable characters feature
     go_to(page, live_server, "/test/manage/features/character/on")
 
-    # Character: multiline paragraph writing question (p)
-    create_char_paragraph_question(page, live_server)
-    fill_character_with_long_paragraph_answer(page, live_server)
-    verify_char_paragraph_popup(page, live_server)
-
     # Character: advanced editor writing question (e)
     create_char_editor_question(page, live_server)
     create_character_with_long_editor_answer(page, live_server)
     verify_char_editor_popup(page, live_server)
+
+    # Character: multiline paragraph writing question (p)
+    create_char_paragraph_question(page, live_server)
+    fill_character_with_long_paragraph_answer(page, live_server)
+    verify_char_paragraph_popup(page, live_server)
 
     # Registration: advanced editor question (e)
     create_reg_editor_question(page, live_server)
@@ -94,6 +94,9 @@ def test_orga_post_popup(pw_page: Any) -> None:
     logout(page)
     login_orga(page, live_server)
     verify_reg_editor_popup(page, live_server)
+
+    go_to(page, live_server, "/test/manage/registrations/")
+    page.locator("a:has(i.fas.fa-trash)").click()
 
     # Registration: multiline paragraph question (p)
     create_reg_paragraph_question(page, live_server)
@@ -204,7 +207,9 @@ def create_char_editor_question(page: Any, live_server: Any) -> None:
 
 
 def create_character_with_long_editor_answer(page: Any, live_server: Any) -> None:
-    go_to(page, live_server, "/test/manage/characters/new")
+    go_to(page, live_server, "/test/manage/characters")
+    page.locator("a:has(i.fas.fa-trash)").click()
+    page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("popup test character")
     # Fill the editor writing question with a long answer
     editor_id = _get_que_textarea_id(page)
@@ -241,7 +246,9 @@ def create_char_paragraph_question(page: Any, live_server: Any) -> None:
 
 
 def fill_character_with_long_paragraph_answer(page: Any, live_server: Any) -> None:
-    go_to(page, live_server, "/test/manage/characters/new")
+    go_to(page, live_server, "/test/manage/characters")
+    page.locator("a:has(i.fas.fa-trash)").click()
+    page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("popup test character 2")
     page.get_by_role("row").filter(has_text=CHAR_PARA_QUESTION).get_by_role("textbox").fill(LONG_TEXT_CHAR_PARA)
     submit_confirm(page)
