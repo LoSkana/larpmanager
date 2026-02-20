@@ -125,23 +125,31 @@ def _compute_registration_status(run: Run) -> str:
 
 
 def _compute_registration_counts(run: Run) -> dict:
-    """Compute registration ticket counts ordered by ticket order field.
-
-    Returns:
-        dict: Mapping of ticket_name -> count
-    """
+    """Compute registration counts: total, per-ticket and per-tier breakdown."""
     counts = get_registration_counts(run)
 
-    ticket_data = []
-    for ticket_id, ticket_name in counts.get("tickets_map", {}).items():
-        count_key = f"count_ticket_{ticket_id}"
-        if counts.get(count_key):
-            ticket_order = counts.get("tickets_order", {}).get(ticket_id, 0)
-            ticket_data.append({"name": ticket_name, "order": ticket_order, "count": counts[count_key]})
+    total = counts.get("count_reg", 0)
+    if not total:
+        return {}
 
-    sorted_tickets = sorted(ticket_data, key=lambda x: (x["order"], x["name"]))
+    tier_labels = [
+        ("count_player", _("Player")),
+        ("count_wait", _("Waiting")),
+        ("count_staff", _("Staff")),
+        ("count_fill", _("Filler")),
+        ("count_seller", _("Seller")),
+        ("count_lottery", _("Lottery")),
+        ("count_npc", _("NPC")),
+        ("count_collaborator", _("Collaborator")),
+    ]
 
-    return {ticket["name"]: ticket["count"] for ticket in sorted_tickets}
+    active_tiers = [(label, counts[key]) for key, label in tier_labels if counts.get(key)]
+
+    result = {_("Tot"): total}
+    if len(active_tiers) > 1:
+        result |= dict(active_tiers)
+
+    return result
 
 
 def _init_deadline_widget_cache(run: Run) -> dict:
