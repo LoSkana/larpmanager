@@ -104,6 +104,33 @@ msgstr ""
 msgid "Registrations opening at: %(date)s"
 msgstr ""
 
+msgid "Player"
+msgstr ""
+
+msgid "Waiting"
+msgstr ""
+
+msgid "Staff"
+msgstr ""
+
+msgid "Filler"
+msgstr ""
+
+msgid "Seller"
+msgstr ""
+
+msgid "Lottery"
+msgstr ""
+
+msgid "NPC"
+msgstr ""
+
+msgid "Collaborator"
+msgstr ""
+
+msgid "Tot"
+msgstr ""
+
 msgid "Manage expense items for contributors"
 msgstr ""
 
@@ -1504,9 +1531,6 @@ msgid ""
 "may only do so if the stipulated number of characters has been reached"
 msgstr ""
 
-msgid "Lottery"
-msgstr ""
-
 msgid "Number of extractions"
 msgstr ""
 
@@ -1762,9 +1786,6 @@ msgid "Discounts"
 msgstr ""
 
 msgid "Traits"
-msgstr ""
-
-msgid "Player"
 msgstr ""
 
 msgid "Status"
@@ -4310,28 +4331,10 @@ msgstr ""
 msgid "New player"
 msgstr ""
 
-msgid "Waiting"
-msgstr ""
-
-msgid "Filler"
-msgstr ""
-
 msgid "Reduced"
 msgstr ""
 
 msgid "Patron"
-msgstr ""
-
-msgid "Staff"
-msgstr ""
-
-msgid "NPC"
-msgstr ""
-
-msgid "Collaborator"
-msgstr ""
-
-msgid "Seller"
 msgstr ""
 
 msgid "Tier"

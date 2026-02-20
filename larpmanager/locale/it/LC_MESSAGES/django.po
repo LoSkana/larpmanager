@@ -68,6 +68,9 @@ msgstr "Pdf"
 msgid "Run"
 msgstr "Run"
 
+msgid "Tot"
+msgstr "Tot"
+
 msgid "VAT"
 msgstr "IVA"
 
