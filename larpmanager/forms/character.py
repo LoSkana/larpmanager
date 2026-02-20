@@ -165,8 +165,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
             - Conditionally adds character proposal field for user approval workflow
 
         """
-        # Get event, preferring parent event if available
-        event = self.params.get("event")
+        # Get event, preferring parent event if available for loading questions
+        current_event = self.params.get("event")
+        event = current_event
         if event.parent:
             event = event.parent
 
@@ -212,7 +213,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Add character completion proposal field for user approval workflow
         if (
             not self.orga
-            and get_event_config(event.id, "user_character_approval", default_value=False, context=self.params)
+            and get_event_config(current_event.id, "user_character_approval", default_value=False, context=self.params)
             and (not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW])
         ):
             self.fields["propose"] = forms.BooleanField(
