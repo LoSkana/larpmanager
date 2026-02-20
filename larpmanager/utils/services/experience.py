@@ -135,6 +135,76 @@ def _apply_modifier_cost(
         break  # First valid wins
 
 
+def _get_current_abilities(
+    character: Any,
+    current_character_abilities: set[int],
+    current_character_choices: set[int],
+    modifiers_by_ability: dict[int, list[tuple]],
+) -> list:
+    """Get current abilities with modified costs.
+
+    Args:
+        character: Character instance.
+        current_character_abilities: Set of ability IDs the character currently has.
+        current_character_choices: Set of choice IDs the character currently has.
+        modifiers_by_ability: Mapping of ability IDs to modifier tuples.
+
+    Returns:
+        List of abilities with modified costs applied.
+
+    """
+    abilities_queryset = character.px_ability_list.only("id", "cost").order_by("name")
+    abilities_with_modified_costs = []
+    for ability in abilities_queryset:
+        _apply_modifier_cost(ability, modifiers_by_ability, current_character_abilities, current_character_choices)
+        abilities_with_modified_costs.append(ability)
+    return abilities_with_modified_costs
+
+
+def _get_available_abilities(
+    char: Any,
+    current_character_abilities: set[int],
+    current_character_choices: set[int],
+    modifiers_by_ability: dict[int, list[tuple]],
+    px_avail: int,
+) -> list:
+    """Get available abilities for purchase.
+
+    Args:
+        char: Character instance.
+        current_character_abilities: Set of ability IDs the character currently has.
+        current_character_choices: Set of choice IDs the character currently has.
+        modifiers_by_ability: Mapping of ability IDs to modifier tuples.
+        px_avail: Available PX points.
+
+    Returns:
+        List of AbilityPx instances the character can purchase.
+
+    """
+    all_abilities = (
+        char.event.get_elements(AbilityPx)
+        .filter(visible=True)
+        .exclude(pk__in=current_character_abilities)
+        .select_related("typ")
+        .order_by("name")
+        .prefetch_related(
+            Prefetch("prerequisites", queryset=AbilityPx.objects.only("id")),
+            Prefetch("requirements", queryset=WritingOption.objects.only("id")),
+        )
+    )
+
+    available_abilities = []
+    for ability in all_abilities:
+        if not check_available_ability_px(ability, current_character_abilities, current_character_choices):
+            continue
+        _apply_modifier_cost(ability, modifiers_by_ability, current_character_abilities, current_character_choices)
+        if ability.cost > px_avail:
+            continue
+        available_abilities.append(ability)
+
+    return available_abilities
+
+
 def get_free_abilities(char: Character) -> list:
     """Return the list of free abilities for a character."""
     config_name = _free_abilities_cache_key()
@@ -160,9 +230,13 @@ def calculate_character_experience_points(character: Any) -> None:
 
     starting_experience_points = get_event_config(character.event_id, "px_start", default_value=0)
 
-    _handle_free_abilities(character)
+    # Automatically obtain abilities with cost 0
+    current_character_abilities, current_character_choices, modifiers_by_ability = _handle_free_abilities(character)
 
-    current_abilities = get_current_ability_px(character)
+    # Get current abilities, with updated cost
+    current_abilities = _get_current_abilities(
+        character, current_character_abilities, current_character_choices, modifiers_by_ability
+    )
 
     total_experience_points = int(starting_experience_points) + (
         character.px_delivery_list.aggregate(total=Coalesce(Sum("amount"), 0))["total"] or 0
@@ -177,31 +251,49 @@ def calculate_character_experience_points(character: Any) -> None:
 
     save_all_element_configs(character, experience_data)
 
-    apply_rules_computed(character)
+    apply_rules_computed(character, current_character_abilities)
 
 
-def _handle_free_abilities(character: Any) -> None:
+def _handle_free_abilities(
+    character: Any,
+) -> tuple[set[int], set[int], dict[int, list[tuple]]]:
     """Handle free abilities that characters should automatically receive.
 
     Args:
-        character: Character instance to process
-
+        character: Character instance to process.
     """
     free_ability_ids = get_free_abilities(character)
 
+    # Build PX context
+    current_character_abilities, current_character_choices, modifiers_by_ability = _build_px_context(character)
+
     # look for available ability with cost 0, and not already in the free list: get them!
-    for ability in get_available_ability_px(character, 0):
+    newly_added_ids: set[int] = set()
+    for ability in _get_available_abilities(
+        character, current_character_abilities, current_character_choices, modifiers_by_ability, 0
+    ):
         if ability.visible and ability.cost == 0 and ability.id not in free_ability_ids:
             character.px_ability_list.add(ability)
             free_ability_ids.append(ability.id)
+            newly_added_ids.add(ability.id)
+
+    # Update context with newly added abilities
+    updated_character_abilities = current_character_abilities | newly_added_ids
 
     # look for current abilities with cost non 0, yet got in the past as free: remove them!
-    for ability in get_current_ability_px(character):
+    all_removed_ids: set[int] = set()
+    for ability in _get_current_abilities(
+        character, updated_character_abilities, current_character_choices, modifiers_by_ability
+    ):
         if ability.visible and ability.cost > 0 and ability.id in free_ability_ids:
             removed_ability_ids = remove_char_ability(character, ability.id)
             free_ability_ids = list(set(free_ability_ids) - set(removed_ability_ids))
+            all_removed_ids |= removed_ability_ids
 
     set_free_abilities(character, free_ability_ids)
+
+    final_character_abilities = updated_character_abilities - all_removed_ids
+    return final_character_abilities, current_character_choices, modifiers_by_ability
 
 
 def get_current_ability_px(character: Character) -> list[AbilityPx]:
@@ -217,19 +309,10 @@ def get_current_ability_px(character: Character) -> list[AbilityPx]:
         List of abilities with modified costs applied
 
     """
-    # Build the context for PX calculations including current abilities and modifiers
     current_character_abilities, current_character_choices, modifiers_by_ability = _build_px_context(character)
-
-    # Get character abilities ordered by name, only fetching needed fields for performance
-    abilities_queryset = character.px_ability_list.only("id", "cost").order_by("name")
-
-    # Process each ability and apply cost modifications
-    abilities_with_modified_costs = []
-    for ability in abilities_queryset:
-        # Apply modifier-based cost adjustments based on character context
-        _apply_modifier_cost(ability, modifiers_by_ability, current_character_abilities, current_character_choices)
-        abilities_with_modified_costs.append(ability)
-    return abilities_with_modified_costs
+    return _get_current_abilities(
+        character, current_character_abilities, current_character_choices, modifiers_by_ability
+    )
 
 
 def check_available_ability_px(ability: Any, current_char_abilities: Any, current_char_choices: Any) -> bool:
@@ -261,43 +344,15 @@ def get_available_ability_px(char: Any, px_avail: int | None = None) -> list:
         current PX and that meet all prerequisites and requirements
 
     """
-    # Build context with current character abilities, choices, and modifiers
     current_character_abilities, current_character_choices, modifiers_by_ability = _build_px_context(char)
 
-    # Calculate available PX if not provided
     if px_avail is None:
         add_char_addit(char)
         px_avail = int(char.addit.get("px_avail", 0))
 
-    # Get all visible abilities excluding those already owned by character
-    all_abilities = (
-        char.event.get_elements(AbilityPx)
-        .filter(visible=True)
-        .exclude(pk__in=current_character_abilities)
-        .select_related("typ")
-        .order_by("name")
-        .prefetch_related(
-            Prefetch("prerequisites", queryset=AbilityPx.objects.only("id")),
-            Prefetch("requirements", queryset=WritingOption.objects.only("id")),
-        )
+    return _get_available_abilities(
+        char, current_character_abilities, current_character_choices, modifiers_by_ability, px_avail
     )
-
-    available_abilities = []
-    for ability in all_abilities:
-        # Check if character meets prerequisites and requirements
-        if not check_available_ability_px(ability, current_character_abilities, current_character_choices):
-            continue
-
-        # Apply cost modifiers based on character's current state
-        _apply_modifier_cost(ability, modifiers_by_ability, current_character_abilities, current_character_choices)
-
-        # Filter out abilities that cost more than available PX
-        if ability.cost > px_avail:
-            continue
-
-        available_abilities.append(ability)
-
-    return available_abilities
 
 
 def on_experience_characters_m2m_changed(
@@ -355,7 +410,7 @@ def on_modifier_abilities_m2m_changed(
     _recalcuate_characters_experience_points(instance)
 
 
-def apply_rules_computed(char: Any) -> None:
+def apply_rules_computed(char: Any, character_ability_ids: set[int] | None = None) -> None:
     """Apply computed field rules to calculate character statistics.
 
     This function processes all computed writing questions for a character's event,
@@ -365,7 +420,7 @@ def apply_rules_computed(char: Any) -> None:
     Args:
         char: Character instance to apply rules to. Must have an associated event
               and ability list.
-
+        character_ability_ids: Optional set of character ability IDs already fetched
     Returns:
         None: Function modifies character data in-place by creating/updating
               WritingAnswer objects.
@@ -381,7 +436,8 @@ def apply_rules_computed(char: Any) -> None:
     computed_field_values = {question.id: Decimal(0) for question in computed_questions}
 
     # Retrieve character's ability IDs for rule filtering
-    character_ability_ids = char.px_ability_list.values_list("pk", flat=True)
+    if character_ability_ids is None:
+        character_ability_ids = char.px_ability_list.values_list("pk", flat=True)
 
     # Get applicable rules: either global rules or rules matching character's abilities
     applicable_rules = (

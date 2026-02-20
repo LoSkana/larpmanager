@@ -461,7 +461,11 @@ def _orga_registrations_text_fields(context: dict) -> None:
     """
     # add editor type questions using cached version
     questions = get_cached_registration_questions(context["event"])
-    text_field_uuids = [str(question["uuid"]) for question in questions if question["typ"] == BaseQuestionType.EDITOR]
+    text_field_uuids = [
+        str(question["uuid"])
+        for question in questions
+        if question["typ"] in [BaseQuestionType.EDITOR, BaseQuestionType.PARAGRAPH]
+    ]
 
     cached_registration_fields = get_cache_registration_field(context["run"])
     for registration in context["registration_list"]:
@@ -537,15 +541,9 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Query active (non-cancelled) registrations ordered by last update
     que = Registration.objects.filter(run=context["run"], cancellation_date__isnull=True).order_by("-updated")
-    context["registration_list"] = que.select_related("member")
+    context["registration_list"] = list(que.select_related("member"))
 
-    # Batch-load membership statuses for all registered members
-    context["memberships"] = {}
-    if "membership" in context["features"]:
-        members_id = [r.member_id for r in context["registration_list"]]
-        # Create lookup dictionary for efficient membership access
-        for el in Membership.objects.filter(association_id=context["association_id"], member_id__in=members_id):
-            context["memberships"][el.member_id] = el
+    _registrations_prepare_membership(context)
 
     # Process each registration to add computed fields
     for r in context["registration_list"]:
@@ -579,6 +577,29 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
     _load_preferences_columns(context)
 
     return render(request, "larpmanager/orga/registration/registrations.html", context)
+
+
+def _registrations_prepare_membership(context: dict) -> None:
+    """Batch-load membership statuses for all registered members."""
+    context["memberships"] = {}
+    if "membership" not in context["features"]:
+        return
+
+    # Create lookup dictionary for efficient membership access
+    members_id = [r.member_id for r in context["registration_list"]]
+    for el in Membership.objects.filter(association_id=context["association_id"], member_id__in=members_id):
+        context["memberships"][el.member_id] = el
+
+    # Bulk-create memberships for members that don't have one yet
+    missing_ids = [mid for mid in members_id if mid not in context["memberships"]]
+    if not missing_ids:
+        return
+    Membership.objects.bulk_create(
+        [Membership(member_id=mid, association_id=context["association_id"]) for mid in missing_ids],
+        ignore_conflicts=True,
+    )
+    for el in Membership.objects.filter(association_id=context["association_id"], member_id__in=missing_ids):
+        context["memberships"][el.member_id] = el
 
 
 def _load_preferences_columns(context: dict) -> None:

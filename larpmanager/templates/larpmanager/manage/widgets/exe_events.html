@@ -34,20 +34,10 @@
                         </td>
                         <td>
                             <a href="{% url 'gallery' run.slug %}" target="_blank">{{ run.development_display }}</a>
-                            <button class="copy-link-btn"
-                                    data-url="{% url 'gallery' run.slug %}"
-                                    title="{% trans "Copy link to clipboard" %}">
-                                <i class="fa-solid fa-copy"></i>
-                            </button>
                         </td>
                         <td>
                             <p>
                                 <a href="{% url 'register' run.slug %}" target="_blank">{{ run.registration_status }}</a>
-                                <button class="copy-link-btn"
-                                        data-url="{% url 'register' run.slug %}"
-                                        title="{% trans "Copy link to clipboard" %}">
-                                    <i class="fa-solid fa-copy"></i>
-                                </button>
                             </p>
                         </td>
                         <td>

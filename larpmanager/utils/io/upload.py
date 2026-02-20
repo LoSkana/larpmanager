@@ -1160,13 +1160,15 @@ def _get_or_create_writing_question(
 
     applicable = field_mappings["applicable"][applicable_value]
 
+    event = context["event"].get_class_parent(WritingQuestion)
+
     # For special (non-basic) WritingQuestionTypes, look up by type+applicable.
     # These questions are auto-created by configuration and are unique per type.
     raw_typ = str(row_data.get("typ", "")).lower().strip()
     typ_value = field_mappings.get("typ", {}).get(raw_typ, "")
     if typ_value and typ_value not in BaseQuestionType.get_basic_types():
         matching_by_type = WritingQuestion.objects.filter(
-            event=context["event"],
+            event=event,
             typ=typ_value,
             applicable=applicable,
         )
@@ -1174,7 +1176,7 @@ def _get_or_create_writing_question(
             return matching_by_type.first(), False
 
     matching_questions = WritingQuestion.objects.filter(
-        event=context["event"],
+        event=event,
         name__iexact=question_name,
         applicable=applicable,
     )
@@ -1183,7 +1185,7 @@ def _get_or_create_writing_question(
 
     return (
         WritingQuestion.objects.create(
-            event=context["event"],
+            event=event,
             name=question_name,
             applicable=applicable,
         ),
@@ -1424,8 +1426,9 @@ def _get_option(
             )
             was_created = True
     else:
+        event = context["event"].get_class_parent(WritingOption)
         matching_options = WritingOption.objects.filter(
-            event=context["event"],
+            event=event,
             name__iexact=option_name,
             question_id=parent_question_id,
         )
@@ -1434,7 +1437,7 @@ def _get_option(
             was_created = False
         else:
             option_instance = WritingOption.objects.create(
-                event=context["event"],
+                event=event,
                 name=option_name,
                 question_id=parent_question_id,
             )

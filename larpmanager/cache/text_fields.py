@@ -41,6 +41,8 @@ if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
     from larpmanager.models.event import Event, Run
 
+ALLOWED_TYPES = [BaseQuestionType.EDITOR, BaseQuestionType.PARAGRAPH]
+
 
 def cache_text_field_key(model_type: type[BaseModel], model_instance: object) -> str:
     """Generate cache key for model text fields."""
@@ -141,7 +143,7 @@ def _init_element_cache_text_field(
     questions = get_cached_writing_questions(element.event, applicable)
 
     # Process editor-type questions and cache their answers
-    for question in [q for q in questions if q["typ"] == BaseQuestionType.EDITOR]:
+    for question in [q for q in questions if q["typ"] in ALLOWED_TYPES]:
         field_key = question["uuid"]
         if field_key in result_cache[element_uuid]:
             continue
@@ -217,7 +219,7 @@ def update_cache_text_fields_answer(instance: BaseModel) -> None:
 
     """
     # Only process editor-type questions
-    if instance.question.typ != BaseQuestionType.EDITOR:
+    if instance.question.typ not in ALLOWED_TYPES:
         return
 
     # Get the applicable type and event for cache key generation
@@ -309,11 +311,11 @@ def _init_element_cache_registration_field(registration: Registration, cache_res
     if registration_uuid not in cache_result:
         cache_result[registration_uuid] = {}
 
-    # Get all editor-type questions for the event
+    # Get all editor/paragraph-type questions for the event
     questions = [
         question
         for question in get_cached_registration_questions(registration.run.event)
-        if question["typ"] == BaseQuestionType.EDITOR
+        if question["typ"] in ALLOWED_TYPES
     ]
 
     # Process each editor question and cache the answer text
@@ -385,8 +387,8 @@ def update_cache_registration_fields_answer(instance: BaseModel) -> None:
         None
 
     """
-    # Skip processing if question is not an editor type
-    if instance.question.typ != BaseQuestionType.EDITOR:
+    # Skip processing if question is not an editor or paragraph type
+    if instance.question.typ not in ALLOWED_TYPES:
         return
 
     # Get the run context from the registration
