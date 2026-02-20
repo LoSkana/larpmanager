@@ -223,7 +223,7 @@ def pw_page(
 
     # Fail after cleanup if any dialog appeared during the test
     if dialog_errors:
-        raise AssertionError("Dialog appeared during test:\n" + "\n".join(dialog_errors))
+        pytest.fail("Test failed due to unexpected dialogs:\n" + "\n".join(dialog_errors))
 
 
 def _truncate_app_tables() -> None:
