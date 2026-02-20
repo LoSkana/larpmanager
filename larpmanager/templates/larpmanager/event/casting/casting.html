@@ -78,7 +78,7 @@
                        name="subm"
                        id="submit"
                        value="{% trans "Submit" %}"
-                       onClick="return confirm('{% filter escapejs %}{% trans "Confirm your choices" %}{% endfilter %}?');">
+                       onClick="return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Confirm your choices" %}{% endfilter %}?');">
                 <p id="err"></p>
             </form>
         </div>

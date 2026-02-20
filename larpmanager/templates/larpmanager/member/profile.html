@@ -177,7 +177,7 @@
                             // Hide spinner and enable submit button on error
                             $('#upload_spinner').addClass('hide');
                             $('input[type="submit"]').prop('disabled', false);
-                            alert('{% filter escapejs %}{% trans "Error uploading image. Please retry or use a smaller file." %}{% endfilter %}');
+                            if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Error uploading image. Please retry or use a smaller file." %}{% endfilter %}');
                         }
                     });
 

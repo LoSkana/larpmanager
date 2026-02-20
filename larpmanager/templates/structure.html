@@ -23,6 +23,7 @@
                 display: none;
             }
         </style>
+        {% if testing %}<script>window.lmTesting = true;</script>{% endif %}
         {% if association.id == 0 %}
             {% if google_tag %}
                 <!-- Google Tag Manager -->

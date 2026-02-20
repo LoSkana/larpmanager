@@ -78,10 +78,10 @@ window.addEventListener('DOMContentLoaded', function() {
             if (value == null || value == '') return;
 
             if (value == edit_uuid) {
-                alert('You have selected the character you are editing');
+                if (!window.lmTesting) alert('You have selected the character you are editing');
             }
             else if (already.includes(value)) {
-                alert('Relationship with this character already exists');
+                if (!window.lmTesting) alert('Relationship with this character already exists');
             } else {
                 var name = $(this).find('option:selected').text();
                 add_relationship(value, name);

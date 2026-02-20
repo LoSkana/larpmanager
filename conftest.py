@@ -35,7 +35,7 @@ from django.core.cache import cache
 from django.core.management import call_command
 from django.db import connection, transaction
 from django.test.utils import ContextList
-from playwright.sync_api import BrowserContext, BrowserType, Page, Response
+from playwright.sync_api import BrowserContext, BrowserType, Dialog, Page, Response
 from pytest_django.fixtures import SettingsWrapper
 
 from larpmanager.models.access import AssociationRole
@@ -167,7 +167,6 @@ def pw_page(
 
     # Check if running in CI/GitHub Actions
     is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
-    is_ci = True  # Enable when video needed
 
     # Configure video recording (only if not in CI)
     video_dir = None
@@ -190,8 +189,6 @@ def pw_page(
     base_url = live_server.url
     page.set_default_timeout(60000)
 
-    page.on("dialog", lambda dialog: dialog.accept())
-
     def on_response(response: Response) -> None:
         error_status = 500
         if response.status == error_status:
@@ -199,6 +196,15 @@ def pw_page(
             raise AssertionError(msg)
 
     page.on("response", on_response)
+
+    dialog_errors: list[str] = []
+
+    def on_dialog(dialog: Dialog) -> None:
+        msg = f"Unexpected dialog [{dialog.type}]: {dialog.message}"
+        dialog_errors.append(msg)
+        dialog.dismiss()
+
+    page.on("dialog", on_dialog)
 
     yield page, base_url, context
 
@@ -214,6 +220,10 @@ def pw_page(
         video_obj, base_filename = video_info
         screenshot_dir = Path(__file__).parent / "test_screenshots"
         _save_video(video_obj, base_filename, screenshot_dir)
+
+    # Fail after cleanup if any dialog appeared during the test
+    if dialog_errors:
+        raise AssertionError("Dialog appeared during test:\n" + "\n".join(dialog_errors))
 
 
 def _truncate_app_tables() -> None:

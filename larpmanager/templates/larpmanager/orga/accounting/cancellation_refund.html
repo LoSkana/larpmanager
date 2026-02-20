@@ -174,10 +174,10 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('form').on('submit', function() {
             {% if not features.tokens and not features.credits %}
-                alert('{% filter escapejs %}{% trans "Cannot process refund: Neither tokens nor credits features are enabled" %}{% endfilter %}');
+                if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Cannot process refund: Neither tokens nor credits features are enabled" %}{% endfilter %}');
                 return false;
             {% else %}
-                return confirm('{% filter escapejs %}{% trans "Are you really sure" %}{% endfilter %}?');
+                return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you really sure" %}{% endfilter %}?');
             {% endif %}
         });
     });

@@ -51,7 +51,7 @@
  window.addEventListener('DOMContentLoaded', function() {
     $(document).ready(function() {
         $('.confirm-link').on('click', function(e) {
-            const confirmAction = confirm('Sei sicuro di voler procedere?');
+            const confirmAction = window.lmTesting || confirm('Sei sicuro di voler procedere?');
             if (!confirmAction) {
                 e.preventDefault();
             }

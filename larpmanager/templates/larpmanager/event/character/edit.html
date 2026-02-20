@@ -151,7 +151,7 @@
                             // Hide spinner and enable confirm button on error
                             $('#upload_spinner').addClass('hide');
                             $('#confirm').prop('disabled', false);
-                            alert('{% filter escapejs %}{% trans "Error uploading image. Please retry or use a smaller file." %}{% endfilter %}');
+                            if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Error uploading image. Please retry or use a smaller file." %}{% endfilter %}');
                         }
                     });
                 });

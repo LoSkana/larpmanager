@@ -38,7 +38,7 @@ $('#id_wwyltd').on('change', function() {
                 $('#id_wwyltd').val('').trigger('change');
             } else {
                 console.error('Invalid response:', response);
-                alert('{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}');
+                if (!window.lmTesting) alert('{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}');
             }
         },
         error: function(xhr) {
@@ -54,7 +54,7 @@ $('#id_wwyltd').on('change', function() {
             }
 
             console.error('AJAX error:', xhr);
-            alert(errorMessage);
+            if (!window.lmTesting) alert(errorMessage);
         }
     });
 });

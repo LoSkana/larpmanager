@@ -91,7 +91,7 @@
                 <input type="submit"
                        id="go"
                        name="submit"
-                       onclick="return confirm('Confermi davvero? Non si torna indietro')"
+                       onclick="return window.lmTesting ? true : confirm('Are you sure? There's no coming back!')"
                        value="{% trans "Upload" %}" />
                 <p>
                     {% trans "Assign selected characters to participants" %}.

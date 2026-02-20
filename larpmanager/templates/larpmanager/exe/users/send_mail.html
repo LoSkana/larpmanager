@@ -13,7 +13,7 @@
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
     $('form').on('submit', function() {
-        return confirm('{% filter escapejs %}{% trans "Are you really sure" %}{% endfilter %}?');
+        return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you really sure" %}{% endfilter %}?');
     });
 });
 });
