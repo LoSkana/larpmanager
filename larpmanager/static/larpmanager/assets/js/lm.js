@@ -322,7 +322,7 @@ $(document).ready(function() {
 
     // Confirmation for delete icons (fa-trash)
     $(document).on('click', 'a:has(i.fa-trash), a:has(i.fa-solid.fa-trash), a:has(i.fas.fa-trash)', function(e) {
-        if (!confirm('Are you sure you want to delete this item?')) {
+        if (!window.lmTesting && !confirm('Are you sure you want to delete this item?')) {
             e.preventDefault();
             e.stopPropagation();
             return false;

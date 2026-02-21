@@ -134,7 +134,7 @@
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
     $('form').on('submit', function() {
-        return confirm('{% filter escapejs %}{% trans "Did you check the required data properly" %}{% endfilter %}?');
+        return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Did you check the required data properly" %}{% endfilter %}?');
     });
 });
 });

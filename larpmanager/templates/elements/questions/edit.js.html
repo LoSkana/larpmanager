@@ -181,7 +181,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 if (config.onError) {
                     config.onError(xhr, status, error);
                 } else {
-                    alert('{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}');
+                    if (!window.lmTesting) alert('{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}');
                 }
             });
     }

@@ -51,6 +51,10 @@ def cache_association(request: HttpRequest) -> dict:
     if request.enviro == "staging":
         context["staging"] = 1
 
+    # Suppresses when out of prod
+    if request.enviro != "prod":
+        context["testing"] = 1
+
     # Add language options for users without member association
     if not hasattr(request, "user") or not hasattr(request.user, "member"):
         context["languages"] = conf_settings.LANGUAGES

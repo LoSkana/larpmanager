@@ -95,7 +95,7 @@ var grid = '#main_grid';
  * @param {*} data - Any data to display for debugging
  */
 function debug(data) {
-    alert(JSON.stringify(data));
+    if (!window.lmTesting) alert(JSON.stringify(data));
 }
 
 /**

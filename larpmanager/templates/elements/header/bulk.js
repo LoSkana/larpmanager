@@ -27,7 +27,7 @@ window.addEventListener('DOMContentLoaded', function() {
 $("#main_bulk #exec").on("click", function(e) {
   e.preventDefault();
 
-    if (!confirm("Confirm? Are you sure, like, really sure?")) return;
+    if (!window.lmTesting && !confirm("Confirm? Are you sure, like, really sure?")) return;
 
   // get operation
   var operation = $("#main_bulk #operation").val();

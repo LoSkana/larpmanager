@@ -73,7 +73,7 @@ window.addEventListener('DOMContentLoaded', function() {
                     // Height will be updated after reload via setTimeout
                 },
                 error: function() {
-                    alert('{% filter escapejs %}{% trans "An error occurred while reordering" %}{% endfilter %}');
+                    if (!window.lmTesting) alert('{% filter escapejs %}{% trans "An error occurred while reordering" %}{% endfilter %}');
                 }
             });
 
@@ -95,7 +95,7 @@ window.addEventListener('DOMContentLoaded', function() {
                     // Height will be updated after reload via setTimeout
                 },
                 error: function() {
-                    alert('{% filter escapejs %}{% trans "An error occurred while deleting" %}{% endfilter %}');
+                    if (!window.lmTesting) alert('{% filter escapejs %}{% trans "An error occurred while deleting" %}{% endfilter %}');
                 }
             });
 

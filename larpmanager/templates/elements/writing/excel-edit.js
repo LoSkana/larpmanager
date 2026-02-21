@@ -145,7 +145,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             // form error
-            alert(res.errors);
+            if (!window.lmTesting) alert(res.errors);
         });
     }
 
