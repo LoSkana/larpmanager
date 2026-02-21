@@ -660,6 +660,14 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("px_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
 
+            # Auto buy configuration
+            auto_buy_label = _("Auto buy")
+            auto_buy_help_text = _(
+                "If checked, characters automatically and repeatedly acquire the most expensive available ability "
+                "with their remaining XP, until no more can be bought.",
+            )
+            self.add_configs("px_auto_buy", ConfigType.BOOL, auto_buy_label, auto_buy_help_text)
+
         # Configure player character editor if user_character feature is enabled
         if "user_character" in self.params["features"]:
             self.set_section("user_character", _("Player editor"))

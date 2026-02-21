@@ -1293,6 +1293,15 @@ msgid ""
 "prerequisites and requirements"
 msgstr ""
 
+msgid "Auto buy"
+msgstr ""
+
+msgid ""
+"If checked, characters automatically and repeatedly acquire the most "
+"expensive available ability with their remaining XP, until no more can be "
+"bought."
+msgstr ""
+
 msgid "Player editor"
 msgstr ""
 

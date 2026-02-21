@@ -1020,6 +1020,9 @@ msgstr "Assegnamento"
 msgid "Attended"
 msgstr "Partecipato"
 
+msgid "Auto buy"
+msgstr "Acquisto auto"
+
 msgid "Campaign"
 msgstr "Campagna"
 
@@ -11534,6 +11537,15 @@ msgstr ""
 "The larpmanager has a over 100 different funzionalità. There is one for "
 "every single aspect of event organizing: signups, accounting, writing, "
 "logistics"
+
+msgid ""
+"If checked, characters automatically and repeatedly acquire the most "
+"expensive available ability with their remaining XP, until no more can be "
+"bought."
+msgstr ""
+"Se selezionata, i personaggi acquistano automaticamente e ripetutamente "
+"l'abilità più costosa disponibile con la loro XP rimanente, finché non è più"
+" possibile acquistarne altre."
 
 msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "

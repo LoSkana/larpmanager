@@ -1020,6 +1020,9 @@ msgstr "Přiřaďte"
 msgid "Attended"
 msgstr "Zúčastnil se"
 
+msgid "Auto buy"
+msgstr "Automatický nákup"
+
 msgid "Campaign"
 msgstr "Kampaň"
 
@@ -11202,6 +11205,14 @@ msgid ""
 msgstr ""
 "Správce larpů má více než 100 různých funkcí. Je zde jedna pro každý aspekt "
 "organizování události: přihlašování, účetnictví, psaní, logistika"
+
+msgid ""
+"If checked, characters automatically and repeatedly acquire the most "
+"expensive available ability with their remaining XP, until no more can be "
+"bought."
+msgstr ""
+"Pokud je zaškrtnuto, postavy si automaticky a opakovaně pořizují nejdražší "
+"dostupnou schopnost za zbývající ZS, dokud si nemohou koupit žádnou další."
 
 msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "

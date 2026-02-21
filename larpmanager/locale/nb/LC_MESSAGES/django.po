@@ -1020,6 +1020,9 @@ msgstr "Tilordne"
 msgid "Attended"
 msgstr "Tilstede"
 
+msgid "Auto buy"
+msgstr "Autokjøp"
+
 msgid "Campaign"
 msgstr "Kampanjen"
 
@@ -11324,6 +11327,15 @@ msgstr ""
 "Larpmanager har over 100 forskjellige funksjoner. Det finnes en funksjon for"
 " hvert eneste aspekt ved et arrangement: påmelding, regnskap, skriving, "
 "logistikk"
+
+msgid ""
+"If checked, characters automatically and repeatedly acquire the most "
+"expensive available ability with their remaining XP, until no more can be "
+"bought."
+msgstr ""
+"Hvis dette alternativet er krysset av, vil rollefiguren automatisk og "
+"gjentatte ganger kjøpe den dyreste tilgjengelige evnen med sine gjenværende "
+"XP, helt til det ikke er flere igjen."
 
 msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "

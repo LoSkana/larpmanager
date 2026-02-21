@@ -1020,6 +1020,9 @@ msgstr "Attribuer"
 msgid "Attended"
 msgstr "Présents"
 
+msgid "Auto buy"
+msgstr "Achat d'automobiles"
+
 msgid "Campaign"
 msgstr "Campagne"
 
@@ -11666,6 +11669,15 @@ msgstr ""
 "Le gestionnaire d'événements dispose de plus de 100 fonctions différentes. "
 "Il en existe une pour chaque aspect de l'organisation d'un événement : "
 "inscriptions, comptabilité, rédaction, logistique"
+
+msgid ""
+"If checked, characters automatically and repeatedly acquire the most "
+"expensive available ability with their remaining XP, until no more can be "
+"bought."
+msgstr ""
+"Si cette case est cochée, les personnages acquièrent automatiquement et de "
+"façon répétée la capacité la plus chère disponible avec leur XP restant, "
+"jusqu'à ce qu'il ne soit plus possible d'en acheter d'autres."
 
 msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "

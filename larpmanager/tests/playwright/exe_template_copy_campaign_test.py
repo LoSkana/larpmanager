@@ -148,8 +148,8 @@ def setup(live_server: Any, page: Any) -> None:
     page.locator("#id_cost").click()
     page.locator("#id_cost").fill("1")
     fill_tinymce(page, "id_descr", "sdsfdsfds", False)
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("te")
+    page.get_by_role("row", name="Characters").get_by_role("searchbox").click()
+    page.get_by_role("row", name="Characters").get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
     submit_confirm(page)
 

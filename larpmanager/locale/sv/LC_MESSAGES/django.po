@@ -1020,6 +1020,9 @@ msgstr "Tilldela"
 msgid "Attended"
 msgstr "Närvarande"
 
+msgid "Auto buy"
+msgstr "Köp av bil"
+
 msgid "Campaign"
 msgstr "Kampanj"
 
@@ -11337,6 +11340,15 @@ msgstr ""
 "Larpmanager har över 100 olika funktioner. Det finns en för varje enskild "
 "aspekt av att organisera evenemang: anmälningar, bokföring, skrivande, "
 "logistik"
+
+msgid ""
+"If checked, characters automatically and repeatedly acquire the most "
+"expensive available ability with their remaining XP, until no more can be "
+"bought."
+msgstr ""
+"Om markerad, förvärvar rollpersonerna automatiskt och upprepade gånger den "
+"dyraste tillgängliga förmågan med sina återstående XP, tills inga fler kan "
+"köpas."
 
 msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "
