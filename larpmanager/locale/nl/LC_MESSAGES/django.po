@@ -1020,6 +1020,9 @@ msgstr "Toewijzen"
 msgid "Attended"
 msgstr "Bijgewoond"
 
+msgid "Auto buy"
+msgstr "Auto kopen"
+
 msgid "Campaign"
 msgstr "Campagne"
 
@@ -11522,6 +11525,15 @@ msgstr ""
 "De larpmanager heeft meer dan 100 verschillende functies. Er is er een voor "
 "elk aspect van het organiseren van evenementen: inschrijvingen, boekhouding,"
 " schrijven, logistiek"
+
+msgid ""
+"If checked, characters automatically and repeatedly acquire the most "
+"expensive available ability with their remaining XP, until no more can be "
+"bought."
+msgstr ""
+"Als deze optie is aangevinkt, verwerven personages automatisch en "
+"herhaaldelijk de duurste vaardigheid die beschikbaar is met hun overgebleven"
+" XP, totdat er niets meer kan worden gekocht."
 
 msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "

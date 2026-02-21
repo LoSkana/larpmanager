@@ -1,5 +1,5 @@
 {% load show_tags i18n %}
-{% if features.px %}
+{% if features.px and not px_auto_buy %}
     <h2>{% trans "Experience points" %}</h2>
     <table class="mob ">
         <tr>

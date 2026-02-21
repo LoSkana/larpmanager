@@ -223,6 +223,45 @@ def set_free_abilities(char: Character, frees: list[int]) -> None:
     save_single_config(char, config_name, json.dumps(frees))
 
 
+def _auto_buy_abilities(
+    character: Any,
+    current_character_abilities: set[int],
+    current_character_choices: set[int],
+    modifiers_by_ability: dict[int, list[tuple]],
+    px_avail: int,
+) -> set[int]:
+    """Automatically buy the most expensive available ability in a loop.
+
+    Repeatedly selects and assigns the most expensive ability the character can
+    afford, until no affordable non-free abilities remain.
+
+    Args:
+        character: Character instance to assign abilities to.
+        current_character_abilities: Set of ability IDs the character currently has.
+        current_character_choices: Set of choice IDs the character currently has.
+        modifiers_by_ability: Mapping of ability IDs to modifier tuples.
+        px_avail: Available PX points.
+
+    Returns:
+        Updated set of ability IDs the character now has.
+
+    """
+    while True:
+        available = _get_available_abilities(
+            character, current_character_abilities, current_character_choices, modifiers_by_ability, px_avail
+        )
+        # Only consider abilities with a cost > 0 (free ones are handled separately)
+        affordable = [a for a in available if a.cost > 0]
+        if not affordable:
+            break
+        most_expensive = max(affordable, key=lambda a: a.cost)
+        character.px_ability_list.add(most_expensive)
+        current_character_abilities = current_character_abilities | {most_expensive.id}
+        px_avail -= most_expensive.cost
+
+    return current_character_abilities
+
+
 def calculate_character_experience_points(character: Any) -> None:
     """Update character experience points and apply ability calculations."""
     if "px" not in get_event_features(character.event_id):
@@ -242,11 +281,24 @@ def calculate_character_experience_points(character: Any) -> None:
         character.px_delivery_list.aggregate(total=Coalesce(Sum("amount"), 0))["total"] or 0
     )
     used_experience_points = sum(ability.cost for ability in current_abilities)
+    px_avail = total_experience_points - used_experience_points
+
+    # Auto-buy abilities if configured
+    if get_event_config(character.event_id, "px_auto_buy", default_value=False):
+        current_character_abilities = _auto_buy_abilities(
+            character, current_character_abilities, current_character_choices, modifiers_by_ability, px_avail
+        )
+        # Recalculate used/available after auto-buy
+        current_abilities = _get_current_abilities(
+            character, current_character_abilities, current_character_choices, modifiers_by_ability
+        )
+        used_experience_points = sum(ability.cost for ability in current_abilities)
+        px_avail = total_experience_points - used_experience_points
 
     experience_data = {
         "px_tot": total_experience_points,
         "px_used": used_experience_points,
-        "px_avail": total_experience_points - used_experience_points,
+        "px_avail": px_avail,
     }
 
     save_all_element_configs(character, experience_data)

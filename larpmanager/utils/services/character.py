@@ -24,6 +24,7 @@ from typing import Any
 from django.http import Http404
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.models.casting import Trait
@@ -269,6 +270,9 @@ def get_character_sheet_px(context: dict) -> None:
     # Check if px feature is enabled before processing
     if "px" not in context["features"]:
         return
+
+    event_id = context["character"].event_id
+    context["px_auto_buy"] = get_event_config(event_id, "px_auto_buy", default_value=False)
 
     # Initialize abilities dictionary for grouping by type
     context["sheet_abilities"] = {}

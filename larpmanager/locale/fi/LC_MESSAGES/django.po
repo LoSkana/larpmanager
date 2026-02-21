@@ -1020,6 +1020,9 @@ msgstr "Myönnetty"
 msgid "Attended"
 msgstr "Osallistui"
 
+msgid "Auto buy"
+msgstr "Auto ostaa"
+
 msgid "Campaign"
 msgstr "Kampanja"
 
@@ -11332,6 +11335,15 @@ msgstr ""
 "Larpmanagerissa on yli 100 erilaista ominaisuutta. Niitä on jokaista "
 "tapahtuman järjestämisen osa-aluetta varten: ilmoittautumiset, kirjanpito, "
 "kirjoittaminen, logistiikka"
+
+msgid ""
+"If checked, characters automatically and repeatedly acquire the most "
+"expensive available ability with their remaining XP, until no more can be "
+"bought."
+msgstr ""
+"Jos tämä valitaan, hahmot hankkivat automaattisesti ja toistuvasti "
+"kalleimman saatavilla olevan kyvyn jäljellä olevilla kokemuspisteillään, "
+"kunnes niitä ei enää voi ostaa."
 
 msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "
