@@ -38,6 +38,7 @@ from larpmanager.models.form import (
     QuestionApplicable,
     WritingAnswer,
     WritingChoice,
+    WritingQuestionType,
 )
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType
@@ -330,7 +331,12 @@ def get_writing_element_fields_batch(
     text_answers_query = WritingAnswer.objects.filter(
         element_id__in=element_ids,
         question__uuid__in=visible_question_ids,
-        question__typ__in=[BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR],
+        question__typ__in=[
+            BaseQuestionType.TEXT,
+            BaseQuestionType.PARAGRAPH,
+            BaseQuestionType.EDITOR,
+            WritingQuestionType.COMPUTED,
+        ],
     ).select_related("question")
     for element_id, question_uuid, text in text_answers_query.values_list("element_id", "question__uuid", "text"):
         results[element_id][question_uuid] = text

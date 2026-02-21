@@ -40,7 +40,7 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.models.experience import AbilityPx, AbilityTemplatePx
-from larpmanager.models.form import WritingOption
+from larpmanager.models.form import WritingOption, WritingQuestion, WritingQuestionType
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
 from larpmanager.models.registration import (
@@ -817,6 +817,22 @@ class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     def get_queryset(self) -> QuerySet[AbilityPx]:
         """Return ability experience entries for this event."""
         return self.event.get_elements(AbilityPx)
+
+
+class ComputedFieldS2Widget(s2forms.ModelSelect2Widget):
+    """Represents selection of event computed fields."""
+
+    search_fields: ClassVar[list] = [
+        "name__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet[AbilityPx]:
+        """Return ability experience entries for this event."""
+        return self.event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
 
 
 class AbilityTemplateS2WidgetMulti(s2forms.ModelSelect2Widget):
