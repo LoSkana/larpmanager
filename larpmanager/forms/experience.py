@@ -136,7 +136,6 @@ class OrgaAbilityPxForm(PxBaseForm):
 
         # Remove user-experience fields if px_user is disabled
         if not px_user:
-            self.delete_field("requirements")
             self.delete_field("prerequisites")
             self.delete_field("visible")
 
