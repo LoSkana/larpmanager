@@ -97,6 +97,9 @@ from larpmanager.cache.px import (
     on_delivery_characters_m2m_changed,
     on_modifier_prerequisites_m2m_changed,
     on_modifier_requirements_m2m_changed,
+    refresh_delivery_relationships,
+    refresh_modifier_relationships,
+    refresh_rule_relationships,
 )
 from larpmanager.cache.px import (
     on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
@@ -780,6 +783,7 @@ def post_save_delivery_px(
 ) -> None:
     """Refresh delivery characters after save signal."""
     _recalcuate_characters_experience_points(instance)
+    refresh_delivery_relationships(instance)
     reset_widgets(instance)
 
 
@@ -1179,6 +1183,7 @@ def post_delete_membership_cache(sender: type, instance: Membership, **kwargs: A
 def post_save_modifier_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update character experience when a modifier is saved."""
     _recalcuate_characters_experience_points(instance)
+    refresh_modifier_relationships(instance)
 
 
 @receiver(post_delete, sender=ModifierPx)
@@ -1564,6 +1569,7 @@ def post_delete_relationship_reset_rels(sender: type, instance: Any, **kwargs: A
 def post_save_rule_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update characters experience when rule changes."""
     _recalcuate_characters_experience_points(instance)
+    refresh_rule_relationships(instance)
 
 
 @receiver(post_delete, sender=RulePx)

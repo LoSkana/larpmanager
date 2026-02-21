@@ -27,13 +27,13 @@ from larpmanager.forms.base import BaseForm, BaseModelForm
 from larpmanager.forms.utils import (
     AbilityS2WidgetMulti,
     AbilityTemplateS2WidgetMulti,
+    ComputedFieldS2Widget,
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     RunCampaignS2Widget,
 )
 from larpmanager.models.event import Run
 from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
-from larpmanager.models.form import WritingQuestion, WritingQuestionType
 
 
 class PxBaseForm(BaseModelForm):
@@ -163,19 +163,16 @@ class OrgaRulePxForm(BaseModelForm):
     class Meta:
         model = RulePx
         exclude = ("number", "order")
-        widgets: ClassVar[dict] = {"abilities": AbilityS2WidgetMulti}
+        widgets: ClassVar[dict] = {"abilities": AbilityS2WidgetMulti, "field": ComputedFieldS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form, configure fields for abilities and writing questions."""
         super().__init__(*args, **kwargs)
         self.delete_field("name")
 
-        # Configure abilities widget with event context
-        self.configure_field_event("abilities", self.params.get("event"))
-
-        # Filter writing questions to computed type only
-        qs = WritingQuestion.objects.filter(event=self.params.get("event"), typ=WritingQuestionType.COMPUTED)
-        self.fields["field"].queryset = qs
+        for field in ["abilities", "field"]:
+            # Configure abilities widget with event context
+            self.configure_field_event(field, self.params.get("event"))
 
 
 class OrgaModifierPxForm(BaseModelForm):
