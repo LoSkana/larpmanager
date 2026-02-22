@@ -112,6 +112,8 @@ def check_orga_features(page: Any) -> None:
         page.locator("#one"), "You have activated the following features, for each here's the links to follow"
     )
     page.get_by_role("link", name="Features").first.click()
+    # Automatically added with character customization
+    checked.append("Characters")
     _check_checkboxes(checked, page)
 
 
@@ -151,7 +153,7 @@ def check_orga_roles(page: Any) -> None:
 
 def _check_checkboxes(checked: Any, page: Any, skip_first: Any = False) -> None:
     for s in checked:
-        expect(page.get_by_label(s)).to_be_checked()
+        expect(page.get_by_label(s, exact=True)).to_be_checked()
     all_checkboxes = page.locator("input[type=checkbox]")
     count = all_checkboxes.count()
     start = 0
