@@ -105,7 +105,7 @@
         {% elif member.membership.status == 'r' %}
             <h3>{% trans "Member revoked" %}</h3>
             <p>{% trans "I am not good what to say. I never thought it would happen" %}.</p>
-        {% else %}
+        {% elif member.membership.status == 'a' %}
             <h3>{% trans "Members of the Organization" %}</h3>
             <p>
                 {% trans "You are a regular member of our Organization. You can subscribe to events organized for our members" %}!
