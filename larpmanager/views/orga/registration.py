@@ -134,6 +134,19 @@ def _orga_registrations_traits(registration: Any, context: dict) -> None:
         registration.traits[quest_type_uuid] = ",".join(registration.traits[quest_type_uuid])
 
 
+_TICKET_TIER_TYPES = {
+    TicketTier.FILLER: ("2", _("Filler")),
+    TicketTier.WAITING: ("3", _("Waiting")),
+    TicketTier.LOTTERY: ("4", _("Lottery")),
+    TicketTier.NPC: ("5", _("NPC")),
+    TicketTier.COLLABORATOR: ("6", _("Collaborator")),
+    TicketTier.STAFF: ("7", _("Staff")),
+    TicketTier.SELLER: ("8", _("Seller")),
+}
+
+_DEFAULT_TICKET_TYPE = ("1", _("Participant"))
+
+
 def _orga_registrations_tickets(registration: Any, context: dict) -> None:
     """Process registration ticket information and categorize by type.
 
@@ -156,18 +169,10 @@ def _orga_registrations_tickets(registration: Any, context: dict) -> None:
 
     """
     # Define default ticket type for participants
-    default_ticket_type = ("1", _("Participant"))
+    default_ticket_type = _DEFAULT_TICKET_TYPE
 
     # Map ticket tiers to their display types and sort order
-    ticket_types = {
-        TicketTier.FILLER: ("2", _("Filler")),
-        TicketTier.WAITING: ("3", _("Waiting")),
-        TicketTier.LOTTERY: ("4", _("Lottery")),
-        TicketTier.NPC: ("5", _("NPC")),
-        TicketTier.COLLABORATOR: ("6", _("Collaborator")),
-        TicketTier.STAFF: ("7", _("Staff")),
-        TicketTier.SELLER: ("8", _("Seller")),
-    }
+    ticket_types = _TICKET_TIER_TYPES
 
     # Start with default type, will be overridden if specific ticket found
     registration_type = default_ticket_type
@@ -223,16 +228,26 @@ def orga_registrations_membership(registration: Any, context: dict) -> None:
     registration.membership = member.membership.get_status_display
 
 
+_slugify_cache: dict[str, str] = {}
+
+
+def _cached_slugify(name: str) -> str:
+    """Return slugified version of name, memoized."""
+    if name not in _slugify_cache:
+        _slugify_cache[name] = slugify(name)
+    return _slugify_cache[name]
+
+
 def regs_list_add(context_dict: Any, category_list_key: Any, category_name: Any, member: Any) -> None:
     """Add member to categorized registration lists."""
-    slugified_key = slugify(category_name)
-    if category_list_key not in context_dict:
-        context_dict[category_list_key] = {}
-    if slugified_key not in context_dict[category_list_key]:
-        context_dict[category_list_key][slugified_key] = {"name": category_name, "emails": [], "players": []}
-    if member.email not in context_dict[category_list_key][slugified_key]["emails"]:
-        context_dict[category_list_key][slugified_key]["emails"].append(member.email)
-        context_dict[category_list_key][slugified_key]["players"].append(member.display_member())
+    slugified_key = _cached_slugify(category_name)
+    cat = context_dict.setdefault(category_list_key, {})
+    if slugified_key not in cat:
+        cat[slugified_key] = {"name": category_name, "emails": set(), "players": []}
+    entry = cat[slugified_key]
+    if member.email not in entry["emails"]:
+        entry["emails"].add(member.email)
+        entry["players"].append(member.display_member())
 
 
 def _orga_registrations_standard(registration: Any, context: dict) -> None:
@@ -393,19 +408,24 @@ def _orga_registrations_prepare(context: dict) -> None:
     for ticket in tickets:
         ticket["emails"] = []
         context["reg_tickets"][ticket["id"]] = ticket
-    context["reg_questions"] = _get_registration_fields(context, context["member"])
+    event_questions = get_cached_registration_questions(context["event"])
+    context["reg_questions"] = _get_registration_fields(context, context["member"], event_questions)
+    context["text_field_uuids"] = [
+        str(q["uuid"]) for q in event_questions if q["typ"] in [BaseQuestionType.EDITOR, BaseQuestionType.PARAGRAPH]
+    ]
 
     context["no_grouping"] = get_event_config(
         context["event"].id, "registration_no_grouping", default_value=False, context=context
     )
 
 
-def _get_registration_fields(context: dict, member: Any) -> dict:
+def _get_registration_fields(context: dict, member: Any, event_questions: list | None = None) -> dict:
     """Get registration questions that are accessible to the given member.
 
     Args:
         context: Context dictionary containing event, features, run, and all_runs information
         member: Member object to check question access permissions for
+        event_questions: Pre-fetched list of questions; fetched from cache if not provided
 
     Returns:
         Dictionary mapping question IDs to RegistrationQuestion objects that the member can access
@@ -413,8 +433,8 @@ def _get_registration_fields(context: dict, member: Any) -> dict:
     """
     registration_questions = {}
 
-    # Get all registration questions for the event
-    event_questions = get_cached_registration_questions(context["event"])
+    if event_questions is None:
+        event_questions = get_cached_registration_questions(context["event"])
 
     for question in event_questions:
         # Check if question has access restrictions enabled
@@ -459,13 +479,7 @@ def _orga_registrations_text_fields(context: dict) -> None:
         context: Context dictionary containing event and registration data
 
     """
-    # add editor type questions using cached version
-    questions = get_cached_registration_questions(context["event"])
-    text_field_uuids = [
-        str(question["uuid"])
-        for question in questions
-        if question["typ"] in [BaseQuestionType.EDITOR, BaseQuestionType.PARAGRAPH]
-    ]
+    text_field_uuids = context["text_field_uuids"]
 
     cached_registration_fields = get_cache_registration_field(context["run"])
     for registration in context["registration_list"]:
