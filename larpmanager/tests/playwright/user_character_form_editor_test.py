@@ -289,7 +289,7 @@ def player_relationships(page: Any, live_server: Any) -> None:
     # Edit the relationship and update the text
     page.locator("#player_relationships").locator(".fa-edit").click()
     just_wait(page)
-    fill_tinymce(page, "id_text", "updated relationship text")
+    fill_tinymce(page, "id_text", "updated relationship text", show=False)
     submit_confirm(page)
 
     # Verify updated text
