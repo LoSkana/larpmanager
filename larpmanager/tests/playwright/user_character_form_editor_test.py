@@ -280,11 +280,11 @@ def player_relationships(page: Any, live_server: Any) -> None:
     page.locator("#select2-id_target-container").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
-    fill_tinymce(page, "id_text", "my relationship text")
+    fill_tinymce(page, "id_text", "my relationship text", show=False)
     submit_confirm(page)
 
     # Verify relationship appears in list
-    expect_normalized(page, page.locator("#player_relationships"), "Test Character my relationship text")
+    expect_normalized(page, page.locator("#player_relationships"), "details relationship test character factions: test teaser (...) my relationship text")
 
     # Edit the relationship and update the text
     page.locator("#player_relationships").locator(".fa-edit").click()
@@ -293,4 +293,4 @@ def player_relationships(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Verify updated text
-    expect_normalized(page, page.locator("#player_relationships"), "Test Character updated relationship text")
+    expect_normalized(page, page.locator("#player_relationships"), "details relationship test character factions: test teaser (...) updated relationship text")
