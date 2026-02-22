@@ -219,8 +219,8 @@
 - model: larpmanager.feature
   fields:
     name: Newsletter
-    descr: Adds a page displaying participant mailing lists, sorted by participants' newsletter
-      preferences
+    descr: Adds a page displaying participant mailing lists, sorted by participants'
+      newsletter preferences
     slug: newsletter
     overall: true
     placeholder: false
@@ -358,19 +358,6 @@
     after_link: ''
     hidden: false
     module: event
-- model: larpmanager.feature
-  fields:
-    name: External registration
-    descr: Instead of using an internal registration form, redirects the participant
-      to an external registration link
-    slug: register_link
-    overall: false
-    placeholder: false
-    order: 30
-    after_text: Now you can set the external registration link
-    after_link: orga_event
-    hidden: false
-    module: registration
 - model: larpmanager.feature
   fields:
     name: Problems
@@ -617,15 +604,28 @@
     module: accounting
 - model: larpmanager.feature
   fields:
-    name: Tokens / Credits
-    descr: Allows managing Tokens and Credits, which participants can use instead
-      of money for registration fees. Credits can also be redeemed for cash
-    slug: token_credit
+    name: Tokens
+    descr: Allows managing Tokens, which participants can use instead of money for
+      registration fees
+    slug: tokens
     overall: true
     placeholder: false
     order: 50
-    after_text: Now set up the token and credits configuration
-    after_link: config/token_credit
+    after_text: Now set up the tokens configuration
+    after_link: config/tokens
+    hidden: false
+    module: accounting
+- model: larpmanager.feature
+  fields:
+    name: Credits
+    descr: Allows managing Credits, which participants can use instead of money for
+      registration fees. Credits can also be redeemed for cash
+    slug: credits
+    overall: true
+    placeholder: false
+    order: 55
+    after_text: Now set up the credits configuration
+    after_link: config/credits
     hidden: false
     module: accounting
 - model: larpmanager.feature
@@ -692,19 +692,6 @@
     module: accounting
 - model: larpmanager.feature
   fields:
-    name: Opening date
-    descr: Lets you specify a date (and time) on which registration will open, keeping
-      it closed until then
-    slug: registration_open
-    overall: false
-    placeholder: false
-    order: 10
-    after_text: Now you can set the registration opening date
-    after_link: orga_run
-    hidden: false
-    module: registration
-- model: larpmanager.feature
-  fields:
     name: Legal Notice
     descr: Adds a link to legal notices on every page, and provides a management panel
       link to edit the content of that notice
@@ -739,6 +726,18 @@
     order: 30
     after_text: Now you can set the player editing settings
     after_link: config/user_character
+    hidden: false
+    module: event
+- model: larpmanager.feature
+  fields:
+    name: Character inventory
+    descr: Allows characters to have inventories
+    slug: inventory
+    overall: false
+    placeholder: false
+    order: 31
+    after_text: ''
+    after_link: ''
     hidden: false
     module: event
 - model: larpmanager.feature
@@ -1320,7 +1319,9 @@
 - model: larpmanager.feature
   fields:
     name: One-Time Content
-    descr: Enables secure streaming of video/audio content via one-time access tokens. Each token can only be used once and tracks who accessed the content, when, and from where
+    descr: Enables secure streaming of video/audio content via one-time access tokens.
+      Each token can only be used once and tracks who accessed the content, when,
+      and from where
     slug: onetime_content
     overall: false
     placeholder: false
@@ -1332,7 +1333,8 @@
 - model: larpmanager.feature
   fields:
     name: Translations
-    descr: Allows to fine-tune how words and phrases are translated in the organization's space
+    descr: Allows to fine-tune how words and phrases are translated in the organization's
+      space
     slug: translation
     overall: true
     placeholder: false
@@ -1341,3 +1343,101 @@
     after_link: exe_translations
     hidden: false
     module: appearance
+- model: larpmanager.feature
+  fields:
+    name: PX Rules
+    descr: Pseudo-feature activated by px_rules configuration
+    slug: px_rules
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: PX Modifiers
+    descr: Pseudo-feature activated by px_modifiers configuration
+    slug: px_modifiers
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: PX Templates
+    descr: Pseudo-feature activated by px_templates configuration
+    slug: px_templates
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Rules
+    descr: Pseudo-feature activated by px_rules configuration
+    slug: rules
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Modifiers
+    descr: Pseudo-feature activated by px_modifiers configuration
+    slug: modifiers
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Templates
+    descr: Pseudo-feature activated by px_templates configuration
+    slug: templates
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Activity Log
+    descr: Show detailed activity log on entities created, updated or deleted.
+    slug: logs
+    overall: true
+    placeholder: false
+    order: 1
+    after_text: ''
+    after_link: ''
+    hidden: false
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: App Integration
+    descr: Enables a button in the topbar to redirect authenticated users to an external
+      application, using a configurable URL and optional JWT-based SSO
+    slug: app_integration
+    overall: true
+    placeholder: false
+    order: 90
+    after_text: Now you can configure the integration button and the external application
+      settings
+    after_link: config/app_integration
+    hidden: false
+    module: miscellany

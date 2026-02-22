@@ -15,13 +15,14 @@
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "CSS" %}</th>
                 <th>{% trans "Handouts" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_handout_templates_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_handout_templates_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i> </a>
                     </td>
                     <td>{{ el }}</td>
@@ -29,8 +30,13 @@
                     <td>
                         {% for p in el.handouts.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_handouts_edit' run.get_slug p.id %}">{{ p }}</a>
+                            <a href="{% url 'orga_handouts_edit' run.get_slug p.uuid %}">{{ p }}</a>
                         {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_handout_templates_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

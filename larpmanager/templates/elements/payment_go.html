@@ -75,13 +75,13 @@
                 // console.log(data);
                 // console.log(data.orderID);
                 return actions.order.capture().then(function (details) {
-                    const responsePromise = fetch('{% url "acc_webhook_paypal" %}/{{ invoice.cod }}');
+                    const responsePromise = fetch('{% url "accounting_webhook_paypal" %}/{{ invoice.cod }}');
                     responsePromise.then(function (responseFromServer) {
                         // console.log(responseFromServer)
                         if(responseFromServer.status === 200) {
-                            location.href = '{% url "acc_wait" %}';
+                            location.href = '{% url "accounting_wait" %}';
                         } else {
-                             location.href = '{% url "acc_cancelled" %}';
+                             location.href = '{% url "accounting_cancelled" %}';
                             }
                         })
 
@@ -100,9 +100,9 @@
     <p>
         {% trans "Please indicate below the exact method of payment you made. Remember to submit the form, otherwise your payment will not be processed" %}!
     </p>
-    <form action="{% url 'acc_submit' 'any' request.path %}"
+    <form action="{% url 'accounting_submit' 'any' invoice.uuid request.path %}"
           method="post"
-          class="acc_submit">
+          class="accounting_submit">
         {% csrf_token %}
         <table class="mob ">
             {{ any_form.as_table }}
@@ -128,10 +128,10 @@
         {% endif %}
     </p>
     <hr />
-    <form action="{% url 'acc_submit' 'wire' request.path %}"
+    <form action="{% url 'accounting_submit' 'wire' invoice.uuid request.path %}"
           enctype="multipart/form-data"
           method="post"
-          class="acc_submit">
+          class="accounting_submit">
         {% csrf_token %}
         {{ wire_form.as_p }}
         <input type="submit" value="{% trans "Submit" %}">
@@ -204,7 +204,7 @@
         {% endif %}
     </p>
     <hr />
-    <form action="{% url 'acc_submit' 'paypal_nf' request.path %}"
+    <form action="{% url 'accounting_submit' 'paypal_nf' invoice.uuid request.path %}"
           enctype="multipart/form-data"
           method="post">
         {% csrf_token %}

@@ -3,7 +3,7 @@
     {% for key, que in form_questions.items %}
         {% if que.typ == 'teaser' or que.typ == 'text' %}
             <td class="q_{{ key }} editable"
-                qid="{{ que.id }}"
+                question_uuid="{{ que.uuid }}"
                 tooltip="{{ que.name }}">
                 {% with ed_id=que.typ|concat:'_red' %}
                     {% lookup el ed_id as value %}
@@ -16,9 +16,9 @@
                     {{ value }}
                 {% endwith %}
             </td>
-        {% elif que.typ == 'e' %}
+        {% elif que.typ == 'e' or que.typ == 'p' %}
             <td class="question q_{{ key }} editable"
-                qid="{{ que.id }}"
+                question_uuid="{{ que.uuid }}"
                 tooltip="{{ que.name }}">
                 {% with ed_id=key|concat:'_red' %}
                     {% lookup el ed_id as value %}
@@ -33,13 +33,13 @@
             </td>
         {% elif que.basic_typ or que.typ == 'c' %}
             <td class="question q_{{ key }} editable"
-                qid="{{ que.id }}"
+                question_uuid="{{ que.uuid }}"
                 tooltip="{{ que.name }}">
                 <!-- fill later -->
             </td>
         {% else %}
             <td class="q_{{ key }} editable"
-                qid="{{ que.id }}"
+                question_uuid="{{ que.uuid }}"
                 tooltip="{{ que.name }}">
                 {% if que.typ == 'progress' %}
                     {% include "elements/show_progress.html" with el=el %}
@@ -49,13 +49,13 @@
                     {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}
                 {% elif que.typ == 'faction' %}
                     {% for g in el.faction_rels.list %}
+                        {% include "elements/comma.html" %}
                         <a href="{% url 'orga_factions_edit' run.get_slug g.0 %}">{{ g.1 }}</a>
-                        <br />
                     {% endfor %}
                 {% elif que.typ == 'mirror' %}
                     {% if el.mirror %}<i>{{ el.mirror }}</i>{% endif %}
                 {% elif que.typ == 'hide' %}
-                    {% if el. %}<i class="fa-solid fa-check"></i>{% endif %}
+                    {% if el.hide %}<i class="fa-solid fa-check"></i>{% endif %}
                 {% elif que.typ == 'cover' %}
                     {% if el.cover %}
                         <a href="{{ el.thumb.url }}">

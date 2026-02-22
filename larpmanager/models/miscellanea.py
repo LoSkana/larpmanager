@@ -17,15 +17,15 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import random
 import secrets
 from pathlib import Path
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
-from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
@@ -33,16 +33,19 @@ from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member
+from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_miny, show_thumb
 from larpmanager.models.writing import Character
 from larpmanager.utils.core.validators import FileTypeValidator
 
+if TYPE_CHECKING:
+    from django.http import HttpResponse
 
-class HelpQuestion(BaseModel):
+
+class HelpQuestion(UuidMixin, BaseModel):
     """Model for storing user help questions and support requests."""
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="questions")
@@ -147,7 +150,7 @@ class ChatMessage(BaseModel):
         return f"CM - {self.sender} {self.message[:20]}"
 
 
-class Util(BaseModel):
+class Util(UuidMixin, BaseModel):
     """Represents Util model."""
 
     number = models.IntegerField()
@@ -158,7 +161,7 @@ class Util(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
-    util = models.FileField(upload_to=UploadToPathAndRename("../utils/"))
+    util = models.FileField(upload_to=UploadToPathAndRename("utils/"))
 
     def __str__(self) -> str:
         """Return string representation with member number and name."""
@@ -177,7 +180,7 @@ class Util(BaseModel):
         return Path(self.util.url).name
 
 
-class UrlShortner(BaseModel):
+class UrlShortner(UuidMixin, BaseModel):
     """Represents UrlShortner model."""
 
     number = models.IntegerField()
@@ -195,7 +198,7 @@ class UrlShortner(BaseModel):
         return f"U{self.number} {self.name}"
 
 
-class Album(BaseModel):
+class Album(UuidMixin, BaseModel):
     """Represents Album model."""
 
     name = models.CharField(max_length=70)
@@ -225,6 +228,10 @@ class Album(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        """Return string representation of the album."""
+        return self.name
+
     def __unicode__(self) -> str:
         """Return the title of the object."""
         # noinspection PyUnresolvedReferences
@@ -250,6 +257,10 @@ class AlbumUpload(BaseModel):
         (PHOTO, _("Photo")),
     ]
     typ = models.CharField(max_length=1, choices=TYPE_CHOICES)
+
+    def __str__(self) -> str:
+        """Return string representation of the album upload."""
+        return self.name
 
 
 class AlbumImage(BaseModel):
@@ -293,7 +304,12 @@ class AlbumImage(BaseModel):
         # noinspection PyUnresolvedReferences
         s = self.original.url
         # Split by /media/ and take the third part (after two splits)
-        return "/media/" + s.split("/media/")[2]
+        parts = s.split("/media/")
+        expected_parts = 3
+        if len(parts) >= expected_parts:
+            return "/media/" + parts[2]
+        # Fallback: return the URL as-is if it doesn't have expected structure
+        return s
 
 
 class Competence(BaseModel):
@@ -306,6 +322,10 @@ class Competence(BaseModel):
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     members = models.ManyToManyField(Member, related_name="competences", through="CompetenceMemberRel")
+
+    def __str__(self) -> str:
+        """Return string representation of the competence."""
+        return self.name
 
 
 class CompetenceMemberRel(BaseModel):
@@ -327,7 +347,7 @@ class CompetenceMemberRel(BaseModel):
         unique_together: ClassVar[list] = ["competence", "member", "deleted"]
 
 
-class WorkshopModule(BaseModel):
+class WorkshopModule(UuidMixin, BaseModel):
     """Model for managing workshop modules and member participation."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -349,7 +369,7 @@ class WorkshopModule(BaseModel):
     def show(self) -> dict[str, Any]:
         """Return dictionary representation of instance for display."""
         # noinspection PyUnresolvedReferences
-        js = {"id": self.id, "number": self.number}
+        js = {"uuid": str(self.uuid), "number": self.number}
         self.upd_js_attr(js, "name")
         return js
 
@@ -366,7 +386,7 @@ class WorkshopMemberRel(BaseModel):
         return f"{self.workshop} - {self.member}"
 
 
-class WorkshopQuestion(BaseModel):
+class WorkshopQuestion(UuidMixin, BaseModel):
     """Represents WorkshopQuestion model."""
 
     search = models.CharField(max_length=200, editable=False)
@@ -387,11 +407,11 @@ class WorkshopQuestion(BaseModel):
         """Return dictionary representation for display purposes.
 
         Returns:
-            Dictionary containing id, number and name attributes.
+            Dictionary containing uuid, number and name attributes.
 
         """
         # noinspection PyUnresolvedReferences
-        js = {"id": self.id, "opt": [], "number": self.number}
+        js = {"uuid": str(self.uuid), "opt": [], "number": self.number}
         self.upd_js_attr(js, "name")
         # noinspection PyUnresolvedReferences
         for op in self.options.all():
@@ -405,7 +425,7 @@ class WorkshopQuestion(BaseModel):
         ]
 
 
-class WorkshopOption(BaseModel):
+class WorkshopOption(UuidMixin, BaseModel):
     """Represents WorkshopOption model."""
 
     search = models.CharField(max_length=500, editable=False)
@@ -425,15 +445,10 @@ class WorkshopOption(BaseModel):
         return f"{self.question} {self.name} ({self.is_correct})"
 
     def show(self) -> dict[str, Any]:
-        """Return JSON-serializable dict with answer option data.
-
-        Returns:
-            Dictionary with id, correctness flag, and name if present.
-
-        """
+        """Return JSON-serializable dict with answer option data."""
         # noinspection PyUnresolvedReferences
-        # Build base dict with id and correctness status
-        js = {"id": self.id, "is_correct": self.is_correct}
+        # Build base dict with uuid and correctness status
+        js = {"uuid": str(self.uuid), "is_correct": self.is_correct}
 
         # Add name attribute if available
         self.upd_js_attr(js, "name")
@@ -441,7 +456,7 @@ class WorkshopOption(BaseModel):
         return js
 
 
-class WarehouseContainer(BaseModel):
+class WarehouseContainer(UuidMixin, BaseModel):
     """Represents WarehouseContainer model."""
 
     name = models.CharField(max_length=100, help_text=_("Code of the box or shelf"))
@@ -452,8 +467,12 @@ class WarehouseContainer(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
 
+    def __str__(self) -> str:
+        """Return string representation of the warehouse container."""
+        return self.name
 
-class WarehouseTag(BaseModel):
+
+class WarehouseTag(UuidMixin, BaseModel):
     """Represents WarehouseTag model."""
 
     name = models.CharField(max_length=100)
@@ -462,8 +481,12 @@ class WarehouseTag(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="tags")
 
+    def __str__(self) -> str:
+        """Return string representation of the warehouse tag."""
+        return self.name
 
-class WarehouseItem(BaseModel):
+
+class WarehouseItem(UuidMixin, BaseModel):
     """Represents WarehouseItem model."""
 
     name = models.CharField(max_length=100)
@@ -494,13 +517,17 @@ class WarehouseItem(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="items")
 
+    def __str__(self) -> str:
+        """Return string representation of the warehouse item."""
+        return self.name
+
     @classmethod
     def get_optional_fields(cls) -> Any:
         """Return list of optional field names."""
         return ["quantity"]
 
 
-class WarehouseMovement(BaseModel):
+class WarehouseMovement(UuidMixin, BaseModel):
     """Represents WarehouseMovement model."""
 
     quantity = models.IntegerField(blank=True, null=True)
@@ -519,7 +546,7 @@ class WarehouseMovement(BaseModel):
     completed = models.BooleanField(default=False)
 
 
-class WarehouseArea(BaseModel):
+class WarehouseArea(UuidMixin, BaseModel):
     """Represents WarehouseArea model."""
 
     name = models.CharField(max_length=100, help_text=_("Name of event area"))
@@ -530,8 +557,12 @@ class WarehouseArea(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="area")
 
+    def __str__(self) -> str:
+        """Return string representation of the warehouse area."""
+        return self.name
 
-class WarehouseItemAssignment(BaseModel):
+
+class WarehouseItemAssignment(UuidMixin, BaseModel):
     """Represents WarehouseItemAssignment model."""
 
     quantity = models.IntegerField(blank=True, null=True)
@@ -570,7 +601,7 @@ class ShuttleStatus(models.TextChoices):
     DONE = "2", _("Arrived safe and sound")
 
 
-class ShuttleService(BaseModel):
+class ShuttleService(UuidMixin, BaseModel):
     """Represents ShuttleService model."""
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="shuttle_services_requests")
@@ -646,7 +677,7 @@ class ProblemSeverity(models.TextChoices):
     GREEN = "g", "4 - GREEN"
 
 
-class Problem(BaseModel):
+class Problem(UuidMixin, BaseModel):
     """Represents Problem model."""
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
@@ -744,7 +775,7 @@ class Problem(BaseModel):
 class PlayerRelationship(BaseModel):
     """Represents PlayerRelationship model."""
 
-    reg = models.ForeignKey(Registration, on_delete=models.CASCADE)
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE)
 
     target = models.ForeignKey(Character, related_name="target_players", on_delete=models.CASCADE)
 
@@ -753,51 +784,128 @@ class PlayerRelationship(BaseModel):
     def __str__(self) -> str:
         """Return string representation with registration, target, and run number."""
         # noinspection PyUnresolvedReferences
-        return f"{self.reg} - {self.target} ({self.reg.run.number})"
+        return f"{self.registration} - {self.target} ({self.registration.run.number})"
 
     class Meta:
         indexes: ClassVar[list] = [
-            models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="prel_reg_act"),
+            models.Index(fields=["registration"], condition=Q(deleted__isnull=True), name="prel_reg_act"),
             models.Index(fields=["target"], condition=Q(deleted__isnull=True), name="prel_target_act"),
         ]
         constraints: ClassVar[list] = [
             UniqueConstraint(
-                fields=["reg", "target", "deleted"],
+                fields=["registration", "target", "deleted"],
                 name="unique_player_relationship_with_optional",
             ),
             UniqueConstraint(
-                fields=["reg", "target"],
+                fields=["registration", "target"],
                 condition=Q(deleted=None),
                 name="unique_player_relationship_without_optional",
             ),
         ]
 
 
-class Email(BaseModel):
-    """Represents Email model."""
+class EmailContent(UuidMixin, BaseModel):
+    """Email content template shared across multiple recipients."""
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, blank=True, null=True)
 
-    recipient = models.CharField(max_length=170)
+    subj = models.CharField(max_length=500, verbose_name=_("Subject"))
 
-    subj = models.CharField(max_length=500)
+    body = models.TextField(verbose_name=_("Body"))
 
-    body = models.TextField()
+    reply_to = models.CharField(max_length=170, blank=True, null=True, verbose_name=_("Reply To"))
 
-    reply_to = models.CharField(max_length=170, blank=True, null=True)
+    search = models.CharField(max_length=500, blank=True, verbose_name=_("Search"))
 
-    sent = models.DateTimeField(blank=True, null=True)
-
-    search = models.CharField(max_length=500, blank=True)
+    class Meta:
+        indexes: ClassVar[list] = [
+            models.Index(fields=["association"], condition=Q(deleted__isnull=True), name="emailcontent_assoc_act"),
+            models.Index(fields=["run"], condition=Q(deleted__isnull=True), name="emailcontent_run_act"),
+        ]
 
     def __str__(self) -> str:
         """Return string representation."""
-        return f"{self.recipient} - {self.subj}"
+        return self.subj
+
+    def recipient_count(self) -> int:
+        """Return the count of recipients for this email content."""
+        return self.recipients.filter(deleted__isnull=True).count()
+
+    def sent_count(self) -> int:
+        """Return the count of sent emails for this email content."""
+        return self.recipients.filter(deleted__isnull=True, sent__isnull=False).count()
 
 
-class OneTimeContent(BaseModel):
+class EmailRecipient(UuidMixin, BaseModel):
+    """Individual email recipient instance."""
+
+    email_content = models.ForeignKey(
+        EmailContent,
+        on_delete=models.CASCADE,
+        related_name="recipients",
+        verbose_name=_("Email Content"),
+    )
+
+    recipient = models.CharField(max_length=170, verbose_name=_("Recipient"))
+
+    sent = models.DateTimeField(blank=True, null=True, verbose_name=_("Sent At"))
+
+    language_code = models.CharField(max_length=10, blank=True, null=True, verbose_name=_("Language Code"))
+
+    class Meta:
+        indexes: ClassVar[list] = [
+            models.Index(fields=["email_content"], condition=Q(deleted__isnull=True), name="emailrecip_content_act"),
+            models.Index(fields=["sent"], condition=Q(deleted__isnull=True), name="emailrecip_sent_act"),
+            models.Index(fields=["recipient"], condition=Q(deleted__isnull=True), name="emailrecip_recip_act"),
+        ]
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.recipient} - {self.email_content.subj}"
+
+    @property
+    def association(self) -> Association | None:
+        """Return the association from the email content."""
+        return self.email_content.association
+
+    @property
+    def run(self) -> Run | None:
+        """Return the run from the email content."""
+        return self.email_content.run
+
+    @property
+    def association_id(self) -> int | None:
+        """Return the association ID from the email content."""
+        return self.email_content.association_id
+
+    @property
+    def run_id(self) -> int | None:
+        """Return the run ID from the email content."""
+        return self.email_content.run_id
+
+    @property
+    def subj(self) -> str:
+        """Return the subject from the email content."""
+        return self.email_content.subj
+
+    @property
+    def body(self) -> str:
+        """Return the body from the email content."""
+        return self.email_content.body
+
+    @property
+    def reply_to(self) -> str | None:
+        """Return the reply_to from the email content."""
+        return self.email_content.reply_to
+
+
+# Backward compatibility alias - will be removed after migration is complete
+Email = EmailContent
+
+
+class OneTimeContent(UuidMixin, BaseModel):
     """Model to store multimedia content for one-time access via tokens.
 
     Organizers can upload video/audio files and generate access tokens.
@@ -884,24 +992,11 @@ class OneTimeContent(BaseModel):
         super().save(*args, **kwargs)
 
     def generate_token(self, note: Any = "") -> Any:
-        """Generate a new access token for this content.
-
-        Args:
-            note (str): Optional note describing the purpose of this token
-
-        Returns:
-            OneTimeAccessToken: The newly created token
-
-        """
+        """Generate a new access token for this content."""
         return OneTimeAccessToken.objects.create(content=self, note=note)
 
     def get_token_stats(self) -> Any:
-        """Get statistics about tokens for this content.
-
-        Returns:
-            dict: Dictionary with token statistics
-
-        """
+        """Get statistics about tokens for this content."""
         access_tokens = self.access_tokens.all()
         return {
             "total": access_tokens.count(),
@@ -910,7 +1005,7 @@ class OneTimeContent(BaseModel):
         }
 
 
-class OneTimeAccessToken(BaseModel):
+class OneTimeAccessToken(UuidMixin, BaseModel):
     """Access token for one-time viewing of content.
 
     Each token can only be used once.
@@ -1015,3 +1110,42 @@ class OneTimeAccessToken(BaseModel):
             self.user_agent = http_request.META.get("HTTP_USER_AGENT", "")[:500]
 
         self.save()
+
+
+class Log(BaseModel):
+    """Represents Log model."""
+
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+
+    eid = models.IntegerField()
+
+    cls = models.CharField(max_length=100)
+
+    dct = models.TextField()
+
+    operation_type = models.CharField(
+        max_length=10,
+        choices=LogOperationType.choices,
+        default=LogOperationType.UPDATE,
+        db_index=True,
+    )
+
+    element_name = models.CharField(max_length=500, blank=True)
+
+    info = models.CharField(max_length=500, blank=True, null=True)
+
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
+
+    run = models.ForeignKey(Run, on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        """Meta options for Log model."""
+
+        indexes = [  # noqa: RUF012
+            models.Index(fields=["member", "-created"]),  # For widget queries
+            models.Index(fields=["-created"]),  # For general ordering
+        ]
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.cls} {self.eid}"

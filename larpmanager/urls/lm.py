@@ -39,9 +39,14 @@ urlpatterns = [
         name="guides",
     ),
     path(
-        "guides/<slug:slug>/",
+        "guide/<slug:slug>/",
         views_lm.guide,
         name="guide",
+    ),
+    path(
+        "blog/<slug:slug>/",
+        views_lm.blog,
+        name="blog",
     ),
     path(
         "tutorials/",
@@ -89,7 +94,7 @@ urlpatterns = [
         name="lm_payments",
     ),
     path(
-        "lm/payments/<int:run_id>",
+        "lm/payments/<str:run_uuid>/",
         views_lm.lm_payments_confirm,
         name="lm_payments_confirm",
     ),
@@ -104,12 +109,17 @@ urlpatterns = [
         name="lm_profile",
     ),
     path(
-        "redirect/<path:path>",
+        "lm/reset/",
+        views_lm.lm_reset,
+        name="lm_reset",
+    ),
+    path(
+        "redirect/<path:path>/",
         views_lm.redr,
         name="redr",
     ),
     path(
-        "activate/<slug:feature_slug>/next/<path:path>",
+        "activate/<slug:feature_slug>/next/<path:path>/",
         views_lm.activate_feature_association,
         name="activate_feature_assoc",
     ),
@@ -119,7 +129,7 @@ urlpatterns = [
         name="activate_feature_assoc",
     ),
     path(
-        "<slug:event_slug>/activate/<slug:feature_slug>/next/<path:path>",
+        "<slug:event_slug>/activate/<slug:feature_slug>/next/<path:path>/",
         views_lm.activate_feature_event,
         name="activate_feature_event",
     ),
@@ -157,6 +167,11 @@ urlpatterns = [
         "debug/mail/",
         views_lm.debug_mail,
         name="debug_mail",
+    ),
+    path(
+        "debug/send_digests/",
+        views_lm.debug_send_digests,
+        name="debug_send_digests",
     ),
     path(
         "debug/",

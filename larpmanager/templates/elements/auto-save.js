@@ -2,10 +2,10 @@
 
 <script>
 
-{% if eid %}
-var eid = {{ eid }};
+{% if edit_uuid %}
+var edit_uuid = '{{ edit_uuid }}';
 {% else %}
-var eid = 0;
+var edit_uuid = "";
 {% endif %}
 var type = '{{ type }}';
 
@@ -14,7 +14,7 @@ var post_url = '{{ request.path }}';
 
 function submitForm(auto) {
     return new Promise(function(resolve, reject) {
-        if (eid == 0) {
+        if (!edit_uuid) {
             $.toast({
                 text: 'Not available for new elements',
                 showHideTransition: 'slide',
@@ -23,7 +23,7 @@ function submitForm(auto) {
                 textAlign: 'center',
                 hideAfter: 1000
             });
-            reject('no-eid');
+            reject('no-edit_uuid');
             return;
         }
 
@@ -32,8 +32,8 @@ function submitForm(auto) {
         }
 
         var formData = $('form').serialize() + "&ajax=1";
-        if (typeof eid !== 'undefined' && eid > 0) {
-            formData += "&eid=" + eid + "&type=" + type + "&token=" + token;
+        if (edit_uuid) {
+            formData += "&edit_uuid=" + edit_uuid + "&type=" + type + "&token=" + token;
         }
 
         $.ajax({
@@ -123,7 +123,7 @@ function setUpAutoSave(key) {
 
 window.addEventListener('DOMContentLoaded', function() {
     {% if auto_save %}
-    if (eid != 0) {
+    if (edit_uuid) {
         $(function() {
             submitForm(true);
         });
@@ -139,7 +139,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     {% for question in form.questions %}
         {% if question.typ == 'e' %}
-            setUpAutoSave('id_q{{ question.id }}');
+            setUpAutoSave('id_que_{{ question.uuid }}');
         {% elif question.typ == 'text' %}
             setUpAutoSave('id_text');
         {% elif question.typ == 'teaser' %}

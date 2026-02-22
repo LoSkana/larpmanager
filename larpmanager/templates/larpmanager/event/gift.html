@@ -9,7 +9,7 @@
         {% trans "A friend of yours will be able to receive the registration as a gift by accessing this special link" %}!
     </p>
     <div class="c nav">
-        <a href="{% url 'gift_edit' run.get_slug 0 %}">{% trans "Add new" %}</a>
+        <a href="{% url 'gift_new' run.get_slug %}">{% trans "Add new" %}</a>
     </div>
     <br />
     <table class="mob ">
@@ -18,21 +18,21 @@
             <th>{% trans "Ticket" %}</th>
             <th>{% trans "Accounting" %}</th>
         </tr>
-        {% for reg in list %}
+        {% for registration in list %}
             <tr>
                 <td>
-                    <a href="{% url 'gift_edit' run.get_slug reg.id %}"
+                    <a href="{% url 'gift_edit' run.get_slug registration.uuid %}"
                        qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                 </td>
                 <td>
-                    {% if reg.ticket %}
+                    {% if registration.ticket %}
                         (
-                        {{ reg.ticket.name }}
-                        {% if reg.ticket.price %}<i><u> {{ reg.ticket.price }}{{ currency_symbol }}</u></i>{% endif %}
+                        {{ registration.ticket.name }}
+                        {% if registration.ticket.price %}<i><u> {{ registration.ticket.price }}{{ currency_symbol }}</u></i>{% endif %}
                         )
                     {% endif %}
-                    {% if reg.info.opts %}
-                        {% for k, el in reg.info.opts.items %}
+                    {% if registration.info.opts %}
+                        {% for k, el in registration.info.opts.items %}
                             {% include "elements/comma.html" %}
                             <b>{{ el.question.name }}</b> -
                             {% for opt in el.selected_options %}
@@ -43,32 +43,32 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if reg.payment %}
-                        {% if reg.deadline > 0 %}
-                            <a href="{% url 'acc_reg' reg.id %}">
-                                {{ reg.payment.quota | format_decimal }}{{ currency_symbol }}
-                            {% trans "within" %} {{ reg.payment.deadline }} {% trans "days" %}</a>
+                    {% if registration.payment %}
+                        {% if registration.deadline > 0 %}
+                            <a href="{% url 'accounting_registration' registration.uuid %}">
+                                {{ registration.payment.quota | format_decimal }}{{ currency_symbol }}
+                            {% trans "within" %} {{ registration.payment.deadline }} {% trans "days" %}</a>
                         {% else %}
-                            <a href="{% url 'acc_reg' reg.id %}">
-                                {{ reg.payment.quota | format_decimal }}{{ currency_symbol }}
+                            <a href="{% url 'accounting_registration' registration.uuid %}">
+                                {{ registration.payment.quota | format_decimal }}{{ currency_symbol }}
                                 {% trans "immediately" %}</a> <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
                             {% endif %}
-                        {% elif reg.pending %}
+                        {% elif registration.pending %}
                             {% trans "Payment currently in review by the staff" %}.
                         {% else %}
-                            <a href="{% url 'gift_redeem' run.get_slug reg.redeem_code %}">{% trans "Access link" %}</a>
-                            (<i>
-                            {% trans "copy this link and give it to your friend" %}:
-                        </i>
-                        <b>
-                            {{ request.build_absolute_uri|slice:":-1" }}{% url 'gift_redeem' run.get_slug reg.redeem_code %}
-                        </b>)
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    <p>
-        <i>{% trans "Note: The special code is re-generated each time you change the gift card" %}</i>
-    </p>
-{% endblock content %}
+                            <a href="{% url 'gift_redeem' run.get_slug registration.redeem_code %}">{% trans "Access link" %}</a>
+                            <i> -
+                                {% trans "copy this link and give it to your friend" %}:
+                            </i>
+                            <b>
+                                {{ request.scheme }}://{{ request.get_host }}{% url 'gift_redeem' run.get_slug registration.redeem_code %}
+                            </b>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p>
+            <i>{% trans "Note: The special code is re-generated each time you change the gift card" %}</i>
+        </p>
+    {% endblock content %}

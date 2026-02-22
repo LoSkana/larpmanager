@@ -22,6 +22,7 @@ from __future__ import annotations
 import io
 import logging
 import os
+import re
 import shutil
 from decimal import Decimal
 from pathlib import Path
@@ -33,7 +34,10 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
+from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
+from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType
+from larpmanager.models.event import EventConfig
 from larpmanager.models.experience import AbilityPx, AbilityTypePx
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -50,7 +54,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
-from larpmanager.models.member import Membership, MembershipStatus
+from larpmanager.models.member import LogOperationType, Membership, MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -65,8 +69,14 @@ from larpmanager.models.writing import (
     PlotCharacterRel,
     Relationship,
 )
+from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.download import _get_column_names
-from larpmanager.utils.services.edit import save_log
+from larpmanager.utils.security import (
+    FileSecurityError,
+    safe_extract_zip,
+    sanitize_dataframe,
+    validate_file_size,
+)
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -76,6 +86,26 @@ if TYPE_CHECKING:
     from larpmanager.models.event import Run
 
 logger = logging.getLogger(__name__)
+
+
+def _normalize_numeric(value: str) -> str:
+    """Normalize numeric string by replacing comma decimal separator with dot."""
+    return str(value).replace(",", ".")
+
+
+def _to_int(value: str) -> int:
+    """Convert numeric string to integer, handling both comma and dot decimal separators."""
+    return int(float(_normalize_numeric(value)))
+
+
+def _to_decimal(value: str) -> Decimal:
+    """Convert numeric string to Decimal, handling both comma and dot decimal separators."""
+    return Decimal(_normalize_numeric(value))
+
+
+def _strip_number_prefix(name: str) -> str:
+    """Strip initial '#number ' pattern from name."""
+    return re.sub(r"^#\d+\s+", "", name)
 
 
 def go_upload(context: dict, upload_form_data: Any) -> Any:
@@ -120,12 +150,16 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
         pandas.DataFrame or None: Parsed CSV data with all columns as strings,
             or None if parsing failed with all attempted encodings.
 
-    Raises:
-        None: All exceptions are caught and handled internally.
-
     """
     # Early return if no file provided
     if not uploaded_file:
+        return None
+
+    # SECURITY: Validate file size to prevent memory exhaustion
+    try:
+        validate_file_size(uploaded_file)
+    except FileSecurityError:
+        logger.exception("File size validation failed: %s")
         return None
 
     # Define encoding priority list - most common first
@@ -148,12 +182,19 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
             # Reset file pointer to beginning
             uploaded_file.seek(0)
 
+            # Read with size limit already validated above (prevent issues with compressed data)
+            file_content = uploaded_file.read()
+
             # Decode file content with current encoding
-            decoded_content = uploaded_file.read().decode(encoding)
+            decoded_content = file_content.decode(encoding)
             string_buffer = io.StringIO(decoded_content)
 
             # Parse CSV with automatic delimiter detection
-            return pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
+            df = pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
+
+            # Sanitize all values to prevent formula injection
+            return sanitize_dataframe(df)
+
         except Exception as parsing_error:  # noqa: BLE001 - Must try all encodings on any parsing error
             # Log error and continue to next encoding
             logger.debug("Failed to parse CSV with encoding %s: %s", encoding, parsing_error)
@@ -181,6 +222,10 @@ def _get_file(context: dict, file: Any, column_id: int | None = None) -> tuple[p
         based on the context configuration.
 
     """
+    # Check if file was provided
+    if not file:
+        return None, ["ERR - No file provided. Please select a file to upload"]
+
     # Get available column names from context
     _get_column_names(context)
     allowed_column_names = []
@@ -199,33 +244,25 @@ def _get_file(context: dict, file: Any, column_id: int | None = None) -> tuple[p
     # Read and parse the uploaded CSV file
     input_dataframe = _read_uploaded_csv(file)
     if input_dataframe is None:
-        return None, ["ERR - Could not read input csv"]
+        return None, ["ERR - Could not parse the uploaded file. Please check the file format and encoding"]
 
     # Normalize column names to lowercase for validation
     input_dataframe.columns = [column.lower() for column in input_dataframe.columns]
 
     # Validate that all columns are recognized
-    for column in input_dataframe.columns:
-        if column.lower() not in allowed_column_names:
-            return None, [f"ERR - column not recognized: {column}"]
+    not_recognized = [column for column in input_dataframe.columns if column.lower() not in allowed_column_names]
+    logs = []
+    if not_recognized:
+        logs.append(f"WARN - columns ignored: {', '.join(not_recognized)}")
 
-    return input_dataframe, []
+    return input_dataframe, logs
 
 
 def registrations_load(context: dict, uploaded_file_form: Form) -> list[str]:
-    """Load registration data from uploaded CSV file.
-
-    Args:
-        context: Context dictionary with event and form settings
-        uploaded_file_form: Form data containing uploaded CSV file
-
-    Returns:
-        list[str]: Processing log messages with statistics
-
-    """
+    """Load registration data from uploaded CSV file."""
     (input_dataframe, processing_logs) = _get_file(context, uploaded_file_form.cleaned_data["first"], 0)
 
-    registration_questions = context["event"].get_elements(RegistrationQuestion).prefetch_related("options")
+    registration_questions = get_cached_registration_questions(context["event"])
     questions_mapping = _get_questions(registration_questions)
 
     if input_dataframe is not None:
@@ -285,11 +322,11 @@ def _reg_load(context: dict, csv_row: dict, registration_questions: dict) -> str
 
     # Process each field in the CSV row
     for field_name, field_value in csv_row.items():
-        _reg_field_load(context, registration, field_name, field_value, registration_questions, error_logs)
+        _registration_field_load(context, registration, field_name, field_value, registration_questions, error_logs)
 
     # Save registration and log the action
     registration.save()
-    save_log(context["member"], Registration, registration)
+    save_log(context, Registration, registration, operation_type=LogOperationType.UPLOAD)
 
     # Generate appropriate status message
     if error_logs:
@@ -302,8 +339,8 @@ def _reg_load(context: dict, csv_row: dict, registration_questions: dict) -> str
     return status_message
 
 
-def _reg_field_load(
-    context: dict[str, Any],
+def _registration_field_load(
+    context: dict,
     registration: Registration,
     field_name: str,
     field_value: str,
@@ -327,12 +364,21 @@ def _reg_field_load(
     if not field_value or pd.isna(field_value):
         return
 
-    if field_name == "ticket":
-        _assign_elem(context, registration, field_name, field_value, RegistrationTicket, error_logs)
+    question_info = registration_questions.get(field_name)
+    field_type = question_info["typ"] if question_info else None
+
+    if field_type == "ticket":
+        _assign_elem(context, registration, "ticket", field_value, RegistrationTicket, error_logs)
     elif field_name == "characters":
         _reg_assign_characters(context, registration, field_value, error_logs)
-    elif field_name == "pwyw":
-        registration.pay_what = Decimal(field_value)
+    elif field_type == "pay_what_you_want":
+        registration.pay_what = _to_decimal(field_value)
+    elif field_type == "reg_surcharges":
+        registration.surcharge = _to_decimal(field_value)
+    elif field_type == "reg_quotas":
+        registration.quota = _to_decimal(field_value)
+    elif field_type == "additional_tickets":
+        registration.additionals = _to_int(field_value)
     else:
         _assign_choice_answer(
             registration,
@@ -366,21 +412,127 @@ def _assign_elem(
         error_logs: List to append error messages to
 
     """
-    try:
-        # Check if value is a digit to determine lookup method
-        if lookup_value.isdigit():
-            # Look up element by number for the given event
+    # Check if value is a digit to determine lookup method
+    if lookup_value.isdigit():
+        # Look up element by number for the given event
+        try:
             element = model_type.objects.get(event=context["event"], number=int(lookup_value))
-        else:
-            # Look up element by name (case-insensitive) for the given event
-            element = model_type.objects.get(event=context["event"], name__iexact=lookup_value)
-    except ObjectDoesNotExist:
-        # Log error if element not found and return without assignment
-        error_logs.append(f"ERR - element {field_name} not found")
-        return
+        except ObjectDoesNotExist:
+            # Log error if element not found and return without assignment
+            error_logs.append(f"ERR - element {field_name} not found")
+            return
+    else:
+        # Look up element by name (case-insensitive) for the given event
+        element = model_type.objects.filter(event=context["event"], name__iexact=lookup_value).first()
+        if not element:
+            # Log error if element not found and return without assignment
+            error_logs.append(f"ERR - element {field_name} not found")
+            return
 
     # Assign the found element to the object field
     target_object.__setattr__(field_name, element)
+
+
+def _get_feature_from_question_type(question_type: str) -> str | None:
+    """Get feature slug required for a WritingQuestionType."""
+    question_type_to_feature = {
+        WritingQuestionType.FACTIONS: "faction",
+        WritingQuestionType.MIRROR: "casting",
+    }
+    return question_type_to_feature.get(question_type)
+
+
+def _get_config_from_question_type(question_type: str) -> str | None:
+    """Get config name required for a WritingQuestionType."""
+    question_type_to_config = {
+        WritingQuestionType.TITLE: "character_title",
+        WritingQuestionType.PROGRESS: "character_progress",
+        WritingQuestionType.ASSIGNED: "character_assigned",
+    }
+    return question_type_to_config.get(question_type)
+
+
+def _activate_features_from_columns(context: dict, column_names: list[str], writing_questions: QuerySet) -> None:
+    """Activate features and configs automatically based on uploaded column names.
+
+    Detects which features and configurations are required by the uploaded columns
+    and activates them on the event if not already enabled.
+
+    Args:
+        context: Context dictionary with event information
+        column_names: List of column names from uploaded CSV
+        writing_questions: QuerySet of WritingQuestion objects for the event
+
+    """
+    # Build mapping of question names to question types
+    question_name_to_type = {q["name"].lower(): q["typ"] for q in writing_questions}
+
+    # Collect features and configs that need to be activated
+    features_to_activate = set()
+    configs_to_activate = set()
+
+    # Check each column to see if it requires a feature or config
+    for column_name in column_names:
+        column_lower = column_name.lower()
+
+        # Check if column matches a writing question
+        if column_lower in question_name_to_type:
+            question_type = question_name_to_type[column_lower]
+
+            # Check if this question type requires a feature
+            feature_slug = _get_feature_from_question_type(question_type)
+            if feature_slug:
+                features_to_activate.add(feature_slug)
+
+            # Check if this question type requires a config
+            config_name = _get_config_from_question_type(question_type)
+            if config_name:
+                configs_to_activate.add(config_name)
+
+    activate_features(context, features_to_activate)
+
+    activate_configs(context, configs_to_activate)
+
+
+def activate_features(context: dict, features_to_activate: set) -> None:
+    """Activate features if not already enabled."""
+    if not features_to_activate:
+        return
+
+    # Get currently enabled features
+    enabled_features = set(context["event"].features.values_list("slug", flat=True))
+
+    # Find features that need to be activated
+    features_to_add = features_to_activate - enabled_features
+
+    if features_to_add:
+        # Get Feature objects for the slugs that need to be added
+        features = Feature.objects.filter(slug__in=features_to_add)
+
+        # Add features to the event
+        for feature in features:
+            context["event"].features.add(feature)
+            logger.info("Auto-activated feature '%s' for event %s", feature.slug, context["event"])
+
+
+def activate_configs(context: dict, configs_to_activate: set) -> None:
+    """Activate configs if not already enabled."""
+    if not configs_to_activate:
+        return
+
+    # Get currently enabled configs
+    enabled_configs = set(
+        EventConfig.objects.filter(event=context["event"], name__in=configs_to_activate).values_list("name", flat=True)
+    )
+
+    # Find configs that need to be activated
+    configs_to_add = configs_to_activate - enabled_configs
+
+    if configs_to_add:
+        # Create config entries with True value
+        for config_name in configs_to_add:
+            EventConfig.objects.create(event=context["event"], name=config_name, value="True")
+            logger.info("Auto-activated config '%s' for event %s", config_name, context["event"])
 
 
 def _reg_assign_characters(
@@ -399,7 +551,7 @@ def _reg_assign_characters(
 
     """
     # Clear existing character assignments for this registration
-    RegistrationCharacterRel.objects.filter(reg=registration).delete()
+    RegistrationCharacterRel.objects.filter(registration=registration).delete()
 
     # Handle multiple characters separated by commas
     character_names = [name.strip() for name in character_names_string.split(",")]
@@ -409,24 +561,23 @@ def _reg_assign_characters(
             continue
 
         # Find character by name in the current event
-        try:
-            character = Character.objects.get(event=context["event"], name__iexact=character_name)
-        except ObjectDoesNotExist:
+        character = context["event"].get_elements(Character).filter(name__iexact=character_name).first()
+        if not character:
             error_logs.append(f"ERR - Character not found: {character_name}")
             continue
 
         # Check if character is already assigned to another active registration
         existing_assignments = RegistrationCharacterRel.objects.filter(
-            reg__run=context["run"],
-            reg__cancellation_date__isnull=True,
+            registration__run=context["run"],
+            registration__cancellation_date__isnull=True,
             character=character,
         )
-        if existing_assignments.exclude(reg_id=registration.id).exists():
+        if existing_assignments.exclude(registration_id=registration.id).exists():
             error_logs.append(f"ERR - character already assigned: {character_name}")
             continue
 
         # Create the character assignment relationship
-        RegistrationCharacterRel.objects.get_or_create(reg=registration, character=character)
+        RegistrationCharacterRel.objects.get_or_create(registration=registration, character=character)
 
 
 def writing_load(context: dict, form: Form) -> list[str]:
@@ -455,13 +606,12 @@ def writing_load(context: dict, form: Form) -> list[str]:
         (input_dataframe, logs) = _get_file(context, uploaded_file, 0)
 
         # Get questions for the writing type with their options
-        writing_questions = (
-            context["event"]
-            .get_elements(WritingQuestion)
-            .filter(applicable=context["writing_typ"])
-            .prefetch_related("options")
-        )
+        writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
         questions_dict = _get_questions(writing_questions)
+
+        # Activate features based on uploaded columns
+        if input_dataframe is not None:
+            _activate_features_from_columns(context, input_dataframe.columns.tolist(), writing_questions)
 
         # Process each row of writing data
         if input_dataframe is not None:
@@ -620,22 +770,18 @@ def _relationships_load(row: dict, chars: dict) -> str:
 
 
 def _get_questions(questions_queryset: QuerySet) -> dict:
-    """Build a dictionary mapping question names to their metadata.
-
-    Args:
-        questions_queryset: QuerySet of question objects with name, id, typ, and options attributes.
-
-    Returns:
-        Dictionary with lowercase question names as keys and question metadata as values.
-
-    """
+    """Build a dictionary mapping question names to their metadata."""
     questions_by_name = {}
     for question in questions_queryset:
         # Extract options as name->id mapping
-        options_by_name = {option.name.lower(): option.id for option in question.options.all()}
+        options_by_name = {option["name"].lower(): option["id"] for option in question["options"]}
 
         # Store question metadata with lowercase name as key
-        questions_by_name[question.name.lower()] = {"id": question.id, "typ": question.typ, "options": options_by_name}
+        questions_by_name[question["name"].lower()] = {
+            "id": question["id"],
+            "typ": question["typ"],
+            "options": options_by_name,
+        }
     return questions_by_name
 
 
@@ -655,7 +801,6 @@ def _assign_choice_answer(
     """
     field_name = field_name.lower()
     if field_name not in available_questions:
-        error_logs.append(f"ERR - question not found {field_name}")
         return
 
     question = available_questions[field_name]
@@ -663,7 +808,9 @@ def _assign_choice_answer(
     # check if answer
     if question["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
         if is_registration:
-            answer, _ = RegistrationAnswer.objects.get_or_create(reg_id=target_element.id, question_id=question["id"])
+            answer, _ = RegistrationAnswer.objects.get_or_create(
+                registration_id=target_element.id, question_id=question["id"]
+            )
         else:
             answer, _ = WritingAnswer.objects.get_or_create(element_id=target_element.id, question_id=question["id"])
         answer.text = field_value
@@ -672,7 +819,7 @@ def _assign_choice_answer(
     # check if choice
     else:
         if is_registration:
-            RegistrationChoice.objects.filter(reg_id=target_element.id, question_id=question["id"]).delete()
+            RegistrationChoice.objects.filter(registration_id=target_element.id, question_id=question["id"]).delete()
         else:
             WritingChoice.objects.filter(element_id=target_element.id, question_id=question["id"]).delete()
 
@@ -685,7 +832,7 @@ def _assign_choice_answer(
 
             if is_registration:
                 RegistrationChoice.objects.create(
-                    reg_id=target_element.id,
+                    registration_id=target_element.id,
                     question_id=question["id"],
                     option_id=option_id,
                 )
@@ -719,15 +866,25 @@ def element_load(context: dict, csv_row: dict, element_questions: dict) -> str:
 
     # Extract element name and determine the appropriate model class
     element_name = csv_row[primary_field_name]
+
+    # Handle NaN or empty element names (e.g. blank rows in CSV)
+    if pd.isna(element_name) or not str(element_name).strip():
+        return "ERR - empty name"
+
+    # Remove initial "#number " pattern from name
+    element_name = _strip_number_prefix(str(element_name))
     question_applicable_type = QuestionApplicable.get_applicable(context["typ"])
     writing_model_class = QuestionApplicable.get_applicable_inverse(question_applicable_type)
 
+    # Get the target event - use parent if in campaign and element is inheritable
+    target_event = context["event"].get_class_parent(writing_model_class)
+
     # Try to find existing element or create new one
-    is_newly_created = False
-    try:
-        element = writing_model_class.objects.get(event=context["event"], name__iexact=element_name)
-    except ObjectDoesNotExist:
-        element = writing_model_class.objects.create(event=context["event"], name=element_name)
+    element = writing_model_class.objects.filter(event=target_event, name__iexact=element_name).first()
+    if element:
+        is_newly_created = False
+    else:
+        element = writing_model_class.objects.create(event=target_event, name=element_name)
         is_newly_created = True
 
     # Initialize logging for field processing errors
@@ -742,7 +899,7 @@ def element_load(context: dict, csv_row: dict, element_questions: dict) -> str:
 
     # Save the element and log the operation
     element.save()
-    save_log(context["member"], writing_model_class, element)
+    save_log(context, writing_model_class, element, operation_type=LogOperationType.UPLOAD)
 
     # Return appropriate status message based on processing results
     if error_logs:
@@ -777,17 +934,19 @@ def _writing_load_field(
 
     # Handle quest type field with case-insensitive lookup
     if field == "typ":
-        try:
-            element.typ = context["event"].get_elements(QuestType).get(name__iexact=value)
-        except ObjectDoesNotExist:
+        quest_type = context["event"].get_elements(QuestType).filter(name__iexact=value).first()
+        if quest_type:
+            element.typ = quest_type
+        else:
             logs.append(f"ERR - quest type not found: {value}")
         return
 
     # Handle quest field with case-insensitive lookup
     if field == "quest":
-        try:
-            element.quest = context["event"].get_elements(Quest).get(name__iexact=value)
-        except ObjectDoesNotExist:
+        quest = context["event"].get_elements(Quest).filter(name__iexact=value).first()
+        if quest:
+            element.quest = quest
+        else:
             logs.append(f"ERR - quest not found: {value}")
         return
 
@@ -808,7 +967,7 @@ def _writing_load_field(
 
 
 def _writing_question_load(
-    context: dict[str, Any],
+    context: dict,
     writing_element: Character | Plot | Faction,
     question_field: str,
     question_type: WritingQuestionType,
@@ -852,9 +1011,10 @@ def _get_mirror_instance(
     error_logs: list[str],
 ) -> None:
     """Fetch and assign mirror character instance from event."""
-    try:
-        character_element.mirror = context["event"].get_elements(Character).get(name__iexact=mirror_character_name)
-    except ObjectDoesNotExist:
+    mirror_character = context["event"].get_elements(Character).filter(name__iexact=mirror_character_name).first()
+    if mirror_character:
+        character_element.mirror = mirror_character
+    else:
         error_logs.append(f"ERR - mirror not found: {mirror_character_name}")
 
 
@@ -870,15 +1030,14 @@ def _assign_faction(context: dict, element: Character, value: str, logs: list[st
     """
     # Process each faction name in the comma-separated list
     for faction_name in value.split(","):
-        try:
-            # Find faction by case-insensitive name match for the event
-            faction = Faction.objects.get(name__iexact=faction_name.strip(), event=context["event"])
-
+        # Find faction by case-insensitive name match for the event
+        faction = Faction.objects.filter(name__iexact=faction_name.strip(), event=context["event"]).first()
+        if faction:
             # Save element and add to faction's characters
             element.save()  # to be sure
             faction.characters.add(element)
             faction.save()
-        except ObjectDoesNotExist:
+        else:
             # Log faction not found errors
             logs.append(f"Faction not found: {faction_name}")
 
@@ -950,6 +1109,130 @@ def invert_dict(dictionary: dict[str, str]) -> dict[str, str]:
     return {value.lower().strip(): key for key, value in dictionary.items()}
 
 
+def _get_or_create_registration_question(context: dict, question_name: str) -> tuple[RegistrationQuestion, bool]:
+    """Get or create a registration question instance.
+
+    Args:
+        context: Context dictionary containing event information
+        question_name: Name of the question to create or retrieve
+
+    Returns:
+        Tuple of (question_instance, was_created)
+
+    """
+    matching_questions = RegistrationQuestion.objects.filter(
+        event=context["event"],
+        name__iexact=question_name,
+    )
+    if matching_questions.exists():
+        return matching_questions.first(), False
+
+    return (
+        RegistrationQuestion.objects.create(
+            event=context["event"],
+            name=question_name,
+        ),
+        True,
+    )
+
+
+def _get_or_create_writing_question(
+    context: dict, question_name: str, row_data: dict, field_mappings: dict
+) -> tuple[WritingQuestion | None, bool] | str:
+    """Get or create a writing question instance.
+
+    Args:
+        context: Context dictionary containing event information
+        question_name: Name of the question to create or retrieve
+        row_data: Row data containing applicable field
+        field_mappings: Field validation mappings
+
+    Returns:
+        Tuple of (question_instance, was_created) or error string
+
+    """
+    if "applicable" not in row_data:
+        return "ERR - missing applicable column"
+
+    applicable_value = row_data["applicable"]
+    if applicable_value not in field_mappings["applicable"]:
+        return "ERR - unknown applicable"
+
+    applicable = field_mappings["applicable"][applicable_value]
+
+    event = context["event"].get_class_parent(WritingQuestion)
+
+    # For special (non-basic) WritingQuestionTypes, look up by type+applicable.
+    # These questions are auto-created by configuration and are unique per type.
+    raw_typ = str(row_data.get("typ", "")).lower().strip()
+    typ_value = field_mappings.get("typ", {}).get(raw_typ, "")
+    if typ_value and typ_value not in BaseQuestionType.get_basic_types():
+        matching_by_type = WritingQuestion.objects.filter(
+            event=event,
+            typ=typ_value,
+            applicable=applicable,
+        )
+        if matching_by_type.exists():
+            return matching_by_type.first(), False
+
+    matching_questions = WritingQuestion.objects.filter(
+        event=event,
+        name__iexact=question_name,
+        applicable=applicable,
+    )
+    if matching_questions.exists():
+        return matching_questions.first(), False
+
+    return (
+        WritingQuestion.objects.create(
+            event=event,
+            name=question_name,
+            applicable=applicable,
+        ),
+        True,
+    )
+
+
+def _process_question_field(
+    field_name: str,
+    field_value: str,
+    field_mappings: dict,
+    question_instance: RegistrationQuestion | WritingQuestion,
+) -> str | None:
+    """Process and validate a single question field.
+
+    Args:
+        field_name: Name of the field to process
+        field_value: Value of the field
+        field_mappings: Field validation mappings
+        question_instance: Question instance to update
+
+    Returns:
+        Error message string if validation fails, None otherwise
+
+    """
+    # Skip empty values and already processed fields
+    if not field_value or pd.isna(field_value) or field_name in ["applicable", "name"]:
+        return None
+
+    validated_value = field_value
+
+    # Apply mapping validation if field has defined mappings
+    if field_name in field_mappings:
+        validated_value = validated_value.lower().strip()
+        if validated_value not in field_mappings[field_name]:
+            return f"ERR - unknow value {field_value} for field {field_name}"
+        validated_value = field_mappings[field_name][validated_value]
+
+    # Handle special case for max_length field conversion
+    if field_name == "max_length":
+        validated_value = _to_int(field_value)
+
+    # Set the validated value on the instance
+    setattr(question_instance, field_name, validated_value)
+    return None
+
+
 def _questions_load(context: dict, row_data: dict, *, is_registration: bool) -> str:
     """Load and validate question data from upload files.
 
@@ -974,52 +1257,32 @@ def _questions_load(context: dict, row_data: dict, *, is_registration: bool) -> 
     # Get field validation mappings for the question type
     field_mappings = _get_mappings(is_registration=is_registration)
 
+    # Get or create the question instance
     if is_registration:
-        # Create or get registration question instance
-        question_instance, was_created = RegistrationQuestion.objects.get_or_create(
-            event=context["event"],
-            name__iexact=question_name,
-            defaults={"name": question_name},
-        )
+        question_instance, was_created = _get_or_create_registration_question(context, question_name)
     else:
-        # Writing questions require additional 'applicable' field validation
-        if "applicable" not in row_data:
-            return "ERR - missing applicable column"
-        applicable_value = row_data["applicable"]
-        if applicable_value not in field_mappings["applicable"]:
-            return "ERR - unknown applicable"
-
-        # Create or get writing question instance with applicable field
-        question_instance, was_created = WritingQuestion.objects.get_or_create(
-            event=context["event"],
-            name__iexact=question_name,
-            applicable=field_mappings["applicable"][applicable_value],
-            defaults={"name": question_name},
-        )
+        result = _get_or_create_writing_question(context, question_name, row_data, field_mappings)
+        if isinstance(result, str):
+            return result
+        question_instance, was_created = result
 
     # Process and validate each field in the row data
     for field_name, field_value in row_data.items():
-        # Skip empty values and already processed fields
-        if not field_value or pd.isna(field_value) or field_name in ["applicable", "name"]:
-            continue
-
-        validated_value = field_value
-        # Apply mapping validation if field has defined mappings
-        if field_name in field_mappings:
-            validated_value = validated_value.lower().strip()
-            if validated_value not in field_mappings[field_name]:
-                return f"ERR - unknow value {field_value} for field {field_name}"
-            validated_value = field_mappings[field_name][validated_value]
-
-        # Handle special case for max_length field conversion
-        if field_name == "max_length":
-            validated_value = int(field_value)
-
-        # Set the validated value on the instance
-        setattr(question_instance, field_name, validated_value)
+        error = _process_question_field(field_name, field_value, field_mappings, question_instance)
+        if error:
+            return error
 
     # Save the configured instance to database
     question_instance.save()
+
+    # For writing questions, activate required features/configs based on question type
+    if not is_registration:
+        feature_slug = _get_feature_from_question_type(question_instance.typ)
+        if feature_slug:
+            activate_features(context, {feature_slug})
+        config_name = _get_config_from_question_type(question_instance.typ)
+        if config_name:
+            activate_configs(context, {config_name})
 
     # Return appropriate success message based on operation
     return f"OK - Created {question_name}" if was_created else f"OK - Updated {question_name}"
@@ -1029,8 +1292,8 @@ def _get_mappings(*, is_registration: bool) -> dict[str, dict[str, str]]:
     """Generate mappings for question field types and attributes.
 
     Args:
-        is_registration: Whether to include additional registration-specific
-                        question types in the type mapping.
+        is_registration: When False (character form), includes additional
+                        WritingQuestionType values in the type mapping.
 
     Returns:
         Dictionary containing inverted mappings for question types, status,
@@ -1045,9 +1308,9 @@ def _get_mappings(*, is_registration: bool) -> dict[str, dict[str, str]]:
         "visibility": invert_dict(QuestionVisibility.get_mapping()),
     }
 
-    # Add registration-specific question types if needed
-    if is_registration:
-        # update typ with new types
+    # Add writing-specific question types if needed (character form upload)
+    if not is_registration:
+        # update typ with WritingQuestionType values not covered by BaseQuestionType mapping
         question_type_mapping = mappings["typ"]
 
         # Iterate through writing question type choices
@@ -1109,8 +1372,10 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
             continue
 
         # Convert numeric fields to appropriate types
-        if field_name in ["max_available", "price"]:
-            processed_value = int(processed_value)
+        if field_name == "max_available":
+            processed_value = _to_int(processed_value)
+        elif field_name == "price":
+            processed_value = _to_decimal(processed_value)
 
         # Handle requirements field with special processing
         if field_name == "requirements":
@@ -1130,7 +1395,7 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
 
 
 def _get_option(
-    context: dict[str, Any], option_name: str, parent_question_id: int, *, is_registration: bool
+    context: dict, option_name: str, parent_question_id: int, *, is_registration: bool
 ) -> tuple[bool, RegistrationOption | WritingOption]:
     """Get or create a question option for registration or writing forms.
 
@@ -1145,19 +1410,38 @@ def _get_option(
 
     """
     if is_registration:
-        option_instance, was_created = RegistrationOption.objects.get_or_create(
+        matching_options = RegistrationOption.objects.filter(
             event=context["event"],
             question_id=parent_question_id,
             name__iexact=option_name,
-            defaults={"name": option_name},
         )
+        if matching_options.exists():
+            option_instance = matching_options.first()
+            was_created = False
+        else:
+            option_instance = RegistrationOption.objects.create(
+                event=context["event"],
+                question_id=parent_question_id,
+                name=option_name,
+            )
+            was_created = True
     else:
-        option_instance, was_created = WritingOption.objects.get_or_create(
-            event=context["event"],
+        event = context["event"].get_class_parent(WritingOption)
+        matching_options = WritingOption.objects.filter(
+            event=event,
             name__iexact=option_name,
             question_id=parent_question_id,
-            defaults={"name": option_name},
         )
+        if matching_options.exists():
+            option_instance = matching_options.first()
+            was_created = False
+        else:
+            option_instance = WritingOption.objects.create(
+                event=event,
+                name=option_name,
+                question_id=parent_question_id,
+            )
+            was_created = True
     return was_created, option_instance
 
 
@@ -1195,7 +1479,7 @@ def get_csv_upload_tmp(csv_upload: Any, run: Run) -> str:
     return tmp_file
 
 
-def cover_load(context: dict[str, Any], z_obj: Any) -> None:
+def cover_load(context: dict, z_obj: Any) -> None:
     """Handle cover image upload and processing from ZIP archive.
 
     Args:
@@ -1205,7 +1489,6 @@ def cover_load(context: dict[str, Any], z_obj: Any) -> None:
     Side effects:
         Extracts ZIP contents, processes images, updates character cover fields,
         and moves files to proper media directory structure
-
     """
     # extract images
     fpath = str(Path(conf_settings.MEDIA_ROOT) / "cover_load")
@@ -1213,7 +1496,8 @@ def cover_load(context: dict[str, Any], z_obj: Any) -> None:
     fpath = str(Path(fpath) / str(context["run"].number))
     if Path(fpath).exists():
         shutil.rmtree(fpath)
-    z_obj.extractall(path=fpath)
+
+    safe_extract_zip(z_obj, fpath)
     covers = {}
     # get images
     for root, _dirnames, filenames in os.walk(fpath):
@@ -1234,16 +1518,7 @@ def cover_load(context: dict[str, Any], z_obj: Any) -> None:
 
 
 def tickets_load(context: dict, form: Form) -> list[str]:
-    """Load tickets from uploaded file data.
-
-    Args:
-        context: Context dictionary containing processing state
-        form: Form containing cleaned file data
-
-    Returns:
-        List of log messages from the loading process
-
-    """
+    """Load tickets from uploaded file data."""
     # Extract and validate file data from form
     (uploaded_dataframe, log_messages) = _get_file(context, form.cleaned_data["first"], 0)
 
@@ -1301,32 +1576,23 @@ def _ticket_load(context: dict, csv_row: dict) -> str:
 
         # Convert numeric fields to appropriate types
         if field_name == "max_available":
-            processed_value = int(field_value)
+            processed_value = _to_int(field_value)
         if field_name == "price":
-            processed_value = float(field_value)
+            processed_value = _to_decimal(field_value)
 
         # Set the field value on the ticket object
         setattr(ticket, field_name, processed_value)
 
     # Save the ticket and log the operation
     ticket.save()
-    save_log(context["member"], RegistrationTicket, ticket)
+    save_log(context, RegistrationTicket, ticket, operation_type=LogOperationType.UPLOAD)
 
     # Return appropriate success message
     return f"OK - Created {ticket}" if was_created else f"OK - Updated {ticket}"
 
 
 def abilities_load(context: dict, form: Form) -> list[str]:
-    """Load abilities from uploaded file and process each row.
-
-    Args:
-        context: Context dictionary containing processing state
-        form: Form object with cleaned data containing file reference
-
-    Returns:
-        List of processing logs from ability loading operations
-
-    """
+    """Load abilities from uploaded file and process each row."""
     # Extract and validate input file data
     (input_dataframe, processing_logs) = _get_file(context, form.cleaned_data["first"], 0)
 
@@ -1382,7 +1648,7 @@ def _ability_load(context: dict, csv_row: dict) -> str:
 
         # Convert cost field to integer
         if field_name == "cost":
-            processed_value = int(field_value)
+            processed_value = _to_int(field_value)
 
         # Handle prerequisites field parsing
         if field_name == "prerequisites":
@@ -1405,7 +1671,7 @@ def _ability_load(context: dict, csv_row: dict) -> str:
     ability_element.save()
 
     # Log the operation for audit trail
-    save_log(context["member"], AbilityPx, ability_element)
+    save_log(context, AbilityPx, ability_element, operation_type=LogOperationType.UPLOAD)
 
     # Return appropriate success message
     return f"OK - Created {ability_element}" if was_created else f"OK - Updated {ability_element}"
@@ -1417,19 +1683,12 @@ def _assign_type(
     error_logs: list[str],
     ability_type_name: str,
 ) -> None:
-    """Assign ability type to element from event context.
-
-    Args:
-        context: Dict containing event with ability types
-        ability_element: Ability element to assign type to
-        error_logs: List to append error messages to
-        ability_type_name: Name of ability type to find
-
-    """
-    try:
-        # Query ability type by name from event context
-        ability_element.typ = context["event"].get_elements(AbilityTypePx).get(name__iexact=ability_type_name)
-    except ObjectDoesNotExist:
+    """Assign ability type to element from event context."""
+    # Query ability type by name from event context
+    ability_type = context["event"].get_elements(AbilityTypePx).filter(name__iexact=ability_type_name).first()
+    if ability_type:
+        ability_element.typ = ability_type
+    else:
         # Log error if ability type not found
         error_logs.append(f"ERR - quest type not found: {ability_type_name}")
 
@@ -1451,14 +1710,15 @@ def _assign_prereq(
     """
     # Parse each prerequisite name from the comma-separated string
     for prerequisite_name in value.split(","):
-        try:
-            # Look up prerequisite ability by name (case-insensitive)
-            prerequisite_element = context["event"].get_elements(AbilityPx).get(name__iexact=prerequisite_name.strip())
-
+        # Look up prerequisite ability by name (case-insensitive)
+        prerequisite_element = (
+            context["event"].get_elements(AbilityPx).filter(name__iexact=prerequisite_name.strip()).first()
+        )
+        if prerequisite_element:
             # Ensure element is saved before adding M2M relationship
             element.save()
             element.prerequisites.add(prerequisite_element)
-        except ObjectDoesNotExist:
+        else:
             logs.append(f"Prerequisite not found: {prerequisite_name}")
 
 
@@ -1479,12 +1739,14 @@ def _assign_requirements(
     """
     # Process each requirement name from comma-separated string
     for requirement_name in requirement_names.split(","):
-        try:
-            # Look up writing option by case-insensitive name match
-            writing_option = context["event"].get_elements(WritingOption).get(name__iexact=requirement_name.strip())
+        # Look up writing option by case-insensitive name match
+        writing_option = (
+            context["event"].get_elements(WritingOption).filter(name__iexact=requirement_name.strip()).first()
+        )
+        if writing_option:
             writing_element.save()  # to be sure
 
             # Add the requirement to the writing element
             writing_element.requirements.add(writing_option)
-        except ObjectDoesNotExist:
+        else:
             error_logs.append(f"requirements not found: {requirement_name}")

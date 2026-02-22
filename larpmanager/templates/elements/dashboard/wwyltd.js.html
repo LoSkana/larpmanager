@@ -1,0 +1,61 @@
+{% load i18n static %}
+<script>
+
+// Auto-submit form when wwyltd select changes via AJAX and open in new tab
+$('#id_wwyltd').on('change', function() {
+    if (!this.value) {
+        return;
+    }
+
+    const $form = $(this).closest('form');
+    const formData = new FormData($form[0]);
+
+    // Add event_slug if available (for orga context)
+    {% if run %}
+    formData.append('event_slug', '{{ run.get_slug }}');
+    {% endif %}
+
+    // Get AJAX URL
+    {% if run %}
+    const ajaxUrl = '{% url "wwyltd_ajax" run.get_slug %}';
+    {% else %}
+    const ajaxUrl = '{% url "wwyltd_ajax" %}';
+    {% endif %}
+
+    // Make AJAX POST request
+    $.ajax({
+        url: ajaxUrl,
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (response.success && response.url) {
+                // Open URL in new tab
+                window.open(response.url, '_blank');
+
+                // Reset select to placeholder
+                $('#id_wwyltd').val('').trigger('change');
+            } else {
+                console.error('Invalid response:', response);
+                if (!window.lmTesting) alert('{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}');
+            }
+        },
+        error: function(xhr) {
+            let errorMessage = '{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}';
+
+            try {
+                const response = JSON.parse(xhr.responseText);
+                if (response.error) {
+                    errorMessage = response.error;
+                }
+            } catch (e) {
+                // Use default error message
+            }
+
+            console.error('AJAX error:', xhr);
+            if (!window.lmTesting) alert(errorMessage);
+        }
+    });
+});
+</script>

@@ -29,12 +29,6 @@ if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
 
 
-def clear_config_cache(config_element: BaseModel) -> None:
-    """Clear the cache for a configuration element."""
-    # noinspection PyProtectedMember
-    cache.delete(cache_configs_key(config_element.id, config_element._meta.model_name.lower()))  # noqa: SLF001  # Django model metadata
-
-
 def reset_element_configs(element: BaseModel) -> None:
     """Delete cached configs for the given element."""
     cache_key = cache_configs_key(element.id, element._meta.model_name.lower())  # noqa: SLF001  # Django model metadata
@@ -53,16 +47,7 @@ def get_configs(model_instance: BaseModel) -> dict[str, Any]:
 
 
 def get_element_configs(element_id: int, model_name: str) -> dict[str, Any]:
-    """Get element configurations from cache or database.
-
-    Args:
-        element_id: The ID of the element to get configs for
-        model_name: The name of the model to retrieve configs from
-
-    Returns:
-        Dictionary containing the element configurations
-
-    """
+    """Get element configurations from cache or database."""
     # Generate cache key for the element and model combination
     cache_key = cache_configs_key(element_id, model_name)
 
@@ -163,30 +148,7 @@ def save_all_element_configs(obj: BaseModel, dct: dict[str, str]) -> None:
 
 
 def save_single_config(obj: object, name: str, value: any) -> None:
-    """Save single configuration value for an element.
-
-    This function creates or updates a configuration entry in the database
-    for the given object. It uses the object's foreign key relationship
-    to store the configuration with the specified name and value.
-
-    Args:
-        obj: Model instance to save configuration for. Must have a 'configs'
-             attribute that references a related configuration model.
-        name: Configuration name/key to store the value under.
-        value: Configuration value to store. Can be any serializable type.
-
-    Returns:
-        None
-
-    Side Effects:
-        Creates or updates configuration in database through the object's
-        configs relationship.
-
-    Raises:
-        AttributeError: If obj doesn't have a 'configs' attribute.
-        DatabaseError: If the database operation fails.
-
-    """
+    """Save single configuration value for an element."""
     # Get the foreign key field name for this object type
     fk_field = _get_fkey_config(obj)
 
@@ -327,6 +289,20 @@ def get_event_config(
     """Get event configuration value from cache or database."""
     return _get_cached_config(
         event_id, "event", config_name, default_value=default_value, context=context, bypass_cache=bypass_cache
+    )
+
+
+def get_member_config(
+    member_id: int,
+    config_name: str,
+    *,
+    default_value: Any = None,
+    context: dict | None = None,
+    bypass_cache: bool = False,
+) -> Any:
+    """Get member configuration value from cache or database."""
+    return _get_cached_config(
+        member_id, "member", config_name, default_value=default_value, context=context, bypass_cache=bypass_cache
     )
 
 

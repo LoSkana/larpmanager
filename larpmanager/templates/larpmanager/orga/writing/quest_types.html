@@ -16,27 +16,34 @@
                 <th></th>
                 <th>{% trans "Presentation" %}</th>
                 <th>{% trans "Quest" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_quest_types_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_quest_types_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i> </a>
                     </td>
                     <td>{{ el }}</td>
                     <td>
-                        <a href="{% url 'orga_quest_types_view' run.get_slug el.id %}"
+                        <a href="{% url 'orga_quest_types_view' run.get_slug el.uuid %}"
                            qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
-                        <a href="{% url 'orga_quest_types_versions' run.get_slug el.id %}"
+                        <a href="{% url 'orga_quest_types_versions' run.get_slug el.uuid %}"
                            qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
                     </td>
                     <td>{{ el.teaser_red | safe }}</td>
                     <td class="dot_links">
                         {% for q in el.quest_rels.list %}
+                            {% include "elements/comma.html" %}
                             <a href="{% url 'orga_quests_edit' run.get_slug q.0 %}">{{ q.1 }}</a>
                         {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_quest_types_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

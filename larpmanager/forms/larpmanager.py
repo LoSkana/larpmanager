@@ -28,7 +28,7 @@ from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
 
-from larpmanager.forms.base import MyForm
+from larpmanager.forms.base import BaseForm, BaseModelForm
 from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.core.common import get_recaptcha_secrets
 
@@ -52,7 +52,7 @@ def _get_captcha(form: forms.Form, request: HttpRequest | None) -> None:
     )
 
 
-class LarpManagerCheck(forms.Form):
+class LarpManagerCheck(BaseForm):
     """Represents LarpManagerCheck model."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -94,7 +94,7 @@ class LarpManagerContact(LarpManagerCheck):
         return verification
 
 
-class LarpManagerTicketForm(MyForm):
+class LarpManagerTicketForm(BaseModelForm):
     """Form for LarpManagerTicket."""
 
     class Meta:
@@ -107,9 +107,9 @@ class LarpManagerTicketForm(MyForm):
         super().__init__(*args, **kwargs)
 
         # Add captcha field for unauthenticated users
-        if not self.params["request"].user.is_authenticated:
-            _get_captcha(self, self.params["request"])
+        if not self.params.get("request").user.is_authenticated:
+            _get_captcha(self, self.params.get("request"))
 
         # Remove screenshot field if reason is provided
         if self.params.get("reason"):
-            del self.fields["screenshot"]
+            self.delete_field("screenshot")

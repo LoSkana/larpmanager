@@ -10,7 +10,7 @@
         {% for el in list %}
             <div class="el badge">
                 <div class="icon">
-                    <a href="{% url 'public' el.id %}">
+                    <a href="{% url 'public' el.uuid %}">
                         {% if el.profile_thumb %}
                             <img src="{{ el.profile_thumb.url }}" alt="player profile" />
                         {% else %}

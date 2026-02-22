@@ -21,7 +21,8 @@
 from datetime import datetime, timedelta
 from typing import Any
 
-from django.db.models import Count, QuerySet
+from django.conf import settings as conf_settings
+from django.db.models import Count
 from django.utils import timezone
 
 from larpmanager.cache.config import get_association_config, get_event_config
@@ -34,15 +35,7 @@ from larpmanager.models.registration import Registration, TicketTier
 
 
 def get_users_data(member_ids: Any) -> Any:
-    """Get user display names and emails for deadline notifications.
-
-    Args:
-        member_ids (list): List of member IDs
-
-    Returns:
-        list: List of (display_name, email) tuples
-
-    """
+    """Get user display names and emails for deadline notifications."""
     return [
         (str(member), member.email)
         for member in Member.objects.filter(pk__in=member_ids)
@@ -51,17 +44,8 @@ def get_users_data(member_ids: Any) -> Any:
     ]
 
 
-def get_membership_fee_year(association_id: Any, year: Any = None) -> Any:
-    """Get set of member IDs who paid membership fee for given year.
-
-    Args:
-        association_id (int): Association ID
-        year (int, optional): Year to check, defaults to current year
-
-    Returns:
-        set: Set of member IDs who paid fee for the year
-
-    """
+def get_membership_fee_year(association_id: int, year: Any = None) -> set:
+    """Get set of member IDs who paid membership fee for given year."""
     if not year:
         year = timezone.now().year
     return set(
@@ -72,7 +56,7 @@ def get_membership_fee_year(association_id: Any, year: Any = None) -> Any:
     )
 
 
-def check_run_deadlines(runs: QuerySet[Run]) -> list:
+def check_run_deadlines(runs: list[Run]) -> list:
     """Check deadline compliance for registrations.
 
     Args:
@@ -289,9 +273,13 @@ def deadlines_payment(deadline_violations: Any, event_features: Any, registratio
     if "payment" not in event_features:
         return
 
+    # Skip alert setting if quota is negligible
+    if registration.quota <= conf_settings.MAX_ROUNDING_TOLERANCE:
+        return
+
     if registration.deadline < -tolerance_days:
         deadline_violations["pay_del"].append(registration.member_id)
-    elif registration.deadline < 0:
+    elif registration.deadline <= 0:
         deadline_violations["pay"].append(registration.member_id)
 
 

@@ -18,13 +18,18 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Organization registration and creation.
+Verifies new user registration, organization creation with automatic slug generation,
+profile picture upload, and organization dashboard access.
+"""
 
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, submit
+from larpmanager.tests.utils import just_wait, go_to, load_image, submit, expect_normalized, login_orga
 
 pytestmark = pytest.mark.e2e
 
@@ -32,10 +37,10 @@ pytestmark = pytest.mark.e2e
 def test_exe_join(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
+    login_orga(page, live_server)
     go_to(page, live_server, "/debug")
 
-    go_to(page, live_server, "/join")
-    page.get_by_role("link", name="Register").click()
+    go_to(page, live_server, "/register")
     page.get_by_role("textbox", name="Email address").click()
     page.get_by_role("textbox", name="Email address").fill("orga@prova.it")
     page.get_by_role("textbox", name="Email address").press("Tab")
@@ -51,10 +56,11 @@ def test_exe_join(pw_page: Any) -> None:
     page.get_by_role("checkbox", name="Authorisation").check()
     submit(page)
 
+    go_to(page, live_server, "/debug")
     go_to(page, live_server, "/join")
 
     # check auto slug
-    name_input = page.get_by_role("textbox", name="Name", exact=True)
+    name_input = page.get_by_role("textbox", name="Organization name", exact=True)
     name_input.fill("prova°°à!* cs")
     expect(page.locator("#slug")).to_have_value("provaacs")
     page.locator("#slug").click()
@@ -70,7 +76,7 @@ def test_exe_join(pw_page: Any) -> None:
     page.locator("#slug").fill("prova")
     submit(page)
 
-    page.wait_for_timeout(1000)
+    just_wait(page)
     go_to(page, live_server, "/debug/prova")
 
-    expect(page.locator("#header")).to_contain_text("Prova Larp")
+    expect_normalized(page, page.locator("#banner"), "welcome to larpmanager!")

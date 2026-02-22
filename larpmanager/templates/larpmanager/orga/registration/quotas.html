@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Quotas" %} - {{ run }}
+    {% trans "Quotas" %} - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows the quota options available for payment of the event" %}
@@ -24,19 +24,25 @@
                 <th>{% trans "Quotas" %}</th>
                 <th>{% trans "Available days" %}</th>
                 <th>{% trans "Surcharge" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_registration_quotas_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_registration_quotas_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.quotas }}</td>
                     <td>{{ el.days_available }}</td>
                     <td>
                         {% if el.surcharge %}{{ el.surcharge }}{% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_registration_quotas_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

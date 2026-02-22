@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Characters" %}
+{% endblock title %}
+{% block content %}
+    {% if campaigns or oneshots %}
+        {% if campaigns %}
+            {% for campaign_data in campaigns.values %}
+                <div class="campaign-section">
+                    <h2>{{ campaign_data.campaign.name }}</h2>
+                    <table class="go_datatable">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Character" %}</th>
+                                <th>{% trans "Active" %}</th>
+                                <th>{% trans "Last Event" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rel in campaign_data.characters.values %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'character' rel.registration.run.get_slug rel.character.uuid %}">{{ rel.character.name }}</a>
+                                    </td>
+                                    <td>
+                                        {% if rel.character.configs_dict.inactive != "True" %}<i class="fa fa-check"></i>{% endif %}
+                                    </td>
+                                    <td>{{ rel.registration.run }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if oneshots %}
+            <table class="go_datatable" no_header_cols="all">
+                <thead>
+                    <tr>
+                        <th>{% trans "Character" %}</th>
+                        <th>{% trans "Event" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rel in oneshots %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'character' rel.registration.run.get_slug rel.character.uuid %}">
+                                    {{ rel.character.name }}
+                                    {% if rel.character.title %}- {{ rel.character.title }}{% endif %}
+                                </a>
+                            </td>
+                            <td>{{ rel.registration.run.search }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% else %}
+        <p>{% trans "You don't have any characters yet" %}.</p>
+    {% endif %}
+{% endblock content %}

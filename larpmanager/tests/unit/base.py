@@ -25,6 +25,7 @@ from typing import Any
 import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
+from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.models.accounting import DiscountType
 from larpmanager.models.association import Association
@@ -66,7 +67,7 @@ class BaseTestCase(TestCase):
             # Check if this user already has a member
             try:
                 member = user.member
-            except Member.DoesNotExist:
+            except ObjectDoesNotExist:
                 member = self.create_member(user=user)
 
         # Ensure the member has a membership attribute set
@@ -115,7 +116,7 @@ class BaseTestCase(TestCase):
     # Helper methods for creating specific test objects when needed
     def create_association(self, **kwargs: Any) -> Any:
         """Create a new association with defaults"""
-        defaults = {"name": "Test Association", "slug": "test-association", "email": "test@example.com"}
+        defaults = {"name": "Test Association", "slug": "test-association", "main_mail": "test@example.com"}
         defaults.update(kwargs)
         return Association.objects.create(**defaults)
 
@@ -133,9 +134,10 @@ class BaseTestCase(TestCase):
 
         if user is None:
             user = self.create_user()
-        defaults = {"user": user, "name": "Test", "surname": "Member"}
-        defaults.update(kwargs)
-        member = Member.objects.create(**defaults)
+
+        member = user.member
+        member.name = "Test"
+        member.surname = "Member"
 
         # Create a membership for this member
         association = self.get_association()
@@ -222,7 +224,7 @@ class BaseTestCase(TestCase):
             "member": self.get_member(),
             "value": Decimal("100.00"),
             "association": self.get_association(),
-            "reg": self.get_registration(),
+            "registration": self.get_registration(),
             "pay": PaymentChoices.MONEY,
             "created": datetime.now(),
         }
@@ -420,7 +422,7 @@ class BaseTestCase(TestCase):
             # Check if this user already has a member
             try:
                 organizer = organizer_user.member
-            except Member.DoesNotExist:
+            except ObjectDoesNotExist:
                 organizer = Member.objects.create(user=organizer_user, name="Organizer", surname="Test", language="en")
         return organizer
 

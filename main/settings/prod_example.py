@@ -42,6 +42,7 @@ COMPRESS_URL = STATIC_URL
 # Social Account
 
 SOCIALACCOUNT_ADAPTER = 'larpmanager.utils.auth.adapter.MySocialAccountAdapter'
+ACCOUNT_ADAPTER = 'larpmanager.utils.auth.adapter.MyAccountAdapter'
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -147,6 +148,11 @@ RATELIMIT_IP_META_KEY = 'HTTP_X_FORWARDED_FOR'
 # captcha
 RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC', '')
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE', '')
+
+# Amazon SES Configuration (optional - email sending fallback)
+AWS_SES_ACCESS_KEY_ID = os.environ.get('AWS_SES_ACCESS_KEY_ID')
+AWS_SES_SECRET_ACCESS_KEY = os.environ.get('AWS_SES_SECRET_ACCESS_KEY')
+AWS_SES_REGION_NAME = os.environ.get('AWS_SES_REGION_NAME', 'us-east-1')
 
 SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = 31536000

@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Discounts" %} - {{ run }}
+    {% trans "Discounts" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows the discounts activated for this event" %}
@@ -18,13 +18,14 @@
                 <th>{% trans "Max uses" %}</th>
                 <th>{% trans "Code" %}</th>
                 <th>{% trans "Session active" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_discounts_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_discounts_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
@@ -37,6 +38,11 @@
                             {% include "elements/comma.html" %}
                             {{ ch }}
                         {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_discounts_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

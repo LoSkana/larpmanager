@@ -1,20 +1,34 @@
 {% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {{ form1.page_title }}
-    {% if nonum is None %}
-        {% if num %}
-            - {% trans "Change" %}
-        {% else %}
-            - {% trans "New" %}
+    {% if welcome_message %}
+        {% trans "Welcome to" %} {{ platform }}!
+    {% else %}
+        {% if nonum is None %}
+            {% if num %}
+                {{ name }}
+            {% else %}
+                {% trans "New" %}
+            {% endif %}
+            -
         {% endif %}
+        {{ form1.page_title }}
+        {% if run %}- {{ run.search | truncatechars:50 }}{% endif %}
     {% endif %}
-    - {{ run }}
 {% endblock title %}
 {% block info %}
-    {{ form1.page_info }}
+    {% if welcome_message %}
+        <div id="welcome_message">
+            <p>{% trans "This page will guide you through the creation of your first event, step by step" %}.</p>
+            <p>{% trans "Simply follow the instructions and provide the required information" %}.</p>
+        </div>
+    {% else %}
+        {{ form1.page_info }}
+    {% endif %}
 {% endblock info %}
 {% block content %}
+    {% include "elements/form/load_template.html" with form=form1 %}
+    {% include "elements/form/load_template.html" with form=form2 %}
     {% include "elements/form/informations.html" with form=form1 %}
     {% include "elements/form/errors.html" with form=form1 %}
     {% include "elements/form/errors.html" with form=form2 %}
@@ -23,8 +37,8 @@
           enctype="multipart/form-data"
           id="main_form">
         {% csrf_token %}
-        <div>
-            <table class="mob">
+        <div class="form_container auto_resize">
+            <table>
                 {% include "elements/form/inner.html" with form=form1 %}
                 {% include "elements/form/inner.html" with form=form2 %}
             </table>
@@ -32,6 +46,7 @@
         <input id="form_submit" type="submit" value="{% trans "Confirm" %}">
         <br />
     </form>
+    {% if additional %}{{ additional | safe }}{% endif %}
 {% endblock content %}
 {% block js2 %}
     {{ form1.media }}

@@ -1,42 +1,65 @@
 {% load show_tags i18n %}
 <div class="staff-list">
     <div class="orga-buttons">
-        <a class="new button" href="#">{% trans "New" %}</a>
+        <a class="new button" href="#">
+            <i class="fas fa-plus"></i>
+            {% trans "New" %}
+        </a>
         <script>
         document.querySelector('a.new').addEventListener('click', function(event) {
             event.preventDefault();
             let currentUrl = window.location.href;
             let cleanedUrl = currentUrl.split('#')[0];
-            let newUrl = cleanedUrl + 'edit/0';
+            let newUrl = cleanedUrl + 'new/';
             window.location.href = newUrl;
         });
         </script>
         {% if upload %}
-            <a class="new button" href="{% url 'orga_upload' run.get_slug upload %}">{% trans "Upload" %}</a>
+            <a class="new button" href="{% url 'orga_upload' run.get_slug upload %}">
+                <i class="fas fa-upload"></i>
+                {% trans "Upload" %}
+            </a>
         {% endif %}
         {% if download %}
             <form action="{{ request.path }}" method="post" class="inline">
                 {% csrf_token %}
                 <input type="hidden" name="download" value="1">
-                <button type="submit" name="submit" value="1">{% trans "Download" %}</button>
+                <button type="submit" name="submit" value="1">
+                    <i class="fas fa-download"></i>
+                    {% trans "Download" %}
+                </button>
             </form>
         {% endif %}
         {% if export %}
-            <a class="new button" href="{% url 'orga_export' run.get_slug export %}">{% trans "Export" %}</a>
+            <a class="new button" href="{% url 'orga_export' run.get_slug export %}">
+                <i class="fas fa-file-export"></i>
+                {% trans "Export" %}
+            </a>
         {% endif %}
-        {% if export %}
-            <a class="new button" href="{% url 'orga_export' run.get_slug export %}">{% trans "Export" %}</a>
+        {% if bulk %}
+            <a class="new button my_toggle" tog='bulk' href="#">
+                <i class="fas fa-tasks"></i>
+                Bulk
+            </a>
         {% endif %}
-        {% if bulk %}<a class="new button my_toggle" tog='bulk' href="#">Bulk</a>{% endif %}
         {% if writing_header %}
             {% if features.progress %}
-                <a class="new button my_toggle" tog='progress-table' href="#">{% trans "Progress" %}</a>
+                <a class="new button my_toggle" tog='progress-table' href="#">
+                    <i class="fas fa-chart-line"></i>
+                    {% trans "Progress" %}
+                </a>
             {% endif %}
             {% if features.assigned %}
-                <a class="new button my_toggle" tog='assigned-table' href="#">{% trans "Assignments" %}</a>
+                <a class="new button my_toggle" tog='assigned-table' href="#">
+                    <i class="fas fa-user-check"></i>
+                    {% trans "Assignments" %}
+                </a>
             {% endif %}
             {% if features.progress and features.assigned %}
-                <a class="new button my_toggle" tog='progress-assigned-table' href="#">{% trans "Progress" %} - {% trans "Assignments" %}</a>
+                <a class="new button my_toggle" tog='progress-assigned-table' href="#">
+                    <i class="fas fa-chart-line"></i>
+                    {% trans "Progress" %} - {% trans "Assignments" %}
+                </a>
             {% endif %}
         {% endif %}
     </div>
@@ -51,10 +74,13 @@
             {% for el in bulk %}
                 <select id="objs_{{ el.idx }}"
                         class="bulk-el objs {% if not forloop.first %}hide{% endif %}">
-                    {% for obj in el.objs %}<option value="{{ obj.id }}">{{ obj.name }}</option>{% endfor %}
+                    {% for obj in el.objs %}<option value="{{ obj.uuid }}">{{ obj.name }}</option>{% endfor %}
                 </select>
             {% endfor %}
-            <a id="exec" class="new button my_toggle bulk-el" href="#">{% trans "Execute" %}</a>
+            <a id="exec" class="new button my_toggle bulk-el" href="#">
+                <i class="fas fa-play"></i>
+                {% trans "Execute" %}
+            </a>
         </div>
     {% endif %}
     {% if writing_header %}

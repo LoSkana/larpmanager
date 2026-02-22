@@ -42,13 +42,7 @@ def clear_event_fields_cache(event_id: int) -> None:
 
 
 def _ensure_cache_structure(cached_fields: dict, applicable_label: str, section: str) -> None:
-    """Ensure the nested cache structure exists for given applicability and section.
-
-    Args:
-        cached_fields: The cache dictionary to update
-        applicable_label: The applicability label key
-        section: The section name (e.g., 'questions', 'options', 'names', 'ids')
-    """
+    """Ensure the nested cache structure exists for given applicability and section."""
     if applicable_label not in cached_fields:
         cached_fields[applicable_label] = {}
     if section not in cached_fields[applicable_label]:
@@ -84,27 +78,31 @@ def update_event_fields(event_id: int) -> dict:
     visible_questions = (
         event.get_elements(WritingQuestion).exclude(visibility=QuestionVisibility.HIDDEN).order_by("order")
     )
-    for question_data in visible_questions.values("id", "name", "typ", "printable", "visibility", "applicable"):
+    for question_data in visible_questions.values(
+        "name", "typ", "printable", "visibility", "applicable", "uuid", "order"
+    ):
         applicabile_label = QuestionApplicable(question_data["applicable"]).label
         _ensure_cache_structure(cached_fields, applicabile_label, "questions")
-        cached_fields[applicabile_label]["questions"][question_data["id"]] = question_data
+        cached_fields[applicabile_label]["questions"][str(question_data["uuid"])] = question_data
 
     # Fetch writing options and group by parent question's applicability
     writing_options = event.get_elements(WritingOption).order_by("order")
-    for option_data in writing_options.values("id", "name", "question_id", "question__applicable"):
+    for option_data in writing_options.values("name", "question__applicable", "uuid", "question__uuid", "order"):
         applicabile_label = QuestionApplicable(option_data["question__applicable"]).label
         _ensure_cache_structure(cached_fields, applicabile_label, "options")
-        cached_fields[applicabile_label]["options"][option_data["id"]] = option_data
+        cached_fields[applicabile_label]["options"][str(option_data["uuid"])] = option_data
 
     # Create name and ID mappings for default writing question types
     default_type_questions = event.get_elements(WritingQuestion).filter(typ__in=get_def_writing_types())
-    for question_data in default_type_questions.values("id", "typ", "name", "applicable"):
+    for question_data in default_type_questions.values("typ", "name", "applicable", "uuid"):
         applicabile_label = QuestionApplicable(question_data["applicable"]).label
         question_type = question_data["typ"]
-        _ensure_cache_structure(cached_fields, applicabile_label, "names")
-        _ensure_cache_structure(cached_fields, applicabile_label, "ids")
-        cached_fields[applicabile_label]["names"][question_type] = question_data["name"]
-        cached_fields[applicabile_label]["ids"][question_type] = question_data["id"]
+        for key, value in (
+            ("names", question_data["name"]),
+            ("uuids", question_data["uuid"]),
+        ):
+            _ensure_cache_structure(cached_fields, applicabile_label, key)
+            cached_fields[applicabile_label][key][question_type] = value
 
     # Cache the complete result structure with 1-day timeout
     cache.set(event_fields_key(event_id), cached_fields, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -123,7 +121,7 @@ def get_event_fields_cache(event_id: int) -> dict:
     return cached_event_fields
 
 
-def _process_visible_questions(writing_fields_data: dict, *, only_visible: bool) -> tuple[dict, list[int], list[int]]:
+def _process_visible_questions(writing_fields_data: dict, *, only_visible: bool) -> tuple[dict, list[str], list[str]]:
     """Process questions and return visible ones with tracking lists.
 
     Args:
@@ -131,32 +129,32 @@ def _process_visible_questions(writing_fields_data: dict, *, only_visible: bool)
         only_visible: If True, filter to public and searchable only
 
     Returns:
-        Tuple of (questions_dict, visible_question_ids, searchable_question_ids)
+        Tuple of (questions_dict, visible_question_uuids, searchable_question_uuids)
     """
     questions = {}
-    visible_question_ids = []
-    searchable_question_ids = []
+    visible_question_uuids = []
+    searchable_question_uuids = []
 
     if "questions" not in writing_fields_data:
-        return questions, visible_question_ids, searchable_question_ids
+        return questions, visible_question_uuids, searchable_question_uuids
 
-    for question_id, question_data in writing_fields_data["questions"].items():
+    for question_uuid, question_data in writing_fields_data["questions"].items():
         # Filter based on visibility settings
         if not only_visible or question_data["visibility"] in [
             QuestionVisibility.PUBLIC,
             QuestionVisibility.SEARCHABLE,
         ]:
-            questions[question_id] = question_data
-            visible_question_ids.append(question_data["id"])
+            questions[question_uuid] = question_data
+            visible_question_uuids.append(str(question_data["uuid"]))
 
         # Track searchable questions separately
         if question_data["visibility"] == QuestionVisibility.SEARCHABLE:
-            searchable_question_ids.append(question_data["id"])
+            searchable_question_uuids.append(str(question_data["uuid"]))
 
-    return questions, visible_question_ids, searchable_question_ids
+    return questions, visible_question_uuids, searchable_question_uuids
 
 
-def visible_writing_fields(context: dict, applicable: str, *, only_visible: bool = True) -> None:
+def visible_writing_fields(context: dict, applicable: str, *, only_visible: bool = True) -> dict:
     """Filter and cache visible writing fields based on visibility settings.
 
     This function processes writing fields from the context and filters them based on
@@ -170,40 +168,49 @@ def visible_writing_fields(context: dict, applicable: str, *, only_visible: bool
                      includes all fields regardless of visibility. Defaults to True.
 
     Returns:
-        None: Results are stored directly in the context dictionary under 'questions',
-              'options', and 'searchable' keys.
+        Dict: Dictionary with 'questions', 'options', and 'searchable' keys.
 
     """
     # Get the label key for the applicable question type
     applicable_type_key = QuestionApplicable(applicable).label
 
     # Initialize result containers in context
-    context["questions"] = {}
-    context["options"] = {}
-    context["searchable"] = {}
+    result = {"questions": {}, "options": {}, "searchable": {}}
 
-    # Early return if no writing fields or key not found
-    if "writing_fields" not in context or applicable_type_key not in context["writing_fields"]:
-        return
+    # Early return if applicable key not found
+    if "writing_fields" not in context:
+        context["writing_fields"] = get_event_fields_cache(context["event"].id)
+
+    if applicable_type_key not in context["writing_fields"]:
+        return result
 
     # Get the relevant writing fields data
     writing_fields_data = context["writing_fields"][applicable_type_key]
 
     # Process questions and get tracking lists
-    questions, visible_question_ids, searchable_question_ids = _process_visible_questions(
+    questions, visible_question_uuids, searchable_question_uuids = _process_visible_questions(
         writing_fields_data, only_visible=only_visible
     )
-    context["questions"] = questions
+    result["questions"] = questions
 
     # Process options if they exist, linking them to visible questions
     if "options" in writing_fields_data:
-        for option_id, option_data in writing_fields_data["options"].items():
+        for option_uuid, option_data in writing_fields_data["options"].items():
             # Include options for visible questions
-            if option_data["question_id"] in visible_question_ids:
-                context["options"][option_id] = option_data
+            if option_data.get("question__uuid") in visible_question_uuids:
+                result["options"][option_uuid] = option_data
 
-            # Build searchable options mapping by question ID
-            if option_data["question_id"] in searchable_question_ids:
-                if option_data["question_id"] not in context["searchable"]:
-                    context["searchable"][option_data["question_id"]] = []
-                context["searchable"][option_data["question_id"]].append(option_data["id"])
+            # Build searchable options mapping by question UUID
+            if option_data.get("question__uuid") in searchable_question_uuids:
+                if option_data["question__uuid"] not in result["searchable"]:
+                    result["searchable"][option_data["question__uuid"]] = []
+                result["searchable"][option_data["question__uuid"]].append(str(option_data["uuid"]))
+
+        # Sort searchable options by their order field
+        for question_uuid in result["searchable"]:
+            result["searchable"][question_uuid] = sorted(
+                result["searchable"][question_uuid],
+                key=lambda opt_uuid: result["options"].get(opt_uuid, {}).get("order", 0),
+            )
+
+    return result

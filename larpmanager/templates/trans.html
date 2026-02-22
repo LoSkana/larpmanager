@@ -89,9 +89,6 @@
 {% blocktrans %}Now you can create the waiting ticket{% endblocktrans %}
 {% blocktrans %}Participant cancellation{% endblocktrans %}
 {% blocktrans %}Allows participants to cancel their own registrations at any time{% endblocktrans %}
-{% blocktrans %}External registration{% endblocktrans %}
-{% blocktrans %}Instead of using an internal registration form, redirects the participant to an external registration link{% endblocktrans %}
-{% blocktrans %}Now you can set the external registration link{% endblocktrans %}
 {% blocktrans %}Problems{% endblocktrans %}
 {% blocktrans %}Enables a ticket-like system for issues during the event, where staff can log issues, assign severity/urgency, and track them{% endblocktrans %}
 {% blocktrans %}Now you can review the event's problems{% endblocktrans %}
@@ -148,9 +145,12 @@
 {% blocktrans %}Expenses{% endblocktrans %}
 {% blocktrans %}Lets staff upload receipts for event expenses, tracking both the event expenses, and the amount to refund the staff{% endblocktrans %}
 {% blocktrans %}Now crew can upload expenses, and you can review them{% endblocktrans %}
-{% blocktrans %}Tokens / Credits{% endblocktrans %}
-{% blocktrans %}Allows managing Tokens and Credits, which participants can use instead of money for registration fees. Credits can also be redeemed for cash{% endblocktrans %}
-{% blocktrans %}Now set up the token and credits configuration{% endblocktrans %}
+{% blocktrans %}Tokens{% endblocktrans %}
+{% blocktrans %}Allows managing Tokens, which participants can use instead of money for registration fees{% endblocktrans %}
+{% blocktrans %}Now set up the tokens configuration{% endblocktrans %}
+{% blocktrans %}Credits{% endblocktrans %}
+{% blocktrans %}Allows managing Credits, which participants can use instead of money for registration fees. Credits can also be redeemed for cash{% endblocktrans %}
+{% blocktrans %}Now set up the credits configuration{% endblocktrans %}
 {% blocktrans %}Outflows{% endblocktrans %}
 {% blocktrans %}Enables management of expenses paid using the organization's financial instruments{% endblocktrans %}
 {% blocktrans %}Now you can create outflows{% endblocktrans %}
@@ -166,9 +166,6 @@
 {% blocktrans %}Refunds{% endblocktrans %}
 {% blocktrans %}Enables participants to request a refund (a money transfer from the organization){% endblocktrans %}
 {% blocktrans %}Now participants can create refund requests, and you can review them{% endblocktrans %}
-{% blocktrans %}Opening date{% endblocktrans %}
-{% blocktrans %}Lets you specify a date (and time) on which registration will open, keeping it closed until then{% endblocktrans %}
-{% blocktrans %}Now you can set the registration opening date{% endblocktrans %}
 {% blocktrans %}Legal Notice{% endblocktrans %}
 {% blocktrans %}Adds a link to legal notices on every page, and provides a management panel link to edit the content of that notice{% endblocktrans %}
 {% blocktrans %}Now you can set the legal notice text{% endblocktrans %}
@@ -178,6 +175,8 @@
 {% blocktrans %}Player editor{% endblocktrans %}
 {% blocktrans %}Allows participants to create and modify their own characters freely{% endblocktrans %}
 {% blocktrans %}Now you can set the player editing settings{% endblocktrans %}
+{% blocktrans %}Character inventory{% endblocktrans %}
+{% blocktrans %}Allows characters to have inventories{% endblocktrans %}
 {% blocktrans %}Organisation tax{% endblocktrans %}
 {% blocktrans %}Allows you to set a 'tax' percentage on event income that must be set aside for the organisation{% endblocktrans %}
 {% blocktrans %}Now you can set the organization tax options{% endblocktrans %}
@@ -237,6 +236,11 @@
 {% blocktrans %}Translations{% endblocktrans %}
 {% blocktrans %}Allows to fine-tune how words and phrases are translated in the organization's space{% endblocktrans %}
 {% blocktrans %}Now you can define custom organization translations{% endblocktrans %}
+{% blocktrans %}Activity Log{% endblocktrans %}
+{% blocktrans %}Show detailed activity log on entities created, updated or deleted.{% endblocktrans %}
+{% blocktrans %}App Integration{% endblocktrans %}
+{% blocktrans %}Enables a button in the topbar to redirect authenticated users to an external application, using a configurable URL and optional JWT-based SSO{% endblocktrans %}
+{% blocktrans %}Now you can configure the integration button and the external application settings{% endblocktrans %}
 {% blocktrans %}Organization{% endblocktrans %}
 {% blocktrans %}Manage the organization main settings{% endblocktrans %}
 {% blocktrans %}Roles{% endblocktrans %}
@@ -258,7 +262,7 @@
 {% blocktrans %}Expenses{% endblocktrans %}
 {% blocktrans %}Manage staff expenses based on receipts uploaded for all events{% endblocktrans %}
 {% blocktrans %}Credits{% endblocktrans %}
-{% blocktrans %}Manages credits used by participants to cover the registration fee on all events{% endblocktrans %}
+{% blocktrans %}Manages credits used by participants to cover the event registration fees{% endblocktrans %}
 {% blocktrans %}Refunds{% endblocktrans %}
 {% blocktrans %}Manage refund requests{% endblocktrans %}
 {% blocktrans %}Collections{% endblocktrans %}
@@ -278,14 +282,14 @@
 {% blocktrans %}Containers{% endblocktrans %}
 {% blocktrans %}Manage warehouse containers{% endblocktrans %}
 {% blocktrans %}Events{% endblocktrans %}
-{% blocktrans %}Create and manage events, setting names, dates, status, and registration details{% endblocktrans %}
+{% blocktrans %}Create and manage events and their setting - names, dates, status{% endblocktrans %}
 {% blocktrans %}Pre-Registrations{% endblocktrans %}
 {% blocktrans %}Manage the pre-registration of all events{% endblocktrans %}
 {% blocktrans %}Deadlines{% endblocktrans %}
 {% blocktrans %}Displays participants overdue for payment or other deadlines for all events{% endblocktrans %}
 {% blocktrans %}Send e-mail{% endblocktrans %}
 {% blocktrans %}Send e-mail{% endblocktrans %}
-{% blocktrans %}Membership{% endblocktrans %}
+{% blocktrans %}Members{% endblocktrans %}
 {% blocktrans %}Review all members{% endblocktrans %}
 {% blocktrans %}Vote{% endblocktrans %}
 {% blocktrans %}Manage votes for the assignment of roles in the organization{% endblocktrans %}
@@ -304,13 +308,13 @@
 {% blocktrans %}Invoices{% endblocktrans %}
 {% blocktrans %}Manage invoices of payments and approve them{% endblocktrans %}
 {% blocktrans %}Check data{% endblocktrans %}
-{% blocktrans %}Check consistency of the participants’ personal data{% endblocktrans %}
+{% blocktrans %}Check consistency of the participants' personal data{% endblocktrans %}
 {% blocktrans %}Tokens{% endblocktrans %}
-{% blocktrans %}Manages tokens used by participants to cover the registration fee for all events{% endblocktrans %}
+{% blocktrans %}Manages tokens used by participants to cover the event registration fees{% endblocktrans %}
 {% blocktrans %}Registry{% endblocktrans %}
 {% blocktrans %}Display all participants data as registry{% endblocktrans %}
 {% blocktrans %}Profile{% endblocktrans %}
-{% blocktrans %}Manage fields that track participants’ data{% endblocktrans %}
+{% blocktrans %}Manage fields that track participants' data{% endblocktrans %}
 {% blocktrans %}Template{% endblocktrans %}
 {% blocktrans %}Manage event templates used as starting points for new events{% endblocktrans %}
 {% blocktrans %}Archive{% endblocktrans %}
@@ -325,8 +329,10 @@
 {% blocktrans %}Manage warehouse tags{% endblocktrans %}
 {% blocktrans %}Translations{% endblocktrans %}
 {% blocktrans %}Customize translations of words and phrases in the organization interface{% endblocktrans %}
+{% blocktrans %}Activity Log{% endblocktrans %}
+{% blocktrans %}View detailed activity log of all changes made for this organization{% endblocktrans %}
 {% blocktrans %}Event{% endblocktrans %}
-{% blocktrans %}Manage the event settings: name, description, dates, and other data{% endblocktrans %}
+{% blocktrans %}Manage the event settings: name, description, dates, status{% endblocktrans %}
 {% blocktrans %}Roles{% endblocktrans %}
 {% blocktrans %}Assign crew roles and grant specific access to event functions{% endblocktrans %}
 {% blocktrans %}Configuration{% endblocktrans %}
@@ -475,6 +481,14 @@
 {% blocktrans %}Upload and manage secure video/audio content with one-time access tokens{% endblocktrans %}
 {% blocktrans %}Tokens{% endblocktrans %}
 {% blocktrans %}Manage one-time access tokens for secure video/audio content{% endblocktrans %}
+{% blocktrans %}Ability Templates{% endblocktrans %}
+{% blocktrans %}Manage ability templates{% endblocktrans %}
+{% blocktrans %}Character Inventory{% endblocktrans %}
+{% blocktrans %}Manage character inventories and their items{% endblocktrans %}
+{% blocktrans %}Pool Types{% endblocktrans %}
+{% blocktrans %}Manage character inventory pool types{% endblocktrans %}
+{% blocktrans %}Activity Log{% endblocktrans %}
+{% blocktrans %}View detailed activity log of all changes made for this specific event{% endblocktrans %}
 {% blocktrans %}Writing{% endblocktrans %}
 {% blocktrans %}Accounting{% endblocktrans %}
 {% blocktrans %}Miscellany{% endblocktrans %}
@@ -491,3 +505,4 @@
 {% blocktrans %}Communications{% endblocktrans %}
 {% blocktrans %}Warehouse{% endblocktrans %}
 {% blocktrans %}One-Time{% endblocktrans %}
+{% blocktrans %}Inventory{% endblocktrans %}

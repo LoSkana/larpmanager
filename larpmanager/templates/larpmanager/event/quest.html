@@ -5,7 +5,7 @@
 {% endblock title %}
 {% block content %}
     {% if show_quest.teaser %}
-        <h2>{{ writing_fields.quest.names.teaser }}</h2>
+        <h2>{{ writing_field_names.teaser }}</h2>
         <p>{{ quest.teaser | safe }}</p>
     {% endif %}
     {% include "elements/sheet/fields.html" with char=quest_fields %}

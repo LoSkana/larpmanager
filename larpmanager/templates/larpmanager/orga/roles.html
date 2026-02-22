@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Roles" %} - {{ run }}
+    {% trans "Roles" %} - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {% trans "This page summarises the roles to be assigned in order to use the functions concerning the event" %}
@@ -16,18 +16,26 @@
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Users" %}</th>
                 <th>{% trans "Role" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_roles_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_roles_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.members_list }}</td>
                     <td>{{ el.perms_list | safe }}</td>
+                    <td>
+                        {% if el.number != 1 %}
+                            <a href="{% url 'orga_roles_delete' run.get_slug el.uuid %}"
+                               qtip="{% trans "Delete" %}"
+                               class="only_new_form"><i class="fas fa-trash"></i></a>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

@@ -1,15 +1,16 @@
 {% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {{ form.page_title }}
     {% if nonum is None %}
         {% if num %}
-            - {% trans "Change" %}
+            {{ name }}
         {% else %}
-            - {% trans "New" %}
+            {% trans "New" %}
         {% endif %}
+        -
     {% endif %}
-    - {{ run }}
+    {{ form.page_title }}
+    - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {{ form.page_info }}

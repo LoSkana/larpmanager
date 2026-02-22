@@ -16,13 +16,14 @@
                 <th>{% trans "Language" %}</th>
                 <th>{% trans "Default" %}</th>
                 <th>{% trans "Text" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_texts_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_texts_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.get_typ_display }}</td>
@@ -31,6 +32,11 @@
                         {% if el.default %}<i class="fa-solid fa-check"></i>{% endif %}
                     </td>
                     <td>{{ el.text | safe | striptags | truncatechars:300 }}</td>
+                    <td>
+                        <a href="{% url 'orga_texts_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

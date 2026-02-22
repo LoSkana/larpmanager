@@ -1,14 +1,14 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans "Warehouse area" %} - {{ run }}
+    {% trans "Warehouse area" %} - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows the event area where warehouse items needs to be deployed" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
-    <table id="inv_area" class="go_datatable dot_links" no_header_cols="4">
+    <table id="inv_area" class="go_datatable dot_links">
         <thead>
             <tr>
                 <th></th>
@@ -16,21 +16,27 @@
                 <th>{% trans "Position" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_warehouse_area_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_warehouse_area_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.position }}</td>
                     <td>{{ el.description | truncatechars:200 }}</td>
                     <td>
-                        <a href="{% url 'orga_warehouse_area_assignments' run.get_slug el.id %}"
+                        <a href="{% url 'orga_warehouse_area_assignments' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}">{% trans "Item assignments" %}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_warehouse_area_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

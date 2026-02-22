@@ -23,6 +23,7 @@ import logging
 import re
 from typing import Any, ClassVar
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
@@ -102,8 +103,14 @@ class Quest(Writing):
             js["typ"] = self.typ.number
 
         # Serialize visible traits
+        # Use prefetched data if available, otherwise query
         # noinspection PyUnresolvedReferences
-        js["traits"] = [t.show() for t in self.traits.filter(hide=False)]
+        if hasattr(self, "_prefetched_objects_cache") and "traits" in self._prefetched_objects_cache:
+            # Use prefetched data (assumes already filtered for hide=False)
+            js["traits"] = [t.show() for t in self.traits.all() if not t.hide]
+        else:
+            # Fall back to query
+            js["traits"] = [t.show() for t in self.traits.filter(hide=False)]
 
         return js
 
@@ -141,10 +148,10 @@ class Trait(Writing):
         for s in ["role", "keywords", "safety"]:
             self.upd_js_attr(js, s)
 
-        # Add quest ID if quest exists
+        # Add quest UUID if quest exists
         if self.quest:
             # noinspection PyUnresolvedReferences
-            js["quest"] = self.quest.id
+            js["quest"] = str(self.quest.uuid)
 
         return js
 
@@ -184,7 +191,7 @@ class Casting(BaseModel):
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="castings", blank=True, null=True)
 
-    element = models.IntegerField()
+    element = models.CharField(max_length=12)
 
     pref = models.IntegerField()
 
@@ -222,6 +229,10 @@ class CastingAvoid(BaseModel):
 
     text = models.TextField(max_length=5000)
 
+    def __str__(self) -> str:
+        """Return string representation of the casting avoid."""
+        return f"{self.member} - {self.text[:50]}"
+
 
 def update_traits_text(instance: AssignmentTrait) -> list:
     """Extract and return trait references from instance text using pattern matching.
@@ -252,7 +263,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
         try:
             trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
             traits.append(trait)
-        except Trait.DoesNotExist as error:
+        except ObjectDoesNotExist as error:
             logger.warning("Error getting trait %s: %s", trait_number, error)
 
     # Extract all @number patterns for validation (not added to return list)
@@ -262,7 +273,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
     for trait_number in set(trait_numbers_to_validate):
         try:
             trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
-        except Trait.DoesNotExist as error:
+        except ObjectDoesNotExist as error:
             logger.warning("Error getting trait %s in assignment: %s", trait_number, error)
 
     return traits

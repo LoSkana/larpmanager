@@ -27,6 +27,7 @@ from django.utils.translation import gettext_lazy as _
 if TYPE_CHECKING:
     from django.http import HttpRequest
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.permission import (
     get_association_permission_feature,
@@ -136,8 +137,8 @@ def has_association_permission(request: HttpRequest, context: dict, permission: 
 
 
 def get_index_association_permissions(
-    context: dict,
     request: HttpRequest,
+    context: dict,
     association_id: int,
     *,
     enforce_check: bool = True,
@@ -262,7 +263,7 @@ def has_event_permission(
         return False
 
     # Check if user has admin role in association (role 1)
-    if "association_role" in context and 1 in context["association_role"]:
+    if 1 in context.get("association_role", {}):
         return True
 
     # Get event-specific roles and permissions for the user
@@ -303,7 +304,7 @@ def get_index_event_permissions(
 
     """
     (is_organizer, user_event_permissions, role_names) = get_event_roles(request, context, event_slug)
-    if "association_role" in context and 1 in context["association_role"]:
+    if 1 in context.get("association_role", {}):
         is_organizer = True
     if enforce_check and not role_names and not is_organizer:
         raise UserPermissionError
@@ -387,27 +388,34 @@ def get_index_permissions(
     permissions_by_module = {}
 
     # Get cached permissions for the specified type
-    for permission_record in get_cache_index_permission(permission_type):
+    for permission in get_cache_index_permission(permission_type):
         # Skip hidden permissions
-        if permission_record["hidden"]:
+        if permission["hidden"]:
             continue
 
         # Check if permission is allowed in current context
-        if not is_allowed_managed(permission_record, context):
+        if not is_allowed_managed(permission, context):
             continue
 
         # Check user has specific permission (unless has default access)
-        if not has_default and permission_record["slug"] not in permissions:
+        if not has_default and permission["slug"] not in permissions:
             continue
 
         # Check feature is available (skip placeholder features)
-        if not permission_record["feature__placeholder"] and permission_record["feature__slug"] not in features:
+        if not permission["feature__placeholder"] and permission["feature__slug"] not in features:
             continue
 
+        # Check config-dependent permissions
+        if permission_type == "event" and permission.get("active_if") and context.get("event"):
+            config_key = permission["active_if"]
+            config_value = get_event_config(context["event"].id, config_key, default_value=False, context=context)
+            if not config_value:
+                continue
+
         # Group permissions by module
-        module_key = (_(permission_record["module__name"]), permission_record["module__icon"])
+        module_key = (_(permission["module__name"]), permission["module__icon"])
         if module_key not in permissions_by_module:
             permissions_by_module[module_key] = []
-        permissions_by_module[module_key].append(permission_record)
+        permissions_by_module[module_key].append(permission)
 
     return permissions_by_module

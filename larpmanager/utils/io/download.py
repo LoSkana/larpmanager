@@ -30,10 +30,10 @@ from django.db.models import F, QuerySet
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.cache.accounting import get_registration_accounting_cache
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_configs
+from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.association import Association
 from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import (
@@ -44,30 +44,19 @@ from larpmanager.models.form import (
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
-    RegistrationQuestion,
     WritingAnswer,
     WritingChoice,
     WritingOption,
     WritingQuestion,
-    get_ordered_registration_questions,
 )
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
 from larpmanager.utils.core.common import check_field
-from larpmanager.utils.services.edit import _get_values_mapping
+from larpmanager.utils.edit.backend import _get_values_mapping
 
 
 def _temp_csv_file(column_headers: Any, data_rows: Any) -> Any:
-    """Create CSV content from keys and values.
-
-    Args:
-        column_headers: Column headers
-        data_rows: Data rows
-
-    Returns:
-        str: CSV formatted string
-
-    """
+    """Create CSV content from keys and values."""
     df = pd.DataFrame(data_rows, columns=column_headers)
     buffer = io.StringIO()
     df.to_csv(buffer, index=False)
@@ -100,17 +89,7 @@ def zip_exports(context: Any, exports: Any, filename: Any) -> Any:
 
 
 def download(context: Any, typ: Any, nm: Any) -> Any:
-    """Generate downloadable ZIP export for model type.
-
-    Args:
-        context: Context dictionary with event data
-        typ: Model class to export
-        nm: Name prefix for file
-
-    Returns:
-        HttpResponse: ZIP download response
-
-    """
+    """Generate downloadable ZIP export for model type."""
     exports = export_data(context, typ)
     return zip_exports(context, exports, nm.capitalize())
 
@@ -256,21 +235,21 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
     if applicable_questions or model == "registration":
         # Determine model-specific classes and field names
         is_registration_model = model == "registration"
-        question_class = RegistrationQuestion if is_registration_model else WritingQuestion
         choices_class = RegistrationChoice if is_registration_model else WritingChoice
         answers_class = RegistrationAnswer if is_registration_model else WritingAnswer
-        reference_field_name = "reg_id" if is_registration_model else "element_id"
+        reference_field_name = "registration_id" if is_registration_model else "element_id"
 
         # Extract element IDs from query for filtering related objects
         element_ids = {element.id for element in query}
 
-        # Get applicable questions for the event and features
-        applicable_question_list = question_class.get_instance_questions(context["event"], context["features"])
-        if model != "registration":
-            applicable_question_list = applicable_question_list.filter(applicable=applicable_questions)
+        # Get applicable questions for the event
+        if is_registration_model:
+            applicable_question_list = get_cached_registration_questions(context["event"])
+        else:
+            applicable_question_list = get_cached_writing_questions(context["event"], applicable_questions)
 
         # Extract question IDs for efficient database filtering
-        question_ids = {question.id for question in applicable_question_list}
+        question_ids = {question["id"] for question in applicable_question_list}
         filter_kwargs = {"question_id__in": question_ids, f"{reference_field_name}__in": element_ids}
 
         # Process multiple choice answers and organize by question and element
@@ -296,12 +275,10 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
     # Special handling for character model: build character-to-member assignments
     if model == "character":
         context["assignments"] = {}
-        for registration_character_relation in RegistrationCharacterRel.objects.filter(
-            reg__run=context["run"],
-        ).select_related("reg", "reg__member"):
-            context["assignments"][registration_character_relation.character_id] = (
-                registration_character_relation.reg.member
-            )
+        for relation in RegistrationCharacterRel.objects.filter(
+            registration__run=context["run"],
+        ).select_related("registration", "registration__member"):
+            context["assignments"][relation.character_id] = relation.registration.member
 
     # Update context with all prepared export data
     context["applicable"] = applicable_questions
@@ -348,28 +325,33 @@ def _get_applicable_row(context: dict, element: object, model: str, *, member_co
     question_answers = context["answers"]
     question_choices = context["choices"]
 
+    # Registration question types that are already handled
+    handled_reg_types = {"ticket", "additional_tickets", "pay_what_you_want", "reg_quotas", "reg_surcharges"}
+
     # Process each question and extract corresponding values
     for question in context["questions"]:
-        column_headers.append(question.name)
+        if model == "registration" and question["typ"] in handled_reg_types:
+            continue
+        column_headers.append(question["name"])
 
         # Get element-specific value mapping for special question types
         question_type_mapping = _get_values_mapping(element)
         cell_value = ""
 
         # Handle mapped question types (direct element attributes)
-        if question.typ in question_type_mapping:
-            cell_value = question_type_mapping[question.typ]()
+        if question["typ"] in question_type_mapping:
+            cell_value = question_type_mapping[question["typ"]]()
         # Handle text-based question types (paragraph, text, email)
-        elif question.typ in {"p", "t", "e"}:
-            if question.id in question_answers and element.id in question_answers[question.id]:
-                cell_value = question_answers[question.id][element.id]
+        elif question["typ"] in {"p", "t", "e"}:
+            if element.id in question_answers.get(question["id"], {}):
+                cell_value = question_answers[question["id"]][element.id]
         # Handle choice-based question types (single, multiple)
         elif (
-            question.typ in {"s", "m"}
-            and question.id in question_choices
-            and element.id in question_choices[question.id]
+            question["typ"] in {"s", "m"}
+            and question["id"] in question_choices
+            and element.id in question_choices[question["id"]]
         ):
-            cell_value = ", ".join(question_choices[question.id][element.id])
+            cell_value = ", ".join(question_choices[question["id"]][element.id])
 
         # Clean value for export format (remove tabs, convert newlines)
         cell_value = cell_value.replace("\t", "").replace("\n", "<br />")
@@ -378,7 +360,7 @@ def _get_applicable_row(context: dict, element: object, model: str, *, member_co
     return row_values, column_headers
 
 
-def _row_header(
+def _row_header(  # noqa: C901
     context: dict,
     el: object,
     header_columns: list,
@@ -420,30 +402,46 @@ def _row_header(
             profile_url = member.profile_thumb.url
         row_values.append(profile_url)
 
-    # Add participant and email columns for relevant models
-    if model in ["registration", "character"]:
+    # Add participant and email columns for registrations
+    if model in ["registration"]:
         # Add participant display name
-        header_columns.append(_("Participant"))
+        header_columns.append("Participant")
         display_name = ""
         if member:
             display_name = member.display_real()
         row_values.append(display_name)
 
         # Add participant email
-        header_columns.append(_("Email"))
+        header_columns.append("Email")
         email_address = ""
         if member:
             email_address = member.email
         row_values.append(email_address)
 
+    # Add player email column for characters if player editor is active
+    elif model == "character" and "user_character" in context.get("features", {}):
+        header_columns.append("player")
+        player_email = ""
+        if member:
+            player_email = member.email
+        row_values.append(player_email)
+
     # Add registration-specific columns
     if model == "registration":
+        type_names = _get_reg_type_names(context.get("questions", []))
+
         # Add ticket information
         row_values.append(el.ticket.name if el.ticket is not None else "")
-        header_columns.append(_("Ticket"))
+        header_columns.append(type_names.get("ticket", _("Ticket")))
 
         # Process additional registration headers
-        _header_regs(context, el, header_columns, row_values)
+        _header_regs(context, el, header_columns, row_values, type_names)
+
+
+def _get_reg_type_names(questions: list) -> dict[str, str]:
+    """Return mapping of special registration question type to question name."""
+    special_types = {"ticket", "additional_tickets", "pay_what_you_want", "reg_quotas", "reg_surcharges"}
+    return {q["typ"]: q["name"] for q in questions if q["typ"] in special_types}
 
 
 def _expand_val(values: list, element: object, field_name: str) -> None:
@@ -460,7 +458,13 @@ def _expand_val(values: list, element: object, field_name: str) -> None:
     values.append("")
 
 
-def _header_regs(context: dict, registration: object, column_headers: list, column_values: list) -> None:
+def _header_regs(
+    context: dict,
+    registration: object,
+    column_headers: list,
+    column_values: list,
+    type_names: dict | None = None,
+) -> None:
     """Generate header row data for registration download with feature-based columns.
 
     This function dynamically builds column headers and values for registration data
@@ -472,11 +476,20 @@ def _header_regs(context: dict, registration: object, column_headers: list, colu
         registration: Registration element object with registration data and relationships
         column_headers: List to append column headers to (modified in-place)
         column_values: List to append column values to (modified in-place)
+        type_names: Mapping of special question type to question name (modified in-place)
 
     Returns:
         None: Function modifies key and val lists in-place
 
     """
+    if type_names is None:
+        type_names = {}
+
+    # Add additional registrations if question exists
+    if "additional_tickets" in type_names:
+        column_headers.append(type_names.get("additional_tickets", _("Additionals")))
+        column_values.append(registration.additionals)
+
     # Handle character-related data if character feature is enabled
     if "character" in context["features"]:
         column_headers.append(_("Characters"))
@@ -485,17 +498,17 @@ def _header_regs(context: dict, registration: object, column_headers: list, colu
     # Add pay-what-you-want pricing if enabled
     if "pay_what_you_want" in context["features"]:
         column_values.append(registration.pay_what)
-        column_headers.append("PWYW")
+        column_headers.append(type_names.get("pay_what_you_want", "PWYW"))
 
     # Include surcharge information if feature is active
     if "surcharge" in context["features"]:
         column_values.append(registration.surcharge)
-        column_headers.append(_("Surcharge"))
+        column_headers.append(type_names.get("reg_surcharges", _("Surcharge")))
 
     # Add quota information for installment or quota-based registrations
     if "reg_quotas" in context["features"] or "reg_installments" in context["features"]:
         column_values.append(registration.quota)
-        column_headers.append(_("Next quota"))
+        column_headers.append(type_names.get("reg_quotas", _("Next quota")))
 
     # Core payment and deadline information (always included)
     column_values.append(registration.deadline)
@@ -513,34 +526,26 @@ def _header_regs(context: dict, registration: object, column_headers: list, colu
     # VAT-related pricing breakdown if VAT feature is enabled
     if "vat" in context["features"]:
         column_values.append(registration.ticket_price)
-        column_headers.append(_("Ticket"))
+        column_headers.append(_("Ticket price"))
 
         column_values.append(registration.options_price)
-        column_headers.append(_("Options"))
+        column_headers.append(_("Options price"))
 
-    # Token and credit payment methods if token credit feature is enabled
-    if "token_credit" in context["features"]:
-        _expand_val(column_values, registration, "pay_a")
-        column_headers.append(_("Money"))
+    # Token and credit payment methods if tokens or credits feature is enabled
+    _expand_val(column_values, registration, "pay_a")
+    column_headers.append(_("Money"))
 
+    if "tokens" in context["features"]:
         _expand_val(column_values, registration, "pay_b")
-        column_headers.append(context.get("credit_name", _("Credits")))
+        column_headers.append(context.get("credits_name", _("Credits")))
 
+    if "tokens" in context["features"]:
         _expand_val(column_values, registration, "pay_c")
-        column_headers.append(context.get("token_name", _("Credits")))
+        column_headers.append(context.get("tokens_name", _("Tokens")))
 
 
 def _get_standard_row(context: dict, element: object) -> tuple[list, list]:
-    """Extract values and keys from element's complete data.
-
-    Args:
-        context: Context dictionary for processing
-        element: Element object with show_complete method
-
-    Returns:
-        Tuple of (values list, keys list)
-
-    """
+    """Extract values and keys from element's complete data."""
     values = []
     keys = []
 
@@ -575,11 +580,11 @@ def _writing_field(context: dict, field_name: str, field_names: list, field_valu
     skip_fields = [
         "id",
         "show",
-        "owner_id",
+        "owner_uuid",
         "owner",
         "player",
         "player_full",
-        "player_id",
+        "player_uuid",
         "first_aid",
         "player_prof",
         "profile",
@@ -606,8 +611,12 @@ def _writing_field(context: dict, field_name: str, field_names: list, field_valu
             return
 
         # Convert faction IDs to names and join with commas
-        faction_names = [context["factions"][int(faction_id)]["name"] for faction_id in field_value]
-        processed_value = ", ".join(faction_names)
+        faction_names = [
+            context["factions"][int(faction_id)]["name"]
+            for faction_id in field_value
+            if int(faction_id) in context["factions"]
+        ]
+        processed_value = " | ".join(faction_names)
 
     # Clean the processed value and append to output lists
     cleaned_value = _clean(processed_value)
@@ -641,7 +650,7 @@ def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], m
     """
     # Apply event-based filtering if specified in type configuration
     if check_field(model_type, "event"):
-        queryset = queryset.filter(event=context["event"])
+        queryset = queryset.filter(event=context["event"].get_class_parent(model_name))
 
     # Apply run-based filtering if specified in type configuration
     elif check_field(model_type, "run"):
@@ -665,25 +674,17 @@ def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], m
 
         # Attach accounting information as dynamic attributes to each registration
         for registration in queryset:
-            if registration.id not in accounting_data:
+            uuid_str = str(registration.uuid)
+            if uuid_str not in accounting_data:
                 continue
-            for key, value in accounting_data[registration.id].items():
+            for key, value in accounting_data[uuid_str].items():
                 setattr(registration, key, value)
 
     return queryset
 
 
 def get_writer(context: dict, nm: str) -> tuple[HttpResponse, csv.writer]:
-    """Create CSV writer with proper headers for file download.
-
-    Args:
-        context: Context dictionary containing event information
-        nm: Name component for the filename
-
-    Returns:
-        Tuple of HTTP response and CSV writer objects
-
-    """
+    """Create CSV writer with proper headers for file download."""
     # Create HTTP response with CSV content type and download headers
     response = HttpResponse(
         content_type="text/csv",
@@ -729,7 +730,7 @@ def export_registration_form(context: dict) -> list[tuple[str, list, list]]:
 
     # Extract registration questions data
     column_headers = context["columns"][0].keys()
-    questions = get_ordered_registration_questions(context)
+    questions = get_cached_registration_questions(context["event"])
     question_values = _extract_values(column_headers, questions, mappings)
 
     # Initialize exports list with registration questions sheet
@@ -750,12 +751,12 @@ def export_registration_form(context: dict) -> list[tuple[str, list, list]]:
     return excel_exports
 
 
-def _extract_values(field_names: list, queryset: object, field_mappings: dict) -> list[list]:
+def _extract_values(field_names: list, objects: list, field_mappings: dict) -> list[list]:
     """Extract and transform values from queryset based on field mappings.
 
     Args:
         field_names: List of field names to extract from queryset
-        queryset: Django queryset object to extract values from
+        objects: List of items to extract values from
         field_mappings: Dictionary mapping field names to value transformation dictionaries
 
     Returns:
@@ -764,14 +765,25 @@ def _extract_values(field_names: list, queryset: object, field_mappings: dict) -
     """
     all_values = []
 
-    # Iterate through each row in the queryset values
-    for row in queryset.values(*field_names):
+    # Iterate through each row in the question list
+    for row in objects:
         row_values = []
 
         # Process each field-value pair in the current row
-        for field_name, field_value in row.items():
+        for field_name in field_names:
+            # Handle Django's double-underscore notation for related fields
+            if "__" in field_name:
+                # Traverse the relationship chain (e.g., "question__name" -> row.question.name)
+                field_value = row
+                for part in field_name.split("__"):
+                    # Support both dict and object access
+                    field_value = field_value[part] if isinstance(field_value, dict) else getattr(field_value, part)
+            else:
+                # Support both dict and object access
+                field_value = row[field_name] if isinstance(row, dict) else getattr(row, field_name)
+
             # Apply mapping transformation if field and value exist in mappings
-            if field_name in field_mappings and field_value in field_mappings[field_name]:
+            if field_value in field_mappings.get(field_name, {}):
                 transformed_value = field_mappings[field_name][field_value]
             else:
                 transformed_value = field_value
@@ -866,75 +878,13 @@ def _orga_registrations_acc(context: Any, registrations: Any = None) -> Any:
     if registrations:
         result = {}
         for registration in registrations:
-            if registration.id in cached_data:
-                result[registration.id] = cached_data[registration.id]
+            # Use string UUID for consistency with cache keys
+            uuid_str = str(registration.uuid)
+            if uuid_str in cached_data:
+                result[uuid_str] = cached_data[uuid_str]
         return result
 
     return cached_data
-
-
-def _orga_registrations_acc_reg(reg: Any, context: dict, cache_aip: dict) -> dict:
-    """Process registration accounting data for organizer downloads.
-
-    Calculates payment breakdowns, remaining balances, and ticket pricing
-    information for registration accounting reports.
-
-    Args:
-        reg: Registration instance containing payment and ticket data
-        context: Context dictionary containing:
-            - features: Available feature flags
-            - reg_tickets: Ticket information by ID
-        cache_aip: Cached accounting payment data indexed by member_id
-            containing payment type breakdown ('b', 'c' payment types)
-
-    Returns:
-        dict: Processed accounting data containing:
-            - Payment amounts (tot_payed, tot_iscr, quota, etc.)
-            - Payment type breakdown (pay_a, pay_b, pay_c) if token_credit enabled
-            - Remaining balance calculation
-            - Ticket and options pricing breakdown
-
-    """
-    dt = {}
-
-    # Maximum rounding threshold for balance calculations
-    max_rounding = 0.05
-
-    # Round all monetary values to nearest cent
-    for k in ["tot_payed", "tot_iscr", "quota", "deadline", "pay_what", "surcharge"]:
-        dt[k] = round_to_nearest_cent(getattr(reg, k, 0))
-
-    # Process payment breakdown if token credit feature is enabled
-    if "token_credit" in context["features"]:
-        if reg.member_id in cache_aip:
-            # Extract payment types 'b' and 'c' from cache
-            for pay in ["b", "c"]:
-                v = 0
-                if pay in cache_aip[reg.member_id]:
-                    v = cache_aip[reg.member_id][pay]
-                dt["pay_" + pay] = float(v)
-            # Calculate remaining payment type 'a' as difference
-            dt["pay_a"] = dt["tot_payed"] - (dt["pay_b"] + dt["pay_c"])
-        else:
-            # If no cached data, all payment is type 'a'
-            dt["pay_a"] = dt["tot_payed"]
-
-    # Calculate remaining balance with rounding tolerance
-    dt["remaining"] = dt["tot_iscr"] - dt["tot_payed"]
-    if abs(dt["remaining"]) < max_rounding:
-        dt["remaining"] = 0
-
-    # Calculate ticket and options pricing breakdown
-    if reg.ticket_id in context["reg_tickets"]:
-        t = context["reg_tickets"][reg.ticket_id]
-        dt["ticket_price"] = t.price
-        # Add pay-what-you-want amount to base ticket price
-        if reg.pay_what:
-            dt["ticket_price"] += reg.pay_what
-        # Calculate options price as difference between total and ticket
-        dt["options_price"] = reg.tot_iscr - dt["ticket_price"]
-
-    return dt
 
 
 def _get_column_names(context: dict) -> None:
@@ -961,24 +911,7 @@ def _get_column_names(context: dict) -> None:
     """
     # Handle registration data export with participant, ticket, and question columns
     if context["typ"] == "registration":
-        context["columns"] = [
-            {
-                "email": _("The participant's email"),
-                "ticket": _("The name of the ticket")
-                + " <i>("
-                + (_("if it doesn't exist, it will be created"))
-                + ")</i>",
-                "characters": _("(Optional) The character names to assign to the player, separated by commas"),
-                "donation": _("(Optional) The amount of a voluntary donation"),
-            },
-        ]
-        # Build field type mapping from registration questions for validation
-        questions = get_ordered_registration_questions(context).values("name", "typ")
-        context["fields"] = {question["name"]: question["typ"] for question in questions}
-
-        # Remove donation column if pay-what-you-want feature is disabled
-        if "pay_what_you_want" not in context["features"]:
-            del context["columns"][0]["donation"]
+        _registration_column_names(context)
 
     # Handle ticket tier definition export
     elif context["typ"] == "registration_ticket":
@@ -1075,6 +1008,38 @@ def _get_column_names(context: dict) -> None:
         _get_writing_names(context)
 
 
+def _registration_column_names(context: dict) -> None:
+    """Build field type mapping from registration questions for validation."""
+    questions = get_cached_registration_questions(context["event"])
+    context["fields"] = {question["name"]: question["typ"] for question in questions}
+
+    # Build mapping of special question type to question name
+    type_names = _get_reg_type_names(questions)
+
+    # Build columns dict dynamically using question names where available
+    ticket_key = type_names.get("ticket", "ticket")
+    columns = {
+        "email": _("The participant's email"),
+        ticket_key: _("(Optional) The name of the ticket"),
+    }
+
+    if "additional_tickets" in type_names:
+        columns[type_names["additional_tickets"]] = _("(Optional) The number of additional registrations")
+
+    columns["characters"] = _("(Optional) The character names to assign to the player, separated by commas")
+
+    if "pay_what_you_want" in context["features"] and "pay_what_you_want" in type_names:
+        columns[type_names["pay_what_you_want"]] = _("(Optional) The amount of voluntary donation")
+
+    if "surcharge" in context["features"] and "reg_surcharges" in type_names:
+        columns[type_names["reg_surcharges"]] = _("(Optional) The surcharge amount")
+
+    if "reg_quotas" in context["features"] and "reg_quotas" in type_names:
+        columns[type_names["reg_quotas"]] = _("(Optional) The number of quotas")
+
+    context["columns"] = [columns]
+
+
 def _get_writing_names(context: dict) -> None:
     """Get writing field names and types for download context.
 
@@ -1100,12 +1065,12 @@ def _get_writing_names(context: dict) -> None:
     context["fields"] = {}
 
     # Retrieve and process writing questions for the event
-    writing_questions = context["event"].get_elements(WritingQuestion).filter(applicable=context["writing_typ"])
-    for field in writing_questions.order_by("order").values("name", "typ"):
-        context["fields"][field["name"]] = field["typ"]
+    writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+    for question in writing_questions:
+        context["fields"][question["name"]] = question["typ"]
         # Store the name field for special handling
-        if field["typ"] == "name":
-            context["field_name"] = field["name"]
+        if question["typ"] == "name":
+            context["field_name"] = question["name"]
 
     # Initialize base column configuration
     context["columns"] = [{}]

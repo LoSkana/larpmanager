@@ -13,9 +13,9 @@
             <tr>
                 <th class="hide">number</th>
                 {% if features.user_character %}<th></th>{% endif %}
-                <th>{{ writing_fields.character.names.name }}</th>
-                {% if features.title %}<th>{{ writing_fields.character.names.title }}</th>{% endif %}
-                <th>{{ writing_fields.character.names.teaser }}</th>
+                <th>{{ writing_field_names.name }}</th>
+                {% if features.title %}<th>{{ writing_field_names.title }}</th>{% endif %}
+                <th>{{ writing_field_names.teaser }}</th>
                 {% for idx, _ in searchable.items %}
                     {% with questions|get:idx as que %}<th>{{ que.name }}</th>{% endwith %}
                 {% endfor %}
@@ -36,11 +36,11 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td class="hide">{{ el.number }}</td>
                     {% if features.user_character %}
                         <td>
-                            <a href="{% url 'character_change' run.get_slug el.number %}"
+                            <a href="{% url 'character_edit' run.get_slug el.uuid %}"
                                qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                         </td>
                     {% endif %}
@@ -69,12 +69,12 @@
                     {% endif %}
                     {% if px_user %}
                         <td>
-                            <a href="{% url 'character_abilities' run.get_slug el.number %}">{% trans "Ability" %}</a>
+                            <a href="{% url 'character_abilities' run.get_slug el.uuid %}">{% trans "Ability" %}</a>
                         </td>
                     {% endif %}
                     {% if not assigned %}
                         <td>
-                            <a href="{% url 'character_assign' run.get_slug el.number %}">{% trans "Select" %}</a>
+                            <a href="{% url 'character_assign' run.get_slug el.uuid %}">{% trans "Select" %}</a>
                         </td>
                     {% endif %}
                 </tr>

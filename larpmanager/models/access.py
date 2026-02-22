@@ -20,11 +20,12 @@
 
 from typing import ClassVar
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q, QuerySet, UniqueConstraint
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature
+from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event
 from larpmanager.models.member import Member
 
@@ -60,6 +61,8 @@ class AssociationPermission(BaseModel):
 
     config = models.TextField(max_length=100, blank=True, null=True)
 
+    active_if = models.TextField(max_length=100, blank=True, null=True)
+
     def __str__(self) -> str:
         """Return string representation of the object."""
         return self.name
@@ -70,7 +73,7 @@ class AssociationPermission(BaseModel):
         ]
 
 
-class AssociationRole(BaseModel):
+class AssociationRole(UuidMixin, BaseModel):
     """Represents AssociationRole model."""
 
     name = models.CharField(max_length=100)
@@ -98,61 +101,14 @@ class AssociationRole(BaseModel):
 
 
 def get_association_executives(association: Association) -> QuerySet[Member]:
-    """Get all executive members of an association.
-
-    Args:
-        association (Association): The association instance to get executives from.
-
-    Returns:
-        QuerySet[Member]: A queryset containing all members with executive role
-            (role number 1) for the specified association.
-
-    Raises:
-        AssociationRole.DoesNotExist: If no executive role (number=1) exists for the association.
-
-    """
-    # Get the executive role (number 1) for the association
-    executive_role = AssociationRole.objects.get(association=association, number=1)
-
-    # Return all members assigned to the executive role
-    return executive_role.members.all()
-
-
-def get_association_inners(association: Association) -> list[Member]:
-    """Get all non-executive members with association roles.
-
-    Retrieves all members that have roles in the given association, excluding
-    executive members (role number 1). Ensures each member appears only once
-    in the returned list, even if they have multiple roles.
-
-    Args:
-        association (Association): The association instance to get members from.
-
-    Returns:
-        list[Member]: List of unique Member instances with non-executive roles
-            in the association. Returns empty list if no qualifying members found.
-
-    Example:
-        >>> association = Association.objects.get(name="My Association")
-        >>> members = get_association_inners(association)
-        >>> len(members)
-        5
-
-    """
-    lst = []
-    already = {}
-
-    # Get all non-executive roles (exclude role number 1) for this association
-    for role in AssociationRole.objects.filter(association=association).exclude(number=1):
-        # Iterate through all members assigned to this role
-        for mb in role.members.all():
-            # Skip if member already processed to avoid duplicates
-            if mb.id in already:
-                continue
-            # Mark member as processed and add to results
-            already[mb.id] = 1
-            lst.append(mb)
-    return lst
+    """Get all executive members of an association."""
+    try:
+        # Get the executive role (number 1) for the association
+        executive_role = AssociationRole.objects.get(association=association, number=1)
+        # Return all members assigned to the executive role
+        return executive_role.members.all()
+    except ObjectDoesNotExist:
+        return []
 
 
 class EventPermission(BaseModel):
@@ -174,6 +130,8 @@ class EventPermission(BaseModel):
 
     config = models.TextField(max_length=100, blank=True, null=True)
 
+    active_if = models.TextField(max_length=100, blank=True, null=True)
+
     def __str__(self) -> str:
         """Return string representation."""
         return self.name
@@ -188,7 +146,7 @@ class EventPermission(BaseModel):
         ]
 
 
-class EventRole(BaseConceptModel):
+class EventRole(UuidMixin, BaseConceptModel):
     """Represents EventRole model."""
 
     members = models.ManyToManyField(Member, related_name="event_roles")
@@ -211,28 +169,14 @@ class EventRole(BaseConceptModel):
 
 
 def get_event_organizers(event: Event) -> QuerySet[Member]:
-    """Get all organizer members of an event.
-
-    Retrieves the event organizer role (role number 1) and returns all members
-    assigned to that role. Creates the organizer role if it doesn't exist.
-
-    Args:
-        event (Event): The event instance to get organizers for.
-
-    Returns:
-        QuerySet[Member]: QuerySet containing all members with event organizer
-            role (role number 1).
-
-    Note:
-        This function uses get_or_create to ensure the organizer role exists,
-        so it may create a new EventRole if none exists for this event.
-
-    """
-    # Get or create the event organizer role (role number 1)
-    (organizer_role, _was_created) = EventRole.objects.get_or_create(event=event, number=1)
-
-    # Return all members assigned to the organizer role
-    return organizer_role.members.all()
+    """Get all organizer members of an event."""
+    try:
+        # Get or create the event organizer role (role number 1)
+        (organizer_role, _was_created) = EventRole.objects.get_or_create(event=event, number=1)
+        # Return all members assigned to the organizer role
+        return organizer_role.members.all()
+    except ObjectDoesNotExist:
+        return []
 
 
 def get_event_staffers(event: Event) -> list:

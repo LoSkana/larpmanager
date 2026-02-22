@@ -22,6 +22,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable, Mapping
+
     from django.http import HttpRequest
 
 
@@ -36,14 +38,7 @@ class FeatureError(Exception):
     """
 
     def __init__(self, feature: str, run: int, path: str) -> None:
-        """Initialize the object with feature, run, and path parameters.
-
-        Args:
-            feature: The feature object to associate
-            run: The run object to associate
-            path: The file path string
-
-        """
+        """Initialize the object with feature, run, and path parameters."""
         super().__init__()
         # Store the feature reference
         self.feature = feature
@@ -54,17 +49,19 @@ class FeatureError(Exception):
 
 
 class RedirectError(Exception):
-    """Exception used to trigger view redirects.
+    """Trigger a redirect from middleware."""
 
-    Attributes:
-        view (str): View name to redirect to
-
-    """
-
-    def __init__(self, view: Any) -> None:
-        """Initialize with the given view."""
+    def __init__(
+        self,
+        view: Any,
+        args: Iterable[Any] | None = None,
+        kwargs: Mapping[str, Any] | None = None,
+    ) -> None:
+        """Init exception with redirect params."""
         super().__init__()
         self.view = view
+        self.args = tuple(args or ())
+        self.kwargs = dict(kwargs or {})
 
 
 class SignupError(Exception):
@@ -138,26 +135,7 @@ class MembershipError(Exception):
 
 
 def check_association_feature(request: HttpRequest, context: dict, feature_slug: str) -> None:
-    """Check if association has required feature enabled.
-
-    Validates that the specified feature is enabled for the association
-    in the current request context. This is typically used as a guard
-    to ensure users only access functionality their organization has
-    subscribed to or enabled.
-
-    Args:
-        request: Django HTTP request object
-        context: Dict context data
-        feature_slug: Feature slug identifier to validate against enabled features
-
-    Raises:
-        FeatureError: If the specified feature is not enabled for the
-            association, includes feature slug, error code 0, and request path
-
-    Example:
-        check_association_feature(request, 'advanced_registration')
-
-    """
+    """Check if association has required feature enabled."""
     # Check if the requested feature slug exists in the association's enabled features
     if feature_slug not in context["features"]:
         # Raise error with feature slug, error code 0, and current request path
@@ -165,26 +143,7 @@ def check_association_feature(request: HttpRequest, context: dict, feature_slug:
 
 
 def check_event_feature(request: HttpRequest, context: dict, feature_slug: str) -> None:
-    """Check if event has required feature enabled.
-
-    Validates that a specific feature is enabled for the current event context.
-    Raises an exception if the feature is not available, preventing access to
-    functionality that requires the feature.
-
-    Args:
-        request: Django HTTP request object containing user and session data
-        context: Event context dictionary containing features and run information
-        feature_slug: Feature slug string identifier to check for availability
-
-    Raises:
-        FeatureError: If the specified feature is not enabled for the event,
-                     includes feature slug, run ID, and request path for debugging
-
-    Example:
-        >>> check_event_feature(request, event_ctx, 'character_creation')
-        # Raises FeatureError if 'character_creation' feature is disabled
-
-    """
+    """Check if event has required feature enabled."""
     # Check if the requested feature slug exists in the event's enabled features
     if feature_slug not in context["features"]:
         # Raise detailed error with context information for debugging

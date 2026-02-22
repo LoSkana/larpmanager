@@ -23,6 +23,7 @@
                 display: none;
             }
         </style>
+        {% if testing %}<script>window.lmTesting = true;</script>{% endif %}
         {% if association.id == 0 %}
             {% if google_tag %}
                 <!-- Google Tag Manager -->
@@ -120,24 +121,28 @@
                   href="{% static 'larpmanager/assets/css/noscript.css' %}" />
         </noscript>
     </head>
-    <body class="is-preload" id="{{ association.name | slugify }}">
+    <body id="{{ association.name | slugify }}"
+          class="is-preload {% if lm or not association.old_form_appearance or interface_new_ui %}new_form{% endif %} {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
-            {% if not frame and association.id != 0 %}
-                {% if user.is_authenticated %}
-                    {% if topbar %}
-                        {% include "elements/structure/topbar-admin.html" %}
+            {% if onboarding %}
+            {% else %}
+                {% if not frame and association.id != 0 %}
+                    {% if user.is_authenticated %}
+                        {% if topbar_admin %}
+                            {% include "elements/structure/topbar-admin.html" %}
+                        {% else %}
+                            {% include "elements/structure/topbar-user.html" %}
+                        {% endif %}
                     {% else %}
-                        {% include "elements/structure/topbar-user.html" %}
+                        {% include "elements/structure/topbar.html" %}
                     {% endif %}
-                {% else %}
-                    {% include "elements/structure/topbar.html" %}
                 {% endif %}
+                {% include "elements/structure/sidebar.html" %}
             {% endif %}
-            {% include "elements/structure/sidebar.html" %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class="{% if manage and is_sidebar_open %}sidebar{% endif %} {% if not frame and association.id != 0 %}topbar{% endif %}">
+                 class=" {% if manage and is_sidebar_open and not onboarding %}sidebar{% endif %} {% if not frame and association.id != 0 and not onboarding %}topbar{% endif %}">
                 {% block main %}
                 {% endblock main %}
             </div>
@@ -147,6 +152,13 @@
     var set_internaz = {{ set_internaz | default:"null" }};
     window.interface_collapse_sidebar = {{ interface_collapse_sidebar | yesno:"true,false" }};
     window.enviro = "{{ request.enviro }}";
+
+window['icon_texts'] = {
+    'edit': '{% filter escapejs %}{% trans "Edit" %}{% endfilter %}',
+    'up': '{% filter escapejs %}{% trans "Move up" %}{% endfilter %}',
+    'down': '{% filter escapejs %}{% trans "Move down" %}{% endfilter %}',
+    'delete': '{% filter escapejs %}{% trans "Delete" %}{% endfilter %}',
+}
         </script>
         <!-- Scripts -->
         {% block js-req %}
@@ -166,6 +178,7 @@
             let url_feature_description = "{% url 'feature_description' %}";
             let url_tutorials = "{% url 'tutorials' %}";
         </script>
+        {% include "elements/dashboard/modal.js.html" %}
         {% if association.id == 0 %}
             {% if google_tag %}
                 <!-- Google Tag Manager (noscript) -->
@@ -282,7 +295,7 @@
 
             // add origin for manage links
             {% if run %}
-                let origin = '{{ run.id }}';
+                let origin = '{{ run.uuid }}';
             {% else %}
                 let origin = '0';
             {% endif %}

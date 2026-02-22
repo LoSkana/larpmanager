@@ -17,11 +17,18 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Access to all organization-level (exe) feature pages.
+Verifies that all organization dashboard links are accessible after enabling/disabling features,
+ensuring no broken links or permission issues across all feature pages.
+"""
+
 from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import _checkboxes, add_links_to_visit, go_to, go_to_check, login_orga
+from larpmanager.tests.utils import just_wait, _checkboxes, add_links_to_visit, go_to, go_to_check, login_orga
 
 pytestmark = pytest.mark.e2e
 
@@ -43,9 +50,11 @@ def test_exe_features_all(pw_page: Any) -> None:
 def visit_all(page: Any, live_server: Any) -> None:
     # Visit every link
     visited_links = set()
-    links_to_visit = {live_server + "/manage/"}
+    links_to_visit = [live_server + "/manage/"]
     while links_to_visit:
-        current_link = links_to_visit.pop()
+        # Sort links to visit, putting "delete" links at the end
+        links_to_visit.sort(key=lambda link: ("delete" in link, link))
+        current_link = links_to_visit.pop(0)
         if current_link in visited_links:
             continue
         visited_links.add(current_link)

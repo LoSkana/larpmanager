@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import csv
+import logging
 from collections import defaultdict
 from datetime import UTC, datetime
 from typing import Any
@@ -35,12 +36,10 @@ from larpmanager.accounting.payment import unique_invoice_cod
 from larpmanager.accounting.registration import update_member_registrations
 from larpmanager.cache.config import get_association_config
 from larpmanager.forms.member import (
-    ExeBadgeForm,
     ExeMemberForm,
     ExeMembershipDocumentForm,
     ExeMembershipFeeForm,
     ExeMembershipForm,
-    ExeVolunteerRegistryForm,
     MembershipResponseForm,
 )
 from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
@@ -67,7 +66,7 @@ from larpmanager.models.member import (
     Vote,
     get_user_membership,
 )
-from larpmanager.models.miscellanea import Email, HelpQuestion
+from larpmanager.models.miscellanea import EmailRecipient, HelpQuestion
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import (
@@ -75,18 +74,21 @@ from larpmanager.utils.core.common import (
     ensure_timezone_aware,
     format_email_body,
     get_member,
+    get_object_uuid,
     normalize_string,
 )
 from larpmanager.utils.core.paginate import exe_paginate
+from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 from larpmanager.utils.io.pdf import (
     get_membership_request,
     print_volunteer_registry,
     return_pdf,
 )
-from larpmanager.utils.services.edit import exe_edit
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_mail
 from larpmanager.views.orga.member import send_mail_batch
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -147,7 +149,7 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
     )
 
     # Define fields to extract from membership query
-    values = ("member__id", "member__surname", "member__name", "member__email", "card_number", "status")
+    values = ("member__id", "member__surname", "member__name", "member__email", "card_number", "status", "member__uuid")
     context["list"] = []
     context["sum"] = {}
 
@@ -178,7 +180,7 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
+def exe_membership_evaluation(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Evaluate membership applications.
 
     Handles membership approval/rejection processes and status updates,
@@ -187,7 +189,7 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
 
     Args:
         request: The HTTP request object
-        num: Primary key of the member to evaluate
+        member_uuid: UUID of the member to evaluate
 
     Returns:
         HttpResponse: Rendered template with membership evaluation form
@@ -197,7 +199,7 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
     context = check_association_context(request, "exe_membership")
 
     # Get member and their membership status
-    member = Member.objects.get(pk=num)
+    member = get_object_uuid(Member, member_uuid)
     get_user_membership(member, context["association_id"])
 
     if request.method == "POST":
@@ -260,10 +262,10 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_membership_request(request: HttpRequest, num: int) -> HttpResponse:
+def exe_membership_request(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Handle membership request display for organization executives."""
     context = check_association_context(request, "exe_membership")
-    member_request = get_member(num)
+    member_request = get_member(member_uuid)
     return get_membership_request(context, member_request)
 
 
@@ -328,7 +330,7 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_member(request: HttpRequest, num: int) -> HttpResponse:
+def exe_member(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Display and edit member profile with accounting and membership data.
 
     This view handles both GET requests for displaying member information and POST
@@ -337,7 +339,7 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user session and form data
-        num: The unique identifier (ID) of the member to display/edit
+        member_uuid: The unique identifier (UUID) of the member to display/edit
 
     Returns:
         HttpResponse: Rendered template with member edit form and associated data
@@ -348,7 +350,7 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
-    context["member_edit"] = get_member(num)
+    context["member_edit"] = get_member(member_uuid)
 
     # Handle form submission for member profile updates
     if request.method == "POST":
@@ -380,7 +382,7 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_member_accounting(request: HttpRequest, num: int) -> HttpResponse:
+def exe_member_accounting(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Display member accounting information including payments, credits, and discounts.
 
     This view shows detailed accounting data for a specific member including payment
@@ -388,7 +390,7 @@ def exe_member_accounting(request: HttpRequest, num: int) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user session data
-        num: The unique identifier (ID) of the member
+        member_uuid: The UUID of the member
 
     Returns:
         HttpResponse: Rendered template with member accounting data
@@ -399,7 +401,7 @@ def exe_member_accounting(request: HttpRequest, num: int) -> HttpResponse:
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
-    context["member_edit"] = get_member(num)
+    context["member_edit"] = get_member(member_uuid)
 
     # Add accounting payment items to context
     member_add_accountingitempayment(context, context["member_edit"])
@@ -421,7 +423,7 @@ def exe_member_accounting(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_member_registrations(request: HttpRequest, num: int) -> HttpResponse:
+def exe_member_registrations(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Display member event registrations and participation history.
 
     This view shows all event registrations for a specific member within the
@@ -429,7 +431,7 @@ def exe_member_registrations(request: HttpRequest, num: int) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user session data
-        num: The unique identifier (ID) of the member
+        member_uuid: The uuid of the member
 
     Returns:
         HttpResponse: Rendered template with member registration data
@@ -440,7 +442,7 @@ def exe_member_registrations(request: HttpRequest, num: int) -> HttpResponse:
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
-    context["member_edit"] = get_member(num)
+    context["member_edit"] = get_member(member_uuid)
 
     # Get member registrations for current association events
     context["regs"] = Registration.objects.filter(
@@ -461,14 +463,14 @@ def member_add_accountingitempayment(context: dict, member: Member) -> None:
         member=member,
         hide=False,
         association_id=context["association_id"],
-    ).select_related("reg")
+    ).select_related("registration")
 
     # Set display type based on payment method
     for payment in context["pays"]:
         if payment.pay == PaymentChoices.TOKEN:
-            payment.typ = context.get("token_name", _("Credits"))
+            payment.typ = context.get("tokens_name", _("Credits"))
         elif payment.pay == PaymentChoices.CREDIT:
-            payment.typ = context.get("credit_name", _("Credits"))
+            payment.typ = context.get("credits_name", _("Credits"))
         else:
             payment.typ = payment.get_pay_display()
 
@@ -485,27 +487,27 @@ def member_add_accountingitemother(context: dict, member: Member) -> None:
     # Set localized type labels based on item category
     for accounting_item in context["others"]:
         if accounting_item.oth == OtherChoices.TOKEN:
-            accounting_item.typ = context.get("token_name", _("Credits"))
+            accounting_item.typ = context.get("tokens_name", _("Credits"))
         elif accounting_item.oth == OtherChoices.CREDIT:
-            accounting_item.typ = context.get("credit_name", _("Credits"))
+            accounting_item.typ = context.get("credits_name", _("Credits"))
         else:
             accounting_item.typ = accounting_item.get_oth_display()
 
 
 @login_required
-def exe_membership_status(request: HttpRequest, num: Any) -> Any:
+def exe_membership_status(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Edit membership status and details for a specific member.
 
     Args:
         request: Django HTTP request object
-        num: Member number identifier
+        member_uuid: Member UUID
 
     Returns:
         Rendered membership editing form or redirect after successful update
 
     """
     context = check_association_context(request, "exe_membership")
-    context["member_edit"] = get_member(num)
+    context["member_edit"] = get_member(member_uuid)
     context["membership_edit"] = get_object_or_404(
         Membership,
         member_id=context["member_edit"].id,
@@ -522,7 +524,8 @@ def exe_membership_status(request: HttpRequest, num: Any) -> Any:
         form = ExeMembershipForm(instance=context["membership_edit"], request=request)
     context["form"] = form
 
-    context["num"] = num
+    context["num"] = member_uuid
+    context["name"] = context["member_edit"].display_real()
 
     context["form"].page_title = str(context["member_edit"]) + " - " + _("Membership")
 
@@ -639,6 +642,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
 
     # Add form to context and render the edit template
     context["form"] = form
+    context["num"] = "0"
     return render(request, "larpmanager/exe/edit.html", context)
 
 
@@ -671,6 +675,7 @@ def exe_membership_document(request: HttpRequest) -> Any:
     else:
         form = ExeMembershipDocumentForm(context=context)
     context["form"] = form
+    context["num"] = "0"
 
     return render(request, "larpmanager/exe/edit.html", context)
 
@@ -772,9 +777,21 @@ def exe_volunteer_registry(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_volunteer_registry_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_volunteer_registry_new(request: HttpRequest) -> HttpResponse:
+    """Create a new volunteer registry entry."""
+    return exe_new(request, ExeAction.VOLUNTEER_REGISTRY)
+
+
+@login_required
+def exe_volunteer_registry_edit(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Edit volunteer registry entry using standard exe form handling."""
-    return exe_edit(request, ExeVolunteerRegistryForm, num, "exe_volunteer_registry")
+    return exe_edit(request, ExeAction.VOLUNTEER_REGISTRY, member_uuid)
+
+
+@login_required
+def exe_volunteer_registry_delete(request: HttpRequest, member_uuid: str) -> HttpResponse:
+    """Delete member."""
+    return exe_delete(request, ExeAction.VOLUNTEER_REGISTRY, member_uuid)
 
 
 @login_required
@@ -789,7 +806,7 @@ def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks exe_volunteer_registry permission.
-        Association.DoesNotExist: If association not found.
+        ObjectDoesNotExist: If association not found.
 
     """
     # Check user permissions and get association context
@@ -887,9 +904,21 @@ def exe_badges(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_badges_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_badges_new(request: HttpRequest) -> HttpResponse:
+    """Create a new badge."""
+    return exe_new(request, ExeAction.BADGES)
+
+
+@login_required
+def exe_badges_edit(request: HttpRequest, badge_uuid: str) -> HttpResponse:
     """Delegate to generic edit view for badge editing."""
-    return exe_edit(request, ExeBadgeForm, num, "exe_badges")
+    return exe_edit(request, ExeAction.BADGES, badge_uuid)
+
+
+@login_required
+def exe_badges_delete(request: HttpRequest, badge_uuid: str) -> HttpResponse:
+    """Delete badge."""
+    return exe_delete(request, ExeAction.BADGES, badge_uuid)
 
 
 @login_required
@@ -948,6 +977,7 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
     # Define table columns for the email archive display
     context.update(
         {
+            "selrel": ("email_content",),
             "fields": [
                 ("run", _("Run")),
                 ("recipient", _("Recipient")),
@@ -960,25 +990,23 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
                 "body": format_email_body,
                 "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
                 "run": lambda el: str(el.run) if el.run else "",
-                "recipient": lambda el: str(el.recipient),
-                "subj": lambda el: str(el.subj),
             },
         },
     )
 
-    # Return paginated view of Email objects
-    return exe_paginate(request, context, Email, "larpmanager/exe/users/archive_mail.html", "exe_read_mail")
+    # Return paginated view of EmailRecipient objects
+    return exe_paginate(request, context, EmailRecipient, "larpmanager/exe/users/archive_mail.html", "exe_read_mail")
 
 
 @login_required
-def exe_read_mail(request: HttpRequest, mail_id: int) -> HttpResponse:
+def exe_read_mail(request: HttpRequest, mail_uuid: str) -> HttpResponse:
     """Display archived email details for organization executives."""
     # Verify user has email archive access permissions
     context = check_association_context(request, "exe_archive_email")
     context["exe"] = True
 
     # Retrieve and add email data to context
-    context["email"] = get_mail(context, mail_id)
+    context["email"] = get_mail(context, mail_uuid)
 
     return render(request, "larpmanager/exe/users/read_mail.html", context)
 
@@ -1018,7 +1046,7 @@ def exe_questions(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_questions_answer(request: HttpRequest, member_id: int) -> HttpResponse:
+def exe_questions_answer(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Handle question answering for executives.
 
     This view allows organization executives to answer help questions submitted by members.
@@ -1026,21 +1054,21 @@ def exe_questions_answer(request: HttpRequest, member_id: int) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user session and POST data
-        member_id: The id of the Member who submitted the question
+        member_uuid: The UUID the Member who submitted the question
 
     Returns:
         HttpResponse: Rendered question answer form page or redirect to questions list
             after successful form submission
 
     Raises:
-        Member.DoesNotExist: If the member with the given ID doesn't exist
+        ObjectDoesNotExist: If the member with the given ID doesn't exist
 
     """
     # Check executive permissions for question management
     context = check_association_context(request, "exe_questions")
 
     # Retrieve the member and their question history
-    context["member_edit"] = get_member(member_id)
+    context["member_edit"] = get_member(member_uuid)
     context["list"] = HelpQuestion.objects.filter(
         member=context["member_edit"],
         association_id=context["association_id"],
@@ -1057,7 +1085,7 @@ def exe_questions_answer(request: HttpRequest, member_id: int) -> HttpResponse:
             hp = form.save(commit=False)
 
             # Associate answer with the same run as the original question if applicable
-            if last.run:
+            if last and last.run:
                 hp.run = last.run
 
             # Set answer metadata and save to database
@@ -1080,21 +1108,22 @@ def exe_questions_answer(request: HttpRequest, member_id: int) -> HttpResponse:
 
 
 @login_required
-def exe_questions_close(request: HttpRequest, member_id: int) -> HttpResponse:
+def exe_questions_close(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Close a help question for a member."""
     context = check_association_context(request, "exe_questions")
 
     # Get the member and their most recent help question
-    member = Member.objects.get(pk=member_id)
+    member = get_member(member_uuid)
     h = (
         HelpQuestion.objects.filter(member=member, association_id=context["association_id"])
         .order_by("-created")
         .first()
     )
 
-    # Mark the question as closed and save
-    h.closed = True
-    h.save()
+    # Mark the question as closed and save if it exists
+    if h:
+        h.closed = True
+        h.save()
 
     return redirect("exe_questions")
 

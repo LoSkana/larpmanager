@@ -90,7 +90,7 @@ window.addEventListener('DOMContentLoaded', function() {
     $(document).ready(function(){
         {% for question in form.questions %}
             {% if question.typ == 'e' %}
-                setUpHighlight('id_q{{ question.id }}');
+                setUpHighlight('id_que_{{ question.uuid }}');
             {% elif question.typ == 'text' %}
                 setUpHighlight('id_text');
             {% elif question.typ == 'teaser' %}

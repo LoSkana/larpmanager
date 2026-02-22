@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans "Lottery" %} {{ gl_name }} - {{ run }}
+    {% trans "Lottery" %} {{ gl_name }} - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows the information to perform the drawing of the lottery" %}

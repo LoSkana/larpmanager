@@ -22,21 +22,23 @@ from __future__ import annotations
 from typing import Any
 
 from django.conf import settings as conf_settings
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
+from larpmanager.cache.association import clear_association_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.fields import get_event_fields_cache
 from larpmanager.cache.links import cache_event_links
 from larpmanager.cache.permission import get_association_permission_feature, get_event_permission_feature
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
 from larpmanager.models.member import get_user_membership
+from larpmanager.models.registration import Registration
 from larpmanager.utils.auth.permission import (
     get_index_association_permissions,
     get_index_event_permissions,
@@ -47,11 +49,15 @@ from larpmanager.utils.core.exceptions import (
     FeatureError,
     MainPageError,
     MembershipError,
+    RedirectError,
     UnknowRunError,
     UserPermissionError,
     check_event_feature,
 )
-from larpmanager.utils.users.registration import check_signup, registration_status
+from larpmanager.utils.users.registration import check_signup, registration_find, registration_status
+
+# Demo mode threshold (Associations with fewer than this many registrations are considered demo/trial accounts)
+MAX_DEMO_REGISTRATIONS = 10
 
 
 def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:  # noqa: C901 - Complex context building with feature checks
@@ -111,20 +117,19 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
         context["membership"] = get_user_membership(context["member"], context["association_id"])
 
         # Get association permissions for the user
-        get_index_association_permissions(context, request, context["association_id"], enforce_check=False)
+        get_index_association_permissions(request, context, context["association_id"], enforce_check=False)
 
         # Add user interface preferences and staff status
-        context["interface_collapse_sidebar"] = context["member"].get_config(
-            "interface_collapse_sidebar", default_value=False
-        )
+        for config_name in ["interface_new_ui", "interface_collapse_sidebar"]:
+            context[config_name] = context["member"].get_config(config_name, default_value=False)
+
         context["is_staff"] = request.user.is_staff
 
     # Set default names for token/credit system if feature enabled
-    if "token_credit" in context["features"]:
-        if not context["token_name"]:
-            context["token_name"] = _("Tokens")
-        if not context["credit_name"]:
-            context["credit_name"] = _("Credits")
+    for feature, default_name in [("tokens", _("Tokens")), ("credits", _("Credits"))]:
+        name_key = f"{feature}_name"
+        if feature in context["features"] and not context.get(name_key):
+            context[name_key] = default_name
 
     # Add TinyMCE editor configuration
     context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
@@ -144,7 +149,7 @@ def is_shuttle(request: HttpRequest) -> bool:
         return False
 
     # Verify user is in association's shuttle operators list
-    return "shuttle" in request.association and request.user.member.id in request.association["shuttle"]
+    return request.user.member.id in request.association.get("shuttle", {})
 
 
 def update_payment_details(context: dict) -> None:
@@ -154,21 +159,13 @@ def update_payment_details(context: dict) -> None:
 
 
 def fetch_payment_details(association_id: int) -> dict:
-    """Retrieve payment configuration details for an association.
-
-    Args:
-        association_id: Primary key of the association
-
-    Returns:
-        Dictionary containing payment gateway configuration
-
-    """
+    """Retrieve payment configuration details for an association."""
     # Fetch association with only required fields for efficiency
     association = Association.objects.only("slug", "key").get(pk=association_id)
     return get_payment_details(association)
 
 
-def check_association_context(request: HttpRequest, permission_slug: str) -> dict:
+def check_association_context(request: HttpRequest, permission_slug: str = "") -> dict:
     """Check and validate association permissions for a request.
 
     Validates that the user has the required association permission and that
@@ -199,7 +196,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
         raise UserPermissionError
 
     # Retrieve feature configuration for this permission
-    (required_feature, tutorial_identifier, config_slug) = get_association_permission_feature(permission_slug)
+    (required_feature, tutorial_slug, config_slug) = get_association_permission_feature(permission_slug)
 
     # Check if required feature is enabled for this association
     if required_feature != "def" and required_feature not in context["features"]:
@@ -210,12 +207,12 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
     context["exe_page"] = 1
 
     # Load association permissions and sidebar state
-    get_index_association_permissions(context, request, context["association_id"])
+    get_index_association_permissions(request, context, context["association_id"])
     context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     # Add tutorial information if not already present
     if "tutorial" not in context:
-        context["tutorial"] = tutorial_identifier
+        context["tutorial"] = tutorial_slug
 
     # Add configuration URL if user has config permissions
     if config_slug and has_association_permission(request, context, "exe_config"):
@@ -263,11 +260,11 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
             permission_slug = permission_slug[0]
 
         # Get feature configuration for this permission
-        (feature_name, tutorial_key, config_section) = get_event_permission_feature(permission_slug)
+        (feature_name, tutorial_slug, config_section) = get_event_permission_feature(permission_slug)
 
         # Add tutorial information if not already present
         if "tutorial" not in context:
-            context["tutorial"] = tutorial_key
+            context["tutorial"] = tutorial_slug
 
         # Add configuration link if user has config permissions
         if config_section and has_event_permission(request, context, event_slug, "orga_config"):
@@ -339,6 +336,7 @@ def get_event_context(
     *,
     signup: bool = False,
     include_status: bool = False,
+    check_visibility: bool = True,
 ) -> dict:
     """Get comprehensive event run context with permissions and features.
 
@@ -351,6 +349,7 @@ def get_event_context(
         signup: Whether to check and validate signup eligibility for the user
         feature_slug: Optional feature slug to verify user access permissions
         include_status: Whether to include detailed registration status information
+        check_visibility: Whether to enforce visibility restrictions
 
     Returns:
         Complete event context dictionary containing:
@@ -369,7 +368,19 @@ def get_event_context(
     # Get base event context with run information
     context = get_event(request, event_slug)
 
-    # Validate user signup eligibility if requested
+    # Find user's registration and store in context
+    registration = registration_find(context["run"], context["member"])
+    context["registration"] = registration
+
+    # Check if the user is staff
+    is_staff = has_event_permission(request, context, event_slug)
+
+    # Configure staff permissions for character management access
+    if has_event_permission(request, context, event_slug, "orga_characters"):
+        context["staff"] = "1"
+        context["skip"] = "1"
+
+    # Validate the signup if requested
     if signup:
         check_signup(context)
 
@@ -379,10 +390,10 @@ def get_event_context(
 
     # Add registration status details to context
     if include_status:
-        registration_status(context["run"], context["member"], context)
+        context["run_status"] = registration_status(context, context["run"], context["member"])
 
     # Configure user permissions and sidebar for authorized users
-    if has_event_permission(request, context, event_slug):
+    if is_staff:
         get_index_event_permissions(request, context, event_slug)
         context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
@@ -392,13 +403,27 @@ def get_event_context(
     else:
         context["association_slug"] = context["event"].association.slug
 
-    # Configure staff permissions for character management access
-    if has_event_permission(request, context, event_slug, "orga_characters"):
-        context["staff"] = "1"
-        context["skip"] = "1"
-
     # Finalize run context preparation and return complete context
     prepare_run(context)
+
+    # Check character visibility restrictions if requested (skip for users with event permissions)
+    if check_visibility and not is_staff:
+        event_url = reverse("register", kwargs={"event_slug": context["run"].get_slug()})
+        # Check if gallery is hidden for non-authenticated users
+        hide_gallery_for_non_login = get_event_config(
+            context["event"].id, "gallery_hide_login", default_value=False, context=context
+        )
+        if hide_gallery_for_non_login and not request.user.is_authenticated:
+            messages.warning(request, _("You must be logged in to view this page"))
+            raise RedirectError(event_url)
+
+        # Check if gallery is hidden for non-registered users
+        hide_gallery_for_non_signup = get_event_config(
+            context["event"].id, "gallery_hide_signup", default_value=False, context=context
+        )
+        if hide_gallery_for_non_signup and not registration:
+            messages.warning(request, _("You must be registered to view this page"))
+            raise RedirectError(event_url)
 
     return context
 
@@ -415,9 +440,15 @@ def prepare_run(context: Any) -> None:
     """
     run_configuration = get_cache_config_run(context["run"])
 
-    if "staff" in context or not get_event_config(
-        context["event"].id, "writing_field_visibility", default_value=False, context=context
-    ):
+    configs = [
+        ("has_visible_factions", False),
+        ("writing_field_visibility", False),
+    ]
+    event_id = context["event"].id
+    for context_key, default in configs:
+        context[context_key] = get_event_config(event_id, context_key, default_value=default, context=context)
+
+    if "staff" in context or not context.get("writing_field_visibility"):
         context["show_all"] = "1"
 
         for writing_element in ["character", "faction", "quest", "trait"]:
@@ -435,8 +466,6 @@ def prepare_run(context: Any) -> None:
 
     context.update(run_configuration)
 
-    context["writing_fields"] = get_event_fields_cache(context["event"].id)
-
 
 def get_run(context: Any, event_slug: Any) -> None:
     """Load run and event data from cache and database.
@@ -453,10 +482,9 @@ def get_run(context: Any, event_slug: Any) -> None:
 
     """
     try:
-        run_id = get_cache_run(context["association_id"], event_slug)
+        run_uuid = get_cache_run(context["association_id"], event_slug)
         que = Run.objects.select_related("event")
         fields = [
-            "search",
             "balance",
             "event__tagline",
             "event__where",
@@ -474,7 +502,18 @@ def get_run(context: Any, event_slug: Any) -> None:
             "event__ter_rgb",
         ]
         que = que.defer(*fields)
-        context["run"] = que.get(pk=run_id)
+        context["run"] = que.get(uuid=run_uuid)
         context["event"] = context["run"].event
     except Exception as err:
         raise UnknowRunError from err
+
+
+def update_association_demo(instance: Registration) -> None:
+    """If association is in demo mode and total registrations exceed 10, disable demo."""
+    association = instance.run.event.association
+    if association.demo:
+        count = Registration.objects.filter(run__event__association_id=association.id).count()
+        if count > MAX_DEMO_REGISTRATIONS:
+            association.demo = False
+            association.save(update_fields=["demo"])
+            clear_association_cache(association.slug)

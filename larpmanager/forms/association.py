@@ -23,12 +23,13 @@ from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext
 
 from larpmanager.cache.feature import get_association_features, reset_association_features
-from larpmanager.forms.base import MyCssForm, MyForm
+from larpmanager.forms.base import BaseModelCssForm, BaseModelForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
@@ -45,7 +46,7 @@ from larpmanager.models.member import Member
 logger = logging.getLogger(__name__)
 
 
-class ExeAssociationForm(MyForm):
+class ExeAssociationForm(BaseModelForm):
     """Form for editing main association settings.
 
     Allows executives to modify core association properties
@@ -94,10 +95,10 @@ class ExeAssociationForm(MyForm):
 
         # Remove specified fields from the form's field collection
         for field_name in ["slug"]:
-            del self.fields[field_name]
+            self.delete_field(field_name)
 
 
-class ExeAssociationTextForm(MyForm):
+class ExeAssociationTextForm(BaseModelForm):
     """Form for managing association text content.
 
     Handles custom text snippets used throughout the
@@ -133,16 +134,16 @@ class ExeAssociationTextForm(MyForm):
         ch = AssociationTextType.choices
         delete_choice = [AssociationTextType.PRIVACY]
 
-        if "legal_notice" not in self.params["features"]:
+        if "legal_notice" not in self.params.get("features"):
             delete_choice.append(AssociationTextType.LEGAL)
 
-        if "receipts" not in self.params["features"]:
+        if "receipts" not in self.params.get("features"):
             delete_choice.append(AssociationTextType.RECEIPT)
 
-        if "membership" not in self.params["features"]:
+        if "membership" not in self.params.get("features"):
             delete_choice.extend([AssociationTextType.MEMBERSHIP, AssociationTextType.STATUTE])
 
-        if "remind" not in self.params["features"]:
+        if "remind" not in self.params.get("features"):
             delete_choice.extend(
                 [
                     AssociationTextType.REMINDER_MEMBERSHIP,
@@ -151,7 +152,7 @@ class ExeAssociationTextForm(MyForm):
                     AssociationTextType.REMINDER_PROFILE,
                 ],
             )
-        elif "membership" not in self.params["features"]:
+        elif "membership" not in self.params.get("features"):
             delete_choice.extend([AssociationTextType.REMINDER_MEMBERSHIP, AssociationTextType.REMINDER_MEMBERSHIP_FEE])
         else:
             delete_choice.extend([AssociationTextType.REMINDER_PROFILE])
@@ -215,13 +216,17 @@ class ExeAssociationTextForm(MyForm):
 
         # Check for duplicate default text of the same type
         if default:
-            res = AssociationText.objects.filter(association_id=self.params["association_id"], default=True, typ=typ)
+            res = AssociationText.objects.filter(
+                association_id=self.params.get("association_id"), default=True, typ=typ
+            )
             # Ensure we're not comparing against the current instance
             if res.count() > 0 and res.first().pk != self.instance.pk:
                 self.add_error("default", "There is already a language set as default!")
 
         # Check for duplicate language-type combination
-        res = AssociationText.objects.filter(association_id=self.params["association_id"], language=language, typ=typ)
+        res = AssociationText.objects.filter(
+            association_id=self.params.get("association_id"), language=language, typ=typ
+        )
         if res.count() > 0:
             first = res.first()
             # Ensure we're not comparing against the current instance
@@ -231,7 +236,7 @@ class ExeAssociationTextForm(MyForm):
         return cleaned_data
 
 
-class ExeAssociationTranslationForm(MyForm):
+class ExeAssociationTranslationForm(BaseModelForm):
     """Django form for creating and editing association-specific translation overrides.
 
     This form provides the interface for organization administrators to create custom
@@ -256,7 +261,7 @@ class ExeAssociationTranslationForm(MyForm):
         exclude = ("number",)
 
 
-class ExeAssociationRoleForm(MyForm):
+class ExeAssociationRoleForm(BaseModelForm):
     """Form for managing association roles and permissions.
 
     Allows configuration of role-based access control
@@ -278,7 +283,7 @@ class ExeAssociationRoleForm(MyForm):
         """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
         # Configure member widget with association context
-        self.fields["members"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("members", self.params.get("association_id"))
         # Prepare role-based permissions for association
         prepare_permissions_role(self, AssociationPermission)
 
@@ -289,12 +294,14 @@ class ExeAssociationRoleForm(MyForm):
         return instance
 
 
-class ExeAppearanceForm(MyCssForm):
+class ExeAppearanceForm(BaseModelCssForm):
     """Form for ExeAppearance."""
 
     page_title = _("Appearance")
 
     page_info = _("Manage appearance settings and presentation of the organization")
+
+    load_js: ClassVar[list] = ["appearance-colors"]
 
     class Meta:
         model = Association
@@ -388,13 +395,23 @@ class ExeConfigForm(ConfigForm):
         association's interface customization. Configures calendar display options,
         email notification preferences, and delegates to other configuration methods.
         """
-        # CALENDAR SECTION - Configure calendar display options
-        self.set_section("calendar", _("Calendar"))
+        self.set_section("interface", _("Interface"))
 
         # Configure visibility of past events link in calendar
         past_events_label = _("Past events")
         past_events_help_text = _("If checked: shows a link in the calendar to past events")
         self.add_configs("calendar_past_events", ConfigType.BOOL, past_events_label, past_events_help_text)
+
+        if self.params.get("skin_id") == 1:
+            # Configure user characters shortcut
+            field_label = _("Characters shortcut")
+            field_help_text = _("If checked: shows a link in the topbar to view all user's characters")
+            self.add_configs("user_characters_shortcut", ConfigType.BOOL, field_label, field_help_text)
+
+        # Configure user characters shortcut
+        field_label = _("Registrations shortcut")
+        field_help_text = _("If checked: shows a link in the topbar to view all user's registrations")
+        self.add_configs("user_registrations_shortcut", ConfigType.BOOL, field_label, field_help_text)
 
         # Configure website link display for each event
         website_label = _("Website")
@@ -421,14 +438,46 @@ class ExeConfigForm(ConfigForm):
         tagline_help_text = _("If checked: shows the tagline for each event")
         self.add_configs("calendar_tagline", ConfigType.BOOL, tagline_label, tagline_help_text)
 
-        # EMAIL SECTION - Configure notification preferences
+        # Add specif sections settings
+        self.set_config_email()
+        self.set_config_members()
+        self.set_config_accounting()
+        self.set_config_einvoice()
+        self.set_config_others()
+        self.set_config_integration()
+
+        self.set_section("legacy", "Legacy")
+
+        # Configure old dashboard visualization
+        past_events_label = _("Old dashboard")
+        past_events_help_text = _("If checked: shows the old dashboard")
+        self.add_configs("old_dashboard", ConfigType.BOOL, past_events_label, past_events_help_text)
+
+        # Configure old dashboard visualization
+        past_events_label = _("Old interface")
+        past_events_help_text = _("If checked: shows the old interface")
+        self.add_configs("old_form_appearance", ConfigType.BOOL, past_events_label, past_events_help_text)
+
+    def set_config_email(self) -> None:
+        """Configure email notification preferences."""
         self.set_section("email", _("Email notifications"))
 
-        # Configure carbon copy setting (only if main_mail exists)
+        # Configure digest notifications carbon copy setting (only if main_mail exists)
         if self.instance.main_mail:
+            digest_label = _("Notifications digest")
+            digest_help_text = _(
+                "If checked: receive a single daily summary email instead of immediate notifications "
+                "for registrations, payments, and invoice approvals"
+            )
+            self.add_configs("mail_exe_digest", ConfigType.BOOL, digest_label, digest_help_text)
+
             carbon_copy_label = _("Carbon copy")
             carbon_copy_help_text = _("If checked: Sends the main mail a copy of all mails sent to participants")
             self.add_configs("mail_cc", ConfigType.BOOL, carbon_copy_label, carbon_copy_help_text)
+
+        mail_interval_label = _("Interval sending")
+        mail_interval_help_text = _("In seconds, amount of time between each sent email (default: 3, minimum: 1)")
+        self.add_configs("mail_interval", ConfigType.INT, mail_interval_label, mail_interval_help_text)
 
         # Configure new signup notification toggle
         new_signup_label = _("New signup")
@@ -451,12 +500,6 @@ class ExeConfigForm(ConfigForm):
         payment_received_label = _("Payments received")
         payment_received_help_text = _("If checked: Send an email to the organisers for each payment received")
         self.add_configs("mail_payment", ConfigType.BOOL, payment_received_label, payment_received_help_text)
-
-        # Delegate to specialized configuration methods for other settings
-        self.set_config_members()
-        self.set_config_accounting()
-        self.set_config_einvoice()
-        self.set_config_others()
 
     def set_config_others(self) -> None:
         """Configure miscellaneous association settings.
@@ -589,7 +632,12 @@ class ExeConfigForm(ConfigForm):
             # Membership year start date configuration
             field_label = _("Start day")
             field_help_text = _("Day of the year from which the membership year begins, in DD-MM format")
-            self.add_configs("membership_day", ConfigType.CHAR, field_label, field_help_text)
+            # Regex validator for DD-MM format (01-31 for day, 01-12 for month)
+            day_validator = RegexValidator(
+                regex=r"^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])$",
+                message=_("Enter a valid date in DD-MM format") + " (e.g., 01-01, 15-06, 31-12)",
+            )
+            self.add_configs("membership_day", ConfigType.CHAR, field_label, field_help_text, [day_validator])
 
             # Grace period for membership fee payment
             field_label = _("Months free quota")
@@ -715,24 +763,27 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("vat_options", ConfigType.INT, label_vat_on_options, help_text_vat_on_options)
 
         # Configure token/credit system naming and display
-        if "token_credit" in self.params["features"]:
-            self.set_section("token_credit", _("Tokens / Credits"))
+        if "tokens" in self.params["features"]:
+            self.set_section("tokens", _("Tokens"))
 
             # Customizable token display name
             label_token_display_name = _("Token name")
             help_text_token_display_name = _("Name to be displayed for tokens")
             self.add_configs(
-                "token_credit_token_name",
+                "tokens_name",
                 ConfigType.CHAR,
                 label_token_display_name,
                 help_text_token_display_name,
             )
 
+        if "credits" in self.params["features"]:
+            self.set_section("credits", _("Credits"))
+
             # Customizable credit display name
-            label_credit_display_name = _("Name credits")
+            label_credit_display_name = _("Credits name")
             help_text_credit_display_name = _("Name to be displayed for credits")
             self.add_configs(
-                "token_credit_credit_name",
+                "credits_name",
                 ConfigType.CHAR,
                 label_credit_display_name,
                 help_text_credit_display_name,
@@ -780,17 +831,33 @@ class ExeConfigForm(ConfigForm):
                 help_text_disable_event_approval,
             )
 
+    def set_config_integration(self) -> None:
+        """Configure app integration redirect settings for associations."""
+        if "app_integration" not in self.params["features"]:
+            return
+
+        self.set_section("app_integration", _("App Integration"))
+
+        field_label = _("Button text")
+        field_help_text = _("Label shown on the topbar button to access the external application")
+        self.add_configs("app_integration_button_text", ConfigType.CHAR, field_label, field_help_text)
+
+        field_label = _("Redirect URL")
+        field_help_text = _("URL of the external application where the user will be redirected")
+        self.add_configs("app_integration_redirect_url", ConfigType.CHAR, field_label, field_help_text)
+
+        field_label = _("Shared secret")
+        field_help_text = _(
+            "Secret key used to sign the JWT token for SSO authentication with the external application",
+        )
+        self.add_configs("app_integration_secret", ConfigType.CHAR, field_label, field_help_text)
+
+        field_label = _("Algorithm")
+        field_help_text = _("Signing algorithm for the JWT token (default: HS256)")
+        self.add_configs("app_integration_algorithm", ConfigType.CHAR, field_label, field_help_text)
+
     def set_config_einvoice(self) -> None:
-        """Configure electronic invoice settings for associations.
-
-        Sets up Italian e-invoice system parameters and business information
-        for electronic billing compliance. Only processes if 'e-invoice'
-        feature is enabled in params.
-
-        Returns:
-            None
-
-        """
+        """Configure electronic invoice settings for associations."""
         if "e-invoice" not in self.params["features"]:
             return
 
@@ -854,7 +921,7 @@ class ExeConfigForm(ConfigForm):
         self.add_configs("einvoice_codicedestinatario", ConfigType.CHAR, field_label, field_help_text)
 
 
-class FirstAssociationForm(MyForm):
+class FirstAssociationForm(BaseModelForm):
     """Form for creating a new association during initial setup.
 
     Simplified form for first-time association creation
@@ -863,21 +930,13 @@ class FirstAssociationForm(MyForm):
 
     class Meta:
         model = Association
-        fields = ("name", "profile", "slug")
+        fields = ("name", "profile", "slug", "payment_currency")
         widgets: ClassVar[dict] = {
             "slug": SlugInput,
         }
 
     def clean_slug(self) -> str:
-        """Validate that the slug is unique across all associations.
-
-        Returns:
-            str: The validated slug value.
-
-        Raises:
-            ValidationError: If the slug is already in use by another association.
-
-        """
+        """Validate that the slug is unique across all associations."""
         data: str = self.cleaned_data["slug"]
         logger.debug("Validating association slug: %s", data)
 
@@ -901,7 +960,7 @@ class ExeQuickSetupForm(QuickSetupForm):
 
     page_title = _("Quick Setup")
 
-    page_info = _("Manage quick setup of the most important settings for your new organization")
+    page_info = _("You are choosing the most common features to activate for your organization")
 
     class Meta:
         model = Association
@@ -1005,3 +1064,38 @@ class ExePreferencesForm(ConfigForm):
             sidebar_collapse_label,
             sidebar_collapse_help_text,
         )
+
+        # Add organizer digest mode toggle option
+        digest_mode_label = _("Notifications digest")
+        digest_mode_help_text = _(
+            "If checked: receive a single daily summary email instead of immediate notifications "
+            "for registrations, payments, and invoice approvals"
+        )
+        self.add_configs(
+            "mail_orga_digest",
+            ConfigType.BOOL,
+            digest_mode_label,
+            digest_mode_help_text,
+        )
+
+        if self.params.get("old_dashboard"):
+            # Add temporary new dashboard
+            digest_mode_label = _("New Dashboard")
+            digest_mode_help_text = _("If checked: activate new dashbord")
+            self.add_configs(
+                "interface_new_dashboard",
+                ConfigType.BOOL,
+                digest_mode_label,
+                digest_mode_help_text,
+            )
+
+        if self.params.get("old_form_appearance"):
+            # Add temporary new dashboard
+            digest_mode_label = _("New interface")
+            digest_mode_help_text = _("If checked: activate new interface")
+            self.add_configs(
+                "interface_new_ui",
+                ConfigType.BOOL,
+                digest_mode_label,
+                digest_mode_help_text,
+            )

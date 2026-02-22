@@ -27,8 +27,10 @@ from django.apps import apps
 from django.conf import settings as conf_settings
 from django.core.exceptions import FieldDoesNotExist
 from django.core.management.base import BaseCommand
-from django.db import transaction
+from django.db import connection, transaction
 from django.db.models import ForeignKey, ManyToManyField
+
+from larpmanager.management.commands.utils import check_virtualenv
 
 
 class Command(BaseCommand):
@@ -42,6 +44,10 @@ class Command(BaseCommand):
         Loads modules, features, permissions, and other system configuration
         from YAML fixtures with proper handling of foreign keys and many-to-many relations.
         """
+        # Ensure we're running inside a virtual environment
+        check_virtualenv()
+        models_to_reset = set()
+
         for fixture in [
             "module",
             "feature",
@@ -59,6 +65,7 @@ class Command(BaseCommand):
                 model_label = obj["model"]
                 Model = apps.get_model(model_label)
                 fields = obj["fields"]
+                models_to_reset.add(Model)
 
                 # set m2m
                 m2m_fields = self.prepare_m2m(fields)
@@ -80,6 +87,9 @@ class Command(BaseCommand):
 
                     for field_name, values in m2m_fields.items():
                         self.set_m2m(Model, field_name, instance, model_label, values)
+
+        # Reset sequences after importing to prevent duplicate key violations
+        self.reset_sequences(models_to_reset)
 
     @staticmethod
     def set_m2m(model: type, field_name: str, instance: object, model_label: str, values: list[int | str]) -> None:
@@ -134,15 +144,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def prepare_m2m(field_definitions: dict) -> dict:
-        """Extract many-to-many fields from the fields dictionary.
-
-        Args:
-            field_definitions: Dictionary of field names and values
-
-        Returns:
-            Dictionary containing only the many-to-many fields (list values)
-
-        """
+        """Extract many-to-many fields from the fields dictionary."""
         many_to_many_fields = {}
         # Iterate through a copy of keys to safely modify the original dict
         for field_name in list(field_definitions.keys()):
@@ -187,3 +189,43 @@ class Command(BaseCommand):
                     related_model = field_object.remote_field.model
                     related_object = related_model.objects.get(slug=field_value)
                     fields[f"{field_name}_id"] = related_object.pk
+
+    def reset_sequences(self, models: set) -> None:
+        """Reset PostgreSQL sequences for the given models.
+
+        Args:
+            models: Set of Django model classes to reset sequences for
+
+        Note:
+            Only works with PostgreSQL databases. Silently skips for other databases.
+
+        """
+        if connection.vendor != "postgresql":
+            return
+
+        with connection.cursor() as cursor:
+            for model in models:
+                table_name = model._meta.db_table  # noqa: SLF001
+                pk_field = model._meta.pk  # noqa: SLF001
+
+                # Only reset tables with auto-incrementing primary keys
+                if not pk_field or pk_field.get_internal_type() not in ("AutoField", "BigAutoField"):
+                    continue
+
+                # Get the actual sequence name using pg_get_serial_sequence
+                # This handles cases where sequence names are truncated due to PostgreSQL's 63-char limit
+                try:
+                    cursor.execute(
+                        "SELECT pg_get_serial_sequence(%s, %s);",
+                        [table_name, pk_field.column],
+                    )
+                    result = cursor.fetchone()
+                    if not result or not result[0]:
+                        continue
+                    sequence_name = result[0]
+
+                    # Reset the sequence to the maximum value in the table
+                    sql = f"SELECT setval('{sequence_name}', COALESCE((SELECT MAX({pk_field.column}) FROM {table_name}), 1));"  # noqa: S608
+                    cursor.execute(sql)
+                except Exception as e:  # noqa: BLE001
+                    self.stdout.write(self.style.WARNING(f"Could not reset sequence for {table_name}: {e}"))

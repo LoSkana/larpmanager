@@ -147,10 +147,10 @@ LANGUAGES = [
     ('nl', 'Nederlands'),
     ('nb', 'Norsk'),
     ('sv', 'Svenska'),
+    ('fi', 'suomi'),
     # ('pt', 'Português'),
     # ('el', 'Ελληνικά'),
     # ('da', 'Dansk'),
-    # ('fi', 'suomi'),
     # ('et', 'Eesti'),
     # ('uk', 'українська мова'),
     # ('bg', 'български език'),
@@ -206,12 +206,18 @@ TINYMCE_DEFAULT_CONFIG = {
     'automatic_uploads': True,
     'file_picker_types': 'image media',
     'paste_data_images': False,
+
+    # "skin_url": "/static/larpmanager/assets/tinymce/lm_skin",
 }
 
 
 TINYMCE_COMPRESSOR = False
 
 SECURE_REFERRER_POLICY = 'origin'
+
+# Accounting
+
+MAX_ROUNDING_TOLERANCE = 0.05
 
 # Demo user password (used for creating demo accounts)
 DEMO_PASSWORD = 'pippo'
@@ -220,9 +226,10 @@ DEMO_PASSWORD = 'pippo'
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB in bytes
 
 # Allowed file extensions for TinyMCE uploads
+# SECURITY: SVG files are excluded due to XSS risk (can contain JavaScript)
 ALLOWED_UPLOAD_EXTENSIONS = {
     # Images
-    '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp',
+    '.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp',
     # Documents
     '.pdf', '.doc', '.docx', '.odt', '.txt',
     # Audio/Video
@@ -235,9 +242,10 @@ UPLOAD_RATE_WINDOW = 60  # Time window in seconds (1 minute)
 UPLOAD_MAX_STORAGE_PER_USER = 100 * 1024 * 1024  # 100MB total per user
 
 # MIME type validation for uploads
+# SECURITY: image/svg+xml is excluded due to XSS risk (SVGs can contain JavaScript)
 ALLOWED_MIME_TYPES = {
     # Images
-    'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/bmp',
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp',
     # Documents
     'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/vnd.oasis.opendocument.text', 'text/plain',
@@ -249,6 +257,15 @@ ALLOWED_MIME_TYPES = {
 # email
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+MAIL_BATCH_SIZE = 10
+
+MAIL_BATCH_INTERVAL = 1
+
+# Amazon SES Configuration (optional - fallback when custom SMTP not configured)
+AWS_SES_ACCESS_KEY_ID = None
+AWS_SES_SECRET_ACCESS_KEY = None
+AWS_SES_REGION_NAME = 'us-east-1'
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
@@ -280,12 +297,12 @@ CLEAN_DB = [
     "delete from larpmanager_accountingitemdiscount where deleted < CURRENT_DATE - INTERVAL '6 months';",
     "delete from larpmanager_registrationcharacterrel where deleted < CURRENT_DATE - INTERVAL '6 months';",
 
-    "delete from larpmanager_registrationchoice where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
-    "delete from larpmanager_registrationanswer where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
-    "delete from larpmanager_accountingitempayment where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
-    "delete from larpmanager_accountingitemtransaction where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
-    "delete from larpmanager_playerrelationship where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
-    "delete from larpmanager_registrationcharacterrel where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
+    "delete from larpmanager_registrationchoice where registration_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
+    "delete from larpmanager_registrationanswer where registration_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
+    "delete from larpmanager_accountingitempayment where registration_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
+    "delete from larpmanager_accountingitemtransaction where registration_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
+    "delete from larpmanager_playerrelationship where registration_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
+    "delete from larpmanager_registrationcharacterrel where registration_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
     "delete from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months';",
 
     "delete from larpmanager_casting where deleted < CURRENT_DATE - INTERVAL '6 months';",
@@ -328,6 +345,22 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
+# django-allauth settings
+# Enable email-based user matching for social accounts
+# This allows django-allauth to find users by email instead of username
+# when users have username different from email
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+ACCOUNT_UNIQUE_EMAIL = True
+
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}
+
+ACCOUNT_SIGNUP_FIELDS = [
+    'email*',
+    'password1*',
+    'password2*'
+]
+
 # PROFILING
 MIN_DURATION_PROFILER = 1
 IGNORABLE_PROFILER_URLS = [
@@ -336,6 +369,16 @@ IGNORABLE_PROFILER_URLS = [
     re.compile(r'logout'),
     re.compile(r'xyz'),
     re.compile(r'accounts/google/login/callback'),
+]
+
+# 404 ERRORS TO IGNORE
+IGNORABLE_404_URLS = [
+    re.compile(r'/functions/webhook\.js'),
+    re.compile(r'/\.well-known/'),
+    re.compile(r'apple-touch-icon'),
+    re.compile(r'favicon\.ico'),
+    re.compile(r'/wp-'),
+    re.compile(r'/xmlrpc\.php'),
 ]
 
 # PAYMENT SETTINGS

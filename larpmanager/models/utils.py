@@ -23,8 +23,11 @@ import base64
 import hashlib
 import json
 import logging
+import os
 import random
+import secrets
 import string
+from decimal import Decimal
 from html.parser import HTMLParser
 from io import StringIO
 from pathlib import Path
@@ -40,9 +43,9 @@ from django.utils.deconstruct import deconstructible
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-if TYPE_CHECKING:
-    from decimal import Decimal
+from larpmanager.utils.security import normalize_filename
 
+if TYPE_CHECKING:
     from django.utils.safestring import SafeString
 
     from larpmanager.models.association import Association
@@ -51,77 +54,54 @@ logger = logging.getLogger(__name__)
 
 
 def generate_id(id_length: Any) -> Any:
-    """Generate random alphanumeric ID string.
-
-    Args:
-        id_length (int): Length of ID to generate
-
-    Returns:
-        str: Random lowercase alphanumeric string of specified length
-
-    """
+    """Generate random alphanumeric ID string."""
     return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(id_length))  # noqa: S311
 
 
 def decimal_to_str(decimal_value: Decimal) -> str:
-    """Convert decimal to string with .00 removed.
-
-    Takes a Decimal value and converts it to a string representation,
-    removing any trailing ".00" to provide cleaner output for whole numbers.
-
-    Args:
-        decimal_value (Decimal): The decimal value to convert to string format.
-
-    Returns:
-        str: String representation of the decimal without trailing ".00".
-            For example, Decimal('5.00') becomes '5', while Decimal('5.50')
-            becomes '5.50'.
-
-    Example:
-        >>> decimal_to_str(Decimal('10.00'))
-        '10'
-        >>> decimal_to_str(Decimal('10.50'))
-        '10.50'
-
-    """
+    """Convert decimal to string with .00 removed."""
     # Convert decimal to string representation
     string_representation = str(decimal_value)
     # Remove trailing .00 for cleaner display of whole numbers
     return string_representation.replace(".00", "")
 
 
-def slug_url_validator(val: Any) -> None:
-    """Validate that string contains only lowercase alphanumeric characters.
+def get_option_form_text(option: dict, currency_symbol: str | None = None, event_association: Any = None) -> str:
+    """Generate form display text for an option dict or ORM object.
 
     Args:
-        val (str): String to validate
+        option: Option dict or ORM object with name and price fields
+        currency_symbol: Currency symbol to append to price (optional)
+        event_association: Association object to get currency from (optional)
 
-    Raises:
-        ValidationError: If string contains invalid characters
+    Returns:
+        Formatted text with name and optional price
 
     """
+    # Get name and price from dict or ORM object
+    name = option["name"] if isinstance(option, dict) else option.name
+    price = option.get("price", 0) if isinstance(option, dict) else option.price
+
+    formatted_text = name
+
+    # Append formatted price with currency symbol if applicable
+    if price and ((isinstance(price, Decimal) and price > 0) or (isinstance(price, (int, float)) and price > 0)):
+        if not currency_symbol and event_association:
+            currency_symbol = event_association.get_currency_symbol()
+        if currency_symbol:
+            formatted_text += f" ({decimal_to_str(price)}{currency_symbol})"
+
+    return formatted_text
+
+
+def slug_url_validator(val: Any) -> None:
+    """Validate that string contains only lowercase alphanumeric characters."""
     if not val.islower() or not val.isalnum():
         raise ValidationError(_("Only lowercase characters and numbers are allowed, no spaces or symbols"))
 
 
 def remove_non_ascii(text: str) -> str:
-    """Remove non-ASCII characters from text.
-
-    Filters out any characters with ordinal values >= 128, keeping only
-    standard ASCII characters (0-127). Useful for sanitizing text data
-    or ensuring compatibility with ASCII-only systems.
-
-    Args:
-        text: Input text string to filter.
-
-    Returns:
-        Filtered string containing only ASCII characters.
-
-    Example:
-        >>> remove_non_ascii("Hello 世界!")
-        "Hello !"
-
-    """
+    """Remove non-ASCII characters from text."""
     # Define ASCII boundary (characters 0-127)
     max_ascii = 128
 
@@ -135,21 +115,14 @@ def my_uuid_miny() -> Any:
 
 
 def my_uuid_short() -> Any:
-    """Generate short UUID string of 12 characters.
-
-    Returns:
-        str: 12-character UUID string
-
-    """
+    """Generate short UUID string of 12 characters."""
     return my_uuid(12)
 
 
-def my_uuid(length: int | None = None) -> str:
-    """Generate a UUID hex string, optionally truncated to specified length."""
-    uuid_hex_string = uuid4().hex
-    if length is None:
-        return uuid_hex_string
-    return uuid_hex_string[:length]
+def my_uuid(length: int | None = 32) -> str:
+    """Generate a UUID of specified length."""
+    alphabet = string.ascii_lowercase + string.digits
+    return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
 def download_d(session: Any) -> Any:
@@ -169,23 +142,7 @@ def download(url: str) -> str:
 
 
 def show_thumb(height: int, image_url: str) -> SafeString:
-    """Generate HTML img tag for thumbnail display.
-
-    Creates an HTML image element with specified height and source URL.
-    The image maintains aspect ratio while constraining height.
-
-    Args:
-        height: Height in pixels for the image display
-        image_url: URL or file path to the image source
-
-    Returns:
-        HTML img tag as a SafeString with specified height and source
-
-    Example:
-        >>> show_thumb(100, "/media/image.jpg")
-        '<img style="height:100px" src="/media/image.jpg" />'
-
-    """
+    """Generate HTML img tag for thumbnail display."""
     # Generate HTML img tag with inline height styling using format_html for safety
     return format_html('<img style="height:{}px" src="{}" />', height, image_url)
 
@@ -249,6 +206,9 @@ class UploadToPathAndRename:
             Backup files are stored in 'bkp/' subdirectory with timestamp suffix.
 
         """
+        # Normalize Unicode to prevent lookalike attacks
+        filename = normalize_filename(filename)
+
         # Extract file extension and generate unique filename
         ext = filename.split(".")[-1].lower()
         filename = f"{uuid4().hex}.{ext}"
@@ -310,6 +270,10 @@ def get_payment_details_path(association: Association) -> str:
     if it doesn't exist and generates a filename using the association's
     slug and encryption key identifier.
 
+    In debug mode or test/CI environment (detected via CI, GITHUB_ACTIONS, or
+    PYTEST_CURRENT_TEST environment variables), includes worker ID to avoid
+    conflicts when multiple tests run in parallel.
+
     Args:
         association: Association instance containing slug and key attributes
 
@@ -329,8 +293,19 @@ def get_payment_details_path(association: Association) -> str:
     # Generate key identifier for filename security
     key_identifier = _key_id(association.key)
 
-    # Create secure filename with association slug and key ID
-    filename = f"{Path(association.slug).name}.{key_identifier}.enc"
+    # In debug mode or test/CI environment, add worker ID to avoid parallel test conflicts
+    if (
+        conf_settings.DEBUG
+        or os.getenv("CI") == "true"
+        or os.getenv("GITHUB_ACTIONS") == "true"
+        or os.getenv("PYTEST_CURRENT_TEST")
+    ):
+        # Get pytest-xdist worker ID (e.g., 'gw0', 'gw1') or use UUID if not available
+        worker_id = os.environ.get("PYTEST_XDIST_WORKER", "main")
+        filename = f"{Path(association.slug).name}.{key_identifier}.{worker_id}.enc"
+    else:
+        # Create secure filename with association slug and key ID
+        filename = f"{Path(association.slug).name}.{key_identifier}.enc"
 
     # Return full path to encrypted payment file
     return str(Path(conf_settings.PAYMENT_SETTING_FOLDER) / filename)
@@ -370,22 +345,7 @@ def save_payment_details(association: Association, payment_details: dict) -> Non
 
 
 def strip_tags(html: str | None) -> str:
-    """Strip HTML tags from text content.
-
-    Args:
-        html: HTML string to process. Can be None or empty string.
-
-    Returns:
-        Plain text with HTML tags removed. Returns empty string if input
-        is None or empty.
-
-    Example:
-        >>> strip_tags("<p>Hello <b>world</b></p>")
-        "Hello world"
-        >>> strip_tags(None)
-        ""
-
-    """
+    """Strip HTML tags from text content."""
     # Handle None and empty string cases early
     if html is None or html == "":
         return ""

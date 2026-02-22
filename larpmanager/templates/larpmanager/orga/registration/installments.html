@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Installments" %} - {{ run }}
+    {% trans "Installments" %} - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows the payment deadline settings for the event" %}
@@ -17,13 +17,14 @@
                 <th>{% trans "Deadline (days)" %}</th>
                 <th>{% trans "Deadline (date)" %}</th>
                 <th>{% trans "Tickets" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_registration_installments_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_registration_installments_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.order }}</td>
@@ -39,6 +40,11 @@
                             {% include "elements/comma.html" %}
                             {{ ticket.name }}
                         {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_registration_installments_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

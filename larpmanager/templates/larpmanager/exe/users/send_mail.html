@@ -4,17 +4,16 @@
     {% trans "Send emails" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "From this page you can send an email to any list of recipients" %}
+    {% trans "From this page you can email any list of recipients" %}
 {% endblock info %}
 {% block content %}
-    <p>{% trans "Remember to put recipients separated by commas" %}</p>
     {% include "elements/form/main.html" %}
 {% endblock content %}
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
     $('form').on('submit', function() {
-        return confirm('{% trans "Are you really sure" %}?');
+        return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you really sure" %}{% endfilter %}?');
     });
 });
 });

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Collection for" %} {{ coll.display_member }}
+{% endblock title %}
+{% block content %}
+    {% if coll.status == 'p' %}
+        <p>{% trans "The collection was delivered to the user" %} {{ coll.member }}</p>
+    {% elif coll.status == 'd' %}
+        <p>
+            {% trans "The collection is ready to be delivered, give this link to the recipient" %}:
+            <a href="{% url 'accounting_collection_redeem' coll.redeem_code %}">{% trans "Collection links" %}</a>
+        </p>
+    {% elif coll.status == 'o' %}
+        <p>
+            {% trans "The collection is active! To participate click on the following link, or copy it to whoever you want to get involved" %}:
+            <br />
+            <a href="{% url 'accounting_collection_participate' coll.contribute_code %}">{% trans "Link to participate in" %}</a>
+        </p>
+        <br />
+        <p>
+            {% trans "When you want to close the collection, follow the link below. A special redemption code will be generated" %}!
+            <br />
+            <a href="{% url 'accounting_collection_close' coll.contribute_code %}">{% trans "Link to close the collection" %}</a>
+        </p>
+        <br />
+    {% endif %}
+    <p>
+        {% trans "Number of partecipants" %}: <b>{{ list | length }}.</b> {% trans "Total collection" %}: <b>{{ coll.total }}.</b>
+    </p>
+    {% if list %}
+        <p>
+            {% trans "Participants included" %}:
+            {% for el in list %}
+                {% include "elements/comma.html" %}
+                {{ el.member.display_member }}
+            {% endfor %}
+        </p>
+    {% endif %}
+{% endblock content %}
+{% block js %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+
+$('#close').click(function(){
+    return window.lmTesting ? true : confirm("{% filter escapejs %}{% trans "Confirm" %}{% endfilter %}?");
+})
+});
+    </script>
+{% endblock js %}

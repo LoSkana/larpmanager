@@ -2,12 +2,12 @@
 
 <script>
 
-const editUrl = "{% url 'orga_characters_edit' run.get_slug 0 %}";
+const editUrl = "{% url 'orga_characters_new' run.get_slug %}";
 
-{% if eid %}
-    var eid = {{ eid }};
+{% if edit_uuid %}
+    var edit_uuid = '{{ edit_uuid }}';
 {% else %}
-    var eid = null;
+    var edit_uuid = '';
 {% endif %}
 
 window.addEventListener('DOMContentLoaded', function() {
@@ -19,7 +19,7 @@ window.addEventListener('DOMContentLoaded', function() {
         console.log(ch_id);
         console.log(ch_name);
 
-        charUrl = editUrl.replace(/\/0\/$/, `/${ch_id}/`);;
+        charUrl = editUrl.replace(/\/new\/$/, `/${ch_id}/edit/`);;
 
         var html = `
         <tr id="id_char_role_{0}_tr">

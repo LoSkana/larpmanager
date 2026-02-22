@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   test:
     name: CI
@@ -13,10 +17,9 @@ jobs:
 
     container:
       image: ghcr.io/loskana/larpmanager-ci:latest
-
       credentials:
-        username: loskana
-        password: ${{ secrets.REPO_TOKEN }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     env:
       CI: true
@@ -26,7 +29,6 @@ jobs:
       POSTGRES_PASSWORD: larpmanager
       POSTGRES_DB: larpmanager_test
       DB_HOST: postgres
-      WORKERS: "4"
 
     services:
       postgres:
@@ -60,6 +62,7 @@ jobs:
     - name: Install dependencies
       run: |
         uv pip install --system -r pyproject.toml
+        playwright install chromium --with-deps
         cd larpmanager/static
         npm install
         cd ../../
@@ -82,16 +85,18 @@ jobs:
 
     - name: Prepare dbs
       run: |
+        export WORKERS=$(( $(nproc) - 1 ))
         bash scripts/create_dbs.sh "$WORKERS" larpmanager/tests/test_db.sql
         export PYTEST_CURRENT_TEST="true"
-        export HOME=$(mktemp -d)
 
     - name: Run Unit Django tests
       run: |
+        export WORKERS=$(( $(nproc) - 1 ))
         bash scripts/test_unit.sh
 
-    - name: Run Plawright Django tests
+    - name: Run Playwright Django tests
       run: |
+        export WORKERS=$(( $(nproc) - 1 ))
         bash scripts/test_playwright.sh
 
 

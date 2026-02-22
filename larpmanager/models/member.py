@@ -37,7 +37,7 @@ from pilkit.processors import ResizeToFill
 
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
 from larpmanager.utils.core.codes import countries
 
@@ -75,7 +75,7 @@ class DocumentChoices(models.TextChoices):
     PASS = "s", _("Passport")
 
 
-class Member(BaseModel):
+class Member(UuidMixin, BaseModel):
     """Represents Member model."""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
@@ -93,9 +93,17 @@ class Member(BaseModel):
         help_text=_("Preferred navigation language"),
     )
 
-    name = models.CharField(max_length=100, verbose_name=_("Name"))
+    name = models.CharField(
+        max_length=100,
+        verbose_name=_("Name"),
+        help_text=_("Your first name as you prefer to be called"),
+    )
 
-    surname = models.CharField(max_length=100, verbose_name=_("Surname"))
+    surname = models.CharField(
+        max_length=100,
+        verbose_name=_("Surname"),
+        help_text=_("Your last name or family name"),
+    )
 
     nickname = models.CharField(
         max_length=100,
@@ -179,9 +187,20 @@ class Member(BaseModel):
         null=True,
     )
 
-    birth_date = models.DateField(verbose_name=_("Birth date"), blank=True, null=True)
+    birth_date = models.DateField(
+        verbose_name=_("Birth date"),
+        help_text=_("Your date of birth"),
+        blank=True,
+        null=True,
+    )
 
-    birth_place = models.CharField(max_length=150, verbose_name=_("Birth place"), blank=True, null=True)
+    birth_place = models.CharField(
+        max_length=150,
+        verbose_name=_("Birth place"),
+        help_text=_("City and country where you were born"),
+        blank=True,
+        null=True,
+    )
 
     fiscal_code = models.CharField(
         max_length=16,
@@ -208,7 +227,12 @@ class Member(BaseModel):
         help_text=_("Enter the number or code of the identification document indicated above"),
     )
 
-    document_issued = models.DateField(verbose_name=_("Date of issue of the document"), blank=True, null=True)
+    document_issued = models.DateField(
+        verbose_name=_("Date of issue of the document"),
+        help_text=_("The date when your identification document was issued"),
+        blank=True,
+        null=True,
+    )
 
     document_expiration = models.DateField(
         blank=True,
@@ -222,6 +246,7 @@ class Member(BaseModel):
     residence_address = models.CharField(
         max_length=500,
         verbose_name=_("Residence address"),
+        help_text=_("Your full residential address including street, city, and country"),
         blank=True,
         null=True,
     )
@@ -306,6 +331,13 @@ class Member(BaseModel):
 
     class Meta:
         ordering: ClassVar[list] = ["surname", "name"]
+        indexes: ClassVar[list] = [
+            # Performance index from migration 0137
+            models.Index(
+                fields=["email"],
+                name="member_email_idx",
+            ),
+        ]
 
     def __str__(self) -> str:
         """Return string representation."""
@@ -365,12 +397,7 @@ class Member(BaseModel):
         return str(self)
 
     def get_member_filepath(self) -> str:
-        """Get the file path for member PDF storage.
-
-        Returns:
-            The absolute path to the member's PDF directory.
-
-        """
+        """Get the file path for member PDF storage."""
         # Build base PDF members directory path
         member_pdf_directory = str(Path(conf_settings.MEDIA_ROOT) / "pdf/members" / str(self.id))
         # Ensure directory exists
@@ -396,6 +423,11 @@ class Member(BaseModel):
         # Split address components by pipe delimiter
         # noinspection PyUnresolvedReferences
         address_components = self.residence_address.split("|")
+
+        expected_parts = 6
+        if len(address_components) < expected_parts:
+            # Return raw address if format is unexpected
+            return self.residence_address
 
         # Format: street number, city (province), country_code (country)
         return f"{address_components[4]} {address_components[5]}, {address_components[2]} ({address_components[3]}), {address_components[1].replace('IT-', '')} ({address_components[0]})"
@@ -554,6 +586,11 @@ class Membership(BaseModel):
                 condition=Q(deleted__isnull=True),
                 name="memb_association_stat_act",
             ),
+            models.Index(
+                fields=["association", "status", "member"],
+                condition=Q(deleted__isnull=True),
+                name="memb_assoc_stat_mem_act",
+            ),
         ]
         constraints: ClassVar[list] = [
             UniqueConstraint(
@@ -590,7 +627,7 @@ class Membership(BaseModel):
             return ""
 
 
-class VolunteerRegistry(BaseModel):
+class VolunteerRegistry(UuidMixin, BaseModel):
     """Represents VolunteerRegistry model."""
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="volunteer")
@@ -615,7 +652,7 @@ class VolunteerRegistry(BaseModel):
         ]
 
 
-class Badge(BaseModel):
+class Badge(UuidMixin, BaseModel):
     """Represents Badge model."""
 
     name = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Short name"))
@@ -655,6 +692,10 @@ class Badge(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        """Return string representation of the badge."""
+        return self.name
+
     def thumb(self) -> str:
         """Return HTML for thumbnail image if available, otherwise empty string."""
         if self.img_thumb:
@@ -665,7 +706,7 @@ class Badge(BaseModel):
     def show(self) -> dict:
         """Return a dictionary representation for display purposes."""
         # noinspection PyUnresolvedReferences
-        js = {"id": self.id, "number": self.number}
+        js = {"uuid": str(self.uuid), "number": self.number}
 
         # Add localized name and description attributes
         for s in ["name", "descr"]:
@@ -678,22 +719,14 @@ class Badge(BaseModel):
         return js
 
 
-class Log(BaseModel):
-    """Represents Log model."""
+class LogOperationType(models.TextChoices):
+    """Log operation types."""
 
-    member = models.ForeignKey(Member, on_delete=models.CASCADE)
-
-    eid = models.IntegerField()
-
-    cls = models.CharField(max_length=100)
-
-    dct = models.TextField()
-
-    dl = models.BooleanField(default=False)
-
-    def __str__(self) -> str:
-        """Return string representation."""
-        return f"{self.cls} {self.eid}"
+    NEW = "new", _("New")
+    UPDATE = "update", _("Update")
+    DELETE = "delete", _("Delete")
+    BULK = "bulk", _("Bulk operation")
+    UPLOAD = "upload", _("Upload")
 
 
 class Vote(BaseModel):
@@ -764,3 +797,49 @@ def get_user_membership(user: Member, association: Association | int) -> Members
     # Cache the membership on the user object for future access
     user.membership = membership
     return membership
+
+
+class NotificationType(models.TextChoices):
+    """Notification types for email sent to organizers and association executives."""
+
+    # Event-level notifications (sent to event organizers)
+    REGISTRATION_NEW = "registration_new", "New Registration"
+    REGISTRATION_UPDATE = "registration_update", "Updated Registration"
+    REGISTRATION_CANCEL = "registration_cancel", "Cancelled Registration"
+    PAYMENT_MONEY = "payment_money", "Money Payment"
+    PAYMENT_CREDIT = "payment_credit", "Credit Payment"
+    PAYMENT_TOKEN = "payment_token", "Token Payment"
+    INVOICE_APPROVAL = "invoice_approval", "Invoice Awaiting Approval"
+
+    # Association-level notifications (sent to association executives)
+    HELP_QUESTION = "help_question", "Help Question"
+    PASSWORD_REMINDER = "password_reminder", "Password Reminder"
+    REFUND_REQUEST = "refund_request", "Refund Request"
+    INVOICE_APPROVAL_EXE = "invoice_approval_exe", "Invoice Approval (Executive)"
+
+
+class NotificationQueue(BaseModel):
+    """Queue for batching organizer and executive notifications into daily summaries.
+
+    Supports both event-level notifications (for event organizers) and association-level
+    notifications (for association executives). Event-level notifications require a run,
+    while association-level notifications require an association.
+
+    If member is None, the notification will be sent to the association's main_mail address.
+    """
+
+    run = models.ForeignKey("Run", on_delete=models.CASCADE, null=True, blank=True)
+    association = models.ForeignKey("Association", on_delete=models.CASCADE, null=True, blank=True)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, null=True, blank=True)
+    notification_type = models.CharField(max_length=30, choices=NotificationType.choices)
+    object_id = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    sent = models.BooleanField(default=False)
+    sent_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        """String representation for notification in queue."""
+        member_str = self.member if self.member else "main_mail"
+        if self.run:
+            return f"{self.run.search} - {member_str} - {self.get_notification_type_display()}"
+        return f"{self.association.name} - {member_str} - {self.get_notification_type_display()}"

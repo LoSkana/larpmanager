@@ -7,8 +7,8 @@
 window.addEventListener('DOMContentLoaded', function() {
 
     var keyTinyMCE;
-    var qid;
-    var eid;
+    var question_uuid;
+    var edit_uuid;
     var workingTicketInterval = null;
 
     function closeEdit () {
@@ -40,12 +40,12 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     function callWorkingTicket() {
-        if (!eid) return;
+        if (!edit_uuid) return;
 
         $.ajax({
             type: "POST",
             url: "{% url 'working_ticket' %}",
-            data: {eid: eid, type: '{{ label_typ }}', token: token},
+            data: {edit_uuid: edit_uuid, type: '{{ label_typ }}', token: token},
             success: function(msg) {
                 if (msg.warn) {
                     $.toast({
@@ -80,8 +80,8 @@ window.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('form-excel');
         const formData = new FormData(form);
 
-        formData.append('eid', eid);
-        formData.append('qid', qid);
+        formData.append('edit_uuid', edit_uuid);
+        formData.append('question_uuid', question_uuid);
         formData.append('auto', auto ? 1 : 0);
         formData.append('token', token);
 
@@ -115,11 +115,37 @@ window.addEventListener('DOMContentLoaded', function() {
             // success
             if (res.k == 1) {
                 closeEdit();
-                $('#' + res.eid + ' [qid=' + res.qid + ']').html(res.update);
+                // Update DataTables instead of direct HTML manipulation
+                Object.keys(window.datatables).forEach(function(key) {
+                    const table = window.datatables[key];
+                    // Try to find cell by class first (most common case)
+                    let cell = table.cell('#' + res.edit_uuid, '.q_' + res.question_uuid);
+
+                    // If not found, try to find by question_uuid attribute (for name and other special fields)
+                    if (!cell || !cell.node()) {
+                        const row = table.row('#' + res.edit_uuid);
+                        if (row.length > 0) {
+                            const rowNode = row.node();
+                            const targetCell = $(rowNode).find('[question_uuid="' + res.question_uuid + '"]');
+                            if (targetCell.length > 0) {
+                                const cellIndex = targetCell.index();
+                                cell = table.cell(rowNode, cellIndex);
+                            }
+                        }
+                    }
+
+                    if (cell && cell.node()) {
+                        // Update cell HTML directly to preserve attributes
+                        const cellNode = cell.node();
+                        cellNode.innerHTML = res.update;
+                        // Invalidate cell to sync DataTables internal state with DOM
+                        cell.invalidate('dom');
+                    }
+                });
                 return;
             }
             // form error
-            alert(res.errors);
+            if (!window.lmTesting) alert(res.errors);
         });
     }
 
@@ -135,13 +161,13 @@ window.addEventListener('DOMContentLoaded', function() {
 
             if ($("#main_bulk").is(":visible")) return;
 
-            eid = $(this).parent().attr("id");
-            qid = $(this).attr("qid");
+            edit_uuid = $(this).parent().attr("id");
+            question_uuid = $(this).attr("question_uuid");
 
             request = $.ajax({
                 url: "{% url 'orga_writing_excel_edit' run.get_slug label_typ %}",
                 method: "POST",
-                data: { qid: qid, eid: eid},
+                data: { question_uuid: question_uuid, edit_uuid: edit_uuid},
                 datatype: "json",
             });
 
@@ -165,22 +191,29 @@ window.addEventListener('DOMContentLoaded', function() {
                 }
 
                 setTimeout(() => {
-                    if (res.tinymce) {
-                        // prepare tinymce count
-                        prepare_tinymce(res.key, res.max_length);
-                    }
-
                     // set up max length
                     if (res.max_length > 0) {
-                        update_count(res.key, res.max_length, res.typ);
-                        $('#' + res.key).on('input', function() {
+                        if (res.tinymce) {
+                            // prepare tinymce count
+                            prepare_tinymce(res.key, res.max_length);
+                        } else {
                             update_count(res.key, res.max_length, res.typ);
-                        });
+                            $('#' + res.key).on('input', function() {
+                                update_count(res.key, res.max_length, res.typ);
+                            });
+                        }
                     }
                 }, 100);
 
                 $('#excel-edit input[type="submit"]').on("click", function() {
                     submitExcelForm(false);
+                });
+
+                // Prevent form submission on Enter, use our custom submit instead
+                $('#excel-edit form').on("submit", function(e) {
+                    e.preventDefault();
+                    submitExcelForm(false);
+                    return false;
                 });
 
                 $('#excel-edit').addClass('visible');

@@ -42,18 +42,20 @@ from django_ratelimit.decorators import ratelimit
 
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.feature import get_association_features, get_event_features
-from larpmanager.cache.larpmanager import get_cache_lm_home
+from larpmanager.cache.larpmanager import get_blog_content_with_images, get_cache_lm_home, get_larpmanager_texts
 from larpmanager.forms.association import FirstAssociationForm
 from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicketForm
 from larpmanager.forms.miscellanea import SendMailForm
 from larpmanager.forms.utils import RedirectForm
 from larpmanager.mail.base import join_email
+from larpmanager.mail.digest import send_daily_organizer_summaries
 from larpmanager.mail.remind import remember_membership, remember_membership_fee, remember_pay, remember_profile
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.association import Association, AssociationPlan, AssociationTextType
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import (
+    LarpManagerBlog,
     LarpManagerDiscover,
     LarpManagerGuide,
     LarpManagerProfiler,
@@ -61,11 +63,13 @@ from larpmanager.models.larpmanager import (
 )
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
+from larpmanager.models.utils import my_uuid_short
 from larpmanager.utils.auth.admin import check_lm_admin
 from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
 from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.larpmanager.tasks import my_send_mail, send_mail_exec
+from larpmanager.utils.services.association import _reset_all_association
 from larpmanager.views.user.member import get_user_backend
 
 
@@ -86,6 +90,7 @@ def lm_home(request: HttpRequest) -> Any:
         return ludomanager(template_context, request)
 
     template_context.update(get_cache_lm_home())
+    template_context["texts"] = get_larpmanager_texts()
     random.shuffle(template_context["promoters"])
     random.shuffle(template_context["reviews"])
 
@@ -93,16 +98,7 @@ def lm_home(request: HttpRequest) -> Any:
 
 
 def ludomanager(template_context: Any, http_request: Any) -> Any:
-    """Render the LudoManager skin version of the home page.
-
-    Args:
-        template_context: Context dictionary to update
-        http_request: Django HTTP request object
-
-    Returns:
-        HttpResponse: Rendered LudoManager template
-
-    """
+    """Render the LudoManager skin version of the home page."""
     template_context["association_skin"] = "LudoManager"
     template_context["platform"] = "LudoManager"
     return render(http_request, "larpmanager/larpmanager/skin/ludomanager.html", template_context)
@@ -143,18 +139,7 @@ def contact(request: HttpRequest) -> Any:
 
 
 def go_redirect(request: HttpRequest, slug: Any, path: Any, base_domain: Any = "larpmanager.com") -> Any:
-    """Redirect user to association-specific subdomain or main domain.
-
-    Args:
-        request: Django HTTP request object
-        slug: Association slug for subdomain
-        path: Path to append to URL
-        base_domain: Base domain name (default: "larpmanager.com")
-
-    Returns:
-        HttpResponseRedirect: Redirect to appropriate URL
-
-    """
+    """Redirect user to association-specific subdomain or main domain."""
     if request.enviro in ["dev", "test"]:
         return redirect("http://127.0.0.1:8000/")
 
@@ -199,16 +184,7 @@ def choose_association(request: HttpRequest, redirect_path: Any, association_slu
 
 
 def go_redirect_run(run: Any, path: Any) -> Any:
-    """Redirect to a specific run's URL on its association's domain.
-
-    Args:
-        run: Run object to redirect to
-        path: URL path to append after the run slug
-
-    Returns:
-        HttpResponseRedirect: Redirect to the run's URL
-
-    """
+    """Redirect to a specific run's URL on its association's domain."""
     full_url = f"https://{run.event.association.slug}.{run.event.association.skin.domain}/{run.get_slug()}/{path}"
     return redirect(full_url)
 
@@ -405,16 +381,9 @@ def activate_feature_event(
     return redirect("gallery", event_slug=event_slug)
 
 
+@login_required
 def toggle_sidebar(request: HttpRequest) -> Any:
-    """Toggle the sidebar open/closed state in user session.
-
-    Args:
-        request: Django HTTP request object
-
-    Returns:
-        JsonResponse: Status response indicating success
-
-    """
+    """Toggle the sidebar open/closed state in user session."""
     key = "is_sidebar_open"
     if key in request.session:
         request.session[key] = not request.session[key]
@@ -423,6 +392,7 @@ def toggle_sidebar(request: HttpRequest) -> Any:
     return JsonResponse({"status": "success"})
 
 
+@login_required
 def debug_mail(request: HttpRequest) -> Any:
     """Send reminder emails to all registrations for debugging.
 
@@ -443,32 +413,30 @@ def debug_mail(request: HttpRequest) -> Any:
         raise Http404
 
     # Use iterator() to avoid loading all registrations into memory at once
-    for reg in Registration.objects.all().iterator(chunk_size=1000):
-        remember_profile(reg)
-        remember_membership(reg)
-        remember_membership_fee(reg)
-        remember_pay(reg)
+    for registration in Registration.objects.all().iterator(chunk_size=1000):
+        remember_profile(registration)
+        remember_membership(registration)
+        remember_membership_fee(registration)
+        remember_pay(registration)
 
     return redirect("home")
 
 
+@login_required
+def debug_send_digests(request: HttpRequest) -> Any:
+    """Send daily organizer digest summaries for debugging."""
+    if request.enviro not in ["dev", "test"]:
+        raise Http404
+
+    # Send all queued digest summaries
+    send_daily_organizer_summaries()
+
+    return redirect("home")
+
+
+@login_required
 def debug_slug(request: HttpRequest, association_slug: Any = "") -> Any:
-    """Set debug slug in session for development testing.
-
-    Only available in development and test environments.
-    Sets a debug slug in the session for testing purposes.
-
-    Args:
-        request: Django HTTP request object
-        association_slug: Debug slug to set in session
-
-    Returns:
-        HttpResponseRedirect: Redirect to home page
-
-    Raises:
-        Http404: If not in dev or test environment
-
-    """
+    """Set debug slug in session for development testing."""
     if request.enviro not in ["dev", "test"]:
         raise Http404
 
@@ -511,15 +479,7 @@ def ticket(request: HttpRequest, reason: Any = "") -> Any:
 
 
 def is_suspicious_user_agent(user_agent_string: Any) -> Any:
-    """Check if a user agent string appears to be from a bot.
-
-    Args:
-        user_agent_string (str): User agent string to check
-
-    Returns:
-        bool: True if user agent appears to be from a bot, False otherwise
-
-    """
+    """Check if a user agent string appears to be from a bot."""
     known_bot_identifiers = ["bot", "crawler", "spider", "http", "archive", "wget", "curl"]
     return any(bot_identifier in user_agent_string.lower() for bot_identifier in known_bot_identifiers)
 
@@ -649,18 +609,7 @@ def _join_form(context: dict, request: HttpRequest) -> Association | None:
 
 @cache_page(60 * 15)
 def discover(request: HttpRequest) -> Any:
-    """Display discovery page with featured content.
-
-    Cached for 15 minutes. Shows LarpManager discover items
-    ordered by their specified order.
-
-    Args:
-        request: Django HTTP request object
-
-    Returns:
-        HttpResponse: Rendered discover page template
-
-    """
+    """Display discovery page with featured content."""
     context = get_lm_contact(request)
     context["index"] = True
     context["discover"] = LarpManagerDiscover.objects.order_by("order")
@@ -729,15 +678,7 @@ def tutorials(request: HttpRequest, slug: str | None = None) -> HttpResponse:
 
 @cache_page(60 * 15)
 def guides(request: HttpRequest) -> Any:
-    """Display list of published guides for LarpManager users.
-
-    Args:
-        request: Django HTTP request object
-
-    Returns:
-        HttpResponse: Rendered guides template with list of published guides
-
-    """
+    """Display list of published guides for LarpManager users."""
     context = get_lm_contact(request)
     context["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
     context["index"] = True
@@ -774,19 +715,41 @@ def guide(request: HttpRequest, slug: Any) -> Any:
     return render(request, "larpmanager/larpmanager/guide.html", context)
 
 
-@cache_page(60 * 15)
-def privacy(request: HttpRequest) -> Any:
-    """Display privacy policy page.
-
-    Cached for 15 minutes. Shows association-specific privacy text.
+def blog(request: HttpRequest, slug: Any) -> Any:
+    """Display a specific blog article by slug with split content and random images.
 
     Args:
         request: Django HTTP request object
+        slug: URL slug of the blog to display
 
     Returns:
-        HttpResponse: Rendered privacy policy page
+        HttpResponse: Rendered blog template with article content and images
+
+    Raises:
+        Http404: If blog with given slug is not found or not published
 
     """
+    context = get_lm_contact(request)
+    context["index"] = True
+
+    try:
+        blog_post = LarpManagerBlog.objects.get(slug=slug, published=True)
+    except ObjectDoesNotExist as err:
+        msg = "blog not found"
+        raise Http404(msg) from err
+
+    context["blog"] = blog_post
+    context["sections"] = get_blog_content_with_images(blog_post.id, blog_post.text)
+
+    context["og_title"] = f"{context['blog'].title} - LarpManager"
+    context["og_description"] = f"{context['blog'].description} - LarpManager"
+
+    return render(request, "larpmanager/larpmanager/blog.html", context)
+
+
+@cache_page(60 * 15)
+def privacy(request: HttpRequest) -> Any:
+    """Display privacy policy page."""
     context = get_lm_contact(request)
     context.update({"text": get_association_text(context["association_id"], AssociationTextType.PRIVACY)})
     return render(request, "larpmanager/larpmanager/privacy.html", context)
@@ -794,17 +757,7 @@ def privacy(request: HttpRequest) -> Any:
 
 @cache_page(60 * 15)
 def usage(request: HttpRequest) -> Any:
-    """Display usage/terms page.
-
-    Cached for 15 minutes. Shows usage guidelines and terms.
-
-    Args:
-        request: Django HTTP request object
-
-    Returns:
-        HttpResponse: Rendered usage page
-
-    """
+    """Display usage/terms page."""
     context = get_lm_contact(request)
     context["index"] = True
     return render(request, "larpmanager/larpmanager/usage.html", context)
@@ -812,35 +765,14 @@ def usage(request: HttpRequest) -> Any:
 
 @cache_page(60 * 15)
 def about_us(request: HttpRequest) -> Any:
-    """Display about us page.
-
-    Cached for 15 minutes. Shows information about the platform.
-
-    Args:
-        request: Django HTTP request object
-
-    Returns:
-        HttpResponse: Rendered about us page
-
-    """
+    """Display about us page."""
     context = get_lm_contact(request)
     context["index"] = True
     return render(request, "larpmanager/larpmanager/about_us.html", context)
 
 
 def get_lm_contact(request: HttpRequest) -> Any:
-    """Get base context for LarpManager contact pages.
-
-    Args:
-        request: Django HTTP request object
-
-    Returns:
-        dict: Base context with contact form and platform info
-
-    Raises:
-        MainPageError: If check_main_site=True and user is on association site
-
-    """
+    """Get base context for LarpManager contact pages."""
     context = get_context(request, check_main_site=True)
     context.update({"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"})
     return context
@@ -848,18 +780,7 @@ def get_lm_contact(request: HttpRequest) -> Any:
 
 @login_required
 def lm_list(request: HttpRequest) -> Any:
-    """Display list of associations for admin users.
-
-    Shows associations ordered by total registrations count.
-    Requires admin permissions.
-
-    Args:
-        request: Django HTTP request object (must be authenticated admin)
-
-    Returns:
-        HttpResponse: Rendered association list page
-
-    """
+    """Display list of associations for admin users."""
     context = check_lm_admin(request)
 
     context["list"] = Association.objects.annotate(total_registrations=Count("events__runs__registrations")).order_by(
@@ -957,22 +878,10 @@ def get_run_lm_payment(run: Any) -> None:
 
 
 @login_required
-def lm_payments_confirm(request: HttpRequest, run_id: Any) -> Any:
-    """Confirm payment for a specific run.
-
-    Marks a run as paid with calculated total.
-    Requires admin permissions.
-
-    Args:
-        request: Django HTTP request object (must be authenticated admin)
-        run_id: Run ID to confirm payment for
-
-    Returns:
-        HttpResponseRedirect: Redirect to payments list
-
-    """
+def lm_payments_confirm(request: HttpRequest, run_uuid: str) -> Any:
+    """Confirm payment for a specific run."""
     check_lm_admin(request)
-    run = Run.objects.get(pk=run_id)
+    run = Run.objects.get(uuid=run_uuid)
     get_run_lm_payment(run)
     run.paid = run.total
     run.save()
@@ -1000,8 +909,7 @@ def lm_send(request: HttpRequest) -> Any:
             players = request.POST["players"]
             subj = request.POST["subject"]
             body = request.POST["body"]
-            interval = int(request.POST.get("interval", 20))
-            send_mail_exec(players, subj, body, interval=interval)
+            send_mail_exec(players, subj, body)
             messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
@@ -1056,6 +964,18 @@ def lm_profile(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/larpmanager/profile.html", context)
 
 
+@login_required
+def lm_reset(request: HttpRequest) -> HttpResponse:
+    """Reset cache for all associations and events."""
+    check_lm_admin(request)
+
+    for association in Association.objects.all():
+        _reset_all_association(association.id, association.slug)
+
+    messages.success(request, "Global cache reset")
+    return HttpResponseRedirect("/")
+
+
 @ratelimit(key="ip", rate="5/m", block=True)
 def donate(request: HttpRequest) -> Any:
     """Handle donation page with bot protection.
@@ -1071,6 +991,10 @@ def donate(request: HttpRequest) -> Any:
         HttpResponseForbidden: If bot detected
 
     """
+    context = get_context(request)
+    if context["association_id"] != 0:
+        return redirect("accounting_donate")
+
     user_agent = request.META.get("HTTP_USER_AGENT", "")
     if is_suspicious_user_agent(user_agent):
         return HttpResponseForbidden("Bots not allowed.")
@@ -1081,27 +1005,17 @@ def donate(request: HttpRequest) -> Any:
             return redirect("https://www.paypal.com/paypalme/mscanagatta")
     else:
         form = LarpManagerCheck(request=request)
-    context = {"form": form}
+
+    context["form"] = form
     return render(request, "larpmanager/larpmanager/donate.html", context)
 
 
-def debug_user(request: HttpRequest, member_id: Any) -> None:
-    """Login as a specific user for debugging purposes.
-
-    Allows admin users to login as another user for debugging.
-    Requires admin permissions.
-
-    Args:
-        request: Django HTTP request object
-        member_id: Member ID to login as
-
-    Side effects:
-        Logs in as the specified user
-
-    """
+def debug_user(request: HttpRequest, member_id: Any) -> HttpResponse:
+    """Login as a specific user for debugging purposes."""
     check_lm_admin(request)
     member = Member.objects.get(pk=member_id)
     login(request, member.user, backend=get_user_backend())
+    return redirect("/")
 
 
 @ratelimit(key="ip", rate="5/m", block=True)
@@ -1155,12 +1069,11 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
 
     """
     # Generate unique primary key for new association
-    new_primary_key = Association.objects.order_by("-pk").values_list("pk", flat=True).first()
-    new_primary_key += 1
+    new_uuid = my_uuid_short()
 
     # Create demo association with unique slug and inherited skin
     demo_association = Association.objects.create(
-        slug=f"test{new_primary_key}",
+        slug=f"test-{new_uuid}",
         name="Demo Organization",
         skin_id=request.association["skin_id"],
         demo=True,
@@ -1168,8 +1081,8 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
 
     # Create test admin user with demo credentials
     (demo_user, _created) = User.objects.get_or_create(
-        email=f"test{new_primary_key}@demo.it",
-        username=f"test{new_primary_key}",
+        email=f"test-{new_uuid}@demo.it",
+        username=f"test-{new_uuid}",
     )
     demo_user.password = conf_settings.DEMO_PASSWORD
     demo_user.save()

@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Problems" %} - {{ run }}
+    {% trans "Problems" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows problems reported by contributors, for direct management during the event" %}
@@ -22,14 +22,15 @@
                 <th>{% trans "What" %}</th>
                 <th>{% trans "Who" %}</th>
                 <th>{% trans "Rensponsable" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}"
+                <tr id="{{ el.uuid }}"
                     {% if el.status == 'c' %}class="closed hide"{% endif %}>
                     <td>
-                        <a href="{% url 'orga_problems_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_problems_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.get_severity_display }}</td>
@@ -39,6 +40,11 @@
                     <td>{{ el.what_l }}</td>
                     <td>{{ el.who_l }}</td>
                     <td>{{ el.assigned }}</td>
+                    <td>
+                        <a href="{% url 'orga_problems_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

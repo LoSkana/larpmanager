@@ -50,15 +50,7 @@ class AssociationIdentifyMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        """Process request through association middleware.
-
-        Args:
-            request: Django HTTP request object
-
-        Returns:
-            HttpResponse: Either a redirect or the normal response
-
-        """
+        """Process request through association middleware."""
         return self.get_association_info(request) or self.get_response(request)
 
     @classmethod
@@ -156,14 +148,15 @@ class AssociationIdentifyMiddleware:
             return redirect(request.path)
 
         # Attempt to load association skin for the base domain
-        association_skin = get_cache_skin(base_domain)
-        if association_skin:
-            # Skin found - load the associated organization
-            return cls.load_association(request, association_skin)
+        if request.get_host() == base_domain or request.enviro != "prod":
+            association_skin = get_cache_skin(base_domain)
+            if association_skin:
+                # Skin found - load the associated organization
+                return cls.load_association(request, association_skin)
 
         # Handle larpmanager.com domain redirects to ensure HTTPS
-        if request.get_host().endswith("larpmanager.com"):
-            return redirect(f"https://larpmanager.com{request.get_full_path()}")
+        if request.get_host().endswith(base_domain):
+            return redirect(f"https://{base_domain}{request.get_full_path()}")
 
         # Allow admin panel access without association
         if request.path.startswith("/admin"):

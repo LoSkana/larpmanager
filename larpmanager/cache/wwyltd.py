@@ -29,32 +29,17 @@ from larpmanager.models.larpmanager import LarpManagerGuide, LarpManagerTutorial
 
 
 def get_guides_cache_key() -> str:
-    """Get the cache key for guides data.
-
-    Returns:
-        str: The cache key used for storing/retrieving guides data
-
-    """
+    """Get the cache key for guides data."""
     return "guides_cache"
 
 
 def get_tutorials_cache_key() -> str:
-    """Get the cache key for tutorials data.
-
-    Returns:
-        str: The cache key used for storing/retrieving tutorials data
-
-    """
+    """Get the cache key for tutorials data."""
     return "tutorials_cache"
 
 
 def get_features_cache_key() -> str:
-    """Get the cache key for features data.
-
-    Returns:
-        str: The cache key used for storing/retrieving features data
-
-    """
+    """Get the cache key for features data."""
     return "features_cache"
 
 

@@ -25,9 +25,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.forms.base import BaseRegistrationForm, MyForm
-from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti, WritingTinyMCE
-from larpmanager.models.access import get_event_staffers
+from larpmanager.cache.question import get_cached_writing_questions
+from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm
+from larpmanager.forms.utils import (
+    EventCharacterS2Widget,
+    EventCharacterS2WidgetMulti,
+    RunStaffS2Widget,
+    WritingTinyMCE,
+)
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, ProgressStep
 from larpmanager.models.form import (
@@ -50,19 +55,14 @@ from larpmanager.models.writing import (
     SpeedLarp,
 )
 from larpmanager.utils.core.validators import FileTypeValidator
+from larpmanager.utils.services.character import _get_character_cache_id
 
 
-class WritingForm(MyForm):
+class WritingForm(BaseModelForm):
     """Form for Writing."""
 
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
-        """Initialize the form with default show_link configuration.
-
-        Args:
-            *args: Variable length argument list passed to parent class.
-            **kwargs: Arbitrary keyword arguments passed to parent class.
-
-        """
+        """Initialize the form with default show_link configuration."""
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
@@ -76,36 +76,34 @@ class WritingForm(MyForm):
         """
         question_types = set()
         for question in self.questions:
-            question_types.add(question.typ)
+            question_types.add(question["typ"])
 
-        if WritingQuestionType.COVER not in question_types and "cover" in self.fields:
-            del self.fields["cover"]
+        if WritingQuestionType.COVER not in question_types:
+            self.delete_field("cover")
 
         if WritingQuestionType.ASSIGNED in question_types:
-            staffer_choices = [
-                (member.id, member.show_nick()) for member in get_event_staffers(self.params["run"].event)
-            ]
-            self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---")), *staffer_choices]
+            self.configure_field_run("assigned", self.params.get("run"))
+            self.fields["assigned"].required = False
         else:
             self.delete_field("assigned")
 
         if WritingQuestionType.PROGRESS in question_types:
             self.fields["progress"].choices = [
-                (step.id, str(step))
-                for step in ProgressStep.objects.filter(event=self.params["run"].event).order_by("order")
+                (step.uuid, str(step))
+                for step in ProgressStep.objects.filter(event=self.params.get("run").event).order_by("order")
             ]
         else:
             self.delete_field("progress")
 
 
-class PlayerRelationshipForm(MyForm):
+class PlayerRelationshipForm(BaseModelForm):
     """Form for PlayerRelationship."""
 
     page_title = _("Character Relationship")
 
     class Meta:
         model = PlayerRelationship
-        exclude: ClassVar[list] = ["reg"]
+        exclude: ClassVar[list] = ["registration"]
         widgets: ClassVar[dict] = {
             "target": EventCharacterS2Widget,
         }
@@ -114,8 +112,9 @@ class PlayerRelationshipForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure target field for the event."""
         super().__init__(*args, **kwargs)
+
         # Configure target field widget with event from run params
-        self.fields["target"].widget.set_event(self.params["run"].event)
+        self.configure_field_event("target", self.params.get("run").event)
         self.fields["target"].required = True
 
     def clean(self) -> dict:
@@ -135,12 +134,15 @@ class PlayerRelationshipForm(MyForm):
         cleaned_data = super().clean()
 
         # Check if user is trying to create relationship with themselves
-        if self.cleaned_data["target"].id == self.params["char"]["id"]:
+        character_id = _get_character_cache_id(self.params)
+        if self.cleaned_data["target"].id == character_id:
             self.add_error("target", _("You cannot create a relationship towards yourself") + "!")
 
         # Check for existing relationships with same target and registration
         try:
-            rel = PlayerRelationship.objects.get(reg=self.params["run"].reg, target=self.cleaned_data["target"])
+            rel = PlayerRelationship.objects.get(
+                registration=self.params.get("registration"), target=self.cleaned_data["target"]
+            )
             # Allow editing existing relationship, but prevent duplicates
             if rel.id != self.instance.id:
                 self.add_error("target", _("Already existing relationship") + "!")
@@ -151,27 +153,19 @@ class PlayerRelationshipForm(MyForm):
         return cleaned_data
 
     def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
-        """Save the form instance, setting registration if new.
-
-        Args:
-            commit: Whether to save the instance to the database.
-
-        Returns:
-            The saved instance.
-
-        """
+        """Save the form instance, setting registration if new."""
         instance = super().save(commit=False)
 
         # Set registration for new instances
         if not instance.pk:
-            instance.reg = self.params["run"].reg
+            instance.registration = self.params.get("registration")
 
         instance.save()
 
         return instance
 
 
-class UploadElementsForm(forms.Form):
+class UploadElementsForm(BaseForm):
     """Form for UploadElements."""
 
     allowed_types: ClassVar[list] = [
@@ -187,14 +181,7 @@ class UploadElementsForm(forms.Form):
     second = forms.FileField(validators=[validator], required=False)
 
     def __init__(self, *args: Any, only_one: bool = False, **kwargs: Any) -> None:
-        """Initialize form, optionally removing the 'second' field.
-
-        Args:
-            *args: Positional arguments passed to parent class.
-            only_one: If True, removes 'second' field if present.
-            **kwargs: Keyword arguments passed to parent class.
-
-        """
+        """Initialize form, optionally removing the 'second' field."""
         only_one = kwargs.pop("only_one", False)
         super().__init__(*args, **kwargs)
 
@@ -214,13 +201,7 @@ class BaseWritingForm(BaseRegistrationForm):
     instance_key = "element_id"
 
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
-        """Initialize form with applicable questions configuration.
-
-        Args:
-            *args: Variable length argument list passed to parent class.
-            **kwargs: Arbitrary keyword arguments passed to parent class.
-
-        """
+        """Initialize form with applicable questions configuration."""
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
@@ -229,22 +210,20 @@ class BaseWritingForm(BaseRegistrationForm):
         self.applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)  # noqa: SLF001  # Django model metadata
 
     def _init_questions(self, event: Event) -> None:
-        """Initialize questions filtered by applicable type."""
-        super()._init_questions(event)
-        # Filter questions to only include those matching this form's applicable type
-        # noinspection PyProtectedMember
-        self.questions = self.questions.filter(applicable=self.applicable)
+        """Initialize questions filtered by applicable type using cache."""
+        self.params.get("features", [])
+        self.questions = get_cached_writing_questions(event, self.applicable)
 
     def get_options_query(self, event: Event) -> Any:
         """Get annotated queryset of options with ticket mappings."""
         # Get base options query from parent class
         options_queryset = super().get_options_query(event)
         # Annotate with array-aggregated tickets for each option
-        return options_queryset.annotate(tickets_map=ArrayAgg("tickets"))
+        return options_queryset.annotate(tickets_map=ArrayAgg("tickets__id"))
 
     def get_option_key_count(self, option: Any) -> str:
         """Return cache key for tracking option character count."""
-        return f"option_char_{option.id}"
+        return f"option_char_{option['id']}"
 
     def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
         """Save the form and handle registration questions if present.
@@ -265,12 +244,12 @@ class BaseWritingForm(BaseRegistrationForm):
             orga = True
             if hasattr(self, "orga"):
                 orga = self.orga
-            self.save_reg_questions(instance, is_organizer=orga)
+            self.save_registration_questions(instance, is_organizer=orga)
 
         return instance
 
 
-class PlotForm(WritingForm, BaseWritingForm):
+class OrgaPlotForm(WritingForm, BaseWritingForm):
     """Form for Plot."""
 
     load_templates: ClassVar[list] = ["plot"]
@@ -284,9 +263,7 @@ class PlotForm(WritingForm, BaseWritingForm):
 
         exclude = ("number", "temp", "hide", "order")
 
-        widgets: ClassVar[dict] = {
-            "characters": EventCharacterS2WidgetMulti,
-        }
+        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti, "assigned": RunStaffS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize plot form with character relationships and dynamic fields.
@@ -341,7 +318,7 @@ class PlotForm(WritingForm, BaseWritingForm):
 
                 self.show_link.append(id_field)
                 self.add_char_finder.append(id_field)
-                reverse_args = [self.params["run"].get_slug(), ch[0]]
+                reverse_args = [self.params.get("run").get_slug(), ch[0]]
                 self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
 
     def _save_multi(self, field: str, instance: Plot) -> None:  # noqa: ARG002
@@ -386,7 +363,7 @@ class PlotForm(WritingForm, BaseWritingForm):
         return instance
 
 
-class FactionForm(WritingForm, BaseWritingForm):
+class OrgaFactionForm(WritingForm, BaseWritingForm):
     """Form for Faction."""
 
     load_templates: ClassVar[list] = ["faction"]
@@ -400,9 +377,7 @@ class FactionForm(WritingForm, BaseWritingForm):
 
         exclude = ("number", "temp", "hide", "order")
 
-        widgets: ClassVar[dict] = {
-            "characters": EventCharacterS2WidgetMulti,
-        }
+        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti, "assigned": RunStaffS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize faction form with field configuration and help text."""
@@ -413,7 +388,7 @@ class FactionForm(WritingForm, BaseWritingForm):
         self.reorder_field("characters")
 
         # Handle selectable field based on user_character feature
-        if "user_character" not in self.params["features"]:
+        if "user_character" not in self.params.get("features"):
             self.delete_field("selectable")
         else:
             self.reorder_field("selectable")
@@ -429,7 +404,7 @@ class FactionForm(WritingForm, BaseWritingForm):
         self.fields["typ"].help_text = ", ".join([f"<b>{key}</b>: {value}" for key, value in help_texts.items()])
 
 
-class QuestTypeForm(WritingForm):
+class OrgaQuestTypeForm(WritingForm):
     """Form for QuestType."""
 
     page_title = _("Quest type")
@@ -438,13 +413,10 @@ class QuestTypeForm(WritingForm):
         model = QuestType
         fields: ClassVar[list] = ["name", "teaser", "event"]
 
-        widgets: ClassVar[dict] = {
-            "teaser": WritingTinyMCE(),
-            "text": WritingTinyMCE(),
-        }
+        widgets: ClassVar[dict] = {"teaser": WritingTinyMCE(), "text": WritingTinyMCE(), "assigned": RunStaffS2Widget}
 
 
-class QuestForm(WritingForm, BaseWritingForm):
+class OrgaQuestForm(WritingForm, BaseWritingForm):
     """Form for Quest."""
 
     page_title = _("Quest")
@@ -452,6 +424,8 @@ class QuestForm(WritingForm, BaseWritingForm):
     class Meta:
         model = Quest
         exclude = ("number", "temp", "hide", "order")
+
+        widgets: ClassVar[dict] = {"assigned": RunStaffS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form with organization fields and quest type choices."""
@@ -462,11 +436,11 @@ class QuestForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
         # Populate quest type choices from event elements
-        que = self.params["run"].event.get_elements(QuestType)
-        self.fields["typ"].choices = [(m.id, m.name) for m in que]
+        que = self.params.get("run").event.get_elements(QuestType)
+        self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
 
-class TraitForm(WritingForm, BaseWritingForm):
+class OrgaTraitForm(WritingForm, BaseWritingForm):
     """Form for Trait."""
 
     page_title = _("Trait")
@@ -477,6 +451,8 @@ class TraitForm(WritingForm, BaseWritingForm):
         model = Trait
         exclude = ("number", "temp", "hide", "order", "traits")
 
+        widgets: ClassVar[dict] = {"assigned": RunStaffS2Widget}
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure quest field choices."""
         super().__init__(*args, **kwargs)
@@ -486,11 +462,11 @@ class TraitForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
         # Populate quest choices from event elements
-        que = self.params["run"].event.get_elements(Quest)
-        self.fields["quest"].choices = [(m.id, m.name) for m in que]
+        que = self.params.get("run").event.get_elements(Quest)
+        self.fields["quest"].choices = [(m.uuid, m.name) for m in que]
 
 
-class HandoutForm(WritingForm):
+class OrgaHandoutForm(WritingForm):
     """Form for Handout."""
 
     page_title = _("Handout")
@@ -499,20 +475,20 @@ class HandoutForm(WritingForm):
         model = Handout
         fields: ClassVar[list] = ["template", "name", "text", "event"]
 
-        widgets: ClassVar[dict] = {
-            "text": WritingTinyMCE(),
-        }
+        widgets: ClassVar[dict] = {"text": WritingTinyMCE(), "assigned": RunStaffS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and populate template choices from run's handout templates."""
         super().__init__(*args, **kwargs)
+
         # Retrieve handout templates for the associated run's event
-        que = self.params["run"].event.get_elements(HandoutTemplate)
+        que = self.params.get("run").event.get_elements(HandoutTemplate)
+
         # Populate template field choices with template IDs and names
-        self.fields["template"].choices = [(m.id, m.name) for m in que]
+        self.fields["template"].choices = [(m.uuid, m.name) for m in que]
 
 
-class HandoutTemplateForm(WritingForm):
+class OrgaHandoutTemplateForm(WritingForm):
     """Form for HandoutTemplate."""
 
     load_templates: ClassVar[list] = ["handout-template"]
@@ -522,11 +498,12 @@ class HandoutTemplateForm(WritingForm):
         exclude: ClassVar[list] = ["number"]
 
         widgets: ClassVar[dict] = {
-            "template": forms.FileInput(attrs={"accept": "application/vnd.oasis.opendocument.text"})
+            "template": forms.FileInput(attrs={"accept": "application/vnd.oasis.opendocument.text"}),
+            "assigned": RunStaffS2Widget,
         }
 
 
-class PrologueTypeForm(WritingForm):
+class OrgaPrologueTypeForm(WritingForm):
     """Form for PrologueType."""
 
     page_title = _("Prologue type")
@@ -536,7 +513,7 @@ class PrologueTypeForm(WritingForm):
         fields: ClassVar[list] = ["name", "event"]
 
 
-class PrologueForm(WritingForm, BaseWritingForm):
+class OrgaPrologueForm(WritingForm, BaseWritingForm):
     """Form for Prologue."""
 
     page_title = _("Prologue")
@@ -548,17 +525,15 @@ class PrologueForm(WritingForm, BaseWritingForm):
 
         exclude = ("number", "teaser", "temp", "hide")
 
-        widgets: ClassVar[dict] = {
-            "characters": EventCharacterS2WidgetMulti,
-        }
+        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti, "assigned": RunStaffS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with prologue choices and field configuration."""
         super().__init__(*args, **kwargs)
 
         # Populate prologue type choices from event elements
-        que = self.params["run"].event.get_elements(PrologueType)
-        self.fields["typ"].choices = [(m.id, m.name) for m in que]
+        que = self.params.get("run").event.get_elements(PrologueType)
+        self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
         # Initialize organization-specific fields and reorder characters
         self.init_orga_fields()
@@ -566,7 +541,7 @@ class PrologueForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
 
-class SpeedLarpForm(WritingForm):
+class OrgaSpeedLarpForm(WritingForm):
     """Form for SpeedLarp."""
 
     page_title = _("Speed larp")
@@ -580,6 +555,7 @@ class SpeedLarpForm(WritingForm):
         widgets: ClassVar[dict] = {
             "characters": EventCharacterS2WidgetMulti,
             "text": WritingTinyMCE(),
+            "assigned": RunStaffS2Widget,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

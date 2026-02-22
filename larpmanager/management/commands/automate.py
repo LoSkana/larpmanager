@@ -34,6 +34,7 @@ from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.mail.accounting import notify_invoice_check
 from larpmanager.mail.base import check_holiday
+from larpmanager.mail.digest import send_daily_organizer_summaries
 from larpmanager.mail.member import send_password_reset_remainder
 from larpmanager.mail.remind import (
     notify_deadlines,
@@ -73,13 +74,7 @@ class Command(BaseCommand):
     help = "Automate processes "
 
     def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
-        """Handle command execution with exception handling.
-
-        Args:
-            *args: Command arguments
-            **options: Command options
-
-        """
+        """Handle command execution with exception handling."""
         try:
             self.go()
         except Exception as e:  # noqa: BLE001 - Top-level handler must catch all errors to notify admins
@@ -110,7 +105,9 @@ class Command(BaseCommand):
         # Update accounting for all registrations with incomplete payments
         # Process each registration to recalculate totals and payment status
         registrations_with_incomplete_payments = get_regs_paying_incomplete()
-        for registration in registrations_with_incomplete_payments.select_related("run"):
+        for registration in registrations_with_incomplete_payments.select_related(
+            "run", "run__event", "ticket", "member"
+        ):
             registration.save()
 
         # Process feature-specific checks for each association
@@ -136,6 +133,9 @@ class Command(BaseCommand):
         self.check_payment_not_approved()
         self.check_old_payments()
 
+        # Send daily organizer summaries for events with digest mode enabled
+        self.send_organizer_summaries()
+
         # Process automation tasks for active runs only
         # Skip completed or cancelled runs to avoid unnecessary processing
         for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):
@@ -155,15 +155,10 @@ class Command(BaseCommand):
 
     @staticmethod
     def check_old_payments() -> None:
-        """Delete payment invoices older than 60 days with CREATED status.
-
-        Cleans up abandoned payment attempts to prevent database bloat.
-        """
-        # delete old payment invoice
+        """Delete payment invoices older than 60 days with CREATED status."""
+        # Bulk delete old payment invoices in a single query
         reference_date = timezone.now() - timedelta(days=60)
-        payment_invoices_query = PaymentInvoice.objects.filter(status=PaymentStatus.CREATED)
-        for payment_invoice in payment_invoices_query.filter(created__lte=reference_date.date()):
-            payment_invoice.delete()
+        PaymentInvoice.objects.filter(status=PaymentStatus.CREATED, created__lte=reference_date.date()).delete()
 
     @staticmethod
     def check_payment_not_approved() -> None:
@@ -183,11 +178,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def check_password_reset() -> None:
-        """Send password reset reminders and clear processed requests.
-
-        Processes pending password reset requests by sending reminder emails
-        and clearing the reset flags from membership records.
-        """
+        """Send password reset reminders and clear processed requests."""
         # check password reset
         pending_reset_memberships = Membership.objects.exclude(password_reset__exact="")
         for membership in pending_reset_memberships.exclude(password_reset__isnull=True):
@@ -197,11 +188,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def clean_db() -> None:
-        """Execute configured database cleanup operations.
-
-        Runs SQL cleanup commands defined in CLEAN_DB setting to maintain
-        database performance and remove stale data.
-        """
+        """Execute configured database cleanup operations."""
         with connection.cursor() as database_cursor:
             for cleanup_sql_query in conf_settings.CLEAN_DB:
                 database_cursor.execute(cleanup_sql_query)
@@ -277,34 +264,12 @@ class Command(BaseCommand):
         badge.members.add(member)
 
     def check_event_badge(self, event: Event, m: Member, cache: dict[str, Any]) -> None:
-        """Award event-specific badge to member.
-
-        Args:
-            event: Event instance to derive badge from
-            m: Member instance to award badge to
-            cache: Badge cache for performance
-
-        """
+        """Award event-specific badge to member."""
         self.add_member_badge(event.slug, m, cache)
 
     @staticmethod
     def get_cache_badges_player(cache: dict, member: Member) -> list:
-        """Get cached list of badge codes for a member.
-
-        Retrieves badge codes from cache if available, otherwise queries the database
-        to build the cache entry for the member's badges.
-
-        Args:
-            cache (dict): Player badge cache containing 'players' key with member IDs
-            member: Member instance to get badges for
-
-        Returns:
-            list: Badge codes already possessed by member
-
-        Note:
-            Modifies the cache dictionary by adding member badge data if not present.
-
-        """
+        """Get cached list of badge codes for a member."""
         # Check if member's badges are already cached
         if member.id not in cache["players"]:
             # Build list of badge codes from member's badges
@@ -343,7 +308,7 @@ class Command(BaseCommand):
 
             # Return cached badge instance
             return badge_cache["badges"][badge_code]
-        except Badge.DoesNotExist:
+        except ObjectDoesNotExist:
             # Return None if badge not found
             return None
 
@@ -378,7 +343,7 @@ class Command(BaseCommand):
         activity_cache[counter_name][member.id] += increment_value
         return activity_cache[counter_name][member.id]
 
-    def check_friends_player(self, reg: Registration, cache: dict) -> None:
+    def check_friends_player(self, registration: Registration, cache: dict) -> None:
         """Check and award friend referral badges based on friend count.
 
         This method counts how many friends a player has referred and awards
@@ -386,7 +351,7 @@ class Command(BaseCommand):
         predefined thresholds.
 
         Args:
-            reg: Registration instance to check friend count for
+            registration: Registration instance to check friend count for
             cache: Activity cache dictionary for tracking friend counts
                   and preventing duplicate badge awards
 
@@ -396,12 +361,12 @@ class Command(BaseCommand):
         """
         # Count total friend referral discounts associated with this registration
         friend_discount_count = AccountingItemDiscount.objects.filter(
-            detail=reg.id,
+            detail=registration.id,
             disc__typ=DiscountType.FRIEND,
         ).count()
 
         # Get current friend count from cache or calculate if not cached
-        current_friend_count = self.get_count("friend", cache, reg.member, friend_discount_count)
+        current_friend_count = self.get_count("friend", cache, registration.member, friend_discount_count)
 
         # Define badge tiers and their corresponding friend count thresholds
         badge_tiers = ["bronze", "silver", "gold", "platinum"]
@@ -415,16 +380,16 @@ class Command(BaseCommand):
 
             # Generate badge key and award to member
             badge_key = f"friends-{badge_tiers[tier_index]}"
-            self.add_member_badge(badge_key, reg.member, cache)
+            self.add_member_badge(badge_key, registration.member, cache)
 
-    def check_ach_player(self, reg: Registration, cache: dict) -> None:
+    def check_ach_player(self, registration: Registration, cache: dict) -> None:
         """Check and award player participation badges based on play count.
 
         Awards bronze, silver, gold, and platinum badges to players based on
         their number of registrations/participation events.
 
         Args:
-            reg: Registration instance for the current player
+            registration: Registration instance for the current player
             cache: Activity cache dictionary for tracking play counts across members
 
         Returns:
@@ -432,7 +397,7 @@ class Command(BaseCommand):
 
         """
         # Count total registrations/plays for this member
-        play_count = self.get_count("play", cache, reg.member)
+        play_count = self.get_count("play", cache, registration.member)
 
         # Define badge tiers and their required play count thresholds
         badge_types = ["bronze", "silver", "gold", "platinum"]
@@ -445,7 +410,7 @@ class Command(BaseCommand):
 
             # Generate badge key and award to member
             badge_key = f"player-{badge_types[badge_index]}"
-            self.add_member_badge(badge_key, reg.member, cache)
+            self.add_member_badge(badge_key, registration.member, cache)
 
     def check_badge_help(self, m: Member, cache: dict) -> None:
         """Check and award help/support badges based on member activity.
@@ -620,7 +585,7 @@ class Command(BaseCommand):
         for registration in registrations_queryset.select_related("run", "ticket"):
             self.remind_reg(registration, association, reminder_days_before_event)
 
-    def remind_reg(self, reg: Registration, association: Association, remind_days: int) -> None:
+    def remind_reg(self, registration: Registration, association: Association, remind_days: int) -> None:
         """Process reminder logic for a specific registration.
 
         Handles various reminder scenarios based on registration status, membership state,
@@ -628,7 +593,7 @@ class Command(BaseCommand):
         current state and membership requirements.
 
         Args:
-            reg: Registration instance to check reminders for
+            registration: Registration instance to check reminders for
             association: Association instance containing the registration
             remind_days: Interval in days for sending reminders
 
@@ -637,37 +602,37 @@ class Command(BaseCommand):
 
         """
         # Get event features and user membership for this registration
-        event_features = get_event_features(reg.run.event_id)
-        get_user_membership(reg.member, association.id)
+        event_features = get_event_features(registration.run.event_id)
+        get_user_membership(registration.member, association.id)
 
         # Check if today is the scheduled day to send reminder emails
         # Only send reminders on specific intervals based on registration creation date
-        if get_time_diff_today(reg.created) % remind_days != 1:
+        if get_time_diff_today(registration.created) % remind_days != 1:
             return
 
         # Process reminders only for non-waiting registrations
-        if reg.ticket and reg.ticket.tier != TicketTier.WAITING:
-            membership = reg.member.membership
+        if registration.ticket and registration.ticket.tier != TicketTier.WAITING:
+            membership = registration.member.membership
             reminder_sent = False
 
             # Handle membership-related reminders if membership feature is enabled
             if "membership" in event_features:
                 # Send membership reminder for empty or joined members
                 if membership.status in (MembershipStatus.EMPTY, MembershipStatus.JOINED):
-                    remember_membership(reg)
+                    remember_membership(registration)
                     reminder_sent = True
                 # Check membership fee payment for accepted members (except LAOG events)
                 elif "laog" not in event_features and membership.status == MembershipStatus.ACCEPTED:
-                    self.check_membership_fee(reg)
+                    self.check_membership_fee(registration)
                     reminder_sent = True
 
             # Send profile completion reminder if membership wasn't handled and profile incomplete
             if not reminder_sent and not membership.compiled:
-                remember_profile(reg)
+                remember_profile(registration)
 
         # Check payment status and send payment reminders if registration has alerts
-        if reg.alert:
-            self.check_payment(reg)
+        if registration.alert:
+            self.check_payment(registration)
 
     @staticmethod
     def check_membership_fee(registration: Registration) -> None:
@@ -716,7 +681,7 @@ class Command(BaseCommand):
         remember_membership_fee(registration)
 
     @staticmethod
-    def check_payment(reg: Registration) -> None:
+    def check_payment(registration: Registration) -> None:
         """Check if payment reminder should be sent for registration.
 
         This function determines whether a payment reminder should be sent to a member
@@ -724,27 +689,27 @@ class Command(BaseCommand):
         quota availability, and existing pending payments.
 
         Args:
-            reg: Registration instance to check payment alerts for
+            registration: Registration instance to check payment alerts for
 
         Returns:
             None: This function performs actions but does not return a value
 
         """
         # Check if alerts are enabled for this registration
-        if not reg.alert:
+        if not registration.alert:
             return
 
         # Verify that the registration has an associated quota
-        if not reg.quota:
+        if not registration.quota:
             return
 
         # Query for any existing submitted payment invoices for this registration
         # to avoid sending duplicate payment reminders
         pending_payment_invoices = PaymentInvoice.objects.filter(
-            member_id=reg.member_id,
+            member_id=registration.member_id,
             status=PaymentStatus.SUBMITTED,
             typ=PaymentType.REGISTRATION,
-            idx=reg.id,
+            idx=registration.id,
         )
 
         # If there are pending payments, skip sending reminder
@@ -752,7 +717,7 @@ class Command(BaseCommand):
             return
 
         # Send payment reminder if all conditions are met
-        remember_pay(reg)
+        remember_pay(registration)
 
     @staticmethod
     def check_deadline(run: Run) -> None:
@@ -790,3 +755,8 @@ class Command(BaseCommand):
 
         # Send deadline notifications for this run
         notify_deadlines(run)
+
+    @staticmethod
+    def send_organizer_summaries() -> None:
+        """Send daily summary emails to organizers for events with digest mode enabled."""
+        send_daily_organizer_summaries()

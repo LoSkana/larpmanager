@@ -31,6 +31,7 @@ from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.db import models
 from django.shortcuts import render
@@ -40,6 +41,7 @@ from PIL import ImageOps
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.member import Badge
 from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
+from larpmanager.utils.security import safe_extract_zip
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
@@ -191,13 +193,16 @@ def upload_albums(main: Any, el: Any) -> None:
     Side effects:
         Extracts zip file, creates album structure, uploads all images
 
+    Raises:
+        ZipSecurityError: If ZIP file contains malicious content
+
     """
     cache_subalbums = {}
 
     extraction_path = Path(conf_settings.MEDIA_ROOT) / "zip" / uuid4().hex
 
     with zipfile.ZipFile(el, "r") as zip_file:
-        zip_file.extractall(extraction_path)
+        safe_extract_zip(zip_file, extraction_path)
 
         for filename in zip_file.namelist():
             file_info = zip_file.getinfo(filename)
@@ -210,16 +215,7 @@ def upload_albums(main: Any, el: Any) -> None:
 
 
 def zipdir(path: Any, ziph: Any) -> None:
-    """Recursively add directory contents to zip file.
-
-    Args:
-        path (str): Directory path to compress
-        ziph: Zip file handle to write to
-
-    Side effects:
-        Adds all files in directory tree to zip archive
-
-    """
+    """Recursively add directory contents to zip file."""
     for root, _dirs, files in os.walk(path):
         for file in files:
             file_path = Path(root) / file
@@ -376,39 +372,38 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     file_object = getattr(photo_file, "file", None) or photo_file
     try:
         file_object.seek(0)
-        image = PILImage.open(file_object)
+        with PILImage.open(file_object) as img:
+            # Apply EXIF orientation and get image dimensions
+            oriented_img = ImageOps.exif_transpose(img)
+            width, height = oriented_img.size
+
+            # Skip rotation if image is already landscape or square
+            if height <= width:
+                return
+
+            # Rotate the image 90 degrees clockwise to make it landscape
+            rotated_img = oriented_img.rotate(90, expand=True)
+
+            # Determine the appropriate file format for saving
+            file_format = _get_extension(photo_file, rotated_img)
+
+            # Convert incompatible color modes for JPEG format
+            if file_format == "JPEG" and rotated_img.mode in ("RGBA", "LA", "P"):
+                rotated_img = rotated_img.convert("RGB")
+
+            # Save the rotated image to a BytesIO buffer with optimization
+            with BytesIO() as output_buffer:
+                save_kwargs = {"optimize": True}
+                if file_format == "JPEG":
+                    save_kwargs["quality"] = 88
+                rotated_img.save(output_buffer, format=file_format, **save_kwargs)
+                output_buffer.seek(0)
+
+                # Replace the original photo with the rotated version
+                original_filename = Path(photo_file.name).name or photo_file.name
+                instance.photo = ContentFile(output_buffer.read(), name=original_filename)
     except (OSError, AttributeError):
         return
-
-    # Apply EXIF orientation and get image dimensions
-    image = ImageOps.exif_transpose(image)
-    width, height = image.size
-
-    # Skip rotation if image is already landscape or square
-    if height <= width:
-        return
-
-    # Rotate the image 90 degrees clockwise to make it landscape
-    image = image.rotate(90, expand=True)
-
-    # Determine the appropriate file format for saving
-    file_format = _get_extension(photo_file, image)
-
-    # Convert incompatible color modes for JPEG format
-    if file_format == "JPEG" and image.mode in ("RGBA", "LA", "P"):
-        image = image.convert("RGB")
-
-    # Save the rotated image to a BytesIO buffer with optimization
-    output_buffer = BytesIO()
-    save_kwargs = {"optimize": True}
-    if file_format == "JPEG":
-        save_kwargs["quality"] = 88
-    image.save(output_buffer, format=file_format, **save_kwargs)
-    output_buffer.seek(0)
-
-    # Replace the original photo with the rotated version
-    original_filename = Path(photo_file.name).name or photo_file.name
-    instance.photo = ContentFile(output_buffer.read(), name=original_filename)
 
 
 def _get_extension(uploaded_file: Any, image: Any) -> str:
@@ -471,7 +466,7 @@ def _check_new(file_field: Any, instance: Any, sender: Any) -> bool:
                 # Compare file names and check if no new file data is present
                 if file_field.name == existing_file_name and not getattr(file_field, "file", None):
                     return True
-        except (sender.DoesNotExist, AttributeError) as e:
+        except (ObjectDoesNotExist, AttributeError) as e:
             # Silently handle any database or attribute errors
             logger.debug("Error checking file field for instance pk=%s: %s", instance.pk, e)
 

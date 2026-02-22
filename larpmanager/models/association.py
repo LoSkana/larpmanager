@@ -32,7 +32,14 @@ from pilkit.processors import ResizeToFill, ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config
-from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, FeatureNationality, PaymentMethod
+from larpmanager.models.base import (
+    AlphanumericValidator,
+    BaseModel,
+    Feature,
+    FeatureNationality,
+    PaymentMethod,
+    UuidMixin,
+)
 from larpmanager.models.utils import UploadToPathAndRename
 from larpmanager.utils.core.validators import FileTypeValidator
 
@@ -86,20 +93,29 @@ class AssociationSkin(BaseModel):
 
     managed = models.BooleanField(default=False)
 
+    def __str__(self) -> str:
+        """Return string representation of the association skin."""
+        return self.name
 
-class Association(BaseModel):
+
+class Association(UuidMixin, BaseModel):
     """Represents Association model."""
 
     skin = models.ForeignKey(AssociationSkin, on_delete=models.CASCADE, default=1)
 
-    name = models.CharField(max_length=100, help_text=_("Complete name of the Organization"))
+    name = models.CharField(
+        max_length=100,
+        verbose_name=_("Organization name"),
+        help_text=_("The full name of your organization as it will appear throughout the platform"),
+    )
 
     slug = models.CharField(
         max_length=20,
-        verbose_name=_("URL identifier"),
-        help_text=_("The subdomain identifier")
-        + " - "
-        + _("Only lowercase characters and numbers are allowed, no spaces or symbols"),
+        verbose_name=_("Subdomain"),
+        help_text=_("Your organization's unique subdomain in the plaftform")
+        + " ("
+        + _("Only lowercase letters and numbers allowed, no spaces or special characters")
+        + ")",
         validators=[AlphanumericValidator],
         db_index=True,
     )
@@ -112,7 +128,10 @@ class Association(BaseModel):
         verbose_name=_("Logo"),
         null=True,
         blank=True,
-        help_text=_("Optional logo image - you can upload a file of any size, it will be automatically resized"),
+        help_text=_("Your organization's logo")
+        + " ("
+        + _("upload any size, it will be automatically optimized; square images work best")
+        + ")",
     )
 
     profile_thumb = ImageSpecField(
@@ -132,7 +151,8 @@ class Association(BaseModel):
     main_mail = models.EmailField(
         blank=True,
         null=True,
-        help_text="(" + _("Optional") + ") " + _("Indicate an organization contact address for sending communications"),
+        verbose_name=_("Contact email"),
+        help_text=_("The main email address participants can use to contact your organization"),
     )
 
     mandatory_fields = models.CharField(max_length=1000, blank=True)
@@ -143,8 +163,8 @@ class Association(BaseModel):
         PaymentMethod,
         related_name="associations_payments",
         blank=True,
-        verbose_name=_("Payment Methods"),
-        help_text=_("Indicate the payment methods you wish to be available to participants"),
+        verbose_name=_("Payment methods"),
+        help_text=_("Select which payment methods participants can use"),
     )
 
     payment_currency = models.CharField(
@@ -154,7 +174,7 @@ class Association(BaseModel):
         blank=True,
         null=True,
         verbose_name=_("Payment currency"),
-        help_text=_("Indicates the currency in which to receive payments"),
+        help_text=_("The currency you want to use for all payments and pricing"),
     )
 
     promoter = models.ImageField(
@@ -162,7 +182,8 @@ class Association(BaseModel):
         upload_to=UploadToPathAndRename("promot/"),
         null=True,
         blank=True,
-        help_text=_("Image shown on homepage as promoter"),
+        verbose_name=_("Promotional image"),
+        help_text=_("Featured image displayed on the portal's homepage"),
     )
 
     promoter_thumb = ImageSpecField(
@@ -179,7 +200,9 @@ class Association(BaseModel):
         upload_to="association_background/",
         verbose_name=_("Background image"),
         blank=True,
-        help_text=_("Background of web pages"),
+        help_text=_(
+            "Background image displayed across all pages of your organization - use a subtle pattern or texture for best results"
+        ),
     )
 
     background_red = ImageSpecField(
@@ -191,8 +214,10 @@ class Association(BaseModel):
 
     font = models.FileField(
         upload_to=UploadToPathAndRename("association_font/"),
-        verbose_name=_("Title font"),
-        help_text=_("Font to be used in page titles"),
+        verbose_name=_("Custom title font"),
+        help_text=_(
+            "Upload a custom font file for page titles to match your organization's branding (TTF, OTF, or WOFF formats)"
+        ),
         blank=True,
         null=True,
         validators=[
@@ -213,22 +238,22 @@ class Association(BaseModel):
     css_code = models.CharField(max_length=32, editable=False, default="")
 
     pri_rgb = ColorField(
-        verbose_name=_("Color texts"),
-        help_text=_("Indicate the color that will be used for the texts"),
+        verbose_name=_("Text color"),
+        help_text=_("Main color for text content throughout your organization's pages"),
         blank=True,
         null=True,
     )
 
     sec_rgb = ColorField(
-        verbose_name=_("Color highlight"),
-        help_text=_("Indicate the color that will be used to highlight texts"),
+        verbose_name=_("Highlight color"),
+        help_text=_("Color used to highlight important text"),
         blank=True,
         null=True,
     )
 
     ter_rgb = ColorField(
-        verbose_name=_("Color links"),
-        help_text=_("Indicate the color that will be used for the links"),
+        verbose_name=_("Link color"),
+        help_text=_("Color for clickable links and interactive elements"),
         blank=True,
         null=True,
     )
@@ -255,21 +280,18 @@ class Association(BaseModel):
         blank=True,
         null=True,
         default="",
-        verbose_name=_("Nationality"),
-        help_text="("
-        + _("Optional")
-        + ") "
-        + _("Indicate the organization nationality to activate nation-specific features"),
+        verbose_name=_("Country"),
+        help_text=_("Your organization's country") + " (" + _("it will enable country-specific features") + ")",
     )
 
-    demo = models.BooleanField(default=False)
+    demo = models.BooleanField(default=True)
 
     maintainers = models.ManyToManyField(
         "larpmanager.Member",
         related_name="maintained_associations",
         blank=True,
-        verbose_name=_("Maintainers"),
-        help_text=_("Users who can manage support tickets and receive ticket notifications"),
+        verbose_name=_("Support maintainers"),
+        help_text=_("Staff members who will receive and manage support tickets"),
     )
 
     class Meta:
@@ -353,7 +375,7 @@ class AssociationTextType(models.TextChoices):
     REMINDER_PROFILE = "rr", _("Reminder profile")
 
 
-class AssociationText(BaseModel):
+class AssociationText(UuidMixin, BaseModel):
     """Represents AssociationText model."""
 
     number = models.IntegerField(null=True, blank=True)
@@ -399,7 +421,7 @@ class AssociationText(BaseModel):
         ]
 
 
-class AssociationTranslation(BaseModel):
+class AssociationTranslation(UuidMixin, BaseModel):
     """Per-organization custom translation overrides for Django i18n strings.
 
     This model enables multi-tenant translation customization, allowing each
@@ -470,12 +492,7 @@ class AssociationTranslation(BaseModel):
     )
 
     def __str__(self) -> str:
-        """Return a human-readable string representation of the translation.
-
-        Returns:
-            A formatted string showing association, language, and truncated original text
-
-        """
+        """Return a human-readable string representation of the translation."""
         return f"{self.association.name} - {self.get_language_display()}: {self.msgid[:50]}"
 
     class Meta:
@@ -514,15 +531,7 @@ def hdr(association_or_related_object: Association | Any) -> str:
 
 
 def get_association_maintainers(association: Association) -> Any:
-    """Get all maintainers for an association.
-
-    Args:
-        association: Association instance
-
-    Returns:
-        QuerySet of Member instances who are maintainers for this association
-
-    """
+    """Get all maintainers for an association."""
     return association.maintainers.all()
 
 

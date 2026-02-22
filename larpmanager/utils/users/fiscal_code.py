@@ -55,15 +55,7 @@ def _calculate_vowels(text: str) -> str:
 
 
 def _extract_last_name(last_name: str) -> str:
-    """Extract 3-character code from last name using consonants, vowels, and padding.
-
-    Args:
-        last_name: The last name to process.
-
-    Returns:
-        3-character string code.
-
-    """
+    """Extract 3-character code from last name using consonants, vowels, and padding."""
     # Convert to uppercase for consistent processing
     normalized_last_name = last_name.upper()
 
@@ -126,15 +118,7 @@ def _extract_birth_date(birth_date: date | None, *, male: bool) -> str:
 
 
 def _clean_birth_place(birth_place: str | None) -> str:
-    """Remove parenthetical content from birth place string.
-
-    Args:
-        birth_place: The birth place string to clean.
-
-    Returns:
-        Cleaned birth place string with parenthetical content removed.
-
-    """
+    """Remove parenthetical content from birth place string."""
     if not birth_place:
         return ""
     # Remove everything in parenthesis
@@ -364,7 +348,7 @@ def _go(member: Member, *, male: bool = True) -> dict[str, Any]:  # noqa: C901 -
             member.name = name_parts[0]
 
     # Initialize validation context
-    validation_context: dict[str, Any] = {"membership_cf": True}
+    validation_context: dict = {"membership_cf": True}
 
     # Extract fiscal code components using helper functions
     last_name_code = _extract_last_name(member.surname)

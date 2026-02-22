@@ -32,13 +32,13 @@ from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config, get_event_config
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_short, show_thumb
 
 
-class Writing(BaseConceptModel):
+class Writing(UuidMixin, BaseConceptModel):
     """Represents Writing model."""
 
     progress = models.ForeignKey(
@@ -78,37 +78,14 @@ class Writing(BaseConceptModel):
         abstract = True
 
     def show_red(self) -> dict[str, Any]:
-        """Return a dictionary representation for red display.
-
-        Returns:
-            Dictionary containing id, number, and name attributes.
-
-        """
-        # noinspection PyUnresolvedReferences
-        # Create base dictionary with id and number
-        js = {"id": self.id, "number": self.number}
-
-        # Update dictionary with name attribute
-        for s in ["name"]:
+        """Return a dictionary representation for red display."""
+        js = {}
+        for s in ["number", "name", "uuid"]:
             self.upd_js_attr(js, s)
         return js
 
     def show(self, run: Run | None = None) -> dict[str, Any]:  # noqa: ARG002
-        """Generate a display dictionary with basic writing information and teaser.
-
-        Builds upon the reduced representation from show_red() by adding the teaser
-        field to provide a more complete view of the writing object for display
-        purposes.
-
-        Args:
-            run: Optional run instance for context-specific display modifications.
-                 Defaults to None if no specific run context is needed.
-
-        Returns:
-            Dict containing writing object data with id, number, name, and teaser
-            fields suitable for JSON serialization and frontend display.
-
-        """
+        """Generate a display dictionary with basic writing information and teaser."""
         # Get base dictionary with id, number, and name fields
         js = self.show_red()
 
@@ -258,12 +235,7 @@ class Character(Writing):
 
     @property
     def is_active(self) -> bool:
-        """Check if character is active (not marked as inactive in CharacterConfig).
-
-        Returns:
-            True if character is active (no inactive config), False otherwise.
-
-        """
+        """Check if character is active (not marked as inactive in CharacterConfig)."""
         is_inactive = self.get_config("inactive", default_value=False)
         return not (is_inactive == "True" or is_inactive is True)
 
@@ -280,7 +252,7 @@ class Character(Writing):
 
         if self.player:
             # noinspection PyUnresolvedReferences
-            js["owner_id"] = self.player_id
+            js["owner_uuid"] = self.player.uuid
             # noinspection PyUnresolvedReferences
             js["owner"] = self.player.display_member()
 
@@ -312,9 +284,9 @@ class Character(Writing):
     def show_factions(self, event: Event | None, js: dict) -> None:
         """Add faction information to the JavaScript data structure.
 
-        Populates the 'factions' list in the js dictionary with faction numbers
-        from the event. If no primary faction is found, adds 0 as default.
-        Also sets thumbnail URL if primary faction has cover image.
+        Populates the 'factions' list in the js dictionary with faction objects
+        containing UUID and number from the event. If no primary faction is found,
+        adds a default faction object. Also sets thumbnail URL if primary faction has cover image.
 
         Args:
             event: Event object to get factions from. If None, uses self.event.
@@ -329,9 +301,10 @@ class Character(Writing):
         # Track if we find a primary faction
         has_primary_faction = False
 
-        # Process all factions for this event
+        # Process all public factions for this event
         # noinspection PyUnresolvedReferences
-        for faction in self.factions_list.filter(event=faction_event):
+        query = self.factions_list.filter(event=faction_event).exclude(typ=FactionType.SECRET)
+        for faction in query.order_by("order"):
             # Check if this is a primary faction
             if faction.typ == FactionType.PRIM:
                 has_primary_faction = True
@@ -339,7 +312,7 @@ class Character(Writing):
                 if faction.cover:
                     js["thumb"] = faction.thumb.url
 
-            # Add faction number to the list
+            # Add faction object with uuid and number
             js["factions"].append(faction.number)
 
         # Add default faction if no primary found
@@ -348,15 +321,7 @@ class Character(Writing):
 
     @staticmethod
     def get_character_filepath(run: Run) -> str:
-        """Get the directory path for storing character files for a given run.
-
-        Args:
-            run: The run instance for which to get the character filepath.
-
-        Returns:
-            The absolute path to the character files directory.
-
-        """
+        """Get the directory path for storing character files for a given run."""
         # Build the path to the characters directory for this run
         directory_path = str(Path(run.event.get_media_filepath()) / "characters" / f"{run.number}/")
         # Ensure the directory exists
@@ -364,15 +329,7 @@ class Character(Writing):
         return directory_path
 
     def get_sheet_filepath(self, run: Run) -> str:
-        """Get the path to this character's PDF sheet file.
-
-        Args:
-            run: The Run instance for which to get the sheet filepath.
-
-        Returns:
-            The full filesystem path to the character's PDF sheet file.
-
-        """
+        """Get the path to this character's PDF sheet file."""
         # Build the character's directory path
         character_directory = self.get_character_filepath(run)
 
@@ -406,15 +363,7 @@ class Character(Writing):
 
     @classmethod
     def get_example_csv(cls, enabled_features: dict[str, int]) -> list[list[str]]:
-        """Extend Writing CSV example with player assignment column.
-
-        Args:
-            enabled_features: List of enabled features for the organization.
-
-        Returns:
-            List of CSV rows with headers and examples including player column.
-
-        """
+        """Extend Writing CSV example with player assignment column."""
         # Get base CSV structure from parent Writing class
         csv_rows = Writing.get_example_csv(enabled_features)
 
@@ -577,26 +526,7 @@ class Faction(Writing):
 
     @staticmethod
     def get_faction_filepath(run: Run) -> str:
-        """Get the directory path for storing faction PDF files for a specific run.
-
-        Creates the faction directory structure within the event's media directory
-        if it doesn't already exist. The directory structure follows the pattern:
-        {event_media}/factions/{run_number}/
-
-        This static method can be called without a faction instance, useful for
-        batch operations or directory initialization.
-
-        Args:
-            run: The Run model instance for which to get the faction files directory
-
-        Returns:
-            Absolute filesystem path to the faction files directory for this run.
-            The directory is guaranteed to exist after this call.
-
-        Side Effects:
-            Creates the faction directory structure if it doesn't exist
-
-        """
+        """Get the directory path for storing faction PDF files for a specific run."""
         # Build directory path: event_media/factions/run_number/
         directory_path = str(Path(run.event.get_media_filepath()) / "factions" / f"{run.number}/")
 
@@ -606,24 +536,7 @@ class Faction(Writing):
         return directory_path
 
     def get_sheet_filepath(self, run: Run) -> str:
-        """Get the complete file path for this faction's PDF sheet.
-
-        Constructs the full filesystem path where the faction sheet PDF should be
-        stored or retrieved from. The filename includes the faction number for
-        easy identification: #{faction_number}.pdf
-
-        Args:
-            run: The Run model instance for which to get the sheet file path
-
-        Returns:
-            Absolute filesystem path to the faction sheet PDF file, in the format:
-            {event_media}/factions/{run_number}/#{faction_number}.pdf
-
-        Example:
-            For faction #5 in run #2:
-            /path/to/media/event_123/factions/2/#5.pdf
-
-        """
+        """Get the complete file path for this faction's PDF sheet."""
         # Get the faction directory for this run
         faction_directory = self.get_faction_filepath(run)
 
@@ -698,7 +611,7 @@ class Prologue(Writing):
         return f"P{self.number} {self.name} ({self.typ})"
 
 
-class HandoutTemplate(BaseModel):
+class HandoutTemplate(UuidMixin, BaseModel):
     """Represents HandoutTemplate model."""
 
     number = models.IntegerField()
@@ -758,15 +671,7 @@ class Handout(Writing):
         return f"H{self.number} {self.name}"
 
     def get_filepath(self, run: Run) -> str:
-        """Build the file path for this handout's PDF within the event's media directory.
-
-        Args:
-            run: The Run instance to determine the event directory.
-
-        Returns:
-            Absolute path to the handout PDF file.
-
-        """
+        """Build the file path for this handout's PDF within the event's media directory."""
         # Build handouts directory path within event media
         handouts_directory = str(Path(run.event.get_media_filepath()) / "handouts")
         Path(handouts_directory).mkdir(parents=True, exist_ok=True)
@@ -792,7 +697,7 @@ class TextVersionChoices(models.TextChoices):
     RELATIONSHIP = "l", "Relationship"
 
 
-class TextVersion(BaseModel):
+class TextVersion(UuidMixin, BaseModel):
     """Represents TextVersion model."""
 
     tp = models.CharField(max_length=1, choices=TextVersionChoices.choices)

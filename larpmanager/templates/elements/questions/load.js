@@ -4,13 +4,13 @@ down_all = false;
 spinner = false;
 
 function load_que(index, first) {
-    num = regs[index];
+    q_uuid = regs[index];
 
-    if (num in done) {
+    if (q_uuid in done) {
         load_que(index+1, true);
     } else {
         if (first) {
-            $( '.lq_{0}'.format(num) ).trigger('click');
+            $( '.lq_{0}'.format(q_uuid) ).trigger('click');
         }
         setTimeout(function() {
             load_que(index, false);
@@ -26,6 +26,8 @@ function load_question(el) {
     if ($('.lq_{0}'.format(key)).hasClass('select')) {
         el.next().trigger('click');
         $( '.lq_{0}'.format(key) ).removeClass('select');
+        // Remove from done to allow reloading when reopened
+        delete done[key];
         return;
     }
 
@@ -33,7 +35,7 @@ function load_question(el) {
 
     request = $.ajax({
         url: url_load_questions,
-        data: { num: key },
+        data: { q_uuid: key },
         method: "POST",
         datatype: "json",
     });
@@ -50,7 +52,7 @@ function load_question(el) {
         // Clear the spinner timeout since request completed
         clearTimeout(spinnerTimeout);
 
-        num = result['num'];
+        q_uuid = result['q_uuid'];
         data = result['res'];
         const popup = new Set(result['popup']);
 
@@ -62,10 +64,10 @@ function load_question(el) {
         // Collect all updates first
         for (let r in data) {
             let vl = data[r];
-            if (vl.constructor === Array) vl = vl.join(", ");
+            if (vl.constructor === Array) vl = vl.join(" | ");
 
             if (popup.has(parseInt(r)))
-                vl += "... <a href='#' class='post_popup' pop='{0}' fie='{1}'><i class='fas fa-eye'></i></a>".format(r, num);
+                vl += "... <a href='#' class='post_popup' pop='{0}' fie='{1}'><i class='fas fa-eye'></i></a>".format(r, q_uuid);
 
             Object.keys(window.datatables).forEach(function(key) {
                 const table = window.datatables[key];
@@ -77,7 +79,7 @@ function load_question(el) {
                     }
                     tableUpdates[key].push({
                         rowSelector: '#' + r,
-                        columnClass: '.q_' + num,
+                        columnClass: '.q_' + q_uuid,
                         value: vl
                     });
                 }
@@ -92,15 +94,16 @@ function load_question(el) {
             updates.forEach(function(update) {
                 const cell = table.cell(update.rowSelector, update.columnClass);
                 if (cell && cell.node()) {
-                    cell.data(update.value);
+                    // Update cell HTML directly to preserve attributes
+                    const cellNode = cell.node();
+                    cellNode.innerHTML = update.value;
+                    // Invalidate cell to sync DataTables internal state with DOM
+                    cell.invalidate('dom');
                 }
             });
-
-            // Single draw call per table instead of multiple
-            table.draw(false);
         });
 
-         done[num.toString()] = 1;
+         done[q_uuid] = 1;
 
          if (spinner) {
             stop_spinner();
@@ -121,7 +124,7 @@ function load_question_email(el) {
 
     request = $.ajax({
         url: url_load_questions_email,
-        data: { num: key },
+        data: { q_uuid: key },
         method: "POST",
         datatype: "json",
     });
@@ -200,7 +203,7 @@ window.addEventListener('DOMContentLoaded', function() {
             var tog = $(this).attr("tog");
             $(this).toggleClass('select');
 
-            var index_list = window.hideColumnsIndexMap[tog];
+            var index_list = window.hideColumnsIndexMap[tog] || [];
             Object.keys(window.datatables).forEach(function(key) {
                 var table = window.datatables[key];
 

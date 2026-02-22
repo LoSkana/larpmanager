@@ -23,7 +23,7 @@ from typing import Any
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssociationTextType, get_url, hdr
@@ -51,6 +51,7 @@ def remember_membership(registration: Any) -> None:
     body = get_association_text(
         registration.run.event.association_id,
         AssociationTextType.REMINDER_MEMBERSHIP,
+        registration.member.language,
     ) or get_remember_membership_body(registration)
 
     my_send_mail(subject, body, registration.member, registration.run)
@@ -84,7 +85,8 @@ def get_remember_membership_body(registration: Any) -> str:
         )
         % {"event": registration.run}
         + ". "
-        + _("To complete the process, simply <a href='%(url)s'>click here</a>") % {"url": get_url("membership")}
+        + _("To complete the process, simply <a href='%(url)s'>click here</a>")
+        % {"url": get_url("membership", registration.run.event)}
         + ". "
     )
 
@@ -121,7 +123,7 @@ def remember_pay(registration: Any) -> None:
     """
     activate(registration.member.language)
 
-    is_provisional = is_reg_provisional(registration)
+    is_provisional = is_registration_provisional(registration)
     email_context = {"event": registration.run}
 
     if is_provisional:
@@ -132,6 +134,7 @@ def remember_pay(registration: Any) -> None:
     email_body = get_association_text(
         registration.run.event.association_id,
         AssociationTextType.REMINDER_PAY,
+        registration.member.language,
     ) or get_remember_pay_body(email_context, registration, is_provisional=is_provisional)
 
     my_send_mail(email_subject, email_body, registration.member, registration.run)
@@ -224,21 +227,14 @@ def remember_profile(registration: Any) -> None:
     body = get_association_text(
         registration.run.event.association_id,
         AssociationTextType.REMINDER_PROFILE,
+        registration.member.language,
     ) or get_remember_profile_body(context)
 
     my_send_mail(subject, body, registration.member, registration.run)
 
 
 def get_remember_profile_body(email_context: Any) -> Any:
-    """Generate default profile completion reminder email body text.
-
-    Args:
-        email_context (dict): Email context with event and URL information
-
-    Returns:
-        str: HTML formatted email body for profile reminder
-
-    """
+    """Generate default profile completion reminder email body text."""
     return (
         _("Hello! You signed up for %(event)s but haven't completed your profile yet") % email_context
         + ". "
@@ -265,6 +261,7 @@ def remember_membership_fee(registration: Any) -> None:
     body = get_association_text(
         registration.run.event.association_id,
         AssociationTextType.REMINDER_MEMBERSHIP_FEE,
+        registration.member.language,
     ) or get_remember_membership_fee_body(context, registration)
 
     my_send_mail(subject, body, registration.member, registration.run)

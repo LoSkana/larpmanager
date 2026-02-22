@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load static i18n %}
 {% block title %}
-    {% trans "Upload" %} - {{ album }} - {{ run }}
+    {% trans "Upload" %} - {{ album }} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "Manage photo album upload" %}
@@ -27,7 +27,7 @@
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
     $('form').on('submit', function() {
-        return confirm('Sei davvero sicuro?');
+        return window.lmTesting ? true : confirm('Sei davvero sicuro?');
     });
 });
 });

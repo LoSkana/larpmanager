@@ -25,7 +25,7 @@
             {% for key, el in list.items %}
                 <tr>
                     <td>
-                        <a href="{% url 'exe_competences_member_detail' el.id %}">{{ el.name }}</a>
+                        <a href="{% url 'exe_competences_member_detail' el.uuid %}">{{ el.name }}</a>
                     </td>
                     <td>{{ el.working | length }}</td>
                     <td>

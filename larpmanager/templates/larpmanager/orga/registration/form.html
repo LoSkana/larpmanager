@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n tz show_tags static %}
 {% block title %}
-    {% trans "Registration questions" %} - {{ run }}
+    {% trans "Registration questions" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows the available questions of the registration form of the event" %}
@@ -14,7 +14,7 @@
             {% if el.section %}
             </table>
             <h1>
-                <a href="{% url 'orga_registration_sections_edit' run.get_slug el.section_id %}">{{ el.section }}</a>
+                <a href="{% url 'orga_registration_sections_edit' run.get_slug el.section.uuid %}">{{ el.section }}</a>
             </h1>
         {% endif %}
         <table id="registration_questions_{{ el.section }}"
@@ -38,13 +38,14 @@
                     {% endif %}
                     <th></th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
             {% endif %}
-            <tr id="{{ el.id }}">
+            <tr id="{{ el.uuid }}">
                 <td>
-                    <a href="{% url 'orga_registration_form_edit' run.get_slug el.id %}">
+                    <a href="{% url 'orga_registration_form_edit' run.get_slug el.uuid %}">
                         <i class="fas fa-edit"></i>
                     </a>
                 </td>
@@ -60,16 +61,16 @@
                     </td>
                 {% endif %}
                 <td>
-                    {% for ch in el.options_list %}
+                    {% for ch in el.options.all %}
                         {% include "elements/comma.html" %}
-                        <a href="{% url 'orga_registration_options_edit' run.get_slug ch.id %}">{{ ch.name }}</a>
+                        {{ ch.name }}
                     {% endfor %}
                 </td>
                 {% if features.reg_que_faction %}
                     <td>
                         {% for ch in el.factions.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_factions_edit' run.get_slug ch.id %}">#{{ ch.number }} {{ ch.name }}</a>
+                            <a href="{% url 'orga_factions_edit' run.get_slug ch.uuid %}">#{{ ch.number }} {{ ch.name }}</a>
                         {% endfor %}
                     </td>
                 {% endif %}
@@ -77,7 +78,7 @@
                     <td>
                         {% for ch in el.tickets.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_registration_tickets_edit' run.get_slug ch.id %}">{{ ch.name }}</a>
+                            <a href="{% url 'orga_registration_tickets_edit' run.get_slug ch.uuid %}">{{ ch.name }}</a>
                         {% endfor %}
                     </td>
                 {% endif %}
@@ -85,16 +86,23 @@
                     {% if el.section != old_section %}
                         {% define el.section as old_section %}
                     {% else %}
-                        <a href="{% url 'orga_registration_form_order' run.get_slug el.id 0 %}">
+                        <a href="{% url 'orga_registration_form_order' run.get_slug el.uuid 0 %}">
                             <i class="fa-solid fa-arrow-up"></i>
                         </a>
                     {% endif %}
                 </td>
                 <td>
                     {% if not forloop.last %}
-                        <a href="{% url 'orga_registration_form_order' run.get_slug el.id 1 %}">
+                        <a href="{% url 'orga_registration_form_order' run.get_slug el.uuid 1 %}">
                             <i class="fa-solid fa-arrow-down"></i>
                         </a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if el.typ|length == 1 %}
+                        <a href="{% url 'orga_registration_form_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     {% endif %}
                 </td>
             </tr>

@@ -29,7 +29,8 @@ from safedelete import HARD_DELETE
 
 # Import signals module to register signal handlers
 import larpmanager.models.signals  # noqa: F401
-from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole
+from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole, \
+    PermissionModule
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemOther,
@@ -37,6 +38,7 @@ from larpmanager.models.accounting import (
     OtherChoices,
     PaymentChoices,
 )
+from larpmanager.models.base import Feature, FeatureModule
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.registration import RegistrationCharacterRel
@@ -68,7 +70,7 @@ class TestCacheSignals(BaseTestCase):
         """Test that Character pre_save signal resets character cache"""
         character = self.character()
         mock_reset.reset_mock()  # Reset after character creation
-        # Modify a field that triggers cache reset (player_id)
+        # Modify a field that triggers cache reset (player_uuid)
         character.player = self.get_member()
         character.save()
 
@@ -236,7 +238,7 @@ class TestCacheSignals(BaseTestCase):
         registration = self.get_registration()
         character = self.character()
         mock_reset.reset_mock()  # Reset after fixtures
-        rel = RegistrationCharacterRel(reg=registration, character=character)
+        rel = RegistrationCharacterRel(registration=registration, character=character)
         rel.save()
 
         mock_reset.assert_called_once_with(registration.run)
@@ -246,7 +248,7 @@ class TestCacheSignals(BaseTestCase):
         """Test that RegistrationCharacterRel post_delete signal resets character cache"""
         registration = self.get_registration()
         character = self.character()
-        rel = RegistrationCharacterRel.objects.create(reg=registration, character=character)
+        rel = RegistrationCharacterRel.objects.create(registration=registration, character=character)
         mock_reset.reset_mock()  # Reset after create
         rel.delete()
 
@@ -289,69 +291,61 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(run)
 
-    def test_association_permission_post_save_resets_permission_cache(self) -> None:
+    @patch("larpmanager.models.signals.clear_association_permission_cache")
+    def test_association_permission_post_save_resets_permission_cache(self, mock_reset: Any) -> None:
         """Test that AssociationPermission post_save signal resets permission cache"""
-        # This test verifies the signal receiver is connected
-        # The actual cache behavior is tested in integration tests
-        permission = AssociationPermission.objects.first()
-        if not permission:
-            self.skipTest("No AssociationPermission available")
+        mock_reset.reset_mock()  # Reset mock after setup
 
-        # Verify signal doesn't raise an error by updating
-        permission.descr = "Updated description"
+        module = FeatureModule.objects.create(name="Test module", order=100)
+        feature = Feature.objects.create(name="Test Feature", order=100, module=module)
+        perm_module = PermissionModule.objects.create(name="Test module", order=100)
+        permission = AssociationPermission(
+            name="Test Permission", number=100, descr="Test", feature=feature, module=perm_module
+        )
         permission.save()
 
-        # Verify the object was updated successfully
-        permission.refresh_from_db()
-        self.assertEqual(permission.descr, "Updated description")
+        mock_reset.assert_called_once_with(permission)
 
-    def test_association_permission_post_delete_resets_permission_cache(self) -> None:
+    @patch("larpmanager.models.signals.clear_association_permission_cache")
+    def test_association_permission_post_delete_resets_permission_cache(self, mock_reset: Any) -> None:
         """Test that AssociationPermission post_delete signal resets permission cache"""
-        # This test verifies the signal receiver is connected
-        permission = AssociationPermission.objects.first()
-        if not permission:
-            self.skipTest("No AssociationPermission available")
 
-        # Store ID before deletion
-        permission_id = permission.id
-
-        # Delete the permission
+        module = FeatureModule.objects.create(name="Test module", order=100)
+        feature = Feature.objects.create(name="Test Feature", order=100, module=module)
+        perm_module = PermissionModule.objects.create(name="Test module", order=100)
+        permission = AssociationPermission.objects.create(
+            name="Test Permission", number=101, descr="Test", feature=feature, module=perm_module
+        )
+        mock_reset.reset_mock()  # Reset after create
         permission.delete()
 
-        # Verify the object was deleted successfully
-        self.assertFalse(AssociationPermission.objects.filter(id=permission_id).exists())
+        mock_reset.assert_called_once_with(permission)
 
-    def test_event_permission_post_save_resets_permission_cache(self) -> None:
+    @patch("larpmanager.models.signals.clear_event_permission_cache")
+    def test_event_permission_post_save_resets_permission_cache(self, mock_reset: Any) -> None:
         """Test that EventPermission post_save signal resets permission cache"""
-        # This test verifies the signal receiver is connected
-        # The actual cache behavior is tested in integration tests
-        permission = EventPermission.objects.first()
-        if not permission:
-            self.skipTest("No EventPermission available")
+        mock_reset.reset_mock()  # Reset mock after setup
 
-        # Verify signal doesn't raise an error by updating
-        permission.descr = "Updated description"
+        module = FeatureModule.objects.create(name="Test module", order=100)
+        feature = Feature.objects.create(name="Test Feature", order=100, module=module)
+        perm_module = PermissionModule.objects.create(name="Test module", order=100)
+        permission = EventPermission(name="Test Permission", number=100, descr="Test", feature=feature, module=perm_module)
         permission.save()
 
-        # Verify the object was updated successfully
-        permission.refresh_from_db()
-        self.assertEqual(permission.descr, "Updated description")
+        mock_reset.assert_called_once_with(permission)
 
-    def test_event_permission_post_delete_resets_permission_cache(self) -> None:
+    @patch("larpmanager.models.signals.clear_event_permission_cache")
+    def test_event_permission_post_delete_resets_permission_cache(self, mock_reset: Any) -> None:
         """Test that EventPermission post_delete signal resets permission cache"""
-        # This test verifies the signal receiver is connected
-        permission = EventPermission.objects.first()
-        if not permission:
-            self.skipTest("No EventPermission available")
 
-        # Store ID before deletion
-        permission_id = permission.id
-
-        # Delete the permission
+        module = FeatureModule.objects.create(name="Test module", order=100)
+        feature = Feature.objects.create(name="Test Feature", order=100, module=module)
+        perm_module = PermissionModule.objects.create(name="Test module", order=100)
+        permission = EventPermission.objects.create(name="Test Permission", number=101, descr="Test", feature=feature, module=perm_module)
+        mock_reset.reset_mock()  # Reset after create
         permission.delete()
 
-        # Verify the object was deleted successfully
-        self.assertFalse(EventPermission.objects.filter(id=permission_id).exists())
+        mock_reset.assert_called_once_with(permission)
 
     @patch("larpmanager.models.signals.remove_association_role_cache")
     def test_association_role_post_save_resets_role_cache(self, mock_reset: Any) -> None:
@@ -398,7 +392,7 @@ class TestCacheSignals(BaseTestCase):
     def test_registration_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_save signal resets accounting cache"""
         registration = self.get_registration()
-        mock_reset.reset_mock()  # Reset after get_registration
+        mock_reset.reset_mock()  # Reset after get_accounting_registration
         registration.save()
 
         mock_reset.assert_called_once_with(registration.run_id)
@@ -408,12 +402,12 @@ class TestCacheSignals(BaseTestCase):
         """Test that Registration post_delete signal resets accounting cache"""
         registration = self.get_registration()
         run = registration.run
-        mock_reset.reset_mock()  # Reset after get_registration
+        mock_reset.reset_mock()  # Reset after get_accounting_registration
         registration.delete()
 
         mock_reset.assert_called_once_with(run.id)
 
-    @patch("larpmanager.models.signals.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
     def test_registration_ticket_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that RegistrationTicket post_save signal resets accounting cache"""
         # RegistrationTicket signal resets for all runs in the event
@@ -426,7 +420,7 @@ class TestCacheSignals(BaseTestCase):
         # Signal calls reset for event runs
         self.assertTrue(mock_reset.called)
 
-    @patch("larpmanager.models.signals.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
     def test_registration_ticket_post_delete_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that RegistrationTicket post_delete signal resets accounting cache"""
         event = self.get_event()
@@ -446,7 +440,7 @@ class TestCacheSignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         payment.save()
@@ -462,11 +456,11 @@ class TestCacheSignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         member_id = payment.member_id
-        run = payment.reg.run
+        run = payment.registration.run
         mock_reset.reset_mock()  # Reset after create
         payment.delete()
 
@@ -487,7 +481,7 @@ class TestCacheSignals(BaseTestCase):
         )
         item.save()
 
-        mock_reset.assert_called_once_with(run, member.id)
+        mock_reset.assert_called_with(run, member.id)
 
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")
     def test_accounting_item_discount_post_delete_resets_accounting_cache(self, mock_reset: Any) -> None:
@@ -506,7 +500,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after create to only test delete signal
         item.delete()
 
-        mock_reset.assert_called_once_with(run, member_id)
+        mock_reset.assert_called_with(run, member_id)
 
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")
     def test_accounting_item_other_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
@@ -565,14 +559,14 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(event_id)
 
-    @patch("larpmanager.models.signals.refresh_event_faction_relationships")
+    @patch("larpmanager.models.signals.refresh_event_faction_relationships_background")
     def test_faction_post_save_resets_rels_cache(self, mock_reset: Any) -> None:
         """Test that Faction post_save signal resets rels cache"""
         event = self.get_event()
         faction = Faction(name="Test Faction", event=event)
         faction.save()
 
-        mock_reset.assert_called_once_with(faction)
+        mock_reset.assert_called_once_with(faction.id)
 
     @patch("larpmanager.cache.rels.refresh_character_related_caches")
     def test_faction_post_delete_resets_rels_cache(self, mock_reset: Any) -> None:
@@ -586,14 +580,14 @@ class TestCacheSignals(BaseTestCase):
         # Verify faction was deleted
         self.assertFalse(Faction.objects.filter(id=faction_id).exists())
 
-    @patch("larpmanager.models.signals.refresh_event_plot_relationships")
+    @patch("larpmanager.models.signals.refresh_event_plot_relationships_background")
     def test_plot_post_save_resets_rels_cache(self, mock_reset: Any) -> None:
         """Test that Plot post_save signal resets rels cache"""
         event = self.get_event()
         plot = Plot(name="Test Plot", event=event)
         plot.save()
 
-        mock_reset.assert_called_once_with(plot)
+        mock_reset.assert_called_once_with(plot.id)
 
     @patch("larpmanager.cache.rels.refresh_character_related_caches")
     def test_plot_post_delete_resets_rels_cache(self, mock_reset: Any) -> None:
@@ -611,7 +605,7 @@ class TestCacheSignals(BaseTestCase):
     def test_registration_post_save_resets_links_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_save signal resets links cache"""
         registration = self.get_registration()
-        mock_reset.reset_mock()  # Reset after get_registration
+        mock_reset.reset_mock()  # Reset after get_accounting_registration
         registration.save()
 
         # Signal resets for the member
@@ -660,7 +654,7 @@ class TestCacheSignals(BaseTestCase):
     def test_registration_post_save_resets_registration_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_save signal resets registration cache"""
         registration = self.get_registration()
-        mock_reset.reset_mock()  # Reset after get_registration
+        mock_reset.reset_mock()  # Reset after get_accounting_registration
         registration.save()
 
         mock_reset.assert_called_once_with(registration.run_id)

@@ -32,19 +32,9 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.feature import get_association_features
-from larpmanager.forms.accounting import ExePaymentSettingsForm
 from larpmanager.forms.association import (
-    ExeAppearanceForm,
-    ExeAssociationForm,
-    ExeAssociationRoleForm,
-    ExeAssociationTextForm,
-    ExeAssociationTranslationForm,
-    ExeConfigForm,
     ExeFeatureForm,
-    ExePreferencesForm,
-    ExeQuickSetupForm,
 )
-from larpmanager.forms.member import ExeProfileForm
 from larpmanager.models.access import AssociationPermission, AssociationRole
 from larpmanager.models.association import Association, AssociationText, AssociationTranslation
 from larpmanager.models.base import Feature
@@ -52,7 +42,9 @@ from larpmanager.models.event import Run
 from larpmanager.utils.auth.permission import get_index_association_permissions
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import clear_messages, get_feature
-from larpmanager.utils.services.edit import backend_edit, exe_edit
+from larpmanager.utils.edit.backend import backend_edit
+from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
+from larpmanager.utils.services.association import _reset_all_association
 from larpmanager.views.larpmanager import get_run_lm_payment
 from larpmanager.views.orga.event import prepare_roles_list
 
@@ -60,27 +52,12 @@ from larpmanager.views.orga.event import prepare_roles_list
 @login_required
 def exe_association(request: HttpRequest) -> Any:
     """Edit association details."""
-    return exe_edit(
-        request,
-        ExeAssociationForm,
-        None,
-        "exe_association",
-        "manage",
-        additional_context={"add_another": False},
-    )
+    return exe_edit(request, ExeAction.ASSOCIATION)
 
 
 @login_required
 def exe_roles(request: HttpRequest) -> HttpResponse:
-    """Handle association roles management page.
-
-    Args:
-        request: HTTP request object
-
-    Returns:
-        Rendered roles management template
-
-    """
+    """Handle association roles management page."""
     # Check user permissions for role management
     context = check_association_context(request, "exe_roles")
 
@@ -100,24 +77,33 @@ def exe_roles(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_roles_edit(request: HttpRequest, num: Any) -> Any:
-    """Edit specific association role."""
-    return exe_edit(request, ExeAssociationRoleForm, num, "exe_roles")
+def exe_roles_new(request: HttpRequest) -> Any:
+    """Create a new association role."""
+    return exe_new(request, ExeAction.ROLES)
 
 
 @login_required
-def exe_config(request: HttpRequest, section: str | None = None) -> HttpResponse:
+def exe_roles_edit(request: HttpRequest, role_uuid: str) -> Any:
+    """Edit specific association role."""
+    return exe_edit(request, ExeAction.ROLES, role_uuid)
+
+
+@login_required
+def exe_roles_delete(request: HttpRequest, role_uuid: str) -> HttpResponse:
+    """Delete role."""
+    return exe_delete(request, ExeAction.ROLES, role_uuid)
+
+
+@login_required
+def exe_config(request: HttpRequest, section: str | None = None) -> HttpResponse:  # noqa: ARG001
     """Handle organization configuration editing with optional section jump."""
-    # Prepare context with section jump if specified
-    add_ctx = {"jump_section": section} if section else {}
-    add_ctx["add_another"] = False
-    return exe_edit(request, ExeConfigForm, None, "exe_config", "manage", additional_context=add_ctx)
+    return exe_edit(request, ExeAction.CONFIG)
 
 
 @login_required
 def exe_profile(request: HttpRequest) -> Any:
     """Edit user profile settings."""
-    return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", additional_context={"add_another": False})
+    return exe_edit(request, ExeAction.PROFILE)
 
 
 @login_required
@@ -137,93 +123,63 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_texts_edit(request: HttpRequest, num: Any) -> Any:
+def exe_texts_new(request: HttpRequest) -> HttpResponse:
+    """Create a new association text."""
+    return exe_new(request, ExeAction.TEXTS)
+
+
+@login_required
+def exe_texts_edit(request: HttpRequest, text_uuid: str) -> HttpResponse:
     """Edit specific association text."""
-    return exe_edit(request, ExeAssociationTextForm, num, "exe_texts")
+    return exe_edit(request, ExeAction.TEXTS, text_uuid)
+
+
+@login_required
+def exe_texts_delete(request: HttpRequest, text_uuid: str) -> HttpResponse:
+    """Delete text."""
+    return exe_delete(request, ExeAction.TEXTS, text_uuid)
 
 
 @login_required
 def exe_translations(request: HttpRequest) -> HttpResponse:
-    """Display the list of custom translation overrides for an association.
-
-    This view renders the management interface for organization-specific translation
-    overrides. It shows all custom translations (active and inactive) that have been
-    configured for the association, allowing administrators to review, edit, and
-    manage their translation customizations.
-
-    Args:
-        request: HTTP request object containing user authentication and session data
-
-    Returns:
-        HttpResponse: Rendered template showing the list of translation overrides
-            with options to add, edit, or delete translations
-
-    Raises:
-        PermissionDenied: If user lacks exe_translations permission for the association
-
-    """
+    """Display the list of custom translation overrides for an association."""
     # Verify user has permission to manage translations for this association
     context = check_association_context(request, "exe_translations")
 
-    # Fetch all custom translations for this association
-    # Results include both active and inactive translations for full visibility
+    # Fetch all custom translations for this association (both active and inactive)
     context["list"] = AssociationTranslation.objects.filter(association_id=context["association_id"])
 
     return render(request, "larpmanager/exe/translations.html", context)
 
 
 @login_required
-def exe_translations_edit(request: HttpRequest, num: int) -> HttpResponse:
-    """Handle creation and editing of association translation overrides.
+def exe_translations_new(request: HttpRequest) -> HttpResponse:
+    """Create a new association translation override."""
+    return exe_new(request, ExeAction.TRANSLATIONS)
 
-    This view provides the form interface for creating new translation overrides
-    or editing existing ones. It delegates to the standard exe_edit utility which
-    handles both GET (display form) and POST (process submission) requests.
 
-    Args:
-        request: HTTP request object
-        num: Translation ID for editing, or 0 for creating new translation
+@login_required
+def exe_translations_edit(request: HttpRequest, translation_uuid: str) -> HttpResponse:
+    """Handle creation and editing of association translation overrides."""
+    return exe_edit(request, ExeAction.TRANSLATIONS, translation_uuid)
 
-    Returns:
-        HttpResponse: Rendered form for editing or redirect after successful save
 
-    Raises:
-        PermissionDenied: If user lacks exe_translations permission
-        Http404: If translation with given ID doesn't exist
-
-    """
-    return exe_edit(request, ExeAssociationTranslationForm, num, "exe_translations")
+@login_required
+def exe_translations_delete(request: HttpRequest, translation_uuid: str) -> HttpResponse:
+    """Delete association translation overrides."""
+    return exe_delete(request, ExeAction.TRANSLATIONS, translation_uuid)
 
 
 @login_required
 def exe_methods(request: HttpRequest) -> Any:
     """Edit payment methods settings."""
-    return exe_edit(
-        request,
-        ExePaymentSettingsForm,
-        None,
-        "exe_methods",
-        "manage",
-        additional_context={"add_another": False},
-    )
+    return exe_edit(request, ExeAction.METHODS)
 
 
 @login_required
 def exe_appearance(request: HttpRequest) -> Any:
     """Edit association appearance settings."""
-    return exe_edit(
-        request,
-        ExeAppearanceForm,
-        None,
-        "exe_appearance",
-        "manage",
-        additional_context={"add_another": False},
-    )
-
-
-def f_k_exe(f_id: Any, r_id: Any) -> str:
-    """Generate feature key for association role."""
-    return f"feature_{f_id}_exe_{r_id}_key"
+    return exe_edit(request, ExeAction.APPEARANCE)
 
 
 @login_required
@@ -244,10 +200,10 @@ def exe_features(request: HttpRequest) -> HttpResponse:
     """
     # Check user permissions and get initial context
     context = check_association_context(request, "exe_features")
-    context["add_another"] = False
+    context["assoc_form"] = True
 
     # Process form submission and handle feature activation
-    if backend_edit(request, context, ExeFeatureForm, None, additional_field=None, is_association=True):
+    if backend_edit(request, context, ExeFeatureForm):
         # Get newly activated features that have after-links
         context["new_features"] = Feature.objects.filter(
             pk__in=context["form"].added_features,
@@ -272,7 +228,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
 
         # Handle multiple features - show management page
         context["features"] = get_association_features(context["association_id"])
-        get_index_association_permissions(context, request, context["association_id"])
+        get_index_association_permissions(request, context, context["association_id"])
         return render(request, "larpmanager/manage/features.html", context)
 
     # Render edit form for feature selection
@@ -334,15 +290,7 @@ def exe_features_go(request: HttpRequest, slug: str, *, to_active: bool = True) 
 
 
 def _exe_feature_after_link(feature: Feature) -> str:
-    """Generate the appropriate redirect URL after feature setup.
-
-    Args:
-        feature: Feature object containing after_link configuration
-
-    Returns:
-        Full URL path for redirection
-
-    """
+    """Generate the appropriate redirect URL after feature setup."""
     redirect_url_or_fragment = feature.after_link
 
     # Check if redirect_url_or_fragment is a named URL pattern starting with "exe"
@@ -465,17 +413,27 @@ def feature_description(request: HttpRequest) -> JsonResponse:
 @login_required
 def exe_quick(request: HttpRequest) -> Any:
     """Edit quick setup configuration."""
-    return exe_edit(request, ExeQuickSetupForm, None, "exe_quick", "manage", additional_context={"add_another": False})
+    return exe_edit(request, ExeAction.QUICK)
 
 
 @login_required
 def exe_preferences(request: HttpRequest) -> Any:
     """Edit user preferences."""
-    return exe_edit(
-        request,
-        ExePreferencesForm,
-        request.user.member.id,
-        None,
-        "manage",
-        additional_context={"add_another": False},
-    )
+    return exe_edit(request, ExeAction.PREFERENCES)
+
+
+@login_required
+def exe_reload_cache(request: HttpRequest) -> HttpResponse:
+    """Reset all cache entries for the organization."""
+    # Verify user permissions and get association context
+    context = check_association_context(request)
+
+    # Get association slug and ID
+    association_slug = context["slug"]
+    association_id = context["id"]
+
+    _reset_all_association(association_id, association_slug)
+
+    # Notify user of successful cache reset
+    messages.success(request, _("Cache reset!"))
+    return redirect("manage")

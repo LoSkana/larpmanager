@@ -18,13 +18,19 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-
+"""
+Test: Organization accounting with payments, taxes, inflows, and outflows.
+Verifies organization and event-level accounting entries, VAT calculations,
+organization tax percentages, payment tracking, and consolidated accounting reports.
+"""
+import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, submit_confirm, expect_normalized, \
+    new_option, submit_option
 
 pytestmark = pytest.mark.e2e
 
@@ -47,49 +53,49 @@ def test_exe_accounting(pw_page: Any) -> None:
 
 def verify(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/accounting/")
-    expect(page.locator("#one")).to_contain_text("Total revenue: 133.00")
-    expect(page.locator("#one")).to_contain_text("Net profit: 71.00")
-    expect(page.locator("#one")).to_contain_text("Organization tax: 17.29")
-    expect(page.locator("#one")).to_contain_text("Registrations: 70.00")
-    expect(page.locator("#one")).to_contain_text("Outflows: 62.00")
-    expect(page.locator("#one")).to_contain_text("Inflows: 63.00")
-    expect(page.locator("#one")).to_contain_text("Income: 70.00")
+    expect_normalized(page, page.locator("#one"), "Realized revenue: 133.00")
+    expect_normalized(page, page.locator("#one"), "Net profit: 71.00")
+    expect_normalized(page, page.locator("#one"), "Organization tax: 17.29")
+    expect_normalized(page, page.locator("#one"), "Registrations: 70.00")
+    expect_normalized(page, page.locator("#one"), "Outflows: 62.00")
+    expect_normalized(page, page.locator("#one"), "Inflows: 63.00")
+    expect_normalized(page, page.locator("#one"), "Income: 70.00")
 
     go_to(page, live_server, "/test/manage/payments/")
     # Check for payment row with value 70
     expect(page.get_by_role("row", name="Admin Test Money 70")).to_be_visible()
 
     go_to(page, live_server, "/manage/accounting/")
-    expect(page.locator("#one")).to_contain_text("20.00")
-    expect(page.locator("#one")).to_contain_text("91.00")
-    expect(page.locator("#one")).to_contain_text("70.00")
-    expect(page.locator("#one")).to_contain_text("93.00")
-    expect(page.locator("#one")).to_contain_text("72.00")
-    expect(page.locator("#one")).to_contain_text("10.00")
-    expect(page.locator("#one")).to_contain_text("30.00")
+    expect_normalized(page, page.locator("#one"), "20.00")
+    expect_normalized(page, page.locator("#one"), "91.00")
+    expect_normalized(page, page.locator("#one"), "70.00")
+    expect_normalized(page, page.locator("#one"), "93.00")
+    expect_normalized(page, page.locator("#one"), "72.00")
+    expect_normalized(page, page.locator("#one"), "10.00")
+    expect_normalized(page, page.locator("#one"), "30.00")
 
 
 def sign_up_pay(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/tickets/")
-    page.get_by_role("link", name="").click()
+    page.locator(".fa-edit").click()
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
     page.locator("#id_price").fill("50.00")
     submit_confirm(page)
 
-    go_to(page, live_server, "test/1/manage/form/")
+    go_to(page, live_server, "test/manage/form/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("pay")
     page.locator("#id_name").press("Tab")
     page.locator("#id_description").fill("pay")
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("ff")
-    page.locator("#id_description").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("20")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("ff")
+    iframe.locator("#id_description").click()
+    iframe.locator("#id_price").click()
+    iframe.locator("#id_price").fill("20")
+    submit_option(page, iframe)
 
     go_to(page, live_server, "/test/register/")
     page.get_by_role("button", name="Continue").click()
@@ -140,7 +146,7 @@ def add_exe(page: Any, live_server: Any) -> None:
     page.locator("#select2-id_run-container").click()
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="Test Larp").click()
-    page.get_by_role("combobox", name="×Test Larp").press("Tab")
+    page.get_by_role("combobox", name=re.compile("Test Larp$")).press("Tab")
     page.locator("#id_descr").fill("ggg")
     load_image(page, "#id_invoice")
     submit_confirm(page)
@@ -192,14 +198,14 @@ def config(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/manage/features/outflow/on")
 
     go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name="Payments ").click()
+    page.get_by_role("link", name=re.compile(r"^Payments ")).click()
     page.locator("#id_payment_special_code").check()
-    page.get_by_role("link", name="VAT ").click()
+    page.get_by_role("link", name=re.compile(r"^VAT ")).click()
     page.locator("#id_vat_ticket").click()
     page.locator("#id_vat_ticket").fill("7")
     page.locator("#id_vat_options").click()
     page.locator("#id_vat_options").fill("11")
-    page.get_by_role("link", name="Organisation fee ").click()
+    page.get_by_role("link", name=re.compile(r"^Organisation fee ")).click()
     page.get_by_role("cell", name="Percentage of takings").click()
     page.locator("#id_organization_tax_perc").fill("13")
     submit_confirm(page)

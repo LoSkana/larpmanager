@@ -30,10 +30,11 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
+from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.rels import get_event_rels_cache
-from larpmanager.cache.text_fields import get_cache_text_field
+from larpmanager.cache.text_fields import ALLOWED_TYPES, get_cache_text_field
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
@@ -42,29 +43,25 @@ from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
     WritingAnswer,
-    WritingQuestion,
     WritingQuestionType,
+    get_def_writing_types,
 )
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
-    CharacterConfig,
     Faction,
     Plot,
-    PlotCharacterRel,
     Prologue,
     SpeedLarp,
-    TextVersion,
     Writing,
     replace_character_names,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
-from larpmanager.utils.core.common import check_field, compute_diff
+from larpmanager.utils.core.common import check_field
 from larpmanager.utils.core.exceptions import ReturnNowError
+from larpmanager.utils.edit.backend import _setup_char_finder
 from larpmanager.utils.io.download import download
 from larpmanager.utils.services.bulk import handle_bulk_characters, handle_bulk_quest, handle_bulk_trait
-from larpmanager.utils.services.character import get_character_relationships, get_character_sheet
-from larpmanager.utils.services.edit import _setup_char_finder
 
 logger = logging.getLogger(__name__)
 
@@ -140,32 +137,7 @@ def orga_list_progress_assign(context: dict, typ: type[Model]) -> None:
     context["typ"] = str(typ._meta).replace("larpmanager.", "")  # type: ignore[attr-defined]  # noqa: SLF001  # Django model metadata
 
 
-def writing_popup_question(context: dict[str, Any], idx: Any, question_idx: Any) -> Any:
-    """Get writing question data for popup display.
-
-    Args:
-        context: Context dictionary with event and writing element data
-        idx (int): Writing element ID
-        question_idx (int): Question index
-
-    Returns:
-        dict: Question data for popup rendering
-
-    """
-    try:
-        character = Character.objects.get(pk=idx, event=context["event"].get_class_parent(Character))
-        question = WritingQuestion.objects.get(
-            pk=question_idx,
-            event=context["event"].get_class_parent(WritingQuestion),
-        )
-        writing_answer = WritingAnswer.objects.get(element_id=character.id, question=question)
-        html_text = f"<h2>{character} - {question.name}</h2>" + writing_answer.text
-        return JsonResponse({"k": 1, "v": html_text})
-    except ObjectDoesNotExist:
-        return JsonResponse({"k": 0})
-
-
-def writing_popup(request: HttpRequest, context: dict[str, Any], typ: type[Model]) -> JsonResponse:
+def writing_popup(request: HttpRequest, context: dict, typ: type[Model]) -> JsonResponse:
     """Handle writing element popup requests.
 
     Args:
@@ -186,28 +158,34 @@ def writing_popup(request: HttpRequest, context: dict[str, Any], typ: type[Model
     # Load all cached event data into context
     get_event_cache_all(context)
 
-    # Parse and validate the index parameter from POST data
-    try:
-        element_id = int(request.POST.get("idx", ""))
-    except (ValueError, TypeError):
+    # Parse and validate the index parameter from POST data (UUID string)
+    element_uuid = request.POST.get("idx", "")
+    if not element_uuid:
         return JsonResponse({"error": "Invalid idx parameter"}, status=400)
 
     # Extract the type parameter for attribute lookup
     attribute_type = request.POST.get("tp", "")
 
-    # Check if this is a character question request (numeric tp indicates question)
-    try:
-        question_id = int(attribute_type)
-        return writing_popup_question(context, element_id, question_id)
-    except ValueError:
-        # Not a question, continue with regular element handling
-        pass
+    applicable = QuestionApplicable.get_applicable(typ._meta.model_name)  # noqa: SLF001  # Django model metadata
+    questions_list = get_cached_writing_questions(context["event"], applicable)
+    # Convert questions list to dict keyed by UUID for lookup
+    questions = {str(q["uuid"]): q for q in questions_list}
 
     # Retrieve the writing element from database using parent event context
     try:
-        writing_element = typ.objects.get(pk=element_id, event=context["event"].get_class_parent(typ))
+        writing_element = typ.objects.get(uuid=element_uuid, event=context["event"].get_class_parent(typ))
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
+
+    # Check if this is a character question request
+    if attribute_type in questions:
+        question = questions[attribute_type]
+        try:
+            writing_answer = WritingAnswer.objects.get(element_id=writing_element.id, question_id=question["id"])
+            html_text = f"<h2>{writing_element} - {question['name']}</h2>" + writing_answer.text
+            return JsonResponse({"k": 1, "v": html_text})
+        except ObjectDoesNotExist:
+            return JsonResponse({"k": 0})
 
     # Verify the requested attribute exists on the element
     if not hasattr(writing_element, attribute_type):
@@ -225,7 +203,7 @@ def writing_popup(request: HttpRequest, context: dict[str, Any], typ: type[Model
     return JsonResponse({"k": 1, "v": html_content})
 
 
-def writing_example(context: dict[str, Any], typ: Any) -> Any:
+def writing_example(context: dict, typ: Any) -> Any:
     """Generate example writing content for a given type.
 
     Args:
@@ -277,7 +255,7 @@ def writing_post(request: HttpRequest, context: dict, writing_element_type: Any,
 
 def writing_list(  # noqa: C901 - Complex writing list building with feature-dependent filtering
     request: HttpRequest,
-    context: dict[str, Any],
+    context: dict,
     writing_type: type[Model],
     template_name: str,
 ) -> HttpResponse:
@@ -365,25 +343,15 @@ def writing_list(  # noqa: C901 - Complex writing list building with feature-dep
     return render(request, "larpmanager/orga/writing/" + template_name + "s.html", context)
 
 
-def writing_bulk(context: dict[str, Any], request: HttpRequest, typ: Any) -> None:
-    """Handle bulk operations for different writing element types.
-
-    Args:
-        context: Context dictionary with event data
-        request: Django HTTP request object
-        typ: Writing element type class
-
-    Side effects:
-        Executes bulk operations through type-specific handlers
-
-    """
+def writing_bulk(context: dict, request: HttpRequest, typ: Any) -> None:
+    """Handle bulk operations for different writing element types."""
     type_to_bulk_handler = {Character: handle_bulk_characters, Quest: handle_bulk_quest, Trait: handle_bulk_trait}
 
     if typ in type_to_bulk_handler:
         type_to_bulk_handler[typ](request, context)
 
 
-def _get_custom_form(context: dict[str, Any]) -> None:
+def _get_custom_form(context: dict) -> None:
     """Set up custom form questions and field names for writing elements.
 
     Args:
@@ -399,15 +367,14 @@ def _get_custom_form(context: dict[str, Any]) -> None:
     # default name for fields
     context["fields_name"] = {WritingQuestionType.NAME.value: _("Name")}
 
-    questions = context["event"].get_elements(WritingQuestion).order_by("order")
-    questions = questions.filter(applicable=context["writing_typ"])
+    questions = get_cached_writing_questions(context["event"], context["writing_typ"])
     context["form_questions"] = {}
     for question in questions:
-        question.basic_typ = question.typ in BaseQuestionType.get_basic_types()
-        if question.typ in context["fields_name"]:
-            context["fields_name"][question.typ] = question.name
+        question["basic_typ"] = question["typ"] in BaseQuestionType.get_basic_types()
+        if question["typ"] in context["fields_name"]:
+            context["fields_name"][question["typ"]] = question["name"]
         else:
-            context["form_questions"][question.id] = question
+            context["form_questions"][question["uuid"]] = question
 
 
 def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list[str], bool]:
@@ -442,7 +409,7 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
         for field_name in deferred_text_fields:
             context["list"] = context["list"].defer(field_name)
 
-    # Apply ordering based on available fields: order > number > updated (newest first)
+    # Apply ordering based on available fields: order > number > updated
     if check_field(model_type, "order"):
         context["list"] = context["list"].order_by("order")
     elif check_field(model_type, "number"):
@@ -453,24 +420,14 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
     return deferred_text_fields, is_writing_model
 
 
-def writing_list_text_fields(context: dict[str, Any], text_fields: Any, writing_element_type: Any) -> None:
-    """Add editor-type question fields to text fields list and retrieve cached data.
-
-    Args:
-        context: Context dictionary with event and writing type information
-        text_fields: List of text field names to extend
-        writing_element_type: Writing element model class
-
-    """
-    # add editor type questions
-    writing_questions = context["event"].get_elements(WritingQuestion).filter(applicable=context["writing_typ"])
-    for question_id in writing_questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
-        text_fields.append(str(question_id))
-
+def writing_list_text_fields(context: dict, text_fields: Any, writing_element_type: Any) -> None:
+    """Add editor/paragraph-type question fields to text fields list and retrieve cached data."""
+    writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+    text_fields.extend([question["uuid"] for question in writing_questions if question["typ"] in ALLOWED_TYPES])
     retrieve_cache_text_field(context, text_fields, writing_element_type)
 
 
-def retrieve_cache_text_field(context: dict[str, Any], text_fields: Any, element_type: Any) -> None:
+def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any) -> None:
     """Retrieve and attach cached text field data to writing elements.
 
     Args:
@@ -481,37 +438,35 @@ def retrieve_cache_text_field(context: dict[str, Any], text_fields: Any, element
     """
     cached_text_fields = get_cache_text_field(element_type, context["event"])
     for element in context["list"]:
-        if element.id not in cached_text_fields:
+        if element.uuid not in cached_text_fields:
             continue
         for field_name in text_fields:
-            if field_name not in cached_text_fields[element.id]:
+            if field_name not in cached_text_fields[element.uuid]:
                 continue
-            (rendered_text, line_count) = cached_text_fields[element.id][field_name]
+            (rendered_text, line_count) = cached_text_fields[element.uuid][field_name]
             setattr(element, field_name + "_red", rendered_text)
             setattr(element, field_name + "_ln", line_count)
 
 
-def _prepare_writing_list(context: dict[str, Any]) -> None:
+def _prepare_writing_list(context: dict) -> None:
     """Prepare context data for writing list display and configuration."""
+    questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+
     try:
-        name_question = (
-            context["event"]
-            .get_elements(WritingQuestion)
-            .filter(applicable=context["writing_typ"], typ=WritingQuestionType.NAME)
-        )
-        context["name_que_id"] = name_question.values_list("id", flat=True)[0]
-    except IndexError as e:
+        name_question = next(q for q in questions if q["typ"] == WritingQuestionType.NAME)
+        context["name_que_uuid"] = name_question["uuid"]
+    except StopIteration as e:
         logger.debug("Name question not found for writing type %s: %s", context["writing_typ"], e)
 
     model_name = context["label_typ"].lower()
     context["default_fields"] = context["member"].get_config(
         f"open_{model_name}_{context['event'].id}", default_value="[]"
     )
-    if context["default_fields"] == "[]" and model_name in context["writing_fields"]:
-        question_field_list = [
-            f"q_{question_id}" for name, question_id in context["writing_fields"][model_name]["ids"].items()
-        ]
-        context["default_fields"] = json.dumps(question_field_list)
+    if context["default_fields"] == "[]" and context.get("writing_typ"):
+        def_types = get_def_writing_types()
+        question_field_list = [f"q_{q['uuid']}" for q in questions if q["typ"] in def_types]
+        if question_field_list:
+            context["default_fields"] = json.dumps(question_field_list)
 
     context["auto_save"] = not get_event_config(
         context["event"].id, "writing_disable_auto", default_value=False, context=context
@@ -522,16 +477,8 @@ def _prepare_writing_list(context: dict[str, Any]) -> None:
     )
 
 
-def writing_list_plot(context: dict[str, Any]) -> None:
-    """Build character associations for plot list display.
-
-    Args:
-        context: Context dictionary with list of plots and event data
-
-    Side effects:
-        Adds chars dictionary to context and attaches character lists to plot objects
-
-    """
+def writing_list_plot(context: dict) -> None:
+    """Build character associations for plot list display."""
     event_relationships = get_event_rels_cache(context["event"]).get("plots", {})
 
     for plot in context["list"]:
@@ -617,11 +564,14 @@ def writing_list_char(context: dict) -> None:  # noqa: C901 - Complex character 
             has_registration=Exists(
                 RegistrationCharacterRel.objects.filter(
                     character=OuterRef("pk"),
-                    reg__run_id=context["run"].id,
-                    reg__cancellation_date__isnull=True,
+                    registration__run_id=context["run"].id,
+                    registration__cancellation_date__isnull=True,
                 ),
             ),
         )
+
+    # Add character configs (last point where we modify the query, first point where we manipulate the list)
+    char_add_addit(context)
 
     # Get cached relationship data for the event
     event_relationships = get_event_rels_cache(context["event"]).get("characters", {})
@@ -651,114 +601,12 @@ def writing_list_char(context: dict) -> None:  # noqa: C901 - Complex character 
         for character in context["list"]:
             character.prologue_rels = event_relationships.get(character.id, {}).get("prologue_rels", [])
 
-    # add character configs
-    char_add_addit(context)
 
-
-def char_add_addit(context: dict[str, Any]) -> None:
-    """Add additional configuration data to all characters in the context list.
-
-    Args:
-        context: Context dictionary containing character list and event information
-
-    """
-    character_configs_by_id = {}
-    event = context["event"].get_class_parent(Character)
-    for config in CharacterConfig.objects.filter(character__event=event):
-        if config.character_id not in character_configs_by_id:
-            character_configs_by_id[config.character_id] = {}
-        character_configs_by_id[config.character_id][config.name] = config.value
-
+def char_add_addit(context: dict) -> None:
+    """Add additional configuration data to all characters in the context list."""
+    context["list"] = context["list"].prefetch_related("configs")
     for character in context["list"]:
-        character.addit = character_configs_by_id.get(character.id, {})
-
-
-def writing_view(request: HttpRequest, context: dict[str, Any], element_type_name: str) -> HttpResponse:
-    """Display writing element view with character data and relationships.
-
-    Args:
-        request: HTTP request object containing user session and request data
-        context: Context dictionary containing element data and cached information
-        element_type_name: Name of the writing element type (e.g., 'character', 'plot')
-
-    Returns:
-        HttpResponse: Rendered writing view template with populated context data
-
-    Note:
-        This function handles different writing element types and populates the context
-        with appropriate data for rendering. Special handling is provided for character
-        and plot elements.
-
-    """
-    # Set up base element data and context
-    context["el"] = context[element_type_name]
-    context["el"].data = context["el"].show_complete()
-    context["nm"] = element_type_name
-
-    # Load event cache data for all related elements
-    get_event_cache_all(context)
-
-    # Handle character-specific data and relationships
-    if element_type_name == "character":
-        if context["el"].number in context["chars"]:
-            context["char"] = context["chars"][context["el"].number]
-        context["character"] = context["el"]
-
-        # Get character sheet and relationship data
-        get_character_sheet(context)
-        get_character_relationships(context)
-    else:
-        # Handle non-character writing elements with applicable questions
-        applicable_questions = QuestionApplicable.get_applicable(element_type_name)
-        if applicable_questions:
-            context["element"] = get_writing_element_fields(
-                context,
-                element_type_name,
-                applicable_questions,
-                context["el"].id,
-                only_visible=False,
-            )
-        context["sheet_char"] = context["el"].show_complete()
-
-    # Add plot-specific character relationships
-    if element_type_name == "plot":
-        context["sheet_plots"] = (
-            PlotCharacterRel.objects.filter(plot=context["el"])
-            .order_by("character__number")
-            .select_related("character")
-        )
-
-    return render(request, "larpmanager/orga/writing/view.html", context)
-
-
-def writing_versions(request: HttpRequest, context: dict, element_name: Any, version_type: Any) -> Any:
-    """Display text versions with diff comparison for writing elements.
-
-    Args:
-        request: HTTP request object
-        context: Context dictionary with writing element data
-        element_name: Name of the writing element
-        version_type: Type identifier for text versions
-
-    Returns:
-        HttpResponse: Rendered versions template with diff data
-
-    """
-    context["versions"] = (
-        TextVersion.objects.filter(tp=version_type, eid=context[element_name].id)
-        .order_by("version")
-        .select_related("member")
-    )
-    previous_version = None
-    for current_version in context["versions"]:
-        if previous_version is not None:
-            compute_diff(current_version, previous_version)
-        else:
-            current_version.diff = current_version.text.replace("\n", "<br />")
-        previous_version = current_version
-    context["element"] = context[element_name]
-    context["typ"] = element_name
-    return render(request, "larpmanager/orga/writing/versions.html", context)
+        character.addit = {config.name: config.value for config in character.configs.all()}
 
 
 def replace_character_names_before_save(instance: object) -> None:

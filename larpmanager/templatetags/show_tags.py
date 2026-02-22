@@ -22,6 +22,7 @@ from __future__ import annotations
 import contextlib
 import logging
 import re
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -38,7 +39,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.models.association import get_url
 from larpmanager.models.casting import Trait
-from larpmanager.models.utils import strip_tags
+from larpmanager.models.utils import get_option_form_text, strip_tags
 from larpmanager.models.writing import Character, FactionType
 from larpmanager.utils.core.common import html_clean
 from larpmanager.utils.io.pdf import get_trait_character
@@ -54,30 +55,13 @@ logger = logging.getLogger(__name__)
 
 @register.filter
 def modulo(num: int, val: int) -> int:
-    """Template filter to calculate modulo operation.
-
-    Args:
-        num (int): Number to divide
-        val (int): Divisor
-
-    Returns:
-        int: Remainder of num divided by val
-
-    """
+    """Template filter to calculate modulo operation."""
     return num % val
 
 
 @register.filter
 def basename(file_path: str | Path) -> str:
-    """Template filter to extract basename from file path.
-
-    Args:
-        file_path (str): File path
-
-    Returns:
-        str: Basename of the file path (filename without directory)
-
-    """
+    """Template filter to extract basename from file path."""
     if not file_path:
         return ""
     return Path(file_path).name
@@ -85,37 +69,26 @@ def basename(file_path: str | Path) -> str:
 
 @register.filter
 def clean_tags(tx: str) -> str:
-    """Template filter to clean HTML tags from text.
-
-    Args:
-        tx (str): Text containing HTML tags
-
-    Returns:
-        str: Text with HTML tags removed and br tags replaced with spaces
-
-    """
+    """Template filter to clean HTML tags from text."""
     tx = tx.replace("<br />", " ")
     return strip_tags(tx)
 
 
 @register.filter
 def get(value: dict[str, Any], arg: str) -> Any:
-    """Template filter to get dictionary value by key.
-
-    Args:
-        value (dict): Dictionary to look up
-        arg (str): Key to retrieve
-
-    Returns:
-        any: Dictionary value for key, or empty string if not found
-
-    """
-    if arg is not None and value and arg in value:
-        return value[arg]
+    """Template filter to get dictionary value by key."""
+    if arg is not None and value:
+        try:
+            if arg in value:
+                return value[arg]
+        except TypeError:
+            # arg is not hashable (e.g., dict), cannot be used as dict key
+            # This can happen when iterating over cached data with dict keys
+            return ""
     return ""
 
 
-def get_tooltip(context: dict[str, Any], character: dict[str, Any]) -> str:
+def get_tooltip(context: dict, character: dict[str, Any]) -> str:
     """Generate HTML tooltip for character display.
 
     Args:
@@ -127,7 +100,7 @@ def get_tooltip(context: dict[str, Any], character: dict[str, Any]) -> str:
 
     """
     avatar_url = static("larpmanager/assets/blank-avatar.svg")
-    if "player_id" in character and character["player_id"] > 0 and character["player_prof"]:
+    if character.get("player_uuid") and character["player_prof"]:
         avatar_url = character["player_prof"]
     tooltip = f"<img src='{escape(avatar_url)}'>"
 
@@ -162,13 +135,13 @@ def tooltip_fields(character: dict[str, Any], tooltip: str) -> str:
 
     tooltip += "</span>"
 
-    if "player_id" in character and character["player_id"] > 0:
+    if character.get("player_uuid"):
         tooltip += "<span>" + str(_("Player")) + ": <b>" + escape(character["player_full"]) + "</b></span>"
 
     return tooltip
 
 
-def tooltip_factions(character: dict[str, Any], context: dict[str, Any], tooltip: str) -> str:
+def tooltip_factions(character: dict[str, Any], context: dict, tooltip: str) -> str:
     """Add faction information to character tooltip.
 
     Args:
@@ -195,7 +168,7 @@ def tooltip_factions(character: dict[str, Any], context: dict[str, Any], tooltip
 
 
 @register.simple_tag(takes_context=True)
-def replace_chars(context: dict[str, Any], text: str, limit: int = 200) -> str:
+def replace_chars(context: dict, text: str, limit: int = 200) -> str:
     """Template tag to replace character number references with names.
 
     Replaces #XX, @XX, and ^XX patterns with character names in text.
@@ -213,7 +186,8 @@ def replace_chars(context: dict[str, Any], text: str, limit: int = 200) -> str:
     for character_number in range(context["max_ch_number"], 0, -1):
         if character_number not in context["chars"]:
             continue
-        character_name = context["chars"][character_number]["name"]
+        # Escape character name to prevent XSS when used in HTML contexts
+        character_name = escape(context["chars"][character_number]["name"])
         text = text.replace(f"#{character_number}", character_name)
         text = text.replace(f"@{character_number}", character_name)
 
@@ -273,9 +247,9 @@ def go_character(
     # Get character data from context
     character_data = context["chars"][character_number]
 
-    # Generate character URL using run slug and character number
+    # Generate character URL using run slug and character uuid
     character_url = get_url(
-        reverse("character", args=[run.get_slug(), character_data["number"]]),
+        reverse("character", args=[run.get_slug(), character_data["uuid"]]),
         context["association_slug"],
     ).replace('"', "")
 
@@ -376,11 +350,11 @@ def show_char(context: dict, element: dict | str | None, run: Run, include_toolt
         tags removed
 
     """
-    # Extract text content from various input types
+    # Extract text content from various input types and sanitize to prevent XSS
     if isinstance(element, dict) and "text" in element:
-        text = element["text"] + " "
+        text = _sanitize_html(element["text"]) + " "
     elif element is not None:
-        text = str(element) + " "
+        text = _sanitize_html(str(element)) + " "
     else:
         text = ""
 
@@ -479,7 +453,7 @@ def go_trait(
 
         # Build character page URL
         character_url = get_url(
-            reverse("character", args=[run.get_slug(), character_data["number"]]),
+            reverse("character", args=[run.get_slug(), character_data["uuid"]]),
             context["slug"],
         )
 
@@ -494,7 +468,7 @@ def go_trait(
 
 
 @register.simple_tag(takes_context=True)
-def show_trait(context: dict[str, Any], text: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
+def show_trait(context: dict, text: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
     """Template tag to process text and convert trait references to character links.
 
     Args:
@@ -507,6 +481,9 @@ def show_trait(context: dict[str, Any], text: str, run: Run, tooltip: bool) -> s
         str: Safe HTML with trait references converted to character links
 
     """
+    # Sanitize input text to prevent XSS
+    text = _sanitize_html(text)
+
     if "max_trait" not in context:
         context["max_trait"] = Trait.objects.filter(event_id=run.event_id).aggregate(Max("number"))["number__max"]
 
@@ -549,72 +526,137 @@ def key(d: Any, key_name: Any, s_key_name: Any = None) -> Any:
 
 @register.simple_tag
 def get_field(form: Form, field_name: str) -> BoundField | str:
-    """Template tag to safely get form field by name.
-
-    Args:
-        form: Django form instance
-        field_name (str): Field name to retrieve
-
-    Returns:
-        Field: Form field or empty string if not found
-
-    """
+    """Template tag to safely get form field by name."""
     if field_name in form:
         return form[field_name]
     return ""
 
 
+_ALLOWED_HTML_TAGS = {
+    "p",
+    "div",
+    "span",
+    "br",
+    "hr",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "ul",
+    "ol",
+    "li",
+    "blockquote",
+    "pre",
+    "code",
+    "strong",
+    "em",
+    "b",
+    "i",
+    "u",
+    "s",
+    "sub",
+    "sup",
+    "a",
+    "img",
+    "table",
+    "thead",
+    "tbody",
+    "tr",
+    "th",
+    "td",
+}
+
+_ALLOWED_HTML_ATTRS: dict[str, set[str]] = {
+    "*": {"class", "id"},
+    "a": {"href", "title", "target"},
+    "img": {"src", "alt", "width", "height"},
+    "td": {"colspan", "rowspan"},
+    "th": {"colspan", "rowspan", "scope"},
+}
+
+_DANGEROUS_CSS_PATTERN = re.compile(r"javascript:|expression\s*\(|url\s*\(", re.IGNORECASE)
+
+
+class _HtmlSanitizer(HTMLParser):
+    """HTML sanitizer that strips dangerous tags and attributes to prevent XSS."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=False)
+        self._parts: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag not in _ALLOWED_HTML_TAGS:
+            return
+        allowed = _ALLOWED_HTML_ATTRS.get("*", set()) | _ALLOWED_HTML_ATTRS.get(tag, set())
+        safe_attrs = []
+        for attr, val in attrs:
+            if attr not in allowed or val is None:
+                continue
+            if attr in ("href", "src") and re.match(r"^\s*javascript:", val, re.IGNORECASE):
+                continue
+            if attr == "style" and _DANGEROUS_CSS_PATTERN.search(val):
+                continue
+            safe_attrs.append(f' {attr}="{escape(val)}"')
+        self._parts.append(f"<{tag}{''.join(safe_attrs)}>")
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in _ALLOWED_HTML_TAGS:
+            self._parts.append(f"</{tag}>")
+
+    def handle_data(self, data: str) -> None:
+        self._parts.append(escape(data))
+
+    def handle_entityref(self, name: str) -> None:
+        self._parts.append(f"&{name};")
+
+    def handle_charref(self, name: str) -> None:
+        self._parts.append(f"&#{name};")
+
+    def get_html(self) -> str:
+        return "".join(self._parts)
+
+
+def _sanitize_html(text: str) -> str:
+    """Sanitize HTML to prevent XSS while preserving safe formatting tags."""
+    if not text:
+        return text
+    sanitizer = _HtmlSanitizer()
+    sanitizer.feed(text)
+    return sanitizer.get_html()
+
+
+@register.filter
+def sanitize_html(text: str) -> str:
+    """Template filter to sanitize HTML and return safe string."""
+    return mark_safe(_sanitize_html(str(text)) if text else "")  # noqa: S308
+
+
 @register.simple_tag(takes_context=True)
 def get_field_show_char(context: dict, form: Form, name: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
-    """Template tag to get form field and process character references.
-
-    Args:
-        context: Template context
-        form: Django form instance
-        name (str): Field name to retrieve
-        run: Run instance for character processing
-        tooltip (bool): Whether to include tooltips
-
-    Returns:
-        str: Processed field value with character links
-
-    """
+    """Template tag to get form field and process character references."""
     if name in form:
         v = form[name]
+        if isinstance(v, dict) and "text" in v:
+            v = {**v, "text": _sanitize_html(v["text"])}
+        elif v is not None:
+            v = _sanitize_html(str(v))
         return show_char(context, v, run, include_tooltip=tooltip)
     return ""
 
 
 @register.simple_tag
 def get_deep_field(form: Form | dict, key1: str, key2: str) -> Any:
-    """Template tag to get nested form field value.
-
-    Args:
-        form: Form or dictionary
-        key1: First level key
-        key2: Second level key
-
-    Returns:
-        any: Nested value or empty string if not found
-
-    """
-    if key1 in form and key2 in form[key1]:
+    """Template tag to get nested form field value."""
+    if key2 in form.get(key1, {}):
         return form[key1][key2]
     return ""
 
 
 @register.filter
 def get_form_field(form: Form, name: str) -> BoundField | str:
-    """Template filter to get form field by name.
-
-    Args:
-        form: Django form instance
-        name (str): Field name
-
-    Returns:
-        Field: Form field or empty string if not found
-
-    """
+    """Template filter to get form field by name."""
     if name in form.fields:
         return form[name]
     return ""
@@ -622,16 +664,7 @@ def get_form_field(form: Form, name: str) -> BoundField | str:
 
 @register.simple_tag
 def lookup(obj: Any, prop: str) -> Any:
-    """Template tag to safely get object attribute.
-
-    Args:
-        obj: Object to inspect
-        prop (str): Property name to retrieve
-
-    Returns:
-        any: Property value or empty string if not found
-
-    """
+    """Template tag to safely get object attribute."""
     if hasattr(obj, prop):
         value = getattr(obj, prop)
         if value:
@@ -640,140 +673,59 @@ def lookup(obj: Any, prop: str) -> Any:
 
 
 @register.simple_tag
-def get_registration_option(reg: Any, number: Any) -> Any:
-    """Template tag to get registration option form text.
-
-    Args:
-        reg: Registration instance
-        number (int): Option number
-
-    Returns:
-        str: Option form text or empty string
-
-    """
-    v = getattr(reg, f"option_{number}")
+def get_registration_option(registration: Any, number: Any) -> Any:
+    """Template tag to get registration option form text."""
+    v = getattr(registration, f"option_{number}")
     if v:
-        return v.get_form_text()
+        return get_option_form_text(v)
     return ""
 
 
 @register.simple_tag
 def gt(value: Any, arg: Any) -> Any:
-    """Template tag for greater than comparison.
-
-    Args:
-        value: Value to compare
-        arg: Comparison value
-
-    Returns:
-        bool: True if value > arg
-
-    """
+    """Template tag for greater than comparison."""
     return value > int(arg)
 
 
 @register.simple_tag
 def lt(value: Any, arg: Any) -> Any:
-    """Template tag for less than comparison.
-
-    Args:
-        value: Value to compare
-        arg: Comparison value
-
-    Returns:
-        bool: True if value < arg
-
-    """
+    """Template tag for less than comparison."""
     return value < int(arg)
 
 
 @register.simple_tag
 def gte(value: Any, arg: Any) -> Any:
-    """Template tag for greater than or equal comparison.
-
-    Args:
-        value: Value to compare
-        arg: Comparison value
-
-    Returns:
-        bool: True if value >= arg
-
-    """
+    """Template tag for greater than or equal comparison."""
     return value >= int(arg)
 
 
 @register.simple_tag
 def lte(value: Any, arg: Any) -> Any:
-    """Template tag for less than or equal comparison.
-
-    Args:
-        value: Value to compare
-        arg: Comparison value
-
-    Returns:
-        bool: True if value <= arg
-
-    """
+    """Template tag for less than or equal comparison."""
     return value <= int(arg)
 
 
 @register.simple_tag
 def length_gt(value: Any, arg: Any) -> Any:
-    """Template tag for length greater than comparison.
-
-    Args:
-        value: Collection to check length
-        arg: Length to compare against
-
-    Returns:
-        bool: True if len(value) > arg
-
-    """
+    """Template tag for length greater than comparison."""
     return len(value) > int(arg)
 
 
 @register.simple_tag
 def length_lt(value: Any, arg: Any) -> Any:
-    """Template tag for length less than comparison.
-
-    Args:
-        value: Collection to check length
-        arg: Length to compare against
-
-    Returns:
-        bool: True if len(value) < arg
-
-    """
+    """Template tag for length less than comparison."""
     return len(value) < int(arg)
 
 
 @register.simple_tag
 def length_gte(value: Any, arg: Any) -> Any:
-    """Template tag for length greater than or equal comparison.
-
-    Args:
-        value: Collection to check length
-        arg: Length to compare against
-
-    Returns:
-        bool: True if len(value) >= arg
-
-    """
+    """Template tag for length greater than or equal comparison."""
     return len(value) >= int(arg)
 
 
 @register.simple_tag
 def length_lte(value: Any, arg: Any) -> Any:
-    """Template tag for length less than or equal comparison.
-
-    Args:
-        value: Collection to check length
-        arg: Length to compare against
-
-    Returns:
-        bool: True if len(value) <= arg
-
-    """
+    """Template tag for length less than or equal comparison."""
     return len(value) <= int(arg)
 
 
@@ -806,29 +758,13 @@ def hex_to_rgb(hex_color: Any) -> Any:
 
 @register.simple_tag
 def define(val: Any = None) -> Any:
-    """Template tag to define/store a value in templates.
-
-    Args:
-        val: Value to store
-
-    Returns:
-        any: The input value unchanged
-
-    """
+    """Template tag to define/store a value in templates."""
     return val
 
 
 @register.filter(name="template_trans")
 def template_trans(text: Any) -> Any:
-    """Template filter for safe translation of text.
-
-    Args:
-        text (str): Text to translate
-
-    Returns:
-        str: Translated text or original text if translation fails
-
-    """
+    """Template filter for safe translation of text."""
     try:
         return _(text)
     except (TypeError, ValueError, AttributeError) as e:
@@ -838,16 +774,7 @@ def template_trans(text: Any) -> Any:
 
 @register.simple_tag(takes_context=True)
 def get_char_profile(context: Any, char: Any) -> Any:
-    """Template tag to get character profile image URL.
-
-    Args:
-        context: Template context with features
-        char (dict): Character data dictionary
-
-    Returns:
-        str: URL to character profile image or default avatar
-
-    """
+    """Template tag to get character profile image URL."""
     if char.get("player_prof"):
         return char["player_prof"]
     if "cover" in context["features"]:
@@ -912,30 +839,13 @@ def get_login_url(context: dict, provider: str, **params: Any) -> str:
 
 @register.filter
 def replace_underscore(value: Any) -> Any:
-    """Template filter to replace underscores with spaces.
-
-    Args:
-        value (str): String to process
-
-    Returns:
-        str: String with underscores replaced by spaces
-
-    """
+    """Template filter to replace underscores with spaces."""
     return value.replace("_", " ")
 
 
 @register.filter
 def remove(value: Any, args: Any) -> Any:
-    """Template filter to remove specific text from string.
-
-    Args:
-        value (str): Source string
-        args (str): Text to remove (underscores replaced with spaces)
-
-    Returns:
-        str: String with specified text removed (case-insensitive)
-
-    """
+    """Template filter to remove specific text from string."""
     args = args.replace("_", " ")
     txt = re.sub(re.escape(args), "", value, flags=re.IGNORECASE)
     return txt.strip()
@@ -943,16 +853,7 @@ def remove(value: Any, args: Any) -> Any:
 
 @register.simple_tag
 def get_character_field(value: Any, options: Any) -> Any:
-    """Template tag to format character field values using options.
-
-    Args:
-        value: Field value (string or list of indices)
-        options (dict): Options mapping indices to data
-
-    Returns:
-        str: Formatted field value or comma-separated option names
-
-    """
+    """Template tag to format character field values using options."""
     if isinstance(value, str):
         return value
     result = []
@@ -964,15 +865,7 @@ def get_character_field(value: Any, options: Any) -> Any:
 
 @register.filter
 def format_decimal(decimal_value: Any) -> Any:
-    """Template filter to format decimal values for display.
-
-    Args:
-        decimal_value: Numeric value to format
-
-    Returns:
-        str: Formatted decimal string, empty for zero, integer format when possible
-
-    """
+    """Template filter to format decimal values for display."""
     try:
         rounded_value = round_to_nearest_cent(float(decimal_value))
         if rounded_value == 0:
@@ -986,44 +879,19 @@ def format_decimal(decimal_value: Any) -> Any:
 
 @register.filter
 def get_attributes(obj: Any) -> dict[str, Any]:
-    """Template filter to get object attributes as dictionary.
-
-    Args:
-        obj: Object to inspect
-
-    Returns:
-        dict: Dictionary of non-private attributes
-
-    """
+    """Template filter to get object attributes as dictionary."""
     return {k: v for k, v in vars(obj).items() if not k.startswith("_")}
 
 
 @register.filter
 def not_in(value: Any, arg: Any) -> Any:
-    """Template filter to check if value is not in comma-separated list.
-
-    Args:
-        value: Value to check
-        arg (str): Comma-separated list of values
-
-    Returns:
-        bool: True if value not in the list
-
-    """
+    """Template filter to check if value is not in comma-separated list."""
     return value not in arg.split(",")
 
 
 @register.filter
 def abs_value(value: Any) -> Any:
-    """Template filter to get absolute value.
-
-    Args:
-        value: Numeric value
-
-    Returns:
-        Absolute value or original value if conversion fails
-
-    """
+    """Template filter to get absolute value."""
     try:
         return abs(value)
     except (TypeError, ValueError):
@@ -1032,14 +900,5 @@ def abs_value(value: Any) -> Any:
 
 @register.filter
 def concat(val1: Any, val2: Any) -> str:
-    """Template filter to concatenate two values.
-
-    Args:
-        val1: First value to concatenate
-        val2: Second value to concatenate
-
-    Returns:
-        str: Concatenated string
-
-    """
+    """Template filter to concatenate two values."""
     return f"{val1}{val2}"

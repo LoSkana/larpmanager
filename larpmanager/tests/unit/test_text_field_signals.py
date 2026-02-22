@@ -102,7 +102,7 @@ class TestTextFieldSignals(BaseTestCase):
     @patch("larpmanager.models.signals.clear_larpmanager_home_cache")
     def test_association_post_save_resets_larpmanager_cache(self, mock_reset: Any) -> None:
         """Test that Association post_save signal resets larpmanager cache"""
-        association = Association(name="Test Association", email="test@example.com")
+        association = Association(name="Test Association", main_mail="test@example.com")
         association.save()
 
         mock_reset.assert_called_once()
@@ -110,7 +110,7 @@ class TestTextFieldSignals(BaseTestCase):
     @patch("larpmanager.models.signals.clear_association_cache")
     def test_association_post_save_resets_association_cache(self, mock_reset: Any) -> None:
         """Test that Association post_save signal resets association cache"""
-        association = Association(name="Test Association", email="test@example.com")
+        association = Association(name="Test Association", main_mail="test@example.com")
         association.save()
 
         mock_reset.assert_called_once_with(association.slug)
@@ -199,7 +199,7 @@ class TestTextFieldSignals(BaseTestCase):
     @patch("larpmanager.cache.feature.reset_association_features")
     def test_association_post_save_resets_features_cache(self, mock_reset: Any) -> None:
         """Test that Association post_save signal resets features cache"""
-        association = Association(name="Test Association", email="test@example.com")
+        association = Association(name="Test Association", main_mail="test@example.com")
         association.save()
 
         mock_reset.assert_called_once_with(association.id)
@@ -225,7 +225,7 @@ class TestTextFieldSignals(BaseTestCase):
         self.assertIsNotNone(character.id)
 
         # Test with minimal association
-        association = Association(name="", email="test@example.com")
+        association = Association(name="", main_mail="test@example.com")
         association.save()
 
         # Should not raise errors even with empty name

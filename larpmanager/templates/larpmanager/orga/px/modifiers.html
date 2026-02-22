@@ -1,14 +1,14 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans "Modifiers" %} - {{ run }}
+    {% trans "Modifiers" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page summarizes the modifiers that are applied to abilities based on other abilities, or character fields" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
-    <table id="modifiers" class="go_datatable writing" no_header_cols="[5,6]">
+    <table id="modifiers" class="go_datatable writing">
         <thead>
             <tr>
                 <th></th>
@@ -18,47 +18,59 @@
                 <th>{% trans "Requirements" %}</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_px_modifiers_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_px_modifiers_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>
-                        {% for ab in el.abilities.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_px_abilities_edit' run.get_slug ab.id %}">{{ ab.name }}</a>
-                        {% endfor %}
+                        {% if el.cached_rels %}
+                            {% for ab_uuid, ab_name in el.cached_rels.ability_rels.list %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_px_abilities_edit' run.get_slug ab_uuid %}">{{ ab_name }}</a>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     <td>{{ el.cost }}</td>
                     <td>
-                        {% for ab in el.prerequisites.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_px_abilities_edit' run.get_slug ab.id %}">{{ ab.name }}</a>
-                        {% endfor %}
+                        {% if el.cached_rels %}
+                            {% for prereq_uuid, prereq_name in el.cached_rels.prerequisite_rels.list %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_px_abilities_edit' run.get_slug prereq_uuid %}">{{ prereq_name }}</a>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     <td>
-                        {% for rq in el.requirements.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_writing_options_edit' run.get_slug 'character' rq.id %}">{{ rq.name }}</a>
-                        {% endfor %}
+                        {% if el.cached_rels %}
+                            {% for req_uuid, req_name in el.cached_rels.requirement_rels.list %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_writing_options_edit' run.get_slug 'character' req_uuid %}">{{ req_name }}</a>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     <td>
                         {% if not forloop.first %}
-                            <a href="{% url 'orga_px_modifiers_order' run.get_slug el.id 0 %}">
+                            <a href="{% url 'orga_px_modifiers_order' run.get_slug el.uuid 0 %}">
                                 <i class="fa-solid fa-arrow-up"></i>
                             </a>
                         {% endif %}
                     </td>
                     <td>
                         {% if not forloop.last %}
-                            <a href="{% url 'orga_px_modifiers_order' run.get_slug el.id 1 %}">
+                            <a href="{% url 'orga_px_modifiers_order' run.get_slug el.uuid 1 %}">
                                 <i class="fa-solid fa-arrow-down"></i>
                             </a>
                         {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_px_modifiers_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

@@ -135,12 +135,13 @@ h1 {
 #banner h2 {
   font-size: 4em;
   margin-bottom: 0.2em;
+  margin: 0 auto 0.3em auto;
 }
 
 @media (max-width: 736px) {
   #banner h2 {
-    font-size: 5em;
-    margin-bottom: 0.2em;
+    font-size: 3.5em;
+    margin-bottom: 0.3em;
   }
 
   #banner h1 {
@@ -207,7 +208,12 @@ h1.home {
 
 @media screen and (max-width: 736px) {
   h1.home {
-    font-size: 1.25em;
+    font-size: 0.9em;
+    padding: 0 1em;
+  }
+
+  h2.home {
+    width: 90%;
   }
 
   #main h5 {
@@ -469,6 +475,8 @@ label {
     padding: 1em 0 0.5em 0;
     margin: 0;
     font-size: 80%;
+    display: flex;
+    flex-direction: column-reverse;
   }
 
   header {
@@ -667,6 +675,7 @@ input[type="checkbox"]:checked {
 
 .owl-nav {
   text-align: center;
+  font-size: 200%;
 }
 
 #review-carousel {

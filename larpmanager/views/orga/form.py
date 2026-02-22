@@ -17,41 +17,38 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
-from typing import Any
-
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
-from django.utils.translation import gettext_lazy as _
+from django.db.models import F, QuerySet
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
 
-from larpmanager.forms.registration import (
-    OrgaRegistrationInstallmentForm,
-    OrgaRegistrationOptionForm,
-    OrgaRegistrationQuestionForm,
-    OrgaRegistrationQuotaForm,
-    OrgaRegistrationSectionForm,
-    OrgaRegistrationSurchargeForm,
-    OrgaRegistrationTicketForm,
-)
-from larpmanager.models.form import (
-    BaseQuestionType,
-    RegistrationOption,
-    RegistrationQuestion,
-    get_ordered_registration_questions,
-)
+from larpmanager.cache.registration import get_registration_tickets
+from larpmanager.forms.registration import OrgaRegistrationTicketForm
+from larpmanager.models.form import RegistrationOption, RegistrationQuestion
 from larpmanager.models.registration import (
     RegistrationInstallment,
     RegistrationQuota,
     RegistrationSection,
     RegistrationSurcharge,
-    RegistrationTicket,
 )
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import exchange_order
+from larpmanager.utils.core.common import get_element
+from larpmanager.utils.edit.backend import (
+    backend_order,
+)
+from larpmanager.utils.edit.orga import (
+    OrgaAction,
+    form_edit_handler,
+    options_edit_handler,
+    orga_delete,
+    orga_edit,
+    orga_new,
+    orga_order,
+)
 from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
-from larpmanager.utils.services.edit import backend_edit, orga_edit, set_suggestion
 
 
 @login_required
@@ -82,7 +79,7 @@ def orga_registration_tickets(request: HttpRequest, event_slug: str) -> HttpResp
     context["download"] = 1
 
     # Fetch registration tickets ordered by their sequence number
-    context["list"] = RegistrationTicket.objects.filter(event=context["event"]).order_by("order")
+    context["list"] = get_registration_tickets(context["event"].id)
     # Get available ticket tiers for the current event
     context["tiers"] = OrgaRegistrationTicketForm.get_tier_available(context["event"], context)
 
@@ -90,17 +87,29 @@ def orga_registration_tickets(request: HttpRequest, event_slug: str) -> HttpResp
 
 
 @login_required
-def orga_registration_tickets_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
-    """Edit a specific registration ticket."""
-    return orga_edit(request, event_slug, "orga_registration_tickets", OrgaRegistrationTicketForm, num)
+def orga_registration_tickets_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration ticket."""
+    return orga_new(request, event_slug, OrgaAction.REGISTRATION_TICKETS)
 
 
 @login_required
-def orga_registration_tickets_order(request: HttpRequest, event_slug: str, num: int, order: int) -> HttpResponse:
+def orga_registration_tickets_edit(request: HttpRequest, event_slug: str, ticket_uuid: str) -> HttpResponse:
+    """Edit a specific registration ticket."""
+    return orga_edit(request, event_slug, OrgaAction.REGISTRATION_TICKETS, ticket_uuid)
+
+
+@login_required
+def orga_registration_tickets_delete(request: HttpRequest, event_slug: str, ticket_uuid: str) -> HttpResponse:
+    """Delete ticket for event."""
+    return orga_delete(request, event_slug, OrgaAction.REGISTRATION_TICKETS, ticket_uuid)
+
+
+@login_required
+def orga_registration_tickets_order(
+    request: HttpRequest, event_slug: str, ticket_uuid: str, order: int
+) -> HttpResponse:
     """Reorder registration tickets for an event."""
-    context = check_event_context(request, event_slug, "orga_registration_tickets")
-    exchange_order(context, RegistrationTicket, num, order)
-    return redirect("orga_registration_tickets", event_slug=context["run"].get_slug())
+    return orga_order(request, event_slug, OrgaAction.REGISTRATION_TICKETS, ticket_uuid, order)
 
 
 @login_required
@@ -116,37 +125,38 @@ def orga_registration_sections(request: HttpRequest, event_slug: str) -> HttpRes
 
 
 @login_required
-def orga_registration_sections_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_registration_sections_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration section for an event."""
+    return orga_new(request, event_slug, OrgaAction.REGISTRATION_SECTIONS)
+
+
+@login_required
+def orga_registration_sections_edit(request: HttpRequest, event_slug: str, section_uuid: str) -> HttpResponse:
     """Edit a specific registration section for an event."""
-    return orga_edit(request, event_slug, "orga_registration_sections", OrgaRegistrationSectionForm, num)
+    return orga_edit(request, event_slug, OrgaAction.REGISTRATION_SECTIONS, section_uuid)
+
+
+@login_required
+def orga_registration_sections_delete(request: HttpRequest, event_slug: str, section_uuid: str) -> HttpResponse:
+    """Delete section for event."""
+    return orga_delete(request, event_slug, OrgaAction.REGISTRATION_SECTIONS, section_uuid)
 
 
 @login_required
 def orga_registration_sections_order(
     request: HttpRequest,
     event_slug: str,
-    num: int,
+    section_uuid: str,
     order: int,
 ) -> HttpResponse:
-    """Reorder registration sections within an event.
+    """Reorder registration sections within an event."""
+    return orga_order(request, event_slug, OrgaAction.REGISTRATION_SECTIONS, section_uuid, order)
 
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-        num: Current position of the section
-        order: Direction to move ('up' or 'down')
 
-    Returns:
-        Redirect to registration sections page
-
-    """
-    # Verify user has permission to manage registration sections
-    context = check_event_context(request, event_slug, "orga_registration_sections")
-
-    # Exchange order of sections and save changes
-    exchange_order(context, RegistrationSection, num, order)
-
-    return redirect("orga_registration_sections", event_slug=context["run"].get_slug())
+def get_ordered_registration_questions(context: dict) -> QuerySet[RegistrationQuestion]:
+    """Get registration questions ordered by section and question order."""
+    questions = context["event"].get_elements(RegistrationQuestion)
+    return questions.order_by(F("section__order").asc(nulls_first=True), "order")
 
 
 @login_required
@@ -178,161 +188,97 @@ def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpRespons
     # Fetch ordered registration questions with their options
     context["list"] = get_ordered_registration_questions(context).prefetch_related("options")
 
-    # Sort options by order field for each question
-    for el in context["list"]:
-        el.options_list = el.options.order_by("order")
-
     return render(request, "larpmanager/orga/registration/form.html", context)
 
 
 @login_required
-def orga_registration_form_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
-    """Handle registration form question editing for organizers.
-
-    This view allows organizers to edit registration questions, handle form submissions,
-    and redirect to appropriate pages based on the question type and user actions.
-
-    Args:
-        request : HttpRequest
-            The HTTP request object containing form data and user information
-        event_slug : str
-            Event slug identifier for the specific event
-        num : int
-            Question number/ID to edit (0 for new questions)
-
-    Returns:
-        HttpResponse
-            Either a rendered form edit page or a redirect response after successful save
-
-    Notes:
-        - Handles both creation (num=0) and editing of existing questions
-        - Automatically redirects to option creation for single/multiple choice questions
-        - Validates that choice questions have at least one option defined
-
-    """
-    # Check user permissions for registration form editing
-    perm = "orga_registration_form"
-    context = check_event_context(request, event_slug, perm)
-
-    # Process form submission using backend edit helper
-    if backend_edit(request, context, OrgaRegistrationQuestionForm, num, is_association=False):
-        # Set suggestion flag for the current permission
-        set_suggestion(context, perm)
-
-        # Handle "continue editing" action - redirect to create new question
-        if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, event_slug=context["run"].get_slug(), num=0)
-
-        # Determine if we need to redirect to option editing
-        edit_option = False
-
-        # Check if user explicitly requested to add options
-        if str(request.POST.get("new_option", "")) == "1":
-            edit_option = True
-        # For choice questions, ensure at least one option exists
-        elif (
-            context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
-            and not RegistrationOption.objects.filter(question_id=context["saved"].id).exists()
-        ):
-            edit_option = True
-            messages.warning(
-                request,
-                _("You must define at least one option before saving a single-choice or multiple-choice question"),
-            )
-
-        # Redirect to option creation if needed, otherwise back to form list
-        if edit_option:
-            return redirect(
-                orga_registration_options_new,
-                event_slug=context["run"].get_slug(),
-                num=context["saved"].id,
-            )
-        return redirect(perm, event_slug=context["run"].get_slug())
-
-    # Prepare context for rendering the edit form
-    context["list"] = RegistrationOption.objects.filter(question=context["el"]).order_by("order")
-    return render(request, "larpmanager/orga/registration/form_edit.html", context)
+def orga_registration_form_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration form question."""
+    return form_edit_handler(
+        request,
+        event_slug,
+        "orga_registration_form",
+        None,
+    )
 
 
 @login_required
-def orga_registration_form_order(request: HttpRequest, event_slug: str, num: int, order: int) -> HttpResponse:
+def orga_registration_form_edit(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
+    """Edit registration form question for organizers."""
+    return form_edit_handler(
+        request,
+        event_slug,
+        "orga_registration_form",
+        question_uuid,
+    )
+
+
+@login_required
+def orga_registration_form_delete(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
+    """Delete question for event."""
+    return orga_delete(
+        request,
+        event_slug,
+        OrgaAction.REGISTRATION_FORM,
+        question_uuid,
+    )
+
+
+@login_required
+def orga_registration_form_order(request: HttpRequest, event_slug: str, question_uuid: str, order: int) -> HttpResponse:
     """Reorders registration form questions for an event."""
-    # Check permissions and get event context
-    context = check_event_context(request, event_slug, "orga_registration_form")
-
-    # Update question order in database
-    exchange_order(context, RegistrationQuestion, num, order)
-
-    return redirect("orga_registration_form", event_slug=context["run"].get_slug())
+    return orga_order(request, event_slug, OrgaAction.REGISTRATION_FORM, question_uuid, order)
 
 
 @login_required
-def orga_registration_options_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
-    """Edit registration options for an event.
+def orga_registration_options_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration option."""
+    return options_edit_handler(request, event_slug, "orga_registration_form", None)
 
-    Validates that registration questions exist before allowing creation of
-    registration options. Redirects to question creation if none exist.
+
+@login_required
+def orga_registration_options_edit(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
+    """Edit registration options for an event."""
+    return options_edit_handler(request, event_slug, "orga_registration_form", option_uuid)
+
+
+@login_required
+def orga_registration_options_list(
+    request: HttpRequest, event_slug: str, question_uuid: str | None = None
+) -> HttpResponse:
+    """Display the list of options for a registration form question in an iframe.
+
+    This view shows only the options list section, designed to be loaded in an iframe
+    within the form edit page.
 
     Args:
         request: The HTTP request object
         event_slug: Event slug identifier
-        num: Registration option number to edit
+        question_uuid: Question UUID to show options for
 
     Returns:
-        HttpResponse: Rendered registration option edit page or redirect
-
+        HttpResponse with the options list template
     """
     # Check user permissions for registration form management
     context = check_event_context(request, event_slug, "orga_registration_form")
+    context["frame"] = 1
 
-    # Verify that registration questions exist before proceeding
-    if not context["event"].get_elements(RegistrationQuestion).exists():
-        # Display warning message to user about missing prerequisites
-        messages.warning(
-            request,
-            _("You must create at least one registration question before you can create registration options"),
-        )
-        # Redirect to registration questions creation page
-        return redirect("orga_registration_form_edit", event_slug=event_slug, num=0)
+    if question_uuid:
+        # Get the question
+        get_element(context, question_uuid, "el", RegistrationQuestion)
 
-    # Proceed with registration option editing
-    return registration_option_edit(context, num, request)
+        # Load existing options for the question
+        options_queryset = RegistrationOption.objects.filter(question=context["el"])
+        context["list"] = options_queryset.order_by("order")
 
-
-@login_required
-def orga_registration_options_new(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
-    """Create new registration option for specified question."""
-    context = check_event_context(request, event_slug, "orga_registration_form")
-    context["question_id"] = num
-    return registration_option_edit(context, 0, request)
-
-
-def registration_option_edit(context: Any, option_number: Any, request: Any) -> Any:
-    """Handle editing of registration option with form processing and redirect logic.
-
-    Args:
-        context: Context dictionary with event and form data
-        option_number: Option number/ID being edited
-        request: HTTP request object
-
-    Returns:
-        HttpResponse: Redirect to next step or rendered edit form
-
-    """
-    if backend_edit(request, context, OrgaRegistrationOptionForm, option_number, is_association=False):
-        redirect_target = "orga_registration_form_edit"
-        if "continue" in request.POST:
-            redirect_target = "orga_registration_options_new"
-        return redirect(redirect_target, event_slug=context["run"].get_slug(), num=context["saved"].question_id)
-
-    return render(request, "larpmanager/orga/edit.html", context)
+    return render(request, "larpmanager/orga/registration/options_list.html", context)
 
 
 @login_required
 def orga_registration_options_order(
     request: HttpRequest,
     event_slug: str,
-    num: int,
+    option_uuid: str,
     order: int,
 ) -> HttpResponse:
     """Reorder registration options within a form question.
@@ -340,7 +286,7 @@ def orga_registration_options_order(
     Args:
         request: The HTTP request object
         event_slug: Event/run slug identifier
-        num: Question ID containing the options to reorder
+        option_uuid: Option UUID to reorder
         order: Direction to move the option (1 or 0)
 
     Returns:
@@ -351,14 +297,23 @@ def orga_registration_options_order(
     context = check_event_context(request, event_slug, "orga_registration_form")
 
     # Exchange the order of registration options
-    exchange_order(context, RegistrationOption, num, order)
+    backend_order(context, RegistrationOption, option_uuid, order)
 
     # Redirect back to the form edit page
-    return redirect(
+    url = reverse(
         "orga_registration_form_edit",
-        event_slug=context["run"].get_slug(),
-        num=context["current"].question_id,
+        kwargs={
+            "event_slug": context["run"].get_slug(),
+            "question_uuid": context["current"].question.uuid,
+        },
     )
+    return HttpResponseRedirect(url)
+
+
+@login_required
+def orga_registration_options_delete(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
+    """Delete registration option for an event."""
+    return orga_delete(request, event_slug, OrgaAction.REGISTRATION_FORM_OPTION, option_uuid)
 
 
 @login_required
@@ -374,26 +329,26 @@ def orga_registration_quotas(request: HttpRequest, event_slug: str) -> HttpRespo
 
 
 @login_required
-def orga_registration_quotas_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_registration_quotas_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration quota for an event."""
+    return orga_new(request, event_slug, OrgaAction.REGISTRATION_QUOTAS)
+
+
+@login_required
+def orga_registration_quotas_edit(request: HttpRequest, event_slug: str, quota_uuid: str) -> HttpResponse:
     """Edit a specific registration quota for an event."""
-    return orga_edit(request, event_slug, "orga_registration_quotas", OrgaRegistrationQuotaForm, num)
+    return orga_edit(request, event_slug, OrgaAction.REGISTRATION_QUOTAS, quota_uuid)
+
+
+@login_required
+def orga_registration_quotas_delete(request: HttpRequest, event_slug: str, quota_uuid: str) -> HttpResponse:
+    """Delete quota for event."""
+    return orga_delete(request, event_slug, OrgaAction.REGISTRATION_QUOTAS, quota_uuid)
 
 
 @login_required
 def orga_registration_installments(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Display and manage registration installments for an event.
-
-    Renders a page showing all payment installment options configured for the event,
-    ordered by sequence and amount.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event slug identifier
-
-    Returns:
-        Rendered installments management page
-
-    """
+    """Display and manage registration installments for an event."""
     # Verify user has permission to access registration installment management
     context = check_event_context(request, event_slug, "orga_registration_installments")
 
@@ -404,9 +359,21 @@ def orga_registration_installments(request: HttpRequest, event_slug: str) -> Htt
 
 
 @login_required
-def orga_registration_installments_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_registration_installments_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration installment for an event."""
+    return orga_new(request, event_slug, OrgaAction.REGISTRATION_INSTALLMENTS)
+
+
+@login_required
+def orga_registration_installments_edit(request: HttpRequest, event_slug: str, installment_uuid: str) -> HttpResponse:
     """Edit a specific registration installment for an event."""
-    return orga_edit(request, event_slug, "orga_registration_installments", OrgaRegistrationInstallmentForm, num)
+    return orga_edit(request, event_slug, OrgaAction.REGISTRATION_INSTALLMENTS, installment_uuid)
+
+
+@login_required
+def orga_registration_installments_delete(request: HttpRequest, event_slug: str, installment_uuid: str) -> HttpResponse:
+    """Delete installment for event."""
+    return orga_delete(request, event_slug, OrgaAction.REGISTRATION_INSTALLMENTS, installment_uuid)
 
 
 @login_required
@@ -422,6 +389,18 @@ def orga_registration_surcharges(request: HttpRequest, event_slug: str) -> HttpR
 
 
 @login_required
-def orga_registration_surcharges_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_registration_surcharges_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new registration surcharge for an event."""
+    return orga_new(request, event_slug, OrgaAction.REGISTRATION_SURCHARGES)
+
+
+@login_required
+def orga_registration_surcharges_edit(request: HttpRequest, event_slug: str, surcharge_uuid: str) -> HttpResponse:
     """Edit a registration surcharge for an event."""
-    return orga_edit(request, event_slug, "orga_registration_surcharges", OrgaRegistrationSurchargeForm, num)
+    return orga_edit(request, event_slug, OrgaAction.REGISTRATION_SURCHARGES, surcharge_uuid)
+
+
+@login_required
+def orga_registration_surcharges_delete(request: HttpRequest, event_slug: str, surcharge_uuid: str) -> HttpResponse:
+    """Delete surcharge for event."""
+    return orga_delete(request, event_slug, OrgaAction.REGISTRATION_SURCHARGES, surcharge_uuid)

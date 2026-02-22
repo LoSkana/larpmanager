@@ -8,8 +8,8 @@
         <table class="mob">
             <thead>
                 <tr>
-                    <th>{{ writing_fields.quest.names.name }}</th>
-                    {% if show_quest.teaser %}<th>{{ writing_fields.quest.names.teaser }}</th>{% endif %}
+                    <th>{{ writing_field_names.name }}</th>
+                    {% if show_quest.teaser %}<th>{{ writing_field_names.teaser }}</th>{% endif %}
                     {% if show_trait %}
                         <th>{% trans "Traits" %}</th>
                     {% endif %}
@@ -19,7 +19,7 @@
                 <tr>
                     <td>
                         <h3>
-                            <a href="{% url 'quest' run.get_slug el.number %}">{{ el.name }}</a>
+                            <a href="{% url 'quest' run.get_slug el.uuid %}">{{ el.name }}</a>
                         </h3>
                     </td>
                     {% if show_quest.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}

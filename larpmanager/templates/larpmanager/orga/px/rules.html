@@ -1,14 +1,14 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans "Rules" %} - {{ run }}
+    {% trans "Rules" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page summarizes the rules that are applied to the computed fields" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
-    <table id="rules" class="go_datatable writing" no_header_cols="[5,6]">
+    <table id="rules" class="go_datatable writing">
         <thead>
             <tr>
                 <th></th>
@@ -18,37 +18,45 @@
                 <th>{% trans "Amount" %}</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_px_rules_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_px_rules_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>
-                        {% for ab in el.abilities.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_px_abilities_edit' run.get_slug ab.id %}">{{ ab.name }}</a>
-                        {% endfor %}
+                        {% if el.cached_rels %}
+                            {% for ab_uuid, ab_name in el.cached_rels.ability_rels.list %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_px_abilities_edit' run.get_slug ab_uuid %}">{{ ab_name }}</a>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     <td>{{ el.field }}</td>
                     <td>{{ el.get_operation_display }}</td>
                     <td>{{ el.amount }}</td>
                     <td>
                         {% if not forloop.first %}
-                            <a href="{% url 'orga_px_rules_order' run.get_slug el.id 0 %}">
+                            <a href="{% url 'orga_px_rules_order' run.get_slug el.uuid 0 %}">
                                 <i class="fa-solid fa-arrow-up"></i>
                             </a>
                         {% endif %}
                     </td>
                     <td>
                         {% if not forloop.last %}
-                            <a href="{% url 'orga_px_rules_order' run.get_slug el.id 1 %}">
+                            <a href="{% url 'orga_px_rules_order' run.get_slug el.uuid 1 %}">
                                 <i class="fa-solid fa-arrow-down"></i>
                             </a>
                         {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_px_rules_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

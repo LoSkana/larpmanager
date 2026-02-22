@@ -27,14 +27,12 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.accounting.base import get_payment_details
+from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.models.association import Association
-from larpmanager.models.registration import Registration
+from larpmanager.models.event import Run
 
 logger = logging.getLogger(__name__)
-
-# Demo mode threshold (Associations with fewer than this many registrations are considered demo/trial accounts)
-MAX_DEMO_REGISTRATIONS = 10
 
 
 def clear_association_cache(association_slug: str) -> None:
@@ -130,10 +128,25 @@ def init_cache_association(a_slug: str) -> dict | None:
     _init_features(association, association_dict)
     _init_skin(association, association_dict)
 
-    # Determine if association qualifies for demo mode (< MAX_DEMO_REGISTRATIONS)
-    association_dict["demo"] = (
-        Registration.objects.filter(run__event__association_id=association.id).count() < MAX_DEMO_REGISTRATIONS
-    )
+    # Check if association has completed runs (onboarding mode if no runs with start and end dates)
+    association_dict["onboarding"] = not Run.objects.filter(
+        event__association=association,
+        start__isnull=False,
+        end__isnull=False,
+    ).exists()
+
+    # Add configs
+    temp_context = {}
+    for config in ["user_characters_shortcut", "user_registrations_shortcut", "old_form_appearance", "old_dashboard"]:
+        association_dict[config] = get_association_config(
+            association.id, config, default_value=False, context=temp_context
+        )
+
+    if "app_integration" in association_dict.get("features", {}):
+        for config in ["app_integration_button_text", "app_integration_redirect_url"]:
+            association_dict[config] = get_association_config(
+                association.id, config, default_value="", context=temp_context
+            )
 
     return association_dict
 
@@ -179,9 +192,15 @@ def _init_features(association: Association, cache_element: dict) -> None:
             cache_element[config_key] = association.get_config(config_key, default_value="")
 
     # Configure token and credit naming if feature is enabled
-    if "token_credit" in cache_element["features"]:
-        for setting in ["token_name", "credit_name"]:
-            cache_element[setting] = association.get_config("token_credit_" + setting, default_value=None)
+    for setting in ["tokens", "credits"]:
+        if setting in cache_element["features"]:
+            name_key = f"{setting}_name"
+            # Try new config key first, fallback to old token_credit_* key for backward compatibility
+            old_key = f"token_credit_{setting[:-1]}_name"  # tokens->token, credits->credit
+            new_value = association.get_config(name_key, default_value=None)
+            if new_value is None:
+                new_value = association.get_config(old_key, default_value=None)
+            cache_element[name_key] = new_value
 
     # Configure Centauri probability settings if feature is enabled
     if "centauri" in cache_element["features"]:

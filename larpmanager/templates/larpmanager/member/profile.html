@@ -53,11 +53,13 @@
                 <br />
                 <br />
                 <div class="hide change-field">
-                    {% trans "Select the new photo to upload" %}: {{ avatar_form.image }}
+                    {% trans "Select the new photo to upload" %}: {{ avatar_form.image }} (maximum 10 MB)
                     <br />
                     <br />
                 </div>
-                {% if profile %}<img id="profile" src="{{ profile }}" alt="image profile" />{% endif %}
+                <img id="profile"
+                     {% if profile %} src="{{ profile }}" {% else %} class="hide" {% endif %}
+                     alt="image profile" />
                 <div id="upload_spinner" class="hide">
                     <div class="spinner-border text-primary" role="status">
                         <span class="sr-only">{% trans "Uploading..." %}</span>
@@ -72,9 +74,11 @@
           enctype="multipart/form-data"
           method="post">
         {% csrf_token %}
-        <table class="mob ">
-            {{ form.as_table }}
-        </table>
+        <div class="form_container auto_resize">
+            <table>
+                {{ form.as_table }}
+            </table>
+        </div>
         <input type="submit" value="Submit">
     </form>
 {% endblock content %}
@@ -119,6 +123,7 @@
         timestamp = (new Date()).getTime();
         newUrl = src + '?_=' + timestamp;
         $('#profile').attr("src", newUrl);
+        $('#profile').show();
     }
 
 {% endif %}
@@ -172,7 +177,7 @@
                             // Hide spinner and enable submit button on error
                             $('#upload_spinner').addClass('hide');
                             $('input[type="submit"]').prop('disabled', false);
-                            alert('{% trans "Error uploading image. Please try again." %}');
+                            if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Error uploading image. Please retry or use a smaller file." %}{% endfilter %}');
                         }
                     });
 

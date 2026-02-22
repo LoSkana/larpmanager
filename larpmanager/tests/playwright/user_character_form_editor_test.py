@@ -17,12 +17,20 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Character form editor with player editor feature.
+Verifies dynamic character form creation with single/multiple choice fields, text fields,
+prerequisites, availability limits, and player character creation/approval workflow.
+"""
+import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
+    submit_option, new_option
 
 pytestmark = pytest.mark.e2e
 
@@ -42,28 +50,30 @@ def test_user_character_form_editor(pw_page: Any) -> None:
 
     character(page, live_server)
 
+    verify_characters_shortcut(page, live_server)
+
 
 def prepare(page: Any, live_server: Any) -> None:
     # Activate characters
-    go_to(page, live_server, "/test/1/manage/features/character/on")
+    go_to(page, live_server, "/test/manage/features/character/on")
 
     # Activate player editor
-    go_to(page, live_server, "/test/1/manage/features/user_character/on")
+    go_to(page, live_server, "/test/manage/features/user_character/on")
 
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name="Player editor ").click()
+    page.get_by_role("link", name=re.compile(r"^Player editor ")).click()
     page.locator("#id_user_character_approval").check()
     page.get_by_role("cell", name="Maximum number of characters").click()
     page.locator("#id_user_character_max").fill("1")
-    page.get_by_role("link", name="Character form ").click()
+    page.get_by_role("link", name=re.compile(r"^Character form ")).click()
     page.locator("#id_character_form_wri_que_max").check()
     page.locator("#id_character_form_wri_que_requirements").check()
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/writing/form/")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("Name")
-    expect(page.locator('[id="\\32 "]')).to_contain_text("Presentation")
-    expect(page.locator('[id="\\33 "]')).to_contain_text("Sheet")
+    expect_normalized(page, page.locator('[id="u1"]'), "Name")
+    expect_normalized(page, page.locator('[id="u2"]'), "Presentation")
+    expect_normalized(page, page.locator('[id="u3"]'), "Sheet")
 
 
 def field_single(page: Any, live_server: Any) -> None:
@@ -74,22 +84,22 @@ def field_single(page: Any, live_server: Any) -> None:
     page.locator("#id_name").press("Tab")
     page.locator("#id_description").fill("sssssingle")
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("ff")
-    page.locator("#id_max_available").click()
-    page.locator("#id_max_available").fill("3")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("ff")
+    iframe.locator("#id_max_available").click()
+    iframe.locator("#id_max_available").fill("3")
+    submit_option(page, iframe)
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("rrrr")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("rrrr")
+    submit_option(page, iframe)
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("wwww")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("wwww")
+    submit_option(page, iframe)
 
     submit_confirm(page)
 
@@ -104,29 +114,29 @@ def field_multiple(page: Any, live_server: Any) -> None:
     page.locator("#id_max_length").click()
     page.locator("#id_max_length").fill("1")
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("q1")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("q1")
+    submit_option(page, iframe)
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("q2")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("q2")
+    submit_option(page, iframe)
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("q3")
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("q3")
+    submit_option(page, iframe)
 
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("14")
-    page.locator("#id_max_available").click()
-    page.locator("#id_max_available").fill("3")
-    page.get_by_role("row", name="Prerequisites").get_by_role("searchbox").fill("ww")
-    page.get_by_role("option", name="Test Larp - single wwww").click()
-    submit_confirm(page)
+    iframe = new_option(page)
+    iframe.locator("#id_name").click()
+    iframe.locator("#id_name").fill("14")
+    iframe.locator("#id_max_available").click()
+    iframe.locator("#id_max_available").fill("3")
+    iframe.get_by_role("row", name="Prerequisites").get_by_role("searchbox").fill("ww")
+    iframe.get_by_role("option", name="Test Larp - single wwww").click()
+    submit_option(page, iframe)
 
     submit_confirm(page)
 
@@ -150,9 +160,9 @@ def field_text(page: Any, live_server: Any) -> None:
 
     # Create new character
     go_to(page, live_server, "/test/manage/characters")
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.get_by_role("link", name="New").click()
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("provaaaa")
 
@@ -160,14 +170,14 @@ def field_text(page: Any, live_server: Any) -> None:
 
     fill_tinymce(page, "id_text", "rrrr")
 
-    page.wait_for_timeout(2000)
-    page.locator("#id_q4").select_option("3")
-    page.locator("#id_q4").select_option("1")
+    just_wait(page)
+    page.locator("#id_que_u4").select_option("u3")
+    page.locator("#id_que_u4").select_option("u1")
     page.get_by_role("checkbox", name="q2").check()
-    page.locator("#id_q6").click()
-    page.locator("#id_q6").fill("sad")
-    page.locator("#id_q7").click()
-    page.locator("#id_q7").fill("sadsadas")
+    page.locator("#id_que_u6").click()
+    page.locator("#id_que_u6").fill("sad")
+    page.locator("#id_que_u7").click()
+    page.locator("#id_que_u7").fill("sadsadas")
     submit_confirm(page)
 
 
@@ -176,9 +186,13 @@ def character(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
-    expect(page.locator("#one")).to_contain_text("Access character creation!")
-    page.get_by_role("link", name="Access character creation!").click()
-    page.wait_for_timeout(2000)
+
+    page.get_by_role("checkbox", name="Authorisation").check()
+    submit_confirm(page)
+
+    expect_normalized(page, page.locator("#one"), "Create your character!")
+    page.get_by_role("link", name="Create your character!").click()
+    just_wait(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("my character")
 
@@ -186,36 +200,59 @@ def character(page: Any, live_server: Any) -> None:
 
     fill_tinymce(page, "id_text", "so braaaave")
 
-    page.locator("#id_q4").select_option("1")
-    page.locator("#id_q4").select_option("3")
+    page.locator("#id_que_u4").select_option("u1")
+    page.locator("#id_que_u4").select_option("u3")
     page.get_by_role("checkbox", name="- (Available 3)").check()
-    page.locator("#id_q6").click()
-    page.locator("#id_q6").fill("wow")
-    page.locator("#id_q7").click()
-    page.locator("#id_q7").fill("asdsadsa")
+    page.locator("#id_que_u6").click()
+    page.locator("#id_que_u6").fill("wow")
+    page.locator("#id_que_u7").click()
+    page.locator("#id_que_u7").fill("asdsadsa")
     submit_confirm(page)
 
     # confirm char
-    expect(page.locator("#one")).to_contain_text("my character (Creation)")
+    expect_normalized(page, page.locator("#one"), "my character (Creation)")
     page.get_by_role("link", name="my character (Creation)").click()
-    page.get_by_role("link", name="Change").click()
+    page.get_by_role("link", name="Edit").click()
     page.get_by_role("cell", name="Click here to confirm that").click()
     page.get_by_text("Click here to confirm that").click()
     page.locator("#id_propose").check()
     submit_confirm(page)
 
     # check char
-    expect(page.locator("#one")).to_contain_text("my character (Proposed)")
+    expect_normalized(page, page.locator("#one"), "my character (Proposed)")
 
     # approve char
     go_to(page, live_server, "/test/manage/characters")
-    page.locator('[id="\\33 "]').get_by_role("link", name="").click()
+    page.locator('[id="u3"]').locator(".fa-edit").click()
     page.locator("#id_status").select_option("a")
     submit_confirm(page)
 
     go_to(page, live_server, "/test/register")
-    page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("my character")
+    expect_normalized(page, page.locator("#one"), "Your character is my character")
 
     go_to(page, live_server, "/test")
-    expect(page.locator("#one")).to_contain_text("my character")
+    expect_normalized(page, page.locator("#one"), "Your character is my character")
+
+def verify_characters_shortcut(page: Any, live_server: Any) -> None:
+    """Enable the user_characters_shortcut configuration."""
+
+    # Enable characters shortcut
+    go_to(page, live_server, "/manage/config")
+    page.get_by_role("link", name="Interface ").click()
+    page.locator("#id_user_characters_shortcut").check()
+    page.locator("#id_user_registrations_shortcut").check()
+    submit_confirm(page)
+
+    # Verify the Characters link is visible in the topbar
+    go_to(page, live_server, "/")
+    just_wait(page)
+    page.get_by_role("link", name=re.compile(" Characters$")).click()
+
+    # Verify the page shows characters content
+    expect_normalized(page, page.locator("#one"), "character active last event character active last event my character test larp")
+
+    page.get_by_role("link", name=re.compile(" Registrations$")).click()
+
+    expect_normalized(page, page.locator("#one"),
+  """event date status details event date status details test larp 19 march 2050
+            registration confirmed (standard) your character is my character""")

@@ -17,30 +17,36 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import contextlib
 import re
 from typing import Any, ClassVar
 
 from django import forms
-from django.core.exceptions import ValidationError
+from django.conf import settings as conf_settings
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db.models import Q
 from django.http import Http404
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.registration import get_reg_counts
-from larpmanager.forms.base import MyForm
+from larpmanager.cache.question import get_cached_writing_questions
+from larpmanager.cache.registration import get_registration_counts
+from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     EventCharacterS2WidgetMulti,
+    EventCharacterS2WidgetUuid,
     EventPlotS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     FactionS2WidgetMulti,
+    RunStaffS2Widget,
     TicketS2WidgetMulti,
     WritingTinyMCE,
 )
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
+from larpmanager.models.base import Feature
 from larpmanager.models.experience import AbilityPx, DeliveryPx
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -62,7 +68,7 @@ from larpmanager.models.writing import (
     Relationship,
     TextVersionChoices,
 )
-from larpmanager.utils.services.edit import save_version
+from larpmanager.utils.edit.backend import save_version
 
 
 class CharacterForm(WritingForm, BaseWritingForm):
@@ -95,20 +101,11 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "text": WritingTinyMCE(),
             "player": AssociationMemberS2Widget,
             "characters": EventCharacterS2WidgetMulti,
+            "assigned": RunStaffS2Widget,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize character form with custom fields and configuration.
-
-        Args:
-            *args: Positional arguments passed to parent form class.
-            **kwargs: Keyword arguments including 'params' dict with event, run,
-                and features configuration.
-
-        Raises:
-            KeyError: If required 'params' key is missing from kwargs.
-
-        """
+        """Initialize character form with custom fields and configuration."""
         # Initialize parent form class with all provided arguments
         super().__init__(*args, **kwargs)
 
@@ -118,7 +115,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Set up character-specific fields including factions and custom questions
         self._init_character()
 
-    def check_editable(self, question: WritingQuestion) -> bool:
+    def check_editable(self, question: dict) -> bool:
         """Check if a question is editable based on event config and instance status.
 
         Args:
@@ -130,7 +127,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         """
         # If character approval is disabled, all questions are editable
         character_approval_enabled = get_event_config(
-            self.params["event"].id,
+            self.params.get("event").id,
             "user_character_approval",
             default_value=False,
             context=self.params,
@@ -139,7 +136,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             return True
 
         # Get allowed statuses for editing this question
-        allowed_editable_statuses = question.get_editable()
+        allowed_editable_statuses = question.get("editable", [])
 
         # If no status restrictions, question is always editable
         if not allowed_editable_statuses:
@@ -168,8 +165,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
             - Conditionally adds character proposal field for user approval workflow
 
         """
-        # Get event, preferring parent event if available
-        event = self.params["event"]
+        # Get event, preferring parent event if available for loading questions
+        current_event = self.params.get("event")
+        event = current_event
         if event.parent:
             event = event.parent
 
@@ -178,8 +176,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
         fields_custom = set()
 
         # Initialize registration questions and get counts
-        self._init_reg_question(self.instance, event)
-        registration_counts = get_reg_counts(self.params["run"])
+        self._init_registration_question(self.instance, event)
+        registration_counts = get_registration_counts(self.params.get("run"))
 
         # Process each question to create form fields
         for question in self.questions:
@@ -188,7 +186,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
                 continue
 
             # Categorize fields based on question type length
-            if len(question.typ) == 1:
+            if len(question["typ"]) == 1:
                 fields_custom.add(field_key)
             else:
                 fields_default.add(field_key)
@@ -210,12 +208,12 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Remove unused fields from form
         all_fields = set(self.fields.keys()) - fields_default
         for field_label in all_fields - fields_custom:
-            del self.fields[field_label]
+            self.delete_field(field_label)
 
         # Add character completion proposal field for user approval workflow
         if (
             not self.orga
-            and get_event_config(event.id, "user_character_approval", default_value=False, context=self.params)
+            and get_event_config(current_event.id, "user_character_approval", default_value=False, context=self.params)
             and (not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW])
         ):
             self.fields["propose"] = forms.BooleanField(
@@ -241,10 +239,10 @@ class CharacterForm(WritingForm, BaseWritingForm):
         Sets up a multiple choice field for selectable factions if the faction
         feature is enabled for the event.
         """
-        if "faction" not in self.params["features"]:
+        if "faction" not in self.params.get("features"):
             return
 
-        queryset = self.params["run"].event.get_elements(Faction).filter(selectable=True)
+        queryset = self.params.get("run").event.get_elements(Faction).filter(selectable=True)
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
@@ -259,8 +257,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if not self.instance.pk:
             return
 
-        for faction_data in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
-            self.initial["factions_list"].append(faction_data[0])
+        self.initial["factions_list"] = list(
+            self.instance.factions_list.order_by("number").values_list("id", flat=True)
+        )
 
     def _save_multi(self, field: str, instance: Any) -> None:
         """Save multi-select field data for the given instance.
@@ -293,10 +292,14 @@ class CharacterForm(WritingForm, BaseWritingForm):
         new = set(self.cleaned_data["factions_list"].values_list("pk", flat=True))
 
         # Get the faction event context for filtering existing factions
-        faction_event = self.params["run"].event.get_class_parent(Faction)
+        faction_event = self.params.get("run").event.get_class_parent(Faction)
 
         # Get current faction IDs associated with the instance
-        old = set(instance.factions_list.filter(event=faction_event).values_list("id", flat=True))
+        # For non-orga users, only consider selectable factions to preserve staff-assigned non-selectable factions
+        old_query = instance.factions_list.filter(event=faction_event)
+        if not self.orga:
+            old_query = old_query.filter(selectable=True)
+        old = set(old_query.values_list("id", flat=True))
 
         # Remove factions that are no longer selected
         for ch in old - new:
@@ -343,7 +346,7 @@ class OrgaCharacterForm(CharacterForm):
 
     page_info = _("Manage characters")
 
-    page_title = _("Character")
+    page_title = _("Characters")
 
     load_templates: ClassVar[list] = ["char"]
 
@@ -357,12 +360,8 @@ class OrgaCharacterForm(CharacterForm):
         """Initialize form with event-specific writing configuration and conditional setup."""
         super().__init__(*args, **kwargs)
 
-        # Load relationship field max length from event configuration
-        self.relationship_max_length = int(
-            get_event_config(
-                self.params["event"].id, "writing_relationship_length", default_value=10000, context=self.params
-            ),
-        )
+        # Init relationships
+        self._init_relationships()
 
         # Skip additional initialization for new instances
         if not self.instance.pk:
@@ -373,6 +372,71 @@ class OrgaCharacterForm(CharacterForm):
 
         # Initialize plot-related fields
         self._init_plots()
+
+    def _init_relationships(self) -> None:
+        """Init relationships data."""
+        if "relationships" not in self.params.get("features"):
+            return
+
+        # Skip if AJAX auto-save
+        if self.params.get("request") and self.params["request"].POST.get("ajax") == "1":
+            return
+
+        # Process character relationships for display and validation
+        self._characters_relationships()
+
+        # Load relationship field max length from event configuration
+        self.relationship_max_length = int(
+            get_event_config(
+                self.params["event"].id, "writing_relationship_length", default_value=10000, context=self.params
+            ),
+        )
+
+    def _characters_relationships(self) -> None:
+        """Set up character relationships data and widgets for editing."""
+        context = self.params
+
+        context["relationships"] = {}
+
+        with contextlib.suppress(ObjectDoesNotExist):
+            context["rel_tutorial"] = Feature.objects.get(slug="relationships").tutorial
+
+        context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
+        widget = EventCharacterS2WidgetUuid(attrs={"id": "new_rel_select"})
+        widget.set_event(context["event"])
+        context["new_rel"] = widget.render(name="new_rel_select", value="")
+
+        if not self.instance.pk:
+            return
+
+        relationships_by_character_uuid = {}
+
+        # Unified query for both direct and inverse relationships
+        all_relationships = Relationship.objects.filter(
+            Q(source=self.instance) | Q(target=self.instance)
+        ).select_related("source", "target")
+
+        for relationship in all_relationships:
+            if relationship.source == self.instance:
+                # This is a direct relationship (current character is source)
+                other_char = relationship.target
+                if other_char.uuid not in relationships_by_character_uuid:
+                    relationships_by_character_uuid[other_char.uuid] = {"char": other_char}
+                relationships_by_character_uuid[other_char.uuid]["direct"] = relationship.text
+            else:
+                # This is an inverse relationship (current character is target)
+                other_char = relationship.source
+                if other_char.uuid not in relationships_by_character_uuid:
+                    relationships_by_character_uuid[other_char.uuid] = {"char": other_char}
+                relationships_by_character_uuid[other_char.uuid]["inverse"] = relationship.text
+
+        sorted_relationships = sorted(
+            relationships_by_character_uuid.items(),
+            key=lambda character_entry: len(character_entry[1].get("direct", ""))
+            + len(character_entry[1].get("inverse", "")),
+            reverse=True,
+        )
+        context["relationships"] = dict(sorted_relationships)
 
     def _init_character(self) -> None:
         """Initialize character form fields based on features and event configuration.
@@ -385,7 +449,7 @@ class OrgaCharacterForm(CharacterForm):
         self._init_custom_fields()
 
         if "user_character" in self.params["features"]:
-            self.fields["player"].widget.set_association_id(self.params["association_id"])
+            self.configure_field_association("player", self.params["association_id"])
         else:
             self.delete_field("player")
 
@@ -394,10 +458,13 @@ class OrgaCharacterForm(CharacterForm):
         ):
             self.delete_field("status")
 
-        if "mirror" in self.fields:
-            characters_query = self.params["run"].event.get_elements(Character).all()
-            character_choices = [(character.id, character.name) for character in characters_query]
-            self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---")), *character_choices]
+        if get_event_config(self.params["event"].id, "casting_mirror", default_value=False, context=self.params):
+            if "mirror" in self.fields:
+                characters_query = self.params["run"].event.get_elements(Character).all()
+                character_choices = [(character.uuid, character.name) for character in characters_query]
+                self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---")), *character_choices]
+        else:
+            self.delete_field("mirror")
 
         # Add active field for campaign feature
         if "campaign" in self.params["features"]:
@@ -431,7 +498,7 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
             widget=EventPlotS2WidgetMulti,
         )
-        self.fields["plots"].widget.set_event(self.params["event"])
+        self.configure_field_event("plots", self.params["event"])
 
         self.plots = self.instance.get_plot_characters()
         self.initial["plots"] = [plot_character.plot_id for plot_character in self.plots]
@@ -461,17 +528,27 @@ class OrgaCharacterForm(CharacterForm):
             self.show_link.append(plot_field_id)
             self.add_char_finder.append(plot_field_id)
 
-            reverse_args = [self.params["run"].get_slug(), plot_character.plot_id]
+            reverse_args = [self.params["run"].get_slug(), plot_character.plot.uuid]
             self.field_link[plot_field_id] = reverse("orga_plots_edit", args=reverse_args)
 
             # if not first, add to ordering up
             if index != 0:
-                reverse_args = [self.params["run"].get_slug(), plot_character.id, "0"]
+                reverse_args = [
+                    self.params["run"].get_slug(),
+                    plot_character.plot.uuid,
+                    plot_character.character.uuid,
+                    "0",
+                ]
                 self.ordering_up[plot_field_id] = reverse("orga_plots_rels_order", args=reverse_args)
 
             # if not last, add to ordering down
             if index != total_plots - 1:
-                reverse_args = [self.params["run"].get_slug(), plot_character.id, "1"]
+                reverse_args = [
+                    self.params["run"].get_slug(),
+                    plot_character.plot.uuid,
+                    plot_character.character.uuid,
+                    "1",
+                ]
                 self.ordering_down[plot_field_id] = reverse("orga_plots_rels_order", args=reverse_args)
 
     def _save_plot(self, instance: Any) -> None:
@@ -524,7 +601,7 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
         )
 
-        self.initial["px_ability_list"] = list(self.instance.px_ability_list.values_list("pk", flat=True))
+        self.initial["px_ability_list"] = list(self.instance.px_ability_list.values_list("id", flat=True))
         self.show_link.append("id_px_ability_list")
 
         # delivery list
@@ -535,7 +612,7 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
         )
 
-        self.initial["px_delivery_list"] = list(self.instance.px_delivery_list.values_list("pk", flat=True))
+        self.initial["px_delivery_list"] = list(self.instance.px_delivery_list.values_list("id", flat=True))
         self.show_link.append("id_px_delivery_list")
 
     def _save_px(self, instance: Any) -> None:
@@ -569,7 +646,7 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
             label=_("Factions"),
         )
-        self.fields["factions_list"].widget.set_event(self.params["event"])
+        self.configure_field_event("factions_list", self.params["event"])
 
         self.show_available_factions = _("Show available factions")
 
@@ -577,9 +654,9 @@ class OrgaCharacterForm(CharacterForm):
             return
 
         # Initial factions values
-        self.initial["factions_list"] = []
-        for faction_data in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
-            self.initial["factions_list"].append(faction_data[0])
+        self.initial["factions_list"] = list(
+            self.instance.factions_list.order_by("number").values_list("id", flat=True)
+        )
 
     def _save_relationships(self, instance: Any) -> None:
         """Save character relationships from form data.
@@ -588,43 +665,45 @@ class OrgaCharacterForm(CharacterForm):
             instance: Character instance being saved
 
         """
-        if "relationships" not in self.params["features"]:
+        if "relationships" not in self.params["features"] or "relationships" not in self.params:
             return
 
-        chars_ids = self.params["event"].get_elements(Character).values_list("pk", flat=True)
+        uuid_to_id = dict(self.params["event"].get_elements(Character).values_list("uuid", "id"))
 
         rel_data = {k: v for k, v in self.data.items() if k.startswith("rel")}
         # Only process relationships if relationship fields are present in the form
         if not rel_data:
             return
         for key, value in rel_data.items():
-            match = re.match(r"rel_(\d+)", key)
+            match = re.match(r"rel_([a-zA-Z0-9]+)", key)
             if not match:
                 continue
-            ch_id = int(match.group(1))
+            ch_uuid = match.group(1)
             rel_type = "direct"
 
-            # check ch_id is in chars of the event
-            if ch_id not in chars_ids:
-                msg = f"char {ch_id} not recognized"
+            # check character uuid is in chars of the event
+            if ch_uuid not in uuid_to_id:
+                msg = f"char {ch_uuid} not recognized"
                 raise Http404(msg)
+
+            character_id = uuid_to_id[ch_uuid]
 
             # if value is empty
             if not value:
                 # if wasn't present, do nothing
-                if ch_id not in self.params["relationships"] or rel_type not in self.params["relationships"][ch_id]:
+                if ch_uuid not in self.params["relationships"] or rel_type not in self.params["relationships"][ch_uuid]:
                     continue
                 # else delete
-                rel = self._get_rel(ch_id, instance, rel_type)
+                rel = self._get_rel(character_id, instance, rel_type)
                 save_version(rel, TextVersionChoices.RELATIONSHIP, self.params["member"], to_delete=True)
                 rel.delete()
                 continue
 
             # if the value is present, and is the same as before, do nothing
             if (
-                ch_id in self.params["relationships"]
-                and rel_type in self.params["relationships"][ch_id]
-                and value == self.params["relationships"][ch_id][rel_type]
+                ch_uuid in self.params["relationships"]
+                and rel_type in self.params["relationships"][ch_uuid]
+                and value == self.params["relationships"][ch_uuid][rel_type]
             ):
                 continue
 
@@ -632,28 +711,18 @@ class OrgaCharacterForm(CharacterForm):
             # Use strip_tags to get plain text length from HTML content
             plain_text = strip_tags(value)
             if len(plain_text) > self.relationship_max_length:
-                msg = f"Relationship text for character #{ch_id} exceeds maximum length of {self.relationship_max_length} characters. Current length: {len(plain_text)}"
+                msg = f"Relationship text for character {ch_uuid} exceeds maximum length of {self.relationship_max_length} characters. Current length: {len(plain_text)}"
                 raise ValidationError(
                     msg,
                 )
 
-            rel = self._get_rel(ch_id, instance, rel_type)
+            rel = self._get_rel(character_id, instance, rel_type)
             rel.text = value
             rel.save()
 
     @staticmethod
     def _get_rel(character_id: int, instance: Any, relationship_type: str) -> Relationship:
-        """Get or create a relationship between characters based on type.
-
-        Args:
-            character_id: Character ID for the relationship
-            instance: Source or target instance depending on relationship_type
-            relationship_type: Either "direct" or reverse relationship type
-
-        Returns:
-            The relationship object
-
-        """
+        """Get or create a relationship between characters based on type."""
         # Create direct relationship (instance -> character)
         if relationship_type == "direct":
             (relationship, _created) = Relationship.objects.get_or_create(source_id=instance.pk, target_id=character_id)
@@ -710,16 +779,16 @@ class OrgaCharacterForm(CharacterForm):
             CharacterConfig.objects.filter(character=instance, name="inactive").delete()
 
 
-class OrgaWritingQuestionForm(MyForm):
+class OrgaWritingQuestionForm(BaseModelForm):
     """Form for OrgaWritingQuestion."""
 
     page_info = _("Manage form questions for writing elements")
 
-    page_title = _("Writing Question")
+    page_title = _("Writing Questions")
 
     class Meta:
         model = WritingQuestion
-        exclude: ClassVar[list] = ["order"]
+        exclude: ClassVar[list] = ["order", "applicable"]
         widgets: ClassVar[dict] = {
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
@@ -762,8 +831,6 @@ class OrgaWritingQuestionForm(MyForm):
 
         self._init_editable()
 
-        self._init_applicable()
-
         # remove visibility from plot
         if self.params["writing_typ"] == QuestionApplicable.PLOT:
             self.delete_field("visibility")
@@ -805,11 +872,10 @@ class OrgaWritingQuestionForm(MyForm):
             - Sets self.prevent_canc based on instance type length
         """
         # Get writing questions applicable to current writing type
-        writing_questions = self.params["event"].get_elements(WritingQuestion)
-        writing_questions = writing_questions.filter(applicable=self.params["writing_typ"])
+        writing_questions = get_cached_writing_questions(self.params["event"], self.params["writing_typ"])
 
         # Extract already used question types to avoid duplicates
-        already_used_types = list(writing_questions.values_list("typ", flat=True).distinct())
+        already_used_types = list({q["typ"] for q in writing_questions})
 
         # Handle existing instance - allow editing current type
         if self.instance.pk and self.instance.typ:
@@ -830,9 +896,10 @@ class OrgaWritingQuestionForm(MyForm):
                 if choice[0] not in ["name", "teaser", "text"] and choice[0] not in self.params["features"]:
                     continue
 
-            # Handle character type 'c' - requires 'px' feature
-            elif choice[0] == "c" and "px" not in self.params["features"]:
-                continue
+            # Handle character type 'c' - requires 'px_rules' config
+            elif choice[0] == "c":
+                if not get_event_config(self.params["event"].id, "px_rules", default_value=False):
+                    continue
 
             # Add valid choice to final list
             filtered_choices.append(choice)
@@ -859,35 +926,33 @@ class OrgaWritingQuestionForm(MyForm):
             if self.instance and self.instance.pk:
                 self.initial["editable"] = self.instance.get_editable()
 
-    def _init_applicable(self) -> None:
-        """Initialize the applicable field based on instance state."""
-        # Remove applicable field if instance already exists
-        if self.instance.pk:
-            del self.fields["applicable"]
-            return
-
-        # Hide applicable field and set default value for new instances
-        self.fields["applicable"].widget = forms.HiddenInput()
-        self.initial["applicable"] = self.params["writing_typ"]
-
     def clean_editable(self) -> str:
         """Join editable field values into comma-separated string."""
         return ",".join(self.cleaned_data["editable"])
 
+    def save(self, commit: bool = True) -> WritingQuestion:  # noqa: FBT001, FBT002
+        """Save form with applicable type from context for new instances."""
+        instance = super().save(commit=False)
+        # Only set applicable for new instances
+        if not instance.pk:
+            instance.applicable = self.params["writing_typ"]
+        if commit:
+            instance.save()
+        return instance
 
-class OrgaWritingOptionForm(MyForm):
+
+class OrgaWritingOptionForm(BaseModelForm):
     """Form for OrgaWritingOption."""
 
     page_info = _("Manage options in form questions for writing elements")
 
-    page_title = _("Writing option")
+    page_title = _("Writing options")
 
     class Meta:
         model = WritingOption
-        exclude: ClassVar[list] = ["order"]
+        exclude: ClassVar[list] = ["order", "question"]
         widgets: ClassVar[dict] = {
             "requirements": EventWritingOptionS2WidgetMulti,
-            "question": forms.HiddenInput(),
             "tickets": TicketS2WidgetMulti,
         }
 
@@ -904,18 +969,22 @@ class OrgaWritingOptionForm(MyForm):
         """
         super().__init__(*args, **kwargs)
 
-        if "question_id" in self.params:
-            self.initial["question"] = self.params["question_id"]
-
         if "wri_que_max" not in self.params["features"]:
             self.delete_field("max_available")
 
         if "wri_que_tickets" not in self.params["features"]:
             self.delete_field("tickets")
         else:
-            self.fields["tickets"].widget.set_event(self.params["event"])
+            self.configure_field_event("tickets", self.params["event"])
 
         if "wri_que_requirements" not in self.params["features"]:
             self.delete_field("requirements")
         else:
-            self.fields["requirements"].widget.set_event(self.params["event"])
+            self.configure_field_event("requirements", self.params["event"])
+
+    def save(self, commit: bool = True) -> WritingOption:  # noqa: FBT001, FBT002
+        """Save the form instance, setting question for new instances."""
+        if not self.instance.pk and "question" in self.params:
+            self.instance.question = self.params["question"]
+
+        return super().save(commit=commit)

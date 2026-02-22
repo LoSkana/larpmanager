@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
+import re
 from typing import Any, ClassVar
 
 from django import forms
@@ -29,8 +30,9 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
+from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.association import ExePreferencesForm
-from larpmanager.forms.base import MyCssForm, MyForm
+from larpmanager.forms.base import BaseModelCssForm, BaseModelForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
@@ -41,6 +43,7 @@ from larpmanager.forms.utils import (
     EventS2Widget,
     SlugInput,
     TemplateS2Widget,
+    WritingTinyMCE,
     prepare_permissions_role,
     remove_choice,
     save_permissions_role,
@@ -54,11 +57,13 @@ from larpmanager.models.event import (
     EventText,
     EventTextType,
     ProgressStep,
+    RegistrationStatus,
     Run,
 )
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
+    QuestionVisibility,
     WritingQuestion,
     WritingQuestionType,
     _get_writing_elements,
@@ -80,19 +85,7 @@ class EventCharactersPdfForm(ConfigForm):
         fields = ()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the instance with cancellation prevention.
-
-        Initializes the parent class with all provided arguments and sets up
-        the instance to prevent cancellation operations.
-
-        Args:
-            *args: Variable length argument list passed to parent class.
-            **kwargs: Arbitrary keyword arguments passed to parent class.
-
-        Returns:
-            None
-
-        """
+        """Initialize the instance with cancellation prevention."""
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
@@ -128,7 +121,7 @@ class EventCharactersPdfForm(ConfigForm):
         self.add_configs("footer_content", ConfigType.TEXTAREA, _("Footer"), _("Insert the html code for the footer"))
 
 
-class OrgaEventForm(MyForm):
+class OrgaEventForm(BaseModelForm):
     """Form for managing general event settings and basic configuration."""
 
     page_title = _("Event")
@@ -152,12 +145,11 @@ class OrgaEventForm(MyForm):
             "max_waiting",
             "max_filler",
             "website",
-            "register_link",
             "parent",
             "association",
         )
 
-        widgets: ClassVar[dict] = {"slug": SlugInput, "parent": CampaignS2Widget}
+        widgets: ClassVar[dict] = {"slug": SlugInput, "parent": CampaignS2Widget, "description": WritingTinyMCE}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize event form with field configuration based on context.
@@ -195,19 +187,19 @@ class OrgaEventForm(MyForm):
         # Check each display-related feature and mark fields for removal if disabled
         dl = [
             s
-            for s in ["visible", "website", "tagline", "where", "authors", "genre", "register_link"]
-            if s not in self.params["features"]
+            for s in ["visible", "website", "tagline", "where", "authors", "genre"]
+            if s not in self.params.get("features")
         ]
 
         # Initialize campaign parent selection and add to deletion list if disabled
         self.init_campaign(dl)
 
         # Add waiting list configuration field if feature is disabled
-        if "waiting" not in self.params["features"]:
+        if "waiting" not in self.params.get("features"):
             dl.append("max_waiting")
 
         # Add filler list configuration field if feature is disabled
-        if "filler" not in self.params["features"]:
+        if "filler" not in self.params.get("features"):
             dl.append("max_filler")
 
         # Remove all marked fields from the form
@@ -217,20 +209,20 @@ class OrgaEventForm(MyForm):
     def init_campaign(self, disabled_fields: list) -> None:
         """Initialize campaign field by setting association and exclusions."""
         # Set association for parent widget and exclude current instance if editing
-        self.fields["parent"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("parent", self.params.get("association_id"))
         if self.instance and self.instance.pk:
             self.fields["parent"].widget.set_exclude(self.instance.pk)
 
         # Remove parent field if campaign feature disabled or no parent options available
-        if "campaign" not in self.params["features"] or not self.fields["parent"].widget.get_queryset().count():
+        if "campaign" not in self.params.get("features") or not self.fields["parent"].widget.get_queryset().count():
             disabled_fields.append("parent")
             return
 
     def clean_slug(self) -> str:
         """Validate event slug for uniqueness and reserved word conflicts.
 
-        Ensures that the slug is unique among all events (excluding current instance
-        during updates) and is not a reserved static prefix.
+        Ensures that the slug is unique among all events within the association
+        (excluding current instance during updates) and is not a reserved static prefix.
 
         Returns:
             str: The validated slug value.
@@ -242,10 +234,10 @@ class OrgaEventForm(MyForm):
         data = self.cleaned_data["slug"]
         logger.debug("Validating event slug: %s", data)
 
-        # Check if slug is already used by another event
-        lst = Event.objects.filter(slug=data)
+        # Check if slug is already used by another event in this association
+        lst = Event.objects.filter(association_id=self.params.get("association_id"), slug=data)
         if self.instance is not None and self.instance.pk is not None:
-            lst.exclude(pk=self.instance.pk)
+            lst = lst.exclude(pk=self.instance.pk)
         if lst.count() > 0:
             msg = "Slug already used!"
             raise ValidationError(msg)
@@ -279,15 +271,7 @@ class OrgaFeatureForm(FeatureForm):
         self._init_features(is_association=False)
 
     def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
-        """Save the form instance and update event features cache.
-
-        Args:
-            commit: Whether to save the instance to database.
-
-        Returns:
-            The saved EventConfig instance.
-
-        """
+        """Save the form instance and update event features cache."""
         # Save form without committing to database yet
         instance: Event = super().save(commit=False)
 
@@ -371,22 +355,22 @@ class OrgaConfigForm(ConfigForm):
 
     def set_config_gallery(self) -> None:
         """Configure gallery settings for event forms."""
-        if "character" not in self.params["features"]:
+        if "character" not in self.params.get("features"):
             return
 
         self.set_section("gallery", _("Gallery"))
 
-        label = _("Request login")
-        help_text = _("If checked, the gallery will not be displayed to those not logged in to the system")
+        label = _("Require login")
+        help_text = _("If checked, the characters will not be displayed to those not logged in to the system")
         self.add_configs("gallery_hide_login", ConfigType.BOOL, label, help_text)
 
-        label = _("Request registration")
+        label = _("Require registration")
         help_text = _(
-            "If checked, the subscribers' gallery will not be displayed to those who are not registered to the event",
+            "If checked, the characters will not be displayed to those who are not registered to the event",
         )
         self.add_configs("gallery_hide_signup", ConfigType.BOOL, label, help_text)
 
-        if "character" in self.params["features"]:
+        if "character" in self.params.get("features"):
             label = _("Hide unassigned characters")
             help_text = _(
                 "If checked, does not show characters in the gallery who have not been assigned a participant",
@@ -410,7 +394,7 @@ class OrgaConfigForm(ConfigForm):
         how registration forms are displayed and processed.
         """
         # Create the registration configuration section
-        self.set_section("reg_form", _("Registrations"))
+        self.set_section("registrations", _("Registrations"))
 
         # Configure table grouping behavior
         grouping_label = _("Disable grouping")
@@ -418,11 +402,6 @@ class OrgaConfigForm(ConfigForm):
             "If checked, all registrations are displayed in a single table rather than being separated by type",
         )
         self.add_configs("registration_no_grouping", ConfigType.BOOL, grouping_label, grouping_help_text)
-
-        # Add unique code generation for registrations
-        unique_code_label = _("Unique code")
-        unique_code_help_text = _("If checked, adds to all registrations an unique code to reference them")
-        self.add_configs("registration_unique_code", ConfigType.BOOL, unique_code_label, unique_code_help_text)
 
         # Configure staff visibility permissions for registration questions
         allowed_label = _("Allowed")
@@ -482,7 +461,7 @@ class OrgaConfigForm(ConfigForm):
         Sets up configuration fields for character form behavior including
         visibility options, maximum selections, ticket requirements, and dependencies.
         """
-        if "character" in self.params["features"]:
+        if "character" in self.params.get("features"):
             self.set_section("char_form", _("Character form"))
 
             label = _("Hide not available")
@@ -504,14 +483,8 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
     def set_config_structure(self) -> None:
-        """Configure structural event settings including pre-registration, mail server, and cover options."""
-        if "pre_register" in self.params["features"]:
-            self.set_section("pre_reg", _("Pre-registration"))
-            field_label = _("Active")
-            field_help_text = _("If checked, makes pre-registration for this event available")
-            self.add_configs("pre_register_active", ConfigType.BOOL, field_label, field_help_text)
-
-        if "custom_mail" in self.params["features"]:
+        """Configure structural event settings including mail server and cover options."""
+        if "custom_mail" in self.params.get("features"):
             self.set_section("custom_mail_server", _("Customised mail server"))
             field_help_text = ""
 
@@ -530,7 +503,7 @@ class OrgaConfigForm(ConfigForm):
             field_label = _("Password of account")
             self.add_configs("mail_server_host_password", ConfigType.CHAR, field_label, field_help_text)
 
-        if "cover" in self.params["features"]:
+        if "cover" in self.params.get("features"):
             self.set_section("cover", _("Character cover"))
             field_label = _("Desalt thumbnail")
             field_help_text = _("If checked, shows the original image in the cover, not the thumbnail version")
@@ -542,7 +515,7 @@ class OrgaConfigForm(ConfigForm):
         Sets up background writing features, character story elements,
         and writing deadline configurations for character development.
         """
-        if "character" in self.params["features"]:
+        if "character" in self.params.get("features"):
             self.set_section("writing", _("Writing"))
 
             config_label = _("Title")
@@ -571,7 +544,7 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_field_visibility", ConfigType.BOOL, config_label, config_help_text)
 
-            if "relationships" in self.params["features"]:
+            if "relationships" in self.params.get("features"):
                 config_label = _("Relationships max length")
                 config_help_text = _("Set maximum length on character relationships (default 10000 characters)")
                 self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
@@ -617,11 +590,11 @@ class OrgaConfigForm(ConfigForm):
         and player-managed character creation settings.
 
         The configuration sections are conditionally created based on available features
-        in self.params["features"]. Each section contains relevant boolean, integer,
+        in self.params.get("features"). Each section contains relevant boolean, integer,
         and other configuration options with appropriate labels and help text.
 
         Note:
-            Requires self.params["features"] to contain feature flags and access to
+            Requires self.params.get("features") to contain feature flags and access to
             self.set_section() and self.add_configs() methods.
 
         """
@@ -666,13 +639,44 @@ class OrgaConfigForm(ConfigForm):
                 initial_experience_points_help_text,
             )
 
+            # Ability templates configuration
+            ability_templates_label = _("Ability templates")
+            ability_templates_help_text = _(
+                "If checked, enables ability templates that can be reused across multiple abilities",
+            )
+            self.add_configs("px_templates", ConfigType.BOOL, ability_templates_label, ability_templates_help_text)
+
+            # Rules configuration
+            rules_label = _("Rules")
+            rules_help_text = _(
+                "If checked, enables rules for computed character fields based on abilities",
+            )
+            self.add_configs("px_rules", ConfigType.BOOL, rules_label, rules_help_text)
+
+            # Modifiers configuration
+            modifiers_label = _("Modifiers")
+            modifiers_help_text = _(
+                "If checked, enables modifiers that can adjust ability costs based on prerequisites and requirements",
+            )
+            self.add_configs("px_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
+
+            # Auto buy configuration
+            auto_buy_label = _("Auto buy")
+            auto_buy_help_text = _(
+                "If checked, characters automatically and repeatedly acquire the most expensive available ability "
+                "with their remaining XP, until no more can be bought.",
+            )
+            self.add_configs("px_auto_buy", ConfigType.BOOL, auto_buy_label, auto_buy_help_text)
+
         # Configure player character editor if user_character feature is enabled
         if "user_character" in self.params["features"]:
             self.set_section("user_character", _("Player editor"))
 
             # Maximum character limit configuration
             max_characters_label = _("Maximum number")
-            max_characters_help_text = _("Maximum number of characters the player can create")
+            max_characters_help_text = _(
+                "Maximum number of characters the player can create (default=0, no creation allowed)"
+            )
             self.add_configs("user_character_max", ConfigType.INT, max_characters_label, max_characters_help_text)
 
             # Character approval process configuration
@@ -862,20 +866,22 @@ class OrgaConfigForm(ConfigForm):
                 disable_provisional_help_text,
             )
 
-        # Configure token and credit system controls
-        if "token_credit" in self.params["features"]:
-            self.set_section("token_credit", _("Tokens / Credits"))
+        if "tokens" in self.params["features"]:
+            self.set_section("tokens", _("Tokens"))
 
             # Token disabling option for this specific event
             disable_tokens_label = _("Disable Tokens")
             disable_tokens_help_text = _("If checked, no tokens will be used in the entries of this event")
-            self.add_configs("token_credit_disable_t", ConfigType.BOOL, disable_tokens_label, disable_tokens_help_text)
+            self.add_configs("tokens_disable", ConfigType.BOOL, disable_tokens_label, disable_tokens_help_text)
+
+        if "credits" in self.params["features"]:
+            self.set_section("credits", _("Credits"))
 
             # Credit disabling option for this specific event
             disable_credits_label = _("Disable credits")
             disable_credits_help_text = _("If checked, no credits will be used in the entries for this event")
             self.add_configs(
-                "token_credit_disable_c",
+                "credits_disable",
                 ConfigType.BOOL,
                 disable_credits_label,
                 disable_credits_help_text,
@@ -995,12 +1001,14 @@ class OrgaConfigForm(ConfigForm):
             )
 
 
-class OrgaAppearanceForm(MyCssForm):
+class OrgaAppearanceForm(BaseModelCssForm):
     """Form for customizing event appearance and styling."""
 
     page_title = _("Event Appearance")
 
     page_info = _("Manage appearance and presentation of the event")
+
+    load_js: ClassVar[list] = ["appearance-colors"]
 
     class Meta:
         model = Event
@@ -1040,7 +1048,7 @@ class OrgaAppearanceForm(MyCssForm):
 
         # Delete unused fields from form
         for m in dl:
-            del self.fields[m]
+            self.delete_field(m)
 
     def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save the form and generate a unique CSS code for the skin."""
@@ -1054,32 +1062,19 @@ class OrgaAppearanceForm(MyCssForm):
 
     @staticmethod
     def get_input_css() -> str:
-        """Get the CSS input field name.
-
-        Returns:
-            str: CSS input field identifier
-
-        """
+        """Get the CSS input field name."""
         return "event_css"
 
     @staticmethod
     def get_css_path(event_instance: Event) -> str:
-        """Generate CSS file path for event styling.
-
-        Args:
-            event_instance: Event instance
-
-        Returns:
-            str: Path to CSS file
-
-        """
+        """Generate CSS file path for event styling."""
         return f"css/{event_instance.association.slug}_{event_instance.slug}_{event_instance.css_code}.css"
 
 
-class OrgaEventTextForm(MyForm):
+class OrgaEventTextForm(BaseModelForm):
     """Form for managing event-specific text content and messages."""
 
-    page_title = _("Texts")
+    page_title = _("Event Texts")
 
     page_info = _("Manage event texts")
 
@@ -1177,7 +1172,7 @@ class OrgaEventTextForm(MyForm):
         return cleaned_data
 
 
-class OrgaEventRoleForm(MyForm):
+class OrgaEventRoleForm(BaseModelForm):
     """Form for managing event access roles and permissions."""
 
     page_title = _("Roles")
@@ -1195,7 +1190,7 @@ class OrgaEventRoleForm(MyForm):
         """Initialize form and configure members widget with association context."""
         super().__init__(*args, **kwargs)
         # Configure members widget with association ID from params
-        self.fields["members"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("members", self.params["association_id"])
         # Prepare permission-based role selection for event permissions
         prepare_permissions_role(self, EventPermission)
 
@@ -1206,10 +1201,10 @@ class OrgaEventRoleForm(MyForm):
         return instance
 
 
-class OrgaEventButtonForm(MyForm):
+class OrgaEventButtonForm(BaseModelForm):
     """Form for editing event navigation buttons."""
 
-    page_title = _("Navigation")
+    page_title = _("Event Navigation")
 
     page_info = _("Manage event navigation buttons")
 
@@ -1250,7 +1245,7 @@ class OrgaRunForm(ConfigForm):
 
         dl = []
 
-        if not self.instance.pk or not self.instance.event:
+        if not self.params.get("is_creation", False) and (not self.instance.pk or not self.instance.event):
             event_field = forms.ChoiceField(
                 required=True,
                 choices=[
@@ -1260,43 +1255,95 @@ class OrgaRunForm(ConfigForm):
             )
             self.fields = {"event": event_field} | self.fields
             self.fields["event"].widget = EventS2Widget()
-            self.fields["event"].widget.set_association_id(self.params["association_id"])
+            self.configure_field_association("event", self.params["association_id"])
             self.fields["event"].help_text = _("Select the event of this new session")
             self.choose_event = True
             self.page_info = _("Manage new session for an existing event")
         else:
             self.page_info = _("Manage date settings for this event")
+            self.delete_field("event")
 
         # do not show cancelled or done options for development if date are not set
-        if not self.instance.pk or not self.instance.start or not self.instance.end:
-            self.fields["development"].choices = [
-                (choice.value, choice.label)
-                for choice in DevelopStatus
-                if choice not in [DevelopStatus.CANC, DevelopStatus.DONE]
-            ]
-        status_text = {
-            DevelopStatus.START: _("Not visible to users"),
-            DevelopStatus.SHOW: _("Visible in the homepage"),
-            DevelopStatus.DONE: _("Concluded and archived"),
-            DevelopStatus.CANC: _("Not active anymore"),
-        }
-        self.fields["development"].help_text = ", ".join(
-            f"<b>{label}</b>: {status_text[DevelopStatus(value)]}"
-            for value, label in self.fields["development"].choices
-        )
+        if "development" in self.fields:
+            if not self.instance.pk or not self.instance.start or not self.instance.end:
+                self.fields["development"].choices = [
+                    (choice.value, choice.label)
+                    for choice in DevelopStatus
+                    if choice not in [DevelopStatus.CANC, DevelopStatus.DONE]
+                ]
+            status_text = {
+                DevelopStatus.START: _("Not visible to users"),
+                DevelopStatus.SHOW: _("Visible in the homepage"),
+                DevelopStatus.DONE: _("Concluded and archived"),
+                DevelopStatus.CANC: _("Not active anymore"),
+            }
+            self.fields["development"].help_text = ", ".join(
+                f"<b>{label}</b>: {status_text[DevelopStatus(value)]}"
+                for value, label in self.fields["development"].choices
+            )
 
-        dl.extend(
-            [
-                s
-                for s in ["registration_open", "registration_secret"]
-                if not self.instance.pk or not self.instance.event or s not in self.params["features"]
-            ]
-        )
+        # Configure registration_status field
+        self._configure_registration_status()
+
+        # Handle registration_secret visibility
+        if not self.instance.pk or not self.instance.event or "registration_secret" not in self.params["features"]:
+            dl.append("registration_secret")
 
         for s in dl:
-            del self.fields[s]
+            self.delete_field(s)
 
         self.show_sections = True
+
+    def _configure_registration_status(self) -> None:
+        """Configure registration_status field with dynamic choices and help text."""
+        if "registration_status" not in self.fields:
+            return
+
+        # Build choices - PRE only available if pre_register feature is active globally
+        choices = [
+            (RegistrationStatus.CLOSED.value, RegistrationStatus.CLOSED.label),
+            (RegistrationStatus.OPEN.value, RegistrationStatus.OPEN.label),
+        ]
+
+        # Add PRE only if pre_register feature is active
+        if "pre_register" in self.params.get("features", []):
+            choices.append((RegistrationStatus.PRE.value, RegistrationStatus.PRE.label))
+
+        choices.extend(
+            [
+                (RegistrationStatus.EXTERNAL.value, RegistrationStatus.EXTERNAL.label),
+                (RegistrationStatus.FUTURE.value, RegistrationStatus.FUTURE.label),
+            ]
+        )
+
+        self.fields["registration_status"].choices = choices
+
+        # Build help text explaining each status
+        status_help = {
+            RegistrationStatus.CLOSED: _("Registrations are not available"),
+            RegistrationStatus.OPEN: _("Registrations are open for participants"),
+            RegistrationStatus.PRE: _("Pre-registration is available"),
+            RegistrationStatus.EXTERNAL: _("Redirects to an external registration link"),
+            RegistrationStatus.FUTURE: _("Registrations will open at the specified date and time"),
+        }
+
+        help_parts = []
+        for value, label in choices:
+            status_enum = RegistrationStatus(value)
+            help_parts.append(f"<b>{label}</b>: {status_help[status_enum]}")
+
+        self.fields["registration_status"].help_text = ", ".join(help_parts)
+
+        # Add data attributes for JavaScript conditional display
+        self.fields["registration_status"].widget.attrs["data-conditional-controller"] = "registration_status"
+        if "registration_open" in self.fields:
+            self.fields["registration_open"].widget.attrs["data-conditional-show"] = RegistrationStatus.FUTURE.value
+            self.fields["registration_open"].custom_class = "hide"
+            self.fields["registration_open"].custom_style = "display: none"
+        if "register_link" in self.fields:
+            self.fields["register_link"].widget.attrs["data-conditional-show"] = RegistrationStatus.EXTERNAL.value
+            self.fields["register_link"].custom_class = "hide"
+            self.fields["registration_open"].custom_style = "display: none"
 
     def set_configs(self) -> None:  # noqa: C901 - Complex form configuration with feature-dependent field setup
         """Configure event-specific form fields and sections.
@@ -1322,17 +1369,19 @@ class OrgaRunForm(ConfigForm):
         basic_types = BaseQuestionType.get_basic_types()
         basic_types.add(WritingQuestionType.COMPUTED)
         self.set_section("visibility", _("Visibility"))
-        for writing_element_key, writing_element_label, _writing_element_type in writing_elements:
-            if "writing_fields" not in self.params or writing_element_key not in self.params["writing_fields"]:
-                continue
+        for writing_element_key, writing_element_label, writing_element_type in writing_elements:
             if writing_element_key in ["plot", "prologue"]:
                 continue
-            questions = self.params["writing_fields"][writing_element_key]["questions"]
+            questions = [
+                q
+                for q in get_cached_writing_questions(self.params["event"], writing_element_type)
+                if q["visibility"] != QuestionVisibility.HIDDEN
+            ]
             field_choices = []
-            for question_field in questions.values():
+            for question_field in questions:
                 question_type = question_field["typ"]
                 if question_type in basic_types:
-                    question_type = str(question_field["id"])
+                    question_type = str(question_field["uuid"])
 
                 field_choices.append((question_type, question_field["name"]))
 
@@ -1391,21 +1440,36 @@ class OrgaRunForm(ConfigForm):
         cleaned_data = super().clean()
 
         # Validate end date is present
-        if "end" not in cleaned_data or not cleaned_data["end"]:
+        end = cleaned_data.get("end")
+        if "end" in self.fields and not end:
             raise ValidationError({"end": _("You need to define the end date!")})
 
         # Validate start date is present
-        if "start" not in cleaned_data or not cleaned_data["start"]:
+        start = cleaned_data.get("start")
+        if "start" in self.fields and not start:
             raise ValidationError({"start": _("You need to define the start date!")})
 
         # Ensure end date is not before start date
-        if cleaned_data["end"] < cleaned_data["start"]:
+        if start and end and end < start:
             raise ValidationError({"end": _("End date cannot be before start date!")})
+
+        # Validate registration status requirements
+        registration_status = cleaned_data.get("registration_status")
+
+        if registration_status == RegistrationStatus.EXTERNAL:
+            register_link = cleaned_data.get("register_link")
+            if not register_link:
+                raise ValidationError({"register_link": _("Value required") + "!"})
+
+        if registration_status == RegistrationStatus.FUTURE:
+            registration_open = cleaned_data.get("registration_open")
+            if not registration_open:
+                raise ValidationError({"registration_open": _("Value required") + "!"})
 
         return cleaned_data
 
 
-class OrgaProgressStepForm(MyForm):
+class OrgaProgressStepForm(BaseModelForm):
     """Form for managing event progression steps."""
 
     page_title = _("Progression")
@@ -1418,14 +1482,10 @@ class OrgaProgressStepForm(MyForm):
 class ExeEventForm(OrgaEventForm):
     """Extended event form for executors with template support."""
 
+    page_title = _("Events")
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize ExeEventForm with template event selection.
-
-        Args:
-            *args: Variable length argument list
-            **kwargs: Arbitrary keyword arguments
-
-        """
+        """Initialize ExeEventForm with template event selection."""
         super().__init__(*args, **kwargs)
 
         if "template" in self.params["features"] and not self.instance.pk:
@@ -1440,7 +1500,7 @@ class ExeEventForm(OrgaEventForm):
                 widget=TemplateS2Widget(),
             )
 
-            self.fields["template_event"].widget.set_association_id(self.params["association_id"])
+            self.configure_field_association("template_event", self.params["association_id"])
 
             if qs.count() == 1:
                 self.initial["template_event"] = qs.first()
@@ -1525,13 +1585,7 @@ class ExeTemplateRolesForm(OrgaEventRoleForm):
     """Form for managing template event roles with optional members."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize template roles form with optional member requirement.
-
-        Args:
-            *args: Variable length argument list
-            **kwargs: Arbitrary keyword arguments
-
-        """
+        """Initialize template roles form with optional member requirement."""
         super().__init__(*args, **kwargs)
         self.fields["members"].required = False
 
@@ -1541,7 +1595,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
     page_title = _("Quick Setup")
 
-    page_info = _("Manage quick setup of the most important settings for your new event")
+    page_info = _("You are choosing the most common features to activate for your event")
 
     class Meta:
         model = Event
@@ -1587,11 +1641,6 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
         self.setup.update(
             {
-                "registration_open": (
-                    True,
-                    _("Registration opening date"),
-                    _("Do you want to open registrations at a specific date and time instead of immediately"),
-                ),
                 "registration_secret": (
                     True,
                     _("Early registration link"),
@@ -1622,6 +1671,73 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
         self.init_fields(get_event_features(self.instance.pk))
 
+    def clean_registration_secret(self) -> str:
+        """Validate that registration_secret only contains URL slug-safe characters."""
+        value = self.cleaned_data.get("registration_secret", "")
+        if value and not re.match(r"^[-a-zA-Z0-9_]+$", value):
+            raise ValidationError(
+                _("The secret code may only contain letters (a-z, A-Z), digits, hyphens and underscores.")
+            )
+        return value
+
+
+class OrgaRunDatesForm(OrgaRunForm):
+    """Form for quick editing of run dates in modal."""
+
+    class Meta(OrgaRunForm.Meta):
+        model = Run
+        fields = ("start", "end")
+        widgets: ClassVar[dict] = {
+            "start": DatePickerInput,
+            "end": DatePickerInput,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize dates form with minimal fields."""
+        super().__init__(*args, **kwargs)
+        self.show_sections = False
+        self.main_class = ""
+
+    def set_configs(self) -> None:
+        """Override to disable config sections for quick edit form."""
+
+
+class OrgaRunDevelopmentForm(OrgaRunForm):
+    """Form for quick editing of run development status in modal."""
+
+    class Meta(OrgaRunForm.Meta):
+        model = Run
+        fields = ("development",)
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize development status form with minimal fields."""
+        super().__init__(*args, **kwargs)
+        self.show_sections = False
+        self.main_class = ""
+
+    def set_configs(self) -> None:
+        """Override to disable config sections for quick edit form."""
+
+
+class OrgaRunRegistrationForm(OrgaRunForm):
+    """Form for quick editing of run registration status in modal."""
+
+    class Meta(OrgaRunForm.Meta):
+        model = Run
+        fields = ("registration_status", "registration_open", "register_link")
+        widgets: ClassVar[dict] = {
+            "registration_open": DateTimePickerInput,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize registration status form with minimal fields."""
+        super().__init__(*args, **kwargs)
+        self.show_sections = False
+        self.main_class = ""
+
+    def set_configs(self) -> None:
+        """Override to disable config sections for quick edit form."""
+
 
 class OrgaPreferencesForm(ExePreferencesForm):
     """Form for setting event organizer preferences and field visibility."""
@@ -1636,7 +1752,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
         basic_question_types = BaseQuestionType.get_basic_types()
         event_id = self.params["event"].id
 
-        self.set_section("open", "Default fields")
+        self.set_section("open", _("Default fields"))
 
         help_text = _("Select which fields should open automatically when the list is displayed")
 
@@ -1680,7 +1796,6 @@ class OrgaPreferencesForm(ExePreferencesForm):
             ("", "#load_accounting", _("Accounting")),
             ("", "email", _("Email")),
             ("", "date", _("Chronology")),
-            ("unique_code", "special_cod", _("Unique code")),
             ("additional_tickets", "additionals", _("Additional")),
             ("gift", "gift", _("Gift")),
             ("membership", "membership", _("Member")),
@@ -1702,12 +1817,12 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra_config_fields.extend(
                 [
                     (
-                        f".lq_{field_id}",
-                        registration_field.name
-                        if len(registration_field.name) <= field_name_max_length
-                        else registration_field.name[: field_name_max_length - 5] + " [...]",
+                        f".lq_{field_uuid}",
+                        registration_field["name"]
+                        if len(registration_field["name"]) <= field_name_max_length
+                        else registration_field["name"][: field_name_max_length - 5] + " [...]",
                     )
-                    for field_id, registration_field in registration_fields.items()
+                    for field_uuid, registration_field in registration_fields.items()
                 ],
             )
 
@@ -1742,10 +1857,6 @@ class OrgaPreferencesForm(ExePreferencesForm):
         if feature_mapping.get(writing_section[0]) not in self.params["features"]:
             return
 
-        # Verify writing fields exist for this section
-        if "writing_fields" not in self.params or writing_section[0] not in self.params["writing_fields"]:
-            return
-
         # Check user permissions for this writing section
         if not has_event_permission(
             self.params["request"],
@@ -1756,7 +1867,8 @@ class OrgaPreferencesForm(ExePreferencesForm):
             return
 
         # Extract field configurations and prepare extra options
-        section_fields = self.params["writing_fields"][writing_section[0]]["questions"]
+        applicable = QuestionApplicable.get_applicable(writing_section[0])
+        section_fields = get_cached_writing_questions(self.params["event"], applicable)
         extra_config_options = []
 
         # Compile basic field configurations
@@ -1764,35 +1876,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
         # Add character-specific configuration options
         if writing_section[0] == "character":
-            # Add player field if character limit is set
-            if get_event_config(self.params["event"].id, "user_character_max", default_value=0, context=self.params):
-                extra_config_options.append(("player", _("Player")))
-
-            # Add status field if character approval is enabled
-            if get_event_config(
-                self.params["event"].id, "user_character_approval", default_value=False, context=self.params
-            ):
-                extra_config_options.append(("status", _("Status")))
-
-            # Define character feature fields with their config keys and labels
-            feature_fields = [
-                ("px", "px", _("XP")),
-                ("plot", "plots", _("Plots")),
-                ("relationships", "relationships", _("Relationships")),
-                ("speedlarp", "speedlarp", _("Speedlarp")),
-                ("prologue", "prologues", _("Prologue")),
-            ]
-
-            # Add faction field if faction feature is enabled
-            if "faction" in self.params["features"]:
-                available_questions = self.params["event"].get_elements(WritingQuestion)
-                faction_question = available_questions.get(
-                    applicable=QuestionApplicable.CHARACTER,
-                    typ=WritingQuestionType.FACTIONS,
-                )
-                feature_fields.insert(0, ("faction", f"q_{faction_question.id}", _("Factions")))
-
-            self.add_feature_extra(extra_config_options, feature_fields)
+            self.character_configs(extra_config_options)
 
         # Add characters field for faction and plot sections
         elif writing_section[0] in ["faction", "plot"]:
@@ -1814,21 +1898,46 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra_data=extra_config_options,
         )
 
+    def character_configs(self, extra_config_options: list) -> None:
+        """Add configs relative to characters."""
+        # Add player field if character limit is set
+        if get_event_config(self.params["event"].id, "user_character_max", default_value=0, context=self.params):
+            extra_config_options.append(("player", _("Player")))
+
+        # Add status field if character approval is enabled
+        if get_event_config(
+            self.params["event"].id, "user_character_approval", default_value=False, context=self.params
+        ):
+            extra_config_options.append(("status", _("Status")))
+
+        # Define character feature fields with their config keys and labels
+        feature_fields = [
+            ("px", "px", _("XP")),
+            ("plot", "plots", _("Plots")),
+            ("relationships", "relationships", _("Relationships")),
+            ("speedlarp", "speedlarp", _("Speedlarp")),
+            ("prologue", "prologues", _("Prologue")),
+        ]
+
+        # Add faction field if faction feature is enabled
+        if "faction" in self.params["features"]:
+            questions = get_cached_writing_questions(self.params["event"], QuestionApplicable.CHARACTER)
+            try:
+                faction_question = next(q for q in questions if q["typ"] == WritingQuestionType.FACTIONS)
+            except StopIteration:
+                raise WritingQuestion.DoesNotExist from None
+            feature_fields.insert(0, ("faction", f"q_{faction_question['uuid']}", _("Factions")))
+
+        self.add_feature_extra(extra_config_options, feature_fields)
+
     @staticmethod
-    def _compile_configs(basic_question_types: set, compiled_options: list, field_definitions: dict) -> None:
-        """Compile configuration options from field definitions.
-
-        Args:
-            basic_question_types: Set of basic question types
-            compiled_options: List to append compiled configurations
-            field_definitions: Dictionary of field definitions
-
-        """
-        for field in field_definitions.values():
+    def _compile_configs(basic_question_types: set, compiled_options: list, field_definitions: list) -> None:
+        """Compile configuration options from field definitions."""
+        for field in field_definitions:
             if field["typ"] == "name":
                 continue
 
-            toggle_key = f".lq_{field['id']}" if field["typ"] in basic_question_types else f"q_{field['id']}"
+            toggle_key = f".lq_{field['uuid']}" if field["typ"] in basic_question_types else f"q_{field['uuid']}"
 
             compiled_options.append((toggle_key, field["name"]))
 

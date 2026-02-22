@@ -25,23 +25,27 @@ from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.db.models import Q, QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.character import (
     get_event_cache_all,
     get_writing_element_fields,
+    get_writing_element_fields_batch,
 )
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
-from larpmanager.cache.registration import get_reg_counts
+from larpmanager.cache.question import get_writing_field_names
+from larpmanager.cache.registration import get_registration_counts, get_registration_tickets
 from larpmanager.models.accounting import PaymentInvoice, PaymentType
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -61,7 +65,6 @@ from larpmanager.models.member import MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
-    RegistrationTicket,
     TicketTier,
 )
 from larpmanager.models.writing import (
@@ -71,8 +74,9 @@ from larpmanager.models.writing import (
     FactionType,
 )
 from larpmanager.utils.auth.admin import is_lm_admin
+from larpmanager.utils.auth.permission import has_association_permission
 from larpmanager.utils.core.base import get_context, get_event, get_event_context
-from larpmanager.utils.core.common import get_element
+from larpmanager.utils.core.common import get_coming_runs, get_element
 from larpmanager.utils.core.exceptions import HiddenError
 from larpmanager.utils.users.registration import registration_status
 
@@ -103,17 +107,33 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
         Anonymous users cannot see START status runs at all.
 
     """
+    if context.get("onboarding") and has_association_permission(request, context, "exe_association"):
+        return redirect("manage")
+
     # Extract association ID from request context
     association_id = context["association_id"]
 
     # Get upcoming runs with optimized queries using select_related and prefetch_related
     runs = get_coming_runs(association_id)
 
-    # Initialize user registration tracking
-    user_registrations_by_run_id = {}
-    character_relations_by_registration_id = {}
-    payment_invoices_by_registration_id = {}
-    pre_registrations_by_event_id = {}
+    # Initialize context with default user context
+    context = get_context(request)
+    context.update(
+        {
+            "open": [],
+            "future": [],
+            "langs": [],
+            "page": "calendar",
+            "my_regs": {},
+            "character_rels_dict": {},
+            "payment_invoices_dict": {},
+            "pre_registrations_dict": {},
+        },
+    )
+
+    # Add language filter to context if specified
+    if lang:
+        context["lang"] = lang
 
     if "member" in context:
         # Define cutoff date (3 days ago) for filtering relevant registrations
@@ -131,41 +151,24 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
         ).select_related("ticket", "run")
 
         # Create lookup dictionary for O(1) access to user registrations
-        user_registrations_by_run_id = {registration.run_id: registration for registration in user_registrations}
-        user_registered_run_ids = list(user_registrations_by_run_id.keys())
+        context["my_regs"] = {registration.run_id: registration for registration in user_registrations}
+        user_registered_run_ids = list(context["my_regs"].keys())
 
         # Filter runs: authenticated users can see START development runs they're registered for
         runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=user_registered_run_ids))
 
         # Precompute character rels, payment invoices, and pre-registrations objects
-        character_relations_by_registration_id = get_character_rels_dict(user_registrations_by_run_id, member)
-        payment_invoices_by_registration_id = get_payment_invoices_dict(user_registrations_by_run_id, member)
-        pre_registrations_by_event_id = get_pre_registrations_dict(association_id, member)
+        context["character_rels_dict"] = get_character_rels_dict(context["my_regs"], member)
+        context["payment_invoices_dict"] = get_payment_invoices_dict(context["my_regs"], member)
+        context["pre_registrations_dict"] = get_pre_registrations_dict(association_id, member)
     else:
         # Anonymous users cannot see runs in START development status
         runs = runs.exclude(development=DevelopStatus.START)
 
-    # Initialize context with default user context and empty collections
-    context = get_context(request)
-    context.update({"open": [], "future": [], "langs": [], "page": "calendar"})
-
-    # Add language filter to context if specified
-    if lang:
-        context["lang"] = lang
-
-    context.update(
-        {
-            "my_regs": user_registrations_by_run_id,
-            "character_rels_dict": character_relations_by_registration_id,
-            "payment_invoices_dict": payment_invoices_by_registration_id,
-            "pre_registrations_dict": pre_registrations_by_event_id,
-        },
-    )
-
     # Process each run to determine registration status and categorize
     for run in runs:
         # Calculate registration status (open, closed, full, etc.)
-        registration_status(run, context["member"], context)
+        run.status = registration_status(context, run, context["member"])
 
         # Categorize runs based on registration availability
         if run.status["open"]:
@@ -205,7 +208,7 @@ def get_character_rels_dict(registrations_by_run_dict: dict, member: Any) -> dic
         # Fetch all RegistrationCharacterRel objects for user's registrations in one optimized query
         # Include character data and order by character number for consistent results
         character_relations = (
-            RegistrationCharacterRel.objects.filter(reg_id__in=registration_ids, reg__member=member)
+            RegistrationCharacterRel.objects.filter(registration_id__in=registration_ids, registration__member=member)
             .select_related("character")
             .order_by("character__number")
         )
@@ -213,10 +216,10 @@ def get_character_rels_dict(registrations_by_run_dict: dict, member: Any) -> dic
         # Group character relations by registration ID for efficient lookup
         for character_relation in character_relations:
             # Initialize list for new registration IDs
-            if character_relation.reg_id not in character_relations_by_registration_dict:
-                character_relations_by_registration_dict[character_relation.reg_id] = []
+            if character_relation.registration_id not in character_relations_by_registration_dict:
+                character_relations_by_registration_dict[character_relation.registration_id] = []
             # Add character relation to the appropriate registration group
-            character_relations_by_registration_dict[character_relation.reg_id].append(character_relation)
+            character_relations_by_registration_dict[character_relation.registration_id].append(character_relation)
 
     return character_relations_by_registration_dict
 
@@ -246,7 +249,7 @@ def get_payment_invoices_dict(registrations_by_id: dict, member: Any) -> dict:
         # Fetch all payment invoices for user's registrations in single optimized query
         # Include method relation when accessing invoice.method
         payment_invoices = PaymentInvoice.objects.filter(
-            reg_id__in=registration_ids,
+            registration_id__in=registration_ids,
             member=member,
             typ=PaymentType.REGISTRATION,
         ).select_related("method")
@@ -297,38 +300,6 @@ def get_pre_registrations_dict(association_id: int, member: Any) -> dict:
             event_id_to_pre_registration[pre_registration.event_id] = pre_registration
 
     return event_id_to_pre_registration
-
-
-def get_coming_runs(association_id: int | None, *, future: bool = True) -> QuerySet[Run]:
-    """Get upcoming or past runs for an association with optimized queries.
-
-    Args:
-        association_id: Association ID to filter by. If None, returns runs for all associations.
-        future: If True, get future runs; if False, get past runs. Defaults to True.
-
-    Returns:
-        QuerySet of Run objects with optimized select_related, ordered by end date.
-        Future runs are ordered ascending, past runs descending.
-
-    """
-    # Base queryset: exclude cancelled runs and invisible events, optimize with select_related
-    runs = Run.objects.exclude(development=DevelopStatus.CANC).exclude(event__visible=False).select_related("event")
-
-    # Filter by association if specified
-    if association_id:
-        runs = runs.filter(event__association_id=association_id)
-
-    # Apply date filtering and ordering based on future/past requirement
-    if future:
-        # Get runs ending 3+ days from now, ordered by end date (earliest first)
-        reference_date = timezone.now() - timedelta(days=3)
-        runs = runs.filter(end__gte=reference_date.date()).order_by("end")
-    else:
-        # Get runs that ended 3+ days ago, ordered by end date (latest first)
-        reference_date = timezone.now() + timedelta(days=3)
-        runs = runs.filter(end__lte=reference_date.date()).order_by("-end")
-
-    return runs
 
 
 def home_json(request: HttpRequest, lang: str = "it") -> object:
@@ -484,10 +455,12 @@ def event_register(request: HttpRequest, event_slug: str) -> Any:
         run = runs.first()
         return redirect("register", event_slug=run.get_slug())
     context["list"] = []
-    context.update({"features_map": {context["event"].id: context["features"]}})
-    for r in runs:
-        registration_status(r, context["member"], context)
-        context["list"].append(r)
+    context.update(
+        {"features_map": {context["event"].id: context["features"]}, "my_regs": get_event_signups(request, context)}
+    )
+    for run in runs:
+        run.status = registration_status(context, run, context["member"])
+        context["list"].append(run)
     return render(request, "larpmanager/general/event_register.html", context)
 
 
@@ -514,11 +487,16 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     # Get all past runs for this association
     runs = get_coming_runs(aid, future=False)
 
-    # Initialize dictionaries for user-specific data
-    my_regs_dict = {}
-    character_rels_dict = {}
-    payment_invoices_dict = {}
-    pre_registrations_dict = {}
+    # Initialize context with user-specific data dictionaries
+    context.update(
+        {
+            "list": [],
+            "my_regs": {},
+            "character_rels_dict": {},
+            "payment_invoices_dict": {},
+            "pre_registrations_dict": {},
+        },
+    )
 
     # Fetch user-specific registration data if authenticated
     if "member" in context:
@@ -532,30 +510,17 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
         ).select_related("ticket", "run")
 
         # Create dictionary mapping run_id to registration for quick lookup
-        my_regs_dict = {reg.run_id: reg for reg in my_regs}
+        context["my_regs"] = {registration.run_id: registration for registration in my_regs}
 
         # Build related data dictionaries for character, payment, and pre-registration info
-        character_rels_dict = get_character_rels_dict(my_regs_dict, member)
-        payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, member)
-        pre_registrations_dict = get_pre_registrations_dict(aid, member)
-
-    # Convert runs queryset to list and initialize context list
-    runs_list = list(runs)
-    context["list"] = []
-
-    context.update(
-        {
-            "my_regs": my_regs_dict,
-            "character_rels_dict": character_rels_dict,
-            "payment_invoices_dict": payment_invoices_dict,
-            "pre_registrations_dict": pre_registrations_dict,
-        },
-    )
+        context["character_rels_dict"] = get_character_rels_dict(context["my_regs"], member)
+        context["payment_invoices_dict"] = get_payment_invoices_dict(context["my_regs"], member)
+        context["pre_registrations_dict"] = get_pre_registrations_dict(aid, member)
 
     # Process each run to add registration status information
-    for run in runs_list:
+    for run in runs:
         # Update run object with registration status data
-        registration_status(run, context["member"], context)
+        run.status = registration_status(context, run, context["member"])
 
         # Add processed run to context list
         context["list"].append(run)
@@ -593,7 +558,7 @@ def check_gallery_visibility(request: HttpRequest, context: dict) -> bool:
         context["hide_login"] = True
         return False
 
-    if hide_gallery_for_non_signup and not context["run"].reg:
+    if hide_gallery_for_non_signup and not context["registration"]:
         context["hide_signup"] = True
         return False
 
@@ -630,49 +595,48 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Get event features for permission checking
     features = get_event_features(context["event"].id)
 
-    # Check if user has permission to view gallery content
-    if check_gallery_visibility(request, context):
-        # Load character cache if writing fields are visible or character display is forced
-        if not get_event_config(
-            context["event"].id, "writing_field_visibility", default_value=False, context=context
-        ) or context.get(
-            "show_character",
-        ):
-            get_event_cache_all(context)
+    # Load character cache if writing fields are visible or character display is forced
+    field_visibility = get_event_config(
+        context["event"].id, "writing_field_visibility", default_value=False, context=context
+    )
+    if not field_visibility or context.get("show_character"):
+        get_event_cache_all(context)
 
-        # Check configuration for hiding uncasted players
-        hide_uncasted_players = get_event_config(
-            context["event"].id, "gallery_hide_uncasted_players", default_value=False, context=context
-        )
-        if not hide_uncasted_players:
-            # Get registrations that have assigned characters
-            que = RegistrationCharacterRel.objects.filter(reg__run_id=context["run"].id)
+    # Check configuration for hiding uncasted players
+    hide_uncasted_players = get_event_config(
+        context["event"].id, "gallery_hide_uncasted_players", default_value=False, context=context
+    )
+    if not hide_uncasted_players:
+        # Get registrations that have assigned characters
+        que = RegistrationCharacterRel.objects.filter(registration__run_id=context["run"].id)
 
-            # Filter by character approval status if required
-            if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
-                que = que.filter(character__status__in=[CharacterStatus.APPROVED])
-            assigned = que.values_list("reg_id", flat=True)
+        # Filter by character approval status if required
+        if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
+            que = que.filter(character__status__in=[CharacterStatus.APPROVED])
+        assigned = que.values_list("registration_id", flat=True)
 
-            # Pre-filter ticket IDs to exclude from registration without character assigned
-            excluded_ticket_ids = RegistrationTicket.objects.filter(
-                event_id=context["event"].id,
-                tier__in=[
-                    TicketTier.WAITING,
-                    TicketTier.STAFF,
-                    TicketTier.NPC,
-                    TicketTier.COLLABORATOR,
-                    TicketTier.SELLER,
-                ],
-            ).values_list("id", flat=True)
+        # Pre-filter ticket IDs to exclude from registration without character assigned
+        excluded_tiers = [
+            TicketTier.WAITING,
+            TicketTier.STAFF,
+            TicketTier.NPC,
+            TicketTier.COLLABORATOR,
+            TicketTier.SELLER,
+        ]
+        excluded_ticket_ids = [
+            ticket["id"] for ticket in get_registration_tickets(context["event"].id) if ticket["tier"] in excluded_tiers
+        ]
 
-            # Get registrations without assigned characters
-            que_reg = Registration.objects.filter(run_id=context["run"].id, cancellation_date__isnull=True)
-            que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket_id__in=excluded_ticket_ids)
+        # Get registrations without assigned characters
+        que_reg = Registration.objects.filter(run_id=context["run"].id, cancellation_date__isnull=True)
+        que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket_id__in=excluded_ticket_ids)
 
-            # Add non-provisional registered members to the display list
-            for reg in que_reg.select_related("member"):
-                if not is_reg_provisional(reg, event=context["event"], features=features, context=context):
-                    context["registration_list"].append(reg.member)
+        # Add non-provisional registered members to the display list
+        for registration in que_reg.select_related("member"):
+            if not is_registration_provisional(
+                registration, event=context["event"], features=features, context=context
+            ):
+                context["registration_list"].append(registration.member)
 
     return render(request, "larpmanager/event/gallery.html", context)
 
@@ -694,20 +658,10 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
         - Sets no_robots flag based on development status and timing
 
     """
-    # Get base context with event and run information
-    context = get_event_context(request, event_slug, include_status=True)
+    # Get base context with event and run information (don't need visibility check)
+    context = get_event_context(request, event_slug, include_status=True, check_visibility=False)
     context["coming"] = []
     context["past"] = []
-
-    # Retrieve user's registrations for this event if authenticated
-    my_regs = []
-    if request.user.is_authenticated:
-        my_regs = Registration.objects.filter(
-            run__event=context["event"],
-            redeem_code__isnull=True,
-            cancellation_date__isnull=True,
-            member=context["member"],
-        )
 
     # Get all runs for the event and set reference date (3 days ago)
     runs = Run.objects.filter(event=context["event"])
@@ -715,21 +669,21 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Prepare features mapping for registration status checking
     features_map = {context["event"].id: context["features"]}
-    context.update({"my_regs": {reg.run_id: reg for reg in my_regs}, "features_map": features_map})
+    context.update({"features_map": features_map, "my_regs": get_event_signups(request, context)})
 
     # Process each run to determine registration status and categorize by timing
-    for r in runs:
-        if not r.end:
+    for run in runs:
+        if not run.end:
             continue
 
         # Update run with registration status information
-        registration_status(r, context["member"], context)
+        run.status = registration_status(context, run, context["member"])
 
         # Categorize run as coming (recent) or past based on end date
-        if r.end > ref.date():
-            context["coming"].append(r)
+        if run.end > ref.date():
+            context["coming"].append(run)
         else:
-            context["past"].append(r)
+            context["past"].append(run)
 
     # Refresh event object to ensure latest data
     context["event"] = Event.objects.get(pk=context["event"].pk)
@@ -742,6 +696,20 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     return render(request, "larpmanager/event/event.html", context)
+
+
+def get_event_signups(request: HttpRequest, context: dict) -> dict:
+    """Retrieve user's registrations for this event."""
+    if not request.user.is_authenticated:
+        return {}
+
+    my_regs = Registration.objects.filter(
+        run__event=context["event"],
+        redeem_code__isnull=True,
+        cancellation_date__isnull=True,
+        member=context["member"],
+    )
+    return {registration.run_id: registration for registration in my_regs}
 
 
 def event_redirect(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:  # noqa: ARG001
@@ -780,22 +748,34 @@ def search(request: HttpRequest, event_slug: str) -> HttpResponse:
         context["search_text"] = get_event_text(context["event"].id, EventTextType.SEARCH)
 
         # Determine which writing fields should be visible
-        visible_writing_fields(context, QuestionApplicable.CHARACTER)
+        fields_data = visible_writing_fields(context, QuestionApplicable.CHARACTER)
+
+        # Remove fields that shouldn't be shown to current user
+        fields_to_remove = [
+            question_uuid
+            for question_uuid in fields_data["questions"]
+            if str(question_uuid) not in context.get("show_character", []) and "show_all" not in context
+        ]
+
+        context["questions"] = {
+            key: value for key, value in fields_data["questions"].items() if key not in fields_to_remove
+        }
+
+        context["options"] = {
+            key: value
+            for key, value in fields_data["options"].items()
+            if value.get("question__uuid") not in fields_to_remove
+        }
+
+        context["searchable"] = {
+            key: value for key, value in fields_data["searchable"].items() if key not in fields_to_remove
+        }
 
         # Filter character fields based on visibility settings
         for character_data in context["chars"].values():
-            character_fields = character_data.get("fields")
-            if not character_fields:
-                continue
-
-            # Remove fields that shouldn't be shown to current user
-            fields_to_remove = [
-                question_id
-                for question_id in list(character_fields)
-                if str(question_id) not in context.get("show_character", []) and "show_all" not in context
-            ]
-            for question_id in fields_to_remove:
-                del character_fields[question_id]
+            character_data["fields"] = {
+                key: value for key, value in character_data.get("fields", {}).items() if key not in fields_to_remove
+            }
 
     # Serialize context data to JSON for frontend consumption
     for context_key in ["chars", "factions", "questions", "options", "searchable"]:
@@ -841,18 +821,7 @@ def get_factions(context: dict) -> None:
 
 
 def check_visibility(context: dict, writing_type: str, writing_name: str) -> None:
-    """Check if a writing type is visible and accessible to the current user.
-
-    Args:
-        context: Context dictionary containing features, staff status, and visibility flags
-        writing_type: Type of writing content to check
-        writing_name: Name identifier for error reporting
-
-    Raises:
-        Http404: If the writing type is not active in current features
-        HiddenError: If user lacks permission to view the content
-
-    """
+    """Check if a writing type is visible and accessible to the current user."""
     # Get the mapping of writing types to features
     writing_type_to_feature_mapping = _get_writing_mapping()
 
@@ -876,16 +845,18 @@ def factions(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Load all event cache data into context
     get_event_cache_all(context)
 
+    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.FACTION)
+
     return render(request, "larpmanager/event/factions.html", context)
 
 
-def faction(request: HttpRequest, event_slug: str, faction_id: Any) -> Any:
+def faction(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
     """Display detailed information for a specific faction.
 
     Args:
         request: HTTP request object
         event_slug: Event slug string
-        faction_id: Faction identifier string
+        faction_uuid: Faction UUID
 
     Returns:
         HttpResponse: Rendered faction detail page
@@ -896,33 +867,38 @@ def faction(request: HttpRequest, event_slug: str, faction_id: Any) -> Any:
 
     get_event_cache_all(context)
 
-    typ = None
-    if faction_id in context["factions"]:
-        context["faction"] = context["factions"][faction_id]
-        typ = context["faction"]["typ"]
+    faction = None
+    for faction_data in context["factions"].values():
+        if faction_uuid == faction_data.get("uuid"):
+            faction = faction_data
+            break
 
-    if "faction" not in context or typ == "g" or "id" not in context["faction"]:
+    if not faction or faction["typ"] == FactionType.SECRET:
         msg = "Faction does not exist"
         raise Http404(msg)
+
+    context["faction"] = faction
+    faction_number = faction["number"]
+    faction_id = context["fac_mapping"][faction_number]
 
     context["fact"] = get_writing_element_fields(
         context,
         "faction",
         QuestionApplicable.FACTION,
-        context["faction"]["id"],
+        faction_id,
         only_visible=True,
     )
 
     return render(request, "larpmanager/event/faction.html", context)
 
 
-def quests(request: HttpRequest, event_slug: str, quest_type_id: int | None = None) -> HttpResponse:
+def quests(request: HttpRequest, event_slug: str, quest_type_uuid: str | None = None) -> HttpResponse:
     """Display quest types or quests for a specific type in an event.
 
     Args:
         request: The HTTP request object
         event_slug: Event identifier string
-        quest_type_id: Optional quest type number. If None, shows all quest types
+        quest_type_uuid: Optional quest type number. If None, shows all quest types
 
     Returns:
         HttpResponse: Rendered template with quest types or specific quests
@@ -933,32 +909,35 @@ def quests(request: HttpRequest, event_slug: str, quest_type_id: int | None = No
     check_visibility(context, "quest", _("Quest"))
 
     # If no quest type specified, show all quest types for the event
-    if not quest_type_id:
+    if not quest_type_uuid:
         context["list"] = QuestType.objects.filter(event=context["event"]).order_by("number").prefetch_related("quests")
         return render(request, "larpmanager/event/quest_types.html", context)
 
     # Get specific quest type and build list of visible quests
-    get_element(context, quest_type_id, "quest_type", QuestType, by_number=True)
-    context["list"] = []
+    get_element(context, quest_type_uuid, "quest_type", QuestType)
 
     # Filter quests by event, visibility, and type, then add complete quest data
-    for el in (
+    quest_queryset = (
         Quest.objects.filter(event=context["event"], hide=False, typ=context["quest_type"])
-        .prefetch_related("traits")
+        .select_related("typ")
+        .prefetch_related(models.Prefetch("traits", queryset=Trait.objects.filter(hide=False)))
         .order_by("number")
-    ):
-        context["list"].append(el.show_complete())
+    )
+
+    context["list"] = [quest.show_complete() for quest in quest_queryset]
+
+    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.QUEST)
 
     return render(request, "larpmanager/event/quests.html", context)
 
 
-def quest(request: HttpRequest, event_slug: str, quest_id: Any) -> Any:
+def quest(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpResponse:
     """Display individual quest details and associated traits.
 
     Args:
         request: HTTP request object
         event_slug: Event slug
-        quest_id: Quest number
+        quest_uuid: Quest uuid
 
     Returns:
         HttpResponse: Rendered quest template
@@ -967,10 +946,11 @@ def quest(request: HttpRequest, event_slug: str, quest_id: Any) -> Any:
     context = get_event_context(request, event_slug, include_status=True)
     check_visibility(context, "quest", _("Quest"))
 
-    get_element(context, quest_id, "quest", Quest, by_number=True)
-
-    # Reload quest with prefetched traits
-    context["quest"] = Quest.objects.prefetch_related("traits").get(pk=context["quest"].id)
+    # Fetch quest with prefetched traits
+    try:
+        context["quest"] = Quest.objects.prefetch_related("traits").get(uuid=quest_uuid, event=context["event"])
+    except ObjectDoesNotExist as err:
+        raise Http404 from err
 
     context["quest_fields"] = get_writing_element_fields(
         context,
@@ -980,12 +960,24 @@ def quest(request: HttpRequest, event_slug: str, quest_id: Any) -> Any:
         only_visible=True,
     )
 
+    # Get traits ordered by number and extract IDs
+    trait_queryset = context["quest"].traits.order_by("number")
+    trait_ids = list(trait_queryset.values_list("id", flat=True))
+
+    # Get fields for all traits
+    fields_batch = get_writing_element_fields_batch(
+        context, "trait", QuestionApplicable.TRAIT, trait_ids, only_visible=True
+    )
+
+    # Build traits list with fields
     traits = []
-    for el in context["quest"].traits.all():
-        res = get_writing_element_fields(context, "trait", QuestionApplicable.TRAIT, el.id, only_visible=True)
-        res.update(el.show())
+    for trait in trait_queryset:
+        res = fields_batch.get(trait.id, {"questions": {}, "options": {}, "fields": {}})
+        res.update(trait.show())
         traits.append(res)
     context["traits"] = traits
+
+    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.QUEST)
 
     return render(request, "larpmanager/event/quest.html", context)
 
@@ -1010,20 +1002,29 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = get_event_context(request, event_slug, include_status=True)
 
     # Retrieve current registration counts for tickets and options
-    counts = get_reg_counts(context["run"])
+    counts = get_registration_counts(context["run"])
 
     # Build discounts list with visibility filtering
     context["disc"] = []
     for discount in context["run"].discounts.exclude(visible=False):
         context["disc"].append(discount.show())
 
-    # Build tickets list with availability and usage data
     context["tickets"] = []
-    for ticket in RegistrationTicket.objects.filter(
-        event=context["event"], max_available__gt=0, visible=True
-    ).select_related("event"):
-        dt = ticket.show()
-        key = f"tk_{ticket.id}"
+    # Filter cached tickets for max_available > 0 and visible
+    filtered_tickets = [
+        ticket
+        for ticket in get_registration_tickets(context["event"].id)
+        if ticket["max_available"] > 0 and ticket["visible"]
+    ]
+    for ticket in filtered_tickets:
+        # Build show() equivalent dict
+        dt = {
+            "max_available": ticket["max_available"],
+            "name": ticket["name"],
+            "price": ticket["price"],
+            "description": ticket["description"],
+        }
+        key = f"tk_{ticket['id']}"
         # Add usage count if available in registration counts
         if key in counts:
             dt["used"] = counts[key]

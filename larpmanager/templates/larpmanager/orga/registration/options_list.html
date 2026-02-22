@@ -1,0 +1,83 @@
+{% extends "utils.html" %}
+{% load i18n show_tags %}
+{% block body_class %}
+    floating_iframe
+{% endblock body_class %}
+{% block title %}
+{% endblock title %}
+{% block info %}
+{% endblock info %}
+{% block content %}
+    <div id="option-list" class="auto_resize">
+        <h2>{% trans "Options" %}</h2>
+        <div class="staff-list">
+            <div class="orga-buttons">
+                <a class="new-option button" href="#">
+                    <i class="fas fa-plus"></i>
+                    {% trans "New" %}
+                </a>
+            </div>
+        </div>
+        <table id="registration_options" class="go_datatable writing ordering_arrow">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Description" %}</th>
+                    <th>{% trans "Price" %}</th>
+                    <th>{% trans "Maximum" %}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for el in list %}
+                    <tr id="{{ el.uuid }}">
+                        <td>
+                            <a href="{% url 'orga_registration_options_edit' run.get_slug el.uuid %}"
+                               class="edit-option-ajax"
+                               data-option-uuid="{{ el.uuid }}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+                        <td>{{ el.name }}</td>
+                        <td>{{ el.description | truncatechars:50 }}</td>
+                        <td>
+                            {% if el.price %}{{ el.price }}{% endif %}
+                        </td>
+                        <td>
+                            {% if el.max_available %}{{ el.max_available }}{% endif %}
+                        </td>
+                        <td>
+                            {% if not forloop.first %}
+                                <a href="{% url 'orga_registration_options_order' run.get_slug el.uuid 0 %}">
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not forloop.last %}
+                                <a href="{% url 'orga_registration_options_order' run.get_slug el.uuid 1 %}">
+                                    <i class="fa-solid fa-arrow-down"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'orga_registration_options_delete' run.get_slug el.uuid %}"
+                               class="delete-option-ajax"
+                               data-option-uuid="{{ el.uuid }}">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <hr />
+        <br />
+    </div>
+{% endblock content %}
+{% block js %}
+    {% include "elements/options/list.js.html" %}
+{% endblock js %}

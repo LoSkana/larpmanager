@@ -1,0 +1,41 @@
+{% load i18n %}
+{% if ongoing_runs %}
+    <h2>
+        <i class="fa-solid fa-calendar-days"></i> {% trans "Events" %}
+    </h2>
+    <table class="go_datatable" no_header_cols="all">
+        <thead>
+            <tr>
+                <th>{% trans "Event" %}</th>
+                <th>{% trans "Dates" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Registrations" %}</th>
+                <th>{% trans "Counts" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for run in ongoing_runs %}
+                <tr>
+                    <td>
+                        <a href="{% url 'manage' run.slug %}" target="_blank">{{ run.name }}</a>
+                    </td>
+                    <td>
+                        <i>{{ run.pretty_dates }}</i>
+                    </td>
+                    <td>{{ run.development_display }}</td>
+                    <td>
+                        <a href="{% url 'register' run.slug %}" target="_blank">{{ run.registration_status }}</a>
+                    </td>
+                    <td>
+                        {% if run.registration_counts %}
+                            {% for key, count in run.registration_counts.items %}
+                                {% if not forloop.first %}|{% endif %}
+                                {{ key }}: {{ count }}
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

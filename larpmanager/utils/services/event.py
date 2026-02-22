@@ -17,18 +17,39 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch, Q
-from django.http import HttpRequest
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.accounting import clear_registration_accounting_cache
+from larpmanager.cache.button import clear_event_button_cache
+from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media
+from larpmanager.cache.config import reset_element_configs
+from larpmanager.cache.event_text import reset_event_text
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache
+from larpmanager.cache.links import clear_run_event_links_cache
+from larpmanager.cache.question import (
+    clear_registration_questions_cache,
+    clear_writing_questions_cache,
+)
+from larpmanager.cache.registration import (
+    clear_registration_counts_cache,
+    clear_registration_tickets_cache,
+    get_registration_tickets,
+)
+from larpmanager.cache.rels import clear_event_relationships_cache
+from larpmanager.cache.role import remove_event_role_cache
+from larpmanager.cache.run import reset_cache_run
+from larpmanager.cache.text_fields import reset_text_fields_cache
+from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.models.access import EventRole, get_event_organizers
+from larpmanager.models.base import Feature, auto_set_uuid, debug_set_uuid
 from larpmanager.models.event import Event, EventConfig, EventText, Run
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -44,26 +65,20 @@ from larpmanager.models.registration import RegistrationCharacterRel, Registrati
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.common import copy_class
+from larpmanager.utils.services.inventory import generate_base_inventories
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
 
 
 def get_character_filter(character: Any, character_registrations: Any, active_filters: Any) -> bool:
-    """Check if character should be included based on filter criteria.
-
-    Args:
-        character: Character instance to check
-        character_registrations (dict): Mapping of character IDs to registrations
-        active_filters (list): Filter criteria ('free', 'mirror', etc.)
-
-    Returns:
-        bool: True if character passes all filters
-
-    """
+    """Check if character should be included based on filter criteria."""
     if "free" in active_filters and character.id in character_registrations:
         return False
     return not ("mirror" in active_filters and character.mirror_id and character.mirror_id in character_registrations)
 
 
-def get_event_filter_characters(context: dict[str, Any], character_filters: Any) -> None:  # noqa: C901 - Complex character filtering with faction organization
+def get_event_filter_characters(context: dict, character_filters: Any) -> None:  # noqa: C901 - Complex character filtering with faction organization
     """Get filtered characters organized by factions for event display.
 
     Args:
@@ -77,16 +92,16 @@ def get_event_filter_characters(context: dict[str, Any], character_filters: Any)
     context["factions"] = []
 
     character_registrations = {}
-    for registration_character_relation in RegistrationCharacterRel.objects.filter(
-        reg__run=context["run"],
-        reg__cancellation_date__isnull=True,
-    ).select_related("reg", "reg__member"):
-        character_registrations[registration_character_relation.character_id] = registration_character_relation.reg
+    for relation in RegistrationCharacterRel.objects.filter(
+        registration__run=context["run"],
+        registration__cancellation_date__isnull=True,
+    ).select_related("registration", "registration__member"):
+        character_registrations[relation.character_id] = relation.registration
 
     characters_by_id = {}
     for character in context["event"].get_elements(Character).filter(hide=False):
         if character.id in character_registrations:
-            character.reg = character_registrations[character.id]
+            character.registration = character_registrations[character.id]
             character.member = character_registrations[character.id].member
         characters_by_id[character.id] = character
 
@@ -115,7 +130,8 @@ def get_event_filter_characters(context: dict[str, Any], character_filters: Any)
         default_faction.name = "all"
         default_faction.data = default_faction.show_red()
         default_faction.chars = []
-        for character in characters_by_id.values():
+        # Sort characters by number for consistent ordering
+        for character in sorted(characters_by_id.values(), key=lambda c: c.number):
             if not get_character_filter(character, character_registrations, character_filters):
                 continue
             character.data = character.show_red()
@@ -124,34 +140,20 @@ def get_event_filter_characters(context: dict[str, Any], character_filters: Any)
 
 
 def has_access_character(request: HttpRequest, context: dict) -> bool:
-    """Check if user has access to view/edit a specific character.
-
-    Args:
-        request: Django HTTP request object
-        context (dict): Context with character information
-
-    Returns:
-        bool: True if user has access (organizer, owner, or player)
-
-    """
+    """Check if user has access to view/edit a specific character."""
     if has_event_permission(request, context, context["event"].slug, "orga_characters"):
         return True
 
-    current_member_id = context["member"].id
+    current_member_uuid = context["member"].uuid
 
-    if "owner_id" in context["char"] and context["char"]["owner_id"] == current_member_id:
+    if "owner_uuid" in context["char"] and context["char"]["owner_uuid"] == current_member_uuid:
         return True
 
-    return bool("player_id" in context["char"] and context["char"]["player_id"] == current_member_id)
+    return bool("player_uuid" in context["char"] and context["char"]["player_uuid"] == current_member_uuid)
 
 
 def update_run_plan_on_event_change(run_instance: Any) -> None:
-    """Set run plan from association default if not already set.
-
-    Args:
-        run_instance: Run instance that was saved
-
-    """
+    """Set run plan from association default if not already set."""
     if not run_instance.plan and run_instance.event:
         plan_updates = {"plan": run_instance.event.association.plan}
         Run.objects.filter(pk=run_instance.pk).update(**plan_updates)
@@ -203,6 +205,9 @@ def create_default_event_setup(event: Any) -> None:
         event: Event instance that was saved
 
     """
+    if event.deleted:
+        return
+
     if event.template:
         return
 
@@ -236,10 +241,12 @@ def save_event_tickets(features: Any, instance: object) -> None:
         ("waiting", TicketTier.WAITING, "Waiting"),
         ("filler", TicketTier.FILLER, "Filler"),
     ]
+
+    existing_tiers = {t["tier"] for t in get_registration_tickets(instance.id)}
     for ticket in tickets:
         if ticket[0] and ticket[0] not in features:
             continue
-        if not RegistrationTicket.objects.filter(event=instance, tier=ticket[1]).exists():
+        if ticket[1] not in existing_tiers:
             RegistrationTicket.objects.create(event=instance, tier=ticket[1], name=ticket[2])
 
 
@@ -277,9 +284,9 @@ def save_event_character_form(features: dict, instance: object) -> None:
 
     # Define default question types with their properties
     def_tps = {
-        WritingQuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 1000),
-        WritingQuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 10000),
-        WritingQuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 50000),
+        WritingQuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 1000, 1),
+        WritingQuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 10000, 2),
+        WritingQuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 50000, 3),
     }
 
     # Get basic custom question types from the system
@@ -304,12 +311,7 @@ def save_event_character_form(features: dict, instance: object) -> None:
     if "plot" in features:
         # Create a copy of default types with modified teaser for plot concept
         plot_tps = dict(def_tps)
-        plot_tps[WritingQuestionType.TEASER] = (
-            "Concept",
-            QuestionStatus.MANDATORY,
-            QuestionVisibility.PUBLIC,
-            3000,
-        )
+        plot_tps[WritingQuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000, 2)
         _init_writing_element(instance, plot_tps, [QuestionApplicable.PLOT])
 
 
@@ -336,10 +338,19 @@ def _init_writing_element(instance: object, default_question_types: Any, questio
                 visibility=config[2],
                 max_length=config[3],
                 applicable=applicable,
+                order=config[4],
             )
             for question_type, config in default_question_types.items()
         ]
+        # Manually set UUIDs since bulk_create doesn't trigger pre_save signals
+        for question in writing_questions:
+            auto_set_uuid(question)
         WritingQuestion.objects.bulk_create(writing_questions)
+
+        # Update UUIDs for debug mode after bulk_create (when IDs are assigned)
+        # Note: bulk_create doesn't trigger post_save, so we need to manually update
+        for question in writing_questions:
+            debug_set_uuid(question, created=True)
 
 
 def _init_character_form_questions(
@@ -551,7 +562,12 @@ def assign_previous_campaign_character(registration: Any) -> None:
         return
 
     # Skip if member already has a character assigned to this run
-    if RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=registration.run).count() > 0:
+    if (
+        RegistrationCharacterRel.objects.filter(
+            registration__member=registration.member, registration__run=registration.run
+        ).count()
+        > 0
+    ):
         return
 
     # Find the most recent run from the same campaign series
@@ -568,8 +584,8 @@ def assign_previous_campaign_character(registration: Any) -> None:
 
     # Get character relationship from previous run and create new one
     previous_character_relation = RegistrationCharacterRel.objects.filter(
-        reg__member=registration.member,
-        reg__run=previous_campaign_run,
+        registration__member=registration.member,
+        registration__run=previous_campaign_run,
     ).first()
 
     # Only proceed if previous character exists and is active
@@ -577,7 +593,7 @@ def assign_previous_campaign_character(registration: Any) -> None:
         return
 
     new_character_relation = RegistrationCharacterRel.objects.create(
-        reg=registration,
+        registration=registration,
         character=previous_character_relation.character,
     )
 
@@ -587,3 +603,88 @@ def assign_previous_campaign_character(registration: Any) -> None:
             attribute_value = getattr(previous_character_relation, "custom_" + custom_attribute_name)
             setattr(new_character_relation, "custom_" + custom_attribute_name, attribute_value)
     new_character_relation.save()
+
+
+def reset_all_run(event: Event, run: Run) -> None:
+    """Clear all caches for a given event and run.
+
+    This function comprehensively clears all cached data related to an event
+    and its run, including character data, features, configurations, registrations,
+    accounting, and role information.
+
+    Args:
+        event: Event instance
+        run: Run instance
+
+    """
+    # Clear run-specific cache and associated media files
+    clear_run_cache_and_media(run)
+    reset_cache_run(event.association_id, run.get_slug())
+
+    # Clear event-level feature and configuration caches
+    clear_event_features_cache(event.id)
+    clear_run_event_links_cache(event)
+
+    # Clear event button cache
+    clear_event_button_cache(event.id)
+
+    # Clear event config cache
+    reset_element_configs(event)
+
+    # Clear run config cache
+    reset_element_configs(run)
+
+    # Clear question cache
+    clear_writing_questions_cache(run.event_id)
+    clear_registration_questions_cache(run.event_id)
+
+    # Clear registration-related caches
+    clear_registration_counts_cache(run.id)
+    clear_registration_accounting_cache(run.id)
+    clear_event_fields_cache(event.id)
+    clear_event_relationships_cache(event.id)
+    clear_registration_tickets_cache(event.id)
+
+    # Clear event text caches for all EventText instances
+    for event_text in EventText.objects.filter(event_id=event.id):
+        reset_event_text(event_text)
+
+    # Clear event role caches
+    for event_role_id in EventRole.objects.filter(event_id=event.id).values_list("id", flat=True):
+        remove_event_role_cache(event_role_id)
+
+    clear_event_cache_all_runs(event)
+
+    # Clear text fields cache
+    reset_text_fields_cache(run)
+
+    # Clear widgets
+    clear_widget_cache(run.id)
+
+
+def on_event_features_m2m_changed(
+    sender: type,  # noqa: ARG001
+    instance: Event,
+    action: str,
+    pk_set: set[int] | None,
+    **kwargs: Any,  # noqa: ARG001
+) -> None:
+    """Handle event-feature m2m relationship changes."""
+    # Only process post_add actions for newly activated features
+    if action != "post_add" or not pk_set:
+        return
+
+    # Single bulk query to get all slugs at once
+    feature_slugs = list(Feature.objects.filter(pk__in=pk_set).values_list("slug", flat=True))
+
+    # Initialize the newly added features
+    if feature_slugs:
+        init_features(instance, feature_slugs)
+
+
+def init_features(event: Event, features_dict: list[str]) -> None:
+    """Perform initializazion on new features activation."""
+    if "inventory" in features_dict:
+        # Generate inventories for all existing characters in this event
+        for character in event.get_elements(Character):
+            generate_base_inventories(character, check=True)

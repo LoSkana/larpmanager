@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Registration sections" %} - {{ run }}
+    {% trans "Registration sections" %} - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows the sections of the event registration form" %}
@@ -17,13 +17,14 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_registration_sections_edit' run.get_slug el.id %}">
+                        <a href="{% url 'orga_registration_sections_edit' run.get_slug el.uuid %}">
                             <i class="fas fa-edit"></i>
                         </a>
                     </td>
@@ -31,22 +32,27 @@
                     <td>
                         {% for ch in el.questions.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_registration_form_edit' run.get_slug ch.id %}">{{ ch.name }}</a>
+                            <a href="{% url 'orga_registration_form_edit' run.get_slug ch.uuid %}">{{ ch.name }}</a>
                         {% endfor %}
                     </td>
                     <td>
                         {% if not forloop.first %}
-                            <a href="{% url 'orga_registration_sections_order' run.get_slug el.id 0 %}">
+                            <a href="{% url 'orga_registration_sections_order' run.get_slug el.uuid 0 %}">
                                 <i class="fa-solid fa-arrow-up"></i>
                             </a>
                         {% endif %}
                     </td>
                     <td>
                         {% if not forloop.last %}
-                            <a href="{% url 'orga_registration_sections_order' run.get_slug el.id 1 %}">
+                            <a href="{% url 'orga_registration_sections_order' run.get_slug el.uuid 1 %}">
                                 <i class="fa-solid fa-arrow-down"></i>
                             </a>
                         {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_registration_sections_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             {% endfor %}

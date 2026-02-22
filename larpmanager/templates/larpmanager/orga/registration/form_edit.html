@@ -1,80 +1,28 @@
 {% extends "utils.html" %}
-{% load i18n %}
 {% load i18n show_tags %}
 {% block title %}
-    {{ form.page_title }}
     {% if nonum is None %}
         {% if num %}
-            - {% trans "Change" %}
+            {{ name }}
         {% else %}
-            - {% trans "New" %}
+            {% trans "New" %}
         {% endif %}
+        -
     {% endif %}
-    - {{ run }}
+    {{ form.page_title }}
+    - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {{ form.page_info }}
 {% endblock info %}
 {% block content %}
     {% include "elements/form/main.html" %}
-    <div id="options" class="hide">
-        <h2>{% trans "Options" %}</h2>
-        {% include "elements/header/edit.html" %}
-        <table id="registration_options" class="go_datatable writing ordering_arrow">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>{% trans "Name" %}</th>
-                    <th>{% trans "Description" %}</th>
-                    <th>{% trans "Price" %}</th>
-                    <th>{% trans "Maximum" %}</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for el in list %}
-                    <tr id="{{ el.id }}">
-                        <td>
-                            <a href="{% url 'orga_registration_options_edit' run.get_slug el.id %}">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                        </td>
-                        <td>{{ el.name }}</td>
-                        <td>{{ el.description | truncatechars:50 }}</td>
-                        <td>
-                            {% if el.price %}{{ el.price }}{% endif %}
-                        </td>
-                        <td>
-                            {% if el.max_available %}{{ el.max_available }}{% endif %}
-                        </td>
-                        <td>
-                            {% if not forloop.first %}
-                                <a href="{% url 'orga_registration_options_order' run.get_slug el.id 0 %}">
-                                    <i class="fa-solid fa-arrow-up"></i>
-                                </a>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if not forloop.last %}
-                                <a href="{% url 'orga_registration_options_order' run.get_slug el.id 1 %}">
-                                    <i class="fa-solid fa-arrow-down"></i>
-                                </a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <hr />
-        <br />
+    <div id="options" class="hide auto_resize">
+        <iframe id="options-iframe"
+                {% if num %} src="{% url 'orga_registration_options_list' run.get_slug num %}" {% else %} src="{% url 'orga_registration_options_list' run.get_slug %}" {% endif %}>
+        </iframe>
     </div>
 {% endblock content %}
 {% block js %}
-    <script>
-    var newUrl = '{% url 'orga_registration_options_new' run.get_slug num %}';
-
-    {% include "elements/question_edit.js" %}
-
-    </script>
+    {% include "elements/questions/edit.js.html" %}
 {% endblock js %}

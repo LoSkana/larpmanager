@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans "Email list" %} - {{ run }}
+    {% trans "Email list" %} - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows the email lists of subscribers" %}
@@ -10,7 +10,7 @@
     <h2>{% trans "Simple list" %}</h2>
     <p>
         {% for el in list %}
-            {% include "elements/comma.html" %}
+            {% include "elements/comma.html" with separator="," %}
             {{ el.1 }}
         {% endfor %}
     </p>

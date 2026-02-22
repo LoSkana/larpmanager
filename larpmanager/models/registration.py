@@ -21,6 +21,7 @@ from __future__ import annotations
 
 from typing import Any, ClassVar
 
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
@@ -29,10 +30,10 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from tinymce.models import HTMLField
 
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
-from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str, my_uuid_short
+from larpmanager.models.utils import UploadToPathAndRename
 from larpmanager.models.writing import Character
 
 
@@ -69,7 +70,7 @@ class TicketTier(models.TextChoices):
         }
 
 
-class RegistrationTicket(BaseModel):
+class RegistrationTicket(UuidMixin, BaseModel):
     """Represents RegistrationTicket model."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -82,6 +83,7 @@ class RegistrationTicket(BaseModel):
         max_length=1,
         choices=TicketTier.choices,
         default=TicketTier.STANDARD,
+        verbose_name=_("Tier"),
         help_text=_("Type of ticket"),
     )
 
@@ -99,26 +101,41 @@ class RegistrationTicket(BaseModel):
         help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
 
-    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        validators=[MinValueValidator(0)],
+        verbose_name=_("Price"),
+        help_text=_("Ticket price"),
+    )
 
     max_available = models.IntegerField(
         default=0,
+        validators=[MinValueValidator(0)],
+        verbose_name=_("Total availability"),
         help_text=_("Optional - Maximum number of times it can be requested across all signups (0 = unlimited)"),
     )
 
-    visible = models.BooleanField(default=True, help_text=_("Is it selectable by participants") + "?")
+    visible = models.BooleanField(
+        default=True,
+        verbose_name=_("Visible"),
+        help_text=_("Is it selectable by participants") + "?",
+    )
 
     casting_priority = models.IntegerField(
         default=1,
+        verbose_name=_("Casting priority"),
         help_text=_("Optional - Casting priority granted by this option (e.g., 1 = low, 5 = medium, 25 = high)"),
     )
 
     giftable = models.BooleanField(
         default=False,
+        verbose_name=_("Giftable"),
         help_text=_("Optional - Indicates whether the ticket can be gifted to other participants"),
     )
 
-    order = models.IntegerField(default=0)
+    order = models.IntegerField(default=0, verbose_name=_("Order"), help_text=_("Display order"))
 
     def __str__(self) -> str:
         """Return ticket tier string representation with event, tier, name and price."""
@@ -140,71 +157,50 @@ class RegistrationTicket(BaseModel):
         """Return the tier price."""
         return self.price
 
-    def get_form_text(self, currency_symbol: str | None = None) -> str:
-        """Generate formatted text representation for form display.
 
-        Creates a text string combining the ticket name, price (if available),
-        and availability count (if the ticket has an available attribute).
-
-        Args:
-            currency_symbol: Currency symbol string. If not provided, will be fetched
-                from the event's association
-
-        Returns:
-            Formatted string containing ticket information for display
-
-        """
-        # Get ticket display information from show method
-        ticket_data = self.show()
-        formatted_text = ticket_data["name"]
-
-        # Add price information if available
-        if ticket_data["price"]:
-            if not currency_symbol:
-                # noinspection PyUnresolvedReferences
-                currency_symbol = self.event.association.get_currency_symbol()
-            formatted_text += f" - {decimal_to_str(ticket_data['price'])}{currency_symbol}"
-
-        # Add availability count if ticket has available attribute
-        if hasattr(self, "available"):
-            formatted_text += f" - ({_('Available')}: {self.available})"
-
-        return formatted_text
-
-
-class RegistrationSection(BaseModel):
+class RegistrationSection(UuidMixin, BaseModel):
     """Represents RegistrationSection model."""
 
     search = models.CharField(max_length=1000, editable=False)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="sections")
 
-    name = models.CharField(max_length=100, help_text=_("Text"))
+    name = models.CharField(max_length=100, help_text=_("Name"))
 
     description = HTMLField(
         max_length=5000,
         blank=True,
         null=True,
+        verbose_name=_("Description"),
         help_text=_("Description - will be displayed at the beginning of the section"),
     )
 
     order = models.IntegerField(default=0)
 
+    def __str__(self) -> str:
+        """Return string representation of the registration section."""
+        return self.name
 
-class RegistrationQuota(BaseModel):
+
+class RegistrationQuota(UuidMixin, BaseModel):
     """Represents RegistrationQuota model."""
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="quotas")
 
     number = models.IntegerField()
 
-    quotas = models.IntegerField(help_text=_("Quotas total number"))
+    quotas = models.IntegerField(verbose_name=_("Quotas"), help_text=_("Quotas total number"))
 
     days_available = models.IntegerField(
+        verbose_name=_("Days available"),
         help_text=_("Minimum number of days before the event for which it is made available (0  = always)"),
     )
 
-    surcharge = models.IntegerField(default=0)
+    surcharge = models.IntegerField(
+        default=0,
+        verbose_name=_("Surcharge"),
+        help_text=_("Extra price applied when this quota is active"),
+    )
 
     class Meta:
         ordering: ClassVar[list] = ["-created"]
@@ -225,7 +221,7 @@ class RegistrationQuota(BaseModel):
         return f"{self.quotas} {self.days_available} ({self.surcharge}€)"
 
 
-class RegistrationInstallment(BaseModel):
+class RegistrationInstallment(UuidMixin, BaseModel):
     """Represents RegistrationInstallment model."""
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="installments")
@@ -235,24 +231,32 @@ class RegistrationInstallment(BaseModel):
     order = models.IntegerField(help_text=_("Payment order"))
 
     amount = models.IntegerField(
+        verbose_name=_("Amount"),
         help_text=_("Total amount of payment to be received by this date (0 = all outstanding)"),
     )
 
     days_deadline = models.IntegerField(
         null=True,
         blank=True,
+        verbose_name=_("Days deadline"),
         help_text=_(
             "Deadline in the measure of days from enrollment (fill in one between the fixed "
             "deadline and the deadline in days)",
         ),
     )
 
-    date_deadline = models.DateField(null=True, blank=True, help_text=_("Deadline date"))
+    date_deadline = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name=_("Date deadline"),
+        help_text=_("Deadline date"),
+    )
 
     tickets = models.ManyToManyField(
         RegistrationTicket,
         related_name="installments",
         blank=True,
+        verbose_name=_("Tickets"),
         help_text=_("Indicate the tickets for which it is active"),
     )
 
@@ -275,16 +279,16 @@ class RegistrationInstallment(BaseModel):
         return f"{self.order} {self.amount} ({self.days_deadline} - {self.date_deadline})"
 
 
-class RegistrationSurcharge(BaseModel):
+class RegistrationSurcharge(UuidMixin, BaseModel):
     """Represents RegistrationSurcharge model."""
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="surcharges")
 
     number = models.IntegerField()
 
-    amount = models.IntegerField(help_text=_("Surcharge applied to the ticket"))
+    amount = models.IntegerField(verbose_name=_("Amount"), help_text=_("Surcharge applied to the ticket"))
 
-    date = models.DateField(help_text=_("Date from when the surcharge is applied"))
+    date = models.DateField(verbose_name=_("Date"), help_text=_("Date from when the surcharge is applied"))
 
     class Meta:
         ordering: ClassVar[list] = ["-created"]
@@ -305,7 +309,7 @@ class RegistrationSurcharge(BaseModel):
         return f"{self.amount} ({self.date})"
 
 
-class Registration(BaseModel):
+class Registration(UuidMixin, BaseModel):
     """Represents Registration model."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -323,9 +327,17 @@ class Registration(BaseModel):
         null=True,
     )
 
-    additionals = models.IntegerField(default=0)
+    additionals = models.IntegerField(
+        default=0,
+        verbose_name=_("Additionals"),
+        help_text=_("Number of additional participants"),
+    )
 
-    pay_what = models.IntegerField(default=0)
+    pay_what = models.IntegerField(
+        default=0,
+        verbose_name=_("Donation"),
+        help_text=_("Donation amount chosen by the participant"),
+    )
 
     num_payments = models.IntegerField(default=1)
 
@@ -347,14 +359,6 @@ class Registration(BaseModel):
 
     modified = models.IntegerField(default=0)
 
-    special_cod = models.CharField(
-        max_length=12,
-        verbose_name=_("Unique code"),
-        unique=True,
-        default=my_uuid_short,
-        db_index=True,
-    )
-
     redeem_code = models.CharField(max_length=16, null=True, blank=True)
 
     # Date when first full payment is detected
@@ -365,6 +369,7 @@ class Registration(BaseModel):
         related_name="multi_registrations",
         blank=True,
         through="RegistrationCharacterRel",
+        verbose_name=_("Characters"),
     )
 
     def __str__(self) -> str:
@@ -406,6 +411,21 @@ class Registration(BaseModel):
                 condition=Q(deleted__isnull=True, cancellation_date__isnull=True),
                 name="reg_run_active_only",
             ),
+            # Performance indexes from migration 0137
+            models.Index(
+                fields=["cancellation_date"],
+                name="reg_cancel_date_idx",
+                condition=Q(cancellation_date__isnull=False),
+            ),
+            models.Index(
+                fields=["refunded"],
+                name="reg_refunded_idx",
+                condition=Q(refunded=True),
+            ),
+            models.Index(
+                fields=["run", "cancellation_date"],
+                name="reg_run_cancel_idx",
+            ),
         ]
 
         ordering: ClassVar[list] = ["-created"]
@@ -426,7 +446,7 @@ class Registration(BaseModel):
 class RegistrationCharacterRel(BaseModel):
     """Represents RegistrationCharacterRel model."""
 
-    reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="rcrs")
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="rcrs")
 
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="rcrs")
 

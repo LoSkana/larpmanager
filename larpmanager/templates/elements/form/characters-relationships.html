@@ -1,4 +1,4 @@
-{% load i18n static %}
+{% load i18n static show_tags %}
 {% if new_rel %}
     <h2>
         {% trans "Relationships" %}
@@ -10,10 +10,10 @@
         </p>
         <p>{{ new_rel }}</p>
     </div>
-    <div id="form_relationships">
+    <div id="form_relationships" class="form_container auto_resize">
         {% for key, item in relationships.items %}
             <h3>
-                <a href="{% url 'orga_characters_edit' run.get_slug item.char.id %}">{{ item.char }}</a>
+                <a href="{% url 'orga_characters_edit' run.get_slug item.char.uuid %}">{{ item.char }}</a>
             </h3>
             <table id="rel_{{ key }}_tr">
                 <tr>
@@ -40,7 +40,7 @@
                             <p>
                                 <a href="#" class="my_toggle" tog="f_{{ key }}_inverse">{% trans "Show" %}</a>
                             </p>
-                            <div class="hide hide_later f_{{ key }}_inverse">{{ item.inverse | safe }}</div>
+                            <div class="hide hide_later f_{{ key }}_inverse">{{ item.inverse | sanitize_html }}</div>
                         {% endif %}
                         <div class="helptext">{% trans "How the relationship is described from the other character's perspective" %}</div>
                     </td>

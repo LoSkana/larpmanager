@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Commit warehouse quantities" %} - {{ run }}
+    {% trans "Commit warehouse quantities" %} - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows what will happen when you commit the warehouse quantities based on the current assignments" %}
@@ -65,7 +65,7 @@
         <div class="mt-4">
             <form method="post"
                   action="{% url 'orga_warehouse_commit_quantities' run.get_slug %}"
-                  onsubmit="return confirm('{% trans "Are you sure you want to commit these quantities? This operation cannot be undone!" %}');">
+                  onsubmit="return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you sure you want to commit these quantities? This operation cannot be undone!" %}{% endfilter %}');">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger btn-lg">
                     <i class="fas fa-check"></i> {% trans "Confirm and commit quantities" %}

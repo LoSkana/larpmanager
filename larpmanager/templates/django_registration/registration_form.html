@@ -9,12 +9,14 @@
           method="post"
           action="{% url 'registration_register' %}">
         {% csrf_token %}
-        <table class="mob ">
-            {{ form.as_table }}
-        </table>
-        {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
-        <br />
-        <input type="submit" value="{% trans "Submit" %}" />
+        <div class="form_container auto_resize platform">
+            <table>
+                {{ form.as_table }}
+            </table>
+            {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
+            <br />
+            <input type="submit" id="id_submit"  value="{% trans "Submit" %}" />
+        </div>
     </form>
 {% endblock content %}
 {% block js %}
@@ -31,6 +33,22 @@ window.addEventListener('DOMContentLoaded', function() {
 
           return true;
       });
+
+        // Add password visibility toggle
+        $('input[type="password"]').each(function() {
+            var $input = $(this);
+            var $wrapper = $('<div class="password-field-wrapper"></div>');
+            var $icon = $('<span class="password-toggle-icon"><i class="fa-solid fa-eye"></i></span>');
+
+            $input.wrap($wrapper);
+            $input.after($icon);
+
+            $icon.on('click', function() {
+                var type = $input.attr('type') === 'password' ? 'text' : 'password';
+                $input.attr('type', type);
+                $icon.html(type === 'password' ? '<i class="fa-solid fa-eye"></i>' : '<i class="fa-solid fa-eye-slash"></i>');
+            });
+        });
 
     });
 });

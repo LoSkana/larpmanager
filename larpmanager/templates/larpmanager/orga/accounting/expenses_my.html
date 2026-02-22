@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Expenses" %} - {{ run }}
+    {% trans "Expenses" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows your personal spending items" %}
@@ -20,7 +20,7 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
                         <a href="{{ el.download }}">{% trans "Download" %}</a>
                     </td>

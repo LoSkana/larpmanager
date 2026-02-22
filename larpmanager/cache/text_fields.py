@@ -25,14 +25,14 @@ from typing import TYPE_CHECKING, Any
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.html import escape
 
+from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
     RegistrationAnswer,
-    RegistrationQuestion,
     WritingAnswer,
-    WritingQuestion,
 )
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Writing
@@ -40,6 +40,8 @@ from larpmanager.models.writing import Writing
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
     from larpmanager.models.event import Event, Run
+
+ALLOWED_TYPES = [BaseQuestionType.EDITOR, BaseQuestionType.PARAGRAPH]
 
 
 def cache_text_field_key(model_type: type[BaseModel], model_instance: object) -> str:
@@ -53,11 +55,11 @@ def remove_html_tags(text: str) -> str:
     return re.sub(html_tag_pattern, "", text)
 
 
-def get_single_cache_text_field(element_id: str, field_name: str, text_value: str | None) -> tuple[str, int]:
+def get_single_cache_text_field(element_uuid: str, field_name: str, text_value: str | None) -> tuple[str, int]:
     """Get a single cache text field with optional truncation and popup link.
 
     Args:
-        element_id: Element ID for the popup link
+        element_uuid: Element ID for the popup link
         field_name: Field name for the popup link
         text_value: Text value to process, can be None
 
@@ -69,8 +71,8 @@ def get_single_cache_text_field(element_id: str, field_name: str, text_value: st
     if text_value is None:
         text_value = ""
 
-    # Remove HTML tags from the text value
-    cleaned_text = remove_html_tags(text_value)
+    # Remove HTML tags and escape remaining content to prevent XSS
+    cleaned_text = escape(remove_html_tags(text_value))
 
     # Get the length of the cleaned text
     original_length = len(cleaned_text)
@@ -82,7 +84,7 @@ def get_single_cache_text_field(element_id: str, field_name: str, text_value: st
     if original_length > limit:
         cleaned_text = cleaned_text[:limit]
         cleaned_text += (
-            f"... <a href='#' class='post_popup' pop='{element_id}' fie='{field_name}'><i class='fas fa-eye'></i></a>"
+            f"... <a href='#' class='post_popup' pop='{element_uuid}' fie='{field_name}'><i class='fas fa-eye'></i></a>"
         )
 
     # Return the processed text and original length
@@ -93,16 +95,7 @@ def get_single_cache_text_field(element_id: str, field_name: str, text_value: st
 
 
 def init_cache_text_field(model_class: type[BaseModel], event: Event) -> dict:
-    """Initialize cache for text fields of model instances related to an event.
-
-    Args:
-        model_class: Model class to filter instances from.
-        event: Event instance to get the parent class from.
-
-    Returns:
-        Dictionary mapping instance identifiers to cached text field data.
-
-    """
+    """Initialize cache for text fields of model instances related to an event."""
     cache_result = {}
     # Iterate through all instances of the given type for the event's parent
     for instance in model_class.objects.filter(event=event.get_class_parent(model_class)):
@@ -112,7 +105,7 @@ def init_cache_text_field(model_class: type[BaseModel], event: Event) -> dict:
 
 def _init_element_cache_text_field(
     element: BaseModel,
-    result_cache: dict[int, dict[str, Any]],
+    result_cache: dict[str, dict[str, Any]],
     element_type: Any,
 ) -> None:
     """Initialize cache for text fields of a single element.
@@ -129,32 +122,39 @@ def _init_element_cache_text_field(
         None
 
     Side Effects:
-        Populates result_cache[element.id] with cached text field data including teaser, text,
+        Populates result_cache[element.uuid] with cached text field data including teaser, text,
         and editor questions
 
     """
+    # Get element UUID for cache key
+    element_uuid = str(element.uuid)
+
     # Initialize element entry in result dictionary if not exists
-    if element.id not in result_cache:
-        result_cache[element.id] = {}
+    if element_uuid not in result_cache:
+        result_cache[element_uuid] = {}
 
     # Cache basic text fields (teaser and text)
     for field_name in ["teaser", "text"]:
         field_value = getattr(element, field_name)
-        result_cache[element.id][field_name] = get_single_cache_text_field(element.id, field_name, field_value)
+        result_cache[element_uuid][field_name] = get_single_cache_text_field(element_uuid, field_name, field_value)
 
     # Get applicable writing questions for this element type
-    # noinspection PyProtectedMember
     applicable = QuestionApplicable.get_applicable(element_type._meta.model_name)  # noqa: SLF001  # Django model metadata
-    questions = element.event.get_elements(WritingQuestion).filter(applicable=applicable)
+    questions = get_cached_writing_questions(element.event, applicable)
 
     # Process editor-type questions and cache their answers
-    for question_id in questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
-        answers = WritingAnswer.objects.filter(question_id=question_id, element_id=element.id)
-        if answers:
-            # Cache the text content of the first matching answer
-            answer_text = answers.first().text
-            field_key = str(question_id)
-            result_cache[element.id][field_key] = get_single_cache_text_field(element.id, field_key, answer_text)
+    for question in [q for q in questions if q["typ"] in ALLOWED_TYPES]:
+        field_key = question["uuid"]
+        if field_key in result_cache[element_uuid]:
+            continue
+
+        answers = WritingAnswer.objects.filter(question_id=question["id"], element_id=element.id).order_by("-updated")
+        if not answers:
+            continue
+
+        # Cache the text content of the first matching answer
+        answer_text = answers.first().text
+        result_cache[element_uuid][field_key] = get_single_cache_text_field(element_uuid, field_key, answer_text)
 
 
 def get_cache_text_field(field_type: type[BaseModel], event: Event) -> str:
@@ -184,10 +184,23 @@ def update_cache_text_fields(el: object) -> None:
     element_type = el.__class__
     event = el.event
 
-    # Generate cache key and retrieve current cache data
+    # Generate cache key
     cache_key = cache_text_field_key(element_type, event)
-    cached_data = get_cache_text_field(element_type, event)
 
+    # Use cache lock to prevent race conditions with concurrent updates
+    lock_key = f"{cache_key}_lock"
+    try:
+        with cache.lock(lock_key, timeout=5):
+            _update_cache_text_fields(cache_key, el, element_type, event)
+    except AttributeError:
+        # Fallback for cache backends that don't support locking
+        _update_cache_text_fields(cache_key, el, element_type, event)
+
+
+def _update_cache_text_fields(cache_key: str, el: object, element_type: type[BaseModel], event: Event) -> None:
+    """Update cache for text fields - internal helper."""
+    # Retrieve current cache data inside lock
+    cached_data = get_cache_text_field(element_type, event)
     # Initialize element cache and update cache storage
     _init_element_cache_text_field(el, cached_data, element_type)
     cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -206,52 +219,84 @@ def update_cache_text_fields_answer(instance: BaseModel) -> None:
 
     """
     # Only process editor-type questions
-    if instance.question.typ != BaseQuestionType.EDITOR:
+    if instance.question.typ not in ALLOWED_TYPES:
         return
 
     # Get the applicable type and event for cache key generation
     applicable_type = QuestionApplicable.get_applicable_inverse(instance.question.applicable)
     event = instance.question.event
 
-    # Generate cache key and retrieve existing cached data
+    # Generate cache key
     cache_key = cache_text_field_key(applicable_type, event)
+
+    # Use cache lock to prevent race conditions with concurrent updates
+    lock_key = f"{cache_key}_lock"
+    try:
+        with cache.lock(lock_key, timeout=5):
+            _update_cache_text_fields_answer(applicable_type, cache_key, event, instance)
+    except AttributeError:
+        # Fallback for cache backends that don't support locking
+        _update_cache_text_fields_answer(applicable_type, cache_key, event, instance)
+
+
+def _update_cache_text_fields_answer(
+    applicable_type: type[BaseModel],
+    cache_key: str,
+    event: Event,
+    instance: BaseModel,
+) -> None:
+    """Update cache for editor-type question answer - internal helper.
+
+    This is a helper function used by update_cache_text_fields_answer to avoid
+    code duplication in the lock try-except block. Updates a single editor question
+    answer in the cache.
+
+    Args:
+        applicable_type: Model class type that the question applies to (e.g., Character)
+        cache_key: The cache key to update
+        event: Event instance associated with the answer
+        instance: WritingAnswer instance containing the question, element_id, and text data
+
+    """
+    # Retrieve existing cached data inside lock
     cached_text_fields = get_cache_text_field(applicable_type, event)
 
+    # Fetch the element to get its UUID
+    try:
+        element = applicable_type.objects.get(id=instance.element_id)
+        element_uuid = str(element.uuid)
+    except ObjectDoesNotExist:
+        # If element doesn't exist, skip cache update
+        return
+
     # Prepare field identifier and ensure element structure exists
-    question_field_id = str(instance.question_id)
-    if instance.element_id not in cached_text_fields:
-        cached_text_fields[instance.element_id] = {}
+    question_field_id = instance.question.uuid
+    if element_uuid not in cached_text_fields:
+        cached_text_fields[element_uuid] = {}
 
     # Update cache with new text field data and persist to cache
-    cached_text_fields[instance.element_id][question_field_id] = get_single_cache_text_field(
-        instance.element_id,
+    cached_text_fields[element_uuid][question_field_id] = get_single_cache_text_field(
+        element_uuid,
         question_field_id,
         instance.text,
     )
+
     cache.set(cache_key, cached_text_fields, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 # Registration
 
 
-def init_cache_reg_field(run: Run) -> dict:
-    """Initialize registration field cache for all registrations in a run.
-
-    Args:
-        run: The Run instance to initialize cache for.
-
-    Returns:
-        Dictionary mapping registration field cache data.
-
-    """
+def init_cache_registration_field(run: Run) -> dict:
+    """Initialize registration field cache for all registrations in a run."""
     cache_data = {}
     # Iterate through all registrations for this run and populate cache
     for registration in Registration.objects.filter(run=run):
-        _init_element_cache_reg_field(registration, cache_data)
+        _init_element_cache_registration_field(registration, cache_data)
     return cache_data
 
 
-def _init_element_cache_reg_field(registration: Registration, cache_result: dict[int, dict[str, Any]]) -> None:
+def _init_element_cache_registration_field(registration: Registration, cache_result: dict[str, dict[str, Any]]) -> None:
     """Initialize cache for registration element fields.
 
     Args:
@@ -259,21 +304,29 @@ def _init_element_cache_reg_field(registration: Registration, cache_result: dict
         cache_result: Result dictionary to populate with cached data
 
     """
-    # Initialize element entry in result dictionary if not present
-    if registration.id not in cache_result:
-        cache_result[registration.id] = {}
+    # Get registration UUID for cache key
+    registration_uuid = str(registration.uuid)
 
-    # Get all editor-type questions for the event
-    # noinspection PyProtectedMember
-    questions = RegistrationQuestion.objects.filter(event_id=registration.run.event_id)
+    # Initialize element entry in result dictionary if not present
+    if registration_uuid not in cache_result:
+        cache_result[registration_uuid] = {}
+
+    # Get all editor/paragraph-type questions for the event
+    questions = [
+        question
+        for question in get_cached_registration_questions(registration.run.event)
+        if question["typ"] in ALLOWED_TYPES
+    ]
 
     # Process each editor question and cache the answer text
-    for question_id in questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
+    for question in questions:
         try:
-            answer_text = RegistrationAnswer.objects.get(question_id=question_id, reg_id=registration.id).text
-            field_key = str(question_id)
-            cache_result[registration.id][field_key] = get_single_cache_text_field(
-                registration.id,
+            answer_text = RegistrationAnswer.objects.get(
+                question_id=question["id"], registration_id=registration.id
+            ).text
+            field_key = str(question["uuid"])
+            cache_result[registration_uuid][field_key] = get_single_cache_text_field(
+                registration_uuid,
                 field_key,
                 answer_text,
             )
@@ -281,7 +334,7 @@ def _init_element_cache_reg_field(registration: Registration, cache_result: dict
             pass
 
 
-def get_cache_reg_field(run: Run) -> dict:
+def get_cache_registration_field(run: Run) -> dict:
     """Get cached registration field data for a run.
 
     Args:
@@ -299,27 +352,27 @@ def get_cache_reg_field(run: Run) -> dict:
 
     # If not cached, initialize and cache the result
     if cached_result is None:
-        cached_result = init_cache_reg_field(run)
+        cached_result = init_cache_registration_field(run)
         cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return cached_result
 
 
-def update_cache_reg_fields(registration: Registration) -> None:
+def update_cache_registration_fields(registration: Registration) -> None:
     """Update cached registration fields for the given element's run."""
     # Get the run associated with the registration element
     run = registration.run
 
     # Generate cache key and retrieve current cached registration fields
     cache_key = cache_text_field_key(Registration, run)
-    cached_registration_fields = get_cache_reg_field(run)
+    cached_registration_fields = get_cache_registration_field(run)
 
     # Initialize element cache and update cache with new data
-    _init_element_cache_reg_field(registration, cached_registration_fields)
+    _init_element_cache_registration_field(registration, cached_registration_fields)
     cache.set(cache_key, cached_registration_fields, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
-def update_cache_reg_fields_answer(instance: BaseModel) -> None:
+def update_cache_registration_fields_answer(instance: BaseModel) -> None:
     """Update cached registration field answers for editor-type questions.
 
     This function updates the cache with new text field answers when a registration
@@ -334,21 +387,33 @@ def update_cache_reg_fields_answer(instance: BaseModel) -> None:
         None
 
     """
-    # Skip processing if question is not an editor type
-    if instance.question.typ != BaseQuestionType.EDITOR:
+    # Skip processing if question is not an editor or paragraph type
+    if instance.question.typ not in ALLOWED_TYPES:
         return
 
     # Get the run context from the registration
-    run = instance.reg.run
+    run = instance.registration.run
 
     # Generate cache key and retrieve current cached field data
     cache_key = cache_text_field_key(Registration, run)
-    cached_registration_fields = get_cache_reg_field(run)
+    cached_registration_fields = get_cache_registration_field(run)
+
+    # Fetch the registration to get its UUID
+    try:
+        registration = Registration.objects.get(id=instance.registration_id)
+        registration_uuid = str(registration.uuid)
+    except ObjectDoesNotExist:
+        # If registration doesn't exist, skip cache update
+        return
+
+    # Ensure registration structure exists in cache
+    if registration_uuid not in cached_registration_fields:
+        cached_registration_fields[registration_uuid] = {}
 
     # Update the specific field for this registration with new text content
-    question_field = str(instance.question_id)
-    cached_registration_fields[instance.reg_id][question_field] = get_single_cache_text_field(
-        instance.reg_id,
+    question_field = str(instance.question.uuid)
+    cached_registration_fields[registration_uuid][question_field] = get_single_cache_text_field(
+        registration_uuid,
         question_field,
         instance.text,
     )
@@ -382,8 +447,29 @@ def update_text_fields_cache(model_instance: object) -> None:
 
     # Update cache for Registration model instances
     if issubclass(model_instance.__class__, Registration):
-        update_cache_reg_fields(model_instance)
+        update_cache_registration_fields(model_instance)
 
     # Update cache for RegistrationAnswer model instances
     if issubclass(model_instance.__class__, RegistrationAnswer):
-        update_cache_reg_fields_answer(model_instance)
+        update_cache_registration_fields_answer(model_instance)
+
+
+def reset_text_fields_cache(run: Run) -> None:
+    """Reset all text fields cache for a run."""
+    # Invalidate text field caches for all Writing model types
+    for applicable_type in ["character", "faction", "plot", "quest", "trait", "prologue"]:
+        # Get the model class for this applicable type
+        try:
+            applicable_code = QuestionApplicable.get_applicable(applicable_type)
+            if applicable_code:
+                model_class = QuestionApplicable.get_applicable_inverse(applicable_code)
+                # Delete cache for this model type and event
+                cache_key = cache_text_field_key(model_class, run.event)
+                cache.delete(cache_key)
+        except (ValueError, LookupError):
+            # Skip if applicable type doesn't exist
+            pass
+
+    # Invalidate registration text field cache
+    cache_key = cache_text_field_key(Registration, run)
+    cache.delete(cache_key)

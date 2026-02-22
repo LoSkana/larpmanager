@@ -2,13 +2,17 @@
 {% load i18n %}
 {% block title %}
     {% if character %}
-        {% trans "Character Edit" %} -
+        {{ character }} - {% trans "Edit" %} -
     {% else %}
         {% trans "New character" %} -
     {% endif %}
     {{ run.search }}
 {% endblock title %}
 {% block content %}
+    {% if user_character_text %}
+        {{ user_character_text | safe }}
+        <hr />
+    {% endif %}
     {% if avatar_form %}
         <form action="{{ request.path }}"
               enctype="multipart/form-data"
@@ -32,15 +36,13 @@
                 <br />
                 <br />
                 <div class="hide change-field">
-                    {% trans "Select the new photo to upload" %}: {{ avatar_form.image }}
+                    {% trans "Select the new photo to upload" %}: {{ avatar_form.image }} (maximum 10 MB)
                     <br />
                     <br />
                 </div>
-                {% if custom_profile %}
-                    <img id="profile"
-                         src="{{ custom_profile }}"
-                         alt="custom character profile" />
-                {% endif %}
+                <img id="profile"
+                     {% if custom_profile %} src="{{ custom_profile }}" {% else %} class="hide" {% endif %}
+                     alt="custom character profile" />
                 <div id="upload_spinner" class="hide">
                     <div class="spinner-border text-primary" role="status">
                         <span class="sr-only">{% trans "Uploading..." %}</span>
@@ -56,10 +58,11 @@
 {% block js %}
     {% include "elements/form/max_length.js" %}
     {% include "elements/helpers/factions-choices.js" %}
+    {{ form.unavail|json_script:"unavail" }}
     <script>
     var dependencies = {{ dependencies | safe }};
 
-    var unavail = {{ form.unavail }};
+    var unavail = JSON.parse(document.getElementById('unavail').textContent);
 
     var hide_unavailable = {{ hide_unavailable | yesno:"true,false" }};
 
@@ -77,7 +80,7 @@
 
             Object.entries(unavail).forEach(([question, values]) => {
                 values.forEach(value => {
-                    const selectorPrefix = '#id_q' + question + '_tr ';
+                    const selectorPrefix = '#id_que_' + question + '_tr ';
                     if (hide_unavailable) {
                         $(selectorPrefix + 'option[value="' + value + '"]').remove();
                         $(selectorPrefix + 'input[type="checkbox"][value="' + value + '"]').closest('label').remove();
@@ -148,7 +151,7 @@
                             // Hide spinner and enable confirm button on error
                             $('#upload_spinner').addClass('hide');
                             $('#confirm').prop('disabled', false);
-                            alert('{% trans "Error uploading image. Please try again." %}');
+                            if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Error uploading image. Please retry or use a smaller file." %}{% endfilter %}');
                         }
                     });
                 });
@@ -307,14 +310,15 @@
 
     {% if avatar_form %}
 
-        var upload = '{% url 'character_profile_upload' run.get_slug character.number %}';
-        var rotate_l = '{% url 'character_profile_rotate' run.get_slug character.number 1 %}';
-        var rotate_r = '{% url 'character_profile_rotate' run.get_slug character.number 0 %}';
+        var upload = '{% url 'character_profile_upload' run.get_slug character.uuid %}';
+        var rotate_l = '{% url 'character_profile_rotate' run.get_slug character.uuid 1 %}';
+        var rotate_r = '{% url 'character_profile_rotate' run.get_slug character.uuid 0 %}';
 
         function profile_update(src) {
             timestamp = (new Date()).getTime();
             newUrl = src + '?_=' + timestamp;
             $('#profile').attr("src", newUrl);
+            $('#profile').show();
         }
 
         $('#rotate_l_btn').on('click', function () {

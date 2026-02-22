@@ -7,25 +7,28 @@
         {% if section != old_section %}
         </table>
     </div>
-    <h1>
-        <a href="#"
-           class="my_toggle section-link"
-           tog='sec_{{ section | slugify }}'>
-            {{ section | template_trans }}
-            <i class="fa-solid fa-chevron-down"></i>
-        </a>
-    </h1>
-    <div class="{% if not form.show_sections %}hide{% endif %} sec_{{ section | slugify }}">
+    {% if not form.hide_section_headers %}
+        <h1>
+            <a href="#"
+               class="my_toggle section-link"
+               tog='sec_{{ section | slugify }}'>
+                {{ section | template_trans }}
+                <i class="fa-solid fa-chevron-down"></i>
+            </a>
+        </h1>
+    {% endif %}
+    <div class="form_container auto_resize {% if not form.show_sections %}hide{% endif %} sec_{{ section | slugify }}">
         {% if section in form.section_descriptions %}
             {% get_field form.section_descriptions section as description %}
             {{ description | safe }}
         {% endif %}
-        <table class="mob">
+        <table>
             {% define section as old_section %}
         {% endif %}
     {% endif %}
     <tr id="{{ field.auto_id }}_tr"
-        {% if field.field.custom_class %}class="{{ field.field.custom_class }}"{% endif %}>
+        {% if field.field.custom_class %}class="{{ field.field.custom_class }}"{% endif %}
+        {% if field.field.custom_style %}style="{{ field.field.custom_style }}"{% endif %}>
         <th>
             {% if form.field_link and field.auto_id in form.field_link %}
                 {% get_field form.field_link field.auto_id as link %}
@@ -46,7 +49,6 @@
                 <br />
                 <a onclick="return translate('{{ field.auto_id }}');">{% trans "Translate" %}</a>
             {% endif %}
-            {{ field.custom_class }}
         </th>
         <td>
             {% if field.errors %}{{ field.errors }}{% endif %}

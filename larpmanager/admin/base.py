@@ -29,7 +29,7 @@ from tinymce.models import HTMLField
 
 from larpmanager.forms.utils import CSRFTinyMCE
 from larpmanager.models.base import Feature, FeatureModule, PaymentMethod
-from larpmanager.models.member import Log
+from larpmanager.models.miscellanea import Log
 
 
 # SET JQUERY
@@ -52,17 +52,7 @@ class CSRFTinyMCEModelAdmin(DefModelAdmin):
     """
 
     def formfield_for_dbfield(self, db_field: Any, request: Any, **kwargs: Any) -> Any:
-        """Override formfield to use CSRFTinyMCE for HTMLField fields.
-
-        Args:
-            db_field: Database field being rendered
-            request: HTTP request object
-            **kwargs: Additional keyword arguments
-
-        Returns:
-            Form field with CSRFTinyMCE widget for HTMLField, default otherwise
-
-        """
+        """Override formfield to use CSRFTinyMCE for HTMLField fields."""
         # Use CSRFTinyMCE for all HTMLField (TinyMCE) fields
         if isinstance(db_field, HTMLField):
             kwargs["widget"] = CSRFTinyMCE()
@@ -71,28 +61,7 @@ class CSRFTinyMCEModelAdmin(DefModelAdmin):
 
 
 def reduced(value: str | None) -> str:
-    """Truncate string to maximum length with ellipsis.
-
-    Truncates the input string to a maximum of 50 characters. If the string
-    is longer than the limit, it's cut off and "[...]" is appended to indicate
-    truncation.
-
-    Args:
-        value: String to potentially truncate. Can be None or empty.
-
-    Returns:
-        Original string if under 50 chars, otherwise truncated with [...] suffix.
-        Returns empty string or None as-is if input is falsy.
-
-    Examples:
-        >>> reduced("short")
-        'short'
-        >>> reduced("a" * 60)
-        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa[...]'
-        >>> reduced(None)
-        None
-
-    """
+    """Truncate string to maximum length with ellipsis."""
     # Define maximum allowed length before truncation
     max_length = 50
 
@@ -150,15 +119,16 @@ class RegistrationFilter(AutocompleteFilter):
     """Admin filter for Registration autocomplete."""
 
     title = "Registration"
-    field_name = "reg"
+    field_name = "registration"
 
 
 @admin.register(Log)
 class LogAdmin(DefModelAdmin):
     """Admin interface for Log model."""
 
-    list_display: ClassVar[tuple] = ("member", "cls", "eid", "created", "dl")
-    search_fields = ("member", "cls", "dl")
+    list_display: ClassVar[tuple] = ("member", "cls", "eid", "operation_type", "element_name", "info")
+    search_fields: ClassVar[tuple] = ("id", "member", "cls", "operation_type", "element_name")
+    list_filter: ClassVar[tuple] = ("operation_type", MemberFilter, RunFilter, AssociationFilter)
     autocomplete_fields: ClassVar[list] = ["member"]
 
 
@@ -167,7 +137,7 @@ class FeatureModuleAdmin(DefModelAdmin):
     """Admin interface for FeatureModule model."""
 
     list_display = ("name", "order")
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
 
 
 class FeatureResource(resources.ModelResource):
@@ -194,7 +164,7 @@ class FeatureAdmin(DefModelAdmin):
     )
     list_filter: ClassVar[tuple] = ("module",)
     autocomplete_fields: ClassVar[list] = ["module", "associations", "events"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
     resource_classes: ClassVar[list] = [FeatureResource]
 
 
@@ -203,4 +173,4 @@ class PaymentMethodAdmin(DefModelAdmin):
     """Admin interface for PaymentMethod model."""
 
     list_display = ("name", "slug")
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]

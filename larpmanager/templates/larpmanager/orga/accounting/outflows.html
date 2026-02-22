@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Outflows" %} - {{ run }}
+    {% trans "Outflows" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows all expenses incurred directly by the organization concerning this event" %}

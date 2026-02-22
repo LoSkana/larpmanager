@@ -44,7 +44,7 @@ def paginate(
     context: dict,
     pagination_model: type[Model],
     template_name: str,
-    view_name: str,
+    edit_view_name: str,
     *,
     is_executive: bool = True,
 ) -> HttpResponse | JsonResponse:
@@ -59,7 +59,7 @@ def paginate(
         context: Template context dictionary containing association/run data
         pagination_model: The Django model class to paginate
         template_name: Template path for initial page rendering
-        view_name: View name used for generating edit URLs
+        edit_view_name: View name used for generating edit URLs
         is_executive: Whether this is an organization-wide view (True) or event-specific (False)
 
     Returns:
@@ -98,10 +98,12 @@ def paginate(
     # Get total count of all records (unfiltered)
     total_records_count = pagination_model.objects.count()
 
-    # Prepare localized edit button text
-    edit_label = _("Edit")
+    # Get delete view name if provided in context
+    delete_view_name = context.get("delete_view")
     # Transform elements into DataTables-compatible format
-    datatables_rows = _prepare_data_json(context, filtered_elements, view_name, edit_label, is_executive=is_executive)
+    datatables_rows = _prepare_data_json(
+        context, filtered_elements, edit_view_name, is_executive=is_executive, delete_view=delete_view_name
+    )
 
     # Return DataTables-expected JSON response
     return JsonResponse(
@@ -112,6 +114,67 @@ def paginate(
             "data": datatables_rows,
         },
     )
+
+
+def _get_filter_field(field_names: list[str], target_field: str, context: dict) -> str:
+    """Determine the correct filter path for a field.
+
+    Args:
+        field_names: List of field names available on the model
+        target_field: Target field name to filter by
+        context: Context dictionary containing potential selrel field
+
+    Returns:
+        Filter path string (e.g., 'field' or 'relation__field')
+
+    """
+    if target_field in field_names:
+        return target_field
+
+    # Handle ForeignKey _id suffix
+    if target_field.endswith("_id"):
+        base_field = target_field[:-3]  # Remove "_id" suffix
+        if base_field in field_names:
+            # Django allows filtering by ForeignKey ID using _id suffix
+            return target_field
+
+    # Use select_related field to build the filter path if available
+    if "selrel" in context:
+        selrel = context["selrel"]
+        if isinstance(selrel, tuple):
+            selrel = selrel[0]
+        return f"{selrel}__{target_field}"
+
+    return target_field
+
+
+def _apply_run_filter(query_elements: QuerySet, field_names: list[str], context: dict) -> QuerySet:
+    """Apply run/event filtering to queryset.
+
+    Args:
+        query_elements: Base queryset to filter
+        field_names: List of field names available on the model
+        context: Context dictionary containing run/event information
+
+    Returns:
+        Filtered queryset
+
+    """
+    if "run" in field_names:
+        return query_elements.filter(run=context["run"])
+    if "registration" in field_names:
+        return query_elements.filter(registration__run=context["run"])
+    if "event" in field_names:
+        return query_elements.filter(event=context["event"])
+
+    # Use select_related field if available
+    if "selrel" in context:
+        selrel = context["selrel"]
+        if isinstance(selrel, tuple):
+            selrel = selrel[0]
+        return query_elements.filter(**{f"{selrel}__run": context["run"]})
+
+    return query_elements
 
 
 def _get_elements_query(
@@ -133,20 +196,17 @@ def _get_elements_query(
     # Extract pagination and filtering parameters from request
     start_index, page_length, order_params, filter_params = _get_query_params(request)
 
-    # Start with base queryset filtered by association
-    query_elements = cls.filter(association_id=context["association_id"])
+    # Check which relation field exists on the model to determine filter path
+    # noinspection PyProtectedMember
+    field_names = [f.name for f in model_type._meta.get_fields()]  # noqa: SLF001  # Django model metadata
+
+    # Determine the correct filter path for association_id and filter
+    association_filter = _get_filter_field(field_names, "association_id", context)
+    query_elements = cls.filter(**{association_filter: context["association_id"]})
 
     # Apply event-specific filtering for non-executive views
     if not is_executive and "run" in context:
-        # Check which relation field exists on the model to filter by run/event
-        # noinspection PyProtectedMember
-        field_names = [f.name for f in model_type._meta.get_fields()]  # noqa: SLF001  # Django model metadata
-        if "run" in field_names:
-            query_elements = query_elements.filter(run=context["run"])
-        elif "reg" in field_names:
-            query_elements = query_elements.filter(reg__run=context["run"])
-        elif "event" in field_names:
-            query_elements = query_elements.filter(event=context["event"])
+        query_elements = _apply_run_filter(query_elements, field_names, context)
 
     # Filter out hidden elements if the model supports it
     # noinspection PyProtectedMember
@@ -163,7 +223,7 @@ def _get_elements_query(
     query_elements = _apply_custom_queries(context, query_elements, model_type)
 
     # Apply user-defined filters from the request
-    query_elements = _set_filtering(context, query_elements, filter_params)
+    query_elements = _set_filtering(context, query_elements, filter_params, field_names)
 
     # Count filtered records before applying pagination
     filtered_records_count = query_elements.count()
@@ -179,13 +239,16 @@ def _get_elements_query(
     return query_elements, filtered_records_count
 
 
-def _set_filtering(context: dict, queryset: QuerySet[Any], column_filters: dict) -> QuerySet[Any]:
+def _set_filtering(
+    context: dict, queryset: QuerySet[Any], column_filters: dict, field_names: list[str]
+) -> QuerySet[Any]:
     """Apply filtering to queryset elements based on provided filters.
 
     Args:
         context: Context dictionary containing fields and optional callbacks/afield
         queryset: Django queryset to filter
         column_filters: Dictionary mapping column indices to filter values
+        field_names: List of field names available on the model
 
     Returns:
         Filtered queryset with applied search conditions
@@ -200,7 +263,7 @@ def _set_filtering(context: dict, queryset: QuerySet[Any], column_filters: dict)
 
         # Validate column index is within bounds
         if column_index >= len(context["fields"]):
-            logger.error("Column index out of bounds in _get_ordering: %s %s", column_filters, context["fields"])
+            logger.debug("Column index out of bounds in _get_ordering: %s %s", column_filters, context["fields"])
 
         # Extract field and name from context fields
         field_name, _display_name = context["fields"][column_index - 1]
@@ -211,12 +274,17 @@ def _set_filtering(context: dict, queryset: QuerySet[Any], column_filters: dict)
             additional_field = context.get("afield")
             if additional_field:
                 field_name = f"{additional_field}__{field_name}"
+            # Use the constructed path directly, don't apply _get_filter_field
+            filter_field = field_name
         # Skip fields that have custom callback handlers
         elif field_name in context.get("callbacks", {}):
             continue
+        else:
+            # Get the correct filter path (handles related fields via selrel)
+            filter_field = _get_filter_field(field_names, field_name, context)
 
         # Map field to search fields using field_map or use as single field
-        search_fields = field_map.get(field_name, [field_name])
+        search_fields = field_map.get(filter_field, [filter_field])
 
         # Build OR query for all mapped fields with case-insensitive search
         q_filter = Q()
@@ -259,7 +327,7 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
 
         # Validate column index is within bounds
         if column_index_int >= len(context["fields"]):
-            logger.error("Column index out of bounds in _get_ordering: %s %s", column_order, context["fields"])
+            logger.debug("Column index out of bounds in _get_ordering: %s %s", column_order, context["fields"])
         field_name, _display_name = context["fields"][column_index_int - 1]
 
         # Skip callback fields as they can't be used for database ordering
@@ -331,16 +399,16 @@ def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[s
 
 
 def _prepare_data_json(
-    context: dict, elements: list, view: str, edit: str, *, is_executive: bool = True
+    context: dict, elements: list, edit_view: str, *, is_executive: bool = True, delete_view: str | None = None
 ) -> list[dict[str, str]]:
     """Prepare data for JSON response in DataTables format.
 
     Args:
         context: Context dictionary containing fields, callbacks, and optionally run
         elements: List of model objects to process
-        view: View name for generating edit URLs
-        edit: Tooltip text for edit links
+        edit_view: View name for generating edit URLs
         is_executive: Whether to use executive view URLs (True) or organization view URLs (False)
+        delete_view: Optional view name for generating delete URLs
 
     Returns:
         List of dictionaries where each dict represents a row with string keys
@@ -348,6 +416,10 @@ def _prepare_data_json(
 
     """
     table_rows_data = []
+
+    # Prepare localized button text
+    edit_label = _("Edit")
+    delete_label = _("Delete")
 
     # Map field names to lambda functions for data extraction and formatting
     field_to_formatter = {
@@ -367,6 +439,8 @@ def _prepare_data_json(
         "info": lambda model_object: str(model_object.info) if model_object.info else "",
         "vat_ticket": lambda model_object: round(float(model_object.vat_ticket), 2),
         "vat_options": lambda model_object: round(float(model_object.vat_options), 2),
+        "operation_type": lambda model_object: str(model_object.operation_type),
+        "element_name": lambda model_object: str(model_object.element_name),
     }
 
     # Allow custom field callbacks to override default mappings
@@ -375,26 +449,43 @@ def _prepare_data_json(
 
     # Process each element and build row data
     for model_object in elements:
-        # Generate appropriate URL based on view type (exe vs orga)
-        if is_executive:
-            edit_url = reverse(view, args=[model_object.id])
-        else:
-            # For orga views, we need both slug and ID
-            edit_url = reverse(view, args=[context["run"].get_slug(), model_object.id])
-
-        # Start each row with edit link in column 0
-        row_data = {"0": f'<a href="{edit_url}" qtip="{edit}"><i class="fas fa-edit"></i></a>'}
+        edit_text = ""
+        if hasattr(model_object, "uuid"):
+            # Generate edit url (in orga need to add event slug)
+            if is_executive:
+                edit_url = reverse(edit_view, args=[model_object.uuid])
+            else:
+                edit_url = reverse(edit_view, args=[context["run"].get_slug(), model_object.uuid])
+            edit_text = f'<a href="{edit_url}" qtip="{edit_label}"><i class="fas fa-edit"></i></a>'
+        row_data = {"0": edit_text}
 
         # Add data for each configured field, starting from column 1
         for column_index, (field_name, _field_label) in enumerate(context["fields"], start=1):
-            row_data[str(column_index)] = field_to_formatter.get(field_name, lambda _model_object: "")(model_object)
+            if field_name in field_to_formatter:
+                row_data[str(column_index)] = field_to_formatter[field_name](model_object)
+            else:
+                # Default: try to get attribute from model, convert to string
+                value = getattr(model_object, field_name, "")
+                row_data[str(column_index)] = str(value) if value is not None else ""
+
+        # Add delete button if delete_view is provided
+        if delete_view:
+            if is_executive:
+                delete_url = reverse(delete_view, args=[model_object.uuid])
+            else:
+                delete_url = reverse(delete_view, args=[context["run"].get_slug(), model_object.uuid])
+            # Add delete button in the last column
+            last_column = str(len(context["fields"]) + 1)
+            row_data[last_column] = (
+                f'<a href="{delete_url}" qtip="{delete_label}" class="only_new_form"><i class="fas fa-trash"></i></a>'
+            )
 
         table_rows_data.append(row_data)
 
     return table_rows_data
 
 
-def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type[Model]) -> QuerySet:
+def _apply_custom_queries(context: dict, elements: QuerySet, typ: type[Model]) -> QuerySet:
     """Apply custom queries and optimizations based on model type.
 
     Args:
@@ -479,13 +570,13 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
 
 def exe_paginate(
     request: HttpRequest,
-    context: dict[str, Any],
+    context: dict,
     pagination_model: type[Model],
     template_name: str,
-    view_name: str,
+    edit_view_name: str,
 ) -> HttpResponse:
     """Paginate content for organization-wide executive views."""
-    return paginate(request, context, pagination_model, template_name, view_name, is_executive=True)
+    return paginate(request, context, pagination_model, template_name, edit_view_name, is_executive=True)
 
 
 def orga_paginate(
@@ -493,7 +584,7 @@ def orga_paginate(
     context: dict,
     pagination_model: type[Model],
     template_name: str,
-    view_name: str,
+    edit_view_name: str,
 ) -> HttpResponse:
     """Paginate items for organization views."""
-    return paginate(request, context, pagination_model, template_name, view_name, is_executive=False)
+    return paginate(request, context, pagination_model, template_name, edit_view_name, is_executive=False)

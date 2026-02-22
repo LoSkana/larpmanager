@@ -1,11 +1,11 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Expenses" %} - {{ run }}
+    {% trans "Expenses" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page provides a summary of all expenses submitted by collaborators" %};
-    {% trans "once approved, the corresponding amounts are assigned as " %} {{ credit_name }}
+    {% trans "once approved, the corresponding amounts are assigned as " %} {{ credits_name }}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}

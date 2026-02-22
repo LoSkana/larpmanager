@@ -39,12 +39,13 @@ from larpmanager.models.event import (
     Event,
     Run,
 )
-from larpmanager.models.experience import AbilityPx
-from larpmanager.models.form import WritingOption
+from larpmanager.models.experience import AbilityPx, AbilityTemplatePx
+from larpmanager.models.form import WritingOption, WritingQuestion, WritingQuestionType
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
 from larpmanager.models.registration import (
     Registration,
+    RegistrationSection,
     RegistrationTicket,
 )
 from larpmanager.models.writing import (
@@ -55,7 +56,7 @@ from larpmanager.models.writing import (
 )
 
 if TYPE_CHECKING:
-    from larpmanager.forms.base import MyForm
+    from larpmanager.forms.base import BaseModelForm
 
 # defer script loaded by form
 
@@ -63,15 +64,7 @@ css_delimeter = "/*@#§*/"
 
 
 def render_js(cls: Any) -> list[str]:
-    """Render JavaScript includes with defer attribute for forms.
-
-    Args:
-        cls: Media class containing JavaScript paths
-
-    Returns:
-        list: HTML script tags with defer attributes
-
-    """
+    """Render JavaScript includes with defer attribute for forms."""
     return [format_html('<script defer src="{}"></script>', cls.absolute_path(path)) for path in cls._js]
 
 
@@ -117,13 +110,7 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
     """Custom checkbox widget for role permission selection with help text."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize widget with feature help text and mapping.
-
-        Args:
-            *args: Variable positional arguments
-            **kwargs: Arbitrary keyword arguments including help_text and feature_map
-
-        """
+        """Initialize widget with feature help text and mapping."""
         self.feature_help = kwargs.pop("help_text", {})
         self.feature_map = kwargs.pop("feature_map", {})
         super().__init__(*args, **kwargs)
@@ -199,19 +186,11 @@ class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
     """Model multiple choice field with translated labels."""
 
     def label_from_instance(self, obj: Any) -> str:
-        """Get translated label for model instance.
-
-        Args:
-            obj: Model instance
-
-        Returns:
-            str: Translated name of the instance
-
-        """
+        """Get translated label for model instance."""
         return _(obj.name)
 
 
-def prepare_permissions_role(form: MyForm, typ: type) -> None:
+def prepare_permissions_role(form: BaseModelForm, typ: type) -> None:
     """Prepare permission fields for role forms based on enabled features.
 
     Creates dynamic form fields for permissions organized by modules,
@@ -298,7 +277,7 @@ def prepare_permissions_role(form: MyForm, typ: type) -> None:
         form.modules.append(field_name)
 
 
-def save_permissions_role(instance: EventRole | AssociationRole, form: MyForm) -> None:
+def save_permissions_role(instance: EventRole | AssociationRole, form: BaseModelForm) -> None:
     """Save selected permissions for a role instance.
 
     Args:
@@ -431,7 +410,7 @@ class AssociationMemberS2Widget(AssocMS2, s2forms.ModelSelect2Widget):
 
 
 class RunMemberS2Widget(s2forms.ModelSelect2Widget):
-    """Represents RunMemberS2Widget model."""
+    """Widget to select only members that have signed up to that run."""
 
     search_fields: ClassVar[list] = [
         "name__icontains",
@@ -464,29 +443,43 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
         return Member.objects.filter(pk__in=self.allowed_member_ids)
 
     def label_from_instance(self, obj: Any) -> str:
-        """Generate label combining object display name and email.
-
-        Args:
-            obj: Object with display_real() method and email attribute.
-
-        Returns:
-            Formatted string with display name and email.
-
-        """
+        """Generate label combining object display name and email."""
         # noinspection PyUnresolvedReferences
         return f"{obj.display_real()} - {obj.email}"
 
 
+class RunStaffS2Widget(s2forms.ModelSelect2Widget):
+    """Widget to select only staff of a run."""
+
+    search_fields: ClassVar[list] = [
+        "name__icontains",
+        "surname__icontains",
+        "nickname__icontains",
+        "user__email__icontains",
+    ]
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and set allowed attribute to None."""
+        super().__init__(*args, **kwargs)
+        self.allowed_member_ids = None
+
+    def set_run(self, run: Run) -> None:
+        """Set allowed members for a run based on event roles."""
+        event_role_queryset = EventRole.objects.filter(event_id=run.event_id).prefetch_related("members")
+        self.allowed_member_ids = set(event_role_queryset.values_list("members__id", flat=True))
+
+    def get_queryset(self) -> QuerySet[Member]:
+        """Return members filtered by allowed IDs."""
+        return Member.objects.filter(pk__in=self.allowed_member_ids)
+
+    def label_from_instance(self, obj: Any) -> str:
+        """Generate label combining object display name and email."""
+        # noinspection PyUnresolvedReferences
+        return f"{obj.show_nick()}"
+
+
 def get_association_people(association_id: int) -> list[tuple[int, str]]:
-    """Get list of people associated with an association for form choices.
-
-    Args:
-        association_id: Association ID to get members for
-
-    Returns:
-        list: List of (member_id, display_string) tuples
-
-    """
+    """Get list of people associated with an association for form choices."""
     que = Membership.objects.select_related("member").filter(association_id=association_id)
     que = que.exclude(status=MembershipStatus.EMPTY).exclude(status=MembershipStatus.REWOKED)
     return [(f.member_id, f"{f.member!s} - {f.member.email}") for f in que]
@@ -506,19 +499,21 @@ def get_run_choices(self: Any, *, past: bool = False) -> None:
     """
     choices = [("", "-----")]
     runs = (
-        Run.objects.filter(event__association_id=self.params["association_id"]).select_related("event").order_by("-end")
+        Run.objects.filter(event__association_id=self.params.get("association_id"))
+        .select_related("event")
+        .order_by("-end")
     )
     if past:
         reference_date = timezone.now() - timedelta(days=30)
         runs = runs.filter(end__gte=reference_date.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
-    choices.extend([(run.id, str(run)) for run in runs])
+    choices.extend([(run.uuid, str(run)) for run in runs])
 
     if "run" not in self.fields:
         self.fields["run"] = forms.ChoiceField(label=_("Session"))
 
     self.fields["run"].choices = choices
     if "run" in self.params:
-        self.initial["run"] = self.params["run"].id
+        self.initial["run"] = self.params.get("run").uuid
 
 
 class EventRegS2Widget(s2forms.ModelSelect2Widget):
@@ -588,6 +583,52 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
         return Run.objects.filter(event__association_id=self.association_id)
 
 
+class RunRegS2Widget(s2forms.ModelSelect2Widget):
+    """Select2 widget for registrations filtered by run."""
+
+    search_fields: ClassVar[list] = [
+        "search__icontains",
+    ]
+
+    def set_run(self, run: Run) -> None:
+        """Set the run for this instance."""
+        self.run = run
+
+    def get_queryset(self) -> QuerySet[Registration]:
+        """Return non-cancelled registrations for the current run."""
+        return (
+            Registration.objects.filter(run=self.run, cancellation_date__isnull=True)
+            .select_related("member", "ticket")
+            .order_by("member__name", "member__surname")
+        )
+
+    def label_from_instance(self, obj: Any) -> str:
+        """Return formatted label for registration instance."""
+        return str(obj)
+
+
+class TransferTargetRunS2Widget(s2forms.ModelSelect2Widget):
+    """Select2 widget for target runs in registration transfers."""
+
+    search_fields: ClassVar[list] = [
+        "search__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the current event to exclude runs from the same event."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet[Run]:
+        """Return runs from different events that are not concluded or cancelled."""
+        return (
+            Run.objects.filter(event__association_id=self.event.association_id)
+            .exclude(event_id=self.event.id)
+            .exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC])
+            .select_related("event")
+            .order_by("-start")
+        )
+
+
 class EventCharacterS2:
     """Represents EventCharacterS2 model."""
 
@@ -606,7 +647,7 @@ class EventCharacterS2:
         """Return optimized queryset of event characters ordered by number."""
         return (
             self.event.get_elements(Character)
-            .only("id", "name", "number", "teaser", "title", "event_id")
+            .only("id", "uuid", "name", "number", "teaser", "title", "event_id")
             .order_by("number")
         )
 
@@ -617,6 +658,56 @@ class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.ModelSelect2Multiple
 
 class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
     """Represents EventCharacterS2Widget model."""
+
+
+class EventCharacterS2WidgetUuid(EventCharacterS2, s2forms.ModelSelect2Widget):
+    """Select2 widget for characters that returns UUID instead of ID as value."""
+
+    def label_from_instance(self, obj: Character) -> str:
+        """Return formatted label for character instance."""
+        return f"#{obj.number} {obj.name}"
+
+    def result_from_instance(self, obj: Character, request: Any = None) -> dict:  # noqa: ARG002
+        """Override to return UUID instead of ID in select2 results."""
+        return {
+            "id": obj.uuid,
+            "text": self.label_from_instance(obj),
+        }
+
+
+class RunCampaignS2:
+    """Manages loading run from a campaign."""
+
+    search_fields: ClassVar[list] = [
+        "search__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the event to look for other campaign events."""
+        if event.parent_id:
+            # Event is in a campaign - get parent and all siblings
+            parent_event = Event.objects.get(id=event.parent_id)
+            # Get all children of the parent (siblings) plus the parent itself
+            event_ids = list(Event.objects.filter(parent_id=parent_event.id).values_list("id", flat=True))
+            event_ids.append(parent_event.id)
+        else:
+            # Event is standalone or parent - get this event and all children
+            event_ids = list(Event.objects.filter(parent_id=event.id).values_list("id", flat=True))
+            event_ids.append(event.id)
+
+        self.event_ids = event_ids
+
+    def get_queryset(self) -> QuerySet[Character]:
+        """Return queryset of runs of allowed event ids."""
+        return Run.objects.filter(event_id__in=self.event_ids).order_by("-end")
+
+
+class RunCampaignS2WidgetMulti(RunCampaignS2, s2forms.ModelSelect2MultipleWidget):
+    """Represents RunCampaignS2WidgetMulti model."""
+
+
+class RunCampaignS2Widget(RunCampaignS2, s2forms.ModelSelect2Widget):
+    """Represents RunCampaignS2Widget model."""
 
 
 class EventPlotS2:
@@ -728,6 +819,42 @@ class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return self.event.get_elements(AbilityPx)
 
 
+class ComputedFieldS2Widget(s2forms.ModelSelect2Widget):
+    """Represents selection of event computed fields."""
+
+    search_fields: ClassVar[list] = [
+        "name__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet[AbilityPx]:
+        """Return ability experience entries for this event."""
+        return self.event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
+
+
+class AbilityTemplateS2WidgetMulti(s2forms.ModelSelect2Widget):
+    """Represents AbilityTemplateS2WidgetMulti model."""
+
+    search_fields: ClassVar[list] = [
+        "name__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet[RegistrationTicket]:
+        """Return registration tickets for the event."""
+        return self.event.get_elements(AbilityTemplatePx)
+
+    def label_from_instance(self, obj: Any) -> str:
+        """Return string representation of the given object."""
+        return obj.get_full_name()
+
+
 class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     """Represents TicketS2WidgetMulti model."""
 
@@ -742,6 +869,38 @@ class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     def get_queryset(self) -> QuerySet[RegistrationTicket]:
         """Return registration tickets for the event."""
         return self.event.get_elements(RegistrationTicket)
+
+
+class RegistrationSectionS2Widget(s2forms.ModelSelect2Widget):
+    """Select2 widget for registration sections."""
+
+    search_fields: ClassVar[list] = [
+        "name__icontains",
+        "description__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet:
+        """Return registration sections for the event."""
+        return RegistrationSection.objects.filter(event=self.event).order_by("order")
+
+    def label_from_instance(self, obj: Any) -> str:
+        """Return formatted label for section instance."""
+        return str(obj)
+
+    def value_from_datadict(self, data: dict, files: dict, name: str) -> Any:  # noqa: ARG002
+        """Get value from form data - expects UUID."""
+        return data.get(name)
+
+    def result_from_instance(self, obj: Any, request: Any = None) -> dict:  # noqa: ARG002
+        """Override to return UUID instead of ID in select2 results."""
+        return {
+            "id": str(obj.uuid),
+            "text": self.label_from_instance(obj),
+        }
 
 
 class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
@@ -852,16 +1011,7 @@ class WarehouseTagS2Widget(WarehouseTagS2, s2forms.ModelSelect2Widget):
 
 
 def remove_choice(choices: list[tuple[str, str]], type_to_remove: str) -> list[tuple[str, str]]:
-    """Remove a specific choice from a list of choices.
-
-    Args:
-        choices: List of (key, value) choice tuples
-        type_to_remove: Choice key to remove
-
-    Returns:
-        list: New choice list without the specified type
-
-    """
+    """Remove a specific choice from a list of choices."""
     filtered_choices = []
     for key, value in choices:
         if key == type_to_remove:
@@ -886,18 +1036,9 @@ class RedirectForm(forms.Form):
 
 
 def get_members_queryset(association_id: int) -> QuerySet[Member]:
-    """Get queryset of members for an association with accepted status.
-
-    Args:
-        association_id: Association ID to filter members for
-
-    Returns:
-        QuerySet: Members with accepted, submitted, or joined membership status
-
-    """
+    """Get queryset of members for an association with accepted status."""
     allowed_statuses = [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.JOINED]
-    queryset = Member.objects.prefetch_related("memberships")
-    return queryset.filter(memberships__association_id=association_id, memberships__status__in=allowed_statuses)
+    return Member.objects.filter(memberships__association_id=association_id, memberships__status__in=allowed_statuses)
 
 
 # CSRF-aware upload handler for TinyMCE
@@ -959,13 +1100,7 @@ class CSRFTinyMCE(TinyMCE):
     """
 
     def __init__(self, attrs=None, mce_attrs=None) -> None:  # noqa: ANN001
-        """Initialize TinyMCE widget with CSRF-aware upload handler.
-
-        Args:
-            attrs: HTML attributes for the widget
-            mce_attrs: TinyMCE-specific configuration attributes
-
-        """
+        """Initialize TinyMCE widget with CSRF-aware upload handler."""
         # Merge custom upload handler with any existing mce_attrs
         mce_attrs = mce_attrs or {}
         mce_attrs["images_upload_handler"] = _TINYMCE_CSRF_UPLOAD_HANDLER

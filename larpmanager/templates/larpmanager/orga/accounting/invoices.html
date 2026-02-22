@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {% trans "Payment confirmation" %} - {{ run }}
+    {% trans "Payment confirmation" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "Manage manual payment approval" %}
@@ -24,7 +24,7 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>{{ el.member }}</td>
                     <td>
                         {% if el.method %}{{ el.method }}{% endif %}
@@ -40,7 +40,7 @@
                     <td>{{ el.created | date:"d/m/Y h:m" }}</td>
                     <td>
                         {% if el.status == 'r' or el.status == 's' %}
-                            <a href="{% url 'orga_invoices_confirm' run.get_slug el.id %}">{% trans "Confirm" %}</a>
+                            <a href="{% url 'orga_invoices_confirm' run.get_slug el.uuid %}">{% trans "Confirm" %}</a>
                         {% endif %}
                     </td>
                 </tr>

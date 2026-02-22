@@ -1,7 +1,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Event
-    descr: 'Manage the event settings: name, description, dates, and other data'
+    descr: 'Manage the event settings: name, description, dates, status'
     slug: orga_event
     number: 11
     config: gallery
@@ -104,9 +104,9 @@
     descr: Manages tokens used by participants to cover the registration fee
     slug: orga_tokens
     number: 41
-    config: token_credit
+    config: tokens
     hidden: false
-    feature: token_credit
+    feature: tokens
     module: accounting
 - model: larpmanager.eventpermission
   fields:
@@ -114,9 +114,9 @@
     descr: Manages credits used by participants to cover the registration fee
     slug: orga_credits
     number: 51
-    config: token_credit
+    config: credits
     hidden: false
-    feature: token_credit
+    feature: credits
     module: accounting
 - model: larpmanager.eventpermission
   fields:
@@ -314,7 +314,7 @@
     descr: Manage participant registrations
     slug: orga_registrations
     number: 11
-    config: null
+    config: registrations
     hidden: false
     feature: orga_registrations
     module: registration
@@ -344,7 +344,7 @@
     descr: Manage the registration questions and options
     slug: orga_registration_form
     number: 41
-    config: reg_form
+    config: registrations
     hidden: false
     feature: orga_registration_form
     module: registration
@@ -715,8 +715,9 @@
     slug: orga_px_rules
     number: 81
     config: px
+    active_if: px_rules
     hidden: false
-    feature: px
+    feature: rules
     module: experience
 - model: larpmanager.eventpermission
   fields:
@@ -725,8 +726,9 @@
     slug: orga_px_modifiers
     number: 91
     config: px
+    active_if: px_modifiers
     hidden: false
-    feature: px
+    feature: modifiers
     module: experience
 - model: larpmanager.eventpermission
   fields:
@@ -748,3 +750,44 @@
     hidden: false
     feature: onetime_content
     module: onetime
+- model: larpmanager.eventpermission
+  fields:
+    name: Ability Templates
+    descr: Manage ability templates
+    slug: orga_px_ability_templates
+    number: 41
+    config: px
+    active_if: px_templates
+    hidden: false
+    feature: templates
+    module: experience
+- model: larpmanager.eventpermission
+  fields:
+    name: Character Inventory
+    descr: Manage character inventories and their items
+    slug: orga_ci_inventory
+    number: 51
+    config: null
+    hidden: false
+    feature: inventory
+    module: inventory
+- model: larpmanager.eventpermission
+  fields:
+    name: Pool Types
+    descr: Manage character inventory pool types
+    slug: orga_ci_pool_types
+    number: 53
+    config: null
+    hidden: false
+    feature: inventory
+    module: inventory
+- model: larpmanager.eventpermission
+  fields:
+    name: Activity Log
+    descr: View detailed activity log of all changes made for this specific event
+    slug: orga_log
+    number: 1
+    config: null
+    hidden: false
+    feature: logs
+    module: miscellany

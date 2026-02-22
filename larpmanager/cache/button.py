@@ -25,35 +25,12 @@ from larpmanager.models.event import EventButton
 
 
 def event_button_key(event_id: int) -> str:
-    """Generate cache key for event buttons.
-
-    Args:
-        event_id (int): Event ID
-
-    Returns:
-        str: Cache key for event buttons
-
-    """
+    """Generate cache key for event buttons."""
     return f"event_button_{event_id}"
 
 
 def update_event_button(event_id: int) -> list[tuple[str, str, str]]:
-    """Update event button cache from database.
-
-    Retrieves all event buttons for the specified event, orders them by number,
-    and caches the result for performance optimization.
-
-    Args:
-        event_id: Event ID to update buttons for.
-
-    Returns:
-        List of tuples containing (name, tooltip, link) for each event button,
-        ordered by the button's number field.
-
-    Side effects:
-        Updates the cache with current button data using a 1-day timeout.
-
-    """
+    """Update event button cache from database."""
     # Query event buttons ordered by number field and extract button data as tuples
     return [
         (button.name, button.tooltip, button.link)

@@ -23,6 +23,7 @@
 from decimal import Decimal
 
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
@@ -75,7 +76,7 @@ class TestBasicSignals(BaseTestCase):
         character.delete()
 
         # Verify deleted correctly
-        with self.assertRaises(Character.DoesNotExist):
+        with self.assertRaises(ObjectDoesNotExist):
             Character.objects.get(id=character_id)
 
     def test_accounting_payment_save_signal(self) -> None:
@@ -87,7 +88,7 @@ class TestBasicSignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
 
@@ -107,7 +108,7 @@ class TestBasicSignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         payment_id = payment.id
@@ -195,7 +196,7 @@ class TestBasicSignals(BaseTestCase):
             member=member,
             value=Decimal("100.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         payment.save()
@@ -208,7 +209,7 @@ class TestBasicSignals(BaseTestCase):
 
         # Relationships should be preserved
         self.assertEqual(payment.member, member)
-        self.assertEqual(payment.reg, registration)
+        self.assertEqual(payment.registration, registration)
 
     def test_cache_operations_dont_break(self) -> None:
         """Test that cache operations triggered by signals don't break"""

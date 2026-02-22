@@ -70,22 +70,13 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
         overrides = get_association_translation_cache(association_id, language) or {}
 
         # Create a custom translation wrapper that applies overrides
-        assoc_trans = AssociationTranslations(base_translation, overrides)
+        assoc_trans = AssociationTranslations(base_translation, overrides, language)
 
         # Replace the thread-local active translation with our custom one
         trans_real._active.value = assoc_trans  # noqa: SLF001  # Django translation internal
 
     def process_response(self, request: HttpRequest, response: HttpResponse) -> HttpResponse:  # noqa: ARG002
-        """Clean up translation overrides after processing the request.
-
-        Args:
-            request: The HTTP request object
-            response: The HTTP response object
-
-        Returns:
-            The unmodified response object
-
-        """
+        """Clean up translation overrides after processing the request."""
         # Restore default translation behavior for the next request
         trans_real._active.value = None  # noqa: SLF001  # Django translation internal
         dj_translation.deactivate_all()
@@ -105,46 +96,28 @@ class AssociationTranslations(GNUTranslations):
     Attributes:
         _base: The underlying Django translation object
         _overrides: Dictionary mapping msgid strings to custom translations
+        _language: The language code for this translation (e.g., 'en', 'it')
 
     """
 
-    def __init__(self, base_translation: Any, overrides: dict[str, str]) -> None:
-        """Initialize the translation wrapper with base translations and overrides.
-
-        Args:
-            base_translation: Django's standard translation object for the language
-            overrides: Dictionary mapping original strings to custom translations
-
-        """
+    def __init__(self, base_translation: Any, overrides: dict[str, str], language: str) -> None:
+        """Initialize the translation wrapper with base translations and overrides."""
         self._base = base_translation
         self._overrides = overrides or {}
+        self._language = language
+
+    def to_language(self) -> str:
+        """Return the language code for this translation."""
+        return self._language
 
     def gettext(self, message: str) -> str:
-        """Translate a message, using custom override if available.
-
-        Args:
-            message: The original message string to translate
-
-        Returns:
-            The custom translation if available, otherwise the default translation
-
-        """
+        """Translate a message, using custom override if available."""
         if message in self._overrides:
             return self._overrides[message]
         return self._base.gettext(message)
 
     def ngettext(self, singular: str, plural: str, n: int) -> str:
-        """Translate a message with plural forms, using custom override if available.
-
-        Args:
-            singular: The singular form of the message
-            plural: The plural form of the message
-            n: The count determining which form to use
-
-        Returns:
-            The custom translation if available, otherwise the default translation
-
-        """
+        """Translate a message with plural forms, using custom override if available."""
         # Determine which form to check for override based on count
         key = singular if n == 1 else plural
         if key in self._overrides:

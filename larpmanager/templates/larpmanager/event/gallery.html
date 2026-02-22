@@ -4,59 +4,48 @@
     {{ run }}
 {% endblock title %}
 {% block content %}
-    {% if hide_login %}
-        <p>
-            <i>{% trans "Characters are only visible to logged in users" %}: <a href="{% url 'login' %}">{% trans "Login" %}</a></i>
-        </p>
-    {% elif hide_signup %}
-        <p>
-            <i>{% trans "Characters are only visible to participants" %}: <a href="{% url 'register' run.get_slug %}">{% trans "Register" %}</a></i>
-        </p>
-    {% else %}
-        {% if factions %}
-            {% for fnum in factions_typ.s %}
-                {% with factions|get:fnum as f %}
-                    {% if f.characters %}
-                        {% if f.name %}
-                            <h1 class="title">
-                                {% if show_faction %}
-                                    <a href="{% url 'faction' run.get_slug fnum %}">{{ f.name }}</a>
-                                {% else %}
-                                    {{ f.name }}
-                                {% endif %}
-                            </h1>
-                        {% endif %}
-                        <div class="gallery">
-                            {% for chnum in f.characters %}
-                                {% with chars|get:chnum as ch %}
-                                    {% if not ch.hide %}
-                                        <div class="el">
-                                            <div class="icon">
-                                                <a href="{% url 'character' run.get_slug ch.number %}">
-                                                    <div class="img_cover"
-                                                         style="background-image:url('{% get_char_profile ch %}')">
-                                                    </div>
-                                                    <div class="icon-name">
-                                                        <p>
-                                                            {{ ch.name }}
-                                                            {% if ch.title %}- {{ ch.title }}{% endif %}
-                                                        </p>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                {% endwith %}
-                            {% endfor %}
-                        </div>
+    {% if factions %}
+        {% for fnum in factions_typ.s %}
+            {% with factions|get:fnum as f %}
+                {% if f.characters %}
+                    {% if f.name %}
+                        <h1 class="title">
+                            {% if show_faction %}
+                                <a href="{% url 'faction' run.get_slug f.uuid %}">{{ f.name }}</a>
+                            {% else %}
+                                {{ f.name }}
+                            {% endif %}
+                        </h1>
                     {% endif %}
-                {% endwith %}
-            {% endfor %}
-        {% endif %}
-        {% if registration_list %}
-            <h1 class="title">{% trans "Registered" %}</h1>
-            {% include "elements/gallery.html" with list=registration_list %}
-        {% endif %}
+                    <div class="gallery">
+                        {% for chnum in f.characters %}
+                            {% with chars|get:chnum as ch %}
+                                {% if not ch.hide %}
+                                    <div class="el">
+                                        <div class="icon">
+                                            <a href="{% url 'character' run.get_slug ch.uuid %}">
+                                                <div class="img_cover"
+                                                     style="background-image:url('{% get_char_profile ch %}')"></div>
+                                                <div class="icon-name">
+                                                    <p>
+                                                        {{ ch.name }}
+                                                        {% if ch.title %}- {{ ch.title }}{% endif %}
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+    {% endif %}
+    {% if registration_list %}
+        <h1 class="title">{% trans "Registered" %}</h1>
+        {% include "elements/gallery.html" with list=registration_list %}
     {% endif %}
 {% endblock content %}
 {% block js %}

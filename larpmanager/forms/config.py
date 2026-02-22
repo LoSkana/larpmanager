@@ -9,7 +9,7 @@ from django.forms import Textarea
 from django.utils.html import escape, format_html_join
 
 from larpmanager.cache.config import reset_element_configs, save_all_element_configs
-from larpmanager.forms.base import MyForm
+from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import AssociationMemberS2WidgetMulti, CSRFTinyMCE, get_members_queryset
 
 if TYPE_CHECKING:
@@ -75,7 +75,7 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
         )
 
 
-class ConfigForm(MyForm):
+class ConfigForm(BaseModelForm):
     """Form for Config."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -101,21 +101,50 @@ class ConfigForm(MyForm):
         for el in self.config_fields:
             self._add_custom_field(el, res)
 
+        # If in frame mode with a specific section, remove fields from other sections
+        if self.params.get("frame") and self.jump_section:
+            self._filter_fields_by_section()
+
     @abstractmethod
     def set_configs(self) -> None:
         """No-op method placeholder."""
 
-    def set_section(self, section_slug: str, section_name: str) -> None:
-        """Set the current section for grouping configuration fields.
+    def _filter_fields_by_section(self) -> None:
+        """Remove all fields that don't belong to jump_section when in frame mode.
 
-        Args:
-            section_slug: Section slug identifier
-            section_name: Display name for the section
+        This method filters out configuration fields from other sections when
+        the form is being displayed in a modal frame focused on a specific section.
 
         Side effects:
-            Sets internal section state and jump_section if matches params
+            - Removes fields from self.fields that don't belong to jump_section
+            - Updates self.sections to only contain fields from jump_section
+            - Updates self.config_fields to only contain configs from jump_section
+            - Sets show_sections to True to auto-open the section
 
         """
+        # Filter config_fields to keep only those in the target section
+        self.config_fields = [cf for cf in self.config_fields if cf["section"] == self.jump_section]
+
+        # Get keys of fields to keep
+        fields_to_keep = {cf["key"] for cf in self.config_fields}
+
+        # Remove fields not in the target section
+        fields_to_remove = [key for key in self.fields if key not in fields_to_keep]
+        for key in fields_to_remove:
+            del self.fields[key]
+
+        # Update sections dict to only contain fields from target section
+        if hasattr(self, "sections"):
+            self.sections = {k: v for k, v in self.sections.items() if v == self.jump_section}
+
+        # Auto-open the section in frame mode
+        self.show_sections = True
+
+        # Flag to hide section headers in frame mode
+        self.hide_section_headers = True
+
+    def set_section(self, section_slug: str, section_name: str) -> None:
+        """Set the current section for grouping configuration fields."""
         self._section = section_name
         if self.params.get("jump_section", "") == section_slug:
             self.jump_section = section_name
@@ -227,8 +256,10 @@ class ConfigForm(MyForm):
         """
         # Map each configuration type to its corresponding Django form field factory
         field_type_to_form_field = {
-            # Basic text input field for short strings
-            ConfigType.CHAR: lambda: forms.CharField(label=label, help_text=help_text, required=False),
+            # Basic text input field for short strings, with optional validators from extra
+            ConfigType.CHAR: lambda: forms.CharField(
+                label=label, help_text=help_text, required=False, validators=extra if extra else []
+            ),
             # Checkbox field with custom styling for boolean values
             ConfigType.BOOL: lambda: forms.BooleanField(
                 label=label,
@@ -302,14 +333,16 @@ class ConfigForm(MyForm):
 
         # Get field type and extra configuration for specific field types
         field_type = config["type"]
-        extra_config = config["extra"] if field_type in [ConfigType.MEMBERS, ConfigType.MULTI_BOOL] else None
+        extra_config = (
+            config["extra"] if field_type in [ConfigType.MEMBERS, ConfigType.MULTI_BOOL, ConfigType.CHAR] else None
+        )
 
         # Create and add the form field
         self.fields[field_key] = self._get_form_field(field_type, config["label"], config["help_text"], extra_config)
 
         # Configure widget for MEMBERS field type
         if field_type == ConfigType.MEMBERS:
-            self.fields[field_key].widget.set_association_id(config["extra"])
+            self.configure_field_association(field_key, config["extra"])
             if initial_value:
                 initial_value = [s.strip() for s in initial_value.split(",")]
 
@@ -325,12 +358,7 @@ class ConfigForm(MyForm):
             self.initial[field_key] = initial_value
 
     def _get_all_element_configs(self) -> dict[str, str]:
-        """Get all existing configuration values for the instance.
-
-        Returns:
-            dict: Mapping of configuration names to their current values
-
-        """
+        """Get all existing configuration values for the instance."""
         config_mapping = {}
         if self.instance.pk:
             for config in self.instance.configs.all():

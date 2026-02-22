@@ -1,0 +1,56 @@
+{% load i18n %}
+{% if ongoing_runs %}
+    <div class="grid-item grid-line ">
+        <h2>
+            <i class="fa-solid fa-calendar-days"></i> {% trans "Events" %}
+        </h2>
+        <table class="go_datatable" no_header_cols="all" no_buttons>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{% trans "Event" %}</th>
+                    <th>{% trans "Dates" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Registrations" %}</th>
+                    <th>{% trans "Counts" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for run in ongoing_runs %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'manage' run.slug %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                        </td>
+                        <th>
+                            {{ run.name }}
+                            {% if run.parent %}
+                                | {% trans "Campaign" %}: {{ run.parent }}
+                            {% endif %}
+                        </th>
+                        <td>
+                            <p>
+                                <i>{{ run.pretty_dates }}</i>
+                            </p>
+                        </td>
+                        <td>
+                            <a href="{% url 'gallery' run.slug %}" target="_blank">{{ run.development_display }}</a>
+                        </td>
+                        <td>
+                            <p>
+                                <a href="{% url 'register' run.slug %}" target="_blank">{{ run.registration_status }}</a>
+                            </p>
+                        </td>
+                        <td>
+                            {% if run.registration_counts %}
+                                {% for key, count in run.registration_counts.items %}
+                                    {% include "elements/comma.html" %}
+                                    {{ key }}: {{ count }}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}

@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Warehouse assignments" %} - {{ area }} - {{ run }}
+    {% trans "Warehouse assignments" %} - {{ area }} - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {% trans "In this page you can mark which items to add to the game area" %}
@@ -28,7 +28,7 @@
         </thead>
         <tbody>
             {% for el in item_all.values %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td></td>
                     <td data-order="{% if el.selected %}1{% else %}0{% endif %}"
                         class="selected">
@@ -38,7 +38,10 @@
                     <td>{{ el.description }}</td>
                     <td>{{ el.container }}</td>
                     <td>
-                        {% for tag in el.tags.all %}{{ tag }}{% endfor %}
+                        {% for tag_id, tag_name in el.tags_cached %}
+                            {% include "elements/comma.html" %}
+                            {{ tag_name }}
+                        {% endfor %}
                     </td>
                     {% if optionals.quantity %}
                         <td>{{ el.available }}</td>
@@ -138,7 +141,7 @@ window.addEventListener('DOMContentLoaded', function() {
           const notes = $notes.length ? ($notes.val() || '').trim() : '';
 
           $.ajax({
-                url: '{% url "orga_warehouse_assignment_area" run.get_slug area.id %}',
+                url: '{% url "orga_warehouse_assignment_area" run.get_slug area.uuid %}',
                 method: 'POST',
                 data: {idx, selected: selected, quantity: quantity, notes: notes },
                 success: function () {

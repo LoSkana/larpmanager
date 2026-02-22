@@ -24,7 +24,7 @@ This module provides admin interfaces for managing associations, their
 configurations, custom texts, translations, and visual themes.
 """
 
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from django.contrib import admin
 
@@ -42,10 +42,16 @@ from larpmanager.models.association import (
 class AssociationAdmin(DefModelAdmin):
     """Admin interface for LARP organizations and associations."""
 
-    list_display = ("name", "slug", "created")
-    search_fields: ClassVar[tuple] = ("name",)
+    list_display = ("id", "name", "slug", "uuid", "demo")
+    search_fields: ClassVar[tuple] = ("id", "name", "uuid")
 
     autocomplete_fields: ClassVar[list] = ["payment_methods", "features", "maintainers"]
+
+    def has_delete_permission(self, request: Any, obj: Any | None = None) -> bool:
+        """Prevent delete if not demo."""
+        if obj is not None and not obj.demo:
+            return False
+        return super().has_delete_permission(request, obj)
 
 
 @admin.register(AssociationConfig)
@@ -53,7 +59,7 @@ class AssociationConfigAdmin(DefModelAdmin):
     """Admin interface for association-specific configuration key-value pairs."""
 
     list_display = ("association", "name", "value")
-    search_fields: ClassVar[tuple] = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name")
     list_filter = (AssociationFilter,)
     autocomplete_fields: ClassVar[list] = ["association"]
 
@@ -62,8 +68,9 @@ class AssociationConfigAdmin(DefModelAdmin):
 class AssociationTextAdmin(DefModelAdmin):
     """Admin interface for association custom text content by language and type."""
 
-    list_display: ClassVar[tuple] = ("association", "typ", "language", "default")
+    list_display: ClassVar[tuple] = ("id", "association", "typ", "language", "default", "uuid")
     list_filter = (AssociationFilter, "typ", "language")
+    search_fields: ClassVar[list] = ["id", "uuid"]
     autocomplete_fields: ClassVar[list] = ["association"]
 
 
@@ -77,37 +84,21 @@ class AssociationTranslationAdmin(DefModelAdmin):
     long text for better readability, and allows quick activation/deactivation.
     """
 
-    list_display = ("association", "language", "msgid_preview", "msgstr_preview", "active")
+    list_display = ("id", "association", "language", "msgid_preview", "msgstr_preview", "active", "uuid")
     list_filter: ClassVar[tuple] = (AssociationFilter, "language", "active")
-    search_fields = ("msgid", "msgstr")
+    search_fields: ClassVar[tuple] = ("id", "msgid", "msgstr", "uuid")
     autocomplete_fields: ClassVar[list] = ["association"]
     list_editable = ("active",)
 
     def msgid_preview(self, obj: AssociationTranslation) -> str:
-        """Display a truncated preview of the original text for list view.
-
-        Args:
-            obj: The AssociationTranslation instance
-
-        Returns:
-            The original text truncated to 50 characters with ellipsis if needed
-
-        """
+        """Display a truncated preview of the original text for list view."""
         max_length = 50
         return obj.msgid[:max_length] + "..." if len(obj.msgid) > max_length else obj.msgid
 
     msgid_preview.short_description = "Original text"
 
     def msgstr_preview(self, obj: AssociationTranslation) -> str:
-        """Display a truncated preview of the translated text for list view.
-
-        Args:
-            obj: The AssociationTranslation instance
-
-        Returns:
-            The translated text truncated to 50 characters with ellipsis if needed
-
-        """
+        """Display a truncated preview of the translated text for list view."""
         max_length = 50
         return obj.msgstr[:max_length] + "..." if len(obj.msgstr) > max_length else obj.msgstr
 
@@ -119,7 +110,7 @@ class AssociationSkinAdmin(DefModelAdmin):
     """Admin interface for association visual themes and skins."""
 
     list_display = ("name",)
-    search_fields: ClassVar[tuple] = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name")
 
     autocomplete_fields: ClassVar[list] = [
         "default_features",

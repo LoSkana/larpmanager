@@ -30,24 +30,14 @@ from django.views.decorators.http import require_GET
 from larpmanager.models.association import Association
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.event import Run
-from larpmanager.models.member import Log, Member
+from larpmanager.models.member import Member
+from larpmanager.models.miscellanea import Log
 from larpmanager.utils.larpmanager.tasks import notify_admins
 from larpmanager.views.manage import _get_registration_status_code
 
 
 def get_client_ip(request: HttpRequest) -> str:
-    """Extract the client IP address from the HTTP request.
-
-    Handles proxy forwarding by checking X-Forwarded-For header first,
-    falling back to REMOTE_ADDR if not present.
-
-    Args:
-        request: The HTTP request object containing client metadata
-
-    Returns:
-        The client's IP address as a string
-
-    """
+    """Extract the client IP address from the HTTP request."""
     x_forwarded_for_header = request.META.get("HTTP_X_FORWARDED_FOR")
     # X-Forwarded-For may contain multiple IPs (client, proxy1, proxy2...)
     # The first IP is the original client, otherwise use REMOTE_ADDR for direct connections

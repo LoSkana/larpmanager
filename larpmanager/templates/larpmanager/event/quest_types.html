@@ -16,13 +16,13 @@
                 <tr>
                     <td>
                         <h3>
-                            <a href="{% url 'quests' run.get_slug el.number %}">{{ el.name }}</a>
+                            <a href="{% url 'quests' run.get_slug el.uuid %}">{{ el.name }}</a>
                         </h3>
                     </td>
                     <td>
                         {% for ch in el.quests.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'quest' run.get_slug ch.number %}">{{ ch.name }}</a>
+                            <a href="{% url 'quest' run.get_slug ch.uuid %}">{{ ch.name }}</a>
                         {% endfor %}
                     </td>
                 </tr>

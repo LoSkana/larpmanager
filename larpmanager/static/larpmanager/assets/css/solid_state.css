@@ -663,7 +663,7 @@ select {
   font-size: 200%;
   text-align: center;
   clear: both;
-  margin: 0em;
+  margin: 0em 0.5em 0em 0em;
 }
 
 .gallery {
@@ -1464,6 +1464,7 @@ input[type="date"],
 input[type="date_p"],
 input[type="datetime_p"],
 input[type="time_p"],
+input[type="url"],
 select,
 textarea {
   border-color: rgba(var(--ter-rgb), 0.35) !important;

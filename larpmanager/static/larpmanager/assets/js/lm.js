@@ -37,6 +37,51 @@ window.jump_to = function(target) {
     }, 0);
 }
 
+/**
+ * Open an uglipop modal with an iframe and a close button
+ * @param {string} iframeUrl - The URL to load in the iframe
+ * @param {string} modalClass - CSS class for the modal (default: 'popup_option')
+ * @param {function} onClose - Optional callback function to call when modal is closed
+ */
+window.openIframeModal = function(iframeUrl, modalClass, onClose) {
+    modalClass = modalClass || 'popup_option';
+
+    const frame = `
+        <div class="frame-container">
+            <button class="modal-close-btn">
+                &times;
+            </button>
+            <iframe src="${iframeUrl}" width="100%" height="100%" style="border: none;"></iframe>
+        </div>
+    `;
+
+    uglipop({
+        class: modalClass,
+        source: 'html',
+        content: frame
+    });
+
+    // Attach click handler to close button after modal is opened
+    setTimeout(function() {
+        $('.modal-close-btn').on('click', function(e) {
+            e.preventDefault();
+
+            // Close the popup by clicking overlay
+            const overlay = document.getElementById('uglipop_overlay');
+            if (overlay) {
+                overlay.click();
+            }
+
+            // Call optional callback
+            if (onClose && typeof onClose === 'function') {
+                onClose();
+            }
+
+            return false;
+        });
+    }, 100);
+}
+
 function sidebar_mobile() {
     $('body').toggleClass('is-sidebar-visible');
     $('#sidebar-mobile-open').toggle();
@@ -61,7 +106,7 @@ window.addTinyMCETextarea = function(sel) {
 
 $(document).ready(function() {
 
-    $('#banner h1').textfill({
+    $('.association #banner h1').textfill({
     });
 
     $('#sidebar h1').textfill({
@@ -118,9 +163,7 @@ $(document).ready(function() {
             newUrl += '#' + hash;
         }
 
-        frame = "<iframe src='{0}' width='100%' height='100%'></iframe>".format(newUrl);
-
-        uglipop({class:'popup_tutorial', source:'html', content: frame});
+        window.openIframeModal(newUrl, 'popup_tutorial');
 
     });
 
@@ -181,8 +224,10 @@ $(document).ready(function() {
     $('.links td:not(:has(*))').parent().remove();
 
     /* QTIP TOOLTIP */
-    if (window.enviro == "prod")
+    if (window.enviro == "prod") {
         lm_tooltip();
+        add_icon_tooltips();
+    }
 
     $(':input[type="date_p"]').datetimepicker({
         format:'Y-m-d',
@@ -203,37 +248,37 @@ $(document).ready(function() {
         scrollInput : false
     });
 
-        let slugTouched = false;
-        let slugTimeout;
+    let slugTouched = false;
+    let slugTimeout;
 
-        $('#slug').on('input', function (e) {
-            slugTouched = true;
+    $('#slug').on('input', function (e) {
+        slugTouched = true;
 
-            let v = $(this).val();
-            var sl = new RegExp('[^a-z0-9]');
-            if (sl.test(v)) {
-                $('.slug_war').fadeIn(200);
+        let v = $(this).val();
+        var sl = new RegExp('[^a-z0-9]');
+        if (sl.test(v)) {
+            $('.slug_war').fadeIn(200);
 
-                clearTimeout(slugTimeout);
-                slugTimeout = setTimeout(function() {
-                    $('.slug_war').fadeOut(200);
-                }, 3000);
+            clearTimeout(slugTimeout);
+            slugTimeout = setTimeout(function() {
+                $('.slug_war').fadeOut(200);
+            }, 3000);
 
-                v = v.replace(sl, '');
-                $(this).val(v);
-            }
+            v = v.replace(sl, '');
+            $(this).val(v);
+        }
 
-            $(this).trigger('slug:changed', [v]);
-        });
+        $(this).trigger('slug:changed', [v]);
+    });
 
-        $('#id_name').on('input', function (e) {
-            if (!slugTouched) {
-                let nameVal = $(this).val();
-                let autoSlug = slugify(nameVal);
-                autoSlug = autoSlug.replaceAll('-', '');
-                $('#slug').val(autoSlug).trigger('slug:changed', [autoSlug]);
-            }
-        });
+    $('#id_name, #id_form1-name').on('input', function (e) {
+        if (!slugTouched) {
+            let nameVal = $(this).val();
+            let autoSlug = slugify(nameVal);
+            autoSlug = autoSlug.replaceAll('-', '');
+            $('#slug').val(autoSlug).trigger('slug:changed', [autoSlug]);
+        }
+    });
 
     reload_has_char();
 
@@ -275,8 +320,13 @@ $(document).ready(function() {
 
     $('.tablesorter').tablesorter();
 
-    $('.delete').click(function(){
-        return confirm('Are you sure?');
+    // Confirmation for delete icons (fa-trash)
+    $(document).on('click', 'a:has(i.fa-trash), a:has(i.fa-solid.fa-trash), a:has(i.fas.fa-trash)', function(e) {
+        if (!window.lmTesting && !confirm('Are you sure you want to delete this item?')) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
     });
 
     $('.show_popup').on( "click", function() {
@@ -317,12 +367,6 @@ $(document).ready(function() {
         $('.info').hide();
     }
 
-    if ($('#topbar').innerWidth() < 840) {
-        document.fonts.ready.then(function () {
-            centerMobileIcons();
-        });
-    }
-
     data_tables();
 
     post_popup();
@@ -343,8 +387,72 @@ $(document).ready(function() {
 
     show_sidebar_active();
 
+    copyClipboardButton();
+
+    setSelectChevronColor();
+
+    setupConditionalFields();
+
     $(document).trigger("lm_ready");
 });
+
+/**
+ * Sets up conditional field visibility based on data attributes.
+ * Fields with data-conditional-controller control visibility of fields
+ * with data-conditional-show that match the controller's value.
+ */
+function setupConditionalFields() {
+    $('[data-conditional-controller]').each(function() {
+        var $controller = $(this);
+        var controllerName = $controller.attr('data-conditional-controller');
+
+        function updateVisibility() {
+            var selectedValue = $controller.val();
+
+            // Find all fields that depend on this controller
+            $('[data-conditional-show]').each(function() {
+                var $field = $(this);
+                var showForValue = $field.attr('data-conditional-show');
+                var $row = $field.closest('tr');
+
+                if (selectedValue === showForValue) {
+                    $row.show();
+                } else {
+                    $row.hide();
+                }
+            });
+        }
+
+        // Initial state
+        updateVisibility();
+
+        // Update on change
+        $controller.on('change', updateVisibility);
+    });
+}
+
+function setSelectChevronColor() {
+  const priRgb = getComputedStyle(document.documentElement)
+    .getPropertyValue('--ter-rgb')
+    .trim();
+
+  const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <path d="M9.4,12.3l10.4,10.4l10.4-10.4c0.2-0.2,0.5-0.4,0.9-0.4c0.3,0,0.6,0.1,0.9,0.4l3.3,3.3c0.2,0.2,0.4,0.5,0.4,0.9
+  c0,0.4-0.1,0.6-0.4,0.9L20.7,31.9c-0.2,0.2-0.5,0.4-0.9,0.4c-0.3,0-0.6-0.1-0.9-0.4L4.3,17.3c-0.2-0.2-0.4-0.5-0.4-0.9
+  c0-0.4,0.1-0.6,0.4-0.9l3.3-3.3c0.2-0.2,0.5-0.4,0.9-0.4S9.1,12.1,9.4,12.3z"
+  fill="rgba(${priRgb},0.725)"/>
+</svg>`;
+
+  const encoded = encodeURIComponent(svg)
+    .replace(/'/g, "%27")
+    .replace(/"/g, "%22");
+
+    $('select:not(.dt-input)').css(
+      'background-image',
+      `url("data:image/svg+xml,${encoded}")`
+    );
+}
 
 function show_sidebar_active() {
     // set select on sidebar
@@ -416,15 +524,16 @@ function data_tables() {
 
         const tableId = $table.attr('id');
 
-        let disable_sort_columns = [0];
-        if ($table.hasClass('writing_list')) {
-            disable_sort_columns = [0, 2];
-        }
-        if ($table.hasClass('ordering_arrow')) {
-            var thList = $table.find('thead th');
-            var totalColumns = thList.length;
-            disable_sort_columns.push(totalColumns - 2, totalColumns - 1);
-        }
+        var thList = $table.find('thead th');
+        var disable_sort_columns = [];
+
+        // disable sort for empty thead th
+        thList.each(function (index) {
+            if ($(this).text().trim() === '') {
+                disable_sort_columns.push(index);
+            }
+        });
+
         let table_no_header_cols = $table.attr('no_header_cols');
         if (table_no_header_cols) {
             if (table_no_header_cols === "all") {
@@ -447,16 +556,20 @@ function data_tables() {
         }
 
         var full_layout = rowCount >= 10;
+        var no_buttons = $table.attr('no_buttons') !== undefined;
 
         const table = new DataTable('#' + tableId, {
             scrollX: true,
-            stateSave: true,
+            stateSave: false,
             paging: full_layout,
             layout: full_layout
-                ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } }
+                ? (no_buttons
+                    ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
+                    : { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } })
                 : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
             columnControl: ['order', 'searchDropdown'],
-            lengthMenu: [[10, 25, 50, 100, 250, 500, 1000], [10, 25, 50, 100, 250, 500, 1000]],
+            lengthMenu: [[25, 50, 100, 250, 500, 1000], [25, 50, 100, 250, 500, 1000]],
+            order: [],
             ordering: {
                 indicators: false,
                 handler: false
@@ -477,6 +590,12 @@ function data_tables() {
         });
 
         table.on('draw.dt', function() {
+            // Add tooltips to edit icons first
+            if (window.enviro == "prod") {
+                add_icon_tooltips();
+            }
+
+            // Then handle any remaining qtip attributes
             $('a[qtip]').each(function() {
                 if (!$(this).data('qtip-initialized')) {
                     $(this).qtip({
@@ -529,14 +648,24 @@ function data_tables() {
 
         const url = $table.attr('url');
 
+        var thList = $table.find('thead th');
+        var disable_sort_columns = [];
+
+        // disable sort for empty thead th
+        thList.each(function (index) {
+            if ($(this).text().trim() === '') {
+                disable_sort_columns.push(index);
+            }
+        });
+
         const table = new DataTable('#' + tableId, {
-            lengthMenu: [[10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000], [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]],
+            lengthMenu: [[25, 50, 100, 250, 500, 1000, 2500, 5000, 10000], [25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]],
             ajax: {
                 url: url,
                 type: 'POST'
             },
             serverSide: true,
-            stateSave: true,
+            stateSave: false,
             columnControl: [
                 {
                     target: 0,
@@ -548,9 +677,9 @@ function data_tables() {
                 handler: false
             },
             columnDefs: [
-                { orderable: false, targets: [0] },
-                { searcheable: false, targets: [0] },
-                { columnControl: [], targets: [0] }
+                { orderable: false, targets: disable_sort_columns },
+                { searcheable: false, targets: disable_sort_columns },
+                { columnControl: [], targets: disable_sort_columns }
             ],
             layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } },
             /*
@@ -576,6 +705,27 @@ function data_tables() {
             }
             */
         });
+
+        table.on('draw.dt', function() {
+            // Add tooltips to edit icons first
+            if (window.enviro == "prod") {
+                add_icon_tooltips();
+            }
+
+            // Then handle any remaining qtip attributes
+            $('a[qtip]').each(function() {
+                if (!$(this).data('qtip-initialized')) {
+                    $(this).qtip({
+                        content: { text: $(this).attr('qtip') },
+                        style: { classes: 'qtip-dark qtip-rounded qtip-shadow' },
+                        hide: { effect: function(offset) { $(this).fadeOut(500); } },
+                        show: { effect: function(offset) { $(this).fadeIn(500); } },
+                        position: { my: 'top center', at: 'bottom center' }
+                    });
+                    $(this).data('qtip-initialized', true);
+                }
+            });
+        });
     });
 }
 
@@ -592,8 +742,9 @@ function post_popup() {
         });
 
         request.done(function(res) {
-            if (res.k == 0) return;
             stop_spinner();
+
+            if (res.k == 0) return;
 
             uglipop({class:'popup', source:'html', content: res.v});
 
@@ -601,6 +752,10 @@ function post_popup() {
 
             $('.popup').scrollTop( 0 );
             $(".popup .hide").hide();
+        });
+
+        request.fail(function(res) {
+            stop_spinner();
         });
 
         return false;
@@ -743,6 +898,61 @@ function reload_has_tooltip(parent='') {
 
 }
 
+function add_icon_tooltips() {
+    // Dictionary mapping icon classes to their tooltip texts
+    var iconTooltips = {
+        'fa-edit': window['icon_texts']['edit'],
+        'fa-arrow-up': window['icon_texts']['up'],
+        'fa-arrow-down': window['icon_texts']['down'],
+        'fa-trash': window['icon_texts']['delete']
+    };
+
+    // Process each icon type
+    Object.keys(iconTooltips).forEach(function(iconClass) {
+        var defaultText = iconTooltips[iconClass];
+
+        // Find all icons with this class (supporting both .fa-* and .fas.fa-*)
+        $('i.' + iconClass + ', i.fa-solid.' + iconClass + ', i.fas.' + iconClass).each(function() {
+            var $icon = $(this);
+            var $link = $icon.closest('a');
+
+            // Only add tooltip if the link doesn't already have qtip attribute and not already initialized
+            if ($link.length && !$link.attr('qtip') && !$link.data('qtip-initialized')) {
+                // Get translation text from data attribute or use default
+                var dataAttr = iconClass.replace('fa-', '') + '-tooltip';
+                var tooltipText = $link.data(dataAttr) || defaultText;
+                $link.attr('qtip', tooltipText);
+
+                // Initialize qtip for this link
+                $link.qtip({
+                    content: {
+                        text: tooltipText
+                    },
+                    style: {
+                        classes: 'qtip-dark qtip-rounded qtip-shadow'
+                    },
+                    hide: {
+                        effect: function(offset) {
+                            $(this).fadeOut(500);
+                        }
+                    },
+                    show: {
+                        effect: function(offset) {
+                            $(this).fadeIn(500);
+                        }
+                    },
+                    position: {
+                        my: 'top center',
+                        at: 'bottom center'
+                    }
+                });
+
+                $link.data('qtip-initialized', true);
+            }
+        });
+    });
+}
+
 
 
 
@@ -809,33 +1019,30 @@ if (!String.prototype.format) {
   };
 }
 
-function centerMobileIcons() {
-    const $topbar = $('#topbar');
-    const topbarWidth = $topbar.innerWidth();
+function copyClipboardButton() {
+    // Copy link to clipboard functionality (jQuery)
+    $('.copy-link-btn').on('click', function (e) {
+        e.preventDefault();
 
-    var $visibleElements = $topbar.find('.el');
-    var elCount = 0;
-    var totalElWidth = 0;
+        const $btn = $(this);
+        const url = window.location.origin + $btn.data('url');
 
-    $visibleElements.each(function () {
-        var width = $(this).innerWidth();
-        if (width > 0) {
-            totalElWidth += width;
-            elCount += 1;
-        }
-    });
+        navigator.clipboard.writeText(url).then(function () {
+            const $icon = $btn.find('i');
+            const originalClass = $icon.attr('class');
 
-    var totalSpacing = topbarWidth * 0.95 - totalElWidth;
-    var margin = totalSpacing / elCount;
+            $icon.attr('class', 'fa-solid fa-check');
+            $btn.css('color', '#28a745');
 
-    $visibleElements.each(function (index) {
-        var ml = margin / 2;
-
-        $(this).closest('.el').css({
-            'margin-left': `${ml}px`,
-            'margin-right': `${ml}px`
+            setTimeout(function () {
+                $icon.attr('class', originalClass);
+                $btn.css('color', '');
+            }, 2000);
+        }).catch(function (err) {
+            console.error('Failed to copy:', err);
         });
     });
+
 }
 
 });

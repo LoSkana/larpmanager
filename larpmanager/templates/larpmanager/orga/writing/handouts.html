@@ -22,25 +22,26 @@
                     <th class="hide assign">{% trans "Assigned" %}</th>
                 {% endif %}
                 <th>{% trans "Text" %}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_handouts_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_handouts_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el }}</td>
                     <td>
-                        <a href="{% url 'orga_handouts_view' run.get_slug el.id %}"
+                        <a href="{% url 'orga_handouts_view' run.get_slug el.uuid %}"
                            qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
-                        <a href="{% url 'orga_handouts_versions' run.get_slug el.id %}"
+                        <a href="{% url 'orga_handouts_versions' run.get_slug el.uuid %}"
                            qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
                         <a href="{% url 'handout_ext' run.get_slug el.cod %}"
                            qtip="{% trans "External access" %}"><i class="fa-solid fa-key"></i></a>
                         {% if features.print_pdf %}
-                            <a href="{% url 'orga_handouts_print' run.get_slug el.id %}"
+                            <a href="{% url 'orga_handouts_print' run.get_slug el.uuid %}"
                                download
                                qtip="PDF"><i class="fa-solid fa-file-pdf"></i></a>
                         {% endif %}
@@ -55,6 +56,11 @@
                         </td>
                     {% endif %}
                     <td>{{ el.text_red | safe }}</td>
+                    <td>
+                        <a href="{% url 'orga_handouts_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

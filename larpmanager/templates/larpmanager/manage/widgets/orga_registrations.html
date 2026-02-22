@@ -1,0 +1,46 @@
+{% load i18n %}
+<div class="grid-item">
+    <h2>
+        <a href="{% url 'orga_registrations' run.get_slug %}" target="_blank"><i class="fa-solid fa-clipboard-list"></i> {% trans "Registrations" %}</a>
+    </h2>
+    <p>
+        {% trans "Status" %}: <a href="{% url 'register' run.get_slug %}" target="_blank">{{ run.get_registration_status_display }}</a>
+        <a href="{% url 'orga_run_quick_edit_registration' run.get_slug %}"
+           class="btn btn-sm btn-primary action-link"
+           data-slug="orga_event"
+           data-modal-eligible="true"
+           title="{% trans "Edit registration status" %}">
+            <i class="fa-solid fa-pencil"></i>
+        </a>
+        <button class="copy-link-btn"
+                data-url="{% url 'register' run.get_slug %}"
+                title="{% trans "Copy link to clipboard" %}">
+            <i class="fa-solid fa-copy"></i>
+        </button>
+    </p>
+    {% if features.registration_secret and not registrations_open %}
+        <p>
+            <a href="{% url 'register_exclusive' run.get_slug run.registration_secret %}"
+               target="_blank">{% trans "Secret registration link" %}</a>
+            <button class="copy-link-btn"
+                    data-url="{% url 'register_exclusive' run.get_slug run.registration_secret %}"
+                    title="{% trans "Copy link to clipboard" %}">
+                <i class="fa-solid fa-copy"></i>
+            </button>
+        </p>
+    {% endif %}
+    {% if registration_counts %}
+        <table>
+            <tbody>
+                {% for key, count in registration_counts.items %}
+                    {% if count %}
+                        <tr>
+                            <th>{{ key }}</th>
+                            <td>{{ count }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>

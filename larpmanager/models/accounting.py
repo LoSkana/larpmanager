@@ -20,13 +20,13 @@
 
 from typing import Any, ClassVar
 
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel, PaymentMethod
+from larpmanager.models.base import BaseModel, PaymentMethod, UuidMixin
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
@@ -51,7 +51,7 @@ class PaymentStatus(models.TextChoices):
     CHECKED = "k", "Checked"
 
 
-class PaymentInvoice(BaseModel):
+class PaymentInvoice(UuidMixin, BaseModel):
     """Represents PaymentInvoice model."""
 
     search = models.CharField(max_length=500, editable=False)
@@ -101,7 +101,7 @@ class PaymentInvoice(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    reg = models.ForeignKey(
+    registration = models.ForeignKey(
         Registration,
         on_delete=models.CASCADE,
         related_name="invoices",
@@ -119,8 +119,13 @@ class PaymentInvoice(BaseModel):
         indexes: ClassVar[list] = [
             models.Index(fields=["key", "status"]),
             models.Index(fields=["association", "cod"]),
-            models.Index(fields=["reg", "status", "-created"]),
+            models.Index(fields=["registration", "status", "-created"]),
             models.Index(fields=["status", "-created"]),
+            # Performance index from migration 0137
+            models.Index(
+                fields=["status", "created"],
+                name="payinv_status_created_idx",
+            ),
         ]
 
     def __str__(self) -> str:
@@ -177,7 +182,7 @@ class PaymentInvoice(BaseModel):
         return details_html
 
 
-class ElectronicInvoice(BaseModel):
+class ElectronicInvoice(UuidMixin, BaseModel):
     """Represents ElectronicInvoice model."""
 
     inv = models.OneToOneField(
@@ -199,6 +204,10 @@ class ElectronicInvoice(BaseModel):
     xml = models.TextField(blank=True, null=True)
 
     response = models.TextField(blank=True, null=True)
+
+    def __str__(self) -> str:
+        """Return string representation of the electronic invoice."""
+        return f"{self.number}/{self.year}"
 
     class Meta:
         constraints: ClassVar[list] = [
@@ -234,19 +243,25 @@ class ElectronicInvoice(BaseModel):
             **kwargs: Arbitrary keyword arguments passed to parent save method.
 
         """
-        # Auto-generate progressive number if not set (global counter)
-        if not self.progressive:
-            highest_progressive = ElectronicInvoice.objects.aggregate(models.Max("progressive"))["progressive__max"]
-            self.progressive = highest_progressive + 1 if highest_progressive else 1
+        # Use atomic transaction to prevent race conditions
+        with transaction.atomic():
+            # Auto-generate progressive number if not set (global counter)
+            if not self.progressive:
+                # Lock all electronic invoices to prevent concurrent progressive number generation
+                highest_progressive = ElectronicInvoice.objects.select_for_update().aggregate(
+                    models.Max("progressive")
+                )["progressive__max"]
+                self.progressive = highest_progressive + 1 if highest_progressive else 1
 
-        # Auto-generate invoice number if not set (per year/association counter)
-        if not self.number:
-            que = ElectronicInvoice.objects.filter(year=self.year, association=self.association)
-            highest_number = que.aggregate(models.Max("number"))["number__max"]
-            self.number = highest_number + 1 if highest_number else 1
+            # Auto-generate invoice number if not set (per year/association counter)
+            if not self.number:
+                # Lock relevant invoices for this year/association
+                que = ElectronicInvoice.objects.select_for_update().filter(year=self.year, association=self.association)
+                highest_number = que.aggregate(models.Max("number"))["number__max"]
+                self.number = highest_number + 1 if highest_number else 1
 
-        # Call parent save method to persist the instance
-        super().save(*args, **kwargs)
+            # Call parent save method to persist the instance
+            super().save(*args, **kwargs)
 
 
 class ExpenseChoices(models.TextChoices):
@@ -274,7 +289,7 @@ class BalanceChoices(models.TextChoices):
     DIVER = "5", _("Miscellaneous operating expenses")
 
 
-class AccountingItem(BaseModel):
+class AccountingItem(UuidMixin, BaseModel):
     """Represents AccountingItem model."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -296,17 +311,23 @@ class AccountingItem(BaseModel):
             String with ID, class name, and member info if available.
 
         """
-        # Build base string with class name
-        s = "Voce contabile"
-        # noinspection PyUnresolvedReferences
-        if self.id:
-            # noinspection PyUnresolvedReferences
-            s += f" &{self.id}"
-        s += f" - {self.__class__.__name__}"
+        s = self.__class__.__name__.replace("AccountingItem", "")
 
-        # Append member info if present
         if self.member:
             s += f" - {self.member}"
+
+        if hasattr(self, "run") and self.run:
+            s += f" - {self.run}"
+
+        if hasattr(self, "registration") and self.registration:
+            s += f" - {self.registration.run}"
+
+        if self.value:
+            s += f" - {self.value}"
+
+        if hasattr(self, "descr"):
+            s += f" - {self.descr[:50]}"
+
         return s
 
     class Meta:
@@ -323,7 +344,7 @@ class AccountingItem(BaseModel):
 class AccountingItemTransaction(AccountingItem):
     """Represents AccountingItemTransaction model."""
 
-    reg = models.ForeignKey(
+    registration = models.ForeignKey(
         Registration,
         on_delete=models.CASCADE,
         related_name="accounting_items_t",
@@ -388,9 +409,15 @@ class AccountingItemOther(AccountingItem):
         elif self.oth == OtherChoices.REFUND:
             s = _("Refund")
 
-        # Append member information if present
         if self.member:
             s += f" - {self.member}"
+
+        if self.value:
+            s += f" - {self.value}"
+
+        if self.run:
+            s += f" - {self.run}"
+
         return s
 
 
@@ -407,7 +434,7 @@ class AccountingItemPayment(AccountingItem):
 
     pay = models.CharField(max_length=1, choices=PaymentChoices.choices, default=PaymentChoices.MONEY)
 
-    reg = models.ForeignKey(
+    registration = models.ForeignKey(
         Registration,
         on_delete=models.CASCADE,
         related_name="accounting_items_p",
@@ -422,7 +449,7 @@ class AccountingItemPayment(AccountingItem):
     vat_options = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
-        indexes: ClassVar[list] = [models.Index(fields=["pay", "reg"])]
+        indexes: ClassVar[list] = [models.Index(fields=["pay", "registration"])]
 
 
 class AccountingItemExpense(AccountingItem):
@@ -518,7 +545,7 @@ class DiscountType(models.TextChoices):
     GIFT = "g", _("Gift")
 
 
-class Discount(BaseModel):
+class Discount(UuidMixin, BaseModel):
     """Represents Discount model."""
 
     name = models.CharField(max_length=100, help_text=_("Name of the discount - internal use"))
@@ -652,7 +679,7 @@ class CollectionStatus(models.TextChoices):
     PAYED = "p", _("Delivered")
 
 
-class Collection(BaseModel):
+class Collection(UuidMixin, BaseModel):
     """Represents Collection model."""
 
     name = models.CharField(max_length=100, null=True)
@@ -743,7 +770,7 @@ class RefundStatus(models.TextChoices):
     PAYED = "p", _("Delivered")
 
 
-class RefundRequest(BaseModel):
+class RefundRequest(UuidMixin, BaseModel):
     """Represents RefundRequest model."""
 
     search = models.CharField(max_length=200, editable=False)

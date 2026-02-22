@@ -23,21 +23,21 @@ import logging
 from datetime import timedelta
 from typing import Any
 
+import jwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_association_config
 from larpmanager.forms.miscellanea import (
     HelpQuestionForm,
     ShuttleServiceEditForm,
     ShuttleServiceForm,
 )
-from larpmanager.models.event import Run
 from larpmanager.models.miscellanea import (
     Album,
     AlbumUpload,
@@ -51,7 +51,7 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.writing import Handout
 from larpmanager.utils.core.base import get_context, get_event_context, is_shuttle
-from larpmanager.utils.core.common import get_album, get_workshop
+from larpmanager.utils.core.common import get_album, get_object_uuid, get_workshop
 from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.io.pdf import (
     print_handout,
@@ -76,22 +76,6 @@ def util(request: HttpRequest, util_cod: str) -> HttpResponseRedirect:  # noqa: 
     except Exception as err:
         msg = "not found"
         raise Http404(msg) from err
-
-
-def help_red(request: HttpRequest, run_id: int) -> HttpResponseRedirect:
-    """Redirect to help page for a specific run."""
-    # Set up context with user data and association ID
-    context = get_context(request)
-
-    # Get the run object or raise 404 if not found
-    try:
-        context["run"] = Run.objects.get(pk=run_id, event__association_id=context["association_id"])
-    except ObjectDoesNotExist as err:
-        msg = "Run does not exist"
-        raise Http404(msg) from err
-
-    # Redirect to help page with run slug
-    return redirect("help", event_slug=context["run"].get_slug())
 
 
 @login_required
@@ -146,7 +130,7 @@ def user_help(request: HttpRequest, event_slug: str | None = None) -> HttpRespon
 
 
 @login_required
-def help_attachment(request: HttpRequest, attachment_id: int) -> HttpResponseRedirect:
+def help_attachment(request: HttpRequest, attachment_uuid: str) -> HttpResponseRedirect:
     """Handle attachment download for help questions.
 
     Validates user permissions and redirects to the attachment URL if authorized.
@@ -154,7 +138,7 @@ def help_attachment(request: HttpRequest, attachment_id: int) -> HttpResponseRed
 
     Args:
         request: The HTTP request object containing user information
-        attachment_id: Primary key of the HelpQuestion to get attachment from
+        attachment_uuid: UUID of the HelpQuestion to get attachment from
 
     Returns:
         HttpResponseRedirect: Redirect to the attachment URL
@@ -166,12 +150,8 @@ def help_attachment(request: HttpRequest, attachment_id: int) -> HttpResponseRed
     # Get default user context with permissions
     context = get_context(request)
 
-    # Attempt to retrieve the help question by primary key
-    try:
-        hp = HelpQuestion.objects.get(pk=attachment_id)
-    except ObjectDoesNotExist as err:
-        msg = "HelpQuestion does not exist"
-        raise Http404(msg) from err
+    # Attempt to retrieve the help question by uuid
+    hp = get_object_uuid(HelpQuestion, attachment_uuid)
 
     # Check access permissions: owner or association role required
     if hp.member != context["member"] and not context["association_role"]:
@@ -183,17 +163,7 @@ def help_attachment(request: HttpRequest, attachment_id: int) -> HttpResponseRed
 
 
 def handout_ext(request: HttpRequest, event_slug: str, code: str) -> HttpResponse:
-    """Generate and return a PDF for a specific event handout.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-        code: Handout code identifier
-
-    Returns:
-        PDF file response with the handout content
-
-    """
+    """Generate and return a PDF for a specific event handout."""
     # Retrieve event/run context and fetch handout by code
     context = get_event_context(request, event_slug)
     context["handout"] = get_object_or_404(Handout, event=context["event"], cod=code)
@@ -245,10 +215,10 @@ def album(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def album_sub(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def album_sub(request: HttpRequest, event_slug: str, album_uuid: str) -> HttpResponse:
     """View handler for displaying a specific photo album within an event run."""
     context = get_event_context(request, event_slug)
-    get_album(context, num)
+    get_album(context, album_uuid)
     return album_aux(request, context, context["album"])
 
 
@@ -327,7 +297,7 @@ def valid_workshop_answer(request: HttpRequest, context: dict) -> Any:
 
 
 @login_required
-def workshop_answer(request: HttpRequest, event_slug: str, workshop_module_id: int) -> HttpResponse:
+def workshop_answer(request: HttpRequest, event_slug: str, module_uuid: str) -> HttpResponse:
     """Handle workshop answer submission and validation.
 
     This function processes workshop submissions for LARP events, validates answers,
@@ -336,7 +306,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, workshop_module_id: i
     Args:
         request (HttpRequest): The HTTP request object containing user data and POST parameters
         event_slug (str): Event slug identifier for the current event/run
-        workshop_module_id (int): Workshop module number to process
+        module_uuid (str): Workshop module UUID to process
 
     Returns:
         HttpResponse: Either a rendered template (answer form or failure page) or
@@ -349,7 +319,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, workshop_module_id: i
     """
     # Get event context and validate user access to workshop signup
     context = get_event_context(request, event_slug, signup=True, include_status=True)
-    get_workshop(context, workshop_module_id)
+    get_workshop(context, module_uuid)
 
     # Check if user has already completed this workshop module
     completed = [el.pk for el in context["member"].workshops.select_related().all()]
@@ -457,12 +427,12 @@ def shuttle_new(request: HttpRequest) -> Any:
 
 
 @login_required
-def shuttle_edit(request: HttpRequest, shuttle_id: Any) -> Any:
+def shuttle_edit(request: HttpRequest, shuttle_uuid: Any) -> Any:
     """Edit existing shuttle service request.
 
     Args:
         request: HTTP request object
-        shuttle_id: Shuttle service ID to edit
+        shuttle_uuid: Shuttle service UUID to edit
 
     Returns:
         HttpResponse: Rendered edit form or redirect after successful update
@@ -471,7 +441,7 @@ def shuttle_edit(request: HttpRequest, shuttle_id: Any) -> Any:
     context = get_context(request)
     check_association_feature(request, context, "shuttle")
 
-    shuttle = ShuttleService.objects.get(pk=shuttle_id)
+    shuttle = get_object_uuid(ShuttleService, shuttle_uuid)
     if request.method == "POST":
         form = ShuttleServiceEditForm(request.POST, instance=shuttle, request=request, context=context)
         if form.is_valid():
@@ -484,3 +454,45 @@ def shuttle_edit(request: HttpRequest, shuttle_id: Any) -> Any:
         "larpmanager/general/writing.html",
         {"form": form, "name": _("Modify shuttle request")},
     )
+
+
+_ALLOWED_ALGORITHMS = {"HS256", "HS384", "HS512"}
+_SSO_TOKEN_TTL_SECONDS = 300
+
+
+@login_required
+def app_integration_redirect(request: HttpRequest) -> HttpResponse:
+    """Generate a signed JWT and redirect to the configured external application.
+
+    Reads the shared secret, algorithm, and redirect URL from the association config,
+    builds a short-lived JWT containing the user's identity, and redirects to the
+    external application as ``<redirect_url>?token=<jwt>``.
+    """
+    context = get_context(request)
+    check_association_feature(request, context, "app_integration")
+
+    association_id = context["association_id"]
+
+    secret = get_association_config(association_id, "app_integration_secret", default_value="")
+    redirect_url = get_association_config(association_id, "app_integration_redirect_url", default_value="")
+    algorithm = get_association_config(association_id, "app_integration_algorithm", default_value="HS256")
+
+    if not secret or not redirect_url:
+        return HttpResponseForbidden("App integration is not fully configured.")
+
+    if algorithm not in _ALLOWED_ALGORITHMS:
+        algorithm = "HS256"
+
+    now = timezone.now()
+    payload = {
+        "sub": request.user.email,
+        "email": request.user.email,
+        "name": str(request.user.member.display_member),
+        "iat": int(now.timestamp()),
+        "exp": int((now + timedelta(seconds=_SSO_TOKEN_TTL_SECONDS)).timestamp()),
+    }
+
+    token = jwt.encode(payload, secret, algorithm=algorithm)
+
+    separator = "&" if "?" in redirect_url else "?"
+    return redirect(f"{redirect_url}{separator}token={token}")

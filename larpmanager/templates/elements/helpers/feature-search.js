@@ -34,7 +34,7 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     $(function() {
-        var input_search = '<input type="text" name="search" id="search" placeholder="Search" /><br />';
+        var input_search = '<input type="text" name="search" id="search" placeholder="Search" />';
         $('.page_exe_features').prepend(input_search);
         $('.page_orga_features').prepend(input_search);
 

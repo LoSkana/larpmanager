@@ -5,9 +5,6 @@
 {% endblock title %}
 {% block nav %}
     {% include "larpmanager/manage/nav.html" %}
-    {% if char.player_id == request.user.member.id %}
-        {% include "elements/sheet/char_nav.html" %}
-    {% endif %}
 {% endblock nav %}
 {% block content %}
     <div class="character">
@@ -18,7 +15,9 @@
         <div class="gallery single">
             <div class="el">
                 <div class="icon">
-                    <img src="{% get_char_profile char %}" alt="character profile" />
+                    <img src="{% get_char_profile char %}"
+                         alt="character profile"
+                         id="char_profile" />
                 </div>
             </div>
             <div class="text">
@@ -39,6 +38,7 @@
                         {% include "elements/sheet/pdf.html" %}
                         {% if intro %}<div class="char_intro">{{ intro | safe }}</div>{% endif %}
                         {% include "elements/sheet/px.html" %}
+                        {% include "elements/sheet/inventories.html" %}
                         {% include "elements/sheet/factions.html" %}
                         {% include "elements/sheet/texts.html" with char=sheet_char %}
                         {% include "elements/sheet/plots.html" %}
@@ -68,11 +68,11 @@ function go_chart() {
     var myChart = new Chart(context, {
         type: 'bar',
         data: {
-            labels: [{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" %} "{{ forloop.counter }}"{% endfor %}{% endwith %}],
+            labels: [{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" with separator="," %} "{{ forloop.counter }}"{% endfor %}{% endwith %}],
             datasets: [{
                 label: '',
-                data:[{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" %}{% get_field pref.2 forloop.counter %}{% endfor %}{% endwith %}],
-                backgroundColor: [{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" %}'rgba(54, 162, 235, 0.8)'{% endfor %}{% endwith %}],
+                data:[{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" with separator="," %}{% get_field pref.2 forloop.counter %}{% endfor %}{% endwith %}],
+                backgroundColor: [{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" with separator="," %}'rgba(54, 162, 235, 0.8)'{% endfor %}{% endwith %}],
                 borderWidth: 0
             }]
         },
