@@ -821,6 +821,9 @@ def vote(request: HttpRequest) -> HttpResponse:
 
     # Check if membership payment is required and completed
     if "membership" in context["features"]:
+        if context["membership"].status != MembershipStatus.ACCEPTED:
+            messages.error(request, _("You must be an approved member to vote") + ".")
+            return redirect("membership")
         que = AccountingItemMembership.objects.filter(association_id=context["association_id"], year=context["year"])
         if not que.filter(member_id=context["member"].id).exists():
             messages.error(request, _("You must complete payment of membership dues in order to vote!"))

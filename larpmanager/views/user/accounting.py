@@ -512,7 +512,7 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
     # Validate user membership status - must be accepted to pay dues
     memb = get_user_membership(context["member"], context["association_id"])
     if memb.status != MembershipStatus.ACCEPTED:
-        messages.success(request, _("It is not possible for you to pay dues at this time") + ".")
+        messages.warning(request, _("It is not possible for you to pay dues at this time") + ".")
         return redirect("accounting")
 
     # Check if membership fee already paid for current year
