@@ -181,6 +181,7 @@ class FeatureForm(BaseModelForm):
                 continue
             features_id.extend([int(v) for v in self.cleaned_data[key]])
 
+        features_id = list(Feature.get_all_dependencies(features_id))
         instance.features.set(features_id)
         instance.save()
 

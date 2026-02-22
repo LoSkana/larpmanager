@@ -11,6 +11,8 @@
     after_link: orga_prologues
     hidden: false
     module: writing
+    dependencies:
+    - character
 - model: larpmanager.feature
   fields:
     name: Quests and Traits
@@ -114,6 +116,8 @@
     after_link: orga_characters_pdf
     hidden: false
     module: writing
+    dependencies:
+    - character
 - model: larpmanager.feature
   fields:
     name: Workshop
@@ -165,6 +169,8 @@
     after_link: config/casting
     hidden: false
     module: event
+    dependencies:
+    - character
 - model: larpmanager.feature
   fields:
     name: Help
@@ -191,6 +197,8 @@
     after_link: exe_collections
     hidden: false
     module: accounting
+    dependencies:
+      - credits
 - model: larpmanager.feature
   fields:
     name: Pre-registration
@@ -255,6 +263,8 @@
     after_link: config/custom_character
     hidden: false
     module: event
+    dependencies:
+    - character
 - model: larpmanager.feature
   fields:
     name: Membership
@@ -320,6 +330,8 @@
     after_link: orga_registration_tickets
     hidden: false
     module: registration
+    dependencies:
+    - character
 - model: larpmanager.feature
   fields:
     name: Chat
@@ -460,6 +472,8 @@
     after_link: orga_characters
     hidden: false
     module: writing
+    dependencies:
+    - character
 - model: larpmanager.feature
   fields:
     name: Sections
@@ -563,6 +577,8 @@
     after_link: orga_plots
     hidden: false
     module: writing
+    dependencies:
+    - character
 - model: larpmanager.feature
   fields:
     name: Factions
@@ -576,6 +592,8 @@
     after_link: orga_factions
     hidden: false
     module: writing
+    dependencies:
+    - character
 - model: larpmanager.feature
   fields:
     name: Handout
@@ -589,6 +607,8 @@
     after_link: orga_handouts
     hidden: false
     module: writing
+    dependencies:
+    - character
 - model: larpmanager.feature
   fields:
     name: Expenses
@@ -602,6 +622,8 @@
     after_link: exe_expenses
     hidden: false
     module: accounting
+    dependencies:
+      - credits
 - model: larpmanager.feature
   fields:
     name: Tokens
@@ -690,6 +712,8 @@
     after_link: exe_refunds
     hidden: false
     module: accounting
+    dependencies:
+      - credits
 - model: larpmanager.feature
   fields:
     name: Legal Notice
@@ -728,6 +752,8 @@
     after_link: config/user_character
     hidden: false
     module: event
+    dependencies:
+    - character
 - model: larpmanager.feature
   fields:
     name: Character inventory
@@ -740,6 +766,8 @@
     after_link: ''
     hidden: false
     module: event
+    dependencies:
+    - character
 - model: larpmanager.feature
   fields:
     name: Organisation tax

@@ -216,12 +216,34 @@ class Feature(BaseModel):
 
     hidden = models.BooleanField(default=False)
 
+    dependencies = models.ManyToManyField(
+        "self",
+        blank=True,
+        symmetrical=False,
+        related_name="dependents",
+    )
+
     class Meta:
         ordering: ClassVar[list] = ["module", "order"]
 
     def __str__(self) -> str:
         """Return string representation of the feature."""
         return f"{self.name} - {self.module}"
+
+    @classmethod
+    def get_all_dependencies(cls, feature_ids: list[int]) -> set[int]:
+        """Return all feature IDs needed, including transitive dependencies."""
+        all_ids: set[int] = set(feature_ids)
+        to_process = list(feature_ids)
+        while to_process:
+            deps = cls.objects.filter(pk__in=to_process).prefetch_related("dependencies")
+            to_process = []
+            for feature in deps:
+                for dep in feature.dependencies.all():
+                    if dep.pk not in all_ids:
+                        all_ids.add(dep.pk)
+                        to_process.append(dep.pk)
+        return all_ids
 
 
 class PaymentMethod(UuidMixin, BaseModel):

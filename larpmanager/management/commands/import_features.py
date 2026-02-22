@@ -61,6 +61,9 @@ class Command(BaseCommand):
             with fixture_path.open(encoding="utf-8") as f:
                 data = yaml.safe_load(f)
 
+            # Collect deferred M2M assignments to process after all instances exist
+            deferred_m2m = []
+
             for obj in data:
                 model_label = obj["model"]
                 Model = apps.get_model(model_label)
@@ -85,8 +88,12 @@ class Command(BaseCommand):
                 with transaction.atomic():
                     instance, _ = Model.objects.update_or_create(defaults=fields, **lookup)
 
-                    for field_name, values in m2m_fields.items():
-                        self.set_m2m(Model, field_name, instance, model_label, values)
+                deferred_m2m.append((Model, model_label, instance, m2m_fields))
+
+            # Second pass: set M2M fields after all instances are created
+            for model_class, model_label, instance, m2m_fields in deferred_m2m:
+                for field_name, values in m2m_fields.items():
+                    self.set_m2m(model_class, field_name, instance, model_label, values)
 
         # Reset sequences after importing to prevent duplicate key violations
         self.reset_sequences(models_to_reset)

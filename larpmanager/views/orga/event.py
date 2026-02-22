@@ -413,7 +413,8 @@ def orga_features_go(request: HttpRequest, context: dict, slug: str, *, to_activ
     # Handle feature activation/deactivation logic
     if to_active:
         if target_feature_id not in current_event_feature_ids:
-            context["event"].features.add(target_feature_id)
+            for dep_id in Feature.get_all_dependencies([target_feature_id]):
+                context["event"].features.add(dep_id)
             message = _("Feature %(name)s activated") + "!"
         else:
             message = _("Feature %(name)s already activated") + "!"
