@@ -52,6 +52,8 @@ def test_user_character_form_editor(pw_page: Any) -> None:
 
     verify_characters_shortcut(page, live_server)
 
+    player_relationships(page, live_server)
+
 
 def prepare(page: Any, live_server: Any) -> None:
     # Activate characters
@@ -142,6 +144,8 @@ def field_multiple(page: Any, live_server: Any) -> None:
 
 
 def field_text(page: Any, live_server: Any) -> None:
+    just_wait(page)
+
     # Add text
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
@@ -256,3 +260,37 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"),
   """event date status details event date status details test larp 19 march 2050
             registration confirmed (standard) your character is my character""")
+
+
+def player_relationships(page: Any, live_server: Any) -> None:
+    # Enable player relationships in config
+    go_to(page, live_server, "/test/manage/config")
+    page.get_by_role("link", name=re.compile(r"^Player editor ")).click()
+    page.locator("#id_user_character_player_relationships").check()
+    submit_confirm(page)
+
+    # Navigate to relationships page from the registration page
+    go_to(page, live_server, "/test/register")
+    page.get_by_role("link", name="Relationships").click()
+    just_wait(page)
+
+    # Create new relationship toward Test Character
+    page.get_by_role("link", name="New").click()
+    just_wait(page)
+    page.locator("#select2-id_target-container").click()
+    page.get_by_role("searchbox").fill("te")
+    page.get_by_role("option", name="#1 Test Character").click()
+    fill_tinymce(page, "id_text", "my relationship text", show=False)
+    submit_confirm(page)
+
+    # Verify relationship appears in list
+    expect_normalized(page, page.locator("#player_relationships"), "details relationship test character factions: test teaser (...) my relationship text")
+
+    # Edit the relationship and update the text
+    page.locator("#player_relationships").locator(".fa-edit").click()
+    just_wait(page)
+    fill_tinymce(page, "id_text", "updated relationship text", show=False)
+    submit_confirm(page)
+
+    # Verify updated text
+    expect_normalized(page, page.locator("#player_relationships"), "details relationship test character factions: test teaser (...) updated relationship text")
