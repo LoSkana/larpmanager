@@ -6241,6 +6241,9 @@ msgstr "behålla det autogenererade värdet eller anpassa det"
 msgid "Amount of the next payment instalment required"
 msgstr "Beloppet för nästa betalningsrat som krävs"
 
+msgid "An ability cannot be a prerequisite of itself."
+msgstr "En förmåga kan inte vara en förutsättning för sig själv."
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Uppsägning på grund av utebliven årlig medlemsavgift"
 

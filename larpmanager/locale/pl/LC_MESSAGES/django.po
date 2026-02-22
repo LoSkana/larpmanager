@@ -6240,6 +6240,9 @@ msgstr "zachować automatycznie wygenerowaną wartość lub ją dostosować"
 msgid "Amount of the next payment instalment required"
 msgstr "Wymagana kwota kolejnej raty płatności"
 
+msgid "An ability cannot be a prerequisite of itself."
+msgstr "Umiejętność nie może być warunkiem wstępnym samej siebie."
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Anulowanie z powodu braku rocznej opłaty członkowskiej"
 

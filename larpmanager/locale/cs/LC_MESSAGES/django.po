@@ -6239,6 +6239,9 @@ msgstr "ponechat automaticky generovanou hodnotu nebo ji přizpůsobit"
 msgid "Amount of the next payment instalment required"
 msgstr "Výše další požadované splátky"
 
+msgid "An ability cannot be a prerequisite of itself."
+msgstr "Schopnost nemůže být sama o sobě předpokladem."
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Zrušení z důvodu chybějícího ročního členského poplatku"
 

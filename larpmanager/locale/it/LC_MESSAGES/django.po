@@ -6240,6 +6240,9 @@ msgstr "mantenere il valore autogenerato o personalizzarlo"
 msgid "Amount of the next payment instalment required"
 msgstr "Importo della prossima rata richiesta"
 
+msgid "An ability cannot be a prerequisite of itself."
+msgstr "Un'abilità non può essere un prerequisito di per sé."
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Cancellazione per mancato pagamento della quota associativa annuale"
 

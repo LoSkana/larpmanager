@@ -138,6 +138,14 @@ class OrgaAbilityPxForm(PxBaseForm):
         if not px_user:
             self.delete_field("visible")
 
+    def clean(self) -> dict:
+        """Validate that the ability is not listed as its own prerequisite."""
+        cleaned_data = super().clean()
+        prerequisites = cleaned_data.get("prerequisites")
+        if prerequisites and self.instance and self.instance.pk and self.instance in prerequisites:
+            self.add_error("prerequisites", _("An ability cannot be a prerequisite of itself."))
+        return cleaned_data
+
 
 class OrgaAbilityTypePxForm(BaseModelForm):
     """Form for OrgaAbilityTypePx."""

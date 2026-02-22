@@ -1829,6 +1829,9 @@ msgstr ""
 msgid "Manage experience point abilities"
 msgstr ""
 
+msgid "An ability cannot be a prerequisite of itself."
+msgstr ""
+
 msgid "Ability type"
 msgstr ""
 
