@@ -60,12 +60,6 @@ var avoids = window['avoids'];
 // CSRF token for POST requests
 var csrf_token = window['csrf_token'];
 
-// Current tier/ticket ID being processed
-var tick = window['tick'];
-
-// Type of casting being performed
-var tipo = window['typ'];
-
 // URL endpoint for toggling character assignments
 var toggle_url = window['toggle_url'];
 
@@ -519,23 +513,6 @@ $(function() {
         }
         return false;
     });
-
-    // Tier/ticket dropdown - reload page with selected tier
-    $('#fascia').change(function() {
-        url = window['orga_casting_url'];
-        url += this.value;
-        window.location = url;
-    });
-    $('#fascia').val(tick);
-
-    // Type dropdown - reload page with selected type
-    $('#tipo').change(function() {
-        url = document.URL;
-        url = url.replace(/&t=[0-9]/i, '');
-        url += '&t=' + this.value;
-        window.location = url;
-    });
-    $('#tipo').val(tipo);
 
     // Set form action to current URL (preserves query parameters)
     $('#load form').attr('action', document.URL);
