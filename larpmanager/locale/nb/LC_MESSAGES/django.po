@@ -6242,6 +6242,9 @@ msgstr "beholde den autogenererte verdien eller tilpasse den"
 msgid "Amount of the next payment instalment required"
 msgstr "Beløpet på neste betalingsrate som kreves"
 
+msgid "An ability cannot be a prerequisite of itself."
+msgstr "En evne kan ikke være en forutsetning i seg selv."
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Kansellering på grunn av manglende årlig medlemsavgift"
 

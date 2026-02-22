@@ -22,9 +22,9 @@
                 {% endif %}
                 {% if px_user %}
                     <th>{% trans "Visible" %}</th>
-                    <th>{% trans "Prerequisites" %}</th>
-                    <th>{% trans "Requirements" %}</th>
                 {% endif %}
+                <th>{% trans "Prerequisites" %}</th>
+                <th>{% trans "Requirements" %}</th>
                 <th></th>
             </tr>
         </thead>
@@ -60,25 +60,23 @@
                             {% if el.template %}{{ el.template.get_full_name }}{% endif %}
                         </td>
                     {% endif %}
-                    {% if px_user %}
-                        <td>{{ el.visible }}</td>
-                        <td>
-                            {% if el.cached_rels %}
-                                {% for prereq_uuid, prereq_name in el.cached_rels.prerequisite_rels.list %}
-                                    {% include "elements/comma.html" %}
-                                    <a href="{% url 'orga_px_abilities_edit' run.get_slug prereq_uuid %}">{{ prereq_name }}</a>
-                                {% endfor %}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if el.cached_rels %}
-                                {% for req_id, req_name in el.cached_rels.requirement_rels.list %}
-                                    {% include "elements/comma.html" %}
-                                    {{ req_name }}
-                                {% endfor %}
-                            {% endif %}
-                        </td>
-                    {% endif %}
+                    {% if px_user %}<td>{{ el.visible }}</td>{% endif %}
+                    <td>
+                        {% if el.cached_rels %}
+                            {% for prereq_uuid, prereq_name in el.cached_rels.prerequisite_rels.list %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_px_abilities_edit' run.get_slug prereq_uuid %}">{{ prereq_name }}</a>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if el.cached_rels %}
+                            {% for req_id, req_name in el.cached_rels.requirement_rels.list %}
+                                {% include "elements/comma.html" %}
+                                {{ req_name }}
+                            {% endfor %}
+                        {% endif %}
+                    </td>
                     <td>
                         <a href="{% url 'orga_px_abilities_delete' run.get_slug el.uuid %}"
                            qtip="{% trans "Delete" %}"
