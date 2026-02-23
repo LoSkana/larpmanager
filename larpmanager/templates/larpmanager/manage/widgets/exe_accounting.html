@@ -1,5 +1,5 @@
 {% load i18n %}
-{% if widgets.accounting %}
+{% if widgets.accounting and widgets.accounting.global_sum or widgets.accounting.bank_sum %}
     <div class="grid-item">
         <h2>
             <a href="{% url 'exe_accounting' %}" target="_blank"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>

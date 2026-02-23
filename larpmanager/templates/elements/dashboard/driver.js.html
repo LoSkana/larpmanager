@@ -161,7 +161,7 @@ window.addEventListener('DOMContentLoaded', function() {
         const driverObj = driver({
             showProgress: true,
             steps: steps,
-            allowClose: false,
+            allowClose: true,
             popoverClass: 'my-driverjs',
             doneBtnText: '{% filter escapejs %}{% trans "Done" %}{% endfilter %}',
             onDestroyed: () => {

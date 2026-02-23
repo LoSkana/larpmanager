@@ -29,7 +29,6 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
-from larpmanager.cache.association import clear_association_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import cache_event_links
@@ -38,7 +37,6 @@ from larpmanager.cache.run import get_cache_config_run, get_cache_run
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
 from larpmanager.models.member import get_user_membership
-from larpmanager.models.registration import Registration
 from larpmanager.utils.auth.permission import (
     get_index_association_permissions,
     get_index_event_permissions,
@@ -506,14 +504,3 @@ def get_run(context: Any, event_slug: Any) -> None:
         context["event"] = context["run"].event
     except Exception as err:
         raise UnknowRunError from err
-
-
-def update_association_demo(instance: Registration) -> None:
-    """If association is in demo mode and total registrations exceed 10, disable demo."""
-    association = instance.run.event.association
-    if association.demo:
-        count = Registration.objects.filter(run__event__association_id=association.id).count()
-        if count > MAX_DEMO_REGISTRATIONS:
-            association.demo = False
-            association.save(update_fields=["demo"])
-            clear_association_cache(association.slug)

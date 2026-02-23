@@ -46,6 +46,11 @@ urlpatterns = [
         name="exe_quick",
     ),
     path(
+        "manage/activation/",
+        views_eas.exe_activation,
+        name="exe_activation",
+    ),
+    path(
         "manage/deadlines/",
         views_ee.exe_deadlines,
         name="exe_deadlines",

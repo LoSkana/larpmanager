@@ -448,3 +448,13 @@
     hidden: false
     feature: logs
     module: miscellany
+- model: larpmanager.associationpermission
+  fields:
+    name: Activation
+    descr: Request activation of advanced mode for the organization
+    slug: exe_activation
+    number: 9999
+    config: null
+    hidden: true
+    feature: exe_activation
+    module: organization

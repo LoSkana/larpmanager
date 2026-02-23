@@ -8,20 +8,20 @@
         {% include "larpmanager/manage/sticky_messages.html" %}
         {% include "larpmanager/manage/widgets/wwyltd.html" %}
         <div {% if not old_dashboard %}class="grid"{% else %}class="old_dashboard"{% endif %}>
+            {% with list=priorities typ="priorities" %}
+                {% include "larpmanager/manage/widgets/helpers.html" %}
+            {% endwith %}
             {% if old_dashboard %}
                 {% include "larpmanager/manage/widgets/exe_events_old.html" %}
             {% else %}
                 {% include "larpmanager/manage/widgets/exe_events.html" %}
             {% endif %}
-            {% include "larpmanager/manage/widgets/exe_accounting.html" %}
-            {% include "larpmanager/manage/widgets/exe_deadlines.html" %}
-            {% include "larpmanager/manage/widgets/exe_logs.html" %}
-            {% with list=priorities typ="priorities" %}
-                {% include "larpmanager/manage/widgets/helpers.html" %}
-            {% endwith %}
             {% with list=actions typ="actions" %}
                 {% include "larpmanager/manage/widgets/helpers.html" %}
             {% endwith %}
+            {% include "larpmanager/manage/widgets/exe_accounting.html" %}
+            {% include "larpmanager/manage/widgets/exe_deadlines.html" %}
+            {% include "larpmanager/manage/widgets/exe_logs.html" %}
             {% with list=suggestions typ="suggestions" %}
                 {% include "larpmanager/manage/widgets/helpers.html" %}
             {% endwith %}

@@ -26,11 +26,13 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db.models import Max
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.association import clear_association_cache
 from larpmanager.cache.association_text import clear_association_text_cache_on_delete
 from larpmanager.cache.association_translation import clear_association_translation_cache
-from larpmanager.cache.config import reset_element_configs
+from larpmanager.cache.config import get_association_config, get_event_config, reset_element_configs
 from larpmanager.cache.feature import reset_association_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.cache.permission import clear_index_permission_cache
@@ -38,8 +40,9 @@ from larpmanager.cache.role import remove_association_role_cache
 from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
 from larpmanager.models.access import AssociationPermission, AssociationRole
 from larpmanager.models.association import Association, AssociationText
-from larpmanager.models.event import Run
+from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Membership
+from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.utils.services.event import reset_all_run
 
 
@@ -187,3 +190,107 @@ def _reset_all_association(association_id: int, association_slug: str) -> None:
     # Clear all events' caches for this association
     for run in Run.objects.filter(event__association_id=association_id):
         reset_all_run(run.event, run)
+
+
+def _get_registrations_url(association_id: int) -> str:
+    """Return URL to the registrations page of the first event that has registrations, or exe_events as fallback."""
+    reg = Registration.objects.filter(run__event__association_id=association_id).select_related("run__event").first()
+    if reg:
+        return reverse("orga_registrations", kwargs={"event_slug": reg.run.event.slug})
+    return reverse("exe_events")
+
+
+def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
+    """Build the activation checklist and compute progress for a demo association.
+
+    Each item represents a required setup step. Progress is expressed as an
+    integer percentage (0-100) based on how many steps are complete.
+
+    Args:
+        association_id: Primary key of the association to evaluate.
+
+    Returns:
+        A tuple of (checklist, progress) where:
+            - checklist: list of dicts with keys slug, name, descr, done, url
+            - progress: integer percentage of completed steps (0-100)
+
+    """
+    association = Association.objects.only("skin_id").get(pk=association_id)
+
+    event_ids = list(Event.objects.filter(association_id=association_id).values_list("id", flat=True))
+
+    def _done(slug: str) -> bool:
+        config_key = f"{slug}_suggestion"
+        if slug.startswith("exe"):
+            return bool(get_association_config(association_id, config_key, default_value=False))
+        return any(get_event_config(eid, config_key, default_value=False) for eid in event_ids)
+
+    checklist = [
+        {
+            "slug": "exe_methods",
+            "name": _("Payment methods"),
+            "descr": _("Configure at least one payment method for participants"),
+            "done": _done("exe_methods"),
+            "url": reverse("exe_methods"),
+        },
+        {
+            "slug": "exe_profile",
+            "name": _("User profile"),
+            "descr": _("Configure the fields to collect in the participant profile data"),
+            "done": _done("exe_profile"),
+            "url": reverse("exe_profile"),
+        },
+        {
+            "slug": "orga_roles",
+            "name": _("Event roles"),
+            "descr": _("Define at least one additional role for event management"),
+            "done": _done("orga_roles"),
+            "url": reverse("redr", kwargs={"path": "event/manage/roles/"}),
+        },
+        {
+            "slug": "orga_registration_tickets",
+            "name": _("Registration tickets"),
+            "descr": _("Create at least one ticket type for event registrations"),
+            "done": _done("orga_registration_tickets"),
+            "url": reverse("redr", kwargs={"path": "event/manage/tickets/"}),
+        },
+        {
+            "slug": "orga_registration_form",
+            "name": _("Registration form"),
+            "descr": _("Define at least one question in the registration form"),
+            "done": _done("orga_registration_form"),
+            "url": reverse("redr", kwargs={"path": "event/manage/form/"}),
+        },
+        {
+            "slug": "orga_registrations",
+            "name": _("First registration"),
+            "descr": _("Have at least one participant registered for an event"),
+            "done": Registration.objects.filter(run__event__association_id=association_id).exists(),
+            "url": _get_registrations_url(association_id),
+        },
+    ]
+
+    if association.skin_id == 1:
+        checklist += [
+            {
+                "slug": "orga_characters",
+                "name": _("First character"),
+                "descr": _("Create at least one character for one of your events"),
+                "done": _done("orga_characters"),
+                "url": reverse("redr", kwargs={"path": "event/manage/characters/"}),
+            },
+            {
+                "slug": "orga_casting",
+                "name": _("First assignment"),
+                "descr": _("Assign a character to a registered participant"),
+                "done": RegistrationCharacterRel.objects.filter(
+                    registration__run__event__association_id=association_id
+                ).exists(),
+                "url": reverse("redr", kwargs={"path": "event/manage/registrations/"}),
+            },
+        ]
+
+    done_count = sum(1 for item in checklist if item["done"])
+    progress = round(done_count * 100 / len(checklist))
+
+    return checklist, progress

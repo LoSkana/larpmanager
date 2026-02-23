@@ -8,6 +8,9 @@ msgstr "e"
 msgid "By"
 msgstr "Door"
 
+msgid "Go"
+msgstr "Ga naar"
+
 msgid "Hi"
 msgstr "Hoi"
 
@@ -250,6 +253,9 @@ msgstr "Lied"
 
 msgid "Spam"
 msgstr "Spam"
+
+msgid "Step"
+msgstr "Stap"
 
 msgid "Tags"
 msgstr "Tags"
@@ -521,6 +527,9 @@ msgstr "Detail"
 
 msgid "Direct"
 msgstr "Direct"
+
+msgid "E-mail"
+msgstr "E-mail"
 
 msgid "Emails"
 msgstr "E-mails"
@@ -851,6 +860,9 @@ msgstr "Gedeeltelijk"
 
 msgid "Payment"
 msgstr "Betaling"
+
+msgid "Pending"
+msgstr "In afwachting van"
 
 msgid "Players"
 msgstr "Spelers"
@@ -1503,6 +1515,9 @@ msgstr "deze link"
 msgid "Accounting"
 msgstr "Boekhouding"
 
+msgid "Activation"
+msgstr "Activering"
+
 msgid "Additional"
 msgstr "Extra"
 
@@ -1841,6 +1856,9 @@ msgstr "Status bewerken"
 
 msgid "Event Texts"
 msgstr "Evenementteksten"
+
+msgid "Event roles"
+msgstr "Evenement rollen"
 
 msgid "Event texts"
 msgstr "Evenementteksten"
@@ -2201,6 +2219,9 @@ msgstr "Uploaden..."
 
 msgid "Url Shortner"
 msgstr "Url Verkorter"
+
+msgid "User profile"
+msgstr "Gebruikersprofiel"
 
 msgid "VAT (Ticket)"
 msgstr "BTW (ticket)"
@@ -2765,6 +2786,9 @@ msgstr "Externe toegang"
 msgid "Filter factions"
 msgstr "Filtergroepen"
 
+msgid "First character"
+msgstr "Eerste teken"
+
 msgid "Highlight color"
 msgstr "Kleur markeren"
 
@@ -2965,6 +2989,9 @@ msgstr "Externe website"
 
 msgid "Field visibility"
 msgstr "Zichtbaarheid in het veld"
+
+msgid "First assignment"
+msgstr "Eerste opdracht"
 
 msgid "Forward discount"
 msgstr "Termijnkorting"
@@ -3359,6 +3386,9 @@ msgstr "Elektronische factuur"
 msgid "Enable preferences"
 msgstr "Voorkeuren inschakelen"
 
+msgid "First registration"
+msgstr "Eerste registratie"
+
 msgid "Hide not available"
 msgstr "Verberg niet beschikbaar"
 
@@ -3747,6 +3777,9 @@ msgstr "Opening registratie"
 msgid "Registration options"
 msgstr "Registratieopties"
 
+msgid "Registration tickets"
+msgstr "Registratie tickets"
+
 msgid "Registrations status"
 msgstr "Status registraties"
 
@@ -3789,6 +3822,9 @@ msgstr "Containers voor magazijnen"
 #, python-format
 msgid "Welcome to %(name)s!"
 msgstr "Welkom bij %(name)s!"
+
+msgid "What you will unlock"
+msgstr "Wat je zult ontgrendelen"
 
 msgid "Yes, keep me posted!"
 msgstr "Ja, hou me op de hoogte!"
@@ -3967,6 +4003,9 @@ msgstr "U hebt al betaald"
 
 msgid "submit your vote here"
 msgstr "breng hier je stem uit"
+
+msgid "Activate advanced mode"
+msgstr "Geavanceerde modus activeren"
 
 msgid "Additional Preferences"
 msgstr "Extra voorkeuren"
@@ -6233,6 +6272,10 @@ msgstr "Een waarde instellen voor registratie externe link"
 msgid "The user has been assigned the specified role"
 msgstr "De gebruiker heeft de opgegeven rol toegewezen gekregen"
 
+msgid "This mode helps you master the basics quickly"
+msgstr ""
+"Deze modus helpt je om de basisbeginselen snel onder de knie te krijgen"
+
 msgid "This page shows the pre-signups for the event"
 msgstr "Deze pagina toont de voorinschrijvingen voor het evenement"
 
@@ -6249,6 +6292,9 @@ msgstr "Bedrag van de volgende betalingstermijn"
 
 msgid "An ability cannot be a prerequisite of itself."
 msgstr "Een vaardigheid kan geen voorwaarde voor zichzelf zijn."
+
+msgid "Assign a character to a registered participant"
+msgstr "Een personage toewijzen aan een geregistreerde deelnemer"
 
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Annulering wegens het niet betalen van de jaarlijkse contributie"
@@ -6501,6 +6547,10 @@ msgstr "Achtergrondafbeelding weergegeven op alle evenementpagina's"
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Kleur gebruikt voor tekstachtergrond en inhoudsvakken"
 
+msgid "Complete all steps above to unlock advanced mode."
+msgstr ""
+"Voltooi alle bovenstaande stappen om de geavanceerde modus te ontgrendelen."
+
 msgid "Create, access, and manage your events from here."
 msgstr "Maak, open en beheer je evenementen vanaf hier."
 
@@ -6658,9 +6708,6 @@ msgstr "Je kunt je lidmaatschapsgeld op dit moment niet betalen"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Word lid van onze Discord voor hulp, ideeën of om bugs te melden"
 
-msgid "Manage profile fields that participants can fill in"
-msgstr "Profielvelden beheren die deelnemers kunnen invullen"
-
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Beheren van magazijnbewegingen, leningen en reparaties"
 
@@ -6706,6 +6753,9 @@ msgstr "Geïnde bijdrage van %(user)s voor %(recipient)s"
 
 msgid "Configure payment methods available for participants"
 msgstr "Beschikbare betalingsmethoden configureren voor deelnemers"
+
+msgid "Create at least one character for one of your events"
+msgstr "Maak minstens één personage voor een van je evenementen"
 
 msgid "Description of the role of the character in the plot"
 msgstr "Beschrijving van de rol van het personage in het plot"
@@ -6774,6 +6824,9 @@ msgstr "upload uw lidmaatschapsaanvraag om verder te gaan"
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Casting-voorkeuren opgeslagen op '%(type)s' voor %(event)s"
 
+msgid "Define at least one question in the registration form"
+msgstr "Definieer ten minste één vraag in het registratieformulier"
+
 msgid "Description of the relationship from source to target"
 msgstr "Beschrijving van de relatie tussen bron en doel"
 
@@ -6782,6 +6835,9 @@ msgstr "Verschilt slechts één teken van het verwachte teken"
 
 msgid "Displays lists of participants to persuade to sign up"
 msgstr "Toont lijsten met deelnemers om ze over te halen zich aan te melden"
+
+msgid "Have at least one participant registered for an event"
+msgstr "Minstens één deelnemer hebben geregistreerd voor een evenement"
 
 msgid "Incorrect answer. Please enter the name of our hobby."
 msgstr "Fout antwoord. Voer de naam van onze hobby in."
@@ -6858,6 +6914,9 @@ msgstr "Het unieke subdomein van uw organisatie in het plaftform"
 
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr "Een pakkende korte zin of slogan om je evenement te beschrijven"
+
+msgid "Configure at least one payment method for participants"
+msgstr "Ten minste één betalingsmethode configureren voor deelnemers"
 
 msgid "Date and time when registrations open for participants"
 msgstr "Datum en tijd waarop de inschrijvingen voor deelnemers opengaan"
@@ -6953,6 +7012,9 @@ msgstr "Aanvraag moet worden ondertekend en vervolgens geüpload"
 msgid "Content of the membership request filled with user data"
 msgstr "Inhoud van de lidmaatschapsaanvraag gevuld met gebruikersgegevens"
 
+msgid "Create at least one ticket type for event registrations"
+msgstr "Maak ten minste één type ticket voor evenementregistraties"
+
 msgid "If checked: shows a link in the calendar to past events"
 msgstr ""
 "Indien aangevinkt: toont een link in de kalender naar evenementen uit het "
@@ -6998,6 +7060,9 @@ msgstr ""
 msgid "Your membership application was successfully submitted!"
 msgstr "Je lidmaatschapsaanvraag is succesvol ingediend!"
 
+msgid "Advanced mode activated! All features are now available."
+msgstr "Geavanceerde modus geactiveerd! Alle functies zijn nu beschikbaar."
+
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr ""
 "Klik op de onderstaande afbeelding (Paypal.me) om de betaling te openen"
@@ -7007,6 +7072,9 @@ msgstr "Tekstuele elementen van de organisatie-interface aanpassen"
 
 msgid "Date of birth characters do not match (check exact date)"
 msgstr "De geboortedatum komt niet overeen (controleer de exacte datum)"
+
+msgid "Define at least one additional role for event management"
+msgstr "Ten minste één extra rol definiëren voor gebeurtenisbeheer"
 
 msgid "If no payment is received, registration may be cancelled"
 msgstr ""
@@ -7023,6 +7091,9 @@ msgstr "Beheer registraties kortingen beschikbaar voor deelnemers"
 
 msgid "Please check the address again, especially its beginning"
 msgstr "Controleer het adres nogmaals, vooral het begin"
+
+msgid "Request activation of advanced mode for the organization"
+msgstr "Geavanceerde modus aanvragen voor de organisatie"
 
 msgid "Review participants' dietary restrictions and allergies."
 msgstr "Bekijk de dieetbeperkingen en allergieën van deelnemers."
@@ -7307,6 +7378,9 @@ msgstr ""
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Optioneel) Tekenopties als vereisten, door komma's gescheiden"
 
+msgid "Access and review the personal data submitted by participants"
+msgstr "Toegang tot en inzage in de persoonlijke gegevens van deelnemers"
+
 msgid "Added at the bottom of mail confirming signup to participants"
 msgstr ""
 "Toegevoegd onderaan de mail ter bevestiging van aanmelding aan deelnemers"
@@ -7463,6 +7537,11 @@ msgstr "Je verzoek is verzonden, we zullen zo snel mogelijk antwoorden!"
 msgid "Allows a user to reserve extra tickets in addition to their own"
 msgstr ""
 "Hiermee kan een gebruiker extra tickets reserveren naast zijn eigen tickets"
+
+msgid "Configure the fields to collect in the participant profile data"
+msgstr ""
+"Configureer de velden die moeten worden verzameld in de "
+"deelnemerprofielgegevens"
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Beschrijving - wordt aan het begin van de sectie weergegeven"
@@ -8108,6 +8187,11 @@ msgid ""
 msgstr "Voer bovenstaand ID-nummer of code in"
 
 msgid ""
+"Fine-tune every setting for your organization and each individual event"
+msgstr ""
+"Elke instelling afstemmen op je organisatie en elk afzonderlijk evenement"
+
+msgid ""
 "Get this data from the bank or equivalent, to verify the entries marked"
 msgstr ""
 "Vraag deze gegevens op bij de bank of gelijkwaardig, om de gemarkeerde "
@@ -8282,6 +8366,11 @@ msgstr ""
 "We hechten veel waarde aan de privacy van uw gegevens en zullen deze met de "
 "grootst mogelijke zorg behandelen"
 
+#, python-format
+msgid ""
+"You are using %(platform)s in <b>Lite Mode</b> (%(progress)s%% complete)"
+msgstr "U gebruikt %(platform)s in <b>Lite Mode</b> (%(progress)s%% voltooid)"
+
 msgid ""
 "You can now setup the tickets, the signup form, the registration options"
 msgstr ""
@@ -8293,6 +8382,12 @@ msgid ""
 msgstr ""
 "als het teken NIET tot dit element behoort, maar er alleen naar wordt "
 "verwezen"
+
+msgid ""
+"Activate and configure advanced features for your organization and events"
+msgstr ""
+"Geavanceerde functies voor je organisatie en evenementen activeren en "
+"configureren"
 
 msgid ""
 "Customize translations of words and phrases in the organization interface"
@@ -8853,6 +8948,13 @@ msgstr ""
 " kiezen"
 
 msgid ""
+"Send bulk e-mails to participants and review the full archive of sent "
+"messages"
+msgstr ""
+"Bulkmails versturen naar deelnemers en het volledige archief van verzonden "
+"berichten bekijken"
+
+msgid ""
 "Sorry, this facilitation code has already been used the maximum number "
 "allowed"
 msgstr ""
@@ -9380,6 +9482,13 @@ msgid ""
 msgstr ""
 "Als je absoluut zeker weet dat je dit item wilt verwijderen, klik je op deze"
 " knop"
+
+msgid ""
+"Select the personal data fields to be requested from participants during "
+"registration"
+msgstr ""
+"Selecteer de velden met persoonlijke gegevens die van deelnemers worden "
+"gevraagd tijdens de registratie"
 
 msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
@@ -10014,6 +10123,13 @@ msgstr ""
 "deelnemersprofielen"
 
 msgid ""
+"Fully customize the appearance, texts and navigation of your organization "
+"and event interfaces"
+msgstr ""
+"Pas het uiterlijk, de teksten en de navigatie van je organisatie- en "
+"evenementinterfaces volledig aan"
+
+msgid ""
 "If it is assigned to you, you will automatically be assigned the original "
 "character it mirrors"
 msgstr ""
@@ -10203,6 +10319,13 @@ msgid ""
 msgstr ""
 "Je kunt optioneel kolommen toevoegen voor de registratievragen, toegestane "
 "waarden voor de koptekst zijn"
+
+msgid ""
+"Complete the setup checklist below to unlock advanced mode and access all "
+"configuration features."
+msgstr ""
+"Vul de onderstaande instellingschecklist in om de geavanceerde modus te "
+"ontgrendelen en toegang te krijgen tot alle configuratiefuncties."
 
 msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
@@ -10964,6 +11087,14 @@ msgstr ""
 "Je registratie wordt nu opgeslagen in de voorlopige status. Deze wordt "
 "bevestigd zodra de betaling van je ticket is ontvangen"
 
+msgid ""
+"<strong>Lite Mode</strong> is a simplified environment designed to help you "
+"master the core mechanics of the platform"
+msgstr ""
+"<strong>Lite Mode</strong> is een vereenvoudigde omgeving die is ontworpen "
+"om je te helpen de basismechanismen van het platform onder de knie te "
+"krijgen"
+
 #, python-format
 msgid ""
 "Allowed type '%(allowed_type)s' is not a valid type.See "
@@ -11241,6 +11372,14 @@ msgid ""
 msgstr ""
 "Hiermee kunnen deelnemers tickets kopen als cadeau. Er wordt een speciale "
 "code gegenereerd en aan de ontvanger van het cadeau gegeven voor registratie"
+
+msgid ""
+"Complete the checklist to unlock <b>Advanced Mode</b>, enabling full access "
+"to complex logistics, accounting, and narrative tools"
+msgstr ""
+"Voltooi de checklist om <b>Advanced Mode</b> vrij te spelen, waarmee je "
+"volledige toegang krijgt tot complexe logistieke, boekhoudkundige en "
+"verhalende tools"
 
 msgid ""
 "You have submitted your dues payment, and it is now being approved by the "
@@ -11670,6 +11809,15 @@ msgstr ""
 "Door je registratie voor dit evenement uit te voeren, geef je ons "
 "toestemming om je gegevens die op ons platform zijn opgeslagen, te delen met"
 " de organisatoren van het evenement"
+
+msgid ""
+"Once you have completed the following steps, you can switch to "
+"<strong>Advanced Mode</strong>, granting you total control over the "
+"platform's professional features"
+msgstr ""
+"Zodra je de volgende stappen hebt doorlopen, kun je overschakelen naar "
+"<strong>Advanced Mode</strong>, waardoor je volledige controle krijgt over "
+"de professionele functies van het platform"
 
 msgid ""
 "Want to help one of your friends play with us? Organize a collection: you "

@@ -1469,3 +1469,15 @@
     after_link: config/app_integration
     hidden: false
     module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Activation
+    descr: ''
+    slug: exe_activation
+    overall: true
+    placeholder: true
+    order: 9999
+    after_text: null
+    after_link: ''
+    hidden: false
+    module: null

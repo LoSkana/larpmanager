@@ -9,3 +9,4 @@
     default_features:
     - exe_events
     - payment
+    - character

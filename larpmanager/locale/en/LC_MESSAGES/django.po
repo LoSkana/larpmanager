@@ -1998,7 +1998,9 @@ msgstr ""
 msgid "Manage badges and user assignments"
 msgstr ""
 
-msgid "Manage profile fields that participants can fill in"
+msgid ""
+"Select the personal data fields to be requested from participants during "
+"registration"
 msgstr ""
 
 msgid "Over"
@@ -5834,6 +5836,69 @@ msgstr ""
 msgid "This page summarises the system entries of"
 msgstr ""
 
+msgid "Activation"
+msgstr ""
+
+msgid ""
+"Complete the setup checklist below to unlock advanced mode and access all "
+"configuration features."
+msgstr ""
+
+msgid ""
+"<strong>Lite Mode</strong> is a simplified environment designed to help you "
+"master the core mechanics of the platform"
+msgstr ""
+
+msgid ""
+"Once you have completed the following steps, you can switch to "
+"<strong>Advanced Mode</strong>, granting you total control over the "
+"platform's professional features"
+msgstr ""
+
+msgid "What you will unlock"
+msgstr ""
+
+msgid ""
+"Activate and configure advanced features for your organization and events"
+msgstr ""
+
+msgid "Fine-tune every setting for your organization and each individual event"
+msgstr ""
+
+msgid "E-mail"
+msgstr ""
+
+msgid ""
+"Send bulk e-mails to participants and review the full archive of sent "
+"messages"
+msgstr ""
+
+msgid ""
+"Fully customize the appearance, texts and navigation of your organization "
+"and event interfaces"
+msgstr ""
+
+msgid "Sensitive data"
+msgstr ""
+
+msgid "Access and review the personal data submitted by participants"
+msgstr ""
+
+msgid "Step"
+msgstr ""
+
+msgid "Pending"
+msgstr ""
+
+msgid "Go"
+msgstr ""
+
+msgid "Activate advanced mode"
+msgstr ""
+
+msgid "Complete all steps above to unlock advanced mode."
+msgstr ""
+
 msgid "Competences"
 msgstr ""
 
@@ -7898,9 +7963,6 @@ msgid ""
 "regarding safety"
 msgstr ""
 
-msgid "Sensitive data"
-msgstr ""
-
 msgid "This page shows the general information of registered participants"
 msgstr ""
 
@@ -9113,6 +9175,9 @@ msgstr ""
 msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
 
+msgid "Request activation of advanced mode for the organization"
+msgstr ""
+
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
 
@@ -9619,6 +9684,48 @@ msgstr ""
 msgid "Failed to add gallery"
 msgstr ""
 
+msgid "Configure at least one payment method for participants"
+msgstr ""
+
+msgid "User profile"
+msgstr ""
+
+msgid "Configure the fields to collect in the participant profile data"
+msgstr ""
+
+msgid "Event roles"
+msgstr ""
+
+msgid "Define at least one additional role for event management"
+msgstr ""
+
+msgid "Registration tickets"
+msgstr ""
+
+msgid "Create at least one ticket type for event registrations"
+msgstr ""
+
+msgid "Define at least one question in the registration form"
+msgstr ""
+
+msgid "First registration"
+msgstr ""
+
+msgid "Have at least one participant registered for an event"
+msgstr ""
+
+msgid "First character"
+msgstr ""
+
+msgid "Create at least one character for one of your events"
+msgstr ""
+
+msgid "First assignment"
+msgstr ""
+
+msgid "Assign a character to a registered participant"
+msgstr ""
+
 msgid "Move to container"
 msgstr ""
 
@@ -9850,6 +9957,9 @@ msgstr ""
 msgid "Cache reset!"
 msgstr ""
 
+msgid "Advanced mode activated! All features are now available."
+msgstr ""
+
 msgid "Event deletion request"
 msgstr ""
 
@@ -9941,7 +10051,17 @@ msgstr ""
 msgid "There are <b>%(number)s</b> members to approve"
 msgstr ""
 
-msgid "Quickly configure your organization's most important settings"
+#, python-format
+msgid ""
+"You are using %(platform)s in <b>Lite Mode</b> (%(progress)s%% complete)"
+msgstr ""
+
+msgid "This mode helps you master the basics quickly"
+msgstr ""
+
+msgid ""
+"Complete the checklist to unlock <b>Advanced Mode</b>, enabling full access "
+"to complex logistics, accounting, and narrative tools"
 msgstr ""
 
 msgid "Set up the payment methods available to participants"
@@ -9950,6 +10070,9 @@ msgstr ""
 msgid ""
 "Define which data will be asked in the profile form to the users once they "
 "sign up"
+msgstr ""
+
+msgid "Quickly configure your organization's most important settings"
 msgstr ""
 
 msgid "Set up the membership request text"
@@ -10073,10 +10196,10 @@ msgstr ""
 msgid "Set up character customization configuration"
 msgstr ""
 
-msgid "Quickly configure your events's most important settings"
+msgid "Set up the tickets that users can select during registration"
 msgstr ""
 
-msgid "Set up the tickets that users can select during registration"
+msgid "Quickly configure your events's most important settings"
 msgstr ""
 
 msgid ""

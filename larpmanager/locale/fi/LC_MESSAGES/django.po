@@ -8,6 +8,9 @@ msgstr "e"
 msgid "By"
 msgstr "By"
 
+msgid "Go"
+msgstr "Mene"
+
 msgid "Hi"
 msgstr "Hei"
 
@@ -250,6 +253,9 @@ msgstr "Laulu"
 
 msgid "Spam"
 msgstr "Roskaposti"
+
+msgid "Step"
+msgstr "Vaihe"
 
 msgid "Tags"
 msgstr "Tunnisteet"
@@ -521,6 +527,9 @@ msgstr "Yksityiskohta"
 
 msgid "Direct"
 msgstr "Suora"
+
+msgid "E-mail"
+msgstr "Sähköposti"
 
 msgid "Emails"
 msgstr "Sähköpostit"
@@ -851,6 +860,9 @@ msgstr "Osittain"
 
 msgid "Payment"
 msgstr "Maksu"
+
+msgid "Pending"
+msgstr "Vireillä"
 
 msgid "Players"
 msgstr "Pelaajat"
@@ -1503,6 +1515,9 @@ msgstr "tämä linkki"
 msgid "Accounting"
 msgstr "Kirjanpito"
 
+msgid "Activation"
+msgstr "Aktivointi"
+
 msgid "Additional"
 msgstr "Lisätiedot"
 
@@ -1841,6 +1856,9 @@ msgstr "Muokkaa tilaa"
 
 msgid "Event Texts"
 msgstr "Tapahtuman tekstit"
+
+msgid "Event roles"
+msgstr "Tapahtuman roolit"
 
 msgid "Event texts"
 msgstr "Tapahtuman tekstit"
@@ -2201,6 +2219,9 @@ msgstr "Lataaminen..."
 
 msgid "Url Shortner"
 msgstr "Url Shortner"
+
+msgid "User profile"
+msgstr "Käyttäjäprofiili"
 
 msgid "VAT (Ticket)"
 msgstr "Arvonlisävero (lippu)"
@@ -2765,6 +2786,9 @@ msgstr "Ulkoinen pääsy"
 msgid "Filter factions"
 msgstr "Suodata ryhmittymät"
 
+msgid "First character"
+msgstr "Ensimmäinen merkki"
+
 msgid "Highlight color"
 msgstr "Korostusväri"
 
@@ -2965,6 +2989,9 @@ msgstr "Ulkoinen verkkosivusto"
 
 msgid "Field visibility"
 msgstr "Kentän näkyvyys"
+
+msgid "First assignment"
+msgstr "Ensimmäinen tehtävä"
 
 msgid "Forward discount"
 msgstr "Myöhemmin myönnettävä alennus"
@@ -3359,6 +3386,9 @@ msgstr "Sähköinen lasku"
 msgid "Enable preferences"
 msgstr "Ota asetukset käyttöön"
 
+msgid "First registration"
+msgstr "Ensimmäinen rekisteröinti"
+
 msgid "Hide not available"
 msgstr "Piilota ei saatavilla"
 
@@ -3747,6 +3777,9 @@ msgstr "Rekisteröinnin avaaminen"
 msgid "Registration options"
 msgstr "Rekisteröintivaihtoehdot"
 
+msgid "Registration tickets"
+msgstr "Rekisteröintiliput"
+
 msgid "Registrations status"
 msgstr "Rekisteröintien tila"
 
@@ -3789,6 +3822,9 @@ msgstr "Varastokontit"
 #, python-format
 msgid "Welcome to %(name)s!"
 msgstr "Tervetuloa %(name)s!"
+
+msgid "What you will unlock"
+msgstr "Mitä avaat"
 
 msgid "Yes, keep me posted!"
 msgstr "Kyllä, pidä minut ajan tasalla!"
@@ -3967,6 +4003,9 @@ msgstr "Olet jo maksanut"
 
 msgid "submit your vote here"
 msgstr "lähetä äänesi täällä"
+
+msgid "Activate advanced mode"
+msgstr "Aktivoi edistynyt tila"
 
 msgid "Additional Preferences"
 msgstr "Lisäasetukset"
@@ -6230,6 +6269,9 @@ msgstr "Määritä arvo rekisteröinnille ulkoinen linkki"
 msgid "The user has been assigned the specified role"
 msgstr "Käyttäjälle on annettu määritetty rooli"
 
+msgid "This mode helps you master the basics quickly"
+msgstr "Tämä tila auttaa sinua hallitsemaan perusasiat nopeasti"
+
 msgid "This page shows the pre-signups for the event"
 msgstr "Tämä sivu näyttää tapahtuman ennakkoilmoittautumiset"
 
@@ -6244,6 +6286,9 @@ msgstr "Seuraavan vaaditun maksuerän määrä"
 
 msgid "An ability cannot be a prerequisite of itself."
 msgstr "Kyky ei voi olla edellytys itselleen."
+
+msgid "Assign a character to a registered participant"
+msgstr "Määritä hahmo rekisteröidylle osallistujalle"
 
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Peruuttaminen puuttuvan vuosittaisen jäsenmaksun vuoksi"
@@ -6494,6 +6539,9 @@ msgstr "Taustakuva näytetään kaikilla tapahtumasivuilla"
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Tekstitaustojen ja sisältölaatikoiden väri"
 
+msgid "Complete all steps above to unlock advanced mode."
+msgstr "Suorita kaikki edellä mainitut vaiheet avataksesi edistyneen tilan."
+
 msgid "Create, access, and manage your events from here."
 msgstr "Luo, käytä ja hallinnoi tapahtumia täältä."
 
@@ -6653,9 +6701,6 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Liity Discordiin saadaksesi apua, ideoita tai ilmoittaaksesi virheistä"
 
-msgid "Manage profile fields that participants can fill in"
-msgstr "Hallitse profiilikenttiä, jotka osallistujat voivat täyttää"
-
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Hallitse varastotavaroiden siirtoja, lainoja ja korjauksia"
 
@@ -6702,6 +6747,9 @@ msgstr "%(user)s kerätty rahoitusosuus %(recipient)s"
 
 msgid "Configure payment methods available for participants"
 msgstr "Määritä osallistujien käytettävissä olevat maksutavat"
+
+msgid "Create at least one character for one of your events"
+msgstr "Luo vähintään yksi hahmo johonkin tapahtumaan"
 
 msgid "Description of the role of the character in the plot"
 msgstr "Kuvaus hahmon roolista juonessa"
@@ -6770,6 +6818,9 @@ msgstr "lataa jäsenhakemuksesi jatkaaksesi"
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "'%(type)s':lle tallennetut valuasetukset %(event)s:lle"
 
+msgid "Define at least one question in the registration form"
+msgstr "Määrittele vähintään yksi kysymys rekisteröintilomakkeessa"
+
 msgid "Description of the relationship from source to target"
 msgstr "Lähteen ja kohteen välisen suhteen kuvaus"
 
@@ -6778,6 +6829,9 @@ msgstr "Poikkeaa vain yhden merkin verran odotetusta merkistä"
 
 msgid "Displays lists of participants to persuade to sign up"
 msgstr "Näyttää osallistujaluettelot, joita voi suostutella rekisteröitymään"
+
+msgid "Have at least one participant registered for an event"
+msgstr "Vähintään yksi osallistuja on rekisteröitynyt tapahtumaan"
 
 msgid "Incorrect answer. Please enter the name of our hobby."
 msgstr "Väärä vastaus. Kirjoita harrastuksemme nimi."
@@ -6851,6 +6905,9 @@ msgstr "Organisaatiosi yksilöllinen aliverkkotunnus plaftformissa"
 
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr "Tarttuva lyhyt lause tai iskulause, joka kuvaa tapahtumaasi"
+
+msgid "Configure at least one payment method for participants"
+msgstr "Määritä vähintään yksi maksutapa osallistujille"
 
 msgid "Date and time when registrations open for participants"
 msgstr ""
@@ -6943,6 +7000,9 @@ msgstr "Hakemus annetaan heille allekirjoitettavaksi ja ladattavaksi"
 msgid "Content of the membership request filled with user data"
 msgstr "Käyttäjätiedoilla täytetyn jäsenyyspyynnön sisältö"
 
+msgid "Create at least one ticket type for event registrations"
+msgstr "Luo vähintään yksi lipputyyppi tapahtumien rekisteröintiä varten"
+
 msgid "If checked: shows a link in the calendar to past events"
 msgstr "Jos valittuna: näyttää kalenterissa linkin aiempiin tapahtumiin"
 
@@ -6985,6 +7045,9 @@ msgstr "Toimittamasi verokoodin kanssa ilmeni ongelma"
 msgid "Your membership application was successfully submitted!"
 msgstr "Jäsenhakemuksesi lähetettiin onnistuneesti!"
 
+msgid "Advanced mode activated! All features are now available."
+msgstr "Edistynyt tila aktivoitu! Kaikki ominaisuudet ovat nyt käytettävissä."
+
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr "Klikkaa alla olevaa kuvaa (Paypal.me) avataksesi maksun"
 
@@ -6993,6 +7056,9 @@ msgstr "Muokkaa organisaation käyttöliittymän tekstielementtejä"
 
 msgid "Date of birth characters do not match (check exact date)"
 msgstr "Syntymäpäivän merkit eivät täsmää (tarkista tarkka päivämäärä)"
+
+msgid "Define at least one additional role for event management"
+msgstr "Määritä vähintään yksi lisärooli tapahtumien hallintaa varten"
 
 msgid "If no payment is received, registration may be cancelled"
 msgstr "Jos maksua ei ole suoritettu, rekisteröinti voidaan peruuttaa"
@@ -7009,6 +7075,9 @@ msgstr ""
 
 msgid "Please check the address again, especially its beginning"
 msgstr "Tarkista osoite uudelleen, erityisesti sen alku"
+
+msgid "Request activation of advanced mode for the organization"
+msgstr "Pyydä organisaation edistyneen tilan aktivointia"
 
 msgid "Review participants' dietary restrictions and allergies."
 msgstr "Tarkista osallistujien ruokavaliorajoitukset ja allergiat."
@@ -7268,6 +7337,10 @@ msgstr "%(amount)s %(credits)s käytettiin tähän tapahtumaan osallistumiseen"
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Valinnainen) Merkkivaihtoehdot vaatimuksina, pilkulla eroteltuina"
 
+msgid "Access and review the personal data submitted by participants"
+msgstr ""
+"Pääsy osallistujien toimittamiin henkilötietoihin ja niiden tarkastelu"
+
 msgid "Added at the bottom of mail confirming signup to participants"
 msgstr ""
 "Lisätty osallistujille lähetettävän ilmoittautumisen vahvistavan "
@@ -7415,6 +7488,9 @@ msgid "Allows a user to reserve extra tickets in addition to their own"
 msgstr ""
 "Mahdollistaa käyttäjälle ylimääräisten lippujen varaamisen omien lippujensa "
 "lisäksi"
+
+msgid "Configure the fields to collect in the participant profile data"
+msgstr "Määritä kentät, jotka kerätään osallistujaprofiilin tietoihin"
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Kuvaus - näytetään jakson alussa"
@@ -8012,6 +8088,12 @@ msgid ""
 msgstr "Merkitään edellä mainitun tunnistusasiakirjan numero tai koodi"
 
 msgid ""
+"Fine-tune every setting for your organization and each individual event"
+msgstr ""
+"Hienosäädä kaikki asetukset organisaatiosi ja kunkin yksittäisen tapahtuman "
+"mukaan"
+
+msgid ""
 "Get this data from the bank or equivalent, to verify the entries marked"
 msgstr ""
 "Hanki nämä tiedot pankista tai vastaavasta pankista, jotta voit tarkistaa "
@@ -8176,6 +8258,11 @@ msgstr ""
 "Arvostamme tietojesi yksityisyyttä ja käsittelemme niitä erittäin "
 "huolellisesti"
 
+#, python-format
+msgid ""
+"You are using %(platform)s in <b>Lite Mode</b> (%(progress)s%% complete)"
+msgstr "Käytät %(platform)s <b>Lite-tilassa</b> (%(progress)s%% valmis)"
+
 msgid ""
 "You can now setup the tickets, the signup form, the registration options"
 msgstr ""
@@ -8185,6 +8272,11 @@ msgstr ""
 msgid ""
 "if the character does NOT belong to this element, but is only referenced"
 msgstr "jos merkki EI kuulu tähän elementtiin, vaan siihen vain viitataan"
+
+msgid ""
+"Activate and configure advanced features for your organization and events"
+msgstr ""
+"Aktivoi ja määritä lisäominaisuudet organisaatiollesi ja tapahtumillesi"
 
 msgid ""
 "Customize translations of words and phrases in the organization interface"
@@ -8707,6 +8799,13 @@ msgstr ""
 "voidaan valita"
 
 msgid ""
+"Send bulk e-mails to participants and review the full archive of sent "
+"messages"
+msgstr ""
+"Lähetä sähköpostiviestejä osallistujille ja tarkastele lähetettyjen viestien"
+" koko arkistoa"
+
+msgid ""
 "Sorry, this facilitation code has already been used the maximum number "
 "allowed"
 msgstr "Anteeksi, tämä helpotuskoodi on jo käytetty sallittu enimmäismäärä"
@@ -9221,6 +9320,13 @@ msgid ""
 "this button"
 msgstr ""
 "Jos olet täysin varma, että haluat poistaa kohteen, napsauta tätä painiketta"
+
+msgid ""
+"Select the personal data fields to be requested from participants during "
+"registration"
+msgstr ""
+"Valitse henkilötietokentät, jotka pyydetään osallistujilta rekisteröinnin "
+"yhteydessä"
 
 msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
@@ -9841,6 +9947,13 @@ msgstr ""
 "galleriasta ja osallistujaprofiileista"
 
 msgid ""
+"Fully customize the appearance, texts and navigation of your organization "
+"and event interfaces"
+msgstr ""
+"Muokkaa täysin organisaatiosi ja tapahtumasi käyttöliittymien ulkoasua, "
+"tekstejä ja navigointia"
+
+msgid ""
 "If it is assigned to you, you will automatically be assigned the original "
 "character it mirrors"
 msgstr ""
@@ -10030,6 +10143,13 @@ msgid ""
 msgstr ""
 "Voit lisätä valinnaisesti sarakkeita rekisteröintikysymyksiä varten, otsikon"
 " sallitut arvot ovat seuraavat"
+
+msgid ""
+"Complete the setup checklist below to unlock advanced mode and access all "
+"configuration features."
+msgstr ""
+"Täytä alla oleva asetusten tarkistuslista, jotta voit avata laajennetun "
+"tilan ja käyttää kaikkia konfigurointiominaisuuksia."
 
 msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
@@ -10786,6 +10906,13 @@ msgstr ""
 "Rekisteröintisi on nyt tallennettu väliaikaiseen tilaan. Se vahvistetaan, "
 "kun lippusi maksu on vastaanotettu"
 
+msgid ""
+"<strong>Lite Mode</strong> is a simplified environment designed to help you "
+"master the core mechanics of the platform"
+msgstr ""
+"<strong>Lite Mode</strong> on yksinkertaistettu ympäristö, joka on "
+"suunniteltu auttamaan sinua hallitsemaan alustan perusmekaniikat"
+
 #, python-format
 msgid ""
 "Allowed type '%(allowed_type)s' is not a valid type.See "
@@ -11056,6 +11183,14 @@ msgid ""
 msgstr ""
 "Osallistujat voivat ostaa lippuja lahjaksi. Erityinen koodi luodaan ja "
 "annetaan lahjan saajalle rekisteröintiä varten"
+
+msgid ""
+"Complete the checklist to unlock <b>Advanced Mode</b>, enabling full access "
+"to complex logistics, accounting, and narrative tools"
+msgstr ""
+"Täytä tarkistuslista avataksesi <b>Advanced Mode</b>, joka mahdollistaa "
+"täyden pääsyn monimutkaisiin logistiikka-, kirjanpito- ja "
+"kerrontatyökaluihin"
 
 msgid ""
 "You have submitted your dues payment, and it is now being approved by the "
@@ -11475,6 +11610,15 @@ msgid ""
 msgstr ""
 "Jatkamalla ilmoittautumistasi tähän tapahtumaan annat meille luvan jakaa "
 "alustallemme tallennetut tietosi tapahtuman järjestäjien kanssa"
+
+msgid ""
+"Once you have completed the following steps, you can switch to "
+"<strong>Advanced Mode</strong>, granting you total control over the "
+"platform's professional features"
+msgstr ""
+"Kun olet suorittanut seuraavat vaiheet, voit siirtyä <strong>Advanced "
+"Mode</strong> -tilaan, jolloin voit hallita täysin alustan ammattimaisia "
+"ominaisuuksia"
 
 msgid ""
 "Want to help one of your friends play with us? Organize a collection: you "

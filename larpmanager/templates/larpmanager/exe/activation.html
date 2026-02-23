@@ -1,0 +1,90 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Activation" %} - {% trans "Organization" %}
+{% endblock title %}
+{% block info %}
+    {% trans "Complete the setup checklist below to unlock advanced mode and access all configuration features." %}
+{% endblock info %}
+{% block content %}
+    <p>
+        {% trans "<strong>Lite Mode</strong> is a simplified environment designed to help you master the core mechanics of the platform" %}.
+        {% trans "Once you have completed the following steps, you can switch to <strong>Advanced Mode</strong>, granting you total control over the platform's professional features" %}.
+    </p>
+    <div class="features-grid">
+        <h3>{% trans "What you will unlock" %}:</h3>
+        <ul class="no-list">
+            <li>
+                <i class="fa-solid fa-sliders"></i>
+                <strong>{% trans "Features" %}</strong> -
+                {% trans "Activate and configure advanced features for your organization and events" %}
+            </li>
+            <li>
+                <i class="fa-solid fa-gear"></i>
+                <strong>{% trans "Configuration" %}</strong> -
+                {% trans "Fine-tune every setting for your organization and each individual event" %}
+            </li>
+            <li>
+                <i class="fa-solid fa-envelope"></i>
+                <strong>{% trans "E-mail" %}</strong> -
+                {% trans "Send bulk e-mails to participants and review the full archive of sent messages" %}
+            </li>
+            <li>
+                <i class="fa-solid fa-font"></i>
+                <strong>{% trans "Appearance" %}</strong> -
+                {% trans "Fully customize the appearance, texts and navigation of your organization and event interfaces" %}
+            </li>
+            <li>
+                <i class="fa-solid fa-shield-halved"></i>
+                <strong>{% trans "Sensitive data" %}</strong> -
+                {% trans "Access and review the personal data submitted by participants" %}
+            </li>
+        </ul>
+    </div>
+    <h3>{% trans "Progress" %}:</h3>
+    <table class="go_datatable">
+        <thead>
+            <tr>
+                <th>{% trans "Step" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in checklist %}
+                <tr>
+                    <td>
+                        <strong>{{ item.name }}</strong>
+                    </td>
+                    <td>{{ item.descr }}</td>
+                    <td>
+                        {% if item.done %}
+                            <i class="fa-solid fa-circle-check progress_done"></i> {% trans "Done" %}
+                        {% else %}
+                            <i class="fa-solid fa-circle-xmark progress_not_done"></i> {% trans "Pending" %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not item.done %}
+                            <a href="{{ item.url }}">{% trans "Go" %}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br />
+    {% if all_done %}
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="button">
+                <i class="fa-solid fa-unlock"></i> {% trans "Activate advanced mode" %}
+            </button>
+        </form>
+    {% else %}
+        <p>
+            <em>{% trans "Complete all steps above to unlock advanced mode." %}</em>
+        </p>
+    {% endif %}
+{% endblock content %}

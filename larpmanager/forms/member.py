@@ -953,7 +953,7 @@ class ExeProfileForm(BaseModelForm):
 
     page_title = _("Profile")
 
-    page_info = _("Manage profile fields that participants can fill in")
+    page_info = _("Select the personal data fields to be requested from participants during registration")
 
     class Meta:
         model = Association
@@ -976,6 +976,9 @@ class ExeProfileForm(BaseModelForm):
         # MEMBERS INFO
         fields = self.get_members_fields()
         for slug, name, help_text in fields:
+            if slug == "uuid":
+                continue
+
             if slug in mandatory:
                 init = MemberFieldType.MANDATORY
             elif slug in optional:
