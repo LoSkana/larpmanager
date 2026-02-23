@@ -23,8 +23,8 @@ from typing import Any, ClassVar
 
 from django import forms
 from django.conf import settings as conf_settings
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.db.models import Q
 from django.http import Http404
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -257,9 +257,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if not self.instance.pk:
             return
 
-        self.initial["factions_list"] = list(
-            self.instance.factions_list.order_by("number").values_list("id", flat=True)
-        )
+        self.initial["factions_list"] = [f.pk for f in self.instance.factions_list.all()]
 
     def _save_multi(self, field: str, instance: Any) -> None:
         """Save multi-select field data for the given instance.
@@ -398,8 +396,15 @@ class OrgaCharacterForm(CharacterForm):
 
         context["relationships"] = {}
 
-        with contextlib.suppress(ObjectDoesNotExist):
-            context["rel_tutorial"] = Feature.objects.get(slug="relationships").tutorial
+        cache_key = "feature_tutorial_relationships"
+        rel_tutorial = cache.get(cache_key)
+        if rel_tutorial is None:
+            rel_tutorial = ""
+            with contextlib.suppress(ObjectDoesNotExist):
+                rel_tutorial = Feature.objects.get(slug="relationships").tutorial or ""
+            cache.set(cache_key, rel_tutorial, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        if rel_tutorial:
+            context["rel_tutorial"] = rel_tutorial
 
         context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
         widget = EventCharacterS2WidgetUuid(attrs={"id": "new_rel_select"})
@@ -411,24 +416,20 @@ class OrgaCharacterForm(CharacterForm):
 
         relationships_by_character_uuid = {}
 
-        # Unified query for both direct and inverse relationships
-        all_relationships = Relationship.objects.filter(
-            Q(source=self.instance) | Q(target=self.instance)
-        ).select_related("source", "target")
+        # Use prefetched reverse relations from backend_get (avoids extra DB queries)
+        for relationship in self.instance.source.all():
+            # Direct relationship: current character is source, target is prefetched
+            other_char = relationship.target
+            if other_char.uuid not in relationships_by_character_uuid:
+                relationships_by_character_uuid[other_char.uuid] = {"char": other_char}
+            relationships_by_character_uuid[other_char.uuid]["direct"] = relationship.text
 
-        for relationship in all_relationships:
-            if relationship.source == self.instance:
-                # This is a direct relationship (current character is source)
-                other_char = relationship.target
-                if other_char.uuid not in relationships_by_character_uuid:
-                    relationships_by_character_uuid[other_char.uuid] = {"char": other_char}
-                relationships_by_character_uuid[other_char.uuid]["direct"] = relationship.text
-            else:
-                # This is an inverse relationship (current character is target)
-                other_char = relationship.source
-                if other_char.uuid not in relationships_by_character_uuid:
-                    relationships_by_character_uuid[other_char.uuid] = {"char": other_char}
-                relationships_by_character_uuid[other_char.uuid]["inverse"] = relationship.text
+        for relationship in self.instance.target.all():
+            # Inverse relationship: current character is target, source is prefetched
+            other_char = relationship.source
+            if other_char.uuid not in relationships_by_character_uuid:
+                relationships_by_character_uuid[other_char.uuid] = {"char": other_char}
+            relationships_by_character_uuid[other_char.uuid]["inverse"] = relationship.text
 
         sorted_relationships = sorted(
             relationships_by_character_uuid.items(),
@@ -579,6 +580,7 @@ class OrgaCharacterForm(CharacterForm):
             PlotCharacterRel.objects.create(character=instance, plot=plot)
 
         # update texts
+        to_update = []
         for pr in instance.get_plot_characters():
             field = f"pl_{pr.plot_id}"
             if field not in self.cleaned_data:
@@ -586,7 +588,9 @@ class OrgaCharacterForm(CharacterForm):
             if self.cleaned_data[field] == pr.text:
                 continue
             pr.text = self.cleaned_data[field]
-            pr.save()
+            to_update.append(pr)
+        if to_update:
+            PlotCharacterRel.objects.bulk_update(to_update, ["text"])
 
     def _init_px(self) -> None:
         """Initialize PX (ability/delivery) form fields if PX feature is enabled."""
@@ -601,7 +605,7 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
         )
 
-        self.initial["px_ability_list"] = list(self.instance.px_ability_list.values_list("id", flat=True))
+        self.initial["px_ability_list"] = [a.pk for a in self.instance.px_ability_list.all()]
         self.show_link.append("id_px_ability_list")
 
         # delivery list
@@ -612,7 +616,7 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
         )
 
-        self.initial["px_delivery_list"] = list(self.instance.px_delivery_list.values_list("id", flat=True))
+        self.initial["px_delivery_list"] = [d.pk for d in self.instance.px_delivery_list.all()]
         self.show_link.append("id_px_delivery_list")
 
     def _save_px(self, instance: Any) -> None:
@@ -653,10 +657,8 @@ class OrgaCharacterForm(CharacterForm):
         if not self.instance.pk:
             return
 
-        # Initial factions values
-        self.initial["factions_list"] = list(
-            self.instance.factions_list.order_by("number").values_list("id", flat=True)
-        )
+        # Initial factions values - uses prefetched data (ordered by number in backend_get)
+        self.initial["factions_list"] = [f.pk for f in self.instance.factions_list.all()]
 
     def _save_relationships(self, instance: Any) -> None:
         """Save character relationships from form data.
