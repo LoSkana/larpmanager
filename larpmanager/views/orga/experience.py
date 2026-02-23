@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import logging
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -34,11 +35,12 @@ from larpmanager.models.event import Run
 from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new, orga_order
 from larpmanager.utils.io.download import export_abilities, zip_exports
 from larpmanager.utils.services.bulk import handle_bulk_ability
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -73,12 +75,12 @@ def orga_px_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespons
 
     # Handle auto-population from run selection
     if request.method == "POST":
-        run_uuid = request.POST.get("auto_populate_run")
+        run_id = request.POST.get("auto_populate_run")
 
         # If a run was selected, get all characters from that run's registrations
-        if run_uuid:
+        if run_id:
             try:
-                run = get_object_uuid(Run, run_uuid)
+                run = Run.objects.get(pk=run_id, event__slug=event_slug)
 
                 # Get all characters assigned to registrations for this run
                 character_ids = (
@@ -115,9 +117,8 @@ def orga_px_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespons
 
                 return render(request, "larpmanager/orga/edit.html", context)
 
-            except (ValueError, ObjectDoesNotExist):
-                # If run retrieval fails, continue with normal flow
-                pass
+            except (ValueError, ObjectDoesNotExist) as err:
+                logger.warning("Auto populate run failed: %s", err)
 
     # Use standard orga_edit for all other cases
     return orga_new(request, event_slug, OrgaAction.PX_DELIVERIES)

@@ -180,7 +180,7 @@ def casting_details(context: dict) -> dict:
         context["gl_name"] = context["quest_type"].name
         context["cl_name"] = _("Quest")
         context["el_name"] = _("Trait")
-        context["typ"] = context["quest_type"].number
+        context["typ"] = context["quest_type"].uuid
     else:
         context["gl_name"] = _("Characters")
         context["cl_name"] = _("Faction")
@@ -545,7 +545,7 @@ def get_casting_preferences(
     # Get casting queryset if not provided
     typ = 0
     if "quest_type" in context:
-        typ = context["quest_type"]
+        typ = context["quest_type"].number
     if casting_queryset is None:
         casting_queryset = Casting.objects.filter(element=element_uuid, run=context["run"], typ=typ)
         # Filter active casts unless staff context is present
@@ -676,7 +676,7 @@ def casting_preferences_traits(context: dict) -> None:
             trait_data = {
                 "group_dis": quest_group_name,
                 "name_dis": trait.show()["name"],
-                "pref": get_casting_preferences(str(trait.uuid), context, quest_type.number),
+                "pref": get_casting_preferences(str(trait.uuid), context),
             }
             context["list"].append(trait_data)
 
@@ -831,7 +831,7 @@ def casting_history_traits(context: dict) -> None:
 
     # Group casting preferences by member ID
     casting_preferences_by_member = {}
-    for casting_item in Casting.objects.filter(run=context["run"], typ=context["typ"]).order_by("pref"):
+    for casting_item in Casting.objects.filter(run=context["run"], typ=context["quest_type"].number).order_by("pref"):
         if casting_item.member_id not in casting_preferences_by_member:
             casting_preferences_by_member[casting_item.member_id] = []
         casting_preferences_by_member[casting_item.member_id].append(casting_item)

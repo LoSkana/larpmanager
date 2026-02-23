@@ -146,15 +146,6 @@ def get_object_uuid(
     try:
         return queryset.get(uuid=identifier, **filters)
     except (ObjectDoesNotExist, ValueError, AttributeError) as err:
-        # TEMPORARY Fallback to ID lookup ONLY if UUID lookup fails and identifier is numeric
-        if str(identifier).isdigit():
-            try:
-                return queryset.get(pk=identifier, **filters)
-            except ObjectDoesNotExist:
-                # Wait 2 seconds before raising 404 to handle race conditions
-                time.sleep(2)
-                msg = f"{model_class.__name__} does not exist"
-                raise Http404(msg) from err
         # Wait 2 seconds before raising 404 to handle race conditions
         time.sleep(2)
         msg = f"{model_class.__name__} does not exist"

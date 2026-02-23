@@ -97,10 +97,10 @@ def orga_casting_history(request: HttpRequest, event_slug: str, casting_type: st
     casting_details(context)
 
     # Add type-specific history data to context
-    if casting_type == "0":
-        casting_history_characters(context)
-    else:
+    if casting_type:
         casting_history_traits(context)
+    else:
+        casting_history_characters(context)
 
     return render(request, "larpmanager/event/casting/history.html", context)
 

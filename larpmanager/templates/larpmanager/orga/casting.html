@@ -14,10 +14,10 @@
                 {% if typ == 0 %}
                     <strong>{% trans "characters" %}</strong>
                 {% else %}
-                    <a href="{% url 'orga_casting' run.get_slug 0 %}">{% trans "characters" %}</a>
+                    <a href="{% url 'orga_casting' run.get_slug %}">{% trans "characters" %}</a>
                 {% endif %}
                 {% for idx, qt in quest_types.items %}
-                    {% if typ == idx %}
+                    {% if typ == qt.uuid %}
                         | <strong>{{ qt.name }}</strong>
                     {% else %}
                         | <a href="{% url 'orga_casting' run.get_slug qt.uuid %}">{{ qt.name }}</a>
@@ -119,15 +119,13 @@ window['mirrors'] = {{ mirrors | safe }};
 window['casting_avoid'] = {{ casting_avoid | yesno:"true,false" }};
 window['avoids'] = {{ avoids | safe }};
 window['csrf_token'] = "{{ csrf_token }}";
-window['tick'] = "{{ tick }}";
-window['tipo'] = "{{ typ }}";
-if (window['tipo'] != "0") {
-    window['toggle_url'] = "{% url 'orga_casting_toggle' run.get_slug typ %}";
-    window['orga_casting_url'] = "{% url 'orga_casting' run.get_slug typ %}";
-} else {
-    window['toggle_url'] = "{% url 'orga_casting_toggle' run.get_slug %}";
-    window['orga_casting_url'] = "{% url 'orga_casting' run.get_slug %}";
-}
+{% if quest_type %}
+window['toggle_url'] = "{% url 'orga_casting_toggle' run.get_slug quest_type.uuid %}";
+window['orga_casting_url'] = "{% url 'orga_casting' run.get_slug quest_type.uuid %}";
+{% else %}
+window['toggle_url'] = "{% url 'orga_casting_toggle' run.get_slug %}";
+window['orga_casting_url'] = "{% url 'orga_casting' run.get_slug %}";
+{% endif %}
 
 window['reg_priority'] = {{ reg_priority }};
 window['pay_priority'] = {{ pay_priority }};
