@@ -2458,6 +2458,9 @@ msgstr "Jaettu salaisuus"
 msgid "Show inactive"
 msgstr "Näytä inaktiivinen"
 
+msgid "Side selector"
+msgstr "Sivuvalitsin"
+
 msgid "Signup update"
 msgstr "Ilmoittautumisen päivitys"
 
@@ -3475,6 +3478,9 @@ msgstr "Vapaaehtoinen lahjoitus"
 
 msgid "Volunteer Registry"
 msgstr "Vapaaehtoisten rekisteri"
+
+msgid "Workspace selector"
+msgstr "Työtilan valitsin"
 
 msgid "Your date of birth"
 msgstr "Syntymäaikasi"
@@ -7797,6 +7803,11 @@ msgstr ""
 msgid "Simply follow the instructions and provide the required information"
 msgstr "Seuraa ohjeita ja anna tarvittavat tiedot"
 
+msgid "Start here to create your first event and begin using the platform."
+msgstr ""
+"Aloita täältä luodaksesi ensimmäisen tapahtumasi ja aloittaaksesi alustan "
+"käytön."
+
 msgid "The full name of your event as it will be displayed to participants"
 msgstr "Tapahtuman koko nimi sellaisena kuin se näytetään osallistujille"
 
@@ -8319,11 +8330,6 @@ msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Huomautus: Erityiskoodi luodaan uudelleen aina, kun vaihdat lahjakortin"
-
-msgid ""
-"Select the active workspace here: your organization or one of the events."
-msgstr ""
-"Valitse tässä aktiivinen työtila: organisaatiosi tai jokin tapahtumista."
 
 msgid ""
 "Some activated features need the 'Character' feature, but it isn't active"
@@ -9035,6 +9041,12 @@ msgstr ""
 "klikkaamalla Vahvista"
 
 msgid ""
+"Welcome! Your organization has been created. Explore the platform to get "
+"started."
+msgstr ""
+"Tervetuloa! Organisaatiosi on luotu. Tutustu foorumiin päästäksesi alkuun."
+
+msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
 " most"
 msgstr ""
@@ -9191,6 +9203,13 @@ msgstr ""
 "sallittua)"
 
 msgid ""
+"Select the active workspace here: switch between your organization and your "
+"events."
+msgstr ""
+"Valitse tässä aktiivinen työtila: vaihda organisaation ja tapahtumien "
+"välillä."
+
+msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "
 "pdf file)"
 msgstr ""
@@ -9300,6 +9319,13 @@ msgid ""
 msgstr ""
 "Vinkki: Kiinnitä tämä sivu selaimeesi, jotta pääset nopeammin organisaatioon"
 " ja tapahtumiin"
+
+msgid ""
+"Your first event has been created! Here is how to navigate the management "
+"interface."
+msgstr ""
+"Ensimmäinen tapahtumasi on luotu! Tässä kerrotaan, miten navigoit "
+"hallintakäyttöliittymässä."
 
 msgid ""
 "I confirm that I have uploaded a valid document issued by the state of my "

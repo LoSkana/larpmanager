@@ -4612,6 +4612,27 @@ msgid "Select ability"
 msgstr ""
 
 msgid ""
+"Welcome! Your organization has been created. Explore the platform to get "
+"started."
+msgstr ""
+
+msgid "Start here to create your first event and begin using the platform."
+msgstr ""
+
+msgid ""
+"Your first event has been created! Here is how to navigate the management "
+"interface."
+msgstr ""
+
+msgid ""
+"Select the active workspace here: switch between your organization and your "
+"events."
+msgstr ""
+
+msgid "Switch here between administrative views and user-facing pages."
+msgstr ""
+
+msgid ""
 "This is the management dashboard, the interface will now be explained "
 "section by section."
 msgstr ""
@@ -4622,13 +4643,6 @@ msgid ""
 msgstr ""
 
 msgid "Create, access, and manage your events from here."
-msgstr ""
-
-msgid ""
-"Select the active workspace here: your organization or one of the events."
-msgstr ""
-
-msgid "Switch here between administrative views and user-facing pages."
 msgstr ""
 
 msgid "Toggle the visibility of the sidebar."
@@ -4660,6 +4674,12 @@ msgid "Welcome to"
 msgstr ""
 
 msgid "And that is all"
+msgstr ""
+
+msgid "Workspace selector"
+msgstr ""
+
+msgid "Side selector"
 msgstr ""
 
 msgid "Confirm"

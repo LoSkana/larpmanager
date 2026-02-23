@@ -31,6 +31,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from larpmanager.cache.config import save_single_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.association import (
     ExeFeatureForm,
@@ -457,6 +458,7 @@ def exe_activation(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
         association = Association.objects.get(pk=association_id)
         association.demo = False
         association.save(update_fields=["demo"])
+        save_single_config(association, "intro_driver", "advanced_unlock")
         messages.success(request, _("Advanced mode activated! All features are now available."))
         return redirect("manage")
 

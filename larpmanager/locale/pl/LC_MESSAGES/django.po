@@ -2458,6 +2458,9 @@ msgstr "Wspólny sekret"
 msgid "Show inactive"
 msgstr "Pokaż nieaktywne"
 
+msgid "Side selector"
+msgstr "Selektor boczny"
+
 msgid "Signup update"
 msgstr "Aktualizacja rejestracji"
 
@@ -3475,6 +3478,9 @@ msgstr "Dobrowolna darowizna"
 
 msgid "Volunteer Registry"
 msgstr "Rejestr wolontariuszy"
+
+msgid "Workspace selector"
+msgstr "Selektor obszaru roboczego"
 
 msgid "Your date of birth"
 msgstr "Data urodzenia"
@@ -7839,6 +7845,11 @@ msgid "Simply follow the instructions and provide the required information"
 msgstr ""
 "Wystarczy postępować zgodnie z instrukcjami i podać wymagane informacje"
 
+msgid "Start here to create your first event and begin using the platform."
+msgstr ""
+"Zacznij tutaj, aby utworzyć swoje pierwsze wydarzenie i rozpocząć "
+"korzystanie z platformy."
+
 msgid "The full name of your event as it will be displayed to participants"
 msgstr "Pełna nazwa wydarzenia, która będzie wyświetlana uczestnikom"
 
@@ -8373,12 +8384,6 @@ msgid ""
 msgstr ""
 "Uwaga: Specjalny kod jest generowany ponownie przy każdej zmianie karty "
 "podarunkowej"
-
-msgid ""
-"Select the active workspace here: your organization or one of the events."
-msgstr ""
-"Wybierz tutaj aktywny obszar roboczy: swoją organizację lub jedno z "
-"wydarzeń."
 
 msgid ""
 "Some activated features need the 'Character' feature, but it isn't active"
@@ -9109,6 +9114,13 @@ msgstr ""
 "kliknąć przycisk Potwierdź"
 
 msgid ""
+"Welcome! Your organization has been created. Explore the platform to get "
+"started."
+msgstr ""
+"Witamy! Twoja organizacja została utworzona. Zapoznaj się z platformą, aby "
+"rozpocząć."
+
+msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
 " most"
 msgstr ""
@@ -9269,6 +9281,13 @@ msgstr ""
 " tworzyć postaci)"
 
 msgid ""
+"Select the active workspace here: switch between your organization and your "
+"events."
+msgstr ""
+"Wybierz tutaj aktywny obszar roboczy: przełączaj się między swoją "
+"organizacją a wydarzeniami."
+
+msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "
 "pdf file)"
 msgstr ""
@@ -9375,6 +9394,13 @@ msgid ""
 msgstr ""
 "Wskazówka: Przypnij tę stronę do przeglądarki, aby uzyskać szybszy dostęp do"
 " organizacji i wydarzeń"
+
+msgid ""
+"Your first event has been created! Here is how to navigate the management "
+"interface."
+msgstr ""
+"Twoje pierwsze wydarzenie zostało utworzone! Oto jak poruszać się po "
+"interfejsie zarządzania."
 
 msgid ""
 "I confirm that I have uploaded a valid document issued by the state of my "

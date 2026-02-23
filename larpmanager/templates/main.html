@@ -109,7 +109,7 @@
                             {% block info %}
                             {% endblock info %}
                             {% if tutorial %}- <a href="#" class="feature_tutorial" tut="{{ tutorial }}">Tutorial</a>{% endif %}
-                            {% if config %}
+                            {% if config and not demo %}
                                 - <a href="{{ config }}"
     class="action-link"
     data-modal-eligible="true"

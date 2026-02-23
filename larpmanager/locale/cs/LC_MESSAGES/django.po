@@ -2458,6 +2458,9 @@ msgstr "Sdílené tajemství"
 msgid "Show inactive"
 msgstr "Zobrazit neaktivní"
 
+msgid "Side selector"
+msgstr "Boční volič"
+
 msgid "Signup update"
 msgstr "Aktualizace registrace"
 
@@ -3475,6 +3478,9 @@ msgstr "Dobrovolné dárcovství"
 
 msgid "Volunteer Registry"
 msgstr "Registr dobrovolníků"
+
+msgid "Workspace selector"
+msgstr "Výběr pracovního prostoru"
 
 msgid "Your date of birth"
 msgstr "Vaše datum narození"
@@ -7768,6 +7774,10 @@ msgstr ""
 msgid "Simply follow the instructions and provide the required information"
 msgstr "Stačí postupovat podle pokynů a zadat požadované informace"
 
+msgid "Start here to create your first event and begin using the platform."
+msgstr ""
+"Zde můžete začít vytvářet svou první událost a začít platformu používat."
+
 msgid "The full name of your event as it will be displayed to participants"
 msgstr "Úplný název vaší akce, jak se bude zobrazovat účastníkům"
 
@@ -8262,11 +8272,6 @@ msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Poznámka: Speciální kód se generuje znovu při každé změně dárkové karty"
-
-msgid ""
-"Select the active workspace here: your organization or one of the events."
-msgstr ""
-"Zde vyberte aktivní pracovní prostor: svou organizaci nebo jednu z událostí."
 
 msgid ""
 "Some activated features need the 'Character' feature, but it isn't active"
@@ -8951,6 +8956,12 @@ msgstr ""
 "klikněte na tlačítko potvrdit"
 
 msgid ""
+"Welcome! Your organization has been created. Explore the platform to get "
+"started."
+msgstr ""
+"Vítejte! Vaše organizace byla založena. Prozkoumejte platformu a začněte."
+
+msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
 " most"
 msgstr ""
@@ -9100,6 +9111,13 @@ msgstr ""
 "postav není povoleno)"
 
 msgid ""
+"Select the active workspace here: switch between your organization and your "
+"events."
+msgstr ""
+"Zde vyberte aktivní pracovní prostor: přepínejte mezi svou organizací a "
+"událostmi."
+
+msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "
 "pdf file)"
 msgstr "Doklad vystavený bankou jako důkaz o převodu (ve formátu pdf)"
@@ -9200,6 +9218,13 @@ msgid ""
 msgstr ""
 "Tip: Připněte si tuto stránku do prohlížeče pro rychlejší přístup k "
 "organizaci a událostem"
+
+msgid ""
+"Your first event has been created! Here is how to navigate the management "
+"interface."
+msgstr ""
+"Vaše první událost byla vytvořena! Zde je návod, jak se pohybovat v rozhraní"
+" pro správu."
 
 msgid ""
 "I confirm that I have uploaded a valid document issued by the state of my "

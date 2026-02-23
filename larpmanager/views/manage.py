@@ -271,9 +271,8 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     # Add sticky messages for the current user
     context["sticky_messages"] = get_sticky_messages(context, context["member"])
 
-    # Compile final context and check for intro driver
+    # Compile final context
     _compile(request, context)
-    _check_intro_driver(context)
 
     return render(request, "larpmanager/manage/exe.html", context)
 
@@ -572,9 +571,6 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
         if origin_id:
             should_open_shortcuts = str(context["run"].id) != origin_id
         context["open_shortcuts"] = should_open_shortcuts
-
-    # Check if intro driver needs to be shown
-    _check_intro_driver(context)
 
     # Loads widget data
     _orga_widgets(request, context, features)
@@ -1164,18 +1160,6 @@ def dismiss_sticky_message(request: HttpRequest, message_uuid: str) -> JsonRespo
         return JsonResponse({"status": "ok"})
     return JsonResponse({"status": "error", "message": "Message not found"}, status=404)
 
-
-def _check_intro_driver(context: dict) -> None:
-    """Check if intro driver should be shown and update context."""
-    member = context["member"]
-    config_key = "intro_driver"
-
-    # Skip if user has already seen the intro driver
-    if member.get_config(config_key, default_value=False):
-        return
-
-    # Enable intro driver in template context
-    context["intro_driver"] = True
 
 
 def orga_redirect(
