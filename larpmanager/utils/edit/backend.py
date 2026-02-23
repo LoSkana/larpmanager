@@ -40,7 +40,7 @@ from larpmanager.models.event import Run
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice
 from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.miscellanea import Log
-from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
+from larpmanager.models.writing import Faction, Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.common import get_element, get_object_uuid, html_clean
@@ -109,7 +109,7 @@ def save_log(
     )
 
 
-def save_version(element: Any, model_type: str, member: Member, *, to_delete: bool = False) -> None:  # noqa: C901 - Complex versioning logic with multiple model types
+def save_version(element: Any, model_type: str, member: Member, *, to_delete: bool = False) -> None:
     """Manage versioning of text content.
 
     Creates and saves new versions of editable text elements with author tracking,
@@ -143,17 +143,7 @@ def save_version(element: Any, model_type: str, member: Member, *, to_delete: bo
 
     # Handle question-based content types by aggregating answers
     if model_type in QuestionApplicable.values:
-        texts = []
-
-        # Collect all applicable questions and their values
-        for question in get_cached_writing_questions(element.event, model_type):
-            value = _get_field_value(element, question)
-            if not value:
-                continue
-            value = html_clean(value)
-            texts.append(f"{question.get('name')}: {value}")
-
-        tv.text = "\n".join(texts)
+        tv.text = _version_applicable(element, model_type)
     else:
         # For non-question types, use the element's text directly
         tv.text = element.text
@@ -178,12 +168,40 @@ def save_version(element: Any, model_type: str, member: Member, *, to_delete: bo
     tv.save()
 
 
-def _get_field_value(element: Any, question: Any) -> str | None:
+def _version_applicable(element: BaseModel, model_type: str) -> str:
+    """Prepare text for the version log for an element with writing answers and choices."""
+    texts = []
+
+    # Pre-fetch all answers and choices for this element
+    answers_by_question = {a.question_id: a.text for a in WritingAnswer.objects.filter(element_id=element.id)}
+    choices_by_question: dict[int, list[str]] = {}
+    for choice in WritingChoice.objects.filter(element_id=element.id).select_related("option"):
+        choices_by_question.setdefault(choice.question_id, []).append(choice.option.name)
+
+    # Collect all applicable questions and their values
+    for question in get_cached_writing_questions(element.event, model_type):
+        value = _get_field_value(element, question, answers_by_question, choices_by_question)
+        if not value:
+            continue
+        value = html_clean(value)
+        texts.append(f"{question.get('name')}: {value}")
+
+    return "\n".join(texts)
+
+
+def _get_field_value(
+    element: Any,
+    question: Any,
+    answers_by_question: dict[int, str] | None = None,
+    choices_by_question: dict[int, list[str]] | None = None,
+) -> str | None:
     """Get the field value for a given element and question.
 
     Args:
         element: The element object to get the value for
         question: The question object containing type and configuration
+        answers_by_question: Pre-fetched mapping of question_id -> answer text
+        choices_by_question: Pre-fetched mapping of question_id -> list of option names
 
     Returns:
         The field value as a string, or None if no value found
@@ -196,18 +214,21 @@ def _get_field_value(element: Any, question: Any) -> str | None:
     if question["typ"] in mapping:
         return mapping[question["typ"]]()
 
+    q_id = question["id"]
+
     # Handle text-based question types (paragraph, text, email)
     if question["typ"] in {"p", "t", "e"}:
-        answers = WritingAnswer.objects.filter(question_id=question["id"], element_id=element.id)
-        if answers:
-            return answers.first().text
-        return ""
+        if answers_by_question is not None:
+            return answers_by_question.get(q_id, "")
+        answers = WritingAnswer.objects.filter(question_id=q_id, element_id=element.id)
+        return answers.first().text if answers else ""
 
     # Handle selection-based question types (single, multiple choice)
     if question["typ"] in {"s", "m"}:
+        if choices_by_question is not None:
+            return ", ".join(choices_by_question.get(q_id, []))
         return ", ".join(
-            choice.option.name
-            for choice in WritingChoice.objects.filter(question_id=question["id"], element_id=element.id)
+            choice.option.name for choice in WritingChoice.objects.filter(question_id=q_id, element_id=element.id)
         )
 
     return None
@@ -409,7 +430,7 @@ def backend_get(
         queryset_base = None
         if model_type.__name__ == "Character":
             queryset_base = model_type.objects.prefetch_related(
-                "factions_list",
+                Prefetch("factions_list", queryset=Faction.objects.order_by("number")),
                 "plotcharacterrel_set__plot",
                 "px_ability_list",
                 "px_delivery_list",
