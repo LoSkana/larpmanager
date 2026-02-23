@@ -736,7 +736,7 @@ def format_email_body(email: object) -> str:
     return cleaned[:cutoff] + "..." if len(cleaned) > cutoff else cleaned
 
 
-def get_now() -> object:
+def get_now() -> datetime:
     """Get current time - if executed in debug/test, without timezone, add it."""
     now = timezone.now()
     if now.tzinfo is None or now.tzinfo.utcoffset(now) is None:

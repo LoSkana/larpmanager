@@ -20,7 +20,10 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/*
 
-RUN python --version && pip --version && node -v && npm -v
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+RUN python --version && uv --version && node -v && npm -v
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -29,7 +32,6 @@ WORKDIR /code
 
 RUN apt-get update && apt-get install -y build-essential \
     libpq-dev \
-    python3-pip \
     git \
     postfix \
     libmagic1 \
@@ -37,7 +39,6 @@ RUN apt-get update && apt-get install -y build-essential \
     postgresql \
     postgresql-contrib \
     nginx \
-    libpq-dev \
     wkhtmltopdf \
     libxmlsec1-openssl \
     libxml2-dev \
@@ -48,10 +49,11 @@ RUN apt-get update && apt-get install -y build-essential \
     gettext \
  && rm -rf /var/lib/apt/lists/*
 
-RUN rm -f /usr/lib/python*/EXTERNALLY-MANAGED || true
+# Copy project files
+COPY pyproject.toml .
 
+# Install dependencies with uv
+RUN uv pip install --system -r pyproject.toml
 COPY requirements.txt .
-
-RUN pip install -r requirements.txt --break-system-packages
 
 EXPOSE 8264
