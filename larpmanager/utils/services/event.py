@@ -213,6 +213,9 @@ def create_default_event_setup(event: Any) -> None:
 
     if not event.runs.exists():
         Run.objects.create(event=event, number=1)
+        skin_features = event.association.skin.default_features.filter(overall=False)
+        if skin_features.exists():
+            event.features.add(*skin_features)
 
     event_features = get_event_features(event.id)
 

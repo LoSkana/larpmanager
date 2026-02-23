@@ -380,6 +380,9 @@ DEMO_HIDDEN_PERMISSIONS: frozenset[str] = frozenset(
         "orga_features",
         "orga_buttons",
         "orga_cancellations",
+        "orga_character_form",
+        "orga_check",
+        "orga_reading",
     }
 )
 
