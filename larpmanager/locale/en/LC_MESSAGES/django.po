@@ -10385,6 +10385,9 @@ msgstr ""
 msgid "The request of removal from further communication has been successfull!"
 msgstr ""
 
+msgid "You must be an approved member to vote"
+msgstr ""
+
 msgid "You must complete payment of membership dues in order to vote!"
 msgstr ""
 

@@ -5649,6 +5649,9 @@ msgstr "Je hebt al een toegewezen personage"
 msgid "You are about to perform a donation of"
 msgstr "Je doet een donatie van"
 
+msgid "You must be an approved member to vote"
+msgstr "Je moet je lidmaatschapsgeld betalen om te kunnen stemmen"
+
 msgid "click on the icon to open the tutorial"
 msgstr "klik op het pictogram om de zelfstudie te openen"
 

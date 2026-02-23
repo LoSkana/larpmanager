@@ -5647,6 +5647,9 @@ msgstr "Ya tienes un personaje asignado"
 msgid "You are about to perform a donation of"
 msgstr "Estas a punto de hacer una donación de"
 
+msgid "You must be an approved member to vote"
+msgstr "Debes completar el pago de la cuota de afiliación para poder votar"
+
 msgid "click on the icon to open the tutorial"
 msgstr "haga clic en el icono para abrir el tutorial"
 

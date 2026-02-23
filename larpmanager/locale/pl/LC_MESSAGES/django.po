@@ -5647,6 +5647,9 @@ msgstr "Masz już przypisaną postać"
 msgid "You are about to perform a donation of"
 msgstr "Zamierzasz dokonać darowizny"
 
+msgid "You must be an approved member to vote"
+msgstr "Aby móc głosować, należy opłacić składki członkowskie"
+
 msgid "click on the icon to open the tutorial"
 msgstr "Kliknij ikonę, aby otworzyć samouczek"
 
