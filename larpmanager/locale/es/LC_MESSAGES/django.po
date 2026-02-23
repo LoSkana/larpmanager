@@ -4739,9 +4739,6 @@ msgstr "Ir al panel de control de la organización"
 msgid "If checked: members can vote"
 msgstr "Si está marcada: los miembros pueden votar"
 
-msgid "Launch guided interface tour"
-msgstr "Iniciar la visita guiada a la interfaz"
-
 msgid "Link to close the collection"
 msgstr "Enlace para cerrar la colección"
 

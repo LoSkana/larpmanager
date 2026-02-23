@@ -6459,9 +6459,6 @@ msgid ""
 "and events"
 msgstr ""
 
-msgid "Launch guided interface tour"
-msgstr ""
-
 msgid "Feature activated"
 msgstr ""
 

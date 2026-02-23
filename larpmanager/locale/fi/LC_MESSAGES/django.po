@@ -4739,9 +4739,6 @@ msgstr "Siirry organisaation kojelautaan"
 msgid "If checked: members can vote"
 msgstr "Jos valitaan: jäsenet voivat äänestää"
 
-msgid "Launch guided interface tour"
-msgstr "Käynnistä opastettu käyttöliittymäkierros"
-
 msgid "Link to close the collection"
 msgstr "Linkki kokoelman sulkemiseen"
 

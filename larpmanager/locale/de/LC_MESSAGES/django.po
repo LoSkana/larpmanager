@@ -4739,9 +4739,6 @@ msgstr "Zum Dashboard der Organisation gehen"
 msgid "If checked: members can vote"
 msgstr "Wenn angekreuzt: Mitglieder können abstimmen"
 
-msgid "Launch guided interface tour"
-msgstr "Geführte Schnittstellentour starten"
-
 msgid "Link to close the collection"
 msgstr "Link zum Schließen der Sammlung"
 

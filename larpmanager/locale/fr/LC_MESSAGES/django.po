@@ -4739,9 +4739,6 @@ msgstr "Accéder au tableau de bord de l'organisation"
 msgid "If checked: members can vote"
 msgstr "Si coché : les membres peuvent voter"
 
-msgid "Launch guided interface tour"
-msgstr "Lancer une visite guidée de l'interface"
-
 msgid "Link to close the collection"
 msgstr "Lien pour fermer la collection"
 

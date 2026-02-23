@@ -4739,9 +4739,6 @@ msgstr "Przejdź do pulpitu nawigacyjnego organizacji"
 msgid "If checked: members can vote"
 msgstr "Jeśli zaznaczone: członkowie mogą głosować"
 
-msgid "Launch guided interface tour"
-msgstr "Uruchom wycieczkę po interfejsie z przewodnikiem"
-
 msgid "Link to close the collection"
 msgstr "Link do zamknięcia kolekcji"
 

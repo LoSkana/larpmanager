@@ -109,7 +109,7 @@ window.addEventListener('DOMContentLoaded', function() {
         driverObj.drive();
     }
 
-    function driverIntro() {
+    function driverUnlocked() {
         const driver = window.driver.js.driver;
 
         let steps = [
@@ -274,11 +274,9 @@ window.addEventListener('DOMContentLoaded', function() {
         });
         {% elif intro_driver == "advanced_unlock" %}
         $(document).on("lm_ready", function() {
-            driverIntro();
+            driverUnlocked();
         });
         {% endif %}
-
-        $('#intro_driver').on('click', driverIntro);
     });
 
 });

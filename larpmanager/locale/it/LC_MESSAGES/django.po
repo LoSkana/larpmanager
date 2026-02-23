@@ -4739,9 +4739,6 @@ msgstr "Vai al cruscotto dell'organizzazione"
 msgid "If checked: members can vote"
 msgstr "Se selezionato: i membri possono votare"
 
-msgid "Launch guided interface tour"
-msgstr "Avvio del tour guidato dell'interfaccia"
-
 msgid "Link to close the collection"
 msgstr "Link per chiudere la colletta"
 

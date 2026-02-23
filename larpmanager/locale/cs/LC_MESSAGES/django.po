@@ -4739,9 +4739,6 @@ msgstr "Přejít na řídicí panel organizace"
 msgid "If checked: members can vote"
 msgstr "Pokud je zaškrtnuto: členové mohou hlasovat"
 
-msgid "Launch guided interface tour"
-msgstr "Spuštění prohlídky rozhraní s průvodcem"
-
 msgid "Link to close the collection"
 msgstr "Odkaz na uzavření sbírky"
 

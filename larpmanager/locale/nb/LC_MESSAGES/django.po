@@ -4739,9 +4739,6 @@ msgstr "Gå til organisasjonens dashbord"
 msgid "If checked: members can vote"
 msgstr "Hvis avkrysset: medlemmene kan stemme"
 
-msgid "Launch guided interface tour"
-msgstr "Start guidet omvisning i grensesnittet"
-
 msgid "Link to close the collection"
 msgstr "Lenke for å lukke samlingen"
 
