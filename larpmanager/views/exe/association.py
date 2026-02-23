@@ -266,7 +266,8 @@ def exe_features_go(request: HttpRequest, slug: str, *, to_active: bool = True) 
     # Handle feature activation
     if to_active:
         if slug not in context["features"]:
-            association.features.add(feature_id)
+            for dep_id in Feature.get_all_dependencies([feature_id]):
+                association.features.add(dep_id)
             message = _("Feature %(name)s activated") + "!"
         else:
             message = _("Feature %(name)s already activated") + "!"
