@@ -138,8 +138,8 @@ class ExeAction(str, Enum):
 
 def _exe_actions(
     request: HttpRequest,
-    permission: str,
-    action: Action,
+    action_name: str,
+    action_type: Action,
     element_uuid: str | None = None,
 ) -> HttpResponse:
     """Unified entry point for all operations on organization-wide (executive) elements.
@@ -150,8 +150,8 @@ def _exe_actions(
 
     Args:
         request: HTTP request object
-        permission: Permission string that maps to an ExeAction enum member
-        action: Action type (EDIT, NEW, or DELETE)
+        action_name: Permission string that maps to an ExeAction enum member
+        action_type: Action type (EDIT, NEW, or DELETE)
         element_uuid: UUID of element to operate on (None for new elements)
 
     Returns:
@@ -161,20 +161,21 @@ def _exe_actions(
         Http404: If permission is not found in ExeAction enum
     """
     # Get permission data from enum
-    exe_action = ExeAction.from_string(permission)
+    exe_action = ExeAction.from_string(action_name)
     if exe_action is None:
-        msg = f"permission unknown: {permission}"
+        msg = f"action unknown: {action_name}"
         raise Http404(msg)
 
     action_data = exe_action.config
     form_type = action_data.get("form")
     model_type = form_type.Meta.model
+    permission = exe_action.value
 
     # Verify user has permission
     context = check_association_context(request, permission)
 
     # Perform DELETE
-    if action == Action.DELETE:
+    if action_type == Action.DELETE:
         backend_delete(request, context, model_type, element_uuid, action_data.get("can_delete"))
         return redirect(permission)
 

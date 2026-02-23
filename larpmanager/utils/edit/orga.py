@@ -499,8 +499,8 @@ def _action_show(
 def _orga_actions(
     request: HttpRequest,
     event_slug: str,
-    permission: str,
-    action: Action,
+    action_name: str,
+    action_type: Action,
     element_uuid: str | None = None,
     additional: Any = None,
 ) -> HttpResponse | None:
@@ -513,8 +513,8 @@ def _orga_actions(
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        permission: Permission string that maps to an OrgaAction enum member
-        action: Action type (EDIT, NEW, DELETE, or ORDER)
+        action_name: String that maps to an OrgaAction enum member
+        action_type: Action type (EDIT, NEW, DELETE, or ORDER)
         element_uuid: UUID of element to operate on (None for new elements)
         additional: Additional parameter for ORDER action (position offset)
 
@@ -525,27 +525,28 @@ def _orga_actions(
         Http404: If permission is not found in OrgaAction enum
     """
     # Get permission data from enum
-    orga_action = OrgaAction.from_string(permission)
+    orga_action = OrgaAction.from_string(action_name)
     if orga_action is None:
-        msg = f"permission unknown: {permission}"
+        msg = f"permission unknown: {action_name}"
         raise Http404(msg)
 
     action_data = orga_action.config
+    permission = orga_action.value
 
     # Verify user has permission
     if permission.endswith("form_option"):
         permission = permission.replace("form_option", "form")
-    if action == Action.VIEW:
+    if action_type == Action.VIEW:
         permission = ["orga_reading", permission]
     context = check_event_context(request, event_slug, permission)
 
-    if action in [Action.EDIT, Action.NEW]:
+    if action_type in [Action.EDIT, Action.NEW]:
         return _action_change(request, context, event_slug, permission, action_data, element_uuid)
 
-    if action in [Action.ORDER, Action.DELETE]:
-        return _action_redirect(request, context, permission, action, action_data, element_uuid, additional)
+    if action_type in [Action.ORDER, Action.DELETE]:
+        return _action_redirect(request, context, permission, action_type, action_data, element_uuid, additional)
 
-    return _action_show(request, context, action, action_data, element_uuid)
+    return _action_show(request, context, action_type, action_data, element_uuid)
 
 
 def orga_new(request: HttpRequest, event_slug: str, permission: str) -> HttpResponse:
