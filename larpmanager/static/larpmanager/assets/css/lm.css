@@ -1926,7 +1926,7 @@ header.sec h1 {
   color: green;
 }
 
-progress_not_done {
+.progress_not_done {
   color: gray;
 }
 

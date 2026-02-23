@@ -6271,9 +6271,6 @@ msgstr "Ange ett värde för registrering av extern länk"
 msgid "The user has been assigned the specified role"
 msgstr "Användaren har tilldelats den angivna rollen"
 
-msgid "This mode helps you master the basics quickly"
-msgstr "Detta läge hjälper dig att snabbt lära dig grunderna"
-
 msgid "This page shows the pre-signups for the event"
 msgstr "Denna sida visar förhandsanmälningarna till evenemanget"
 
@@ -7395,6 +7392,9 @@ msgstr ""
 msgid "These are the workshops you must complete before you can play"
 msgstr "Detta är de workshops som du måste genomföra innan du kan spela"
 
+msgid "This mode helps you master quickly the basics of the platform"
+msgstr "Detta läge hjälper dig att snabbt lära dig grunderna i plattformen"
+
 msgid "This page lists all reimbursement claims submitted by members"
 msgstr ""
 "På denna sida listas alla ersättningsanspråk som skickats in av medlemmar"
@@ -8259,8 +8259,7 @@ msgstr ""
 #, python-format
 msgid ""
 "You are using %(platform)s in <b>Lite Mode</b> (%(progress)s%% complete)"
-msgstr ""
-"Du använder %(plattform)s i <b>Lite Mode</b> (%(progress)s%% komplett)"
+msgstr "Du använder %(platform)s i <b>Lite Mode</b> (%(progress)s%% komplett)"
 
 msgid ""
 "You can now setup the tickets, the signup form, the registration options"

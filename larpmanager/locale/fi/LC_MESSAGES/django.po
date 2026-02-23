@@ -6269,9 +6269,6 @@ msgstr "Määritä arvo rekisteröinnille ulkoinen linkki"
 msgid "The user has been assigned the specified role"
 msgstr "Käyttäjälle on annettu määritetty rooli"
 
-msgid "This mode helps you master the basics quickly"
-msgstr "Tämä tila auttaa sinua hallitsemaan perusasiat nopeasti"
-
 msgid "This page shows the pre-signups for the event"
 msgstr "Tämä sivu näyttää tapahtuman ennakkoilmoittautumiset"
 
@@ -7393,6 +7390,9 @@ msgstr ""
 
 msgid "These are the workshops you must complete before you can play"
 msgstr "Nämä työpajat sinun on suoritettava ennen kuin voit pelata"
+
+msgid "This mode helps you master quickly the basics of the platform"
+msgstr "Tämä tila auttaa sinua hallitsemaan nopeasti alustan perusteet"
 
 msgid "This page lists all reimbursement claims submitted by members"
 msgstr ""

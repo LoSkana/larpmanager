@@ -10056,7 +10056,7 @@ msgid ""
 "You are using %(platform)s in <b>Lite Mode</b> (%(progress)s%% complete)"
 msgstr ""
 
-msgid "This mode helps you master the basics quickly"
+msgid "This mode helps you master quickly the basics of the platform"
 msgstr ""
 
 msgid ""

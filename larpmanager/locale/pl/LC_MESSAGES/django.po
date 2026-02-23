@@ -6270,9 +6270,6 @@ msgstr "Skonfiguruj wartość dla zewnętrznego linku rejestracyjnego"
 msgid "The user has been assigned the specified role"
 msgstr "Użytkownikowi przypisano określoną rolę"
 
-msgid "This mode helps you master the basics quickly"
-msgstr "Ten tryb pomaga szybko opanować podstawy"
-
 msgid "This page shows the pre-signups for the event"
 msgstr "Ta strona pokazuje wstępne zapisy na wydarzenie"
 
@@ -7420,6 +7417,9 @@ msgstr ""
 
 msgid "These are the workshops you must complete before you can play"
 msgstr "Są to warsztaty, które należy ukończyć przed rozpoczęciem gry"
+
+msgid "This mode helps you master quickly the basics of the platform"
+msgstr "Ten tryb pomaga szybko opanować podstawy platformy"
 
 msgid "This page lists all reimbursement claims submitted by members"
 msgstr ""

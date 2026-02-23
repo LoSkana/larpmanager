@@ -4268,7 +4268,7 @@ INSERT INTO public.django_migrations VALUES (190, 'larpmanager', '0142_demo_defa
 INSERT INTO public.django_migrations VALUES (191, 'larpmanager', '0143_alter_associationtext_language_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (192, 'larpmanager', '0143_feature_dependencies', '2025-01-01 00:00:00.000000+01');
 
-INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, true, 'u1');
+INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
 INSERT INTO public.larpmanager_association_features VALUES (1, 1, 78);
 
@@ -4317,6 +4317,7 @@ INSERT INTO public.larpmanager_associationpermission VALUES (42, NULL, false, '2
 INSERT INTO public.larpmanager_associationpermission VALUES (43, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Tags', 'exe_warehouse_tags', 36, 33, 'Manage warehouse tags', false, 'warehouse', 15, NULL);
 INSERT INTO public.larpmanager_associationpermission VALUES (44, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Translations', 'exe_translations', 31, 107, 'Customize translations of words and phrases in the organization interface', false, NULL, 6, NULL);
 INSERT INTO public.larpmanager_associationpermission VALUES (45, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activity Log', 'exe_log', 1, 114, 'View detailed activity log of all changes made for this organization', false, NULL, 3, NULL);
+INSERT INTO public.larpmanager_associationpermission VALUES (46, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activation', 'exe_activation', 9999, 116, 'Request activation of advanced mode for the organization', true, NULL, 9, NULL);
 
 INSERT INTO public.larpmanager_associationrole VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Admin', 1, 1, 'u1');
 
@@ -4324,8 +4325,9 @@ INSERT INTO public.larpmanager_associationrole_members VALUES (1, 1, 2);
 
 INSERT INTO public.larpmanager_associationskin VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'LarpManager', 'larpmanager.com', '', '', '', NULL, false);
 
-INSERT INTO public.larpmanager_associationskin_default_features VALUES (1, 1, 53);
-INSERT INTO public.larpmanager_associationskin_default_features VALUES (2, 1, 78);
+INSERT INTO public.larpmanager_associationskin_default_features VALUES (1, 1, 72);
+INSERT INTO public.larpmanager_associationskin_default_features VALUES (2, 1, 53);
+INSERT INTO public.larpmanager_associationskin_default_features VALUES (3, 1, 78);
 
 INSERT INTO public.larpmanager_character VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Test Character', '<p>Test Teaser</p>', '<p>Test Text</p>', false, '', false, '', 'c', NULL, 1, NULL, NULL, NULL, 'baba', 'u1');
 
@@ -4538,6 +4540,7 @@ INSERT INTO public.larpmanager_feature VALUES (112, NULL, false, '2025-01-01 00:
 INSERT INTO public.larpmanager_feature VALUES (113, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Templates', 'Pseudo-feature activated by px_templates configuration', 'templates', 0, false, '', true, 3, '', '', true);
 INSERT INTO public.larpmanager_feature VALUES (114, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activity Log', 'Show detailed activity log on entities created, updated or deleted.', 'logs', 1, true, '', false, 3, '', '', false);
 INSERT INTO public.larpmanager_feature VALUES (115, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'App Integration', 'Enables a button in the topbar to redirect authenticated users to an external application, using a configurable URL and optional JWT-based SSO', 'app_integration', 90, true, '', false, 3, 'config/app_integration', 'Now you can configure the integration button and the external application settings', false);
+INSERT INTO public.larpmanager_feature VALUES (116, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activation', '', 'exe_activation', 9999, true, '', true, NULL, '', NULL, false);
 
 INSERT INTO public.larpmanager_feature_dependencies VALUES (1, 1, 72);
 INSERT INTO public.larpmanager_feature_dependencies VALUES (2, 9, 72);
@@ -4728,13 +4731,13 @@ SELECT pg_catalog.setval('public.larpmanager_association_payment_methods_id_seq'
 
 SELECT pg_catalog.setval('public.larpmanager_associationconfig_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.larpmanager_associationskin_default_features_id_seq', 3, true);
+SELECT pg_catalog.setval('public.larpmanager_associationskin_default_features_id_seq', 4, true);
 
 SELECT pg_catalog.setval('public.larpmanager_associationskin_id_seq', 1, true);
 
 SELECT pg_catalog.setval('public.larpmanager_associationtranslation_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.larpmanager_assocpermission_id_seq', 45, true);
+SELECT pg_catalog.setval('public.larpmanager_assocpermission_id_seq', 46, true);
 
 SELECT pg_catalog.setval('public.larpmanager_assocrole_id_seq', 1, true);
 
@@ -4820,7 +4823,7 @@ SELECT pg_catalog.setval('public.larpmanager_faction_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.larpmanager_feature_dependencies_id_seq', 14, true);
 
-SELECT pg_catalog.setval('public.larpmanager_feature_id_seq', 115, true);
+SELECT pg_catalog.setval('public.larpmanager_feature_id_seq', 116, true);
 
 SELECT pg_catalog.setval('public.larpmanager_featuremodule_id_seq', 10, true);
 

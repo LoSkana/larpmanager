@@ -6269,9 +6269,6 @@ msgstr "Nastavení hodnoty pro registraci externího odkazu"
 msgid "The user has been assigned the specified role"
 msgstr "Uživateli byla přidělena zadaná role"
 
-msgid "This mode helps you master the basics quickly"
-msgstr "Tento režim vám pomůže rychle zvládnout základy"
-
 msgid "This page shows the pre-signups for the event"
 msgstr "Na této stránce jsou zobrazeny předběžné přihlášky na akci"
 
@@ -7387,6 +7384,9 @@ msgstr ""
 
 msgid "These are the workshops you must complete before you can play"
 msgstr "Tyto semináře musíte dokončit, abyste mohli hrát"
+
+msgid "This mode helps you master quickly the basics of the platform"
+msgstr "Tento režim vám pomůže rychle zvládnout základy platformy"
 
 msgid "This page lists all reimbursement claims submitted by members"
 msgstr ""

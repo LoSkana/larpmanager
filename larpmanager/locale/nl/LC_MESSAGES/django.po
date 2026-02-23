@@ -6272,10 +6272,6 @@ msgstr "Een waarde instellen voor registratie externe link"
 msgid "The user has been assigned the specified role"
 msgstr "De gebruiker heeft de opgegeven rol toegewezen gekregen"
 
-msgid "This mode helps you master the basics quickly"
-msgstr ""
-"Deze modus helpt je om de basisbeginselen snel onder de knie te krijgen"
-
 msgid "This page shows the pre-signups for the event"
 msgstr "Deze pagina toont de voorinschrijvingen voor het evenement"
 
@@ -7435,6 +7431,11 @@ msgstr ""
 
 msgid "These are the workshops you must complete before you can play"
 msgstr "Dit zijn de workshops die je moet voltooien voordat je kunt spelen"
+
+msgid "This mode helps you master quickly the basics of the platform"
+msgstr ""
+"Deze modus helpt je snel de basisbeginselen van het platform onder de knie "
+"te krijgen"
 
 msgid "This page lists all reimbursement claims submitted by members"
 msgstr ""

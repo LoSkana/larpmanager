@@ -407,7 +407,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
         demo_text = _(
             "You are using %(platform)s in <b>Lite Mode</b> (%(progress)s%% complete)"
         ) % {"platform": context.get("platform", "LarpManager"), "progress": progress} + ". " + _(
-            "This mode helps you master the basics quickly") + ". " + _(
+            "This mode helps you master quickly the basics of the platform") + ". " + _(
             "Complete the checklist to unlock <b>Advanced Mode</b>, enabling full access to complex logistics, accounting, and narrative tools") + "."
         _add_priority(context, demo_text, "exe_activation")
 
