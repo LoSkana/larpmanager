@@ -950,7 +950,10 @@ def _writing_load_field(
             logs.append(f"ERR - quest not found: {value}")
         return
 
-    # Get field type from context configuration
+    # Get field type from context configuration; skip unknown fields
+    if field not in context["fields"]:
+        logs.append(f"ERR - field not found: {field}")
+        return
     field_type = context["fields"][field]
 
     # Skip processing for name fields and explicitly skipped fields
