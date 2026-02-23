@@ -5647,6 +5647,9 @@ msgstr "Již máte přidělenou postavu"
 msgid "You are about to perform a donation of"
 msgstr "Přispíváte částkou"
 
+msgid "You must be an approved member to vote"
+msgstr "Abyste mohli hlasovat, musíte uhradit členský poplatek"
+
 msgid "click on the icon to open the tutorial"
 msgstr "kliknutím na ikonu otevřete výukový program"
 

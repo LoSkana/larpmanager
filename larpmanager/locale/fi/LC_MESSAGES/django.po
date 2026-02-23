@@ -5647,6 +5647,9 @@ msgstr "Sinulle on jo määritetty hahmo"
 msgid "You are about to perform a donation of"
 msgstr "Olet aikeissa tehdä lahjoituksen"
 
+msgid "You must be an approved member to vote"
+msgstr "Sinun on maksettava jäsenmaksusi, jotta voit äänestää"
+
 msgid "click on the icon to open the tutorial"
 msgstr "klikkaa kuvaketta avataksesi opetusohjelman"
 

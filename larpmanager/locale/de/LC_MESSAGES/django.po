@@ -5651,6 +5651,10 @@ msgstr "Sie haben bereits ein zugewiesenes Zeichen"
 msgid "You are about to perform a donation of"
 msgstr "Sie machen eine Spende von"
 
+msgid "You must be an approved member to vote"
+msgstr ""
+"Um wählen zu können, muss der Mitgliedsbeitrag vollständig bezahlt werden"
+
 msgid "click on the icon to open the tutorial"
 msgstr "Klicken Sie auf das Symbol, um das Tutorial zu öffnen"
 

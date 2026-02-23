@@ -5649,6 +5649,9 @@ msgstr "Du har allerede en tildelt karakter"
 msgid "You are about to perform a donation of"
 msgstr "Du gir en donasjon på"
 
+msgid "You must be an approved member to vote"
+msgstr "Du må fullføre betalingen av medlemskontingenten for å kunne stemme"
+
 msgid "click on the icon to open the tutorial"
 msgstr "klikk på ikonet for å åpne veiledningen"
 

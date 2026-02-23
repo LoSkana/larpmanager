@@ -5650,6 +5650,10 @@ msgstr "Vous avez déjà un personnage attribué"
 msgid "You are about to perform a donation of"
 msgstr "Vous faites un don de"
 
+msgid "You must be an approved member to vote"
+msgstr ""
+"Vous devez vous acquitter du paiement de la cotisation pour pouvoir voter "
+
 msgid "click on the icon to open the tutorial"
 msgstr "cliquez sur l'icône pour ouvrir le tutoriel"
 
