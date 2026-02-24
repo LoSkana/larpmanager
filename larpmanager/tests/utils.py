@@ -347,3 +347,8 @@ def new_option(page):
 def submit_option(page, iframe):
     iframe.get_by_role("button", name="Confirm").click()
     just_wait(page)
+
+
+def sidebar(page, link):
+    pattern = re.compile(re.escape(link) + "$", re.IGNORECASE)
+    page.locator("#sidebar").get_by_role("link", name=pattern).click()

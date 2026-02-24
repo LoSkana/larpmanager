@@ -160,8 +160,8 @@
     module: users
 - model: larpmanager.eventpermission
   fields:
-    name: Sensitive data
-    descr: Review participants' sensitive data
+    name: Users
+    descr: Review participants' personal data
     slug: orga_sensitive
     number: 31
     config: null
@@ -233,7 +233,7 @@
     name: Quest type
     descr: Manage the type of event quests
     slug: orga_quest_types
-    number: 21
+    number: 51
     config: null
     hidden: false
     feature: questbuilder
@@ -494,7 +494,7 @@
     name: Ability type
     descr: Manage the type of character skills
     slug: orga_px_ability_types
-    number: 41
+    number: 81
     config: px
     hidden: false
     feature: px
@@ -631,7 +631,7 @@
     module: appearance
 - model: larpmanager.eventpermission
   fields:
-    name: Send e-mail
+    name: E-mail
     descr: Send e-mail
     slug: orga_send_mail
     number: 99

@@ -30,7 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, logout, login_orga, \
-    login_user, submit_confirm, new_option, submit_option
+    login_user, submit_confirm, new_option, submit_option, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -265,7 +265,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
 
     # Assign char
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    sidebar(page, "Registrations")
     page.locator(".fa-edit").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")

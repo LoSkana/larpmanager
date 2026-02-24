@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, expect_normalized, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import just_wait, expect_normalized, go_to, login_orga, submit_confirm, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -80,7 +80,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # check base
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text Load")
