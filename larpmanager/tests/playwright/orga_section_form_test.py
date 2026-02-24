@@ -34,7 +34,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_user,
                                      logout,
                                      submit_confirm,
-                                     expect_normalized, fill_tinymce, check_feature,
+                                     expect_normalized, fill_tinymce, check_feature, sidebar,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -191,7 +191,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("option", name="Admin Test").click()
     page.get_by_role("button", name="Confirm").click()
 
-    page.sidebar(page, "Registrations").click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="Food").click()
     page.get_by_role("link", name="sleep").click()
     just_wait(page)
@@ -214,7 +214,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     # login as user
     login_user(page, live_server)
     go_to(page, live_server, "/test/manage/")
-    page.sidebar(page, "Registrations").click()
+    sidebar(page, "Registrations")
 
     expect(page.get_by_role("link", name="Food")).to_be_visible()
     expect(page.get_by_role("link", name="sleep")).not_to_be_visible()
@@ -272,7 +272,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # delete sign up
-    page.sidebar(page, "Registrations").click()
+    sidebar(page, "Registrations")
     page.locator('.fa-trash').click()
 
     # check does not show on new sign up
@@ -288,7 +288,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # assign character
     go_to(page, live_server, "/test/manage/")
-    page.sidebar(page, "Registrations").click()
+    sidebar(page, "Registrations")
     page.locator(".fa-edit").click()
     page.get_by_role("link", name=re.compile(r"^Character ")).click()
     page.get_by_role("searchbox").click()

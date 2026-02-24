@@ -29,7 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, load_image, login_orga, expect_normalized, submit_confirm
+from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, load_image, login_orga, expect_normalized, \
+    submit_confirm, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -149,7 +150,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     page.locator("#id_registration_no_grouping").check()
     page.locator("#id_registration_reg_que_allowed").check()
     submit_confirm(page)
-    page.sidebar(page, "Registrations").click()
+    sidebar(page, "Registrations")
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")
     page.locator(".fa-edit").click()
     expect_normalized(page,
