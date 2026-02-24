@@ -355,6 +355,8 @@ def _init_writing_element(instance: object, default_question_types: Any, questio
         for question in writing_questions:
             debug_set_uuid(question, created=True)
 
+        clear_writing_questions_cache(instance.id)
+
 
 def _init_character_form_questions(
     custom_types: set,

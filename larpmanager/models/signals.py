@@ -843,6 +843,8 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
 
     # Reset configuration cache and create default setup
     on_event_post_save_reset_config_cache(instance)
+
+    # Default event setup
     create_default_event_setup(instance)
 
 
