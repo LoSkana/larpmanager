@@ -347,14 +347,7 @@ class ExeInvoiceForm(BaseModelForm):
 
     class Meta:
         model = PaymentInvoice
-        fields = ("typ", "invoice")
-        widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget}
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form and configure member widget with association."""
-        super().__init__(*args, **kwargs)
-
-        self.configure_field_association("member", self.params.get("association_id"))
+        fields = ("invoice",)
 
 
 class ExeCreditForm(BaseModelForm):
