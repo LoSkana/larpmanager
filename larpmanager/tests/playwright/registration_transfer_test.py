@@ -195,7 +195,7 @@ def copy_tickets_and_questions(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Navigate to copy page
-    page.locator("#orga_copy").get_by_role("link", name="Copy").click()
+    sidebar(page, "Copy")
 
     # Select Event A as source
     page.locator("#select2-id_parent-container").click()

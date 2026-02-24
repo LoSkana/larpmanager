@@ -143,7 +143,7 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
     """Test that NPC/Staff ticket links bypass external registration link redirect."""
 
     # Set an external registration link
-    page.get_by_role("link", name="Event", exact=True).click()
+    page.sidebar(page, "Event").click()
     page.locator("#id_form2-registration_status").select_option("e")
     page.locator("#id_form2-register_link").click()
     page.locator("#id_form2-register_link").fill("https://google.com")
@@ -334,7 +334,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     # check situation in second event
     page.locator("#one").get_by_role("link", name="Characters").click()
     expect_normalized(page, page.locator("#one"), "PRIMAAAA Primary Test Character TRANVERSA Transversal Test Character")
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text PRIMAAAA TRANVERSA")
 
@@ -343,7 +343,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Factions").click()
     page.locator("#one").get_by_role("link", name="Characters").click()
     expect_normalized(page, page.locator("#one"), "primaaa Primary Test Character tranver Transversal Test Character")
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text primaaa tranver")
 

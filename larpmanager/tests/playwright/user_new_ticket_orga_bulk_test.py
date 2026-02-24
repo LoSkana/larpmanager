@@ -80,7 +80,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # check base
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text Load")

@@ -272,7 +272,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # test adding them to character
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.locator('[id="u1"]').locator(".fa-edit").click()
     searchbox = page.get_by_role("searchbox")
     searchbox.click()

@@ -134,7 +134,7 @@ def test_faction_all(pw_page: Any) -> None:
 
     # Helper to create characters with faction assignments
     def create_character(name: str, teaser: str, text: str, faction_names: list) -> None:
-        page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+        sidebar(page, "Characters")
         page.get_by_role("link", name="New").click()
         page.locator("#id_name").fill(name)
         fill_tinymce(page, "id_teaser", teaser)
@@ -255,7 +255,7 @@ def test_faction_all(pw_page: Any) -> None:
 
     # Navigate to characters list
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    page.sidebar(page, "Registrations").click()
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").nth(1).fill("user")

@@ -149,7 +149,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     page.locator("#id_registration_no_grouping").check()
     page.locator("#id_registration_reg_que_allowed").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    page.sidebar(page, "Registrations").click()
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")
     page.locator(".fa-edit").click()
     expect_normalized(page,
