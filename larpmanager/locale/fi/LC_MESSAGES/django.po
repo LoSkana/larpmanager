@@ -831,9 +831,6 @@ msgstr "Enimmäismäärä"
 msgid "Members"
 msgstr "Jäsenet"
 
-msgid "Methods"
-msgstr "Menetelmät"
-
 msgid "Modules"
 msgstr "Moduulit"
 

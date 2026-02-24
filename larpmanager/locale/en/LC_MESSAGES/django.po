@@ -9063,9 +9063,6 @@ msgstr ""
 msgid "Display all users data"
 msgstr ""
 
-msgid "Methods"
-msgstr ""
-
 msgid "Configure payment methods available for participants"
 msgstr ""
 
