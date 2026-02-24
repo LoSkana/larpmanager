@@ -71,14 +71,14 @@ def update_association_permission_feature(slug: str) -> tuple[str, str, str]:
     return slug, tutorial, config
 
 
-def get_association_permission_feature(slug: str) -> tuple[str, str | None, dict | None]:
+def get_association_permission_feature(slug: str | list[str]) -> tuple[str, str | None, dict | None]:
     """Get cached association permission feature data.
 
     Retrieves feature data for an association permission from cache first,
     falling back to database if not cached.
 
     Args:
-        slug: Permission slug identifier
+        slug: Permission slug(s) identifier
 
     Returns:
         A tuple containing:
@@ -91,12 +91,14 @@ def get_association_permission_feature(slug: str) -> tuple[str, str | None, dict
     if not slug:
         return "def", None, None
 
+    permission = slug[0] if isinstance(slug, list) else slug
+
     # Attempt to retrieve from cache first
-    cached_feature_data = cache.get(association_permission_feature_key(slug))
+    cached_feature_data = cache.get(association_permission_feature_key(permission))
 
     # If cache miss, update cache and return fresh data
     if cached_feature_data is None:
-        cached_feature_data = update_association_permission_feature(slug)
+        cached_feature_data = update_association_permission_feature(permission)
 
     return cached_feature_data
 

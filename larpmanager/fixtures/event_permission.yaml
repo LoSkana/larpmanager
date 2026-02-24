@@ -435,8 +435,9 @@
     slug: orga_invoices
     number: 81
     config: null
+    active_if: payment_invoices
     hidden: false
-    feature: payment
+    feature: payment_invoices
     module: accounting
 - model: larpmanager.eventpermission
   fields:

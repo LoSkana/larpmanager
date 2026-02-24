@@ -7,6 +7,7 @@
     {% trans "This page shows the list of members, divided by type: applicants, approved, renewed for the current year" %}
 {% endblock info %}
 {% block content %}
+    {% include "elements/pending_invoices_exe.html" %}
     <p>
         {% trans "Total members" %}: {{ list | length }}
         {% if sum.s %}

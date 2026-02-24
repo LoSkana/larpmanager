@@ -109,6 +109,17 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
 
+    # Pending membership invoice approvals requiring confirmation
+    context["pending_invoices"] = (
+        PaymentInvoice.objects.filter(
+            association_id=context["association_id"],
+            status=PaymentStatus.SUBMITTED,
+            typ=PaymentType.MEMBERSHIP,
+        )
+        .select_related("member", "method")
+        .order_by("-created")
+    )
+
     # Get set of member IDs who have paid membership fees for current year
     fees = set(
         AccountingItemMembership.objects.filter(

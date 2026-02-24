@@ -441,7 +441,8 @@ class ExeConfigForm(ConfigForm):
         # Add specif sections settings
         self.set_config_email()
         self.set_config_members()
-        self.set_config_accounting()
+        self.set_config_accounting_1()
+        self.set_config_accounting_2()
         self.set_config_einvoice()
         self.set_config_others()
         self.set_config_integration()
@@ -684,16 +685,8 @@ class ExeConfigForm(ConfigForm):
             field_help_text = _("If checked: the system will send reminds the days on which holidays fall")
             self.add_configs("remind_holidays", ConfigType.BOOL, field_label, field_help_text)
 
-    def set_config_accounting(self) -> None:
-        """Configure accounting-related form fields for association settings.
-
-        Sets up payment options, transaction fee settings, and financial
-        feature configurations for the association based on enabled features.
-
-        This method conditionally adds form sections and configuration fields
-        for various accounting features including payments, VAT, tokens/credits,
-        treasury management, organization fees, and expenses.
-        """
+    def set_config_accounting_1(self) -> None:
+        """Configure accounting-related form fields for association settings."""
         # Configure payment gateway settings and fee options
         if "payment" in self.params["features"]:
             self.set_section("payment", _("Payments"))
@@ -746,6 +739,13 @@ class ExeConfigForm(ConfigForm):
                 help_text_require_payment_receipt,
             )
 
+            # Show invoice approval menu item for manual payment confirmation
+            invoices_label = _("Invoices")
+            invoices_help_text = _(
+                "If checked, shows the invoice approval menu item to manually confirm payments received",
+            )
+            self.add_configs("payment_invoices", ConfigType.BOOL, invoices_label, invoices_help_text)
+
         # Configure VAT calculation settings for different cost components
         if "vat" in self.params["features"]:
             self.set_section("vat", _("VAT"))
@@ -762,6 +762,8 @@ class ExeConfigForm(ConfigForm):
             )
             self.add_configs("vat_options", ConfigType.INT, label_vat_on_options, help_text_vat_on_options)
 
+    def set_config_accounting_2(self) -> None:
+        """Configure accounting-related form fields for association settings."""
         # Configure token/credit system naming and display
         if "tokens" in self.params["features"]:
             self.set_section("tokens", _("Tokens"))
@@ -778,7 +780,6 @@ class ExeConfigForm(ConfigForm):
 
         if "credits" in self.params["features"]:
             self.set_section("credits", _("Credits"))
-
             # Customizable credit display name
             label_credit_display_name = _("Credits name")
             help_text_credit_display_name = _("Name to be displayed for credits")

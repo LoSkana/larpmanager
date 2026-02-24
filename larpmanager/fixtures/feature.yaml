@@ -1471,6 +1471,19 @@
     module: miscellany
 - model: larpmanager.feature
   fields:
+    name: Payment Invoices
+    descr: Pseudo-feature activated by payment_invoices configuration to show invoice
+      approval menu item
+    slug: payment_invoices
+    overall: true
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: accounting
+- model: larpmanager.feature
+  fields:
     name: Activation
     descr: ''
     slug: exe_activation

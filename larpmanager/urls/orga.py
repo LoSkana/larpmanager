@@ -989,6 +989,11 @@ urlpatterns = [
         name="orga_invoices_confirm",
     ),
     path(
+        "<slug:event_slug>/manage/invoices/<slug:invoice_uuid>/delete/",
+        views_oa.orga_invoices_delete,
+        name="orga_invoices_delete",
+    ),
+    path(
         "<slug:event_slug>/manage/workshops/",
         views_oms.orga_workshops,
         name="orga_workshops",

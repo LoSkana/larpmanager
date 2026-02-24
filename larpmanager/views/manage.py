@@ -371,13 +371,20 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
             "exe_expenses",
         )
 
-    # Check for pending payment approvals
-    if actions_data.get("pending_payments", {}).get("count", 0) > 0:
-        _add_action(
-            context,
-            _("There are <b>%(number)s</b> payments to approve") % {"number": actions_data["pending_payments"]["count"]},
-            "exe_invoices",
-        )
+    # Check for pending invoice approvals split by type
+    for key, url, label in [
+        ("pending_invoices_registration", "exe_payments", _("registration payments")),
+        ("pending_invoices_donation", "exe_donations", _("donations")),
+        ("pending_invoices_collection", "exe_collections", _("collections")),
+        ("pending_invoices_membership", "exe_membership", _("membership fees")),
+    ]:
+        if actions_data.get(key, {}).get("count", 0) > 0:
+            _add_action(
+                context,
+                _("There are <b>%(number)s</b> %(label)s to approve")
+                % {"number": actions_data[key]["count"], "label": label},
+                url,
+            )
 
     # Check for pending refund approvals
     if actions_data.get("pending_refunds", {}).get("count", 0) > 0:
@@ -698,12 +705,13 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
                 "orga_expenses",
             )
 
-    # Check for pending payment approvals
-    if actions_data.get("pending_payments", {}).get("count", 0) > 0:
+    # Check for pending registration invoice approvals
+    if actions_data.get("pending_invoices_registration", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> payments to approve") % {"number": actions_data["pending_payments"]["count"]},
-            "orga_invoices",
+            _("There are <b>%(number)s</b> %(label)s to approve")
+            % {"number": actions_data["pending_invoices_registration"]["count"], "label": _("registration payments")},
+            "orga_payments",
         )
 
     # Check for incomplete registration form questions (missing options)

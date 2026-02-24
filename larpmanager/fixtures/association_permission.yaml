@@ -325,8 +325,9 @@
     slug: exe_invoices
     number: 33
     config: null
+    active_if: payment_invoices
     hidden: false
-    feature: payment
+    feature: payment_invoices
     module: accounting
 - model: larpmanager.associationpermission
   fields:

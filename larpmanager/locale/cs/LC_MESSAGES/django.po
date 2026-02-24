@@ -1506,6 +1506,9 @@ msgstr "Sklad"
 msgid "Workshops"
 msgstr "Workshopy"
 
+msgid "donations"
+msgstr "dary"
+
 msgid "negatives"
 msgstr "negativy"
 
@@ -2007,6 +2010,9 @@ msgstr "Kde se nachází"
 msgid "assignments"
 msgstr "úkoly"
 
+msgid "collections"
+msgstr "sbírky"
+
 msgid "immediately"
 msgstr "okamžitě"
 
@@ -2316,6 +2322,9 @@ msgstr "Typ dokumentu"
 
 msgid "Dynamic rates"
 msgstr "Dynamické sazby"
+
+msgid "Element saved"
+msgstr "Uložený prvek"
 
 msgid "Email Content"
 msgstr "Obsah e-mailu"
@@ -2905,6 +2914,9 @@ msgstr "Vaše postavy"
 
 msgid "expected within"
 msgstr "očekává se v rámci"
+
+msgid "membership fees"
+msgstr "členské příspěvky"
 
 msgid "upcoming events"
 msgstr "Naplánované události"
@@ -4001,6 +4013,9 @@ msgstr "Přidělování skladových úkolů"
 msgid "You have already paid"
 msgstr "Již jste zaplatili"
 
+msgid "registration payments"
+msgstr "registrační platby"
+
 msgid "submit your vote here"
 msgstr "hlasujte zde"
 
@@ -4479,6 +4494,9 @@ msgstr "Možnost úspěšně uložena"
 
 msgid "Payment already confirmed"
 msgstr "Platba již potvrzena"
+
+msgid "Pending invoice approvals"
+msgstr "Schválení faktur v očekávání"
 
 msgid "Pre-register to the event"
 msgstr "Zapište se na seznam předběžných registrací"
@@ -6417,10 +6435,6 @@ msgid "There are <b>%(number)s</b> expenses to approve"
 msgstr "Je třeba schválit <b>%(number)s</b> výdajů"
 
 #, python-format
-msgid "There are <b>%(number)s</b> payments to approve"
-msgstr "Je třeba schválit <b>%(number)s</b> plateb"
-
-#, python-format
 msgid "There are <b>%(number)s</b> questions to answer"
 msgstr "Je třeba odpovědět na <b>%(number)s</b> otázek"
 
@@ -6491,6 +6505,10 @@ msgstr "Přezkoumání informací o bezpečnosti účastníků"
 
 msgid "The subscription plan associated with this event"
 msgstr "Volitelná šablona spojená s touto schopností"
+
+#, python-format
+msgid "There are <b>%(number)s</b> %(label)s to approve"
+msgstr "Ke schválení jsou <b>%(number)s</b> %(label)s"
 
 msgid "There are no new sessions scheduled at this time"
 msgstr "V tuto chvíli nejsou naplánovány žádné nové schůzky"
@@ -9281,6 +9299,13 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, automaticky odstraní formátování při vkládání textu do "
 "editoru WYSIWYG"
+
+msgid ""
+"If checked, shows the invoice approval menu item to manually confirm "
+"payments received"
+msgstr ""
+"Pokud je zaškrtnuto, zobrazí se položka nabídky schválení faktury pro ruční "
+"potvrzení přijatých plateb"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "

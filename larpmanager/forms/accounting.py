@@ -48,6 +48,7 @@ from larpmanager.models.accounting import (
     Collection,
     Discount,
     OtherChoices,
+    PaymentChoices,
     PaymentInvoice,
     RefundRequest,
 )
@@ -177,7 +178,7 @@ class OrgaCreditForm(BaseModelFormRun):
         return instance
 
 
-class OrgaPaymentForm(BaseModelFormRun):
+class ExePaymentForm(BaseModelForm):
     """Form for managing payment accounting records.
 
     Handles payment processing, validation, and
@@ -191,15 +192,34 @@ class OrgaPaymentForm(BaseModelFormRun):
     class Meta:
         model = AccountingItemPayment
         exclude = ("inv", "hide", "member", "vat_ticket", "vat_options")
-        widgets: ClassVar[dict] = {"registration": EventRegS2Widget}
+        widgets: ClassVar[dict] = {"registration": AssocRegS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form and configure registration field for the event."""
+        """Initialize form with field configuration."""
         super().__init__(*args, **kwargs)
 
-        # Configure registration widget with event context and make field required
-        self.configure_field_event("registration", self.params.get("event"))
-        self.fields["registration"].required = True
+        self._configure_registration()
+
+        # Remove VAT field if feature is not enabled
+        if "vat" not in self.params.get("features"):
+            self.delete_field("vat_ticket")
+            self.delete_field("vat_options")
+
+        # Filter pay choices based on active features
+        features = self.params.get("features", [])
+        available = [PaymentChoices.MONEY]
+        if "tokens" in features:
+            available.append(PaymentChoices.TOKEN)
+        if "credits" in features:
+            available.append(PaymentChoices.CREDIT)
+        self.fields["pay"].choices = [(c.value, c.label) for c in PaymentChoices if c in available]
+        if len(available) == 1:
+            self.fields["pay"].widget = forms.HiddenInput()
+            self.initial["pay"] = PaymentChoices.MONEY
+
+    def _configure_registration(self) -> None:
+        """Configure registration field for association context."""
+        self.configure_field_association("registration", self.params.get("association_id"))
 
 
 class ExeOutflowForm(BaseModelForm):
@@ -301,29 +321,21 @@ class ExeDonationForm(BaseModelForm):
         self.configure_field_association("member", self.params.get("association_id"))
 
 
-class ExePaymentForm(BaseModelForm):
-    """Form for ExePayment."""
+class OrgaPaymentForm(ExePaymentForm):
+    """Form for managing payment accounting records in event context."""
 
-    page_title = _("Payments")
-
-    page_info = _("Manage payment items")
-
-    class Meta:
-        model = AccountingItemPayment
-        exclude = ("inv", "hide", "member", "vat_ticket", "vat_options")
-        widgets: ClassVar[dict] = {"registration": AssocRegS2Widget}
+    class Meta(ExePaymentForm.Meta):
+        widgets: ClassVar[dict] = {"registration": EventRegS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form with association-specific field configuration."""
+        """Initialize form with event-specific field configuration."""
+        self.auto_run = True
         super().__init__(*args, **kwargs)
+        self.fields["registration"].required = True
 
-        # Configure registration field widget with association context
-        self.configure_field_association("registration", self.params.get("association_id"))
-
-        # Remove VAT field if feature is not enabled
-        if "vat" not in self.params.get("features"):
-            self.delete_field("vat_ticket")
-            self.delete_field("vat_options")
+    def _configure_registration(self) -> None:
+        """Configure registration field for event context."""
+        self.configure_field_event("registration", self.params.get("event"))
 
 
 class ExeInvoiceForm(BaseModelForm):
@@ -335,7 +347,7 @@ class ExeInvoiceForm(BaseModelForm):
 
     class Meta:
         model = PaymentInvoice
-        exclude = ("hide", "registration", "key", "idx", "txn_id")
+        fields = ("typ", "invoice")
         widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
