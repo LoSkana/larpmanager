@@ -31,13 +31,13 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait,
-    check_feature,
-    fill_tinymce,
-    go_to,
-    login_orga,
-    submit_confirm,
-    expect_normalized,
-)
+                                     check_feature,
+                                     fill_tinymce,
+                                     go_to,
+                                     login_orga,
+                                     submit_confirm,
+                                     expect_normalized, sidebar,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -126,7 +126,7 @@ def reading(live_server: Any, page: Any) -> None:
 
 def relationships(live_server: Any, page: Any) -> None:
     # create second character
-    page.get_by_role("link", name="Characters", exact=True).click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("prova")
@@ -272,7 +272,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # test adding them to character
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.locator('[id="u1"]').locator(".fa-edit").click()
     searchbox = page.get_by_role("searchbox")
     searchbox.click()

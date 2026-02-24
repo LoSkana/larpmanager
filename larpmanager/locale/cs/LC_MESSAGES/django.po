@@ -840,9 +840,6 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Členové"
 
-msgid "Methods"
-msgstr "Metody"
-
 msgid "Modules"
 msgstr "Moduly"
 
@@ -1157,6 +1154,9 @@ msgstr "Nový dárek"
 
 msgid "Nickname"
 msgstr "Přezdívka"
+
+msgid "Old menu"
+msgstr "Staré menu"
 
 msgid "One-Time"
 msgstr "Jednorázové"
@@ -1757,6 +1757,9 @@ msgstr "Dvě kvóty"
 
 msgid "User agent"
 msgstr "Uživatelský agent"
+
+msgid "Users data"
+msgstr "Údaje o uživatelích"
 
 msgid "Visibility"
 msgstr "Viditelnost"
@@ -2686,9 +2689,6 @@ msgstr "Typ návratu"
 
 msgid "Select ability"
 msgstr "Vybrat schopnost"
-
-msgid "Sensitive data"
-msgstr "Citlivé údaje"
 
 msgid "Session active"
 msgstr "Relace aktivní"
@@ -4917,6 +4917,9 @@ msgstr "Zpoždění ročního členského poplatku"
 msgid "Duration in seconds (optional)"
 msgstr "Doba trvání v sekundách (nepovinné)"
 
+msgid "If checked: shows the old menu"
+msgstr "Pokud je zaškrtnuto: zobrazí starou nabídku"
+
 msgid "Manage issues during the event"
 msgstr "Správa problémů během akce"
 
@@ -5326,6 +5329,9 @@ msgstr "Registrace aktualizována na %(event)s!"
 msgid "Registrations opening at: %(date)s"
 msgstr "Registrace se otevírají na adrese: %(date)s"
 
+msgid "Review participants' personal data"
+msgstr "Kontrola osobních údajů účastníků"
+
 msgid "Secretarial - stationery, printing"
 msgstr "Sekretářské služby - kancelářské potřeby, tisk"
 
@@ -5436,9 +5442,6 @@ msgstr "Vyžadovat potvrzení o ručních platbách"
 
 msgid "Review historical financial records"
 msgstr "Přezkoumání historických finančních záznamů"
-
-msgid "Review participants' sensitive data"
-msgstr "Přezkoumání citlivých údajů účastníků"
 
 msgid "Set up the membership configuration"
 msgstr "Nastavení konfigurace členství"

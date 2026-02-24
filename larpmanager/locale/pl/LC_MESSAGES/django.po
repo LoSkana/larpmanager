@@ -840,9 +840,6 @@ msgstr "Maksimum"
 msgid "Members"
 msgstr "Członkowie"
 
-msgid "Methods"
-msgstr "Metody"
-
 msgid "Modules"
 msgstr "Moduły"
 
@@ -1157,6 +1154,9 @@ msgstr "Nowy prezent"
 
 msgid "Nickname"
 msgstr "Pseudonim"
+
+msgid "Old menu"
+msgstr "Stare menu"
 
 msgid "One-Time"
 msgstr "Jednorazowo"
@@ -1757,6 +1757,9 @@ msgstr "Dwa limity"
 
 msgid "User agent"
 msgstr "Agent użytkownika"
+
+msgid "Users data"
+msgstr "Dane użytkowników"
 
 msgid "Visibility"
 msgstr "Widoczność"
@@ -2686,9 +2689,6 @@ msgstr "Typ zwrotu"
 
 msgid "Select ability"
 msgstr "Wybierz zdolność"
-
-msgid "Sensitive data"
-msgstr "Wrażliwe dane"
 
 msgid "Session active"
 msgstr "Sesja aktywna"
@@ -4917,6 +4917,9 @@ msgstr "Opóźnienie rocznej opłaty członkowskiej"
 msgid "Duration in seconds (optional)"
 msgstr "Czas trwania w sekundach (opcjonalnie)"
 
+msgid "If checked: shows the old menu"
+msgstr "Jeśli zaznaczone: wyświetla stare menu"
+
 msgid "Manage issues during the event"
 msgstr "Zarządzanie kwestiami podczas wydarzenia"
 
@@ -5326,6 +5329,9 @@ msgstr "Rejestracja zaktualizowana do %(event)s!"
 msgid "Registrations opening at: %(date)s"
 msgstr "Rejestracja rozpoczyna się o godz: %(date)s"
 
+msgid "Review participants' personal data"
+msgstr "Przegląd danych osobowych uczestników"
+
 msgid "Secretarial - stationery, printing"
 msgstr "Sekretariat - artykuły papiernicze, drukowanie"
 
@@ -5436,9 +5442,6 @@ msgstr "Wymagaj pokwitowania dla płatności ręcznych"
 
 msgid "Review historical financial records"
 msgstr "Przegląd historycznej dokumentacji finansowej"
-
-msgid "Review participants' sensitive data"
-msgstr "Przegląd wrażliwych danych uczestników"
 
 msgid "Set up the membership configuration"
 msgstr "Konfiguracja członkostwa"

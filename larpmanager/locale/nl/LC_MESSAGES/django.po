@@ -840,9 +840,6 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Leden"
 
-msgid "Methods"
-msgstr "Methoden"
-
 msgid "Modules"
 msgstr "Modules"
 
@@ -1157,6 +1154,9 @@ msgstr "Nieuw cadeau"
 
 msgid "Nickname"
 msgstr "Bijnaam"
+
+msgid "Old menu"
+msgstr "Oud menu"
 
 msgid "One-Time"
 msgstr "Eenmalig"
@@ -1757,6 +1757,9 @@ msgstr "Twee quota"
 
 msgid "User agent"
 msgstr "Gebruiker agent"
+
+msgid "Users data"
+msgstr "Gebruikersgegevens"
 
 msgid "Visibility"
 msgstr "Zichtbaarheid"
@@ -2686,9 +2689,6 @@ msgstr "Type terugkeer"
 
 msgid "Select ability"
 msgstr "Selecteer vermogen"
-
-msgid "Sensitive data"
-msgstr "Gevoelige gegevens"
 
 msgid "Session active"
 msgstr "Sessie actief"
@@ -4917,6 +4917,9 @@ msgstr "Uitstel van jaarlijkse contributie"
 msgid "Duration in seconds (optional)"
 msgstr "Duur in seconden (optioneel)"
 
+msgid "If checked: shows the old menu"
+msgstr "Indien aangevinkt: toont het oude menu"
+
 msgid "Manage issues during the event"
 msgstr "Problemen tijdens het evenement beheren"
 
@@ -5326,6 +5329,9 @@ msgstr "Registratie bijgewerkt tot %(event)s!"
 msgid "Registrations opening at: %(date)s"
 msgstr "Registraties openen op: %(date)s"
 
+msgid "Review participants' personal data"
+msgstr "Persoonlijke gegevens van deelnemers controleren"
+
 msgid "Secretarial - stationery, printing"
 msgstr "Secretariaat - briefpapier, drukwerk"
 
@@ -5436,9 +5442,6 @@ msgstr "Ontvangstbewijs vereisen voor handmatige betalingen"
 
 msgid "Review historical financial records"
 msgstr "Historische financiële gegevens bekijken"
-
-msgid "Review participants' sensitive data"
-msgstr "Gevoelige gegevens van deelnemers beoordelen"
 
 msgid "Set up the membership configuration"
 msgstr "De lidmaatschapsconfiguratie instellen"
