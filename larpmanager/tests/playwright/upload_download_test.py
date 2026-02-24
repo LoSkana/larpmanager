@@ -94,7 +94,7 @@ def abilities(page: Any) -> None:
     page.locator("#id_px_user").check()
     submit_confirm(page)
 
-    page.locator("#orga_px_abilities").get_by_role("link", name="Ability", exact=True).click()
+    sidebar(page, "Ability")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     page.locator("#id_first").click()
