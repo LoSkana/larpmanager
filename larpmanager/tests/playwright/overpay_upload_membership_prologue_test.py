@@ -209,13 +209,16 @@ def upload_membership(page: Any, live_server: Any) -> None:
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").fill("adm")
     page.locator(".select2-results__option").first.click()
+    page.locator("#id_date").fill("2024-06-11")
     load_image(page, "#id_request")
     load_image(page, "#id_document")
-    page.locator("#id_date").fill("2024-06-11")
+    just_wait(page)
+    page.locator("#id_date").click()
     just_wait(page)
     submit_confirm(page)
 
     # Try accessing member form
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Test Admin orga@test.it Accepted 1")
     page.locator(".fa-edit").click()
 
