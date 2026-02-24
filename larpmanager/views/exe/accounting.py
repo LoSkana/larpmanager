@@ -36,6 +36,7 @@ from larpmanager.accounting.balance import (
     get_run_accounting,
 )
 from larpmanager.accounting.invoice import invoice_verify
+from larpmanager.forms.accounting import ExePaymentForm
 from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.accounting import (
     AccountingItemDonation,
@@ -67,6 +68,7 @@ from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import exe_paginate
 from larpmanager.utils.edit.backend import backend_get
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
+from larpmanager.views.orga.accounting import payment_edit
 
 
 @login_required
@@ -237,6 +239,17 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
     """
     # Check user has permission to view donations for this association
     context = check_association_context(request, "exe_donations")
+
+    # Pending donation invoice approvals requiring confirmation
+    context["pending_invoices"] = (
+        PaymentInvoice.objects.filter(
+            association_id=context["association_id"],
+            status=PaymentStatus.SUBMITTED,
+            typ=PaymentType.DONATE,
+        )
+        .select_related("member", "method")
+        .order_by("-created")
+    )
 
     # Define table column headers and their corresponding field names
     # These will be displayed in the donations list template
@@ -526,6 +539,17 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
     # Check user permissions for accessing payments section
     context = check_association_context(request, "exe_payments")
 
+    # Pending registration invoice approvals requiring confirmation
+    context["pending_invoices"] = (
+        PaymentInvoice.objects.filter(
+            association_id=context["association_id"],
+            status=PaymentStatus.SUBMITTED,
+            typ=PaymentType.REGISTRATION,
+        )
+        .select_related("member", "method")
+        .order_by("-created")
+    )
+
     # Define base fields to display in payments table
     fields = [
         ("member", _("Member")),
@@ -537,6 +561,7 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
         ("trans", _("Fee")),
         ("created", _("Date")),
         ("info", _("Info")),
+        ("receipt", _("Receipt")),
     ]
 
     # Add VAT-related fields if VAT feature is enabled for this organization
@@ -558,6 +583,9 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
+                "receipt": lambda el: f"<a href='{el.inv.download()}' target='_blank' download>{_('Download')}</a>"
+                if el.inv and el.inv.invoice and el.pay == PaymentChoices.MONEY
+                else "",
             },
             "delete_view": "exe_payments_delete",
         },
@@ -581,8 +609,16 @@ def exe_payments_new(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def exe_payments_edit(request: HttpRequest, payment_uuid: str) -> HttpResponse:
-    """Edit organization-wide payment method."""
-    return exe_edit(request, ExeAction.PAYMENTS, payment_uuid)
+    """Edit payment and its linked invoice (if present) in a combined form."""
+    context = check_association_context(request, "exe_payments")
+    context["exe"] = True
+    return payment_edit(
+        request,
+        context,
+        payment_uuid,
+        ExePaymentForm,
+        lambda: redirect("exe_payments"),
+    )
 
 
 @login_required
@@ -673,8 +709,12 @@ def exe_invoices_edit(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
 
 @login_required
 def exe_invoices_delete(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
-    """Delete invoice."""
-    return exe_delete(request, ExeAction.INVOICES, invoice_uuid)
+    """Delete a payment invoice and redirect to payments."""
+    context = check_association_context(request, ["exe_payments", "exe_invoices"])
+    backend_get(context, PaymentInvoice, invoice_uuid)
+    context["el"].delete()
+    messages.success(request, _("Operation completed") + "!")
+    return redirect("exe_payments")
 
 
 @login_required
@@ -696,7 +736,7 @@ def exe_invoices_confirm(request: HttpRequest, invoice_uuid: str) -> HttpRespons
 
     """
     # Check user permissions for invoice management
-    context = check_association_context(request, "exe_invoices")
+    context = check_association_context(request, ["exe_payments", "exe_invoices"])
 
     # Retrieve the specific invoice by number
     backend_get(context, PaymentInvoice, invoice_uuid)
@@ -715,7 +755,7 @@ def exe_invoices_confirm(request: HttpRequest, invoice_uuid: str) -> HttpRespons
 
     # Show success message and redirect to invoice list
     messages.success(request, _("Element approved") + "!")
-    return redirect("exe_invoices")
+    return redirect("exe_payments")
 
 
 @login_required
@@ -723,6 +763,17 @@ def exe_collections(request: HttpRequest) -> HttpResponse:
     """Display collections list for association executives."""
     # Check user permissions and get association context
     context = check_association_context(request, "exe_collections")
+
+    # Pending collection invoice approvals requiring confirmation
+    context["pending_invoices"] = (
+        PaymentInvoice.objects.filter(
+            association_id=context["association_id"],
+            status=PaymentStatus.SUBMITTED,
+            typ=PaymentType.COLLECTION,
+        )
+        .select_related("member", "method")
+        .order_by("-created")
+    )
 
     # Fetch collections with related data, ordered by creation date
     context["list"] = (

@@ -1930,16 +1930,19 @@ header.sec h1 {
   color: gray;
 }
 
+.button.big {
+  font-size: 1.2em;
+  padding: 0.8em 1.6em;
+  margin-top: 1em;
+  display: inline-block;
+}
+
 /* ---------------------------------------------------------------------------
    Dashboard & Manage
    --------------------------------------------------------------------------- */
 
 #manage ul {
   margin: 0.5em;
-}
-
-#welcome_message {
-  font-size: 130%;
 }
 
 .sticky-message {

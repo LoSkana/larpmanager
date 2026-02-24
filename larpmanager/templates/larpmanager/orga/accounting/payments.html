@@ -1,12 +1,13 @@
 {% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {% trans "Invoices" %} - {{ run.search | truncatechars:50 }}
+    {% trans "Payments" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows all payments received for this event" %}
 {% endblock info %}
 {% block content %}
+    {% include "elements/pending_invoices_orga.html" %}
     {% include "elements/header/edit.html" %}
     {% include "elements/paginate.html" %}
 {% endblock content %}

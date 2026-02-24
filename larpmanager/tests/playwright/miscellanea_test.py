@@ -39,7 +39,7 @@ from larpmanager.tests.utils import (
     login_orga,
     login_user,
     logout,
-    submit_confirm,
+    submit_confirm, sidebar,
 )
 
 pytestmark = pytest.mark.e2e
@@ -123,7 +123,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # Create a test character to have something in the gallery
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Test Gallery Character")
@@ -187,7 +187,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     logout(page)
     login_orga(page, live_server)
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_registrations").get_by_role("link", name="Registrations").click()
+    sidebar(page, "Registrations")
     # Find and delete the user's registration
     page.locator("a:has(i.fas.fa-trash)").click()
 
@@ -245,7 +245,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Verify orga is NOT registered to the event
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_registrations").get_by_role("link", name="Registrations").click()
+    sidebar(page, "Registrations")
     # Check that "Admin Test" (orga user) is NOT in the registrations list
     expect(page.locator("#one")).not_to_contain_text("Admin Test")
 

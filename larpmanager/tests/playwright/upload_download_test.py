@@ -38,7 +38,7 @@ from larpmanager.tests.utils import (
     login_orga,
     submit_confirm,
     upload,
-    expect_normalized,
+    expect_normalized, sidebar,
 )
 
 pytestmark = pytest.mark.e2e
@@ -227,7 +227,7 @@ def reg_form(page: Any) -> None:
 
 
 def characters(page: Any) -> None:
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("character.csv"))

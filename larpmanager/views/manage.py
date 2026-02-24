@@ -242,13 +242,6 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     # Get available features for this association
     features = get_association_features(context["association_id"])
 
-    # Redirect to event creation if no events exist and feature is available
-    if context.get("onboarding") and "exe_events" in features:
-        return redirect("exe_events_new")
-
-    # Check if currency configuration suggestion has been dismissed
-    _check_currency_priority(request, context, features)
-
     # Get ongoing runs directly from cache (already contains all data needed by template)
     actions_data_exe = get_exe_widget_cache(context["association_id"], "actions")
     context["ongoing_runs"] = actions_data_exe.get("ongoing_runs", [])
@@ -266,6 +259,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
 
     # Add dashboard actions and suggestions
     _exe_actions(request, context, features)
+
     _exe_suggestions(context)
 
     # Add sticky messages for the current user
@@ -347,6 +341,19 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     if not association_features:
         association_features = get_association_features(context["association_id"])
 
+    # Add prompt to complete checklist and activate advanced mode when in demo/lite mode
+    if context.get("demo"):
+        _checklist, progress = get_activation_checklist(context["association_id"])
+        demo_text = _(
+            "You are using %(platform)s in <b>Lite Mode</b> (%(progress)s%% complete)"
+        ) % {"platform": context.get("platform", "LarpManager"), "progress": progress} + ". " + _(
+            "This mode helps you master quickly the basics of the platform") + ". " + _(
+            "Complete the checklist to unlock <b>Advanced Mode</b>, enabling full access to complex logistics, accounting, and narrative tools") + "."
+        _add_priority(context, demo_text, "exe_activation")
+
+    # Check if currency configuration suggestion has been dismissed
+    _check_currency_priority(request, context, association_features)
+
     # Get cached actions data
     actions_data = get_exe_widget_cache(context["association_id"], "actions")
 
@@ -370,13 +377,20 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
             "exe_expenses",
         )
 
-    # Check for pending payment approvals
-    if actions_data.get("pending_payments", {}).get("count", 0) > 0:
-        _add_action(
-            context,
-            _("There are <b>%(number)s</b> payments to approve") % {"number": actions_data["pending_payments"]["count"]},
-            "exe_invoices",
-        )
+    # Check for pending invoice approvals split by type
+    for key, url, label in [
+        ("pending_invoices_registration", "exe_payments", _("registration payments")),
+        ("pending_invoices_donation", "exe_donations", _("donations")),
+        ("pending_invoices_collection", "exe_collections", _("collections")),
+        ("pending_invoices_membership", "exe_membership", _("membership fees")),
+    ]:
+        if actions_data.get(key, {}).get("count", 0) > 0:
+            _add_action(
+                context,
+                _("There are <b>%(number)s</b> %(label)s to approve")
+                % {"number": actions_data[key]["count"], "label": label},
+                url,
+            )
 
     # Check for pending refund approvals
     if actions_data.get("pending_refunds", {}).get("count", 0) > 0:
@@ -399,16 +413,6 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
 
     # Process user-specific actions
     _exe_users_actions(request, context, association_features, actions_data)
-
-    # Add prompt to complete checklist and activate advanced mode when in demo/lite mode
-    if context.get("demo"):
-        _checklist, progress = get_activation_checklist(context["association_id"])
-        demo_text = _(
-            "You are using %(platform)s in <b>Lite Mode</b> (%(progress)s%% complete)"
-        ) % {"platform": context.get("platform", "LarpManager"), "progress": progress} + ". " + _(
-            "This mode helps you master quickly the basics of the platform") + ". " + _(
-            "Complete the checklist to unlock <b>Advanced Mode</b>, enabling full access to complex logistics, accounting, and narrative tools") + "."
-        _add_priority(context, demo_text, "exe_activation")
 
     actions = {
         "exe_methods": _("Set up the payment methods available to participants"),
@@ -470,6 +474,9 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
         enabled_features: Set of enabled features for the association
 
     """
+
+    if context.get("demo"):
+        return
 
     if "payment" in enabled_features and not context.get("methods", ""):
         _add_priority(
@@ -624,6 +631,9 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
 
     """
 
+    if context.get("demo"):
+        return
+
     # Check if currency configuration suggestion has been dismissed
     _check_currency_priority(request, context, features)
 
@@ -694,12 +704,13 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
                 "orga_expenses",
             )
 
-    # Check for pending payment approvals
-    if actions_data.get("pending_payments", {}).get("count", 0) > 0:
+    # Check for pending registration invoice approvals
+    if actions_data.get("pending_invoices_registration", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> payments to approve") % {"number": actions_data["pending_payments"]["count"]},
-            "orga_invoices",
+            _("There are <b>%(number)s</b> %(label)s to approve")
+            % {"number": actions_data["pending_invoices_registration"]["count"], "label": _("registration payments")},
+            "orga_payments",
         )
 
     # Check for incomplete registration form questions (missing options)
@@ -941,6 +952,7 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
 
 def _check_currency_priority(request: HttpRequest, context: dict, features:dict) ->Any:
     """Check if currency has been already set / checked."""
+
     if "payment" in features and not get_association_config(
             context["association_id"], "exe_association_suggestion", default_value=False, context=context
     ) and has_association_permission(request, context, "exe_association"):

@@ -393,6 +393,12 @@ msgstr ""
 msgid "If checked: shows the old interface"
 msgstr ""
 
+msgid "Old menu"
+msgstr ""
+
+msgid "If checked: shows the old menu"
+msgstr ""
+
 msgid "Email notifications"
 msgstr ""
 
@@ -649,6 +655,11 @@ msgstr ""
 
 msgid ""
 "If checked: Participants must provide a receipt/invoice for manual payments"
+msgstr ""
+
+msgid ""
+"If checked, shows the invoice approval menu item to manually confirm "
+"payments received"
 msgstr ""
 
 msgid "VAT"
@@ -4611,75 +4622,61 @@ msgstr ""
 msgid "Select ability"
 msgstr ""
 
-msgid ""
-"Welcome! Your organization has been created. Explore the platform to get "
-"started."
+msgid "Your organization has been created!"
 msgstr ""
 
-msgid "Start here to create your first event and begin using the platform."
+msgid "Initialize the platform by creating your first event."
 msgstr ""
 
-msgid ""
-"Your first event has been created! Here is how to navigate the management "
-"interface."
+msgid "You have been redirected to the Event Dashboard."
 msgstr ""
 
-msgid ""
-"Select the active workspace here: switch between your organization and your "
-"events."
+msgid "Switch between Organization and Events management."
 msgstr ""
 
-msgid "Switch here between administrative views and user-facing pages."
+msgid "Toggle between administrative backend and public-facing pages."
+msgstr ""
+
+msgid "Complete the setup to unlock full platform features."
 msgstr ""
 
 msgid ""
-"This is the management dashboard, the interface will now be explained "
-"section by section."
+"The sidebar has expanded. New menus will continue to appear as you activate "
+"additional modules."
 msgstr ""
 
 msgid ""
-"This is the sidebar, it contains all management functions and remains "
-"visible across all admin pages."
+"Enable specific features to add specialized functionalities to the platform."
 msgstr ""
 
-msgid "Create, access, and manage your events from here."
-msgstr ""
-
-msgid "Toggle the visibility of the sidebar."
-msgstr ""
-
-msgid "Search here for settings, features, and configuration options."
-msgstr ""
-
-msgid "This section lists critical issues that require immediate attention."
-msgstr ""
-
-msgid "This is the task list of required actions to complete the event setup."
-msgstr ""
-
-msgid ""
-"This list contains recommended actions to improve and finalize the "
-"configuration."
-msgstr ""
-
-msgid ""
-"Open the tutorial to follow guided, step-by-step instructions for this "
-"feature."
-msgstr ""
-
-msgid "Write to us if you need help in setting things up!"
+msgid "Write here what you would like to to!"
 msgstr ""
 
 msgid "Welcome to"
 msgstr ""
 
-msgid "And that is all"
+msgid "Start here:"
+msgstr ""
+
+msgid "Event created"
 msgstr ""
 
 msgid "Workspace selector"
 msgstr ""
 
-msgid "Side selector"
+msgid "View Selector"
+msgstr ""
+
+msgid "Lite Mode active"
+msgstr ""
+
+msgid "Advanced Mode Enabled"
+msgstr ""
+
+msgid "Module Activation"
+msgstr ""
+
+msgid "Need help"
 msgstr ""
 
 msgid "Confirm"
@@ -5031,6 +5028,9 @@ msgstr ""
 msgid ""
 "Once you have made the payment, return to this page and submit the form "
 "below to notify us of your payment"
+msgstr ""
+
+msgid "Pending invoice approvals"
 msgstr ""
 
 msgid "Total registration fee"
@@ -6459,6 +6459,12 @@ msgid ""
 "and events"
 msgstr ""
 
+msgid "Welcome to the dashboard of your organization!"
+msgstr ""
+
+msgid "Create your first event"
+msgstr ""
+
 msgid "Feature activated"
 msgstr ""
 
@@ -7507,14 +7513,6 @@ msgstr ""
 msgid "This page shows the deadlines to be met for this event"
 msgstr ""
 
-msgid ""
-"This page will guide you through the creation of your first event, step by "
-"step"
-msgstr ""
-
-msgid "Simply follow the instructions and provide the required information"
-msgstr ""
-
 msgid "This page shows all log entries for this event"
 msgstr ""
 
@@ -7980,6 +7978,9 @@ msgid ""
 "regarding safety"
 msgstr ""
 
+msgid "Users data"
+msgstr ""
+
 msgid "This page shows the general information of registered participants"
 msgstr ""
 
@@ -8334,9 +8335,6 @@ msgid ""
 msgstr ""
 
 msgid "Manage viewing writing element"
-msgstr ""
-
-msgid "Need help"
 msgstr ""
 
 msgid "Privacy Policy"
@@ -9142,9 +9140,6 @@ msgstr ""
 msgid "Display all users data"
 msgstr ""
 
-msgid "Methods"
-msgstr ""
-
 msgid "Configure payment methods available for participants"
 msgstr ""
 
@@ -9237,7 +9232,7 @@ msgstr ""
 msgid "Review participants' dietary restrictions and allergies."
 msgstr ""
 
-msgid "Review participants' sensitive data"
+msgid "Review participants' personal data"
 msgstr ""
 
 msgid "Manage questions asked by the participants"
@@ -9701,13 +9696,10 @@ msgstr ""
 msgid "Failed to add gallery"
 msgstr ""
 
+msgid "Event creation"
+msgstr ""
+
 msgid "Configure at least one payment method for participants"
-msgstr ""
-
-msgid "User profile"
-msgstr ""
-
-msgid "Configure the fields to collect in the participant profile data"
 msgstr ""
 
 msgid "Event roles"
@@ -10048,28 +10040,6 @@ msgstr ""
 
 #, python-format
 msgid ""
-"There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, "
-"etc.) are finished, mark them as completed"
-msgstr ""
-
-#, python-format
-msgid "There are <b>%(number)s</b> expenses to approve"
-msgstr ""
-
-#, python-format
-msgid "There are <b>%(number)s</b> payments to approve"
-msgstr ""
-
-#, python-format
-msgid "There are <b>%(number)s</b> refunds to deliver"
-msgstr ""
-
-#, python-format
-msgid "There are <b>%(number)s</b> members to approve"
-msgstr ""
-
-#, python-format
-msgid ""
 "You are using %(platform)s in <b>Lite Mode</b> (%(progress)s%% complete)"
 msgstr ""
 
@@ -10079,6 +10049,40 @@ msgstr ""
 msgid ""
 "Complete the checklist to unlock <b>Advanced Mode</b>, enabling full access "
 "to complex logistics, accounting, and narrative tools"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, "
+"etc.) are finished, mark them as completed"
+msgstr ""
+
+#, python-format
+msgid "There are <b>%(number)s</b> expenses to approve"
+msgstr ""
+
+msgid "registration payments"
+msgstr ""
+
+msgid "donations"
+msgstr ""
+
+msgid "collections"
+msgstr ""
+
+msgid "membership fees"
+msgstr ""
+
+#, python-format
+msgid "There are <b>%(number)s</b> %(label)s to approve"
+msgstr ""
+
+#, python-format
+msgid "There are <b>%(number)s</b> refunds to deliver"
+msgstr ""
+
+#, python-format
+msgid "There are <b>%(number)s</b> members to approve"
 msgstr ""
 
 msgid "Set up the payment methods available to participants"
@@ -10266,6 +10270,9 @@ msgid "Reimbursement request item added"
 msgstr ""
 
 msgid "Receipt already confirmed"
+msgstr ""
+
+msgid "Element saved"
 msgstr ""
 
 msgid "Results not present"

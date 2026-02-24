@@ -840,9 +840,6 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Medlemmar"
 
-msgid "Methods"
-msgstr "Metoder"
-
 msgid "Modules"
 msgstr "Moduler"
 
@@ -1157,6 +1154,9 @@ msgstr "Ny gåva"
 
 msgid "Nickname"
 msgstr "Smeknamn"
+
+msgid "Old menu"
+msgstr "Gammal meny"
 
 msgid "One-Time"
 msgstr "En gång"
@@ -1506,6 +1506,9 @@ msgstr "Lagerlokal"
 msgid "Workshops"
 msgstr "Verkstäder"
 
+msgid "donations"
+msgstr "donationer"
+
 msgid "negatives"
 msgstr "negativ"
 
@@ -1755,6 +1758,9 @@ msgstr "Två kvoter"
 msgid "User agent"
 msgstr "Användaragent"
 
+msgid "Users data"
+msgstr "Uppgifter om användare"
+
 msgid "Visibility"
 msgstr "Synlighet"
 
@@ -1971,6 +1977,9 @@ msgstr "Länk för registrering"
 msgid "Simple list"
 msgstr "Enkel lista"
 
+msgid "Start here:"
+msgstr "Börja här:"
+
 msgid "Subtraction"
 msgstr "Subtraktion"
 
@@ -2006,6 +2015,9 @@ msgstr "Var det är"
 
 msgid "assignments"
 msgstr "Uppdrag"
+
+msgid "collections"
+msgstr "samlingar"
 
 msgid "immediately"
 msgstr "omedelbart"
@@ -2220,9 +2232,6 @@ msgstr "Uppladdning..."
 msgid "Url Shortner"
 msgstr "Kortare URL"
 
-msgid "User profile"
-msgstr "Användarprofil"
-
 msgid "VAT (Ticket)"
 msgstr "Moms (biljett)"
 
@@ -2317,11 +2326,17 @@ msgstr "Typ av dokument"
 msgid "Dynamic rates"
 msgstr "Dynamiska priser"
 
+msgid "Element saved"
+msgstr "Element sparat"
+
 msgid "Email Content"
 msgstr "Innehåll i e-post"
 
 msgid "Event balance"
 msgstr "Balans i evenemang"
+
+msgid "Event created"
+msgstr "Händelse skapad"
 
 msgid "Event history"
 msgstr "Händelsehistorik"
@@ -2458,9 +2473,6 @@ msgstr "Delad hemlighet"
 msgid "Show inactive"
 msgstr "Visa inaktiv"
 
-msgid "Side selector"
-msgstr "Sidoväljare"
-
 msgid "Signup update"
 msgstr "Uppdatering av registrering"
 
@@ -2493,6 +2505,9 @@ msgstr "URL-förkortare"
 
 msgid "VAT (Options)"
 msgstr "Moms (tillval)"
+
+msgid "View Selector"
+msgstr "Väljare för vy"
 
 msgid "Visualisation"
 msgstr "Visualisering"
@@ -2569,6 +2584,9 @@ msgstr "Donationer som gjorts"
 
 msgid "Event Template"
 msgstr "Mall för evenemang"
+
+msgid "Event creation"
+msgstr "Skapande av evenemang"
 
 msgid "Event features"
 msgstr "Funktioner för evenemang"
@@ -2741,9 +2759,6 @@ msgstr "Förmåga saknas"
 msgid "Ability removed"
 msgstr "Förmåga borttagen"
 
-msgid "And that is all"
-msgstr "Och det är allt"
-
 msgid "App Integration"
 msgstr "App-integration"
 
@@ -2909,6 +2924,9 @@ msgstr "Dina karaktärer"
 msgid "expected within"
 msgstr "förväntas inom"
 
+msgid "membership fees"
+msgstr "medlemsavgifter"
+
 msgid "upcoming events"
 msgstr "Planerade händelser"
 
@@ -3007,6 +3025,9 @@ msgstr "Intervallsändning"
 
 msgid "Item assignments"
 msgstr "Tilldelning av objekt"
+
+msgid "Lite Mode active"
+msgstr "Lite-läge aktivt"
 
 msgid "Manage discounts"
 msgstr "Hantera rabatter"
@@ -3241,6 +3262,9 @@ msgstr "Medlemsavgift på"
 
 msgid "Membership status"
 msgstr "Medlemskapets status"
+
+msgid "Module Activation"
+msgstr "Aktivering av modul"
 
 msgid "Months free quota"
 msgstr "Månader fri kvot"
@@ -3838,6 +3862,9 @@ msgstr "Ja, håll mig uppdaterad!"
 msgid "Access your character"
 msgstr "Få tillgång till din karaktär"
 
+msgid "Advanced Mode Enabled"
+msgstr "Avancerat läge aktiverat"
+
 msgid "Approve reimbursement"
 msgstr "Godkänna återbetalning"
 
@@ -4006,6 +4033,9 @@ msgstr "Lageruppdrag"
 
 msgid "You have already paid"
 msgstr "Du har redan betalat"
+
+msgid "registration payments"
+msgstr "registreringsbetalningar"
 
 msgid "submit your vote here"
 msgstr "lämna din röst här"
@@ -4206,6 +4236,9 @@ msgstr "Deltagande samlingar"
 
 msgid "Create a new collection"
 msgstr "Skapa en ny samling"
+
+msgid "Create your first event"
+msgstr "Skapa ditt första evenemang"
 
 msgid "Discount code not valid"
 msgstr "Ogiltig kod för underlättande"
@@ -4485,6 +4518,9 @@ msgstr "Alternativet sparades framgångsrikt"
 
 msgid "Payment already confirmed"
 msgstr "Betalning redan bekräftad"
+
+msgid "Pending invoice approvals"
+msgstr "Väntande fakturagodkännanden"
 
 msgid "Pre-register to the event"
 msgstr "Skriv upp dig på föranmälningslistan"
@@ -4896,6 +4932,9 @@ msgstr "Försening av årlig medlemsavgift"
 msgid "Duration in seconds (optional)"
 msgstr "Varaktighet i sekunder (valfritt)"
 
+msgid "If checked: shows the old menu"
+msgstr "Om markerad: visar den gamla menyn"
+
 msgid "Manage issues during the event"
 msgstr "Hantera problem under evenemanget"
 
@@ -5305,6 +5344,9 @@ msgstr "Registrering uppdaterad till %(event)s!"
 msgid "Registrations opening at: %(date)s"
 msgstr "Registreringar öppnar kl: %(date)s"
 
+msgid "Review participants' personal data"
+msgstr "Granska deltagarnas personuppgifter"
+
 msgid "Secretarial - stationery, printing"
 msgstr "Sekretariat - brevpapper, tryckning"
 
@@ -5416,9 +5458,6 @@ msgstr "Kräv kvitto för manuella betalningar"
 msgid "Review historical financial records"
 msgstr "Granska historiska finansiella poster"
 
-msgid "Review participants' sensitive data"
-msgstr "Granska deltagarnas känsliga uppgifter"
-
 msgid "Set up the membership configuration"
 msgstr "Ställ in medlemskonfigurationen"
 
@@ -5433,6 +5472,9 @@ msgstr "Unik identifierare för evenemanget URL"
 
 msgid "You can't send messages to yourself"
 msgstr "Du kan inte skicka meddelanden till dig själv"
+
+msgid "Your organization has been created!"
+msgstr "Din organisation har skapats!"
 
 msgid "here the conditions of registration"
 msgstr "här villkoren för registrering av evenemang"
@@ -5623,15 +5665,15 @@ msgstr "Frågetyp, tillåtna värden är"
 msgid "This page shows cancelled enrollments"
 msgstr "Denna sida sammanfattar annullerade registreringar"
 
-msgid "Toggle the visibility of the sidebar."
-msgstr "Växla sidofältets synlighet."
-
 msgid "Total amount refunded to participants"
 msgstr "Totalt belopp som återbetalas till deltagarna"
 
 #, python-format
 msgid "Utilisation %(credits)s per %(event)s"
 msgstr "Utnyttjande %(credits)s per %(event)s"
+
+msgid "Write here what you would like to to!"
+msgstr "Skriv här vad du vill att vi ska göra!"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"
@@ -6364,6 +6406,9 @@ msgstr "På denna sida sammanfattas karaktärsinventeringarna"
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totalt belopp som innehållits för överföringsprovisioner"
 
+msgid "Welcome to the dashboard of your organization!"
+msgstr "Välkommen till instrumentpanelen för din organisation!"
+
 msgid "Your preferences have been saved in the system"
 msgstr "Dina preferenser har sparats i systemet"
 
@@ -6419,10 +6464,6 @@ msgstr "Namnet på den fråga som detta alternativ hör till"
 #, python-format
 msgid "There are <b>%(number)s</b> expenses to approve"
 msgstr "Det finns <b>%(number)s</b> kostnader att godkänna"
-
-#, python-format
-msgid "There are <b>%(number)s</b> payments to approve"
-msgstr "Det finns <b>%(number)s</b> betalningar att godkänna"
 
 #, python-format
 msgid "There are <b>%(number)s</b> questions to answer"
@@ -6496,6 +6537,10 @@ msgstr "Granska deltagarnas säkerhetsrelaterade information"
 msgid "The subscription plan associated with this event"
 msgstr "Valfri mall som associeras med denna förmåga"
 
+#, python-format
+msgid "There are <b>%(number)s</b> %(label)s to approve"
+msgstr "Det finns <b>%(number)s</b> %(label)s att godkänna"
+
 msgid "There are no new sessions scheduled at this time"
 msgstr "Det finns inga nya sessioner inplanerade för närvarande"
 
@@ -6514,6 +6559,9 @@ msgstr "Du kan ladda upp en fil i pdf-format eller en bild"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Du har redan betalat årets medlemsavgift"
+
+msgid "You have been redirected to the Event Dashboard."
+msgstr "Du har omdirigerats till Event Dashboard."
 
 msgid "awaiting member approval to proceed with payment"
 msgstr "inväntar medlemsgodkännande för att gå vidare med betalningen"
@@ -6542,9 +6590,6 @@ msgstr "Färg som används för textbakgrunder och innehållsrutor"
 
 msgid "Complete all steps above to unlock advanced mode."
 msgstr "Genomför alla steg ovan för att låsa upp avancerat läge."
-
-msgid "Create, access, and manage your events from here."
-msgstr "Skapa, få tillgång till och hantera dina evenemang härifrån."
 
 msgid "Describe exactly what risks it poses to the event"
 msgstr "Beskriv exakt vilka risker det utgör för evenemanget"
@@ -6645,6 +6690,9 @@ msgstr "Ställ in casting-alternativen i konfigurationspanelen"
 msgid "Set visual aspect: colors, background, cover image"
 msgstr "Ställ in visuell aspekt: färger, bakgrund, omslagsbild"
 
+msgid "Switch between Organization and Events management."
+msgstr "Växla mellan organisations- och evenemangshantering."
+
 msgid "Thank you for choosing to be part of our community"
 msgstr "Tack för att du väljer att vara en del av vår gemenskap"
 
@@ -6666,9 +6714,6 @@ msgstr "Totala deltagaravgifter reducerade genom rabatter"
 
 msgid "Transfer a registration from this event to another"
 msgstr "Överföra en registrering från detta evenemang till ett annat"
-
-msgid "Write to us if you need help in setting things up!"
-msgstr "Hör av dig till oss om du behöver hjälp med att sätta upp saker!"
 
 msgid "You don't have a character assigned for this event"
 msgstr "Du har inte tilldelats någon karaktär för detta evenemang"
@@ -6739,6 +6784,9 @@ msgstr "Kontrollera att deltagarnas personuppgifter är korrekta"
 #, python-format
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Insamlat bidrag från %(user)s för %(recipient)s"
+
+msgid "Complete the setup to unlock full platform features."
+msgstr "Slutför installationen för att låsa upp alla plattformsfunktioner."
 
 msgid "Configure payment methods available for participants"
 msgstr "Konfigurera betalningsmetoder som är tillgängliga för deltagare"
@@ -6833,6 +6881,9 @@ msgstr "Felaktigt svar. Vänligen ange namnet på vår hobby."
 
 msgid "Initial value of experience points for all characters"
 msgstr "Initialt värde av erfarenhetspoäng för alla karaktärer"
+
+msgid "Initialize the platform by creating your first event."
+msgstr "Initiera plattformen genom att skapa din första händelse."
 
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Hantera dynamiska delbetalningar för registreringar"
@@ -7463,14 +7514,14 @@ msgstr "Valfritt - Utökad beskrivning (visas i liten grå text)"
 msgid "Optional note about this token (e.g., recipient name, purpose)"
 msgstr "Valfri notering om denna token (t.ex. mottagarens namn, syfte)"
 
-msgid "Search here for settings, features, and configuration options."
-msgstr "Sök här efter inställningar, funktioner och konfigurationsalternativ."
-
 msgid "Set specific values for configuration of features of the event"
 msgstr "Ange specifika värden för konfiguration av evenemangets funktioner"
 
 msgid "This content is protected and cannot be downloaded or recorded"
 msgstr "Detta innehåll är skyddat och kan inte laddas ner eller spelas in"
+
+msgid "Toggle between administrative backend and public-facing pages."
+msgstr "Växla mellan administrativa backend- och publika sidor."
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Vi ber dig att betala det belopp som begärs för nästa delbetalning"
@@ -7489,9 +7540,6 @@ msgid "Allows a user to reserve extra tickets in addition to their own"
 msgstr ""
 "Gör det möjligt för en användare att reservera extra biljetter utöver sina "
 "egna"
-
-msgid "Configure the fields to collect in the participant profile data"
-msgstr "Konfigurera de fält som ska samlas in i deltagarens profildata"
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Beskrivning - visas i början av avsnittet"
@@ -7541,11 +7589,6 @@ msgstr "Medlemsavgift redan befintlig för denna användare och för detta år"
 msgid "Select from the dropdown the characters to be added to the plot"
 msgstr ""
 "Välj från rullgardinsmenyn de karaktärer som ska läggas till i handlingen"
-
-msgid "Switch here between administrative views and user-facing pages."
-msgstr ""
-"Här växlar du mellan administrativa vyer och sidor som vänder sig till "
-"användaren."
 
 msgid "This page shows the assignment of warehouse items to event area"
 msgstr "På den här sidan visas hur lagerartiklar tilldelas händelseområden"
@@ -7799,13 +7842,6 @@ msgstr ""
 "Visa detaljerad aktivitetslogg över enheter som skapats, uppdaterats eller "
 "tagits bort."
 
-msgid "Simply follow the instructions and provide the required information"
-msgstr "Följ bara instruktionerna och fyll i den information som krävs"
-
-msgid "Start here to create your first event and begin using the platform."
-msgstr ""
-"Börja här för att skapa ditt första evenemang och börja använda plattformen."
-
 msgid "The full name of your event as it will be displayed to participants"
 msgstr ""
 "Det fullständiga namnet på ditt evenemang som det kommer att visas för "
@@ -7893,10 +7929,6 @@ msgstr ""
 msgid "This page shows the total number of pre-registrations for each event"
 msgstr ""
 "Denna sida visar det totala antalet föranmälningar för varje evenemang"
-
-msgid "This section lists critical issues that require immediate attention."
-msgstr ""
-"I detta avsnitt listas kritiska frågor som kräver omedelbar uppmärksamhet."
 
 #, python-format
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
@@ -8048,9 +8080,6 @@ msgstr ""
 msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
 "Detta dras automatiskt av från registreringen av ett framtida evenemang"
-
-msgid "This is the task list of required actions to complete the event setup."
-msgstr "Detta är en lista med åtgärder som krävs för att slutföra eventet."
 
 msgid "This page summarizes the rules that are applied to the computed fields"
 msgstr ""
@@ -8567,6 +8596,12 @@ msgstr ""
 "status"
 
 msgid ""
+"Enable specific features to add specialized functionalities to the platform."
+msgstr ""
+"Aktivera specifika funktioner för att lägga till specialfunktioner i "
+"plattformen."
+
+msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget report"
 msgstr ""
 "Skapar en årlig sammanfattning av den finanspolitiska verksamheten för den "
@@ -8862,13 +8897,6 @@ msgstr ""
 "att följa"
 
 msgid ""
-"Open the tutorial to follow guided, step-by-step instructions for this "
-"feature."
-msgstr ""
-"Öppna handledningen för att följa guidade steg-för-steg-instruktioner för "
-"den här funktionen."
-
-msgid ""
 "Optional - Amount added to the registration fee if selected (0 = no extra "
 "cost)"
 msgstr ""
@@ -8886,13 +8914,6 @@ msgid ""
 "This content can only be accessed once. Please read carefully before "
 "proceeding"
 msgstr "Detta innehåll kan endast nås en gång. Läs noga innan du fortsätter"
-
-msgid ""
-"This page will guide you through the creation of your first event, step by "
-"step"
-msgstr ""
-"Den här sidan guidar dig genom skapandet av ditt första evenemang, steg för "
-"steg"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"
@@ -9019,25 +9040,11 @@ msgstr ""
 "skickas inga e-postmeddelanden)"
 
 msgid ""
-"This list contains recommended actions to improve and finalize the "
-"configuration."
-msgstr ""
-"Den här listan innehåller rekommenderade åtgärder för att förbättra och "
-"slutföra konfigurationen."
-
-msgid ""
 "To register for the event, please fill in the following form and click on "
 "confirm"
 msgstr ""
 "För att anmäla dig till evenemanget, vänligen fyll i följande formulär och "
 "klicka på bekräfta"
-
-msgid ""
-"Welcome! Your organization has been created. Explore the platform to get "
-"started."
-msgstr ""
-"Välkommen till oss! Din organisation har skapats. Utforska plattformen för "
-"att komma igång."
 
 msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
@@ -9197,13 +9204,6 @@ msgstr ""
 " tillåten)"
 
 msgid ""
-"Select the active workspace here: switch between your organization and your "
-"events."
-msgstr ""
-"Välj den aktiva arbetsytan här: växla mellan din organisation och dina "
-"evenemang."
-
-msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "
 "pdf file)"
 msgstr "Bevis utfärdat av banken som bevis på överföringen (som pdf-fil)"
@@ -9316,13 +9316,6 @@ msgstr ""
 "din organisation och dina evenemang"
 
 msgid ""
-"Your first event has been created! Here is how to navigate the management "
-"interface."
-msgstr ""
-"Ditt första evenemang har skapats! Här följer en beskrivning av hur du "
-"navigerar i administrationsgränssnittet."
-
-msgid ""
 "I confirm that I have uploaded a valid document issued by the state of my "
 "nationality"
 msgstr ""
@@ -9405,6 +9398,13 @@ msgid ""
 msgstr ""
 "Om markerad, tas formateringen automatiskt bort när du klistrar in text i "
 "WYSIWYG-redigeraren"
+
+msgid ""
+"If checked, shows the invoice approval menu item to manually confirm "
+"payments received"
+msgstr ""
+"Om markerad, visar menyalternativet för fakturagodkännande för att manuellt "
+"bekräfta mottagna betalningar"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "
@@ -9646,13 +9646,6 @@ msgid ""
 msgstr ""
 "Valfritt - Maximalt antal gånger det kan begäras för alla registreringar (0 "
 "= obegränsat)"
-
-msgid ""
-"This is the management dashboard, the interface will now be explained "
-"section by section."
-msgstr ""
-"Detta är instrumentpanelen för hantering, gränssnittet kommer nu att "
-"förklaras avsnitt för avsnitt."
 
 msgid ""
 "This page shows all access tokens for one-time content. Each token can only "
@@ -10071,6 +10064,13 @@ msgstr ""
 "medlemsevenemanget"
 
 msgid ""
+"The sidebar has expanded. New menus will continue to appear as you activate "
+"additional modules."
+msgstr ""
+"Sidofältet har utökats. Nya menyer kommer att fortsätta att visas när du "
+"aktiverar ytterligare moduler."
+
+msgid ""
 "Unique code for internal use - not visible. Indicate a string without spaces"
 " or strange symbols"
 msgstr ""
@@ -10402,13 +10402,6 @@ msgid ""
 msgstr ""
 "Karaktären har lagts till i fraktionen, men i fraktionstexten nämns "
 "karaktären aldrig"
-
-msgid ""
-"This is the sidebar, it contains all management functions and remains "
-"visible across all admin pages."
-msgstr ""
-"Det här är sidofältet, som innehåller alla hanteringsfunktioner och är "
-"synligt på alla adminsidor."
 
 msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "

@@ -866,6 +866,13 @@ class OrgaConfigForm(ConfigForm):
                 disable_provisional_help_text,
             )
 
+            # Show invoice approval menu item for manual payment confirmation
+            invoices_label = _("Invoices")
+            invoices_help_text = _(
+                "If checked, shows the invoice approval menu item to manually confirm payments received",
+            )
+            self.add_configs("payment_invoices", ConfigType.BOOL, invoices_label, invoices_help_text)
+
         if "tokens" in self.params["features"]:
             self.set_section("tokens", _("Tokens"))
 
@@ -1351,7 +1358,7 @@ class OrgaRunForm(ConfigForm):
         Sets up various event features and their configuration options
         based on enabled features for character management.
         """
-        if "character" not in self.params["features"]:
+        if "character" not in self.params["features"] or "event" not in self.params:
             return
 
         if not get_event_config(

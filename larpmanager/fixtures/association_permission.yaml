@@ -230,7 +230,7 @@
     module: registration
 - model: larpmanager.associationpermission
   fields:
-    name: Send e-mail
+    name: E-mail
     descr: Send e-mail
     slug: exe_send_mail
     number: 11
@@ -310,10 +310,10 @@
     module: users
 - model: larpmanager.associationpermission
   fields:
-    name: Methods
+    name: Payment Methods
     descr: Configure payment methods available for participants
     slug: exe_methods
-    number: 1
+    number: 1000
     config: payment
     hidden: false
     feature: payment
@@ -325,8 +325,9 @@
     slug: exe_invoices
     number: 33
     config: null
+    active_if: payment_invoices
     hidden: false
-    feature: payment
+    feature: payment_invoices
     module: accounting
 - model: larpmanager.associationpermission
   fields:

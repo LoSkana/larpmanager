@@ -30,13 +30,13 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait,
-    check_feature,
-    fill_tinymce,
-    go_to,
-    login_orga,
-    submit_confirm,
-    expect_normalized,
-)
+                                     check_feature,
+                                     fill_tinymce,
+                                     go_to,
+                                     login_orga,
+                                     submit_confirm,
+                                     expect_normalized, sidebar,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -164,7 +164,7 @@ def traits(page: Any, live_server: Any) -> None:
 def signups(page: Any, live_server: Any) -> None:
     # create signup for my char
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").nth(1).fill("org")
@@ -182,7 +182,7 @@ def signups(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # create signup for another
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").nth(1).fill("user")
@@ -206,7 +206,7 @@ def casting(page: Any, live_server: Any) -> None:
 
     # perform casting
     go_to(page, live_server, "/test")
-    page.get_by_role("link", name="Casting", exact=True).click()
+    sidebar(page, "Casting")
     page.get_by_role("link", name="Lore").click()
     page.locator("#faction0").select_option("Torta")
     page.locator("#choice0").select_option("u2")
@@ -233,14 +233,14 @@ def casting(page: Any, live_server: Any) -> None:
 
     # make casting
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Casting", exact=True).click()
+    sidebar(page, "Casting")
     page.get_by_role("link", name="Lore").click()
     page.get_by_role("button", name="Start algorithm").click()
     just_wait(page)
     page.get_by_role("button", name="Upload").click()
 
     # check signups
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="Lore").click()
     expect_normalized(page,
         page.locator("#one"), "User Test #2 Another Standard "

@@ -29,7 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, load_image, login_orga, expect_normalized, submit_confirm
+from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, load_image, login_orga, expect_normalized, \
+    submit_confirm, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -149,7 +150,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     page.locator("#id_registration_no_grouping").check()
     page.locator("#id_registration_reg_que_allowed").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    sidebar(page, "Registrations")
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")
     page.locator(".fa-edit").click()
     expect_normalized(page,
@@ -209,13 +210,16 @@ def upload_membership(page: Any, live_server: Any) -> None:
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").fill("adm")
     page.locator(".select2-results__option").first.click()
+    page.locator("#id_date").fill("2024-06-11")
     load_image(page, "#id_request")
     load_image(page, "#id_document")
-    page.locator("#id_date").fill("2024-06-11")
+    just_wait(page)
+    page.locator("#id_date").click()
     just_wait(page)
     submit_confirm(page)
 
     # Try accessing member form
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Test Admin orga@test.it Accepted 1")
     page.locator(".fa-edit").click()
 
@@ -262,5 +266,3 @@ def upload_membership_fee(page: Any, live_server: Any) -> None:
 
     # check
     expect_normalized(page, page.locator("#one"), "Test Admin orga@test.it Payed 1")
-    page.get_by_role("link", name="Invoices").click()
-    expect_normalized(page, page.locator("#one"), "Admin Test Wire membership Confirmed 10 Membership fee of Admin Test")

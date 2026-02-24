@@ -39,7 +39,7 @@ from larpmanager.tests.utils import (
     login_orga,
     login_user,
     logout,
-    submit_confirm, new_option, submit_option,
+    submit_confirm, new_option, submit_option, sidebar,
 )
 
 pytestmark = pytest.mark.e2e
@@ -195,7 +195,7 @@ def copy_tickets_and_questions(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Navigate to copy page
-    page.locator("#orga_copy").get_by_role("link", name="Copy").click()
+    sidebar(page, "Copy")
 
     # Select Event A as source
     page.locator("#select2-id_parent-container").click()
