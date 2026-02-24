@@ -2229,9 +2229,6 @@ msgstr "Uppladdning..."
 msgid "Url Shortner"
 msgstr "Kortare URL"
 
-msgid "User profile"
-msgstr "Användarprofil"
-
 msgid "VAT (Ticket)"
 msgstr "Moms (biljett)"
 
@@ -2689,6 +2686,9 @@ msgstr "Typ av retur"
 
 msgid "Select ability"
 msgstr "Välj förmåga"
+
+msgid "Sensitive data"
+msgstr "Känsliga uppgifter"
 
 msgid "Session active"
 msgstr "Session aktiv"
@@ -7516,9 +7516,6 @@ msgid "Allows a user to reserve extra tickets in addition to their own"
 msgstr ""
 "Gör det möjligt för en användare att reservera extra biljetter utöver sina "
 "egna"
-
-msgid "Configure the fields to collect in the participant profile data"
-msgstr "Konfigurera de fält som ska samlas in i deltagarens profildata"
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Beskrivning - visas i början av avsnittet"

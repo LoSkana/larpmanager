@@ -2229,9 +2229,6 @@ msgstr "Lataaminen..."
 msgid "Url Shortner"
 msgstr "Url Shortner"
 
-msgid "User profile"
-msgstr "Käyttäjäprofiili"
-
 msgid "VAT (Ticket)"
 msgstr "Arvonlisävero (lippu)"
 
@@ -2689,6 +2686,9 @@ msgstr "Palauttava tyyppi"
 
 msgid "Select ability"
 msgstr "Valitse kyky"
+
+msgid "Sensitive data"
+msgstr "Arkaluonteiset tiedot"
 
 msgid "Session active"
 msgstr "Istunto aktiivinen"
@@ -7518,9 +7518,6 @@ msgid "Allows a user to reserve extra tickets in addition to their own"
 msgstr ""
 "Mahdollistaa käyttäjälle ylimääräisten lippujen varaamisen omien lippujensa "
 "lisäksi"
-
-msgid "Configure the fields to collect in the participant profile data"
-msgstr "Määritä kentät, jotka kerätään osallistujaprofiilin tietoihin"
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Kuvaus - näytetään jakson alussa"

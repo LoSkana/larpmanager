@@ -2229,9 +2229,6 @@ msgstr "Nahrávání..."
 msgid "Url Shortner"
 msgstr "Zkracovač URL"
 
-msgid "User profile"
-msgstr "Profil uživatele"
-
 msgid "VAT (Ticket)"
 msgstr "DPH (jízdenka)"
 
@@ -2689,6 +2686,9 @@ msgstr "Typ návratu"
 
 msgid "Select ability"
 msgstr "Vybrat schopnost"
+
+msgid "Sensitive data"
+msgstr "Citlivé údaje"
 
 msgid "Session active"
 msgstr "Relace aktivní"
@@ -7506,10 +7506,6 @@ msgstr "Vaše žádost byla odeslána, odpovíme vám co nejdříve!"
 
 msgid "Allows a user to reserve extra tickets in addition to their own"
 msgstr "Umožňuje uživateli rezervovat další vstupenky kromě svých vlastních"
-
-msgid "Configure the fields to collect in the participant profile data"
-msgstr ""
-"Konfigurace polí, která se mají shromažďovat v údajích profilu účastníka"
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Popis - zobrazí se na začátku sekce"

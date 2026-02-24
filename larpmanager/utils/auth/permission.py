@@ -374,6 +374,7 @@ DEMO_HIDDEN_PERMISSIONS: frozenset[str] = frozenset(
         "exe_config",
         "exe_features",
         "exe_roles",
+        "exe_profile"
         # Event-level
         "orga_send_mail",
         "orga_archive_email",

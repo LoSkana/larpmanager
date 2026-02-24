@@ -2229,9 +2229,6 @@ msgstr "Uploaden..."
 msgid "Url Shortner"
 msgstr "Url Verkorter"
 
-msgid "User profile"
-msgstr "Gebruikersprofiel"
-
 msgid "VAT (Ticket)"
 msgstr "BTW (ticket)"
 
@@ -2689,6 +2686,9 @@ msgstr "Type terugkeer"
 
 msgid "Select ability"
 msgstr "Selecteer vermogen"
+
+msgid "Sensitive data"
+msgstr "Gevoelige gegevens"
 
 msgid "Session active"
 msgstr "Sessie actief"
@@ -7568,11 +7568,6 @@ msgstr "Je verzoek is verzonden, we zullen zo snel mogelijk antwoorden!"
 msgid "Allows a user to reserve extra tickets in addition to their own"
 msgstr ""
 "Hiermee kan een gebruiker extra tickets reserveren naast zijn eigen tickets"
-
-msgid "Configure the fields to collect in the participant profile data"
-msgstr ""
-"Configureer de velden die moeten worden verzameld in de "
-"deelnemerprofielgegevens"
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Beschrijving - wordt aan het begin van de sectie weergegeven"

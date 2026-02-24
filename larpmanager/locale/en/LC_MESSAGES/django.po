@@ -9107,9 +9107,6 @@ msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
 
-msgid "E-mail"
-msgstr ""
-
 msgid "Send e-mail"
 msgstr ""
 
@@ -9703,12 +9700,6 @@ msgid "Event creation"
 msgstr ""
 
 msgid "Configure at least one payment method for participants"
-msgstr ""
-
-msgid "User profile"
-msgstr ""
-
-msgid "Configure the fields to collect in the participant profile data"
 msgstr ""
 
 msgid "Event roles"

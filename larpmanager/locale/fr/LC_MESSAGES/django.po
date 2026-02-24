@@ -2229,9 +2229,6 @@ msgstr "Téléchargement..."
 msgid "Url Shortner"
 msgstr "Raccourcisseur d'url"
 
-msgid "User profile"
-msgstr "Profil de l'utilisateur"
-
 msgid "VAT (Ticket)"
 msgstr "TVA (ticket)"
 
@@ -2689,6 +2686,9 @@ msgstr "Type de retour"
 
 msgid "Select ability"
 msgstr "Sélectionner la capacité"
+
+msgid "Sensitive data"
+msgstr "Données sensibles"
 
 msgid "Session active"
 msgstr "Session active"
@@ -7647,10 +7647,6 @@ msgid "Allows a user to reserve extra tickets in addition to their own"
 msgstr ""
 "Permet à un utilisateur de réserver des billets supplémentaires en plus des "
 "siens"
-
-msgid "Configure the fields to collect in the participant profile data"
-msgstr ""
-"Configurer les champs à collecter dans les données du profil du participant"
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Description - s'affiche au début de la section"

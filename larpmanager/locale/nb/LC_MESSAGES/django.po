@@ -2229,9 +2229,6 @@ msgstr "Laster opp..."
 msgid "Url Shortner"
 msgstr "URL-forkortelse"
 
-msgid "User profile"
-msgstr "Brukerprofil"
-
 msgid "VAT (Ticket)"
 msgstr "MVA (billett)"
 
@@ -2689,6 +2686,9 @@ msgstr "Avkastningstype"
 
 msgid "Select ability"
 msgstr "Velg evne"
+
+msgid "Sensitive data"
+msgstr "Sensitive data"
 
 msgid "Session active"
 msgstr "Økt aktiv"
@@ -7522,9 +7522,6 @@ msgid "Allows a user to reserve extra tickets in addition to their own"
 msgstr ""
 "Gjør det mulig for en bruker å reservere ekstra billetter i tillegg til sine"
 " egne"
-
-msgid "Configure the fields to collect in the participant profile data"
-msgstr "Konfigurer feltene som skal samles inn i deltakerprofildataene"
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Beskrivelse - vises i begynnelsen av seksjonen"

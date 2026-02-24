@@ -2229,9 +2229,6 @@ msgstr "Hochladen..."
 msgid "Url Shortner"
 msgstr "Url-Verkürzer"
 
-msgid "User profile"
-msgstr "Benutzerprofil"
-
 msgid "VAT (Ticket)"
 msgstr "Mehrwertsteuer (Ticket)"
 
@@ -2689,6 +2686,9 @@ msgstr "Art der Rückgabe"
 
 msgid "Select ability"
 msgstr "Fähigkeit auswählen"
+
+msgid "Sensitive data"
+msgstr "Sensible Daten"
 
 msgid "Session active"
 msgstr "Sitzung aktiv"
@@ -7688,11 +7688,6 @@ msgid "Allows a user to reserve extra tickets in addition to their own"
 msgstr ""
 "Ermöglicht es einem Nutzer, zusätzlich zu seinen eigenen Tickets weitere "
 "Tickets zu reservieren"
-
-msgid "Configure the fields to collect in the participant profile data"
-msgstr ""
-"Konfigurieren Sie die Felder, die in den Teilnehmerprofildaten erfasst "
-"werden sollen"
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Beschreibung - wird am Anfang des Abschnitts angezeigt"
