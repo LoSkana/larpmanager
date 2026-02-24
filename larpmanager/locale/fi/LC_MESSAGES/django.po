@@ -2576,6 +2576,9 @@ msgstr "Lahjoitukset tehty"
 msgid "Event Template"
 msgstr "Tapahtuman malli"
 
+msgid "Event creation"
+msgstr "Tapahtuman luominen"
+
 msgid "Event features"
 msgstr "Tapahtuman ominaisuudet"
 
@@ -4215,6 +4218,9 @@ msgstr "Kokoelma osallistui"
 
 msgid "Create a new collection"
 msgstr "Luo uusi kokoelma"
+
+msgid "Create your first event"
+msgstr "Luo ensimmäinen tapahtuma"
 
 msgid "Discount code not valid"
 msgstr "Alennuskoodi ei ole voimassa"
@@ -6377,6 +6383,9 @@ msgstr "Tällä sivulla on yhteenveto hahmoluetteloista"
 msgid "Total amount withheld for transfer commissions"
 msgstr "Siirtopalkkioita varten pidätetty kokonaismäärä"
 
+msgid "Welcome to the dashboard of your organization!"
+msgstr "Tervetuloa organisaatiosi kojelautaan!"
+
 msgid "Your preferences have been saved in the system"
 msgstr "Asetuksesi on tallennettu järjestelmään"
 
@@ -7812,9 +7821,6 @@ msgstr ""
 "Näytä yksityiskohtainen toimintoloki luoduista, päivitetyistä tai "
 "poistetuista yksiköistä."
 
-msgid "Simply follow the instructions and provide the required information"
-msgstr "Seuraa ohjeita ja anna tarvittavat tiedot"
-
 msgid "The full name of your event as it will be displayed to participants"
 msgstr "Tapahtuman koko nimi sellaisena kuin se näytetään osallistujille"
 
@@ -8908,13 +8914,6 @@ msgid ""
 "proceeding"
 msgstr ""
 "Tätä sisältöä voi käyttää vain kerran. Lue huolellisesti ennen jatkamista"
-
-msgid ""
-"This page will guide you through the creation of your first event, step by "
-"step"
-msgstr ""
-"Tällä sivulla opastetaan sinut ensimmäisen tapahtuman luomisessa vaihe "
-"vaiheelta"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"

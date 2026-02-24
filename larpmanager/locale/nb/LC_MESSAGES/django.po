@@ -2576,6 +2576,9 @@ msgstr "Donasjoner"
 msgid "Event Template"
 msgstr "Mal for arrangement"
 
+msgid "Event creation"
+msgstr "Opprettelse av hendelser"
+
 msgid "Event features"
 msgstr "Arrangementets funksjoner"
 
@@ -4215,6 +4218,9 @@ msgstr "Samlinger som har deltatt"
 
 msgid "Create a new collection"
 msgstr "Opprett en ny samling"
+
+msgid "Create your first event"
+msgstr "Opprett ditt første arrangement"
 
 msgid "Discount code not valid"
 msgstr "Ugyldig kode for tilrettelegging"
@@ -6380,6 +6386,9 @@ msgstr "Denne siden oppsummerer karakterinventarene"
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totalt beløp holdt tilbake for overføringsprovisjoner"
 
+msgid "Welcome to the dashboard of your organization!"
+msgstr "Velkommen til dashbordet i organisasjonen din!"
+
 msgid "Your preferences have been saved in the system"
 msgstr "Dine preferanser er lagret i systemet"
 
@@ -7826,9 +7835,6 @@ msgstr ""
 "Vis detaljert aktivitetslogg over enheter som er opprettet, oppdatert eller "
 "slettet."
 
-msgid "Simply follow the instructions and provide the required information"
-msgstr "Følg instruksjonene og oppgi den nødvendige informasjonen"
-
 msgid "The full name of your event as it will be displayed to participants"
 msgstr ""
 "Det fulle navnet på arrangementet slik det vil bli vist til deltakerne"
@@ -8906,13 +8912,6 @@ msgid ""
 "proceeding"
 msgstr ""
 "Dette innholdet kan bare åpnes én gang. Vennligst les nøye før du fortsetter"
-
-msgid ""
-"This page will guide you through the creation of your first event, step by "
-"step"
-msgstr ""
-"På denne siden vil du bli guidet gjennom opprettelsen av ditt første "
-"arrangement, steg for steg"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"

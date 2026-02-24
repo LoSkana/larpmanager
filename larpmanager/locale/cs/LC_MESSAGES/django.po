@@ -2576,6 +2576,9 @@ msgstr "Poskytnuté dary"
 msgid "Event Template"
 msgstr "Šablona události"
 
+msgid "Event creation"
+msgstr "Vytvoření události"
+
 msgid "Event features"
 msgstr "Funkce události"
 
@@ -4215,6 +4218,9 @@ msgstr "Zúčastněné sbírky"
 
 msgid "Create a new collection"
 msgstr "Vytvoření nové kolekce"
+
+msgid "Create your first event"
+msgstr "Vytvoření první události"
 
 msgid "Discount code not valid"
 msgstr "Neplatný kód usnadnění"
@@ -6378,6 +6384,9 @@ msgstr "Tato stránka shrnuje soupisy postav"
 msgid "Total amount withheld for transfer commissions"
 msgstr "Celková částka sražená na provize za převod"
 
+msgid "Welcome to the dashboard of your organization!"
+msgstr "Vítejte na palubní desce vaší organizace!"
+
 msgid "Your preferences have been saved in the system"
 msgstr "Vaše předvolby byly uloženy do systému"
 
@@ -7783,9 +7792,6 @@ msgstr ""
 "Zobrazení podrobného záznamu činnosti o vytvořených, aktualizovaných nebo "
 "odstraněných entitách."
 
-msgid "Simply follow the instructions and provide the required information"
-msgstr "Stačí postupovat podle pokynů a zadat požadované informace"
-
 msgid "The full name of your event as it will be displayed to participants"
 msgstr "Úplný název vaší akce, jak se bude zobrazovat účastníkům"
 
@@ -8830,12 +8836,6 @@ msgid ""
 msgstr ""
 "K tomuto obsahu lze přistupovat pouze jednou. Před pokračováním si prosím "
 "pozorně přečtěte"
-
-msgid ""
-"This page will guide you through the creation of your first event, step by "
-"step"
-msgstr ""
-"Tato stránka vás krok za krokem provede vytvořením vaší první události"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"

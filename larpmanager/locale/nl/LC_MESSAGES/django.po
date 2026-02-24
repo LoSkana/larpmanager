@@ -2576,6 +2576,9 @@ msgstr "Donaties"
 msgid "Event Template"
 msgstr "Evenement Sjabloon"
 
+msgid "Event creation"
+msgstr "Evenement maken"
+
 msgid "Event features"
 msgstr "Functies van het evenement"
 
@@ -4215,6 +4218,9 @@ msgstr "Deelgenomen Collecties"
 
 msgid "Create a new collection"
 msgstr "Maak een nieuwe verzameling"
+
+msgid "Create your first event"
+msgstr "Maak je eerste evenement"
 
 msgid "Discount code not valid"
 msgstr "Ongeldige facilitatiecode"
@@ -6382,6 +6388,9 @@ msgstr "Deze pagina geeft een samenvatting van de karakterinventarisaties"
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totaal ingehouden bedrag voor overschrijvingsprovisies"
 
+msgid "Welcome to the dashboard of your organization!"
+msgstr "Welkom op het dashboard van je organisatie!"
+
 msgid "Your preferences have been saved in the system"
 msgstr "Uw voorkeuren zijn opgeslagen in het systeem"
 
@@ -7896,9 +7905,6 @@ msgstr ""
 "Toon gedetailleerd activiteitenlogboek over entiteiten die zijn aangemaakt, "
 "bijgewerkt of verwijderd."
 
-msgid "Simply follow the instructions and provide the required information"
-msgstr "Volg gewoon de instructies en geef de vereiste informatie"
-
 msgid "The full name of your event as it will be displayed to participants"
 msgstr ""
 "De volledige naam van je evenement zoals die wordt weergegeven aan "
@@ -9062,12 +9068,6 @@ msgid ""
 msgstr ""
 "Deze inhoud is slechts eenmaal toegankelijk. Lees aandachtig voordat u "
 "verder gaat"
-
-msgid ""
-"This page will guide you through the creation of your first event, step by "
-"step"
-msgstr ""
-"Deze pagina leidt je stap voor stap door de creatie van je eerste evenement"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"

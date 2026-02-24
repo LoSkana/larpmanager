@@ -2576,6 +2576,9 @@ msgstr "Donationer som gjorts"
 msgid "Event Template"
 msgstr "Mall för evenemang"
 
+msgid "Event creation"
+msgstr "Skapande av evenemang"
+
 msgid "Event features"
 msgstr "Funktioner för evenemang"
 
@@ -4215,6 +4218,9 @@ msgstr "Deltagande samlingar"
 
 msgid "Create a new collection"
 msgstr "Skapa en ny samling"
+
+msgid "Create your first event"
+msgstr "Skapa ditt första evenemang"
 
 msgid "Discount code not valid"
 msgstr "Ogiltig kod för underlättande"
@@ -6379,6 +6385,9 @@ msgstr "På denna sida sammanfattas karaktärsinventeringarna"
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totalt belopp som innehållits för överföringsprovisioner"
 
+msgid "Welcome to the dashboard of your organization!"
+msgstr "Välkommen till instrumentpanelen för din organisation!"
+
 msgid "Your preferences have been saved in the system"
 msgstr "Dina preferenser har sparats i systemet"
 
@@ -7814,9 +7823,6 @@ msgstr ""
 "Visa detaljerad aktivitetslogg över enheter som skapats, uppdaterats eller "
 "tagits bort."
 
-msgid "Simply follow the instructions and provide the required information"
-msgstr "Följ bara instruktionerna och fyll i den information som krävs"
-
 msgid "The full name of your event as it will be displayed to participants"
 msgstr ""
 "Det fullständiga namnet på ditt evenemang som det kommer att visas för "
@@ -8902,13 +8908,6 @@ msgid ""
 "This content can only be accessed once. Please read carefully before "
 "proceeding"
 msgstr "Detta innehåll kan endast nås en gång. Läs noga innan du fortsätter"
-
-msgid ""
-"This page will guide you through the creation of your first event, step by "
-"step"
-msgstr ""
-"Den här sidan guidar dig genom skapandet av ditt första evenemang, steg för "
-"steg"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"

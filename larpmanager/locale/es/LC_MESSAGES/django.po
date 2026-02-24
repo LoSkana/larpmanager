@@ -2576,6 +2576,9 @@ msgstr "Donaciones efectuadas"
 msgid "Event Template"
 msgstr "Plantilla de eventos"
 
+msgid "Event creation"
+msgstr "Creación de eventos"
+
 msgid "Event features"
 msgstr "Características del evento"
 
@@ -4215,6 +4218,9 @@ msgstr "Colectas participadas"
 
 msgid "Create a new collection"
 msgstr "Crear una nueva colecta"
+
+msgid "Create your first event"
+msgstr "Cree su primer evento"
 
 msgid "Discount code not valid"
 msgstr "Código de descuento no válido"
@@ -6379,6 +6385,9 @@ msgstr "Esta página resume los inventarios de personajes"
 msgid "Total amount withheld for transfer commissions"
 msgstr "Importe total retenido en concepto de comisiones de transferencia"
 
+msgid "Welcome to the dashboard of your organization!"
+msgstr "Bienvenido al cuadro de mandos de su organización."
+
 msgid "Your preferences have been saved in the system"
 msgstr "Sus preferencias se han guardado en el sistema"
 
@@ -7893,10 +7902,6 @@ msgstr ""
 "Mostrar el registro de actividad detallado de las entidades creadas, "
 "actualizadas o eliminadas."
 
-msgid "Simply follow the instructions and provide the required information"
-msgstr ""
-"Sólo tiene que seguir las instrucciones y facilitar la información requerida"
-
 msgid "The full name of your event as it will be displayed to participants"
 msgstr ""
 "El nombre completo de su evento tal y como se mostrará a los participantes"
@@ -9052,11 +9057,6 @@ msgid ""
 msgstr ""
 "Sólo se puede acceder a este contenido una vez. Lea atentamente antes de "
 "continuar"
-
-msgid ""
-"This page will guide you through the creation of your first event, step by "
-"step"
-msgstr "Esta página le guiará paso a paso en la creación de su primer evento"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"

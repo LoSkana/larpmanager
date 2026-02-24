@@ -81,11 +81,7 @@ def exe_events_new(request: HttpRequest) -> HttpResponse:
 
     # Prepare for creation
     context["exe"] = True
-    if context.get("onboarding"):
-        context["welcome_message"] = True
-        context["tutorial"] = None
-        context["config"] = None
-        context["is_sidebar_open"] = False
+    context["creation"] = True
 
     # Define callback for post-creation operations
     def on_created(created_event: Event) -> None:
@@ -123,6 +119,7 @@ def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
 
     # Use unified full_event_edit
     context["add_another"] = False
+    context["exe"]
     return full_event_edit(
         context,
         request,

@@ -6447,6 +6447,12 @@ msgid ""
 "and events"
 msgstr ""
 
+msgid "Welcome to the dashboard of your organization!"
+msgstr ""
+
+msgid "Create your first event"
+msgstr ""
+
 msgid "Launch guided interface tour"
 msgstr ""
 
@@ -7496,14 +7502,6 @@ msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 
 msgid "This page shows the deadlines to be met for this event"
-msgstr ""
-
-msgid ""
-"This page will guide you through the creation of your first event, step by "
-"step"
-msgstr ""
-
-msgid "Simply follow the instructions and provide the required information"
 msgstr ""
 
 msgid "This page shows all log entries for this event"
@@ -9690,6 +9688,9 @@ msgid "Failed to add profiles"
 msgstr ""
 
 msgid "Failed to add gallery"
+msgstr ""
+
+msgid "Event creation"
 msgstr ""
 
 msgid "Configure at least one payment method for participants"

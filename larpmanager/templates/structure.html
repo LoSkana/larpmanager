@@ -129,24 +129,21 @@
           class="is-preload {% if lm or not association.old_form_appearance or interface_new_ui %}new_form{% endif %} {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
-            {% if onboarding %}
-            {% else %}
-                {% if not frame and association.id != 0 %}
-                    {% if user.is_authenticated %}
-                        {% if topbar_admin %}
-                            {% include "elements/structure/topbar-admin.html" %}
-                        {% else %}
-                            {% include "elements/structure/topbar-user.html" %}
-                        {% endif %}
+            {% if not frame and association.id != 0 %}
+                {% if user.is_authenticated %}
+                    {% if topbar_admin %}
+                        {% include "elements/structure/topbar-admin.html" %}
                     {% else %}
-                        {% include "elements/structure/topbar.html" %}
+                        {% include "elements/structure/topbar-user.html" %}
                     {% endif %}
+                {% else %}
+                    {% include "elements/structure/topbar.html" %}
                 {% endif %}
-                {% include "elements/structure/sidebar.html" %}
             {% endif %}
+            {% include "elements/structure/sidebar.html" %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class=" {% if manage and is_sidebar_open and not onboarding %}sidebar{% endif %} {% if not frame and association.id != 0 and not onboarding %}topbar{% endif %}">
+                 class=" {% if manage and is_sidebar_open %}sidebar{% endif %} {% if not frame and association.id != 0 %}topbar{% endif %}">
                 {% block main %}
                 {% endblock main %}
             </div>

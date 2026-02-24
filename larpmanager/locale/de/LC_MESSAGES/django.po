@@ -2576,6 +2576,9 @@ msgstr "Geleistete Spenden"
 msgid "Event Template"
 msgstr "Ereignis-Vorlage"
 
+msgid "Event creation"
+msgstr "Erstellung von Veranstaltungen"
+
 msgid "Event features"
 msgstr "Merkmale der Veranstaltung"
 
@@ -4215,6 +4218,9 @@ msgstr "Beteiligte Sammlungen"
 
 msgid "Create a new collection"
 msgstr "Eine neue Sammlung erstellen"
+
+msgid "Create your first event"
+msgstr "Erstellen Sie Ihre erste Veranstaltung"
 
 msgid "Discount code not valid"
 msgstr "Ungültiger Erleichterungscode"
@@ -6393,6 +6399,9 @@ msgstr "Diese Seite fasst die Zeichenverzeichnisse zusammen"
 msgid "Total amount withheld for transfer commissions"
 msgstr "Für Überweisungsprovisionen einbehaltener Gesamtbetrag"
 
+msgid "Welcome to the dashboard of your organization!"
+msgstr "Willkommen auf dem Dashboard Ihrer Organisation!"
+
 msgid "Your preferences have been saved in the system"
 msgstr "Ihre Präferenzen wurden im System gespeichert"
 
@@ -8044,11 +8053,6 @@ msgstr ""
 "Detailliertes Aktivitätsprotokoll über erstellte, aktualisierte oder "
 "gelöschte Entitäten anzeigen."
 
-msgid "Simply follow the instructions and provide the required information"
-msgstr ""
-"Folgen Sie einfach den Anweisungen und geben Sie die erforderlichen "
-"Informationen an"
-
 msgid "The full name of your event as it will be displayed to participants"
 msgstr ""
 "Der vollständige Name Ihrer Veranstaltung, wie er den Teilnehmern angezeigt "
@@ -9260,13 +9264,6 @@ msgid ""
 msgstr ""
 "Dieser Inhalt kann nur einmal aufgerufen werden. Bitte sorgfältig lesen, "
 "bevor Sie fortfahren"
-
-msgid ""
-"This page will guide you through the creation of your first event, step by "
-"step"
-msgstr ""
-"Diese Seite wird Sie Schritt für Schritt durch die Erstellung Ihrer ersten "
-"Veranstaltung führen"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"

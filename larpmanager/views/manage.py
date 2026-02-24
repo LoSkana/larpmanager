@@ -242,10 +242,6 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     # Get available features for this association
     features = get_association_features(context["association_id"])
 
-    # Redirect to event creation if no events exist and feature is available
-    if context.get("onboarding") and "exe_events" in features:
-        return redirect("exe_events_new")
-
     # Check if currency configuration suggestion has been dismissed
     _check_currency_priority(request, context, features)
 

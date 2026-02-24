@@ -227,6 +227,13 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
 
     checklist = [
         {
+            "slug": "exe_events",
+            "name": _("Event creation"),
+            "descr": _("Create your first event"),
+            "done": Event.objects.filter(association_id=association_id).exists(),
+            "url": reverse("exe_events"),
+        },
+        {
             "slug": "exe_methods",
             "name": _("Payment methods"),
             "descr": _("Configure at least one payment method for participants"),
