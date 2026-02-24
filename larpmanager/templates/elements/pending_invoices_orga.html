@@ -1,0 +1,39 @@
+{% load i18n show_tags %}
+{% if pending_invoices %}
+    <div class="alert alert-warning">
+        <h4>{% trans "Pending invoice approvals" %}</h4>
+        <table class="go_datatable">
+            <thead>
+                <tr>
+                    <th>{% trans "Member" %}</th>
+                    <th>{% trans "Method" %}</th>
+                    <th>{% trans "Amount" %}</th>
+                    <th>{% trans "Details" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inv in pending_invoices %}
+                    <tr>
+                        <td>{{ inv.member }}</td>
+                        <td>{{ inv.method }}</td>
+                        <td>{{ inv.mc_gross | format_decimal }}</td>
+                        <td>{{ inv.get_details | safe }}</td>
+                        <td>{{ inv.created | date:"d/m/Y" }}</td>
+                        <td>
+                            <a href="{% url 'orga_invoices_confirm' run.get_slug inv.uuid %}">{% trans "Confirm" %}</a>
+                        </td>
+                        <td>
+                            <a href="{% url 'orga_invoices_delete' run.get_slug inv.uuid %}"
+                               qtip="{% trans "Delete" %}"
+                               class="only_new_form"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <hr />
+{% endif %}

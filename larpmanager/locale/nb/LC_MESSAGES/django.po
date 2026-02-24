@@ -1494,6 +1494,9 @@ msgstr "Lager"
 msgid "Workshops"
 msgstr "Verksteder"
 
+msgid "donations"
+msgstr "donasjoner"
+
 msgid "negatives"
 msgstr "negativer"
 
@@ -1989,6 +1992,9 @@ msgstr "Hvor det er"
 msgid "assignments"
 msgstr "oppgaver"
 
+msgid "collections"
+msgstr "samlinger"
+
 msgid "immediately"
 msgstr "umiddelbart"
 
@@ -2295,6 +2301,9 @@ msgstr "Dokumenttype"
 
 msgid "Dynamic rates"
 msgstr "Dynamiske priser"
+
+msgid "Element saved"
+msgstr "Element lagret"
 
 msgid "Email Content"
 msgstr "Innhold i e-post"
@@ -2881,6 +2890,9 @@ msgstr "Karakterene dine"
 
 msgid "expected within"
 msgstr "forventet innen"
+
+msgid "membership fees"
+msgstr "medlemskontingent"
 
 msgid "upcoming events"
 msgstr "Planlagte arrangementer"
@@ -3965,6 +3977,9 @@ msgstr "Oppgaver på lageret"
 msgid "You have already paid"
 msgstr "Du har allerede betalt"
 
+msgid "registration payments"
+msgstr "registreringsbetalinger"
+
 msgid "submit your vote here"
 msgstr "send inn din stemme her"
 
@@ -4440,6 +4455,9 @@ msgstr "Alternativet ble lagret"
 
 msgid "Payment already confirmed"
 msgstr "Betaling allerede bekreftet"
+
+msgid "Pending invoice approvals"
+msgstr "Venter på godkjenning av fakturaer"
 
 msgid "Pre-register to the event"
 msgstr "Sett deg selv på forhåndsregistreringslisten"
@@ -6377,10 +6395,6 @@ msgid "There are <b>%(number)s</b> expenses to approve"
 msgstr "Det er <b>%(number)s</b> utgifter som skal godkjennes"
 
 #, python-format
-msgid "There are <b>%(number)s</b> payments to approve"
-msgstr "Det er <b>%(number)s</b> betalinger som skal godkjennes"
-
-#, python-format
 msgid "There are <b>%(number)s</b> questions to answer"
 msgstr "Det er <b>%(number)s</b> spørsmål som må besvares"
 
@@ -6452,6 +6466,10 @@ msgstr "Gjennomgå deltakernes sikkerhetsrelaterte informasjon"
 
 msgid "The subscription plan associated with this event"
 msgstr "Valgfri mal knyttet til denne evnen"
+
+#, python-format
+msgid "There are <b>%(number)s</b> %(label)s to approve"
+msgstr "Det er <b>%(number)s</b> %(label)s som skal godkjennes"
 
 msgid "There are no new sessions scheduled at this time"
 msgstr "Det er ingen nye økter planlagt for øyeblikket"
@@ -9266,6 +9284,13 @@ msgid ""
 msgstr ""
 "Hvis avkrysset, fjernes formateringen automatisk når du limer inn tekst i "
 "WYSIWYG-redigeringsprogrammet"
+
+msgid ""
+"If checked, shows the invoice approval menu item to manually confirm "
+"payments received"
+msgstr ""
+"Hvis avkrysset, vises menyvalget for fakturagodkjenning for manuell "
+"bekreftelse av mottatte betalinger"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "

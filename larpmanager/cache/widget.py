@@ -39,6 +39,7 @@ from larpmanager.models.accounting import (
     AccountingItemExpense,
     PaymentInvoice,
     PaymentStatus,
+    PaymentType,
     RefundRequest,
     RefundStatus,
 )
@@ -338,13 +339,20 @@ def _init_exe_actions_cache(association_id: int) -> dict:
     if pending_expenses_count > 0:
         data["pending_expenses"] = {"count": pending_expenses_count}
 
-    # Pending payments
-    pending_payments_count = PaymentInvoice.objects.filter(
-        association_id=association_id,
-        status=PaymentStatus.SUBMITTED,
-    ).count()
-    if pending_payments_count > 0:
-        data["pending_payments"] = {"count": pending_payments_count}
+    # Pending invoice approvals split by type
+    for typ, key in [
+        (PaymentType.REGISTRATION, "pending_invoices_registration"),
+        (PaymentType.DONATE, "pending_invoices_donation"),
+        (PaymentType.COLLECTION, "pending_invoices_collection"),
+        (PaymentType.MEMBERSHIP, "pending_invoices_membership"),
+    ]:
+        count = PaymentInvoice.objects.filter(
+            association_id=association_id,
+            status=PaymentStatus.SUBMITTED,
+            typ=typ,
+        ).count()
+        if count > 0:
+            data[key] = {"count": count}
 
     # Pending refunds
     pending_refunds_count = RefundRequest.objects.filter(
@@ -387,13 +395,14 @@ def _init_orga_actions_cache(run: Run) -> dict:
     if pending_expenses_count > 0:
         data["pending_expenses"] = {"count": pending_expenses_count}
 
-    # Pending payments
+    # Pending registration invoice approvals
     pending_payments_count = PaymentInvoice.objects.filter(
         registration__run=run,
         status=PaymentStatus.SUBMITTED,
+        typ=PaymentType.REGISTRATION,
     ).count()
     if pending_payments_count > 0:
-        data["pending_payments"] = {"count": pending_payments_count}
+        data["pending_invoices_registration"] = {"count": pending_payments_count}
 
     # Registration questions without options
     registration_questions_without_options = list(

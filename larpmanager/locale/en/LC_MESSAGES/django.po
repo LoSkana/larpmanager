@@ -651,6 +651,11 @@ msgid ""
 "If checked: Participants must provide a receipt/invoice for manual payments"
 msgstr ""
 
+msgid ""
+"If checked, shows the invoice approval menu item to manually confirm "
+"payments received"
+msgstr ""
+
 msgid "VAT"
 msgstr ""
 
@@ -5009,6 +5014,9 @@ msgstr ""
 msgid ""
 "Once you have made the payment, return to this page and submit the form "
 "below to notify us of your payment"
+msgstr ""
+
+msgid "Pending invoice approvals"
 msgstr ""
 
 msgid "Total registration fee"
@@ -9929,8 +9937,20 @@ msgstr ""
 msgid "There are <b>%(number)s</b> expenses to approve"
 msgstr ""
 
+msgid "registration payments"
+msgstr ""
+
+msgid "donations"
+msgstr ""
+
+msgid "collections"
+msgstr ""
+
+msgid "membership fees"
+msgstr ""
+
 #, python-format
-msgid "There are <b>%(number)s</b> payments to approve"
+msgid "There are <b>%(number)s</b> %(label)s to approve"
 msgstr ""
 
 #, python-format
@@ -10126,6 +10146,9 @@ msgid "Reimbursement request item added"
 msgstr ""
 
 msgid "Receipt already confirmed"
+msgstr ""
+
+msgid "Element saved"
 msgstr ""
 
 msgid "Results not present"

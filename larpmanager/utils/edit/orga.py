@@ -30,6 +30,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields, reset_event_cache_all
 from larpmanager.forms.accounting import (
+    ExeInvoiceForm,
     OrgaCreditForm,
     OrgaDiscountForm,
     OrgaExpenseForm,
@@ -260,6 +261,7 @@ class OrgaAction(str, Enum):
     TOKENS = ("orga_tokens", {"form": OrgaTokenForm})
     CREDITS = ("orga_credits", {"form": OrgaCreditForm})
     PAYMENTS = ("orga_payments", {"form": OrgaPaymentForm})
+    INVOICES = ("orga_invoices", {"form": ExeInvoiceForm})
     OUTFLOWS = ("orga_outflows", {"form": OrgaOutflowForm})
     INFLOWS = ("orga_inflows", {"form": OrgaInflowForm})
     EXPENSES = ("orga_expenses", {"form": OrgaExpenseForm})
