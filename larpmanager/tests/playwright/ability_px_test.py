@@ -265,7 +265,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
 
     # Assign char
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    page.sidebar(page, "Registrations").click()
     page.locator(".fa-edit").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")

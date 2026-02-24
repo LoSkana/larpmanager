@@ -164,7 +164,7 @@ def traits(page: Any, live_server: Any) -> None:
 def signups(page: Any, live_server: Any) -> None:
     # create signup for my char
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    page.sidebar(page, "Registrations").click()
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").nth(1).fill("org")
@@ -182,7 +182,7 @@ def signups(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # create signup for another
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    page.sidebar(page, "Registrations").click()
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").nth(1).fill("user")
@@ -240,7 +240,7 @@ def casting(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Upload").click()
 
     # check signups
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    page.sidebar(page, "Registrations").click()
     page.get_by_role("link", name="Lore").click()
     expect_normalized(page,
         page.locator("#one"), "User Test #2 Another Standard "

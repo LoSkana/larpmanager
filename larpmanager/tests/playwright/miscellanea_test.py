@@ -123,7 +123,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # Create a test character to have something in the gallery
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Test Gallery Character")
