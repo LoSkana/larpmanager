@@ -165,7 +165,7 @@ def fetch_payment_details(association_id: int) -> dict:
     return get_payment_details(association)
 
 
-def check_association_context(request: HttpRequest, permission_slug: str = "") -> dict:
+def check_association_context(request: HttpRequest, permission_slug: str | list[str] | None = None) -> dict:
     """Check and validate association permissions for a request.
 
     Validates that the user has the required association permission and that
@@ -174,7 +174,7 @@ def check_association_context(request: HttpRequest, permission_slug: str = "") -
 
     Args:
         request: HTTP request object containing user and association data
-        permission_slug: Permission slug identifier to check against user permissions
+        permission_slug: Required permission(s). Can be a single permission slug or list of permission slugs.
 
     Returns:
         dict: Context dictionary containing:
@@ -231,7 +231,6 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
         request: Django HTTP request object containing user and session data
         event_slug: Event slug identifier for the target event
         permission_slug: Required permission(s). Can be a single permission slug or list of permission slugs.
-            If None, only basic event access is checked.
 
     Returns:
         Dictionary containing event context with management permissions including:

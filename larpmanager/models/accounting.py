@@ -169,7 +169,7 @@ class PaymentInvoice(UuidMixin, BaseModel):
 
         # Add download link if invoice is available
         if self.invoice:
-            details_html += f" <a href='{self.download()}'>Download</a>"
+            details_html += f" <a href='{self.download()}' target='_blank' download>Download</a>"
 
         # Append payment method text description
         if self.text:
@@ -332,6 +332,13 @@ class AccountingItem(UuidMixin, BaseModel):
 
     class Meta:
         abstract = True
+
+    def delete(self, *args: tuple, **kwargs: dict) -> None:
+        """Delete this item and its linked PaymentInvoice if present."""
+        inv = self.inv
+        super().delete(*args, **kwargs)
+        if inv:
+            inv.delete()
 
     def short_descr(self) -> str:
         """Return first 100 characters of description if available, empty string otherwise."""

@@ -8,6 +8,7 @@
     {% trans "You can update them by indicating the recipient and assigning the contributed money" %}
 {% endblock info %}
 {% block content %}
+    {% include "elements/pending_invoices_exe.html" %}
     <p>
         {% trans "Show collections" %} <a href="#" class="my_toggle" tog='done'>{% trans "already delivered" %}</a>
     </p>

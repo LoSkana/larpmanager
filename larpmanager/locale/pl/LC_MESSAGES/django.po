@@ -1494,6 +1494,9 @@ msgstr "Magazyn"
 msgid "Workshops"
 msgstr "Warsztaty"
 
+msgid "donations"
+msgstr "darowizny"
+
 msgid "negatives"
 msgstr "negatywy"
 
@@ -1989,6 +1992,9 @@ msgstr "Gdzie to jest"
 msgid "assignments"
 msgstr "zadania"
 
+msgid "collections"
+msgstr "kolekcje"
+
 msgid "immediately"
 msgstr "natychmiast"
 
@@ -2295,6 +2301,9 @@ msgstr "Typ dokumentu"
 
 msgid "Dynamic rates"
 msgstr "Stawki dynamiczne"
+
+msgid "Element saved"
+msgstr "Zapisany element"
 
 msgid "Email Content"
 msgstr "Treść wiadomości e-mail"
@@ -2881,6 +2890,9 @@ msgstr "Twoje postacie"
 
 msgid "expected within"
 msgstr "oczekiwany w ciągu"
+
+msgid "membership fees"
+msgstr "składki członkowskie"
 
 msgid "upcoming events"
 msgstr "nadchodzące wydarzenia"
@@ -3965,6 +3977,9 @@ msgstr "Zadania magazynowe"
 msgid "You have already paid"
 msgstr "Już zapłaciłeś"
 
+msgid "registration payments"
+msgstr "płatności rejestracyjne"
+
 msgid "submit your vote here"
 msgstr "oddaj swój głos tutaj"
 
@@ -4440,6 +4455,9 @@ msgstr "Opcja zapisana pomyślnie"
 
 msgid "Payment already confirmed"
 msgstr "Płatność już potwierdzona"
+
+msgid "Pending invoice approvals"
+msgstr "Oczekujące na zatwierdzenie faktury"
 
 msgid "Pre-register to the event"
 msgstr "Wstępna rejestracja na wydarzenie"
@@ -6377,10 +6395,6 @@ msgid "There are <b>%(number)s</b> expenses to approve"
 msgstr "Istnieją <b>%(number)s</b> wydatków do zatwierdzenia"
 
 #, python-format
-msgid "There are <b>%(number)s</b> payments to approve"
-msgstr "Do zatwierdzenia jest <b>%(number)s</b> płatności"
-
-#, python-format
 msgid "There are <b>%(number)s</b> questions to answer"
 msgstr "Istnieją <b>%(number)s</b> pytania, na które należy odpowiedzieć"
 
@@ -6452,6 +6466,10 @@ msgstr "Przegląd informacji dotyczących bezpieczeństwa uczestników"
 
 msgid "The subscription plan associated with this event"
 msgstr "Opcjonalny szablon powiązany z tą umiejętnością"
+
+#, python-format
+msgid "There are <b>%(number)s</b> %(label)s to approve"
+msgstr "Istnieją <b>%(number)s</b> %(label)s do zatwierdzenia"
 
 msgid "There are no new sessions scheduled at this time"
 msgstr "Obecnie nie ma zaplanowanych żadnych nowych sesji"
@@ -9350,6 +9368,13 @@ msgid ""
 msgstr ""
 "Jeśli zaznaczone, automatycznie usuwa formatowanie podczas wklejania tekstu "
 "do edytora WYSIWYG"
+
+msgid ""
+"If checked, shows the invoice approval menu item to manually confirm "
+"payments received"
+msgstr ""
+"Jeśli opcja ta jest zaznaczona, wyświetlana jest pozycja menu zatwierdzania "
+"faktury w celu ręcznego potwierdzenia otrzymanych płatności"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "

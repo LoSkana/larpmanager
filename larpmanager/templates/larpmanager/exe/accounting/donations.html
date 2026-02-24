@@ -7,6 +7,7 @@
     {% trans "This page shows all donations recorded in the system" %}
 {% endblock info %}
 {% block content %}
+    {% include "elements/pending_invoices_exe.html" %}
     {% include "elements/header/edit.html" %}
     {% include "elements/paginate.html" %}
 {% endblock content %}
