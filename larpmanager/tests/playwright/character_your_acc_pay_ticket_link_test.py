@@ -370,7 +370,7 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # open request
-    page.get_by_role("link", name=re.compile(" Accounting$")).click()
+    sidebar(page, "Accounting")
     page.get_by_role("link", name="refund request").click()
     page.get_by_role("textbox", name="Details").click()
     page.get_by_role("textbox", name="Details").fill("asdsadsadsa")
