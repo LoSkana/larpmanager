@@ -1519,10 +1519,8 @@ button,
 }
 
 .info {
-  font-style: italic;
-  margin-bottom: 0em;
-  border-bottom: solid 2px rgba(var(--pri-rgb), 0.5);
-  padding-bottom: 0.4em;
+  float: right;
+  margin-top: -4.5em;
 }
 
 .fa-edit {
