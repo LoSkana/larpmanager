@@ -393,6 +393,12 @@ msgstr ""
 msgid "If checked: shows the old interface"
 msgstr ""
 
+msgid "Old menu"
+msgstr ""
+
+msgid "If checked: shows the old menu"
+msgstr ""
+
 msgid "Email notifications"
 msgstr ""
 
@@ -7898,7 +7904,7 @@ msgid ""
 "regarding safety"
 msgstr ""
 
-msgid "Sensitive data"
+msgid "Users data"
 msgstr ""
 
 msgid "This page shows the general information of registered participants"
@@ -9030,6 +9036,9 @@ msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
 
+msgid "E-mail"
+msgstr ""
+
 msgid "Send e-mail"
 msgstr ""
 
@@ -9152,7 +9161,7 @@ msgstr ""
 msgid "Review participants' dietary restrictions and allergies."
 msgstr ""
 
-msgid "Review participants' sensitive data"
+msgid "Review participants' personal data"
 msgstr ""
 
 msgid "Manage questions asked by the participants"

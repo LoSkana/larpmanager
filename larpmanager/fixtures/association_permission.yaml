@@ -230,7 +230,7 @@
     module: registration
 - model: larpmanager.associationpermission
   fields:
-    name: Send e-mail
+    name: E-mail
     descr: Send e-mail
     slug: exe_send_mail
     number: 11

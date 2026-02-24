@@ -522,6 +522,9 @@ msgstr "Detaljer"
 msgid "Direct"
 msgstr "Direkte"
 
+msgid "E-mail"
+msgstr "E-post"
+
 msgid "Emails"
 msgstr "E-poster"
 
@@ -1143,6 +1146,9 @@ msgstr "Ny gave"
 msgid "Nickname"
 msgstr "Kallenavn"
 
+msgid "Old menu"
+msgstr "Gammel meny"
+
 msgid "One-Time"
 msgstr "Engangsbruk"
 
@@ -1736,6 +1742,9 @@ msgstr "To kvoter"
 
 msgid "User agent"
 msgstr "Brukeragent"
+
+msgid "Users data"
+msgstr "Brukerdata"
 
 msgid "Visibility"
 msgstr "Synlighet"
@@ -2650,9 +2659,6 @@ msgstr "Avkastningstype"
 
 msgid "Select ability"
 msgstr "Velg evne"
-
-msgid "Sensitive data"
-msgstr "Sensitive data"
 
 msgid "Session active"
 msgstr "Økt aktiv"
@@ -4851,6 +4857,9 @@ msgstr "Forsinkelse i årlig medlemsavgift"
 msgid "Duration in seconds (optional)"
 msgstr "Varighet i sekunder (valgfritt)"
 
+msgid "If checked: shows the old menu"
+msgstr "Hvis avkrysset: viser den gamle menyen"
+
 msgid "Manage issues during the event"
 msgstr "Håndtere problemer under arrangementet"
 
@@ -5260,6 +5269,9 @@ msgstr "Registrering oppdatert til %(event)s!"
 msgid "Registrations opening at: %(date)s"
 msgstr "Registreringene åpner kl: %(date)s"
 
+msgid "Review participants' personal data"
+msgstr "Gjennomgå deltakernes personopplysninger"
+
 msgid "Secretarial - stationery, printing"
 msgstr "Sekretariat - skrivesaker, trykking"
 
@@ -5370,9 +5382,6 @@ msgstr "Krev kvittering for manuelle betalinger"
 
 msgid "Review historical financial records"
 msgstr "Gjennomgå historiske regnskaper"
-
-msgid "Review participants' sensitive data"
-msgstr "Gjennomgå deltakernes sensitive data"
 
 msgid "Set up the membership configuration"
 msgstr "Konfigurer medlemskapskonfigurasjonen"

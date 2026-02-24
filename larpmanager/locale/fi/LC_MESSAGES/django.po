@@ -522,6 +522,9 @@ msgstr "Yksityiskohta"
 msgid "Direct"
 msgstr "Suora"
 
+msgid "E-mail"
+msgstr "Sähköposti"
+
 msgid "Emails"
 msgstr "Sähköpostit"
 
@@ -1143,6 +1146,9 @@ msgstr "Uusi lahja"
 msgid "Nickname"
 msgstr "Lempinimi"
 
+msgid "Old menu"
+msgstr "Vanha valikko"
+
 msgid "One-Time"
 msgstr "Kertaluonteinen"
 
@@ -1736,6 +1742,9 @@ msgstr "Kaksi kiintiötä"
 
 msgid "User agent"
 msgstr "Käyttäjäagentti"
+
+msgid "Users data"
+msgstr "Käyttäjien tiedot"
 
 msgid "Visibility"
 msgstr "Näkyvyys"
@@ -2650,9 +2659,6 @@ msgstr "Palauttava tyyppi"
 
 msgid "Select ability"
 msgstr "Valitse kyky"
-
-msgid "Sensitive data"
-msgstr "Arkaluonteiset tiedot"
 
 msgid "Session active"
 msgstr "Istunto aktiivinen"
@@ -4851,6 +4857,9 @@ msgstr "Vuosittaisen jäsenmaksun viivästyminen"
 msgid "Duration in seconds (optional)"
 msgstr "Kesto sekunteina (valinnainen)"
 
+msgid "If checked: shows the old menu"
+msgstr "Jos valittuna: näyttää vanhan valikon"
+
 msgid "Manage issues during the event"
 msgstr "Tapahtuman aikana ilmenevien ongelmien hallinta"
 
@@ -5260,6 +5269,9 @@ msgstr "Ilmoittautuminen päivitetty %(event)s!"
 msgid "Registrations opening at: %(date)s"
 msgstr "Ilmoittautumiset avataan osoitteessa: %(date)s"
 
+msgid "Review participants' personal data"
+msgstr "Osallistujien henkilötietojen tarkastelu"
+
 msgid "Secretarial - stationery, printing"
 msgstr "Sihteeristö - paperitavarat, painatus"
 
@@ -5370,9 +5382,6 @@ msgstr "Vaadi kuitti manuaalisista maksuista"
 
 msgid "Review historical financial records"
 msgstr "Historiallisen taloustiedon tarkastelu"
-
-msgid "Review participants' sensitive data"
-msgstr "Tarkista osallistujien arkaluonteiset tiedot"
 
 msgid "Set up the membership configuration"
 msgstr "Määritä jäsenyysasetukset"

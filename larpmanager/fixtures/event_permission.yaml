@@ -160,8 +160,8 @@
     module: users
 - model: larpmanager.eventpermission
   fields:
-    name: Sensitive data
-    descr: Review participants' sensitive data
+    name: Users
+    descr: Review participants' personal data
     slug: orga_sensitive
     number: 31
     config: null
@@ -630,7 +630,7 @@
     module: appearance
 - model: larpmanager.eventpermission
   fields:
-    name: Send e-mail
+    name: E-mail
     descr: Send e-mail
     slug: orga_send_mail
     number: 99

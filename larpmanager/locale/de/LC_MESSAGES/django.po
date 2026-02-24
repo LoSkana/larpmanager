@@ -522,6 +522,9 @@ msgstr "Einzelheiten"
 msgid "Direct"
 msgstr "Direkt"
 
+msgid "E-mail"
+msgstr "E-Mail"
+
 msgid "Emails"
 msgstr "E-Mails"
 
@@ -1143,6 +1146,9 @@ msgstr "Neues Geschenk"
 msgid "Nickname"
 msgstr "Spitzname"
 
+msgid "Old menu"
+msgstr "Altes Menü"
+
 msgid "One-Time"
 msgstr "Einmalig"
 
@@ -1736,6 +1742,9 @@ msgstr "Zwei Quoten"
 
 msgid "User agent"
 msgstr "Benutzer-Agent"
+
+msgid "Users data"
+msgstr "Benutzerdaten"
 
 msgid "Visibility"
 msgstr "Sichtbarkeit"
@@ -2650,9 +2659,6 @@ msgstr "Art der Rückgabe"
 
 msgid "Select ability"
 msgstr "Fähigkeit auswählen"
-
-msgid "Sensitive data"
-msgstr "Sensible Daten"
 
 msgid "Session active"
 msgstr "Sitzung aktiv"
@@ -4851,6 +4857,9 @@ msgstr "Verzögerung des jährlichen Mitgliedsbeitrags"
 msgid "Duration in seconds (optional)"
 msgstr "Dauer in Sekunden (optional)"
 
+msgid "If checked: shows the old menu"
+msgstr "Wenn markiert: zeigt das alte Menü an"
+
 msgid "Manage issues during the event"
 msgstr "Bewältigung von Problemen während der Veranstaltung"
 
@@ -5260,6 +5269,9 @@ msgstr "Anmeldung aktualisiert auf %(event)s!"
 msgid "Registrations opening at: %(date)s"
 msgstr "Die Anmeldungen beginnen am: %(date)s"
 
+msgid "Review participants' personal data"
+msgstr "Überprüfung der persönlichen Daten der Teilnehmer"
+
 msgid "Secretarial - stationery, printing"
 msgstr "Sekretariat - Schreibwaren, Druck"
 
@@ -5371,9 +5383,6 @@ msgstr "Für manuelle Zahlungen eine Quittung verlangen"
 
 msgid "Review historical financial records"
 msgstr "Überprüfung historischer Finanzunterlagen"
-
-msgid "Review participants' sensitive data"
-msgstr "Überprüfung der sensiblen Daten der Teilnehmer"
 
 msgid "Set up the membership configuration"
 msgstr "Konfiguration der Mitgliedschaft einrichten"
