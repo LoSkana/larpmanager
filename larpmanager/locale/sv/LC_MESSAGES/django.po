@@ -522,6 +522,9 @@ msgstr "Detalj"
 msgid "Direct"
 msgstr "Direkt"
 
+msgid "E-mail"
+msgstr "E-post"
+
 msgid "Emails"
 msgstr "E-postmeddelanden"
 
@@ -1143,6 +1146,9 @@ msgstr "Ny gåva"
 msgid "Nickname"
 msgstr "Smeknamn"
 
+msgid "Old menu"
+msgstr "Gammal meny"
+
 msgid "One-Time"
 msgstr "En gång"
 
@@ -1739,6 +1745,9 @@ msgstr "Två kvoter"
 
 msgid "User agent"
 msgstr "Användaragent"
+
+msgid "Users data"
+msgstr "Uppgifter om användare"
 
 msgid "Visibility"
 msgstr "Synlighet"
@@ -2659,9 +2668,6 @@ msgstr "Typ av retur"
 
 msgid "Select ability"
 msgstr "Välj förmåga"
-
-msgid "Sensitive data"
-msgstr "Känsliga uppgifter"
 
 msgid "Session active"
 msgstr "Session aktiv"
@@ -4869,6 +4875,9 @@ msgstr "Försening av årlig medlemsavgift"
 msgid "Duration in seconds (optional)"
 msgstr "Varaktighet i sekunder (valfritt)"
 
+msgid "If checked: shows the old menu"
+msgstr "Om markerad: visar den gamla menyn"
+
 msgid "Manage issues during the event"
 msgstr "Hantera problem under evenemanget"
 
@@ -5278,6 +5287,9 @@ msgstr "Registrering uppdaterad till %(event)s!"
 msgid "Registrations opening at: %(date)s"
 msgstr "Registreringar öppnar kl: %(date)s"
 
+msgid "Review participants' personal data"
+msgstr "Granska deltagarnas personuppgifter"
+
 msgid "Secretarial - stationery, printing"
 msgstr "Sekretariat - brevpapper, tryckning"
 
@@ -5388,9 +5400,6 @@ msgstr "Kräv kvitto för manuella betalningar"
 
 msgid "Review historical financial records"
 msgstr "Granska historiska finansiella poster"
-
-msgid "Review participants' sensitive data"
-msgstr "Granska deltagarnas känsliga uppgifter"
 
 msgid "Set up the membership configuration"
 msgstr "Ställ in medlemskonfigurationen"

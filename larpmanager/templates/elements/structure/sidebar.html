@@ -19,19 +19,32 @@
                 {% for mod, list in event_pms.items %}
                     {% if list %}
                         <div class="sidebar-section">
-                            <h2>
-                                {% if mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
-                                <span class="no_mobile">{{ mod.0 }}</span>
-                            </h2>
+                            {% if association.old_menu_appearance %}
+                                <h2>
+                                    {% if mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
+                                    <span class="no_mobile">{{ mod.0 }}</span>
+                                </h2>
+                            {% else %}
+                                {% with first_ap=list|first %}
+                                    <h2>
+                                        <a class="sidebar-link" href="{% url first_ap.slug run.get_slug %}">
+                                            {% if mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
+                                            <span class="no_mobile">{% trans first_ap.name %}</span>
+                                        </a>
+                                    </h2>
+                                {% endwith %}
+                            {% endif %}
                             <p>
                                 {% for ap in list %}
                                     {% if not ap.hidden %}
-                                        <span class="sidebar-link-wrap"
-                                              descr="{% trans ap.descr %}"
-                                              id="{{ ap.slug }}">
-                                            <a class="sidebar-link" href="{% url ap.slug run.get_slug %}">{% trans ap.name %}</a>
-                                            <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
-                                        </span>
+                                        {% if association.old_menu_appearance or not forloop.first %}
+                                            <span class="sidebar-link-wrap"
+                                                  descr="{% trans ap.descr %}"
+                                                  id="{{ ap.slug }}">
+                                                <a class="sidebar-link" href="{% url ap.slug run.get_slug %}">{% trans ap.name %}</a>
+                                                <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                            </span>
+                                        {% endif %}
                                     {% endif %}
                                 {% endfor %}
                             </p>
@@ -54,19 +67,32 @@
                 {% for mod, list in association_pms.items %}
                     {% if list %}
                         <div class="sidebar-section">
-                            <h2>
-                                {% if mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
-                                <span class="no_mobile">{{ mod.0 }}</span>
-                            </h2>
+                            {% if association.old_menu_appearance %}
+                                <h2>
+                                    {% if mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
+                                    <span class="no_mobile">{{ mod.0 }}</span>
+                                </h2>
+                            {% else %}
+                                {% with first_ap=list|first %}
+                                    <h2>
+                                        <a class="sidebar-link" href="{% url first_ap.slug %}">
+                                            {% if mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
+                                            <span class="no_mobile">{% trans first_ap.name %}</span>
+                                        </a>
+                                    </h2>
+                                {% endwith %}
+                            {% endif %}
                             <p>
                                 {% for ap in list %}
                                     {% if not ap.hidden %}
-                                        <span class="sidebar-link-wrap"
-                                              descr="{% trans ap.descr %}"
-                                              id="{{ ap.slug }}">
-                                            <a class="sidebar-link" href="{% url ap.slug %}">{% trans ap.name %}</a>
-                                            <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
-                                        </span>
+                                        {% if association.old_menu_appearance or not forloop.first %}
+                                            <span class="sidebar-link-wrap"
+                                                  descr="{% trans ap.descr %}"
+                                                  id="{{ ap.slug }}">
+                                                <a class="sidebar-link" href="{% url ap.slug %}">{% trans ap.name %}</a>
+                                                <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                            </span>
+                                        {% endif %}
                                     {% endif %}
                                 {% endfor %}
                             </p>

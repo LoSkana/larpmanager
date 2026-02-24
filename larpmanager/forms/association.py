@@ -459,6 +459,11 @@ class ExeConfigForm(ConfigForm):
         past_events_help_text = _("If checked: shows the old interface")
         self.add_configs("old_form_appearance", ConfigType.BOOL, past_events_label, past_events_help_text)
 
+        # Configure old menu
+        past_events_label = _("Old menu")
+        past_events_help_text = _("If checked: shows the old menu")
+        self.add_configs("old_menu_appearance", ConfigType.BOOL, past_events_label, past_events_help_text)
+
     def set_config_email(self) -> None:
         """Configure email notification preferences."""
         self.set_section("email", _("Email notifications"))

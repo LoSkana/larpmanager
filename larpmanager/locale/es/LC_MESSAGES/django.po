@@ -522,6 +522,9 @@ msgstr "Detalle"
 msgid "Direct"
 msgstr "Directo"
 
+msgid "E-mail"
+msgstr "Correo electrónico"
+
 msgid "Emails"
 msgstr "Correos electrónicos"
 
@@ -1143,6 +1146,9 @@ msgstr "Nuevo regalo"
 msgid "Nickname"
 msgstr "Apodo"
 
+msgid "Old menu"
+msgstr "Menú antiguo"
+
 msgid "One-Time"
 msgstr "Una sola vez"
 
@@ -1739,6 +1745,9 @@ msgstr "Dos plazos"
 
 msgid "User agent"
 msgstr "Agente de usuario"
+
+msgid "Users data"
+msgstr "Datos de los usuarios"
 
 msgid "Visibility"
 msgstr "Visibilidad"
@@ -2659,9 +2668,6 @@ msgstr "Tipo de devolución"
 
 msgid "Select ability"
 msgstr "Seleccionar habilidad"
-
-msgid "Sensitive data"
-msgstr "Datos sensibles"
 
 msgid "Session active"
 msgstr "Sesión activa"
@@ -4869,6 +4875,9 @@ msgstr "Retraso en la cuota anual de afiliación"
 msgid "Duration in seconds (optional)"
 msgstr "Duración en segundos (opcional)"
 
+msgid "If checked: shows the old menu"
+msgstr "Si está marcada: muestra el menú antiguo"
+
 msgid "Manage issues during the event"
 msgstr "Gestionar los problemas durante el acto"
 
@@ -5278,6 +5287,9 @@ msgstr "¡Inscripción actualizada a %(event)s!"
 msgid "Registrations opening at: %(date)s"
 msgstr "Apertura de inscripciones en: %(date)s"
 
+msgid "Review participants' personal data"
+msgstr "Revisar los datos personales de los participantes"
+
 msgid "Secretarial - stationery, printing"
 msgstr "Papelería - suministros, impresión"
 
@@ -5388,9 +5400,6 @@ msgstr "Exigir recibo para los pagos manuales"
 
 msgid "Review historical financial records"
 msgstr "Revisar los registros financieros históricos"
-
-msgid "Review participants' sensitive data"
-msgstr "Revisar los datos sensibles de los participantes"
 
 msgid "Set up the membership configuration"
 msgstr "Establecer la configuración de afiliación"

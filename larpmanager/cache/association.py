@@ -137,7 +137,13 @@ def init_cache_association(a_slug: str) -> dict | None:
 
     # Add configs
     temp_context = {}
-    for config in ["user_characters_shortcut", "user_registrations_shortcut", "old_form_appearance", "old_dashboard"]:
+    for config in [
+        "user_characters_shortcut",
+        "user_registrations_shortcut",
+        "old_form_appearance",
+        "old_dashboard",
+        "old_menu_appearance",
+    ]:
         association_dict[config] = get_association_config(
             association.id, config, default_value=False, context=temp_context
         )
