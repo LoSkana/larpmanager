@@ -126,7 +126,7 @@ def reading(live_server: Any, page: Any) -> None:
 
 def relationships(live_server: Any, page: Any) -> None:
     # create second character
-    page.get_by_role("link", name="Characters", exact=True).click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("prova")
