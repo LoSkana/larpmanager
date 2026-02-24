@@ -233,7 +233,7 @@
     name: Quest type
     descr: Manage the type of event quests
     slug: orga_quest_types
-    number: 21
+    number: 51
     config: null
     hidden: false
     feature: questbuilder
@@ -493,7 +493,7 @@
     name: Ability type
     descr: Manage the type of character skills
     slug: orga_px_ability_types
-    number: 41
+    number: 81
     config: px
     hidden: false
     feature: px
