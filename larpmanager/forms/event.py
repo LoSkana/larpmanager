@@ -1351,7 +1351,7 @@ class OrgaRunForm(ConfigForm):
         Sets up various event features and their configuration options
         based on enabled features for character management.
         """
-        if "character" not in self.params["features"]:
+        if "character" not in self.params["features"] or "event" not in self.params:
             return
 
         if not get_event_config(
