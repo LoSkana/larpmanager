@@ -831,9 +831,6 @@ msgstr "Máximo"
 msgid "Members"
 msgstr "Miembros"
 
-msgid "Methods"
-msgstr "Métodos"
-
 msgid "Modules"
 msgstr "Módulos"
 
