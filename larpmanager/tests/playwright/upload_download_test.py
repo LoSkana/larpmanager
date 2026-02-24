@@ -38,7 +38,7 @@ from larpmanager.tests.utils import (
     login_orga,
     submit_confirm,
     upload,
-    expect_normalized,
+    expect_normalized, sidebar,
 )
 
 pytestmark = pytest.mark.e2e

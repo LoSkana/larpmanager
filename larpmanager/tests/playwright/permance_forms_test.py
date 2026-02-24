@@ -29,7 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, check_feature, go_to, login_orga, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, check_feature, go_to, login_orga, submit_confirm, expect_normalized, \
+    sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -66,11 +67,11 @@ def check_orga_visibility(page: Any) -> None:
     page.get_by_role("link", name=re.compile(r"^Writing ")).click()
     page.locator("#id_writing_field_visibility").check()
     submit_confirm(page)
-    page.sidebar(page, "Event").click()
+    sidebar(page, "Event")
     page.locator("#id_form2-show_character_0").check()
     page.locator("#id_form2-show_character_2").check()
     submit_confirm(page)
-    page.sidebar(page, "Event").click()
+    sidebar(page, "Event")
     expect(page.locator("#id_form2-show_character_0")).to_be_checked()
     expect(page.locator("#id_form2-show_character_2")).to_be_checked()
     expect(page.locator("#id_form2-show_character_1")).not_to_be_checked()

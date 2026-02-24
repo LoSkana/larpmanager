@@ -39,7 +39,7 @@ from larpmanager.tests.utils import (
     login_orga,
     login_user,
     logout,
-    submit_confirm, new_option, submit_option,
+    submit_confirm, new_option, submit_option, sidebar,
 )
 
 pytestmark = pytest.mark.e2e

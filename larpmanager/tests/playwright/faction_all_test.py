@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (
     login_orga,
     login_user,
     logout,
-    submit_confirm,
+    submit_confirm, sidebar,
 )
 
 pytestmark = pytest.mark.e2e
@@ -255,7 +255,7 @@ def test_faction_all(pw_page: Any) -> None:
 
     # Navigate to characters list
     go_to(page, live_server, "/test/manage/")
-    page.sidebar(page, "Registrations").click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").nth(1).fill("user")
