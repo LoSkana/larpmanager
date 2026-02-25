@@ -111,20 +111,11 @@
                         {% for mod, list in event_pms.items %}
                             {% if list %}
                                 <div class="sidebar-section">
-                                    {% with first_ap=list|first %}
-                                        <a class="sidebar-link module"
-                                           href="{% url first_ap.slug run.get_slug %}">
-                                            <i class="fa-solid fa-{{ first_ap.icon }}"></i>
-                                            <span class="no_mobile">{% trans first_ap.name %}</span>
-                                        </a>
-                                    {% endwith %}
                                     {% for ap in list %}
                                         {% if not ap.hidden %}
-                                            {% if not forloop.first %}
-                                                <a class="sidebar-link" href="{% url ap.slug run.get_slug %}">
-                                                    <i class="fa-solid fa-{{ ap.icon }}"></i>
-                                                    <span>{% trans ap.name %}</span></a>
-                                            {% endif %}
+                                            <a class="sidebar-link" href="{% url ap.slug run.get_slug %}">
+                                                <i class="fa-solid fa-{{ ap.icon }}"></i>
+                                                <span>{% trans ap.name %}</span></a>
                                         {% endif %}
                                     {% endfor %}
                                 </div>
@@ -136,19 +127,11 @@
                         {% for mod, list in association_pms.items %}
                             {% if list %}
                                 <div class="sidebar-section">
-                                    {% with first_ap=list|first %}
-                                        <a class="sidebar-link" href="{% url first_ap.slug %}">
-                                            <i class="fa-solid fa-{{ first_ap.icon }}"></i>
-                                            <span class="no_mobile">{% trans first_ap.name %}</span>
-                                        </a>
-                                    {% endwith %}
                                     {% for ap in list %}
                                         {% if not ap.hidden %}
-                                            {% if not forloop.first %}
-                                                <a class="sidebar-link" href="{% url ap.slug %}">
-                                                    <i class="fa-solid fa-{{ ap.icon }}"></i>
-                                                    <span>{% trans ap.name %}</span></a>
-                                            {% endif %}
+                                            <a class="sidebar-link" href="{% url ap.slug %}">
+                                                <i class="fa-solid fa-{{ ap.icon }}"></i>
+                                                <span>{% trans ap.name %}</span></a>
                                         {% endif %}
                                     {% endfor %}
                                 </div>
