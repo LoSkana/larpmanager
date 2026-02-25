@@ -808,7 +808,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
         writing_typ = self.params.get("writing_typ")
         if writing_typ:
             label = QuestionApplicable(writing_typ).label.capitalize()
-            self.page_title += " - " + label
+            self.page_title = label + " " + _("Sheet")
 
         self._init_type()
 

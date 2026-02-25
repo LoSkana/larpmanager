@@ -228,7 +228,7 @@
     hidden: false
     feature: character
     module: writing
-    icon: person
+    icon: theater-masks
 - model: larpmanager.eventpermission
   fields:
     name: Plots
@@ -713,7 +713,7 @@
     hidden: false
     feature: character
     module: writing
-    icon: pen-to-square
+    icon: scroll
 - model: larpmanager.eventpermission
   fields:
     name: Archive

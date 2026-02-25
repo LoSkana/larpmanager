@@ -478,6 +478,17 @@ function show_sidebar_active() {
       }
     });
 
+    // scroll sidebar to center the active link
+    var $active = $('.sidebar-link.select').first();
+    if ($active.length) {
+      var $sidebar = $('#sidebar');
+      var sidebarScrollTop = $sidebar.scrollTop();
+      var sidebarHeight = $sidebar.height();
+      var itemTop = $active.offset().top - $sidebar.offset().top + sidebarScrollTop;
+      var itemHeight = $active.outerHeight();
+      $sidebar.scrollTop(itemTop - (sidebarHeight - itemHeight) / 2);
+    }
+
 }
 
 function data_tables() {

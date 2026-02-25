@@ -289,6 +289,9 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
         if feature_name != "def" and feature_name not in context["features"]:
             raise FeatureError(path=request.path, feature=feature_name, run=context["run"].id)
 
+        # Mark active sidebar entry for redirect-style views
+        context["sidebar_active"] = permission_slug
+
     # Load additional event permissions and management context
     get_index_event_permissions(request, context, event_slug)
 
