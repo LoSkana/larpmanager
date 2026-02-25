@@ -60,7 +60,7 @@ def test_orga_character_form(pw_page: Any) -> None:
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     page.locator("#id_user_character_approval").check()
-    page.get_by_role("link", name=re.compile(r"^Character sheet")).click()
+    page.get_by_role("link", name=re.compile(r"^Character Sheet")).click()
     page.locator("#id_character_form_wri_que_max").check()
     submit_confirm(page)
 
