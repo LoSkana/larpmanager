@@ -956,7 +956,7 @@ msgstr ""
 msgid "Manage form questions for writing elements"
 msgstr ""
 
-msgid "Writing Questions"
+msgid "Writing Form"
 msgstr ""
 
 msgid "Manage options in form questions for writing elements"
@@ -2120,7 +2120,7 @@ msgstr ""
 msgid "Manage signup form questions"
 msgstr ""
 
-msgid "Registration questions"
+msgid "Registration form"
 msgstr ""
 
 msgid "--- Empty"
@@ -3091,10 +3091,13 @@ msgstr ""
 msgid "Overall balance"
 msgstr ""
 
+msgid "Hidden"
+msgstr ""
+
 msgid "Optional"
 msgstr ""
 
-msgid "Mandatory"
+msgid "Required"
 msgstr ""
 
 msgid "Free"
@@ -3296,12 +3299,14 @@ msgstr ""
 msgid "Association Translations"
 msgstr ""
 
-msgid "Italy"
-msgstr ""
-
 msgid ""
 "Logo image (you can upload a file of any size, it will be resized "
 "automatically)"
+msgstr ""
+
+msgid ""
+"If set, this payment method is only available for organizations of this "
+"country"
 msgstr ""
 
 msgid "Descriptive name for this API key"
@@ -3437,9 +3442,6 @@ msgstr ""
 msgid "Terms and conditions"
 msgstr ""
 
-msgid "Registration form"
-msgstr ""
-
 msgid "Search"
 msgstr ""
 
@@ -3456,9 +3458,6 @@ msgid "Approved character"
 msgstr ""
 
 msgid "Character review"
-msgstr ""
-
-msgid "Hidden"
 msgstr ""
 
 msgid "Visible"
@@ -3627,6 +3626,9 @@ msgid "Pay what you want"
 msgstr ""
 
 msgid "Rate"
+msgstr ""
+
+msgid "Mandatory"
 msgstr ""
 
 msgid "Disabled"
@@ -4889,6 +4891,11 @@ msgstr ""
 msgid ""
 "For each character added, a specific field will be available to add "
 "additional plot information"
+msgstr ""
+
+msgid ""
+"Select which information participants must provide during registration: "
+"either Required, Optional or Hidden"
 msgstr ""
 
 msgid "You can only add users who approved data sharing with the organization"
@@ -7633,6 +7640,9 @@ msgstr ""
 msgid "Discounts available"
 msgstr ""
 
+msgid "Registration questions"
+msgstr ""
+
 msgid ""
 "This page shows the available questions of the registration form of the event"
 msgstr ""
@@ -8362,6 +8372,9 @@ msgid "Move down"
 msgstr ""
 
 msgid "Miscellany"
+msgstr ""
+
+msgid "Italy"
 msgstr ""
 
 msgid ""

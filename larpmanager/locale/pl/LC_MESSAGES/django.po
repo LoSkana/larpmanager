@@ -1236,6 +1236,9 @@ msgstr "Przypomnienie"
 msgid "Reply To"
 msgstr "Odpowiedzieć do"
 
+msgid "Required"
+msgstr "Wymagane"
+
 msgid "Resource"
 msgstr "Zasoby"
 
@@ -2249,6 +2252,9 @@ msgstr "Nadchodzimy"
 
 msgid "Will open at"
 msgstr "Otwarcie nastąpi o godz"
+
+msgid "Writing Form"
+msgstr "Formularz zapisu"
 
 msgid "You must pay"
 msgstr "Musisz zapłacić"
@@ -3358,9 +3364,6 @@ msgstr "Zweryfikowane płatności"
 
 msgid "Vote not yet open"
 msgstr "Głosowanie nie jest jeszcze otwarte"
-
-msgid "Writing Questions"
-msgstr "Pisanie pytań"
 
 msgid "Your character is"
 msgstr "Twoja postać to"
@@ -8961,6 +8964,13 @@ msgstr ""
 "Aktywowałeś następujące funkcje, dla każdej z nich są linki do naśladowania"
 
 msgid ""
+"If set, this payment method is only available for organizations of this "
+"country"
+msgstr ""
+"Jeśli jest ustawiona, ta metoda płatności jest dostępna tylko dla "
+"organizacji z tego kraju"
+
+msgid ""
 "Optional - Amount added to the registration fee if selected (0 = no extra "
 "cost)"
 msgstr ""
@@ -10702,6 +10712,13 @@ msgid ""
 msgstr ""
 "Od czasu do czasu wyświetla użytkownikom specjalną stronę na podstawie "
 "określonego prawdopodobieństwa i opcjonalnie przypisuje wynik"
+
+msgid ""
+"Select which information participants must provide during registration: "
+"either Required, Optional or Hidden"
+msgstr ""
+"Wybierz, które informacje uczestnicy muszą podać podczas rejestracji: "
+"wymagane, opcjonalne lub ukryte"
 
 msgid ""
 "Upload a custom font file for page titles to match your organization's "

@@ -1236,6 +1236,9 @@ msgstr "Připomínka"
 msgid "Reply To"
 msgstr "Odpovědět na"
 
+msgid "Required"
+msgstr "Požadované"
+
 msgid "Resource"
 msgstr "Zdroje"
 
@@ -2249,6 +2252,9 @@ msgstr "Přicházíme"
 
 msgid "Will open at"
 msgstr "Otevírají se v"
+
+msgid "Writing Form"
+msgstr "Forma psaní"
 
 msgid "You must pay"
 msgstr "Musíte zaplatit"
@@ -3358,9 +3364,6 @@ msgstr "Ověřené platby"
 
 msgid "Vote not yet open"
 msgstr "Hlasování ještě není otevřeno"
-
-msgid "Writing Questions"
-msgstr "Psaní otázek"
 
 msgid "Your character is"
 msgstr "Vaše postava je"
@@ -8814,6 +8817,13 @@ msgstr ""
 "které je třeba sledovat"
 
 msgid ""
+"If set, this payment method is only available for organizations of this "
+"country"
+msgstr ""
+"Pokud je nastaveno, je tento způsob platby k dispozici pouze pro organizace "
+"této země"
+
+msgid ""
 "Optional - Amount added to the registration fee if selected (0 = no extra "
 "cost)"
 msgstr ""
@@ -10508,6 +10518,13 @@ msgid ""
 msgstr ""
 "Příležitostně zobrazí uživatelům speciální stránku na základě definované "
 "pravděpodobnosti a volitelně přiřadí výsledek"
+
+msgid ""
+"Select which information participants must provide during registration: "
+"either Required, Optional or Hidden"
+msgstr ""
+"Vyberte, které informace musí účastníci při registraci poskytnout: povinné, "
+"nepovinné nebo skryté"
 
 msgid ""
 "Upload a custom font file for page titles to match your organization's "

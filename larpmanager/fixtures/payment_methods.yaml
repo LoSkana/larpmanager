@@ -74,6 +74,7 @@
     fields: merchant_code, merchant_terminal, merchant_currency, secret_key, sandbox,
       merchant_paymethods
     profile: payment_methods/d313edf6dff84bd0834b3ed32dbc1475.png
+    nationality: es
 - model: larpmanager.paymentmethod
   fields:
     name: Paypal (manual)
@@ -94,3 +95,4 @@
       using the authentication token provided by your Dashboard</p>'
     fields: key_id
     profile: payment_methods/24037547097e4bd3b530de38eaaf4ce3.png
+    nationality: it

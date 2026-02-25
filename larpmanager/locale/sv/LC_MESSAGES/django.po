@@ -1236,6 +1236,9 @@ msgstr "Påminnelse"
 msgid "Reply To"
 msgstr "Svara på"
 
+msgid "Required"
+msgstr "Krävs"
+
 msgid "Resource"
 msgstr "Resurs"
 
@@ -2249,6 +2252,9 @@ msgstr "Vi är på väg"
 
 msgid "Will open at"
 msgstr "De kommer att öppna kl"
+
+msgid "Writing Form"
+msgstr "Skrivform"
 
 msgid "You must pay"
 msgstr "Du måste betala"
@@ -3358,9 +3364,6 @@ msgstr "Verifierade betalningar"
 
 msgid "Vote not yet open"
 msgstr "Omröstningen är ännu inte inledd"
-
-msgid "Writing Questions"
-msgstr "Skriva frågor"
 
 msgid "Your character is"
 msgstr "Din karaktär är"
@@ -8890,6 +8893,13 @@ msgstr ""
 "att följa"
 
 msgid ""
+"If set, this payment method is only available for organizations of this "
+"country"
+msgstr ""
+"Om den är inställd är denna betalningsmetod endast tillgänglig för "
+"organisationer i detta land"
+
+msgid ""
 "Optional - Amount added to the registration fee if selected (0 = no extra "
 "cost)"
 msgstr ""
@@ -10633,6 +10643,13 @@ msgid ""
 msgstr ""
 "Visar ibland en speciell sida för användare, baserat på en definierad "
 "sannolikhet, och tilldelar eventuellt ett resultat"
+
+msgid ""
+"Select which information participants must provide during registration: "
+"either Required, Optional or Hidden"
+msgstr ""
+"Välj vilken information deltagarna måste lämna vid registreringen: antingen "
+"Obligatorisk, Valfri eller Dold"
 
 msgid ""
 "Upload a custom font file for page titles to match your organization's "

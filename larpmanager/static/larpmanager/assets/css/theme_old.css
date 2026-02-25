@@ -148,40 +148,6 @@ body {
   border-bottom: 1.5px dashed rgba(var(--pri-rgb), 0.8);
 }
 
-#sidebar .new-menu {
-  padding-top: 0.5em;
-}
-
-#sidebar a {
-  padding: 0.15em 0.45em;
-  display: block;
-}
-
-#sidebar .new-menu a.sidebar-link {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-}
-
-#sidebar .new-menu a.sidebar-link i {
-  width: 1.1em;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-#sidebar .new-menu a.select {
-  border-bottom: none;
-  background-color: rgba(var(--pri-rgb), 0.8);
-  color: rgba(var(--sec-rgb), 0.8);
-  border-radius: 0.4em;
-}
-
-#sidebar .new-menu .sidebar-section {
-  border-top: 1px solid rgba(var(--pri-rgb), 0.1);
-  margin: 0.4em 0;
-  padding: 0.2em 0;
-}
-
 /* Topbar + page-wrapper integration */
 #sidebar.topbar,
 #page-wrapper.topbar,
@@ -222,6 +188,7 @@ body {
     flex-shrink: 0;
   }
 
+  .inner .no_mobile,
   #topbar .no_mobile,
   #sidebar .no_mobile {
     display: none !important;
@@ -310,6 +277,11 @@ body {
   .new_form #topbar table.mobile {
     width: 100%;
   }
+}
+
+#right_bar {
+  float: right;
+  margin-top: -3.7em;
 }
 
 /* ---------------------------------------------------------------------------
@@ -422,6 +394,37 @@ nav#sidebar-nav {
 .sidebar-link,
 .explain-icon {
   display: inline-block;
+  margin: 0;
+}
+
+#sidebar .new-menu {
+  padding-top: 0.5em;
+}
+
+#sidebar .new-menu a {
+  padding: 0.15em 0.45em;
+  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+#sidebar .new-menu a i {
+  width: 1.1em;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+#sidebar .new-menu a.select {
+  border-bottom: none;
+  background-color: rgba(var(--pri-rgb), 0.8);
+  color: rgba(var(--sec-rgb), 0.8);
+  border-radius: 0.4em;
+}
+
+#sidebar .new-menu .sidebar-section {
+  border-top: 1px solid rgba(var(--pri-rgb), 0.1);
+  padding: 0.2em 0;
   margin: 0;
 }
 
@@ -567,6 +570,15 @@ nav#sidebar-nav {
     -ms-transform: translateY(0);
     transform: translateY(0);
     opacity: 1;
+  }
+
+  #sidebar .new-menu {
+    padding: 0;
+    font-size: 90%;
+  }
+
+  #sidebar .new-menu a {
+    display: flex;
   }
 }
 

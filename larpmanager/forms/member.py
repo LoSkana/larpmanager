@@ -52,7 +52,6 @@ from larpmanager.forms.utils import (
 )
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.association import Association, MemberFieldType
-from larpmanager.models.base import BaseModel, FeatureNationality
 from larpmanager.models.member import (
     Badge,
     Member,
@@ -69,6 +68,8 @@ from larpmanager.utils.larpmanager.tasks import my_send_mail
 if TYPE_CHECKING:
     from collections.abc import Generator
     from datetime import date
+
+    from larpmanager.models.base import BaseModel
 
 logger = logging.getLogger(__name__)
 
@@ -955,6 +956,8 @@ class ExeProfileForm(BaseModelForm):
 
     page_info = _("Select the personal data fields to be requested from participants during registration")
 
+    load_templates: ClassVar[list] = ["profile"]
+
     class Meta:
         model = Association
         fields = ()
@@ -995,7 +998,7 @@ class ExeProfileForm(BaseModelForm):
 
             self.initial[slug] = init
 
-        if self.instance.nationality != FeatureNationality.ITALY:
+        if self.instance.nationality != "it":
             self.delete_field("fiscal_code")
 
     @staticmethod

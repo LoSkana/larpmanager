@@ -150,22 +150,10 @@
                         </div>
                     {% endif %}
                     {% if association.skin_id == 1 %}
-                        <div>
-                            <p class="centerized">
-                                <a href="https://discord.gg/C4KuyQbuft" class="sidebar-link">Discord</a>
-                            </p>
-                        </div>
-                        <div>
-                            <p class="centerized">
-                                <a href="{% url 'guides' %}" class="sidebar-link">Guides</a>
-                            </p>
-                        </div>
+                        <a href="https://discord.gg/C4KuyQbuft" class="sidebar-link">Discord</a>
+                        <a href="{% url 'guides' %}" class="sidebar-link">Guides</a>
                     {% endif %}
-                    <div>
-                        <p class="centerized">
-                            <a href="{% url 'tutorials' %}" class="sidebar-link">Tutorials</a>
-                        </p>
-                    </div>
+                    <a href="{% url 'tutorials' %}" class="sidebar-link">Tutorials</a>
                 </div>
             {% endif %}
         </div>

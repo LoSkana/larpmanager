@@ -786,7 +786,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
 
     page_info = _("Manage form questions for writing elements")
 
-    page_title = _("Writing Questions")
+    page_title = _("Writing Form")
 
     class Meta:
         model = WritingQuestion

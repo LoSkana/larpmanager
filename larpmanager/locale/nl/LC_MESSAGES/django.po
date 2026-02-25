@@ -1236,6 +1236,9 @@ msgstr "Herinnering"
 msgid "Reply To"
 msgstr "Antwoord op"
 
+msgid "Required"
+msgstr "Vereist"
+
 msgid "Resource"
 msgstr "Bron"
 
@@ -2249,6 +2252,9 @@ msgstr "We komen eraan"
 
 msgid "Will open at"
 msgstr "Ze gaan open op"
+
+msgid "Writing Form"
+msgstr "Schrijfvorm"
 
 msgid "You must pay"
 msgstr "U moet betalen"
@@ -3358,9 +3364,6 @@ msgstr "Geverifieerde betalingen"
 
 msgid "Vote not yet open"
 msgstr "Er kan nog niet gestemd worden"
-
-msgid "Writing Questions"
-msgstr "Vragen schrijven"
 
 msgid "Your character is"
 msgstr "Je personage is"
@@ -9047,6 +9050,13 @@ msgstr ""
 "volgen"
 
 msgid ""
+"If set, this payment method is only available for organizations of this "
+"country"
+msgstr ""
+"Indien ingesteld, is deze betaalmethode alleen beschikbaar voor organisaties"
+" in dit land"
+
+msgid ""
 "Optional - Amount added to the registration fee if selected (0 = no extra "
 "cost)"
 msgstr ""
@@ -10802,6 +10812,13 @@ msgid ""
 msgstr ""
 "Toont af en toe een speciale pagina aan gebruikers, gebaseerd op een "
 "gedefinieerde waarschijnlijkheid, en kent optioneel een resultaat toe"
+
+msgid ""
+"Select which information participants must provide during registration: "
+"either Required, Optional or Hidden"
+msgstr ""
+"Selecteer welke informatie deelnemers moeten verstrekken tijdens de "
+"registratie: Verplicht, Optioneel of Verborgen"
 
 msgid ""
 "Upload a custom font file for page titles to match your organization's "

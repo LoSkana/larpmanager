@@ -374,7 +374,8 @@ DEMO_HIDDEN_PERMISSIONS: frozenset[str] = frozenset(
         "exe_config",
         "exe_features",
         "exe_roles",
-        "exe_profile"
+        "exe_profile",
+        "exe_accounting",
         # Event-level
         "orga_send_mail",
         "orga_archive_email",
@@ -388,6 +389,7 @@ DEMO_HIDDEN_PERMISSIONS: frozenset[str] = frozenset(
         "orga_character_form",
         "orga_check",
         "orga_reading",
+        "orga_accounting",
     }
 )
 

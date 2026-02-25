@@ -1937,6 +1937,11 @@ header.sec h1 {
   display: inline-block;
 }
 
+#id_payment_methods div {
+  display: inline-block;
+  margin: 0.5em;
+}
+
 /* ---------------------------------------------------------------------------
    Dashboard & Manage
    --------------------------------------------------------------------------- */

@@ -1236,6 +1236,9 @@ msgstr "Muistutus"
 msgid "Reply To"
 msgstr "Reply To"
 
+msgid "Required"
+msgstr "Vaadittu"
+
 msgid "Resource"
 msgstr "Resurssit"
 
@@ -2249,6 +2252,9 @@ msgstr "Olemme tulossa"
 
 msgid "Will open at"
 msgstr "Avataan klo"
+
+msgid "Writing Form"
+msgstr "Kirjoituslomake"
 
 msgid "You must pay"
 msgstr "Sinun on maksettava"
@@ -3358,9 +3364,6 @@ msgstr "Tarkastetut maksut"
 
 msgid "Vote not yet open"
 msgstr "Äänestys ei ole vielä avoinna"
-
-msgid "Writing Questions"
-msgstr "Kirjoittaminen Kysymykset"
 
 msgid "Your character is"
 msgstr "Hahmosi on"
@@ -8893,6 +8896,13 @@ msgstr ""
 "seuraavat linkit"
 
 msgid ""
+"If set, this payment method is only available for organizations of this "
+"country"
+msgstr ""
+"Jos tämä maksutapa on asetettu, se on käytettävissä vain tämän maan "
+"organisaatioille"
+
+msgid ""
 "Optional - Amount added to the registration fee if selected (0 = no extra "
 "cost)"
 msgstr ""
@@ -10620,6 +10630,13 @@ msgid ""
 msgstr ""
 "Näyttää satunnaisesti käyttäjille erityisen sivun määritellyn "
 "todennäköisyyden perusteella ja määrittää valinnaisesti tuloksen"
+
+msgid ""
+"Select which information participants must provide during registration: "
+"either Required, Optional or Hidden"
+msgstr ""
+"Valitse, mitkä tiedot osallistujien on annettava rekisteröinnin aikana: joko"
+" pakolliset, valinnaiset tai piilotetut"
 
 msgid ""
 "Upload a custom font file for page titles to match your organization's "
