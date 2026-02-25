@@ -2699,9 +2699,6 @@ msgstr "Type terugkeer"
 msgid "Select ability"
 msgstr "Selecteer vermogen"
 
-msgid "Sensitive data"
-msgstr "Gevoelige gegevens"
-
 msgid "Session active"
 msgstr "Sessie actief"
 

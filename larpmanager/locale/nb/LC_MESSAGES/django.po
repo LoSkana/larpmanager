@@ -2699,9 +2699,6 @@ msgstr "Avkastningstype"
 msgid "Select ability"
 msgstr "Velg evne"
 
-msgid "Sensitive data"
-msgstr "Sensitive data"
-
 msgid "Session active"
 msgstr "Økt aktiv"
 

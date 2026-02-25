@@ -9111,6 +9111,9 @@ msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
 
+msgid "E-mail"
+msgstr ""
+
 msgid "Send e-mail"
 msgstr ""
 

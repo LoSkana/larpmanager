@@ -2699,9 +2699,6 @@ msgstr "Tipo restituzione"
 msgid "Select ability"
 msgstr "Seleziona l'abilità"
 
-msgid "Sensitive data"
-msgstr "Dati sensibili"
-
 msgid "Session active"
 msgstr "Sessione attiva"
 

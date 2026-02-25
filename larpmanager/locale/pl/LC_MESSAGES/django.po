@@ -2699,9 +2699,6 @@ msgstr "Typ zwrotu"
 msgid "Select ability"
 msgstr "Wybierz zdolność"
 
-msgid "Sensitive data"
-msgstr "Wrażliwe dane"
-
 msgid "Session active"
 msgstr "Sesja aktywna"
 

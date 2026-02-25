@@ -2699,9 +2699,6 @@ msgstr "Typ av retur"
 msgid "Select ability"
 msgstr "Välj förmåga"
 
-msgid "Sensitive data"
-msgstr "Känsliga uppgifter"
-
 msgid "Session active"
 msgstr "Session aktiv"
 

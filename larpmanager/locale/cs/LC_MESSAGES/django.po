@@ -2699,9 +2699,6 @@ msgstr "Typ návratu"
 msgid "Select ability"
 msgstr "Vybrat schopnost"
 
-msgid "Sensitive data"
-msgstr "Citlivé údaje"
-
 msgid "Session active"
 msgstr "Relace aktivní"
 
