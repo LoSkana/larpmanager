@@ -2603,9 +2603,6 @@ msgstr "Filen hittades inte"
 msgid "Final quantity"
 msgstr "Slutlig kvantitet"
 
-msgid "Form questions"
-msgstr "Formulärfrågor"
-
 msgid "Full returning"
 msgstr "Total avkastning"
 
@@ -2698,6 +2695,9 @@ msgstr "Typ av retur"
 
 msgid "Select ability"
 msgstr "Välj förmåga"
+
+msgid "Sensitive data"
+msgstr "Känsliga uppgifter"
 
 msgid "Session active"
 msgstr "Session aktiv"
@@ -4150,9 +4150,6 @@ msgstr "Anmälan bekräftad"
 
 msgid "Registration not found"
 msgstr "Registreringen hittades inte"
-
-msgid "Registration questions"
-msgstr "Tillämpningar"
 
 msgid "Registration surcharge"
 msgstr "Tillägg för inresa"

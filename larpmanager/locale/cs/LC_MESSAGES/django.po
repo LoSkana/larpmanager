@@ -2603,9 +2603,6 @@ msgstr "Soubor nebyl nalezen"
 msgid "Final quantity"
 msgstr "Konečné množství"
 
-msgid "Form questions"
-msgstr "Formulářové otázky"
-
 msgid "Full returning"
 msgstr "Celková návratnost"
 
@@ -2698,6 +2695,9 @@ msgstr "Typ návratu"
 
 msgid "Select ability"
 msgstr "Vybrat schopnost"
+
+msgid "Sensitive data"
+msgstr "Citlivé údaje"
 
 msgid "Session active"
 msgstr "Relace aktivní"
@@ -4150,9 +4150,6 @@ msgstr "Vstup potvrzen"
 
 msgid "Registration not found"
 msgstr "Registrace nebyla nalezena"
-
-msgid "Registration questions"
-msgstr "Aplikace"
 
 msgid "Registration surcharge"
 msgstr "Vstupní příplatek"

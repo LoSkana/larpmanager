@@ -2603,9 +2603,6 @@ msgstr "Fichier non trouvé"
 msgid "Final quantity"
 msgstr "Quantité finale"
 
-msgid "Form questions"
-msgstr "Questions de forme"
-
 msgid "Full returning"
 msgstr "Rendement total"
 
@@ -2698,6 +2695,9 @@ msgstr "Type de retour"
 
 msgid "Select ability"
 msgstr "Sélectionner la capacité"
+
+msgid "Sensitive data"
+msgstr "Données sensibles"
 
 msgid "Session active"
 msgstr "Session active"
@@ -4150,9 +4150,6 @@ msgstr "Entrée confirmée"
 
 msgid "Registration not found"
 msgstr "Enregistrement non trouvé"
-
-msgid "Registration questions"
-msgstr "Applications"
 
 msgid "Registration surcharge"
 msgstr "Supplément d'entrée"

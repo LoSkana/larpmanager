@@ -2603,9 +2603,6 @@ msgstr "Nie znaleziono pliku"
 msgid "Final quantity"
 msgstr "Ilość końcowa"
 
-msgid "Form questions"
-msgstr "Pytania dotyczące formularza"
-
 msgid "Full returning"
 msgstr "Pełny powrót"
 
@@ -2698,6 +2695,9 @@ msgstr "Typ zwrotu"
 
 msgid "Select ability"
 msgstr "Wybierz zdolność"
+
+msgid "Sensitive data"
+msgstr "Wrażliwe dane"
 
 msgid "Session active"
 msgstr "Sesja aktywna"
@@ -4150,9 +4150,6 @@ msgstr "Rejestracja potwierdzona"
 
 msgid "Registration not found"
 msgstr "Nie znaleziono rejestracji"
-
-msgid "Registration questions"
-msgstr "Pytania dotyczące rejestracji"
 
 msgid "Registration surcharge"
 msgstr "Dopłata za rejestrację"

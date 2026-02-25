@@ -2603,9 +2603,6 @@ msgstr "Tiedostoa ei löydy"
 msgid "Final quantity"
 msgstr "Lopullinen määrä"
 
-msgid "Form questions"
-msgstr "Lomakekysymykset"
-
 msgid "Full returning"
 msgstr "Täysi palautus"
 
@@ -2698,6 +2695,9 @@ msgstr "Palauttava tyyppi"
 
 msgid "Select ability"
 msgstr "Valitse kyky"
+
+msgid "Sensitive data"
+msgstr "Arkaluonteiset tiedot"
 
 msgid "Session active"
 msgstr "Istunto aktiivinen"
@@ -4150,9 +4150,6 @@ msgstr "Rekisteröinti vahvistettu"
 
 msgid "Registration not found"
 msgstr "Rekisteröintiä ei löydy"
-
-msgid "Registration questions"
-msgstr "Rekisteröintikysymykset"
 
 msgid "Registration surcharge"
 msgstr "Rekisteröintilisä"

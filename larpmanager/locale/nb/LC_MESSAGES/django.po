@@ -2603,9 +2603,6 @@ msgstr "Filen ble ikke funnet"
 msgid "Final quantity"
 msgstr "Endelig mengde"
 
-msgid "Form questions"
-msgstr "Skjema for spørsmål"
-
 msgid "Full returning"
 msgstr "Totalavkastning"
 
@@ -2698,6 +2695,9 @@ msgstr "Avkastningstype"
 
 msgid "Select ability"
 msgstr "Velg evne"
+
+msgid "Sensitive data"
+msgstr "Sensitive data"
 
 msgid "Session active"
 msgstr "Økt aktiv"
@@ -4150,9 +4150,6 @@ msgstr "Inngang bekreftet"
 
 msgid "Registration not found"
 msgstr "Registrering ikke funnet"
-
-msgid "Registration questions"
-msgstr "Bruksområder"
 
 msgid "Registration surcharge"
 msgstr "Inngangsavgift"

@@ -7379,9 +7379,6 @@ msgstr ""
 msgid "Email list"
 msgstr ""
 
-msgid "Form questions"
-msgstr ""
-
 msgid "This page summarises the available questions of the character form"
 msgstr ""
 
@@ -7635,9 +7632,6 @@ msgid "Discounts active"
 msgstr ""
 
 msgid "Discounts available"
-msgstr ""
-
-msgid "Registration questions"
 msgstr ""
 
 msgid ""
@@ -9109,9 +9103,6 @@ msgstr ""
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
-msgstr ""
-
-msgid "E-mail"
 msgstr ""
 
 msgid "Send e-mail"

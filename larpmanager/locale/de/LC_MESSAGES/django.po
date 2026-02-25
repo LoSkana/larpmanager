@@ -2603,9 +2603,6 @@ msgstr "Datei nicht gefunden"
 msgid "Final quantity"
 msgstr "Endgültige Menge"
 
-msgid "Form questions"
-msgstr "Fragen zum Formular"
-
 msgid "Full returning"
 msgstr "Gesamtrendite"
 
@@ -2698,6 +2695,9 @@ msgstr "Art der Rückgabe"
 
 msgid "Select ability"
 msgstr "Fähigkeit auswählen"
+
+msgid "Sensitive data"
+msgstr "Sensible Daten"
 
 msgid "Session active"
 msgstr "Sitzung aktiv"
@@ -4150,9 +4150,6 @@ msgstr "Eintrag bestätigt"
 
 msgid "Registration not found"
 msgstr "Registrierung nicht gefunden"
-
-msgid "Registration questions"
-msgstr "Anwendungen"
 
 msgid "Registration surcharge"
 msgstr "Einreise-Zuschlag"

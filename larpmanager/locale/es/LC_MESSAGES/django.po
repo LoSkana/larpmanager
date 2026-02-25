@@ -2603,9 +2603,6 @@ msgstr "Archivo no encontrado"
 msgid "Final quantity"
 msgstr "Cantidad final"
 
-msgid "Form questions"
-msgstr "Preguntas de formulario"
-
 msgid "Full returning"
 msgstr "Rentabilidad total"
 
@@ -2698,6 +2695,9 @@ msgstr "Tipo de devolución"
 
 msgid "Select ability"
 msgstr "Seleccionar habilidad"
+
+msgid "Sensitive data"
+msgstr "Datos sensibles"
 
 msgid "Session active"
 msgstr "Sesión activa"
@@ -4150,9 +4150,6 @@ msgstr "Entrada confirmada"
 
 msgid "Registration not found"
 msgstr "Registro no encontrado"
-
-msgid "Registration questions"
-msgstr "Aplicaciones"
 
 msgid "Registration surcharge"
 msgstr "Suplemento de inscripción"

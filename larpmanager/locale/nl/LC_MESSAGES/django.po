@@ -2603,9 +2603,6 @@ msgstr "Bestand niet gevonden"
 msgid "Final quantity"
 msgstr "Definitieve hoeveelheid"
 
-msgid "Form questions"
-msgstr "Formulier vragen"
-
 msgid "Full returning"
 msgstr "Totaal rendement"
 
@@ -2698,6 +2695,9 @@ msgstr "Type terugkeer"
 
 msgid "Select ability"
 msgstr "Selecteer vermogen"
+
+msgid "Sensitive data"
+msgstr "Gevoelige gegevens"
 
 msgid "Session active"
 msgstr "Sessie actief"
@@ -4150,9 +4150,6 @@ msgstr "Toegang bevestigd"
 
 msgid "Registration not found"
 msgstr "Registratie niet gevonden"
-
-msgid "Registration questions"
-msgstr "Toepassingen"
 
 msgid "Registration surcharge"
 msgstr "Toeslag"
