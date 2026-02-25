@@ -1469,3 +1469,16 @@
     after_link: config/app_integration
     hidden: false
     module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Payment Invoices
+    descr: Pseudo-feature activated by payment_invoices configuration to show invoice
+      approval menu item
+    slug: payment_invoices
+    overall: true
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: accounting

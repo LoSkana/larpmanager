@@ -27,7 +27,7 @@ from django.utils.translation import gettext_lazy as _
 if TYPE_CHECKING:
     from django.http import HttpRequest
 
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.permission import (
     get_association_permission_feature,
@@ -97,7 +97,7 @@ def get_association_roles(request: HttpRequest, context: dict) -> tuple[bool, di
     return is_admin, permissions, role_names
 
 
-def has_association_permission(request: HttpRequest, context: dict, permission: str) -> bool:
+def has_association_permission(request: HttpRequest, context: dict, permission: str | list[str]) -> bool:
     """Check if the user has the specified association permission.
 
     Args:
@@ -132,7 +132,11 @@ def has_association_permission(request: HttpRequest, context: dict, permission: 
     if not permission:
         return True
 
-    # Check if user has the specific permission
+    # Handle multiple permissions (list)
+    if isinstance(permission, list):
+        return any(p in user_permissions for p in permission)
+
+    # Check single permission
     return permission in user_permissions
 
 
@@ -359,7 +363,7 @@ def check_managed(context: dict, permission: str, *, is_association: bool = True
     return placeholder == "def"
 
 
-def get_index_permissions(
+def get_index_permissions(  # noqa: C901
     context: dict,
     features: dict,
     permissions: dict,
@@ -406,9 +410,16 @@ def get_index_permissions(
             continue
 
         # Check config-dependent permissions
-        if permission_type == "event" and permission.get("active_if") and context.get("event"):
+        if permission.get("active_if"):
             config_key = permission["active_if"]
-            config_value = get_event_config(context["event"].id, config_key, default_value=False, context=context)
+            if permission_type == "event" and context.get("event"):
+                config_value = get_event_config(context["event"].id, config_key, default_value=False, context=context)
+            elif permission_type == "association" and context.get("association_id"):
+                config_value = get_association_config(
+                    context["association_id"], config_key, default_value=False, context=context
+                )
+            else:
+                config_value = False
             if not config_value:
                 continue
 

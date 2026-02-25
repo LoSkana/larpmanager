@@ -28,6 +28,8 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.balance import get_run_accounting
 from larpmanager.cache.config import get_association_config
 from larpmanager.forms.accounting import (
+    ExeInvoiceForm,
+    OrgaPaymentForm,
     OrgaPersonalExpenseForm,
 )
 from larpmanager.models.accounting import (
@@ -37,8 +39,10 @@ from larpmanager.models.accounting import (
     AccountingItemOutflow,
     AccountingItemPayment,
     Discount,
+    PaymentChoices,
     PaymentInvoice,
     PaymentStatus,
+    PaymentType,
 )
 from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_event_context
@@ -206,7 +210,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
 
     """
     # Check user permissions and get event context
-    context = check_event_context(request, event_slug, "orga_invoices")
+    context = check_event_context(request, event_slug, ["orga_payments", "orga_invoices"])
 
     # Retrieve the payment invoice by number
     backend_get(context, PaymentInvoice, invoice_uuid)
@@ -223,14 +227,24 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
     else:
         # Invoice already processed - show warning and redirect
         messages.warning(request, _("Receipt already confirmed") + ".")
-        return redirect("orga_invoices", event_slug=context["run"].get_slug())
+        return redirect("orga_payments", event_slug=context["run"].get_slug())
 
     # Save the updated invoice status
     context["el"].save()
 
     # Show success message and redirect to invoices list
     messages.success(request, _("Element approved") + "!")
-    return redirect("orga_invoices", event_slug=context["run"].get_slug())
+    return redirect("orga_payments", event_slug=context["run"].get_slug())
+
+
+@login_required
+def orga_invoices_delete(request: HttpRequest, event_slug: str, invoice_uuid: str) -> HttpResponse:
+    """Delete a payment invoice and redirect to payments."""
+    context = check_event_context(request, event_slug, ["orga_payments", "orga_invoices"])
+    backend_get(context, PaymentInvoice, invoice_uuid)
+    context["el"].delete()
+    messages.success(request, _("Operation completed") + "!")
+    return redirect("orga_payments", event_slug=context["run"].get_slug())
 
 
 @login_required
@@ -389,6 +403,17 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check user permissions for accessing organization payments
     context = check_event_context(request, event_slug, "orga_payments")
 
+    # Pending registration invoice approvals for this run
+    context["pending_invoices"] = (
+        PaymentInvoice.objects.filter(
+            registration__run=context["run"],
+            status=PaymentStatus.SUBMITTED,
+            typ=PaymentType.REGISTRATION,
+        )
+        .select_related("member", "method")
+        .order_by("-created")
+    )
+
     # Define base table fields for payment display
     fields = [
         ("member", _("Member")),
@@ -398,6 +423,7 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
         ("net", _("Net")),
         ("trans", _("Fee")),
         ("created", _("Date")),
+        ("receipt", _("Receipt")),
     ]
 
     # Add VAT fields if VAT feature is enabled
@@ -422,6 +448,9 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
+                "receipt": lambda el: f"<a href='{el.inv.download()}' target='_blank' download>{_('Download')}</a>"
+                if el.inv and el.inv.invoice and el.pay == PaymentChoices.MONEY
+                else "",
             },
             "delete_view": "orga_payments_delete",
         },
@@ -443,10 +472,66 @@ def orga_payments_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     return orga_new(request, event_slug, OrgaAction.PAYMENTS)
 
 
+def payment_edit(
+    request: HttpRequest,
+    context: dict,
+    payment_uuid: str,
+    payment_form_class: type,
+    redirect_fn: callable,
+) -> HttpResponse:
+    """Edit payment and its linked invoice in a combined form.
+
+    Args:
+        request: HTTP request object
+        context: Context dictionary (already initialized with permission check)
+        payment_uuid: UUID of the payment to edit
+        payment_form_class: Form class to use for the payment (ExePaymentForm or OrgaPaymentForm)
+        redirect_fn: Callable returning the redirect response on success
+
+    Returns:
+        HttpResponse with the edit form or redirect on success
+
+    """
+    backend_get(context, AccountingItemPayment, payment_uuid)
+    el = context["el"]
+    invoice = el.inv
+
+    if request.method == "POST":
+        payment_form = payment_form_class(request.POST, request.FILES, instance=el, context=context)
+        invoice_form = (
+            ExeInvoiceForm(request.POST, request.FILES, instance=invoice, context=context) if invoice else None
+        )
+
+        payment_valid = payment_form.is_valid()
+        invoice_valid = invoice_form.is_valid() if invoice_form else True
+
+        if payment_valid and invoice_valid:
+            payment_form.save()
+            if invoice_form:
+                invoice_form.save()
+            messages.success(request, _("Element saved") + "!")
+            return redirect_fn()
+
+        context["form1"] = payment_form
+        context["form2"] = invoice_form
+    else:
+        context["form1"] = payment_form_class(instance=el, context=context)
+        context["form2"] = ExeInvoiceForm(instance=invoice, context=context) if invoice else None
+
+    return render(request, "larpmanager/orga/edit_multi.html", context)
+
+
 @login_required
 def orga_payments_edit(request: HttpRequest, event_slug: str, payment_uuid: str) -> HttpResponse:
-    """Edit an existing payment for an event."""
-    return orga_edit(request, event_slug, OrgaAction.PAYMENTS, payment_uuid)
+    """Edit payment and its linked invoice (if present) in a combined form."""
+    context = check_event_context(request, event_slug, "orga_payments")
+    return payment_edit(
+        request,
+        context,
+        payment_uuid,
+        OrgaPaymentForm,
+        lambda: redirect("orga_payments", context["run"].get_slug()),
+    )
 
 
 @login_required

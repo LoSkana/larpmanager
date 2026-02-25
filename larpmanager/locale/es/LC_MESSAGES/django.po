@@ -1497,6 +1497,9 @@ msgstr "Almacén"
 msgid "Workshops"
 msgstr "Talleres"
 
+msgid "donations"
+msgstr "donativos"
+
 msgid "negatives"
 msgstr "negativos"
 
@@ -1995,6 +1998,9 @@ msgstr "Dónde está"
 msgid "assignments"
 msgstr "tareas"
 
+msgid "collections"
+msgstr "colecciones"
+
 msgid "immediately"
 msgstr "inmediatamente"
 
@@ -2302,6 +2308,9 @@ msgstr "Tipo de documento"
 msgid "Dynamic rates"
 msgstr "Plazos dinámicos"
 
+msgid "Element saved"
+msgstr "Elemento guardado"
+
 msgid "Email Content"
 msgstr "Contenido del correo electrónico"
 
@@ -2514,7 +2523,7 @@ msgid "Carousel image"
 msgstr "Carrusel de imágenes"
 
 msgid "Character form"
-msgstr "Forma de carácter"
+msgstr "Forma de personaje"
 
 msgid "Character name"
 msgstr "Nombre del personaje"
@@ -2884,6 +2893,9 @@ msgstr "Tus personajes"
 
 msgid "expected within"
 msgstr "esperado dentro de"
+
+msgid "membership fees"
+msgstr "cuotas de afiliación"
 
 msgid "upcoming events"
 msgstr "Actos programados"
@@ -3339,7 +3351,7 @@ msgid "Allowed values are"
 msgstr "Los valores permitidos son"
 
 msgid "Approved character"
-msgstr "Carácter aprobado"
+msgstr "Personaje aprobado"
 
 msgid "Character portrait"
 msgstr "Retrato del personaje"
@@ -3408,7 +3420,7 @@ msgid "Preferences saved!"
 msgstr "¡Preferencias guardadas!"
 
 msgid "Proposed character"
-msgstr "Carácter propuesto"
+msgstr "Personaje propuesto"
 
 msgid "Reason for payment"
 msgstr "Motivo del pago"
@@ -3812,7 +3824,7 @@ msgid "Character not allowed"
 msgstr "Carácter no permitido"
 
 msgid "Character not visible"
-msgstr "Carácter no visible"
+msgstr "Personaje no visible"
 
 msgid "Character sheet intro"
 msgstr "Introducción de la hoja de personaje"
@@ -3967,6 +3979,9 @@ msgstr "Tareas de almacén"
 
 msgid "You have already paid"
 msgstr "Ya ha pagado"
+
+msgid "registration payments"
+msgstr "pagos de inscripción"
 
 msgid "submit your vote here"
 msgstr "¡envía tu voto aquí"
@@ -4175,7 +4190,7 @@ msgid "Early registration link"
 msgstr "Enlace de inscripción anticipada"
 
 msgid "Failed to add character"
-msgstr "Fallo al añadir carácter"
+msgstr "Fallo al añadir personaje"
 
 msgid "Indicate only if rate 0"
 msgstr "Indicar sólo si tasa 0"
@@ -4443,6 +4458,9 @@ msgstr "Opción guardada correctamente"
 
 msgid "Payment already confirmed"
 msgstr "Pago ya confirmado"
+
+msgid "Pending invoice approvals"
+msgstr "Aprobación de facturas pendientes"
 
 msgid "Pre-register to the event"
 msgstr "¡Preinscríbete al evento"
@@ -5026,7 +5044,7 @@ msgstr "Anulación por falta de perfil"
 
 #, python-format
 msgid "Character assigned for %(event)s"
-msgstr "Carácter asignado para %(event)s"
+msgstr "Personaje asignado para %(event)s"
 
 msgid "Copy elements from another event"
 msgstr "Copiar elementos de otro evento"
@@ -5515,7 +5533,7 @@ msgid "End date cannot be before start date!"
 msgstr "La fecha final no puede ser anterior a la fecha de inicio."
 
 msgid "Hide participants without a character"
-msgstr "Ocultar participantes sin carácter"
+msgstr "Ocultar participantes sin personaje"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Si está marcada, permite el nivel de entradas: Vendedor"
@@ -5673,7 +5691,7 @@ msgid "Completed module. Remaining: {number:d}"
 msgstr "Módulo completado. Restante: {number:d}"
 
 msgid "Create the first character of the event"
-msgstr "Crear el primer carácter del evento"
+msgstr "Crear el primer personaje del evento"
 
 msgid "Date from when the surcharge is applied"
 msgstr "Fecha a partir de la cual se aplica el recargo"
@@ -5841,7 +5859,7 @@ msgid "Your card number is: <b>%(number)03d</b>"
 msgstr "Su número de tarjeta es: <b>%(number)03d</b>"
 
 msgid "if the character belongs to this element"
-msgstr "si el carácter pertenece a este elemento"
+msgstr "si el personaje pertenece a este elemento"
 
 msgid "it will enable country-specific features"
 msgstr "permitirá funciones específicas para cada país"
@@ -6384,10 +6402,6 @@ msgid "There are <b>%(number)s</b> expenses to approve"
 msgstr "Hay <b>%(number)s</b> gastos que aprobar"
 
 #, python-format
-msgid "There are <b>%(number)s</b> payments to approve"
-msgstr "Hay <b>%(number)s</b> pagos por aprobar"
-
-#, python-format
 msgid "There are <b>%(number)s</b> questions to answer"
 msgstr "Hay <b>%(number)s</b> preguntas que responder"
 
@@ -6461,6 +6475,10 @@ msgstr "Revisar la información sobre seguridad de los participantes"
 
 msgid "The subscription plan associated with this event"
 msgstr "Plantilla opcional asociada a esta habilidad"
+
+#, python-format
+msgid "There are <b>%(number)s</b> %(label)s to approve"
+msgstr "Hay <b>%(number)s</b> %(label)s que aprobar"
 
 msgid "There are no new sessions scheduled at this time"
 msgstr "No hay nuevas sesiones programadas en este momento"
@@ -6599,7 +6617,7 @@ msgid "Manage the progress steps for the writing elements"
 msgstr "Gestionar las etapas de progreso de los elementos de escritura"
 
 msgid "Second character in the relationship (destination)"
-msgstr "Segundo carácter de la relación (destino)"
+msgstr "Segundo personaje de la relación (destino)"
 
 msgid "Select which of your characters you want to access"
 msgstr "Selecciona a cuál de tus personajes quieres acceder"
@@ -8299,7 +8317,7 @@ msgstr ""
 msgid ""
 "if the character does NOT belong to this element, but is only referenced"
 msgstr ""
-"si el carácter NO pertenece a este elemento, sino que sólo se hace "
+"si el personaje NO pertenece a este elemento, sino que sólo se hace "
 "referencia a él"
 
 msgid ""
@@ -8354,7 +8372,7 @@ msgstr ""
 msgid ""
 "Some activated features need the 'Character' feature, but it isn't active"
 msgstr ""
-"Algunas funciones activadas necesitan la función 'Carácter', pero no está "
+"Algunas funciones activadas necesitan la función 'Personaje', pero no está "
 "activa"
 
 msgid ""
@@ -8417,7 +8435,7 @@ msgstr ""
 msgid ""
 "Content of mail notifying participants of their character in review status"
 msgstr ""
-"Contenido del correo en el que se notifica a los participantes su carácter "
+"Contenido del correo en el que se notifica a los participantes su personaje "
 "en estado de revisión"
 
 msgid ""
@@ -8601,13 +8619,13 @@ msgstr ""
 msgid ""
 "Content of mail notifying participants of their character in approved status"
 msgstr ""
-"Contenido del correo en el que se notifica a los participantes su carácter "
+"Contenido del correo en el que se notifica a los participantes su personaje "
 "aprobado"
 
 msgid ""
 "Content of mail notifying participants of their character in proposed status"
 msgstr ""
-"Contenido del correo en el que se notifica a los participantes su carácter "
+"Contenido del correo en el que se notifica a los participantes su personaje "
 "en estado propuesto"
 
 msgid ""
@@ -9155,7 +9173,7 @@ msgid ""
 "Indicate the character options, which must be selected to make the skill "
 "available"
 msgstr ""
-"Indicar las opciones de carácter que deben seleccionarse para que la "
+"Indicar las opciones de personaje que deben seleccionarse para que la "
 "habilidad esté disponible"
 
 msgid ""
@@ -9431,6 +9449,13 @@ msgid ""
 msgstr ""
 "Si está marcada, elimina automáticamente el formato al pegar texto en el "
 "editor WYSIWYG"
+
+msgid ""
+"If checked, shows the invoice approval menu item to manually confirm "
+"payments received"
+msgstr ""
+"Si está marcada, muestra la opción de menú de aprobación de facturas para "
+"confirmar manualmente los pagos recibidos"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "
@@ -9927,8 +9952,8 @@ msgid ""
 "Disable the system that finds the character number when a special reference "
 "symbol is written"
 msgstr ""
-"Desactivar el sistema que encuentra el número de carácter cuando se escribe "
-"un símbolo de referencia especial"
+"Desactivar el sistema que encuentra el número de personaje cuando se escribe"
+" un símbolo de referencia especial"
 
 msgid ""
 "Enables field 'assigned', to track which staff member is responsible for "

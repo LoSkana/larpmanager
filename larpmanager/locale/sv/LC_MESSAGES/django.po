@@ -1497,6 +1497,9 @@ msgstr "Lagerlokal"
 msgid "Workshops"
 msgstr "Verkstäder"
 
+msgid "donations"
+msgstr "donationer"
+
 msgid "negatives"
 msgstr "negativ"
 
@@ -1995,6 +1998,9 @@ msgstr "Var det är"
 msgid "assignments"
 msgstr "Uppdrag"
 
+msgid "collections"
+msgstr "samlingar"
+
 msgid "immediately"
 msgstr "omedelbart"
 
@@ -2301,6 +2307,9 @@ msgstr "Typ av dokument"
 
 msgid "Dynamic rates"
 msgstr "Dynamiska priser"
+
+msgid "Element saved"
+msgstr "Element sparat"
 
 msgid "Email Content"
 msgstr "Innehåll i e-post"
@@ -2884,6 +2893,9 @@ msgstr "Dina karaktärer"
 
 msgid "expected within"
 msgstr "förväntas inom"
+
+msgid "membership fees"
+msgstr "medlemsavgifter"
 
 msgid "upcoming events"
 msgstr "Planerade händelser"
@@ -3968,6 +3980,9 @@ msgstr "Lageruppdrag"
 msgid "You have already paid"
 msgstr "Du har redan betalat"
 
+msgid "registration payments"
+msgstr "registreringsbetalningar"
+
 msgid "submit your vote here"
 msgstr "lämna din röst här"
 
@@ -4443,6 +4458,9 @@ msgstr "Alternativet sparades framgångsrikt"
 
 msgid "Payment already confirmed"
 msgstr "Betalning redan bekräftad"
+
+msgid "Pending invoice approvals"
+msgstr "Väntande fakturagodkännanden"
 
 msgid "Pre-register to the event"
 msgstr "Skriv upp dig på föranmälningslistan"
@@ -6382,10 +6400,6 @@ msgid "There are <b>%(number)s</b> expenses to approve"
 msgstr "Det finns <b>%(number)s</b> kostnader att godkänna"
 
 #, python-format
-msgid "There are <b>%(number)s</b> payments to approve"
-msgstr "Det finns <b>%(number)s</b> betalningar att godkänna"
-
-#, python-format
 msgid "There are <b>%(number)s</b> questions to answer"
 msgstr "Det finns <b>%(number)s</b> frågor att besvara"
 
@@ -6456,6 +6470,10 @@ msgstr "Granska deltagarnas säkerhetsrelaterade information"
 
 msgid "The subscription plan associated with this event"
 msgstr "Valfri mall som associeras med denna förmåga"
+
+#, python-format
+msgid "There are <b>%(number)s</b> %(label)s to approve"
+msgstr "Det finns <b>%(number)s</b> %(label)s att godkänna"
 
 msgid "There are no new sessions scheduled at this time"
 msgstr "Det finns inga nya sessioner inplanerade för närvarande"
@@ -9281,6 +9299,13 @@ msgid ""
 msgstr ""
 "Om markerad, tas formateringen automatiskt bort när du klistrar in text i "
 "WYSIWYG-redigeraren"
+
+msgid ""
+"If checked, shows the invoice approval menu item to manually confirm "
+"payments received"
+msgstr ""
+"Om markerad, visar menyalternativet för fakturagodkännande för att manuellt "
+"bekräfta mottagna betalningar"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "

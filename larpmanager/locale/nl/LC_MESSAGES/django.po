@@ -1497,6 +1497,9 @@ msgstr "Magazijn"
 msgid "Workshops"
 msgstr "Workshops"
 
+msgid "donations"
+msgstr "donaties"
+
 msgid "negatives"
 msgstr "negatieven"
 
@@ -1995,6 +1998,9 @@ msgstr "Waar het is"
 msgid "assignments"
 msgstr "opdrachten"
 
+msgid "collections"
+msgstr "collecties"
+
 msgid "immediately"
 msgstr "onmiddellijk"
 
@@ -2301,6 +2307,9 @@ msgstr "Type document"
 
 msgid "Dynamic rates"
 msgstr "Dynamische tarieven"
+
+msgid "Element saved"
+msgstr "Element opgeslagen"
 
 msgid "Email Content"
 msgstr "Inhoud e-mail"
@@ -2884,6 +2893,9 @@ msgstr "Uw personages"
 
 msgid "expected within"
 msgstr "verwacht binnen"
+
+msgid "membership fees"
+msgstr "lidmaatschapsgelden"
 
 msgid "upcoming events"
 msgstr "Geplande evenementen"
@@ -3968,6 +3980,9 @@ msgstr "Magazijn opdrachten"
 msgid "You have already paid"
 msgstr "U hebt al betaald"
 
+msgid "registration payments"
+msgstr "registratiebetalingen"
+
 msgid "submit your vote here"
 msgstr "breng hier je stem uit"
 
@@ -4443,6 +4458,9 @@ msgstr "Optie succesvol opgeslagen"
 
 msgid "Payment already confirmed"
 msgstr "Betaling al bevestigd"
+
+msgid "Pending invoice approvals"
+msgstr "In afwachting van factuurgoedkeuringen"
 
 msgid "Pre-register to the event"
 msgstr "Schrijf je in op de voorinschrijvingslijst"
@@ -6388,10 +6406,6 @@ msgid "There are <b>%(number)s</b> expenses to approve"
 msgstr "Er zijn <b>%(number)s</b> uitgaven om goed te keuren"
 
 #, python-format
-msgid "There are <b>%(number)s</b> payments to approve"
-msgstr "Er zijn <b>%(number)s</b> betalingen om goed te keuren"
-
-#, python-format
 msgid "There are <b>%(number)s</b> questions to answer"
 msgstr "Er zijn <b>%(number)s</b> vragen te beantwoorden"
 
@@ -6462,6 +6476,10 @@ msgstr "Veiligheidsgerelateerde informatie van deelnemers beoordelen"
 
 msgid "The subscription plan associated with this event"
 msgstr "Optioneel sjabloon voor deze vaardigheid"
+
+#, python-format
+msgid "There are <b>%(number)s</b> %(label)s to approve"
+msgstr "Er zijn <b>%(number)s</b> %(label)s om goed te keuren"
 
 msgid "There are no new sessions scheduled at this time"
 msgstr "Er zijn op dit moment geen nieuwe sessies gepland"
@@ -9442,6 +9460,13 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, wordt opmaak automatisch verwijderd wanneer "
 "tekst in de WYSIWYG-editor wordt geplakt"
+
+msgid ""
+"If checked, shows the invoice approval menu item to manually confirm "
+"payments received"
+msgstr ""
+"Als deze optie is aangevinkt, wordt het menu-item Factuurgoedkeuring "
+"weergegeven om ontvangen betalingen handmatig te bevestigen"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "

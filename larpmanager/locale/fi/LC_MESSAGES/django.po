@@ -1497,6 +1497,9 @@ msgstr "Varasto"
 msgid "Workshops"
 msgstr "Työpajat"
 
+msgid "donations"
+msgstr "lahjoitukset"
+
 msgid "negatives"
 msgstr "negatiivit"
 
@@ -1995,6 +1998,9 @@ msgstr "Missä se on"
 msgid "assignments"
 msgstr "tehtävät"
 
+msgid "collections"
+msgstr "kokoelmat"
+
 msgid "immediately"
 msgstr "välittömästi"
 
@@ -2301,6 +2307,9 @@ msgstr "Asiakirjan tyyppi"
 
 msgid "Dynamic rates"
 msgstr "Dynaamiset hinnat"
+
+msgid "Element saved"
+msgstr "Elementti tallennettu"
 
 msgid "Email Content"
 msgstr "Sähköpostin sisältö"
@@ -2884,6 +2893,9 @@ msgstr "Hahmosi"
 
 msgid "expected within"
 msgstr "odotettavissa"
+
+msgid "membership fees"
+msgstr "jäsenmaksut"
 
 msgid "upcoming events"
 msgstr "tulevat tapahtumat"
@@ -3968,6 +3980,9 @@ msgstr "Varastotehtävät"
 msgid "You have already paid"
 msgstr "Olet jo maksanut"
 
+msgid "registration payments"
+msgstr "rekisteröintimaksut"
+
 msgid "submit your vote here"
 msgstr "lähetä äänesi täällä"
 
@@ -4443,6 +4458,9 @@ msgstr "Vaihtoehto tallennettu onnistuneesti"
 
 msgid "Payment already confirmed"
 msgstr "Maksu on jo vahvistettu"
+
+msgid "Pending invoice approvals"
+msgstr "Vireillä olevat laskujen hyväksynnät"
 
 msgid "Pre-register to the event"
 msgstr "Ennakkorekisteröityminen tapahtumaan"
@@ -6381,10 +6399,6 @@ msgid "There are <b>%(number)s</b> expenses to approve"
 msgstr "Hyväksyttäviä kuluja on <b>%(number)s</b>"
 
 #, python-format
-msgid "There are <b>%(number)s</b> payments to approve"
-msgstr "Hyväksyttäviä maksuja on <b>%(number)s</b>"
-
-#, python-format
 msgid "There are <b>%(number)s</b> questions to answer"
 msgstr "On <b>%(number)s</b> kysymyksiä, joihin on vastattava"
 
@@ -6455,6 +6469,10 @@ msgstr "Tarkastellaan osallistujien turvallisuuteen liittyviä tietoja"
 
 msgid "The subscription plan associated with this event"
 msgstr "Tähän tapahtumaan liittyvä tilaussuunnitelma"
+
+#, python-format
+msgid "There are <b>%(number)s</b> %(label)s to approve"
+msgstr "Hyväksyttäviä on <b>%(number)s</b> %(label)s"
 
 msgid "There are no new sessions scheduled at this time"
 msgstr "Tällä hetkellä ei ole uusia istuntoja"
@@ -9283,6 +9301,13 @@ msgid ""
 msgstr ""
 "Jos valintamerkki on valittuna, muotoilu poistetaan automaattisesti, kun "
 "tekstiä liitetään WYSIWYG-editoriin"
+
+msgid ""
+"If checked, shows the invoice approval menu item to manually confirm "
+"payments received"
+msgstr ""
+"Jos valintaruutu on valittuna, näytetään laskun hyväksyntä -valikkokohta "
+"vastaanotettujen maksujen manuaalista vahvistamista varten"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "

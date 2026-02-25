@@ -393,6 +393,12 @@ $(document).ready(function() {
 
     setupConditionalFields();
 
+    // remove empty pageinfo
+    var $pageInfo = $('#page-info');
+    if ($pageInfo.length && !$pageInfo.attr('qtip').trim()) {
+        $pageInfo.remove();
+    }
+
     $(document).trigger("lm_ready");
 });
 
