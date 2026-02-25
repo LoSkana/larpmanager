@@ -94,7 +94,7 @@ def abilities(page: Any) -> None:
     page.locator("#id_px_user").check()
     submit_confirm(page)
 
-    page.locator("#orga_px_abilities").get_by_role("link", name="Ability", exact=True).click()
+    sidebar(page, "Ability")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     page.locator("#id_first").click()
@@ -164,7 +164,7 @@ def plots(live_server: Any, page: Any) -> None:
 
 
 def quest_trait(page: Any) -> None:
-    page.get_by_role("link", name="Quest", exact=True).click()
+    sidebar(page, "Quest")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     page.get_by_role("link", name="Quest type").click()
@@ -172,7 +172,7 @@ def quest_trait(page: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("bhbh")
     submit_confirm(page)
-    page.get_by_role("link", name="Quest", exact=True).click()
+    sidebar(page, "Quest")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("quest.csv"))

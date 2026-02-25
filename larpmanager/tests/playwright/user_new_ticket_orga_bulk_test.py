@@ -138,7 +138,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 
 def bulk_questbuilder(live_server: Any, page: Any) -> None:
     # create quest
-    page.get_by_role("link", name="Quest", exact=True).click()
+    sidebar(page, "Quest")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("q1")
@@ -157,7 +157,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # test bulk set quest
-    page.get_by_role("link", name="Quest", exact=True).click()
+    sidebar(page, "Quest")
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u1"]').get_by_role("cell", name="typ").click()
     page.get_by_role("link", name="Execute").click()
@@ -193,7 +193,7 @@ def bulk_px(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # create ability
-    page.get_by_role("link", name="Ability", exact=True).click()
+    sidebar(page, "Ability")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("swor")
