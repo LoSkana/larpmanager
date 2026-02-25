@@ -8,7 +8,7 @@
     hidden: false
     feature: orga_event
     module: event
-    icon: calendar
+    icon: calendar-days
 - model: larpmanager.eventpermission
   fields:
     name: Roles

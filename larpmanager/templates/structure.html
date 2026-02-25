@@ -154,7 +154,6 @@
         <script>
     var set_language_url = "{% url 'set_language' %}";
     var set_internaz = {{ set_internaz | default:"null" }};
-    window.interface_collapse_sidebar = {{ interface_collapse_sidebar | yesno:"true,false" }};
     window.enviro = "{{ request.enviro }}";
 
 window['icon_texts'] = {

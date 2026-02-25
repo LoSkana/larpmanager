@@ -238,7 +238,7 @@
     config: null
     hidden: false
     feature: pre_register
-    module: registration
+    module: events
     icon: user-clock
 - model: larpmanager.associationpermission
   fields:
@@ -249,7 +249,7 @@
     config: deadlines
     hidden: false
     feature: deadlines
-    module: registration
+    module: events
     icon: hourglass-half
 - model: larpmanager.associationpermission
   fields:

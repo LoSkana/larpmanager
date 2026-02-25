@@ -148,6 +148,40 @@ body {
   border-bottom: 1.5px dashed rgba(var(--pri-rgb), 0.8);
 }
 
+#sidebar .new-menu {
+  padding-top: 0.5em;
+}
+
+#sidebar a {
+  padding: 0.15em 0.45em;
+  display: block;
+}
+
+#sidebar .new-menu a.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+#sidebar .new-menu a.sidebar-link i {
+  width: 1.1em;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+#sidebar .new-menu a.select {
+  border-bottom: none;
+  background-color: rgba(var(--pri-rgb), 0.8);
+  color: rgba(var(--sec-rgb), 0.8);
+  border-radius: 0.4em;
+}
+
+#sidebar .new-menu .sidebar-section {
+  border-top: 1px solid rgba(var(--pri-rgb), 0.1);
+  margin: 0.4em 0;
+  padding: 0.2em 0;
+}
+
 /* Topbar + page-wrapper integration */
 #sidebar.topbar,
 #page-wrapper.topbar,

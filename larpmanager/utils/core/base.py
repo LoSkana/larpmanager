@@ -120,7 +120,7 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
         get_index_association_permissions(request, context, context["association_id"], enforce_check=False)
 
         # Add user interface preferences and staff status
-        for config_name in ["interface_new_ui", "interface_collapse_sidebar"]:
+        for config_name in ["interface_new_ui"]:
             context[config_name] = context["member"].get_config(config_name, default_value=False)
 
         context["is_staff"] = request.user.is_staff
