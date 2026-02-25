@@ -191,7 +191,7 @@ class OrgaEventForm(BaseModelForm):
             if s not in self.params.get("features")
         ]
 
-        if "demo" in self.params:
+        if "demo" in self.params and self.params.get("demo"):
             dl.append("description")
 
         # Initialize campaign parent selection and add to deletion list if disabled
