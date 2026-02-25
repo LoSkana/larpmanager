@@ -387,7 +387,7 @@ nav#sidebar-nav {
 
 .sidebar-link,
 .explain-icon {
-  display: inline;
+  display: inline-block;
   margin: 0;
 }
 
