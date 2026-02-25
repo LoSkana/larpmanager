@@ -79,4 +79,4 @@ def test_exe_join(pw_page: Any) -> None:
     just_wait(page)
     go_to(page, live_server, "/debug/prova")
 
-    expect_normalized(page, page.locator("#banner"), "welcome to larpmanager!")
+    expect_normalized(page, page.locator("#banner"), "prova larp")

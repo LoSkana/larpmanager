@@ -125,7 +125,7 @@ def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
 
     # Use unified full_event_edit
     context["add_another"] = False
-    context["exe"]
+    context["exe"] = True
     return full_event_edit(
         context,
         request,
