@@ -798,6 +798,9 @@ msgstr "Výchozí"
 msgid "Details"
 msgstr "Podrobnosti na"
 
+msgid "Display"
+msgstr "Zobrazit"
+
 msgid "Element"
 msgstr "Prvek"
 
@@ -2512,9 +2515,6 @@ msgstr "DPH (volitelně)"
 msgid "View Selector"
 msgstr "Výběr zobrazení"
 
-msgid "Visualisation"
-msgstr "Vizualizace"
-
 msgid "Wanna connect"
 msgstr "Chcete se připojit"
 
@@ -2548,9 +2548,6 @@ msgstr "Seznam nákladu"
 
 msgid "Carousel image"
 msgstr "Kolotoč obrázků"
-
-msgid "Character form"
-msgstr "Podoba postavy"
 
 msgid "Character name"
 msgstr "Jméno postavy"
@@ -2764,6 +2761,9 @@ msgstr "Integrace aplikací"
 
 msgid "Change password"
 msgstr "Obnovení hesla"
+
+msgid "Character Sheet"
+msgstr "List postavy"
 
 msgid "Character cover"
 msgstr "Obal postavy"
@@ -7149,6 +7149,9 @@ msgid "Content of privacy page linked at the bottom of all pages"
 msgstr ""
 "Obsah stránky o ochraně osobních údajů s odkazem v dolní části všech stránek"
 
+msgid "If checked, enables the reading view for writing elements"
+msgstr "Pokud je zaškrtnuto, povolí zobrazení pro čtení prvků pro zápis"
+
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Uveďte zájmena, která si přejete používat pro označení vaší osoby"
 
@@ -7769,6 +7772,11 @@ msgstr "Jak je vztah popsán z pohledu této postavy"
 
 msgid "I confirm that my face and name are clearly visible in the document"
 msgstr "Potvrzuji, že moje tvář a jméno jsou v dokumentu zřetelně viditelné"
+
+msgid "If checked, enables the consistency check tool for character sheets"
+msgstr ""
+"Pokud je zaškrtnuto, povolí nástroj pro kontrolu konzistence pro listy "
+"postav"
 
 msgid "If checked, shows participants the histories of preferences entered"
 msgstr ""

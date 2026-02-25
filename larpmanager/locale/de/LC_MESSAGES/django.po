@@ -798,6 +798,9 @@ msgstr "Standard"
 msgid "Details"
 msgstr "Einzelheiten"
 
+msgid "Display"
+msgstr "Anzeige"
+
 msgid "Element"
 msgstr "Element"
 
@@ -2512,9 +2515,6 @@ msgstr "Mehrwertsteuer (Optionen)"
 msgid "View Selector"
 msgstr "Ansicht Selektor"
 
-msgid "Visualisation"
-msgstr "Visualisierung"
-
 msgid "Wanna connect"
 msgstr "Möchten Sie eine Verbindung herstellen"
 
@@ -2548,9 +2548,6 @@ msgstr "Ladungsverzeichnis"
 
 msgid "Carousel image"
 msgstr "Bild-Karussell"
-
-msgid "Character form"
-msgstr "Zeichenform"
 
 msgid "Character name"
 msgstr "Name des Charakters"
@@ -2764,6 +2761,9 @@ msgstr "App-Integration"
 
 msgid "Change password"
 msgstr "Passwort-Wiederherstellung"
+
+msgid "Character Sheet"
+msgstr "Charakterbogen"
 
 msgid "Character cover"
 msgstr "Charakter Abdeckung"
@@ -7234,6 +7234,10 @@ msgstr "Verfügbares Guthaben für Zahlungen und Käufe für Veranstaltungen"
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Inhalt der Datenschutzseite, die unten auf allen Seiten verlinkt ist"
 
+msgid "If checked, enables the reading view for writing elements"
+msgstr ""
+"Wenn markiert, wird die Leseansicht für schreibende Elemente aktiviert"
+
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Geben Sie die Pronomen an, mit denen Sie bezeichnet werden möchten"
 
@@ -8026,6 +8030,11 @@ msgid "I confirm that my face and name are clearly visible in the document"
 msgstr ""
 "Ich bestätige, dass mein Gesicht und mein Name auf dem Dokument deutlich "
 "sichtbar sind"
+
+msgid "If checked, enables the consistency check tool for character sheets"
+msgstr ""
+"Wenn diese Option aktiviert ist, wird das Werkzeug zur Konsistenzprüfung für"
+" Charakterbögen aktiviert"
 
 msgid "If checked, shows participants the histories of preferences entered"
 msgstr ""

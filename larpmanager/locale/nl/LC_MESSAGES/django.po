@@ -798,6 +798,9 @@ msgstr "Standaard"
 msgid "Details"
 msgstr "Details"
 
+msgid "Display"
+msgstr "Weergave"
+
 msgid "Element"
 msgstr "Element"
 
@@ -2512,9 +2515,6 @@ msgstr "BTW (opties)"
 msgid "View Selector"
 msgstr "Weergave Selector"
 
-msgid "Visualisation"
-msgstr "Visualisatie"
-
 msgid "Wanna connect"
 msgstr "Wil je verbinding maken"
 
@@ -2548,9 +2548,6 @@ msgstr "Vrachtmanifest"
 
 msgid "Carousel image"
 msgstr "Afbeeldingencarrousel"
-
-msgid "Character form"
-msgstr "Karaktervorm"
 
 msgid "Character name"
 msgstr "Naam personage"
@@ -2764,6 +2761,9 @@ msgstr "App integratie"
 
 msgid "Change password"
 msgstr "Wachtwoord herstel"
+
+msgid "Character Sheet"
+msgstr "Karakterblad"
 
 msgid "Character cover"
 msgstr "Karakter cover"
@@ -7166,6 +7166,11 @@ msgstr "Beschikbaar kredietsaldo voor betalingen en aankopen voor evenementen"
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Inhoud van privacy pagina gelinkt onderaan alle pagina's"
 
+msgid "If checked, enables the reading view for writing elements"
+msgstr ""
+"Indien aangevinkt, wordt de leesweergave ingeschakeld voor het schrijven van"
+" elementen"
+
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Geef aan met welke voornaamwoorden je wilt worden aangeduid"
 
@@ -7885,6 +7890,11 @@ msgid "I confirm that my face and name are clearly visible in the document"
 msgstr ""
 "Ik bevestig dat mijn gezicht en naam duidelijk zichtbaar zijn in het "
 "document"
+
+msgid "If checked, enables the consistency check tool for character sheets"
+msgstr ""
+"Als deze optie is aangevinkt, wordt de consistentiecontrole voor "
+"karaktersheets ingeschakeld"
 
 msgid "If checked, shows participants the histories of preferences entered"
 msgstr ""

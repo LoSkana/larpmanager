@@ -798,6 +798,9 @@ msgstr "Standard"
 msgid "Details"
 msgstr "Detaljer"
 
+msgid "Display"
+msgstr "Display"
+
 msgid "Element"
 msgstr "Element"
 
@@ -2512,9 +2515,6 @@ msgstr "Moms (tillval)"
 msgid "View Selector"
 msgstr "Väljare för vy"
 
-msgid "Visualisation"
-msgstr "Visualisering"
-
 msgid "Wanna connect"
 msgstr "Vill du ansluta dig"
 
@@ -2548,9 +2548,6 @@ msgstr "Lastmanifest"
 
 msgid "Carousel image"
 msgstr "Bildkarusell"
-
-msgid "Character form"
-msgstr "Karaktärsform"
 
 msgid "Character name"
 msgstr "Karaktärens namn"
@@ -2764,6 +2761,9 @@ msgstr "App-integration"
 
 msgid "Change password"
 msgstr "Återställning av lösenord"
+
+msgid "Character Sheet"
+msgstr "Karaktärsblad"
 
 msgid "Character cover"
 msgstr "Omslag för karaktär"
@@ -7143,6 +7143,9 @@ msgstr "Tillgängligt kreditutrymme för betalningar och köp av evenemang"
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Innehåll på integritetssidan länkad längst ner på alla sidor"
 
+msgid "If checked, enables the reading view for writing elements"
+msgstr "Om markerad, aktiveras läsvyn för skrivande element"
+
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Ange de pronomen som du vill ska användas för att referera till dig"
 
@@ -7802,6 +7805,11 @@ msgstr "Hur relationen beskrivs ur den här karaktärens perspektiv"
 msgid "I confirm that my face and name are clearly visible in the document"
 msgstr ""
 "Jag bekräftar att mitt ansikte och namn är tydligt synliga i dokumentet"
+
+msgid "If checked, enables the consistency check tool for character sheets"
+msgstr ""
+"Om markerad, aktiverar verktyget för kontroll av konsistens för "
+"karaktärsblad"
 
 msgid "If checked, shows participants the histories of preferences entered"
 msgstr ""

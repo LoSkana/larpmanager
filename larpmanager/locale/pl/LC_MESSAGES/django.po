@@ -798,6 +798,9 @@ msgstr "Domyślne"
 msgid "Details"
 msgstr "Szczegóły"
 
+msgid "Display"
+msgstr "Wyświetlacz"
+
 msgid "Element"
 msgstr "Element"
 
@@ -2512,9 +2515,6 @@ msgstr "VAT (Opcje)"
 msgid "View Selector"
 msgstr "Selektor widoku"
 
-msgid "Visualisation"
-msgstr "Wizualizacja"
-
 msgid "Wanna connect"
 msgstr "Chcesz się połączyć"
 
@@ -2548,9 +2548,6 @@ msgstr "Manifest ładunku"
 
 msgid "Carousel image"
 msgstr "Obraz karuzeli"
-
-msgid "Character form"
-msgstr "Postać"
 
 msgid "Character name"
 msgstr "Nazwa postaci"
@@ -2764,6 +2761,9 @@ msgstr "Integracja aplikacji"
 
 msgid "Change password"
 msgstr "Zmiana hasła"
+
+msgid "Character Sheet"
+msgstr "Arkusz postaci"
 
 msgid "Character cover"
 msgstr "Osłona postaci"
@@ -7160,6 +7160,9 @@ msgstr "Dostępne saldo kredytowe na płatności za wydarzenia i zakupy"
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Treść strony prywatności połączona na dole wszystkich stron"
 
+msgid "If checked, enables the reading view for writing elements"
+msgstr "Jeśli zaznaczone, włącza widok odczytu dla elementów zapisu"
+
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Wskaż zaimki, które mają być używane w odniesieniu do Ciebie"
 
@@ -7838,6 +7841,10 @@ msgstr "Jak opisywany jest związek z perspektywy tej postaci"
 msgid "I confirm that my face and name are clearly visible in the document"
 msgstr ""
 "Potwierdzam, że moja twarz i nazwisko są wyraźnie widoczne w dokumencie"
+
+msgid "If checked, enables the consistency check tool for character sheets"
+msgstr ""
+"Zaznaczenie tej opcji włącza narzędzie sprawdzania spójności arkuszy postaci"
 
 msgid "If checked, shows participants the histories of preferences entered"
 msgstr ""

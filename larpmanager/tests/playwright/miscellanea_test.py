@@ -81,7 +81,7 @@ def check_user_fee(live_server: Any, page: Any) -> None:
     sidebar(page, "Features")
     check_feature(page, "Donation")
     submit_confirm(page)
-    page.locator("#exe_config").get_by_role("link", name="Configuration").click()
+    sidebar(page, "Configuration")
     page.get_by_role("link", name=re.compile(r"^Payments ")).click()
     page.locator("#id_payment_fees_user").check()
     submit_confirm(page)

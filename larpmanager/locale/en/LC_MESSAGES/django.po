@@ -997,15 +997,7 @@ msgstr ""
 msgid "Event Configuration"
 msgstr ""
 
-msgid "Disable assignment"
-msgstr ""
-
-msgid ""
-"If checked: Does not send communication to the participant when the "
-"character is assigned"
-msgstr ""
-
-msgid "Visualisation"
+msgid "Display"
 msgstr ""
 
 msgid "Show shortcuts"
@@ -1028,6 +1020,71 @@ msgid "Limitations"
 msgstr ""
 
 msgid "If checked: Show summary page with number of tickets/options used"
+msgstr ""
+
+msgid "Character cover"
+msgstr ""
+
+msgid "Desalt thumbnail"
+msgstr ""
+
+msgid ""
+"If checked, shows the original image in the cover, not the thumbnail version"
+msgstr ""
+
+msgid "Disable assignment"
+msgstr ""
+
+msgid ""
+"If checked: Does not send communication to the participant when the "
+"character is assigned"
+msgstr ""
+
+msgid "Tickets"
+msgstr ""
+
+msgid "If checked, allow ticket tier: Staff"
+msgstr ""
+
+msgid "If checked, allow ticket tier: NPC"
+msgstr ""
+
+msgid "If checked, allow ticket tier: Collaborator"
+msgstr ""
+
+msgid "If checked, allow ticket tier: Seller"
+msgstr ""
+
+msgid "Patron / Reduced"
+msgstr ""
+
+msgid ""
+"Indicates the ratio between reduced and patron tickets, multiplied by 10. "
+"Example: 10 -> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets "
+"for 1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets"
+msgstr ""
+
+msgid "Ticket Filler"
+msgstr ""
+
+msgid "Free registration"
+msgstr ""
+
+msgid ""
+"If checked, participants may sign up as fillers at any time; otherwise, they "
+"may only do so if the stipulated number of characters has been reached"
+msgstr ""
+
+msgid "Number of extractions"
+msgstr ""
+
+msgid "Number of tickets to be drawn"
+msgstr ""
+
+msgid "Conversion ticket"
+msgstr ""
+
+msgid "Name of the ticket into which to convert"
 msgstr ""
 
 msgid "Gallery"
@@ -1113,7 +1170,7 @@ msgid ""
 "participant's age"
 msgstr ""
 
-msgid "Character form"
+msgid "Character Sheet"
 msgstr ""
 
 msgid ""
@@ -1137,19 +1194,6 @@ msgstr ""
 
 msgid ""
 "If checked, allows a option to be visible only if other options are selected"
-msgstr ""
-
-msgid "Character cover"
-msgstr ""
-
-msgid "Desalt thumbnail"
-msgstr ""
-
-msgid ""
-"If checked, shows the original image in the cover, not the thumbnail version"
-msgstr ""
-
-msgid "Writing"
 msgstr ""
 
 msgid "Title"
@@ -1242,6 +1286,18 @@ msgstr ""
 msgid ""
 "If checked, allows to track the plots or relationships not really important "
 "for the character"
+msgstr ""
+
+msgid "Check"
+msgstr ""
+
+msgid "If checked, enables the consistency check tool for character sheets"
+msgstr ""
+
+msgid "Reading"
+msgstr ""
+
+msgid "If checked, enables the reading view for writing elements"
 msgstr ""
 
 msgid "Independent factions"
@@ -1508,53 +1564,6 @@ msgstr ""
 msgid ""
 "Value of the discount for the friend who signs up using the code of a "
 "registered participant"
-msgstr ""
-
-msgid "Tickets"
-msgstr ""
-
-msgid "If checked, allow ticket tier: Staff"
-msgstr ""
-
-msgid "If checked, allow ticket tier: NPC"
-msgstr ""
-
-msgid "If checked, allow ticket tier: Collaborator"
-msgstr ""
-
-msgid "If checked, allow ticket tier: Seller"
-msgstr ""
-
-msgid "Patron / Reduced"
-msgstr ""
-
-msgid ""
-"Indicates the ratio between reduced and patron tickets, multiplied by 10. "
-"Example: 10 -> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets "
-"for 1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets"
-msgstr ""
-
-msgid "Ticket Filler"
-msgstr ""
-
-msgid "Free registration"
-msgstr ""
-
-msgid ""
-"If checked, participants may sign up as fillers at any time; otherwise, they "
-"may only do so if the stipulated number of characters has been reached"
-msgstr ""
-
-msgid "Number of extractions"
-msgstr ""
-
-msgid "Number of tickets to be drawn"
-msgstr ""
-
-msgid "Conversion ticket"
-msgstr ""
-
-msgid "Name of the ticket into which to convert"
 msgstr ""
 
 msgid "Event Appearance"
@@ -7614,9 +7623,6 @@ msgstr ""
 msgid "Operation"
 msgstr ""
 
-msgid "Reading"
-msgstr ""
-
 msgid "Manage reading writing elements using the table search controls"
 msgstr ""
 
@@ -8161,9 +8167,6 @@ msgstr ""
 msgid "This page shows the factions and plots of the indicated character"
 msgstr ""
 
-msgid "Check"
-msgstr ""
-
 msgid "This page performs several correctness checks of the character sheets"
 msgstr ""
 
@@ -8360,6 +8363,9 @@ msgid "Move up"
 msgstr ""
 
 msgid "Move down"
+msgstr ""
+
+msgid "Writing"
 msgstr ""
 
 msgid "Miscellany"

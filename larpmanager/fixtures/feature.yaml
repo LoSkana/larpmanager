@@ -26,6 +26,7 @@
     after_link: orga_quest_types
     hidden: false
     module: writing
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Copy
@@ -38,6 +39,7 @@
     after_link: orga_copy
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Pay what you want
@@ -51,6 +53,7 @@
     after_link: orga_registration_form
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Discount
@@ -64,6 +67,7 @@
     after_link: orga_discounts
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: LAOG
@@ -77,6 +81,7 @@
     after_link: ''
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Reminder
@@ -90,6 +95,7 @@
     after_link: config/remind
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Bring a friend
@@ -103,6 +109,7 @@
     after_link: config/bring_friend
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: PDF generation
@@ -131,6 +138,7 @@
     after_link: orga_workshop_modules
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Speed Larp
@@ -144,6 +152,7 @@
     after_link: orga_speedlarps
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Safety
@@ -156,6 +165,7 @@
     after_link: orga_safety
     hidden: true
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Casting algorithm
@@ -184,6 +194,7 @@
     after_link: exe_questions
     hidden: false
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Collections
@@ -198,7 +209,7 @@
     hidden: false
     module: accounting
     dependencies:
-      - credits
+    - credits
 - model: larpmanager.feature
   fields:
     name: Pre-registration
@@ -211,6 +222,7 @@
     after_link: exe_pre_registrations
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Donation
@@ -224,6 +236,7 @@
     after_link: exe_donations
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Newsletter
@@ -237,6 +250,7 @@
     after_link: exe_newsletter
     hidden: false
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Utility
@@ -250,6 +264,7 @@
     after_link: orga_utils
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Character customization
@@ -278,6 +293,7 @@
     after_link: config/membership
     hidden: false
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Shuttle
@@ -291,6 +307,7 @@
     after_link: ''
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: External mail server
@@ -304,6 +321,7 @@
     after_link: config/custom_mail_server
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Lottery
@@ -317,6 +335,7 @@
     after_link: orga_registration_tickets
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Filler
@@ -345,6 +364,7 @@
     after_link: ''
     hidden: false
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Waiting list
@@ -358,6 +378,7 @@
     after_link: orga_registration_tickets
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Participant cancellation
@@ -370,6 +391,7 @@
     after_link: ''
     hidden: false
     module: event
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Problems
@@ -383,6 +405,7 @@
     after_link: orga_problems
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Dynamic rates
@@ -397,6 +420,7 @@
     after_link: orga_registration_quotas
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Vote
@@ -410,6 +434,7 @@
     after_link: config/vote
     hidden: false
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Badge
@@ -422,6 +447,7 @@
     after_link: exe_badges
     hidden: false
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Warehouse
@@ -434,6 +460,7 @@
     after_link: exe_warehouse_containers
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Secret link
@@ -447,6 +474,7 @@
     after_link: orga_run
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Fixed instalments
@@ -460,6 +488,7 @@
     after_link: orga_registration_installments
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Relationships
@@ -487,6 +516,7 @@
     after_link: orga_registration_sections
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Campaign
@@ -500,6 +530,7 @@
     after_link: ''
     hidden: false
     module: events
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Patron and Reduced
@@ -513,6 +544,7 @@
     after_link: orga_registration_tickets
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Accounting tracking
@@ -526,6 +558,7 @@
     after_link: exe_accounting_rec
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Progress
@@ -539,6 +572,7 @@
     after_link: orga_progress_steps
     hidden: false
     module: writing
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Diet
@@ -551,6 +585,7 @@
     after_link: orga_diet
     hidden: true
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Deadlines
@@ -564,6 +599,7 @@
     after_link: exe_deadlines
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Plots
@@ -623,7 +659,7 @@
     hidden: false
     module: accounting
     dependencies:
-      - credits
+    - credits
 - model: larpmanager.feature
   fields:
     name: Tokens
@@ -637,6 +673,7 @@
     after_link: config/tokens
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Credits
@@ -650,6 +687,7 @@
     after_link: config/credits
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Outflows
@@ -663,6 +701,7 @@
     after_link: exe_outflows
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Verification payments
@@ -676,6 +715,7 @@
     after_link: exe_verification
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Fiscal Budget
@@ -688,6 +728,7 @@
     after_link: exe_balance
     hidden: false
     module: italy
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Payments
@@ -700,6 +741,7 @@
     after_link: exe_methods
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Refunds
@@ -713,7 +755,7 @@
     hidden: false
     module: accounting
     dependencies:
-      - credits
+    - credits
 - model: larpmanager.feature
   fields:
     name: Legal Notice
@@ -727,6 +769,7 @@
     after_link: exe_texts
     hidden: false
     module: appearance
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Experience points
@@ -740,6 +783,7 @@
     after_link: config/px
     hidden: false
     module: event
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Player editor
@@ -781,6 +825,7 @@
     after_link: config/organization_tax
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Easter egg
@@ -794,6 +839,7 @@
     after_link: config/centauri
     hidden: false
     module: italy
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: URL shortener
@@ -806,6 +852,7 @@
     after_link: exe_urlshortner
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Surcharge
@@ -819,6 +866,7 @@
     after_link: orga_registration_surcharges
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Inflows
@@ -832,6 +880,7 @@
     after_link: exe_inflows
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Carousel
@@ -845,6 +894,7 @@
     after_link: ''
     hidden: false
     module: appearance
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Treasurer
@@ -858,6 +908,7 @@
     after_link: ''
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Receipt
@@ -871,6 +922,7 @@
     after_link: exe_texts
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Register of volunteers
@@ -883,6 +935,7 @@
     after_link: exe_volunteer_registry
     hidden: false
     module: italy
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Taxes
@@ -895,6 +948,7 @@
     after_link: config/vat
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Delegated accounts
@@ -908,6 +962,7 @@
     after_link: ''
     hidden: false
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Gift
@@ -921,6 +976,7 @@
     after_link: orga_registration_tickets
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Additional tickets
@@ -933,6 +989,7 @@
     after_link: orga_registration_form
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Characters
@@ -946,6 +1003,7 @@
     after_link: orga_characters
     hidden: false
     module: writing
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Template
@@ -959,6 +1017,7 @@
     after_link: exe_templates
     hidden: false
     module: events
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Fiscal code check
@@ -971,6 +1030,7 @@
     after_link: exe_membership_check
     hidden: false
     module: italy
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Exe Archive
@@ -983,6 +1043,7 @@
     after_link: null
     hidden: false
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Exe Profile
@@ -995,6 +1056,7 @@
     after_link: null
     hidden: false
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Exe Send e-mail
@@ -1007,6 +1069,7 @@
     after_link: null
     hidden: false
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Event
@@ -1019,6 +1082,7 @@
     after_link: exe_events
     hidden: false
     module: events
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Exe Texts
@@ -1031,6 +1095,7 @@
     after_link: null
     hidden: false
     module: appearance
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Exe Appearance
@@ -1043,6 +1108,7 @@
     after_link: null
     hidden: false
     module: appearance
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Exe Accounting
@@ -1055,6 +1121,7 @@
     after_link: null
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Exe Features
@@ -1067,6 +1134,7 @@
     after_link: null
     hidden: false
     module: organization
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Exe Configuration
@@ -1079,6 +1147,7 @@
     after_link: null
     hidden: false
     module: organization
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Exe Roles
@@ -1091,6 +1160,7 @@
     after_link: null
     hidden: false
     module: organization
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Exe Organization
@@ -1103,6 +1173,7 @@
     after_link: null
     hidden: false
     module: organization
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Archive
@@ -1115,6 +1186,7 @@
     after_link: null
     hidden: false
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Send e-mail
@@ -1127,6 +1199,7 @@
     after_link: null
     hidden: false
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Cache Reloading
@@ -1139,6 +1212,7 @@
     after_link: null
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Navigation
@@ -1151,6 +1225,7 @@
     after_link: null
     hidden: false
     module: appearance
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Texts
@@ -1163,6 +1238,7 @@
     after_link: null
     hidden: false
     module: appearance
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Cancellations
@@ -1175,6 +1251,7 @@
     after_link: null
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Form
@@ -1187,6 +1264,7 @@
     after_link: null
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Tickets
@@ -1199,6 +1277,7 @@
     after_link: null
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Registrations
@@ -1211,6 +1290,7 @@
     after_link: null
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Sensitive data
@@ -1223,6 +1303,7 @@
     after_link: null
     hidden: false
     module: users
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Accounting
@@ -1235,6 +1316,7 @@
     after_link: null
     hidden: false
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Appearance
@@ -1247,6 +1329,7 @@
     after_link: null
     hidden: false
     module: appearance
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Features
@@ -1259,6 +1342,7 @@
     after_link: null
     hidden: false
     module: event
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Configuration
@@ -1271,6 +1355,7 @@
     after_link: null
     hidden: false
     module: event
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Roles
@@ -1283,6 +1368,7 @@
     after_link: null
     hidden: false
     module: event
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Run
@@ -1295,6 +1381,7 @@
     after_link: null
     hidden: false
     module: event
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Orga Event
@@ -1307,6 +1394,7 @@
     after_link: null
     hidden: false
     module: event
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Quick Setup
@@ -1319,6 +1407,7 @@
     after_link: null
     hidden: false
     module: event
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: New player
@@ -1332,6 +1421,7 @@
     after_link: orga_registration_tickets
     hidden: false
     module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Publication
@@ -1344,6 +1434,7 @@
     after_link: ''
     hidden: false
     module: events
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: One-Time Content
@@ -1358,6 +1449,7 @@
     after_link: orga_onetimes
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Translations
@@ -1371,6 +1463,7 @@
     after_link: exe_translations
     hidden: false
     module: appearance
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: PX Rules
@@ -1383,6 +1476,7 @@
     after_link: ''
     hidden: true
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: PX Modifiers
@@ -1395,6 +1489,7 @@
     after_link: ''
     hidden: true
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: PX Templates
@@ -1407,6 +1502,7 @@
     after_link: ''
     hidden: true
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Rules
@@ -1419,6 +1515,7 @@
     after_link: ''
     hidden: true
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Modifiers
@@ -1431,6 +1528,7 @@
     after_link: ''
     hidden: true
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Templates
@@ -1443,6 +1541,7 @@
     after_link: ''
     hidden: true
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Activity Log
@@ -1455,6 +1554,7 @@
     after_link: ''
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: App Integration
@@ -1469,6 +1569,7 @@
     after_link: config/app_integration
     hidden: false
     module: miscellany
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Payment Invoices
@@ -1482,6 +1583,7 @@
     after_link: ''
     hidden: true
     module: accounting
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Activation
@@ -1494,3 +1596,4 @@
     after_link: ''
     hidden: false
     module: null
+    dependencies: []

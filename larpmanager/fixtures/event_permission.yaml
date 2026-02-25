@@ -5,10 +5,11 @@
     slug: orga_event
     number: 11
     config: gallery
+    active_if: null
     hidden: false
+    icon: calendar-days
     feature: orga_event
     module: event
-    icon: calendar-days
 - model: larpmanager.eventpermission
   fields:
     name: Roles
@@ -16,10 +17,11 @@
     slug: orga_roles
     number: 31
     config: null
+    active_if: null
     hidden: false
+    icon: users
     feature: orga_roles
     module: event
-    icon: users
 - model: larpmanager.eventpermission
   fields:
     name: Configuration
@@ -27,10 +29,11 @@
     slug: orga_config
     number: 41
     config: null
+    active_if: null
     hidden: false
+    icon: gears
     feature: orga_config
     module: event
-    icon: gears
 - model: larpmanager.eventpermission
   fields:
     name: Features
@@ -38,10 +41,11 @@
     slug: orga_features
     number: 51
     config: null
+    active_if: null
     hidden: false
+    icon: puzzle-piece
     feature: orga_features
     module: event
-    icon: puzzle-piece
 - model: larpmanager.eventpermission
   fields:
     name: Appearance
@@ -49,10 +53,11 @@
     slug: orga_appearance
     number: 11
     config: visualisation
+    active_if: null
     hidden: false
+    icon: palette
     feature: orga_appearance
     module: appearance
-    icon: palette
 - model: larpmanager.eventpermission
   fields:
     name: Copy
@@ -60,10 +65,11 @@
     slug: orga_copy
     number: 11
     config: null
+    active_if: null
     hidden: false
+    icon: copy
     feature: copy
     module: miscellany
-    icon: copy
 - model: larpmanager.eventpermission
   fields:
     name: Casting
@@ -71,10 +77,11 @@
     slug: orga_casting
     number: 11
     config: casting
+    active_if: null
     hidden: false
+    icon: user-check
     feature: casting
     module: casting
-    icon: user-check
 - model: larpmanager.eventpermission
   fields:
     name: Accounting
@@ -82,10 +89,11 @@
     slug: orga_accounting
     number: 11
     config: null
+    active_if: null
     hidden: false
+    icon: calculator
     feature: orga_accounting
     module: accounting
-    icon: calculator
 - model: larpmanager.eventpermission
   fields:
     name: Payments
@@ -93,10 +101,11 @@
     slug: orga_payments
     number: 21
     config: payment
+    active_if: null
     hidden: false
+    icon: credit-card
     feature: payment
     module: accounting
-    icon: credit-card
 - model: larpmanager.eventpermission
   fields:
     name: Expenses
@@ -104,10 +113,11 @@
     slug: orga_expenses
     number: 31
     config: null
+    active_if: null
     hidden: false
+    icon: receipt
     feature: expense
     module: accounting
-    icon: receipt
 - model: larpmanager.eventpermission
   fields:
     name: Tokens
@@ -115,10 +125,11 @@
     slug: orga_tokens
     number: 41
     config: tokens
+    active_if: null
     hidden: false
+    icon: coins
     feature: tokens
     module: accounting
-    icon: coins
 - model: larpmanager.eventpermission
   fields:
     name: Credits
@@ -126,10 +137,11 @@
     slug: orga_credits
     number: 51
     config: credits
+    active_if: null
     hidden: false
+    icon: gem
     feature: credits
     module: accounting
-    icon: gem
 - model: larpmanager.eventpermission
   fields:
     name: Inflows
@@ -137,10 +149,11 @@
     slug: orga_inflows
     number: 61
     config: null
+    active_if: null
     hidden: false
+    icon: arrow-trend-down
     feature: inflow
     module: accounting
-    icon: arrow-trend-down
 - model: larpmanager.eventpermission
   fields:
     name: Outflows
@@ -148,10 +161,11 @@
     slug: orga_outflows
     number: 71
     config: null
+    active_if: null
     hidden: false
+    icon: arrow-trend-up
     feature: outflow
     module: accounting
-    icon: arrow-trend-up
 - model: larpmanager.eventpermission
   fields:
     name: Safety
@@ -159,10 +173,11 @@
     slug: orga_safety
     number: 11
     config: null
+    active_if: null
     hidden: false
+    icon: shield
     feature: safety
     module: users
-    icon: shield
 - model: larpmanager.eventpermission
   fields:
     name: Diet
@@ -170,10 +185,11 @@
     slug: orga_diet
     number: 21
     config: null
+    active_if: null
     hidden: false
+    icon: utensils
     feature: diet
     module: users
-    icon: utensils
 - model: larpmanager.eventpermission
   fields:
     name: Users
@@ -181,10 +197,11 @@
     slug: orga_sensitive
     number: 31
     config: null
+    active_if: null
     hidden: false
+    icon: lock
     feature: orga_sensitive
     module: users
-    icon: lock
 - model: larpmanager.eventpermission
   fields:
     name: Questions
@@ -192,10 +209,11 @@
     slug: orga_questions
     number: 41
     config: null
+    active_if: null
     hidden: false
+    icon: circle-question
     feature: help
     module: communications
-    icon: circle-question
 - model: larpmanager.eventpermission
   fields:
     name: Spam
@@ -203,10 +221,11 @@
     slug: orga_spam
     number: 51
     config: null
+    active_if: null
     hidden: false
+    icon: envelope-open-text
     feature: newsletter
     module: communications
-    icon: envelope-open-text
 - model: larpmanager.eventpermission
   fields:
     name: Preaching
@@ -214,10 +233,11 @@
     slug: orga_persuade
     number: 61
     config: null
+    active_if: null
     hidden: false
+    icon: bullhorn
     feature: newsletter
     module: communications
-    icon: bullhorn
 - model: larpmanager.eventpermission
   fields:
     name: Characters
@@ -225,10 +245,11 @@
     slug: orga_characters
     number: 11
     config: writing
+    active_if: null
     hidden: false
+    icon: theater-masks
     feature: character
     module: writing
-    icon: theater-masks
 - model: larpmanager.eventpermission
   fields:
     name: Plots
@@ -236,10 +257,11 @@
     slug: orga_plots
     number: 41
     config: null
+    active_if: null
     hidden: false
+    icon: scroll
     feature: plot
     module: writing
-    icon: scroll
 - model: larpmanager.eventpermission
   fields:
     name: Factions
@@ -247,10 +269,11 @@
     slug: orga_factions
     number: 51
     config: null
+    active_if: null
     hidden: false
+    icon: flag
     feature: faction
     module: writing
-    icon: flag
 - model: larpmanager.eventpermission
   fields:
     name: Quest type
@@ -258,10 +281,11 @@
     slug: orga_quest_types
     number: 51
     config: null
+    active_if: null
     hidden: false
+    icon: map
     feature: questbuilder
     module: quests
-    icon: map
 - model: larpmanager.eventpermission
   fields:
     name: Quest
@@ -269,10 +293,11 @@
     slug: orga_quests
     number: 31
     config: null
+    active_if: null
     hidden: false
+    icon: dragon
     feature: questbuilder
     module: quests
-    icon: dragon
 - model: larpmanager.eventpermission
   fields:
     name: Traits
@@ -280,10 +305,11 @@
     slug: orga_traits
     number: 41
     config: null
+    active_if: null
     hidden: false
+    icon: list
     feature: questbuilder
     module: quests
-    icon: list
 - model: larpmanager.eventpermission
   fields:
     name: Prologues type
@@ -291,10 +317,11 @@
     slug: orga_prologue_types
     number: 61
     config: null
+    active_if: null
     hidden: false
+    icon: book
     feature: prologue
     module: writing
-    icon: book
 - model: larpmanager.eventpermission
   fields:
     name: Prologues
@@ -302,10 +329,11 @@
     slug: orga_prologues
     number: 71
     config: null
+    active_if: null
     hidden: false
+    icon: book-open
     feature: prologue
     module: writing
-    icon: book-open
 - model: larpmanager.eventpermission
   fields:
     name: Speed larp
@@ -313,10 +341,11 @@
     slug: orga_speedlarps
     number: 21
     config: null
+    active_if: null
     hidden: false
+    icon: bolt
     feature: speedlarp
     module: miscellany
-    icon: bolt
 - model: larpmanager.eventpermission
   fields:
     name: Check
@@ -324,10 +353,11 @@
     slug: orga_check
     number: 81
     config: null
+    active_if: writing_check
     hidden: false
+    icon: circle-check
     feature: character
     module: writing
-    icon: circle-check
 - model: larpmanager.eventpermission
   fields:
     name: Progress
@@ -335,10 +365,11 @@
     slug: orga_progress_steps
     number: 91
     config: null
+    active_if: null
     hidden: false
+    icon: chart-line
     feature: progress
     module: writing
-    icon: chart-line
 - model: larpmanager.eventpermission
   fields:
     name: Registrations
@@ -346,10 +377,11 @@
     slug: orga_registrations
     number: 11
     config: registrations
+    active_if: null
     hidden: false
+    icon: clipboard-list
     feature: orga_registrations
     module: registration
-    icon: clipboard-list
 - model: larpmanager.eventpermission
   fields:
     name: Tickets
@@ -357,10 +389,11 @@
     slug: orga_registration_tickets
     number: 21
     config: tickets
+    active_if: null
     hidden: false
+    icon: ticket
     feature: orga_registration_tickets
     module: registration
-    icon: ticket
 - model: larpmanager.eventpermission
   fields:
     name: Sections
@@ -368,10 +401,11 @@
     slug: orga_registration_sections
     number: 31
     config: null
+    active_if: null
     hidden: false
+    icon: layer-group
     feature: reg_que_sections
     module: registration
-    icon: layer-group
 - model: larpmanager.eventpermission
   fields:
     name: Form
@@ -379,10 +413,11 @@
     slug: orga_registration_form
     number: 41
     config: registrations
+    active_if: null
     hidden: false
+    icon: file-lines
     feature: orga_registration_form
     module: registration
-    icon: file-lines
 - model: larpmanager.eventpermission
   fields:
     name: Surcharges
@@ -390,10 +425,11 @@
     slug: orga_registration_surcharges
     number: 61
     config: null
+    active_if: null
     hidden: false
+    icon: circle-plus
     feature: reg_surcharges
     module: accounting
-    icon: circle-plus
 - model: larpmanager.eventpermission
   fields:
     name: Dynamic rates
@@ -401,10 +437,11 @@
     slug: orga_registration_quotas
     number: 71
     config: null
+    active_if: null
     hidden: false
+    icon: chart-bar
     feature: reg_quotas
     module: accounting
-    icon: chart-bar
 - model: larpmanager.eventpermission
   fields:
     name: Fixed instalments
@@ -412,10 +449,11 @@
     slug: orga_registration_installments
     number: 81
     config: null
+    active_if: null
     hidden: false
+    icon: calendar-check
     feature: reg_installments
     module: accounting
-    icon: calendar-check
 - model: larpmanager.eventpermission
   fields:
     name: Discounts
@@ -423,10 +461,11 @@
     slug: orga_discounts
     number: 91
     config: null
+    active_if: null
     hidden: false
+    icon: tag
     feature: discount
     module: accounting
-    icon: tag
 - model: larpmanager.eventpermission
   fields:
     name: Pre-Registrations
@@ -434,10 +473,11 @@
     slug: orga_pre_registrations
     number: 101
     config: pre_reg
+    active_if: null
     hidden: false
+    icon: user-clock
     feature: pre_register
     module: registration
-    icon: user-clock
 - model: larpmanager.eventpermission
   fields:
     name: Cancellations
@@ -445,10 +485,11 @@
     slug: orga_cancellations
     number: 111
     config: null
+    active_if: null
     hidden: false
+    icon: circle-xmark
     feature: orga_cancellations
     module: registration
-    icon: circle-xmark
 - model: larpmanager.eventpermission
   fields:
     name: Newsletter
@@ -456,10 +497,11 @@
     slug: orga_newsletter
     number: 71
     config: null
+    active_if: null
     hidden: false
+    icon: envelope
     feature: newsletter
     module: communications
-    icon: envelope
 - model: larpmanager.eventpermission
   fields:
     name: Assignments
@@ -467,10 +509,11 @@
     slug: orga_assignments
     number: 51
     config: null
+    active_if: null
     hidden: false
+    icon: list-check
     feature: questbuilder
     module: casting
-    icon: list-check
 - model: larpmanager.eventpermission
   fields:
     name: Approvals
@@ -480,9 +523,9 @@
     config: null
     active_if: payment_invoices
     hidden: false
+    icon: file-invoice
     feature: payment_invoices
     module: accounting
-    icon: file-invoice
 - model: larpmanager.eventpermission
   fields:
     name: Upload Expenses
@@ -490,10 +533,11 @@
     slug: orga_expenses_my
     number: 91
     config: null
+    active_if: null
     hidden: false
+    icon: upload
     feature: expense
     module: accounting
-    icon: upload
 - model: larpmanager.eventpermission
   fields:
     name: Deadlines
@@ -501,10 +545,11 @@
     slug: orga_deadlines
     number: 31
     config: null
+    active_if: null
     hidden: false
+    icon: hourglass-half
     feature: deadlines
     module: registration
-    icon: hourglass-half
 - model: larpmanager.eventpermission
   fields:
     name: PDF
@@ -512,10 +557,11 @@
     slug: orga_characters_pdf
     number: 111
     config: null
+    active_if: null
     hidden: false
+    icon: file-pdf
     feature: print_pdf
     module: writing
-    icon: file-pdf
 - model: larpmanager.eventpermission
   fields:
     name: Handout Models
@@ -523,10 +569,11 @@
     slug: orga_handout_templates
     number: 121
     config: null
+    active_if: null
     hidden: false
+    icon: file-lines
     feature: handout
     module: writing
-    icon: file-lines
 - model: larpmanager.eventpermission
   fields:
     name: Handouts
@@ -534,10 +581,11 @@
     slug: orga_handouts
     number: 131
     config: null
+    active_if: null
     hidden: false
+    icon: hand-holding
     feature: handout
     module: writing
-    icon: hand-holding
 - model: larpmanager.eventpermission
   fields:
     name: Ability type
@@ -545,10 +593,11 @@
     slug: orga_px_ability_types
     number: 81
     config: px
+    active_if: null
     hidden: false
+    icon: sitemap
     feature: px
     module: experience
-    icon: sitemap
 - model: larpmanager.eventpermission
   fields:
     name: Ability
@@ -556,10 +605,11 @@
     slug: orga_px_abilities
     number: 51
     config: px
+    active_if: null
     hidden: false
+    icon: star
     feature: px
     module: experience
-    icon: star
 - model: larpmanager.eventpermission
   fields:
     name: Delivery
@@ -567,10 +617,11 @@
     slug: orga_px_deliveries
     number: 61
     config: px
+    active_if: null
     hidden: false
+    icon: truck
     feature: px
     module: experience
-    icon: truck
 - model: larpmanager.eventpermission
   fields:
     name: Historical
@@ -578,10 +629,11 @@
     slug: orga_casting_history
     number: 61
     config: casting
+    active_if: null
     hidden: false
+    icon: clock-rotate-left
     feature: casting
     module: casting
-    icon: clock-rotate-left
 - model: larpmanager.eventpermission
   fields:
     name: Statistics
@@ -589,10 +641,11 @@
     slug: orga_casting_preferences
     number: 71
     config: casting
+    active_if: null
     hidden: false
+    icon: chart-bar
     feature: casting
     module: casting
-    icon: chart-bar
 - model: larpmanager.eventpermission
   fields:
     name: Utility
@@ -600,10 +653,11 @@
     slug: orga_utils
     number: 31
     config: null
+    active_if: null
     hidden: false
+    icon: toolbox
     feature: utils
     module: miscellany
-    icon: toolbox
 - model: larpmanager.eventpermission
   fields:
     name: Problems
@@ -611,10 +665,11 @@
     slug: orga_problems
     number: 41
     config: null
+    active_if: null
     hidden: false
+    icon: triangle-exclamation
     feature: problems
     module: miscellany
-    icon: triangle-exclamation
 - model: larpmanager.eventpermission
   fields:
     name: Lottery
@@ -622,10 +677,11 @@
     slug: orga_lottery
     number: 121
     config: lottery
+    active_if: null
     hidden: false
+    icon: dice
     feature: lottery
     module: registration
-    icon: dice
 - model: larpmanager.eventpermission
   fields:
     name: Workshops
@@ -633,10 +689,11 @@
     slug: orga_workshops
     number: 51
     config: null
+    active_if: null
     hidden: false
+    icon: chalkboard
     feature: workshop
     module: miscellany
-    icon: chalkboard
 - model: larpmanager.eventpermission
   fields:
     name: Modules
@@ -644,10 +701,11 @@
     slug: orga_workshop_modules
     number: 61
     config: null
+    active_if: null
     hidden: false
+    icon: cubes
     feature: workshop
     module: miscellany
-    icon: cubes
 - model: larpmanager.eventpermission
   fields:
     name: Questions
@@ -655,10 +713,11 @@
     slug: orga_workshop_questions
     number: 1
     config: null
+    active_if: null
     hidden: false
+    icon: circle-question
     feature: workshop
     module: miscellany
-    icon: circle-question
 - model: larpmanager.eventpermission
   fields:
     name: Answers
@@ -666,10 +725,11 @@
     slug: orga_workshop_options
     number: 81
     config: null
+    active_if: null
     hidden: false
+    icon: circle-check
     feature: workshop
     module: miscellany
-    icon: circle-check
 - model: larpmanager.eventpermission
   fields:
     name: Texts
@@ -677,10 +737,11 @@
     slug: orga_texts
     number: 20
     config: null
+    active_if: null
     hidden: false
+    icon: font
     feature: orga_texts
     module: appearance
-    icon: font
 - model: larpmanager.eventpermission
   fields:
     name: Navigation
@@ -688,10 +749,11 @@
     slug: orga_buttons
     number: 30
     config: null
+    active_if: null
     hidden: false
+    icon: bars
     feature: orga_buttons
     module: appearance
-    icon: bars
 - model: larpmanager.eventpermission
   fields:
     name: E-mail
@@ -699,10 +761,11 @@
     slug: orga_send_mail
     number: 99
     config: email
+    active_if: null
     hidden: false
+    icon: paper-plane
     feature: orga_send_mail
     module: communications
-    icon: paper-plane
 - model: larpmanager.eventpermission
   fields:
     name: Sheet
@@ -710,10 +773,11 @@
     slug: orga_character_form
     number: 12
     config: char_form
+    active_if: null
     hidden: false
+    icon: scroll
     feature: character
     module: writing
-    icon: scroll
 - model: larpmanager.eventpermission
   fields:
     name: Archive
@@ -721,10 +785,11 @@
     slug: orga_archive_email
     number: 100
     config: email
+    active_if: null
     hidden: false
+    icon: box-archive
     feature: orga_archive_email
     module: communications
-    icon: box-archive
 - model: larpmanager.eventpermission
   fields:
     name: Quick Setup
@@ -732,10 +797,11 @@
     slug: orga_quick
     number: 9999
     config: null
+    active_if: null
     hidden: true
+    icon: rocket
     feature: quick_setup
     module: event
-    icon: rocket
 - model: larpmanager.eventpermission
   fields:
     name: Reading
@@ -743,10 +809,11 @@
     slug: orga_reading
     number: 999
     config: writing
+    active_if: writing_reading
     hidden: false
+    icon: glasses
     feature: character
     module: writing
-    icon: glasses
 - model: larpmanager.eventpermission
   fields:
     name: Area
@@ -754,10 +821,11 @@
     slug: orga_warehouse_area
     number: 11
     config: warehouse
+    active_if: null
     hidden: false
+    icon: warehouse
     feature: warehouse
     module: warehouse
-    icon: warehouse
 - model: larpmanager.eventpermission
   fields:
     name: Checks
@@ -765,10 +833,11 @@
     slug: orga_warehouse_checks
     number: 41
     config: warehouse
+    active_if: null
     hidden: false
+    icon: clipboard-check
     feature: warehouse
     module: warehouse
-    icon: clipboard-check
 - model: larpmanager.eventpermission
   fields:
     name: Manifest
@@ -776,10 +845,11 @@
     slug: orga_warehouse_manifest
     number: 31
     config: warehouse
+    active_if: null
     hidden: false
+    icon: list-ul
     feature: warehouse
     module: warehouse
-    icon: list-ul
 - model: larpmanager.eventpermission
   fields:
     name: Rules
@@ -789,9 +859,9 @@
     config: px
     active_if: px_rules
     hidden: false
+    icon: scale-balanced
     feature: rules
     module: experience
-    icon: scale-balanced
 - model: larpmanager.eventpermission
   fields:
     name: Modifiers
@@ -801,9 +871,9 @@
     config: px
     active_if: px_modifiers
     hidden: false
+    icon: sliders
     feature: modifiers
     module: experience
-    icon: sliders
 - model: larpmanager.eventpermission
   fields:
     name: Content
@@ -811,10 +881,11 @@
     slug: orga_onetimes
     number: 11
     config: null
+    active_if: null
     hidden: false
+    icon: video
     feature: onetime_content
     module: onetime
-    icon: video
 - model: larpmanager.eventpermission
   fields:
     name: Tokens
@@ -822,10 +893,11 @@
     slug: orga_onetimes_tokens
     number: 21
     config: null
+    active_if: null
     hidden: false
+    icon: key
     feature: onetime_content
     module: onetime
-    icon: key
 - model: larpmanager.eventpermission
   fields:
     name: Ability Templates
@@ -835,9 +907,9 @@
     config: px
     active_if: px_templates
     hidden: false
+    icon: clone
     feature: templates
     module: experience
-    icon: clone
 - model: larpmanager.eventpermission
   fields:
     name: Character Inventory
@@ -845,10 +917,11 @@
     slug: orga_ci_inventory
     number: 51
     config: null
+    active_if: null
     hidden: false
+    icon: box
     feature: inventory
     module: inventory
-    icon: box
 - model: larpmanager.eventpermission
   fields:
     name: Pool Types
@@ -856,10 +929,11 @@
     slug: orga_ci_pool_types
     number: 53
     config: null
+    active_if: null
     hidden: false
+    icon: layer-group
     feature: inventory
     module: inventory
-    icon: layer-group
 - model: larpmanager.eventpermission
   fields:
     name: Activity Log
@@ -867,7 +941,8 @@
     slug: orga_log
     number: 1
     config: null
+    active_if: null
     hidden: false
+    icon: clock-rotate-left
     feature: logs
     module: miscellany
-    icon: clock-rotate-left

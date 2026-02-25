@@ -136,7 +136,7 @@ def check_orga_config(page: Any) -> None:
 
 
 def check_orga_roles(page: Any) -> None:
-    page.locator("#orga_roles").get_by_role("link", name="Roles").click()
+    sidebar(page, "Roles")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("testona")
@@ -173,7 +173,7 @@ def check_exe_config(page: Any) -> None:
     page.locator("#id_calendar_authors").check()
     page.locator("#id_calendar_tagline").check()
     submit_confirm(page)
-    page.locator("#exe_config").get_by_role("link", name="Configuration").click()
+    sidebar(page, "Configuration")
     page.get_by_role("link", name=re.compile(r"^Interface ")).click()
     expect(page.locator("#id_calendar_past_events")).to_be_checked()
     expect(page.locator("#id_calendar_website")).not_to_be_checked()

@@ -49,7 +49,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
 
     # Activate section feature
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Sections").check()
     page.get_by_role("button", name="Confirm").click()
 
@@ -130,14 +130,14 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Activate ticket selection / allowed selection
     go_to(page, live_server, "/test/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    sidebar(page, "Configuration")
     page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
     page.locator("#id_registration_reg_que_allowed").check()
     page.locator("#id_registration_reg_que_tickets").check()
     page.get_by_role("button", name="Confirm").click()
 
     # Create new ticket
-    page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
+    sidebar(page, "Tickets")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Depends")
@@ -232,20 +232,20 @@ def test_orga_section_form(pw_page: Any) -> None:
     # test factions
     login_orga(page, live_server)
     go_to(page, live_server, "/test/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    sidebar(page, "Configuration")
     page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
     page.locator("#id_registration_reg_que_tickets").check()
     page.locator("#id_registration_reg_que_allowed").uncheck()
     page.locator("#id_registration_reg_que_tickets").uncheck()
     page.get_by_role("button", name="Confirm").click()
 
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    sidebar(page, "Configuration")
     page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
     page.locator("#id_registration_reg_que_faction").check()
     page.get_by_role("button", name="Confirm").click()
 
     # set up features
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Characters").check()
     check_feature(page, "Factions")
     page.get_by_role("button", name="Confirm").click()

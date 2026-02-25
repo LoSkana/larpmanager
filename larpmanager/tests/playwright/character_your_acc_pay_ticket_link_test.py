@@ -380,7 +380,7 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Requests open: asdsadsadsa (20.00)")
 
     go_to(page, live_server, "/manage")
-    page.locator("#exe_refunds").get_by_role("link", name="Refunds").click()
+    sidebar(page, "Refunds")
     just_wait(page)
     expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 200 request done")
     page.get_by_role("link", name="Done").click()

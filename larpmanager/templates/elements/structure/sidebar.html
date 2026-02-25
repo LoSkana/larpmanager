@@ -108,7 +108,9 @@
                 <div class=" new-menu">
                     {% if run %}
                         <a class="sidebar-link" href="{% url 'manage' run.get_slug %}">Dashboard</a>
-                        <a class="sidebar-link" href="{% url 'orga_preferences' run.get_slug %}">{% trans "Preferences" %}</a>
+                        {% if not demo %}
+                            <a class="sidebar-link" href="{% url 'orga_preferences' run.get_slug %}">{% trans "Preferences" %}</a>
+                        {% endif %}
                         {% for mod, list in event_pms.items %}
                             {% if list %}
                                 <div class="sidebar-section">
@@ -125,7 +127,9 @@
                         {% endfor %}
                     {% else %}
                         <a class="sidebar-link" href="{% url 'manage' %}">Dashboard</a>
-                        <a class="sidebar-link" href="{% url 'exe_preferences' %}">{% trans "Preferences" %}</a>
+                        {% if not demo %}
+                            <a class="sidebar-link" href="{% url 'exe_preferences' %}">{% trans "Preferences" %}</a>
+                        {% endif %}
                         {% for mod, list in association_pms.items %}
                             {% if list %}
                                 <div class="sidebar-section">

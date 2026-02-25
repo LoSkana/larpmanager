@@ -798,6 +798,9 @@ msgstr "Oletusarvo"
 msgid "Details"
 msgstr "Yksityiskohdat"
 
+msgid "Display"
+msgstr "Näyttö"
+
 msgid "Element"
 msgstr "Elementti"
 
@@ -2512,9 +2515,6 @@ msgstr "Arvonlisävero (vaihtoehdot)"
 msgid "View Selector"
 msgstr "Näkymän valitsin"
 
-msgid "Visualisation"
-msgstr "Visualisointi"
-
 msgid "Wanna connect"
 msgstr "Haluatko yhteyden"
 
@@ -2548,9 +2548,6 @@ msgstr "Lastiluettelo"
 
 msgid "Carousel image"
 msgstr "Karusellin kuva"
-
-msgid "Character form"
-msgstr "Hahmon muoto"
 
 msgid "Character name"
 msgstr "Hahmon nimi"
@@ -2764,6 +2761,9 @@ msgstr "Sovelluksen integrointi"
 
 msgid "Change password"
 msgstr "Vaihda salasana"
+
+msgid "Character Sheet"
+msgstr "Hahmolista"
 
 msgid "Character cover"
 msgstr "Merkin kansi"
@@ -7149,6 +7149,11 @@ msgstr "Käytettävissä oleva luottosaldo tapahtumien maksuja ja ostoja varten"
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Kaikkien sivujen alareunassa olevan yksityisyydensuojan sivun sisältö"
 
+msgid "If checked, enables the reading view for writing elements"
+msgstr ""
+"Jos valintaruutu on valittuna, lukunäkymä otetaan käyttöön elementtien "
+"kirjoittamista varten"
+
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Ilmoita, mitä pronomineja haluat, että sinuun viitataan"
 
@@ -7803,6 +7808,11 @@ msgstr "Miten suhdetta kuvataan tämän hahmon näkökulmasta"
 
 msgid "I confirm that my face and name are clearly visible in the document"
 msgstr "Vahvistan, että kasvoni ja nimeni näkyvät selvästi asiakirjassa"
+
+msgid "If checked, enables the consistency check tool for character sheets"
+msgstr ""
+"Jos valitaan, otetaan käyttöön hahmolistausten johdonmukaisuuden "
+"tarkistustyökalu"
 
 msgid "If checked, shows participants the histories of preferences entered"
 msgstr ""
