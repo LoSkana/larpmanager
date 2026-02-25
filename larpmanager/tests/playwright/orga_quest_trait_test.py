@@ -87,7 +87,7 @@ def quests(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # create two quests
-    page.get_by_role("link", name="Quest", exact=True).click(force=True)
+    sidebar(page, "Quest")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("Torta")
     fill_tinymce(page, "id_teaser", "zucchero")
