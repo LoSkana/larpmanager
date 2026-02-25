@@ -2253,9 +2253,6 @@ msgstr "Vi er på vei"
 msgid "Will open at"
 msgstr "De åpner kl"
 
-msgid "Writing Form"
-msgstr "Skriveskjema"
-
 msgid "You must pay"
 msgstr "Du må betale"
 
@@ -6988,6 +6985,9 @@ msgstr "Angir at betalingen er sendt 'til venner og familie"
 msgid "Manage XP distributions for character skill purchases."
 msgstr "Administrer XP-distribusjoner for kjøp av karakterferdigheter."
 
+msgid "Manage fields for character sheet and writing elements"
+msgstr "Administrere felt for karakterark og skriveelementer"
+
 msgid "No registrations have been received for this event yet"
 msgstr "Ingen påmeldinger er mottatt til dette arrangementet ennå"
 
@@ -7636,10 +7636,6 @@ msgstr ""
 
 msgid "Main color for text content throughout your organization's pages"
 msgstr "Hovedfarge for tekstinnhold på alle organisasjonens sider"
-
-msgid "Manage questions and options for characters and writing elements"
-msgstr ""
-"Administrer spørsmål og alternativer for karakterer og skriveelementer"
 
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Nå kan deltakerne sende inn innsamlinger, og du kan gå gjennom dem"

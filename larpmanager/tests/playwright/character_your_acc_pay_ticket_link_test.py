@@ -358,7 +358,7 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # give out credits
-    page.get_by_role("link", name="Credits", exact=True).click()
+    sidebar(page, "Credits")
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").fill("org")

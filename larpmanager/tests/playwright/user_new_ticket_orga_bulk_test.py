@@ -165,7 +165,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Q1 q1 t2 Q2 q2 typ")
 
     # create traits
-    page.locator("#orga_traits").get_by_role("link", name="Traits").click()
+    sidebar(page, "Traits")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("t1")
@@ -220,7 +220,7 @@ def bulk_px(live_server: Any, page: Any) -> None:
 def bulk_warehouse(live_server: Any, page: Any) -> None:
     # activate warehouse
     go_to(page, live_server, "manage/")
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Warehouse").check()
     submit_confirm(page)
 

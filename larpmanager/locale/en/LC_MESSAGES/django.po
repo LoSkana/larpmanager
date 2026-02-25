@@ -956,7 +956,7 @@ msgstr ""
 msgid "Manage form questions for writing elements"
 msgstr ""
 
-msgid "Writing Form"
+msgid "Sheet"
 msgstr ""
 
 msgid "Manage options in form questions for writing elements"
@@ -3611,9 +3611,6 @@ msgid "Advanced text editor"
 msgstr ""
 
 msgid "Presentation"
-msgstr ""
-
-msgid "Sheet"
 msgstr ""
 
 msgid "Progress"
@@ -9407,7 +9404,7 @@ msgstr ""
 msgid "Customize buttons in the event navigation bar"
 msgstr ""
 
-msgid "Manage questions and options for characters and writing elements"
+msgid "Manage fields for character sheet and writing elements"
 msgstr ""
 
 msgid "Display sent e-mails"

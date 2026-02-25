@@ -30,7 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, new_option, \
-    submit_option
+    submit_option, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -136,14 +136,14 @@ def prepare(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # create faction
-    page.get_by_role("link", name="Factions", exact=True).click()
+    sidebar(page, "Factions")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("fassione")
     submit_confirm(page)
 
     # create form options
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("color")
 

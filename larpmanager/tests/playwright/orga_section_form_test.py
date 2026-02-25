@@ -183,7 +183,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("link", name="Sections").click()
     page.locator(".fa-arrow-up").click()
 
-    page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Form")
     page.locator("#registration_questions_Needs").locator(".fa-edit").click()
     page.get_by_text("Staff members who are allowed").click()
     page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").click()
@@ -251,7 +251,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # create faction
-    page.get_by_role("link", name="Factions", exact=True).click()
+    sidebar(page, "Factions")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("aaaaaccc")
@@ -261,7 +261,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # set up question
-    page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Form")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("faaaaacc")

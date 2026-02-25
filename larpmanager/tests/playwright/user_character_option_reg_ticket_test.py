@@ -77,7 +77,7 @@ def prepare(page: Any) -> None:
     submit_confirm(page)
 
     # set option based on ticket
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("choose")

@@ -2253,9 +2253,6 @@ msgstr "Přicházíme"
 msgid "Will open at"
 msgstr "Otevírají se v"
 
-msgid "Writing Form"
-msgstr "Forma psaní"
-
 msgid "You must pay"
 msgstr "Musíte zaplatit"
 
@@ -6988,6 +6985,9 @@ msgstr "Označuje, že platba je zasílána 'přátelům a rodině'"
 msgid "Manage XP distributions for character skill purchases."
 msgstr "Správa rozdělování zkušeností pro nákup dovedností postavy."
 
+msgid "Manage fields for character sheet and writing elements"
+msgstr "Správa polí pro list postavy a prvky psaní"
+
 msgid "No registrations have been received for this event yet"
 msgstr "Na tuto akci zatím nebyly přijaty žádné registrace"
 
@@ -7610,9 +7610,6 @@ msgstr ""
 
 msgid "Main color for text content throughout your organization's pages"
 msgstr "Hlavní barva pro textový obsah na stránkách vaší organizace"
-
-msgid "Manage questions and options for characters and writing elements"
-msgstr "Správa otázek a možností pro postavy a prvky psaní"
 
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Nyní mohou účastníci odesílat sbírky a vy si je můžete prohlédnout"

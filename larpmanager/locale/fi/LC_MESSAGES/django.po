@@ -2253,9 +2253,6 @@ msgstr "Olemme tulossa"
 msgid "Will open at"
 msgstr "Avataan klo"
 
-msgid "Writing Form"
-msgstr "Kirjoituslomake"
-
 msgid "You must pay"
 msgstr "Sinun on maksettava"
 
@@ -6992,6 +6989,9 @@ msgstr "Ilmoittaa, että maksu lähetetään 'ystäville ja perheenjäsenille'"
 msgid "Manage XP distributions for character skill purchases."
 msgstr "Hallitse hahmon taitojen hankkimiseen liittyviä XP-jakoja."
 
+msgid "Manage fields for character sheet and writing elements"
+msgstr "Hallitse kenttiä hahmo- ja kirjoituselementtejä varten"
+
 msgid "No registrations have been received for this event yet"
 msgstr "Tähän tapahtumaan ei ole vielä saatu ilmoittautumisia"
 
@@ -7629,10 +7629,6 @@ msgstr ""
 
 msgid "Main color for text content throughout your organization's pages"
 msgstr "Tekstisisällön pääväri organisaatiosi sivuilla"
-
-msgid "Manage questions and options for characters and writing elements"
-msgstr ""
-"Hallitse hahmoja ja kirjoituselementtejä koskevia kysymyksiä ja vaihtoehtoja"
 
 msgid "Now participants can submit collections, and you can review them"
 msgstr ""

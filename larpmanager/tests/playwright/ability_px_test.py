@@ -84,7 +84,7 @@ def setup(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # create computed field
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("c")
     page.locator("#id_name").click()

@@ -705,8 +705,8 @@
     icon: paper-plane
 - model: larpmanager.eventpermission
   fields:
-    name: Form
-    descr: Manage questions and options for characters and writing elements
+    name: Sheet
+    descr: Manage fields for character sheet and writing elements
     slug: orga_character_form
     number: 12
     config: char_form

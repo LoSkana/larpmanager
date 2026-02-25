@@ -181,7 +181,7 @@ def quest_trait(page: Any) -> None:
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(page, page.locator("#one"), "Q1 questt bhbh presenttation ttext")
     check_download(page, "Download")
-    page.locator("#orga_traits").get_by_role("link", name="Traits").click()
+    sidebar(page, "Traits")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("trait.csv"))
@@ -205,7 +205,7 @@ def registrations(page: Any) -> None:
 
 
 def reg_form(page: Any) -> None:
-    page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Form")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("reg-questions.csv"))
@@ -253,7 +253,7 @@ def factions(page: Any) -> None:
 
 
 def char_form(page: Any) -> None:
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("char-questions.csv"))

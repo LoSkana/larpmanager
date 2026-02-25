@@ -63,7 +63,7 @@ def test_miscellanea(pw_page: Any) -> None:
 
 def check_user_fee(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/manage/")
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     check_feature(page, "Payments")
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
@@ -78,7 +78,7 @@ def check_user_fee(live_server: Any, page: Any) -> None:
     page.locator("#id_wire_iban").fill("3sadsadsa")
     page.locator("#id_wire_bic").fill("test iban")
     submit_confirm(page)
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     check_feature(page, "Donation")
     submit_confirm(page)
     page.locator("#exe_config").get_by_role("link", name="Configuration").click()

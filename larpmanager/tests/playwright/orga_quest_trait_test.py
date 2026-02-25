@@ -107,7 +107,7 @@ def quests(page: Any, live_server: Any) -> None:
 
 def traits(page: Any, live_server: Any) -> None:
     # create traits
-    page.locator("#orga_traits").get_by_role("link", name="Traits").click()
+    sidebar(page, "Traits")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Strudel")

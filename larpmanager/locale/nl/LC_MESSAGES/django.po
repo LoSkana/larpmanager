@@ -2253,9 +2253,6 @@ msgstr "We komen eraan"
 msgid "Will open at"
 msgstr "Ze gaan open op"
 
-msgid "Writing Form"
-msgstr "Schrijfvorm"
-
 msgid "You must pay"
 msgstr "U moet betalen"
 
@@ -7000,6 +6997,9 @@ msgid "Manage XP distributions for character skill purchases."
 msgstr ""
 "Beheer XP-uitkeringen voor de aankoop van vaardigheden voor personages."
 
+msgid "Manage fields for character sheet and writing elements"
+msgstr "Beheer velden voor karakterblad en schrijfelementen"
+
 msgid "No registrations have been received for this event yet"
 msgstr "Er zijn nog geen inschrijvingen ontvangen voor dit evenement"
 
@@ -7691,9 +7691,6 @@ msgstr ""
 
 msgid "Main color for text content throughout your organization's pages"
 msgstr "Hoofdkleur voor tekstinhoud op alle pagina's van je organisatie"
-
-msgid "Manage questions and options for characters and writing elements"
-msgstr "Vragen en opties voor personages en schrijfelementen beheren"
 
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Deelnemers kunnen nu collecties indienen en jij kunt ze bekijken"

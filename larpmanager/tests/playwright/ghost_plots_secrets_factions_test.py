@@ -140,7 +140,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     submit_confirm(page)
 
     # add new field
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.get_by_role("cell", name="Question name (keep it short)").click()

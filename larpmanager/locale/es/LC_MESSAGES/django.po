@@ -2253,9 +2253,6 @@ msgstr "Estamos en camino"
 msgid "Will open at"
 msgstr "Se abrirá en"
 
-msgid "Writing Form"
-msgstr "Formulario de escritura"
-
 msgid "You must pay"
 msgstr "Debe pagar"
 
@@ -7010,6 +7007,10 @@ msgstr ""
 "Gestionar las distribuciones de XP para las compras de habilidades de los "
 "personajes."
 
+msgid "Manage fields for character sheet and writing elements"
+msgstr ""
+"Gestionar los campos de la hoja de personaje y los elementos de escritura"
+
 msgid "No registrations have been received for this event yet"
 msgstr "Aún no se han recibido inscripciones para este acto"
 
@@ -7685,11 +7686,6 @@ msgid "Main color for text content throughout your organization's pages"
 msgstr ""
 "Color principal para el contenido de texto en todas las páginas de su "
 "organización"
-
-msgid "Manage questions and options for characters and writing elements"
-msgstr ""
-"Gestionar las preguntas y las opciones para los personajes y los elementos "
-"de escritura"
 
 msgid "Now participants can submit collections, and you can review them"
 msgstr ""

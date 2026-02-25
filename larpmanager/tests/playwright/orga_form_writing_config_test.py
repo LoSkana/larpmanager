@@ -56,7 +56,7 @@ def feature_fields(page: Any) -> None:
     submit_confirm(page)
 
     # reorder test
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
     page.locator('[id="u3"]').locator(".fa-arrow-up").click()
     expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation")
@@ -68,7 +68,7 @@ def feature_fields(page: Any) -> None:
     submit_confirm(page)
 
     # check
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation Title Title Hidden")
 
     # add config fields - cover, assigned
@@ -80,7 +80,7 @@ def feature_fields(page: Any) -> None:
     submit_confirm(page)
 
     # check
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"),
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Cover Cover Hidden",
@@ -98,7 +98,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden"
     )
@@ -114,7 +114,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # add field computed
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("c")
     page.locator("#id_name").click()
@@ -126,7 +126,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check it has not been deleted
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"),
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden comp Computed Private",
@@ -138,7 +138,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden"
     )
@@ -153,7 +153,7 @@ def form_other_writing(page: Any) -> None:
     submit_confirm(page)
 
     # check
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     page.get_by_role("link", name="Plot", exact=True).click()
     page.get_by_role("link", name="Character", exact=True).click()
     expect_normalized(page,

@@ -197,7 +197,7 @@ def check_exe_features(page: Any) -> None:
 
 
 def check_exe_roles(page: Any) -> None:
-    page.locator("#exe_roles").get_by_role("link", name="Roles").click()
+    sidebar(page, "Roles")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("test")

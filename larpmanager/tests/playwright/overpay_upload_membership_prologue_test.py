@@ -53,7 +53,7 @@ def test_overpay_upload_membership_prologue(pw_page: Any) -> None:
 def check_overpay(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/manage")
     # Activate tokens / credits
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Tokens").check()
     page.get_by_role("checkbox", name="Credits").check()
     submit_confirm(page)
@@ -195,7 +195,7 @@ def upload_membership(page: Any, live_server: Any) -> None:
     # Activate membership
     go_to(page, live_server, "/manage")
     page.locator("#exe_features").click()
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Membership").check()
     submit_confirm(page)
 
@@ -239,8 +239,8 @@ def upload_membership(page: Any, live_server: Any) -> None:
 def upload_membership_fee(page: Any, live_server: Any) -> None:
     # upload fee
     go_to(page, live_server, "/manage")
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Payments", exact=True).check()
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
