@@ -65,7 +65,7 @@ def prepare(page: Any) -> None:
     page.get_by_role("link", name=re.compile(r"^Player editor ")).click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
-    page.get_by_role("link", name=re.compile(r"^Character form ")).click()
+    page.get_by_role("link", name=re.compile(r"^Character sheet")).click()
     page.locator("#id_character_form_wri_que_tickets").check()
     submit_confirm(page)
 
