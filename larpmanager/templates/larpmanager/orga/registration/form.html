@@ -17,7 +17,7 @@
                 <a href="{% url 'orga_registration_sections_edit' run.get_slug el.section.uuid %}">{{ el.section }}</a>
             </h1>
         {% endif %}
-        <table id="registration_questions_{{ el.section }}"
+        <table id="registration_questions_{{ el.section | slugify }}"
                class="go_datatable writing ordering_arrow">
             <thead>
                 <tr>
