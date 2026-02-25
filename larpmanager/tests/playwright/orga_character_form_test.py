@@ -134,7 +134,7 @@ def create_second_char(live_server: Any, page: Any) -> None:
 
 def show_chars(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Character")).click()
+    page.get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_field_visibility").check()
     submit_confirm(page)
 

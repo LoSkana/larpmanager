@@ -63,7 +63,7 @@ def feature_fields(page: Any) -> None:
 
     # add config fields - title
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Character ")).click()
+    page.get_by_role("link", name=re.compile(r"^Characters ")).click()
     page.locator("#id_writing_title").check()
     submit_confirm(page)
 
