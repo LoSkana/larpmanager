@@ -64,7 +64,7 @@ def test_permanence_form(pw_page: Any) -> None:
 def check_orga_visibility(page: Any) -> None:
     page.get_by_role("link", name="Event").click()
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Writing ")).click()
+    page.get_by_role("link", name=re.compile(r"^Character ")).click()
     page.locator("#id_writing_field_visibility").check()
     submit_confirm(page)
     sidebar(page, "Event")
