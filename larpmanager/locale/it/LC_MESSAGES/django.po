@@ -2924,9 +2924,6 @@ msgstr "Priorità casting"
 msgid "Character review"
 msgstr "Personaggio revisione"
 
-msgid "Collapse sidebar"
-msgstr "Comprimi barra laterale"
-
 msgid "Collection links"
 msgstr "Link di riscossione"
 
@@ -7439,11 +7436,6 @@ msgstr ""
 
 msgid "Description of this payment method to be displayed to the user"
 msgstr "Descrizione di questo metodo di pagamento da mostrare all'utente"
-
-msgid "If checked: collpase sidebars links, and expand on mouse hover"
-msgstr ""
-"Se selezionato: comprimi i link delle barre laterali ed espandi al passaggio"
-" del mouse"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "In caso di problemi, contattaci e ti assisteremo"

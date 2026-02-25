@@ -870,12 +870,6 @@ msgstr ""
 msgid "Manage your personal interface preferences"
 msgstr ""
 
-msgid "Collapse sidebar"
-msgstr ""
-
-msgid "If checked: collpase sidebars links, and expand on mouse hover"
-msgstr ""
-
 msgid "New Dashboard"
 msgstr ""
 

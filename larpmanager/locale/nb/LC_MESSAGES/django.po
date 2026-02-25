@@ -2924,9 +2924,6 @@ msgstr "Prioritet ved støping"
 msgid "Character review"
 msgstr "Karaktergjennomgang"
 
-msgid "Collapse sidebar"
-msgstr "Skjul sidepanelet"
-
 msgid "Collection links"
 msgstr "Lenker til samlingen"
 
@@ -7397,9 +7394,6 @@ msgstr ""
 
 msgid "Description of this payment method to be displayed to the user"
 msgstr "Beskrivelse av betalingsmåten som skal vises for brukeren"
-
-msgid "If checked: collpase sidebars links, and expand on mouse hover"
-msgstr "Hvis avkrysset: Skjul lenker i sidefelt, og utvid ved musepekeren"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Hvis du støter på problemer, kan du kontakte oss, så hjelper vi deg"

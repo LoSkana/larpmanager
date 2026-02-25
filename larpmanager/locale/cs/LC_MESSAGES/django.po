@@ -2924,9 +2924,6 @@ msgstr "Priorita obsazování"
 msgid "Character review"
 msgstr "Recenze postavy"
 
-msgid "Collapse sidebar"
-msgstr "Sbalit postranní panel"
-
 msgid "Collection links"
 msgstr "Odkazy na sbírku"
 
@@ -7387,11 +7384,6 @@ msgstr ""
 
 msgid "Description of this payment method to be displayed to the user"
 msgstr "Popis tohoto způsobu platby, který se zobrazí uživateli"
-
-msgid "If checked: collpase sidebars links, and expand on mouse hover"
-msgstr ""
-"Pokud je zaškrtnuto: rozbalí odkazy na postranních panelech a rozbalí je při"
-" najetí myší"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Pokud narazíte na nějaké problémy, kontaktujte nás a my vám pomůžeme"
