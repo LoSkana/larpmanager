@@ -262,7 +262,7 @@ def plots(live_server: Any, page: Any) -> None:
 def plots_character(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     # create other plots
-    page.get_by_role("link", name="Plots", exact=True).click()
+    sidebar(page, "Plots")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("gaga")
     page.get_by_text("After confirmation, add").click()

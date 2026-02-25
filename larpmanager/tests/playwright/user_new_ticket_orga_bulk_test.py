@@ -67,7 +67,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # add plot
-    page.get_by_role("link", name="Plots", exact=True).click()
+    sidebar(page, "Plots")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("plot")
     submit_confirm(page)

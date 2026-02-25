@@ -194,7 +194,6 @@ def prologues(page: Any) -> None:
 def upload_membership(page: Any, live_server: Any) -> None:
     # Activate membership
     go_to(page, live_server, "/manage")
-    page.locator("#exe_features").click()
     sidebar(page, "Features")
     page.get_by_role("checkbox", name="Membership").check()
     submit_confirm(page)
