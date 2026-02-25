@@ -1061,16 +1061,6 @@ class ExePreferencesForm(ConfigForm):
         # Define interface configuration section
         self.set_section("interface", _("Interface"))
 
-        # Add sidebar collapse toggle option
-        sidebar_collapse_label = _("Collapse sidebar")
-        sidebar_collapse_help_text = _("If checked: collpase sidebars links, and expand on mouse hover")
-        self.add_configs(
-            "interface_collapse_sidebar",
-            ConfigType.BOOL,
-            sidebar_collapse_label,
-            sidebar_collapse_help_text,
-        )
-
         # Add organizer digest mode toggle option
         digest_mode_label = _("Notifications digest")
         digest_mode_help_text = _(

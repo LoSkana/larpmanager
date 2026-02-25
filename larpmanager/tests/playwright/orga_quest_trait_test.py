@@ -206,7 +206,7 @@ def casting(page: Any, live_server: Any) -> None:
 
     # perform casting
     go_to(page, live_server, "/test")
-    sidebar(page, "Casting")
+    page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
     page.locator("#faction0").select_option("Torta")
     page.locator("#choice0").select_option("u2")

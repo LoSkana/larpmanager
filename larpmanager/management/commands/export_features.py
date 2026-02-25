@@ -95,11 +95,11 @@ class Command(BaseCommand):
             "permission_module": (PermissionModule, ("name", "slug", "order", "icon")),
             "association_permission": (
                 AssociationPermission,
-                ("name", "descr", "slug", "number", "feature", "config", "active_if", "hidden", "module"),
+                ("name", "descr", "slug", "number", "feature", "config", "active_if", "hidden", "module", "icon"),
             ),
             "event_permission": (
                 EventPermission,
-                ("name", "descr", "slug", "number", "feature", "config", "active_if", "hidden", "module"),
+                ("name", "descr", "slug", "number", "feature", "config", "active_if", "hidden", "module", "icon"),
             ),
             "payment_methods": (PaymentMethod, ("name", "slug", "instructions", "fields", "profile")),
         }

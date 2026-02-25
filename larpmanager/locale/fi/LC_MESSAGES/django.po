@@ -2954,9 +2954,6 @@ msgstr "Casting prioriteetti"
 msgid "Character review"
 msgstr "Hahmon tarkastelu"
 
-msgid "Collapse sidebar"
-msgstr "Sulje sivupalkki"
-
 msgid "Collection links"
 msgstr "Kokoelman linkit"
 
@@ -7497,11 +7494,6 @@ msgstr ""
 
 msgid "Description of this payment method to be displayed to the user"
 msgstr "Käyttäjälle näytettävä tämän maksutavan kuvaus"
-
-msgid "If checked: collpase sidebars links, and expand on mouse hover"
-msgstr ""
-"Jos valittuna: sivupalkkien linkit ja laajenevat hiiren leijutuksen "
-"yhteydessä"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Jos sinulla on ongelmia, ota meihin yhteyttä, niin autamme sinua"

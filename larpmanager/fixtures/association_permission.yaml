@@ -8,6 +8,7 @@
     hidden: false
     feature: exe_association
     module: organization
+    icon: building
 - model: larpmanager.associationpermission
   fields:
     name: Roles
@@ -18,6 +19,7 @@
     hidden: false
     feature: exe_roles
     module: organization
+    icon: user-shield
 - model: larpmanager.associationpermission
   fields:
     name: Configuration
@@ -28,6 +30,7 @@
     hidden: false
     feature: exe_config
     module: organization
+    icon: gears
 - model: larpmanager.associationpermission
   fields:
     name: Features
@@ -38,6 +41,7 @@
     hidden: false
     feature: exe_features
     module: organization
+    icon: puzzle-piece
 - model: larpmanager.associationpermission
   fields:
     name: Accounting
@@ -48,6 +52,7 @@
     hidden: false
     feature: exe_accounting
     module: accounting
+    icon: calculator
 - model: larpmanager.associationpermission
   fields:
     name: Payments
@@ -58,6 +63,7 @@
     hidden: false
     feature: payment
     module: accounting
+    icon: credit-card
 - model: larpmanager.associationpermission
   fields:
     name: Donations
@@ -68,6 +74,7 @@
     hidden: false
     feature: donate
     module: accounting
+    icon: hand-holding-heart
 - model: larpmanager.associationpermission
   fields:
     name: Outflows
@@ -78,6 +85,7 @@
     hidden: false
     feature: outflow
     module: accounting
+    icon: arrow-trend-up
 - model: larpmanager.associationpermission
   fields:
     name: Inflows
@@ -88,6 +96,7 @@
     hidden: false
     feature: inflow
     module: accounting
+    icon: arrow-trend-down
 - model: larpmanager.associationpermission
   fields:
     name: Expenses
@@ -98,6 +107,7 @@
     hidden: false
     feature: expense
     module: accounting
+    icon: receipt
 - model: larpmanager.associationpermission
   fields:
     name: Credits
@@ -108,6 +118,7 @@
     hidden: false
     feature: credits
     module: accounting
+    icon: gem
 - model: larpmanager.associationpermission
   fields:
     name: Refunds
@@ -118,6 +129,7 @@
     hidden: false
     feature: refund
     module: accounting
+    icon: rotate-left
 - model: larpmanager.associationpermission
   fields:
     name: Collections
@@ -128,6 +140,7 @@
     hidden: false
     feature: collection
     module: accounting
+    icon: layer-group
 - model: larpmanager.associationpermission
   fields:
     name: Verification
@@ -138,6 +151,7 @@
     hidden: false
     feature: verification
     module: accounting
+    icon: circle-check
 - model: larpmanager.associationpermission
   fields:
     name: Balance
@@ -148,6 +162,7 @@
     hidden: false
     feature: ita_balance
     module: italy
+    icon: scale-balanced
 - model: larpmanager.associationpermission
   fields:
     name: Historical
@@ -158,6 +173,7 @@
     hidden: false
     feature: record_acc
     module: accounting
+    icon: clock-rotate-left
 - model: larpmanager.associationpermission
   fields:
     name: Appearance
@@ -168,6 +184,7 @@
     hidden: false
     feature: exe_appearance
     module: appearance
+    icon: palette
 - model: larpmanager.associationpermission
   fields:
     name: Texts
@@ -178,6 +195,7 @@
     hidden: false
     feature: exe_texts
     module: appearance
+    icon: font
 - model: larpmanager.associationpermission
   fields:
     name: URL shortener
@@ -188,6 +206,7 @@
     hidden: false
     feature: urlshortner
     module: miscellany
+    icon: link
 - model: larpmanager.associationpermission
   fields:
     name: Containers
@@ -198,6 +217,7 @@
     hidden: false
     feature: warehouse
     module: warehouse
+    icon: box-open
 - model: larpmanager.associationpermission
   fields:
     name: Events
@@ -208,6 +228,7 @@
     hidden: false
     feature: exe_events
     module: events
+    icon: calendar
 - model: larpmanager.associationpermission
   fields:
     name: Pre-Registrations
@@ -217,7 +238,8 @@
     config: null
     hidden: false
     feature: pre_register
-    module: registration
+    module: events
+    icon: user-clock
 - model: larpmanager.associationpermission
   fields:
     name: Deadlines
@@ -227,7 +249,8 @@
     config: deadlines
     hidden: false
     feature: deadlines
-    module: registration
+    module: events
+    icon: hourglass-half
 - model: larpmanager.associationpermission
   fields:
     name: E-mail
@@ -238,6 +261,7 @@
     hidden: false
     feature: exe_send_mail
     module: communications
+    icon: paper-plane
 - model: larpmanager.associationpermission
   fields:
     name: Members
@@ -248,6 +272,7 @@
     hidden: false
     feature: membership
     module: users
+    icon: users
 - model: larpmanager.associationpermission
   fields:
     name: Vote
@@ -258,6 +283,7 @@
     hidden: false
     feature: vote
     module: users
+    icon: square-check
 - model: larpmanager.associationpermission
   fields:
     name: Badges
@@ -268,6 +294,7 @@
     hidden: false
     feature: badge
     module: users
+    icon: certificate
 - model: larpmanager.associationpermission
   fields:
     name: Questions
@@ -278,6 +305,7 @@
     hidden: false
     feature: help
     module: communications
+    icon: circle-question
 - model: larpmanager.associationpermission
   fields:
     name: Newsletter
@@ -288,6 +316,7 @@
     hidden: false
     feature: newsletter
     module: communications
+    icon: envelope
 - model: larpmanager.associationpermission
   fields:
     name: Volunteers
@@ -298,6 +327,7 @@
     hidden: false
     feature: volunteer_registry
     module: italy
+    icon: handshake
 - model: larpmanager.associationpermission
   fields:
     name: Enrolment
@@ -308,6 +338,7 @@
     hidden: false
     feature: membership
     module: users
+    icon: user-plus
 - model: larpmanager.associationpermission
   fields:
     name: Payment Methods
@@ -318,6 +349,7 @@
     hidden: false
     feature: payment
     module: accounting
+    icon: money-bill-wave
 - model: larpmanager.associationpermission
   fields:
     name: Invoices
@@ -329,6 +361,7 @@
     hidden: false
     feature: payment_invoices
     module: accounting
+    icon: file-invoice
 - model: larpmanager.associationpermission
   fields:
     name: Check data
@@ -339,6 +372,7 @@
     hidden: false
     feature: fiscal_code_check
     module: italy
+    icon: user-check
 - model: larpmanager.associationpermission
   fields:
     name: Tokens
@@ -349,6 +383,7 @@
     hidden: false
     feature: tokens
     module: accounting
+    icon: coins
 - model: larpmanager.associationpermission
   fields:
     name: Registry
@@ -359,6 +394,7 @@
     hidden: false
     feature: membership
     module: users
+    icon: address-book
 - model: larpmanager.associationpermission
   fields:
     name: Profile
@@ -369,6 +405,7 @@
     hidden: false
     feature: exe_profile
     module: users
+    icon: user-pen
 - model: larpmanager.associationpermission
   fields:
     name: Template
@@ -379,6 +416,7 @@
     hidden: false
     feature: template
     module: events
+    icon: clone
 - model: larpmanager.associationpermission
   fields:
     name: Archive
@@ -389,6 +427,7 @@
     hidden: false
     feature: exe_archive_email
     module: communications
+    icon: box-archive
 - model: larpmanager.associationpermission
   fields:
     name: Quick Setup
@@ -399,6 +438,7 @@
     hidden: true
     feature: quick_setup
     module: event
+    icon: rocket
 - model: larpmanager.associationpermission
   fields:
     name: Items
@@ -409,6 +449,7 @@
     hidden: false
     feature: warehouse
     module: warehouse
+    icon: box
 - model: larpmanager.associationpermission
   fields:
     name: Movements
@@ -419,6 +460,7 @@
     hidden: false
     feature: warehouse
     module: warehouse
+    icon: dolly
 - model: larpmanager.associationpermission
   fields:
     name: Tags
@@ -429,6 +471,7 @@
     hidden: false
     feature: warehouse
     module: warehouse
+    icon: tags
 - model: larpmanager.associationpermission
   fields:
     name: Translations
@@ -439,6 +482,7 @@
     hidden: false
     feature: translation
     module: appearance
+    icon: language
 - model: larpmanager.associationpermission
   fields:
     name: Activity Log
@@ -449,6 +493,7 @@
     hidden: false
     feature: logs
     module: miscellany
+    icon: clock-rotate-left
 - model: larpmanager.associationpermission
   fields:
     name: Activation
