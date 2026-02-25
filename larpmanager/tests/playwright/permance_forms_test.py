@@ -120,7 +120,7 @@ def check_orga_features(page: Any) -> None:
 
 def check_orga_config(page: Any) -> None:
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Visualisation ")).click()
+    page.get_by_role("link", name=re.compile(r"^Display ")).click()
     page.locator("#id_show_shortcuts_mobile").check()
     page.get_by_text("If checked: Show summary page").click()
     page.locator("#id_show_limitations").check()
@@ -129,7 +129,7 @@ def check_orga_config(page: Any) -> None:
     page.get_by_text("Email notifications Disable").click()
     page.get_by_text("If checked, options no longer").click()
     page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
-    page.get_by_role("link", name=re.compile(r"^Visualisation ")).click()
+    page.get_by_role("link", name=re.compile(r"^Display ")).click()
     expect(page.locator("#id_show_shortcuts_mobile")).to_be_checked()
     expect(page.locator("#id_show_export")).not_to_be_checked()
     expect(page.locator("#id_show_limitations")).to_be_checked()

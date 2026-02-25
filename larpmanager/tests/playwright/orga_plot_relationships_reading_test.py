@@ -56,6 +56,11 @@ def test_plot_relationship_reading(pw_page: Any) -> None:
     check_feature(page, "Relationships")
     submit_confirm(page)
 
+    go_to(page, live_server, "/test/manage/config")
+    page.get_by_role("link", name=re.compile(r"^Characters")).click()
+    page.locator("#id_writing_reading").check()
+    submit_confirm(page)
+
     relationships(live_server, page)
 
     plots(live_server, page)
@@ -79,7 +84,7 @@ def reading(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # now read it
-    page.get_by_role("link", name="Reading").click()
+    sidebar(page, "Reading")
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
     expect_normalized(page,
         page.locator("#one"),
@@ -111,7 +116,7 @@ def reading(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "only for testt Primary Test Character")
 
     # check reading for prova
-    page.get_by_role("link", name="Reading").click()
+    sidebar(page, "Reading")
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
     expect_normalized(page,
         page.locator("#one"),
@@ -119,7 +124,7 @@ def reading(live_server: Any, page: Any) -> None:
     )
 
     # check reading plot
-    page.get_by_role("link", name="Reading").click()
+    sidebar(page, "Reading")
     page.locator('[id="plot_u1"]').locator(".fa-book-open").click()
     expect_normalized(page, page.locator("#one"), "testona Text wwwww prova bruuuu")
 

@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, logout, expect_normalized, \
-    submit_confirm, new_option, submit_option
+    submit_confirm, new_option, submit_option, sidebar
 
 pytestmark = pytest.mark.e2e
 

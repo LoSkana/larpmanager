@@ -115,7 +115,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("link", name="Form").click()
 
     # check section is still available
-    page.locator("#registration_questions_Needs").locator(".fa-edit").click()
+    page.locator("#registration_questions_needs").locator(".fa-edit").click()
     expect(page.locator("#select2-id_section-container")).to_match_aria_snapshot("- textbox \"Needs\"")
 
     # Reorder sections, check they are updated
@@ -145,7 +145,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Select ticket as dependent
     page.get_by_role("link", name="Form").click()
-    page.locator("#registration_questions_Preferences").locator(".fa-edit").click()
+    page.locator("#registration_questions_preferences").locator(".fa-edit").click()
     page.get_by_role("row", name="Ticket list If you select one").get_by_role("searchbox").click()
     page.get_by_role("row", name="Ticket list If you select one").get_by_role("searchbox").fill("de")
     page.get_by_role("option", name="Test Larp (Standard) Depends").click()
@@ -184,7 +184,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.locator(".fa-arrow-up").click()
 
     sidebar(page, "Form")
-    page.locator("#registration_questions_Needs").locator(".fa-edit").click()
+    page.locator("#registration_questions_needs").locator(".fa-edit").click()
     page.get_by_text("Staff members who are allowed").click()
     page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").click()
     page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").fill("ad")
