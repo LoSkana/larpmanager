@@ -226,6 +226,7 @@ def _init_casting_widget_cache(run: Run) -> dict:
 def _init_orga_accounting_widget_cache(run: Run) -> dict:
     """Compute accounting statistics for widget cache."""
     summary, _accounting_data = get_run_accounting(run, {})
+    summary["has_data"] = any(summary.values())
     return summary
 
 

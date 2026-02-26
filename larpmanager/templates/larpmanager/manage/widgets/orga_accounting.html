@@ -53,5 +53,10 @@
                 {% endif %}
             </tbody>
         </table>
+        {% if not widgets.accounting.has_data %}
+            <p>
+                <i>{% trans "No transactions recorded" %}</i>.
+            </p>
+        {% endif %}
     </div>
 {% endif %}

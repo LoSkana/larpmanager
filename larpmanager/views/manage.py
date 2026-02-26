@@ -300,18 +300,14 @@ def _exe_suggestions(context: dict) -> None:
     """
 
     suggestions = {
-        "exe_roles": _(
-            "Grant access to organization management for other users and define roles with specific permissions",
-        )
+        "exe_roles": _("Define roles to grant organization management access"),
     }
 
     if not context.get("demo"):
         suggestions.update({
-            "exe_appearance": _(
-                "Customize the appearance of all organizational pages, including colors, fonts, and images",
-            ),
-            "exe_features": _("Activate new features and enhance the functionality of the platform"),
-            "exe_config": _("Set up specific values for the interface configuration or features"),
+            "exe_appearance": _("Customize organization pages appearance"),
+            "exe_features": _("Activate new platform features"),
+            "exe_config": _("Configure organization feature settings"),
         })
 
     for permission_key, suggestion_text in suggestions.items():
@@ -343,13 +339,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
 
     # Add prompt to complete checklist and activate advanced mode when in demo/lite mode
     if context.get("demo"):
-        _checklist, progress = get_activation_checklist(context["association_id"])
-        demo_text = _(
-            "You are using %(platform)s in <b>Lite Mode</b> (%(progress)s%% complete)"
-        ) % {"platform": context.get("platform", "LarpManager"), "progress": progress} + ". " + _(
-            "This mode helps you master quickly the basics of the platform") + ". " + _(
-            "Complete the checklist to unlock <b>Advanced Mode</b>, enabling full access to complex logistics, accounting, and narrative tools") + "."
-        _add_priority(context, demo_text, "exe_activation")
+        _checklist, context["progress"] = get_activation_checklist(context["association_id"])
 
     # Check if currency configuration suggestion has been dismissed
     _check_currency_priority(request, context, association_features)
@@ -362,9 +352,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
         runs_to_conclude = actions_data["past_runs"]["runs"]
         _add_action(
             context,
-            _(
-                "There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, etc.) are finished, mark them as completed",
-            )
+            _("Mark as completed: <b>%(list)s</b>.")
             % {"list": ", ".join(runs_to_conclude)},
             "exe_events",
         )
@@ -373,7 +361,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     if actions_data.get("pending_expenses", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> expenses to approve") % {"number": actions_data["pending_expenses"]["count"]},
+            _("<b>%(number)s</b> expenses to approve") % {"number": actions_data["pending_expenses"]["count"]},
             "exe_expenses",
         )
 
@@ -387,7 +375,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
         if actions_data.get(key, {}).get("count", 0) > 0:
             _add_action(
                 context,
-                _("There are <b>%(number)s</b> %(label)s to approve")
+                _("<b>%(number)s</b> %(label)s to approve")
                 % {"number": actions_data[key]["count"], "label": label},
                 url,
             )
@@ -396,7 +384,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     if actions_data.get("pending_refunds", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> refunds to deliver") % {"number": actions_data["pending_refunds"]["count"]},
+            _("<b>%(number)s</b> refunds to deliver") % {"number": actions_data["pending_refunds"]["count"]},
             "exe_refunds",
         )
 
@@ -404,7 +392,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     if actions_data.get("pending_members", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> members to approve") % {"number": actions_data["pending_members"]["count"]},
+            _("<b>%(number)s</b> members to approve") % {"number": actions_data["pending_members"]["count"]},
             "exe_membership",
         )
 
@@ -415,11 +403,11 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     _exe_users_actions(request, context, association_features, actions_data)
 
     actions = {
-        "exe_methods": _("Set up the payment methods available to participants"),
-        "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
+        "exe_methods": _("Set up payment methods for participants"),
+        "exe_profile": _("Define the data collected in the user profile form"),
     }
     if not context.get("demo"):
-        actions["exe_quick"] = _("Quickly configure your organization's most important settings")
+        actions["exe_quick"] = _("Select and activate key features")
 
     for permission_key, suggestion_text in actions.items():
         if get_association_config(
@@ -461,7 +449,7 @@ def _exe_users_actions(request: HttpRequest, context: dict, enabled_features: di
     if "help" in enabled_features and actions_data.get("open_help_questions", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> questions to answer") % {"number": actions_data["open_help_questions"]["count"]},
+            _("<b>%(number)s</b> questions to answer") % {"number": actions_data["open_help_questions"]["count"]},
             "exe_questions",
         )
 
@@ -658,7 +646,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
     }:
         _add_priority(
             context,
-            _("Some activated features need the 'Character' feature, but it isn't active"),
+            _("Some features require 'Character', which is not active"),
             "orga_features",
         )
 
@@ -669,7 +657,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
     ):
         _add_priority(
             context,
-            _("Set up the configuration for the creation or editing of characters by the participants"),
+            _("Set up participant character creation/editing configuration"),
             "orga_character",
             "config/user_character",
         )
@@ -678,7 +666,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
     if "credits" not in features and set(features) & {"expense", "refund", "collection"}:
         _add_priority(
             context,
-            _("Some activated features need the 'Credits' feature, but it isn't active"),
+            _("Some features require 'Credits', which is not active"),
             "orga_features",
         )
 
@@ -686,7 +674,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
     if actions_data.get("proposed_characters", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> characters to approve") % {"number": actions_data["proposed_characters"]["count"]},
+            _("<b>%(number)s</b> characters to approve") % {"number": actions_data["proposed_characters"]["count"]},
             "orga_characters",
         )
 
@@ -697,7 +685,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
         if actions_data.get("pending_expenses", {}).get("count", 0) > 0:
             _add_action(
                 context,
-                _("There are <b>%(number)s</b> expenses to approve") % {"number": actions_data["pending_expenses"]["count"]},
+                _("<b>%(number)s</b> expenses to approve") % {"number": actions_data["pending_expenses"]["count"]},
                 "orga_expenses",
             )
 
@@ -705,7 +693,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
     if actions_data.get("pending_invoices_registration", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> %(label)s to approve")
+            _("<b>%(number)s</b> %(label)s to approve")
             % {"number": actions_data["pending_invoices_registration"]["count"], "label": _("registration payments")},
             "orga_payments",
         )
@@ -715,7 +703,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
         registration_questions_without_options = actions_data["registration_questions_incomplete"]["names"]
         _add_priority(
             context,
-            _("There are registration questions without options: %(list)s")
+            _("Registration questions without options: %(list)s")
             % {"list": ", ".join(registration_questions_without_options)},
             "orga_registration_form",
         )
@@ -725,7 +713,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
         writing_questions_without_options = actions_data["writing_questions_incomplete"]["names"]
         _add_priority(
             context,
-            _("There are writing fields without options: %(list)s")
+            _("Writing fields without options: %(list)s")
             % {"list": ", ".join(writing_questions_without_options)},
             "orga_character_form",
         )
@@ -761,7 +749,7 @@ def _orga_user_actions(
     if "help" in features and actions_data.get("open_help_questions", {}).get("count", 0) > 0:
         _add_action(
             context,
-            _("There are <b>%(number)s</b> questions to answer") % {"number": actions_data["open_help_questions"]["count"]},
+            _("<b>%(number)s</b> questions to answer") % {"number": actions_data["open_help_questions"]["count"]},
             "exe_questions",
         )
 
@@ -782,7 +770,7 @@ def _orga_casting_actions(context: dict, enabled_features: dict[str, Any], actio
     ):
         _add_priority(
             context,
-            _("Set the casting options in the configuration panel"),
+            _("Set casting options in the configuration"),
             "orga_casting",
             "config/casting",
         )
@@ -799,7 +787,7 @@ def _orga_casting_actions(context: dict, enabled_features: dict[str, Any], actio
             quest_type_names = actions_data["quest_types_without_quests"]["names"]
             _add_priority(
                 context,
-                _("There are quest types without quests: %(list)s")
+                _("Quest types without quests: %(list)s")
                 % {"list": ", ".join(quest_type_names)},
                 "orga_quests",
             )
@@ -808,7 +796,7 @@ def _orga_casting_actions(context: dict, enabled_features: dict[str, Any], actio
             quest_names = actions_data["quests_without_traits"]["names"]
             _add_priority(
                 context,
-                _("There are quests without traits: %(list)s")
+                _("Quests without traits: %(list)s")
                 % {"list": ", ".join(quest_names)},
                 "orga_traits",
             )
@@ -855,7 +843,7 @@ def _orga_px_actions(context: dict, enabled_features: dict, actions_data: dict) 
         ability_type_names = actions_data["ability_types_without_abilities"]["names"]
         _add_priority(
             context,
-            _("There are ability types without abilities: %(list)s")
+            _("Ability types without abilities: %(list)s")
             % {"list": ", ".join(ability_type_names)},
             "orga_px_abilities",
         )
@@ -888,10 +876,7 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
     if "reg_installments" in enabled_features and "reg_quotas" in enabled_features:
         _add_priority(
             context,
-            _(
-                "You have activated both fixed and dynamic installments; they are not meant to be used together, "
-                "deactivate one of the two in the features management panel",
-            ),
+            _("Fixed and dynamic installments cannot be used together; deactivate one"),
             "orga_features",
         )
 
@@ -918,9 +903,7 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
                 installments_names = actions_data["installments_both_deadlines"]["names"]
                 _add_priority(
                     context,
-                    _(
-                        "You have some fixed installments with both date and days set, but those values cannot be set at the same time: %(list)s",
-                    )
+                    _("Some installments have both date and days set (mutually exclusive): %(list)s")
                     % {"list": ", ".join(installments_names)},
                     "orga_registration_installments",
                 )
@@ -930,7 +913,7 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
                 tickets_names = actions_data["tickets_missing_final_installment"]["names"]
                 _add_priority(
                     context,
-                    _("You have some tickets without a final installment (with 0 amount): %(list)s")
+                    _("Some tickets are missing a final installment (0 amount): %(list)s")
                     % {"list": ", ".join(tickets_names)},
                     "orga_registration_installments",
                 )
@@ -941,7 +924,7 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
     ):
         _add_priority(
             context,
-            _("Set up configuration for Patron and Reduced tickets"),
+            _("Set up Patron and Reduced ticket configuration"),
             "orga_registration_tickets",
             "config/reduced",
         )
@@ -955,7 +938,7 @@ def _check_currency_priority(request: HttpRequest, context: dict, features:dict)
     ) and has_association_permission(request, context, "exe_association"):
         _add_priority(
             context,
-            _("Set up the payment currency in the organization settings"),
+            _("Set the organization payment currency"),
             "exe_association",
         )
 
@@ -969,21 +952,21 @@ def _orga_registration_actions(context: dict, enabled_features: dict[str, Any]) 
     if context["run"].registration_status == RegistrationStatus.FUTURE and not context["run"].registration_open:
         _add_priority(
             context,
-            _("Set up a value for registration opening date"),
+            _("Set the registration opening date"),
             "orga_event",
         )
 
     if "registration_secret" in enabled_features and not context["run"].registration_secret:
         _add_priority(
             context,
-            _("Set up a value for registration secret link"),
+            _("Set the registration secret link"),
             "orga_event",
         )
 
     if context["run"].registration_status == RegistrationStatus.EXTERNAL and not context["run"].register_link:
         _add_priority(
             context,
-            _("Set up a value for registration external link"),
+            _("Set the registration external link"),
             "orga_event",
         )
 
@@ -1012,10 +995,10 @@ def _orga_suggestions(context: dict) -> None:
 
     """
     actions = {
-        "orga_registration_tickets": _("Set up the tickets that users can select during registration"),
+        "orga_registration_tickets": _("Set up registration tickets"),
     }
     if not context.get("demo"):
-        actions["orga_quick"] = _("Quickly configure your events's most important settings")
+        actions["orga_quick"] = _("Select and activate key features")
 
     for permission_slug, suggestion_text in actions.items():
         if get_event_config(context["event"].id, f"{permission_slug}_suggestion", default_value=False, context=context):
@@ -1023,17 +1006,15 @@ def _orga_suggestions(context: dict) -> None:
         _add_action(context, suggestion_text, permission_slug)
 
     suggestions = {
-        "orga_registration_form": _(
-            "Define the registration form, and set up any number of registration questions and their options",
-        ),
-        "orga_roles": _("Grant access to event management for other users and define roles with specific permissions"),
+        "orga_registration_form": _("Define the registration form"),
+        "orga_roles": _("Define roles to grant event management access"),
     }
 
     if not context.get("demo"):
         suggestions.update({
-            "orga_appearance": _("Customize the appearance of all event pages, including colors, fonts, and images"),
-            "orga_features": _("Activate new features and enhance the functionality of the event"),
-            "orga_config": _("Set specific values for configuration of features of the event"),
+            "orga_appearance": _("Customize event pages appearance"),
+            "orga_features": _("Activate new event features"),
+            "orga_config": _("Configure event feature settings"),
         })
 
     for permission_slug, suggestion_text in suggestions.items():
@@ -1123,8 +1104,8 @@ def _compile(request: HttpRequest, context: dict) -> None:  # noqa: C901 - Compl
 
     for permission_model in (EventPermission, AssociationPermission):
         permission_queryset = permission_model.objects.filter(slug__in=permission_slug_list).select_related("feature")
-        for slug, permission_name, tutorial in permission_queryset.values_list("slug", "name", "feature__tutorial"):
-            permission_cache[slug] = (permission_name, tutorial)
+        for slug, permission_name, tutorial, icon in permission_queryset.values_list("slug", "name", "feature__tutorial", "icon"):
+            permission_cache[slug] = (permission_name, tutorial, icon)
 
     for section_name in section_names:
         if f"{section_name}_list" not in context:
@@ -1134,10 +1115,10 @@ def _compile(request: HttpRequest, context: dict) -> None:  # noqa: C901 - Compl
             if slug not in permission_cache:
                 continue
 
-            (permission_name, tutorial) = permission_cache[slug]
+            (permission_name, tutorial, icon) = permission_cache[slug]
             link_name, link_url = _get_href(context, slug, permission_name, custom_link)
             context[section_name].append(
-                {"text": text, "link": link_name, "href": link_url, "tutorial": tutorial, "slug": slug},
+                {"text": text, "link": link_name, "href": link_url, "tutorial": tutorial, "slug": slug, "icon": icon},
             )
 
 

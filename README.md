@@ -204,15 +204,20 @@ sudo apt install python3.12 python3.12-venv python3.12-dev python3-pip redis-ser
   libxmlsec1-openssl libavif16 libcairo2-dev pkg-config
 ```
 
+Install uv (fast Python package manager):
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
 Create and activate a virtual environment:
 ```bash
-python3.12 -m venv venv
-source venv/bin/activate
+uv venv
+source .venv/bin/activate
 ```
 
 Install Python dependencies:
 ```bash
-pip install -r requirements.txt
+uv pip install -r pyproject.toml
 ```
 
 Install and activate LFS to handle big files:
@@ -305,7 +310,7 @@ Thanks in advance for contributing! Here's the steps:
 
 2. Install and activate `pre-commit`:
    ```bash
-   pip install pre-commit
+   uv pip install pre-commit
    pre-commit install
    ```
 

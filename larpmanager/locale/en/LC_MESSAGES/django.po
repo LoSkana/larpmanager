@@ -6531,6 +6531,13 @@ msgstr ""
 msgid "Register to the event"
 msgstr ""
 
+#, python-format
+msgid "<b>Lite Mode</b>: %(progress)s%% complete"
+msgstr ""
+
+msgid "Complete the checklist to unlock all features"
+msgstr ""
+
 msgid "Dates"
 msgstr ""
 
@@ -6586,6 +6593,9 @@ msgstr ""
 msgid "Organization tax"
 msgstr ""
 
+msgid "No transactions recorded"
+msgstr ""
+
 msgid "Characters assigned"
 msgstr ""
 
@@ -6611,6 +6621,9 @@ msgid "Edit registration status"
 msgstr ""
 
 msgid "Secret registration link"
+msgstr ""
+
+msgid "No registrations found"
 msgstr ""
 
 msgid "In creation"
@@ -10026,43 +10039,24 @@ msgstr ""
 msgid "No events are present, create one"
 msgstr ""
 
-msgid ""
-"Grant access to organization management for other users and define roles "
-"with specific permissions"
+msgid "Define roles to grant organization management access"
 msgstr ""
 
-msgid ""
-"Customize the appearance of all organizational pages, including colors, "
-"fonts, and images"
+msgid "Customize organization pages appearance"
 msgstr ""
 
-msgid "Activate new features and enhance the functionality of the platform"
+msgid "Activate new platform features"
 msgstr ""
 
-msgid "Set up specific values for the interface configuration or features"
+msgid "Configure organization feature settings"
 msgstr ""
 
 #, python-format
-msgid ""
-"You are using %(platform)s in <b>Lite Mode</b> (%(progress)s%% complete)"
-msgstr ""
-
-msgid "This mode helps you master quickly the basics of the platform"
-msgstr ""
-
-msgid ""
-"Complete the checklist to unlock <b>Advanced Mode</b>, enabling full access "
-"to complex logistics, accounting, and narrative tools"
+msgid "Mark as completed: <b>%(list)s</b>."
 msgstr ""
 
 #, python-format
-msgid ""
-"There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, "
-"etc.) are finished, mark them as completed"
-msgstr ""
-
-#, python-format
-msgid "There are <b>%(number)s</b> expenses to approve"
+msgid "<b>%(number)s</b> expenses to approve"
 msgstr ""
 
 msgid "registration payments"
@@ -10078,26 +10072,24 @@ msgid "membership fees"
 msgstr ""
 
 #, python-format
-msgid "There are <b>%(number)s</b> %(label)s to approve"
+msgid "<b>%(number)s</b> %(label)s to approve"
 msgstr ""
 
 #, python-format
-msgid "There are <b>%(number)s</b> refunds to deliver"
+msgid "<b>%(number)s</b> refunds to deliver"
 msgstr ""
 
 #, python-format
-msgid "There are <b>%(number)s</b> members to approve"
+msgid "<b>%(number)s</b> members to approve"
 msgstr ""
 
-msgid "Set up the payment methods available to participants"
+msgid "Set up payment methods for participants"
 msgstr ""
 
-msgid ""
-"Define which data will be asked in the profile form to the users once they "
-"sign up"
+msgid "Define the data collected in the user profile form"
 msgstr ""
 
-msgid "Quickly configure your organization's most important settings"
+msgid "Select and activate key features"
 msgstr ""
 
 msgid "Set up the membership request text"
@@ -10110,7 +10102,7 @@ msgid "Set up the voting configuration"
 msgstr ""
 
 #, python-format
-msgid "There are <b>%(number)s</b> questions to answer"
+msgid "<b>%(number)s</b> questions to answer"
 msgstr ""
 
 msgid "Set up payment methods"
@@ -10129,42 +10121,39 @@ msgstr ""
 msgid "Create the first character of the event"
 msgstr ""
 
-msgid ""
-"Some activated features need the 'Character' feature, but it isn't active"
+msgid "Some features require 'Character', which is not active"
 msgstr ""
 
-msgid ""
-"Set up the configuration for the creation or editing of characters by the "
-"participants"
+msgid "Set up participant character creation/editing configuration"
 msgstr ""
 
-msgid "Some activated features need the 'Credits' feature, but it isn't active"
+msgid "Some features require 'Credits', which is not active"
 msgstr ""
 
 #, python-format
-msgid "There are <b>%(number)s</b> characters to approve"
+msgid "<b>%(number)s</b> characters to approve"
 msgstr ""
 
 #, python-format
-msgid "There are registration questions without options: %(list)s"
+msgid "Registration questions without options: %(list)s"
 msgstr ""
 
 #, python-format
-msgid "There are writing fields without options: %(list)s"
+msgid "Writing fields without options: %(list)s"
 msgstr ""
 
-msgid "Set the casting options in the configuration panel"
+msgid "Set casting options in the configuration"
 msgstr ""
 
 msgid "Set up quest types"
 msgstr ""
 
 #, python-format
-msgid "There are quest types without quests: %(list)s"
+msgid "Quest types without quests: %(list)s"
 msgstr ""
 
 #, python-format
-msgid "There are quests without traits: %(list)s"
+msgid "Quests without traits: %(list)s"
 msgstr ""
 
 msgid "Set the experience points configuration"
@@ -10174,16 +10163,13 @@ msgid "Set up ability types"
 msgstr ""
 
 #, python-format
-msgid "There are ability types without abilities: %(list)s"
+msgid "Ability types without abilities: %(list)s"
 msgstr ""
 
 msgid "Set up delivery for experience points"
 msgstr ""
 
-msgid ""
-"You have activated both fixed and dynamic installments; they are not meant "
-"to be used together, deactivate one of the two in the features management "
-"panel"
+msgid "Fixed and dynamic installments cannot be used together; deactivate one"
 msgstr ""
 
 msgid "Set up dynamic installments"
@@ -10194,58 +10180,47 @@ msgstr ""
 
 #, python-format
 msgid ""
-"You have some fixed installments with both date and days set, but those "
-"values cannot be set at the same time: %(list)s"
+"Some installments have both date and days set (mutually exclusive): %(list)s"
 msgstr ""
 
 #, python-format
-msgid ""
-"You have some tickets without a final installment (with 0 amount): %(list)s"
+msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr ""
 
-msgid "Set up configuration for Patron and Reduced tickets"
+msgid "Set up Patron and Reduced ticket configuration"
 msgstr ""
 
-msgid "Set up the payment currency in the organization settings"
+msgid "Set the organization payment currency"
 msgstr ""
 
-msgid "Set up a value for registration opening date"
+msgid "Set the registration opening date"
 msgstr ""
 
-msgid "Set up a value for registration secret link"
+msgid "Set the registration secret link"
 msgstr ""
 
-msgid "Set up a value for registration external link"
+msgid "Set the registration external link"
 msgstr ""
 
 msgid "Set up character customization configuration"
 msgstr ""
 
-msgid "Set up the tickets that users can select during registration"
+msgid "Set up registration tickets"
 msgstr ""
 
-msgid "Quickly configure your events's most important settings"
+msgid "Define the registration form"
 msgstr ""
 
-msgid ""
-"Define the registration form, and set up any number of registration "
-"questions and their options"
+msgid "Define roles to grant event management access"
 msgstr ""
 
-msgid ""
-"Grant access to event management for other users and define roles with "
-"specific permissions"
+msgid "Customize event pages appearance"
 msgstr ""
 
-msgid ""
-"Customize the appearance of all event pages, including colors, fonts, and "
-"images"
+msgid "Activate new event features"
 msgstr ""
 
-msgid "Activate new features and enhance the functionality of the event"
-msgstr ""
-
-msgid "Set specific values for configuration of features of the event"
+msgid "Configure event feature settings"
 msgstr ""
 
 msgid "What would you like to do?"
