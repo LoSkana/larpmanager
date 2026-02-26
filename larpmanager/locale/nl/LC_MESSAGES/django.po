@@ -5414,6 +5414,9 @@ msgstr "Je staat op het punt een betaling te doen van"
 msgid "You need to define the start date!"
 msgstr "Je moet de begindatum bepalen!"
 
+msgid "Your organization has been created"
+msgstr "Je organisatie is opgericht"
+
 msgid "Your updated registration total is"
 msgstr "Je bijgewerkte totaal is"
 
@@ -5510,9 +5513,6 @@ msgstr "Unieke identifier voor de URL van het evenement"
 
 msgid "You can't send messages to yourself"
 msgstr "Je kunt geen berichten naar jezelf sturen"
-
-msgid "Your organization has been created!"
-msgstr "Je organisatie is opgericht!"
 
 msgid "here the conditions of registration"
 msgstr "hier de voorwaarden voor registratie voor het evenement"
@@ -6557,6 +6557,9 @@ msgstr "Attentie! Het formulier bevat fouten in de velden"
 msgid "You are now logged in with the delegate account"
 msgstr "Je bent nu ingelogd met de account van de gedelegeerde"
 
+msgid "You have been redirected to the Event Dashboard"
+msgstr "Je bent doorgestuurd naar het Event Dashboard"
+
 msgid "you can review, edit, and mark them as assigned"
 msgstr "je kunt ze bekijken, bewerken en markeren als toegewezen"
 
@@ -6637,9 +6640,6 @@ msgstr "Je kunt een bestand in pdf-formaat of een afbeelding uploaden"
 msgid "You have already paid this year's membership fee"
 msgstr "Je hebt je lidmaatschapsgeld voor dit jaar al betaald"
 
-msgid "You have been redirected to the Event Dashboard."
-msgstr "Je bent doorgestuurd naar het Event Dashboard."
-
 msgid "awaiting member approval to proceed with payment"
 msgstr "in afwachting van goedkeuring door leden om door te gaan met betaling"
 
@@ -6708,6 +6708,9 @@ msgstr "Selecteer welke betalingsmethoden deelnemers kunnen gebruiken"
 msgid "Select your preferences on the characters to play"
 msgstr "Kies je favoriete personages om te spelen"
 
+msgid "Switch between Organization and Events management"
+msgstr "Schakel tussen Organisatie- en Gebeurtenissenbeheer"
+
 msgid "The registration code is not active at the moment"
 msgstr "De registratiecode is momenteel niet actief"
 
@@ -6764,9 +6767,6 @@ msgstr "Selecteer welke van je personages je wilt openen"
 msgid "Set visual aspect: colors, background, cover image"
 msgstr "Visueel aspect instellen: kleuren, achtergrond, omslagafbeelding"
 
-msgid "Switch between Organization and Events management."
-msgstr "Schakel tussen Organisatie- en Gebeurtenissenbeheer."
-
 msgid "Thank you for choosing to be part of our community"
 msgstr "Bedankt dat je deel wilt uitmaken van onze gemeenschap"
 
@@ -6801,6 +6801,10 @@ msgstr "Er bestaat al een opdracht voor dit item en gebied"
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Toegewezen %(amount).2f %(elements)s voor '%(reason)s'"
+
+msgid "Complete the setup to unlock full platform features"
+msgstr ""
+"Voltooi de installatie om alle functies van het platform te ontgrendelen"
 
 msgid "From this page you can email any list of recipients"
 msgstr "Vanaf deze pagina kunt u een lijst met ontvangers e-mailen"
@@ -6850,10 +6854,6 @@ msgstr ""
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Geïnde bijdrage van %(user)s voor %(recipient)s"
 
-msgid "Complete the setup to unlock full platform features."
-msgstr ""
-"Voltooi de installatie om alle functies van het platform te ontgrendelen."
-
 msgid "Configure payment methods available for participants"
 msgstr "Beschikbare betalingsmethoden configureren voor deelnemers"
 
@@ -6874,6 +6874,9 @@ msgstr "Geeft aan hoeveel passagiers vervoer nodig hebben"
 
 msgid "Indicates whether it can be selected by participants"
 msgstr "Geeft aan of het kan worden geselecteerd door deelnemers"
+
+msgid "Initialize the platform by creating your first event"
+msgstr "Initialiseer het platform door je eerste evenement aan te maken"
 
 msgid "Input an element name to insert their reference code"
 msgstr "Voer een elementnaam in om hun referentiecode in te voegen"
@@ -6950,9 +6953,6 @@ msgstr "Fout antwoord. Voer de naam van onze hobby in."
 
 msgid "Initial value of experience points for all characters"
 msgstr "Beginwaarde van ervaringspunten voor alle personages"
-
-msgid "Initialize the platform by creating your first event."
-msgstr "Initialiseer het platform door je eerste evenement aan te maken."
 
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Beheer dynamische termijnbetalingen voor registraties"
@@ -7560,6 +7560,11 @@ msgstr ""
 msgid "To confirm your registration, please pay the amount indicated"
 msgstr "Om je inschrijving te bevestigen, betaal je het aangegeven bedrag"
 
+msgid "Toggle between administrative backend and public-facing pages"
+msgstr ""
+"Schakel tussen administratieve pagina's aan de achterkant en openbare "
+"pagina's"
+
 msgid "for no relationship, only to display the other character name"
 msgstr "voor geen relatie, alleen om de andere karakternaam weer te geven"
 
@@ -7611,11 +7616,6 @@ msgstr "Optionele opmerking over dit token (bijv. naam ontvanger, doel)"
 
 msgid "This content is protected and cannot be downloaded or recorded"
 msgstr "Deze inhoud is beschermd en kan niet worden gedownload of opgenomen"
-
-msgid "Toggle between administrative backend and public-facing pages."
-msgstr ""
-"Schakel tussen administratieve pagina's aan de achterkant en openbare "
-"pagina's."
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "We vragen u het gevraagde bedrag voor de volgende termijn te betalen"
@@ -8655,6 +8655,12 @@ msgstr ""
 "alle evenementen"
 
 msgid ""
+"Enable specific features to add specialized functionalities to the platform"
+msgstr ""
+"Schakel specifieke functies in om gespecialiseerde functionaliteiten aan het"
+" platform toe te voegen"
+
+msgid ""
 "For what time you will need transportation (time zone of the larp location)"
 msgstr ""
 "Voor hoe laat je vervoer nodig hebt (tijdzone van de evenementenlocatie)"
@@ -8746,12 +8752,6 @@ msgid ""
 msgstr ""
 "Inhoud van de e-mail waarin de deelnemers op de hoogte worden gebracht van "
 "hun status in het voorstel"
-
-msgid ""
-"Enable specific features to add specialized functionalities to the platform."
-msgstr ""
-"Schakel specifieke functies in om gespecialiseerde functionaliteiten aan het"
-" platform toe te voegen."
 
 msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget report"
@@ -10167,6 +10167,13 @@ msgstr ""
 "opdrachten voor dit evenement"
 
 msgid ""
+"The sidebar has expanded. New menus will continue to appear as you activate "
+"additional modules"
+msgstr ""
+"De zijbalk is uitgebreid. Er zullen nieuwe menu's blijven verschijnen "
+"wanneer u extra modules activeert"
+
+msgid ""
 "This page shows active discounts on the participant, allows you to activate "
 "or deactivate them"
 msgstr ""
@@ -10215,13 +10222,6 @@ msgid ""
 msgstr ""
 "Voor elk van hen ontvang je de volgende korting op de registratie voor je "
 "lidmaatschapsevenement"
-
-msgid ""
-"The sidebar has expanded. New menus will continue to appear as you activate "
-"additional modules."
-msgstr ""
-"De zijbalk is uitgebreid. Er zullen nieuwe menu's blijven verschijnen "
-"wanneer u extra modules activeert."
 
 msgid ""
 "Unique code for internal use - not visible. Indicate a string without spaces"

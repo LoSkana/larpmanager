@@ -4630,31 +4630,31 @@ msgstr ""
 msgid "Select ability"
 msgstr ""
 
-msgid "Your organization has been created!"
+msgid "Your organization has been created"
 msgstr ""
 
-msgid "Initialize the platform by creating your first event."
+msgid "Initialize the platform by creating your first event"
 msgstr ""
 
-msgid "You have been redirected to the Event Dashboard."
+msgid "You have been redirected to the Event Dashboard"
 msgstr ""
 
-msgid "Switch between Organization and Events management."
+msgid "Switch between Organization and Events management"
 msgstr ""
 
-msgid "Toggle between administrative backend and public-facing pages."
+msgid "Toggle between administrative backend and public-facing pages"
 msgstr ""
 
-msgid "Complete the setup to unlock full platform features."
+msgid "Complete the setup to unlock full platform features"
 msgstr ""
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "
-"additional modules."
+"additional modules"
 msgstr ""
 
 msgid ""
-"Enable specific features to add specialized functionalities to the platform."
+"Enable specific features to add specialized functionalities to the platform"
 msgstr ""
 
 msgid "Write here what you would like to to!"

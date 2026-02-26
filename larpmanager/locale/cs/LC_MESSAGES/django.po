@@ -5414,6 +5414,9 @@ msgstr "Chystáte se provést platbu ve výši"
 msgid "You need to define the start date!"
 msgstr "Je třeba určit datum zahájení!"
 
+msgid "Your organization has been created"
+msgstr "Vaše organizace byla vytvořena"
+
 msgid "Your updated registration total is"
 msgstr "Váš aktualizovaný celkový počet vstupů je"
 
@@ -5510,9 +5513,6 @@ msgstr "Jedinečný identifikátor adresy URL události"
 
 msgid "You can't send messages to yourself"
 msgstr "Nemůžete posílat zprávy sami sobě"
-
-msgid "Your organization has been created!"
-msgstr "Vaše organizace byla vytvořena!"
 
 msgid "here the conditions of registration"
 msgstr "zde podmínky registrace na akci"
@@ -6549,6 +6549,9 @@ msgstr "Pozor! Formulář obsahuje chyby v polích"
 msgid "You are now logged in with the delegate account"
 msgstr "Nyní jste přihlášeni pomocí účtu delegáta"
 
+msgid "You have been redirected to the Event Dashboard"
+msgstr "Byli jste přesměrováni na panel událostí"
+
 msgid "you can review, edit, and mark them as assigned"
 msgstr "si je můžete prohlédnout, upravit a označit jako přiřazené"
 
@@ -6630,9 +6633,6 @@ msgstr "Můžete nahrát soubor ve formátu pdf nebo obrázek"
 msgid "You have already paid this year's membership fee"
 msgstr "Již jste zaplatili letošní členský příspěvek"
 
-msgid "You have been redirected to the Event Dashboard."
-msgstr "Byli jste přesměrováni na panel událostí."
-
 msgid "awaiting member approval to proceed with payment"
 msgstr "čeká na souhlas členů s platbou"
 
@@ -6700,6 +6700,9 @@ msgstr "Zvolte, které platební metody mohou účastníci používat"
 msgid "Select your preferences on the characters to play"
 msgstr "Vyberte si postavy, které chcete hrát"
 
+msgid "Switch between Organization and Events management"
+msgstr "Přepínání mezi správou organizací a událostí"
+
 msgid "The registration code is not active at the moment"
 msgstr "Registrační kód není v současné době aktivní"
 
@@ -6755,9 +6758,6 @@ msgstr "Vyberte, ke které z vašich postav chcete získat přístup"
 msgid "Set visual aspect: colors, background, cover image"
 msgstr "Nastavení vizuální stránky: barvy, pozadí, obrázek obálky"
 
-msgid "Switch between Organization and Events management."
-msgstr "Přepínání mezi správou organizací a událostí."
-
 msgid "Thank you for choosing to be part of our community"
 msgstr "Děkujeme, že jste se rozhodli být součástí naší komunity"
 
@@ -6791,6 +6791,9 @@ msgstr "Pro tuto položku a oblast již existuje přiřazení"
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Přiřazeno %(amount).2f %(elements)s pro '%(reason)s'"
+
+msgid "Complete the setup to unlock full platform features"
+msgstr "Dokončením nastavení odemknete všechny funkce platformy"
 
 msgid "From this page you can email any list of recipients"
 msgstr "Na této stránce můžete odeslat e-mail libovolnému seznamu příjemců"
@@ -6840,9 +6843,6 @@ msgstr "Kontrola konzistence osobních údajů účastníků"
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Vybraný příspěvek %(user)s pro %(recipient)s"
 
-msgid "Complete the setup to unlock full platform features."
-msgstr "Dokončením nastavení odemknete všechny funkce platformy."
-
 msgid "Configure payment methods available for participants"
 msgstr "Konfigurace platebních metod dostupných pro účastníky"
 
@@ -6863,6 +6863,9 @@ msgstr "Uvádí, kolik cestujících potřebuje přepravu"
 
 msgid "Indicates whether it can be selected by participants"
 msgstr "Označuje, zda jej mohou vybrat účastníci"
+
+msgid "Initialize the platform by creating your first event"
+msgstr "Inicializujte platformu vytvořením první události"
 
 msgid "Input an element name to insert their reference code"
 msgstr "Zadáním názvu prvku vložíte jeho referenční kód"
@@ -6942,9 +6945,6 @@ msgstr "Nesprávná odpověď. Zadejte prosím název našeho koníčku."
 
 msgid "Initial value of experience points for all characters"
 msgstr "Počáteční hodnota zkušenostních bodů pro všechny postavy"
-
-msgid "Initialize the platform by creating your first event."
-msgstr "Inicializujte platformu vytvořením první události."
 
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Správa dynamických splátek za registrace"
@@ -7507,6 +7507,9 @@ msgstr ""
 msgid "To confirm your registration, please pay the amount indicated"
 msgstr "Pro potvrzení registrace prosím zaplaťte uvedenou částku"
 
+msgid "Toggle between administrative backend and public-facing pages"
+msgstr "Přepínání mezi správou backendu a veřejnými stránkami"
+
 msgid "for no relationship, only to display the other character name"
 msgstr "pro žádný vztah, pouze pro zobrazení jména druhého znaku"
 
@@ -7551,9 +7554,6 @@ msgstr "Nepovinná poznámka o tomto tokenu (např. jméno příjemce, účel)"
 
 msgid "This content is protected and cannot be downloaded or recorded"
 msgstr "Tento obsah je chráněn a nelze jej stahovat ani nahrávat"
-
-msgid "Toggle between administrative backend and public-facing pages."
-msgstr "Přepínání mezi správou backendu a veřejnými stránkami."
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Žádáme vás, abyste zaplatili požadovanou částku na další splátku"
@@ -8466,6 +8466,12 @@ msgstr ""
 "všechny události"
 
 msgid ""
+"Enable specific features to add specialized functionalities to the platform"
+msgstr ""
+"Povolení specifických funkcí pro přidání specializovaných funkcí do "
+"platformy"
+
+msgid ""
 "For what time you will need transportation (time zone of the larp location)"
 msgstr ""
 "Na jakou dobu budete potřebovat dopravu (časové pásmo místa konání akce)"
@@ -8549,12 +8555,6 @@ msgid ""
 msgstr ""
 "Obsah dopisu, kterým se účastníkům oznamuje jejich povaha v navrhovaném "
 "statusu"
-
-msgid ""
-"Enable specific features to add specialized functionalities to the platform."
-msgstr ""
-"Povolení specifických funkcí pro přidání specializovaných funkcí do "
-"platformy."
 
 msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget report"
@@ -9888,6 +9888,13 @@ msgstr ""
 "akci"
 
 msgid ""
+"The sidebar has expanded. New menus will continue to appear as you activate "
+"additional modules"
+msgstr ""
+"Postranní panel se rozšířil. Nové nabídky se budou objevovat i nadále, "
+"jakmile aktivujete další moduly"
+
+msgid ""
 "This page shows active discounts on the participant, allows you to activate "
 "or deactivate them"
 msgstr ""
@@ -9935,13 +9942,6 @@ msgid ""
 " event registration"
 msgstr ""
 "Za každou z nich získáte následující slevu na registraci na členskou akci"
-
-msgid ""
-"The sidebar has expanded. New menus will continue to appear as you activate "
-"additional modules."
-msgstr ""
-"Postranní panel se rozšířil. Nové nabídky se budou objevovat i nadále, "
-"jakmile aktivujete další moduly."
 
 msgid ""
 "Unique code for internal use - not visible. Indicate a string without spaces"
