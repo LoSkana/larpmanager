@@ -168,7 +168,7 @@ def excel(page: Any, live_server: Any) -> None:
 def external(page: Any, live_server: Any) -> None:
     # enable external access
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Writing ")).click()
+    page.get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_external_access").check()
     submit_confirm(page)
 

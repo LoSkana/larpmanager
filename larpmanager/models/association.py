@@ -47,9 +47,9 @@ from larpmanager.utils.core.validators import FileTypeValidator
 class MemberFieldType(models.TextChoices):
     """Represents MemberFieldType model."""
 
-    ABSENT = "a", _("Absent")
+    ABSENT = "a", _("Hidden")
     OPTIONAL = "o", _("Optional")
-    MANDATORY = "m", _("Mandatory")
+    MANDATORY = "m", _("Required")
 
 
 class Currency(models.TextChoices):
@@ -60,6 +60,7 @@ class Currency(models.TextChoices):
     GBP = "g", "GBP"
     CAD = "c", "CAD"
     JPY = "j", "JPY"
+    SEK = "s", "SEK"
 
 
 class AssociationPlan(models.TextChoices):

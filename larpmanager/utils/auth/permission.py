@@ -363,6 +363,37 @@ def check_managed(context: dict, permission: str, *, is_association: bool = True
     return placeholder == "def"
 
 
+# Permissions hidden in demo mode to simplify the interface for new users
+DEMO_HIDDEN_PERMISSIONS: frozenset[str] = frozenset(
+    {
+        # Association-level
+        "exe_send_mail",
+        "exe_archive_email",
+        "exe_appearance",
+        "exe_texts",
+        "exe_config",
+        "exe_features",
+        "exe_roles",
+        "exe_profile",
+        "exe_accounting",
+        # Event-level
+        "orga_send_mail",
+        "orga_archive_email",
+        "orga_sensitive",
+        "orga_appearance",
+        "orga_texts",
+        "orga_config",
+        "orga_features",
+        "orga_buttons",
+        "orga_cancellations",
+        "orga_character_form",
+        "orga_check",
+        "orga_reading",
+        "orga_accounting",
+    }
+)
+
+
 def get_index_permissions(  # noqa: C901
     context: dict,
     features: dict,
@@ -390,11 +421,16 @@ def get_index_permissions(  # noqa: C901
 
     """
     permissions_by_module = {}
+    is_demo = context.get("demo", False)
 
     # Get cached permissions for the specified type
     for permission in get_cache_index_permission(permission_type):
         # Skip hidden permissions
         if permission["hidden"]:
+            continue
+
+        # Skip permissions hidden in demo mode
+        if is_demo and permission["slug"] in DEMO_HIDDEN_PERMISSIONS:
             continue
 
         # Check if permission is allowed in current context

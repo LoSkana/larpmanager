@@ -1,179 +1,132 @@
 {% load i18n static %}
-{% trans "This is the management dashboard, the interface will now be explained section by section." as intro %}
-{% trans "This is the sidebar, it contains all management functions and remains visible across all admin pages." as sidebar %}
-{% trans "Create, access, and manage your events from here." as exe_events %}
-{% trans "Select the active workspace here: your organization or one of the events." as select_workspace %}
-{% trans "Switch here between administrative views and user-facing pages." as select_side %}
-{% trans "Toggle the visibility of the sidebar." as sidebar_open %}
-{% trans "Search here for settings, features, and configuration options." as wwyltd %}
-{% trans "This section lists critical issues that require immediate attention." as priorities %}
-{% trans "This is the task list of required actions to complete the event setup." as actions %}
-{% trans "This list contains recommended actions to improve and finalize the configuration." as suggestions %}
-{% trans "Open the tutorial to follow guided, step-by-step instructions for this feature." as feature_tutorial %}
-{% trans "Write to us if you need help in setting things up!" as outro %}
+{% trans "Your organization has been created!" as welcome_intro %}
+{% trans "Initialize the platform by creating your first event." as welcome_cta %}
+{% trans "You have been redirected to the Event Dashboard." as first_event_intro %}
+{% trans "Switch between Organization and Events management." as select_workspace %}
+{% trans "Toggle between administrative backend and public-facing pages." as select_side %}
+{% trans "Complete the setup to unlock full platform features." as lite_mode %}
+{% trans "The sidebar has expanded. New menus will continue to appear as you activate additional modules." as advanced_unlock %}
+{% trans "Enable specific features to add specialized functionalities to the platform." as features_sugg %}
+{% trans "Write here what you would like to to!" as wwyltd_sugg %}
 <script src="{% static 'node_modules/driver.js/dist/driver.js.iife.js' %}"
         defer></script>
 <script>
 window.addEventListener('DOMContentLoaded', function() {
 
-    function driverIntro() {
+    function driverWelcome() {
         const driver = window.driver.js.driver;
 
         let steps = [
           {
             popover: {
               title: '{% filter escapejs %}{% trans "Welcome to" %} {{ association.platform }}{% endfilter %}!',
-              description: '{{ intro | escapejs }}'
+              description: '{{ welcome_intro | escapejs }}'
             }
           }
         ];
 
-        if ($('.sidebar_button').is(':visible')) {
-          steps.push({
-            element: '#sidebar',
-            popover: {
-              title: 'Sidebar',
-              description: '{{ sidebar | escapejs }}',
-              side: 'right',
-              align: 'start'
-            }
-          });
-        }
-
-        {% if not run %}
-        if ($('#exe_events').is(':visible')) {
         steps.push({
-          element: '#exe_events',
+            element: '#first_event',
           popover: {
-            title: 'Events',
-            description: '{{ exe_events | escapejs }}',
-            side: 'right',
-            align: 'start'
+            title: '{% filter escapejs %}{% trans "Start here:" %}{% endfilter %}',
+            description: '{{ welcome_cta | escapejs }}'
           }
         });
-        }
-        {% endif %}
 
-        const sidebar_id = $('.sidebar_tutorial:visible').first().attr('id');
-        if (sidebar_id) {
-          steps.push({
-            element: '#' + sidebar_id,
+        const driverObj = driver({
+            showProgress: true,
+            steps: steps,
+            allowClose: true,
+            popoverClass: 'my-driverjs',
+            doneBtnText: '{% filter escapejs %}{% trans "Done" %}{% endfilter %}',
+        });
+
+        driverObj.drive();
+    }
+
+    function driverFirstEvent() {
+        const driver = window.driver.js.driver;
+
+        let steps = [
+          {
             popover: {
-              title: 'Sidebar toggle',
-              description: '{{ sidebar_open | escapejs }}',
+              title: '{% filter escapejs %}{% trans "Event created" %}{% endfilter %}!',
+              description: '{{ first_event_intro | escapejs }}'
+            }
+          },
+          {
+            element: '#select_workspace',
+            popover: {
+              title: '{% filter escapejs %}{% trans "Workspace selector" %}{% endfilter %}',
+              description: '{{ select_workspace | escapejs }}',
               side: 'bottom',
               align: 'start'
             }
-          });
-        }
-
-        steps.push(
+          },
           {
             element: '#select_side',
             popover: {
-              title: 'Side selector',
+              title: '{% filter escapejs %}{% trans "View Selector" %}{% endfilter %}',
               description: '{{ select_side | escapejs }}',
               side: 'bottom',
               align: 'start'
             }
           },
           {
-            element: '#select_workspace',
             popover: {
-              title: 'Workspace selector',
-              description: '{{ select_workspace | escapejs }}',
-              side: 'bottom',
-              align: 'start'
+              title: '{% filter escapejs %}{% trans "Lite Mode active" %}!{% endfilter %}!',
+              description: '{{ lite_mode | escapejs }}'
             }
-          }
-        );
-
-
-
-        if ($('#wwyltd').is(':visible')) {
-          steps.push({
-            element: '#wwyltd',
-            popover: {
-              title: 'What would you like to do?',
-              description: '{{ wwyltd | escapejs }}',
-              side: 'bottom',
-              align: 'start'
-            }
-          });
-        }
-
-        if ($('#priorities').is(':visible')) {
-          steps.push({
-            element: '#priorities',
-            popover: {
-              title: 'Priorities',
-              description: '{{ priorities | escapejs }}',
-              side: 'top',
-              align: 'start'
-            }
-          });
-        }
-
-        if ($('#actions').is(':visible')) {
-          steps.push({
-            element: '#actions',
-            popover: {
-              title: 'Actions',
-              description: '{{ actions | escapejs }}',
-              side: 'top',
-              align: 'start'
-            }
-          });
-        }
-
-        if ($('#suggestions').is(':visible')) {
-          steps.push({
-            element: '#suggestions',
-            popover: {
-              title: 'Suggestions',
-              description: '{{ suggestions | escapejs }}',
-              side: 'top',
-              align: 'start'
-            }
-          });
-        }
-
-        if ($('.feature_tutorial').is(':visible')) {
-          steps.push({
-            element: '.feature_tutorial',
-            popover: {
-              title: 'Tutorials',
-              description: '{{ feature_tutorial | escapejs }}',
-              side: 'top',
-              align: 'start'
-            }
-          });
-        }
-
-        steps.push({
-          popover: {
-            title: '{% filter escapejs %}{% trans "And that is all" %}{% endfilter %}',
-            description: '{{ outro | escapejs }}'
-          }
-        });
-
+          },
+        ];
 
         const driverObj = driver({
             showProgress: true,
             steps: steps,
-            allowClose: false,
+            allowClose: true,
             popoverClass: 'my-driverjs',
             doneBtnText: '{% filter escapejs %}{% trans "Done" %}{% endfilter %}',
-            onDestroyed: () => {
-              $.ajax({
-                url: '{% url "set_member_config" %}',
-                method: 'POST',
-                data: {
-                  name: 'intro_driver',
-                  value: "true",
-                }
-              });
+        });
+
+        driverObj.drive();
+    }
+
+    function driverUnlocked() {
+        const driver = window.driver.js.driver;
+
+        let steps = [
+          {
+            popover: {
+              title: '{% filter escapejs %}{% trans "Advanced Mode Enabled" %}{% endfilter %}!',
+              description: '{{ advanced_unlock | escapejs }}'
             }
+          },
+          {
+            element: '#exe_features',
+            popover: {
+              title: '{% filter escapejs %}{% trans "Module Activation" %}{% endfilter %}!',
+              description: '{{ features_sugg | escapejs }}',
+              side: 'bottom',
+              align: 'start'
+            }
+          },
+          {
+            element: '#wwyltd',
+            popover: {
+              title: '{% filter escapejs %}{% trans "Need help" %}?{% endfilter %}!',
+              description: '{{ wwyltd_sugg | escapejs }}',
+              side: 'bottom',
+              align: 'start'
+            }
+          }
+        ];
+
+        const driverObj = driver({
+            showProgress: true,
+            steps: steps,
+            allowClose: true,
+            popoverClass: 'my-driverjs',
+            doneBtnText: '{% filter escapejs %}{% trans "Done" %}{% endfilter %}',
         });
 
         driverObj.drive();
@@ -181,13 +134,19 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     jQuery(function(){
-        {% if intro_driver and request.enviro == "prod" %}
+        {% if intro_driver == "welcome" %}
         $(document).on("lm_ready", function() {
-            driverIntro();
+            driverWelcome();
+        });
+        {% elif intro_driver == "first_event" %}
+        $(document).on("lm_ready", function() {
+            driverFirstEvent();
+        });
+        {% elif intro_driver == "advanced_unlock" %}
+        $(document).on("lm_ready", function() {
+            driverUnlocked();
         });
         {% endif %}
-
-        $('#intro_driver').on('click', driverIntro);
     });
 
 });

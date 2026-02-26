@@ -30,12 +30,12 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait,
-    expect_normalized,
-    fill_tinymce,
-    go_to,
-    login_orga,
-    login_user, submit_confirm,
-)
+                                     expect_normalized,
+                                     fill_tinymce,
+                                     go_to,
+                                     login_orga,
+                                     login_user, submit_confirm, sidebar,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -60,7 +60,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("www")
     submit_confirm(page)
-    page.get_by_role("link", name="Ability", exact=True).click()
+    sidebar(page, "Ability")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("ggggg")
@@ -75,7 +75,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("searchbox").fill("te")
     page.locator(".select2-results__option").first.click()
     submit_confirm(page)
-    page.get_by_role("link", name="Ability", exact=True).click()
+    sidebar(page, "Ability")
     page.locator(".fa-edit").click()
     page.locator("#id_cost").click()
     page.locator("#id_cost").fill("1")
@@ -140,7 +140,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     submit_confirm(page)
 
     # add new field
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.get_by_role("cell", name="Question name (keep it short)").click()

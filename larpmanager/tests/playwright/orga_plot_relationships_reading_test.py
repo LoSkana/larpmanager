@@ -31,13 +31,13 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait,
-    check_feature,
-    fill_tinymce,
-    go_to,
-    login_orga,
-    submit_confirm,
-    expect_normalized,
-)
+                                     check_feature,
+                                     fill_tinymce,
+                                     go_to,
+                                     login_orga,
+                                     submit_confirm,
+                                     expect_normalized, sidebar,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -54,6 +54,11 @@ def test_plot_relationship_reading(pw_page: Any) -> None:
     check_feature(page, "Characters")
     check_feature(page, "Plots")
     check_feature(page, "Relationships")
+    submit_confirm(page)
+
+    go_to(page, live_server, "/test/manage/config")
+    page.get_by_role("link", name=re.compile(r"^Characters")).click()
+    page.locator("#id_writing_reading").check()
     submit_confirm(page)
 
     relationships(live_server, page)
@@ -79,7 +84,7 @@ def reading(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # now read it
-    page.get_by_role("link", name="Reading").click()
+    sidebar(page, "Reading")
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
     expect_normalized(page,
         page.locator("#one"),
@@ -111,7 +116,7 @@ def reading(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "only for testt Primary Test Character")
 
     # check reading for prova
-    page.get_by_role("link", name="Reading").click()
+    sidebar(page, "Reading")
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
     expect_normalized(page,
         page.locator("#one"),
@@ -119,14 +124,14 @@ def reading(live_server: Any, page: Any) -> None:
     )
 
     # check reading plot
-    page.get_by_role("link", name="Reading").click()
+    sidebar(page, "Reading")
     page.locator('[id="plot_u1"]').locator(".fa-book-open").click()
     expect_normalized(page, page.locator("#one"), "testona Text wwwww prova bruuuu")
 
 
 def relationships(live_server: Any, page: Any) -> None:
     # create second character
-    page.get_by_role("link", name="Characters", exact=True).click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("prova")
@@ -262,7 +267,7 @@ def plots(live_server: Any, page: Any) -> None:
 def plots_character(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     # create other plots
-    page.get_by_role("link", name="Plots", exact=True).click()
+    sidebar(page, "Plots")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("gaga")
     page.get_by_text("After confirmation, add").click()
@@ -272,7 +277,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # test adding them to character
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.locator('[id="u1"]').locator(".fa-edit").click()
     searchbox = page.get_by_role("searchbox")
     searchbox.click()

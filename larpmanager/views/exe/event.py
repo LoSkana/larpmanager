@@ -30,7 +30,7 @@ from django.utils.translation import gettext_lazy as _
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
-from larpmanager.cache.config import get_association_config
+from larpmanager.cache.config import get_association_config, save_single_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.forms.event import (
@@ -38,6 +38,7 @@ from larpmanager.forms.event import (
     OrgaConfigForm,
 )
 from larpmanager.models.access import EventRole
+from larpmanager.models.association import Association
 from larpmanager.models.event import (
     Event,
     RegistrationStatus,
@@ -81,11 +82,7 @@ def exe_events_new(request: HttpRequest) -> HttpResponse:
 
     # Prepare for creation
     context["exe"] = True
-    if context.get("onboarding"):
-        context["welcome_message"] = True
-        context["tutorial"] = None
-        context["config"] = None
-        context["is_sidebar_open"] = False
+    context["creation"] = True
 
     # Define callback for post-creation operations
     def on_created(created_event: Event) -> None:
@@ -99,6 +96,11 @@ def exe_events_new(request: HttpRequest) -> HttpResponse:
 
         # Refresh cached event links for user navigation
         reset_event_links(context["member"].id, context["association_id"])
+
+        # Set intro_driver to "first_event" if this is the first event for the association
+        if Event.objects.filter(association_id=context["association_id"]).count() == 1:
+            association = Association.objects.get(pk=context["association_id"])
+            save_single_config(association, "intro_driver", "first_event")
 
     # Use unified full_event_edit
     context["add_another"] = False
@@ -123,6 +125,7 @@ def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
 
     # Use unified full_event_edit
     context["add_another"] = False
+    context["exe"] = True
     return full_event_edit(
         context,
         request,

@@ -63,6 +63,8 @@ class AssociationPermission(BaseModel):
 
     active_if = models.TextField(max_length=100, blank=True, null=True)
 
+    icon = models.CharField(max_length=100, blank=True, default="")
+
     def __str__(self) -> str:
         """Return string representation of the object."""
         return self.name
@@ -131,6 +133,8 @@ class EventPermission(BaseModel):
     config = models.TextField(max_length=100, blank=True, null=True)
 
     active_if = models.TextField(max_length=100, blank=True, null=True)
+
+    icon = models.CharField(max_length=100, blank=True, default="")
 
     def __str__(self) -> str:
         """Return string representation."""

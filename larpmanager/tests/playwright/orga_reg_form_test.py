@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -51,7 +51,7 @@ def test_orga_registration_form(pw_page: Any) -> None:
 def prepare_form(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage")
     # check initial reg form
-    page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Form")
     just_wait(page)
     expect_normalized(page, page.locator("#one"), "Ticket Your registration ticket Ticket")
 
@@ -129,7 +129,7 @@ def prepare_surcharge(page: Any, live_server: Any) -> None:
 
     # set up payments
     go_to(page, live_server, "manage")
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Payments", exact=True).check()
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()

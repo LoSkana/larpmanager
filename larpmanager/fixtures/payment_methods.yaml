@@ -3,8 +3,9 @@
     name: Wire
     slug: wire
     instructions: "<p><strong>Beneficiary: </strong>Name of the recipient account\
-      \ holder.&nbsp;</p>\r\n<p><strong>IBAN</strong>: International Bank Account Number of the recipient account (27-character\
-      \ long)</p><p><strong>BIC</strong>: Optional</p>"
+      \ holder.&nbsp;</p>\r\n<p><strong>IBAN</strong>: International Bank Account\
+      \ Number of the recipient account (27-character long)</p><p><strong>BIC</strong>:\
+      \ Optional</p>"
     fields: payee, iban, bic
     profile: payment_methods/ac81a0b8942e41a8bbcefa197ccfb3d8.png
 - model: larpmanager.paymentmethod

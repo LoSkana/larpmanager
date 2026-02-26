@@ -39,7 +39,7 @@ from larpmanager.tests.utils import (
     login_orga,
     login_user,
     logout,
-    submit_confirm,
+    submit_confirm, sidebar,
 )
 
 pytestmark = pytest.mark.e2e
@@ -63,7 +63,7 @@ def test_miscellanea(pw_page: Any) -> None:
 
 def check_user_fee(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/manage/")
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     check_feature(page, "Payments")
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
@@ -78,10 +78,10 @@ def check_user_fee(live_server: Any, page: Any) -> None:
     page.locator("#id_wire_iban").fill("3sadsadsa")
     page.locator("#id_wire_bic").fill("test iban")
     submit_confirm(page)
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     check_feature(page, "Donation")
     submit_confirm(page)
-    page.locator("#exe_config").get_by_role("link", name="Configuration").click()
+    sidebar(page, "Configuration")
     page.get_by_role("link", name=re.compile(r"^Payments ")).click()
     page.locator("#id_payment_fees_user").check()
     submit_confirm(page)
@@ -123,7 +123,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # Create a test character to have something in the gallery
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Test Gallery Character")
@@ -187,7 +187,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     logout(page)
     login_orga(page, live_server)
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_registrations").get_by_role("link", name="Registrations").click()
+    sidebar(page, "Registrations")
     # Find and delete the user's registration
     page.locator("a:has(i.fas.fa-trash)").click()
 
@@ -245,7 +245,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Verify orga is NOT registered to the event
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_registrations").get_by_role("link", name="Registrations").click()
+    sidebar(page, "Registrations")
     # Check that "Admin Test" (orga user) is NOT in the registrations list
     expect(page.locator("#one")).not_to_contain_text("Admin Test")
 

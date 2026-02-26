@@ -191,6 +191,9 @@ class OrgaEventForm(BaseModelForm):
             if s not in self.params.get("features")
         ]
 
+        if "demo" in self.params and self.params.get("demo"):
+            dl.append("description")
+
         # Initialize campaign parent selection and add to deletion list if disabled
         self.init_campaign(dl)
 
@@ -305,19 +308,35 @@ class OrgaConfigForm(ConfigForm):
         self.prevent_canc = True
 
     def set_configs(self) -> None:
-        """Configure form fields for event settings and features.
+        """Configure form fields for event settings and features."""
+        # 1. Appearance
+        self.set_config_display()
+        self.set_config_gallery()
+        self.set_config_cover()
 
-        Sets up various configuration sections including email notifications,
-        visualization options, and event-specific settings.
-        """
-        self.set_section("email", _("Email notifications"))
-        disable_assignment_label = _("Disable assignment")
-        disable_assignment_help_text = _(
-            "If checked: Does not send communication to the participant when the character is assigned",
-        )
-        self.add_configs("mail_character", ConfigType.BOOL, disable_assignment_label, disable_assignment_help_text)
+        # 2. Tickets
+        self.set_config_tickets()
 
-        self.set_section("visualisation", _("Visualisation"))
+        # 3. Registrations
+        self.set_config_reg_form()
+
+        # 4. Characters
+        self.set_config_writing()
+        self.set_config_character()
+        self.set_config_char_form()
+        self.set_config_custom()
+        self.set_config_casting()
+
+        # 5. Miscellanea
+        self.set_config_accounting()
+
+        # 6. Email and communications
+        self.set_config_email()
+        self.set_config_custom_mail()
+
+    def set_config_display(self) -> None:
+        """Configure visualisation settings for the event management page."""
+        self.set_section("visualisation", _("Display"))
 
         show_shortcuts_label = _("Show shortcuts")
         show_shortcuts_help_text = _(
@@ -333,25 +352,108 @@ class OrgaConfigForm(ConfigForm):
         limitations_help_text = _("If checked: Show summary page with number of tickets/options used")
         self.add_configs("show_limitations", ConfigType.BOOL, limitations_label, limitations_help_text)
 
-        self.set_config_reg_form()
+    def set_config_cover(self) -> None:
+        """Configure character cover image settings."""
+        if "cover" in self.params.get("features"):
+            self.set_section("cover", _("Character cover"))
+            field_label = _("Desalt thumbnail")
+            field_help_text = _("If checked, shows the original image in the cover, not the thumbnail version")
+            self.add_configs("cover_orig", ConfigType.BOOL, field_label, field_help_text)
 
-        self.set_config_gallery()
+    def set_config_email(self) -> None:
+        """Configure email notification settings."""
+        self.set_section("email", _("Email notifications"))
+        disable_assignment_label = _("Disable assignment")
+        disable_assignment_help_text = _(
+            "If checked: Does not send communication to the participant when the character is assigned",
+        )
+        self.add_configs("mail_character", ConfigType.BOOL, disable_assignment_label, disable_assignment_help_text)
 
-        self.set_config_structure()
+    def set_config_custom_mail(self) -> None:
+        """Configure custom mail server settings."""
+        if "custom_mail" in self.params.get("features"):
+            self.set_section("custom_mail_server", _("Customised mail server"))
+            field_help_text = ""
 
-        self.set_config_writing()
+            field_label = _("Use TLD")
+            self.add_configs("mail_server_use_tls", ConfigType.BOOL, field_label, field_help_text)
 
-        self.set_config_character()
+            field_label = _("Host Address")
+            self.add_configs("mail_server_host", ConfigType.CHAR, field_label, field_help_text)
 
-        self.set_config_char_form()
+            field_label = _("Port")
+            self.add_configs("mail_server_port", ConfigType.INT, field_label, field_help_text)
 
-        self.set_config_custom()
+            field_label = _("Username of account")
+            self.add_configs("mail_server_host_user", ConfigType.CHAR, field_label, field_help_text)
 
-        self.set_config_accounting()
+            field_label = _("Password of account")
+            self.add_configs("mail_server_host_password", ConfigType.CHAR, field_label, field_help_text)
 
-        self.set_config_casting()
+    def set_config_tickets(self) -> None:
+        """Configure ticket tiers and registration sub-features."""
+        self.set_section("tickets", _("Tickets"))
 
-        self.set_config_registration()
+        staff_ticket_label = "Staff"
+        staff_ticket_help_text = _("If checked, allow ticket tier: Staff")
+        self.add_configs("ticket_staff", ConfigType.BOOL, staff_ticket_label, staff_ticket_help_text)
+
+        npc_ticket_label = "NPC"
+        npc_ticket_help_text = _("If checked, allow ticket tier: NPC")
+        self.add_configs("ticket_npc", ConfigType.BOOL, npc_ticket_label, npc_ticket_help_text)
+
+        collaborator_ticket_label = "Collaborator"
+        collaborator_ticket_help_text = _("If checked, allow ticket tier: Collaborator")
+        self.add_configs(
+            "ticket_collaborator",
+            ConfigType.BOOL,
+            collaborator_ticket_label,
+            collaborator_ticket_help_text,
+        )
+
+        seller_ticket_label = "Seller"
+        seller_ticket_help_text = _("If checked, allow ticket tier: Seller")
+        self.add_configs("ticket_seller", ConfigType.BOOL, seller_ticket_label, seller_ticket_help_text)
+
+        if "reduced" in self.params["features"]:
+            self.set_section("reduced", _("Patron / Reduced"))
+            reduced_ratio_label = "Ratio"
+            reduced_ratio_help_text = _(
+                "Indicates the ratio between reduced and patron tickets, multiplied by 10. "
+                "Example: 10 -> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets for "
+                "1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets",
+            )
+            self.add_configs("reduced_ratio", ConfigType.INT, reduced_ratio_label, reduced_ratio_help_text)
+
+        if "filler" in self.params["features"]:
+            self.set_section("filler", _("Ticket Filler"))
+            filler_free_registration_label = _("Free registration")
+            filler_free_registration_help_text = _(
+                "If checked, participants may sign up as fillers at any time; otherwise, they may only "
+                "do so if the stipulated number of characters has been reached",
+            )
+            self.add_configs(
+                "filler_always",
+                ConfigType.BOOL,
+                filler_free_registration_label,
+                filler_free_registration_help_text,
+            )
+
+        if "lottery" in self.params["features"]:
+            self.set_section("lottery", _("Lottery"))
+
+            lottery_num_draws_label = _("Number of extractions")
+            lottery_num_draws_help_text = _("Number of tickets to be drawn")
+            self.add_configs("lottery_num_draws", ConfigType.INT, lottery_num_draws_label, lottery_num_draws_help_text)
+
+            lottery_conversion_ticket_label = _("Conversion ticket")
+            lottery_conversion_ticket_help_text = _("Name of the ticket into which to convert")
+            self.add_configs(
+                "lottery_ticket",
+                ConfigType.CHAR,
+                lottery_conversion_ticket_label,
+                lottery_conversion_ticket_help_text,
+            )
 
     def set_config_gallery(self) -> None:
         """Configure gallery settings for event forms."""
@@ -462,7 +564,7 @@ class OrgaConfigForm(ConfigForm):
         visibility options, maximum selections, ticket requirements, and dependencies.
         """
         if "character" in self.params.get("features"):
-            self.set_section("char_form", _("Character form"))
+            self.set_section("char_form", _("Character Sheet"))
 
             label = _("Hide not available")
             help_text = _(
@@ -482,33 +584,6 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, allows a option to be visible only if other options are selected")
             self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
-    def set_config_structure(self) -> None:
-        """Configure structural event settings including mail server and cover options."""
-        if "custom_mail" in self.params.get("features"):
-            self.set_section("custom_mail_server", _("Customised mail server"))
-            field_help_text = ""
-
-            field_label = _("Use TLD")
-            self.add_configs("mail_server_use_tls", ConfigType.BOOL, field_label, field_help_text)
-
-            field_label = _("Host Address")
-            self.add_configs("mail_server_host", ConfigType.CHAR, field_label, field_help_text)
-
-            field_label = _("Port")
-            self.add_configs("mail_server_port", ConfigType.INT, field_label, field_help_text)
-
-            field_label = _("Username of account")
-            self.add_configs("mail_server_host_user", ConfigType.CHAR, field_label, field_help_text)
-
-            field_label = _("Password of account")
-            self.add_configs("mail_server_host_password", ConfigType.CHAR, field_label, field_help_text)
-
-        if "cover" in self.params.get("features"):
-            self.set_section("cover", _("Character cover"))
-            field_label = _("Desalt thumbnail")
-            field_help_text = _("If checked, shows the original image in the cover, not the thumbnail version")
-            self.add_configs("cover_orig", ConfigType.BOOL, field_label, field_help_text)
-
     def set_config_writing(self) -> None:
         """Configure writing system settings for events.
 
@@ -516,7 +591,7 @@ class OrgaConfigForm(ConfigForm):
         and writing deadline configurations for character development.
         """
         if "character" in self.params.get("features"):
-            self.set_section("writing", _("Writing"))
+            self.set_section("writing", _("Characters"))
 
             config_label = _("Title")
             config_help_text = _("Enables field 'title', a short (2-3 words) text added to the character's name")
@@ -581,6 +656,14 @@ class OrgaConfigForm(ConfigForm):
                 "If checked, allows to track the plots or relationships not really important for the character",
             )
             self.add_configs("writing_unimportant", ConfigType.BOOL, config_label, config_help_text)
+
+            config_label = _("Check")
+            config_help_text = _("If checked, enables the consistency check tool for character sheets")
+            self.add_configs("writing_check", ConfigType.BOOL, config_label, config_help_text)
+
+            config_label = _("Reading")
+            config_help_text = _("If checked, enables the reading view for writing elements")
+            self.add_configs("writing_reading", ConfigType.BOOL, config_label, config_help_text)
 
     def set_config_character(self) -> None:
         """Configure character-related settings including campaign and faction options.
@@ -920,91 +1003,6 @@ class OrgaConfigForm(ConfigForm):
                 ConfigType.INT,
                 referred_discount_label,
                 referred_discount_help_text,
-            )
-
-    def set_config_registration(self) -> None:
-        """Configure event registration settings.
-
-        Sets up ticket tiers, registration options, and staff ticket availability
-        including special ticket types like NPC, collaborator, and seller tiers
-        based on available features.
-
-        This method configures various registration-related settings by adding
-        configuration options to different sections. It handles basic ticket types
-        and conditional features like reduced tickets, filler tickets, and lottery
-        systems.
-        """
-        # Set up main tickets section
-        self.set_section("tickets", _("Tickets"))
-
-        # Configure staff ticket tier
-        staff_ticket_label = "Staff"
-        staff_ticket_help_text = _("If checked, allow ticket tier: Staff")
-        self.add_configs("ticket_staff", ConfigType.BOOL, staff_ticket_label, staff_ticket_help_text)
-
-        # Configure NPC ticket tier
-        npc_ticket_label = "NPC"
-        npc_ticket_help_text = _("If checked, allow ticket tier: NPC")
-        self.add_configs("ticket_npc", ConfigType.BOOL, npc_ticket_label, npc_ticket_help_text)
-
-        # Configure collaborator ticket tier
-        collaborator_ticket_label = "Collaborator"
-        collaborator_ticket_help_text = _("If checked, allow ticket tier: Collaborator")
-        self.add_configs(
-            "ticket_collaborator",
-            ConfigType.BOOL,
-            collaborator_ticket_label,
-            collaborator_ticket_help_text,
-        )
-
-        # Configure seller ticket tier
-        seller_ticket_label = "Seller"
-        seller_ticket_help_text = _("If checked, allow ticket tier: Seller")
-        self.add_configs("ticket_seller", ConfigType.BOOL, seller_ticket_label, seller_ticket_help_text)
-
-        # Configure reduced/patron tickets if feature is enabled
-        if "reduced" in self.params["features"]:
-            self.set_section("reduced", _("Patron / Reduced"))
-            reduced_ratio_label = "Ratio"
-            reduced_ratio_help_text = _(
-                "Indicates the ratio between reduced and patron tickets, multiplied by 10. "
-                "Example: 10 -> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets for "
-                "1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets",
-            )
-            self.add_configs("reduced_ratio", ConfigType.INT, reduced_ratio_label, reduced_ratio_help_text)
-
-        # Configure filler ticket options if feature is enabled
-        if "filler" in self.params["features"]:
-            self.set_section("filler", _("Ticket Filler"))
-            filler_free_registration_label = _("Free registration")
-            filler_free_registration_help_text = _(
-                "If checked, participants may sign up as fillers at any time; otherwise, they may only "
-                "do so if the stipulated number of characters has been reached",
-            )
-            self.add_configs(
-                "filler_always",
-                ConfigType.BOOL,
-                filler_free_registration_label,
-                filler_free_registration_help_text,
-            )
-
-        # Configure lottery system if feature is enabled
-        if "lottery" in self.params["features"]:
-            self.set_section("lottery", _("Lottery"))
-
-            # Set number of lottery draws
-            lottery_num_draws_label = _("Number of extractions")
-            lottery_num_draws_help_text = _("Number of tickets to be drawn")
-            self.add_configs("lottery_num_draws", ConfigType.INT, lottery_num_draws_label, lottery_num_draws_help_text)
-
-            # Set conversion ticket type for lottery winners
-            lottery_conversion_ticket_label = _("Conversion ticket")
-            lottery_conversion_ticket_help_text = _("Name of the ticket into which to convert")
-            self.add_configs(
-                "lottery_ticket",
-                ConfigType.CHAR,
-                lottery_conversion_ticket_label,
-                lottery_conversion_ticket_help_text,
             )
 
 
@@ -1358,7 +1356,7 @@ class OrgaRunForm(ConfigForm):
         Sets up various event features and their configuration options
         based on enabled features for character management.
         """
-        if "character" not in self.params["features"]:
+        if "character" not in self.params["features"] or "event" not in self.params:
             return
 
         if not get_event_config(

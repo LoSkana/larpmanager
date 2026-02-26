@@ -389,78 +389,83 @@ class ExeConfigForm(ConfigForm):
         self.prevent_canc = True
 
     def set_configs(self) -> None:
-        """Set up interface configuration options for association settings.
+        """Configure association-level settings."""
+        # 1. Appearance
+        self.set_config_interface()
 
-        Manages UI preferences, theme settings, and display options for the
-        association's interface customization. Configures calendar display options,
-        email notification preferences, and delegates to other configuration methods.
-        """
+        # 2. Accounting
+        self.set_config_accounting_1()
+        self.set_config_accounting_2()
+
+        # 3. Member
+        self.set_config_members()
+
+        # 4. Miscellanea
+        self.set_config_einvoice()
+        self.set_config_others()
+
+        # 5. Email and communications
+        self.set_config_email()
+        self.set_config_integration()
+
+        # Legacy
+        self.set_config_legacy()
+
+    def set_config_interface(self) -> None:
+        """Configure interface and calendar display settings."""
         self.set_section("interface", _("Interface"))
 
-        # Configure visibility of past events link in calendar
         past_events_label = _("Past events")
         past_events_help_text = _("If checked: shows a link in the calendar to past events")
         self.add_configs("calendar_past_events", ConfigType.BOOL, past_events_label, past_events_help_text)
 
         if self.params.get("skin_id") == 1:
-            # Configure user characters shortcut
             field_label = _("Characters shortcut")
             field_help_text = _("If checked: shows a link in the topbar to view all user's characters")
             self.add_configs("user_characters_shortcut", ConfigType.BOOL, field_label, field_help_text)
 
-        # Configure user characters shortcut
         field_label = _("Registrations shortcut")
         field_help_text = _("If checked: shows a link in the topbar to view all user's registrations")
         self.add_configs("user_registrations_shortcut", ConfigType.BOOL, field_label, field_help_text)
 
-        # Configure website link display for each event
         website_label = _("Website")
         website_help_text = _("If checked: shows the website for each event")
         self.add_configs("calendar_website", ConfigType.BOOL, website_label, website_help_text)
 
-        # Configure event location display toggle
         location_label = _("Where")
         location_help_text = _("If checked: shows the position for each event")
         self.add_configs("calendar_where", ConfigType.BOOL, location_label, location_help_text)
 
-        # Configure authors list visibility for events
         authors_label = _("Authors")
         authors_help_text = _("If checked: shows the list of authors for each event")
         self.add_configs("calendar_authors", ConfigType.BOOL, authors_label, authors_help_text)
 
-        # Configure event genre display setting
         genre_label = pgettext("event", "Genre")
         genre_help_text = pgettext("event", "If checked: shows the genre for each event")
         self.add_configs("calendar_genre", ConfigType.BOOL, genre_label, genre_help_text)
 
-        # Configure event tagline visibility toggle
         tagline_label = _("Tagline")
         tagline_help_text = _("If checked: shows the tagline for each event")
         self.add_configs("calendar_tagline", ConfigType.BOOL, tagline_label, tagline_help_text)
 
-        # Add specif sections settings
-        self.set_config_email()
-        self.set_config_members()
-        self.set_config_accounting_1()
-        self.set_config_accounting_2()
-        self.set_config_einvoice()
-        self.set_config_others()
-        self.set_config_integration()
-
+    def set_config_legacy(self) -> None:
+        """Configure legacy interface options."""
         self.set_section("legacy", "Legacy")
 
-        # Configure old dashboard visualization
         past_events_label = _("Old dashboard")
         past_events_help_text = _("If checked: shows the old dashboard")
         self.add_configs("old_dashboard", ConfigType.BOOL, past_events_label, past_events_help_text)
 
-        # Configure old dashboard visualization
         past_events_label = _("Old interface")
         past_events_help_text = _("If checked: shows the old interface")
         self.add_configs("old_form_appearance", ConfigType.BOOL, past_events_label, past_events_help_text)
 
+        past_events_label = _("Old menu")
+        past_events_help_text = _("If checked: shows the old menu")
+        self.add_configs("old_menu_appearance", ConfigType.BOOL, past_events_label, past_events_help_text)
+
     def set_config_email(self) -> None:
-        """Configure email notification preferences."""
+        """Configure email notification preferences and mail server settings."""
         self.set_section("email", _("Email notifications"))
 
         # Configure digest notifications carbon copy setting (only if main_mail exists)
@@ -502,25 +507,10 @@ class ExeConfigForm(ConfigForm):
         payment_received_help_text = _("If checked: Send an email to the organisers for each payment received")
         self.add_configs("mail_payment", ConfigType.BOOL, payment_received_label, payment_received_help_text)
 
-    def set_config_others(self) -> None:
-        """Configure miscellaneous association settings.
-
-        Sets up configuration sections for various optional features including:
-        - Custom mail server settings (SMTP configuration)
-        - Pre-registration preferences
-        - Easter egg features (centauri)
-        - Campaign-specific settings
-        - Warehouse management options
-
-        The method checks for available features in self.params["features"] and
-        creates appropriate configuration sections and fields for each enabled feature.
-        """
-        # Configure custom mail server settings if feature is enabled
         if "custom_mail" in self.params["features"]:
             self.set_section("custom_mail_server", _("Customised mail server"))
             empty_help_text = ""
 
-            # SMTP connection settings
             use_tls_label = _("Use TLD")
             self.add_configs("mail_server_use_tls", ConfigType.BOOL, use_tls_label, empty_help_text)
 
@@ -530,13 +520,14 @@ class ExeConfigForm(ConfigForm):
             port_label = _("Port")
             self.add_configs("mail_server_port", ConfigType.INT, port_label, empty_help_text)
 
-            # Authentication credentials
             username_label = _("Username of account")
             self.add_configs("mail_server_host_user", ConfigType.CHAR, username_label, empty_help_text)
 
             password_label = _("Password of account")
             self.add_configs("mail_server_host_password", ConfigType.CHAR, password_label, empty_help_text)
 
+    def set_config_others(self) -> None:
+        """Configure miscellaneous association settings."""
         # Configure pre-registration preferences
         if "pre_register" in self.params["features"]:
             self.set_section("pre_reg", _("Pre-registration"))
@@ -1055,16 +1046,6 @@ class ExePreferencesForm(ConfigForm):
         """Add interface configuration options to the form."""
         # Define interface configuration section
         self.set_section("interface", _("Interface"))
-
-        # Add sidebar collapse toggle option
-        sidebar_collapse_label = _("Collapse sidebar")
-        sidebar_collapse_help_text = _("If checked: collpase sidebars links, and expand on mouse hover")
-        self.add_configs(
-            "interface_collapse_sidebar",
-            ConfigType.BOOL,
-            sidebar_collapse_label,
-            sidebar_collapse_help_text,
-        )
 
         # Add organizer digest mode toggle option
         digest_mode_label = _("Notifications digest")

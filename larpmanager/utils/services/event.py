@@ -213,6 +213,9 @@ def create_default_event_setup(event: Any) -> None:
 
     if not event.runs.exists():
         Run.objects.create(event=event, number=1)
+        skin_features = event.association.skin.default_features.filter(overall=False)
+        if skin_features.exists():
+            event.features.add(*skin_features)
 
     event_features = get_event_features(event.id)
 
@@ -351,6 +354,8 @@ def _init_writing_element(instance: object, default_question_types: Any, questio
         # Note: bulk_create doesn't trigger post_save, so we need to manually update
         for question in writing_questions:
             debug_set_uuid(question, created=True)
+
+        clear_writing_questions_cache(instance.id)
 
 
 def _init_character_form_questions(

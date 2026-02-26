@@ -45,7 +45,7 @@ def test_orga_mirror(pw_page: Any) -> None:
 
     # show chars
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Writing")).click()
+    page.get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_field_visibility").check()
     submit_confirm(page)
 

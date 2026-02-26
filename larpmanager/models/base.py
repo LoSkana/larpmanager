@@ -25,6 +25,7 @@ import time
 from itertools import chain
 from typing import Any, ClassVar
 
+import pycountry
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.validators import RegexValidator
@@ -164,10 +165,13 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         return serialized_data
 
 
-class FeatureNationality(models.TextChoices):
-    """Represents FeatureNationality model."""
+class FeatureNationality:
+    """Nationality choices from pycountry, sorted by name."""
 
-    ITALY = "it", _("Italy")
+    choices: ClassVar[list] = sorted(
+        [(c.alpha_2.lower(), c.name) for c in pycountry.countries],
+        key=lambda x: x[1],
+    )
 
 
 class FeatureModule(BaseModel):
@@ -270,6 +274,15 @@ class PaymentMethod(UuidMixin, BaseModel):
         processors=[ResizeToFill(100, 100)],
         format="JPEG",
         options={"quality": 90},
+    )
+
+    nationality = models.CharField(
+        max_length=2,
+        choices=FeatureNationality.choices,
+        blank=True,
+        null=True,
+        verbose_name=_("Country"),
+        help_text=_("If set, this payment method is only available for organizations of this country"),
     )
 
     def as_dict(self, **kwargs: Any) -> Any:  # noqa: ARG002

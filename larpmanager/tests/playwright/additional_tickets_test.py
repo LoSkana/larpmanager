@@ -29,7 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, login_user, logout, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, go_to, login_orga, login_user, logout, submit_confirm, expect_normalized, \
+    sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -75,7 +76,7 @@ def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Verify feature is enabled and form question is created
-    page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Form")
     expect_normalized(page, page.locator("#one"), "Additional")
 
     # Configure ticket price

@@ -786,7 +786,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
 
     page_info = _("Manage form questions for writing elements")
 
-    page_title = _("Writing Questions")
+    page_title = _("Sheet")
 
     class Meta:
         model = WritingQuestion
@@ -804,6 +804,11 @@ class OrgaWritingQuestionForm(BaseModelForm):
 
         """
         super().__init__(*args, **kwargs)
+
+        writing_typ = self.params.get("writing_typ")
+        if writing_typ:
+            label = QuestionApplicable(writing_typ).label.capitalize()
+            self.page_title = label + " " + _("Sheet")
 
         self._init_type()
 

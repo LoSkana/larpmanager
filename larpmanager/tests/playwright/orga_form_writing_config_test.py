@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -56,31 +56,31 @@ def feature_fields(page: Any) -> None:
     submit_confirm(page)
 
     # reorder test
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
     page.locator('[id="u3"]').locator(".fa-arrow-up").click()
     expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation")
 
     # add config fields - title
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Writing ")).click()
+    page.get_by_role("link", name=re.compile(r"^Characters ")).click()
     page.locator("#id_writing_title").check()
     submit_confirm(page)
 
     # check
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation Title Title Hidden")
 
     # add config fields - cover, assigned
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Writing ")).click()
+    page.get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_title").uncheck()
     page.locator("#id_writing_cover").check()
     page.locator("#id_writing_assigned").check()
     submit_confirm(page)
 
     # check
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"),
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Cover Cover Hidden",
@@ -90,7 +90,7 @@ def feature_fields(page: Any) -> None:
 def feature_fields2(page: Any, live_server: Any) -> None:
     # add config hide, assigned
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Writing ")).click()
+    page.get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_assigned").uncheck()
     page.locator("#id_writing_cover").uncheck()
     page.locator("#id_writing_hide").check()
@@ -98,7 +98,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden"
     )
@@ -114,7 +114,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # add field computed
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("c")
     page.locator("#id_name").click()
@@ -126,7 +126,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check it has not been deleted
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"),
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden comp Computed Private",
@@ -138,7 +138,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden"
     )
@@ -153,7 +153,7 @@ def form_other_writing(page: Any) -> None:
     submit_confirm(page)
 
     # check
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     page.get_by_role("link", name="Plot", exact=True).click()
     page.get_by_role("link", name="Character", exact=True).click()
     expect_normalized(page,

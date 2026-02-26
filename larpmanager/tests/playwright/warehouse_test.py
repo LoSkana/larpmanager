@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, expect_normalized, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, expect_normalized, submit_confirm, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -50,7 +50,7 @@ def test_warehouse(pw_page: Any) -> None:
 
 def prepare(page: Any) -> None:
     # Activate feature inventory
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Warehouse").check()
     submit_confirm(page)
 

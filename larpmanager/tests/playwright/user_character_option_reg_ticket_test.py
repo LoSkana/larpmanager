@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, logout, expect_normalized, \
-    submit_confirm, new_option, submit_option
+    submit_confirm, new_option, submit_option, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -65,7 +65,7 @@ def prepare(page: Any) -> None:
     page.get_by_role("link", name=re.compile(r"^Player editor ")).click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
-    page.get_by_role("link", name=re.compile(r"^Character form ")).click()
+    page.get_by_role("link", name=re.compile(r"^Character Sheet")).click()
     page.locator("#id_character_form_wri_que_tickets").check()
     submit_confirm(page)
 
@@ -77,7 +77,7 @@ def prepare(page: Any) -> None:
     submit_confirm(page)
 
     # set option based on ticket
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("choose")

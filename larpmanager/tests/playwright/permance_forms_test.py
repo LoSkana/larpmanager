@@ -29,7 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, check_feature, go_to, login_orga, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, check_feature, go_to, login_orga, submit_confirm, expect_normalized, \
+    sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -63,14 +64,14 @@ def test_permanence_form(pw_page: Any) -> None:
 def check_orga_visibility(page: Any) -> None:
     page.get_by_role("link", name="Event").click()
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Writing ")).click()
+    page.get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_field_visibility").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Event", exact=True).click()
+    sidebar(page, "Event")
     page.locator("#id_form2-show_character_0").check()
     page.locator("#id_form2-show_character_2").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Event", exact=True).click()
+    sidebar(page, "Event")
     expect(page.locator("#id_form2-show_character_0")).to_be_checked()
     expect(page.locator("#id_form2-show_character_2")).to_be_checked()
     expect(page.locator("#id_form2-show_character_1")).not_to_be_checked()
@@ -119,7 +120,7 @@ def check_orga_features(page: Any) -> None:
 
 def check_orga_config(page: Any) -> None:
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Visualisation ")).click()
+    page.get_by_role("link", name=re.compile(r"^Display ")).click()
     page.locator("#id_show_shortcuts_mobile").check()
     page.get_by_text("If checked: Show summary page").click()
     page.locator("#id_show_limitations").check()
@@ -128,14 +129,14 @@ def check_orga_config(page: Any) -> None:
     page.get_by_text("Email notifications Disable").click()
     page.get_by_text("If checked, options no longer").click()
     page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
-    page.get_by_role("link", name=re.compile(r"^Visualisation ")).click()
+    page.get_by_role("link", name=re.compile(r"^Display ")).click()
     expect(page.locator("#id_show_shortcuts_mobile")).to_be_checked()
     expect(page.locator("#id_show_export")).not_to_be_checked()
     expect(page.locator("#id_show_limitations")).to_be_checked()
 
 
 def check_orga_roles(page: Any) -> None:
-    page.locator("#orga_roles").get_by_role("link", name="Roles").click()
+    sidebar(page, "Roles")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("testona")
@@ -172,7 +173,7 @@ def check_exe_config(page: Any) -> None:
     page.locator("#id_calendar_authors").check()
     page.locator("#id_calendar_tagline").check()
     submit_confirm(page)
-    page.locator("#exe_config").get_by_role("link", name="Configuration").click()
+    sidebar(page, "Configuration")
     page.get_by_role("link", name=re.compile(r"^Interface ")).click()
     expect(page.locator("#id_calendar_past_events")).to_be_checked()
     expect(page.locator("#id_calendar_website")).not_to_be_checked()
@@ -196,7 +197,7 @@ def check_exe_features(page: Any) -> None:
 
 
 def check_exe_roles(page: Any) -> None:
-    page.locator("#exe_roles").get_by_role("link", name="Roles").click()
+    sidebar(page, "Roles")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("test")

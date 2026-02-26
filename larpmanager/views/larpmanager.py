@@ -41,6 +41,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django_ratelimit.decorators import ratelimit
 
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.cache.config import save_single_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.larpmanager import get_blog_content_with_images, get_cache_lm_home, get_larpmanager_texts
 from larpmanager.forms.association import FirstAssociationForm
@@ -571,6 +572,7 @@ def _join_form(context: dict, request: HttpRequest) -> Association | None:
             new_association: Association = form.save(commit=False)
             new_association.skin_id = request.association["skin_id"]
             new_association.save()
+            save_single_config(new_association, "intro_driver", "welcome")
 
             # Create admin role for the new association and assign creator
             (admin_role, _created) = AssociationRole.objects.get_or_create(

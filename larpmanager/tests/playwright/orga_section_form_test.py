@@ -34,7 +34,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_user,
                                      logout,
                                      submit_confirm,
-                                     expect_normalized, fill_tinymce, check_feature,
+                                     expect_normalized, fill_tinymce, check_feature, sidebar,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -49,7 +49,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
 
     # Activate section feature
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Sections").check()
     page.get_by_role("button", name="Confirm").click()
 
@@ -130,14 +130,14 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Activate ticket selection / allowed selection
     go_to(page, live_server, "/test/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    sidebar(page, "Configuration")
     page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
     page.locator("#id_registration_reg_que_allowed").check()
     page.locator("#id_registration_reg_que_tickets").check()
     page.get_by_role("button", name="Confirm").click()
 
     # Create new ticket
-    page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
+    sidebar(page, "Tickets")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Depends")
@@ -183,7 +183,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("link", name="Sections").click()
     page.locator(".fa-arrow-up").click()
 
-    page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Form")
     page.locator("#registration_questions_needs").locator(".fa-edit").click()
     page.get_by_text("Staff members who are allowed").click()
     page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").click()
@@ -191,7 +191,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("option", name="Admin Test").click()
     page.get_by_role("button", name="Confirm").click()
 
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="Food").click()
     page.get_by_role("link", name="sleep").click()
     just_wait(page)
@@ -214,7 +214,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     # login as user
     login_user(page, live_server)
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    sidebar(page, "Registrations")
 
     expect(page.get_by_role("link", name="Food")).to_be_visible()
     expect(page.get_by_role("link", name="sleep")).not_to_be_visible()
@@ -232,26 +232,26 @@ def test_orga_section_form(pw_page: Any) -> None:
     # test factions
     login_orga(page, live_server)
     go_to(page, live_server, "/test/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    sidebar(page, "Configuration")
     page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
     page.locator("#id_registration_reg_que_tickets").check()
     page.locator("#id_registration_reg_que_allowed").uncheck()
     page.locator("#id_registration_reg_que_tickets").uncheck()
     page.get_by_role("button", name="Confirm").click()
 
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    sidebar(page, "Configuration")
     page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
     page.locator("#id_registration_reg_que_faction").check()
     page.get_by_role("button", name="Confirm").click()
 
     # set up features
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Characters").check()
     check_feature(page, "Factions")
     page.get_by_role("button", name="Confirm").click()
 
     # create faction
-    page.get_by_role("link", name="Factions", exact=True).click()
+    sidebar(page, "Factions")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("aaaaaccc")
@@ -261,7 +261,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # set up question
-    page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Form")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("faaaaacc")
@@ -272,7 +272,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # delete sign up
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    sidebar(page, "Registrations")
     page.locator('.fa-trash').click()
 
     # check does not show on new sign up
@@ -288,7 +288,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # assign character
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    sidebar(page, "Registrations")
     page.locator(".fa-edit").click()
     page.get_by_role("link", name=re.compile(r"^Character ")).click()
     page.get_by_role("searchbox").click()

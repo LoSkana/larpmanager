@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, expect_normalized, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import just_wait, expect_normalized, go_to, login_orga, submit_confirm, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -143,7 +143,7 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
     """Test that NPC/Staff ticket links bypass external registration link redirect."""
 
     # Set an external registration link
-    page.get_by_role("link", name="Event", exact=True).click()
+    sidebar(page, "Event")
     page.locator("#id_form2-registration_status").select_option("e")
     page.locator("#id_form2-register_link").click()
     page.locator("#id_form2-register_link").fill("https://google.com")
@@ -334,7 +334,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     # check situation in second event
     page.locator("#one").get_by_role("link", name="Characters").click()
     expect_normalized(page, page.locator("#one"), "PRIMAAAA Primary Test Character TRANVERSA Transversal Test Character")
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text PRIMAAAA TRANVERSA")
 
@@ -343,7 +343,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Factions").click()
     page.locator("#one").get_by_role("link", name="Characters").click()
     expect_normalized(page, page.locator("#one"), "primaaa Primary Test Character tranver Transversal Test Character")
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text primaaa tranver")
 
@@ -358,7 +358,7 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # give out credits
-    page.get_by_role("link", name="Credits", exact=True).click()
+    sidebar(page, "Credits")
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").fill("org")
@@ -370,7 +370,7 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # open request
-    page.get_by_role("link", name=re.compile(" Accounting$")).click()
+    go_to(page, live_server, "/accounting")
     page.get_by_role("link", name="refund request").click()
     page.get_by_role("textbox", name="Details").click()
     page.get_by_role("textbox", name="Details").fill("asdsadsadsa")
@@ -380,7 +380,7 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Requests open: asdsadsadsa (20.00)")
 
     go_to(page, live_server, "/manage")
-    page.locator("#exe_refunds").get_by_role("link", name="Refunds").click()
+    sidebar(page, "Refunds")
     just_wait(page)
     expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 200 request done")
     page.get_by_role("link", name="Done").click()

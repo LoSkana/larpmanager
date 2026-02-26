@@ -22,6 +22,7 @@ from decimal import Decimal, InvalidOperation
 from typing import Any, ClassVar
 
 from django import forms
+from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -665,9 +666,14 @@ class ExePaymentSettingsForm(BaseModelForm):
 
         self.prevent_canc = True
 
-        self.fields["payment_methods"].queryset = self.fields["payment_methods"].queryset.order_by("id")
+        assoc_nationality = getattr(self.instance, "nationality", None) or ""
+        nationality_filter = (
+            models.Q(nationality__isnull=True) | models.Q(nationality="") | models.Q(nationality=assoc_nationality)
+        )
 
-        self.methods = PaymentMethod.objects.order_by("id")
+        self.fields["payment_methods"].queryset = PaymentMethod.objects.filter(nationality_filter).order_by("id")
+
+        self.methods = PaymentMethod.objects.filter(nationality_filter).order_by("id")
         self.section_descriptions = {}
         for el in self.methods:
             self.section_descriptions[el.name] = el.instructions

@@ -29,7 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, load_image, login_orga, expect_normalized, submit_confirm
+from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, load_image, login_orga, expect_normalized, \
+    submit_confirm, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -52,7 +53,7 @@ def test_overpay_upload_membership_prologue(pw_page: Any) -> None:
 def check_overpay(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/manage")
     # Activate tokens / credits
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Tokens").check()
     page.get_by_role("checkbox", name="Credits").check()
     submit_confirm(page)
@@ -149,7 +150,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     page.locator("#id_registration_no_grouping").check()
     page.locator("#id_registration_reg_que_allowed").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Registrations", exact=True).click()
+    sidebar(page, "Registrations")
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")
     page.locator(".fa-edit").click()
     expect_normalized(page,
@@ -193,8 +194,7 @@ def prologues(page: Any) -> None:
 def upload_membership(page: Any, live_server: Any) -> None:
     # Activate membership
     go_to(page, live_server, "/manage")
-    page.locator("#exe_features").click()
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Membership").check()
     submit_confirm(page)
 
@@ -238,8 +238,8 @@ def upload_membership(page: Any, live_server: Any) -> None:
 def upload_membership_fee(page: Any, live_server: Any) -> None:
     # upload fee
     go_to(page, live_server, "/manage")
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Payments", exact=True).check()
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()

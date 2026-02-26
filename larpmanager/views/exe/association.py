@@ -31,6 +31,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from larpmanager.cache.config import save_single_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.association import (
     ExeFeatureForm,
@@ -44,7 +45,7 @@ from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import clear_messages, get_feature
 from larpmanager.utils.edit.backend import backend_edit
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
-from larpmanager.utils.services.association import _reset_all_association
+from larpmanager.utils.services.association import _reset_all_association, get_activation_checklist
 from larpmanager.views.larpmanager import get_run_lm_payment
 from larpmanager.views.orga.event import prepare_roles_list
 
@@ -438,3 +439,27 @@ def exe_reload_cache(request: HttpRequest) -> HttpResponse:
     # Notify user of successful cache reset
     messages.success(request, _("Cache reset!"))
     return redirect("manage")
+
+
+@login_required
+def exe_activation(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
+    """Show activation checklist and allow unlocking advanced mode from lite/demo."""
+    context = check_association_context(request, "exe_activation")
+    association_id = context["association_id"]
+
+    checklist, progress = get_activation_checklist(association_id)
+    progress_done = 100
+    all_done = progress == progress_done
+    context["checklist"] = checklist
+    context["progress"] = progress
+    context["all_done"] = all_done
+
+    if request.method == "POST" and all_done:
+        association = Association.objects.get(pk=association_id)
+        association.demo = False
+        association.save(update_fields=["demo"])
+        save_single_config(association, "intro_driver", "advanced_unlock")
+        messages.success(request, _("Advanced mode activated! All features are now available."))
+        return redirect("manage")
+
+    return render(request, "larpmanager/exe/activation.html", context)

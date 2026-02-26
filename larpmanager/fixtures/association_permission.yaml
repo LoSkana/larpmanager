@@ -5,7 +5,9 @@
     slug: exe_association
     number: 2
     config: interface
+    active_if: null
     hidden: false
+    icon: building
     feature: exe_association
     module: organization
 - model: larpmanager.associationpermission
@@ -15,7 +17,9 @@
     slug: exe_roles
     number: 3
     config: null
+    active_if: null
     hidden: false
+    icon: user-shield
     feature: exe_roles
     module: organization
 - model: larpmanager.associationpermission
@@ -25,7 +29,9 @@
     slug: exe_config
     number: 4
     config: null
+    active_if: null
     hidden: false
+    icon: gears
     feature: exe_config
     module: organization
 - model: larpmanager.associationpermission
@@ -35,7 +41,9 @@
     slug: exe_features
     number: 5
     config: null
+    active_if: null
     hidden: false
+    icon: puzzle-piece
     feature: exe_features
     module: organization
 - model: larpmanager.associationpermission
@@ -45,7 +53,9 @@
     slug: exe_accounting
     number: 2
     config: null
+    active_if: null
     hidden: false
+    icon: calculator
     feature: exe_accounting
     module: accounting
 - model: larpmanager.associationpermission
@@ -55,7 +65,9 @@
     slug: exe_payments
     number: 3
     config: payment
+    active_if: null
     hidden: false
+    icon: credit-card
     feature: payment
     module: accounting
 - model: larpmanager.associationpermission
@@ -65,7 +77,9 @@
     slug: exe_donations
     number: 4
     config: null
+    active_if: null
     hidden: false
+    icon: hand-holding-heart
     feature: donate
     module: accounting
 - model: larpmanager.associationpermission
@@ -75,7 +89,9 @@
     slug: exe_outflows
     number: 5
     config: null
+    active_if: null
     hidden: false
+    icon: arrow-trend-up
     feature: outflow
     module: accounting
 - model: larpmanager.associationpermission
@@ -85,7 +101,9 @@
     slug: exe_inflows
     number: 6
     config: null
+    active_if: null
     hidden: false
+    icon: arrow-trend-down
     feature: inflow
     module: accounting
 - model: larpmanager.associationpermission
@@ -95,7 +113,9 @@
     slug: exe_expenses
     number: 7
     config: expense
+    active_if: null
     hidden: false
+    icon: receipt
     feature: expense
     module: accounting
 - model: larpmanager.associationpermission
@@ -105,7 +125,9 @@
     slug: exe_credits
     number: 8
     config: credits
+    active_if: null
     hidden: false
+    icon: gem
     feature: credits
     module: accounting
 - model: larpmanager.associationpermission
@@ -115,7 +137,9 @@
     slug: exe_refunds
     number: 9
     config: null
+    active_if: null
     hidden: false
+    icon: rotate-left
     feature: refund
     module: accounting
 - model: larpmanager.associationpermission
@@ -125,7 +149,9 @@
     slug: exe_collections
     number: 10
     config: null
+    active_if: null
     hidden: false
+    icon: layer-group
     feature: collection
     module: accounting
 - model: larpmanager.associationpermission
@@ -135,7 +161,9 @@
     slug: exe_verification
     number: 11
     config: null
+    active_if: null
     hidden: false
+    icon: circle-check
     feature: verification
     module: accounting
 - model: larpmanager.associationpermission
@@ -145,7 +173,9 @@
     slug: exe_balance
     number: 12
     config: null
+    active_if: null
     hidden: false
+    icon: scale-balanced
     feature: ita_balance
     module: italy
 - model: larpmanager.associationpermission
@@ -155,7 +185,9 @@
     slug: exe_accounting_rec
     number: 13
     config: null
+    active_if: null
     hidden: false
+    icon: clock-rotate-left
     feature: record_acc
     module: accounting
 - model: larpmanager.associationpermission
@@ -165,7 +197,9 @@
     slug: exe_appearance
     number: 11
     config: calendar
+    active_if: null
     hidden: false
+    icon: palette
     feature: exe_appearance
     module: appearance
 - model: larpmanager.associationpermission
@@ -175,7 +209,9 @@
     slug: exe_texts
     number: 21
     config: null
+    active_if: null
     hidden: false
+    icon: font
     feature: exe_texts
     module: appearance
 - model: larpmanager.associationpermission
@@ -185,7 +221,9 @@
     slug: exe_urlshortner
     number: 11
     config: null
+    active_if: null
     hidden: false
+    icon: link
     feature: urlshortner
     module: miscellany
 - model: larpmanager.associationpermission
@@ -195,7 +233,9 @@
     slug: exe_warehouse_containers
     number: 21
     config: warehouse
+    active_if: null
     hidden: false
+    icon: box-open
     feature: warehouse
     module: warehouse
 - model: larpmanager.associationpermission
@@ -205,7 +245,9 @@
     slug: exe_events
     number: 11
     config: null
+    active_if: null
     hidden: false
+    icon: calendar
     feature: exe_events
     module: events
 - model: larpmanager.associationpermission
@@ -215,9 +257,11 @@
     slug: exe_pre_registrations
     number: 31
     config: null
+    active_if: null
     hidden: false
+    icon: user-clock
     feature: pre_register
-    module: registration
+    module: events
 - model: larpmanager.associationpermission
   fields:
     name: Deadlines
@@ -225,17 +269,21 @@
     slug: exe_deadlines
     number: 41
     config: deadlines
+    active_if: null
     hidden: false
+    icon: hourglass-half
     feature: deadlines
-    module: registration
+    module: events
 - model: larpmanager.associationpermission
   fields:
-    name: Send e-mail
+    name: E-mail
     descr: Send e-mail
     slug: exe_send_mail
     number: 11
     config: email
+    active_if: null
     hidden: false
+    icon: paper-plane
     feature: exe_send_mail
     module: communications
 - model: larpmanager.associationpermission
@@ -245,7 +293,9 @@
     slug: exe_membership
     number: 15
     config: membership
+    active_if: null
     hidden: false
+    icon: users
     feature: membership
     module: users
 - model: larpmanager.associationpermission
@@ -255,7 +305,9 @@
     slug: exe_vote
     number: 21
     config: vote
+    active_if: null
     hidden: false
+    icon: square-check
     feature: vote
     module: users
 - model: larpmanager.associationpermission
@@ -265,7 +317,9 @@
     slug: exe_badges
     number: 31
     config: null
+    active_if: null
     hidden: false
+    icon: certificate
     feature: badge
     module: users
 - model: larpmanager.associationpermission
@@ -275,7 +329,9 @@
     slug: exe_questions
     number: 1
     config: null
+    active_if: null
     hidden: false
+    icon: circle-question
     feature: help
     module: communications
 - model: larpmanager.associationpermission
@@ -285,7 +341,9 @@
     slug: exe_newsletter
     number: 51
     config: null
+    active_if: null
     hidden: false
+    icon: envelope
     feature: newsletter
     module: communications
 - model: larpmanager.associationpermission
@@ -295,7 +353,9 @@
     slug: exe_volunteer_registry
     number: 71
     config: null
+    active_if: null
     hidden: false
+    icon: handshake
     feature: volunteer_registry
     module: italy
 - model: larpmanager.associationpermission
@@ -305,17 +365,21 @@
     slug: exe_enrolment
     number: 81
     config: null
+    active_if: null
     hidden: false
+    icon: user-plus
     feature: membership
     module: users
 - model: larpmanager.associationpermission
   fields:
-    name: Methods
+    name: Payment Methods
     descr: Configure payment methods available for participants
     slug: exe_methods
-    number: 1
+    number: 1000
     config: payment
+    active_if: null
     hidden: false
+    icon: money-bill-wave
     feature: payment
     module: accounting
 - model: larpmanager.associationpermission
@@ -327,6 +391,7 @@
     config: null
     active_if: payment_invoices
     hidden: false
+    icon: file-invoice
     feature: payment_invoices
     module: accounting
 - model: larpmanager.associationpermission
@@ -336,7 +401,9 @@
     slug: exe_membership_check
     number: 99
     config: null
+    active_if: null
     hidden: false
+    icon: user-check
     feature: fiscal_code_check
     module: italy
 - model: larpmanager.associationpermission
@@ -346,7 +413,9 @@
     slug: exe_tokens
     number: 8
     config: tokens
+    active_if: null
     hidden: false
+    icon: coins
     feature: tokens
     module: accounting
 - model: larpmanager.associationpermission
@@ -356,7 +425,9 @@
     slug: exe_membership_registry
     number: 99
     config: null
+    active_if: null
     hidden: false
+    icon: address-book
     feature: membership
     module: users
 - model: larpmanager.associationpermission
@@ -366,7 +437,9 @@
     slug: exe_profile
     number: 1
     config: users
+    active_if: null
     hidden: false
+    icon: user-pen
     feature: exe_profile
     module: users
 - model: larpmanager.associationpermission
@@ -376,7 +449,9 @@
     slug: exe_templates
     number: 51
     config: null
+    active_if: null
     hidden: false
+    icon: clone
     feature: template
     module: events
 - model: larpmanager.associationpermission
@@ -386,7 +461,9 @@
     slug: exe_archive_email
     number: 91
     config: email
+    active_if: null
     hidden: false
+    icon: box-archive
     feature: exe_archive_email
     module: communications
 - model: larpmanager.associationpermission
@@ -396,7 +473,9 @@
     slug: exe_quick
     number: 9999
     config: null
+    active_if: null
     hidden: true
+    icon: rocket
     feature: quick_setup
     module: event
 - model: larpmanager.associationpermission
@@ -406,7 +485,9 @@
     slug: exe_warehouse_items
     number: 46
     config: warehouse
+    active_if: null
     hidden: false
+    icon: box
     feature: warehouse
     module: warehouse
 - model: larpmanager.associationpermission
@@ -416,7 +497,9 @@
     slug: exe_warehouse_movements
     number: 66
     config: warehouse
+    active_if: null
     hidden: false
+    icon: dolly
     feature: warehouse
     module: warehouse
 - model: larpmanager.associationpermission
@@ -426,7 +509,9 @@
     slug: exe_warehouse_tags
     number: 36
     config: warehouse
+    active_if: null
     hidden: false
+    icon: tags
     feature: warehouse
     module: warehouse
 - model: larpmanager.associationpermission
@@ -436,7 +521,9 @@
     slug: exe_translations
     number: 31
     config: null
+    active_if: null
     hidden: false
+    icon: language
     feature: translation
     module: appearance
 - model: larpmanager.associationpermission
@@ -446,6 +533,20 @@
     slug: exe_log
     number: 1
     config: null
+    active_if: null
     hidden: false
+    icon: clock-rotate-left
     feature: logs
     module: miscellany
+- model: larpmanager.associationpermission
+  fields:
+    name: Activation
+    descr: Request activation of advanced mode for the organization
+    slug: exe_activation
+    number: 9999
+    config: null
+    active_if: null
+    hidden: true
+    icon: ''
+    feature: exe_activation
+    module: organization

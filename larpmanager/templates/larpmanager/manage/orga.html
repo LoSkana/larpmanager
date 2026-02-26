@@ -8,19 +8,19 @@
         {% include "larpmanager/manage/sticky_messages.html" %}
         {% include "larpmanager/manage/widgets/wwyltd.html" %}
         <div {% if not old_dashboard %}class="grid"{% else %}class="old_dashboard"{% endif %}>
+            {% with list=priorities typ="priorities" %}
+                {% include "larpmanager/manage/widgets/helpers.html" %}
+            {% endwith %}
             {% include "larpmanager/manage/widgets/orga_event.html" %}
             {% include "larpmanager/manage/widgets/orga_registrations.html" %}
             {% include "larpmanager/manage/widgets/orga_accounting.html" %}
+            {% with list=actions typ="actions" %}
+                {% include "larpmanager/manage/widgets/helpers.html" %}
+            {% endwith %}
             {% include "larpmanager/manage/widgets/orga_deadline.html" %}
             {% include "larpmanager/manage/widgets/orga_user_character.html" %}
             {% include "larpmanager/manage/widgets/orga_casting.html" %}
             {% include "larpmanager/manage/widgets/orga_logs.html" %}
-            {% with list=priorities typ="priorities" %}
-                {% include "larpmanager/manage/widgets/helpers.html" %}
-            {% endwith %}
-            {% with list=actions typ="actions" %}
-                {% include "larpmanager/manage/widgets/helpers.html" %}
-            {% endwith %}
             {% with list=suggestions typ="suggestions" %}
                 {% include "larpmanager/manage/widgets/helpers.html" %}
             {% endwith %}
@@ -38,9 +38,6 @@
                 </a>
             </div>
         </div>
-        <p>
-            <a href="#" id="intro_driver">{% trans "Launch guided interface tour" %}</a>
-        </p>
     </div>
 {% endblock content %}
 {% block css %}

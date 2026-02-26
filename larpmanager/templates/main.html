@@ -105,15 +105,21 @@
                         {% block nav %}
                             {% include "larpmanager/manage/nav.html" %}
                         {% endblock nav %}
-                        <div class="info nav main_nav">
-                            {% if tutorial %}<a href="#" class="feature_tutorial" tut="{{ tutorial }}">Tutorial</a>{% endif %}
-                            {% if config %}
+                        <div id="right_bar" class="info nav main_nav no_mobile">
+                            {% if tutorial %}
+                                <a href="#"
+                                   class="feature_tutorial"
+                                   tut="{{ tutorial }}"
+                                   qtip="Tutorial"><i class="fa-solid fa-graduation-cap"></i></a>
+                            {% endif %}
+                            {% if config and not demo %}
                                 <a href="{{ config }}"
                                    class="action-link"
                                    data-modal-eligible="true"
-                                   data-slug="config">Config</a>
+                                   data-slug="config"
+                                   qtip="Config"><i class="fa-solid fa-gear"></i></a>
                             {% endif %}
-                            <a href="#" qtip="{% block info %}{% endblock info %}" id="page-info">Info</a>
+                            <a href="#" qtip="{% block info %}{% endblock info %}" id="page-info"><i class="fa-solid fa-circle-info"></i></a>
                         </div>
                         <div class="page_{{ request_func_name }} {% block special %}{% endblock special %}">
                             {% block content %}

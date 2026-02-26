@@ -393,6 +393,12 @@ msgstr ""
 msgid "If checked: shows the old interface"
 msgstr ""
 
+msgid "Old menu"
+msgstr ""
+
+msgid "If checked: shows the old menu"
+msgstr ""
+
 msgid "Email notifications"
 msgstr ""
 
@@ -864,12 +870,6 @@ msgstr ""
 msgid "Manage your personal interface preferences"
 msgstr ""
 
-msgid "Collapse sidebar"
-msgstr ""
-
-msgid "If checked: collpase sidebars links, and expand on mouse hover"
-msgstr ""
-
 msgid "New Dashboard"
 msgstr ""
 
@@ -956,7 +956,7 @@ msgstr ""
 msgid "Manage form questions for writing elements"
 msgstr ""
 
-msgid "Writing Questions"
+msgid "Sheet"
 msgstr ""
 
 msgid "Manage options in form questions for writing elements"
@@ -997,15 +997,7 @@ msgstr ""
 msgid "Event Configuration"
 msgstr ""
 
-msgid "Disable assignment"
-msgstr ""
-
-msgid ""
-"If checked: Does not send communication to the participant when the "
-"character is assigned"
-msgstr ""
-
-msgid "Visualisation"
+msgid "Display"
 msgstr ""
 
 msgid "Show shortcuts"
@@ -1028,6 +1020,71 @@ msgid "Limitations"
 msgstr ""
 
 msgid "If checked: Show summary page with number of tickets/options used"
+msgstr ""
+
+msgid "Character cover"
+msgstr ""
+
+msgid "Desalt thumbnail"
+msgstr ""
+
+msgid ""
+"If checked, shows the original image in the cover, not the thumbnail version"
+msgstr ""
+
+msgid "Disable assignment"
+msgstr ""
+
+msgid ""
+"If checked: Does not send communication to the participant when the "
+"character is assigned"
+msgstr ""
+
+msgid "Tickets"
+msgstr ""
+
+msgid "If checked, allow ticket tier: Staff"
+msgstr ""
+
+msgid "If checked, allow ticket tier: NPC"
+msgstr ""
+
+msgid "If checked, allow ticket tier: Collaborator"
+msgstr ""
+
+msgid "If checked, allow ticket tier: Seller"
+msgstr ""
+
+msgid "Patron / Reduced"
+msgstr ""
+
+msgid ""
+"Indicates the ratio between reduced and patron tickets, multiplied by 10. "
+"Example: 10 -> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets "
+"for 1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets"
+msgstr ""
+
+msgid "Ticket Filler"
+msgstr ""
+
+msgid "Free registration"
+msgstr ""
+
+msgid ""
+"If checked, participants may sign up as fillers at any time; otherwise, they "
+"may only do so if the stipulated number of characters has been reached"
+msgstr ""
+
+msgid "Number of extractions"
+msgstr ""
+
+msgid "Number of tickets to be drawn"
+msgstr ""
+
+msgid "Conversion ticket"
+msgstr ""
+
+msgid "Name of the ticket into which to convert"
 msgstr ""
 
 msgid "Gallery"
@@ -1113,7 +1170,7 @@ msgid ""
 "participant's age"
 msgstr ""
 
-msgid "Character form"
+msgid "Character Sheet"
 msgstr ""
 
 msgid ""
@@ -1137,19 +1194,6 @@ msgstr ""
 
 msgid ""
 "If checked, allows a option to be visible only if other options are selected"
-msgstr ""
-
-msgid "Character cover"
-msgstr ""
-
-msgid "Desalt thumbnail"
-msgstr ""
-
-msgid ""
-"If checked, shows the original image in the cover, not the thumbnail version"
-msgstr ""
-
-msgid "Writing"
 msgstr ""
 
 msgid "Title"
@@ -1242,6 +1286,18 @@ msgstr ""
 msgid ""
 "If checked, allows to track the plots or relationships not really important "
 "for the character"
+msgstr ""
+
+msgid "Check"
+msgstr ""
+
+msgid "If checked, enables the consistency check tool for character sheets"
+msgstr ""
+
+msgid "Reading"
+msgstr ""
+
+msgid "If checked, enables the reading view for writing elements"
 msgstr ""
 
 msgid "Independent factions"
@@ -1508,53 +1564,6 @@ msgstr ""
 msgid ""
 "Value of the discount for the friend who signs up using the code of a "
 "registered participant"
-msgstr ""
-
-msgid "Tickets"
-msgstr ""
-
-msgid "If checked, allow ticket tier: Staff"
-msgstr ""
-
-msgid "If checked, allow ticket tier: NPC"
-msgstr ""
-
-msgid "If checked, allow ticket tier: Collaborator"
-msgstr ""
-
-msgid "If checked, allow ticket tier: Seller"
-msgstr ""
-
-msgid "Patron / Reduced"
-msgstr ""
-
-msgid ""
-"Indicates the ratio between reduced and patron tickets, multiplied by 10. "
-"Example: 10 -> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets "
-"for 1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets"
-msgstr ""
-
-msgid "Ticket Filler"
-msgstr ""
-
-msgid "Free registration"
-msgstr ""
-
-msgid ""
-"If checked, participants may sign up as fillers at any time; otherwise, they "
-"may only do so if the stipulated number of characters has been reached"
-msgstr ""
-
-msgid "Number of extractions"
-msgstr ""
-
-msgid "Number of tickets to be drawn"
-msgstr ""
-
-msgid "Conversion ticket"
-msgstr ""
-
-msgid "Name of the ticket into which to convert"
 msgstr ""
 
 msgid "Event Appearance"
@@ -2003,7 +2012,9 @@ msgstr ""
 msgid "Manage badges and user assignments"
 msgstr ""
 
-msgid "Manage profile fields that participants can fill in"
+msgid ""
+"Select the personal data fields to be requested from participants during "
+"registration"
 msgstr ""
 
 msgid "Over"
@@ -2118,7 +2129,7 @@ msgstr ""
 msgid "Manage signup form questions"
 msgstr ""
 
-msgid "Registration questions"
+msgid "Registration form"
 msgstr ""
 
 msgid "--- Empty"
@@ -3089,10 +3100,13 @@ msgstr ""
 msgid "Overall balance"
 msgstr ""
 
+msgid "Hidden"
+msgstr ""
+
 msgid "Optional"
 msgstr ""
 
-msgid "Mandatory"
+msgid "Required"
 msgstr ""
 
 msgid "Free"
@@ -3294,12 +3308,14 @@ msgstr ""
 msgid "Association Translations"
 msgstr ""
 
-msgid "Italy"
-msgstr ""
-
 msgid ""
 "Logo image (you can upload a file of any size, it will be resized "
 "automatically)"
+msgstr ""
+
+msgid ""
+"If set, this payment method is only available for organizations of this "
+"country"
 msgstr ""
 
 msgid "Descriptive name for this API key"
@@ -3435,9 +3451,6 @@ msgstr ""
 msgid "Terms and conditions"
 msgstr ""
 
-msgid "Registration form"
-msgstr ""
-
 msgid "Search"
 msgstr ""
 
@@ -3454,9 +3467,6 @@ msgid "Approved character"
 msgstr ""
 
 msgid "Character review"
-msgstr ""
-
-msgid "Hidden"
 msgstr ""
 
 msgid "Visible"
@@ -3612,9 +3622,6 @@ msgstr ""
 msgid "Presentation"
 msgstr ""
 
-msgid "Sheet"
-msgstr ""
-
 msgid "Progress"
 msgstr ""
 
@@ -3625,6 +3632,9 @@ msgid "Pay what you want"
 msgstr ""
 
 msgid "Rate"
+msgstr ""
+
+msgid "Mandatory"
 msgstr ""
 
 msgid "Disabled"
@@ -4614,55 +4624,61 @@ msgstr ""
 msgid "Select ability"
 msgstr ""
 
-msgid ""
-"This is the management dashboard, the interface will now be explained "
-"section by section."
+msgid "Your organization has been created!"
+msgstr ""
+
+msgid "Initialize the platform by creating your first event."
+msgstr ""
+
+msgid "You have been redirected to the Event Dashboard."
+msgstr ""
+
+msgid "Switch between Organization and Events management."
+msgstr ""
+
+msgid "Toggle between administrative backend and public-facing pages."
+msgstr ""
+
+msgid "Complete the setup to unlock full platform features."
 msgstr ""
 
 msgid ""
-"This is the sidebar, it contains all management functions and remains "
-"visible across all admin pages."
-msgstr ""
-
-msgid "Create, access, and manage your events from here."
+"The sidebar has expanded. New menus will continue to appear as you activate "
+"additional modules."
 msgstr ""
 
 msgid ""
-"Select the active workspace here: your organization or one of the events."
+"Enable specific features to add specialized functionalities to the platform."
 msgstr ""
 
-msgid "Switch here between administrative views and user-facing pages."
-msgstr ""
-
-msgid "Toggle the visibility of the sidebar."
-msgstr ""
-
-msgid "Search here for settings, features, and configuration options."
-msgstr ""
-
-msgid "This section lists critical issues that require immediate attention."
-msgstr ""
-
-msgid "This is the task list of required actions to complete the event setup."
-msgstr ""
-
-msgid ""
-"This list contains recommended actions to improve and finalize the "
-"configuration."
-msgstr ""
-
-msgid ""
-"Open the tutorial to follow guided, step-by-step instructions for this "
-"feature."
-msgstr ""
-
-msgid "Write to us if you need help in setting things up!"
+msgid "Write here what you would like to to!"
 msgstr ""
 
 msgid "Welcome to"
 msgstr ""
 
-msgid "And that is all"
+msgid "Start here:"
+msgstr ""
+
+msgid "Event created"
+msgstr ""
+
+msgid "Workspace selector"
+msgstr ""
+
+msgid "View Selector"
+msgstr ""
+
+msgid "Lite Mode active"
+msgstr ""
+
+msgid "Advanced Mode Enabled"
+msgstr ""
+
+msgid "Module Activation"
+msgstr ""
+
+msgid "Need help"
 msgstr ""
 
 msgid "Confirm"
@@ -4881,6 +4897,11 @@ msgstr ""
 msgid ""
 "For each character added, a specific field will be available to add "
 "additional plot information"
+msgstr ""
+
+msgid ""
+"Select which information participants must provide during registration: "
+"either Required, Optional or Hidden"
 msgstr ""
 
 msgid "You can only add users who approved data sharing with the organization"
@@ -5842,6 +5863,69 @@ msgstr ""
 msgid "This page summarises the system entries of"
 msgstr ""
 
+msgid "Activation"
+msgstr ""
+
+msgid ""
+"Complete the setup checklist below to unlock advanced mode and access all "
+"configuration features."
+msgstr ""
+
+msgid ""
+"<strong>Lite Mode</strong> is a simplified environment designed to help you "
+"master the core mechanics of the platform"
+msgstr ""
+
+msgid ""
+"Once you have completed the following steps, you can switch to "
+"<strong>Advanced Mode</strong>, granting you total control over the "
+"platform's professional features"
+msgstr ""
+
+msgid "What you will unlock"
+msgstr ""
+
+msgid ""
+"Activate and configure advanced features for your organization and events"
+msgstr ""
+
+msgid "Fine-tune every setting for your organization and each individual event"
+msgstr ""
+
+msgid "E-mail"
+msgstr ""
+
+msgid ""
+"Send bulk e-mails to participants and review the full archive of sent "
+"messages"
+msgstr ""
+
+msgid ""
+"Fully customize the appearance, texts and navigation of your organization "
+"and event interfaces"
+msgstr ""
+
+msgid "Sensitive data"
+msgstr ""
+
+msgid "Access and review the personal data submitted by participants"
+msgstr ""
+
+msgid "Step"
+msgstr ""
+
+msgid "Pending"
+msgstr ""
+
+msgid "Go"
+msgstr ""
+
+msgid "Activate advanced mode"
+msgstr ""
+
+msgid "Complete all steps above to unlock advanced mode."
+msgstr ""
+
 msgid "Competences"
 msgstr ""
 
@@ -6382,7 +6466,10 @@ msgid ""
 "and events"
 msgstr ""
 
-msgid "Launch guided interface tour"
+msgid "Welcome to the dashboard of your organization!"
+msgstr ""
+
+msgid "Create your first event"
 msgstr ""
 
 msgid "Feature activated"
@@ -7301,9 +7388,6 @@ msgstr ""
 msgid "Email list"
 msgstr ""
 
-msgid "Form questions"
-msgstr ""
-
 msgid "This page summarises the available questions of the character form"
 msgstr ""
 
@@ -7433,14 +7517,6 @@ msgstr ""
 msgid "This page shows the deadlines to be met for this event"
 msgstr ""
 
-msgid ""
-"This page will guide you through the creation of your first event, step by "
-"step"
-msgstr ""
-
-msgid "Simply follow the instructions and provide the required information"
-msgstr ""
-
 msgid "This page shows all log entries for this event"
 msgstr ""
 
@@ -7545,9 +7621,6 @@ msgid "Field"
 msgstr ""
 
 msgid "Operation"
-msgstr ""
-
-msgid "Reading"
 msgstr ""
 
 msgid "Manage reading writing elements using the table search controls"
@@ -7906,7 +7979,7 @@ msgid ""
 "regarding safety"
 msgstr ""
 
-msgid "Sensitive data"
+msgid "Users data"
 msgstr ""
 
 msgid "This page shows the general information of registered participants"
@@ -8094,9 +8167,6 @@ msgstr ""
 msgid "This page shows the factions and plots of the indicated character"
 msgstr ""
 
-msgid "Check"
-msgstr ""
-
 msgid "This page performs several correctness checks of the character sheets"
 msgstr ""
 
@@ -8265,9 +8335,6 @@ msgstr ""
 msgid "Manage viewing writing element"
 msgstr ""
 
-msgid "Need help"
-msgstr ""
-
 msgid "Privacy Policy"
 msgstr ""
 
@@ -8298,7 +8365,13 @@ msgstr ""
 msgid "Move down"
 msgstr ""
 
+msgid "Writing"
+msgstr ""
+
 msgid "Miscellany"
+msgstr ""
+
+msgid "Italy"
 msgstr ""
 
 msgid ""
@@ -9071,9 +9144,6 @@ msgstr ""
 msgid "Display all users data"
 msgstr ""
 
-msgid "Methods"
-msgstr ""
-
 msgid "Configure payment methods available for participants"
 msgstr ""
 
@@ -9121,6 +9191,9 @@ msgstr ""
 msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
 
+msgid "Request activation of advanced mode for the organization"
+msgstr ""
+
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
 
@@ -9163,7 +9236,7 @@ msgstr ""
 msgid "Review participants' dietary restrictions and allergies."
 msgstr ""
 
-msgid "Review participants' sensitive data"
+msgid "Review participants' personal data"
 msgstr ""
 
 msgid "Manage questions asked by the participants"
@@ -9331,7 +9404,7 @@ msgstr ""
 msgid "Customize buttons in the event navigation bar"
 msgstr ""
 
-msgid "Manage questions and options for characters and writing elements"
+msgid "Manage fields for character sheet and writing elements"
 msgstr ""
 
 msgid "Display sent e-mails"
@@ -9627,6 +9700,45 @@ msgstr ""
 msgid "Failed to add gallery"
 msgstr ""
 
+msgid "Event creation"
+msgstr ""
+
+msgid "Configure at least one payment method for participants"
+msgstr ""
+
+msgid "Event roles"
+msgstr ""
+
+msgid "Define at least one additional role for event management"
+msgstr ""
+
+msgid "Registration tickets"
+msgstr ""
+
+msgid "Create at least one ticket type for event registrations"
+msgstr ""
+
+msgid "Define at least one question in the registration form"
+msgstr ""
+
+msgid "First registration"
+msgstr ""
+
+msgid "Have at least one participant registered for an event"
+msgstr ""
+
+msgid "First character"
+msgstr ""
+
+msgid "Create at least one character for one of your events"
+msgstr ""
+
+msgid "First assignment"
+msgstr ""
+
+msgid "Assign a character to a registered participant"
+msgstr ""
+
 msgid "Move to container"
 msgstr ""
 
@@ -9858,6 +9970,9 @@ msgstr ""
 msgid "Cache reset!"
 msgstr ""
 
+msgid "Advanced mode activated! All features are now available."
+msgstr ""
+
 msgid "Event deletion request"
 msgstr ""
 
@@ -9929,6 +10044,19 @@ msgstr ""
 
 #, python-format
 msgid ""
+"You are using %(platform)s in <b>Lite Mode</b> (%(progress)s%% complete)"
+msgstr ""
+
+msgid "This mode helps you master quickly the basics of the platform"
+msgstr ""
+
+msgid ""
+"Complete the checklist to unlock <b>Advanced Mode</b>, enabling full access "
+"to complex logistics, accounting, and narrative tools"
+msgstr ""
+
+#, python-format
+msgid ""
 "There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, "
 "etc.) are finished, mark them as completed"
 msgstr ""
@@ -9961,15 +10089,15 @@ msgstr ""
 msgid "There are <b>%(number)s</b> members to approve"
 msgstr ""
 
-msgid "Quickly configure your organization's most important settings"
-msgstr ""
-
 msgid "Set up the payment methods available to participants"
 msgstr ""
 
 msgid ""
 "Define which data will be asked in the profile form to the users once they "
 "sign up"
+msgstr ""
+
+msgid "Quickly configure your organization's most important settings"
 msgstr ""
 
 msgid "Set up the membership request text"
@@ -10093,10 +10221,10 @@ msgstr ""
 msgid "Set up character customization configuration"
 msgstr ""
 
-msgid "Quickly configure your events's most important settings"
+msgid "Set up the tickets that users can select during registration"
 msgstr ""
 
-msgid "Set up the tickets that users can select during registration"
+msgid "Quickly configure your events's most important settings"
 msgstr ""
 
 msgid ""

@@ -38,7 +38,7 @@ from larpmanager.tests.utils import (
     login_orga,
     submit_confirm,
     upload,
-    expect_normalized,
+    expect_normalized, sidebar,
 )
 
 pytestmark = pytest.mark.e2e
@@ -94,7 +94,7 @@ def abilities(page: Any) -> None:
     page.locator("#id_px_user").check()
     submit_confirm(page)
 
-    page.locator("#orga_px_abilities").get_by_role("link", name="Ability", exact=True).click()
+    sidebar(page, "Ability")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     page.locator("#id_first").click()
@@ -164,7 +164,7 @@ def plots(live_server: Any, page: Any) -> None:
 
 
 def quest_trait(page: Any) -> None:
-    page.get_by_role("link", name="Quest", exact=True).click()
+    sidebar(page, "Quest")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     page.get_by_role("link", name="Quest type").click()
@@ -172,7 +172,7 @@ def quest_trait(page: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("bhbh")
     submit_confirm(page)
-    page.get_by_role("link", name="Quest", exact=True).click()
+    sidebar(page, "Quest")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("quest.csv"))
@@ -181,7 +181,7 @@ def quest_trait(page: Any) -> None:
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(page, page.locator("#one"), "Q1 questt bhbh presenttation ttext")
     check_download(page, "Download")
-    page.locator("#orga_traits").get_by_role("link", name="Traits").click()
+    sidebar(page, "Traits")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("trait.csv"))
@@ -205,7 +205,7 @@ def registrations(page: Any) -> None:
 
 
 def reg_form(page: Any) -> None:
-    page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Form")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("reg-questions.csv"))
@@ -227,7 +227,7 @@ def reg_form(page: Any) -> None:
 
 
 def characters(page: Any) -> None:
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("character.csv"))
@@ -253,7 +253,7 @@ def factions(page: Any) -> None:
 
 
 def char_form(page: Any) -> None:
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    sidebar(page, "Sheet")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("char-questions.csv"))

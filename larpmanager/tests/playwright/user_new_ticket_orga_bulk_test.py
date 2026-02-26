@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, expect_normalized, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import just_wait, expect_normalized, go_to, login_orga, submit_confirm, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -67,7 +67,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # add plot
-    page.get_by_role("link", name="Plots", exact=True).click()
+    sidebar(page, "Plots")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("plot")
     submit_confirm(page)
@@ -80,7 +80,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # check base
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text Load")
@@ -138,7 +138,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 
 def bulk_questbuilder(live_server: Any, page: Any) -> None:
     # create quest
-    page.get_by_role("link", name="Quest", exact=True).click()
+    sidebar(page, "Quest")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("q1")
@@ -157,7 +157,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # test bulk set quest
-    page.get_by_role("link", name="Quest", exact=True).click()
+    sidebar(page, "Quest")
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u1"]').get_by_role("cell", name="typ").click()
     page.get_by_role("link", name="Execute").click()
@@ -165,7 +165,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Q1 q1 t2 Q2 q2 typ")
 
     # create traits
-    page.locator("#orga_traits").get_by_role("link", name="Traits").click()
+    sidebar(page, "Traits")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("t1")
@@ -193,7 +193,7 @@ def bulk_px(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # create ability
-    page.get_by_role("link", name="Ability", exact=True).click()
+    sidebar(page, "Ability")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("swor")
@@ -220,7 +220,7 @@ def bulk_px(live_server: Any, page: Any) -> None:
 def bulk_warehouse(live_server: Any, page: Any) -> None:
     # activate warehouse
     go_to(page, live_server, "manage/")
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Warehouse").check()
     submit_confirm(page)
 

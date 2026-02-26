@@ -29,16 +29,14 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
-from larpmanager.cache.association import clear_association_cache
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import cache_event_links
 from larpmanager.cache.permission import get_association_permission_feature, get_event_permission_feature
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
-from larpmanager.models.association import Association
+from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.event import Run
 from larpmanager.models.member import get_user_membership
-from larpmanager.models.registration import Registration
 from larpmanager.utils.auth.permission import (
     get_index_association_permissions,
     get_index_event_permissions,
@@ -112,18 +110,8 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
     # Add cached event links to context
     cache_event_links(request, context)
 
-    if context["member"]:
-        # Get membership info
-        context["membership"] = get_user_membership(context["member"], context["association_id"])
-
-        # Get association permissions for the user
-        get_index_association_permissions(request, context, context["association_id"], enforce_check=False)
-
-        # Add user interface preferences and staff status
-        for config_name in ["interface_new_ui", "interface_collapse_sidebar"]:
-            context[config_name] = context["member"].get_config(config_name, default_value=False)
-
-        context["is_staff"] = request.user.is_staff
+    # Set data on the member, if authenticated
+    get_context_member(request, context)
 
     # Set default names for token/credit system if feature enabled
     for feature, default_name in [("tokens", _("Tokens")), ("credits", _("Credits"))]:
@@ -139,7 +127,35 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
     if request and request.resolver_match:
         context["request_func_name"] = request.resolver_match.func.__name__
 
+    # Check if intro driver tutorial should be shown for this association
+    if context["member"] and context["association_id"]:
+        intro_value = get_association_config(context["association_id"], "intro_driver")
+        if intro_value:
+            context["intro_driver"] = intro_value
+            AssociationConfig.objects.filter(
+                association_id=context["association_id"],
+                name="intro_driver",
+            ).delete()
+
     return context
+
+
+def get_context_member(request: HttpRequest, context: dict) -> None:
+    """Set context dict on the member, if user authenticated."""
+    if not context["member"]:
+        return
+
+    # Get membership info
+    context["membership"] = get_user_membership(context["member"], context["association_id"])
+
+    # Get association permissions for the user
+    get_index_association_permissions(request, context, context["association_id"], enforce_check=False)
+
+    # Add user interface preferences and staff status
+    for config_name in ["interface_new_ui"]:
+        context[config_name] = context["member"].get_config(config_name, default_value=False)
+
+    context["is_staff"] = request.user.is_staff
 
 
 def is_shuttle(request: HttpRequest) -> bool:
@@ -272,6 +288,9 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
         # Verify required feature is enabled for this event
         if feature_name != "def" and feature_name not in context["features"]:
             raise FeatureError(path=request.path, feature=feature_name, run=context["run"].id)
+
+        # Mark active sidebar entry for redirect-style views
+        context["sidebar_active"] = permission_slug
 
     # Load additional event permissions and management context
     get_index_event_permissions(request, context, event_slug)
@@ -505,14 +524,3 @@ def get_run(context: Any, event_slug: Any) -> None:
         context["event"] = context["run"].event
     except Exception as err:
         raise UnknowRunError from err
-
-
-def update_association_demo(instance: Registration) -> None:
-    """If association is in demo mode and total registrations exceed 10, disable demo."""
-    association = instance.run.event.association
-    if association.demo:
-        count = Registration.objects.filter(run__event__association_id=association.id).count()
-        if count > MAX_DEMO_REGISTRATIONS:
-            association.demo = False
-            association.save(update_fields=["demo"])
-            clear_association_cache(association.slug)

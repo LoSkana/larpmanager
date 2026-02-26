@@ -58,6 +58,7 @@ from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, Writ
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterStatus
+from larpmanager.utils.services.association import get_activation_checklist
 from larpmanager.utils.core.base import check_association_context, check_event_context, get_context, get_event_context
 from larpmanager.utils.core.common import _get_help_questions, format_datetime
 from larpmanager.utils.core.sticky import get_sticky_messages, dismiss_sticky
@@ -241,13 +242,6 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     # Get available features for this association
     features = get_association_features(context["association_id"])
 
-    # Redirect to event creation if no events exist and feature is available
-    if context.get("onboarding") and "exe_events" in features:
-        return redirect("exe_events_new")
-
-    # Check if currency configuration suggestion has been dismissed
-    _check_currency_priority(request, context, features)
-
     # Get ongoing runs directly from cache (already contains all data needed by template)
     actions_data_exe = get_exe_widget_cache(context["association_id"], "actions")
     context["ongoing_runs"] = actions_data_exe.get("ongoing_runs", [])
@@ -265,14 +259,14 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
 
     # Add dashboard actions and suggestions
     _exe_actions(request, context, features)
+
     _exe_suggestions(context)
 
     # Add sticky messages for the current user
     context["sticky_messages"] = get_sticky_messages(context, context["member"])
 
-    # Compile final context and check for intro driver
+    # Compile final context
     _compile(request, context)
-    _check_intro_driver(context)
 
     return render(request, "larpmanager/manage/exe.html", context)
 
@@ -308,13 +302,17 @@ def _exe_suggestions(context: dict) -> None:
     suggestions = {
         "exe_roles": _(
             "Grant access to organization management for other users and define roles with specific permissions",
-        ),
-        "exe_appearance": _(
-            "Customize the appearance of all organizational pages, including colors, fonts, and images",
-        ),
-        "exe_features": _("Activate new features and enhance the functionality of the platform"),
-        "exe_config": _("Set up specific values for the interface configuration or features"),
+        )
     }
+
+    if not context.get("demo"):
+        suggestions.update({
+            "exe_appearance": _(
+                "Customize the appearance of all organizational pages, including colors, fonts, and images",
+            ),
+            "exe_features": _("Activate new features and enhance the functionality of the platform"),
+            "exe_config": _("Set up specific values for the interface configuration or features"),
+        })
 
     for permission_key, suggestion_text in suggestions.items():
         if get_association_config(
@@ -342,6 +340,19 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     # Get association features if not provided
     if not association_features:
         association_features = get_association_features(context["association_id"])
+
+    # Add prompt to complete checklist and activate advanced mode when in demo/lite mode
+    if context.get("demo"):
+        _checklist, progress = get_activation_checklist(context["association_id"])
+        demo_text = _(
+            "You are using %(platform)s in <b>Lite Mode</b> (%(progress)s%% complete)"
+        ) % {"platform": context.get("platform", "LarpManager"), "progress": progress} + ". " + _(
+            "This mode helps you master quickly the basics of the platform") + ". " + _(
+            "Complete the checklist to unlock <b>Advanced Mode</b>, enabling full access to complex logistics, accounting, and narrative tools") + "."
+        _add_priority(context, demo_text, "exe_activation")
+
+    # Check if currency configuration suggestion has been dismissed
+    _check_currency_priority(request, context, association_features)
 
     # Get cached actions data
     actions_data = get_exe_widget_cache(context["association_id"], "actions")
@@ -404,10 +415,11 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     _exe_users_actions(request, context, association_features, actions_data)
 
     actions = {
-        "exe_quick": _("Quickly configure your organization's most important settings"),
         "exe_methods": _("Set up the payment methods available to participants"),
         "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
     }
+    if not context.get("demo"):
+        actions["exe_quick"] = _("Quickly configure your organization's most important settings")
 
     for permission_key, suggestion_text in actions.items():
         if get_association_config(
@@ -462,6 +474,9 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
         enabled_features: Set of enabled features for the association
 
     """
+
+    if context.get("demo"):
+        return
 
     if "payment" in enabled_features and not context.get("methods", ""):
         _add_priority(
@@ -564,9 +579,6 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
             should_open_shortcuts = str(context["run"].id) != origin_id
         context["open_shortcuts"] = should_open_shortcuts
 
-    # Check if intro driver needs to be shown
-    _check_intro_driver(context)
-
     # Loads widget data
     _orga_widgets(request, context, features)
 
@@ -618,6 +630,9 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
         action lists for the organizer dashboard
 
     """
+
+    if context.get("demo"):
+        return
 
     # Check if currency configuration suggestion has been dismissed
     _check_currency_priority(request, context, features)
@@ -937,6 +952,7 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
 
 def _check_currency_priority(request: HttpRequest, context: dict, features:dict) ->Any:
     """Check if currency has been already set / checked."""
+
     if "payment" in features and not get_association_config(
             context["association_id"], "exe_association_suggestion", default_value=False, context=context
     ) and has_association_permission(request, context, "exe_association"):
@@ -999,9 +1015,10 @@ def _orga_suggestions(context: dict) -> None:
 
     """
     actions = {
-        "orga_quick": _("Quickly configure your events's most important settings"),
         "orga_registration_tickets": _("Set up the tickets that users can select during registration"),
     }
+    if not context.get("demo"):
+        actions["orga_quick"] = _("Quickly configure your events's most important settings")
 
     for permission_slug, suggestion_text in actions.items():
         if get_event_config(context["event"].id, f"{permission_slug}_suggestion", default_value=False, context=context):
@@ -1013,10 +1030,14 @@ def _orga_suggestions(context: dict) -> None:
             "Define the registration form, and set up any number of registration questions and their options",
         ),
         "orga_roles": _("Grant access to event management for other users and define roles with specific permissions"),
-        "orga_appearance": _("Customize the appearance of all event pages, including colors, fonts, and images"),
-        "orga_features": _("Activate new features and enhance the functionality of the event"),
-        "orga_config": _("Set specific values for configuration of features of the event"),
     }
+
+    if not context.get("demo"):
+        suggestions.update({
+            "orga_appearance": _("Customize the appearance of all event pages, including colors, fonts, and images"),
+            "orga_features": _("Activate new features and enhance the functionality of the event"),
+            "orga_config": _("Set specific values for configuration of features of the event"),
+        })
 
     for permission_slug, suggestion_text in suggestions.items():
         if get_event_config(context["event"].id, f"{permission_slug}_suggestion", default_value=False, context=context):
@@ -1151,18 +1172,6 @@ def dismiss_sticky_message(request: HttpRequest, message_uuid: str) -> JsonRespo
         return JsonResponse({"status": "ok"})
     return JsonResponse({"status": "error", "message": "Message not found"}, status=404)
 
-
-def _check_intro_driver(context: dict) -> None:
-    """Check if intro driver should be shown and update context."""
-    member = context["member"]
-    config_key = "intro_driver"
-
-    # Skip if user has already seen the intro driver
-    if member.get_config(config_key, default_value=False):
-        return
-
-    # Enable intro driver in template context
-    context["intro_driver"] = True
 
 
 def orga_redirect(
