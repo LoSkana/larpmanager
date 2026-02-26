@@ -4891,6 +4891,16 @@ msgstr ""
 msgid "Application to be given to them to sign and then upload"
 msgstr ""
 
+msgid ""
+"To ensure total control over your revenue, this platform never handles or "
+"collects funds on your behalf"
+msgstr ""
+
+msgid ""
+"Payments are processed directly through your configured methods, sending "
+"revenue straight to your account"
+msgstr ""
+
 msgid "Select from the dropdown the characters to be added to the plot"
 msgstr ""
 
