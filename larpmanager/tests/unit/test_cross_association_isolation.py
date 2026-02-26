@@ -7,19 +7,17 @@ manipulating UUIDs in requests.
 
 import pytest
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-from django.http import Http404
 from django.test import RequestFactory
 
 from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.registration import OrgaRegistrationForm
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member, Membership
+from larpmanager.models.member import Membership
 from larpmanager.models.registration import Registration, RegistrationTicket
 from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.views.orga.character import orga_characters_summary
-from larpmanager.views.orga.writing import orga_multichoice_available, orga_version
+from larpmanager.views.orga.writing import orga_multichoice_available
 
 User = get_user_model()
 

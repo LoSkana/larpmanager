@@ -28,7 +28,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import just_wait, go_to, load_image, login_user, submit_confirm
+from larpmanager.tests.utils import go_to, load_image, login_user, submit_confirm
 
 pytestmark = pytest.mark.e2e
 

@@ -46,8 +46,12 @@ from larpmanager.models.form import (
     get_writing_max_length,
 )
 from larpmanager.models.registration import RegistrationTicket
-from larpmanager.models.utils import generate_id, get_attr, strip_tags
-from larpmanager.models.utils import get_option_form_text as util_get_option_form_text
+from larpmanager.models.utils import (
+    generate_id,
+    get_attr,
+    get_option_form_text as util_get_option_form_text,
+    strip_tags,
+)
 from larpmanager.templatetags.show_tags import hex_to_rgb
 
 if TYPE_CHECKING:

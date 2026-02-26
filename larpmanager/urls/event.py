@@ -21,12 +21,14 @@
 
 from django.urls import path
 
-from larpmanager.views.user import casting as views_uca
-from larpmanager.views.user import character as views_uc
-from larpmanager.views.user import event as views_ue
-from larpmanager.views.user import miscellanea as views_ums
-from larpmanager.views.user import pdf as views_up
-from larpmanager.views.user import registration as views_ur
+from larpmanager.views.user import (
+    casting as views_uca,
+    character as views_uc,
+    event as views_ue,
+    miscellanea as views_ums,
+    pdf as views_up,
+    registration as views_ur,
+)
 
 urlpatterns = [
     path(

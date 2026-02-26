@@ -27,7 +27,6 @@ new items can be created, and items appear in the paginated table after creation
 from typing import Any
 
 import pytest
-import re
 
 from larpmanager.tests.utils import expect_normalized, go_to, just_wait, load_image, login_orga, submit_confirm, submit
 

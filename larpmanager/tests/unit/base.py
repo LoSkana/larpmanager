@@ -24,8 +24,8 @@ from typing import Any
 
 import pytest
 from django.contrib.auth.models import User
-from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
+from django.test import TestCase
 
 from larpmanager.models.accounting import DiscountType
 from larpmanager.models.association import Association

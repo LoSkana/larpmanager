@@ -22,20 +22,22 @@ from django.urls import path
 import larpmanager.views.orga.event
 import larpmanager.views.orga.miscellanea
 from larpmanager.views import manage as views_mg
-from larpmanager.views.orga import accounting as views_oa
-from larpmanager.views.orga import casting as views_oca
-from larpmanager.views.orga import character as views_oc
-from larpmanager.views.orga import copy as views_oy
-from larpmanager.views.orga import event as views_oe
-from larpmanager.views.orga import experience as views_ox
-from larpmanager.views.orga import form as views_of
-from larpmanager.views.orga import inventory as views_ci
-from larpmanager.views.orga import member as views_om
-from larpmanager.views.orga import miscellanea as views_oms
-from larpmanager.views.orga import pdf as views_op
-from larpmanager.views.orga import registration as views_or
-from larpmanager.views.orga import transfer as views_ot
-from larpmanager.views.orga import writing as views_ow
+from larpmanager.views.orga import (
+    accounting as views_oa,
+    casting as views_oca,
+    character as views_oc,
+    copy as views_oy,
+    event as views_oe,
+    experience as views_ox,
+    form as views_of,
+    inventory as views_ci,
+    member as views_om,
+    miscellanea as views_oms,
+    pdf as views_op,
+    registration as views_or,
+    transfer as views_ot,
+    writing as views_ow,
+)
 
 urlpatterns = [
     path(

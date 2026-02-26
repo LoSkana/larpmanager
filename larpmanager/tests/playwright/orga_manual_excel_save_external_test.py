@@ -27,18 +27,17 @@ import re
 from typing import Any
 
 import pytest
-from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait,
-    check_feature,
-    expect_normalized,
-    fill_tinymce,
-    go_to,
-    go_to_check,
-    login_orga,
-    logout,
-    submit_confirm,
-)
+                                     check_feature,
+                                     expect_normalized,
+                                     fill_tinymce,
+                                     go_to,
+                                     go_to_check,
+                                     login_orga,
+                                     logout,
+                                     submit_confirm,
+                                     )
 
 pytestmark = pytest.mark.e2e
 

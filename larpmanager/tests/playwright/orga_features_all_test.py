@@ -28,13 +28,12 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import (just_wait,
-    _checkboxes,
-    add_links_to_visit,
-    go_to,
-    go_to_check,
-    login_orga,
-)
+from larpmanager.tests.utils import (_checkboxes,
+                                     add_links_to_visit,
+                                     go_to,
+                                     go_to_check,
+                                     login_orga,
+                                     )
 
 pytestmark = pytest.mark.e2e
 

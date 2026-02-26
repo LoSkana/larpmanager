@@ -24,7 +24,7 @@ import pytest
 
 from larpmanager.models.registration import TicketTier
 from larpmanager.tests.unit.base import BaseTestCase
-from larpmanager.views.user.casting import casting_characters, casting_quest_traits
+from larpmanager.views.user.casting import casting_characters
 
 
 @pytest.mark.django_db(transaction=True)

@@ -95,17 +95,13 @@ from larpmanager.cache.px import (
     on_ability_prerequisites_m2m_changed,
     on_ability_requirements_m2m_changed,
     on_delivery_characters_m2m_changed,
+    on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
     on_modifier_prerequisites_m2m_changed,
     on_modifier_requirements_m2m_changed,
+    on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
     refresh_delivery_relationships,
     refresh_modifier_relationships,
     refresh_rule_relationships,
-)
-from larpmanager.cache.px import (
-    on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
-)
-from larpmanager.cache.px import (
-    on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
 )
 from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
 from larpmanager.cache.registration import (

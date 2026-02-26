@@ -28,10 +28,8 @@ import re
 from typing import Any
 
 import pytest
-from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
-                                     check_download,
+from larpmanager.tests.utils import (check_download,
                                      go_to,
                                      load_image,
                                      login_orga,

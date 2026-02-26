@@ -29,10 +29,8 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait,
                                      go_to,
-                                     load_image,
                                      login_orga,
                                      login_user,
-                                     logout,
                                      submit_confirm,
                                      expect_normalized, fill_tinymce, check_feature, sidebar,
                                      )

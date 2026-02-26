@@ -23,8 +23,7 @@ from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.utils import timezone
-from django.utils.translation import activate
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
