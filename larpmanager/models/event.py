@@ -132,9 +132,16 @@ class Event(UuidMixin, BaseModel):
 
     cover_thumb = ImageSpecField(
         source="cover",
-        processors=[ResizeToFit(width=600)],
+        processors=[ResizeToFit(width=400)],
         format="JPEG",
         options={"quality": 70},
+    )
+
+    cover_full = ImageSpecField(
+        source="cover",
+        processors=[ResizeToFit(width=1200)],
+        format="JPEG",
+        options={"quality": 90},
     )
 
     carousel_img = models.ImageField(

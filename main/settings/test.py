@@ -12,6 +12,9 @@ DATABASES = {
         'PASSWORD': 'larpmanager',
         "HOST": os.getenv("DB_HOST", "localhost"),
         'PORT': '5432',
+        'OPTIONS': {
+            'options': '-c synchronous_commit=off',
+        },
    }
 }
 

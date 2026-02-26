@@ -334,7 +334,13 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
         )
 
 def just_wait(page, big=False):
-    wait = 2000 if big else 500
+    is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
+    if big:
+        wait = 2000
+    elif is_ci:
+        wait = 500
+    else:
+        wait = 1000
     page.wait_for_timeout(wait)
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
