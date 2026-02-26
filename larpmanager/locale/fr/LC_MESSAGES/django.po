@@ -10461,13 +10461,6 @@ msgstr ""
 "d'inscription. Les valeurs autorisées pour l'en-tête sont les suivantes"
 
 msgid ""
-"Complete the setup checklist below to unlock advanced mode and access all "
-"configuration features."
-msgstr ""
-"Complétez la liste de contrôle ci-dessous pour déverrouiller le mode avancé "
-"et accéder à toutes les fonctions de configuration."
-
-msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
 "translation in your language"
 msgstr ""

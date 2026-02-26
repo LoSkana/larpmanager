@@ -10524,13 +10524,6 @@ msgstr ""
 "zulässige Werte für die Kopfzeile sind"
 
 msgid ""
-"Complete the setup checklist below to unlock advanced mode and access all "
-"configuration features."
-msgstr ""
-"Füllen Sie die nachstehende Setup-Checkliste aus, um den erweiterten Modus "
-"freizuschalten und auf alle Konfigurationsfunktionen zuzugreifen."
-
-msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
 "translation in your language"
 msgstr ""
