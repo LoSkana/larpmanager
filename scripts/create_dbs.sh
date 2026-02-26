@@ -20,11 +20,15 @@ if [ ! -f "$SQL_FILE" ]; then
   exit 1
 fi
 
+# Optimize PostgreSQL for test speed - disable durability guarantees (safe for test-only DBs)
+psql -d postgres -c "ALTER SYSTEM SET synchronous_commit = 'off'; ALTER SYSTEM SET full_page_writes = 'off'; SELECT pg_reload_conf();" --quiet > /dev/null 2>&1 || true
+
 for i in $(seq 0 $((WORKERS-1))); do
   DB="${POSTGRES_DB}_gw${i}"
   psql -v ON_ERROR_STOP=1 -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB}' AND pid <> pg_backend_pid();" --quiet > /dev/null 2>&1 || true
   psql -v ON_ERROR_STOP=1 -d postgres -c "DROP DATABASE IF EXISTS ${DB};" --quiet > /dev/null
   psql -v ON_ERROR_STOP=1 -d postgres -c "CREATE DATABASE ${DB} OWNER ${POSTGRES_USER};" --quiet > /dev/null
+  psql -v ON_ERROR_STOP=1 -d "${DB}" -c "ALTER DATABASE ${DB} SET synchronous_commit TO off;" --quiet > /dev/null
   psql -v ON_ERROR_STOP=1 -d "${DB}" -c "SET search_path TO public;" --quiet > /dev/null
   psql -v ON_ERROR_STOP=1 -d "${DB}" -f "${SQL_FILE}" --quiet > /dev/null
 done

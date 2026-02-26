@@ -70,7 +70,10 @@ check_schema_version() {
 cleanup_test_environment() {
   echo "==> Cleaning up test environment..."
 
-  # Kill any running pytest and playwright processes
+  # Kill any running pytest and playwright processes (graceful first, then force)
+  pkill -15 -f "pytest" 2>/dev/null || true
+  pkill -15 -f "playwright" 2>/dev/null || true
+  sleep 3
   pkill -9 -f "pytest" 2>/dev/null || true
   pkill -9 -f "playwright" 2>/dev/null || true
   sleep 1
@@ -144,5 +147,5 @@ bash "${SCRIPT_DIR}/test_playwright.sh"
 echo ""
 
 echo "========================================"
-echo "All tests passed! ✓"
+echo "All tests passed!"
 echo "========================================"
