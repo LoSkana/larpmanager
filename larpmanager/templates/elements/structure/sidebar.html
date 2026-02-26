@@ -116,7 +116,8 @@
                                 <div class="sidebar-section">
                                     {% for ap in list %}
                                         {% if not ap.hidden %}
-                                            <a class="sidebar-link{% if sidebar_active == ap.slug %} select{% endif %}"
+                                            <a id="{{ ap.slug }}"
+                                               class="sidebar-link{% if sidebar_active == ap.slug %} select{% endif %}"
                                                href="{% url ap.slug run.get_slug %}">
                                                 <i class="fa-solid fa-{{ ap.icon }}"></i>
                                                 <span>{% trans ap.name %}</span></a>
@@ -135,7 +136,9 @@
                                 <div class="sidebar-section">
                                     {% for ap in list %}
                                         {% if not ap.hidden %}
-                                            <a class="sidebar-link" href="{% url ap.slug %}">
+                                            <a id="{{ ap.slug }}"
+                                               class="sidebar-link{% if sidebar_active == ap.slug %} select{% endif %}"
+                                               href="{% url ap.slug %}">
                                                 <i class="fa-solid fa-{{ ap.icon }}"></i>
                                                 <span>{% trans ap.name %}</span></a>
                                         {% endif %}

@@ -73,8 +73,9 @@ window.addEventListener('DOMContentLoaded', function() {
             }
           },
           {
+            element: '#priorities',
             popover: {
-              title: '{% filter escapejs %}{% trans "Lite Mode active" %}!{% endfilter %}!',
+              title: '{% filter escapejs %}{% trans "Lite Mode active" %}{% endfilter %}',
               description: '{{ lite_mode | escapejs }}'
             }
           },
@@ -104,7 +105,7 @@ window.addEventListener('DOMContentLoaded', function() {
           {
             element: '#exe_features',
             popover: {
-              title: '{% filter escapejs %}{% trans "Module Activation" %}{% endfilter %}!',
+              title: '{% filter escapejs %}{% trans "Module Activation" %}{% endfilter %}',
               description: '{{ features_sugg | escapejs }}',
               side: 'bottom',
               align: 'start'
@@ -113,7 +114,7 @@ window.addEventListener('DOMContentLoaded', function() {
           {
             element: '#wwyltd',
             popover: {
-              title: '{% filter escapejs %}{% trans "Need help" %}?{% endfilter %}!',
+              title: '{% filter escapejs %}{% trans "Need help" %}?{% endfilter %}',
               description: '{{ wwyltd_sugg | escapejs }}',
               side: 'bottom',
               align: 'start'

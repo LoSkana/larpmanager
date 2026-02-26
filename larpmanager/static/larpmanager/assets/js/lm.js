@@ -51,7 +51,7 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
             <button class="modal-close-btn">
                 &times;
             </button>
-            <iframe src="${iframeUrl}" width="100%" height="100%" style="border: none;"></iframe>
+            <iframe src="${iframeUrl}" width="100%" style="border: none; height: 300px;"></iframe>
         </div>
     `;
 
@@ -61,10 +61,23 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
         content: frame
     });
 
+    // Auto-resize: update iframe height when the modal's own iframe sends its size
+    function onIframeMessage(e) {
+
+        if (e.data && e.data.type === 'iframe_resize') {
+            const iframe = document.querySelector('.' + modalClass + ' iframe');
+            if (iframe && e.data.height && e.source === iframe.contentWindow) {
+                iframe.style.height = (e.data.height + 20) + 'px';
+            }
+        }
+    }
+    window.addEventListener('message', onIframeMessage);
+
     // Attach click handler to close button after modal is opened
     setTimeout(function() {
         $('.modal-close-btn').on('click', function(e) {
             e.preventDefault();
+            window.removeEventListener('message', onIframeMessage);
 
             // Close the popup by clicking overlay
             const overlay = document.getElementById('uglipop_overlay');
@@ -79,6 +92,14 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
 
             return false;
         });
+
+        // Clean up listener when overlay is clicked directly
+        const overlay = document.getElementById('uglipop_overlay');
+        if (overlay) {
+            overlay.addEventListener('click', function() {
+                window.removeEventListener('message', onIframeMessage);
+            }, { once: true });
+        }
     }, 100);
 }
 
