@@ -756,7 +756,7 @@ def options_edit_handler(
         **(extra_context or {}),
     }
 
-    return render(request, "elements/options/form_frame.html", form_context)
+    return render(request, "elements/dashboard/form_frame.html", form_context)
 
 
 def check_writing_form_type(context: dict, form_type: str) -> None:
