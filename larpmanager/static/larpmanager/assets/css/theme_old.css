@@ -906,10 +906,6 @@ body:not(.new_form) .only_new_form {
   border-radius: 8px;
   padding: 1em;
   box-shadow: 0 2px 5px rgba(var(--pri-rgb), 0.5);
-  height: 14em;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(var(--ter-rgb), 0.5) rgba(var(--pri-rgb), 0.1);
 }
 
 .grid .grid-line {
@@ -931,8 +927,6 @@ body:not(.new_form) .only_new_form {
 @media (max-width: 768px) {
   .grid .grid-item {
     flex: 0 0 100%;
-    height: auto;
-    overflow-y: visible;
   }
 }
 
@@ -941,24 +935,6 @@ body:not(.new_form) .only_new_form {
   .grid .grid-item {
     flex: 0 0 calc(50% - 10px);
   }
-}
-
-.grid .grid-item::-webkit-scrollbar {
-  width: 8px;
-}
-
-.grid .grid-item::-webkit-scrollbar-track {
-  background: rgba(var(--pri-rgb), 0.1);
-  border-radius: 4px;
-}
-
-.grid .grid-item::-webkit-scrollbar-thumb {
-  background: rgba(var(--ter-rgb), 0.5);
-  border-radius: 4px;
-}
-
-.grid .grid-item::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--ter-rgb), 0.7);
 }
 
 .old_dashboard .grid-item {

@@ -1,6 +1,6 @@
 {% load i18n %}
 {% if list %}
-    <div class="grid-item grid-line">
+    <div class="grid-item {% if typ == 'priorities' %}grid-line{% endif %}">
         <h2 id="{{ typ }}">
             {% if typ == "priorities" %}
                 <i class="fa-solid fa-triangle-exclamation"></i> {% trans "Priorities" %}
