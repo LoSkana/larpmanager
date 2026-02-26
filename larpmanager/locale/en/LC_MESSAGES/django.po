@@ -10064,7 +10064,7 @@ msgstr ""
 msgid "<b>%(number)s</b> expenses to approve"
 msgstr ""
 
-msgid "registration payments"
+msgid "payments"
 msgstr ""
 
 msgid "donations"
@@ -10137,9 +10137,6 @@ msgstr ""
 
 #, python-format
 msgid "<b>%(number)s</b> characters to approve"
-msgstr ""
-
-msgid "payments"
 msgstr ""
 
 #, python-format

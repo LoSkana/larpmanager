@@ -4031,9 +4031,6 @@ msgstr "Aufgaben im Lager"
 msgid "You have already paid"
 msgstr "Sie haben bereits bezahlt"
 
-msgid "registration payments"
-msgstr "Registrierungszahlungen"
-
 msgid "submit your vote here"
 msgstr "Geben Sie hier Ihre Stimme ab"
 

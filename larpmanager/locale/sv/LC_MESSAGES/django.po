@@ -4031,9 +4031,6 @@ msgstr "Lageruppdrag"
 msgid "You have already paid"
 msgstr "Du har redan betalat"
 
-msgid "registration payments"
-msgstr "registreringsbetalningar"
-
 msgid "submit your vote here"
 msgstr "lämna din röst här"
 

@@ -4031,9 +4031,6 @@ msgstr "Magazijn opdrachten"
 msgid "You have already paid"
 msgstr "U hebt al betaald"
 
-msgid "registration payments"
-msgstr "registratiebetalingen"
-
 msgid "submit your vote here"
 msgstr "breng hier je stem uit"
 

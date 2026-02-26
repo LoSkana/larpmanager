@@ -4031,9 +4031,6 @@ msgstr "Affectation à l'entrepôt"
 msgid "You have already paid"
 msgstr "Vous avez déjà payé"
 
-msgid "registration payments"
-msgstr "paiements d'inscription"
-
 msgid "submit your vote here"
 msgstr "Soumettez votre vote ici"
 

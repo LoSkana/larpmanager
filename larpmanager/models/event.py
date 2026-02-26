@@ -133,14 +133,14 @@ class Event(UuidMixin, BaseModel):
 
     cover_thumb = ImageSpecField(
         source="cover",
-        processors=[ResizeToFit(width=400)],
+        processors=[ResizeToFit(width=800)],
         format="JPEG",
-        options={"quality": 70},
+        options={"quality": 80},
     )
 
     cover_full = ImageSpecField(
         source="cover",
-        processors=[ResizeToFit(width=1200)],
+        processors=[ResizeToFit(width=1600)],
         format="JPEG",
         options={"quality": 90},
     )

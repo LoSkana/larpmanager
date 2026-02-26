@@ -4031,9 +4031,6 @@ msgstr "Oppgaver på lageret"
 msgid "You have already paid"
 msgstr "Du har allerede betalt"
 
-msgid "registration payments"
-msgstr "registreringsbetalinger"
-
 msgid "submit your vote here"
 msgstr "send inn din stemme her"
 

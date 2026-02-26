@@ -4031,9 +4031,6 @@ msgstr "Přidělování skladových úkolů"
 msgid "You have already paid"
 msgstr "Již jste zaplatili"
 
-msgid "registration payments"
-msgstr "registrační platby"
-
 msgid "submit your vote here"
 msgstr "hlasujte zde"
 
