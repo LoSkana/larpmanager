@@ -4,8 +4,8 @@
         <h2>
             <a href="{% url 'orga_accounting' run.get_slug %}" target="_blank"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
         </h2>
-        <table>
-            {% if widgets.accounting.has_data %}
+        {% if widgets.accounting.has_data %}
+            <table>
                 <tbody>
                     {% if widgets.accounting.expected %}
                         <tr>
