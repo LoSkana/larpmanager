@@ -727,7 +727,7 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
                 # Generate download link for expense statement documents
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 # Show approval link only for unapproved items when approval is enabled
-                "action": lambda el: f"<a href='{reverse('orga_expenses_approve', args=[context['run'].get_slug(), el.id])}'>{approve}</a>"
+                "action": lambda el: f"<a href='{reverse('orga_expenses_approve', args=[context['run'].get_slug(), el.uuid])}'>{approve}</a>"
                 if not el.is_approved and not context["disable_approval"]
                 else "",
                 # Display human-readable expense type from model choices
