@@ -42,13 +42,19 @@
                    title="{% trans "Edit status" %}">
                     <i class="fa-solid fa-pencil"></i>
                 </a>
-                |
-                <a href="{% url 'gallery' run.get_slug %}" target="_blank">Event link</a>
-                <button class="copy-link-btn"
-                        data-url="{% url 'gallery' run.get_slug %}"
-                        title="{% trans "Copy link to clipboard" %}">
-                    <i class="fa-solid fa-copy"></i>
-                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>{% trans "Registrations" %}</td>
+            <td>
+                {{ run.get_registration_status_display }}
+                <a href="{% url 'orga_run_quick_edit_registration' run.get_slug %}"
+                   class="btn btn-sm btn-primary action-link"
+                   data-slug="orga_event"
+                   data-modal-eligible="true"
+                   title="{% trans "Edit registration status" %}">
+                    <i class="fa-solid fa-pencil"></i>
+                </a>
             </td>
         </tr>
     </table>

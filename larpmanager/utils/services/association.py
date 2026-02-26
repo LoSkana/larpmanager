@@ -193,10 +193,10 @@ def _reset_all_association(association_id: int, association_slug: str) -> None:
 
 
 def _get_registrations_url(association_id: int) -> str:
-    """Return URL to the registrations page of the first event that has registrations, or exe_events as fallback."""
-    reg = Registration.objects.filter(run__event__association_id=association_id).select_related("run__event").first()
-    if reg:
-        return reverse("orga_registrations", kwargs={"event_slug": reg.run.event.slug})
+    """Return URL to the registrations page of the first event."""
+    event = Event.objects.filter(association_id=association_id).first()
+    if event:
+        return reverse("register", kwargs={"event_slug": event.slug})
     return reverse("exe_events")
 
 

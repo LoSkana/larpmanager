@@ -298,6 +298,8 @@ function check_tickets_map() {
             el.parent().parent().show();
             el.prop('disabled', false);
             el.parent().parent().removeClass('not-required');
+            // restore required attribute if it was originally required
+            if (el.data('was-required')) el.prop('required', true);
         } else {
             // hide the question
             el.parent().parent().hide();
@@ -310,6 +312,9 @@ function check_tickets_map() {
                 else non.prop('selected', true);
                 el.prop('disabled', true);
             }
+            // remove required to prevent browser native validation on hidden fields
+            if (el.prop('required')) el.data('was-required', true);
+            el.prop('required', false);
 
             el.parent().parent().addClass('not-required');
         }

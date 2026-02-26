@@ -281,7 +281,11 @@ body {
 
 #right_bar {
   float: right;
-  margin-top: -4.5em;
+}
+
+#manage #right_bar a {
+  padding: 0.5em;
+  margin: 0.5em;
 }
 
 /* ---------------------------------------------------------------------------
@@ -898,6 +902,7 @@ body:not(.new_form) .only_new_form {
   gap: 20px;
   margin: 0 auto;
   padding: 0.5em;
+  clear: both;
 }
 
 .grid .grid-item {

@@ -25,28 +25,17 @@
 {% block js2 %}
     <script>
     $(document).ready(function() {
-        // Auto-resize iframe based on content
         function sendHeight() {
-            if (window.parent) {
-                const height = document.body.scrollHeight + 50; // Add some padding
+            if (window.parent && window.parent !== window) {
+                const form = document.querySelector('form');
+                const height = form ? form.scrollHeight : document.body.scrollHeight;
                 window.parent.postMessage({
                     type: 'iframe_resize',
-                    height: height
+                    height: height + 50
                 }, '*');
             }
         }
-
-        // Send height on load and when content changes
-        setTimeout(sendHeight, 100);
-        $(window).on('resize', sendHeight);
-
-        // Watch for dynamic content changes
-        const observer = new MutationObserver(sendHeight);
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true,
-            attributes: true
-        });
+        setTimeout(sendHeight, 10);
     });
     </script>
 {% endblock js2 %}

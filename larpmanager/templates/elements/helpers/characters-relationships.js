@@ -11,7 +11,7 @@ const editUrl = "{% url 'orga_characters_new' run.get_slug %}";
 {% endif %}
 
 // Get relationship length limit from form context
-const relationshipLimit = {{ form.relationship_max_length }};
+const relationshipLimit = {{ form.relationship_max_length|default:10000 }};
 
 window.addEventListener('DOMContentLoaded', function() {
 
