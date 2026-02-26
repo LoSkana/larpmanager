@@ -3,7 +3,7 @@
     <div id="sidebar"
          class="{% if not is_sidebar_open %}hide{% endif %} topbar">
         <div class="inner">
-            {% if association.old_menu_appearance %}
+            {% if association.old_menu_appearance and not interface_new_menu %}
                 {% if run %}
                     <p>
                         <span class="sidebar-link-wrap"

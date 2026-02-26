@@ -1,0 +1,8 @@
+{% load i18n %}
+{% if demo %}
+    <div class="grid-item grid-line">
+        {% blocktranslate %}<b>Lite Mode</b>: {{ progress }}% complete{% endblocktranslate %}.
+        {% trans "Complete the checklist to unlock all features" %}:
+        <a href="{% url 'exe_activation' %}"><i class="fas fa-list-check"></i> {% trans "Activation" %}</a>
+    </div>
+{% endif %}

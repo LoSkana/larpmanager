@@ -54,6 +54,7 @@ from larpmanager.models.writing import (
     FactionType,
     Plot,
 )
+from larpmanager.utils.auth.permission import DEMO_HIDDEN_PERMISSIONS
 
 if TYPE_CHECKING:
     from larpmanager.forms.base import BaseModelForm
@@ -234,6 +235,10 @@ def prepare_permissions_role(form: BaseModelForm, typ: type) -> None:
         .filter(Q(feature__placeholder=True) | Q(feature__slug__in=enabled_features))
         .order_by("module__order", "number", "pk")
     )
+
+    # Hide demo-restricted permissions when in demo mode
+    if form.params.get("demo", False):
+        base_queryset = base_queryset.exclude(slug__in=DEMO_HIDDEN_PERMISSIONS)
 
     # Group permissions by module for organized display
     permissions_by_module = defaultdict(list)

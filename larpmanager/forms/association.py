@@ -1080,3 +1080,13 @@ class ExePreferencesForm(ConfigForm):
                 digest_mode_label,
                 digest_mode_help_text,
             )
+
+        if self.params.get("old_menu_appearance"):
+            digest_mode_label = _("New menu")
+            digest_mode_help_text = _("If checked: activate new menu")
+            self.add_configs(
+                "interface_new_menu",
+                ConfigType.BOOL,
+                digest_mode_label,
+                digest_mode_help_text,
+            )

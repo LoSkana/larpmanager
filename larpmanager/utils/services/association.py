@@ -241,13 +241,6 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "url": reverse("exe_methods"),
         },
         {
-            "slug": "orga_roles",
-            "name": _("Event roles"),
-            "descr": _("Define at least one additional role for event management"),
-            "done": _done("orga_roles"),
-            "url": reverse("redr", kwargs={"path": "event/manage/roles/"}),
-        },
-        {
             "slug": "orga_registration_tickets",
             "name": _("Registration tickets"),
             "descr": _("Create at least one ticket type for event registrations"),

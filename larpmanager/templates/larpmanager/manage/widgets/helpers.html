@@ -1,6 +1,6 @@
 {% load i18n %}
 {% if list %}
-    <div class="grid-item grid-line">
+    <div class="grid-item">
         <h2 id="{{ typ }}">
             {% if typ == "priorities" %}
                 <i class="fa-solid fa-triangle-exclamation"></i> {% trans "Priorities" %}
@@ -14,12 +14,17 @@
             {% for obj in list %}
                 <tr>
                     <td>
-                        {{ obj.text | safe }} -
+                        {{ obj.text | safe }}
                         <a href="{{ obj.href }}"
                            class="action-link"
                            data-slug="{{ obj.slug }}"
-                           data-modal-eligible="true">{{ obj.link }}</a>
-                        {% if obj.tutorial %}(<a href="#" class="feature_tutorial" tut="{{ obj.tutorial }}">Tutorial</a>){% endif %}
+                           data-modal-eligible="true">
+                            {% if obj.icon %}
+                                <i class="fa-solid fa-{{ obj.icon }}"></i>
+                            {% else %}
+                                {{ obj.link }}
+                            {% endif %}
+                        </a>
                     </td>
                     {% if typ == "suggestions" %}
                         <td>

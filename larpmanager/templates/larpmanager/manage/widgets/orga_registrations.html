@@ -27,5 +27,9 @@
                 {% endfor %}
             </tbody>
         </table>
+    {% else %}
+        <p>
+            <i>{% trans "No registrations found" %}.</i>
+        </p>
     {% endif %}
 </div>
