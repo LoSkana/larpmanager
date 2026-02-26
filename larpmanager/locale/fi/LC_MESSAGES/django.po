@@ -10156,13 +10156,6 @@ msgstr ""
 " sallitut arvot ovat seuraavat"
 
 msgid ""
-"Complete the setup checklist below to unlock advanced mode and access all "
-"configuration features."
-msgstr ""
-"Täytä alla oleva asetusten tarkistuslista, jotta voit avata laajennetun "
-"tilan ja käyttää kaikkia konfigurointiominaisuuksia."
-
-msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
 "translation in your language"
 msgstr ""

@@ -398,7 +398,11 @@ def debug_set_uuid(instance: Any, *, created: bool) -> None:
     )
 
     debug_enviro = (
-        conf_settings.DEBUG or os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true" or is_pycharm
+        conf_settings.DEBUG
+        or os.getenv("CI") == "true"
+        or os.getenv("GITHUB_ACTIONS") == "true"
+        or is_pycharm
+        or getattr(conf_settings, "DEBUG_UUID", False)
     )
     if not created or not hasattr(instance, "uuid") or not debug_enviro:
         return

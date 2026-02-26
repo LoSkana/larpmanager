@@ -10050,13 +10050,6 @@ msgstr ""
 " záhlaví jsou tyto"
 
 msgid ""
-"Complete the setup checklist below to unlock advanced mode and access all "
-"configuration features."
-msgstr ""
-"Chcete-li odemknout pokročilý režim a získat přístup ke všem konfiguračním "
-"funkcím, vyplňte níže uvedený kontrolní seznam nastavení."
-
-msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
 "translation in your language"
 msgstr ""
