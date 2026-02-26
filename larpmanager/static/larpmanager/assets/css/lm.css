@@ -875,14 +875,11 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   width: 70vw;
 }
 
-.popup_option {
+.popup_option,
+.popup_dashboard {
   height: auto;
   min-height: 200px;
   max-height: 85vh;
-}
-
-.popup_dashboard {
-  height: 50vh;
 }
 
 @media (max-width: 1200px) {
@@ -1972,8 +1969,8 @@ header.sec h1 {
 }
 
 #wwyltd {
-  width: 80%;
-  margin: 0;
+  width: 60%;
+  margin: 0 0 0 0.5em;
   padding: 0.5em 0em;
   text-align: left;
 }
@@ -2006,6 +2003,7 @@ header.sec h1 {
 #wwyltd .select2-container {
   position: relative;
   width: 100% !important;
+  max-width: 100% !important;
 }
 
 #wwyltd .select2-container::before {

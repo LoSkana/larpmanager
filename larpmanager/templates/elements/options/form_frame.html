@@ -25,18 +25,16 @@
     <script>
     $(document).ready(function() {
         function sendHeight() {
-            if (window.parent) {
-                const height = document.body.scrollHeight + 50;
+            if (window.parent && window.parent !== window) {
+                const form = document.querySelector('form');
+                const height = form ? form.scrollHeight : document.body.scrollHeight;
                 window.parent.postMessage({
                     type: 'iframe_resize',
-                    height: height
+                    height: height + 50
                 }, '*');
             }
         }
-        setTimeout(sendHeight, 100);
-        $(window).on('resize', sendHeight);
-        const observer = new MutationObserver(sendHeight);
-        observer.observe(document.body, {childList: true, subtree: true, attributes: true});
+        setTimeout(sendHeight, 10);
     });
     </script>
 {% endblock js2 %}
