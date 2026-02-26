@@ -634,9 +634,6 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
     if context.get("demo"):
         return
 
-    # Check if currency configuration suggestion has been dismissed
-    _check_currency_priority(request, context, features)
-
     # Get cached actions data
     actions_data = get_orga_widget_cache(context["run"], "actions")
 

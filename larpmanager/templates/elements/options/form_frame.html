@@ -21,3 +21,22 @@
         </div>
     </form>
 {% endblock content %}
+{% block js2 %}
+    <script>
+    $(document).ready(function() {
+        function sendHeight() {
+            if (window.parent) {
+                const height = document.body.scrollHeight + 50;
+                window.parent.postMessage({
+                    type: 'iframe_resize',
+                    height: height
+                }, '*');
+            }
+        }
+        setTimeout(sendHeight, 100);
+        $(window).on('resize', sendHeight);
+        const observer = new MutationObserver(sendHeight);
+        observer.observe(document.body, {childList: true, subtree: true, attributes: true});
+    });
+    </script>
+{% endblock js2 %}

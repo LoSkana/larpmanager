@@ -5,6 +5,11 @@
 {% endblock title %}
 {% block content %}
     <div id="manage">
+        <div id="right_bar" class="info nav main_nav no_mobile">
+            <a href="{% url 'gallery' run.get_slug %}"
+               target="_blank"
+               qtip="User link"><i class="fa-solid fa-user"></i> User link</a>
+        </div>
         {% include "larpmanager/manage/sticky_messages.html" %}
         {% include "larpmanager/manage/widgets/wwyltd.html" %}
         <div {% if not old_dashboard %}class="grid"{% else %}class="old_dashboard"{% endif %}>
