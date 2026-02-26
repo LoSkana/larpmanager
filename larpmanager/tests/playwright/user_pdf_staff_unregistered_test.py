@@ -31,7 +31,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_download, go_to, login_orga, login_user, logout, submit_confirm, go_to_check
+from larpmanager.tests.utils import check_download, go_to, login_orga, login_user, submit_confirm
 
 pytestmark = pytest.mark.e2e
 

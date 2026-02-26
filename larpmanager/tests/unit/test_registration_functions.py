@@ -20,9 +20,10 @@
 
 """Tests for registration accounting functions"""
 
-import pytest
 from datetime import timedelta
 from decimal import Decimal
+
+import pytest
 
 from larpmanager.accounting.registration import (
     cancel_reg,
@@ -35,7 +36,6 @@ from larpmanager.accounting.registration import (
     registration_payments_status,
     round_to_nearest_cent,
 )
-from larpmanager.utils.core.common import get_display_choice
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemPayment,
@@ -53,6 +53,7 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.tests.unit.base import BaseTestCase
+from larpmanager.utils.core.common import get_display_choice
 
 
 class TestRegistrationCalculationFunctions(BaseTestCase):

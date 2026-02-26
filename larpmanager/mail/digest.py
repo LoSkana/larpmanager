@@ -24,8 +24,7 @@ from typing import TYPE_CHECKING, Any
 
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.translation import activate
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config, get_member_config
 from larpmanager.mail.templates import (

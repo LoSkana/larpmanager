@@ -29,7 +29,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import just_wait, go_to, get_request, logout, login_orga, login_user, submit_confirm, expect_normalized
+from larpmanager.tests.utils import go_to, get_request, login_orga, login_user, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 

@@ -21,15 +21,10 @@
 """Tests for digest email generation functions"""
 
 from decimal import Decimal
-from typing import Any
-from unittest.mock import MagicMock, patch
-
-from django.utils import timezone
 
 from larpmanager.mail.digest import (
     digest_help_questions,
     digest_invoice_approvals,
-    digest_password_reminders,
     digest_refund_request,
     generate_association_summary_email,
     generate_summary_email,
@@ -37,7 +32,6 @@ from larpmanager.mail.digest import (
 from larpmanager.models.accounting import AccountingItemPayment, PaymentInvoice
 from larpmanager.models.member import NotificationQueue, NotificationType
 from larpmanager.models.miscellanea import HelpQuestion
-from larpmanager.models.registration import Registration
 from larpmanager.tests.unit.base import BaseTestCase
 
 

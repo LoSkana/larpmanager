@@ -3,10 +3,11 @@
 import colorfield.fields
 import django.core.validators
 import django.db.models.deletion
-import larpmanager.models.utils
-import larpmanager.utils.core.validators
 import tinymce.models
 from django.db import migrations, models
+
+import larpmanager.models.utils
+import larpmanager.utils.core.validators
 
 
 class Migration(migrations.Migration):

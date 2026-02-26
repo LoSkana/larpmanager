@@ -25,8 +25,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.forms import Textarea
-from django.utils.translation import gettext_lazy as _
-from django.utils.translation import pgettext
+from django.utils.translation import gettext_lazy as _, pgettext
 
 from larpmanager.cache.feature import get_association_features, reset_association_features
 from larpmanager.forms.base import BaseModelCssForm, BaseModelForm

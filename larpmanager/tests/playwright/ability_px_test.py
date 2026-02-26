@@ -29,8 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, logout, login_orga, \
-    login_user, submit_confirm, new_option, submit_option, sidebar
+from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, login_orga, \
+    submit_confirm, new_option, submit_option, sidebar
 
 pytestmark = pytest.mark.e2e
 

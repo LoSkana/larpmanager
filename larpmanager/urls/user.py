@@ -27,15 +27,16 @@ from larpmanager.forms.member import (
     MyPasswordResetForm,
     MyRegistrationFormUniqueEmail,
 )
-from larpmanager.views import auth as views_auth
-from larpmanager.views import base as views_base
+from larpmanager.views import auth as views_auth, base as views_base
 from larpmanager.views.base import MyLoginView
-from larpmanager.views.user import accounting as views_ua
-from larpmanager.views.user import event as views_ue
-from larpmanager.views.user import member as views_um
-from larpmanager.views.user import miscellanea as views_ums
-from larpmanager.views.user import onetime as views_onetime
-from larpmanager.views.user import registration as views_ur
+from larpmanager.views.user import (
+    accounting as views_ua,
+    event as views_ue,
+    member as views_um,
+    miscellanea as views_ums,
+    onetime as views_onetime,
+    registration as views_ur,
+)
 
 urlpatterns = [
     path(

@@ -20,8 +20,7 @@
 
 from typing import Any
 
-from django.utils.translation import activate
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features, get_event_features

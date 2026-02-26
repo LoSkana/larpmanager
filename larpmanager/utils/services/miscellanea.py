@@ -35,8 +35,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.db import models
 from django.shortcuts import render
-from PIL import Image as PILImage
-from PIL import ImageOps
+from PIL import Image as PILImage, ImageOps
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.member import Badge

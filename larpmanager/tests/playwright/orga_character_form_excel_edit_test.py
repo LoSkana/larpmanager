@@ -28,7 +28,6 @@ Tests editing on both populated and empty cells, and validates persistence after
 from typing import Any
 
 import pytest
-from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
     just_wait,

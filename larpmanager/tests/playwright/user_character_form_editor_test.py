@@ -27,7 +27,6 @@ import re
 from typing import Any
 
 import pytest
-from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
     submit_option, new_option

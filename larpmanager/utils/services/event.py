@@ -23,8 +23,7 @@ from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch, Q
-from django.utils.translation import activate
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.accounting import clear_registration_accounting_cache
 from larpmanager.cache.button import clear_event_button_cache

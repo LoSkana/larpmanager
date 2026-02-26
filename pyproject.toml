@@ -131,3 +131,7 @@ convention = "google"
 
 [tool.ruff.lint.pylint]
 max-args = 8
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+force-single-line = false

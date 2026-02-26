@@ -23,11 +23,13 @@ from django.urls import path
 import larpmanager.views.exe.miscellanea
 from larpmanager.utils.edit import backend as views_ed
 from larpmanager.views import manage as views_mg
-from larpmanager.views.exe import accounting as views_ea
-from larpmanager.views.exe import association as views_eas
-from larpmanager.views.exe import event as views_ee
-from larpmanager.views.exe import member as views_em
-from larpmanager.views.exe import miscellanea as views_ems
+from larpmanager.views.exe import (
+    accounting as views_ea,
+    association as views_eas,
+    event as views_ee,
+    member as views_em,
+    miscellanea as views_ems,
+)
 
 urlpatterns = [
     path(

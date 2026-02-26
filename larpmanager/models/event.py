@@ -31,8 +31,7 @@ from django.db import models
 from django.db.models import Q, QuerySet
 from django.db.models.constraints import UniqueConstraint
 from django.utils import formats
-from django.utils.translation import gettext_lazy as _
-from django.utils.translation import pgettext_lazy
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
 from tinymce.models import HTMLField

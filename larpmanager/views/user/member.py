@@ -38,8 +38,7 @@ from django.core.validators import URLValidator
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
-from django.utils.translation import activate, get_language
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import activate, get_language, gettext_lazy as _
 from PIL import Image, UnidentifiedImageError
 
 from larpmanager.accounting.member import info_accounting

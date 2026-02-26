@@ -21,15 +21,12 @@
 """Tests for registration question filtering features (reg_que_*)"""
 
 import uuid
-from decimal import Decimal
 
 import pytest
 
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.forms.registration import RegistrationForm
-from larpmanager.models.form import QuestionStatus, RegistrationQuestion
-from larpmanager.models.member import Member
-from larpmanager.models.registration import Registration
+from larpmanager.models.form import QuestionStatus
 from larpmanager.models.writing import Faction
 from larpmanager.tests.unit.base import BaseTestCase
 

@@ -27,7 +27,6 @@ date configuration, and event dashboard access.
 from typing import Any
 
 import pytest
-from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, go_to, login_orga, submit_confirm, expect_normalized
 

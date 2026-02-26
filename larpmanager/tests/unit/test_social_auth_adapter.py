@@ -31,8 +31,8 @@ from unittest.mock import Mock
 import pytest
 from allauth.socialaccount.models import SocialAccount, SocialLogin
 from django.contrib.auth.models import User
-from django.test import RequestFactory
 from django.core.exceptions import ObjectDoesNotExist
+from django.test import RequestFactory
 
 from larpmanager.models.member import Member
 from larpmanager.utils.auth.adapter import MyAccountAdapter, MySocialAccountAdapter

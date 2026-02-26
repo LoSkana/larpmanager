@@ -2,6 +2,7 @@
 # Migration to add UUID fields to all models with UuidMixin
 
 from django.db import migrations, models
+
 import larpmanager.models.utils
 
 

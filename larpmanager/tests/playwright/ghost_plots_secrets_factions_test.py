@@ -29,8 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
-                                     expect_normalized,
+from larpmanager.tests.utils import (expect_normalized,
                                      fill_tinymce,
                                      go_to,
                                      login_orga,
