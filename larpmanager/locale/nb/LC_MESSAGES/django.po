@@ -1317,6 +1317,9 @@ msgstr "nedlasting"
 msgid "factions"
 msgstr "fraksjoner"
 
+msgid "payments"
+msgstr "betalinger"
+
 msgid "positive"
 msgstr "positiv"
 

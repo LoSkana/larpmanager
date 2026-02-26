@@ -1317,6 +1317,9 @@ msgstr "downloaden"
 msgid "factions"
 msgstr "facties"
 
+msgid "payments"
+msgstr "betalingen"
+
 msgid "positive"
 msgstr "positief"
 

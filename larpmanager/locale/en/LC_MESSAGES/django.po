@@ -10139,6 +10139,9 @@ msgstr ""
 msgid "<b>%(number)s</b> characters to approve"
 msgstr ""
 
+msgid "payments"
+msgstr ""
+
 #, python-format
 msgid "Registration questions without options: %(list)s"
 msgstr ""

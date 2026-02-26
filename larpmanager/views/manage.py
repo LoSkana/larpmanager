@@ -694,7 +694,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
         _add_action(
             context,
             _("<b>%(number)s</b> %(label)s to approve")
-            % {"number": actions_data["pending_invoices_registration"]["count"], "label": _("registration payments")},
+            % {"number": actions_data["pending_invoices_registration"]["count"], "label": _("payments")},
             "orga_payments",
         )
 

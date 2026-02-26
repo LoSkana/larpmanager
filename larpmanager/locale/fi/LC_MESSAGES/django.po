@@ -1317,6 +1317,9 @@ msgstr "lataa"
 msgid "factions"
 msgstr "ryhmittymät"
 
+msgid "payments"
+msgstr "maksut"
+
 msgid "positive"
 msgstr "positiivinen"
 
