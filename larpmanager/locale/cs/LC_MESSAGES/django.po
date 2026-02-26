@@ -1869,9 +1869,6 @@ msgstr "Upravit stav"
 msgid "Event Texts"
 msgstr "Texty událostí"
 
-msgid "Event roles"
-msgstr "Role v události"
-
 msgid "Event texts"
 msgstr "Texty událostí"
 
@@ -7163,9 +7160,6 @@ msgstr "Přizpůsobení textových prvků rozhraní organizace"
 
 msgid "Date of birth characters do not match (check exact date)"
 msgstr "Nesouhlasí znaky data narození (zkontrolujte přesné datum)"
-
-msgid "Define at least one additional role for event management"
-msgstr "Definice alespoň jedné další role pro správu událostí"
 
 msgid "If no payment is received, registration may be cancelled"
 msgstr "V případě, že platbu neobdržíte, může být registrace zrušena"

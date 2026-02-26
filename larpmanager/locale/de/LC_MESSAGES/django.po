@@ -1869,9 +1869,6 @@ msgstr "Status bearbeiten"
 msgid "Event Texts"
 msgstr "Veranstaltungstexte"
 
-msgid "Event roles"
-msgstr "Rollen der Veranstaltung"
-
 msgid "Event texts"
 msgstr "Veranstaltungstexte"
 
@@ -7243,10 +7240,6 @@ msgstr "Anpassen von Textelementen der Organisationsoberfläche"
 msgid "Date of birth characters do not match (check exact date)"
 msgstr ""
 "Die Zeichen des Geburtsdatums stimmen nicht überein (genaues Datum prüfen)"
-
-msgid "Define at least one additional role for event management"
-msgstr ""
-"Definieren Sie mindestens eine zusätzliche Rolle für die Ereignisverwaltung"
 
 msgid "If no payment is received, registration may be cancelled"
 msgstr "Geht keine Zahlung ein, kann die Anmeldung storniert werden"

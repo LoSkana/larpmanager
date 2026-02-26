@@ -1869,9 +1869,6 @@ msgstr "Muokkaa tilaa"
 msgid "Event Texts"
 msgstr "Tapahtuman tekstit"
 
-msgid "Event roles"
-msgstr "Tapahtuman roolit"
-
 msgid "Event texts"
 msgstr "Tapahtuman tekstit"
 
@@ -7166,9 +7163,6 @@ msgstr "Muokkaa organisaation käyttöliittymän tekstielementtejä"
 
 msgid "Date of birth characters do not match (check exact date)"
 msgstr "Syntymäpäivän merkit eivät täsmää (tarkista tarkka päivämäärä)"
-
-msgid "Define at least one additional role for event management"
-msgstr "Määritä vähintään yksi lisärooli tapahtumien hallintaa varten"
 
 msgid "If no payment is received, registration may be cancelled"
 msgstr "Jos maksua ei ole suoritettu, rekisteröinti voidaan peruuttaa"

@@ -9719,12 +9719,6 @@ msgstr ""
 msgid "Configure at least one payment method for participants"
 msgstr ""
 
-msgid "Event roles"
-msgstr ""
-
-msgid "Define at least one additional role for event management"
-msgstr ""
-
 msgid "Registration tickets"
 msgstr ""
 

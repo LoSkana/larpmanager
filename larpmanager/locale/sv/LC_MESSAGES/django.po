@@ -1869,9 +1869,6 @@ msgstr "Redigera status"
 msgid "Event Texts"
 msgstr "Evenemangstexter"
 
-msgid "Event roles"
-msgstr "Roller vid evenemang"
-
 msgid "Event texts"
 msgstr "Händelsetexter"
 
@@ -7160,9 +7157,6 @@ msgstr "Anpassa textelement i organisationsgränssnittet"
 msgid "Date of birth characters do not match (check exact date)"
 msgstr ""
 "Tecknen för födelsedatum stämmer inte överens (kontrollera exakt datum)"
-
-msgid "Define at least one additional role for event management"
-msgstr "Definiera minst en ytterligare roll för evenemangshantering"
 
 msgid "If no payment is received, registration may be cancelled"
 msgstr "Om ingen betalning erhålls kan registreringen komma att avbrytas"

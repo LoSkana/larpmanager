@@ -1869,9 +1869,6 @@ msgstr "Modifica stato"
 msgid "Event Texts"
 msgstr "Testi degli eventi"
 
-msgid "Event roles"
-msgstr "Ruoli dell'evento"
-
 msgid "Event texts"
 msgstr "Testi evento"
 
@@ -7184,9 +7181,6 @@ msgid "Date of birth characters do not match (check exact date)"
 msgstr ""
 "Caratteri relativi alla data di nascita non corrispondono (controllare la "
 "data esatta)"
-
-msgid "Define at least one additional role for event management"
-msgstr "Definiscialmeno un ruolo aggiuntivo per la gestione degli eventi"
 
 msgid "If no payment is received, registration may be cancelled"
 msgstr ""

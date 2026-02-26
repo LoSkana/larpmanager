@@ -390,6 +390,7 @@ DEMO_HIDDEN_PERMISSIONS: frozenset[str] = frozenset(
         "orga_check",
         "orga_reading",
         "orga_accounting",
+        "orga_roles",
     }
 )
 

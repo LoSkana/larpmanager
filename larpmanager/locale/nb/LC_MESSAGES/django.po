@@ -1869,9 +1869,6 @@ msgstr "Rediger status"
 msgid "Event Texts"
 msgstr "Arrangementstekster"
 
-msgid "Event roles"
-msgstr "Event-roller"
-
 msgid "Event texts"
 msgstr "Begivenhetstekster"
 
@@ -7165,9 +7162,6 @@ msgstr "Tilpasse tekstelementer i organisasjonsgrensesnittet"
 
 msgid "Date of birth characters do not match (check exact date)"
 msgstr "Fødselsdatoens tegn stemmer ikke overens (sjekk nøyaktig dato)"
-
-msgid "Define at least one additional role for event management"
-msgstr "Definer minst én ekstra rolle for hendelseshåndtering"
 
 msgid "If no payment is received, registration may be cancelled"
 msgstr "Hvis ingen betaling mottas, kan registreringen bli kansellert"

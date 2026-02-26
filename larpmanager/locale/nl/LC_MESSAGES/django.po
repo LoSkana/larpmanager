@@ -1869,9 +1869,6 @@ msgstr "Status bewerken"
 msgid "Event Texts"
 msgstr "Evenementteksten"
 
-msgid "Event roles"
-msgstr "Evenement rollen"
-
 msgid "Event texts"
 msgstr "Evenementteksten"
 
@@ -7181,9 +7178,6 @@ msgstr "Tekstuele elementen van de organisatie-interface aanpassen"
 
 msgid "Date of birth characters do not match (check exact date)"
 msgstr "De geboortedatum komt niet overeen (controleer de exacte datum)"
-
-msgid "Define at least one additional role for event management"
-msgstr "Ten minste één extra rol definiëren voor gebeurtenisbeheer"
 
 msgid "If no payment is received, registration may be cancelled"
 msgstr ""
