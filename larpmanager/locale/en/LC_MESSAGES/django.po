@@ -882,6 +882,12 @@ msgstr ""
 msgid "If checked: activate new interface"
 msgstr ""
 
+msgid "New menu"
+msgstr ""
+
+msgid "If checked: activate new menu"
+msgstr ""
+
 msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 

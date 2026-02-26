@@ -1155,6 +1155,9 @@ msgstr "Nuovo costo"
 msgid "New gift"
 msgstr "Nuovo regalo"
 
+msgid "New menu"
+msgstr "Nuovo menu"
+
 msgid "Nickname"
 msgstr "Nickname"
 
@@ -4830,6 +4833,9 @@ msgstr "Modifica i dettagli del personaggio"
 
 msgid "I Understand - Access Content"
 msgstr "Capisco - Accedi al contenuto"
+
+msgid "If checked: activate new menu"
+msgstr "Se selezionato: attiva il nuovo menu"
 
 msgid "Indicate the outflow category"
 msgstr "Indica la categoria entro cui viene contata l'uscita"

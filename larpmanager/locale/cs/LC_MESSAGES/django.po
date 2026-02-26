@@ -1155,6 +1155,9 @@ msgstr "Nové náklady"
 msgid "New gift"
 msgstr "Nový dárek"
 
+msgid "New menu"
+msgstr "Nové menu"
+
 msgid "Nickname"
 msgstr "Přezdívka"
 
@@ -4830,6 +4833,9 @@ msgstr "Úprava údajů o postavě"
 
 msgid "I Understand - Access Content"
 msgstr "Rozumím - Přístup k obsahu"
+
+msgid "If checked: activate new menu"
+msgstr "Pokud je zaškrtnuto: aktivuje novou nabídku"
 
 msgid "Indicate the outflow category"
 msgstr "Uveďte kategorii, do které se výstup započítává"

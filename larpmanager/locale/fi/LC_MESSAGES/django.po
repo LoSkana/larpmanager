@@ -1155,6 +1155,9 @@ msgstr "Uudet kustannukset"
 msgid "New gift"
 msgstr "Uusi lahja"
 
+msgid "New menu"
+msgstr "Uusi valikko"
+
 msgid "Nickname"
 msgstr "Lempinimi"
 
@@ -4830,6 +4833,9 @@ msgstr "Muokkaa hahmosi tietoja"
 
 msgid "I Understand - Access Content"
 msgstr "Ymmärrän - Sisällön käyttö"
+
+msgid "If checked: activate new menu"
+msgstr "Jos valittuna: aktivoi uusi valikko"
 
 msgid "Indicate the outflow category"
 msgstr "Ilmoita ulosvirtauksen luokka"
