@@ -5,55 +5,56 @@
             <a href="{% url 'orga_accounting' run.get_slug %}" target="_blank"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
         </h2>
         <table>
-            <tbody>
-                {% if widgets.accounting.expected %}
-                    <tr>
-                        <th descr="{% trans "Total amount of money expected if all registered participants fully pay their due amount" %}">
-                            <a href="#" class="sidebar-link">{% trans "Expected revenue" %}</a>
-                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                        </th>
-                        <td>{{ widgets.accounting.expected }}</td>
-                    </tr>
-                {% endif %}
-                {% if widgets.accounting.revenue %}
-                    <tr>
-                        <th descr="{% trans "Total amount of money received for this event, minus commission fees and refunds" %}">
-                            <a href="#" class="sidebar-link">{% trans "Realized revenue" %}</a>
-                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                        </th>
-                        <td>{{ widgets.accounting.revenue }}</td>
-                    </tr>
-                {% endif %}
-                {% if widgets.accounting.costs %}
-                    <tr>
-                        <th descr="{% trans "Total of all expenses incurred for the event, both personal and organizational, including any tokens and credits issued" %}">
-                            <a href="#" class="sidebar-link">{% trans "Total costs" %}</a>
-                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                        </th>
-                        <td>{{ widgets.accounting.costs }}</td>
-                    </tr>
-                {% endif %}
-                {% if widgets.accounting.balance %}
-                    <tr>
-                        <th descr="{% trans "Net profit of the event, difference between realized revenue and total costs" %}">
-                            <a href="#" class="sidebar-link">{% trans "Net profit" %}</a>
-                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                        </th>
-                        <td>{{ widgets.accounting.balance }}</td>
-                    </tr>
-                {% endif %}
-                {% if 'organization_tax' in features and widgets.accounting.tax %}
-                    <tr>
-                        <th descr="{% trans "Minimum amount of net profit to be retained for the association tax" %}">
-                            <a href="#" class="sidebar-link">{% trans "Organization tax" %}</a>
-                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                        </th>
-                        <td>{{ widgets.accounting.tax }}</td>
-                    </tr>
-                {% endif %}
-            </tbody>
-        </table>
-        {% if not widgets.accounting.has_data %}
+            {% if widgets.accounting.has_data %}
+                <tbody>
+                    {% if widgets.accounting.expected %}
+                        <tr>
+                            <th descr="{% trans "Total amount of money expected if all registered participants fully pay their due amount" %}">
+                                <a href="#" class="sidebar-link">{% trans "Expected revenue" %}</a>
+                                <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                            </th>
+                            <td>{{ widgets.accounting.expected }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if widgets.accounting.revenue %}
+                        <tr>
+                            <th descr="{% trans "Total amount of money received for this event, minus commission fees and refunds" %}">
+                                <a href="#" class="sidebar-link">{% trans "Realized revenue" %}</a>
+                                <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                            </th>
+                            <td>{{ widgets.accounting.revenue }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if widgets.accounting.costs %}
+                        <tr>
+                            <th descr="{% trans "Total of all expenses incurred for the event, both personal and organizational, including any tokens and credits issued" %}">
+                                <a href="#" class="sidebar-link">{% trans "Total costs" %}</a>
+                                <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                            </th>
+                            <td>{{ widgets.accounting.costs }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if widgets.accounting.balance %}
+                        <tr>
+                            <th descr="{% trans "Net profit of the event, difference between realized revenue and total costs" %}">
+                                <a href="#" class="sidebar-link">{% trans "Net profit" %}</a>
+                                <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                            </th>
+                            <td>{{ widgets.accounting.balance }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if 'organization_tax' in features and widgets.accounting.tax %}
+                        <tr>
+                            <th descr="{% trans "Minimum amount of net profit to be retained for the association tax" %}">
+                                <a href="#" class="sidebar-link">{% trans "Organization tax" %}</a>
+                                <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                            </th>
+                            <td>{{ widgets.accounting.tax }}</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        {% else %}
             <p>
                 <i>{% trans "No transactions recorded" %}</i>.
             </p>

@@ -1317,6 +1317,9 @@ msgstr "lataa"
 msgid "factions"
 msgstr "ryhmittymät"
 
+msgid "payments"
+msgstr "maksut"
+
 msgid "positive"
 msgstr "positiivinen"
 
@@ -4027,9 +4030,6 @@ msgstr "Varastotehtävät"
 
 msgid "You have already paid"
 msgstr "Olet jo maksanut"
-
-msgid "registration payments"
-msgstr "rekisteröintimaksut"
 
 msgid "submit your vote here"
 msgstr "lähetä äänesi täällä"

@@ -1317,6 +1317,9 @@ msgstr "nedlasting"
 msgid "factions"
 msgstr "fraksjoner"
 
+msgid "payments"
+msgstr "betalinger"
+
 msgid "positive"
 msgstr "positiv"
 
@@ -4027,9 +4030,6 @@ msgstr "Oppgaver på lageret"
 
 msgid "You have already paid"
 msgstr "Du har allerede betalt"
-
-msgid "registration payments"
-msgstr "registreringsbetalinger"
 
 msgid "submit your vote here"
 msgstr "send inn din stemme her"

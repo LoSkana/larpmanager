@@ -10064,7 +10064,7 @@ msgstr ""
 msgid "<b>%(number)s</b> expenses to approve"
 msgstr ""
 
-msgid "registration payments"
+msgid "payments"
 msgstr ""
 
 msgid "donations"

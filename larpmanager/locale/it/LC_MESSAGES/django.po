@@ -1317,6 +1317,9 @@ msgstr "scarica"
 msgid "factions"
 msgstr "fazioni"
 
+msgid "payments"
+msgstr "pagamenti"
+
 msgid "positive"
 msgstr "positivi"
 
@@ -4027,9 +4030,6 @@ msgstr "Incarichi di magazzino"
 
 msgid "You have already paid"
 msgstr "Hai già versato"
-
-msgid "registration payments"
-msgstr "pagamenti di registrazione"
 
 msgid "submit your vote here"
 msgstr "invia il tuo voto qui"

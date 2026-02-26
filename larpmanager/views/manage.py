@@ -353,7 +353,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
 
     # Check for pending invoice approvals split by type
     for key, url, label in [
-        ("pending_invoices_registration", "exe_payments", _("registration payments")),
+        ("pending_invoices_registration", "exe_payments", _("payments")),
         ("pending_invoices_donation", "exe_donations", _("donations")),
         ("pending_invoices_collection", "exe_collections", _("collections")),
         ("pending_invoices_membership", "exe_membership", _("membership fees")),
@@ -680,7 +680,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
         _add_action(
             context,
             _("<b>%(number)s</b> %(label)s to approve")
-            % {"number": actions_data["pending_invoices_registration"]["count"], "label": _("registration payments")},
+            % {"number": actions_data["pending_invoices_registration"]["count"], "label": _("payments")},
             "orga_payments",
         )
 

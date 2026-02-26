@@ -7,6 +7,10 @@
 {% block css %}
     {% if iframe %}
         <style>
+            html {
+                overflow: hidden;
+            }
+
             #header,
             #footer,
             header,
@@ -14,7 +18,7 @@
             #tutorials .navig,
             .main_nav,
             #topbar {
-                display: none
+                display: none !important;
             }
 
             #main {
@@ -130,6 +134,14 @@ window.addEventListener('DOMContentLoaded', function() {
 
         // all link open in new page
         $('#tutorial-descr a').attr('target', '_blank');
+
+        {% if iframe %}
+        function notifyHeight() {
+            window.parent.postMessage({ type: 'iframe_resize', height: document.body.scrollHeight }, '*');
+        }
+        notifyHeight();
+        new ResizeObserver(notifyHeight).observe(document.body);
+        {% endif %}
 
         // check if this page was opened by requesting an anchor
         const anchor = window.location.hash.substring(1);
