@@ -2847,10 +2847,10 @@ msgid "Parent campaign"
 msgstr "Campagna genitore"
 
 msgid "Payment Methods"
-msgstr "Metodi di pagamento"
+msgstr "Metodi pagamento"
 
 msgid "Payment methods"
-msgstr "Metodi di pagamento"
+msgstr "Metodi pagamento"
 
 msgid "Portraits (PDF)"
 msgstr "Ritratti (PDF)"

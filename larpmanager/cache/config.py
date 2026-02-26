@@ -156,6 +156,9 @@ def save_single_config(obj: object, name: str, value: any) -> None:
     # Uses update_or_create to avoid duplicates and handle both insert/update cases
     obj.configs.model.objects.update_or_create(defaults={"value": value}, **{fk_field: obj, "name": name})
 
+    # Invalidate the cache so the next read fetches the updated value from the database
+    reset_element_configs(obj)
+
 
 def _get_fkey_config(model_instance: object) -> str | None:
     """Get foreign key field name for configuration model.
