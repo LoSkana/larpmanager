@@ -367,7 +367,7 @@
     config: null
     active_if: null
     hidden: false
-    icon: chart-line
+    icon: fa-tasks
     feature: progress
     module: writing
 - model: larpmanager.eventpermission
