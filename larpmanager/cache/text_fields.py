@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import html as html_stdlib
 import re
 from typing import TYPE_CHECKING, Any
 
@@ -71,8 +72,8 @@ def get_single_cache_text_field(element_uuid: str, field_name: str, text_value: 
     if text_value is None:
         text_value = ""
 
-    # Remove HTML tags and escape remaining content to prevent XSS
-    cleaned_text = escape(remove_html_tags(text_value))
+    # Remove HTML tags, then unescape HTML entities to actual Unicode characters
+    cleaned_text = html_stdlib.unescape(remove_html_tags(text_value))
 
     # Get the length of the cleaned text
     original_length = len(cleaned_text)
@@ -80,9 +81,16 @@ def get_single_cache_text_field(element_uuid: str, field_name: str, text_value: 
     # Get the snippet limit from configuration
     limit = conf_settings.FIELD_SNIPPET_LIMIT
 
-    # Truncate text if it exceeds the limit and add popup link
-    if original_length > limit:
+    truncated = original_length > limit
+
+    # Truncate on actual characters before re-escaping
+    if truncated:
         cleaned_text = cleaned_text[:limit]
+
+    # Escape for XSS prevention after truncation
+    cleaned_text = escape(cleaned_text)
+
+    if truncated:
         cleaned_text += (
             f"... <a href='#' class='post_popup' pop='{element_uuid}' fie='{field_name}'><i class='fas fa-eye'></i></a>"
         )
