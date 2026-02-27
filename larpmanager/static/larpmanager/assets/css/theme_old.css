@@ -402,6 +402,10 @@ nav#sidebar-nav {
   margin: 0;
 }
 
+#sidebar .sidebar-link {
+  width: 100%;
+}
+
 #sidebar .new-menu {
   padding-top: 0.5em;
 }

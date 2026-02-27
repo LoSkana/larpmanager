@@ -545,7 +545,7 @@ orga_widget_list = {
     "actions": _init_orga_actions_cache,
     "deadlines": _init_deadline_widget_cache,
     "user_character": _init_user_character_widget_cache,
-    "progressstep": _init_progress_widget_cache,
+    "progress": _init_progress_widget_cache,
     "casting": _init_casting_widget_cache,
     "accounting": _init_orga_accounting_widget_cache,
     "logs": _init_orga_log_widget_cache,
