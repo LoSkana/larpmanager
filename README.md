@@ -194,14 +194,14 @@ For a Debian-like system: install the following packages:
 # On Ubuntu 24.04 LTS
 sudo apt install python3.12 python3.12-venv python3.12-dev python3-pip redis-server git \
   postgresql postgresql-contrib libpq-dev nodejs build-essential libxmlsec1-dev \
-  libxmlsec1-openssl libavif16 libcairo2-dev pkg-config
+  libxmlsec1-openssl libcairo2-dev pkg-config
 
 # On Ubuntu 22.04 or older (requires deadsnakes PPA for Python 3.12)
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
 sudo apt install python3.12 python3.12-venv python3.12-dev python3-pip redis-server git \
   postgresql postgresql-contrib libpq-dev nodejs build-essential libxmlsec1-dev \
-  libxmlsec1-openssl libavif16 libcairo2-dev pkg-config
+  libxmlsec1-openssl libcairo2-dev pkg-config
 ```
 
 Install uv (fast Python package manager):
