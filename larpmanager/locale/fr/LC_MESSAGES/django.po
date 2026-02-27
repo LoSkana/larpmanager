@@ -9915,6 +9915,13 @@ msgstr ""
 " utilisation illimitée)"
 
 msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Indique le montant du remboursement souhaité (ne peut être supérieur à vos "
+"crédits actuels)"
+
+msgid ""
 "Items marked in red will be deleted because their final quantity will be "
 "zero or negative"
 msgstr ""

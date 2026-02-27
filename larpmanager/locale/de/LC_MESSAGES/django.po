@@ -9979,6 +9979,13 @@ msgstr ""
 "werden können (0 für unendliche Nutzung)"
 
 msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Gibt den gewünschten Erstattungsbetrag an (kann nicht höher sein als Ihr "
+"aktuelles Guthaben)"
+
+msgid ""
 "Items marked in red will be deleted because their final quantity will be "
 "zero or negative"
 msgstr ""

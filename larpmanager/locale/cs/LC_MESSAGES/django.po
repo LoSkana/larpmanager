@@ -9519,6 +9519,12 @@ msgstr ""
 "použití)"
 
 msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Uvádí požadovanou výši úhrady (nesmí být vyšší než vaše současné kredity)"
+
+msgid ""
 "Items marked in red will be deleted because their final quantity will be "
 "zero or negative"
 msgstr ""
