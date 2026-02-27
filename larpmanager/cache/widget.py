@@ -48,7 +48,7 @@ from larpmanager.models.event import DevelopStatus, Event, ProgressStep, Registr
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
 from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, WritingQuestion
 from larpmanager.models.member import LogOperationType, Membership, MembershipStatus
-from larpmanager.models.miscellanea import HelpQuestion, Log
+from larpmanager.models.miscellanea import HelpQuestion, Log, Milestone, MilestoneStatus
 from larpmanager.models.registration import (
     RegistrationCharacterRel,
     RegistrationInstallment,
@@ -540,6 +540,29 @@ def _init_orga_actions_writing(data: dict, run: Run) -> None:
     data["has_delivery_px"] = run.event.get_elements(DeliveryPx).exists()
 
 
+def _init_milestones_widget_cache(run: Run) -> dict:
+    """Compute 5 most urgent non-completed milestones for widget cache."""
+    today = timezone.now().date()
+    milestones = (
+        Milestone.objects.filter(event=run.event)
+        .exclude(status=MilestoneStatus.COMPLETED)
+        .select_related("assigned")
+        .order_by("deadline")[:5]
+    )
+    result = []
+    for m in milestones:
+        days_remaining = (m.deadline - today).days if m.deadline else None
+        result.append(
+            {
+                "name": m.name,
+                "status": m.get_status_display(),
+                "days_remaining": days_remaining,
+                "assigned": str(m.assigned) if m.assigned else "",
+            }
+        )
+    return {"milestones": result} if result else {}
+
+
 # Widget list for run-level widgets
 orga_widget_list = {
     "actions": _init_orga_actions_cache,
@@ -549,6 +572,7 @@ orga_widget_list = {
     "casting": _init_casting_widget_cache,
     "accounting": _init_orga_accounting_widget_cache,
     "logs": _init_orga_log_widget_cache,
+    "milestones": _init_milestones_widget_cache,
 }
 
 # Widget list for association-level widgets

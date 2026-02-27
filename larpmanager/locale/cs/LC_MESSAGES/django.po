@@ -450,6 +450,9 @@ msgstr "Třetí"
 msgid "Title"
 msgstr "Název"
 
+msgid "To Do"
+msgstr "Co je třeba udělat"
+
 msgid "Token"
 msgstr "Token"
 
@@ -860,6 +863,9 @@ msgstr "Nic"
 
 msgid "Options"
 msgstr "Možnosti"
+
+msgid "Overdue"
+msgstr "Zpoždění"
 
 msgid "Partial"
 msgstr "Částečně"
@@ -1350,6 +1356,9 @@ msgstr "Zrušeno"
 msgid "Character"
 msgstr "Postava"
 
+msgid "Completed"
+msgstr "Dokončeno"
+
 msgid "Concluded"
 msgstr "Uzavřeno"
 
@@ -1406,6 +1415,9 @@ msgstr "Seznam zatížení"
 
 msgid "Mandatory"
 msgstr "Povinné"
+
+msgid "Milestone"
+msgstr "Milník"
 
 msgid "Modifiers"
 msgstr "Modifikátory"
@@ -1650,6 +1662,9 @@ msgstr "Mediální soubor"
 msgid "Membership"
 msgstr "Členství"
 
+msgid "Milestones"
+msgstr "Milníky"
+
 msgid "Miscellany"
 msgstr "Různé"
 
@@ -1833,6 +1848,9 @@ msgstr "Dodatky"
 msgid "Amount paid"
 msgstr "Vyplacená částka"
 
+msgid "Assigned to"
+msgstr "Přiřazeno k"
+
 msgid "Assignments"
 msgstr "Zadání"
 
@@ -1895,6 +1913,9 @@ msgstr "Čtyři kvóty"
 
 msgid "Gallery Pdf"
 msgstr "Galerie Pdf"
+
+msgid "In Progress"
+msgstr "Probíhá"
 
 msgid "In creation"
 msgstr "Při tvorbě"
@@ -2578,6 +2599,9 @@ msgstr "Přizpůsobení"
 
 msgid "Days available"
 msgstr "Dostupné dny"
+
+msgid "Days remaining"
+msgstr "Zbývající dny"
 
 msgid "Default fields"
 msgstr "Výchozí pole"
@@ -4197,6 +4221,9 @@ msgstr "Stupeň vstupenky"
 msgid "Total registration fee"
 msgstr "Celkový registrační poplatek"
 
+msgid "Track event milestones"
+msgstr "Sledování milníků události"
+
 msgid "Unknow error on upload"
 msgstr "Neznámá chyba při nahrávání"
 
@@ -4988,6 +5015,9 @@ msgstr "Nastavení konfigurace daní"
 
 msgid "Set your interface preferences"
 msgstr "Nastavení předvoleb rozhraní"
+
+msgid "Show/hide completed milestones"
+msgstr "Zobrazit/skrýt dokončené milníky"
 
 msgid "The registrations to the event"
 msgstr "Registrace na akci"
@@ -6236,6 +6266,9 @@ msgstr "Uveďte tipy, pro které je aktivní"
 
 msgid "Manage fields that track participants' data"
 msgstr "Správa polí, která sledují údaje účastníků"
+
+msgid "Now you can create milestones for the event"
+msgstr "Nyní můžete pro událost vytvořit milníky"
 
 msgid "Now you can set the player editing settings"
 msgstr "Nyní můžete nastavit úpravy přehrávače"
@@ -8749,6 +8782,13 @@ msgstr ""
 "Tato stránka shrnuje dostupné otázky v registračním formuláři události"
 
 msgid ""
+"Track and manage event milestones with status, deadline, and staff "
+"assignment"
+msgstr ""
+"Sledování a správa milníků události se stavem, termínem a přiřazením "
+"pracovníků"
+
+msgid ""
 "Write your question, request or concern here. We will be happy to answer "
 "you!"
 msgstr "Zde napište svůj dotaz, požadavek nebo pochybnost. Rádi vám odpovíme!"
@@ -8994,6 +9034,13 @@ msgid ""
 msgstr ""
 "Nastavuje četnost zasílání e-mailů s připomenutím v dnech (pokud není "
 "nastaveno, nejsou zasílány žádné e-maily)"
+
+msgid ""
+"This page shows the event milestones. Completed milestones are hidden by "
+"default."
+msgstr ""
+"Na této stránce jsou uvedeny milníky události. Dokončené milníky jsou ve "
+"výchozím nastavení skryté."
 
 msgid ""
 "To register for the event, please fill in the following form and click on "

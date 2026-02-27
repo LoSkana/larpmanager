@@ -34,7 +34,7 @@ from tinymce.models import HTMLField
 
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel, UuidMixin
-from larpmanager.models.event import Event, Run
+from larpmanager.models.event import BaseConceptModel, Event, Run
 from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_miny, show_thumb
@@ -1149,3 +1149,44 @@ class Log(BaseModel):
     def __str__(self) -> str:
         """Return string representation."""
         return f"{self.cls} {self.eid}"
+
+
+class MilestoneStatus(models.TextChoices):
+    """Status choices for Milestone."""
+
+    TODO = "todo", _("To Do")
+    IN_PROGRESS = "in_progress", _("In Progress")
+    COMPLETED = "completed", _("Completed")
+
+
+class Milestone(UuidMixin, BaseConceptModel):
+    """Track event milestones with status, deadline, and staff assignment."""
+
+    status = models.CharField(
+        max_length=20,
+        choices=MilestoneStatus.choices,
+        default=MilestoneStatus.TODO,
+        verbose_name=_("Status"),
+    )
+
+    description = models.TextField(
+        blank=True,
+        verbose_name=_("Description"),
+    )
+
+    deadline = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name=_("Deadline"),
+    )
+
+    assigned = models.ForeignKey(
+        Member,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("Assigned to"),
+    )
+
+    class Meta:
+        indexes: ClassVar[list] = [models.Index(fields=["event", "deadline"])]
