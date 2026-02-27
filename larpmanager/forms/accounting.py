@@ -650,7 +650,7 @@ class ExePaymentSettingsForm(BaseModelForm):
 
     page_info = _("Manage payment methods")
 
-    load_template: ClassVar[list] = ["payment-details"]
+    load_templates: ClassVar[list] = ["payment-details"]
 
     load_js: ClassVar[list] = ["payment-details"]
 
