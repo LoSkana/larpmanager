@@ -843,11 +843,17 @@ msgstr "Maksimum"
 msgid "Members"
 msgstr "Członkowie"
 
+msgid "Methods"
+msgstr "Metody"
+
 msgid "Modules"
 msgstr "Moduły"
 
 msgid "Move up"
 msgstr "Przesuń w górę"
+
+msgid "No step"
+msgstr "Brak kroku"
 
 msgid "Nothing"
 msgstr "Nic"
@@ -2674,6 +2680,9 @@ msgstr "Polityka prywatności"
 
 msgid "Profiles (PDF)"
 msgstr "Profile (PDF)"
+
+msgid "Progress steps"
+msgstr "Kroki postępu"
 
 msgid "Prologues type"
 msgstr "Typ prologu"

@@ -843,11 +843,17 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Členové"
 
+msgid "Methods"
+msgstr "Metody"
+
 msgid "Modules"
 msgstr "Moduly"
 
 msgid "Move up"
 msgstr "Posun nahoru"
+
+msgid "No step"
+msgstr "Žádný krok"
 
 msgid "Nothing"
 msgstr "Nic"
@@ -2674,6 +2680,9 @@ msgstr "Zásady ochrany osobních údajů"
 
 msgid "Profiles (PDF)"
 msgstr "Profily (PDF)"
+
+msgid "Progress steps"
+msgstr "Kroky k pokroku"
 
 msgid "Prologues type"
 msgstr "Typ prologů"

@@ -3848,6 +3848,15 @@ msgstr ""
 msgid "Preferred navigation language"
 msgstr ""
 
+msgid "Portrait"
+msgstr ""
+
+msgid ""
+"Upload your portrait photo. It will be shown to other participants to help "
+"recognize you in the event. Choose a photo that you would put in an official "
+"document (in which you are alone, centered on your face)"
+msgstr ""
+
 msgid "Your first name as you prefer to be called"
 msgstr ""
 
@@ -4000,15 +4009,6 @@ msgid "Newsletter"
 msgstr ""
 
 msgid "Do you wish to be always updated on our events"
-msgstr ""
-
-msgid "Portrait"
-msgstr ""
-
-msgid ""
-"Upload your portrait photo. It will be shown to other participants to help "
-"recognize you in the event. Choose a photo that you would put in an official "
-"document (in which you are alone, centered on your face)"
 msgstr ""
 
 msgid ""
@@ -6636,6 +6636,12 @@ msgstr ""
 msgid "Edit registration status"
 msgstr ""
 
+msgid "Progress steps"
+msgstr ""
+
+msgid "No step"
+msgstr ""
+
 msgid "Secret registration link"
 msgstr ""
 
@@ -9171,6 +9177,9 @@ msgid "Enrolment"
 msgstr ""
 
 msgid "Display all users data"
+msgstr ""
+
+msgid "Methods"
 msgstr ""
 
 msgid "Configure payment methods available for participants"
