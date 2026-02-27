@@ -19,7 +19,7 @@
     config: null
     active_if: null
     hidden: false
-    icon: user-shield
+    icon: users-gear
     feature: exe_roles
     module: organization
 - model: larpmanager.associationpermission
@@ -91,7 +91,7 @@
     config: null
     active_if: null
     hidden: false
-    icon: arrow-trend-up
+    icon: arrow-trend-down
     feature: outflow
     module: accounting
 - model: larpmanager.associationpermission
@@ -103,7 +103,7 @@
     config: null
     active_if: null
     hidden: false
-    icon: arrow-trend-down
+    icon: arrow-trend-up
     feature: inflow
     module: accounting
 - model: larpmanager.associationpermission
@@ -127,7 +127,7 @@
     config: credits
     active_if: null
     hidden: false
-    icon: gem
+    icon: piggy-bank
     feature: credits
     module: accounting
 - model: larpmanager.associationpermission
@@ -295,7 +295,7 @@
     config: membership
     active_if: null
     hidden: false
-    icon: users
+    icon: id-badge
     feature: membership
     module: users
 - model: larpmanager.associationpermission
@@ -367,7 +367,7 @@
     config: null
     active_if: null
     hidden: false
-    icon: user-plus
+    icon: user-check
     feature: membership
     module: users
 - model: larpmanager.associationpermission
@@ -415,7 +415,7 @@
     config: tokens
     active_if: null
     hidden: false
-    icon: coins
+    icon: circle-dollar-to-slot
     feature: tokens
     module: accounting
 - model: larpmanager.associationpermission

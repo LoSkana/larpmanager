@@ -24,8 +24,20 @@ import re
 from django.core.cache import cache
 from slugify import slugify
 
+from larpmanager.forms.association import ExeConfigForm
+from larpmanager.forms.event import OrgaConfigForm
 from larpmanager.models.base import Feature
 from larpmanager.models.larpmanager import LarpManagerGuide, LarpManagerTutorial
+
+
+def get_orga_configs_cache_key(event_id: int) -> str:
+    """Get the cache key for orga (event) config data."""
+    return f"orga_configs_cache_{event_id}"
+
+
+def get_exe_configs_cache_key(association_id: int) -> str:
+    """Get the cache key for exe (association) config data."""
+    return f"exe_configs_cache_{association_id}"
 
 
 def get_guides_cache_key() -> str:
@@ -106,6 +118,32 @@ def get_features_cache() -> list[dict]:
     return features_list
 
 
+def get_orga_configs_cache(event_id: int, features: set) -> list[dict]:
+    """Get cached orga (event) config field definitions for a specific event."""
+    cache_key = get_orga_configs_cache_key(event_id)
+    cached = cache.get(cache_key)
+
+    if cached is not None:
+        return cached
+
+    data = _extract_config_fields(OrgaConfigForm, features)
+    cache.set(cache_key, data, timeout=86400)
+    return data
+
+
+def get_exe_configs_cache(association_id: int, features: set) -> list[dict]:
+    """Get cached exe (association) config field definitions for a specific association."""
+    cache_key = get_exe_configs_cache_key(association_id)
+    cached = cache.get(cache_key)
+
+    if cached is not None:
+        return cached
+
+    data = _extract_config_fields(ExeConfigForm, features)
+    cache.set(cache_key, data, timeout=86400)
+    return data
+
+
 def reset_guides_cache() -> None:
     """Reset the guides cache."""
     guides_cache_key = get_guides_cache_key()
@@ -122,6 +160,16 @@ def reset_features_cache() -> None:
     """Reset the features cache."""
     features_cache_key = get_features_cache_key()
     cache.delete(features_cache_key)
+
+
+def reset_orga_configs_cache(event_id: int) -> None:
+    """Reset the orga configs cache for a specific event."""
+    cache.delete(get_orga_configs_cache_key(event_id))
+
+
+def reset_exe_configs_cache(association_id: int) -> None:
+    """Reset the exe configs cache for a specific association."""
+    cache.delete(get_exe_configs_cache_key(association_id))
 
 
 def _build_guides_cache() -> list[dict]:
@@ -197,6 +245,81 @@ def _extract_h2_sections(content: str) -> list[tuple]:
             sections.append((section_title, section_content))
 
     return sections
+
+
+class _MockInstance:
+    """Minimal stub for set_config_* methods that access self.instance attributes.
+
+    Provides truthy values so all config entries are included regardless of the
+    specific instance state. extra_data (e.g. self.instance.id) is ignored by the
+    overridden add_configs, so id=0 is safe.
+    """
+
+    id = 0
+    main_mail = "mock"  # include email-gated configs with a truthy value
+
+
+def _extract_config_fields(form_class: type, features: set) -> list[dict]:
+    """Extract config field definitions from a ConfigForm subclass without full initialization.
+
+    Uses __new__ to bypass ModelForm.__init__ and injects lightweight overrides for
+    set_section and add_configs to capture field metadata with section slugs.
+
+    Args:
+        form_class: A ConfigForm subclass (e.g. OrgaConfigForm, ExeConfigForm)
+        features: Set of activated feature slugs for this event or association.
+
+    Returns:
+        List of dicts with: key, label, help_text, section, section_slug
+
+    """
+    # Create instance without calling __init__ to avoid DB access / model requirements
+    form = form_class.__new__(form_class)
+    form.config_fields = []
+    form._section = None  # noqa: SLF001
+    form._section_slug = None  # noqa: SLF001
+    form.jump_section = None
+
+    form.params = {
+        "features": features,
+        "skin_id": 1,
+    }
+
+    # Provide a minimal mock instance so set_config_* methods that check
+    # self.instance.main_mail or use self.instance.id as extra_data don't fail.
+    # extra_data is ignored by our _add_configs override; main_mail=True includes
+    # those config entries (since the association may have it set).
+    form.instance = _MockInstance()
+
+    # Override set_section to also capture section_slug (via closure over form)
+    def _set_section(section_slug: str, section_name: str) -> None:
+        form._section = section_name  # noqa: SLF001
+        form._section_slug = section_slug  # noqa: SLF001
+
+    # Override add_configs to record key, label, help_text and section_slug
+    def _add_configs(
+        configuration_key: str,
+        config_type: object,  # noqa: ARG001
+        field_label: str,
+        field_help_text: str,
+        extra_data: object = None,  # noqa: ARG001
+    ) -> None:
+        form.config_fields.append(
+            {
+                "key": configuration_key,
+                "label": field_label,
+                "help_text": field_help_text,
+                "section": form._section,  # noqa: SLF001
+                "section_slug": form._section_slug,  # noqa: SLF001
+            }
+        )
+
+    # Store as plain instance attributes; Python finds instance attrs before class methods
+    form.set_section = _set_section
+    form.add_configs = _add_configs
+
+    form.set_configs()
+    return form.config_fields
 
 
 def _get_content_preview(html_content: str, maximum_preview_length: int = 200) -> str:

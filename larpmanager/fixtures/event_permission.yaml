@@ -19,7 +19,7 @@
     config: null
     active_if: null
     hidden: false
-    icon: users
+    icon: users-gear
     feature: orga_roles
     module: event
 - model: larpmanager.eventpermission
@@ -127,7 +127,7 @@
     config: tokens
     active_if: null
     hidden: false
-    icon: coins
+    icon: circle-dollar-to-slot
     feature: tokens
     module: accounting
 - model: larpmanager.eventpermission
@@ -139,7 +139,7 @@
     config: credits
     active_if: null
     hidden: false
-    icon: gem
+    icon: piggy-bank
     feature: credits
     module: accounting
 - model: larpmanager.eventpermission
@@ -151,7 +151,7 @@
     config: null
     active_if: null
     hidden: false
-    icon: arrow-trend-down
+    icon: arrow-trend-up
     feature: inflow
     module: accounting
 - model: larpmanager.eventpermission
@@ -163,7 +163,7 @@
     config: null
     active_if: null
     hidden: false
-    icon: arrow-trend-up
+    icon: arrow-trend-down
     feature: outflow
     module: accounting
 - model: larpmanager.eventpermission
@@ -175,7 +175,7 @@
     config: null
     active_if: null
     hidden: false
-    icon: shield
+    icon: user-shield
     feature: safety
     module: users
 - model: larpmanager.eventpermission
@@ -195,11 +195,11 @@
     name: Users
     descr: Review participants' personal data
     slug: orga_sensitive
-    number: 31
+    number: 3
     config: null
     active_if: null
     hidden: false
-    icon: lock
+    icon: id-card
     feature: orga_sensitive
     module: users
 - model: larpmanager.eventpermission
@@ -259,7 +259,7 @@
     config: null
     active_if: null
     hidden: false
-    icon: scroll
+    icon: clapperboard
     feature: plot
     module: writing
 - model: larpmanager.eventpermission
