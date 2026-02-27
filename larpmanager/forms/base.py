@@ -1295,8 +1295,9 @@ class BaseRegistrationForm(BaseModelFormRun):
                 self.answers[question_id].save()
         elif value:
             # Only create new answers if there's actually content
-            self.answer_class.objects.create(
-                **{"question_id": question_id, self.instance_key: instance.id, "text": value}
+            self.answer_class.objects.get_or_create(
+                **{"question_id": question_id, self.instance_key: instance.id},
+                defaults={"text": value},
             )
 
     def save_registration_single(self, instance: Any, option_uuid: str | None, question: dict) -> None:
@@ -1332,7 +1333,7 @@ class BaseRegistrationForm(BaseModelFormRun):
                 self.singles[question_id].save()
         # Create new choice
         else:
-            self.choice_class.objects.create(
+            self.choice_class.objects.get_or_create(
                 **{"question_id": question_id, self.instance_key: instance.id, "option_id": option["id"]}
             )
 

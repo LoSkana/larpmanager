@@ -931,6 +931,10 @@ body:not(.new_form) .only_new_form {
   font-size: 1.3em;
 }
 
+.new_menu .grid .grid-item h2 {
+  text-align: left;
+}
+
 .grid .grid-item th,
 .grid .grid-item td {
   padding: 0.4em;

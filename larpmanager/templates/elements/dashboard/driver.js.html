@@ -134,21 +134,13 @@ window.addEventListener('DOMContentLoaded', function() {
 
     }
 
-    jQuery(function(){
-        {% if intro_driver == "welcome" %}
-        $(document).on("lm_ready", function() {
-            driverWelcome();
-        });
-        {% elif intro_driver == "first_event" %}
-        $(document).on("lm_ready", function() {
-            driverFirstEvent();
-        });
-        {% elif intro_driver == "advanced_unlock" %}
-        $(document).on("lm_ready", function() {
-            driverUnlocked();
-        });
-        {% endif %}
-    });
+    {% if intro_driver == "welcome" %}
+    driverWelcome();
+    {% elif intro_driver == "first_event" %}
+    driverFirstEvent();
+    {% elif intro_driver == "advanced_unlock" %}
+    driverUnlocked();
+    {% endif %}
 
 });
 
