@@ -93,6 +93,26 @@ class Member(UuidMixin, BaseModel):
         help_text=_("Preferred navigation language"),
     )
 
+    profile = models.ImageField(
+        max_length=500,
+        upload_to=UploadToPathAndRename("member/"),
+        verbose_name=_("Portrait"),
+        help_text=_(
+            "Upload your portrait photo. It will be shown to other participants to help recognize "
+            "you in the event. Choose a photo that you would put in an official document (in which "
+            "you are alone, centered on your face)",
+        ),
+        blank=True,
+        null=True,
+    )
+
+    profile_thumb = ImageSpecField(
+        source="profile",
+        processors=[ResizeToFill(500, 500)],
+        format="JPEG",
+        options={"quality": 90},
+    )
+
     name = models.CharField(
         max_length=100,
         verbose_name=_("Name"),
@@ -296,26 +316,6 @@ class Member(UuidMixin, BaseModel):
         verbose_name=_("Newsletter"),
         help_text=_("Do you wish to be always updated on our events") + "?",
         null=True,
-    )
-
-    profile = models.ImageField(
-        max_length=500,
-        upload_to=UploadToPathAndRename("member/"),
-        verbose_name=_("Portrait"),
-        help_text=_(
-            "Upload your portrait photo. It will be shown to other participants to help recognize "
-            "you in the event. Choose a photo that you would put in an official document (in which "
-            "you are alone, centered on your face)",
-        ),
-        blank=True,
-        null=True,
-    )
-
-    profile_thumb = ImageSpecField(
-        source="profile",
-        processors=[ResizeToFill(500, 500)],
-        format="JPEG",
-        options={"quality": 90},
     )
 
     presentation = models.CharField(

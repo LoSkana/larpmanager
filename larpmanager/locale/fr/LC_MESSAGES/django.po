@@ -2706,7 +2706,7 @@ msgid "Profiles (PDF)"
 msgstr "Profils (PDF)"
 
 msgid "Progress steps"
-msgstr "Étapes de l'avancement des travaux"
+msgstr "Les étapes du progrès"
 
 msgid "Prologues type"
 msgstr "Type de prologues"
