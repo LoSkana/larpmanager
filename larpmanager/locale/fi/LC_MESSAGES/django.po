@@ -450,6 +450,9 @@ msgstr "Kolmas"
 msgid "Title"
 msgstr "Otsikko"
 
+msgid "To Do"
+msgstr "To Do"
+
 msgid "Token"
 msgstr "Merkki"
 
@@ -843,17 +846,26 @@ msgstr "Enimmäismäärä"
 msgid "Members"
 msgstr "Jäsenet"
 
+msgid "Methods"
+msgstr "Menetelmät"
+
 msgid "Modules"
 msgstr "Moduulit"
 
 msgid "Move up"
 msgstr "Siirry ylöspäin"
 
+msgid "No step"
+msgstr "Ei askelta"
+
 msgid "Nothing"
 msgstr "Ei mitään"
 
 msgid "Options"
 msgstr "Vaihtoehdot"
+
+msgid "Overdue"
+msgstr "Myöhästyneet"
 
 msgid "Partial"
 msgstr "Osittain"
@@ -1344,6 +1356,9 @@ msgstr "Peruutettu"
 msgid "Character"
 msgstr "Hahmo"
 
+msgid "Completed"
+msgstr "Valmistunut"
+
 msgid "Concluded"
 msgstr "Päätelmät"
 
@@ -1400,6 +1415,9 @@ msgstr "Latausluettelo"
 
 msgid "Mandatory"
 msgstr "Pakollinen"
+
+msgid "Milestone"
+msgstr "Virstanpylväs"
 
 msgid "Modifiers"
 msgstr "Muuntimet"
@@ -1644,6 +1662,9 @@ msgstr "Mediatiedosto"
 msgid "Membership"
 msgstr "Jäsenyys"
 
+msgid "Milestones"
+msgstr "Virstanpylväät"
+
 msgid "Miscellany"
 msgstr "Sekalaista"
 
@@ -1827,6 +1848,9 @@ msgstr "Lisäaineet"
 msgid "Amount paid"
 msgstr "Maksettu määrä"
 
+msgid "Assigned to"
+msgstr "Nimetty"
+
 msgid "Assignments"
 msgstr "Tehtävät"
 
@@ -1889,6 +1913,9 @@ msgstr "Neljä kiintiötä"
 
 msgid "Gallery Pdf"
 msgstr "Galleria Pdf"
+
+msgid "In Progress"
+msgstr "Käynnissä"
 
 msgid "In creation"
 msgstr "Luomisessa"
@@ -2573,6 +2600,9 @@ msgstr "Mukautukset"
 msgid "Days available"
 msgstr "Käytettävissä olevat päivät"
 
+msgid "Days remaining"
+msgstr "Jäljellä olevat päivät"
+
 msgid "Default fields"
 msgstr "Oletuskentät"
 
@@ -2674,6 +2704,9 @@ msgstr "Tietosuojakäytäntö"
 
 msgid "Profiles (PDF)"
 msgstr "Profiilit (PDF)"
+
+msgid "Progress steps"
+msgstr "Edistymisen vaiheet"
 
 msgid "Prologues type"
 msgstr "Prologien tyyppi"
@@ -4188,6 +4221,9 @@ msgstr "Lipun taso"
 msgid "Total registration fee"
 msgstr "Rekisteröintimaksu yhteensä"
 
+msgid "Track event milestones"
+msgstr "Seuraa tapahtuman virstanpylväitä"
+
 msgid "Unknow error on upload"
 msgstr "Tietämätön virhe latauksessa"
 
@@ -4979,6 +5015,9 @@ msgstr "Määritä verojen kokoonpano"
 
 msgid "Set your interface preferences"
 msgstr "Aseta käyttöliittymän asetukset"
+
+msgid "Show/hide completed milestones"
+msgstr "Näytä/piilota suoritetut virstanpylväät"
 
 msgid "The registrations to the event"
 msgstr "Ilmoittautumiset tapahtumaan"
@@ -6227,6 +6266,9 @@ msgstr "Ilmoita liput, joiden osalta se on aktiivinen"
 
 msgid "Manage fields that track participants' data"
 msgstr "Hallitse kenttiä, joilla seurataan osallistujien tietoja"
+
+msgid "Now you can create milestones for the event"
+msgstr "Nyt voit luoda virstanpylväitä tapahtumalle"
 
 msgid "Now you can set the player editing settings"
 msgstr "Nyt voit määrittää soittimen muokkausasetukset"
@@ -8812,6 +8854,13 @@ msgstr ""
 "olevat kysymykset"
 
 msgid ""
+"Track and manage event milestones with status, deadline, and staff "
+"assignment"
+msgstr ""
+"Seuraa ja hallinnoi tapahtuman virstanpylväitä tilaan, määräaikaan ja "
+"henkilöstön määrittelyyn liittyvine tietoineen"
+
+msgid ""
 "Write your question, request or concern here. We will be happy to answer "
 "you!"
 msgstr ""
@@ -9065,6 +9114,13 @@ msgid ""
 msgstr ""
 "Määrittää, kuinka usein muistutussähköposteja lähetetään päivinä (jos sitä "
 "ei ole asetettu, sähköposteja ei lähetetä)"
+
+msgid ""
+"This page shows the event milestones. Completed milestones are hidden by "
+"default."
+msgstr ""
+"Tällä sivulla näkyvät tapahtuman virstanpylväät. Valmistuneet virstanpylväät"
+" on oletusarvoisesti piilotettu."
 
 msgid ""
 "To register for the event, please fill in the following form and click on "

@@ -450,6 +450,9 @@ msgstr "Dritte"
 msgid "Title"
 msgstr "Titel"
 
+msgid "To Do"
+msgstr "Zu tun"
+
 msgid "Token"
 msgstr "Token"
 
@@ -843,17 +846,26 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Mitglieder"
 
+msgid "Methods"
+msgstr "Methoden"
+
 msgid "Modules"
 msgstr "Module"
 
 msgid "Move up"
 msgstr "Nachrücken"
 
+msgid "No step"
+msgstr "Keine Stufe"
+
 msgid "Nothing"
 msgstr "Nichts"
 
 msgid "Options"
 msgstr "Optionen"
+
+msgid "Overdue"
+msgstr "Überfällig"
 
 msgid "Partial"
 msgstr "Teilweise"
@@ -1344,6 +1356,9 @@ msgstr "Abgesagt"
 msgid "Character"
 msgstr "Zeichen"
 
+msgid "Completed"
+msgstr "Abgeschlossen"
+
 msgid "Concluded"
 msgstr "Abgeschlossen"
 
@@ -1400,6 +1415,9 @@ msgstr "Liste laden"
 
 msgid "Mandatory"
 msgstr "Obligatorisch"
+
+msgid "Milestone"
+msgstr "Meilenstein"
 
 msgid "Modifiers"
 msgstr "Modifikatoren"
@@ -1644,6 +1662,9 @@ msgstr "Medien-Datei"
 msgid "Membership"
 msgstr "Mitgliedschaft"
 
+msgid "Milestones"
+msgstr "Meilensteine"
+
 msgid "Miscellany"
 msgstr "Gemischtes"
 
@@ -1827,6 +1848,9 @@ msgstr "Zusatzstoffe"
 msgid "Amount paid"
 msgstr "Gezahlter Betrag"
 
+msgid "Assigned to"
+msgstr "Zugewiesen an"
+
 msgid "Assignments"
 msgstr "Zuweisungen"
 
@@ -1889,6 +1913,9 @@ msgstr "Vier Quoten"
 
 msgid "Gallery Pdf"
 msgstr "Pdf-Galerie"
+
+msgid "In Progress"
+msgstr "In Arbeit"
 
 msgid "In creation"
 msgstr "In der Schöpfung"
@@ -2573,6 +2600,9 @@ msgstr "Anpassungen"
 msgid "Days available"
 msgstr "Verfügbare Tage"
 
+msgid "Days remaining"
+msgstr "Verbleibende Tage"
+
 msgid "Default fields"
 msgstr "Standard-Felder"
 
@@ -2674,6 +2704,9 @@ msgstr "Datenschutzbestimmungen"
 
 msgid "Profiles (PDF)"
 msgstr "Steckbriefe (PDF)"
+
+msgid "Progress steps"
+msgstr "Fortschrittliche Schritte"
 
 msgid "Prologues type"
 msgstr "Prologe Typ"
@@ -4188,6 +4221,9 @@ msgstr "Die Stufe der Fahrkarte"
 msgid "Total registration fee"
 msgstr "Anmeldegebühr insgesamt"
 
+msgid "Track event milestones"
+msgstr "Meilensteine der Veranstaltung verfolgen"
+
 msgid "Unknow error on upload"
 msgstr "Unbekannter Fehler beim Hochladen"
 
@@ -4979,6 +5015,9 @@ msgstr "Einrichten der Steuerkonfiguration"
 
 msgid "Set your interface preferences"
 msgstr "Legen Sie Ihre Schnittstelleneinstellungen fest"
+
+msgid "Show/hide completed milestones"
+msgstr "Abgeschlossene Meilensteine anzeigen/ausblenden"
 
 msgid "The registrations to the event"
 msgstr "Anmeldung zur Veranstaltung"
@@ -6234,6 +6273,9 @@ msgstr "Geben Sie die Tickets an, für die sie aktiv ist"
 
 msgid "Manage fields that track participants' data"
 msgstr "Verwalten von Feldern, die die Daten der Teilnehmer verfolgen"
+
+msgid "Now you can create milestones for the event"
+msgstr "Jetzt können Sie Meilensteine für das Ereignis erstellen"
 
 msgid "Now you can set the player editing settings"
 msgstr ""
@@ -9141,6 +9183,13 @@ msgstr ""
 " Veranstaltung zusammengefasst"
 
 msgid ""
+"Track and manage event milestones with status, deadline, and staff "
+"assignment"
+msgstr ""
+"Verfolgung und Verwaltung von Ereignismeilensteinen mit Status, Frist und "
+"Personalzuweisung"
+
+msgid ""
 "Write your question, request or concern here. We will be happy to answer "
 "you!"
 msgstr ""
@@ -9407,6 +9456,13 @@ msgid ""
 msgstr ""
 "Legt fest, wie oft Erinnerungs-E-Mails gesendet werden, in Tagen (wenn nicht"
 " festgelegt, werden keine E-Mails gesendet)"
+
+msgid ""
+"This page shows the event milestones. Completed milestones are hidden by "
+"default."
+msgstr ""
+"Auf dieser Seite werden die Meilensteine des Ereignisses angezeigt. "
+"Abgeschlossene Meilensteine sind standardmäßig ausgeblendet."
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
