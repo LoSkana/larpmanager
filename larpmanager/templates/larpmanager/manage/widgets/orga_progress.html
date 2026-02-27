@@ -1,0 +1,26 @@
+{% load i18n %}
+{% if widgets.progress %}
+    <div class="grid-item">
+        <h2>
+            <a href="{% url 'orga_progress_steps' run.get_slug %}" target="_blank"><i class="fas fa-tasks"></i> {% trans "Progress steps" %}</a>
+        </h2>
+        <table>
+            {% for step in widgets.progress.steps %}
+                <tr>
+                    <td>
+                        <b>{{ step.name }}</b>
+                    </td>
+                    <td>{{ step.count }}</td>
+                </tr>
+            {% endfor %}
+            {% if widgets.progress.no_step %}
+                <tr>
+                    <td>
+                        <b>{% trans "No step" %}</b>
+                    </td>
+                    <td>{{ widgets.progress.no_step }}</td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+{% endif %}

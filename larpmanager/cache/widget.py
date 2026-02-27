@@ -44,7 +44,7 @@ from larpmanager.models.accounting import (
     RefundStatus,
 )
 from larpmanager.models.casting import Casting, Quest, QuestType
-from larpmanager.models.event import DevelopStatus, Event, RegistrationStatus, Run
+from larpmanager.models.event import DevelopStatus, Event, ProgressStep, RegistrationStatus, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
 from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, WritingQuestion
 from larpmanager.models.member import LogOperationType, Membership, MembershipStatus
@@ -185,6 +185,28 @@ def _init_user_character_widget_cache(run: Run) -> dict:
     counts["approved"] = characters.filter(status=CharacterStatus.APPROVED).count()
 
     return counts
+
+
+def _init_progress_widget_cache(run: Run) -> dict:
+    """Compute character counts by progress step for widget cache."""
+    characters = run.event.get_elements(Character)
+    steps = ProgressStep.objects.filter(event=run.event, deleted=None).order_by("order")
+
+    step_counts = []
+    for step in steps:
+        count = characters.filter(progress=step).count()
+        if count:
+            step_counts.append({"name": step.name, "count": count})
+
+    result = {}
+    if step_counts:
+        result["steps"] = step_counts
+
+    no_step_count = characters.filter(progress__isnull=True).count()
+    if no_step_count:
+        result["no_step"] = no_step_count
+
+    return result
 
 
 def _init_casting_widget_cache(run: Run) -> dict:
@@ -523,6 +545,7 @@ orga_widget_list = {
     "actions": _init_orga_actions_cache,
     "deadlines": _init_deadline_widget_cache,
     "user_character": _init_user_character_widget_cache,
+    "progress": _init_progress_widget_cache,
     "casting": _init_casting_widget_cache,
     "accounting": _init_orga_accounting_widget_cache,
     "logs": _init_orga_log_widget_cache,
