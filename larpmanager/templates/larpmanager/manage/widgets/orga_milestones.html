@@ -1,0 +1,27 @@
+{% load i18n %}
+{% if widgets.milestones %}
+    <div class="grid-item">
+        <h2>
+            <a href="{% url 'orga_milestones' run.get_slug %}" target="_blank"><i class="fas fa-flag"></i> {% trans "Milestones" %}</a>
+        </h2>
+        <table>
+            {% for m in widgets.milestones.milestones %}
+                <tr>
+                    <td>
+                        <b>{{ m.name }}</b>
+                    </td>
+                    <td>{{ m.status }}</td>
+                    <td>
+                        {% if m.days_remaining is not None %}
+                            {% if m.days_remaining >= 0 %}
+                                {{ m.days_remaining }} {% trans "days" %}
+                            {% else %}
+                                <span class="overdue">{% trans "Overdue" %}</span>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}

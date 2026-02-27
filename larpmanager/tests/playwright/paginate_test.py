@@ -105,10 +105,12 @@ def config(page: Any, live_server: Any) -> None:
 def check_paginate(page: Any, live_server: Any, path: str, descr: str) -> None:
     """Navigate to a paginate list page and verify item appears in the table."""
     go_to(page, live_server, path)
-    just_wait(page)
-    just_wait(page)
-    just_wait(page)
+    just_wait(page, big=True)
     expect_normalized(page, page.locator("#one"), descr)
+
+    # try to change it
+    page.locator(".fa-edit").first.click()
+
 
 
 def exe_paginate_views(page: Any, live_server: Any) -> None:

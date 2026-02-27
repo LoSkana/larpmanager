@@ -2089,6 +2089,9 @@ msgstr ""
 msgid "One-time token"
 msgstr ""
 
+msgid "Milestone"
+msgstr ""
+
 #, python-format
 msgid ""
 "Enter the 'bring a friend' code provided by a registered participant to "
@@ -4375,6 +4378,18 @@ msgstr ""
 msgid "Unused"
 msgstr ""
 
+msgid "To Do"
+msgstr ""
+
+msgid "In Progress"
+msgstr ""
+
+msgid "Completed"
+msgstr ""
+
+msgid "Assigned to"
+msgstr ""
+
 msgid "New player"
 msgstr ""
 
@@ -6645,6 +6660,12 @@ msgstr ""
 msgid "Edit registration status"
 msgstr ""
 
+msgid "Milestones"
+msgstr ""
+
+msgid "Overdue"
+msgstr ""
+
 msgid "Progress steps"
 msgstr ""
 
@@ -7562,6 +7583,17 @@ msgid "This page shows the deadlines to be met for this event"
 msgstr ""
 
 msgid "This page shows all log entries for this event"
+msgstr ""
+
+msgid ""
+"This page shows the event milestones. Completed milestones are hidden by "
+"default."
+msgstr ""
+
+msgid "Show/hide completed milestones"
+msgstr ""
+
+msgid "Days remaining"
 msgstr ""
 
 msgid ""
@@ -9081,6 +9113,12 @@ msgid ""
 "settings"
 msgstr ""
 
+msgid "Track event milestones"
+msgstr ""
+
+msgid "Now you can create milestones for the event"
+msgstr ""
+
 msgid "Manage the organization main settings"
 msgstr ""
 
@@ -9501,6 +9539,10 @@ msgid "Manage character inventory pool types"
 msgstr ""
 
 msgid "View detailed activity log of all changes made for this specific event"
+msgstr ""
+
+msgid ""
+"Track and manage event milestones with status, deadline, and staff assignment"
 msgstr ""
 
 msgid "Communications"

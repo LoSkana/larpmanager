@@ -453,6 +453,9 @@ msgstr "Derde"
 msgid "Title"
 msgstr "Titel"
 
+msgid "To Do"
+msgstr "Doen"
+
 msgid "Token"
 msgstr "Penning"
 
@@ -863,6 +866,9 @@ msgstr "Niets"
 
 msgid "Options"
 msgstr "Opties"
+
+msgid "Overdue"
+msgstr "Achterstallig"
 
 msgid "Partial"
 msgstr "Gedeeltelijk"
@@ -1353,6 +1359,9 @@ msgstr "Geannuleerd"
 msgid "Character"
 msgstr "Karakter"
 
+msgid "Completed"
+msgstr "Voltooid"
+
 msgid "Concluded"
 msgstr "Afgesloten"
 
@@ -1409,6 +1418,9 @@ msgstr "Lijst laden"
 
 msgid "Mandatory"
 msgstr "Verplicht"
+
+msgid "Milestone"
+msgstr "Mijlpaal"
 
 msgid "Modifiers"
 msgstr "Aanpassingen"
@@ -1653,6 +1665,9 @@ msgstr "Mediabestand"
 msgid "Membership"
 msgstr "Lidmaatschap"
 
+msgid "Milestones"
+msgstr "Mijlpalen"
+
 msgid "Miscellany"
 msgstr "Diversen"
 
@@ -1836,6 +1851,9 @@ msgstr "Toevoegingen"
 msgid "Amount paid"
 msgstr "Betaald bedrag"
 
+msgid "Assigned to"
+msgstr "Toegewezen aan"
+
 msgid "Assignments"
 msgstr "Opdrachten"
 
@@ -1898,6 +1916,9 @@ msgstr "Vier quota"
 
 msgid "Gallery Pdf"
 msgstr "Pdf Galerij"
+
+msgid "In Progress"
+msgstr "In uitvoering"
 
 msgid "In creation"
 msgstr "In de schepping"
@@ -2581,6 +2602,9 @@ msgstr "Aanpassingen"
 
 msgid "Days available"
 msgstr "Beschikbare dagen"
+
+msgid "Days remaining"
+msgstr "Resterende dagen"
 
 msgid "Default fields"
 msgstr "Standaardvelden"
@@ -4200,6 +4224,9 @@ msgstr "Het niveau van het ticket"
 msgid "Total registration fee"
 msgstr "Totale registratiekosten"
 
+msgid "Track event milestones"
+msgstr "Volg mijlpalen van evenementen"
+
 msgid "Unknow error on upload"
 msgstr "Onbekende fout bij uploaden"
 
@@ -4991,6 +5018,9 @@ msgstr "De belastingconfiguratie instellen"
 
 msgid "Set your interface preferences"
 msgstr "Stel je interfacevoorkeuren in"
+
+msgid "Show/hide completed milestones"
+msgstr "Voltooide mijlpalen weergeven/verbergen"
 
 msgid "The registrations to the event"
 msgstr "Registratie voor het evenement"
@@ -6241,6 +6271,9 @@ msgstr "Geef aan voor welke tickets het actief is"
 
 msgid "Manage fields that track participants' data"
 msgstr "Velden beheren die de gegevens van deelnemers bijhouden"
+
+msgid "Now you can create milestones for the event"
+msgstr "Nu kun je mijlpalen voor het evenement aanmaken"
 
 msgid "Now you can set the player editing settings"
 msgstr "Nu kun je de instellingen voor het bewerken van de speler instellen"
@@ -8968,6 +9001,13 @@ msgstr ""
 "registratieformulier voor evenementen"
 
 msgid ""
+"Track and manage event milestones with status, deadline, and staff "
+"assignment"
+msgstr ""
+"Volg en beheer mijlpalen van evenementen met status, deadline en "
+"personeelstoewijzing"
+
+msgid ""
 "Write your question, request or concern here. We will be happy to answer "
 "you!"
 msgstr ""
@@ -9228,6 +9268,13 @@ msgid ""
 msgstr ""
 "Stelt in hoe vaak herinneringsmails worden verzonden, in dagen (als dit niet"
 " is ingesteld, worden er geen e-mails verzonden)"
+
+msgid ""
+"This page shows the event milestones. Completed milestones are hidden by "
+"default."
+msgstr ""
+"Deze pagina toont de mijlpalen van het evenement. Afgeronde mijlpalen zijn "
+"standaard verborgen."
 
 msgid ""
 "To register for the event, please fill in the following form and click on "

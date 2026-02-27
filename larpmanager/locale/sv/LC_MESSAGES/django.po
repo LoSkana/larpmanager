@@ -453,6 +453,9 @@ msgstr "Tredje"
 msgid "Title"
 msgstr "Titel"
 
+msgid "To Do"
+msgstr "Att göra"
+
 msgid "Token"
 msgstr "Token"
 
@@ -863,6 +866,9 @@ msgstr "Ingenting"
 
 msgid "Options"
 msgstr "Alternativ"
+
+msgid "Overdue"
+msgstr "Försenad"
 
 msgid "Partial"
 msgstr "Delvis"
@@ -1353,6 +1359,9 @@ msgstr "Avbokad"
 msgid "Character"
 msgstr "Karaktär"
 
+msgid "Completed"
+msgstr "Färdigställd"
+
 msgid "Concluded"
 msgstr "Avslutning"
 
@@ -1409,6 +1418,9 @@ msgstr "Ladda lista"
 
 msgid "Mandatory"
 msgstr "Obligatorisk"
+
+msgid "Milestone"
+msgstr "Milstolpe"
 
 msgid "Modifiers"
 msgstr "Modifierare"
@@ -1653,6 +1665,9 @@ msgstr "Mediefil"
 msgid "Membership"
 msgstr "Medlemskap"
 
+msgid "Milestones"
+msgstr "Milstolpar"
+
 msgid "Miscellany"
 msgstr "Diverse"
 
@@ -1836,6 +1851,9 @@ msgstr "Tilläggsaktier"
 msgid "Amount paid"
 msgstr "Utbetalt belopp"
 
+msgid "Assigned to"
+msgstr "Tilldelad till"
+
 msgid "Assignments"
 msgstr "Uppdrag"
 
@@ -1898,6 +1916,9 @@ msgstr "Fyra kvoter"
 
 msgid "Gallery Pdf"
 msgstr "Pdf-galleri"
+
+msgid "In Progress"
+msgstr "Pågående"
 
 msgid "In creation"
 msgstr "I skapelsen"
@@ -2581,6 +2602,9 @@ msgstr "Anpassningar"
 
 msgid "Days available"
 msgstr "Tillgängliga dagar"
+
+msgid "Days remaining"
+msgstr "Återstående dagar"
 
 msgid "Default fields"
 msgstr "Standardfält"
@@ -4200,6 +4224,9 @@ msgstr "Biljettens nivå"
 msgid "Total registration fee"
 msgstr "Total registreringsavgift"
 
+msgid "Track event milestones"
+msgstr "Spåra milstolpar i evenemanget"
+
 msgid "Unknow error on upload"
 msgstr "Okänt fel vid uppladdning"
 
@@ -4991,6 +5018,9 @@ msgstr "Ställ in skattekonfigurationen"
 
 msgid "Set your interface preferences"
 msgstr "Ställ in dina gränssnittsinställningar"
+
+msgid "Show/hide completed milestones"
+msgstr "Visa/dölj slutförda milstolpar"
 
 msgid "The registrations to the event"
 msgstr "Anmälan till evenemanget"
@@ -6241,6 +6271,9 @@ msgstr "Ange de biljetter för vilka den är aktiv"
 
 msgid "Manage fields that track participants' data"
 msgstr "Hantera fält som spårar deltagarnas data"
+
+msgid "Now you can create milestones for the event"
+msgstr "Nu kan du skapa milstolpar för evenemanget"
 
 msgid "Now you can set the player editing settings"
 msgstr "Nu kan du ställa in spelarens redigeringsinställningar"
@@ -8820,6 +8853,13 @@ msgstr ""
 "för registrering av evenemang"
 
 msgid ""
+"Track and manage event milestones with status, deadline, and staff "
+"assignment"
+msgstr ""
+"Spåra och hantera milstolpar för evenemang med status, deadline och "
+"personaltilldelning"
+
+msgid ""
 "Write your question, request or concern here. We will be happy to answer "
 "you!"
 msgstr ""
@@ -9076,6 +9116,13 @@ msgid ""
 msgstr ""
 "Anger hur ofta påminnelsemeddelanden ska skickas, i dagar (om inget anges "
 "skickas inga e-postmeddelanden)"
+
+msgid ""
+"This page shows the event milestones. Completed milestones are hidden by "
+"default."
+msgstr ""
+"På den här sidan visas milstolparna för evenemanget. Avslutade milstolpar är"
+" dolda som standard."
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
