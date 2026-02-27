@@ -22,6 +22,13 @@
         </div>
     </form>
 {% endblock content %}
+{% block css %}
+    <style>
+            html, #page-wrapper {
+                overflow: hidden !important;
+            }
+    </style>
+{% endblock css %}
 {% block js2 %}
     <script>
     $(document).ready(function() {
