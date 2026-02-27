@@ -82,6 +82,8 @@ window.addEventListener('DOMContentLoaded', function() {
             if (h2Text === 'Menu') return;
             var slug = slugify(h2Text);
 
+            if (!slug) return;
+
             $(this).attr('id', slug);
 
             var link = $('<a></a>')

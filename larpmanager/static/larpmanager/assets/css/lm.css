@@ -908,7 +908,7 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
 }
 
 .popup_tutorial iframe {
-  height: calc(80vh - 4em) !important;
+  height: calc(80vh - 2em) !important;
   overflow-y: auto;
 }
 
