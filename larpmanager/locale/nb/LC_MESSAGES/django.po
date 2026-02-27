@@ -9608,6 +9608,13 @@ msgstr ""
 "Angi maksimalt antall slike rabatter som kan kreves (0 for uendelig bruk)"
 
 msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Angir hvor mye du ønsker å få refundert (kan ikke være høyere enn dine "
+"nåværende studiepoeng)"
+
+msgid ""
 "Items marked in red will be deleted because their final quantity will be "
 "zero or negative"
 msgstr ""

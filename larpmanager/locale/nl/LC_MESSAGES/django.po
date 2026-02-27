@@ -9786,6 +9786,13 @@ msgstr ""
 "(0 voor oneindig gebruik)"
 
 msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Geeft het gewenste terugbetalingsbedrag aan (kan niet hoger zijn dan je "
+"huidige credits)"
+
+msgid ""
 "Items marked in red will be deleted because their final quantity will be "
 "zero or negative"
 msgstr ""

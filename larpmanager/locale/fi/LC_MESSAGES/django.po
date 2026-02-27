@@ -9617,6 +9617,13 @@ msgstr ""
 "käyttää loputtomasti)"
 
 msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Ilmoittaa halutun korvauksen määrän (ei voi olla suurempi kuin nykyiset "
+"opintopisteesi)"
+
+msgid ""
 "Items marked in red will be deleted because their final quantity will be "
 "zero or negative"
 msgstr ""

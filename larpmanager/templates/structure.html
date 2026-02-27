@@ -22,7 +22,7 @@
             html body .hide {
                 display: none;
             }
-            {% if frame %}html { overflow: hidden; }{% endif %}
+            {% if frame %}html, #page-wrapper { overflow: hidden; }{% endif %}
         </style>
         {% if testing %}<script>window.lmTesting = true;</script>{% endif %}
         {% if association.id == 0 %}

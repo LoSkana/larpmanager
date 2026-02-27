@@ -9626,6 +9626,13 @@ msgstr ""
 "användning)"
 
 msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Anger det önskade ersättningsbeloppet (kan inte vara högre än dina nuvarande"
+" krediter)"
+
+msgid ""
 "Items marked in red will be deleted because their final quantity will be "
 "zero or negative"
 msgstr ""

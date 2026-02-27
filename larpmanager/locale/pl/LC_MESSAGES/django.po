@@ -9694,6 +9694,12 @@ msgstr ""
 "nieskończonej liczby zastosowań)"
 
 msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Wskazuje żądaną kwotę zwrotu (nie może być wyższa niż bieżące kredyty)"
+
+msgid ""
 "Items marked in red will be deleted because their final quantity will be "
 "zero or negative"
 msgstr ""

@@ -9803,6 +9803,13 @@ msgstr ""
 "richiesti (0 per usi infiniti)"
 
 msgid ""
+"Indicates the amount of reimbursement desired (can't be higher than your "
+"current credits)"
+msgstr ""
+"Indica l'importo del rimborso desiderato (non può essere superiore ai "
+"crediti attuali)"
+
+msgid ""
 "Items marked in red will be deleted because their final quantity will be "
 "zero or negative"
 msgstr ""
