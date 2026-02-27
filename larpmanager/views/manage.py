@@ -38,7 +38,13 @@ from larpmanager.cache.config import get_association_config, get_event_config, g
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.cache.widget import get_exe_widget_cache, get_orga_widget_cache
-from larpmanager.cache.wwyltd import get_features_cache, get_guides_cache, get_tutorials_cache
+from larpmanager.cache.wwyltd import (
+    get_exe_configs_cache,
+    get_features_cache,
+    get_guides_cache,
+    get_orga_configs_cache,
+    get_tutorials_cache,
+)
 from larpmanager.models.access import AssociationPermission, EventPermission
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import RegistrationStatus, Run
@@ -1211,6 +1217,9 @@ class WhatWouldYouLikeForm(Form):
         # Add guide and tutorial choices to the list
         self._add_guides_tutorials(choices)
 
+        # Add config choices to the list
+        self._add_configs_choices(choices)
+
         # Create the choice field with populated options and Select2 widget
         self.fields["wwyltd"] = ChoiceField(
             choices=[("", _("What would you like to do?"))] + choices,
@@ -1252,6 +1261,9 @@ class WhatWouldYouLikeForm(Form):
         """Add feature entries to tutorial choices list."""
         # Add features recap
         for feature in get_features_cache():
+            if not feature['tutorial']:
+                continue
+
             # Build display text with feature name and optional module
             display_text = _(feature["name"])
             if feature["module_name"]:
@@ -1263,6 +1275,30 @@ class WhatWouldYouLikeForm(Form):
                 display_text += _(feature["descr"])
 
             choices.append((f"feature|{feature['tutorial']}", display_text))
+
+    def _add_configs_choices(self, choices: list[tuple[str, str]]) -> None:
+        """Add config field entries to choices list, scoped to the current context."""
+        features = self.context.get("features", set())
+        if self.context.get("orga_page"):
+            event = self.context.get("event")
+            if not event:
+                return
+            config_list = get_orga_configs_cache(event.id, features)
+            prefix = "config_orga"
+        elif self.context.get("exe_page"):
+            association_id = self.context.get("association_id")
+            if not association_id:
+                return
+            config_list = get_exe_configs_cache(association_id, features)
+            prefix = "config_exe"
+        else:
+            return
+
+        for config in config_list:
+            display = f"{config['label']} [CONFIG]"
+            if config["help_text"]:
+                display += f" - {config['help_text']}"
+            choices.append((f"{prefix}|{config['section_slug']}", display))
 
     def _add_dashboard_choices(self, choices: list[tuple[str, str]]) -> None:
         """Add dashboard choices for runs and associations accessible by user."""
@@ -1423,6 +1459,8 @@ def _get_choice_redirect_url(choice: str, context: dict) -> str:
         "tutorial": lambda: _handle_tutorial_redirect(choice_value),
         "guide": lambda: reverse("guide", args=[choice_value]),
         "feature": lambda: _handle_tutorial_redirect(choice_value),
+        "config_orga": lambda: _handle_config_orga_redirect(choice_value, context),
+        "config_exe": lambda: _handle_config_exe_redirect(choice_value),
     }
 
     redirect_handler = redirect_handlers.get(choice_type)
@@ -1451,3 +1489,16 @@ def _handle_tutorial_redirect(tutorial_choice_value: str) -> str:
     # Remove forward slashes from tutorial_choice_value
     sanitized_tutorial_slug = tutorial_choice_value.replace("/", "")
     return reverse("tutorials", args=[sanitized_tutorial_slug])
+
+
+def _handle_config_orga_redirect(section_slug: str, context: dict) -> str:
+    """Handle redirect to event config page, optionally at a specific section."""
+    if "run" not in context:
+        raise ValueError(_("Event context not available"))
+    event_slug = context["run"].get_slug()
+    return reverse("orga_config", args=[event_slug, section_slug])
+
+
+def _handle_config_exe_redirect(section_slug: str) -> str:
+    """Handle redirect to association config page at a specific section."""
+    return reverse("exe_config", args=[section_slug])

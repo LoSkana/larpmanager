@@ -300,6 +300,25 @@ log = logging.getLogger(__name__)
 # ruff: noqa: FBT001 (Do not check "Boolean-typed positional argument in function definition", as with created there are too many)
 # ruff: noqa: ARG001 Unused function argument
 
+RESET_WIDGETS_TYPES = (
+    AccountingItem,
+    AbilityPx,
+    Casting,
+    Character,
+    DeliveryPx,
+    Log,
+    Membership,
+    Quest,
+    QuestType,
+    Registration,
+    RegistrationInstallment,
+    RegistrationQuestion,
+    RegistrationQuota,
+    RegistrationTicket,
+    Trait,
+    WritingQuestion,
+)
+
 
 # Generic signal handlers (no specific sender)
 @receiver(pre_save)
@@ -314,6 +333,9 @@ def pre_save_callback(sender: type, instance: object, *args: Any, **kwargs: Any)
     # Assign uuid for models that has it
     auto_set_uuid(instance)
 
+    if isinstance(instance, RESET_WIDGETS_TYPES):
+        reset_widgets(instance)
+
 
 @receiver(post_save)
 def post_save_callback(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
@@ -327,6 +349,9 @@ def post_save_callback(sender: type, instance: object, created: bool, **kwargs: 
     # Update cache for accounting items
     reset_accountingitem_cache(instance)
 
+    if isinstance(instance, RESET_WIDGETS_TYPES):
+        reset_widgets(instance)
+
 
 @receiver(post_delete)
 def post_delete_text_fields_callback(sender: type, instance: object, **kwargs: Any) -> None:
@@ -337,13 +362,14 @@ def post_delete_text_fields_callback(sender: type, instance: object, **kwargs: A
     # Update cache for accounting items
     reset_accountingitem_cache(instance)
 
+    if isinstance(instance, RESET_WIDGETS_TYPES):
+        reset_widgets(instance)
+
 
 def reset_accountingitem_cache(instance: Any) -> None:
     """Handle reset cache after accounting item saved."""
     if not isinstance(instance, AccountingItem):
         return
-
-    reset_widgets(instance)
 
     if hasattr(instance, "run") and instance.run and instance.member_id:
         refresh_member_accounting_cache(instance.run, instance.member_id)
@@ -353,14 +379,12 @@ def reset_accountingitem_cache(instance: Any) -> None:
 def post_save_ability_px(sender: type, instance: AbilityPx, *args: Any, **kwargs: Any) -> None:
     """Update character experience when ability changes."""
     _recalcuate_characters_experience_points(instance)
-    reset_widgets(instance)
 
 
 @receiver(post_delete, sender=AbilityPx)
 def post_delete_ability_px(sender: type, instance: AbilityPx, *args: Any, **kwargs: Any) -> None:
     """Update character experience when ability is deleted."""
     _recalcuate_characters_experience_points(instance)
-    reset_widgets(instance)
 
 
 @receiver(pre_save, sender=AccountingItemCollection)
@@ -681,9 +705,6 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
     # Create a personal inventory for newly created characters
     generate_base_inventories(instance)
 
-    # Clear actions cache
-    reset_widgets(instance)
-
 
 @receiver(pre_delete, sender=Character)
 def pre_delete_character_reset(sender: type, instance: Character, **kwargs: Any) -> None:
@@ -707,29 +728,6 @@ def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs
 
     # Update visible factions
     update_visible_factions(instance.event)
-
-    # Clear actions cache
-    reset_widgets(instance)
-
-
-@receiver(post_save, sender=Casting)
-def post_save_casting_cache(sender: type, instance: Casting, **kwargs: Any) -> None:
-    """Clear deadline widget cache when casting preferences are saved."""
-    # Clear deadline widget cache for this run (casting deadline)
-    reset_widgets(instance)
-
-
-@receiver(post_delete, sender=Casting)
-def post_delete_casting_cache(sender: type, instance: Casting, **kwargs: Any) -> None:
-    """Clear deadline widget cache when casting preferences are deleted."""
-    # Clear deadline widget cache for this run (casting deadline)
-    reset_widgets(instance)
-
-
-@receiver(post_save, sender=Log)
-def post_save_log_cache(sender: type, instance: Log, **kwargs: Any) -> None:
-    """Clear log widget cache when log entries are saved."""
-    reset_widgets(instance)
 
 
 @receiver(post_save, sender=CharacterConfig)
@@ -779,14 +777,12 @@ def post_save_delivery_px(
     """Refresh delivery characters after save signal."""
     _recalcuate_characters_experience_points(instance)
     refresh_delivery_relationships(instance)
-    reset_widgets(instance)
 
 
 @receiver(post_delete, sender=DeliveryPx)
 def post_delete_delivery_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Signal handler that refreshes delivery characters after a delivery is deleted."""
     _recalcuate_characters_experience_points(instance)
-    reset_widgets(instance)
 
 
 @receiver(post_save, sender=Inventory)
@@ -1164,18 +1160,6 @@ def pre_save_membership(sender: type, instance: Membership, **kwargs: Any) -> No
     process_membership_status_updates(instance)
 
 
-@receiver(post_save, sender=Membership)
-def post_save_membership_cache(sender: type, instance: Membership, **kwargs: Any) -> None:
-    """Clear deadline widget cache when membership status changes."""
-    reset_widgets(instance)
-
-
-@receiver(post_delete, sender=Membership)
-def post_delete_membership_cache(sender: type, instance: Membership, **kwargs: Any) -> None:
-    """Clear deadline widget cache when membership status changes."""
-    reset_widgets(instance)
-
-
 @receiver(post_save, sender=ModifierPx)
 def post_save_modifier_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update character experience when a modifier is saved."""
@@ -1285,8 +1269,6 @@ def post_save_quest_reset_rels(sender: type, instance: Quest, **kwargs: Any) -> 
     if instance.typ:
         refresh_event_questtype_relationships_background(instance.typ_id)
 
-    reset_widgets(instance)
-
 
 @receiver(pre_delete, sender=Quest)
 def pre_delete_quest_reset(sender: type, instance: Any, **kwargs: Any) -> None:
@@ -1303,8 +1285,6 @@ def post_delete_quest_reset_rels(sender: type, instance: object, **kwargs: Any) 
 
     # Remove quest from cache
     remove_item_from_cache_section(instance.event_id, "quests", instance.id)
-
-    reset_widgets(instance)
 
 
 @receiver(pre_save, sender=QuestType)
@@ -1327,8 +1307,6 @@ def post_save_questtype_reset_rels(
     for quest in instance.quests.all():
         refresh_event_quest_relationships_background(quest.id)
 
-    reset_widgets(instance)
-
 
 @receiver(pre_delete, sender=QuestType)
 def pre_delete_quest_type_reset(sender: type, instance: QuestType, **kwargs: dict) -> None:
@@ -1345,8 +1323,6 @@ def post_delete_questtype_reset_rels(sender: type, instance: QuestType, **kwargs
 
     # Remove questtype from cache
     remove_item_from_cache_section(instance.event_id, "questtypes", instance.id)
-
-    reset_widgets(instance)
 
 
 @receiver(pre_save, sender=RefundRequest)
@@ -1403,9 +1379,6 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     # Update registration count caches for this run
     clear_registration_counts_cache(instance.run_id)
 
-    # Clear deadline widget cache for this run
-    reset_widgets(instance)
-
 
 @receiver(pre_delete, sender=Registration)
 def pre_delete_registration(sender: type, instance: Registration, *args: Any, **kwargs: Any) -> None:
@@ -1417,7 +1390,6 @@ def pre_delete_registration(sender: type, instance: Registration, *args: Any, **
 def post_delete_registration_accounting_cache(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear accounting cache for the associated run after registration deletion."""
     clear_registration_accounting_cache(instance.run_id)
-    reset_widgets(instance)
 
 
 @receiver(post_save, sender=RegistrationCharacterRel)
@@ -1470,14 +1442,12 @@ def post_delete_registration_section(sender: type, instance: RegistrationSection
 def post_save_registration_question(sender: type, instance: RegistrationQuestion, **kwargs: dict) -> None:
     """Process registration question post-save signal."""
     clear_registration_questions_cache(instance.event_id)
-    reset_widgets(instance)
 
 
 @receiver(post_delete, sender=RegistrationQuestion)
 def post_delete_registration_question(sender: type, instance: RegistrationTicket, **kwargs: Any) -> None:
     """Process registration question post-delete signal."""
     clear_registration_questions_cache(instance.event_id)
-    reset_widgets(instance)
 
 
 @receiver(post_save, sender=RegistrationOption)
@@ -1504,40 +1474,18 @@ def post_save_ticket_accounting_cache(
     log_registration_ticket_saved(instance)
     reset_registration_ticket(instance)
     clear_registration_tickets_cache(instance.event_id)
-    reset_widgets(instance)
 
 
 @receiver(post_delete, sender=RegistrationTicket)
 def post_delete_ticket_accounting_cache(sender: type, instance: RegistrationTicket, **kwargs: Any) -> None:
     """Clear cache for all runs when a ticket is deleted."""
     reset_registration_ticket(instance)
-    reset_widgets(instance)
-
-
-@receiver(post_save, sender=RegistrationInstallment)
-def post_save_registration_installment(sender: type, instance: RegistrationInstallment, **kwargs: Any) -> None:
-    """Clear actions cache when installment is saved."""
-    reset_widgets(instance)
-
-
-@receiver(post_delete, sender=RegistrationInstallment)
-def post_delete_registration_installment(sender: type, instance: RegistrationInstallment, **kwargs: Any) -> None:
-    """Clear actions cache when installment is deleted."""
-    reset_widgets(instance)
-
-
-@receiver(post_save, sender=RegistrationQuota)
-def post_save_registration_quota(sender: type, instance: RegistrationQuota, **kwargs: Any) -> None:
-    """Clear actions cache when quota is saved."""
-    reset_widgets(instance)
 
 
 @receiver(post_delete, sender=RegistrationQuota)
 def post_delete_registration_quota(sender: type, instance: RegistrationQuota, **kwargs: Any) -> None:
-    """Clear actions cache when quota is deleted."""
-    reset_widgets(instance)
+    """Clear cache for registration tickets when quota is deleted."""
     clear_registration_tickets_cache(instance.event_id)
-    reset_widgets(instance)
 
 
 @receiver(pre_delete, sender=Relationship)
@@ -1681,9 +1629,6 @@ def post_save_trait_reset_rels(sender: type, instance: Trait, **kwargs: Any) -> 
     # Refresh all trait relationships for this instance
     refresh_all_instance_traits(instance)
 
-    # Clear actions cache
-    reset_widgets(instance)
-
 
 @receiver(pre_delete, sender=Trait)
 def pre_delete_trait_reset(sender: type, instance: Any, **kwargs: Any) -> None:
@@ -1697,8 +1642,6 @@ def post_delete_trait_reset_rels(sender: type, instance: Any, **kwargs: Any) -> 
     # Update quest cache if trait had a quest
     if instance.quest:
         refresh_event_quest_relationships_background(instance.quest_id)
-
-    reset_widgets(instance)
 
 
 @receiver(post_save, sender=User)
@@ -1735,7 +1678,6 @@ def pre_delete_writing_question_reset(sender: type, instance: WritingQuestion, *
     clear_event_fields_cache(instance.event_id)
     clear_event_cache_all_runs(instance.event)
     clear_writing_questions_cache(instance.event_id)
-    reset_widgets(instance)
 
 
 @receiver(post_save, sender=WritingQuestion)
@@ -1744,7 +1686,6 @@ def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any)
     clear_event_fields_cache(instance.event_id)
     clear_event_cache_all_runs(instance.event)
     clear_writing_questions_cache(instance.event_id)
-    reset_widgets(instance)
 
 
 m2m_changed.connect(on_experience_characters_m2m_changed, sender=DeliveryPx.characters.through)
