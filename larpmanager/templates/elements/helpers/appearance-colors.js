@@ -69,6 +69,38 @@ window.addEventListener('DOMContentLoaded', function() {
     setupColorListener('id_sec_rgb', '--sec-rgb');
     setupColorListener('id_ter_rgb', '--ter-rgb');
 
+    /**
+     * Show or hide fields that are only relevant for the halo (custom) theme.
+     * Each field is wrapped in a <tr id="<field_id>_tr"> by the form template.
+     * @param {string} theme - The selected theme value
+     */
+    function updateThemeFields(theme) {
+        var haloOnlyFields = [
+            'id_background',
+            'id_pri_rgb',
+            'id_sec_rgb',
+            'id_ter_rgb',
+            'id_association_css',
+            'id_event_css',
+        ];
+        var isHalo = (theme === 'halo');
+        haloOnlyFields.forEach(function(fieldId) {
+            var row = document.getElementById(fieldId + '_tr');
+            if (row) {
+                row.style.display = isHalo ? '' : 'none';
+            }
+        });
+    }
+
+    var themeSelect = document.getElementById('id_theme');
+    if (themeSelect) {
+        themeSelect.addEventListener('change', function() {
+            updateThemeFields(this.value);
+        });
+        // Apply immediately on page load
+        updateThemeFields(themeSelect.value);
+    }
+
 });
 
 </script>

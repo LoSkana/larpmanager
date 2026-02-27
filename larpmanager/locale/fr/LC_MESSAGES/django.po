@@ -444,6 +444,9 @@ msgstr "Impôts"
 msgid "Texts"
 msgstr "Textes"
 
+msgid "Theme"
+msgstr "Thème"
+
 msgid "Third"
 msgstr "Troisièmement"
 
@@ -12128,6 +12131,16 @@ msgstr ""
 "prend en compte les budgets des événements de plus de deux mois, qui sont "
 "considérés comme clos, et considère tous les jetons et crédits comme "
 "remboursés"
+
+msgid ""
+"<b>Nebula</b>: mixed dark and light theme (default). <b>Aurora</b>: full "
+"light theme. <b>Eclipse</b>: full dark theme. <b>Halo</b>: custom (enables "
+"custom CSS, colors, and background).<b>---</b>: will use default values. "
+msgstr ""
+"<b>Nebula</b> : thème mixte sombre et clair (par défaut). <b>Aurora</b> : "
+"thème clair complet. <b>Eclipse</b> : thème sombre complet. <b>Halo</b> : "
+"personnalisé (permet de personnaliser le CSS, les couleurs et l'arrière-"
+"plan).<b>---</b> : utilise les valeurs par défaut"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

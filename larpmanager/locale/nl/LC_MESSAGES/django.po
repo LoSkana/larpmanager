@@ -444,6 +444,9 @@ msgstr "Belastingen"
 msgid "Texts"
 msgstr "Teksten"
 
+msgid "Theme"
+msgstr "Thema"
+
 msgid "Third"
 msgstr "Derde"
 
@@ -11979,6 +11982,16 @@ msgstr ""
 "rekening gehouden met budgetten voor evenementen die langer dan twee maanden"
 " duren, die als afgesloten worden beschouwd, en alle tokens en credits "
 "worden als terugbetaald beschouwd"
+
+msgid ""
+"<b>Nebula</b>: mixed dark and light theme (default). <b>Aurora</b>: full "
+"light theme. <b>Eclipse</b>: full dark theme. <b>Halo</b>: custom (enables "
+"custom CSS, colors, and background).<b>---</b>: will use default values. "
+msgstr ""
+"<b>Nebula</b>: gemengd donker en licht thema (standaard). <b>Aurora</b>: "
+"volledig licht thema. <b>Eclips</b>: volledig donker thema. <b>Halo</b>: "
+"aangepast (maakt aangepaste CSS, kleuren en achtergrond mogelijk).<b>--</b>:"
+" gebruikt standaardwaarden"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

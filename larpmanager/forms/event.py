@@ -28,11 +28,16 @@ from django.core.exceptions import ValidationError
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import (
+    get_association_config,
+    get_event_config,
+    reset_element_configs,
+    save_all_element_configs,
+)
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.association import ExePreferencesForm
-from larpmanager.forms.base import BaseModelCssForm, BaseModelForm
+from larpmanager.forms.base import THEME_HELP_TEXT, AppearanceTheme, BaseModelCssForm, BaseModelForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
@@ -1021,12 +1026,20 @@ class OrgaAppearanceForm(BaseModelCssForm):
             "cover",
             "carousel_img",
             "carousel_text",
-            "background",
             "font",
+            "background",
             "pri_rgb",
             "sec_rgb",
             "ter_rgb",
         )
+
+    theme = forms.ChoiceField(
+        choices=[("", "---"), *AppearanceTheme.choices],
+        initial="",
+        required=False,
+        label=_("Theme"),
+        help_text=THEME_HELP_TEXT,
+    )
 
     event_css = forms.CharField(
         widget=Textarea(attrs={"rows": 15}),
@@ -1055,6 +1068,17 @@ class OrgaAppearanceForm(BaseModelCssForm):
         for m in dl:
             self.delete_field(m)
 
+        # Load current theme: from event config if editing, else from association config (new event default)
+        current_theme = None
+        if self.instance.pk:
+            current_theme = get_event_config(self.instance.id, "theme", default_value="")
+
+        if not current_theme:
+            assoc_id = self.params.get("association_id")
+            current_theme = (get_association_config(assoc_id, "theme") if assoc_id else None) or AppearanceTheme.NEBULA
+        self.initial["theme"] = current_theme
+        self.order_fields(["theme"] + [f for f in self.fields if f != "theme"])
+
     def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save the form and generate a unique CSS code for the skin."""
         # Generate unique 32-character identifier for CSS code
@@ -1063,6 +1087,10 @@ class OrgaAppearanceForm(BaseModelCssForm):
 
         # Save associated CSS file
         self.save_css(instance)
+
+        # Persist theme configuration
+        save_all_element_configs(instance, {"theme": self.cleaned_data.get("theme", AppearanceTheme.NEBULA)})
+        reset_element_configs(instance)
         return instance
 
     @staticmethod

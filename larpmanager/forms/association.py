@@ -27,8 +27,9 @@ from django.core.validators import RegexValidator
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _, pgettext
 
+from larpmanager.cache.config import reset_element_configs, save_all_element_configs
 from larpmanager.cache.feature import get_association_features, reset_association_features
-from larpmanager.forms.base import BaseModelCssForm, BaseModelForm
+from larpmanager.forms.base import THEME_HELP_TEXT, AppearanceTheme, BaseModelCssForm, BaseModelForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
@@ -304,7 +305,15 @@ class ExeAppearanceForm(BaseModelCssForm):
 
     class Meta:
         model = Association
-        fields = ("background", "font", "pri_rgb", "sec_rgb", "ter_rgb")
+        fields = ("font", "background", "pri_rgb", "sec_rgb", "ter_rgb")
+
+    theme = forms.ChoiceField(
+        choices=[("", "---"), *AppearanceTheme.choices],
+        initial="",
+        required=False,
+        label=_("Theme"),
+        help_text=THEME_HELP_TEXT,
+    )
 
     association_css = forms.CharField(
         widget=Textarea(attrs={"rows": 15}),
@@ -320,6 +329,16 @@ class ExeAppearanceForm(BaseModelCssForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
         self.show_link = ["id_association_css"]
+        if self.instance.pk:
+            self.initial["theme"] = self.instance.get_config("theme", default_value=AppearanceTheme.NEBULA)
+        self.order_fields(["theme"] + [f for f in self.fields if f != "theme"])
+
+    def save(self, commit: bool = True) -> Association:  # noqa: FBT001, FBT002
+        """Save form and persist theme configuration."""
+        instance = super().save(commit=commit)
+        save_all_element_configs(instance, {"theme": self.cleaned_data.get("theme", AppearanceTheme.NEBULA)})
+        reset_element_configs(instance)
+        return instance
 
     @staticmethod
     def get_css_path(instance: Association) -> str:

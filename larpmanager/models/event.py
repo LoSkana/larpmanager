@@ -206,6 +206,16 @@ class Event(UuidMixin, BaseModel):
         + ")",
     )
 
+    font = models.FileField(
+        upload_to=UploadToPathAndRename("event_font/"),
+        verbose_name=_("Custom title font"),
+        help_text=_(
+            "Upload a custom font file for page titles to match your event's theme (TTF, OTF, or WOFF formats)"
+        ),
+        blank=True,
+        null=True,
+    )
+
     background = models.ImageField(
         max_length=500,
         upload_to="event_background/",
@@ -222,16 +232,6 @@ class Event(UuidMixin, BaseModel):
         processors=[ResizeToFit(width=1000)],
         format="JPEG",
         options={"quality": 80},
-    )
-
-    font = models.FileField(
-        upload_to=UploadToPathAndRename("event_font/"),
-        verbose_name=_("Custom title font"),
-        help_text=_(
-            "Upload a custom font file for page titles to match your event's theme (TTF, OTF, or WOFF formats)"
-        ),
-        blank=True,
-        null=True,
     )
 
     css_code = models.CharField(max_length=32, editable=False, default="")

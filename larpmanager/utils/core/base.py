@@ -119,6 +119,9 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
         if feature in context["features"] and not context.get(name_key):
             context[name_key] = default_name
 
+    # Set page theme from association config
+    context["page_theme"] = get_association_config(context["association_id"], "theme") or ""
+
     # Add TinyMCE editor configuration
     context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
     context["TINYMCE_JS_URL"] = conf_settings.TINYMCE_JS_URL
@@ -465,6 +468,11 @@ def prepare_run(context: Any) -> None:
     event_id = context["event"].id
     for context_key, default in configs:
         context[context_key] = get_event_config(event_id, context_key, default_value=default, context=context)
+
+    # Override page theme if defined
+    event_theme = get_event_config(event_id, "theme", default_value="", context=context)
+    if event_theme:
+        context["page_theme"] = event_theme
 
     if "staff" in context or not context.get("writing_field_visibility"):
         context["show_all"] = "1"

@@ -444,6 +444,9 @@ msgstr "Steuern"
 msgid "Texts"
 msgstr "Texte"
 
+msgid "Theme"
+msgstr "Thema"
+
 msgid "Third"
 msgstr "Dritte"
 
@@ -12203,6 +12206,16 @@ msgstr ""
 "die Budgets für Veranstaltungen, die länger als zwei Monate zurückliegen und"
 " als abgeschlossen gelten, und behandelt alle Token und Gutschriften als "
 "zurückerstattet"
+
+msgid ""
+"<b>Nebula</b>: mixed dark and light theme (default). <b>Aurora</b>: full "
+"light theme. <b>Eclipse</b>: full dark theme. <b>Halo</b>: custom (enables "
+"custom CSS, colors, and background).<b>---</b>: will use default values. "
+msgstr ""
+"<b>Nebula</b>: gemischtes dunkles und helles Thema (Standard). "
+"<b>Aurora</b>: vollständig helles Thema. <b>Eclipse</b>: vollständig dunkles"
+" Thema. <b>Halo</b>: benutzerdefiniert (ermöglicht benutzerdefiniertes CSS, "
+"Farben und Hintergrund).<b>---</b>: verwendet Standardwerte"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

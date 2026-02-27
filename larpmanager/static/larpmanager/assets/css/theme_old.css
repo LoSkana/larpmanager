@@ -305,12 +305,12 @@ body {
 
 #sidebar {
   display: block;
-  width: 21ch;
+  width: 20ch;
   height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
-  padding: 0 1em 3em 1em;
+  padding: 0 0.5em 3em 0.5em;
   box-sizing: border-box;
   border-right: 2px solid rgba(var(--pri-rgb), 0.085);
   font-size: 100%;

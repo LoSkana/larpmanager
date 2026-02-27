@@ -444,6 +444,9 @@ msgstr "Tasse"
 msgid "Texts"
 msgstr "Testi"
 
+msgid "Theme"
+msgstr "Tema"
+
 msgid "Third"
 msgstr "Terzo"
 
@@ -11986,6 +11989,16 @@ msgstr ""
 "Questo dato è il positivo, il margine operativo. Tiene conto dei bilanci "
 "degli eventi che hanno superato i due mesi, che sono considerati chiusi, e "
 "considera tutti i gettoni e i crediti come rimborsati"
+
+msgid ""
+"<b>Nebula</b>: mixed dark and light theme (default). <b>Aurora</b>: full "
+"light theme. <b>Eclipse</b>: full dark theme. <b>Halo</b>: custom (enables "
+"custom CSS, colors, and background).<b>---</b>: will use default values. "
+msgstr ""
+"<b>Nebula</b>: tema misto scuro e chiaro (predefinito). <b>Aurora</b>: tema "
+"completamente chiaro. <b>Eclipse</b>: tema scuro completo. <b>Halo</b>: "
+"personalizzato (abilita CSS, colori e sfondo personalizzati).<b>---</b>: "
+"utilizzerà i valori predefiniti"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

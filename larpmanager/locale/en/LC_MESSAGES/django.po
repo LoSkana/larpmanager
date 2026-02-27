@@ -314,6 +314,9 @@ msgstr ""
 msgid "Manage appearance settings and presentation of the organization"
 msgstr ""
 
+msgid "Theme"
+msgstr ""
+
 msgid ""
 "Freely insert CSS commands, they will be reported in all pages  in the space "
 "of your Organization. In this way you can customize freely the appearance."
@@ -918,6 +921,12 @@ msgid "Invalid ticket selection"
 msgstr ""
 
 msgid "Not selected"
+msgstr ""
+
+msgid ""
+"<b>Nebula</b>: mixed dark and light theme (default). <b>Aurora</b>: full "
+"light theme. <b>Eclipse</b>: full dark theme. <b>Halo</b>: custom (enables "
+"custom CSS, colors, and background).<b>---</b>: will use default values. "
 msgstr ""
 
 msgid "Character"
@@ -3178,20 +3187,20 @@ msgstr ""
 msgid "Featured image displayed on the portal's homepage"
 msgstr ""
 
-msgid "Background image"
-msgstr ""
-
-msgid ""
-"Background image displayed across all pages of your organization - use a "
-"subtle pattern or texture for best results"
-msgstr ""
-
 msgid "Custom title font"
 msgstr ""
 
 msgid ""
 "Upload a custom font file for page titles to match your organization's "
 "branding (TTF, OTF, or WOFF formats)"
+msgstr ""
+
+msgid "Background image"
+msgstr ""
+
+msgid ""
+"Background image displayed across all pages of your organization - use a "
+"subtle pattern or texture for best results"
 msgstr ""
 
 msgid "Text color"
@@ -3436,15 +3445,15 @@ msgstr ""
 msgid "leave empty to start a new campaign"
 msgstr ""
 
+msgid ""
+"Upload a custom font file for page titles to match your event's theme (TTF, "
+"OTF, or WOFF formats)"
+msgstr ""
+
 msgid "Background image displayed across all event pages"
 msgstr ""
 
 msgid "use a subtle pattern or texture for best results"
-msgstr ""
-
-msgid ""
-"Upload a custom font file for page titles to match your event's theme (TTF, "
-"OTF, or WOFF formats)"
 msgstr ""
 
 msgid "Main color for text content throughout your event's pages"
