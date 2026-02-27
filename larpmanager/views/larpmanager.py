@@ -1095,6 +1095,9 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
     demo_member.surname = "Admin"
     demo_member.save()
 
+    # Welcome message
+    save_single_config(demo_association, "intro_driver", "welcome")
+
     # Create admin role and assign member with full permissions
     (admin_role, _created) = AssociationRole.objects.get_or_create(association=demo_association, number=1, name="Admin")
     admin_role.members.add(demo_member)
