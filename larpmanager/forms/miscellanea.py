@@ -33,6 +33,7 @@ from larpmanager.forms.utils import (
     CSRFTinyMCE,
     DatePickerInput,
     EventS2Widget,
+    RunStaffS2Widget,
     TimePickerInput,
     get_run_choices,
 )
@@ -41,6 +42,7 @@ from larpmanager.models.miscellanea import (
     Album,
     Competence,
     HelpQuestion,
+    Milestone,
     OneTimeAccessToken,
     OneTimeContent,
     Problem,
@@ -543,3 +545,25 @@ class OneTimeAccessTokenForm(BaseModelForm):
         widgets: ClassVar[dict] = {
             "note": Textarea(attrs={"rows": 2}),
         }
+
+
+class OrgaMilestoneForm(BaseModelForm):
+    """Form for event Milestones."""
+
+    page_title = _("Milestone")
+
+    class Meta:
+        model = Milestone
+        exclude = ("number",)
+
+        widgets: ClassVar[dict] = {
+            "description": Textarea(attrs={"rows": 3}),
+            "assigned": RunStaffS2Widget,
+            "deadline": DatePickerInput,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize milestone form and configure staff widget."""
+        super().__init__(*args, **kwargs)
+        if "assigned" in self.fields and self.params.get("run"):
+            self.configure_field_run("assigned", self.params["run"])

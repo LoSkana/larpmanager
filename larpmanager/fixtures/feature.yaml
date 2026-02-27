@@ -1597,3 +1597,16 @@
     hidden: false
     module: null
     dependencies: []
+- model: larpmanager.feature
+  fields:
+    name: Milestones
+    descr: Track event milestones
+    slug: milestones
+    overall: false
+    placeholder: false
+    order: 250
+    after_text: Now you can create milestones for the event
+    after_link: orga_milestones
+    hidden: false
+    module: miscellany
+    dependencies: []

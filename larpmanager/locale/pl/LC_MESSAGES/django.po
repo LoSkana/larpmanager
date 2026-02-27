@@ -450,6 +450,9 @@ msgstr "Trzeci"
 msgid "Title"
 msgstr "Tytuł"
 
+msgid "To Do"
+msgstr "Do zrobienia"
+
 msgid "Token"
 msgstr "Token"
 
@@ -860,6 +863,9 @@ msgstr "Nic"
 
 msgid "Options"
 msgstr "Opcje"
+
+msgid "Overdue"
+msgstr "Zaległe"
 
 msgid "Partial"
 msgstr "Częściowy"
@@ -1350,6 +1356,9 @@ msgstr "Anulowane"
 msgid "Character"
 msgstr "Charakter"
 
+msgid "Completed"
+msgstr "Zakończono"
+
 msgid "Concluded"
 msgstr "Zakończono"
 
@@ -1406,6 +1415,9 @@ msgstr "Lista obciążeń"
 
 msgid "Mandatory"
 msgstr "Obowiązkowe"
+
+msgid "Milestone"
+msgstr "Kamień milowy"
 
 msgid "Modifiers"
 msgstr "Modyfikatory"
@@ -1650,6 +1662,9 @@ msgstr "Plik multimedialny"
 msgid "Membership"
 msgstr "Członkostwo"
 
+msgid "Milestones"
+msgstr "Kamienie milowe"
+
 msgid "Miscellany"
 msgstr "Różności"
 
@@ -1833,6 +1848,9 @@ msgstr "Dodatki"
 msgid "Amount paid"
 msgstr "Zapłacona kwota"
 
+msgid "Assigned to"
+msgstr "Przypisany do"
+
 msgid "Assignments"
 msgstr "Zadania"
 
@@ -1895,6 +1913,9 @@ msgstr "Cztery kwoty"
 
 msgid "Gallery Pdf"
 msgstr "Galeria Pdf"
+
+msgid "In Progress"
+msgstr "W toku"
 
 msgid "In creation"
 msgstr "W tworzeniu"
@@ -2578,6 +2599,9 @@ msgstr "Personalizacja"
 
 msgid "Days available"
 msgstr "Dostępne dni"
+
+msgid "Days remaining"
+msgstr "Pozostałe dni"
 
 msgid "Default fields"
 msgstr "Pola domyślne"
@@ -4197,6 +4221,9 @@ msgstr "Poziom biletu"
 msgid "Total registration fee"
 msgstr "Całkowita opłata rejestracyjna"
 
+msgid "Track event milestones"
+msgstr "Śledzenie kamieni milowych wydarzenia"
+
 msgid "Unknow error on upload"
 msgstr "Nieznany błąd podczas przesyłania"
 
@@ -4988,6 +5015,9 @@ msgstr "Konfiguracja podatków"
 
 msgid "Set your interface preferences"
 msgstr "Ustaw preferencje interfejsu"
+
+msgid "Show/hide completed milestones"
+msgstr "Pokaż/ukryj ukończone kamienie milowe"
 
 msgid "The registrations to the event"
 msgstr "Rejestracje na wydarzenie"
@@ -6236,6 +6266,9 @@ msgstr "Wskaż bilety, dla których jest aktywny"
 
 msgid "Manage fields that track participants' data"
 msgstr "Zarządzanie polami śledzącymi dane uczestników"
+
+msgid "Now you can create milestones for the event"
+msgstr "Teraz możesz tworzyć kamienie milowe dla wydarzenia"
 
 msgid "Now you can set the player editing settings"
 msgstr "Teraz możesz skonfigurować ustawienia edycji odtwarzacza"
@@ -8881,6 +8914,13 @@ msgstr ""
 "Ta strona pokazuje dostępne pytania w formularzu rejestracyjnym wydarzenia"
 
 msgid ""
+"Track and manage event milestones with status, deadline, and staff "
+"assignment"
+msgstr ""
+"Śledzenie kamieni milowych wydarzenia i zarządzanie nimi wraz ze statusem, "
+"terminem i przydziałem pracowników"
+
+msgid ""
 "Write your question, request or concern here. We will be happy to answer "
 "you!"
 msgstr ""
@@ -9143,6 +9183,13 @@ msgid ""
 msgstr ""
 "Ustawia częstotliwość wysyłania wiadomości e-mail z przypomnieniem, w dniach"
 " (jeśli nie ustawiono, wiadomości nie są wysyłane)"
+
+msgid ""
+"This page shows the event milestones. Completed milestones are hidden by "
+"default."
+msgstr ""
+"Na tej stronie wyświetlane są kamienie milowe wydarzenia. Ukończone kamienie"
+" milowe są domyślnie ukryte."
 
 msgid ""
 "To register for the event, please fill in the following form and click on "

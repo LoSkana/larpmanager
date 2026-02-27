@@ -208,12 +208,15 @@ body {
   }
 
   .new_form {
-    --topbar-height: 3.7em;
+    --topbar-height: 3.2em;
   }
 
   .new_form #topbar {
     top: auto;
-    bottom: 0;
+    bottom: 3vw;
+    width: 94vw;
+    margin: 0 auto;
+    border-radius: 5vw;
     height: var(--topbar-height);
     border-top: 2px solid rgba(var(--pri-rgb), 0.085);
     border-bottom: none;
@@ -239,9 +242,17 @@ body {
   }
 
   .new_form #topbar .mobile .el i {
-    font-size: 1.7em !important;
+    font-size: 1.2em !important;
     margin: 0;
     display: block;
+  }
+
+  .new_form #topbar .mobile .el .menu_profile {
+    width: 1.3em;
+    height: 1.3em;
+    padding-bottom: 0;
+    display: block;
+    margin: 0 auto;
   }
 
   .new_form #topbar .mobile .el span.label {

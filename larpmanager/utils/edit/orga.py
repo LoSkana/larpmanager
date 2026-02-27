@@ -64,6 +64,7 @@ from larpmanager.forms.miscellanea import (
     OneTimeAccessTokenForm,
     OneTimeContentForm,
     OrgaAlbumForm,
+    OrgaMilestoneForm,
     OrgaProblemForm,
     UtilForm,
     WorkshopModuleForm,
@@ -241,6 +242,7 @@ class OrgaAction(str, Enum):
 
     # Miscellaneous
     ALBUMS = ("orga_albums", {"form": OrgaAlbumForm})
+    MILESTONES = ("orga_milestones", {"form": OrgaMilestoneForm})
     UTILS = ("orga_utils", {"form": UtilForm})
     WORKSHOP_MODULES = ("orga_workshop_modules", {"form": WorkshopModuleForm})
     WORKSHOP_QUESTIONS = ("orga_workshop_questions", {"form": WorkshopQuestionForm})

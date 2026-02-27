@@ -38,6 +38,8 @@ from larpmanager.forms.miscellanea import (
 from larpmanager.models.miscellanea import (
     Album,
     Log,
+    Milestone,
+    MilestoneStatus,
     OneTimeAccessToken,
     OneTimeContent,
     Problem,
@@ -964,3 +966,37 @@ def orga_log(request: HttpRequest, event_slug: str) -> HttpResponse:
         "larpmanager/orga/logs.html",
         None,  # No edit view for logs (read-only)
     )
+
+
+@login_required
+def orga_milestones(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display milestones for an event run in the organizer dashboard."""
+    context = check_event_context(request, event_slug, "orga_milestones")
+    today = timezone.now().date()
+    milestones = Milestone.objects.filter(event=context["event"]).select_related("assigned").order_by("deadline")
+    for m in milestones:
+        if m.deadline:
+            m.days_remaining = (m.deadline - today).days
+        else:
+            m.days_remaining = None
+    context["list"] = milestones
+    context["completed_status"] = MilestoneStatus.COMPLETED
+    return render(request, "larpmanager/orga/milestones.html", context)
+
+
+@login_required
+def orga_milestones_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new milestone for an event."""
+    return orga_new(request, event_slug, OrgaAction.MILESTONES)
+
+
+@login_required
+def orga_milestones_edit(request: HttpRequest, event_slug: str, milestone_uuid: str) -> HttpResponse:
+    """Edit a milestone for an event."""
+    return orga_edit(request, event_slug, OrgaAction.MILESTONES, milestone_uuid)
+
+
+@login_required
+def orga_milestones_delete(request: HttpRequest, event_slug: str, milestone_uuid: str) -> HttpResponse:
+    """Delete a milestone for an event."""
+    return orga_delete(request, event_slug, OrgaAction.MILESTONES, milestone_uuid)

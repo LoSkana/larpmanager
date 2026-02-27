@@ -946,3 +946,15 @@
     icon: clock-rotate-left
     feature: logs
     module: miscellany
+- model: larpmanager.eventpermission
+  fields:
+    name: Milestones
+    descr: Track and manage event milestones with status, deadline, and staff assignment
+    slug: orga_milestones
+    number: 21
+    config: null
+    active_if: null
+    hidden: false
+    icon: flag
+    feature: milestones
+    module: miscellany

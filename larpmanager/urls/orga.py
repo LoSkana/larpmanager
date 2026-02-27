@@ -1081,6 +1081,26 @@ urlpatterns = [
         name="orga_problems_delete",
     ),
     path(
+        "<slug:event_slug>/manage/milestones/",
+        views_oms.orga_milestones,
+        name="orga_milestones",
+    ),
+    path(
+        "<slug:event_slug>/manage/milestones/new/",
+        views_oms.orga_milestones_new,
+        name="orga_milestones_new",
+    ),
+    path(
+        "<slug:event_slug>/manage/milestones/<slug:milestone_uuid>/edit/",
+        views_oms.orga_milestones_edit,
+        name="orga_milestones_edit",
+    ),
+    path(
+        "<slug:event_slug>/manage/milestones/<slug:milestone_uuid>/delete/",
+        views_oms.orga_milestones_delete,
+        name="orga_milestones_delete",
+    ),
+    path(
         "<slug:event_slug>/manage/progress_steps/",
         views_ow.orga_progress_steps,
         name="orga_progress_steps",
