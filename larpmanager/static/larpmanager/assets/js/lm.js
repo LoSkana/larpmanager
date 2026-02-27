@@ -67,7 +67,11 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
         if (e.data && e.data.type === 'iframe_resize') {
             const iframe = document.querySelector('.' + modalClass + ' iframe');
             if (iframe && e.data.height && e.source === iframe.contentWindow) {
-                iframe.style.height = (e.data.height + 20) + 'px';
+                const newHeight = e.data.height;
+                const currentHeight = parseFloat(iframe.style.height) || 0;
+                if (newHeight > currentHeight) {
+                    iframe.style.height = newHeight + 'px';
+                }
             }
         }
     }
