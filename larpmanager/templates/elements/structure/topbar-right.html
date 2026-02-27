@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n static %}
 {% if mobile %}
     {% if user_characters_shortcut %}
         <td class="{% if topbar_admin %}no_mobile{% endif %}">
@@ -45,7 +45,9 @@
     <td>
         <div class="el">
             <a id="menu-open" href="#menu">
-                <i class="fa-solid fa-bars"></i>
+                <div class="img_cover menu_profile"
+                     style="background-image:url('{% if member.profile %}{{ member.profile_thumb.url }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
+                </div>
             </a>
             <span class="label">Menu</span>
         </div>

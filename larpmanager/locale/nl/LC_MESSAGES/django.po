@@ -843,11 +843,17 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Leden"
 
+msgid "Methods"
+msgstr "Methoden"
+
 msgid "Modules"
 msgstr "Modules"
 
 msgid "Move up"
 msgstr "Omhoog"
+
+msgid "No step"
+msgstr "Geen stap"
 
 msgid "Nothing"
 msgstr "Niets"
@@ -2674,6 +2680,9 @@ msgstr "Privacybeleid"
 
 msgid "Profiles (PDF)"
 msgstr "Profielen (PDF)"
+
+msgid "Progress steps"
+msgstr "Stappen"
 
 msgid "Prologues type"
 msgstr "Soort prologen"
