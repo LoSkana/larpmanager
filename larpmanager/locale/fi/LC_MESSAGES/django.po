@@ -843,11 +843,17 @@ msgstr "Enimmäismäärä"
 msgid "Members"
 msgstr "Jäsenet"
 
+msgid "Methods"
+msgstr "Menetelmät"
+
 msgid "Modules"
 msgstr "Moduulit"
 
 msgid "Move up"
 msgstr "Siirry ylöspäin"
+
+msgid "No step"
+msgstr "Ei askelta"
 
 msgid "Nothing"
 msgstr "Ei mitään"
@@ -2674,6 +2680,9 @@ msgstr "Tietosuojakäytäntö"
 
 msgid "Profiles (PDF)"
 msgstr "Profiilit (PDF)"
+
+msgid "Progress steps"
+msgstr "Edistymisen vaiheet"
 
 msgid "Prologues type"
 msgstr "Prologien tyyppi"

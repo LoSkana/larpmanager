@@ -6636,6 +6636,12 @@ msgstr ""
 msgid "Edit registration status"
 msgstr ""
 
+msgid "Progress steps"
+msgstr ""
+
+msgid "No step"
+msgstr ""
+
 msgid "Secret registration link"
 msgstr ""
 
@@ -9171,6 +9177,9 @@ msgid "Enrolment"
 msgstr ""
 
 msgid "Display all users data"
+msgstr ""
+
+msgid "Methods"
 msgstr ""
 
 msgid "Configure payment methods available for participants"

@@ -843,11 +843,17 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Medlemmar"
 
+msgid "Methods"
+msgstr "Metoder"
+
 msgid "Modules"
 msgstr "Moduler"
 
 msgid "Move up"
 msgstr "Flytta upp"
+
+msgid "No step"
+msgstr "Inget steg"
 
 msgid "Nothing"
 msgstr "Ingenting"
@@ -2674,6 +2680,9 @@ msgstr "Integritetspolicy"
 
 msgid "Profiles (PDF)"
 msgstr "Profiler (PDF)"
+
+msgid "Progress steps"
+msgstr "Framstegssteg"
 
 msgid "Prologues type"
 msgstr "Prologer typ"
