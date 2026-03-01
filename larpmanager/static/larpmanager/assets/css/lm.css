@@ -1946,6 +1946,7 @@ header.sec h1 {
   padding: 0.8em 1.6em;
   margin-top: 1em;
   display: inline-block;
+  white-space: normal;
 }
 
 #id_payment_methods div {
@@ -2029,7 +2030,8 @@ header.sec h1 {
 
 @media (max-width: 768px) {
   #wwyltd {
-    width: 100%;
+    width: 90%;
+    margin: 0 auto;
   }
 }
 
