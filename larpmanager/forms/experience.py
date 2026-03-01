@@ -27,6 +27,7 @@ from larpmanager.forms.base import BaseForm, BaseModelForm
 from larpmanager.forms.utils import (
     AbilityS2WidgetMulti,
     AbilityTemplateS2WidgetMulti,
+    AbilityTypePxS2Widget,
     ComputedFieldS2Widget,
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
@@ -105,6 +106,7 @@ class OrgaAbilityPxForm(PxBaseForm):
         exclude = ("number",)
 
         widgets: ClassVar[dict] = {
+            "typ": AbilityTypePxS2Widget,
             "characters": EventCharacterS2WidgetMulti,
             "prerequisites": AbilityS2WidgetMulti,
             "requirements": EventWritingOptionS2WidgetMulti,
@@ -116,7 +118,7 @@ class OrgaAbilityPxForm(PxBaseForm):
         super().__init__(*args, **kwargs)
 
         # Configure event-specific widgets
-        for field_name in ["characters", "prerequisites", "requirements", "template", "dependents"]:
+        for field_name in ["typ", "characters", "prerequisites", "requirements", "template", "dependents"]:
             if field_name in self.fields and hasattr(self.fields[field_name].widget, "set_event"):
                 self.configure_field_event(field_name, self.params.get("event"))
 
@@ -124,11 +126,6 @@ class OrgaAbilityPxForm(PxBaseForm):
         px_templates = get_event_config(
             self.params.get("event").id, "px_templates", default_value=False, context=self.params
         )
-
-        # Set ability type choices from event-specific elements
-        self.fields["typ"].choices = [
-            (el[0], el[1]) for el in self.params.get("event").get_elements(AbilityTypePx).values_list("uuid", "name")
-        ]
 
         # Remove template field if px_templates is disabled
         if not px_templates:
