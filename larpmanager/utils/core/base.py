@@ -119,9 +119,6 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
         if feature in context["features"] and not context.get(name_key):
             context[name_key] = default_name
 
-    # Set page theme from association config
-    context["page_theme"] = get_association_config(context["association_id"], "theme") or ""
-
     # Add TinyMCE editor configuration
     context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
     context["TINYMCE_JS_URL"] = conf_settings.TINYMCE_JS_URL

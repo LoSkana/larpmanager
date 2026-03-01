@@ -21,6 +21,8 @@
 from django.conf import settings as conf_settings
 from django.http import HttpRequest
 
+from larpmanager.cache.config import get_association_config
+
 
 def cache_association(request: HttpRequest) -> dict:
     """Cache association context for template rendering.
@@ -46,6 +48,8 @@ def cache_association(request: HttpRequest) -> dict:
     # Add association object if available in request
     if hasattr(request, "association"):
         context["association"] = request.association
+        association_id = request.association["id"]
+        context["page_theme"] = get_association_config(association_id, "theme") or "nebula"
 
     # Set staging flag for staging environment
     if request.enviro == "staging":
