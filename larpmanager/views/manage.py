@@ -1080,7 +1080,9 @@ def _compile(request: HttpRequest, context: dict) -> None:  # noqa: C901 - Compl
     Processes and organizes management content sections, handling empty states
     and providing appropriate user messaging.
     """
-    section_names = ["suggestions", "actions", "priorities"]
+    section_names = ["priorities"]
+    if not context.get("demo"):
+        section_names.extend(["suggestions", "actions"])
     all_sections_empty = True
     for section_name in section_names:
         context[section_name] = []
