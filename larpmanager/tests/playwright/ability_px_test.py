@@ -124,6 +124,10 @@ def ability(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/test/manage/px/abilities/")
     page.get_by_role("link", name="New").click()
+    row = page.get_by_role("row", name="Type")
+    row.get_by_role("searchbox").click()
+    row.get_by_role("searchbox").fill("base")
+    page.locator(".select2-results__option").first.click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("standard")
     page.locator("#id_cost").click()
@@ -135,6 +139,10 @@ def ability(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
+    row = page.get_by_role("row", name="Type")
+    row.get_by_role("searchbox").click()
+    row.get_by_role("searchbox").fill("base")
+    page.locator(".select2-results__option").first.click()
     page.locator("#id_name").fill("double shield")
     page.locator("#id_cost").click()
     page.locator("#id_cost").fill("2")
