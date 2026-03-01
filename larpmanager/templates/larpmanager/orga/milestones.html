@@ -1,0 +1,71 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Milestones" %}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows the event milestones. Completed milestones are hidden by default." %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/header/edit.html" %}
+    <p>
+        <a href="#" id="toggle-completed">{% trans "Show/hide completed milestones" %}</a>
+    </p>
+    <table id="milestones" class="go_datatable writing">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Deadline" %}</th>
+                <th>{% trans "Days remaining" %}</th>
+                <th>{% trans "Assigned to" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.uuid }}"
+                    {% if el.status == completed_status %}class="hide"{% endif %}>
+                    <td>
+                        <a href="{% url 'orga_milestones_edit' run.get_slug el.uuid %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.name }}</td>
+                    <td>{{ el.get_status_display }}</td>
+                    <td>{{ el.deadline|default:"" }}</td>
+                    <td>
+                        {% if el.days_remaining is not None %}
+                            {% if el.days_remaining >= 0 %}
+                                {{ el.days_remaining }}
+                            {% else %}
+                                <span class="overdue">{% trans "Overdue" %}</span>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td>{{ el.assigned|default:"" }}</td>
+                    <td>
+                        <a href="{% url 'orga_milestones_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_form"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}
+{% block js %}
+    <script>
+        document.getElementById('toggle-completed').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('#milestones tbody tr.hide').forEach(function(row) {
+                row.style.display = row.style.display === 'none' ? '' : 'none';
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('#milestones tbody tr.hide').forEach(function(row) {
+                row.style.display = 'none';
+            });
+        });
+    </script>
+{% endblock js %}

@@ -450,6 +450,9 @@ msgstr "Tredje"
 msgid "Title"
 msgstr "Tittel"
 
+msgid "To Do"
+msgstr "Å gjøre"
+
 msgid "Token"
 msgstr "Token"
 
@@ -860,6 +863,9 @@ msgstr "Ingenting"
 
 msgid "Options"
 msgstr "Alternativer"
+
+msgid "Overdue"
+msgstr "Forsinket"
 
 msgid "Partial"
 msgstr "Delvis"
@@ -1350,6 +1356,9 @@ msgstr "Avlyst"
 msgid "Character"
 msgstr "Karakter"
 
+msgid "Completed"
+msgstr "Ferdigstilt"
+
 msgid "Concluded"
 msgstr "Avsluttet"
 
@@ -1406,6 +1415,9 @@ msgstr "Last inn liste"
 
 msgid "Mandatory"
 msgstr "Obligatorisk"
+
+msgid "Milestone"
+msgstr "Milepæl"
 
 msgid "Modifiers"
 msgstr "Modifikatorer"
@@ -1650,6 +1662,9 @@ msgstr "Mediefil"
 msgid "Membership"
 msgstr "Medlemskap"
 
+msgid "Milestones"
+msgstr "Milepæler"
+
 msgid "Miscellany"
 msgstr "Diverse"
 
@@ -1833,6 +1848,9 @@ msgstr "Additionals"
 msgid "Amount paid"
 msgstr "Utbetalt beløp"
 
+msgid "Assigned to"
+msgstr "Tildelt til"
+
 msgid "Assignments"
 msgstr "Oppgaver"
 
@@ -1895,6 +1913,9 @@ msgstr "Fire kvoter"
 
 msgid "Gallery Pdf"
 msgstr "Pdf-galleri"
+
+msgid "In Progress"
+msgstr "Pågående"
 
 msgid "In creation"
 msgstr "I skapelsen"
@@ -2578,6 +2599,9 @@ msgstr "Tilpasninger"
 
 msgid "Days available"
 msgstr "Tilgjengelige dager"
+
+msgid "Days remaining"
+msgstr "Gjenværende dager"
 
 msgid "Default fields"
 msgstr "Standard felter"
@@ -4197,6 +4221,9 @@ msgstr "Nivået på billetten"
 msgid "Total registration fee"
 msgstr "Total registreringsavgift"
 
+msgid "Track event milestones"
+msgstr "Spor milepæler i arrangementet"
+
 msgid "Unknow error on upload"
 msgstr "Ukjent feil ved opplasting"
 
@@ -4988,6 +5015,9 @@ msgstr "Sett opp skattekonfigurasjonen"
 
 msgid "Set your interface preferences"
 msgstr "Angi grensesnittinnstillingene dine"
+
+msgid "Show/hide completed milestones"
+msgstr "Vis/skjul fullførte milepæler"
 
 msgid "The registrations to the event"
 msgstr "Påmelding til arrangementet"
@@ -6238,6 +6268,9 @@ msgstr "Angi hvilke billetter den er aktiv for"
 
 msgid "Manage fields that track participants' data"
 msgstr "Administrer felt som sporer deltakernes data"
+
+msgid "Now you can create milestones for the event"
+msgstr "Nå kan du opprette milepæler for arrangementet"
 
 msgid "Now you can set the player editing settings"
 msgstr "Nå kan du angi innstillinger for spillerredigering"
@@ -8814,6 +8847,13 @@ msgstr ""
 " for arrangementet"
 
 msgid ""
+"Track and manage event milestones with status, deadline, and staff "
+"assignment"
+msgstr ""
+"Spore og administrere milepæler i arrangementet med status, tidsfrister og "
+"tildeling av medarbeidere"
+
+msgid ""
 "Write your question, request or concern here. We will be happy to answer "
 "you!"
 msgstr ""
@@ -9067,6 +9107,13 @@ msgid ""
 msgstr ""
 "Angir hvor ofte påminnelses-e-poster skal sendes, i dager (hvis ikke angitt,"
 " sendes ingen e-poster)"
+
+msgid ""
+"This page shows the event milestones. Completed milestones are hidden by "
+"default."
+msgstr ""
+"Denne siden viser milepælene for hendelsen. Fullførte milepæler er skjult "
+"som standard."
 
 msgid ""
 "To register for the event, please fill in the following form and click on "

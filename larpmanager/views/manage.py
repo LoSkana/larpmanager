@@ -589,6 +589,9 @@ def _orga_widgets(request: HttpRequest, context:dict, features:dict):
     if "progress" in features and has_association_permission(request, context, "orga_characters"):
         widgets_available.append("progress")
 
+    if "milestones" in features and has_association_permission(request, context, "orga_milestones"):
+        widgets_available.append("milestones")
+
     context["widgets"] = {
         widget: get_orga_widget_cache(context["run"], widget)
         for widget in widgets_available

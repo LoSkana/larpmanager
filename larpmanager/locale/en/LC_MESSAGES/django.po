@@ -2080,6 +2080,9 @@ msgstr ""
 msgid "One-time token"
 msgstr ""
 
+msgid "Milestone"
+msgstr ""
+
 #, python-format
 msgid ""
 "Enter the 'bring a friend' code provided by a registered participant to "
@@ -3848,6 +3851,15 @@ msgstr ""
 msgid "Preferred navigation language"
 msgstr ""
 
+msgid "Portrait"
+msgstr ""
+
+msgid ""
+"Upload your portrait photo. It will be shown to other participants to help "
+"recognize you in the event. Choose a photo that you would put in an official "
+"document (in which you are alone, centered on your face)"
+msgstr ""
+
 msgid "Your first name as you prefer to be called"
 msgstr ""
 
@@ -4000,15 +4012,6 @@ msgid "Newsletter"
 msgstr ""
 
 msgid "Do you wish to be always updated on our events"
-msgstr ""
-
-msgid "Portrait"
-msgstr ""
-
-msgid ""
-"Upload your portrait photo. It will be shown to other participants to help "
-"recognize you in the event. Choose a photo that you would put in an official "
-"document (in which you are alone, centered on your face)"
 msgstr ""
 
 msgid ""
@@ -4364,6 +4367,18 @@ msgid "One-Time Access Tokens"
 msgstr ""
 
 msgid "Unused"
+msgstr ""
+
+msgid "To Do"
+msgstr ""
+
+msgid "In Progress"
+msgstr ""
+
+msgid "Completed"
+msgstr ""
+
+msgid "Assigned to"
 msgstr ""
 
 msgid "New player"
@@ -6636,6 +6651,12 @@ msgstr ""
 msgid "Edit registration status"
 msgstr ""
 
+msgid "Milestones"
+msgstr ""
+
+msgid "Overdue"
+msgstr ""
+
 msgid "Progress steps"
 msgstr ""
 
@@ -7553,6 +7574,17 @@ msgid "This page shows the deadlines to be met for this event"
 msgstr ""
 
 msgid "This page shows all log entries for this event"
+msgstr ""
+
+msgid ""
+"This page shows the event milestones. Completed milestones are hidden by "
+"default."
+msgstr ""
+
+msgid "Show/hide completed milestones"
+msgstr ""
+
+msgid "Days remaining"
 msgstr ""
 
 msgid ""
@@ -9072,6 +9104,12 @@ msgid ""
 "settings"
 msgstr ""
 
+msgid "Track event milestones"
+msgstr ""
+
+msgid "Now you can create milestones for the event"
+msgstr ""
+
 msgid "Manage the organization main settings"
 msgstr ""
 
@@ -9492,6 +9530,10 @@ msgid "Manage character inventory pool types"
 msgstr ""
 
 msgid "View detailed activity log of all changes made for this specific event"
+msgstr ""
+
+msgid ""
+"Track and manage event milestones with status, deadline, and staff assignment"
 msgstr ""
 
 msgid "Communications"
