@@ -305,12 +305,12 @@ body {
 
 #sidebar {
   display: block;
-  width: 21ch;
+  width: 20ch;
   height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
-  padding: 0 1em 3em 1em;
+  padding: 0 0.5em 3em 0.5em;
   box-sizing: border-box;
   border-right: 2px solid rgba(var(--pri-rgb), 0.085);
   font-size: 100%;
@@ -998,4 +998,70 @@ body:not(.new_form) .only_new_form {
 
 .grid .grid-item div.dt-container div.dt-layout-row {
   margin: 0em;
+}
+
+/* ---------------------------------------------------------------------------
+   Themes
+   --------------------------------------------------------------------------- */
+
+body.theme-aurora {
+  --pri-rgb: 30, 30, 30;
+  --sec-rgb: 245, 245, 250;
+  --ter-rgb: 0, 100, 128;
+  --pri-clr: rgb(var(--pri-rgb));
+  --sec-clr: rgb(var(--sec-rgb));
+  --ter-clr: rgb(var(--ter-rgb));
+  background-color: #f5f5fa;
+  background-image: none;
+}
+
+body.theme-eclipse {
+  --pri-rgb: 255, 255, 255;
+  --sec-rgb: 0, 0, 0;
+  --ter-rgb: 152, 230, 255;
+  --pri-clr: rgb(var(--pri-rgb));
+  --sec-clr: rgb(var(--sec-rgb));
+  --ter-clr: rgb(var(--ter-rgb));
+  background-color: #3b3b3b;
+  background-image: none;
+}
+
+body.theme-nebula {
+  --pri-rgb: 30, 30, 30;
+  --sec-rgb: 245, 245, 250;
+  --ter-rgb: 0, 100, 128;
+  --pri-clr: rgb(var(--pri-rgb));
+  --sec-clr: rgb(var(--sec-rgb));
+  --ter-clr: rgb(var(--ter-rgb));
+  background-color: #f5f5fa;
+  background-image: none;
+}
+
+body.theme-nebula #topbar {
+  --pri-rgb: 255, 255, 255;
+  --sec-rgb: 0, 0, 0;
+  --ter-rgb: 152, 230, 255;
+  --pri-clr: rgb(var(--pri-rgb));
+  --sec-clr: rgb(var(--sec-rgb));
+  --ter-clr: rgb(var(--ter-rgb));
+  background-color: #3b3b3b;
+}
+
+body.theme-nebula #sidebar {
+  --pri-rgb: 152, 230, 255;
+  --sec-rgb: 0, 0, 0;
+  --ter-rgb: 255, 255, 255;
+  --pri-clr: rgb(var(--pri-rgb));
+  --sec-clr: rgb(var(--sec-rgb));
+  --ter-clr: rgb(var(--ter-rgb));
+  background-color: #3b3b3b;
+}
+
+body.theme-nebula #topbar,
+body.theme-nebula #sidebar {
+  color: var(--pri-clr);
+}
+
+body.theme-nebula #sidebar .new-menu a.select {
+  background-color: rgba(var(--pri-rgb), 0.8);
 }

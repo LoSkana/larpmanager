@@ -444,6 +444,9 @@ msgstr "Daně"
 msgid "Texts"
 msgstr "Texty"
 
+msgid "Theme"
+msgstr "Téma"
+
 msgid "Third"
 msgstr "Třetí"
 
@@ -8111,6 +8114,9 @@ msgstr ""
 "Maximální počet dostupných slotů pro účastníky (pro neomezený počet nastavte"
 " hodnotu 0)"
 
+msgid "Personal theme preference, overrides the event and organization theme."
+msgstr "Předvolba osobního tématu je nadřazena tématu události a organizace."
+
 msgid "The first line of the file are the field names that you want to upload"
 msgstr "Na prvním řádku souboru jsou názvy polí, které chcete nahrát"
 
@@ -11692,6 +11698,15 @@ msgstr ""
 "tento údaj je hlavním pozitivem, provozní marží. Zohledňuje rozpočty na "
 "události, které trvají déle než dva měsíce a které se považují za uzavřené, "
 "a považuje všechny žetony a kredity za uhrazené"
+
+msgid ""
+"<b>Nebula</b>: mixed dark and light theme (default). <b>Aurora</b>: full "
+"light theme. <b>Eclipse</b>: full dark theme. <b>Halo</b>: custom (enables "
+"custom CSS, colors, and background).<b>---</b>: will use default values. "
+msgstr ""
+"<b>Nebula</b>: smíšené tmavé a světlé téma (výchozí). <b>Aurora</b>: plně "
+"světlé téma. <b>Eclipse</b>: plně tmavé téma. <b>Halo</b>: vlastní (umožňuje"
+" vlastní CSS, barvy a pozadí). <b>---</b>: použije výchozí hodnoty"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

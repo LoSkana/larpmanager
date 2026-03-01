@@ -126,7 +126,7 @@
         </noscript>
     </head>
     <body id="{{ association.name | slugify }}"
-          class="is-preload {% if lm or not association.old_form_appearance or interface_new_ui %}new_form{% endif %} {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %} {% if not association.old_menu_appearance %}new_menu{% endif %}">
+          class="is-preload {% if lm or not association.old_form_appearance or interface_new_ui %}new_form{% endif %} {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %} {% if not association.old_menu_appearance %}new_menu{% endif %} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
             {% if not frame and association.id != 0 %}

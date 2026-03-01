@@ -69,6 +69,61 @@ window.addEventListener('DOMContentLoaded', function() {
     setupColorListener('id_sec_rgb', '--sec-rgb');
     setupColorListener('id_ter_rgb', '--ter-rgb');
 
+    /**
+     * Show or hide fields that are only relevant for the halo (custom) theme.
+     * Each field is wrapped in a <tr id="<field_id>_tr"> by the form template.
+     * @param {string} theme - The selected theme value
+     */
+    function updateThemeFields(theme) {
+        var haloOnlyFields = [
+            'id_background',
+            'id_pri_rgb',
+            'id_sec_rgb',
+            'id_ter_rgb',
+            'id_association_css',
+            'id_event_css',
+        ];
+        var isHalo = (theme === 'halo');
+        haloOnlyFields.forEach(function(fieldId) {
+            var row = document.getElementById(fieldId + '_tr');
+            if (row) {
+                row.style.display = isHalo ? '' : 'none';
+            }
+        });
+    }
+
+    var THEMES = ['aurora', 'eclipse', 'nebula', 'halo'];
+
+    /**
+     * Switch the body theme class for real-time preview.
+     * @param {string} theme - The selected theme value
+     */
+    function updateThemePreview(theme) {
+        THEMES.forEach(function(t) {
+            document.body.classList.remove('theme-' + t);
+        });
+        if (theme) {
+            document.body.classList.add('theme-' + theme);
+        }
+    }
+
+    var themeSelect = document.getElementById('id_theme');
+    if (themeSelect) {
+        themeSelect.addEventListener('change', function() {
+            updateThemeFields(this.value);
+            updateThemePreview(this.value);
+        });
+        // Apply immediately on page load
+        updateThemeFields(themeSelect.value);
+    }
+
+    var memberThemeSelect = document.getElementById('id_member_theme');
+    if (memberThemeSelect) {
+        memberThemeSelect.addEventListener('change', function() {
+            updateThemePreview(this.value);
+        });
+    }
+
 });
 
 </script>

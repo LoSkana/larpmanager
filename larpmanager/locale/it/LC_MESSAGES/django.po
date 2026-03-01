@@ -444,6 +444,9 @@ msgstr "Tasse"
 msgid "Texts"
 msgstr "Testi"
 
+msgid "Theme"
+msgstr "Tema"
+
 msgid "Third"
 msgstr "Terzo"
 
@@ -8256,6 +8259,11 @@ msgstr ""
 "Numero massimo di slot per i partecipanti disponibili (imposta su 0 per "
 "essere illimitato)"
 
+msgid "Personal theme preference, overrides the event and organization theme."
+msgstr ""
+"Preferenza per il tema personale, che sostituisce il tema dell'evento e "
+"dell'organizzazione."
+
 msgid "The first line of the file are the field names that you want to upload"
 msgstr ""
 "La prima riga del file contiene i nomi dei campi che si desidera caricare"
@@ -12033,6 +12041,16 @@ msgstr ""
 "Questo dato è il positivo, il margine operativo. Tiene conto dei bilanci "
 "degli eventi che hanno superato i due mesi, che sono considerati chiusi, e "
 "considera tutti i gettoni e i crediti come rimborsati"
+
+msgid ""
+"<b>Nebula</b>: mixed dark and light theme (default). <b>Aurora</b>: full "
+"light theme. <b>Eclipse</b>: full dark theme. <b>Halo</b>: custom (enables "
+"custom CSS, colors, and background).<b>---</b>: will use default values. "
+msgstr ""
+"<b>Nebula</b>: tema misto scuro e chiaro (predefinito). <b>Aurora</b>: tema "
+"completamente chiaro. <b>Eclipse</b>: tema scuro completo. <b>Halo</b>: "
+"personalizzato (abilita CSS, colori e sfondo personalizzati).<b>---</b>: "
+"utilizzerà i valori predefiniti"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

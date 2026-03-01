@@ -444,6 +444,9 @@ msgstr "Impuestos"
 msgid "Texts"
 msgstr "Textos"
 
+msgid "Theme"
+msgstr "Tema"
+
 msgid "Third"
 msgstr "Tercera"
 
@@ -8240,6 +8243,10 @@ msgstr ""
 msgid "Maximum number of participant slots available (set to 0 for unlimited)"
 msgstr "Número máximo de plazas disponibles (0 para ilimitado)"
 
+msgid "Personal theme preference, overrides the event and organization theme."
+msgstr ""
+"Preferencia de tema personal, anula el tema del evento y de la organización."
+
 msgid "The first line of the file are the field names that you want to upload"
 msgstr ""
 "La primera línea del archivo son los nombres de los campos que desea cargar"
@@ -11996,6 +12003,16 @@ msgstr ""
 "esta cifra es el principal positivo, el margen de explotación. Tiene en "
 "cuenta los presupuestos de los eventos que llevan más de dos meses, que se "
 "consideran cerrados, y trata todas las fichas y créditos como reembolsados"
+
+msgid ""
+"<b>Nebula</b>: mixed dark and light theme (default). <b>Aurora</b>: full "
+"light theme. <b>Eclipse</b>: full dark theme. <b>Halo</b>: custom (enables "
+"custom CSS, colors, and background).<b>---</b>: will use default values. "
+msgstr ""
+"<b>Nebula</b>: tema mixto oscuro y claro (por defecto). <b>Aurora</b>: tema "
+"completamente claro. <b>Eclipse</b>: tema oscuro completo. <b>Halo</b>: "
+"personalizado (permite CSS, colores y fondo personalizados).<b>---</b>: "
+"usará los valores por defecto"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

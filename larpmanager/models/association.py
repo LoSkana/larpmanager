@@ -196,23 +196,6 @@ class Association(UuidMixin, BaseModel):
 
     features = models.ManyToManyField(Feature, related_name="associations", blank=True)
 
-    background = models.ImageField(
-        max_length=500,
-        upload_to="association_background/",
-        verbose_name=_("Background image"),
-        blank=True,
-        help_text=_(
-            "Background image displayed across all pages of your organization - use a subtle pattern or texture for best results"
-        ),
-    )
-
-    background_red = ImageSpecField(
-        source="background",
-        processors=[ResizeToFit(width=1000)],
-        format="JPEG",
-        options={"quality": 80},
-    )
-
     font = models.FileField(
         upload_to=UploadToPathAndRename("association_font/"),
         verbose_name=_("Custom title font"),
@@ -234,6 +217,23 @@ class Association(UuidMixin, BaseModel):
                 ],
             ),
         ],
+    )
+
+    background = models.ImageField(
+        max_length=500,
+        upload_to="association_background/",
+        verbose_name=_("Background image"),
+        blank=True,
+        help_text=_(
+            "Background image displayed across all pages of your organization - use a subtle pattern or texture for best results"
+        ),
+    )
+
+    background_red = ImageSpecField(
+        source="background",
+        processors=[ResizeToFit(width=1000)],
+        format="JPEG",
+        options={"quality": 80},
     )
 
     css_code = models.CharField(max_length=32, editable=False, default="")

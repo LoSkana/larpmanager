@@ -27,6 +27,7 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.db.models import TextChoices
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
@@ -1383,6 +1384,24 @@ class BaseRegistrationForm(BaseModelFormRun):
         data = self.cleaned_data.get("pay_what")
         # Convert None or empty string to 0 to prevent NULL constraint violations
         return data if data is not None else 0
+
+
+class AppearanceTheme(TextChoices):
+    """Available appearance themes."""
+
+    NEBULA = "nebula", "Nebula"
+    AURORA = "aurora", "Aurora"
+    ECLIPSE = "eclipse", "Eclipse"
+    HALO = "halo", "Halo"
+
+
+THEME_HELP_TEXT = _(
+    "<b>Nebula</b>: mixed dark and light theme (default). "
+    "<b>Aurora</b>: full light theme. "
+    "<b>Eclipse</b>: full dark theme. "
+    "<b>Halo</b>: custom (enables custom CSS, colors, and background)."
+    "<b>---</b>: will use default values. "
+)
 
 
 class BaseModelCssForm(BaseModelForm):

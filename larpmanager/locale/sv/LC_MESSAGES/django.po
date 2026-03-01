@@ -444,6 +444,9 @@ msgstr "Skatter"
 msgid "Texts"
 msgstr "Texter"
 
+msgid "Theme"
+msgstr "Tema"
+
 msgid "Third"
 msgstr "Tredje"
 
@@ -8149,6 +8152,11 @@ msgstr ""
 "Maximalt antal tillgängliga deltagarplatser (inställt på 0 för obegränsat "
 "antal)"
 
+msgid "Personal theme preference, overrides the event and organization theme."
+msgstr ""
+"Personliga temapreferenser, åsidosätter evenemangets och organisationens "
+"tema."
+
 msgid "The first line of the file are the field names that you want to upload"
 msgstr "Den första raden i filen är de fältnamn som du vill ladda upp"
 
@@ -11839,6 +11847,16 @@ msgstr ""
 "denna siffra är den viktigaste positiva, rörelsemarginalen. Den tar hänsyn "
 "till budgetar för evenemang som har varit över två månader, som anses vara "
 "stängda, och behandlar alla tokens och krediter som återbetalda"
+
+msgid ""
+"<b>Nebula</b>: mixed dark and light theme (default). <b>Aurora</b>: full "
+"light theme. <b>Eclipse</b>: full dark theme. <b>Halo</b>: custom (enables "
+"custom CSS, colors, and background).<b>---</b>: will use default values. "
+msgstr ""
+"<b>Nebula</b>: blandat mörkt och ljust tema (standard). <b>Aurora</b>: helt "
+"ljust tema. <b>Eclipse</b>: helt mörkt tema. <b>Halo</b>: anpassad "
+"(möjliggör anpassad CSS, färger och bakgrund).<b>---</b>: kommer att använda"
+" standardvärden"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

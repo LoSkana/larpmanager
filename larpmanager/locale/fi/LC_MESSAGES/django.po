@@ -444,6 +444,9 @@ msgstr "Verot"
 msgid "Texts"
 msgstr "Tekstit"
 
+msgid "Theme"
+msgstr "Teema"
+
 msgid "Third"
 msgstr "Kolmas"
 
@@ -8150,6 +8153,11 @@ msgstr ""
 "Käytettävissä olevien osallistujapaikkojen enimmäismäärä (0 tarkoittaa "
 "rajoittamatonta määrää)"
 
+msgid "Personal theme preference, overrides the event and organization theme."
+msgstr ""
+"Henkilökohtainen teema-asetus, joka ohittaa tapahtuman ja organisaation "
+"teeman."
+
 msgid "The first line of the file are the field names that you want to upload"
 msgstr ""
 "Tiedoston ensimmäisellä rivillä ovat kenttien nimet, jotka haluat ladata"
@@ -11825,6 +11833,16 @@ msgstr ""
 "tämä luku on tärkein positiivinen luku, käyttökate. Siinä otetaan huomioon "
 "yli kaksi kuukautta kestäneiden tapahtumien budjetit, jotka katsotaan "
 "päättyneiksi, ja käsitellään kaikki kuponkien ja hyvitysten palautukset"
+
+msgid ""
+"<b>Nebula</b>: mixed dark and light theme (default). <b>Aurora</b>: full "
+"light theme. <b>Eclipse</b>: full dark theme. <b>Halo</b>: custom (enables "
+"custom CSS, colors, and background).<b>---</b>: will use default values. "
+msgstr ""
+"<b>Nebula</b>: sekoitettu tumma ja vaalea teema (oletus). <b>Aurora</b>: "
+"täysin vaalea teema. <b>Eclipse</b>: täysin tumma teema. <b>Halo</b>: "
+"mukautettu (mahdollistaa mukautetun CSS:n, värit ja taustan). <b>---</b>: "
+"käyttää oletusarvoja"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

@@ -45,9 +45,13 @@
     <td>
         <div class="el">
             <a id="menu-open" href="#menu">
-                <div class="img_cover menu_profile"
-                     style="background-image:url('{% if member.profile %}{{ member.profile_thumb.url }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
-                </div>
+                {% if association.old_form_appearance or interface_new_ui %}
+                    <i class="fa-solid fa-bars"></i>
+                {% else %}
+                    <div class="img_cover menu_profile"
+                         style="background-image:url('{% if member.profile %}{{ member.profile_thumb.url }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
+                    </div>
+                {% endif %}
             </a>
             <span class="label">Menu</span>
         </div>

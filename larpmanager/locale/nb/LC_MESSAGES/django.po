@@ -444,6 +444,9 @@ msgstr "Skatter og avgifter"
 msgid "Texts"
 msgstr "Tekster"
 
+msgid "Theme"
+msgstr "Tema"
+
 msgid "Third"
 msgstr "Tredje"
 
@@ -8156,6 +8159,11 @@ msgid "Maximum number of participant slots available (set to 0 for unlimited)"
 msgstr ""
 "Maksimalt antall tilgjengelige deltakerspor (sett til 0 for ubegrenset)"
 
+msgid "Personal theme preference, overrides the event and organization theme."
+msgstr ""
+"Personlige temapreferanser, overstyrer arrangementets og organisasjonens "
+"tema."
+
 msgid "The first line of the file are the field names that you want to upload"
 msgstr ""
 "Den første linjen i filen inneholder feltnavnene du ønsker å laste opp"
@@ -11819,6 +11827,16 @@ msgstr ""
 "dette tallet er det viktigste positive tallet, driftsmarginen. Det tar "
 "hensyn til budsjetter for arrangementer som har vært over to måneder, som "
 "anses å være avsluttet, og behandler alle tokens og kreditter som refundert"
+
+msgid ""
+"<b>Nebula</b>: mixed dark and light theme (default). <b>Aurora</b>: full "
+"light theme. <b>Eclipse</b>: full dark theme. <b>Halo</b>: custom (enables "
+"custom CSS, colors, and background).<b>---</b>: will use default values. "
+msgstr ""
+"<b>Nebula</b>: blandet mørkt og lyst tema (standard). <b>Aurora</b>: helt "
+"lyst tema. <b>Eclipse</b>: helt mørkt tema. <b>Halo</b>: tilpasset "
+"(muliggjør tilpasset CSS, farger og bakgrunn) <b>---</b>: bruker "
+"standardverdier"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"
