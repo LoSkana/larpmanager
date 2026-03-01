@@ -8153,6 +8153,11 @@ msgstr ""
 "Käytettävissä olevien osallistujapaikkojen enimmäismäärä (0 tarkoittaa "
 "rajoittamatonta määrää)"
 
+msgid "Personal theme preference, overrides the event and organization theme."
+msgstr ""
+"Henkilökohtainen teema-asetus, joka ohittaa tapahtuman ja organisaation "
+"teeman."
+
 msgid "The first line of the file are the field names that you want to upload"
 msgstr ""
 "Tiedoston ensimmäisellä rivillä ovat kenttien nimet, jotka haluat ladata"

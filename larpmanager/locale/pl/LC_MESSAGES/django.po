@@ -8202,6 +8202,11 @@ msgstr ""
 "Maksymalna liczba dostępnych miejsc dla uczestników (ustawiona na 0 dla "
 "nieograniczonej liczby)"
 
+msgid "Personal theme preference, overrides the event and organization theme."
+msgstr ""
+"Osobiste preferencje dotyczące motywu zastępują motyw wydarzenia i "
+"organizacji."
+
 msgid "The first line of the file are the field names that you want to upload"
 msgstr "Pierwszy wiersz pliku to nazwy pól, które mają zostać przesłane"
 

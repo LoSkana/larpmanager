@@ -8259,6 +8259,11 @@ msgstr ""
 "Numero massimo di slot per i partecipanti disponibili (imposta su 0 per "
 "essere illimitato)"
 
+msgid "Personal theme preference, overrides the event and organization theme."
+msgstr ""
+"Preferenza per il tema personale, che sostituisce il tema dell'evento e "
+"dell'organizzazione."
+
 msgid "The first line of the file are the field names that you want to upload"
 msgstr ""
 "La prima riga del file contiene i nomi dei campi che si desidera caricare"

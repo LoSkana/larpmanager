@@ -8243,6 +8243,10 @@ msgstr ""
 msgid "Maximum number of participant slots available (set to 0 for unlimited)"
 msgstr "Número máximo de plazas disponibles (0 para ilimitado)"
 
+msgid "Personal theme preference, overrides the event and organization theme."
+msgstr ""
+"Preferencia de tema personal, anula el tema del evento y de la organización."
+
 msgid "The first line of the file are the field names that you want to upload"
 msgstr ""
 "La primera línea del archivo son los nombres de los campos que desea cargar"

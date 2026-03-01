@@ -26,6 +26,7 @@ class ConfigType(IntEnum):
     TEXTAREA = 5
     MEMBERS = 6
     MULTI_BOOL = 7
+    CHOICE = 8
 
 
 class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
@@ -299,6 +300,13 @@ class ConfigForm(BaseModelForm):
                 required=False,
                 help_text=help_text,
             ),
+            # Dropdown select field for single choice from a list
+            ConfigType.CHOICE: lambda: forms.ChoiceField(
+                label=label,
+                choices=extra,
+                required=False,
+                help_text=help_text,
+            ),
         }
 
         # Get the factory function for the specified field type
@@ -334,7 +342,9 @@ class ConfigForm(BaseModelForm):
         # Get field type and extra configuration for specific field types
         field_type = config["type"]
         extra_config = (
-            config["extra"] if field_type in [ConfigType.MEMBERS, ConfigType.MULTI_BOOL, ConfigType.CHAR] else None
+            config["extra"]
+            if field_type in [ConfigType.MEMBERS, ConfigType.MULTI_BOOL, ConfigType.CHAR, ConfigType.CHOICE]
+            else None
         )
 
         # Create and add the form field

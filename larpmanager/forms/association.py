@@ -29,6 +29,7 @@ from django.utils.translation import gettext_lazy as _, pgettext
 
 from larpmanager.cache.config import reset_element_configs, save_all_element_configs
 from larpmanager.cache.feature import get_association_features, reset_association_features
+from larpmanager.cache.links import reset_event_links
 from larpmanager.forms.base import THEME_HELP_TEXT, AppearanceTheme, BaseModelCssForm, BaseModelForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
@@ -1048,6 +1049,8 @@ class ExePreferencesForm(ConfigForm):
 
     page_info = _("Manage your personal interface preferences")
 
+    load_js: ClassVar[list] = ["appearance-colors"]
+
     class Meta:
         model = Member
         fields = ()
@@ -1109,3 +1112,22 @@ class ExePreferencesForm(ConfigForm):
                 digest_mode_label,
                 digest_mode_help_text,
             )
+
+        theme_choices = [("", "---")] + [
+            (value, label) for value, label in AppearanceTheme.choices if value != AppearanceTheme.HALO
+        ]
+        self.add_configs(
+            "member_theme",
+            ConfigType.CHOICE,
+            _("Theme"),
+            _("Personal theme preference, overrides the event and organization theme."),
+            theme_choices,
+        )
+
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
+        """Save preferences and invalidate event links cache for real-time theme update."""
+        instance = super().save(commit=commit)
+        association_id = self.params.get("association_id")
+        if association_id:
+            reset_event_links(instance.id, association_id)
+        return instance

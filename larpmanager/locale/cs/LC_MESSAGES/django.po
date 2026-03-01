@@ -8114,6 +8114,9 @@ msgstr ""
 "Maximální počet dostupných slotů pro účastníky (pro neomezený počet nastavte"
 " hodnotu 0)"
 
+msgid "Personal theme preference, overrides the event and organization theme."
+msgstr "Předvolba osobního tématu je nadřazena tématu události a organizace."
+
 msgid "The first line of the file are the field names that you want to upload"
 msgstr "Na prvním řádku souboru jsou názvy polí, které chcete nahrát"
 

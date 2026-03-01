@@ -112,6 +112,9 @@ def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
         navigation_context["event_role"] or navigation_context["association_role"]
     )
 
+    # Store personal theme preference (overrides event/association theme)
+    navigation_context["member_theme"] = member.get_config("member_theme", default_value="")
+
     return navigation_context
 
 

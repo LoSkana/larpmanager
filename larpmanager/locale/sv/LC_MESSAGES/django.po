@@ -8152,6 +8152,11 @@ msgstr ""
 "Maximalt antal tillgängliga deltagarplatser (inställt på 0 för obegränsat "
 "antal)"
 
+msgid "Personal theme preference, overrides the event and organization theme."
+msgstr ""
+"Personliga temapreferenser, åsidosätter evenemangets och organisationens "
+"tema."
+
 msgid "The first line of the file are the field names that you want to upload"
 msgstr "Den första raden i filen är de fältnamn som du vill ladda upp"
 

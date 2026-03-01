@@ -896,6 +896,9 @@ msgstr ""
 msgid "If checked: activate new menu"
 msgstr ""
 
+msgid "Personal theme preference, overrides the event and organization theme."
+msgstr ""
+
 msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 
