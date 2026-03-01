@@ -669,6 +669,8 @@ def _copy_appearance_fields(context: dict, child_event: object, parent_event: ob
     for field_name in get_all_fields_from_form(OrgaAppearanceForm, context):
         if field_name == "event_css":
             copy_css(context, child_event, parent_event)
+        elif field_name == "theme":
+            continue
         else:
             field_value = getattr(parent_event, field_name)
             setattr(child_event, field_name, field_value)
