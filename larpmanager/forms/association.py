@@ -1068,6 +1068,17 @@ class ExePreferencesForm(ConfigForm):
         # Define interface configuration section
         self.set_section("interface", _("Interface"))
 
+        theme_choices = [("", "---")] + [
+            (value, label) for value, label in AppearanceTheme.choices if value != AppearanceTheme.HALO
+        ]
+        self.add_configs(
+            "member_theme",
+            ConfigType.CHOICE,
+            _("Theme"),
+            _("Personal theme preference, overrides the event and organization theme."),
+            theme_choices,
+        )
+
         # Add organizer digest mode toggle option
         digest_mode_label = _("Notifications digest")
         digest_mode_help_text = _(
@@ -1112,17 +1123,6 @@ class ExePreferencesForm(ConfigForm):
                 digest_mode_label,
                 digest_mode_help_text,
             )
-
-        theme_choices = [("", "---")] + [
-            (value, label) for value, label in AppearanceTheme.choices if value != AppearanceTheme.HALO
-        ]
-        self.add_configs(
-            "member_theme",
-            ConfigType.CHOICE,
-            _("Theme"),
-            _("Personal theme preference, overrides the event and organization theme."),
-            theme_choices,
-        )
 
     def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
         """Save preferences and invalidate event links cache for real-time theme update."""
