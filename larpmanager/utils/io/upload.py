@@ -1637,10 +1637,16 @@ def _ability_load(context: dict, csv_row: dict) -> str:
 
     logs = []
 
+    # Apply cost only if the column is present in the uploaded file and has a valid value
+    if "cost" in csv_row:
+        cost_value = csv_row["cost"]
+        if cost_value is not None and cost_value != "" and not pd.isna(cost_value):
+            ability_element.cost = _to_int(cost_value)
+
     # Process each field in the CSV row
     for field_name, field_value in csv_row.items():
-        # Skip empty, NaN values, or the name field (already processed)
-        if not field_value or pd.isna(field_value) or field_name in ["name"]:
+        # Skip empty, NaN values, or the name/cost field (already processed)
+        if not field_value or pd.isna(field_value) or field_name in ["name", "cost"]:
             continue
         processed_value = field_value
 
@@ -1648,10 +1654,6 @@ def _ability_load(context: dict, csv_row: dict) -> str:
         if field_name == "typ":
             _assign_type(context, ability_element, logs, field_value)
             continue
-
-        # Convert cost field to integer
-        if field_name == "cost":
-            processed_value = _to_int(field_value)
 
         # Handle prerequisites field parsing
         if field_name == "prerequisites":

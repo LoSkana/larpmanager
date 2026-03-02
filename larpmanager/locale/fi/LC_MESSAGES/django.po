@@ -3596,9 +3596,6 @@ msgstr "Sisältö ei ole käytettävissä"
 msgid "Content unavailable"
 msgstr "Sisältö ei ole käytettävissä"
 
-msgid "Cost of the ability"
-msgstr "Kyvyn kustannukset"
-
 msgid "Date of association"
 msgstr "Yhdistymispäivä"
 
@@ -4966,6 +4963,9 @@ msgstr "Sukunimesi tai sukunimesi"
 
 msgid "check excessive relationships"
 msgstr "tarkista liialliset suhteet"
+
+msgid "(Optional) Cost of the ability"
+msgstr "(Valinnainen) Kyvyn kustannukset"
 
 msgid "Activate new platform features"
 msgstr "Aktivoi uudet alustan ominaisuudet"

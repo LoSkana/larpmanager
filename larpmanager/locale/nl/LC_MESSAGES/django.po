@@ -3596,9 +3596,6 @@ msgstr "Inhoud niet beschikbaar"
 msgid "Content unavailable"
 msgstr "Inhoud niet beschikbaar"
 
-msgid "Cost of the ability"
-msgstr "Kosten van het vermogen"
-
 msgid "Date of association"
 msgstr "Datum van vereniging"
 
@@ -4966,6 +4963,9 @@ msgstr "Je achternaam of familienaam"
 
 msgid "check excessive relationships"
 msgstr "extra rapporten controleren"
+
+msgid "(Optional) Cost of the ability"
+msgstr "(Optioneel) Kosten van de vaardigheid"
 
 msgid "Activate new platform features"
 msgstr "Nieuwe platformfuncties activeren"

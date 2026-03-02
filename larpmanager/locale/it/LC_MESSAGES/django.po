@@ -3596,9 +3596,6 @@ msgstr "Contenuto non disponibile"
 msgid "Content unavailable"
 msgstr "Contenuto non disponibile"
 
-msgid "Cost of the ability"
-msgstr "Costo dell'abilità"
-
 msgid "Date of association"
 msgstr "Data associazione"
 
@@ -4966,6 +4963,9 @@ msgstr "Il tuo cognome o nome di famiglia"
 
 msgid "check excessive relationships"
 msgstr "check relazioni in più"
+
+msgid "(Optional) Cost of the ability"
+msgstr "(Facoltativo) Costo dell'abilità"
 
 msgid "Activate new platform features"
 msgstr "Attiva nuove funzionalità della piattaforma"
