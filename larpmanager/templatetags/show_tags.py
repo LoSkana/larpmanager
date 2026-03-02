@@ -468,14 +468,14 @@ def go_trait(
 
 
 @register.simple_tag(takes_context=True)
-def show_trait(context: dict, text: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
+def show_trait(context: dict, text: str, run: Run, include_tooltip: bool) -> str:  # noqa: FBT001
     """Template tag to process text and convert trait references to character links.
 
     Args:
         context: Template context
         text (str): Text containing trait references
         run: Run instance for trait lookup
-        tooltip (bool): Whether to include character tooltips
+        include_tooltip (bool): Whether to include character tooltips
 
     Returns:
         str: Safe HTML with trait references converted to character links
@@ -491,9 +491,11 @@ def show_trait(context: dict, text: str, run: Run, tooltip: bool) -> str:  # noq
         context["max_trait"] = 0
 
     for trait_number in range(context["max_trait"], 0, -1):
-        text = go_trait(context, f"#{trait_number}", trait_number, text, run, include_tooltip=tooltip)
-        text = go_trait(context, f"@{trait_number}", trait_number, text, run, include_tooltip=tooltip)
-        text = go_trait(context, f"^{trait_number}", trait_number, text, run, include_tooltip=tooltip, simple=True)
+        text = go_trait(context, f"#{trait_number}", trait_number, text, run, include_tooltip=include_tooltip)
+        text = go_trait(context, f"@{trait_number}", trait_number, text, run, include_tooltip=include_tooltip)
+        text = go_trait(
+            context, f"^{trait_number}", trait_number, text, run, include_tooltip=include_tooltip, simple=True
+        )
 
     # Text is already HTML-safe from trait link processing, so we can mark it as such
     return format_html("{}", mark_safe(text))  # noqa: S308
