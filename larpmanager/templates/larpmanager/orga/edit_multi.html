@@ -42,5 +42,5 @@
     {{ form2.media }}
     {% include "elements/form/max_length.js" %}
     {% include "elements/form/jump_section.js" %}
-    {% include "elements/working-ticket.js" %}
+    {% include "elements/working-ticket.js" with edit_uuid=num %}
 {% endblock js2 %}

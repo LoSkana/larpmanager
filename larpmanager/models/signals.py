@@ -101,6 +101,7 @@ from larpmanager.cache.px import (
     on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
     refresh_delivery_relationships,
     refresh_modifier_relationships,
+    refresh_modifier_rels_dirty_background,
     refresh_rule_relationships,
 )
 from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
@@ -1662,6 +1663,9 @@ def post_save_writing_option_reset(sender: type, instance: Any, **kwargs: Any) -
     clear_event_fields_cache(instance.question.event_id)
     clear_event_cache_all_runs(instance.question.event)
     clear_writing_questions_cache(instance.event_id)
+    modifier_ids = list(ModifierPx.objects.filter(requirements=instance).values_list("id", flat=True))
+    if modifier_ids:
+        refresh_modifier_rels_dirty_background(modifier_ids)
 
 
 @receiver(pre_delete, sender=WritingOption)
@@ -1686,6 +1690,11 @@ def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any)
     clear_event_fields_cache(instance.event_id)
     clear_event_cache_all_runs(instance.event)
     clear_writing_questions_cache(instance.event_id)
+    modifier_ids = list(
+        ModifierPx.objects.filter(requirements__question=instance).values_list("id", flat=True).distinct()
+    )
+    if modifier_ids:
+        refresh_modifier_rels_dirty_background(modifier_ids)
 
 
 m2m_changed.connect(on_experience_characters_m2m_changed, sender=DeliveryPx.characters.through)

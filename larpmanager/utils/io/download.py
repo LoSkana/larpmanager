@@ -930,7 +930,7 @@ def _get_column_names(context: dict) -> None:
         context["columns"] = [
             {
                 "name": _("The name ability"),
-                "cost": _("Cost of the ability"),
+                "cost": _("(Optional) Cost of the ability"),
                 "typ": _("Ability type"),
                 "descr": _("(Optional) The ability description"),
                 "prerequisites": _("(Optional) Other ability as prerequisite, comma-separated"),
