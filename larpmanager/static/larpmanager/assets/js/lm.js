@@ -463,7 +463,7 @@ function setupConditionalFields() {
 }
 
 function setSelectChevronColor() {
-  const priRgb = getComputedStyle(document.documentElement)
+  const priRgb = getComputedStyle(document.body)
     .getPropertyValue('--ter-rgb')
     .trim();
 
