@@ -33,6 +33,7 @@ from larpmanager.cache.event_text import reset_event_text
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.links import clear_run_event_links_cache
+from larpmanager.cache.px import clear_event_px_cache
 from larpmanager.cache.question import (
     clear_registration_questions_cache,
     clear_writing_questions_cache,
@@ -47,6 +48,7 @@ from larpmanager.cache.role import remove_event_role_cache
 from larpmanager.cache.run import reset_cache_run
 from larpmanager.cache.text_fields import reset_text_fields_cache
 from larpmanager.cache.widget import clear_widget_cache
+from larpmanager.cache.wwyltd import reset_orga_configs_cache
 from larpmanager.models.access import EventRole, get_event_organizers
 from larpmanager.models.base import Feature, auto_set_uuid, debug_set_uuid
 from larpmanager.models.event import Event, EventConfig, EventText, Run
@@ -647,6 +649,7 @@ def reset_all_run(event: Event, run: Run) -> None:
     clear_registration_accounting_cache(run.id)
     clear_event_fields_cache(event.id)
     clear_event_relationships_cache(event.id)
+    clear_event_px_cache(event.id)
     clear_registration_tickets_cache(event.id)
 
     # Clear event text caches for all EventText instances
@@ -664,6 +667,9 @@ def reset_all_run(event: Event, run: Run) -> None:
 
     # Clear widgets
     clear_widget_cache(run.id)
+
+    # Clear orga config field definitions cache (derived from active features)
+    reset_orga_configs_cache(event.id)
 
 
 def on_event_features_m2m_changed(
