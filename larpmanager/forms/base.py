@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import logging
+import re
 from typing import TYPE_CHECKING, Any
 
 from django import forms
@@ -53,7 +54,6 @@ from larpmanager.models.utils import (
     get_option_form_text as util_get_option_form_text,
     strip_tags,
 )
-from larpmanager.templatetags.show_tags import hex_to_rgb
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -1532,3 +1532,29 @@ class BaseAccForm(BaseForm):
             default_value=False,
             context=self.context,
         )
+
+
+def hex_to_rgb(hex_color: Any) -> Any:
+    """Template filter to convert hex color to RGB values.
+
+    Args:
+        hex_color (str): Hex color string (e.g., '#FF0000')
+
+    Returns:
+        str: Comma-separated RGB values (e.g., '255,0,0'), or original value if invalid format
+
+    """
+    if not hex_color:
+        return ""
+
+    hex_without_hash = str(hex_color).lstrip("#")
+
+    # Validate hex format: exactly 6 hexadecimal characters
+    if not re.match(r"^[0-9A-Fa-f]{6}$", hex_without_hash):
+        return hex_color  # Return original value if invalid format
+
+    try:
+        rgb_values = [str(int(hex_without_hash[i : i + 2], 16)) for i in (0, 2, 4)]
+        return ",".join(rgb_values)
+    except (ValueError, IndexError):
+        return hex_color  # Return original value if conversion fails

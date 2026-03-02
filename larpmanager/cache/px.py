@@ -443,6 +443,18 @@ def refresh_rule_rels_dirty_background(rule_ids: int | list[int]) -> None:
     _refresh_px_if_dirty("rules", rules, refresh_rule_relationships)
 
 
+def on_ability_saved(ability: AbilityPx) -> None:
+    """Refresh rels for an ability and all abilities that list it as a prerequisite.
+
+    Called from post_save signal so that renaming or updating an ability propagates
+    to every ability whose prerequisite_rels cache references this one.
+    """
+    ability_ids = [ability.id]
+    ability_ids += list(ability.px_ability_unlock.values_list("id", flat=True))
+    _mark_px_dirty("abilities", ability_ids, ability.event_id)
+    refresh_ability_character_rels_background(ability_ids)
+
+
 # Signal handlers for M2M changes
 def on_ability_characters_m2m_changed(
     sender: type,  # noqa: ARG001

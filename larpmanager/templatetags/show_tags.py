@@ -731,33 +731,6 @@ def length_lte(value: Any, arg: Any) -> Any:
     return len(value) <= int(arg)
 
 
-@register.filter
-def hex_to_rgb(hex_color: Any) -> Any:
-    """Template filter to convert hex color to RGB values.
-
-    Args:
-        hex_color (str): Hex color string (e.g., '#FF0000')
-
-    Returns:
-        str: Comma-separated RGB values (e.g., '255,0,0'), or original value if invalid format
-
-    """
-    if not hex_color:
-        return ""
-
-    hex_without_hash = str(hex_color).lstrip("#")
-
-    # Validate hex format: exactly 6 hexadecimal characters
-    if not re.match(r"^[0-9A-Fa-f]{6}$", hex_without_hash):
-        return hex_color  # Return original value if invalid format
-
-    try:
-        rgb_values = [str(int(hex_without_hash[i : i + 2], 16)) for i in (0, 2, 4)]
-        return ",".join(rgb_values)
-    except (ValueError, IndexError):
-        return hex_color  # Return original value if conversion fails
-
-
 @register.simple_tag
 def define(val: Any = None) -> Any:
     """Template tag to define/store a value in templates."""

@@ -94,6 +94,7 @@ from larpmanager.cache.px import (
     on_ability_characters_m2m_changed,
     on_ability_prerequisites_m2m_changed,
     on_ability_requirements_m2m_changed,
+    on_ability_saved,
     on_delivery_characters_m2m_changed,
     on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
     on_modifier_prerequisites_m2m_changed,
@@ -380,6 +381,7 @@ def reset_accountingitem_cache(instance: Any) -> None:
 def post_save_ability_px(sender: type, instance: AbilityPx, *args: Any, **kwargs: Any) -> None:
     """Update character experience when ability changes."""
     _recalcuate_characters_experience_points(instance)
+    on_ability_saved(instance)
 
 
 @receiver(post_delete, sender=AbilityPx)
