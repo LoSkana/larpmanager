@@ -111,7 +111,7 @@ class AbilityPx(UuidMixin, BaseConceptModel):
         related_name="abilities",
         blank=True,
         verbose_name=_("Requirements"),
-        help_text=_("Indicate the character options, which must be selected to make the skill available"),
+        help_text=_("Indicate the character options, which must be selected to make the ability available"),
     )
 
     characters = models.ManyToManyField(Character, related_name="px_ability_list", blank=True)

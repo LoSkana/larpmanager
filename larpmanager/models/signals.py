@@ -696,7 +696,7 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
     for rel in Relationship.objects.filter(target=instance):
         refresh_character_relationships_background(rel.source_id)
 
-    # Update all other character-related caches (experience, skills, etc.)
+    # Update all other character-related caches (experience, abilities, etc.)
     refresh_character_related_caches(instance)
 
     # Update visible factions

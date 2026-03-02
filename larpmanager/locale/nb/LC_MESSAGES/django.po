@@ -4858,9 +4858,6 @@ msgstr "Allerede eksisterende forhold"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Godkjenning %(user)s som %(role)s"
 
-msgid "Buy skills for your character"
-msgstr "Kjøp ferdigheter til karakteren din"
-
 msgid "Confirm and commit quantities"
 msgstr "Bekreft og forplikt mengder"
 
@@ -5150,6 +5147,9 @@ msgstr "Lagt til nederst på alle sider"
 
 msgid "An error occurred while deleting"
 msgstr "Det oppsto en feil under sletting"
+
+msgid "Buy abilities for your character"
+msgstr "Kjøp evner til karakteren din"
 
 msgid "Cancellation for missing payment"
 msgstr "Avbestilling på grunn av manglende betaling"
@@ -5493,9 +5493,6 @@ msgstr "Administrer datoinnstillinger for dette arrangementet"
 msgid "Manage signup form question options"
 msgstr "Administrer spørsmålsalternativer i påmeldingsskjemaet"
 
-msgid "Manage the type of character skills"
-msgstr "Administrer typen karakterferdigheter"
-
 #, python-format
 msgid "Mark as completed: <b>%(list)s</b>."
 msgstr "Merk som fullført: <b>%(list)s</b>."
@@ -5816,6 +5813,9 @@ msgstr "Jeg bekrefter at jeg har foretatt betalingen"
 msgid "It will be shown to other participants"
 msgstr "Den vil bli vist til andre deltakere"
 
+msgid "Manage the type of character abilities"
+msgstr "Administrer typen karakteregenskaper"
+
 msgid "Membership of the Organization refused"
 msgstr "Medlemskap avslått"
 
@@ -5852,6 +5852,9 @@ msgstr "vi gir deg beskjed så snart som mulig"
 #, python-format
 msgid "<b>%(number)s</b> characters to approve"
 msgstr "<b>%(number)s</b> tegn som skal godkjennes"
+
+msgid "A description of the abilities involved"
+msgstr "En beskrivelse av de involverte evnene"
 
 msgid "Character are not visible at the moment"
 msgstr "Tegnene er ikke synlige for øyeblikket"
@@ -6520,11 +6523,11 @@ msgstr "Denne siden viser alle loggoppføringer for denne hendelsen"
 msgid "This page shows the email lists of subscribers"
 msgstr "Denne siden viser e-postlistene til abonnentene"
 
-msgid "This page summarizes px delivery to characters"
-msgstr "Denne siden oppsummerer px-leveransen til tegn"
-
 msgid "This page summarizes the character inventories"
 msgstr "Denne siden oppsummerer karakterinventarene"
+
+msgid "This page summarizes xp delivery to characters"
+msgstr "Denne siden oppsummerer xp-levering til tegn"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totalt beløp holdt tilbake for overføringsprovisjoner"
@@ -6602,9 +6605,6 @@ msgstr "Du har blitt videresendt til Event Dashboard"
 msgid "you can review, edit, and mark them as assigned"
 msgstr "du kan gå gjennom, redigere og markere dem som tildelt"
 
-msgid "A description of the skills / abilities involved"
-msgstr "En beskrivelse av kompetanseferdighetene"
-
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Få tilgang til karakteren din <a href='%(url)s'>her</a>"
@@ -6633,9 +6633,6 @@ msgstr "Liste over mottakerens e-postadresse, kommaseparert"
 msgid "Manage copying event settings from another event"
 msgstr ""
 "Administrere kopiering av hendelsesinnstillinger fra en annen hendelse"
-
-msgid "Manage the character skills purchaseable with XP"
-msgstr "Administrer karakterferdighetene som kan kjøpes med XP"
 
 msgid "Manage ticket types for participant registration"
 msgstr "Administrer billettyper for deltakerregistrering"
@@ -6855,6 +6852,9 @@ msgstr "Du kan ikke betale medlemskontingenten på dette tidspunktet"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Bli med på Discord for å få hjelp, ideer eller rapportere feil"
 
+msgid "Manage the character abilities purchaseable with XP"
+msgstr "Administrer karakteregenskapene som kan kjøpes med XP"
+
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Administrere lagerbevegelser, lån og reparasjoner"
 
@@ -6964,6 +6964,9 @@ msgstr "Du har allerede sendt en betaling i påvente av bekreftelse"
 msgid "You will have our eternal thanks for believing in us"
 msgstr "Du skal ha vår evige takk for at du tror på oss"
 
+msgid "Your organization's unique subdomain in the platform"
+msgstr "Organisasjonens unike underdomene i plattformen"
+
 msgid "please upload your membership application to proceed"
 msgstr "vennligst last opp medlemssøknaden din for å gå videre"
 
@@ -7050,9 +7053,6 @@ msgstr "Du har fått en inngangsbillett til dette arrangementet av"
 msgid "You have granted data sharing with this organisation!"
 msgstr "Du har gitt tillatelse til datadeling med denne organisasjonen!"
 
-msgid "Your organization's unique subdomain in the plaftform"
-msgstr "Organisasjonens unike underdomene i plaftskjemaet"
-
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr ""
 "En fengende kort setning eller et slagord for å beskrive arrangementet ditt"
@@ -7086,9 +7086,6 @@ msgstr "Angi hvilke økter rabatten er aktiv for"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Angir at betalingen er sendt 'til venner og familie"
-
-msgid "Manage XP distributions for character skill purchases."
-msgstr "Administrer XP-distribusjoner for kjøp av karakterferdigheter."
 
 msgid "Manage fields for character sheet and writing elements"
 msgstr "Administrere felt for karakterark og skriveelementer"
@@ -7350,6 +7347,9 @@ msgstr "Hovedbildet av arrangementet vises på organisasjonens hjemmeside"
 
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Sørg for at du har tid til å se/lytte til innholdet nå"
+
+msgid "Manage XP distributions for character abilities purchases."
+msgstr "Administrer XP-distribusjoner for kjøp av karakteregenskaper."
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Alternativets navn, vises i spørsmålet (hold det kort)"
@@ -9191,12 +9191,6 @@ msgstr ""
 "evner"
 
 msgid ""
-"Indicate the character options, which must be selected to make the skill "
-"available"
-msgstr ""
-"Angi tegnalternativene som må velges for å gjøre ferdigheten tilgjengelig"
-
-msgid ""
 "Now you can configure the integration button and the external application "
 "settings"
 msgstr ""
@@ -9338,6 +9332,11 @@ msgid ""
 msgstr ""
 "I redigeringsprogrammer for rik tekst kan du referere til andre tegn direkte"
 " ved hjelp av deres nummer"
+
+msgid ""
+"Indicate the character options, which must be selected to make the ability "
+"available"
+msgstr "Angi tegnalternativene som må velges for å gjøre evnen tilgjengelig"
 
 msgid ""
 "Indicates a type of identification document issued by the nation in which "
@@ -10617,13 +10616,6 @@ msgstr ""
 "innløsningskode vil bli generert"
 
 msgid ""
-"Adds support for assigning XP (experience points) to characters, which can "
-"then be used to purchase skills"
-msgstr ""
-"Tilfører støtte for å tildele XP (erfaringspoeng) til figurer, som deretter "
-"kan brukes til å kjøpe ferdigheter"
-
-msgid ""
 "Every friend who registers and uses this code will receive the following "
 "discount directly on their ticket"
 msgstr ""
@@ -10657,13 +10649,6 @@ msgid ""
 msgstr ""
 "Denne siden viser hva som vil skje når du forplikter lagermengdene basert på"
 " de gjeldende tilordningene"
-
-msgid ""
-"Time window (in hours) during which the user can revoke a chosen skill and "
-"recover spent XP (default is 0)"
-msgstr ""
-"Tidsvindu (i timer) der brukeren kan tilbakekalle en valgt ferdighet og få "
-"tilbake brukte XP (standard er 0)"
 
 msgid ""
 "Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
@@ -10728,6 +10713,13 @@ msgstr ""
 "Sjekk at du har kopiert hele betalingsgrunnen nøyaktig (i farget tekst), det"
 " er viktig"
 
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen ability and"
+" recover spent XP (default is 0)"
+msgstr ""
+"Tidsvindu (i timer) der brukeren kan tilbakekalle en valgt evne og få "
+"tilbake brukte XP (standard er 0)"
+
 #, python-format
 msgid ""
 "We confirm that the collection for '%(recipient)s' has been activated. <a "
@@ -10735,6 +10727,13 @@ msgid ""
 msgstr ""
 "Vi bekrefter at samlingen for '%(recipient)s' er aktivert. <a "
 "href='%(url)s'>Håndter den her!</a>"
+
+msgid ""
+"Adds support for assigning XP (experience points) to characters, which can "
+"then be used to purchase abilities"
+msgstr ""
+"Tilfører støtte for å tildele XP (erfaringspoeng) til karakterer, som "
+"deretter kan brukes til å kjøpe evner"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

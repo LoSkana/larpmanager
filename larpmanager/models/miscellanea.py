@@ -317,7 +317,7 @@ class Competence(BaseModel):
 
     name = models.CharField(max_length=100, help_text=_("The name of the competence"))
 
-    descr = models.CharField(max_length=5000, help_text=_("A description of the skills / abilities involved"))
+    descr = models.CharField(max_length=5000, help_text=_("A description of the abilities involved"))
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 

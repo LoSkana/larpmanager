@@ -4858,9 +4858,6 @@ msgstr "Již existující vztah"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Schválení %(user)s jako %(role)s"
 
-msgid "Buy skills for your character"
-msgstr "Kupte si dovednosti pro svou postavu"
-
 msgid "Confirm and commit quantities"
 msgstr "Potvrzení a odevzdání množství"
 
@@ -5150,6 +5147,9 @@ msgstr "Přidáno do spodní části všech stránek"
 
 msgid "An error occurred while deleting"
 msgstr "Při odstraňování došlo k chybě"
+
+msgid "Buy abilities for your character"
+msgstr "Koupit schopnosti pro svou postavu"
 
 msgid "Cancellation for missing payment"
 msgstr "Zrušení z důvodu chybějící platby"
@@ -5493,9 +5493,6 @@ msgstr "Správa nastavení data pro tuto událost"
 msgid "Manage signup form question options"
 msgstr "Správa možností otázek registračního formuláře"
 
-msgid "Manage the type of character skills"
-msgstr "Správa typu dovedností postavy"
-
 #, python-format
 msgid "Mark as completed: <b>%(list)s</b>."
 msgstr "Označte jako dokončené: <b>%(list)s</b>."
@@ -5814,6 +5811,9 @@ msgstr "Potvrzuji, že jsem provedl/a platbu"
 msgid "It will be shown to other participants"
 msgstr "Bude ukázán ostatním účastníkům"
 
+msgid "Manage the type of character abilities"
+msgstr "Správa typu schopností postavy"
+
 msgid "Membership of the Organization refused"
 msgstr "Členství odmítnuto"
 
@@ -5850,6 +5850,9 @@ msgstr "dáme vám co nejdříve vědět"
 #, python-format
 msgid "<b>%(number)s</b> characters to approve"
 msgstr "<b>%(number)s</b> znaky ke schválení"
+
+msgid "A description of the abilities involved"
+msgstr "Popis příslušných schopností"
 
 msgid "Character are not visible at the moment"
 msgstr "Znaky nejsou v tuto chvíli viditelné"
@@ -6518,11 +6521,11 @@ msgstr ""
 msgid "This page shows the email lists of subscribers"
 msgstr "Tato stránka zobrazuje seznamy e-mailových odběratelů"
 
-msgid "This page summarizes px delivery to characters"
-msgstr "Tato stránka shrnuje doručení px znakům"
-
 msgid "This page summarizes the character inventories"
 msgstr "Tato stránka shrnuje soupisy postav"
+
+msgid "This page summarizes xp delivery to characters"
+msgstr "Na této stránce je shrnuto poskytování xp postavám"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Celková částka sražená na provize za převod"
@@ -6600,9 +6603,6 @@ msgstr "Byli jste přesměrováni na panel událostí"
 msgid "you can review, edit, and mark them as assigned"
 msgstr "si je můžete prohlédnout, upravit a označit jako přiřazené"
 
-msgid "A description of the skills / abilities involved"
-msgstr "Popis kompetenčních dovedností"
-
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Přístup ke své postavě <a href='%(url)s'>zde</a>"
@@ -6630,9 +6630,6 @@ msgstr "Seznam e-mailových adres příjemce oddělených čárkou"
 
 msgid "Manage copying event settings from another event"
 msgstr "Správa kopírování nastavení události z jiné události"
-
-msgid "Manage the character skills purchaseable with XP"
-msgstr "Správa dovedností postavy, které lze zakoupit za XP"
 
 msgid "Manage ticket types for participant registration"
 msgstr "Správa typů vstupenek pro registraci účastníků"
@@ -6853,6 +6850,9 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Připojte se k našemu Discordu a získejte pomoc, nápady nebo nahlaste chyby"
 
+msgid "Manage the character abilities purchaseable with XP"
+msgstr "Správa schopností postavy zakoupitelných za XP"
+
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Správa pohybu skladových položek, výpůjček a oprav"
 
@@ -6962,6 +6962,9 @@ msgstr "Již jste odeslali platbu, která čeká na ověření"
 msgid "You will have our eternal thanks for believing in us"
 msgstr "Za to, že jste nám věřili, vám patří náš věčný dík"
 
+msgid "Your organization's unique subdomain in the platform"
+msgstr "jedinečná subdoména vaší organizace v platformě"
+
 msgid "please upload your membership application to proceed"
 msgstr "pro pokračování nahrajte svou členskou přihlášku"
 
@@ -7051,9 +7054,6 @@ msgstr "Vstup na tuto událost vám darovali"
 msgid "You have granted data sharing with this organisation!"
 msgstr "S touto organizací jste povolili sdílení dat!"
 
-msgid "Your organization's unique subdomain in the plaftform"
-msgstr "Jedinečná subdoména vaší organizace ve formuláři plaftform"
-
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr "Krátká chytlavá fráze nebo slogan popisující vaši událost"
 
@@ -7086,9 +7086,6 @@ msgstr "Uveďte relace, pro které je sleva aktivní"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Označuje, že platba je zasílána 'přátelům a rodině'"
-
-msgid "Manage XP distributions for character skill purchases."
-msgstr "Správa rozdělování zkušeností pro nákup dovedností postavy."
 
 msgid "Manage fields for character sheet and writing elements"
 msgstr "Správa polí pro list postavy a prvky psaní"
@@ -7351,6 +7348,9 @@ msgstr "Hlavní obrázek události zobrazený na domovské stránce vaší organ
 
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Ujistěte se, že máte čas sledovat/poslouchat obsah nyní"
+
+msgid "Manage XP distributions for character abilities purchases."
+msgstr "Správa distribuce XP pro nákupy schopností postavy."
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Název možnosti, který se zobrazí v otázce (musí být krátký)"
@@ -9111,12 +9111,6 @@ msgstr ""
 "přiřadit schopnostem"
 
 msgid ""
-"Indicate the character options, which must be selected to make the skill "
-"available"
-msgstr ""
-"Uveďte možnosti postavy, které musí být vybrány, aby byla dovednost dostupná"
-
-msgid ""
 "Now you can configure the integration button and the external application "
 "settings"
 msgstr ""
@@ -9255,6 +9249,12 @@ msgid ""
 msgstr ""
 "V textových editorech můžete odkazovat na jiné znaky přímo pomocí jejich "
 "čísla"
+
+msgid ""
+"Indicate the character options, which must be selected to make the ability "
+"available"
+msgstr ""
+"Uveďte možnosti znaků, které musí být vybrány, aby byla schopnost dostupná"
 
 msgid ""
 "Indicates a type of identification document issued by the nation in which "
@@ -10511,13 +10511,6 @@ msgstr ""
 "vygenerován speciální výkupní kód"
 
 msgid ""
-"Adds support for assigning XP (experience points) to characters, which can "
-"then be used to purchase skills"
-msgstr ""
-"Přidává podporu pro přidělování XP (zkušenostních bodů) postavám, které lze "
-"následně použít k nákupu dovedností"
-
-msgid ""
 "Every friend who registers and uses this code will receive the following "
 "discount directly on their ticket"
 msgstr ""
@@ -10551,13 +10544,6 @@ msgid ""
 msgstr ""
 "Tato stránka ukazuje, co se stane, když odevzdáte skladová množství na "
 "základě aktuálních přiřazení"
-
-msgid ""
-"Time window (in hours) during which the user can revoke a chosen skill and "
-"recover spent XP (default is 0)"
-msgstr ""
-"Časové okno (v hodinách), během něhož může uživatel zrušit vybranou "
-"dovednost a získat zpět použité XP (výchozí hodnota je 0)"
 
 msgid ""
 "Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
@@ -10622,6 +10608,13 @@ msgstr ""
 "Zkontrolujte, zda jste přesně opsali celý důvod platby (barevným textem), je"
 " to důležité"
 
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen ability and"
+" recover spent XP (default is 0)"
+msgstr ""
+"Časové okno (v hodinách), během něhož může uživatel zrušit vybranou "
+"schopnost a získat zpět utracené XP (výchozí hodnota je 0)"
+
 #, python-format
 msgid ""
 "We confirm that the collection for '%(recipient)s' has been activated. <a "
@@ -10629,6 +10622,13 @@ msgid ""
 msgstr ""
 "Potvrzujeme, že sběr pro '%(recipient)s' byl aktivován. <a "
 "href='%(url)s'>Spravujte ji zde!</a>"
+
+msgid ""
+"Adds support for assigning XP (experience points) to characters, which can "
+"then be used to purchase abilities"
+msgstr ""
+"Přidává podporu pro přidělování zkušenostních bodů (XP) postavám, které lze "
+"následně použít k nákupu schopností"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

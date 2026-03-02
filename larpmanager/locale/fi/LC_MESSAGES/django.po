@@ -4858,9 +4858,6 @@ msgstr "Jo olemassa oleva suhde"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Hyväksyntä %(user)s kuin %(role)s"
 
-msgid "Buy skills for your character"
-msgstr "Osta taitoja hahmollesi"
-
 msgid "Confirm and commit quantities"
 msgstr "Vahvistetaan ja vahvistetaan määrät"
 
@@ -5150,6 +5147,9 @@ msgstr "Lisätty kaikkien sivujen alareunaan"
 
 msgid "An error occurred while deleting"
 msgstr "Virhe tapahtui poistettaessa"
+
+msgid "Buy abilities for your character"
+msgstr "Osta kykyjä hahmollesi"
 
 msgid "Cancellation for missing payment"
 msgstr "Peruuttaminen maksun puuttumisen vuoksi"
@@ -5493,9 +5493,6 @@ msgstr "Hallitse tämän tapahtuman päivämääräasetuksia"
 msgid "Manage signup form question options"
 msgstr "Hallitse rekisteröitymislomakkeen kysymysvaihtoehtoja"
 
-msgid "Manage the type of character skills"
-msgstr "Hallitse hahmon taitojen tyyppiä"
-
 #, python-format
 msgid "Mark as completed: <b>%(list)s</b>."
 msgstr "Merkitse suoritetuksi: <b>%(list)s</b>."
@@ -5814,6 +5811,9 @@ msgstr "Vahvistan, että olen suorittanut maksun"
 msgid "It will be shown to other participants"
 msgstr "Se näytetään muille osallistujille"
 
+msgid "Manage the type of character abilities"
+msgstr "Hallitse hahmon kykyjen tyyppiä"
+
 msgid "Membership of the Organization refused"
 msgstr "Järjestön jäsenyys evättiin"
 
@@ -5850,6 +5850,9 @@ msgstr "ilmoitamme sinulle mahdollisimman pian"
 #, python-format
 msgid "<b>%(number)s</b> characters to approve"
 msgstr "<b>%(number)s</b> hyväksyttävät merkit"
+
+msgid "A description of the abilities involved"
+msgstr "Kuvaus kyseessä olevista kyvyistä"
 
 msgid "Character are not visible at the moment"
 msgstr "Hahmot eivät näy tällä hetkellä"
@@ -6518,11 +6521,11 @@ msgstr "Tällä sivulla näkyvät kaikki tämän tapahtuman lokimerkinnät"
 msgid "This page shows the email lists of subscribers"
 msgstr "Tämä sivu näyttää tilaajien sähköpostilistat"
 
-msgid "This page summarizes px delivery to characters"
-msgstr "Tällä sivulla on yhteenveto px-toimituksista merkkeihin"
-
 msgid "This page summarizes the character inventories"
 msgstr "Tällä sivulla on yhteenveto hahmoluetteloista"
+
+msgid "This page summarizes xp delivery to characters"
+msgstr "Tällä sivulla on yhteenveto xp:n toimittamisesta hahmoille"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Siirtopalkkioita varten pidätetty kokonaismäärä"
@@ -6601,9 +6604,6 @@ msgstr "Sinut on ohjattu tapahtuman kojelaudalle"
 msgid "you can review, edit, and mark them as assigned"
 msgstr "voit tarkastella, muokata ja merkitä ne osoitetuiksi"
 
-msgid "A description of the skills / abilities involved"
-msgstr "Kuvaus tarvittavista taidoista / kyvyistä"
-
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Pääset hahmoosi <a href='%(url)s'>täältä</a>"
@@ -6631,9 +6631,6 @@ msgstr "Luettelo vastaanottajan sähköpostiosoitteista, pilkulla erotettuna"
 
 msgid "Manage copying event settings from another event"
 msgstr "Tapahtuman asetusten kopioinnin hallinta toisesta tapahtumasta"
-
-msgid "Manage the character skills purchaseable with XP"
-msgstr "Hallitse XP:llä ostettavia hahmon taitoja"
 
 msgid "Manage ticket types for participant registration"
 msgstr "Hallitse lipputyyppejä osallistujien rekisteröintiä varten"
@@ -6857,6 +6854,9 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Liity Discordiin saadaksesi apua, ideoita tai ilmoittaaksesi virheistä"
 
+msgid "Manage the character abilities purchaseable with XP"
+msgstr "Hallitse XP:llä ostettavia hahmon kykyjä"
+
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Hallitse varastotavaroiden siirtoja, lainoja ja korjauksia"
 
@@ -6966,6 +6966,9 @@ msgstr "Olet jo lähettänyt maksun, joka odottaa vahvistusta"
 msgid "You will have our eternal thanks for believing in us"
 msgstr "Saatte ikuisen kiitoksemme siitä, että uskoitte meihin, -"
 
+msgid "Your organization's unique subdomain in the platform"
+msgstr "Organisaatiosi yksilöllinen aliverkkotunnus alustalla"
+
 msgid "please upload your membership application to proceed"
 msgstr "lataa jäsenhakemuksesi jatkaaksesi"
 
@@ -7055,9 +7058,6 @@ msgstr ""
 msgid "You have granted data sharing with this organisation!"
 msgstr "Olet antanut luvan tietojen jakamiseen tämän organisaation kanssa!"
 
-msgid "Your organization's unique subdomain in the plaftform"
-msgstr "Organisaatiosi yksilöllinen aliverkkotunnus plaftformissa"
-
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr "Tarttuva lyhyt lause tai iskulause, joka kuvaa tapahtumaasi"
 
@@ -7091,9 +7091,6 @@ msgstr "Ilmoita istunnot, joiden osalta alennus on voimassa"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Ilmoittaa, että maksu lähetetään 'ystäville ja perheenjäsenille'"
-
-msgid "Manage XP distributions for character skill purchases."
-msgstr "Hallitse hahmon taitojen hankkimiseen liittyviä XP-jakoja."
 
 msgid "Manage fields for character sheet and writing elements"
 msgstr "Hallitse kenttiä hahmo- ja kirjoituselementtejä varten"
@@ -7353,6 +7350,9 @@ msgstr "Päätapahtuman kuva näkyy organisaatiosi kotisivulla"
 
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Varmista, että sinulla on aikaa katsoa/kuunnella sisältöä nyt"
+
+msgid "Manage XP distributions for character abilities purchases."
+msgstr "Hallitse hahmon kykyjen hankkimiseen liittyviä XP-jakoja."
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Vaihtoehdon nimi, joka näkyy kysymyksessä (pidä se lyhyenä)"
@@ -9198,12 +9198,6 @@ msgstr ""
 "voidaan käyttää uudelleen useissa kyvyissä"
 
 msgid ""
-"Indicate the character options, which must be selected to make the skill "
-"available"
-msgstr ""
-"Ilmoita hahmovaihtoehdot, jotka on valittava, jotta taito on käytettävissä"
-
-msgid ""
 "Now you can configure the integration button and the external application "
 "settings"
 msgstr ""
@@ -9348,6 +9342,12 @@ msgid ""
 msgstr ""
 "Rikastekstieditorissa voit viitata muihin merkkeihin suoraan niiden numeron "
 "avulla"
+
+msgid ""
+"Indicate the character options, which must be selected to make the ability "
+"available"
+msgstr ""
+"Ilmoita merkkivaihtoehdot, jotka on valittava, jotta kyky on käytettävissä"
 
 msgid ""
 "Indicates a type of identification document issued by the nation in which "
@@ -10620,13 +10620,6 @@ msgstr ""
 "lunastuskoodi luodaan"
 
 msgid ""
-"Adds support for assigning XP (experience points) to characters, which can "
-"then be used to purchase skills"
-msgstr ""
-"Lisää tuen XP:n (kokemuspisteiden) antamiselle hahmoille, joita voi sitten "
-"käyttää taitojen ostamiseen"
-
-msgid ""
 "Every friend who registers and uses this code will receive the following "
 "discount directly on their ticket"
 msgstr ""
@@ -10660,13 +10653,6 @@ msgid ""
 msgstr ""
 "Tällä sivulla näytetään, mitä tapahtuu, kun sitoudut varastomääriin "
 "nykyisten toimeksiantojen perusteella"
-
-msgid ""
-"Time window (in hours) during which the user can revoke a chosen skill and "
-"recover spent XP (default is 0)"
-msgstr ""
-"Aikaikkuna (tunteina), jonka aikana käyttäjä voi peruuttaa valitun taidon ja"
-" saada takaisin käytetyt XP:t (oletusarvo on 0)"
 
 msgid ""
 "Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
@@ -10731,6 +10717,13 @@ msgstr ""
 "Tarkista, että olet kopioinut koko maksuviestin tarkasti (värillisenä "
 "tekstinä), sillä se on tärkeää"
 
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen ability and"
+" recover spent XP (default is 0)"
+msgstr ""
+"Aikaikkuna (tunteina), jonka aikana käyttäjä voi peruuttaa valitsemansa "
+"kyvyn ja saada käytetyt XP:t takaisin (oletusarvo on 0)"
+
 #, python-format
 msgid ""
 "We confirm that the collection for '%(recipient)s' has been activated. <a "
@@ -10738,6 +10731,13 @@ msgid ""
 msgstr ""
 "Vahvistamme, että '%(recipient)s' -keräys on aktivoitu. <a "
 "href='%(url)s'>Hallitse sitä täällä!</a>"
+
+msgid ""
+"Adds support for assigning XP (experience points) to characters, which can "
+"then be used to purchase abilities"
+msgstr ""
+"Lisää tuen XP:n (kokemuspisteiden) antamiselle hahmoille, joita voi sitten "
+"käyttää kykyjen ostamiseen"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

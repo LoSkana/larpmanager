@@ -4858,9 +4858,6 @@ msgstr "Relazione già esistente"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Approvazione %(user)s come %(role)s"
 
-msgid "Buy skills for your character"
-msgstr "Acquista abilità del tuo personaggio"
-
 msgid "Confirm and commit quantities"
 msgstr "Conferma e impegna le quantità"
 
@@ -5150,6 +5147,9 @@ msgstr "Aggiunto in fondo a tutte le pagine"
 
 msgid "An error occurred while deleting"
 msgstr "Si è verificato un errore durante l'eliminazione di"
+
+msgid "Buy abilities for your character"
+msgstr "Acquista abilità per il tuo personaggio"
 
 msgid "Cancellation for missing payment"
 msgstr "Cancellazione per mancato pagamento"
@@ -5493,9 +5493,6 @@ msgstr "Gestione delle impostazioni della data per questo evento"
 msgid "Manage signup form question options"
 msgstr "Gestisci le opzioni delle domande del modulo di iscrizione"
 
-msgid "Manage the type of character skills"
-msgstr "Gestisci il tipo di abilità del personaggio"
-
 #, python-format
 msgid "Mark as completed: <b>%(list)s</b>."
 msgstr "Imposta come completato: <b>%(list)s</b>."
@@ -5814,6 +5811,9 @@ msgstr "Confermo di aver effettuato il pagamento"
 msgid "It will be shown to other participants"
 msgstr "Verrà mostrato agli altri partecipanti"
 
+msgid "Manage the type of character abilities"
+msgstr "Gestisci i tipi di abilità del personaggio"
+
 msgid "Membership of the Organization refused"
 msgstr "Iscrizione all'Associazione rifiutata"
 
@@ -5850,6 +5850,9 @@ msgstr "vi faremo sapere il prima possibile"
 #, python-format
 msgid "<b>%(number)s</b> characters to approve"
 msgstr "<b>%(number)s</b> personaggi da approvare"
+
+msgid "A description of the abilities involved"
+msgstr "Una descrizione delle abilità coinvolte"
 
 msgid "Character are not visible at the moment"
 msgstr "I personaggi non sono visibili al momento"
@@ -6519,11 +6522,11 @@ msgstr "Questa pagina mostra tutte le voci di attività per questo evento"
 msgid "This page shows the email lists of subscribers"
 msgstr "Questa pagina mostra gli elenchi di e-mail degli abbonati"
 
-msgid "This page summarizes px delivery to characters"
-msgstr "Questa pagina riassume le consegne di px ai personaggi"
-
 msgid "This page summarizes the character inventories"
 msgstr "Questa pagina riassume gli inventari dei personaggi"
+
+msgid "This page summarizes xp delivery to characters"
+msgstr "Questa pagina riepiloga la consegna di PX ai personaggi"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Importo totale trattenuto per commissioni di trasferimento"
@@ -6603,9 +6606,6 @@ msgstr "Sei stato reindirizzato alla dashboard dell'evento"
 msgid "you can review, edit, and mark them as assigned"
 msgstr "è possibile rivederli, modificarli e contrassegnarli come assegnati"
 
-msgid "A description of the skills / abilities involved"
-msgstr "Una descrizione delle abilità della competenza"
-
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Accedi al tuo personaggio <a href='%(url)s'>qui</a>"
@@ -6633,9 +6633,6 @@ msgstr "Elenco degli indirizzi e-mail dei destinatari, separati da virgole"
 
 msgid "Manage copying event settings from another event"
 msgstr "Gestisci la copia delle impostazioni dell'evento da un altro evento"
-
-msgid "Manage the character skills purchaseable with XP"
-msgstr "Gestisci le abilità del personaggio acquistabili con gli XP"
 
 msgid "Manage ticket types for participant registration"
 msgstr "Gestisci i tipi di biglietti per l'iscrizione dei partecipanti"
@@ -6860,6 +6857,9 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Unisciti al nostro Discord per ricevere aiuto, idee o per segnalare bug"
 
+msgid "Manage the character abilities purchaseable with XP"
+msgstr "Gestire le abilità dei personaggi acquistabili con gli XP"
+
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Gestione dei movimenti di magazzino, dei prestiti e delle riparazioni"
 
@@ -6970,6 +6970,9 @@ msgstr "Hai già inviato un pagamento in attesa di verifica"
 msgid "You will have our eternal thanks for believing in us"
 msgstr "Avrai il nostro eterno ringraziamento per aver creduto  in noi"
 
+msgid "Your organization's unique subdomain in the platform"
+msgstr "Il sottodominio unico della vostra organizzazione nella piattaforma"
+
 msgid "please upload your membership application to proceed"
 msgstr "per favore carica la domanda di adesione per procedere"
 
@@ -7059,9 +7062,6 @@ msgstr "Ti è stata regalata una iscrizione a questo evento, da parte di "
 msgid "You have granted data sharing with this organisation!"
 msgstr "Hai concesso la condivisione dei dati con questa organizzazione!"
 
-msgid "Your organization's unique subdomain in the plaftform"
-msgstr "Il sottodominio unico della tua organizzazione nella piattaforma"
-
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr ""
 "Una breve frase o uno slogan accattivante per descrivere il tuo evento"
@@ -7097,10 +7097,6 @@ msgstr "Indica le sessioni per le quali è attivo lo sconto"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Indica che il pagamento viene inviato 'ad amici e parenti'"
-
-msgid "Manage XP distributions for character skill purchases."
-msgstr ""
-"Gestisci le distribuzioni di XP per l'acquisto delle abilità dei personaggi."
 
 msgid "Manage fields for character sheet and writing elements"
 msgstr ""
@@ -7376,6 +7372,10 @@ msgstr ""
 
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Assicurati di avere il tempo di guardare/ascoltare i contenuti adesso"
+
+msgid "Manage XP distributions for character abilities purchases."
+msgstr ""
+"Gestire le distribuzioni di XP per l'acquisto delle abilità dei personaggi."
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr ""
@@ -9369,13 +9369,6 @@ msgstr ""
 "essere assegnati alle abilità"
 
 msgid ""
-"Indicate the character options, which must be selected to make the skill "
-"available"
-msgstr ""
-"Indicare le opzioni personaggio, che devono essere selezionate per rendere "
-"l'abilità disponibile"
-
-msgid ""
 "Now you can configure the integration button and the external application "
 "settings"
 msgstr ""
@@ -9523,6 +9516,13 @@ msgid ""
 msgstr ""
 "Negli editor di testo ricco, è possibile fare riferimento ad altri "
 "personaggi direttamente utilizzando il loro numero"
+
+msgid ""
+"Indicate the character options, which must be selected to make the ability "
+"available"
+msgstr ""
+"Indicare le opzioni dei caratteri che devono essere selezionate per rendere "
+"disponibile l'abilità"
 
 msgid ""
 "Indicates a type of identification document issued by the nation in which "
@@ -10813,13 +10813,6 @@ msgstr ""
 "codice speciale di riscatto"
 
 msgid ""
-"Adds support for assigning XP (experience points) to characters, which can "
-"then be used to purchase skills"
-msgstr ""
-"Aggiunge il supporto per l'assegnazione di XP (punti esperienza) ai "
-"personaggi, che possono essere utilizzati per acquistare abilità"
-
-msgid ""
 "Every friend who registers and uses this code will receive the following "
 "discount directly on their ticket"
 msgstr ""
@@ -10853,13 +10846,6 @@ msgid ""
 msgstr ""
 "Questa pagina mostra cosa accadrà quando si impegneranno le quantità di "
 "magazzino in base alle assegnazioni correnti"
-
-msgid ""
-"Time window (in hours) during which the user can revoke a chosen skill and "
-"recover spent XP (default is 0)"
-msgstr ""
-"Finestra di tempo (in ore) durante la quale l'utente può revocare un'abilità"
-" scelta e recuperare i punti XP spesi (l'impostazione predefinita è 0)"
 
 msgid ""
 "Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
@@ -10924,6 +10910,13 @@ msgstr ""
 "Controlla di aver copiato esattamente tutta la causale di versamento (in "
 "testo colorato), è importante"
 
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen ability and"
+" recover spent XP (default is 0)"
+msgstr ""
+"Finestra di tempo (in ore) durante la quale l'utente può revocare un'abilità"
+" scelta e recuperare i PX spesi (predefinito 0)"
+
 #, python-format
 msgid ""
 "We confirm that the collection for '%(recipient)s' has been activated. <a "
@@ -10931,6 +10924,13 @@ msgid ""
 msgstr ""
 "Ti confermiamo che è stata attivata la colletta per '%(recipient)s'. <a "
 "href='%(url)s'>Gestiscila qui!</a>"
+
+msgid ""
+"Adds support for assigning XP (experience points) to characters, which can "
+"then be used to purchase abilities"
+msgstr ""
+"Aggiunge il supporto per l'assegnazione di XP (punti esperienza) ai "
+"personaggi, che possono essere utilizzati per acquistare abilità"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

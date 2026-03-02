@@ -589,7 +589,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Ability type
-    descr: Manage the type of character skills
+    descr: Manage the type of character abilities
     slug: orga_px_ability_types
     number: 81
     config: px
@@ -600,8 +600,8 @@
     module: experience
 - model: larpmanager.eventpermission
   fields:
-    name: Ability
-    descr: Manage the character skills purchaseable with XP
+    name: Abilities
+    descr: Manage the character abilities purchaseable with XP
     slug: orga_px_abilities
     number: 51
     config: px
@@ -612,8 +612,8 @@
     module: experience
 - model: larpmanager.eventpermission
   fields:
-    name: Delivery
-    descr: Manage XP distributions for character skill purchases.
+    name: Deliveries
+    descr: Manage XP distributions for character abilities purchases.
     slug: orga_px_deliveries
     number: 61
     config: px
