@@ -64,7 +64,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("ggggg")
     submit_confirm(page)
-    page.get_by_role("link", name="Delivery").click()
+    sidebar(page, "Deliveries")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("eeee2")
