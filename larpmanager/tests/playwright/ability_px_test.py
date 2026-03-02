@@ -159,7 +159,7 @@ def ability(live_server: Any, page: Any) -> None:
         "This text should show"
     )
     submit_confirm(page)
-    sidebar(page, "Ability")
+    sidebar(page, "Abilities")
     page.wait_for_load_state("load")
     just_wait(page)
     page.locator("[id='u2']").locator(".fa-edit").click()
@@ -167,7 +167,7 @@ def ability(live_server: Any, page: Any) -> None:
     page.get_by_role("searchbox").nth(3).fill("test_template")
     page.get_by_role("option", name="test_template").click()
     submit_confirm(page)
-    sidebar(page, "Ability")
+    sidebar(page, "Abilities")
     page.get_by_role("cell", name="This text should show").click()
 
 

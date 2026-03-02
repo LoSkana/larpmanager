@@ -92,7 +92,7 @@ def abilities(page: Any) -> None:
     page.locator("#id_px_user").check()
     submit_confirm(page)
 
-    sidebar(page, "Ability")
+    sidebar(page, "Abilities")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     page.locator("#id_first").click()
