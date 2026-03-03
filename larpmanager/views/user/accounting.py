@@ -79,7 +79,7 @@ from larpmanager.utils.core.common import (
     get_collection_partecipate,
     get_collection_redeem,
 )
-from larpmanager.utils.core.exceptions import check_association_feature
+from larpmanager.utils.core.exceptions import RedirectError, check_association_feature
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 
 logger = logging.getLogger(__name__)
@@ -387,7 +387,7 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
     check_association_feature(request, context, "payment")
 
     # Get event context and mark as accounting page
-    registration = get_accounting_registration(context, registration_uuid)
+    registration = get_accounting_registration(request, context, registration_uuid)
     context = get_event_context(request, registration.run.get_slug())
     context["show_accounting"] = True
     context["registration"] = registration
@@ -450,19 +450,8 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
     return render(request, "larpmanager/member/accounting_registration.html", context)
 
 
-def get_accounting_registration(context: dict, registration_uuid: str) -> Registration:
-    """Get registration by UUID with member and association validation.
-
-    Args:
-        context: Context dictionary containing member and association_id
-        registration_uuid: Registration UUID or ID (numeric fallback)
-
-    Returns:
-        Registration object with related run and event data
-
-    Raises:
-        Http404: If registration not found or access denied
-    """
+def get_accounting_registration(request: HttpRequest, context: dict, registration_uuid: str) -> Registration:
+    """Get registration by UUID with member and association validation."""
     # Build base queryset with related data
     queryset = Registration.objects.select_related("run", "run__event")
     filters = {
@@ -471,19 +460,20 @@ def get_accounting_registration(context: dict, registration_uuid: str) -> Regist
         "run__event__association_id": context["association_id"],
     }
 
-    # Try UUID lookup first
+    # Check UUID lookup first
     try:
         return queryset.get(uuid=registration_uuid, **filters)
-    except (ObjectDoesNotExist, ValueError, AttributeError) as err:
-        # Fallback to pk lookup if identifier is numeric
-        if str(registration_uuid).isdigit():
-            try:
-                return queryset.get(pk=registration_uuid, **filters)
-            except ObjectDoesNotExist:
-                msg = f"registration not found {err}"
-                raise Http404(msg) from err
-        msg = f"registration not found {err}"
-        raise Http404(msg) from err
+    except (ObjectDoesNotExist, ValueError, AttributeError):
+        pass
+
+    messages.error(
+        request,
+        _("No registration found for this event")
+        + ", "
+        + _("please ensure that you have accessed the platform using the correct account"),
+    )
+    msg = "home"
+    raise RedirectError(msg)
 
 
 @login_required
@@ -512,7 +502,12 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
     # Validate user membership status - must be accepted to pay dues
     memb = get_user_membership(context["member"], context["association_id"])
     if memb.status != MembershipStatus.ACCEPTED:
-        messages.warning(request, _("It is not possible for you to pay dues at this time") + ".")
+        messages.error(
+            request,
+            _("No accepted membership found")
+            + ", "
+            + _("please ensure that you have accessed the platform using the correct account"),
+        )
         return redirect("accounting")
 
     # Check if membership fee already paid for current year
