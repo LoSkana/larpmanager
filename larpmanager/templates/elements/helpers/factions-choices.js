@@ -20,7 +20,7 @@ window.addEventListener('DOMContentLoaded', function() {
             {% if form.instance.pk %}
             var edit_uuid = '{{ form.instance.uuid }}';
             {% else %}
-            var edit_uuid = "0";
+            var edit_uuid = "";
             {% endif %}
 
             request = $.ajax({

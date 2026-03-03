@@ -3593,9 +3593,6 @@ msgstr "Sisältö ei ole käytettävissä"
 msgid "Content unavailable"
 msgstr "Sisältö ei ole käytettävissä"
 
-msgid "Cost of the ability"
-msgstr "Taidon hinta"
-
 msgid "Date of association"
 msgstr "Yhdistymispäivä"
 
