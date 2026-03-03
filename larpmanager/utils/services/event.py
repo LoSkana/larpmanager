@@ -33,7 +33,7 @@ from larpmanager.cache.event_text import reset_event_text
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.links import clear_run_event_links_cache
-from larpmanager.cache.px import clear_event_px_cache
+from larpmanager.cache.px import clear_event_px_cache, get_px_effective_event_id
 from larpmanager.cache.question import (
     clear_registration_questions_cache,
     clear_writing_questions_cache,
@@ -649,7 +649,7 @@ def reset_all_run(event: Event, run: Run) -> None:
     clear_registration_accounting_cache(run.id)
     clear_event_fields_cache(event.id)
     clear_event_relationships_cache(event.id)
-    clear_event_px_cache(event.id)
+    clear_event_px_cache(get_px_effective_event_id(event))
     clear_registration_tickets_cache(event.id)
 
     # Clear event text caches for all EventText instances

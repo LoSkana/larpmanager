@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import logging
 from functools import partial
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -31,6 +31,9 @@ from larpmanager.models.event import Event
 from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.utils.core.common import _validate_and_fetch_objects
 from larpmanager.utils.larpmanager.tasks import background_auto
+
+if TYPE_CHECKING:
+    from larpmanager.models.form import WritingOption
 
 logger = logging.getLogger(__name__)
 
@@ -46,17 +49,19 @@ def get_event_px_key(event_id: int) -> str:
     return f"event__px__{event_id}"
 
 
+def get_px_effective_event_id(event: Event) -> int:
+    """Return the event ID to use as PX cache key."""
+    if event.parent_id and not event.get_config("campaign_abilitypx_indep", default_value=False):
+        return event.parent_id
+    return event.id
+
+
 def clear_event_px_cache(event_id: int) -> None:
     """Reset event PX cache for given event ID."""
     # Clear cache for the main event
     cache_key = get_event_px_key(event_id)
     cache.delete(cache_key)
     logger.debug("Reset PX cache for event %s", event_id)
-
-    # Invalidate cache for all child events to maintain consistency
-    for child_event_id in Event.objects.filter(parent_id=event_id).values_list("pk", flat=True):
-        cache_key = get_event_px_key(child_event_id)
-        cache.delete(cache_key)
 
 
 def build_relationship_dict(relationship_items: list) -> dict[str, Any]:
@@ -306,45 +311,46 @@ def get_event_px_cache(event: Event) -> dict[str, Any]:
         Dictionary containing cached PX relationship data
 
     """
-    # Generate cache key for this specific event
-    cache_key = get_event_px_key(event.id)
+    effective_event = event.parent if event.parent else event
+    cache_key = get_event_px_key(effective_event.id)
 
     # Attempt to retrieve cached relationships
     cached_relationships = cache.get(cache_key)
 
     # Initialize cache if no data found
     if cached_relationships is None:
-        logger.debug("PX cache miss for event %s, initializing", event.id)
-        return init_event_px_all(event)
+        logger.debug("PX cache miss for event %s (effective %s), initializing", event.id, effective_event.id)
+        return init_event_px_all(effective_event)
 
     # Resolve any items still marked as dirty (not yet cleaned by background job)
     any_resolved = False
-    if cache.get(_get_px_has_dirty_key(event.id)):
+    if cache.get(_get_px_has_dirty_key(effective_event.id)):
         for _section, _model, _get_rels in (
             ("abilities", AbilityPx, get_ability_rels),
             ("deliveries", DeliveryPx, get_delivery_rels),
             ("modifiers", ModifierPx, get_modifier_rels),
             ("rules", RulePx, get_rule_rels),
         ):
-            if _resolve_dirty_px_section(event.id, cached_relationships, _section, _model, _get_rels):
+            if _resolve_dirty_px_section(effective_event.id, cached_relationships, _section, _model, _get_rels):
                 any_resolved = True
     if any_resolved:
-        cache.set(get_event_px_key(event.id), cached_relationships, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cache.set(get_event_px_key(effective_event.id), cached_relationships, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return cached_relationships
 
 
-def update_cache_section(event_id: int, section_name: str, section_id: int, data: dict[str, Any]) -> None:
+def update_cache_section(event: Event, section_name: str, section_id: int, data: dict[str, Any]) -> None:
     """Update a specific section in the event PX cache.
 
     Args:
-        event_id: The event ID
+        event: The event
         section_name: Name of the cache section (e.g., 'abilities', 'deliveries')
         section_id: ID of the item within the section
         data: Data to store for this item
 
     """
     try:
+        event_id = event.parent_id if event.parent else event.id
         cache_key = get_event_px_key(event_id)
         cached_event_data = cache.get(cache_key)
 
@@ -367,49 +373,28 @@ def update_cache_section(event_id: int, section_name: str, section_id: int, data
         clear_event_px_cache(event_id)
 
 
-def remove_item_from_cache_section(event_id: int, section_name: str, section_id: int) -> None:
-    """Remove an item from a specific section in the event PX cache.
-
-    Args:
-        event_id: The event ID
-        section_name: Name of the cache section (e.g., 'abilities', 'deliveries')
-        section_id: ID of the item to remove
-
-    """
-    try:
-        cache_key = get_event_px_key(event_id)
-        cached_data = cache.get(cache_key)
-        if cached_data and section_id in cached_data.get(section_name, {}):
-            del cached_data[section_name][section_id]
-            cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-            logger.debug("Removed %s %s from PX cache", section_name, section_id)
-    except Exception:
-        logger.exception("Error removing %s %s from PX cache", section_name, section_id)
-        clear_event_px_cache(event_id)
-
-
 def refresh_ability_relationships(ability: AbilityPx) -> None:
     """Update ability relationships in cache."""
     ability_relationship_data = get_ability_rels(ability)
-    update_cache_section(ability.event_id, "abilities", ability.id, ability_relationship_data)
+    update_cache_section(ability.event, "abilities", ability.id, ability_relationship_data)
 
 
 def refresh_delivery_relationships(delivery: DeliveryPx) -> None:
     """Update delivery relationships in cache."""
     delivery_relationship_data = get_delivery_rels(delivery)
-    update_cache_section(delivery.event_id, "deliveries", delivery.id, delivery_relationship_data)
+    update_cache_section(delivery.event, "deliveries", delivery.id, delivery_relationship_data)
 
 
 def refresh_modifier_relationships(modifier: ModifierPx) -> None:
     """Update modifier relationships in cache."""
     modifier_relationship_data = get_modifier_rels(modifier)
-    update_cache_section(modifier.event_id, "modifiers", modifier.id, modifier_relationship_data)
+    update_cache_section(modifier.event, "modifiers", modifier.id, modifier_relationship_data)
 
 
 def refresh_rule_relationships(rule: RulePx) -> None:
     """Update rule relationships in cache."""
     rule_relationship_data = get_rule_rels(rule)
-    update_cache_section(rule.event_id, "rules", rule.id, rule_relationship_data)
+    update_cache_section(rule.event, "rules", rule.id, rule_relationship_data)
 
 
 # Background tasks for cache updates
@@ -453,6 +438,36 @@ def on_ability_saved(ability: AbilityPx) -> None:
     ability_ids += list(ability.px_ability_unlock.values_list("id", flat=True))
     _mark_px_dirty("abilities", ability_ids, ability.event_id)
     refresh_ability_character_rels_background(ability_ids)
+
+
+def on_character_saved(character_id: int, event_id: int) -> None:
+    """Refresh ability caches that list this character in their character_rels.
+
+    Called from post_save signal on Character so that renaming a character propagates
+    to the cached_rels of every ability that has this character assigned.
+    """
+    ability_ids = list(AbilityPx.objects.filter(characters__id=character_id).values_list("id", flat=True))
+    if not ability_ids:
+        return
+    _mark_px_dirty("abilities", ability_ids, event_id)
+    refresh_ability_character_rels_background(ability_ids)
+
+
+def on_writing_option_saved(option: WritingOption, event_id: int) -> None:
+    """Refresh ability caches that list this option in their requirement_rels.
+
+    Called from post_save signal on WritingOption so that renaming an option propagates
+    to the cached_rels of every ability that has this option as a requirement.
+    """
+    ability_ids = list(AbilityPx.objects.filter(requirements__id=option.id).values_list("id", flat=True))
+    if not ability_ids:
+        return
+    _mark_px_dirty("abilities", ability_ids, event_id)
+    refresh_ability_character_rels_background(ability_ids)
+
+    modifier_ids = list(ModifierPx.objects.filter(requirements=option).values_list("id", flat=True))
+    if modifier_ids:
+        refresh_modifier_rels_dirty_background(modifier_ids)
 
 
 # Signal handlers for M2M changes
