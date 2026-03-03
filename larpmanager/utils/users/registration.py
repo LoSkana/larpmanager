@@ -748,7 +748,7 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
             (
                 reverse("character_abilities", args=[run.get_slug(), character_uuid]),
                 _("Abilities"),
-                _("Buy skills for your character"),
+                _("Buy abilities for your character"),
             )
         )
 

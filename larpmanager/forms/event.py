@@ -710,10 +710,10 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("px_user", ConfigType.BOOL, player_selection_label, player_selection_help_text)
 
-            # Undo period configuration - time window for skill revocation
+            # Undo period configuration - time window for ability revocation
             undo_period_label = _("Undo period")
             undo_period_help_text = _(
-                "Time window (in hours) during which the user can revoke a chosen skill and recover spent XP (default is 0)",
+                "Time window (in hours) during which the user can revoke a chosen ability and recover spent XP (default is 0)",
             )
             self.add_configs("px_undo", ConfigType.INT, undo_period_label, undo_period_help_text)
 

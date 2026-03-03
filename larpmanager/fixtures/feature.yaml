@@ -774,7 +774,7 @@
   fields:
     name: Experience points
     descr: Adds support for assigning XP (experience points) to characters, which
-      can then be used to purchase skills
+      can then be used to purchase abilities
     slug: px
     overall: false
     placeholder: false

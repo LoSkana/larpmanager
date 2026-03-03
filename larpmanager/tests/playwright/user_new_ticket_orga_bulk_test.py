@@ -193,7 +193,7 @@ def bulk_px(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # create ability
-    sidebar(page, "Ability")
+    sidebar(page, "Abilities")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("swor")

@@ -89,9 +89,6 @@ msgstr "voor"
 msgid "Area"
 msgstr "Gebied"
 
-msgid "Band"
-msgstr "Fascia"
-
 msgid "Body"
 msgstr "Lichaam"
 
@@ -4855,9 +4852,6 @@ msgstr "Reeds bestaande relatie"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Goedkeuring %(user)s als %(role)s"
 
-msgid "Buy skills for your character"
-msgstr "Koop vaardigheden voor je personage"
-
 msgid "Confirm and commit quantities"
 msgstr "Hoeveelheden bevestigen en vastleggen"
 
@@ -5150,6 +5144,9 @@ msgstr "Toegevoegd aan de onderkant van alle pagina's"
 
 msgid "An error occurred while deleting"
 msgstr "Er is een fout opgetreden tijdens het verwijderen van"
+
+msgid "Buy abilities for your character"
+msgstr "Koop vaardigheden voor je personage"
 
 msgid "Cancellation for missing payment"
 msgstr "Annulering wegens te late betaling"
@@ -5493,9 +5490,6 @@ msgstr "Beheer de datuminstellingen voor dit evenement"
 msgid "Manage signup form question options"
 msgstr "Vraagopties inschrijfformulier beheren"
 
-msgid "Manage the type of character skills"
-msgstr "Beheer het type karaktervaardigheden"
-
 #, python-format
 msgid "Mark as completed: <b>%(list)s</b>."
 msgstr "Markeer als voltooid: <b>%(list)s</b>."
@@ -5816,6 +5810,9 @@ msgstr "Ik bevestig dat ik de betaling heb gedaan"
 msgid "It will be shown to other participants"
 msgstr "Het wordt getoond aan andere deelnemers"
 
+msgid "Manage the type of character abilities"
+msgstr "Het type karaktervaardigheden beheren"
+
 msgid "Membership of the Organization refused"
 msgstr "Lidmaatschap geweigerd"
 
@@ -5852,6 +5849,9 @@ msgstr "we laten het je zo snel mogelijk weten"
 #, python-format
 msgid "<b>%(number)s</b> characters to approve"
 msgstr "<b>%(number)s</b> tekens om goed te keuren"
+
+msgid "A description of the abilities involved"
+msgstr "Een beschrijving van de betrokken vaardigheden"
 
 msgid "Character are not visible at the moment"
 msgstr "Karakters zijn momenteel niet zichtbaar"
@@ -6523,11 +6523,11 @@ msgstr "Deze pagina toont alle logboekvermeldingen voor deze gebeurtenis"
 msgid "This page shows the email lists of subscribers"
 msgstr "Deze pagina toont de e-maillijsten van abonnees"
 
-msgid "This page summarizes px delivery to characters"
-msgstr "Deze pagina geeft een overzicht van de px-levering aan tekens"
-
 msgid "This page summarizes the character inventories"
 msgstr "Deze pagina geeft een samenvatting van de karakterinventarisaties"
+
+msgid "This page summarizes xp delivery to characters"
+msgstr "Deze pagina geeft een overzicht van de xp-levering aan personages"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totaal ingehouden bedrag voor overschrijvingsprovisies"
@@ -6608,9 +6608,6 @@ msgstr "Je bent doorgestuurd naar het Event Dashboard"
 msgid "you can review, edit, and mark them as assigned"
 msgstr "je kunt ze bekijken, bewerken en markeren als toegewezen"
 
-msgid "A description of the skills / abilities involved"
-msgstr "Een beschrijving van de competentievaardigheden"
-
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Krijg toegang tot je personage <a href='%(url)s'>hier</a>"
@@ -6638,9 +6635,6 @@ msgstr "Lijst met e-mailadressen van ontvangers, door komma's gescheiden"
 
 msgid "Manage copying event settings from another event"
 msgstr "Beheer het kopiëren van evenementinstellingen van een ander evenement"
-
-msgid "Manage the character skills purchaseable with XP"
-msgstr "Beheer de personagevaardigheden die je kunt kopen met XP"
 
 msgid "Manage ticket types for participant registration"
 msgstr "Beheer tickettypen voor deelnemersregistratie"
@@ -6863,6 +6857,9 @@ msgstr "Je kunt je lidmaatschapsgeld op dit moment niet betalen"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Word lid van onze Discord voor hulp, ideeën of om bugs te melden"
 
+msgid "Manage the character abilities purchaseable with XP"
+msgstr "Beheer de vaardigheden van je personage die je kunt kopen met XP"
+
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Beheren van magazijnbewegingen, leningen en reparaties"
 
@@ -6971,6 +6968,9 @@ msgstr "Je hebt al een betaling verzonden in afwachting van verificatie"
 msgid "You will have our eternal thanks for believing in us"
 msgstr "We zijn je eeuwig dankbaar dat je in ons gelooft"
 
+msgid "Your organization's unique subdomain in the platform"
+msgstr "Het unieke subdomein van je organisatie in het platform"
+
 msgid "please upload your membership application to proceed"
 msgstr "upload uw lidmaatschapsaanvraag om verder te gaan"
 
@@ -7063,9 +7063,6 @@ msgstr ""
 "Je hebt toestemming gegeven voor het delen van gegevens met deze "
 "organisatie!"
 
-msgid "Your organization's unique subdomain in the plaftform"
-msgstr "Het unieke subdomein van uw organisatie in het plaftform"
-
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr "Een pakkende korte zin of slogan om je evenement te beschrijven"
 
@@ -7098,10 +7095,6 @@ msgstr "Geef aan voor welke sessies de korting actief is"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Geeft aan dat de betaling wordt verzonden 'naar vrienden en familie'"
-
-msgid "Manage XP distributions for character skill purchases."
-msgstr ""
-"Beheer XP-uitkeringen voor de aankoop van vaardigheden voor personages."
 
 msgid "Manage fields for character sheet and writing elements"
 msgstr "Beheer velden voor karakterblad en schrijfelementen"
@@ -7377,6 +7370,9 @@ msgstr "Hoofdafbeelding evenement op de homepage van uw organisatie"
 
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Zorg dat je nu tijd hebt om de inhoud te bekijken/beluisteren"
+
+msgid "Manage XP distributions for character abilities purchases."
+msgstr "Beheer XP-uitkeringen voor de aankoop van personagevaardigheden."
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Optienaam, weergegeven in de vraag (houd het kort)"
@@ -9350,13 +9346,6 @@ msgstr ""
 "kunnen worden hergebruikt voor meerdere vaardigheden"
 
 msgid ""
-"Indicate the character options, which must be selected to make the skill "
-"available"
-msgstr ""
-"Geef de tekenopties aan die moeten worden geselecteerd om de vaardigheid "
-"beschikbaar te maken"
-
-msgid ""
 "Now you can configure the integration button and the external application "
 "settings"
 msgstr ""
@@ -9504,6 +9493,13 @@ msgid ""
 msgstr ""
 "In rich text editors kun je rechtstreeks naar andere tekens verwijzen door "
 "hun nummer te gebruiken"
+
+msgid ""
+"Indicate the character options, which must be selected to make the ability "
+"available"
+msgstr ""
+"Geef de tekenopties aan die moeten worden geselecteerd om de vaardigheid "
+"beschikbaar te maken"
 
 msgid ""
 "Indicates a type of identification document issued by the nation in which "
@@ -10796,13 +10792,6 @@ msgstr ""
 "een speciale inwisselcode gegenereerd"
 
 msgid ""
-"Adds support for assigning XP (experience points) to characters, which can "
-"then be used to purchase skills"
-msgstr ""
-"Voegt ondersteuning toe voor het toekennen van XP (ervaringspunten) aan "
-"personages, die vervolgens kunnen worden gebruikt om vaardigheden te kopen"
-
-msgid ""
 "Every friend who registers and uses this code will receive the following "
 "discount directly on their ticket"
 msgstr ""
@@ -10836,13 +10825,6 @@ msgid ""
 msgstr ""
 "Deze pagina laat zien wat er gebeurt als je de magazijnhoeveelheden vastlegt"
 " op basis van de huidige toewijzingen"
-
-msgid ""
-"Time window (in hours) during which the user can revoke a chosen skill and "
-"recover spent XP (default is 0)"
-msgstr ""
-"Tijdsvenster (in uren) waarin de gebruiker een gekozen vaardigheid kan "
-"herroepen en uitgegeven XP kan terugkrijgen (standaardwaarde is 0)"
 
 msgid ""
 "Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
@@ -10907,6 +10889,13 @@ msgstr ""
 "Controleer of je de hele reden van betaling precies hebt overgenomen (in "
 "gekleurde tekst), dat is belangrijk"
 
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen ability and"
+" recover spent XP (default is 0)"
+msgstr ""
+"Tijdsvenster (in uren) waarbinnen de gebruiker een gekozen vaardigheid kan "
+"herroepen en uitgegeven XP kan terugkrijgen (standaard is 0)"
+
 #, python-format
 msgid ""
 "We confirm that the collection for '%(recipient)s' has been activated. <a "
@@ -10914,6 +10903,13 @@ msgid ""
 msgstr ""
 "Wij bevestigen dat de collectie voor '%(recipient)s' is geactiveerd. <a "
 "href='%(url)s'>Hier beheren!</a>"
+
+msgid ""
+"Adds support for assigning XP (experience points) to characters, which can "
+"then be used to purchase abilities"
+msgstr ""
+"Ondersteuning toegevoegd voor het toekennen van XP (ervaringspunten) aan "
+"personages, die vervolgens kunnen worden gebruikt om vaardigheden te kopen"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

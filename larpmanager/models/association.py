@@ -113,7 +113,7 @@ class Association(UuidMixin, BaseModel):
     slug = models.CharField(
         max_length=20,
         verbose_name=_("Subdomain"),
-        help_text=_("Your organization's unique subdomain in the plaftform")
+        help_text=_("Your organization's unique subdomain in the platform")
         + " ("
         + _("Only lowercase letters and numbers allowed, no spaces or special characters")
         + ")",

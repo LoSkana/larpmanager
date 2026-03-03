@@ -1344,7 +1344,7 @@ msgid "Undo period"
 msgstr ""
 
 msgid ""
-"Time window (in hours) during which the user can revoke a chosen skill and "
+"Time window (in hours) during which the user can revoke a chosen ability and "
 "recover spent XP (default is 0)"
 msgstr ""
 
@@ -3151,7 +3151,7 @@ msgstr ""
 msgid "Subdomain"
 msgstr ""
 
-msgid "Your organization's unique subdomain in the plaftform"
+msgid "Your organization's unique subdomain in the platform"
 msgstr ""
 
 msgid ""
@@ -3600,7 +3600,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Indicate the character options, which must be selected to make the skill "
+"Indicate the character options, which must be selected to make the ability "
 "available"
 msgstr ""
 
@@ -4162,7 +4162,7 @@ msgstr ""
 msgid "The name of the competence"
 msgstr ""
 
-msgid "A description of the skills / abilities involved"
+msgid "A description of the abilities involved"
 msgstr ""
 
 msgid "Code of the box or shelf"
@@ -7682,7 +7682,7 @@ msgid ""
 "This page summarizes the types of abilities that participants can purchase"
 msgstr ""
 
-msgid "This page summarizes px delivery to characters"
+msgid "This page summarizes xp delivery to characters"
 msgstr ""
 
 msgid ""
@@ -8397,9 +8397,6 @@ msgstr ""
 msgid "This page shows the speedlarps of the event"
 msgstr ""
 
-msgid "Band"
-msgstr ""
-
 msgid "Station"
 msgstr ""
 
@@ -8912,7 +8909,7 @@ msgstr ""
 
 msgid ""
 "Adds support for assigning XP (experience points) to characters, which can "
-"then be used to purchase skills"
+"then be used to purchase abilities"
 msgstr ""
 
 msgid "Now you can set the experience points settings"
@@ -9438,13 +9435,13 @@ msgstr ""
 msgid "Manage the event handouts"
 msgstr ""
 
-msgid "Manage the type of character skills"
+msgid "Manage the type of character abilities"
 msgstr ""
 
-msgid "Manage the character skills purchaseable with XP"
+msgid "Manage the character abilities purchaseable with XP"
 msgstr ""
 
-msgid "Manage XP distributions for character skill purchases."
+msgid "Manage XP distributions for character abilities purchases."
 msgstr ""
 
 msgid "Display full history of participant preferences on characters"
@@ -9983,7 +9980,7 @@ msgstr ""
 msgid "Edit your character's details"
 msgstr ""
 
-msgid "Buy skills for your character"
+msgid "Buy abilities for your character"
 msgstr ""
 
 msgid "Customize"
