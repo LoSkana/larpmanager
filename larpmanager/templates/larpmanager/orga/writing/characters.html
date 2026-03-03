@@ -92,6 +92,11 @@
             <i class="fa fa-hashtag"></i> {% trans "Speedlarp" %}
         </th>
     {% endif %}
+    {% if not features.relationships %}
+        <th class="stats">
+            <i class="fa fa-hashtag"></i> {% trans "Connections" %}
+        </th>
+    {% endif %}
     <th></th>
 {% endblock thead %}
 {% block tbody %}
@@ -175,6 +180,7 @@
                 </td>
                 <td class="stats">{{ el.speedlarp_rels.count }}</td>
             {% endif %}
+            {% if not features.relationships %}<td class="stats">{{ el.addit.text_links|default:"0" }}</td>{% endif %}
             <td>
                 <a href="{% url 'orga_characters_delete' run.get_slug el.uuid %}"
                    qtip="{% trans "Delete" %}"

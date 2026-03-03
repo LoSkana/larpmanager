@@ -1884,6 +1884,9 @@ msgstr "Już wkrótce"
 msgid "Competences"
 msgstr "Kompetencje"
 
+msgid "Connections"
+msgstr "Połączenia"
+
 msgid "Cover image"
 msgstr "Obraz na okładce"
 

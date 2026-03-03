@@ -1884,6 +1884,9 @@ msgstr "Demnächst verfügbar"
 msgid "Competences"
 msgstr "Fachwissen"
 
+msgid "Connections"
+msgstr "Verbindungen"
+
 msgid "Cover image"
 msgstr "Titelbild"
 

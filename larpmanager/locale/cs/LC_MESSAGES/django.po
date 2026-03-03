@@ -1884,6 +1884,9 @@ msgstr "Již brzy"
 msgid "Competences"
 msgstr "Odbornost"
 
+msgid "Connections"
+msgstr "Připojení"
+
 msgid "Cover image"
 msgstr "Obrázek na obálce"
 
