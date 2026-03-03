@@ -95,11 +95,13 @@ from larpmanager.cache.px import (
     on_ability_prerequisites_m2m_changed,
     on_ability_requirements_m2m_changed,
     on_ability_saved,
+    on_character_saved,
     on_delivery_characters_m2m_changed,
     on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
     on_modifier_prerequisites_m2m_changed,
     on_modifier_requirements_m2m_changed,
     on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
+    on_writing_option_saved,
     refresh_delivery_relationships,
     refresh_modifier_relationships,
     refresh_modifier_rels_dirty_background,
@@ -707,6 +709,9 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
 
     # Create a personal inventory for newly created characters
     generate_base_inventories(instance)
+
+    # Refresh ability caches that show this character in their character_rels
+    on_character_saved(instance.id, instance.event_id)
 
 
 @receiver(pre_delete, sender=Character)
@@ -1665,9 +1670,9 @@ def post_save_writing_option_reset(sender: type, instance: Any, **kwargs: Any) -
     clear_event_fields_cache(instance.question.event_id)
     clear_event_cache_all_runs(instance.question.event)
     clear_writing_questions_cache(instance.event_id)
-    modifier_ids = list(ModifierPx.objects.filter(requirements=instance).values_list("id", flat=True))
-    if modifier_ids:
-        refresh_modifier_rels_dirty_background(modifier_ids)
+
+    # Refresh ability caches that show this option in their requirement_rels
+    on_writing_option_saved(instance, instance.question.event_id)
 
 
 @receiver(pre_delete, sender=WritingOption)
