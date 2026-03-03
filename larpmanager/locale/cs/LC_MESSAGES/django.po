@@ -86,6 +86,9 @@ msgstr "věk"
 msgid "for"
 msgstr "pro"
 
+msgid "AICS"
+msgstr "AICS"
+
 msgid "Area"
 msgstr "Oblast"
 
@@ -3245,6 +3248,9 @@ msgstr "Vlastní písmo názvu"
 msgid "Disable Auto save"
 msgstr "Zakázat automatické ukládání"
 
+msgid "Download AICS CSV"
+msgstr "Stáhnout AICS CSV"
+
 msgid "Download document"
 msgstr "Stáhnout dokument"
 
@@ -3683,6 +3689,9 @@ msgstr "Výsledky nejsou k dispozici"
 msgid "Signup cancellation"
 msgstr "Zrušení předplatného"
 
+msgid "Sport activity code"
+msgstr "Kód sportovní aktivity"
+
 msgid "Support maintainers"
 msgstr "Správci podpory"
 
@@ -3860,6 +3869,9 @@ msgstr "Nastavení typů schopností"
 
 msgid "Sign up as a filler!"
 msgstr "Zaregistrujte se jako výplň!"
+
+msgid "Social activity code"
+msgstr "Kód sociální aktivity"
 
 msgid "Terms and Conditions"
 msgstr "Podmínky a pravidla"
@@ -4705,6 +4717,9 @@ msgstr "Závazné skladové množství"
 msgid "Date of membership approval"
 msgstr "Datum schválení členství"
 
+msgid "Default sport qualification"
+msgstr "Výchozí sportovní kvalifikace"
+
 msgid "Description - international"
 msgstr "Anglický popis"
 
@@ -5272,6 +5287,9 @@ msgstr "Požádejte organizátory o aktivaci"
 msgid "Confirm registration to %(event)s"
 msgstr "Potvrzení vstupu do %(event)s"
 
+msgid "Default social qualification code"
+msgstr "Výchozí kód sociální kvalifikace"
+
 msgid "Descriptive name for this API key"
 msgstr "Popisný název tohoto klíče API"
 
@@ -5685,6 +5703,9 @@ msgstr "Zkontrolujte platnost fiskálního kódu"
 
 msgid "End date cannot be before start date!"
 msgstr "Datum ukončení nesmí být před datem zahájení!"
+
+msgid "Export member list in AICS CSV format"
+msgstr "Export seznamu členů do formátu AICS CSV"
 
 msgid "Hide participants without a character"
 msgstr "Skrýt účastníky bez znaku"
@@ -6604,6 +6625,9 @@ msgstr "si je můžete prohlédnout, upravit a označit jako přiřazené"
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Přístup ke své postavě <a href='%(url)s'>zde</a>"
 
+msgid "Default AICS sport qualification for all members"
+msgstr "Výchozí sportovní kvalifikace AICS pro všechny členy"
+
 msgid "Describe exactly which participants are involved"
 msgstr "Přesně popište, kteří účastníci jsou zapojeni"
 
@@ -6719,6 +6743,9 @@ msgstr "Správa náhrady za účastníka, který se odhlásil"
 
 msgid "Minimum age of members (leave empty for no limit)"
 msgstr "Minimální věk členů (pro neomezený věk nechte prázdné)"
+
+msgid "Now you can export the member list in AICS format"
+msgstr "Nyní můžete exportovat seznam členů ve formátu AICS"
 
 msgid "Now you can peform the fiscal code validity check"
 msgstr "Nyní můžete provést kontrolu platnosti fiskálního kódu"
@@ -7612,6 +7639,9 @@ msgstr "Vaše žádost byla odeslána, odpovíme vám co nejdříve!"
 msgid "Allows a user to reserve extra tickets in addition to their own"
 msgstr "Umožňuje uživateli rezervovat další vstupenky kromě svých vlastních"
 
+msgid "Code of the sporting activity of the club as registered in AICS"
+msgstr "Kód sportovní činnosti klubu zapsaný v AICS"
+
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Popis - zobrazí se na začátku sekce"
 
@@ -7850,6 +7880,9 @@ msgstr "Nahrajte sken podepsané přihlášky (obrázek nebo dokument pdf)"
 
 msgid "With these tutorials, you can learn how to use the tool in no time"
 msgstr "Díky těmto návodům se tento nástroj naučíte používat během chvilky"
+
+msgid "Code of the non-sporting activity of the club as registered in AICS"
+msgstr "Kód nesportovní činnosti klubu zapsaný v AICS"
 
 msgid "How the relationship is described from this character's perspective"
 msgstr "Jak je vztah popsán z pohledu této postavy"
@@ -10115,6 +10148,13 @@ msgstr ""
 " záhlaví jsou tyto"
 
 msgid ""
+"Default AICS social qualification code for all members (e.g. SO, AT, DI). "
+"Leave empty to use 'SO'"
+msgstr ""
+"Výchozí kód sociální kvalifikace AICS pro všechny členy (např. SO, AT, DI). "
+"Pro použití \"SO\" ponechte prázdné"
+
+msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
 "translation in your language"
 msgstr ""
@@ -11218,6 +11258,13 @@ msgstr ""
 "finančních nástrojů - nezohledňuje tokeny a kredity"
 
 msgid ""
+"Enables export of member list in AICS CSV format for Italian associations "
+"affiliated with AICS (Associazioni Italiane Cultura e Sport)"
+msgstr ""
+"Umožňuje export seznamu členů ve formátu AICS CSV pro italské asociace "
+"sdružené v AICS (Associazioni Italiane Cultura e Sport)"
+
+msgid ""
 "If checked: receive a single daily summary email instead of immediate "
 "notifications for registrations, payments, and invoice approvals"
 msgstr ""
@@ -11518,6 +11565,14 @@ msgid ""
 msgstr ""
 "Uvádí, jak vás lze poznat, zda vás najdeme poblíž určitého místa, zda máte "
 "hodně zavazadel: všechny informace, které by nám mohly pomoci"
+
+msgid ""
+"This page allows you to export the member list in the CSV format required "
+"for import into the AICS (Associazioni Italiane Cultura e Sport) management "
+"system."
+msgstr ""
+"Tato stránka umožňuje exportovat seznam členů ve formátu CSV potřebném pro "
+"import do systému správy AICS (Associazioni Italiane Cultura e Sport)."
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "

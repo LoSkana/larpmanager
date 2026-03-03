@@ -360,6 +360,18 @@
     module: italy
 - model: larpmanager.associationpermission
   fields:
+    name: AICS
+    descr: Export member list in AICS CSV format
+    slug: exe_aics
+    number: 72
+    config: aics
+    active_if: null
+    hidden: false
+    icon: hand-holding-medical
+    feature: aics
+    module: italy
+- model: larpmanager.associationpermission
+  fields:
     name: Enrolment
     descr: Display all users data
     slug: exe_enrolment

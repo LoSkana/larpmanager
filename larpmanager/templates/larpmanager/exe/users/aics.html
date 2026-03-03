@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    AICS - {% trans "Organization" %}
+{% endblock title %}
+{% block info %}
+    {% trans "This page allows you to export the member list in the CSV format required for import into the AICS (Associazioni Italiane Cultura e Sport) management system." %}
+{% endblock info %}
+{% block content %}
+    <p>
+        <a href="{% url 'exe_aics_csv' %}" class="btn btn-primary" download>
+            <i class="fas fa-file-csv"></i> {% trans "Download AICS CSV" %}
+        </a>
+    </p>
+{% endblock content %}

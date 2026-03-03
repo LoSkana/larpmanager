@@ -592,6 +592,35 @@ class ExeConfigForm(ConfigForm):
             quantity_help_text = _("If checked: Add a field to track items quantity")
             self.add_configs("warehouse_quantity", ConfigType.BOOL, quantity_label, quantity_help_text)
 
+        # Configure AICS export options
+        if "aics" in self.params["features"]:
+            self.set_section("aics", "AICS")
+
+            self.add_configs(
+                "aics_social_qualification",
+                ConfigType.CHAR,
+                _("Default social qualification code"),
+                _("Default AICS social qualification code for all members (e.g. SO, AT, DI). Leave empty to use 'SO'"),
+            )
+            self.add_configs(
+                "aics_social_activity",
+                ConfigType.CHAR,
+                _("Social activity code"),
+                _("Code of the non-sporting activity of the club as registered in AICS"),
+            )
+            self.add_configs(
+                "aics_sport_qualification",
+                ConfigType.CHAR,
+                _("Default sport qualification"),
+                _("Default AICS sport qualification for all members"),
+            )
+            self.add_configs(
+                "aics_sport_activity",
+                ConfigType.CHAR,
+                _("Sport activity code"),
+                _("Code of the sporting activity of the club as registered in AICS"),
+            )
+
     def set_config_members(self) -> None:
         """Configure member-related form fields and sections in association settings.
 
