@@ -4829,6 +4829,9 @@ msgstr "Administrer hendelsens speed-larps"
 msgid "Membership request submitted"
 msgstr "Forespørsel om underdanig medlem"
 
+msgid "No accepted membership found"
+msgstr "Ingen akseptert medlemskap funnet"
+
 msgid "Player customisation updated"
 msgstr "Spillertilpasning oppdatert"
 
@@ -5308,6 +5311,9 @@ msgstr "Administrer hovedorganisasjonsinnstillinger"
 msgid "Manage membership document upload"
 msgstr "Administrere opplasting av medlemsdokumenter"
 
+msgid "No character found for this event"
+msgstr "Ingen tegn funnet for denne hendelsen"
+
 msgid "No events are present, create one"
 msgstr "Ingen hendelser er til stede, opprett en"
 
@@ -5597,6 +5603,9 @@ msgstr "Administrer opplasting av fakturaer for medlemsavgift"
 
 msgid "Manage the models for event handouts"
 msgstr "Administrerer modeller for utdeling av arrangementer"
+
+msgid "No registration found for this event"
+msgstr "Ingen påmelding funnet for dette arrangementet"
 
 msgid "Now set up the credits configuration"
 msgstr "Nå skal du konfigurere studiepoengkonfigurasjonen"
@@ -6816,9 +6825,6 @@ msgstr "Totale deltakeravgifter redusert gjennom rabatter"
 msgid "Transfer a registration from this event to another"
 msgstr "Overfør en registrering fra dette arrangementet til et annet"
 
-msgid "You don't have a character assigned for this event"
-msgstr "Du har ikke fått tildelt en karakter for denne hendelsen"
-
 msgid "hidden faction visible only to assigned characters"
 msgstr "skjult fraksjon som kun er synlig for tildelte karakterer"
 
@@ -6842,9 +6848,6 @@ msgstr ""
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jeg har gjort det noen ganger, jeg har grunnleggende erfaring"
-
-msgid "It is not possible for you to pay dues at this time"
-msgstr "Du kan ikke betale medlemskontingenten på dette tidspunktet"
 
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Bli med på Discord for å få hjelp, ideer eller rapportere feil"
@@ -8650,6 +8653,10 @@ msgid ""
 "only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "kun små bokstaver og tall er tillatt, ingen mellomrom eller spesialtegn"
+
+msgid ""
+"please ensure that you have accessed the platform using the correct account"
+msgstr "forsikre deg om at du har tilgang til plattformen med riktig konto"
 
 msgid ""
 "Content of mail notifying participants of their character in approved status"
