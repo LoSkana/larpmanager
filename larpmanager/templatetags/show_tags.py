@@ -468,14 +468,14 @@ def go_trait(
 
 
 @register.simple_tag(takes_context=True)
-def show_trait(context: dict, text: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
+def show_trait(context: dict, text: str, run: Run, include_tooltip: bool) -> str:  # noqa: FBT001
     """Template tag to process text and convert trait references to character links.
 
     Args:
         context: Template context
         text (str): Text containing trait references
         run: Run instance for trait lookup
-        tooltip (bool): Whether to include character tooltips
+        include_tooltip (bool): Whether to include character tooltips
 
     Returns:
         str: Safe HTML with trait references converted to character links
@@ -491,9 +491,11 @@ def show_trait(context: dict, text: str, run: Run, tooltip: bool) -> str:  # noq
         context["max_trait"] = 0
 
     for trait_number in range(context["max_trait"], 0, -1):
-        text = go_trait(context, f"#{trait_number}", trait_number, text, run, include_tooltip=tooltip)
-        text = go_trait(context, f"@{trait_number}", trait_number, text, run, include_tooltip=tooltip)
-        text = go_trait(context, f"^{trait_number}", trait_number, text, run, include_tooltip=tooltip, simple=True)
+        text = go_trait(context, f"#{trait_number}", trait_number, text, run, include_tooltip=include_tooltip)
+        text = go_trait(context, f"@{trait_number}", trait_number, text, run, include_tooltip=include_tooltip)
+        text = go_trait(
+            context, f"^{trait_number}", trait_number, text, run, include_tooltip=include_tooltip, simple=True
+        )
 
     # Text is already HTML-safe from trait link processing, so we can mark it as such
     return format_html("{}", mark_safe(text))  # noqa: S308
@@ -727,33 +729,6 @@ def length_gte(value: Any, arg: Any) -> Any:
 def length_lte(value: Any, arg: Any) -> Any:
     """Template tag for length less than or equal comparison."""
     return len(value) <= int(arg)
-
-
-@register.filter
-def hex_to_rgb(hex_color: Any) -> Any:
-    """Template filter to convert hex color to RGB values.
-
-    Args:
-        hex_color (str): Hex color string (e.g., '#FF0000')
-
-    Returns:
-        str: Comma-separated RGB values (e.g., '255,0,0'), or original value if invalid format
-
-    """
-    if not hex_color:
-        return ""
-
-    hex_without_hash = str(hex_color).lstrip("#")
-
-    # Validate hex format: exactly 6 hexadecimal characters
-    if not re.match(r"^[0-9A-Fa-f]{6}$", hex_without_hash):
-        return hex_color  # Return original value if invalid format
-
-    try:
-        rgb_values = [str(int(hex_without_hash[i : i + 2], 16)) for i in (0, 2, 4)]
-        return ",".join(rgb_values)
-    except (ValueError, IndexError):
-        return hex_color  # Return original value if conversion fails
 
 
 @register.simple_tag

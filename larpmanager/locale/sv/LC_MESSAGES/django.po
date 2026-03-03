@@ -3593,9 +3593,6 @@ msgstr "Innehållet är inte tillgängligt"
 msgid "Content unavailable"
 msgstr "Innehållet är inte tillgängligt"
 
-msgid "Cost of the ability"
-msgstr "Kostnad för förmågan"
-
 msgid "Date of association"
 msgstr "Datum för anslutning"
 
@@ -4960,6 +4957,9 @@ msgstr "Ditt efternamn eller släktnamn"
 
 msgid "check excessive relationships"
 msgstr "kontrollera extra rapporter"
+
+msgid "(Optional) Cost of the ability"
+msgstr "(Valfritt) Kostnad för förmågan"
 
 msgid "Activate new platform features"
 msgstr "Aktivera nya plattformsfunktioner"

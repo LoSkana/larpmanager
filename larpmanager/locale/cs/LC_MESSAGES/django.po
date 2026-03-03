@@ -3593,9 +3593,6 @@ msgstr "Obsah není k dispozici"
 msgid "Content unavailable"
 msgstr "Obsah není k dispozici"
 
-msgid "Cost of the ability"
-msgstr "Náklady na schopnost"
-
 msgid "Date of association"
 msgstr "Datum přidružení"
 
@@ -4960,6 +4957,9 @@ msgstr "Vaše příjmení nebo rodové jméno"
 
 msgid "check excessive relationships"
 msgstr "zkontrolovat další zprávy"
+
+msgid "(Optional) Cost of the ability"
+msgstr "(Nepovinné) Náklady na schopnost"
 
 msgid "Activate new platform features"
 msgstr "Aktivace nových funkcí platformy"

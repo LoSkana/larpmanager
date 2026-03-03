@@ -9673,7 +9673,7 @@ msgstr ""
 msgid "The name ability"
 msgstr ""
 
-msgid "Cost of the ability"
+msgid "(Optional) Cost of the ability"
 msgstr ""
 
 msgid "(Optional) The ability description"
