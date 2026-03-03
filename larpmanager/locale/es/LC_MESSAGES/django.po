@@ -89,9 +89,6 @@ msgstr "para"
 msgid "Area"
 msgstr "Zona"
 
-msgid "Band"
-msgstr "Banda"
-
 msgid "Body"
 msgstr "Cuerpo"
 

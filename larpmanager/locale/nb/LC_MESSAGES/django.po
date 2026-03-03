@@ -89,9 +89,6 @@ msgstr "for"
 msgid "Area"
 msgstr "Område"
 
-msgid "Band"
-msgstr "Fascia"
-
 msgid "Body"
 msgstr "Kropp"
 

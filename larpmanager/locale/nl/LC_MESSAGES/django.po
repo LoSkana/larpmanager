@@ -89,9 +89,6 @@ msgstr "voor"
 msgid "Area"
 msgstr "Gebied"
 
-msgid "Band"
-msgstr "Fascia"
-
 msgid "Body"
 msgstr "Lichaam"
 

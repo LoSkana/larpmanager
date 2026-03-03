@@ -8397,9 +8397,6 @@ msgstr ""
 msgid "This page shows the speedlarps of the event"
 msgstr ""
 
-msgid "Band"
-msgstr ""
-
 msgid "Station"
 msgstr ""
 
