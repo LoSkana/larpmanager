@@ -8237,6 +8237,9 @@ msgstr ""
 msgid "Important"
 msgstr ""
 
+msgid "Connections"
+msgstr ""
+
 msgid "Versions"
 msgstr ""
 

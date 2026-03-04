@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
+import re
 from typing import Any
 
 from django.http import Http404
@@ -554,6 +555,12 @@ def get_char_check(
     if restrict_non_owners:
         msg = "Not your character"
         raise Http404(msg)
+
+
+def count_distinct_text_links(text: str) -> int:
+    """Count distinct #number character references in HTML text."""
+    cleaned = strip_tags(text or "")
+    return len(set(re.findall(r"#(\d+)", cleaned)))
 
 
 def get_chars_relations(text: str, character_numbers: list[int]) -> tuple[list[int], list[int]]:

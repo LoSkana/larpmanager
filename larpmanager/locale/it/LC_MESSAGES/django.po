@@ -1884,6 +1884,9 @@ msgstr "Coming soon"
 msgid "Competences"
 msgstr "Competenza"
 
+msgid "Connections"
+msgstr "Connessioni"
+
 msgid "Cover image"
 msgstr "Immagine di copertina"
 

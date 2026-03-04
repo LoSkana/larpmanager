@@ -274,6 +274,7 @@ from larpmanager.utils.services.association import (
     generate_association_encryption_key,
     prepare_association_skin_features,
 )
+from larpmanager.utils.services.character import count_distinct_text_links
 from larpmanager.utils.services.event import (
     assign_previous_campaign_character,
     copy_parent_event_to_campaign,
@@ -703,6 +704,14 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
 
     # Update all other character-related caches (experience, abilities, etc.)
     refresh_character_related_caches(instance)
+
+    # Save count of distinct #number references in text as CharacterConfig
+    text_links_count = count_distinct_text_links(instance.text or "")
+    CharacterConfig.objects.update_or_create(
+        character=instance,
+        name="text_links",
+        defaults={"value": str(text_links_count)},
+    )
 
     # Update visible factions
     update_visible_factions(instance.event)

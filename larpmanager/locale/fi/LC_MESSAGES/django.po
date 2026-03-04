@@ -1884,6 +1884,9 @@ msgstr "Tulossa pian"
 msgid "Competences"
 msgstr "Osaaminen"
 
+msgid "Connections"
+msgstr "Yhteydet"
+
 msgid "Cover image"
 msgstr "Kannen kuva"
 

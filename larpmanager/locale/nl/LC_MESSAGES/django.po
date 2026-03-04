@@ -1884,6 +1884,9 @@ msgstr "Binnenkort beschikbaar"
 msgid "Competences"
 msgstr "Expertise"
 
+msgid "Connections"
+msgstr "Verbindingen"
+
 msgid "Cover image"
 msgstr "Afbeelding omslag"
 
