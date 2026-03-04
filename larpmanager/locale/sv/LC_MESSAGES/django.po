@@ -1491,9 +1491,6 @@ msgstr "Avdrag"
 msgid "Returning"
 msgstr "Återgång"
 
-msgid "Seniority"
-msgstr "Senioritet"
-
 msgid "Set quest"
 msgstr "Ställ in uppdrag"
 

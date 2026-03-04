@@ -1491,9 +1491,6 @@ msgstr "Inhouding"
 msgid "Returning"
 msgstr "Stuur  terug"
 
-msgid "Seniority"
-msgstr "Anciënniteit"
-
 msgid "Set quest"
 msgstr "Zoektocht instellen"
 

@@ -79,7 +79,9 @@
                 </i>
             </p>
             <hr />
-            <table id="main_grid" class="tablesorter">
+            <table id="main_grid">
+                <thead>
+                </thead>
                 <tbody>
                     <!-- filled later -->
                 </tbody>
@@ -132,7 +134,6 @@ window['pay_priority'] = {{ pay_priority }};
 
 window['trads'] = {
     'g': '{% filter escapejs %}{% trans "Player" %}{% endfilter %}',
-    'a': '{% filter escapejs %}{% trans "Seniority" %}{% endfilter %}',
     'p': '{% filter escapejs %}{% trans "Priority" %}{% endfilter %}',
     'e': '{% filter escapejs %}{% trans "Avoid" %}{% endfilter %}',
     'ne': '{% filter escapejs %}{% trans "Elements NOT chosen" %}{% endfilter %}',

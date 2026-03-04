@@ -7441,9 +7441,6 @@ msgid ""
 "before uploading"
 msgstr ""
 
-msgid "Seniority"
-msgstr ""
-
 msgid "Avoid"
 msgstr ""
 

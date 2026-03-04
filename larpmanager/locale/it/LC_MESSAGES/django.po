@@ -1491,9 +1491,6 @@ msgstr "Trattenuta"
 msgid "Returning"
 msgstr "Restituzione"
 
-msgid "Seniority"
-msgstr "Anzianità"
-
 msgid "Set quest"
 msgstr "Imposta missione"
 

@@ -1491,9 +1491,6 @@ msgstr "Zadržení"
 msgid "Returning"
 msgstr "Návrat na"
 
-msgid "Seniority"
-msgstr "Seniorita"
-
 msgid "Set quest"
 msgstr "Zadání úkolu"
 

@@ -1491,9 +1491,6 @@ msgstr "Zatrzymanie"
 msgid "Returning"
 msgstr "Powrót"
 
-msgid "Seniority"
-msgstr "Staż pracy"
-
 msgid "Set quest"
 msgstr "Zestaw zadań"
 

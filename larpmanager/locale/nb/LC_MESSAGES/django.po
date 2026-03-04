@@ -1491,9 +1491,6 @@ msgstr "Tilbakeholdelse"
 msgid "Returning"
 msgstr "Retur"
 
-msgid "Seniority"
-msgstr "Ansiennitet"
-
 msgid "Set quest"
 msgstr "Sett oppdrag"
 

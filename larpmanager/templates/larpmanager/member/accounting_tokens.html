@@ -17,7 +17,7 @@
     <div class="hide given">
         <h2>{% trans "Delivered" %}</h2>
         <div class="no-more-tables mob">
-            <table class="mob tablesorter">
+            <table class="go_datatable">
                 <thead>
                     <tr>
                         <th>{% trans "Event" %}</th>
@@ -26,23 +26,25 @@
                         <th>{% trans "Amount" %}</th>
                     </tr>
                 </thead>
-                {% for el in given %}
-                    <tr>
-                        <td data-title="{% trans "Event" %}">
-                            {% if el.run %}{{ el.run }}{% endif %}
-                        </td>
-                        <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
-                        <td data-title="{% trans "Description" %}">{{ el.descr }}</td>
-                        <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
-                    </tr>
-                {% endfor %}
+                <tbody>
+                    {% for el in given %}
+                        <tr>
+                            <td data-title="{% trans "Event" %}">
+                                {% if el.run %}{{ el.run }}{% endif %}
+                            </td>
+                            <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
+                            <td data-title="{% trans "Description" %}">{{ el.descr }}</td>
+                            <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>
     <div class="hide used">
         <h2>{% trans "Consumed" %}</h2>
         <div class="no-more-tables mob">
-            <table class="mob tablesorter">
+            <table class="go_datatable">
                 <thead>
                     <tr>
                         <th>{% trans "Event" %}</th>
@@ -50,13 +52,15 @@
                         <th>{% trans "Amount" %}</th>
                     </tr>
                 </thead>
-                {% for el in used %}
-                    <tr>
-                        <td data-title="{% trans "Event" %}">{{ el.registration.run }}</td>
-                        <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
-                        <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
-                    </tr>
-                {% endfor %}
+                <tbody>
+                    {% for el in used %}
+                        <tr>
+                            <td data-title="{% trans "Event" %}">{{ el.registration.run }}</td>
+                            <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
+                            <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>

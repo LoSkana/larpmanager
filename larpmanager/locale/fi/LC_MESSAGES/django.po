@@ -1491,9 +1491,6 @@ msgstr "Säilyttäminen"
 msgid "Returning"
 msgstr "Paluu"
 
-msgid "Seniority"
-msgstr "Senioriteetti"
-
 msgid "Set quest"
 msgstr "Aseta tehtävä"
 
