@@ -688,6 +688,16 @@ urlpatterns = [
         name="exe_enrolment",
     ),
     path(
+        "manage/aics/",
+        views_em.exe_aics,
+        name="exe_aics",
+    ),
+    path(
+        "manage/aics/csv/",
+        views_em.exe_aics_csv,
+        name="exe_aics_csv",
+    ),
+    path(
         "manage/accounting/",
         views_ea.exe_accounting,
         name="exe_accounting",
