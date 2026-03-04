@@ -698,32 +698,26 @@ def exe_membership_document(request: HttpRequest) -> Any:
 
 @login_required
 def exe_enrolment(request: HttpRequest) -> HttpResponse:
-    """Display yearly enrollment list with membership card numbers.
+    """Display yearly enrollment list with membership card numbers."""
+    context = check_association_context(request, "exe_enrolment")
+    context["list"] = _retrieve_enrolment_data(context)
+    return render(request, "larpmanager/exe/users/enrolment.html", context)
 
-    Generates a list of enrolled members for the current year, including their
-    membership card numbers and enrollment dates. Members are ordered by their
-    card numbers and include calculated enrollment order based on days from
-    year start.
+
+def _retrieve_enrolment_data(context: dict) -> list:
+    """Generates a list of enrolled members for the current year.
 
     Args:
-        request (HttpRequest): The HTTP request object containing user and
-            association context.
+        context (dict): Context dict.
 
     Returns:
-        HttpResponse: Rendered template with context containing:
-            - year: Current year
-            - list: List of members with membership details, enrollment dates,
+        list: List of members with membership details, enrollment dates,
               and formatted names
-
     """
-    # Check user permissions and get association context
-    context = check_association_context(request, "exe_enrolment")
     split_two_names = 2
-
     # Set current year and calculate year start date
     context["year"] = timezone.now().year
     start = datetime(context["year"], 1, 1, tzinfo=UTC)
-
     # Build cache of member enrollment dates from accounting items
     cache = {}
     for el in AccountingItemMembership.objects.filter(
@@ -731,16 +725,14 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
         year=context["year"],
     ).values_list("member_id", "created"):
         cache[el[0]] = el[1]
-
     # Query memberships with card numbers for enrolled members
-    context["list"] = []
+    member_list = []
     que = Membership.objects.filter(
         member_id__in=cache.keys(),
         association_id=context["association_id"],
         card_number__isnull=False,
     )
     que = que.select_related("member").order_by("card_number")
-
     # Process each membership and prepare member data
     for mb in que:
         member = mb.member
@@ -763,9 +755,8 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
         member.name = member.name.capitalize()
         member.surname = member.surname.capitalize()
 
-        context["list"].append(member)
-
-    return render(request, "larpmanager/exe/users/enrolment.html", context)
+        member_list.append(member)
+    return member_list
 
 
 @login_required
@@ -1256,36 +1247,36 @@ def _aics_residence_fields(residence_address: str | None) -> tuple[str, str, str
 
 
 def _aics_row(
-    el: Any, social_qualification: str, social_activity: str, sport_qualification: str, sport_activity: str
+    member: Member, social_qualification: str, social_activity: str, sport_qualification: str, sport_activity: str
 ) -> list:
     """Build a single AICS CSV row from a Membership instance."""
-    m = el.member
-
-    gender = "M" if m.gender == GenderChoices.MALE else ("F" if m.gender == GenderChoices.FEMALE else "")
-    birth_date = m.birth_date.strftime("%d/%m/%Y") if m.birth_date else ""
-    birth_province, birth_municipality = _aics_birth_fields(m.birth_place)
-    res_street, res_cap, res_province, res_municipality = _aics_residence_fields(m.residence_address)
+    gender = "M" if member.gender == GenderChoices.MALE else ("F" if member.gender == GenderChoices.FEMALE else "")
+    birth_date = member.birth_date.strftime("%d/%m/%Y") if member.birth_date else ""
+    birth_province, birth_municipality = _aics_birth_fields(member.birth_place)
+    res_street, res_cap, res_province, res_municipality = _aics_residence_fields(member.residence_address)
 
     phone = ""
-    if m.phone_contact:
-        phone = "".join(c for c in str(m.phone_contact) if c.isdigit())[:12]
+    if member.phone_contact:
+        phone = "".join(c for c in str(member.phone_contact) if c.isdigit())[:12]
+
+    el = member.membership
 
     card_number = str(el.card_number) if el.card_number else ""
     card_date = el.date.strftime("%d/%m/%Y") if el.date else ""
 
     return [
-        (m.surname or "").strip()[:50],  # A - Cognome
-        (m.name or "").strip()[:50],  # B - Nome
+        (member.surname or "").strip()[:50],  # A - Cognome
+        (member.name or "").strip()[:50],  # B - Nome
         gender,  # C - Sesso
         birth_date,  # D - Data di nascita
         birth_province,  # E - Provincia di nascita
         birth_municipality,  # F - Comune di nascita
-        (m.fiscal_code or "").strip()[:16],  # G - Codice fiscale
+        (member.fiscal_code or "").strip()[:16],  # G - Codice fiscale
         res_street,  # H - Indirizzo residenza
         res_cap,  # I - CAP
         res_province,  # K - Provincia residenza (before J per spec)
         res_municipality,  # J - Comune residenza
-        (m.email or "").strip()[:50],  # L - Email
+        (member.email or "").strip()[:50],  # L - Email
         phone,  # M - Telefono abitazione
         phone,  # N - Cellulare
         "",  # O - Fax abitazione
@@ -1327,10 +1318,14 @@ def exe_aics_csv(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_aics")
     association_id = context["association_id"]
 
-    social_qualification = get_association_config(association_id, "aics_social_qualification", "SO", context)
-    social_activity = get_association_config(association_id, "aics_social_activity", "", context)
-    sport_qualification = get_association_config(association_id, "aics_sport_qualification", "", context)
-    sport_activity = get_association_config(association_id, "aics_sport_activity", "", context)
+    social_qualification = get_association_config(
+        association_id, "aics_social_qualification", default_value="SO", context=context
+    )
+    social_activity = get_association_config(association_id, "aics_social_activity", default_value="", context=context)
+    sport_qualification = get_association_config(
+        association_id, "aics_sport_qualification", default_value="", context=context
+    )
+    sport_activity = get_association_config(association_id, "aics_sport_activity", default_value="", context=context)
 
     response = HttpResponse(
         content_type="text/csv; charset=utf-8",
@@ -1338,12 +1333,8 @@ def exe_aics_csv(request: HttpRequest) -> HttpResponse:
     )
     writer = csv.writer(response, delimiter="~", quoting=csv.QUOTE_NONE, escapechar="\\")
 
-    memberships = (
-        Membership.objects.filter(association_id=association_id)
-        .select_related("member")
-        .order_by("member__surname", "member__name")
-    )
-    for el in memberships:
+    members_list = _retrieve_enrolment_data(context)
+    for el in members_list:
         writer.writerow(_aics_row(el, social_qualification, social_activity, sport_qualification, sport_activity))
 
     return response
