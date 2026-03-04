@@ -282,6 +282,7 @@ function load_grid() {
         searching: true,
         scrollX: true,
         stateSave: false,
+        columnControl: ['order', 'searchDropdown'],
         order: [],
         layout: {
             topStart: 'search',
