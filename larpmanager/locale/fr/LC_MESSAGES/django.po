@@ -1491,9 +1491,6 @@ msgstr "Retenue à la source"
 msgid "Returning"
 msgstr "Retour"
 
-msgid "Seniority"
-msgstr "L'ancienneté"
-
 msgid "Set quest"
 msgstr "Définir la quête"
 

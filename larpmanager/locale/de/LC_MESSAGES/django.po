@@ -1491,9 +1491,6 @@ msgstr "Vorenthaltung"
 msgid "Returning"
 msgstr "Rückkehr"
 
-msgid "Seniority"
-msgstr "Dienstalter"
-
 msgid "Set quest"
 msgstr "Suche einstellen"
 

@@ -1,14 +1,14 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans "Refund for" %} - {{ registration.stration }}
+    {% trans "Refund for" %} - {{ registration }}
 {% endblock title %}
 {% block info %}
     {% trans "Manage refund for a participant who has cancelled" %}
 {% endblock info %}
 {% block content %}
     <h3>{% trans "Payment" %}</h3>
-    <table class="tablesorter">
+    <table>
         <tr>
             <th>{% trans "Registration fee" %}</th>
             <th>{% trans "Actual paid" %}</th>
@@ -37,7 +37,7 @@
         </tr>
     </table>
     <h3>{% trans "Returning" %}</h3>
-    <table class="tablesorter">
+    <table>
         <tr>
             <th>{% trans "Retention" %}</th>
             <th>{% trans "Full returning" %}</th>

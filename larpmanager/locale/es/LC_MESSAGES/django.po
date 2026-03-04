@@ -1491,9 +1491,6 @@ msgstr "Retención"
 msgid "Returning"
 msgstr "Devolución"
 
-msgid "Seniority"
-msgstr "Antigüedad"
-
 msgid "Set quest"
 msgstr "Establecer búsqueda"
 
