@@ -1964,6 +1964,20 @@ header.sec h1 {
   color: red;
 }
 
+.abilities h4 {
+  margin: 0;
+  font-size: 1.1em;
+}
+
+.abilities p {
+  margin: 0;
+}
+
+.new_form .abilities th,
+.new_form .abilities th {
+  padding: 0.5em;
+}
+
 /* ---------------------------------------------------------------------------
    Dashboard & Manage
    --------------------------------------------------------------------------- */

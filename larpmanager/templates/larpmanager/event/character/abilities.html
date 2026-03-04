@@ -4,7 +4,6 @@
     {% trans "Ability" %} - {{ character }} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% include "elements/sheet/px.html" %}
     <h2>{% trans "Obtain ability" %}</h2>
     <p>
         <i>{% trans "Select the new ability to get" %}</i>
@@ -29,6 +28,7 @@
         </table>
         <input type="submit" value="{% trans "Submit" %}" disabled>
     </form>
+    {% include "elements/sheet/px.html" %}
 {% endblock content %}
 {% block js2 %}
     {% include "elements/char_abilities.js.html" %}

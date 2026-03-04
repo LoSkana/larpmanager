@@ -284,7 +284,9 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Abilities").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get base ability --- Select ability double shield - 2",
+        """
+        Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
+        Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
     )
 
     # get ability
@@ -292,7 +294,9 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Submit", exact=True).click()
     expect_normalized(page,
         page.locator("#one"),
-        "Experience points Total Used Available 12 3 9 Abilities base ability double shield (2) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability",
+        """Obtain ability Select the new ability to get --- Select ability
+        Experience points Total Used Available 12 3 9 Abilities base ability double shield (2)
+        This text should show sword1 (1) sdsfdsfds Deliveries first live (2) """,
     )
     expect(page.locator("#ability_select")).not_to_contain_text("double shield")
 
@@ -300,7 +304,10 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     page.get_by_role("heading", name=re.compile("^double shield")).get_by_role("link").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get base ability --- Select ability double shield - 2",
+        """
+        Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
+        Experience points Total Used Available 12 1 11
+        Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
     )
     expect_normalized(page, page.locator("#ability_select"), "--- Select ability double shield - 2")
 
@@ -326,7 +333,10 @@ def modifiers(page: Any, live_server: Any) -> None:
     # ability is not there
     expect_normalized(page,
         page.locator("#one"),
-        "Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get base ability --- Select ability double shield - 2",
+        """
+        Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
+        Experience points Total Used Available 12 1 11
+        Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Edit").click()
@@ -336,7 +346,10 @@ def modifiers(page: Any, live_server: Any) -> None:
     # ability is there (i got the correct class)
     expect_normalized(page,
         page.locator("#one"),
-        "Experience points Total Used Available 12 1 11 Abilities base ability double shield (0) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability",
+        """
+        Obtain ability Select the new ability to get --- Select ability
+        Experience points Total Used Available 12 1 11 Abilities base ability double shield (0)
+        This text should show sword1 (1) sdsfdsfds Deliveries first live (2)""",
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Edit").click()
@@ -346,7 +359,10 @@ def modifiers(page: Any, live_server: Any) -> None:
     # ability is not there (changed class)
     expect_normalized(page,
         page.locator("#one"),
-        "Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get base ability --- Select ability double shield - 2",
+        """
+        Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
+        Experience points Total Used Available 12 1 11
+        Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
     )
 
     # now test increase cost modifiers
@@ -370,7 +386,10 @@ def modifiers(page: Any, live_server: Any) -> None:
     submit_confirm(page)
     expect_normalized(page,
         page.locator("#one"),
-        "Experience points Total Used Available 12 4 8 Abilities base ability double shield (3) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability",
+        """
+        Obtain ability Select the new ability to get --- Select ability
+        Experience points Total Used Available 12 4 8 Abilities base ability double shield (3)
+        This text should show sword1 (1) sdsfdsfds Deliveries first live (2)""",
     )
 
 

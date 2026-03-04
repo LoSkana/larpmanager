@@ -770,6 +770,8 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
     # Build available abilities dictionary organized by ability type
     context["available"] = {}
     for ability in get_available_ability_px(context["character"]):
+        if ability.typ is None:
+            continue
         # Create type entry if it doesn't exist
         if ability.typ.uuid not in context["available"]:
             context["available"][ability.typ.uuid] = {"name": ability.typ.name, "order": ability.typ.number, "list": {}}
@@ -779,6 +781,8 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
     # Build current character abilities organized by type name
     context["sheet_abilities"] = {}
     for el in get_current_ability_px(context["character"]):
+        if el.typ is None:
+            continue
         # Create type list if it doesn't exist
         if el.typ.name not in context["sheet_abilities"]:
             context["sheet_abilities"][el.typ.name] = []
