@@ -1491,9 +1491,6 @@ msgstr "Säilyttäminen"
 msgid "Returning"
 msgstr "Paluu"
 
-msgid "Seniority"
-msgstr "Senioriteetti"
-
 msgid "Set quest"
 msgstr "Aseta tehtävä"
 
@@ -1883,6 +1880,9 @@ msgstr "Tulossa pian"
 
 msgid "Competences"
 msgstr "Osaaminen"
+
+msgid "Connections"
+msgstr "Yhteydet"
 
 msgid "Cover image"
 msgstr "Kannen kuva"
@@ -4829,6 +4829,9 @@ msgstr "Hallitse speed-larp tapahtumaa"
 msgid "Membership request submitted"
 msgstr "Jäsenyyshakemus jätetty"
 
+msgid "No accepted membership found"
+msgstr "Ei löydetty hyväksyttyä jäsenyyttä"
+
 msgid "Player customisation updated"
 msgstr "Pelaajan mukauttaminen päivitetty"
 
@@ -5308,6 +5311,9 @@ msgstr "Hallitse organisaation pääasetuksia"
 msgid "Manage membership document upload"
 msgstr "Hallitse jäsenyysasiakirjojen lataamista"
 
+msgid "No character found for this event"
+msgstr "Tälle tapahtumalle ei löytynyt merkkiä"
+
 msgid "No events are present, create one"
 msgstr "Tapahtumia ei ole, luo yksi"
 
@@ -5597,6 +5603,9 @@ msgstr "Hallitse jäsenmaksulaskujen lataamista"
 
 msgid "Manage the models for event handouts"
 msgstr "Tapahtuman käsiohjelmien mallien hallinta"
+
+msgid "No registration found for this event"
+msgstr "Tälle tapahtumalle ei löytynyt rekisteröintiä"
 
 msgid "Now set up the credits configuration"
 msgstr "Määritä nyt luottojen kokoonpano"
@@ -6815,9 +6824,6 @@ msgstr "Osallistumismaksujen kokonaismäärä alennusten ansiosta"
 msgid "Transfer a registration from this event to another"
 msgstr "Siirrä ilmoittautuminen tästä tapahtumasta toiseen"
 
-msgid "You don't have a character assigned for this event"
-msgstr "Sinulle ei ole määritetty hahmoa tätä tapahtumaa varten"
-
 msgid "hidden faction visible only to assigned characters"
 msgstr "piilotettu ryhmittymä, joka näkyy vain sille osoitetuille hahmoille"
 
@@ -6841,9 +6847,6 @@ msgstr ""
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Olen tehnyt sen muutaman kerran, minulla on peruskokemusta"
-
-msgid "It is not possible for you to pay dues at this time"
-msgstr "Sinun ei ole mahdollista maksaa jäsenmaksuja tällä hetkellä"
 
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
@@ -8655,6 +8658,10 @@ msgid ""
 msgstr ""
 "vain pienet kirjaimet ja numerot sallittu, ei välilyöntejä tai "
 "erikoismerkkejä"
+
+msgid ""
+"please ensure that you have accessed the platform using the correct account"
+msgstr "Varmista, että olet käyttänyt alustaa oikealla tilillä"
 
 msgid ""
 "Content of mail notifying participants of their character in approved status"

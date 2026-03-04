@@ -263,13 +263,27 @@ def character_your(request: HttpRequest, event_slug: str, path: str | None = Non
     # Get event and run context with signup and status validation
     context = get_event_context(request, event_slug, signup=True, include_status=True)
 
+    registration = context.get("registration")
+    if not registration:
+        messages.error(
+            request,
+            _("No registration found for this event")
+            + ", "
+            + _("please ensure that you have accessed the platform using the correct account"),
+        )
+        return redirect("home")
+
     # Retrieve all registration character relationships for this run
-    # Use select_related to optimize database queries for character data
-    rcrs = list(context["registration"].rcrs.select_related("character").all())
+    rcrs = list(registration.rcrs.select_related("character").all())
 
     # Handle case where user has no characters assigned to this event
     if not rcrs:
-        messages.error(request, _("You don't have a character assigned for this event") + "!")
+        messages.error(
+            request,
+            _("No character found for this event")
+            + ", "
+            + _("please ensure that you have accessed the platform using the correct account"),
+        )
         return redirect("home")
 
     # If user has exactly one character, redirect directly to character page

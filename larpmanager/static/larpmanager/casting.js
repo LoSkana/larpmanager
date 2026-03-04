@@ -84,6 +84,9 @@ var disappoint = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
 // CSS selector for the main grid table
 var grid = '#main_grid';
 
+// DataTable instance (initialized after load_grid)
+var dtTable = null;
+
 /**
  * Debug helper function - displays data as JSON alert
  * @param {*} data - Any data to display for debugging
@@ -176,8 +179,13 @@ function load_grid() {
     for (var ix = 0; ix < num_pref; ix++) {
         aux += '<th>Pref {0}</th>'.format(ix+1);
     }
+    if (reg_priority)
+        aux += '<th>{0}</th>'.format('Reg days');
+    if (pay_priority)
+        aux += '<th>{0}</th>'.format('Pay days');
+
     aux += '</tr>'
-    $(grid).append(aux);
+    $(grid + ' thead').append(aux);
 
     // Sort the taken characters list for easier lookup
     taken.sort();
@@ -224,26 +232,33 @@ function load_grid() {
                 aux += '</select><br /><span class="c_{0}">{1}</span> - {2}</td>'.format(k, nm_choice, tgl);
             }
         }
+
+        if (reg_priority)
+            aux += '<td>{0}</td>'.format(players[key]['reg_days']);
+
+        if (pay_priority)
+            aux += '<td>{0}</td>'.format(players[key]['pay_days']);
+
         aux += '</tr>';
-        $(grid).append(aux);
+        $(grid + ' tbody').append(aux);
 
         // Initialize preference ordering for this player
         select_option(key);
     }
 
-    // Attach click handlers to YES/NO toggle buttons
-    // When clicked, toggles between including/excluding a character choice
-    $('.change').click(function() {
-        $( this ).toggleClass('NO');
-        if ($( this ).hasClass('NO')) $( this ).text('NO'); else $( this ).text('YES');
+    // Attach click handlers to YES/NO toggle buttons via delegation
+    // (delegation is required so handlers survive DataTable redraws)
+    $(grid).on('click', '.change', function() {
+        $(this).toggleClass('NO');
+        if ($(this).hasClass('NO')) $(this).text('NO'); else $(this).text('YES');
 
         // Recalculate preference ordering for this player
-        pid = $( this ).attr('pid');
+        var pid = $(this).attr('pid');
         select_option(pid);
 
         // Send toggle to server
-        oid = $( this ).attr('oid');
-        data = {'pid': pid, 'oid': oid, csrfmiddlewaretoken: csrf_token };
+        var oid = $(this).attr('oid');
+        var data = {'pid': pid, 'oid': oid, csrfmiddlewaretoken: csrf_token};
         $.post(toggle_url, data);
     });
 
@@ -261,8 +276,23 @@ function load_grid() {
         select_option(pid);
     }
 
-    // Initialize tablesorter plugin for sortable columns
-    $('.tablesorter').tablesorter();
+    // Initialize DataTable (search + sort, no pagination)
+    dtTable = new DataTable(grid, {
+        paging: false,
+        searching: true,
+        scrollX: true,
+        stateSave: false,
+        order: [],
+        layout: {
+            topStart: 'search',
+            topEnd: null,
+            bottomStart: null,
+            bottomEnd: null,
+        },
+        columnDefs: [
+            { orderable: false, targets: 0 },  // checkbox column not sortable
+        ],
+    });
 }
 
 /**
@@ -468,8 +498,8 @@ function exec_assigner() {
         // Show submit button
         $('#load').show();
 
-        // Re-initialize tablesorter
-        $('.tablesorter').tablesorter();
+        // Notify DataTable that cell content has changed
+        if (dtTable) dtTable.rows().invalidate().draw(false);
 
         // Check if solution is feasible (all constraints satisfied)
         if (!results['feasible']) {

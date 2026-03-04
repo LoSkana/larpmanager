@@ -1491,9 +1491,6 @@ msgstr "Retenue à la source"
 msgid "Returning"
 msgstr "Retour"
 
-msgid "Seniority"
-msgstr "L'ancienneté"
-
 msgid "Set quest"
 msgstr "Définir la quête"
 
@@ -1883,6 +1880,9 @@ msgstr "Prochainement"
 
 msgid "Competences"
 msgstr "Expertise"
+
+msgid "Connections"
+msgstr "Connexions"
 
 msgid "Cover image"
 msgstr "Image de couverture"
@@ -4829,6 +4829,9 @@ msgstr "Gérer les ralentissements de l'événement"
 msgid "Membership request submitted"
 msgstr "Demande de membre soumis"
 
+msgid "No accepted membership found"
+msgstr "Aucune adhésion acceptée n'a été trouvée"
+
 msgid "Player customisation updated"
 msgstr "Personnalisation des joueurs mise à jour"
 
@@ -5308,6 +5311,9 @@ msgstr "Gérer les principaux paramètres de l'organisation"
 msgid "Manage membership document upload"
 msgstr "Gérer le téléchargement des documents d'adhésion"
 
+msgid "No character found for this event"
+msgstr "Aucun personnage n'a été trouvé pour cet événement"
+
 msgid "No events are present, create one"
 msgstr "Aucun événement n'est présent, en créer un"
 
@@ -5598,6 +5604,9 @@ msgstr "Gérer le téléchargement des factures de cotisation"
 
 msgid "Manage the models for event handouts"
 msgstr "Gérer les modèles de documents à distribuer lors des événements"
+
+msgid "No registration found for this event"
+msgstr "Aucune inscription n'a été trouvée pour cet événement"
 
 msgid "Now set up the credits configuration"
 msgstr "Configurez maintenant les crédits"
@@ -6847,9 +6856,6 @@ msgstr "Total des frais de participation réduits par des remises"
 msgid "Transfer a registration from this event to another"
 msgstr "Transférer une inscription de cet événement à un autre"
 
-msgid "You don't have a character assigned for this event"
-msgstr "Vous n'avez pas de personnage assigné pour cet événement"
-
 msgid "hidden faction visible only to assigned characters"
 msgstr "faction cachée visible uniquement par les personnages assignés"
 
@@ -6875,9 +6881,6 @@ msgstr ""
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Je l'ai fait plusieurs fois, j'ai une expérience de base"
-
-msgid "It is not possible for you to pay dues at this time"
-msgstr "Vous ne pouvez pas payer votre cotisation à ce moment-là"
 
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
@@ -8914,6 +8917,12 @@ msgid ""
 msgstr ""
 "seules les lettres minuscules et les chiffres sont autorisés, pas d'espaces "
 "ni de caractères spéciaux"
+
+msgid ""
+"please ensure that you have accessed the platform using the correct account"
+msgstr ""
+"veuillez vous assurer que vous avez accédé à la plateforme en utilisant le "
+"bon compte"
 
 msgid ""
 "Content of mail notifying participants of their character in approved status"

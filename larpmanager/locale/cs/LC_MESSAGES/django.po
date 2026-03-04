@@ -1491,9 +1491,6 @@ msgstr "Zadržení"
 msgid "Returning"
 msgstr "Návrat na"
 
-msgid "Seniority"
-msgstr "Seniorita"
-
 msgid "Set quest"
 msgstr "Zadání úkolu"
 
@@ -1883,6 +1880,9 @@ msgstr "Již brzy"
 
 msgid "Competences"
 msgstr "Odbornost"
+
+msgid "Connections"
+msgstr "Připojení"
 
 msgid "Cover image"
 msgstr "Obrázek na obálce"
@@ -4829,6 +4829,9 @@ msgstr "Správa rychlostních svorek událostí"
 msgid "Membership request submitted"
 msgstr "Žádost o submisivní členství"
 
+msgid "No accepted membership found"
+msgstr "Nebylo nalezeno žádné přijaté členství"
+
 msgid "Player customisation updated"
 msgstr "Přizpůsobení hráče aktualizováno"
 
@@ -5308,6 +5311,9 @@ msgstr "Správa hlavních nastavení organizace"
 msgid "Manage membership document upload"
 msgstr "Správa nahrávání členských dokumentů"
 
+msgid "No character found for this event"
+msgstr "Pro tuto událost nebyla nalezena žádná postava"
+
 msgid "No events are present, create one"
 msgstr "Nejsou přítomny žádné události, vytvořte jednu"
 
@@ -5597,6 +5603,9 @@ msgstr "Správa odesílání faktur za členské poplatky"
 
 msgid "Manage the models for event handouts"
 msgstr "Správa modelů pro materiály k událostem"
+
+msgid "No registration found for this event"
+msgstr "Pro tuto událost nebyla nalezena žádná registrace"
 
 msgid "Now set up the credits configuration"
 msgstr "Nyní nastavte konfiguraci kreditů"
@@ -6815,9 +6824,6 @@ msgstr "Celkové účastnické poplatky snížené díky slevám"
 msgid "Transfer a registration from this event to another"
 msgstr "Převést registraci z této události na jinou"
 
-msgid "You don't have a character assigned for this event"
-msgstr "Pro tuto událost nemáte přiřazenou žádnou postavu"
-
 msgid "hidden faction visible only to assigned characters"
 msgstr "skrytá frakce viditelná pouze pro přiřazené postavy"
 
@@ -6839,9 +6845,6 @@ msgstr "Na této stránce můžete odeslat e-mail libovolnému seznamu příjemc
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Několikrát jsem to dělal, mám základní zkušenosti"
-
-msgid "It is not possible for you to pay dues at this time"
-msgstr "V tuto chvíli nemůžete zaplatit členský poplatek"
 
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
@@ -8589,6 +8592,11 @@ msgid ""
 "only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "povolena jsou pouze malá písmena a číslice, žádné mezery ani speciální znaky"
+
+msgid ""
+"please ensure that you have accessed the platform using the correct account"
+msgstr ""
+"ujistěte se prosím, že jste k platformě přistoupili pod správným účtem"
 
 msgid ""
 "Content of mail notifying participants of their character in approved status"

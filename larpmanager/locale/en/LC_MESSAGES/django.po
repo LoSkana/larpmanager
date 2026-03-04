@@ -7441,9 +7441,6 @@ msgid ""
 "before uploading"
 msgstr ""
 
-msgid "Seniority"
-msgstr ""
-
 msgid "Avoid"
 msgstr ""
 
@@ -8235,6 +8232,9 @@ msgid "Attended"
 msgstr ""
 
 msgid "Important"
+msgstr ""
+
+msgid "Connections"
 msgstr ""
 
 msgid "Versions"
@@ -10436,7 +10436,14 @@ msgstr ""
 msgid "To be able to pay, your membership application must be approved"
 msgstr ""
 
-msgid "It is not possible for you to pay dues at this time"
+msgid "No registration found for this event"
+msgstr ""
+
+msgid ""
+"please ensure that you have accessed the platform using the correct account"
+msgstr ""
+
+msgid "No accepted membership found"
 msgstr ""
 
 msgid "You have already paid this year's membership fee"
@@ -10510,7 +10517,7 @@ msgstr ""
 msgid "Character not found"
 msgstr ""
 
-msgid "You don't have a character assigned for this event"
+msgid "No character found for this event"
 msgstr ""
 
 msgid "Informations saved"
