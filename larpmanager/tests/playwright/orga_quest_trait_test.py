@@ -188,7 +188,7 @@ def signups(page: Any, live_server: Any) -> None:
     page.get_by_role("option", name="User Test - user@test.it").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("an")
-    page.get_by_role("option", name="#2 Another").click()
+    page.get_by_role("option", name="Another").click()
     submit_confirm(page)
 
 
@@ -242,7 +242,7 @@ def casting(page: Any, live_server: Any) -> None:
     sidebar(page, "Registrations")
     page.get_by_role("link", name="Lore").click()
     expect_normalized(page,
-        page.locator("#one"), "User Test #2 Another Standard "
+        page.locator("#one"), "User Test Another Standard "
     )
     expect_normalized(page,
         page.locator("#one"), "Admin Test Test Character Torta - Nonna Standard"
@@ -257,5 +257,5 @@ def casting(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Lore").click()
     expect_normalized(page,
         page.locator("#one"),
-        "User Test #2 Another Torta - Strudel Standard Admin Test Test Character Torta - Nonna Standard",
+        "User Test Another Torta - Strudel Standard Admin Test Test Character Torta - Nonna Standard",
     )

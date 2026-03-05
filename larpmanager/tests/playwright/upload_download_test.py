@@ -133,7 +133,7 @@ def relationships(page: Any) -> None:
     expect_normalized(
         page,
         page.locator("#one"),
-        "Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr Test Character",
+        "Test Character Test Teaser Test Text characcter trg poor ertd fewr Test Character",
     )
 
 
@@ -155,7 +155,7 @@ def plots(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "plott conceptt textt")
     page.locator(".fa-edit").click()
     page.get_by_role("cell", name="Show This text will be added").get_by_role("link").click()
-    expect_normalized(page, page.locator("#id_char_role_2_tr"), "#2 characcter")
+    expect_normalized(page, page.locator("#id_char_role_2_tr"), "characcter")
     expect_normalized(page, page.locator("#id_char_role_2_tr"), "super start")
     go_to(page, live_server, "/test/manage/plots/")
     check_download(page, "Download")
@@ -198,7 +198,7 @@ def registrations(page: Any) -> None:
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), " OK - Created User Test")
     page.get_by_role("link", name="Proceed").click()
-    expect_normalized(page, page.locator("#one"), "User Test #2 characcter")
+    expect_normalized(page, page.locator("#one"), "User Test characcter")
     check_download(page, "Download")
 
 
@@ -233,7 +233,7 @@ def characters(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), " OK - Created characcter")
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(
-        page, page.locator("#one"), "Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr"
+        page, page.locator("#one"), "Test Character Test Teaser Test Text characcter trg poor ertd fewr"
     )
     check_download(page, "Download")
 

@@ -149,7 +149,7 @@ def relationships(live_server: Any, page: Any) -> None:
     # check in main list
     page.get_by_role("link", name="Relationships").click()
     just_wait(page)
-    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text #2 prova Test Character")
+    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text prova Test Character")
 
     # check in char
     page.locator('[id="u2"]').locator(".fa-edit").click()
@@ -203,7 +203,7 @@ def plots(live_server: Any, page: Any) -> None:
     searchbox = page.get_by_role("searchbox")
     searchbox.fill("pro")
     # Wait for the option to appear and click it
-    option = page.get_by_role("option", name="#2 prova")
+    option = page.get_by_role("option", name="prova")
     option.wait_for(state="visible")
     option.click()
     page.wait_for_timeout(5000)
@@ -244,7 +244,7 @@ def plots(live_server: Any, page: Any) -> None:
     searchbox = page.get_by_role("searchbox")
     searchbox.fill("pro")
     # Wait for the option to appear and click it
-    option = page.get_by_role("option", name="#2 prova")
+    option = page.get_by_role("option", name="prova")
     option.wait_for(state="visible")
     option.click()
     submit_confirm(page)
