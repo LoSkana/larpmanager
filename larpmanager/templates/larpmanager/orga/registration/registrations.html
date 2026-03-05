@@ -174,7 +174,10 @@
                                     <td>
                                         {% for el in registration.chars %}
                                             {% include "elements/comma.html" %}
-                                            <a href="{% url 'orga_characters_edit' run.get_slug el.uuid %}">#{{ el.number }} {{ el.name }}</a>
+                                            <a href="{% url 'orga_characters_edit' run.get_slug el.uuid %}">
+                                                {% if writing_number %}#{{ el.number }}{% endif %}
+                                                {{ el.name }}
+                                            </a>
                                             {% if features.custom_character %}
                                                 <a href="{% url 'orga_registrations_customization' run.get_slug el.uuid %}"><i class="fas fa-user-pen"></i></a>
                                             {% endif %}

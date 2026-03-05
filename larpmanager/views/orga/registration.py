@@ -541,13 +541,14 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Configure custom character fields if feature enabled
     _orga_registrations_custom_character(context)
 
-    # Check if age-based question filtering is enabled
-    context["registration_reg_que_age"] = get_event_config(
-        context["event"].id,
-        "registration_reg_que_age",
-        default_value=False,
-        context=context,
-    )
+    # Check event configs
+    for config in ["registration_reg_que_age", "writing_number"]:
+        context[config] = get_event_config(
+            context["event"].id,
+            config,
+            default_value=False,
+            context=context,
+        )
 
     # Initialize registration grouping and list dictionaries
     context["reg_all"] = {}

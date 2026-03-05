@@ -140,7 +140,7 @@ def excel(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Characters").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Test Character2 Test Teaser + 2 Test Text ff kinda hate Another good friends with #1",
+        "Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 Another good friends with #1",
     )
 
     # test manual save
@@ -155,7 +155,7 @@ def excel(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Characters").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Test Character2 Test Teaser + 2 Test Text ff kinda hate Another good friends with #1 ciaoooo",
+        "Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 Another good friends with #1 ciaoooo",
     )
 
     # check in page
