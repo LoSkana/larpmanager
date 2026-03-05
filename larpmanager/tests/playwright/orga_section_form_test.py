@@ -255,7 +255,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.locator("#id_name").fill("aaaaaccc")
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("option", name="Test Character").click()
     page.get_by_role("button", name="Confirm").click()
 
     # set up question
@@ -291,7 +291,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("link", name=re.compile(r"^Character ")).click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("option", name="Test Character").click()
     page.get_by_role("button", name="Confirm").click()
 
     # check it is visible

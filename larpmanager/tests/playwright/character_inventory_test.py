@@ -97,7 +97,7 @@ def character_inventory_pools(live_server: Any, page: Any) -> None:
     page.locator("#id_name").fill("Test Character's Bank")
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("option", name="Test Character").click()
     submit_confirm(page)
 
 

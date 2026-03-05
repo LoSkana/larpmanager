@@ -122,13 +122,13 @@ def casting(live_server: Any, page: Any) -> None:
 
     # perform casting
     page.get_by_role("button", name="Start algorithm").click()
-    expect_normalized(page, page.locator("#assegnazioni"), "#1 Test Character")
+    expect_normalized(page, page.locator("#assegnazioni"), "Test Character")
     expect_normalized(page, page.locator("#assegnazioni"), "-> #2 Mirror")
     page.get_by_role("button", name="Upload").click()
 
     # check assignment
     go_to(page, live_server, "/test/manage/registrations")
-    expect_normalized(page, page.locator("#one"), "#1 Test Character")
+    expect_normalized(page, page.locator("#one"), "Test Character")
 
     go_to(page, live_server, "/test")
     expect_normalized(page, page.locator("#one"), "Test Character")

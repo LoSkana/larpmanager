@@ -170,7 +170,7 @@ def signups(page: Any, live_server: Any) -> None:
     page.get_by_role("option", name="Admin Test - orga@test.it").click()
     page.get_by_role("list").click()
     page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("option", name="Test Character").click()
     submit_confirm(page)
 
     # create another char
@@ -245,7 +245,7 @@ def casting(page: Any, live_server: Any) -> None:
         page.locator("#one"), "User Test #2 Another Standard "
     )
     expect_normalized(page,
-        page.locator("#one"), "Admin Test #1 Test Character Torta - Nonna Standard"
+        page.locator("#one"), "Admin Test Test Character Torta - Nonna Standard"
     )
 
     # manual trait assignments
@@ -257,5 +257,5 @@ def casting(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Lore").click()
     expect_normalized(page,
         page.locator("#one"),
-        "User Test #2 Another Torta - Strudel Standard Admin Test #1 Test Character Torta - Nonna Standard",
+        "User Test #2 Another Torta - Strudel Standard Admin Test Test Character Torta - Nonna Standard",
     )

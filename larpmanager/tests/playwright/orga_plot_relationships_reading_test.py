@@ -105,7 +105,7 @@ def reading(live_server: Any, page: Any) -> None:
     searchbox = page.get_by_role("searchbox")
     searchbox.fill("te")
     # Wait for the option to appear and click it
-    option = page.get_by_role("option", name="#1 Test Character")
+    option = page.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
     submit_confirm(page)
@@ -139,7 +139,7 @@ def relationships(live_server: Any, page: Any) -> None:
     searchbox = page.get_by_role("searchbox")
     searchbox.fill("tes")
     # Wait for the option to appear and click it
-    option = page.get_by_role("option", name="#1 Test Character")
+    option = page.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
     page.wait_for_timeout(5000)
@@ -149,7 +149,7 @@ def relationships(live_server: Any, page: Any) -> None:
     # check in main list
     page.get_by_role("link", name="Relationships").click()
     just_wait(page)
-    expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text #2 prova Test Character")
+    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text #2 prova Test Character")
 
     # check in char
     page.locator('[id="u2"]').locator(".fa-edit").click()
@@ -193,7 +193,7 @@ def plots(live_server: Any, page: Any) -> None:
     searchbox.click()
     searchbox.fill("te")
     # Wait for the option to appear and click it
-    option = page.get_by_role("option", name="#1 Test Character")
+    option = page.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
     page.wait_for_timeout(5000)
@@ -239,7 +239,7 @@ def plots(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "asadsadas wwwww prova222 second char role")
 
     # remove first char
-    page.get_by_role("listitem", name="#1 Test Character").locator("span").click()
+    page.get_by_role("listitem", name="Test Character").locator("span").click()
     # add another char
     searchbox = page.get_by_role("searchbox")
     searchbox.fill("pro")

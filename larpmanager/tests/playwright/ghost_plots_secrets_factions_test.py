@@ -94,7 +94,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     searchbox.click()
     searchbox.fill("te")
     # Wait for the option to appear and click it
-    option = page.get_by_role("option", name="#1 Test Character")
+    option = page.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
     page.wait_for_timeout(5000)
@@ -109,7 +109,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     searchbox.click()
     searchbox.fill("te")
     # Wait for the option to appear and click it
-    option = page.get_by_role("option", name="#1 Test Character")
+    option = page.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
     page.wait_for_timeout(5000)
@@ -154,7 +154,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.locator("#one").get_by_role("link", name="Plots").click()
     expect_normalized(page,
         page.locator("#one"),
-        "#1 Test Character 2 1 1 Test Teaser Test Text eefqq gggerwe first qweeerr",
+        "Test Character 2 1 1 Test Teaser Test Text eefqq gggerwe first qweeerr",
     )
 
     # check secret factions

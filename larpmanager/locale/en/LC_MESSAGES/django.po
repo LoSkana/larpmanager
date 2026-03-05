@@ -1226,6 +1226,12 @@ msgid ""
 "Enables field 'title', a short (2-3 words) text added to the character's name"
 msgstr ""
 
+msgid "Number"
+msgstr ""
+
+msgid "Enables field 'number', an unique numerical ID to reference it"
+msgstr ""
+
 msgid "Cover"
 msgstr ""
 
@@ -3285,9 +3291,6 @@ msgid "Language"
 msgstr ""
 
 msgid "Text language"
-msgstr ""
-
-msgid "Number"
 msgstr ""
 
 msgid "Optional ordering number"

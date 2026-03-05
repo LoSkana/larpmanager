@@ -54,7 +54,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     submit_confirm(page)
 
     # change name
-    page.get_by_role("cell", name="#1 Test Character").dblclick()
+    page.get_by_role("cell", name="Test Character").dblclick()
     page.locator("#id_name").click()
     page.locator("#id_name").press("End")
     page.locator("#id_name").fill("Test Character2")
@@ -78,7 +78,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 
     # check by reload
     page.get_by_role("link", name="Characters").click()
-    expect_normalized(page, page.locator("#one"), "#1 Test Character2 Test Teaser + 2 Test Text ff")
+    expect_normalized(page, page.locator("#one"), "Test Character2 Test Teaser + 2 Test Text ff")
 
     # add new
     page.get_by_role("link", name="New").click()
@@ -113,7 +113,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     just_wait(page)
     expect_normalized(page,
         page.locator("#one"),
-        "#1 Test Character2 Test Teaser + 2 Test Text ff #2 Another good friends with #1",
+        "Test Character2 Test Teaser + 2 Test Text ff #2 Another good friends with #1",
     )
 
     excel(page, live_server)
@@ -140,7 +140,7 @@ def excel(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Characters").click()
     expect_normalized(page,
         page.locator("#one"),
-        "#1 Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 #2 Another good friends with #1",
+        "Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 #2 Another good friends with #1",
     )
 
     # test manual save
@@ -155,7 +155,7 @@ def excel(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Characters").click()
     expect_normalized(page,
         page.locator("#one"),
-        "#1 Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 #2 Another good friends with #1 ciaoooo",
+        "Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 #2 Another good friends with #1 ciaoooo",
     )
 
     # check in page

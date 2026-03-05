@@ -227,7 +227,7 @@ class Character(Writing):
 
     def __str__(self) -> str:
         """Return string representation."""
-        return f"#{self.number} {self.name}"
+        return self.name
 
     def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
         """Get configuration value for this character."""

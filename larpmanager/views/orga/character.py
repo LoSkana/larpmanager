@@ -100,7 +100,7 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Load event data and configuration settings
     get_event_cache_all(context)
-    for config_name in ["user_character_approval", "writing_external_access"]:
+    for config_name in ["user_character_approval", "writing_external_access", "writing_number"]:
         context[config_name] = get_event_config(context["event"].id, config_name, default_value=False, context=context)
 
     # Enable export functionality if configured

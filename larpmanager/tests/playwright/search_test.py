@@ -216,5 +216,5 @@ def characters(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="tag").first.click()
     expect_normalized(page,
         page.locator("#one"),
-        "#1 Test Character Test Teaser Test Text fassione red zapyr #2 another blue wunder | qerfi #3 wheel fassione blue wunder",
+        "Test Character Test Teaser Test Text fassione red zapyr #2 another blue wunder | qerfi #3 wheel fassione blue wunder",
     )

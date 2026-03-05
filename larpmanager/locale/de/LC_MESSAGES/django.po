@@ -7751,6 +7751,11 @@ msgid "Description of this payment method to be displayed to the user"
 msgstr ""
 "Beschreibung dieser Zahlungsmethode, die dem Benutzer angezeigt werden soll"
 
+msgid "Enables field 'number', an unique numerical ID to reference it"
+msgstr ""
+"Aktiviert das Feld \"Nummer\", eine eindeutige numerische ID, um darauf zu "
+"verweisen"
+
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Wenn Sie auf Probleme stoßen, kontaktieren Sie uns und wir werden Ihnen "

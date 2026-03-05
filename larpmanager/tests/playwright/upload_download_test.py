@@ -133,7 +133,7 @@ def relationships(page: Any) -> None:
     expect_normalized(
         page,
         page.locator("#one"),
-        "#1 Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr Test Character",
+        "Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr Test Character",
     )
 
 
@@ -233,7 +233,7 @@ def characters(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), " OK - Created characcter")
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(
-        page, page.locator("#one"), "#1 Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr"
+        page, page.locator("#one"), "Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr"
     )
     check_download(page, "Download")
 

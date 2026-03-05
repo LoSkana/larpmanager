@@ -187,7 +187,7 @@ def prologues(page: Any) -> None:
 
     # check result
     page.get_by_role("link", name="Characters").click()
-    expect_normalized(page, page.locator("#one"), "P1 ffff (test) #1 Test Character")
+    expect_normalized(page, page.locator("#one"), "P1 ffff (test) Test Character")
 
 
 def upload_membership(page: Any, live_server: Any) -> None:
