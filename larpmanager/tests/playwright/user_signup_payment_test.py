@@ -133,7 +133,7 @@ def characters(page: Any, live_server: Any) -> None:
     page.locator(".fa-edit").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("option", name="Test Character").click()
     submit_confirm(page)
 
     # test mails
@@ -142,7 +142,7 @@ def characters(page: Any, live_server: Any) -> None:
     # Remove character
     go_to(page, live_server, "/test/manage/registrations")
     page.locator(".fa-edit").click()
-    page.get_by_role("listitem", name="#1 Test Character").locator("span").click()
+    page.get_by_role("listitem", name="Test Character").locator("span").click()
     submit_confirm(page)
 
     # test mails

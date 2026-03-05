@@ -83,7 +83,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text Load")
+    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text Load")
 
     # set faction
     page.get_by_role("link", name="Bulk").click()
@@ -93,7 +93,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 
     # check result
     page.get_by_role("link", name="Faction", exact=True).click()
-    expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text faz")
+    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text faz")
 
     # remove faction
     page.get_by_role("link", name="Bulk").click()
@@ -104,7 +104,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 
     # check result
     page.get_by_role("link", name="Faction", exact=True).click()
-    expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text Load")
+    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text Load")
 
     # add plot
     page.get_by_role("link", name="Bulk").click()
@@ -115,7 +115,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 
     # check result
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text plot")
+    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text plot")
 
     # remove plot
     page.get_by_role("link", name="Bulk").click()
@@ -126,7 +126,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 
     # check
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text Load")
+    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text Load")
 
     # set quest type
     page.get_by_role("link", name="Quest type").click()

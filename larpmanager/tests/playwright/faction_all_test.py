@@ -262,7 +262,7 @@ def test_faction_all(pw_page: Any) -> None:
     page.get_by_role("option", name="User Test - user@test.it").click()
     page.get_by_role("list").click()
     page.get_by_role("searchbox").fill("alpha")
-    page.get_by_role("option", name="#2 Character Alpha").click()
+    page.get_by_role("option", name="Character Alpha").click()
     submit_confirm(page)
 
 

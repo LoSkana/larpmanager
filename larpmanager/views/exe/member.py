@@ -332,7 +332,7 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
             # Add members with incorrect fiscal codes to report
             if not check["correct_cf"]:
                 check["member"] = str(member)
-                check["member_id"] = member.id
+                check["member_uuid"] = member.uuid
                 check["email"] = member.email
                 check["membership"] = get_user_membership(member, context["association_id"])
                 context["cf"].append(check)

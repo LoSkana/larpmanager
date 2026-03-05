@@ -178,7 +178,7 @@ def inline_editing_name(page: Any, live_server: Any) -> None:
     just_wait(page)
 
     # Edit u1 name (existing value)
-    page.get_by_role("cell", name="#1 Test Character").dblclick()
+    page.get_by_role("cell", name="Test Character").dblclick()
     just_wait(page)
     page.locator("#id_name").fill("Test Character Modified")
     submit_confirm(page)

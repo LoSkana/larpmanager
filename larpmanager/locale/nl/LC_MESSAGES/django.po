@@ -7642,6 +7642,10 @@ msgstr ""
 "Beschrijving van deze betaalmethode die moet worden weergegeven aan de "
 "gebruiker"
 
+msgid "Enables field 'number', an unique numerical ID to reference it"
+msgstr ""
+"Maakt veld 'nummer' mogelijk, een unieke numerieke ID om ernaar te verwijzen"
+
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Als u problemen ondervindt, neem dan contact met ons op en wij zullen u "

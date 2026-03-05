@@ -47,6 +47,7 @@ from larpmanager.forms.utils import (
 )
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
 from larpmanager.models.base import Feature
+from larpmanager.models.event import Event
 from larpmanager.models.experience import AbilityPx, DeliveryPx
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -94,6 +95,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "event",
             "status",
             "access_token",
+            "number",
         ]
 
         widgets: ClassVar[dict] = {
@@ -171,13 +173,13 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if event.parent:
             event = event.parent
 
-        # Initialize field categorization sets
-        fields_default = {"event"}
-        fields_custom = set()
-
         # Initialize registration questions and get counts
         self._init_registration_question(self.instance, event)
         registration_counts = get_registration_counts(self.params.get("run"))
+
+        # Initialize field categorization sets
+        fields_default = {"event"}
+        fields_custom = set()
 
         # Process each question to create form fields
         for question in self.questions:
@@ -197,23 +199,25 @@ class CharacterForm(WritingForm, BaseWritingForm):
                 fields_default.add(field_key)
                 self.reorder_field(field_key)
 
-            # Add access token field for external writing access
-            if (
-                get_event_config(event.id, "writing_external_access", default_value=False, context=self.params)
-                and self.instance.pk
-            ):
-                fields_default.add("access_token")
-                self.reorder_field("access_token")
+            checks = [("writing_external_access", "access_token"), ("writing_number", "number")]
+            for check in checks:
+                config = get_event_config(current_event.id, check[0], default_value=False, context=self.params)
+                if config and self.instance.pk:
+                    fields_default.add(check[1])
+                    self.reorder_field(check[1])
 
         # Remove unused fields from form
         all_fields = set(self.fields.keys()) - fields_default
         for field_label in all_fields - fields_custom:
             self.delete_field(field_label)
 
-        # Add character completion proposal field for user approval workflow
+        self._init_character_status(current_event)
+
+    def _init_character_status(self, event: Event) -> None:
+        """Add character completion proposal field for user approval workflow."""
         if (
             not self.orga
-            and get_event_config(current_event.id, "user_character_approval", default_value=False, context=self.params)
+            and get_event_config(event.id, "user_character_approval", default_value=False, context=self.params)
             and (not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW])
         ):
             self.fields["propose"] = forms.BooleanField(
@@ -230,6 +234,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
     def _init_character(self) -> None:
         """Initialize character-specific form data."""
+        self.delete_field("number")
+
         self._init_factions()
         self._init_custom_fields()
 
@@ -732,6 +738,10 @@ class OrgaCharacterForm(CharacterForm):
         else:
             (relationship, _created) = Relationship.objects.get_or_create(target_id=instance.pk, source_id=character_id)
         return relationship
+
+    def clean_number(self) -> None:
+        """Ensure character number is unique."""
+        return self._validate_unique_event("number")
 
     def save(self, commit: bool = True) -> object:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance and handle related data.

@@ -264,7 +264,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.locator("#id_name").fill("primaaa")
     page.get_by_role("list").click()
     page.get_by_role("searchbox").fill("tes")
-    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("option", name="Test Character").click()
     page.get_by_role("checkbox", name="After confirmation, add").check()
     submit_confirm(page)
     page.locator("#id_typ").select_option("t")
@@ -272,7 +272,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.locator("#id_name").fill("tranver")
     page.get_by_role("list").click()
     page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("option", name="Test Character").click()
     submit_confirm(page)
 
     # check result
@@ -320,7 +320,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.locator("#id_name").fill("PRIMAAAA")
     page.get_by_role("list").click()
     page.get_by_role("searchbox").fill("TE")
-    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("option", name="Test Character").click()
     page.get_by_role("checkbox", name="After confirmation, add").check()
     submit_confirm(page)
     page.locator("#id_typ").select_option("t")
@@ -328,7 +328,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.locator("#id_name").fill("TRANVERSA")
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("TE")
-    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("option", name="Test Character").click()
     submit_confirm(page)
 
     # check situation in second event
@@ -336,7 +336,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "PRIMAAAA Primary Test Character TRANVERSA Transversal Test Character")
     sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
-    expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text PRIMAAAA TRANVERSA")
+    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text PRIMAAAA TRANVERSA")
 
     # check situation in first event
     go_to(page, live_server, "/test/manage/")
@@ -345,7 +345,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "primaaa Primary Test Character tranver Transversal Test Character")
     sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
-    expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text primaaa tranver")
+    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text primaaa tranver")
 
 
 def accounting_refund(page: Any, live_server: Any) -> None:

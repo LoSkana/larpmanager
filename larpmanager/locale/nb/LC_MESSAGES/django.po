@@ -7597,6 +7597,9 @@ msgstr ""
 msgid "Description of this payment method to be displayed to the user"
 msgstr "Beskrivelse av betalingsmåten som skal vises for brukeren"
 
+msgid "Enables field 'number', an unique numerical ID to reference it"
+msgstr "Aktiverer feltet \"nummer\", en unik numerisk ID for å referere til det"
+
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Hvis du støter på problemer, kan du kontakte oss, så hjelper vi deg"
 

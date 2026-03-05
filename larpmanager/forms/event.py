@@ -602,6 +602,10 @@ class OrgaConfigForm(ConfigForm):
             config_help_text = _("Enables field 'title', a short (2-3 words) text added to the character's name")
             self.add_configs("writing_title", ConfigType.BOOL, config_label, config_help_text)
 
+            config_label = _("Number")
+            config_help_text = _("Enables field 'number', an unique numerical ID to reference it")
+            self.add_configs("writing_number", ConfigType.BOOL, config_label, config_help_text)
+
             config_label = _("Cover")
             config_help_text = _(
                 "Enables field 'cover', to shown a specific image in the gallery - until assigned to a participant",

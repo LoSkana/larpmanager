@@ -101,7 +101,7 @@ class Command(BaseCommand):
                 EventPermission,
                 ("name", "descr", "slug", "number", "feature", "config", "active_if", "hidden", "module", "icon"),
             ),
-            "payment_methods": (PaymentMethod, ("name", "slug", "instructions", "fields", "profile")),
+            "payment_methods": (PaymentMethod, ("name", "slug", "instructions", "fields", "profile", "nationality")),
         }
 
         # Process each model type and export to YAML fixture files

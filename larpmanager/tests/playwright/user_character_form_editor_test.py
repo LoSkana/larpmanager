@@ -278,7 +278,7 @@ def player_relationships(page: Any, live_server: Any) -> None:
     just_wait(page)
     page.locator("#select2-id_target-container").click()
     page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("option", name="Test Character").click()
     fill_tinymce(page, "id_text", "my relationship text", show=False)
     submit_confirm(page)
 
