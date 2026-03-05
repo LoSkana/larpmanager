@@ -614,6 +614,12 @@ ul.special {
   margin-bottom: -2em;
 }
 
+#promoter-carousel .item img {
+  height: 10vh;
+  width: auto;
+  object-fit: contain;
+}
+
 @media (max-width: 860px) {
   #promoter-carousel,
   #review-carousel {
