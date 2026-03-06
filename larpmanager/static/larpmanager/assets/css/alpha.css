@@ -614,10 +614,13 @@ ul.special {
   margin-bottom: -2em;
 }
 
-#promoter-carousel .item img {
+#promoter-carousel .item .promoter-img {
   height: 10vh;
-  width: auto;
-  object-fit: contain;
+  width: 10vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0 auto;
 }
 
 @media (max-width: 860px) {

@@ -59,7 +59,9 @@
                 <section id="promoter-carousel" class="owl-carousel owl-theme">
                     {% for el in promoters %}
                         <div class="item">
-                            <img src="{{ el.promoter_url }}" alt="preview image {{ el.name }}" />
+                            <div class="promoter-img"
+                                 style="background-image: url('{{ el.promoter_url }}')"
+                                 aria-label="{{ el.name }}"></div>
                         </div>
                     {% endfor %}
                 </section>

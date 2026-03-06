@@ -739,6 +739,12 @@ def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int)
         None
 
     """
+    # Copy character sheet questions and options (standalone, without characters)
+    if "writing_question" in targets and "character" not in targets:
+        copy_class(target_event_id, parent_event_id, WritingQuestion)
+        copy_class(target_event_id, parent_event_id, WritingOption)
+        correct_rels(target_event_id, parent_event_id, WritingQuestion, WritingOption, "question", "name")
+
     # Copy character-related elements and fix relationships
     if "character" in targets:
         copy_class(target_event_id, parent_event_id, Character)
