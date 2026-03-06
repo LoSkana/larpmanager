@@ -631,8 +631,8 @@ ul.special {
   }
 
   #promoter-carousel .item .promoter-img {
-    width: 100%;
-    height: 100%;
+    width: 20vw;
+    height: 20vw;
   }
 }
 
