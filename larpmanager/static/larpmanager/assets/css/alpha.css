@@ -615,8 +615,8 @@ ul.special {
 }
 
 #promoter-carousel .item .promoter-img {
-  height: 10vh;
-  width: 10vh;
+  width: 18vw;
+  height: 18vw;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -627,6 +627,11 @@ ul.special {
   #promoter-carousel,
   #review-carousel {
     padding: 2em 1em 0em 1em;
+  }
+
+  #promoter-carousel .item .promoter-img {
+    width: 100%;
+    height: 100vw;
   }
 }
 
