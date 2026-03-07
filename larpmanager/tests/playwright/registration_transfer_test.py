@@ -204,7 +204,7 @@ def copy_tickets_and_questions(page: Any, live_server: Any) -> None:
 
     # Select tickets and registration form
     page.get_by_role("checkbox", name="Registration Tickets").check()
-    page.get_by_role("checkbox", name="Registration questions and options").check()
+    page.get_by_role("checkbox", name="Registration Form").check()
 
     submit_confirm(page)
 
