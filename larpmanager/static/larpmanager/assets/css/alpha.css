@@ -614,10 +614,25 @@ ul.special {
   margin-bottom: -2em;
 }
 
+#promoter-carousel .item .promoter-img {
+  width: 10vw;
+  height: 10vw;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0 auto;
+  border-radius: 1vw;
+}
+
 @media (max-width: 860px) {
   #promoter-carousel,
   #review-carousel {
     padding: 2em 1em 0em 1em;
+  }
+
+  #promoter-carousel .item .promoter-img {
+    width: 20vw;
+    height: 20vw;
   }
 }
 
