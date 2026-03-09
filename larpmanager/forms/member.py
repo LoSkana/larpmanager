@@ -796,7 +796,7 @@ class ExeMembershipFeeForm(BaseForm):
     member = forms.ModelChoiceField(
         label=_("Member"),
         queryset=Member.objects.none(),
-        required=False,
+        required=True,
         widget=AssociationMemberS2Widget,
     )
 
@@ -834,10 +834,13 @@ class ExeMembershipFeeForm(BaseForm):
     def clean_member(self) -> Member:
         """Validate that the member doesn't already have a membership fee for the current year."""
         member = self.cleaned_data["member"]
+        if not member:
+            return member
         year = timezone.now().year
+        association_id = self.params.get("association_id")
 
-        # Check if membership fee already exists for this year
-        if AccountingItemMembership.objects.filter(member=member, year=year).exists():
+        # Check if membership fee already exists for this association and year
+        if AccountingItemMembership.objects.filter(member=member, year=year, association_id=association_id).exists():
             self.add_error("member", _("Membership fee already existing for this user and for this year"))
 
         return member
