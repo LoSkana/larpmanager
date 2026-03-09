@@ -11,7 +11,7 @@
                 {% if typ == 0 %}
                     <strong>{% trans "characters" %}</strong>
                 {% else %}
-                    <a href="{% url 'orga_casting_history' run.get_slug 0 %}">{% trans "characters" %}</a>
+                    <a href="{% url 'orga_casting_history' run.get_slug %}">{% trans "characters" %}</a>
                 {% endif %}
                 {% for num, qt in quest_types.items %}
                     {% if typ == num %}
@@ -27,7 +27,7 @@
                 {% if typ == 0 %}
                     <strong>{% trans "characters" %}</strong>
                 {% else %}
-                    <a href="{% url 'casting_history' run.get_slug 0 %}">{% trans "characters" %}</a>
+                    <a href="{% url 'casting_history' run.get_slug %}">{% trans "characters" %}</a>
                 {% endif %}
                 {% for num, qt in quest_types.items %}
                     {% if typ == num %}
