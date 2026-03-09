@@ -370,6 +370,7 @@ def _check_already_done(context: dict) -> None:
             character_names = [
                 context["chars"][character_number]["name"]
                 for character_number in context["registration"].rcrs.values_list("character__number", flat=True)
+                if character_number in context["chars"]
             ]
             context["assigned"] = ", ".join(character_names)
     else:
