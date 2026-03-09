@@ -11,7 +11,7 @@
                 {% if typ == 0 %}
                     <strong>{% trans "Characters" %}</strong>
                 {% else %}
-                    <a href="{% url 'casting' run.get_slug 0 %}">{% trans "Characters" %}</a>
+                    <a href="{% url 'casting' run.get_slug %}">{% trans "Characters" %}</a>
                 {% endif %}
                 {% for qtnum, qt in quest_types.items %}
                     {% if typ == qtnum %}
