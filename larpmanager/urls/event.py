@@ -192,11 +192,6 @@ urlpatterns = [
         name="casting",
     ),
     path(
-        "<slug:event_slug>/casting/<str:casting_type>/",
-        views_uca.casting,
-        name="casting",
-    ),
-    path(
         "<slug:event_slug>/casting/preferences/",
         views_uca.casting_preferences,
         name="casting_preferences",
@@ -210,6 +205,11 @@ urlpatterns = [
         "<slug:event_slug>/casting/history/",
         views_uca.casting_history,
         name="casting_history",
+    ),
+    path(
+        "<slug:event_slug>/casting/<str:casting_type>/",
+        views_uca.casting,
+        name="casting",
     ),
     path(
         "<slug:event_slug>/casting/history/<str:casting_type>/",
