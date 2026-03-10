@@ -104,6 +104,23 @@ def check_time(times: Any, step: Any, start: Any = None) -> Any:
     return now
 
 
+def _collect_trait_label(trait_number: int, context: dict) -> tuple[str, str] | None:
+    """Return (quest_type_uuid, label) for a trait number, or None if unresolvable."""
+    trait = context.get("traits", {}).get(trait_number)
+    if not trait:
+        return None
+    quest = context.get("quests", {}).get(trait.get("quest"))
+    if not quest:
+        return None
+    quest_type = context.get("quest_types", {}).get(quest.get("typ"))
+    if not quest_type:
+        return None
+    quest_type_uuid = quest_type.get("uuid")
+    if not quest_type_uuid:
+        return None
+    return quest_type_uuid, f"{quest.get('name')} - {trait.get('name')}"
+
+
 def _orga_registrations_traits(registration: Any, context: dict) -> None:
     """Process and organize character traits for registration display.
 
@@ -118,17 +135,13 @@ def _orga_registrations_traits(registration: Any, context: dict) -> None:
     registration.traits = {}
     if not hasattr(registration, "chars"):
         return
+
     for character in registration.chars:
-        if "traits" not in character:
-            continue
-        for trait_number in character["traits"]:
-            trait = context["traits"][trait_number]
-            quest = context["quests"][trait["quest"]]
-            quest_type = context["quest_types"][quest["typ"]]
-            quest_type_uuid = quest_type["uuid"]
-            if quest_type_uuid not in registration.traits:
-                registration.traits[quest_type_uuid] = []
-            registration.traits[quest_type_uuid].append(f"{quest['name']} - {trait['name']}")
+        for trait_number in character.get("traits", []):
+            result = _collect_trait_label(trait_number, context)
+            if result:
+                qt_uuid, label = result
+                registration.traits.setdefault(qt_uuid, []).append(label)
 
     for quest_type_uuid in registration.traits:
         registration.traits[quest_type_uuid] = ",".join(registration.traits[quest_type_uuid])
