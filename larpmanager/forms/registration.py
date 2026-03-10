@@ -893,7 +893,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.sections[key] = char_section
         choices = [("0", _("--- NOT ASSIGNED ---"))]
         for quest in self.params["quests"].values():
-            if quest["typ"] != qt_number:
+            if quest.get("typ") != qt_number:
                 continue
             for trait in available:
                 if trait.quest.uuid != quest["uuid"]:
