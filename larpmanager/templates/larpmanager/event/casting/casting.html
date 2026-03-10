@@ -8,7 +8,7 @@
         {% if features.questbuilder %}
             <p>
                 {% trans "Go to the casting for" %}:
-                {% if typ == 0 %}
+                {% if not typ %}
                     <strong>{% trans "Characters" %}</strong>
                 {% else %}
                     <a href="{% url 'casting' run.get_slug %}">{% trans "Characters" %}</a>
@@ -24,7 +24,12 @@
         {% endif %}
         {% if casting_history %}
             <p>
-                {% trans "Show the" %} <a href="{% url 'casting_history' run.get_slug typ %}">{% trans "history of preferences" %}.</a>
+                {% trans "Show the" %}
+                {% if typ %}
+                    <a href="{% url 'casting_history' run.get_slug typ %}">{% trans "history of preferences" %}.</a>
+                {% else %}
+                    <a href="{% url 'casting_history' run.get_slug %}">{% trans "history of preferences" %}.</a>
+                {% endif %}
             </p>
         {% endif %}
         {% if assigned %}
@@ -35,7 +40,12 @@
             <p>{% trans "Enter your preferences here" %}!</p>
             {% if casting_show_pref %}
                 <p>
-                    {% trans "Show the" %} <a href="{% url 'casting_preferences' run.get_slug typ %}">{% trans "global preferences" %}.</a>
+                    {% trans "Show the" %}
+                    {% if typ %}
+                        <a href="{% url 'casting_preferences' run.get_slug typ %}">{% trans "global preferences" %}.</a>
+                    {% else %}
+                        <a href="{% url 'casting_preferences' run.get_slug %}">{% trans "global preferences" %}.</a>
+                    {% endif %}
                 </p>
             {% endif %}
             {% if faction_filter %}

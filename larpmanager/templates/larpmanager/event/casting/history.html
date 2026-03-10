@@ -8,7 +8,7 @@
         {% if staff %}
             <p>
                 {% trans "Go to the history preferences for" %}:
-                {% if typ == 0 %}
+                {% if not typ %}
                     <strong>{% trans "characters" %}</strong>
                 {% else %}
                     <a href="{% url 'orga_casting_history' run.get_slug %}">{% trans "characters" %}</a>
@@ -24,7 +24,7 @@
         {% else %}
             <p>
                 {% trans "Go to the history preferences for" %}:
-                {% if typ == 0 %}
+                {% if not typ %}
                     <strong>{% trans "characters" %}</strong>
                 {% else %}
                     <a href="{% url 'casting_history' run.get_slug %}">{% trans "characters" %}</a>

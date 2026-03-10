@@ -185,7 +185,7 @@ def casting_details(context: dict) -> dict:
         context["gl_name"] = _("Characters")
         context["cl_name"] = _("Faction")
         context["el_name"] = _("Character")
-        context["typ"] = 0
+        context["typ"] = None
 
     # Set type identifier and numeric casting configuration
     for config_key, default_value in (("add", 0), ("min", 5), ("max", 5)):
@@ -724,13 +724,13 @@ def casting_preferences(request: HttpRequest, event_slug: str, casting_type: str
         raise Http404(msg)
 
     # Route to appropriate preference handler based on type
-    if casting_type == "0":
-        # Handle character-based casting preferences
-        casting_preferences_characters(context)
-    else:
+    if casting_type:
         # Handle trait-based preferences (requires questbuilder feature)
         check_event_feature(request, context, "questbuilder")
         casting_preferences_traits(context)
+    else:
+        # Handle character-based casting preferences
+        casting_preferences_characters(context)
 
     return render(request, "larpmanager/event/casting/preferences.html", context)
 
@@ -910,13 +910,13 @@ def casting_history(request: HttpRequest, event_slug: str, casting_type: str | N
         raise Http404(msg)
 
     # Handle different history types
-    if casting_type == "0":
-        # Load character casting history
-        casting_history_characters(context)
-    else:
+    if casting_type:
         # For trait history, verify questbuilder feature access
         check_event_feature(request, context, "questbuilder")
         casting_history_traits(context)
+    else:
+        # Load character casting history
+        casting_history_characters(context)
 
     # Render the casting history template with populated context
     return render(request, "larpmanager/event/casting/history.html", context)
