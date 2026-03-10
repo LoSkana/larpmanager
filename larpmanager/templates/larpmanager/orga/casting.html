@@ -11,7 +11,7 @@
         {% if features.questbuilder %}
             <p>
                 {% trans "Casting management for" %}:
-                {% if typ == 0 %}
+                {% if not typ %}
                     <strong>{% trans "characters" %}</strong>
                 {% else %}
                     <a href="{% url 'orga_casting' run.get_slug %}">{% trans "characters" %}</a>
