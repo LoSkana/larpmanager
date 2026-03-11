@@ -682,15 +682,15 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Build character data directly from database to include all characters (even hidden ones)
     check_chars = {}
     id_number_map = {}
-    number_map = {}
+    uuid_map = {}
 
     # Get all characters for the event
-    for ch_id, ch_number, ch_name, ch_text in (
-        context["event"].get_elements(Character).values_list("id", "number", "name", "text")
+    for ch_id, ch_uuid, ch_number, ch_name, ch_text in (
+        context["event"].get_elements(Character).values_list("id", "uuid", "number", "name", "text")
     ):
         check_chars[ch_number] = {"id": ch_id, "number": ch_number, "name": ch_name, "text": ch_text or ""}
         id_number_map[ch_id] = ch_number
-        number_map[ch_number] = ch_id
+        uuid_map[ch_number] = ch_uuid
 
     chs_numbers = list(check_chars.keys())
 
@@ -708,7 +708,7 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["chars"] = check_chars
 
     # Validate character relationships and dependencies
-    check_relations(cache, checks, chs_numbers, context, number_map)
+    check_relations(cache, checks, chs_numbers, context, uuid_map)
 
     # Verify writing completeness and identify extinct/missing/interloper characters
     check_writings(cache, checks, chs_numbers, context, id_number_map)
@@ -755,9 +755,9 @@ def check_relations(
             if character_id not in second_character_relations:
                 validation_checks["relat_missing"].append(
                     {
-                        "f_id": number_to_id_map[character_id],
+                        "f_uuid": number_to_id_map[character_id],
                         "f_name": first_character_name,
-                        "s_id": number_to_id_map[other_character_id],
+                        "s_uuid": number_to_id_map[other_character_id],
                         "s_name": second_character_name,
                     },
                 )

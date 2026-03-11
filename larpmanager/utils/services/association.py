@@ -37,6 +37,7 @@ from larpmanager.cache.feature import reset_association_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.cache.permission import clear_index_permission_cache
 from larpmanager.cache.role import remove_association_role_cache
+from larpmanager.cache.widget import clear_widget_cache_association
 from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
 from larpmanager.models.access import AssociationPermission, AssociationRole
 from larpmanager.models.association import Association, AssociationText
@@ -186,6 +187,9 @@ def _reset_all_association(association_id: int, association_slug: str) -> None:
     # Clear event links for all members of this association
     for member_id in Membership.objects.filter(association__id=association_id).values_list("member_id", flat=True):
         reset_event_links(member_id, association_id)
+
+    # Clear widget caches for this association
+    clear_widget_cache_association(association_id)
 
     # Clear all events' caches for this association
     for run in Run.objects.filter(event__association_id=association_id):
