@@ -21,13 +21,13 @@
             {% for el in checks.relat_missing %}
                 <tr>
                     <td>
-                        {% if el.s_id %}
-                            <a href="{% url 'orga_characters_edit' run.get_slug el.s_id %}">{{ el.s_name }}</a>
+                        {% if el.s_uuid %}
+                            <a href="{% url 'orga_characters_edit' run.get_slug el.s_uuid %}">{{ el.s_name }}</a>
                         {% endif %}
                     </td>
                     <td>
-                        {% if el.f_id %}
-                            <a href="{% url 'orga_characters_edit' run.get_slug el.f_id %}">{{ el.f_name }}</a>
+                        {% if el.f_uuid %}
+                            <a href="{% url 'orga_characters_edit' run.get_slug el.f_uuid %}">{{ el.f_name }}</a>
                         {% endif %}
                     </td>
                 </tr>
