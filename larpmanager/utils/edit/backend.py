@@ -429,14 +429,20 @@ def backend_get(
         # Optimize queryset for Character model
         queryset_base = None
         if model_type.__name__ == "Character":
-            queryset_base = model_type.objects.prefetch_related(
+            is_ajax = context.get("request") and context["request"].POST.get("ajax") == "1"
+            prefetches = [
                 Prefetch("factions_list", queryset=Faction.objects.order_by("number")),
                 "plotcharacterrel_set__plot",
                 "px_ability_list",
                 "px_delivery_list",
-                Prefetch("source", queryset=Relationship.objects.select_related("target")),
-                Prefetch("target", queryset=Relationship.objects.select_related("source")),
-            )
+            ]
+            # Relationship prefetches are only needed for non-AJAX saves
+            if not is_ajax:
+                prefetches += [
+                    Prefetch("source", queryset=Relationship.objects.select_related("target")),
+                    Prefetch("target", queryset=Relationship.objects.select_related("source")),
+                ]
+            queryset_base = model_type.objects.prefetch_related(*prefetches)
 
         # For writing elements, use get_element with proper checks
         get_element(context, entity_uuid, "el", model_type, queryset_base)
@@ -496,13 +502,11 @@ def _backend_save(
             return backend_save_ajax(context["form"], request)
         return JsonResponse({"res": "ko"})
 
+    if writing_type:
+        context["form"].instance.temp = False
+
     # Save the form
     saved_object = context["form"].save()
-
-    # For writing elements, manage temp flag
-    if writing_type:
-        saved_object.temp = False
-        saved_object.save(update_fields=["temp"])
 
     model_type = form_type.Meta.model
 
@@ -575,9 +579,8 @@ def backend_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonResponse
         return JsonResponse(res)
 
     # Save form data as temporary version
-    saved_object = form.save()
-    saved_object.temp = True
-    saved_object.save(update_fields=["temp"])
+    form.instance.temp = True
+    form.save()
 
     return JsonResponse(res)
 
