@@ -33,6 +33,7 @@ from django_select2 import forms as s2forms
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.registration import get_registration_counts
+from larpmanager.cache.rels import refresh_character_relationships_background
 from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
@@ -762,6 +763,7 @@ class OrgaCharacterForm(CharacterForm):
             self._save_px(instance)
             self._save_relationships(instance)
             self._save_active(instance)
+            refresh_character_relationships_background(instance.id)
 
         return instance
 
