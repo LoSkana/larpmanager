@@ -196,15 +196,16 @@ def visible_writing_fields(context: dict, applicable: str, *, only_visible: bool
     # Process options if they exist, linking them to visible questions
     if "options" in writing_fields_data:
         for option_uuid, option_data in writing_fields_data["options"].items():
+            q_uuid_str = str(option_data.get("question__uuid"))
             # Include options for visible questions
-            if option_data.get("question__uuid") in visible_question_uuids:
+            if q_uuid_str in visible_question_uuids:
                 result["options"][option_uuid] = option_data
 
             # Build searchable options mapping by question UUID
-            if option_data.get("question__uuid") in searchable_question_uuids:
-                if option_data["question__uuid"] not in result["searchable"]:
-                    result["searchable"][option_data["question__uuid"]] = []
-                result["searchable"][option_data["question__uuid"]].append(str(option_data["uuid"]))
+            if q_uuid_str in searchable_question_uuids:
+                if q_uuid_str not in result["searchable"]:
+                    result["searchable"][q_uuid_str] = []
+                result["searchable"][q_uuid_str].append(str(option_data["uuid"]))
 
         # Sort searchable options by their order field
         for question_uuid in result["searchable"]:
