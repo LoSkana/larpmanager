@@ -1166,7 +1166,7 @@ def orga_cancellation_refund(request: HttpRequest, event_slug: str, registration
         # Wrap refund operations in atomic transaction to prevent partial refunds
         with transaction.atomic():
             # Check if already refunded to prevent duplicate refunds
-            if context["registration"].refunded:
+            if not context["registration"].refunded:
                 # Create token refund accounting entry if amount > 0
                 if ref_token > 0:
                     AccountingItemOther.objects.get_or_create(
