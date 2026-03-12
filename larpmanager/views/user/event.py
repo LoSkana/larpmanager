@@ -760,7 +760,7 @@ def search(request: HttpRequest, event_slug: str) -> HttpResponse:
         context["options"] = {
             key: value
             for key, value in fields_data["options"].items()
-            if value.get("question__uuid") not in fields_to_remove
+            if str(value.get("question__uuid")) not in fields_to_remove
         }
 
         context["searchable"] = {
