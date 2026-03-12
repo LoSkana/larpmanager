@@ -171,16 +171,12 @@ class RegistrationForm(BaseRegistrationForm):
         if "additional_tickets" not in self.params.get("features"):
             return
 
-        # Get max_length from additional_tickets question, default to 5
+        # Get max_length from cached registration questions
         max_tickets = 5
-        try:
-            additional_question = RegistrationQuestion.objects.filter(
-                event=self.params.get("run").event, typ=RegistrationQuestionType.ADDITIONAL
-            ).first()
-            if additional_question and additional_question.max_length > 0:
-                max_tickets = additional_question.max_length
-        except ObjectDoesNotExist:
-            pass  # Use default value if query fails
+        for q in get_cached_registration_questions(self.params.get("run").event):
+            if q["typ"] == RegistrationQuestionType.ADDITIONAL and q["max_length"] > 0:
+                max_tickets = q["max_length"]
+                break
 
         # Create choice field with ticket quantity options (0 to max_tickets)
         self.fields["additionals"] = forms.ChoiceField(
@@ -727,16 +723,12 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         if "additional_tickets" not in self.params["features"]:
             return
 
-        # Get max_length from additional_tickets question, default to 5
+        # Get max_length from cached registration questions (avoids a DB query)
         max_tickets = 5
-        try:
-            additional_question = RegistrationQuestion.objects.filter(
-                event=self.params["run"].event, typ=RegistrationQuestionType.ADDITIONAL
-            ).first()
-            if additional_question and additional_question.max_length > 0:
-                max_tickets = additional_question.max_length
-        except ObjectDoesNotExist:
-            pass  # Use default value if query fails
+        for q in get_cached_registration_questions(self.params["run"].event):
+            if q["typ"] == RegistrationQuestionType.ADDITIONAL and q["max_length"] > 0:
+                max_tickets = q["max_length"]
+                break
 
         # Update field choices if the field exists
         if "additionals" in self.fields:
