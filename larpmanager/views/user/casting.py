@@ -417,47 +417,35 @@ def _handle_casting_avoidance(context: dict, request: Any, typ: int) -> str | No
     return None
 
 
-def _build_preference_names_list(context: dict, typ: int) -> list[str]:
+def _build_preference_names_list(context: dict, typ: int, prefs: dict) -> list[str]:
     """Build list of preference names for email confirmation.
 
     Args:
         context: Context dictionary with run and member data
         typ: Casting type (0 for characters, other for traits)
+        prefs: Ordered dict mapping preference_order -> element_uuid (already saved)
 
     Returns:
-        List of preference names as strings
+        List of preference names as strings, in preference order
     """
-    preference_names_list = []
-    casting_preferences_list = list(
-        Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).order_by("pref")
-    )
-
-    if not casting_preferences_list:
-        return preference_names_list
-
-    # Batch fetch all characters or traits
-    element_uuids = [cp.element for cp in casting_preferences_list]
+    # Use prefs directly to avoid a redundant DB round-trip after bulk_create
+    element_uuids = [prefs[k] for k in sorted(prefs)]
+    if not element_uuids:
+        return []
 
     if typ == 0:
-        # Character casting: batch fetch all characters
         characters_dict = {
             str(char.uuid): char for char in Character.objects.filter(uuid__in=element_uuids).select_related("event")
         }
-        for casting_preference in casting_preferences_list:
-            character = characters_dict.get(casting_preference.element)
-            if character:
-                preference_names_list.append(character.show(context["run"])["name"])
-    else:
-        # Trait casting: batch fetch all traits with their quests
-        traits_dict = {
-            str(trait.uuid): trait for trait in Trait.objects.filter(uuid__in=element_uuids).select_related("quest")
-        }
-        for casting_preference in casting_preferences_list:
-            trait = traits_dict.get(casting_preference.element)
-            if trait:
-                preference_names_list.append(f"{trait.quest.show()['name']} - {trait.show()['name']}")
-
-    return preference_names_list
+        return [characters_dict[uid].show(context["run"])["name"] for uid in element_uuids if uid in characters_dict]
+    traits_dict = {
+        str(trait.uuid): trait for trait in Trait.objects.filter(uuid__in=element_uuids).select_related("quest")
+    }
+    return [
+        f"{traits_dict[uid].quest.show()['name']} - {traits_dict[uid].show()['name']}"
+        for uid in element_uuids
+        if uid in traits_dict
+    ]
 
 
 def _casting_update(request: HttpRequest, context: dict, prefs: dict) -> None:
@@ -487,14 +475,18 @@ def _casting_update(request: HttpRequest, context: dict, prefs: dict) -> None:
     Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).delete()
 
     # Create new casting preferences based on submitted data
-    for preference_order, element_id in prefs.items():
-        Casting.objects.create(
-            run=context["run"],
-            member=context["member"],
-            typ=typ,
-            element=element_id,
-            pref=preference_order,
-        )
+    Casting.objects.bulk_create(
+        [
+            Casting(
+                run=context["run"],
+                member=context["member"],
+                typ=typ,
+                element=element_id,
+                pref=preference_order,
+            )
+            for preference_order, element_id in prefs.items()
+        ]
+    )
 
     # Handle casting avoidance preferences if feature is enabled
     avoidance_text = _handle_casting_avoidance(context, request, typ)
@@ -503,7 +495,7 @@ def _casting_update(request: HttpRequest, context: dict, prefs: dict) -> None:
     messages.success(request, _("Preferences saved!"))
 
     # Build preference list for confirmation email
-    preference_names_list = _build_preference_names_list(context, typ)
+    preference_names_list = _build_preference_names_list(context, typ, prefs)
 
     # Send confirmation email with updated preferences
     mail_confirm_casting(context["member"], context["run"], context["gl_name"], preference_names_list, avoidance_text)
@@ -512,7 +504,7 @@ def _casting_update(request: HttpRequest, context: dict, prefs: dict) -> None:
 def get_casting_preferences(
     element_uuid: str,
     context: dict,
-    casting_queryset: QuerySet | None = None,
+    casting_queryset: QuerySet | list | None = None,
 ) -> tuple[int, str, dict[int, int]]:
     """Calculate and return casting preference statistics.
 
@@ -658,6 +650,11 @@ def casting_preferences_traits(context: dict) -> None:
     # Pre-fetch all assigned traits for this run
     assigned_trait_ids_set = set(AssignmentTrait.objects.filter(run=context["run"]).values_list("trait_id", flat=True))
 
+    # Pre-fetch all castings for this run/type grouped by element UUID to avoid N+1
+    castings_by_element: dict[str, list] = {}
+    for casting_item in Casting.objects.filter(run=context["run"], typ=quest_type.number, active=True):
+        castings_by_element.setdefault(casting_item.element, []).append(casting_item)
+
     # Iterate through all visible quests of the specified type
     for quest in (
         Quest.objects.filter(event=context["event"], typ=quest_type, hide=False)
@@ -673,11 +670,12 @@ def casting_preferences_traits(context: dict) -> None:
             if "staff" not in context and trait.id in assigned_trait_ids_set:
                 continue
 
+            trait_uuid = str(trait.uuid)
             # Build trait preference data structure
             trait_data = {
                 "group_dis": quest_group_name,
                 "name_dis": trait.show()["name"],
-                "pref": get_casting_preferences(str(trait.uuid), context),
+                "pref": get_casting_preferences(trait_uuid, context, castings_by_element.get(trait_uuid, [])),
             }
             context["list"].append(trait_data)
 
