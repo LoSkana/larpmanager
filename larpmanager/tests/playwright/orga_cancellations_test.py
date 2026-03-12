@@ -35,9 +35,9 @@ The refund entry has descr="Refund" so we filter by that text and verify value.
 
 Refund math (70% return rate):
   - user@test.it: 17 tokens + 19 credits paid = 36 total
-    typ_t → ceil(36*0.7)=26 tokens returned
+    typ_t -> ceil(36*0.7)=26 tokens returned
   - orga@test.it: 10 tokens + 8 credits paid = 18 total
-    typ_c → rest=ceil(18*0.7)=13; token=min(13,10)=10; credit=13-10=3
+    typ_c -> rest=ceil(18*0.7)=13; token=min(13,10)=10; credit=13-10=3
 """
 
 import re
@@ -157,7 +157,7 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#pay_token"), str(USER_TOKENS))
     expect_normalized(page, page.locator("#pay_credit"), str(USER_CREDITS))
 
-    # Select "Only tokens" type and 70% — JS computes inp_token=26, inp_credit=0
+    # Select "Only tokens" type and 70% - JS computes inp_token=26, inp_credit=0
     expect(page.locator("#typ_t")).to_be_visible()
     page.locator("#typ_t").click()
     page.locator("#p_7").click()
@@ -222,7 +222,7 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#pay_token"), str(ORGA_TOKENS))
     expect_normalized(page, page.locator("#pay_credit"), str(ORGA_CREDITS))
 
-    # Select "tokens + credits" type and 70% — JS computes inp_token=10, inp_credit=3
+    # Select "tokens + credits" type and 70% - JS computes inp_token=10, inp_credit=3
     expect(page.locator("#typ_c")).to_be_visible()
     page.locator("#typ_c").click()
     page.locator("#p_7").click()
@@ -268,5 +268,5 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
     credit_refund_row = page.get_by_role("row").filter(has_text="Refund")
     expect_normalized(page, credit_refund_row, str(ORGA_CREDIT_REFUND))
     go_to(page, live_server, "/accounting/")
-    expect_normalized(page, "#one", "Total: " + str(ORGA_TOKEN_REFUND))
-    expect_normalized(page, "#one", "Total: " + str(ORGA_CREDIT_REFUND))
+    expect_normalized(page, page.locator("#one"), "Total: " + str(ORGA_TOKEN_REFUND))
+    expect_normalized(page, page.locator("#one"), "Total: " + str(ORGA_CREDIT_REFUND))
