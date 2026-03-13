@@ -60,40 +60,40 @@
     {% include "elements/writing/questions_header.html" %}
     {% if features.plot %}
         <th class="plots">{% trans "Plots" %}</th>
-        <th class="stats">
+        <th class="stats stats-plots">
             <i class="fa fa-hashtag"></i> {% trans "Plots" %}
         </th>
         {% if writing_unimportant %}
-            <th class="stats">
+            <th class="stats stats-plots">
                 <i class="fa fa-hashtag"></i> {% trans "Important" %}
             </th>
         {% endif %}
     {% endif %}
     {% if features.prologue %}
         <th class="prologues">{% trans "Prologues" %}</th>
-        <th class="stats">
+        <th class="stats stats-prologues">
             <i class="fa fa-hashtag"></i> {% trans "Prologues" %}
         </th>
     {% endif %}
     {% if features.relationships %}
         <th class="relationship_list">{% trans "Relationships" %}</th>
-        <th class="stats">
+        <th class="stats stats-relationship_list">
             <i class="fa fa-hashtag"></i> {% trans "Relationships" %}
         </th>
         {% if writing_unimportant %}
-            <th class="stats">
+            <th class="stats stats-relationship_list">
                 <i class="fa fa-hashtag"></i> {% trans "Important" %}
             </th>
         {% endif %}
     {% endif %}
     {% if features.speedlarp %}
         <th class="speedlarp">{% trans "Speedlarp" %}</th>
-        <th class="stats">
+        <th class="stats stats-speedlarp">
             <i class="fa fa-hashtag"></i> {% trans "Speedlarp" %}
         </th>
     {% endif %}
     {% if not features.relationships %}
-        <th class="stats">
+        <th class="stats stats-always">
             <i class="fa fa-hashtag"></i> {% trans "Connections" %}
         </th>
     {% endif %}
