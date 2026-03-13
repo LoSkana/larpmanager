@@ -199,19 +199,51 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('.go_table a').hide();
 
+        function setColumnsVisible(indexList, visible) {
+            Object.keys(window.datatables).forEach(function(key) {
+                var table = window.datatables[key];
+                for (const index of indexList) {
+                    table.column(index).visible(visible);
+                }
+            });
+        }
+
         $('.table_toggle').on('click', function () {
             var tog = $(this).attr("tog");
             $(this).toggleClass('select');
 
+            if (tog === 'stats') {
+                // For each stats sub-type, show only if both stats and the parent toggle are active
+                var statsActive = $(this).hasClass('select');
+                Object.keys(window.hideColumnsIndexMap).forEach(function(key) {
+                    if (!key.startsWith('stats-')) return;
+                    var contentType = key.slice('stats-'.length);
+                    var contentActive = contentType === 'always' ||
+                        $('a.table_toggle[tog="' + contentType + '"]').hasClass('select');
+                    setColumnsVisible(window.hideColumnsIndexMap[key], statsActive && contentActive);
+                });
+                return false;
+            }
+
+            // Normal toggle for content columns
             var index_list = window.hideColumnsIndexMap[tog] || [];
             Object.keys(window.datatables).forEach(function(key) {
                 var table = window.datatables[key];
-
                 for (const index of index_list) {
                     var column = table.column(index);
                     column.visible(!column.visible());
-                };
+                }
             });
+
+            // If stats is active, also update the corresponding stats sub-columns
+            var statsActive = $('a.table_toggle[tog="stats"]').hasClass('select');
+            if (statsActive) {
+                var statsKey = 'stats-' + tog;
+                var statsIndices = window.hideColumnsIndexMap[statsKey] || [];
+                if (statsIndices.length) {
+                    setColumnsVisible(statsIndices, $(this).hasClass('select'));
+                }
+            }
 
             return false;
         });
