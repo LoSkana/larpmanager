@@ -11,6 +11,7 @@ var type = '{{ type }}';
 
 var timeout = 15 * 1000;
 var post_url = '{{ request.path }}';
+var hasNetworkError = false;
 
 function submitForm(auto) {
     return new Promise(function(resolve, reject) {
@@ -56,7 +57,17 @@ function submitForm(auto) {
                 console.log('Response is not valid JSON, treating as successful save');
             }
 
-            if (!auto) {
+            if (hasNetworkError) {
+                hasNetworkError = false;
+                $.toast({
+                    text: 'Saved!',
+                    showHideTransition: 'slide',
+                    icon: 'success',
+                    position: 'top-center',
+                    textAlign: 'center',
+                    hideAfter: 1000
+                });
+            } else if (!auto) {
                 $.toast({
                     text: 'Saved!',
                     showHideTransition: 'slide',
@@ -83,7 +94,8 @@ function submitForm(auto) {
                 resolve(true);
             }
         }).fail(function(xhr) {
-            // console.log('Auto-save failed:', xhr.status, xhr.statusText, xhr.responseText);
+            console.log('Auto-save failed:', xhr.status, xhr.statusText);
+            hasNetworkError = true;
             $.toast({
                 text: 'Network or server error',
                 showHideTransition: 'slide',
