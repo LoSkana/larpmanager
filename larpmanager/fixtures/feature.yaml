@@ -938,6 +938,20 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
+    name: AICS
+    descr: Enables export of member list in AICS CSV format for Italian associations
+      affiliated with AICS (Associazioni Italiane Cultura e Sport)
+    slug: aics
+    overall: true
+    placeholder: false
+    order: 30
+    after_text: Now you can export the member list in AICS format
+    after_link: exe_aics
+    hidden: false
+    module: italy
+    dependencies: []
+- model: larpmanager.feature
+  fields:
     name: Taxes
     descr: Shows the calculated tax amount on each payment
     slug: vat

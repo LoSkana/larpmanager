@@ -86,6 +86,9 @@ msgstr "ikä"
 msgid "for"
 msgstr "osoitteessa"
 
+msgid "AICS"
+msgstr "AICS"
+
 msgid "Area"
 msgstr "Alue"
 
@@ -3245,6 +3248,9 @@ msgstr "Mukautettu otsikon fontti"
 msgid "Disable Auto save"
 msgstr "Poista automaattinen tallennus käytöstä"
 
+msgid "Download AICS CSV"
+msgstr "Lataa AICS CSV"
+
 msgid "Download document"
 msgstr "Lataa asiakirja"
 
@@ -3683,6 +3689,9 @@ msgstr "Tuloksia ei ole"
 msgid "Signup cancellation"
 msgstr "Rekisteröitymisen peruutus"
 
+msgid "Sport activity code"
+msgstr "Urheilutoiminnan koodi"
+
 msgid "Support maintainers"
 msgstr "Tuki ylläpitäjille"
 
@@ -3860,6 +3869,9 @@ msgstr "Määritä taitojen tyypit"
 
 msgid "Sign up as a filler!"
 msgstr "Ilmoittaudu täytehahmoksi!"
+
+msgid "Social activity code"
+msgstr "Sosiaalisen toiminnan koodi"
 
 msgid "Terms and Conditions"
 msgstr "Ehdot ja edellytykset"
@@ -4705,6 +4717,9 @@ msgstr "Varastomäärien sitominen"
 msgid "Date of membership approval"
 msgstr "Jäsenyyden hyväksymispäivä"
 
+msgid "Default sport qualification"
+msgstr "Oletusarvoinen urheilun pätevyys"
+
 msgid "Description - international"
 msgstr "Kuvaus - kansainvälinen"
 
@@ -5275,6 +5290,9 @@ msgstr "Pyydä järjestäjiä aktivoimaan se"
 msgid "Confirm registration to %(event)s"
 msgstr "Vahvista ilmoittautuminen tapahtumaan %(event)s"
 
+msgid "Default social qualification code"
+msgstr "Sosiaalisen pätevyyden oletuskoodi"
+
 msgid "Descriptive name for this API key"
 msgstr "Tämän API-avaimen kuvaava nimi"
 
@@ -5694,6 +5712,9 @@ msgstr "Tarkista verokoodin voimassaolo"
 
 msgid "End date cannot be before start date!"
 msgstr "Loppupäivä ei voi olla ennen alkupäivää!"
+
+msgid "Export member list in AICS CSV format"
+msgstr "Vie jäsenluettelo AICS CSV-muodossa"
 
 msgid "Hide participants without a character"
 msgstr "Piilota osallistujat ilman hahmoa"
@@ -6613,6 +6634,9 @@ msgstr "voit tarkastella, muokata ja merkitä ne osoitetuiksi"
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Pääset hahmoosi <a href='%(url)s'>täältä</a>"
 
+msgid "Default AICS sport qualification for all members"
+msgstr "AICS-urheilun oletusarvoinen pätevyys kaikille jäsenille"
+
 msgid "Describe exactly which participants are involved"
 msgstr "Kuvaa tarkasti, ketkä osallistujat ovat mukana"
 
@@ -6728,6 +6752,9 @@ msgstr ""
 
 msgid "Minimum age of members (leave empty for no limit)"
 msgstr "Jäsenten vähimmäisikä (jätetään tyhjäksi, jos ei ole rajoitusta)"
+
+msgid "Now you can export the member list in AICS format"
+msgstr "Nyt voit viedä jäsenluettelon AICS-muodossa"
 
 msgid "Now you can peform the fiscal code validity check"
 msgstr "Nyt voit suorittaa verokoodin voimassaolon tarkistuksen"
@@ -7632,6 +7659,9 @@ msgstr ""
 "Mahdollistaa käyttäjälle ylimääräisten lippujen varaamisen omien lippujensa "
 "lisäksi"
 
+msgid "Code of the sporting activity of the club as registered in AICS"
+msgstr "AICS:ään rekisteröidyn seuran urheilutoiminnan säännöt"
+
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Kuvaus - näytetään osion alussa"
 
@@ -7888,6 +7918,9 @@ msgstr "Lataa skannattu allekirjoitettu hakemus (kuva tai pdf-dokumentti)"
 
 msgid "With these tutorials, you can learn how to use the tool in no time"
 msgstr "Näiden ohjeiden avulla opit käyttämään työkalua hetkessä"
+
+msgid "Code of the non-sporting activity of the club as registered in AICS"
+msgstr "AICS:ään rekisteröidyn seuran ei-urheilullisen toiminnan koodi"
 
 msgid "How the relationship is described from this character's perspective"
 msgstr "Miten suhdetta kuvataan tämän hahmon näkökulmasta"
@@ -10224,6 +10257,13 @@ msgstr ""
 "otsikon sallitut arvot ovat seuraavat"
 
 msgid ""
+"Default AICS social qualification code for all members (e.g. SO, AT, DI). "
+"Leave empty to use 'SO'"
+msgstr ""
+"Kaikkien jäsenten oletusarvoinen AICS-koodin mukainen sosiaalinen pätevyys "
+"(esim. SO, AT, DI). Jätetään tyhjäksi, jos käytetään \"SO\""
+
+msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
 "translation in your language"
 msgstr ""
@@ -11333,6 +11373,13 @@ msgstr ""
 "tuloksena - siinä ei oteta huomioon rahakkeita ja luottoja"
 
 msgid ""
+"Enables export of member list in AICS CSV format for Italian associations "
+"affiliated with AICS (Associazioni Italiane Cultura e Sport)"
+msgstr ""
+"Mahdollistaa jäsenluettelon viennin AICS:n CSV-muodossa AICS:n (Associazioni"
+" Italiane Cultura e Sport) jäseninä oleville italialaisille yhdistyksille"
+
+msgid ""
 "If checked: receive a single daily summary email instead of immediate "
 "notifications for registrations, payments, and invoice approvals"
 msgstr ""
@@ -11645,6 +11692,15 @@ msgstr ""
 "Ilmoittaa, miten sinut voidaan tunnistaa, jos sinut löydetään jostain "
 "tietystä kohdasta, jos sinulla on paljon matkatavaroita: kaikki tiedot, "
 "jotka voivat auttaa meitä auttamaan sinua"
+
+msgid ""
+"This page allows you to export the member list in the CSV format required "
+"for import into the AICS (Associazioni Italiane Cultura e Sport) management "
+"system."
+msgstr ""
+"Tällä sivulla voit viedä jäsenluettelon CSV-muodossa, jota tarvitaan AICS:n "
+"(Associazioni Italiane Cultura e Sport) hallintajärjestelmään tuontia "
+"varten."
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "

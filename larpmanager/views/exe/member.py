@@ -20,6 +20,7 @@
 
 import csv
 import logging
+import re
 from collections import defaultdict
 from datetime import UTC, datetime
 from typing import Any
@@ -59,6 +60,7 @@ from larpmanager.models.association import Association
 from larpmanager.models.event import Run
 from larpmanager.models.member import (
     Badge,
+    GenderChoices,
     Member,
     Membership,
     MembershipStatus,
@@ -89,6 +91,9 @@ from larpmanager.utils.users.member import get_mail
 from larpmanager.views.orga.member import send_mail_batch
 
 logger = logging.getLogger(__name__)
+
+# Regex to extract Italian province code from birth_place strings like "Milano (MI)"
+_BIRTH_PROVINCE_RE = re.compile(r"\s*\(([A-Z]{2})\)")
 
 
 @login_required
@@ -693,32 +698,26 @@ def exe_membership_document(request: HttpRequest) -> Any:
 
 @login_required
 def exe_enrolment(request: HttpRequest) -> HttpResponse:
-    """Display yearly enrollment list with membership card numbers.
+    """Display yearly enrollment list with membership card numbers."""
+    context = check_association_context(request, "exe_enrolment")
+    context["list"] = _retrieve_enrolment_data(context)
+    return render(request, "larpmanager/exe/users/enrolment.html", context)
 
-    Generates a list of enrolled members for the current year, including their
-    membership card numbers and enrollment dates. Members are ordered by their
-    card numbers and include calculated enrollment order based on days from
-    year start.
+
+def _retrieve_enrolment_data(context: dict) -> list:
+    """Generates a list of enrolled members for the current year.
 
     Args:
-        request (HttpRequest): The HTTP request object containing user and
-            association context.
+        context (dict): Context dict.
 
     Returns:
-        HttpResponse: Rendered template with context containing:
-            - year: Current year
-            - list: List of members with membership details, enrollment dates,
+        list: List of members with membership details, enrollment dates,
               and formatted names
-
     """
-    # Check user permissions and get association context
-    context = check_association_context(request, "exe_enrolment")
     split_two_names = 2
-
     # Set current year and calculate year start date
     context["year"] = timezone.now().year
     start = datetime(context["year"], 1, 1, tzinfo=UTC)
-
     # Build cache of member enrollment dates from accounting items
     cache = {}
     for el in AccountingItemMembership.objects.filter(
@@ -726,16 +725,14 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
         year=context["year"],
     ).values_list("member_id", "created"):
         cache[el[0]] = el[1]
-
     # Query memberships with card numbers for enrolled members
-    context["list"] = []
+    member_list = []
     que = Membership.objects.filter(
         member_id__in=cache.keys(),
         association_id=context["association_id"],
         card_number__isnull=False,
     )
     que = que.select_related("member").order_by("card_number")
-
     # Process each membership and prepare member data
     for mb in que:
         member = mb.member
@@ -758,9 +755,8 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
         member.name = member.name.capitalize()
         member.surname = member.surname.capitalize()
 
-        context["list"].append(member)
-
-    return render(request, "larpmanager/exe/users/enrolment.html", context)
+        member_list.append(member)
+    return member_list
 
 
 @login_required
@@ -1221,5 +1217,124 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
 
         # Write the complete row to CSV
         writer.writerow(lis)
+
+    return response
+
+
+def _aics_birth_fields(birth_place: str | None) -> tuple[str, str]:
+    """Extract province code and municipality from an Italian birth_place string."""
+    if not birth_place:
+        return "", ""
+    prov_match = _BIRTH_PROVINCE_RE.search(birth_place)
+    if prov_match:
+        return prov_match.group(1), _BIRTH_PROVINCE_RE.sub("", birth_place).strip()[:65]
+    return "", birth_place.strip()[:65]
+
+
+def _aics_residence_fields(residence_address: str | None) -> tuple[str, str, str, str]:
+    """Extract AICS residence fields from pipe-separated address string."""
+    expected_parts = 6
+    if not residence_address:
+        return "", "", "", ""
+    parts = residence_address.split("|")
+    if len(parts) < expected_parts:
+        return "", "", "", ""
+    province = parts[1].replace("IT-", "").strip()[:2]
+    municipality = parts[2].strip()[:65]
+    cap = parts[3].strip()[:5]
+    street = f"{parts[4].strip()} {parts[5].strip()}".strip()[:50]
+    return street, cap, province, municipality
+
+
+def _aics_row(
+    member: Member, social_qualification: str, social_activity: str, sport_qualification: str, sport_activity: str
+) -> list:
+    """Build a single AICS CSV row from a Membership instance."""
+    gender = "M" if member.gender == GenderChoices.MALE else ("F" if member.gender == GenderChoices.FEMALE else "")
+    birth_date = member.birth_date.strftime("%d/%m/%Y") if member.birth_date else ""
+    birth_province, birth_municipality = _aics_birth_fields(member.birth_place)
+    res_street, res_cap, res_province, res_municipality = _aics_residence_fields(member.residence_address)
+
+    phone = ""
+    if member.phone_contact:
+        phone = "".join(c for c in str(member.phone_contact) if c.isdigit())[:12]
+
+    el = member.membership
+
+    card_number = str(el.card_number) if el.card_number else ""
+    card_date = el.date.strftime("%d/%m/%Y") if el.date else ""
+
+    return [
+        (member.surname or "").strip()[:50],  # A - Cognome
+        (member.name or "").strip()[:50],  # B - Nome
+        gender,  # C - Sesso
+        birth_date,  # D - Data di nascita
+        birth_province,  # E - Provincia di nascita
+        birth_municipality,  # F - Comune di nascita
+        (member.fiscal_code or "").strip()[:16],  # G - Codice fiscale
+        res_street,  # H - Indirizzo residenza
+        res_cap,  # I - CAP
+        res_province,  # K - Provincia residenza (before J per spec)
+        res_municipality,  # J - Comune residenza
+        (member.email or "").strip()[:50],  # L - Email
+        phone,  # M - Telefono abitazione
+        phone,  # N - Cellulare
+        "",  # O - Fax abitazione
+        "",  # P - Telefono ufficio
+        "",  # Q - Fax ufficio
+        (social_qualification or "SO")[:10],  # R - Qualifica sociale
+        (social_activity or "")[:10],  # S - Attivita sociale
+        "",  # T - Tipo certificato medico
+        "",  # U - Data rilascio certificato
+        "",  # V - Data scadenza certificato
+        (sport_qualification or "")[:10],  # W - Qualifica sportiva
+        (sport_activity or "")[:10],  # X - Attivita sportiva
+        card_number,  # Y - Numero tessera
+        card_date,  # Z - Data rilascio tessera
+    ]
+
+
+@login_required
+def exe_aics(request: HttpRequest) -> HttpResponse:
+    """Display the AICS export page for Italian associations."""
+    context = check_association_context(request, "exe_aics")
+    return render(request, "larpmanager/exe/users/aics.html", context)
+
+
+@login_required
+def exe_aics_csv(request: HttpRequest) -> HttpResponse:
+    """Generate AICS membership CSV export for Italian associations.
+
+    Creates a tilde-separated CSV file with member data formatted according to
+    the AICS (Associazioni Italiane Cultura e Sport) import specification.
+
+    Args:
+        request: Django HTTP request object containing user session and context
+
+    Returns:
+        HttpResponse: CSV file attachment with member data in AICS format
+
+    """
+    context = check_association_context(request, "exe_aics")
+    association_id = context["association_id"]
+
+    social_qualification = get_association_config(
+        association_id, "aics_social_qualification", default_value="SO", context=context
+    )
+    social_activity = get_association_config(association_id, "aics_social_activity", default_value="", context=context)
+    sport_qualification = get_association_config(
+        association_id, "aics_sport_qualification", default_value="", context=context
+    )
+    sport_activity = get_association_config(association_id, "aics_sport_activity", default_value="", context=context)
+
+    response = HttpResponse(
+        content_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": 'attachment; filename="AICS.csv"'},
+    )
+    writer = csv.writer(response, delimiter="~", quoting=csv.QUOTE_NONE, escapechar="\\")
+
+    members_list = _retrieve_enrolment_data(context)
+    for el in members_list:
+        writer.writerow(_aics_row(el, social_qualification, social_activity, sport_qualification, sport_activity))
 
     return response
