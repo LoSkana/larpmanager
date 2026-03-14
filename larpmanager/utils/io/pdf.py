@@ -34,7 +34,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404
-from django.template import Context, Template
+from django.template import Context, Engine
 from django.template.loader import get_template
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -59,6 +59,13 @@ from larpmanager.utils.core.common import get_element, get_handout, get_now
 from larpmanager.utils.core.exceptions import NotFoundError
 from larpmanager.utils.larpmanager.tasks import background_auto
 from larpmanager.utils.services.character import get_char_check, get_character_relationships, get_character_sheet
+
+# Restricted engine for rendering untrusted database templates
+_RESTRICTED_ENGINE = Engine(
+    libraries={},
+    builtins=["django.template.defaulttags", "django.template.defaultfilters"],
+    autoescape=True,
+)
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Event, Run
@@ -239,8 +246,8 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
     """
     # Render HTML content based on input type
     if html:
-        # Treat template_path as raw HTML string and render with Django context
-        template = Template(template_path)
+        # Render database-stored template with a restricted engine
+        template = _RESTRICTED_ENGINE.from_string(template_path)
         django_context = Context(context)
         html_content = template.render(django_context)
     else:

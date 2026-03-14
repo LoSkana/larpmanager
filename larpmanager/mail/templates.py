@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any
 from django.conf import settings as conf_settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
+from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config
@@ -281,7 +282,7 @@ def registration_options(registration_instance: Any) -> str:
     if registration_instance.ticket:
         email_body += "<br /><br />" + _("Ticket selected") + f": <b>{registration_instance.ticket.name}</b>"
         if registration_instance.ticket.description:
-            email_body += f" - {registration_instance.ticket.description}"
+            email_body += f" - {escape(registration_instance.ticket.description)}"
 
     # Get user membership and event features for permission checks
     get_user_membership(registration_instance.member, registration_instance.run.event.association_id)
@@ -323,7 +324,7 @@ def registration_options(registration_instance: Any) -> str:
     if selected_options:
         email_body += "<br /><br />" + _("Selected options") + ":"
         for option_name, option_value in selected_options:
-            email_body += f"<br />{option_name} - {option_value}"
+            email_body += f"<br />{escape(option_name)} - {escape(option_value)}"
 
     return email_body
 
@@ -389,7 +390,7 @@ def get_help_email(help_question: Any) -> Any:
     """Generate subject and body for help question notification."""
     subject = hdr(help_question) + _("New question by %(user)s") % {"user": help_question.member}
     email_body = _("A question was asked by: %(user)s") % {"user": help_question.member}
-    email_body += "<br /><br />" + help_question.text
+    email_body += "<br /><br />" + escape(help_question.text)
     return subject, email_body
 
 

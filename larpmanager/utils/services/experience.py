@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-import ast
 import json
 from collections import defaultdict
 from decimal import Decimal
@@ -209,7 +208,7 @@ def get_free_abilities(char: Character) -> list:
     """Return the list of free abilities for a character."""
     config_name = _free_abilities_cache_key()
     config_value = char.get_config(config_name, default_value="[]")
-    return ast.literal_eval(config_value)
+    return json.loads(config_value)
 
 
 def _free_abilities_cache_key() -> str:

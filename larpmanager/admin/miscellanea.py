@@ -410,7 +410,7 @@ class OneTimeAccessTokenAdmin(DefModelAdmin):
 
     list_display = ("token_short", "content", "note", "used", "used_at", "used_by", "ip_address")
     list_filter = ("used", "used_at", "content__event")
-    search_fields: ClassVar[tuple] = ("id", "token", "note", "content__name", "used_by__name", "ip_address")
+    search_fields: ClassVar[tuple] = ("id", "note", "content__name", "used_by__name")
     readonly_fields = ("token", "used", "used_at", "used_by", "ip_address", "user_agent")
     autocomplete_fields: ClassVar[list] = ["content", "used_by"]
 
