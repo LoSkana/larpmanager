@@ -27,7 +27,7 @@ from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import models, transaction
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -191,9 +191,12 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
 def pre_register_remove(request: HttpRequest, event_slug: str) -> Any:
     """Remove user's pre-registration for an event."""
     context = get_event(request, event_slug)
-    element = PreRegistration.objects.get(member=context["member"], event=context["event"])
-    element.delete()
-    messages.success(request, _("Pre-registration cancelled!"))
+    element = PreRegistration.objects.filter(member=context["member"], event=context["event"]).first()
+    if element:
+        element.delete()
+        messages.success(request, _("Pre-registration cancelled!"))
+    else:
+        messages.warning(request, _("Pre-registration not found."))
     return redirect("pre_register")
 
 
@@ -233,10 +236,27 @@ def save_registration(
         and bring_friend functionality based on context feature flags.
 
     """
+    is_new = not registration
+
+    # Non-player tiers that do not consume a max_pg slot
+    _non_player_tiers = {
+        TicketTier.STAFF,
+        TicketTier.WAITING,
+        TicketTier.FILLER,
+        TicketTier.SELLER,
+        TicketTier.LOTTERY,
+        TicketTier.NPC,
+        TicketTier.COLLABORATOR,
+    }
+
     # Create or update registration within atomic transaction
     with transaction.atomic():
+        # Lock the run row to serialise concurrent new registrations
+        if is_new and run.event.max_pg > 0:
+            Run.objects.select_for_update().get(pk=run.pk)
+
         # Initialize new registration if none provided
-        if not registration:
+        if is_new:
             registration = Registration()
             registration.run = run
             registration.member = context["member"]
@@ -250,6 +270,22 @@ def save_registration(
 
         # Save standard registration fields and data
         save_registration_standard(context, event, form, registration, gifted=gifted, provisional=provisional)
+
+        # Enforce max_pg atomically after the ticket tier is known
+        if (
+            is_new
+            and run.event.max_pg > 0
+            and registration.ticket
+            and registration.ticket.tier not in _non_player_tiers
+        ):
+            player_count = (
+                Registration.objects.filter(run=run, cancellation_date__isnull=True)
+                .exclude(ticket__tier__in=_non_player_tiers)
+                .exclude(pk=registration.pk)
+                .count()
+            )
+            if player_count >= run.event.max_pg:
+                raise PermissionDenied
 
         # Process and save registration-specific questions
         form.save_registration_questions(registration, is_organizer=False)
@@ -918,20 +954,24 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
     run = context["run"]
     event = context["event"]
 
-    # Validate discount eligibility and constraints
-    check = _check_discount(disc, member, run, event)
-    if check:
-        return error(check)
+    # Validate eligibility and reserve atomically to prevent race conditions
+    with transaction.atomic():
+        # Lock the discount row so concurrent requests serialise here
+        disc = Discount.objects.select_for_update().get(pk=disc.pk)
 
-    # Create temporary discount reservation with 15-minute expiration
-    AccountingItemDiscount.objects.create(
-        value=disc.value,
-        member=member,
-        expires=now + timedelta(minutes=15),
-        disc=disc,
-        run=run,
-        association_id=context["association_id"],
-    )
+        check = _check_discount(disc, member, run, event)
+        if check:
+            return error(check)
+
+        # Create temporary discount reservation with 15-minute expiration
+        AccountingItemDiscount.objects.create(
+            value=disc.value,
+            member=member,
+            expires=now + timedelta(minutes=15),
+            disc=disc,
+            run=run,
+            association_id=context["association_id"],
+        )
 
     # Return success response with reservation confirmation
     return JsonResponse(

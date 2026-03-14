@@ -232,16 +232,16 @@ def go_character(
         'See character <a class="link_show_char" href="/run/char/1">John Doe</a>'
 
     """
-    # Early return if search pattern not in text
-    if search_pattern not in text:
-        return text
-
     # Check if character data exists in context
     if "chars" not in context:
         return text
 
     # Verify specific character number exists
     if character_number not in context["chars"]:
+        return text
+
+    # Early return if search pattern not in text
+    if search_pattern not in text:
         return text
 
     # Get character data from context

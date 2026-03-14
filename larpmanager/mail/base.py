@@ -29,6 +29,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import escape
 from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
@@ -580,9 +581,9 @@ def send_support_ticket_email(instance: Any) -> None:
 
     # Build email body
     body = f"Ticket ID: {instance.id}<br /><br />"
-    body += f"Email: {instance.email} <br /><br />"
+    body += f"Email: {escape(instance.email)} <br /><br />"
     if instance.member:
-        body += f"User: {instance.member} ({instance.member.email}) <br /><br />"
+        body += f"User: {escape(str(instance.member))} ({escape(instance.member.email)}) <br /><br />"
     body += instance.content
     if instance.screenshot:
         body += f"<br /><br /><img src='http://larpmanager.com/{instance.screenshot_reduced.url}' />"

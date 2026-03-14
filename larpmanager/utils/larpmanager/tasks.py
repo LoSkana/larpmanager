@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import hashlib
 import logging
 import re
 import traceback
@@ -28,8 +29,10 @@ from typing import TYPE_CHECKING, Any
 
 from background_task import background
 from django.conf import settings as conf_settings
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import EmailMultiAlternatives
+from django.core.validators import validate_email
 from django.utils import timezone
 
 from larpmanager.cache.association_text import get_association_text
@@ -117,9 +120,8 @@ def mail_error(subject: Any, email_body: Any, exception: Any = None) -> None:
     logger.error("Subject: %s", subject)
     logger.error("Body: %s", email_body)
     if exception:
-        error_notification_body = f"{traceback.format_exc()} <br /><br /> {subject} <br /><br /> {email_body}"
-    else:
-        error_notification_body = f"{subject} <br /><br /> {email_body}"
+        logger.error("Mail error traceback: %s", traceback.format_exc())
+    error_notification_body = f"{subject} <br /><br /> {email_body}"
     error_notification_subject = "[LarpManager] Mail error"
     for _admin_name, admin_email in conf_settings.ADMINS:
         my_send_simple_mail(error_notification_subject, error_notification_body, admin_email)
@@ -131,6 +133,27 @@ def split_players(players: str) -> list:
     counts = Counter({sep: players.count(sep) for sep in separators})
     sep = counts.most_common(1)[0][0]
     return [p.strip() for p in players.split(sep) if p.strip()]
+
+
+def _create_bulk_recipients(email_content: Any, recipients: list, seen_emails: dict) -> list:
+    """Create EmailRecipient records for valid, unique addresses and return their PKs."""
+    recipient_ids = []
+    for email in recipients:
+        if not email or email in seen_emails:
+            continue
+        try:
+            validate_email(email.strip())
+        except ValidationError:
+            logger.warning("Skipping invalid email address in bulk send")
+            continue
+        email_recipient = EmailRecipient.objects.create(
+            email_content=email_content,
+            recipient=email.strip(),
+            language_code=None,
+        )
+        recipient_ids.append(email_recipient.pk)
+        seen_emails[email] = 1
+    return recipient_ids
 
 
 @background_auto()
@@ -182,6 +205,11 @@ def send_mail_exec(
     # Parse symbol-separated email list
     recipients = split_players(players)
 
+    max_recipients = getattr(conf_settings, "MAIL_MAX_RECIPIENTS", 2000)
+    if len(recipients) > max_recipients:
+        logger.warning("Broadcast rejected: %d recipients exceeds limit of %d", len(recipients), max_recipients)
+        return
+
     # Notify administrators about bulk email operation
     if sender_context:
         notify_admins(f"Sending {len(recipients)} - [{sender_context}]", f"{subj}")
@@ -194,21 +222,7 @@ def send_mail_exec(
         body=str(body),
     )
 
-    # Create all EmailRecipient objects first
-    recipient_ids = []
-    for email in recipients:
-        if not email:
-            continue
-        if email in seen_emails:
-            continue
-
-        email_recipient = EmailRecipient.objects.create(
-            email_content=email_content,
-            recipient=email.strip(),
-            language_code=None,
-        )
-        recipient_ids.append(email_recipient.pk)
-        seen_emails[email] = 1
+    recipient_ids = _create_bulk_recipients(email_content, recipients, seen_emails)
 
     # Split into batches
     batches = [
@@ -412,6 +426,9 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
 
     # Add headers
     if reply_to:
+        if "\r" in reply_to or "\n" in reply_to:
+            msg = "Invalid characters in reply-to address"
+            raise ValueError(msg)
         metadata["headers"]["Reply-To"] = reply_to
     metadata["headers"]["List-Unsubscribe"] = f"<mailto:{metadata['sender_email']}>"
 
@@ -554,11 +571,19 @@ def get_context_elements(context_object: dict) -> tuple[int, int]:
 
 def notify_admins(subject: str, message_text: str = "", exception: Exception | None = None) -> None:
     """Send notification email to system administrators."""
+    # Rate-limit: suppress duplicate notifications for the same subject within 5 minutes
+    rate_key = "notify_admins:" + hashlib.md5(subject.encode(), usedforsecurity=False).hexdigest()
+    if cache.get(rate_key):
+        return
+    cache.set(rate_key, 1, timeout=300)
+
     # Ensure message_text is a string to prevent type errors during concatenation
     message_text = str(message_text)
 
     if exception:
-        traceback_text = "".join(traceback.format_exception(type(exception), exception, exception.__traceback__))
-        message_text += "\n" + traceback_text
+        logger.error(
+            "Admin notification traceback: %s",
+            "".join(traceback.format_exception(type(exception), exception, exception.__traceback__)),
+        )
     for _name, email in conf_settings.ADMINS:
         my_send_mail(subject, message_text, email)

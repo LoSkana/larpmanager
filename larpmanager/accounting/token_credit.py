@@ -36,7 +36,7 @@ from larpmanager.models.accounting import (
     PaymentChoices,
 )
 from larpmanager.models.event import DevelopStatus
-from larpmanager.models.member import get_user_membership
+from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 
@@ -166,8 +166,9 @@ def registration_tokens_credits_use(
         return
 
     with transaction.atomic():
-        # Get member and their membership for the association
+        # Prevent concurrent requests from double-spending the same balance
         membership = get_user_membership(registration.member, association_id)
+        membership = Membership.objects.select_for_update().get(pk=membership.pk)
         event_id = registration.run.event_id
 
         # Apply tokens first if feature is enabled
@@ -176,7 +177,7 @@ def registration_tokens_credits_use(
 
         # Apply credits to remaining balance if feature is enabled
         if credits_enabled and remaining > 0:
-            remaining = _apply_credits(registration, remaining, membership, event_id, association_id)
+            _remaining = _apply_credits(registration, remaining, membership, event_id, association_id)
 
         # Note: registration.tot_payed is updated in memory but NOT saved here
         # to prevent infinite recursion via post_save signal

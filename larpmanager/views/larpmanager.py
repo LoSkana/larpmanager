@@ -36,7 +36,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _, override
 from django.views.decorators.cache import cache_page
-from django.views.decorators.csrf import csrf_exempt
 from django_ratelimit.decorators import ratelimit
 
 from larpmanager.cache.association_text import get_association_text
@@ -104,7 +103,6 @@ def ludomanager(template_context: Any, http_request: Any) -> Any:
     return render(http_request, "larpmanager/larpmanager/skin/ludomanager.html", template_context)
 
 
-@csrf_exempt
 def contact(request: HttpRequest) -> Any:
     """Handle contact form submissions and display contact page.
 

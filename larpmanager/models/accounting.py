@@ -18,8 +18,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from decimal import Decimal
 from typing import Any, ClassVar
 
+from django.core.validators import MinValueValidator
 from django.db import models, transaction
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
@@ -569,6 +571,7 @@ class Discount(UuidMixin, BaseModel):
         max_digits=10,
         decimal_places=2,
         default=0,
+        validators=[MinValueValidator(Decimal("0.00"))],
         help_text=_("Indicate the value of the discount, it will be deducted from the total amount calculated"),
     )
 
