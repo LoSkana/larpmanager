@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-import csv
 import io
 import logging
 import os
@@ -193,14 +192,8 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
             decoded_content = file_content.decode(encoding)
             string_buffer = io.StringIO(decoded_content)
 
-            # Detect delimiter from first 4KB only (avoid scanning entire file)
-            sample = decoded_content[:4096]
-            try:
-                sep = csv.Sniffer().sniff(sample, delimiters=",;\t|").delimiter
-            except csv.Error:
-                sep = ","
-            string_buffer = io.StringIO(decoded_content)
-            df = pd.read_csv(string_buffer, encoding=encoding, sep=sep, dtype=str)
+            # Parse CSV with automatic delimiter detection
+            df = pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
 
             # Sanitize all values to prevent formula injection
             return sanitize_dataframe(df)
