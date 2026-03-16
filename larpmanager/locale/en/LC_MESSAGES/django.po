@@ -176,6 +176,9 @@ msgstr ""
 msgid "Collections"
 msgstr ""
 
+msgid "A member must be selected to mark the collection as paid"
+msgstr ""
+
 msgid "Manage discounts"
 msgstr ""
 
@@ -10656,6 +10659,9 @@ msgid "Pre-registrations saved"
 msgstr ""
 
 msgid "Pre-registration cancelled!"
+msgstr ""
+
+msgid "Pre-registration not found."
 msgstr ""
 
 msgid "To confirm your registration, please fill in your personal profile"

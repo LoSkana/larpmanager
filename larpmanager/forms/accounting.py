@@ -47,6 +47,7 @@ from larpmanager.models.accounting import (
     AccountingItemOutflow,
     AccountingItemPayment,
     Collection,
+    CollectionStatus,
     Discount,
     OtherChoices,
     PaymentChoices,
@@ -107,6 +108,7 @@ class OrgaExpenseForm(BaseModelFormRun):
 
         # Configure member widget with run context
         self.configure_field_run("member", self.params.get("run"))
+        self.fields["member"].required = True
 
         # Remove balance field if Italian balance feature is disabled
         if "ita_balance" not in self.params.get("features"):
@@ -141,6 +143,7 @@ class OrgaTokenForm(BaseModelFormRun):
 
         # Configure field widget
         self.configure_field_run("member", self.params.get("run"))
+        self.fields["member"].required = True
 
     def save(self, commit: bool = True) -> AccountingItemOther:  # noqa: FBT001, FBT002
         """Save form with TOKEN type."""
@@ -169,6 +172,7 @@ class OrgaCreditForm(BaseModelFormRun):
 
         # Configure field widget
         self.configure_field_run("member", self.params.get("run"))
+        self.fields["member"].required = True
 
     def save(self, commit: bool = True) -> AccountingItemOther:  # noqa: FBT001, FBT002
         """Save form with CREDIT type."""
@@ -320,6 +324,7 @@ class ExeDonationForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         self.configure_field_association("member", self.params.get("association_id"))
+        self.fields["member"].required = True
 
 
 class OrgaPaymentForm(ExePaymentForm):
@@ -372,6 +377,7 @@ class ExeCreditForm(BaseModelForm):
         get_run_choices(self)
         self.configure_field_association("member", self.params.get("association_id"))
         self.configure_field_association("run", self.params.get("association_id"))
+        self.fields["member"].required = True
 
     def save(self, commit: bool = True) -> AccountingItemOther:  # noqa: FBT001, FBT002
         """Save form with CREDIT type."""
@@ -402,6 +408,7 @@ class ExeTokenForm(BaseModelForm):
         get_run_choices(self)
         self.configure_field_association("member", self.params.get("association_id"))
         self.configure_field_association("run", self.params.get("association_id"))
+        self.fields["member"].required = True
 
     def save(self, commit: bool = True) -> AccountingItemOther:  # noqa: FBT001, FBT002
         """Save form with TOKEN type."""
@@ -499,6 +506,13 @@ class ExeCollectionForm(CollectionNewForm):
 
         # Set association for member widget filtering
         self.configure_field_association("member", self.params["association_id"])
+
+    def clean(self) -> dict:
+        """Validate that a member is selected when status is set to PAYED."""
+        cleaned_data = super().clean()
+        if cleaned_data.get("status") == CollectionStatus.PAYED and not cleaned_data.get("member"):
+            self.add_error("member", _("A member must be selected to mark the collection as paid"))
+        return cleaned_data
 
 
 class OrgaDiscountForm(BaseModelForm):

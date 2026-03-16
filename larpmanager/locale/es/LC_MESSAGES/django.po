@@ -4753,6 +4753,9 @@ msgstr "Ahora puede crear salidas"
 msgid "Pre-registration cancelled!"
 msgstr "Preinscripción anulada"
 
+msgid "Pre-registration not found."
+msgstr "No se ha encontrado el prerregistro."
+
 msgid "Question saved successfully"
 msgstr "¡Cuenta creada correctamente"
 
@@ -7225,6 +7228,9 @@ msgstr ""
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Su solicitud de afiliación se ha enviado correctamente."
+
+msgid "A member must be selected to mark the collection as paid"
+msgstr "Debe seleccionarse un miembro para marcar la recaudación como pagada"
 
 msgid "Advanced mode activated! All features are now available."
 msgstr "¡Modo avanzado activado! Ya están disponibles todas las funciones."
