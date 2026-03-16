@@ -10658,6 +10658,9 @@ msgstr ""
 msgid "Pre-registration cancelled!"
 msgstr ""
 
+msgid "Pre-registration not found."
+msgstr ""
+
 msgid "To confirm your registration, please fill in your personal profile"
 msgstr ""
 

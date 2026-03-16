@@ -4753,6 +4753,9 @@ msgstr "Nyní můžete vytvářet odtoky"
 msgid "Pre-registration cancelled!"
 msgstr "Předběžná registrace zrušena!"
 
+msgid "Pre-registration not found."
+msgstr "Předběžná registrace nebyla nalezena."
+
 msgid "Question saved successfully"
 msgstr "Registrace byla úspěšně dokončena"
 

@@ -4753,6 +4753,9 @@ msgstr "Nå kan du opprette utstrømninger"
 msgid "Pre-registration cancelled!"
 msgstr "Forhåndsregistrering avlyst!"
 
+msgid "Pre-registration not found."
+msgstr "Forhåndsregistrering ikke funnet."
+
 msgid "Question saved successfully"
 msgstr "Registreringen er fullført"
 

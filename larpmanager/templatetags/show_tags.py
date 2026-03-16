@@ -316,7 +316,7 @@ def _remove_unimportant_prefix(text: str) -> str:
             # Match empty HTML tags like <p></p>, <div></div>, <span></span>, etc.
             # Also match \r, \n, &nbsp; and other whitespace characters inside tags
             empty_tag_match = re.match(
-                r"^<(\w+)(?:\s[^>]*)?>(?:\s|&nbsp;|\r|\n)*</\1>",
+                r"^<(\w+)(?:\s[^>]*)?>(?:\s|&nbsp;){0,500}</\1>",
                 text_without_leading_whitespace,
             )
 

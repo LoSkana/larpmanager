@@ -4753,6 +4753,9 @@ msgstr "Nu kun je uitstromen maken"
 msgid "Pre-registration cancelled!"
 msgstr "Voorinschrijving geannuleerd!"
 
+msgid "Pre-registration not found."
+msgstr "Voorinschrijving niet gevonden."
+
 msgid "Question saved successfully"
 msgstr "Registratie succesvol afgerond"
 

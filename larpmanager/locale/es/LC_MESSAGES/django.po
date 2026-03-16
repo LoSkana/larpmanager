@@ -4753,6 +4753,9 @@ msgstr "Ahora puede crear salidas"
 msgid "Pre-registration cancelled!"
 msgstr "Preinscripción anulada"
 
+msgid "Pre-registration not found."
+msgstr "No se ha encontrado el prerregistro."
+
 msgid "Question saved successfully"
 msgstr "¡Cuenta creada correctamente"
 

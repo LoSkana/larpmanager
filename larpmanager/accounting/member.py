@@ -22,7 +22,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
@@ -291,7 +291,7 @@ def _info_membership(context: dict, member: Member) -> None:
         return
 
     # Get current year for membership calculations
-    current_year = timezone.now().year
+    current_year = timezone.localtime(timezone.now()).year
 
     # Retrieve all membership fee years for this member and association
     context["membership_fee"] = []
@@ -329,8 +329,8 @@ def _info_membership(context: dict, member: Member) -> None:
         # Build full date string with current year
         membership_day += f"-{current_year}"
 
-        # Parse and make aware with explicit UTC
-        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(tzinfo=UTC)
+        # Parse and make aware
+        membership_deadline_date = timezone.make_aware(datetime.strptime(membership_day, "%d-%m-%Y"))  # noqa: DTZ007
 
         # Add grace period months
         membership_deadline_date += relativedelta(months=membership_grace_period_months)

@@ -4753,6 +4753,9 @@ msgstr "Vous pouvez maintenant créer des flux sortants"
 msgid "Pre-registration cancelled!"
 msgstr "Préinscription annulée !"
 
+msgid "Pre-registration not found."
+msgstr "La préinscription n'a pas été trouvée."
+
 msgid "Question saved successfully"
 msgstr "L'inscription a été effectuée avec succès "
 

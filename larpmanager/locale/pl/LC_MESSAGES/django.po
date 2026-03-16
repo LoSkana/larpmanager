@@ -4753,6 +4753,9 @@ msgstr "Teraz można tworzyć przepływy"
 msgid "Pre-registration cancelled!"
 msgstr "Wstępna rejestracja anulowana!"
 
+msgid "Pre-registration not found."
+msgstr "Nie znaleziono wstępnej rejestracji."
+
 msgid "Question saved successfully"
 msgstr "Rejestracja zakończona pomyślnie"
 

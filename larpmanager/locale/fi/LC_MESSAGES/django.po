@@ -4753,6 +4753,9 @@ msgstr "Nyt voit luoda ulosvirtauksia"
 msgid "Pre-registration cancelled!"
 msgstr "EnnakkoIlmoittautuminen peruutettu!"
 
+msgid "Pre-registration not found."
+msgstr "Ennakkorekisteröintiä ei löydy."
+
 msgid "Question saved successfully"
 msgstr "Kysymys tallennettu onnistuneesti"
 

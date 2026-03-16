@@ -215,8 +215,9 @@ class BaseTestCase(TestCase):
 
     def payment_item(self, **kwargs: Any) -> Any:
         """Create a payment item for testing"""
-        from datetime import datetime
         from decimal import Decimal
+
+        from django.utils import timezone
 
         from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
 
@@ -226,7 +227,7 @@ class BaseTestCase(TestCase):
             "association": self.get_association(),
             "registration": self.get_registration(),
             "pay": PaymentChoices.MONEY,
-            "created": datetime.now(),
+            "created": timezone.now(),
         }
         defaults.update(kwargs)
         return AccountingItemPayment(**defaults)

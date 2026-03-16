@@ -4753,6 +4753,9 @@ msgstr "Nu kan du skapa utflöden"
 msgid "Pre-registration cancelled!"
 msgstr "Förhandsregistreringen är inställd!"
 
+msgid "Pre-registration not found."
+msgstr "Förhandsregistrering hittades inte."
+
 msgid "Question saved successfully"
 msgstr "Registreringen har slutförts framgångsrikt"
 

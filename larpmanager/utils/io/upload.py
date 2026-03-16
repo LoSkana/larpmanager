@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import csv
 import io
 import logging
 import os
@@ -86,6 +87,9 @@ if TYPE_CHECKING:
     from larpmanager.models.event import Run
 
 logger = logging.getLogger(__name__)
+
+MAX_CSV_ROWS = 10_000
+MAX_COMMA_VALUES = 100
 
 
 def _normalize_numeric(value: str) -> str:
@@ -189,8 +193,14 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
             decoded_content = file_content.decode(encoding)
             string_buffer = io.StringIO(decoded_content)
 
-            # Parse CSV with automatic delimiter detection
-            df = pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
+            # Detect delimiter from first 4KB only (avoid scanning entire file)
+            sample = decoded_content[:4096]
+            try:
+                sep = csv.Sniffer().sniff(sample, delimiters=",;\t|").delimiter
+            except csv.Error:
+                sep = ","
+            string_buffer = io.StringIO(decoded_content)
+            df = pd.read_csv(string_buffer, encoding=encoding, sep=sep, dtype=str)
 
             # Sanitize all values to prevent formula injection
             return sanitize_dataframe(df)
@@ -266,6 +276,8 @@ def registrations_load(context: dict, uploaded_file_form: Form) -> list[str]:
     questions_mapping = _get_questions(registration_questions)
 
     if input_dataframe is not None:
+        if len(input_dataframe) > MAX_CSV_ROWS:
+            return [f"ERR - File too large: {len(input_dataframe)} rows exceeds limit of {MAX_CSV_ROWS}"]
         for registration_row in input_dataframe.to_dict(orient="records"):
             processing_logs.append(_reg_load(context, registration_row, questions_mapping))
     return processing_logs
@@ -555,6 +567,9 @@ def _reg_assign_characters(
 
     # Handle multiple characters separated by commas
     character_names = [name.strip() for name in character_names_string.split(",")]
+    if len(character_names) > MAX_COMMA_VALUES:
+        error_logs.append(f"ERR - Too many characters: {len(character_names)} exceeds limit of {MAX_COMMA_VALUES}")
+        return
 
     for character_name in character_names:
         if not character_name:
@@ -615,6 +630,8 @@ def writing_load(context: dict, form: Form) -> list[str]:
 
         # Process each row of writing data
         if input_dataframe is not None:
+            if len(input_dataframe) > MAX_CSV_ROWS:
+                return [f"ERR - File too large: {len(input_dataframe)} rows exceeds limit of {MAX_CSV_ROWS}"]
             for row in input_dataframe.to_dict(orient="records"):
                 logs.append(element_load(context, row, questions_dict))
 
@@ -818,12 +835,19 @@ def _assign_choice_answer(
 
     # check if choice
     else:
+        option_values = field_value.split(",")
+        if len(option_values) > MAX_COMMA_VALUES:
+            error_logs.append(
+                f"Problem with question {field_name}: too many options ({len(option_values)}, max {MAX_COMMA_VALUES})"
+            )
+            return
+
         if is_registration:
             RegistrationChoice.objects.filter(registration_id=target_element.id, question_id=question["id"]).delete()
         else:
             WritingChoice.objects.filter(element_id=target_element.id, question_id=question["id"]).delete()
 
-        for original_input_option in field_value.split(","):
+        for original_input_option in option_values:
             normalized_input_option = original_input_option.lower().strip()
             option_id = question["options"].get(normalized_input_option)
             if not option_id:
@@ -1031,15 +1055,18 @@ def _assign_faction(context: dict, element: Character, value: str, logs: list[st
         logs: List to append error messages to
 
     """
+    faction_names = value.split(",")
+    if len(faction_names) > MAX_COMMA_VALUES:
+        logs.append(f"ERR - Too many factions: {len(faction_names)} exceeds limit of {MAX_COMMA_VALUES}")
+        return
+
+    element.save()
     # Process each faction name in the comma-separated list
-    for faction_name in value.split(","):
+    for faction_name in faction_names:
         # Find faction by case-insensitive name match for the event
         faction = Faction.objects.filter(name__iexact=faction_name.strip(), event=context["event"]).first()
         if faction:
-            # Save element and add to faction's characters
-            element.save()  # to be sure
             faction.characters.add(element)
-            faction.save()
         else:
             # Log faction not found errors
             logs.append(f"Faction not found: {faction_name}")
@@ -1074,6 +1101,8 @@ def form_load(context: dict, form: Form, *, is_registration: bool = True) -> lis
         # Parse uploaded questions file into DataFrame
         (questions_dataframe, log_messages) = _get_file(context, questions_file, 0)
         if questions_dataframe is not None:
+            if len(questions_dataframe) > MAX_CSV_ROWS:
+                return [f"ERR - File too large: {len(questions_dataframe)} rows exceeds limit of {MAX_CSV_ROWS}"]
             # Create question objects from each row in the DataFrame
             for question_row in questions_dataframe.to_dict(orient="records"):
                 log_messages.append(_questions_load(context, question_row, is_registration=is_registration))
@@ -1527,6 +1556,8 @@ def tickets_load(context: dict, form: Form) -> list[str]:
 
     # Process each row if data frame is valid
     if uploaded_dataframe is not None:
+        if len(uploaded_dataframe) > MAX_CSV_ROWS:
+            return [f"ERR - File too large: {len(uploaded_dataframe)} rows exceeds limit of {MAX_CSV_ROWS}"]
         # Convert dataframe to dictionary records and process each ticket
         for ticket_row in uploaded_dataframe.to_dict(orient="records"):
             log_messages.append(_ticket_load(context, ticket_row))
@@ -1601,6 +1632,8 @@ def abilities_load(context: dict, form: Form) -> list[str]:
 
     # Process each row if valid dataframe exists
     if input_dataframe is not None:
+        if len(input_dataframe) > MAX_CSV_ROWS:
+            return [f"ERR - File too large: {len(input_dataframe)} rows exceeds limit of {MAX_CSV_ROWS}"]
         for ability_row in input_dataframe.to_dict(orient="records"):
             # Load individual ability and collect processing logs
             processing_logs.append(_ability_load(context, ability_row))
@@ -1713,15 +1746,19 @@ def _assign_prereq(
         value: Comma-separated prerequisite ability names
 
     """
+    prereq_names = value.split(",")
+    if len(prereq_names) > MAX_COMMA_VALUES:
+        logs.append(f"ERR - Too many prerequisites: {len(prereq_names)} exceeds limit of {MAX_COMMA_VALUES}")
+        return
+
+    element.save()
     # Parse each prerequisite name from the comma-separated string
-    for prerequisite_name in value.split(","):
+    for prerequisite_name in prereq_names:
         # Look up prerequisite ability by name (case-insensitive)
         prerequisite_element = (
             context["event"].get_elements(AbilityPx).filter(name__iexact=prerequisite_name.strip()).first()
         )
         if prerequisite_element:
-            # Ensure element is saved before adding M2M relationship
-            element.save()
             element.prerequisites.add(prerequisite_element)
         else:
             logs.append(f"Prerequisite not found: {prerequisite_name}")
@@ -1742,15 +1779,19 @@ def _assign_requirements(
         requirement_names: Comma-separated string of requirement names
 
     """
+    req_names = requirement_names.split(",")
+    if len(req_names) > MAX_COMMA_VALUES:
+        error_logs.append(f"ERR - Too many requirements: {len(req_names)} exceeds limit of {MAX_COMMA_VALUES}")
+        return
+
+    writing_element.save()
     # Process each requirement name from comma-separated string
-    for requirement_name in requirement_names.split(","):
+    for requirement_name in req_names:
         # Look up writing option by case-insensitive name match
         writing_option = (
             context["event"].get_elements(WritingOption).filter(name__iexact=requirement_name.strip()).first()
         )
         if writing_option:
-            writing_element.save()  # to be sure
-
             # Add the requirement to the writing element
             writing_element.requirements.add(writing_option)
         else:

@@ -4753,6 +4753,9 @@ msgstr "Jetzt können Sie Abflüsse erstellen"
 msgid "Pre-registration cancelled!"
 msgstr "Vorregistrierung storniert!"
 
+msgid "Pre-registration not found."
+msgstr "Vorregistrierung nicht gefunden."
+
 msgid "Question saved successfully"
 msgstr "Registrierung erfolgreich abgeschlossen"
 

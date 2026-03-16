@@ -4753,6 +4753,9 @@ msgstr "Ora puoi creare flussi in uscita"
 msgid "Pre-registration cancelled!"
 msgstr "Pre-iscrizione cancellata!"
 
+msgid "Pre-registration not found."
+msgstr "Pre-registrazione non trovata."
+
 msgid "Question saved successfully"
 msgstr "Domanda salvata con successo"
 
