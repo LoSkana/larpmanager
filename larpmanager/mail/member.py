@@ -23,6 +23,7 @@ from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.utils import timezone
+from django.utils.html import escape
 from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config
@@ -260,7 +261,7 @@ def send_help_question_notification_email(instance: Any) -> None:
         # new answer
         activate(member.language)
         subject = hdr(instance) + _("New answer") + "!"
-        body = _("Your question has been answered") + f": {instance.text}"
+        body = _("Your question has been answered") + f": {escape(instance.text)}"
 
         url = get_url(f"{instance.run.get_slug()}/help", instance) if instance.run else get_url("help", instance)
 
@@ -276,7 +277,7 @@ def send_chat_message_notification_email(instance: Any) -> None:
     activate(instance.receiver.language)
     subject = hdr(instance) + _("New message from %(user)s") % {"user": instance.sender.display_member()}
     chat_url = get_url(f"chat/{instance.sender.id}/", instance)
-    email_body = f"<br /><br />{instance.message} (<a href='{chat_url}'>" + _("reply here") + "</a>)"
+    email_body = f"<br /><br />{escape(instance.message)} (<a href='{chat_url}'>" + _("reply here") + "</a>)"
     my_send_mail(subject, email_body, instance.receiver, instance)
 
 

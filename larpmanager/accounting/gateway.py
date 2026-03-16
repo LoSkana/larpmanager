@@ -330,11 +330,8 @@ def handle_valid_paypal_ipn(ipn_obj: Any) -> bool | None:
 
 def handle_invalid_paypal_ipn(invalid_ipn_object: Any) -> None:
     """Handle invalid PayPal IPN notifications."""
-    if invalid_ipn_object:
-        logger.error("PayPal IPN object: %s", invalid_ipn_object)
-
-    formatted_ipn_body = pformat(invalid_ipn_object)
-    logger.error("PayPal IPN body: %s", formatted_ipn_body)
+    invoice_code = getattr(invalid_ipn_object, "invoice", "unknown")
+    logger.error("PayPal IPN validation failed for invoice: %s", invoice_code)
 
 
 def get_stripe_form(

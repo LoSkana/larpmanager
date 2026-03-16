@@ -215,6 +215,10 @@ TINYMCE_COMPRESSOR = False
 
 SECURE_REFERRER_POLICY = 'origin'
 
+# Session and CSRF cookie security
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False
+
 # Accounting
 
 MAX_ROUNDING_TOLERANCE = 0.05
@@ -261,6 +265,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 MAIL_BATCH_SIZE = 10
 
 MAIL_BATCH_INTERVAL = 1
+
+MAIL_MAX_RECIPIENTS = 2000
 
 # Amazon SES Configuration (optional - fallback when custom SMTP not configured)
 AWS_SES_ACCESS_KEY_ID = None
