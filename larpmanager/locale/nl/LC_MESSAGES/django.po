@@ -4753,6 +4753,9 @@ msgstr "Nu kun je uitstromen maken"
 msgid "Pre-registration cancelled!"
 msgstr "Voorinschrijving geannuleerd!"
 
+msgid "Pre-registration not found."
+msgstr "Voorinschrijving niet gevonden."
+
 msgid "Question saved successfully"
 msgstr "Registratie succesvol afgerond"
 
@@ -7212,6 +7215,10 @@ msgstr ""
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Je lidmaatschapsaanvraag is succesvol ingediend!"
+
+msgid "A member must be selected to mark the collection as paid"
+msgstr ""
+"Er moet een lid worden geselecteerd om de collectie als betaald te markeren"
 
 msgid "Advanced mode activated! All features are now available."
 msgstr "Geavanceerde modus geactiveerd! Alle functies zijn nu beschikbaar."

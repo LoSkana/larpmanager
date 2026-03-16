@@ -725,6 +725,10 @@ def process_collection_status_change(collection: Collection) -> None:
         if collection.status != CollectionStatus.PAYED:
             return
 
+        # Skip credit assignment if no member is associated with the collection
+        if not collection.member_id:
+            return
+
         # Create accounting credit item for the newly paid collection
         accounting_item = AccountingItemOther()
         accounting_item.association_id = collection.association_id

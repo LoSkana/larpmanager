@@ -4753,6 +4753,9 @@ msgstr "Nyt voit luoda ulosvirtauksia"
 msgid "Pre-registration cancelled!"
 msgstr "EnnakkoIlmoittautuminen peruutettu!"
 
+msgid "Pre-registration not found."
+msgstr "Ennakkorekisteröintiä ei löydy."
+
 msgid "Question saved successfully"
 msgstr "Kysymys tallennettu onnistuneesti"
 
@@ -7197,6 +7200,9 @@ msgstr "Toimittamasi verokoodin kanssa ilmeni ongelma"
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Jäsenhakemuksesi lähetettiin onnistuneesti!"
+
+msgid "A member must be selected to mark the collection as paid"
+msgstr "Jäsen on valittava, jotta keräys voidaan merkitä maksetuksi"
 
 msgid "Advanced mode activated! All features are now available."
 msgstr "Edistynyt tila aktivoitu! Kaikki ominaisuudet ovat nyt käytettävissä."

@@ -4753,6 +4753,9 @@ msgstr "Nyní můžete vytvářet odtoky"
 msgid "Pre-registration cancelled!"
 msgstr "Předběžná registrace zrušena!"
 
+msgid "Pre-registration not found."
+msgstr "Předběžná registrace nebyla nalezena."
+
 msgid "Question saved successfully"
 msgstr "Registrace byla úspěšně dokončena"
 
@@ -7196,6 +7199,9 @@ msgstr "Narazili jsme na problém s daňovým kódem, který jste nám poskytli"
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Vaše žádost o členství byla úspěšně odeslána!"
+
+msgid "A member must be selected to mark the collection as paid"
+msgstr "Pro označení sbírky jako zaplacené musí být vybrán člen"
 
 msgid "Advanced mode activated! All features are now available."
 msgstr "Pokročilý režim aktivován! Nyní jsou k dispozici všechny funkce."

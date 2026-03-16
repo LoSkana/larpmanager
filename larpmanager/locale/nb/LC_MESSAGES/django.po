@@ -4753,6 +4753,9 @@ msgstr "Nå kan du opprette utstrømninger"
 msgid "Pre-registration cancelled!"
 msgstr "Forhåndsregistrering avlyst!"
 
+msgid "Pre-registration not found."
+msgstr "Forhåndsregistrering ikke funnet."
+
 msgid "Question saved successfully"
 msgstr "Registreringen er fullført"
 
@@ -7198,6 +7201,9 @@ msgstr "Vi har støtt på et problem med skattekoden du oppga"
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Medlemskapssøknaden din ble sendt inn!"
+
+msgid "A member must be selected to mark the collection as paid"
+msgstr "Et medlem må velges for å markere innsamlingen som betalt"
 
 msgid "Advanced mode activated! All features are now available."
 msgstr "Avansert modus aktivert! Alle funksjoner er nå tilgjengelige."

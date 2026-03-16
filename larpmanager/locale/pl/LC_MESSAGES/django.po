@@ -4753,6 +4753,9 @@ msgstr "Teraz można tworzyć przepływy"
 msgid "Pre-registration cancelled!"
 msgstr "Wstępna rejestracja anulowana!"
 
+msgid "Pre-registration not found."
+msgstr "Nie znaleziono wstępnej rejestracji."
+
 msgid "Question saved successfully"
 msgstr "Rejestracja zakończona pomyślnie"
 
@@ -7205,6 +7208,9 @@ msgstr "Napotkaliśmy problem z podanym kodem podatkowym"
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Twój wniosek o członkostwo został pomyślnie przesłany!"
+
+msgid "A member must be selected to mark the collection as paid"
+msgstr "Członek musi zostać wybrany, aby oznaczyć kolekcję jako opłaconą"
 
 msgid "Advanced mode activated! All features are now available."
 msgstr "Tryb zaawansowany włączony! Wszystkie funkcje są teraz dostępne."

@@ -4753,6 +4753,9 @@ msgstr "Nu kan du skapa utflöden"
 msgid "Pre-registration cancelled!"
 msgstr "Förhandsregistreringen är inställd!"
 
+msgid "Pre-registration not found."
+msgstr "Förhandsregistrering hittades inte."
+
 msgid "Question saved successfully"
 msgstr "Registreringen har slutförts framgångsrikt"
 
@@ -7192,6 +7195,9 @@ msgstr "Vi stötte på ett problem med den skattekod du angav"
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Din medlemsansökan har skickats in framgångsrikt!"
+
+msgid "A member must be selected to mark the collection as paid"
+msgstr "En medlem måste väljas för att markera samlingen som betald"
 
 msgid "Advanced mode activated! All features are now available."
 msgstr "Avancerat läge aktiverat! Alla funktioner är nu tillgängliga."

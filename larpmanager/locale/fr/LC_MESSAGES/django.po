@@ -4753,6 +4753,9 @@ msgstr "Vous pouvez maintenant créer des flux sortants"
 msgid "Pre-registration cancelled!"
 msgstr "Préinscription annulée !"
 
+msgid "Pre-registration not found."
+msgstr "La préinscription n'a pas été trouvée."
+
 msgid "Question saved successfully"
 msgstr "L'inscription a été effectuée avec succès "
 
@@ -7260,6 +7263,10 @@ msgstr ""
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Votre demande d'adhésion a été envoyée avec succès !"
+
+msgid "A member must be selected to mark the collection as paid"
+msgstr ""
+"Un membre doit être sélectionné pour marquer la collection comme payée"
 
 msgid "Advanced mode activated! All features are now available."
 msgstr ""
