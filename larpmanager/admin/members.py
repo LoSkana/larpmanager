@@ -23,6 +23,8 @@ from typing import ClassVar
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from django.db.models import QuerySet
+from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.html import format_html
 
@@ -32,6 +34,11 @@ from larpmanager.models.member import Badge, Member, MemberConfig, Membership, V
 
 class MyUserAdmin(UserAdmin):
     """Custom admin interface for Django User model."""
+
+    def delete_queryset(self, _request: HttpRequest, queryset: QuerySet) -> None:
+        """Soft-delete Member profiles first (cascades to Membership via SOFT_DELETE_CASCADE)."""
+        Member.objects.filter(user__in=queryset).delete()
+        queryset.delete()
 
     list_display = ("username", "is_staff", "email", "is_superuser", "character_link")
     list_filter = ("is_staff", "is_superuser")
