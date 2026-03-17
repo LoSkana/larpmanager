@@ -86,6 +86,9 @@ msgstr "wiek"
 msgid "for"
 msgstr "dla"
 
+msgid "AICS"
+msgstr "AICS"
+
 msgid "Area"
 msgstr "Obszar"
 
@@ -3245,6 +3248,9 @@ msgstr "Niestandardowa czcionka tytułu"
 msgid "Disable Auto save"
 msgstr "Wyłącz automatyczne zapisywanie"
 
+msgid "Download AICS CSV"
+msgstr "Pobierz AICS CSV"
+
 msgid "Download document"
 msgstr "Pobierz dokument"
 
@@ -3683,6 +3689,9 @@ msgstr "Brak wyników"
 msgid "Signup cancellation"
 msgstr "Anulowanie rejestracji"
 
+msgid "Sport activity code"
+msgstr "Kod aktywności sportowej"
+
 msgid "Support maintainers"
 msgstr "Wsparcie dla opiekunów"
 
@@ -3860,6 +3869,9 @@ msgstr "Konfigurowanie typów umiejętności"
 
 msgid "Sign up as a filler!"
 msgstr "Zarejestruj się jako wypełniacz!"
+
+msgid "Social activity code"
+msgstr "Kod aktywności społecznej"
 
 msgid "Terms and Conditions"
 msgstr "Zasady i warunki"
@@ -4705,6 +4717,9 @@ msgstr "Zaangażowanie ilości magazynowych"
 msgid "Date of membership approval"
 msgstr "Data zatwierdzenia członkostwa"
 
+msgid "Default sport qualification"
+msgstr "Domyślna kwalifikacja sportowa"
+
 msgid "Description - international"
 msgstr "Opis - międzynarodowy"
 
@@ -5278,6 +5293,9 @@ msgstr "Poproś organizatorów o aktywację"
 msgid "Confirm registration to %(event)s"
 msgstr "Potwierdź rejestrację na %(event)s"
 
+msgid "Default social qualification code"
+msgstr "Domyślny kod kwalifikacji społecznej"
+
 msgid "Descriptive name for this API key"
 msgstr "Nazwa opisowa dla tego klucza API"
 
@@ -5697,6 +5715,9 @@ msgstr "Sprawdź ważność kodu fiskalnego"
 
 msgid "End date cannot be before start date!"
 msgstr "Data końcowa nie może być wcześniejsza niż data początkowa!"
+
+msgid "Export member list in AICS CSV format"
+msgstr "Eksport listy członków w formacie AICS CSV"
 
 msgid "Hide participants without a character"
 msgstr "Ukryj uczestników bez znaku"
@@ -6618,6 +6639,9 @@ msgstr "możesz je przeglądać, edytować i oznaczać jako przypisane"
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Uzyskaj dostęp do swojej postaci <a href='%(url)s'>tutaj</a>"
 
+msgid "Default AICS sport qualification for all members"
+msgstr "Domyślna kwalifikacja sportowa AICS dla wszystkich członków"
+
 msgid "Describe exactly which participants are involved"
 msgstr "Opisz dokładnie, którzy uczestnicy są zaangażowani"
 
@@ -6734,6 +6758,9 @@ msgstr ""
 
 msgid "Minimum age of members (leave empty for no limit)"
 msgstr "Minimalny wiek członków (pozostaw puste dla braku limitu)"
+
+msgid "Now you can export the member list in AICS format"
+msgstr "Teraz można wyeksportować listę członków w formacie AICS"
 
 msgid "Now you can peform the fiscal code validity check"
 msgstr "Teraz można wykonać sprawdzenie poprawności kodu fiskalnego"
@@ -7663,6 +7690,9 @@ msgid "Allows a user to reserve extra tickets in addition to their own"
 msgstr ""
 "Umożliwia użytkownikowi zarezerwowanie dodatkowych biletów oprócz własnych"
 
+msgid "Code of the sporting activity of the club as registered in AICS"
+msgstr "Kodeks działalności sportowej klubu zarejestrowanego w AICS"
+
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Opis - będzie wyświetlany na początku sekcji"
 
@@ -7930,6 +7960,9 @@ msgid "With these tutorials, you can learn how to use the tool in no time"
 msgstr ""
 "Dzięki tym samouczkom możesz nauczyć się korzystać z tego narzędzia w "
 "mgnieniu oka"
+
+msgid "Code of the non-sporting activity of the club as registered in AICS"
+msgstr "Kod działalności pozasportowej klubu zarejestrowany w AICS"
 
 msgid "How the relationship is described from this character's perspective"
 msgstr "Jak opisywany jest związek z perspektywy tej postaci"
@@ -10324,6 +10357,13 @@ msgstr ""
 "wartości dla nagłówka to"
 
 msgid ""
+"Default AICS social qualification code for all members (e.g. SO, AT, DI). "
+"Leave empty to use 'SO'"
+msgstr ""
+"Domyślny kod kwalifikacji społecznych AICS dla wszystkich członków (np. SO, "
+"AT, DI). Pozostaw puste, aby użyć \"SO"
+
+msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
 "translation in your language"
 msgstr ""
@@ -11435,6 +11475,13 @@ msgstr ""
 "instrumentów finansowych - nie uwzględnia tokenów i kredytów"
 
 msgid ""
+"Enables export of member list in AICS CSV format for Italian associations "
+"affiliated with AICS (Associazioni Italiane Cultura e Sport)"
+msgstr ""
+"Umożliwia eksport listy członków w formacie AICS CSV dla włoskich "
+"stowarzyszeń zrzeszonych w AICS (Associazioni Italiane Cultura e Sport)"
+
+msgid ""
 "If checked: receive a single daily summary email instead of immediate "
 "notifications for registrations, payments, and invoice approvals"
 msgstr ""
@@ -11755,6 +11802,15 @@ msgstr ""
 "Wskazuje, w jaki sposób możesz zostać rozpoznany, jeśli zostaniesz "
 "znaleziony w pobliżu jakiegoś konkretnego punktu, jeśli masz dużo bagażu: "
 "wszelkie informacje, które mogą nam pomóc"
+
+msgid ""
+"This page allows you to export the member list in the CSV format required "
+"for import into the AICS (Associazioni Italiane Cultura e Sport) management "
+"system."
+msgstr ""
+"Ta strona umożliwia wyeksportowanie listy członków w formacie CSV wymaganym "
+"do importu do systemu zarządzania AICS (Associazioni Italiane Cultura e "
+"Sport)."
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "

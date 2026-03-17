@@ -534,6 +534,32 @@ msgstr ""
 msgid "If checked: Add a field to track items quantity"
 msgstr ""
 
+msgid "Default social qualification code"
+msgstr ""
+
+msgid ""
+"Default AICS social qualification code for all members (e.g. SO, AT, DI). "
+"Leave empty to use 'SO'"
+msgstr ""
+
+msgid "Social activity code"
+msgstr ""
+
+msgid "Code of the non-sporting activity of the club as registered in AICS"
+msgstr ""
+
+msgid "Default sport qualification"
+msgstr ""
+
+msgid "Default AICS sport qualification for all members"
+msgstr ""
+
+msgid "Sport activity code"
+msgstr ""
+
+msgid "Code of the sporting activity of the club as registered in AICS"
+msgstr ""
+
 msgid "Users"
 msgstr ""
 
@@ -6113,6 +6139,15 @@ msgstr ""
 msgid "Short url"
 msgstr ""
 
+msgid ""
+"This page allows you to export the member list in the CSV format required "
+"for import into the AICS (Associazioni Italiane Cultura e Sport) management "
+"system."
+msgstr ""
+
+msgid "Download AICS CSV"
+msgstr ""
+
 msgid "Archive mail"
 msgstr ""
 
@@ -9010,6 +9045,17 @@ msgstr ""
 msgid "Now you can review the volunteers registry"
 msgstr ""
 
+msgid "AICS"
+msgstr ""
+
+msgid ""
+"Enables export of member list in AICS CSV format for Italian associations "
+"affiliated with AICS (Associazioni Italiane Cultura e Sport)"
+msgstr ""
+
+msgid "Now you can export the member list in AICS format"
+msgstr ""
+
 msgid "Taxes"
 msgstr ""
 
@@ -9224,6 +9270,9 @@ msgid "Volunteers"
 msgstr ""
 
 msgid "Manage volunteer registry"
+msgstr ""
+
+msgid "Export member list in AICS CSV format"
 msgstr ""
 
 msgid "Enrolment"
