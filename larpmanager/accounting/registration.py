@@ -570,6 +570,8 @@ def round_to_nearest_cent(amount: float) -> float:
 
 def process_registration_pre_save(registration: Registration) -> None:
     """Process registration before saving."""
+    if registration.deleted:
+        return
     registration.surcharge = get_date_surcharge(registration, registration.run.event)
     registration.member.join(registration.run.event.association)
 

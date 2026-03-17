@@ -812,6 +812,10 @@ def on_faction_pre_save_update_cache(instance: Faction) -> None:
         instance: The Faction instance being saved.
 
     """
+    # Skip cache updates when the instance is being soft-deleted
+    if instance.deleted:
+        return
+
     # Handle new faction creation - clear all event caches
     if not instance.pk:
         clear_event_cache_all_runs(instance.event)
@@ -833,6 +837,10 @@ def on_faction_pre_save_update_cache(instance: Faction) -> None:
 
 def on_quest_type_pre_save_update_cache(instance: QuestType) -> None:
     """Clear event cache when QuestType changes that affect caching."""
+    # Skip cache updates when the instance is being soft-deleted
+    if instance.deleted:
+        return
+
     # Handle new QuestType creation
     if not instance.pk:
         clear_event_cache_all_runs(instance.event)
@@ -847,6 +855,10 @@ def on_quest_type_pre_save_update_cache(instance: QuestType) -> None:
 
 def on_quest_pre_save_update_cache(instance: Quest) -> None:
     """Clear event cache when quest fields change."""
+    # Skip cache updates when the instance is being soft-deleted
+    if instance.deleted:
+        return
+
     # Clear cache for new quests
     if not instance.pk:
         clear_event_cache_all_runs(instance.event)
@@ -866,6 +878,10 @@ def on_trait_pre_save_update_cache(instance: Trait) -> None:
         instance: The trait instance being saved.
 
     """
+    # Skip cache updates when the instance is being soft-deleted
+    if instance.deleted:
+        return
+
     # Clear cache for new traits
     if not instance.pk:
         clear_event_cache_all_runs(instance.event)
