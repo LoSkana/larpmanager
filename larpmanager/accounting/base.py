@@ -144,6 +144,10 @@ def handle_accounting_item_payment_pre_save(instance: AccountingItemPayment) -> 
         None
 
     """
+    # Skip pre-save logic when the instance is being soft-deleted
+    if instance.deleted:
+        return
+
     # Set member from registration if not already set
     if not instance.member:
         instance.member = instance.registration.member
