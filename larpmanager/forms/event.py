@@ -1464,6 +1464,15 @@ class OrgaRunForm(ConfigForm):
                 writing_element_label,
             )
 
+    def clean_registration_secret(self) -> str:
+        """Validate that registration_secret only contains URL slug-safe characters."""
+        value = self.cleaned_data.get("registration_secret", "")
+        if value and not re.match(r"^[-a-zA-Z0-9_]+$", value):
+            raise ValidationError(
+                _("The secret code may only contain letters (a-z, A-Z), digits, hyphens and underscores.")
+            )
+        return value
+
     def clean(self) -> dict[str, Any]:
         """Validate that end date is defined and not before start date.
 
@@ -1707,15 +1716,6 @@ class OrgaQuickSetupForm(QuickSetupForm):
         )
 
         self.init_fields(get_event_features(self.instance.pk))
-
-    def clean_registration_secret(self) -> str:
-        """Validate that registration_secret only contains URL slug-safe characters."""
-        value = self.cleaned_data.get("registration_secret", "")
-        if value and not re.match(r"^[-a-zA-Z0-9_]+$", value):
-            raise ValidationError(
-                _("The secret code may only contain letters (a-z, A-Z), digits, hyphens and underscores.")
-            )
-        return value
 
 
 class OrgaRunDatesForm(OrgaRunForm):
