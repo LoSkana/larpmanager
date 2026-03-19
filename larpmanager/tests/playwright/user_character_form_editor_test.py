@@ -27,6 +27,7 @@ import re
 from typing import Any
 
 import pytest
+from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
     submit_option, new_option
@@ -46,6 +47,8 @@ def test_user_character_form_editor(pw_page: Any) -> None:
     field_multiple(page, live_server)
 
     field_text(page, live_server)
+
+    field_single_req(page, live_server)
 
     character(page, live_server)
 
@@ -184,6 +187,53 @@ def field_text(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
 
+def field_single_req(page: Any, live_server: Any) -> None:
+    # Add a second single-choice question where one option requires "wwww" from "single"
+    go_to(page, live_server, "/test/manage/writing/form/")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("single_req")
+
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("dep_a")
+    submit_option(page, iframe)
+
+    iframe = new_option(page)
+    iframe.locator("#id_name").fill("dep_b")
+    iframe.get_by_role("row", name="Prerequisites").get_by_role("searchbox").fill("ww")
+    iframe.get_by_role("option", name="Test Larp - single wwww").click()
+    submit_option(page, iframe)
+
+    submit_confirm(page)
+
+
+def verify_requirements_hidden(page: Any) -> None:
+    """Verify options with unmet requirements are hidden, and shown when requirements are met.
+
+    Tests both question types:
+    - multiple-choice (checkbox): option "14" (u7) requires "wwww" (u3)
+    - single-choice (select): option "dep_b" (u9) in "single_req" (u8) requires "wwww" (u3)
+    """
+    label_14 = page.locator('input[type="checkbox"][value="u7"]')
+    dep_b_option = page.locator('#id_que_u8 option[value="u9"]')
+
+    # Nothing selected yet in "single" - both dependent options must be hidden
+    expect(label_14).to_be_hidden()
+    expect(dep_b_option).to_have_attribute("hidden", "")
+
+    # Select a different option ("rrrr") - both must still be hidden
+    page.locator("#id_que_u4").select_option("u2")
+    just_wait(page)
+    expect(label_14).to_be_hidden()
+    expect(dep_b_option).to_have_attribute("hidden", "")
+
+    # Select "wwww" - both must become visible
+    page.locator("#id_que_u4").select_option("u3")
+    just_wait(page)
+    expect(label_14).to_be_visible()
+    expect(dep_b_option).not_to_have_attribute("hidden", "")
+
+
 def character(page: Any, live_server: Any) -> None:
     # signup, create char
     go_to(page, live_server, "/test/register")
@@ -196,6 +246,9 @@ def character(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Create your character!")
     page.get_by_role("link", name="Create your character!").click()
     just_wait(page)
+
+    verify_requirements_hidden(page)
+
     page.locator("#id_name").click()
     page.locator("#id_name").fill("my character")
 
