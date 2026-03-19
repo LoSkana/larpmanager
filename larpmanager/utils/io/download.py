@@ -32,7 +32,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.accounting import get_registration_accounting_cache
 from larpmanager.cache.character import get_event_cache_all
-from larpmanager.cache.config import get_configs
+from larpmanager.cache.config import get_configs, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.association import Association
 from larpmanager.models.experience import AbilityPx
@@ -426,6 +426,16 @@ def _row_header(  # noqa: C901
             player_email = member.email
         row_values.append(player_email)
 
+    # Add status column if character approval is enabled
+    if model == "character" and context.get("user_character_approval", False):
+        header_columns.append("status")
+        row_values.append(el.status if hasattr(el, "status") else "")
+
+    # Add assigned orga email if assigned feature is enabled
+    if model == "character" and "assigned" in context.get("features", {}):
+        header_columns.append("assigned")
+        row_values.append(el.assigned.user.email if el.assigned else "")
+
     # Add registration-specific columns
     if model == "registration":
         type_names = _get_reg_type_names(context.get("questions", []))
@@ -662,7 +672,7 @@ def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], m
 
     # Optimize character queries by prefetching factions and selecting player data
     if model_name == "character":
-        queryset = queryset.prefetch_related("factions_list").select_related("player")
+        queryset = queryset.prefetch_related("factions_list").select_related("player", "assigned")
 
     # Handle registration-specific filtering and data enrichment
     if model_name == "registration":
@@ -1079,6 +1089,14 @@ def _get_writing_names(context: dict) -> None:
     if context["writing_typ"] == QuestionApplicable.CHARACTER:
         context["fields"]["player"] = "skip"
         context["fields"]["email"] = "skip"
+
+        # Add status field if approval feature is enabled
+        if get_event_config(context["event"].id, "user_character_approval", default_value=False):
+            context["fields"]["status"] = "character_status"
+
+        # Add assigned field if assigned feature is enabled
+        if "assigned" in context["features"]:
+            context["fields"]["assigned"] = "character_assigned"
 
         # Add relationship columns if feature is enabled
         if "relationships" in context["features"]:
