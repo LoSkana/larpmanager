@@ -54,7 +54,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
-from larpmanager.models.member import LogOperationType, Membership, MembershipStatus
+from larpmanager.models.member import LogOperationType, Member, Membership, MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -64,6 +64,7 @@ from larpmanager.models.registration import (
 from larpmanager.models.utils import UploadToPathAndRename
 from larpmanager.models.writing import (
     Character,
+    CharacterStatus,
     Faction,
     Plot,
     PlotCharacterRel,
@@ -969,6 +970,25 @@ def _writing_load_field(
     _writing_question_load(context, element, field, field_type, logs, questions, html_formatted_value)
 
 
+def _set_character_status(element: Character, value: str, logs: list[str]) -> None:
+    """Set character status from key value (c, s, r, a)."""
+    value_lower = str(value).strip().lower()
+    for key, _display in CharacterStatus.choices:
+        if value_lower == key.lower():
+            element.status = key
+            return
+    logs.append(f"ERR - status not found: {value}")
+
+
+def _set_assigned_member(element: Character, email: str, logs: list[str]) -> None:
+    """Set assigned staff member from email address."""
+    try:
+        member = Member.objects.get(user__email__iexact=email.strip())
+        element.assigned = member
+    except Member.DoesNotExist:
+        logs.append(f"ERR - assigned member not found: {email}")
+
+
 def _writing_question_load(
     context: dict,
     writing_element: Character | Plot | Faction,
@@ -1002,6 +1022,10 @@ def _writing_question_load(
         writing_element.text = field_value
     elif question_type == WritingQuestionType.TITLE:
         writing_element.title = field_value
+    elif question_type == "character_status":
+        _set_character_status(writing_element, field_value, processing_logs)
+    elif question_type == "character_assigned":
+        _set_assigned_member(writing_element, field_value, processing_logs)
     # TODO: implement
     else:
         _assign_choice_answer(writing_element, question_field, field_value, questions_dict, processing_logs)
