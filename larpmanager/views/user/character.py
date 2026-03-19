@@ -712,7 +712,7 @@ def get_options_dependencies(context: dict) -> None:
 
     # Build dependency mapping for options that have requirements
     for option in writing_options.filter(requirements__isnull=False).distinct():
-        context["dependencies"][option.id] = list(option.requirements.values_list("id", flat=True))
+        context["dependencies"][str(option.uuid)] = [str(u) for u in option.requirements.values_list("uuid", flat=True)]
 
 
 @login_required

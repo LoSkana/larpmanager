@@ -166,7 +166,7 @@
         // Collect the selects that contain dependency values
         $('select').each(function () {
             const name = $(this).attr('name');
-            const val = parseInt($(this).val());
+            const val = $(this).val();
 
             if (remainingDependencies.includes(val)) {
                 // Remove the found value from dependencies
@@ -178,9 +178,9 @@
         // Collect checkbox groups that contain dependency values
         $('input[type="checkbox"]:checked').each(function () {
             const name = $(this).attr('name');
-            const value = parseInt($(this).val());
+            const value = $(this).val();
 
-            if (!isNaN(value) && remainingDependencies.includes(value)) {
+            if (value && remainingDependencies.includes(value)) {
                 // Remove the found value from dependencies
                 remainingDependencies = remainingDependencies.filter(v => v !== value);
                 if (!checkboxes.includes(name)) {
@@ -195,7 +195,7 @@
             let selectFound = $('select').not(function() {
                 return selects.includes($(this).attr('name'));
             }).is(function () {
-                return $(this).find('option').toArray().some(option => parseInt($(option).val()) === val);
+                return $(this).find('option').toArray().some(option => $(option).val() === val);
             });
 
             if (selectFound) {
@@ -204,7 +204,7 @@
 
             // If the remaining value is in a checkbox that was not considered before, return false
             let checkboxFound = $('input[type="checkbox"]').is(function () {
-                return $(this).val() == val && !checkboxes.includes($(this).attr('name'));
+                return $(this).val() === val && !checkboxes.includes($(this).attr('name'));
             });
 
             if (checkboxFound) {
@@ -224,10 +224,10 @@
 
             // disable selects with that value
             if (available) {
-              $('select option[value="' + key + '"]').show();
+              $('select option[value="' + key + '"]').prop('hidden', false);
               $('#hp_' + key).show();
             } else {
-              $('select option[value="' + key + '"]').hide();
+              $('select option[value="' + key + '"]').prop('hidden', true);
               $('#hp_' + key).hide();
             }
             if (!available) {
@@ -243,11 +243,15 @@
             // disable checkboxes with that value
             $('input[type="checkbox"][value="' + key + '"]').each(function() {
                 if (available) {
+                  $(this).closest('div').show();
                   $(this).show();
+                  $(this).closest('label').show();
                   $('#hp_' + key).show();
                 } else {
                   $(this).hide();
+                  $(this).closest('label').hide();
                   $('#hp_' + key).hide();
+                  $(this).closest('div').hide();
                 }
                 if (!available && $(this).is(':checked')) {
                     $(this).prop('checked', false);
