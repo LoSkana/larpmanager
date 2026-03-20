@@ -207,7 +207,7 @@ def copy(live_server: Any, page: Any) -> None:
     expect(page.locator("#id_exp_start")).to_have_value("10")
 
     go_to(page, live_server, "/copy/manage/characters/")
-    page.get_by_role("link", name="XP").click()
+    page.get_by_role("link", name="Experience").click()
     char_row = page.locator('tr:has-text("Test Character")').first
     expect_normalized(page, char_row, "12")
     expect_normalized(page, char_row, "1")
@@ -238,7 +238,7 @@ def campaign(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/campaign/manage/characters/")
-    page.get_by_role("link", name="XP").click()
+    page.get_by_role("link", name="Experience").click()
     char_row = page.locator('tr:has-text("Test Character")').first
     expect_normalized(page, char_row, "12")
     expect_normalized(page, char_row, "1")

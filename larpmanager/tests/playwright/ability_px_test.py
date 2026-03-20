@@ -185,7 +185,7 @@ def delivery(live_server: Any, page: Any) -> None:
 
     # check experience computation
     go_to(page, live_server, "/test/manage/characters/")
-    page.get_by_role("link", name="XP").click()
+    page.get_by_role("link", name="Experience").click()
     expect_normalized(page, page.locator('[id="u1"]'), "12")
     expect_normalized(page, page.locator('[id="u1"]'), "12")
     expect_normalized(page, page.locator('[id="u1"]'), "0")
@@ -199,7 +199,7 @@ def delivery(live_server: Any, page: Any) -> None:
     just_wait(page)
     page.locator(".select2-results__option").first.click()
     submit_confirm(page)
-    page.get_by_role("link", name="XP").click()
+    page.get_by_role("link", name="Experience").click()
     expect_normalized(page, page.locator('[id="u1"]'), "11")
     expect_normalized(page, page.locator('[id="u1"]'), "12")
     expect_normalized(page, page.locator('[id="u1"]'), "1")

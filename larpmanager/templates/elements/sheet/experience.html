@@ -11,7 +11,9 @@
             </tr>
             {% for sys in exp_systems_data %}
                 <tr>
-                    <td>{{ sys.name }}</td>
+                    <td>
+                        {% if exp_systems_data|length > 1 %}{{ sys.name }}{% endif %}
+                    </td>
                     <td>{{ sys.tot }}</td>
                     <td>{{ sys.used }}</td>
                     <td>{{ sys.avail }}</td>
@@ -28,9 +30,11 @@
                     <tr>
                         <th>
                             <h4>
-                                {{ el.name }} ({{ el.cost }}
-                                {% if exp_systems_data|length > 1 %}, {{ el.system.name }}{% endif %}
-                                )
+                                {% if exp_systems_data|length > 1 %}
+                                    {{ el.name }} ({{ el.cost }}, {{ el.system.name }})
+                                {% else %}
+                                    {{ el.name }} ({{ el.cost }})
+                                {% endif %}
                                 {% if undo_abilities and el.uuid in undo_abilities %}
                                     <a href="{% url 'character_abilities_del' run.get_slug character.uuid el.uuid %}"
                                        qtip="{% trans "Remove" %}">
