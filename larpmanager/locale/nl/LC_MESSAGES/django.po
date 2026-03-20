@@ -2855,9 +2855,6 @@ msgstr "Laden van gebeurtenis"
 msgid "Mail assignment"
 msgstr "Mail toewijzing"
 
-msgid "Manage XP rules"
-msgstr "XP-regels beheren"
-
 msgid "Manage invoices"
 msgstr "Facturen beheren"
 
@@ -3626,9 +3623,6 @@ msgstr "Niet geïnteresseerd"
 msgid "List of other users"
 msgstr "Lijst van andere gebruikers"
 
-msgid "Manage XP modifiers"
-msgstr "XP modifiers beheren"
-
 msgid "Manage competencies"
 msgstr "Competenties beheren"
 
@@ -4300,6 +4294,9 @@ msgstr "Lijst van te verifiëren betalingen"
 msgid "Manage event accounting"
 msgstr "De boekhouding van evenementen beheren"
 
+msgid "Manage experience rules"
+msgstr "Beheer ervaringsregels"
+
 msgid "Manage the event quests"
 msgstr "Beheer de event quests"
 
@@ -4408,9 +4405,6 @@ msgstr "Ongeldige ticket selectie"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lichtgewicht plaat (Test)"
-
-msgid "Manage ability templates"
-msgstr "Mogelijkheidssjablonen beheren"
 
 msgid "Manage area of the event"
 msgstr "Gebied van het evenement beheren"
@@ -4728,6 +4722,9 @@ msgstr "Items die worden gewijzigd"
 
 msgid "Loading performed, see logs"
 msgstr "Laden uitgevoerd, zie logboeken"
+
+msgid "Manage experience modifiers"
+msgstr "Ervaringsaanpassers beheren"
 
 msgid "Manage quiz-style workshops"
 msgstr "Beheer quizachtige workshops"
@@ -6112,6 +6109,9 @@ msgstr "Donatiebedrag gekozen door de deelnemer"
 msgid "I do it routinely, I have good experience"
 msgstr "Ik doe het regelmatig, ik heb goede ervaring"
 
+msgid "Manage templates for experience abilities"
+msgstr "Sjablonen voor ervaringsvaardigheden beheren"
+
 msgid "Manage the pre-registration of all events"
 msgstr "De voorregistratie van alle evenementen beheren"
 
@@ -6875,9 +6875,6 @@ msgstr "Ik heb het een paar keer gedaan, ik heb basiservaring"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Word lid van onze Discord voor hulp, ideeën of om bugs te melden"
 
-msgid "Manage the character abilities purchaseable with XP"
-msgstr "Beheer de vaardigheden van je personage die je kunt kopen met XP"
-
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Beheren van magazijnbewegingen, leningen en reparaties"
 
@@ -7398,9 +7395,6 @@ msgstr "Hoofdafbeelding evenement op de homepage van uw organisatie"
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Zorg dat je nu tijd hebt om de inhoud te bekijken/beluisteren"
 
-msgid "Manage XP distributions for character abilities purchases."
-msgstr "Beheer XP-uitkeringen voor de aankoop van personagevaardigheden."
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Optienaam, weergegeven in de vraag (houd het kort)"
 
@@ -7428,6 +7422,10 @@ msgstr "Ga naar het beheerpaneel <a href= %(url)s'>van hier</a>"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "Wil je via het systeem verwerkte betalingen accepteren"
+
+msgid "Manage the character abilities purchaseable with experience"
+msgstr ""
+"Beheer de vaardigheden van je personage die je kunt kopen met ervaring"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
@@ -7956,6 +7954,11 @@ msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Geeft medewerkers toegang tot de veiligheidsinformatie die deelnemers hebben"
 " ingediend"
+
+msgid "Manage experience distributions for character abilities purchases."
+msgstr ""
+"Beheer ervaringsverdelingen voor de aankoop van vaardigheden voor "
+"personages."
 
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""

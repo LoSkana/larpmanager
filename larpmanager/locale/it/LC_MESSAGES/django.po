@@ -2855,9 +2855,6 @@ msgstr "Carica dall'evento"
 msgid "Mail assignment"
 msgstr "Mail assegnazione"
 
-msgid "Manage XP rules"
-msgstr "Gestisci le regole XP"
-
 msgid "Manage invoices"
 msgstr "Gestisci le fatture"
 
@@ -3626,9 +3623,6 @@ msgstr "Non sono interessato"
 msgid "List of other users"
 msgstr "Elenco degli altri utenti"
 
-msgid "Manage XP modifiers"
-msgstr "Gestisci i modificatori XP"
-
 msgid "Manage competencies"
 msgstr "Gestisci le competenze"
 
@@ -4300,6 +4294,9 @@ msgstr "Lista pagamenti da verificare"
 msgid "Manage event accounting"
 msgstr "Gestisci la contabilità dell'evento"
 
+msgid "Manage experience rules"
+msgstr "Gestire le regole dell'esperienza"
+
 msgid "Manage the event quests"
 msgstr "Gestisci le missioni dell'evento"
 
@@ -4408,9 +4405,6 @@ msgstr "Selezione del biglietto non valida"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Scheda leggera (Test)"
-
-msgid "Manage ability templates"
-msgstr "Gestisci i modelli di abilità"
 
 msgid "Manage area of the event"
 msgstr "Gestione dell'area dell'evento"
@@ -4728,6 +4722,9 @@ msgstr "Voci che verranno modificate"
 
 msgid "Loading performed, see logs"
 msgstr "Caricamento eseguito, consulta i log"
+
+msgid "Manage experience modifiers"
+msgstr "Gestire i modificatori di esperienza"
 
 msgid "Manage quiz-style workshops"
 msgstr "Gestisci laboratori a quiz"
@@ -6110,6 +6107,9 @@ msgstr "Importo della donazione scelto dal partecipante"
 msgid "I do it routinely, I have good experience"
 msgstr "Lo faccio abitualmente, ho una buona esperienza"
 
+msgid "Manage templates for experience abilities"
+msgstr "Gestire i modelli per le capacità di esperienza"
+
 msgid "Manage the pre-registration of all events"
 msgstr "Gestisci le pre-iscrizioni di tutti gli eventi"
 
@@ -6872,9 +6872,6 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Unisciti al nostro Discord per ricevere aiuto, idee o per segnalare bug"
 
-msgid "Manage the character abilities purchaseable with XP"
-msgstr "Gestire le abilità dei personaggi acquistabili con gli XP"
-
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Gestione dei movimenti di magazzino, dei prestiti e delle riparazioni"
 
@@ -7397,10 +7394,6 @@ msgstr ""
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Assicurati di avere il tempo di guardare/ascoltare i contenuti adesso"
 
-msgid "Manage XP distributions for character abilities purchases."
-msgstr ""
-"Gestire le distribuzioni di XP per l'acquisto delle abilità dei personaggi."
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr ""
 "Nome dell'opzione, visualizzato all'interno della domanda (tienilo corto)"
@@ -7428,6 +7421,9 @@ msgstr "Accedi al pannello di gestione <a href= %(url)s'>da qui</a>"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "Vuoi accettare pagamenti elaborati attraverso il sistema"
+
+msgid "Manage the character abilities purchaseable with experience"
+msgstr "Gestire le abilità del personaggio acquistabili con l'esperienza"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr "Gestisci le impostazioni dell'evento: nome, descrizione, date, stato"
@@ -7958,6 +7954,11 @@ msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Consente allo staff di accedere alle informazioni sulla sicurezza fornite "
 "dai partecipanti"
+
+msgid "Manage experience distributions for character abilities purchases."
+msgstr ""
+"Gestire la distribuzione dell'esperienza per l'acquisto delle abilità dei "
+"personaggi."
 
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""

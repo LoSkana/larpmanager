@@ -9464,10 +9464,10 @@ msgstr ""
 msgid "Manage the type of character abilities"
 msgstr ""
 
-msgid "Manage the character abilities purchaseable with XP"
+msgid "Manage the character abilities purchaseable with experience"
 msgstr ""
 
-msgid "Manage XP distributions for character abilities purchases."
+msgid "Manage experience distributions for character abilities purchases."
 msgstr ""
 
 msgid "Display full history of participant preferences on characters"
@@ -9539,10 +9539,10 @@ msgstr ""
 msgid "Manage loading and deployment status of warehouse items"
 msgstr ""
 
-msgid "Manage XP rules"
+msgid "Manage experience rules"
 msgstr ""
 
-msgid "Manage XP modifiers"
+msgid "Manage experience modifiers"
 msgstr ""
 
 msgid ""
@@ -9552,7 +9552,7 @@ msgstr ""
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr ""
 
-msgid "Manage ability templates"
+msgid "Manage templates for experience abilities"
 msgstr ""
 
 msgid "Manage character inventories and their items"

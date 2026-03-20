@@ -601,7 +601,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Abilities
-    descr: Manage the character abilities purchaseable with XP
+    descr: Manage the character abilities purchaseable with experience
     slug: orga_exp_abilities
     number: 51
     config: experience
@@ -613,7 +613,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Deliveries
-    descr: Manage XP distributions for character abilities purchases.
+    descr: Manage experience distributions for character abilities purchases.
     slug: orga_exp_deliveries
     number: 61
     config: experience
@@ -853,26 +853,26 @@
 - model: larpmanager.eventpermission
   fields:
     name: Rules
-    descr: Manage XP rules
+    descr: Manage experience rules
     slug: orga_exp_rules
     number: 81
     config: experience
-    active_if: px_rules
+    active_if: exp_rules
     hidden: false
     icon: scale-balanced
-    feature: rules
+    feature: exp_rules
     module: experience
 - model: larpmanager.eventpermission
   fields:
     name: Modifiers
-    descr: Manage XP modifiers
+    descr: Manage experience modifiers
     slug: orga_exp_modifiers
     number: 91
     config: experience
-    active_if: px_modifiers
+    active_if: exp_modifiers
     hidden: false
     icon: sliders
-    feature: modifiers
+    feature: exp_modifiers
     module: experience
 - model: larpmanager.eventpermission
   fields:
@@ -901,14 +901,14 @@
 - model: larpmanager.eventpermission
   fields:
     name: Ability Templates
-    descr: Manage ability templates
+    descr: Manage templates for experience abilities
     slug: orga_exp_ability_templates
     number: 41
     config: experience
-    active_if: px_templates
+    active_if: exp_templates
     hidden: false
     icon: clone
-    feature: templates
+    feature: exp_templates
     module: experience
 - model: larpmanager.eventpermission
   fields:

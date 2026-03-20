@@ -2855,9 +2855,6 @@ msgstr "Lataa tapahtumasta"
 msgid "Mail assignment"
 msgstr "Postin osoittaminen"
 
-msgid "Manage XP rules"
-msgstr "XP-sääntöjen hallinta"
-
 msgid "Manage invoices"
 msgstr "Hallitse laskuja"
 
@@ -3626,9 +3623,6 @@ msgstr "En ole kiinnostunut"
 msgid "List of other users"
 msgstr "Luettelo muista käyttäjistä"
 
-msgid "Manage XP modifiers"
-msgstr "Hallitse XP-modifikaattoreita"
-
 msgid "Manage competencies"
 msgstr "Osaamisen hallinta"
 
@@ -4300,6 +4294,9 @@ msgstr "Luettelo tarkistettavista maksuista"
 msgid "Manage event accounting"
 msgstr "Hallitse tapahtuman kirjanpitoa"
 
+msgid "Manage experience rules"
+msgstr "Hallitse kokemussääntöjä"
+
 msgid "Manage the event quests"
 msgstr "Hallitse tapahtuman tehtäviä"
 
@@ -4408,9 +4405,6 @@ msgstr "Virheellinen lipun valinta"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Kevytlomake (testi)"
-
-msgid "Manage ability templates"
-msgstr "Hallitse taitopohjia"
 
 msgid "Manage area of the event"
 msgstr "Tapahtuma-alueen hallinta"
@@ -4728,6 +4722,9 @@ msgstr "Muutettavat kohteet"
 
 msgid "Loading performed, see logs"
 msgstr "Lataus suoritettu, katso lokitiedot"
+
+msgid "Manage experience modifiers"
+msgstr "Kokemuksen muokkaajien hallinta"
 
 msgid "Manage quiz-style workshops"
 msgstr "Hallitse tietokilpailutyyppisiä työpajoja"
@@ -6110,6 +6107,9 @@ msgstr "Osallistujan valitsema lahjoitussumma"
 msgid "I do it routinely, I have good experience"
 msgstr "Teen sitä rutiininomaisesti, minulla on hyviä kokemuksia"
 
+msgid "Manage templates for experience abilities"
+msgstr "Hallitse kokemustaitojen malleja"
+
 msgid "Manage the pre-registration of all events"
 msgstr "hallinnoida kaikkien tapahtumien ennakkoilmoittautumista"
 
@@ -6867,9 +6867,6 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Liity Discordiin saadaksesi apua, ideoita tai ilmoittaaksesi virheistä"
 
-msgid "Manage the character abilities purchaseable with XP"
-msgstr "Hallitse XP:llä ostettavia hahmon kykyjä"
-
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Hallitse varastotavaroiden siirtoja, lainoja ja korjauksia"
 
@@ -7371,9 +7368,6 @@ msgstr "Päätapahtuman kuva näkyy organisaatiosi kotisivulla"
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Varmista, että sinulla on aikaa katsoa/kuunnella sisältöä nyt"
 
-msgid "Manage XP distributions for character abilities purchases."
-msgstr "Hallitse hahmon kykyjen hankkimiseen liittyviä XP-jakoja."
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Vaihtoehdon nimi, joka näkyy kysymyksessä (pidä se lyhyenä)"
 
@@ -7399,6 +7393,9 @@ msgstr "Pääset hallintapaneeliin <a href= %(url)s'>täältä</a>"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "Haluatko hyväksyä järjestelmän kautta käsitellyt maksut"
+
+msgid "Manage the character abilities purchaseable with experience"
+msgstr "Hallitse hahmon kykyjä, joita voi ostaa kokemuksella"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr "Tapahtuma-asetusten hallinta: nimi, kuvaus, päivämäärät, tila"
@@ -7882,6 +7879,9 @@ msgstr ""
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Henkilöstö saa käyttöönsä osallistujien toimittamat turvallisuustiedot"
+
+msgid "Manage experience distributions for character abilities purchases."
+msgstr "Hallitse hahmon kykyjen hankkimiseen liittyvää kokemuksen jakamista."
 
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
