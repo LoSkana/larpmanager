@@ -35,6 +35,7 @@ from django.views.decorators.http import require_POST
 
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.experience import get_event_exp_systems
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.character import (
     OrgaCharacterForm,
@@ -106,6 +107,17 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Enable export functionality if configured
     if get_event_config(context["event"].id, "show_export", default_value=False, context=context):
         context["export"] = "character"
+
+    if "experience" in context.get("features", {}):
+        context["exp_systems"] = [
+            {
+                "name": sys.name,
+                "tot_key": f"exp_tot_{sys.uuid}",
+                "used_key": f"exp_used_{sys.uuid}",
+                "avail_key": f"exp_avail_{sys.uuid}",
+            }
+            for sys in get_event_exp_systems(context["event"])
+        ]
 
     return writing_list(request, context, Character, "character")
 

@@ -28,7 +28,7 @@ from django.core.cache import cache
 
 from larpmanager.cache.dirty import get_has_dirty_key, mark_dirty, refresh_if_dirty, resolve_dirty_section
 from larpmanager.models.event import Event
-from larpmanager.models.experience import AbilityExp, DeliveryExp, ModifierExp, RuleExp
+from larpmanager.models.experience import AbilityExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
 from larpmanager.utils.core.common import _validate_and_fetch_objects
 from larpmanager.utils.larpmanager.tasks import background_auto
 
@@ -42,6 +42,35 @@ _get_exp_has_dirty_key = partial(get_has_dirty_key, _EXP_NS)
 _mark_exp_dirty = partial(mark_dirty, _EXP_NS)
 _refresh_exp_if_dirty = partial(refresh_if_dirty, _EXP_NS)
 _resolve_dirty_exp_section = partial(resolve_dirty_section, _EXP_NS)
+
+
+def get_event_exp_systems_key(event_id: int) -> str:
+    """Generate cache key for event experience systems list."""
+    return f"event__exp_systems__{event_id}"
+
+
+def get_event_exp_systems(event: Event) -> list[SystemExp]:
+    """Get ordered SystemExp list for an event, using cache.
+
+    Args:
+        event: Event instance (handles parent inheritance via get_elements).
+
+    Returns:
+        Ordered list of SystemExp instances for the effective event.
+
+    """
+    effective_event_id = event.get_class_parent(SystemExp).id
+    cache_key = get_event_exp_systems_key(effective_event_id)
+    systems = cache.get(cache_key)
+    if systems is None:
+        systems = list(event.get_elements(SystemExp).order_by("number"))
+        cache.set(cache_key, systems, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return systems
+
+
+def clear_event_exp_systems_cache(event_id: int) -> None:
+    """Clear cached experience systems list for the given event ID."""
+    cache.delete(get_event_exp_systems_key(event_id))
 
 
 def get_event_exp_key(event_id: int) -> str:

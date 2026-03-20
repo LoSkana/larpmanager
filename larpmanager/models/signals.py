@@ -74,6 +74,7 @@ from larpmanager.cache.character import (
 from larpmanager.cache.config import reset_element_configs
 from larpmanager.cache.event_text import reset_event_text, update_event_text_cache_on_save
 from larpmanager.cache.experience import (
+    clear_event_exp_systems_cache,
     on_ability_characters_m2m_changed,
     on_ability_prerequisites_m2m_changed,
     on_ability_requirements_m2m_changed,
@@ -211,7 +212,7 @@ from larpmanager.models.event import (
     Run,
     RunConfig,
 )
-from larpmanager.models.experience import AbilityExp, DeliveryExp, ModifierExp, RuleExp
+from larpmanager.models.experience import AbilityExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
 from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
@@ -863,6 +864,18 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
 def post_delete_event_links(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear cache for event links after deletion."""
     clear_run_event_links_cache(instance)
+
+
+@receiver(post_save, sender=SystemExp)
+def post_save_system_exp(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear experience systems cache after save."""
+    clear_event_exp_systems_cache(instance.event_id)
+
+
+@receiver(pre_delete, sender=SystemExp)
+def pre_delete_system_exp(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear experience systems cache before deletion."""
+    clear_event_exp_systems_cache(instance.event_id)
 
 
 @receiver(post_save, sender=EventButton)

@@ -26,10 +26,10 @@ from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django.db.models import Prefetch, Q, Sum
-from django.db.models.functions import Coalesce
+from django.db.models import Prefetch, Q
 
 from larpmanager.cache.config import get_event_config, save_all_element_configs, save_single_config
+from larpmanager.cache.experience import get_event_exp_systems
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event
 from larpmanager.models.experience import AbilityExp, DeliveryExp, ModifierExp, Operation, RuleExp
@@ -152,7 +152,9 @@ def _get_current_abilities(
         List of abilities with modified costs applied.
 
     """
-    abilities_queryset = character.exp_ability_list.only("id", "cost").order_by("name")
+    abilities_queryset = (
+        character.exp_ability_list.select_related("system").only("id", "cost", "system_id").order_by("name")
+    )
     abilities_with_modified_costs = []
     for ability in abilities_queryset:
         _apply_modifier_cost(ability, modifiers_by_ability, current_character_abilities, current_character_choices)
@@ -165,7 +167,7 @@ def _get_available_abilities(
     current_character_abilities: set[int],
     current_character_choices: set[int],
     modifiers_by_ability: dict[int, list[tuple]],
-    px_avail: int,
+    px_avail_by_system: dict[int, int],
 ) -> list:
     """Get available abilities for purchase.
 
@@ -174,7 +176,7 @@ def _get_available_abilities(
         current_character_abilities: Set of ability IDs the character currently has.
         current_character_choices: Set of choice IDs the character currently has.
         modifiers_by_ability: Mapping of ability IDs to modifier tuples.
-        px_avail: Available EXP points.
+        px_avail_by_system: Mapping of system_id to available EXP points for that system.
 
     Returns:
         List of AbilityExp instances the character can purchase.
@@ -184,7 +186,7 @@ def _get_available_abilities(
         char.event.get_elements(AbilityExp)
         .filter(visible=True)
         .exclude(pk__in=current_character_abilities)
-        .select_related("typ")
+        .select_related("typ", "system")
         .order_by("name")
         .prefetch_related(
             Prefetch("prerequisites", queryset=AbilityExp.objects.only("id")),
@@ -197,7 +199,7 @@ def _get_available_abilities(
         if not check_available_ability_exp(ability, current_character_abilities, current_character_choices):
             continue
         _apply_modifier_cost(ability, modifiers_by_ability, current_character_abilities, current_character_choices)
-        if ability.cost > px_avail:
+        if ability.cost > px_avail_by_system.get(ability.system_id, 0):
             continue
         available_abilities.append(ability)
 
@@ -227,7 +229,7 @@ def _auto_buy_abilities(
     current_character_abilities: set[int],
     current_character_choices: set[int],
     modifiers_by_ability: dict[int, list[tuple]],
-    px_avail: int,
+    px_avail_by_system: dict[int, int],
 ) -> set[int]:
     """Automatically buy the most expensive available ability in a loop.
 
@@ -239,7 +241,7 @@ def _auto_buy_abilities(
         current_character_abilities: Set of ability IDs the character currently has.
         current_character_choices: Set of choice IDs the character currently has.
         modifiers_by_ability: Mapping of ability IDs to modifier tuples.
-        px_avail: Available EXP points.
+        px_avail_by_system: Mapping of system_id to available EXP points for that system.
 
     Returns:
         Updated set of ability IDs the character now has.
@@ -247,7 +249,7 @@ def _auto_buy_abilities(
     """
     while True:
         available = _get_available_abilities(
-            character, current_character_abilities, current_character_choices, modifiers_by_ability, px_avail
+            character, current_character_abilities, current_character_choices, modifiers_by_ability, px_avail_by_system
         )
         # Only consider abilities with a cost > 0 (free ones are handled separately)
         affordable = [a for a in available if a.cost > 0]
@@ -256,9 +258,104 @@ def _auto_buy_abilities(
         most_expensive = max(affordable, key=lambda a: a.cost)
         character.exp_ability_list.add(most_expensive)
         current_character_abilities = current_character_abilities | {most_expensive.id}
-        px_avail -= most_expensive.cost
+        px_avail_by_system[most_expensive.system_id] = (
+            px_avail_by_system.get(most_expensive.system_id, 0) - most_expensive.cost
+        )
 
     return current_character_abilities
+
+
+def _build_px_avail_by_system(
+    character: Any, current_abilities: list, starting_experience_points: int
+) -> dict[int, int]:
+    """Build a mapping of system_id -> available EXP points.
+
+    Args:
+        character: Character instance.
+        current_abilities: List of current abilities with costs (must have .system_id).
+        starting_experience_points: Global starting EXP added to the first system found.
+
+    Returns:
+        Dict mapping system_id to available EXP points.
+
+    """
+    systems = get_event_exp_systems(character.event)
+    if not systems:
+        return {}
+
+    # Sum deliveries per system
+    deliveries_by_system: dict[int, int] = {}
+    for delivery in character.exp_delivery_list.select_related("system").all():
+        deliveries_by_system[delivery.system_id] = deliveries_by_system.get(delivery.system_id, 0) + delivery.amount
+
+    # Sum ability costs per system
+    used_by_system: dict[int, int] = {}
+    for ability in current_abilities:
+        used_by_system[ability.system_id] = used_by_system.get(ability.system_id, 0) + ability.cost
+
+    # Add exp_start to the first (primary) system
+    first_system_id = systems[0].id
+    deliveries_by_system[first_system_id] = deliveries_by_system.get(first_system_id, 0) + int(
+        starting_experience_points
+    )
+
+    px_avail_by_system: dict[int, int] = {}
+    for system in systems:
+        tot = deliveries_by_system.get(system.id, 0)
+        used = used_by_system.get(system.id, 0)
+        px_avail_by_system[system.id] = tot - used
+
+    return px_avail_by_system
+
+
+def _build_experience_data(character: Any, current_abilities: list, starting_experience_points: int) -> dict:
+    """Build experience data dict with global and per-system values.
+
+    Args:
+        character: Character instance.
+        current_abilities: List of current abilities with costs.
+        starting_experience_points: Global starting EXP.
+
+    Returns:
+        Dict with exp_tot/exp_used/exp_avail and per-system keys.
+
+    """
+    systems = get_event_exp_systems(character.event)
+
+    deliveries_by_system: dict[int, int] = {}
+    for delivery in character.exp_delivery_list.select_related("system").all():
+        deliveries_by_system[delivery.system_id] = deliveries_by_system.get(delivery.system_id, 0) + delivery.amount
+
+    used_by_system: dict[int, int] = {}
+    for ability in current_abilities:
+        used_by_system[ability.system_id] = used_by_system.get(ability.system_id, 0) + ability.cost
+
+    if systems:
+        first_system_id = systems[0].id
+        deliveries_by_system[first_system_id] = deliveries_by_system.get(first_system_id, 0) + int(
+            starting_experience_points
+        )
+
+    experience_data: dict = {}
+    total_tot = 0
+    total_used = 0
+    for system in systems:
+        tot = deliveries_by_system.get(system.id, 0)
+        used = used_by_system.get(system.id, 0)
+        avail = tot - used
+        total_tot += tot
+        total_used += used
+        sys_uuid = str(system.uuid)
+        experience_data[f"exp_tot_{sys_uuid}"] = tot
+        experience_data[f"exp_used_{sys_uuid}"] = used
+        experience_data[f"exp_avail_{sys_uuid}"] = avail
+
+    # Global aggregates for backward compatibility
+    experience_data["exp_tot"] = total_tot
+    experience_data["exp_used"] = total_used
+    experience_data["exp_avail"] = total_tot - total_used
+
+    return experience_data
 
 
 def calculate_character_experience_points(character: Any) -> None:
@@ -271,34 +368,23 @@ def calculate_character_experience_points(character: Any) -> None:
     # Automatically obtain abilities with cost 0
     current_character_abilities, current_character_choices, modifiers_by_ability = _handle_free_abilities(character)
 
-    # Get current abilities, with updated cost
+    # Get current abilities, with updated cost (need system_id for per-system grouping)
     current_abilities = _get_current_abilities(
         character, current_character_abilities, current_character_choices, modifiers_by_ability
     )
 
-    total_experience_points = int(starting_experience_points) + (
-        character.exp_delivery_list.aggregate(total=Coalesce(Sum("amount"), 0))["total"] or 0
-    )
-    used_experience_points = sum(ability.cost for ability in current_abilities)
-    px_avail = total_experience_points - used_experience_points
-
     # Auto-buy abilities if configured
     if get_event_config(character.event_id, "exp_auto_buy", default_value=False):
+        px_avail_by_system = _build_px_avail_by_system(character, current_abilities, starting_experience_points)
         current_character_abilities = _auto_buy_abilities(
-            character, current_character_abilities, current_character_choices, modifiers_by_ability, px_avail
+            character, current_character_abilities, current_character_choices, modifiers_by_ability, px_avail_by_system
         )
-        # Recalculate used/available after auto-buy
+        # Recalculate after auto-buy
         current_abilities = _get_current_abilities(
             character, current_character_abilities, current_character_choices, modifiers_by_ability
         )
-        used_experience_points = sum(ability.cost for ability in current_abilities)
-        px_avail = total_experience_points - used_experience_points
 
-    experience_data = {
-        "exp_tot": total_experience_points,
-        "exp_used": used_experience_points,
-        "exp_avail": px_avail,
-    }
+    experience_data = _build_experience_data(character, current_abilities, starting_experience_points)
 
     save_all_element_configs(character, experience_data)
 
@@ -319,9 +405,11 @@ def _handle_free_abilities(
     current_character_abilities, current_character_choices, modifiers_by_ability = _build_exp_context(character)
 
     # look for available ability with cost 0, and not already in the free list: get them!
+    # Use a dict with 0 for all systems (we only want cost=0 abilities here)
+    zero_avail: dict[int, int] = defaultdict(int)
     newly_added_ids: set[int] = set()
     for ability in _get_available_abilities(
-        character, current_character_abilities, current_character_choices, modifiers_by_ability, 0
+        character, current_character_abilities, current_character_choices, modifiers_by_ability, zero_avail
     ):
         if ability.visible and ability.cost == 0 and ability.id not in free_ability_ids:
             character.exp_ability_list.add(ability)
@@ -378,7 +466,7 @@ def check_available_ability_exp(ability: Any, current_char_abilities: Any, curre
     return prerequisite_ids.issubset(current_char_abilities) and requirement_ids.issubset(current_char_choices)
 
 
-def get_available_ability_exp(char: Any, px_avail: int | None = None) -> list:
+def get_available_ability_exp(char: Any, px_avail_by_system: dict[int, int] | None = None) -> list:
     """Get list of abilities available for purchase with character's EXP.
 
     Retrieves all visible abilities that the character can purchase based on their
@@ -387,8 +475,8 @@ def get_available_ability_exp(char: Any, px_avail: int | None = None) -> list:
 
     Args:
         char: Character instance to check abilities for
-        px_avail: Available EXP points. If None, calculated from character's
-            additional data
+        px_avail_by_system: Mapping of system_id to available EXP. If None,
+            built from character's additional data.
 
     Returns:
         List of AbilityExp instances that the character can purchase with their
@@ -397,13 +485,31 @@ def get_available_ability_exp(char: Any, px_avail: int | None = None) -> list:
     """
     current_character_abilities, current_character_choices, modifiers_by_ability = _build_exp_context(char)
 
-    if px_avail is None:
+    if px_avail_by_system is None:
         add_char_addit(char)
-        px_avail = int(char.addit.get("exp_avail", 0))
+        px_avail_by_system = build_exp_avail_by_system_from_addit(char)
 
     return _get_available_abilities(
-        char, current_character_abilities, current_character_choices, modifiers_by_ability, px_avail
+        char, current_character_abilities, current_character_choices, modifiers_by_ability, px_avail_by_system
     )
+
+
+def build_exp_avail_by_system_from_addit(char: Any) -> dict[int, int]:
+    """Build px_avail_by_system dict from character addit data.
+
+    Args:
+        char: Character instance with populated addit dict.
+
+    Returns:
+        Dict mapping system_id to available EXP points.
+
+    """
+    systems = get_event_exp_systems(char.event)
+    px_avail_by_system: dict[int, int] = {}
+    for system in systems:
+        avail_key = f"exp_avail_{system.uuid}"
+        px_avail_by_system[system.id] = int(char.addit.get(avail_key, 0))
+    return px_avail_by_system
 
 
 def on_experience_characters_m2m_changed(

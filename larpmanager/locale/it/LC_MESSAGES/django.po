@@ -86,6 +86,9 @@ msgstr "età"
 msgid "for"
 msgstr "per"
 
+msgid "tot"
+msgstr "tot"
+
 msgid "Area"
 msgstr "Area"
 
@@ -293,6 +296,9 @@ msgstr "Quando"
 msgid "days"
 msgstr "giorni"
 
+msgid "free"
+msgstr "libero"
+
 msgid "gift"
 msgstr "regalo"
 
@@ -476,6 +482,9 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Dove"
+
+msgid "avail"
+msgstr "avvalersi"
 
 msgid "email"
 msgstr "email"
@@ -680,6 +689,9 @@ msgstr "Via"
 
 msgid "Submit"
 msgstr "Invia"
+
+msgid "System"
+msgstr "Sistema"
 
 msgid "Ticket"
 msgstr "Biglietto"
@@ -953,6 +965,9 @@ msgstr "Support"
 
 msgid "Surname"
 msgstr "Cognome"
+
+msgid "Systems"
+msgstr "Sistemi"
 
 msgid "Tagline"
 msgstr "Tagline"
@@ -3068,6 +3083,9 @@ msgstr "Che vinca il migliore"
 msgid "Member approved!"
 msgstr "Membro approvato!"
 
+msgid "Multiple systems"
+msgstr "Sistemi multipli"
+
 msgid "Name of the plot"
 msgstr "Nome della missione"
 
@@ -4521,6 +4539,9 @@ msgstr "Gestisci le assegnazioni di credito"
 msgid "Manage event access roles"
 msgstr "Gestisci i ruoli di accesso agli eventi"
 
+msgid "Manage experience systems"
+msgstr "Gestire i sistemi di esperienza"
+
 msgid "Manage photo album upload"
 msgstr "Gestisci il caricamento degli album fotografici"
 
@@ -4746,9 +4767,6 @@ msgstr "Quota sociale in approvazione"
 
 msgid "Missing casting preferences"
 msgstr "Preferenze di casting mancanti"
-
-msgid "Multiple experience systems"
-msgstr "Sistemi di esperienza multipli"
 
 msgid "Name of badge to be awarded"
 msgstr "Nome del distintivo da assegnare"

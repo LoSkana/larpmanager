@@ -86,6 +86,9 @@ msgstr "âge"
 msgid "for"
 msgstr "pour"
 
+msgid "tot"
+msgstr "tot"
+
 msgid "Area"
 msgstr "Zone"
 
@@ -293,6 +296,9 @@ msgstr "Quand"
 msgid "days"
 msgstr "jours"
 
+msgid "free"
+msgstr "gratuit"
+
 msgid "gift"
 msgstr "cadeau"
 
@@ -476,6 +482,9 @@ msgstr "Vidéo"
 
 msgid "Where"
 msgstr "Où"
+
+msgid "avail"
+msgstr "avail"
 
 msgid "email"
 msgstr "courriel"
@@ -680,6 +689,9 @@ msgstr "Rue"
 
 msgid "Submit"
 msgstr "Envoyer"
+
+msgid "System"
+msgstr "Système"
 
 msgid "Ticket"
 msgstr "Billet"
@@ -953,6 +965,9 @@ msgstr "Soutien"
 
 msgid "Surname"
 msgstr "Nom de famille"
+
+msgid "Systems"
+msgstr "Systèmes"
 
 msgid "Tagline"
 msgstr "Titre d'appel"
@@ -3068,6 +3083,9 @@ msgstr "Que le meilleur gagne"
 msgid "Member approved!"
 msgstr "Approuvé par les membres !"
 
+msgid "Multiple systems"
+msgstr "Systèmes multiples"
+
 msgid "Name of the plot"
 msgstr "Nom de la parcelle"
 
@@ -4521,6 +4539,9 @@ msgstr "Gérer les affectations de crédit"
 msgid "Manage event access roles"
 msgstr "Gérer les rôles d'accès aux événements"
 
+msgid "Manage experience systems"
+msgstr "Gérer les systèmes d'expérience"
+
 msgid "Manage photo album upload"
 msgstr "Gérer le téléchargement d'un album photo"
 
@@ -4746,9 +4767,6 @@ msgstr "Participation à l'approbation"
 
 msgid "Missing casting preferences"
 msgstr "Préférences de casting manquantes"
-
-msgid "Multiple experience systems"
-msgstr "Systèmes d'expérience multiples"
 
 msgid "Name of badge to be awarded"
 msgstr "Nom de l'insigne à décerner"

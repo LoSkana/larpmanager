@@ -624,6 +624,54 @@
     module: experience
 - model: larpmanager.eventpermission
   fields:
+    name: Ability Templates
+    descr: Manage templates for experience abilities
+    slug: orga_exp_ability_templates
+    number: 41
+    config: experience
+    active_if: exp_templates
+    hidden: false
+    icon: clone
+    feature: exp_templates
+    module: experience
+- model: larpmanager.eventpermission
+  fields:
+    name: Rules
+    descr: Manage experience rules
+    slug: orga_exp_rules
+    number: 81
+    config: experience
+    active_if: exp_rules
+    hidden: false
+    icon: scale-balanced
+    feature: exp_rules
+    module: experience
+- model: larpmanager.eventpermission
+  fields:
+    name: Modifiers
+    descr: Manage experience modifiers
+    slug: orga_exp_modifiers
+    number: 91
+    config: experience
+    active_if: exp_modifiers
+    hidden: false
+    icon: sliders
+    feature: exp_modifiers
+    module: experience
+- model: larpmanager.eventpermission
+  fields:
+    name: Systems
+    descr: Manage experience systems
+    slug: orga_exp_systems
+    number: 101
+    config: experience
+    active_if: exp_systems
+    hidden: false
+    icon: layer-group
+    feature: exp_systems
+    module: experience
+- model: larpmanager.eventpermission
+  fields:
     name: Historical
     descr: Display full history of participant preferences on characters
     slug: orga_casting_history
@@ -852,30 +900,6 @@
     module: warehouse
 - model: larpmanager.eventpermission
   fields:
-    name: Rules
-    descr: Manage experience rules
-    slug: orga_exp_rules
-    number: 81
-    config: experience
-    active_if: exp_rules
-    hidden: false
-    icon: scale-balanced
-    feature: exp_rules
-    module: experience
-- model: larpmanager.eventpermission
-  fields:
-    name: Modifiers
-    descr: Manage experience modifiers
-    slug: orga_exp_modifiers
-    number: 91
-    config: experience
-    active_if: exp_modifiers
-    hidden: false
-    icon: sliders
-    feature: exp_modifiers
-    module: experience
-- model: larpmanager.eventpermission
-  fields:
     name: Content
     descr: Upload and manage secure video/audio content with one-time access tokens
     slug: orga_onetimes
@@ -898,18 +922,6 @@
     icon: key
     feature: onetime_content
     module: onetime
-- model: larpmanager.eventpermission
-  fields:
-    name: Ability Templates
-    descr: Manage templates for experience abilities
-    slug: orga_exp_ability_templates
-    number: 41
-    config: experience
-    active_if: exp_templates
-    hidden: false
-    icon: clone
-    feature: exp_templates
-    module: experience
 - model: larpmanager.eventpermission
   fields:
     name: Character Inventory

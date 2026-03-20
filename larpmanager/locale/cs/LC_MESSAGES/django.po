@@ -86,6 +86,9 @@ msgstr "věk"
 msgid "for"
 msgstr "pro"
 
+msgid "tot"
+msgstr "tot"
+
 msgid "Area"
 msgstr "Oblast"
 
@@ -293,6 +296,9 @@ msgstr "Když"
 msgid "days"
 msgstr "dny"
 
+msgid "free"
+msgstr "zdarma"
+
 msgid "gift"
 msgstr "dárek"
 
@@ -476,6 +482,9 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Kde"
+
+msgid "avail"
+msgstr "k dispozici"
 
 msgid "email"
 msgstr "e-mail"
@@ -680,6 +689,9 @@ msgstr "Ulice"
 
 msgid "Submit"
 msgstr "Odeslat"
+
+msgid "System"
+msgstr "Systém"
 
 msgid "Ticket"
 msgstr "Vstupenka"
@@ -953,6 +965,9 @@ msgstr "Podpora"
 
 msgid "Surname"
 msgstr "Příjmení"
+
+msgid "Systems"
+msgstr "Systémy"
 
 msgid "Tagline"
 msgstr "Tagline"
@@ -3068,6 +3083,9 @@ msgstr "Ať vyhraje ten nejlepší"
 msgid "Member approved!"
 msgstr "Člen schválen!"
 
+msgid "Multiple systems"
+msgstr "Více systémů"
+
 msgid "Name of the plot"
 msgstr "Název pozemku"
 
@@ -4521,6 +4539,9 @@ msgstr "Správa přiřazení kreditů"
 msgid "Manage event access roles"
 msgstr "Správa rolí pro přístup k událostem"
 
+msgid "Manage experience systems"
+msgstr "Správa zážitkových systémů"
+
 msgid "Manage photo album upload"
 msgstr "Správa nahrávání fotoalb"
 
@@ -4746,9 +4767,6 @@ msgstr "Podíl na schválení"
 
 msgid "Missing casting preferences"
 msgstr "Chybějící předvolby obsazení"
-
-msgid "Multiple experience systems"
-msgstr "Vícenásobné zážitkové systémy"
 
 msgid "Name of badge to be awarded"
 msgstr "Název odznaku, který má být udělen"

@@ -49,6 +49,7 @@ from larpmanager.cache.character import (
 )
 from larpmanager.cache.config import get_event_config, save_single_config
 from larpmanager.cache.event_text import get_event_text
+from larpmanager.cache.experience import get_event_exp_systems
 from larpmanager.cache.question import get_cached_writing_questions, get_writing_field_names
 from larpmanager.forms.character import CharacterForm
 from larpmanager.forms.member import AvatarForm
@@ -79,6 +80,8 @@ from larpmanager.utils.services.character import (
     get_character_sheet_factions,
 )
 from larpmanager.utils.services.experience import (
+    add_char_addit,
+    build_exp_avail_by_system_from_addit,
     get_available_ability_exp,
     get_current_ability_exp,
     remove_char_ability,
@@ -634,6 +637,17 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
     # add character configs
     char_add_addit(context)
 
+    if "experience" in context.get("features", {}):
+        context["exp_systems"] = [
+            {
+                "name": sys.name,
+                "tot_key": f"exp_tot_{sys.uuid}",
+                "used_key": f"exp_used_{sys.uuid}",
+                "avail_key": f"exp_avail_{sys.uuid}",
+            }
+            for sys in get_event_exp_systems(context["event"])
+        ]
+
     # Get character fields info
     char_ids = [el.id for el in context["list"]]
     fields_batch = get_writing_element_fields_batch(
@@ -770,21 +784,42 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
     """
     # Initialize context with character and permission checks
     context = check_char_abilities(request, event_slug, character_uuid)
+    char = context["character"]
+
+    # Ensure char.addit is populated with per-system exp data
+    add_char_addit(char)
+
+    # Build per-system experience data for display
+    context["exp_systems_data"] = [
+        {
+            "name": sys.name,
+            "uuid": str(sys.uuid),
+            "tot": char.addit.get(f"exp_tot_{sys.uuid}", 0),
+            "used": char.addit.get(f"exp_used_{sys.uuid}", 0),
+            "avail": char.addit.get(f"exp_avail_{sys.uuid}", 0),
+        }
+        for sys in get_event_exp_systems(context["event"])
+    ]
 
     # Build available abilities dictionary organized by ability type
+    exp_avail_by_system = build_exp_avail_by_system_from_addit(char)
+    multiple_systems = len(context["exp_systems_data"]) > 1
     context["available"] = {}
-    for ability in get_available_ability_exp(context["character"]):
+    for ability in get_available_ability_exp(char, exp_avail_by_system):
         if ability.typ is None:
             continue
         # Create type entry if it doesn't exist
         if ability.typ.uuid not in context["available"]:
             context["available"][ability.typ.uuid] = {"name": ability.typ.name, "order": ability.typ.number, "list": {}}
-        # Add ability with name and cost to the type's list
-        context["available"][ability.typ.uuid]["list"][str(ability.uuid)] = f"{ability.name} - {ability.cost}"
+        # Include system name in label only when multiple systems are configured
+        label = f"{ability.name} - {ability.cost}"
+        if multiple_systems:
+            label += f" [{ability.system.name}]"
+        context["available"][ability.typ.uuid]["list"][str(ability.uuid)] = label
 
     # Build current character abilities organized by type name
     context["sheet_abilities"] = {}
-    for el in get_current_ability_exp(context["character"]):
+    for el in get_current_ability_exp(char):
         if el.typ is None:
             continue
         # Create type list if it doesn't exist

@@ -34,11 +34,12 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
+from larpmanager.cache.experience import clear_event_exp_systems_cache, get_event_exp_systems
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import EventConfig
-from larpmanager.models.experience import AbilityExp, AbilityTypeExp
+from larpmanager.models.experience import AbilityExp, AbilityTypeExp, SystemExp
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -1631,6 +1632,16 @@ def abilities_load(context: dict, form: Form) -> list[str]:
     return processing_logs
 
 
+def _resolve_ability_system(event: Any) -> Any:
+    """Return the first SystemExp for the event, creating it if none exists."""
+    systems = get_event_exp_systems(event)
+    if systems:
+        return systems[0]
+    system = SystemExp.objects.create(event=event.get_class_parent(SystemExp), name="XP", number=1)
+    clear_event_exp_systems_cache(event.get_class_parent(SystemExp).id)
+    return system
+
+
 def _ability_load(context: dict, csv_row: dict) -> str:
     """Load ability data from CSV row for bulk import.
 
@@ -1653,10 +1664,14 @@ def _ability_load(context: dict, csv_row: dict) -> str:
     if "name" not in csv_row:
         return "ERR - There is no name column"
 
+    event = context["event"]
+    system = _resolve_ability_system(event)
+
     # Get or create ability object using event's class parent
     (ability_element, was_created) = AbilityExp.objects.get_or_create(
-        event=context["event"].get_class_parent(AbilityExp),
+        event=event.get_class_parent(AbilityExp),
         name=csv_row["name"],
+        defaults={"system": system},
     )
 
     logs = []
@@ -1669,7 +1684,7 @@ def _ability_load(context: dict, csv_row: dict) -> str:
 
     # Process each field in the CSV row
     for field_name, field_value in csv_row.items():
-        # Skip empty, NaN values, or the name/cost field (already processed)
+        # Skip empty, NaN values, or fields already processed above
         if not field_value or pd.isna(field_value) or field_name in ["name", "cost"]:
             continue
         processed_value = field_value

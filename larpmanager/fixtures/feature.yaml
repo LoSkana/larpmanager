@@ -1466,19 +1466,6 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: Experience Multiple
-    descr: Pseudo-feature activated by exp_multiple configuration
-    slug: exp_multiple
-    overall: false
-    placeholder: true
-    order: 0
-    after_text: ''
-    after_link: ''
-    hidden: true
-    module: miscellany
-    dependencies: []
-- model: larpmanager.feature
-  fields:
     name: Experience Rules
     descr: Pseudo-feature activated by exp_rules configuration
     slug: exp_rules
@@ -1508,6 +1495,19 @@
     name: Experience Templates
     descr: Pseudo-feature activated by exp_templates configuration
     slug: exp_templates
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+    dependencies: []
+- model: larpmanager.feature
+  fields:
+    name: Experience Systems
+    descr: Pseudo-feature activated by exp_systems configuration
+    slug: exp_systems
     overall: false
     placeholder: true
     order: 0

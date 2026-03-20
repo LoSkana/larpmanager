@@ -1395,7 +1395,7 @@ msgid ""
 "bought."
 msgstr ""
 
-msgid "Multiple experience systems"
+msgid "Multiple systems"
 msgstr ""
 
 msgid ""
@@ -3601,6 +3601,9 @@ msgstr ""
 msgid "The subscription plan associated with this event"
 msgstr ""
 
+msgid "System"
+msgstr ""
+
 msgid "Optional template associated with this ability."
 msgstr ""
 
@@ -5400,13 +5403,13 @@ msgstr ""
 msgid "Create new character"
 msgstr ""
 
-msgid "XP tot"
+msgid "tot"
 msgstr ""
 
-msgid "XP used"
+msgid "used"
 msgstr ""
 
-msgid "XP avail"
+msgid "avail"
 msgstr ""
 
 msgid "Character relationships"
@@ -7685,9 +7688,6 @@ msgstr ""
 msgid "Created"
 msgstr ""
 
-msgid "used"
-msgstr ""
-
 msgid ""
 "This page shows all access tokens for one-time content. Each token can only "
 "be used once."
@@ -8255,6 +8255,18 @@ msgid "This page shows the characters of the event"
 msgstr ""
 
 msgid "Attended"
+msgstr ""
+
+msgid "free"
+msgstr ""
+
+msgid "XP tot"
+msgstr ""
+
+msgid "XP used"
+msgstr ""
+
+msgid "XP avail"
 msgstr ""
 
 msgid "Important"
@@ -9470,6 +9482,21 @@ msgstr ""
 msgid "Manage experience distributions for character abilities purchases."
 msgstr ""
 
+msgid "Manage templates for experience abilities"
+msgstr ""
+
+msgid "Manage experience rules"
+msgstr ""
+
+msgid "Manage experience modifiers"
+msgstr ""
+
+msgid "Systems"
+msgstr ""
+
+msgid "Manage experience systems"
+msgstr ""
+
 msgid "Display full history of participant preferences on characters"
 msgstr ""
 
@@ -9539,20 +9566,11 @@ msgstr ""
 msgid "Manage loading and deployment status of warehouse items"
 msgstr ""
 
-msgid "Manage experience rules"
-msgstr ""
-
-msgid "Manage experience modifiers"
-msgstr ""
-
 msgid ""
 "Upload and manage secure video/audio content with one-time access tokens"
 msgstr ""
 
 msgid "Manage one-time access tokens for secure video/audio content"
-msgstr ""
-
-msgid "Manage templates for experience abilities"
 msgstr ""
 
 msgid "Manage character inventories and their items"

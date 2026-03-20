@@ -77,8 +77,11 @@ def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Verify user has permission and retrieve event context
     context = check_event_context(request, event_slug, "orga_exp_deliveries")
 
+    # Expose system column only when multiple systems are configured
+    context["multiple_systems"] = context["event"].get_elements(SystemExp).count() > 1
+
     # Get all deliveries ordered by number
-    deliveries = list(context["event"].get_elements(DeliveryExp).order_by("number"))
+    deliveries = list(context["event"].get_elements(DeliveryExp).order_by("number").select_related("system"))
 
     # Get cached EXP relationship data and enrich delivery objects
     px_cache = get_event_exp_cache(context["event"])
@@ -203,8 +206,11 @@ def orga_exp_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
         context["event"].id, "exp_templates", default_value=False, context=context
     )
 
+    # Expose system column only when multiple systems are configured
+    context["multiple_systems"] = context["event"].get_elements(SystemExp).count() > 1
+
     # Query and prepare abilities list with optimized database access
-    abilities = list(context["event"].get_elements(AbilityExp).order_by("number").select_related("typ"))
+    abilities = list(context["event"].get_elements(AbilityExp).order_by("number").select_related("typ", "system"))
 
     # Get cached EXP relationship data and enrich ability objects
     px_cache = get_event_exp_cache(context["event"])

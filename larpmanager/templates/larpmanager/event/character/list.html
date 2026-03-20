@@ -25,10 +25,12 @@
                 {% if features.campaign %}
                     <th>{% trans "Active" %}</th>
                 {% endif %}
-                {% if features.experience %}
-                    <th>{% trans "XP tot" %}</th>
-                    <th>{% trans "XP used" %}</th>
-                    <th>{% trans "XP avail" %}</th>
+                {% if features.experience and exp_systems %}
+                    {% for sys in exp_systems %}
+                        <th>{{ sys.name }} {% trans "tot" %}</th>
+                        <th>{{ sys.name }} {% trans "used" %}</th>
+                        <th>{{ sys.name }} {% trans "avail" %}</th>
+                    {% endfor %}
                 {% endif %}
                 {% if exp_user %}<th></th>{% endif %}
                 {% if not assigned %}<th></th>{% endif %}
@@ -63,9 +65,13 @@
                         </td>
                     {% endif %}
                     {% if features.experience %}
-                        <td>{{ el.addit | get:'exp_tot' }}</td>
-                        <td>{{ el.addit | get:'exp_used' }}</td>
-                        <td>{{ el.addit | get:'exp_avail' }}</td>
+                        {% if exp_systems %}
+                            {% for sys in exp_systems %}
+                                <td>{{ el.addit|get:sys.tot_key }}</td>
+                                <td>{{ el.addit|get:sys.used_key }}</td>
+                                <td>{{ el.addit|get:sys.avail_key }}</td>
+                            {% endfor %}
+                        {% endif %}
                     {% endif %}
                     {% if exp_user %}
                         <td>

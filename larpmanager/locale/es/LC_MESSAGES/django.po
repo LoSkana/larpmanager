@@ -86,6 +86,9 @@ msgstr "edad"
 msgid "for"
 msgstr "para"
 
+msgid "tot"
+msgstr "tot"
+
 msgid "Area"
 msgstr "Zona"
 
@@ -293,6 +296,9 @@ msgstr "En"
 msgid "days"
 msgstr "días"
 
+msgid "free"
+msgstr "gratis"
+
 msgid "gift"
 msgstr "regalo"
 
@@ -476,6 +482,9 @@ msgstr "Vídeo"
 
 msgid "Where"
 msgstr "Dónde"
+
+msgid "avail"
+msgstr "disponible"
 
 msgid "email"
 msgstr "correo electrónico"
@@ -680,6 +689,9 @@ msgstr "Calle"
 
 msgid "Submit"
 msgstr "Enviar"
+
+msgid "System"
+msgstr "Sistema"
 
 msgid "Ticket"
 msgstr "Billete"
@@ -953,6 +965,9 @@ msgstr "Ayuda"
 
 msgid "Surname"
 msgstr "Apellidos"
+
+msgid "Systems"
+msgstr "Sistemas"
 
 msgid "Tagline"
 msgstr "Etiqueta"
@@ -3068,6 +3083,9 @@ msgstr "¡Que gane el mejor"
 msgid "Member approved!"
 msgstr "¡Miembro aprobado!"
 
+msgid "Multiple systems"
+msgstr "Múltiples sistemas"
+
 msgid "Name of the plot"
 msgstr "Nombre de la parcela"
 
@@ -4521,6 +4539,9 @@ msgstr "Gestionar las asignaciones de créditos"
 msgid "Manage event access roles"
 msgstr "Gestión de las funciones de acceso a los actos"
 
+msgid "Manage experience systems"
+msgstr "Gestionar los sistemas de experiencia"
+
 msgid "Manage photo album upload"
 msgstr "Gestionar la carga de álbumes de fotos"
 
@@ -4746,9 +4767,6 @@ msgstr "Cuotas de afiliación aprobadas"
 
 msgid "Missing casting preferences"
 msgstr "Faltan preferencias de reparto"
-
-msgid "Multiple experience systems"
-msgstr "Múltiples sistemas de experiencia"
 
 msgid "Name of badge to be awarded"
 msgstr "Nombre de la insignia que se concederá"

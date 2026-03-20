@@ -86,6 +86,9 @@ msgstr "leeftijd"
 msgid "for"
 msgstr "voor"
 
+msgid "tot"
+msgstr "tot"
+
 msgid "Area"
 msgstr "Gebied"
 
@@ -293,6 +296,9 @@ msgstr "Wanneer"
 msgid "days"
 msgstr "dagen"
 
+msgid "free"
+msgstr "gratis"
+
 msgid "gift"
 msgstr "cadeau"
 
@@ -476,6 +482,9 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Waar"
+
+msgid "avail"
+msgstr "beschikbaar"
 
 msgid "email"
 msgstr "e-mail"
@@ -680,6 +689,9 @@ msgstr "Straat"
 
 msgid "Submit"
 msgstr "Stuur"
+
+msgid "System"
+msgstr "Systeem"
 
 msgid "Ticket"
 msgstr "Ticket"
@@ -953,6 +965,9 @@ msgstr "Ondersteuning"
 
 msgid "Surname"
 msgstr "Achternaam"
+
+msgid "Systems"
+msgstr "Systemen"
 
 msgid "Tagline"
 msgstr "Tagline"
@@ -3068,6 +3083,9 @@ msgstr "Moge de beste winnen"
 msgid "Member approved!"
 msgstr "Lid goedgekeurd!"
 
+msgid "Multiple systems"
+msgstr "Meerdere systemen"
+
 msgid "Name of the plot"
 msgstr "Naam van het perceel"
 
@@ -4521,6 +4539,9 @@ msgstr "Beheer krediettoewijzingen"
 msgid "Manage event access roles"
 msgstr "Toegangsrollen voor evenementen beheren"
 
+msgid "Manage experience systems"
+msgstr "Beheer ervaringssystemen"
+
 msgid "Manage photo album upload"
 msgstr "Fotoalbum uploaden beheren"
 
@@ -4746,9 +4767,6 @@ msgstr "Aandeel in goedkeuring"
 
 msgid "Missing casting preferences"
 msgstr "Ontbrekende gietvoorkeuren"
-
-msgid "Multiple experience systems"
-msgstr "Meerdere ervaringssystemen"
 
 msgid "Name of badge to be awarded"
 msgstr "Naam van de badge die wordt uitgereikt"

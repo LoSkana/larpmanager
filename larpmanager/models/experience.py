@@ -91,7 +91,7 @@ class AbilityExp(UuidMixin, BaseConceptModel):
         SystemExp,
         on_delete=models.PROTECT,
         related_name="abilities",
-        verbose_name=_("Experience System"),
+        verbose_name=_("System"),
     )
 
     typ = models.ForeignKey(
@@ -172,7 +172,7 @@ class DeliveryExp(UuidMixin, BaseConceptModel):
         SystemExp,
         on_delete=models.PROTECT,
         related_name="deliveries",
-        verbose_name=_("Experience System"),
+        verbose_name=_("System"),
     )
 
     amount = models.IntegerField()

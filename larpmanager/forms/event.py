@@ -761,12 +761,12 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("exp_auto_buy", ConfigType.BOOL, auto_buy_label, auto_buy_help_text)
 
             # Multiple XP systems configuration
-            multiple_systems_label = _("Multiple experience systems")
+            multiple_systems_label = _("Multiple systems")
             multiple_systems_help_text = _(
                 "If checked, enables managing multiple experience systems for the event. "
                 "Each ability and delivery can be assigned to a specific system.",
             )
-            self.add_configs("exp_multiple", ConfigType.BOOL, multiple_systems_label, multiple_systems_help_text)
+            self.add_configs("exp_systems", ConfigType.BOOL, multiple_systems_label, multiple_systems_help_text)
 
         # Configure player character editor if user_character feature is enabled
         if "user_character" in self.params["features"]:

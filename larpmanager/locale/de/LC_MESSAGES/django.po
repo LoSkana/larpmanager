@@ -86,6 +86,9 @@ msgstr "Alter"
 msgid "for"
 msgstr "für"
 
+msgid "tot"
+msgstr "tot"
+
 msgid "Area"
 msgstr "Bereich"
 
@@ -293,6 +296,9 @@ msgstr "Wenn"
 msgid "days"
 msgstr "Tage"
 
+msgid "free"
+msgstr "kostenlos"
+
 msgid "gift"
 msgstr "Geschenk"
 
@@ -476,6 +482,9 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Wo"
+
+msgid "avail"
+msgstr "verfügbar"
 
 msgid "email"
 msgstr "E-Mail"
@@ -680,6 +689,9 @@ msgstr "Straße"
 
 msgid "Submit"
 msgstr "Senden Sie"
+
+msgid "System"
+msgstr "System"
 
 msgid "Ticket"
 msgstr "Ticket"
@@ -953,6 +965,9 @@ msgstr "Unterstützung"
 
 msgid "Surname"
 msgstr "Nachname"
+
+msgid "Systems"
+msgstr "Systeme"
 
 msgid "Tagline"
 msgstr "Tagline"
@@ -3068,6 +3083,9 @@ msgstr "Möge der beste Mann gewinnen"
 msgid "Member approved!"
 msgstr "Mitglied genehmigt!"
 
+msgid "Multiple systems"
+msgstr "Mehrere Systeme"
+
 msgid "Name of the plot"
 msgstr "Name des Grundstücks"
 
@@ -4521,6 +4539,9 @@ msgstr "Verwalten von Kreditvergaben"
 msgid "Manage event access roles"
 msgstr "Verwalten von Ereignis-Zugangsrollen"
 
+msgid "Manage experience systems"
+msgstr "Erlebnissysteme verwalten"
+
 msgid "Manage photo album upload"
 msgstr "Verwalten des Fotoalbum-Uploads"
 
@@ -4746,9 +4767,6 @@ msgstr "Anteil an der Genehmigung"
 
 msgid "Missing casting preferences"
 msgstr "Fehlende Besetzungspräferenzen"
-
-msgid "Multiple experience systems"
-msgstr "Mehrere Erlebnissysteme"
 
 msgid "Name of badge to be awarded"
 msgstr "Name des zu verleihenden Abzeichens"

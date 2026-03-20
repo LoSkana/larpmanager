@@ -86,6 +86,9 @@ msgstr "alder"
 msgid "for"
 msgstr "for"
 
+msgid "tot"
+msgstr "tot"
+
 msgid "Area"
 msgstr "Område"
 
@@ -293,6 +296,9 @@ msgstr "Når"
 msgid "days"
 msgstr "dager"
 
+msgid "free"
+msgstr "gratis"
+
 msgid "gift"
 msgstr "gave"
 
@@ -476,6 +482,9 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Hvor"
+
+msgid "avail"
+msgstr "benytte"
 
 msgid "email"
 msgstr "e-post"
@@ -680,6 +689,9 @@ msgstr "Gate"
 
 msgid "Submit"
 msgstr "Send"
+
+msgid "System"
+msgstr "System"
 
 msgid "Ticket"
 msgstr "Billett"
@@ -953,6 +965,9 @@ msgstr "Støtte"
 
 msgid "Surname"
 msgstr "Etternavn"
+
+msgid "Systems"
+msgstr "Systemer"
 
 msgid "Tagline"
 msgstr "Tagline"
@@ -3068,6 +3083,9 @@ msgstr "Måtte den beste vinne"
 msgid "Member approved!"
 msgstr "Medlem godkjent!"
 
+msgid "Multiple systems"
+msgstr "Flere systemer"
+
 msgid "Name of the plot"
 msgstr "Navn på tomten"
 
@@ -4521,6 +4539,9 @@ msgstr "Administrere kredittoppdrag"
 msgid "Manage event access roles"
 msgstr "Administrer tilgangsroller for arrangementer"
 
+msgid "Manage experience systems"
+msgstr "Administrer opplevelsessystemer"
+
 msgid "Manage photo album upload"
 msgstr "Administrer opplasting av fotoalbum"
 
@@ -4746,9 +4767,6 @@ msgstr "Andel i godkjenningen"
 
 msgid "Missing casting preferences"
 msgstr "Mangler castingpreferanser"
-
-msgid "Multiple experience systems"
-msgstr "Flere opplevelsessystemer"
 
 msgid "Name of badge to be awarded"
 msgstr "Navn på merket som skal deles ut"

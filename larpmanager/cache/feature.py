@@ -145,7 +145,7 @@ def update_event_features(ev_id: int) -> dict[str, int]:
             for feature_slug in config_feature_slugs:
                 if event.get_config(f"{config_type}_{feature_slug}", default_value=False):
                     features_dict[feature_slug] = 1
-        for feature_slug in ["exp_rules", "exp_modifiers", "exp_templates", "exp_multiple"]:
+        for feature_slug in ["exp_rules", "exp_modifiers", "exp_templates", "exp_systems"]:
             if event.get_config(feature_slug, default_value=False):
                 features_dict[feature_slug] = 1
 

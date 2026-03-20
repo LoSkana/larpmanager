@@ -86,6 +86,9 @@ msgstr "wiek"
 msgid "for"
 msgstr "dla"
 
+msgid "tot"
+msgstr "całość"
+
 msgid "Area"
 msgstr "Obszar"
 
@@ -293,6 +296,9 @@ msgstr "Kiedy"
 msgid "days"
 msgstr "dni"
 
+msgid "free"
+msgstr "darmowy"
+
 msgid "gift"
 msgstr "prezent"
 
@@ -476,6 +482,9 @@ msgstr "Wideo"
 
 msgid "Where"
 msgstr "Gdzie"
+
+msgid "avail"
+msgstr "dostęp"
 
 msgid "email"
 msgstr "e-mail"
@@ -680,6 +689,9 @@ msgstr "ul"
 
 msgid "Submit"
 msgstr "Prześlij"
+
+msgid "System"
+msgstr "System"
 
 msgid "Ticket"
 msgstr "Bilet"
@@ -953,6 +965,9 @@ msgstr "Wsparcie"
 
 msgid "Surname"
 msgstr "Nazwisko"
+
+msgid "Systems"
+msgstr "Systemy"
 
 msgid "Tagline"
 msgstr "Tagline"
@@ -3068,6 +3083,9 @@ msgstr "Niech wygra najlepszy"
 msgid "Member approved!"
 msgstr "Członek zatwierdzony!"
 
+msgid "Multiple systems"
+msgstr "Wiele systemów"
+
 msgid "Name of the plot"
 msgstr "Nazwa działki"
 
@@ -4521,6 +4539,9 @@ msgstr "Zarządzanie zadaniami kredytowymi"
 msgid "Manage event access roles"
 msgstr "Zarządzanie rolami dostępu do zdarzeń"
 
+msgid "Manage experience systems"
+msgstr "Zarządzanie systemami doświadczeń"
+
 msgid "Manage photo album upload"
 msgstr "Zarządzanie przesyłaniem albumów zdjęć"
 
@@ -4746,9 +4767,6 @@ msgstr "Składki członkowskie w zatwierdzeniu"
 
 msgid "Missing casting preferences"
 msgstr "Brakujące preferencje castingu"
-
-msgid "Multiple experience systems"
-msgstr "Wiele systemów doświadczenia"
 
 msgid "Name of badge to be awarded"
 msgstr "Nazwa odznaki, która ma zostać przyznana"

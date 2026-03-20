@@ -103,7 +103,7 @@ def rename_event_configs(apps, schema_editor):
         "px_rules": "exp_rules",
         "px_modifiers": "exp_modifiers",
         "px_auto_buy": "exp_auto_buy",
-        "px_multiple": "exp_multiple",
+        "px_multiple": "exp_systems",
     }
     for old_key, new_key in config_renames.items():
         EventConfig.objects.filter(name=old_key).update(name=new_key)

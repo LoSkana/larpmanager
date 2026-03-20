@@ -13,6 +13,9 @@
             <tr>
                 <th></th>
                 <th>{% trans "Name" %}</th>
+                {% if multiple_systems %}
+                    <th>{% trans "System" %}</th>
+                {% endif %}
                 <th>{% trans "Type" %}</th>
                 <th>{% trans "Cost" %}</th>
                 <th>{% trans "Description" %}</th>
@@ -36,6 +39,7 @@
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
+                    {% if multiple_systems %}<td>{{ el.system }}</td>{% endif %}
                     <td>{{ el.typ }}</td>
                     <td>{{ el.cost }}</td>
                     <td>
