@@ -207,6 +207,9 @@ TINYMCE_DEFAULT_CONFIG = {
     'file_picker_types': 'image media',
     'paste_data_images': False,
 
+    # Preserve Font Awesome <i> tags (empty elements with class attributes)
+    'extended_valid_elements': 'i[class|style|aria-hidden|title]',
+
     # "skin_url": "/static/larpmanager/assets/tinymce/lm_skin",
 }
 
