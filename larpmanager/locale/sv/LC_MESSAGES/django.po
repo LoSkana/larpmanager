@@ -3251,6 +3251,9 @@ msgstr "Ladda ner dokument"
 msgid "Elements uploaded"
 msgstr "Elementen är laddade"
 
+msgid "Experience System"
+msgstr "System för upplevelser"
+
 msgid "Experience points"
 msgstr "Erfarenhetspoäng"
 
@@ -3442,6 +3445,9 @@ msgstr "Elektronisk faktura"
 
 msgid "Enable preferences"
 msgstr "Aktivera inställningar"
+
+msgid "Experience Systems"
+msgstr "System för upplevelser"
 
 msgid "First registration"
 msgstr "Första registrering"
@@ -4744,6 +4750,9 @@ msgstr "Andel i godkännande"
 msgid "Missing casting preferences"
 msgstr "Saknade castingpreferenser"
 
+msgid "Multiple experience systems"
+msgstr "Flera erfarenhetssystem"
+
 msgid "Name of badge to be awarded"
 msgstr "Namn på märket som ska delas ut"
 
@@ -5069,6 +5078,9 @@ msgstr "Filtrera eller sök bland karaktärerna"
 
 msgid "Manage event navigation buttons"
 msgstr "Hantera navigeringsknappar för evenemang"
+
+msgid "Manage experience point systems"
+msgstr "Hantera system för erfarenhetspoäng"
 
 msgid "Manage member membership status"
 msgstr "Hantera medlemsstatus för medlemskap"
@@ -7282,6 +7294,11 @@ msgstr "Den valuta som du vill använda för alla betalningar och prissättning"
 msgid "This page allows you to add or edit a character inventory"
 msgstr ""
 "På den här sidan kan du lägga till eller redigera en karaktärsinventering"
+
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"På denna sida listas de erfarenhetssystem som definierats för detta "
+"evenemang"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Denna sida visar all redovisningsinformation för medlemmen"
@@ -11393,6 +11410,13 @@ msgid ""
 msgstr ""
 "Vid en betalningsfrist anges det antal dagar under vilka deltagaren ska "
 "underrättas om att betalningen ska genomföras. Standardvärde 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Om markerad gör det möjligt att hantera flera upplevelsesystem för "
+"evenemanget. Varje förmåga och leverans kan tilldelas ett specifikt system."
 
 #, python-format
 msgid ""

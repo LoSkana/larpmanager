@@ -3251,6 +3251,9 @@ msgstr "Pobierz dokument"
 msgid "Elements uploaded"
 msgstr "Elementy przesłane"
 
+msgid "Experience System"
+msgstr "System doświadczeń"
+
 msgid "Experience points"
 msgstr "Punkty doświadczenia"
 
@@ -3442,6 +3445,9 @@ msgstr "Faktura elektroniczna"
 
 msgid "Enable preferences"
 msgstr "Włącz preferencje"
+
+msgid "Experience Systems"
+msgstr "Experience Systems"
 
 msgid "First registration"
 msgstr "Pierwsza rejestracja"
@@ -4744,6 +4750,9 @@ msgstr "Składki członkowskie w zatwierdzeniu"
 msgid "Missing casting preferences"
 msgstr "Brakujące preferencje castingu"
 
+msgid "Multiple experience systems"
+msgstr "Wiele systemów doświadczenia"
+
 msgid "Name of badge to be awarded"
 msgstr "Nazwa odznaki, która ma zostać przyznana"
 
@@ -5069,6 +5078,9 @@ msgstr "Filtruj lub przeszukuj znaki"
 
 msgid "Manage event navigation buttons"
 msgstr "Zarządzanie przyciskami nawigacji zdarzeń"
+
+msgid "Manage experience point systems"
+msgstr "Zarządzanie systemami punktów doświadczenia"
 
 msgid "Manage member membership status"
 msgstr "Zarządzanie statusem członkostwa"
@@ -7298,6 +7310,11 @@ msgstr "Waluta, której chcesz używać do wszystkich płatności i ustalania ce
 
 msgid "This page allows you to add or edit a character inventory"
 msgstr "Ta strona umożliwia dodanie lub edycję ekwipunku postaci"
+
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Ta strona zawiera listę systemów doświadczenia zdefiniowanych dla tego "
+"wydarzenia"
 
 msgid "This page shows all accounting information for the member"
 msgstr ""
@@ -11463,6 +11480,14 @@ msgid ""
 msgstr ""
 "Biorąc pod uwagę termin płatności, wskazuje liczbę dni, w ciągu których "
 "powiadamia uczestnika o dokonaniu płatności. Domyślnie 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Jeśli zaznaczone, umożliwia zarządzanie wieloma systemami doświadczeń dla "
+"wydarzenia. Każda możliwość i dostawa może zostać przypisana do określonego "
+"systemu."
 
 #, python-format
 msgid ""

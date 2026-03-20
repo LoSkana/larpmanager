@@ -52,7 +52,7 @@ def test_user_new_ticket_orga_bulk(pw_page: Any) -> None:
 
     bulk_questbuilder(live_server, page)
 
-    bulk_px(live_server, page)
+    bulk_exp(live_server, page)
 
 
 def bulk_writing(live_server: Any, page: Any) -> None:
@@ -180,7 +180,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "T1 t1 Q2 q2")
 
 
-def bulk_px(live_server: Any, page: Any) -> None:
+def bulk_exp(live_server: Any, page: Any) -> None:
     # create ability type
     page.get_by_role("link", name="Ability type").click()
     page.get_by_role("link", name="New").click()

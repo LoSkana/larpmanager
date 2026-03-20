@@ -554,7 +554,7 @@ def _prepare_backup(context: dict) -> HttpResponse:
         export_files.extend(export_data(context, Plot))
 
     # Export experience/abilities data if feature is enabled
-    if "px" in context["features"]:
+    if "experience" in context["features"]:
         export_files.extend(export_abilities(context))
 
     # Export quest builder data if feature is enabled
@@ -638,7 +638,7 @@ def orga_upload_template(request: HttpRequest, event_slug: str, upload_type: str
         upload_type: Template type specifying which template to generate. Valid values:
             - 'writing': Character writing elements template
             - 'registration': Event registration template
-            - 'px_abilitie': Player experience abilities template
+            - 'exp_abilitie': Player experience abilities template
             - 'form': Generic form template
 
     Returns:
@@ -690,7 +690,7 @@ def orga_upload_template(request: HttpRequest, event_slug: str, upload_type: str
     elif upload_type == "registration_ticket":
         # Generate ticket template for ticket tier definitions
         exports = _ticket_template(context)
-    elif upload_type == "px_abilitie":
+    elif upload_type == "exp_abilitie":
         # Generate abilities template for player experience tracking
         exports = _ability_template(context)
     else:

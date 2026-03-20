@@ -33,7 +33,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import AssociationText
 from larpmanager.models.event import EventText
-from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx
+from larpmanager.models.experience import AbilityExp, DeliveryExp, ModifierExp
 from larpmanager.models.writing import Faction, Handout, HandoutTemplate
 from larpmanager.tests.unit.base import BaseTestCase
 
@@ -43,7 +43,7 @@ class TestUtilitySignals(BaseTestCase):
 
     def test_character_post_save_updates_experience(self) -> None:
         """Test that Character post_save signal updates character experience"""
-        # Signal only runs when "px" feature is enabled
+        # Signal only runs when "experience" feature is enabled
         character = self.character()
         original_name = character.name
         character.save()
@@ -54,10 +54,10 @@ class TestUtilitySignals(BaseTestCase):
         self.assertIsNotNone(character.id)
 
     @patch("larpmanager.utils.services.experience.calculate_character_experience_points")
-    def test_ability_px_post_save_updates_experience(self, mock_update: Any) -> None:
-        """Test that AbilityPx m2m_changed signal updates character experience"""
+    def test_ability_exp_post_save_updates_experience(self, mock_update: Any) -> None:
+        """Test that AbilityExp m2m_changed signal updates character experience"""
         character = self.character()
-        ability_px = AbilityPx.objects.create(name="Test Ability", cost=10, event=self.get_event())
+        ability_px = AbilityExp.objects.create(name="Test Ability", cost=10, event=self.get_event())
         mock_update.reset_mock()
         # Adding character to ability triggers m2m_changed signal
         ability_px.characters.add(character)
@@ -65,10 +65,10 @@ class TestUtilitySignals(BaseTestCase):
         # The m2m_changed signal calls calculate_character_experience_points for the added character
         mock_update.assert_called_with(character)
 
-    def test_delivery_px_post_save_updates_experience(self) -> None:
-        """Test that DeliveryPx post_save signal updates character experience"""
+    def test_delivery_exp_post_save_updates_experience(self) -> None:
+        """Test that DeliveryExp post_save signal updates character experience"""
         character = self.character()
-        delivery_px = DeliveryPx.objects.create(name="Test Delivery", amount=5, event=self.get_event())
+        delivery_px = DeliveryExp.objects.create(name="Test Delivery", amount=5, event=self.get_event())
         delivery_px.characters.add(character)
         delivery_px.save()
 
@@ -78,21 +78,21 @@ class TestUtilitySignals(BaseTestCase):
         self.assertEqual(delivery_px.amount, 5)
         self.assertIn(character, delivery_px.characters.all())
 
-    def test_rule_px_post_save_updates_experience(self) -> None:
-        """Test that RulePx post_save signal updates character experience"""
+    def test_rule_exp_post_save_updates_experience(self) -> None:
+        """Test that RuleExp post_save signal updates character experience"""
         # Signal triggers calculate_character_experience_points for all characters in event
-        # RulePx requires complex setup with field_id, so we just verify signal is connected
+        # RuleExp requires complex setup with field_id, so we just verify signal is connected
         event = self.get_event()
 
         # Verify event exists for the signal context
         self.assertIsNotNone(event.id)
 
-    def test_modifier_px_post_save_updates_experience(self) -> None:
-        """Test that ModifierPx can be saved without errors"""
+    def test_modifier_exp_post_save_updates_experience(self) -> None:
+        """Test that ModifierExp can be saved without errors"""
         event = self.get_event()
         character = self.character(event=event)  # Create character directly in the event
 
-        modifier_px = ModifierPx.objects.create(name="Test Modifier", cost=8, event=event)
+        modifier_px = ModifierExp.objects.create(name="Test Modifier", cost=8, event=event)
 
         # Verify modifier was created successfully
         self.assertIsNotNone(modifier_px.id)

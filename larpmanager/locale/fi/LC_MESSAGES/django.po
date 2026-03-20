@@ -3251,6 +3251,9 @@ msgstr "Lataa asiakirja"
 msgid "Elements uploaded"
 msgstr "Ladatut elementit"
 
+msgid "Experience System"
+msgstr "Kokemusjärjestelmä"
+
 msgid "Experience points"
 msgstr "Kokemuspisteet"
 
@@ -3442,6 +3445,9 @@ msgstr "Sähköinen lasku"
 
 msgid "Enable preferences"
 msgstr "Ota asetukset käyttöön"
+
+msgid "Experience Systems"
+msgstr "Kokemusjärjestelmät"
 
 msgid "First registration"
 msgstr "Ensimmäinen rekisteröinti"
@@ -4744,6 +4750,9 @@ msgstr "Hyväksytyt jäsenmaksut"
 msgid "Missing casting preferences"
 msgstr "Puuttuvat hahmojaon asetukset"
 
+msgid "Multiple experience systems"
+msgstr "Useita kokemusjärjestelmiä"
+
 msgid "Name of badge to be awarded"
 msgstr "Myönnettävän merkin nimi"
 
@@ -5069,6 +5078,9 @@ msgstr "Suodata tai etsiä merkkejä"
 
 msgid "Manage event navigation buttons"
 msgstr "Tapahtuman navigointipainikkeiden hallinta"
+
+msgid "Manage experience point systems"
+msgstr "Kokemuspistejärjestelmien hallinta"
 
 msgid "Manage member membership status"
 msgstr "Hallitse jäsenen jäsenyyden tilaa"
@@ -7287,6 +7299,11 @@ msgstr "Valuutta, jota haluat käyttää kaikissa maksuissa ja hinnoittelussa"
 
 msgid "This page allows you to add or edit a character inventory"
 msgstr "Tällä sivulla voit lisätä tai muokata hahmon inventaariota"
+
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Tällä sivulla luetellaan tätä tapahtumaa varten määritellyt "
+"kokemusjärjestelmät"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Tällä sivulla näkyvät kaikki jäsenen kirjanpitotiedot"
@@ -11367,6 +11384,14 @@ msgid ""
 msgstr ""
 "Kun maksun määräaika on annettu, ilmoittaa, kuinka monen päivän kuluessa se "
 "ilmoittaa osallistujalle, että maksu on suoritettava. Oletusarvo 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Jos valintaruutu on valittuna, tämä mahdollistaa tapahtuman useiden "
+"kokemusjärjestelmien hallinnan. Jokainen kyky ja toimitus voidaan määrittää "
+"tiettyyn järjestelmään."
 
 #, python-format
 msgid ""

@@ -31,14 +31,32 @@ from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.writing import Character
 
 
-class AbilityTemplatePx(UuidMixin, BaseConceptModel):
-    """Represents AbilityTemplatePx model."""
+class SystemExp(UuidMixin, BaseConceptModel):
+    """Represents a named experience system for an event."""
+
+    class Meta:
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
+            UniqueConstraint(
+                fields=["event", "number", "deleted"],
+                name="unique_system_px_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_system_px_without_optional",
+            ),
+        ]
+
+
+class AbilityTemplateExp(UuidMixin, BaseConceptModel):
+    """Represents AbilityTemplateExp model."""
 
     name = models.CharField(max_length=150)
     descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
 
     def __str__(self) -> str:
-        """Return string representation of AbilityTemplatePx."""
+        """Return string representation of AbilityTemplateExp."""
         return self.name
 
     def get_full_name(self) -> str:
@@ -46,8 +64,8 @@ class AbilityTemplatePx(UuidMixin, BaseConceptModel):
         return self.name
 
 
-class AbilityTypePx(UuidMixin, BaseConceptModel):
-    """Represents AbilityTypePx model."""
+class AbilityTypeExp(UuidMixin, BaseConceptModel):
+    """Represents AbilityTypeExp model."""
 
     name = models.CharField(max_length=150, blank=True)
 
@@ -66,11 +84,18 @@ class AbilityTypePx(UuidMixin, BaseConceptModel):
         ]
 
 
-class AbilityPx(UuidMixin, BaseConceptModel):
-    """Represents AbilityPx model."""
+class AbilityExp(UuidMixin, BaseConceptModel):
+    """Represents AbilityExp model."""
+
+    system = models.ForeignKey(
+        SystemExp,
+        on_delete=models.PROTECT,
+        related_name="abilities",
+        verbose_name=_("Experience System"),
+    )
 
     typ = models.ForeignKey(
-        AbilityTypePx,
+        AbilityTypeExp,
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -79,7 +104,7 @@ class AbilityPx(UuidMixin, BaseConceptModel):
     )
 
     template = models.ForeignKey(
-        AbilityTemplatePx,
+        AbilityTemplateExp,
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
@@ -99,7 +124,7 @@ class AbilityPx(UuidMixin, BaseConceptModel):
 
     prerequisites = models.ManyToManyField(
         "self",
-        related_name="px_ability_unlock",
+        related_name="exp_ability_unlock",
         blank=True,
         symmetrical=False,
         verbose_name=_("Pre-requisites"),
@@ -114,7 +139,7 @@ class AbilityPx(UuidMixin, BaseConceptModel):
         help_text=_("Indicate the character options, which must be selected to make the ability available"),
     )
 
-    characters = models.ManyToManyField(Character, related_name="px_ability_list", blank=True)
+    characters = models.ManyToManyField(Character, related_name="exp_ability_list", blank=True)
 
     class Meta:
         indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
@@ -140,12 +165,19 @@ class AbilityPx(UuidMixin, BaseConceptModel):
         return self.template.descr if self.template else self.descr
 
 
-class DeliveryPx(UuidMixin, BaseConceptModel):
-    """Represents DeliveryPx model."""
+class DeliveryExp(UuidMixin, BaseConceptModel):
+    """Represents DeliveryExp model."""
+
+    system = models.ForeignKey(
+        SystemExp,
+        on_delete=models.PROTECT,
+        related_name="deliveries",
+        verbose_name=_("Experience System"),
+    )
 
     amount = models.IntegerField()
 
-    characters = models.ManyToManyField(Character, related_name="px_delivery_list", blank=True)
+    characters = models.ManyToManyField(Character, related_name="exp_delivery_list", blank=True)
 
     class Meta:
         indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
@@ -175,11 +207,11 @@ class Operation(models.TextChoices):
     DIVISION = "DIV", _("Division")
 
 
-class RulePx(UuidMixin, BaseConceptModel):
-    """Represents RulePx model."""
+class RuleExp(UuidMixin, BaseConceptModel):
+    """Represents RuleExp model."""
 
     abilities = models.ManyToManyField(
-        AbilityPx,
+        AbilityExp,
         related_name="rules",
         blank=True,
         help_text=_(
@@ -205,15 +237,15 @@ class RulePx(UuidMixin, BaseConceptModel):
     order = models.IntegerField(default=0)
 
 
-class ModifierPx(UuidMixin, BaseConceptModel):
-    """Represents ModifierPx model."""
+class ModifierExp(UuidMixin, BaseConceptModel):
+    """Represents ModifierExp model."""
 
-    abilities = models.ManyToManyField(AbilityPx, related_name="modifiers_abilities", blank=True)
+    abilities = models.ManyToManyField(AbilityExp, related_name="modifiers_abilities", blank=True)
 
     cost = models.IntegerField(default=0, help_text=_("Note that if the cost is 0, it will be automatically assigned"))
 
     prerequisites = models.ManyToManyField(
-        AbilityPx,
+        AbilityExp,
         related_name="modifiers_prerequisites",
         blank=True,
         verbose_name=_("Pre-requisites"),

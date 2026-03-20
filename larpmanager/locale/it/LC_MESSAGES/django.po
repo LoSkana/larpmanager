@@ -3251,6 +3251,9 @@ msgstr "Scarica documento"
 msgid "Elements uploaded"
 msgstr "Elementi caricati"
 
+msgid "Experience System"
+msgstr "Sistema di esperienza"
+
 msgid "Experience points"
 msgstr "Punti esperienza"
 
@@ -3442,6 +3445,9 @@ msgstr "Fattura elettronica"
 
 msgid "Enable preferences"
 msgstr "Abilita le preferenze"
+
+msgid "Experience Systems"
+msgstr "Sistemi di esperienza"
 
 msgid "First registration"
 msgstr "Prima iscrizione"
@@ -4744,6 +4750,9 @@ msgstr "Quota sociale in approvazione"
 msgid "Missing casting preferences"
 msgstr "Preferenze di casting mancanti"
 
+msgid "Multiple experience systems"
+msgstr "Sistemi di esperienza multipli"
+
 msgid "Name of badge to be awarded"
 msgstr "Nome del distintivo da assegnare"
 
@@ -5069,6 +5078,9 @@ msgstr "Filtrao cercai personaggi"
 
 msgid "Manage event navigation buttons"
 msgstr "Gestione dei pulsanti di navigazione degli eventi"
+
+msgid "Manage experience point systems"
+msgstr "Gestisci i sistemi di punti esperienza"
 
 msgid "Manage member membership status"
 msgstr "Gestisci lo stato di appartenenza dei membri"
@@ -7311,6 +7323,10 @@ msgid "This page allows you to add or edit a character inventory"
 msgstr ""
 "Questa pagina consente di aggiungere o modificare l'inventario di un "
 "personaggio"
+
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Questa pagina elenca i sistemi di esperienza definiti per questo evento"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Questa pagina mostra tutte le informazioni contabili del socio"
@@ -11577,6 +11593,13 @@ msgid ""
 msgstr ""
 "Data una scadenza di pagamento, indica il numero di giorni entro i quali si "
 "comunica al partecipante di procedere con il pagamento. Predefinito 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Se selezionata, consente di gestire più sistemi di esperienza per l'evento. "
+"Ogni abilità e consegna può essere assegnata a un sistema specifico."
 
 #, python-format
 msgid ""

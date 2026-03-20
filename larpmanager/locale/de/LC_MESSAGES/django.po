@@ -3251,6 +3251,9 @@ msgstr "Dokument herunterladen"
 msgid "Elements uploaded"
 msgstr "Elemente geladen"
 
+msgid "Experience System"
+msgstr "System erleben"
+
 msgid "Experience points"
 msgstr "Erfahrungspunkte"
 
@@ -3442,6 +3445,9 @@ msgstr "Elektronische Rechnung"
 
 msgid "Enable preferences"
 msgstr "Einstellungen aktivieren"
+
+msgid "Experience Systems"
+msgstr "Systeme erleben"
 
 msgid "First registration"
 msgstr "Erste Registrierung"
@@ -4744,6 +4750,9 @@ msgstr "Anteil an der Genehmigung"
 msgid "Missing casting preferences"
 msgstr "Fehlende Besetzungspräferenzen"
 
+msgid "Multiple experience systems"
+msgstr "Mehrere Erlebnissysteme"
+
 msgid "Name of badge to be awarded"
 msgstr "Name des zu verleihenden Abzeichens"
 
@@ -5069,6 +5078,9 @@ msgstr "Filtern oder suchen Sie die Zeichen"
 
 msgid "Manage event navigation buttons"
 msgstr "Schaltflächen für die Ereignisnavigation verwalten"
+
+msgid "Manage experience point systems"
+msgstr "Verwalten von Erfahrungspunktesystemen"
 
 msgid "Manage member membership status"
 msgstr "Verwaltung des Mitgliedschaftsstatus"
@@ -7374,6 +7386,11 @@ msgstr "Die Währung, die Sie für alle Zahlungen und Preise verwenden möchten"
 msgid "This page allows you to add or edit a character inventory"
 msgstr ""
 "Auf dieser Seite können Sie ein Charakterinventar hinzufügen oder bearbeiten"
+
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Auf dieser Seite finden Sie die für diese Veranstaltung definierten "
+"Erlebnissysteme"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Diese Seite zeigt alle Buchhaltungsinformationen für das Mitglied"
@@ -11784,6 +11801,14 @@ msgid ""
 msgstr ""
 "Gibt bei einer Zahlungsfrist die Anzahl der Tage an, innerhalb derer sie den"
 " Teilnehmer benachrichtigt, die Zahlung vorzunehmen. Standard 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Wenn diese Option aktiviert ist, können Sie mehrere Erlebnissysteme für die "
+"Veranstaltung verwalten. Jede Fähigkeit und Lieferung kann einem bestimmten "
+"System zugewiesen werden."
 
 #, python-format
 msgid ""

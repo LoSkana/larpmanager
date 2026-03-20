@@ -160,7 +160,7 @@ def init_cache_config_run(run: Run) -> dict:
             - limitations: Whether to show limitations
             - user_character_max: Maximum characters per user
             - cover_orig: Original cover setting
-            - px_user: User experience points setting
+            - exp_user: User experience points setting
             - show_* keys: Display configuration for character, faction, quest, trait
             - show_addit: Additional display configuration
 
@@ -179,7 +179,7 @@ def init_cache_config_run(run: Run) -> dict:
         ("limitations", "show_limitations", event_id, False),
         ("user_character_max", "user_character_max", event_id, 0),
         ("cover_orig", "cover_orig", event_id, False),
-        ("px_user", "px_user", parent_id, False),
+        ("exp_user", "exp_user", parent_id, False),
     ]
     for context_key, config_key, event_id, default in configs:
         context[context_key] = get_event_config(event_id, config_key, default_value=default, context=context)

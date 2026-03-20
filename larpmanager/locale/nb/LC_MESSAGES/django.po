@@ -3251,6 +3251,9 @@ msgstr "Last ned dokumentet"
 msgid "Elements uploaded"
 msgstr "Elementer lastet"
 
+msgid "Experience System"
+msgstr "Opplevelsessystem"
+
 msgid "Experience points"
 msgstr "Erfaringspoeng"
 
@@ -3442,6 +3445,9 @@ msgstr "Elektronisk faktura"
 
 msgid "Enable preferences"
 msgstr "Aktiver innstillinger"
+
+msgid "Experience Systems"
+msgstr "Opplevelsessystemer"
 
 msgid "First registration"
 msgstr "Første registrering"
@@ -4744,6 +4750,9 @@ msgstr "Andel i godkjenningen"
 msgid "Missing casting preferences"
 msgstr "Mangler castingpreferanser"
 
+msgid "Multiple experience systems"
+msgstr "Flere opplevelsessystemer"
+
 msgid "Name of badge to be awarded"
 msgstr "Navn på merket som skal deles ut"
 
@@ -5069,6 +5078,9 @@ msgstr "Filtrer eller søk i tegnene"
 
 msgid "Manage event navigation buttons"
 msgstr "Administrer navigeringsknapper for hendelser"
+
+msgid "Manage experience point systems"
+msgstr "Administrere erfaringspoengsystemer"
 
 msgid "Manage member membership status"
 msgstr "Administrere medlemsstatus"
@@ -7286,6 +7298,10 @@ msgstr "Valutaen du ønsker å bruke for alle betalinger og priser"
 
 msgid "This page allows you to add or edit a character inventory"
 msgstr "På denne siden kan du legge til eller redigere en karakterbeholdning"
+
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Denne siden viser erfaringssystemer som er definert for dette arrangementet"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Denne siden viser all regnskapsinformasjon for medlemmet"
@@ -11373,6 +11389,13 @@ msgid ""
 msgstr ""
 "Angir antall dager som deltakeren skal varsles om at betalingen skal "
 "gjennomføres, gitt en betalingsfrist. Standard 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Hvis avkrysset, gjør det mulig å administrere flere opplevelsessystemer for "
+"arrangementet. Hver evne og leveranse kan tilordnes et bestemt system."
 
 #, python-format
 msgid ""

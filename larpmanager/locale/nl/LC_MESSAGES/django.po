@@ -3251,6 +3251,9 @@ msgstr "Document downloaden"
 msgid "Elements uploaded"
 msgstr "Elementen geladen"
 
+msgid "Experience System"
+msgstr "Ervaringssysteem"
+
 msgid "Experience points"
 msgstr "Ervaringspunten"
 
@@ -3442,6 +3445,9 @@ msgstr "Elektronische factuur"
 
 msgid "Enable preferences"
 msgstr "Voorkeuren inschakelen"
+
+msgid "Experience Systems"
+msgstr "Ervaringssystemen"
 
 msgid "First registration"
 msgstr "Eerste registratie"
@@ -4744,6 +4750,9 @@ msgstr "Aandeel in goedkeuring"
 msgid "Missing casting preferences"
 msgstr "Ontbrekende gietvoorkeuren"
 
+msgid "Multiple experience systems"
+msgstr "Meerdere ervaringssystemen"
+
 msgid "Name of badge to be awarded"
 msgstr "Naam van de badge die wordt uitgereikt"
 
@@ -5069,6 +5078,9 @@ msgstr "Filter of zoek de tekens"
 
 msgid "Manage event navigation buttons"
 msgstr "Navigatietoetsen voor evenementen beheren"
+
+msgid "Manage experience point systems"
+msgstr "Systemen voor ervaringspunten beheren"
 
 msgid "Manage member membership status"
 msgstr "Lidmaatschapsstatus van leden beheren"
@@ -7307,6 +7319,11 @@ msgstr "De valuta die je wilt gebruiken voor alle betalingen en prijzen"
 msgid "This page allows you to add or edit a character inventory"
 msgstr ""
 "Op deze pagina kun je een inventaris van een personage toevoegen of bewerken"
+
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Deze pagina geeft een overzicht van ervaringssystemen die voor dit evenement"
+" zijn gedefinieerd"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Deze pagina toont alle boekhoudkundige informatie voor het lid"
@@ -11568,6 +11585,14 @@ msgid ""
 msgstr ""
 "Geeft, gegeven een betalingstermijn, het aantal dagen aan waarbinnen het de "
 "deelnemer op de hoogte stelt om door te gaan met de betaling. Standaard 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Als deze optie is aangevinkt, kunnen meerdere belevingssystemen voor het "
+"evenement worden beheerd. Elke mogelijkheid en levering kan worden "
+"toegewezen aan een specifiek systeem."
 
 #, python-format
 msgid ""

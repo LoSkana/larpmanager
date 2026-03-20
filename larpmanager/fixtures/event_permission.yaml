@@ -590,37 +590,37 @@
   fields:
     name: Ability type
     descr: Manage the type of character abilities
-    slug: orga_px_ability_types
+    slug: orga_exp_ability_types
     number: 81
-    config: px
+    config: experience
     active_if: null
     hidden: false
     icon: sitemap
-    feature: px
+    feature: experience
     module: experience
 - model: larpmanager.eventpermission
   fields:
     name: Abilities
     descr: Manage the character abilities purchaseable with XP
-    slug: orga_px_abilities
+    slug: orga_exp_abilities
     number: 51
-    config: px
+    config: experience
     active_if: null
     hidden: false
     icon: star
-    feature: px
+    feature: experience
     module: experience
 - model: larpmanager.eventpermission
   fields:
     name: Deliveries
     descr: Manage XP distributions for character abilities purchases.
-    slug: orga_px_deliveries
+    slug: orga_exp_deliveries
     number: 61
-    config: px
+    config: experience
     active_if: null
     hidden: false
     icon: truck
-    feature: px
+    feature: experience
     module: experience
 - model: larpmanager.eventpermission
   fields:
@@ -854,9 +854,9 @@
   fields:
     name: Rules
     descr: Manage XP rules
-    slug: orga_px_rules
+    slug: orga_exp_rules
     number: 81
-    config: px
+    config: experience
     active_if: px_rules
     hidden: false
     icon: scale-balanced
@@ -866,9 +866,9 @@
   fields:
     name: Modifiers
     descr: Manage XP modifiers
-    slug: orga_px_modifiers
+    slug: orga_exp_modifiers
     number: 91
-    config: px
+    config: experience
     active_if: px_modifiers
     hidden: false
     icon: sliders
@@ -902,9 +902,9 @@
   fields:
     name: Ability Templates
     descr: Manage ability templates
-    slug: orga_px_ability_templates
+    slug: orga_exp_ability_templates
     number: 41
-    config: px
+    config: experience
     active_if: px_templates
     hidden: false
     icon: clone

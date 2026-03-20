@@ -140,12 +140,14 @@ def update_event_features(ev_id: int) -> dict[str, int]:
             "character_form": ["wri_que_max", "wri_que_tickets", "wri_que_requirements"],
             "casting": ["mirror"],
             "user_character": ["player_relationships"],
-            "px": ["rules", "modifiers", "templates"],
         }
         for config_type, config_feature_slugs in extra_features_mapping.items():
             for feature_slug in config_feature_slugs:
                 if event.get_config(f"{config_type}_{feature_slug}", default_value=False):
                     features_dict[feature_slug] = 1
+        for feature_slug in ["exp_rules", "exp_modifiers", "exp_templates", "exp_multiple"]:
+            if event.get_config(feature_slug, default_value=False):
+                features_dict[feature_slug] = 1
 
     except ObjectDoesNotExist:
         return {}

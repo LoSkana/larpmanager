@@ -702,9 +702,9 @@ class OrgaConfigForm(ConfigForm):
                 independent_factions_help_text,
             )
 
-        # Configure experience points system if px feature is enabled
-        if "px" in self.params["features"]:
-            self.set_section("px", _("Experience points"))
+        # Configure experience points system if experience feature is enabled
+        if "experience" in self.params["features"]:
+            self.set_section("experience", _("Experience points"))
 
             # Player selection configuration - allows participants to choose abilities
             player_selection_label = _("Player selection")
@@ -712,20 +712,20 @@ class OrgaConfigForm(ConfigForm):
                 "If checked, participants may add abilities themselves, by selecting from those that "
                 "are visible, and whose pre-requisites they meet.",
             )
-            self.add_configs("px_user", ConfigType.BOOL, player_selection_label, player_selection_help_text)
+            self.add_configs("exp_user", ConfigType.BOOL, player_selection_label, player_selection_help_text)
 
             # Undo period configuration - time window for ability revocation
             undo_period_label = _("Undo period")
             undo_period_help_text = _(
                 "Time window (in hours) during which the user can revoke a chosen ability and recover spent XP (default is 0)",
             )
-            self.add_configs("px_undo", ConfigType.INT, undo_period_label, undo_period_help_text)
+            self.add_configs("exp_undo", ConfigType.INT, undo_period_label, undo_period_help_text)
 
             # Initial experience points configuration
             initial_experience_points_label = _("Initial experience points")
             initial_experience_points_help_text = _("Initial value of experience points for all characters")
             self.add_configs(
-                "px_start",
+                "exp_start",
                 ConfigType.INT,
                 initial_experience_points_label,
                 initial_experience_points_help_text,
@@ -736,21 +736,21 @@ class OrgaConfigForm(ConfigForm):
             ability_templates_help_text = _(
                 "If checked, enables ability templates that can be reused across multiple abilities",
             )
-            self.add_configs("px_templates", ConfigType.BOOL, ability_templates_label, ability_templates_help_text)
+            self.add_configs("exp_templates", ConfigType.BOOL, ability_templates_label, ability_templates_help_text)
 
             # Rules configuration
             rules_label = _("Rules")
             rules_help_text = _(
                 "If checked, enables rules for computed character fields based on abilities",
             )
-            self.add_configs("px_rules", ConfigType.BOOL, rules_label, rules_help_text)
+            self.add_configs("exp_rules", ConfigType.BOOL, rules_label, rules_help_text)
 
             # Modifiers configuration
             modifiers_label = _("Modifiers")
             modifiers_help_text = _(
                 "If checked, enables modifiers that can adjust ability costs based on prerequisites and requirements",
             )
-            self.add_configs("px_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
+            self.add_configs("exp_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
 
             # Auto buy configuration
             auto_buy_label = _("Auto buy")
@@ -758,7 +758,15 @@ class OrgaConfigForm(ConfigForm):
                 "If checked, characters automatically and repeatedly acquire the most expensive available ability "
                 "with their remaining XP, until no more can be bought.",
             )
-            self.add_configs("px_auto_buy", ConfigType.BOOL, auto_buy_label, auto_buy_help_text)
+            self.add_configs("exp_auto_buy", ConfigType.BOOL, auto_buy_label, auto_buy_help_text)
+
+            # Multiple XP systems configuration
+            multiple_systems_label = _("Multiple experience systems")
+            multiple_systems_help_text = _(
+                "If checked, enables managing multiple experience systems for the event. "
+                "Each ability and delivery can be assigned to a specific system.",
+            )
+            self.add_configs("exp_multiple", ConfigType.BOOL, multiple_systems_label, multiple_systems_help_text)
 
         # Configure player character editor if user_character feature is enabled
         if "user_character" in self.params["features"]:
@@ -1677,7 +1685,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
                         _("Player editor"),
                         _("Do you want to allow participants to create their own characters"),
                     ),
-                    "px": (
+                    "experience": (
                         True,
                         _("Experience points"),
                         _("Do you want to manage character progression through abilities"),
@@ -1949,7 +1957,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
         # Define character feature fields with their config keys and labels
         feature_fields = [
-            ("px", "px", _("XP")),
+            ("experience", "experience", _("XP")),
             ("plot", "plots", _("Plots")),
             ("relationships", "relationships", _("Relationships")),
             ("speedlarp", "speedlarp", _("Speedlarp")),

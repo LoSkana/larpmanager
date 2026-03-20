@@ -36,7 +36,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
+from larpmanager.models.experience import AbilityExp, AbilityTypeExp, DeliveryExp
 from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.miscellanea import (
     WarehouseContainer,
@@ -283,13 +283,13 @@ def exec_add_char_delivery(
     uuids: list[str],
 ) -> None:
     """Add characters to a delivery."""
-    delivery = context["event"].get_elements(DeliveryPx).get(uuid=target)
+    delivery = context["event"].get_elements(DeliveryExp).get(uuid=target)
     delivery.characters.add(*_get_chars(context, uuids))
 
 
 def exec_del_char_delivery(context: dict, target: str, uuids: list[str]) -> None:
     """Remove characters from delivery."""
-    delivery = context["event"].get_elements(DeliveryPx).get(uuid=target)
+    delivery = context["event"].get_elements(DeliveryExp).get(uuid=target)
     delivery.characters.remove(*_get_chars(context, uuids))
 
 
@@ -400,9 +400,9 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
             ],
         )
 
-    # Add XP delivery operations if px feature is enabled
-    if "px" in context["features"]:
-        delivery = context["event"].get_elements(DeliveryPx).values("uuid", "name")
+    # Add XP delivery operations if experience feature is enabled
+    if "experience" in context["features"]:
+        delivery = context["event"].get_elements(DeliveryExp).values("uuid", "name")
         context["bulk"].extend(
             [
                 {"idx": Operations.ADD_CHAR_DELIVERY, "label": _("Add to xp delivery"), "objs": delivery},
@@ -499,9 +499,9 @@ def exec_set_ability_type(
 ) -> None:
     """Update ability type for selected abilities in bulk."""
     # Get target ability type from event elements
-    typ = context["event"].get_elements(AbilityTypePx).get(uuid=target)
+    typ = context["event"].get_elements(AbilityTypeExp).get(uuid=target)
     # Update all selected abilities with new type
-    context["event"].get_elements(AbilityPx).filter(uuid__in=uuids).update(typ=typ)
+    context["event"].get_elements(AbilityExp).filter(uuid__in=uuids).update(typ=typ)
 
 
 def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
@@ -515,11 +515,11 @@ def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
     if request.POST:
         # Execute bulk operation and return early if POST request
         raise ReturnNowError(
-            exec_bulk(request, context, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}, AbilityPx)
+            exec_bulk(request, context, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}, AbilityExp)
         )
 
     # Get ability types for the event, ordered by name
-    ability_types = context["event"].get_elements(AbilityTypePx).values("uuid", "name").order_by("name")
+    ability_types = context["event"].get_elements(AbilityTypeExp).values("uuid", "name").order_by("name")
 
     # Setup bulk operations context
     context["bulk"] = [

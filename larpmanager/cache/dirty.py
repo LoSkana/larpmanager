@@ -17,9 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-"""Shared dirty-flag helpers for PX and rels cache namespaces.
+"""Shared dirty-flag helpers for EXP and rels cache namespaces.
 
-Each namespace (``"px"``, ``"rels"``) gets its own per-item and event-level hint
+Each namespace (``"experience"``, ``"rels"``) gets its own per-item and event-level hint
 keys so the two systems never collide.  Callers create thin :func:`functools.partial`
 aliases so existing code keeps the original private-looking names.
 """

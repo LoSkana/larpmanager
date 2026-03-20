@@ -27,12 +27,20 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.px import get_event_px_cache
+from larpmanager.cache.experience import get_event_exp_cache
 from larpmanager.forms.experience import (
-    OrgaDeliveryPxForm,
+    OrgaDeliveryExpForm,
 )
 from larpmanager.models.event import Run
-from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
+from larpmanager.models.experience import (
+    AbilityExp,
+    AbilityTemplateExp,
+    AbilityTypeExp,
+    DeliveryExp,
+    ModifierExp,
+    RuleExp,
+    SystemExp,
+)
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.exceptions import ReturnNowError
@@ -44,34 +52,54 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def orga_px_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
+def orga_exp_systems(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display list of experience systems for an event."""
+    context = check_event_context(request, event_slug, "orga_exp_systems")
+    context["list"] = context["event"].get_elements(SystemExp).order_by("number")
+    return render(request, "larpmanager/orga/experience/systems.html", context)
+
+
+@login_required
+def orga_exp_systems_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a new experience system for an event."""
+    return orga_new(request, event_slug, OrgaAction.PX_SYSTEMS)
+
+
+@login_required
+def orga_exp_systems_edit(request: HttpRequest, event_slug: str, system_uuid: str) -> HttpResponse:
+    """Edit an experience system for an event."""
+    return orga_edit(request, event_slug, OrgaAction.PX_SYSTEMS, system_uuid)
+
+
+@login_required
+def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of experience deliveries for an event."""
     # Verify user has permission and retrieve event context
-    context = check_event_context(request, event_slug, "orga_px_deliveries")
+    context = check_event_context(request, event_slug, "orga_exp_deliveries")
 
     # Get all deliveries ordered by number
-    deliveries = list(context["event"].get_elements(DeliveryPx).order_by("number"))
+    deliveries = list(context["event"].get_elements(DeliveryExp).order_by("number"))
 
-    # Get cached PX relationship data and enrich delivery objects
-    px_cache = get_event_px_cache(context["event"])
+    # Get cached EXP relationship data and enrich delivery objects
+    px_cache = get_event_exp_cache(context["event"])
     for delivery in deliveries:
         if delivery.id in px_cache.get("deliveries", {}):
             delivery.cached_rels = px_cache["deliveries"][delivery.id]
 
     context["list"] = deliveries
 
-    return render(request, "larpmanager/orga/px/deliveries.html", context)
+    return render(request, "larpmanager/orga/experience/deliveries.html", context)
 
 
 @login_required
-def orga_px_deliveries_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+def orga_exp_deliveries_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new delivery of experience points.
 
     If a run is selected via the auto_populate_run field, the form will be reloaded with characters
     from that run's registrations pre-populated in the characters field.
     """
     # Check user permissions and get base context for the event
-    context = check_event_context(request, event_slug, "orga_px_deliveries")
+    context = check_event_context(request, event_slug, "orga_exp_deliveries")
 
     # Handle auto-population from run selection
     if request.method == "POST":
@@ -97,7 +125,7 @@ def orga_px_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespons
                 form_data.setlist("characters", [str(cid) for cid in character_ids])
 
                 # Create the form with pre-populated data
-                form = OrgaDeliveryPxForm(form_data, instance=None, context=context)
+                form = OrgaDeliveryExpForm(form_data, instance=None, context=context)
 
                 # Hide the auto_populate_run field now that characters are loaded
                 form.fields.pop("auto_populate_run", None)
@@ -107,7 +135,7 @@ def orga_px_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespons
                 context["num"] = "0"
                 context["add_another"] = True
                 context["continue_add"] = False
-                context["elementTyp"] = DeliveryPx
+                context["elementTyp"] = DeliveryExp
 
                 # Add success message to inform user
                 messages.info(
@@ -125,20 +153,20 @@ def orga_px_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespons
 
 
 @login_required
-def orga_px_deliveries_edit(request: HttpRequest, event_slug: str, delivery_uuid: str) -> HttpResponse:
+def orga_exp_deliveries_edit(request: HttpRequest, event_slug: str, delivery_uuid: str) -> HttpResponse:
     """Edit a delivery for an event."""
     return orga_edit(request, event_slug, OrgaAction.PX_DELIVERIES, delivery_uuid)
 
 
 @login_required
-def orga_px_deliveries_delete(request: HttpRequest, event_slug: str, delivery_uuid: str) -> HttpResponse:
+def orga_exp_deliveries_delete(request: HttpRequest, event_slug: str, delivery_uuid: str) -> HttpResponse:
     """Delete delivery for event."""
     return orga_delete(request, event_slug, OrgaAction.PX_DELIVERIES, delivery_uuid)
 
 
 @login_required
-def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Display and manage PX (experience) abilities for organizers.
+def orga_exp_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display and manage EXP (experience) abilities for organizers.
 
     This view handles the display of abilities available for purchase with experience points,
     allowing organizers to manage the ability catalog for their events. It supports both
@@ -156,7 +184,7 @@ def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     """
     # Check user permissions and retrieve event context
-    context = check_event_context(request, event_slug, "orga_px_abilities")
+    context = check_event_context(request, event_slug, "orga_exp_abilities")
 
     # Handle file export request if download parameter is present
     if request.POST and request.POST.get("download") == "1":
@@ -166,187 +194,187 @@ def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     handle_bulk_ability(request, context)
 
     # Configure template context for file upload/download functionality
-    context["upload"] = "px_abilities"
+    context["upload"] = "exp_abilities"
     context["download"] = 1
 
-    # Retrieve event configuration for user PX management permissions
-    context["px_user"] = get_event_config(context["event"].id, "px_user", default_value=False, context=context)
-    context["px_templates"] = get_event_config(
-        context["event"].id, "px_templates", default_value=False, context=context
+    # Retrieve event configuration for user EXP management permissions
+    context["exp_user"] = get_event_config(context["event"].id, "exp_user", default_value=False, context=context)
+    context["exp_templates"] = get_event_config(
+        context["event"].id, "exp_templates", default_value=False, context=context
     )
 
     # Query and prepare abilities list with optimized database access
-    abilities = list(context["event"].get_elements(AbilityPx).order_by("number").select_related("typ"))
+    abilities = list(context["event"].get_elements(AbilityExp).order_by("number").select_related("typ"))
 
-    # Get cached PX relationship data and enrich ability objects
-    px_cache = get_event_px_cache(context["event"])
+    # Get cached EXP relationship data and enrich ability objects
+    px_cache = get_event_exp_cache(context["event"])
     for ability in abilities:
         ability.cached_rels = px_cache.get("abilities", {}).get(ability.id, [])
 
     context["list"] = abilities
 
     # Render the abilities management template with populated context
-    return render(request, "larpmanager/orga/px/abilities.html", context)
+    return render(request, "larpmanager/orga/experience/abilities.html", context)
 
 
 @login_required
-def orga_px_abilities_new(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Create organization PX abilities."""
+def orga_exp_abilities_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create organization EXP abilities."""
     return orga_new(request, event_slug, OrgaAction.PX_ABILITIES)
 
 
 @login_required
-def orga_px_abilities_edit(request: HttpRequest, event_slug: str, ability_uuid: str) -> HttpResponse:
-    """Edit organization PX abilities."""
+def orga_exp_abilities_edit(request: HttpRequest, event_slug: str, ability_uuid: str) -> HttpResponse:
+    """Edit organization EXP abilities."""
     return orga_edit(request, event_slug, OrgaAction.PX_ABILITIES, ability_uuid)
 
 
 @login_required
-def orga_px_abilities_delete(request: HttpRequest, event_slug: str, ability_uuid: str) -> HttpResponse:
+def orga_exp_abilities_delete(request: HttpRequest, event_slug: str, ability_uuid: str) -> HttpResponse:
     """Delete ability for event."""
     return orga_delete(request, event_slug, OrgaAction.PX_ABILITIES, ability_uuid)
 
 
 @login_required
-def orga_px_ability_types(request: HttpRequest, event_slug: str) -> HttpResponse:
+def orga_exp_ability_types(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display ability type list for experience management."""
     # Check user has permission to access ability types management
-    context = check_event_context(request, event_slug, "orga_px_ability_types")
+    context = check_event_context(request, event_slug, "orga_exp_ability_types")
 
     # Retrieve and order ability types by number
-    context["list"] = context["event"].get_elements(AbilityTypePx).order_by("number")
+    context["list"] = context["event"].get_elements(AbilityTypeExp).order_by("number")
 
-    return render(request, "larpmanager/orga/px/ability_types.html", context)
+    return render(request, "larpmanager/orga/experience/ability_types.html", context)
 
 
 @login_required
-def orga_px_ability_types_new(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Create ability type for PX system."""
+def orga_exp_ability_types_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create ability type for EXP system."""
     return orga_new(request, event_slug, OrgaAction.PX_ABILITY_TYPES)
 
 
 @login_required
-def orga_px_ability_types_edit(request: HttpRequest, event_slug: str, type_uuid: str) -> HttpResponse:
-    """Edit ability type for PX system."""
+def orga_exp_ability_types_edit(request: HttpRequest, event_slug: str, type_uuid: str) -> HttpResponse:
+    """Edit ability type for EXP system."""
     return orga_edit(request, event_slug, OrgaAction.PX_ABILITY_TYPES, type_uuid)
 
 
 @login_required
-def orga_px_ability_types_delete(request: HttpRequest, event_slug: str, type_uuid: str) -> HttpResponse:
+def orga_exp_ability_types_delete(request: HttpRequest, event_slug: str, type_uuid: str) -> HttpResponse:
     """Delete type for event."""
     return orga_delete(request, event_slug, OrgaAction.PX_ABILITY_TYPES, type_uuid)
 
 
 @login_required
-def orga_px_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
+def orga_exp_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display experience rules for an event."""
-    context = check_event_context(request, event_slug, "orga_px_rules")
+    context = check_event_context(request, event_slug, "orga_exp_rules")
     # Get all rules ordered
-    rules = list(context["event"].get_elements(RulePx).order_by("order"))
-    # Get cached PX relationship data and enrich rule objects
-    px_cache = get_event_px_cache(context["event"])
+    rules = list(context["event"].get_elements(RuleExp).order_by("order"))
+    # Get cached EXP relationship data and enrich rule objects
+    px_cache = get_event_exp_cache(context["event"])
     for rule in rules:
         if rule.id in px_cache.get("rules", {}):
             rule.cached_rels = px_cache["rules"][rule.id]
     context["list"] = rules
-    return render(request, "larpmanager/orga/px/rules.html", context)
+    return render(request, "larpmanager/orga/experience/rules.html", context)
 
 
 @login_required
-def orga_px_ability_templates(request: HttpRequest, event_slug: str) -> HttpResponse:
+def orga_exp_ability_templates(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of ability templates for an event."""
-    context = check_event_context(request, event_slug, "orga_px_ability_templates")
-    context["list"] = context["event"].get_elements(AbilityTemplatePx).order_by("number")
-    return render(request, "larpmanager/orga/px/ability_templates.html", context)
+    context = check_event_context(request, event_slug, "orga_exp_ability_templates")
+    context["list"] = context["event"].get_elements(AbilityTemplateExp).order_by("number")
+    return render(request, "larpmanager/orga/experience/ability_templates.html", context)
 
 
 @login_required
-def orga_px_ability_templates_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+def orga_exp_ability_templates_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a specific rule for an event."""
     return orga_new(request, event_slug, OrgaAction.PX_ABILITY_TEMPLATES)
 
 
 @login_required
-def orga_px_ability_templates_edit(request: HttpRequest, event_slug: str, template_uuid: str) -> HttpResponse:
+def orga_exp_ability_templates_edit(request: HttpRequest, event_slug: str, template_uuid: str) -> HttpResponse:
     """Edit a specific rule for an event."""
     return orga_edit(request, event_slug, OrgaAction.PX_ABILITY_TEMPLATES, template_uuid)
 
 
 @login_required
-def orga_px_ability_templates_delete(request: HttpRequest, event_slug: str, template_uuid: str) -> HttpResponse:
+def orga_exp_ability_templates_delete(request: HttpRequest, event_slug: str, template_uuid: str) -> HttpResponse:
     """Delete template for event."""
     return orga_delete(request, event_slug, OrgaAction.PX_ABILITY_TEMPLATES, template_uuid)
 
 
 @login_required
-def orga_px_rules_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+def orga_exp_rules_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a specific rule for an event."""
     return orga_new(request, event_slug, OrgaAction.PX_RULES)
 
 
 @login_required
-def orga_px_rules_edit(request: HttpRequest, event_slug: str, rule_uuid: str) -> HttpResponse:
+def orga_exp_rules_edit(request: HttpRequest, event_slug: str, rule_uuid: str) -> HttpResponse:
     """Edit a specific rule for an event."""
     return orga_edit(request, event_slug, OrgaAction.PX_RULES, rule_uuid)
 
 
 @login_required
-def orga_px_rules_delete(request: HttpRequest, event_slug: str, rule_uuid: str) -> HttpResponse:
+def orga_exp_rules_delete(request: HttpRequest, event_slug: str, rule_uuid: str) -> HttpResponse:
     """Delete rule for event."""
     return orga_delete(request, event_slug, OrgaAction.PX_RULES, rule_uuid)
 
 
 @login_required
-def orga_px_rules_order(
+def orga_exp_rules_order(
     request: HttpRequest,
     event_slug: str,
     rule_uuid: str,
     order: int,
 ) -> HttpResponse:
-    """Reorder PX rules for an event."""
+    """Reorder EXP rules for an event."""
     return orga_order(request, event_slug, OrgaAction.PX_RULES, rule_uuid, order)
 
 
 @login_required
-def orga_px_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
+def orga_exp_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display and manage experience modifiers for an event."""
     # Check permissions and get event context
-    context = check_event_context(request, event_slug, "orga_px_modifiers")
+    context = check_event_context(request, event_slug, "orga_exp_modifiers")
 
     # Retrieve ordered list of experience modifiers
-    modifiers = list(context["event"].get_elements(ModifierPx).order_by("order"))
+    modifiers = list(context["event"].get_elements(ModifierExp).order_by("order"))
 
-    # Get cached PX relationship data and enrich modifier objects
-    px_cache = get_event_px_cache(context["event"])
+    # Get cached EXP relationship data and enrich modifier objects
+    px_cache = get_event_exp_cache(context["event"])
     for modifier in modifiers:
         if modifier.id in px_cache.get("modifiers", {}):
             modifier.cached_rels = px_cache["modifiers"][modifier.id]
 
     context["list"] = modifiers
 
-    return render(request, "larpmanager/orga/px/modifiers.html", context)
+    return render(request, "larpmanager/orga/experience/modifiers.html", context)
 
 
 @login_required
-def orga_px_modifiers_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+def orga_exp_modifiers_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create experience modifier for an event."""
     return orga_new(request, event_slug, OrgaAction.PX_MODIFIERS)
 
 
 @login_required
-def orga_px_modifiers_edit(request: HttpRequest, event_slug: str, modifier_uuid: str) -> HttpResponse:
+def orga_exp_modifiers_edit(request: HttpRequest, event_slug: str, modifier_uuid: str) -> HttpResponse:
     """Edit experience modifier for an event."""
     return orga_edit(request, event_slug, OrgaAction.PX_MODIFIERS, modifier_uuid)
 
 
 @login_required
-def orga_px_modifiers_delete(request: HttpRequest, event_slug: str, modifier_uuid: str) -> HttpResponse:
+def orga_exp_modifiers_delete(request: HttpRequest, event_slug: str, modifier_uuid: str) -> HttpResponse:
     """Delete modifier for event."""
     return orga_delete(request, event_slug, OrgaAction.PX_MODIFIERS, modifier_uuid)
 
 
 @login_required
-def orga_px_modifiers_order(
+def orga_exp_modifiers_order(
     request: HttpRequest,
     event_slug: str,
     modifier_uuid: str,

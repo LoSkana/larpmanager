@@ -3251,6 +3251,9 @@ msgstr "Stáhnout dokument"
 msgid "Elements uploaded"
 msgstr "Prvky jsou načteny"
 
+msgid "Experience System"
+msgstr "Zážitkový systém"
+
 msgid "Experience points"
 msgstr "Zkušenostní body"
 
@@ -3442,6 +3445,9 @@ msgstr "Elektronická faktura"
 
 msgid "Enable preferences"
 msgstr "Povolení předvoleb"
+
+msgid "Experience Systems"
+msgstr "Zkušenostní systémy"
 
 msgid "First registration"
 msgstr "První registrace"
@@ -4744,6 +4750,9 @@ msgstr "Podíl na schválení"
 msgid "Missing casting preferences"
 msgstr "Chybějící předvolby obsazení"
 
+msgid "Multiple experience systems"
+msgstr "Vícenásobné zážitkové systémy"
+
 msgid "Name of badge to be awarded"
 msgstr "Název odznaku, který má být udělen"
 
@@ -5069,6 +5078,9 @@ msgstr "Filtrujte nebo vyhledávejte postavy"
 
 msgid "Manage event navigation buttons"
 msgstr "Správa navigačních tlačítek událostí"
+
+msgid "Manage experience point systems"
+msgstr "Správa systémů zkušenostních bodů"
 
 msgid "Manage member membership status"
 msgstr "Správa stavu členství"
@@ -7286,6 +7298,10 @@ msgstr "Měna, kterou chcete používat pro všechny platby a ceny"
 
 msgid "This page allows you to add or edit a character inventory"
 msgstr "Na této stránce můžete přidat nebo upravit inventář postavy"
+
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Na této stránce jsou uvedeny zážitkové systémy definované pro tuto událost"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Na této stránce se zobrazují všechny účetní informace o členovi"
@@ -11261,6 +11277,13 @@ msgid ""
 msgstr ""
 "Vzhledem k termínu platby uvede počet dní, do kterých oznámí účastníkovi, "
 "aby platbu provedl. Výchozí hodnota 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Pokud je zaškrtnuto, umožňuje správu více systémů zážitků pro danou událost."
+" Každou schopnost a dodávku lze přiřadit k určitému systému."
 
 #, python-format
 msgid ""

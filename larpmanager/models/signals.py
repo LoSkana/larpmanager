@@ -73,6 +73,23 @@ from larpmanager.cache.character import (
 )
 from larpmanager.cache.config import reset_element_configs
 from larpmanager.cache.event_text import reset_event_text, update_event_text_cache_on_save
+from larpmanager.cache.experience import (
+    on_ability_characters_m2m_changed,
+    on_ability_prerequisites_m2m_changed,
+    on_ability_requirements_m2m_changed,
+    on_ability_saved,
+    on_character_saved,
+    on_delivery_characters_m2m_changed,
+    on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
+    on_modifier_prerequisites_m2m_changed,
+    on_modifier_requirements_m2m_changed,
+    on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
+    on_writing_option_saved,
+    refresh_delivery_relationships,
+    refresh_modifier_relationships,
+    refresh_modifier_rels_dirty_background,
+    refresh_rule_relationships,
+)
 from larpmanager.cache.feature import (
     clear_event_features_cache,
     get_event_features,
@@ -89,23 +106,6 @@ from larpmanager.cache.permission import (
     clear_association_permission_cache,
     clear_event_permission_cache,
     clear_index_permission_cache,
-)
-from larpmanager.cache.px import (
-    on_ability_characters_m2m_changed,
-    on_ability_prerequisites_m2m_changed,
-    on_ability_requirements_m2m_changed,
-    on_ability_saved,
-    on_character_saved,
-    on_delivery_characters_m2m_changed,
-    on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
-    on_modifier_prerequisites_m2m_changed,
-    on_modifier_requirements_m2m_changed,
-    on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
-    on_writing_option_saved,
-    refresh_delivery_relationships,
-    refresh_modifier_relationships,
-    refresh_modifier_rels_dirty_background,
-    refresh_rule_relationships,
 )
 from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
 from larpmanager.cache.registration import (
@@ -211,7 +211,7 @@ from larpmanager.models.event import (
     Run,
     RunConfig,
 )
-from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, RulePx
+from larpmanager.models.experience import AbilityExp, DeliveryExp, ModifierExp, RuleExp
 from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
@@ -307,10 +307,10 @@ log = logging.getLogger(__name__)
 
 RESET_WIDGETS_TYPES = (
     AccountingItem,
-    AbilityPx,
+    AbilityExp,
     Casting,
     Character,
-    DeliveryPx,
+    DeliveryExp,
     Log,
     Membership,
     PaymentInvoice,
@@ -382,15 +382,15 @@ def reset_accountingitem_cache(instance: Any) -> None:
         refresh_member_accounting_cache(instance.run, instance.member_id)
 
 
-@receiver(post_save, sender=AbilityPx)
-def post_save_ability_px(sender: type, instance: AbilityPx, *args: Any, **kwargs: Any) -> None:
+@receiver(post_save, sender=AbilityExp)
+def post_save_ability_exp(sender: type, instance: AbilityExp, *args: Any, **kwargs: Any) -> None:
     """Update character experience when ability changes."""
     _recalcuate_characters_experience_points(instance)
     on_ability_saved(instance)
 
 
-@receiver(post_delete, sender=AbilityPx)
-def post_delete_ability_px(sender: type, instance: AbilityPx, *args: Any, **kwargs: Any) -> None:
+@receiver(post_delete, sender=AbilityExp)
+def post_delete_ability_exp(sender: type, instance: AbilityExp, *args: Any, **kwargs: Any) -> None:
     """Update character experience when ability is deleted."""
     _recalcuate_characters_experience_points(instance)
 
@@ -678,7 +678,7 @@ def pre_save_character_update_status(sender: type, instance: Character, **kwargs
 
 
 @receiver(post_save, sender=Character, dispatch_uid="post_character_update_px_v1")
-def post_character_update_px(sender: type, instance: Character, *args: Any, **kwargs: Any) -> None:
+def post_character_update_exp(sender: type, instance: Character, *args: Any, **kwargs: Any) -> None:
     """Calculate experience points for character after update."""
     calculate_character_experience_points(instance)
 
@@ -786,10 +786,10 @@ def post_save_collection_activation_email(
         send_collection_activation_email(instance)
 
 
-@receiver(post_save, sender=DeliveryPx)
-def post_save_delivery_px(
+@receiver(post_save, sender=DeliveryExp)
+def post_save_delivery_exp(
     sender: type,
-    instance: DeliveryPx,
+    instance: DeliveryExp,
     *args: Any,
     **kwargs: Any,
 ) -> None:
@@ -798,8 +798,8 @@ def post_save_delivery_px(
     refresh_delivery_relationships(instance)
 
 
-@receiver(post_delete, sender=DeliveryPx)
-def post_delete_delivery_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+@receiver(post_delete, sender=DeliveryExp)
+def post_delete_delivery_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Signal handler that refreshes delivery characters after a delivery is deleted."""
     _recalcuate_characters_experience_points(instance)
 
@@ -1179,15 +1179,15 @@ def pre_save_membership(sender: type, instance: Membership, **kwargs: Any) -> No
     process_membership_status_updates(instance)
 
 
-@receiver(post_save, sender=ModifierPx)
-def post_save_modifier_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+@receiver(post_save, sender=ModifierExp)
+def post_save_modifier_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update character experience when a modifier is saved."""
     _recalcuate_characters_experience_points(instance)
     refresh_modifier_relationships(instance)
 
 
-@receiver(post_delete, sender=ModifierPx)
-def post_delete_modifier_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+@receiver(post_delete, sender=ModifierExp)
+def post_delete_modifier_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update character experience after modifier deletion."""
     _recalcuate_characters_experience_points(instance)
 
@@ -1526,15 +1526,15 @@ def post_delete_relationship_reset_rels(sender: type, instance: Any, **kwargs: A
     refresh_character_relationships(instance.source)
 
 
-@receiver(post_save, sender=RulePx)
-def post_save_rule_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+@receiver(post_save, sender=RuleExp)
+def post_save_rule_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update characters experience when rule changes."""
     _recalcuate_characters_experience_points(instance)
     refresh_rule_relationships(instance)
 
 
-@receiver(post_delete, sender=RulePx)
-def post_delete_rule_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+@receiver(post_delete, sender=RuleExp)
+def post_delete_rule_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update character experience when a rule is deleted."""
     _recalcuate_characters_experience_points(instance)
 
@@ -1709,16 +1709,16 @@ def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any)
     clear_event_cache_all_runs(instance.event)
     clear_writing_questions_cache(instance.event_id)
     modifier_ids = list(
-        ModifierPx.objects.filter(requirements__question=instance).values_list("id", flat=True).distinct()
+        ModifierExp.objects.filter(requirements__question=instance).values_list("id", flat=True).distinct()
     )
     if modifier_ids:
         refresh_modifier_rels_dirty_background(modifier_ids)
 
 
-m2m_changed.connect(on_experience_characters_m2m_changed, sender=DeliveryPx.characters.through)
-m2m_changed.connect(on_experience_characters_m2m_changed, sender=AbilityPx.characters.through)
-m2m_changed.connect(on_modifier_abilities_m2m_changed, sender=ModifierPx.abilities.through)
-m2m_changed.connect(on_rule_abilities_m2m_changed, sender=RulePx.abilities.through)
+m2m_changed.connect(on_experience_characters_m2m_changed, sender=DeliveryExp.characters.through)
+m2m_changed.connect(on_experience_characters_m2m_changed, sender=AbilityExp.characters.through)
+m2m_changed.connect(on_modifier_abilities_m2m_changed, sender=ModifierExp.abilities.through)
+m2m_changed.connect(on_rule_abilities_m2m_changed, sender=RuleExp.abilities.through)
 
 m2m_changed.connect(on_faction_characters_m2m_changed, sender=Faction.characters.through)
 m2m_changed.connect(on_plot_characters_m2m_changed, sender=Plot.characters.through)
@@ -1733,14 +1733,14 @@ m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
 m2m_changed.connect(on_warehouse_item_tags_m2m_changed, sender=WarehouseItem.tags.through)
 
 
-m2m_changed.connect(on_ability_characters_m2m_changed, sender=AbilityPx.characters.through)
-m2m_changed.connect(on_ability_prerequisites_m2m_changed, sender=AbilityPx.prerequisites.through)
-m2m_changed.connect(on_ability_requirements_m2m_changed, sender=AbilityPx.requirements.through)
-m2m_changed.connect(on_delivery_characters_m2m_changed, sender=DeliveryPx.characters.through)
-m2m_changed.connect(on_modifier_abilities_m2m_changed_cache, sender=ModifierPx.abilities.through)
-m2m_changed.connect(on_modifier_prerequisites_m2m_changed, sender=ModifierPx.prerequisites.through)
-m2m_changed.connect(on_modifier_requirements_m2m_changed, sender=ModifierPx.requirements.through)
-m2m_changed.connect(on_rule_abilities_m2m_changed_cache, sender=RulePx.abilities.through)
+m2m_changed.connect(on_ability_characters_m2m_changed, sender=AbilityExp.characters.through)
+m2m_changed.connect(on_ability_prerequisites_m2m_changed, sender=AbilityExp.prerequisites.through)
+m2m_changed.connect(on_ability_requirements_m2m_changed, sender=AbilityExp.requirements.through)
+m2m_changed.connect(on_delivery_characters_m2m_changed, sender=DeliveryExp.characters.through)
+m2m_changed.connect(on_modifier_abilities_m2m_changed_cache, sender=ModifierExp.abilities.through)
+m2m_changed.connect(on_modifier_prerequisites_m2m_changed, sender=ModifierExp.prerequisites.through)
+m2m_changed.connect(on_modifier_requirements_m2m_changed, sender=ModifierExp.requirements.through)
+m2m_changed.connect(on_rule_abilities_m2m_changed_cache, sender=RuleExp.abilities.through)
 
 m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
 

@@ -3251,6 +3251,9 @@ msgstr "Descargar documento"
 msgid "Elements uploaded"
 msgstr "¡Elementos subidos"
 
+msgid "Experience System"
+msgstr "Sistema de experiencia"
+
 msgid "Experience points"
 msgstr "Puntos de experiencia"
 
@@ -3442,6 +3445,9 @@ msgstr "Factura electrónica"
 
 msgid "Enable preferences"
 msgstr "Activar preferencias"
+
+msgid "Experience Systems"
+msgstr "Sistemas de experiencia"
 
 msgid "First registration"
 msgstr "Primera inscripción"
@@ -4744,6 +4750,9 @@ msgstr "Cuotas de afiliación aprobadas"
 msgid "Missing casting preferences"
 msgstr "Faltan preferencias de reparto"
 
+msgid "Multiple experience systems"
+msgstr "Múltiples sistemas de experiencia"
+
 msgid "Name of badge to be awarded"
 msgstr "Nombre de la insignia que se concederá"
 
@@ -5069,6 +5078,9 @@ msgstr "Filtra o busca los personajes"
 
 msgid "Manage event navigation buttons"
 msgstr "Gestión de los botones de navegación del evento"
+
+msgid "Manage experience point systems"
+msgstr "Gestionar los sistemas de puntos de experiencia"
 
 msgid "Manage member membership status"
 msgstr "Gestionar el estado de afiliación de los miembros"
@@ -7321,6 +7333,10 @@ msgstr "La moneda que desea utilizar para todos los pagos y precios"
 
 msgid "This page allows you to add or edit a character inventory"
 msgstr "Esta página te permite añadir o editar el inventario de un personaje"
+
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Esta página enumera los sistemas de experiencia definidos para este evento"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Esta página muestra toda la información contable del miembro"
@@ -11541,6 +11557,13 @@ msgid ""
 msgstr ""
 "Dado un plazo de pago, indica el número de días en los que notifica al "
 "participante que proceda al pago. Por defecto 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Si está marcada, permite gestionar múltiples sistemas de experiencia para el"
+" evento. Cada habilidad y entrega se puede asignar a un sistema específico."
 
 #, python-format
 msgid ""

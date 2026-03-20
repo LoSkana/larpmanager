@@ -35,7 +35,7 @@ from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_
 pytestmark = pytest.mark.e2e
 
 
-def test_px(pw_page: Any) -> None:
+def test_exp(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -69,14 +69,14 @@ def setup(live_server: Any, page: Any) -> None:
     # configure test larp
     go_to(page, live_server, "/test/manage/config/")
     page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
-    page.locator("#id_px_start").click()
-    page.locator("#id_px_start").fill("10")
-    page.locator("#id_px_undo").click()
-    page.locator("#id_px_undo").fill("2")
-    page.locator("#id_px_user").check()
-    page.locator("#id_px_templates").check()
-    page.locator("#id_px_rules").check()
-    page.locator("#id_px_modifiers").check()
+    page.locator("#id_exp_start").click()
+    page.locator("#id_exp_start").fill("10")
+    page.locator("#id_exp_undo").click()
+    page.locator("#id_exp_undo").fill("2")
+    page.locator("#id_exp_user").check()
+    page.locator("#id_exp_templates").check()
+    page.locator("#id_exp_rules").check()
+    page.locator("#id_exp_modifiers").check()
 
     page.get_by_role("link", name=re.compile(r"^Player editor\s.+")).click()
     page.locator("#id_user_character_max").click()
@@ -116,13 +116,13 @@ def setup(live_server: Any, page: Any) -> None:
 
 def ability(live_server: Any, page: Any) -> None:
     # set up xp
-    go_to(page, live_server, "/test/manage/px/ability_types/")
+    go_to(page, live_server, "/test/manage/experience/ability_types/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("base ability")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/manage/px/abilities/")
+    go_to(page, live_server, "/test/manage/experience/abilities/")
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_typ-container").click()
     page.get_by_role("searchbox").nth(3).fill("base")
@@ -172,7 +172,7 @@ def ability(live_server: Any, page: Any) -> None:
 
 
 def delivery(live_server: Any, page: Any) -> None:
-    go_to(page, live_server, "/test/manage/px/deliveries/")
+    go_to(page, live_server, "/test/manage/experience/deliveries/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("first live")
@@ -183,7 +183,7 @@ def delivery(live_server: Any, page: Any) -> None:
     page.get_by_role("option", name="Test Character").click()
     submit_confirm(page)
 
-    # check px computation
+    # check experience computation
     go_to(page, live_server, "/test/manage/characters/")
     page.get_by_role("link", name="XP").click()
     expect_normalized(page, page.locator('[id="u1"]'), "12")
@@ -396,7 +396,7 @@ def modifiers(page: Any, live_server: Any) -> None:
 def delivery_auto_populate(page: Any, live_server: Any) -> None:
     """Test auto-populate delivery from run."""
     # Go to deliveries page
-    go_to(page, live_server, "/test/manage/px/deliveries/")
+    go_to(page, live_server, "/test/manage/experience/deliveries/")
     page.get_by_role("link", name="New").click()
 
     # Fill in delivery name and amount

@@ -72,11 +72,11 @@ class OrgaInventoryForm(InventoryBaseForm):
             if self.instance.pk:
                 self.fields["owners"].initial = self.instance.owners.all()
         else:
-            # No event → empty queryset
+            # No event: empty queryset
             self.fields["owners"].queryset = Character.objects.none()
 
 
-class OrgaPoolTypePxForm(BaseModelForm):
+class OrgaPoolTypeForm(BaseModelForm):
     """Form for managing character inventory pool types."""
 
     page_title = _("Pool type")

@@ -39,7 +39,7 @@ from larpmanager.models.event import (
     Event,
     Run,
 )
-from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx
+from larpmanager.models.experience import AbilityExp, AbilityTemplateExp, AbilityTypeExp, SystemExp
 from larpmanager.models.form import WritingOption, WritingQuestion, WritingQuestionType
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
@@ -819,9 +819,9 @@ class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         """Set the event for this instance."""
         self.event = event
 
-    def get_queryset(self) -> QuerySet[AbilityPx]:
+    def get_queryset(self) -> QuerySet[AbilityExp]:
         """Return ability experience entries for this event."""
-        return self.event.get_elements(AbilityPx)
+        return self.event.get_elements(AbilityExp)
 
 
 class ComputedFieldS2Widget(s2forms.ModelSelect2Widget):
@@ -835,9 +835,25 @@ class ComputedFieldS2Widget(s2forms.ModelSelect2Widget):
         """Set the event for this instance."""
         self.event = event
 
-    def get_queryset(self) -> QuerySet[AbilityPx]:
+    def get_queryset(self) -> QuerySet[AbilityExp]:
         """Return ability experience entries for this event."""
         return self.event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
+
+
+class SystemExpS2Widget(s2forms.ModelSelect2Widget):
+    """Represents selection of an XP system for an event."""
+
+    search_fields: ClassVar[list] = [
+        "name__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet[SystemExp]:
+        """Return XP systems for this event."""
+        return self.event.get_elements(SystemExp)
 
 
 class AbilityTypePxS2Widget(s2forms.ModelSelect2Widget):
@@ -851,9 +867,9 @@ class AbilityTypePxS2Widget(s2forms.ModelSelect2Widget):
         """Set the event for this instance."""
         self.event = event
 
-    def get_queryset(self) -> QuerySet[AbilityTypePx]:
+    def get_queryset(self) -> QuerySet[AbilityTypeExp]:
         """Return ability types for this event."""
-        return self.event.get_elements(AbilityTypePx)
+        return self.event.get_elements(AbilityTypeExp)
 
 
 class AbilityTemplateS2WidgetMulti(s2forms.ModelSelect2Widget):
@@ -869,7 +885,7 @@ class AbilityTemplateS2WidgetMulti(s2forms.ModelSelect2Widget):
 
     def get_queryset(self) -> QuerySet[RegistrationTicket]:
         """Return registration tickets for the event."""
-        return self.event.get_elements(AbilityTemplatePx)
+        return self.event.get_elements(AbilityTemplateExp)
 
     def label_from_instance(self, obj: Any) -> str:
         """Return string representation of the given object."""

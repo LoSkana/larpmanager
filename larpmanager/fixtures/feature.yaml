@@ -775,12 +775,12 @@
     name: Experience points
     descr: Adds support for assigning XP (experience points) to characters, which
       can then be used to purchase abilities
-    slug: px
+    slug: experience
     overall: false
     placeholder: false
     order: 50
     after_text: Now you can set the experience points settings
-    after_link: config/px
+    after_link: config/experience
     hidden: false
     module: event
     dependencies: []
@@ -1466,9 +1466,9 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: PX Rules
-    descr: Pseudo-feature activated by px_rules configuration
-    slug: px_rules
+    name: Experience Multiple
+    descr: Pseudo-feature activated by exp_multiple configuration
+    slug: exp_multiple
     overall: false
     placeholder: true
     order: 0
@@ -1479,9 +1479,9 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: PX Modifiers
-    descr: Pseudo-feature activated by px_modifiers configuration
-    slug: px_modifiers
+    name: Experience Rules
+    descr: Pseudo-feature activated by exp_rules configuration
+    slug: exp_rules
     overall: false
     placeholder: true
     order: 0
@@ -1492,9 +1492,9 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: PX Templates
-    descr: Pseudo-feature activated by px_templates configuration
-    slug: px_templates
+    name: Experience Modifiers
+    descr: Pseudo-feature activated by exp_modifiers configuration
+    slug: exp_modifiers
     overall: false
     placeholder: true
     order: 0
@@ -1505,35 +1505,9 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: Rules
-    descr: Pseudo-feature activated by px_rules configuration
-    slug: rules
-    overall: false
-    placeholder: true
-    order: 0
-    after_text: ''
-    after_link: ''
-    hidden: true
-    module: miscellany
-    dependencies: []
-- model: larpmanager.feature
-  fields:
-    name: Modifiers
-    descr: Pseudo-feature activated by px_modifiers configuration
-    slug: modifiers
-    overall: false
-    placeholder: true
-    order: 0
-    after_text: ''
-    after_link: ''
-    hidden: true
-    module: miscellany
-    dependencies: []
-- model: larpmanager.feature
-  fields:
-    name: Templates
-    descr: Pseudo-feature activated by px_templates configuration
-    slug: templates
+    name: Experience Templates
+    descr: Pseudo-feature activated by exp_templates configuration
+    slug: exp_templates
     overall: false
     placeholder: true
     order: 0

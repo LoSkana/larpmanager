@@ -638,7 +638,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
         "plot",
         "casting",
         "user_character",
-        "px",
+        "experience",
         "custom_character",
         "questbuilder",
     }:
@@ -723,7 +723,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
 
     _orga_registration_actions(context, features)
 
-    _orga_px_actions(context, features, actions_data)
+    _orga_exp_actions(context, features, actions_data)
 
     _orga_casting_actions(context, features, actions_data)
 
@@ -800,10 +800,10 @@ def _orga_casting_actions(context: dict, enabled_features: dict[str, Any], actio
             )
 
 
-def _orga_px_actions(context: dict, enabled_features: dict, actions_data: dict) -> None:
+def _orga_exp_actions(context: dict, enabled_features: dict, actions_data: dict) -> None:
     """Add priority actions for experience points system setup.
 
-    Checks for missing PX configurations, ability types, and deliveries,
+    Checks for missing EXP configurations, ability types, and deliveries,
     adding appropriate priority suggestions for event organizers.
 
     Args:
@@ -815,17 +815,17 @@ def _orga_px_actions(context: dict, enabled_features: dict, actions_data: dict) 
         None: Function modifies context in place by adding priority suggestions
 
     """
-    # Early return if PX feature is not enabled
-    if "px" not in enabled_features:
+    # Early return if EXP feature is not enabled
+    if "experience" not in enabled_features:
         return
 
     # Check if experience points configuration is missing
-    if not get_event_config(context["event"].id, "px_start", default_value=0, context=context):
+    if not get_event_config(context["event"].id, "exp_start", default_value=0, context=context):
         _add_priority(
             context,
             _("Set the experience points configuration"),
-            "orga_px_abilities",
-            "config/px",
+            "orga_exp_abilities",
+            "config/experience",
         )
 
     # Verify that ability types have been set up
@@ -833,7 +833,7 @@ def _orga_px_actions(context: dict, enabled_features: dict, actions_data: dict) 
         _add_priority(
             context,
             _("Set up ability types"),
-            "orga_px_ability_types",
+            "orga_exp_ability_types",
         )
 
     # Find ability types that don't have any associated abilities
@@ -843,7 +843,7 @@ def _orga_px_actions(context: dict, enabled_features: dict, actions_data: dict) 
             context,
             _("Ability types without abilities: %(list)s")
             % {"list": ", ".join(ability_type_names)},
-            "orga_px_abilities",
+            "orga_exp_abilities",
         )
 
     # Check if delivery methods for experience points are configured
@@ -851,7 +851,7 @@ def _orga_px_actions(context: dict, enabled_features: dict, actions_data: dict) 
         _add_priority(
             context,
             _("Set up delivery for experience points"),
-            "orga_px_deliveries",
+            "orga_exp_deliveries",
         )
 
 

@@ -3251,6 +3251,9 @@ msgstr "Télécharger le document"
 msgid "Elements uploaded"
 msgstr "Éléments chargés"
 
+msgid "Experience System"
+msgstr "Système d'expérience"
+
 msgid "Experience points"
 msgstr "Points d'expérience"
 
@@ -3442,6 +3445,9 @@ msgstr "Facture électronique"
 
 msgid "Enable preferences"
 msgstr "Activer les préférences"
+
+msgid "Experience Systems"
+msgstr "Systèmes d'expérience"
 
 msgid "First registration"
 msgstr "Première inscription"
@@ -4744,6 +4750,9 @@ msgstr "Participation à l'approbation"
 msgid "Missing casting preferences"
 msgstr "Préférences de casting manquantes"
 
+msgid "Multiple experience systems"
+msgstr "Systèmes d'expérience multiples"
+
 msgid "Name of badge to be awarded"
 msgstr "Nom de l'insigne à décerner"
 
@@ -5069,6 +5078,9 @@ msgstr "Filtrez ou recherchez les personnages"
 
 msgid "Manage event navigation buttons"
 msgstr "Gérer les boutons de navigation des événements"
+
+msgid "Manage experience point systems"
+msgstr "Gérer les systèmes de points d'expérience"
 
 msgid "Manage member membership status"
 msgstr "Gérer le statut des membres"
@@ -7368,6 +7380,10 @@ msgstr ""
 msgid "This page allows you to add or edit a character inventory"
 msgstr ""
 "Cette page vous permet d'ajouter ou de modifier l'inventaire d'un personnage"
+
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Cette page présente les systèmes d'expérience définis pour cet événement"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Cette page présente toutes les informations comptables du membre"
@@ -11714,6 +11730,14 @@ msgid ""
 msgstr ""
 "Compte tenu d'un délai de paiement, indique le nombre de jours sous lequel "
 "il notifie au participant de procéder au paiement. Défaut 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Si cette option est cochée, elle permet de gérer plusieurs systèmes "
+"d'expérience pour l'événement. Chaque capacité et chaque prestation peuvent "
+"être affectées à un système spécifique."
 
 #, python-format
 msgid ""
