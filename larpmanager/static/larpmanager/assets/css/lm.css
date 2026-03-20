@@ -1484,9 +1484,19 @@ header.sec h1 {
   line-height: 1.5;
 }
 
-.showcase .text p {
-  margin: 0.5rem auto;
-  text-align: left;
+.showcase .sc_content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.showcase .sc_content p {
+  width: fit-content;
+  padding-bottom: 0.5em;
+  margin: 0;
 }
 
 .showcase .button {
