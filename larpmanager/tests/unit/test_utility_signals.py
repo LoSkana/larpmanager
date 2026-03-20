@@ -57,7 +57,8 @@ class TestUtilitySignals(BaseTestCase):
     def test_ability_exp_post_save_updates_experience(self, mock_update: Any) -> None:
         """Test that AbilityExp m2m_changed signal updates character experience"""
         character = self.character()
-        ability_px = AbilityExp.objects.create(name="Test Ability", cost=10, event=self.get_event())
+        event = self.get_event()
+        ability_px = AbilityExp.objects.create(name="Test Ability", cost=10, event=event, system=self.get_system_exp(event))
         mock_update.reset_mock()
         # Adding character to ability triggers m2m_changed signal
         ability_px.characters.add(character)
@@ -68,7 +69,8 @@ class TestUtilitySignals(BaseTestCase):
     def test_delivery_exp_post_save_updates_experience(self) -> None:
         """Test that DeliveryExp post_save signal updates character experience"""
         character = self.character()
-        delivery_px = DeliveryExp.objects.create(name="Test Delivery", amount=5, event=self.get_event())
+        event = self.get_event()
+        delivery_px = DeliveryExp.objects.create(name="Test Delivery", amount=5, event=event, system=self.get_system_exp(event))
         delivery_px.characters.add(character)
         delivery_px.save()
 

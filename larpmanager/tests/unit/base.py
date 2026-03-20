@@ -477,6 +477,15 @@ class BaseTestCase(TestCase):
             discount.runs.add(self.get_run())
         return discount
 
+    def get_system_exp(self, event: Any = None) -> Any:
+        """Get or create a SystemExp for testing"""
+        from larpmanager.models.experience import SystemExp
+
+        if event is None:
+            event = self.get_event()
+        system, _ = SystemExp.objects.get_or_create(event=event, number=1, defaults={"name": "XP"})
+        return system
+
     def user_with_permissions(self) -> Any:
         """Get or create a user with permissions for testing"""
         # This can return the same as member().user for simplicity
