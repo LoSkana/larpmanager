@@ -76,6 +76,7 @@ class ExpBaseForm(BaseModelForm):
         if commit:
             instance.save()
             self.save_m2m()
+            self.save_select2_m2m(instance)
         return instance
 
 
