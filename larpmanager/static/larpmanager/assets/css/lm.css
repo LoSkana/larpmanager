@@ -1250,6 +1250,32 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
 }
 
 /* ---------------------------------------------------------------------------
+   Hero CTA buttons
+   --------------------------------------------------------------------------- */
+
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  justify-content: center;
+  margin: 1.5em 0;
+}
+
+.hero-cta .button {
+  flex: 1 1 auto;
+  min-width: 140px;
+  max-width: 220px;
+  text-align: center;
+}
+
+@media screen and (max-width: 480px) {
+  .hero-cta .button {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Tutorials
    --------------------------------------------------------------------------- */
 
@@ -1460,6 +1486,18 @@ header.sec h1 {
 
 .showcase .text p {
   margin: 0.5rem auto;
+  text-align: left;
+}
+
+.showcase .button {
+  margin-top: 0.5em;
+}
+
+.showcase .fas {
+  color: #a5dee5;
+  margin-right: 0.4em;
+  width: 1.1em;
+  text-align: center;
 }
 
 .showcase .text h4 {
