@@ -240,6 +240,7 @@ def campaign(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/campaign/manage/characters/")
     page.get_by_role("link", name="Experience").click()
+    just_wait(page)
     char_row = page.locator('tr:has-text("Test Character")').first
     expect_normalized(page, char_row, "12")
     expect_normalized(page, char_row, "1")

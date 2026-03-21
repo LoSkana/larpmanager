@@ -59,7 +59,7 @@
                 {% if exp_systems_data|length > 1 %}
                     {{ el.name }} ({{ el.amount }}, {{ el.system.name }})
                 {% else %}
-                    { el.name }} ({{ el.amount }})
+                    {{ el.name }} ({{ el.amount }})
                 {% endif %}
             {% endfor %}
         </p>
