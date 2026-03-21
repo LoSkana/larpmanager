@@ -54,8 +54,13 @@
                 <hr />
                 <h3>{{ texts.hero_description }}</h3>
                 <hr />
+                <div class="hero-cta">
+                    <a href="{% url 'join' %}" title="Free trial" class="button">Get Started</a>
+                    <a href="{% url 'demo' %}" title="Live demo" class="button alt">Live Demo</a>
+                </div>
+                <h3>{{ texts.hero_additional | safe }}</h3>
+                <hr />
                 <h3>{{ texts.associations_list }}</h3>
-                <br />
                 <section id="promoter-carousel" class="owl-carousel owl-theme">
                     {% for el in promoters %}
                         <div class="item">
@@ -82,14 +87,14 @@
             {% for el in showcase %}
                 <div class="section">
                     <div class="text">
-                        <h4>
-                            {% if el.blog %}
+                        {% if el.blog %}
+                            <h4>
                                 <a href="{% url 'blog' el.blog.slug %}">{{ el.title }}</a>
-                            {% else %}
-                                {{ el.title }}
-                            {% endif %}
-                        </h4>
-                        <p>{{ el.text | safe }}</p>
+                            </h4>
+                        {% else %}
+                            <h4>{{ el.title }}</h4>
+                        {% endif %}
+                        <div class="sc_content">{{ el.text | safe }}</div>
                     </div>
                     {% if el.highlight %}
                         <div class="image-container">
@@ -186,7 +191,7 @@
 window.addEventListener('DOMContentLoaded', function() {
 
       const counters = document.querySelectorAll('.key-number-value');
-      const speed = 60; // Velocità dell'animazione
+      const speed = 60; // animation speed
 
       counters.forEach(counter => {
         const updateCount = () => {
