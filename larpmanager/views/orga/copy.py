@@ -68,6 +68,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import copy_class
+from larpmanager.utils.services.experience import calculate_character_experience_points
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponseRedirect
@@ -752,6 +753,10 @@ def _copy_experience(target_event_id: int, parent_event_id: int) -> None:
     copy_class(target_event_id, parent_event_id, DeliveryExp)
     correct_rels(target_event_id, parent_event_id, SystemExp, DeliveryExp, "system")
     correct_rels_many(target_event_id, Character, DeliveryExp, "characters")
+    # copy_class temporarily assigns parent-event characters to copied abilities/deliveries,
+    # which triggers recalculations with doubled counts. Recalculate to restore correct values.
+    for char in Character.objects.filter(event_id=parent_event_id):
+        calculate_character_experience_points(char)
 
 
 def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int) -> None:
