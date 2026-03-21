@@ -364,17 +364,19 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         # Call parent save method to get the instance
         instance = super(forms.ModelForm, self).save(commit=commit)
 
-        # Process each field in the form
-        for field in self.fields:
-            # Skip custom fields if they exist
-            if hasattr(self, "custom_field") and field in self.custom_field:
-                continue
-
-            # Handle multi-select widgets specially
-            if isinstance(self.fields[field].widget, s2forms.ModelSelect2MultipleWidget):
-                self._save_multi(field, instance)
+        # Process each field in the form (only when committing, as M2M requires a DB id)
+        if commit:
+            self.save_select2_m2m(instance)
 
         return instance
+
+    def save_select2_m2m(self, instance: Any) -> None:
+        """Save all ModelSelect2MultipleWidget fields on the given instance."""
+        for field in self.fields:
+            if hasattr(self, "custom_field") and field in self.custom_field:
+                continue
+            if isinstance(self.fields[field].widget, s2forms.ModelSelect2MultipleWidget):
+                self._save_multi(field, instance)
 
     def _save_multi(self, field: str, instance: Any) -> None:
         """Save many-to-many field relationships for a model instance.

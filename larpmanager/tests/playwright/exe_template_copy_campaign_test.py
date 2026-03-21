@@ -108,7 +108,7 @@ def setup(live_server: Any, page: Any) -> None:
     # activate factions
     go_to(page, live_server, "/test/manage/features/faction/on")
     # activate xp
-    go_to(page, live_server, "/test/manage/features/px/on")
+    go_to(page, live_server, "/test/manage/features/experience/on")
     # activate characters
     go_to(page, live_server, "/test/manage/features/character/on")
     # configure test larp
@@ -116,8 +116,8 @@ def setup(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
     page.locator("#id_gallery_hide_login").check()
     page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
-    page.locator("#id_px_start").click()
-    page.locator("#id_px_start").fill("10")
+    page.locator("#id_exp_start").click()
+    page.locator("#id_exp_start").fill("10")
 
     submit_confirm(page)
 
@@ -133,13 +133,13 @@ def setup(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # give ability xp
-    go_to(page, live_server, "/test/manage/px/ability_types/")
+    go_to(page, live_server, "/test/manage/experience/ability_types/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("base ability")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/manage/px/abilities/")
+    go_to(page, live_server, "/test/manage/experience/abilities/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("standard")
@@ -155,7 +155,7 @@ def setup(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # give delivery xp
-    go_to(page, live_server, "/test/manage/px/deliveries/")
+    go_to(page, live_server, "/test/manage/experience/deliveries/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("first live")
@@ -204,11 +204,12 @@ def copy(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
     expect(page.locator("#id_gallery_hide_login")).to_be_checked()
     page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
-    expect(page.locator("#id_px_start")).to_have_value("10")
+    expect(page.locator("#id_exp_start")).to_have_value("10")
 
     go_to(page, live_server, "/copy/manage/characters/")
-    page.get_by_role("link", name="XP").click()
-    char_row = page.locator('tr:has-text("Test Character")').first
+    page.get_by_role("link", name="Experience").click()
+    just_wait(page)
+    char_row = page.locator('tr:has-text("Test Character")')
     expect_normalized(page, char_row, "12")
     expect_normalized(page, char_row, "1")
     expect_normalized(page, char_row, "11")
@@ -238,7 +239,8 @@ def campaign(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/campaign/manage/characters/")
-    page.get_by_role("link", name="XP").click()
+    page.get_by_role("link", name="Experience").click()
+    just_wait(page)
     char_row = page.locator('tr:has-text("Test Character")').first
     expect_normalized(page, char_row, "12")
     expect_normalized(page, char_row, "1")

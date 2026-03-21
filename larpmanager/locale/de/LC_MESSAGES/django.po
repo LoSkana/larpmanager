@@ -86,6 +86,9 @@ msgstr "Alter"
 msgid "for"
 msgstr "für"
 
+msgid "tot"
+msgstr "tot"
+
 msgid "Area"
 msgstr "Bereich"
 
@@ -296,6 +299,9 @@ msgstr "Wenn"
 msgid "days"
 msgstr "Tage"
 
+msgid "free"
+msgstr "kostenlos"
+
 msgid "gift"
 msgstr "Geschenk"
 
@@ -485,6 +491,9 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Wo"
+
+msgid "avail"
+msgstr "verfügbar"
 
 msgid "email"
 msgstr "E-Mail"
@@ -689,6 +698,9 @@ msgstr "Straße"
 
 msgid "Submit"
 msgstr "Senden Sie"
+
+msgid "System"
+msgstr "System"
 
 msgid "Ticket"
 msgstr "Ticket"
@@ -962,6 +974,9 @@ msgstr "Unterstützung"
 
 msgid "Surname"
 msgstr "Nachname"
+
+msgid "Systems"
+msgstr "Systeme"
 
 msgid "Tagline"
 msgstr "Tagline"
@@ -2876,9 +2891,6 @@ msgstr "Laden aus Ereignis"
 msgid "Mail assignment"
 msgstr "Zuordnung der Post"
 
-msgid "Manage XP rules"
-msgstr "Verwalten von XP-Regeln"
-
 msgid "Manage invoices"
 msgstr "Verwalten von Rechnungen"
 
@@ -3092,6 +3104,9 @@ msgstr "Möge der beste Mann gewinnen"
 msgid "Member approved!"
 msgstr "Mitglied genehmigt!"
 
+msgid "Multiple systems"
+msgstr "Mehrere Systeme"
+
 msgid "Name of the plot"
 msgstr "Name des Grundstücks"
 
@@ -3277,6 +3292,9 @@ msgstr "Dokument herunterladen"
 
 msgid "Elements uploaded"
 msgstr "Elemente geladen"
+
+msgid "Experience System"
+msgstr "System erleben"
 
 msgid "Experience points"
 msgstr "Erfahrungspunkte"
@@ -3470,6 +3488,9 @@ msgstr "Elektronische Rechnung"
 msgid "Enable preferences"
 msgstr "Einstellungen aktivieren"
 
+msgid "Experience Systems"
+msgstr "Systeme erleben"
+
 msgid "First registration"
 msgstr "Erste Registrierung"
 
@@ -3649,9 +3670,6 @@ msgstr "Nicht interessiert"
 
 msgid "List of other users"
 msgstr "Liste der anderen Benutzer"
-
-msgid "Manage XP modifiers"
-msgstr "Verwalten von XP-Modifikatoren"
 
 msgid "Manage competencies"
 msgstr "Zuständigkeiten verwalten"
@@ -4327,6 +4345,9 @@ msgstr "Liste der zu überprüfenden Zahlungen"
 msgid "Manage event accounting"
 msgstr "Abrechnung von Veranstaltungen verwalten"
 
+msgid "Manage experience rules"
+msgstr "Erfahrungsregeln verwalten"
+
 msgid "Manage the event quests"
 msgstr "Verwalten Sie die Ereignis-Quests"
 
@@ -4435,9 +4456,6 @@ msgstr "Ungültige Ticketauswahl"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Leichte Platte (Test)"
-
-msgid "Manage ability templates"
-msgstr "Verwalten von Fähigkeitsvorlagen"
 
 msgid "Manage area of the event"
 msgstr "Verwalten Sie den Bereich der Veranstaltung"
@@ -4556,6 +4574,9 @@ msgstr "Verwalten von Kreditvergaben"
 
 msgid "Manage event access roles"
 msgstr "Verwalten von Ereignis-Zugangsrollen"
+
+msgid "Manage experience systems"
+msgstr "Erlebnissysteme verwalten"
 
 msgid "Manage photo album upload"
 msgstr "Verwalten des Fotoalbum-Uploads"
@@ -4758,6 +4779,9 @@ msgstr "Elemente, die geändert werden sollen"
 
 msgid "Loading performed, see logs"
 msgstr "Laden durchgeführt, siehe Protokolle"
+
+msgid "Manage experience modifiers"
+msgstr "Verwalten von Erfahrungsmodifikatoren"
 
 msgid "Manage quiz-style workshops"
 msgstr "Verwalten von Quiz-ähnlichen Workshops"
@@ -5105,6 +5129,9 @@ msgstr "Filtern oder suchen Sie die Zeichen"
 
 msgid "Manage event navigation buttons"
 msgstr "Schaltflächen für die Ereignisnavigation verwalten"
+
+msgid "Manage experience point systems"
+msgstr "Verwalten von Erfahrungspunktesystemen"
 
 msgid "Manage member membership status"
 msgstr "Verwaltung des Mitgliedschaftsstatus"
@@ -6148,6 +6175,9 @@ msgstr "Vom Teilnehmer gewählter Spendenbetrag"
 msgid "I do it routinely, I have good experience"
 msgstr "Ich mache das regelmäßig, ich habe gute Erfahrungen"
 
+msgid "Manage templates for experience abilities"
+msgstr "Verwalten von Vorlagen für Erfahrungswerte"
+
 msgid "Manage the pre-registration of all events"
 msgstr "Verwaltung der Vorregistrierung für alle Veranstaltungen"
 
@@ -6937,9 +6967,6 @@ msgstr ""
 "Treten Sie unserem Discord bei, um Hilfe und Ideen zu erhalten oder um "
 "Fehler zu melden"
 
-msgid "Manage the character abilities purchaseable with XP"
-msgstr "Verwalten der mit XP erwerbbaren Charakterfähigkeiten"
-
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr ""
 "Verwaltung der Bewegungen von Lagerartikeln, Ausleihen und Reparaturen"
@@ -7423,6 +7450,11 @@ msgid "This page allows you to add or edit a character inventory"
 msgstr ""
 "Auf dieser Seite können Sie ein Charakterinventar hinzufügen oder bearbeiten"
 
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Auf dieser Seite finden Sie die für diese Veranstaltung definierten "
+"Erlebnissysteme"
+
 msgid "This page shows all accounting information for the member"
 msgstr "Diese Seite zeigt alle Buchhaltungsinformationen für das Mitglied"
 
@@ -7507,10 +7539,6 @@ msgstr ""
 "Vergewissern Sie sich, dass Sie jetzt Zeit haben, sich die Inhalte "
 "anzusehen/anzuhören"
 
-msgid "Manage XP distributions for character abilities purchases."
-msgstr ""
-"Verwalten Sie die XP-Verteilung für den Erwerb von Charakterfähigkeiten."
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Name der Option, angezeigt in der Frage (kurz halten)"
 
@@ -7540,6 +7568,9 @@ msgstr "Zugang zum Verwaltungsbereich <a href= %(url)s'>von hier aus</a>"
 msgid "Do you want to accept payments processed through the system"
 msgstr ""
 "Möchten Sie Zahlungen akzeptieren, die über das System abgewickelt werden"
+
+msgid "Manage the character abilities purchaseable with experience"
+msgstr "Verwalten der mit Erfahrung erwerbbaren Charakterfähigkeiten"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
@@ -8128,6 +8159,11 @@ msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Ermöglicht den Mitarbeitern den Zugriff auf die von den Teilnehmern "
 "übermittelten Sicherheitsinformationen"
+
+msgid "Manage experience distributions for character abilities purchases."
+msgstr ""
+"Verwalten Sie die Verteilung der Erfahrung für den Erwerb von "
+"Charakterfähigkeiten."
 
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
@@ -11854,6 +11890,14 @@ msgid ""
 msgstr ""
 "Gibt bei einer Zahlungsfrist die Anzahl der Tage an, innerhalb derer sie den"
 " Teilnehmer benachrichtigt, die Zahlung vorzunehmen. Standard 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Wenn diese Option aktiviert ist, können Sie mehrere Erlebnissysteme für die "
+"Veranstaltung verwalten. Jede Fähigkeit und Lieferung kann einem bestimmten "
+"System zugewiesen werden."
 
 #, python-format
 msgid ""

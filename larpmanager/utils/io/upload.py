@@ -34,11 +34,12 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
+from larpmanager.cache.experience import clear_event_exp_systems_cache, get_event_exp_systems
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import EventConfig
-from larpmanager.models.experience import AbilityPx, AbilityTypePx
+from larpmanager.models.experience import AbilityExp, AbilityTypeExp, SystemExp
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -130,7 +131,7 @@ def go_upload(context: dict, upload_form_data: Any) -> Any:
         return form_load(context, upload_form_data, is_registration=False)
     if upload_type == "registration":
         return registrations_load(context, upload_form_data)
-    if upload_type == "px_abilitie":
+    if upload_type == "exp_abilitie":
         return abilities_load(context, upload_form_data)
     if upload_type == "registration_ticket":
         return tickets_load(context, upload_form_data)
@@ -1631,6 +1632,16 @@ def abilities_load(context: dict, form: Form) -> list[str]:
     return processing_logs
 
 
+def _resolve_ability_system(event: Any) -> Any:
+    """Return the first SystemExp for the event, creating it if none exists."""
+    systems = get_event_exp_systems(event)
+    if systems:
+        return systems[0]
+    system = SystemExp.objects.create(event=event.get_class_parent(SystemExp), name="XP", number=1)
+    clear_event_exp_systems_cache(event.get_class_parent(SystemExp).id)
+    return system
+
+
 def _ability_load(context: dict, csv_row: dict) -> str:
     """Load ability data from CSV row for bulk import.
 
@@ -1653,10 +1664,14 @@ def _ability_load(context: dict, csv_row: dict) -> str:
     if "name" not in csv_row:
         return "ERR - There is no name column"
 
+    event = context["event"]
+    system = _resolve_ability_system(event)
+
     # Get or create ability object using event's class parent
-    (ability_element, was_created) = AbilityPx.objects.get_or_create(
-        event=context["event"].get_class_parent(AbilityPx),
+    (ability_element, was_created) = AbilityExp.objects.get_or_create(
+        event=event.get_class_parent(AbilityExp),
         name=csv_row["name"],
+        defaults={"system": system},
     )
 
     logs = []
@@ -1669,7 +1684,7 @@ def _ability_load(context: dict, csv_row: dict) -> str:
 
     # Process each field in the CSV row
     for field_name, field_value in csv_row.items():
-        # Skip empty, NaN values, or the name/cost field (already processed)
+        # Skip empty, NaN values, or fields already processed above
         if not field_value or pd.isna(field_value) or field_name in ["name", "cost"]:
             continue
         processed_value = field_value
@@ -1700,7 +1715,7 @@ def _ability_load(context: dict, csv_row: dict) -> str:
     ability_element.save()
 
     # Log the operation for audit trail
-    save_log(context, AbilityPx, ability_element, operation_type=LogOperationType.UPLOAD)
+    save_log(context, AbilityExp, ability_element, operation_type=LogOperationType.UPLOAD)
 
     # Return appropriate success message
     return f"OK - Created {ability_element}" if was_created else f"OK - Updated {ability_element}"
@@ -1708,13 +1723,13 @@ def _ability_load(context: dict, csv_row: dict) -> str:
 
 def _assign_type(
     context: dict,
-    ability_element: AbilityPx,
+    ability_element: AbilityExp,
     error_logs: list[str],
     ability_type_name: str,
 ) -> None:
     """Assign ability type to element from event context."""
     # Query ability type by name from event context
-    ability_type = context["event"].get_elements(AbilityTypePx).filter(name__iexact=ability_type_name).first()
+    ability_type = context["event"].get_elements(AbilityTypeExp).filter(name__iexact=ability_type_name).first()
     if ability_type:
         ability_element.typ = ability_type
     else:
@@ -1724,7 +1739,7 @@ def _assign_type(
 
 def _assign_prereq(
     context: dict,
-    element: AbilityPx,
+    element: AbilityExp,
     logs: list[str],
     value: str,
 ) -> None:
@@ -1741,7 +1756,7 @@ def _assign_prereq(
     for prerequisite_name in value.split(","):
         # Look up prerequisite ability by name (case-insensitive)
         prerequisite_element = (
-            context["event"].get_elements(AbilityPx).filter(name__iexact=prerequisite_name.strip()).first()
+            context["event"].get_elements(AbilityExp).filter(name__iexact=prerequisite_name.strip()).first()
         )
         if prerequisite_element:
             # Ensure element is saved before adding M2M relationship

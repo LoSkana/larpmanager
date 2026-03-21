@@ -30,10 +30,10 @@ from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media
 from larpmanager.cache.config import reset_element_configs
 from larpmanager.cache.event_text import reset_event_text
+from larpmanager.cache.experience import clear_event_exp_cache, get_exp_effective_event_id
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.links import clear_run_event_links_cache
-from larpmanager.cache.px import clear_event_px_cache, get_px_effective_event_id
 from larpmanager.cache.question import (
     clear_registration_questions_cache,
     clear_writing_questions_cache,
@@ -52,6 +52,7 @@ from larpmanager.cache.wwyltd import reset_orga_configs_cache
 from larpmanager.models.access import EventRole, get_event_organizers
 from larpmanager.models.base import Feature, auto_set_uuid, debug_set_uuid
 from larpmanager.models.event import Event, EventConfig, EventText, Run
+from larpmanager.models.experience import SystemExp
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -225,6 +226,9 @@ def create_default_event_setup(event: Any) -> None:
     save_event_registration_form(event_features, event)
 
     save_event_character_form(event_features, event)
+
+    if "experience" in event_features and not event.get_elements(SystemExp).exists():
+        SystemExp.objects.create(event=event, name="XP", number=1)
 
     clear_event_features_cache(event.id)
 
@@ -404,9 +408,9 @@ def _init_character_form_questions(
                 applicable=QuestionApplicable.CHARACTER,
             )
 
-    # Determine which types should not be removed (defaults + px feature)
+    # Determine which types should not be removed (defaults + experience feature)
     protected_types = set(default_types.keys())
-    if "px" in features:
+    if "experience" in features:
         protected_types.add(WritingQuestionType.COMPUTED)
     available_types -= protected_types
 
@@ -649,7 +653,7 @@ def reset_all_run(event: Event, run: Run) -> None:
     clear_registration_accounting_cache(run.id)
     clear_event_fields_cache(event.id)
     clear_event_relationships_cache(event.id)
-    clear_event_px_cache(get_px_effective_event_id(event))
+    clear_event_exp_cache(get_exp_effective_event_id(event))
     clear_registration_tickets_cache(event.id)
 
     # Clear event text caches for all EventText instances

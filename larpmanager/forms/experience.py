@@ -32,12 +32,33 @@ from larpmanager.forms.utils import (
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     RunCampaignS2Widget,
+    SystemExpS2Widget,
 )
 from larpmanager.models.event import Run
-from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
+from larpmanager.models.experience import (
+    AbilityExp,
+    AbilityTemplateExp,
+    AbilityTypeExp,
+    DeliveryExp,
+    ModifierExp,
+    RuleExp,
+    SystemExp,
+)
 
 
-class PxBaseForm(BaseModelForm):
+class OrgaSystemExpForm(BaseModelForm):
+    """Form for OrgaSystemPx."""
+
+    page_title = _("Experience System")
+
+    page_info = _("Manage experience point systems")
+
+    class Meta:
+        model = SystemExp
+        exclude = ("number",)
+
+
+class ExpBaseForm(BaseModelForm):
     """Form for PxBase."""
 
     class Meta:
@@ -47,9 +68,20 @@ class PxBaseForm(BaseModelForm):
         """Initialize the instance with variable arguments."""
         super().__init__(*args, **kwargs)
 
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
+        """Save instance, applying the default system when field is hidden."""
+        instance = super().save(commit=False)
+        if hasattr(instance, "_default_system") and not instance.system_id:
+            instance.system = instance._default_system  # noqa: SLF001
+        if commit:
+            instance.save()
+            self.save_m2m()
+            self.save_select2_m2m(instance)
+        return instance
 
-class OrgaDeliveryPxForm(PxBaseForm):
-    """Form for OrgaDeliveryPx."""
+
+class OrgaDeliveryExpForm(ExpBaseForm):
+    """Form for OrgaDeliveryExp."""
 
     load_js: ClassVar[list] = ["characters-choices"]
 
@@ -68,10 +100,10 @@ class OrgaDeliveryPxForm(PxBaseForm):
     )
 
     class Meta:
-        model = DeliveryPx
+        model = DeliveryExp
         exclude = ("number",)
 
-        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti}
+        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti, "system": SystemExpS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with event configuration."""
@@ -79,8 +111,16 @@ class OrgaDeliveryPxForm(PxBaseForm):
 
         self.configure_field_event("auto_populate_run", self.params.get("event"))
 
+        event = self.params.get("event")
+        systems = list(event.get_elements(SystemExp)) if event else []
+        if len(systems) == 1:
+            self.delete_field("system")
+            self.instance._default_system = systems[0]  # noqa: SLF001
+        elif "system" in self.fields:
+            self.configure_field_event("system", event)
 
-class OrgaAbilityTemplatePxForm(BaseModelForm):
+
+class OrgaAbilityTemplateExpForm(BaseModelForm):
     """Form for OrgaAbilityTemplatePx."""
 
     page_title = _("Ability Template")
@@ -88,12 +128,12 @@ class OrgaAbilityTemplatePxForm(BaseModelForm):
     page_info = _("This page allows you to add or edit an ability template")
 
     class Meta:
-        model = AbilityTemplatePx
+        model = AbilityTemplateExp
         exclude = ("number",)
 
 
-class OrgaAbilityPxForm(PxBaseForm):
-    """Form for OrgaAbilityPx."""
+class OrgaAbilityExpForm(ExpBaseForm):
+    """Form for OrgaAbilityExp."""
 
     load_js: ClassVar[list] = ["characters-choices"]
 
@@ -102,10 +142,11 @@ class OrgaAbilityPxForm(PxBaseForm):
     page_info = _("Manage experience point abilities")
 
     class Meta:
-        model = AbilityPx
+        model = AbilityExp
         exclude = ("number",)
 
         widgets: ClassVar[dict] = {
+            "system": SystemExpS2Widget,
             "typ": AbilityTypePxS2Widget,
             "characters": EventCharacterS2WidgetMulti,
             "prerequisites": AbilityS2WidgetMulti,
@@ -117,22 +158,30 @@ class OrgaAbilityPxForm(PxBaseForm):
         """Initialize form with event-specific ability configuration."""
         super().__init__(*args, **kwargs)
 
+        event = self.params.get("event")
+
+        # Handle system field visibility
+        systems = list(event.get_elements(SystemExp)) if event else []
+        if len(systems) == 1:
+            self.delete_field("system")
+            self.instance._default_system = systems[0]  # noqa: SLF001
+        elif "system" in self.fields:
+            self.configure_field_event("system", event)
+
         # Configure event-specific widgets
         for field_name in ["typ", "characters", "prerequisites", "requirements", "template", "dependents"]:
             if field_name in self.fields and hasattr(self.fields[field_name].widget, "set_event"):
-                self.configure_field_event(field_name, self.params.get("event"))
+                self.configure_field_event(field_name, event)
 
-        px_user = get_event_config(self.params.get("event").id, "px_user", default_value=False, context=self.params)
-        px_templates = get_event_config(
-            self.params.get("event").id, "px_templates", default_value=False, context=self.params
-        )
+        exp_user = get_event_config(event.id, "exp_user", default_value=False, context=self.params)
+        exp_templates = get_event_config(event.id, "exp_templates", default_value=False, context=self.params)
 
-        # Remove template field if px_templates is disabled
-        if not px_templates:
+        # Remove template field if exp_templates is disabled
+        if not exp_templates:
             self.delete_field("template")
 
-        # Remove user-experience fields if px_user is disabled
-        if not px_user:
+        # Remove user-experience fields if exp_user is disabled
+        if not exp_user:
             self.delete_field("visible")
 
     def clean(self) -> dict:
@@ -144,7 +193,7 @@ class OrgaAbilityPxForm(PxBaseForm):
         return cleaned_data
 
 
-class OrgaAbilityTypePxForm(BaseModelForm):
+class OrgaAbilityTypeExpForm(BaseModelForm):
     """Form for OrgaAbilityTypePx."""
 
     page_title = _("Ability type")
@@ -152,19 +201,19 @@ class OrgaAbilityTypePxForm(BaseModelForm):
     page_info = _("Manage experience point ability types")
 
     class Meta:
-        model = AbilityTypePx
+        model = AbilityTypeExp
         exclude = ("number",)
 
 
-class OrgaRulePxForm(BaseModelForm):
-    """Form for OrgaRulePx."""
+class OrgaRuleExpForm(BaseModelForm):
+    """Form for OrgaRuleExp."""
 
     page_title = _("Rule")
 
     page_info = _("Manage rules for computed fields")
 
     class Meta:
-        model = RulePx
+        model = RuleExp
         exclude = ("number", "order")
         widgets: ClassVar[dict] = {"abilities": AbilityS2WidgetMulti, "field": ComputedFieldS2Widget}
 
@@ -178,8 +227,8 @@ class OrgaRulePxForm(BaseModelForm):
             self.configure_field_event(field, self.params.get("event"))
 
 
-class OrgaModifierPxForm(BaseModelForm):
-    """Form for OrgaModifierPx."""
+class OrgaModifierExpForm(BaseModelForm):
+    """Form for OrgaModifierExp."""
 
     page_title = _("Rule")
 
@@ -189,7 +238,7 @@ class OrgaModifierPxForm(BaseModelForm):
     )
 
     class Meta:
-        model = ModifierPx
+        model = ModifierExp
         exclude = ("number", "order")
         widgets: ClassVar[dict] = {
             "abilities": AbilityS2WidgetMulti,

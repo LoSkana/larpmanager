@@ -433,8 +433,8 @@ def backend_get(
             prefetches = [
                 Prefetch("factions_list", queryset=Faction.objects.order_by("number")),
                 "plotcharacterrel_set__plot",
-                "px_ability_list",
-                "px_delivery_list",
+                "exp_ability_list",
+                "exp_delivery_list",
             ]
             # Relationship prefetches are only needed for non-AJAX saves
             if not is_ajax:

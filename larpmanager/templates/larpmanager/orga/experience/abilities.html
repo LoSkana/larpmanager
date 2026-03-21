@@ -13,14 +13,17 @@
             <tr>
                 <th></th>
                 <th>{% trans "Name" %}</th>
+                {% if multiple_systems %}
+                    <th>{% trans "System" %}</th>
+                {% endif %}
                 <th>{% trans "Type" %}</th>
                 <th>{% trans "Cost" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th>{% trans "Characters" %}</th>
-                {% if px_templates %}
+                {% if exp_templates %}
                     <th>{% trans "Template" %}</th>
                 {% endif %}
-                {% if px_user %}
+                {% if exp_user %}
                     <th>{% trans "Visible" %}</th>
                 {% endif %}
                 <th>{% trans "Prerequisites" %}</th>
@@ -32,10 +35,11 @@
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_px_abilities_edit' run.get_slug el.uuid %}"
+                        <a href="{% url 'orga_exp_abilities_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
+                    {% if multiple_systems %}<td>{{ el.system }}</td>{% endif %}
                     <td>{{ el.typ }}</td>
                     <td>{{ el.cost }}</td>
                     <td>
@@ -55,17 +59,17 @@
                             {% endfor %}
                         {% endif %}
                     </td>
-                    {% if px_templates %}
+                    {% if exp_templates %}
                         <td>
                             {% if el.template %}{{ el.template.get_full_name }}{% endif %}
                         </td>
                     {% endif %}
-                    {% if px_user %}<td>{{ el.visible }}</td>{% endif %}
+                    {% if exp_user %}<td>{{ el.visible }}</td>{% endif %}
                     <td>
                         {% if el.cached_rels %}
                             {% for prereq_uuid, prereq_name in el.cached_rels.prerequisite_rels.list %}
                                 {% include "elements/comma.html" %}
-                                <a href="{% url 'orga_px_abilities_edit' run.get_slug prereq_uuid %}">{{ prereq_name }}</a>
+                                <a href="{% url 'orga_exp_abilities_edit' run.get_slug prereq_uuid %}">{{ prereq_name }}</a>
                             {% endfor %}
                         {% endif %}
                     </td>
@@ -78,7 +82,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'orga_px_abilities_delete' run.get_slug el.uuid %}"
+                        <a href="{% url 'orga_exp_abilities_delete' run.get_slug el.uuid %}"
                            qtip="{% trans "Delete" %}"
                            class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>

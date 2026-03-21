@@ -86,6 +86,9 @@ msgstr "věk"
 msgid "for"
 msgstr "pro"
 
+msgid "tot"
+msgstr "tot"
+
 msgid "Area"
 msgstr "Oblast"
 
@@ -296,6 +299,9 @@ msgstr "Když"
 msgid "days"
 msgstr "dny"
 
+msgid "free"
+msgstr "zdarma"
+
 msgid "gift"
 msgstr "dárek"
 
@@ -485,6 +491,9 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Kde"
+
+msgid "avail"
+msgstr "k dispozici"
 
 msgid "email"
 msgstr "e-mail"
@@ -689,6 +698,9 @@ msgstr "Ulice"
 
 msgid "Submit"
 msgstr "Odeslat"
+
+msgid "System"
+msgstr "Systém"
 
 msgid "Ticket"
 msgstr "Vstupenka"
@@ -962,6 +974,9 @@ msgstr "Podpora"
 
 msgid "Surname"
 msgstr "Příjmení"
+
+msgid "Systems"
+msgstr "Systémy"
 
 msgid "Tagline"
 msgstr "Tagline"
@@ -2876,9 +2891,6 @@ msgstr "Načtení z události"
 msgid "Mail assignment"
 msgstr "Přiřazení pošty"
 
-msgid "Manage XP rules"
-msgstr "Správa pravidel XP"
-
 msgid "Manage invoices"
 msgstr "Správa faktur"
 
@@ -3092,6 +3104,9 @@ msgstr "Ať vyhraje ten nejlepší"
 msgid "Member approved!"
 msgstr "Člen schválen!"
 
+msgid "Multiple systems"
+msgstr "Více systémů"
+
 msgid "Name of the plot"
 msgstr "Název pozemku"
 
@@ -3277,6 +3292,9 @@ msgstr "Stáhnout dokument"
 
 msgid "Elements uploaded"
 msgstr "Prvky jsou načteny"
+
+msgid "Experience System"
+msgstr "Zážitkový systém"
 
 msgid "Experience points"
 msgstr "Zkušenostní body"
@@ -3470,6 +3488,9 @@ msgstr "Elektronická faktura"
 msgid "Enable preferences"
 msgstr "Povolení předvoleb"
 
+msgid "Experience Systems"
+msgstr "Zkušenostní systémy"
+
 msgid "First registration"
 msgstr "První registrace"
 
@@ -3649,9 +3670,6 @@ msgstr "Nemám zájem"
 
 msgid "List of other users"
 msgstr "Seznam dalších uživatelů"
-
-msgid "Manage XP modifiers"
-msgstr "Správa modifikátorů XP"
 
 msgid "Manage competencies"
 msgstr "Řízení kompetencí"
@@ -4327,6 +4345,9 @@ msgstr "Seznam plateb, které mají být ověřeny"
 msgid "Manage event accounting"
 msgstr "Správa účtování událostí"
 
+msgid "Manage experience rules"
+msgstr "Správa pravidel zkušeností"
+
 msgid "Manage the event quests"
 msgstr "Správa úkolů událostí"
 
@@ -4435,9 +4456,6 @@ msgstr "Neplatný výběr tipu"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lehký plech (test)"
-
-msgid "Manage ability templates"
-msgstr "Správa šablon schopností"
 
 msgid "Manage area of the event"
 msgstr "Správa oblasti události"
@@ -4556,6 +4574,9 @@ msgstr "Správa přiřazení kreditů"
 
 msgid "Manage event access roles"
 msgstr "Správa rolí pro přístup k událostem"
+
+msgid "Manage experience systems"
+msgstr "Správa zážitkových systémů"
 
 msgid "Manage photo album upload"
 msgstr "Správa nahrávání fotoalb"
@@ -4758,6 +4779,9 @@ msgstr "Položky, které budou upraveny"
 
 msgid "Loading performed, see logs"
 msgstr "Provedeno načítání, viz protokoly"
+
+msgid "Manage experience modifiers"
+msgstr "Správa modifikátorů zkušeností"
 
 msgid "Manage quiz-style workshops"
 msgstr "Správa workshopů ve stylu kvízů"
@@ -5105,6 +5129,9 @@ msgstr "Filtrujte nebo vyhledávejte postavy"
 
 msgid "Manage event navigation buttons"
 msgstr "Správa navigačních tlačítek událostí"
+
+msgid "Manage experience point systems"
+msgstr "Správa systémů zkušenostních bodů"
 
 msgid "Manage member membership status"
 msgstr "Správa stavu členství"
@@ -6143,6 +6170,9 @@ msgstr "Výše příspěvku zvolená účastníkem"
 msgid "I do it routinely, I have good experience"
 msgstr "Dělám to pravidelně, mám dobré zkušenosti"
 
+msgid "Manage templates for experience abilities"
+msgstr "Správa šablon pro schopnosti získávání zkušeností"
+
 msgid "Manage the pre-registration of all events"
 msgstr "Správa předběžné registrace všech událostí"
 
@@ -6898,9 +6928,6 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Připojte se k našemu Discordu a získejte pomoc, nápady nebo nahlaste chyby"
 
-msgid "Manage the character abilities purchaseable with XP"
-msgstr "Správa schopností postavy zakoupitelných za XP"
-
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Správa pohybu skladových položek, výpůjček a oprav"
 
@@ -7335,6 +7362,10 @@ msgstr "Měna, kterou chcete používat pro všechny platby a ceny"
 msgid "This page allows you to add or edit a character inventory"
 msgstr "Na této stránce můžete přidat nebo upravit inventář postavy"
 
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Na této stránce jsou uvedeny zážitkové systémy definované pro tuto událost"
+
 msgid "This page shows all accounting information for the member"
 msgstr "Na této stránce se zobrazují všechny účetní informace o členovi"
 
@@ -7403,9 +7434,6 @@ msgstr "Hlavní obrázek události zobrazený na domovské stránce vaší organ
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Ujistěte se, že máte čas sledovat/poslouchat obsah nyní"
 
-msgid "Manage XP distributions for character abilities purchases."
-msgstr "Správa distribuce XP pro nákupy schopností postavy."
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Název možnosti, který se zobrazí v otázce (musí být krátký)"
 
@@ -7432,6 +7460,9 @@ msgstr "Přístup k panelu správy <a href= %(url)s'>zde</a>"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "Chcete přijímat platby zpracované prostřednictvím systému"
+
+msgid "Manage the character abilities purchaseable with experience"
+msgstr "Správa schopností postavy, které lze zakoupit za zkušenosti"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr "Správa nastavení události: název, popis, data, stav"
@@ -7887,6 +7918,9 @@ msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Umožňuje pracovníkům přístup k bezpečnostním informacím předloženým "
 "účastníky"
+
+msgid "Manage experience distributions for character abilities purchases."
+msgstr "Správa distribuce zkušeností pro nákup schopností postavy."
 
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
@@ -11330,6 +11364,13 @@ msgid ""
 msgstr ""
 "Vzhledem k termínu platby uvede počet dní, do kterých oznámí účastníkovi, "
 "aby platbu provedl. Výchozí hodnota 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Pokud je zaškrtnuto, umožňuje správu více systémů zážitků pro danou událost."
+" Každou schopnost a dodávku lze přiřadit k určitému systému."
 
 #, python-format
 msgid ""

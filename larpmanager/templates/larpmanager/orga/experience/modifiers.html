@@ -25,14 +25,14 @@
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_px_modifiers_edit' run.get_slug el.uuid %}"
+                        <a href="{% url 'orga_exp_modifiers_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>
                         {% if el.cached_rels %}
                             {% for ab_uuid, ab_name in el.cached_rels.ability_rels.list %}
                                 {% include "elements/comma.html" %}
-                                <a href="{% url 'orga_px_abilities_edit' run.get_slug ab_uuid %}">{{ ab_name }}</a>
+                                <a href="{% url 'orga_exp_abilities_edit' run.get_slug ab_uuid %}">{{ ab_name }}</a>
                             {% endfor %}
                         {% endif %}
                     </td>
@@ -41,7 +41,7 @@
                         {% if el.cached_rels %}
                             {% for prereq_uuid, prereq_name in el.cached_rels.prerequisite_rels.list %}
                                 {% include "elements/comma.html" %}
-                                <a href="{% url 'orga_px_abilities_edit' run.get_slug prereq_uuid %}">{{ prereq_name }}</a>
+                                <a href="{% url 'orga_exp_abilities_edit' run.get_slug prereq_uuid %}">{{ prereq_name }}</a>
                             {% endfor %}
                         {% endif %}
                     </td>
@@ -55,20 +55,20 @@
                     </td>
                     <td>
                         {% if not forloop.first %}
-                            <a href="{% url 'orga_px_modifiers_order' run.get_slug el.uuid 0 %}">
+                            <a href="{% url 'orga_exp_modifiers_order' run.get_slug el.uuid 0 %}">
                                 <i class="fa-solid fa-arrow-up"></i>
                             </a>
                         {% endif %}
                     </td>
                     <td>
                         {% if not forloop.last %}
-                            <a href="{% url 'orga_px_modifiers_order' run.get_slug el.uuid 1 %}">
+                            <a href="{% url 'orga_exp_modifiers_order' run.get_slug el.uuid 1 %}">
                                 <i class="fa-solid fa-arrow-down"></i>
                             </a>
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'orga_px_modifiers_delete' run.get_slug el.uuid %}"
+                        <a href="{% url 'orga_exp_modifiers_delete' run.get_slug el.uuid %}"
                            qtip="{% trans "Delete" %}"
                            class="only_new_form"><i class="fas fa-trash"></i></a>
                     </td>

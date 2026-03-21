@@ -148,7 +148,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
 
     # check value now
     page.get_by_role("link", name="Characters").click()
-    page.get_by_role("link", name="XP").click()
+    page.get_by_role("link", name="Experience").click()
     page.get_by_role("link", name="Faction", exact=True).click()
     page.get_by_role("link", name="teeeeest").click()
     page.locator("#one").get_by_role("link", name="Plots").click()
