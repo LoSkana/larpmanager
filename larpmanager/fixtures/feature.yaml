@@ -1618,10 +1618,10 @@
     slug: ensemble
     overall: false
     placeholder: false
-    order: 160
-    after_text: Now you can view the ensemble page
-    after_link: ensemble
+    order: 5
+    after_text: Now you can configure the ensemble page
+    after_link: config/ensemble
     hidden: false
-    module: writing
+    module: miscellany
     dependencies:
     - character

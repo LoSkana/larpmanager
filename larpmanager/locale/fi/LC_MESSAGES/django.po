@@ -414,6 +414,9 @@ msgstr "Juonet"
 msgid "Price"
 msgstr "Hinta"
 
+msgid "Print"
+msgstr "Tulosta"
+
 msgid "Quest"
 msgstr "Quest"
 
@@ -3509,6 +3512,9 @@ msgstr "Suorita louhinta"
 msgid "Preferences saved!"
 msgstr "Asetukset tallennettu!"
 
+msgid "Print current view"
+msgstr "Tulosta nykyinen näkymä"
+
 msgid "Proposed character"
 msgstr "Ehdotettu luonne"
 
@@ -5432,9 +5438,6 @@ msgstr "Nyt voit luoda tapahtumamalleja"
 msgid "Now you can set membership options"
 msgstr "Nyt voit asettaa jäsenyysasetukset"
 
-msgid "Now you can view the ensemble page"
-msgstr "Nyt voit tarkastella ensemble-sivua"
-
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Päivitetty ilmoittautuminen tapahtumaan %(event)s"
@@ -5945,6 +5948,9 @@ msgstr "Jäsenmaksu %(user)s vuoden %(year)s osalta"
 
 msgid "Membership of the Organization accepted"
 msgstr "Järjestön hyväksytty jäsenyys"
+
+msgid "Now you can configure the ensemble page"
+msgstr "Nyt voit määrittää ensemble-sivun"
 
 msgid "Now you can create quests for the event"
 msgstr "Nyt voit luoda tehtäviä tapahtumaa varten"

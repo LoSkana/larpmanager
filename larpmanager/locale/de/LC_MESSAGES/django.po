@@ -414,6 +414,9 @@ msgstr "Grundstücke"
 msgid "Price"
 msgstr "Preis"
 
+msgid "Print"
+msgstr "Drucken"
+
 msgid "Quest"
 msgstr "Suche"
 
@@ -3509,6 +3512,9 @@ msgstr "Extraktion durchführen"
 msgid "Preferences saved!"
 msgstr "Präferenzen gespeichert!"
 
+msgid "Print current view"
+msgstr "Aktuelle Ansicht drucken"
+
 msgid "Proposed character"
 msgstr "Vorgeschlagener Charakter"
 
@@ -5432,9 +5438,6 @@ msgstr "Jetzt können Sie Veranstaltungsvorlagen erstellen"
 msgid "Now you can set membership options"
 msgstr "Jetzt können Sie Mitgliedschaftsoptionen festlegen"
 
-msgid "Now you can view the ensemble page"
-msgstr "Jetzt können Sie die Ensemble-Seite anzeigen"
-
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Aktualisierter Eintrag für %(event)s"
@@ -5950,6 +5953,9 @@ msgstr "Anteil der %(user)s pro %(year)s"
 
 msgid "Membership of the Organization accepted"
 msgstr "Vereinsmitgliedschaft akzeptiert"
+
+msgid "Now you can configure the ensemble page"
+msgstr "Jetzt können Sie die Ensemble-Seite konfigurieren"
 
 msgid "Now you can create quests for the event"
 msgstr "Jetzt können Sie Quests für das Ereignis erstellen"

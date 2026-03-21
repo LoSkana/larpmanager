@@ -414,6 +414,9 @@ msgstr "Percelen"
 msgid "Price"
 msgstr "Prijs"
 
+msgid "Print"
+msgstr "Afdrukken"
+
 msgid "Quest"
 msgstr "Zoektocht"
 
@@ -3509,6 +3512,9 @@ msgstr "Extractie uitvoeren"
 msgid "Preferences saved!"
 msgstr "Voorkeuren opgeslagen!"
 
+msgid "Print current view"
+msgstr "Huidige weergave afdrukken"
+
 msgid "Proposed character"
 msgstr "Voorgesteld karakter"
 
@@ -5432,9 +5438,6 @@ msgstr "Nu kun je sjablonen voor evenementen maken"
 msgid "Now you can set membership options"
 msgstr "Nu kunt u lidmaatschapsopties instellen"
 
-msgid "Now you can view the ensemble page"
-msgstr "Nu kunt u de ensemblepagina bekijken"
-
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Bijgewerkte invoer voor %(event)s"
@@ -5947,6 +5950,9 @@ msgstr "Aandeel %(user)s per %(year)s"
 
 msgid "Membership of the Organization accepted"
 msgstr "Lidmaatschap van de vereniging geaccepteerd"
+
+msgid "Now you can configure the ensemble page"
+msgstr "Nu kunt u de ensemblepagina configureren"
 
 msgid "Now you can create quests for the event"
 msgstr "Nu kun je quests maken voor het evenement"

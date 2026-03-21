@@ -5437,6 +5437,12 @@ msgstr ""
 msgid "are closed"
 msgstr ""
 
+msgid "Print current view"
+msgstr ""
+
+msgid "Print"
+msgstr ""
+
 msgid "No characters available."
 msgstr ""
 
@@ -9160,7 +9166,7 @@ msgid ""
 "compact list) to help players memorise other characters before the event"
 msgstr ""
 
-msgid "Now you can view the ensemble page"
+msgid "Now you can configure the ensemble page"
 msgstr ""
 
 msgid "Manage the organization main settings"

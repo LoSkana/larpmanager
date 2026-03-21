@@ -31,6 +31,12 @@
                    placeholder="{% trans "Search" %}..."
                    autocomplete="off">
         </div>
+        <button id="ensemble-print"
+                class="ensemble-btn"
+                title="{% trans "Print current view" %}">
+            <i class="fa-solid fa-print"></i>
+            <span>{% trans "Print" %}</span>
+        </button>
     </div>
     {% if char_list %}
         {# BOOK MODE #}
@@ -214,13 +220,18 @@
         .ens-field-name { font-weight: 600; margin-right: 0.3rem; }
         /* Cards mode */
         .ens-card {
-            width: 280px;
+            width: 19%;
             border: 1px solid #ccc;
             border-radius: 6px;
             overflow: hidden;
             background: #fff;
             box-shadow: 0 1px 4px rgba(0,0,0,.08);
             page-break-inside: avoid;
+        }
+        @media screen and (max-width: 1200px) {
+            .ens-card {
+                width: 24%;
+            }
         }
         .ens-card-portrait img {
             width: 100%;
@@ -292,8 +303,16 @@
         try { savedMode = sessionStorage.getItem(STORAGE_KEY) || defaultMode; } catch(e) {}
         showMode(savedMode);
 
-        document.querySelectorAll('.ensemble-btn').forEach(btn => {
+        document.querySelectorAll('.ensemble-btn[data-mode]').forEach(btn => {
             btn.addEventListener('click', function () { showMode(this.dataset.mode); });
+        });
+
+        // Print: switch to cards mode, print, restore previous mode
+        document.getElementById('ensemble-print').addEventListener('click', function () {
+            const current = sessionStorage.getItem(STORAGE_KEY) || defaultMode;
+            showMode('cards');
+            window.print();
+            showMode(current);
         });
 
         // Search

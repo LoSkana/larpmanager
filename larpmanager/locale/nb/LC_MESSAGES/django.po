@@ -414,6 +414,9 @@ msgstr "Tomter"
 msgid "Price"
 msgstr "Pris"
 
+msgid "Print"
+msgstr "Skriv ut"
+
 msgid "Quest"
 msgstr "Søken"
 
@@ -3509,6 +3512,9 @@ msgstr "Utføre ekstraksjon"
 msgid "Preferences saved!"
 msgstr "Innstillinger lagret!"
 
+msgid "Print current view"
+msgstr "Skriv ut gjeldende visning"
+
 msgid "Proposed character"
 msgstr "Foreslått karakter"
 
@@ -5432,9 +5438,6 @@ msgstr "Nå kan du opprette hendelsesmaler"
 msgid "Now you can set membership options"
 msgstr "Nå kan du angi medlemsalternativer"
 
-msgid "Now you can view the ensemble page"
-msgstr "Nå kan du se ensemblesiden"
-
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Oppdatert oppføring for %(event)s"
@@ -5947,6 +5950,9 @@ msgstr "Andel %(user)s per %(year)s"
 
 msgid "Membership of the Organization accepted"
 msgstr "Medlemskap i foreningen aksepteres"
+
+msgid "Now you can configure the ensemble page"
+msgstr "Nå kan du konfigurere ensemblesiden"
 
 msgid "Now you can create quests for the event"
 msgstr "Nå kan du lage oppdrag for arrangementet"

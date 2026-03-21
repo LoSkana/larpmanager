@@ -414,6 +414,9 @@ msgstr "Trame"
 msgid "Price"
 msgstr "Prezzo"
 
+msgid "Print"
+msgstr "Stampa"
+
 msgid "Quest"
 msgstr "Quest"
 
@@ -3509,6 +3512,9 @@ msgstr "Esegui estrazione"
 msgid "Preferences saved!"
 msgstr "Preferenze salvate!"
 
+msgid "Print current view"
+msgstr "Stampa la vista corrente"
+
 msgid "Proposed character"
 msgstr "Personaggio proposto"
 
@@ -5432,9 +5438,6 @@ msgstr "Ora puoi creare modelli di eventi"
 msgid "Now you can set membership options"
 msgstr "Ora puoi impostare le opzioni di iscrizione"
 
-msgid "Now you can view the ensemble page"
-msgstr "Ora è possibile visualizzare la pagina dell'ensemble"
-
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Iscrizione aggiornata per %(event)s"
@@ -5945,6 +5948,9 @@ msgstr "Quota sociale di %(user)s per %(year)s"
 
 msgid "Membership of the Organization accepted"
 msgstr "Iscrizione all'Associazione accettata"
+
+msgid "Now you can configure the ensemble page"
+msgstr "Ora è possibile configurare la pagina dell'ensemble"
 
 msgid "Now you can create quests for the event"
 msgstr "Ora puoi creare missioni per l'evento"

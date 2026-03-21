@@ -414,6 +414,9 @@ msgstr "Pozemky"
 msgid "Price"
 msgstr "Cena"
 
+msgid "Print"
+msgstr "Tisk"
+
 msgid "Quest"
 msgstr "Quest"
 
@@ -3509,6 +3512,9 @@ msgstr "Proveďte extrakci"
 msgid "Preferences saved!"
 msgstr "Předvolby uloženy!"
 
+msgid "Print current view"
+msgstr "Tisk aktuálního zobrazení"
+
 msgid "Proposed character"
 msgstr "Navrhovaný charakter"
 
@@ -5432,9 +5438,6 @@ msgstr "Nyní můžete vytvářet šablony událostí"
 msgid "Now you can set membership options"
 msgstr "Nyní můžete nastavit možnosti členství"
 
-msgid "Now you can view the ensemble page"
-msgstr "Nyní můžete zobrazit stránku souboru"
-
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Aktualizovaný záznam pro %(event)s"
@@ -5945,6 +5948,9 @@ msgstr "Podíl %(user)s na %(year)s"
 
 msgid "Membership of the Organization accepted"
 msgstr "Členství ve sdružení je přijato"
+
+msgid "Now you can configure the ensemble page"
+msgstr "Nyní můžete nakonfigurovat stránku souboru."
 
 msgid "Now you can create quests for the event"
 msgstr "Nyní můžete vytvářet úkoly pro tuto událost"
