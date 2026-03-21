@@ -31,7 +31,7 @@ def create_default_systems_and_assign(apps, schema_editor):
     SystemExp = apps.get_model("larpmanager", "SystemExp")
     AbilityExp = apps.get_model("larpmanager", "AbilityExp")
     DeliveryExp = apps.get_model("larpmanager", "DeliveryExp")
-    EventPermission = apps.get_model("larpmanager", "EventPermission")
+    Event = apps.get_model("larpmanager", "Event")
     Feature = apps.get_model("larpmanager", "Feature")
 
     try:
@@ -39,13 +39,13 @@ def create_default_systems_and_assign(apps, schema_editor):
     except Feature.DoesNotExist:
         return
 
-    # Find all events that have the experience feature enabled
+    # Find all events that have the experience feature enabled via the M2M relationship
     event_ids = (
-        EventPermission.objects.filter(
-            feature=px_feature,
+        Event.objects.filter(
+            features=px_feature,
             deleted__isnull=True,
         )
-        .values_list("event_id", flat=True)
+        .values_list("id", flat=True)
         .distinct()
     )
 
@@ -289,4 +289,16 @@ class Migration(migrations.Migration):
             new_name="larpmanager_number_7157a9_idx",
             old_name="larpmanager_number_cbb709_idx",
         ),
+        migrations.AlterField(
+            model_name='abilityexp',
+            name='system',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='abilities',
+                                    to='larpmanager.systemexp', verbose_name='System'),
+        ),
+        migrations.AlterField(
+            model_name='deliveryexp',
+            name='system',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='deliveries',
+                                    to='larpmanager.systemexp', verbose_name='System'),
+        )
     ]

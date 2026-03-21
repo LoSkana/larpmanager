@@ -4,7 +4,7 @@
 window.addEventListener('DOMContentLoaded', function() {
 
     var templateDescriptions = {
-        {% for slug, label, icon, desc, feats, configs in form.template_data %}
+        {% for slug, label, icon, desc, feats in form.template_data %}
         "{{ slug }}": {
             label: "{{ label|escapejs }}",
             icon: "{{ icon|escapejs }}",
@@ -25,6 +25,14 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateTemplateUI(selectedValue) {
+        $('#template-desc-row').remove();
+
+        if (!selectedValue) {
+            // No selection: hide manual fields, show nothing
+            $('tr.manual-section').hide();
+            return;
+        }
+
         // Show or hide manual-section rows
         if (selectedValue === 'manual') {
             $('tr.manual-section').show();
@@ -32,14 +40,12 @@ window.addEventListener('DOMContentLoaded', function() {
             $('tr.manual-section').hide();
         }
 
-        // Update description box below the template selector
-        $('#template-desc-box').remove();
+        // Show description box below the template selector
         var box = buildDescriptionBox(selectedValue);
         if (box) {
-            box.attr('id', 'template-desc-box');
-            $('#id_template').closest('tr').after(
-                $('<tr><td></td><td></td></tr>').find('td').eq(1).append(box).end()
-            );
+            var $row = $('<tr id="template-desc-row"><td></td><td></td></tr>');
+            $row.find('td').eq(1).append(box);
+            $('#id_template').closest('tr').after($row);
         }
     }
 

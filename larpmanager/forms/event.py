@@ -1671,15 +1671,20 @@ class ExeTemplateRolesForm(OrgaEventRoleForm):
         self.fields["members"].required = False
 
 
-# Event templates: (slug, label, icon, description, feature_slugs, extra_configs)
+# Configs automatically applied when a feature is activated via QuickSetupForm
+_FEATURE_IMPLIED_CONFIGS: dict[str, dict] = {
+    "user_character": {"user_character_max": 1, "user_character_approval": "True"},
+    "experience": {"exp_user": "True"},
+}
+
+# Event templates: (slug, label, icon, description, feature_slugs)
 _EVENT_TEMPLATES = [
     (
         "campaign",
         _("Campaign"),
         "fa-solid fa-dragon",
         _("Multi-event story with player-created characters, experience points, and a persistent world"),
-        ["character", "user_character", "px", "campaign", "player_cancellation"],
-        {"user_character_max": 1, "user_character_approval": "True"},
+        ["character", "user_character", "experience", "campaign", "player_cancellation"],
     ),
     (
         "oneshot",
@@ -1689,7 +1694,6 @@ _EVENT_TEMPLATES = [
             "Single event focusing on narrative, characters written by staff and assigned via casting algorithm, with factions and plots"
         ),
         ["character", "casting", "faction", "plot", "handout", "player_cancellation"],
-        {},
     ),
     (
         "manual",
@@ -1697,7 +1701,6 @@ _EVENT_TEMPLATES = [
         "fa-solid fa-sliders",
         _("Choose individual features yourself"),
         [],
-        {},
     ),
 ]
 
@@ -1790,21 +1793,20 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
         if is_skin_full:
             # Add template picker as the first field
-            template_choices = [(slug, label) for slug, label, _i, _d, _f, _c in _EVENT_TEMPLATES]
-            initial_template = "manual" if active_features else "campaign"
+            template_choices = [("", "---")] + [(slug, label) for slug, label, _i, _d, _f in _EVENT_TEMPLATES]
 
             # Insert template field at the beginning of the ordered dict
             updated_fields = {
                 "template": forms.ChoiceField(
                     choices=template_choices,
                     label=_("Event template"),
-                    required=True,
-                    initial=initial_template,
+                    required=False,
+                    initial="",
                 )
             }
             updated_fields.update(self.fields)
             self.fields = updated_fields
-            self.initial["template"] = initial_template
+            self.initial["template"] = ""
 
             # Mark manual-mode fields so JS can show/hide them
             for key in self.setup:
@@ -1826,14 +1828,13 @@ class OrgaQuickSetupForm(QuickSetupForm):
         """
         selected_template = self.cleaned_data.get("template", "manual")
 
-        if selected_template != "manual":
+        if selected_template not in ("manual", ""):
             # Template mode: apply predefined features additively, ignore manual checkboxes
             template_entry = next(
                 (t for t in _EVENT_TEMPLATES if t[0] == selected_template),
                 None,
             )
             template_features = template_entry[4] if template_entry else []
-            template_configs = template_entry[5] if template_entry else {}
 
             original_setup = self.setup
             self.setup = {}
@@ -1848,13 +1849,21 @@ class OrgaQuickSetupForm(QuickSetupForm):
                     if feat_slug in feat_ids:
                         self.instance.features.add(feat_ids[feat_slug])
 
-            for config_name, config_value in template_configs.items():
-                save_single_config(self.instance, config_name, config_value)
-
+            self._apply_implied_configs(template_features)
             instance.save()
             return instance
 
-        return super().save(commit=commit)
+        # Manual mode: parent save processes checkboxes; then apply implied configs for activated features
+        instance = super().save(commit=commit)
+        activated = [key for key, (is_feat, _l, _h) in self.setup.items() if is_feat and self.cleaned_data.get(key)]
+        self._apply_implied_configs(activated)
+        return instance
+
+    def _apply_implied_configs(self, activated_feature_slugs: list) -> None:
+        """Apply configs implied by specific features being activated."""
+        for feat_slug in activated_feature_slugs:
+            for config_name, config_value in _FEATURE_IMPLIED_CONFIGS.get(feat_slug, {}).items():
+                save_single_config(self.instance, config_name, config_value)
 
 
 class OrgaRunDatesForm(OrgaRunForm):
