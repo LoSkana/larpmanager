@@ -267,8 +267,14 @@
             .ens-card { width: 100%; }
         }
         /* Print (cards mode) */
+        @page { margin: 8mm; }
         @media print {
-            .ensemble-toolbar, #ensemble-book, #ensemble-compact { display: none !important; }
+            hr, #banner, #topbar, .main_nav, .reg_status, .ensemble-toolbar, #ensemble-book, #ensemble-compact { display: none !important; }
+            html, body { margin: 0 !important; padding: 0 !important; }
+            body > *, #content, .container, main, [id^="wrap"], [class*="wrap"], [class*="content"] {
+                padding: 0 !important;
+                margin: 0 !important;
+            }
             #ensemble-cards { display: flex !important; flex-wrap: wrap; gap: 0; }
             .ens-card {
                 width: 128mm;
