@@ -208,7 +208,8 @@ def copy(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/copy/manage/characters/")
     page.get_by_role("link", name="Experience").click()
-    char_row = page.locator('tr:has-text("Test Character")').first
+    just_wait(page)
+    char_row = page.locator('tr:has-text("Test Character")')
     expect_normalized(page, char_row, "12")
     expect_normalized(page, char_row, "1")
     expect_normalized(page, char_row, "11")

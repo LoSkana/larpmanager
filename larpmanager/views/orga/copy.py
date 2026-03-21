@@ -37,6 +37,7 @@ from larpmanager.models.access import EventRole
 from larpmanager.models.accounting import Discount
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText
+from larpmanager.models.experience import AbilityExp, AbilityTemplateExp, AbilityTypeExp, DeliveryExp, SystemExp
 from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
@@ -721,6 +722,38 @@ def copy_registration(source_event_id: int, targets: list[str], target_event_id:
         copy_class(source_event_id, target_event_id, RegistrationSurcharge)
 
 
+def _copy_characters_and_questions(target_event_id: int, parent_event_id: int, targets: list[str]) -> None:
+    """Copy character sheet questions (standalone) or full characters with questions."""
+    if "writing_question" in targets and "character" not in targets:
+        copy_class(target_event_id, parent_event_id, WritingQuestion)
+        copy_class(target_event_id, parent_event_id, WritingOption)
+        correct_rels(target_event_id, parent_event_id, WritingQuestion, WritingOption, "question", "name")
+    if "character" in targets:
+        copy_class(target_event_id, parent_event_id, Character)
+        correct_relationship(target_event_id, parent_event_id)
+        copy_class(target_event_id, parent_event_id, WritingQuestion)
+        copy_class(target_event_id, parent_event_id, WritingOption)
+        copy_character_config(target_event_id, parent_event_id)
+        correct_rels(target_event_id, parent_event_id, WritingQuestion, WritingOption, "question", "name")
+        _copy_character_field_values(target_event_id, parent_event_id)
+
+
+def _copy_experience(target_event_id: int, parent_event_id: int) -> None:
+    """Copy experience elements (systems, ability types, abilities, deliveries) between events."""
+    copy_class(target_event_id, parent_event_id, SystemExp)
+    copy_class(target_event_id, parent_event_id, AbilityTypeExp)
+    copy_class(target_event_id, parent_event_id, AbilityTemplateExp)
+    copy_class(target_event_id, parent_event_id, AbilityExp)
+    correct_rels(target_event_id, parent_event_id, SystemExp, AbilityExp, "system")
+    correct_rels(target_event_id, parent_event_id, AbilityTypeExp, AbilityExp, "typ")
+    correct_rels(target_event_id, parent_event_id, AbilityTemplateExp, AbilityExp, "template")
+    correct_rels_many(target_event_id, Character, AbilityExp, "characters")
+    correct_rels_many(target_event_id, AbilityExp, AbilityExp, "prerequisites")
+    copy_class(target_event_id, parent_event_id, DeliveryExp)
+    correct_rels(target_event_id, parent_event_id, SystemExp, DeliveryExp, "system")
+    correct_rels_many(target_event_id, Character, DeliveryExp, "characters")
+
+
 def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int) -> None:
     """Copy writing elements from parent to child event.
 
@@ -739,24 +772,12 @@ def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int)
         None
 
     """
-    # Copy character sheet questions and options (standalone, without characters)
-    if "writing_question" in targets and "character" not in targets:
-        copy_class(target_event_id, parent_event_id, WritingQuestion)
-        copy_class(target_event_id, parent_event_id, WritingOption)
-        correct_rels(target_event_id, parent_event_id, WritingQuestion, WritingOption, "question", "name")
+    # Copy character sheet questions and characters
+    _copy_characters_and_questions(target_event_id, parent_event_id, targets)
 
-    # Copy character-related elements and fix relationships
-    if "character" in targets:
-        copy_class(target_event_id, parent_event_id, Character)
-        # correct relationship
-        correct_relationship(target_event_id, parent_event_id)
-        # character fields
-        copy_class(target_event_id, parent_event_id, WritingQuestion)
-        copy_class(target_event_id, parent_event_id, WritingOption)
-        copy_character_config(target_event_id, parent_event_id)
-        correct_rels(target_event_id, parent_event_id, WritingQuestion, WritingOption, "question", "name")
-        # copy character answers and choices
-        _copy_character_field_values(target_event_id, parent_event_id)
+    # Copy experience elements
+    if "experience" in targets:
+        _copy_experience(target_event_id, parent_event_id)
 
     # Copy faction elements
     if "faction" in targets:
