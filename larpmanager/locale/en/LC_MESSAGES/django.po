@@ -1066,6 +1066,30 @@ msgid ""
 "character is assigned"
 msgstr ""
 
+msgid "Ensemble"
+msgstr ""
+
+msgid "Show player name"
+msgstr ""
+
+msgid "If checked, shows the player's name alongside their character"
+msgstr ""
+
+msgid "Default view mode"
+msgstr ""
+
+msgid "The initial display mode when opening the ensemble page"
+msgstr ""
+
+msgid "Book"
+msgstr ""
+
+msgid "Cards"
+msgstr ""
+
+msgid "Compact list"
+msgstr ""
+
 msgid "Tickets"
 msgstr ""
 
@@ -5413,6 +5437,15 @@ msgstr ""
 msgid "are closed"
 msgstr ""
 
+msgid "Print current view"
+msgstr ""
+
+msgid "Print"
+msgstr ""
+
+msgid "No characters available."
+msgstr ""
+
 msgid "Discover the web site"
 msgstr ""
 
@@ -6536,6 +6569,9 @@ msgid "View the list of characters and participants"
 msgstr ""
 
 msgid "Filter or search the characters"
+msgstr ""
+
+msgid "Learn all characters before the event"
 msgstr ""
 
 msgid "Browse the presentation website"
@@ -9123,6 +9159,14 @@ msgid "Track event milestones"
 msgstr ""
 
 msgid "Now you can create milestones for the event"
+msgstr ""
+
+msgid ""
+"Provides a character learning page with multiple display modes (book, cards, "
+"compact list) to help players memorise other characters before the event"
+msgstr ""
+
+msgid "Now you can configure the ensemble page"
 msgstr ""
 
 msgid "Manage the organization main settings"

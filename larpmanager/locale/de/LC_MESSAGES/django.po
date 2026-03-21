@@ -92,6 +92,9 @@ msgstr "Bereich"
 msgid "Body"
 msgstr "Körper"
 
+msgid "Book"
+msgstr "Buchen Sie"
+
 msgid "Card"
 msgstr "Karte"
 
@@ -320,6 +323,9 @@ msgstr "Vermeiden Sie"
 msgid "Badge"
 msgstr "Abzeichen"
 
+msgid "Cards"
+msgstr "Karten"
+
 msgid "Check"
 msgstr "Siehe"
 
@@ -407,6 +413,9 @@ msgstr "Grundstücke"
 
 msgid "Price"
 msgstr "Preis"
+
+msgid "Print"
+msgstr "Drucken"
 
 msgid "Quest"
 msgstr "Suche"
@@ -1112,6 +1121,9 @@ msgstr "Elemente"
 
 msgid "End date"
 msgstr "Datum des Endes"
+
+msgid "Ensemble"
+msgstr "Ensemble"
 
 msgid "Excluded"
 msgstr "Ausgenommen"
@@ -2099,6 +2111,9 @@ msgstr "Foto ändern"
 
 msgid "Collaborator"
 msgstr "Beitragende"
+
+msgid "Compact list"
+msgstr "Kompakte Liste"
 
 msgid "Content Type"
 msgstr "Inhalt Typ"
@@ -3155,6 +3170,9 @@ msgstr "Fähigkeitstyp festlegen"
 msgid "Show collections"
 msgstr "Sammlungen anzeigen"
 
+msgid "Show player name"
+msgstr "Spielername anzeigen"
+
 msgid "Single-line text"
 msgstr "Einzeiliger Text"
 
@@ -3241,6 +3259,9 @@ msgstr "Kreditvergabe"
 
 msgid "Custom title font"
 msgstr "Benutzerdefinierte Titelschriftart"
+
+msgid "Default view mode"
+msgstr "Standard-Ansichtsmodus"
 
 msgid "Disable Auto save"
 msgstr "Automatisches Speichern deaktivieren"
@@ -3490,6 +3511,9 @@ msgstr "Extraktion durchführen"
 
 msgid "Preferences saved!"
 msgstr "Präferenzen gespeichert!"
+
+msgid "Print current view"
+msgstr "Aktuelle Ansicht drucken"
 
 msgid "Proposed character"
 msgstr "Vorgeschlagener Charakter"
@@ -4436,6 +4460,9 @@ msgstr "Neuer Verein gegründet"
 #, python-format
 msgid "New question by %(user)s"
 msgstr "Neue Frage von %(user)s"
+
+msgid "No characters available."
+msgstr "Keine Zeichen verfügbar."
 
 msgid "No transactions recorded"
 msgstr "Keine Transaktionen erfasst"
@@ -5705,6 +5732,9 @@ msgstr "Teilnehmer ohne Zeichen ausblenden"
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Wenn angekreuzt, Ticketstufe zulassen: Verkäufer"
 
+msgid "Learn all characters before the event"
+msgstr "Lernen Sie alle Zeichen vor der Veranstaltung"
+
 msgid "Location - rent, gas, overnight stays"
 msgstr "Standort - Miete, Gas, Übernachtungen"
 
@@ -5923,6 +5953,9 @@ msgstr "Anteil der %(user)s pro %(year)s"
 
 msgid "Membership of the Organization accepted"
 msgstr "Vereinsmitgliedschaft akzeptiert"
+
+msgid "Now you can configure the ensemble page"
+msgstr "Jetzt können Sie die Ensemble-Seite konfigurieren"
 
 msgid "Now you can create quests for the event"
 msgstr "Jetzt können Sie Quests für das Ereignis erstellen"
@@ -7254,6 +7287,9 @@ msgid "Select the table rows and choose the operation to apply"
 msgstr ""
 "Markieren Sie die Tabellenzeilen und wählen Sie die anzuwendende Operation"
 
+msgid "The initial display mode when opening the ensemble page"
+msgstr "Der anfängliche Anzeigemodus beim Öffnen der Ensemble-Seite"
+
 msgid "The link will be valid for the following number of days"
 msgstr "Der Link wird für die folgende Anzahl von Tagen gültig sein"
 
@@ -7654,6 +7690,11 @@ msgid "If checked, an option can be chosen a maximum number of times"
 msgstr ""
 "Wenn dieses Kästchen markiert ist, kann eine Option maximal mehrmals "
 "ausgewählt werden"
+
+msgid "If checked, shows the player's name alongside their character"
+msgstr ""
+"Wenn diese Option aktiviert ist, wird der Name des Spielers neben seinem "
+"Charakter angezeigt"
 
 msgid "In this page you can mark which items to add to the game area"
 msgstr ""
@@ -11957,6 +11998,14 @@ msgstr ""
 "Der larpmanager hat über 100 verschiedene Funktionen. Es gibt eine für jeden"
 " einzelnen Aspekt der Veranstaltungsorganisation: Anmeldungen, Buchhaltung, "
 "Schreiben, Logistik"
+
+msgid ""
+"Provides a character learning page with multiple display modes (book, cards,"
+" compact list) to help players memorise other characters before the event"
+msgstr ""
+"Bietet eine Charakter-Lernseite mit mehreren Anzeigemodi (Buch, Karten, "
+"kompakte Liste), um den Spielern zu helfen, sich andere Charaktere vor dem "
+"Ereignis einzuprägen"
 
 msgid ""
 "If checked, characters automatically and repeatedly acquire the most "

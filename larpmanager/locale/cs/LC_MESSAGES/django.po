@@ -92,6 +92,9 @@ msgstr "Oblast"
 msgid "Body"
 msgstr "Tělo"
 
+msgid "Book"
+msgstr "Kniha"
+
 msgid "Card"
 msgstr "Karta"
 
@@ -320,6 +323,9 @@ msgstr "Vyhněte se"
 msgid "Badge"
 msgstr "Odznaky"
 
+msgid "Cards"
+msgstr "Karty"
+
 msgid "Check"
 msgstr "Podívejte se na stránky"
 
@@ -407,6 +413,9 @@ msgstr "Pozemky"
 
 msgid "Price"
 msgstr "Cena"
+
+msgid "Print"
+msgstr "Tisk"
 
 msgid "Quest"
 msgstr "Quest"
@@ -1112,6 +1121,9 @@ msgstr "Prvky"
 
 msgid "End date"
 msgstr "Datum ukončení"
+
+msgid "Ensemble"
+msgstr "Soubor"
 
 msgid "Excluded"
 msgstr "S výjimkou"
@@ -2099,6 +2111,9 @@ msgstr "Změna fotografie"
 
 msgid "Collaborator"
 msgstr "Přispěvatel"
+
+msgid "Compact list"
+msgstr "Kompaktní seznam"
 
 msgid "Content Type"
 msgstr "Typ obsahu"
@@ -3155,6 +3170,9 @@ msgstr "Nastavení typu schopnosti"
 msgid "Show collections"
 msgstr "Zobrazit sbírky"
 
+msgid "Show player name"
+msgstr "Zobrazit jméno hráče"
+
 msgid "Single-line text"
 msgstr "Jednořádkový text"
 
@@ -3241,6 +3259,9 @@ msgstr "Přiřazení zápočtu"
 
 msgid "Custom title font"
 msgstr "Vlastní písmo názvu"
+
+msgid "Default view mode"
+msgstr "Výchozí režim zobrazení"
 
 msgid "Disable Auto save"
 msgstr "Zakázat automatické ukládání"
@@ -3490,6 +3511,9 @@ msgstr "Proveďte extrakci"
 
 msgid "Preferences saved!"
 msgstr "Předvolby uloženy!"
+
+msgid "Print current view"
+msgstr "Tisk aktuálního zobrazení"
 
 msgid "Proposed character"
 msgstr "Navrhovaný charakter"
@@ -4436,6 +4460,9 @@ msgstr "Vytvoření nového sdružení"
 #, python-format
 msgid "New question by %(user)s"
 msgstr "Nová otázka od %(user)s"
+
+msgid "No characters available."
+msgstr "Žádné postavy nejsou k dispozici."
 
 msgid "No transactions recorded"
 msgstr "Žádné zaznamenané transakce"
@@ -5704,6 +5731,9 @@ msgstr "Skrýt účastníky bez znaku"
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Prodejce"
 
+msgid "Learn all characters before the event"
+msgstr "Naučte se všechny znaky před akcí"
+
 msgid "Location - rent, gas, overnight stays"
 msgstr "Poloha - nájemné, benzín, noclehy"
 
@@ -5918,6 +5948,9 @@ msgstr "Podíl %(user)s na %(year)s"
 
 msgid "Membership of the Organization accepted"
 msgstr "Členství ve sdružení je přijato"
+
+msgid "Now you can configure the ensemble page"
+msgstr "Nyní můžete nakonfigurovat stránku souboru."
 
 msgid "Now you can create quests for the event"
 msgstr "Nyní můžete vytvářet úkoly pro tuto událost"
@@ -7179,6 +7212,9 @@ msgstr "Přehled uživatelů, kteří nedodržují termíny události"
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Vyberte řádky tabulky a zvolte operaci, která se má použít"
 
+msgid "The initial display mode when opening the ensemble page"
+msgstr "Počáteční režim zobrazení při otevření stránky souboru"
+
 msgid "The link will be valid for the following number of days"
 msgstr "Odkaz bude platný po dobu následujících dnů"
 
@@ -7508,6 +7544,9 @@ msgstr "Chcete řídit vývoj postavy prostřednictvím schopností"
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Pokud je možnost zaškrtnuta, lze ji zvolit maximálně několikrát"
+
+msgid "If checked, shows the player's name alongside their character"
+msgstr "Pokud je zaškrtnuto, zobrazí se jméno hráče vedle jeho postavy"
 
 msgid "In this page you can mark which items to add to the game area"
 msgstr ""
@@ -11420,6 +11459,14 @@ msgid ""
 msgstr ""
 "Správce larpů má více než 100 různých funkcí. Je zde jedna pro každý aspekt "
 "organizování události: přihlašování, účetnictví, psaní, logistika"
+
+msgid ""
+"Provides a character learning page with multiple display modes (book, cards,"
+" compact list) to help players memorise other characters before the event"
+msgstr ""
+"Poskytuje stránku pro učení postav s několika režimy zobrazení (kniha, "
+"karty, kompaktní seznam), která hráčům pomáhá zapamatovat si další postavy "
+"před akcí"
 
 msgid ""
 "If checked, characters automatically and repeatedly acquire the most "

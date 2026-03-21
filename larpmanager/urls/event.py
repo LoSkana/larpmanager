@@ -37,6 +37,11 @@ urlpatterns = [
         name="gallery",
     ),
     path(
+        "<slug:event_slug>/ensemble/",
+        views_ue.ensemble,
+        name="ensemble",
+    ),
+    path(
         "<slug:event_slug>/event/",
         views_ue.event,
         name="event",

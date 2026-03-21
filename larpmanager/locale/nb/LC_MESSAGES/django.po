@@ -92,6 +92,9 @@ msgstr "Område"
 msgid "Body"
 msgstr "Kropp"
 
+msgid "Book"
+msgstr "Bok"
+
 msgid "Card"
 msgstr "Kort"
 
@@ -320,6 +323,9 @@ msgstr "Unngå"
 msgid "Badge"
 msgstr "Merker"
 
+msgid "Cards"
+msgstr "Kort"
+
 msgid "Check"
 msgstr "Sjekk"
 
@@ -407,6 +413,9 @@ msgstr "Tomter"
 
 msgid "Price"
 msgstr "Pris"
+
+msgid "Print"
+msgstr "Skriv ut"
 
 msgid "Quest"
 msgstr "Søken"
@@ -1112,6 +1121,9 @@ msgstr "Elementer"
 
 msgid "End date"
 msgstr "Sluttdato"
+
+msgid "Ensemble"
+msgstr "Ensemble"
 
 msgid "Excluded"
 msgstr "Med unntak av"
@@ -2099,6 +2111,9 @@ msgstr "Endre bilde"
 
 msgid "Collaborator"
 msgstr "Bidragsyter"
+
+msgid "Compact list"
+msgstr "Kompakt liste"
 
 msgid "Content Type"
 msgstr "Innholdstype"
@@ -3155,6 +3170,9 @@ msgstr "Angi evnetype"
 msgid "Show collections"
 msgstr "Vis samlinger"
 
+msgid "Show player name"
+msgstr "Vis spillerens navn"
+
 msgid "Single-line text"
 msgstr "Tekst på én linje"
 
@@ -3241,6 +3259,9 @@ msgstr "Tildeling av kreditt"
 
 msgid "Custom title font"
 msgstr "Tilpasset tittelfont"
+
+msgid "Default view mode"
+msgstr "Standard visningsmodus"
 
 msgid "Disable Auto save"
 msgstr "Deaktiver automatisk lagring"
@@ -3490,6 +3511,9 @@ msgstr "Utføre ekstraksjon"
 
 msgid "Preferences saved!"
 msgstr "Innstillinger lagret!"
+
+msgid "Print current view"
+msgstr "Skriv ut gjeldende visning"
 
 msgid "Proposed character"
 msgstr "Foreslått karakter"
@@ -4436,6 +4460,9 @@ msgstr "Ny forening opprettet"
 #, python-format
 msgid "New question by %(user)s"
 msgstr "Nytt spørsmål fra %(user)s"
+
+msgid "No characters available."
+msgstr "Ingen tegn tilgjengelig."
 
 msgid "No transactions recorded"
 msgstr "Ingen transaksjoner registrert"
@@ -5704,6 +5731,9 @@ msgstr "Skjul deltakere uten tegn"
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Hvis avkrysset, tillat billettnivå: Selger"
 
+msgid "Learn all characters before the event"
+msgstr "Lær alle tegnene før arrangementet"
+
 msgid "Location - rent, gas, overnight stays"
 msgstr "Beliggenhet - husleie, bensin, overnattinger"
 
@@ -5920,6 +5950,9 @@ msgstr "Andel %(user)s per %(year)s"
 
 msgid "Membership of the Organization accepted"
 msgstr "Medlemskap i foreningen aksepteres"
+
+msgid "Now you can configure the ensemble page"
+msgstr "Nå kan du konfigurere ensemblesiden"
 
 msgid "Now you can create quests for the event"
 msgstr "Nå kan du lage oppdrag for arrangementet"
@@ -7181,6 +7214,9 @@ msgstr "Gå gjennom brukerne som ikke overholder arrangementets tidsfrister"
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Velg tabellradene og velg operasjonen som skal brukes"
 
+msgid "The initial display mode when opening the ensemble page"
+msgstr "Den første visningsmodusen når du åpner ensemblesiden"
+
 msgid "The link will be valid for the following number of days"
 msgstr "Koblingen vil være gyldig i følgende antall dager"
 
@@ -7515,6 +7551,9 @@ msgstr "Ønsker du å styre karakterens progresjon gjennom evner"
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Hvis avkrysset, kan et alternativ velges maksimalt antall ganger"
+
+msgid "If checked, shows the player's name alongside their character"
+msgstr "Hvis avkrysset, vises spillerens navn ved siden av karakteren"
 
 msgid "In this page you can mark which items to add to the game area"
 msgstr ""
@@ -11537,6 +11576,13 @@ msgstr ""
 "Larpmanager har over 100 forskjellige funksjoner. Det finnes en funksjon for"
 " hvert eneste aspekt ved et arrangement: påmelding, regnskap, skriving, "
 "logistikk"
+
+msgid ""
+"Provides a character learning page with multiple display modes (book, cards,"
+" compact list) to help players memorise other characters before the event"
+msgstr ""
+"En side for å lære seg figurer med flere visningsmoduser (bok, kort, kompakt"
+" liste) for å hjelpe spillerne med å huske andre figurer før hendelsen"
 
 msgid ""
 "If checked, characters automatically and repeatedly acquire the most "

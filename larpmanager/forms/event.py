@@ -339,6 +339,9 @@ class OrgaConfigForm(ConfigForm):
         self.set_config_email()
         self.set_config_custom_mail()
 
+        # 7. Ensemble
+        self.set_config_ensemble()
+
     def set_config_display(self) -> None:
         """Configure visualisation settings for the event management page."""
         self.set_section("visualisation", _("Display"))
@@ -394,6 +397,28 @@ class OrgaConfigForm(ConfigForm):
 
             field_label = _("Password of account")
             self.add_configs("mail_server_host_password", ConfigType.CHAR, field_label, field_help_text)
+
+    def set_config_ensemble(self) -> None:
+        """Configure ensemble character learning page settings."""
+        if "ensemble" not in self.params.get("features"):
+            return
+
+        self.set_section("ensemble", _("Ensemble"))
+
+        self.add_configs(
+            "ensemble_show_player",
+            ConfigType.BOOL,
+            _("Show player name"),
+            _("If checked, shows the player's name alongside their character"),
+        )
+
+        self.add_configs(
+            "ensemble_default_mode",
+            ConfigType.CHOICE,
+            _("Default view mode"),
+            _("The initial display mode when opening the ensemble page"),
+            extra_data=[("book", _("Book")), ("cards", _("Cards")), ("compact", _("Compact list"))],
+        )
 
     def set_config_tickets(self) -> None:
         """Configure ticket tiers and registration sub-features."""

@@ -92,6 +92,9 @@ msgstr "Zone"
 msgid "Body"
 msgstr "Corps"
 
+msgid "Book"
+msgstr "Livre"
+
 msgid "Card"
 msgstr "Carte"
 
@@ -320,6 +323,9 @@ msgstr "Éviter"
 msgid "Badge"
 msgstr "Badges"
 
+msgid "Cards"
+msgstr "Cartes"
+
 msgid "Check"
 msgstr "Vérifier"
 
@@ -407,6 +413,9 @@ msgstr "Parcelles"
 
 msgid "Price"
 msgstr "Prix"
+
+msgid "Print"
+msgstr "Imprimer"
 
 msgid "Quest"
 msgstr "Quête"
@@ -1112,6 +1121,9 @@ msgstr "Éléments"
 
 msgid "End date"
 msgstr "Date de fin"
+
+msgid "Ensemble"
+msgstr "Ensemble"
 
 msgid "Excluded"
 msgstr "A l'exclusion de"
@@ -2099,6 +2111,9 @@ msgstr "Changer de photo"
 
 msgid "Collaborator"
 msgstr "Contributeur"
+
+msgid "Compact list"
+msgstr "Liste compacte"
 
 msgid "Content Type"
 msgstr "Type de contenu"
@@ -3155,6 +3170,9 @@ msgstr "Définir le type de capacité"
 msgid "Show collections"
 msgstr "Afficher les collections"
 
+msgid "Show player name"
+msgstr "Afficher le nom du joueur"
+
 msgid "Single-line text"
 msgstr "Texte sur une seule ligne"
 
@@ -3241,6 +3259,9 @@ msgstr "Attribution de crédits"
 
 msgid "Custom title font"
 msgstr "Police de titre personnalisée"
+
+msgid "Default view mode"
+msgstr "Mode d'affichage par défaut"
 
 msgid "Disable Auto save"
 msgstr "Désactiver l'enregistrement automatique"
@@ -3490,6 +3511,9 @@ msgstr "Effectuer l'extraction"
 
 msgid "Preferences saved!"
 msgstr "Préférences sauvegardées !"
+
+msgid "Print current view"
+msgstr "Imprimer la vue actuelle"
 
 msgid "Proposed character"
 msgstr "Caractère proposé"
@@ -4436,6 +4460,9 @@ msgstr "Création d'une nouvelle association"
 #, python-format
 msgid "New question by %(user)s"
 msgstr "Nouvelle question posée par %(user)s"
+
+msgid "No characters available."
+msgstr "Aucun personnage n'est disponible."
 
 msgid "No transactions recorded"
 msgstr "Aucune transaction enregistrée"
@@ -5705,6 +5732,9 @@ msgstr "Cacher les participants sans caractère"
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Si la case est cochée, autoriser le niveau de ticket : Vendeur"
 
+msgid "Learn all characters before the event"
+msgstr "Apprendre tous les personnages avant l'événement"
+
 msgid "Location - rent, gas, overnight stays"
 msgstr "Lieu - loyer, gaz, nuitées"
 
@@ -5922,6 +5952,9 @@ msgstr "Part des %(user)s par %(year)s"
 
 msgid "Membership of the Organization accepted"
 msgstr "Adhésion à l'association acceptée"
+
+msgid "Now you can configure the ensemble page"
+msgstr "Vous pouvez maintenant configurer la page d'ensemble"
 
 msgid "Now you can create quests for the event"
 msgstr "Vous pouvez maintenant créer des quêtes pour l'événement"
@@ -7242,6 +7275,9 @@ msgid "Select the table rows and choose the operation to apply"
 msgstr ""
 "Sélectionnez les lignes du tableau et choisissez l'opération à appliquer"
 
+msgid "The initial display mode when opening the ensemble page"
+msgstr "Mode d'affichage initial lors de l'ouverture de la page d'ensemble"
+
 msgid "The link will be valid for the following number of days"
 msgstr "Le lien sera valable pendant le nombre de jours suivant "
 
@@ -7629,6 +7665,10 @@ msgid "If checked, an option can be chosen a maximum number of times"
 msgstr ""
 "Si cette case est cochée, une option peut être choisie un nombre maximum de "
 "fois"
+
+msgid "If checked, shows the player's name alongside their character"
+msgstr ""
+"Si cette case est cochée, le nom du joueur apparaît à côté de son personnage"
 
 msgid "In this page you can mark which items to add to the game area"
 msgstr ""
@@ -11888,6 +11928,14 @@ msgstr ""
 "Le gestionnaire d'événements dispose de plus de 100 fonctions différentes. "
 "Il en existe une pour chaque aspect de l'organisation d'un événement : "
 "inscriptions, comptabilité, rédaction, logistique"
+
+msgid ""
+"Provides a character learning page with multiple display modes (book, cards,"
+" compact list) to help players memorise other characters before the event"
+msgstr ""
+"Fournit une page d'apprentissage des personnages avec plusieurs modes "
+"d'affichage (livre, cartes, liste compacte) pour aider les joueurs à "
+"mémoriser les autres personnages avant l'événement"
 
 msgid ""
 "If checked, characters automatically and repeatedly acquire the most "

@@ -92,6 +92,9 @@ msgstr "Obszar"
 msgid "Body"
 msgstr "Ciało"
 
+msgid "Book"
+msgstr "Książka"
+
 msgid "Card"
 msgstr "Karta"
 
@@ -320,6 +323,9 @@ msgstr "Unikać"
 msgid "Badge"
 msgstr "Odznaka"
 
+msgid "Cards"
+msgstr "Karty"
+
 msgid "Check"
 msgstr "Sprawdź"
 
@@ -407,6 +413,9 @@ msgstr "Działki"
 
 msgid "Price"
 msgstr "Cena"
+
+msgid "Print"
+msgstr "Drukuj"
 
 msgid "Quest"
 msgstr "Quest"
@@ -1112,6 +1121,9 @@ msgstr "Elementy"
 
 msgid "End date"
 msgstr "Data zakończenia"
+
+msgid "Ensemble"
+msgstr "Zespół"
 
 msgid "Excluded"
 msgstr "Wyłączone"
@@ -2099,6 +2111,9 @@ msgstr "Zmień zdjęcie"
 
 msgid "Collaborator"
 msgstr "Współpracownik"
+
+msgid "Compact list"
+msgstr "Lista kompaktowa"
 
 msgid "Content Type"
 msgstr "Typ zawartości"
@@ -3155,6 +3170,9 @@ msgstr "Ustaw typ umiejętności"
 msgid "Show collections"
 msgstr "Pokaż kolekcje"
 
+msgid "Show player name"
+msgstr "Pokaż nazwę gracza"
+
 msgid "Single-line text"
 msgstr "Tekst jednowierszowy"
 
@@ -3241,6 +3259,9 @@ msgstr "Przypisanie kredytu"
 
 msgid "Custom title font"
 msgstr "Niestandardowa czcionka tytułu"
+
+msgid "Default view mode"
+msgstr "Domyślny tryb widoku"
 
 msgid "Disable Auto save"
 msgstr "Wyłącz automatyczne zapisywanie"
@@ -3490,6 +3511,9 @@ msgstr "Przeprowadzenie ekstrakcji"
 
 msgid "Preferences saved!"
 msgstr "Preferencje zapisane!"
+
+msgid "Print current view"
+msgstr "Drukuj bieżący widok"
 
 msgid "Proposed character"
 msgstr "Proponowany charakter"
@@ -4436,6 +4460,9 @@ msgstr "Utworzono nową organizację"
 #, python-format
 msgid "New question by %(user)s"
 msgstr "Nowe pytanie od %(user)s"
+
+msgid "No characters available."
+msgstr "Brak dostępnych znaków."
 
 msgid "No transactions recorded"
 msgstr "Nie zarejestrowano żadnych transakcji"
@@ -5704,6 +5731,9 @@ msgstr "Ukryj uczestników bez znaku"
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Jeśli zaznaczone, zezwól na poziom biletu: Sprzedawca"
 
+msgid "Learn all characters before the event"
+msgstr "Poznaj wszystkie postacie przed wydarzeniem"
+
 msgid "Location - rent, gas, overnight stays"
 msgstr "Lokalizacja - czynsz, gaz, noclegi"
 
@@ -5918,6 +5948,9 @@ msgstr "Opłata członkowska w wysokości %(user)s za %(year)s"
 
 msgid "Membership of the Organization accepted"
 msgstr "Członkostwo w organizacji przyjęte"
+
+msgid "Now you can configure the ensemble page"
+msgstr "Teraz można skonfigurować stronę zespołu"
 
 msgid "Now you can create quests for the event"
 msgstr "Teraz możesz tworzyć zadania dla wydarzenia"
@@ -7188,6 +7221,9 @@ msgstr "Przejrzyj użytkowników, którzy nie dotrzymali terminów wydarzenia"
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Zaznacz wiersze tabeli i wybierz operację do zastosowania"
 
+msgid "The initial display mode when opening the ensemble page"
+msgstr "Początkowy tryb wyświetlania po otwarciu strony zespołu"
+
 msgid "The link will be valid for the following number of days"
 msgstr "Link będzie ważny przez następującą liczbę dni"
 
@@ -7531,6 +7567,9 @@ msgstr "Czy chcesz zarządzać postępem postaci poprzez umiejętności"
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Jeśli opcja jest zaznaczona, można ją wybrać maksymalnie kilka razy"
+
+msgid "If checked, shows the player's name alongside their character"
+msgstr "Jeśli zaznaczone, wyświetla imię gracza obok jego postaci"
 
 msgid "In this page you can mark which items to add to the game area"
 msgstr ""
@@ -11633,6 +11672,14 @@ msgid ""
 msgstr ""
 "Larpmanager ma ponad 100 różnych funkcji. Jest jeden dla każdego aspektu "
 "organizacji wydarzeń: zapisy, księgowość, pisanie, logistyka"
+
+msgid ""
+"Provides a character learning page with multiple display modes (book, cards,"
+" compact list) to help players memorise other characters before the event"
+msgstr ""
+"Zapewnia stronę nauki postaci z wieloma trybami wyświetlania (książka, "
+"karty, kompaktowa lista), aby pomóc graczom zapamiętać inne postacie przed "
+"wydarzeniem"
 
 msgid ""
 "If checked, characters automatically and repeatedly acquire the most "
