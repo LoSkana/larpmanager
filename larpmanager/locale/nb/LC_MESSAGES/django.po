@@ -1191,6 +1191,9 @@ msgstr "Gammel meny"
 msgid "One-Time"
 msgstr "Engangsbruk"
 
+msgid "One-shot"
+msgstr "Ett skudd"
+
 msgid "Optional"
 msgstr "Valgfritt"
 
@@ -2639,6 +2642,9 @@ msgstr "Opprettelse av hendelser"
 msgid "Event features"
 msgstr "Arrangementets funksjoner"
 
+msgid "Event template"
+msgstr "Mal for arrangement"
+
 msgid "Executive Vote"
 msgstr "Avstemning i ledelsen"
 
@@ -3793,6 +3799,9 @@ msgstr "Administrer påmeldinger til arrangementer"
 
 msgid "Manage payment items"
 msgstr "Administrer betalingselementer"
+
+msgid "Manual configuration"
+msgstr "Manuell konfigurasjon"
 
 msgid "Maximum participants"
 msgstr "Maksimalt antall deltakere"
@@ -5504,6 +5513,9 @@ msgstr "(<a href='%(url)s'>svar her</a>)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Valgfritt) Billettens beskrivelse"
+
+msgid "Choose individual features yourself"
+msgstr "Velg individuelle funksjoner selv"
 
 msgid "If checked: shows the old dashboard"
 msgstr "Hvis avkrysset: viser det gamle dashbordet"
@@ -8080,10 +8092,6 @@ msgstr ""
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Vi sender deg en bekreftelse på e-post når endringen er gjennomført"
 
-msgid "You are choosing the most common features to activate for your event"
-msgstr ""
-"Du velger de vanligste funksjonene som skal aktiveres for arrangementet ditt"
-
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr ""
@@ -8960,6 +8968,13 @@ msgstr ""
 "velges"
 
 msgid ""
+"Select an event template to activate the right features, or configure "
+"manually"
+msgstr ""
+"Velg en hendelsesmal for å aktivere de riktige funksjonene, eller konfigurer"
+" manuelt"
+
+msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "
 "messages"
 msgstr ""
@@ -9833,6 +9848,13 @@ msgid ""
 msgstr ""
 "for ensrettede relasjoner, der den andre karakteren IKKE er klar over "
 "forbindelsen"
+
+msgid ""
+"Multi-event story with player-created characters, experience points, and a "
+"persistent world"
+msgstr ""
+"En historie med flere hendelser, spillskapte karakterer, erfaringspoeng og "
+"en vedvarende verden"
 
 msgid ""
 "Note that existing abilities with the same name, will be overwritten with "
@@ -11188,6 +11210,13 @@ msgid ""
 msgstr ""
 "Valgfritt - For tekstspørsmål, maksimalt antall tegn; for flere "
 "alternativer, maksimalt antall alternativer (0 = ingen begrensning)"
+
+msgid ""
+"Single event focusing on narrative, characters written by staff and assigned"
+" via casting algorithm, with factions and plots"
+msgstr ""
+"Enkeltstående arrangement med fokus på fortelling, karakterer skrevet av "
+"ansatte og tildelt via castingalgoritme, med fraksjoner og plott"
 
 #, python-format
 msgid ""

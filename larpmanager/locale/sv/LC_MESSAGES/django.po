@@ -1191,6 +1191,9 @@ msgstr "Gammal meny"
 msgid "One-Time"
 msgstr "En gång"
 
+msgid "One-shot"
+msgstr "Ett skott"
+
 msgid "Optional"
 msgstr "Valfritt"
 
@@ -2639,6 +2642,9 @@ msgstr "Skapande av evenemang"
 msgid "Event features"
 msgstr "Funktioner för evenemang"
 
+msgid "Event template"
+msgstr "Mall för evenemang"
+
 msgid "Executive Vote"
 msgstr "Ledningens omröstning"
 
@@ -3793,6 +3799,9 @@ msgstr "Hantera anmälningar till evenemang"
 
 msgid "Manage payment items"
 msgstr "Hantera betalningsobjekt"
+
+msgid "Manual configuration"
+msgstr "Manuell konfiguration"
 
 msgid "Maximum participants"
 msgstr "Maximalt antal deltagare"
@@ -5504,6 +5513,9 @@ msgstr "(<a href='%(url)s'>svara här</a>)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Valfritt) Beskrivning av biljetten"
+
+msgid "Choose individual features yourself"
+msgstr "Välj enskilda funktioner själv"
 
 msgid "If checked: shows the old dashboard"
 msgstr "Om markerad: visar den gamla instrumentpanelen"
@@ -8074,10 +8086,6 @@ msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
 "Vi skickar ett bekräftelsemeddelande till dig när ändringen har gjorts"
 
-msgid "You are choosing the most common features to activate for your event"
-msgstr ""
-"Du väljer de vanligaste funktionerna som ska aktiveras för ditt evenemang"
-
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Du har korrekt avbokat registreringen till %(event)s event"
@@ -8962,6 +8970,13 @@ msgid ""
 msgstr ""
 "Anger andra alternativ som måste väljas för att detta alternativ ska vara "
 "valbart"
+
+msgid ""
+"Select an event template to activate the right features, or configure "
+"manually"
+msgstr ""
+"Välj en händelsemall för att aktivera rätt funktioner, eller konfigurera "
+"manuellt"
 
 msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "
@@ -9852,6 +9867,13 @@ msgid ""
 msgstr ""
 "för enkelriktade relationer, där den andra karaktären INTE är medveten om "
 "anslutningen"
+
+msgid ""
+"Multi-event story with player-created characters, experience points, and a "
+"persistent world"
+msgstr ""
+"Berättelse med flera händelser, spelarskapade karaktärer, erfarenhetspoäng "
+"och en bestående värld"
 
 msgid ""
 "Note that existing abilities with the same name, will be overwritten with "
@@ -11207,6 +11229,13 @@ msgid ""
 msgstr ""
 "Valfritt - För textfrågor, maximalt antal tecken; För flervalsalternativ, "
 "maximalt antal alternativ (0 = ingen begränsning)"
+
+msgid ""
+"Single event focusing on narrative, characters written by staff and assigned"
+" via casting algorithm, with factions and plots"
+msgstr ""
+"Enstaka evenemang med fokus på berättande, karaktärer skrivna av personal "
+"och tilldelade via castingalgoritm, med fraktioner och intriger"
 
 #, python-format
 msgid ""

@@ -1781,7 +1781,28 @@ msgstr ""
 msgid "Manage template features (click on a feature to show its description)"
 msgstr ""
 
-msgid "You are choosing the most common features to activate for your event"
+msgid ""
+"Multi-event story with player-created characters, experience points, and a "
+"persistent world"
+msgstr ""
+
+msgid "One-shot"
+msgstr ""
+
+msgid ""
+"Single event focusing on narrative, characters written by staff and assigned "
+"via casting algorithm, with factions and plots"
+msgstr ""
+
+msgid "Manual configuration"
+msgstr ""
+
+msgid "Choose individual features yourself"
+msgstr ""
+
+msgid ""
+"Select an event template to activate the right features, or configure "
+"manually"
 msgstr ""
 
 msgid "Do you want to manage characters assigned to registered participants"
@@ -1828,6 +1849,9 @@ msgstr ""
 msgid ""
 "Do you want to allow users to add a voluntary donation to their registration "
 "fee"
+msgstr ""
+
+msgid "Event template"
 msgstr ""
 
 msgid "Default fields"

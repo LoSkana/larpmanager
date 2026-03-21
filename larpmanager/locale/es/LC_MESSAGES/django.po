@@ -1191,6 +1191,9 @@ msgstr "Menú antiguo"
 msgid "One-Time"
 msgstr "Una sola vez"
 
+msgid "One-shot"
+msgstr "Un disparo"
+
 msgid "Optional"
 msgstr "Opcional"
 
@@ -2639,6 +2642,9 @@ msgstr "Creación de eventos"
 msgid "Event features"
 msgstr "Características del evento"
 
+msgid "Event template"
+msgstr "Plantilla de eventos"
+
 msgid "Executive Vote"
 msgstr "Voto ejecutivo"
 
@@ -3793,6 +3799,9 @@ msgstr "Gestionar las inscripciones a eventos"
 
 msgid "Manage payment items"
 msgstr "Gestionar elementos de pago"
+
+msgid "Manual configuration"
+msgstr "Configuración manual"
 
 msgid "Maximum participants"
 msgstr "Máximo de participantes"
@@ -5504,6 +5513,9 @@ msgstr "(<a href='%(url)s'>responda aquí</a>)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Opcional) Descripción del ticket"
+
+msgid "Choose individual features yourself"
+msgstr "Elija usted mismo las características individuales"
 
 msgid "If checked: shows the old dashboard"
 msgstr "Si está marcada: muestra el salpicadero antiguo"
@@ -8154,10 +8166,6 @@ msgstr ""
 "Le enviaremos un correo electrónico de confirmación cuando se haya realizado"
 " el cambio"
 
-msgid "You are choosing the most common features to activate for your event"
-msgstr ""
-"Está eligiendo las características más comunes para activar para su evento"
-
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Ha cancelado correctamente la inscripción al evento %(event)s"
@@ -9095,6 +9103,13 @@ msgstr ""
 "seleccionable"
 
 msgid ""
+"Select an event template to activate the right features, or configure "
+"manually"
+msgstr ""
+"Seleccione una plantilla de eventos para activar las funciones adecuadas, o "
+"configúrela manualmente"
+
+msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "
 "messages"
 msgstr ""
@@ -9993,6 +10008,13 @@ msgid ""
 msgstr ""
 "para relaciones unidireccionales, en las que el otro personaje NO conoce la "
 "conexión"
+
+msgid ""
+"Multi-event story with player-created characters, experience points, and a "
+"persistent world"
+msgstr ""
+"Historia multievento con personajes creados por el jugador, puntos de "
+"experiencia y un mundo persistente"
 
 msgid ""
 "Note that existing abilities with the same name, will be overwritten with "
@@ -11351,6 +11373,13 @@ msgid ""
 msgstr ""
 "Opcional - Para preguntas de texto, número máximo de caracteres; Para "
 "opciones múltiples, número máximo de opciones (0 = sin límite)"
+
+msgid ""
+"Single event focusing on narrative, characters written by staff and assigned"
+" via casting algorithm, with factions and plots"
+msgstr ""
+"Evento único centrado en la narrativa, personajes escritos por el personal y"
+" asignados mediante algoritmo de reparto, con facciones y tramas"
 
 #, python-format
 msgid ""

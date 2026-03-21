@@ -33,6 +33,7 @@ from larpmanager.cache.config import (
     get_event_config,
     reset_element_configs,
     save_all_element_configs,
+    save_single_config,
 )
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.question import get_cached_writing_questions
@@ -54,6 +55,7 @@ from larpmanager.forms.utils import (
     save_permissions_role,
 )
 from larpmanager.models.access import EventPermission, EventRole
+from larpmanager.models.base import Feature
 from larpmanager.models.event import (
     DevelopStatus,
     Event,
@@ -1661,12 +1663,45 @@ class ExeTemplateRolesForm(OrgaEventRoleForm):
         self.fields["members"].required = False
 
 
+# Event templates: (slug, label, icon, description, feature_slugs, extra_configs)
+_EVENT_TEMPLATES = [
+    (
+        "campaign",
+        _("Campaign"),
+        "fa-solid fa-dragon",
+        _("Multi-event story with player-created characters, experience points, and a persistent world"),
+        ["character", "user_character", "px", "campaign", "player_cancellation"],
+        {"user_character_max": 1, "user_character_approval": "True"},
+    ),
+    (
+        "oneshot",
+        _("One-shot"),
+        "fa-solid fa-masks-theater",
+        _(
+            "Single event focusing on narrative, characters written by staff and assigned via casting algorithm, with factions and plots"
+        ),
+        ["character", "casting", "faction", "plot", "handout", "player_cancellation"],
+        {},
+    ),
+    (
+        "manual",
+        _("Manual configuration"),
+        "fa-solid fa-sliders",
+        _("Choose individual features yourself"),
+        [],
+        {},
+    ),
+]
+
+
 class OrgaQuickSetupForm(QuickSetupForm):
     """Form for quick setup of essential event settings."""
 
     page_title = _("Quick Setup")
 
-    page_info = _("You are choosing the most common features to activate for your event")
+    page_info = _("Select an event template to activate the right features, or configure manually")
+
+    load_js: ClassVar[list] = ["quick_setup_template"]
 
     class Meta:
         model = Event
@@ -1682,9 +1717,11 @@ class OrgaQuickSetupForm(QuickSetupForm):
         """
         super().__init__(*args, **kwargs)
 
+        is_skin_full = self.instance.association.skin_id == 1
+
         self.setup = {}
 
-        if self.instance.association.skin_id == 1:
+        if is_skin_full:
             self.setup.update(
                 {
                     "character": (
@@ -1740,7 +1777,76 @@ class OrgaQuickSetupForm(QuickSetupForm):
             },
         )
 
-        self.init_fields(get_event_features(self.instance.pk))
+        active_features = get_event_features(self.instance.pk)
+        self.init_fields(active_features)
+
+        if is_skin_full:
+            # Add template picker as the first field
+            template_choices = [(slug, label) for slug, label, _i, _d, _f, _c in _EVENT_TEMPLATES]
+            initial_template = "manual" if active_features else "campaign"
+
+            # Insert template field at the beginning of the ordered dict
+            updated_fields = {
+                "template": forms.ChoiceField(
+                    choices=template_choices,
+                    label=_("Event template"),
+                    required=True,
+                    initial=initial_template,
+                )
+            }
+            updated_fields.update(self.fields)
+            self.fields = updated_fields
+            self.initial["template"] = initial_template
+
+            # Mark manual-mode fields so JS can show/hide them
+            for key in self.setup:
+                if key in self.fields:
+                    self.fields[key].custom_class = "manual-section"
+
+            # Store template data for use in the JS helper template
+            self.template_data = _EVENT_TEMPLATES
+
+    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002
+        """Save form, applying either a template's feature set or manual checkbox choices.
+
+        Args:
+            commit: Whether to save to the database. Defaults to True.
+
+        Returns:
+            The saved Event instance.
+
+        """
+        selected_template = self.cleaned_data.get("template", "manual")
+
+        if selected_template != "manual":
+            # Template mode: apply predefined features additively, ignore manual checkboxes
+            template_entry = next(
+                (t for t in _EVENT_TEMPLATES if t[0] == selected_template),
+                None,
+            )
+            template_features = template_entry[4] if template_entry else []
+            template_configs = template_entry[5] if template_entry else {}
+
+            original_setup = self.setup
+            self.setup = {}
+            try:
+                instance = super().save(commit=commit)
+            finally:
+                self.setup = original_setup
+
+            if template_features:
+                feat_ids = dict(Feature.objects.filter(slug__in=template_features).values_list("slug", "id"))
+                for feat_slug in template_features:
+                    if feat_slug in feat_ids:
+                        self.instance.features.add(feat_ids[feat_slug])
+
+            for config_name, config_value in template_configs.items():
+                save_single_config(self.instance, config_name, config_value)
+
+            instance.save()
+            return instance
+
+        return super().save(commit=commit)
 
 
 class OrgaRunDatesForm(OrgaRunForm):

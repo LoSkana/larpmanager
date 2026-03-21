@@ -1191,6 +1191,9 @@ msgstr "Vanha valikko"
 msgid "One-Time"
 msgstr "Kertaluonteinen"
 
+msgid "One-shot"
+msgstr "One-shot"
+
 msgid "Optional"
 msgstr "Valinnainen"
 
@@ -2639,6 +2642,9 @@ msgstr "Tapahtuman luominen"
 msgid "Event features"
 msgstr "Tapahtuman ominaisuudet"
 
+msgid "Event template"
+msgstr "Tapahtuman malli"
+
 msgid "Executive Vote"
 msgstr "Johtava äänestys"
 
@@ -3793,6 +3799,9 @@ msgstr "Hallitse tapahtuman ilmoittautumisia"
 
 msgid "Manage payment items"
 msgstr "Hallitse maksueriä"
+
+msgid "Manual configuration"
+msgstr "Manuaalinen konfigurointi"
 
 msgid "Maximum participants"
 msgstr "Osallistujien enimmäismäärä"
@@ -5504,6 +5513,9 @@ msgstr "(<a href='%(url)s'>vastaukset täällä</a>))"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Valinnainen) Lipun kuvaus"
+
+msgid "Choose individual features yourself"
+msgstr "Valitse yksittäiset ominaisuudet itse"
 
 msgid "If checked: shows the old dashboard"
 msgstr "Jos valittuna: näyttää vanhan kojelaudan"
@@ -8066,9 +8078,6 @@ msgstr ""
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Lähetämme sinulle vahvistussähköpostin, kun muutos on tehty"
 
-msgid "You are choosing the most common features to activate for your event"
-msgstr "Valitset yleisimmät ominaisuudet aktivoitavaksi tapahtumaasi varten"
-
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Olet peruuttanut ilmoittautumisen tapahtumaan %(event)s"
@@ -8961,6 +8970,13 @@ msgstr ""
 "voidaan valita"
 
 msgid ""
+"Select an event template to activate the right features, or configure "
+"manually"
+msgstr ""
+"Valitse tapahtumamalli oikeiden ominaisuuksien aktivoimiseksi tai määritä "
+"manuaalisesti"
+
+msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "
 "messages"
 msgstr ""
@@ -9832,6 +9848,13 @@ msgid ""
 "the connection"
 msgstr ""
 "yksisuuntaisissa suhteissa, joissa toinen hahmo EI ole tietoinen yhteydestä"
+
+msgid ""
+"Multi-event story with player-created characters, experience points, and a "
+"persistent world"
+msgstr ""
+"Monitapahtumainen tarina, jossa on pelaajan luomia hahmoja, kokemuspisteitä "
+"ja pysyvä maailma"
 
 msgid ""
 "Note that existing abilities with the same name, will be overwritten with "
@@ -11181,6 +11204,13 @@ msgid ""
 msgstr ""
 "Valinnainen - Tekstikysymyksissä merkkien enimmäismäärä; monivaihtoehdoissa "
 "vaihtoehtojen enimmäismäärä (0 = ei rajoitusta)"
+
+msgid ""
+"Single event focusing on narrative, characters written by staff and assigned"
+" via casting algorithm, with factions and plots"
+msgstr ""
+"Kerrontaan keskittyvä yksittäinen tapahtuma, henkilökunnan kirjoittamat "
+"hahmot, jotka osoitetaan casting-algoritmin avulla, ryhmittymät ja juonet"
 
 #, python-format
 msgid ""

@@ -1191,6 +1191,9 @@ msgstr "Ancien menu"
 msgid "One-Time"
 msgstr "Unique"
 
+msgid "One-shot"
+msgstr "One-shot (une seule prise)"
+
 msgid "Optional"
 msgstr "En option"
 
@@ -2639,6 +2642,9 @@ msgstr "Création d'un événement"
 msgid "Event features"
 msgstr "Caractéristiques de l'événement"
 
+msgid "Event template"
+msgstr "Modèle d'événement"
+
 msgid "Executive Vote"
 msgstr "Vote de la direction"
 
@@ -3793,6 +3799,9 @@ msgstr "Gérer les inscriptions aux événements"
 
 msgid "Manage payment items"
 msgstr "Gérer les éléments de paiement"
+
+msgid "Manual configuration"
+msgstr "Configuration manuelle"
 
 msgid "Maximum participants"
 msgstr "Nombre maximum de participants"
@@ -5505,6 +5514,9 @@ msgstr "(<a href='%(url)s'>réponse ici</a>)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Facultatif) Description du billet"
+
+msgid "Choose individual features yourself"
+msgstr "Choisissez vous-même les caractéristiques individuelles"
 
 msgid "If checked: shows the old dashboard"
 msgstr "Si coché : affiche l'ancien tableau de bord"
@@ -8263,11 +8275,6 @@ msgstr ""
 "Nous vous enverrons un e-mail de confirmation lorsque la modification aura "
 "été effectuée"
 
-msgid "You are choosing the most common features to activate for your event"
-msgstr ""
-"Vous choisissez les fonctionnalités les plus courantes à activer pour votre "
-"événement"
-
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Vous avez correctement annulé l'inscription à l'événement %(event)s"
@@ -9247,6 +9254,13 @@ msgstr ""
 "option soit sélectionnable"
 
 msgid ""
+"Select an event template to activate the right features, or configure "
+"manually"
+msgstr ""
+"Sélectionnez un modèle d'événement pour activer les fonctions appropriées ou"
+" configurez-le manuellement"
+
+msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "
 "messages"
 msgstr ""
@@ -10147,6 +10161,13 @@ msgid ""
 msgstr ""
 "pour les relations unidirectionnelles, où l'autre personnage n'est PAS au "
 "courant de la connexion"
+
+msgid ""
+"Multi-event story with player-created characters, experience points, and a "
+"persistent world"
+msgstr ""
+"Une histoire à événements multiples avec des personnages créés par le "
+"joueur, des points d'expérience et un monde persistant"
 
 msgid ""
 "Note that existing abilities with the same name, will be overwritten with "
@@ -11519,6 +11540,14 @@ msgid ""
 msgstr ""
 "Facultatif - Pour les questions textuelles, nombre maximum de caractères ; "
 "Pour les options multiples, nombre maximum d'options (0 = aucune limite)"
+
+msgid ""
+"Single event focusing on narrative, characters written by staff and assigned"
+" via casting algorithm, with factions and plots"
+msgstr ""
+"Événement unique axé sur la narration, avec des personnages écrits par le "
+"personnel et attribués par un algorithme de casting, avec des factions et "
+"des intrigues"
 
 #, python-format
 msgid ""

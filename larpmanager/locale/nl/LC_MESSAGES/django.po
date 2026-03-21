@@ -1191,6 +1191,9 @@ msgstr "Oud menu"
 msgid "One-Time"
 msgstr "Eenmalig"
 
+msgid "One-shot"
+msgstr "Eenmalig"
+
 msgid "Optional"
 msgstr "Optioneel"
 
@@ -2639,6 +2642,9 @@ msgstr "Evenement maken"
 msgid "Event features"
 msgstr "Functies van het evenement"
 
+msgid "Event template"
+msgstr "Gebeurtenissjabloon"
+
 msgid "Executive Vote"
 msgstr "Stemming management"
 
@@ -3793,6 +3799,9 @@ msgstr "Aanmeldingen voor evenementen beheren"
 
 msgid "Manage payment items"
 msgstr "Betalingsitems beheren"
+
+msgid "Manual configuration"
+msgstr "Handmatige configuratie"
 
 msgid "Maximum participants"
 msgstr "Maximaal aantal deelnemers"
@@ -5504,6 +5513,9 @@ msgstr "(<a href='%(url)s'>antwoord hier</a>)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Optioneel) De beschrijving van het ticket"
+
+msgid "Choose individual features yourself"
+msgstr "Kies zelf individuele functies"
 
 msgid "If checked: shows the old dashboard"
 msgstr "Indien aangevinkt: toont het oude dashboard"
@@ -8161,10 +8173,6 @@ msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
 "We sturen je een bevestigingse-mail wanneer de wijziging is doorgevoerd"
 
-msgid "You are choosing the most common features to activate for your event"
-msgstr ""
-"Je kiest de meest gebruikelijke functies om te activeren voor je evenement"
-
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr ""
@@ -9117,6 +9125,13 @@ msgstr ""
 " kiezen"
 
 msgid ""
+"Select an event template to activate the right features, or configure "
+"manually"
+msgstr ""
+"Selecteer een gebeurtenissjabloon om de juiste functies te activeren of "
+"configureer handmatig"
+
+msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "
 "messages"
 msgstr ""
@@ -10015,6 +10030,13 @@ msgid ""
 msgstr ""
 "voor unidirectionele relaties, waarbij het andere personage zich NIET bewust"
 " is van de verbinding"
+
+msgid ""
+"Multi-event story with player-created characters, experience points, and a "
+"persistent world"
+msgstr ""
+"Verhaal met meerdere gebeurtenissen, door de speler gecreëerde personages, "
+"ervaringspunten en een persistente wereld"
 
 msgid ""
 "Note that existing abilities with the same name, will be overwritten with "
@@ -11379,6 +11401,13 @@ msgid ""
 msgstr ""
 "Optioneel - Voor tekstvragen, maximaal aantal tekens; Voor meerkeuzevragen, "
 "maximaal aantal opties (0 = geen limiet)"
+
+msgid ""
+"Single event focusing on narrative, characters written by staff and assigned"
+" via casting algorithm, with factions and plots"
+msgstr ""
+"Eén evenement gericht op verhaal, personages geschreven door personeel en "
+"toegewezen via castingalgoritme, met facties en plots"
 
 #, python-format
 msgid ""

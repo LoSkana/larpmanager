@@ -1191,6 +1191,9 @@ msgstr "Staré menu"
 msgid "One-Time"
 msgstr "Jednorázové"
 
+msgid "One-shot"
+msgstr "Jednorázový záběr"
+
 msgid "Optional"
 msgstr "Volitelně"
 
@@ -2639,6 +2642,9 @@ msgstr "Vytvoření události"
 msgid "Event features"
 msgstr "Funkce události"
 
+msgid "Event template"
+msgstr "Šablona události"
+
 msgid "Executive Vote"
 msgstr "Hlasování vedení"
 
@@ -3793,6 +3799,9 @@ msgstr "Správa přihlašování na události"
 
 msgid "Manage payment items"
 msgstr "Správa platebních položek"
+
+msgid "Manual configuration"
+msgstr "Ruční konfigurace"
 
 msgid "Maximum participants"
 msgstr "Maximální počet účastníků"
@@ -5505,6 +5514,9 @@ msgstr "(<a href='%(url)s'>odpověď zde</a>)"
 msgid "(Optional) The ticket's description"
 msgstr "(Nepovinné) Popis tipu"
 
+msgid "Choose individual features yourself"
+msgstr "Vyberte si jednotlivé funkce sami"
+
 msgid "If checked: shows the old dashboard"
 msgstr "Pokud je zaškrtnuto: zobrazí starý přístrojový panel"
 
@@ -5950,7 +5962,7 @@ msgid "Membership of the Organization accepted"
 msgstr "Členství ve sdružení je přijato"
 
 msgid "Now you can configure the ensemble page"
-msgstr "Nyní můžete nakonfigurovat stránku souboru."
+msgstr "Nyní můžete nakonfigurovat stránku souboru"
 
 msgid "Now you can create quests for the event"
 msgstr "Nyní můžete vytvářet úkoly pro tuto událost"
@@ -8039,9 +8051,6 @@ msgstr ""
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Po provedení změny vám zašleme potvrzující e-mail"
 
-msgid "You are choosing the most common features to activate for your event"
-msgstr "Vybíráte nejběžnější funkce, které chcete pro svou událost aktivovat"
-
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Správně jste zrušili registraci na událost %(event)s"
@@ -8892,6 +8901,13 @@ msgstr ""
 " vybrat"
 
 msgid ""
+"Select an event template to activate the right features, or configure "
+"manually"
+msgstr ""
+"Výběrem šablony události aktivujte správné funkce nebo je nakonfigurujte "
+"ručně"
+
+msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "
 "messages"
 msgstr ""
@@ -9738,6 +9754,13 @@ msgid ""
 "for unidirectional relationships, where the other character is NOT aware of "
 "the connection"
 msgstr "pro jednosměrné vztahy, kdy druhá postava o spojení NEví"
+
+msgid ""
+"Multi-event story with player-created characters, experience points, and a "
+"persistent world"
+msgstr ""
+"Příběh s několika událostmi, postavami vytvořenými hráčem, zkušenostními "
+"body a trvalým světem"
 
 msgid ""
 "Note that existing abilities with the same name, will be overwritten with "
@@ -11080,6 +11103,13 @@ msgid ""
 msgstr ""
 "Nepovinné - u textových otázek maximální počet znaků; u vícenásobných "
 "možností maximální počet možností (0 = bez omezení)"
+
+msgid ""
+"Single event focusing on narrative, characters written by staff and assigned"
+" via casting algorithm, with factions and plots"
+msgstr ""
+"Jedna událost zaměřená na vyprávění, postavy napsané zaměstnanci a přiřazené"
+" pomocí algoritmu castingu, s frakcemi a zápletkami"
 
 #, python-format
 msgid ""
