@@ -1527,7 +1527,13 @@ header.sec h1 {
 
 @media screen and (max-width: 840px) {
   .showcase .text h4 {
-    font-size: 2em;
+    font-size: 80%;
+  }
+  .showcase .sc_content p {
+    font-size: 80%;
+  }
+  .showcase .sc_content {
+    margin: 0;
   }
 }
 
