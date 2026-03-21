@@ -92,6 +92,9 @@ msgstr "Alue"
 msgid "Body"
 msgstr "Keho"
 
+msgid "Book"
+msgstr "Kirja"
+
 msgid "Card"
 msgstr "Kortti"
 
@@ -319,6 +322,9 @@ msgstr "Vältä"
 
 msgid "Badge"
 msgstr "Merkki"
+
+msgid "Cards"
+msgstr "Kortit"
 
 msgid "Check"
 msgstr "Tarkista"
@@ -1112,6 +1118,9 @@ msgstr "Elementit"
 
 msgid "End date"
 msgstr "Loppupäivä"
+
+msgid "Ensemble"
+msgstr "Ensemble"
 
 msgid "Excluded"
 msgstr "Poissuljettu"
@@ -2099,6 +2108,9 @@ msgstr "Vaihda kuva"
 
 msgid "Collaborator"
 msgstr "Yhteistyökumppani"
+
+msgid "Compact list"
+msgstr "Kompakti luettelo"
 
 msgid "Content Type"
 msgstr "Sisältötyyppi"
@@ -3155,6 +3167,9 @@ msgstr "Aseta taidon tyyppi"
 msgid "Show collections"
 msgstr "Näytä kokoelmat"
 
+msgid "Show player name"
+msgstr "Näytä pelaajan nimi"
+
 msgid "Single-line text"
 msgstr "Yksirivinen teksti"
 
@@ -3241,6 +3256,9 @@ msgstr "Luottotehtävä"
 
 msgid "Custom title font"
 msgstr "Mukautettu otsikon fontti"
+
+msgid "Default view mode"
+msgstr "Oletusnäkymätila"
 
 msgid "Disable Auto save"
 msgstr "Poista automaattinen tallennus käytöstä"
@@ -4437,6 +4455,9 @@ msgstr "Uusi organisaatio luotu"
 msgid "New question by %(user)s"
 msgstr "Uusi kysymys %(user)s"
 
+msgid "No characters available."
+msgstr "Merkkejä ei ole saatavilla."
+
 msgid "No transactions recorded"
 msgstr "Ei kirjattuja tapahtumia"
 
@@ -5411,6 +5432,9 @@ msgstr "Nyt voit luoda tapahtumamalleja"
 msgid "Now you can set membership options"
 msgstr "Nyt voit asettaa jäsenyysasetukset"
 
+msgid "Now you can view the ensemble page"
+msgstr "Nyt voit tarkastella ensemble-sivua"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Päivitetty ilmoittautuminen tapahtumaan %(event)s"
@@ -5703,6 +5727,9 @@ msgstr "Piilota osallistujat ilman hahmoa"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Jos valittuna, salli lipputaso: Myyjä"
+
+msgid "Learn all characters before the event"
+msgstr "Opettele kaikki hahmot ennen tapahtumaa"
 
 msgid "Location - rent, gas, overnight stays"
 msgstr "Sijainti - vuokra, kaasu, yöpymiset"
@@ -7180,6 +7207,9 @@ msgstr "Tarkista käyttäjät, jotka ovat jääneet pois tapahtuman määräajoi
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Valitse taulukon rivit ja valitse sovellettava toiminto"
 
+msgid "The initial display mode when opening the ensemble page"
+msgstr "Alkuperäinen näyttötila, kun ensemble-sivu avataan"
+
 msgid "The link will be valid for the following number of days"
 msgstr "Linkki on voimassa seuraavan määrän päiviä"
 
@@ -7513,6 +7543,10 @@ msgstr "Haluatko hallita hahmon etenemistä kykyjen avulla"
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Jos valittuna, vaihtoehto voidaan valita enintään kerran"
+
+msgid "If checked, shows the player's name alongside their character"
+msgstr ""
+"Jos valintaruutu on valittuna, näyttää pelaajan nimen hahmonsa vieressä"
 
 msgid "In this page you can mark which items to add to the game area"
 msgstr "Tällä sivulla voit merkitä, mitkä kohteet haluat lisätä pelialueelle"
@@ -11534,6 +11568,13 @@ msgstr ""
 "Larpmanagerissa on yli 100 erilaista ominaisuutta. Niitä on jokaista "
 "tapahtuman järjestämisen osa-aluetta varten: ilmoittautumiset, kirjanpito, "
 "kirjoittaminen, logistiikka"
+
+msgid ""
+"Provides a character learning page with multiple display modes (book, cards,"
+" compact list) to help players memorise other characters before the event"
+msgstr ""
+"Tarjoaa hahmojen oppimissivun, jossa on useita näyttötiloja (kirja, kortit, "
+"kompakti lista), jotta pelaajat voivat muistaa muut hahmot ennen tapahtumaa"
 
 msgid ""
 "If checked, characters automatically and repeatedly acquire the most "

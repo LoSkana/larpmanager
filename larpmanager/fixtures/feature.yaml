@@ -1610,3 +1610,18 @@
     hidden: false
     module: miscellany
     dependencies: []
+- model: larpmanager.feature
+  fields:
+    name: Ensemble
+    descr: Provides a character learning page with multiple display modes (book, cards,
+      compact list) to help players memorise other characters before the event
+    slug: ensemble
+    overall: false
+    placeholder: false
+    order: 160
+    after_text: Now you can view the ensemble page
+    after_link: ensemble
+    hidden: false
+    module: writing
+    dependencies:
+    - character

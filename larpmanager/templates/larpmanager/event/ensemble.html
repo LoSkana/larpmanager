@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+{% load tz show_tags static i18n %}
+{% block title %}
+    {% trans "Ensemble" %} - {{ run }}
+{% endblock title %}
+{% block content %}
+    <div class="ensemble-toolbar">
+        <div class="ensemble-modes">
+            <button class="ensemble-btn {% if ensemble_default_mode == 'book' %}active{% endif %}"
+                    data-mode="book"
+                    title="{% trans "Book" %}">
+                <i class="fa-solid fa-book-open"></i>
+                <span>{% trans "Book" %}</span>
+            </button>
+            <button class="ensemble-btn {% if ensemble_default_mode == 'cards' %}active{% endif %}"
+                    data-mode="cards"
+                    title="{% trans "Cards" %}">
+                <i class="fa-solid fa-address-card"></i>
+                <span>{% trans "Cards" %}</span>
+            </button>
+            <button class="ensemble-btn {% if ensemble_default_mode == 'compact' %}active{% endif %}"
+                    data-mode="compact"
+                    title="{% trans "Compact list" %}">
+                <i class="fa-solid fa-list"></i>
+                <span>{% trans "Compact list" %}</span>
+            </button>
+        </div>
+        <div class="ensemble-search-wrap">
+            <input type="text"
+                   id="ensemble-search"
+                   placeholder="{% trans "Search" %}..."
+                   autocomplete="off">
+        </div>
+    </div>
+    {% if char_list %}
+        {# BOOK MODE #}
+        <div class="ensemble-view" id="ensemble-book">
+            {% for ch in char_list %}
+                <div class="ens-book-entry"
+                     data-search="{{ ch.name|lower }} {{ ch.title|lower }} {{ ch.teaser|lower|striptags }}">
+                    <div class="ens-book-cover">
+                        {% get_char_profile ch as profile_url %}
+                        <img src="{{ profile_url }}" alt="{{ ch.name }}" loading="lazy">
+                    </div>
+                    <div class="ens-book-body">
+                        <h2 class="ens-book-name">
+                            {{ ch.name }}
+                            {% if ch.title %}<span class="ens-title">- {{ ch.title }}</span>{% endif %}
+                        </h2>
+                        {% if ensemble_show_player and ch.player_name %}<p class="ens-player">{{ ch.player_name }}</p>{% endif %}
+                        {% if ch.factions %}
+                            <p class="ens-factions">
+                                {% for f in ch.factions %}<span class="ens-faction-tag">{{ f.name }}</span>{% endfor %}
+                            </p>
+                        {% endif %}
+                        {% if ch.teaser %}<div class="ens-teaser">{{ ch.teaser|safe }}</div>{% endif %}
+                        {% for field in ch.display_fields %}
+                            <div class="ens-field">
+                                <span class="ens-field-name">{{ field.name }}:</span>
+                                <span class="ens-field-value">{{ field.value }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {# CARDS MODE #}
+        <div class="ensemble-view" id="ensemble-cards">
+            {% for ch in char_list %}
+                <div class="ens-card"
+                     data-search="{{ ch.name|lower }} {{ ch.title|lower }} {{ ch.teaser|lower|striptags }}">
+                    <div class="ens-card-portrait">
+                        {% get_char_profile ch as profile_url %}
+                        <img src="{{ profile_url }}" alt="{{ ch.name }}">
+                    </div>
+                    <div class="ens-card-content">
+                        <div class="ens-card-name">
+                            {{ ch.name }}
+                            {% if ch.title %}<span class="ens-title">- {{ ch.title }}</span>{% endif %}
+                        </div>
+                        {% if ensemble_show_player and ch.player_name %}<div class="ens-card-player">{{ ch.player_name }}</div>{% endif %}
+                        {% if ch.factions %}
+                            <div class="ens-card-factions">
+                                {% for f in ch.factions %}<span class="ens-faction-tag">{{ f.name }}</span>{% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if ch.teaser %}<div class="ens-card-teaser">{{ ch.teaser|safe|truncatechars_html:300 }}</div>{% endif %}
+                        {% for field in ch.display_fields %}
+                            <div class="ens-field-inline">
+                                <b>{{ field.name }}:</b> {{ field.value }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {# COMPACT MODE #}
+        <div class="ensemble-view" id="ensemble-compact">
+            <table class="ens-table">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-col="0">#</th>
+                        <th class="sortable" data-col="1">{% trans "Character" %}</th>
+                        {% if char_list.0.factions %}
+                            <th>{% trans "Factions" %}</th>
+                        {% endif %}
+                        {% if ensemble_show_player %}
+                            <th class="sortable" data-col="3">{% trans "Player" %}</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ch in char_list %}
+                        <tr data-search="{{ ch.name|lower }} {% if ensemble_show_player %}{{ ch.player_name|lower }}{% endif %}">
+                            <td>{{ ch.number }}</td>
+                            <td>
+                                <a href="{% url 'character' run.get_slug ch.uuid %}">{{ ch.name }}
+                                    {% if ch.title %}- {{ ch.title }}{% endif %}
+                                </a>
+                            </td>
+                            {% if ch.factions %}
+                                <td>
+                                    {% for f in ch.factions %}
+                                        {{ f.name }}
+                                        {% if not forloop.last %},{% endif %}
+                                    {% endfor %}
+                                </td>
+                            {% elif char_list.0.factions %}
+                                <td></td>
+                            {% endif %}
+                            {% if ensemble_show_player %}<td>{{ ch.player_name|default:"" }}</td>{% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="ens-empty">{% trans "No characters available." %}</p>
+    {% endif %}
+{% endblock content %}
+{% block css %}
+    <style>
+        /* Toolbar */
+        .ensemble-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+        .ensemble-modes {
+            display: flex;
+            gap: 0.4rem;
+        }
+        .ensemble-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.9rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #f5f5f5;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .ensemble-btn:hover { background: #e0e0e0; }
+        .ensemble-btn.active { background: #333; color: #fff; border-color: #333; }
+        .ensemble-search-wrap { flex: 1; min-width: 200px; }
+        #ensemble-search {
+            width: 100%;
+            padding: 0.4rem 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        /* Views toggle */
+        .ensemble-view { display: none; }
+        .ensemble-view.active { display: block; }
+        #ensemble-cards.active { display: flex; flex-wrap: wrap; gap: 1rem; }
+        /* Book mode */
+        .ens-book-entry {
+            display: flex;
+            gap: 1.25rem;
+            padding: 1.25rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .ens-book-cover {
+            flex-shrink: 0;
+            width: 100px;
+        }
+        .ens-book-cover img {
+            width: 100px;
+            height: 133px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .ens-book-body { flex: 1; }
+        .ens-book-name { font-size: 1.2rem; margin: 0 0 0.3rem; }
+        .ens-title { color: #666; font-weight: normal; }
+        .ens-player { color: #888; font-size: 0.85rem; margin: 0 0 0.3rem; }
+        .ens-factions { margin: 0 0 0.5rem; }
+        .ens-faction-tag {
+            display: inline-block;
+            background: #eee;
+            border-radius: 3px;
+            padding: 0.1rem 0.45rem;
+            font-size: 0.8rem;
+            margin-right: 0.3rem;
+        }
+        .ens-teaser { font-size: 0.95rem; margin-bottom: 0.5rem; }
+        .ens-field { font-size: 0.88rem; margin-bottom: 0.2rem; }
+        .ens-field-name { font-weight: 600; margin-right: 0.3rem; }
+        /* Cards mode */
+        .ens-card {
+            width: 280px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 1px 4px rgba(0,0,0,.08);
+            page-break-inside: avoid;
+        }
+        .ens-card-portrait img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+        .ens-card-content { padding: 0.75rem; }
+        .ens-card-name { font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
+        .ens-card-player { color: #888; font-size: 0.8rem; margin-bottom: 0.25rem; }
+        .ens-card-factions { margin-bottom: 0.4rem; }
+        .ens-card-teaser { font-size: 0.85rem; color: #444; margin-bottom: 0.4rem; }
+        .ens-field-inline { font-size: 0.8rem; margin-bottom: 0.15rem; }
+        /* Compact mode */
+        .ens-table { width: 100%; border-collapse: collapse; }
+        .ens-table th, .ens-table td {
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        .ens-table th { background: #f5f5f5; font-weight: 600; }
+        .ens-table th.sortable { cursor: pointer; user-select: none; }
+        .ens-table th.sortable::after { content: " ↕"; color: #aaa; font-size: 0.75rem; }
+        .ens-table th.asc::after { content: " ↑"; color: #333; }
+        .ens-table th.desc::after { content: " ↓"; color: #333; }
+        .ens-table tr:hover td { background: #fafafa; }
+        .ens-empty { color: #888; padding: 2rem 0; text-align: center; }
+        /* Responsive */
+        @media (max-width: 600px) {
+            .ens-book-cover { width: 70px; }
+            .ens-book-cover img { width: 70px; height: 93px; }
+            .ens-card { width: 100%; }
+        }
+        /* Print (cards mode) */
+        @media print {
+            .ensemble-toolbar, #ensemble-book, #ensemble-compact { display: none !important; }
+            #ensemble-cards { display: flex !important; flex-wrap: wrap; gap: 0; }
+            .ens-card {
+                width: 128mm;
+                height: 89mm;
+                border: 1px solid #999;
+                box-shadow: none;
+                page-break-inside: avoid;
+                overflow: hidden;
+            }
+            .ens-card-portrait img { height: 55mm; }
+        }
+    </style>
+{% endblock css %}
+{% block js %}
+    <script>
+    (function () {
+        const STORAGE_KEY = 'ensemble_mode_{{ run.event.slug }}';
+        const defaultMode = '{{ ensemble_default_mode }}';
+
+        // Mode switching
+        function showMode(mode) {
+            document.querySelectorAll('.ensemble-view').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.ensemble-btn').forEach(el => el.classList.remove('active'));
+            const view = document.getElementById('ensemble-' + mode);
+            const btn = document.querySelector('.ensemble-btn[data-mode="' + mode + '"]');
+            if (view) view.classList.add('active');
+            if (btn) btn.classList.add('active');
+            try { sessionStorage.setItem(STORAGE_KEY, mode); } catch(e) {}
+        }
+
+        let savedMode = defaultMode;
+        try { savedMode = sessionStorage.getItem(STORAGE_KEY) || defaultMode; } catch(e) {}
+        showMode(savedMode);
+
+        document.querySelectorAll('.ensemble-btn').forEach(btn => {
+            btn.addEventListener('click', function () { showMode(this.dataset.mode); });
+        });
+
+        // Search
+        document.getElementById('ensemble-search').addEventListener('input', function () {
+            const q = this.value.toLowerCase().trim();
+            document.querySelectorAll('[data-search]').forEach(el => {
+                const match = !q || el.dataset.search.includes(q);
+                el.style.display = match ? '' : 'none';
+            });
+        });
+
+        // Compact table sort
+        document.querySelectorAll('.ens-table th.sortable').forEach(th => {
+            th.addEventListener('click', function () {
+                const col = parseInt(this.dataset.col);
+                const tbody = this.closest('table').querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const asc = !this.classList.contains('asc');
+                document.querySelectorAll('.ens-table th').forEach(h => h.classList.remove('asc', 'desc'));
+                this.classList.add(asc ? 'asc' : 'desc');
+                rows.sort((a, b) => {
+                    const av = (a.cells[col] || {textContent: ''}).textContent.trim();
+                    const bv = (b.cells[col] || {textContent: ''}).textContent.trim();
+                    const an = parseFloat(av), bn = parseFloat(bv);
+                    if (!isNaN(an) && !isNaN(bn)) return asc ? an - bn : bn - an;
+                    return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+                });
+                rows.forEach(r => tbody.appendChild(r));
+            });
+        });
+    })();
+    </script>
+{% endblock js %}

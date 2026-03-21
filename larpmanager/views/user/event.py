@@ -637,6 +637,64 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/gallery.html", context)
 
 
+def ensemble(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Ensemble character learning page with multiple display modes.
+
+    Provides book, cards, and compact views of all characters to help players
+    memorise other characters before the event.
+
+    Args:
+        request: The HTTP request object
+        event_slug: Event identifier string
+
+    Returns:
+        HttpResponse: Rendered ensemble template with character data
+
+    """
+    context = get_event_context(request, event_slug, include_status=True)
+    if "ensemble" not in context["features"]:
+        return redirect("event", event_slug=context["run"].get_slug())
+
+    # Load all characters with their fields
+    get_event_cache_all(context)
+
+    # Get visible writing questions and options for display
+    fields_data = visible_writing_fields(context, QuestionApplicable.CHARACTER, only_visible=True)
+    options_map = {opt_uuid: opt_data["name"] for opt_uuid, opt_data in fields_data.get("options", {}).items()}
+    char_questions = sorted(fields_data.get("questions", {}).items(), key=lambda x: x[1]["order"])
+
+    # Pre-process human-readable display fields for each character
+    for ch_data in context.get("chars", {}).values():
+        if ch_data.get("hide"):
+            continue
+        ch_data["display_fields"] = []
+        for uuid_str, q in char_questions:
+            val = ch_data["fields"].get(uuid_str)
+            if val is None:
+                continue
+            if isinstance(val, list):
+                display_val = ", ".join(options_map.get(v, "") for v in val if options_map.get(v))
+            else:
+                display_val = str(val)
+            if display_val:
+                ch_data["display_fields"].append({"name": q["name"], "value": display_val})
+
+    # Build sorted visible character list
+    context["char_list"] = sorted(
+        (ch for ch in context.get("chars", {}).values() if not ch.get("hide")),
+        key=lambda ch: ch["number"],
+    )
+
+    context["ensemble_show_player"] = get_event_config(
+        context["event"].id, "ensemble_show_player", default_value=False, context=context
+    )
+    context["ensemble_default_mode"] = get_event_config(
+        context["event"].id, "ensemble_default_mode", default_value="book", context=context
+    )
+
+    return render(request, "larpmanager/event/ensemble.html", context)
+
+
 def event(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display main event page with runs, registration status, and event details.
 

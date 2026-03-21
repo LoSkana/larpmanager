@@ -92,6 +92,9 @@ msgstr "Gebied"
 msgid "Body"
 msgstr "Lichaam"
 
+msgid "Book"
+msgstr "Boek"
+
 msgid "Card"
 msgstr "Kaart"
 
@@ -319,6 +322,9 @@ msgstr "Vermijd"
 
 msgid "Badge"
 msgstr "Badges"
+
+msgid "Cards"
+msgstr "Kaarten"
 
 msgid "Check"
 msgstr "Controleer"
@@ -1112,6 +1118,9 @@ msgstr "Elementen"
 
 msgid "End date"
 msgstr "Einddatum"
+
+msgid "Ensemble"
+msgstr "Ensemble"
 
 msgid "Excluded"
 msgstr "Exclusief"
@@ -2099,6 +2108,9 @@ msgstr "Foto wijzigen"
 
 msgid "Collaborator"
 msgstr "Deelnemer"
+
+msgid "Compact list"
+msgstr "Compacte lijst"
 
 msgid "Content Type"
 msgstr "Type inhoud"
@@ -3155,6 +3167,9 @@ msgstr "Type vaardigheid instellen"
 msgid "Show collections"
 msgstr "Toon collecties"
 
+msgid "Show player name"
+msgstr "Spelersnaam tonen"
+
 msgid "Single-line text"
 msgstr "Enkelvoudige tekst"
 
@@ -3241,6 +3256,9 @@ msgstr "Credit opdracht"
 
 msgid "Custom title font"
 msgstr "Aangepast titellettertype"
+
+msgid "Default view mode"
+msgstr "Standaard weergavemodus"
 
 msgid "Disable Auto save"
 msgstr "Automatisch opslaan uitschakelen"
@@ -4437,6 +4455,9 @@ msgstr "Nieuwe vereniging aangemaakt"
 msgid "New question by %(user)s"
 msgstr "Nieuwe vraag door %(user)s"
 
+msgid "No characters available."
+msgstr "Geen tekens beschikbaar."
+
 msgid "No transactions recorded"
 msgstr "Geen transacties geregistreerd"
 
@@ -5411,6 +5432,9 @@ msgstr "Nu kun je sjablonen voor evenementen maken"
 msgid "Now you can set membership options"
 msgstr "Nu kunt u lidmaatschapsopties instellen"
 
+msgid "Now you can view the ensemble page"
+msgstr "Nu kunt u de ensemblepagina bekijken"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Bijgewerkte invoer voor %(event)s"
@@ -5703,6 +5727,9 @@ msgstr "Deelnemers zonder teken verbergen"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Indien aangevinkt, ticketniveau toestaan: Verkoper"
+
+msgid "Learn all characters before the event"
+msgstr "Leer alle personages voor het evenement"
 
 msgid "Location - rent, gas, overnight stays"
 msgstr "Locatie - huur, gas, overnachtingen"
@@ -7194,6 +7221,9 @@ msgstr "Bekijk de gebruikers die de deadlines van het evenement missen"
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Selecteer de tabelrijen en kies de toe te passen bewerking"
 
+msgid "The initial display mode when opening the ensemble page"
+msgstr "De initiële weergavemodus bij het openen van de ensemblepagina"
+
 msgid "The link will be valid for the following number of days"
 msgstr "De link blijft het volgende aantal dagen geldig"
 
@@ -7555,6 +7585,11 @@ msgid "If checked, an option can be chosen a maximum number of times"
 msgstr ""
 "Als deze optie is aangevinkt, kan deze een maximaal aantal keren worden "
 "gekozen"
+
+msgid "If checked, shows the player's name alongside their character"
+msgstr ""
+"Indien aangevinkt, wordt de naam van de speler naast zijn personage "
+"weergegeven"
 
 msgid "In this page you can mark which items to add to the game area"
 msgstr ""
@@ -11740,6 +11775,14 @@ msgstr ""
 "De larpmanager heeft meer dan 100 verschillende functies. Er is er een voor "
 "elk aspect van het organiseren van evenementen: inschrijvingen, boekhouding,"
 " schrijven, logistiek"
+
+msgid ""
+"Provides a character learning page with multiple display modes (book, cards,"
+" compact list) to help players memorise other characters before the event"
+msgstr ""
+"Biedt een leerpagina voor personages met meerdere weergavemodi (boek, "
+"kaarten, compacte lijst) om spelers te helpen andere personages te onthouden"
+" voor het evenement"
 
 msgid ""
 "If checked, characters automatically and repeatedly acquire the most "

@@ -92,6 +92,9 @@ msgstr "Zona"
 msgid "Body"
 msgstr "Cuerpo"
 
+msgid "Book"
+msgstr "Reserve"
+
 msgid "Card"
 msgstr "Tarjeta"
 
@@ -319,6 +322,9 @@ msgstr "Evitar"
 
 msgid "Badge"
 msgstr "Insignia"
+
+msgid "Cards"
+msgstr "Tarjetas"
 
 msgid "Check"
 msgstr "Verificar"
@@ -1112,6 +1118,9 @@ msgstr "Elementos"
 
 msgid "End date"
 msgstr "Fecha final"
+
+msgid "Ensemble"
+msgstr "Conjunto"
 
 msgid "Excluded"
 msgstr "Excluido"
@@ -2099,6 +2108,9 @@ msgstr "Cambiar foto"
 
 msgid "Collaborator"
 msgstr "Colaborador"
+
+msgid "Compact list"
+msgstr "Lista compacta"
 
 msgid "Content Type"
 msgstr "Tipo de contenido"
@@ -3155,6 +3167,9 @@ msgstr "Establecer tipo de habilidad"
 msgid "Show collections"
 msgstr "Mostrar colectas"
 
+msgid "Show player name"
+msgstr "Mostrar el nombre del jugador"
+
 msgid "Single-line text"
 msgstr "Texto de una línea"
 
@@ -3241,6 +3256,9 @@ msgstr "Asignación de créditos"
 
 msgid "Custom title font"
 msgstr "Fuente del título personalizada"
+
+msgid "Default view mode"
+msgstr "Modo de vista por defecto"
 
 msgid "Disable Auto save"
 msgstr "Desactivar guardado automático"
@@ -4437,6 +4455,9 @@ msgstr "Nueva organización creada"
 msgid "New question by %(user)s"
 msgstr "Nueva pregunta de %(user)s"
 
+msgid "No characters available."
+msgstr "No hay caracteres disponibles."
+
 msgid "No transactions recorded"
 msgstr "No se registran transacciones"
 
@@ -5411,6 +5432,9 @@ msgstr "Ahora puedes crear plantillas de eventos"
 msgid "Now you can set membership options"
 msgstr "Ahora puedes configurar las opciones de afiliación"
 
+msgid "Now you can view the ensemble page"
+msgstr "Ahora puedes ver la página del conjunto"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Inscripción a %(event)s actualizada"
@@ -5703,6 +5727,9 @@ msgstr "Ocultar participantes sin personaje"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Si está marcada, permite el nivel de entradas: Vendedor"
+
+msgid "Learn all characters before the event"
+msgstr "Apréndete todos los personajes antes del evento"
 
 msgid "Location - rent, gas, overnight stays"
 msgstr "Localización - alquiler, gasolina, alojamientos"
@@ -7207,6 +7234,9 @@ msgstr "Revisar los usuarios que incumplen los plazos del evento"
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Seleccione las filas de la tabla y elija la operación a aplicar"
 
+msgid "The initial display mode when opening the ensemble page"
+msgstr "El modo de visualización inicial al abrir la página del conjunto"
+
 msgid "The link will be valid for the following number of days"
 msgstr "El enlace será válido durante el siguiente número de días"
 
@@ -7563,6 +7593,9 @@ msgstr ""
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Si está marcada, una opción puede elegirse un número máximo de veces"
+
+msgid "If checked, shows the player's name alongside their character"
+msgstr "Si está marcada, muestra el nombre del jugador junto a su personaje"
 
 msgid "In this page you can mark which items to add to the game area"
 msgstr "En esta página puedes marcar qué elementos añadir al área de juego"
@@ -11711,6 +11744,14 @@ msgstr ""
 "LarpManager tiene más de 100 funciones diferentes. Cubren todos los aspectos"
 " de la organización de eventos: inscripciones, contabilidad, narración, "
 "logística…"
+
+msgid ""
+"Provides a character learning page with multiple display modes (book, cards,"
+" compact list) to help players memorise other characters before the event"
+msgstr ""
+"Proporciona una página de aprendizaje de personajes con varios modos de "
+"visualización (libro, tarjetas, lista compacta) para ayudar a los jugadores "
+"a memorizar otros personajes antes del evento"
 
 msgid ""
 "If checked, characters automatically and repeatedly acquire the most "

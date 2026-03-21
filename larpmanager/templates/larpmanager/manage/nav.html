@@ -20,6 +20,13 @@
                            {% if request_func_name == "search" %}class="select"{% endif %}>{% trans "Search" %}</a>
                         <div class="lm_tooltiptext">{% trans "Filter or search the characters" %}!</div>
                     </div>
+                    {% if features.ensemble %}
+                        <div class="lm_tooltip">
+                            <a href="{% url 'ensemble' run.get_slug %}"
+                               {% if request_func_name == "ensemble" %}class="select"{% endif %}>{% trans "Ensemble" %}</a>
+                            <div class="lm_tooltiptext">{% trans "Learn all characters before the event" %}!</div>
+                        </div>
+                    {% endif %}
                 {% endif %}
                 {% for el in buttons %}
                     <div class="lm_tooltip">
