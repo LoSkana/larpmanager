@@ -1618,7 +1618,7 @@ class ExeEventForm(OrgaEventForm):
 
                 if qs.count() == 1:
                     self.initial["template_event"] = qs.first()
-            else:
+            elif self.params.get("skin_id") == 1:
                 template_descriptions = {slug: (label, desc) for slug, label, desc, _f in _EVENT_TEMPLATES if slug}
                 template_choices = [("", "---")] + [(slug, label) for slug, label, _d, _f in _EVENT_TEMPLATES]
                 self.fields["event_template"] = forms.ChoiceField(
