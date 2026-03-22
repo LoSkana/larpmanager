@@ -4310,20 +4310,20 @@ INSERT INTO public.django_migrations VALUES (181, 'larpmanager', '0140_alter_wri
 INSERT INTO public.django_migrations VALUES (182, 'larpmanager', '0141_alter_registration_additionals_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (183, 'larpmanager', '0142_demo_default_true', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (184, 'larpmanager', '0143_associationpermission_icon_eventpermission_icon_and_more', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (185, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (186, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (187, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (188, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (189, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (190, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (191, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (192, 'larpmanager', '0144_milestone', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (193, 'larpmanager', '0144_set_initial_theme', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (194, 'larpmanager', '0145_set_initial_theme', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (195, 'larpmanager', '0146_alter_abilitypx_requirements_alter_association_slug_and_more', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (196, 'larpmanager', '0147_alter_discount_value', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (197, 'larpmanager', '0148_systempx_and_px_systems', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (198, 'larpmanager', '0149_rename_larpmanager_number_e9171d_idx_larpmanager_number_28e377_idx_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (185, 'larpmanager', '0144_milestone', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (186, 'larpmanager', '0145_set_initial_theme', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (187, 'larpmanager', '0146_alter_abilitypx_requirements_alter_association_slug_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (188, 'larpmanager', '0147_alter_discount_value', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (189, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (190, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (191, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (192, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (193, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (194, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (195, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (196, 'larpmanager', '0148_systempx_and_px_systems', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (197, 'larpmanager', '0149_alter_abilityexp_system_alter_deliveryexp_system', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (198, 'larpmanager', '0149_writingquestion_editable_default_all_statuses', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
@@ -4452,34 +4452,35 @@ INSERT INTO public.larpmanager_eventpermission VALUES (49, NULL, false, '2025-01
 INSERT INTO public.larpmanager_eventpermission VALUES (50, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Ability type', 'orga_exp_ability_types', 81, 56, 'Manage the type of character abilities', false, 'experience', 11, NULL, 'sitemap');
 INSERT INTO public.larpmanager_eventpermission VALUES (51, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Abilities', 'orga_exp_abilities', 51, 56, 'Manage the character abilities purchaseable with experience', false, 'experience', 11, NULL, 'star');
 INSERT INTO public.larpmanager_eventpermission VALUES (52, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Deliveries', 'orga_exp_deliveries', 61, 56, 'Manage experience distributions for character abilities purchases.', false, 'experience', 11, NULL, 'truck');
-INSERT INTO public.larpmanager_eventpermission VALUES (53, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Historical', 'orga_casting_history', 61, 13, 'Display full history of participant preferences on characters', false, 'casting', 5, NULL, 'clock-rotate-left');
-INSERT INTO public.larpmanager_eventpermission VALUES (54, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Statistics', 'orga_casting_preferences', 71, 13, 'Displays statistics on participant preferences on characters', false, 'casting', 5, NULL, 'chart-bar');
-INSERT INTO public.larpmanager_eventpermission VALUES (55, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Utility', 'orga_utils', 31, 19, 'Upload and host files directly', false, NULL, 3, NULL, 'toolbox');
-INSERT INTO public.larpmanager_eventpermission VALUES (56, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Problems', 'orga_problems', 41, 29, 'Manage issues during the event', false, NULL, 3, NULL, 'triangle-exclamation');
-INSERT INTO public.larpmanager_eventpermission VALUES (57, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Lottery', 'orga_lottery', 121, 24, 'Select randomly lottery tickets to upgrade', false, 'lottery', 4, NULL, 'dice');
-INSERT INTO public.larpmanager_eventpermission VALUES (58, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Workshops', 'orga_workshops', 51, 10, 'Manage quiz-style workshops', false, NULL, 3, NULL, 'chalkboard');
-INSERT INTO public.larpmanager_eventpermission VALUES (59, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Modules', 'orga_workshop_modules', 61, 10, 'Manages modules for workshops', false, NULL, 3, NULL, 'cubes');
-INSERT INTO public.larpmanager_eventpermission VALUES (60, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Questions', 'orga_workshop_questions', 1, 10, 'Manage questions for workshops', false, NULL, 3, NULL, 'circle-question');
-INSERT INTO public.larpmanager_eventpermission VALUES (61, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Answers', 'orga_workshop_options', 81, 10, 'Manage answers for workshop questions', false, NULL, 3, NULL, 'circle-check');
-INSERT INTO public.larpmanager_eventpermission VALUES (62, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Texts', 'orga_texts', 20, 90, 'Customize specific texts on the event interface', false, NULL, 6, NULL, 'font');
-INSERT INTO public.larpmanager_eventpermission VALUES (63, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Navigation', 'orga_buttons', 30, 89, 'Customize buttons in the event navigation bar', false, NULL, 6, NULL, 'bars');
-INSERT INTO public.larpmanager_eventpermission VALUES (64, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'E-mail', 'orga_send_mail', 99, 87, 'Send e-mail', false, 'email', 14, NULL, 'paper-plane');
-INSERT INTO public.larpmanager_eventpermission VALUES (65, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Sheet', 'orga_character_form', 12, 72, 'Manage fields for character sheet and writing elements', false, 'char_form', 1, NULL, 'scroll');
-INSERT INTO public.larpmanager_eventpermission VALUES (66, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Archive', 'orga_archive_email', 100, 86, 'Display sent e-mails', false, 'email', 14, NULL, 'box-archive');
-INSERT INTO public.larpmanager_eventpermission VALUES (67, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Quick Setup', 'orga_quick', 9999, 103, 'quick', true, NULL, 7, NULL, 'rocket');
-INSERT INTO public.larpmanager_eventpermission VALUES (68, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Reading', 'orga_reading', 999, 72, 'Read the writing elements', false, 'writing', 1, 'writing_reading', 'glasses');
-INSERT INTO public.larpmanager_eventpermission VALUES (69, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Area', 'orga_warehouse_area', 11, 33, 'Manage area of the event', false, 'warehouse', 15, NULL, 'warehouse');
-INSERT INTO public.larpmanager_eventpermission VALUES (70, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Checks', 'orga_warehouse_checks', 41, 33, 'Perform checks on warehouse assignments', false, 'warehouse', 15, NULL, 'clipboard-check');
-INSERT INTO public.larpmanager_eventpermission VALUES (71, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Manifest', 'orga_warehouse_manifest', 31, 33, 'Manage loading and deployment status of warehouse items', false, 'warehouse', 15, NULL, 'list-ul');
-INSERT INTO public.larpmanager_eventpermission VALUES (72, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Rules', 'orga_exp_rules', 81, 109, 'Manage experience rules', false, 'experience', 11, 'exp_rules', 'scale-balanced');
-INSERT INTO public.larpmanager_eventpermission VALUES (73, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Modifiers', 'orga_exp_modifiers', 91, 110, 'Manage experience modifiers', false, 'experience', 11, 'exp_modifiers', 'sliders');
-INSERT INTO public.larpmanager_eventpermission VALUES (74, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Content', 'orga_onetimes', 11, 106, 'Upload and manage secure video/audio content with one-time access tokens', false, NULL, 16, NULL, 'video');
-INSERT INTO public.larpmanager_eventpermission VALUES (75, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Tokens', 'orga_onetimes_tokens', 21, 106, 'Manage one-time access tokens for secure video/audio content', false, NULL, 16, NULL, 'key');
-INSERT INTO public.larpmanager_eventpermission VALUES (76, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Ability Templates', 'orga_exp_ability_templates', 41, 111, 'Manage templates for experience abilities', false, 'experience', 11, 'exp_templates', 'clone');
-INSERT INTO public.larpmanager_eventpermission VALUES (77, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Character Inventory', 'orga_ci_inventory', 51, 58, 'Manage character inventories and their items', false, NULL, 17, NULL, 'box');
-INSERT INTO public.larpmanager_eventpermission VALUES (78, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Pool Types', 'orga_ci_pool_types', 53, 58, 'Manage character inventory pool types', false, NULL, 17, NULL, 'layer-group');
-INSERT INTO public.larpmanager_eventpermission VALUES (79, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activity Log', 'orga_log', 1, 112, 'View detailed activity log of all changes made for this specific event', false, NULL, 3, NULL, 'clock-rotate-left');
-INSERT INTO public.larpmanager_eventpermission VALUES (80, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Milestones', 'orga_milestones', 21, 116, 'Track and manage event milestones with status, deadline, and staff assignment', false, NULL, 3, NULL, 'flag');
+INSERT INTO public.larpmanager_eventpermission VALUES (53, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Ability Templates', 'orga_exp_ability_templates', 41, 110, 'Manage templates for experience abilities', false, 'experience', 11, 'exp_templates', 'clone');
+INSERT INTO public.larpmanager_eventpermission VALUES (54, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Rules', 'orga_exp_rules', 81, 108, 'Manage experience rules', false, 'experience', 11, 'exp_rules', 'scale-balanced');
+INSERT INTO public.larpmanager_eventpermission VALUES (55, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Modifiers', 'orga_exp_modifiers', 91, 109, 'Manage experience modifiers', false, 'experience', 11, 'exp_modifiers', 'sliders');
+INSERT INTO public.larpmanager_eventpermission VALUES (56, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Systems', 'orga_exp_systems', 101, 111, 'Manage experience systems', false, 'experience', 11, 'exp_systems', 'layer-group');
+INSERT INTO public.larpmanager_eventpermission VALUES (57, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Historical', 'orga_casting_history', 61, 13, 'Display full history of participant preferences on characters', false, 'casting', 5, NULL, 'clock-rotate-left');
+INSERT INTO public.larpmanager_eventpermission VALUES (58, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Statistics', 'orga_casting_preferences', 71, 13, 'Displays statistics on participant preferences on characters', false, 'casting', 5, NULL, 'chart-bar');
+INSERT INTO public.larpmanager_eventpermission VALUES (59, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Utility', 'orga_utils', 31, 19, 'Upload and host files directly', false, NULL, 3, NULL, 'toolbox');
+INSERT INTO public.larpmanager_eventpermission VALUES (60, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Problems', 'orga_problems', 41, 29, 'Manage issues during the event', false, NULL, 3, NULL, 'triangle-exclamation');
+INSERT INTO public.larpmanager_eventpermission VALUES (61, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Lottery', 'orga_lottery', 121, 24, 'Select randomly lottery tickets to upgrade', false, 'lottery', 4, NULL, 'dice');
+INSERT INTO public.larpmanager_eventpermission VALUES (62, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Workshops', 'orga_workshops', 51, 10, 'Manage quiz-style workshops', false, NULL, 3, NULL, 'chalkboard');
+INSERT INTO public.larpmanager_eventpermission VALUES (63, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Modules', 'orga_workshop_modules', 61, 10, 'Manages modules for workshops', false, NULL, 3, NULL, 'cubes');
+INSERT INTO public.larpmanager_eventpermission VALUES (64, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Questions', 'orga_workshop_questions', 1, 10, 'Manage questions for workshops', false, NULL, 3, NULL, 'circle-question');
+INSERT INTO public.larpmanager_eventpermission VALUES (65, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Answers', 'orga_workshop_options', 81, 10, 'Manage answers for workshop questions', false, NULL, 3, NULL, 'circle-check');
+INSERT INTO public.larpmanager_eventpermission VALUES (66, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Texts', 'orga_texts', 20, 90, 'Customize specific texts on the event interface', false, NULL, 6, NULL, 'font');
+INSERT INTO public.larpmanager_eventpermission VALUES (67, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Navigation', 'orga_buttons', 30, 89, 'Customize buttons in the event navigation bar', false, NULL, 6, NULL, 'bars');
+INSERT INTO public.larpmanager_eventpermission VALUES (68, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'E-mail', 'orga_send_mail', 99, 87, 'Send e-mail', false, 'email', 14, NULL, 'paper-plane');
+INSERT INTO public.larpmanager_eventpermission VALUES (69, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Sheet', 'orga_character_form', 12, 72, 'Manage fields for character sheet and writing elements', false, 'char_form', 1, NULL, 'scroll');
+INSERT INTO public.larpmanager_eventpermission VALUES (70, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Archive', 'orga_archive_email', 100, 86, 'Display sent e-mails', false, 'email', 14, NULL, 'box-archive');
+INSERT INTO public.larpmanager_eventpermission VALUES (71, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Quick Setup', 'orga_quick', 9999, 103, 'quick', true, NULL, 7, NULL, 'rocket');
+INSERT INTO public.larpmanager_eventpermission VALUES (72, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Reading', 'orga_reading', 999, 72, 'Read the writing elements', false, 'writing', 1, 'writing_reading', 'glasses');
+INSERT INTO public.larpmanager_eventpermission VALUES (73, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Area', 'orga_warehouse_area', 11, 33, 'Manage area of the event', false, 'warehouse', 15, NULL, 'warehouse');
+INSERT INTO public.larpmanager_eventpermission VALUES (74, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Checks', 'orga_warehouse_checks', 41, 33, 'Perform checks on warehouse assignments', false, 'warehouse', 15, NULL, 'clipboard-check');
+INSERT INTO public.larpmanager_eventpermission VALUES (75, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Manifest', 'orga_warehouse_manifest', 31, 33, 'Manage loading and deployment status of warehouse items', false, 'warehouse', 15, NULL, 'list-ul');
+INSERT INTO public.larpmanager_eventpermission VALUES (76, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Content', 'orga_onetimes', 11, 106, 'Upload and manage secure video/audio content with one-time access tokens', false, NULL, 16, NULL, 'video');
+INSERT INTO public.larpmanager_eventpermission VALUES (77, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Tokens', 'orga_onetimes_tokens', 21, 106, 'Manage one-time access tokens for secure video/audio content', false, NULL, 16, NULL, 'key');
+INSERT INTO public.larpmanager_eventpermission VALUES (78, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Character Inventory', 'orga_ci_inventory', 51, 58, 'Manage character inventories and their items', false, NULL, 17, NULL, 'box');
+INSERT INTO public.larpmanager_eventpermission VALUES (79, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Pool Types', 'orga_ci_pool_types', 53, 58, 'Manage character inventory pool types', false, NULL, 17, NULL, 'layer-group');
+INSERT INTO public.larpmanager_eventpermission VALUES (80, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activity Log', 'orga_log', 1, 112, 'View detailed activity log of all changes made for this specific event', false, NULL, 3, NULL, 'clock-rotate-left');
+INSERT INTO public.larpmanager_eventpermission VALUES (81, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Milestones', 'orga_milestones', 21, 116, 'Track and manage event milestones with status, deadline, and staff assignment', false, NULL, 3, NULL, 'flag');
 
 INSERT INTO public.larpmanager_eventrole VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Organizer', 1, 'u1');
 
@@ -4592,15 +4593,16 @@ INSERT INTO public.larpmanager_feature VALUES (104, NULL, false, '2025-01-01 00:
 INSERT INTO public.larpmanager_feature VALUES (105, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Publication', 'Makes upcoming events visible to external sites through a public API', 'publisher', 80, true, '', false, 10, '', '', false);
 INSERT INTO public.larpmanager_feature VALUES (106, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'One-Time Content', 'Enables secure streaming of video/audio content via one-time access tokens. Each token can only be used once and tracks who accessed the content, when, and from where', 'onetime_content', 50, false, '', false, 3, 'orga_onetimes', 'Now you can upload content and generate access tokens', false);
 INSERT INTO public.larpmanager_feature VALUES (107, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Translations', 'Allows to fine-tune how words and phrases are translated in the organization''s space', 'translation', 30, true, '', false, 5, 'exe_translations', 'Now you can define custom organization translations', false);
-INSERT INTO public.larpmanager_feature VALUES (108, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Experience Multiple', 'Pseudo-feature activated by exp_multiple configuration', 'exp_multiple', 0, false, '', true, 3, '', '', true);
-INSERT INTO public.larpmanager_feature VALUES (109, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Experience Rules', 'Pseudo-feature activated by exp_rules configuration', 'exp_rules', 0, false, '', true, 3, '', '', true);
-INSERT INTO public.larpmanager_feature VALUES (110, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Experience Modifiers', 'Pseudo-feature activated by exp_modifiers configuration', 'exp_modifiers', 0, false, '', true, 3, '', '', true);
-INSERT INTO public.larpmanager_feature VALUES (111, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Experience Templates', 'Pseudo-feature activated by exp_templates configuration', 'exp_templates', 0, false, '', true, 3, '', '', true);
+INSERT INTO public.larpmanager_feature VALUES (108, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Experience Rules', 'Pseudo-feature activated by exp_rules configuration', 'exp_rules', 0, false, '', true, 3, '', '', true);
+INSERT INTO public.larpmanager_feature VALUES (109, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Experience Modifiers', 'Pseudo-feature activated by exp_modifiers configuration', 'exp_modifiers', 0, false, '', true, 3, '', '', true);
+INSERT INTO public.larpmanager_feature VALUES (110, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Experience Templates', 'Pseudo-feature activated by exp_templates configuration', 'exp_templates', 0, false, '', true, 3, '', '', true);
+INSERT INTO public.larpmanager_feature VALUES (111, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Experience Systems', 'Pseudo-feature activated by exp_systems configuration', 'exp_systems', 0, false, '', true, 3, '', '', true);
 INSERT INTO public.larpmanager_feature VALUES (112, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activity Log', 'Show detailed activity log on entities created, updated or deleted.', 'logs', 1, true, '', false, 3, '', '', false);
 INSERT INTO public.larpmanager_feature VALUES (113, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'App Integration', 'Enables a button in the topbar to redirect authenticated users to an external application, using a configurable URL and optional JWT-based SSO', 'app_integration', 90, true, '', false, 3, 'config/app_integration', 'Now you can configure the integration button and the external application settings', false);
 INSERT INTO public.larpmanager_feature VALUES (114, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Payment Invoices', 'Pseudo-feature activated by payment_invoices configuration to show invoice approval menu item', 'payment_invoices', 0, true, '', true, 2, '', '', true);
 INSERT INTO public.larpmanager_feature VALUES (115, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activation', '', 'exe_activation', 9999, true, '', true, NULL, '', NULL, false);
 INSERT INTO public.larpmanager_feature VALUES (116, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Milestones', 'Track event milestones', 'milestones', 250, false, '', false, 3, 'orga_milestones', 'Now you can create milestones for the event', false);
+INSERT INTO public.larpmanager_feature VALUES (117, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Ensemble', 'Provides a character learning page with multiple display modes (book, cards, compact list) to help players memorise other characters before the event', 'ensemble', 5, false, '', false, 3, 'config/ensemble', 'Now you can configure the ensemble page', false);
 
 INSERT INTO public.larpmanager_feature_dependencies VALUES (1, 1, 72);
 INSERT INTO public.larpmanager_feature_dependencies VALUES (2, 9, 72);
@@ -4616,6 +4618,7 @@ INSERT INTO public.larpmanager_feature_dependencies VALUES (11, 47, 49);
 INSERT INTO public.larpmanager_feature_dependencies VALUES (12, 54, 49);
 INSERT INTO public.larpmanager_feature_dependencies VALUES (13, 57, 72);
 INSERT INTO public.larpmanager_feature_dependencies VALUES (14, 58, 72);
+INSERT INTO public.larpmanager_feature_dependencies VALUES (15, 117, 72);
 
 INSERT INTO public.larpmanager_featuremodule VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Writing', 50, NULL, 'pen-nib', 'writing');
 INSERT INTO public.larpmanager_featuremodule VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Accounting', 40, NULL, 'calculator', 'accounting');
@@ -4871,7 +4874,7 @@ SELECT pg_catalog.setval('public.larpmanager_eventbutton_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.larpmanager_eventconfig_id_seq', 1, true);
 
-SELECT pg_catalog.setval('public.larpmanager_eventpermission_id_seq', 80, true);
+SELECT pg_catalog.setval('public.larpmanager_eventpermission_id_seq', 81, true);
 
 SELECT pg_catalog.setval('public.larpmanager_eventrole_id_seq', 1, true);
 
@@ -4885,9 +4888,9 @@ SELECT pg_catalog.setval('public.larpmanager_faction_characters_id_seq', 1, fals
 
 SELECT pg_catalog.setval('public.larpmanager_faction_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.larpmanager_feature_dependencies_id_seq', 14, true);
+SELECT pg_catalog.setval('public.larpmanager_feature_dependencies_id_seq', 15, true);
 
-SELECT pg_catalog.setval('public.larpmanager_feature_id_seq', 116, true);
+SELECT pg_catalog.setval('public.larpmanager_feature_id_seq', 117, true);
 
 SELECT pg_catalog.setval('public.larpmanager_featuremodule_id_seq', 10, true);
 
@@ -8663,4 +8666,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0148_systempx_and_px_systems
+-- LARPMANAGER_SCHEMA_VERSION: 0149_writingquestion_editable_default_all_statuses
