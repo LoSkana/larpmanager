@@ -1,4 +1,4 @@
-from django.db import migrations
+from django.db import migrations, models
 
 
 def set_editable_all_statuses(apps, schema_editor):
@@ -15,5 +15,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AlterField(
+            model_name='writingquestion',
+            name='editable',
+            field=models.CharField(blank=True, default='c,s,r,a',
+                                   help_text='This field can be edited by the participant only when the character is in one of the selected statuses',
+                                   max_length=20, null=True, verbose_name='Editable'),
+        ),
         migrations.RunPython(set_editable_all_statuses, migrations.RunPython.noop),
     ]
