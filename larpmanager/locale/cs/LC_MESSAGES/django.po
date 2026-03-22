@@ -5950,7 +5950,7 @@ msgid "Membership of the Organization accepted"
 msgstr "Členství ve sdružení je přijato"
 
 msgid "Now you can configure the ensemble page"
-msgstr "Nyní můžete nakonfigurovat stránku souboru."
+msgstr "Nyní můžete nakonfigurovat stránku souboru"
 
 msgid "Now you can create quests for the event"
 msgstr "Nyní můžete vytvářet úkoly pro tuto událost"
