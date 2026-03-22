@@ -141,9 +141,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Get allowed statuses for editing this question
         allowed_editable_statuses = question.get("editable", [])
 
-        # If no status restrictions, question is always editable
+        # If no status restrictions, question is never editable
         if not allowed_editable_statuses:
-            return True
+            return False
 
         # Check if current instance status allows editing
         return self.instance.status in allowed_editable_statuses
@@ -941,9 +941,11 @@ class OrgaWritingQuestionForm(BaseModelForm):
                 required=False,
             )
 
-            # Set initial values from existing instance if available
+            # Set initial values: existing instance statuses, or all statuses for new instances
             if self.instance and self.instance.pk:
                 self.initial["editable"] = self.instance.get_editable()
+            else:
+                self.initial["editable"] = [value for value, _ in CharacterStatus.choices]
 
     def clean_editable(self) -> str:
         """Join editable field values into comma-separated string."""

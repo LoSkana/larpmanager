@@ -61,7 +61,11 @@
                     <td>
                         {% if el.typ|not_in:"name,teaser,text,factions_list" %}{{ el.get_visibility_display }}{% endif %}
                     </td>
-                    {% if approval %}<td>{{ el.get_editable_display }}</td>{% endif %}
+                    {% if approval %}
+                        <td>
+                            {% if el.status|not_in:"d" and el.status|not_in:"h" and el.typ|not_in:"c" %}{{ el.get_editable_display }}{% endif %}
+                        </td>
+                    {% endif %}
                     <td>
                         {% for ch in el.options_list %}
                             {% include "elements/comma.html" %}
