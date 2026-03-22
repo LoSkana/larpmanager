@@ -225,6 +225,7 @@ class ExePaymentForm(BaseModelForm):
     def _configure_registration(self) -> None:
         """Configure registration field for association context."""
         self.configure_field_association("registration", self.params.get("association_id"))
+        self.fields["registration"].required = True
 
 
 class ExeOutflowForm(BaseModelForm):
