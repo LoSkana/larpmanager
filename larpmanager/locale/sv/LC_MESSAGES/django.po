@@ -2657,9 +2657,6 @@ msgstr "Skapande av evenemang"
 msgid "Event features"
 msgstr "Funktioner för evenemang"
 
-msgid "Event template"
-msgstr "Mall för evenemang"
-
 msgid "Executive Vote"
 msgstr "Ledningens omröstning"
 
@@ -7244,6 +7241,9 @@ msgstr "Hantera betalningar som utförs av deltagare på alla evenemang"
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Granska de användare som inte klarar evenemangets deadlines"
 
+msgid "Select the features you want to activate for this event"
+msgstr "Välj de funktioner som du vill aktivera för detta evenemang"
+
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Markera tabellraderna och välj den operation som ska tillämpas"
 
@@ -9005,13 +9005,6 @@ msgid ""
 msgstr ""
 "Anger andra alternativ som måste väljas för att detta alternativ ska vara "
 "valbart"
-
-msgid ""
-"Select an event template to activate the right features, or configure "
-"manually"
-msgstr ""
-"Välj en händelsemall för att aktivera rätt funktioner, eller konfigurera "
-"manuellt"
 
 msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "

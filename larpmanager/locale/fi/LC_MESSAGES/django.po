@@ -2657,9 +2657,6 @@ msgstr "Tapahtuman luominen"
 msgid "Event features"
 msgstr "Tapahtuman ominaisuudet"
 
-msgid "Event template"
-msgstr "Tapahtuman malli"
-
 msgid "Executive Vote"
 msgstr "Johtava äänestys"
 
@@ -7249,6 +7246,9 @@ msgstr "Hallitse osallistujien suorittamia maksuja kaikissa tapahtumissa"
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Tarkista käyttäjät, jotka ovat jääneet pois tapahtuman määräajoista"
 
+msgid "Select the features you want to activate for this event"
+msgstr "Valitse ominaisuudet, jotka haluat aktivoida tätä tapahtumaa varten"
+
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Valitse taulukon rivit ja valitse sovellettava toiminto"
 
@@ -9003,13 +9003,6 @@ msgid ""
 msgstr ""
 "Ilmaisee muita vaihtoehtoja, jotka on valittava, jotta tämä vaihtoehto "
 "voidaan valita"
-
-msgid ""
-"Select an event template to activate the right features, or configure "
-"manually"
-msgstr ""
-"Valitse tapahtumamalli oikeiden ominaisuuksien aktivoimiseksi tai määritä "
-"manuaalisesti"
 
 msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "

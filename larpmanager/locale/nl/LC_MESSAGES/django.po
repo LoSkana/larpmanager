@@ -2657,9 +2657,6 @@ msgstr "Evenement maken"
 msgid "Event features"
 msgstr "Functies van het evenement"
 
-msgid "Event template"
-msgstr "Gebeurtenissjabloon"
-
 msgid "Executive Vote"
 msgstr "Stemming management"
 
@@ -7263,6 +7260,9 @@ msgstr "Beheer betalingen door deelnemers aan alle evenementen"
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Bekijk de gebruikers die de deadlines van het evenement missen"
 
+msgid "Select the features you want to activate for this event"
+msgstr "Selecteer de functies die je voor dit evenement wilt activeren"
+
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Selecteer de tabelrijen en kies de toe te passen bewerking"
 
@@ -9161,13 +9161,6 @@ msgid ""
 msgstr ""
 "Geeft andere opties aan die geselecteerd moeten zijn om deze optie te kunnen"
 " kiezen"
-
-msgid ""
-"Select an event template to activate the right features, or configure "
-"manually"
-msgstr ""
-"Selecteer een gebeurtenissjabloon om de juiste functies te activeren of "
-"configureer handmatig"
 
 msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "

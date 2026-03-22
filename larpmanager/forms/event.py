@@ -35,7 +35,7 @@ from larpmanager.cache.config import (
     save_all_element_configs,
     save_single_config,
 )
-from larpmanager.cache.feature import clear_event_features_cache, get_event_features
+from larpmanager.cache.feature import clear_event_features_cache, get_event_features, reset_association_features
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.association import ExePreferencesForm
 from larpmanager.forms.base import THEME_HELP_TEXT, AppearanceTheme, BaseModelCssForm, BaseModelForm
@@ -55,6 +55,7 @@ from larpmanager.forms.utils import (
     save_permissions_role,
 )
 from larpmanager.models.access import EventPermission, EventRole
+from larpmanager.models.association import Association
 from larpmanager.models.base import Feature
 from larpmanager.models.event import (
     DevelopStatus,
@@ -1560,6 +1561,37 @@ class OrgaProgressStepForm(BaseModelForm):
         exclude = ("number", "order")
 
 
+# Configs automatically applied when a feature is activated via QuickSetupForm
+_FEATURE_IMPLIED_CONFIGS: dict[str, dict] = {
+    "user_character": {"user_character_max": 1, "user_character_approval": "True"},
+    "experience": {"exp_user": "True"},
+}
+
+# Event templates: (slug, label, description, feature_slugs)
+_EVENT_TEMPLATES = [
+    (
+        "campaign",
+        _("Campaign"),
+        _("Multi-event story with player-created characters, experience points, and a persistent world"),
+        ["character", "user_character", "experience", "campaign", "player_cancellation"],
+    ),
+    (
+        "oneshot",
+        _("One-shot"),
+        _(
+            "Single event focusing on narrative, characters written by staff and assigned via casting algorithm, with factions and plots"
+        ),
+        ["character", "casting", "faction", "plot", "handout", "player_cancellation"],
+    ),
+    (
+        "manual",
+        _("Manual configuration"),
+        _("Choose individual features yourself"),
+        [],
+    ),
+]
+
+
 class ExeEventForm(OrgaEventForm):
     """Extended event form for executors with template support."""
 
@@ -1569,22 +1601,35 @@ class ExeEventForm(OrgaEventForm):
         """Initialize ExeEventForm with template event selection."""
         super().__init__(*args, **kwargs)
 
-        if "template" in self.params["features"] and not self.instance.pk:
-            qs = Event.objects.filter(association_id=self.params["association_id"], template=True)
-            self.fields["template_event"] = forms.ModelChoiceField(
-                required=False,
-                queryset=qs,
-                label=_("Template"),
-                help_text=_(
-                    "You can indicate a template event from which functionality and configurations will be copied",
-                ),
-                widget=TemplateS2Widget(),
-            )
+        if not self.instance.pk:
+            if "template" in self.params["features"]:
+                qs = Event.objects.filter(association_id=self.params["association_id"], template=True)
+                self.fields["template_event"] = forms.ModelChoiceField(
+                    required=False,
+                    queryset=qs,
+                    label=_("Template"),
+                    help_text=_(
+                        "You can indicate a template event from which functionality and configurations will be copied",
+                    ),
+                    widget=TemplateS2Widget(),
+                )
 
-            self.configure_field_association("template_event", self.params["association_id"])
+                self.configure_field_association("template_event", self.params["association_id"])
 
-            if qs.count() == 1:
-                self.initial["template_event"] = qs.first()
+                if qs.count() == 1:
+                    self.initial["template_event"] = qs.first()
+            else:
+                template_descriptions = {slug: (label, desc) for slug, label, desc, _f in _EVENT_TEMPLATES if slug}
+                template_choices = [("", "---")] + [(slug, label) for slug, label, _d, _f in _EVENT_TEMPLATES]
+                self.fields["event_template"] = forms.ChoiceField(
+                    choices=template_choices,
+                    label=_("Template"),
+                    required=False,
+                    initial="",
+                    help_text=", ".join(
+                        f"<b>{label}</b>: {desc}" for slug, (label, desc) in template_descriptions.items()
+                    ),
+                )
 
     def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save event with optional template copying.
@@ -1612,6 +1657,29 @@ class ExeEventForm(OrgaEventForm):
             copy_class(instance.id, event_id, EventRole)
 
         instance.save()
+
+        # Apply built-in event template if selected (only when custom template feature is not active)
+        selected_template = self.cleaned_data.get("event_template", "")
+        if selected_template:
+            template_entry = next((t for t in _EVENT_TEMPLATES if t[0] == selected_template), None)
+            if template_entry:
+                template_features = template_entry[3]
+                feat_ids = dict(Feature.objects.filter(slug__in=template_features).values_list("slug", "id"))
+                for feat_slug in template_features:
+                    if feat_slug in feat_ids:
+                        instance.features.add(feat_ids[feat_slug])
+
+                # For campaign template, also activate the campaign feature for the association
+                if selected_template == "campaign":
+                    campaign_feat = Feature.objects.filter(slug="campaign").first()
+                    if campaign_feat:
+                        association = Association.objects.get(pk=self.params["association_id"])
+                        association.features.add(campaign_feat)
+                        reset_association_features(self.params["association_id"])
+
+                for feat_slug in template_features:
+                    for config_name, config_value in _FEATURE_IMPLIED_CONFIGS.get(feat_slug, {}).items():
+                        save_single_config(instance, config_name, config_value)
 
         return instance
 
@@ -1671,48 +1739,12 @@ class ExeTemplateRolesForm(OrgaEventRoleForm):
         self.fields["members"].required = False
 
 
-# Configs automatically applied when a feature is activated via QuickSetupForm
-_FEATURE_IMPLIED_CONFIGS: dict[str, dict] = {
-    "user_character": {"user_character_max": 1, "user_character_approval": "True"},
-    "experience": {"exp_user": "True"},
-}
-
-# Event templates: (slug, label, icon, description, feature_slugs)
-_EVENT_TEMPLATES = [
-    (
-        "campaign",
-        _("Campaign"),
-        "fa-solid fa-dragon",
-        _("Multi-event story with player-created characters, experience points, and a persistent world"),
-        ["character", "user_character", "experience", "campaign", "player_cancellation"],
-    ),
-    (
-        "oneshot",
-        _("One-shot"),
-        "fa-solid fa-masks-theater",
-        _(
-            "Single event focusing on narrative, characters written by staff and assigned via casting algorithm, with factions and plots"
-        ),
-        ["character", "casting", "faction", "plot", "handout", "player_cancellation"],
-    ),
-    (
-        "manual",
-        _("Manual configuration"),
-        "fa-solid fa-sliders",
-        _("Choose individual features yourself"),
-        [],
-    ),
-]
-
-
 class OrgaQuickSetupForm(QuickSetupForm):
     """Form for quick setup of essential event settings."""
 
     page_title = _("Quick Setup")
 
-    page_info = _("Select an event template to activate the right features, or configure manually")
-
-    load_js: ClassVar[list] = ["quick_setup_template"]
+    page_info = _("Select the features you want to activate for this event")
 
     class Meta:
         model = Event
@@ -1791,33 +1823,8 @@ class OrgaQuickSetupForm(QuickSetupForm):
         active_features = get_event_features(self.instance.pk)
         self.init_fields(active_features)
 
-        if is_skin_full:
-            # Add template picker as the first field
-            template_choices = [("", "---")] + [(slug, label) for slug, label, _i, _d, _f in _EVENT_TEMPLATES]
-
-            # Insert template field at the beginning of the ordered dict
-            updated_fields = {
-                "template": forms.ChoiceField(
-                    choices=template_choices,
-                    label=_("Event template"),
-                    required=False,
-                    initial="",
-                )
-            }
-            updated_fields.update(self.fields)
-            self.fields = updated_fields
-            self.initial["template"] = ""
-
-            # Mark manual-mode fields so JS can show/hide them
-            for key in self.setup:
-                if key in self.fields:
-                    self.fields[key].custom_class = "manual-section"
-
-            # Store template data for use in the JS helper template
-            self.template_data = _EVENT_TEMPLATES
-
     def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002
-        """Save form, applying either a template's feature set or manual checkbox choices.
+        """Save form, applying manual checkbox choices.
 
         Args:
             commit: Whether to save to the database. Defaults to True.
@@ -1826,34 +1833,6 @@ class OrgaQuickSetupForm(QuickSetupForm):
             The saved Event instance.
 
         """
-        selected_template = self.cleaned_data.get("template", "manual")
-
-        if selected_template not in ("manual", ""):
-            # Template mode: apply predefined features additively, ignore manual checkboxes
-            template_entry = next(
-                (t for t in _EVENT_TEMPLATES if t[0] == selected_template),
-                None,
-            )
-            template_features = template_entry[4] if template_entry else []
-
-            original_setup = self.setup
-            self.setup = {}
-            try:
-                instance = super().save(commit=commit)
-            finally:
-                self.setup = original_setup
-
-            if template_features:
-                feat_ids = dict(Feature.objects.filter(slug__in=template_features).values_list("slug", "id"))
-                for feat_slug in template_features:
-                    if feat_slug in feat_ids:
-                        self.instance.features.add(feat_ids[feat_slug])
-
-            self._apply_implied_configs(template_features)
-            instance.save()
-            return instance
-
-        # Manual mode: parent save processes checkboxes; then apply implied configs for activated features
         instance = super().save(commit=commit)
         activated = [key for key, (is_feat, _l, _h) in self.setup.items() if is_feat and self.cleaned_data.get(key)]
         self._apply_implied_configs(activated)

@@ -2657,9 +2657,6 @@ msgstr "Vytvoření události"
 msgid "Event features"
 msgstr "Funkce události"
 
-msgid "Event template"
-msgstr "Šablona události"
-
 msgid "Executive Vote"
 msgstr "Hlasování vedení"
 
@@ -7248,6 +7245,9 @@ msgstr "Správa plateb provedených účastníky všech událostí"
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Přehled uživatelů, kteří nedodržují termíny události"
 
+msgid "Select the features you want to activate for this event"
+msgstr "Vyberte funkce, které chcete pro tuto událost aktivovat"
+
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Vyberte řádky tabulky a zvolte operaci, která se má použít"
 
@@ -8933,13 +8933,6 @@ msgid ""
 msgstr ""
 "Označuje další možnosti, které musí být vybrány, aby bylo možné tuto možnost"
 " vybrat"
-
-msgid ""
-"Select an event template to activate the right features, or configure "
-"manually"
-msgstr ""
-"Výběrem šablony události aktivujte správné funkce nebo je nakonfigurujte "
-"ručně"
 
 msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "

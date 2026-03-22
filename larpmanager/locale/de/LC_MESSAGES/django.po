@@ -2657,9 +2657,6 @@ msgstr "Erstellung von Veranstaltungen"
 msgid "Event features"
 msgstr "Merkmale der Veranstaltung"
 
-msgid "Event template"
-msgstr "Ereignis-Vorlage"
-
 msgid "Executive Vote"
 msgstr "Abstimmung der Verwaltung"
 
@@ -7322,6 +7319,10 @@ msgstr ""
 "Überprüfen Sie die Benutzer, die die Termine für die Veranstaltung nicht "
 "einhalten"
 
+msgid "Select the features you want to activate for this event"
+msgstr ""
+"Wählen Sie die Funktionen, die Sie für dieses Ereignis aktivieren möchten"
+
 msgid "Select the table rows and choose the operation to apply"
 msgstr ""
 "Markieren Sie die Tabellenzeilen und wählen Sie die anzuwendende Operation"
@@ -9349,13 +9350,6 @@ msgid ""
 msgstr ""
 "Zeigt andere Optionen an, die ausgewählt werden müssen, damit diese Option "
 "gewählt werden kann"
-
-msgid ""
-"Select an event template to activate the right features, or configure "
-"manually"
-msgstr ""
-"Wählen Sie eine Ereignisvorlage, um die richtigen Funktionen zu aktivieren, "
-"oder konfigurieren Sie manuell"
 
 msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "

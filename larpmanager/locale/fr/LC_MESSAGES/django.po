@@ -2657,9 +2657,6 @@ msgstr "Création d'un événement"
 msgid "Event features"
 msgstr "Caractéristiques de l'événement"
 
-msgid "Event template"
-msgstr "Modèle d'événement"
-
 msgid "Executive Vote"
 msgstr "Vote de la direction"
 
@@ -7309,6 +7306,11 @@ msgstr ""
 "Passer en revue les utilisateurs qui ne respectent pas les délais de "
 "l'événement"
 
+msgid "Select the features you want to activate for this event"
+msgstr ""
+"Sélectionnez les fonctionnalités que vous souhaitez activer pour cet "
+"événement"
+
 msgid "Select the table rows and choose the operation to apply"
 msgstr ""
 "Sélectionnez les lignes du tableau et choisissez l'opération à appliquer"
@@ -9288,13 +9290,6 @@ msgid ""
 msgstr ""
 "Indique les autres options qui doivent être sélectionnées pour que cette "
 "option soit sélectionnable"
-
-msgid ""
-"Select an event template to activate the right features, or configure "
-"manually"
-msgstr ""
-"Sélectionnez un modèle d'événement pour activer les fonctions appropriées ou"
-" configurez-le manuellement"
 
 msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "

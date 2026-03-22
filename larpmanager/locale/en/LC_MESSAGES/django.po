@@ -1772,23 +1772,6 @@ msgstr ""
 msgid "Progression"
 msgstr ""
 
-msgid "Events"
-msgstr ""
-
-msgid "Template"
-msgstr ""
-
-msgid ""
-"You can indicate a template event from which functionality and "
-"configurations will be copied"
-msgstr ""
-
-msgid "Event Template"
-msgstr ""
-
-msgid "Manage template features (click on a feature to show its description)"
-msgstr ""
-
 msgid ""
 "Multi-event story with player-created characters, experience points, and a "
 "persistent world"
@@ -1808,9 +1791,24 @@ msgstr ""
 msgid "Choose individual features yourself"
 msgstr ""
 
+msgid "Events"
+msgstr ""
+
+msgid "Template"
+msgstr ""
+
 msgid ""
-"Select an event template to activate the right features, or configure "
-"manually"
+"You can indicate a template event from which functionality and "
+"configurations will be copied"
+msgstr ""
+
+msgid "Event Template"
+msgstr ""
+
+msgid "Manage template features (click on a feature to show its description)"
+msgstr ""
+
+msgid "Select the features you want to activate for this event"
 msgstr ""
 
 msgid "Do you want to manage characters assigned to registered participants"
@@ -1857,9 +1855,6 @@ msgstr ""
 msgid ""
 "Do you want to allow users to add a voluntary donation to their registration "
 "fee"
-msgstr ""
-
-msgid "Event template"
 msgstr ""
 
 msgid "Default fields"

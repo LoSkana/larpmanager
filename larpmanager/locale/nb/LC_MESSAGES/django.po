@@ -2657,9 +2657,6 @@ msgstr "Opprettelse av hendelser"
 msgid "Event features"
 msgstr "Arrangementets funksjoner"
 
-msgid "Event template"
-msgstr "Mal for arrangement"
-
 msgid "Executive Vote"
 msgstr "Avstemning i ledelsen"
 
@@ -7250,6 +7247,9 @@ msgstr "Administrere betalinger utført av deltakere på alle arrangementer"
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Gå gjennom brukerne som ikke overholder arrangementets tidsfrister"
 
+msgid "Select the features you want to activate for this event"
+msgstr "Velg funksjonene du vil aktivere for dette arrangementet"
+
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Velg tabellradene og velg operasjonen som skal brukes"
 
@@ -9000,13 +9000,6 @@ msgid ""
 msgstr ""
 "Angir andre alternativer som må velges for at dette alternativet skal kunne "
 "velges"
-
-msgid ""
-"Select an event template to activate the right features, or configure "
-"manually"
-msgstr ""
-"Velg en hendelsesmal for å aktivere de riktige funksjonene, eller konfigurer"
-" manuelt"
 
 msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "
