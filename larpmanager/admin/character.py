@@ -25,7 +25,14 @@ from django.contrib import admin
 
 from larpmanager.admin.base import CharacterFilter, DefModelAdmin, EventFilter, reduced
 from larpmanager.models.base import BaseModel
-from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
+from larpmanager.models.experience import (
+    AbilityExp,
+    AbilityTemplateExp,
+    AbilityTypeExp,
+    DeliveryExp,
+    ModifierExp,
+    RuleExp,
+)
 from larpmanager.models.form import (
     WritingAnswer,
     WritingChoice,
@@ -155,9 +162,9 @@ class RelationshipAdmin(DefModelAdmin):
     autocomplete_fields: ClassVar[list] = ["source", "target"]
 
 
-@admin.register(AbilityTypePx)
+@admin.register(AbilityTypeExp)
 class AbilityTypePxAdmin(DefModelAdmin):
-    """Admin interface for AbilityTypePx model."""
+    """Admin interface for AbilityTypeExp model."""
 
     list_display: ClassVar[tuple] = ("id", "event", "name", "uuid")
     list_filter: ClassVar[tuple] = (EventFilter,)
@@ -165,9 +172,9 @@ class AbilityTypePxAdmin(DefModelAdmin):
     search_fields: ClassVar[list] = ["id", "name", "uuid"]
 
 
-@admin.register(AbilityPx)
+@admin.register(AbilityExp)
 class AbilityPxAdmin(DefModelAdmin):
-    """Admin interface for AbilityPx model."""
+    """Admin interface for AbilityExp model."""
 
     list_display: ClassVar[tuple] = ("id", "name", "typ", "cost", "event", "uuid")
     list_filter: ClassVar[tuple] = (EventFilter,)
@@ -175,9 +182,9 @@ class AbilityPxAdmin(DefModelAdmin):
     search_fields: ClassVar[list] = ["id", "name", "uuid"]
 
 
-@admin.register(DeliveryPx)
+@admin.register(DeliveryExp)
 class DeliveryPxAdmin(DefModelAdmin):
-    """Admin interface for DeliveryPx model."""
+    """Admin interface for DeliveryExp model."""
 
     list_display: ClassVar[tuple] = ("id", "event", "name", "amount", "uuid")
     list_filter = (EventFilter,)
@@ -192,9 +199,9 @@ class PlotFilter(AutocompleteFilter):
     field_name = "plot"
 
 
-@admin.register(AbilityTemplatePx)
+@admin.register(AbilityTemplateExp)
 class AbilityTemplatePxAdmin(DefModelAdmin):
-    """Admin interface for AbilityTemplatePx model."""
+    """Admin interface for AbilityTemplateExp model."""
 
     list_display: ClassVar[tuple] = ("id", "name", "event", "uuid")
     search_fields: ClassVar[list] = ["id", "name", "uuid"]
@@ -202,9 +209,9 @@ class AbilityTemplatePxAdmin(DefModelAdmin):
     list_filter: ClassVar[tuple] = (EventFilter,)
 
 
-@admin.register(RulePx)
+@admin.register(RuleExp)
 class RulePxAdmin(DefModelAdmin):
-    """Admin interface for RulePx model."""
+    """Admin interface for RuleExp model."""
 
     list_display: ClassVar[tuple] = ("id", "name", "event", "uuid")
     search_fields: ClassVar[list] = ["id", "name", "uuid"]
@@ -212,9 +219,9 @@ class RulePxAdmin(DefModelAdmin):
     list_filter: ClassVar[tuple] = (EventFilter,)
 
 
-@admin.register(ModifierPx)
+@admin.register(ModifierExp)
 class ModifierPxAdmin(DefModelAdmin):
-    """Admin interface for ModifierPx model."""
+    """Admin interface for ModifierExp model."""
 
     list_display: ClassVar[tuple] = ("id", "name", "event", "cost", "uuid")
     search_fields: ClassVar[list] = ["id", "name", "uuid"]

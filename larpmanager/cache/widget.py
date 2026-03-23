@@ -45,7 +45,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.casting import Casting, Quest, QuestType
 from larpmanager.models.event import DevelopStatus, Event, ProgressStep, RegistrationStatus, Run
-from larpmanager.models.experience import AbilityTypePx, DeliveryPx
+from larpmanager.models.experience import AbilityTypeExp, DeliveryExp
 from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, WritingQuestion
 from larpmanager.models.member import LogOperationType, Membership, MembershipStatus
 from larpmanager.models.miscellanea import HelpQuestion, Log, Milestone, MilestoneStatus
@@ -524,11 +524,11 @@ def _init_orga_actions_writing(data: dict, run: Run) -> None:
         data["quests_without_traits"] = {"count": len(unused_quests), "names": [q.name for q in unused_quests]}
 
     # Ability types existence check
-    data["has_ability_types"] = run.event.get_elements(AbilityTypePx).exists()
+    data["has_ability_types"] = run.event.get_elements(AbilityTypeExp).exists()
 
     # Ability types without abilities
     ability_types_without_abilities = list(
-        run.event.get_elements(AbilityTypePx).annotate(ability_count=Count("abilities")).filter(ability_count=0)
+        run.event.get_elements(AbilityTypeExp).annotate(ability_count=Count("abilities")).filter(ability_count=0)
     )
     if ability_types_without_abilities:
         data["ability_types_without_abilities"] = {
@@ -536,8 +536,8 @@ def _init_orga_actions_writing(data: dict, run: Run) -> None:
             "names": [at.name for at in ability_types_without_abilities],
         }
 
-    # Delivery PX existence check
-    data["has_delivery_px"] = run.event.get_elements(DeliveryPx).exists()
+    # Delivery EXP existence check
+    data["has_delivery_px"] = run.event.get_elements(DeliveryExp).exists()
 
 
 def _init_milestones_widget_cache(run: Run) -> dict:

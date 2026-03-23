@@ -25,9 +25,8 @@ from unittest.mock import MagicMock, patch
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.services.experience import (
     _apply_modifier_cost,
-    check_available_ability_px,
     get_free_abilities,
-    set_free_abilities,
+    set_free_abilities, check_available_ability_exp,
 )
 
 
@@ -66,17 +65,17 @@ class TestExperienceUtilityFunctions(BaseTestCase):
             self.assertEqual(args[1], "free_abilities")
             self.assertEqual(args[2], "[1, 2, 3]")
 
-    def test_check_available_ability_px_no_prereq(self) -> None:
+    def test_check_available_ability_exp_no_prereq(self) -> None:
         """Test check_available_ability_px with no prerequisites"""
         ability = MagicMock()
         ability.prerequisites.all.return_value = []
         ability.requirements.all.return_value = []
 
-        result = check_available_ability_px(ability, set(), set())
+        result = check_available_ability_exp(ability, set(), set())
 
         self.assertTrue(result)
 
-    def test_check_available_ability_px_prereq_met(self) -> None:
+    def test_check_available_ability_exp_prereq_met(self) -> None:
         """Test check_available_ability_px with prerequisites met"""
         prereq1 = MagicMock()
         prereq1.id = 1
@@ -88,11 +87,11 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         ability.requirements.all.return_value = []
 
         current_abilities = {1, 2, 3}
-        result = check_available_ability_px(ability, current_abilities, set())
+        result = check_available_ability_exp(ability, current_abilities, set())
 
         self.assertTrue(result)
 
-    def test_check_available_ability_px_prereq_not_met(self) -> None:
+    def test_check_available_ability_exp_prereq_not_met(self) -> None:
         """Test check_available_ability_px with prerequisites not met"""
         prereq1 = MagicMock()
         prereq1.id = 1
@@ -104,12 +103,12 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         ability.requirements.all.return_value = []
 
         current_abilities = {1, 2, 3}
-        result = check_available_ability_px(ability, current_abilities, set())
+        result = check_available_ability_exp(ability, current_abilities, set())
 
         # Missing prerequisite 5
         self.assertFalse(result)
 
-    def test_check_available_ability_px_requirements_met(self) -> None:
+    def test_check_available_ability_exp_requirements_met(self) -> None:
         """Test check_available_ability_px with requirements met"""
         req1 = MagicMock()
         req1.id = 10
@@ -121,11 +120,11 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         ability.requirements.all.return_value = [req1, req2]
 
         current_choices = {10, 20, 30}
-        result = check_available_ability_px(ability, set(), current_choices)
+        result = check_available_ability_exp(ability, set(), current_choices)
 
         self.assertTrue(result)
 
-    def test_check_available_ability_px_requirements_not_met(self) -> None:
+    def test_check_available_ability_exp_requirements_not_met(self) -> None:
         """Test check_available_ability_px with requirements not met"""
         req1 = MagicMock()
         req1.id = 10
@@ -137,7 +136,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         ability.requirements.all.return_value = [req1, req2]
 
         current_choices = {10, 20, 30}
-        result = check_available_ability_px(ability, set(), current_choices)
+        result = check_available_ability_exp(ability, set(), current_choices)
 
         # Missing requirement 25
         self.assertFalse(result)

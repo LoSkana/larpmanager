@@ -86,6 +86,9 @@ msgstr "alder"
 msgid "for"
 msgstr "for"
 
+msgid "tot"
+msgstr "tot"
+
 msgid "Area"
 msgstr "Område"
 
@@ -296,6 +299,9 @@ msgstr "Når"
 msgid "days"
 msgstr "dager"
 
+msgid "free"
+msgstr "gratis"
+
 msgid "gift"
 msgstr "gave"
 
@@ -485,6 +491,9 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Hvor"
+
+msgid "avail"
+msgstr "benytte"
 
 msgid "email"
 msgstr "e-post"
@@ -689,6 +698,9 @@ msgstr "Gate"
 
 msgid "Submit"
 msgstr "Send"
+
+msgid "System"
+msgstr "System"
 
 msgid "Ticket"
 msgstr "Billett"
@@ -963,6 +975,9 @@ msgstr "Støtte"
 msgid "Surname"
 msgstr "Etternavn"
 
+msgid "Systems"
+msgstr "Systemer"
+
 msgid "Tagline"
 msgstr "Tagline"
 
@@ -1190,6 +1205,9 @@ msgstr "Gammel meny"
 
 msgid "One-Time"
 msgstr "Engangsbruk"
+
+msgid "One-shot"
+msgstr "Ett skudd"
 
 msgid "Optional"
 msgstr "Valgfritt"
@@ -2870,9 +2888,6 @@ msgstr "Last inn fra hendelse"
 msgid "Mail assignment"
 msgstr "Tildeling av post"
 
-msgid "Manage XP rules"
-msgstr "Administrer XP-regler"
-
 msgid "Manage invoices"
 msgstr "Administrer fakturaer"
 
@@ -3086,6 +3101,9 @@ msgstr "Måtte den beste vinne"
 msgid "Member approved!"
 msgstr "Medlem godkjent!"
 
+msgid "Multiple systems"
+msgstr "Flere systemer"
+
 msgid "Name of the plot"
 msgstr "Navn på tomten"
 
@@ -3271,6 +3289,9 @@ msgstr "Last ned dokumentet"
 
 msgid "Elements uploaded"
 msgstr "Elementer lastet"
+
+msgid "Experience System"
+msgstr "Opplevelsessystem"
 
 msgid "Experience points"
 msgstr "Erfaringspoeng"
@@ -3464,6 +3485,9 @@ msgstr "Elektronisk faktura"
 msgid "Enable preferences"
 msgstr "Aktiver innstillinger"
 
+msgid "Experience Systems"
+msgstr "Opplevelsessystemer"
+
 msgid "First registration"
 msgstr "Første registrering"
 
@@ -3644,9 +3668,6 @@ msgstr "Ikke interessert"
 msgid "List of other users"
 msgstr "Liste over andre brukere"
 
-msgid "Manage XP modifiers"
-msgstr "Administrere XP-modifikatorer"
-
 msgid "Manage competencies"
 msgstr "Administrer kompetanse"
 
@@ -3793,6 +3814,9 @@ msgstr "Administrer påmeldinger til arrangementer"
 
 msgid "Manage payment items"
 msgstr "Administrer betalingselementer"
+
+msgid "Manual configuration"
+msgstr "Manuell konfigurasjon"
 
 msgid "Maximum participants"
 msgstr "Maksimalt antall deltakere"
@@ -4318,6 +4342,9 @@ msgstr "Liste over betalinger som skal verifiseres"
 msgid "Manage event accounting"
 msgstr "Administrer regnskap for arrangementer"
 
+msgid "Manage experience rules"
+msgstr "Administrer erfaringsregler"
+
 msgid "Manage the event quests"
 msgstr "Administrer hendelsesoppdragene"
 
@@ -4426,9 +4453,6 @@ msgstr "Ugyldig billettvalg"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lettvektsplate (Test)"
-
-msgid "Manage ability templates"
-msgstr "Administrere evne-maler"
 
 msgid "Manage area of the event"
 msgstr "Administrer området for arrangementet"
@@ -4547,6 +4571,9 @@ msgstr "Administrere kredittoppdrag"
 
 msgid "Manage event access roles"
 msgstr "Administrer tilgangsroller for arrangementer"
+
+msgid "Manage experience systems"
+msgstr "Administrer opplevelsessystemer"
 
 msgid "Manage photo album upload"
 msgstr "Administrer opplasting av fotoalbum"
@@ -4749,6 +4776,9 @@ msgstr "Elementer som vil bli endret"
 
 msgid "Loading performed, see logs"
 msgstr "Lasting utført, se logger"
+
+msgid "Manage experience modifiers"
+msgstr "Administrer erfaringsmodifikatorer"
 
 msgid "Manage quiz-style workshops"
 msgstr "Administrere quiz-lignende workshops"
@@ -5096,6 +5126,9 @@ msgstr "Filtrer eller søk i tegnene"
 
 msgid "Manage event navigation buttons"
 msgstr "Administrer navigeringsknapper for hendelser"
+
+msgid "Manage experience point systems"
+msgstr "Administrere erfaringspoengsystemer"
 
 msgid "Manage member membership status"
 msgstr "Administrere medlemsstatus"
@@ -5504,6 +5537,9 @@ msgstr "(<a href='%(url)s'>svar her</a>)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Valgfritt) Billettens beskrivelse"
+
+msgid "Choose individual features yourself"
+msgstr "Velg individuelle funksjoner selv"
 
 msgid "If checked: shows the old dashboard"
 msgstr "Hvis avkrysset: viser det gamle dashbordet"
@@ -6132,6 +6168,9 @@ msgstr "Donasjonsbeløp valgt av deltakeren"
 
 msgid "I do it routinely, I have good experience"
 msgstr "Jeg gjør det regelmessig, jeg har god erfaring"
+
+msgid "Manage templates for experience abilities"
+msgstr "Administrer maler for opplevelsesevner"
 
 msgid "Manage the pre-registration of all events"
 msgstr "Administrere forhåndsregistreringen av alle arrangementer"
@@ -6888,9 +6927,6 @@ msgstr "Jeg har gjort det noen ganger, jeg har grunnleggende erfaring"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Bli med på Discord for å få hjelp, ideer eller rapportere feil"
 
-msgid "Manage the character abilities purchaseable with XP"
-msgstr "Administrer karakteregenskapene som kan kjøpes med XP"
-
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Administrere lagerbevegelser, lån og reparasjoner"
 
@@ -7211,6 +7247,9 @@ msgstr "Administrere betalinger utført av deltakere på alle arrangementer"
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Gå gjennom brukerne som ikke overholder arrangementets tidsfrister"
 
+msgid "Select the features you want to activate for this event"
+msgstr "Velg funksjonene du vil aktivere for dette arrangementet"
+
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Velg tabellradene og velg operasjonen som skal brukes"
 
@@ -7323,6 +7362,10 @@ msgstr "Valutaen du ønsker å bruke for alle betalinger og priser"
 msgid "This page allows you to add or edit a character inventory"
 msgstr "På denne siden kan du legge til eller redigere en karakterbeholdning"
 
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Denne siden viser erfaringssystemer som er definert for dette arrangementet"
+
 msgid "This page shows all accounting information for the member"
 msgstr "Denne siden viser all regnskapsinformasjon for medlemmet"
 
@@ -7390,9 +7433,6 @@ msgstr "Hovedbildet av arrangementet vises på organisasjonens hjemmeside"
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Sørg for at du har tid til å se/lytte til innholdet nå"
 
-msgid "Manage XP distributions for character abilities purchases."
-msgstr "Administrer XP-distribusjoner for kjøp av karakteregenskaper."
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Alternativets navn, vises i spørsmålet (hold det kort)"
 
@@ -7418,6 +7458,9 @@ msgstr "Få tilgang til administrasjonspanelet <a href= %(url)s'>herfra</a>"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "Ønsker du å akseptere betalinger som behandles gjennom systemet"
+
+msgid "Manage the character abilities purchaseable with experience"
+msgstr "Administrer karakteregenskapene som kan kjøpes med erfaring"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
@@ -7915,6 +7958,9 @@ msgstr ""
 "Gir personalet tilgang til sikkerhetsinformasjonen som deltakerne har sendt "
 "inn"
 
+msgid "Manage experience distributions for character abilities purchases."
+msgstr "Administrer erfaringsfordelinger for kjøp av karakteregenskaper."
+
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Administrerer studiepoeng som deltakerne bruker for å dekke "
@@ -8079,10 +8125,6 @@ msgstr ""
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Vi sender deg en bekreftelse på e-post når endringen er gjennomført"
-
-msgid "You are choosing the most common features to activate for your event"
-msgstr ""
-"Du velger de vanligste funksjonene som skal aktiveres for arrangementet ditt"
 
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
@@ -9835,6 +9877,13 @@ msgstr ""
 "forbindelsen"
 
 msgid ""
+"Multi-event story with player-created characters, experience points, and a "
+"persistent world"
+msgstr ""
+"En historie med flere hendelser, spillskapte karakterer, erfaringspoeng og "
+"en vedvarende verden"
+
+msgid ""
 "Note that existing abilities with the same name, will be overwritten with "
 "the uploaded data"
 msgstr ""
@@ -11189,6 +11238,13 @@ msgstr ""
 "Valgfritt - For tekstspørsmål, maksimalt antall tegn; for flere "
 "alternativer, maksimalt antall alternativer (0 = ingen begrensning)"
 
+msgid ""
+"Single event focusing on narrative, characters written by staff and assigned"
+" via casting algorithm, with factions and plots"
+msgstr ""
+"Enkeltstående arrangement med fokus på fortelling, karakterer skrevet av "
+"ansatte og tildelt via castingalgoritme, med fraksjoner og plott"
+
 #, python-format
 msgid ""
 "Every friend who signs up and uses this code in the 'Discounts' field will "
@@ -11412,6 +11468,13 @@ msgid ""
 msgstr ""
 "Angir antall dager som deltakeren skal varsles om at betalingen skal "
 "gjennomføres, gitt en betalingsfrist. Standard 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Hvis avkrysset, gjør det mulig å administrere flere opplevelsessystemer for "
+"arrangementet. Hver evne og leveranse kan tilordnes et bestemt system."
 
 #, python-format
 msgid ""

@@ -89,7 +89,7 @@ def abilities(page: Any) -> None:
 
     page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name=re.compile(r"^Experience points ")).click()
-    page.locator("#id_px_user").check()
+    page.locator("#id_exp_user").check()
     submit_confirm(page)
 
     sidebar(page, "Abilities")

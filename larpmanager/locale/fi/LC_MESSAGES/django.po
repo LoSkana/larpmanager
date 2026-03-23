@@ -86,6 +86,9 @@ msgstr "ikä"
 msgid "for"
 msgstr "osoitteessa"
 
+msgid "tot"
+msgstr "tot"
+
 msgid "Area"
 msgstr "Alue"
 
@@ -296,6 +299,9 @@ msgstr "Kun"
 msgid "days"
 msgstr "päivää"
 
+msgid "free"
+msgstr "ilmainen"
+
 msgid "gift"
 msgstr "lahja"
 
@@ -485,6 +491,9 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Missä"
+
+msgid "avail"
+msgstr "avail"
 
 msgid "email"
 msgstr "sähköpostiosoite"
@@ -689,6 +698,9 @@ msgstr "Street"
 
 msgid "Submit"
 msgstr "Tallenna"
+
+msgid "System"
+msgstr "Järjestelmä"
 
 msgid "Ticket"
 msgstr "Lippu"
@@ -963,6 +975,9 @@ msgstr "Tuki"
 msgid "Surname"
 msgstr "Sukunimi"
 
+msgid "Systems"
+msgstr "Järjestelmät"
+
 msgid "Tagline"
 msgstr "Tagline"
 
@@ -1190,6 +1205,9 @@ msgstr "Vanha valikko"
 
 msgid "One-Time"
 msgstr "Kertaluonteinen"
+
+msgid "One-shot"
+msgstr "One-shot"
 
 msgid "Optional"
 msgstr "Valinnainen"
@@ -2870,9 +2888,6 @@ msgstr "Lataa tapahtumasta"
 msgid "Mail assignment"
 msgstr "Postin osoittaminen"
 
-msgid "Manage XP rules"
-msgstr "XP-sääntöjen hallinta"
-
 msgid "Manage invoices"
 msgstr "Hallitse laskuja"
 
@@ -3086,6 +3101,9 @@ msgstr "Paras voittakoon"
 msgid "Member approved!"
 msgstr "Jäsen hyväksytty!"
 
+msgid "Multiple systems"
+msgstr "Useita järjestelmiä"
+
 msgid "Name of the plot"
 msgstr "Juonen nimi"
 
@@ -3271,6 +3289,9 @@ msgstr "Lataa asiakirja"
 
 msgid "Elements uploaded"
 msgstr "Ladatut elementit"
+
+msgid "Experience System"
+msgstr "Kokemusjärjestelmä"
 
 msgid "Experience points"
 msgstr "Kokemuspisteet"
@@ -3464,6 +3485,9 @@ msgstr "Sähköinen lasku"
 msgid "Enable preferences"
 msgstr "Ota asetukset käyttöön"
 
+msgid "Experience Systems"
+msgstr "Kokemusjärjestelmät"
+
 msgid "First registration"
 msgstr "Ensimmäinen rekisteröinti"
 
@@ -3644,9 +3668,6 @@ msgstr "En ole kiinnostunut"
 msgid "List of other users"
 msgstr "Luettelo muista käyttäjistä"
 
-msgid "Manage XP modifiers"
-msgstr "Hallitse XP-modifikaattoreita"
-
 msgid "Manage competencies"
 msgstr "Osaamisen hallinta"
 
@@ -3793,6 +3814,9 @@ msgstr "Hallitse tapahtuman ilmoittautumisia"
 
 msgid "Manage payment items"
 msgstr "Hallitse maksueriä"
+
+msgid "Manual configuration"
+msgstr "Manuaalinen konfigurointi"
 
 msgid "Maximum participants"
 msgstr "Osallistujien enimmäismäärä"
@@ -4318,6 +4342,9 @@ msgstr "Luettelo tarkistettavista maksuista"
 msgid "Manage event accounting"
 msgstr "Hallitse tapahtuman kirjanpitoa"
 
+msgid "Manage experience rules"
+msgstr "Hallitse kokemussääntöjä"
+
 msgid "Manage the event quests"
 msgstr "Hallitse tapahtuman tehtäviä"
 
@@ -4426,9 +4453,6 @@ msgstr "Virheellinen lipun valinta"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Kevytlomake (testi)"
-
-msgid "Manage ability templates"
-msgstr "Hallitse taitopohjia"
 
 msgid "Manage area of the event"
 msgstr "Tapahtuma-alueen hallinta"
@@ -4547,6 +4571,9 @@ msgstr "Luottotehtävien hallinta"
 
 msgid "Manage event access roles"
 msgstr "Tapahtuman käyttöoikeuksien roolituksen hallinta"
+
+msgid "Manage experience systems"
+msgstr "Kokemusjärjestelmien hallinta"
 
 msgid "Manage photo album upload"
 msgstr "Hallitse valokuva-albumin lataamista"
@@ -4749,6 +4776,9 @@ msgstr "Muutettavat kohteet"
 
 msgid "Loading performed, see logs"
 msgstr "Lataus suoritettu, katso lokitiedot"
+
+msgid "Manage experience modifiers"
+msgstr "Kokemuksen muokkaajien hallinta"
 
 msgid "Manage quiz-style workshops"
 msgstr "Hallitse tietokilpailutyyppisiä työpajoja"
@@ -5096,6 +5126,9 @@ msgstr "Suodata tai etsiä merkkejä"
 
 msgid "Manage event navigation buttons"
 msgstr "Tapahtuman navigointipainikkeiden hallinta"
+
+msgid "Manage experience point systems"
+msgstr "Kokemuspistejärjestelmien hallinta"
 
 msgid "Manage member membership status"
 msgstr "Hallitse jäsenen jäsenyyden tilaa"
@@ -5504,6 +5537,9 @@ msgstr "(<a href='%(url)s'>vastaukset täällä</a>))"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Valinnainen) Lipun kuvaus"
+
+msgid "Choose individual features yourself"
+msgstr "Valitse yksittäiset ominaisuudet itse"
 
 msgid "If checked: shows the old dashboard"
 msgstr "Jos valittuna: näyttää vanhan kojelaudan"
@@ -6130,6 +6166,9 @@ msgstr "Osallistujan valitsema lahjoitussumma"
 
 msgid "I do it routinely, I have good experience"
 msgstr "Teen sitä rutiininomaisesti, minulla on hyviä kokemuksia"
+
+msgid "Manage templates for experience abilities"
+msgstr "Hallitse kokemustaitojen malleja"
 
 msgid "Manage the pre-registration of all events"
 msgstr "hallinnoida kaikkien tapahtumien ennakkoilmoittautumista"
@@ -6888,9 +6927,6 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Liity Discordiin saadaksesi apua, ideoita tai ilmoittaaksesi virheistä"
 
-msgid "Manage the character abilities purchaseable with XP"
-msgstr "Hallitse XP:llä ostettavia hahmon kykyjä"
-
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Hallitse varastotavaroiden siirtoja, lainoja ja korjauksia"
 
@@ -7210,6 +7246,9 @@ msgstr "Hallitse osallistujien suorittamia maksuja kaikissa tapahtumissa"
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Tarkista käyttäjät, jotka ovat jääneet pois tapahtuman määräajoista"
 
+msgid "Select the features you want to activate for this event"
+msgstr "Valitse ominaisuudet, jotka haluat aktivoida tätä tapahtumaa varten"
+
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Valitse taulukon rivit ja valitse sovellettava toiminto"
 
@@ -7324,6 +7363,11 @@ msgstr "Valuutta, jota haluat käyttää kaikissa maksuissa ja hinnoittelussa"
 msgid "This page allows you to add or edit a character inventory"
 msgstr "Tällä sivulla voit lisätä tai muokata hahmon inventaariota"
 
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Tällä sivulla luetellaan tätä tapahtumaa varten määritellyt "
+"kokemusjärjestelmät"
+
 msgid "This page shows all accounting information for the member"
 msgstr "Tällä sivulla näkyvät kaikki jäsenen kirjanpitotiedot"
 
@@ -7390,9 +7434,6 @@ msgstr "Päätapahtuman kuva näkyy organisaatiosi kotisivulla"
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Varmista, että sinulla on aikaa katsoa/kuunnella sisältöä nyt"
 
-msgid "Manage XP distributions for character abilities purchases."
-msgstr "Hallitse hahmon kykyjen hankkimiseen liittyviä XP-jakoja."
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Vaihtoehdon nimi, joka näkyy kysymyksessä (pidä se lyhyenä)"
 
@@ -7418,6 +7459,9 @@ msgstr "Pääset hallintapaneeliin <a href= %(url)s'>täältä</a>"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "Haluatko hyväksyä järjestelmän kautta käsitellyt maksut"
+
+msgid "Manage the character abilities purchaseable with experience"
+msgstr "Hallitse hahmon kykyjä, joita voi ostaa kokemuksella"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr "Tapahtuma-asetusten hallinta: nimi, kuvaus, päivämäärät, tila"
@@ -7906,6 +7950,9 @@ msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Henkilöstö saa käyttöönsä osallistujien toimittamat turvallisuustiedot"
 
+msgid "Manage experience distributions for character abilities purchases."
+msgstr "Hallitse hahmon kykyjen hankkimiseen liittyvää kokemuksen jakamista."
+
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Hallinnoi osallistujien käyttämiä hyvityksiä ilmoittautumismaksun "
@@ -8065,9 +8112,6 @@ msgstr ""
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Lähetämme sinulle vahvistussähköpostin, kun muutos on tehty"
-
-msgid "You are choosing the most common features to activate for your event"
-msgstr "Valitset yleisimmät ominaisuudet aktivoitavaksi tapahtumaasi varten"
 
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
@@ -9834,6 +9878,13 @@ msgstr ""
 "yksisuuntaisissa suhteissa, joissa toinen hahmo EI ole tietoinen yhteydestä"
 
 msgid ""
+"Multi-event story with player-created characters, experience points, and a "
+"persistent world"
+msgstr ""
+"Monitapahtumainen tarina, jossa on pelaajan luomia hahmoja, kokemuspisteitä "
+"ja pysyvä maailma"
+
+msgid ""
 "Note that existing abilities with the same name, will be overwritten with "
 "the uploaded data"
 msgstr ""
@@ -11182,6 +11233,13 @@ msgstr ""
 "Valinnainen - Tekstikysymyksissä merkkien enimmäismäärä; monivaihtoehdoissa "
 "vaihtoehtojen enimmäismäärä (0 = ei rajoitusta)"
 
+msgid ""
+"Single event focusing on narrative, characters written by staff and assigned"
+" via casting algorithm, with factions and plots"
+msgstr ""
+"Kerrontaan keskittyvä yksittäinen tapahtuma, henkilökunnan kirjoittamat "
+"hahmot, jotka osoitetaan casting-algoritmin avulla, ryhmittymät ja juonet"
+
 #, python-format
 msgid ""
 "Every friend who signs up and uses this code in the 'Discounts' field will "
@@ -11407,6 +11465,14 @@ msgid ""
 msgstr ""
 "Kun maksun määräaika on annettu, ilmoittaa, kuinka monen päivän kuluessa se "
 "ilmoittaa osallistujalle, että maksu on suoritettava. Oletusarvo 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Jos valintaruutu on valittuna, tämä mahdollistaa tapahtuman useiden "
+"kokemusjärjestelmien hallinnan. Jokainen kyky ja toimitus voidaan määrittää "
+"tiettyyn järjestelmään."
 
 #, python-format
 msgid ""

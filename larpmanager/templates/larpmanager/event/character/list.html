@@ -25,12 +25,14 @@
                 {% if features.campaign %}
                     <th>{% trans "Active" %}</th>
                 {% endif %}
-                {% if features.px %}
-                    <th>{% trans "XP tot" %}</th>
-                    <th>{% trans "XP used" %}</th>
-                    <th>{% trans "XP avail" %}</th>
+                {% if features.experience and exp_systems %}
+                    {% for sys in exp_systems %}
+                        <th>{{ sys.name }} {% trans "tot" %}</th>
+                        <th>{{ sys.name }} {% trans "used" %}</th>
+                        <th>{{ sys.name }} {% trans "avail" %}</th>
+                    {% endfor %}
                 {% endif %}
-                {% if px_user %}<th></th>{% endif %}
+                {% if exp_user %}<th></th>{% endif %}
                 {% if not assigned %}<th></th>{% endif %}
             </tr>
         </thead>
@@ -62,12 +64,16 @@
                             {% if el.addit.inactive != "True" %}<i class="fa fa-check"></i>{% endif %}
                         </td>
                     {% endif %}
-                    {% if features.px %}
-                        <td>{{ el.addit | get:'px_tot' }}</td>
-                        <td>{{ el.addit | get:'px_used' }}</td>
-                        <td>{{ el.addit | get:'px_avail' }}</td>
+                    {% if features.experience %}
+                        {% if exp_systems %}
+                            {% for sys in exp_systems %}
+                                <td>{{ el.addit|get:sys.tot_key }}</td>
+                                <td>{{ el.addit|get:sys.used_key }}</td>
+                                <td>{{ el.addit|get:sys.avail_key }}</td>
+                            {% endfor %}
+                        {% endif %}
                     {% endif %}
-                    {% if px_user %}
+                    {% if exp_user %}
                         <td>
                             <a href="{% url 'character_abilities' run.get_slug el.uuid %}">{% trans "Ability" %}</a>
                         </td>

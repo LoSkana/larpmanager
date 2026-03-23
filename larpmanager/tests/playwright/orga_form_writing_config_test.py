@@ -109,7 +109,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
 
     go_to(page, live_server, "/test/manage/config/")
     page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
-    page.locator("#id_px_rules").check()
+    page.locator("#id_exp_rules").check()
     submit_confirm(page)
 
     # add field computed
@@ -131,7 +131,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden comp Computed Private",
     )
 
-    # remove px
+    # remove experience
     page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Experience points").uncheck()
     submit_confirm(page)

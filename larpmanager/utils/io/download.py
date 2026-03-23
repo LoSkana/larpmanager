@@ -35,7 +35,7 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_configs, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.association import Association
-from larpmanager.models.experience import AbilityPx
+from larpmanager.models.experience import AbilityExp
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -907,7 +907,7 @@ def _get_column_names(context: dict) -> None:
 
     Args:
         context: Context dictionary containing export configuration including:
-            - typ: Export type ('registration', 'registration_ticket', 'px_abilitie',
+            - typ: Export type ('registration', 'registration_ticket', 'exp_abilitie',
                    'registration_form', 'character_form', or writing element types)
             - features: Set of available features for the export context
             - event: Event instance for question lookups (for registration types)
@@ -916,7 +916,7 @@ def _get_column_names(context: dict) -> None:
         Modifies context in-place, adding:
         - columns: List of dicts with column names and descriptions
         - fields: Dict mapping field names to types (for registration type)
-        - name: Name of the export type (for px_abilitie type)
+        - name: Name of the export type (for exp_abilitie type)
 
     """
     # Handle registration data export with participant, ticket, and question columns
@@ -936,7 +936,7 @@ def _get_column_names(context: dict) -> None:
         ]
 
     # Handle ability/experience system export
-    elif context["typ"] == "px_abilitie":
+    elif context["typ"] == "exp_abilitie":
         context["columns"] = [
             {
                 "name": _("The name ability"),
@@ -1207,7 +1207,7 @@ def export_abilities(context: Any) -> Any:
 
     ability_queryset = (
         context["event"]
-        .get_elements(AbilityPx)
+        .get_elements(AbilityExp)
         .order_by("number")
         .select_related("typ")
         .prefetch_related("requirements", "prerequisites")

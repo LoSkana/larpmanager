@@ -49,7 +49,7 @@ from larpmanager.forms.utils import (
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Event
-from larpmanager.models.experience import AbilityPx, DeliveryPx
+from larpmanager.models.experience import AbilityExp, DeliveryExp
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
@@ -141,9 +141,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Get allowed statuses for editing this question
         allowed_editable_statuses = question.get("editable", [])
 
-        # If no status restrictions, question is always editable
+        # If no status restrictions, question is never editable
         if not allowed_editable_statuses:
-            return True
+            return False
 
         # Check if current instance status allows editing
         return self.instance.status in allowed_editable_statuses
@@ -373,7 +373,7 @@ class OrgaCharacterForm(CharacterForm):
             return
 
         # Initialize experience points configuration
-        self._init_px()
+        self._init_exp()
 
         # Initialize plot-related fields
         self._init_plots()
@@ -599,46 +599,46 @@ class OrgaCharacterForm(CharacterForm):
         if to_update:
             PlotCharacterRel.objects.bulk_update(to_update, ["text"])
 
-    def _init_px(self) -> None:
-        """Initialize PX (ability/delivery) form fields if PX feature is enabled."""
-        if "px" not in self.params["features"]:
+    def _init_exp(self) -> None:
+        """Initialize EPX (ability/delivery) form fields if experience points feature is enabled."""
+        if "experience" not in self.params["features"]:
             return
 
-        # px ability
-        self.fields["px_ability_list"] = forms.ModelMultipleChoiceField(
+        # experience ability
+        self.fields["exp_ability_list"] = forms.ModelMultipleChoiceField(
             label=_("Abilities"),
-            queryset=self.params["run"].event.get_elements(AbilityPx),
+            queryset=self.params["run"].event.get_elements(AbilityExp),
             widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
             required=False,
         )
 
-        self.initial["px_ability_list"] = [a.pk for a in self.instance.px_ability_list.all()]
-        self.show_link.append("id_px_ability_list")
+        self.initial["exp_ability_list"] = [a.pk for a in self.instance.exp_ability_list.all()]
+        self.show_link.append("id_exp_ability_list")
 
         # delivery list
-        self.fields["px_delivery_list"] = forms.ModelMultipleChoiceField(
+        self.fields["exp_delivery_list"] = forms.ModelMultipleChoiceField(
             label=_("Delivery"),
-            queryset=self.params["run"].event.get_elements(DeliveryPx),
+            queryset=self.params["run"].event.get_elements(DeliveryExp),
             widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
             required=False,
         )
 
-        self.initial["px_delivery_list"] = [d.pk for d in self.instance.px_delivery_list.all()]
-        self.show_link.append("id_px_delivery_list")
+        self.initial["exp_delivery_list"] = [d.pk for d in self.instance.exp_delivery_list.all()]
+        self.show_link.append("id_exp_delivery_list")
 
-    def _save_px(self, instance: Any) -> None:
-        """Save PX-related data to the instance if PX feature is enabled."""
-        # Check if PX feature is available
-        if "px" not in self.params["features"]:
+    def _save_exp(self, instance: Any) -> None:
+        """Save EPX-related data to the instance if experience points feature is enabled."""
+        # Check if feature is available
+        if "experience" not in self.params["features"]:
             return
 
         # Set ability list if present in cleaned data
-        if "px_ability_list" in self.cleaned_data:
-            instance.px_ability_list.set(self.cleaned_data["px_ability_list"])
+        if "exp_ability_list" in self.cleaned_data:
+            instance.exp_ability_list.set(self.cleaned_data["exp_ability_list"])
 
         # Set delivery list if present in cleaned data
-        if "px_delivery_list" in self.cleaned_data:
-            instance.px_delivery_list.set(self.cleaned_data["px_delivery_list"])
+        if "exp_delivery_list" in self.cleaned_data:
+            instance.exp_delivery_list.set(self.cleaned_data["exp_delivery_list"])
 
     def _init_factions(self) -> None:
         """Initialize faction selection fields for character forms.
@@ -760,7 +760,7 @@ class OrgaCharacterForm(CharacterForm):
         # Only process related data if instance has been persisted
         if instance.pk:
             self._save_plot(instance)
-            self._save_px(instance)
+            self._save_exp(instance)
             self._save_relationships(instance)
             self._save_active(instance)
             refresh_character_relationships_background(instance.id)
@@ -915,9 +915,9 @@ class OrgaWritingQuestionForm(BaseModelForm):
                 if choice[0] not in ["name", "teaser", "text"] and choice[0] not in self.params["features"]:
                     continue
 
-            # Handle character type 'c' - requires 'px_rules' config
+            # Handle character type 'c' - requires 'exp_rules' config
             elif choice[0] == "c":
-                if not get_event_config(self.params["event"].id, "px_rules", default_value=False):
+                if not get_event_config(self.params["event"].id, "exp_rules", default_value=False):
                     continue
 
             # Add valid choice to final list
@@ -941,9 +941,11 @@ class OrgaWritingQuestionForm(BaseModelForm):
                 required=False,
             )
 
-            # Set initial values from existing instance if available
+            # Set initial values: existing instance statuses, or all statuses for new instances
             if self.instance and self.instance.pk:
                 self.initial["editable"] = self.instance.get_editable()
+            else:
+                self.initial["editable"] = [value for value, _ in CharacterStatus.choices]
 
     def clean_editable(self) -> str:
         """Join editable field values into comma-separated string."""

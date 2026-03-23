@@ -33,8 +33,9 @@ from larpmanager.cache.config import (
     get_event_config,
     reset_element_configs,
     save_all_element_configs,
+    save_single_config,
 )
-from larpmanager.cache.feature import clear_event_features_cache, get_event_features
+from larpmanager.cache.feature import clear_event_features_cache, get_event_features, reset_association_features
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.association import ExePreferencesForm
 from larpmanager.forms.base import THEME_HELP_TEXT, AppearanceTheme, BaseModelCssForm, BaseModelForm
@@ -54,6 +55,8 @@ from larpmanager.forms.utils import (
     save_permissions_role,
 )
 from larpmanager.models.access import EventPermission, EventRole
+from larpmanager.models.association import Association
+from larpmanager.models.base import Feature
 from larpmanager.models.event import (
     DevelopStatus,
     Event,
@@ -727,9 +730,9 @@ class OrgaConfigForm(ConfigForm):
                 independent_factions_help_text,
             )
 
-        # Configure experience points system if px feature is enabled
-        if "px" in self.params["features"]:
-            self.set_section("px", _("Experience points"))
+        # Configure experience points system if experience feature is enabled
+        if "experience" in self.params["features"]:
+            self.set_section("experience", _("Experience points"))
 
             # Player selection configuration - allows participants to choose abilities
             player_selection_label = _("Player selection")
@@ -737,20 +740,20 @@ class OrgaConfigForm(ConfigForm):
                 "If checked, participants may add abilities themselves, by selecting from those that "
                 "are visible, and whose pre-requisites they meet.",
             )
-            self.add_configs("px_user", ConfigType.BOOL, player_selection_label, player_selection_help_text)
+            self.add_configs("exp_user", ConfigType.BOOL, player_selection_label, player_selection_help_text)
 
             # Undo period configuration - time window for ability revocation
             undo_period_label = _("Undo period")
             undo_period_help_text = _(
                 "Time window (in hours) during which the user can revoke a chosen ability and recover spent XP (default is 0)",
             )
-            self.add_configs("px_undo", ConfigType.INT, undo_period_label, undo_period_help_text)
+            self.add_configs("exp_undo", ConfigType.INT, undo_period_label, undo_period_help_text)
 
             # Initial experience points configuration
             initial_experience_points_label = _("Initial experience points")
             initial_experience_points_help_text = _("Initial value of experience points for all characters")
             self.add_configs(
-                "px_start",
+                "exp_start",
                 ConfigType.INT,
                 initial_experience_points_label,
                 initial_experience_points_help_text,
@@ -761,21 +764,21 @@ class OrgaConfigForm(ConfigForm):
             ability_templates_help_text = _(
                 "If checked, enables ability templates that can be reused across multiple abilities",
             )
-            self.add_configs("px_templates", ConfigType.BOOL, ability_templates_label, ability_templates_help_text)
+            self.add_configs("exp_templates", ConfigType.BOOL, ability_templates_label, ability_templates_help_text)
 
             # Rules configuration
             rules_label = _("Rules")
             rules_help_text = _(
                 "If checked, enables rules for computed character fields based on abilities",
             )
-            self.add_configs("px_rules", ConfigType.BOOL, rules_label, rules_help_text)
+            self.add_configs("exp_rules", ConfigType.BOOL, rules_label, rules_help_text)
 
             # Modifiers configuration
             modifiers_label = _("Modifiers")
             modifiers_help_text = _(
                 "If checked, enables modifiers that can adjust ability costs based on prerequisites and requirements",
             )
-            self.add_configs("px_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
+            self.add_configs("exp_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
 
             # Auto buy configuration
             auto_buy_label = _("Auto buy")
@@ -783,7 +786,15 @@ class OrgaConfigForm(ConfigForm):
                 "If checked, characters automatically and repeatedly acquire the most expensive available ability "
                 "with their remaining XP, until no more can be bought.",
             )
-            self.add_configs("px_auto_buy", ConfigType.BOOL, auto_buy_label, auto_buy_help_text)
+            self.add_configs("exp_auto_buy", ConfigType.BOOL, auto_buy_label, auto_buy_help_text)
+
+            # Multiple XP systems configuration
+            multiple_systems_label = _("Multiple systems")
+            multiple_systems_help_text = _(
+                "If checked, enables managing multiple experience systems for the event. "
+                "Each ability and delivery can be assigned to a specific system.",
+            )
+            self.add_configs("exp_systems", ConfigType.BOOL, multiple_systems_label, multiple_systems_help_text)
 
         # Configure player character editor if user_character feature is enabled
         if "user_character" in self.params["features"]:
@@ -1550,6 +1561,37 @@ class OrgaProgressStepForm(BaseModelForm):
         exclude = ("number", "order")
 
 
+# Configs automatically applied when a feature is activated via QuickSetupForm
+_FEATURE_IMPLIED_CONFIGS: dict[str, dict] = {
+    "user_character": {"user_character_max": 1, "user_character_approval": "True"},
+    "experience": {"exp_user": "True"},
+}
+
+# Event templates: (slug, label, description, feature_slugs)
+_EVENT_TEMPLATES = [
+    (
+        "campaign",
+        _("Campaign"),
+        _("Multi-event story with player-created characters, experience points, and a persistent world"),
+        ["character", "user_character", "experience", "campaign", "player_cancellation"],
+    ),
+    (
+        "oneshot",
+        _("One-shot"),
+        _(
+            "Single event focusing on narrative, characters written by staff and assigned via casting algorithm, with factions and plots"
+        ),
+        ["character", "casting", "faction", "plot", "handout", "player_cancellation"],
+    ),
+    (
+        "manual",
+        _("Manual configuration"),
+        _("Choose individual features yourself"),
+        [],
+    ),
+]
+
+
 class ExeEventForm(OrgaEventForm):
     """Extended event form for executors with template support."""
 
@@ -1559,22 +1601,35 @@ class ExeEventForm(OrgaEventForm):
         """Initialize ExeEventForm with template event selection."""
         super().__init__(*args, **kwargs)
 
-        if "template" in self.params["features"] and not self.instance.pk:
-            qs = Event.objects.filter(association_id=self.params["association_id"], template=True)
-            self.fields["template_event"] = forms.ModelChoiceField(
-                required=False,
-                queryset=qs,
-                label=_("Template"),
-                help_text=_(
-                    "You can indicate a template event from which functionality and configurations will be copied",
-                ),
-                widget=TemplateS2Widget(),
-            )
+        if not self.instance.pk:
+            if "template" in self.params["features"]:
+                qs = Event.objects.filter(association_id=self.params["association_id"], template=True)
+                self.fields["template_event"] = forms.ModelChoiceField(
+                    required=False,
+                    queryset=qs,
+                    label=_("Template"),
+                    help_text=_(
+                        "You can indicate a template event from which functionality and configurations will be copied",
+                    ),
+                    widget=TemplateS2Widget(),
+                )
 
-            self.configure_field_association("template_event", self.params["association_id"])
+                self.configure_field_association("template_event", self.params["association_id"])
 
-            if qs.count() == 1:
-                self.initial["template_event"] = qs.first()
+                if qs.count() == 1:
+                    self.initial["template_event"] = qs.first()
+            elif self.params.get("skin_id") == 1:
+                template_descriptions = {slug: (label, desc) for slug, label, desc, _f in _EVENT_TEMPLATES if slug}
+                template_choices = [("", "---")] + [(slug, label) for slug, label, _d, _f in _EVENT_TEMPLATES]
+                self.fields["event_template"] = forms.ChoiceField(
+                    choices=template_choices,
+                    label=_("Template"),
+                    required=False,
+                    initial="",
+                    help_text=", ".join(
+                        f"<b>{label}</b>: {desc}" for slug, (label, desc) in template_descriptions.items()
+                    ),
+                )
 
     def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save event with optional template copying.
@@ -1602,6 +1657,29 @@ class ExeEventForm(OrgaEventForm):
             copy_class(instance.id, event_id, EventRole)
 
         instance.save()
+
+        # Apply built-in event template if selected (only when custom template feature is not active)
+        selected_template = self.cleaned_data.get("event_template", "")
+        if selected_template:
+            template_entry = next((t for t in _EVENT_TEMPLATES if t[0] == selected_template), None)
+            if template_entry:
+                template_features = template_entry[3]
+                feat_ids = dict(Feature.objects.filter(slug__in=template_features).values_list("slug", "id"))
+                for feat_slug in template_features:
+                    if feat_slug in feat_ids:
+                        instance.features.add(feat_ids[feat_slug])
+
+                # For campaign template, also activate the campaign feature for the association
+                if selected_template == "campaign":
+                    campaign_feat = Feature.objects.filter(slug="campaign").first()
+                    if campaign_feat:
+                        association = Association.objects.get(pk=self.params["association_id"])
+                        association.features.add(campaign_feat)
+                        reset_association_features(self.params["association_id"])
+
+                for feat_slug in template_features:
+                    for config_name, config_value in _FEATURE_IMPLIED_CONFIGS.get(feat_slug, {}).items():
+                        save_single_config(instance, config_name, config_value)
 
         return instance
 
@@ -1666,7 +1744,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
     page_title = _("Quick Setup")
 
-    page_info = _("You are choosing the most common features to activate for your event")
+    page_info = _("Select the features you want to activate for this event")
 
     class Meta:
         model = Event
@@ -1682,9 +1760,11 @@ class OrgaQuickSetupForm(QuickSetupForm):
         """
         super().__init__(*args, **kwargs)
 
+        is_skin_full = self.instance.association.skin_id == 1
+
         self.setup = {}
 
-        if self.instance.association.skin_id == 1:
+        if is_skin_full:
             self.setup.update(
                 {
                     "character": (
@@ -1702,7 +1782,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
                         _("Player editor"),
                         _("Do you want to allow participants to create their own characters"),
                     ),
-                    "px": (
+                    "experience": (
                         True,
                         _("Experience points"),
                         _("Do you want to manage character progression through abilities"),
@@ -1740,7 +1820,29 @@ class OrgaQuickSetupForm(QuickSetupForm):
             },
         )
 
-        self.init_fields(get_event_features(self.instance.pk))
+        active_features = get_event_features(self.instance.pk)
+        self.init_fields(active_features)
+
+    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002
+        """Save form, applying manual checkbox choices.
+
+        Args:
+            commit: Whether to save to the database. Defaults to True.
+
+        Returns:
+            The saved Event instance.
+
+        """
+        instance = super().save(commit=commit)
+        activated = [key for key, (is_feat, _l, _h) in self.setup.items() if is_feat and self.cleaned_data.get(key)]
+        self._apply_implied_configs(activated)
+        return instance
+
+    def _apply_implied_configs(self, activated_feature_slugs: list) -> None:
+        """Apply configs implied by specific features being activated."""
+        for feat_slug in activated_feature_slugs:
+            for config_name, config_value in _FEATURE_IMPLIED_CONFIGS.get(feat_slug, {}).items():
+                save_single_config(self.instance, config_name, config_value)
 
 
 class OrgaRunDatesForm(OrgaRunForm):
@@ -1974,7 +2076,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
         # Define character feature fields with their config keys and labels
         feature_fields = [
-            ("px", "px", _("XP")),
+            ("experience", "experience", _("XP")),
             ("plot", "plots", _("Plots")),
             ("relationships", "relationships", _("Relationships")),
             ("speedlarp", "speedlarp", _("Speedlarp")),

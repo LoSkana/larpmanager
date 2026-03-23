@@ -52,14 +52,15 @@ from larpmanager.forms.event import (
     OrgaRunForm,
 )
 from larpmanager.forms.experience import (
-    OrgaAbilityPxForm,
-    OrgaAbilityTemplatePxForm,
-    OrgaAbilityTypePxForm,
-    OrgaDeliveryPxForm,
-    OrgaModifierPxForm,
-    OrgaRulePxForm,
+    OrgaAbilityExpForm,
+    OrgaAbilityTemplateExpForm,
+    OrgaAbilityTypeExpForm,
+    OrgaDeliveryExpForm,
+    OrgaModifierExpForm,
+    OrgaRuleExpForm,
+    OrgaSystemExpForm,
 )
-from larpmanager.forms.inventory import OrgaInventoryForm, OrgaPoolTypePxForm
+from larpmanager.forms.inventory import OrgaInventoryForm, OrgaPoolTypeForm
 from larpmanager.forms.miscellanea import (
     OneTimeAccessTokenForm,
     OneTimeContentForm,
@@ -94,7 +95,7 @@ from larpmanager.forms.writing import (
     OrgaTraitForm,
 )
 from larpmanager.models.casting import Quest, QuestType
-from larpmanager.models.experience import AbilityTypePx
+from larpmanager.models.experience import AbilityTypeExp
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -119,12 +120,12 @@ from larpmanager.utils.edit.base import Action, prepare_change
 from larpmanager.utils.services.character import get_character_relationships, get_character_sheet
 
 
-def validate_ability_px(request: HttpRequest, context: dict, event_slug: str) -> None:
+def validate_ability_exp(request: HttpRequest, context: dict, event_slug: str) -> None:
     """Validate that ability types exist before allowing ability creation."""
-    if not context["event"].get_elements(AbilityTypePx).exists():
+    if not context["event"].get_elements(AbilityTypeExp).exists():
         # Warn user and redirect to ability types creation page
         messages.warning(request, _("You must create at least one ability type before you can create abilities"))
-        msg = "orga_px_ability_types_new"
+        msg = "orga_exp_ability_types_new"
         raise RedirectError(msg, args=[event_slug])
 
 
@@ -228,17 +229,18 @@ class OrgaAction(str, Enum):
     REGISTRATION_INSTALLMENTS = ("orga_registration_installments", {"form": OrgaRegistrationInstallmentForm})
     REGISTRATION_SURCHARGES = ("orga_registration_surcharges", {"form": OrgaRegistrationSurchargeForm})
 
-    # Experience/PX system
-    PX_DELIVERIES = ("orga_px_deliveries", {"form": OrgaDeliveryPxForm})
-    PX_ABILITIES = ("orga_px_abilities", {"form": OrgaAbilityPxForm, "check": validate_ability_px})
-    PX_ABILITY_TYPES = ("orga_px_ability_types", {"form": OrgaAbilityTypePxForm})
-    PX_ABILITY_TEMPLATES = ("orga_px_ability_templates", {"form": OrgaAbilityTemplatePxForm})
-    PX_RULES = ("orga_px_rules", {"form": OrgaRulePxForm})
-    PX_MODIFIERS = ("orga_px_modifiers", {"form": OrgaModifierPxForm})
+    # Experience Points
+    PX_SYSTEMS = ("orga_exp_systems", {"form": OrgaSystemExpForm})
+    PX_DELIVERIES = ("orga_exp_deliveries", {"form": OrgaDeliveryExpForm})
+    PX_ABILITIES = ("orga_exp_abilities", {"form": OrgaAbilityExpForm, "check": validate_ability_exp})
+    PX_ABILITY_TYPES = ("orga_exp_ability_types", {"form": OrgaAbilityTypeExpForm})
+    PX_ABILITY_TEMPLATES = ("orga_exp_ability_templates", {"form": OrgaAbilityTemplateExpForm})
+    PX_RULES = ("orga_exp_rules", {"form": OrgaRuleExpForm})
+    PX_MODIFIERS = ("orga_exp_modifiers", {"form": OrgaModifierExpForm})
 
     # Inventory
     CI_INVENTORY = ("orga_ci_inventory", {"form": OrgaInventoryForm})
-    CI_POOL_TYPES = ("orga_ci_pool_types", {"form": OrgaPoolTypePxForm})
+    CI_POOL_TYPES = ("orga_ci_pool_types", {"form": OrgaPoolTypeForm})
 
     # Miscellaneous
     ALBUMS = ("orga_albums", {"form": OrgaAlbumForm})

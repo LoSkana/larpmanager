@@ -471,6 +471,7 @@ class OrgaCopyForm(BaseForm):
             ("surcharge", "Registration Surcharge"),
             ("writing_question", "Character Sheet"),
             ("character", "Characters"),
+            ("experience", "Experience"),
             ("faction", "Factions"),
             ("quest", "Quests and Traits"),
             ("prologue", "Prologues"),

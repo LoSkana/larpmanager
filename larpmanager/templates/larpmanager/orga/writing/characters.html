@@ -19,8 +19,8 @@
     {% if user_character_approval %}
         <a href="#" class="table_toggle" tog='status'>{% trans "Status" %}</a>
     {% endif %}
-    {% if features.px %}
-        <a href="#" class="table_toggle" tog='px'>{% trans "XP" %}</a>
+    {% if features.experience %}
+        <a href="#" class="table_toggle" tog='px'>{% trans "Experience" %}</a>
     {% endif %}
     {% include "elements/writing/questions_nav.html" %}
     {% if features.plot %}
@@ -52,10 +52,18 @@
     {% if user_character_approval %}
         <th class="status">{% trans "Status" %}</th>
     {% endif %}
-    {% if features.px %}
-        <th class="px">{% trans "XP tot" %}</th>
-        <th class="px">{% trans "XP used" %}</th>
-        <th class="px">{% trans "XP avail" %}</th>
+    {% if features.experience %}
+        {% if exp_systems %}
+            {% for sys in exp_systems %}
+                <th class="px">{{ sys.name }} {% trans "tot" %}</th>
+                <th class="px">{{ sys.name }} {% trans "used" %}</th>
+                <th class="px">{{ sys.name }} {% trans "free" %}</th>
+            {% endfor %}
+        {% else %}
+            <th class="px">{% trans "XP tot" %}</th>
+            <th class="px">{% trans "XP used" %}</th>
+            <th class="px">{% trans "XP avail" %}</th>
+        {% endif %}
     {% endif %}
     {% include "elements/writing/questions_header.html" %}
     {% if features.plot %}
@@ -139,10 +147,18 @@
                 </td>
             {% endif %}
             {% if user_character_approval %}<td class="status">{{ el.get_status_display }}</td>{% endif %}
-            {% if features.px %}
-                <td class="px">{{ el.addit | get:'px_tot' }}</td>
-                <td class="px">{{ el.addit | get:'px_used' }}</td>
-                <td class="px">{{ el.addit | get:'px_avail' }}</td>
+            {% if features.experience %}
+                {% if exp_systems %}
+                    {% for sys in exp_systems %}
+                        <td class="px">{{ el.addit|get:sys.tot_key }}</td>
+                        <td class="px">{{ el.addit|get:sys.used_key }}</td>
+                        <td class="px">{{ el.addit|get:sys.avail_key }}</td>
+                    {% endfor %}
+                {% else %}
+                    <td class="px">{{ el.addit | get:'exp_tot' }}</td>
+                    <td class="px">{{ el.addit | get:'exp_used' }}</td>
+                    <td class="px">{{ el.addit | get:'exp_avail' }}</td>
+                {% endif %}
             {% endif %}
             {% include "elements/writing/questions_body.html" %}
             {% if features.plot %}

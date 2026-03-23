@@ -28,7 +28,7 @@ from django.core.cache import cache
 
 from larpmanager.cache.dirty import get_has_dirty_key, mark_dirty, refresh_if_dirty, resolve_dirty_section
 from larpmanager.models.event import Event
-from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, RulePx
+from larpmanager.models.experience import AbilityExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
 from larpmanager.utils.core.common import _validate_and_fetch_objects
 from larpmanager.utils.larpmanager.tasks import background_auto
 
@@ -37,31 +37,60 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-_PX_NS = "px"
-_get_px_has_dirty_key = partial(get_has_dirty_key, _PX_NS)
-_mark_px_dirty = partial(mark_dirty, _PX_NS)
-_refresh_px_if_dirty = partial(refresh_if_dirty, _PX_NS)
-_resolve_dirty_px_section = partial(resolve_dirty_section, _PX_NS)
+_EXP_NS = "exp"
+_get_exp_has_dirty_key = partial(get_has_dirty_key, _EXP_NS)
+_mark_exp_dirty = partial(mark_dirty, _EXP_NS)
+_refresh_exp_if_dirty = partial(refresh_if_dirty, _EXP_NS)
+_resolve_dirty_exp_section = partial(resolve_dirty_section, _EXP_NS)
 
 
-def get_event_px_key(event_id: int) -> str:
-    """Generate cache key for event PX relationships."""
-    return f"event__px__{event_id}"
+def get_event_exp_systems_key(event_id: int) -> str:
+    """Generate cache key for event experience systems list."""
+    return f"event__exp_systems__{event_id}"
 
 
-def get_px_effective_event_id(event: Event) -> int:
-    """Return the event ID to use as PX cache key."""
+def get_event_exp_systems(event: Event) -> list[SystemExp]:
+    """Get ordered SystemExp list for an event, using cache.
+
+    Args:
+        event: Event instance (handles parent inheritance via get_elements).
+
+    Returns:
+        Ordered list of SystemExp instances for the effective event.
+
+    """
+    effective_event_id = event.get_class_parent(SystemExp).id
+    cache_key = get_event_exp_systems_key(effective_event_id)
+    systems = cache.get(cache_key)
+    if systems is None:
+        systems = list(event.get_elements(SystemExp).order_by("number"))
+        cache.set(cache_key, systems, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return systems
+
+
+def clear_event_exp_systems_cache(event_id: int) -> None:
+    """Clear cached experience systems list for the given event ID."""
+    cache.delete(get_event_exp_systems_key(event_id))
+
+
+def get_event_exp_key(event_id: int) -> str:
+    """Generate cache key for event EXP relationships."""
+    return f"event__exp__{event_id}"
+
+
+def get_exp_effective_event_id(event: Event) -> int:
+    """Return the event ID to use as EXP cache key."""
     if event.parent_id and not event.get_config("campaign_abilitypx_indep", default_value=False):
         return event.parent_id
     return event.id
 
 
-def clear_event_px_cache(event_id: int) -> None:
-    """Reset event PX cache for given event ID."""
+def clear_event_exp_cache(event_id: int) -> None:
+    """Reset event EXP cache for given event ID."""
     # Clear cache for the main event
-    cache_key = get_event_px_key(event_id)
+    cache_key = get_event_exp_key(event_id)
     cache.delete(cache_key)
-    logger.debug("Reset PX cache for event %s", event_id)
+    logger.debug("Reset EXP cache for event %s", event_id)
 
 
 def build_relationship_dict(relationship_items: list) -> dict[str, Any]:
@@ -69,11 +98,11 @@ def build_relationship_dict(relationship_items: list) -> dict[str, Any]:
     return {"list": relationship_items, "count": len(relationship_items)}
 
 
-def get_ability_rels(ability: AbilityPx) -> dict[str, Any]:
+def get_ability_rels(ability: AbilityExp) -> dict[str, Any]:
     """Get ability relationships (characters, prerequisites, and requirements).
 
     Args:
-        ability: The AbilityPx instance to get relationships for
+        ability: The AbilityExp instance to get relationships for
 
     Returns:
         Dictionary containing relationship data with the structure:
@@ -118,11 +147,11 @@ def get_ability_rels(ability: AbilityPx) -> dict[str, Any]:
     return relationships
 
 
-def get_delivery_rels(delivery: DeliveryPx) -> dict[str, Any]:
+def get_delivery_rels(delivery: DeliveryExp) -> dict[str, Any]:
     """Get delivery relationships (characters).
 
     Args:
-        delivery: The DeliveryPx instance to get relationships for
+        delivery: The DeliveryExp instance to get relationships for
 
     Returns:
         Dictionary containing relationship data with the structure:
@@ -149,11 +178,11 @@ def get_delivery_rels(delivery: DeliveryPx) -> dict[str, Any]:
     return relationships
 
 
-def get_modifier_rels(modifier: ModifierPx) -> dict[str, Any]:
+def get_modifier_rels(modifier: ModifierExp) -> dict[str, Any]:
     """Get modifier relationships (abilities, prerequisites, and requirements).
 
     Args:
-        modifier: The ModifierPx instance to get relationships for
+        modifier: The ModifierExp instance to get relationships for
 
     Returns:
         Dictionary containing relationship data with the structure:
@@ -198,11 +227,11 @@ def get_modifier_rels(modifier: ModifierPx) -> dict[str, Any]:
     return relationships
 
 
-def get_rule_rels(rule: RulePx) -> dict[str, Any]:
+def get_rule_rels(rule: RuleExp) -> dict[str, Any]:
     """Get rule relationships (abilities).
 
     Args:
-        rule: The RulePx instance to get relationships for
+        rule: The RuleExp instance to get relationships for
 
     Returns:
         Dictionary containing relationship data with the structure:
@@ -229,14 +258,14 @@ def get_rule_rels(rule: RulePx) -> dict[str, Any]:
     return relationships
 
 
-def init_event_px_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
-    """Initialize all PX relationships for an event and cache the result.
+def init_event_exp_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
+    """Initialize all EXP relationships for an event and cache the result.
 
-    Builds a complete relationship cache for all PX elements in the event,
+    Builds a complete relationship cache for all EXP elements in the event,
     including abilities, deliveries, modifiers, and rules.
 
     Args:
-        event: The Event instance to initialize PX relationships for
+        event: The Event instance to initialize EXP relationships for
 
     Returns:
         Dictionary with relationship data structure organized by element type:
@@ -263,15 +292,15 @@ def init_event_px_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
     px_cache: dict[str, dict[int, dict[str, Any]]] = {}
 
     try:
-        # Configuration mapping for each PX type
+        # Configuration mapping for each EXP type
         px_configs = [
-            ("abilities", AbilityPx, get_ability_rels),
-            ("deliveries", DeliveryPx, get_delivery_rels),
-            ("modifiers", ModifierPx, get_modifier_rels),
-            ("rules", RulePx, get_rule_rels),
+            ("abilities", AbilityExp, get_ability_rels),
+            ("deliveries", DeliveryExp, get_delivery_rels),
+            ("modifiers", ModifierExp, get_modifier_rels),
+            ("rules", RuleExp, get_rule_rels),
         ]
 
-        # Process each PX type
+        # Process each EXP type
         for cache_key_plural, model_class, get_relationships_function in px_configs:
             # Initialize the cache section for this type
             px_cache[cache_key_plural] = {}
@@ -286,61 +315,63 @@ def init_event_px_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
             logger.debug("Initialized %s %s for event %s", len(elements), cache_key_plural, event.id)
 
         # Cache the complete relationship data structure
-        cache_key = get_event_px_key(event.id)
+        cache_key = get_event_exp_key(event.id)
         cache.set(cache_key, px_cache, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-        logger.debug("Cached PX relationships for event %s", event.id)
+        logger.debug("Cached EXP relationships for event %s", event.id)
 
     except Exception:
         # Log the error with full traceback and return empty result
-        logger.exception("Error initializing PX relationships for event %s", event.id)
+        logger.exception("Error initializing EXP relationships for event %s", event.id)
         px_cache = {}
 
     return px_cache
 
 
-def get_event_px_cache(event: Event) -> dict[str, Any]:
-    """Get event PX relationships from cache, initializing if not present.
+def get_event_exp_cache(event: Event) -> dict[str, Any]:
+    """Get event EXP relationships from cache, initializing if not present.
 
-    Retrieves cached PX relationship data for the specified event. If no cached
+    Retrieves cached EXP relationship data for the specified event. If no cached
     data exists, initializes the cache with fresh relationship data.
 
     Args:
-        event: The Event instance to get PX relationships for
+        event: The Event instance to get EXP relationships for
 
     Returns:
-        Dictionary containing cached PX relationship data
+        Dictionary containing cached EXP relationship data
 
     """
     effective_event = event.parent if event.parent else event
-    cache_key = get_event_px_key(effective_event.id)
+    cache_key = get_event_exp_key(effective_event.id)
 
     # Attempt to retrieve cached relationships
     cached_relationships = cache.get(cache_key)
 
     # Initialize cache if no data found
     if cached_relationships is None:
-        logger.debug("PX cache miss for event %s (effective %s), initializing", event.id, effective_event.id)
-        return init_event_px_all(effective_event)
+        logger.debug("EXP cache miss for event %s (effective %s), initializing", event.id, effective_event.id)
+        return init_event_exp_all(effective_event)
 
     # Resolve any items still marked as dirty (not yet cleaned by background job)
     any_resolved = False
-    if cache.get(_get_px_has_dirty_key(effective_event.id)):
+    if cache.get(_get_exp_has_dirty_key(effective_event.id)):
         for _section, _model, _get_rels in (
-            ("abilities", AbilityPx, get_ability_rels),
-            ("deliveries", DeliveryPx, get_delivery_rels),
-            ("modifiers", ModifierPx, get_modifier_rels),
-            ("rules", RulePx, get_rule_rels),
+            ("abilities", AbilityExp, get_ability_rels),
+            ("deliveries", DeliveryExp, get_delivery_rels),
+            ("modifiers", ModifierExp, get_modifier_rels),
+            ("rules", RuleExp, get_rule_rels),
         ):
-            if _resolve_dirty_px_section(effective_event.id, cached_relationships, _section, _model, _get_rels):
+            if _resolve_dirty_exp_section(effective_event.id, cached_relationships, _section, _model, _get_rels):
                 any_resolved = True
     if any_resolved:
-        cache.set(get_event_px_key(effective_event.id), cached_relationships, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cache.set(
+            get_event_exp_key(effective_event.id), cached_relationships, timeout=conf_settings.CACHE_TIMEOUT_1_DAY
+        )
 
     return cached_relationships
 
 
 def update_cache_section(event: Event, section_name: str, section_id: int, data: dict[str, Any]) -> None:
-    """Update a specific section in the event PX cache.
+    """Update a specific section in the event EXP cache.
 
     Args:
         event: The event
@@ -351,14 +382,14 @@ def update_cache_section(event: Event, section_name: str, section_id: int, data:
     """
     try:
         event_id = event.parent_id if event.parent else event.id
-        cache_key = get_event_px_key(event_id)
+        cache_key = get_event_exp_key(event_id)
         cached_event_data = cache.get(cache_key)
 
         if cached_event_data is None:
             logger.debug("Cache miss during %s update for event %s, reinitializing", section_name, event_id)
             # We need to get the event to reinitialize
             event = Event.objects.get(id=event_id)
-            init_event_px_all(event)
+            init_event_exp_all(event)
             return
 
         if section_name not in cached_event_data:
@@ -366,32 +397,32 @@ def update_cache_section(event: Event, section_name: str, section_id: int, data:
 
         cached_event_data[section_name][section_id] = data
         cache.set(cache_key, cached_event_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-        logger.debug("Updated %s %s PX relationships in cache", section_name, section_id)
+        logger.debug("Updated %s %s EXP relationships in cache", section_name, section_id)
 
     except Exception:
-        logger.exception("Error updating %s %s PX relationships", section_name, section_id)
-        clear_event_px_cache(event_id)
+        logger.exception("Error updating %s %s EXP relationships", section_name, section_id)
+        clear_event_exp_cache(event_id)
 
 
-def refresh_ability_relationships(ability: AbilityPx) -> None:
+def refresh_ability_relationships(ability: AbilityExp) -> None:
     """Update ability relationships in cache."""
     ability_relationship_data = get_ability_rels(ability)
     update_cache_section(ability.event, "abilities", ability.id, ability_relationship_data)
 
 
-def refresh_delivery_relationships(delivery: DeliveryPx) -> None:
+def refresh_delivery_relationships(delivery: DeliveryExp) -> None:
     """Update delivery relationships in cache."""
     delivery_relationship_data = get_delivery_rels(delivery)
     update_cache_section(delivery.event, "deliveries", delivery.id, delivery_relationship_data)
 
 
-def refresh_modifier_relationships(modifier: ModifierPx) -> None:
+def refresh_modifier_relationships(modifier: ModifierExp) -> None:
     """Update modifier relationships in cache."""
     modifier_relationship_data = get_modifier_rels(modifier)
     update_cache_section(modifier.event, "modifiers", modifier.id, modifier_relationship_data)
 
 
-def refresh_rule_relationships(rule: RulePx) -> None:
+def refresh_rule_relationships(rule: RuleExp) -> None:
     """Update rule relationships in cache."""
     rule_relationship_data = get_rule_rels(rule)
     update_cache_section(rule.event, "rules", rule.id, rule_relationship_data)
@@ -400,43 +431,43 @@ def refresh_rule_relationships(rule: RulePx) -> None:
 # Background tasks for cache updates
 
 
-@background_auto(queue="cache-px")
+@background_auto(queue="cache-experience")
 def refresh_ability_character_rels_background(ability_ids: int | list[int]) -> None:
     """Update ability relationships in cache (dirty-aware background task)."""
-    abilities = _validate_and_fetch_objects(AbilityPx, ability_ids, "AbilityPx")
-    _refresh_px_if_dirty("abilities", abilities, refresh_ability_relationships)
+    abilities = _validate_and_fetch_objects(AbilityExp, ability_ids, "AbilityExp")
+    _refresh_exp_if_dirty("abilities", abilities, refresh_ability_relationships)
 
 
-@background_auto(queue="cache-px")
+@background_auto(queue="cache-experience")
 def refresh_delivery_rels_dirty_background(delivery_ids: int | list[int]) -> None:
     """Update delivery relationships in cache (dirty-aware background task)."""
-    deliveries = _validate_and_fetch_objects(DeliveryPx, delivery_ids, "DeliveryPx")
-    _refresh_px_if_dirty("deliveries", deliveries, refresh_delivery_relationships)
+    deliveries = _validate_and_fetch_objects(DeliveryExp, delivery_ids, "DeliveryExp")
+    _refresh_exp_if_dirty("deliveries", deliveries, refresh_delivery_relationships)
 
 
-@background_auto(queue="cache-px")
+@background_auto(queue="cache-experience")
 def refresh_modifier_rels_dirty_background(modifier_ids: int | list[int]) -> None:
     """Update modifier relationships in cache (dirty-aware background task)."""
-    modifiers = _validate_and_fetch_objects(ModifierPx, modifier_ids, "ModifierPx")
-    _refresh_px_if_dirty("modifiers", modifiers, refresh_modifier_relationships)
+    modifiers = _validate_and_fetch_objects(ModifierExp, modifier_ids, "ModifierExp")
+    _refresh_exp_if_dirty("modifiers", modifiers, refresh_modifier_relationships)
 
 
-@background_auto(queue="cache-px")
+@background_auto(queue="cache-experience")
 def refresh_rule_rels_dirty_background(rule_ids: int | list[int]) -> None:
     """Update rule relationships in cache (dirty-aware background task)."""
-    rules = _validate_and_fetch_objects(RulePx, rule_ids, "RulePx")
-    _refresh_px_if_dirty("rules", rules, refresh_rule_relationships)
+    rules = _validate_and_fetch_objects(RuleExp, rule_ids, "RuleExp")
+    _refresh_exp_if_dirty("rules", rules, refresh_rule_relationships)
 
 
-def on_ability_saved(ability: AbilityPx) -> None:
+def on_ability_saved(ability: AbilityExp) -> None:
     """Refresh rels for an ability and all abilities that list it as a prerequisite.
 
     Called from post_save signal so that renaming or updating an ability propagates
     to every ability whose prerequisite_rels cache references this one.
     """
     ability_ids = [ability.id]
-    ability_ids += list(ability.px_ability_unlock.values_list("id", flat=True))
-    _mark_px_dirty("abilities", ability_ids, ability.event_id)
+    ability_ids += list(ability.exp_ability_unlock.values_list("id", flat=True))
+    _mark_exp_dirty("abilities", ability_ids, ability.event_id)
     refresh_ability_character_rels_background(ability_ids)
 
 
@@ -446,10 +477,10 @@ def on_character_saved(character_id: int, event_id: int) -> None:
     Called from post_save signal on Character so that renaming a character propagates
     to the cached_rels of every ability that has this character assigned.
     """
-    ability_ids = list(AbilityPx.objects.filter(characters__id=character_id).values_list("id", flat=True))
+    ability_ids = list(AbilityExp.objects.filter(characters__id=character_id).values_list("id", flat=True))
     if not ability_ids:
         return
-    _mark_px_dirty("abilities", ability_ids, event_id)
+    _mark_exp_dirty("abilities", ability_ids, event_id)
     refresh_ability_character_rels_background(ability_ids)
 
 
@@ -459,13 +490,13 @@ def on_writing_option_saved(option: WritingOption, event_id: int) -> None:
     Called from post_save signal on WritingOption so that renaming an option propagates
     to the cached_rels of every ability that has this option as a requirement.
     """
-    ability_ids = list(AbilityPx.objects.filter(requirements__id=option.id).values_list("id", flat=True))
+    ability_ids = list(AbilityExp.objects.filter(requirements__id=option.id).values_list("id", flat=True))
     if not ability_ids:
         return
-    _mark_px_dirty("abilities", ability_ids, event_id)
+    _mark_exp_dirty("abilities", ability_ids, event_id)
     refresh_ability_character_rels_background(ability_ids)
 
-    modifier_ids = list(ModifierPx.objects.filter(requirements=option).values_list("id", flat=True))
+    modifier_ids = list(ModifierExp.objects.filter(requirements=option).values_list("id", flat=True))
     if modifier_ids:
         refresh_modifier_rels_dirty_background(modifier_ids)
 
@@ -473,7 +504,7 @@ def on_writing_option_saved(option: WritingOption, event_id: int) -> None:
 # Signal handlers for M2M changes
 def on_ability_characters_m2m_changed(
     sender: type,  # noqa: ARG001
-    instance: AbilityPx,
+    instance: AbilityExp,
     action: str,
     pk_set: set[int] | None,
     reverse: bool = False,  # noqa: FBT001, FBT002
@@ -485,10 +516,10 @@ def on_ability_characters_m2m_changed(
 
     Args:
         sender: The M2M through model
-        instance: The AbilityPx (if reverse=False) or Character (if reverse=True)
+        instance: The AbilityExp (if reverse=False) or Character (if reverse=True)
         action: The M2M action (pre_add, post_add, etc.)
         pk_set: Set of related object IDs
-        reverse: True if signal was triggered from Character.px_ability_list
+        reverse: True if signal was triggered from Character.exp_ability_list
         **kwargs: Additional keyword arguments
 
     """
@@ -496,29 +527,29 @@ def on_ability_characters_m2m_changed(
         return
 
     if reverse:
-        # Signal came from Character.px_ability_list - instance is a Character
+        # Signal came from Character.exp_ability_list - instance is a Character
         # pk_set contains ability IDs, so refresh each ability
         if pk_set:
             ability_ids = list(pk_set)
         elif action == "post_clear":
             # Clear was called - need to refresh all abilities for this character
-            ability_ids = list(AbilityPx.objects.filter(characters=instance).values_list("id", flat=True))
+            ability_ids = list(AbilityExp.objects.filter(characters=instance).values_list("id", flat=True))
         else:
             ability_ids = []
     else:
-        # Signal came from AbilityPx.characters - instance is an AbilityPx
+        # Signal came from AbilityExp.characters - instance is an AbilityExp
         ability_ids = [instance.id]
 
     if not ability_ids:
         return
 
-    _mark_px_dirty("abilities", ability_ids, instance.event_id)
+    _mark_exp_dirty("abilities", ability_ids, instance.event_id)
     refresh_ability_character_rels_background(ability_ids)
 
 
 def on_ability_prerequisites_m2m_changed(
     sender: type,  # noqa: ARG001
-    instance: AbilityPx,
+    instance: AbilityExp,
     action: str,
     pk_set: set[int] | None,
     reverse: bool = False,  # noqa: FBT001, FBT002
@@ -530,10 +561,10 @@ def on_ability_prerequisites_m2m_changed(
 
     Args:
         sender: The M2M through model
-        instance: The AbilityPx being modified
+        instance: The AbilityExp being modified
         action: The M2M action (pre_add, post_add, etc.)
         pk_set: Set of prerequisite ability IDs
-        reverse: True if signal was triggered from px_ability_unlock
+        reverse: True if signal was triggered from exp_ability_unlock
         **kwargs: Additional keyword arguments
 
     """
@@ -541,29 +572,29 @@ def on_ability_prerequisites_m2m_changed(
         return
 
     if reverse:
-        # Signal came from px_ability_unlock reverse relation
-        # instance is an AbilityPx that is a prerequisite for others
+        # Signal came from exp_ability_unlock reverse relation
+        # instance is an AbilityExp that is a prerequisite for others
         # pk_set contains ability IDs that require this prerequisite
         if pk_set:
             ability_ids = list(pk_set)
         elif action == "post_clear":
-            ability_ids = list(AbilityPx.objects.filter(prerequisites=instance).values_list("id", flat=True))
+            ability_ids = list(AbilityExp.objects.filter(prerequisites=instance).values_list("id", flat=True))
         else:
             ability_ids = []
     else:
-        # Signal came from AbilityPx.prerequisites - instance is the ability being modified
+        # Signal came from AbilityExp.prerequisites - instance is the ability being modified
         ability_ids = [instance.id]
 
     if not ability_ids:
         return
 
-    _mark_px_dirty("abilities", ability_ids, instance.event_id)
+    _mark_exp_dirty("abilities", ability_ids, instance.event_id)
     refresh_ability_character_rels_background(ability_ids)
 
 
 def on_ability_requirements_m2m_changed(
     sender: type,  # noqa: ARG001
-    instance: AbilityPx,
+    instance: AbilityExp,
     action: str,
     pk_set: set[int] | None,
     reverse: bool = False,  # noqa: FBT001, FBT002
@@ -575,7 +606,7 @@ def on_ability_requirements_m2m_changed(
 
     Args:
         sender: The M2M through model
-        instance: The AbilityPx (if reverse=False) or WritingOption (if reverse=True)
+        instance: The AbilityExp (if reverse=False) or WritingOption (if reverse=True)
         action: The M2M action (pre_add, post_add, etc.)
         pk_set: Set of related object IDs
         reverse: True if signal was triggered from WritingOption.abilities
@@ -591,30 +622,30 @@ def on_ability_requirements_m2m_changed(
         if pk_set:
             ability_ids = list(pk_set)
         elif action == "post_clear":
-            ability_ids = list(AbilityPx.objects.filter(requirements=instance).values_list("id", flat=True))
+            ability_ids = list(AbilityExp.objects.filter(requirements=instance).values_list("id", flat=True))
         else:
             ability_ids = []
         # WritingOption has no event_id; derive it from the affected abilities
         event_id = (
-            AbilityPx.objects.filter(id__in=ability_ids).values_list("event_id", flat=True).first()
+            AbilityExp.objects.filter(id__in=ability_ids).values_list("event_id", flat=True).first()
             if ability_ids
             else None
         )
     else:
-        # Signal came from AbilityPx.requirements - instance is an AbilityPx
+        # Signal came from AbilityExp.requirements - instance is an AbilityExp
         ability_ids = [instance.id]
         event_id = instance.event_id
 
     if not ability_ids:
         return
 
-    _mark_px_dirty("abilities", ability_ids, event_id)
+    _mark_exp_dirty("abilities", ability_ids, event_id)
     refresh_ability_character_rels_background(ability_ids)
 
 
 def on_delivery_characters_m2m_changed(
     sender: type,  # noqa: ARG001
-    instance: DeliveryPx,
+    instance: DeliveryExp,
     action: str,
     pk_set: set[int] | None,
     reverse: bool = False,  # noqa: FBT001, FBT002
@@ -626,7 +657,7 @@ def on_delivery_characters_m2m_changed(
 
     Args:
         sender: The M2M through model
-        instance: The DeliveryPx (if reverse=False) or Character (if reverse=True)
+        instance: The DeliveryExp (if reverse=False) or Character (if reverse=True)
         action: The M2M action (pre_add, post_add, etc.)
         pk_set: Set of related object IDs
         reverse: True if signal was triggered from Character side
@@ -642,23 +673,23 @@ def on_delivery_characters_m2m_changed(
         if pk_set:
             delivery_ids = list(pk_set)
         elif action == "post_clear":
-            delivery_ids = list(DeliveryPx.objects.filter(characters=instance).values_list("id", flat=True))
+            delivery_ids = list(DeliveryExp.objects.filter(characters=instance).values_list("id", flat=True))
         else:
             delivery_ids = []
     else:
-        # Signal came from DeliveryPx.characters - instance is a DeliveryPx
+        # Signal came from DeliveryExp.characters - instance is a DeliveryExp
         delivery_ids = [instance.id]
 
     if not delivery_ids:
         return
 
-    _mark_px_dirty("deliveries", delivery_ids, instance.event_id)
+    _mark_exp_dirty("deliveries", delivery_ids, instance.event_id)
     refresh_delivery_rels_dirty_background(delivery_ids)
 
 
 def on_modifier_abilities_m2m_changed(
     sender: type,  # noqa: ARG001
-    instance: ModifierPx,
+    instance: ModifierExp,
     action: str,
     pk_set: set[int] | None,
     reverse: bool = False,  # noqa: FBT001, FBT002
@@ -670,10 +701,10 @@ def on_modifier_abilities_m2m_changed(
 
     Args:
         sender: The M2M through model
-        instance: The ModifierPx (if reverse=False) or AbilityPx (if reverse=True)
+        instance: The ModifierExp (if reverse=False) or AbilityExp (if reverse=True)
         action: The M2M action (pre_add, post_add, etc.)
         pk_set: Set of related object IDs
-        reverse: True if signal was triggered from AbilityPx side
+        reverse: True if signal was triggered from AbilityExp side
         **kwargs: Additional keyword arguments
 
     """
@@ -681,28 +712,28 @@ def on_modifier_abilities_m2m_changed(
         return
 
     if reverse:
-        # Signal came from AbilityPx - instance is an AbilityPx
+        # Signal came from AbilityExp - instance is an AbilityExp
         # pk_set contains modifier IDs, so refresh each modifier
         if pk_set:
             modifier_ids = list(pk_set)
         elif action == "post_clear":
-            modifier_ids = list(ModifierPx.objects.filter(abilities=instance).values_list("id", flat=True))
+            modifier_ids = list(ModifierExp.objects.filter(abilities=instance).values_list("id", flat=True))
         else:
             modifier_ids = []
     else:
-        # Signal came from ModifierPx.abilities - instance is a ModifierPx
+        # Signal came from ModifierExp.abilities - instance is a ModifierExp
         modifier_ids = [instance.id]
 
     if not modifier_ids:
         return
 
-    _mark_px_dirty("modifiers", modifier_ids, instance.event_id)
+    _mark_exp_dirty("modifiers", modifier_ids, instance.event_id)
     refresh_modifier_rels_dirty_background(modifier_ids)
 
 
 def on_modifier_prerequisites_m2m_changed(
     sender: type,  # noqa: ARG001
-    instance: ModifierPx,
+    instance: ModifierExp,
     action: str,
     pk_set: set[int] | None,
     reverse: bool = False,  # noqa: FBT001, FBT002
@@ -714,10 +745,10 @@ def on_modifier_prerequisites_m2m_changed(
 
     Args:
         sender: The M2M through model
-        instance: The ModifierPx (if reverse=False) or AbilityPx (if reverse=True)
+        instance: The ModifierExp (if reverse=False) or AbilityExp (if reverse=True)
         action: The M2M action (pre_add, post_add, etc.)
         pk_set: Set of related object IDs
-        reverse: True if signal was triggered from AbilityPx side
+        reverse: True if signal was triggered from AbilityExp side
         **kwargs: Additional keyword arguments
 
     """
@@ -725,28 +756,28 @@ def on_modifier_prerequisites_m2m_changed(
         return
 
     if reverse:
-        # Signal came from AbilityPx - instance is an AbilityPx that is a prerequisite
+        # Signal came from AbilityExp - instance is an AbilityExp that is a prerequisite
         # pk_set contains modifier IDs, so refresh each modifier
         if pk_set:
             modifier_ids = list(pk_set)
         elif action == "post_clear":
-            modifier_ids = list(ModifierPx.objects.filter(prerequisites=instance).values_list("id", flat=True))
+            modifier_ids = list(ModifierExp.objects.filter(prerequisites=instance).values_list("id", flat=True))
         else:
             modifier_ids = []
     else:
-        # Signal came from ModifierPx.prerequisites - instance is a ModifierPx
+        # Signal came from ModifierExp.prerequisites - instance is a ModifierExp
         modifier_ids = [instance.id]
 
     if not modifier_ids:
         return
 
-    _mark_px_dirty("modifiers", modifier_ids, instance.event_id)
+    _mark_exp_dirty("modifiers", modifier_ids, instance.event_id)
     refresh_modifier_rels_dirty_background(modifier_ids)
 
 
 def on_modifier_requirements_m2m_changed(
     sender: type,  # noqa: ARG001
-    instance: ModifierPx,
+    instance: ModifierExp,
     action: str,
     pk_set: set[int] | None,
     reverse: bool = False,  # noqa: FBT001, FBT002
@@ -758,7 +789,7 @@ def on_modifier_requirements_m2m_changed(
 
     Args:
         sender: The M2M through model
-        instance: The ModifierPx (if reverse=False) or WritingOption (if reverse=True)
+        instance: The ModifierExp (if reverse=False) or WritingOption (if reverse=True)
         action: The M2M action (pre_add, post_add, etc.)
         pk_set: Set of related object IDs
         reverse: True if signal was triggered from WritingOption side
@@ -774,30 +805,30 @@ def on_modifier_requirements_m2m_changed(
         if pk_set:
             modifier_ids = list(pk_set)
         elif action == "post_clear":
-            modifier_ids = list(ModifierPx.objects.filter(requirements=instance).values_list("id", flat=True))
+            modifier_ids = list(ModifierExp.objects.filter(requirements=instance).values_list("id", flat=True))
         else:
             modifier_ids = []
         # WritingOption has no event_id; derive it from the affected modifiers
         event_id = (
-            ModifierPx.objects.filter(id__in=modifier_ids).values_list("event_id", flat=True).first()
+            ModifierExp.objects.filter(id__in=modifier_ids).values_list("event_id", flat=True).first()
             if modifier_ids
             else None
         )
     else:
-        # Signal came from ModifierPx.requirements - instance is a ModifierPx
+        # Signal came from ModifierExp.requirements - instance is a ModifierExp
         modifier_ids = [instance.id]
         event_id = instance.event_id
 
     if not modifier_ids:
         return
 
-    _mark_px_dirty("modifiers", modifier_ids, event_id)
+    _mark_exp_dirty("modifiers", modifier_ids, event_id)
     refresh_modifier_rels_dirty_background(modifier_ids)
 
 
 def on_rule_abilities_m2m_changed(
     sender: type,  # noqa: ARG001
-    instance: RulePx,
+    instance: RuleExp,
     action: str,
     pk_set: set[int] | None,
     reverse: bool = False,  # noqa: FBT001, FBT002
@@ -809,10 +840,10 @@ def on_rule_abilities_m2m_changed(
 
     Args:
         sender: The M2M through model
-        instance: The RulePx (if reverse=False) or AbilityPx (if reverse=True)
+        instance: The RuleExp (if reverse=False) or AbilityExp (if reverse=True)
         action: The M2M action (pre_add, post_add, etc.)
         pk_set: Set of related object IDs
-        reverse: True if signal was triggered from AbilityPx side
+        reverse: True if signal was triggered from AbilityExp side
         **kwargs: Additional keyword arguments
 
     """
@@ -820,20 +851,20 @@ def on_rule_abilities_m2m_changed(
         return
 
     if reverse:
-        # Signal came from AbilityPx - instance is an AbilityPx
+        # Signal came from AbilityExp - instance is an AbilityExp
         # pk_set contains rule IDs, so refresh each rule
         if pk_set:
             rule_ids = list(pk_set)
         elif action == "post_clear":
-            rule_ids = list(RulePx.objects.filter(abilities=instance).values_list("id", flat=True))
+            rule_ids = list(RuleExp.objects.filter(abilities=instance).values_list("id", flat=True))
         else:
             rule_ids = []
     else:
-        # Signal came from RulePx.abilities - instance is a RulePx
+        # Signal came from RuleExp.abilities - instance is a RuleExp
         rule_ids = [instance.id]
 
     if not rule_ids:
         return
 
-    _mark_px_dirty("rules", rule_ids, instance.event_id)
+    _mark_exp_dirty("rules", rule_ids, instance.event_id)
     refresh_rule_rels_dirty_background(rule_ids)

@@ -86,6 +86,9 @@ msgstr "leeftijd"
 msgid "for"
 msgstr "voor"
 
+msgid "tot"
+msgstr "tot"
+
 msgid "Area"
 msgstr "Gebied"
 
@@ -296,6 +299,9 @@ msgstr "Wanneer"
 msgid "days"
 msgstr "dagen"
 
+msgid "free"
+msgstr "gratis"
+
 msgid "gift"
 msgstr "cadeau"
 
@@ -485,6 +491,9 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Waar"
+
+msgid "avail"
+msgstr "beschikbaar"
 
 msgid "email"
 msgstr "e-mail"
@@ -689,6 +698,9 @@ msgstr "Straat"
 
 msgid "Submit"
 msgstr "Stuur"
+
+msgid "System"
+msgstr "Systeem"
 
 msgid "Ticket"
 msgstr "Ticket"
@@ -963,6 +975,9 @@ msgstr "Ondersteuning"
 msgid "Surname"
 msgstr "Achternaam"
 
+msgid "Systems"
+msgstr "Systemen"
+
 msgid "Tagline"
 msgstr "Tagline"
 
@@ -1189,6 +1204,9 @@ msgid "Old menu"
 msgstr "Oud menu"
 
 msgid "One-Time"
+msgstr "Eenmalig"
+
+msgid "One-shot"
 msgstr "Eenmalig"
 
 msgid "Optional"
@@ -2870,9 +2888,6 @@ msgstr "Laden van gebeurtenis"
 msgid "Mail assignment"
 msgstr "Mail toewijzing"
 
-msgid "Manage XP rules"
-msgstr "XP-regels beheren"
-
 msgid "Manage invoices"
 msgstr "Facturen beheren"
 
@@ -3086,6 +3101,9 @@ msgstr "Moge de beste winnen"
 msgid "Member approved!"
 msgstr "Lid goedgekeurd!"
 
+msgid "Multiple systems"
+msgstr "Meerdere systemen"
+
 msgid "Name of the plot"
 msgstr "Naam van het perceel"
 
@@ -3271,6 +3289,9 @@ msgstr "Document downloaden"
 
 msgid "Elements uploaded"
 msgstr "Elementen geladen"
+
+msgid "Experience System"
+msgstr "Ervaringssysteem"
 
 msgid "Experience points"
 msgstr "Ervaringspunten"
@@ -3464,6 +3485,9 @@ msgstr "Elektronische factuur"
 msgid "Enable preferences"
 msgstr "Voorkeuren inschakelen"
 
+msgid "Experience Systems"
+msgstr "Ervaringssystemen"
+
 msgid "First registration"
 msgstr "Eerste registratie"
 
@@ -3644,9 +3668,6 @@ msgstr "Niet geïnteresseerd"
 msgid "List of other users"
 msgstr "Lijst van andere gebruikers"
 
-msgid "Manage XP modifiers"
-msgstr "XP modifiers beheren"
-
 msgid "Manage competencies"
 msgstr "Competenties beheren"
 
@@ -3793,6 +3814,9 @@ msgstr "Aanmeldingen voor evenementen beheren"
 
 msgid "Manage payment items"
 msgstr "Betalingsitems beheren"
+
+msgid "Manual configuration"
+msgstr "Handmatige configuratie"
 
 msgid "Maximum participants"
 msgstr "Maximaal aantal deelnemers"
@@ -4318,6 +4342,9 @@ msgstr "Lijst van te verifiëren betalingen"
 msgid "Manage event accounting"
 msgstr "De boekhouding van evenementen beheren"
 
+msgid "Manage experience rules"
+msgstr "Beheer ervaringsregels"
+
 msgid "Manage the event quests"
 msgstr "Beheer de event quests"
 
@@ -4426,9 +4453,6 @@ msgstr "Ongeldige ticket selectie"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lichtgewicht plaat (Test)"
-
-msgid "Manage ability templates"
-msgstr "Mogelijkheidssjablonen beheren"
 
 msgid "Manage area of the event"
 msgstr "Gebied van het evenement beheren"
@@ -4547,6 +4571,9 @@ msgstr "Beheer krediettoewijzingen"
 
 msgid "Manage event access roles"
 msgstr "Toegangsrollen voor evenementen beheren"
+
+msgid "Manage experience systems"
+msgstr "Beheer ervaringssystemen"
 
 msgid "Manage photo album upload"
 msgstr "Fotoalbum uploaden beheren"
@@ -4749,6 +4776,9 @@ msgstr "Items die worden gewijzigd"
 
 msgid "Loading performed, see logs"
 msgstr "Laden uitgevoerd, zie logboeken"
+
+msgid "Manage experience modifiers"
+msgstr "Ervaringsaanpassers beheren"
 
 msgid "Manage quiz-style workshops"
 msgstr "Beheer quizachtige workshops"
@@ -5096,6 +5126,9 @@ msgstr "Filter of zoek de tekens"
 
 msgid "Manage event navigation buttons"
 msgstr "Navigatietoetsen voor evenementen beheren"
+
+msgid "Manage experience point systems"
+msgstr "Systemen voor ervaringspunten beheren"
 
 msgid "Manage member membership status"
 msgstr "Lidmaatschapsstatus van leden beheren"
@@ -5504,6 +5537,9 @@ msgstr "(<a href='%(url)s'>antwoord hier</a>)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Optioneel) De beschrijving van het ticket"
+
+msgid "Choose individual features yourself"
+msgstr "Kies zelf individuele functies"
 
 msgid "If checked: shows the old dashboard"
 msgstr "Indien aangevinkt: toont het oude dashboard"
@@ -6132,6 +6168,9 @@ msgstr "Donatiebedrag gekozen door de deelnemer"
 
 msgid "I do it routinely, I have good experience"
 msgstr "Ik doe het regelmatig, ik heb goede ervaring"
+
+msgid "Manage templates for experience abilities"
+msgstr "Sjablonen voor ervaringsvaardigheden beheren"
 
 msgid "Manage the pre-registration of all events"
 msgstr "De voorregistratie van alle evenementen beheren"
@@ -6896,9 +6935,6 @@ msgstr "Ik heb het een paar keer gedaan, ik heb basiservaring"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Word lid van onze Discord voor hulp, ideeën of om bugs te melden"
 
-msgid "Manage the character abilities purchaseable with XP"
-msgstr "Beheer de vaardigheden van je personage die je kunt kopen met XP"
-
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Beheren van magazijnbewegingen, leningen en reparaties"
 
@@ -7224,6 +7260,9 @@ msgstr "Beheer betalingen door deelnemers aan alle evenementen"
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Bekijk de gebruikers die de deadlines van het evenement missen"
 
+msgid "Select the features you want to activate for this event"
+msgstr "Selecteer de functies die je voor dit evenement wilt activeren"
+
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Selecteer de tabelrijen en kies de toe te passen bewerking"
 
@@ -7344,6 +7383,11 @@ msgid "This page allows you to add or edit a character inventory"
 msgstr ""
 "Op deze pagina kun je een inventaris van een personage toevoegen of bewerken"
 
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+"Deze pagina geeft een overzicht van ervaringssystemen die voor dit evenement"
+" zijn gedefinieerd"
+
 msgid "This page shows all accounting information for the member"
 msgstr "Deze pagina toont alle boekhoudkundige informatie voor het lid"
 
@@ -7417,9 +7461,6 @@ msgstr "Hoofdafbeelding evenement op de homepage van uw organisatie"
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Zorg dat je nu tijd hebt om de inhoud te bekijken/beluisteren"
 
-msgid "Manage XP distributions for character abilities purchases."
-msgstr "Beheer XP-uitkeringen voor de aankoop van personagevaardigheden."
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Optienaam, weergegeven in de vraag (houd het kort)"
 
@@ -7447,6 +7488,10 @@ msgstr "Ga naar het beheerpaneel <a href= %(url)s'>van hier</a>"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "Wil je via het systeem verwerkte betalingen accepteren"
+
+msgid "Manage the character abilities purchaseable with experience"
+msgstr ""
+"Beheer de vaardigheden van je personage die je kunt kopen met ervaring"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
@@ -7981,6 +8026,11 @@ msgstr ""
 "Geeft medewerkers toegang tot de veiligheidsinformatie die deelnemers hebben"
 " ingediend"
 
+msgid "Manage experience distributions for character abilities purchases."
+msgstr ""
+"Beheer ervaringsverdelingen voor de aankoop van vaardigheden voor "
+"personages."
+
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Beheert de kredieten die deelnemers gebruiken om het inschrijfgeld te dekken"
@@ -8160,10 +8210,6 @@ msgstr ""
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
 "We sturen je een bevestigingse-mail wanneer de wijziging is doorgevoerd"
-
-msgid "You are choosing the most common features to activate for your event"
-msgstr ""
-"Je kiest de meest gebruikelijke functies om te activeren voor je evenement"
 
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
@@ -10017,6 +10063,13 @@ msgstr ""
 " is van de verbinding"
 
 msgid ""
+"Multi-event story with player-created characters, experience points, and a "
+"persistent world"
+msgstr ""
+"Verhaal met meerdere gebeurtenissen, door de speler gecreëerde personages, "
+"ervaringspunten en een persistente wereld"
+
+msgid ""
 "Note that existing abilities with the same name, will be overwritten with "
 "the uploaded data"
 msgstr ""
@@ -11380,6 +11433,13 @@ msgstr ""
 "Optioneel - Voor tekstvragen, maximaal aantal tekens; Voor meerkeuzevragen, "
 "maximaal aantal opties (0 = geen limiet)"
 
+msgid ""
+"Single event focusing on narrative, characters written by staff and assigned"
+" via casting algorithm, with factions and plots"
+msgstr ""
+"Eén evenement gericht op verhaal, personages geschreven door personeel en "
+"toegewezen via castingalgoritme, met facties en plots"
+
 #, python-format
 msgid ""
 "Every friend who signs up and uses this code in the 'Discounts' field will "
@@ -11609,6 +11669,14 @@ msgid ""
 msgstr ""
 "Geeft, gegeven een betalingstermijn, het aantal dagen aan waarbinnen het de "
 "deelnemer op de hoogte stelt om door te gaan met de betaling. Standaard 30."
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and delivery can be assigned to a specific system."
+msgstr ""
+"Als deze optie is aangevinkt, kunnen meerdere belevingssystemen voor het "
+"evenement worden beheerd. Elke mogelijkheid en levering kan worden "
+"toegewezen aan een specifiek systeem."
 
 #, python-format
 msgid ""

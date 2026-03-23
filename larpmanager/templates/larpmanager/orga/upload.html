@@ -49,7 +49,7 @@
         <p>
             <i>{% trans "Note that existing tickets with the same name, will be overwritten with the uploaded data" %}.</i>
         </p>
-    {% elif typ == 'px_abilitie' %}
+    {% elif typ == 'exp_abilitie' %}
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table>
             {% for column, description in columns.0.items %}

@@ -243,7 +243,7 @@ def get_character_sheet(context: dict) -> None:
 
     get_character_sheet_prologue(context)
 
-    get_character_sheet_px(context)
+    get_character_sheet_exp(context)
 
     get_character_sheet_inventory(context)
 
@@ -256,30 +256,30 @@ def get_character_sheet_inventory(context: dict) -> None:
     context["sheet_inventory"] = context["character"].inventory.all()
 
 
-def get_character_sheet_px(context: dict) -> None:
+def get_character_sheet_exp(context: dict) -> None:
     """Populate the character sheet with ability data grouped by type.
 
     Args:
         context: Context dictionary containing character data and features.
              Expected to have 'features' dict and 'character' object with
-             px_ability_list attribute.
+             exp_ability_list attribute.
 
     Returns:
         None: Modifies context dictionary in-place by adding 'sheet_abilities'.
 
     """
-    # Check if px feature is enabled before processing
-    if "px" not in context["features"]:
+    # Check if experience feature is enabled before processing
+    if "experience" not in context["features"]:
         return
 
     event_id = context["character"].event_id
-    context["px_auto_buy"] = get_event_config(event_id, "px_auto_buy", default_value=False)
+    context["exp_auto_buy"] = get_event_config(event_id, "exp_auto_buy", default_value=False)
 
     # Initialize abilities dictionary for grouping by type
     context["sheet_abilities"] = {}
 
     # Group abilities by their type name
-    for ability in context["character"].px_ability_list.select_related("typ").all():
+    for ability in context["character"].exp_ability_list.select_related("typ").all():
         # Ensure ability has valid type and name before processing
         if ability.typ and ability.typ.name and ability.typ.name not in context["sheet_abilities"]:
             context["sheet_abilities"][ability.typ.name] = []

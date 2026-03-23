@@ -252,7 +252,7 @@ class WritingQuestion(UuidMixin, BaseModel):
     )
 
     editable = models.CharField(
-        default="",
+        default="c,s,r,a",
         max_length=20,
         null=True,
         blank=True,

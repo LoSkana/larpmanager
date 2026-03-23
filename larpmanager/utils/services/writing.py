@@ -38,7 +38,7 @@ from larpmanager.cache.text_fields import ALLOWED_TYPES, get_cache_text_field
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
-from larpmanager.models.experience import AbilityPx
+from larpmanager.models.experience import AbilityExp
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -316,7 +316,7 @@ def writing_list(  # noqa: C901 - Complex writing list building with feature-dep
         writing_list_questtype(context)
 
     # Add prerequisites prefetching for ability experience types
-    if issubclass(writing_type, AbilityPx):
+    if issubclass(writing_type, AbilityExp):
         context["list"] = context["list"].prefetch_related("prerequisites")
 
     # Setup writing-specific context if writing elements exist

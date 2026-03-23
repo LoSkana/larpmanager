@@ -276,7 +276,8 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         // Editable field visibility
-        if (["c"].includes(selectedValue)) {
+        const selectedStatus = $('#id_status').val();
+        if (["c"].includes(selectedValue) || ["d", "h"].includes(selectedStatus)) {
             $('#id_editable_tr').fadeOut(speed);
         } else {
             $('#id_editable_tr').fadeIn(speed);

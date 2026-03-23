@@ -49,13 +49,14 @@ from larpmanager.cache.character import (
 )
 from larpmanager.cache.config import get_event_config, save_single_config
 from larpmanager.cache.event_text import get_event_text
+from larpmanager.cache.experience import get_event_exp_systems
 from larpmanager.cache.question import get_cached_writing_questions, get_writing_field_names
 from larpmanager.forms.character import CharacterForm
 from larpmanager.forms.member import AvatarForm
 from larpmanager.forms.registration import RegistrationCharacterRelForm
 from larpmanager.forms.writing import PlayerRelationshipForm
 from larpmanager.models.event import EventTextType
-from larpmanager.models.experience import AbilityPx
+from larpmanager.models.experience import AbilityExp
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingOption,
@@ -78,7 +79,13 @@ from larpmanager.utils.services.character import (
     get_character_sheet,
     get_character_sheet_factions,
 )
-from larpmanager.utils.services.experience import get_available_ability_px, get_current_ability_px, remove_char_ability
+from larpmanager.utils.services.experience import (
+    add_char_addit,
+    build_exp_avail_by_system_from_addit,
+    get_available_ability_exp,
+    get_current_ability_exp,
+    remove_char_ability,
+)
 from larpmanager.utils.services.writing import char_add_addit
 from larpmanager.utils.users.registration import (
     check_assign_character,
@@ -630,6 +637,17 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
     # add character configs
     char_add_addit(context)
 
+    if "experience" in context.get("features", {}):
+        context["exp_systems"] = [
+            {
+                "name": sys.name,
+                "tot_key": f"exp_tot_{sys.uuid}",
+                "used_key": f"exp_used_{sys.uuid}",
+                "avail_key": f"exp_avail_{sys.uuid}",
+            }
+            for sys in get_event_exp_systems(context["event"])
+        ]
+
     # Get character fields info
     char_ids = [el.id for el in context["list"]]
     fields_batch = get_writing_element_fields_batch(
@@ -766,21 +784,42 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
     """
     # Initialize context with character and permission checks
     context = check_char_abilities(request, event_slug, character_uuid)
+    char = context["character"]
+
+    # Ensure char.addit is populated with per-system exp data
+    add_char_addit(char)
+
+    # Build per-system experience data for display
+    context["exp_systems_data"] = [
+        {
+            "name": sys.name,
+            "uuid": str(sys.uuid),
+            "tot": char.addit.get(f"exp_tot_{sys.uuid}", 0),
+            "used": char.addit.get(f"exp_used_{sys.uuid}", 0),
+            "avail": char.addit.get(f"exp_avail_{sys.uuid}", 0),
+        }
+        for sys in get_event_exp_systems(context["event"])
+    ]
 
     # Build available abilities dictionary organized by ability type
+    exp_avail_by_system = build_exp_avail_by_system_from_addit(char)
+    multiple_systems = len(context["exp_systems_data"]) > 1
     context["available"] = {}
-    for ability in get_available_ability_px(context["character"]):
+    for ability in get_available_ability_exp(char, exp_avail_by_system):
         if ability.typ is None:
             continue
         # Create type entry if it doesn't exist
         if ability.typ.uuid not in context["available"]:
             context["available"][ability.typ.uuid] = {"name": ability.typ.name, "order": ability.typ.number, "list": {}}
-        # Add ability with name and cost to the type's list
-        context["available"][ability.typ.uuid]["list"][str(ability.uuid)] = f"{ability.name} - {ability.cost}"
+        # Include system name in label only when multiple systems are configured
+        label = f"{ability.name} - {ability.cost}"
+        if multiple_systems:
+            label += f" [{ability.system.name}]"
+        context["available"][ability.typ.uuid]["list"][str(ability.uuid)] = label
 
     # Build current character abilities organized by type name
     context["sheet_abilities"] = {}
-    for el in get_current_ability_px(context["character"]):
+    for el in get_current_ability_exp(char):
         if el.typ is None:
             continue
         # Create type list if it doesn't exist
@@ -829,7 +868,7 @@ def character_abilities_json(request: HttpRequest, event_slug: str, character_uu
 
     # Build current character abilities organized by type uuid
     context["sheet_abilities"] = {}
-    for el in get_current_ability_px(context["character"]):
+    for el in get_current_ability_exp(context["character"]):
         # Create type list if it doesn't exist
         if el.typ.uuid not in context["sheet_abilities"]:
             context["sheet_abilities"][el.typ.uuid] = {"type_name": el.typ.name, "type_abilities": []}
@@ -864,7 +903,7 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_uuid: 
     event_id = context["event"].parent_id or context["event"].id
 
     # Check if user ability selection is enabled for this event
-    if not get_event_config(event_id, "px_user", default_value=False):
+    if not get_event_config(event_id, "exp_user", default_value=False):
         msg = "ehm."
         raise Http404(msg)
 
@@ -925,7 +964,7 @@ def character_abilities_del(request: HttpRequest, event_slug: str, character_uui
     """Remove ability from character, if the ability was added recently enough."""
     context = check_char_abilities(request, event_slug, character_uuid)
 
-    get_element(context, ability_uuid, "ability", AbilityPx)
+    get_element(context, ability_uuid, "ability", AbilityExp)
 
     undo_abilities = get_undo_abilities(context, context["character"])
     if context["ability"].uuid not in undo_abilities:
@@ -964,10 +1003,10 @@ def _save_character_abilities(context: dict, request: HttpRequest) -> None:
         messages.error(request, _("Invalid selection"))
         return
 
-    ability = get_element_event(context, selected_uuid, AbilityPx)
+    ability = get_element_event(context, selected_uuid, AbilityExp)
 
     with transaction.atomic():
-        context["character"].px_ability_list.add(ability)
+        context["character"].exp_ability_list.add(ability)
         context["character"].save()
     messages.success(request, _("Ability acquired") + "!")
 
@@ -980,13 +1019,13 @@ def get_undo_abilities(context: dict, char: Any, new_ability: Any = None) -> Any
     Args:
         context: Context dictionary containing event data
         char: Character object
-        new_ability: AbilityPx object of newly acquired ability to track (optional)
+        new_ability: AbilityExp object of newly acquired ability to track (optional)
 
     Returns:
         list: List of ability UUID objects that can be undone
 
     """
-    undo_window_hours = int(get_event_config(context["event"].id, "px_undo", default_value=0, context=context))
+    undo_window_hours = int(get_event_config(context["event"].id, "exp_undo", default_value=0, context=context))
     config_key = f"added_px_{char.uuid}"
     stored_config_value = char.get_config(config_key, default_value="{}")
     ability_timestamp_map = ast.literal_eval(stored_config_value)

@@ -1419,6 +1419,14 @@ msgid ""
 "bought."
 msgstr ""
 
+msgid "Multiple systems"
+msgstr ""
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each "
+"ability and delivery can be assigned to a specific system."
+msgstr ""
+
 msgid "Player editor"
 msgstr ""
 
@@ -1764,6 +1772,25 @@ msgstr ""
 msgid "Progression"
 msgstr ""
 
+msgid ""
+"Multi-event story with player-created characters, experience points, and a "
+"persistent world"
+msgstr ""
+
+msgid "One-shot"
+msgstr ""
+
+msgid ""
+"Single event focusing on narrative, characters written by staff and assigned "
+"via casting algorithm, with factions and plots"
+msgstr ""
+
+msgid "Manual configuration"
+msgstr ""
+
+msgid "Choose individual features yourself"
+msgstr ""
+
 msgid "Events"
 msgstr ""
 
@@ -1781,7 +1808,7 @@ msgstr ""
 msgid "Manage template features (click on a feature to show its description)"
 msgstr ""
 
-msgid "You are choosing the most common features to activate for your event"
+msgid "Select the features you want to activate for this event"
 msgstr ""
 
 msgid "Do you want to manage characters assigned to registered participants"
@@ -1874,6 +1901,12 @@ msgid "XP"
 msgstr ""
 
 msgid "Prologue"
+msgstr ""
+
+msgid "Experience System"
+msgstr ""
+
+msgid "Manage experience point systems"
 msgstr ""
 
 msgid "Manage experience point deliveries"
@@ -3611,6 +3644,9 @@ msgstr ""
 msgid "The subscription plan associated with this event"
 msgstr ""
 
+msgid "System"
+msgstr ""
+
 msgid "Optional template associated with this ability."
 msgstr ""
 
@@ -5151,6 +5187,15 @@ msgstr ""
 msgid "Organization"
 msgstr ""
 
+msgid "Total"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Deliveries"
+msgstr ""
+
 msgid "View Details"
 msgstr ""
 
@@ -5190,15 +5235,6 @@ msgid ""
 "This is the information with which your character will begin each act. We "
 "ask that you do NOT read this information before the act to which it "
 "referenced"
-msgstr ""
-
-msgid "Total"
-msgstr ""
-
-msgid "Remove"
-msgstr ""
-
-msgid "Deliveries"
 msgstr ""
 
 msgid "Delegated users"
@@ -5410,13 +5446,13 @@ msgstr ""
 msgid "Create new character"
 msgstr ""
 
-msgid "XP tot"
+msgid "tot"
 msgstr ""
 
-msgid "XP used"
+msgid "used"
 msgstr ""
 
-msgid "XP avail"
+msgid "avail"
 msgstr ""
 
 msgid "Character relationships"
@@ -7624,74 +7660,6 @@ msgstr ""
 msgid "This page shows the deadlines to be met for this event"
 msgstr ""
 
-msgid "This page shows all log entries for this event"
-msgstr ""
-
-msgid ""
-"This page shows the event milestones. Completed milestones are hidden by "
-"default."
-msgstr ""
-
-msgid "Show/hide completed milestones"
-msgstr ""
-
-msgid "Days remaining"
-msgstr ""
-
-msgid ""
-"This page shows the secure video/audio content with one-time access tokens "
-"for the event"
-msgstr ""
-
-msgid "File"
-msgstr ""
-
-msgid "Content Type"
-msgstr ""
-
-msgid "Created"
-msgstr ""
-
-msgid "used"
-msgstr ""
-
-msgid ""
-"This page shows all access tokens for one-time content. Each token can only "
-"be used once."
-msgstr ""
-
-msgid "Access Link"
-msgstr ""
-
-msgid "Used At"
-msgstr ""
-
-msgid "Used By"
-msgstr ""
-
-msgid "IP Address"
-msgstr ""
-
-msgid "Open Link"
-msgstr ""
-
-msgid "Copied"
-msgstr ""
-
-msgid "Copy URL"
-msgstr ""
-
-msgid ""
-"This page shows problems reported by contributors, for direct management "
-"during the event"
-msgstr ""
-
-msgid "Show closed"
-msgstr ""
-
-msgid "Rensponsable"
-msgstr ""
-
 msgid ""
 "This page summarizes the abilities that participants can purchase with "
 "experience points"
@@ -7739,6 +7707,77 @@ msgid "Field"
 msgstr ""
 
 msgid "Operation"
+msgstr ""
+
+msgid "Experience Systems"
+msgstr ""
+
+msgid "This page lists experience systems defined for this event"
+msgstr ""
+
+msgid "This page shows all log entries for this event"
+msgstr ""
+
+msgid ""
+"This page shows the event milestones. Completed milestones are hidden by "
+"default."
+msgstr ""
+
+msgid "Show/hide completed milestones"
+msgstr ""
+
+msgid "Days remaining"
+msgstr ""
+
+msgid ""
+"This page shows the secure video/audio content with one-time access tokens "
+"for the event"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "Content Type"
+msgstr ""
+
+msgid "Created"
+msgstr ""
+
+msgid ""
+"This page shows all access tokens for one-time content. Each token can only "
+"be used once."
+msgstr ""
+
+msgid "Access Link"
+msgstr ""
+
+msgid "Used At"
+msgstr ""
+
+msgid "Used By"
+msgstr ""
+
+msgid "IP Address"
+msgstr ""
+
+msgid "Open Link"
+msgstr ""
+
+msgid "Copied"
+msgstr ""
+
+msgid "Copy URL"
+msgstr ""
+
+msgid ""
+"This page shows problems reported by contributors, for direct management "
+"during the event"
+msgstr ""
+
+msgid "Show closed"
+msgstr ""
+
+msgid "Rensponsable"
 msgstr ""
 
 msgid "Manage reading writing elements using the table search controls"
@@ -8271,6 +8310,18 @@ msgid "This page shows the characters of the event"
 msgstr ""
 
 msgid "Attended"
+msgstr ""
+
+msgid "free"
+msgstr ""
+
+msgid "XP tot"
+msgstr ""
+
+msgid "XP used"
+msgstr ""
+
+msgid "XP avail"
 msgstr ""
 
 msgid "Important"
@@ -9488,10 +9539,25 @@ msgstr ""
 msgid "Manage the type of character abilities"
 msgstr ""
 
-msgid "Manage the character abilities purchaseable with XP"
+msgid "Manage the character abilities purchaseable with experience"
 msgstr ""
 
-msgid "Manage XP distributions for character abilities purchases."
+msgid "Manage experience distributions for character abilities purchases."
+msgstr ""
+
+msgid "Manage templates for experience abilities"
+msgstr ""
+
+msgid "Manage experience rules"
+msgstr ""
+
+msgid "Manage experience modifiers"
+msgstr ""
+
+msgid "Systems"
+msgstr ""
+
+msgid "Manage experience systems"
 msgstr ""
 
 msgid "Display full history of participant preferences on characters"
@@ -9563,20 +9629,11 @@ msgstr ""
 msgid "Manage loading and deployment status of warehouse items"
 msgstr ""
 
-msgid "Manage XP rules"
-msgstr ""
-
-msgid "Manage XP modifiers"
-msgstr ""
-
 msgid ""
 "Upload and manage secure video/audio content with one-time access tokens"
 msgstr ""
 
 msgid "Manage one-time access tokens for secure video/audio content"
-msgstr ""
-
-msgid "Manage ability templates"
 msgstr ""
 
 msgid "Manage character inventories and their items"
