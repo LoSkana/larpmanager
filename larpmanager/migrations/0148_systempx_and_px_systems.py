@@ -61,6 +61,39 @@ def create_default_systems_and_assign(apps, schema_editor):
         AbilityExp.objects.filter(event_id=event_id, system__isnull=True).update(system=system)
         DeliveryExp.objects.filter(event_id=event_id, system__isnull=True).update(system=system)
 
+    # Handle any remaining records whose events didn't have the px feature enabled
+    orphan_ability_event_ids = (
+        AbilityExp.objects.filter(system__isnull=True)
+        .values_list("event_id", flat=True)
+        .distinct()
+    )
+    for event_id in orphan_ability_event_ids:
+        system, _ = SystemExp.objects.get_or_create(
+            event_id=event_id,
+            number=1,
+            defaults={
+                "name": "XP",
+                "uuid": larpmanager.models.utils.my_uuid_short(),
+            },
+        )
+        AbilityExp.objects.filter(event_id=event_id, system__isnull=True).update(system=system)
+
+    orphan_delivery_event_ids = (
+        DeliveryExp.objects.filter(system__isnull=True)
+        .values_list("event_id", flat=True)
+        .distinct()
+    )
+    for event_id in orphan_delivery_event_ids:
+        system, _ = SystemExp.objects.get_or_create(
+            event_id=event_id,
+            number=1,
+            defaults={
+                "name": "XP",
+                "uuid": larpmanager.models.utils.my_uuid_short(),
+            },
+        )
+        DeliveryExp.objects.filter(event_id=event_id, system__isnull=True).update(system=system)
+
 
 def rename_feature_slugs(apps, schema_editor):
     """Rename old pseudo-feature slugs to exp_ prefixed versions."""
