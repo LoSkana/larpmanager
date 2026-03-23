@@ -105,7 +105,11 @@ def rename_feature_slugs(apps, schema_editor):
         "templates": "exp_templates",
     }
     for old_slug, new_slug in renames.items():
-        Feature.objects.filter(slug=old_slug).update(slug=new_slug)
+        # If the target slug already exists, just delete the old one to avoid unique constraint violation
+        if Feature.objects.filter(slug=new_slug).exists():
+            Feature.objects.filter(slug=old_slug).delete()
+        else:
+            Feature.objects.filter(slug=old_slug).update(slug=new_slug)
 
 
 def rename_event_permission_slugs(apps, schema_editor):
