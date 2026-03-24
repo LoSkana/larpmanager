@@ -6672,6 +6672,9 @@ msgstr "Niitä maksetaan säännöllisesti seuraavilta vuosilta"
 msgid "To access this feature, you must first register"
 msgstr "Tämän ominaisuuden käyttämiseksi sinun on ensin ilmoittauduttava"
 
+msgid "User already has a registration for this event!"
+msgstr "Käyttäjällä on jo rekisteröityminen tähän tapahtumaan!"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Varoitus. Lomake sisältää virheitä kenttiin"
 

@@ -6691,6 +6691,9 @@ msgstr ""
 "Um auf diese Funktion zugreifen zu können, müssen Sie sich zunächst "
 "registrieren"
 
+msgid "User already has a registration for this event!"
+msgstr "Der Benutzer hat bereits eine Anmeldung für diese Veranstaltung!"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Achtung! Das Formular enthält Fehler in den Feldern"
 

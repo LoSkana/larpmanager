@@ -6674,6 +6674,9 @@ msgstr "Są one regularnie wypłacane za następujące lata"
 msgid "To access this feature, you must first register"
 msgstr "Aby uzyskać dostęp do tej funkcji, musisz się najpierw zarejestrować"
 
+msgid "User already has a registration for this event!"
+msgstr "Użytkownik już zarejestrował się na to wydarzenie!"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Ostrzeżenie. Formularz zawiera błędy w polach"
 

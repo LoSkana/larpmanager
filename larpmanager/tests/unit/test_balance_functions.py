@@ -212,7 +212,8 @@ class TestRegDetailFunctions(BaseTestCase):
         """Test getting registration detail breakdown"""
         run = self.get_run()
         member1 = self.get_member()
-        member2 = self.get_member()
+        user2 = self.create_user(username="testuser2", email="test2@example.com")
+        member2 = self.create_member(user=user2)
 
         ticket1 = self.ticket(event=run.event, price=Decimal("100.00"), tier=TicketTier.PATRON)
         ticket2 = self.ticket(event=run.event, price=Decimal("50.00"), tier=TicketTier.STANDARD)

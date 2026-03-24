@@ -2209,6 +2209,9 @@ msgstr ""
 msgid "The number of payments to split the fee"
 msgstr ""
 
+msgid "User already has a registration for this event!"
+msgstr ""
+
 msgid "Manage ticket types for participant registration"
 msgstr ""
 
