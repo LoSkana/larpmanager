@@ -1631,6 +1631,9 @@ class ExeEventForm(OrgaEventForm):
                     ),
                 )
 
+        if "parent" in self.fields and ("template_event" in self.fields or "event_template" in self.fields):
+            self.campaign_hide_template = True
+
     def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save event with optional template copying.
 
