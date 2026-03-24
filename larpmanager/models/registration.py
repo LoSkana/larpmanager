@@ -440,6 +440,11 @@ class Registration(UuidMixin, BaseModel):
                 condition=Q(deleted=None),
                 name="unique_registraion_without_optional",
             ),
+            UniqueConstraint(
+                fields=["run", "member"],
+                condition=Q(deleted=None, cancellation_date__isnull=True, redeem_code__isnull=True),
+                name="unique_active_registration_per_run_member",
+            ),
         ]
 
 

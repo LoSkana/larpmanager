@@ -6672,6 +6672,9 @@ msgstr "Pravidelně se vyplácejí za následující roky"
 msgid "To access this feature, you must first register"
 msgstr "Pro přístup k této funkci se musíte nejprve zaregistrovat"
 
+msgid "User already has a registration for this event!"
+msgstr "Uživatel již má registraci na tuto událost!"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Pozor! Formulář obsahuje chyby v polích"
 

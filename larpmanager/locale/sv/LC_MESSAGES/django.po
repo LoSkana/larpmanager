@@ -6673,6 +6673,9 @@ msgstr "De betalas regelbundet för följande år"
 msgid "To access this feature, you must first register"
 msgstr "För att få tillgång till denna funktion måste du först registrera dig"
 
+msgid "User already has a registration for this event!"
+msgstr "Användaren har redan en registrering för detta evenemang!"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Var uppmärksam! Formuläret innehåller fel i fälten"
 

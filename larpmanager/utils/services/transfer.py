@@ -84,9 +84,12 @@ def transfer_registration_between_runs(
         msg = "Registration is already in the target run"
         raise ValidationError(msg)
 
-    # Check that the member doesn't already have a registration in the target run
+    # Check that the member doesn't already have an active registration in the target run
     existing_reg = Registration.objects.filter(
-        run=target_run, member=registration.member, cancellation_date__isnull=True
+        run=target_run,
+        member=registration.member,
+        cancellation_date__isnull=True,
+        redeem_code__isnull=True,
     ).first()
 
     if existing_reg:
@@ -462,9 +465,12 @@ def validate_transfer_feasibility(registration: Registration, target_run: Run) -
     """
     result = {"errors": [], "warnings": [], "info": []}
 
-    # Check if member already has registration in target run
+    # Check if member already has an active registration in target run
     existing_reg = Registration.objects.filter(
-        run=target_run, member=registration.member, cancellation_date__isnull=True
+        run=target_run,
+        member=registration.member,
+        cancellation_date__isnull=True,
+        redeem_code__isnull=True,
     ).first()
 
     if existing_reg:

@@ -978,6 +978,27 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         return data
 
+    def clean(self) -> dict:
+        """Validate run switch doesn't create a duplicate active registration."""
+        form_data = super().clean()
+        target_run = form_data.get("run")
+        member = form_data.get("member")
+
+        if target_run and member and target_run != self.params["run"]:
+            qs = Registration.objects.filter(
+                run=target_run,
+                member=member,
+                cancellation_date__isnull=True,
+                redeem_code__isnull=True,
+            )
+            if self.instance.pk:
+                qs = qs.exclude(pk=self.instance.pk)
+            if qs.exists():
+                msg = _("User already has a registration for this event!")
+                raise ValidationError(msg)
+
+        return form_data
+
     def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
         """Save form instance with custom field handling."""
         # Handle auto ticket

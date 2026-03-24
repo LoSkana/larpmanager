@@ -6680,6 +6680,9 @@ msgstr "Ze worden regelmatig betaald voor de volgende jaren"
 msgid "To access this feature, you must first register"
 msgstr "Om toegang te krijgen tot deze functie, moet je je eerst registreren"
 
+msgid "User already has a registration for this event!"
+msgstr "Gebruiker heeft al een registratie voor dit evenement!"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Attentie! Het formulier bevat fouten in de velden"
 
