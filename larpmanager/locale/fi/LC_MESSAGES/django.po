@@ -1335,6 +1335,9 @@ msgstr "Siirto"
 msgid "Treasury"
 msgstr "Valtiovarainministeriö"
 
+msgid "Tutorial"
+msgstr "Tutorial"
+
 msgid "Used on:"
 msgstr "Käytetty:"
 
@@ -5903,6 +5906,9 @@ msgstr "Seuraavat ilmoittautumiset arvottiin"
 
 msgid "This page shows the plots of the event"
 msgstr "Tällä sivulla näkyvät tapahtuman juonet"
+
+msgid "Visit the tutorial to learn the basics"
+msgstr "Vieraile opetusohjelmassa oppiaksesi perusteet"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Pyydämme sinua maksamaan jäljellä olevan summan"

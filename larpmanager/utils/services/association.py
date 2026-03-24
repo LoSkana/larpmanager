@@ -231,6 +231,13 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
 
     checklist = [
         {
+            "slug": "exe_tutorial",
+            "name": _("Tutorial"),
+            "descr": _("Visit the tutorial to learn the basics"),
+            "done": _done("exe_tutorial"),
+            "url": reverse("tutorials"),
+        },
+        {
             "slug": "exe_events",
             "name": _("Event creation"),
             "descr": _("Create your first event"),

@@ -1335,6 +1335,9 @@ msgstr "Přenos"
 msgid "Treasury"
 msgstr "Pokladna"
 
+msgid "Tutorial"
+msgstr "Výukový program"
+
 msgid "Used on:"
 msgstr "Používá se na:"
 
@@ -5903,6 +5906,9 @@ msgstr "Byly vylosovány tyto položky"
 
 msgid "This page shows the plots of the event"
 msgstr "Tato stránka zobrazuje pozemky události"
+
+msgid "Visit the tutorial to learn the basics"
+msgstr "Navštivte výukový program a naučte se základy"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Žádáme vás, abyste zaplatili zbývající částku"

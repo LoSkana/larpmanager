@@ -673,6 +673,12 @@ def tutorials(request: HttpRequest, slug: str | None = None) -> HttpResponse:
     context["iframe"] = request.GET.get("in_iframe") == "1"
     context["opened"] = tutorial
 
+    # Track tutorial visit for activation checklist
+    member = context.get("member")
+    if member:
+        for membership in member.memberships.filter(association__demo=True).select_related("association"):
+            save_single_config(membership.association, "exe_tutorial_suggestion", value=True)
+
     return render(request, "larpmanager/larpmanager/tutorials.html", context)
 
 

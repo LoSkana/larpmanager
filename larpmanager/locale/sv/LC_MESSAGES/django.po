@@ -1335,6 +1335,9 @@ msgstr "Överföring"
 msgid "Treasury"
 msgstr "Finansdepartementet"
 
+msgid "Tutorial"
+msgstr "Handledning"
+
 msgid "Used on:"
 msgstr "Används på:"
 
@@ -5905,6 +5908,9 @@ msgstr "Följande bidrag lottades ut"
 
 msgid "This page shows the plots of the event"
 msgstr "På denna sida visas plottarna från evenemanget"
+
+msgid "Visit the tutorial to learn the basics"
+msgstr "Besök handledningen för att lära dig grunderna"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Vi ber dig att betala det återstående beloppet"
