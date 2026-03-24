@@ -98,6 +98,7 @@ def create_default_systems_and_assign(apps, schema_editor):
 def rename_feature_slugs(apps, schema_editor):
     """Rename old pseudo-feature slugs to exp_ prefixed versions."""
     Feature = apps.get_model("larpmanager", "Feature")
+    Event = apps.get_model("larpmanager", "Event")
     renames = {
         "px": "experience",
         "rules": "exp_rules",
@@ -105,9 +106,17 @@ def rename_feature_slugs(apps, schema_editor):
         "templates": "exp_templates",
     }
     for old_slug, new_slug in renames.items():
-        # If the target slug already exists, just delete the old one to avoid unique constraint violation
         if Feature.objects.filter(slug=new_slug).exists():
-            Feature.objects.filter(slug=old_slug).delete()
+            # Target already exists: transfer M2M event associations then delete the old feature
+            try:
+                old_feature = Feature.objects.get(slug=old_slug)
+                new_feature = Feature.objects.get(slug=new_slug)
+                for event in Event.objects.filter(features=old_feature):
+                    if not event.features.filter(pk=new_feature.pk).exists():
+                        event.features.add(new_feature)
+                old_feature.delete()
+            except Feature.DoesNotExist:
+                pass
         else:
             Feature.objects.filter(slug=old_slug).update(slug=new_slug)
 
