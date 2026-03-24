@@ -4324,6 +4324,7 @@ INSERT INTO public.django_migrations VALUES (195, 'socialaccount', '0006_alter_s
 INSERT INTO public.django_migrations VALUES (196, 'larpmanager', '0148_systempx_and_px_systems', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (197, 'larpmanager', '0149_alter_abilityexp_system_alter_deliveryexp_system', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (198, 'larpmanager', '0149_writingquestion_editable_default_all_statuses', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (199, 'larpmanager', '0150_unique_active_registration_per_run_member', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
@@ -4746,7 +4747,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 198, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 199, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -7599,6 +7600,8 @@ CREATE UNIQUE INDEX unique_ability_type_without_optional ON public.larpmanager_a
 
 CREATE UNIQUE INDEX unique_ability_without_optional ON public.larpmanager_abilityexp USING btree (event_id, number) WHERE (deleted IS NULL);
 
+CREATE UNIQUE INDEX unique_active_registration_per_run_member ON public.larpmanager_registration USING btree (run_id, member_id) WHERE ((cancellation_date IS NULL) AND (deleted IS NULL) AND (redeem_code IS NULL));
+
 CREATE UNIQUE INDEX unique_assoc_translation_without_deleted ON public.larpmanager_associationtranslation USING btree (association_id, language, msgid, context) WHERE (deleted IS NULL);
 
 CREATE UNIQUE INDEX unique_association_config_without_optional ON public.larpmanager_associationconfig USING btree (association_id, name) WHERE (deleted IS NULL);
@@ -8666,4 +8669,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0149_writingquestion_editable_default_all_statuses
+-- LARPMANAGER_SCHEMA_VERSION: 0150_unique_active_registration_per_run_member
