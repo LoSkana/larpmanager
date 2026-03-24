@@ -1335,6 +1335,9 @@ msgstr "Overdracht"
 msgid "Treasury"
 msgstr "Schatkist"
 
+msgid "Tutorial"
+msgstr "Les"
+
 msgid "Used on:"
 msgstr "Gebruikt op:"
 
@@ -5905,6 +5908,9 @@ msgstr "De volgende inzendingen zijn getrokken"
 
 msgid "This page shows the plots of the event"
 msgstr "Deze pagina toont de plots van het evenement"
+
+msgid "Visit the tutorial to learn the basics"
+msgstr "Ga naar de tutorial om de basis te leren"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "We vragen je om het resterende bedrag te betalen"

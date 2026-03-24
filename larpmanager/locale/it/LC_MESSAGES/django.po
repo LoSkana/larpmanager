@@ -1335,6 +1335,9 @@ msgstr "Trasferimento"
 msgid "Treasury"
 msgstr "Tesoreria"
 
+msgid "Tutorial"
+msgstr "Tutorial"
+
 msgid "Used on:"
 msgstr "Utilizzato su:"
 
@@ -5903,6 +5906,9 @@ msgstr "Sono stati estratte le seguenti iscrizioni"
 
 msgid "This page shows the plots of the event"
 msgstr "Questa pagina mostra le trame dell'evento"
+
+msgid "Visit the tutorial to learn the basics"
+msgstr "Visita il tutorial per imparare le basi"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Ti chiediamo di pagare l'importo rimanente"

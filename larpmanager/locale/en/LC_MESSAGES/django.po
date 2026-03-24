@@ -9899,6 +9899,12 @@ msgstr ""
 msgid "Failed to add gallery"
 msgstr ""
 
+msgid "Tutorial"
+msgstr ""
+
+msgid "Visit the tutorial to learn the basics"
+msgstr ""
+
 msgid "Event creation"
 msgstr ""
 

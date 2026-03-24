@@ -1335,6 +1335,9 @@ msgstr "Übertragung"
 msgid "Treasury"
 msgstr "Schatzamt"
 
+msgid "Tutorial"
+msgstr "Tutorial"
+
 msgid "Used on:"
 msgstr "Verwendet am:"
 
@@ -5907,6 +5910,9 @@ msgstr "Die folgenden Beiträge wurden ausgelost"
 
 msgid "This page shows the plots of the event"
 msgstr "Diese Seite zeigt die Plots der Veranstaltung"
+
+msgid "Visit the tutorial to learn the basics"
+msgstr "Besuchen Sie das Lernprogramm, um die Grundlagen zu lernen"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Wir bitten Sie, den Restbetrag zu zahlen"
