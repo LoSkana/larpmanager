@@ -135,13 +135,13 @@ window.addEventListener('DOMContentLoaded', function() {
 
     </script>
 {% endblock js %}
-{% if iframe %}
-    {% block js2 %}
+{% block js2 %}
+    {% if iframe %}
         <style>
         #header, #footer, header, #tutorials .column, #tutorials .navig, .main_nav, #topbar { display: none !important; }
         #main { padding: 0 !important; width: 100% !important; max-width: 100% !important; }
         #page-wrapper { padding: 0 !important; }
         #page-wrapper.topbar { padding: 0 !important; margin-top: 0 !important; }
         </style>
-    {% endblock js2 %}
-{% endif %}
+    {% endif %}
+{% endblock js2 %}
