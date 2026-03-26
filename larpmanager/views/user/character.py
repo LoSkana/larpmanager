@@ -480,7 +480,7 @@ def character_customize(request: HttpRequest, event_slug: str, character_uuid: s
     """
     context = get_event_context(request, event_slug, signup=True, include_status=True)
 
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "registration", "registration__member").get(
@@ -531,7 +531,7 @@ def character_profile_upload(request: HttpRequest, event_slug: str, character_uu
 
     # Get event context and validate user permissions
     context = get_event_context(request, event_slug, signup=True)
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     # Retrieve character registration relationship
     try:
@@ -579,7 +579,7 @@ def character_profile_rotate(
     """
     # Get event context and validate character access permissions
     context = get_event_context(request, event_slug, signup=True, include_status=True)
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     # Retrieve character registration relationship with related objects
     try:
@@ -698,7 +698,7 @@ def character_create(request: HttpRequest, event_slug: str) -> Any:
 def character_edit(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Handle user character editing form."""
     context = get_event_context(request, event_slug, include_status=True, signup=True)
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
     return character_form(request, context, event_slug, context["character"], CharacterForm)
 
 
@@ -747,7 +747,7 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
 
     """
     context = get_event_context(request, event_slug, signup=True, include_status=True)
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
     if RegistrationCharacterRel.objects.filter(registration_id=context["registration"].id).exists():
         messages.warning(request, _("You already have an assigned character"))
     elif not context["character"].is_active:
@@ -908,7 +908,7 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_uuid: 
         raise Http404(msg)
 
     # Validate character access permissions
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     return context
 
@@ -939,7 +939,7 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
         raise Http404(msg)
 
     # Validate character access permissions
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     # Get character data
     context["character"] = context["event"].get_elements(Character).get(uuid=character_uuid)
@@ -1067,7 +1067,7 @@ def character_relationships(request: HttpRequest, event_slug: str, character_uui
     """
     # Get event context and validate user access to event and character
     context = get_event_context(request, event_slug, include_status=True, signup=True)
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     # Load all cached event data for performance
     get_event_cache_all(context)
@@ -1109,7 +1109,7 @@ def _character_relationship(
 ) -> HttpResponse:
     """Handle creation / editing of character relationship."""
     context = get_event_context(request, event_slug, include_status=True, signup=True)
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     context["relationship"] = None
     if other_character_uuid:

@@ -59,7 +59,7 @@ def character_pdf_sheet(request: HttpRequest, event_slug: str, character_uuid: s
     check_print_pdf(context)
 
     # Validate character access and retrieve character data
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     # Generate and return the character PDF
     return print_character(context)
@@ -85,7 +85,7 @@ def character_pdf_sheet_friendly(request: HttpRequest, event_slug: str, characte
     check_print_pdf(context)
 
     # Retrieve and validate character access
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     # Generate and return the printer-friendly PDF
     return print_character_friendly(context)
@@ -111,7 +111,7 @@ def character_pdf_relationships(request: HttpRequest, event_slug: str, character
     check_print_pdf(context)
 
     # Validate character access and retrieve character data
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     # Generate and return the relationships PDF
     return print_character_rel(context)

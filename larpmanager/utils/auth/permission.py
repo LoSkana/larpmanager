@@ -363,34 +363,19 @@ def check_managed(context: dict, permission: str, *, is_association: bool = True
     return placeholder == "def"
 
 
-# Permissions hidden in demo mode to simplify the interface for new users
-DEMO_HIDDEN_PERMISSIONS: frozenset[str] = frozenset(
+# Essential permissions visible in lite/demo mode
+LITE_PERMISSIONS: frozenset[str] = frozenset(
     {
-        # Association-level
-        "exe_send_mail",
-        "exe_archive_email",
-        "exe_appearance",
-        "exe_texts",
-        "exe_config",
-        "exe_features",
-        "exe_roles",
-        "exe_profile",
-        "exe_accounting",
-        # Event-level
-        "orga_send_mail",
-        "orga_archive_email",
-        "orga_sensitive",
-        "orga_appearance",
-        "orga_texts",
-        "orga_config",
-        "orga_features",
-        "orga_buttons",
-        "orga_cancellations",
-        "orga_character_form",
-        "orga_check",
-        "orga_reading",
-        "orga_accounting",
-        "orga_roles",
+        "exe_association",
+        "exe_events",
+        "exe_payments",
+        "exe_methods",
+        "orga_event",
+        "orga_registrations",
+        "orga_registration_tickets",
+        "orga_registration_form",
+        "orga_payments",
+        "orga_characters",
     }
 )
 
@@ -430,8 +415,8 @@ def get_index_permissions(  # noqa: C901
         if permission["hidden"]:
             continue
 
-        # Skip permissions hidden in demo mode
-        if is_demo and permission["slug"] in DEMO_HIDDEN_PERMISSIONS:
+        # In lite/demo mode, only show essential permissions
+        if is_demo and permission["slug"] not in LITE_PERMISSIONS:
             continue
 
         # Check if permission is allowed in current context
