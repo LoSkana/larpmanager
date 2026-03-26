@@ -277,7 +277,7 @@ def _test_faction_locked(page: Any, live_server: Any, char_counter: list, factio
     go_to(page, live_server, "test/")
     expect(page.locator("#one")).to_contain_text("FactionLockedChar")
 
-    # TODO remove
+    # TODO remove, should not be required
     go_to(page, live_server, "test/manage/cache")
 
     # Character page shows public teaser but NOT private text
