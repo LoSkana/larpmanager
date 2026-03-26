@@ -56,6 +56,8 @@
                     {% if el.mirror %}<i>{{ el.mirror }}</i>{% endif %}
                 {% elif que.typ == 'hide' %}
                     {% if el.hide %}<i class="fa-solid fa-check"></i>{% endif %}
+                {% elif que.typ == 'locked' %}
+                    {% if el.locked %}<i class="fa-solid fa-check"></i>{% endif %}
                 {% elif que.typ == 'cover' %}
                     {% if el.cover %}
                         <a href="{{ el.thumb.url }}">

@@ -63,6 +63,7 @@ from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import (
     clear_event_cache_all_runs,
     clear_run_cache_and_media,
+    on_character_factions_m2m_changed,
     on_character_pre_save_update_cache,
     on_faction_pre_save_update_cache,
     on_quest_pre_save_update_cache,
@@ -1734,6 +1735,7 @@ m2m_changed.connect(on_modifier_abilities_m2m_changed, sender=ModifierExp.abilit
 m2m_changed.connect(on_rule_abilities_m2m_changed, sender=RuleExp.abilities.through)
 
 m2m_changed.connect(on_faction_characters_m2m_changed, sender=Faction.characters.through)
+m2m_changed.connect(on_character_factions_m2m_changed, sender=Faction.characters.through)
 m2m_changed.connect(on_plot_characters_m2m_changed, sender=Plot.characters.through)
 m2m_changed.connect(on_speedlarp_characters_m2m_changed, sender=SpeedLarp.characters.through)
 m2m_changed.connect(on_prologue_characters_m2m_changed, sender=Prologue.characters.through)

@@ -824,8 +824,8 @@ def on_faction_pre_save_update_cache(instance: Faction) -> None:
     # Get the previous version from database for comparison
     prev = Faction.objects.get(pk=instance.pk)
 
-    # Check if faction type changed - requires full cache clear
-    lst = ["typ"]
+    # Check if faction type or visibility/access flags changed - requires full cache clear
+    lst = ["typ", "hide", "locked"]
     if has_different_cache_values(instance, prev, lst):
         clear_event_cache_all_runs(instance.event)
 
