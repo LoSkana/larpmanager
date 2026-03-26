@@ -550,17 +550,19 @@ def get_char_check(
         context["check"] = 1
         return
 
-    # Block access to characters marked as hidden from public view
-    if context["char"].get("hide", False):
-        raise NotFoundError
-
-    # Check player access (owner or assigned player)
+    # Check player access (owner or assigned player) before hide check,
+    # because hide=True can be set automatically by user_character_approval
+    # (unapproved characters are hidden from gallery but the player can still view them)
     if request.user.is_authenticated and has_access_character(request, context):
         # Locked character: player can access the page but only sees public fields
         if not context["char"].get("locked", False):
             get_element(context, character_uuid, "character", Character)
             context["check"] = 1
         return
+
+    # Block public access to characters marked as hidden
+    if context["char"].get("hide", False):
+        raise NotFoundError
 
     # No access for anonymous or non-owner users
     if deny_public:
