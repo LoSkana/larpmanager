@@ -609,6 +609,9 @@ msgstr "Legend"
 msgid "Loaded"
 msgstr "Laddad"
 
+msgid "Locked"
+msgstr "Låst"
+
 msgid "Log in"
 msgstr "Logga in"
 
@@ -10457,6 +10460,13 @@ msgid ""
 msgstr ""
 "En delbetalning med order %(order)d finns redan med följande gemensamma "
 "biljett(er): %(tickets)s"
+
+msgid ""
+"Enables field 'locked', to prevent players from viewing the full character "
+"sheet even when assigned"
+msgstr ""
+"Möjliggör fältet \"låst\" för att förhindra att spelare ser hela "
+"karaktärsbladet även när det är tilldelat"
 
 msgid ""
 "If checked, enables modifiers that can adjust ability costs based on "

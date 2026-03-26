@@ -623,84 +623,96 @@ class OrgaConfigForm(ConfigForm):
         Sets up background writing features, character story elements,
         and writing deadline configurations for character development.
         """
-        if "character" in self.params.get("features"):
-            self.set_section("writing", _("Characters"))
+        if "character" not in self.params.get("features"):
+            return
 
-            config_label = _("Title")
-            config_help_text = _("Enables field 'title', a short (2-3 words) text added to the character's name")
-            self.add_configs("writing_title", ConfigType.BOOL, config_label, config_help_text)
+        self.set_section("writing", _("Characters"))
 
-            config_label = _("Number")
-            config_help_text = _("Enables field 'number', an unique numerical ID to reference it")
-            self.add_configs("writing_number", ConfigType.BOOL, config_label, config_help_text)
+        config_label = _("Title")
+        config_help_text = _("Enables field 'title', a short (2-3 words) text added to the character's name")
+        self.add_configs("writing_title", ConfigType.BOOL, config_label, config_help_text)
 
-            config_label = _("Cover")
-            config_help_text = _(
-                "Enables field 'cover', to shown a specific image in the gallery - until assigned to a participant",
-            )
-            self.add_configs("writing_cover", ConfigType.BOOL, config_label, config_help_text)
+        config_label = _("Number")
+        config_help_text = _("Enables field 'number', an unique numerical ID to reference it")
+        self.add_configs("writing_number", ConfigType.BOOL, config_label, config_help_text)
 
-            config_label = _("Hide")
-            config_help_text = _("Enables field 'hide', to be able to hide writing element from participants")
-            self.add_configs("writing_hide", ConfigType.BOOL, config_label, config_help_text)
+        config_label = _("Cover")
+        config_help_text = _(
+            "Enables field 'cover', to shown a specific image in the gallery - until assigned to a participant",
+        )
+        self.add_configs("writing_cover", ConfigType.BOOL, config_label, config_help_text)
 
-            config_label = _("Assigned")
-            config_help_text = _(
-                "Enables field 'assigned', to track which staff member is responsible for each writing element",
-            )
-            self.add_configs("writing_assigned", ConfigType.BOOL, config_label, config_help_text)
+        config_label = _("Hide")
+        config_help_text = _("Enables field 'hide', to be able to hide writing element from participants")
+        self.add_configs("writing_hide", ConfigType.BOOL, config_label, config_help_text)
 
-            config_label = _("Field visibility")
-            config_help_text = _(
-                "Normally all character fields (public or private) are shown; with this configuration you can select which ones to display at any given time",
-            )
-            self.add_configs("writing_field_visibility", ConfigType.BOOL, config_label, config_help_text)
+        config_label = _("Locked")
+        config_help_text = _(
+            "Enables field 'locked', to prevent players from viewing the full character sheet even when assigned"
+        )
+        self.add_configs("writing_locked", ConfigType.BOOL, config_label, config_help_text)
 
-            if "relationships" in self.params.get("features"):
-                config_label = _("Relationships max length")
-                config_help_text = _("Set maximum length on character relationships (default 10000 characters)")
-                self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
+        config_label = _("Assigned")
+        config_help_text = _(
+            "Enables field 'assigned', to track which staff member is responsible for each writing element",
+        )
+        self.add_configs("writing_assigned", ConfigType.BOOL, config_label, config_help_text)
 
-            config_label = _("Disable character finder")
-            config_help_text = (
-                _("Disable the system that finds the character number when a special reference symbol is written")
-                + " (#, @, ^)"
-            )
-            self.add_configs("writing_disable_char_finder", ConfigType.BOOL, config_label, config_help_text)
+        config_label = _("Field visibility")
+        config_help_text = _(
+            "Normally all character fields (public or private) are shown; with this configuration you can select which ones to display at any given time",
+        )
+        self.add_configs("writing_field_visibility", ConfigType.BOOL, config_label, config_help_text)
 
-            config_label = _("Replacing names")
-            config_help_text = _("If checked, character names will be automatically replaced by a reference")
-            self.add_configs("writing_substitute", ConfigType.BOOL, config_label, config_help_text)
+        self._set_config_writing_behavior()
 
-            config_label = _("Paste as text")
-            config_help_text = _(
-                "If checked, automatically removes formatting when pasting text into the WYSIWYG editor",
-            )
-            self.add_configs("writing_paste_text", ConfigType.BOOL, config_label, config_help_text)
+    def _set_config_writing_behavior(self) -> None:
+        """Configure writing behavior options (editor, tools, access)."""
+        if "relationships" in self.params.get("features"):
+            config_label = _("Relationships max length")
+            config_help_text = _("Set maximum length on character relationships (default 10000 characters)")
+            self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
 
-            config_label = _("Disable Auto save")
-            config_help_text = _("If checked, automatic saving during editing will be disable for writing elements")
-            self.add_configs("writing_disable_auto", ConfigType.BOOL, config_label, config_help_text)
+        config_label = _("Disable character finder")
+        config_help_text = (
+            _("Disable the system that finds the character number when a special reference symbol is written")
+            + " (#, @, ^)"
+        )
+        self.add_configs("writing_disable_char_finder", ConfigType.BOOL, config_label, config_help_text)
 
-            config_label = _("External access")
-            config_help_text = _(
-                "If checked, generates secret urls to share the full character sheet with a not signed up user",
-            )
-            self.add_configs("writing_external_access", ConfigType.BOOL, config_label, config_help_text)
+        config_label = _("Replacing names")
+        config_help_text = _("If checked, character names will be automatically replaced by a reference")
+        self.add_configs("writing_substitute", ConfigType.BOOL, config_label, config_help_text)
 
-            config_label = _("Unimportant")
-            config_help_text = _(
-                "If checked, allows to track the plots or relationships not really important for the character",
-            )
-            self.add_configs("writing_unimportant", ConfigType.BOOL, config_label, config_help_text)
+        config_label = _("Paste as text")
+        config_help_text = _(
+            "If checked, automatically removes formatting when pasting text into the WYSIWYG editor",
+        )
+        self.add_configs("writing_paste_text", ConfigType.BOOL, config_label, config_help_text)
 
-            config_label = _("Check")
-            config_help_text = _("If checked, enables the consistency check tool for character sheets")
-            self.add_configs("writing_check", ConfigType.BOOL, config_label, config_help_text)
+        config_label = _("Disable Auto save")
+        config_help_text = _("If checked, automatic saving during editing will be disable for writing elements")
+        self.add_configs("writing_disable_auto", ConfigType.BOOL, config_label, config_help_text)
 
-            config_label = _("Reading")
-            config_help_text = _("If checked, enables the reading view for writing elements")
-            self.add_configs("writing_reading", ConfigType.BOOL, config_label, config_help_text)
+        config_label = _("External access")
+        config_help_text = _(
+            "If checked, generates secret urls to share the full character sheet with a not signed up user",
+        )
+        self.add_configs("writing_external_access", ConfigType.BOOL, config_label, config_help_text)
+
+        config_label = _("Unimportant")
+        config_help_text = _(
+            "If checked, allows to track the plots or relationships not really important for the character",
+        )
+        self.add_configs("writing_unimportant", ConfigType.BOOL, config_label, config_help_text)
+
+        config_label = _("Check")
+        config_help_text = _("If checked, enables the consistency check tool for character sheets")
+        self.add_configs("writing_check", ConfigType.BOOL, config_label, config_help_text)
+
+        config_label = _("Reading")
+        config_help_text = _("If checked, enables the reading view for writing elements")
+        self.add_configs("writing_reading", ConfigType.BOOL, config_label, config_help_text)
 
     def set_config_character(self) -> None:
         """Configure character-related settings including campaign and faction options.

@@ -313,7 +313,8 @@ def save_event_character_form(features: dict, instance: object) -> None:
 
     # Add faction writing elements if faction feature is enabled
     if "faction" in features:
-        _init_writing_element(instance, def_tps, [QuestionApplicable.FACTION])
+        extra = [typ for typ in [WritingQuestionType.HIDE, WritingQuestionType.LOCKED] if typ in features]
+        _init_writing_element(instance, def_tps, [QuestionApplicable.FACTION], extra_types=extra or None)
 
     # Add plot writing elements with modified teaser settings if plot feature is enabled
     if "plot" in features:
@@ -323,44 +324,64 @@ def save_event_character_form(features: dict, instance: object) -> None:
         _init_writing_element(instance, plot_tps, [QuestionApplicable.PLOT])
 
 
-def _init_writing_element(instance: object, default_question_types: Any, question_applicables: Any) -> None:
+def _init_writing_element(
+    instance: object,
+    default_question_types: Any,
+    question_applicables: Any,
+    extra_types: list | None = None,
+) -> None:
     """Initialize writing questions for specific applicables in an event instance.
 
     Args:
         instance: Event instance to initialize writing elements for
         default_question_types: Dictionary of default question types and their configurations
         question_applicables: List of QuestionApplicable types to create questions for
+        extra_types: Optional list of additional special question types to add
 
     """
     for applicable in question_applicables:
-        # if there are already questions for this applicable, skip
-        if instance.get_elements(WritingQuestion).filter(applicable=applicable).exists():
-            continue
+        existing_qs = instance.get_elements(WritingQuestion).filter(applicable=applicable)
 
-        writing_questions = [
-            WritingQuestion(
-                event=instance,
-                typ=question_type,
-                name=_(config[0]),
-                status=config[1],
-                visibility=config[2],
-                max_length=config[3],
-                applicable=applicable,
-                order=config[4],
-            )
-            for question_type, config in default_question_types.items()
-        ]
-        # Manually set UUIDs since bulk_create doesn't trigger pre_save signals
-        for question in writing_questions:
-            auto_set_uuid(question)
-        WritingQuestion.objects.bulk_create(writing_questions)
+        if not existing_qs.exists():
+            writing_questions = [
+                WritingQuestion(
+                    event=instance,
+                    typ=question_type,
+                    name=_(config[0]),
+                    status=config[1],
+                    visibility=config[2],
+                    max_length=config[3],
+                    applicable=applicable,
+                    order=config[4],
+                )
+                for question_type, config in default_question_types.items()
+            ]
+            # Manually set UUIDs since bulk_create doesn't trigger pre_save signals
+            for question in writing_questions:
+                auto_set_uuid(question)
+            WritingQuestion.objects.bulk_create(writing_questions)
 
-        # Update UUIDs for debug mode after bulk_create (when IDs are assigned)
-        # Note: bulk_create doesn't trigger post_save, so we need to manually update
-        for question in writing_questions:
-            debug_set_uuid(question, created=True)
+            # Update UUIDs for debug mode after bulk_create (when IDs are assigned)
+            # Note: bulk_create doesn't trigger post_save, so we need to manually update
+            for question in writing_questions:
+                debug_set_uuid(question, created=True)
 
-        clear_writing_questions_cache(instance.id)
+            clear_writing_questions_cache(instance.id)
+
+        if extra_types:
+            existing_types = set(existing_qs.values_list("typ", flat=True))
+            for typ in extra_types:
+                if typ not in existing_types:
+                    WritingQuestion.objects.create(
+                        event=instance,
+                        typ=typ,
+                        name=_(typ.capitalize()),
+                        status=QuestionStatus.HIDDEN,
+                        visibility=QuestionVisibility.HIDDEN,
+                        max_length=1000,
+                        applicable=applicable,
+                    )
+                    clear_writing_questions_cache(instance.id)
 
 
 def _init_character_form_questions(

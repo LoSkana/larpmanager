@@ -95,6 +95,7 @@ WritingQuestionType = extend_textchoices(
         ("TITLE", "title", _("Title")),
         ("MIRROR", "mirror", _("Mirror")),
         ("HIDE", "hide", _("Hide")),
+        ("LOCKED", "locked", _("Locked")),
         ("PROGRESS", "progress", _("Progress")),
         ("ASSIGNED", "assigned", _("Assigned")),
         ("COMPUTED", "c", _("Computed")),

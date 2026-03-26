@@ -1274,6 +1274,14 @@ msgid ""
 "Enables field 'hide', to be able to hide writing element from participants"
 msgstr ""
 
+msgid "Locked"
+msgstr ""
+
+msgid ""
+"Enables field 'locked', to prevent players from viewing the full character "
+"sheet even when assigned"
+msgstr ""
+
 msgid "Assigned"
 msgstr ""
 

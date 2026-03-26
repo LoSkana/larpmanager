@@ -609,6 +609,9 @@ msgstr "Leyenda"
 msgid "Loaded"
 msgstr "Cargado"
 
+msgid "Locked"
+msgstr "Bloqueado"
+
 msgid "Log in"
 msgstr "Conectarse"
 
@@ -10599,6 +10602,13 @@ msgid ""
 msgstr ""
 "Ya existe un plazo con el pedido %(order)d con el(los) siguiente(s) "
 "ticket(s) común(es): %(tickets)s"
+
+msgid ""
+"Enables field 'locked', to prevent players from viewing the full character "
+"sheet even when assigned"
+msgstr ""
+"Habilita el campo \"bloqueado\", para evitar que los jugadores vean la hoja "
+"de personaje completa aunque esté asignada"
 
 msgid ""
 "If checked, enables modifiers that can adjust ability costs based on "

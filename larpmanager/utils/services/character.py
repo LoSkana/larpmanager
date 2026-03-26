@@ -541,25 +541,31 @@ def get_char_check(
     if "char" not in context:
         raise NotFoundError
 
-    is_orga = bypass_access_checks or (
+    # Orga or bypass always get full access regardless of hide/locked
+    if bypass_access_checks or (
         request.user.is_authenticated
         and has_event_permission(request, context, context["event"].slug, "orga_characters")
-    )
-    is_player = not is_orga and request.user.is_authenticated and has_access_character(request, context)
-
-    # Hide character if not staff
-    if context["char"].get("hide", False) and not is_orga:
-        raise NotFoundError
-
-    # Restrict if not player and not staff
-    if deny_public and not is_orga and not is_player:
-        msg = "Not your character"
-        raise Http404(msg)
-
-    # Only load full character data for orga or player
-    if is_orga or is_player:
+    ):
         get_element(context, character_uuid, "character", Character)
         context["check"] = 1
+        return
+
+    # Block access to characters marked as hidden from public view
+    if context["char"].get("hide", False):
+        raise NotFoundError
+
+    # Check player access (owner or assigned player)
+    if request.user.is_authenticated and has_access_character(request, context):
+        # Locked character: player can access the page but only sees public fields
+        if not context["char"].get("locked", False):
+            get_element(context, character_uuid, "character", Character)
+            context["check"] = 1
+        return
+
+    # No access for anonymous or non-owner users
+    if deny_public:
+        msg = "Not your character"
+        raise Http404(msg)
 
 
 def count_distinct_text_links(text: str) -> int:

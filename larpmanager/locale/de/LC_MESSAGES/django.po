@@ -609,6 +609,9 @@ msgstr "Legende"
 msgid "Loaded"
 msgstr "Geladen"
 
+msgid "Locked"
+msgstr "Abgeschlossen"
+
 msgid "Log in"
 msgstr "Einloggen"
 
@@ -10820,6 +10823,13 @@ msgid ""
 msgstr ""
 "Es existiert bereits eine Rate mit dem Auftrag %(order)d mit dem/den "
 "folgenden gemeinsamen Ticket(s): %(tickets)s"
+
+msgid ""
+"Enables field 'locked', to prevent players from viewing the full character "
+"sheet even when assigned"
+msgstr ""
+"Aktiviert das Feld \"gesperrt\", um zu verhindern, dass Spieler den "
+"kompletten Charakterbogen sehen, selbst wenn er zugewiesen wurde"
 
 msgid ""
 "If checked, enables modifiers that can adjust ability costs based on "

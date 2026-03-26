@@ -181,6 +181,8 @@ class Character(Writing):
 
     hide = models.BooleanField(default=False)
 
+    locked = models.BooleanField(default=False)
+
     cover = models.ImageField(
         max_length=500,
         upload_to=UploadToPathAndRename("character/cover/"),
@@ -279,6 +281,8 @@ class Character(Writing):
         ]:
             js["hide"] = True
 
+        js["locked"] = self.locked
+
         return js
 
     def show_factions(self, event: Event | None, js: dict) -> None:
@@ -314,6 +318,12 @@ class Character(Writing):
 
             # Add faction object with uuid and number
             js["factions"].append(faction.number)
+
+            # Propagate faction-level hide and locked flags to character
+            if faction.hide:
+                js["hide"] = True
+            if faction.locked:
+                js["locked"] = True
 
         # Add default faction if no primary found
         if not has_primary_faction:
@@ -523,6 +533,8 @@ class Faction(Writing):
         default=False,
         help_text=_("Indicates whether it can be selected by participants"),
     )
+
+    locked = models.BooleanField(default=False)
 
     @staticmethod
     def get_faction_filepath(run: Run) -> str:

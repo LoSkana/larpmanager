@@ -1015,6 +1015,8 @@ def _writing_question_load(
         _get_mirror_instance(context, writing_element, field_value, processing_logs)
     elif question_type == WritingQuestionType.HIDE:
         writing_element.hide = field_value.lower() == "true"
+    elif question_type == WritingQuestionType.LOCKED:
+        writing_element.locked = field_value.lower() == "true"
     elif question_type == WritingQuestionType.FACTIONS:
         _assign_faction(context, writing_element, field_value, processing_logs)
     elif question_type == WritingQuestionType.TEASER:

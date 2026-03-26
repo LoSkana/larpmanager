@@ -609,6 +609,9 @@ msgstr "Legenda"
 msgid "Loaded"
 msgstr "Caricato"
 
+msgid "Locked"
+msgstr "Bloccato"
+
 msgid "Log in"
 msgstr "Log in"
 
@@ -10642,6 +10645,13 @@ msgid ""
 msgstr ""
 "Esiste già una rata con ordine %(order)d con i seguenti ticket comuni: "
 "%(tickets)s"
+
+msgid ""
+"Enables field 'locked', to prevent players from viewing the full character "
+"sheet even when assigned"
+msgstr ""
+"Abilita il campo \"bloccato\", per evitare che i giocatori visualizzino "
+"l'intera scheda del personaggio anche quando è assegnato"
 
 msgid ""
 "If checked, enables modifiers that can adjust ability costs based on "

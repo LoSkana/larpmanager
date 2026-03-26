@@ -609,6 +609,9 @@ msgstr "Legenda"
 msgid "Loaded"
 msgstr "Załadowany"
 
+msgid "Locked"
+msgstr "Zablokowany"
+
 msgid "Log in"
 msgstr "Zaloguj się"
 
@@ -10526,6 +10529,13 @@ msgid ""
 msgstr ""
 "Rata z zamówieniem %(order)d już istnieje z następującymi wspólnymi "
 "biletami: %(tickets)s"
+
+msgid ""
+"Enables field 'locked', to prevent players from viewing the full character "
+"sheet even when assigned"
+msgstr ""
+"Umożliwia \"zablokowanie\" pola, aby uniemożliwić graczom przeglądanie "
+"pełnego arkusza postaci, nawet po jego przypisaniu"
 
 msgid ""
 "If checked, enables modifiers that can adjust ability costs based on "
