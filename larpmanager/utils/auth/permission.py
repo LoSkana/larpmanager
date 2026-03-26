@@ -261,6 +261,7 @@ def has_event_permission(
     # Early return if request is invalid or user lacks member attribute
     if (
         not request
+        or not request.user.is_authenticated
         or not hasattr(request.user, "member")
         or check_managed(context, permission_name, is_association=False)
     ):

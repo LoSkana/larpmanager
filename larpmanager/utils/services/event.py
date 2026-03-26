@@ -143,6 +143,9 @@ def get_event_filter_characters(context: dict, character_filters: Any) -> None: 
 
 def has_access_character(request: HttpRequest, context: dict) -> bool:
     """Check if user has access to view/edit a specific character."""
+    if not request.user.is_authenticated:
+        return False
+
     if has_event_permission(request, context, context["event"].slug, "orga_characters"):
         return True
 

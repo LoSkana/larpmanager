@@ -541,33 +541,23 @@ def get_char_check(
     if "char" not in context:
         raise NotFoundError
 
-    # Orga or bypass always get full access regardless of hide/locked
-    if bypass_access_checks or (
-        request.user.is_authenticated
-        and has_event_permission(request, context, context["event"].slug, "orga_characters")
-    ):
-        get_element(context, character_uuid, "character", Character)
-        context["check"] = 1
-        return
+    is_orga = bypass_access_checks or has_event_permission(request, context, context["event"].slug, "orga_characters")
+    is_player = request.user.is_authenticated and has_access_character(request, context)
 
-    # Check player access (owner or assigned player) before hide check,
-    # because hide=True can be set automatically by user_character_approval
-    # (unapproved characters are hidden from gallery but the player can still view them)
-    if request.user.is_authenticated and has_access_character(request, context):
-        # Locked character: player can access the page but only sees public fields
-        if not context["char"].get("locked", False):
-            get_element(context, character_uuid, "character", Character)
-            context["check"] = 1
-        return
+    if not is_orga:
+        if not is_player:
+            # Public access: hidden characters are not accessible
+            if context["char"].get("hide", False):
+                raise NotFoundError
+            if deny_public:
+                msg = "Not your character"
+                raise Http404(msg)
+        elif context["char"].get("locked", False):
+            # Locked: player sees public fields only (no full sheet)
+            return
 
-    # Block public access to characters marked as hidden
-    if context["char"].get("hide", False):
-        raise NotFoundError
-
-    # No access for anonymous or non-owner users
-    if deny_public:
-        msg = "Not your character"
-        raise Http404(msg)
+    get_element(context, character_uuid, "character", Character)
+    context["check"] = 1
 
 
 def count_distinct_text_links(text: str) -> int:
