@@ -277,6 +277,9 @@ def _test_faction_locked(page: Any, live_server: Any, char_counter: list, factio
     go_to(page, live_server, "test/")
     expect(page.locator("#one")).to_contain_text("FactionLockedChar")
 
+    # TODO remove
+    go_to(page, live_server, "test/manage/reset")
+
     # Character page shows public teaser but NOT private text
     go_to(page, live_server, f"test/character/{char_uuid}/")
     expect(page.locator("#one")).to_contain_text("flocked teaser")
