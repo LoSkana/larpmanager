@@ -552,7 +552,9 @@ def get_char_check(
             if deny_public:
                 msg = "Not your character"
                 raise Http404(msg)
-        elif context["char"].get("locked", False):
+            # Non-player users see only public fields, never the full sheet
+            return
+        if context["char"].get("locked", False):
             # Locked: player sees public fields only (no full sheet)
             return
 

@@ -262,9 +262,6 @@ class Character(Writing):
         if js.get("title"):
             js["show"] += " - " + js["title"]
 
-        if run:
-            self.show_factions(run.event, js)
-
         if self.cover:
             # noinspection PyUnresolvedReferences
             js["cover"] = self.cover.url
@@ -282,6 +279,9 @@ class Character(Writing):
             js["hide"] = True
 
         js["locked"] = self.locked
+
+        if run:
+            self.show_factions(run.event, js)
 
         return js
 
