@@ -658,7 +658,7 @@ def update_event_cache_all_character_reg(
         return
 
     # Generate character display data
-    character_display_data = character.show()
+    character_display_data = character.show(event_run)
 
     # Search and update player information
     search_player(
