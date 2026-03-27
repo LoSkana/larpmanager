@@ -140,20 +140,19 @@ def tutorial_query(request: HttpRequest) -> HttpResponse:
     return query_index(request)
 
 
-def _validate_upload_file(file: Any, file_ext: str, *, is_superuser: bool) -> str | None:
+def _validate_upload_file(file: Any, file_ext: str) -> str | None:
     """Validate uploaded file size, extension, and MIME type.
 
     Args:
         file: Uploaded file object
         file_ext: File extension (lowercase with dot)
-        is_superuser: Whether user is a superuser
 
     Returns:
         Error message if validation fails, None if successful
 
     """
-    # Validate file size (skip for superusers)
-    if not is_superuser and file.size > settings.MAX_UPLOAD_SIZE:
+    # Validate file size
+    if file.size > settings.MAX_UPLOAD_SIZE:
         max_size_mb = settings.MAX_UPLOAD_SIZE / (1024 * 1024)
         return f"File size exceeds maximum allowed size of {max_size_mb}MB"
 
@@ -190,7 +189,7 @@ def upload_media(request: HttpRequest) -> JsonResponse:
     - Generates unique filenames to prevent overwriting
     - Stores files in user-specific subdirectories
 
-    Note: Superusers bypass rate limiting and size restrictions for administrative tasks.
+    Note: Superusers bypass rate limiting and total storage limits for administrative tasks.
 
     Args:
         request: HTTP request containing file upload data
@@ -242,7 +241,7 @@ def upload_media(request: HttpRequest) -> JsonResponse:
     file_ext = file.name[file.name.rfind(".") :].lower() if "." in file.name else ""
 
     # Validate file (size, extension, MIME type)
-    error = _validate_upload_file(file, file_ext, is_superuser=is_superuser)
+    error = _validate_upload_file(file, file_ext)
     if error:
         return JsonResponse({"error": error}, status=400)
 

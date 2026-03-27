@@ -175,9 +175,9 @@ class TestRegDetailFunctions(BaseTestCase):
         run = self.get_run()
         registration = self.create_registration(member=member, run=run)
 
-        from datetime import datetime
+        from django.utils import timezone
 
-        registration.cancellation_date = datetime.now()
+        registration.cancellation_date = timezone.now()
         registration.save()
 
         typ, descr = get_accounting_registration_type(registration)

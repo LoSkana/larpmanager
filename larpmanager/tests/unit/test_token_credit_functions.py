@@ -315,13 +315,13 @@ class TestRegistrationQueryFunctions(BaseTestCase):
 
     def test_get_regs_excludes_cancelled(self) -> None:
         """Test get_regs excludes cancelled registrations"""
-        from datetime import datetime
+        from django.utils import timezone
 
         member = self.get_member()
         association = self.get_association()
         run = self.get_run()
         registration = self.create_registration(member=member, run=run)
-        registration.cancellation_date = datetime.now()
+        registration.cancellation_date = timezone.now()
         registration.save()
 
         regs = get_regs(association)
