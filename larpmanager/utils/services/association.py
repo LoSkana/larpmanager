@@ -229,14 +229,17 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             return bool(get_association_config(association_id, config_key, default_value=False))
         return any(get_event_config(eid, config_key, default_value=False) for eid in event_ids)
 
-    checklist = [
+    _not_used = [
         {
             "slug": "exe_tutorial",
             "name": _("Tutorial"),
             "descr": _("Visit the tutorial to learn the basics"),
             "done": _done("exe_tutorial"),
             "url": reverse("tutorials"),
-        },
+        }
+    ]
+
+    checklist = [
         {
             "slug": "exe_events",
             "name": _("Event creation"),
