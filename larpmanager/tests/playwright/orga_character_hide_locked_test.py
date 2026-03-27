@@ -271,9 +271,6 @@ def _test_faction_locked(page: Any, live_server: Any, char_counter: list, factio
     # Assign to user
     _assign_to_user(page, live_server, "FactionLockedChar")
 
-    # TODO remove, should not be required
-    go_to(page, live_server, "test/manage/cache")
-
     # As user: character visible in gallery
     logout(page)
     login_user(page, live_server)
