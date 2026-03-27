@@ -609,6 +609,9 @@ msgstr "Legenda"
 msgid "Loaded"
 msgstr "Načteno"
 
+msgid "Locked"
+msgstr "Uzamčené stránky"
+
 msgid "Log in"
 msgstr "Přihlášení"
 
@@ -10334,6 +10337,13 @@ msgid ""
 msgstr ""
 "Splátka s pořadovým číslem %(order)d již existuje s následujícím společným "
 "tipem (tipy): %(tickets)s"
+
+msgid ""
+"Enables field 'locked', to prevent players from viewing the full character "
+"sheet even when assigned"
+msgstr ""
+"Povoluje pole \"uzamčené\", aby hráči nemohli zobrazit celý list postavy, i "
+"když je přiřazen"
 
 msgid ""
 "If checked, enables modifiers that can adjust ability costs based on "

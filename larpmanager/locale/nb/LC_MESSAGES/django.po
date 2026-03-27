@@ -609,6 +609,9 @@ msgstr "Tegnforklaring"
 msgid "Loaded"
 msgstr "Lastet"
 
+msgid "Locked"
+msgstr "Låst"
+
 msgid "Log in"
 msgstr "Logg inn"
 
@@ -10436,6 +10439,13 @@ msgid ""
 msgstr ""
 "En avbetaling med ordre %(order)d eksisterer allerede med følgende felles "
 "billett(er): %(tickets)s"
+
+msgid ""
+"Enables field 'locked', to prevent players from viewing the full character "
+"sheet even when assigned"
+msgstr ""
+"Aktiverer \"låst\" felt for å hindre at spillerne ser hele karakterarket, "
+"selv når det er tildelt"
 
 msgid ""
 "If checked, enables modifiers that can adjust ability costs based on "

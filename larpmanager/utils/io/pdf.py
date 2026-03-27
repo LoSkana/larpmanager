@@ -916,7 +916,7 @@ def _bulk_characters(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
         if request.POST.get(f"character_{character.id}"):
             try:
                 # Load and validate character data
-                get_char_check(request, context, character.uuid, restrict_non_owners=True)
+                get_char_check(request, context, character.uuid, deny_public=True)
                 filepath = context["character"].get_sheet_filepath(context["run"])
 
                 # Generate PDF if it doesn't exist or is outdated

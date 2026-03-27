@@ -39,6 +39,7 @@ from larpmanager.models.form import (
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, FactionType, PlotCharacterRel, Relationship
+from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.core.exceptions import NotFoundError
 from larpmanager.utils.services.event import has_access_character
@@ -505,7 +506,7 @@ def get_char_check(
     context: dict,
     character_uuid: str,
     *,
-    restrict_non_owners: bool = False,
+    deny_public: bool = False,
     bypass_access_checks: bool = False,
 ) -> None:
     """Get character with access control checks.
@@ -517,7 +518,7 @@ def get_char_check(
         request: Django HTTP request object containing user and session data
         context: Context dictionary containing cached character and event data
         character_uuid: Character uuid to retrieve from the character cache
-        restrict_non_owners: Whether to apply strict visibility restrictions for non-owners
+        deny_public: Whether to apply strict visibility restrictions for non-owners
         bypass_access_checks: Whether to bypass all access checks (admin override)
 
     Returns:
@@ -540,21 +541,25 @@ def get_char_check(
     if "char" not in context:
         raise NotFoundError
 
-    # Allow access if bypassing checks or user has character access permissions
-    if bypass_access_checks or (request.user.is_authenticated and has_access_character(request, context)):
-        # Load full character data and mark as having elevated access
-        get_element(context, character_uuid, "character", Character)
-        context["check"] = 1
-        return
+    is_orga = bypass_access_checks or has_event_permission(request, context, context["event"].slug, "orga_characters")
+    is_player = request.user.is_authenticated and has_access_character(request, context)
 
-    # Block access to characters marked as hidden from public view
-    if context["char"].get("hide", False):
-        raise NotFoundError
+    if not is_orga:
+        if not is_player:
+            # Public access: hidden characters are not accessible
+            if context["char"].get("hide", False):
+                raise NotFoundError
+            if deny_public:
+                msg = "Not your character"
+                raise Http404(msg)
+            # Non-player users see only public fields, never the full sheet
+            return
+        if context["char"].get("locked", False):
+            # Locked: player sees public fields only (no full sheet)
+            return
 
-    # Apply restriction check - deny access if restrict flag is set
-    if restrict_non_owners:
-        msg = "Not your character"
-        raise Http404(msg)
+    get_element(context, character_uuid, "character", Character)
+    context["check"] = 1
 
 
 def count_distinct_text_links(text: str) -> int:

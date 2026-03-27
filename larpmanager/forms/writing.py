@@ -81,6 +81,12 @@ class WritingForm(BaseModelForm):
         if WritingQuestionType.COVER not in question_types:
             self.delete_field("cover")
 
+        if WritingQuestionType.HIDE not in question_types:
+            self.delete_field("hide")
+
+        if WritingQuestionType.LOCKED not in question_types:
+            self.delete_field("locked")
+
         if WritingQuestionType.ASSIGNED in question_types:
             self.configure_field_run("assigned", self.params.get("run"))
             self.fields["assigned"].required = False
@@ -375,7 +381,7 @@ class OrgaFactionForm(WritingForm, BaseWritingForm):
     class Meta:
         model = Faction
 
-        exclude = ("number", "temp", "hide", "order")
+        exclude = ("number", "temp", "order")
 
         widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti, "assigned": RunStaffS2Widget}
 

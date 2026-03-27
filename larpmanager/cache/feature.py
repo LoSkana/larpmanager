@@ -135,7 +135,7 @@ def update_event_features(ev_id: int) -> dict[str, int]:
         for feature_slug in event.features.values_list("slug", flat=True):
             features_dict[feature_slug] = 1
         extra_features_mapping = {
-            "writing": ["paste_text", "title", "cover", "hide", "assigned"],
+            "writing": ["paste_text", "title", "cover", "hide", "assigned", "locked"],
             "registration": ["reg_que_age", "reg_que_faction", "reg_que_tickets", "reg_que_allowed"],
             "character_form": ["wri_que_max", "wri_que_tickets", "wri_que_requirements"],
             "casting": ["mirror"],

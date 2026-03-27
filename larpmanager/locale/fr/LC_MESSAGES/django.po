@@ -609,6 +609,9 @@ msgstr "Légende "
 msgid "Loaded"
 msgstr "Chargé"
 
+msgid "Locked"
+msgstr "Verrouillé"
+
 msgid "Log in"
 msgstr "Se connecter"
 
@@ -10758,6 +10761,13 @@ msgid ""
 msgstr ""
 "Un versement avec l'ordre %(order)d existe déjà avec le(s) ticket(s) "
 "commun(s) suivant(s) : %(tickets)s"
+
+msgid ""
+"Enables field 'locked', to prevent players from viewing the full character "
+"sheet even when assigned"
+msgstr ""
+"Permet d'activer le champ \"verrouillé\", afin d'empêcher les joueurs de "
+"voir la feuille de personnage complète, même lorsqu'elle est attribuée"
 
 msgid ""
 "If checked, enables modifiers that can adjust ability costs based on "

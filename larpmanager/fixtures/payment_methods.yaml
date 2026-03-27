@@ -7,6 +7,7 @@
       \ Number of the recipient account (27-character long)</p><p><strong>BIC</strong>:\
       \ Optional</p>"
     fields: payee, iban, bic
+    nationality: null
     profile: payment_methods/ac81a0b8942e41a8bbcefa197ccfb3d8.png
 - model: larpmanager.paymentmethod
   fields:
@@ -14,6 +15,7 @@
     slug: any
     instructions: <p>No need for data; the participant will upload a text of any kind.&nbsp;</p>
     fields: ''
+    nationality: null
     profile: payment_methods/873326d033b74568bb9e79d1e96762cf.png
 - model: larpmanager.paymentmethod
   fields:
@@ -30,6 +32,7 @@
       \ on Show copy the secret key.</li>\r\n<li>Input this secret key in the field\
       \ <strong>PAYPAL_BUSINESS</strong></li>\r\n</ol>"
     fields: id, business
+    nationality: null
     profile: payment_methods/aba0f22f1f3b4cc8bfb7ca092ad0ba6e.png
 - model: larpmanager.paymentmethod
   fields:
@@ -49,6 +52,7 @@
       \ the endpoint</li>\r\n<li>Click on \"Signing secret\"</li>\r\n<li>Copy that\
       \ value on <strong>STRIPE WEBHOOK SECRET</strong></li>\r\n</ol>"
     fields: pk_api, sk_api, webhook_secret
+    nationality: null
     profile: payment_methods/86a08e7ab3bd41f9be8dff0bd5302d78.png
 - model: larpmanager.paymentmethod
   fields:
@@ -66,6 +70,7 @@
       \n<li>Copy \"Client secret\" (download it) in <strong>SUMUP CLIENT SECRET</strong></li>\r\
       \n</ol>"
     fields: merchant_id, client_id, client_secret
+    nationality: null
     profile: payment_methods/6e4c4daef26f43c0a8bac55274cca6f0.png
 - model: larpmanager.paymentmethod
   fields:
@@ -87,6 +92,7 @@
       \ class=\"TrT0Xe\">Your PayPal name will show up under the Profile section (as\
       \ shown in the image below)</li>\r\n</ol>"
     fields: handle
+    nationality: null
     profile: payment_methods/7_3b97971f5d8747b1bd225266243b5179.png
 - model: larpmanager.paymentmethod
   fields:

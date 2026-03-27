@@ -609,6 +609,9 @@ msgstr "Selite"
 msgid "Loaded"
 msgstr "Ladattu"
 
+msgid "Locked"
+msgstr "Lukittu"
+
 msgid "Log in"
 msgstr "Kirjaudu sisään"
 
@@ -10435,6 +10438,13 @@ msgid ""
 msgstr ""
 "Maksuerä, jonka tilaus on %(order)d, on jo olemassa seuraavalla yhteisellä "
 "lipulla (seuraavilla yhteisillä lipuilla): %(tickets)s"
+
+msgid ""
+"Enables field 'locked', to prevent players from viewing the full character "
+"sheet even when assigned"
+msgstr ""
+"Mahdollistaa kentän 'lukittu', jotta pelaajat eivät näe koko "
+"hahmolistaakaan, vaikka se olisi määritetty"
 
 msgid ""
 "If checked, enables modifiers that can adjust ability costs based on "

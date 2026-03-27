@@ -181,6 +181,8 @@ class Character(Writing):
 
     hide = models.BooleanField(default=False)
 
+    locked = models.BooleanField(default=False)
+
     cover = models.ImageField(
         max_length=500,
         upload_to=UploadToPathAndRename("character/cover/"),
@@ -260,9 +262,6 @@ class Character(Writing):
         if js.get("title"):
             js["show"] += " - " + js["title"]
 
-        if run:
-            self.show_factions(run.event, js)
-
         if self.cover:
             # noinspection PyUnresolvedReferences
             js["cover"] = self.cover.url
@@ -278,6 +277,11 @@ class Character(Writing):
             CharacterStatus.APPROVED
         ]:
             js["hide"] = True
+
+        js["locked"] = self.locked
+
+        if run:
+            self.show_factions(run.event, js)
 
         return js
 
@@ -314,6 +318,12 @@ class Character(Writing):
 
             # Add faction object with uuid and number
             js["factions"].append(faction.number)
+
+            # Propagate faction-level hide and locked flags to character
+            if faction.hide:
+                js["hide"] = True
+            if faction.locked:
+                js["locked"] = True
 
         # Add default faction if no primary found
         if not has_primary_faction:
@@ -523,6 +533,8 @@ class Faction(Writing):
         default=False,
         help_text=_("Indicates whether it can be selected by participants"),
     )
+
+    locked = models.BooleanField(default=False)
 
     @staticmethod
     def get_faction_filepath(run: Run) -> str:

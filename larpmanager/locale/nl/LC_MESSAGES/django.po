@@ -609,6 +609,9 @@ msgstr "Legende"
 msgid "Loaded"
 msgstr "Geladen"
 
+msgid "Locked"
+msgstr "Gesloten"
+
 msgid "Log in"
 msgstr "Inloggen"
 
@@ -10623,6 +10626,13 @@ msgid ""
 msgstr ""
 "Er bestaat al een aflevering met order %(order)d met de volgende "
 "gemeenschappelijke ticket(s): %(tickets)s"
+
+msgid ""
+"Enables field 'locked', to prevent players from viewing the full character "
+"sheet even when assigned"
+msgstr ""
+"Schakelt het veld 'vergrendeld' in om te voorkomen dat spelers de volledige "
+"karaktersheet zien, zelfs als deze is toegewezen"
 
 msgid ""
 "If checked, enables modifiers that can adjust ability costs based on "

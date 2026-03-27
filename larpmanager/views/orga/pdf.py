@@ -184,7 +184,7 @@ def orga_characters_sheet_pdf(request: HttpRequest, event_slug: str, character_u
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Retrieve and validate character data
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     # Generate and return the character sheet PDF
     return print_character(context, force=True)
@@ -207,7 +207,7 @@ def orga_characters_sheet_test(request: HttpRequest, event_slug: str, character_
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Validate and retrieve character data
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     # Configure context for PDF rendering
     context["pdf"] = True
@@ -225,7 +225,7 @@ def orga_characters_friendly_pdf(request: HttpRequest, event_slug: str, characte
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Validate and retrieve character
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     return print_character_friendly(context, force=True)
 
@@ -237,7 +237,7 @@ def orga_characters_friendly_test(request: HttpRequest, event_slug: str, charact
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Retrieve and validate character, ensuring user has access
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     # Populate context with character sheet data
     get_character_sheet(context)
@@ -275,7 +275,7 @@ def orga_characters_relationships_test(request: HttpRequest, event_slug: str, ch
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Validate character access and retrieve character data
-    get_char_check(request, context, character_uuid, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
     # Populate context with character sheet and relationship data
     get_character_sheet(context)

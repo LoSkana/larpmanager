@@ -91,6 +91,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "text",
             "mirror",
             "hide",
+            "locked",
             "cover",
             "player",
             "event",
