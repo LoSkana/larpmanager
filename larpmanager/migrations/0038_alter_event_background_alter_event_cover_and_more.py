@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
             name="cover",
             field=models.ImageField(
                 blank=True,
-                help_text="Cover image shown on the organization's homepage — rectangular, ideally 4:3 ratio",
+                help_text="Cover image shown on the organization's homepage - rectangular, ideally 4:3 ratio",
                 max_length=500,
                 upload_to="cover/",
             ),

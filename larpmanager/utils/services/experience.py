@@ -84,7 +84,7 @@ def _build_exp_context(character: Any) -> tuple[set[int], set[int], dict[int, li
         .prefetch_related(
             Prefetch("abilities", queryset=AbilityExp.objects.only("id")),
             Prefetch("prerequisites", queryset=AbilityExp.objects.only("id")),
-            Prefetch("requirements", queryset=WritingOption.objects.only("id")),
+            Prefetch("requirements", queryset=WritingOption.objects.only("id", "question_id")),
         )
     )
 
@@ -93,10 +93,14 @@ def _build_exp_context(character: Any) -> tuple[set[int], set[int], dict[int, li
     for modifier in all_modifiers:
         ability_ids = [ability.id for ability in modifier.abilities.all()]
         prerequisite_ids = {ability.id for ability in modifier.prerequisites.all()}
-        requirement_ids = {option.id for option in modifier.requirements.all()}
+
+        # Group requirements by question: AND between questions, OR within each question
+        requirements_by_question: dict[int, set[int]] = defaultdict(set)
+        for option in modifier.requirements.all():
+            requirements_by_question[option.question_id].add(option.id)
 
         # Map each ability to its applicable modifiers
-        payload = (modifier.cost, prerequisite_ids, requirement_ids)
+        payload = (modifier.cost, prerequisite_ids, dict(requirements_by_question))
         for ability_id in ability_ids:
             modifiers_by_ability[ability_id].append(payload)
 
@@ -126,8 +130,10 @@ def _apply_modifier_cost(
         # Check if ability prerequisites are met
         if prerequisite_ability_ids and not prerequisite_ability_ids.issubset(character_ability_ids):
             continue
-        # Check if choice requirements are met
-        if required_choice_ids and not required_choice_ids.issubset(character_choice_ids):
+        # Check if choice requirements are met (AND between questions, OR within each question)
+        if required_choice_ids and not all(
+            bool(option_ids & character_choice_ids) for option_ids in required_choice_ids.values()
+        ):
             continue
         # Apply the cost from the first valid modifier
         ability.cost = cost
@@ -190,7 +196,7 @@ def _get_available_abilities(
         .order_by("name")
         .prefetch_related(
             Prefetch("prerequisites", queryset=AbilityExp.objects.only("id")),
-            Prefetch("requirements", queryset=WritingOption.objects.only("id")),
+            Prefetch("requirements", queryset=WritingOption.objects.only("id", "question_id")),
         )
     )
 
@@ -455,15 +461,23 @@ def get_current_ability_exp(character: Character) -> list[AbilityExp]:
 
 
 def check_available_ability_exp(ability: Any, current_char_abilities: Any, current_char_choices: Any) -> bool:
-    """Check if an ability is available based on prerequisites and requirements."""
-    # Extract prerequisite IDs from the ability
-    prerequisite_ids = {ability.id for ability in ability.prerequisites.all()}
+    """Check if an ability is available based on prerequisites and requirements.
 
-    # Extract requirement IDs from the ability
-    requirement_ids = {option.id for option in ability.requirements.all()}
+    Prerequisites: all must be met (AND).
+    Requirements: grouped by writing question field - all fields must be satisfied (AND between fields),
+    but within each field at least one option must be selected (OR within field).
+    """
+    # Check prerequisites: all must be in current abilities (AND)
+    prerequisite_ids = {a.id for a in ability.prerequisites.all()}
+    if not prerequisite_ids.issubset(current_char_abilities):
+        return False
 
-    # Check if all prerequisites and requirements are satisfied
-    return prerequisite_ids.issubset(current_char_abilities) and requirement_ids.issubset(current_char_choices)
+    # Group requirements by question (AND between questions, OR within each question)
+    requirements_by_question: dict[int, set[int]] = defaultdict(set)
+    for option in ability.requirements.all():
+        requirements_by_question[option.question_id].add(option.id)
+
+    return all(bool(option_ids & current_char_choices) for option_ids in requirements_by_question.values())
 
 
 def get_available_ability_exp(char: Any, px_avail_by_system: dict[int, int] | None = None) -> list:

@@ -111,4 +111,4 @@ class InventoryTransfer(BaseModel):
         """Return string representation of the transfer."""
         src = self.source_inventory or "Bank"
         tgt = self.target_inventory or "Bank"
-        return f"{self.amount} {self.pool_type.name} {src} → {tgt}"
+        return f"{self.amount} {self.pool_type.name} {src} -> {tgt}"

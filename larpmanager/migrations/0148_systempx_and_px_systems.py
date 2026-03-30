@@ -252,7 +252,7 @@ class Migration(migrations.Migration):
                 verbose_name="Experience System",
             ),
         ),
-        # Step 4: Data migration — create default systems and assign existing records
+        # Step 4: Data migration - create default systems and assign existing records
         migrations.RunPython(create_default_systems_and_assign, migrations.RunPython.noop),
         # Step 5: Make system non-nullable
         migrations.AlterField(
