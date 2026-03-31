@@ -727,6 +727,7 @@ class LogOperationType(models.TextChoices):
     DELETE = "delete", _("Delete")
     BULK = "bulk", _("Bulk operation")
     UPLOAD = "upload", _("Upload")
+    RESTORE = "restore", _("Restore")
 
 
 class Vote(BaseModel):

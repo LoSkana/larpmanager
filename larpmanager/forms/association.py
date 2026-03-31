@@ -467,6 +467,14 @@ class ExeConfigForm(ConfigForm):
         tagline_help_text = _("If checked: shows the tagline for each event")
         self.add_configs("calendar_tagline", ConfigType.BOOL, tagline_label, tagline_help_text)
 
+        delete_label = _("Bulk delete")
+        delete_help_text = (
+            _("If checked, allows to delete items in bulk")
+            + ". "
+            + _("WARNING: deleted items might not be full recoverable")
+        )
+        self.add_configs("allow_bulk_delete", ConfigType.BOOL, delete_label, delete_help_text)
+
     def set_config_legacy(self) -> None:
         """Configure legacy interface options."""
         self.set_section("legacy", "Legacy")
@@ -748,13 +756,6 @@ class ExeConfigForm(ConfigForm):
                 label_require_payment_receipt,
                 help_text_require_payment_receipt,
             )
-
-            # Show invoice approval menu item for manual payment confirmation
-            invoices_label = _("Invoices")
-            invoices_help_text = _(
-                "If checked, shows the invoice approval menu item to manually confirm payments received",
-            )
-            self.add_configs("payment_invoices", ConfigType.BOOL, invoices_label, invoices_help_text)
 
         # Configure VAT calculation settings for different cost components
         if "vat" in self.params["features"]:

@@ -550,3 +550,15 @@
     icon: ''
     feature: exe_activation
     module: organization
+- model: larpmanager.associationpermission
+  fields:
+    name: Trash
+    descr: Recover deleted objects
+    slug: exe_trash
+    number: 2
+    config: null
+    active_if: allow_bulk_delete
+    hidden: false
+    icon: trash-can-arrow-up
+    feature: exe_trash
+    module: miscellany

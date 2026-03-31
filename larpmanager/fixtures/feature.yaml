@@ -1599,3 +1599,16 @@
     module: miscellany
     dependencies:
     - character
+- model: larpmanager.feature
+  fields:
+    name: Trash
+    descr: Pseudo-feature activated by allow_bulk_delete configuration to restore deleted items
+    slug: exe_trash
+    overall: true
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: accounting
+    dependencies: []

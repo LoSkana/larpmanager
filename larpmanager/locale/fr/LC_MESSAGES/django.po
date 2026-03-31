@@ -477,6 +477,9 @@ msgstr "Total"
 msgid "Trait"
 msgstr "Trait"
 
+msgid "Trash"
+msgstr "Poubelle"
+
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -941,6 +944,9 @@ msgstr "Remboursements"
 
 msgid "Request"
 msgstr "Demande"
+
+msgid "Restore"
+msgstr "Restaurer"
 
 msgid "Section"
 msgstr "Section"
@@ -1644,6 +1650,9 @@ msgstr "Contactez nous"
 msgid "Containers"
 msgstr "Conteneurs"
 
+msgid "Deleted on"
+msgstr "Supprimé le"
+
 msgid "Deliveries"
 msgstr "Livraisons"
 
@@ -1895,6 +1904,9 @@ msgstr "Bénéficiaire"
 
 msgid "Birth place"
 msgstr "Lieu de naissance"
+
+msgid "Bulk delete"
+msgstr "Suppression en bloc"
 
 msgid "Button text"
 msgstr "Texte du bouton"
@@ -3566,6 +3578,9 @@ msgstr "Configurer les types de quêtes"
 msgid "Show cancellations"
 msgstr "Annulation d'un spectacle"
 
+msgid "The trash is empty"
+msgstr "La poubelle est vide"
+
 msgid "Token Already Used"
 msgstr "Jeton déjà utilisé"
 
@@ -4387,6 +4402,9 @@ msgstr "Préinscription active"
 
 msgid "Pre-registrations saved"
 msgstr "Les pré-inscriptions sont sauvées"
+
+msgid "Recover deleted objects"
+msgstr "Récupérer les objets supprimés"
 
 msgid "Registration conditions"
 msgstr "Conditions d'entrée"
@@ -6238,6 +6256,10 @@ msgstr "Pour quel jour avez-vous besoin d'un transport"
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "Code ISO de la langue (par exemple, 'en', 'it', 'de')"
 
+msgid "If checked, allows to delete items in bulk"
+msgstr ""
+"Si cette case est cochée, elle permet de supprimer des éléments en bloc"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Si coché : affiche le genre pour chaque événement"
@@ -6306,6 +6328,9 @@ msgstr "Il y a déjà un membre avec ce numéro"
 
 msgid "This page performs checks on members' data"
 msgstr "Cette page effectue des contrôles sur les données des membres"
+
+msgid "This page shows deleted objects to restore"
+msgstr "Cette page présente les objets supprimés à restaurer"
 
 msgid "This page shows the prologues of the event"
 msgstr "Cette page résume les prologues de l'événement"
@@ -6717,6 +6742,10 @@ msgstr "vous pouvez les réviser, les éditer et les marquer comme assignés"
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Accédez à votre personnage <a href='%(url)s'>ici</a>"
 
+msgid "Are you sure? The items might be not recoverable"
+msgstr ""
+"Êtes-vous sûr ? Il se peut que les éléments ne soient pas récupérables"
+
 msgid "Describe exactly which participants are involved"
 msgstr "Décrire exactement quels sont les participants impliqués"
 
@@ -7081,6 +7110,11 @@ msgstr "Cette page résume les liens entre les personnages"
 
 msgid "This page shows the workshop questions for the event"
 msgstr "Cette page résume les questions posées lors de l'atelier"
+
+msgid "WARNING: deleted items might not be full recoverable"
+msgstr ""
+"AVERTISSEMENT : il est possible que les éléments supprimés ne puissent pas "
+"être récupérés dans leur intégralité"
 
 msgid "You have already sent a payment pending verification"
 msgstr "Vous avez déjà envoyé un paiement en attente de vérification"
@@ -9885,13 +9919,6 @@ msgid ""
 msgstr ""
 "Si cette case est cochée, la mise en forme est automatiquement supprimée "
 "lorsque le texte est collé dans l'éditeur WYSIWYG"
-
-msgid ""
-"If checked, shows the invoice approval menu item to manually confirm "
-"payments received"
-msgstr ""
-"Si cette case est cochée, l'option de menu Approbation de la facture est "
-"affichée pour confirmer manuellement les paiements reçus"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "

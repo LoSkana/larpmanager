@@ -477,6 +477,9 @@ msgstr "Celkové součty"
 msgid "Trait"
 msgstr "Trať"
 
+msgid "Trash"
+msgstr "Odpadkový koš"
+
 msgid "Users"
 msgstr "Uživatelé"
 
@@ -941,6 +944,9 @@ msgstr "Náhrady"
 
 msgid "Request"
 msgstr "Žádost"
+
+msgid "Restore"
+msgstr "Obnovení"
 
 msgid "Section"
 msgstr "Sekce"
@@ -1644,6 +1650,9 @@ msgstr "Kontaktujte nás"
 msgid "Containers"
 msgstr "Kontejnery"
 
+msgid "Deleted on"
+msgstr "Odstraněno dne"
+
 msgid "Deliveries"
 msgstr "Dodávky"
 
@@ -1895,6 +1904,9 @@ msgstr "Příjemce"
 
 msgid "Birth place"
 msgstr "Místo narození"
+
+msgid "Bulk delete"
+msgstr "Hromadné odstranění"
 
 msgid "Button text"
 msgstr "Text tlačítka"
@@ -3566,6 +3578,9 @@ msgstr "Nastavení typů úkolů"
 msgid "Show cancellations"
 msgstr "Zrušení výstavy"
 
+msgid "The trash is empty"
+msgstr "Koš je prázdný"
+
 msgid "Token Already Used"
 msgstr "Již použitý žeton"
 
@@ -4387,6 +4402,9 @@ msgstr "Předběžná registrace aktivní"
 
 msgid "Pre-registrations saved"
 msgstr "Předběžné registrace jsou uloženy"
+
+msgid "Recover deleted objects"
+msgstr "Obnovení odstraněných objektů"
 
 msgid "Registration conditions"
 msgstr "Vstupní podmínky"
@@ -6232,6 +6250,9 @@ msgstr "Na který den budete potřebovat dopravu"
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "kód jazyka ISO (např. 'en', 'it', 'de')"
 
+msgid "If checked, allows to delete items in bulk"
+msgstr "Pokud je zaškrtnuto, umožňuje hromadné mazání položek"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Pokud je zaškrtnuto: zobrazí žánr pro každou událost"
@@ -6300,6 +6321,9 @@ msgstr "Člen s tímto číslem již existuje"
 
 msgid "This page performs checks on members' data"
 msgstr "Tato stránka provádí kontroly údajů členů"
+
+msgid "This page shows deleted objects to restore"
+msgstr "Na této stránce jsou zobrazeny odstraněné objekty k obnovení"
 
 msgid "This page shows the prologues of the event"
 msgstr "Tato stránka shrnuje prology této události"
@@ -6700,6 +6724,9 @@ msgstr "si je můžete prohlédnout, upravit a označit jako přiřazené"
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Přístup ke své postavě <a href='%(url)s'>zde</a>"
 
+msgid "Are you sure? The items might be not recoverable"
+msgstr "Jste si jistý? Položky nemusí být možné obnovit"
+
 msgid "Describe exactly which participants are involved"
 msgstr "Přesně popište, kteří účastníci jsou zapojeni"
 
@@ -7039,6 +7066,9 @@ msgstr "Tato stránka shrnuje vazby mezi jednotlivými postavami"
 
 msgid "This page shows the workshop questions for the event"
 msgstr "Na této stránce jsou shrnuty otázky z workshopu"
+
+msgid "WARNING: deleted items might not be full recoverable"
+msgstr "UPOZORNĚNÍ: smazané položky nemusí být plně obnovitelné"
 
 msgid "You have already sent a payment pending verification"
 msgstr "Již jste odeslali platbu, která čeká na ověření"
@@ -9487,13 +9517,6 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, automaticky odstraní formátování při vkládání textu do "
 "editoru WYSIWYG"
-
-msgid ""
-"If checked, shows the invoice approval menu item to manually confirm "
-"payments received"
-msgstr ""
-"Pokud je zaškrtnuto, zobrazí se položka nabídky schválení faktury pro ruční "
-"potvrzení přijatých plateb"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "
