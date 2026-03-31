@@ -1546,20 +1546,6 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: Payment Invoices
-    descr: Pseudo-feature activated by payment_invoices configuration to show invoice
-      approval menu item
-    slug: payment_invoices
-    overall: true
-    placeholder: true
-    order: 0
-    after_text: ''
-    after_link: ''
-    hidden: true
-    module: accounting
-    dependencies: []
-- model: larpmanager.feature
-  fields:
     name: Activation
     descr: ''
     slug: exe_activation
@@ -1599,3 +1585,16 @@
     module: miscellany
     dependencies:
     - character
+- model: larpmanager.feature
+  fields:
+    name: Trash
+    descr: Pseudo-feature activated by allow_bulk_delete configuration to restore deleted items
+    slug: exe_trash
+    overall: true
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: accounting
+    dependencies: []

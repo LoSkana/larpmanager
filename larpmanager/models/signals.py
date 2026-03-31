@@ -682,6 +682,8 @@ def pre_save_character_update_status(sender: type, instance: Character, **kwargs
 @receiver(post_save, sender=Character, dispatch_uid="post_character_update_px_v1")
 def post_character_update_exp(sender: type, instance: Character, *args: Any, **kwargs: Any) -> None:
     """Calculate experience points for character after update."""
+    if instance.deleted:
+        return
     calculate_character_experience_points(instance)
 
 

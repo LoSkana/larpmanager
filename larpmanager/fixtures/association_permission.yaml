@@ -384,18 +384,6 @@
     module: accounting
 - model: larpmanager.associationpermission
   fields:
-    name: Invoices
-    descr: Manage invoices of payments and approve them
-    slug: exe_invoices
-    number: 33
-    config: null
-    active_if: payment_invoices
-    hidden: false
-    icon: file-invoice
-    feature: payment_invoices
-    module: accounting
-- model: larpmanager.associationpermission
-  fields:
     name: Check data
     descr: Check consistency of the participants' personal data
     slug: exe_membership_check
@@ -550,3 +538,15 @@
     icon: ''
     feature: exe_activation
     module: organization
+- model: larpmanager.associationpermission
+  fields:
+    name: Trash
+    descr: Recover deleted objects
+    slug: exe_trash
+    number: 2
+    config: null
+    active_if: allow_bulk_delete
+    hidden: false
+    icon: trash-can-arrow-up
+    feature: exe_trash
+    module: miscellany

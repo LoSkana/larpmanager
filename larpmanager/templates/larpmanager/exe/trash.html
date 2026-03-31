@@ -1,0 +1,50 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Trash" %} - {% trans "Organization" %}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows deleted objects to restore" %}
+{% endblock info %}
+{% block content %}
+    {% if deleted_items %}
+        {% for model_name, group in deleted_items.items %}
+            <h3>{{ group.label|capfirst }}</h3>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="model_type" value="{{ model_name }}">
+                <table class="go_datatable">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Name" %}</th>
+                            {% if group.has_event %}
+                                <th>{% trans "Event" %}</th>
+                            {% endif %}
+                            <th>{% trans "Deleted on" %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for obj in group.objects %}
+                            <tr>
+                                <td>{{ obj.name }}</td>
+                                {% if group.has_event %}<td>{{ obj.event }}</td>{% endif %}
+                                <td>{{ obj.deleted }}</td>
+                                <td>
+                                    <button type="submit" name="uuid" value="{{ obj.uuid }}">
+                                        <i class="fas fa-trash-can-arrow-up"></i>
+                                        {% trans "Restore" %}
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+        {% endfor %}
+    {% else %}
+        <p>
+            <i>{% trans "The trash is empty" %}</i>
+        </p>
+    {% endif %}
+{% endblock content %}

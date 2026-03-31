@@ -477,6 +477,9 @@ msgstr "Summen"
 msgid "Trait"
 msgstr "Traktat"
 
+msgid "Trash"
+msgstr "Papierkorb"
+
 msgid "Users"
 msgstr "Benutzer"
 
@@ -942,6 +945,9 @@ msgstr "Erstattungen"
 msgid "Request"
 msgstr "Anfrage"
 
+msgid "Restore"
+msgstr "Wiederherstellen"
+
 msgid "Section"
 msgstr "Abschnitt"
 
@@ -1380,9 +1386,6 @@ msgstr "Fähigkeiten"
 msgid "Algorithm"
 msgstr "Algorithmus"
 
-msgid "Approvals"
-msgstr "Zulassungen"
-
 msgid "Available"
 msgstr "Verfügbar"
 
@@ -1644,6 +1647,9 @@ msgstr "Kontakt"
 msgid "Containers"
 msgstr "Behältnisse"
 
+msgid "Deleted on"
+msgstr "Gelöscht am"
+
 msgid "Deliveries"
 msgstr "Lieferungen"
 
@@ -1895,6 +1901,9 @@ msgstr "Begünstigter"
 
 msgid "Birth place"
 msgstr "Ort der Geburt"
+
+msgid "Bulk delete"
+msgstr "Massenhaftes Löschen"
 
 msgid "Button text"
 msgstr "Text der Schaltfläche"
@@ -3566,6 +3575,9 @@ msgstr "Questtypen einrichten"
 msgid "Show cancellations"
 msgstr "Absagen von Veranstaltungen"
 
+msgid "The trash is empty"
+msgstr "Der Papierkorb ist leer"
+
 msgid "Token Already Used"
 msgstr "Bereits verwendetes Token"
 
@@ -4387,6 +4399,9 @@ msgstr "Vorregistrierung aktiv"
 
 msgid "Pre-registrations saved"
 msgstr "Vorregistrierungen gespeichert"
+
+msgid "Recover deleted objects"
+msgstr "Gelöschte Objekte wiederherstellen"
 
 msgid "Registration conditions"
 msgstr "Zulassungsbedingungen"
@@ -5468,9 +5483,6 @@ msgstr "Verwalten Sie die Art der Ereignisprologe"
 msgid "Manages registration cancellations"
 msgstr "Verwaltet die Stornierungen von Anmeldungen"
 
-msgid "Manually approve payments received"
-msgstr "Eingehende Zahlungen manuell genehmigen"
-
 msgid "Now you can create event templates"
 msgstr "Jetzt können Sie Veranstaltungsvorlagen erstellen"
 
@@ -6237,6 +6249,10 @@ msgstr "Für welchen Tag benötigen Sie einen Transport"
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "ISO-Sprachcode (z. B. 'en', 'it', 'de')"
 
+msgid "If checked, allows to delete items in bulk"
+msgstr ""
+"Wenn diese Option aktiviert ist, können Sie Objekte in großen Mengen löschen"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Wenn markiert: zeigt das Genre für jedes Ereignis an"
@@ -6305,6 +6321,9 @@ msgstr "Es gibt bereits ein Mitglied mit dieser Nummer"
 
 msgid "This page performs checks on members' data"
 msgstr "Auf dieser Seite werden die Daten der Mitglieder überprüft"
+
+msgid "This page shows deleted objects to restore"
+msgstr "Diese Seite zeigt gelöschte Objekte zur Wiederherstellung an"
 
 msgid "This page shows the prologues of the event"
 msgstr "Diese Seite fasst die Prologe der Veranstaltung zusammen"
@@ -6447,9 +6466,6 @@ msgstr "Wenn Sie Hilfe brauchen, lassen Sie es uns bitte wissen"
 
 msgid "Manage character inventories and their items"
 msgstr "Verwalten von Charakterbeständen und deren Gegenständen"
-
-msgid "Manage invoices of payments and approve them"
-msgstr "Verwaltung und Genehmigung von Rechnungen und Zahlungen"
 
 msgid "Manage participant questions and answer them"
 msgstr "Fragen der Teilnehmer verwalten und beantworten"
@@ -6718,6 +6734,10 @@ msgstr "Sie können sie überprüfen, bearbeiten und als zugewiesen markieren"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Rufen Sie Ihren Charakter <a href='%(url)s'>hier</a> auf"
+
+msgid "Are you sure? The items might be not recoverable"
+msgstr ""
+"Sind Sie sicher? Die Gegenstände sind möglicherweise nicht wiederherstellbar"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Beschreiben Sie genau, welche Teilnehmer beteiligt sind"
@@ -7087,6 +7107,11 @@ msgid "This page shows the workshop questions for the event"
 msgstr ""
 "Auf dieser Seite finden Sie eine Zusammenfassung der Fragen aus den "
 "Workshops der Veranstaltung"
+
+msgid "WARNING: deleted items might not be full recoverable"
+msgstr ""
+"WARNUNG: Gelöschte Objekte sind möglicherweise nicht vollständig "
+"wiederherstellbar"
 
 msgid "You have already sent a payment pending verification"
 msgstr ""
@@ -9947,13 +9972,6 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist, wird die Formatierung beim Einfügen von "
 "Text in den WYSIWYG-Editor automatisch entfernt"
-
-msgid ""
-"If checked, shows the invoice approval menu item to manually confirm "
-"payments received"
-msgstr ""
-"Wenn markiert, wird der Menüpunkt Rechnungsfreigabe angezeigt, um "
-"eingegangene Zahlungen manuell zu bestätigen"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "

@@ -21,7 +21,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.db import transaction
 from django.http import HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 
@@ -32,19 +33,107 @@ if TYPE_CHECKING:
 
     from larpmanager.models.base import BaseModel
 
-from larpmanager.cache.config import get_event_config
+import datetime
+
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityExp, AbilityTypeExp, DeliveryExp
+from larpmanager.models.form import WritingAnswer, WritingChoice
 from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.miscellanea import (
     WarehouseContainer,
     WarehouseItem,
     WarehouseTag,
 )
-from larpmanager.models.writing import Character, CharacterStatus, Faction, Plot, Prologue
+from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus, Faction, Plot, Prologue
+from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.exceptions import ReturnNowError
+
+RECOVERABLE_MODELS: dict[str, type] = {
+    "character": Character,
+    "plot": Plot,
+    "faction": Faction,
+    "quest": Quest,
+    "trait": Trait,
+    "ability": AbilityExp,
+    "warehouse_item": WarehouseItem,
+}
+
+
+def _check_delete_role(request: HttpRequest, context: dict) -> bool:
+    """Return True if the user has role required to bulk delete (admin or organizer)."""
+    if is_lm_admin(request):
+        return True
+    if 1 in context.get("association_role", {}):
+        return True
+    return any(1 in roles for roles in context.get("event_role", {}).values())
+
+
+def _require_role_delete(request: HttpRequest, context: dict) -> None:
+    """Raise PermissionDenied if the user has not role required to bulk delete."""
+    if not _check_delete_role(request, context):
+        raise PermissionDenied
+
+
+def _check_bulk_delete_enabled(context: dict) -> None:
+    """Raise PermissionDenied if bulk delete is not enabled for this association."""
+    if not get_association_config(context["association_id"], "allow_bulk_delete", default_value=False, context=context):
+        raise PermissionDenied
+
+
+def _add_bulk_delete_option(request: HttpRequest, context: dict) -> None:
+    """Append bulk delete option to context bulk list if enabled for the association and user has the required role."""
+    if not get_association_config(context["association_id"], "allow_bulk_delete", default_value=False, context=context):
+        return
+    if _check_delete_role(request, context):
+        objs = [{"uuid": 1, "name": _("Are you sure? The items might be not recoverable")}]
+        context["bulk"].append({"idx": Operations.DEL_BULK, "label": _("Delete"), "objs": objs})
+
+
+def _restore_writing_answers(element_id: int, deleted_at: Any) -> None:
+    """Restore soft-deleted WritingAnswers and WritingChoices for a writing element.
+
+    Only restores entries deleted within 1 second of the parent object's deletion
+    (i.e. cascade-deleted together with it) and whose question/option is still active.
+    """
+    window_start = deleted_at - datetime.timedelta(seconds=1)
+    window_end = deleted_at + datetime.timedelta(seconds=1)
+    for answer in WritingAnswer.all_objects.filter(
+        element_id=element_id,
+        deleted__range=(window_start, window_end),
+        question__deleted__isnull=True,
+    ):
+        answer.undelete()
+    for choice in WritingChoice.all_objects.filter(
+        element_id=element_id,
+        deleted__range=(window_start, window_end),
+        question__deleted__isnull=True,
+        option__deleted__isnull=True,
+    ):
+        choice.undelete()
+
+
+def restore_object(model_class: type, uuid: str) -> None:
+    """Undelete a soft-deleted object and reassign its sequential number if applicable.
+
+    For event-scoped writing elements, also restores any soft-deleted WritingAnswers
+    and WritingChoices whose question is still active.
+    """
+    with transaction.atomic():
+        obj = model_class.all_objects.select_for_update().get(uuid=uuid, deleted__isnull=False)
+        if hasattr(obj, "number"):
+            obj.number = None
+        deleted_at = obj.deleted
+        if isinstance(obj, Character):
+            # Restore cascade-deleted CharacterConfigs before undeleting the Character.
+            CharacterConfig.all_objects.filter(character=obj, deleted__isnull=False, deleted_by_cascade=True).update(
+                deleted=None, deleted_by_cascade=False
+            )
+        obj.undelete()
+        if hasattr(obj, "event"):
+            _restore_writing_answers(obj.pk, deleted_at)
 
 
 def _get_bulk_params(request: HttpRequest) -> tuple[list[str], int, int]:
@@ -108,23 +197,27 @@ class Operations:
     SET_CHAR_PROGRESS = 15
     SET_CHAR_ASSIGNED = 16
     SET_CHAR_STATUS = 17
+    DEL_BULK = 18
 
 
 def _create_bulk_logs(
-    context: dict, operation_name: int, operation_target: str | int, object_uuids: list[str], model_class: BaseModel
+    context: dict,
+    operation_name: int,
+    operation_target: str | int,
+    object_uuids: list[str],
+    model_class: BaseModel,
+    info: str | None = None,
 ) -> None:
     """Create individual log entries for each element in a bulk operation."""
-    # Get all objects that were affected by the bulk operation
     objects = model_class.objects.filter(uuid__in=object_uuids)
-
-    # Create a log entry for each affected object
+    log_info = info or f"operation_name: {operation_name}, operation_target: {operation_target}"
     for obj in objects:
         save_log(
             context=context,
             cls=model_class,
             element=obj,
             operation_type=LogOperationType.BULK,
-            info=f"operation_name: {operation_name}, operation_target: {operation_target}",
+            info=log_info,
         )
 
 
@@ -147,6 +240,17 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict, mode
     """
     # Extract bulk operation parameters from request
     object_uuids, operation_name, operation_target = _get_bulk_params(request)
+
+    # Handle delete separately: log before deletion so objects are still queryable
+    if operation_name == Operations.DEL_BULK:
+        _require_role_delete(request, context)
+        _check_bulk_delete_enabled(context)
+        try:
+            _create_bulk_logs(context, operation_name, operation_target, object_uuids, model_class, info="bulk delete")
+            model_class.objects.filter(uuid__in=object_uuids).delete()
+        except ObjectDoesNotExist:
+            return JsonResponse({"error": "not found"}, status=400)
+        return JsonResponse({"res": "ok"})
 
     # Validate that the requested operation is supported
     if operation_name not in operation_mapping:
@@ -246,6 +350,7 @@ def handle_bulk_items(request: HttpRequest, context: dict) -> None:
         {"idx": Operations.ADD_ITEM_TAG, "label": _("Add tag"), "objs": available_tags},
         {"idx": Operations.DEL_ITEM_TAG, "label": _("Remove tag"), "objs": available_tags},
     ]
+    _add_bulk_delete_option(request, context)
 
 
 def _get_chars(context: dict, character_uuids: list[str]) -> QuerySet[Character]:
@@ -432,6 +537,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
         context["bulk"].append(
             {"idx": Operations.SET_CHAR_STATUS, "label": _("Set character status"), "objs": status_choices},
         )
+    _add_bulk_delete_option(request, context)
 
 
 def exec_set_quest_type(
@@ -463,6 +569,7 @@ def handle_bulk_quest(request: HttpRequest, context: dict) -> None:
     context["bulk"] = [
         {"idx": Operations.SET_QUEST_TYPE, "label": _("Set quest type"), "objs": quest_types},
     ]
+    _add_bulk_delete_option(request, context)
 
 
 def exec_set_quest(
@@ -490,6 +597,7 @@ def handle_bulk_trait(request: HttpRequest, context: dict) -> None:
     context["bulk"] = [
         {"idx": Operations.SET_TRAIT_QUEST, "label": _("Set quest"), "objs": quests},
     ]
+    _add_bulk_delete_option(request, context)
 
 
 def exec_set_ability_type(
@@ -525,3 +633,4 @@ def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
     context["bulk"] = [
         {"idx": Operations.SET_ABILITY_TYPE, "label": _("Set ability type"), "objs": ability_types},
     ]
+    _add_bulk_delete_option(request, context)

@@ -516,18 +516,6 @@
     module: casting
 - model: larpmanager.eventpermission
   fields:
-    name: Approvals
-    descr: Manually approve payments received
-    slug: orga_invoices
-    number: 81
-    config: null
-    active_if: payment_invoices
-    hidden: false
-    icon: file-invoice
-    feature: payment_invoices
-    module: accounting
-- model: larpmanager.eventpermission
-  fields:
     name: Upload Expenses
     descr: Manage your event expenses and upload receipts
     slug: orga_expenses_my

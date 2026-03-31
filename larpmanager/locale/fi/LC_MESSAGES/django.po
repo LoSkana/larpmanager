@@ -477,6 +477,9 @@ msgstr "Yhteensä"
 msgid "Trait"
 msgstr "Ominaisuus"
 
+msgid "Trash"
+msgstr "Roskat"
+
 msgid "Users"
 msgstr "Käyttäjät"
 
@@ -942,6 +945,9 @@ msgstr "Palautukset"
 msgid "Request"
 msgstr "Pyyntö"
 
+msgid "Restore"
+msgstr "Palauta"
+
 msgid "Section"
 msgstr "Osio"
 
@@ -1380,9 +1386,6 @@ msgstr "Taidot"
 msgid "Algorithm"
 msgstr "Algoritmi"
 
-msgid "Approvals"
-msgstr "Hyväksynnät"
-
 msgid "Available"
 msgstr "Saatavilla"
 
@@ -1644,6 +1647,9 @@ msgstr "Ota yhteyttä"
 msgid "Containers"
 msgstr "Säiliöt"
 
+msgid "Deleted on"
+msgstr "Poistettu"
+
 msgid "Deliveries"
 msgstr "XP-jakamiset"
 
@@ -1895,6 +1901,9 @@ msgstr "Edunsaaja"
 
 msgid "Birth place"
 msgstr "Syntymäpaikka"
+
+msgid "Bulk delete"
+msgstr "Joukkopoisto"
 
 msgid "Button text"
 msgstr "Painikkeen teksti"
@@ -3566,6 +3575,9 @@ msgstr "Määritä tehtävätyypit"
 msgid "Show cancellations"
 msgstr "Näytä peruutukset"
 
+msgid "The trash is empty"
+msgstr "Roskakori on tyhjä"
+
 msgid "Token Already Used"
 msgstr "Token on jo käytetty"
 
@@ -4387,6 +4399,9 @@ msgstr "EnnakkoIlmoittautuminen aktiivinen"
 
 msgid "Pre-registrations saved"
 msgstr "Tallennetut ennakkoilmoittautumiset"
+
+msgid "Recover deleted objects"
+msgstr "Palauta poistetut kohteet"
 
 msgid "Registration conditions"
 msgstr "Ilmoittautumisehdot"
@@ -5468,9 +5483,6 @@ msgstr "Tapahtuman prologien tyypin hallinta"
 msgid "Manages registration cancellations"
 msgstr "Hallinnoi ilmoittautumisten peruutuksia"
 
-msgid "Manually approve payments received"
-msgstr "Hyväksy vastaanotetut maksut manuaalisesti"
-
 msgid "Now you can create event templates"
 msgstr "Nyt voit luoda tapahtumamalleja"
 
@@ -6232,6 +6244,9 @@ msgstr "Mille päivälle tarvitset kuljetuksen"
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "ISO-kielikoodi (esim. 'en', 'it', 'de')"
 
+msgid "If checked, allows to delete items in bulk"
+msgstr "Jos valintaruutu on valittuna, voit poistaa kohteita irtotavarana"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Jos valittuna: näyttää kunkin tapahtuman genren"
@@ -6300,6 +6315,9 @@ msgstr "Tällä numerolla on jo jäsen"
 
 msgid "This page performs checks on members' data"
 msgstr "Tällä sivulla suoritetaan jäsenten tietojen tarkistuksia"
+
+msgid "This page shows deleted objects to restore"
+msgstr "Tällä sivulla näytetään palautettavat poistetut kohteet"
 
 msgid "This page shows the prologues of the event"
 msgstr "Tämä sivu näyttää tapahtuman prologit"
@@ -6434,9 +6452,6 @@ msgstr "Jos tarvitset apua, kerro meille rohkeasti"
 
 msgid "Manage character inventories and their items"
 msgstr "Hallitse hahmojen varastoja ja niiden esineitä"
-
-msgid "Manage invoices of payments and approve them"
-msgstr "Maksulaskujen hallinnointi ja hyväksyminen"
 
 msgid "Manage participant questions and answer them"
 msgstr "Hallitse osallistujien kysymyksiä ja vastaa niihin"
@@ -6699,6 +6714,9 @@ msgstr "voit tarkastella, muokata ja merkitä ne osoitetuiksi"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Pääset hahmoosi <a href='%(url)s'>täältä</a>"
+
+msgid "Are you sure? The items might be not recoverable"
+msgstr "Oletko varma? Kohteita ei ehkä voida palauttaa"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Kuvaa tarkasti, ketkä osallistujat ovat mukana"
@@ -7041,6 +7059,9 @@ msgstr "Tämä sivu näyttää hahmojen väliset suhteet"
 
 msgid "This page shows the workshop questions for the event"
 msgstr "Tällä sivulla näkyvät tapahtuman työpajakysymykset"
+
+msgid "WARNING: deleted items might not be full recoverable"
+msgstr "VAROITUS: poistettuja kohteita ei ehkä voida palauttaa kokonaan"
 
 msgid "You have already sent a payment pending verification"
 msgstr "Olet jo lähettänyt maksun, joka odottaa vahvistusta"
@@ -9578,13 +9599,6 @@ msgid ""
 msgstr ""
 "Jos valittuna, muotoilu poistetaan automaattisesti, kun tekstiä liitetään "
 "WYSIWYG-editoriin"
-
-msgid ""
-"If checked, shows the invoice approval menu item to manually confirm "
-"payments received"
-msgstr ""
-"Jos valintaruutu on valittuna, näytetään laskun hyväksyntä -valikkokohta "
-"vastaanotettujen maksujen manuaalista vahvistamista varten"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "

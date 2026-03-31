@@ -477,6 +477,9 @@ msgstr "Totali"
 msgid "Trait"
 msgstr "Tratto"
 
+msgid "Trash"
+msgstr "Cestino"
+
 msgid "Users"
 msgstr "Utenti"
 
@@ -942,6 +945,9 @@ msgstr "Rimborsi"
 msgid "Request"
 msgstr "Richiesta"
 
+msgid "Restore"
+msgstr "Ripristino"
+
 msgid "Section"
 msgstr "Sezione"
 
@@ -1380,9 +1386,6 @@ msgstr "Abilità"
 msgid "Algorithm"
 msgstr "Algoritmo"
 
-msgid "Approvals"
-msgstr "Approvazioni"
-
 msgid "Available"
 msgstr "Disponibili"
 
@@ -1644,6 +1647,9 @@ msgstr "Contattaci"
 msgid "Containers"
 msgstr "Contenitori"
 
+msgid "Deleted on"
+msgstr "Cancellato il"
+
 msgid "Deliveries"
 msgstr "Consegne"
 
@@ -1895,6 +1901,9 @@ msgstr "Beneficiario"
 
 msgid "Birth place"
 msgstr "Luogo di nascita"
+
+msgid "Bulk delete"
+msgstr "Eliminazione massiva"
 
 msgid "Button text"
 msgstr "Testo del pulsante"
@@ -3566,6 +3575,9 @@ msgstr "Imposta i tipi di missione"
 msgid "Show cancellations"
 msgstr "Mostra disdette"
 
+msgid "The trash is empty"
+msgstr "Il cestino è vuoto"
+
 msgid "Token Already Used"
 msgstr "Gettone già utilizzato"
 
@@ -4387,6 +4399,9 @@ msgstr "Pre-iscrizione attiva"
 
 msgid "Pre-registrations saved"
 msgstr "Pre-iscrizioni salvate"
+
+msgid "Recover deleted objects"
+msgstr "Recupera gli oggetti eliminati"
 
 msgid "Registration conditions"
 msgstr "Condizioni iscrizione"
@@ -5468,9 +5483,6 @@ msgstr "Gestisci il tipo di prologo dell'evento"
 msgid "Manages registration cancellations"
 msgstr "Gestisci le cancellazioni delle iscrizioni"
 
-msgid "Manually approve payments received"
-msgstr "Approva manualmente i pagamenti ricevuti"
-
 msgid "Now you can create event templates"
 msgstr "Ora puoi creare modelli di eventi"
 
@@ -6232,6 +6244,9 @@ msgstr "Per quale giorno avrai bisogno del trasporto"
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "Codice lingua ISO (ad esempio, 'en', 'it', 'de')"
 
+msgid "If checked, allows to delete items in bulk"
+msgstr "Se selezionata, consente di eliminare gli elementi in blocco"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Se checkato: mostra il genere per ogni evento"
@@ -6300,6 +6315,9 @@ msgstr "C'è già un utente con questo numero"
 
 msgid "This page performs checks on members' data"
 msgstr "Questa pagina esegue controlli sui dati dei membri"
+
+msgid "This page shows deleted objects to restore"
+msgstr "Questa pagina mostra gli oggetti eliminati da ripristinare"
 
 msgid "This page shows the prologues of the event"
 msgstr "Questa pagina riepiloga i prologhi dell'evento"
@@ -6434,9 +6452,6 @@ msgstr "Se hai bisogno di una mano, faccelo sapere"
 
 msgid "Manage character inventories and their items"
 msgstr "Gestiscigli inventari dei personaggi e i loro oggetti"
-
-msgid "Manage invoices of payments and approve them"
-msgstr "Gestisci le ricevute dei pagamenti e approvale"
 
 msgid "Manage participant questions and answer them"
 msgstr "Gestisci le domande dei partecipanti e rispondigli"
@@ -6702,6 +6717,9 @@ msgstr "è possibile rivederli, modificarli e contrassegnarli come assegnati"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Accedi al tuo personaggio <a href='%(url)s'>qui</a>"
+
+msgid "Are you sure? The items might be not recoverable"
+msgstr "Sei sicuro? Gli elementi potrebbero non essere recuperabili"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Descrivi esattamente quali partecipanti sono coinvolti"
@@ -7047,6 +7065,11 @@ msgstr "Questa pagina riepiloga i legami tra i personaggi"
 
 msgid "This page shows the workshop questions for the event"
 msgstr "Questa pagina riepiloga le domande workshop dell'evento"
+
+msgid "WARNING: deleted items might not be full recoverable"
+msgstr ""
+"ATTENZIONE: gli elementi eliminati potrebbero non essere completamente "
+"recuperabili"
 
 msgid "You have already sent a payment pending verification"
 msgstr "Hai già inviato un pagamento in attesa di verifica"
@@ -9771,13 +9794,6 @@ msgid ""
 msgstr ""
 "Se selezionata, rimuove automaticamente la formattazione quando si incolla "
 "il testo nell'editor WYSIWYG"
-
-msgid ""
-"If checked, shows the invoice approval menu item to manually confirm "
-"payments received"
-msgstr ""
-"Se selezionata, mostra la voce di menu Approvazione fattura per confermare "
-"manualmente i pagamenti ricevuti"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "

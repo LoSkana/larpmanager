@@ -392,6 +392,15 @@ msgstr ""
 msgid "If checked: shows the tagline for each event"
 msgstr ""
 
+msgid "Bulk delete"
+msgstr ""
+
+msgid "If checked, allows to delete items in bulk"
+msgstr ""
+
+msgid "WARNING: deleted items might not be full recoverable"
+msgstr ""
+
 msgid "Old dashboard"
 msgstr ""
 
@@ -666,11 +675,6 @@ msgstr ""
 
 msgid ""
 "If checked: Participants must provide a receipt/invoice for manual payments"
-msgstr ""
-
-msgid ""
-"If checked, shows the invoice approval menu item to manually confirm "
-"payments received"
 msgstr ""
 
 msgid "VAT"
@@ -4218,6 +4222,9 @@ msgstr ""
 msgid "Upload"
 msgstr ""
 
+msgid "Restore"
+msgstr ""
+
 msgid ""
 "If your question is about a specific event, please select it! If  is a "
 "general question instead, please leave it blank."
@@ -6179,6 +6186,18 @@ msgid "This page summarizes the organization's custom translations"
 msgstr ""
 
 msgid "Translation"
+msgstr ""
+
+msgid "Trash"
+msgstr ""
+
+msgid "This page shows deleted objects to restore"
+msgstr ""
+
+msgid "Deleted on"
+msgstr ""
+
+msgid "The trash is empty"
 msgstr ""
 
 msgid "Url Shortner"
@@ -9344,9 +9363,6 @@ msgstr ""
 msgid "Configure payment methods available for participants"
 msgstr ""
 
-msgid "Manage invoices of payments and approve them"
-msgstr ""
-
 msgid "Check data"
 msgstr ""
 
@@ -9389,6 +9405,9 @@ msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
 
 msgid "Request activation of advanced mode for the organization"
+msgstr ""
+
+msgid "Recover deleted objects"
 msgstr ""
 
 msgid "Manage the event settings: name, description, dates, status"
@@ -9518,12 +9537,6 @@ msgid "Displays list of emails of signed-up participants"
 msgstr ""
 
 msgid "Manages and assigns tasks to characters"
-msgstr ""
-
-msgid "Approvals"
-msgstr ""
-
-msgid "Manually approve payments received"
 msgstr ""
 
 msgid "Upload Expenses"
@@ -9944,6 +9957,9 @@ msgid "First assignment"
 msgstr ""
 
 msgid "Assign a character to a registered participant"
+msgstr ""
+
+msgid "Are you sure? The items might be not recoverable"
 msgstr ""
 
 msgid "Move to container"

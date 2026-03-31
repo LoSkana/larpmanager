@@ -63,6 +63,11 @@ urlpatterns = [
         name="exe_log",
     ),
     path(
+        "manage/trash/",
+        views_ems.exe_trash,
+        name="exe_trash",
+    ),
+    path(
         "manage/urlshortner/",
         views_ems.exe_urlshortner,
         name="exe_urlshortner",

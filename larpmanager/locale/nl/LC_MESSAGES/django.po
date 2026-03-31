@@ -477,6 +477,9 @@ msgstr "Totalen"
 msgid "Trait"
 msgstr "Trek"
 
+msgid "Trash"
+msgstr "Vuilnis"
+
 msgid "Users"
 msgstr "Gebruikers"
 
@@ -942,6 +945,9 @@ msgstr "Terugbetalingen"
 msgid "Request"
 msgstr "Verzoek"
 
+msgid "Restore"
+msgstr "Herstel"
+
 msgid "Section"
 msgstr "Sectie"
 
@@ -1380,9 +1386,6 @@ msgstr "Capaciteiten"
 msgid "Algorithm"
 msgstr "Algoritme"
 
-msgid "Approvals"
-msgstr "Goedkeuringen"
-
 msgid "Available"
 msgstr "Beschikbaar"
 
@@ -1644,6 +1647,9 @@ msgstr "Neem contact met ons op"
 msgid "Containers"
 msgstr "Containers"
 
+msgid "Deleted on"
+msgstr "Verwijderd op"
+
 msgid "Deliveries"
 msgstr "Leveringen"
 
@@ -1895,6 +1901,9 @@ msgstr "Begunstigde"
 
 msgid "Birth place"
 msgstr "Geboorteplaats"
+
+msgid "Bulk delete"
+msgstr "Bulk verwijderen"
 
 msgid "Button text"
 msgstr "Knoptekst"
@@ -3566,6 +3575,9 @@ msgstr "Zoektochttypes instellen"
 msgid "Show cancellations"
 msgstr "Show annuleringen"
 
+msgid "The trash is empty"
+msgstr "De prullenbak is leeg"
+
 msgid "Token Already Used"
 msgstr "Reeds gebruikt token"
 
@@ -4387,6 +4399,9 @@ msgstr "Voorinschrijving actief"
 
 msgid "Pre-registrations saved"
 msgstr "Voorinschrijvingen opgeslagen"
+
+msgid "Recover deleted objects"
+msgstr "Verwijderde objecten herstellen"
 
 msgid "Registration conditions"
 msgstr "Voorwaarden"
@@ -5468,9 +5483,6 @@ msgstr "Het type proloog beheren"
 msgid "Manages registration cancellations"
 msgstr "Beheert annuleringen van registraties"
 
-msgid "Manually approve payments received"
-msgstr "Ontvangen betalingen handmatig goedkeuren"
-
 msgid "Now you can create event templates"
 msgstr "Nu kun je sjablonen voor evenementen maken"
 
@@ -6234,6 +6246,9 @@ msgstr "Voor welke dag heb je vervoer nodig"
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "ISO-taalcode (bijv. 'en', 'it', 'de')"
 
+msgid "If checked, allows to delete items in bulk"
+msgstr "Als deze optie is aangevinkt, kunnen items in bulk worden verwijderd"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Indien aangevinkt: toont het genre voor elk evenement"
@@ -6302,6 +6317,9 @@ msgstr "Er is al een lid met dit nummer"
 
 msgid "This page performs checks on members' data"
 msgstr "Deze pagina voert controles uit op de gegevens van leden"
+
+msgid "This page shows deleted objects to restore"
+msgstr "Deze pagina toont verwijderde objecten om te herstellen"
 
 msgid "This page shows the prologues of the event"
 msgstr "Deze pagina vat de prologen van het evenement samen"
@@ -6437,9 +6455,6 @@ msgstr "Als je hulp nodig hebt, laat het ons weten"
 
 msgid "Manage character inventories and their items"
 msgstr "Beheer personage-inventarissen en hun items"
-
-msgid "Manage invoices of payments and approve them"
-msgstr "Facturen van betalingen beheren en goedkeuren"
 
 msgid "Manage participant questions and answer them"
 msgstr "Vragen van deelnemers beheren en beantwoorden"
@@ -6707,6 +6722,9 @@ msgstr "je kunt ze bekijken, bewerken en markeren als toegewezen"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Krijg toegang tot je personage <a href='%(url)s'>hier</a>"
+
+msgid "Are you sure? The items might be not recoverable"
+msgstr "Weet je het zeker? De items kunnen misschien niet worden teruggehaald"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Beschrijf precies welke deelnemers betrokken zijn"
@@ -7048,6 +7066,11 @@ msgstr "Deze pagina geeft een overzicht van de verbanden tussen de personages"
 
 msgid "This page shows the workshop questions for the event"
 msgstr "Deze pagina vat de workshopvragen van het evenement samen"
+
+msgid "WARNING: deleted items might not be full recoverable"
+msgstr ""
+"WAARSCHUWING: verwijderde items kunnen mogelijk niet volledig worden "
+"hersteld"
 
 msgid "You have already sent a payment pending verification"
 msgstr "Je hebt al een betaling verzonden in afwachting van verificatie"
@@ -9752,13 +9775,6 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, wordt opmaak automatisch verwijderd wanneer "
 "tekst in de WYSIWYG-editor wordt geplakt"
-
-msgid ""
-"If checked, shows the invoice approval menu item to manually confirm "
-"payments received"
-msgstr ""
-"Als deze optie is aangevinkt, wordt het menu-item Factuurgoedkeuring "
-"weergegeven om ontvangen betalingen handmatig te bevestigen"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "

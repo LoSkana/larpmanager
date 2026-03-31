@@ -477,6 +477,9 @@ msgstr "Totalt"
 msgid "Trait"
 msgstr "Trakt"
 
+msgid "Trash"
+msgstr "Skräp"
+
 msgid "Users"
 msgstr "Användare"
 
@@ -942,6 +945,9 @@ msgstr "Återbetalningar"
 msgid "Request"
 msgstr "Begäran"
 
+msgid "Restore"
+msgstr "Återställ"
+
 msgid "Section"
 msgstr "Sektion"
 
@@ -1380,9 +1386,6 @@ msgstr "Förmågor"
 msgid "Algorithm"
 msgstr "Algoritm"
 
-msgid "Approvals"
-msgstr "Godkännande"
-
 msgid "Available"
 msgstr "Tillgänglig"
 
@@ -1644,6 +1647,9 @@ msgstr "Kontakta oss"
 msgid "Containers"
 msgstr "Behållare"
 
+msgid "Deleted on"
+msgstr "Raderad på"
+
 msgid "Deliveries"
 msgstr "Leveranser"
 
@@ -1895,6 +1901,9 @@ msgstr "Förmånstagare"
 
 msgid "Birth place"
 msgstr "Födelseort"
+
+msgid "Bulk delete"
+msgstr "Bulk radering"
 
 msgid "Button text"
 msgstr "Knapptext"
@@ -3566,6 +3575,9 @@ msgstr "Ange typer av uppdrag"
 msgid "Show cancellations"
 msgstr "Avbokningar av visningar"
 
+msgid "The trash is empty"
+msgstr "Papperskorgen är tom"
+
 msgid "Token Already Used"
 msgstr "Token redan använd"
 
@@ -4387,6 +4399,9 @@ msgstr "Förhandsregistrering aktiv"
 
 msgid "Pre-registrations saved"
 msgstr "Förhandsanmälningar sparade"
+
+msgid "Recover deleted objects"
+msgstr "Återställ raderade objekt"
 
 msgid "Registration conditions"
 msgstr "Villkor för tillträde"
@@ -5468,9 +5483,6 @@ msgstr "Hantera typen av prologer för evenemang"
 msgid "Manages registration cancellations"
 msgstr "Hanterar avbokningar av registreringar"
 
-msgid "Manually approve payments received"
-msgstr "Manuellt godkänna mottagna betalningar"
-
 msgid "Now you can create event templates"
 msgstr "Nu kan du skapa eventmallar"
 
@@ -6234,6 +6246,9 @@ msgstr "För vilken dag behöver du transport"
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "ISO-språkkod (t.ex. 'en', 'it', 'de')"
 
+msgid "If checked, allows to delete items in bulk"
+msgstr "Om markerad, gör det möjligt att radera objekt i bulk"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Om markerat: visar genren för varje evenemang"
@@ -6302,6 +6317,9 @@ msgstr "Det finns redan en medlem med detta nummer"
 
 msgid "This page performs checks on members' data"
 msgstr "Denna sida utför kontroller av medlemmarnas uppgifter"
+
+msgid "This page shows deleted objects to restore"
+msgstr "Denna sida visar borttagna objekt som ska återställas"
 
 msgid "This page shows the prologues of the event"
 msgstr "Denna sida sammanfattar prologerna för evenemanget"
@@ -6436,9 +6454,6 @@ msgstr "Om du behöver hjälp är du välkommen att höra av dig till oss"
 
 msgid "Manage character inventories and their items"
 msgstr "Hantera karaktärernas inventarier och deras föremål"
-
-msgid "Manage invoices of payments and approve them"
-msgstr "Hantera fakturor och betalningar och godkänna dem"
 
 msgid "Manage participant questions and answer them"
 msgstr "Hantera deltagarnas frågor och besvara dem"
@@ -6700,6 +6715,9 @@ msgstr "du kan granska, redigera och markera dem som tilldelade"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Få tillgång till din karaktär <a href='%(url)s'>här</a>"
+
+msgid "Are you sure? The items might be not recoverable"
+msgstr "Är du säker på det? Föremålen kanske inte kan återställas"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Beskriv exakt vilka deltagare som är involverade"
@@ -7037,6 +7055,9 @@ msgstr "Denna sida sammanfattar länkarna mellan rollpersonerna"
 
 msgid "This page shows the workshop questions for the event"
 msgstr "På denna sida sammanfattas workshopfrågorna från evenemanget"
+
+msgid "WARNING: deleted items might not be full recoverable"
+msgstr "VARNING: raderade objekt kanske inte kan återställas helt och hållet"
 
 msgid "You have already sent a payment pending verification"
 msgstr "Du har redan skickat en betalning som väntar på verifiering"
@@ -9589,13 +9610,6 @@ msgid ""
 msgstr ""
 "Om markerad, tas formateringen automatiskt bort när du klistrar in text i "
 "WYSIWYG-redigeraren"
-
-msgid ""
-"If checked, shows the invoice approval menu item to manually confirm "
-"payments received"
-msgstr ""
-"Om markerad, visar menyalternativet för fakturagodkännande för att manuellt "
-"bekräfta mottagna betalningar"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "

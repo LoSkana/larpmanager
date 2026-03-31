@@ -477,6 +477,9 @@ msgstr "Totalsum"
 msgid "Trait"
 msgstr "Trakt"
 
+msgid "Trash"
+msgstr "Søppel"
+
 msgid "Users"
 msgstr "Brukere"
 
@@ -942,6 +945,9 @@ msgstr "Refusjon"
 msgid "Request"
 msgstr "Forespørsel"
 
+msgid "Restore"
+msgstr "Gjenopprett"
+
 msgid "Section"
 msgstr "Seksjon"
 
@@ -1380,9 +1386,6 @@ msgstr "Evner"
 msgid "Algorithm"
 msgstr "Algoritme"
 
-msgid "Approvals"
-msgstr "Godkjenninger"
-
 msgid "Available"
 msgstr "Tilgjengelig"
 
@@ -1644,6 +1647,9 @@ msgstr "Kontakt oss"
 msgid "Containers"
 msgstr "Beholdere"
 
+msgid "Deleted on"
+msgstr "Slettet på"
+
 msgid "Deliveries"
 msgstr "Leveranser"
 
@@ -1895,6 +1901,9 @@ msgstr "Mottaker"
 
 msgid "Birth place"
 msgstr "Fødested"
+
+msgid "Bulk delete"
+msgstr "Bulk-sletting"
 
 msgid "Button text"
 msgstr "Knappenes tekst"
@@ -3566,6 +3575,9 @@ msgstr "Sett opp oppdragstyper"
 msgid "Show cancellations"
 msgstr "Avlysninger av forestillinger"
 
+msgid "The trash is empty"
+msgstr "Søppelet er tomt"
+
 msgid "Token Already Used"
 msgstr "Token allerede brukt"
 
@@ -4387,6 +4399,9 @@ msgstr "Forhåndsregistrering aktiv"
 
 msgid "Pre-registrations saved"
 msgstr "Forhåndsregistreringene er lagret"
+
+msgid "Recover deleted objects"
+msgstr "Gjenopprett slettede objekter"
 
 msgid "Registration conditions"
 msgstr "Opptaksvilkår"
@@ -5468,9 +5483,6 @@ msgstr "Administrer typen hendelsesprologer"
 msgid "Manages registration cancellations"
 msgstr "Håndterer avbestillinger av registreringer"
 
-msgid "Manually approve payments received"
-msgstr "Godkjenn mottatte betalinger manuelt"
-
 msgid "Now you can create event templates"
 msgstr "Nå kan du opprette hendelsesmaler"
 
@@ -6234,6 +6246,9 @@ msgstr "For hvilken dag trenger du transport"
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "ISO-språkkode (f.eks. 'en', 'it', 'de')"
 
+msgid "If checked, allows to delete items in bulk"
+msgstr "Hvis avkrysset, kan du slette elementer i bulk"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Hvis avkrysset: viser sjangeren for hvert arrangement"
@@ -6302,6 +6317,9 @@ msgstr "Det er allerede et medlem med dette nummeret"
 
 msgid "This page performs checks on members' data"
 msgstr "Denne siden utfører kontroller av medlemmenes data"
+
+msgid "This page shows deleted objects to restore"
+msgstr "Denne siden viser slettede objekter som skal gjenopprettes"
 
 msgid "This page shows the prologues of the event"
 msgstr "Denne siden oppsummerer arrangementets prologer"
@@ -6437,9 +6455,6 @@ msgstr "Hvis du trenger hjelp, er du velkommen til å gi oss beskjed"
 
 msgid "Manage character inventories and their items"
 msgstr "Administrere karakterbeholdninger og deres gjenstander"
-
-msgid "Manage invoices of payments and approve them"
-msgstr "Administrere og godkjenne fakturaer og betalinger"
 
 msgid "Manage participant questions and answer them"
 msgstr "Håndtere spørsmål fra deltakerne og besvare dem"
@@ -6701,6 +6716,9 @@ msgstr "du kan gå gjennom, redigere og markere dem som tildelt"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Få tilgang til karakteren din <a href='%(url)s'>her</a>"
+
+msgid "Are you sure? The items might be not recoverable"
+msgstr "Er du sikker? Gjenstandene kan kanskje ikke gjenopprettes"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Beskriv nøyaktig hvilke deltakere som er involvert"
@@ -7041,6 +7059,11 @@ msgstr "Denne siden oppsummerer koblingene mellom karakterene"
 
 msgid "This page shows the workshop questions for the event"
 msgstr "Denne siden oppsummerer spørsmålene fra workshopen"
+
+msgid "WARNING: deleted items might not be full recoverable"
+msgstr ""
+"ADVARSEL: Det er ikke sikkert at slettede elementer kan gjenopprettes i sin "
+"helhet"
 
 msgid "You have already sent a payment pending verification"
 msgstr "Du har allerede sendt en betaling i påvente av bekreftelse"
@@ -9572,13 +9595,6 @@ msgid ""
 msgstr ""
 "Hvis avkrysset, fjernes formateringen automatisk når du limer inn tekst i "
 "WYSIWYG-redigeringsprogrammet"
-
-msgid ""
-"If checked, shows the invoice approval menu item to manually confirm "
-"payments received"
-msgstr ""
-"Hvis avkrysset, vises menyvalget for fakturagodkjenning for manuell "
-"bekreftelse av mottatte betalinger"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "
