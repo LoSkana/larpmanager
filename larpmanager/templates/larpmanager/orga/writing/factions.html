@@ -21,6 +21,9 @@
     {% if features.user_character %}
         <th>{% trans "Selectable" %}</th>
     {% endif %}
+    {% if features.ensemble %}
+        <th>{% trans "Color" %}</th>
+    {% endif %}
     {% include "elements/writing/questions_header.html" %}
     <th class="characters">{% trans "Characters" %}</th>
     <th class="stats stats-characters">
@@ -53,6 +56,16 @@
             {% if features.user_character %}
                 <td>
                     {% if el.selectable %}<i class="fa-solid fa-check"></i>{% endif %}
+                </td>
+            {% endif %}
+            {% if features.ensemble %}
+                <td>
+                    {% if el.color %}
+                        <div style="width: 40px;
+                                    height: 20px;
+                                    background-color: {{ el.color }};
+                                    border-radius: 3px"></div>
+                    {% endif %}
                 </td>
             {% endif %}
             {% include "elements/writing/questions_body.html" %}

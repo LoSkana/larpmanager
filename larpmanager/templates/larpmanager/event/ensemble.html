@@ -44,6 +44,11 @@
             {% for ch in char_list %}
                 <div class="ens-book-entry"
                      data-search="{{ ch.name|lower }} {{ ch.title|lower }} {{ ch.teaser|lower|striptags }}">
+                    {% if ch.faction_colors %}
+                        <div class="ens-faction-bar">
+                            {% for f in ch.faction_colors %}<div style="flex:1;background-color:{{ f.color }};"></div>{% endfor %}
+                        </div>
+                    {% endif %}
                     <div class="ens-book-cover">
                         {% get_char_profile ch as profile_url %}
                         <img src="{{ profile_url }}" alt="{{ ch.name }}" loading="lazy">
@@ -75,6 +80,11 @@
             {% for ch in char_list %}
                 <div class="ens-card"
                      data-search="{{ ch.name|lower }} {{ ch.title|lower }} {{ ch.teaser|lower|striptags }}">
+                    {% if ch.faction_colors %}
+                        <div class="ens-faction-bar">
+                            {% for f in ch.faction_colors %}<div style="flex:1;background-color:{{ f.color }};"></div>{% endfor %}
+                        </div>
+                    {% endif %}
                     <div class="ens-card-portrait">
                         {% get_char_profile ch as profile_url %}
                         <img src="{{ profile_url }}" alt="{{ ch.name }}">
@@ -185,10 +195,20 @@
         .ensemble-view { display: none; }
         .ensemble-view.active { display: block; }
         #ensemble-cards.active { display: flex; flex-wrap: wrap; gap: 1rem; }
+        /* Faction color bar */
+        .ens-faction-bar {
+            display: flex;
+            width: 100%;
+            height: 5px;
+            border-radius: 2px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+        }
         /* Book mode */
         .ens-book-entry {
             display: flex;
-            gap: 1.25rem;
+            flex-wrap: wrap;
+            gap: 0 1.25rem;
             padding: 1.25rem 0;
             border-bottom: 1px solid #e0e0e0;
         }

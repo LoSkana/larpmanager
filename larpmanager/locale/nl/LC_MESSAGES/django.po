@@ -338,6 +338,9 @@ msgstr "Controleer"
 msgid "Close"
 msgstr "Gesloten"
 
+msgid "Color"
+msgstr "Kleur"
+
 msgid "Cover"
 msgstr "Omslag"
 

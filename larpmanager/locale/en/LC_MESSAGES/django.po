@@ -4679,6 +4679,9 @@ msgstr ""
 msgid "Indicates whether it can be selected by participants"
 msgstr ""
 
+msgid "Color"
+msgstr ""
+
 msgid "By"
 msgstr ""
 

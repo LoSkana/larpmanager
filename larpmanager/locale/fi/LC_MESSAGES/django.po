@@ -338,6 +338,9 @@ msgstr "Tarkista"
 msgid "Close"
 msgstr "Sulje"
 
+msgid "Color"
+msgstr "Väri"
+
 msgid "Cover"
 msgstr "Kansikuva"
 

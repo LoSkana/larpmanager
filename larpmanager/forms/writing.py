@@ -399,6 +399,12 @@ class OrgaFactionForm(WritingForm, BaseWritingForm):
         else:
             self.reorder_field("selectable")
 
+        # Handle color field based on ensemble feature
+        if "ensemble" not in self.params.get("features"):
+            self.delete_field("color")
+        else:
+            self.reorder_field("color")
+
         self._init_special_fields()
 
         # Configure faction type help text with descriptions
