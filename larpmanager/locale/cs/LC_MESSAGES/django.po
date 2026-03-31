@@ -1386,6 +1386,9 @@ msgstr "Schopnosti"
 msgid "Algorithm"
 msgstr "Algoritmus"
 
+msgid "Approvals"
+msgstr "Schválení"
+
 msgid "Available"
 msgstr "Dostupné na"
 
@@ -5483,6 +5486,9 @@ msgstr "Správa typu prologů událostí"
 msgid "Manages registration cancellations"
 msgstr "spravuje zrušení registrace"
 
+msgid "Manually approve payments received"
+msgstr "Ruční schvalování přijatých plateb"
+
 msgid "Now you can create event templates"
 msgstr "Nyní můžete vytvářet šablony událostí"
 
@@ -6452,6 +6458,9 @@ msgstr "Pokud potřebujete pomoc, neváhejte nám dát vědět"
 
 msgid "Manage character inventories and their items"
 msgstr "Správa inventáře postav a jejich předmětů"
+
+msgid "Manage invoices of payments and approve them"
+msgstr "Správa faktur a jejich schvalování"
 
 msgid "Manage participant questions and answer them"
 msgstr "Správa dotazů účastníků a jejich zodpovídání"

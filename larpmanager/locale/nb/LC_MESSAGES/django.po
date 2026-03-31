@@ -1386,6 +1386,9 @@ msgstr "Evner"
 msgid "Algorithm"
 msgstr "Algoritme"
 
+msgid "Approvals"
+msgstr "Godkjenninger"
+
 msgid "Available"
 msgstr "Tilgjengelig"
 
@@ -5483,6 +5486,9 @@ msgstr "Administrer typen hendelsesprologer"
 msgid "Manages registration cancellations"
 msgstr "Håndterer avbestillinger av registreringer"
 
+msgid "Manually approve payments received"
+msgstr "Godkjenn mottatte betalinger manuelt"
+
 msgid "Now you can create event templates"
 msgstr "Nå kan du opprette hendelsesmaler"
 
@@ -6455,6 +6461,9 @@ msgstr "Hvis du trenger hjelp, er du velkommen til å gi oss beskjed"
 
 msgid "Manage character inventories and their items"
 msgstr "Administrere karakterbeholdninger og deres gjenstander"
+
+msgid "Manage invoices of payments and approve them"
+msgstr "Administrere og godkjenne fakturaer og betalinger"
 
 msgid "Manage participant questions and answer them"
 msgstr "Håndtere spørsmål fra deltakerne og besvare dem"

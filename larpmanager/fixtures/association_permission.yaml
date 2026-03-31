@@ -384,6 +384,18 @@
     module: accounting
 - model: larpmanager.associationpermission
   fields:
+    name: Invoices
+    descr: Manage invoices of payments and approve them
+    slug: exe_invoices
+    number: 33
+    config: null
+    active_if: payment_invoices
+    hidden: false
+    icon: file-invoice
+    feature: payment_invoices
+    module: accounting
+- model: larpmanager.associationpermission
+  fields:
     name: Check data
     descr: Check consistency of the participants' personal data
     slug: exe_membership_check

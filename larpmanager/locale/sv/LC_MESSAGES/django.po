@@ -1386,6 +1386,9 @@ msgstr "Förmågor"
 msgid "Algorithm"
 msgstr "Algoritm"
 
+msgid "Approvals"
+msgstr "Godkännande"
+
 msgid "Available"
 msgstr "Tillgänglig"
 
@@ -5483,6 +5486,9 @@ msgstr "Hantera typen av prologer för evenemang"
 msgid "Manages registration cancellations"
 msgstr "Hanterar avbokningar av registreringar"
 
+msgid "Manually approve payments received"
+msgstr "Manuellt godkänna mottagna betalningar"
+
 msgid "Now you can create event templates"
 msgstr "Nu kan du skapa eventmallar"
 
@@ -6454,6 +6460,9 @@ msgstr "Om du behöver hjälp är du välkommen att höra av dig till oss"
 
 msgid "Manage character inventories and their items"
 msgstr "Hantera karaktärernas inventarier och deras föremål"
+
+msgid "Manage invoices of payments and approve them"
+msgstr "Hantera fakturor och betalningar och godkänna dem"
 
 msgid "Manage participant questions and answer them"
 msgstr "Hantera deltagarnas frågor och besvara dem"

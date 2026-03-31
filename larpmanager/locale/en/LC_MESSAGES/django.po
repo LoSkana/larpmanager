@@ -9363,6 +9363,9 @@ msgstr ""
 msgid "Configure payment methods available for participants"
 msgstr ""
 
+msgid "Manage invoices of payments and approve them"
+msgstr ""
+
 msgid "Check data"
 msgstr ""
 
@@ -9537,6 +9540,12 @@ msgid "Displays list of emails of signed-up participants"
 msgstr ""
 
 msgid "Manages and assigns tasks to characters"
+msgstr ""
+
+msgid "Approvals"
+msgstr ""
+
+msgid "Manually approve payments received"
 msgstr ""
 
 msgid "Upload Expenses"

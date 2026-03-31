@@ -1386,6 +1386,9 @@ msgstr "Capacités"
 msgid "Algorithm"
 msgstr "Algorithme"
 
+msgid "Approvals"
+msgstr "Agréments"
+
 msgid "Available"
 msgstr "Disponible"
 
@@ -5484,6 +5487,9 @@ msgstr "Gérer le type de prologues d'événements"
 msgid "Manages registration cancellations"
 msgstr "Gestion des annulations d'inscription"
 
+msgid "Manually approve payments received"
+msgstr "Approuver manuellement les paiements reçus"
+
 msgid "Now you can create event templates"
 msgstr "Vous pouvez désormais créer des modèles d'événements"
 
@@ -6463,6 +6469,9 @@ msgstr ""
 
 msgid "Manage character inventories and their items"
 msgstr "Gérer les inventaires des personnages et leurs objets"
+
+msgid "Manage invoices of payments and approve them"
+msgstr "Gérer les factures et les paiements et les approuver"
 
 msgid "Manage participant questions and answer them"
 msgstr "Gérer les questions des participants et y répondre"

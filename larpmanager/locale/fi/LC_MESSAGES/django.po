@@ -1386,6 +1386,9 @@ msgstr "Taidot"
 msgid "Algorithm"
 msgstr "Algoritmi"
 
+msgid "Approvals"
+msgstr "Hyväksynnät"
+
 msgid "Available"
 msgstr "Saatavilla"
 
@@ -5483,6 +5486,9 @@ msgstr "Tapahtuman prologien tyypin hallinta"
 msgid "Manages registration cancellations"
 msgstr "Hallinnoi ilmoittautumisten peruutuksia"
 
+msgid "Manually approve payments received"
+msgstr "Hyväksy vastaanotetut maksut manuaalisesti"
+
 msgid "Now you can create event templates"
 msgstr "Nyt voit luoda tapahtumamalleja"
 
@@ -6452,6 +6458,9 @@ msgstr "Jos tarvitset apua, kerro meille rohkeasti"
 
 msgid "Manage character inventories and their items"
 msgstr "Hallitse hahmojen varastoja ja niiden esineitä"
+
+msgid "Manage invoices of payments and approve them"
+msgstr "Maksulaskujen hallinnointi ja hyväksyminen"
 
 msgid "Manage participant questions and answer them"
 msgstr "Hallitse osallistujien kysymyksiä ja vastaa niihin"

@@ -1386,6 +1386,9 @@ msgstr "Capaciteiten"
 msgid "Algorithm"
 msgstr "Algoritme"
 
+msgid "Approvals"
+msgstr "Goedkeuringen"
+
 msgid "Available"
 msgstr "Beschikbaar"
 
@@ -5483,6 +5486,9 @@ msgstr "Het type proloog beheren"
 msgid "Manages registration cancellations"
 msgstr "Beheert annuleringen van registraties"
 
+msgid "Manually approve payments received"
+msgstr "Ontvangen betalingen handmatig goedkeuren"
+
 msgid "Now you can create event templates"
 msgstr "Nu kun je sjablonen voor evenementen maken"
 
@@ -6455,6 +6461,9 @@ msgstr "Als je hulp nodig hebt, laat het ons weten"
 
 msgid "Manage character inventories and their items"
 msgstr "Beheer personage-inventarissen en hun items"
+
+msgid "Manage invoices of payments and approve them"
+msgstr "Facturen van betalingen beheren en goedkeuren"
 
 msgid "Manage participant questions and answer them"
 msgstr "Vragen van deelnemers beheren en beantwoorden"

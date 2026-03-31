@@ -1386,6 +1386,9 @@ msgstr "Umiejętności"
 msgid "Algorithm"
 msgstr "Algorytm"
 
+msgid "Approvals"
+msgstr "Zatwierdzenia"
+
 msgid "Available"
 msgstr "Dostępne"
 
@@ -5483,6 +5486,9 @@ msgstr "Zarządzanie typem prologów wydarzeń"
 msgid "Manages registration cancellations"
 msgstr "Zarządzanie anulowaniem rejestracji"
 
+msgid "Manually approve payments received"
+msgstr "Ręczne zatwierdzanie otrzymanych płatności"
+
 msgid "Now you can create event templates"
 msgstr "Teraz możesz tworzyć szablony wydarzeń"
 
@@ -6452,6 +6458,9 @@ msgstr "Jeśli potrzebujesz pomocy, daj nam znać"
 
 msgid "Manage character inventories and their items"
 msgstr "Zarządzanie zapasami postaci i ich przedmiotami"
+
+msgid "Manage invoices of payments and approve them"
+msgstr "Zarządzanie fakturami i płatnościami oraz ich zatwierdzanie"
 
 msgid "Manage participant questions and answer them"
 msgstr "Zarządzanie pytaniami uczestników i odpowiadanie na nie"
