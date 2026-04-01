@@ -2975,6 +2975,9 @@ msgstr "Usługi wahadłowe"
 msgid "Start algorithm"
 msgstr "Algorytm startowy"
 
+msgid "The rule's name"
+msgstr "Nazwa reguły"
+
 msgid "Ticket selected"
 msgstr "Wybrany bilet"
 
@@ -3755,6 +3758,9 @@ msgstr "Anulowanie rejestracji"
 msgid "Support maintainers"
 msgstr "Wsparcie dla opiekunów"
 
+msgid "The modifier's name"
+msgstr "Nazwa modyfikatora"
+
 msgid "Treasury appointees"
 msgstr "Osoby mianowane przez Ministerstwo Skarbu"
 
@@ -4442,6 +4448,12 @@ msgstr "Co ty tu robisz"
 msgid "You have made a mistake"
 msgstr "Popełniłeś błąd"
 
+msgid "(Optional) Display order"
+msgstr "(Opcjonalnie) Kolejność wyświetlania"
+
+msgid "Amount for the operation"
+msgstr "Kwota za operację"
+
 msgid "Association Translations"
 msgstr "Tłumaczenia stowarzyszeniowe"
 
@@ -4977,6 +4989,9 @@ msgstr "Teraz możesz tworzyć postacie"
 
 msgid "Number of tickets to be drawn"
 msgstr "Liczba losów do rozlosowania"
+
+msgid "Operation: ADD, SUB, MUL, DIV"
+msgstr "Działanie: ADD, SUB, MUL, DIV"
 
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
@@ -5561,6 +5576,9 @@ msgstr "aby potwierdzić, przejdź do płatności"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>odpowiedź tutaj</a>)"
+
+msgid "(Optional) Cost (0 = auto assigned)"
+msgstr "(Opcjonalnie) Koszt (0 = przypisany automatycznie)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Opcjonalnie) Opis biletu"
@@ -6165,6 +6183,9 @@ msgstr "umożliwi korzystanie z funkcji specyficznych dla danego kraju"
 msgid "will be displayed on the main event page"
 msgstr "będą wyświetlane na głównej stronie wydarzenia"
 
+msgid "(Optional) Ability names, comma-separated"
+msgstr "(Opcjonalnie) Nazwy możliwości, oddzielone przecinkami"
+
 #, python-format
 msgid "<b>Lite Mode</b>: %(progress)s%% complete"
 msgstr "<b>Tryb uproszczony</b>: %(progress)s%% ukończony"
@@ -6631,6 +6652,9 @@ msgstr "Suma płatności otrzymanych za pomocą środków płatniczych"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Tekst wyświetlany na początku wszystkich arkuszy postaci"
+
+msgid "The character field of computed type to update"
+msgstr "Pole znakowe obliczanego typu do aktualizacji"
 
 msgid "This page shows all log entries for this event"
 msgstr ""
@@ -7177,6 +7201,9 @@ msgstr "Zostałeś obdarowany rejestracją na to wydarzenie przez"
 msgid "You have granted data sharing with this organisation!"
 msgstr "Użytkownik wyraził zgodę na udostępnianie danych tej organizacji!"
 
+msgid "(Optional) Prerequisite ability names, comma-separated"
+msgstr "(Opcjonalnie) Nazwy wymaganych zdolności, oddzielone przecinkami"
+
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr "Chwytliwa krótka fraza lub slogan opisujący wydarzenie"
 
@@ -7515,6 +7542,9 @@ msgstr "Unikalny numer karty członkowskiej przypisany przez organizację"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Przekroczono maksymalną liczbę opcji do wyboru"
+
+msgid "(Optional) Required character option names, comma-separated"
+msgstr "(Opcjonalnie) Wymagane nazwy opcji znaków, oddzielone przecinkami"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
@@ -8983,6 +9013,13 @@ msgid ""
 msgstr ""
 "prześlij dowolny rozmiar, zostanie on automatycznie zoptymalizowany; "
 "najlepiej sprawdzają się obrazy kwadratowe"
+
+msgid ""
+"(Optional) Ability names, comma-separated - rule applies if character has "
+"any"
+msgstr ""
+"(Opcjonalnie) Nazwy zdolności, oddzielone przecinkami - reguła ma "
+"zastosowanie, jeśli znak ma dowolną wartość"
 
 msgid ""
 "Allows participants to add an optional extra amount to their registration "

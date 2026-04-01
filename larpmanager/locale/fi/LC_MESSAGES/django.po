@@ -2975,6 +2975,9 @@ msgstr "Kuljetuspalvelu"
 msgid "Start algorithm"
 msgstr "Aloita algoritmi"
 
+msgid "The rule's name"
+msgstr "Säännön nimi"
+
 msgid "Ticket selected"
 msgstr "Valittu lippu"
 
@@ -3755,6 +3758,9 @@ msgstr "Rekisteröitymisen peruutus"
 msgid "Support maintainers"
 msgstr "Tuki ylläpitäjille"
 
+msgid "The modifier's name"
+msgstr "Muunnoksen nimi"
+
 msgid "Treasury appointees"
 msgstr "Valtiovarainministeriön nimittämät henkilöt"
 
@@ -4442,6 +4448,12 @@ msgstr "Mitä teet täällä"
 msgid "You have made a mistake"
 msgstr "Olet tehnyt virheen"
 
+msgid "(Optional) Display order"
+msgstr "(Valinnainen) Näyttöjärjestys"
+
+msgid "Amount for the operation"
+msgstr "Toimenpiteen määrä"
+
 msgid "Association Translations"
 msgstr "Yhdistyksen käännökset"
 
@@ -4977,6 +4989,9 @@ msgstr "Nyt voit luoda hahmoja"
 
 msgid "Number of tickets to be drawn"
 msgstr "Arvottavien lippujen lukumäärä"
+
+msgid "Operation: ADD, SUB, MUL, DIV"
+msgstr "Toiminta: ADD, SUB, MUL, DIV"
 
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
@@ -5561,6 +5576,9 @@ msgstr "Vahvistaaksesi jatka maksulla"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>vastaukset täällä</a>))"
+
+msgid "(Optional) Cost (0 = auto assigned)"
+msgstr "(Valinnainen) Kustannukset (0 = automaattisesti määritetty)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Valinnainen) Lipun kuvaus"
@@ -6165,6 +6183,9 @@ msgstr "se mahdollistaa maakohtaiset ominaisuudet"
 msgid "will be displayed on the main event page"
 msgstr "näytetään tapahtuman pääsivulla"
 
+msgid "(Optional) Ability names, comma-separated"
+msgstr "(Valinnainen) Kykyjen nimet, pilkulla eroteltuina"
+
 #, python-format
 msgid "<b>Lite Mode</b>: %(progress)s%% complete"
 msgstr "<b>Lite Mode</b>: %(progress)s%% valmis"
@@ -6630,6 +6651,9 @@ msgstr "Saatujen maksujen summa ja maksuvälineet"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Tekstin näyttäminen kaikkien hahmolomakkeiden alussa"
+
+msgid "The character field of computed type to update"
+msgstr "Päivitettävä laskennallisen tyypin merkkikenttä"
 
 msgid "This page shows all log entries for this event"
 msgstr "Tällä sivulla näkyvät kaikki tämän tapahtuman lokimerkinnät"
@@ -7173,6 +7197,9 @@ msgstr ""
 msgid "You have granted data sharing with this organisation!"
 msgstr "Olet antanut luvan tietojen jakamiseen tämän organisaation kanssa!"
 
+msgid "(Optional) Prerequisite ability names, comma-separated"
+msgstr "(Valinnainen) Edellytettyjen kykyjen nimet pilkulla eroteltuina"
+
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr "Tarttuva lyhyt lause tai iskulause, joka kuvaa tapahtumaasi"
 
@@ -7497,6 +7524,10 @@ msgstr "Järjestön antama yksilöllinen jäsenkortin numero"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Olet ylittänyt valittavissa olevien vaihtoehtojen enimmäismäärän"
+
+msgid "(Optional) Required character option names, comma-separated"
+msgstr ""
+"(Valinnainen) Tarvittavat merkkivaihtoehtojen nimet, pilkulla erotetut"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
@@ -8922,6 +8953,13 @@ msgid ""
 msgstr ""
 "lataa minkä tahansa kokoisia kuvia, ne optimoidaan automaattisesti; "
 "neliönmuotoiset kuvat toimivat parhaiten"
+
+msgid ""
+"(Optional) Ability names, comma-separated - rule applies if character has "
+"any"
+msgstr ""
+"(Valinnainen) Kykyjen nimet, pilkulla erotetut - sääntöä sovelletaan, jos "
+"merkillä on mikä tahansa"
 
 msgid ""
 "Allows participants to add an optional extra amount to their registration "

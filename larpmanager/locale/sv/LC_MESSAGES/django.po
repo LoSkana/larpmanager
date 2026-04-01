@@ -2975,6 +2975,9 @@ msgstr "Transferservice"
 msgid "Start algorithm"
 msgstr "Starta algoritmen"
 
+msgid "The rule's name"
+msgstr "Regelns namn"
+
 msgid "Ticket selected"
 msgstr "Biljett vald"
 
@@ -3755,6 +3758,9 @@ msgstr "Uppsägning av prenumeration"
 msgid "Support maintainers"
 msgstr "Stödja underhållare"
 
+msgid "The modifier's name"
+msgstr "Modifierarens namn"
+
 msgid "Treasury appointees"
 msgstr "Kassaförvaltare"
 
@@ -4442,6 +4448,12 @@ msgstr "Vad gör du fortfarande här"
 msgid "You have made a mistake"
 msgstr "Du har fått det om bakfoten"
 
+msgid "(Optional) Display order"
+msgstr "(Valfritt) Visa ordning"
+
+msgid "Amount for the operation"
+msgstr "Belopp för åtgärden"
+
 msgid "Association Translations"
 msgstr "Översättningar av föreningar"
 
@@ -4977,6 +4989,9 @@ msgstr "Nu kan du skapa karaktärer"
 
 msgid "Number of tickets to be drawn"
 msgstr "Antal biljetter som skall dras"
+
+msgid "Operation: ADD, SUB, MUL, DIV"
+msgstr "Operation: ADD, SUB, MUL, DIV"
 
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
@@ -5561,6 +5576,9 @@ msgstr "för att bekräfta det fortsätt med betalningen"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>svara här</a>)"
+
+msgid "(Optional) Cost (0 = auto assigned)"
+msgstr "(Valfritt) Kostnad (0 = tilldelas automatiskt)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Valfritt) Beskrivning av biljetten"
@@ -6167,6 +6185,9 @@ msgstr "det kommer att möjliggöra landsspecifika funktioner"
 msgid "will be displayed on the main event page"
 msgstr "kommer att visas på huvudsidan för evenemanget"
 
+msgid "(Optional) Ability names, comma-separated"
+msgstr "(Valfritt) Namn på förmågor, kommaseparerade"
+
 #, python-format
 msgid "<b>Lite Mode</b>: %(progress)s%% complete"
 msgstr "<b>Lite Mode</b>: %(progress)s%% slutfört"
@@ -6632,6 +6653,9 @@ msgstr "Summan av mottagna betalningar med betalningsmedel"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Text visas i början av alla karaktärsblad"
+
+msgid "The character field of computed type to update"
+msgstr "Teckenfältet för den beräknade typ som ska uppdateras"
 
 msgid "This page shows all log entries for this event"
 msgstr "På den här sidan visas alla loggposter för den här händelsen"
@@ -7166,6 +7190,9 @@ msgstr "Du har begåvats med ett inträde till detta evenemang, av"
 msgid "You have granted data sharing with this organisation!"
 msgstr "Du har beviljat datadelning med denna organisation!"
 
+msgid "(Optional) Prerequisite ability names, comma-separated"
+msgstr "(Valfritt) Namn på förkunskapskrav, kommaseparerade"
+
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr "En fängslande kort fras eller slogan för att beskriva ditt evenemang"
 
@@ -7493,6 +7520,9 @@ msgstr "Unikt nummer på medlemskortet som tilldelats av organisationen"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Du har överskridit det maximala antalet valbara alternativ"
+
+msgid "(Optional) Required character option names, comma-separated"
+msgstr "(Valfritt) Obligatoriska namn på teckenalternativ, kommaseparerade"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
@@ -8922,6 +8952,13 @@ msgid ""
 msgstr ""
 "ladda upp valfri storlek, den kommer att optimeras automatiskt; fyrkantiga "
 "bilder fungerar bäst"
+
+msgid ""
+"(Optional) Ability names, comma-separated - rule applies if character has "
+"any"
+msgstr ""
+"(Valfritt) Namn på förmågor, kommaseparerade - regeln gäller om tecknet har "
+"någon"
 
 msgid ""
 "Allows participants to add an optional extra amount to their registration "

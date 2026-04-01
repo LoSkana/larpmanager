@@ -39,7 +39,7 @@ from larpmanager.cache.question import get_cached_registration_questions, get_ca
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import EventConfig
-from larpmanager.models.experience import AbilityExp, AbilityTypeExp, SystemExp
+from larpmanager.models.experience import AbilityExp, AbilityTypeExp, ModifierExp, Operation, RuleExp, SystemExp
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -125,16 +125,18 @@ def go_upload(context: dict, upload_form_data: Any) -> Any:
 
     upload_type = context["typ"]
 
-    if upload_type == "registration_form":
-        return form_load(context, upload_form_data, is_registration=True)
-    if upload_type == "character_form":
-        return form_load(context, upload_form_data, is_registration=False)
-    if upload_type == "registration":
-        return registrations_load(context, upload_form_data)
-    if upload_type == "exp_abilitie":
-        return abilities_load(context, upload_form_data)
-    if upload_type == "registration_ticket":
-        return tickets_load(context, upload_form_data)
+    dispatch = {
+        "registration_form": lambda: form_load(context, upload_form_data, is_registration=True),
+        "character_form": lambda: form_load(context, upload_form_data, is_registration=False),
+        "registration": lambda: registrations_load(context, upload_form_data),
+        "exp_abilitie": lambda: abilities_load(context, upload_form_data),
+        "exp_rule": lambda: rules_load(context, upload_form_data),
+        "exp_modifier": lambda: modifiers_load(context, upload_form_data),
+        "registration_ticket": lambda: tickets_load(context, upload_form_data),
+    }
+    handler = dispatch.get(upload_type)
+    if handler:
+        return handler()
     return writing_load(context, upload_form_data)
 
 
@@ -1796,3 +1798,140 @@ def _assign_requirements(
             writing_element.requirements.add(writing_option)
         else:
             error_logs.append(f"requirements not found: {requirement_name}")
+
+
+def _assign_abilities(
+    context: dict,
+    element: Any,
+    logs: list[str],
+    value: str,
+) -> None:
+    """Assign abilities to element from comma-separated names."""
+    for ability_name in value.split(","):
+        ability = context["event"].get_elements(AbilityExp).filter(name__iexact=ability_name.strip()).first()
+        if ability:
+            element.save()
+            element.abilities.add(ability)
+        else:
+            logs.append(f"Ability not found: {ability_name}")
+
+
+def rules_load(context: dict, form: Form) -> list[str]:
+    """Load rules from uploaded file and process each row."""
+    (input_dataframe, processing_logs) = _get_file(context, form.cleaned_data["first"], 0)
+    if input_dataframe is not None:
+        for rule_row in input_dataframe.to_dict(orient="records"):
+            processing_logs.append(_rule_load(context, rule_row))
+    return processing_logs
+
+
+def _assign_rule_field(context: dict, rule: RuleExp, logs: list[str], value: str) -> None:
+    """Assign the WritingQuestion FK field to a rule by name."""
+    field_obj = context["event"].get_elements(WritingQuestion).filter(name__iexact=value.strip()).first()
+    if field_obj:
+        rule.field = field_obj
+    else:
+        logs.append(f"ERR - field not found: {value}")
+
+
+def _assign_rule_operation(rule: RuleExp, logs: list[str], value: str) -> None:
+    """Assign the operation to a rule by value string (ADD/SUB/MUL/DIV)."""
+    operation_map = {op.value: op for op in Operation}
+    op_val = value.strip().upper()
+    if op_val in operation_map:
+        rule.operation = operation_map[op_val]
+    else:
+        logs.append(f"ERR - unknown operation: {value}")
+
+
+def _rule_load(context: dict, csv_row: dict) -> str:
+    """Load rule data from CSV row for bulk import."""
+    if "name" not in csv_row:
+        return "ERR - There is no name column"
+
+    event = context["event"]
+
+    (rule, was_created) = RuleExp.objects.get_or_create(
+        event=event.get_class_parent(RuleExp),
+        name=csv_row["name"],
+    )
+
+    logs = []
+
+    for field_name, field_value in csv_row.items():
+        if not field_value or pd.isna(field_value) or field_name == "name":
+            continue
+
+        if field_name == "abilities":
+            _assign_abilities(context, rule, logs, str(field_value))
+        elif field_name == "field":
+            _assign_rule_field(context, rule, logs, str(field_value))
+        elif field_name == "amount":
+            rule.amount = _to_decimal(field_value)
+        elif field_name == "order":
+            rule.order = _to_int(field_value)
+        elif field_name == "operation":
+            _assign_rule_operation(rule, logs, str(field_value))
+        else:
+            setattr(rule, field_name, field_value)
+
+    rule.save()
+    save_log(context, RuleExp, rule, operation_type=LogOperationType.UPLOAD)
+
+    return f"OK - Created {rule}" if was_created else f"OK - Updated {rule}"
+
+
+def modifiers_load(context: dict, form: Form) -> list[str]:
+    """Load modifiers from uploaded file and process each row."""
+    (input_dataframe, processing_logs) = _get_file(context, form.cleaned_data["first"], 0)
+    if input_dataframe is not None:
+        for modifier_row in input_dataframe.to_dict(orient="records"):
+            processing_logs.append(_modifier_load(context, modifier_row))
+    return processing_logs
+
+
+def _modifier_load(context: dict, csv_row: dict) -> str:
+    """Load modifier data from CSV row for bulk import."""
+    if "name" not in csv_row:
+        return "ERR - There is no name column"
+
+    event = context["event"]
+
+    (modifier, was_created) = ModifierExp.objects.get_or_create(
+        event=event.get_class_parent(ModifierExp),
+        name=csv_row["name"],
+        defaults={"order": 0},
+    )
+
+    logs = []
+
+    for field_name, field_value in csv_row.items():
+        if not field_value or pd.isna(field_value) or field_name == "name":
+            continue
+
+        if field_name == "abilities":
+            _assign_abilities(context, modifier, logs, str(field_value))
+            continue
+
+        if field_name == "prerequisites":
+            _assign_prereq(context, modifier, logs, str(field_value))
+            continue
+
+        if field_name == "requirements":
+            _assign_requirements(context, modifier, logs, str(field_value))
+            continue
+
+        if field_name == "cost":
+            modifier.cost = _to_int(field_value)
+            continue
+
+        if field_name == "order":
+            modifier.order = _to_int(field_value)
+            continue
+
+        setattr(modifier, field_name, field_value)
+
+    modifier.save()
+    save_log(context, ModifierExp, modifier, operation_type=LogOperationType.UPLOAD)
+
+    return f"OK - Created {modifier}" if was_created else f"OK - Updated {modifier}"

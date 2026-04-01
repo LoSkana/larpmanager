@@ -2975,6 +2975,9 @@ msgstr "Shuttle-Dienst"
 msgid "Start algorithm"
 msgstr "Start-Algorithmus"
 
+msgid "The rule's name"
+msgstr "Der Name der Regel"
+
 msgid "Ticket selected"
 msgstr "Ticket ausgewählt"
 
@@ -3755,6 +3758,9 @@ msgstr "Kündigung des Abonnements"
 msgid "Support maintainers"
 msgstr "Unterstützung der Betreuer"
 
+msgid "The modifier's name"
+msgstr "Der Name des Modifikators"
+
 msgid "Treasury appointees"
 msgstr "Finanzbeamte"
 
@@ -4442,6 +4448,12 @@ msgstr "Was machen Sie noch hier"
 msgid "You have made a mistake"
 msgstr "Sie haben sich geirrt"
 
+msgid "(Optional) Display order"
+msgstr "(Optional) Reihenfolge anzeigen"
+
+msgid "Amount for the operation"
+msgstr "Betrag für die Operation"
+
 msgid "Association Translations"
 msgstr "Assoziationsübersetzungen"
 
@@ -4977,6 +4989,9 @@ msgstr "Jetzt können Sie Zeichen erstellen"
 
 msgid "Number of tickets to be drawn"
 msgstr "Anzahl der zu ziehenden Lose"
+
+msgid "Operation: ADD, SUB, MUL, DIV"
+msgstr "Operation: ADD, SUB, MUL, DIV"
 
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
@@ -5561,6 +5576,9 @@ msgstr "zu bestätigen, um mit der Zahlung fortzufahren"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>Antwort hier</a>)"
+
+msgid "(Optional) Cost (0 = auto assigned)"
+msgstr "(fakultativ) Kosten (0 = automatisch zugewiesen)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Optional) Die Beschreibung des Tickets"
@@ -6170,6 +6188,9 @@ msgstr "es wird länderspezifische Merkmale ermöglichen"
 msgid "will be displayed on the main event page"
 msgstr "wird auf der Hauptseite der Veranstaltung angezeigt"
 
+msgid "(Optional) Ability names, comma-separated"
+msgstr "(Optional) Ability-Namen, durch Komma getrennt"
+
 #, python-format
 msgid "<b>Lite Mode</b>: %(progress)s%% complete"
 msgstr "<b>Lite-Modus</b>: %(progress)s%% abgeschlossen"
@@ -6648,6 +6669,9 @@ msgstr "Summe der Zahlungseingänge mit Zahlungsmitteln"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Textanzeige am Anfang aller Charakterbögen"
+
+msgid "The character field of computed type to update"
+msgstr "Das zu aktualisierende Zeichenfeld des berechneten Typs"
 
 msgid "This page shows all log entries for this event"
 msgstr "Diese Seite zeigt alle Protokolleinträge für dieses Ereignis"
@@ -7230,6 +7254,9 @@ msgstr ""
 msgid "You have granted data sharing with this organisation!"
 msgstr "Sie haben dem Datenaustausch mit dieser Organisation zugestimmt!"
 
+msgid "(Optional) Prerequisite ability names, comma-separated"
+msgstr "(Optional) Namen der vorausgesetzten Fähigkeiten, kommagetrennt"
+
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr ""
 "Ein einprägsamer kurzer Satz oder Slogan zur Beschreibung Ihrer "
@@ -7610,6 +7637,9 @@ msgstr "Eindeutige, von der Organisation zugewiesene Mitgliedsausweisnummer"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Sie haben die maximale Anzahl der wählbaren Optionen überschritten"
+
+msgid "(Optional) Required character option names, comma-separated"
+msgstr "(Optional) Erforderliche Zeichenoptionsnamen, durch Komma getrennt"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
@@ -9259,6 +9289,13 @@ msgid ""
 msgstr ""
 "Laden Sie eine beliebige Größe hoch, sie wird automatisch optimiert; "
 "quadratische Bilder funktionieren am besten"
+
+msgid ""
+"(Optional) Ability names, comma-separated - rule applies if character has "
+"any"
+msgstr ""
+"(Optional) Fähigkeitsnamen, kommagetrennt - Regel wird angewendet, wenn ein "
+"Zeichen eine"
 
 msgid ""
 "Allows participants to add an optional extra amount to their registration "

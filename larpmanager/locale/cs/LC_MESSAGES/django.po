@@ -2975,6 +2975,9 @@ msgstr "Kyvadlová doprava"
 msgid "Start algorithm"
 msgstr "Algoritmus spuštění"
 
+msgid "The rule's name"
+msgstr "Název pravidla"
+
 msgid "Ticket selected"
 msgstr "Vybraná vstupenka"
 
@@ -3755,6 +3758,9 @@ msgstr "Zrušení předplatného"
 msgid "Support maintainers"
 msgstr "Správci podpory"
 
+msgid "The modifier's name"
+msgstr "Název modifikátoru"
+
 msgid "Treasury appointees"
 msgstr "Úředníci ministerstva financí"
 
@@ -4442,6 +4448,12 @@ msgstr "Co tady ještě děláš"
 msgid "You have made a mistake"
 msgstr "Špatně jste to pochopili"
 
+msgid "(Optional) Display order"
+msgstr "(Volitelné) Pořadí zobrazení"
+
+msgid "Amount for the operation"
+msgstr "Částka za operaci"
+
 msgid "Association Translations"
 msgstr "Překlady asociace"
 
@@ -4977,6 +4989,9 @@ msgstr "Nyní můžete vytvářet postavy"
 
 msgid "Number of tickets to be drawn"
 msgstr "Počet losovaných vstupenek"
+
+msgid "Operation: ADD, SUB, MUL, DIV"
+msgstr "Provoz: ADD, SUB, MUL, DIV"
 
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
@@ -5561,6 +5576,9 @@ msgstr "potvrdit a provést platbu"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>odpověď zde</a>)"
+
+msgid "(Optional) Cost (0 = auto assigned)"
+msgstr "(Nepovinné) Náklady (0 = automaticky přiřazeno)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Nepovinné) Popis tipu"
@@ -6165,6 +6183,9 @@ msgstr "umožní funkce specifické pro danou zemi"
 msgid "will be displayed on the main event page"
 msgstr "se zobrazí na hlavní stránce události"
 
+msgid "(Optional) Ability names, comma-separated"
+msgstr "(Nepovinné) Názvy schopností oddělené čárkou"
+
 #, python-format
 msgid "<b>Lite Mode</b>: %(progress)s%% complete"
 msgstr "<b>Lite Mode</b>: %(progress)s%% dokončeno"
@@ -6630,6 +6651,9 @@ msgstr "Součet přijatých plateb s platebními prostředky"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Zobrazení textu na začátku všech listů postav"
+
+msgid "The character field of computed type to update"
+msgstr "Pole znaků vypočteného typu k aktualizaci"
 
 msgid "This page shows all log entries for this event"
 msgstr ""
@@ -7171,6 +7195,9 @@ msgstr "Vstup na tuto událost vám darovali"
 msgid "You have granted data sharing with this organisation!"
 msgstr "S touto organizací jste povolili sdílení dat!"
 
+msgid "(Optional) Prerequisite ability names, comma-separated"
+msgstr "(Nepovinné) Názvy předpokládaných schopností oddělené čárkami"
+
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr "Krátká chytlavá fráze nebo slogan popisující vaši událost"
 
@@ -7498,6 +7525,9 @@ msgstr "Jedinečné číslo členské karty přidělené organizací"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Překročili jste maximální počet volitelných možností"
+
+msgid "(Optional) Required character option names, comma-separated"
+msgstr "(Nepovinné) Povinné názvy možností znaků oddělené čárkou"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
@@ -8849,6 +8879,13 @@ msgid ""
 msgstr ""
 "nahrajte libovolnou velikost, bude automaticky optimalizována; nejlépe "
 "fungují čtvercové obrázky"
+
+msgid ""
+"(Optional) Ability names, comma-separated - rule applies if character has "
+"any"
+msgstr ""
+"(Nepovinné) Názvy schopností oddělené čárkami - pravidlo platí, pokud má "
+"znak nějaký znak"
 
 msgid ""
 "Allows participants to add an optional extra amount to their registration "
