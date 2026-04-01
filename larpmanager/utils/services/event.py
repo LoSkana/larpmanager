@@ -126,7 +126,8 @@ def get_event_filter_characters(context: dict, character_filters: Any) -> None: 
             if len(faction.chars) == 0:
                 continue
             context["factions"].append(faction)
-    else:
+
+    if not context["factions"]:
         default_faction = Faction()
         default_faction.number = 0
         default_faction.name = "all"
