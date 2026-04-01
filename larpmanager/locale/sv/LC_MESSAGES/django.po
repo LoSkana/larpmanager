@@ -338,6 +338,9 @@ msgstr "Kontrollera"
 msgid "Close"
 msgstr "Stängt"
 
+msgid "Color"
+msgstr "Färg"
+
 msgid "Cover"
 msgstr "Skydd"
 

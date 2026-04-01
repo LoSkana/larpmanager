@@ -338,6 +338,9 @@ msgstr "Podívejte se na stránky"
 msgid "Close"
 msgstr "Uzavřeno"
 
+msgid "Color"
+msgstr "Barva"
+
 msgid "Cover"
 msgstr "Obálka"
 

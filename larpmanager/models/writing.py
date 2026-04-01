@@ -23,6 +23,7 @@ import re
 from pathlib import Path
 from typing import Any, ClassVar
 
+from colorfield.fields import ColorField
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
@@ -536,6 +537,12 @@ class Faction(Writing):
 
     locked = models.BooleanField(default=False)
 
+    color = ColorField(
+        verbose_name=_("Color"),
+        null=True,
+        blank=True,
+    )
+
     @staticmethod
     def get_faction_filepath(run: Run) -> str:
         """Get the directory path for storing faction PDF files for a specific run."""
@@ -562,8 +569,8 @@ class Faction(Writing):
         """Update JavaScript response with 'typ' and 'teaser' attributes."""
         js = super().show_red()
 
-        # Update JS attributes for typ and teaser fields
-        for s in ["typ", "teaser"]:
+        # Update JS attributes for typ, teaser and color fields
+        for s in ["typ", "teaser", "color"]:
             self.upd_js_attr(js, s)
 
         return js

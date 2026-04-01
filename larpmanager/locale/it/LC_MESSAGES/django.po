@@ -338,6 +338,9 @@ msgstr "Check"
 msgid "Close"
 msgstr "Chiudi"
 
+msgid "Color"
+msgstr "Colore"
+
 msgid "Cover"
 msgstr "Cover"
 

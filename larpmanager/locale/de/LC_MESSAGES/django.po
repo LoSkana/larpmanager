@@ -338,6 +338,9 @@ msgstr "Siehe"
 msgid "Close"
 msgstr "Geschlossen"
 
+msgid "Color"
+msgstr "Farbe"
+
 msgid "Cover"
 msgstr "Abdeckung"
 

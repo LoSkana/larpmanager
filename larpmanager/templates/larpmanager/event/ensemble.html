@@ -49,14 +49,25 @@
                         <img src="{{ profile_url }}" alt="{{ ch.name }}" loading="lazy">
                     </div>
                     <div class="ens-book-body">
-                        <h2 class="ens-book-name">
+                        <p class="ens-name">
+                            <b>{% trans "Character" %}:</b>
                             {{ ch.name }}
                             {% if ch.title %}<span class="ens-title">- {{ ch.title }}</span>{% endif %}
-                        </h2>
-                        {% if ensemble_show_player and ch.player_name %}<p class="ens-player">{{ ch.player_name }}</p>{% endif %}
+                        </p>
+                        {% if ensemble_show_player and ch.player_name %}
+                            <p class="ens-player">
+                                <b>{% trans "Player" %}:</b> {{ ch.player_name }}
+                            </p>
+                        {% endif %}
                         {% if ch.factions %}
                             <p class="ens-factions">
-                                {% for f in ch.factions %}<span class="ens-faction-tag">{{ f.name }}</span>{% endfor %}
+                                <b>{% trans "Factions" %}:</b>
+                                {% for f in ch.factions %}
+                                    {% if f.name %}
+                                        <span class="ens-faction-tag"
+                                              {% if f.color %}style="background-color:{{ f.color }}; color: white"{% endif %}>{{ f.name }}</span>
+                                    {% endif %}
+                                {% endfor %}
                             </p>
                         {% endif %}
                         {% if ch.teaser %}<div class="ens-teaser">{{ ch.teaser|safe }}</div>{% endif %}
@@ -75,7 +86,21 @@
             {% for ch in char_list %}
                 <div class="ens-card"
                      data-search="{{ ch.name|lower }} {{ ch.title|lower }} {{ ch.teaser|lower|striptags }}">
+                    {% if ch.faction_colors %}
+                        <div class="ens-faction-bar">
+                            {% for f in ch.faction_colors %}<div style="flex:1;background-color:{{ f.color }};"></div>{% endfor %}
+                        </div>
+                        <div class="ens-card-factions-print">
+                            {% for f in ch.factions %}
+                                {% if f.name %}<span class="ens-faction-tag-print">{{ f.name }}</span>{% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     <div class="ens-card-portrait">
+                        {% get_char_profile ch as profile_url %}
+                        <img src="{{ profile_url }}" alt="{{ ch.name }}">
+                    </div>
+                    <div class="ens-card-mini-portrait">
                         {% get_char_profile ch as profile_url %}
                         <img src="{{ profile_url }}" alt="{{ ch.name }}">
                     </div>
@@ -84,19 +109,30 @@
                             {{ ch.name }}
                             {% if ch.title %}<span class="ens-title">- {{ ch.title }}</span>{% endif %}
                         </div>
-                        {% if ensemble_show_player and ch.player_name %}<div class="ens-card-player">{{ ch.player_name }}</div>{% endif %}
                         {% if ch.factions %}
-                            <div class="ens-card-factions">
-                                {% for f in ch.factions %}<span class="ens-faction-tag">{{ f.name }}</span>{% endfor %}
+                            <div class="ens-card-factions-screen">
+                                {% for f in ch.factions %}
+                                    {% if f.name %}<span class="ens-faction-tag" style="background-color:{{ f.color }};">{{ f.name }}</span>{% endif %}
+                                {% endfor %}
                             </div>
                         {% endif %}
-                        {% if ch.teaser %}<div class="ens-card-teaser">{{ ch.teaser|safe|truncatechars_html:300 }}</div>{% endif %}
+                        {% if ensemble_show_player and ch.player_name %}<div class="ens-card-player">{{ ch.player_name }}</div>{% endif %}
                         {% for field in ch.display_fields %}
                             <div class="ens-field-inline">
                                 <b>{{ field.name }}:</b> {{ field.value }}
                             </div>
                         {% endfor %}
+                        {% if ch.teaser %}
+                            <hr class="ens-card-divider-screen">
+                            <div class="ens-card-teaser">{{ ch.teaser|safe|truncatechars_html:300 }}</div>
+                        {% endif %}
                     </div>
+                    {% if ch.teaser %}
+                        <div class="ens-card-teaser-print">
+                            <hr class="ens-card-divider-print">
+                            <div class="ens-card-teaser">{{ ch.teaser|safe|truncatechars_html:300 }}</div>
+                        </div>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>
@@ -128,7 +164,8 @@
                                 <td>
                                     {% for f in ch.factions %}
                                         {{ f.name }}
-                                        {% if not forloop.last %},{% endif %}
+                                        {% if f.color %}<span class="ens-compact-color" style="background-color:{{ f.color }};"></span>{% endif %}
+                                        {% if not forloop.last %}|{% endif %}
                                     {% endfor %}
                                 </td>
                             {% elif char_list.0.factions %}
@@ -184,11 +221,26 @@
         /* Views toggle */
         .ensemble-view { display: none; }
         .ensemble-view.active { display: block; }
+        #ensemble-book.active { max-width: 1000px; margin: auto; }
         #ensemble-cards.active { display: flex; flex-wrap: wrap; gap: 1rem; }
+        /* Override .active a from global CSS */
+        #ensemble-cards a, #ensemble-book a, #ensemble-compact a {
+            background-color: transparent !important;
+            pointer-events: auto !important;
+        }
+        /* Faction color bar */
+        .ens-faction-bar {
+            display: flex;
+            width: 100%;
+            height: 5px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
         /* Book mode */
         .ens-book-entry {
             display: flex;
-            gap: 1.25rem;
+            flex-wrap: wrap;
+            gap: 0 1.25rem;
             padding: 1.25rem 0;
             border-bottom: 1px solid #e0e0e0;
         }
@@ -202,11 +254,10 @@
             object-fit: cover;
             border-radius: 4px;
         }
-        .ens-book-body { flex: 1; }
+        .ens-book-body { flex: 1; text-align: left; }
         .ens-book-name { font-size: 1.2rem; margin: 0 0 0.3rem; }
         .ens-title { color: #666; font-weight: normal; }
         .ens-player { color: #888; font-size: 0.85rem; margin: 0 0 0.3rem; }
-        .ens-factions { margin: 0 0 0.5rem; }
         .ens-faction-tag {
             display: inline-block;
             background: #eee;
@@ -245,6 +296,11 @@
         .ens-card-factions { margin-bottom: 0.4rem; }
         .ens-card-teaser { font-size: 0.85rem; color: #444; margin-bottom: 0.4rem; }
         .ens-field-inline { font-size: 0.8rem; margin-bottom: 0.15rem; }
+        .ens-card-mini-portrait { display: none; }
+        .ens-card-factions-print { display: none; }
+        .ens-card-factions-screen { margin: 0.25rem 0 0.4rem; }
+        .ens-card-teaser-print { display: none; }
+        .ens-card-divider-screen { border: none; border-top: 1px solid #e0e0e0; margin: 0.5rem 0; }
         /* Compact mode */
         .ens-table { width: 100%; border-collapse: collapse; }
         .ens-table th, .ens-table td {
@@ -260,17 +316,25 @@
         .ens-table th.desc::after { content: " ↓"; color: #333; }
         .ens-table tr:hover td { background: #fafafa; }
         .ens-empty { color: #888; padding: 2rem 0; text-align: center; }
+        .ens-card-factions-screen .ens-faction-tag { color: white; }
+        .ens-compact-color {
+            display: inline-block;
+            width: 30px;
+            height: 10px;
+            border-radius: 2px;
+            margin-right: 4px;
+            vertical-align: middle;
+        }
         /* Responsive */
         @media (max-width: 600px) {
             .ens-book-cover { width: 70px; }
             .ens-book-cover img { width: 70px; height: 93px; }
             .ens-card { width: 100%; }
         }
-        /* Print (cards mode) - A4 landscape = 2 cards per row */
-        @page { size: A4 landscape; margin: 8mm; }
+        /* Print - shared reset */
         @media print {
-            hr, #staging, #banner, #topbar, .main_nav, .reg_status,
-            .ensemble-toolbar, #ensemble-book, #ensemble-compact { display: none !important; }
+            hr, #staging, #banner, #header, #topbar, .main_nav, .reg_status,
+            .ensemble-toolbar, #footer { display: none !important; }
             html, body {
                 margin: 0 !important;
                 padding: 0 !important;
@@ -287,7 +351,11 @@
                 padding: 0 !important;
                 margin: 0 !important;
             }
-            #ensemble-cards {
+            /* Hide inactive views */
+            .ensemble-view { display: none !important; }
+
+            /* CARDS MODE (A4 landscape, 2 per row) */
+            #ensemble-cards.active {
                 display: flex !important;
                 flex-wrap: wrap !important;
                 gap: 0 !important;
@@ -295,8 +363,8 @@
                 overflow: visible !important;
                 height: auto !important;
             }
-            /* Card: Ensemble layout - portrait on right (64mm), content on left */
-            .ens-card {
+            /* Card: portrait on right (64mm), content on left */
+            #ensemble-cards.active .ens-card {
                 position: relative !important;
                 width: 128mm !important;
                 height: 89mm !important;
@@ -308,8 +376,7 @@
                 box-sizing: border-box !important;
                 display: block !important;
             }
-            /* Right-side large portrait background */
-            .ens-card-portrait {
+            #ensemble-cards.active .ens-card-portrait {
                 position: absolute !important;
                 right: 0 !important;
                 top: 0 !important;
@@ -318,32 +385,162 @@
                 overflow: hidden !important;
                 border-left: 1px dashed #bbb !important;
             }
-            .ens-card-portrait img {
+            #ensemble-cards.active .ens-card-portrait img {
                 width: 100% !important;
                 height: 89mm !important;
                 max-height: 89mm !important;
                 object-fit: cover !important;
                 display: block !important;
             }
-            /* Content limited to left 64mm */
-            .ens-card-content {
+            #ensemble-cards.active .ens-card-mini-portrait {
+                display: block !important;
                 position: absolute !important;
                 left: 0 !important;
                 top: 0 !important;
-                width: 62mm !important;
-                height: 89mm !important;
+                width: 18mm !important;
+                height: 24mm !important;
                 overflow: hidden !important;
-                padding: 2mm 2mm 2mm 3mm !important;
+                border-radius: 0 !important;
+                z-index: 2 !important;
+            }
+            #ensemble-cards.active .ens-card-mini-portrait img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover !important;
+                display: block !important;
+            }
+            #ensemble-cards.active .ens-faction-bar {
+                display: flex !important;
+                position: absolute !important;
+                left: 18mm !important;
+                top: 0 !important;
+                width: 46mm !important;
+                height: 3mm !important;
+                flex-direction: row !important;
+                border-radius: 0 !important;
+                margin-bottom: 0 !important;
+                z-index: 2 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            #ensemble-cards.active .ens-faction-bar > div {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            #ensemble-cards.active .ens-card-factions-print {
+                display: flex !important;
+                position: absolute !important;
+                left: 18mm !important;
+                top: 3mm !important;
+                width: 46mm !important;
+                font-size: 7pt !important;
+                z-index: 2 !important;
+            }
+            #ensemble-cards.active .ens-card-factions-print .ens-faction-tag-print {
+                font-size: 9pt !important;
+                flex: 1;
+            }
+            #ensemble-cards.active .ens-card-factions-screen { display: none !important; }
+            #ensemble-cards.active .ens-card-divider-screen { display: none !important; }
+            #ensemble-cards.active .ens-card-content {
+                position: absolute !important;
+                left: 18mm !important;
+                top: 9mm !important;
+                width: 44mm !important;
+                height: 15mm !important;
+                overflow: hidden !important;
+                padding: 0 1mm !important;
                 box-sizing: border-box !important;
             }
-            .ens-card-name { font-size: 9pt !important; font-weight: 700 !important; margin-bottom: 1mm !important; }
-            .ens-card-player { font-size: 7pt !important; color: #666 !important; margin-bottom: 1mm !important; }
-            .ens-card-factions { font-size: 7pt !important; margin-bottom: 1mm !important; }
-            .ens-card-teaser { font-size: 7pt !important; color: #333 !important; line-height: 1.3 !important; }
-            .ens-field-inline { font-size: 6.5pt !important; margin-bottom: 0.5mm !important; }
-            .ens-faction-tag { background: none !important; padding: 0 !important; font-size: 7pt !important; }
-            .ens-faction-tag::after { content: ", "; }
-            .ens-faction-tag:last-child::after { content: ""; }
+            #ensemble-cards.active .ens-card-content .ens-card-teaser { display: none !important; }
+            #ensemble-cards.active .ens-card-teaser-print {
+                display: block !important;
+                position: absolute !important;
+                left: 0 !important;
+                top: 25mm !important;
+                width: 62mm !important;
+                height: 62mm !important;
+                overflow: hidden !important;
+                padding: 0 2mm !important;
+                box-sizing: border-box !important;
+            }
+            #ensemble-cards.active .ens-card-divider-print {
+                display: block !important;
+                border: none !important;
+                border-top: 1pt solid #333 !important;
+                margin: 0 0 1mm !important;
+                height: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            #ensemble-cards.active .ens-card-teaser-print .ens-card-teaser {
+                display: block !important;
+                font-size: 10pt !important;
+                color: #333 !important;
+                line-height: 1.3 !important;
+            }
+            #ensemble-cards.active .ens-card-name { font-size: 12pt !important; font-weight: 700 !important; margin-top: 0 !important; margin-bottom: 0.5mm !important; }
+            #ensemble-cards.active .ens-card-player { display: none !important; }
+            #ensemble-cards.active .ens-card-teaser { font-size: 7pt !important; color: #333 !important; line-height: 1.3 !important; }
+            #ensemble-cards.active .ens-field-inline { font-size: 6.5pt !important; margin-bottom: 0.5mm !important; }
+            #ensemble-cards.active .ens-faction-tag { background: none !important; padding: 0 !important; font-size: 7pt !important; }
+            #ensemble-cards.active .ens-faction-tag::after { content: ", "; }
+            #ensemble-cards.active .ens-faction-tag:last-child::after { content: ""; }
+            #ensemble-cards.active a { background: none !important; background-color: transparent !important; }
+
+            /* BOOK MODE (A4 portrait) */
+            #ensemble-book.active {
+                display: block !important;
+            }
+            #ensemble-book.active .ens-book-entry {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                gap: 0 6mm !important;
+                padding: 5mm 0 !important;
+                border-bottom: 0.5pt solid #ccc !important;
+                page-break-inside: avoid !important;
+            }
+            #ensemble-book.active .ens-book-cover {
+                flex-shrink: 0 !important;
+                width: 28mm !important;
+            }
+            #ensemble-book.active .ens-book-cover img {
+                width: 28mm !important;
+                height: 37mm !important;
+                object-fit: cover !important;
+                border-radius: 2px !important;
+                display: block !important;
+            }
+            #ensemble-book.active .ens-book-body { flex: 1 !important; }
+            #ensemble-book.active .ens-book-name { font-size: 12pt !important; margin: 0 0 1mm !important; }
+            #ensemble-book.active .ens-player { font-size: 8pt !important; color: #555 !important; margin: 0 0 1mm !important; }
+            #ensemble-book.active .ens-faction-tag {
+                padding: 0.3mm 1.5mm !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            #ensemble-book.active .ens-teaser { font-size: 12pt !important; line-height: 1.35 !important; }
+            #ensemble-book.active .ens-field { font-size: 14pt !important; margin-bottom: 0.5mm !important; }
+            #ensemble-book.active a { background: none !important; background-color: transparent !important; }
+
+            /* COMPACT MODE (A4 portrait) */
+            #ensemble-compact.active {
+                display: block !important;
+            }
+            #ensemble-compact.active .ens-table { width: 100% !important; border-collapse: collapse !important; }
+            #ensemble-compact.active .ens-table th,
+            #ensemble-compact.active .ens-table td {
+                padding: 2mm 3mm !important;
+                border-bottom: 0.5pt solid #ccc !important;
+                font-size: 9pt !important;
+            }
+            #ensemble-compact.active .ens-table th { background: #f0f0f0 !important; font-weight: 600 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            #ensemble-compact.active .ens-table th::after { content: "" !important; }
+            #ensemble-compact.active .ens-compact-color {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            #ensemble-compact.active a { background: none !important; background-color: transparent !important; }
         }
     </style>
 {% endblock css %}
@@ -372,12 +569,16 @@
             btn.addEventListener('click', function () { showMode(this.dataset.mode); });
         });
 
-        // Print: switch to cards mode, print, restore previous mode
+        // Print: inject @page orientation based on current mode, then print
+        const _printStyle = document.createElement('style');
+        document.head.appendChild(_printStyle);
         document.getElementById('ensemble-print').addEventListener('click', function () {
             const current = sessionStorage.getItem(STORAGE_KEY) || defaultMode;
-            showMode('cards');
+            const isLandscape = current === 'cards';
+            _printStyle.textContent = isLandscape
+                ? '@media print { @page { size: A4 landscape; margin: 8mm; } }'
+                : '@media print { @page { size: A4 portrait; margin: 10mm; } }';
             window.print();
-            showMode(current);
         });
 
         // Search

@@ -338,6 +338,9 @@ msgstr "Sjekk"
 msgid "Close"
 msgstr "Stengt"
 
+msgid "Color"
+msgstr "Farge"
+
 msgid "Cover"
 msgstr "Omslag"
 

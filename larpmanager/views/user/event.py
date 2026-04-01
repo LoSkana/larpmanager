@@ -663,6 +663,8 @@ def ensemble(request: HttpRequest, event_slug: str) -> HttpResponse:
     options_map = {opt_uuid: opt_data["name"] for opt_uuid, opt_data in fields_data.get("options", {}).items()}
     char_questions = sorted(fields_data.get("questions", {}).items(), key=lambda x: x[1]["order"])
 
+    _get_faction_colors(context)
+
     # Pre-process human-readable display fields for each character
     for ch_data in context.get("chars", {}).values():
         if ch_data.get("hide"):
@@ -693,6 +695,19 @@ def ensemble(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     return render(request, "larpmanager/event/ensemble.html", context)
+
+
+def _get_faction_colors(context: dict) -> None:
+    """Resolve faction numbers to faction dicts; collect colors for the color bar (up to 3, in order)."""
+    factions_cache = context.get("factions", {})
+    for ch_data in context.get("chars", {}).values():
+        faction_objs = []
+        for fac_num in ch_data.get("factions", []):
+            fac = factions_cache.get(fac_num)
+            if fac:
+                faction_objs.append(fac)
+        ch_data["factions"] = faction_objs
+        ch_data["faction_colors"] = [f for f in faction_objs if f.get("color")][:3]
 
 
 def event(request: HttpRequest, event_slug: str) -> HttpResponse:
