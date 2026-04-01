@@ -9992,16 +9992,25 @@ msgstr ""
 msgid "Remove from plot"
 msgstr ""
 
-msgid "Add prologue"
+msgid "Set quest type"
 msgstr ""
 
-msgid "Remove prologue"
+msgid "Set quest"
+msgstr ""
+
+msgid "Set ability type"
 msgstr ""
 
 msgid "Add to xp delivery"
 msgstr ""
 
 msgid "Remove from xp delivery"
+msgstr ""
+
+msgid "Add prologue"
+msgstr ""
+
+msgid "Remove prologue"
 msgstr ""
 
 msgid "Set progress step"
@@ -10011,15 +10020,6 @@ msgid "Set assigned staff member"
 msgstr ""
 
 msgid "Set character status"
-msgstr ""
-
-msgid "Set quest type"
-msgstr ""
-
-msgid "Set quest"
-msgstr ""
-
-msgid "Set ability type"
 msgstr ""
 
 msgid "Your registration ticket"
