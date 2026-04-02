@@ -1335,6 +1335,7 @@ class OrgaRunForm(ConfigForm):
             self.fields["event"].widget = EventS2Widget()
             self.configure_field_association("event", self.params["association_id"])
             self.fields["event"].help_text = _("Select the event of this new session")
+            self.fields["event"].to_field_name = None
             self.choose_event = True
             self.page_info = _("Manage new session for an existing event")
         else:
