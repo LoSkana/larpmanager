@@ -201,15 +201,16 @@
             align-items: center;
             gap: 0.35rem;
             padding: 0.4rem 0.9rem;
-            border: 1px solid #ccc;
             border-radius: 4px;
-            background: #f5f5f5;
+            box-shadow: none;
+            border: 1px solid black;
+            background: rgba(var(--sec-rgb), 0.7) !important;
             cursor: pointer;
             font-size: 0.9rem;
             transition: background 0.15s, border-color 0.15s;
         }
-        .ensemble-btn:hover { background: #e0e0e0; }
-        .ensemble-btn.active { background: #333; color: #fff; border-color: #333; }
+        .ensemble-btn:hover { background: rgba(var(--sec-rgb), 0.3) !important; }
+        .ensemble-btn.active { rgba(var(--pri-rgb), 0.9) !important; color: rgba(var(--ter-rgb), 0.9) !important; border-color: #333; }
         .ensemble-search-wrap { flex: 1; min-width: 200px; }
         #ensemble-search {
             width: 100%;
@@ -256,7 +257,7 @@
         }
         .ens-book-body { flex: 1; text-align: left; }
         .ens-book-name { font-size: 1.2rem; margin: 0 0 0.3rem; }
-        .ens-title { color: #666; font-weight: normal; }
+        .ens-card-name { color: #666; font-weight: normal; }
         .ens-player { color: #888; font-size: 0.85rem; margin: 0 0 0.3rem; }
         .ens-faction-tag {
             display: inline-block;
@@ -309,12 +310,12 @@
             text-align: left;
             font-size: 0.9rem;
         }
-        .ens-table th { background: #f5f5f5; font-weight: 600; }
+        .ens-table th { background: rgba(var(--sec-rgb), 0.7) !important; font-weight: 600; }
         .ens-table th.sortable { cursor: pointer; user-select: none; }
         .ens-table th.sortable::after { content: " ↕"; color: #aaa; font-size: 0.75rem; }
         .ens-table th.asc::after { content: " ↑"; color: #333; }
         .ens-table th.desc::after { content: " ↓"; color: #333; }
-        .ens-table tr:hover td { background: #fafafa; }
+        .ens-table tr:hover td { background: rgba(var(--sec-rgb), 0.3) !important; }
         .ens-empty { color: #888; padding: 2rem 0; text-align: center; }
         .ens-card-factions-screen .ens-faction-tag { color: white; }
         .ens-compact-color {
