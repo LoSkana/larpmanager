@@ -362,8 +362,8 @@ nav#sidebar-nav {
 }
 
 #header.sidebar {
-  margin-left: 21ch;
-  width: calc(100% - 21ch);
+  margin-left: 20ch;
+  width: calc(100% - 20ch);
 }
 
 @media (max-width: 800px) {
