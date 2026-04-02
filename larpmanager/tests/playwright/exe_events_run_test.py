@@ -33,6 +33,34 @@ from larpmanager.tests.utils import just_wait, go_to, login_orga, submit_confirm
 pytestmark = pytest.mark.e2e
 
 
+def test_exe_runs_new_session(pw_page: Any) -> None:
+    """Test creating a new session for an existing event via exe_runs_new."""
+    page, live_server, _ = pw_page
+
+    login_orga(page, live_server)
+
+    go_to(page, live_server, "/manage/runs/new/")
+
+    # Select the existing event using the Select2 widget
+    page.locator("#select2-id_event-container").click()
+    just_wait(page)
+    page.get_by_role("searchbox").last.fill("Test")
+    just_wait(page)
+    page.get_by_role("option", name="Test Larp").click()
+    just_wait(page)
+
+    page.locator("#id_start").fill("2060-01-10")
+    just_wait(page)
+    page.locator("#id_start").click()
+    page.locator("#id_end").fill("2060-01-12")
+    just_wait(page)
+    page.locator("#id_end").click()
+    submit_confirm(page)
+
+    # After saving, we are redirected to the events list
+    expect_normalized(page, page.locator("#one"), "Test Larp")
+
+
 def test_exe_events_run(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
