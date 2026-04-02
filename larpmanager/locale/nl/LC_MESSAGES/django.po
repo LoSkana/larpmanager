@@ -2975,6 +2975,9 @@ msgstr "Pendeldienst"
 msgid "Start algorithm"
 msgstr "Algoritme starten"
 
+msgid "The rule's name"
+msgstr "De naam van de regel"
+
 msgid "Ticket selected"
 msgstr "Geselecteerd ticket"
 
@@ -3755,6 +3758,9 @@ msgstr "Abonnement opzeggen"
 msgid "Support maintainers"
 msgstr "Ondersteunende beheerders"
 
+msgid "The modifier's name"
+msgstr "De naam van de modificator"
+
 msgid "Treasury appointees"
 msgstr "Schatkistbeambten"
 
@@ -4442,6 +4448,12 @@ msgstr "Wat doe je hier nog steeds"
 msgid "You have made a mistake"
 msgstr "Je hebt het verkeerd"
 
+msgid "(Optional) Display order"
+msgstr "(Optioneel) Volgorde weergeven"
+
+msgid "Amount for the operation"
+msgstr "Bedrag voor de operatie"
+
 msgid "Association Translations"
 msgstr "Vereniging Vertalingen"
 
@@ -4977,6 +4989,9 @@ msgstr "Nu kun je personages maken"
 
 msgid "Number of tickets to be drawn"
 msgstr "Aantal te trekken tickets"
+
+msgid "Operation: ADD, SUB, MUL, DIV"
+msgstr "Werking: OPTELLEN, SUB, MUL, DIV"
 
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
@@ -5561,6 +5576,9 @@ msgstr "om te bevestigen ga verder met de betaling"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>antwoord hier</a>)"
+
+msgid "(Optional) Cost (0 = auto assigned)"
+msgstr "(Optioneel) Kosten (0 = automatisch toegewezen)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Optioneel) De beschrijving van het ticket"
@@ -6167,6 +6185,9 @@ msgstr "het zal landspecifieke functies mogelijk maken"
 msgid "will be displayed on the main event page"
 msgstr "wordt weergegeven op de hoofdpagina van het evenement"
 
+msgid "(Optional) Ability names, comma-separated"
+msgstr "(Optioneel) Mogelijkheidsnamen, door komma's gescheiden"
+
 #, python-format
 msgid "<b>Lite Mode</b>: %(progress)s%% complete"
 msgstr "<b>Lite modus</b>: %(progress)s%% voltooid"
@@ -6636,6 +6657,9 @@ msgstr "Som van ontvangen betalingen met betaalmiddelen"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Tekst tonen aan het begin van alle karaktersheets"
+
+msgid "The character field of computed type to update"
+msgstr "Het bij te werken karakterveld van het berekende type"
 
 msgid "This page shows all log entries for this event"
 msgstr "Deze pagina toont alle logboekvermeldingen voor deze gebeurtenis"
@@ -7185,6 +7209,9 @@ msgstr ""
 "Je hebt toestemming gegeven voor het delen van gegevens met deze "
 "organisatie!"
 
+msgid "(Optional) Prerequisite ability names, comma-separated"
+msgstr "(Optioneel) Namen van voorvereiste vermogens, door komma's gescheiden"
+
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr "Een pakkende korte zin of slogan om je evenement te beschrijven"
 
@@ -7528,6 +7555,10 @@ msgstr "Uniek lidmaatschapsnummer toegekend door de organisatie"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "U hebt het maximum aantal selecteerbare opties overschreden"
+
+msgid "(Optional) Required character option names, comma-separated"
+msgstr ""
+"(Optioneel) Namen van verplichte karakteropties, door komma's gescheiden"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
@@ -9069,6 +9100,13 @@ msgid ""
 msgstr ""
 "Upload om het even welk formaat, het zal automatisch worden geoptimaliseerd;"
 " vierkante afbeeldingen werken het best"
+
+msgid ""
+"(Optional) Ability names, comma-separated - rule applies if character has "
+"any"
+msgstr ""
+"(Optioneel) Vermogensnamen, door komma's gescheiden - regel is van "
+"toepassing als teken een"
 
 msgid ""
 "Allows participants to add an optional extra amount to their registration "

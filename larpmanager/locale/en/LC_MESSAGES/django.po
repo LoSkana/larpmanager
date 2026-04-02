@@ -9828,6 +9828,40 @@ msgstr ""
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr ""
 
+msgid "The rule's name"
+msgstr ""
+
+msgid ""
+"(Optional) Ability names, comma-separated - rule applies if character has any"
+msgstr ""
+
+msgid "The character field of computed type to update"
+msgstr ""
+
+msgid "Operation: ADD, SUB, MUL, DIV"
+msgstr ""
+
+msgid "Amount for the operation"
+msgstr ""
+
+msgid "(Optional) Display order"
+msgstr ""
+
+msgid "The modifier's name"
+msgstr ""
+
+msgid "(Optional) Ability names, comma-separated"
+msgstr ""
+
+msgid "(Optional) Cost (0 = auto assigned)"
+msgstr ""
+
+msgid "(Optional) Prerequisite ability names, comma-separated"
+msgstr ""
+
+msgid "(Optional) Required character option names, comma-separated"
+msgstr ""
+
 msgid "The question name"
 msgstr ""
 

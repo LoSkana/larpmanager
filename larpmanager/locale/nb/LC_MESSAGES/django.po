@@ -2975,6 +2975,9 @@ msgstr "Skytteltrafikk"
 msgid "Start algorithm"
 msgstr "Start-algoritme"
 
+msgid "The rule's name"
+msgstr "Regelens navn"
+
 msgid "Ticket selected"
 msgstr "Billett valgt"
 
@@ -3755,6 +3758,9 @@ msgstr "Oppsigelse av abonnement"
 msgid "Support maintainers"
 msgstr "Støtte vedlikeholdere"
 
+msgid "The modifier's name"
+msgstr "Modifikatorens navn"
+
 msgid "Treasury appointees"
 msgstr "Finansdepartementet"
 
@@ -4442,6 +4448,12 @@ msgstr "Hva gjør du fortsatt her"
 msgid "You have made a mistake"
 msgstr "Du tar feil"
 
+msgid "(Optional) Display order"
+msgstr "(Valgfritt) Vis rekkefølge"
+
+msgid "Amount for the operation"
+msgstr "Beløp for operasjonen"
+
 msgid "Association Translations"
 msgstr "Foreningsoversettelser"
 
@@ -4977,6 +4989,9 @@ msgstr "Nå kan du opprette tegn"
 
 msgid "Number of tickets to be drawn"
 msgstr "Antall billetter som skal trekkes"
+
+msgid "Operation: ADD, SUB, MUL, DIV"
+msgstr "Operasjon ADD, SUB, MUL, DIV"
 
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
@@ -5561,6 +5576,9 @@ msgstr "for å bekrefte det, fortsett med betalingen"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>svar her</a>)"
+
+msgid "(Optional) Cost (0 = auto assigned)"
+msgstr "(Valgfritt) Kostnad (0 = automatisk tildelt)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Valgfritt) Billettens beskrivelse"
@@ -6167,6 +6185,9 @@ msgstr "det vil aktivere landsspesifikke funksjoner"
 msgid "will be displayed on the main event page"
 msgstr "vil bli vist på hovedsiden for arrangementet"
 
+msgid "(Optional) Ability names, comma-separated"
+msgstr "(Valgfritt) Navn på evner, kommaseparert"
+
 #, python-format
 msgid "<b>Lite Mode</b>: %(progress)s%% complete"
 msgstr "<b>Lite Mode</b>: %(progress)s%% fullført"
@@ -6633,6 +6654,9 @@ msgstr "Summen av mottatte betalinger med betalingsmiddel"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Tekst vises i starten av alle karakterark"
+
+msgid "The character field of computed type to update"
+msgstr "Tegnfeltet av beregnet type som skal oppdateres"
 
 msgid "This page shows all log entries for this event"
 msgstr "Denne siden viser alle loggoppføringer for denne hendelsen"
@@ -7172,6 +7196,9 @@ msgstr "Du har fått en inngangsbillett til dette arrangementet av"
 msgid "You have granted data sharing with this organisation!"
 msgstr "Du har gitt tillatelse til datadeling med denne organisasjonen!"
 
+msgid "(Optional) Prerequisite ability names, comma-separated"
+msgstr "(Valgfritt) Navn på forutsetninger, kommaseparert"
+
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr ""
 "En fengende kort setning eller et slagord for å beskrive arrangementet ditt"
@@ -7498,6 +7525,9 @@ msgstr "Unikt medlemskortnummer tildelt av organisasjonen"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Du har overskredet det maksimale antallet valgbare alternativer"
+
+msgid "(Optional) Required character option names, comma-separated"
+msgstr "(Valgfritt) Påkrevde navn på tegnalternativer, kommaseparert"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
@@ -8916,6 +8946,12 @@ msgid ""
 msgstr ""
 "Last opp bilder i alle størrelser, så blir de automatisk optimalisert; "
 "firkantede bilder fungerer best"
+
+msgid ""
+"(Optional) Ability names, comma-separated - rule applies if character has "
+"any"
+msgstr ""
+"(Valgfritt) Evnenavn, kommaseparert - regelen gjelder hvis tegnet har noen"
 
 msgid ""
 "Allows participants to add an optional extra amount to their registration "

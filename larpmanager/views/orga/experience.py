@@ -45,7 +45,7 @@ from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new, orga_order
-from larpmanager.utils.io.download import export_abilities, zip_exports
+from larpmanager.utils.io.download import export_abilities, export_modifiers, export_rules, zip_exports
 from larpmanager.utils.services.bulk import handle_bulk_ability
 
 logger = logging.getLogger(__name__)
@@ -275,6 +275,13 @@ def orga_exp_ability_types_delete(request: HttpRequest, event_slug: str, type_uu
 def orga_exp_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display experience rules for an event."""
     context = check_event_context(request, event_slug, "orga_exp_rules")
+
+    if request.POST and request.POST.get("download") == "1":
+        raise ReturnNowError(zip_exports(context, export_rules(context), "Rules"))
+
+    context["upload"] = "exp_rules"
+    context["download"] = 1
+
     # Get all rules ordered
     rules = list(context["event"].get_elements(RuleExp).order_by("order"))
     # Get cached EXP relationship data and enrich rule objects
@@ -346,6 +353,12 @@ def orga_exp_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display and manage experience modifiers for an event."""
     # Check permissions and get event context
     context = check_event_context(request, event_slug, "orga_exp_modifiers")
+
+    if request.POST and request.POST.get("download") == "1":
+        raise ReturnNowError(zip_exports(context, export_modifiers(context), "Modifiers"))
+
+    context["upload"] = "exp_modifiers"
+    context["download"] = 1
 
     # Retrieve ordered list of experience modifiers
     modifiers = list(context["event"].get_elements(ModifierExp).order_by("order"))

@@ -35,7 +35,7 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_configs, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.association import Association
-from larpmanager.models.experience import AbilityExp
+from larpmanager.models.experience import AbilityExp, ModifierExp, RuleExp
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -949,6 +949,34 @@ def _get_column_names(context: dict) -> None:
         ]
         context["name"] = "Ability"
 
+    # Handle experience rule export
+    elif context["typ"] == "exp_rule":
+        context["columns"] = [
+            {
+                "name": _("The rule's name"),
+                "abilities": _("(Optional) Ability names, comma-separated - rule applies if character has any"),
+                "field": _("The character field of computed type to update"),
+                "operation": _("Operation: ADD, SUB, MUL, DIV"),
+                "amount": _("Amount for the operation"),
+                "order": _("(Optional) Display order"),
+            },
+        ]
+        context["name"] = "Rule"
+
+    # Handle experience modifier export
+    elif context["typ"] == "exp_modifier":
+        context["columns"] = [
+            {
+                "name": _("The modifier's name"),
+                "abilities": _("(Optional) Ability names, comma-separated"),
+                "cost": _("(Optional) Cost (0 = auto assigned)"),
+                "prerequisites": _("(Optional) Prerequisite ability names, comma-separated"),
+                "requirements": _("(Optional) Required character option names, comma-separated"),
+                "order": _("(Optional) Display order"),
+            },
+        ]
+        context["name"] = "Modifier"
+
     # Handle registration form (questions + options) export
     elif context["typ"] == "registration_form":
         # First dict: Question definitions with name, type, status
@@ -1225,3 +1253,50 @@ def export_abilities(context: Any) -> Any:
         ability_rows.append(row_data)
 
     return [("abilities", column_headers, ability_rows)]
+
+
+def export_rules(context: Any) -> Any:
+    """Export rules data for an event."""
+    column_headers = ["name", "abilities", "field", "operation", "amount", "order"]
+
+    rule_queryset = (
+        context["event"].get_elements(RuleExp).order_by("order").select_related("field").prefetch_related("abilities")
+    )
+    rule_rows = [
+        [
+            rule.name,
+            ", ".join([ability.name for ability in rule.abilities.all()]),
+            rule.field.name if rule.field else "",
+            rule.operation,
+            rule.amount,
+            rule.order,
+        ]
+        for rule in rule_queryset
+    ]
+
+    return [("rules", column_headers, rule_rows)]
+
+
+def export_modifiers(context: Any) -> Any:
+    """Export modifiers data for an event."""
+    column_headers = ["name", "abilities", "cost", "prerequisites", "requirements", "order"]
+
+    modifier_queryset = (
+        context["event"]
+        .get_elements(ModifierExp)
+        .order_by("order")
+        .prefetch_related("abilities", "prerequisites", "requirements")
+    )
+    modifier_rows = [
+        [
+            modifier.name,
+            ", ".join([ability.name for ability in modifier.abilities.all()]),
+            modifier.cost,
+            ", ".join([prereq.name for prereq in modifier.prerequisites.all()]),
+            ", ".join([req.name for req in modifier.requirements.all()]),
+            modifier.order,
+        ]
+        for modifier in modifier_queryset
+    ]
+
+    return [("modifiers", column_headers, modifier_rows)]

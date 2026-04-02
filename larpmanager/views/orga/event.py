@@ -693,6 +693,10 @@ def orga_upload_template(request: HttpRequest, event_slug: str, upload_type: str
     elif upload_type == "exp_abilitie":
         # Generate abilities template for player experience tracking
         exports = _ability_template(context)
+    elif upload_type == "exp_rule":
+        exports = _rule_template(context)
+    elif upload_type == "exp_modifier":
+        exports = _modifier_template(context)
     else:
         # Generate generic form template for other data types
         exports = _form_template(context)
@@ -748,6 +752,36 @@ def _ability_template(context: dict) -> Any:
         example_row_values.append(example_value)
     export_data.append(("abilities", column_names, [example_row_values]))
     return export_data
+
+
+def _rule_template(context: dict) -> Any:
+    """Generate template for rule uploads with example data."""
+    field_example_values = {
+        "name": "Rule name",
+        "abilities": "Ability name, comma-separated",
+        "field": "Character field name",
+        "operation": "ADD",
+        "amount": "10",
+        "order": "1",
+    }
+    column_names = list(context["columns"][0].keys())
+    example_row = [field_example_values[f] for f in field_example_values if f in column_names]
+    return [("rules", column_names, [example_row])]
+
+
+def _modifier_template(context: dict) -> Any:
+    """Generate template for modifier uploads with example data."""
+    field_example_values = {
+        "name": "Modifier name",
+        "abilities": "Ability name, comma-separated",
+        "cost": "5",
+        "prerequisites": "Prerequisite ability, comma-separated",
+        "requirements": "Character option, comma-separated",
+        "order": "1",
+    }
+    column_names = list(context["columns"][0].keys())
+    example_row = [field_example_values[f] for f in field_example_values if f in column_names]
+    return [("modifiers", column_names, [example_row])]
 
 
 def _form_template(context: dict) -> list[tuple[str, list[str], list[list[str]]]]:
