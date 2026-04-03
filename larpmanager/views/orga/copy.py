@@ -103,7 +103,9 @@ def correct_rels_many(e_id: Any, cls_p: Any, cls: Any, field: Any, rel_field: An
 
         for old_relation in current_relations:
             relation_value = getattr(old_relation, rel_field)
-            new_relation_id = old_id_to_new_id[relation_value]
+            new_relation_id = old_id_to_new_id.get(relation_value)
+            if new_relation_id is None:
+                continue
             new_relation_ids.append(new_relation_id)
 
         many_to_many_field.set(new_relation_ids, clear=True)
@@ -787,6 +789,7 @@ def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int)
     # Copy faction elements
     if "faction" in targets:
         copy_class(target_event_id, parent_event_id, Faction)
+        correct_rels_many(target_event_id, Character, Faction, "characters")
 
     # Copy quest-related elements and fix relationships
     if "quest" in targets:
