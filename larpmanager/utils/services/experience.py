@@ -174,6 +174,8 @@ def _get_available_abilities(
     current_character_choices: set[int],
     modifiers_by_ability: dict[int, list[tuple]],
     px_avail_by_system: dict[int, int],
+    *,
+    visible_only: bool = True,
 ) -> list:
     """Get available abilities for purchase.
 
@@ -183,16 +185,17 @@ def _get_available_abilities(
         current_character_choices: Set of choice IDs the character currently has.
         modifiers_by_ability: Mapping of ability IDs to modifier tuples.
         px_avail_by_system: Mapping of system_id to available EXP points for that system.
+        visible_only: If True, only return visible abilities.
 
     Returns:
         List of AbilityExp instances the character can purchase.
 
     """
+    qs = char.event.get_elements(AbilityExp).exclude(pk__in=current_character_abilities)
+    if visible_only:
+        qs = qs.filter(visible=True, system__hidden=False)
     all_abilities = (
-        char.event.get_elements(AbilityExp)
-        .filter(visible=True)
-        .exclude(pk__in=current_character_abilities)
-        .select_related("typ", "system")
+        qs.select_related("typ", "system")
         .order_by("name")
         .prefetch_related(
             Prefetch("prerequisites", queryset=AbilityExp.objects.only("id")),
@@ -415,9 +418,14 @@ def _handle_free_abilities(
     zero_avail: dict[int, int] = defaultdict(int)
     newly_added_ids: set[int] = set()
     for ability in _get_available_abilities(
-        character, current_character_abilities, current_character_choices, modifiers_by_ability, zero_avail
+        character,
+        current_character_abilities,
+        current_character_choices,
+        modifiers_by_ability,
+        zero_avail,
+        visible_only=False,
     ):
-        if ability.visible and ability.cost == 0 and ability.id not in free_ability_ids:
+        if ability.cost == 0 and ability.id not in free_ability_ids:
             character.exp_ability_list.add(ability)
             free_ability_ids.append(ability.id)
             newly_added_ids.add(ability.id)
@@ -430,7 +438,7 @@ def _handle_free_abilities(
     for ability in _get_current_abilities(
         character, updated_character_abilities, current_character_choices, modifiers_by_ability
     ):
-        if ability.visible and ability.cost > 0 and ability.id in free_ability_ids:
+        if ability.cost > 0 and ability.id in free_ability_ids:
             removed_ability_ids = remove_char_ability(character, ability.id)
             free_ability_ids = list(set(free_ability_ids) - set(removed_ability_ids))
             all_removed_ids |= removed_ability_ids
