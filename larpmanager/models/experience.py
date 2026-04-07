@@ -34,6 +34,8 @@ from larpmanager.models.writing import Character
 class SystemExp(UuidMixin, BaseConceptModel):
     """Represents a named experience system for an event."""
 
+    hidden = models.BooleanField(default=False, verbose_name=_("Hidden"))
+
     class Meta:
         indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
         constraints: ClassVar[list] = [

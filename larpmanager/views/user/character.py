@@ -646,6 +646,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
                 "avail_key": f"exp_avail_{sys.uuid}",
             }
             for sys in get_event_exp_systems(context["event"])
+            if not sys.hidden
         ]
 
     # Get character fields info
@@ -799,6 +800,7 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
             "avail": char.addit.get(f"exp_avail_{sys.uuid}", 0),
         }
         for sys in get_event_exp_systems(context["event"])
+        if not sys.hidden
     ]
 
     # Build available abilities dictionary organized by ability type
