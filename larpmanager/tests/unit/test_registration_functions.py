@@ -20,7 +20,7 @@
 
 """Tests for registration accounting functions"""
 
-from datetime import timedelta
+from datetime import date, timedelta
 from decimal import Decimal
 
 import pytest
@@ -810,6 +810,55 @@ class TestInstallmentFallbackLogic(BaseTestCase):
         self.assertEqual(registration.quota, Decimal("100.00"))  # 150 - 50
         self.assertIsNotNone(registration.deadline)
         self.assertGreaterEqual(registration.deadline, 0)
+
+    def test_installment_fallback_overdue_with_distant_future(self) -> None:
+        """Test fallback when overdue installments exist alongside distant future ones.
+
+        Regression test: previously quota was incorrectly set to 0 when has_distant_installments
+        was True, even if earlier installments were already past due and unpaid.
+        """
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("585.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Ensure membership has no approval date to avoid interference with deadline calculation
+        membership = get_user_membership(member, association.id)
+        membership.date = None
+        membership.save()
+
+        # Installment 1: overdue (days_deadline negative → in the past)
+        RegistrationInstallment.objects.create(
+            event=run.event, amount=Decimal("125.00"), days_deadline=-200, order=1, number=1
+        )
+        # Installment 2: overdue (fixed date in the past)
+        RegistrationInstallment.objects.create(
+            event=run.event,
+            amount=Decimal("150.00"),
+            date_deadline=date.today() - timedelta(days=2),
+            order=2,
+            number=2,
+        )
+        # Installment 3: distant future (beyond alert threshold of 30)
+        RegistrationInstallment.objects.create(
+            event=run.event,
+            amount=Decimal("150.00"),
+            date_deadline=date.today() + timedelta(days=59),
+            order=3,
+            number=3,
+        )
+
+        # Player has not paid anything
+        registration.tot_iscr = Decimal("585.00")
+        registration.tot_payed = Decimal("0.00")
+        registration.quota = 0
+
+        installment_check(registration, alert=30, association_id=association.id)
+
+        # Overdue cumulative is 275 (125 + 150); quota should reflect that debt
+        self.assertEqual(registration.quota, Decimal("275.00"))
+        self.assertEqual(registration.deadline, 0)
 
 
 class TestQuotaCheckFallbackLogic(BaseTestCase):
