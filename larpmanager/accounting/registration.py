@@ -339,9 +339,14 @@ def _set_installment_fallback(
 
     """
     if has_distant_installments:
-        # All installments are beyond alert threshold: player is OK for now
-        registration.quota = 0
-        registration.deadline = 0
+        if cumulative_amount > registration.tot_payed:
+            # Overdue installments exist despite distant future ones: immediate payment
+            registration.quota = cumulative_amount - registration.tot_payed
+            registration.deadline = 0
+        else:
+            # All installments are beyond alert threshold: player is OK for now
+            registration.quota = 0
+            registration.deadline = 0
 
     elif not cumulative_amount:
         # No installments configured at all: use registration date as deadline
