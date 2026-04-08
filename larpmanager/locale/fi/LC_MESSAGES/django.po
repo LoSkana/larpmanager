@@ -756,6 +756,9 @@ msgstr "jäsen"
 msgid "within"
 msgstr "osoitteessa"
 
+msgid "API key"
+msgstr "API-avain"
+
 msgid "Ability"
 msgstr "Taidot"
 
@@ -992,6 +995,9 @@ msgstr "Järjestelmät"
 
 msgid "Tagline"
 msgstr "Tagline"
+
+msgid "Team ID"
+msgstr "Joukkueen tunnus"
 
 msgid "Tickets"
 msgstr "Liput"
@@ -4357,6 +4363,9 @@ msgstr "Varhaisen ilmoittautumisen linkki"
 msgid "Failed to add character"
 msgstr "Merkin lisääminen epäonnistui"
 
+msgid "ILDB - larpdatabase.com"
+msgstr "ILDB - larpdatabase.com"
+
 msgid "Indicate only if rate 0"
 msgstr "Ilmoitetaan vain, jos korko 0"
 
@@ -5355,6 +5364,9 @@ msgstr "Onko tätä tokenia käytetty"
 
 msgid "You need to define the end date!"
 msgstr "Sinun on määriteltävä päättymispäivä!"
+
+msgid "Your team ID on larpdatabase.com"
+msgstr "Joukkuetunnuksesi larpdatabase.com-sivustolla"
 
 msgid "(Optional) The cost of the ticket"
 msgstr "(Valinnainen) Lipun hinta"
@@ -6838,6 +6850,9 @@ msgstr "Mahdollistaa kirjoittajien lisätä suhteita hahmoihin"
 
 msgid "Attention! The form contains errors in the fields"
 msgstr "Huomio! Lomake sisältää virheitä kentissä"
+
+msgid "Authentication token for the larpdatabase.com API"
+msgstr "Todennuskoodi larpdatabase.com API:lle"
 
 msgid "Background image displayed across all event pages"
 msgstr "Taustakuva näytetään kaikilla tapahtumasivuilla"

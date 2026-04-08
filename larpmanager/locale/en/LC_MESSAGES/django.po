@@ -734,6 +734,21 @@ msgid ""
 "panel"
 msgstr ""
 
+msgid "ILDB - larpdatabase.com"
+msgstr ""
+
+msgid "API key"
+msgstr ""
+
+msgid "Authentication token for the larpdatabase.com API"
+msgstr ""
+
+msgid "Team ID"
+msgstr ""
+
+msgid "Your team ID on larpdatabase.com"
+msgstr ""
+
 msgid "App Integration"
 msgstr ""
 

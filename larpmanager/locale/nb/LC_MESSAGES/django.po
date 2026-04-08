@@ -756,6 +756,9 @@ msgstr "medlem"
 msgid "within"
 msgstr "innenfor"
 
+msgid "API key"
+msgstr "API-nøkkel"
+
 msgid "Ability"
 msgstr "Kompetanse"
 
@@ -992,6 +995,9 @@ msgstr "Systemer"
 
 msgid "Tagline"
 msgstr "Tagline"
+
+msgid "Team ID"
+msgstr "Team-ID"
 
 msgid "Tickets"
 msgstr "Billetter"
@@ -4357,6 +4363,9 @@ msgstr "Lenke til tidlig registrering"
 msgid "Failed to add character"
 msgstr "Kunne ikke legge til tegn"
 
+msgid "ILDB - larpdatabase.com"
+msgstr "ILDB - larpdatabase.com"
+
 msgid "Indicate only if rate 0"
 msgstr "Angi kun hvis sats 0"
 
@@ -5355,6 +5364,9 @@ msgstr "Om dette tokenet har blitt brukt"
 
 msgid "You need to define the end date!"
 msgstr "Du må definere sluttdatoen!"
+
+msgid "Your team ID on larpdatabase.com"
+msgstr "Lag-ID-en din på larpdatabase.com"
 
 msgid "(Optional) The cost of the ticket"
 msgstr "(Valgfritt) Kostnaden for billetten"
@@ -6840,6 +6852,9 @@ msgstr "Gjør det mulig for forfattere å legge til relasjoner til karakterer"
 
 msgid "Attention! The form contains errors in the fields"
 msgstr "Vær oppmerksom på følgende! Skjemaet inneholder feil i feltene"
+
+msgid "Authentication token for the larpdatabase.com API"
+msgstr "Autentiseringstoken for larpdatabase.com API"
 
 msgid "Background image displayed across all event pages"
 msgstr "Bakgrunnsbildet vises på alle arrangementssidene"

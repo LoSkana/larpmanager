@@ -756,6 +756,9 @@ msgstr "lid"
 msgid "within"
 msgstr "binnen"
 
+msgid "API key"
+msgstr "API-sleutel"
+
 msgid "Ability"
 msgstr "Vaardigheden"
 
@@ -992,6 +995,9 @@ msgstr "Systemen"
 
 msgid "Tagline"
 msgstr "Tagline"
+
+msgid "Team ID"
+msgstr "Team ID"
 
 msgid "Tickets"
 msgstr "Tickets"
@@ -4357,6 +4363,9 @@ msgstr "Link voor vroege registratie"
 msgid "Failed to add character"
 msgstr "Geen teken toegevoegd"
 
+msgid "ILDB - larpdatabase.com"
+msgstr "ILDB - larpdatabase.nl"
+
 msgid "Indicate only if rate 0"
 msgstr "Alleen aangeven als tarief 0"
 
@@ -5355,6 +5364,9 @@ msgstr "Of dit token is gebruikt"
 
 msgid "You need to define the end date!"
 msgstr "Je moet de einddatum definiëren!"
+
+msgid "Your team ID on larpdatabase.com"
+msgstr "Je team-ID op larpdatabase.com"
 
 msgid "(Optional) The cost of the ticket"
 msgstr "(Optioneel) De kosten van het ticket"
@@ -6846,6 +6858,9 @@ msgstr "Hiermee kunnen auteurs relaties aan personages toevoegen"
 
 msgid "Attention! The form contains errors in the fields"
 msgstr "Attentie! Het formulier bevat fouten in de velden"
+
+msgid "Authentication token for the larpdatabase.com API"
+msgstr "Authenticatie token voor de larpdatabase.com API"
 
 msgid "Background image displayed across all event pages"
 msgstr "Achtergrondafbeelding weergegeven op alle evenementpagina's"

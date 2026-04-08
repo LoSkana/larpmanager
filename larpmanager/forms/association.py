@@ -845,6 +845,17 @@ class ExeConfigForm(ConfigForm):
 
     def set_config_integration(self) -> None:
         """Configure app integration redirect settings for associations."""
+        if "publisher" in self.params["features"] and self.instance.nationality == "it":
+            self.set_section("ildb", _("ILDB - larpdatabase.com"))
+
+            field_label = _("API key")
+            field_help_text = _("Authentication token for the larpdatabase.com API")
+            self.add_configs("ildb_api_key", ConfigType.CHAR, field_label, field_help_text)
+
+            field_label = _("Team ID")
+            field_help_text = _("Your team ID on larpdatabase.com")
+            self.add_configs("ildb_team_id", ConfigType.CHAR, field_label, field_help_text)
+
         if "app_integration" not in self.params["features"]:
             return
 

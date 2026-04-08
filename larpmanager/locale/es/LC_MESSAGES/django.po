@@ -756,6 +756,9 @@ msgstr "miembro"
 msgid "within"
 msgstr "en"
 
+msgid "API key"
+msgstr "Clave API"
+
 msgid "Ability"
 msgstr "Habilidad"
 
@@ -992,6 +995,9 @@ msgstr "Sistemas"
 
 msgid "Tagline"
 msgstr "Etiqueta"
+
+msgid "Team ID"
+msgstr "Identificación del equipo"
 
 msgid "Tickets"
 msgstr "Entradas"
@@ -4357,6 +4363,9 @@ msgstr "Enlace de inscripción anticipada"
 msgid "Failed to add character"
 msgstr "Fallo al añadir personaje"
 
+msgid "ILDB - larpdatabase.com"
+msgstr "ILDB - larpdatabase.com"
+
 msgid "Indicate only if rate 0"
 msgstr "Indicar sólo si tasa 0"
 
@@ -5355,6 +5364,9 @@ msgstr "Si se ha utilizado este token"
 
 msgid "You need to define the end date!"
 msgstr "Debe definir la fecha de finalización."
+
+msgid "Your team ID on larpdatabase.com"
+msgstr "Tu ID de equipo en larpdatabase.com"
 
 msgid "(Optional) The cost of the ticket"
 msgstr "(Opcional) El coste del billete"
@@ -6847,6 +6859,9 @@ msgstr "Permite a los autores añadir relaciones a los personajes"
 
 msgid "Attention! The form contains errors in the fields"
 msgstr "¡Atención! El formulario contiene errores en los siguientes campos"
+
+msgid "Authentication token for the larpdatabase.com API"
+msgstr "Token de autenticación para la API larpdatabase.com"
 
 msgid "Background image displayed across all event pages"
 msgstr "Imagen de fondo en todas las páginas del evento"

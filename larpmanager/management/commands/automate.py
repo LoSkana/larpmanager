@@ -57,6 +57,7 @@ from larpmanager.models.member import Badge, Member, Membership, MembershipStatu
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.io.pdf import print_run_bkg
+from larpmanager.utils.larpmanager.ildb import upload_ildb
 from larpmanager.utils.larpmanager.tasks import notify_admins
 
 
@@ -113,19 +114,7 @@ class Command(BaseCommand):
         # Process feature-specific checks for each association
         # Only run checks if the association has the required features enabled
         for association in Association.objects.all():
-            enabled_features = get_association_features(association.id)
-
-            # Check if reminder notifications need to be sent
-            if "remind" in enabled_features:
-                self.check_remind(association)
-
-            # Process achievement/badge updates for members
-            if "badge" in enabled_features:
-                self.check_achievements(association)
-
-            # Validate and update accounting records
-            if "record_acc" in enabled_features:
-                check_accounting(association.id)
+            self.check_association(association)
 
         # Perform standard system-wide maintenance checks
         # These checks run regardless of feature flags
@@ -152,6 +141,26 @@ class Command(BaseCommand):
             # Generate background PDF documents for the run
             if "print_pdf" in event_features:
                 print_run_bkg(run.event.association.slug, run.get_slug())
+
+    def check_association(self, association: Association) -> None:
+        """Run all feature-specific automation checks for a single association."""
+        enabled_features = get_association_features(association.id)
+
+        # Check if reminder notifications need to be sent
+        if "remind" in enabled_features:
+            self.check_remind(association)
+
+        # Process achievement/badge updates for members
+        if "badge" in enabled_features:
+            self.check_achievements(association)
+
+        # Validate and update accounting records
+        if "record_acc" in enabled_features:
+            check_accounting(association.id)
+
+        # Upload past runs to larpdatabase.com (Italian LARP database)
+        if "publisher" in enabled_features and association.nationality == "it":
+            upload_ildb(association)
 
     @staticmethod
     def check_old_payments() -> None:

@@ -756,6 +756,9 @@ msgstr "člen"
 msgid "within"
 msgstr "v rámci"
 
+msgid "API key"
+msgstr "Klíč API"
+
 msgid "Ability"
 msgstr "Dovednosti"
 
@@ -992,6 +995,9 @@ msgstr "Systémy"
 
 msgid "Tagline"
 msgstr "Tagline"
+
+msgid "Team ID"
+msgstr "ID týmu"
 
 msgid "Tickets"
 msgstr "Vstupenky"
@@ -4357,6 +4363,9 @@ msgstr "Odkaz pro včasnou registraci"
 msgid "Failed to add character"
 msgstr "Nepodařilo se přidat znak"
 
+msgid "ILDB - larpdatabase.com"
+msgstr "ILDB - larpdatabase.com"
+
 msgid "Indicate only if rate 0"
 msgstr "Uveďte pouze v případě sazby 0"
 
@@ -5355,6 +5364,9 @@ msgstr "Zda byl tento token použit"
 
 msgid "You need to define the end date!"
 msgstr "Je třeba určit datum ukončení!"
+
+msgid "Your team ID on larpdatabase.com"
+msgstr "ID vašeho týmu na larpdatabase.com"
 
 msgid "(Optional) The cost of the ticket"
 msgstr "(Nepovinné) Cena letenky"
@@ -6839,6 +6851,9 @@ msgstr "Umožňuje autorům přidávat vztahy k postavám"
 
 msgid "Attention! The form contains errors in the fields"
 msgstr "Pozor! Formulář obsahuje chyby v polích"
+
+msgid "Authentication token for the larpdatabase.com API"
+msgstr "Ověřovací token pro rozhraní API larpdatabase.com"
 
 msgid "Background image displayed across all event pages"
 msgstr "Obrázek na pozadí zobrazený na všech stránkách události"

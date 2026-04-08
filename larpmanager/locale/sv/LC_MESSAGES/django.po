@@ -756,6 +756,9 @@ msgstr "medlem"
 msgid "within"
 msgstr "inom"
 
+msgid "API key"
+msgstr "API-nyckel"
+
 msgid "Ability"
 msgstr "Färdigheter"
 
@@ -992,6 +995,9 @@ msgstr "System"
 
 msgid "Tagline"
 msgstr "Tagline"
+
+msgid "Team ID"
+msgstr "Team-ID"
 
 msgid "Tickets"
 msgstr "Biljetter"
@@ -4357,6 +4363,9 @@ msgstr "Länk för tidig registrering"
 msgid "Failed to add character"
 msgstr "Misslyckades med att lägga till karaktär"
 
+msgid "ILDB - larpdatabase.com"
+msgstr "ILDB - larpdatabase.com"
+
 msgid "Indicate only if rate 0"
 msgstr "Ange endast om hastighet 0"
 
@@ -5355,6 +5364,9 @@ msgstr "Om denna token har använts"
 
 msgid "You need to define the end date!"
 msgstr "Du måste definiera slutdatumet!"
+
+msgid "Your team ID on larpdatabase.com"
+msgstr "Ditt lag-ID på larpdatabase.com"
 
 msgid "(Optional) The cost of the ticket"
 msgstr "(Valfritt) Kostnaden för biljetten"
@@ -6839,6 +6851,9 @@ msgstr ""
 
 msgid "Attention! The form contains errors in the fields"
 msgstr "Varning för fel i formuläret! Formuläret innehåller fel i fälten"
+
+msgid "Authentication token for the larpdatabase.com API"
+msgstr "Autentiseringstoken för API:et larpdatabase.com"
 
 msgid "Background image displayed across all event pages"
 msgstr "Bakgrundsbild visas på alla evenemangssidor"
