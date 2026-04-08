@@ -174,7 +174,7 @@ def signups(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # create another char
-    page.get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Another")
