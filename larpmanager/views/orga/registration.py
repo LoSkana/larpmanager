@@ -507,6 +507,19 @@ def _orga_registrations_text_fields(context: dict) -> None:
             setattr(registration, field_uuid + "_ln", line_number)
 
 
+def _orga_registrations_char_by_count(context: dict) -> None:
+    """Group registrations by number of characters assigned."""
+    if "character" not in context["features"]:
+        return
+    char_by_count: dict[int, list] = {}
+    for r in context["registration_list"]:
+        if r.redeem_code:
+            continue
+        count = len(getattr(r, "chars", None) or [])
+        char_by_count.setdefault(count, []).append(r)
+    context["char_by_count"] = sorted(char_by_count.items())
+
+
 @login_required
 def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display and manage comprehensive event registration list for organizers.
@@ -593,6 +606,8 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Process editor-type question responses for popup display
     _orga_registrations_text_fields(context)
+
+    _orga_registrations_char_by_count(context)
 
     # Enable bulk upload functionality
     context["upload"] = "registrations"

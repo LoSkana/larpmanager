@@ -9,6 +9,9 @@
     {% if features.discount %}
         | <a href="#" class="my_toggle" tog='email_disc'>{% trans "Discounts" %}</a>
     {% endif %}
+    {% if features.character and char_by_count %}
+        | <a href="#" class="my_toggle" tog='char_count'>{% trans "Characters" %}</a>
+    {% endif %}
     {% if list_factions %}
         {% for k, fc in list_factions.items %}
             {% if fc.name %}| <a href="#" class="my_toggle" tog='email_fc_{{ k }}'>{{ fc.name }}</a>{% endif %}
@@ -160,6 +163,42 @@
                     </td>
                 </tr>
             {% endfor %}
+        </table>
+    </div>
+{% endif %}
+{% if features.character and char_by_count %}
+    <div class="hide char_count">
+        <br />
+        <h4>{% trans "Characters" %}</h4>
+        <table class="mob">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th></th>
+                    <th>Emails</th>
+                    <th>Names</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for count, regs in char_by_count %}
+                    <tr>
+                        <th>{{ count }}</th>
+                        <td>{{ regs | length }}</td>
+                        <td>
+                            {% for r in regs %}
+                                {% include "elements/comma.html" with separator="," %}
+                                {{ r.member.email }}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for r in regs %}
+                                {% include "elements/comma.html" with separator="," %}
+                                {{ r.member | title }}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 {% endif %}
