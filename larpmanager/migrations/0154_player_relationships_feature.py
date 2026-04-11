@@ -22,7 +22,7 @@ def convert_player_relationships_config_to_feature(apps: Any, schema_editor: Any
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0154_event_keywords"),
+        ("larpmanager", "0153_systemexp_hidden"),
     ]
 
     operations = [
