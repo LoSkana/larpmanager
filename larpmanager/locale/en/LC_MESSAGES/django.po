@@ -378,12 +378,11 @@ msgstr ""
 msgid "If checked: shows the list of authors for each event"
 msgstr ""
 
-msgctxt "event"
-msgid "Genre"
+msgid "Keywords"
 msgstr ""
 
 msgctxt "event"
-msgid "If checked: shows the genre for each event"
+msgid "If checked: shows the keywords for each event"
 msgstr ""
 
 msgid "Tagline"
@@ -740,13 +739,25 @@ msgstr ""
 msgid "API key"
 msgstr ""
 
-msgid "Authentication token for the larpdatabase.com API"
+msgid "Authentication token (mark all permissions)"
 msgstr ""
 
 msgid "Team ID"
 msgstr ""
 
-msgid "Your team ID on larpdatabase.com"
+msgid "Your team ID"
+msgstr ""
+
+msgid "Upload staff"
+msgstr ""
+
+msgid "If checked: upload staff members"
+msgstr ""
+
+msgid "Upload players"
+msgstr ""
+
+msgid "If checked: upload registered players"
 msgstr ""
 
 msgid "App Integration"
@@ -1930,6 +1941,115 @@ msgstr ""
 msgid "Prologue"
 msgstr ""
 
+msgid "Included"
+msgstr ""
+
+msgid "Not included"
+msgstr ""
+
+msgid "Non-residential"
+msgstr ""
+
+msgid "Camping"
+msgstr ""
+
+msgid "Agritourism"
+msgstr ""
+
+msgid "Historic residence"
+msgstr ""
+
+msgid "Hotel"
+msgstr ""
+
+msgid "Other"
+msgstr ""
+
+msgid "Restaurant"
+msgstr ""
+
+msgid "Self-catering"
+msgstr ""
+
+msgid "Internal catering"
+msgstr ""
+
+msgid "External catering"
+msgstr ""
+
+msgid "Enter a valid number."
+msgstr ""
+
+msgid "Publication"
+msgstr ""
+
+msgid "Manage event metadata for external publication"
+msgstr ""
+
+msgid "Informations"
+msgstr ""
+
+msgid "Languages"
+msgstr ""
+
+msgid "Language(s) the event is held in"
+msgstr ""
+
+msgid "Event type"
+msgstr ""
+
+msgid "Category of the event"
+msgstr ""
+
+msgctxt "event"
+msgid "Genre"
+msgstr ""
+
+msgid "Event genre(s)"
+msgstr ""
+
+msgid "City / Place"
+msgstr ""
+
+msgid "City or place of the event"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "Country of the event"
+msgstr ""
+
+msgid "Accommodation"
+msgstr ""
+
+msgid "Type of accommodation included"
+msgstr ""
+
+msgid "Accommodation details"
+msgstr ""
+
+msgid "Type(s) of accommodation available"
+msgstr ""
+
+msgid "Meals"
+msgstr ""
+
+msgid "Meals included in the event"
+msgstr ""
+
+msgid "Latitude"
+msgstr ""
+
+msgid "Latitude coordinate of the event location"
+msgstr ""
+
+msgid "Longitude"
+msgstr ""
+
+msgid "Longitude coordinate of the event location"
+msgstr ""
+
 msgid "Experience System"
 msgstr ""
 
@@ -2299,9 +2419,6 @@ msgstr ""
 
 msgid ""
 "Enter the order of preference of your pre-registration (1 is the maximum)"
-msgstr ""
-
-msgid "Informations"
 msgstr ""
 
 msgid "Is there anything else you would like to tell us"
@@ -3096,9 +3213,6 @@ msgstr ""
 msgid "Secretarial - stationery, printing"
 msgstr ""
 
-msgid "Other"
-msgstr ""
-
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr ""
 
@@ -3323,9 +3437,6 @@ msgstr ""
 msgid "Color for clickable links and interactive elements"
 msgstr ""
 
-msgid "Country"
-msgstr ""
-
 msgid "Your organization's country"
 msgstr ""
 
@@ -3477,7 +3588,7 @@ msgstr ""
 msgid "will be displayed on the main event page"
 msgstr ""
 
-msgid "The genre or setting of your event"
+msgid "Keywords describing the event"
 msgstr ""
 
 msgid "Cover image"
@@ -5223,6 +5334,10 @@ msgstr ""
 msgid "Organization"
 msgstr ""
 
+msgctxt "event"
+msgid "Keywords"
+msgstr ""
+
 msgid "Total"
 msgstr ""
 
@@ -5802,9 +5917,6 @@ msgstr ""
 msgid ""
 "If you press once, it will be *included* in the search. If a character "
 "belongs to at least one inclusion category, it will be shown in the search"
-msgstr ""
-
-msgid "Included"
 msgstr ""
 
 msgid ""
@@ -9213,9 +9325,6 @@ msgid ""
 msgstr ""
 
 msgid "Now you can create the \"new player\" ticket"
-msgstr ""
-
-msgid "Publication"
 msgstr ""
 
 msgid "Makes upcoming events visible to external sites through a public API"

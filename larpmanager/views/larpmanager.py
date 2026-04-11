@@ -67,6 +67,7 @@ from larpmanager.utils.auth.admin import check_lm_admin
 from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
 from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.exceptions import UserPermissionError
+from larpmanager.utils.larpmanager.ildb import upload_ildb
 from larpmanager.utils.larpmanager.tasks import my_send_mail, send_mail_exec
 from larpmanager.utils.services.association import _reset_all_association
 from larpmanager.views.user.member import get_user_backend
@@ -429,6 +430,18 @@ def debug_send_digests(request: HttpRequest) -> Any:
     # Send all queued digest summaries
     send_daily_organizer_summaries()
 
+    return redirect("home")
+
+
+@login_required
+def debug_ildb(request: HttpRequest) -> Any:
+    """Trigger ILDB upload for the current association for debugging."""
+    if request.enviro not in ["dev", "test"]:
+        raise Http404
+
+    context = get_context(request)
+    association = get_object_or_404(Association, pk=context["association_id"])
+    upload_ildb(association, skip_check=True)
     return redirect("home")
 
 

@@ -426,6 +426,7 @@ class ExeConfigForm(ConfigForm):
         # 5. Email and communications
         self.set_config_email()
         self.set_config_integration()
+        self.set_config_publisher()
 
         # Legacy
         self.set_config_legacy()
@@ -459,9 +460,9 @@ class ExeConfigForm(ConfigForm):
         authors_help_text = _("If checked: shows the list of authors for each event")
         self.add_configs("calendar_authors", ConfigType.BOOL, authors_label, authors_help_text)
 
-        genre_label = pgettext("event", "Genre")
-        genre_help_text = pgettext("event", "If checked: shows the genre for each event")
-        self.add_configs("calendar_genre", ConfigType.BOOL, genre_label, genre_help_text)
+        keywords_label = _("Keywords")
+        keywords_help_text = pgettext("event", "If checked: shows the keywords for each event")
+        self.add_configs("calendar_keywords", ConfigType.BOOL, keywords_label, keywords_help_text)
 
         tagline_label = _("Tagline")
         tagline_help_text = _("If checked: shows the tagline for each event")
@@ -843,19 +844,36 @@ class ExeConfigForm(ConfigForm):
                 help_text_disable_event_approval,
             )
 
+    def set_config_publisher(self) -> None:
+        """Configure external publications for associations."""
+        if "publisher" not in self.params["features"]:
+            return
+
+        self.set_section("ildb", _("ILDB - larpdatabase.com"))
+
+        field_label = _("API key")
+        field_help_text = _("Authentication token (mark all permissions)")
+        self.add_configs("ildb_api_key", ConfigType.CHAR, field_label, field_help_text)
+
+        field_label = _("Team ID")
+        field_help_text = _("Your team ID")
+        self.add_configs("ildb_team_id", ConfigType.CHAR, field_label, field_help_text)
+
+        self.add_configs(
+            "ildb_crew_staff",
+            ConfigType.BOOL,
+            _("Upload staff"),
+            _("If checked: upload staff members"),
+        )
+        self.add_configs(
+            "ildb_crew_players",
+            ConfigType.BOOL,
+            _("Upload players"),
+            _("If checked: upload registered players"),
+        )
+
     def set_config_integration(self) -> None:
         """Configure app integration redirect settings for associations."""
-        if "publisher" in self.params["features"] and self.instance.nationality == "it":
-            self.set_section("ildb", _("ILDB - larpdatabase.com"))
-
-            field_label = _("API key")
-            field_help_text = _("Authentication token for the larpdatabase.com API")
-            self.add_configs("ildb_api_key", ConfigType.CHAR, field_label, field_help_text)
-
-            field_label = _("Team ID")
-            field_help_text = _("Your team ID on larpdatabase.com")
-            self.add_configs("ildb_team_id", ConfigType.CHAR, field_label, field_help_text)
-
         if "app_integration" not in self.params["features"]:
             return
 

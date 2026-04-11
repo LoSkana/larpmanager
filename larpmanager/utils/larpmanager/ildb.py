@@ -19,18 +19,21 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import ast
 import logging
 from datetime import timedelta
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import requests
 from django.db.models import Max, Min
 from django.utils import timezone
 
-from larpmanager.cache.config import get_association_config, save_single_config
+from larpmanager.cache.config import get_association_config, get_element_config, save_single_config
+from larpmanager.forms.event import PublicationEventType, PublicationGenre, PublicationLanguage
 from larpmanager.models.access import EventRole
 from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration, RegistrationTicket, TicketTier
+from larpmanager.utils.core.common import clean_html
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 
 if TYPE_CHECKING:
@@ -45,7 +48,7 @@ ILDB_TEAM_CONFIG_KEY = "ildb_team_id"
 ILDB_RUN_CONFIG = "ildb"
 
 
-def upload_ildb(association: Association) -> None:
+def upload_ildb(association: Association, *, skip_check: bool = False) -> None:
     """Upload past runs to larpdatabase.com (ILDB) as draft events.
 
     Checks all runs whose end date is more than one month ago. For each run
@@ -54,7 +57,8 @@ def upload_ildb(association: Association) -> None:
     notifies the association via email.
 
     Args:
-        association: Association instance with ILDB API key configured.
+        association: Association instance.
+        skip_check: If check already uploaded needs to be skipped.
 
     """
     api_key = get_association_config(association.id, ILDB_CONFIG_KEY, default_value="")
@@ -69,7 +73,7 @@ def upload_ildb(association: Association) -> None:
     ).select_related("event", "event__association")
 
     for run in runs:
-        if run.get_config(ILDB_RUN_CONFIG, default_value=False):
+        if not skip_check and run.get_config(ILDB_RUN_CONFIG, default_value=False):
             continue
 
         try:
@@ -92,12 +96,36 @@ def _process_run(run: Run, api_key: str, team_id: str, association: Association)
     event = run.event
 
     # Load event
-    payload = _build_event_payload(event, run)
-    ildb_event_id = _upload_event(api_key, payload, team_id)
+    payload, locandina = _build_event_payload(event, run)
 
-    # Load crew
-    crew = _build_crew(run, event)
-    _upload_crew(crew, api_key, team_id, ildb_event_id)
+    required = [
+        "nome",
+        "genere",
+        "tipologia",
+        "run",
+        "lingua",
+        "data_inizio",
+        "data_fine",
+        "durata",
+        "tipo_durata",
+        "numero_partecipanti",
+    ]
+    missing = [f for f in required if f not in payload]
+    if missing:
+        notify_admins(f"ILDB: skipping run {run.id} - missing required fields: {missing}", str(run))
+        return
+
+    ildb_event_id = _upload_event(api_key, payload, team_id, locandina)
+
+    upload_staff = get_association_config(association.id, "ildb_crew_staff", default_value=False)
+    if upload_staff:
+        crew = _build_crew(event)
+        _upload_crew(crew, api_key, team_id, ildb_event_id)
+
+    upload_players = get_association_config(association.id, "ildb_crew_players", default_value=False)
+    if upload_players:
+        cast = _build_cast(run)
+        _upload_cast(cast, api_key, team_id, ildb_event_id)
 
     # Mark as processed
     save_single_config(run, ILDB_RUN_CONFIG, "True")
@@ -106,22 +134,37 @@ def _process_run(run: Run, api_key: str, team_id: str, association: Association)
     _notify_association(association, run, ildb_event_id)
 
 
-def _upload_event(api_key: str, payload: dict, team_id: str) -> str:
-    """Upload event paylod to the API."""
+def _upload_event(api_key: str, payload: dict, team_id: str, locandina: object = None) -> str:
+    """Upload event payload to the API.
+
+    Sends as multipart/form-data when a cover image (locandina) is provided,
+    otherwise sends as JSON.
+    """
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Accept": "application/json",
-        "Content-Type": "application/json",
     }
-    response = requests.post(
-        f"{ILDB_API_BASE}/teams/{team_id}/events",
-        json=payload,
-        headers=headers,
-        timeout=30,
-    )
+    url = f"{ILDB_API_BASE}/teams/{team_id}/events"
+
+    if locandina:
+        # Flatten payload for multipart (arrays become repeated fields)
+        data = []
+        for k, v in payload.items():
+            if isinstance(v, list):
+                data.extend((f"{k}[]", item) for item in v)
+            else:
+                data.append((k, v))
+        with locandina.open("rb") as f:
+            response = requests.post(url, data=data, files={"locandina": f}, headers=headers, timeout=30)
+    else:
+        headers["Content-Type"] = "application/json"
+        response = requests.post(url, json=payload, headers=headers, timeout=30)
+
+    if not response.ok:
+        logger.error("ILDB event upload failed %s: %s", response.status_code, response.text)
     response.raise_for_status()
-    data = response.json()
-    return data.get("id", "")
+    json_res = response.json()
+    return json_res.get("data", {}).get("id", "")
 
 
 PLAYER_TIERS = [
@@ -132,8 +175,53 @@ PLAYER_TIERS = [
     TicketTier.PATRON,
 ]
 
+# Maps internal stored values → ILDB Italian API values
+_TIPOLOGIA_MAP = {
+    "one_shot": "one shot",
+    "serie": "serie",
+    "campaign": "campagna",
+    "edu_larp": "edu larp",
+    "convention": "convention",
+    "other": "altro",
+    "chamber": "chamber larp",
+    "laog": "laog",
+}
 
-def _build_event_payload(event: Event, run: Run) -> dict:
+_ACCOMMODATION_MAP = {
+    "included": "compresa",
+    "nope": "non compresa",
+    "nonres": "non residenziale",
+}
+
+_ACCOMMODATION_TYPE_MAP = {
+    "camping": "campeggio",
+    "agritourism": "agriturismo",
+    "historical": "residenza d'epoca",
+    "hotel": "hotel",
+    "other": "altro",
+}
+
+_MEALS_MAP = {
+    "nope": "non compresi",
+    "restaurant": "ristorante",
+    "diy": "fai da te",
+    "internal": "catering interno",
+    "external": "catering esterno",
+}
+
+
+def _parse_multi_config(value: str) -> list:
+    """Parse a MULTI_BOOL config string (stored as Python list repr) into a list."""
+    if not value:
+        return []
+    try:
+        result = ast.literal_eval(value)
+        return result if isinstance(result, list) else []
+    except (ValueError, SyntaxError):
+        return []
+
+
+def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
     """Build the payload with the event data."""
     days = (run.end - run.start).days + 1 if run.start and run.end else None
 
@@ -145,20 +233,59 @@ def _build_event_payload(event: Event, run: Run) -> dict:
         event=run.event, tier__in=PLAYER_TIERS, deleted__isnull=True
     ).aggregate(costo=Min("price"), costo_max=Max("price"))
 
-    return {
+    # Load publication metadata from EventConfig
+    genere_raw = get_element_config(event, "pub_genre", default_value="")
+    genere = [int(g) for g in _parse_multi_config(genere_raw) if g.isdigit()] or [int(PublicationGenre.values[0])]
+
+    lingua_raw = get_element_config(event, "pub_language", default_value="")
+    lingua = _parse_multi_config(lingua_raw) or [PublicationLanguage.values[0]]
+
+    tipologia_raw = get_element_config(event, "pub_event_type", default_value="") or PublicationEventType.values[0]
+    tipologia = _TIPOLOGIA_MAP.get(tipologia_raw, tipologia_raw)
+
+    luogo = get_element_config(event, "pub_place", default_value="") or event.where or None
+    nazione = get_element_config(event, "pub_country", default_value="") or None
+
+    accommodation_raw = get_element_config(event, "pub_accommodation", default_value="")
+    accommodation = _ACCOMMODATION_MAP.get(accommodation_raw, accommodation_raw) or None
+
+    tipo_accommodation_raw = get_element_config(event, "pub_accommodation_type", default_value="")
+    tipo_accommodation = [
+        _ACCOMMODATION_TYPE_MAP.get(v, v) for v in _parse_multi_config(tipo_accommodation_raw)
+    ] or None
+
+    pasti_raw = get_element_config(event, "pub_meals", default_value="")
+    pasti = [_MEALS_MAP.get(v, v) for v in _parse_multi_config(pasti_raw)] or None
+
+    lat = get_element_config(event, "pub_lat", default_value="").strip()
+    lon = get_element_config(event, "pub_lon", default_value="").strip()
+    location = f"{lat},{lon}" if lat and lon else None
+
+    locandina = event.cover if event.cover else None
+
+    payload = {
         "nome": event.name,
-        "abstract": event.description or "",
+        "abstract": clean_html(event.description) or "",
         "data_inizio": run.start.isoformat() if run.start else None,
         "data_fine": run.end.isoformat() if run.end else None,
         "run": str(run.number) if run.number else None,
         "durata": days,
         "tipo_durata": "giorni" if days else None,
-        "luogo": event.where or None,
+        "luogo": luogo,
+        "nazione": nazione,
+        "accommodation": accommodation,
+        "tipo_accommodation": tipo_accommodation,
+        "pasti": pasti,
         "sito_evento": event.website or None,
-        "numero_partecipanti": player_count or None,
-        "costo": ticket_prices["costo"],
-        "costo_max": ticket_prices["costo_max"],
+        "numero_partecipanti": player_count if player_count >= 1 else None,
+        "costo": float(ticket_prices["costo"]) if ticket_prices["costo"] is not None else None,
+        "costo_max": float(ticket_prices["costo_max"]) if ticket_prices["costo_max"] is not None else None,
+        "tipologia": tipologia,
+        "genere": genere,
+        "lingua": lingua,
+        "location": location,
     }
+    return {k: v for k, v in payload.items() if v is not None}, locandina
 
 
 def _upload_crew(crew: list[dict], api_key: str, team_id: str, event_id: str) -> None:
@@ -235,57 +362,127 @@ def _make_crew_entry(member: object, *, is_organizer: bool, role_name: str) -> d
     }
 
 
-def _build_crew(run: Run, event: object) -> list[dict]:
-    """Build the crew list for the ILDB event payload.
+def _build_crew(event: object) -> list[dict]:
+    """Build the crew list (staff/organizers) for the ILDB event payload.
 
-    Collects all EventRole members (staff/organizers) and player registrations,
-    de-duplicating by member. For each person:
-    - first_name/last_name are set from nickname if the member has one
-    - is_organizer is True if the member has any EventRole for this event
-    - role is the name of their first EventRole (lowest number order),
-      or empty for players without a role
+    Collects all EventRole members, de-duplicating by member.
+    is_organizer is True only for members of the role with number=1.
 
     Args:
-        run: Run instance.
-        event: Event instance linked to the run.
+        event: Event instance.
 
     Returns:
-        List of crew dictionaries ready for the ILDB API payload.
+        List of crew dictionaries ready for the ILDB crew API.
 
     """
     crew: list[dict] = []
     processed_member_ids: set[int] = set()
 
-    # Fetch all event roles ordered by number; build member -> first role name map
     roles = list(
         EventRole.objects.filter(event=event, deleted__isnull=True).prefetch_related("members").order_by("number")
     )
     member_first_role = _build_member_first_role(roles)
 
-    # Add EventRole members first (staff / organisers)
     for role in roles:
+        is_organizer = role.number == 1
         for member in role.members.all():
             if member.id in processed_member_ids:
                 continue
             processed_member_ids.add(member.id)
-            crew.append(_make_crew_entry(member, is_organizer=True, role_name=member_first_role[member.id]))
+            crew.append(_make_crew_entry(member, is_organizer=is_organizer, role_name=member_first_role[member.id]))
 
-    # Add registered players (all non-waiting, non-cancelled registrations)
+    return crew
+
+
+def _make_cast_entry(member: object, character_name: str, *, npc: bool) -> dict:
+    """Build a single cast entry dict for the ILDB cast API.
+
+    Args:
+        member: Member instance.
+        character_name: Name of the character played.
+        npc: Whether this is an NPC.
+
+    Returns:
+        Cast entry dict ready for POST /teams/{team}/events/{event}/cast.
+
+    """
+    if member.nickname:  # type: ignore[attr-defined]
+        first_name = member.nickname  # type: ignore[attr-defined]
+        last_name = ""
+    else:
+        first_name = member.name  # type: ignore[attr-defined]
+        last_name = member.surname  # type: ignore[attr-defined]
+
+    return {
+        "first_name": first_name,
+        "last_name": last_name,
+        "character": character_name,
+        "npc": npc,
+    }
+
+
+def _build_cast(run: Run) -> list[dict]:
+    """Build the cast list (players) for the ILDB event payload.
+
+    Collects all non-cancelled, non-waiting registrations that have an
+    assigned character, de-duplicating by member.
+
+    Args:
+        run: Run instance.
+
+    Returns:
+        List of cast dictionaries ready for the ILDB cast API.
+
+    """
+    cast: list[dict] = []
+    processed_member_ids: set[int] = set()
+
     registrations = (
         Registration.objects.filter(run=run, cancellation_date__isnull=True)
         .exclude(ticket__tier=TicketTier.WAITING)
         .select_related("member", "ticket")
+        .prefetch_related("rcrs__character")
     )
     for reg in registrations:
         member = reg.member
         if member.id in processed_member_ids:
             continue
-        processed_member_ids.add(member.id)
-        is_organizer = member.id in member_first_role
-        role_name = member_first_role.get(member.id, "")
-        crew.append(_make_crew_entry(member, is_organizer=is_organizer, role_name=role_name))
 
-    return crew
+        rcr = reg.rcrs.first()
+        if rcr is None:
+            continue
+
+        processed_member_ids.add(member.id)
+        character_name = rcr.custom_name or rcr.character.name
+        npc = reg.ticket.tier == TicketTier.NPC
+        cast.append(_make_cast_entry(member, character_name, npc=npc))
+
+    return cast
+
+
+def _upload_cast(cast: list[dict], api_key: str, team_id: str, event_id: str) -> None:
+    """POST each cast member to the ILDB cast endpoint.
+
+    Args:
+        cast: List of cast entry dicts.
+        api_key: ILDB API authentication token.
+        team_id: ILDB team ID.
+        event_id: ILDB event ID returned by event creation.
+
+    """
+    if not event_id:
+        return
+
+    url = f"{ILDB_API_BASE}/teams/{team_id}/events/{event_id}/cast"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+
+    for entry in cast:
+        response = requests.post(url, json=entry, headers=headers, timeout=30)
+        response.raise_for_status()
 
 
 def _notify_association(association: Association, run: Run, ildb_event_id: str) -> None:

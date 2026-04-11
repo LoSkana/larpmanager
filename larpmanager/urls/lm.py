@@ -164,6 +164,11 @@ urlpatterns = [
         name="ticket",
     ),
     path(
+        "debug/ildb/",
+        views_lm.debug_ildb,
+        name="debug_ildb",
+    ),
+    path(
         "debug/mail/",
         views_lm.debug_mail,
         name="debug_mail",

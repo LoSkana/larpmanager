@@ -25,8 +25,9 @@ from typing import Any, ClassVar
 from django import forms
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
+from django.db.models import TextChoices
 from django.forms import Textarea
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext
 
 from larpmanager.cache.config import (
     get_association_config,
@@ -147,7 +148,7 @@ class OrgaEventForm(BaseModelForm):
             "where",
             "authors",
             "description",
-            "genre",
+            "keywords",
             "visible",
             "max_pg",
             "max_waiting",
@@ -195,7 +196,7 @@ class OrgaEventForm(BaseModelForm):
         # Check each display-related feature and mark fields for removal if disabled
         dl = [
             s
-            for s in ["visible", "website", "tagline", "where", "authors", "genre"]
+            for s in ["visible", "website", "tagline", "where", "authors", "keywords"]
             if s not in self.params.get("features")
         ]
 
@@ -2130,3 +2131,171 @@ class OrgaPreferencesForm(ExePreferencesForm):
             if feature and feature not in self.params["features"]:
                 continue
             extra_fields.append((field_id, field_label))
+
+
+class PublicationAccommodation(TextChoices):
+    """Accommodation type for publication."""
+
+    INCLUDED = "included", _("Included")
+    NOT_INCLUDED = "nope", _("Not included")
+    NON_RESIDENTIAL = "nonres", _("Non-residential")
+
+
+class PublicationAccommodationType(TextChoices):
+    """Accommodation facility details for publication."""
+
+    CAMPING = "camping", _("Camping")
+    FARM_STAY = "agritourism", _("Agritourism")
+    HISTORIC_RESIDENCE = "historical", _("Historic residence")
+    HOTEL = "hotel", _("Hotel")
+    OTHER = "other", _("Other")
+
+
+class PublicationMeals(TextChoices):
+    """Meals included for publication."""
+
+    NOT_INCLUDED = "nope", _("Not included")
+    RESTAURANT = "restaurant", _("Restaurant")
+    SELF_CATERING = "diy", _("Self-catering")
+    INTERNAL_CATERING = "internal", _("Internal catering")
+    EXTERNAL_CATERING = "external", _("External catering")
+
+
+class PublicationGenre(TextChoices):
+    """Event genre IDs for publication."""
+
+    FANTASY = "1", "Fantasy"
+    HORROR = "2", "Horror"
+    SCI_FI = "3", "Sci-Fi"
+    HISTORICAL = "4", "Historical"
+    CONTEMPORARY = "5", "Contemporary"
+    POST_APOCALYPTIC = "6", "Post-Apocalyptic"
+    STEAMPUNK = "7", "Steampunk"
+    CYBERPUNK = "8", "Cyberpunk"
+    NOIR = "9", "Noir"
+    SUPERNATURAL = "10", "Supernatural"
+    POLITICAL = "11", "Political"
+    ACTION_ADVENTURE = "12", "Action / Adventure"
+
+
+class PublicationEventType(TextChoices):
+    """Event category for publication."""
+
+    ONE_SHOT = "one_shot", "One shot"
+    SERIES = "serie", "Series"
+    CAMPAIGN = "campaign", "Campaign"
+    EDU_LARP = "edu_larp", "Edu larp"
+    CONVENTION = "convention", "Convention"
+    OTHER = "other", "Other"
+    CHAMBER_LARP = "chamber", "Chamber larp"
+    LAOG = "laog", "LAOG"
+
+
+class PublicationLanguage(TextChoices):
+    """Event language for publication."""
+
+    ENGLISH = "en", "English"
+    ITALIAN = "it", "Italian"
+    FRENCH = "fr", "French"
+    SPANISH = "es", "Spanish"
+    GERMAN = "de", "German"
+    SLOVENIAN = "sl", "Slovenian"
+    CHINESE = "zh", "Chinese"
+    HUNGARIAN = "hu", "Hungarian"
+    POLISH = "pl", "Polish"
+    DUTCH = "nl", "Dutch"
+    BULGARIAN = "bg", "Bulgarian"
+    GREEK = "el", "Greek"
+
+
+def validate_coordinate(value: str) -> None:
+    """Validate that a string is a valid decimal coordinate number."""
+    if not value:
+        return
+    try:
+        float(value)
+    except ValueError as err:
+        raise ValidationError(_("Enter a valid number.")) from err
+
+
+class OrgaPublicationForm(ConfigForm):
+    """Form for configuring ILDB publication metadata for an event."""
+
+    page_title = _("Publication")
+
+    page_info = _("Manage event metadata for external publication")
+
+    show_sections = True
+
+    load_js: ClassVar[list] = ["leaflet-picker"]
+
+    class Meta:
+        model = Event
+        fields = ()
+
+    def set_configs(self) -> None:
+        """Configure publication metadata fields."""
+        self.set_section("info", _("Informations"))
+
+        self.add_configs(
+            "pub_language",
+            ConfigType.MULTI_BOOL,
+            _("Languages"),
+            _("Language(s) the event is held in"),
+            PublicationLanguage.choices,
+        )
+
+        self.add_configs(
+            "pub_event_type",
+            ConfigType.CHOICE,
+            _("Event type"),
+            _("Category of the event"),
+            [("", "---"), *list(PublicationEventType.choices)],
+        )
+
+        self.add_configs(
+            "pub_genre",
+            ConfigType.MULTI_BOOL,
+            pgettext("event", "Genre"),
+            _("Event genre(s)"),
+            PublicationGenre.choices,
+        )
+
+        self.add_configs("pub_place", ConfigType.CHAR, _("City / Place"), _("City or place of the event"))
+        self.add_configs("pub_country", ConfigType.CHAR, _("Country"), _("Country of the event"))
+        self.add_configs(
+            "pub_accommodation",
+            ConfigType.CHOICE,
+            _("Accommodation"),
+            _("Type of accommodation included"),
+            [("", "---"), *list(PublicationAccommodation.choices)],
+        )
+        self.add_configs(
+            "pub_accommodation_type",
+            ConfigType.MULTI_BOOL,
+            _("Accommodation details"),
+            _("Type(s) of accommodation available"),
+            PublicationAccommodationType.choices,
+        )
+        self.add_configs(
+            "pub_meals",
+            ConfigType.MULTI_BOOL,
+            _("Meals"),
+            _("Meals included in the event"),
+            PublicationMeals.choices,
+        )
+
+        self.add_configs(
+            "pub_lat",
+            ConfigType.CHAR,
+            _("Latitude"),
+            _("Latitude coordinate of the event location"),
+            [validate_coordinate],
+        )
+        self.add_configs(
+            "pub_lon",
+            ConfigType.CHAR,
+            _("Longitude"),
+            _("Longitude coordinate of the event location"),
+            [validate_coordinate],
+        )

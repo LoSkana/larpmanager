@@ -799,3 +799,9 @@ def _validate_and_fetch_objects(model_class: type, ids: int | list[int], model_n
         logger.warning("%s IDs %s not found for cache refresh", model_name, missing_ids)
 
     return list(objects)
+
+
+def clean_html(tx: str) -> str:
+    """Remove HTML tags and clean up whitespace from the given string."""
+    tx = tx.replace("<br />", " ")
+    return strip_tags(tx)

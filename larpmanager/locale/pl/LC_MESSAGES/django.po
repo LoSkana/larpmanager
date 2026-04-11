@@ -378,6 +378,9 @@ msgstr "Wykres"
 msgid "Gross"
 msgstr "Brutto"
 
+msgid "Hotel"
+msgstr "Hotel"
+
 msgid "Image"
 msgstr "Obraz"
 
@@ -389,6 +392,9 @@ msgstr "Przedmioty"
 
 msgid "Login"
 msgstr "Logowanie"
+
+msgid "Meals"
+msgstr "Posiłki"
 
 msgid "Media"
 msgstr "Media"
@@ -795,6 +801,9 @@ msgstr "Średnia"
 msgid "Balance"
 msgstr "Równowaga"
 
+msgid "Camping"
+msgstr "Kemping"
+
 msgid "Casting"
 msgstr "Casting"
 
@@ -1191,8 +1200,14 @@ msgstr "W zestawie"
 msgid "Invoices"
 msgstr "Faktury"
 
+msgid "Keywords"
+msgstr "Słowa kluczowe"
+
 msgid "Language"
 msgstr "Język"
+
+msgid "Latitude"
+msgstr "Szerokość geograficzna"
 
 msgid "Location"
 msgstr "Lokalizacja"
@@ -1461,8 +1476,14 @@ msgstr "Interfejs"
 msgid "Inventory"
 msgstr "Inwentaryzacja"
 
+msgid "Languages"
+msgstr "Języki"
+
 msgid "Load list"
 msgstr "Lista obciążeń"
+
+msgid "Longitude"
+msgstr "Długość geograficzna"
 
 msgid "Mandatory"
 msgstr "Obowiązkowe"
@@ -1680,6 +1701,9 @@ msgstr "Obszar wydarzenia"
 msgid "Event name"
 msgstr "Nazwa wydarzenia"
 
+msgid "Event type"
+msgstr "Typ zdarzenia"
+
 msgid "Experience"
 msgstr "Doświadczenie"
 
@@ -1791,6 +1815,9 @@ msgstr "Usuń tag"
 msgid "Repertoire"
 msgstr "Repertuar"
 
+msgid "Restaurant"
+msgstr "Restauracja"
+
 msgid "Run number"
 msgstr "Numer biegu"
 
@@ -1895,6 +1922,9 @@ msgstr "Dodaj do wykresu"
 
 msgid "Additionals"
 msgstr "Dodatki"
+
+msgid "Agritourism"
+msgstr "Agroturystyka"
 
 msgid "Amount paid"
 msgstr "Zapłacona kwota"
@@ -2154,6 +2184,9 @@ msgstr "Anulowanie"
 msgid "Change photo"
 msgstr "Zmień zdjęcie"
 
+msgid "City / Place"
+msgstr "Miasto / miejsce"
+
 msgid "Collaborator"
 msgstr "Współpracownik"
 
@@ -2222,6 +2255,9 @@ msgstr "Gmina"
 
 msgid "Next payment"
 msgstr "Następna płatność"
+
+msgid "Not included"
+msgstr "Nie zawiera"
 
 msgid "Not selected"
 msgstr "Nie wybrano"
@@ -2322,6 +2358,9 @@ msgstr "Tłumaczenia"
 msgid "Type of text"
 msgstr "Rodzaj tekstu"
 
+msgid "Upload staff"
+msgstr "Prześlij personel"
+
 msgid "Uploading..."
 msgstr "Przesyłanie..."
 
@@ -2349,6 +2388,9 @@ msgstr "Otwarcie nastąpi o godz"
 msgid "You must pay"
 msgstr "Musisz zapłacić"
 
+msgid "Your team ID"
+msgstr "Identyfikator zespołu"
+
 msgid "already used"
 msgstr "już używany"
 
@@ -2367,6 +2409,9 @@ msgstr "Odmowa dostępu"
 
 msgid "Accessibility"
 msgstr "Dostępność"
+
+msgid "Accommodation"
+msgstr "Zakwaterowanie"
 
 msgid "Age selection"
 msgstr "Wybór wieku"
@@ -2563,6 +2608,9 @@ msgstr "Wnioski otwarte"
 msgid "Require login"
 msgstr "Wymagaj logowania"
 
+msgid "Self-catering"
+msgstr "Wyżywienie we własnym zakresie"
+
 msgid "Shared secret"
 msgstr "Wspólny sekret"
 
@@ -2683,6 +2731,9 @@ msgstr "Tworzenie zdarzeń"
 
 msgid "Event features"
 msgstr "Cechy wydarzenia"
+
+msgid "Event genre(s)"
+msgstr "Gatunki wydarzeń"
 
 msgid "Executive Vote"
 msgstr "Głosowanie wykonawcze"
@@ -2828,6 +2879,9 @@ msgstr "Prologi typu"
 msgid "URL identifier"
 msgstr "Identyfikator URL"
 
+msgid "Upload players"
+msgstr "Przesyłanie graczy"
+
 msgid "Value required"
 msgstr "Wymagana wartość"
 
@@ -2932,6 +2986,9 @@ msgstr "Tekst wielowierszowy"
 
 msgid "Multiple choice"
 msgstr "Wielokrotny wybór"
+
+msgid "Non-residential"
+msgstr "Niemieszkalne"
 
 msgid "Overall balance"
 msgstr "Ogólny bilans"
@@ -3326,6 +3383,9 @@ msgstr "System doświadczeń"
 msgid "Experience points"
 msgstr "Punkty doświadczenia"
 
+msgid "External catering"
+msgstr "Catering zewnętrzny"
+
 msgid "Faction selection"
 msgstr "Wybór frakcji"
 
@@ -3349,6 +3409,9 @@ msgstr "Zdjęcie dokumentu tożsamości"
 
 msgid "Identity document"
 msgstr "Dokument tożsamości"
+
+msgid "Internal catering"
+msgstr "Catering wewnętrzny"
 
 msgid "Invalid selection"
 msgstr "Nieprawidłowy wybór"
@@ -3523,6 +3586,9 @@ msgstr "Pierwsza rejestracja"
 
 msgid "Hide not available"
 msgstr "Ukryj niedostępne"
+
+msgid "Historic residence"
+msgstr "Historyczna rezydencja"
 
 msgid "Informations saved"
 msgstr "Informacje zapisane"
@@ -3803,6 +3869,9 @@ msgstr "Pełny arkusz (Pdf)"
 msgid "Confirm your choices"
 msgstr "Potwierdzić swój wybór"
 
+msgid "Country of the event"
+msgstr "Kraj wydarzenia"
+
 msgid "Create new character"
 msgstr "Tworzenie nowej postaci"
 
@@ -3973,6 +4042,9 @@ msgstr "Tak, informuj mnie na bieżąco!"
 msgid "Access your character"
 msgstr "Uzyskaj dostęp do swojej postaci"
 
+msgid "Accommodation details"
+msgstr "Szczegóły dotyczące zakwaterowania"
+
 msgid "Advanced Mode Enabled"
 msgstr "Tryb zaawansowany włączony"
 
@@ -3981,6 +4053,9 @@ msgstr "Zatwierdzenie zwrotu kosztów"
 
 msgid "Assigned staff member"
 msgstr "Przydzielony pracownik"
+
+msgid "Category of the event"
+msgstr "Kategoria wydarzenia"
 
 msgid "Character Inventories"
 msgstr "Spisy postaci"
@@ -4017,6 +4092,9 @@ msgstr "Wyłącz zmianę kwoty"
 
 msgid "Discover the web site"
 msgstr "Odkryj stronę internetową"
+
+msgid "Enter a valid number."
+msgstr "Wprowadź prawidłowy numer."
 
 msgid "Failed password reset"
 msgstr "Nieudany reset hasła"
@@ -4715,6 +4793,9 @@ msgstr "Nie można kopiować z tego samego zdarzenia"
 msgid "Check inverse relationship"
 msgstr "Sprawdź odwrotną zależność"
 
+msgid "City or place of the event"
+msgstr "Miasto lub miejsce wydarzenia"
+
 msgid "Discover the game factions"
 msgstr "Odkryj frakcje w grze"
 
@@ -4839,6 +4920,9 @@ msgstr "Zarządzanie postaciami wydarzenia"
 
 msgid "Manage warehouse containers"
 msgstr "Zarządzanie kontenerami magazynowymi"
+
+msgid "Meals included in the event"
+msgstr "Posiłki wliczone w cenę wydarzenia"
 
 msgid "Members of the Organization"
 msgstr "Członkowie organizacji"
@@ -4980,6 +5064,9 @@ msgstr "Jeśli zaznaczone: aktywuje nowe menu"
 
 msgid "Indicate the outflow category"
 msgstr "Wskaż kategorię odpływu"
+
+msgid "Keywords describing the event"
+msgstr "Słowa kluczowe opisujące wydarzenie"
 
 msgid "Manage expense items incurred"
 msgstr "Zarządzanie poniesionymi wydatkami"
@@ -5132,6 +5219,9 @@ msgstr "Pokaż/ukryj ukończone kamienie milowe"
 
 msgid "The registrations to the event"
 msgstr "Rejestracje na wydarzenie"
+
+msgid "Type of accommodation included"
+msgstr "Rodzaj zakwaterowania wliczony w cenę"
 
 msgid "Upload and host files directly"
 msgstr "Bezpośrednie przesyłanie i hostowanie plików"
@@ -5293,8 +5383,14 @@ msgstr "Wyświetla listę wiadomości e-mail użytkowników"
 msgid "Do you want to tell us something"
 msgstr "Chcesz nam coś powiedzieć"
 
+msgid "If checked: upload staff members"
+msgstr "Jeśli zaznaczono: prześlij członków personelu"
+
 msgid "Is it selectable by participants"
 msgstr "Czy jest wybierany przez uczestników"
+
+msgid "Language(s) the event is held in"
+msgstr "Języki, w których odbywa się wydarzenie"
 
 msgid "Manage expenses for contributors"
 msgstr "Zarządzanie wydatkami dla współpracowników"
@@ -5364,9 +5460,6 @@ msgstr "Czy token został użyty"
 
 msgid "You need to define the end date!"
 msgstr "Musisz określić datę końcową!"
-
-msgid "Your team ID on larpdatabase.com"
-msgstr "Identyfikator zespołu na stronie larpdatabase.com"
 
 msgid "(Optional) The cost of the ticket"
 msgstr "(Opcjonalnie) Koszt biletu"
@@ -5561,14 +5654,14 @@ msgstr "Kolekcja została dostarczona!"
 msgid "The form is saved every 30 seconds"
 msgstr "Formularz jest zapisywany co 30 sekund"
 
-msgid "The genre or setting of your event"
-msgstr "Gatunek lub otoczenie wydarzenia"
-
 msgid "The payment has not been completed"
 msgstr "Płatność nie została zrealizowana"
 
 msgid "This page shows the warehouse tags"
 msgstr "Ta strona pokazuje znaczniki magazynu"
+
+msgid "Type(s) of accommodation available"
+msgstr "Dostępne rodzaje zakwaterowania"
 
 msgid "You are about to make a payment of"
 msgstr "Masz zamiar dokonać płatności w wysokości"
@@ -5823,6 +5916,9 @@ msgstr "Ukryj uczestników bez znaku"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Jeśli zaznaczone, zezwól na poziom biletu: Sprzedawca"
+
+msgid "If checked: upload registered players"
+msgstr "Jeśli zaznaczone: prześlij zarejestrowanych graczy"
 
 msgid "Learn all characters before the event"
 msgstr "Poznaj wszystkie postacie przed wydarzeniem"
@@ -6230,6 +6326,9 @@ msgstr "Kwota darowizny wybrana przez uczestnika"
 msgid "I do it routinely, I have good experience"
 msgstr "Robię to rutynowo, mam dobre doświadczenie"
 
+msgid "Latitude coordinate of the event location"
+msgstr "Współrzędna szerokości geograficznej miejsca zdarzenia"
+
 msgid "Manage templates for experience abilities"
 msgstr "Zarządzanie szablonami zdolności doświadczenia"
 
@@ -6289,9 +6388,8 @@ msgstr "Kod języka ISO (np. 'en', 'it', 'de')"
 msgid "If checked, allows to delete items in bulk"
 msgstr "Jeśli zaznaczone, pozwala na zbiorcze usuwanie elementów"
 
-msgctxt "event"
-msgid "If checked: shows the genre for each event"
-msgstr "Jeśli zaznaczone: pokazuje gatunek dla każdego wydarzenia"
+msgid "Longitude coordinate of the event location"
+msgstr "Współrzędna długości geograficznej miejsca zdarzenia"
 
 msgid "Manage configuration of activated features"
 msgstr "Zarządzanie konfiguracją aktywowanych funkcji"
@@ -6391,6 +6489,9 @@ msgstr "Możliwość przełączania rejestracji między wydarzeniami"
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr "Zatwierdzenie %(user)s jako %(role)s dla %(event)s"
+
+msgid "Authentication token (mark all permissions)"
+msgstr "Token uwierzytelniania (zaznacz wszystkie uprawnienia)"
 
 msgid "Characters are only visible to participants"
 msgstr "Postacie są widoczne tylko dla uczestników"
@@ -6562,6 +6663,10 @@ msgstr "Definiowanie ról w celu przyznania dostępu do zarządzania zdarzeniami
 msgid "Extra price applied when this quota is active"
 msgstr "Dodatkowa cena stosowana, gdy ten limit jest aktywny"
 
+msgctxt "event"
+msgid "If checked: shows the keywords for each event"
+msgstr "Jeśli zaznaczone: wyświetla słowa kluczowe dla każdego wydarzenia"
+
 msgid "If checked: shows the position for each event"
 msgstr "Jeśli zaznaczone: pokazuje pozycję dla każdego zdarzenia"
 
@@ -6631,6 +6736,9 @@ msgstr "Wskazówka: Prawidłowe odpowiedzi na to pytanie to"
 
 msgid "Indicates what gender you identify yourself as"
 msgstr "Wskazuje płeć, z którą się identyfikujesz"
+
+msgid "Manage event metadata for external publication"
+msgstr "Zarządzanie metadanymi wydarzeń na potrzeby publikacji zewnętrznych"
 
 msgid "Manage your event expenses and upload receipts"
 msgstr "Zarządzanie wydatkami na wydarzenia i przesyłanie paragonów"
@@ -6853,9 +6961,6 @@ msgstr "Umożliwia autorom dodawanie relacji do postaci"
 
 msgid "Attention! The form contains errors in the fields"
 msgstr "Uwaga! Formularz zawiera błędy w polach"
-
-msgid "Authentication token for the larpdatabase.com API"
-msgstr "Token uwierzytelniający dla interfejsu API larpdatabase.com"
 
 msgid "Background image displayed across all event pages"
 msgstr "Obraz tła wyświetlany na wszystkich stronach wydarzenia"

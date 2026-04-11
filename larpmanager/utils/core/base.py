@@ -513,7 +513,7 @@ def get_run(context: Any, event_slug: Any) -> None:
             "event__where",
             "event__authors",
             "event__description",
-            "event__genre",
+            "event__keywords",
             "event__cover",
             "event__carousel_img",
             "event__carousel_text",

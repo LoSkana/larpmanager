@@ -378,6 +378,9 @@ msgstr "Grafiek"
 msgid "Gross"
 msgstr "Bruto"
 
+msgid "Hotel"
+msgstr "Hotel"
+
 msgid "Image"
 msgstr "Afbeelding"
 
@@ -389,6 +392,9 @@ msgstr "Items"
 
 msgid "Login"
 msgstr "Inloggen"
+
+msgid "Meals"
+msgstr "Maaltijden"
 
 msgid "Media"
 msgstr "Media"
@@ -795,6 +801,9 @@ msgstr "Media"
 msgid "Balance"
 msgstr "Soldeer"
 
+msgid "Camping"
+msgstr "Camping"
+
 msgid "Casting"
 msgstr "Gieten"
 
@@ -1191,8 +1200,14 @@ msgstr "Inclusief"
 msgid "Invoices"
 msgstr "Facturen"
 
+msgid "Keywords"
+msgstr "Trefwoorden"
+
 msgid "Language"
 msgstr "Taal"
+
+msgid "Latitude"
+msgstr "Breedte"
 
 msgid "Location"
 msgstr "Locatie"
@@ -1461,8 +1476,14 @@ msgstr "Interface"
 msgid "Inventory"
 msgstr "Inventaris"
 
+msgid "Languages"
+msgstr "Talen"
+
 msgid "Load list"
 msgstr "Lijst laden"
+
+msgid "Longitude"
+msgstr "Lengte"
 
 msgid "Mandatory"
 msgstr "Verplicht"
@@ -1680,6 +1701,9 @@ msgstr "Evenemententerrein"
 msgid "Event name"
 msgstr "Naam evenement"
 
+msgid "Event type"
+msgstr "Type evenement"
+
 msgid "Experience"
 msgstr "Ervaring"
 
@@ -1791,6 +1815,9 @@ msgstr "Tag verwijderen"
 msgid "Repertoire"
 msgstr "Repertoire"
 
+msgid "Restaurant"
+msgstr "Restaurant"
+
 msgid "Run number"
 msgstr "Runnummer"
 
@@ -1895,6 +1922,9 @@ msgstr "Toevoegen aan perceel"
 
 msgid "Additionals"
 msgstr "Toevoegingen"
+
+msgid "Agritourism"
+msgstr "Agrotoerisme"
 
 msgid "Amount paid"
 msgstr "Betaald bedrag"
@@ -2154,6 +2184,9 @@ msgstr "Annulering"
 msgid "Change photo"
 msgstr "Foto wijzigen"
 
+msgid "City / Place"
+msgstr "Stad / Plaats"
+
 msgid "Collaborator"
 msgstr "Deelnemer"
 
@@ -2222,6 +2255,9 @@ msgstr "Gemeente"
 
 msgid "Next payment"
 msgstr "Volgende betaling"
+
+msgid "Not included"
+msgstr "Niet inbegrepen"
 
 msgid "Not selected"
 msgstr "Niet geselecteerd"
@@ -2322,6 +2358,9 @@ msgstr "Vertalingen"
 msgid "Type of text"
 msgstr "Type tekst"
 
+msgid "Upload staff"
+msgstr "Personeel uploaden"
+
 msgid "Uploading..."
 msgstr "Uploaden..."
 
@@ -2349,6 +2388,9 @@ msgstr "Ze gaan open op"
 msgid "You must pay"
 msgstr "U moet betalen"
 
+msgid "Your team ID"
+msgstr "Je team-ID"
+
 msgid "already used"
 msgstr "al gebruikt"
 
@@ -2367,6 +2409,9 @@ msgstr "Toegang geweigerd"
 
 msgid "Accessibility"
 msgstr "Toegankelijkheid"
+
+msgid "Accommodation"
+msgstr "Accommodatie"
 
 msgid "Age selection"
 msgstr "Leeftijdselectie"
@@ -2563,6 +2608,9 @@ msgstr "Open vragen"
 msgid "Require login"
 msgstr "Aanmelden vereist"
 
+msgid "Self-catering"
+msgstr "Self-catering"
+
 msgid "Shared secret"
 msgstr "Gedeeld geheim"
 
@@ -2683,6 +2731,9 @@ msgstr "Evenement maken"
 
 msgid "Event features"
 msgstr "Functies van het evenement"
+
+msgid "Event genre(s)"
+msgstr "Soort evenement"
 
 msgid "Executive Vote"
 msgstr "Stemming management"
@@ -2828,6 +2879,9 @@ msgstr "Type proloog"
 msgid "URL identifier"
 msgstr "Idenominatieve URL"
 
+msgid "Upload players"
+msgstr "Spelers uploaden"
+
 msgid "Value required"
 msgstr "Vereiste waarde"
 
@@ -2932,6 +2986,9 @@ msgstr "Meerregelige tekst"
 
 msgid "Multiple choice"
 msgstr "Meerkeuze"
+
+msgid "Non-residential"
+msgstr "Niet-residentieel"
 
 msgid "Overall balance"
 msgstr "Kasbudget"
@@ -3326,6 +3383,9 @@ msgstr "Ervaringssysteem"
 msgid "Experience points"
 msgstr "Ervaringspunten"
 
+msgid "External catering"
+msgstr "Externe catering"
+
 msgid "Faction selection"
 msgstr "Factieselectie"
 
@@ -3349,6 +3409,9 @@ msgstr "Foto ID-document"
 
 msgid "Identity document"
 msgstr "Identiteitsbewijs"
+
+msgid "Internal catering"
+msgstr "Interne catering"
 
 msgid "Invalid selection"
 msgstr "Ongeldige selectie"
@@ -3523,6 +3586,9 @@ msgstr "Eerste registratie"
 
 msgid "Hide not available"
 msgstr "Verberg niet beschikbaar"
+
+msgid "Historic residence"
+msgstr "Historisch verblijf"
 
 msgid "Informations saved"
 msgstr "Informatie opgeslagen"
@@ -3803,6 +3869,9 @@ msgstr "Volledig blad (Pdf)"
 msgid "Confirm your choices"
 msgstr "Bevestig je je keuzes"
 
+msgid "Country of the event"
+msgstr "Land van het evenement"
+
 msgid "Create new character"
 msgstr "Nieuw personage maken"
 
@@ -3973,6 +4042,9 @@ msgstr "Ja, hou me op de hoogte!"
 msgid "Access your character"
 msgstr "Toegang tot je personage"
 
+msgid "Accommodation details"
+msgstr "Details accommodatie"
+
 msgid "Advanced Mode Enabled"
 msgstr "Geavanceerde modus ingeschakeld"
 
@@ -3981,6 +4053,9 @@ msgstr "Terugbetaling goedkeuren"
 
 msgid "Assigned staff member"
 msgstr "Toegewezen medewerker"
+
+msgid "Category of the event"
+msgstr "Categorie van het evenement"
 
 msgid "Character Inventories"
 msgstr "Karakterinventarissen"
@@ -4017,6 +4092,9 @@ msgstr "Bedrag wijzigen uitschakelen"
 
 msgid "Discover the web site"
 msgstr "Ontdek de website"
+
+msgid "Enter a valid number."
+msgstr "Voer een geldig nummer in."
 
 msgid "Failed password reset"
 msgstr "Wachtwoord resetten mislukt"
@@ -4715,6 +4793,9 @@ msgstr "Kan niet kopiëren van dezelfde gebeurtenis"
 msgid "Check inverse relationship"
 msgstr "controleer omgekeerde relatie"
 
+msgid "City or place of the event"
+msgstr "Stad of plaats van het evenement"
+
 msgid "Discover the game factions"
 msgstr "Ontdek de spelgroepen"
 
@@ -4839,6 +4920,9 @@ msgstr "De tekens van het evenement beheren"
 
 msgid "Manage warehouse containers"
 msgstr "Magazijncontainers beheren"
+
+msgid "Meals included in the event"
+msgstr "Maaltijden inbegrepen in het evenement"
 
 msgid "Members of the Organization"
 msgstr "Lid van de vereniging"
@@ -4980,6 +5064,9 @@ msgstr "Indien aangevinkt: nieuw menu activeren"
 
 msgid "Indicate the outflow category"
 msgstr "Geef de categorie aan waarbinnen de output wordt geteld"
+
+msgid "Keywords describing the event"
+msgstr "Trefwoorden die het evenement beschrijven"
 
 msgid "Manage expense items incurred"
 msgstr "Gemaakte onkosten beheren"
@@ -5132,6 +5219,9 @@ msgstr "Voltooide mijlpalen weergeven/verbergen"
 
 msgid "The registrations to the event"
 msgstr "Registratie voor het evenement"
+
+msgid "Type of accommodation included"
+msgstr "Type accommodatie inbegrepen"
 
 msgid "Upload and host files directly"
 msgstr "Bestanden rechtstreeks uploaden en hosten"
@@ -5293,8 +5383,14 @@ msgstr "Lijst met e-mails van gebruikers weergeven"
 msgid "Do you want to tell us something"
 msgstr "Wil je ons iets vertellen"
 
+msgid "If checked: upload staff members"
+msgstr "Indien aangevinkt: personeelsleden uploaden"
+
 msgid "Is it selectable by participants"
 msgstr "Is het selecteerbaar door deelnemers"
+
+msgid "Language(s) the event is held in"
+msgstr "Taal/talen waarin het evenement wordt gehouden"
 
 msgid "Manage expenses for contributors"
 msgstr "Beheer uitgaven voor medewerkers"
@@ -5364,9 +5460,6 @@ msgstr "Of dit token is gebruikt"
 
 msgid "You need to define the end date!"
 msgstr "Je moet de einddatum definiëren!"
-
-msgid "Your team ID on larpdatabase.com"
-msgstr "Je team-ID op larpdatabase.com"
 
 msgid "(Optional) The cost of the ticket"
 msgstr "(Optioneel) De kosten van het ticket"
@@ -5561,14 +5654,14 @@ msgstr "De collectie is afgeleverd!"
 msgid "The form is saved every 30 seconds"
 msgstr "Het formulier wordt elke 30 seconden opgeslagen"
 
-msgid "The genre or setting of your event"
-msgstr "Het genre of de setting van je evenement"
-
 msgid "The payment has not been completed"
 msgstr "De betaling is niet voltooid"
 
 msgid "This page shows the warehouse tags"
 msgstr "Deze pagina toont de magazijnlabels"
+
+msgid "Type(s) of accommodation available"
+msgstr "Type(n) accommodatie beschikbaar"
 
 msgid "You are about to make a payment of"
 msgstr "Je staat op het punt een betaling te doen van"
@@ -5823,6 +5916,9 @@ msgstr "Deelnemers zonder teken verbergen"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Indien aangevinkt, ticketniveau toestaan: Verkoper"
+
+msgid "If checked: upload registered players"
+msgstr "Indien aangevinkt: geregistreerde spelers uploaden"
 
 msgid "Learn all characters before the event"
 msgstr "Leer alle personages voor het evenement"
@@ -6232,6 +6328,9 @@ msgstr "Donatiebedrag gekozen door de deelnemer"
 msgid "I do it routinely, I have good experience"
 msgstr "Ik doe het regelmatig, ik heb goede ervaring"
 
+msgid "Latitude coordinate of the event location"
+msgstr "Breedtecoördinaat van de locatie van het evenement"
+
 msgid "Manage templates for experience abilities"
 msgstr "Sjablonen voor ervaringsvaardigheden beheren"
 
@@ -6291,9 +6390,8 @@ msgstr "ISO-taalcode (bijv. 'en', 'it', 'de')"
 msgid "If checked, allows to delete items in bulk"
 msgstr "Als deze optie is aangevinkt, kunnen items in bulk worden verwijderd"
 
-msgctxt "event"
-msgid "If checked: shows the genre for each event"
-msgstr "Indien aangevinkt: toont het genre voor elk evenement"
+msgid "Longitude coordinate of the event location"
+msgstr "Lengtecoördinaat van de locatie van het voorval"
 
 msgid "Manage configuration of activated features"
 msgstr "Configuratie van geactiveerde functies beheren"
@@ -6393,6 +6491,9 @@ msgstr "Registratie schakelen tussen evenementen toestaan"
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr "Goedkeuring %(user)s als %(role)s voor %(event)s"
+
+msgid "Authentication token (mark all permissions)"
+msgstr "Authenticatietoken (alle rechten markeren)"
 
 msgid "Characters are only visible to participants"
 msgstr "Tekens zijn alleen zichtbaar voor deelnemers"
@@ -6565,6 +6666,10 @@ msgstr "Rollen definiëren om toegang te verlenen tot gebeurtenisbeheer"
 msgid "Extra price applied when this quota is active"
 msgstr "Extra prijs toegepast wanneer dit quotum actief is"
 
+msgctxt "event"
+msgid "If checked: shows the keywords for each event"
+msgstr "Indien aangevinkt: toont de trefwoorden voor elke gebeurtenis"
+
 msgid "If checked: shows the position for each event"
 msgstr "Indien aangevinkt: toont de positie voor elke gebeurtenis"
 
@@ -6636,6 +6741,9 @@ msgstr "Hint: De juiste antwoorden op deze vraag zijn"
 
 msgid "Indicates what gender you identify yourself as"
 msgstr "Geef aan met welk geslacht je je identificeert"
+
+msgid "Manage event metadata for external publication"
+msgstr "Metagegevens van evenementen beheren voor externe publicatie"
 
 msgid "Manage your event expenses and upload receipts"
 msgstr "Beheer je evenementuitgaven en upload ontvangstbewijzen"
@@ -6858,9 +6966,6 @@ msgstr "Hiermee kunnen auteurs relaties aan personages toevoegen"
 
 msgid "Attention! The form contains errors in the fields"
 msgstr "Attentie! Het formulier bevat fouten in de velden"
-
-msgid "Authentication token for the larpdatabase.com API"
-msgstr "Authenticatie token voor de larpdatabase.com API"
 
 msgid "Background image displayed across all event pages"
 msgstr "Achtergrondafbeelding weergegeven op alle evenementpagina's"

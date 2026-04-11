@@ -378,6 +378,9 @@ msgstr "Graf"
 msgid "Gross"
 msgstr "Hrubý"
 
+msgid "Hotel"
+msgstr "Hotel"
+
 msgid "Image"
 msgstr "Obrázek"
 
@@ -389,6 +392,9 @@ msgstr "Položky"
 
 msgid "Login"
 msgstr "Přihlášení"
+
+msgid "Meals"
+msgstr "Stravování"
 
 msgid "Media"
 msgstr "Média"
@@ -795,6 +801,9 @@ msgstr "Média"
 msgid "Balance"
 msgstr "Pájka"
 
+msgid "Camping"
+msgstr "Kempování"
+
 msgid "Casting"
 msgstr "Casting"
 
@@ -1191,8 +1200,14 @@ msgstr "Včetně"
 msgid "Invoices"
 msgstr "Faktury"
 
+msgid "Keywords"
+msgstr "Klíčová slova"
+
 msgid "Language"
 msgstr "Jazyk"
+
+msgid "Latitude"
+msgstr "Zeměpisná šířka"
 
 msgid "Location"
 msgstr "Umístění"
@@ -1461,8 +1476,14 @@ msgstr "Rozhraní"
 msgid "Inventory"
 msgstr "Inventura"
 
+msgid "Languages"
+msgstr "Jazyky"
+
 msgid "Load list"
 msgstr "Seznam zatížení"
+
+msgid "Longitude"
+msgstr "Zeměpisná délka"
 
 msgid "Mandatory"
 msgstr "Povinné"
@@ -1680,6 +1701,9 @@ msgstr "Oblast události"
 msgid "Event name"
 msgstr "Název události"
 
+msgid "Event type"
+msgstr "Typ události"
+
 msgid "Experience"
 msgstr "Zkušenosti"
 
@@ -1791,6 +1815,9 @@ msgstr "Odstranění štítku"
 msgid "Repertoire"
 msgstr "Repertoár"
 
+msgid "Restaurant"
+msgstr "Restaurace"
+
 msgid "Run number"
 msgstr "Číslo běhu"
 
@@ -1895,6 +1922,9 @@ msgstr "Přidat do pozemku"
 
 msgid "Additionals"
 msgstr "Dodatky"
+
+msgid "Agritourism"
+msgstr "Agroturistika"
 
 msgid "Amount paid"
 msgstr "Vyplacená částka"
@@ -2154,6 +2184,9 @@ msgstr "Zrušení"
 msgid "Change photo"
 msgstr "Změna fotografie"
 
+msgid "City / Place"
+msgstr "Město / místo"
+
 msgid "Collaborator"
 msgstr "Přispěvatel"
 
@@ -2222,6 +2255,9 @@ msgstr "Obec"
 
 msgid "Next payment"
 msgstr "Další platba"
+
+msgid "Not included"
+msgstr "Není zahrnuto"
 
 msgid "Not selected"
 msgstr "Nevybráno"
@@ -2322,6 +2358,9 @@ msgstr "Překlady"
 msgid "Type of text"
 msgstr "Typ textu"
 
+msgid "Upload staff"
+msgstr "Nahrát zaměstnance"
+
 msgid "Uploading..."
 msgstr "Nahrávání..."
 
@@ -2349,6 +2388,9 @@ msgstr "Otevírají se v"
 msgid "You must pay"
 msgstr "Musíte zaplatit"
 
+msgid "Your team ID"
+msgstr "ID vašeho týmu"
+
 msgid "already used"
 msgstr "již použity"
 
@@ -2367,6 +2409,9 @@ msgstr "Přístup odepřen"
 
 msgid "Accessibility"
 msgstr "Přístupnost"
+
+msgid "Accommodation"
+msgstr "Ubytování"
 
 msgid "Age selection"
 msgstr "Výběr věku"
@@ -2563,6 +2608,9 @@ msgstr "Otevřené dotazy"
 msgid "Require login"
 msgstr "Vyžadovat přihlášení"
 
+msgid "Self-catering"
+msgstr "Vlastní stravování"
+
 msgid "Shared secret"
 msgstr "Sdílené tajemství"
 
@@ -2683,6 +2731,9 @@ msgstr "Vytvoření události"
 
 msgid "Event features"
 msgstr "Funkce události"
+
+msgid "Event genre(s)"
+msgstr "Žánr(y) události"
 
 msgid "Executive Vote"
 msgstr "Hlasování vedení"
@@ -2828,6 +2879,9 @@ msgstr "Typ prologu"
 msgid "URL identifier"
 msgstr "Idenominativní adresa URL"
 
+msgid "Upload players"
+msgstr "Nahrát hráče"
+
 msgid "Value required"
 msgstr "Požadovaná hodnota"
 
@@ -2932,6 +2986,9 @@ msgstr "Víceřádkový text"
 
 msgid "Multiple choice"
 msgstr "Vícenásobná volba"
+
+msgid "Non-residential"
+msgstr "Nebytové prostory"
 
 msgid "Overall balance"
 msgstr "Peněžní rozpočet"
@@ -3326,6 +3383,9 @@ msgstr "Zážitkový systém"
 msgid "Experience points"
 msgstr "Zkušenostní body"
 
+msgid "External catering"
+msgstr "Externí stravování"
+
 msgid "Faction selection"
 msgstr "Výběr frakce"
 
@@ -3349,6 +3409,9 @@ msgstr "Fotografie na dokladu totožnosti"
 
 msgid "Identity document"
 msgstr "Doklad totožnosti"
+
+msgid "Internal catering"
+msgstr "Interní stravování"
 
 msgid "Invalid selection"
 msgstr "Neplatný výběr"
@@ -3523,6 +3586,9 @@ msgstr "První registrace"
 
 msgid "Hide not available"
 msgstr "Skrýt není k dispozici"
+
+msgid "Historic residence"
+msgstr "Historická rezidence"
 
 msgid "Informations saved"
 msgstr "Informace uloženy"
@@ -3803,6 +3869,9 @@ msgstr "Kompletní list (Pdf)"
 msgid "Confirm your choices"
 msgstr "Potvrzujete své volby"
 
+msgid "Country of the event"
+msgstr "Země konání akce"
+
 msgid "Create new character"
 msgstr "Vytvoření nové postavy"
 
@@ -3973,6 +4042,9 @@ msgstr "Ano, informujte mě!"
 msgid "Access your character"
 msgstr "Získejte přístup ke své postavě"
 
+msgid "Accommodation details"
+msgstr "Podrobnosti o ubytování"
+
 msgid "Advanced Mode Enabled"
 msgstr "Povolený pokročilý režim"
 
@@ -3981,6 +4053,9 @@ msgstr "Schválit vrácení peněz"
 
 msgid "Assigned staff member"
 msgstr "Přidělený zaměstnanec"
+
+msgid "Category of the event"
+msgstr "Kategorie události"
 
 msgid "Character Inventories"
 msgstr "Soupisy znaků"
@@ -4017,6 +4092,9 @@ msgstr "Zakázat změnu částky"
 
 msgid "Discover the web site"
 msgstr "Objevte webové stránky"
+
+msgid "Enter a valid number."
+msgstr "Zadejte platné číslo."
 
 msgid "Failed password reset"
 msgstr "Obnovení hesla se nezdařilo"
@@ -4715,6 +4793,9 @@ msgstr "Nelze kopírovat ze stejné události"
 msgid "Check inverse relationship"
 msgstr "kontrola inverzního vztahu"
 
+msgid "City or place of the event"
+msgstr "Město nebo místo konání akce"
+
 msgid "Discover the game factions"
 msgstr "Objevte herní skupiny"
 
@@ -4839,6 +4920,9 @@ msgstr "Správa znaků události"
 
 msgid "Manage warehouse containers"
 msgstr "Správa skladových kontejnerů"
+
+msgid "Meals included in the event"
+msgstr "Stravování v rámci akce"
 
 msgid "Members of the Organization"
 msgstr "Člen sdružení"
@@ -4980,6 +5064,9 @@ msgstr "Pokud je zaškrtnuto: aktivuje novou nabídku"
 
 msgid "Indicate the outflow category"
 msgstr "Uveďte kategorii, do které se výstup započítává"
+
+msgid "Keywords describing the event"
+msgstr "Klíčová slova popisující událost"
 
 msgid "Manage expense items incurred"
 msgstr "Správa vzniklých výdajových položek"
@@ -5132,6 +5219,9 @@ msgstr "Zobrazit/skrýt dokončené milníky"
 
 msgid "The registrations to the event"
 msgstr "Registrace na akci"
+
+msgid "Type of accommodation included"
+msgstr "Typ ubytování v ceně"
 
 msgid "Upload and host files directly"
 msgstr "Přímé nahrávání a hostování souborů"
@@ -5293,8 +5383,14 @@ msgstr "Zobrazí seznam e-mailů uživatelů"
 msgid "Do you want to tell us something"
 msgstr "Chcete nám něco říct"
 
+msgid "If checked: upload staff members"
+msgstr "Pokud je zaškrtnuto: nahrát zaměstnance"
+
 msgid "Is it selectable by participants"
 msgstr "Je volitelný účastníky"
+
+msgid "Language(s) the event is held in"
+msgstr "Jazyk(y), ve kterém(ých) se akce koná"
 
 msgid "Manage expenses for contributors"
 msgstr "Správa výdajů pro přispěvatele"
@@ -5364,9 +5460,6 @@ msgstr "Zda byl tento token použit"
 
 msgid "You need to define the end date!"
 msgstr "Je třeba určit datum ukončení!"
-
-msgid "Your team ID on larpdatabase.com"
-msgstr "ID vašeho týmu na larpdatabase.com"
 
 msgid "(Optional) The cost of the ticket"
 msgstr "(Nepovinné) Cena letenky"
@@ -5561,14 +5654,14 @@ msgstr "Sbírka byla doručena!"
 msgid "The form is saved every 30 seconds"
 msgstr "Formulář se ukládá každých 30 sekund"
 
-msgid "The genre or setting of your event"
-msgstr "Žánr nebo prostředí vaší události"
-
 msgid "The payment has not been completed"
 msgstr "Platba nebyla dokončena"
 
 msgid "This page shows the warehouse tags"
 msgstr "Na této stránce jsou zobrazeny značky skladu"
+
+msgid "Type(s) of accommodation available"
+msgstr "Typ(y) dostupného ubytování"
 
 msgid "You are about to make a payment of"
 msgstr "Chystáte se provést platbu ve výši"
@@ -5823,6 +5916,9 @@ msgstr "Skrýt účastníky bez znaku"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Prodejce"
+
+msgid "If checked: upload registered players"
+msgstr "Pokud je zaškrtnuto: nahrát registrované hráče"
 
 msgid "Learn all characters before the event"
 msgstr "Naučte se všechny znaky před akcí"
@@ -6230,6 +6326,9 @@ msgstr "Výše příspěvku zvolená účastníkem"
 msgid "I do it routinely, I have good experience"
 msgstr "Dělám to pravidelně, mám dobré zkušenosti"
 
+msgid "Latitude coordinate of the event location"
+msgstr "Souřadnice zeměpisné šířky místa události"
+
 msgid "Manage templates for experience abilities"
 msgstr "Správa šablon pro schopnosti získávání zkušeností"
 
@@ -6289,9 +6388,8 @@ msgstr "kód jazyka ISO (např. 'en', 'it', 'de')"
 msgid "If checked, allows to delete items in bulk"
 msgstr "Pokud je zaškrtnuto, umožňuje hromadné mazání položek"
 
-msgctxt "event"
-msgid "If checked: shows the genre for each event"
-msgstr "Pokud je zaškrtnuto: zobrazí žánr pro každou událost"
+msgid "Longitude coordinate of the event location"
+msgstr "Souřadnice zeměpisné délky místa události"
 
 msgid "Manage configuration of activated features"
 msgstr "Správa konfigurace aktivovaných funkcí"
@@ -6391,6 +6489,9 @@ msgstr "Umožnit přepínání registrace mezi událostmi"
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr "Schválení %(user)s jako %(role)s pro %(event)s"
+
+msgid "Authentication token (mark all permissions)"
+msgstr "Ověřovací token (označte všechna oprávnění)"
 
 msgid "Characters are only visible to participants"
 msgstr "Znaky jsou viditelné pouze pro účastníky"
@@ -6561,6 +6662,10 @@ msgstr "Definice rolí pro udělení přístupu ke správě událostí"
 msgid "Extra price applied when this quota is active"
 msgstr "Cena navíc se použije, když je tato kvóta aktivní"
 
+msgctxt "event"
+msgid "If checked: shows the keywords for each event"
+msgstr "Pokud je zaškrtnuto: zobrazí klíčová slova pro každou událost"
+
 msgid "If checked: shows the position for each event"
 msgstr "Pokud je zaškrtnuto: zobrazuje pozici pro každou událost"
 
@@ -6630,6 +6735,9 @@ msgstr "Nápověda: Správné odpovědi na tuto otázku jsou tyto"
 
 msgid "Indicates what gender you identify yourself as"
 msgstr "Uveďte, ke kterému pohlaví se hlásíte"
+
+msgid "Manage event metadata for external publication"
+msgstr "Správa metadat událostí pro externí publikaci"
 
 msgid "Manage your event expenses and upload receipts"
 msgstr "Správa výdajů na události a nahrávání účtenek"
@@ -6851,9 +6959,6 @@ msgstr "Umožňuje autorům přidávat vztahy k postavám"
 
 msgid "Attention! The form contains errors in the fields"
 msgstr "Pozor! Formulář obsahuje chyby v polích"
-
-msgid "Authentication token for the larpdatabase.com API"
-msgstr "Ověřovací token pro rozhraní API larpdatabase.com"
 
 msgid "Background image displayed across all event pages"
 msgstr "Obrázek na pozadí zobrazený na všech stránkách události"

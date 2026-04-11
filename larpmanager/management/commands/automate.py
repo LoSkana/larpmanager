@@ -158,8 +158,8 @@ class Command(BaseCommand):
         if "record_acc" in enabled_features:
             check_accounting(association.id)
 
-        # Upload past runs to larpdatabase.com (Italian LARP database)
-        if "publisher" in enabled_features and association.nationality == "it":
+        # Upload past runs to larpdatabase.com
+        if "publisher" in enabled_features:
             upload_ildb(association)
 
     @staticmethod
