@@ -254,7 +254,7 @@ class OrgaAction(str, Enum):
     # Warehouse
     WAREHOUSE_AREA = ("orga_warehouse_area", {"form": OrgaWarehouseAreaForm})
     WAREHOUSE_MANIFEST = ("orga_warehouse_manifest", {"form": OrgaWarehouseItemAssignmentForm})
-    WAREHOUSE_ASSIGNMENT_ITEM = ("orga_warehouse_assignment_item", {})
+    WAREHOUSE_ASSIGNMENT_ITEM = ("orga_warehouse_manifest", {})
 
     # One-time content
     ONETIMES = ("orga_onetimes", {"form": OneTimeContentForm})
