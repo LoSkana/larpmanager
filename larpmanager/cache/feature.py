@@ -139,7 +139,6 @@ def update_event_features(ev_id: int) -> dict[str, int]:
             "registration": ["reg_que_age", "reg_que_faction", "reg_que_tickets", "reg_que_allowed"],
             "character_form": ["wri_que_max", "wri_que_tickets", "wri_que_requirements"],
             "casting": ["mirror"],
-            "user_character": ["player_relationships"],
         }
         for config_type, config_feature_slugs in extra_features_mapping.items():
             for feature_slug in config_feature_slugs:

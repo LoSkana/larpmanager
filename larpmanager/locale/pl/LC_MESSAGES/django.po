@@ -3897,6 +3897,9 @@ msgstr "Płatności w zatwierdzeniu"
 msgid "Personal preferences"
 msgstr "Osobiste preferencje"
 
+msgid "Player relationships"
+msgstr "Relacje między graczami"
+
 msgid "Please wait a moment"
 msgstr "Poczekaj chwilę"
 
@@ -8424,6 +8427,11 @@ msgid ""
 msgstr "Pobierz listę postaci wraz ze zdjęciami profilowymi ich tłumaczy"
 
 msgid ""
+"Enables participants to write their own list of character relationships"
+msgstr ""
+"Umożliwia uczestnikom stworzenie własnej listy relacji między postaciami"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr "Wprowadź numer lub kod dokumentu identyfikacyjnego wskazanego powyżej"
 
@@ -9510,13 +9518,6 @@ msgid ""
 msgstr ""
 "Jeśli opcja jest zaznaczona, może być widoczna tylko dla uczestników z "
 "wybranym biletem"
-
-msgid ""
-"If checked, enables participants to write their own list of character "
-"relationships"
-msgstr ""
-"Zaznaczenie tej opcji umożliwia uczestnikom stworzenie własnej listy relacji"
-" między postaciami"
 
 #, python-format
 msgid ""
