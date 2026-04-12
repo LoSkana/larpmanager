@@ -316,10 +316,8 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
 
 def player_relationships(page: Any, live_server: Any) -> None:
     # Enable player relationships in config
-    go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Player editor ")).click()
-    page.locator("#id_user_character_player_relationships").check()
-    submit_confirm(page)
+    go_to(page, live_server, "/test/manage/features/player_relationships/on")
+
 
     # Navigate to relationships page from the registration page
     go_to(page, live_server, "/test/register")
