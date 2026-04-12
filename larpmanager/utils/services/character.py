@@ -129,11 +129,12 @@ def _build_player_relationships_mappings(
     """
     player_relationships_mapping = {}
     # Update with player-inputted relationship data
-    if "player_id" in context["char"]:
+    player_id = context.get("character") and context["character"].player_id
+    if player_id:
         for player_relationship in PlayerRelationship.objects.select_related(
             "target", "registration", "registration__member"
         ).filter(
-            registration__member_id=context["char"]["player_id"],
+            registration__member_id=player_id,
             registration__run=context["run"],
         ):
             target_uuid = str(player_relationship.target.uuid)
