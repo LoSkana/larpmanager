@@ -37,6 +37,7 @@ from larpmanager.models.form import (
     WritingChoice,
 )
 from larpmanager.models.miscellanea import PlayerRelationship
+from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, FactionType, PlotCharacterRel, Relationship
 from larpmanager.utils.auth.permission import has_event_permission
@@ -129,7 +130,17 @@ def _build_player_relationships_mappings(
     """
     player_relationships_mapping = {}
     # Update with player-inputted relationship data
-    player_id = context.get("character") and context["character"].player_id
+    player_id = None
+    if context.get("character") and context.get("run"):
+        rcr = (
+            RegistrationCharacterRel.objects.filter(
+                character=context["character"],
+                registration__run=context["run"],
+            )
+            .values_list("registration__member_id", flat=True)
+            .first()
+        )
+        player_id = rcr
     if player_id:
         for player_relationship in PlayerRelationship.objects.select_related(
             "target", "registration", "registration__member"
