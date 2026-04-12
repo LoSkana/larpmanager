@@ -114,11 +114,7 @@
                                 </p>
                             {% endif %}
                             {% if el.factions_list %}
-                                <b>{% trans "Factions" %}:</b>
-                                {% for fac in el.factions_list %}
-                                    {% include "elements/comma.html" %}
-                                    {{ fac }}
-                                {% endfor %}
+                                <b>{% trans "Factions" %}:</b> {{ el.factions_list }}
                             {% endif %}
                             <p class="relationship">
                                 <b>Relationship:</b> {% show_char el.text run 1 %}

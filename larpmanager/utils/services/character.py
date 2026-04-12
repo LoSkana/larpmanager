@@ -28,6 +28,7 @@ from larpmanager.cache.character import get_character_element_fields, get_event_
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.question import get_cached_writing_questions
+from larpmanager.cache.registration import search_player
 from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -156,7 +157,9 @@ def _build_player_relationships_mappings(
             # Add character data if not already present (fixes bug where player relationships
             # with characters that don't have system relationships are lost)
             if target_uuid not in character_data_mapping:
-                character_data = player_relationship.target.show(context["run"])
+                target_character = player_relationship.target
+                character_data = target_character.show(context["run"])
+                search_player(target_character, character_data, context)
                 # Build faction list for display purposes
                 character_data["factions_list"] = []
                 for faction_number in character_data["factions"]:
@@ -219,7 +222,9 @@ def _build_relationships_mappings(context: dict, character_data_mapping: dict, r
         if target_character_number in cached_chars:
             character_data = cached_chars[target_character_number]
         elif target_character_number in bulk_fetched:
-            character_data = bulk_fetched[target_character_number].show(context["run"])
+            target_character = bulk_fetched[target_character_number]
+            character_data = target_character.show(context["run"])
+            search_player(target_character, character_data, context)
         else:
             continue
 
