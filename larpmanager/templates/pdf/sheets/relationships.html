@@ -72,6 +72,15 @@
                 border: none;
             }
 
+            td.right .img-cell {
+                padding-left: 1em;
+            }
+
+            .relationship {
+                display: block;
+                text-align: left;
+            }
+
             .text-cell {
                 vertical-align: top;
                 text-align: left;
@@ -108,7 +117,7 @@
             <table>
                 <tr>
                     {% for el in rel %}
-                        <td class="{% if not forloop.counter|divisibleby:2 %}left{% endif %}">
+                        <td class="{% if forloop.counter|divisibleby:2 %}right{% else %}left{% endif %}">
                             <table class="inner">
                                 <tr>
                                     <td class="img-cell">
