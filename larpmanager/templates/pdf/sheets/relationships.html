@@ -96,11 +96,10 @@
                 <tr>
                     {% for el in rel %}
                         <td class="{% if not forloop.counter|divisibleby:2 %}left{% endif %}">
-                            {% if el.player_uuid %}
-                                <img src="https://{{ association.main_domain }}/{{ el.player_prof }}"
-                                     alt="player profile" />
+                            {% if el.player_uuid and el.player_prof %}
+                                <img src="{{ el.player_prof }}" alt="player profile" />
                             {% else %}
-                                <img src="https://{{ association.main_domain }}/{% static 'larpmanager/assets/blank-avatar.png' %}"
+                                <img src="{% static 'larpmanager/assets/blank-avatar.png' %}"
                                      alt="player profile" />
                             {% endif %}
                             <p>
@@ -116,9 +115,7 @@
                             {% if el.factions_list %}
                                 <b>{% trans "Factions" %}:</b> {{ el.factions_list }}
                             {% endif %}
-                            <p class="relationship">
-                                <b>Relationship:</b> {% show_char el.text run 1 %}
-                            </p>
+                            <span class="relationship">{% show_char el.text run 1 %}</span>
                         </td>
                         {% if forloop.counter|divisibleby:2 and not forloop.last %}
                         </tr>
