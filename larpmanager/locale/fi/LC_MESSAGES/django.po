@@ -3897,6 +3897,9 @@ msgstr "Hyväksytyt maksut"
 msgid "Personal preferences"
 msgstr "Henkilökohtaiset mieltymykset"
 
+msgid "Player relationships"
+msgstr "Pelaajasuhteet"
+
 msgid "Please wait a moment"
 msgstr "Odottakaa hetki"
 
@@ -8379,6 +8382,10 @@ msgid ""
 msgstr "Lataa luettelo hahmoista ja niiden tulkkien profiilikuvista"
 
 msgid ""
+"Enables participants to write their own list of character relationships"
+msgstr "Antaa osallistujien kirjoittaa oman luettelonsa hahmosuhteista"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr "Merkitään edellä mainitun tunnistusasiakirjan numero tai koodi"
 
@@ -9428,13 +9435,6 @@ msgid ""
 " ticket"
 msgstr ""
 "Jos valittuna, vaihtoehto näkyy vain osallistujille, joilla on valittu lippu"
-
-msgid ""
-"If checked, enables participants to write their own list of character "
-"relationships"
-msgstr ""
-"Jos valittuna, osallistujat voivat kirjoittaa oman luettelonsa "
-"hahmosuhteista"
 
 #, python-format
 msgid ""

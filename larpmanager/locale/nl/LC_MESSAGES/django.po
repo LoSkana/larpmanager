@@ -3897,6 +3897,9 @@ msgstr "Betalingen onder goedkeuring"
 msgid "Personal preferences"
 msgstr "Persoonlijke voorkeuren"
 
+msgid "Player relationships"
+msgstr "Relaties met spelers"
+
 msgid "Please wait a moment"
 msgstr "Een ogenblik geduld alstublieft"
 
@@ -8481,6 +8484,11 @@ msgid ""
 msgstr "Download de karakterlijst met spelersprofielen"
 
 msgid ""
+"Enables participants to write their own list of character relationships"
+msgstr ""
+"Deelnemers kunnen hun eigen lijst met relaties tussen personages opstellen"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr "Voer bovenstaand ID-nummer of code in"
 
@@ -9598,13 +9606,6 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, is deze alleen zichtbaar voor deelnemers met "
 "een geselecteerd ticket"
-
-msgid ""
-"If checked, enables participants to write their own list of character "
-"relationships"
-msgstr ""
-"Als deze optie is aangevinkt, kunnen deelnemers hun eigen lijst met relaties"
-" tussen personages schrijven"
 
 #, python-format
 msgid ""

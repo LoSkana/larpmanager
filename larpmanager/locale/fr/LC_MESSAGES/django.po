@@ -3897,6 +3897,9 @@ msgstr "Paiements en cours d'approbation"
 msgid "Personal preferences"
 msgstr "Préférences personnelles"
 
+msgid "Player relationships"
+msgstr "Relations avec les joueurs"
+
 msgid "Please wait a moment"
 msgstr "Veuillez patienter un instant"
 
@@ -8602,6 +8605,12 @@ msgid ""
 msgstr "Téléchargez la liste des personnages et les profils des joueurs"
 
 msgid ""
+"Enables participants to write their own list of character relationships"
+msgstr ""
+"Permet aux participants de rédiger leur propre liste de relations entre les "
+"personnages"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr ""
 "Veuillez saisir le numéro d'identification ou le code indiqué ci-dessus"
@@ -9735,13 +9744,6 @@ msgid ""
 msgstr ""
 "Si la case est cochée, l'option n'est visible que pour les participants "
 "ayant le billet sélectionné"
-
-msgid ""
-"If checked, enables participants to write their own list of character "
-"relationships"
-msgstr ""
-"Si la case est cochée, les participants peuvent rédiger leur propre liste de"
-" relations entre les personnages"
 
 #, python-format
 msgid ""

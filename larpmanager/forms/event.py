@@ -829,18 +829,6 @@ class OrgaConfigForm(ConfigForm):
                 character_approval_help_text,
             )
 
-            # Player relationships configuration
-            player_relationships_label = _("Relationships")
-            player_relationships_help_text = _(
-                "If checked, enables participants to write their own list of character relationships",
-            )
-            self.add_configs(
-                "user_character_player_relationships",
-                ConfigType.BOOL,
-                player_relationships_label,
-                player_relationships_help_text,
-            )
-
     def set_config_custom(self) -> None:
         """Configure character customization form fields for event settings."""
         if "custom_character" in self.params["features"]:

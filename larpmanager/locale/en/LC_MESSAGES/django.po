@@ -1456,14 +1456,6 @@ msgstr ""
 msgid "If checked, activates a staff-managed approval process for characters"
 msgstr ""
 
-msgid "Relationships"
-msgstr ""
-
-msgid ""
-"If checked, enables participants to write their own list of character "
-"relationships"
-msgstr ""
-
 msgid "Character customisation"
 msgstr ""
 
@@ -1744,6 +1736,9 @@ msgid "Visibility"
 msgstr ""
 
 msgid "Plots"
+msgstr ""
+
+msgid "Relationships"
 msgstr ""
 
 msgid "Speedlarp"
@@ -9045,6 +9040,12 @@ msgid "Allows participants to create and modify their own characters freely"
 msgstr ""
 
 msgid "Now you can set the player editing settings"
+msgstr ""
+
+msgid "Player relationships"
+msgstr ""
+
+msgid "Enables participants to write their own list of character relationships"
 msgstr ""
 
 msgid "Character inventory"
