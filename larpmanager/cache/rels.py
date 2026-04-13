@@ -1054,12 +1054,34 @@ def on_faction_characters_m2m_changed(
     instance: Faction,
     action: str,
     pk_set: set[int] | None,
-    **kwargs: object,  # noqa: ARG001
+    **kwargs: object,
 ) -> None:
-    """Handle faction-character relationship changes."""
-    # Delegate to the generic M2M character update handler
-    # This will schedule background tasks for cache invalidation
-    update_m2m_related_characters(instance, pk_set, action, "factions")
+    """Handle faction-character relationship changes.
+
+    Django fires m2m_changed for both directions of the M2M:
+    - Forward (faction.characters.add(character)): instance=Faction, pk_set=character IDs
+    - Reverse (character.factions_list.add(faction)): instance=Character, pk_set=faction IDs
+
+    When the signal is reversed, we fetch the Faction objects from pk_set and call
+    update_m2m_related_characters with each faction and the character's ID, so the
+    faction's character_rels cache is correctly updated.
+    """
+    if kwargs.get("reverse"):
+        # Reverse direction: instance=Character, pk_set=faction IDs
+        # We need to update each affected faction with this character
+        if action not in ("post_add", "post_remove", "post_clear"):
+            return
+        character = instance
+        if pk_set:
+            faction_ids = list(pk_set)
+        else:
+            # post_clear: relation already removed, pk_set is None and factions_list is empty
+            return
+        for faction in Faction.objects.filter(id__in=faction_ids):
+            update_m2m_related_characters(faction, {character.id}, action, "factions")
+    else:
+        # Forward direction: instance=Faction, pk_set=character IDs
+        update_m2m_related_characters(instance, pk_set, action, "factions")
 
 
 def on_plot_characters_m2m_changed(
