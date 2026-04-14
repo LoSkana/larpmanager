@@ -1844,36 +1844,51 @@ def _assign_rule_operation(rule: RuleExp, logs: list[str], value: str) -> None:
         logs.append(f"ERR - unknown operation: {value}")
 
 
+def _apply_rule_field(context: dict, rule: RuleExp, logs: list[str], field_name: str, field_value: object) -> None:
+    """Apply a single CSV field to a RuleExp instance."""
+    if field_name == "abilities":
+        _assign_abilities(context, rule, logs, str(field_value))
+    elif field_name == "field":
+        _assign_rule_field(context, rule, logs, str(field_value))
+    elif field_name == "amount":
+        rule.amount = _to_decimal(field_value)
+    elif field_name == "number":
+        rule.number = _to_int(field_value)
+    elif field_name == "order":
+        rule.order = _to_int(field_value)
+    elif field_name == "operation":
+        _assign_rule_operation(rule, logs, str(field_value))
+    else:
+        setattr(rule, field_name, field_value)
+
+
 def _rule_load(context: dict, csv_row: dict) -> str:
     """Load rule data from CSV row for bulk import."""
     if "name" not in csv_row:
         return "ERR - There is no name column"
 
     event = context["event"]
+    event_parent = event.get_class_parent(RuleExp)
 
-    (rule, was_created) = RuleExp.objects.get_or_create(
-        event=event.get_class_parent(RuleExp),
-        name=csv_row["name"],
-    )
+    rule = RuleExp.objects.filter(event=event_parent, name=csv_row["name"]).first()
+    was_created = rule is None
+    if was_created:
+        rule = RuleExp(event=event_parent, name=csv_row["name"])
 
     logs = []
 
     for field_name, field_value in csv_row.items():
-        if not field_value or pd.isna(field_value) or field_name == "name":
+        if field_value is None or field_name == "name":
             continue
+        try:
+            if pd.isna(field_value):
+                continue
+        except (TypeError, ValueError):
+            pass
+        _apply_rule_field(context, rule, logs, field_name, field_value)
 
-        if field_name == "abilities":
-            _assign_abilities(context, rule, logs, str(field_value))
-        elif field_name == "field":
-            _assign_rule_field(context, rule, logs, str(field_value))
-        elif field_name == "amount":
-            rule.amount = _to_decimal(field_value)
-        elif field_name == "order":
-            rule.order = _to_int(field_value)
-        elif field_name == "operation":
-            _assign_rule_operation(rule, logs, str(field_value))
-        else:
-            setattr(rule, field_name, field_value)
+    if was_created and not rule.field_id:
+        return f"ERR - Cannot create rule '{csv_row['name']}': missing required 'field'"
 
     rule.save()
     save_log(context, RuleExp, rule, operation_type=LogOperationType.UPLOAD)

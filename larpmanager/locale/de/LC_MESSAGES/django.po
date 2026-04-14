@@ -3972,6 +3972,9 @@ msgstr "Genehmigte Zahlungen"
 msgid "Personal preferences"
 msgstr "Persönliche Vorlieben"
 
+msgid "Player relationships"
+msgstr "Beziehungen zwischen Spielern"
+
 msgid "Please wait a moment"
 msgstr "Bitte warten Sie einen Moment"
 
@@ -8777,6 +8780,12 @@ msgid ""
 msgstr "Laden Sie die Charakterliste mit Spielerprofilen herunter"
 
 msgid ""
+"Enables participants to write their own list of character relationships"
+msgstr ""
+"Ermöglicht es den Teilnehmern, ihre eigene Liste von Charakterbeziehungen zu"
+" erstellen"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr "Bitte geben Sie die oben angegebene ID-Nummer oder den Code ein"
 
@@ -9914,13 +9923,6 @@ msgid ""
 msgstr ""
 "Wenn diese Option markiert ist, kann sie nur für Teilnehmer mit einem "
 "ausgewählten Ticket sichtbar sein"
-
-msgid ""
-"If checked, enables participants to write their own list of character "
-"relationships"
-msgstr ""
-"Wenn diese Option aktiviert ist, können die Teilnehmer ihre eigene Liste der"
-" Beziehungen zwischen den Charakteren erstellen"
 
 #, python-format
 msgid ""

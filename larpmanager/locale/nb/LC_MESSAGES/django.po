@@ -3972,6 +3972,9 @@ msgstr "Betalinger under godkjenning"
 msgid "Personal preferences"
 msgstr "Personlige preferanser"
 
+msgid "Player relationships"
+msgstr "Spillerrelasjoner"
+
 msgid "Please wait a moment"
 msgstr "Vennligst vent et øyeblikk"
 
@@ -8497,6 +8500,12 @@ msgid ""
 msgstr "Last ned karakterlisten med spillerprofiler"
 
 msgid ""
+"Enables participants to write their own list of character relationships"
+msgstr ""
+"Gjør det mulig for deltakerne å skrive sin egen liste over "
+"karakterrelasjoner"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr "Vennligst skriv inn ID-nummeret eller koden som er angitt ovenfor"
 
@@ -9548,12 +9557,6 @@ msgid ""
 msgstr ""
 "Hvis avkrysset, kan et alternativ bare være synlig for deltakere med valgt "
 "billett"
-
-msgid ""
-"If checked, enables participants to write their own list of character "
-"relationships"
-msgstr ""
-"Hvis avkrysset, kan deltakerne skrive sin egen liste over karakterrelasjoner"
 
 #, python-format
 msgid ""

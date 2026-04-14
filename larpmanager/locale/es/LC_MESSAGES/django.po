@@ -3972,6 +3972,9 @@ msgstr "Pagos pendientes"
 msgid "Personal preferences"
 msgstr "Preferencias personales"
 
+msgid "Player relationships"
+msgstr "Relaciones con los jugadores"
+
 msgid "Please wait a moment"
 msgstr "Espere un momento"
 
@@ -8591,6 +8594,12 @@ msgstr ""
 "Descarga la lista de personajes con las fotos de perfil de sus intérpretes"
 
 msgid ""
+"Enables participants to write their own list of character relationships"
+msgstr ""
+"Permite a los participantes escribir su propia lista de relaciones entre "
+"personajes"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr ""
 "Introduce el número o el código del documento de identificación indicado "
@@ -9698,13 +9707,6 @@ msgid ""
 msgstr ""
 "Si está marcada, permite que una opción sólo sea visible para los "
 "participantes con la entrada seleccionada"
-
-msgid ""
-"If checked, enables participants to write their own list of character "
-"relationships"
-msgstr ""
-"Si está marcada, permite a los participantes escribir su propia lista de "
-"relaciones entre personajes"
 
 #, python-format
 msgid ""

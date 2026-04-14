@@ -1741,6 +1741,11 @@ urlpatterns = [
         name="orga_warehouse_manifest",
     ),
     path(
+        "<slug:event_slug>/manage/warehouse/manifest/new/",
+        views_oms.orga_warehouse_assignment_item_new,
+        name="orga_warehouse_manifest_new",
+    ),
+    path(
         "<slug:event_slug>/manage/warehouse/assignment/manifest/",
         views_oms.orga_warehouse_assignment_manifest,
         name="orga_warehouse_assignment_manifest",

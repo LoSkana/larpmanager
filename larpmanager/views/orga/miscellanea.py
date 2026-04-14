@@ -623,7 +623,7 @@ def orga_warehouse_assignment_manifest(request: HttpRequest, event_slug: str) ->
 
     # Retrieve the warehouse item assignment
     try:
-        assign = WarehouseItemAssignment.objects.get(pk=idx)
+        assign = WarehouseItemAssignment.objects.get(uuid=idx)
     except ObjectDoesNotExist:
         return JsonResponse({"error": "not found"}, status=400)
 

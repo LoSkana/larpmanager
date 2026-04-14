@@ -3972,6 +3972,9 @@ msgstr "Pagamenti in approvazione"
 msgid "Personal preferences"
 msgstr "Preferenze personali"
 
+msgid "Player relationships"
+msgstr "Relazioni con i giocatori"
+
 msgid "Please wait a moment"
 msgstr "Attendi un momento"
 
@@ -8611,6 +8614,12 @@ msgid ""
 msgstr "Scarica l'elenco dei personaggi con i profili dei giocatori"
 
 msgid ""
+"Enables participants to write their own list of character relationships"
+msgstr ""
+"Consente ai partecipanti di scrivere il proprio elenco di relazioni tra i "
+"personaggi"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr ""
 "Inserisci il numero o codice identificativo del documento di identità "
@@ -9738,13 +9747,6 @@ msgid ""
 msgstr ""
 "Se selezionata, l'opzione può essere visibile solo ai partecipanti con il "
 "biglietto selezionato"
-
-msgid ""
-"If checked, enables participants to write their own list of character "
-"relationships"
-msgstr ""
-"Se selezionata, consente ai partecipanti di scrivere il proprio elenco di "
-"relazioni tra i personaggi"
 
 #, python-format
 msgid ""

@@ -3972,6 +3972,9 @@ msgstr "Platby v rámci schvalování"
 msgid "Personal preferences"
 msgstr "Osobní preference"
 
+msgid "Player relationships"
+msgstr "Vztahy mezi hráči"
+
 msgid "Please wait a moment"
 msgstr "Chvíli prosím počkejte"
 
@@ -8449,6 +8452,10 @@ msgid ""
 msgstr "Stáhněte si seznam postav s profily hráčů"
 
 msgid ""
+"Enables participants to write their own list of character relationships"
+msgstr "Umožňuje účastníkům napsat vlastní seznam vztahů mezi postavami"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr "Zadejte prosím výše uvedené identifikační číslo nebo kód"
 
@@ -9467,13 +9474,6 @@ msgid ""
 msgstr ""
 "Pokud je tato možnost zaškrtnuta, umožňuje, aby byla viditelná pouze pro "
 "účastníky s vybraným tipem"
-
-msgid ""
-"If checked, enables participants to write their own list of character "
-"relationships"
-msgstr ""
-"Pokud je zaškrtnuto, umožňuje účastníkům napsat vlastní seznam vztahů mezi "
-"postavami"
 
 #, python-format
 msgid ""
