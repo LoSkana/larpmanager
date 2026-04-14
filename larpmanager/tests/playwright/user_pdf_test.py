@@ -28,7 +28,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import check_download, go_to, go_to_check, login_orga, submit_confirm
+from larpmanager.tests.utils import check_download, fill_tinymce, go_to, go_to_check, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -78,6 +78,17 @@ def test_user_pdf(pw_page: Any) -> None:
 
 
 def orga_characters_pdf_test(page: Any, live_server: Any) -> None:
+    # create a second character with a relationship to Test Character so the
+    # relationships PDF page has content to render
+    go_to(page, live_server, "/test/manage/characters")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").fill("Pdf Rel Character")
+    page.get_by_role("combobox").click()
+    page.get_by_role("searchbox").fill("test")
+    page.get_by_role("option", name="Test Character").click()
+    fill_tinymce(page, "rel_u1", "pdf relationship text")
+    submit_confirm(page)
+
     go_to(page, live_server, "/test/manage/pdf/")
 
     # pick the first real character from the dropdown (skip the disabled placeholder)
