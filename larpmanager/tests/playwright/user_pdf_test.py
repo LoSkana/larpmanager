@@ -139,7 +139,7 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
     # Delete the orga-created character: this cascades the orga relationship deletion
     go_to(page, live_server, "/test/manage/characters")
     page.get_by_role("row", name="Pdf Rel Character").locator(".fa-trash").click()
-    submit_confirm(page)
+    just_wait(page)
 
     # Create a new target character for the player relationship
     page.get_by_role("link", name="New").click()
