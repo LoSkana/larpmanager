@@ -78,6 +78,11 @@ def test_user_pdf(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage/characters")
     page.locator('[id="u1"]').locator(".fa-edit").click()
     just_wait(page)
+    # select Pdf Rel Character from the combobox so the JS creates the rel_u2 section
+    page.locator("#select2-new_rel_select-container").click()
+    page.get_by_role("searchbox").fill("pdf")
+    page.get_by_role("option", name="Pdf Rel Character").click()
+    just_wait(page)
     fill_tinymce(page, "rel_u2", "pdf relationship text")
     submit_confirm(page)
 
