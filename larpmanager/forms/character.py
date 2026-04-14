@@ -929,6 +929,11 @@ class OrgaWritingQuestionForm(BaseModelForm):
 
     def _init_editable(self) -> None:
         """Initialize the editable field based on character approval configuration."""
+        # Modifiable only applies to character questions
+        if self.params.get("writing_typ") != QuestionApplicable.CHARACTER:
+            self.delete_field("editable")
+            return
+
         # Check if character approval feature is enabled for this event
         if not get_event_config(
             self.params["event"].id, "user_character_approval", default_value=False, context=self.params

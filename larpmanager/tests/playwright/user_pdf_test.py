@@ -28,7 +28,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import check_download, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import check_download, go_to, go_to_check, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -72,3 +72,28 @@ def test_user_pdf(pw_page: Any) -> None:
     check_download(page, "Download light sheet")
 
     check_download(page, "Download relationships")
+
+    # Test orga pdf page: select character and verify HTML test links produce content
+    orga_characters_pdf_test(page, live_server)
+
+
+def orga_characters_pdf_test(page: Any, live_server: Any) -> None:
+    go_to(page, live_server, "/test/manage/pdf/")
+
+    # pick the first real character from the dropdown (skip the disabled placeholder)
+    char_uuid = page.locator("#char option:not([disabled])").first.get_attribute("value")
+    assert char_uuid, "No characters found in the PDF page dropdown"
+
+    # collect orig URLs for the three HTML test links
+    test_links = {
+        "Complete sheet (Test)": page.locator("a.link", has_text="Complete sheet (Test)").get_attribute("orig"),
+        "Lightweight sheet (Test)": page.locator("a.link", has_text="Lightweight sheet (Test)").get_attribute("orig"),
+        "Relationships (Test)": page.locator("a.link", has_text="Relationships (Test)").get_attribute("orig"),
+    }
+
+    for label, orig in test_links.items():
+        # JS replaces '0/pdf' with '{uuid}/pdf' on change
+        url = orig.replace("0/pdf", f"{char_uuid}/pdf")
+        go_to_check(page, f"{live_server}{url}")
+        body = page.locator("body")
+        assert body.inner_text().strip(), f"Empty body for {label} at {url}"

@@ -44,6 +44,7 @@ def test_warehouse(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     area_assigmenents(page)
     checks(page)
+    edit_loaded_deployed(page)
 
 
 def prepare(page: Any) -> None:
@@ -242,3 +243,53 @@ def checks(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Item 1 Description: sadsada Photo")
     expect_normalized(page, page.locator("#one"), "Kitchen sALOON ffff Item 3sa Description: dsad")
     expect_normalized(page, page.locator("#one"), "Kitchen b sALOON sss")
+
+
+def edit_loaded_deployed(page: Any) -> None:
+    # navigate to manifest
+    page.get_by_role("link", name="Manifest").click()
+
+    # find first item row in the manifest table
+    first_row = page.locator("table.go_datatable tbody tr").first
+
+    # toggle Loaded on: click the loaded cell and verify check icon appears
+    loaded_cell = first_row.locator("td.ajax-toggle[tp='load']")
+    loaded_icon = loaded_cell.locator("span.value")
+    assert not loaded_icon.is_visible(), "Loaded should be off initially"
+    loaded_cell.click()
+    just_wait(page)
+    assert loaded_icon.is_visible(), "Loaded check icon should be visible after click"
+
+    # reload and verify loaded state persists
+    page.reload()
+    page.wait_for_load_state("domcontentloaded")
+    first_row = page.locator("table.go_datatable tbody tr").first
+    loaded_cell = first_row.locator("td.ajax-toggle[tp='load']")
+    loaded_icon = loaded_cell.locator("span.value")
+    assert loaded_icon.is_visible(), "Loaded check icon should persist after reload"
+
+    # toggle Loaded off
+    loaded_cell.click()
+    just_wait(page)
+    assert not loaded_icon.is_visible(), "Loaded check icon should be hidden after second click"
+
+    # toggle Deployed on: click the deployed cell and verify check icon appears
+    deployed_cell = first_row.locator("td.ajax-toggle[tp='depl']")
+    deployed_icon = deployed_cell.locator("span.value")
+    assert not deployed_icon.is_visible(), "Deployed should be off initially"
+    deployed_cell.click()
+    just_wait(page)
+    assert deployed_icon.is_visible(), "Deployed check icon should be visible after click"
+
+    # reload and verify deployed state persists
+    page.reload()
+    page.wait_for_load_state("domcontentloaded")
+    first_row = page.locator("table.go_datatable tbody tr").first
+    deployed_cell = first_row.locator("td.ajax-toggle[tp='depl']")
+    deployed_icon = deployed_cell.locator("span.value")
+    assert deployed_icon.is_visible(), "Deployed check icon should persist after reload"
+
+    # toggle Deployed off
+    deployed_cell.click()
+    just_wait(page)
+    assert not deployed_icon.is_visible(), "Deployed check icon should be hidden after second click"
