@@ -28,7 +28,15 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import check_download, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import (
+    check_download,
+    fill_tinymce,
+    go_to,
+    go_to_check,
+    just_wait,
+    login_orga,
+    submit_confirm,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -60,6 +68,24 @@ def test_user_pdf(pw_page: Any) -> None:
     page.get_by_role("option", name="Test Character").click()
     submit_confirm(page)
 
+    # create a second character (no relationship yet)
+    go_to(page, live_server, "/test/manage/characters")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").fill("Pdf Rel Character")
+    submit_confirm(page)
+
+    # add the relationship from Test Character (u1) to Pdf Rel Character (u2)
+    go_to(page, live_server, "/test/manage/characters")
+    page.locator('[id="u1"]').locator(".fa-edit").click()
+    just_wait(page)
+    # select Pdf Rel Character from the combobox so the JS creates the rel_u2 section
+    page.locator("#select2-new_rel_select-container").click()
+    page.get_by_role("searchbox").fill("pdf")
+    page.get_by_role("option", name="Pdf Rel Character").click()
+    just_wait(page)
+    fill_tinymce(page, "rel_u2", "pdf relationship text")
+    submit_confirm(page)
+
     # Go to character, test download pdf
     go_to(page, live_server, "/test/character/u1")
 
@@ -71,4 +97,68 @@ def test_user_pdf(pw_page: Any) -> None:
 
     check_download(page, "Download light sheet")
 
+    check_download(page, "Download relationships")
+
+    # Test orga pdf page: select character and verify HTML test links produce content
+    orga_characters_pdf_test(page, live_server)
+
+    # Test player relationship: enable feature, delete orga relationship, add via player
+    player_relationship_pdf_test(page, live_server)
+
+    # Test again orga pdf page
+    login_orga(page, live_server)
+    orga_characters_pdf_test(page, live_server)
+
+
+def orga_characters_pdf_test(page: Any, live_server: Any) -> None:
+    go_to(page, live_server, "/test/manage/pdf/")
+
+    # pick the first real character from the dropdown (skip the disabled placeholder)
+    char_uuid = page.locator("#char option:not([disabled])").first.get_attribute("value")
+    assert char_uuid, "No characters found in the PDF page dropdown"
+
+    # collect orig URLs for the three HTML test links
+    test_links = {
+        "Complete sheet (Test)": page.locator("a.link", has_text="Complete sheet (Test)").get_attribute("orig"),
+        "Lightweight sheet (Test)": page.locator("a.link", has_text="Lightweight sheet (Test)").get_attribute("orig"),
+        "Relationships (Test)": page.locator("a.link", has_text="Relationships (Test)").get_attribute("orig"),
+    }
+
+    for label, orig in test_links.items():
+        # JS replaces '0/pdf' with '{uuid}/pdf' on change
+        url = orig.replace("0/pdf", f"{char_uuid}/pdf")
+        go_to_check(page, f"{live_server}{url}")
+        body = page.locator("body")
+        assert body.inner_text().strip(), f"Empty body for {label} at {url}"
+
+
+def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
+    # Enable player relationships feature
+    go_to(page, live_server, "/test/manage/features/player_relationships/on")
+
+    # Delete the orga-created character: this cascades the orga relationship deletion
+    go_to(page, live_server, "/test/manage/characters")
+    page.get_by_role("row", name="Pdf Rel Character").locator(".fa-trash").click()
+    just_wait(page)
+
+    # Create a new target character for the player relationship
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").fill("Player Rel Target")
+    submit_confirm(page)
+
+    # As player (orga user, who has Test Character assigned), add a player relationship
+    go_to(page, live_server, "/test/register")
+    page.get_by_role("link", name="Relationships").click()
+    just_wait(page)
+
+    page.get_by_role("link", name="New").click()
+    just_wait(page)
+    page.locator("#select2-id_target-container").click()
+    page.get_by_role("searchbox").fill("player")
+    page.get_by_role("option", name="Player Rel Target").click()
+    fill_tinymce(page, "id_text", "player relationship text", show=False)
+    submit_confirm(page)
+
+    # Go to character page and verify the relationships PDF download still works
+    go_to(page, live_server, "/test/character/u1")
     check_download(page, "Download relationships")
