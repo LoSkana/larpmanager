@@ -24,6 +24,8 @@ services:
       - static_data:/code/static
     env_file:
       - .env
+    environment:
+      - DOCKER=true
 
   nginx:
     image: nginx:alpine
