@@ -5169,6 +5169,9 @@ msgstr "Upptäck vilka evenemang som är på gång"
 msgid "Filter or search the characters"
 msgstr "Filtrera eller sök bland karaktärerna"
 
+msgid "Make credits readonly in events"
+msgstr "Gör krediter läsbara i evenemang"
+
 msgid "Manage event navigation buttons"
 msgstr "Hantera navigeringsknappar för evenemang"
 
@@ -10707,6 +10710,13 @@ msgid ""
 msgstr ""
 "Gör det möjligt för deltagare att skicka privata meddelanden till varandra "
 "utan att avslöja personliga e-postadresser"
+
+msgid ""
+"If checked, credits will be readonly in the event panel. You can modify them"
+" only in organization panel"
+msgstr ""
+"Om det är markerat kommer krediter att vara skrivskyddade i "
+"evenemangspanelen. Du kan bara ändra dem i organisationspanelen"
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "

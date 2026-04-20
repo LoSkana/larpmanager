@@ -343,6 +343,14 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check user permissions for accessing organization credits functionality
     context = check_event_context(request, event_slug, "orga_credits")
 
+    # Determine if page must be readonly in events
+    context["readonly_event"] = get_association_config(
+        context["event"].association_id,
+        "credit_readonly_event",
+        default_value=False,
+        context=context,
+    )
+
     # Configure context with relationship selectors and field definitions
     context.update(
         {

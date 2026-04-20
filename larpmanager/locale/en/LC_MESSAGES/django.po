@@ -706,6 +706,14 @@ msgstr ""
 msgid "Name to be displayed for credits"
 msgstr ""
 
+msgid "Make credits readonly in events"
+msgstr ""
+
+msgid ""
+"If checked, credits will be readonly in the event panel. You can modify them "
+"only in organization panel"
+msgstr ""
+
 msgid "Treasury"
 msgstr ""
 

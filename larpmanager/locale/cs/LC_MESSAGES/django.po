@@ -5169,6 +5169,9 @@ msgstr "Objevte připravované akce"
 msgid "Filter or search the characters"
 msgstr "Filtrujte nebo vyhledávejte postavy"
 
+msgid "Make credits readonly in events"
+msgstr "Udělat kredity v událostech pouze pro čtení"
+
 msgid "Manage event navigation buttons"
 msgstr "Správa navigačních tlačítek událostí"
 
@@ -10582,6 +10585,13 @@ msgid ""
 msgstr ""
 "Umožňuje účastníkům posílat si navzájem soukromé zprávy, aniž by došlo k "
 "odhalení osobních e-mailových adres"
+
+msgid ""
+"If checked, credits will be readonly in the event panel. You can modify them"
+" only in organization panel"
+msgstr ""
+"Pokud je zaškrtnuto, budou kredity v panelu událostí pouze pro čtení. Můžete"
+" je upravovat pouze na panelu organizace"
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "

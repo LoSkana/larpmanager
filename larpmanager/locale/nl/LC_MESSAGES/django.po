@@ -5169,6 +5169,9 @@ msgstr "Ontdek de evenementen die op stapel staan"
 msgid "Filter or search the characters"
 msgstr "Filter of zoek de tekens"
 
+msgid "Make credits readonly in events"
+msgstr "Credits alleen-lezen maken in evenementen"
+
 msgid "Manage event navigation buttons"
 msgstr "Navigatietoetsen voor evenementen beheren"
 
@@ -10876,6 +10879,13 @@ msgid ""
 msgstr ""
 "Stelt deelnemers in staat om privéberichten naar elkaar te sturen, zonder "
 "persoonlijke e-mailadressen te onthullen"
+
+msgid ""
+"If checked, credits will be readonly in the event panel. You can modify them"
+" only in organization panel"
+msgstr ""
+"Als deze optie is aangevinkt, zijn credits alleen leesbaar in het "
+"gebeurtenissenpaneel. Je kunt ze alleen wijzigen in het organisatiepaneel"
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "
