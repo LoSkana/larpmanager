@@ -1,22 +1,13 @@
-FROM ubuntu:24.04
+FROM python:3.13-slim-bookworm
 
 ENV DEBIAN_FRONTEND=noninteractive
-
-# Install Python 3.12
-RUN apt-get update && \
-    apt-get install -y \
-    python3.12 \
-    python3.12-venv \
-    python3.12-dev \
-    python3-pip \
-    curl \
-    ca-certificates \
-    gnupg && \
-    update-alternatives --install /usr/bin/python python /usr/bin/python3.12 1 && \
-    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # Install Node.js 18.x
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+RUN apt-get update && \
+    apt-get install -y curl ca-certificates gnupg && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/*
 
@@ -24,9 +15,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 RUN python --version && uv --version && node -v && npm -v
-
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
 
 WORKDIR /code
 
@@ -54,6 +42,5 @@ COPY pyproject.toml .
 
 # Install dependencies with uv
 RUN uv pip install --system -r pyproject.toml
-COPY requirements.txt .
 
 EXPOSE 8264
