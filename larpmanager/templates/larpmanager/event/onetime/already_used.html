@@ -12,10 +12,10 @@
     </head>
     <body class="onetime-used-body">
         <div class="onetime-error-container">
-            <div class="onetime-error-icon">⛔</div>
+            <i class="fa-solid fa-circle-xmark onetime-error-icon"></i>
             <h1>{% trans "Token Already Used" %}</h1>
-            <p>{% trans "This access link has already been used and cannot be accessed again." %}</p>
-            <p>{% trans "Each token can only be used once for security reasons." %}</p>
+            <p>{% trans "This access link has already been used and cannot be accessed again" %}.</p>
+            <p>{% trans "Each token can only be used once for security reasons" %}.</p>
             <div class="onetime-info-box">
                 <strong>{% trans "Access Information:" %}</strong>
                 <div class="onetime-info-detail">
@@ -28,7 +28,7 @@
                 {% endif %}
             </div>
             <p class="onetime-contact-text">
-                {% trans "If you need access to this content again, please contact the organizers for a new access link." %}
+                {% trans "If you need access to this content again, please contact the organizers for a new access link" %}.
             </p>
         </div>
     </body>

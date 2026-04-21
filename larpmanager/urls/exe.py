@@ -763,6 +763,11 @@ urlpatterns = [
         name="exe_preferences",
     ),
     path(
+        "manage/version/",
+        views_eas.exe_version_upgrade,
+        name="exe_version_upgrade",
+    ),
+    path(
         "manage/working_ticket/",
         views_ed.working_ticket,
         name="working_ticket",
