@@ -4332,6 +4332,7 @@ INSERT INTO public.django_migrations VALUES (199, 'socialaccount', '0003_extra_d
 INSERT INTO public.django_migrations VALUES (200, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (201, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (202, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (206, 'larpmanager', '0155_interface_version_system', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
@@ -4384,6 +4385,7 @@ INSERT INTO public.larpmanager_associationpermission VALUES (44, NULL, false, '2
 INSERT INTO public.larpmanager_associationpermission VALUES (45, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activity Log', 'exe_log', 1, 113, 'View detailed activity log of all changes made for this organization', false, NULL, 3, NULL, 'clock-rotate-left');
 INSERT INTO public.larpmanager_associationpermission VALUES (46, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Activation', 'exe_activation', 9999, 116, 'Request activation of advanced mode for the organization', true, NULL, 9, NULL, '');
 INSERT INTO public.larpmanager_associationpermission VALUES (47, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Trash', 'exe_trash', 2, 119, 'Recover deleted objects', false, NULL, 3, 'allow_bulk_delete', 'trash-can-arrow-up');
+INSERT INTO public.larpmanager_associationpermission VALUES (48, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Version Upgrade', 'exe_version_upgrade', 10009, 120, 'Platform version upgrade page', true, NULL, 9, NULL, 'circle-up');
 
 INSERT INTO public.larpmanager_associationrole VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Admin', 1, 1, 'u1');
 
@@ -4614,6 +4616,7 @@ INSERT INTO public.larpmanager_feature VALUES (116, NULL, false, '2025-01-01 00:
 INSERT INTO public.larpmanager_feature VALUES (117, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Milestones', 'Track event milestones', 'milestones', 250, false, '', false, 3, 'orga_milestones', 'Now you can create milestones for the event', false);
 INSERT INTO public.larpmanager_feature VALUES (118, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Ensemble', 'Provides a character learning page with multiple display modes (book, cards, compact list) to help players memorise other characters before the event', 'ensemble', 5, false, '', false, 3, 'config/ensemble', 'Now you can configure the ensemble page', false);
 INSERT INTO public.larpmanager_feature VALUES (119, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Trash', 'Pseudo-feature activated by allow_bulk_delete configuration to restore deleted items', 'exe_trash', 0, true, '', true, 2, '', '', true);
+INSERT INTO public.larpmanager_feature VALUES (120, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Version Upgrade', 'Internal pseudo-feature for the platform version upgrade page', 'exe_version_upgrade', 0, true, '', true, NULL, '', '', true);
 
 INSERT INTO public.larpmanager_feature_dependencies VALUES (1, 1, 73);
 INSERT INTO public.larpmanager_feature_dependencies VALUES (2, 9, 73);
@@ -4758,7 +4761,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 202, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 206, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -4816,7 +4819,7 @@ SELECT pg_catalog.setval('public.larpmanager_associationskin_id_seq', 1, true);
 
 SELECT pg_catalog.setval('public.larpmanager_associationtranslation_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.larpmanager_assocpermission_id_seq', 47, true);
+SELECT pg_catalog.setval('public.larpmanager_assocpermission_id_seq', 48, true);
 
 SELECT pg_catalog.setval('public.larpmanager_assocrole_id_seq', 1, true);
 
@@ -4902,7 +4905,7 @@ SELECT pg_catalog.setval('public.larpmanager_faction_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.larpmanager_feature_dependencies_id_seq', 16, true);
 
-SELECT pg_catalog.setval('public.larpmanager_feature_id_seq', 119, true);
+SELECT pg_catalog.setval('public.larpmanager_feature_id_seq', 120, true);
 
 SELECT pg_catalog.setval('public.larpmanager_featuremodule_id_seq', 10, true);
 
@@ -8680,4 +8683,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0154_player_relationships_feature
+-- LARPMANAGER_SCHEMA_VERSION: 0155_interface_version_system
