@@ -154,8 +154,8 @@ class AssociationIdentifyMiddleware:
                 # Skin found - load the associated organization
                 return cls.load_association(request, association_skin)
 
-        # Handle larpmanager.com domain redirects to ensure HTTPS
-        if request.get_host().endswith(base_domain):
+        # Handle larpmanager.com domain redirects to ensure HTTPS (skip for bare hostnames like localhost)
+        if "." in base_domain and request.get_host().endswith(base_domain):
             return redirect(f"https://{base_domain}{request.get_full_path()}")
 
         # Allow admin panel access without association
