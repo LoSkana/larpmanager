@@ -4,12 +4,11 @@ version = "1.0.0"
 description = "A Django-based web application for managing LARP (Live Action Role-Playing) events"
 readme = "README.md"
 requires-python = ">=3.11"
-license = {text = "AGPL-3.0-or-later"}
+license = "AGPL-3.0-or-later"
 authors = [
   {name = "Scanagatta Mauro"}
 ]
 classifiers = [
-  "License :: OSI Approved :: GNU Affero General Public License v3",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
   "Framework :: Django",
@@ -98,6 +97,9 @@ dependencies = [
   "boto3>=1.42.54",
   "legacy-cgi"
 ]
+
+[tool.setuptools.packages.find]
+include = ["larpmanager*", "main*"]
 
 [tool.djlint]
 ignore="H006"
