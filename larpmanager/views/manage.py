@@ -34,7 +34,7 @@ from django_select2.forms import Select2Widget
 from slugify import slugify
 
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.config import get_association_config, get_event_config, get_member_config
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.cache.widget import get_exe_widget_cache, get_orga_widget_cache
@@ -218,16 +218,6 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     context["exe_page"] = 1
     context["manage"] = 1
 
-    # TODO remove
-    context["old_dashboard"] = (
-            get_association_config(
-                context["association_id"], "old_dashboard", default_value=False, context=context
-            )
-            and not get_member_config(
-                context["member"].id, "interface_new_dashboard", default_value=False, context=context
-            )
-    )
-
     # Check what would you like form
     what_would_you_like(context, request)
 
@@ -247,6 +237,14 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
             context,
             _("No events are present, create one"),
             "exe_events",
+        )
+
+    # Notify if a newer platform version is available
+    if context.get("assoc_version", 0) < context.get("latest_available_version", 0):
+        _add_priority(
+            context,
+            _("A new version of the platform is available"),
+            "exe_version_upgrade",
         )
 
     # Add dashboard actions and suggestions
@@ -505,16 +503,6 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["orga_page"] = 1
     context["manage"] = 1
     features = get_event_features(context["event"].id)
-
-    # TODO remove
-    context["old_dashboard"] = (
-            get_association_config(
-                context["association_id"], "old_dashboard", default_value=False, context=context
-            )
-            and not get_member_config(
-                context["member"].id, "interface_new_dashboard", default_value=False, context=context
-            )
-    )
 
     # Check what would you like form
     what_would_you_like(context, request)
@@ -1075,11 +1063,8 @@ def _get_perm_link(context: dict, permission: str, view_name: str) -> str:
 
 
 def _compile(request: HttpRequest, context: dict) -> None:  # noqa: C901 - Complex dashboard compilation with feature-dependent sections
-    """Compile management dashboard with suggestions, actions, and priorities.
+    """Compile management dashboard with suggestions, actions, and priorities."""
 
-    Processes and organizes management content sections, handling empty states
-    and providing appropriate user messaging.
-    """
     section_names = ["priorities"]
     if not context.get("demo"):
         section_names.extend(["suggestions", "actions"])

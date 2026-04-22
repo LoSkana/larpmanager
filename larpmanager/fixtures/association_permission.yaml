@@ -562,3 +562,16 @@
     icon: trash-can-arrow-up
     feature: exe_trash
     module: miscellany
+
+- model: larpmanager.associationpermission
+  fields:
+    name: Version Upgrade
+    descr: Platform version upgrade page
+    slug: exe_version_upgrade
+    number: 0
+    config: null
+    active_if: null
+    hidden: true
+    icon: circle-up
+    feature: exe_version_upgrade
+    module: organization

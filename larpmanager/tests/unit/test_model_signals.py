@@ -376,6 +376,7 @@ class TestModelSignals(BaseTestCase):
     def test_event_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that EventConfig post_save signal resets configs cache"""
         event = self.get_event()
+        mock_reset.reset_mock()  # Reset after setup (new association may save version config)
 
         config = EventConfig(event=event, name="test_key", value="test_value")
         config.save()
@@ -397,6 +398,7 @@ class TestModelSignals(BaseTestCase):
     def test_association_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that AssociationConfig post_save signal resets configs cache"""
         association = self.get_association()
+        mock_reset.reset_mock()  # Reset after setup (new association may save version config)
 
         config = AssociationConfig(association=association, name="test_key", value="test_value")
         config.save()
@@ -418,6 +420,7 @@ class TestModelSignals(BaseTestCase):
     def test_run_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that RunConfig post_save signal resets configs cache"""
         run = self.get_run()
+        mock_reset.reset_mock()  # Reset after setup (new association may save version config)
 
         config = RunConfig(run=run, name="test_key", value="test_value")
         config.save()
@@ -439,6 +442,7 @@ class TestModelSignals(BaseTestCase):
     def test_member_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that MemberConfig post_save signal resets configs cache"""
         member = self.get_member()
+        mock_reset.reset_mock()  # Reset after setup (new association may save version config)
 
         config = MemberConfig(member=member, name="test_key", value="test_value")
         config.save()

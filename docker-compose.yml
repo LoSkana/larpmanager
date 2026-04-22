@@ -23,7 +23,11 @@ services:
       - media_data:/code/media
       - static_data:/code/static
     env_file:
-      - .env
+      - path: .env
+        required: false
+    environment:
+      - DOCKER=true
+      - env=prod
 
   nginx:
     image: nginx:alpine

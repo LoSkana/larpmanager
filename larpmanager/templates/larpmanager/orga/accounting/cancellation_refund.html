@@ -54,7 +54,8 @@
     <h3>{% trans "Returning type" %}</h3>
     {% if not features.tokens and not features.credits %}
         <div class="alert alert-warning">
-            {% trans "Warning: Neither tokens nor credits features are enabled. Refunds cannot be processed as virtual currency." %}
+            {% trans "Warning: Neither tokens nor credits features are enabled" %}.
+            {% trans "Refunds cannot be processed as virtual currency" %}.
         </div>
     {% elif features.tokens and not features.credits %}
         <div class="nav typ">

@@ -1206,14 +1206,8 @@ msgstr "Ny kostnad"
 msgid "New gift"
 msgstr "Ny gåva"
 
-msgid "New menu"
-msgstr "Ny meny"
-
 msgid "Nickname"
 msgstr "Smeknamn"
-
-msgid "Old menu"
-msgstr "Gammal meny"
 
 msgid "One-Time"
 msgstr "En gång"
@@ -1571,6 +1565,9 @@ msgstr "Översätt"
 
 msgid "Treasurer"
 msgstr "Kassör"
+
+msgid "Uploading"
+msgstr "Uppladdning"
 
 msgid "Warehouse"
 msgstr "Lagerlokal"
@@ -2169,6 +2166,9 @@ msgstr "Credits namn"
 msgid "Event hidden"
 msgstr "Dold händelse"
 
+msgid "Exit Preview"
+msgstr "Förhandsgranskning av utgång"
+
 msgid "Experimental"
 msgstr "Experimentell"
 
@@ -2316,9 +2316,6 @@ msgstr "Översättningar"
 msgid "Type of text"
 msgstr "Typ av text"
 
-msgid "Uploading..."
-msgstr "Uppladdning..."
-
 msgid "Url Shortner"
 msgstr "Kortare URL"
 
@@ -2364,6 +2361,9 @@ msgstr "Tillgänglighet"
 
 msgid "Age selection"
 msgstr "Val av ålder"
+
+msgid "Apply Upgrade"
+msgstr "Ansök om uppgradering"
 
 msgid "Authorisation"
 msgstr "Auktorisation"
@@ -2479,14 +2479,8 @@ msgstr "Minimiantal röster"
 msgid "Name of quest"
 msgstr "Namn på uppdraget"
 
-msgid "New Dashboard"
-msgstr "Ny instrumentpanel"
-
 msgid "New character"
 msgstr "Ny karaktär"
-
-msgid "New interface"
-msgstr "Nytt gränssnitt"
 
 msgid "Next sessions"
 msgstr "Nästa session"
@@ -2496,12 +2490,6 @@ msgstr "Ej slutfört"
 
 msgid "Number events"
 msgstr "Antal evenemang"
-
-msgid "Old dashboard"
-msgstr "Gammal instrumentpanel"
-
-msgid "Old interface"
-msgstr "Gammalt gränssnitt"
 
 msgid "Options price"
 msgstr "Pris på optioner"
@@ -2535,6 +2523,9 @@ msgstr "Spelarredaktör"
 
 msgid "Prerequisites"
 msgstr "Förkunskapskrav"
+
+msgid "Preview reset"
+msgstr "Återställning av förhandsgranskning"
 
 msgid "Progress step"
 msgstr "Ta ett steg framåt"
@@ -2987,6 +2978,9 @@ msgstr "Översatt text"
 msgid "Upload Expenses"
 msgstr "Ladda upp kostnader"
 
+msgid "Version Upgrade"
+msgstr "Uppgradering av version"
+
 msgid "View accounting"
 msgstr "Visa redovisning"
 
@@ -3133,6 +3127,9 @@ msgstr "Tomtens namn"
 
 msgid "No comunications"
 msgstr "Ingen kommunikation"
+
+msgid "No transfers yet"
+msgstr "Inga överföringar ännu"
 
 msgid "Number not found"
 msgstr "Numret hittades inte"
@@ -3344,6 +3341,9 @@ msgstr "Foto av ID-handling"
 msgid "Identity document"
 msgstr "Identitetshandling"
 
+msgid "Interface version"
+msgstr "Version av gränssnitt"
+
 msgid "Invalid selection"
 msgstr "Ogiltigt val"
 
@@ -3374,9 +3374,6 @@ msgstr "Flytta till container"
 msgid "New Registrations"
 msgstr "Nya registreringar"
 
-msgid "No transfers yet."
-msgstr "Inga överföringar ännu."
-
 msgid "One-Time Contents"
 msgstr "Innehåll av engångskaraktär"
 
@@ -3406,6 +3403,9 @@ msgstr "Förhandsanmälningar"
 
 msgid "Pre-register here"
 msgstr "Föranmäl dig här"
+
+msgid "Preview activated"
+msgstr "Förhandsgranskning aktiverad"
 
 msgid "Profile completed"
 msgstr "Profilen är klar"
@@ -3488,6 +3488,9 @@ msgstr "Tillåtna värden är"
 msgid "Approved character"
 msgstr "Godkänd karaktär"
 
+msgid "Available versions"
+msgstr "Tillgängliga versioner"
+
 msgid "Character portrait"
 msgstr "Porträtt av karaktären"
 
@@ -3560,6 +3563,9 @@ msgstr "Utför extraktion"
 msgid "Preferences saved!"
 msgstr "Inställningar sparade!"
 
+msgid "Previewing version"
+msgstr "Förhandsgranskning av version"
+
 msgid "Print current view"
 msgstr "Skriv ut aktuell vy"
 
@@ -3598,6 +3604,9 @@ msgstr "Totalt skickad betalning"
 
 msgid "Transaction totals"
 msgstr "Summa transaktioner"
+
+msgid "Version Management"
+msgstr "Hantering av versioner"
 
 msgid "View registrations"
 msgstr "Visa registreringar"
@@ -4015,6 +4024,9 @@ msgstr "Inaktivera ändring av belopp"
 msgid "Discover the web site"
 msgstr "Upptäck webbplatsen"
 
+msgid "Error uploading image"
+msgstr "Fel vid uppladdning av bild"
+
 msgid "Failed password reset"
 msgstr "Återställning av lösenord misslyckades"
 
@@ -4394,6 +4406,9 @@ msgstr "Lägsta antal röster"
 msgid "Move registration event"
 msgstr "Flytta registreringshändelse"
 
+msgid "No characters available"
+msgstr "Inga tecken tillgängliga"
+
 msgid "One-Time Access Warning"
 msgstr "Engångstillgång Varning"
 
@@ -4475,6 +4490,9 @@ msgstr "Kod för lådan eller hyllan"
 msgid "Code two capital letters"
 msgstr "Kod två stora bokstäver"
 
+msgid "Current platform version"
+msgstr "Aktuell plattformsversion"
+
 msgid "Disable character finder"
 msgstr "Inaktivera teckensökare"
 
@@ -4492,6 +4510,9 @@ msgstr "Åtkomst till PT-historik"
 
 msgid "Invalid ticket selection"
 msgstr "Ogiltigt val av biljett"
+
+msgid "Invalid version selected"
+msgstr "Ogiltig version vald"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lättviktsark (Test)"
@@ -4526,9 +4547,6 @@ msgstr "Ny förening skapad"
 #, python-format
 msgid "New question by %(user)s"
 msgstr "Ny fråga av %(user)s"
-
-msgid "No characters available."
-msgstr "Inga tecken tillgängliga."
 
 msgid "No transactions recorded"
 msgstr "Inga transaktioner registrerade"
@@ -4632,6 +4650,9 @@ msgstr "Hantera volontärregister"
 #, python-format
 msgid "New message from %(user)s"
 msgstr "Nytt meddelande från %(user)s"
+
+msgid "No items will be modified"
+msgstr "Inga artiklar kommer att modifieras"
 
 msgid "Now you can create badges"
 msgstr "Nu kan du skapa badges"
@@ -4763,6 +4784,9 @@ msgstr "Totalt återstående att betala"
 
 msgid "Upload membership document"
 msgstr "Ladda upp medlemsdokument"
+
+msgid "Using organization version"
+msgstr "Använda organisationsversion"
 
 msgid "View photos from the event"
 msgstr "Se bilder från evenemanget"
@@ -4944,6 +4968,9 @@ msgstr "Den enda obligatoriska kolumnen är"
 msgid "Trait assigned for %(event)s"
 msgstr "Egenskap tilldelad för %(event)s"
 
+msgid "Uploading image, please wait"
+msgstr "Laddar upp bild, vänligen vänta"
+
 msgid "Your request has been logged"
 msgstr "Din förfrågan har loggats"
 
@@ -4968,9 +4995,6 @@ msgstr "Redigera din karaktärs detaljer"
 
 msgid "I Understand - Access Content"
 msgstr "Jag förstår - Få tillgång till innehåll"
-
-msgid "If checked: activate new menu"
-msgstr "Om markerad: aktivera ny meny"
 
 msgid "Indicate the outflow category"
 msgstr "Ange den kategori inom vilken produktionen räknas"
@@ -4999,6 +5023,9 @@ msgstr "Operation: ADD, SUB, MUL, DIV"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Personlig kod: <b>%(cod)s</b>"
+
+msgid "Platform version upgrade page"
+msgstr "Sida för uppgradering av plattformsversion"
 
 msgid "Players waiting for character"
 msgstr "Spelare som väntar på karaktär"
@@ -5084,9 +5111,6 @@ msgstr "Försening av årlig medlemsavgift"
 
 msgid "Duration in seconds (optional)"
 msgstr "Varaktighet i sekunder (valfritt)"
-
-msgid "If checked: shows the old menu"
-msgstr "Om markerad: visar den gamla menyn"
 
 msgid "Manage issues during the event"
 msgstr "Hantera problem under evenemanget"
@@ -5238,9 +5262,6 @@ msgstr "För att logga in igen med kontot"
 msgid "Total of recorded money inflows"
 msgstr "Totalt antal registrerade penninginflöden"
 
-msgid "Uploading image, please wait..."
-msgstr "Laddar upp bild, vänligen vänta..."
-
 msgid "Where the event will take place"
 msgstr "Var evenemanget kommer att äga rum"
 
@@ -5289,6 +5310,9 @@ msgstr "Visar en lista över användarnas e-postmeddelanden"
 
 msgid "Do you want to tell us something"
 msgstr "Är det något du vill berätta för oss"
+
+msgid "Each token can only be used once"
+msgstr "Av säkerhetsskäl kan varje token endast användas en gång"
 
 msgid "Is it selectable by participants"
 msgstr "Är den valbar för deltagare"
@@ -5404,9 +5428,6 @@ msgstr "För mer information, skriv till oss"
 msgid "Go to the history preferences for"
 msgstr "Gå till preferenshistoriken för"
 
-msgid "If checked: activate new dashbord"
-msgstr "Om markerat: aktivera nytt instrumentbräde"
-
 msgid "Indicate your level of experience"
 msgstr "Ange din erfarenhetsnivå"
 
@@ -5458,6 +5479,10 @@ msgstr "Se all information om evenemanget i"
 msgid "You don't have any characters yet"
 msgstr "Du har inga karaktärer ännu"
 
+#, python-format
+msgid "you are now viewing version %(v)s"
+msgstr "Förhandsgranskning aktiverad. Du tittar nu på version %(v)s"
+
 msgid "(Optional) The ability description"
 msgstr "(Valfritt) Beskrivning av förmågan"
 
@@ -5485,9 +5510,6 @@ msgstr "Upptäck de tillgängliga uppdragen"
 
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Om markerad, tillåt biljettnivå: NPC"
-
-msgid "If checked: activate new interface"
-msgstr "Om markerat: aktivera nytt gränssnitt"
 
 msgid "Manage badges and user assignments"
 msgstr "Hantera badges och användartilldelningar"
@@ -5518,6 +5540,10 @@ msgstr "Nu kan du skapa eventmallar"
 
 msgid "Now you can set membership options"
 msgstr "Nu kan du ställa in medlemsalternativ"
+
+msgid "Please retry or use a smaller file"
+msgstr ""
+"Fel vid uppladdning av bild. Vänligen försök igen eller använd en mindre fil"
 
 #, python-format
 msgid "Registration updated for %(event)s"
@@ -5591,12 +5617,6 @@ msgstr "(Valfritt) Beskrivning av biljetten"
 
 msgid "Choose individual features yourself"
 msgstr "Välj enskilda funktioner själv"
-
-msgid "If checked: shows the old dashboard"
-msgstr "Om markerad: visar den gamla instrumentpanelen"
-
-msgid "If checked: shows the old interface"
-msgstr "Om markerad: visar det gamla gränssnittet"
 
 msgid "Indicate the prerequisite abilities"
 msgstr "Ange vilka förmågor som krävs"
@@ -5769,6 +5789,9 @@ msgstr "Villkor och anvisningar för deltagande"
 
 msgid "They need to complete it immediately"
 msgstr "De måste slutföra det omedelbart"
+
+msgid "This page shows the event milestones"
+msgstr "På denna sida visas milstolparna för evenemanget"
 
 msgid "Tickets that have already been drawn"
 msgstr "Det finns redan dragna biljetter"
@@ -5950,6 +5973,10 @@ msgstr "Nu kan du hosta filer i plattformen"
 
 msgid "Now you can start creating speed-larps"
 msgstr "Nu kan du börja skapa speed-larps"
+
+#, python-format
+msgid "Organization upgraded to version %(v)s"
+msgstr "Organisationen uppgraderad till version %(v)s"
 
 msgid "The following registrations were drawn"
 msgstr "Följande bidrag lottades ut"
@@ -6256,6 +6283,9 @@ msgstr "Du har överskridit den maximala textlängden"
 msgid "copy this link and give it to your friend"
 msgstr "kopiera den här länken och ge den till din vän"
 
+msgid "A new version of the platform is available"
+msgstr "En ny version av plattformen finns tillgänglig"
+
 msgid "Added at the top of the main calendar page"
 msgstr "Tillagd högst upp på huvudkalendersidan"
 
@@ -6267,6 +6297,11 @@ msgstr "Karaktär redan tilldelad, inte valbar"
 
 msgid "Click on a name to go and view it directly"
 msgstr "Klicka på ett namn för att se det direkt"
+
+msgid "Completed milestones are hidden by default"
+msgstr ""
+"På den här sidan visas milstolparna för evenemanget. Avslutade milstolpar är"
+" dolda som standard"
 
 #, python-format
 msgid "Confirmation of registration for %(event)s"
@@ -6545,6 +6580,9 @@ msgstr "Du är ännu inte medlem i föreningen"
 msgid "You are now logged in with your main account"
 msgstr "Du är nu inloggad med ditt huvudkonto"
 
+msgid "Apply the upgrade to the entire organization?"
+msgstr "Tillämpa uppgraderingen på hela organisationen?"
+
 msgid "Complete the checklist to unlock all features"
 msgstr "Slutför installationen för att låsa upp alla plattformsfunktioner"
 
@@ -6663,6 +6701,9 @@ msgstr "Text visas i början av alla karaktärsblad"
 msgid "The character field of computed type to update"
 msgstr "Teckenfältet för den beräknade typ som ska uppdateras"
 
+msgid "The organization is running the latest version"
+msgstr "Organisationen kör den senaste versionen"
+
 msgid "This page shows all log entries for this event"
 msgstr "På den här sidan visas alla loggposter för den här händelsen"
 
@@ -6721,6 +6762,11 @@ msgstr "Antal tecken som ska tilldelas (standard 1)"
 msgid "Optional template associated with this ability."
 msgstr "Valfri mall som associeras med denna förmåga."
 
+msgid "Refunds cannot be processed as virtual currency"
+msgstr ""
+"Varning för att Varken tokens eller credits-funktioner är aktiverade. "
+"Återbetalningar kan inte behandlas som virtuell valuta"
+
 msgid "Selected elements will be shown to participants"
 msgstr "Utvalda element kommer att visas för deltagarna"
 
@@ -6760,6 +6806,9 @@ msgstr "Få tillgång till din karaktär <a href='%(url)s'>här</a>"
 
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Är du säker på det? Föremålen kanske inte kan återställas"
+
+msgid "Complete all steps above to unlock advanced mode"
+msgstr "Genomför alla steg ovan för att låsa upp avancerat läge"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Beskriv exakt vilka deltagare som är involverade"
@@ -6811,6 +6860,9 @@ msgstr "Valfri mall som associeras med denna förmåga"
 msgid "There are no new sessions scheduled at this time"
 msgstr "Det finns inga nya sessioner inplanerade för närvarande"
 
+msgid "This operation is permanent and cannot be undone"
+msgstr "Denna åtgärd är permanent och kan inte ångras"
+
 msgid "This page shows all emails, both queued and sent"
 msgstr ""
 "På den här sidan visas alla e-postmeddelanden, både köade och skickade"
@@ -6851,9 +6903,6 @@ msgstr "Bakgrundsbild visas på alla evenemangssidor"
 
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Färg som används för textbakgrunder och innehållsrutor"
-
-msgid "Complete all steps above to unlock advanced mode."
-msgstr "Genomför alla steg ovan för att låsa upp avancerat läge."
 
 msgid "Describe exactly what risks it poses to the event"
 msgstr "Beskriv exakt vilka risker det utgör för evenemanget"
@@ -7129,6 +7178,9 @@ msgstr "Avviker med endast en karaktär från den förväntade"
 msgid "Displays lists of participants to persuade to sign up"
 msgstr "Visar listor över deltagare som ska övertygas om att registrera sig"
 
+msgid "Each token can only be used once for security reasons"
+msgstr "Av säkerhetsskäl kan varje token endast användas en gång"
+
 msgid "Have at least one participant registered for an event"
 msgstr "Har minst en deltagare registrerad för ett evenemang"
 
@@ -7152,6 +7204,9 @@ msgstr "Nu kan du skapa biljetterna 'patron' och 'reduced"
 
 msgid "Now you can upload content and generate access tokens"
 msgstr "Nu kan du ladda upp innehåll och generera åtkomsttokens"
+
+msgid "Please review the changes carefully before confirming"
+msgstr "Läs igenom ändringarna noggrant innan du bekräftar"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
@@ -7211,9 +7266,6 @@ msgstr "Datum och tid när registreringar öppnar för deltagare"
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Vill du tillåta användare att göra frivilliga donationer"
 
-msgid "Each token can only be used once for security reasons."
-msgstr "Av säkerhetsskäl kan varje token endast användas en gång."
-
 msgid "Everything is in order about the payment of this event"
 msgstr "Allt är i sin ordning för att vi ska kunna betala för detta evenemang"
 
@@ -7258,6 +7310,11 @@ msgstr "Användaren har bekräftat sin anmälan till detta evenemang"
 
 msgid "The user has updated their registration for this event"
 msgstr "Användaren har uppdaterat sin registrering för detta evenemang"
+
+msgid "This page shows all access tokens for one-time content"
+msgstr ""
+"På den här sidan visas alla åtkomsttoken för engångsinnehåll. Varje token "
+"kan bara användas en gång"
 
 msgid "This page shows all event registrations for the member"
 msgstr "Denna sida visar alla eventregistreringar för medlemmen"
@@ -7389,6 +7446,9 @@ msgstr "Gå igenom deltagarnas kostbegränsningar och allergier."
 msgid "This page shows all expense items recorded in the system"
 msgstr "Denna sida visar alla utgiftsposter som registrerats i systemet"
 
+msgid "Warning: Neither tokens nor credits features are enabled"
+msgstr "Varning för att Varken tokens eller credits-funktioner är aktiverade"
+
 msgid "You must select at least one ticket for this installment"
 msgstr "Du måste välja minst en biljett för denna delbetalning"
 
@@ -7475,11 +7535,6 @@ msgstr "Kontakta arrangörerna om du behöver en ny accesslänk senare"
 
 msgid "Do you want to assign characters using a casting algorithm"
 msgstr "Vill du tilldela tecken med hjälp av en casting-algoritm"
-
-msgid "Error uploading image. Please retry or use a smaller file."
-msgstr ""
-"Fel vid uppladdning av bild. Vänligen försök igen eller använd en mindre "
-"fil."
 
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
@@ -8113,6 +8168,9 @@ msgid "They will not be communicated, shared or processed in any other way"
 msgstr ""
 "De kommer inte att kommuniceras, delas eller behandlas på något annat sätt"
 
+msgid "This access link has already been used and cannot be accessed again"
+msgstr "Denna åtkomstlänk har redan använts och kan inte användas igen"
+
 msgid "This page shows the modules for the workshop questions of the event"
 msgstr ""
 "Denna sida sammanfattar de moduler som frågorna i evenemangets workshop är "
@@ -8176,9 +8234,6 @@ msgstr ""
 
 msgid "The ticket will be divided equally in the number of quotas indicated"
 msgstr "Biljetten kommer att delas upp lika i det angivna antalet aktier"
-
-msgid "This access link has already been used and cannot be accessed again."
-msgstr "Denna åtkomstlänk har redan använts och kan inte användas igen."
 
 msgid "This page shows the quota options available for payment of the event"
 msgstr ""
@@ -8610,6 +8665,12 @@ msgstr ""
 msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr "Obs: Specialkoden genereras på nytt varje gång du byter presentkort"
+
+msgid ""
+"Personal interface version preference, overrides the organization setting"
+msgstr ""
+"Personlig preferens för gränssnittsversion, åsidosätter "
+"organisationsinställningen"
 
 msgid ""
 "This page shows for each participant their completion status of workshops"
@@ -9170,6 +9231,13 @@ msgstr ""
 "att följa"
 
 msgid ""
+"Either no items have assigned quantities, or all assignments have zero "
+"quantity"
+msgstr ""
+"Inga artiklar kommer att modifieras. Antingen har inga artiklar tilldelade "
+"kvantiteter, eller så har alla tilldelningar noll kvantitet"
+
+msgid ""
 "If set, this payment method is only available for organizations of this "
 "country"
 msgstr ""
@@ -9311,13 +9379,6 @@ msgid ""
 msgstr ""
 "Anger hur ofta påminnelsemeddelanden ska skickas, i dagar (om inget anges "
 "skickas inga e-postmeddelanden)"
-
-msgid ""
-"This page shows the event milestones. Completed milestones are hidden by "
-"default."
-msgstr ""
-"På den här sidan visas milstolparna för evenemanget. Avslutade milstolpar är"
-" dolda som standard."
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
@@ -9900,13 +9961,6 @@ msgstr ""
 "= obegränsat)"
 
 msgid ""
-"This page shows all access tokens for one-time content. Each token can only "
-"be used once."
-msgstr ""
-"På den här sidan visas alla åtkomsttoken för engångsinnehåll. Varje token "
-"kan bara användas en gång."
-
-msgid ""
 "This page shows problems reported by contributors, for direct management "
 "during the event"
 msgstr ""
@@ -10175,6 +10229,13 @@ msgstr ""
 "för evenemanget"
 
 msgid ""
+"If you need access to this content again, please contact the organizers for "
+"a new access link"
+msgstr ""
+"Om du behöver tillgång till detta innehåll igen, vänligen kontakta "
+"arrangörerna för en ny åtkomstlänk"
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -10236,13 +10297,6 @@ msgid ""
 msgstr ""
 "Om den tilldelas dig kommer du automatiskt att tilldelas den ursprungliga "
 "karaktären som den speglar"
-
-msgid ""
-"If you need access to this content again, please contact the organizers for "
-"a new access link."
-msgstr ""
-"Om du behöver tillgång till detta innehåll igen, vänligen kontakta "
-"arrangörerna för en ny åtkomstlänk."
 
 msgid ""
 "Optional - Maximum number of times it can be selected across all "
@@ -10775,13 +10829,6 @@ msgstr ""
 "därefter kommer den att tas bort"
 
 msgid ""
-"This operation is permanent and cannot be undone. Please review the changes "
-"carefully before confirming."
-msgstr ""
-"Denna åtgärd är permanent och kan inte ångras. Läs igenom ändringarna "
-"noggrant innan du bekräftar."
-
-msgid ""
 "This page shows the list of members, divided by type: applicants, approved, "
 "renewed for the current year"
 msgstr ""
@@ -10864,20 +10911,6 @@ msgid ""
 msgstr ""
 "På den här sidan visas vad som händer när du fastställer lagerkvantiteterna "
 "baserat på de aktuella uppdragen"
-
-msgid ""
-"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
-"processed as virtual currency."
-msgstr ""
-"Varning för att Varken tokens eller credits-funktioner är aktiverade. "
-"Återbetalningar kan inte behandlas som virtuell valuta."
-
-msgid ""
-"No items will be modified. Either no items have assigned quantities, or all "
-"assignments have zero quantity."
-msgstr ""
-"Inga artiklar kommer att modifieras. Antingen har inga artiklar tilldelade "
-"kvantiteter, eller så har alla tilldelningar noll kvantitet."
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

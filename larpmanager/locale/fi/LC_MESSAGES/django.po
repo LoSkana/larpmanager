@@ -1206,14 +1206,8 @@ msgstr "Uusi hinta"
 msgid "New gift"
 msgstr "Uusi lahja"
 
-msgid "New menu"
-msgstr "Uusi valikko"
-
 msgid "Nickname"
 msgstr "Lempinimi"
-
-msgid "Old menu"
-msgstr "Vanha valikko"
 
 msgid "One-Time"
 msgstr "Kertaluonteinen"
@@ -1571,6 +1565,9 @@ msgstr "Käännä"
 
 msgid "Treasurer"
 msgstr "Rahastonhoitaja"
+
+msgid "Uploading"
+msgstr "Lataaminen"
 
 msgid "Warehouse"
 msgstr "Varasto"
@@ -2169,6 +2166,9 @@ msgstr "Krediittien nimi"
 msgid "Event hidden"
 msgstr "Tapahtuma piilotettu"
 
+msgid "Exit Preview"
+msgstr "Poistumisen esikatselu"
+
 msgid "Experimental"
 msgstr "Kokeellinen"
 
@@ -2316,9 +2316,6 @@ msgstr "Käännökset"
 msgid "Type of text"
 msgstr "Tekstityyppi"
 
-msgid "Uploading..."
-msgstr "Lataaminen..."
-
 msgid "Url Shortner"
 msgstr "Url Shortner"
 
@@ -2364,6 +2361,9 @@ msgstr "Saavutettavuus"
 
 msgid "Age selection"
 msgstr "Iän valinta"
+
+msgid "Apply Upgrade"
+msgstr "Hae päivitystä"
 
 msgid "Authorisation"
 msgstr "Lupa"
@@ -2479,14 +2479,8 @@ msgstr "Vähimmäisäänet"
 msgid "Name of quest"
 msgstr "Tehtävän nimi"
 
-msgid "New Dashboard"
-msgstr "Uusi kojelauta"
-
 msgid "New character"
 msgstr "Uusi hahmo"
-
-msgid "New interface"
-msgstr "Uusi käyttöliittymä"
 
 msgid "Next sessions"
 msgstr "Seuraavat istunnot"
@@ -2496,12 +2490,6 @@ msgstr "Ei suoritettu"
 
 msgid "Number events"
 msgstr "Tapahtumien lukumäärä"
-
-msgid "Old dashboard"
-msgstr "Vanha kojelauta"
-
-msgid "Old interface"
-msgstr "Vanha käyttöliittymä"
 
 msgid "Options price"
 msgstr "Optioiden hinta"
@@ -2535,6 +2523,9 @@ msgstr "Pelaajan editori"
 
 msgid "Prerequisites"
 msgstr "Edellytykset"
+
+msgid "Preview reset"
+msgstr "Esikatselun nollaus"
 
 msgid "Progress step"
 msgstr "Edistymisvaihe"
@@ -2987,6 +2978,9 @@ msgstr "Käännetty teksti"
 msgid "Upload Expenses"
 msgstr "Lataa kulut"
 
+msgid "Version Upgrade"
+msgstr "Versiopäivitys"
+
 msgid "View accounting"
 msgstr "Näytä kirjanpito"
 
@@ -3133,6 +3127,9 @@ msgstr "Juonen nimi"
 
 msgid "No comunications"
 msgstr "Ei viestintää"
+
+msgid "No transfers yet"
+msgstr "Ei vielä siirtoja"
 
 msgid "Number not found"
 msgstr "Numeroa ei löydy"
@@ -3344,6 +3341,9 @@ msgstr "Henkilöllisyystodistuksen valokuva"
 msgid "Identity document"
 msgstr "Henkilöllisyystodistus"
 
+msgid "Interface version"
+msgstr "Käyttöliittymän versio"
+
 msgid "Invalid selection"
 msgstr "Virheellinen valinta"
 
@@ -3374,9 +3374,6 @@ msgstr "Siirry säiliöön"
 msgid "New Registrations"
 msgstr "Uudet ilmoittautumiset"
 
-msgid "No transfers yet."
-msgstr "Ei vielä siirtoja."
-
 msgid "One-Time Contents"
 msgstr "Kertaluonteinen sisältö"
 
@@ -3406,6 +3403,9 @@ msgstr "Ennakkoilmoittautumiset"
 
 msgid "Pre-register here"
 msgstr "Ilmoittaudu ennakkoon täällä"
+
+msgid "Preview activated"
+msgstr "Esikatselu aktivoitu"
 
 msgid "Profile completed"
 msgstr "Profiili valmis"
@@ -3488,6 +3488,9 @@ msgstr "Sallitut arvot ovat"
 msgid "Approved character"
 msgstr "Hyväksytty luonne"
 
+msgid "Available versions"
+msgstr "Saatavilla olevat versiot"
+
 msgid "Character portrait"
 msgstr "Hahmon muotokuva"
 
@@ -3560,6 +3563,9 @@ msgstr "Suorita louhinta"
 msgid "Preferences saved!"
 msgstr "Asetukset tallennettu!"
 
+msgid "Previewing version"
+msgstr "Esikatseluversio"
+
 msgid "Print current view"
 msgstr "Tulosta nykyinen näkymä"
 
@@ -3598,6 +3604,9 @@ msgstr "Lähetetty maksu yhteensä"
 
 msgid "Transaction totals"
 msgstr "Tapahtumien loppusummat"
+
+msgid "Version Management"
+msgstr "Versiohallinta"
 
 msgid "View registrations"
 msgstr "Näytä ilmoittautumiset"
@@ -4015,6 +4024,9 @@ msgstr "Määrän muutoksen poistaminen käytöstä"
 msgid "Discover the web site"
 msgstr "Tutustu verkkosivustoon"
 
+msgid "Error uploading image"
+msgstr "Virhe kuvan lataamisessa"
+
 msgid "Failed password reset"
 msgstr "Salasanan palautus epäonnistui"
 
@@ -4394,6 +4406,9 @@ msgstr "Äänten vähimmäismäärä"
 msgid "Move registration event"
 msgstr "Siirrä tapahtuman ilmoittautuminen"
 
+msgid "No characters available"
+msgstr "Merkkejä ei ole saatavilla"
+
 msgid "One-Time Access Warning"
 msgstr "Kertakäyttövaroitus"
 
@@ -4475,6 +4490,9 @@ msgstr "Laatikon tai hyllyn koodi"
 msgid "Code two capital letters"
 msgstr "Koodi kaksi isoa kirjainta"
 
+msgid "Current platform version"
+msgstr "Nykyinen alustaversio"
+
 msgid "Disable character finder"
 msgstr "Poista hahmonetsintä käytöstä"
 
@@ -4492,6 +4510,9 @@ msgstr "Siirry tokenien historiaan"
 
 msgid "Invalid ticket selection"
 msgstr "Virheellinen lipun valinta"
+
+msgid "Invalid version selected"
+msgstr "Valittu virheellinen versio"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Kevytlomake (testi)"
@@ -4526,9 +4547,6 @@ msgstr "Uusi organisaatio luotu"
 #, python-format
 msgid "New question by %(user)s"
 msgstr "Uusi kysymys %(user)s"
-
-msgid "No characters available."
-msgstr "Merkkejä ei ole saatavilla."
 
 msgid "No transactions recorded"
 msgstr "Ei kirjattuja tapahtumia"
@@ -4632,6 +4650,9 @@ msgstr "Vapaaehtoisten rekisterin hallinnointi"
 #, python-format
 msgid "New message from %(user)s"
 msgstr "Uusi viesti %(user)s"
+
+msgid "No items will be modified"
+msgstr "Mitään kohteita ei muuteta"
 
 msgid "Now you can create badges"
 msgstr "Nyt voit luoda merkkejä"
@@ -4763,6 +4784,9 @@ msgstr "Jäljellä oleva maksettava kokonaismäärä"
 
 msgid "Upload membership document"
 msgstr "Lataa jäsenyysasiakirja"
+
+msgid "Using organization version"
+msgstr "Organisaatioversion käyttäminen"
 
 msgid "View photos from the event"
 msgstr "Katso kuvia tapahtumasta"
@@ -4944,6 +4968,9 @@ msgstr "Ainoa pakollinen sarake on"
 msgid "Trait assigned for %(event)s"
 msgstr "Ominaisuus tapahtumalle %(event)s"
 
+msgid "Uploading image, please wait"
+msgstr "Kuvan lataaminen, odota"
+
 msgid "Your request has been logged"
 msgstr "Pyyntösi on kirjattu"
 
@@ -4968,9 +4995,6 @@ msgstr "Muokkaa hahmosi tietoja"
 
 msgid "I Understand - Access Content"
 msgstr "Ymmärrän - Sisällön käyttö"
-
-msgid "If checked: activate new menu"
-msgstr "Jos valittuna: aktivoi uusi valikko"
 
 msgid "Indicate the outflow category"
 msgstr "Ilmoita ulosvirtauksen luokka"
@@ -4999,6 +5023,9 @@ msgstr "Toiminta: ADD, SUB, MUL, DIV"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Henkilökohtainen koodi: <b>%(cod)s</b>"
+
+msgid "Platform version upgrade page"
+msgstr "Alustan version päivityssivu"
 
 msgid "Players waiting for character"
 msgstr "Pelaajat odottavat hahmoa"
@@ -5084,9 +5111,6 @@ msgstr "Vuosittaisen jäsenmaksun viivästyminen"
 
 msgid "Duration in seconds (optional)"
 msgstr "Kesto sekunteina (valinnainen)"
-
-msgid "If checked: shows the old menu"
-msgstr "Jos valittuna: näyttää vanhan valikon"
 
 msgid "Manage issues during the event"
 msgstr "Tapahtuman aikana ilmenevien ongelmien hallinta"
@@ -5238,9 +5262,6 @@ msgstr "Kirjautuminen takaisin sisään tilillä"
 msgid "Total of recorded money inflows"
 msgstr "Kirjatut rahantulot yhteensä"
 
-msgid "Uploading image, please wait..."
-msgstr "Kuvan lataaminen, odota..."
-
 msgid "Where the event will take place"
 msgstr "Missä tapahtuma järjestetään"
 
@@ -5289,6 +5310,9 @@ msgstr "Näyttää luettelon käyttäjien sähköposteista"
 
 msgid "Do you want to tell us something"
 msgstr "Haluatko kertoa meille jotain"
+
+msgid "Each token can only be used once"
+msgstr "Kukin tunniste voidaan käyttää vain kerran turvallisuussyistä"
 
 msgid "Is it selectable by participants"
 msgstr "Voivatko osallistujat valita sen"
@@ -5404,9 +5428,6 @@ msgstr "Lisätietoja saat kirjoittamalla meille"
 msgid "Go to the history preferences for"
 msgstr "Siirry historian asetuksiin"
 
-msgid "If checked: activate new dashbord"
-msgstr "Jos valittuna: aktivoi uusi kojelauta"
-
 msgid "Indicate your level of experience"
 msgstr "Ilmoita kokemuksesi taso"
 
@@ -5458,6 +5479,10 @@ msgstr "Näytä tapahtuman tiedot avaamalla sen"
 msgid "You don't have any characters yet"
 msgstr "Sinulla ei ole vielä yhtään hahmoa"
 
+#, python-format
+msgid "you are now viewing version %(v)s"
+msgstr "Esikatselu aktivoitu. Katselet nyt versiota %(v)s"
+
 msgid "(Optional) The ability description"
 msgstr "(Valinnainen) Taidon kuvaus"
 
@@ -5485,9 +5510,6 @@ msgstr "Selvitä, mitä tehtäviä on saatavilla"
 
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Jos valittuna, salli lippuluokka: NPC"
-
-msgid "If checked: activate new interface"
-msgstr "Jos valittuna: aktivoi uusi käyttöliittymä"
 
 msgid "Manage badges and user assignments"
 msgstr "Nimimerkkien ja käyttäjätehtävien hallinta"
@@ -5518,6 +5540,10 @@ msgstr "Nyt voit luoda tapahtumamalleja"
 
 msgid "Now you can set membership options"
 msgstr "Nyt voit asettaa jäsenyysasetukset"
+
+msgid "Please retry or use a smaller file"
+msgstr ""
+"Virhe kuvan lataamisessa. Yritä uudelleen tai käytä pienempää tiedostoa"
 
 #, python-format
 msgid "Registration updated for %(event)s"
@@ -5591,12 +5617,6 @@ msgstr "(Valinnainen) Lipun kuvaus"
 
 msgid "Choose individual features yourself"
 msgstr "Valitse yksittäiset ominaisuudet itse"
-
-msgid "If checked: shows the old dashboard"
-msgstr "Jos valittuna: näyttää vanhan kojelaudan"
-
-msgid "If checked: shows the old interface"
-msgstr "Jos valittuna: näyttää vanhan käyttöliittymän"
 
 msgid "Indicate the prerequisite abilities"
 msgstr "Ilmoita vaadittavat taidot"
@@ -5769,6 +5789,9 @@ msgstr "Ilmoittautumisen ehdot ja säännöt"
 
 msgid "They need to complete it immediately"
 msgstr "Niiden on saatettava se päätökseen välittömästi"
+
+msgid "This page shows the event milestones"
+msgstr "Tämä sivu näyttää tapahtuman virstanpylväät"
 
 msgid "Tickets that have already been drawn"
 msgstr "Jo arvotut liput"
@@ -5948,6 +5971,10 @@ msgstr "Nyt voit isännöidä tiedostoja alustalla"
 
 msgid "Now you can start creating speed-larps"
 msgstr "Nyt voit aloittaa speed-larppien luomisen"
+
+#, python-format
+msgid "Organization upgraded to version %(v)s"
+msgstr "Organisaatio päivitetty versioon %(v)s"
 
 msgid "The following registrations were drawn"
 msgstr "Seuraavat ilmoittautumiset arvottiin"
@@ -6254,6 +6281,9 @@ msgstr "Olet ylittänyt tekstin enimmäispituuden"
 msgid "copy this link and give it to your friend"
 msgstr "kopioi tämä linkki ja anna se ystävällesi"
 
+msgid "A new version of the platform is available"
+msgstr "Alustan uusi versio on saatavilla"
+
 msgid "Added at the top of the main calendar page"
 msgstr "Lisätty kalenterin pääsivun yläosaan"
 
@@ -6265,6 +6295,11 @@ msgstr "Hahmo on jo jaettu, ei valittavissa"
 
 msgid "Click on a name to go and view it directly"
 msgstr "Klikkaa nimeä siirtyäksesi katsomaan sitä suoraan"
+
+msgid "Completed milestones are hidden by default"
+msgstr ""
+"Tällä sivulla näkyvät tapahtuman virstanpylväät. Valmistuneet virstanpylväät"
+" on oletusarvoisesti piilotettu"
 
 #, python-format
 msgid "Confirmation of registration for %(event)s"
@@ -6543,6 +6578,9 @@ msgstr "Et ole vielä järjestön jäsen"
 msgid "You are now logged in with your main account"
 msgstr "Olet nyt kirjautuneena sisään päätililläsi"
 
+msgid "Apply the upgrade to the entire organization?"
+msgstr "Sovelletaanko päivitystä koko organisaatioon?"
+
 msgid "Complete the checklist to unlock all features"
 msgstr "Täytä tarkistuslista avataksesi kaikki ominaisuudet"
 
@@ -6661,6 +6699,9 @@ msgstr "Tekstin näyttäminen kaikkien hahmolomakkeiden alussa"
 msgid "The character field of computed type to update"
 msgstr "Päivitettävä laskennallisen tyypin merkkikenttä"
 
+msgid "The organization is running the latest version"
+msgstr "Organisaatiossa on käytössä uusin versio"
+
 msgid "This page shows all log entries for this event"
 msgstr "Tällä sivulla näkyvät kaikki tämän tapahtuman lokimerkinnät"
 
@@ -6720,6 +6761,11 @@ msgstr "Jaettavien hahmojen määrä (oletusarvo 1)"
 msgid "Optional template associated with this ability."
 msgstr "Tähän taitoon liittyvä valinnainen pohja."
 
+msgid "Refunds cannot be processed as virtual currency"
+msgstr ""
+"Varoitus: Merkit ja hyvitykset eivät ole käytössä. Palautuksia ei voida "
+"käsitellä virtuaalivaluuttana"
+
 msgid "Selected elements will be shown to participants"
 msgstr "Valitut elementit näytetään osallistujille"
 
@@ -6759,6 +6805,9 @@ msgstr "Pääset hahmoosi <a href='%(url)s'>täältä</a>"
 
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Oletko varma? Kohteita ei ehkä voida palauttaa"
+
+msgid "Complete all steps above to unlock advanced mode"
+msgstr "Suorita kaikki edellä mainitut vaiheet avataksesi edistyneen tilan"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Kuvaa tarkasti, ketkä osallistujat ovat mukana"
@@ -6810,6 +6859,9 @@ msgstr "Tähän tapahtumaan liittyvä tilaussuunnitelma"
 msgid "There are no new sessions scheduled at this time"
 msgstr "Tällä hetkellä ei ole uusia istuntoja"
 
+msgid "This operation is permanent and cannot be undone"
+msgstr "Tämä toimenpide on pysyvä eikä sitä voi peruuttaa"
+
 msgid "This page shows all emails, both queued and sent"
 msgstr ""
 "Tällä sivulla näkyvät kaikki sähköpostit, sekä jonossa olevat että lähetetyt"
@@ -6850,9 +6902,6 @@ msgstr "Taustakuva näytetään kaikilla tapahtumasivuilla"
 
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Tekstitaustojen ja sisältölaatikoiden väri"
-
-msgid "Complete all steps above to unlock advanced mode."
-msgstr "Suorita kaikki edellä mainitut vaiheet avataksesi edistyneen tilan."
 
 msgid "Describe exactly what risks it poses to the event"
 msgstr "Kuvaile tarkkaan, mitä riskejä se aiheuttaa tapahtumalle"
@@ -7133,6 +7182,9 @@ msgstr "Poikkeaa vain yhden merkin verran odotetusta merkistä"
 msgid "Displays lists of participants to persuade to sign up"
 msgstr "Näyttää osallistujaluettelot, joita voi suostutella rekisteröitymään"
 
+msgid "Each token can only be used once for security reasons"
+msgstr "Kukin tunniste voidaan käyttää vain kerran turvallisuussyistä"
+
 msgid "Have at least one participant registered for an event"
 msgstr "Vähintään yksi osallistuja on rekisteröitynyt tapahtumaan"
 
@@ -7156,6 +7208,9 @@ msgstr "Nyt voit luoda 'patron'- ja 'alennetut' liput"
 
 msgid "Now you can upload content and generate access tokens"
 msgstr "Nyt voit ladata sisältöä ja luoda käyttöoikeuskoodeja"
+
+msgid "Please review the changes carefully before confirming"
+msgstr "Tutustu muutoksiin huolellisesti ennen vahvistamista"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
@@ -7219,9 +7274,6 @@ msgstr ""
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Haluatko antaa käyttäjien tehdä vapaaehtoisia lahjoituksia"
 
-msgid "Each token can only be used once for security reasons."
-msgstr "Kukin tunniste voidaan käyttää vain kerran turvallisuussyistä."
-
 msgid "Everything is in order about the payment of this event"
 msgstr "Kaikki on kunnossa tämän tapahtuman maksun osalta"
 
@@ -7266,6 +7318,11 @@ msgstr "Käyttäjä on vahvistanut ilmoittautumisensa tähän tapahtumaan"
 
 msgid "The user has updated their registration for this event"
 msgstr "Käyttäjä on päivittänyt ilmoittautumisensa tähän tapahtumaan"
+
+msgid "This page shows all access tokens for one-time content"
+msgstr ""
+"Tällä sivulla näkyvät kaikki kertakäyttösisällön käyttöoikeuskoodit. Kutakin"
+" tunnusta voi käyttää vain kerran"
 
 msgid "This page shows all event registrations for the member"
 msgstr "Tällä sivulla näkyvät kaikki jäsenen ilmoittautumiset tapahtumiin"
@@ -7393,6 +7450,10 @@ msgstr "Tarkista osallistujien ruokavaliorajoitukset ja allergiat."
 msgid "This page shows all expense items recorded in the system"
 msgstr "Tällä sivulla näkyvät kaikki järjestelmään kirjatut kuluerät"
 
+msgid "Warning: Neither tokens nor credits features are enabled"
+msgstr ""
+"Varoitus: Ei poletteja eikä krediittejä -ominaisuuksia ei ole käytössä"
+
 msgid "You must select at least one ticket for this installment"
 msgstr "Sinun on valittava vähintään yksi lippu tätä erää varten"
 
@@ -7482,10 +7543,6 @@ msgstr "Ota yhteyttä järjestäjiin, jos tarvitset uuden linkin myöhemmin"
 
 msgid "Do you want to assign characters using a casting algorithm"
 msgstr "Haluatko määrittää hahmot käyttämällä hahmojakoalgoritmia"
-
-msgid "Error uploading image. Please retry or use a smaller file."
-msgstr ""
-"Virhe kuvan lataamisessa. Yritä uudelleen tai käytä pienempää tiedostoa."
 
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
@@ -8106,6 +8163,9 @@ msgstr "Haettua kohdetta ei ole olemassa, ehkä se on hiljattain poistettu"
 msgid "They will not be communicated, shared or processed in any other way"
 msgstr "Niitä ei välitetä, jaeta tai käsitellä millään muulla tavalla"
 
+msgid "This access link has already been used and cannot be accessed again"
+msgstr "Tämä linkki on jo käytetty, eikä sitä voi käyttää uudelleen"
+
 msgid "This page shows the modules for the workshop questions of the event"
 msgstr "Tällä sivulla näkyvät tapahtuman työpajakysymysten moduulit"
 
@@ -8170,9 +8230,6 @@ msgstr ""
 
 msgid "The ticket will be divided equally in the number of quotas indicated"
 msgstr "Lippu jaetaan tasan ilmoitettujen kiintiöiden mukaisesti"
-
-msgid "This access link has already been used and cannot be accessed again."
-msgstr "Tämä linkki on jo käytetty, eikä sitä voi käyttää uudelleen."
 
 msgid "This page shows the quota options available for payment of the event"
 msgstr ""
@@ -8613,6 +8670,12 @@ msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Huomautus: Erityiskoodi luodaan uudelleen aina, kun vaihdat lahjakortin"
+
+msgid ""
+"Personal interface version preference, overrides the organization setting"
+msgstr ""
+"Henkilökohtainen käyttöliittymäversio-asetus, joka ohittaa organisaation "
+"asetukset"
 
 msgid ""
 "This page shows for each participant their completion status of workshops"
@@ -9164,6 +9227,13 @@ msgstr ""
 "seuraavat linkit"
 
 msgid ""
+"Either no items have assigned quantities, or all assignments have zero "
+"quantity"
+msgstr ""
+"Mitään kohteita ei muuteta. Joko yhdellekään nimikkeelle ei ole määritetty "
+"määriä tai kaikille nimikkeille on määritetty nollamäärä"
+
+msgid ""
 "If set, this payment method is only available for organizations of this "
 "country"
 msgstr ""
@@ -9304,13 +9374,6 @@ msgid ""
 msgstr ""
 "Määrittää, kuinka usein muistutussähköposteja lähetetään päivinä (jos sitä "
 "ei ole asetettu, sähköposteja ei lähetetä)"
-
-msgid ""
-"This page shows the event milestones. Completed milestones are hidden by "
-"default."
-msgstr ""
-"Tällä sivulla näkyvät tapahtuman virstanpylväät. Valmistuneet virstanpylväät"
-" on oletusarvoisesti piilotettu."
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
@@ -9882,13 +9945,6 @@ msgstr ""
 "kirjautumisissa (0 = rajoittamaton)"
 
 msgid ""
-"This page shows all access tokens for one-time content. Each token can only "
-"be used once."
-msgstr ""
-"Tällä sivulla näkyvät kaikki kertakäyttösisällön käyttöoikeuskoodit. Kutakin"
-" tunnusta voi käyttää vain kerran."
-
-msgid ""
 "This page shows problems reported by contributors, for direct management "
 "during the event"
 msgstr ""
@@ -10153,6 +10209,13 @@ msgstr ""
 "tapahtumaan"
 
 msgid ""
+"If you need access to this content again, please contact the organizers for "
+"a new access link"
+msgstr ""
+"Jos tarvitset pääsyn tähän sisältöön uudelleen, ota yhteyttä järjestäjiin "
+"uuden linkin saamiseksi"
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -10214,13 +10277,6 @@ msgid ""
 msgstr ""
 "Jos se osoitetaan sinulle, sinulle osoitetaan automaattisesti alkuperäinen "
 "hahmo, jota se peilaa"
-
-msgid ""
-"If you need access to this content again, please contact the organizers for "
-"a new access link."
-msgstr ""
-"Jos tarvitset pääsyn tähän sisältöön uudelleen, ota yhteyttä järjestäjiin "
-"uuden linkin saamiseksi."
 
 msgid ""
 "Optional - Maximum number of times it can be selected across all "
@@ -10750,13 +10806,6 @@ msgstr ""
 "poistetaan"
 
 msgid ""
-"This operation is permanent and cannot be undone. Please review the changes "
-"carefully before confirming."
-msgstr ""
-"Tämä toimenpide on pysyvä, eikä sitä voi peruuttaa. Tarkista muutokset "
-"huolellisesti ennen vahvistamista."
-
-msgid ""
 "This page shows the list of members, divided by type: applicants, approved, "
 "renewed for the current year"
 msgstr ""
@@ -10839,20 +10888,6 @@ msgid ""
 msgstr ""
 "Tällä sivulla näytetään, mitä tapahtuu, kun sitoudut varastomääriin "
 "nykyisten toimeksiantojen perusteella"
-
-msgid ""
-"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
-"processed as virtual currency."
-msgstr ""
-"Varoitus: Merkit ja hyvitykset eivät ole käytössä. Palautuksia ei voida "
-"käsitellä virtuaalivaluuttana."
-
-msgid ""
-"No items will be modified. Either no items have assigned quantities, or all "
-"assignments have zero quantity."
-msgstr ""
-"Mitään kohteita ei muuteta. Joko yhdellekään nimikkeelle ei ole määritetty "
-"määriä tai kaikille nimikkeille on määritetty nollamäärä."
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

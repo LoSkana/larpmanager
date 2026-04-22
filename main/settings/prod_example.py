@@ -154,12 +154,14 @@ AWS_SES_ACCESS_KEY_ID = os.environ.get('AWS_SES_ACCESS_KEY_ID')
 AWS_SES_SECRET_ACCESS_KEY = os.environ.get('AWS_SES_SECRET_ACCESS_KEY')
 AWS_SES_REGION_NAME = os.environ.get('AWS_SES_REGION_NAME', 'us-east-1')
 
-SECURE_SSL_REDIRECT = True
-SECURE_HSTS_SECONDS = 31536000
-SESSION_COOKIE_SECURE = True
+_docker = os.environ.get('DOCKER') == 'true'
+
+SECURE_SSL_REDIRECT = not _docker
+SECURE_HSTS_SECONDS = 0 if _docker else 31536000
+SESSION_COOKIE_SECURE = not _docker
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = False  # Must stay False — JS reads token for AJAX X-CSRFToken header
+CSRF_COOKIE_SECURE = not _docker
+CSRF_COOKIE_HTTPONLY = False  # Must stay False, as JS reads token for AJAX X-CSRFToken header
 CSRF_COOKIE_SAMESITE = 'Lax'  # Strict would break Google OAuth redirect
 SECURE_BROWSER_XSS_FILTER = True
