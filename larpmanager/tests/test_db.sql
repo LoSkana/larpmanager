@@ -4332,7 +4332,7 @@ INSERT INTO public.django_migrations VALUES (199, 'socialaccount', '0003_extra_d
 INSERT INTO public.django_migrations VALUES (200, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (201, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (202, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (206, 'larpmanager', '0155_interface_version_system', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (203, 'larpmanager', '0155_interface_version_system', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
@@ -4761,7 +4761,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 206, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 203, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
