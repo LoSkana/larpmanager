@@ -30,6 +30,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import go_to, login_orga
+from playwright.sync_api import expect
 
 pytestmark = pytest.mark.e2e
 
@@ -55,24 +56,25 @@ def test_credits_readonly_event(pw_page: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # Check presence of New, Edit and Delete links
-    expect(page.get_by_role("link", name="+ New").toHaveCount(1))
-    expect(page.locator('i.fas.fa-edit')).toHaveCount(1)
-    expect(page.locator('i.fas.fa-trash')).toHaveCount(1)
+    expect(page.get_by_role("link", name="+ New")).to_have_count(1)
+    expect(page.locator('i.fas.fa-edit')).to_have_count(1)
+    expect(page.locator('i.fas.fa-trash')).to_have_count(1)
 
     # Activate readonly flag
     go_to(page, live_server, "/manage/config/")
-    page.get_by_role("link", name="Credits").click()
+    #page.get_by_role("link", name="Credits").filter(has=page.locator('[tog="sec_credits"]')).click()
+    page.locator('a[tog="sec_credits"]').click()
     page.locator("#id_credit_readonly_event").check()
     page.get_by_role("button", name="Confirm").click()
 
     # Go to event and check lack of New, Edit and Delete links
     go_to(page, live_server, "/test/manage/credits/")
-    expect(page.get_by_role("link", name="+ New").toHaveCount(0))
-    expect(page.locator('i.fas.fa-edit')).toHaveCount(0)
-    expect(page.locator('i.fas.fa-trash')).toHaveCount(0)
+    expect(page.get_by_role("link", name="+ New")).to_have_count(0)
+    expect(page.locator('i.fas.fa-edit')).to_have_count(0)
+    expect(page.locator('i.fas.fa-trash')).to_have_count(0)
 
     # Go to orga and check presence of New, Edit and Delete links
     go_to(page, live_server, "manage/credits/")
-    expect(page.get_by_role("link", name="+ New").toHaveCount(1))
-    expect(page.locator('i.fas.fa-edit')).toHaveCount(1)
-    expect(page.locator('i.fas.fa-trash')).toHaveCount(1)
+    expect(page.get_by_role("link", name="+ New")).to_have_count(1)
+    expect(page.locator('i.fas.fa-edit')).to_have_count(1)
+    expect(page.locator('i.fas.fa-trash')).to_have_count(1)
