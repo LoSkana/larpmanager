@@ -12,7 +12,8 @@
         <div class="alert alert-warning" role="alert">
             <i class="fas fa-exclamation-triangle"></i>
             <strong>{% trans "Warning" %}:</strong>
-            {% trans "This operation is permanent and cannot be undone. Please review the changes carefully before confirming." %}
+            {% trans "This operation is permanent and cannot be undone" %}.
+            {% trans "Please review the changes carefully before confirming" %}.
         </div>
         <h3>{% trans "Items that will be modified" %}</h3>
         <p>
@@ -79,7 +80,8 @@
     {% else %}
         <div class="alert alert-info" role="alert">
             <i class="fas fa-info-circle"></i>
-            {% trans "No items will be modified. Either no items have assigned quantities, or all assignments have zero quantity." %}
+            {% trans "No items will be modified" %}.
+            {% trans "Either no items have assigned quantities, or all assignments have zero quantity" %}.
         </div>
         <a href="{% url 'orga_warehouse_manifest' run.get_slug %}"
            class="btn btn-primary">

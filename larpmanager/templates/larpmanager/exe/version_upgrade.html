@@ -1,0 +1,75 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block css %}
+    <style>
+        .version-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1em 1.25em;
+            margin-bottom: 1em;
+        }
+        .version-item .button-upgrade {
+            background: #2a7ae2;
+            color: #fff;
+            border-color: #2a7ae2;
+        }
+        .version-item .button-upgrade:hover {
+            background: #1a5bb8;
+            border-color: #1a5bb8;
+        }
+    </style>
+{% endblock css %}
+{% block title %}
+    {% trans "Version Management" %} - {% trans "Organization" %}
+{% endblock title %}
+
+{% block content %}
+    <p>
+        {% trans "Current platform version" %}: <strong>{{ assoc_version }}</strong> ({{ assoc_version_description }})
+    </p>
+
+    {% if is_previewing %}
+        <div class="alert alert-info">
+            {% trans "Previewing version" %} <strong>{{ member_version }}</strong>.
+            <form method="post" style="display:inline">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="reset_preview">
+                <button type="submit" class="button small">{% trans "Exit Preview" %}</button>
+            </form>
+        </div>
+    {% endif %}
+
+    {% if upgradeable_versions %}
+        <h3>{% trans "Available versions" %}</h3>
+        {% for version in upgradeable_versions %}
+            <div class="version-item">
+                <strong>{% trans "Version" %} {{ version.number }}</strong> ({{ version.description }})
+                <div style="margin-top:0.5em">
+                    <form method="post" style="display:inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="test">
+                        <input type="hidden" name="target_version" value="{{ version.number }}">
+                        <button type="submit" class="button">
+                            <i class="fa-solid fa-eye"></i> {% trans "Preview" %}
+                        </button>
+                    </form>
+                    &nbsp;
+                    <form method="post" style="display:inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="upgrade">
+                        <input type="hidden" name="target_version" value="{{ version.number }}">
+                        <button type="submit" class="button button-upgrade"
+                                onclick="return confirm('{% trans "Apply the upgrade to the entire organization?" %}')">
+                            <i class="fa-solid fa-arrow-up"></i> {% trans "Apply Upgrade" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>
+            <i class="fa-solid fa-circle-check"></i>
+            <em>{% trans "The organization is running the latest version" %}.</em>
+        </p>
+    {% endif %}
+{% endblock content %}

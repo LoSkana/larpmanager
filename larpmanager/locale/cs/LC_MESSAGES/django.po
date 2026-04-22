@@ -1206,14 +1206,8 @@ msgstr "Nové náklady"
 msgid "New gift"
 msgstr "Nový dárek"
 
-msgid "New menu"
-msgstr "Nové menu"
-
 msgid "Nickname"
 msgstr "Přezdívka"
-
-msgid "Old menu"
-msgstr "Staré menu"
 
 msgid "One-Time"
 msgstr "Jednorázové"
@@ -1571,6 +1565,9 @@ msgstr "Přeložit"
 
 msgid "Treasurer"
 msgstr "Pokladník"
+
+msgid "Uploading"
+msgstr "Nahrávání"
 
 msgid "Warehouse"
 msgstr "Sklad"
@@ -2169,6 +2166,9 @@ msgstr "Název úvěru"
 msgid "Event hidden"
 msgstr "Skrytá událost"
 
+msgid "Exit Preview"
+msgstr "Náhled výstupu"
+
 msgid "Experimental"
 msgstr "Experimentální"
 
@@ -2316,9 +2316,6 @@ msgstr "Překlady"
 msgid "Type of text"
 msgstr "Typ textu"
 
-msgid "Uploading..."
-msgstr "Nahrávání..."
-
 msgid "Url Shortner"
 msgstr "Zkracovač URL"
 
@@ -2364,6 +2361,9 @@ msgstr "Přístupnost"
 
 msgid "Age selection"
 msgstr "Výběr věku"
+
+msgid "Apply Upgrade"
+msgstr "Použít upgrade"
 
 msgid "Authorisation"
 msgstr "Autorizace"
@@ -2479,14 +2479,8 @@ msgstr "Minimální počet hlasů"
 msgid "Name of quest"
 msgstr "Název úkolu"
 
-msgid "New Dashboard"
-msgstr "Nový přístrojový panel"
-
 msgid "New character"
 msgstr "Nová postava"
-
-msgid "New interface"
-msgstr "Nové rozhraní"
 
 msgid "Next sessions"
 msgstr "Další zasedání"
@@ -2496,12 +2490,6 @@ msgstr "Není dokončeno"
 
 msgid "Number events"
 msgstr "Počet událostí"
-
-msgid "Old dashboard"
-msgstr "Stará přístrojová deska"
-
-msgid "Old interface"
-msgstr "Staré rozhraní"
 
 msgid "Options price"
 msgstr "Cena opce"
@@ -2535,6 +2523,9 @@ msgstr "Editor hráčů"
 
 msgid "Prerequisites"
 msgstr "Předpoklady"
+
+msgid "Preview reset"
+msgstr "Obnovení náhledu"
 
 msgid "Progress step"
 msgstr "Krok vpřed"
@@ -2987,6 +2978,9 @@ msgstr "Přeložený text"
 msgid "Upload Expenses"
 msgstr "Nahrávání výdajů"
 
+msgid "Version Upgrade"
+msgstr "Aktualizace verze"
+
 msgid "View accounting"
 msgstr "Zobrazení účetnictví"
 
@@ -3133,6 +3127,9 @@ msgstr "Název pozemku"
 
 msgid "No comunications"
 msgstr "Žádná komunikace"
+
+msgid "No transfers yet"
+msgstr "Zatím žádné přestupy"
 
 msgid "Number not found"
 msgstr "Číslo nebylo nalezeno"
@@ -3344,6 +3341,9 @@ msgstr "Fotografie na dokladu totožnosti"
 msgid "Identity document"
 msgstr "Doklad totožnosti"
 
+msgid "Interface version"
+msgstr "Verze rozhraní"
+
 msgid "Invalid selection"
 msgstr "Neplatný výběr"
 
@@ -3374,9 +3374,6 @@ msgstr "Přesun do kontejneru"
 msgid "New Registrations"
 msgstr "Nové registrace"
 
-msgid "No transfers yet."
-msgstr "Zatím žádné přestupy."
-
 msgid "One-Time Contents"
 msgstr "Jednorázový obsah"
 
@@ -3406,6 +3403,9 @@ msgstr "Předběžné registrace"
 
 msgid "Pre-register here"
 msgstr "Předběžná registrace zde"
+
+msgid "Preview activated"
+msgstr "Aktivovaný náhled"
 
 msgid "Profile completed"
 msgstr "Profil dokončen"
@@ -3488,6 +3488,9 @@ msgstr "Povolené hodnoty jsou"
 msgid "Approved character"
 msgstr "Schválená postava"
 
+msgid "Available versions"
+msgstr "Dostupné verze"
+
 msgid "Character portrait"
 msgstr "Portrét postavy"
 
@@ -3560,6 +3563,9 @@ msgstr "Proveďte extrakci"
 msgid "Preferences saved!"
 msgstr "Předvolby uloženy!"
 
+msgid "Previewing version"
+msgstr "Verze náhledu"
+
 msgid "Print current view"
 msgstr "Tisk aktuálního zobrazení"
 
@@ -3598,6 +3604,9 @@ msgstr "Celková odeslaná platba"
 
 msgid "Transaction totals"
 msgstr "Celkový počet transakcí"
+
+msgid "Version Management"
+msgstr "Správa verzí"
 
 msgid "View registrations"
 msgstr "Zobrazit registrace"
@@ -4015,6 +4024,9 @@ msgstr "Zakázat změnu částky"
 msgid "Discover the web site"
 msgstr "Objevte webové stránky"
 
+msgid "Error uploading image"
+msgstr "Chyba při nahrávání obrázku"
+
 msgid "Failed password reset"
 msgstr "Obnovení hesla se nezdařilo"
 
@@ -4394,6 +4406,9 @@ msgstr "Minimální počet hlasů"
 msgid "Move registration event"
 msgstr "Přesun registrační události"
 
+msgid "No characters available"
+msgstr "Žádné postavy nejsou k dispozici"
+
 msgid "One-Time Access Warning"
 msgstr "Upozornění na jednorázový přístup"
 
@@ -4475,6 +4490,9 @@ msgstr "Kód krabice nebo police"
 msgid "Code two capital letters"
 msgstr "Kód dvě velká písmena"
 
+msgid "Current platform version"
+msgstr "Aktuální verze platformy"
+
 msgid "Disable character finder"
 msgstr "Zakázat vyhledávač znaků"
 
@@ -4492,6 +4510,9 @@ msgstr "Přístup k historii PT"
 
 msgid "Invalid ticket selection"
 msgstr "Neplatný výběr tipu"
+
+msgid "Invalid version selected"
+msgstr "Vybrána nesprávná verze"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lehký plech (test)"
@@ -4526,9 +4547,6 @@ msgstr "Vytvoření nového sdružení"
 #, python-format
 msgid "New question by %(user)s"
 msgstr "Nová otázka od %(user)s"
-
-msgid "No characters available."
-msgstr "Žádné postavy nejsou k dispozici."
 
 msgid "No transactions recorded"
 msgstr "Žádné zaznamenané transakce"
@@ -4632,6 +4650,9 @@ msgstr "Správa registru dobrovolníků"
 #, python-format
 msgid "New message from %(user)s"
 msgstr "Nová zpráva od %(user)s"
+
+msgid "No items will be modified"
+msgstr "Žádné položky nebudou upraveny"
 
 msgid "Now you can create badges"
 msgstr "Nyní můžete vytvářet odznaky"
@@ -4763,6 +4784,9 @@ msgstr "Zbývající částka k vyplacení"
 
 msgid "Upload membership document"
 msgstr "Nahrát členský dokument"
+
+msgid "Using organization version"
+msgstr "Použití verze organizace"
 
 msgid "View photos from the event"
 msgstr "Prohlédněte si fotografie z akce"
@@ -4944,6 +4968,9 @@ msgstr "Jediný povinný sloupec je"
 msgid "Trait assigned for %(event)s"
 msgstr "Známka přiřazená pro %(event)s"
 
+msgid "Uploading image, please wait"
+msgstr "Nahrávání obrázku, počkejte prosím"
+
 msgid "Your request has been logged"
 msgstr "Váš požadavek byl zaznamenán"
 
@@ -4968,9 +4995,6 @@ msgstr "Úprava údajů o postavě"
 
 msgid "I Understand - Access Content"
 msgstr "Rozumím - Přístup k obsahu"
-
-msgid "If checked: activate new menu"
-msgstr "Pokud je zaškrtnuto: aktivuje novou nabídku"
 
 msgid "Indicate the outflow category"
 msgstr "Uveďte kategorii, do které se výstup započítává"
@@ -4999,6 +5023,9 @@ msgstr "Provoz: ADD, SUB, MUL, DIV"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Osobní kód: <b>%(cod)s</b>"
+
+msgid "Platform version upgrade page"
+msgstr "Stránka pro aktualizaci verze platformy"
 
 msgid "Players waiting for character"
 msgstr "Hráči čekají na postavu"
@@ -5084,9 +5111,6 @@ msgstr "Zpoždění ročního členského poplatku"
 
 msgid "Duration in seconds (optional)"
 msgstr "Doba trvání v sekundách (nepovinné)"
-
-msgid "If checked: shows the old menu"
-msgstr "Pokud je zaškrtnuto: zobrazí starou nabídku"
 
 msgid "Manage issues during the event"
 msgstr "Správa problémů během akce"
@@ -5235,9 +5259,6 @@ msgstr "Opětovné přihlášení pomocí účtu"
 msgid "Total of recorded money inflows"
 msgstr "Součet zaznamenaných přílivů peněz"
 
-msgid "Uploading image, please wait..."
-msgstr "Nahrávání obrázku, počkejte prosím..."
-
 msgid "Where the event will take place"
 msgstr "Kde se akce koná"
 
@@ -5286,6 +5307,9 @@ msgstr "Zobrazí seznam e-mailů uživatelů"
 
 msgid "Do you want to tell us something"
 msgstr "Chcete nám něco říct"
+
+msgid "Each token can only be used once"
+msgstr "Každý token lze z bezpečnostních důvodů použít pouze jednou"
 
 msgid "Is it selectable by participants"
 msgstr "Je volitelný účastníky"
@@ -5401,9 +5425,6 @@ msgstr "Pro více informací nám napište"
 msgid "Go to the history preferences for"
 msgstr "Přejděte do historie předvoleb pro"
 
-msgid "If checked: activate new dashbord"
-msgstr "Pokud je zaškrtnuto: aktivovat nový přístrojový panel"
-
 msgid "Indicate your level of experience"
 msgstr "Uveďte svou úroveň zkušeností"
 
@@ -5455,6 +5476,10 @@ msgstr "Zobrazení všech informací o události v"
 msgid "You don't have any characters yet"
 msgstr "Zatím nemáte žádné postavy"
 
+#, python-format
+msgid "you are now viewing version %(v)s"
+msgstr "Aktivovaný náhled. Nyní si prohlížíte verzi %(v)s"
+
 msgid "(Optional) The ability description"
 msgstr "(Nepovinné) Popis schopnosti"
 
@@ -5482,9 +5507,6 @@ msgstr "Objevte dostupné úkoly"
 
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: NPC"
-
-msgid "If checked: activate new interface"
-msgstr "Pokud je zaškrtnuto: aktivuje nové rozhraní"
 
 msgid "Manage badges and user assignments"
 msgstr "Správa odznaků a přiřazení uživatelů"
@@ -5515,6 +5537,11 @@ msgstr "Nyní můžete vytvářet šablony událostí"
 
 msgid "Now you can set membership options"
 msgstr "Nyní můžete nastavit možnosti členství"
+
+msgid "Please retry or use a smaller file"
+msgstr ""
+"Chyba při nahrávání obrázku. Zkuste to prosím znovu nebo použijte menší "
+"soubor"
 
 #, python-format
 msgid "Registration updated for %(event)s"
@@ -5588,12 +5615,6 @@ msgstr "(Nepovinné) Popis tipu"
 
 msgid "Choose individual features yourself"
 msgstr "Vyberte si jednotlivé funkce sami"
-
-msgid "If checked: shows the old dashboard"
-msgstr "Pokud je zaškrtnuto: zobrazí starý přístrojový panel"
-
-msgid "If checked: shows the old interface"
-msgstr "Pokud je zaškrtnuto: zobrazí staré rozhraní"
 
 msgid "Indicate the prerequisite abilities"
 msgstr "Uveďte předpokládané schopnosti"
@@ -5766,6 +5787,9 @@ msgstr "Podmínky vstupu"
 
 msgid "They need to complete it immediately"
 msgstr "Musí ji okamžitě dokončit"
+
+msgid "This page shows the event milestones"
+msgstr "Na této stránce jsou uvedeny milníky události"
 
 msgid "Tickets that have already been drawn"
 msgstr "Vstupenky jsou již vylosovány"
@@ -5945,6 +5969,10 @@ msgstr "Nyní můžete hostovat soubory v platformě"
 
 msgid "Now you can start creating speed-larps"
 msgstr "Nyní můžete začít vytvářet speed-larpy"
+
+#, python-format
+msgid "Organization upgraded to version %(v)s"
+msgstr "Organizace aktualizována na verzi %(v)s"
 
 msgid "The following registrations were drawn"
 msgstr "Byly vylosovány tyto položky"
@@ -6251,6 +6279,9 @@ msgstr "Překročili jste maximální délku textu"
 msgid "copy this link and give it to your friend"
 msgstr "zkopírujte tento odkaz a dejte ho svému příteli"
 
+msgid "A new version of the platform is available"
+msgstr "K dispozici je nová verze platformy"
+
 msgid "Added at the top of the main calendar page"
 msgstr "Přidáno v horní části hlavní stránky kalendáře"
 
@@ -6262,6 +6293,11 @@ msgstr "Znak již přiřazen, nelze vybrat"
 
 msgid "Click on a name to go and view it directly"
 msgstr "Kliknutím na název jej můžete přímo zobrazit"
+
+msgid "Completed milestones are hidden by default"
+msgstr ""
+"Na této stránce jsou uvedeny milníky události. Dokončené milníky jsou ve "
+"výchozím nastavení skryté"
 
 #, python-format
 msgid "Confirmation of registration for %(event)s"
@@ -6540,6 +6576,9 @@ msgstr "Ještě nejste členem asociace"
 msgid "You are now logged in with your main account"
 msgstr "Nyní jste přihlášeni pomocí svého hlavního účtu"
 
+msgid "Apply the upgrade to the entire organization?"
+msgstr "Použít upgrade pro celou organizaci?"
+
 msgid "Complete the checklist to unlock all features"
 msgstr "Dokončením nastavení odemknete všechny funkce platformy"
 
@@ -6658,6 +6697,9 @@ msgstr "Zobrazení textu na začátku všech listů postav"
 msgid "The character field of computed type to update"
 msgstr "Pole znaků vypočteného typu k aktualizaci"
 
+msgid "The organization is running the latest version"
+msgstr "Organizace používá nejnovější verzi"
+
 msgid "This page shows all log entries for this event"
 msgstr ""
 "Na této stránce jsou zobrazeny všechny záznamy protokolu pro tuto událost"
@@ -6717,6 +6759,11 @@ msgstr "Počet znaků, které mají být přiřazeny (výchozí 1)"
 msgid "Optional template associated with this ability."
 msgstr "Volitelná šablona spojená s touto schopností."
 
+msgid "Refunds cannot be processed as virtual currency"
+msgstr ""
+"Varování: Funkce žetonů ani kreditů nejsou povoleny. Náhrady nelze zpracovat"
+" jako virtuální měnu"
+
 msgid "Selected elements will be shown to participants"
 msgstr "Vybrané prvky budou účastníkům předvedeny"
 
@@ -6756,6 +6803,9 @@ msgstr "Přístup ke své postavě <a href='%(url)s'>zde</a>"
 
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Jste si jistý? Položky nemusí být možné obnovit"
+
+msgid "Complete all steps above to unlock advanced mode"
+msgstr "Dokončením všech výše uvedených kroků odemknete pokročilý režim"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Přesně popište, kteří účastníci jsou zapojeni"
@@ -6807,6 +6857,9 @@ msgstr "Volitelná šablona spojená s touto schopností"
 msgid "There are no new sessions scheduled at this time"
 msgstr "V tuto chvíli nejsou naplánovány žádné nové schůzky"
 
+msgid "This operation is permanent and cannot be undone"
+msgstr "Tato operace je trvalá a nelze ji vrátit zpět"
+
 msgid "This page shows all emails, both queued and sent"
 msgstr ""
 "Na této stránce jsou zobrazeny všechny e-maily, a to jak ty, které jsou ve "
@@ -6848,9 +6901,6 @@ msgstr "Obrázek na pozadí zobrazený na všech stránkách události"
 
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Barva použitá pro pozadí textu a rámečky s obsahem"
-
-msgid "Complete all steps above to unlock advanced mode."
-msgstr "Dokončením všech výše uvedených kroků odemknete pokročilý režim."
 
 msgid "Describe exactly what risks it poses to the event"
 msgstr "Popište přesně, jaká rizika pro událost představuje"
@@ -7129,6 +7179,9 @@ msgid "Displays lists of participants to persuade to sign up"
 msgstr ""
 "Zobrazuje seznamy účastníků, které je třeba přesvědčit, aby se přihlásili"
 
+msgid "Each token can only be used once for security reasons"
+msgstr "Každý token lze z bezpečnostních důvodů použít pouze jednou"
+
 msgid "Have at least one participant registered for an event"
 msgstr "Mít alespoň jednoho účastníka registrovaného na akci"
 
@@ -7152,6 +7205,9 @@ msgstr "Nyní můžete vytvořit tipy 'patron' a 'snížený'"
 
 msgid "Now you can upload content and generate access tokens"
 msgstr "Nyní můžete nahrávat obsah a generovat přístupové tokeny"
+
+msgid "Please review the changes carefully before confirming"
+msgstr "Před potvrzením si prosím změny pečlivě prostudujte"
 
 #, python-format
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
@@ -7213,9 +7269,6 @@ msgstr "Datum a čas zahájení registrace účastníků"
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Chcete uživatelům umožnit dobrovolné dary"
 
-msgid "Each token can only be used once for security reasons."
-msgstr "Každý token lze z bezpečnostních důvodů použít pouze jednou."
-
 msgid "Everything is in order about the payment of this event"
 msgstr "Vše je v pořádku, abychom mohli tuto akci zaplatit"
 
@@ -7260,6 +7313,11 @@ msgstr "Uživatel potvrdil svou registraci na tuto událost"
 
 msgid "The user has updated their registration for this event"
 msgstr "Uživatel aktualizoval svou registraci na tuto událost"
+
+msgid "This page shows all access tokens for one-time content"
+msgstr ""
+"Tato stránka zobrazuje všechny přístupové tokeny pro jednorázový obsah. "
+"Každý token lze použít pouze jednou"
 
 msgid "This page shows all event registrations for the member"
 msgstr ""
@@ -7390,6 +7448,9 @@ msgid "This page shows all expense items recorded in the system"
 msgstr ""
 "Tato stránka zobrazuje všechny nákladové položky zaznamenané v systému"
 
+msgid "Warning: Neither tokens nor credits features are enabled"
+msgstr "Varování: Funkce žetonů ani kreditů nejsou povoleny"
+
 msgid "You must select at least one ticket for this installment"
 msgstr "Pro tuto část musíte vybrat alespoň jeden tip"
 
@@ -7476,11 +7537,6 @@ msgstr ""
 
 msgid "Do you want to assign characters using a casting algorithm"
 msgstr "Chcete přiřadit znaky pomocí algoritmu obsazování"
-
-msgid "Error uploading image. Please retry or use a smaller file."
-msgstr ""
-"Chyba při nahrávání obrázku. Zkuste to prosím znovu nebo použijte menší "
-"soubor."
 
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
@@ -8073,6 +8129,10 @@ msgstr "Hledaný objekt neexistuje, možná byl nedávno odstraněn"
 msgid "They will not be communicated, shared or processed in any other way"
 msgstr "Nebudou sdělovány, sdíleny ani jinak zpracovávány"
 
+msgid "This access link has already been used and cannot be accessed again"
+msgstr ""
+"Tento přístupový odkaz byl již použit a nelze k němu znovu přistupovat"
+
 msgid "This page shows the modules for the workshop questions of the event"
 msgstr ""
 "Na této stránce jsou shrnuty moduly, do kterých jsou rozděleny otázky "
@@ -8136,10 +8196,6 @@ msgstr ""
 
 msgid "The ticket will be divided equally in the number of quotas indicated"
 msgstr "Vstupenka bude rozdělena rovným dílem na uvedený počet akcií"
-
-msgid "This access link has already been used and cannot be accessed again."
-msgstr ""
-"Tento přístupový odkaz byl již použit a nelze k němu znovu přistupovat."
 
 msgid "This page shows the quota options available for payment of the event"
 msgstr ""
@@ -8547,6 +8603,11 @@ msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Poznámka: Speciální kód se generuje znovu při každé změně dárkové karty"
+
+msgid ""
+"Personal interface version preference, overrides the organization setting"
+msgstr ""
+"Osobní předvolba verze rozhraní, má přednost před nastavením organizace"
 
 msgid ""
 "This page shows for each participant their completion status of workshops"
@@ -9089,6 +9150,13 @@ msgstr ""
 "které je třeba sledovat"
 
 msgid ""
+"Either no items have assigned quantities, or all assignments have zero "
+"quantity"
+msgstr ""
+"Žádné položky nebudou upraveny. Žádné položky nemají přiřazené množství nebo"
+" všechna přiřazení mají nulové množství"
+
+msgid ""
 "If set, this payment method is only available for organizations of this "
 "country"
 msgstr ""
@@ -9225,13 +9293,6 @@ msgid ""
 msgstr ""
 "Nastavuje četnost zasílání e-mailů s připomenutím v dnech (pokud není "
 "nastaveno, nejsou zasílány žádné e-maily)"
-
-msgid ""
-"This page shows the event milestones. Completed milestones are hidden by "
-"default."
-msgstr ""
-"Na této stránce jsou uvedeny milníky události. Dokončené milníky jsou ve "
-"výchozím nastavení skryté."
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
@@ -9786,13 +9847,6 @@ msgstr ""
 "registracích (0 = neomezeně)"
 
 msgid ""
-"This page shows all access tokens for one-time content. Each token can only "
-"be used once."
-msgstr ""
-"Tato stránka zobrazuje všechny přístupové tokeny pro jednorázový obsah. "
-"Každý token lze použít pouze jednou."
-
-msgid ""
 "This page shows problems reported by contributors, for direct management "
 "during the event"
 msgstr ""
@@ -10051,6 +10105,13 @@ msgstr ""
 "přihlášeni"
 
 msgid ""
+"If you need access to this content again, please contact the organizers for "
+"a new access link"
+msgstr ""
+"Pokud potřebujete znovu získat přístup k tomuto obsahu, kontaktujte prosím "
+"organizátory, kteří vám poskytnou nový přístupový odkaz"
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -10112,13 +10173,6 @@ msgid ""
 msgstr ""
 "Pokud je vám přiřazena, bude vám automaticky přiřazena původní postava, "
 "kterou zrcadlí"
-
-msgid ""
-"If you need access to this content again, please contact the organizers for "
-"a new access link."
-msgstr ""
-"Pokud potřebujete znovu získat přístup k tomuto obsahu, kontaktujte prosím "
-"organizátory, kteří vám poskytnou nový přístupový odkaz."
 
 msgid ""
 "Optional - Maximum number of times it can be selected across all "
@@ -10640,13 +10694,6 @@ msgstr ""
 "odstraněno"
 
 msgid ""
-"This operation is permanent and cannot be undone. Please review the changes "
-"carefully before confirming."
-msgstr ""
-"Tato operace je trvalá a nelze ji vrátit zpět. Před potvrzením si změny "
-"pečlivě zkontrolujte."
-
-msgid ""
 "This page shows the list of members, divided by type: applicants, approved, "
 "renewed for the current year"
 msgstr ""
@@ -10729,20 +10776,6 @@ msgid ""
 msgstr ""
 "Tato stránka ukazuje, co se stane, když odevzdáte skladová množství na "
 "základě aktuálních přiřazení"
-
-msgid ""
-"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
-"processed as virtual currency."
-msgstr ""
-"Varování: Funkce žetonů ani kreditů nejsou povoleny. Náhrady nelze zpracovat"
-" jako virtuální měnu."
-
-msgid ""
-"No items will be modified. Either no items have assigned quantities, or all "
-"assignments have zero quantity."
-msgstr ""
-"Žádné položky nebudou upraveny. Žádné položky nemají přiřazené množství nebo"
-" všechna přiřazení mají nulové množství."
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

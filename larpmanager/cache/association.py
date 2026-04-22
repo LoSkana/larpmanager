@@ -31,6 +31,7 @@ from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
+from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 
 logger = logging.getLogger(__name__)
 
@@ -140,13 +141,14 @@ def init_cache_association(a_slug: str) -> dict | None:
     for config in [
         "user_characters_shortcut",
         "user_registrations_shortcut",
-        "old_form_appearance",
-        "old_dashboard",
-        "old_menu_appearance",
     ]:
         association_dict[config] = get_association_config(
             association.id, config, default_value=False, context=temp_context
         )
+
+    association_dict["assoc_version"] = int(
+        get_association_config(association.id, "version", default_value=LATEST_AVAILABLE_VERSION, context=temp_context)
+    )
 
     if "app_integration" in association_dict.get("features", {}):
         for config in ["app_integration_button_text", "app_integration_redirect_url"]:

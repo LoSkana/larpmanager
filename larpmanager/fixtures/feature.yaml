@@ -1626,3 +1626,17 @@
     hidden: true
     module: accounting
     dependencies: []
+
+- model: larpmanager.feature
+  fields:
+    name: Version Upgrade
+    descr: Internal pseudo-feature for the platform version upgrade page
+    slug: exe_version_upgrade
+    overall: true
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: null
+    dependencies: []

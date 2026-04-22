@@ -43,6 +43,7 @@ from larpmanager.forms.utils import (
 from larpmanager.models.access import AssociationPermission, AssociationRole
 from larpmanager.models.association import Association, AssociationText, AssociationTextType, AssociationTranslation
 from larpmanager.models.member import Member
+from larpmanager.utils.larpmanager.versions import VERSIONS
 
 logger = logging.getLogger(__name__)
 
@@ -427,9 +428,6 @@ class ExeConfigForm(ConfigForm):
         self.set_config_email()
         self.set_config_integration()
 
-        # Legacy
-        self.set_config_legacy()
-
     def set_config_interface(self) -> None:
         """Configure interface and calendar display settings."""
         self.set_section("interface", _("Interface"))
@@ -474,22 +472,6 @@ class ExeConfigForm(ConfigForm):
             + _("WARNING: deleted items might not be full recoverable")
         )
         self.add_configs("allow_bulk_delete", ConfigType.BOOL, delete_label, delete_help_text)
-
-    def set_config_legacy(self) -> None:
-        """Configure legacy interface options."""
-        self.set_section("legacy", "Legacy")
-
-        past_events_label = _("Old dashboard")
-        past_events_help_text = _("If checked: shows the old dashboard")
-        self.add_configs("old_dashboard", ConfigType.BOOL, past_events_label, past_events_help_text)
-
-        past_events_label = _("Old interface")
-        past_events_help_text = _("If checked: shows the old interface")
-        self.add_configs("old_form_appearance", ConfigType.BOOL, past_events_label, past_events_help_text)
-
-        past_events_label = _("Old menu")
-        past_events_help_text = _("If checked: shows the old menu")
-        self.add_configs("old_menu_appearance", ConfigType.BOOL, past_events_label, past_events_help_text)
 
     def set_config_email(self) -> None:
         """Configure email notification preferences and mail server settings."""
@@ -1093,36 +1075,20 @@ class ExePreferencesForm(ConfigForm):
             digest_mode_help_text,
         )
 
-        if self.params.get("old_dashboard"):
-            # Add temporary new dashboard
-            digest_mode_label = _("New Dashboard")
-            digest_mode_help_text = _("If checked: activate new dashbord")
+        assoc_version = self.params.get("assoc_version", 0)
+        latest = self.params.get("latest_available_version", 0)
+        if assoc_version < latest:
+            version_choices = [("", "---")] + [
+                (str(v["number"]), f"{v['number']} - {v['description']}")
+                for v in VERSIONS
+                if v["available"] and v["number"] >= assoc_version
+            ]
             self.add_configs(
-                "interface_new_dashboard",
-                ConfigType.BOOL,
-                digest_mode_label,
-                digest_mode_help_text,
-            )
-
-        if self.params.get("old_form_appearance"):
-            # Add temporary new dashboard
-            digest_mode_label = _("New interface")
-            digest_mode_help_text = _("If checked: activate new interface")
-            self.add_configs(
-                "interface_new_ui",
-                ConfigType.BOOL,
-                digest_mode_label,
-                digest_mode_help_text,
-            )
-
-        if self.params.get("old_menu_appearance"):
-            digest_mode_label = _("New menu")
-            digest_mode_help_text = _("If checked: activate new menu")
-            self.add_configs(
-                "interface_new_menu",
-                ConfigType.BOOL,
-                digest_mode_label,
-                digest_mode_help_text,
+                "interface_version",
+                ConfigType.CHOICE,
+                _("Interface version"),
+                _("Personal interface version preference, overrides the organization setting"),
+                version_choices,
             )
 
     def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
