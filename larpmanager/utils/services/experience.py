@@ -425,7 +425,7 @@ def _handle_free_abilities(
         zero_avail,
         visible_only=False,
     ):
-        if ability.cost == 0 and ability.id not in free_ability_ids:
+        if ability.cost == 0 and ability.id not in free_ability_ids and (ability.visible or ability.system.hidden):
             character.exp_ability_list.add(ability)
             free_ability_ids.append(ability.id)
             newly_added_ids.add(ability.id)
