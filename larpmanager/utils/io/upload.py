@@ -89,6 +89,7 @@ logger = logging.getLogger(__name__)
 
 MAX_CSV_ROWS = 10_000
 MAX_COMMA_VALUES = 100
+MAX_CSV_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
 
 def _normalize_numeric(value: str) -> str:
@@ -228,6 +229,15 @@ def _get_file(context: dict, file: Any, column_id: int | None = None) -> tuple[p
     # Check if file was provided
     if not file:
         return None, ["ERR - No file provided. Please select a file to upload"]
+
+    # Check file size before parsing to prevent memory exhaustion
+    file_size = getattr(file, "size", None)
+    if file_size is None and hasattr(file, "file"):
+        file_size = getattr(file.file, "size", None)
+    if file_size is not None and file_size > MAX_CSV_FILE_SIZE:
+        max_mb = MAX_CSV_FILE_SIZE / (1024 * 1024)
+        actual_mb = file_size / (1024 * 1024)
+        return None, [f"ERR - File too large: {actual_mb:.1f}MB exceeds limit of {max_mb:.0f}MB"]
 
     # Get available column names from context
     _get_column_names(context)
