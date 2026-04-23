@@ -3758,6 +3758,9 @@ msgstr "Sähköposti-ilmoitukset"
 msgid "Event Configuration"
 msgstr "Tapahtuman konfigurointi"
 
+msgid "Event added to ILDB"
+msgstr "Tapahtuma lisätty ILDB:hen"
+
 msgid "History preferences"
 msgstr "Historialliset mieltymykset"
 
@@ -6532,6 +6535,9 @@ msgstr "Nyt voit luoda virstanpylväitä tapahtumalle"
 
 msgid "Now you can set the player editing settings"
 msgstr "Nyt voit määrittää soittimen muokkausasetukset"
+
+msgid "Please review and submit it for publication"
+msgstr "Tarkista ja lähetä se julkaistavaksi"
 
 msgid "Text displayed alongside the carousel image"
 msgstr "Karusellin kuvan vieressä näkyvä teksti"
@@ -10543,6 +10549,14 @@ msgid ""
 msgstr ""
 "Jos valittuna, kaikki ilmoittautumiset näytetään yhdessä taulukossa sen "
 "sijaan, että ne erotettaisiin toisistaan tyypin mukaan"
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically added to "
+"larpdatabase.com as a draft."
+msgstr ""
+"Tapahtuma <strong>%(event)s</strong> on lisätty automaattisesti "
+"larpdatabase.com-sivustolle luonnoksena."
 
 msgid ""
 "Upload a custom font file for page titles to match your event's theme (TTF, "

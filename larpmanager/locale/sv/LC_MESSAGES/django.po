@@ -3758,6 +3758,9 @@ msgstr "E-postmeddelanden"
 msgid "Event Configuration"
 msgstr "Händelsekonfiguration"
 
+msgid "Event added to ILDB"
+msgstr "Händelse tillagd i ILDB"
+
 msgid "History preferences"
 msgstr "Preferenshistorik"
 
@@ -6534,6 +6537,9 @@ msgstr "Nu kan du skapa milstolpar för evenemanget"
 
 msgid "Now you can set the player editing settings"
 msgstr "Nu kan du ställa in spelarens redigeringsinställningar"
+
+msgid "Please review and submit it for publication"
+msgstr "Vänligen granska och skicka in den för publicering"
 
 msgid "Text displayed alongside the carousel image"
 msgstr "Text som visas tillsammans med karusellbilden"
@@ -10565,6 +10571,14 @@ msgid ""
 msgstr ""
 "Om markerad visas alla registreringar i en enda tabell i stället för att "
 "separeras efter typ"
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically added to "
+"larpdatabase.com as a draft."
+msgstr ""
+"Händelsen <strong>%(event)s</strong> har automatiskt lagts till i "
+"larpdatabase.com som ett utkast."
 
 msgid ""
 "Upload a custom font file for page titles to match your event's theme (TTF, "

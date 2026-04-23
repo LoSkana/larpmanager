@@ -10091,6 +10091,18 @@ msgstr ""
 msgid "Failed to add gallery"
 msgstr ""
 
+msgid "Event added to ILDB"
+msgstr ""
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically added to "
+"larpdatabase.com as a draft."
+msgstr ""
+
+msgid "Please review and submit it for publication"
+msgstr ""
+
 msgid "Tutorial"
 msgstr ""
 

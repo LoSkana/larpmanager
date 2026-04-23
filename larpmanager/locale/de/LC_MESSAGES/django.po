@@ -3758,6 +3758,9 @@ msgstr "E-Mail-Benachrichtigungen"
 msgid "Event Configuration"
 msgstr "Ereignis-Konfiguration"
 
+msgid "Event added to ILDB"
+msgstr "Ereignis zur ILDB hinzugefügt"
+
 msgid "History preferences"
 msgstr "Geschichte der Präferenzen"
 
@@ -6541,6 +6544,10 @@ msgstr "Jetzt können Sie Meilensteine für das Ereignis erstellen"
 msgid "Now you can set the player editing settings"
 msgstr ""
 "Jetzt können Sie die Bearbeitungseinstellungen für den Player festlegen"
+
+msgid "Please review and submit it for publication"
+msgstr ""
+"Bitte überprüfen Sie den Text und reichen Sie ihn zur Veröffentlichung ein"
 
 msgid "Text displayed alongside the carousel image"
 msgstr "Text, der neben dem Karussellbild angezeigt wird"
@@ -10933,6 +10940,14 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist, werden alle Registrierungen in einer "
 "einzigen Tabelle angezeigt und nicht nach Typ getrennt"
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically added to "
+"larpdatabase.com as a draft."
+msgstr ""
+"Das Ereignis <strong>%(event)s</strong> wurde automatisch als Entwurf zu "
+"larpdatabase.com hinzugefügt."
 
 msgid ""
 "Upload a custom font file for page titles to match your event's theme (TTF, "

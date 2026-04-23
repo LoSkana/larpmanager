@@ -27,6 +27,7 @@ from typing import TYPE_CHECKING, Any
 import requests
 from django.db.models import Max, Min
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from larpmanager.cache.config import get_association_config, get_element_config, save_single_config
 from larpmanager.forms.event import PublicationEventType, PublicationGenre, PublicationLanguage
@@ -175,7 +176,7 @@ PLAYER_TIERS = [
     TicketTier.PATRON,
 ]
 
-# Maps internal stored values → ILDB Italian API values
+# Maps internal stored values to ILDB Italian API values
 _TIPOLOGIA_MAP = {
     "one_shot": "one shot",
     "serie": "serie",
@@ -499,12 +500,15 @@ def _notify_association(association: Association, run: Run, ildb_event_id: str) 
 
     review_url = f"https://www.larpdatabase.com/events/{ildb_event_id}/review"
 
-    subject = f"[{association.name}] Event added to ILDB: {run.event.name}"
+    subject = f"[{association.name}] " + _("Event added to ILDB") + ": " + run.event.name
     body = (
-        f"<p>The event <strong>{run.event.name}</strong> (run #{run.number}) "
-        f"has been automatically added to larpdatabase.com as a draft.</p>"
-        f"<p>Please review and submit it for publication: "
-        f"<a href='{review_url}'>{review_url}</a></p>"
+        "<p>"
+        + _("The event <strong>%(event)s</strong> has been automatically added to larpdatabase.com as a draft.")
+        % {"event": run.search}
+        + "</p><p>"
+        + _("Please review and submit it for publication")
+        + f": <a href='{review_url}'>{review_url}</a>"
+        + "</p>"
     )
 
     my_send_mail(subject, body, association.main_mail, association)

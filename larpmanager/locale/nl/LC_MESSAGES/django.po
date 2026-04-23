@@ -3758,6 +3758,9 @@ msgstr "Kennisgevingen per e-mail"
 msgid "Event Configuration"
 msgstr "Gebeurtenis Configuratie"
 
+msgid "Event added to ILDB"
+msgstr "Gebeurtenis toegevoegd aan ILDB"
+
 msgid "History preferences"
 msgstr "Voorkeur geschiedenis"
 
@@ -6534,6 +6537,9 @@ msgstr "Nu kun je mijlpalen voor het evenement aanmaken"
 
 msgid "Now you can set the player editing settings"
 msgstr "Nu kun je de instellingen voor het bewerken van de speler instellen"
+
+msgid "Please review and submit it for publication"
+msgstr "Bekijk het en stuur het in voor publicatie"
 
 msgid "Text displayed alongside the carousel image"
 msgstr "Tekst die naast de carrouselafbeelding wordt weergegeven"
@@ -10734,6 +10740,14 @@ msgid ""
 msgstr ""
 "Als deze optie is ingeschakeld, worden alle registraties in één tabel "
 "weergegeven in plaats van gescheiden per type"
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically added to "
+"larpdatabase.com as a draft."
+msgstr ""
+"De gebeurtenis <strong>%(event)s</strong> is automatisch toegevoegd aan "
+"larpdatabase.com als concept."
 
 msgid ""
 "Upload a custom font file for page titles to match your event's theme (TTF, "

@@ -3758,6 +3758,9 @@ msgstr "Notifications par courrier électronique"
 msgid "Event Configuration"
 msgstr "Configuration des événements"
 
+msgid "Event added to ILDB"
+msgstr "Événement ajouté à l'ILDB"
+
 msgid "History preferences"
 msgstr "Historique des préférences"
 
@@ -6542,6 +6545,9 @@ msgstr "Vous pouvez maintenant créer des étapes pour l'événement"
 
 msgid "Now you can set the player editing settings"
 msgstr "Vous pouvez maintenant définir les paramètres d'édition du lecteur"
+
+msgid "Please review and submit it for publication"
+msgstr "Veuillez le réviser et le soumettre pour publication"
 
 msgid "Text displayed alongside the carousel image"
 msgstr "Texte affiché à côté de l'image du carrousel"
@@ -10871,6 +10877,14 @@ msgid ""
 msgstr ""
 "Si cette case est cochée, tous les enregistrements sont affichés dans un "
 "seul tableau au lieu d'être séparés par type"
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically added to "
+"larpdatabase.com as a draft."
+msgstr ""
+"L'événement <strong>%(event)s</strong> a été automatiquement ajouté à "
+"larpdatabase.com en tant que projet."
 
 msgid ""
 "Upload a custom font file for page titles to match your event's theme (TTF, "
