@@ -20,10 +20,12 @@
 
 """Tests for registration creation, modification, and automatic value updates"""
 
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from decimal import Decimal
 from typing import Any
 from unittest.mock import patch
+
+from django.utils import timezone
 
 # Import signals module to register signal handlers
 import larpmanager.models.signals  # noqa: F401
@@ -164,7 +166,7 @@ class TestRegistrationModification(BaseTestCase):
         registration = self.create_registration()
         self.assertIsNone(registration.cancellation_date)
 
-        registration.cancellation_date = datetime.now()
+        registration.cancellation_date = timezone.now()
         registration.save()
 
         updated = Registration.objects.get(id=registration.id)
