@@ -4961,6 +4961,9 @@ msgstr "Geen geaccepteerd lidmaatschap gevonden"
 msgid "Player customisation updated"
 msgstr "Spelersaanpassing bijgewerkt"
 
+msgid "Surcharge cannot be negative"
+msgstr "Toeslag kan niet negatief zijn"
+
 msgid "The only mandatory column is"
 msgstr "De enige verplichte kolom is"
 
@@ -5406,6 +5409,9 @@ msgstr "Vraag de organisatoren om het te activeren"
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Toegang tot %(event)s bevestigen"
+
+msgid "Days available cannot be negative"
+msgstr "Beschikbare dagen kunnen niet negatief zijn"
 
 msgid "Descriptive name for this API key"
 msgstr "Beschrijvende naam voor deze API-sleutel"

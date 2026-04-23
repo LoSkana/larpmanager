@@ -562,7 +562,6 @@
     icon: trash-can-arrow-up
     feature: exe_trash
     module: miscellany
-
 - model: larpmanager.associationpermission
   fields:
     name: Version Upgrade

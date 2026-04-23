@@ -441,7 +441,7 @@
     hidden: false
     icon: chart-bar
     feature: reg_quotas
-    module: accounting
+    module: registration
 - model: larpmanager.eventpermission
   fields:
     name: Fixed instalments
@@ -453,7 +453,7 @@
     hidden: false
     icon: calendar-check
     feature: reg_installments
-    module: accounting
+    module: registration
 - model: larpmanager.eventpermission
   fields:
     name: Discounts

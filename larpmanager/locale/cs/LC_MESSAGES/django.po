@@ -4961,6 +4961,9 @@ msgstr "Nebylo nalezeno žádné přijaté členství"
 msgid "Player customisation updated"
 msgstr "Přizpůsobení hráče aktualizováno"
 
+msgid "Surcharge cannot be negative"
+msgstr "Příplatek nemůže být záporný"
+
 msgid "The only mandatory column is"
 msgstr "Jediný povinný sloupec je"
 
@@ -5406,6 +5409,9 @@ msgstr "Požádejte organizátory o aktivaci"
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Potvrzení vstupu do %(event)s"
+
+msgid "Days available cannot be negative"
+msgstr "Počet dnů k dispozici nemůže být záporný"
 
 msgid "Descriptive name for this API key"
 msgstr "Popisný název tohoto klíče API"

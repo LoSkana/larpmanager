@@ -1526,14 +1526,18 @@ header.sec h1 {
 }
 
 @media screen and (max-width: 840px) {
+  .showcase .text {
+    width: 100%;
+  }
   .showcase .text h4 {
-    font-size: 80%;
+    font-size: 140%;
+    text-align: center;
   }
   .showcase .sc_content p {
     font-size: 80%;
   }
   .showcase .sc_content {
-    margin: 0;
+    margin: 0 auto;
   }
 }
 
@@ -1570,7 +1574,8 @@ header.sec h1 {
 }
 
 @media (max-width: 768px) {
-  .showcase .section {
+  .showcase .section,
+  .showcase .section:nth-child(even) {
     flex-direction: column;
     margin-bottom: 0rem;
   }

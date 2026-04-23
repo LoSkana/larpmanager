@@ -2220,6 +2220,12 @@ msgstr ""
 msgid "Dynamic rates"
 msgstr ""
 
+msgid "Surcharge cannot be negative"
+msgstr ""
+
+msgid "Days available cannot be negative"
+msgstr ""
+
 #, python-format
 msgid "A quota with %(quotas)d payments already exists for this event"
 msgstr ""
