@@ -4961,6 +4961,9 @@ msgstr "Inget accepterat medlemskap hittades"
 msgid "Player customisation updated"
 msgstr "Spelaranpassning uppdaterad"
 
+msgid "Surcharge cannot be negative"
+msgstr "Tilläggsavgiften kan inte vara negativ"
+
 msgid "The only mandatory column is"
 msgstr "Den enda obligatoriska kolumnen är"
 
@@ -5406,6 +5409,9 @@ msgstr "Be arrangörerna att aktivera den"
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Bekräfta inmatning till %(event)s"
+
+msgid "Days available cannot be negative"
+msgstr "Tillgängliga dagar kan inte vara negativa"
 
 msgid "Descriptive name for this API key"
 msgstr "Beskrivande namn för denna API-nyckel"

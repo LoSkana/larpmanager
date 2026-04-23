@@ -54,6 +54,8 @@ def test_exp(pw_page: Any) -> None:
 
     delivery_auto_populate(page, live_server)
 
+    free_invisible_not_auto_assigned(page, live_server)
+
     endpoint_test(page, live_server)
 
 
@@ -417,6 +419,31 @@ def delivery_auto_populate(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     expect_normalized(page, page.locator('[id="u2"]'), "5 Test Character")
+
+def free_invisible_not_auto_assigned(page: Any, live_server: Any) -> None:
+    """Test that a cost-0 ability with visible=False is NOT auto-assigned."""
+    # Create ability with cost=0 and visible unchecked
+    go_to(page, live_server, "/test/manage/experience/abilities/")
+    page.get_by_role("link", name="New").click()
+    page.locator("#select2-id_typ-container").click()
+    page.get_by_role("searchbox").nth(3).fill("base")
+    page.locator(".select2-results__option").first.click()
+    page.locator("#id_name").fill("hidden_zero")
+    page.locator("#id_cost").fill("0")
+    page.locator("#id_visible").uncheck()
+    submit_confirm(page)
+
+    # Trigger recalculation by saving the character via orga
+    go_to(page, live_server, "/test/manage/characters/")
+    page.locator(".fa-edit").first.click()
+    submit_confirm(page)
+
+    # Verify hidden_zero is NOT in the character's abilities
+    go_to(page, live_server, "/test")
+    page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
+    page.get_by_role("link", name="Abilities").click()
+    expect(page.locator("#one")).not_to_contain_text("hidden_zero")
+
 
 def endpoint_test(page: Any, live_server: Any) -> None:
     """Test character abilties endpoint"""

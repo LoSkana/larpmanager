@@ -4961,6 +4961,9 @@ msgstr "Ei löydetty hyväksyttyä jäsenyyttä"
 msgid "Player customisation updated"
 msgstr "Pelaajan mukauttaminen päivitetty"
 
+msgid "Surcharge cannot be negative"
+msgstr "Lisämaksu ei voi olla negatiivinen"
+
 msgid "The only mandatory column is"
 msgstr "Ainoa pakollinen sarake on"
 
@@ -5406,6 +5409,9 @@ msgstr "Pyydä järjestäjiä aktivoimaan se"
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Vahvista ilmoittautuminen tapahtumaan %(event)s"
+
+msgid "Days available cannot be negative"
+msgstr "Käytettävissä olevat päivät eivät voi olla negatiivisia"
 
 msgid "Descriptive name for this API key"
 msgstr "Tämän API-avaimen kuvaava nimi"
