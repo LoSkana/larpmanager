@@ -24,19 +24,19 @@
             <header class="major">
                 <div class="key-numbers-container">
                     <div class="key-number">
-                        <div class="key-number-value" data-target="{{ cnt_run }}">0</div>
+                        <div class="key-number-value" data-target="{{ cnt_run }}">{{ cnt_run }}+</div>
                         <div class="key-number-label">Events</div>
                     </div>
                     <div class="key-number">
-                        <div class="key-number-value" data-target="{{ cnt_character }}">0</div>
+                        <div class="key-number-value" data-target="{{ cnt_character }}">{{ cnt_character }}+</div>
                         <div class="key-number-label">Characters</div>
                     </div>
                     <div class="key-number">
-                        <div class="key-number-value" data-target="{{ cnt_registration }}">0</div>
+                        <div class="key-number-value" data-target="{{ cnt_registration }}">{{ cnt_registration }}+</div>
                         <div class="key-number-label">Signups</div>
                     </div>
                     <div class="key-number">
-                        <div class="key-number-value" data-target="{{ cnt_paymentinvoice }}">0</div>
+                        <div class="key-number-value" data-target="{{ cnt_paymentinvoice }}">{{ cnt_paymentinvoice }}+</div>
                         <div class="key-number-label">Payments</div>
                     </div>
                 </div>
@@ -194,6 +194,7 @@ window.addEventListener('DOMContentLoaded', function() {
       const speed = 60; // animation speed
 
       counters.forEach(counter => {
+        counter.innerText = '0';
         const updateCount = () => {
           const target = +counter.getAttribute('data-target');
           const count = +counter.innerText.replace('+', '');
