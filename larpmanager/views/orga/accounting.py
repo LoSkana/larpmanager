@@ -346,12 +346,7 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_credits")
 
     # Determine if page must be readonly in events
-    context["readonly_event"] = get_association_config(
-        context["event"].association_id,
-        "credit_readonly_event",
-        default_value=False,
-        context=context,
-    )
+    context["readonly_event"] = _is_credit_readonly(context)
 
     # Configure context with relationship selectors and field definitions
     context.update(
@@ -380,21 +375,24 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
 
-@login_required
-def orga_credits_new(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Create new organization credits."""
-    # Check user permissions for accessing organization credits functionality
-    context = check_event_context(request, event_slug, "orga_credits")
-
-    # Determine if page must be readonly in events
-    context["readonly_event"] = get_association_config(
+def _is_credit_readonly(context: dict) -> bool:
+    """Check if credits cannot be edited in orga pages."""
+    return get_association_config(
         context["event"].association_id,
         "credit_readonly_event",
         default_value=False,
         context=context,
     )
 
-    if context["readonly_event"]:
+
+@login_required
+def orga_credits_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create new organization credits."""
+    # Check user permissions for accessing organization credits functionality
+    context = check_event_context(request, event_slug, "orga_credits")
+
+    # Check if user is allowed
+    if _is_credit_readonly(context):
         raise UserPermissionError
 
     return orga_new(request, event_slug, OrgaAction.CREDITS)
@@ -406,15 +404,8 @@ def orga_credits_edit(request: HttpRequest, event_slug: str, credit_uuid: str) -
     # Check user permissions for accessing organization credits functionality
     context = check_event_context(request, event_slug, "orga_credits")
 
-    # Determine if page must be readonly in events
-    context["readonly_event"] = get_association_config(
-        context["event"].association_id,
-        "credit_readonly_event",
-        default_value=False,
-        context=context,
-    )
-
-    if context["readonly_event"]:
+    # Check if user is allowed
+    if _is_credit_readonly(context):
         raise UserPermissionError
 
     return orga_edit(request, event_slug, OrgaAction.CREDITS, credit_uuid)
@@ -426,15 +417,8 @@ def orga_credits_delete(request: HttpRequest, event_slug: str, credit_uuid: str)
     # Check user permissions for accessing organization credits functionality
     context = check_event_context(request, event_slug, "orga_credits")
 
-    # Determine if page must be readonly in events
-    context["readonly_event"] = get_association_config(
-        context["event"].association_id,
-        "credit_readonly_event",
-        default_value=False,
-        context=context,
-    )
-
-    if context["readonly_event"]:
+    # Check if user is allowed
+    if _is_credit_readonly(context):
         raise UserPermissionError
 
     return orga_delete(request, event_slug, OrgaAction.CREDITS, credit_uuid)
