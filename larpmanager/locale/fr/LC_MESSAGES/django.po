@@ -4961,6 +4961,9 @@ msgstr "Aucune adhésion acceptée n'a été trouvée"
 msgid "Player customisation updated"
 msgstr "Personnalisation des joueurs mise à jour"
 
+msgid "Surcharge cannot be negative"
+msgstr "La surtaxe ne peut pas être négative"
+
 msgid "The only mandatory column is"
 msgstr "La seule colonne obligatoire est"
 
@@ -5411,6 +5414,9 @@ msgstr "Demander aux organisateurs de l'activer"
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Confirmer l'entrée dans %(event)s"
+
+msgid "Days available cannot be negative"
+msgstr "Les jours disponibles ne peuvent pas être négatifs"
 
 msgid "Descriptive name for this API key"
 msgstr "Nom descriptif de cette clé API"

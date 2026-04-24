@@ -1626,7 +1626,6 @@
     hidden: true
     module: accounting
     dependencies: []
-
 - model: larpmanager.feature
   fields:
     name: Version Upgrade

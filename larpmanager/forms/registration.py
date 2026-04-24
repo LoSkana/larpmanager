@@ -1294,6 +1294,20 @@ class OrgaRegistrationQuotaForm(BaseModelForm):
         model = RegistrationQuota
         exclude = ("number",)
 
+    def clean_surcharge(self) -> int:
+        """Validate that surcharge is not negative."""
+        surcharge = self.cleaned_data.get("surcharge")
+        if surcharge is not None and surcharge < 0:
+            raise ValidationError(_("Surcharge cannot be negative"))
+        return surcharge
+
+    def clean_days_available(self) -> int:
+        """Validate that days_available is not negative."""
+        days_available = self.cleaned_data.get("days_available")
+        if days_available is not None and days_available < 0:
+            raise ValidationError(_("Days available cannot be negative"))
+        return days_available
+
     def clean_quotas(self) -> int:
         """Validate that the number is unique for quotas of this event."""
         quotas = self.cleaned_data.get("quotas")
