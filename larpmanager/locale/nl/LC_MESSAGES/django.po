@@ -5045,6 +5045,9 @@ msgstr "Geen geaccepteerd lidmaatschap gevonden"
 msgid "Player customisation updated"
 msgstr "Spelersaanpassing bijgewerkt"
 
+msgid "Please wait before retrying."
+msgstr "Wacht even voordat u het opnieuw probeert."
+
 msgid "Surcharge cannot be negative"
 msgstr "Toeslag kan niet negatief zijn"
 

@@ -10365,6 +10365,9 @@ msgstr ""
 msgid "Using organization version"
 msgstr ""
 
+msgid "Please wait before retrying."
+msgstr ""
+
 msgid "Cache reset!"
 msgstr ""
 

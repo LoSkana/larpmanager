@@ -5045,6 +5045,9 @@ msgstr "Non è stata trovata una iscrizione associativa accettata"
 msgid "Player customisation updated"
 msgstr "Personalizzazione giocatore aggiornata"
 
+msgid "Please wait before retrying."
+msgstr "Attendere prima di riprovare."
+
 msgid "Surcharge cannot be negative"
 msgstr "Il sovrapprezzo non può essere negativo"
 

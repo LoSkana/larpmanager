@@ -5045,6 +5045,9 @@ msgstr "Inget accepterat medlemskap hittades"
 msgid "Player customisation updated"
 msgstr "Spelaranpassning uppdaterad"
 
+msgid "Please wait before retrying."
+msgstr "Vänligen vänta innan du försöker igen."
+
 msgid "Surcharge cannot be negative"
 msgstr "Tilläggsavgiften kan inte vara negativ"
 

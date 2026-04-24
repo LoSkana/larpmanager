@@ -54,7 +54,7 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.auth.permission import get_event_roles, get_index_event_permissions
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import clear_messages, get_feature
+from larpmanager.utils.core.common import clear_messages, get_feature, is_rate_limited
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.edit.backend import backend_edit
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
@@ -513,6 +513,9 @@ def orga_backup(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Prepare event backup for download."""
     context = check_event_context(request, event_slug, "orga_event")
     _check_organizer(request, context, event_slug)
+    if is_rate_limited(f"orga_backup_{context['event'].id}"):
+        messages.error(request, _("Please wait before retrying."))
+        return redirect("manage", event_slug=event_slug)
     return _prepare_backup(context)
 
 
@@ -583,6 +586,9 @@ def orga_restore(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     if request.method == "POST":
         if "confirm" in request.POST:
+            if is_rate_limited(f"orga_restore_{context['event'].id}"):
+                messages.error(request, _("Please wait before retrying."))
+                return render(request, "larpmanager/orga/restore.html", context)
             temp_key = request.POST.get("temp_key", "")
             zip_bytes = load_restore_temp(temp_key)
             if zip_bytes is None:
@@ -1010,6 +1016,10 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Check it's an organizer
     _check_organizer(request, context, event_slug)
+
+    if is_rate_limited(f"orga_reload_cache_{context['event'].id}"):
+        messages.error(request, _("Please wait before retrying."))
+        return redirect("manage", event_slug=context["run"].get_slug())
 
     # Reset everything
     reset_all_run(context["event"], context["run"])

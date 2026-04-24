@@ -5045,6 +5045,9 @@ msgstr "Ei löydetty hyväksyttyä jäsenyyttä"
 msgid "Player customisation updated"
 msgstr "Pelaajan mukauttaminen päivitetty"
 
+msgid "Please wait before retrying."
+msgstr "Odota ennen kuin yrität uudelleen."
+
 msgid "Surcharge cannot be negative"
 msgstr "Lisämaksu ei voi olla negatiivinen"
 

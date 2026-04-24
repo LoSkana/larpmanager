@@ -5045,6 +5045,9 @@ msgstr "No se ha encontrado ninguna adhesión aceptada"
 msgid "Player customisation updated"
 msgstr "Personalización de los jugadores actualizada"
 
+msgid "Please wait before retrying."
+msgstr "Espere antes de volver a intentarlo."
+
 msgid "Surcharge cannot be negative"
 msgstr "El recargo no puede ser negativo"
 

@@ -5045,6 +5045,9 @@ msgstr "Nebylo nalezeno žádné přijaté členství"
 msgid "Player customisation updated"
 msgstr "Přizpůsobení hráče aktualizováno"
 
+msgid "Please wait before retrying."
+msgstr "Před dalším pokusem vyčkejte."
+
 msgid "Surcharge cannot be negative"
 msgstr "Příplatek nemůže být záporný"
 

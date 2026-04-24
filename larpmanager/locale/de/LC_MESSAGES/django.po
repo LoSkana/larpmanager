@@ -5045,6 +5045,9 @@ msgstr "Keine akzeptierte Mitgliedschaft gefunden"
 msgid "Player customisation updated"
 msgstr "Spieleranpassung aktualisiert"
 
+msgid "Please wait before retrying."
+msgstr "Bitte warten Sie, bevor Sie es erneut versuchen."
+
 msgid "Surcharge cannot be negative"
 msgstr "Zuschlag kann nicht negativ sein"
 
