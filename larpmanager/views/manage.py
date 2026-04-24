@@ -48,11 +48,16 @@ from larpmanager.cache.wwyltd import (
 from larpmanager.models.access import AssociationPermission, EventPermission
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import RegistrationStatus, Run
-from larpmanager.utils.auth.permission import has_association_permission, get_index_association_permissions, \
-    has_event_permission, get_index_event_permissions
+from larpmanager.utils.auth.permission import (
+    get_event_roles,
+    get_index_association_permissions,
+    get_index_event_permissions,
+    has_association_permission,
+    has_event_permission,
+)
 from larpmanager.utils.core.base import check_association_context, check_event_context, get_context, get_event_context
 from larpmanager.utils.core.common import format_datetime
-from larpmanager.utils.core.sticky import get_sticky_messages, dismiss_sticky
+from larpmanager.utils.core.sticky import dismiss_sticky, get_sticky_messages
 from larpmanager.utils.edit.backend import set_suggestion
 from larpmanager.utils.services.association import get_activation_checklist
 from larpmanager.utils.users.registration import registration_available
@@ -170,29 +175,28 @@ def _get_registration_status(run: Run) -> str:
 
 def _get_registration_counts(run: Run) -> dict:
     """Prepares run registration ticket counts ordered by ticket order field."""
-
     counts = get_registration_counts(run)
 
     # Create a list of ticket data with name, order, and count
     ticket_data = []
     for ticket_id, ticket_name in counts.get("tickets_map", {}).items():
         count_key = f"count_ticket_{ticket_id}"
-        if count_key in counts and counts[count_key]:
+        if counts.get(count_key):
             ticket_order = counts.get("tickets_order", {}).get(ticket_id, 0)
             ticket_data.append({
-                'name': ticket_name,
-                'order': ticket_order,
-                'count': counts[count_key]
+                "name": ticket_name,
+                "order": ticket_order,
+                "count": counts[count_key]
             })
 
     # Sort by order field, then by name
     sorted_tickets = sorted(
         ticket_data,
-        key=lambda x: (x['order'], x['name'])
+        key=lambda x: (x["order"], x["name"])
     )
 
     # Return as a dict with ticket name as key and count as value
-    return {ticket['name']: ticket['count'] for ticket in sorted_tickets}
+    return {ticket["name"]: ticket["count"] for ticket in sorted_tickets}
 
 
 def _exe_manage(request: HttpRequest) -> HttpResponse:
@@ -263,7 +267,6 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
 
 def _exe_widgets(request: HttpRequest, context: dict, features: dict) -> None:
     """Loads widget data into context for executive dashboard."""
-
     permissions = [
         ("exe_accounting", "accounting", False),
         ("exe_deadlines", "deadlines", True),
@@ -288,7 +291,6 @@ def _exe_suggestions(context: dict) -> None:
         context: Context dictionary containing association ID and other data
 
     """
-
     suggestions = {
         "exe_roles": _("Define roles to grant organization management access"),
     }
@@ -452,7 +454,6 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
         enabled_features: Set of enabled features for the association
 
     """
-
     if context.get("demo"):
         return
 
@@ -515,6 +516,8 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Load permissions and navigation
     get_index_event_permissions(request, context, event_slug)
+    is_organizer, _perms, _roles = get_event_roles(request, context, event_slug)
+    context["is_organizer"] = is_organizer or 1 in context.get("association_role", {})
     if get_association_config(context["association_id"], "interface_admin_links", default_value=False, context=context):
         get_index_association_permissions(request, context, context["association_id"], enforce_check=False)
 
@@ -555,7 +558,6 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 def _orga_widgets(request: HttpRequest, context:dict, features:dict):
     """Loads widget data into context."""
-
     permissions = [
         ("orga_accounting", "accounting", False),
         ("orga_deadlines", "deadlines", True),
@@ -604,7 +606,6 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
         action lists for the organizer dashboard
 
     """
-
     if context.get("demo"):
         return
 
@@ -918,7 +919,6 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
 
 def _check_currency_priority(request: HttpRequest, context: dict, features:dict) ->Any:
     """Check if currency has been already set / checked."""
-
     if "payment" in features and not get_association_config(
             context["association_id"], "exe_association_suggestion", default_value=False, context=context
     ) and has_association_permission(request, context, "exe_association"):
@@ -1064,7 +1064,6 @@ def _get_perm_link(context: dict, permission: str, view_name: str) -> str:
 
 def _compile(request: HttpRequest, context: dict) -> None:  # noqa: C901 - Complex dashboard compilation with feature-dependent sections
     """Compile management dashboard with suggestions, actions, and priorities."""
-
     section_names = ["priorities"]
     if not context.get("demo"):
         section_names.extend(["suggestions", "actions"])
@@ -1128,7 +1127,6 @@ def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: str) -> H
 @login_required
 def dismiss_sticky_message(request: HttpRequest, message_uuid: str) -> JsonResponse:
     """Dismiss a sticky message via AJAX."""
-
     success = dismiss_sticky(request.user.member, message_uuid)
 
     if success:
@@ -1254,7 +1252,7 @@ class WhatWouldYouLikeForm(Form):
         """Add feature entries to tutorial choices list."""
         # Add features recap
         for feature in get_features_cache():
-            if not feature['tutorial']:
+            if not feature["tutorial"]:
                 continue
 
             # Build display text with feature name and optional module

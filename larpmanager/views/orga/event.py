@@ -52,9 +52,10 @@ from larpmanager.models.event import Event, EventButton, EventText, Run
 from larpmanager.models.form import BaseQuestionType, QuestionApplicable, RegistrationQuestionType, WritingQuestionType
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, Plot
-from larpmanager.utils.auth.permission import get_index_event_permissions
+from larpmanager.utils.auth.permission import get_event_roles, get_index_event_permissions
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import clear_messages, get_feature
+from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.edit.backend import backend_edit
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.io.download import (
@@ -501,13 +502,17 @@ def orga_preferences(request: HttpRequest, event_slug: str) -> HttpResponse:
     return orga_edit(request, event_slug, OrgaAction.PREFERENCES)
 
 
+def _check_organizer(request: HttpRequest, context: dict, event_slug: str) -> None:
+    is_organizer, _perms, _roles = get_event_roles(request, context, event_slug)
+    if not is_organizer and 1 not in context.get("association_role", {}):
+        raise UserPermissionError
+
+
 @login_required
 def orga_backup(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Prepare event backup for download."""
-    # Check user has event access
     context = check_event_context(request, event_slug, "orga_event")
-
-    # Generate and return backup response
+    _check_organizer(request, context, event_slug)
     return _prepare_backup(context)
 
 
@@ -574,6 +579,7 @@ def _prepare_backup(context: dict) -> HttpResponse:
 def orga_restore(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Restore event data from a previously exported backup ZIP."""
     context = check_event_context(request, event_slug, "orga_event")
+    _check_organizer(request, context, event_slug)
 
     if request.method == "POST":
         if "confirm" in request.POST:
@@ -1001,6 +1007,9 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Reset all cache entries for the specified event run."""
     # Verify user permissions and get event context
     context = check_event_context(request, event_slug)
+
+    # Check it's an organizer
+    _check_organizer(request, context, event_slug)
 
     # Reset everything
     reset_all_run(context["event"], context["run"])
