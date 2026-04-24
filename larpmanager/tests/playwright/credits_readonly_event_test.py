@@ -62,7 +62,6 @@ def test_credits_readonly_event(pw_page: Any) -> None:
 
     # Activate readonly flag
     go_to(page, live_server, "/manage/config/")
-    #page.get_by_role("link", name="Credits").filter(has=page.locator('[tog="sec_credits"]')).click()
     page.locator('a[tog="sec_credits"]').click()
     page.locator("#id_credit_readonly_event").check()
     page.get_by_role("button", name="Confirm").click()
@@ -74,7 +73,7 @@ def test_credits_readonly_event(pw_page: Any) -> None:
     expect(page.locator('i.fas.fa-trash')).to_have_count(0)
 
     # Go to orga and check presence of New, Edit and Delete links
-    go_to(page, live_server, "manage/credits/")
+    go_to(page, live_server, "/manage/credits/")
     expect(page.get_by_role("link", name="+ New")).to_have_count(1)
     expect(page.locator('i.fas.fa-edit')).to_have_count(1)
     expect(page.locator('i.fas.fa-trash')).to_have_count(1)
