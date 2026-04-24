@@ -8038,6 +8038,85 @@ msgid "Information"
 msgstr ""
 
 msgid ""
+"Upload a backup ZIP file to restore event data. A preview of the changes "
+"will be shown before any data is modified."
+msgstr ""
+
+msgid "Files recognized in the ZIP"
+msgstr ""
+
+msgid "Required feature"
+msgstr ""
+
+msgid "Event configuration"
+msgstr ""
+
+msgid "Enabled features"
+msgstr ""
+
+msgid "Registration form questions"
+msgstr ""
+
+msgid "Registration form options"
+msgstr ""
+
+msgid "Ticket tiers"
+msgstr ""
+
+msgid "Character sheet questions"
+msgstr ""
+
+msgid "Character sheet options"
+msgstr ""
+
+msgid "Character configurations"
+msgstr ""
+
+msgid "Plot-character roles"
+msgstr ""
+
+msgid "Quest types"
+msgstr ""
+
+msgid "Backup ZIP file"
+msgstr ""
+
+msgid "Preview Restore"
+msgstr ""
+
+msgid "Restore Preview"
+msgstr ""
+
+msgid ""
+"The following changes will be applied when you confirm. Review carefully "
+"before proceeding."
+msgstr ""
+
+msgid "Unrecognized files in ZIP (will be skipped)"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "and"
+msgstr ""
+
+msgid "more"
+msgstr ""
+
+msgid "Skip"
+msgstr ""
+
+msgid "No changes"
+msgstr ""
+
+msgid "No recognized files found in the ZIP."
+msgstr ""
+
+msgid "Confirm Restore"
+msgstr ""
+
+msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
 "concerning the event"
 msgstr ""
@@ -9984,6 +10063,18 @@ msgstr ""
 msgid "Failed to add gallery"
 msgstr ""
 
+msgid "Registration Form"
+msgstr ""
+
+msgid "Character Form"
+msgstr ""
+
+msgid "Character Config"
+msgstr ""
+
+msgid "Plot Roles"
+msgstr ""
+
 msgid "Tutorial"
 msgstr ""
 
@@ -10561,6 +10652,18 @@ msgid "Can't copy from same event"
 msgstr ""
 
 msgid "Copy done"
+msgstr ""
+
+msgid "Restore session expired, please upload the file again."
+msgstr ""
+
+msgid "Restore completed!"
+msgstr ""
+
+msgid "Restore error"
+msgstr ""
+
+msgid "Error reading backup file"
 msgstr ""
 
 msgid "Elements uploaded"

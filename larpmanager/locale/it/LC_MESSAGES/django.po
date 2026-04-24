@@ -83,6 +83,9 @@ msgstr "Chi"
 msgid "age"
 msgstr "età"
 
+msgid "and"
+msgstr "e"
+
 msgid "for"
 msgstr "per"
 
@@ -251,6 +254,9 @@ msgstr "Mostra"
 msgid "Size"
 msgstr "Dimensione"
 
+msgid "Skip"
+msgstr "Salta"
+
 msgid "Song"
 msgstr "Canzone"
 
@@ -304,6 +310,9 @@ msgstr "libero"
 
 msgid "gift"
 msgstr "regalo"
+
+msgid "more"
+msgstr "di più"
 
 msgid "used"
 msgstr "usato"
@@ -545,6 +554,9 @@ msgstr "Copiato"
 
 msgid "Counts"
 msgstr "Conteggi"
+
+msgid "Create"
+msgstr "Creare"
 
 msgid "Delete"
 msgstr "Elimina"
@@ -1740,6 +1752,9 @@ msgstr "Newsletter"
 msgid "Next quota"
 msgstr "Prossima quota"
 
+msgid "No changes"
+msgstr "Nessuna modifica"
+
 msgid "Organizers"
 msgstr "Organizzatori"
 
@@ -1751,6 +1766,9 @@ msgstr "Percentuale"
 
 msgid "Play Again"
 msgstr "Play Again"
+
+msgid "Plot Roles"
+msgstr "Ruoli della trama"
 
 msgid "Pool Types"
 msgstr "Tipi di pool"
@@ -2025,6 +2043,9 @@ msgstr "Provvisorie"
 msgid "Publication"
 msgstr "Pubblicazione"
 
+msgid "Quest types"
+msgstr "Tipi di missione"
+
 msgid "Quick Setup"
 msgstr "Impostazione rapida"
 
@@ -2298,6 +2319,9 @@ msgstr "Tre quote"
 msgid "Ticket price"
 msgstr "Prezzo del biglietto"
 
+msgid "Ticket tiers"
+msgstr "Livelli di biglietti"
+
 msgid "Total issued"
 msgstr "Totale emesso"
 
@@ -2548,6 +2572,9 @@ msgstr "Richieste aperte"
 msgid "Require login"
 msgstr "Richiedi il login"
 
+msgid "Restore error"
+msgstr "Errore di ripristino"
+
 msgid "Shared secret"
 msgstr "Segreto condiviso"
 
@@ -2623,6 +2650,9 @@ msgstr "Manifesto di carico"
 
 msgid "Carousel image"
 msgstr "Immagine carousel"
+
+msgid "Character Form"
+msgstr "Forma Personaggio"
 
 msgid "Character name"
 msgstr "Nome personaggio"
@@ -2840,6 +2870,9 @@ msgstr "Abilità rimossa"
 msgid "App Integration"
 msgstr "Integrazione delle app"
 
+msgid "Backup ZIP file"
+msgstr "File ZIP di backup"
+
 msgid "Change password"
 msgstr "Recupera password"
 
@@ -2857,6 +2890,9 @@ msgstr "Lista personaggi"
 
 msgid "Collected votes"
 msgstr "Voti ricevuti"
+
+msgid "Confirm Restore"
+msgstr "Conferma il ripristino"
 
 msgid "Deadline (date)"
 msgstr "Scadenza (data)"
@@ -2933,6 +2969,9 @@ msgstr "Metodi pagamento"
 msgid "Portraits (PDF)"
 msgstr "Ritratti (PDF)"
 
+msgid "Preview Restore"
+msgstr "Anteprima di ripristino"
+
 msgid "Private message"
 msgstr "Messaggio privato"
 
@@ -2953,6 +2992,9 @@ msgstr "Rimuovi prologo"
 
 msgid "Replacing names"
 msgstr "Sostituzione nomi"
+
+msgid "Restore Preview"
+msgstr "Anteprima di ripristino"
 
 msgid "Select Language"
 msgstr "Seleziona la lingua"
@@ -3035,6 +3077,9 @@ msgstr "Immagine sfondo"
 msgid "Casting priority"
 msgstr "Priorità casting"
 
+msgid "Character Config"
+msgstr "Configurazione personaggio"
+
 msgid "Character review"
 msgstr "Personaggio revisione"
 
@@ -3070,6 +3115,9 @@ msgstr "Patente"
 
 msgid "Element approved"
 msgstr "Elemento approvato"
+
+msgid "Enabled features"
+msgstr "Caratteristiche abilitate"
 
 msgid "Event Appearance"
 msgstr "Aspetto Evento"
@@ -3199,6 +3247,9 @@ msgstr "Rimuovi dalla trama"
 
 msgid "Request approved"
 msgstr "Richiesta approvata"
+
+msgid "Required feature"
+msgstr "Caratteristica richiesta"
 
 msgid "Selected options"
 msgstr "Opzioni selezionate"
@@ -3419,6 +3470,9 @@ msgstr "Missioni e tratti"
 msgid "Redeem collection"
 msgstr "Riscatta colletta"
 
+msgid "Registration Form"
+msgstr "Modulo di registrazione"
+
 msgid "Registration form"
 msgstr "Form iscrizione"
 
@@ -3578,6 +3632,9 @@ msgstr "Motivo del pagamento"
 msgid "Registrations open"
 msgstr "Le iscrizioni sono aperte"
 
+msgid "Restore completed!"
+msgstr "Ripristino completato!"
+
 msgid "Review all members"
 msgstr "Esamina tutti i membri"
 
@@ -3694,6 +3751,9 @@ msgstr "Notifiche email"
 
 msgid "Event Configuration"
 msgstr "Configurazione Evento"
+
+msgid "Event configuration"
+msgstr "Configurazione dell'evento"
 
 msgid "History preferences"
 msgstr "Storico preferenze"
@@ -3911,6 +3971,9 @@ msgstr "Relazioni con i giocatori"
 
 msgid "Please wait a moment"
 msgstr "Attendi un momento"
+
+msgid "Plot-character roles"
+msgstr "Ruoli trama-personaggio"
 
 msgid "Preference not valid"
 msgstr "Preferenza non valida"
@@ -4351,6 +4414,9 @@ msgstr "Personalizzazione del personaggio"
 msgid "Character relationships"
 msgstr "Legami del personaggio"
 
+msgid "Character sheet options"
+msgstr "Opzioni per la scheda del personaggio"
+
 msgid "Collection participated"
 msgstr "Collette partecipate"
 
@@ -4477,6 +4543,9 @@ msgstr "Traduzioni di associazioni"
 
 msgid "Cancel your registration"
 msgstr "Cancella iscrizione"
+
+msgid "Character configurations"
+msgstr "Configurazioni personaggio"
 
 msgid "Check double speed larps"
 msgstr "Check speed larp duplicati"
@@ -4605,11 +4674,17 @@ msgstr "check relazioni in meno"
 msgid "not visible at this time"
 msgstr "non visibili in questo momento"
 
+msgid "Character sheet questions"
+msgstr "Domande sulla scheda del personaggio"
+
 msgid "Choose the payment method"
 msgstr "Scegli il mezzo di pagamento"
 
 msgid "Download example template"
 msgstr "Scarica un modello di esempio"
+
+msgid "Error reading backup file"
+msgstr "Errore nella lettura del file di backup"
 
 msgid "Go to the preferences for"
 msgstr "Vai alle preferenze per"
@@ -4677,6 +4752,9 @@ msgstr "Leggere gli elementi di scrittura"
 
 msgid "Receipt already confirmed"
 msgstr "Ricevuta già confermata"
+
+msgid "Registration form options"
+msgstr "Opzioni del modulo di registrazione"
 
 #, python-format
 msgid "Registration to %(event)s"
@@ -4837,6 +4915,9 @@ msgstr "Indica qui le tue preferenze"
 msgid "Event context not available"
 msgstr "Contesto dell'evento non disponibile"
 
+msgid "Files recognized in the ZIP"
+msgstr "File riconosciuti nello ZIP"
+
 msgid "Items that will be modified"
 msgstr "Voci che verranno modificate"
 
@@ -4881,6 +4962,9 @@ msgstr "Pre-registrazione non trovata."
 
 msgid "Question saved successfully"
 msgstr "Domanda salvata con successo"
+
+msgid "Registration form questions"
+msgstr "Domande sul modulo di registrazione"
 
 msgid "Reminder membership request"
 msgstr "Promemoria richiesta di adesione"
@@ -5871,6 +5955,9 @@ msgstr "Gestisci le pre-iscrizioni ricevute"
 msgid "Mirror type character, not selectable"
 msgstr "Personaggio di tipo Mirror, non selezionalbile"
 
+msgid "No recognized files found in the ZIP."
+msgstr "Non sono stati trovati file riconosciuti nello ZIP."
+
 msgid "Now you can create fixed installments"
 msgstr "Ora puoi creare rate fisse"
 
@@ -6485,6 +6572,9 @@ msgstr "Questa pagina riepiloga gli speedlarps dell'evento"
 
 msgid "This page shows the types of event prologue"
 msgstr "Questa pagina riepiloga i tipi di prologo dell'evento"
+
+msgid "Unrecognized files in ZIP (will be skipped)"
+msgstr "File non riconosciuti nello ZIP (verranno saltati)"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Carica un file PDF o un'immagine (JPG, PNG, ecc.)"
@@ -7317,6 +7407,9 @@ msgstr ""
 
 msgid "Registrations will open at the specified date and time"
 msgstr "Le iscrizioni si apriranno alla data e all'ora specificate"
+
+msgid "Restore session expired, please upload the file again."
+msgstr "La sessione di ripristino è scaduta, caricare nuovamente il file."
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Alcune funzioni richiedono \"Personaggi\", che non è attivo"
@@ -10238,6 +10331,13 @@ msgstr ""
 "personaggi (0 = illimitato)"
 
 msgid ""
+"The following changes will be applied when you confirm. Review carefully "
+"before proceeding."
+msgstr ""
+"Le seguenti modifiche saranno applicate al momento della conferma. Esaminare"
+" attentamente prima di procedere."
+
+msgid ""
 "This page shows global competencies, skill areas in which contributors can "
 "score themselves"
 msgstr ""
@@ -11384,6 +11484,13 @@ msgid ""
 msgstr ""
 "Numero di mesi, a partire dall'inizio dell'anno associativo, per cui rendere"
 " libero il versamento della quota sociale"
+
+msgid ""
+"Upload a backup ZIP file to restore event data. A preview of the changes "
+"will be shown before any data is modified."
+msgstr ""
+"Carica un file ZIP di backup per ripristinare i dati evento. Prima di "
+"modificare i dati, viene visualizzata un'anteprima delle modifiche."
 
 msgid ""
 "If you select one (or more) tickets, the option will only be available to "

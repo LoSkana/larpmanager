@@ -1,0 +1,75 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Restore Preview" %} - {{ run.search }}
+{% endblock title %}
+{% block content %}
+    <p>{% trans "The following changes will be applied when you confirm. Review carefully before proceeding." %}</p>
+    {% if unknown_files %}
+        <div class="alert">
+            <b>{% trans "Unrecognized files in ZIP (will be skipped)" %}:</b>
+            {% for f in unknown_files %}
+                <code>{{ f }}</code>
+                {% if not forloop.last %},{% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% for section in sections %}
+        <h3>{{ section.label }}</h3>
+        <table>
+            {% if section.creates %}
+                <tr>
+                    <th>{% trans "Create" %} ({{ section.creates|length }})</th>
+                    <td>
+                        {% for item in section.creates|slice:":20" %}<span class="tag-create">{{ item }}</span>{% endfor %}
+                        {% if section.creates|length > 20 %}
+                            <em>{% trans "and" %} {{ section.creates|length|add:"-20" }} {% trans "more" %}...</em>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+            {% if section.updates %}
+                <tr>
+                    <th>{% trans "Update" %} ({{ section.updates|length }})</th>
+                    <td>
+                        {% for item in section.updates|slice:":20" %}<span class="tag-update">{{ item }}</span>{% endfor %}
+                        {% if section.updates|length > 20 %}
+                            <em>{% trans "and" %} {{ section.updates|length|add:"-20" }} {% trans "more" %}...</em>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+            {% if section.skips %}
+                <tr>
+                    <th>{% trans "Skip" %} ({{ section.skips|length }})</th>
+                    <td>
+                        {% for item in section.skips|slice:":10" %}<span class="tag-skip">{{ item }}</span>{% endfor %}
+                        {% if section.skips|length > 10 %}
+                            <em>{% trans "and" %} {{ section.skips|length|add:"-10" }} {% trans "more" %}...</em>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+            {% if not section.creates and not section.updates and not section.skips %}
+                <tr>
+                    <td colspan="2">
+                        <em>{% trans "No changes" %}</em>
+                    </td>
+                </tr>
+            {% endif %}
+        </table>
+    {% empty %}
+        <p>
+            <em>{% trans "No recognized files found in the ZIP." %}</em>
+        </p>
+    {% endfor %}
+    <br />
+    <form action="{{ request.path }}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="temp_key" value="{{ temp_key }}">
+        <input type="hidden" name="confirm" value="1">
+        <input type="submit" value="{% trans "Confirm Restore" %}">
+        &nbsp;
+        <a class="button" href="{% url 'orga_restore' run.get_slug %}">{% trans "Cancel" %}</a>
+    </form>
+{% endblock content %}

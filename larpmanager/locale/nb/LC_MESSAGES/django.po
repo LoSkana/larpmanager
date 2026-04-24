@@ -83,6 +83,9 @@ msgstr "Hvem"
 msgid "age"
 msgstr "alder"
 
+msgid "and"
+msgstr "og"
+
 msgid "for"
 msgstr "for"
 
@@ -251,6 +254,9 @@ msgstr "Vis"
 msgid "Size"
 msgstr "Enheter"
 
+msgid "Skip"
+msgstr "Hopp over"
+
 msgid "Song"
 msgstr "Sang"
 
@@ -304,6 +310,9 @@ msgstr "gratis"
 
 msgid "gift"
 msgstr "gave"
+
+msgid "more"
+msgstr "mer"
 
 msgid "used"
 msgstr "brukt"
@@ -545,6 +554,9 @@ msgstr "Kopiert"
 
 msgid "Counts"
 msgstr "Tellinger"
+
+msgid "Create"
+msgstr "Opprett"
 
 msgid "Delete"
 msgstr "Slett"
@@ -1740,6 +1752,9 @@ msgstr "Nyhetsbrev"
 msgid "Next quota"
 msgstr "Neste kvote"
 
+msgid "No changes"
+msgstr "Ingen endringer"
+
 msgid "Organizers"
 msgstr "Arrangører"
 
@@ -1751,6 +1766,9 @@ msgstr "Prosentandel"
 
 msgid "Play Again"
 msgstr "Spill igjen"
+
+msgid "Plot Roles"
+msgstr "Plot-roller"
 
 msgid "Pool Types"
 msgstr "Bassengtyper"
@@ -2025,6 +2043,9 @@ msgstr "Foreløpig"
 msgid "Publication"
 msgstr "Utgivelse"
 
+msgid "Quest types"
+msgstr "Oppdragstyper"
+
 msgid "Quick Setup"
 msgstr "Hurtigoppsett"
 
@@ -2298,6 +2319,9 @@ msgstr "Tre kvoter"
 msgid "Ticket price"
 msgstr "Billettpris"
 
+msgid "Ticket tiers"
+msgstr "Billettnivåer"
+
 msgid "Total issued"
 msgstr "Totalt utstedt"
 
@@ -2548,6 +2572,9 @@ msgstr "Åpne forespørsler"
 msgid "Require login"
 msgstr "Krever innlogging"
 
+msgid "Restore error"
+msgstr "Gjenopprett feil"
+
 msgid "Shared secret"
 msgstr "Delt hemmelighet"
 
@@ -2623,6 +2650,9 @@ msgstr "Lastmanifest"
 
 msgid "Carousel image"
 msgstr "Bildekarusell"
+
+msgid "Character Form"
+msgstr "Tegnform"
 
 msgid "Character name"
 msgstr "Tegnets navn"
@@ -2840,6 +2870,9 @@ msgstr "Evne fjernet"
 msgid "App Integration"
 msgstr "App-integrasjon"
 
+msgid "Backup ZIP file"
+msgstr "Sikkerhetskopier ZIP-fil"
+
 msgid "Change password"
 msgstr "Gjenoppretting av passord"
 
@@ -2857,6 +2890,9 @@ msgstr "Liste over tegn"
 
 msgid "Collected votes"
 msgstr "Mottatte stemmer"
+
+msgid "Confirm Restore"
+msgstr "Bekreft gjenoppretting"
 
 msgid "Deadline (date)"
 msgstr "Frist (dato)"
@@ -2933,6 +2969,9 @@ msgstr "Betalingsmetoder"
 msgid "Portraits (PDF)"
 msgstr "Portretter (PDF)"
 
+msgid "Preview Restore"
+msgstr "Forhåndsvisning av gjenoppretting"
+
 msgid "Private message"
 msgstr "Privat melding"
 
@@ -2953,6 +2992,9 @@ msgstr "Fjern prolog"
 
 msgid "Replacing names"
 msgstr "Erstatning av navn"
+
+msgid "Restore Preview"
+msgstr "Forhåndsvisning av gjenoppretting"
 
 msgid "Select Language"
 msgstr "Velg språk"
@@ -3035,6 +3077,9 @@ msgstr "Bakgrunnsbilde"
 msgid "Casting priority"
 msgstr "Prioritet ved støping"
 
+msgid "Character Config"
+msgstr "Tegnkonfigurasjon"
+
 msgid "Character review"
 msgstr "Karaktergjennomgang"
 
@@ -3070,6 +3115,9 @@ msgstr "Lisens"
 
 msgid "Element approved"
 msgstr "Godkjent element"
+
+msgid "Enabled features"
+msgstr "Aktiverte funksjoner"
 
 msgid "Event Appearance"
 msgstr "Arrangementets opptreden"
@@ -3199,6 +3247,9 @@ msgstr "Fjern fra tomten"
 
 msgid "Request approved"
 msgstr "Anmodning godkjent"
+
+msgid "Required feature"
+msgstr "Nødvendig funksjon"
 
 msgid "Selected options"
 msgstr "Utvalgte alternativer"
@@ -3419,6 +3470,9 @@ msgstr "Oppdrag og egenskaper"
 msgid "Redeem collection"
 msgstr "Løs inn samlingen"
 
+msgid "Registration Form"
+msgstr "Registreringsskjema"
+
 msgid "Registration form"
 msgstr "Registreringsskjema"
 
@@ -3578,6 +3632,9 @@ msgstr "Årsak til betaling"
 msgid "Registrations open"
 msgstr "Registreringen er åpen"
 
+msgid "Restore completed!"
+msgstr "Gjenoppretting fullført!"
+
 msgid "Review all members"
 msgstr "Gjennomgå alle medlemmer"
 
@@ -3694,6 +3751,9 @@ msgstr "E-postvarsler"
 
 msgid "Event Configuration"
 msgstr "Hendelseskonfigurasjon"
+
+msgid "Event configuration"
+msgstr "Konfigurasjon av hendelser"
 
 msgid "History preferences"
 msgstr "Historikk over preferanser"
@@ -3911,6 +3971,9 @@ msgstr "Spillerrelasjoner"
 
 msgid "Please wait a moment"
 msgstr "Vennligst vent et øyeblikk"
+
+msgid "Plot-character roles"
+msgstr "Plot-karakterroller"
 
 msgid "Preference not valid"
 msgstr "Ugyldig preferanse"
@@ -4351,6 +4414,9 @@ msgstr "Tilpasning av karakterer"
 msgid "Character relationships"
 msgstr "Koblinger til tegn"
 
+msgid "Character sheet options"
+msgstr "Alternativer for karakterark"
+
 msgid "Collection participated"
 msgstr "Samlinger som har deltatt"
 
@@ -4477,6 +4543,9 @@ msgstr "Foreningsoversettelser"
 
 msgid "Cancel your registration"
 msgstr "Avslutt abonnementet"
+
+msgid "Character configurations"
+msgstr "Tegnkonfigurasjoner"
 
 msgid "Check double speed larps"
 msgstr "Sjekk speed larp-duplikater"
@@ -4605,11 +4674,17 @@ msgstr "sjekk rapporter mindre"
 msgid "not visible at this time"
 msgstr "ikke synlig på dette tidspunktet"
 
+msgid "Character sheet questions"
+msgstr "Spørsmål til karakterarket"
+
 msgid "Choose the payment method"
 msgstr "Velg betalingsmåte"
 
 msgid "Download example template"
 msgstr "Last ned eksempelmal"
+
+msgid "Error reading backup file"
+msgstr "Feil ved lesing av sikkerhetskopifil"
 
 msgid "Go to the preferences for"
 msgstr "Gå til innstillinger for"
@@ -4677,6 +4752,9 @@ msgstr "Les skriveelementene"
 
 msgid "Receipt already confirmed"
 msgstr "Kvitteringen er allerede bekreftet"
+
+msgid "Registration form options"
+msgstr "Alternativer for registreringsskjema"
 
 #, python-format
 msgid "Registration to %(event)s"
@@ -4837,6 +4915,9 @@ msgstr "Angi dine preferanser her"
 msgid "Event context not available"
 msgstr "Hendelseskontekst ikke tilgjengelig"
 
+msgid "Files recognized in the ZIP"
+msgstr "Filer som gjenkjennes i ZIP-filen"
+
 msgid "Items that will be modified"
 msgstr "Elementer som vil bli endret"
 
@@ -4881,6 +4962,9 @@ msgstr "Forhåndsregistrering ikke funnet."
 
 msgid "Question saved successfully"
 msgstr "Registreringen er fullført"
+
+msgid "Registration form questions"
+msgstr "Spørsmål til registreringsskjemaet"
 
 msgid "Reminder membership request"
 msgstr "Påminnelse om medlemskap"
@@ -5870,6 +5954,9 @@ msgstr "Administrere mottatte forhåndsregistreringer"
 msgid "Mirror type character, not selectable"
 msgstr "Tegn av speiltype, kan ikke velges"
 
+msgid "No recognized files found in the ZIP."
+msgstr "Ingen gjenkjente filer funnet i ZIP-filen."
+
 msgid "Now you can create fixed installments"
 msgstr "Nå kan du opprette faste avdrag"
 
@@ -6489,6 +6576,9 @@ msgstr "Denne siden oppsummerer arrangementets speedlarps"
 
 msgid "This page shows the types of event prologue"
 msgstr "Denne siden oppsummerer de ulike typene arrangementsprologer"
+
+msgid "Unrecognized files in ZIP (will be skipped)"
+msgstr "Ukjente filer i ZIP-filen (vil bli hoppet over)"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Last opp en PDF-fil eller et bilde (JPG, PNG osv.)"
@@ -7307,6 +7397,9 @@ msgstr "Mengdesporing er ikke aktivert for denne organisasjonen"
 
 msgid "Registrations will open at the specified date and time"
 msgstr "Registreringen åpner på angitt dato og klokkeslett"
+
+msgid "Restore session expired, please upload the file again."
+msgstr "Gjenopprettingsøkten er utløpt, vennligst last opp filen på nytt."
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Noen funksjoner krever \"Character\", som ikke er aktiv"
@@ -10038,6 +10131,13 @@ msgstr ""
 "= ubegrenset)"
 
 msgid ""
+"The following changes will be applied when you confirm. Review carefully "
+"before proceeding."
+msgstr ""
+"Følgende endringer vil bli brukt når du bekrefter. Les nøye gjennom før du "
+"fortsetter."
+
+msgid ""
 "This page shows global competencies, skill areas in which contributors can "
 "score themselves"
 msgstr ""
@@ -11180,6 +11280,13 @@ msgid ""
 msgstr ""
 "Antall måneder, regnet fra begynnelsen av medlemsåret, hvor "
 "medlemskontingenten kan betales gratis"
+
+msgid ""
+"Upload a backup ZIP file to restore event data. A preview of the changes "
+"will be shown before any data is modified."
+msgstr ""
+"Last opp en ZIP-fil for å gjenopprette hendelsesdata. En forhåndsvisning av "
+"endringene vises før dataene endres."
 
 msgid ""
 "If you select one (or more) tickets, the option will only be available to "

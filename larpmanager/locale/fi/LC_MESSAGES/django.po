@@ -83,6 +83,9 @@ msgstr "Kuka"
 msgid "age"
 msgstr "ikä"
 
+msgid "and"
+msgstr "ja"
+
 msgid "for"
 msgstr "osoitteessa"
 
@@ -251,6 +254,9 @@ msgstr "Näytä"
 msgid "Size"
 msgstr "Koko"
 
+msgid "Skip"
+msgstr "Ohita"
+
 msgid "Song"
 msgstr "Laulu"
 
@@ -304,6 +310,9 @@ msgstr "ilmainen"
 
 msgid "gift"
 msgstr "lahja"
+
+msgid "more"
+msgstr "lisää"
 
 msgid "used"
 msgstr "käytetty"
@@ -545,6 +554,9 @@ msgstr "Kopioitu"
 
 msgid "Counts"
 msgstr "Laskee"
+
+msgid "Create"
+msgstr "Luo"
 
 msgid "Delete"
 msgstr "Poista"
@@ -1740,6 +1752,9 @@ msgstr "Uutiskirje"
 msgid "Next quota"
 msgstr "Seuraava kiintiö"
 
+msgid "No changes"
+msgstr "Ei muutoksia"
+
 msgid "Organizers"
 msgstr "Järjestäjät"
 
@@ -1751,6 +1766,9 @@ msgstr "Prosenttiosuus"
 
 msgid "Play Again"
 msgstr "Pelaa uudelleen"
+
+msgid "Plot Roles"
+msgstr "Juoniroolit"
 
 msgid "Pool Types"
 msgstr "Allastyypit"
@@ -2025,6 +2043,9 @@ msgstr "Väliaikainen"
 msgid "Publication"
 msgstr "Julkaisu"
 
+msgid "Quest types"
+msgstr "Tehtävätyypit"
+
 msgid "Quick Setup"
 msgstr "Pika-asennus"
 
@@ -2298,6 +2319,9 @@ msgstr "Kolme kiintiötä"
 msgid "Ticket price"
 msgstr "Lipun hinta"
 
+msgid "Ticket tiers"
+msgstr "Lippuluokat"
+
 msgid "Total issued"
 msgstr "Myönnetty yhteensä"
 
@@ -2548,6 +2572,9 @@ msgstr "Pyynnöt avoinna"
 msgid "Require login"
 msgstr "Vaadi kirjautuminen"
 
+msgid "Restore error"
+msgstr "Palauta virhe"
+
 msgid "Shared secret"
 msgstr "Jaettu salaisuus"
 
@@ -2623,6 +2650,9 @@ msgstr "Lastiluettelo"
 
 msgid "Carousel image"
 msgstr "Karusellin kuva"
+
+msgid "Character Form"
+msgstr "Hahmomuoto"
 
 msgid "Character name"
 msgstr "Hahmon nimi"
@@ -2840,6 +2870,9 @@ msgstr "Taito poistettu"
 msgid "App Integration"
 msgstr "Sovelluksen integrointi"
 
+msgid "Backup ZIP file"
+msgstr "Varmuuskopio ZIP-tiedosto"
+
 msgid "Change password"
 msgstr "Vaihda salasana"
 
@@ -2857,6 +2890,9 @@ msgstr "Hahmoluettelo"
 
 msgid "Collected votes"
 msgstr "Kerätyt äänet"
+
+msgid "Confirm Restore"
+msgstr "Vahvista Palauta"
 
 msgid "Deadline (date)"
 msgstr "Määräaika (päivämäärä)"
@@ -2933,6 +2969,9 @@ msgstr "Maksutavat"
 msgid "Portraits (PDF)"
 msgstr "Muotokuvat (PDF)"
 
+msgid "Preview Restore"
+msgstr "Esikatselu Palauta"
+
 msgid "Private message"
 msgstr "Yksityisviesti"
 
@@ -2953,6 +2992,9 @@ msgstr "Poista prologi"
 
 msgid "Replacing names"
 msgstr "Nimien korvaaminen"
+
+msgid "Restore Preview"
+msgstr "Palauta esikatselu"
 
 msgid "Select Language"
 msgstr "Valitse kieli"
@@ -3035,6 +3077,9 @@ msgstr "Taustakuva"
 msgid "Casting priority"
 msgstr "Hahmojaon prioriteetti"
 
+msgid "Character Config"
+msgstr "Hahmon konfigurointi"
+
 msgid "Character review"
 msgstr "Hahmon tarkastelu"
 
@@ -3070,6 +3115,9 @@ msgstr "Ajokortti"
 
 msgid "Element approved"
 msgstr "Elementti hyväksytty"
+
+msgid "Enabled features"
+msgstr "Käytössä olevat ominaisuudet"
 
 msgid "Event Appearance"
 msgstr "Tapahtuman esiintyminen"
@@ -3199,6 +3247,9 @@ msgstr "Poista juonelta"
 
 msgid "Request approved"
 msgstr "Pyyntö hyväksytty"
+
+msgid "Required feature"
+msgstr "Vaadittu ominaisuus"
 
 msgid "Selected options"
 msgstr "Valitut vaihtoehdot"
@@ -3419,6 +3470,9 @@ msgstr "Tehtävät ja ominaisuudet"
 msgid "Redeem collection"
 msgstr "Lunasta kokoelma"
 
+msgid "Registration Form"
+msgstr "Rekisteröintilomake"
+
 msgid "Registration form"
 msgstr "Ilmoittautumislomake"
 
@@ -3578,6 +3632,9 @@ msgstr "Maksun syy"
 msgid "Registrations open"
 msgstr "Ilmoittautuminen avoinna"
 
+msgid "Restore completed!"
+msgstr "Palautus suoritettu!"
+
 msgid "Review all members"
 msgstr "Tarkista kaikki jäsenet"
 
@@ -3693,6 +3750,9 @@ msgid "Email notifications"
 msgstr "Sähköposti-ilmoitukset"
 
 msgid "Event Configuration"
+msgstr "Tapahtuman konfigurointi"
+
+msgid "Event configuration"
 msgstr "Tapahtuman konfigurointi"
 
 msgid "History preferences"
@@ -3911,6 +3971,9 @@ msgstr "Pelaajasuhteet"
 
 msgid "Please wait a moment"
 msgstr "Odottakaa hetki"
+
+msgid "Plot-character roles"
+msgstr "Juoni-hahmo roolit"
 
 msgid "Preference not valid"
 msgstr "Etusija ei ole voimassa"
@@ -4351,6 +4414,9 @@ msgstr "Hahmon mukauttaminen"
 msgid "Character relationships"
 msgstr "Hahmosuhteet"
 
+msgid "Character sheet options"
+msgstr "Hahmolistan vaihtoehdot"
+
 msgid "Collection participated"
 msgstr "Kokoelma osallistui"
 
@@ -4477,6 +4543,9 @@ msgstr "Yhdistyksen käännökset"
 
 msgid "Cancel your registration"
 msgstr "Peruuta ilmoittautumisesi"
+
+msgid "Character configurations"
+msgstr "Merkin kokoonpanot"
 
 msgid "Check double speed larps"
 msgstr "Tarkista speed-larpit"
@@ -4605,11 +4674,17 @@ msgstr "tarkista puuttuvat suhteet"
 msgid "not visible at this time"
 msgstr "ei näy tällä hetkellä"
 
+msgid "Character sheet questions"
+msgstr "Hahmo arkki kysymyksiä"
+
 msgid "Choose the payment method"
 msgstr "Valitse maksutapa"
 
 msgid "Download example template"
 msgstr "Lataa esimerkkimalli"
+
+msgid "Error reading backup file"
+msgstr "Virhe varmuuskopiotiedoston lukemisessa"
 
 msgid "Go to the preferences for"
 msgstr "Siirry asetuksiin"
@@ -4677,6 +4752,9 @@ msgstr "Lue kirjoituselementit"
 
 msgid "Receipt already confirmed"
 msgstr "Kuitti on jo vahvistettu"
+
+msgid "Registration form options"
+msgstr "Rekisteröintilomakkeen vaihtoehdot"
 
 #, python-format
 msgid "Registration to %(event)s"
@@ -4837,6 +4915,9 @@ msgstr "Kirjoita mieltymyksesi tähän"
 msgid "Event context not available"
 msgstr "Tapahtumakonteksti ei ole käytettävissä"
 
+msgid "Files recognized in the ZIP"
+msgstr "ZIP:ssä tunnistetut tiedostot"
+
 msgid "Items that will be modified"
 msgstr "Muutettavat kohteet"
 
@@ -4881,6 +4962,9 @@ msgstr "Ennakkorekisteröintiä ei löydy."
 
 msgid "Question saved successfully"
 msgstr "Kysymys tallennettu onnistuneesti"
+
+msgid "Registration form questions"
+msgstr "Rekisteröintilomakkeen kysymykset"
 
 msgid "Reminder membership request"
 msgstr "Muistutus jäsenyyspyyntö"
@@ -5871,6 +5955,9 @@ msgstr "Hallinnoi vastaanotettuja ennakkoilmoittautumisia"
 msgid "Mirror type character, not selectable"
 msgstr "Peilityyppinen merkki, ei valittavissa"
 
+msgid "No recognized files found in the ZIP."
+msgstr "ZIP-tiedostosta ei löytynyt tunnistettuja tiedostoja."
+
 msgid "Now you can create fixed installments"
 msgstr "Nyt voit luoda kiinteitä maksueriä"
 
@@ -6487,6 +6574,9 @@ msgstr "Tämä sivu näyttää tapahtuman speedlarpsin"
 
 msgid "This page shows the types of event prologue"
 msgstr "Tällä sivulla esitellään tapahtuman prologin tyypit"
+
+msgid "Unrecognized files in ZIP (will be skipped)"
+msgstr "Tunnistamattomat tiedostot ZIP:ssä (ohitetaan)"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Lataa PDF-tiedosto tai kuva (JPG, PNG jne.)"
@@ -7309,6 +7399,9 @@ msgstr "Määränseuranta ei ole käytössä tässä organisaatiossa"
 
 msgid "Registrations will open at the specified date and time"
 msgstr "Ilmoittautumiset avataan tiettynä päivänä ja kellonaikana"
+
+msgid "Restore session expired, please upload the file again."
+msgstr "Palautusistunto päättyi, lataa tiedosto uudelleen."
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Jotkin ominaisuudet edellyttävät 'Merkkiä', joka ei ole aktiivinen"
@@ -10037,6 +10130,13 @@ msgstr ""
 " rajoittamaton)"
 
 msgid ""
+"The following changes will be applied when you confirm. Review carefully "
+"before proceeding."
+msgstr ""
+"Seuraavat muutokset otetaan käyttöön, kun vahvistat. Tarkista huolellisesti "
+"ennen jatkamista."
+
+msgid ""
 "This page shows global competencies, skill areas in which contributors can "
 "score themselves"
 msgstr ""
@@ -11176,6 +11276,13 @@ msgid ""
 msgstr ""
 "Kuukausien lukumäärä jäsenyysvuoden alusta alkaen, joilta jäsenmaksu on "
 "maksettava maksutta"
+
+msgid ""
+"Upload a backup ZIP file to restore event data. A preview of the changes "
+"will be shown before any data is modified."
+msgstr ""
+"Lataa varmuuskopio ZIP-tiedosto tapahtumatietojen palauttamiseksi. Muutosten"
+" esikatselu näytetään ennen tietojen muuttamista."
 
 msgid ""
 "If you select one (or more) tickets, the option will only be available to "

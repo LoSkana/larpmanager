@@ -42,7 +42,11 @@
                     </a>
                     <a class="new button" href="{% url 'orga_backup' run.get_slug %}">
                         <i class="fas fa-save"></i>
-                        Full backup
+                        Backup
+                    </a>
+                    <a class="new button" href="{% url 'orga_restore' run.get_slug %}">
+                        <i class="fas fa-undo"></i>
+                        Restore
                     </a>
                 </div>
             </div>

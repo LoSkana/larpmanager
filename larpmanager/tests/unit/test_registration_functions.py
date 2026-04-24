@@ -828,7 +828,7 @@ class TestInstallmentFallbackLogic(BaseTestCase):
         membership.date = None
         membership.save()
 
-        # Installment 1: overdue (days_deadline negative → in the past)
+        # Installment 1: overdue (days_deadline negative -> in the past)
         RegistrationInstallment.objects.create(
             event=run.event, amount=Decimal("125.00"), days_deadline=-200, order=1, number=1
         )

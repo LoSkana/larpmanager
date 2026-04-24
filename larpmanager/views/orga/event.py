@@ -60,6 +60,7 @@ from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga
 from larpmanager.utils.io.download import (
     _get_column_names,
     export_abilities,
+    export_character_configs,
     export_character_form,
     export_data,
     export_event,
@@ -67,6 +68,7 @@ from larpmanager.utils.io.download import (
     export_tickets,
     zip_exports,
 )
+from larpmanager.utils.io.restore import execute_restore, load_restore_temp, preview_restore, save_restore_temp
 from larpmanager.utils.io.upload import go_upload
 from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.users.deadlines import check_run_deadlines
@@ -544,6 +546,7 @@ def _prepare_backup(context: dict) -> HttpResponse:
     if "character" in context["features"]:
         export_files.extend(export_data(context, Character))
         export_files.extend(export_character_form(context))
+        export_files.extend(export_character_configs(context))
 
     # Export faction data if feature is enabled
     if "faction" in context["features"]:
@@ -565,6 +568,43 @@ def _prepare_backup(context: dict) -> HttpResponse:
 
     # Create and return ZIP file with all exports
     return zip_exports(context, export_files, "backup")
+
+
+@login_required
+def orga_restore(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Restore event data from a previously exported backup ZIP."""
+    context = check_event_context(request, event_slug, "orga_event")
+
+    if request.method == "POST":
+        if "confirm" in request.POST:
+            temp_key = request.POST.get("temp_key", "")
+            zip_bytes = load_restore_temp(temp_key)
+            if zip_bytes is None:
+                messages.error(request, _("Restore session expired, please upload the file again."))
+                return render(request, "larpmanager/orga/restore.html", context)
+            try:
+                context["logs"] = execute_restore(context, zip_bytes)
+                messages.success(request, _("Restore completed" + "!"))
+                return render(request, "larpmanager/orga/uploads.html", context)
+            except Exception as exc:
+                logger.exception("Restore execute error")
+                messages.error(request, _("Restore error") + f": {exc}")
+                return render(request, "larpmanager/orga/restore.html", context)
+
+        elif "zip_file" in request.FILES:
+            zip_bytes = request.FILES["zip_file"].read()
+            try:
+                sections, unknown_files = preview_restore(context, zip_bytes)
+                temp_key = save_restore_temp(zip_bytes)
+                context["sections"] = sections
+                context["unknown_files"] = unknown_files
+                context["temp_key"] = temp_key
+                return render(request, "larpmanager/orga/restore_preview.html", context)
+            except Exception as exc:
+                logger.exception("Restore preview error")
+                messages.error(request, _("Error reading backup file") + f": {exc}")
+
+    return render(request, "larpmanager/orga/restore.html", context)
 
 
 @login_required

@@ -83,6 +83,9 @@ msgstr "Kdo"
 msgid "age"
 msgstr "věk"
 
+msgid "and"
+msgstr "a"
+
 msgid "for"
 msgstr "pro"
 
@@ -251,6 +254,9 @@ msgstr "Zobrazit"
 msgid "Size"
 msgstr "Subjekty"
 
+msgid "Skip"
+msgstr "Přeskočit"
+
 msgid "Song"
 msgstr "Píseň"
 
@@ -304,6 +310,9 @@ msgstr "zdarma"
 
 msgid "gift"
 msgstr "dárek"
+
+msgid "more"
+msgstr "více"
 
 msgid "used"
 msgstr "použité"
@@ -545,6 +554,9 @@ msgstr "Zkopírováno"
 
 msgid "Counts"
 msgstr "Počítá"
+
+msgid "Create"
+msgstr "Vytvořit"
 
 msgid "Delete"
 msgstr "Odstranit"
@@ -1740,6 +1752,9 @@ msgstr "Zpravodaj"
 msgid "Next quota"
 msgstr "Další kvóta"
 
+msgid "No changes"
+msgstr "Žádné změny"
+
 msgid "Organizers"
 msgstr "Organizátoři"
 
@@ -1751,6 +1766,9 @@ msgstr "Procento"
 
 msgid "Play Again"
 msgstr "Znovu si zahrát"
+
+msgid "Plot Roles"
+msgstr "Role v zápletce"
 
 msgid "Pool Types"
 msgstr "Typy bazénů"
@@ -2025,6 +2043,9 @@ msgstr "Provizorní"
 msgid "Publication"
 msgstr "Publikace"
 
+msgid "Quest types"
+msgstr "Typy úkolů"
+
 msgid "Quick Setup"
 msgstr "Rychlé nastavení"
 
@@ -2298,6 +2319,9 @@ msgstr "Tři kvóty"
 msgid "Ticket price"
 msgstr "Cena vstupenky"
 
+msgid "Ticket tiers"
+msgstr "Úrovně vstupenek"
+
 msgid "Total issued"
 msgstr "Vydáno celkem"
 
@@ -2548,6 +2572,9 @@ msgstr "Otevřené dotazy"
 msgid "Require login"
 msgstr "Vyžadovat přihlášení"
 
+msgid "Restore error"
+msgstr "Chyba při obnovení"
+
 msgid "Shared secret"
 msgstr "Sdílené tajemství"
 
@@ -2623,6 +2650,9 @@ msgstr "Seznam nákladu"
 
 msgid "Carousel image"
 msgstr "Kolotoč obrázků"
+
+msgid "Character Form"
+msgstr "Forma postavy"
 
 msgid "Character name"
 msgstr "Jméno postavy"
@@ -2840,6 +2870,9 @@ msgstr "Odstranění schopnosti"
 msgid "App Integration"
 msgstr "Integrace aplikací"
 
+msgid "Backup ZIP file"
+msgstr "Záložní soubor ZIP"
+
 msgid "Change password"
 msgstr "Obnovení hesla"
 
@@ -2857,6 +2890,9 @@ msgstr "Seznam postav"
 
 msgid "Collected votes"
 msgstr "Obdržené hlasy"
+
+msgid "Confirm Restore"
+msgstr "Potvrzení obnovení"
 
 msgid "Deadline (date)"
 msgstr "Termín (datum)"
@@ -2933,6 +2969,9 @@ msgstr "Platební metody"
 msgid "Portraits (PDF)"
 msgstr "Portréty (PDF)"
 
+msgid "Preview Restore"
+msgstr "Obnovení náhledu"
+
 msgid "Private message"
 msgstr "Soukromá zpráva"
 
@@ -2953,6 +2992,9 @@ msgstr "Odstranění prologu"
 
 msgid "Replacing names"
 msgstr "Nahrazování názvů"
+
+msgid "Restore Preview"
+msgstr "Obnovení náhledu"
 
 msgid "Select Language"
 msgstr "Zvolte jazyk"
@@ -3035,6 +3077,9 @@ msgstr "Obrázek na pozadí"
 msgid "Casting priority"
 msgstr "Priorita obsazování"
 
+msgid "Character Config"
+msgstr "Konfigurace postavy"
+
 msgid "Character review"
 msgstr "Recenze postavy"
 
@@ -3070,6 +3115,9 @@ msgstr "Licence"
 
 msgid "Element approved"
 msgstr "Schválený prvek"
+
+msgid "Enabled features"
+msgstr "Povolené funkce"
 
 msgid "Event Appearance"
 msgstr "Vystoupení na akci"
@@ -3199,6 +3247,9 @@ msgstr "Odstranění z pozemku"
 
 msgid "Request approved"
 msgstr "Žádost schválena"
+
+msgid "Required feature"
+msgstr "Požadovaná funkce"
 
 msgid "Selected options"
 msgstr "Vybrané možnosti"
@@ -3419,6 +3470,9 @@ msgstr "Úkoly a vlastnosti"
 msgid "Redeem collection"
 msgstr "Sbírka Redeem"
 
+msgid "Registration Form"
+msgstr "Registrační formulář"
+
 msgid "Registration form"
 msgstr "Registrační formulář"
 
@@ -3578,6 +3632,9 @@ msgstr "Důvod platby"
 msgid "Registrations open"
 msgstr "Otevření registrací"
 
+msgid "Restore completed!"
+msgstr "Obnova dokončena!"
+
 msgid "Review all members"
 msgstr "Přezkoumání všech členů"
 
@@ -3693,6 +3750,9 @@ msgid "Email notifications"
 msgstr "E-mailová oznámení"
 
 msgid "Event Configuration"
+msgstr "Konfigurace události"
+
+msgid "Event configuration"
 msgstr "Konfigurace události"
 
 msgid "History preferences"
@@ -3911,6 +3971,9 @@ msgstr "Vztahy mezi hráči"
 
 msgid "Please wait a moment"
 msgstr "Chvíli prosím počkejte"
+
+msgid "Plot-character roles"
+msgstr "Dějové role postav"
 
 msgid "Preference not valid"
 msgstr "Neplatná předvolba"
@@ -4351,6 +4414,9 @@ msgstr "Přizpůsobení postavy"
 msgid "Character relationships"
 msgstr "Odkazy na postavy"
 
+msgid "Character sheet options"
+msgstr "Možnosti listu postavy"
+
 msgid "Collection participated"
 msgstr "Zúčastněné sbírky"
 
@@ -4477,6 +4543,9 @@ msgstr "Překlady asociace"
 
 msgid "Cancel your registration"
 msgstr "Odhlásit se z odběru"
+
+msgid "Character configurations"
+msgstr "Konfigurace znaků"
 
 msgid "Check double speed larps"
 msgstr "Zkontrolujte duplicity rychlostních larpů"
@@ -4605,11 +4674,17 @@ msgstr "méně kontrolních hlášení"
 msgid "not visible at this time"
 msgstr "v tuto chvíli není viditelný"
 
+msgid "Character sheet questions"
+msgstr "Otázky k listu postavy"
+
 msgid "Choose the payment method"
 msgstr "Zvolte způsob platby"
 
 msgid "Download example template"
 msgstr "Stáhněte si vzorovou šablonu"
+
+msgid "Error reading backup file"
+msgstr "Chyba při čtení záložního souboru"
 
 msgid "Go to the preferences for"
 msgstr "Přejděte do předvoleb pro"
@@ -4677,6 +4752,9 @@ msgstr "Přečtěte si prvky psaní"
 
 msgid "Receipt already confirmed"
 msgstr "Příjem již potvrzen"
+
+msgid "Registration form options"
+msgstr "Možnosti registračního formuláře"
 
 #, python-format
 msgid "Registration to %(event)s"
@@ -4837,6 +4915,9 @@ msgstr "Zde uveďte své preference"
 msgid "Event context not available"
 msgstr "Kontext události není k dispozici"
 
+msgid "Files recognized in the ZIP"
+msgstr "Soubory rozpoznané v ZIP"
+
 msgid "Items that will be modified"
 msgstr "Položky, které budou upraveny"
 
@@ -4881,6 +4962,9 @@ msgstr "Předběžná registrace nebyla nalezena."
 
 msgid "Question saved successfully"
 msgstr "Registrace byla úspěšně dokončena"
+
+msgid "Registration form questions"
+msgstr "Otázky k registračnímu formuláři"
 
 msgid "Reminder membership request"
 msgstr "Připomínka žádosti o členství"
@@ -5872,6 +5956,9 @@ msgstr "Správa přijatých předběžných registrací"
 msgid "Mirror type character, not selectable"
 msgstr "Zrcadlový typ znaku, nelze vybrat"
 
+msgid "No recognized files found in the ZIP."
+msgstr "V souboru ZIP nebyly nalezeny žádné rozpoznané soubory."
+
 msgid "Now you can create fixed installments"
 msgstr "Nyní můžete vytvořit pevné splátky"
 
@@ -6488,6 +6575,9 @@ msgstr "Tato stránka shrnuje rychlostní mapy této události"
 
 msgid "This page shows the types of event prologue"
 msgstr "Tato stránka shrnuje typy prologů událostí"
+
+msgid "Unrecognized files in ZIP (will be skipped)"
+msgstr "Nerozpoznané soubory v ZIP (budou přeskočeny)"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Nahrajte soubor PDF nebo obrázek (JPG, PNG atd.)"
@@ -7307,6 +7397,9 @@ msgstr "Sledování množství není pro tuto organizaci povoleno"
 
 msgid "Registrations will open at the specified date and time"
 msgstr "Registrace budou otevřeny v uvedeném termínu a čase"
+
+msgid "Restore session expired, please upload the file again."
+msgstr "Platnost relace obnovení vypršela, nahrajte prosím soubor znovu."
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Některé funkce vyžadují \"Character\", který není aktivní"
@@ -9937,6 +10030,13 @@ msgid ""
 msgstr "Nepovinné - maximální počet výběrů ve všech znacích (0 = neomezeně)"
 
 msgid ""
+"The following changes will be applied when you confirm. Review carefully "
+"before proceeding."
+msgstr ""
+"Po potvrzení se provedou následující změny. Před pokračováním si je pečlivě "
+"prohlédněte."
+
+msgid ""
 "This page shows global competencies, skill areas in which contributors can "
 "score themselves"
 msgstr ""
@@ -11073,6 +11173,13 @@ msgid ""
 msgstr ""
 "Počet měsíců, počínaje začátkem členského roku, za které lze zaplatit "
 "členský příspěvek zdarma"
+
+msgid ""
+"Upload a backup ZIP file to restore event data. A preview of the changes "
+"will be shown before any data is modified."
+msgstr ""
+"Nahrajte záložní soubor ZIP a obnovte data událostí. Před úpravou dat se "
+"zobrazí náhled změn."
 
 msgid ""
 "If you select one (or more) tickets, the option will only be available to "
