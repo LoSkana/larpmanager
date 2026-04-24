@@ -143,6 +143,7 @@ def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Add form to context and render template
     context["form"] = form
+    context["add_another"] = True
     return render(request, "larpmanager/orga/accounting/expenses_my_new.html", context)
 
 
