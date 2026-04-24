@@ -42,11 +42,14 @@ def logout(page: Any) -> None:
     page.locator("a#menu-open").first.click()
     page.get_by_role("link", name="Logout").click()
 
+
 def login_orga(page: Any, live_server: Any) -> None:
     login(page, live_server, orga_user)
 
+
 def login_user(page: Any, live_server: Any) -> None:
     login(page, live_server, test_user)
+
 
 def login(page: Any, live_server: Any, name: Any) -> None:
     go_to(page, live_server, "/login")
@@ -56,6 +59,7 @@ def login(page: Any, live_server: Any, name: Any) -> None:
     submit_confirm(page)
     expect(page.locator("#banner")).not_to_contain_text("Login")
 
+
 def handle_error(page: Any, e: Any, test_name: Any) -> NoReturn:
     logger.error("Error on %s: %s\n", test_name, page.url)
     logger.error(e)
@@ -64,6 +68,7 @@ def handle_error(page: Any, e: Any, test_name: Any) -> NoReturn:
     page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
 
     raise e
+
 
 def print_text(page: Any) -> None:
     visible_text = page.evaluate("""
@@ -80,6 +85,7 @@ def print_text(page: Any) -> None:
     """)
 
     logger.debug(visible_text)
+
 
 def go_to(page: Any, live_server: Any, path: Any) -> None:
     go_to_check(page, f"{live_server}/{path}")
@@ -102,6 +108,7 @@ def submit(page: Any) -> None:
     page.wait_for_load_state("domcontentloaded")
     ooops_check(page)
 
+
 def ooops_check(page: Any) -> None:
     banner = page.locator("#banner")
     if banner.count() > 0:
@@ -110,6 +117,7 @@ def ooops_check(page: Any) -> None:
             expect(banner).not_to_contain_text("404")
         except AssertionError:
             raise Exception(f"Error on {page.url}: {banner.inner_text()}")
+
 
 def check_download(page: Any, link: str) -> None:
     max_tries = 3
@@ -155,6 +163,7 @@ def check_download(page: Any, link: str) -> None:
             if current_try >= max_tries:
                 raise
 
+
 def fill_tinymce(page, iframe_id, text, show = True, timeout = 10000) -> None:
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
@@ -187,6 +196,7 @@ def fill_tinymce(page, iframe_id, text, show = True, timeout = 10000) -> None:
         [iframe_id, text],
     )
 
+
 def _checkboxes(page: Any, check: Any = True) -> None:
     checkboxes = page.locator('input[type="checkbox"]')
     count = checkboxes.count()
@@ -201,6 +211,8 @@ def _checkboxes(page: Any, check: Any = True) -> None:
 
     submit_confirm(page)
 
+
+
 def submit_confirm(page: Any, container_id: str = None) -> None:
     scope = page
     if container_id:
@@ -214,6 +226,7 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     expect(submit_btn).to_be_visible()
     submit_btn.click(force=True)
     just_wait(page)
+
 
 def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> None:
     new_links = page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
@@ -232,19 +245,23 @@ def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> No
         if link not in visited_links and link not in links_to_visit:
             links_to_visit.append(link)
 
+
 def check_feature(page: Any, name: Any) -> None:
     block = page.locator(".feature_checkbox").filter(has=page.get_by_text(name, exact=True))
     block.get_by_role("checkbox").check()
 
+
 def load_image(page: Any, element_id: Any) -> None:
     image_path = Path(__file__).parent / "image.jpg"
     upload(page, element_id, image_path)
+
 
 def upload(page: Any, element_id: Any, image_path: Any) -> None:
     inp = page.locator(element_id)
     inp.scroll_into_view_if_needed()
     expect(inp).to_be_visible(timeout=60000)
     inp.set_input_files(str(image_path))
+
 
 def normalize_whitespace(text: str) -> str:
     """Normalize whitespace by removing newlines and collapsing multiple spaces."""
@@ -333,6 +350,7 @@ def new_option(page):
 def submit_option(page, iframe):
     iframe.get_by_role("button", name="Confirm").click()
     just_wait(page)
+
 
 def sidebar(page, link):
     pattern = re.compile(re.escape(link) + "$", re.IGNORECASE)
