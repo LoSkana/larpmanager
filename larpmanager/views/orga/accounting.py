@@ -47,6 +47,7 @@ from larpmanager.models.accounting import (
 from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_object_uuid
+from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.backend import backend_get
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
@@ -344,6 +345,14 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check user permissions for accessing organization credits functionality
     context = check_event_context(request, event_slug, "orga_credits")
 
+    # Determine if page must be readonly in events
+    context["readonly_event"] = get_association_config(
+        context["event"].association_id,
+        "credit_readonly_event",
+        default_value=False,
+        context=context,
+    )
+
     # Configure context with relationship selectors and field definitions
     context.update(
         {
@@ -374,18 +383,60 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
 @login_required
 def orga_credits_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create new organization credits."""
+    # Check user permissions for accessing organization credits functionality
+    context = check_event_context(request, event_slug, "orga_credits")
+
+    # Determine if page must be readonly in events
+    context["readonly_event"] = get_association_config(
+        context["event"].association_id,
+        "credit_readonly_event",
+        default_value=False,
+        context=context,
+    )
+
+    if context["readonly_event"]:
+        raise UserPermissionError
+
     return orga_new(request, event_slug, OrgaAction.CREDITS)
 
 
 @login_required
 def orga_credits_edit(request: HttpRequest, event_slug: str, credit_uuid: str) -> HttpResponse:
     """Edit organization credits."""
+    # Check user permissions for accessing organization credits functionality
+    context = check_event_context(request, event_slug, "orga_credits")
+
+    # Determine if page must be readonly in events
+    context["readonly_event"] = get_association_config(
+        context["event"].association_id,
+        "credit_readonly_event",
+        default_value=False,
+        context=context,
+    )
+
+    if context["readonly_event"]:
+        raise UserPermissionError
+
     return orga_edit(request, event_slug, OrgaAction.CREDITS, credit_uuid)
 
 
 @login_required
 def orga_credits_delete(request: HttpRequest, event_slug: str, credit_uuid: str) -> HttpResponse:
     """Delete credit for event."""
+    # Check user permissions for accessing organization credits functionality
+    context = check_event_context(request, event_slug, "orga_credits")
+
+    # Determine if page must be readonly in events
+    context["readonly_event"] = get_association_config(
+        context["event"].association_id,
+        "credit_readonly_event",
+        default_value=False,
+        context=context,
+    )
+
+    if context["readonly_event"]:
+        raise UserPermissionError
+
     return orga_delete(request, event_slug, OrgaAction.CREDITS, credit_uuid)
 
 

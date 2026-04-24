@@ -5196,6 +5196,9 @@ msgstr "Tutustu tuleviin tapahtumiin"
 msgid "Filter or search the characters"
 msgstr "Suodata tai etsiä merkkejä"
 
+msgid "Make credits readonly in events"
+msgstr "Tehdään hyvityksistä lukukelpoisia tapahtumissa"
+
 msgid "Manage event navigation buttons"
 msgstr "Tapahtuman navigointipainikkeiden hallinta"
 
@@ -10744,6 +10747,13 @@ msgid ""
 msgstr ""
 "Osallistujat voivat lähettää toisilleen yksityisviestejä paljastamatta "
 "henkilökohtaisia sähköpostiosoitteita"
+
+msgid ""
+"If checked, credits will be readonly in the event panel. You can modify them"
+" only in organization panel"
+msgstr ""
+"Jos valintaruutu on valittuna, tapahtumapaneelissa on vain lukuoikeus. Voit "
+"muokata niitä vain organisaatiopaneelissa"
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "

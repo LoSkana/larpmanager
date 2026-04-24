@@ -757,7 +757,7 @@ class ExeConfigForm(ConfigForm):
 
     def set_config_accounting_2(self) -> None:
         """Configure accounting-related form fields for association settings."""
-        # Configure token/credit system naming and display
+        # Configure token system naming and display
         if "tokens" in self.params["features"]:
             self.set_section("tokens", _("Tokens"))
 
@@ -771,8 +771,10 @@ class ExeConfigForm(ConfigForm):
                 help_text_token_display_name,
             )
 
+        # Configure credit system naming and display
         if "credits" in self.params["features"]:
             self.set_section("credits", _("Credits"))
+
             # Customizable credit display name
             label_credit_display_name = _("Credits name")
             help_text_credit_display_name = _("Name to be displayed for credits")
@@ -781,6 +783,18 @@ class ExeConfigForm(ConfigForm):
                 ConfigType.CHAR,
                 label_credit_display_name,
                 help_text_credit_display_name,
+            )
+
+            # Make credits readonly in events
+            label_credit_readonly_event = _("Make credits readonly in events")
+            help_text_credit_readonly_event = _(
+                "If checked, credits will be readonly in the event panel. You can modify them only in organization panel",
+            )
+            self.add_configs(
+                "credit_readonly_event",
+                ConfigType.BOOL,
+                label_credit_readonly_event,
+                help_text_credit_readonly_event,
             )
 
         # Configure treasury management and appointee selection

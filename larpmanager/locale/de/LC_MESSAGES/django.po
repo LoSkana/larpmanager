@@ -5196,6 +5196,9 @@ msgstr "Entdecken Sie die bevorstehenden Veranstaltungen"
 msgid "Filter or search the characters"
 msgstr "Filtern oder suchen Sie die Zeichen"
 
+msgid "Make credits readonly in events"
+msgstr "Kredite in Ereignissen schreibgeschützt machen"
+
 msgid "Manage event navigation buttons"
 msgstr "Schaltflächen für die Ereignisnavigation verwalten"
 
@@ -11138,6 +11141,14 @@ msgid ""
 msgstr ""
 "Ermöglicht den Teilnehmern, sich gegenseitig private Nachrichten zu senden, "
 "ohne persönliche E-Mail-Adressen preiszugeben"
+
+msgid ""
+"If checked, credits will be readonly in the event panel. You can modify them"
+" only in organization panel"
+msgstr ""
+"Wenn dieses Kontrollkästchen aktiviert ist, sind die Gutschriften in der "
+"Ereignisanzeige schreibgeschützt. Sie können sie nur im Organisationsbereich"
+" ändern"
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "

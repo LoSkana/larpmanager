@@ -5196,6 +5196,9 @@ msgstr "Découvrez les événements en cours de préparation"
 msgid "Filter or search the characters"
 msgstr "Filtrez ou recherchez les personnages"
 
+msgid "Make credits readonly in events"
+msgstr "Rendre les crédits en lecture seule dans les événements"
+
 msgid "Manage event navigation buttons"
 msgstr "Gérer les boutons de navigation des événements"
 
@@ -11079,6 +11082,14 @@ msgid ""
 msgstr ""
 "Permet aux participants de s'envoyer des messages privés sans révéler leur "
 "adresse électronique personnelle"
+
+msgid ""
+"If checked, credits will be readonly in the event panel. You can modify them"
+" only in organization panel"
+msgstr ""
+"Si cette case est cochée, les crédits seront en lecture seule dans le "
+"panneau des événements. Vous ne pouvez les modifier que dans le panneau de "
+"l'organisation"
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "

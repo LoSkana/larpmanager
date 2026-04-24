@@ -447,10 +447,14 @@ def _prepare_data_json(
     if "callbacks" in context:
         field_to_formatter.update(context["callbacks"])
 
+    # Check if page must be readonly in events (if parameter is not present, default to False)
+    readonly_event = context.get("readonly_event", False)
+
     # Process each element and build row data
     for model_object in elements:
         edit_text = ""
-        if hasattr(model_object, "uuid"):
+        # Check if page must be readonly in events
+        if (not readonly_event) and (hasattr(model_object, "uuid")):
             # Generate edit url (in orga need to add event slug)
             if is_executive:
                 edit_url = reverse(edit_view, args=[model_object.uuid])
@@ -470,15 +474,21 @@ def _prepare_data_json(
 
         # Add delete button if delete_view is provided
         if delete_view:
-            if is_executive:
-                delete_url = reverse(delete_view, args=[model_object.uuid])
-            else:
-                delete_url = reverse(delete_view, args=[context["run"].get_slug(), model_object.uuid])
             # Add delete button in the last column
             last_column = str(len(context["fields"]) + 1)
-            row_data[last_column] = (
-                f'<a href="{delete_url}" qtip="{delete_label}" class="only_new_form"><i class="fas fa-trash"></i></a>'
-            )
+
+            # Check if page must be readonly in events
+            if readonly_event:
+                row_data[last_column] = ""
+            else:
+                delete_url = (
+                    reverse(delete_view, args=[model_object.uuid])
+                    if is_executive
+                    else reverse(delete_view, args=[context["run"].get_slug(), model_object.uuid])
+                )
+                row_data[last_column] = (
+                    f'<a href="{delete_url}" qtip="{delete_label}" class="only_new_form"><i class="fas fa-trash"></i></a>'
+                )
 
         table_rows_data.append(row_data)
 
