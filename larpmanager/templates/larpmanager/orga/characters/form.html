@@ -34,7 +34,7 @@
                     <th>{% trans "Status" %}</th>
                 {% endif %}
                 <th>{% trans "Visibility" %}</th>
-                {% if approval %}
+                {% if approval and typ == "character" %}
                     <th>{% trans "Modifiable" %}</th>
                 {% endif %}
                 <th>{% trans "Options" %}</th>
@@ -61,7 +61,7 @@
                     <td>
                         {% if el.typ|not_in:"name,teaser,text,factions_list" %}{{ el.get_visibility_display }}{% endif %}
                     </td>
-                    {% if approval %}
+                    {% if approval and typ == "character" %}
                         <td>
                             {% if el.status|not_in:"d" and el.status|not_in:"h" and el.typ|not_in:"c" %}{{ el.get_editable_display }}{% endif %}
                         </td>
