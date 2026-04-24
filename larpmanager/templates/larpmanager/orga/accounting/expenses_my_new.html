@@ -7,22 +7,7 @@
     {% trans "Manage personal expense submission" %}
 {% endblock info %}
 {% block content %}
-    <form action="{{ request.path }}"
-          enctype="multipart/form-data"
-          method="post">
-        {% csrf_token %}
-        <table class="mob ">
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="Confirm">
-        <br />
-        <br />
-        <div class="continue">
-            <input type="checkbox" id="continue" name="continue">
-            <label for="continue">{% trans "After confirmation, add another" %}</label>
-        </div>
-        <br />
-    </form>
+    {% include "elements/form/main.html" %}
 {% endblock content %}
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {
