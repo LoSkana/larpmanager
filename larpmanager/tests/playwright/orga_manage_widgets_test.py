@@ -82,14 +82,16 @@ def test_orga_manage_widgets_event_role(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     expect(page.locator("#banner")).not_to_contain_text("Access denied")
 
+    widgets = page.locator("#manage h2")
+
     # Accounting widget visible (permission-only, no feature required)
-    expect(page.locator("h2")).to_contain_text("Accounting")
+    expect(widgets.filter(has_text="Accounting")).to_be_visible()
 
     # Registrations widget always visible for any dashboard user
-    expect(page.locator("h2")).to_contain_text("Registrations")
+    expect(widgets.filter(has_text="Registrations")).to_be_visible()
 
     # Deadlines widget NOT visible: feature is enabled but permission is missing
-    expect(page.locator("h2")).not_to_contain_text("Deadlines")
+    expect(widgets.filter(has_text="Deadlines")).to_have_count(0)
 
     logout(page)
     login_orga(page, live_server)
@@ -105,14 +107,16 @@ def test_orga_manage_widgets_event_role(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     expect(page.locator("#banner")).not_to_contain_text("Access denied")
 
+    widgets = page.locator("#manage h2")
+
     # Deadlines widget visible (permission + feature both satisfied)
-    expect(page.locator("h2")).to_contain_text("Deadlines")
+    expect(widgets.filter(has_text="Deadlines")).to_be_visible()
 
     # Registrations widget still always visible
-    expect(page.locator("h2")).to_contain_text("Registrations")
+    expect(widgets.filter(has_text="Registrations")).to_be_visible()
 
     # Accounting widget NOT visible: no accounting permission
-    expect(page.locator("h2")).not_to_contain_text("Accounting")
+    expect(widgets.filter(has_text="Accounting")).to_have_count(0)
 
     logout(page)
     login_orga(page, live_server)
@@ -131,8 +135,10 @@ def test_orga_manage_widgets_event_role(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     expect(page.locator("#banner")).not_to_contain_text("Access denied")
 
+    widgets = page.locator("#manage h2")
+
     # Deadlines widget NOT visible: feature disabled even though permission is granted
-    expect(page.locator("h2")).not_to_contain_text("Deadlines")
+    expect(widgets.filter(has_text="Deadlines")).to_have_count(0)
 
     logout(page)
     login_orga(page, live_server)
