@@ -48,6 +48,10 @@ INSTALLED_APPS = [
     'compressor',
     'debug_toolbar',
     'django_recaptcha',
+    'axes',
+    'django_otp',
+    'django_otp.plugins.otp_totp',
+    'django_otp.plugins.otp_static',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +63,8 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     # Session middleware needed by auth
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # Axes: rate limiting on login
+    'axes.middleware.AxesMiddleware',
     # URL correction before other processing
     'larpmanager.middleware.url.CorrectUrlMiddleware',
     # Messages depends on sessions
@@ -67,6 +73,8 @@ MIDDLEWARE = [
     'larpmanager.middleware.token.TokenAuthMiddleware',
     # Authentication (must be before anything that depends on request.user)
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # OTP: marks request.user as verified if they passed 2FA
+    'django_otp.middleware.OTPMiddleware',
     # Custom middleware for exception handling and locale
     'larpmanager.middleware.exception.ExceptionHandlingMiddleware',
     'larpmanager.middleware.broken.BrokenLinkEmailsMiddleware',
@@ -449,3 +457,16 @@ LOGGING = {
         },
     },
 }
+
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+# django-axes: brute-force protection on login
+from datetime import timedelta  # noqa: E402
+
+AXES_FAILURE_LIMIT = 5
+AXES_COOLOFF_TIME = timedelta(minutes=30)
+AXES_RESET_ON_SUCCESS = True
+AXES_LOCKOUT_PARAMETERS = ['username', 'ip_address']

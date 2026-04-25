@@ -55,6 +55,8 @@ Now create a super user:
 docker exec -it larpmanager python manage.py createsuperuser
 ```
 
+> **Security recommendation**: It is strongly recommended to enable two-factor authentication (TOTP) for all superuser and staff accounts on the Django admin backend (`/admin/`). After your first login, go to **Home / OTP TOTP devices** in the admin panel and configure a TOTP device using an authenticator app (e.g. Google Authenticator, Authy, Bitwarden). Once a device is enrolled, the next admin login will require OTP verification.
+
 Go to `http://127.0.0.1:8264/admin/larpmanager/association/`, and create your Organization. Put as values only:
 - Name: you should get it;
 - URL identifier: put `def`;
