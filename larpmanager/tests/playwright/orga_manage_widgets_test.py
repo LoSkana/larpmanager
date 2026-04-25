@@ -36,7 +36,6 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import (
-    _checkboxes,
     check_feature,
     go_to,
     login_orga,
@@ -72,10 +71,8 @@ def test_orga_manage_widgets_event_role(pw_page: Any) -> None:
     login_orga(page, live_server)
 
     # --- Phase 1: Accounting only ---
-    # Enable Deadlines feature so the widget can potentially appear (to test it doesn't without permission).
-    go_to(page, live_server, "/test/manage/features")
-    check_feature(page, "Deadlines")
-    submit_confirm(page)
+    # Enable Deadlines feature so the widget can potentially appear
+    go_to(page, live_server, "/manage/features/deadlines/on")
 
     _create_role(page, live_server, "Accounting")
 
@@ -124,9 +121,7 @@ def test_orga_manage_widgets_event_role(pw_page: Any) -> None:
 
     # --- Phase 3: Disable Deadlines feature, assign Deadlines permission ---
     # Even with the permission, the widget must be hidden when the feature is off.
-    go_to(page, live_server, "/test/manage/features")
-    check_feature(page, "Deadlines")  # uncheck (toggle off)
-    submit_confirm(page)
+    go_to(page, live_server, "/manage/features/deadlines/off")
 
     _create_role(page, live_server, "Deadlines")
 
