@@ -45,11 +45,14 @@ SOCIALACCOUNT_ADAPTER = 'larpmanager.utils.auth.adapter.MySocialAccountAdapter'
 ACCOUNT_ADAPTER = 'larpmanager.utils.auth.adapter.MyAccountAdapter'
 
 AUTHENTICATION_BACKENDS = [
+    # axes must be first to intercept locked accounts before auth
+    'axes.backends.AxesStandaloneBackend',
+
     # Needed to login by username in Django admin, regardless of `allauth`
     'larpmanager.utils.auth.backend.EmailOrUsernameModelBackend',
 
     # `allauth` specific authentication methods, such as login by e-mail
-    'allauth.account.auth_backends.AuthenticationBackend'
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 SITE_ID = 1
@@ -144,6 +147,9 @@ USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8264', 'http://127.0.0.1:8264']
 RATELIMIT_IP_META_KEY = 'HTTP_X_FORWARDED_FOR'
+
+# axes: read real IP from reverse proxy
+AXES_IPWARE_META_PRECEDENCE_ORDER = ['HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR']
 
 # captcha
 RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC', '')

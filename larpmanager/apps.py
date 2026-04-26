@@ -26,11 +26,14 @@ class LarpManagerConfig(AppConfig):
 
     name = "larpmanager"
 
-    # Import signals
     def ready(self) -> None:
         """Initialize signal handlers and profiler receivers on app startup."""
-        # Import model signal handlers for database events
         _ = __import__("larpmanager.models.signals")
-
-        # Import profiler signal receivers for performance monitoring
         _ = __import__("larpmanager.utils.profiler.receivers")
+
+        # Swap default AdminSite to OTP-enforced version
+        from django.contrib import admin  # noqa: PLC0415
+
+        from larpmanager.utils.auth.otp import LarpManagerOTPAdminSite  # noqa: PLC0415
+
+        admin.site.__class__ = LarpManagerOTPAdminSite
