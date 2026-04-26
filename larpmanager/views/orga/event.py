@@ -56,7 +56,7 @@ from larpmanager.utils.auth.permission import get_event_roles, get_index_event_p
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import clear_messages, get_feature, is_rate_limited
 from larpmanager.utils.core.exceptions import UserPermissionError
-from larpmanager.utils.edit.backend import backend_edit
+from larpmanager.utils.edit.backend import backend_edit, save_log
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.io.download import (
     _get_column_names,
@@ -137,6 +137,7 @@ def full_event_edit(
         if event_form.is_valid() and run_form.is_valid():
             # Save event first
             saved_event = event_form.save()
+            save_log(context, Event, saved_event, event.uuid if event else None)
 
             if context["is_creation"]:
                 # Get the run created automatically, and update it with form data
@@ -144,11 +145,13 @@ def full_event_edit(
                 for field in run_form.cleaned_data:
                     setattr(saved_run, field, run_form.cleaned_data[field])
                 saved_run.save()
+                save_log(context, Run, saved_run, None)
                 if on_created_callback:
                     on_created_callback(saved_event)
             else:
                 # For editing, just save the run form normally
                 saved_run = run_form.save()
+                save_log(context, Run, saved_run, run.uuid)
 
             # Show success message and redirect based on access level
             messages.success(request, _("Operation completed") + "!")
@@ -1053,7 +1056,8 @@ def _orga_run_quick_edit(
     if request.method == "POST":
         form = form_class(request.POST, instance=context["run"], context=context)
         if form.is_valid():
-            form.save()
+            saved_run = form.save()
+            save_log(context, Run, saved_run, context["run"].uuid)
             messages.success(request, success_message)
             if context["is_modal"]:
                 return render(request, "elements/dashboard/form_success.html", context)

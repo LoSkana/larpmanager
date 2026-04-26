@@ -44,12 +44,13 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     PaymentType,
 )
+from larpmanager.models.member import LogOperationType
 from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.core.paginate import orga_paginate
-from larpmanager.utils.edit.backend import backend_get
+from larpmanager.utils.edit.backend import backend_get, save_log
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 
 
@@ -130,6 +131,7 @@ def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
             exp.member = context["member"]
             exp.association_id = context["association_id"]
             exp.save()
+            save_log(context, AccountingItemExpense, exp, None)
 
             # Show success message to user
             messages.success(request, _("Reimbursement request item added"))
@@ -542,9 +544,11 @@ def payment_edit(
         invoice_valid = invoice_form.is_valid() if invoice_form else True
 
         if payment_valid and invoice_valid:
-            payment_form.save()
+            saved_payment = payment_form.save()
+            save_log(context, AccountingItemPayment, saved_payment, el.uuid)
             if invoice_form:
-                invoice_form.save()
+                saved_invoice = invoice_form.save()
+                save_log(context, type(saved_invoice), saved_invoice, None, operation_type=LogOperationType.UPDATE)
             messages.success(request, _("Element saved") + "!")
             return redirect_fn()
 
