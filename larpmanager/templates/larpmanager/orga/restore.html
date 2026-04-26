@@ -1,0 +1,196 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Restore" %} - {{ run.search }}
+{% endblock title %}
+{% block content %}
+    <p>
+        {% trans "Upload a backup ZIP file to restore event data. A preview of the changes will be shown before any data is modified." %}
+    </p>
+    <h3>{% trans "Files recognized in the ZIP" %}</h3>
+    <table>
+        <tr>
+            <th>{% trans "File" %}</th>
+            <th>{% trans "Content" %}</th>
+            <th>{% trans "Required feature" %}</th>
+        </tr>
+        <tr>
+            <td>
+                <code>configuration.csv</code>
+            </td>
+            <td>{% trans "Event configuration" %}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <code>features.csv</code>
+            </td>
+            <td>{% trans "Enabled features" %}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <code>registration.csv</code>
+            </td>
+            <td>{% trans "Registrations" %}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <code>registration_questions.csv</code>
+            </td>
+            <td>{% trans "Registration form questions" %}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <code>registration_options.csv</code>
+            </td>
+            <td>{% trans "Registration form options" %}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <code>tickets.csv</code>
+            </td>
+            <td>{% trans "Ticket tiers" %}</td>
+            <td></td>
+        </tr>
+        {% if features.character %}
+            <tr>
+                <td>
+                    <code>character.csv</code>
+                </td>
+                <td>{% trans "Characters" %}</td>
+                <td>
+                    <code>character</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <code>writing_questions.csv</code>
+                </td>
+                <td>{% trans "Character sheet questions" %}</td>
+                <td>
+                    <code>character</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <code>writing_options.csv</code>
+                </td>
+                <td>{% trans "Character sheet options" %}</td>
+                <td>
+                    <code>character</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <code>character_config.csv</code>
+                </td>
+                <td>{% trans "Character configurations" %}</td>
+                <td>
+                    <code>character</code>
+                </td>
+            </tr>
+        {% endif %}
+        {% if features.relationships %}
+            <tr>
+                <td>
+                    <code>relationships.csv</code>
+                </td>
+                <td>{% trans "Character relationships" %}</td>
+                <td>
+                    <code>relationships</code>
+                </td>
+            </tr>
+        {% endif %}
+        {% if features.faction %}
+            <tr>
+                <td>
+                    <code>faction.csv</code>
+                </td>
+                <td>{% trans "Factions" %}</td>
+                <td>
+                    <code>faction</code>
+                </td>
+            </tr>
+        {% endif %}
+        {% if features.plot %}
+            <tr>
+                <td>
+                    <code>plot.csv</code>
+                </td>
+                <td>{% trans "Plots" %}</td>
+                <td>
+                    <code>plot</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <code>plot_rels.csv</code>
+                </td>
+                <td>{% trans "Plot-character roles" %}</td>
+                <td>
+                    <code>plot</code>
+                </td>
+            </tr>
+        {% endif %}
+        {% if features.experience %}
+            <tr>
+                <td>
+                    <code>abilities.csv</code>
+                </td>
+                <td>{% trans "Abilities" %}</td>
+                <td>
+                    <code>experience</code>
+                </td>
+            </tr>
+        {% endif %}
+        {% if features.questbuilder %}
+            <tr>
+                <td>
+                    <code>questtype.csv</code>
+                </td>
+                <td>{% trans "Quest types" %}</td>
+                <td>
+                    <code>questbuilder</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <code>quest.csv</code>
+                </td>
+                <td>{% trans "Quests" %}</td>
+                <td>
+                    <code>questbuilder</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <code>trait.csv</code>
+                </td>
+                <td>{% trans "Traits" %}</td>
+                <td>
+                    <code>questbuilder</code>
+                </td>
+            </tr>
+        {% endif %}
+    </table>
+    <br />
+    <form action="{{ request.path }}"
+          enctype="multipart/form-data"
+          method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>{% trans "Backup ZIP file" %}</th>
+                <td>
+                    <input type="file" name="zip_file" accept=".zip" required>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <input type="submit" value="{% trans "Preview Restore" %}">
+    </form>
+{% endblock content %}

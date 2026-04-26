@@ -83,6 +83,9 @@ msgstr "Wer"
 msgid "age"
 msgstr "Alter"
 
+msgid "and"
+msgstr "und"
+
 msgid "for"
 msgstr "für"
 
@@ -251,6 +254,9 @@ msgstr "anzeigen"
 msgid "Size"
 msgstr "Entitäten"
 
+msgid "Skip"
+msgstr "Überspringen"
+
 msgid "Song"
 msgstr "Lied"
 
@@ -304,6 +310,9 @@ msgstr "kostenlos"
 
 msgid "gift"
 msgstr "Geschenk"
+
+msgid "more"
+msgstr "mehr"
 
 msgid "used"
 msgstr "gebraucht"
@@ -545,6 +554,9 @@ msgstr "Kopiert"
 
 msgid "Counts"
 msgstr "Zählt"
+
+msgid "Create"
+msgstr "erstellen"
 
 msgid "Delete"
 msgstr "Löschen"
@@ -1740,6 +1752,9 @@ msgstr "Newsletter"
 msgid "Next quota"
 msgstr "Nächste Quote"
 
+msgid "No changes"
+msgstr "Keine Änderungen"
+
 msgid "Organizers"
 msgstr "Veranstalter"
 
@@ -1751,6 +1766,9 @@ msgstr "Prozentsatz"
 
 msgid "Play Again"
 msgstr "Erneut spielen"
+
+msgid "Plot Roles"
+msgstr "Handlungsrollen"
 
 msgid "Pool Types"
 msgstr "Pool-Typen"
@@ -2025,6 +2043,9 @@ msgstr "Vorläufig"
 msgid "Publication"
 msgstr "Veröffentlichung"
 
+msgid "Quest types"
+msgstr "Quest-Typen"
+
 msgid "Quick Setup"
 msgstr "Schnelles Einrichten"
 
@@ -2298,6 +2319,9 @@ msgstr "Drei Quoten"
 msgid "Ticket price"
 msgstr "Preis der Eintrittskarte"
 
+msgid "Ticket tiers"
+msgstr "Ticket-Stufen"
+
 msgid "Total issued"
 msgstr "Insgesamt ausgegeben"
 
@@ -2548,6 +2572,9 @@ msgstr "Offene Anfragen"
 msgid "Require login"
 msgstr "Anmeldung erforderlich"
 
+msgid "Restore error"
+msgstr "Fehler wiederherstellen"
+
 msgid "Shared secret"
 msgstr "Gemeinsames Geheimnis"
 
@@ -2623,6 +2650,9 @@ msgstr "Ladungsverzeichnis"
 
 msgid "Carousel image"
 msgstr "Bild-Karussell"
+
+msgid "Character Form"
+msgstr "Charakter Form"
 
 msgid "Character name"
 msgstr "Name des Charakters"
@@ -2840,6 +2870,9 @@ msgstr "Fähigkeit entfernt"
 msgid "App Integration"
 msgstr "App-Integration"
 
+msgid "Backup ZIP file"
+msgstr "ZIP-Datei sichern"
+
 msgid "Change password"
 msgstr "Passwort-Wiederherstellung"
 
@@ -2857,6 +2890,9 @@ msgstr "Liste der Zeichen"
 
 msgid "Collected votes"
 msgstr "Erhaltene Stimmen"
+
+msgid "Confirm Restore"
+msgstr "Bestätigen Sie Wiederherstellen"
 
 msgid "Deadline (date)"
 msgstr "Stichtag (Datum)"
@@ -2933,6 +2969,9 @@ msgstr "Zahlungsmöglichkeiten"
 msgid "Portraits (PDF)"
 msgstr "Porträts (PDF)"
 
+msgid "Preview Restore"
+msgstr "Vorschau Wiederherstellen"
+
 msgid "Private message"
 msgstr "Private Nachricht"
 
@@ -2953,6 +2992,9 @@ msgstr "Prolog entfernen"
 
 msgid "Replacing names"
 msgstr "Ersetzen von Namen"
+
+msgid "Restore Preview"
+msgstr "Vorschau wiederherstellen"
 
 msgid "Select Language"
 msgstr "Sprache auswählen"
@@ -3035,6 +3077,9 @@ msgstr "Hintergrundbild"
 msgid "Casting priority"
 msgstr "Priorität des Gießens"
 
+msgid "Character Config"
+msgstr "Zeichen-Konfiguration"
+
 msgid "Character review"
 msgstr "Überprüfung des Charakters"
 
@@ -3070,6 +3115,9 @@ msgstr "Lizenz"
 
 msgid "Element approved"
 msgstr "Bewährtes Element"
+
+msgid "Enabled features"
+msgstr "Aktivierte Funktionen"
 
 msgid "Event Appearance"
 msgstr "Veranstaltung Erscheinungsbild"
@@ -3199,6 +3247,9 @@ msgstr "Aus der Handlung entfernen"
 
 msgid "Request approved"
 msgstr "Antrag genehmigt"
+
+msgid "Required feature"
+msgstr "Erforderliches Merkmal"
 
 msgid "Selected options"
 msgstr "Ausgewählte Optionen"
@@ -3419,6 +3470,9 @@ msgstr "Quests und Eigenschaften"
 msgid "Redeem collection"
 msgstr "Sammlung einlösen"
 
+msgid "Registration Form"
+msgstr "Anmeldeformular"
+
 msgid "Registration form"
 msgstr "Anmeldeformular"
 
@@ -3578,6 +3632,9 @@ msgstr "Grund für die Zahlung"
 msgid "Registrations open"
 msgstr "Anmeldungen geöffnet"
 
+msgid "Restore completed!"
+msgstr "Wiederherstellung abgeschlossen!"
+
 msgid "Review all members"
 msgstr "Überprüfung aller Mitglieder"
 
@@ -3694,6 +3751,9 @@ msgstr "E-Mail-Benachrichtigungen"
 
 msgid "Event Configuration"
 msgstr "Ereignis-Konfiguration"
+
+msgid "Event configuration"
+msgstr "Konfiguration der Veranstaltung"
 
 msgid "History preferences"
 msgstr "Geschichte der Präferenzen"
@@ -3911,6 +3971,9 @@ msgstr "Beziehungen zwischen Spielern"
 
 msgid "Please wait a moment"
 msgstr "Bitte warten Sie einen Moment"
+
+msgid "Plot-character roles"
+msgstr "Rollen der Handlungscharaktere"
 
 msgid "Preference not valid"
 msgstr "Ungültige Präferenz"
@@ -4351,6 +4414,9 @@ msgstr "Charakter-Anpassung"
 msgid "Character relationships"
 msgstr "Charakter-Links"
 
+msgid "Character sheet options"
+msgstr "Optionen für den Charakterbogen"
+
 msgid "Collection participated"
 msgstr "Beteiligte Sammlungen"
 
@@ -4477,6 +4543,9 @@ msgstr "Assoziationsübersetzungen"
 
 msgid "Cancel your registration"
 msgstr "Abbestellen"
+
+msgid "Character configurations"
+msgstr "Zeichen-Konfigurationen"
 
 msgid "Check double speed larps"
 msgstr "Speed Larp-Duplikate prüfen"
@@ -4605,11 +4674,17 @@ msgstr "Berichte überprüfen weniger"
 msgid "not visible at this time"
 msgstr "zur Zeit nicht sichtbar"
 
+msgid "Character sheet questions"
+msgstr "Fragen zum Charakterbogen"
+
 msgid "Choose the payment method"
 msgstr "Wählen Sie das Zahlungsmittel"
 
 msgid "Download example template"
 msgstr "Beispielvorlage herunterladen"
+
+msgid "Error reading backup file"
+msgstr "Fehler beim Lesen der Sicherungsdatei"
 
 msgid "Go to the preferences for"
 msgstr "Gehen Sie zu den Einstellungen für"
@@ -4677,6 +4752,9 @@ msgstr "Lesen Sie die Schriftelemente"
 
 msgid "Receipt already confirmed"
 msgstr "Der Eingang wurde bereits bestätigt"
+
+msgid "Registration form options"
+msgstr "Optionen für das Anmeldeformular"
 
 #, python-format
 msgid "Registration to %(event)s"
@@ -4837,6 +4915,9 @@ msgstr "Geben Sie hier Ihre Präferenzen an"
 msgid "Event context not available"
 msgstr "Ereigniskontext nicht verfügbar"
 
+msgid "Files recognized in the ZIP"
+msgstr "Im ZIP erkannte Dateien"
+
 msgid "Items that will be modified"
 msgstr "Elemente, die geändert werden sollen"
 
@@ -4881,6 +4962,9 @@ msgstr "Vorregistrierung nicht gefunden."
 
 msgid "Question saved successfully"
 msgstr "Registrierung erfolgreich abgeschlossen"
+
+msgid "Registration form questions"
+msgstr "Fragen zum Anmeldeformular"
 
 msgid "Reminder membership request"
 msgstr "Erinnerung an den Antrag auf Mitgliedschaft"
@@ -4960,6 +5044,9 @@ msgstr "Keine akzeptierte Mitgliedschaft gefunden"
 
 msgid "Player customisation updated"
 msgstr "Spieleranpassung aktualisiert"
+
+msgid "Please wait before retrying."
+msgstr "Bitte warten Sie, bevor Sie es erneut versuchen."
 
 msgid "Surcharge cannot be negative"
 msgstr "Zuschlag kann nicht negativ sein"
@@ -5876,6 +5963,9 @@ msgstr "Verwaltung der eingegangenen Vorregistrierungen"
 msgid "Mirror type character, not selectable"
 msgstr "Zeichen vom Typ 'Spiegel', nicht wählbar"
 
+msgid "No recognized files found in the ZIP."
+msgstr "Keine erkannten Dateien in der ZIP-Datei gefunden."
+
 msgid "Now you can create fixed installments"
 msgstr "Jetzt können Sie feste Raten erstellen"
 
@@ -6505,6 +6595,9 @@ msgstr ""
 msgid "This page shows the types of event prologue"
 msgstr ""
 "Auf dieser Seite sind die Arten von Ereignisprotokollen zusammengefasst"
+
+msgid "Unrecognized files in ZIP (will be skipped)"
+msgstr "Nicht erkannte Dateien im ZIP (werden übersprungen)"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Hochladen einer PDF-Datei oder eines Bildes (JPG, PNG, usw.)"
@@ -7376,6 +7469,11 @@ msgid "Registrations will open at the specified date and time"
 msgstr ""
 "Die Anmeldungen werden zu dem angegebenen Datum und der angegebenen Uhrzeit "
 "geöffnet"
+
+msgid "Restore session expired, please upload the file again."
+msgstr ""
+"Die Wiederherstellungssitzung ist abgelaufen, bitte laden Sie die Datei "
+"erneut hoch."
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Einige Funktionen erfordern \"Charakter\", der nicht aktiv ist"
@@ -10427,6 +10525,13 @@ msgstr ""
 "werden kann (0 = unbegrenzt)"
 
 msgid ""
+"The following changes will be applied when you confirm. Review carefully "
+"before proceeding."
+msgstr ""
+"Die folgenden Änderungen werden übernommen, wenn Sie bestätigen. Überprüfen "
+"Sie diese sorgfältig, bevor Sie fortfahren."
+
+msgid ""
 "This page shows global competencies, skill areas in which contributors can "
 "score themselves"
 msgstr ""
@@ -11587,6 +11692,14 @@ msgid ""
 msgstr ""
 "Anzahl der Monate ab Beginn des Mitgliedsjahres, für die der "
 "Mitgliedsbeitrag gebührenfrei gezahlt werden kann"
+
+msgid ""
+"Upload a backup ZIP file to restore event data. A preview of the changes "
+"will be shown before any data is modified."
+msgstr ""
+"Laden Sie eine Sicherungs-ZIP-Datei hoch, um die Ereignisdaten "
+"wiederherzustellen. Eine Vorschau der Änderungen wird angezeigt, bevor die "
+"Daten geändert werden."
 
 msgid ""
 "If you select one (or more) tickets, the option will only be available to "

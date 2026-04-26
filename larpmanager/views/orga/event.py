@@ -52,14 +52,16 @@ from larpmanager.models.event import Event, EventButton, EventText, Run
 from larpmanager.models.form import BaseQuestionType, QuestionApplicable, RegistrationQuestionType, WritingQuestionType
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, Plot
-from larpmanager.utils.auth.permission import get_index_event_permissions
+from larpmanager.utils.auth.permission import get_event_roles, get_index_event_permissions
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import clear_messages, get_feature
+from larpmanager.utils.core.common import clear_messages, get_feature, is_rate_limited
+from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.edit.backend import backend_edit
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.io.download import (
     _get_column_names,
     export_abilities,
+    export_character_configs,
     export_character_form,
     export_data,
     export_event,
@@ -67,6 +69,7 @@ from larpmanager.utils.io.download import (
     export_tickets,
     zip_exports,
 )
+from larpmanager.utils.io.restore import execute_restore, load_restore_temp, preview_restore, save_restore_temp
 from larpmanager.utils.io.upload import go_upload
 from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.users.deadlines import check_run_deadlines
@@ -499,13 +502,20 @@ def orga_preferences(request: HttpRequest, event_slug: str) -> HttpResponse:
     return orga_edit(request, event_slug, OrgaAction.PREFERENCES)
 
 
+def _check_organizer(request: HttpRequest, context: dict, event_slug: str) -> None:
+    is_organizer, _perms, _roles = get_event_roles(request, context, event_slug)
+    if not is_organizer and 1 not in context.get("association_role", {}):
+        raise UserPermissionError
+
+
 @login_required
 def orga_backup(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Prepare event backup for download."""
-    # Check user has event access
     context = check_event_context(request, event_slug, "orga_event")
-
-    # Generate and return backup response
+    _check_organizer(request, context, event_slug)
+    if is_rate_limited(f"orga_backup_{context['event'].id}"):
+        messages.error(request, _("Please wait before retrying."))
+        return redirect("manage", event_slug=event_slug)
     return _prepare_backup(context)
 
 
@@ -544,6 +554,7 @@ def _prepare_backup(context: dict) -> HttpResponse:
     if "character" in context["features"]:
         export_files.extend(export_data(context, Character))
         export_files.extend(export_character_form(context))
+        export_files.extend(export_character_configs(context))
 
     # Export faction data if feature is enabled
     if "faction" in context["features"]:
@@ -565,6 +576,47 @@ def _prepare_backup(context: dict) -> HttpResponse:
 
     # Create and return ZIP file with all exports
     return zip_exports(context, export_files, "backup")
+
+
+@login_required
+def orga_restore(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Restore event data from a previously exported backup ZIP."""
+    context = check_event_context(request, event_slug, "orga_event")
+    _check_organizer(request, context, event_slug)
+
+    if request.method == "POST":
+        if "confirm" in request.POST:
+            if is_rate_limited(f"orga_restore_{context['event'].id}"):
+                messages.error(request, _("Please wait before retrying."))
+                return render(request, "larpmanager/orga/restore.html", context)
+            temp_key = request.POST.get("temp_key", "")
+            zip_bytes = load_restore_temp(temp_key)
+            if zip_bytes is None:
+                messages.error(request, _("Restore session expired, please upload the file again."))
+                return render(request, "larpmanager/orga/restore.html", context)
+            try:
+                context["logs"] = execute_restore(context, zip_bytes)
+                messages.success(request, _("Restore completed" + "!"))
+                return render(request, "larpmanager/orga/uploads.html", context)
+            except Exception as exc:
+                logger.exception("Restore execute error")
+                messages.error(request, _("Restore error") + f": {exc}")
+                return render(request, "larpmanager/orga/restore.html", context)
+
+        elif "zip_file" in request.FILES:
+            zip_bytes = request.FILES["zip_file"].read()
+            try:
+                sections, unknown_files = preview_restore(context, zip_bytes)
+                temp_key = save_restore_temp(zip_bytes)
+                context["sections"] = sections
+                context["unknown_files"] = unknown_files
+                context["temp_key"] = temp_key
+                return render(request, "larpmanager/orga/restore_preview.html", context)
+            except Exception as exc:
+                logger.exception("Restore preview error")
+                messages.error(request, _("Error reading backup file") + f": {exc}")
+
+    return render(request, "larpmanager/orga/restore.html", context)
 
 
 @login_required
@@ -961,6 +1013,13 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Reset all cache entries for the specified event run."""
     # Verify user permissions and get event context
     context = check_event_context(request, event_slug)
+
+    # Check it's an organizer
+    _check_organizer(request, context, event_slug)
+
+    if is_rate_limited(f"orga_reload_cache_{context['event'].id}"):
+        messages.error(request, _("Please wait before retrying."))
+        return redirect("manage", event_slug=context["run"].get_slug())
 
     # Reset everything
     reset_all_run(context["event"], context["run"])

@@ -42,7 +42,7 @@ from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.utils.auth.permission import get_index_association_permissions
 from larpmanager.utils.core.base import check_association_context
-from larpmanager.utils.core.common import clear_messages, get_feature
+from larpmanager.utils.core.common import clear_messages, get_feature, is_rate_limited
 from larpmanager.utils.edit.backend import backend_edit
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION, VERSIONS
@@ -482,6 +482,10 @@ def exe_reload_cache(request: HttpRequest) -> HttpResponse:
     # Get association slug and ID
     association_slug = context["slug"]
     association_id = context["id"]
+
+    if is_rate_limited(f"exe_reload_cache_{association_id}"):
+        messages.error(request, _("Please wait before retrying."))
+        return redirect("manage")
 
     _reset_all_association(association_id, association_slug)
 

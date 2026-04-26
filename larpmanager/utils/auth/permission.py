@@ -171,8 +171,9 @@ def get_index_association_permissions(
             raise UserPermissionError
         return
 
-    # Set role names in context for template rendering
+    # Set role names and admin status in context for template rendering
     context["role_names"] = role_names
+    context["is_admin"] = is_admin
 
     # Retrieve available features for the association
     features = context.get("features") or get_association_features(association_id)

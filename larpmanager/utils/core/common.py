@@ -36,6 +36,7 @@ from background_task.models import Task
 from diff_match_patch import diff_match_patch
 from django.conf import settings as conf_settings
 from django.contrib import messages
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, QuerySet, Subquery
 from django.http import Http404, HttpRequest
@@ -800,3 +801,8 @@ def _validate_and_fetch_objects(model_class: type, ids: int | list[int], model_n
         logger.warning("%s IDs %s not found for cache refresh", model_name, missing_ids)
 
     return list(objects)
+
+
+def is_rate_limited(key: str, timeout: int = 10) -> bool:
+    """Return True if the action identified by key is rate-limited."""
+    return not cache.add(f"rl_{key}", 1, timeout)

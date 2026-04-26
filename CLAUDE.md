@@ -44,6 +44,17 @@ Use the `./scripts/pip_upgrade.sh` script which has been updated for uv:
 ./scripts/pip_upgrade.sh
 ```
 
+## Virtual Environment
+
+**Always use the venv binaries directly for Python and ruff commands:**
+```bash
+.venv/bin/ruff check <file>
+.venv/bin/ruff format <file>
+.venv/bin/python manage.py <command>
+```
+Do not prefix with `source .venv/bin/activate &&`, invoke `.venv/bin/ruff` and `.venv/bin/python` directly.
+For pytest and scripts, use `source .venv/bin/activate` or `./scripts/test.sh`.
+
 ## Development Commands
 
 ### Common Development Tasks

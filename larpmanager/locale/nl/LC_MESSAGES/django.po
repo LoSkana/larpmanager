@@ -83,6 +83,9 @@ msgstr "Wie"
 msgid "age"
 msgstr "leeftijd"
 
+msgid "and"
+msgstr "en"
+
 msgid "for"
 msgstr "voor"
 
@@ -251,6 +254,9 @@ msgstr "Toon"
 msgid "Size"
 msgstr "Entiteiten"
 
+msgid "Skip"
+msgstr "Skip"
+
 msgid "Song"
 msgstr "Lied"
 
@@ -304,6 +310,9 @@ msgstr "gratis"
 
 msgid "gift"
 msgstr "cadeau"
+
+msgid "more"
+msgstr "meer"
 
 msgid "used"
 msgstr "tweedehands"
@@ -545,6 +554,9 @@ msgstr "Gekopieerd"
 
 msgid "Counts"
 msgstr "Telt"
+
+msgid "Create"
+msgstr "Maak"
 
 msgid "Delete"
 msgstr "Verwijder"
@@ -1740,6 +1752,9 @@ msgstr "Nieuwsbrief"
 msgid "Next quota"
 msgstr "Volgende quota"
 
+msgid "No changes"
+msgstr "Geen wijzigingen"
+
 msgid "Organizers"
 msgstr "Organisatoren"
 
@@ -1751,6 +1766,9 @@ msgstr "Percentage"
 
 msgid "Play Again"
 msgstr "Opnieuw spelen"
+
+msgid "Plot Roles"
+msgstr "Plotrollen"
 
 msgid "Pool Types"
 msgstr "Soorten zwembaden"
@@ -2025,6 +2043,9 @@ msgstr "Voorlopig"
 msgid "Publication"
 msgstr "Publicatie"
 
+msgid "Quest types"
+msgstr "Typen zoektochten"
+
 msgid "Quick Setup"
 msgstr "Snelle installatie"
 
@@ -2298,6 +2319,9 @@ msgstr "Drie quota"
 msgid "Ticket price"
 msgstr "Ticketprijs"
 
+msgid "Ticket tiers"
+msgstr "Ticketniveaus"
+
 msgid "Total issued"
 msgstr "Totaal uitgegeven"
 
@@ -2548,6 +2572,9 @@ msgstr "Open vragen"
 msgid "Require login"
 msgstr "Aanmelden vereist"
 
+msgid "Restore error"
+msgstr "Fout herstellen"
+
 msgid "Shared secret"
 msgstr "Gedeeld geheim"
 
@@ -2623,6 +2650,9 @@ msgstr "Vrachtmanifest"
 
 msgid "Carousel image"
 msgstr "Afbeeldingencarrousel"
+
+msgid "Character Form"
+msgstr "Karakter Vorm"
 
 msgid "Character name"
 msgstr "Naam personage"
@@ -2840,6 +2870,9 @@ msgstr "Vermogen verwijderd"
 msgid "App Integration"
 msgstr "App integratie"
 
+msgid "Backup ZIP file"
+msgstr "Back-up ZIP-bestand"
+
 msgid "Change password"
 msgstr "Wachtwoord herstel"
 
@@ -2857,6 +2890,9 @@ msgstr "Lijst van personages"
 
 msgid "Collected votes"
 msgstr "Ontvangen stemmen"
+
+msgid "Confirm Restore"
+msgstr "Herstel bevestigen"
 
 msgid "Deadline (date)"
 msgstr "Uiterste datum"
@@ -2933,6 +2969,9 @@ msgstr "Betaalmethoden"
 msgid "Portraits (PDF)"
 msgstr "Portretten (PDF)"
 
+msgid "Preview Restore"
+msgstr "Voorbeeld herstellen"
+
 msgid "Private message"
 msgstr "Privébericht"
 
@@ -2953,6 +2992,9 @@ msgstr "Proloog verwijderen"
 
 msgid "Replacing names"
 msgstr "Namen vervangen"
+
+msgid "Restore Preview"
+msgstr "Voorbeeld herstellen"
 
 msgid "Select Language"
 msgstr "Selecteer taal"
@@ -3035,6 +3077,9 @@ msgstr "Achtergrondafbeelding"
 msgid "Casting priority"
 msgstr "Voorrang bij het gieten"
 
+msgid "Character Config"
+msgstr "Karakter configureren"
+
 msgid "Character review"
 msgstr "Karakter recensie"
 
@@ -3070,6 +3115,9 @@ msgstr "Licentie"
 
 msgid "Element approved"
 msgstr "Goedgekeurd element"
+
+msgid "Enabled features"
+msgstr "Ingeschakelde functies"
 
 msgid "Event Appearance"
 msgstr "Evenement Verschijning"
@@ -3199,6 +3247,9 @@ msgstr "Verwijderen uit perceel"
 
 msgid "Request approved"
 msgstr "Verzoek goedgekeurd"
+
+msgid "Required feature"
+msgstr "Vereist kenmerk"
 
 msgid "Selected options"
 msgstr "Geselecteerde opties"
@@ -3419,6 +3470,9 @@ msgstr "Quests en eigenschappen"
 msgid "Redeem collection"
 msgstr "Verzameling inwisselen"
 
+msgid "Registration Form"
+msgstr "Registratieformulier"
+
 msgid "Registration form"
 msgstr "Registratieformulier"
 
@@ -3578,6 +3632,9 @@ msgstr "Reden voor betaling"
 msgid "Registrations open"
 msgstr "Registraties geopend"
 
+msgid "Restore completed!"
+msgstr "Herstel voltooid!"
+
 msgid "Review all members"
 msgstr "Alle leden beoordelen"
 
@@ -3694,6 +3751,9 @@ msgstr "Kennisgevingen per e-mail"
 
 msgid "Event Configuration"
 msgstr "Gebeurtenis Configuratie"
+
+msgid "Event configuration"
+msgstr "Gebeurtenisconfiguratie"
 
 msgid "History preferences"
 msgstr "Voorkeur geschiedenis"
@@ -3911,6 +3971,9 @@ msgstr "Relaties met spelers"
 
 msgid "Please wait a moment"
 msgstr "Een ogenblik geduld alstublieft"
+
+msgid "Plot-character roles"
+msgstr "Plot-personage rollen"
 
 msgid "Preference not valid"
 msgstr "Ongeldige voorkeur"
@@ -4351,6 +4414,9 @@ msgstr "Karakter aanpassen"
 msgid "Character relationships"
 msgstr "Karakter links"
 
+msgid "Character sheet options"
+msgstr "Karakterblad opties"
+
 msgid "Collection participated"
 msgstr "Deelgenomen Collecties"
 
@@ -4477,6 +4543,9 @@ msgstr "Vereniging Vertalingen"
 
 msgid "Cancel your registration"
 msgstr "Afmelden"
+
+msgid "Character configurations"
+msgstr "Karakter configuraties"
 
 msgid "Check double speed larps"
 msgstr "Controleer snelheid larp duplicaten"
@@ -4605,11 +4674,17 @@ msgstr "controleer rapporten minder"
 msgid "not visible at this time"
 msgstr "momenteel niet zichtbaar"
 
+msgid "Character sheet questions"
+msgstr "Karakterblad vragen"
+
 msgid "Choose the payment method"
 msgstr "Kies het betaalmiddel"
 
 msgid "Download example template"
 msgstr "Voorbeeldsjabloon downloaden"
+
+msgid "Error reading backup file"
+msgstr "Fout bij het lezen van back-upbestand"
 
 msgid "Go to the preferences for"
 msgstr "Ga naar voorkeuren voor"
@@ -4677,6 +4752,9 @@ msgstr "Lees de schrijfelementen"
 
 msgid "Receipt already confirmed"
 msgstr "Ontvangst al bevestigd"
+
+msgid "Registration form options"
+msgstr "Opties registratieformulier"
 
 #, python-format
 msgid "Registration to %(event)s"
@@ -4837,6 +4915,9 @@ msgstr "Geef hier je voorkeuren aan"
 msgid "Event context not available"
 msgstr "Gebeurteniscontext niet beschikbaar"
 
+msgid "Files recognized in the ZIP"
+msgstr "Bestanden herkend in de ZIP"
+
 msgid "Items that will be modified"
 msgstr "Items die worden gewijzigd"
 
@@ -4881,6 +4962,9 @@ msgstr "Voorinschrijving niet gevonden."
 
 msgid "Question saved successfully"
 msgstr "Registratie succesvol afgerond"
+
+msgid "Registration form questions"
+msgstr "Vragen over registratieformulier"
 
 msgid "Reminder membership request"
 msgstr "Herinnering lidmaatschapsverzoek"
@@ -4960,6 +5044,9 @@ msgstr "Geen geaccepteerd lidmaatschap gevonden"
 
 msgid "Player customisation updated"
 msgstr "Spelersaanpassing bijgewerkt"
+
+msgid "Please wait before retrying."
+msgstr "Wacht even voordat u het opnieuw probeert."
 
 msgid "Surcharge cannot be negative"
 msgstr "Toeslag kan niet negatief zijn"
@@ -5875,6 +5962,9 @@ msgstr "Beheer de ontvangen voorregistraties"
 msgid "Mirror type character, not selectable"
 msgstr "Spiegeltype teken, niet selecteerbaar"
 
+msgid "No recognized files found in the ZIP."
+msgstr "Geen herkende bestanden gevonden in de ZIP."
+
 msgid "Now you can create fixed installments"
 msgstr "Nu kun je vaste afbetalingen maken"
 
@@ -6494,6 +6584,9 @@ msgstr "Deze pagina vat de speedlarps van het evenement samen"
 
 msgid "This page shows the types of event prologue"
 msgstr "Deze pagina geeft een overzicht van de soorten proloog"
+
+msgid "Unrecognized files in ZIP (will be skipped)"
+msgstr "Niet-herkende bestanden in ZIP (worden overgeslagen)"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Upload een PDF-bestand of afbeelding (JPG, PNG, enz.)"
@@ -7325,6 +7418,9 @@ msgstr ""
 
 msgid "Registrations will open at the specified date and time"
 msgstr "De inschrijvingen gaan open op de aangegeven datum en tijd"
+
+msgid "Restore session expired, please upload the file again."
+msgstr "Herstelsessie verlopen, upload het bestand opnieuw."
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Sommige functies vereisen 'Character', dat niet actief is"
@@ -10227,6 +10323,13 @@ msgstr ""
 "tekens (0 = onbeperkt)"
 
 msgid ""
+"The following changes will be applied when you confirm. Review carefully "
+"before proceeding."
+msgstr ""
+"De volgende wijzigingen worden toegepast wanneer je bevestigt. Lees ze "
+"zorgvuldig door voordat u verdergaat."
+
+msgid ""
 "This page shows global competencies, skill areas in which contributors can "
 "score themselves"
 msgstr ""
@@ -11382,6 +11485,14 @@ msgid ""
 msgstr ""
 "Aantal maanden, vanaf het begin van het lidmaatschapsjaar, waarvoor de "
 "lidmaatschapsbijdrage gratis kan worden betaald"
+
+msgid ""
+"Upload a backup ZIP file to restore event data. A preview of the changes "
+"will be shown before any data is modified."
+msgstr ""
+"Upload een back-up ZIP-bestand om gebeurtenisgegevens te herstellen. Er "
+"wordt een voorbeeld van de wijzigingen weergegeven voordat er gegevens "
+"worden gewijzigd."
 
 msgid ""
 "If you select one (or more) tickets, the option will only be available to "

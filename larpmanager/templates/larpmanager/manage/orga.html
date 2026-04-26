@@ -33,7 +33,8 @@
                 {% include "larpmanager/manage/widgets/helpers.html" %}
             {% endwith %}
         </div>
-        {% if not demo %}
+        {% if not demo and is_organizer %}
+            %}
             <div class="staff-list">
                 <div class="orga-buttons">
                     <a class="new button" href="{% url 'orga_reload_cache' run.get_slug %}">
@@ -42,7 +43,11 @@
                     </a>
                     <a class="new button" href="{% url 'orga_backup' run.get_slug %}">
                         <i class="fas fa-save"></i>
-                        Full backup
+                        Backup
+                    </a>
+                    <a class="new button" href="{% url 'orga_restore' run.get_slug %}">
+                        <i class="fas fa-undo"></i>
+                        Restore
                     </a>
                 </div>
             </div>
