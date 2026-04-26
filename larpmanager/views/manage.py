@@ -563,9 +563,10 @@ def _orga_widgets(request: HttpRequest, context:dict, features:dict):
         ("orga_log", "logs", True)
     ]
 
+    event_slug = context["event"].slug
     widgets_available = [
         widget for perm, widget, require_feature in permissions
-        if has_association_permission(request, context, perm)
+        if has_event_permission(request, context, event_slug, perm)
            and (not require_feature or widget in context["features"])
     ]
 
@@ -574,10 +575,10 @@ def _orga_widgets(request: HttpRequest, context:dict, features:dict):
     ):
         widgets_available.append("user_character")
 
-    if "progress" in features and has_association_permission(request, context, "orga_characters"):
+    if "progress" in features and has_event_permission(request, context, event_slug, "orga_characters"):
         widgets_available.append("progress")
 
-    if "milestones" in features and has_association_permission(request, context, "orga_milestones"):
+    if "milestones" in features and has_event_permission(request, context, event_slug, "orga_milestones"):
         widgets_available.append("milestones")
 
     context["widgets"] = {
