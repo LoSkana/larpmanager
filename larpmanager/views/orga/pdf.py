@@ -28,11 +28,12 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
 from larpmanager.forms.event import EventCharactersPdfForm
-from larpmanager.models.event import Run
+from larpmanager.models.event import Event, Run
 from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.writing import Character, Faction, Handout
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_element
+from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import (
     add_pdf_instructions,
     print_bulk,
@@ -76,6 +77,7 @@ def orga_characters_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
         # Validate and save form data, then redirect to prevent resubmission
         if form.is_valid():
             form.save()
+            save_log(context, Event, context["event"], context["event"].uuid)
             messages.success(request, _("Updated") + "!")
             return redirect(request.path_info)
     else:

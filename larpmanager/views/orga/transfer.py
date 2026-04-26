@@ -28,8 +28,10 @@ from django.views.decorators.http import require_POST
 
 from larpmanager.forms.registration import RegistrationTransferForm
 from larpmanager.models.event import Run
+from larpmanager.models.member import LogOperationType
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.services.transfer import (
     get_suggested_ticket_mapping,
@@ -152,6 +154,14 @@ def orga_registration_transfer_confirm(request: HttpRequest, event_slug: str) ->
             preserve_choices=True,
             preserve_answers=True,
             preserve_accounting=True,
+        )
+        save_log(
+            context,
+            Registration,
+            registration,
+            registration.uuid,
+            operation_type=LogOperationType.UPDATE,
+            info=f"transfer to run {target_run.id}",
         )
 
         action = _("moved") if move_registration else _("copied")

@@ -69,7 +69,7 @@ from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
 )
-from larpmanager.models.member import Member, Membership, get_user_membership
+from larpmanager.models.member import LogOperationType, Member, Membership, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -86,6 +86,7 @@ from larpmanager.utils.core.common import (
     get_registration,
     get_time_diff,
 )
+from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.download import _orga_registrations_acc, download
 from larpmanager.views.orga.member import member_field_correct
 
@@ -885,9 +886,12 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
 
             # Handle registration deletion if requested
             if "delete" in request.POST and request.POST["delete"] == "1":
+                save_log(context, Registration, registration, None, operation_type=LogOperationType.DELETE)
                 cancel_reg(registration)
                 messages.success(request, _("Registration cancelled"))
                 return redirect("orga_registrations", event_slug=context["run"].get_slug())
+
+            save_log(context, Registration, registration, registration_uuid)
 
             # Save registration-specific questions and answers
             form.save_registration_questions(registration)
@@ -988,6 +992,7 @@ def orga_registrations_customization(request: HttpRequest, event_slug: str, char
         form = RegistrationCharacterRelForm(request.POST, context=context, instance=rcr)
         if form.is_valid():
             form.save()
+            save_log(context, RegistrationCharacterRel, rcr, None, operation_type=LogOperationType.UPDATE)
             messages.success(request, _("Player customisation updated") + "!")
             return redirect("orga_registrations", event_slug=context["run"].get_slug())
     else:

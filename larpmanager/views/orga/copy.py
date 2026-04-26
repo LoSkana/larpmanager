@@ -46,6 +46,7 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
+from larpmanager.models.member import LogOperationType
 from larpmanager.models.miscellanea import WorkshopModule, WorkshopOption, WorkshopQuestion
 from larpmanager.models.registration import (
     RegistrationInstallment,
@@ -68,6 +69,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import copy_class
+from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.services.experience import calculate_character_experience_points
 
 if TYPE_CHECKING:
@@ -616,6 +618,14 @@ def copy(
 
     # Save changes to the target event
     target_event.save()
+    save_log(
+        context,
+        Event,
+        target_event,
+        target_event.uuid,
+        operation_type=LogOperationType.BULK,
+        info=f"copy from event {parent_event_id}",
+    )
 
     # Notify user of successful completion
     messages.success(request, _("Copy done"))

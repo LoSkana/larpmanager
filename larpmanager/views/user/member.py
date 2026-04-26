@@ -56,6 +56,7 @@ from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.association import Association, AssociationTextType
 from larpmanager.models.member import (
     Badge,
+    LogOperationType,
     Member,
     Membership,
     MembershipStatus,
@@ -73,6 +74,7 @@ from larpmanager.models.writing import CharacterConfig
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.common import get_badge, get_channel, get_contact
 from larpmanager.utils.core.exceptions import check_association_feature
+from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import get_membership_request
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_leaderboard, get_member_uuid
@@ -142,6 +144,7 @@ def language(request: HttpRequest) -> HttpResponse:
 def _save_profile(request: HttpRequest, context: dict, form: ProfileForm, member: Member) -> HttpResponseRedirect:
     """Perform profile save and checks for after-save redirects."""
     profile = form.save()
+    save_log(context, Member, profile, profile.uuid)
 
     # Update membership status
     membership = context["membership"]
@@ -149,6 +152,7 @@ def _save_profile(request: HttpRequest, context: dict, form: ProfileForm, member
     if membership.status == MembershipStatus.EMPTY:
         membership.status = MembershipStatus.JOINED
     membership.save()
+    save_log(context, Membership, membership, None, operation_type=LogOperationType.UPDATE)
 
     activate(profile.language)
 
@@ -451,6 +455,7 @@ def membership(request: HttpRequest) -> HttpResponse:
                 # Mark membership as submitted and send confirmation
                 el.status = MembershipStatus.SUBMITTED
                 el.save()
+                save_log(context, Membership, el, None, operation_type=LogOperationType.UPDATE)
                 send_membership_confirm(request, el)
 
                 # Show success message and redirect to home
@@ -464,6 +469,7 @@ def membership(request: HttpRequest) -> HttpResponse:
             if form.is_valid():
                 # Save form data and update status to uploaded
                 form.save()
+                save_log(context, Membership, el, None, operation_type=LogOperationType.UPDATE)
                 el.status = MembershipStatus.UPLOADED
                 el.save()
 
