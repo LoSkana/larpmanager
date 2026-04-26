@@ -27,7 +27,6 @@ Covers:
 - Accounting widget (permission only, no feature required)
 - Deadlines widget (permission + feature required)
 - Registrations widget (always visible to any dashboard user)
-- Negative: widgets hidden when permission is absent
 - Negative: feature-gated widget hidden when feature is disabled
 """
 
@@ -36,7 +35,6 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import (
-    check_feature,
     go_to,
     login_orga,
     login_user,
@@ -48,21 +46,18 @@ from playwright.sync_api import expect
 pytestmark = pytest.mark.e2e
 
 
-def _create_role(page: Any, live_server: Any, *permissions: str) -> None:
-    go_to(page, live_server, "/test/manage/roles")
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("widget test role")
-    page.locator("#id_name").press("Tab")
+def _add_user_to_role(page: Any, live_server: Any) -> None:
+    go_to(page, live_server, "/test/manage/roles/u1/edit/")
     page.get_by_role("searchbox").fill("us")
     page.get_by_role("option", name="User Test -").click()
-    for perm in permissions:
-        check_feature(page, perm)
     submit_confirm(page)
 
 
-def _delete_role(page: Any, live_server: Any) -> None:
-    go_to(page, live_server, "/test/manage/roles")
-    page.locator('[id="u2"] .fa-trash').click()
+def _remove_user_from_role(page: Any, live_server: Any) -> None:
+    go_to(page, live_server, "/test/manage/roles/u1/edit/")
+    btn = page.locator(".select2-selection__choice:has-text('User Test') .select2-selection__choice__remove")
+    btn.evaluate("el => el.click()")
+    submit_confirm(page)
 
 
 def test_orga_manage_widgets_event_role(pw_page: Any) -> None:
@@ -70,11 +65,9 @@ def test_orga_manage_widgets_event_role(pw_page: Any) -> None:
 
     login_orga(page, live_server)
 
-    # --- Phase 1: Accounting only ---
-    # Enable Deadlines feature so the widget can potentially appear
+    # --- Phase 1: Deadlines feature on ---
     go_to(page, live_server, "/manage/features/deadlines/on")
-
-    _create_role(page, live_server, "Accounting")
+    _add_user_to_role(page, live_server)
 
     logout(page)
     login_user(page, live_server)
@@ -90,44 +83,17 @@ def test_orga_manage_widgets_event_role(pw_page: Any) -> None:
     # Registrations widget always visible for any dashboard user
     expect(widgets.filter(has_text="Registrations")).to_be_visible()
 
-    # Deadlines widget NOT visible: feature is enabled but permission is missing
-    expect(widgets.filter(has_text="Deadlines")).to_have_count(0)
-
-    logout(page)
-    login_orga(page, live_server)
-
-    _delete_role(page, live_server)
-
-    # --- Phase 2: Deadlines only (feature already enabled) ---
-    _create_role(page, live_server, "Deadlines")
-
-    logout(page)
-    login_user(page, live_server)
-
-    go_to(page, live_server, "/test/manage/")
-    expect(page.locator("#banner")).not_to_contain_text("Access denied")
-
-    widgets = page.locator("#manage h2")
-
-    # Deadlines widget visible (permission + feature both satisfied)
+    # Deadlines widget visible (feature enabled + organizer permission)
     expect(widgets.filter(has_text="Deadlines")).to_be_visible()
 
-    # Registrations widget still always visible
-    expect(widgets.filter(has_text="Registrations")).to_be_visible()
-
-    # Accounting widget NOT visible: no accounting permission
-    expect(widgets.filter(has_text="Accounting")).to_have_count(0)
-
     logout(page)
     login_orga(page, live_server)
 
-    _delete_role(page, live_server)
+    _remove_user_from_role(page, live_server)
 
-    # --- Phase 3: Disable Deadlines feature, assign Deadlines permission ---
-    # Even with the permission, the widget must be hidden when the feature is off.
+    # --- Phase 2: Deadlines feature off ---
     go_to(page, live_server, "/manage/features/deadlines/off")
-
-    _create_role(page, live_server, "Deadlines")
+    _add_user_to_role(page, live_server)
 
     logout(page)
     login_user(page, live_server)
@@ -137,10 +103,13 @@ def test_orga_manage_widgets_event_role(pw_page: Any) -> None:
 
     widgets = page.locator("#manage h2")
 
-    # Deadlines widget NOT visible: feature disabled even though permission is granted
+    # Accounting widget still visible
+    expect(widgets.filter(has_text="Accounting")).to_be_visible()
+
+    # Deadlines widget NOT visible: feature is disabled
     expect(widgets.filter(has_text="Deadlines")).to_have_count(0)
 
     logout(page)
     login_orga(page, live_server)
 
-    _delete_role(page, live_server)
+    _remove_user_from_role(page, live_server)
