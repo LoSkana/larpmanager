@@ -956,6 +956,8 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, writing_type:
 
     # Prepare localized labels and form field references
     confirm = _("Confirm")
+    if context["field_key"] not in context["form"].fields:
+        return JsonResponse({"k": 0})
     field = context["form"][context["field_key"]]
 
     # Build complete form HTML with header, input field, and controls
@@ -1000,6 +1002,9 @@ def orga_writing_excel_submit(request: HttpRequest, event_slug: str, writing_typ
     try:
         context = _get_excel_form(request, event_slug, writing_type, is_submit=True)
     except ObjectDoesNotExist:
+        return JsonResponse({"k": 0})
+
+    if context["field_key"] not in context["form"].fields:
         return JsonResponse({"k": 0})
 
     context["auto"] = int(request.POST.get("auto", 0) or 0)
