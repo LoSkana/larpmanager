@@ -191,6 +191,10 @@ msgstr "Hlavní stránka"
 msgid "Male"
 msgstr "Muži"
 
+msgctxt "event"
+msgid "Mood"
+msgstr "Nálada"
+
 msgid "Name"
 msgstr "Název"
 
@@ -364,10 +368,6 @@ msgstr "Pátý"
 
 msgid "First"
 msgstr "První"
-
-msgctxt "event"
-msgid "Genre"
-msgstr "Žánr"
 
 msgid "Given"
 msgstr "Data"
@@ -971,6 +971,10 @@ msgstr "Odesláno na"
 
 msgid "Session"
 msgstr "Relace"
+
+msgctxt "event"
+msgid "Setting"
+msgstr "Nastavení"
 
 msgid "Sharing"
 msgstr "Sdílení"
@@ -2731,9 +2735,6 @@ msgstr "Vytvoření události"
 
 msgid "Event features"
 msgstr "Funkce události"
-
-msgid "Event genre(s)"
-msgstr "Žánr(y) události"
 
 msgid "Executive Vote"
 msgstr "Hlasování vedení"
@@ -5371,6 +5372,9 @@ msgstr "Zrušení pro chybějící profil"
 msgid "Character assigned for %(event)s"
 msgstr "Znak přiřazený pro %(event)s"
 
+msgid "Choose the setting for the event"
+msgstr "Výběr nastavení události"
+
 msgid "Configure event feature settings"
 msgstr "Konfigurace nastavení funkcí událostí"
 
@@ -5913,6 +5917,9 @@ msgstr "Umožňuje postavám mít zásoby"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Zkontrolujte platnost fiskálního kódu"
+
+msgid "Choose the mood / style for the event"
+msgstr "Zvolte náladu / styl události"
 
 msgid "End date cannot be before start date!"
 msgstr "Datum ukončení nesmí být před datem zahájení!"

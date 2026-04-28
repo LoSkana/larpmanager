@@ -191,6 +191,10 @@ msgstr "Hoofd"
 msgid "Male"
 msgstr "Mannelijk"
 
+msgctxt "event"
+msgid "Mood"
+msgstr "Stemming"
+
 msgid "Name"
 msgstr "Naam"
 
@@ -364,10 +368,6 @@ msgstr "Vijfde"
 
 msgid "First"
 msgstr "Eerste"
-
-msgctxt "event"
-msgid "Genre"
-msgstr "Genre"
 
 msgid "Given"
 msgstr "Gegevens"
@@ -971,6 +971,10 @@ msgstr "Verzonden op"
 
 msgid "Session"
 msgstr "Sessie"
+
+msgctxt "event"
+msgid "Setting"
+msgstr "Instelling"
 
 msgid "Sharing"
 msgstr "Delen"
@@ -2731,9 +2735,6 @@ msgstr "Evenement maken"
 
 msgid "Event features"
 msgstr "Functies van het evenement"
-
-msgid "Event genre(s)"
-msgstr "Soort evenement"
 
 msgid "Executive Vote"
 msgstr "Stemming management"
@@ -5371,6 +5372,9 @@ msgstr "Annulering wegens ontbrekend profiel"
 msgid "Character assigned for %(event)s"
 msgstr "Karakter toegewezen voor %(event)s"
 
+msgid "Choose the setting for the event"
+msgstr "Kies de instelling voor het evenement"
+
 msgid "Configure event feature settings"
 msgstr "Instellingen gebeurtenisfuncties configureren"
 
@@ -5913,6 +5917,9 @@ msgstr "Laat personages inventarissen hebben"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Controleer de geldigheid van de fiscale code"
+
+msgid "Choose the mood / style for the event"
+msgstr "Kies de sfeer / stijl voor het evenement"
 
 msgid "End date cannot be before start date!"
 msgstr "Einddatum kan niet voor startdatum liggen!"

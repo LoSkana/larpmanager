@@ -191,6 +191,10 @@ msgstr "Main"
 msgid "Male"
 msgstr "Mies"
 
+msgctxt "event"
+msgid "Mood"
+msgstr "Tunnelma"
+
 msgid "Name"
 msgstr "Nimi"
 
@@ -364,10 +368,6 @@ msgstr "Viides"
 
 msgid "First"
 msgstr "Ensimmäinen"
-
-msgctxt "event"
-msgid "Genre"
-msgstr "Genre"
 
 msgid "Given"
 msgstr "Annettu"
@@ -971,6 +971,10 @@ msgstr "Lähetetty osoitteessa"
 
 msgid "Session"
 msgstr "Istunto"
+
+msgctxt "event"
+msgid "Setting"
+msgstr "Asetukset"
 
 msgid "Sharing"
 msgstr "Jakaminen"
@@ -2731,9 +2735,6 @@ msgstr "Tapahtuman luominen"
 
 msgid "Event features"
 msgstr "Tapahtuman ominaisuudet"
-
-msgid "Event genre(s)"
-msgstr "Tapahtuman laji(t)"
 
 msgid "Executive Vote"
 msgstr "Johtava äänestys"
@@ -5371,6 +5372,9 @@ msgstr "Peruutus puuttuvan profiilin vuoksi"
 msgid "Character assigned for %(event)s"
 msgstr "Hahmo asetettu tapahtumaan %(event)s"
 
+msgid "Choose the setting for the event"
+msgstr "Valitse tapahtuman asetukset"
+
 msgid "Configure event feature settings"
 msgstr "Tapahtumaominaisuuden asetusten määrittäminen"
 
@@ -5913,6 +5917,9 @@ msgstr "Mahdollistaa hahmojen inventaarion"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Tarkista verokoodin voimassaolo"
+
+msgid "Choose the mood / style for the event"
+msgstr "Valitse tapahtuman tunnelma / tyyli (valitse mikä tahansa)"
 
 msgid "End date cannot be before start date!"
 msgstr "Loppupäivä ei voi olla ennen alkupäivää!"

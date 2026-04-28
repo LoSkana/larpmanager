@@ -28,6 +28,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_GET
 
 from larpmanager.cache.config import get_element_config
+from larpmanager.forms.event import PublicationMood, PublicationSetting
 from larpmanager.models.association import Association
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.event import Run
@@ -231,10 +232,23 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR09
                 if parsed:
                     event_data[field] = parsed
 
-            genre_raw = get_element_config(event, "pub_genre", default_value="")
-            genre = [int(g) for g in _parse_multi_config(genre_raw) if g.isdigit()]
-            if genre:
-                event_data["genre"] = genre
+            _setting_map = {v: label.lower() for v, label in PublicationSetting.choices}
+            event_settings = [
+                _setting_map[g]
+                for g in _parse_multi_config(get_element_config(event, "pub_setting", default_value=""))
+                if g in _setting_map
+            ]
+            if event_settings:
+                event_data["setting"] = event_settings
+
+            _mood_map = {v: label.lower() for v, label in PublicationMood.choices}
+            moods = [
+                _mood_map[g]
+                for g in _parse_multi_config(get_element_config(event, "pub_mood", default_value=""))
+                if g in _mood_map
+            ]
+            if moods:
+                event_data["mood"] = moods
 
             # Add cover image URL if available
             if event.cover:

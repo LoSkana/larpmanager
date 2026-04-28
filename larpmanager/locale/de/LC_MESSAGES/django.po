@@ -191,6 +191,10 @@ msgstr "Hauptseite"
 msgid "Male"
 msgstr "Männlich"
 
+msgctxt "event"
+msgid "Mood"
+msgstr "Stimmung"
+
 msgid "Name"
 msgstr "Name"
 
@@ -364,10 +368,6 @@ msgstr "Fünfte"
 
 msgid "First"
 msgstr "Erste"
-
-msgctxt "event"
-msgid "Genre"
-msgstr "Genre"
 
 msgid "Given"
 msgstr "Daten"
@@ -971,6 +971,10 @@ msgstr "Gesendet am"
 
 msgid "Session"
 msgstr "Sitzung"
+
+msgctxt "event"
+msgid "Setting"
+msgstr "Einstellung"
 
 msgid "Sharing"
 msgstr "Teilen"
@@ -2731,9 +2735,6 @@ msgstr "Erstellung von Veranstaltungen"
 
 msgid "Event features"
 msgstr "Merkmale der Veranstaltung"
-
-msgid "Event genre(s)"
-msgstr "Genre der Veranstaltung(en)"
 
 msgid "Executive Vote"
 msgstr "Abstimmung der Verwaltung"
@@ -5371,6 +5372,9 @@ msgstr "Löschung wegen fehlendem Profil"
 msgid "Character assigned for %(event)s"
 msgstr "Zugewiesenes Zeichen für %(event)s"
 
+msgid "Choose the setting for the event"
+msgstr "Wählen Sie den Rahmen für die Veranstaltung"
+
 msgid "Configure event feature settings"
 msgstr "Konfigurieren der Einstellungen für Ereignisfunktionen"
 
@@ -5914,6 +5918,9 @@ msgstr "Erlaubt Charakteren, Vorräte zu haben"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Prüfen Sie die Gültigkeit des Steuerkennzeichens"
+
+msgid "Choose the mood / style for the event"
+msgstr "Wählen Sie die Stimmung / den Stil für die Veranstaltung"
 
 msgid "End date cannot be before start date!"
 msgstr "Das Enddatum kann nicht vor dem Startdatum liegen!"

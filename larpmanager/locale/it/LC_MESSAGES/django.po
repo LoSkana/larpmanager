@@ -191,6 +191,10 @@ msgstr "Principale"
 msgid "Male"
 msgstr "Maschile"
 
+msgctxt "event"
+msgid "Mood"
+msgstr "Mood"
+
 msgid "Name"
 msgstr "Nome"
 
@@ -364,10 +368,6 @@ msgstr "Quinto"
 
 msgid "First"
 msgstr "Primo"
-
-msgctxt "event"
-msgid "Genre"
-msgstr "Genere"
 
 msgid "Given"
 msgstr "Dato"
@@ -971,6 +971,10 @@ msgstr "Inviato a"
 
 msgid "Session"
 msgstr "Sessione"
+
+msgctxt "event"
+msgid "Setting"
+msgstr "Ambientazione"
 
 msgid "Sharing"
 msgstr "Condivisione"
@@ -2731,9 +2735,6 @@ msgstr "Creazione eventi"
 
 msgid "Event features"
 msgstr "Funzionalità dell'evento"
-
-msgid "Event genre(s)"
-msgstr "Genere dell'evento"
 
 msgid "Executive Vote"
 msgstr "Votazione Direttivo"
@@ -5371,6 +5372,9 @@ msgstr "Cancellazione per profilo mancante"
 msgid "Character assigned for %(event)s"
 msgstr "Personaggio assegnato per %(event)s"
 
+msgid "Choose the setting for the event"
+msgstr "Scegli l'ambientazione dell'evento"
+
 msgid "Configure event feature settings"
 msgstr "Configura le impostazioni delle funzioni evento"
 
@@ -5913,6 +5917,9 @@ msgstr "Permette ai personaggi di avere un inventario"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Verifica la validità del codice fiscale"
+
+msgid "Choose the mood / style for the event"
+msgstr "Scegli l'atmosfera / stile dell'evento"
 
 msgid "End date cannot be before start date!"
 msgstr "La data di fine non può essere precedente alla data di inizio!"

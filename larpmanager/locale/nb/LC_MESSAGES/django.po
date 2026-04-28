@@ -191,6 +191,10 @@ msgstr "Viktigste"
 msgid "Male"
 msgstr "Mann"
 
+msgctxt "event"
+msgid "Mood"
+msgstr "Stemning"
+
 msgid "Name"
 msgstr "Navn"
 
@@ -364,10 +368,6 @@ msgstr "Femte"
 
 msgid "First"
 msgstr "Første"
-
-msgctxt "event"
-msgid "Genre"
-msgstr "Sjanger"
 
 msgid "Given"
 msgstr "Data"
@@ -971,6 +971,10 @@ msgstr "Sendt på"
 
 msgid "Session"
 msgstr "Sesjon"
+
+msgctxt "event"
+msgid "Setting"
+msgstr "Innstilling"
 
 msgid "Sharing"
 msgstr "Deling"
@@ -2731,9 +2735,6 @@ msgstr "Opprettelse av hendelser"
 
 msgid "Event features"
 msgstr "Arrangementets funksjoner"
-
-msgid "Event genre(s)"
-msgstr "Arrangementssjanger(e)"
 
 msgid "Executive Vote"
 msgstr "Avstemning i ledelsen"
@@ -5371,6 +5372,9 @@ msgstr "Avbestilling på grunn av manglende profil"
 msgid "Character assigned for %(event)s"
 msgstr "Tegn tildelt for %(event)s"
 
+msgid "Choose the setting for the event"
+msgstr "Velg innstilling for arrangementet"
+
 msgid "Configure event feature settings"
 msgstr "Konfigurere innstillinger for hendelsesfunksjoner"
 
@@ -5913,6 +5917,9 @@ msgstr "Tillater karakterer å ha varelager"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Kontroller gyldigheten av skattekoden"
+
+msgid "Choose the mood / style for the event"
+msgstr "Velg stemning/stil for arrangementet"
 
 msgid "End date cannot be before start date!"
 msgstr "Sluttdato kan ikke være før startdato!"

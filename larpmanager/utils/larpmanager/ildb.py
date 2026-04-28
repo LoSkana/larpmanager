@@ -25,12 +25,14 @@ from datetime import timedelta
 from typing import TYPE_CHECKING, Any
 
 import requests
+from django.core.cache import cache
 from django.db.models import Max, Min
 from django.utils import timezone
+from django.utils.text import slugify
 from django.utils.translation import gettext as _
 
 from larpmanager.cache.config import get_association_config, get_element_config, save_single_config
-from larpmanager.forms.event import PublicationEventType, PublicationGenre, PublicationLanguage
+from larpmanager.forms.event import PublicationEventType, PublicationLanguage
 from larpmanager.models.access import EventRole
 from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration, RegistrationTicket, TicketTier
@@ -176,6 +178,28 @@ PLAYER_TIERS = [
     TicketTier.PATRON,
 ]
 
+_ILDB_GENRES_URL = "https://www.larpdatabase.com/api/v1/genres"
+_ILDB_GENRES_CACHE_KEY = "ildb_genre_slug_map"
+_ILDB_GENRES_CACHE_TTL = 86400  # 24 hours
+
+
+def _get_genre_slug_map() -> dict[str, int]:
+    """Return a slug -> ID map built from the larpdatabase genres API, cached for 24h."""
+    result = cache.get(_ILDB_GENRES_CACHE_KEY)
+    if result is not None:
+        return result
+    try:
+        response = requests.get(_ILDB_GENRES_URL, timeout=10)
+        response.raise_for_status()
+        genres = response.json().get("genres", [])
+        result = {slugify(g["name_en"]): g["id"] for g in genres}
+    except Exception as err:  # noqa: BLE001
+        notify_admins("_get_genre_slug_map", "Failed to fetch ILDB genres", err)
+        result = {}
+    cache.set(_ILDB_GENRES_CACHE_KEY, result, _ILDB_GENRES_CACHE_TTL)
+    return result
+
+
 # Maps internal stored values to ILDB Italian API values
 _TIPOLOGIA_MAP = {
     "one_shot": "one shot",
@@ -235,8 +259,12 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
     ).aggregate(costo=Min("price"), costo_max=Max("price"))
 
     # Load publication metadata from EventConfig
-    genere_raw = get_element_config(event, "pub_genre", default_value="")
-    genere = [int(g) for g in _parse_multi_config(genere_raw) if g.isdigit()] or [int(PublicationGenre.values[0])]
+    genre_map = _get_genre_slug_map()
+    setting_raw = get_element_config(event, "pub_setting", default_value="")
+    mood_raw = get_element_config(event, "pub_mood", default_value="")
+    slugs = _parse_multi_config(setting_raw) + _parse_multi_config(mood_raw)
+    genere_ids = {genre_map[s] for s in slugs if s in genre_map}
+    genere = sorted(genere_ids) or [genre_map.get("no-genre-specified", 27)]
 
     lingua_raw = get_element_config(event, "pub_language", default_value="")
     lingua = _parse_multi_config(lingua_raw) or [PublicationLanguage.values[0]]

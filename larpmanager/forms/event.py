@@ -2149,21 +2149,30 @@ class PublicationMeals(TextChoices):
     EXTERNAL_CATERING = "external", _("External catering")
 
 
-class PublicationGenre(TextChoices):
-    """Event genre IDs for publication."""
+class PublicationSetting(TextChoices):
+    """Event setting (world/genre) for publication. Values are lowercase slugs."""
 
-    FANTASY = "1", "Fantasy"
-    HORROR = "2", "Horror"
-    SCI_FI = "3", "Sci-Fi"
-    HISTORICAL = "4", "Historical"
-    CONTEMPORARY = "5", "Contemporary"
-    POST_APOCALYPTIC = "6", "Post-Apocalyptic"
-    STEAMPUNK = "7", "Steampunk"
-    CYBERPUNK = "8", "Cyberpunk"
-    NOIR = "9", "Noir"
-    SUPERNATURAL = "10", "Supernatural"
-    POLITICAL = "11", "Political"
-    ACTION_ADVENTURE = "12", "Action / Adventure"
+    FANTASY = "fantasy", "Fantasy"
+    HORROR = "horror", "Horror"
+    SCI_FI = "science-fiction", "Sci-Fi"
+    HISTORICAL = "historical", "Historical"
+    CONTEMPORARY = "contemporary", "Contemporary"
+    POST_APOCALYPTIC = "post-apocalyptic", "Post-Apocalyptic"
+    CYBERPUNK = "cyberpunk", "Cyberpunk"
+    STEAMPUNK = "steampunk", "Steampunk"
+    SUPERHEROES = "superheroes", "Superheroes"
+    GOTHIC = "gothic", "Gothic"
+    WESTERN = "western", "Western"
+
+
+class PublicationMood(TextChoices):
+    """Event mood/tone for publication. Values are lowercase slugs."""
+
+    ADVENTURE = "adventure", "Adventure"
+    THRILLER = "thriller", "Thriller"
+    DRAMA = "drama", "Drama"
+    COMEDY = "comedy", "Comedy"
+    SURREAL = "surreal", "Surreal"
 
 
 class PublicationEventType(TextChoices):
@@ -2242,11 +2251,19 @@ class OrgaPublicationForm(ConfigForm):
         )
 
         self.add_configs(
-            "pub_genre",
+            "pub_setting",
             ConfigType.MULTI_BOOL,
-            pgettext("event", "Genre"),
-            _("Event genre(s)"),
-            PublicationGenre.choices,
+            pgettext("event", "Setting"),
+            _("Choose the setting for the event"),
+            PublicationSetting.choices,
+        )
+
+        self.add_configs(
+            "pub_mood",
+            ConfigType.MULTI_BOOL,
+            pgettext("event", "Mood"),
+            _("Choose the mood / style for the event"),
+            PublicationMood.choices,
         )
 
         self.add_configs("pub_place", ConfigType.CHAR, _("City / Place"), _("City or place of the event"))

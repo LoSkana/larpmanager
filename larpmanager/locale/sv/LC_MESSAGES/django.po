@@ -191,6 +191,10 @@ msgstr "Huvud"
 msgid "Male"
 msgstr "Man"
 
+msgctxt "event"
+msgid "Mood"
+msgstr "Stämning"
+
 msgid "Name"
 msgstr "Namn"
 
@@ -364,10 +368,6 @@ msgstr "Femte"
 
 msgid "First"
 msgstr "Första"
-
-msgctxt "event"
-msgid "Genre"
-msgstr "Genre"
 
 msgid "Given"
 msgstr "Data"
@@ -971,6 +971,10 @@ msgstr "Skickat till"
 
 msgid "Session"
 msgstr "Session"
+
+msgctxt "event"
+msgid "Setting"
+msgstr "Inställning"
 
 msgid "Sharing"
 msgstr "Delning"
@@ -2731,9 +2735,6 @@ msgstr "Skapande av evenemang"
 
 msgid "Event features"
 msgstr "Funktioner för evenemang"
-
-msgid "Event genre(s)"
-msgstr "Genre(n) för evenemanget"
 
 msgid "Executive Vote"
 msgstr "Ledningens omröstning"
@@ -5371,6 +5372,9 @@ msgstr "Avbokning för saknad profil"
 msgid "Character assigned for %(event)s"
 msgstr "Tecken tilldelade för %(event)s"
 
+msgid "Choose the setting for the event"
+msgstr "Välj miljö för evenemanget"
+
 msgid "Configure event feature settings"
 msgstr "Konfigurera inställningar för händelsefunktioner"
 
@@ -5913,6 +5917,9 @@ msgstr "Tillåter karaktärer att ha inventarier"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Kontrollera att skattekoden är giltig"
+
+msgid "Choose the mood / style for the event"
+msgstr "Välj stämning/stil för evenemanget"
 
 msgid "End date cannot be before start date!"
 msgstr "Slutdatum kan inte vara före startdatum!"
