@@ -59,6 +59,7 @@ from larpmanager.models.association import Association
 from larpmanager.models.event import Run
 from larpmanager.models.member import (
     Badge,
+    LogOperationType,
     Member,
     Membership,
     MembershipStatus,
@@ -78,6 +79,7 @@ from larpmanager.utils.core.common import (
     normalize_string,
 )
 from larpmanager.utils.core.paginate import exe_paginate
+from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 from larpmanager.utils.io.pdf import (
     get_membership_request,
@@ -224,6 +226,7 @@ def exe_membership_evaluation(request: HttpRequest, member_uuid: str) -> HttpRes
                 # Approve member and send notifications
                 member.membership.status = MembershipStatus.ACCEPTED
                 member.membership.save()
+                save_log(context, Membership, member.membership, None, operation_type=LogOperationType.UPDATE)
                 notify_membership_approved(member, resp)
                 update_member_registrations(member)
                 messages.success(request, _("Member approved!"))
@@ -231,6 +234,7 @@ def exe_membership_evaluation(request: HttpRequest, member_uuid: str) -> HttpRes
                 # Reject member and send notifications
                 member.membership.status = MembershipStatus.EMPTY
                 member.membership.save()
+                save_log(context, Membership, member.membership, None, operation_type=LogOperationType.UPDATE)
                 notify_membership_reject(member, resp)
                 messages.success(request, _("Member refused!"))
 
@@ -368,6 +372,7 @@ def exe_member(request: HttpRequest, member_uuid: str) -> HttpResponse:
         form = ExeMemberForm(request.POST, request.FILES, instance=context["member_edit"], context=context)
         if form.is_valid():
             form.save()
+            save_log(context, Member, context["member_edit"], context["member_edit"].uuid)
             messages.success(request, _("Profile updated"))
             return redirect(request.path)
     else:
@@ -529,6 +534,7 @@ def exe_membership_status(request: HttpRequest, member_uuid: str) -> HttpRespons
         form = ExeMembershipForm(request.POST, request.FILES, instance=context["membership_edit"], request=request)
         if form.is_valid():
             form.save()
+            save_log(context, Membership, context["membership_edit"], None, operation_type=LogOperationType.UPDATE)
             messages.success(request, _("Profile updated"))
             return redirect(request.path)
     else:
@@ -643,6 +649,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
             # Automatically confirm the payment and save
             payment.status = PaymentStatus.CONFIRMED
             payment.save()
+            save_log(context, PaymentInvoice, payment, None)
 
             # Show success message and redirect to membership page
             messages.success(request, _("Operation completed") + "!")
@@ -681,6 +688,7 @@ def exe_membership_document(request: HttpRequest) -> Any:
             membership.date = form.cleaned_data["date"]
             membership.status = MembershipStatus.ACCEPTED
             membership.save()
+            save_log(context, Membership, membership, None, operation_type=LogOperationType.UPDATE)
             messages.success(request, _("Operation completed") + "!")
             return redirect("exe_membership")
     else:
@@ -1104,6 +1112,7 @@ def exe_questions_answer(request: HttpRequest, member_uuid: str) -> HttpResponse
             hp.is_user = False
             hp.association_id = context["association_id"]
             hp.save()
+            save_log(context, HelpQuestion, hp, None)
 
             # Notify user of successful submission and redirect
             messages.success(request, _("Answer submitted!"))
@@ -1135,6 +1144,7 @@ def exe_questions_close(request: HttpRequest, member_uuid: str) -> HttpResponse:
     if h:
         h.closed = True
         h.save()
+        save_log(context, HelpQuestion, h, None, operation_type=LogOperationType.UPDATE)
 
     return redirect("exe_questions")
 

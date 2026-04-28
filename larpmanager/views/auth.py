@@ -96,6 +96,7 @@ class MyRegistrationView(RegistrationView):
 
         # Authenticate the newly created user with provided credentials
         new_user = authenticate(
+            self.request,
             **{
                 User.USERNAME_FIELD: new_user.get_username(),
                 "password": form.cleaned_data["password1"],

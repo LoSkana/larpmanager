@@ -400,24 +400,6 @@ msgstr ""
 msgid "WARNING: deleted items might not be full recoverable"
 msgstr ""
 
-msgid "Old dashboard"
-msgstr ""
-
-msgid "If checked: shows the old dashboard"
-msgstr ""
-
-msgid "Old interface"
-msgstr ""
-
-msgid "If checked: shows the old interface"
-msgstr ""
-
-msgid "Old menu"
-msgstr ""
-
-msgid "If checked: shows the old menu"
-msgstr ""
-
 msgid "Email notifications"
 msgstr ""
 
@@ -705,6 +687,13 @@ msgstr ""
 msgid "Name to be displayed for credits"
 msgstr ""
 
+msgid "Lock events"
+msgstr ""
+
+msgid ""
+"If checked, prevents credits from being created or changed in the event panel"
+msgstr ""
+
 msgid "Treasury"
 msgstr ""
 
@@ -914,22 +903,11 @@ msgstr ""
 msgid "Personal theme preference, overrides the event and organization theme."
 msgstr ""
 
-msgid "New Dashboard"
+msgid "Interface version"
 msgstr ""
 
-msgid "If checked: activate new dashbord"
-msgstr ""
-
-msgid "New interface"
-msgstr ""
-
-msgid "If checked: activate new interface"
-msgstr ""
-
-msgid "New menu"
-msgstr ""
-
-msgid "If checked: activate new menu"
+msgid ""
+"Personal interface version preference, overrides the organization setting"
 msgstr ""
 
 msgid "Select a valid choice. That choice is not one of the available choices."
@@ -1984,6 +1962,12 @@ msgstr ""
 msgid "Informations"
 msgstr ""
 
+msgid "Ready for publication"
+msgstr ""
+
+msgid "Mark this event as ready to be published on larpdatabase.com"
+msgstr ""
+
 msgid "Languages"
 msgstr ""
 
@@ -2389,6 +2373,12 @@ msgid "Manage dynamic payment installments for participants"
 msgstr ""
 
 msgid "Dynamic rates"
+msgstr ""
+
+msgid "Surcharge cannot be negative"
+msgstr ""
+
+msgid "Days available cannot be negative"
 msgstr ""
 
 #, python-format
@@ -5584,13 +5574,16 @@ msgstr ""
 msgid "Select the new photo to upload"
 msgstr ""
 
-msgid "Uploading..."
+msgid "Uploading"
 msgstr ""
 
-msgid "Uploading image, please wait..."
+msgid "Uploading image, please wait"
 msgstr ""
 
-msgid "Error uploading image. Please retry or use a smaller file."
+msgid "Error uploading image"
+msgstr ""
+
+msgid "Please retry or use a smaller file"
 msgstr ""
 
 msgid "Your characters"
@@ -5632,7 +5625,7 @@ msgstr ""
 msgid "Print"
 msgstr ""
 
-msgid "No characters available."
+msgid "No characters available"
 msgstr ""
 
 msgid "Discover the web site"
@@ -5740,10 +5733,10 @@ msgstr ""
 msgid "Token Already Used"
 msgstr ""
 
-msgid "This access link has already been used and cannot be accessed again."
+msgid "This access link has already been used and cannot be accessed again"
 msgstr ""
 
-msgid "Each token can only be used once for security reasons."
+msgid "Each token can only be used once for security reasons"
 msgstr ""
 
 msgid "Access Information:"
@@ -5754,7 +5747,7 @@ msgstr ""
 
 msgid ""
 "If you need access to this content again, please contact the organizers for "
-"a new access link."
+"a new access link"
 msgstr ""
 
 msgid "Access Confirmation"
@@ -6191,7 +6184,7 @@ msgstr ""
 msgid "Activate advanced mode"
 msgstr ""
 
-msgid "Complete all steps above to unlock advanced mode."
+msgid "Complete all steps above to unlock advanced mode"
 msgstr ""
 
 msgid "Competences"
@@ -6565,6 +6558,36 @@ msgid "Payment"
 msgstr ""
 
 msgid "Verification"
+msgstr ""
+
+msgid "Version Management"
+msgstr ""
+
+msgid "Current platform version"
+msgstr ""
+
+msgid "Previewing version"
+msgstr ""
+
+msgid "Exit Preview"
+msgstr ""
+
+msgid "Available versions"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid "Apply the upgrade to the entire organization?"
+msgstr ""
+
+msgid "Apply Upgrade"
+msgstr ""
+
+msgid "The organization is running the latest version"
 msgstr ""
 
 msgid "This page shows the warehouse containers"
@@ -7528,9 +7551,10 @@ msgstr ""
 msgid "Returning type"
 msgstr ""
 
-msgid ""
-"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
-"processed as virtual currency."
+msgid "Warning: Neither tokens nor credits features are enabled"
+msgstr ""
+
+msgid "Refunds cannot be processed as virtual currency"
 msgstr ""
 
 msgid "Only"
@@ -7795,7 +7819,7 @@ msgstr ""
 msgid "Resource"
 msgstr ""
 
-msgid "No transfers yet."
+msgid "No transfers yet"
 msgstr ""
 
 msgid "Character Inventory Pool Types"
@@ -7880,9 +7904,10 @@ msgstr ""
 msgid "This page shows all log entries for this event"
 msgstr ""
 
-msgid ""
-"This page shows the event milestones. Completed milestones are hidden by "
-"default."
+msgid "This page shows the event milestones"
+msgstr ""
+
+msgid "Completed milestones are hidden by default"
 msgstr ""
 
 msgid "Show/hide completed milestones"
@@ -7905,9 +7930,10 @@ msgstr ""
 msgid "Created"
 msgstr ""
 
-msgid ""
-"This page shows all access tokens for one-time content. Each token can only "
-"be used once."
+msgid "This page shows all access tokens for one-time content"
+msgstr ""
+
+msgid "Each token can only be used once"
 msgstr ""
 
 msgid "Access Link"
@@ -8143,9 +8169,6 @@ msgstr ""
 msgid "Transfer a registration from this event to another"
 msgstr ""
 
-msgid "Preview"
-msgstr ""
-
 msgid "Transfer preview"
 msgstr ""
 
@@ -8159,6 +8182,85 @@ msgid "Warnings"
 msgstr ""
 
 msgid "Information"
+msgstr ""
+
+msgid ""
+"Upload a backup ZIP file to restore event data. A preview of the changes "
+"will be shown before any data is modified."
+msgstr ""
+
+msgid "Files recognized in the ZIP"
+msgstr ""
+
+msgid "Required feature"
+msgstr ""
+
+msgid "Event configuration"
+msgstr ""
+
+msgid "Enabled features"
+msgstr ""
+
+msgid "Registration form questions"
+msgstr ""
+
+msgid "Registration form options"
+msgstr ""
+
+msgid "Ticket tiers"
+msgstr ""
+
+msgid "Character sheet questions"
+msgstr ""
+
+msgid "Character sheet options"
+msgstr ""
+
+msgid "Character configurations"
+msgstr ""
+
+msgid "Plot-character roles"
+msgstr ""
+
+msgid "Quest types"
+msgstr ""
+
+msgid "Backup ZIP file"
+msgstr ""
+
+msgid "Preview Restore"
+msgstr ""
+
+msgid "Restore Preview"
+msgstr ""
+
+msgid ""
+"The following changes will be applied when you confirm. Review carefully "
+"before proceeding."
+msgstr ""
+
+msgid "Unrecognized files in ZIP (will be skipped)"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "and"
+msgstr ""
+
+msgid "more"
+msgstr ""
+
+msgid "Skip"
+msgstr ""
+
+msgid "No changes"
+msgstr ""
+
+msgid "No recognized files found in the ZIP."
+msgstr ""
+
+msgid "Confirm Restore"
 msgstr ""
 
 msgid ""
@@ -8324,9 +8426,6 @@ msgstr ""
 msgid "Internal link"
 msgstr ""
 
-msgid "Version"
-msgstr ""
-
 msgid "Warehouse area"
 msgstr ""
 
@@ -8362,9 +8461,10 @@ msgstr ""
 msgid "Warning"
 msgstr ""
 
-msgid ""
-"This operation is permanent and cannot be undone. Please review the changes "
-"carefully before confirming."
+msgid "This operation is permanent and cannot be undone"
+msgstr ""
+
+msgid "Please review the changes carefully before confirming"
 msgstr ""
 
 msgid "Items that will be modified"
@@ -8403,9 +8503,12 @@ msgstr ""
 msgid "Confirm and commit quantities"
 msgstr ""
 
+msgid "No items will be modified"
+msgstr ""
+
 msgid ""
-"No items will be modified. Either no items have assigned quantities, or all "
-"assignments have zero quantity."
+"Either no items have assigned quantities, or all assignments have zero "
+"quantity"
 msgstr ""
 
 msgid "Back to manifest"
@@ -9548,6 +9651,12 @@ msgstr ""
 msgid "Recover deleted objects"
 msgstr ""
 
+msgid "Version Upgrade"
+msgstr ""
+
+msgid "Platform version upgrade page"
+msgstr ""
+
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
 
@@ -10098,6 +10207,30 @@ msgstr ""
 msgid "Failed to add gallery"
 msgstr ""
 
+msgid "Registration Form"
+msgstr ""
+
+msgid "Character Form"
+msgstr ""
+
+msgid "Character Config"
+msgstr ""
+
+msgid "Plot Roles"
+msgstr ""
+
+msgid "ILDB draft event pending confirmation"
+msgstr ""
+
+#, python-format
+msgid ""
+"A draft event matching <strong>%(event)s</strong> was found on larpdatabase."
+"com."
+msgstr ""
+
+msgid "Please review and confirm it before it can be published"
+msgstr ""
+
 msgid "Event added to ILDB"
 msgstr ""
 
@@ -10380,6 +10513,29 @@ msgstr ""
 msgid "Feature %(name)s deactivated"
 msgstr ""
 
+msgid "Invalid version selected"
+msgstr ""
+
+msgid "Preview activated"
+msgstr ""
+
+#, python-format
+msgid "you are now viewing version %(v)s"
+msgstr ""
+
+#, python-format
+msgid "Organization upgraded to version %(v)s"
+msgstr ""
+
+msgid "Preview reset"
+msgstr ""
+
+msgid "Using organization version"
+msgstr ""
+
+msgid "Please wait before retrying."
+msgstr ""
+
 msgid "Cache reset!"
 msgstr ""
 
@@ -10437,6 +10593,9 @@ msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
 msgstr ""
 
 msgid "No events are present, create one"
+msgstr ""
+
+msgid "A new version of the platform is available"
 msgstr ""
 
 msgid "Define roles to grant organization management access"
@@ -10664,6 +10823,18 @@ msgid "Can't copy from same event"
 msgstr ""
 
 msgid "Copy done"
+msgstr ""
+
+msgid "Restore session expired, please upload the file again."
+msgstr ""
+
+msgid "Restore completed!"
+msgstr ""
+
+msgid "Restore error"
+msgstr ""
+
+msgid "Error reading backup file"
 msgstr ""
 
 msgid "Elements uploaded"

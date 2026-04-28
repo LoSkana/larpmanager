@@ -42,9 +42,10 @@ from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.utils.auth.permission import get_index_association_permissions
 from larpmanager.utils.core.base import check_association_context
-from larpmanager.utils.core.common import clear_messages, get_feature
+from larpmanager.utils.core.common import clear_messages, get_feature, is_rate_limited
 from larpmanager.utils.edit.backend import backend_edit
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
+from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION, VERSIONS
 from larpmanager.utils.services.association import _reset_all_association, get_activation_checklist
 from larpmanager.views.larpmanager import get_run_lm_payment
 from larpmanager.views.orga.event import prepare_roles_list
@@ -425,6 +426,54 @@ def exe_preferences(request: HttpRequest) -> Any:
 
 
 @login_required
+def exe_version_upgrade(request: HttpRequest) -> HttpResponse:
+    """Show available platform versions and allow testing or upgrading."""
+    context = check_association_context(request)
+    assoc_version = context.get("assoc_version", LATEST_AVAILABLE_VERSION)
+    member = context["member"]
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+        try:
+            target_version = int(request.POST.get("target_version", assoc_version))
+        except (TypeError, ValueError):
+            target_version = assoc_version
+
+        available_numbers = [v["number"] for v in VERSIONS if v["available"]]
+        if target_version not in available_numbers:
+            messages.error(request, _("Invalid version selected") + ".")
+            return redirect("exe_version_upgrade")
+
+        if action == "test":
+            save_single_config(member, "interface_version", str(target_version))
+            messages.success(
+                request,
+                _("Preview activated") + ": " + _("you are now viewing version %(v)s") % {"v": target_version} + ".",
+            )
+        elif action == "upgrade":
+            association = Association.objects.get(pk=context["association_id"])
+            save_single_config(association, "version", str(target_version))
+            save_single_config(member, "interface_version", "")
+            _reset_all_association(context["association_id"], context["slug"])
+            messages.success(request, _("Organization upgraded to version %(v)s") % {"v": target_version} + ".")
+        elif action == "reset_preview":
+            save_single_config(member, "interface_version", "")
+            messages.success(request, _("Preview reset") + ". " + _("Using organization version") + ".")
+
+        return redirect("exe_version_upgrade")
+
+    upgradeable = [v for v in VERSIONS if v["available"] and v["number"] > assoc_version]
+    context["upgradeable_versions"] = upgradeable
+    context["assoc_version_description"] = next(
+        (v["description"] for v in VERSIONS if v["number"] == assoc_version), ""
+    )
+    context["member_version"] = context.get("effective_version")
+    context["is_previewing"] = context.get("effective_version") != assoc_version
+
+    return render(request, "larpmanager/exe/version_upgrade.html", context)
+
+
+@login_required
 def exe_reload_cache(request: HttpRequest) -> HttpResponse:
     """Reset all cache entries for the organization."""
     # Verify user permissions and get association context
@@ -433,6 +482,10 @@ def exe_reload_cache(request: HttpRequest) -> HttpResponse:
     # Get association slug and ID
     association_slug = context["slug"]
     association_id = context["id"]
+
+    if is_rate_limited(f"exe_reload_cache_{association_id}"):
+        messages.error(request, _("Please wait before retrying."))
+        return redirect("manage")
 
     _reset_all_association(association_id, association_slug)
 

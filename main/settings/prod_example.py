@@ -45,11 +45,14 @@ SOCIALACCOUNT_ADAPTER = 'larpmanager.utils.auth.adapter.MySocialAccountAdapter'
 ACCOUNT_ADAPTER = 'larpmanager.utils.auth.adapter.MyAccountAdapter'
 
 AUTHENTICATION_BACKENDS = [
+    # axes must be first to intercept locked accounts before auth
+    'axes.backends.AxesStandaloneBackend',
+
     # Needed to login by username in Django admin, regardless of `allauth`
     'larpmanager.utils.auth.backend.EmailOrUsernameModelBackend',
 
     # `allauth` specific authentication methods, such as login by e-mail
-    'allauth.account.auth_backends.AuthenticationBackend'
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 SITE_ID = 1
@@ -145,6 +148,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8264', 'http://127.0.0.1:8264']
 RATELIMIT_IP_META_KEY = 'HTTP_X_FORWARDED_FOR'
 
+# axes: read real IP from reverse proxy
+AXES_IPWARE_META_PRECEDENCE_ORDER = ['HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR']
+
 # captcha
 RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC', '')
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE', '')
@@ -154,12 +160,14 @@ AWS_SES_ACCESS_KEY_ID = os.environ.get('AWS_SES_ACCESS_KEY_ID')
 AWS_SES_SECRET_ACCESS_KEY = os.environ.get('AWS_SES_SECRET_ACCESS_KEY')
 AWS_SES_REGION_NAME = os.environ.get('AWS_SES_REGION_NAME', 'us-east-1')
 
-SECURE_SSL_REDIRECT = True
-SECURE_HSTS_SECONDS = 31536000
-SESSION_COOKIE_SECURE = True
+_docker = os.environ.get('DOCKER') == 'true'
+
+SECURE_SSL_REDIRECT = not _docker
+SECURE_HSTS_SECONDS = 0 if _docker else 31536000
+SESSION_COOKIE_SECURE = not _docker
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = False  # Must stay False — JS reads token for AJAX X-CSRFToken header
+CSRF_COOKIE_SECURE = not _docker
+CSRF_COOKIE_HTTPONLY = False  # Must stay False, as JS reads token for AJAX X-CSRFToken header
 CSRF_COOKIE_SAMESITE = 'Lax'  # Strict would break Google OAuth redirect
 SECURE_BROWSER_XSS_FILTER = True

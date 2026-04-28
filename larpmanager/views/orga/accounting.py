@@ -44,11 +44,13 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     PaymentType,
 )
+from larpmanager.models.member import LogOperationType
 from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_object_uuid
+from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.core.paginate import orga_paginate
-from larpmanager.utils.edit.backend import backend_get
+from larpmanager.utils.edit.backend import backend_get, save_log
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 
 
@@ -129,6 +131,7 @@ def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
             exp.member = context["member"]
             exp.association_id = context["association_id"]
             exp.save()
+            save_log(context, AccountingItemExpense, exp, None)
 
             # Show success message to user
             messages.success(request, _("Reimbursement request item added"))
@@ -143,6 +146,7 @@ def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Add form to context and render template
     context["form"] = form
+    context["add_another"] = True
     return render(request, "larpmanager/orga/accounting/expenses_my_new.html", context)
 
 
@@ -343,6 +347,9 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check user permissions for accessing organization credits functionality
     context = check_event_context(request, event_slug, "orga_credits")
 
+    # Determine if page must be readonly in events
+    context["readonly_event"] = _is_credit_readonly(context)
+
     # Configure context with relationship selectors and field definitions
     context.update(
         {
@@ -370,21 +377,52 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
 
+def _is_credit_readonly(context: dict) -> bool:
+    """Check if credits cannot be edited in orga pages."""
+    return get_association_config(
+        context["event"].association_id,
+        "credit_readonly_event",
+        default_value=False,
+        context=context,
+    )
+
+
 @login_required
 def orga_credits_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create new organization credits."""
+    # Check user permissions for accessing organization credits functionality
+    context = check_event_context(request, event_slug, "orga_credits")
+
+    # Check if user is allowed
+    if _is_credit_readonly(context):
+        raise UserPermissionError
+
     return orga_new(request, event_slug, OrgaAction.CREDITS)
 
 
 @login_required
 def orga_credits_edit(request: HttpRequest, event_slug: str, credit_uuid: str) -> HttpResponse:
     """Edit organization credits."""
+    # Check user permissions for accessing organization credits functionality
+    context = check_event_context(request, event_slug, "orga_credits")
+
+    # Check if user is allowed
+    if _is_credit_readonly(context):
+        raise UserPermissionError
+
     return orga_edit(request, event_slug, OrgaAction.CREDITS, credit_uuid)
 
 
 @login_required
 def orga_credits_delete(request: HttpRequest, event_slug: str, credit_uuid: str) -> HttpResponse:
     """Delete credit for event."""
+    # Check user permissions for accessing organization credits functionality
+    context = check_event_context(request, event_slug, "orga_credits")
+
+    # Check if user is allowed
+    if _is_credit_readonly(context):
+        raise UserPermissionError
+
     return orga_delete(request, event_slug, OrgaAction.CREDITS, credit_uuid)
 
 
@@ -506,9 +544,11 @@ def payment_edit(
         invoice_valid = invoice_form.is_valid() if invoice_form else True
 
         if payment_valid and invoice_valid:
-            payment_form.save()
+            saved_payment = payment_form.save()
+            save_log(context, AccountingItemPayment, saved_payment, el.uuid)
             if invoice_form:
-                invoice_form.save()
+                saved_invoice = invoice_form.save()
+                save_log(context, type(saved_invoice), saved_invoice, None, operation_type=LogOperationType.UPDATE)
             messages.success(request, _("Element saved") + "!")
             return redirect_fn()
 

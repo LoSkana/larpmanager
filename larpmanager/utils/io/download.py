@@ -50,7 +50,7 @@ from larpmanager.models.form import (
     WritingQuestion,
 )
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
-from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
+from larpmanager.models.writing import Character, CharacterConfig, Plot, PlotCharacterRel, Relationship
 from larpmanager.utils.core.common import check_field
 from larpmanager.utils.edit.backend import _get_values_mapping
 
@@ -1201,18 +1201,19 @@ def export_event(context: Any) -> Any:
         list: List of tuples containing configuration and features export data
 
     """
-    column_names = ["name", "value"]
-    configuration_values = []
     association = Association.objects.get(pk=context["event"].association_id)
-    for element in [context["event"], context["run"], association]:
+
+    column_names = ["source", "name", "value"]
+    configuration_values = []
+    for source, element in [("event", context["event"]), ("run", context["run"]), ("association", association)]:
         for config_name, config_value in get_configs(element).items():
-            configuration_values.append((config_name, config_value))
+            configuration_values.append((source, config_name, config_value))
     export_data = [("configuration", column_names, configuration_values)]
 
-    column_names = ["name", "slug"]
+    column_names = ["source", "name", "slug"]
     feature_values = [
-        (feature.name, feature.slug)
-        for element in [context["event"], association]
+        (source, feature.name, feature.slug)
+        for source, element in [("event", context["event"]), ("association", association)]
         for feature in element.features.all()
     ]
     export_data.append(("features", column_names, feature_values))
@@ -1300,3 +1301,16 @@ def export_modifiers(context: Any) -> Any:
     ]
 
     return [("modifiers", column_headers, modifier_rows)]
+
+
+def export_character_configs(context: Any) -> Any:
+    """Export CharacterConfig entries for all characters in the event."""
+    column_headers = ["character", "name", "value"]
+    event_id = context["event"].get_class_parent(Character)
+    rows = [
+        [cfg.character.name, cfg.name, cfg.value]
+        for cfg in CharacterConfig.objects.filter(character__event_id=event_id, deleted__isnull=True)
+        .select_related("character")
+        .order_by("character__number", "name")
+    ]
+    return [("character_config", column_headers, rows)]

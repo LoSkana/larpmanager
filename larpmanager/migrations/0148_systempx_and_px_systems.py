@@ -275,7 +275,7 @@ class Migration(migrations.Migration):
                 verbose_name="Experience System",
             ),
         ),
-        # Step 6: Rename Feature slugs (px→experience, rules/modifiers/templates→exp_*)
+        # Step 6: Rename Feature slugs (px -> experience, rules/modifiers/templates -> exp_*)
         migrations.RunPython(rename_feature_slugs, migrations.RunPython.noop),
         # Step 7: Update EventPermissions to point to new Feature slugs
         migrations.RunPython(rename_event_permission_slugs, migrations.RunPython.noop),

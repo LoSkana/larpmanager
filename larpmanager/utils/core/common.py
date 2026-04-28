@@ -36,6 +36,7 @@ from background_task.models import Task
 from diff_match_patch import diff_match_patch
 from django.conf import settings as conf_settings
 from django.contrib import messages
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, QuerySet, Subquery
 from django.http import Http404, HttpRequest
@@ -806,3 +807,8 @@ def clean_html(tx: str) -> str:
     """Remove HTML tags and clean up whitespace from the given string."""
     tx = tx.replace("<br />", " ")
     return strip_tags(tx)
+
+
+def is_rate_limited(key: str, timeout: int = 10) -> bool:
+    """Return True if the action identified by key is rate-limited."""
+    return not cache.add(f"rl_{key}", 1, timeout)

@@ -1536,6 +1536,11 @@ urlpatterns = [
         name="orga_backup",
     ),
     path(
+        "<slug:event_slug>/manage/restore/",
+        views_oe.orga_restore,
+        name="orga_restore",
+    ),
+    path(
         "<slug:event_slug>/manage/upload/<slug:upload_type>/template/",
         views_oe.orga_upload_template,
         name="orga_upload_template",

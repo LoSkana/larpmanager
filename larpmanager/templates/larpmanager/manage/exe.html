@@ -18,9 +18,9 @@
         <div id="manage">
             {% include "larpmanager/manage/sticky_messages.html" %}
             {% include "larpmanager/manage/widgets/wwyltd.html" %}
-            <div {% if not old_dashboard %}class="grid"{% else %}class="old_dashboard"{% endif %}>
+            <div {% if effective_version >= 17 %}class="grid"{% else %}class="old_dashboard"{% endif %}>
                 {% include "larpmanager/manage/widgets/demo.html" %}
-                {% if old_dashboard %}
+                {% if effective_version < 17 %}
                     {% include "larpmanager/manage/widgets/exe_events_old.html" %}
                 {% else %}
                     {% include "larpmanager/manage/widgets/exe_events.html" %}
@@ -38,7 +38,7 @@
                     {% include "larpmanager/manage/widgets/helpers.html" %}
                 {% endwith %}
             </div>
-            {% if not demo %}
+            {% if not demo and is_admin %}
                 <div class="staff-list">
                     <div class="orga-buttons">
                         <a class="new button" href="{% url 'exe_reload_cache' %}">

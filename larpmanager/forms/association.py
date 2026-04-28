@@ -43,6 +43,7 @@ from larpmanager.forms.utils import (
 from larpmanager.models.access import AssociationPermission, AssociationRole
 from larpmanager.models.association import Association, AssociationText, AssociationTextType, AssociationTranslation
 from larpmanager.models.member import Member
+from larpmanager.utils.larpmanager.versions import VERSIONS
 
 logger = logging.getLogger(__name__)
 
@@ -428,9 +429,6 @@ class ExeConfigForm(ConfigForm):
         self.set_config_integration()
         self.set_config_publisher()
 
-        # Legacy
-        self.set_config_legacy()
-
     def set_config_interface(self) -> None:
         """Configure interface and calendar display settings."""
         self.set_section("interface", _("Interface"))
@@ -475,22 +473,6 @@ class ExeConfigForm(ConfigForm):
             + _("WARNING: deleted items might not be full recoverable")
         )
         self.add_configs("allow_bulk_delete", ConfigType.BOOL, delete_label, delete_help_text)
-
-    def set_config_legacy(self) -> None:
-        """Configure legacy interface options."""
-        self.set_section("legacy", "Legacy")
-
-        past_events_label = _("Old dashboard")
-        past_events_help_text = _("If checked: shows the old dashboard")
-        self.add_configs("old_dashboard", ConfigType.BOOL, past_events_label, past_events_help_text)
-
-        past_events_label = _("Old interface")
-        past_events_help_text = _("If checked: shows the old interface")
-        self.add_configs("old_form_appearance", ConfigType.BOOL, past_events_label, past_events_help_text)
-
-        past_events_label = _("Old menu")
-        past_events_help_text = _("If checked: shows the old menu")
-        self.add_configs("old_menu_appearance", ConfigType.BOOL, past_events_label, past_events_help_text)
 
     def set_config_email(self) -> None:
         """Configure email notification preferences and mail server settings."""
@@ -776,7 +758,7 @@ class ExeConfigForm(ConfigForm):
 
     def set_config_accounting_2(self) -> None:
         """Configure accounting-related form fields for association settings."""
-        # Configure token/credit system naming and display
+        # Configure token system naming and display
         if "tokens" in self.params["features"]:
             self.set_section("tokens", _("Tokens"))
 
@@ -790,8 +772,10 @@ class ExeConfigForm(ConfigForm):
                 help_text_token_display_name,
             )
 
+        # Configure credit system naming and display
         if "credits" in self.params["features"]:
             self.set_section("credits", _("Credits"))
+
             # Customizable credit display name
             label_credit_display_name = _("Credits name")
             help_text_credit_display_name = _("Name to be displayed for credits")
@@ -800,6 +784,18 @@ class ExeConfigForm(ConfigForm):
                 ConfigType.CHAR,
                 label_credit_display_name,
                 help_text_credit_display_name,
+            )
+
+            # Make credits readonly in events
+            label_credit_readonly_event = _("Lock events")
+            help_text_credit_readonly_event = _(
+                "If checked, prevents credits from being created or changed in the event panel"
+            )
+            self.add_configs(
+                "credit_readonly_event",
+                ConfigType.BOOL,
+                label_credit_readonly_event,
+                help_text_credit_readonly_event,
             )
 
         # Configure treasury management and appointee selection
@@ -1122,36 +1118,20 @@ class ExePreferencesForm(ConfigForm):
             digest_mode_help_text,
         )
 
-        if self.params.get("old_dashboard"):
-            # Add temporary new dashboard
-            digest_mode_label = _("New Dashboard")
-            digest_mode_help_text = _("If checked: activate new dashbord")
+        assoc_version = self.params.get("assoc_version", 0)
+        latest = self.params.get("latest_available_version", 0)
+        if assoc_version < latest:
+            version_choices = [("", "---")] + [
+                (str(v["number"]), f"{v['number']} - {v['description']}")
+                for v in VERSIONS
+                if v["available"] and v["number"] >= assoc_version
+            ]
             self.add_configs(
-                "interface_new_dashboard",
-                ConfigType.BOOL,
-                digest_mode_label,
-                digest_mode_help_text,
-            )
-
-        if self.params.get("old_form_appearance"):
-            # Add temporary new dashboard
-            digest_mode_label = _("New interface")
-            digest_mode_help_text = _("If checked: activate new interface")
-            self.add_configs(
-                "interface_new_ui",
-                ConfigType.BOOL,
-                digest_mode_label,
-                digest_mode_help_text,
-            )
-
-        if self.params.get("old_menu_appearance"):
-            digest_mode_label = _("New menu")
-            digest_mode_help_text = _("If checked: activate new menu")
-            self.add_configs(
-                "interface_new_menu",
-                ConfigType.BOOL,
-                digest_mode_label,
-                digest_mode_help_text,
+                "interface_version",
+                ConfigType.CHOICE,
+                _("Interface version"),
+                _("Personal interface version preference, overrides the organization setting"),
+                version_choices,
             )
 
     def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002

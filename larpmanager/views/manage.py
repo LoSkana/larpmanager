@@ -34,7 +34,7 @@ from django_select2.forms import Select2Widget
 from slugify import slugify
 
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.config import get_association_config, get_event_config, get_member_config
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.cache.widget import get_exe_widget_cache, get_orga_widget_cache
@@ -48,11 +48,16 @@ from larpmanager.cache.wwyltd import (
 from larpmanager.models.access import AssociationPermission, EventPermission
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import RegistrationStatus, Run
-from larpmanager.utils.auth.permission import has_association_permission, get_index_association_permissions, \
-    has_event_permission, get_index_event_permissions
+from larpmanager.utils.auth.permission import (
+    get_event_roles,
+    get_index_association_permissions,
+    get_index_event_permissions,
+    has_association_permission,
+    has_event_permission,
+)
 from larpmanager.utils.core.base import check_association_context, check_event_context, get_context, get_event_context
 from larpmanager.utils.core.common import format_datetime
-from larpmanager.utils.core.sticky import get_sticky_messages, dismiss_sticky
+from larpmanager.utils.core.sticky import dismiss_sticky, get_sticky_messages
 from larpmanager.utils.edit.backend import set_suggestion
 from larpmanager.utils.services.association import get_activation_checklist
 from larpmanager.utils.users.registration import registration_available
@@ -170,29 +175,28 @@ def _get_registration_status(run: Run) -> str:
 
 def _get_registration_counts(run: Run) -> dict:
     """Prepares run registration ticket counts ordered by ticket order field."""
-
     counts = get_registration_counts(run)
 
     # Create a list of ticket data with name, order, and count
     ticket_data = []
     for ticket_id, ticket_name in counts.get("tickets_map", {}).items():
         count_key = f"count_ticket_{ticket_id}"
-        if count_key in counts and counts[count_key]:
+        if counts.get(count_key):
             ticket_order = counts.get("tickets_order", {}).get(ticket_id, 0)
             ticket_data.append({
-                'name': ticket_name,
-                'order': ticket_order,
-                'count': counts[count_key]
+                "name": ticket_name,
+                "order": ticket_order,
+                "count": counts[count_key]
             })
 
     # Sort by order field, then by name
     sorted_tickets = sorted(
         ticket_data,
-        key=lambda x: (x['order'], x['name'])
+        key=lambda x: (x["order"], x["name"])
     )
 
     # Return as a dict with ticket name as key and count as value
-    return {ticket['name']: ticket['count'] for ticket in sorted_tickets}
+    return {ticket["name"]: ticket["count"] for ticket in sorted_tickets}
 
 
 def _exe_manage(request: HttpRequest) -> HttpResponse:
@@ -218,16 +222,6 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     context["exe_page"] = 1
     context["manage"] = 1
 
-    # TODO remove
-    context["old_dashboard"] = (
-            get_association_config(
-                context["association_id"], "old_dashboard", default_value=False, context=context
-            )
-            and not get_member_config(
-                context["member"].id, "interface_new_dashboard", default_value=False, context=context
-            )
-    )
-
     # Check what would you like form
     what_would_you_like(context, request)
 
@@ -249,6 +243,14 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
             "exe_events",
         )
 
+    # Notify if a newer platform version is available
+    if context.get("assoc_version", 0) < context.get("latest_available_version", 0):
+        _add_priority(
+            context,
+            _("A new version of the platform is available"),
+            "exe_version_upgrade",
+        )
+
     # Add dashboard actions and suggestions
     _exe_actions(request, context, features)
 
@@ -265,7 +267,6 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
 
 def _exe_widgets(request: HttpRequest, context: dict, features: dict) -> None:
     """Loads widget data into context for executive dashboard."""
-
     permissions = [
         ("exe_accounting", "accounting", False),
         ("exe_deadlines", "deadlines", True),
@@ -290,7 +291,6 @@ def _exe_suggestions(context: dict) -> None:
         context: Context dictionary containing association ID and other data
 
     """
-
     suggestions = {
         "exe_roles": _("Define roles to grant organization management access"),
     }
@@ -454,7 +454,6 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
         enabled_features: Set of enabled features for the association
 
     """
-
     if context.get("demo"):
         return
 
@@ -506,16 +505,6 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["manage"] = 1
     features = get_event_features(context["event"].id)
 
-    # TODO remove
-    context["old_dashboard"] = (
-            get_association_config(
-                context["association_id"], "old_dashboard", default_value=False, context=context
-            )
-            and not get_member_config(
-                context["member"].id, "interface_new_dashboard", default_value=False, context=context
-            )
-    )
-
     # Check what would you like form
     what_would_you_like(context, request)
 
@@ -527,6 +516,8 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Load permissions and navigation
     get_index_event_permissions(request, context, event_slug)
+    is_organizer, _perms, _roles = get_event_roles(request, context, event_slug)
+    context["is_organizer"] = is_organizer or 1 in context.get("association_role", {})
     if get_association_config(context["association_id"], "interface_admin_links", default_value=False, context=context):
         get_index_association_permissions(request, context, context["association_id"], enforce_check=False)
 
@@ -567,7 +558,6 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 def _orga_widgets(request: HttpRequest, context:dict, features:dict):
     """Loads widget data into context."""
-
     permissions = [
         ("orga_accounting", "accounting", False),
         ("orga_deadlines", "deadlines", True),
@@ -575,9 +565,10 @@ def _orga_widgets(request: HttpRequest, context:dict, features:dict):
         ("orga_log", "logs", True)
     ]
 
+    event_slug = context["event"].slug
     widgets_available = [
         widget for perm, widget, require_feature in permissions
-        if has_association_permission(request, context, perm)
+        if has_event_permission(request, context, event_slug, perm)
            and (not require_feature or widget in context["features"])
     ]
 
@@ -586,10 +577,10 @@ def _orga_widgets(request: HttpRequest, context:dict, features:dict):
     ):
         widgets_available.append("user_character")
 
-    if "progress" in features and has_association_permission(request, context, "orga_characters"):
+    if "progress" in features and has_event_permission(request, context, event_slug, "orga_characters"):
         widgets_available.append("progress")
 
-    if "milestones" in features and has_association_permission(request, context, "orga_milestones"):
+    if "milestones" in features and has_event_permission(request, context, event_slug, "orga_milestones"):
         widgets_available.append("milestones")
 
     context["widgets"] = {
@@ -616,7 +607,6 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
         action lists for the organizer dashboard
 
     """
-
     if context.get("demo"):
         return
 
@@ -930,7 +920,6 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
 
 def _check_currency_priority(request: HttpRequest, context: dict, features:dict) ->Any:
     """Check if currency has been already set / checked."""
-
     if "payment" in features and not get_association_config(
             context["association_id"], "exe_association_suggestion", default_value=False, context=context
     ) and has_association_permission(request, context, "exe_association"):
@@ -1075,11 +1064,7 @@ def _get_perm_link(context: dict, permission: str, view_name: str) -> str:
 
 
 def _compile(request: HttpRequest, context: dict) -> None:  # noqa: C901 - Complex dashboard compilation with feature-dependent sections
-    """Compile management dashboard with suggestions, actions, and priorities.
-
-    Processes and organizes management content sections, handling empty states
-    and providing appropriate user messaging.
-    """
+    """Compile management dashboard with suggestions, actions, and priorities."""
     section_names = ["priorities"]
     if not context.get("demo"):
         section_names.extend(["suggestions", "actions"])
@@ -1143,7 +1128,6 @@ def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: str) -> H
 @login_required
 def dismiss_sticky_message(request: HttpRequest, message_uuid: str) -> JsonResponse:
     """Dismiss a sticky message via AJAX."""
-
     success = dismiss_sticky(request.user.member, message_uuid)
 
     if success:
@@ -1269,7 +1253,7 @@ class WhatWouldYouLikeForm(Form):
         """Add feature entries to tutorial choices list."""
         # Add features recap
         for feature in get_features_cache():
-            if not feature['tutorial']:
+            if not feature["tutorial"]:
                 continue
 
             # Build display text with feature name and optional module

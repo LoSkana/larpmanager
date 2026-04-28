@@ -115,7 +115,7 @@ def abilities(page: Any) -> None:
 def full(page: Any) -> None:
     page.get_by_role("link", name="Dashboard").click()
 
-    check_download(page, "Full backup")
+    check_download(page, "Backup")
 
 
 def relationships(page: Any) -> None:

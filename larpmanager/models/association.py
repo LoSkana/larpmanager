@@ -42,6 +42,7 @@ from larpmanager.models.base import (
 )
 from larpmanager.models.utils import UploadToPathAndRename
 from larpmanager.utils.core.validators import FileTypeValidator
+from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 
 
 class MemberFieldType(models.TextChoices):
@@ -304,6 +305,17 @@ class Association(UuidMixin, BaseModel):
                 name="unique_association_without_optional",
             ),
         ]
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Create version config on first save."""
+        is_new = not self.pk
+        super().save(*args, **kwargs)
+        if is_new:
+            AssociationConfig.objects.get_or_create(
+                association=self,
+                name="version",
+                defaults={"value": str(LATEST_AVAILABLE_VERSION)},
+            )
 
     def get_currency_symbol(self) -> str:
         """Return the currency symbol for the payment currency."""

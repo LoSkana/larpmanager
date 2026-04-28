@@ -1,6 +1,6 @@
 from typing import Any
 
-from django.db import migrations
+from django.db import migrations, models
 
 
 def convert_configs(apps: Any, schema_editor: Any) -> None:
@@ -14,7 +14,7 @@ def convert_configs(apps: Any, schema_editor: Any) -> None:
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("larpmanager", "0154_player_relationships_feature"),
+        ("larpmanager", "0155_interface_version_system"),
     ]
 
     operations = [
@@ -26,5 +26,11 @@ class Migration(migrations.Migration):
         migrations.RunPython(
             convert_configs,
             migrations.RunPython.noop,
+        ),
+        migrations.AlterField(
+            model_name='event',
+            name='keywords',
+            field=models.CharField(blank=True, help_text='Keywords describing the event', max_length=100,
+                                   verbose_name='Keywords'),
         ),
     ]

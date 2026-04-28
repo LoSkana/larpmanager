@@ -52,6 +52,7 @@ from larpmanager.utils.core.exceptions import (
     UserPermissionError,
     check_event_feature,
 )
+from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 from larpmanager.utils.users.registration import check_signup, registration_find, registration_status
 
 # Demo mode threshold (Associations with fewer than this many registrations are considered demo/trial accounts)
@@ -151,9 +152,16 @@ def get_context_member(request: HttpRequest, context: dict) -> None:
     # Get association permissions for the user
     get_index_association_permissions(request, context, context["association_id"], enforce_check=False)
 
-    # Add user interface preferences and staff status
-    for config_name in ["interface_new_ui", "interface_new_menu"]:
-        context[config_name] = context["member"].get_config(config_name, default_value=False)
+    # Compute effective interface version (member override, clamped to [assoc_version, latest])
+    member_version_str = context["member"].get_config("interface_version", default_value=None)
+    member_version = int(member_version_str) if member_version_str else None
+    assoc_version = context.get("assoc_version", LATEST_AVAILABLE_VERSION)
+    if member_version is not None and assoc_version != LATEST_AVAILABLE_VERSION:
+        effective = max(member_version, assoc_version)
+    else:
+        effective = assoc_version
+    context["effective_version"] = effective
+    context["latest_available_version"] = LATEST_AVAILABLE_VERSION
 
     context["is_staff"] = request.user.is_staff
 
