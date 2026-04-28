@@ -19,9 +19,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-import ast
 import logging
 import time
+from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import TYPE_CHECKING, Any
 
@@ -35,16 +35,17 @@ from django.utils.translation import gettext as _
 from larpmanager.cache.config import get_association_config, get_element_config, save_single_config
 from larpmanager.forms.event import PublicationEventType, PublicationLanguage
 from larpmanager.models.access import EventRole
-from larpmanager.models.event import Run
+from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import Registration, RegistrationTicket, TicketTier
-from larpmanager.utils.core.common import clean_html
+from larpmanager.utils.core.common import clean_html, parse_multi_config
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
-    from larpmanager.models.event import Event
 
 logger = logging.getLogger(__name__)
+
+# ---- ILDB API ---- #
 
 ILDB_API_BASE = "https://www.larpdatabase.com/api/v1"
 ILDB_CONFIG_KEY = "ildb_api_key"
@@ -52,49 +53,85 @@ ILDB_TEAM_CONFIG_KEY = "ildb_team_id"
 ILDB_RUN_CONFIG = "ildb"
 
 
-def upload_ildb(association: Association) -> None:
-    """Upload/update recent runs on larpdatabase.com (ILDB) for events marked as ready.
+def _ildb_http(method: str, url: str, api_key: str = "", **kwargs: Any) -> requests.Response:
+    """Execute one ILDB API call and sleep 1 s to stay within the 60 req/min limit.
 
-    Processes runs that ended within the last month and have pub_ready set.
-    Creates a new ILDB event on first upload; updates it on subsequent runs.
-
-    Args:
-        association: Association instance.
-
+    When api_key is provided, Authorization and Accept headers are injected automatically.
     """
+    if api_key:
+        headers = kwargs.pop("headers", {})
+        headers.setdefault("Authorization", f"Bearer {api_key}")
+        headers.setdefault("Accept", "application/json")
+        kwargs["headers"] = headers
+    response = getattr(requests, method)(url, **kwargs)
+    time.sleep(1)
+    return response
+
+
+@dataclass
+class IldbCtx:
+    """Prepared ILDB context for a ready-to-publish event."""
+
+    api_key: str
+    team_id: str
+    association: Association
+    ildb_event_id: str = field(default="")
+
+
+def _get_ildb_context(event: Event, run: Run | None = None) -> IldbCtx | None:
+    """Return IldbCtx if the event is ready and credentials are set, else None.
+
+    When run is provided, ildb_event_id is the stored ILDB run ID (empty if not yet published).
+    """
+    if not get_element_config(event, "pub_ready", default_value=False):
+        return None
+    association = event.association
     api_key = get_association_config(association.id, ILDB_CONFIG_KEY, default_value="")
     team_id = get_association_config(association.id, ILDB_TEAM_CONFIG_KEY, default_value="")
     if not api_key or not team_id:
+        return None
+    ildb_event_id = ""
+    if run is not None:
+        stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
+        if stored and stored not in ("True", "False"):
+            ildb_event_id = stored
+    return IldbCtx(api_key=api_key, team_id=team_id, association=association, ildb_event_id=ildb_event_id)
+
+
+def _send_request(method: str, url: str, ctx: IldbCtx, payload: dict, locandina: object) -> requests.Response:
+    """Send a POST or PUT event request, using multipart when a cover image is present."""
+    if locandina:
+        data = []
+        for k, v in payload.items():
+            if isinstance(v, list):
+                data.extend((f"{k}[]", item) for item in v)
+            else:
+                data.append((k, v))
+        with locandina.open("rb") as f:
+            return _ildb_http(method, url, api_key=ctx.api_key, data=data, files={"locandina": f}, timeout=30)
+    return _ildb_http(method, url, api_key=ctx.api_key, json=payload, timeout=30)
+
+
+# ---- EVENT ---- #
+
+
+def publish_event(event_id: int) -> None:
+    """Create or update the ILDB entry for all eligible runs of an event."""
+    event = Event.objects.select_related("association").get(pk=event_id)
+    ctx = _get_ildb_context(event)
+    if not ctx:
         return
-
-    one_month_ago = timezone.now().date() - timedelta(days=30)
-    runs = Run.objects.filter(
-        event__association=association,
-        end__gte=one_month_ago,
-        end__lte=timezone.now().date(),
-    ).select_related("event", "event__association")
-
-    for run in runs:
-        if not get_element_config(run.event, "pub_ready", default_value=False):
-            continue
-
+    for run in event.runs.all():
+        run_ctx = _get_ildb_context(event, run)
         try:
-            _process_run(run, api_key, team_id, association)
+            _process_run(run, run_ctx)
         except Exception as exc:
-            logger.exception("ILDB upload failed for run %s", run.id)
-            notify_admins(f"ILDB upload failed for run {run.id}", str(run), exc)
+            logger.exception("ILDB publish_event failed for run %s", run.id)
+            notify_admins(f"ILDB publish_event failed for run {run.id}", str(run), exc)
 
 
-def _process_run(run: Run, api_key: str, team_id: str, association: Association) -> None:
-    """Create or update a run on ILDB, then sync crew/cast and notify the association.
-
-    Args:
-        run: Run instance to upload.
-        api_key: ILDB API authentication token.
-        team_id: ILDB team ID that owns the event.
-        association: Association instance owning the run.
-
-    """
+def _process_run(run: Run, ctx: IldbCtx) -> None:
+    """Create or update a run on ILDB, then sync crew/cast and notify the association."""
     event = run.event
     payload, locandina = _build_event_payload(event, run)
 
@@ -115,55 +152,36 @@ def _process_run(run: Run, api_key: str, team_id: str, association: Association)
         notify_admins(f"ILDB: skipping run {run.id} - missing required fields: {missing}", str(run))
         return
 
-    ildb_event_id = _find_ildb_event_id(run, api_key, team_id, association)
-    if ildb_event_id:
-        _update_event(api_key, payload, team_id, ildb_event_id, locandina)
-    else:
-        ildb_event_id = _create_event(api_key, payload, team_id, locandina)
+    ctx.ildb_event_id = _find_event_id(run, ctx)
+    if ctx.ildb_event_id:
+        _update_event(ctx, payload, locandina)
+        return
 
-    save_single_config(run, ILDB_RUN_CONFIG, str(ildb_event_id))
-
-    upload_staff = get_association_config(association.id, "ildb_crew_staff", default_value=False)
-    if upload_staff:
-        crew = _build_crew(event)
-        _upload_crew(crew, api_key, team_id, ildb_event_id)
-
-    upload_players = get_association_config(association.id, "ildb_crew_players", default_value=False)
-    if upload_players:
-        cast = _build_cast(run)
-        _upload_cast(cast, api_key, team_id, ildb_event_id)
-
-    _notify_association(association, run, ildb_event_id)
+    # Create new event, notify association, save event_id
+    ctx.ildb_event_id = _create_event(ctx, payload, locandina)
+    save_single_config(run, ILDB_RUN_CONFIG, ctx.ildb_event_id)
+    _notify_association(ctx.association, run, ctx.ildb_event_id)
 
 
-def _find_ildb_event_id(run: Run, api_key: str, team_id: str, association: Association) -> str:
+def _find_event_id(run: Run, ctx: IldbCtx) -> str:
     """Return the ILDB event ID for a run, checking local config then the ILDB API.
 
-    If a matching event in draft status is found via the API, notifies the association by email.
+    If a matching draft event is found via the API, notifies the association by email.
     """
     stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
     if stored and stored not in ("True", "False"):
         return stored
 
-    headers = {"Authorization": f"Bearer {api_key}", "Accept": "application/json"}
-    event_name = run.event.name
     page = 1
     while True:
-        response = requests.get(
-            f"{ILDB_API_BASE}/teams/{team_id}/events",
-            params={"page": page},
-            headers=headers,
-            timeout=30,
+        response = _ildb_http(
+            "get", f"{ILDB_API_BASE}/teams/{ctx.team_id}/events", api_key=ctx.api_key, params={"page": page}, timeout=30
         )
         response.raise_for_status()
-        time.sleep(1)
         body = response.json()
         for ev in body.get("data", []):
-            if ev.get("nome") == event_name:
-                event_id = str(ev["id"])
-                if ev.get("status") == "draft":
-                    _notify_draft_pending(association, run, event_id)
-                return event_id
+            if slugify(ev.get("nome")) == slugify(run.search):
+                return str(ev["id"])
         meta = body.get("meta", {})
         if page >= meta.get("last_page", 1):
             break
@@ -171,39 +189,20 @@ def _find_ildb_event_id(run: Run, api_key: str, team_id: str, association: Assoc
     return ""
 
 
-def _send_event_request(method: str, url: str, api_key: str, payload: dict, locandina: object) -> requests.Response:
-    """Send a POST or PUT event request, using multipart when a cover image is present."""
-    headers = {"Authorization": f"Bearer {api_key}", "Accept": "application/json"}
-    if locandina:
-        data = []
-        for k, v in payload.items():
-            if isinstance(v, list):
-                data.extend((f"{k}[]", item) for item in v)
-            else:
-                data.append((k, v))
-        with locandina.open("rb") as f:
-            response = getattr(requests, method)(url, data=data, files={"locandina": f}, headers=headers, timeout=30)
-    else:
-        headers["Content-Type"] = "application/json"
-        response = getattr(requests, method)(url, json=payload, headers=headers, timeout=30)
-    time.sleep(1)
-    return response
-
-
-def _create_event(api_key: str, payload: dict, team_id: str, locandina: object = None) -> str:
+def _create_event(ctx: IldbCtx, payload: dict, locandina: object = None) -> str:
     """POST a new event to ILDB and return its ID."""
-    url = f"{ILDB_API_BASE}/teams/{team_id}/events"
-    response = _send_event_request("post", url, api_key, payload, locandina)
+    url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events"
+    response = _send_request("post", url, ctx, payload, locandina)
     if not response.ok:
         logger.error("ILDB event create failed %s: %s", response.status_code, response.text)
     response.raise_for_status()
     return str(response.json().get("data", {}).get("id", ""))
 
 
-def _update_event(api_key: str, payload: dict, team_id: str, event_id: str, locandina: object = None) -> None:
+def _update_event(ctx: IldbCtx, payload: dict, locandina: object = None) -> None:
     """PUT updated fields to an existing ILDB event."""
-    url = f"{ILDB_API_BASE}/teams/{team_id}/events/{event_id}"
-    response = _send_event_request("put", url, api_key, payload, locandina)
+    url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events/{ctx.ildb_event_id}"
+    response = _send_request("put", url, ctx, payload, locandina)
     if not response.ok:
         logger.error("ILDB event update failed %s: %s", response.status_code, response.text)
 
@@ -215,7 +214,6 @@ PLAYER_TIERS = [
     TicketTier.REDUCED,
     TicketTier.PATRON,
 ]
-
 _ILDB_GENRES_URL = "https://www.larpdatabase.com/api/v1/genres"
 _ILDB_GENRES_CACHE_KEY = "ildb_genre_slug_map"
 _ILDB_GENRES_CACHE_TTL = 86400  # 24 hours
@@ -227,9 +225,8 @@ def _get_genre_slug_map() -> dict[str, int]:
     if result is not None:
         return result
     try:
-        response = requests.get(_ILDB_GENRES_URL, timeout=10)
+        response = _ildb_http("get", _ILDB_GENRES_URL, timeout=10)
         response.raise_for_status()
-        time.sleep(1)
         res_json = response.json()
         if not res_json.get("success"):
             notify_admins("_get_genre_slug_map", f"Failed genre fetch: {response}")
@@ -243,7 +240,6 @@ def _get_genre_slug_map() -> dict[str, int]:
     return result
 
 
-# Maps internal stored values to ILDB Italian API values
 _TIPOLOGIA_MAP = {
     "one_shot": "one shot",
     "serie": "serie",
@@ -254,13 +250,11 @@ _TIPOLOGIA_MAP = {
     "chamber": "chamber larp",
     "laog": "laog",
 }
-
 _ACCOMMODATION_MAP = {
     "included": "compresa",
     "nope": "non compresa",
     "nonres": "non residenziale",
 }
-
 _ACCOMMODATION_TYPE_MAP = {
     "camping": "campeggio",
     "agritourism": "agriturismo",
@@ -268,7 +262,6 @@ _ACCOMMODATION_TYPE_MAP = {
     "hotel": "hotel",
     "other": "altro",
 }
-
 _MEALS_MAP = {
     "nope": "non compresi",
     "restaurant": "ristorante",
@@ -276,17 +269,6 @@ _MEALS_MAP = {
     "internal": "catering interno",
     "external": "catering esterno",
 }
-
-
-def _parse_multi_config(value: str) -> list:
-    """Parse a MULTI_BOOL config string (stored as Python list repr) into a list."""
-    if not value:
-        return []
-    try:
-        result = ast.literal_eval(value)
-        return result if isinstance(result, list) else []
-    except (ValueError, SyntaxError):
-        return []
 
 
 def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
@@ -305,12 +287,12 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
     genre_map = _get_genre_slug_map()
     setting_raw = get_element_config(event, "pub_setting", default_value="")
     mood_raw = get_element_config(event, "pub_mood", default_value="")
-    slugs = _parse_multi_config(setting_raw) + _parse_multi_config(mood_raw)
+    slugs = parse_multi_config(setting_raw) + parse_multi_config(mood_raw)
     genere_ids = {genre_map[s] for s in slugs if s in genre_map}
     genere = sorted(genere_ids) or [genre_map.get("no-genre-specified", 27)]
 
     lingua_raw = get_element_config(event, "pub_language", default_value="")
-    lingua = _parse_multi_config(lingua_raw) or [PublicationLanguage.values[0]]
+    lingua = parse_multi_config(lingua_raw) or [PublicationLanguage.values[0]]
 
     tipologia_raw = get_element_config(event, "pub_event_type", default_value="") or PublicationEventType.values[0]
     tipologia = _TIPOLOGIA_MAP.get(tipologia_raw, tipologia_raw)
@@ -322,12 +304,10 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
     accommodation = _ACCOMMODATION_MAP.get(accommodation_raw, accommodation_raw) or None
 
     tipo_accommodation_raw = get_element_config(event, "pub_accommodation_type", default_value="")
-    tipo_accommodation = [
-        _ACCOMMODATION_TYPE_MAP.get(v, v) for v in _parse_multi_config(tipo_accommodation_raw)
-    ] or None
+    tipo_accommodation = [_ACCOMMODATION_TYPE_MAP.get(v, v) for v in parse_multi_config(tipo_accommodation_raw)] or None
 
     pasti_raw = get_element_config(event, "pub_meals", default_value="")
-    pasti = [_MEALS_MAP.get(v, v) for v in _parse_multi_config(pasti_raw)] or None
+    pasti = [_MEALS_MAP.get(v, v) for v in parse_multi_config(pasti_raw)] or None
 
     lat = get_element_config(event, "pub_lat", default_value="").strip()
     lon = get_element_config(event, "pub_lon", default_value="").strip()
@@ -360,30 +340,18 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
     return {k: v for k, v in payload.items() if v is not None}, locandina
 
 
-def _upload_crew(crew: list[dict], api_key: str, team_id: str, event_id: str) -> None:
-    """POST each crew member to the ILDB crew endpoint.
+# ---- CREW ---- #
 
-    Args:
-        crew: List of crew entry dicts.
-        api_key: ILDB API authentication token.
-        team_id: ILDB team ID.
-        event_id: ILDB event ID returned by event creation.
 
-    """
-    if not event_id:
+def _upload_crew(crew: list[dict], ctx: IldbCtx) -> None:
+    """POST each crew member to the ILDB crew endpoint."""
+    if not ctx.ildb_event_id:
         return
 
-    url = f"{ILDB_API_BASE}/teams/{team_id}/events/{event_id}/crew"
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-    }
-
+    url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events/{ctx.ildb_event_id}/crew"
     for entry in crew:
-        response = requests.post(url, json=entry, headers=headers, timeout=30)
+        response = _ildb_http("post", url, api_key=ctx.api_key, json=entry, timeout=30)
         response.raise_for_status()
-        time.sleep(1)
 
 
 def _build_member_first_role(roles: list) -> dict[int, str]:
@@ -467,6 +435,9 @@ def _build_crew(event: object) -> list[dict]:
     return crew
 
 
+# ---- CAST ---- #
+
+
 def _make_cast_entry(member: object, character_name: str, *, npc: bool) -> dict:
     """Build a single cast entry dict for the ILDB cast API.
 
@@ -533,30 +504,70 @@ def _build_cast(run: Run) -> list[dict]:
     return cast
 
 
-def _upload_cast(cast: list[dict], api_key: str, team_id: str, event_id: str) -> None:
-    """POST each cast member to the ILDB cast endpoint.
-
-    Args:
-        cast: List of cast entry dicts.
-        api_key: ILDB API authentication token.
-        team_id: ILDB team ID.
-        event_id: ILDB event ID returned by event creation.
-
-    """
-    if not event_id:
+def _upload_cast(cast: list[dict], ctx: IldbCtx) -> None:
+    """POST each cast member to the ILDB cast endpoint."""
+    if not ctx.ildb_event_id:
         return
 
-    url = f"{ILDB_API_BASE}/teams/{team_id}/events/{event_id}/cast"
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-    }
-
+    url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events/{ctx.ildb_event_id}/cast"
     for entry in cast:
-        response = requests.post(url, json=entry, headers=headers, timeout=30)
+        response = _ildb_http("post", url, api_key=ctx.api_key, json=entry, timeout=30)
         response.raise_for_status()
-        time.sleep(1)
+
+
+# ---- ASSOCIATION ---- #
+
+
+def check_ildb_drafts(association: Association) -> None:
+    """Check for ILDB events still in draft status and notify the association to confirm them.
+
+    Called daily by the automate command. Actual create/update is handled by
+    the publish_event / publish_registration / publish_event_role background tasks.
+
+    Args:
+        association: Association instance.
+
+    """
+    api_key = get_association_config(association.id, ILDB_CONFIG_KEY, default_value="")
+    team_id = get_association_config(association.id, ILDB_TEAM_CONFIG_KEY, default_value="")
+    if not api_key or not team_id:
+        return
+
+    one_month_ago = timezone.now().date() - timedelta(days=30)
+    runs = Run.objects.filter(
+        event__association=association,
+        end__gte=one_month_ago,
+        end__lte=timezone.now().date(),
+    ).select_related("event", "event__association")
+
+    tracked: dict[str, Run] = {}
+    for run in runs:
+        ildb_id = run.get_config(ILDB_RUN_CONFIG, default_value="")
+        if ildb_id and ildb_id not in ("True", "False"):
+            tracked[ildb_id] = run
+
+    if not tracked:
+        return
+
+    page = 1
+    while True:
+        response = _ildb_http(
+            "get",
+            f"{ILDB_API_BASE}/teams/{team_id}/events",
+            api_key=api_key,
+            params={"status": "draft", "page": page},
+            timeout=30,
+        )
+        response.raise_for_status()
+        body = response.json()
+        for ev in body.get("data", []):
+            ev_id = str(ev["id"])
+            if ev_id in tracked:
+                _notify_draft_pending(association, tracked[ev_id], ev_id)
+        meta = body.get("meta", {})
+        if page >= meta.get("last_page", 1):
+            break
+        page += 1
 
 
 def _notify_draft_pending(association: Association, run: Run, ildb_event_id: str) -> None:

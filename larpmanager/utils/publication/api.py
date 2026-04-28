@@ -34,7 +34,7 @@ from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.event import Run
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Log
-from larpmanager.utils.larpmanager.ildb import _parse_multi_config
+from larpmanager.utils.core.common import parse_multi_config
 from larpmanager.utils.larpmanager.tasks import notify_admins
 from larpmanager.views.manage import _get_registration_status_code
 
@@ -228,14 +228,14 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR09
 
             for field in ["accommodation_type", "meals", "language"]:
                 raw = get_element_config(event, f"pub_{field}", default_value="")
-                parsed = _parse_multi_config(raw)
+                parsed = parse_multi_config(raw)
                 if parsed:
                     event_data[field] = parsed
 
             _setting_map = {v: label.lower() for v, label in PublicationSetting.choices}
             event_settings = [
                 _setting_map[g]
-                for g in _parse_multi_config(get_element_config(event, "pub_setting", default_value=""))
+                for g in parse_multi_config(get_element_config(event, "pub_setting", default_value=""))
                 if g in _setting_map
             ]
             if event_settings:
@@ -244,7 +244,7 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR09
             _mood_map = {v: label.lower() for v, label in PublicationMood.choices}
             moods = [
                 _mood_map[g]
-                for g in _parse_multi_config(get_element_config(event, "pub_mood", default_value=""))
+                for g in parse_multi_config(get_element_config(event, "pub_mood", default_value=""))
                 if g in _mood_map
             ]
             if moods:

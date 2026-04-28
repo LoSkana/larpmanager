@@ -270,6 +270,7 @@ from larpmanager.utils.io.pdf import (
     delete_character_pdf_files,
 )
 from larpmanager.utils.larpmanager.tutorial import auto_assign_faq_sequential_number, generate_tutorial_url_slug
+from larpmanager.utils.publication.base import publish_event, publish_event_role, publish_registration
 from larpmanager.utils.services.association import (
     apply_skin_features_to_association,
     auto_assign_association_permission_number,
@@ -862,6 +863,9 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     # Default event setup
     create_default_event_setup(instance)
 
+    # Schedule event publication
+    publish_event(instance.id)
+
 
 @receiver(post_delete, sender=Event)
 def post_delete_event_links(sender: type, instance: Any, **kwargs: Any) -> None:
@@ -899,6 +903,10 @@ def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> 
     reset_element_configs(instance.event)
     for run in instance.event.runs.all():
         reset_cache_config_run(run)
+
+    # If a publication config has been changed, trigger event publication
+    if instance.key.startswith("pub_"):
+        publish_event(instance.event_id)
 
 
 @receiver(post_delete, sender=EventConfig)
@@ -949,6 +957,9 @@ def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any)
     # Reset event links cache for all members assigned to this role
     for member in instance.members.all():
         reset_event_links(member.id, instance.event.association_id)
+
+    # Schedule publication crew sync
+    publish_event_role(instance.id)
 
 
 @receiver(pre_delete, sender=EventText)
@@ -1414,6 +1425,9 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     # Update registration count caches for this run
     clear_registration_counts_cache(instance.run_id)
 
+    # Schedule publication cast sync
+    publish_registration(instance.id)
+
 
 @receiver(pre_delete, sender=Registration)
 def pre_delete_registration(sender: type, instance: Registration, *args: Any, **kwargs: Any) -> None:
@@ -1448,6 +1462,9 @@ def post_save_registration_character_rel_savereg(
 
     if created:
         send_character_assignment_email(instance)
+
+    # Schedule publication cast sync
+    publish_registration(instance.registration_id)
 
 
 @receiver(post_delete, sender=RegistrationCharacterRel)
@@ -1591,6 +1608,9 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
 
     # Clear association cache to update onboarding status
     clear_association_cache(instance.event.association.slug)
+
+    # Schedule publication for this run's event
+    publish_event(instance.event_id)
 
 
 @receiver(pre_delete, sender=Run)

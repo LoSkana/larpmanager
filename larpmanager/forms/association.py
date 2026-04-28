@@ -856,13 +856,13 @@ class ExeConfigForm(ConfigForm):
         self.add_configs("ildb_team_id", ConfigType.CHAR, field_label, field_help_text)
 
         self.add_configs(
-            "ildb_crew_staff",
+            "ildb_crew",
             ConfigType.BOOL,
             _("Upload staff"),
             _("If checked: upload staff members"),
         )
         self.add_configs(
-            "ildb_crew_players",
+            "ildb_cast",
             ConfigType.BOOL,
             _("Upload players"),
             _("If checked: upload registered players"),

@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import ast
 import html
 import logging
 import random
@@ -812,3 +813,14 @@ def clean_html(tx: str) -> str:
 def is_rate_limited(key: str, timeout: int = 10) -> bool:
     """Return True if the action identified by key is rate-limited."""
     return not cache.add(f"rl_{key}", 1, timeout)
+
+
+def parse_multi_config(value: str) -> list:
+    """Parse a MULTI_BOOL config string (stored as Python list repr) into a list."""
+    if not value:
+        return []
+    try:
+        result = ast.literal_eval(value)
+        return result if isinstance(result, list) else []
+    except (ValueError, SyntaxError):
+        return []
