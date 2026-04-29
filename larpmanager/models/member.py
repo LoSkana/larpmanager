@@ -43,13 +43,16 @@ from larpmanager.utils.core.codes import countries
 
 logger = logging.getLogger(__name__)
 
+SENSITIVE_DISCLAIMER = _(
+    "It will only be used for internal bureaucratic purposes, and will NEVER be displayed to other participants"
+)
+
 
 class GenderChoices(models.TextChoices):
     """Choices for GenderChoices."""
 
     MALE = "m", _("Male")
     FEMALE = "f", _("Female")
-    OTHER = "o", _("Other")
 
 
 class FirstAidChoices(models.TextChoices):
@@ -144,10 +147,23 @@ class Member(UuidMixin, BaseModel):
         null=True,
         help_text=_(
             "If for whatever reason the first and last name shown on your documents is "
-            "different from the one you prefer to use, then write it here. It will only be "
-            "used for internal bureaucratic purposes, and will NEVER be displayed to other "
-            "participants.",
-        ),
+            "different from the one you prefer to use, then write it here",
+        )
+        + ". "
+        + SENSITIVE_DISCLAIMER
+        + ". ",
+    )
+
+    gender = models.CharField(
+        max_length=1,
+        choices=GenderChoices.choices,
+        default=None,
+        verbose_name=_("Legal Gender"),
+        null=True,
+        help_text=_("Indicate your legal gender as it appears on official documents")
+        + ". "
+        + SENSITIVE_DISCLAIMER
+        + ". ",
     )
 
     pronoun = models.CharField(
@@ -165,15 +181,6 @@ class Member(UuidMixin, BaseModel):
         null=True,
         verbose_name=_("Nationality"),
         help_text=_("Indicate the country of which you are a citizen"),
-    )
-
-    gender = models.CharField(
-        max_length=1,
-        choices=GenderChoices.choices,
-        default=GenderChoices.OTHER,
-        verbose_name=_("Gender"),
-        help_text=_("Indicates what gender you identify yourself as"),
-        null=True,
     )
 
     phone_contact = PhoneNumberField(

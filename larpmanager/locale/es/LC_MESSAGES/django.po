@@ -2220,6 +2220,9 @@ msgstr "Plazos"
 msgid "Instructions"
 msgstr "Instrucciones"
 
+msgid "Legal Gender"
+msgstr "Género legal"
+
 msgid "Legal Notice"
 msgstr "Aviso legal"
 
@@ -6762,9 +6765,6 @@ msgstr "¿Quieres estar al día de nuestros eventos"
 msgid "Hint: The correct answers to this question are"
 msgstr "Pista: Las respuestas correctas a esta pregunta son"
 
-msgid "Indicates what gender you identify yourself as"
-msgstr "Indícanos con qué género te identificas"
-
 msgid "Manage your event expenses and upload receipts"
 msgstr "Gestione los gastos de su evento y cargue los recibos"
 
@@ -7983,6 +7983,9 @@ msgstr "Habilita el campo \"número\", un ID numérico único para referenciarlo
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Si tiene algún problema, póngase en contacto con nosotros y le ayudaremos"
+
+msgid "Indicate your legal gender as it appears on official documents"
+msgstr "Indique su sexo legal tal como aparece en los documentos oficiales"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr "Nombres de las personas o equipos que organizan y dirigen este acto"
@@ -11150,6 +11153,13 @@ msgstr ""
 "hora estimada de llegada"
 
 msgid ""
+"It will only be used for internal bureaucratic purposes, and will NEVER be "
+"displayed to other participants"
+msgstr ""
+"Sólo se utilizará con fines burocráticos internos y NUNCA se mostrará a "
+"otros participantes"
+
+msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
 "displaying trend graphs over time"
 msgstr ""
@@ -11868,6 +11878,13 @@ msgstr ""
 " facturas"
 
 msgid ""
+"If for whatever reason the first and last name shown on your documents is "
+"different from the one you prefer to use, then write it here"
+msgstr ""
+"Si por cualquier motivo el nombre y los apellidos que figuran en sus "
+"documentos son diferentes de los que prefiere utilizar, escríbalos aquí"
+
+msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "
 "notice any delays, write us directly, do not enter new requests"
 msgstr ""
@@ -12419,17 +12436,6 @@ msgstr ""
 "para proponerlo al personal. Cuidado: puede que algunos campos ya no sean "
 "editables. Deje el campo en blanco para guardar sus cambios y poder "
 "continuarlos en el futuro."
-
-msgid ""
-"If for whatever reason the first and last name shown on your documents is "
-"different from the one you prefer to use, then write it here. It will only "
-"be used for internal bureaucratic purposes, and will NEVER be displayed to "
-"other participants."
-msgstr ""
-"Si por cualquier motivo el nombre y apellidos que figuran en sus documentos "
-"son diferentes de los que prefiere utilizar, escríbalos aquí. Sólo se "
-"utilizará con fines burocráticos internos, y NUNCA se mostrará a otros "
-"participantes."
 
 msgid ""
 "If you prefer that your real name and surname not be publicly visible, "

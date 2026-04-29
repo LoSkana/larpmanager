@@ -2220,6 +2220,9 @@ msgstr "Hodnotit"
 msgid "Instructions"
 msgstr "Pokyny"
 
+msgid "Legal Gender"
+msgstr "Právní pohlaví"
+
 msgid "Legal Notice"
 msgstr "Právní upozornění"
 
@@ -6760,9 +6763,6 @@ msgstr "Chcete být informováni o našich akcích"
 msgid "Hint: The correct answers to this question are"
 msgstr "Nápověda: Správné odpovědi na tuto otázku jsou tyto"
 
-msgid "Indicates what gender you identify yourself as"
-msgstr "Uveďte, ke kterému pohlaví se hlásíte"
-
 msgid "Manage your event expenses and upload receipts"
 msgstr "Správa výdajů na události a nahrávání účtenek"
 
@@ -7917,6 +7917,9 @@ msgstr "Povoluje pole \"number\", jedinečné číselné ID, na které se odkazu
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Pokud narazíte na nějaké problémy, kontaktujte nás a my vám pomůžeme"
+
+msgid "Indicate your legal gender as it appears on official documents"
+msgstr "Uveďte své zákonné pohlaví, jak je uvedeno v úředních dokumentech"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr "Jména osob nebo týmů, které tuto akci organizují a řídí"
@@ -10876,6 +10879,13 @@ msgstr ""
 "čas příjezdu"
 
 msgid ""
+"It will only be used for internal bureaucratic purposes, and will NEVER be "
+"displayed to other participants"
+msgstr ""
+"Budou použity pouze pro interní byrokratické účely a NIKDY nebudou zobrazeny"
+" ostatním účastníkům"
+
+msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
 "displaying trend graphs over time"
 msgstr ""
@@ -11579,6 +11589,13 @@ msgstr ""
 "schvalování faktur obdržíte jeden souhrnný e-mail denně"
 
 msgid ""
+"If for whatever reason the first and last name shown on your documents is "
+"different from the one you prefer to use, then write it here"
+msgstr ""
+"Pokud se jméno a příjmení uvedené v dokladech z jakéhokoli důvodu liší od "
+"toho, které preferujete, napište je sem"
+
+msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "
 "notice any delays, write us directly, do not enter new requests"
 msgstr ""
@@ -12105,16 +12122,6 @@ msgstr ""
 "navrhnout personálu. Buďte opatrní: některá pole již nemusí být "
 "editovatelná. Ponechte pole prázdné, abyste uložili své změny a mohli v nich"
 " v budoucnu pokračovat."
-
-msgid ""
-"If for whatever reason the first and last name shown on your documents is "
-"different from the one you prefer to use, then write it here. It will only "
-"be used for internal bureaucratic purposes, and will NEVER be displayed to "
-"other participants."
-msgstr ""
-"Pokud se jméno a příjmení uvedené v dokladech z jakéhokoli důvodu liší od "
-"toho, které preferujete, napište je sem. Bude použito pouze pro interní "
-"byrokratické účely a NIKDY nebude zobrazeno ostatním účastníkům."
 
 msgid ""
 "If you prefer that your real name and surname not be publicly visible, "

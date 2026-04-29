@@ -2220,6 +2220,9 @@ msgstr "Maksuerät"
 msgid "Instructions"
 msgstr "Ohjeet"
 
+msgid "Legal Gender"
+msgstr "Oikeudellinen sukupuoli"
+
 msgid "Legal Notice"
 msgstr "Oikeudellinen huomautus"
 
@@ -6759,9 +6762,6 @@ msgstr "Haluatko olla aina ajan tasalla tapahtumistamme"
 msgid "Hint: The correct answers to this question are"
 msgstr "Vihje: Oikeat vastaukset tähän kysymykseen ovat seuraavat"
 
-msgid "Indicates what gender you identify yourself as"
-msgstr "Ilmoittaa, minkä sukupuolen edustajaksi tunnet itsesi"
-
 msgid "Manage your event expenses and upload receipts"
 msgstr "Hallitse tapahtumakuluja ja lataa kuitteja"
 
@@ -7931,6 +7931,11 @@ msgstr ""
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Jos sinulla on ongelmia, ota meihin yhteyttä, niin autamme sinua"
+
+msgid "Indicate your legal gender as it appears on official documents"
+msgstr ""
+"Ilmoita laillinen sukupuolesi sellaisena kuin se näkyy virallisissa "
+"asiakirjoissa"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr "Tapahtuman järjestäjien ja toteuttajien henkilöiden tai ryhmien nimet"
@@ -10978,6 +10983,13 @@ msgstr ""
 "saapumisajan ja saapumisajan"
 
 msgid ""
+"It will only be used for internal bureaucratic purposes, and will NEVER be "
+"displayed to other participants"
+msgstr ""
+"Tietoja käytetään ainoastaan sisäisiin byrokraattisiin tarkoituksiin, eikä "
+"niitä KOSKAAN näytetä muille osallistujille"
+
+msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
 "displaying trend graphs over time"
 msgstr ""
@@ -11689,6 +11701,13 @@ msgstr ""
 "hyväksymisestä"
 
 msgid ""
+"If for whatever reason the first and last name shown on your documents is "
+"different from the one you prefer to use, then write it here"
+msgstr ""
+"Jos asiakirjoissa oleva etu- ja sukunimi on jostain syystä eri kuin "
+"haluamasi nimi, kirjoita se tähän"
+
+msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "
 "notice any delays, write us directly, do not enter new requests"
 msgstr ""
@@ -12232,17 +12251,6 @@ msgstr ""
 "valmis ehdottamaan sitä henkilökunnalle. Ole varovainen: joitakin kenttiä ei"
 " ehkä voi enää muokata. Jätä kenttä tyhjäksi, jotta voit tallentaa muutokset"
 " ja jatkaa niitä tulevaisuudessa."
-
-msgid ""
-"If for whatever reason the first and last name shown on your documents is "
-"different from the one you prefer to use, then write it here. It will only "
-"be used for internal bureaucratic purposes, and will NEVER be displayed to "
-"other participants."
-msgstr ""
-"Jos asiakirjoissa oleva etu- ja sukunimi on jostain syystä eri kuin "
-"haluamasi nimi, kirjoita se tähän. Sitä käytetään ainoastaan sisäisiin "
-"byrokraattisiin tarkoituksiin, eikä sitä koskaan näytetä muille "
-"osallistujille."
 
 msgid ""
 "If you prefer that your real name and surname not be publicly visible, "
