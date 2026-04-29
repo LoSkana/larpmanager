@@ -1323,9 +1323,13 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   text-align: center !important;
 }
 
+#tutorial-descr hr {
+  margin: 1em 0;
+}
+
 #tutorial-descr p {
   text-align: left !important;
-  margin: 0 0 1em 0;
+  margin: 0.5em 0;
 }
 
 #tutorial-descr ul,
@@ -1333,7 +1337,7 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   text-align: left !important;
   list-style-position: outside !important;
   padding-left: 1.5em !important;
-  margin: 0 0 1em 0;
+  margin: 0.5em 0;
 }
 
 #tutorial-descr li {
