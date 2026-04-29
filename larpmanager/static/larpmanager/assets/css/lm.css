@@ -1315,10 +1315,6 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   width: 33%;
 }
 
-#tutorials ul li {
-  padding: 1em;
-}
-
 #tutorial-descr {
   text-align: left !important;
 }
@@ -1337,6 +1333,7 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   text-align: left !important;
   list-style-position: outside !important;
   padding-left: 1.5em !important;
+  margin: 0 0 1em 0;
 }
 
 #tutorial-descr li {
