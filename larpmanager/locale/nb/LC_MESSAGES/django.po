@@ -2220,6 +2220,9 @@ msgstr "Pris"
 msgid "Instructions"
 msgstr "Instruksjoner"
 
+msgid "Legal Gender"
+msgstr "Juridisk kjønn"
+
 msgid "Legal Notice"
 msgstr "Juridisk merknad"
 
@@ -6761,9 +6764,6 @@ msgstr "Vil du holde deg oppdatert om arrangementene våre"
 msgid "Hint: The correct answers to this question are"
 msgstr "Hint: De riktige svarene på dette spørsmålet er"
 
-msgid "Indicates what gender you identify yourself as"
-msgstr "Angi hvilket kjønn du identifiserer deg med"
-
 msgid "Manage your event expenses and upload receipts"
 msgstr "Administrer utgiftene til arrangementet og last opp kvitteringer"
 
@@ -7931,6 +7931,9 @@ msgstr "Aktiverer feltet \"nummer\", en unik numerisk ID for å referere til det
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Hvis du støter på problemer, kan du kontakte oss, så hjelper vi deg"
+
+msgid "Indicate your legal gender as it appears on official documents"
+msgstr "Oppgi ditt juridiske kjønn slik det fremgår av offisielle dokumenter"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr ""
@@ -10985,6 +10988,13 @@ msgstr ""
 "og beregnet ankomsttid"
 
 msgid ""
+"It will only be used for internal bureaucratic purposes, and will NEVER be "
+"displayed to other participants"
+msgstr ""
+"Den vil kun bli brukt til interne byråkratiske formål, og vil ALDRI bli vist"
+" til andre deltakere"
+
+msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
 "displaying trend graphs over time"
 msgstr ""
@@ -11694,6 +11704,13 @@ msgstr ""
 "umiddelbare varsler om registreringer, betalinger og fakturagodkjenninger"
 
 msgid ""
+"If for whatever reason the first and last name shown on your documents is "
+"different from the one you prefer to use, then write it here"
+msgstr ""
+"Hvis for- og etternavnet som vises på dokumentene dine av en eller annen "
+"grunn er forskjellig fra det du foretrekker å bruke, skriver du det her"
+
+msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "
 "notice any delays, write us directly, do not enter new requests"
 msgstr ""
@@ -12237,17 +12254,6 @@ msgstr ""
 "foreslå den for personalet. Vær forsiktig: Noen felt kan ikke lenger "
 "redigeres. La feltet stå tomt for å lagre endringene dine og for å kunne "
 "fortsette med dem i fremtiden."
-
-msgid ""
-"If for whatever reason the first and last name shown on your documents is "
-"different from the one you prefer to use, then write it here. It will only "
-"be used for internal bureaucratic purposes, and will NEVER be displayed to "
-"other participants."
-msgstr ""
-"Hvis for- og etternavnet som vises på dokumentene dine av en eller annen "
-"grunn er forskjellig fra det du foretrekker å bruke, skriver du det her. Det"
-" vil kun bli brukt til interne byråkratiske formål, og vil ALDRI bli vist "
-"til andre deltakere."
 
 msgid ""
 "If you prefer that your real name and surname not be publicly visible, "

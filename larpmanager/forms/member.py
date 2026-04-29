@@ -1032,7 +1032,6 @@ class ExeProfileForm(BaseModelForm):
             "language",
             "newsletter",
             "parent",
-            "legal_gender",
         ]
 
         available_fields: list[tuple[str, str, str]] = []
