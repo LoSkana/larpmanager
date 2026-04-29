@@ -774,9 +774,6 @@ msgstr "lid"
 msgid "within"
 msgstr "binnen"
 
-msgid "API key"
-msgstr "API-sleutel"
-
 msgid "Ability"
 msgstr "Vaardigheden"
 
@@ -1020,9 +1017,6 @@ msgstr "Systemen"
 
 msgid "Tagline"
 msgstr "Tagline"
-
-msgid "Team ID"
-msgstr "Team ID"
 
 msgid "Tickets"
 msgstr "Tickets"
@@ -2389,9 +2383,6 @@ msgstr "Vertalingen"
 msgid "Type of text"
 msgstr "Type tekst"
 
-msgid "Upload staff"
-msgstr "Personeel uploaden"
-
 msgid "Url Shortner"
 msgstr "Url Verkorter"
 
@@ -2614,6 +2605,9 @@ msgstr "Stap naar voren"
 
 msgid "Prologue type"
 msgstr "Type proloog"
+
+msgid "Publish staff"
+msgstr "Personeel publiceren"
 
 msgid "Question type"
 msgstr "Type vraag"
@@ -2904,9 +2898,6 @@ msgstr "Type proloog"
 msgid "URL identifier"
 msgstr "Idenominatieve URL"
 
-msgid "Upload players"
-msgstr "Spelers uploaden"
-
 msgid "Value required"
 msgstr "Vereiste waarde"
 
@@ -3047,6 +3038,9 @@ msgstr "Bijgewerkt lidmaatschap"
 
 msgid "Progress status"
 msgstr "Vooruitgang"
+
+msgid "Publish players"
+msgstr "Spelers publiceren"
 
 msgid "Question saved!"
 msgstr "Onderdanige vraag!"
@@ -4257,9 +4251,6 @@ msgstr "Links voor voorinschrijving"
 msgid "Prop - weapons, props"
 msgstr "Prop - wapens, rekwisieten"
 
-msgid "Ready for publication"
-msgstr "Klaar voor publicatie"
-
 msgid "Register to the event"
 msgstr "Meld je aan voor het evenement"
 
@@ -4531,9 +4522,6 @@ msgstr "Link voor vroege registratie"
 
 msgid "Failed to add character"
 msgstr "Geen teken toegevoegd"
-
-msgid "ILDB - larpdatabase.com"
-msgstr "ILDB - larpdatabase.nl"
 
 msgid "Indicate only if rate 0"
 msgstr "Alleen aangeven als tarief 0"
@@ -5513,9 +5501,6 @@ msgstr "Wil je ons iets vertellen"
 msgid "Each token can only be used once"
 msgstr "Om veiligheidsredenen kan elk token maar één keer worden gebruikt"
 
-msgid "If checked: upload staff members"
-msgstr "Indien aangevinkt: personeelsleden uploaden"
-
 msgid "Is it selectable by participants"
 msgstr "Is het selecteerbaar door deelnemers"
 
@@ -5636,6 +5621,9 @@ msgstr "Schrijf ons voor meer informatie"
 msgid "Go to the history preferences for"
 msgstr "Ga naar de voorkeurengeschiedenis voor"
 
+msgid "If checked: publish staff members"
+msgstr "Indien aangevinkt: medewerkers publiceren"
+
 msgid "Indicate your level of experience"
 msgstr "Geef je ervaringsniveau aan"
 
@@ -5662,6 +5650,10 @@ msgstr "Nu kun je de belastingopties instellen"
 
 msgid "Number of additional participants"
 msgstr "Aantal extra deelnemers"
+
+#, python-format
+msgid "Publish to ILDB: <b>%(list)s</b>."
+msgstr "Publiceren naar ILDB: <b>%(list)s</b>."
 
 msgid "Set the registration opening date"
 msgstr "Stel de openingsdatum van de registratie in"
@@ -6056,9 +6048,6 @@ msgstr "ILDB ontwerp evenement in afwachting van bevestiging"
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Indien aangevinkt, ticketniveau toestaan: Verkoper"
 
-msgid "If checked: upload registered players"
-msgstr "Indien aangevinkt: geregistreerde spelers uploaden"
-
 msgid "Learn all characters before the event"
 msgstr "Leer alle personages voor het evenement"
 
@@ -6179,6 +6168,9 @@ msgstr "Vul de relaties van je personage in"
 
 msgid "I confirm that I have made the payment"
 msgstr "Ik bevestig dat ik de betaling heb gedaan"
+
+msgid "If checked: publish registered players"
+msgstr "Indien aangevinkt: publiceer geregistreerde spelers"
 
 msgid "It will be shown to other participants"
 msgstr "Het wordt getoond aan andere deelnemers"
@@ -7969,10 +7961,6 @@ msgstr "Beheer eenmalige toegangstokens voor beveiligde video/audio-inhoud"
 
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Stemmen beheren voor de toewijzing van rollen in de organisatie"
-
-msgid "Mark this event as ready to be published on larpdatabase.com"
-msgstr ""
-"Markeer deze gebeurtenis als gereed voor publicatie op larpdatabase.com"
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Dit personage is inactief en kan niet worden toegewezen aan spelers"

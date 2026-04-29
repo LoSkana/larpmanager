@@ -388,6 +388,14 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
             "exe_membership",
         )
 
+    # Check for runs not yet published to ILDB
+    if "publisher" in association_features and actions_data.get("ildb_unpublished_runs", {}).get("count", 0) > 0:
+        _add_action(
+            context,
+            _("Publish to ILDB: <b>%(list)s</b>.") % {"list": ", ".join(actions_data["ildb_unpublished_runs"]["runs"])},
+            "exe_events",
+        )
+
     # Process accounting-specific actions
     _exe_accounting_actions(context, association_features)
 

@@ -774,9 +774,6 @@ msgstr "medlem"
 msgid "within"
 msgstr "inom"
 
-msgid "API key"
-msgstr "API-nyckel"
-
 msgid "Ability"
 msgstr "Färdigheter"
 
@@ -1020,9 +1017,6 @@ msgstr "System"
 
 msgid "Tagline"
 msgstr "Tagline"
-
-msgid "Team ID"
-msgstr "Team-ID"
 
 msgid "Tickets"
 msgstr "Biljetter"
@@ -2389,9 +2383,6 @@ msgstr "Översättningar"
 msgid "Type of text"
 msgstr "Typ av text"
 
-msgid "Upload staff"
-msgstr "Ladda upp personal"
-
 msgid "Url Shortner"
 msgstr "Kortare URL"
 
@@ -2614,6 +2605,9 @@ msgstr "Ta ett steg framåt"
 
 msgid "Prologue type"
 msgstr "Typ av prolog"
+
+msgid "Publish staff"
+msgstr "Publicera personal"
 
 msgid "Question type"
 msgstr "Typ av fråga"
@@ -2904,9 +2898,6 @@ msgstr "Typ av prolog"
 msgid "URL identifier"
 msgstr "Idenominativ URL"
 
-msgid "Upload players"
-msgstr "Ladda upp spelare"
-
 msgid "Value required"
 msgstr "Värde krävs"
 
@@ -3047,6 +3038,9 @@ msgstr "Uppdaterat medlemskap"
 
 msgid "Progress status"
 msgstr "Framsteg"
+
+msgid "Publish players"
+msgstr "Publicera spelare"
 
 msgid "Question saved!"
 msgstr "Undergiven fråga!"
@@ -4257,9 +4251,6 @@ msgstr "Länkar för förhandsregistrering"
 msgid "Prop - weapons, props"
 msgstr "Prop - vapen, rekvisita"
 
-msgid "Ready for publication"
-msgstr "Klar för publicering"
-
 msgid "Register to the event"
 msgstr "Anmäl dig till evenemanget"
 
@@ -4531,9 +4522,6 @@ msgstr "Länk för tidig registrering"
 
 msgid "Failed to add character"
 msgstr "Misslyckades med att lägga till karaktär"
-
-msgid "ILDB - larpdatabase.com"
-msgstr "ILDB - larpdatabase.com"
 
 msgid "Indicate only if rate 0"
 msgstr "Ange endast om hastighet 0"
@@ -5513,9 +5501,6 @@ msgstr "Är det något du vill berätta för oss"
 msgid "Each token can only be used once"
 msgstr "Av säkerhetsskäl kan varje token endast användas en gång"
 
-msgid "If checked: upload staff members"
-msgstr "Om markerat: ladda upp personal"
-
 msgid "Is it selectable by participants"
 msgstr "Är den valbar för deltagare"
 
@@ -5636,6 +5621,9 @@ msgstr "För mer information, skriv till oss"
 msgid "Go to the history preferences for"
 msgstr "Gå till preferenshistoriken för"
 
+msgid "If checked: publish staff members"
+msgstr "Om markerat: publicera personal"
+
 msgid "Indicate your level of experience"
 msgstr "Ange din erfarenhetsnivå"
 
@@ -5662,6 +5650,10 @@ msgstr "Nu kan du ställa in skattealternativen"
 
 msgid "Number of additional participants"
 msgstr "Antal ytterligare deltagare"
+
+#, python-format
+msgid "Publish to ILDB: <b>%(list)s</b>."
+msgstr "Publicera till ILDB: <b>%(list)s</b>."
 
 msgid "Set the registration opening date"
 msgstr "Fastställ datum för registreringens öppnande"
@@ -6055,9 +6047,6 @@ msgstr "ILDB utkast till evenemang i väntan på bekräftelse"
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Om markerat, tillåt biljettnivå: Säljare"
 
-msgid "If checked: upload registered players"
-msgstr "Om markerat: ladda upp registrerade spelare"
-
 msgid "Learn all characters before the event"
 msgstr "Lär dig alla karaktärer före evenemanget"
 
@@ -6178,6 +6167,9 @@ msgstr "Fyll i din karaktärs relationer"
 
 msgid "I confirm that I have made the payment"
 msgstr "Jag bekräftar att jag har gjort betalningen"
+
+msgid "If checked: publish registered players"
+msgstr "Om markerat: publicera registrerade spelare"
 
 msgid "It will be shown to other participants"
 msgstr "Den kommer att visas för andra deltagare"
@@ -7929,9 +7921,6 @@ msgstr "Hantera engångsåtkomsttokens för säkert video-/audioinnehåll"
 
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Hantera röster för tilldelning av roller i organisationen"
-
-msgid "Mark this event as ready to be published on larpdatabase.com"
-msgstr "Markera denna händelse som klar att publiceras på larpdatabase.com"
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Denna karaktär är inaktiv och kan inte tilldelas spelare"

@@ -774,9 +774,6 @@ msgstr "Mitglied"
 msgid "within"
 msgstr "innerhalb"
 
-msgid "API key"
-msgstr "API-Schlüssel"
-
 msgid "Ability"
 msgstr "Fertigkeiten"
 
@@ -1020,9 +1017,6 @@ msgstr "Systeme"
 
 msgid "Tagline"
 msgstr "Tagline"
-
-msgid "Team ID"
-msgstr "Team-ID"
 
 msgid "Tickets"
 msgstr "Eintrittskarten"
@@ -2389,9 +2383,6 @@ msgstr "Übersetzungen"
 msgid "Type of text"
 msgstr "Art des Textes"
 
-msgid "Upload staff"
-msgstr "Personal hochladen"
-
 msgid "Url Shortner"
 msgstr "Url-Verkürzer"
 
@@ -2614,6 +2605,9 @@ msgstr "Schritt vorwärts"
 
 msgid "Prologue type"
 msgstr "Typ Prolog"
+
+msgid "Publish staff"
+msgstr "Personal veröffentlichen"
 
 msgid "Question type"
 msgstr "Art der Frage"
@@ -2904,9 +2898,6 @@ msgstr "Typ Prolog"
 msgid "URL identifier"
 msgstr "Idenominative URL"
 
-msgid "Upload players"
-msgstr "Spieler hochladen"
-
 msgid "Value required"
 msgstr "Erforderlicher Wert"
 
@@ -3047,6 +3038,9 @@ msgstr "Aktualisierte Mitgliedschaft"
 
 msgid "Progress status"
 msgstr "Fortschritt"
+
+msgid "Publish players"
+msgstr "Spieler veröffentlichen"
 
 msgid "Question saved!"
 msgstr "Unterwürfige Frage!"
@@ -4257,9 +4251,6 @@ msgstr "Links zur Vorregistrierung"
 msgid "Prop - weapons, props"
 msgstr "Prop - Waffen, Requisiten"
 
-msgid "Ready for publication"
-msgstr "Bereit zur Veröffentlichung"
-
 msgid "Register to the event"
 msgstr "Melden Sie sich für die Veranstaltung an"
 
@@ -4531,9 +4522,6 @@ msgstr "Link zur frühzeitigen Anmeldung"
 
 msgid "Failed to add character"
 msgstr "Zeichen kann nicht hinzugefügt werden"
-
-msgid "ILDB - larpdatabase.com"
-msgstr "ILDB - larpdatabase.com"
 
 msgid "Indicate only if rate 0"
 msgstr "Nur angeben, wenn Satz 0"
@@ -5513,9 +5501,6 @@ msgstr "Möchten Sie uns irgendetwas sagen"
 msgid "Each token can only be used once"
 msgstr "Jeder Token kann aus Sicherheitsgründen nur einmal verwendet werden"
 
-msgid "If checked: upload staff members"
-msgstr "Wenn angekreuzt: Personalmitglieder hochladen"
-
 msgid "Is it selectable by participants"
 msgstr "Ist sie für die Teilnehmer auswählbar"
 
@@ -5636,6 +5621,9 @@ msgstr "Für weitere Informationen, schreiben Sie uns"
 msgid "Go to the history preferences for"
 msgstr "Rufen Sie die Einstellungshistorie für"
 
+msgid "If checked: publish staff members"
+msgstr "Wenn angekreuzt: Mitarbeiter veröffentlichen"
+
 msgid "Indicate your level of experience"
 msgstr "Geben Sie Ihr Erfahrungsniveau an"
 
@@ -5662,6 +5650,10 @@ msgstr "Jetzt können Sie die Steueroptionen einstellen"
 
 msgid "Number of additional participants"
 msgstr "Anzahl der zusätzlichen Teilnehmer"
+
+#, python-format
+msgid "Publish to ILDB: <b>%(list)s</b>."
+msgstr "In der ILDB veröffentlichen: <b>%(list)s</b>."
 
 msgid "Set the registration opening date"
 msgstr "Legen Sie das Datum für die Öffnung der Registrierung fest"
@@ -6057,9 +6049,6 @@ msgstr "ILDB-Ereignisentwurf wartet auf Bestätigung"
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Wenn angekreuzt, Ticketstufe zulassen: Verkäufer"
 
-msgid "If checked: upload registered players"
-msgstr "Wenn angekreuzt: registrierte Spieler hochladen"
-
 msgid "Learn all characters before the event"
 msgstr "Lernen Sie alle Zeichen vor der Veranstaltung"
 
@@ -6181,6 +6170,9 @@ msgstr "Fülle die Beziehungen deines Charakters aus"
 
 msgid "I confirm that I have made the payment"
 msgstr "Ich bestätige, dass ich die Zahlung geleistet habe"
+
+msgid "If checked: publish registered players"
+msgstr "Wenn angekreuzt: registrierte Spieler veröffentlichen"
 
 msgid "It will be shown to other participants"
 msgstr "Es wird den anderen Teilnehmern gezeigt"
@@ -8067,11 +8059,6 @@ msgid "Manage votes for the assignment of roles in the organization"
 msgstr ""
 "Verwaltung von Abstimmungen über die Zuweisung von Rollen in der "
 "Organisation"
-
-msgid "Mark this event as ready to be published on larpdatabase.com"
-msgstr ""
-"Markieren Sie dieses Ereignis als bereit für die Veröffentlichung auf "
-"larpdatabase.com"
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr ""

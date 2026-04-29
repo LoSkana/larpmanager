@@ -58,7 +58,6 @@ from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.io.pdf import print_run_bkg
 from larpmanager.utils.larpmanager.tasks import notify_admins
-from larpmanager.utils.publication.ildb import check_ildb_drafts
 
 
 class Command(BaseCommand):
@@ -157,10 +156,6 @@ class Command(BaseCommand):
         # Validate and update accounting records
         if "record_acc" in enabled_features:
             check_accounting(association.id)
-
-        # Upload past runs to larpdatabase.com
-        if "publisher" in enabled_features:
-            check_ildb_drafts(association)
 
     @staticmethod
     def check_old_payments() -> None:

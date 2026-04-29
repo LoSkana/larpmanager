@@ -722,31 +722,25 @@ msgid ""
 "panel"
 msgstr ""
 
-msgid "ILDB - larpdatabase.com"
+msgid "Publication"
 msgstr ""
 
-msgid "API key"
+msgid "Publish staff"
+msgstr ""
+
+msgid "If checked: publish staff members"
+msgstr ""
+
+msgid "Publish players"
+msgstr ""
+
+msgid "If checked: publish registered players"
 msgstr ""
 
 msgid "Authentication token (mark all permissions)"
 msgstr ""
 
-msgid "Team ID"
-msgstr ""
-
 msgid "Your team ID"
-msgstr ""
-
-msgid "Upload staff"
-msgstr ""
-
-msgid "If checked: upload staff members"
-msgstr ""
-
-msgid "Upload players"
-msgstr ""
-
-msgid "If checked: upload registered players"
 msgstr ""
 
 msgid "App Integration"
@@ -1953,19 +1947,10 @@ msgstr ""
 msgid "Enter a valid number."
 msgstr ""
 
-msgid "Publication"
-msgstr ""
-
 msgid "Manage event metadata for external publication"
 msgstr ""
 
 msgid "Informations"
-msgstr ""
-
-msgid "Ready for publication"
-msgstr ""
-
-msgid "Mark this event as ready to be published on larpdatabase.com"
 msgstr ""
 
 msgid "Languages"
@@ -10640,6 +10625,10 @@ msgstr ""
 
 #, python-format
 msgid "<b>%(number)s</b> members to approve"
+msgstr ""
+
+#, python-format
+msgid "Publish to ILDB: <b>%(list)s</b>."
 msgstr ""
 
 msgid "Set up payment methods for participants"

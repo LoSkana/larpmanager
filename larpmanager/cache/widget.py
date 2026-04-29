@@ -34,6 +34,7 @@ from larpmanager.accounting.balance import (
     association_accounting_summary,
     get_run_accounting,
 )
+from larpmanager.cache.config import get_association_config
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.models.accounting import (
     AccountingItemExpense,
@@ -57,6 +58,7 @@ from larpmanager.models.registration import (
 )
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.core.common import format_datetime, get_coming_runs, get_event_features
+from larpmanager.utils.publication.ildb import ILDB_CONFIG_KEY, ILDB_RUN_CONFIG, ILDB_TEAM_CONFIG_KEY
 from larpmanager.utils.users.deadlines import check_run_deadlines
 from larpmanager.utils.users.registration import registration_available
 
@@ -406,7 +408,28 @@ def _init_exe_actions_cache(association_id: int) -> dict:
     if open_questions_count > 0:
         data["open_help_questions"] = {"count": open_questions_count}
 
+    # Runs not yet passed (end >= one month ago) without an ILDB entry
+    unpublished = _get_ildb_unpublished_runs(association_id)
+    if unpublished:
+        data["ildb_unpublished_runs"] = {"count": len(unpublished), "runs": unpublished}
+
     return data
+
+
+def _get_ildb_unpublished_runs(association_id: int) -> list[str]:
+    """Return search names of runs not yet published to ILDB."""
+    api_key = get_association_config(association_id, ILDB_CONFIG_KEY, default_value="")
+    team_id = get_association_config(association_id, ILDB_TEAM_CONFIG_KEY, default_value="")
+    if not api_key or not team_id:
+        return []
+    one_month_ago = timezone.now().date() - timedelta(days=30)
+    candidate_runs = Run.objects.filter(event__association_id=association_id, end__gte=one_month_ago).order_by("end")
+    unpublished = []
+    for run in candidate_runs:
+        stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
+        if not stored or stored in ("True", "False"):
+            unpublished.append(run.search)
+    return unpublished
 
 
 def _init_orga_actions_cache(run: Run) -> dict:

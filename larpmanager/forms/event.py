@@ -2235,13 +2235,6 @@ class OrgaPublicationForm(ConfigForm):
         self.set_section("info", _("Informations"))
 
         self.add_configs(
-            "pub_ready",
-            ConfigType.BOOL,
-            _("Ready for publication"),
-            _("Mark this event as ready to be published on larpdatabase.com"),
-        )
-
-        self.add_configs(
             "pub_language",
             ConfigType.MULTI_BOOL,
             _("Languages"),

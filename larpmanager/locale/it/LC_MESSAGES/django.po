@@ -774,9 +774,6 @@ msgstr "socio"
 msgid "within"
 msgstr "all'interno"
 
-msgid "API key"
-msgstr "Chiave API"
-
 msgid "Ability"
 msgstr "Abilità"
 
@@ -1020,9 +1017,6 @@ msgstr "Sistemi"
 
 msgid "Tagline"
 msgstr "Tagline"
-
-msgid "Team ID"
-msgstr "ID squadra"
 
 msgid "Tickets"
 msgstr "Biglietti"
@@ -2389,9 +2383,6 @@ msgstr "Traduzioni"
 msgid "Type of text"
 msgstr "Tipologia del testo"
 
-msgid "Upload staff"
-msgstr "Carica lo staff"
-
 msgid "Url Shortner"
 msgstr "Url Shortner"
 
@@ -2614,6 +2605,9 @@ msgstr "Step avanzamento"
 
 msgid "Prologue type"
 msgstr "Tipo di prologo"
+
+msgid "Publish staff"
+msgstr "Pubblicare il personale"
 
 msgid "Question type"
 msgstr "Tipo di domanda"
@@ -2904,9 +2898,6 @@ msgstr "Tipo prologhi"
 msgid "URL identifier"
 msgstr "Idenficativo URL"
 
-msgid "Upload players"
-msgstr "Carica i giocatori"
-
 msgid "Value required"
 msgstr "Valore richiesto"
 
@@ -3047,6 +3038,9 @@ msgstr "Socio aggiornato"
 
 msgid "Progress status"
 msgstr "Stato di avanzamento"
+
+msgid "Publish players"
+msgstr "Pubblicare i giocatori"
 
 msgid "Question saved!"
 msgstr "Domanda salvata!"
@@ -4257,9 +4251,6 @@ msgstr "Link pre-iscrizioni"
 msgid "Prop - weapons, props"
 msgstr "Prop - armi, oggetti di scena"
 
-msgid "Ready for publication"
-msgstr "Pronto per la pubblicazione"
-
 msgid "Register to the event"
 msgstr "Iscriviti all'evento"
 
@@ -4531,9 +4522,6 @@ msgstr "Link per iscrizione anticipata"
 
 msgid "Failed to add character"
 msgstr "Impossibile aggiungere il personaggio"
-
-msgid "ILDB - larpdatabase.com"
-msgstr "ILDB - larpdatabase.com"
 
 msgid "Indicate only if rate 0"
 msgstr "Indica solo se aliquota 0"
@@ -5514,9 +5502,6 @@ msgid "Each token can only be used once"
 msgstr ""
 "Per motivi di sicurezza, ogni token può essere utilizzato una sola volta"
 
-msgid "If checked: upload staff members"
-msgstr "Se selezionato: caricare i membri del personale"
-
 msgid "Is it selectable by participants"
 msgstr "È selezionabile dai partecipanti"
 
@@ -5637,6 +5622,9 @@ msgstr "Per maggiori informazioni, scrivici"
 msgid "Go to the history preferences for"
 msgstr "Vai allo storico preferenze per"
 
+msgid "If checked: publish staff members"
+msgstr "Se selezionato: pubblicare i membri del personale"
+
 msgid "Indicate your level of experience"
 msgstr "Indica il tuo grado di esperienza"
 
@@ -5663,6 +5651,10 @@ msgstr "Ora puoi impostare le opzioni relative alle tasse"
 
 msgid "Number of additional participants"
 msgstr "Numero di partecipanti aggiuntivi"
+
+#, python-format
+msgid "Publish to ILDB: <b>%(list)s</b>."
+msgstr "Pubblicare su ILDB: <b>%(list)s</b>."
 
 msgid "Set the registration opening date"
 msgstr "Imposta la data di apertura della registrazione"
@@ -6055,9 +6047,6 @@ msgstr "Progetto di evento ILDB in attesa di conferma"
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Se selezionata, abilita il livello del biglietto: Venditore"
 
-msgid "If checked: upload registered players"
-msgstr "Se selezionato: caricare i giocatori registrati"
-
 msgid "Learn all characters before the event"
 msgstr "Imparare tutti i personaggi prima dell'evento"
 
@@ -6176,6 +6165,9 @@ msgstr "Compila le relazioni del tuo personaggio"
 
 msgid "I confirm that I have made the payment"
 msgstr "Confermo di aver effettuato il pagamento"
+
+msgid "If checked: publish registered players"
+msgstr "Se selezionato: pubblica i giocatori registrati"
 
 msgid "It will be shown to other participants"
 msgstr "Verrà mostrato agli altri partecipanti"
@@ -7966,11 +7958,6 @@ msgstr ""
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr ""
 "Gestisci le votazioni per l'assegnazione dei ruoli nell'organizzazione"
-
-msgid "Mark this event as ready to be published on larpdatabase.com"
-msgstr ""
-"Contrassegnare questo evento come pronto per essere pubblicato su "
-"larpdatabase.com"
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Questo personaggio è inattivo e non può essere assegnato"

@@ -774,9 +774,6 @@ msgstr "jäsen"
 msgid "within"
 msgstr "osoitteessa"
 
-msgid "API key"
-msgstr "API-avain"
-
 msgid "Ability"
 msgstr "Taidot"
 
@@ -1020,9 +1017,6 @@ msgstr "Järjestelmät"
 
 msgid "Tagline"
 msgstr "Tagline"
-
-msgid "Team ID"
-msgstr "Joukkueen tunnus"
 
 msgid "Tickets"
 msgstr "Liput"
@@ -2389,9 +2383,6 @@ msgstr "Käännökset"
 msgid "Type of text"
 msgstr "Tekstityyppi"
 
-msgid "Upload staff"
-msgstr "Henkilöstön lataaminen"
-
 msgid "Url Shortner"
 msgstr "Url Shortner"
 
@@ -2614,6 +2605,9 @@ msgstr "Edistymisvaihe"
 
 msgid "Prologue type"
 msgstr "Prologin tyyppi"
+
+msgid "Publish staff"
+msgstr "Julkaise henkilöstö"
 
 msgid "Question type"
 msgstr "Kysymyksen tyyppi"
@@ -2904,9 +2898,6 @@ msgstr "Tyypin prologit"
 msgid "URL identifier"
 msgstr "URL-tunniste"
 
-msgid "Upload players"
-msgstr "Lataa pelaajia"
-
 msgid "Value required"
 msgstr "Vaadittu arvo"
 
@@ -3047,6 +3038,9 @@ msgstr "Profiili päivitetty"
 
 msgid "Progress status"
 msgstr "Edistymisen tila"
+
+msgid "Publish players"
+msgstr "Julkaise pelaajat"
 
 msgid "Question saved!"
 msgstr "Kysymys pelastettu!"
@@ -4257,9 +4251,6 @@ msgstr "Ennakkoilmoittautumislinkki"
 msgid "Prop - weapons, props"
 msgstr "Prop - aseet, rekvisiitta"
 
-msgid "Ready for publication"
-msgstr "Valmis julkaistavaksi"
-
 msgid "Register to the event"
 msgstr "Ilmoittaudu tapahtumaan"
 
@@ -4531,9 +4522,6 @@ msgstr "Varhaisen ilmoittautumisen linkki"
 
 msgid "Failed to add character"
 msgstr "Merkin lisääminen epäonnistui"
-
-msgid "ILDB - larpdatabase.com"
-msgstr "ILDB - larpdatabase.com"
 
 msgid "Indicate only if rate 0"
 msgstr "Ilmoitetaan vain, jos korko 0"
@@ -5513,9 +5501,6 @@ msgstr "Haluatko kertoa meille jotain"
 msgid "Each token can only be used once"
 msgstr "Kukin tunniste voidaan käyttää vain kerran turvallisuussyistä"
 
-msgid "If checked: upload staff members"
-msgstr "Jos rasti on merkitty: henkilöstön jäsenten lataaminen"
-
 msgid "Is it selectable by participants"
 msgstr "Voivatko osallistujat valita sen"
 
@@ -5636,6 +5621,9 @@ msgstr "Lisätietoja saat kirjoittamalla meille"
 msgid "Go to the history preferences for"
 msgstr "Siirry historian asetuksiin"
 
+msgid "If checked: publish staff members"
+msgstr "Jos rasti on merkitty: julkaise henkilöstön jäsenet"
+
 msgid "Indicate your level of experience"
 msgstr "Ilmoita kokemuksesi taso"
 
@@ -5662,6 +5650,10 @@ msgstr "Nyt voit asettaa verovaihtoehdot"
 
 msgid "Number of additional participants"
 msgstr "Lisäosallistujien määrä"
+
+#, python-format
+msgid "Publish to ILDB: <b>%(list)s</b>."
+msgstr "Julkaise ILDB:hen: <b>%(list)s</b>."
 
 msgid "Set the registration opening date"
 msgstr "Aseta rekisteröinnin avaamispäivä"
@@ -6055,9 +6047,6 @@ msgstr "ILDB:n luonnos tapahtumaksi odottaa vahvistusta"
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Jos valittuna, salli lipputaso: Myyjä"
 
-msgid "If checked: upload registered players"
-msgstr "Jos valittuna: lataa rekisteröityjä pelaajia"
-
 msgid "Learn all characters before the event"
 msgstr "Opettele kaikki hahmot ennen tapahtumaa"
 
@@ -6176,6 +6165,9 @@ msgstr "Täytä hahmosi suhteet"
 
 msgid "I confirm that I have made the payment"
 msgstr "Vahvistan, että olen suorittanut maksun"
+
+msgid "If checked: publish registered players"
+msgstr "Jos valittuna: julkaise rekisteröidyt pelaajat"
 
 msgid "It will be shown to other participants"
 msgstr "Se näytetään muille osallistujille"
@@ -7932,10 +7924,6 @@ msgstr ""
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr ""
 "Hallinnoi äänestyksiä, jotka koskevat roolien jakamista organisaatiossa"
-
-msgid "Mark this event as ready to be published on larpdatabase.com"
-msgstr ""
-"Merkitse tämä tapahtuma valmiiksi julkaistavaksi larpdatabase.com-sivustolla"
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Tämä hahmo on inaktiivinen, eikä sitä voi antaa pelaajille"

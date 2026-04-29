@@ -774,9 +774,6 @@ msgstr "člen"
 msgid "within"
 msgstr "v rámci"
 
-msgid "API key"
-msgstr "Klíč API"
-
 msgid "Ability"
 msgstr "Dovednosti"
 
@@ -1020,9 +1017,6 @@ msgstr "Systémy"
 
 msgid "Tagline"
 msgstr "Tagline"
-
-msgid "Team ID"
-msgstr "ID týmu"
 
 msgid "Tickets"
 msgstr "Vstupenky"
@@ -2389,9 +2383,6 @@ msgstr "Překlady"
 msgid "Type of text"
 msgstr "Typ textu"
 
-msgid "Upload staff"
-msgstr "Nahrát zaměstnance"
-
 msgid "Url Shortner"
 msgstr "Zkracovač URL"
 
@@ -2614,6 +2605,9 @@ msgstr "Krok vpřed"
 
 msgid "Prologue type"
 msgstr "Typ prologu"
+
+msgid "Publish staff"
+msgstr "Zveřejnit zaměstnance"
 
 msgid "Question type"
 msgstr "Typ otázky"
@@ -2904,9 +2898,6 @@ msgstr "Typ prologu"
 msgid "URL identifier"
 msgstr "Idenominativní adresa URL"
 
-msgid "Upload players"
-msgstr "Nahrát hráče"
-
 msgid "Value required"
 msgstr "Požadovaná hodnota"
 
@@ -3047,6 +3038,9 @@ msgstr "Aktualizované členství"
 
 msgid "Progress status"
 msgstr "Progress"
+
+msgid "Publish players"
+msgstr "Zveřejnit hráče"
 
 msgid "Question saved!"
 msgstr "Submisivní otázka!"
@@ -4257,9 +4251,6 @@ msgstr "Odkazy pro předběžnou registraci"
 msgid "Prop - weapons, props"
 msgstr "Rekvizity - zbraně, rekvizity"
 
-msgid "Ready for publication"
-msgstr "Připraveno ke zveřejnění"
-
 msgid "Register to the event"
 msgstr "Přihlaste se na akci"
 
@@ -4531,9 +4522,6 @@ msgstr "Odkaz pro včasnou registraci"
 
 msgid "Failed to add character"
 msgstr "Nepodařilo se přidat znak"
-
-msgid "ILDB - larpdatabase.com"
-msgstr "ILDB - larpdatabase.com"
 
 msgid "Indicate only if rate 0"
 msgstr "Uveďte pouze v případě sazby 0"
@@ -5513,9 +5501,6 @@ msgstr "Chcete nám něco říct"
 msgid "Each token can only be used once"
 msgstr "Každý token lze z bezpečnostních důvodů použít pouze jednou"
 
-msgid "If checked: upload staff members"
-msgstr "Pokud je zaškrtnuto: nahrát zaměstnance"
-
 msgid "Is it selectable by participants"
 msgstr "Je volitelný účastníky"
 
@@ -5636,6 +5621,9 @@ msgstr "Pro více informací nám napište"
 msgid "Go to the history preferences for"
 msgstr "Přejděte do historie předvoleb pro"
 
+msgid "If checked: publish staff members"
+msgstr "Pokud je zaškrtnuto: zveřejnit zaměstnance"
+
 msgid "Indicate your level of experience"
 msgstr "Uveďte svou úroveň zkušeností"
 
@@ -5662,6 +5650,10 @@ msgstr "Nyní můžete nastavit možnosti daní"
 
 msgid "Number of additional participants"
 msgstr "Počet dalších účastníků"
+
+#, python-format
+msgid "Publish to ILDB: <b>%(list)s</b>."
+msgstr "Publikovat do ILDB: <b>%(list)s</b>."
 
 msgid "Set the registration opening date"
 msgstr "Nastavení data zahájení registrace"
@@ -6056,9 +6048,6 @@ msgstr "ILDB návrh události čeká na potvrzení"
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Prodejce"
 
-msgid "If checked: upload registered players"
-msgstr "Pokud je zaškrtnuto: nahrát registrované hráče"
-
 msgid "Learn all characters before the event"
 msgstr "Naučte se všechny znaky před akcí"
 
@@ -6177,6 +6166,9 @@ msgstr "Vyplňte vztahy své postavy"
 
 msgid "I confirm that I have made the payment"
 msgstr "Potvrzuji, že jsem provedl/a platbu"
+
+msgid "If checked: publish registered players"
+msgstr "Pokud je zaškrtnuto: zveřejnit registrované hráče"
 
 msgid "It will be shown to other participants"
 msgstr "Bude ukázán ostatním účastníkům"
@@ -7927,10 +7919,6 @@ msgstr ""
 
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Řídit hlasování o přidělování rolí v organizaci"
-
-msgid "Mark this event as ready to be published on larpdatabase.com"
-msgstr ""
-"Označte tuto událost jako připravenou ke zveřejnění na larpdatabase.com"
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Tato postava je neaktivní a nelze ji přiřadit k hráčům"

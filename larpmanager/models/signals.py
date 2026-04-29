@@ -270,7 +270,12 @@ from larpmanager.utils.io.pdf import (
     delete_character_pdf_files,
 )
 from larpmanager.utils.larpmanager.tutorial import auto_assign_faq_sequential_number, generate_tutorial_url_slug
-from larpmanager.utils.publication.base import publish_event, publish_event_role, publish_registration
+from larpmanager.utils.publication.base import (
+    publish_crew_member,
+    publish_event,
+    publish_event_role,
+    publish_registration,
+)
 from larpmanager.utils.services.association import (
     apply_skin_features_to_association,
     auto_assign_association_permission_number,
@@ -905,7 +910,7 @@ def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> 
         reset_cache_config_run(run)
 
     # If a publication config has been changed, trigger event publication
-    if instance.key.startswith("pub_"):
+    if instance.name.startswith("pub_"):
         publish_event(instance.event_id)
 
 
@@ -1425,7 +1430,7 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     # Update registration count caches for this run
     clear_registration_counts_cache(instance.run_id)
 
-    # Schedule publication cast sync
+    # Sync published data on this registration
     publish_registration(instance.id)
 
 
@@ -1437,8 +1442,9 @@ def pre_delete_registration(sender: type, instance: Registration, *args: Any, **
 
 @receiver(post_delete, sender=Registration)
 def post_delete_registration_accounting_cache(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear accounting cache for the associated run after registration deletion."""
+    """Clear accounting cache for the associated run after registration deletion, and sync published data."""
     clear_registration_accounting_cache(instance.run_id)
+    publish_registration(instance.id, instance.run_id)
 
 
 @receiver(post_save, sender=RegistrationCharacterRel)
@@ -1476,6 +1482,9 @@ def post_delete_registration_character_rel_savereg(
 
     # Clear deadline widget cache (casting requirements)
     reset_widgets(instance.registration)
+
+    # Schedule publication cast sync
+    publish_registration(instance.registration_id)
 
 
 @receiver(post_save, sender=RegistrationSection)
@@ -1764,6 +1773,20 @@ m2m_changed.connect(on_prologue_characters_m2m_changed, sender=Prologue.characte
 
 m2m_changed.connect(on_association_roles_m2m_changed, sender=AssociationRole.members.through)
 m2m_changed.connect(on_event_roles_m2m_changed, sender=EventRole.members.through)
+
+
+def _on_event_role_members_pub(sender: type, instance: Any, action: str, pk_set: Any, **kwargs: Any) -> None:
+    if action == "post_add":
+        for member_id in pk_set or []:
+            publish_crew_member(instance.id, member_id, delete=False)
+    elif action == "post_remove":
+        for member_id in pk_set or []:
+            publish_crew_member(instance.id, member_id, delete=True)
+    elif action == "post_clear":
+        publish_event_role(instance.id)  # pk_set is None on clear; fall back to full sync
+
+
+m2m_changed.connect(_on_event_role_members_pub, sender=EventRole.members.through)
 
 m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
 

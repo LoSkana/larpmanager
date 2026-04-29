@@ -845,28 +845,28 @@ class ExeConfigForm(ConfigForm):
         if "publisher" not in self.params["features"]:
             return
 
-        self.set_section("ildb", _("ILDB - larpdatabase.com"))
+        self.set_section("publication", _("Publication"))
 
-        field_label = _("API key")
+        self.add_configs(
+            "publication_crew",
+            ConfigType.BOOL,
+            _("Publish staff"),
+            _("If checked: publish staff members"),
+        )
+        self.add_configs(
+            "publication_cast",
+            ConfigType.BOOL,
+            _("Publish players"),
+            _("If checked: publish registered players"),
+        )
+
+        field_label = "ILDB - API key"
         field_help_text = _("Authentication token (mark all permissions)")
         self.add_configs("ildb_api_key", ConfigType.CHAR, field_label, field_help_text)
 
-        field_label = _("Team ID")
+        field_label = "ILDB - Team ID"
         field_help_text = _("Your team ID")
         self.add_configs("ildb_team_id", ConfigType.CHAR, field_label, field_help_text)
-
-        self.add_configs(
-            "ildb_crew",
-            ConfigType.BOOL,
-            _("Upload staff"),
-            _("If checked: upload staff members"),
-        )
-        self.add_configs(
-            "ildb_cast",
-            ConfigType.BOOL,
-            _("Upload players"),
-            _("If checked: upload registered players"),
-        )
 
     def set_config_integration(self) -> None:
         """Configure app integration redirect settings for associations."""
