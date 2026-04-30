@@ -6833,7 +6833,7 @@ msgstr "Lisähintaa sovelletaan, kun tämä kiintiö on aktiivinen"
 
 msgctxt "event"
 msgid "If checked: shows the keywords for each event"
-msgstr "Jos valittuna: näyttää kunkin tapahtuman avainsanat."
+msgstr "Jos valittuna: näyttää kunkin tapahtuman avainsanat"
 
 msgid "If checked: shows the position for each event"
 msgstr "Jos valittuna: näyttää kunkin tapahtuman sijainnin"
@@ -7624,7 +7624,7 @@ msgid "Manage payments performed by participants on all events"
 msgstr "Hallitse osallistujien suorittamia maksuja kaikissa tapahtumissa"
 
 msgid "Please review and confirm it before it can be published"
-msgstr "Tarkista ja vahvista se ennen sen julkaisemista."
+msgstr "Tarkista ja vahvista se ennen sen julkaisemista"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Tarkista käyttäjät, jotka ovat jääneet pois tapahtuman määräajoista"
@@ -9322,7 +9322,7 @@ msgid ""
 "panel"
 msgstr ""
 "Jos valintamerkki on valittuna, estetään hyvitysten luominen tai muuttaminen"
-" tapahtumapaneelissa."
+" tapahtumapaneelissa"
 
 msgid ""
 "If checked: in the public page of an user shows a list of all events "

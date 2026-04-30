@@ -6834,7 +6834,7 @@ msgstr "Cena navíc se použije, když je tato kvóta aktivní"
 
 msgctxt "event"
 msgid "If checked: shows the keywords for each event"
-msgstr "Pokud je zaškrtnuto: zobrazí klíčová slova pro každou událost."
+msgstr "Pokud je zaškrtnuto: zobrazí klíčová slova pro každou událost"
 
 msgid "If checked: shows the position for each event"
 msgstr "Pokud je zaškrtnuto: zobrazuje pozici pro každou událost"
@@ -7624,7 +7624,7 @@ msgid "Manage payments performed by participants on all events"
 msgstr "Správa plateb provedených účastníky všech událostí"
 
 msgid "Please review and confirm it before it can be published"
-msgstr "Před zveřejněním jej prosím zkontrolujte a potvrďte."
+msgstr "Před zveřejněním jej prosím zkontrolujte a potvrďte"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Přehled uživatelů, kteří nedodržují termíny události"
@@ -9244,8 +9244,7 @@ msgid ""
 "If checked, prevents credits from being created or changed in the event "
 "panel"
 msgstr ""
-"Pokud je zaškrtnuto, zabrání vytváření nebo změně kreditů na panelu "
-"událostí."
+"Pokud je zaškrtnuto, zabrání vytváření nebo změně kreditů na panelu událostí"
 
 msgid ""
 "If checked: in the public page of an user shows a list of all events "

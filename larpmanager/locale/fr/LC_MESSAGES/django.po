@@ -7691,7 +7691,7 @@ msgstr ""
 "Gérer les paiements effectués par les participants à tous les événements"
 
 msgid "Please review and confirm it before it can be published"
-msgstr "Veuillez la réviser et la confirmer avant qu'elle ne soit publiée."
+msgstr "Veuillez la réviser et la confirmer avant qu'elle ne soit publiée"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr ""
@@ -9608,7 +9608,7 @@ msgid ""
 "panel"
 msgstr ""
 "Si cette case est cochée, elle empêche la création ou la modification de "
-"crédits dans le panneau des événements."
+"crédits dans le panneau des événements"
 
 msgid ""
 "If checked: in the public page of an user shows a list of all events "

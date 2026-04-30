@@ -6833,7 +6833,7 @@ msgstr "Prezzo extra applicato quando questa quota è attiva"
 
 msgctxt "event"
 msgid "If checked: shows the keywords for each event"
-msgstr "Se selezionato: mostra le parole chiave per ogni evento."
+msgstr "Se selezionato: mostra le parole chiave per ogni evento"
 
 msgid "If checked: shows the position for each event"
 msgstr "Se checkato: mostra la posizione per ogni evento"
@@ -7633,8 +7633,7 @@ msgid "Manage payments performed by participants on all events"
 msgstr "Gestisci i pagamenti effettuati dai partecipanti a tutti gli eventi"
 
 msgid "Please review and confirm it before it can be published"
-msgstr ""
-"Per favore controlla e conferma prima che venga pubblicato."
+msgstr "Per favore controlla e conferma prima che venga pubblicato"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Verifica gli utenti che non hanno rispettato le scadenze dell'evento"
@@ -9486,7 +9485,7 @@ msgid ""
 "panel"
 msgstr ""
 "Se selezionata, impedisce la creazione o la modifica dei crediti nel "
-"pannello degli eventi."
+"pannello degli eventi"
 
 msgid ""
 "If checked: in the public page of an user shows a list of all events "
