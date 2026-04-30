@@ -5042,6 +5042,15 @@ msgid ""
 "always of the same macrotype)"
 msgstr ""
 
+msgid "You are logged in as: "
+msgstr ""
+
+msgid "Your Organizations"
+msgstr ""
+
+msgid "Your Events"
+msgstr ""
+
 msgid "Organization"
 msgstr ""
 
@@ -6596,15 +6605,6 @@ msgid "See practical examples of how LarpManager can help your event"
 msgstr ""
 
 msgid "Show inactive"
-msgstr ""
-
-msgid "You are logged in as: "
-msgstr ""
-
-msgid "Your Organizations"
-msgstr ""
-
-msgid "Your Events"
 msgstr ""
 
 msgid "With these tutorials, you can learn how to use the tool in no time"
