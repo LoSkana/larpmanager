@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import random
-from datetime import date, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -811,7 +811,7 @@ def get_personal_area(context: dict) -> None:
             membership, _ = Membership.objects.get_or_create(member=member, association_id=association_id)
         registration_list.extend(build_registration_list(member, regs, association_id, membership))
 
-    registration_list.sort(key=lambda r: r.run.start or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
+    registration_list.sort(key=lambda r: r.run.start or datetime.min.replace(tzinfo=UTC), reverse=True)
     context["registration_list"] = registration_list
 
     # Retrieve association roles
