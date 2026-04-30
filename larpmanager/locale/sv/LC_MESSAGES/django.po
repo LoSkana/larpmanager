@@ -10781,7 +10781,7 @@ msgid ""
 "The event <strong>%(event)s</strong> has been automatically added to "
 "larpdatabase.com as a draft."
 msgstr ""
-"Händelsen <strong>%(händelse)s</strong> har automatiskt lagts till i "
+"Händelsen <strong>%(event)s</strong> har automatiskt lagts till i "
 "larpdatabase.com som ett utkast."
 
 msgid ""

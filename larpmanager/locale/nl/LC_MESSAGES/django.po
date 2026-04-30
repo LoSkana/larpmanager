@@ -10952,7 +10952,7 @@ msgid ""
 "The event <strong>%(event)s</strong> has been automatically added to "
 "larpdatabase.com as a draft."
 msgstr ""
-"De gebeurtenis <strong>%(gebeurtenis)s</strong> is automatisch toegevoegd "
+"De gebeurtenis <strong>%(event)s</strong> is automatisch toegevoegd "
 "aan larpdatabase.com als concept."
 
 msgid ""

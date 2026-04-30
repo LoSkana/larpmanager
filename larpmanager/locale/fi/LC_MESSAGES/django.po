@@ -10763,7 +10763,7 @@ msgid ""
 "The event <strong>%(event)s</strong> has been automatically added to "
 "larpdatabase.com as a draft."
 msgstr ""
-"Tapahtuma <strong>%(tapahtuma)s</strong> on lisätty automaattisesti "
+"Tapahtuma <strong>%(event)s</strong> on lisätty automaattisesti "
 "larpdatabase.com-sivustolle luonnoksena."
 
 msgid ""

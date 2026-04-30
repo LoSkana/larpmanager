@@ -10930,7 +10930,7 @@ msgid ""
 "The event <strong>%(event)s</strong> has been automatically added to "
 "larpdatabase.com as a draft."
 msgstr ""
-"El evento <strong>%(evento)s</strong> se ha añadido automáticamente a "
+"El evento <strong>%(event)s</strong> se ha añadido automáticamente a "
 "larpdatabase.com como borrador."
 
 msgid ""
