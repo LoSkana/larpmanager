@@ -825,16 +825,15 @@ def get_personal_area(context: dict) -> None:
         EventRole.objects.filter(members=member).select_related("event__association").order_by("event__name")
     )
     event_ids = [role.event_id for role in event_roles]
-    runs_by_event: dict = {}
+    event_roles = []
     for run in (
         Run.objects.filter(event_id__in=event_ids)
         .exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC])
+        .select_related("event__association")
         .order_by("-start")
     ):
-        if run.event_id not in runs_by_event:
-            runs_by_event[run.event_id] = run
-    for role in event_roles:
-        role.latest_run = runs_by_event.get(role.event_id)
+        event_roles.append(run)
+
     context["event_roles"] = event_roles
 
 

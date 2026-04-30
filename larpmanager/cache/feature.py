@@ -73,7 +73,7 @@ def update_association_features(association_id: int) -> dict[str, int]:
 
         # Check calendar-related configuration features
         for sl in [
-            "keywords",
+            "genre",
             "show_event",
             "website",
             "past_events",

@@ -39,4 +39,10 @@ class Migration(migrations.Migration):
             },
             bases=(model_clone.mixin.CloneMixin, models.Model),
         ),
+        migrations.AlterField(
+            model_name='event',
+            name='genre',
+            field=models.CharField(blank=True, help_text='The genre of your event', max_length=100,
+                                   verbose_name='Genre'),
+        ),
     ]

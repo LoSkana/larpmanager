@@ -319,7 +319,7 @@
     where: null
     authors: null
     description: <p>testone</p>
-    keywords: ''
+    genre: ''
     visible: true
     cover: ''
     carousel_img: ''

@@ -170,7 +170,7 @@ def _sync_run(run: Run, ctx: IldbCtx) -> None:
     ]
     missing = [f for f in required if f not in payload]
     if missing:
-        notify_admins(f"ILDB: skipping run {run.id} - missing required fields: {missing}", str(run))
+        logger.exception("ILDB: skipping run %s - missing required fields: %s", run.search, missing)
         return
 
     ctx.ildb_event_id = _find_event_id(run, ctx)
@@ -338,7 +338,7 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
     locandina = event.cover if event.cover else None
 
     payload = {
-        "nome": event.name,
+        "nome": run.search,
         "abstract": clean_html(event.description) or "",
         "data_inizio": run.start.isoformat() if run.start else None,
         "data_fine": run.end.isoformat() if run.end else None,
@@ -351,7 +351,7 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
         "tipo_accommodation": tipo_accommodation,
         "pasti": pasti,
         "sito_evento": event.website or None,
-        "numero_partecipanti": player_count if player_count >= 1 else None,
+        "numero_partecipanti": max(player_count, 1),
         "costo": float(ticket_prices["costo"]) if ticket_prices["costo"] is not None else None,
         "costo_max": float(ticket_prices["costo_max"]) if ticket_prices["costo_max"] is not None else None,
         "tipologia": tipologia,
@@ -518,19 +518,21 @@ def sync_cast(registration_id: int, _run_id: int | None = None) -> None:
     stored_uuid = get_config(cast_config_key, use_cache=False)
     base_url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events/{ctx.ildb_event_id}/cast"
 
+    response = _ildb_http("get", base_url, api_key=ctx.api_key, timeout=30)
+    response.raise_for_status()
+    ildb_uuids = {e["uuid"] for e in response.json().get("data", [])}
+
     # If registration not found or cancelled/waitlisted, delete from ILDB and return
     if not reg or reg.cancellation_date or reg.ticket.tier == TicketTier.WAITING:
-        if stored_uuid:
+        if stored_uuid and stored_uuid in ildb_uuids:
             _ildb_http("delete", f"{base_url}/{stored_uuid}", api_key=ctx.api_key, timeout=30).raise_for_status()
         return
 
     # Check if already exist or needs to be created
     rcr = reg.rcrs.first()
-    character_name = (rcr.custom_name or rcr.character.name) if rcr else ""
-
-    response = _ildb_http("get", base_url, api_key=ctx.api_key, timeout=30)
-    response.raise_for_status()
-    ildb_uuids = {e["uuid"] for e in response.json().get("data", [])}
+    if not rcr:
+        return
+    character_name = rcr.custom_name or rcr.character.name
     entry = _make_cast_entry(reg.member, character_name, npc=reg.ticket.tier == TicketTier.NPC)
 
     if stored_uuid and stored_uuid in ildb_uuids:

@@ -1665,7 +1665,7 @@ CREATE TABLE public.larpmanager_event (
     "where" character varying(500),
     authors character varying(500),
     description text NOT NULL,
-    keywords character varying(100) NOT NULL,
+    genre character varying(100) NOT NULL,
     visible boolean NOT NULL,
     cover character varying(500) NOT NULL,
     carousel_img character varying(500) NOT NULL,
@@ -4498,22 +4498,21 @@ INSERT INTO public.django_migrations VALUES (203, 'larpmanager', '0152_faction_c
 INSERT INTO public.django_migrations VALUES (204, 'larpmanager', '0153_systemexp_hidden', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (205, 'larpmanager', '0154_player_relationships_feature', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (206, 'larpmanager', '0155_interface_version_system', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (207, 'larpmanager', '0156_alter_member_gender_alter_member_legal_name', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (208, 'otp_static', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (209, 'otp_static', '0002_throttling', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (210, 'otp_static', '0003_add_timestamps', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (211, 'otp_totp', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (212, 'otp_totp', '0002_auto_20190420_0723', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (213, 'otp_totp', '0003_add_timestamps', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (214, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (215, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (216, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (217, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (218, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (219, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (220, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (221, 'larpmanager', '0156_event_keywords', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (222, 'larpmanager', '0157_alter_member_gender_alter_member_legal_name_config', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (207, 'larpmanager', '0156_alter_member_gender_alter_member_legal_name_config', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (208, 'larpmanager', '0157_alter_event_genre', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (209, 'otp_static', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (210, 'otp_static', '0002_throttling', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (211, 'otp_static', '0003_add_timestamps', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (212, 'otp_totp', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (213, 'otp_totp', '0002_auto_20190420_0723', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (214, 'otp_totp', '0003_add_timestamps', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (215, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (216, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (217, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (218, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (219, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (220, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (221, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
@@ -4785,7 +4784,7 @@ INSERT INTO public.larpmanager_feature VALUES (102, NULL, false, '2025-01-01 00:
 INSERT INTO public.larpmanager_feature VALUES (103, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Orga Event', '', 'orga_event', 9999, false, '', true, 6, NULL, NULL, false);
 INSERT INTO public.larpmanager_feature VALUES (104, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Quick Setup', '', 'quick_setup', 9999, false, '', true, 6, NULL, NULL, false);
 INSERT INTO public.larpmanager_feature VALUES (105, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'New player', 'Enables ''New player'' tickets, reserved for users that never participated in an event of the organization', 'new_player', 75, false, '', false, 4, 'orga_registration_tickets', 'Now you can create the "new player" ticket', false);
-INSERT INTO public.larpmanager_feature VALUES (106, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Publication', 'Makes upcoming events visible to external sites through a public API', 'publisher', 80, true, '', false, 10, '', '', false);
+INSERT INTO public.larpmanager_feature VALUES (106, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Publication', 'Makes upcoming events visible to external sites through a public API', 'publisher', 80, true, '', false, 10, 'config/publication', 'Now set the publication configurations', false);
 INSERT INTO public.larpmanager_feature VALUES (107, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'One-Time Content', 'Enables secure streaming of video/audio content via one-time access tokens. Each token can only be used once and tracks who accessed the content, when, and from where', 'onetime_content', 50, false, '', false, 3, 'orga_onetimes', 'Now you can upload content and generate access tokens', false);
 INSERT INTO public.larpmanager_feature VALUES (108, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Translations', 'Allows to fine-tune how words and phrases are translated in the organization''s space', 'translation', 30, true, '', false, 5, 'exe_translations', 'Now you can define custom organization translations', false);
 INSERT INTO public.larpmanager_feature VALUES (109, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Experience Rules', 'Pseudo-feature activated by exp_rules configuration', 'exp_rules', 0, false, '', true, 3, '', '', true);
@@ -4950,7 +4949,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 222, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 221, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -8968,4 +8967,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0157_alter_member_gender_alter_member_legal_name_config
+-- LARPMANAGER_SCHEMA_VERSION: 0156_alter_member_gender_alter_member_legal_name_config

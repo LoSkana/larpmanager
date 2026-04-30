@@ -6195,6 +6195,9 @@ msgstr "Gestisci i tipi di abilità del personaggio"
 msgid "Membership of the Organization refused"
 msgstr "Iscrizione all'Associazione rifiutata"
 
+msgid "Now set the publication configurations"
+msgstr "Ora impostate le configurazioni di pubblicazione"
+
 msgid "Now you can host files in the platform"
 msgstr "Ora puoi ospitare i file nella piattaforma"
 

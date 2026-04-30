@@ -180,7 +180,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
 
 def get_member_registrations(member: Any, association_id: int | None = None) -> QuerySet:
     """Get registrations for a member, optionally scoped to a single association."""
-    qs = Registration.objects.filter(member=member)
+    qs = Registration.objects.filter(member=member, cancellation_date__isnull=True).select_related("ticket")
     if association_id is not None:
         qs = qs.filter(run__event__association_id=association_id).select_related("run__event")
     else:

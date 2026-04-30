@@ -6196,6 +6196,9 @@ msgstr "Správa typu schopností postavy"
 msgid "Membership of the Organization refused"
 msgstr "Členství odmítnuto"
 
+msgid "Now set the publication configurations"
+msgstr "Nyní nastavte konfigurace publikace"
+
 msgid "Now you can host files in the platform"
 msgstr "Nyní můžete hostovat soubory v platformě"
 
