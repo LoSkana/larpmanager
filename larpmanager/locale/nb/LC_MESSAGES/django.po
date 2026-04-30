@@ -350,6 +350,9 @@ msgstr "Stengt"
 msgid "Color"
 msgstr "Farge"
 
+msgid "Count"
+msgstr "Telle"
+
 msgid "Cover"
 msgstr "Omslag"
 
@@ -1460,9 +1463,6 @@ msgstr "Grensesnitt"
 
 msgid "Inventory"
 msgstr "Lagerbeholdning"
-
-msgid "Load list"
-msgstr "Last inn liste"
 
 msgid "Mandatory"
 msgstr "Obligatorisk"

@@ -350,6 +350,9 @@ msgstr "Sulje"
 msgid "Color"
 msgstr "Väri"
 
+msgid "Count"
+msgstr "Count"
+
 msgid "Cover"
 msgstr "Kansikuva"
 
@@ -1460,9 +1463,6 @@ msgstr "Liitäntä"
 
 msgid "Inventory"
 msgstr "Inventaario"
-
-msgid "Load list"
-msgstr "Latausluettelo"
 
 msgid "Mandatory"
 msgstr "Pakollinen"

@@ -350,6 +350,9 @@ msgstr "Uzavřeno"
 msgid "Color"
 msgstr "Barva"
 
+msgid "Count"
+msgstr "Hrabě"
+
 msgid "Cover"
 msgstr "Obálka"
 
@@ -1460,9 +1463,6 @@ msgstr "Rozhraní"
 
 msgid "Inventory"
 msgstr "Inventura"
-
-msgid "Load list"
-msgstr "Seznam zatížení"
 
 msgid "Mandatory"
 msgstr "Povinné"

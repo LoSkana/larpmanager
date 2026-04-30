@@ -350,6 +350,9 @@ msgstr "Stängt"
 msgid "Color"
 msgstr "Färg"
 
+msgid "Count"
+msgstr "Räkna"
+
 msgid "Cover"
 msgstr "Skydd"
 
@@ -1460,9 +1463,6 @@ msgstr "Gränssnitt"
 
 msgid "Inventory"
 msgstr "Inventarieförteckning"
-
-msgid "Load list"
-msgstr "Ladda lista"
 
 msgid "Mandatory"
 msgstr "Obligatorisk"

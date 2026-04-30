@@ -8474,7 +8474,7 @@ msgstr ""
 msgid "Versions"
 msgstr ""
 
-msgid "Load list"
+msgid "Count"
 msgstr ""
 
 msgid "This page shows the factions and plots of the indicated character"

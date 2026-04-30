@@ -37,6 +37,7 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.experience import get_event_exp_systems
 from larpmanager.cache.question import get_cached_writing_questions
+from larpmanager.cache.widget import get_orga_widget_cache
 from larpmanager.forms.character import (
     OrgaCharacterForm,
 )
@@ -54,6 +55,7 @@ from larpmanager.models.form import (
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Character,
+    CharacterStatus,
     Faction,
     Plot,
     PlotCharacterRel,
@@ -107,6 +109,16 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Enable export functionality if configured
     if get_event_config(context["event"].id, "show_export", default_value=False, context=context):
         context["export"] = "character"
+
+    if context.get("user_character_approval"):
+        context["character_status_choices"] = CharacterStatus.choices
+        widget = get_orga_widget_cache(context["run"], "user_character")
+        context["character_status_counts"] = {
+            CharacterStatus.CREATION: widget.get("creation", 0),
+            CharacterStatus.PROPOSED: widget.get("proposed", 0),
+            CharacterStatus.REVIEW: widget.get("review", 0),
+            CharacterStatus.APPROVED: widget.get("approved", 0),
+        }
 
     if "experience" in context.get("features", {}):
         context["exp_systems"] = [
