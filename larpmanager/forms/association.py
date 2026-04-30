@@ -458,9 +458,9 @@ class ExeConfigForm(ConfigForm):
         authors_help_text = _("If checked: shows the list of authors for each event")
         self.add_configs("calendar_authors", ConfigType.BOOL, authors_label, authors_help_text)
 
-        keywords_label = _("Keywords")
-        keywords_help_text = pgettext("event", "If checked: shows the keywords for each event")
-        self.add_configs("calendar_keywords", ConfigType.BOOL, keywords_label, keywords_help_text)
+        genre_label = pgettext("event", "Genre")
+        genre_help_text = pgettext("event", "If checked: shows the genre for each event")
+        self.add_configs("calendar_genre", ConfigType.BOOL, genre_label, genre_help_text)
 
         tagline_label = _("Tagline")
         tagline_help_text = _("If checked: shows the tagline for each event")

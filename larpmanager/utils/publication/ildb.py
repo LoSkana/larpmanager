@@ -215,7 +215,7 @@ def _create_event(ctx: IldbCtx, payload: dict, locandina: object = None) -> str:
     url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events"
     response = _send_request("post", url, ctx, payload, locandina)
     if not response.ok:
-        logger.error("ILDB event create failed %s: %s", response.status_code, response.text)
+        notify_admins(f"ILDB event create failed {response.status_code}", response.text)
     response.raise_for_status()
     return str(response.json().get("data", {}).get("id", ""))
 
@@ -225,7 +225,8 @@ def _update_event(ctx: IldbCtx, payload: dict, locandina: object = None) -> None
     url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events/{ctx.ildb_event_id}"
     response = _send_request("put", url, ctx, payload, locandina)
     if not response.ok:
-        logger.error("ILDB event update failed %s: %s", response.status_code, response.text)
+        notify_admins(f"ILDB event update failed {response.status_code}", response.text)
+    response.raise_for_status()
 
 
 PLAYER_TIERS = [
@@ -517,10 +518,10 @@ def sync_cast(registration_id: int, _run_id: int | None = None) -> None:
     stored_uuid = get_config(cast_config_key, use_cache=False)
     base_url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events/{ctx.ildb_event_id}/cast"
 
-    # If registration not found, delete from ILDB and return
-    cancelled = bool(reg.cancellation_date) or reg.ticket.tier == TicketTier.WAITING
-    if not reg or cancelled:
-        _ildb_http("delete", f"{base_url}/{stored_uuid}", api_key=ctx.api_key, timeout=30).raise_for_status()
+    # If registration not found or cancelled/waitlisted, delete from ILDB and return
+    if not reg or reg.cancellation_date or reg.ticket.tier == TicketTier.WAITING:
+        if stored_uuid:
+            _ildb_http("delete", f"{base_url}/{stored_uuid}", api_key=ctx.api_key, timeout=30).raise_for_status()
         return
 
     # Check if already exist or needs to be created
@@ -564,24 +565,6 @@ def _make_cast_entry(member: object, character_name: str, *, npc: bool) -> dict:
 
 
 # ---- ASSOCIATION ---- #
-
-
-def _notify_draft_pending(association: Association, run: Run, ildb_event_id: str) -> None:
-    """Notify the association that a matching draft event was found on ILDB and needs review."""
-    if not association.main_mail:
-        return
-
-    review_url = f"https://www.larpdatabase.com/events/{ildb_event_id}/review"
-    subject = f"[{association.name}] " + _("ILDB draft event pending confirmation") + ": " + run.event.name
-    body = (
-        "<p>"
-        + _("A draft event matching <strong>%(event)s</strong> was found on larpdatabase.com.") % {"event": run.search}
-        + "</p><p>"
-        + _("Please review and confirm it before it can be published")
-        + f": <a href='{review_url}'>{review_url}</a>"
-        + "</p>"
-    )
-    my_send_mail(subject, body, association.main_mail, association)
 
 
 def _notify_association(association: Association, run: Run, ildb_event_id: str) -> None:

@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0156_event_keywords'),
+        ('larpmanager', '0155_interface_version_system'),
     ]
 
     operations = [

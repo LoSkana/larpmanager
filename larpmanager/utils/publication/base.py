@@ -47,7 +47,7 @@ def publish_event(event_id: int) -> None:
 
 
 @background_auto(queue=PUB_QUEUE)
-def publish_registration(registration_id: int, run_id: int | None) -> None:
+def publish_registration(registration_id: int, run_id: int | None = None) -> None:
     """Background task: sync a single cast entry on ILDB after a registration changes."""
     sync_cast_ildb(registration_id, run_id)
 

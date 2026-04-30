@@ -148,7 +148,7 @@ class OrgaEventForm(BaseModelForm):
             "where",
             "authors",
             "description",
-            "keywords",
+            "genre",
             "visible",
             "max_pg",
             "max_waiting",
@@ -196,7 +196,7 @@ class OrgaEventForm(BaseModelForm):
         # Check each display-related feature and mark fields for removal if disabled
         dl = [
             s
-            for s in ["visible", "website", "tagline", "where", "authors", "keywords"]
+            for s in ["visible", "website", "tagline", "where", "authors", "genre"]
             if s not in self.params.get("features")
         ]
 
