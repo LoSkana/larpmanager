@@ -2118,6 +2118,9 @@ msgstr "Code unique"
 msgid "Where it is"
 msgstr "Où il se trouve"
 
+msgid "Your Events"
+msgstr "Vos événements"
+
 msgid "assignments"
 msgstr "les missions"
 
@@ -3680,6 +3683,9 @@ msgstr "Registre des volontaires"
 msgid "Workspace selector"
 msgstr "Sélecteur d'espace de travail"
 
+msgid "Your Organizations"
+msgstr "Vos organisations"
+
 msgid "Your date of birth"
 msgstr "Votre date de naissance"
 
@@ -4388,6 +4394,9 @@ msgstr "Bienvenue à LarpManager"
 
 msgid "Workshop already done!"
 msgstr "L'atelier est déjà passé !"
+
+msgid "You are logged in as: "
+msgstr "Vous êtes connecté en tant que :"
 
 msgid "give them this address"
 msgstr "donnez-leur cette adresse"

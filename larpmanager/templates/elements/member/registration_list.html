@@ -1,0 +1,45 @@
+{% load i18n %}
+{% if registration_list %}
+    <table id="my_registrations" class="go_datatable">
+        <thead>
+            <tr>
+                {% if show_association %}
+                    <th>{% trans "Organization" %}</th>
+                {% endif %}
+                <th>{% trans "Event" %}</th>
+                <th>{% trans "Cover" %}</th>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Details" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registration in registration_list %}
+                <tr>
+                    {% if show_association %}<td>{{ registration.run.event.association.name }}</td>{% endif %}
+                    <td>
+                        <b>
+                            <a href="{% url 'gallery' registration.run.get_slug %}">{{ registration.run }}</a>
+                        </b>
+                    </td>
+                    {% if run.event.cover %}
+                        <td class="cover-container">
+                            <img src="{{ run.event.cover_thumb.url }}" alt="run cover image" />
+                        </td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    <td>
+                        <i>{{ registration.run.pretty_dates }}</i>
+                    </td>
+                    <td>{{ registration.run.status.text | safe }}</td>
+                    <td>
+                        {% if registration.run.status.details %}{{ registration.run.status.details | safe }}{% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>{% trans "You don't have any registrations yet" %}.</p>
+{% endif %}

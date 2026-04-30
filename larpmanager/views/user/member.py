@@ -78,8 +78,7 @@ from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import get_membership_request
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_leaderboard, get_member_uuid
-from larpmanager.utils.users.registration import registration_status
-from larpmanager.views.user.event import get_character_rels_dict, get_payment_invoices_dict, get_pre_registrations_dict
+from larpmanager.views.user.event import build_registration_list, get_member_registrations
 
 logger = logging.getLogger(__name__)
 
@@ -1028,31 +1027,11 @@ def registrations(request: HttpRequest) -> HttpResponse:
             with status and related information.
 
     """
-    nt = []
     context = get_context(request)
-
-    # Get user's registrations in this association
-    my_regs = Registration.objects.filter(member=context["member"], run__event_id=context["association_id"])
-    my_regs_dict = {registration.run_id: registration for registration in my_regs}
-
-    # Prepare context data
-    context.update(
-        {
-            "pre_registrations_dict": get_pre_registrations_dict(context["association_id"], context["member"]),
-            "character_rels_dict": get_character_rels_dict(my_regs_dict, context["member"]),
-            "payment_invoices_dict": get_payment_invoices_dict(my_regs_dict, context["member"]),
-        },
+    my_regs = get_member_registrations(context["member"], context["association_id"])
+    context["registration_list"] = build_registration_list(
+        context["member"], my_regs, context["association_id"], context["membership"]
     )
-
-    # Process each registration to calculate status and append to results
-    for registration in my_regs:
-        # Calculate registration status
-        context["registration"] = registration
-        registration.run.status = registration_status(context, registration.run, context["member"])
-        nt.append(registration)
-
-    # Render template with processed registration list
-    context["registration_list"] = nt
     return render(request, "larpmanager/member/registrations.html", context)
 
 

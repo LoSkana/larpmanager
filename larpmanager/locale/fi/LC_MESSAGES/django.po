@@ -2118,6 +2118,9 @@ msgstr "Yksilöllinen koodi"
 msgid "Where it is"
 msgstr "Missä se on"
 
+msgid "Your Events"
+msgstr "Tapahtumasi"
+
 msgid "assignments"
 msgstr "tehtävät"
 
@@ -3680,6 +3683,9 @@ msgstr "Vapaaehtoisten rekisteri"
 msgid "Workspace selector"
 msgstr "Työtilan valitsin"
 
+msgid "Your Organizations"
+msgstr "Organisaationne"
+
 msgid "Your date of birth"
 msgstr "Syntymäaikasi"
 
@@ -4388,6 +4394,9 @@ msgstr "Tervetuloa LarpManageriin"
 
 msgid "Workshop already done!"
 msgstr "Työpaja on jo tehty!"
+
+msgid "You are logged in as: "
+msgstr "Olet kirjautunut sisään nimellä:"
 
 msgid "give them this address"
 msgstr "anna heille tämä osoite"
