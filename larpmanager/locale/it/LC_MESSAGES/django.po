@@ -350,6 +350,9 @@ msgstr "Chiudi"
 msgid "Color"
 msgstr "Colore"
 
+msgid "Count"
+msgstr "Conteggio"
+
 msgid "Cover"
 msgstr "Cover"
 
@@ -1460,9 +1463,6 @@ msgstr "Interfaccia"
 
 msgid "Inventory"
 msgstr "Inventario"
-
-msgid "Load list"
-msgstr "Carica lista"
 
 msgid "Mandatory"
 msgstr "Obbligatoria"

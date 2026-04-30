@@ -209,19 +209,57 @@
     {% endfor %}
 {% endblock tbody %}
 {% block additional %}
-    {% if form_questions %}
+    {% if user_character_approval and character_status_choices or form_questions %}
         <br />
-        <p id="show">
-            <b>{% trans "Load list" %}</b>
-        </p>
         <div class="fields">
-            {% for key, que in form_questions.items %}
-                {% if que.typ == 's' or que.typ == 'm' %}
-                    <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
-                    <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
-                {% endif %}
-            {% endfor %}
+            {% if user_character_approval and character_status_choices %}
+                <a href="#" class="my_toggle" tog='char_status'>{% trans "Status" %}</a>
+            {% endif %}
+            {% if form_questions %}
+                {% for key, que in form_questions.items %}
+                    {% if que.typ == 's' or que.typ == 'm' %}
+                        <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
+                        <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </div>
+    {% endif %}
+    {% if user_character_approval and character_status_choices %}
+        <div class="char_status hide">
+            <br />
+            <h4>{% trans "Status" %}</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>{% trans "Status" %}</th>
+                        <th>{% trans "Count" %}</th>
+                        <th>{% trans "Emails" %}</th>
+                        <th>{% trans "Names" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for status_val, status_label in character_status_choices %}
+                        <tr>
+                            <td>{{ status_label }}</td>
+                            <td>{{ character_status_counts|get:status_val|default:"0" }}</td>
+                            <td>
+                                {% for el in list %}
+                                    {% if el.status == status_val and el.player %}{{ el.player.email }}{% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for el in list %}
+                                    {% if el.status == status_val and el.player %}{{ el.player.show_nick }}{% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% if form_questions %}
         {% for key, que in form_questions.items %}
             {% if que.typ == 's' or que.typ == 'm' %}
                 <div class="email_que_{{ key }} hide">

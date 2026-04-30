@@ -350,6 +350,9 @@ msgstr "Gesloten"
 msgid "Color"
 msgstr "Kleur"
 
+msgid "Count"
+msgstr "Graaf"
+
 msgid "Cover"
 msgstr "Omslag"
 
@@ -1460,9 +1463,6 @@ msgstr "Interface"
 
 msgid "Inventory"
 msgstr "Inventaris"
-
-msgid "Load list"
-msgstr "Lijst laden"
 
 msgid "Mandatory"
 msgstr "Verplicht"
