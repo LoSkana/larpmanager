@@ -374,6 +374,10 @@ msgstr "Vijfde"
 msgid "First"
 msgstr "Eerste"
 
+msgctxt "event"
+msgid "Genre"
+msgstr "Genre"
+
 msgid "Given"
 msgstr "Gegevens"
 
@@ -1210,6 +1214,7 @@ msgstr "Inclusief"
 msgid "Invoices"
 msgstr "Facturen"
 
+msgctxt "event"
 msgid "Keywords"
 msgstr "Trefwoorden"
 
@@ -4127,6 +4132,9 @@ msgstr "Wat je zult ontgrendelen"
 msgid "Yes, keep me posted!"
 msgstr "Ja, hou me op de hoogte!"
 
+msgid "You are logged in as"
+msgstr "U bent aangemeld als"
+
 msgid "Access your character"
 msgstr "Toegang tot je personage"
 
@@ -4480,9 +4488,6 @@ msgstr "Welkom bij LarpManager"
 msgid "Workshop already done!"
 msgstr "Workshop al geslaagd!"
 
-msgid "You are logged in as: "
-msgstr "Je bent ingelogd als:"
-
 msgid "give them this address"
 msgstr "geef ze dit adres"
 
@@ -4613,6 +4618,9 @@ msgstr "Beschikbare facties tonen"
 
 msgid "Thanks for your support"
 msgstr "Bedankt voor je steun"
+
+msgid "The genre of your event"
+msgstr "Het genre van je evenement"
 
 msgid "The participant's email"
 msgstr "E-mailadres van de deelnemer"
@@ -5194,9 +5202,6 @@ msgstr "Ik begrijp het - Toegang tot inhoud"
 
 msgid "Indicate the outflow category"
 msgstr "Geef de categorie aan waarbinnen de output wordt geteld"
-
-msgid "Keywords describing the event"
-msgstr "Trefwoorden die het evenement beschrijven"
 
 msgid "Manage expense items incurred"
 msgstr "Gemaakte onkosten beheren"
@@ -6057,9 +6062,6 @@ msgstr "Einddatum kan niet voor startdatum liggen!"
 msgid "Hide participants without a character"
 msgstr "Deelnemers zonder teken verbergen"
 
-msgid "ILDB draft event pending confirmation"
-msgstr "ILDB ontwerp evenement in afwachting van bevestiging"
-
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Indien aangevinkt, ticketniveau toestaan: Verkoper"
 
@@ -6551,6 +6553,10 @@ msgstr "ISO-taalcode (bijv. 'en', 'it', 'de')"
 msgid "If checked, allows to delete items in bulk"
 msgstr "Als deze optie is aangevinkt, kunnen items in bulk worden verwijderd"
 
+msgctxt "event"
+msgid "If checked: shows the genre for each event"
+msgstr "Indien aangevinkt: toont het genre voor elk evenement"
+
 msgid "Longitude coordinate of the event location"
 msgstr "Lengtecoördinaat van de locatie van het voorval"
 
@@ -6835,10 +6841,6 @@ msgstr "Rollen definiëren om toegang te verlenen tot gebeurtenisbeheer"
 
 msgid "Extra price applied when this quota is active"
 msgstr "Extra prijs toegepast wanneer dit quotum actief is"
-
-msgctxt "event"
-msgid "If checked: shows the keywords for each event"
-msgstr "Indien aangevinkt: toont de trefwoorden voor elke gebeurtenis"
 
 msgid "If checked: shows the position for each event"
 msgstr "Indien aangevinkt: toont de positie voor elke gebeurtenis"
@@ -7639,9 +7641,6 @@ msgstr "De laad- en inzetstatus van magazijnitems beheren"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Beheer betalingen door deelnemers aan alle evenementen"
-
-msgid "Please review and confirm it before it can be published"
-msgstr "Controleer en bevestig het voordat het kan worden gepubliceerd"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Bekijk de gebruikers die de deadlines van het evenement missen"
@@ -9689,14 +9688,6 @@ msgid ""
 msgstr ""
 "Om deel te nemen aan dit evenement moet je de jaarlijkse "
 "lidmaatschapsbijdrage van"
-
-#, python-format
-msgid ""
-"A draft event matching <strong>%(event)s</strong> was found on "
-"larpdatabase.com."
-msgstr ""
-"Er is een ontwerpevent gevonden op larpdatabase.com dat overeenkomt met "
-"<strong>%(event)s</strong>."
 
 msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "

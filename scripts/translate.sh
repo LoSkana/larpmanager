@@ -2,10 +2,12 @@
 
 source ./scripts/venv.sh
 
-# Skip if Django detects any Python errors
-if ! python manage.py check --quiet 2>/dev/null; then
-  echo "Skipping translate: python manage.py check failed"
-  exit 0
+# Check code, skip if does not compile
+python manage.py check
+CHECK_EXIT_CODE=$?
+if [ $CHECK_EXIT_CODE -ne 0 ]; then
+  echo "Skipping translate: python manage.py check failed (Exit code: $CHECK_EXIT_CODE)"
+  exit 1
 fi
 
 # remove show from test

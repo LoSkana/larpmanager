@@ -374,6 +374,10 @@ msgstr "Quinto"
 msgid "First"
 msgstr "Primo"
 
+msgctxt "event"
+msgid "Genre"
+msgstr "Genere"
+
 msgid "Given"
 msgstr "Dato"
 
@@ -1210,6 +1214,7 @@ msgstr "Incluso"
 msgid "Invoices"
 msgstr "Versamenti"
 
+msgctxt "event"
 msgid "Keywords"
 msgstr "Parole chiave"
 
@@ -4127,6 +4132,9 @@ msgstr "Cosa sbloccherai"
 msgid "Yes, keep me posted!"
 msgstr "Sì, tenetemi aggiornato!"
 
+msgid "You are logged in as"
+msgstr "L'utente ha effettuato l'accesso come"
+
 msgid "Access your character"
 msgstr "Accedi al tuo personaggio"
 
@@ -4480,9 +4488,6 @@ msgstr "Benvenuto su LarpManager"
 msgid "Workshop already done!"
 msgstr "Workshop già superato!"
 
-msgid "You are logged in as: "
-msgstr "Hai effettuato l'accesso come:"
-
 msgid "give them this address"
 msgstr "dai loro questo indirizzo"
 
@@ -4613,6 +4618,9 @@ msgstr "Mostra le fazioni disponibili"
 
 msgid "Thanks for your support"
 msgstr "Grazie per il tuo supporto"
+
+msgid "The genre of your event"
+msgstr "Il genere del vostro evento"
 
 msgid "The participant's email"
 msgstr "L'e-mail del partecipante"
@@ -5194,9 +5202,6 @@ msgstr "Capisco - Accedi al contenuto"
 
 msgid "Indicate the outflow category"
 msgstr "Indica la categoria entro cui viene contata l'uscita"
-
-msgid "Keywords describing the event"
-msgstr "Parole chiave che descrivono l'evento"
 
 msgid "Manage expense items incurred"
 msgstr "Gestisci le voci di spesa sostenute"
@@ -6056,9 +6061,6 @@ msgstr "La data di fine non può essere precedente alla data di inizio!"
 msgid "Hide participants without a character"
 msgstr "Nascondi i partecipanti senza personaggio"
 
-msgid "ILDB draft event pending confirmation"
-msgstr "Progetto di evento ILDB in attesa di conferma"
-
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Se selezionata, abilita il livello del biglietto: Venditore"
 
@@ -6546,6 +6548,10 @@ msgstr "Codice lingua ISO (ad esempio, 'en', 'it', 'de')"
 msgid "If checked, allows to delete items in bulk"
 msgstr "Se selezionata, consente di eliminare gli elementi in blocco"
 
+msgctxt "event"
+msgid "If checked: shows the genre for each event"
+msgstr "Se selezionato: mostra il genere per ogni evento"
+
 msgid "Longitude coordinate of the event location"
 msgstr "Coordinate di longitudine del luogo dell'evento"
 
@@ -6830,10 +6836,6 @@ msgstr "Definisci i ruoli per concedere l'accesso alla gestione dell'evento"
 
 msgid "Extra price applied when this quota is active"
 msgstr "Prezzo extra applicato quando questa quota è attiva"
-
-msgctxt "event"
-msgid "If checked: shows the keywords for each event"
-msgstr "Se selezionato: mostra le parole chiave per ogni evento"
 
 msgid "If checked: shows the position for each event"
 msgstr "Se checkato: mostra la posizione per ogni evento"
@@ -7631,9 +7633,6 @@ msgstr ""
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Gestisci i pagamenti effettuati dai partecipanti a tutti gli eventi"
-
-msgid "Please review and confirm it before it can be published"
-msgstr "Per favore controlla e conferma prima che venga pubblicato"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Verifica gli utenti che non hanno rispettato le scadenze dell'evento"
@@ -9701,14 +9700,6 @@ msgid ""
 msgstr ""
 "Per partecipare a questo evento, dovrai versare in futuro la quota sociale "
 "annuale di"
-
-#, python-format
-msgid ""
-"A draft event matching <strong>%(event)s</strong> was found on "
-"larpdatabase.com."
-msgstr ""
-"Su larpdatabase.com è stata trovata una bozza di evento corrispondente a "
-"<strong>%(event)s</strong>."
 
 msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "

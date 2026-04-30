@@ -374,6 +374,10 @@ msgstr "Viides"
 msgid "First"
 msgstr "Ensimmäinen"
 
+msgctxt "event"
+msgid "Genre"
+msgstr "Genre"
+
 msgid "Given"
 msgstr "Annettu"
 
@@ -1210,6 +1214,7 @@ msgstr "Mukana"
 msgid "Invoices"
 msgstr "Laskut"
 
+msgctxt "event"
 msgid "Keywords"
 msgstr "Avainsanat"
 
@@ -4127,6 +4132,9 @@ msgstr "Mitä avaat"
 msgid "Yes, keep me posted!"
 msgstr "Kyllä, pidä minut ajan tasalla!"
 
+msgid "You are logged in as"
+msgstr "Olet kirjautunut sisään nimellä"
+
 msgid "Access your character"
 msgstr "Pääset hahmoosi"
 
@@ -4480,9 +4488,6 @@ msgstr "Tervetuloa LarpManageriin"
 msgid "Workshop already done!"
 msgstr "Työpaja on jo tehty!"
 
-msgid "You are logged in as: "
-msgstr "Olet kirjautunut sisään nimellä:"
-
 msgid "give them this address"
 msgstr "anna heille tämä osoite"
 
@@ -4613,6 +4618,9 @@ msgstr "Näytä käytettävissä olevat ryhmittymät"
 
 msgid "Thanks for your support"
 msgstr "Kiitos tuestanne"
+
+msgid "The genre of your event"
+msgstr "Tapahtuman laji"
 
 msgid "The participant's email"
 msgstr "Osallistujan sähköpostiosoite"
@@ -5194,9 +5202,6 @@ msgstr "Ymmärrän - Sisällön käyttö"
 
 msgid "Indicate the outflow category"
 msgstr "Ilmoita ulosvirtauksen luokka"
-
-msgid "Keywords describing the event"
-msgstr "Tapahtumaa kuvaavat avainsanat"
 
 msgid "Manage expense items incurred"
 msgstr "Hallitse syntyneitä kulueriä"
@@ -6056,9 +6061,6 @@ msgstr "Loppupäivä ei voi olla ennen alkupäivää!"
 msgid "Hide participants without a character"
 msgstr "Piilota osallistujat ilman hahmoa"
 
-msgid "ILDB draft event pending confirmation"
-msgstr "ILDB:n luonnos tapahtumaksi odottaa vahvistusta"
-
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Jos valittuna, salli lipputaso: Myyjä"
 
@@ -6548,6 +6550,10 @@ msgstr "ISO-kielikoodi (esim. 'en', 'it', 'de')"
 msgid "If checked, allows to delete items in bulk"
 msgstr "Jos valintaruutu on valittuna, voit poistaa kohteita irtotavarana"
 
+msgctxt "event"
+msgid "If checked: shows the genre for each event"
+msgstr "Jos valittuna: näyttää kunkin tapahtuman genren"
+
 msgid "Longitude coordinate of the event location"
 msgstr "Tapahtumapaikan pituuskoordinaatti"
 
@@ -6830,10 +6836,6 @@ msgstr "Määritä roolit tapahtumien hallintaoikeuksien myöntämiseksi"
 
 msgid "Extra price applied when this quota is active"
 msgstr "Lisähintaa sovelletaan, kun tämä kiintiö on aktiivinen"
-
-msgctxt "event"
-msgid "If checked: shows the keywords for each event"
-msgstr "Jos valittuna: näyttää kunkin tapahtuman avainsanat"
 
 msgid "If checked: shows the position for each event"
 msgstr "Jos valittuna: näyttää kunkin tapahtuman sijainnin"
@@ -7622,9 +7624,6 @@ msgstr "Varastotavaroiden lastauksen ja käyttöönoton tilan hallinta"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Hallitse osallistujien suorittamia maksuja kaikissa tapahtumissa"
-
-msgid "Please review and confirm it before it can be published"
-msgstr "Tarkista ja vahvista se ennen sen julkaisemista"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Tarkista käyttäjät, jotka ovat jääneet pois tapahtuman määräajoista"
@@ -9526,14 +9525,6 @@ msgid ""
 msgstr ""
 "Osallistuaksesi tähän tapahtumaan sinun on maksettava vuotuinen jäsenmaksu, "
 "joka on seuraava"
-
-#, python-format
-msgid ""
-"A draft event matching <strong>%(event)s</strong> was found on "
-"larpdatabase.com."
-msgstr ""
-"Larpdatabase.com-sivustolta löytyi luonnostapahtuma, joka vastaa "
-"<strong>%(event)s</strong>."
 
 msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "

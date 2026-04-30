@@ -374,6 +374,10 @@ msgstr "Femte"
 msgid "First"
 msgstr "Første"
 
+msgctxt "event"
+msgid "Genre"
+msgstr "Sjanger"
+
 msgid "Given"
 msgstr "Data"
 
@@ -1210,6 +1214,7 @@ msgstr "Inkludert"
 msgid "Invoices"
 msgstr "Fakturaer"
 
+msgctxt "event"
 msgid "Keywords"
 msgstr "Nøkkelord"
 
@@ -4127,6 +4132,9 @@ msgstr "Hva du vil låse opp"
 msgid "Yes, keep me posted!"
 msgstr "Ja, hold meg oppdatert!"
 
+msgid "You are logged in as"
+msgstr "Du er logget inn som"
+
 msgid "Access your character"
 msgstr "Få tilgang til karakteren din"
 
@@ -4480,9 +4488,6 @@ msgstr "Velkommen til LarpManager"
 msgid "Workshop already done!"
 msgstr "Workshopen er allerede bestått!"
 
-msgid "You are logged in as: "
-msgstr "Du er logget inn som:"
-
 msgid "give them this address"
 msgstr "gi dem denne adressen"
 
@@ -4613,6 +4618,9 @@ msgstr "Vis tilgjengelige fraksjoner"
 
 msgid "Thanks for your support"
 msgstr "Takk for støtten"
+
+msgid "The genre of your event"
+msgstr "Sjangeren på arrangementet ditt"
 
 msgid "The participant's email"
 msgstr "Deltakerens e-postadresse"
@@ -5194,9 +5202,6 @@ msgstr "Jeg forstår - Få tilgang til innhold"
 
 msgid "Indicate the outflow category"
 msgstr "Angi hvilken kategori produksjonen regnes innenfor"
-
-msgid "Keywords describing the event"
-msgstr "Nøkkelord som beskriver hendelsen"
 
 msgid "Manage expense items incurred"
 msgstr "Administrere påløpte utgiftsposter"
@@ -6055,9 +6060,6 @@ msgstr "Sluttdato kan ikke være før startdato!"
 msgid "Hide participants without a character"
 msgstr "Skjul deltakere uten tegn"
 
-msgid "ILDB draft event pending confirmation"
-msgstr "ILDB utkast til arrangement i påvente av bekreftelse"
-
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Hvis avkrysset, tillat billettnivå: Selger"
 
@@ -6549,6 +6551,10 @@ msgstr "ISO-språkkode (f.eks. 'en', 'it', 'de')"
 msgid "If checked, allows to delete items in bulk"
 msgstr "Hvis avkrysset, kan du slette elementer i bulk"
 
+msgctxt "event"
+msgid "If checked: shows the genre for each event"
+msgstr "Hvis avkrysset: viser sjangeren for hvert arrangement"
+
 msgid "Longitude coordinate of the event location"
 msgstr "Lengdegradskoordinat for hendelsesstedet"
 
@@ -6832,10 +6838,6 @@ msgstr "Definer roller for å gi tilgang til hendelseshåndtering"
 
 msgid "Extra price applied when this quota is active"
 msgstr "Ekstra pris gjelder når denne kvoten er aktiv"
-
-msgctxt "event"
-msgid "If checked: shows the keywords for each event"
-msgstr "Hvis avkrysset: viser nøkkelordene for hver hendelse"
 
 msgid "If checked: shows the position for each event"
 msgstr "Hvis avkrysset: viser posisjonen for hver hendelse"
@@ -7624,9 +7626,6 @@ msgstr "Administrerer status for lasting og distribusjon av varer på lageret"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Administrere betalinger utført av deltakere på alle arrangementer"
-
-msgid "Please review and confirm it before it can be published"
-msgstr "Vennligst se gjennom og bekreft den før den kan publiseres"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Gå gjennom brukerne som ikke overholder arrangementets tidsfrister"
@@ -9523,14 +9522,6 @@ msgid ""
 " of"
 msgstr ""
 "For å delta i dette arrangementet må du betale den årlige medlemsavgiften på"
-
-#, python-format
-msgid ""
-"A draft event matching <strong>%(event)s</strong> was found on "
-"larpdatabase.com."
-msgstr ""
-"Et utkast til hendelse som samsvarer med <strong>%(event)s</strong> ble "
-"funnet på larpdatabase.com."
 
 msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "

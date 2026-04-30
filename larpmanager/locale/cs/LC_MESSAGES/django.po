@@ -374,6 +374,10 @@ msgstr "Pátý"
 msgid "First"
 msgstr "První"
 
+msgctxt "event"
+msgid "Genre"
+msgstr "Žánr"
+
 msgid "Given"
 msgstr "Data"
 
@@ -1210,6 +1214,7 @@ msgstr "Včetně"
 msgid "Invoices"
 msgstr "Faktury"
 
+msgctxt "event"
 msgid "Keywords"
 msgstr "Klíčová slova"
 
@@ -4127,6 +4132,9 @@ msgstr "Co odemknete"
 msgid "Yes, keep me posted!"
 msgstr "Ano, informujte mě!"
 
+msgid "You are logged in as"
+msgstr "Jste přihlášeni jako"
+
 msgid "Access your character"
 msgstr "Získejte přístup ke své postavě"
 
@@ -4480,9 +4488,6 @@ msgstr "Vítejte v LarpManageru"
 msgid "Workshop already done!"
 msgstr "Workshop již proběhl!"
 
-msgid "You are logged in as: "
-msgstr "Jste přihlášeni jako:"
-
 msgid "give them this address"
 msgstr "předejte jim tuto adresu"
 
@@ -4613,6 +4618,9 @@ msgstr "Zobrazit dostupné frakce"
 
 msgid "Thanks for your support"
 msgstr "Děkujeme vám za podporu"
+
+msgid "The genre of your event"
+msgstr "Žánr vaší akce"
 
 msgid "The participant's email"
 msgstr "E-mail účastníka"
@@ -5194,9 +5202,6 @@ msgstr "Rozumím - Přístup k obsahu"
 
 msgid "Indicate the outflow category"
 msgstr "Uveďte kategorii, do které se výstup započítává"
-
-msgid "Keywords describing the event"
-msgstr "Klíčová slova popisující událost"
 
 msgid "Manage expense items incurred"
 msgstr "Správa vzniklých výdajových položek"
@@ -6057,9 +6062,6 @@ msgstr "Datum ukončení nesmí být před datem zahájení!"
 msgid "Hide participants without a character"
 msgstr "Skrýt účastníky bez znaku"
 
-msgid "ILDB draft event pending confirmation"
-msgstr "ILDB návrh události čeká na potvrzení"
-
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Prodejce"
 
@@ -6549,6 +6551,10 @@ msgstr "kód jazyka ISO (např. 'en', 'it', 'de')"
 msgid "If checked, allows to delete items in bulk"
 msgstr "Pokud je zaškrtnuto, umožňuje hromadné mazání položek"
 
+msgctxt "event"
+msgid "If checked: shows the genre for each event"
+msgstr "Pokud je zaškrtnuto: zobrazí žánr pro každou událost"
+
 msgid "Longitude coordinate of the event location"
 msgstr "Souřadnice zeměpisné délky místa události"
 
@@ -6831,10 +6837,6 @@ msgstr "Definice rolí pro udělení přístupu ke správě událostí"
 
 msgid "Extra price applied when this quota is active"
 msgstr "Cena navíc se použije, když je tato kvóta aktivní"
-
-msgctxt "event"
-msgid "If checked: shows the keywords for each event"
-msgstr "Pokud je zaškrtnuto: zobrazí klíčová slova pro každou událost"
 
 msgid "If checked: shows the position for each event"
 msgstr "Pokud je zaškrtnuto: zobrazuje pozici pro každou událost"
@@ -7622,9 +7624,6 @@ msgstr "Správa stavu nakládky a nasazení skladových položek"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Správa plateb provedených účastníky všech událostí"
-
-msgid "Please review and confirm it before it can be published"
-msgstr "Před zveřejněním jej prosím zkontrolujte a potvrďte"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Přehled uživatelů, kteří nedodržují termíny události"
@@ -9449,14 +9448,6 @@ msgid ""
 msgstr ""
 "Abyste se mohli této akce zúčastnit, musíte zaplatit roční členský poplatek "
 "ve výši"
-
-#, python-format
-msgid ""
-"A draft event matching <strong>%(event)s</strong> was found on "
-"larpdatabase.com."
-msgstr ""
-"V databázi larpdatabase.com byl nalezen návrh události odpovídající "
-"<strong>%(event)s</strong>."
 
 msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "

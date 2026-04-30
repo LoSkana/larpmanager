@@ -378,11 +378,12 @@ msgstr ""
 msgid "If checked: shows the list of authors for each event"
 msgstr ""
 
-msgid "Keywords"
+msgctxt "event"
+msgid "Genre"
 msgstr ""
 
 msgctxt "event"
-msgid "If checked: shows the keywords for each event"
+msgid "If checked: shows the genre for each event"
 msgstr ""
 
 msgid "Tagline"
@@ -3565,7 +3566,7 @@ msgstr ""
 msgid "will be displayed on the main event page"
 msgstr ""
 
-msgid "Keywords describing the event"
+msgid "The genre of your event"
 msgstr ""
 
 msgid "Cover image"
@@ -5165,7 +5166,7 @@ msgid ""
 "always of the same macrotype)"
 msgstr ""
 
-msgid "You are logged in as: "
+msgid "You are logged in as"
 msgstr ""
 
 msgid "Your Organizations"
@@ -5327,6 +5328,9 @@ msgid "Players"
 msgstr ""
 
 msgctxt "event"
+msgid "Keywords"
+msgstr ""
+
 msgid "Keywords"
 msgstr ""
 
@@ -10217,18 +10221,6 @@ msgid "Character Config"
 msgstr ""
 
 msgid "Plot Roles"
-msgstr ""
-
-msgid "ILDB draft event pending confirmation"
-msgstr ""
-
-#, python-format
-msgid ""
-"A draft event matching <strong>%(event)s</strong> was found on larpdatabase."
-"com."
-msgstr ""
-
-msgid "Please review and confirm it before it can be published"
 msgstr ""
 
 msgid "Event added to ILDB"

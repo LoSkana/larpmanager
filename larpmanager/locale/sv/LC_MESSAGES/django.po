@@ -374,6 +374,10 @@ msgstr "Femte"
 msgid "First"
 msgstr "Första"
 
+msgctxt "event"
+msgid "Genre"
+msgstr "Genre"
+
 msgid "Given"
 msgstr "Data"
 
@@ -1210,6 +1214,7 @@ msgstr "Inklusive"
 msgid "Invoices"
 msgstr "Fakturor"
 
+msgctxt "event"
 msgid "Keywords"
 msgstr "Nyckelord"
 
@@ -4127,6 +4132,9 @@ msgstr "Vad du kommer att låsa upp"
 msgid "Yes, keep me posted!"
 msgstr "Ja, håll mig uppdaterad!"
 
+msgid "You are logged in as"
+msgstr "Du är inloggad som"
+
 msgid "Access your character"
 msgstr "Få tillgång till din karaktär"
 
@@ -4480,9 +4488,6 @@ msgstr "Välkommen till LarpManager"
 msgid "Workshop already done!"
 msgstr "Workshop redan godkänd!"
 
-msgid "You are logged in as: "
-msgstr "Du är inloggad som:"
-
 msgid "give them this address"
 msgstr "ge dem denna adress"
 
@@ -4613,6 +4618,9 @@ msgstr "Visa tillgängliga fraktioner"
 
 msgid "Thanks for your support"
 msgstr "Tack för ert stöd"
+
+msgid "The genre of your event"
+msgstr "Genren för ditt evenemang"
 
 msgid "The participant's email"
 msgstr "Deltagarens e-postadress"
@@ -5194,9 +5202,6 @@ msgstr "Jag förstår - Få tillgång till innehåll"
 
 msgid "Indicate the outflow category"
 msgstr "Ange den kategori inom vilken produktionen räknas"
-
-msgid "Keywords describing the event"
-msgstr "Nyckelord som beskriver händelsen"
 
 msgid "Manage expense items incurred"
 msgstr "Hantera uppkomna kostnadsposter"
@@ -6056,9 +6061,6 @@ msgstr "Slutdatum kan inte vara före startdatum!"
 msgid "Hide participants without a character"
 msgstr "Dölj deltagare utan tecken"
 
-msgid "ILDB draft event pending confirmation"
-msgstr "ILDB utkast till evenemang i väntan på bekräftelse"
-
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Om markerat, tillåt biljettnivå: Säljare"
 
@@ -6550,6 +6552,10 @@ msgstr "ISO-språkkod (t.ex. 'en', 'it', 'de')"
 msgid "If checked, allows to delete items in bulk"
 msgstr "Om markerad, gör det möjligt att radera objekt i bulk"
 
+msgctxt "event"
+msgid "If checked: shows the genre for each event"
+msgstr "Om markerat: visar genren för varje evenemang"
+
 msgid "Longitude coordinate of the event location"
 msgstr "Longitudkoordinat för platsen för händelsen"
 
@@ -6832,10 +6838,6 @@ msgstr "Definiera roller för att ge åtkomst till händelsehantering"
 
 msgid "Extra price applied when this quota is active"
 msgstr "Extra pris tillämpas när denna kvot är aktiv"
-
-msgctxt "event"
-msgid "If checked: shows the keywords for each event"
-msgstr "Om markerat: visar nyckelorden för varje evenemang"
 
 msgid "If checked: shows the position for each event"
 msgstr "Om markerat: visar positionen för varje evenemang"
@@ -7617,9 +7619,6 @@ msgstr "Hantera lastnings- och utplaceringsstatus för lagerartiklar"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Hantera betalningar som utförs av deltagare på alla evenemang"
-
-msgid "Please review and confirm it before it can be published"
-msgstr "Vänligen granska och bekräfta den innan den kan publiceras"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Granska de användare som inte klarar evenemangets deadlines"
@@ -9527,14 +9526,6 @@ msgid ""
 msgstr ""
 "För att delta i detta evenemang måste du betala den årliga medlemsavgiften "
 "på"
-
-#, python-format
-msgid ""
-"A draft event matching <strong>%(event)s</strong> was found on "
-"larpdatabase.com."
-msgstr ""
-"Ett utkast till händelse som matchade <strong>%(event)s</strong> hittades på"
-" larpdatabase.com."
 
 msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
