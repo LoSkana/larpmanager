@@ -194,10 +194,6 @@ msgstr "Hauptseite"
 msgid "Male"
 msgstr "Männlich"
 
-msgctxt "event"
-msgid "Mood"
-msgstr "Stimmung"
-
 msgid "Name"
 msgstr "Name"
 
@@ -464,6 +460,10 @@ msgstr "Personal"
 
 msgid "Start"
 msgstr "Start"
+
+msgctxt "event"
+msgid "Style"
+msgstr "Stil"
 
 msgid "Swift"
 msgstr "Schnell"
@@ -2155,6 +2155,9 @@ msgstr "Eindeutiger Code"
 msgid "Where it is"
 msgstr "Wo sie ist"
 
+msgid "Your Events"
+msgstr "Ihre Veranstaltungen"
+
 msgid "assignments"
 msgstr "Zuweisungen"
 
@@ -2259,6 +2262,9 @@ msgstr "Bewerten Sie"
 
 msgid "Instructions"
 msgstr "Anweisungen"
+
+msgid "Legal Gender"
+msgstr "Rechtliches Geschlecht"
 
 msgid "Legal Notice"
 msgstr "Rechtlicher Hinweis"
@@ -3747,6 +3753,9 @@ msgstr "Freiwilligen-Register"
 msgid "Workspace selector"
 msgstr "Arbeitsbereichswähler"
 
+msgid "Your Organizations"
+msgstr "Ihre Organisationen"
+
 msgid "Your date of birth"
 msgstr "Ihr Geburtsdatum"
 
@@ -3950,6 +3959,9 @@ msgstr "Gesendete E-Mails anzeigen"
 
 msgid "Download light sheet"
 msgstr "Download Lichtblatt"
+
+msgid "Enter a valid number"
+msgstr "Geben Sie eine gültige Nummer ein"
 
 msgid "Event already played"
 msgstr "Bereits gespielte Ereignisse"
@@ -4168,9 +4180,6 @@ msgstr "Betragsänderung deaktivieren"
 
 msgid "Discover the web site"
 msgstr "Entdecken Sie die Website"
-
-msgid "Enter a valid number."
-msgstr "Geben Sie eine gültige Nummer ein."
 
 msgid "Error uploading image"
 msgstr "Fehler beim Hochladen eines Bildes"
@@ -4471,6 +4480,9 @@ msgstr "Willkommen beim LarpManager"
 msgid "Workshop already done!"
 msgstr "Workshop bereits bestanden!"
 
+msgid "You are logged in as: "
+msgstr "Sie sind eingeloggt als:"
+
 msgid "give them this address"
 msgstr "Geben Sie ihnen diese Adresse"
 
@@ -4770,6 +4782,9 @@ msgstr "Beispielvorlage herunterladen"
 
 msgid "Error reading backup file"
 msgstr "Fehler beim Lesen der Sicherungsdatei"
+
+msgid "Generate a new ILDB token"
+msgstr "Erzeugen eines neuen ILDB-Tokens"
 
 msgid "Go to the preferences for"
 msgstr "Gehen Sie zu den Einstellungen für"
@@ -5285,6 +5300,9 @@ msgstr "Aktivieren Sie neue Plattformfunktionen"
 
 msgid "Character Inventory Pool Types"
 msgstr "Charaktere Inventar-Pool-Typen"
+
+msgid "Choose the style for the event"
+msgstr "Wählen Sie den Stil für die Veranstaltung"
 
 #, python-format
 msgid "Complete payment for %(event)s"
@@ -6034,9 +6052,6 @@ msgstr "Erlaubt Charakteren, Vorräte zu haben"
 msgid "Check the validity of the fiscal code"
 msgstr "Prüfen Sie die Gültigkeit des Steuerkennzeichens"
 
-msgid "Choose the mood / style for the event"
-msgstr "Wählen Sie die Stimmung / den Stil für die Veranstaltung"
-
 msgid "End date cannot be before start date!"
 msgstr "Das Enddatum kann nicht vor dem Startdatum liegen!"
 
@@ -6541,7 +6556,7 @@ msgstr ""
 "Wenn diese Option aktiviert ist, können Sie Objekte in großen Mengen löschen"
 
 msgid "Longitude coordinate of the event location"
-msgstr "Längengradkoordinate des Veranstaltungsorts"
+msgstr "Längengradkoordinate des Veranstaltungsortes"
 
 msgid "Manage configuration of activated features"
 msgstr "Verwalten der Konfiguration aktivierter Funktionen"
@@ -6905,9 +6920,6 @@ msgstr "Möchten Sie über unsere Veranstaltungen auf dem Laufenden bleiben"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Hinweis: Die richtigen Antworten auf diese Frage sind"
-
-msgid "Indicates what gender you identify yourself as"
-msgstr "Geben Sie an, mit welchem Geschlecht Sie sich identifizieren"
 
 msgid "Manage event metadata for external publication"
 msgstr "Verwaltung von Ereignis-Metadaten für die externe Veröffentlichung"
@@ -7693,7 +7705,7 @@ msgstr "Verwaltung der Zahlungen von Teilnehmern an allen Veranstaltungen"
 
 msgid "Please review and confirm it before it can be published"
 msgstr ""
-"Bitte überprüfen und bestätigen Sie es, bevor es veröffentlicht werden kann"
+"Bitte überprüfen und bestätigen Sie es, bevor es veröffentlicht werden kann."
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr ""
@@ -8235,6 +8247,11 @@ msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Wenn Sie auf Probleme stoßen, kontaktieren Sie uns und wir werden Ihnen "
 "helfen"
+
+msgid "Indicate your legal gender as it appears on official documents"
+msgstr ""
+"Geben Sie Ihr rechtliches Geschlecht an, wie es in offiziellen Dokumenten "
+"angegeben ist"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr ""
@@ -9652,7 +9669,7 @@ msgid ""
 "panel"
 msgstr ""
 "Wenn dieses Kontrollkästchen aktiviert ist, können keine Gutschriften in der"
-" Ereignistafel erstellt oder geändert werden"
+" Ereignistafel erstellt oder geändert werden."
 
 msgid ""
 "If checked: in the public page of an user shows a list of all events "
@@ -9877,8 +9894,8 @@ msgid ""
 "A draft event matching <strong>%(event)s</strong> was found on "
 "larpdatabase.com."
 msgstr ""
-"Ein Ereignisentwurf, der <strong>%(event)s</strong> entspricht, wurde auf "
-"larpdatabase.com gefunden."
+"Ein Ereignisentwurf, der <strong>%(event)s</strong> entspricht, wurde auf"
+" larpdatabase.com gefunden."
 
 msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
@@ -11140,7 +11157,7 @@ msgid ""
 "The event <strong>%(event)s</strong> has been automatically added to "
 "larpdatabase.com as a draft."
 msgstr ""
-"Das Ereignis <strong>%(event)s</strong> wurde automatisch als Entwurf zu "
+"Das Ereignis <strong>%(Ereignis)s</strong> wurde automatisch als Entwurf zu "
 "larpdatabase.com hinzugefügt."
 
 msgid ""
@@ -11527,6 +11544,13 @@ msgid ""
 msgstr ""
 "Zeigt nützliche Informationen für Fahrgäste an, wie z.B. die Farbe Ihres "
 "Fahrzeugs, die voraussichtliche Ankunftszeit"
+
+msgid ""
+"It will only be used for internal bureaucratic purposes, and will NEVER be "
+"displayed to other participants"
+msgstr ""
+"Die Daten werden nur für interne bürokratische Zwecke verwendet und NIEMALS "
+"an andere Teilnehmer weitergegeben"
 
 msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
@@ -12267,6 +12291,14 @@ msgstr ""
 " und Rechnungsfreigaben"
 
 msgid ""
+"If for whatever reason the first and last name shown on your documents is "
+"different from the one you prefer to use, then write it here"
+msgstr ""
+"Wenn aus irgendeinem Grund der Vor- und Nachname auf Ihren Dokumenten nicht "
+"mit dem von Ihnen bevorzugten Namen übereinstimmt, tragen Sie ihn bitte hier"
+" ein"
+
+msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "
 "notice any delays, write us directly, do not enter new requests"
 msgstr ""
@@ -12840,17 +12872,6 @@ msgstr ""
 "haben und bereit sind, ihn den Mitarbeitern vorzuschlagen. Achtung: Einige "
 "Felder sind möglicherweise nicht mehr bearbeitbar. Lassen Sie das Feld leer,"
 " um Ihre Änderungen zu speichern und sie in Zukunft fortsetzen zu können."
-
-msgid ""
-"If for whatever reason the first and last name shown on your documents is "
-"different from the one you prefer to use, then write it here. It will only "
-"be used for internal bureaucratic purposes, and will NEVER be displayed to "
-"other participants."
-msgstr ""
-"Wenn aus irgendeinem Grund der Vor- und Nachname auf Ihren Unterlagen nicht "
-"mit dem von Ihnen bevorzugten Namen übereinstimmt, tragen Sie ihn bitte hier"
-" ein. Er wird nur für interne bürokratische Zwecke verwendet und NIEMALS an "
-"andere Teilnehmer weitergegeben."
 
 msgid ""
 "If you prefer that your real name and surname not be publicly visible, "

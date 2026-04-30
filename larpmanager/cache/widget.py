@@ -20,7 +20,7 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
+from datetime import date, timedelta
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -58,7 +58,12 @@ from larpmanager.models.registration import (
 )
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.core.common import format_datetime, get_coming_runs, get_event_features
-from larpmanager.utils.publication.ildb import ILDB_CONFIG_KEY, ILDB_RUN_CONFIG, ILDB_TEAM_CONFIG_KEY
+from larpmanager.utils.publication.ildb import (
+    ILDB_CONFIG_KEY,
+    ILDB_EXPIRE_CONFIG,
+    ILDB_RUN_CONFIG,
+    ILDB_TEAM_CONFIG_KEY,
+)
 from larpmanager.utils.users.deadlines import check_run_deadlines
 from larpmanager.utils.users.registration import registration_available
 
@@ -408,12 +413,31 @@ def _init_exe_actions_cache(association_id: int) -> dict:
     if open_questions_count > 0:
         data["open_help_questions"] = {"count": open_questions_count}
 
-    # Runs not yet passed (end >= one month ago) without an ILDB entry
-    unpublished = _get_ildb_unpublished_runs(association_id)
-    if unpublished:
-        data["ildb_unpublished_runs"] = {"count": len(unpublished), "runs": unpublished}
+    data.update(_get_ildb_actions_data(association_id))
 
     return data
+
+
+def _get_ildb_actions_data(association_id: int) -> dict:
+    """Return ILDB-related action entries for the executive dashboard widget."""
+    result = {}
+    unpublished = _get_ildb_unpublished_runs(association_id)
+    if unpublished:
+        result["ildb_unpublished_runs"] = {"count": len(unpublished), "runs": unpublished}
+    if _is_ildb_token_expired(association_id):
+        result["ildb_token_expired"] = True
+    return result
+
+
+def _is_ildb_token_expired(association_id: int) -> bool:
+    """Return True if the stored ILDB token expiry date has passed."""
+    expire_val = get_association_config(association_id, ILDB_EXPIRE_CONFIG, default_value="")
+    if not expire_val:
+        return False
+    try:
+        return date.fromisoformat(expire_val) < timezone.now().date()
+    except ValueError:
+        return False
 
 
 def _get_ildb_unpublished_runs(association_id: int) -> list[str]:
@@ -654,6 +678,8 @@ def get_orga_widget_cache(run: Run, widget_name: str) -> dict:
 
 def get_exe_widget_cache(association_id: int, widget_name: str) -> dict:
     """Get deadline widget data from cache or compute if not cached."""
+    if _is_ildb_token_expired(association_id):
+        cache.delete(get_widget_cache_key("association", association_id, widget_name))
     return get_widget_cache(association_id, "association", association_id, exe_widget_list, widget_name)
 
 

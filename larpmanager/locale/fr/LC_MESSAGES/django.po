@@ -194,10 +194,6 @@ msgstr "Principal"
 msgid "Male"
 msgstr "Homme"
 
-msgctxt "event"
-msgid "Mood"
-msgstr "Humeur"
-
 msgid "Name"
 msgstr "Nom"
 
@@ -464,6 +460,10 @@ msgstr "Personnel"
 
 msgid "Start"
 msgstr "Démarrage"
+
+msgctxt "event"
+msgid "Style"
+msgstr "Style"
 
 msgid "Swift"
 msgstr "Swift"
@@ -2155,6 +2155,9 @@ msgstr "Code unique"
 msgid "Where it is"
 msgstr "Où il se trouve"
 
+msgid "Your Events"
+msgstr "Vos événements"
+
 msgid "assignments"
 msgstr "les missions"
 
@@ -2259,6 +2262,9 @@ msgstr "Taux"
 
 msgid "Instructions"
 msgstr "Instructions"
+
+msgid "Legal Gender"
+msgstr "Sexe légal"
 
 msgid "Legal Notice"
 msgstr "Avis juridique"
@@ -3747,6 +3753,9 @@ msgstr "Registre des volontaires"
 msgid "Workspace selector"
 msgstr "Sélecteur d'espace de travail"
 
+msgid "Your Organizations"
+msgstr "Vos organisations"
+
 msgid "Your date of birth"
 msgstr "Votre date de naissance"
 
@@ -3950,6 +3959,9 @@ msgstr "Afficher les courriels envoyés"
 
 msgid "Download light sheet"
 msgstr "Télécharger la feuille de lumière"
+
+msgid "Enter a valid number"
+msgstr "Saisir un numéro valide"
 
 msgid "Event already played"
 msgstr "Événements déjà joués"
@@ -4168,9 +4180,6 @@ msgstr "Désactiver la modification du montant"
 
 msgid "Discover the web site"
 msgstr "Découvrez le site web"
-
-msgid "Enter a valid number."
-msgstr "Entrez un numéro valide."
 
 msgid "Error uploading image"
 msgstr "Erreur lors du téléchargement de l'image"
@@ -4471,6 +4480,9 @@ msgstr "Bienvenue à LarpManager"
 msgid "Workshop already done!"
 msgstr "L'atelier est déjà passé !"
 
+msgid "You are logged in as: "
+msgstr "Vous êtes connecté en tant que :"
+
 msgid "give them this address"
 msgstr "donnez-leur cette adresse"
 
@@ -4770,6 +4782,9 @@ msgstr "Télécharger l'exemple de modèle"
 
 msgid "Error reading backup file"
 msgstr "Erreur de lecture du fichier de sauvegarde"
+
+msgid "Generate a new ILDB token"
+msgstr "Générer un nouveau jeton ILDB"
 
 msgid "Go to the preferences for"
 msgstr "Aller dans les préférences pour"
@@ -5285,6 +5300,9 @@ msgstr "Activer les nouvelles fonctionnalités de la plate-forme"
 
 msgid "Character Inventory Pool Types"
 msgstr "Types de pools d'inventaire de personnages"
+
+msgid "Choose the style for the event"
+msgstr "Choisir le style de l'événement"
 
 #, python-format
 msgid "Complete payment for %(event)s"
@@ -6035,9 +6053,6 @@ msgstr "Permet aux personnages d'avoir des inventaires"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Vérifier la validité du code fiscal"
-
-msgid "Choose the mood / style for the event"
-msgstr "Choisir l'ambiance / le style de l'événement"
 
 msgid "End date cannot be before start date!"
 msgstr "La date de fin ne peut pas être antérieure à la date de début !"
@@ -6904,9 +6919,6 @@ msgstr "Vous souhaitez être tenu au courant de nos événements"
 msgid "Hint: The correct answers to this question are"
 msgstr "Indice : Les réponses correctes à cette question sont les suivantes"
 
-msgid "Indicates what gender you identify yourself as"
-msgstr "Indiquez le sexe auquel vous vous identifiez"
-
 msgid "Manage event metadata for external publication"
 msgstr "Gérer les métadonnées de l'événement en vue d'une publication externe"
 
@@ -7679,7 +7691,7 @@ msgstr ""
 "Gérer les paiements effectués par les participants à tous les événements"
 
 msgid "Please review and confirm it before it can be published"
-msgstr "Veuillez la réviser et la confirmer avant qu'elle ne soit publiée"
+msgstr "Veuillez la réviser et la confirmer avant qu'elle ne soit publiée."
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr ""
@@ -8202,6 +8214,10 @@ msgstr ""
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Si vous rencontrez des difficultés, contactez-nous et nous vous aiderons"
+
+msgid "Indicate your legal gender as it appears on official documents"
+msgstr ""
+"Indiquez votre sexe légal tel qu'il apparaît sur les documents officiels"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr ""
@@ -9592,7 +9608,7 @@ msgid ""
 "panel"
 msgstr ""
 "Si cette case est cochée, elle empêche la création ou la modification de "
-"crédits dans le panneau des événements"
+"crédits dans le panneau des événements."
 
 msgid ""
 "If checked: in the public page of an user shows a list of all events "
@@ -11467,6 +11483,13 @@ msgstr ""
 " la voiture, l'heure d'arrivée prévue, etc"
 
 msgid ""
+"It will only be used for internal bureaucratic purposes, and will NEVER be "
+"displayed to other participants"
+msgstr ""
+"Elles ne seront utilisées qu'à des fins bureaucratiques internes et ne "
+"seront JAMAIS communiquées à d'autres participants"
+
+msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
 "displaying trend graphs over time"
 msgstr ""
@@ -12199,6 +12222,14 @@ msgstr ""
 " approbations de factures"
 
 msgid ""
+"If for whatever reason the first and last name shown on your documents is "
+"different from the one you prefer to use, then write it here"
+msgstr ""
+"Si, pour une raison quelconque, le nom et le prénom figurant sur vos "
+"documents sont différents de ceux que vous préférez utiliser, indiquez-les "
+"ici"
+
+msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "
 "notice any delays, write us directly, do not enter new requests"
 msgstr ""
@@ -12765,17 +12796,6 @@ msgstr ""
 "êtes prêt à le proposer au personnel. Attention : certains champs peuvent ne"
 " plus être modifiables. Laissez le champ vide pour enregistrer vos "
 "modifications et pouvoir les poursuivre à l'avenir."
-
-msgid ""
-"If for whatever reason the first and last name shown on your documents is "
-"different from the one you prefer to use, then write it here. It will only "
-"be used for internal bureaucratic purposes, and will NEVER be displayed to "
-"other participants."
-msgstr ""
-"Si, pour une raison quelconque, le nom et le prénom figurant sur vos "
-"documents sont différents de ceux que vous préférez utiliser, indiquez-les "
-"ici. Il ne sera utilisé qu'à des fins bureaucratiques internes et ne sera "
-"JAMAIS communiqué aux autres participants."
 
 msgid ""
 "If you prefer that your real name and surname not be publicly visible, "

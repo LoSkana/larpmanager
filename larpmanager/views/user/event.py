@@ -178,6 +178,41 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     return render(request, "larpmanager/general/calendar.html", context)
 
 
+def get_member_registrations(member: Any, association_id: int | None = None) -> QuerySet:
+    """Get registrations for a member, optionally scoped to a single association."""
+    qs = Registration.objects.filter(member=member)
+    if association_id is not None:
+        qs = qs.filter(run__event__association_id=association_id).select_related("run__event")
+    else:
+        qs = qs.select_related("run__event__association")
+    return qs
+
+
+def build_registration_list(member: Any, my_regs: Any, association_id: int, membership: Any) -> list:
+    """Build a list of registrations with computed status for display.
+
+    Preloads related dicts in bulk then calls registration_status per entry.
+    """
+    my_regs_list = list(my_regs)
+    my_regs_dict = {reg.run_id: reg for reg in my_regs_list}
+
+    ctx: dict = {
+        "member": member,
+        "membership": membership,
+        "pre_registrations_dict": get_pre_registrations_dict(association_id, member),
+        "character_rels_dict": get_character_rels_dict(my_regs_dict, member),
+        "payment_invoices_dict": get_payment_invoices_dict(my_regs_dict, member),
+    }
+
+    result = []
+    for registration in my_regs_list:
+        ctx["registration"] = registration
+        registration.run.status = registration_status(ctx, registration.run, member)
+        result.append(registration)
+
+    return result
+
+
 def get_character_rels_dict(registrations_by_run_dict: dict, member: Any) -> dict:
     """Get character relations dictionary grouped by registration ID.
 

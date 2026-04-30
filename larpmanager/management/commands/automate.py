@@ -58,6 +58,7 @@ from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.io.pdf import print_run_bkg
 from larpmanager.utils.larpmanager.tasks import notify_admins
+from larpmanager.utils.publication.base import publish_event_all
 
 
 class Command(BaseCommand):
@@ -156,6 +157,16 @@ class Command(BaseCommand):
         # Validate and update accounting records
         if "record_acc" in enabled_features:
             check_accounting(association.id)
+
+        # Sync published events to ILDB for all upcoming runs
+        if "publisher" in enabled_features:
+            self.publish_runs(association)
+
+    @staticmethod
+    def publish_runs(association: Association) -> None:
+        """Trigger publication sync for all visible runs."""
+        for run in Run.objects.filter(event__association=association, development=DevelopStatus.SHOW):
+            publish_event_all(run)
 
     @staticmethod
     def check_old_payments() -> None:

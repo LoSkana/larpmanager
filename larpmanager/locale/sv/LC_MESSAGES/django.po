@@ -194,10 +194,6 @@ msgstr "Huvud"
 msgid "Male"
 msgstr "Man"
 
-msgctxt "event"
-msgid "Mood"
-msgstr "Stämning"
-
 msgid "Name"
 msgstr "Namn"
 
@@ -464,6 +460,10 @@ msgstr "Personal"
 
 msgid "Start"
 msgstr "Start"
+
+msgctxt "event"
+msgid "Style"
+msgstr "Stil"
 
 msgid "Swift"
 msgstr "Swift"
@@ -2155,6 +2155,9 @@ msgstr "Unik kod"
 msgid "Where it is"
 msgstr "Var det är"
 
+msgid "Your Events"
+msgstr "Dina evenemang"
+
 msgid "assignments"
 msgstr "Uppdrag"
 
@@ -2259,6 +2262,9 @@ msgstr "Pris"
 
 msgid "Instructions"
 msgstr "Instruktioner"
+
+msgid "Legal Gender"
+msgstr "Juridiskt kön"
 
 msgid "Legal Notice"
 msgstr "Rättsligt meddelande"
@@ -3747,6 +3753,9 @@ msgstr "Frivilligregister"
 msgid "Workspace selector"
 msgstr "Väljare för arbetsyta"
 
+msgid "Your Organizations"
+msgstr "Dina organisationer"
+
 msgid "Your date of birth"
 msgstr "Ditt födelsedatum"
 
@@ -3950,6 +3959,9 @@ msgstr "Visa skickade e-postmeddelanden"
 
 msgid "Download light sheet"
 msgstr "Ladda ner ljusblad"
+
+msgid "Enter a valid number"
+msgstr "Ange ett giltigt nummer"
 
 msgid "Event already played"
 msgstr "Redan spelade evenemang"
@@ -4168,9 +4180,6 @@ msgstr "Inaktivera ändring av belopp"
 
 msgid "Discover the web site"
 msgstr "Upptäck webbplatsen"
-
-msgid "Enter a valid number."
-msgstr "Ange ett giltigt nummer."
 
 msgid "Error uploading image"
 msgstr "Fel vid uppladdning av bild"
@@ -4471,6 +4480,9 @@ msgstr "Välkommen till LarpManager"
 msgid "Workshop already done!"
 msgstr "Workshop redan godkänd!"
 
+msgid "You are logged in as: "
+msgstr "Du är inloggad som:"
+
 msgid "give them this address"
 msgstr "ge dem denna adress"
 
@@ -4770,6 +4782,9 @@ msgstr "Ladda ner exempelmall"
 
 msgid "Error reading backup file"
 msgstr "Fel vid läsning av backup-fil"
+
+msgid "Generate a new ILDB token"
+msgstr "Generera en ny ILDB-token"
 
 msgid "Go to the preferences for"
 msgstr "Gå till preferenser för"
@@ -5285,6 +5300,9 @@ msgstr "Aktivera nya plattformsfunktioner"
 
 msgid "Character Inventory Pool Types"
 msgstr "Pooltyper för karaktärsinventering"
+
+msgid "Choose the style for the event"
+msgstr "Välj stil för evenemanget"
 
 #, python-format
 msgid "Complete payment for %(event)s"
@@ -6031,9 +6049,6 @@ msgstr "Tillåter karaktärer att ha inventarier"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Kontrollera att skattekoden är giltig"
-
-msgid "Choose the mood / style for the event"
-msgstr "Välj stämning/stil för evenemanget"
 
 msgid "End date cannot be before start date!"
 msgstr "Slutdatum kan inte vara före startdatum!"
@@ -6888,9 +6903,6 @@ msgstr "Vill du hålla dig uppdaterad om våra evenemang"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Ledtråd: De rätta svaren på denna fråga är"
-
-msgid "Indicates what gender you identify yourself as"
-msgstr "Ange vilket kön du identifierar dig med"
 
 msgid "Manage event metadata for external publication"
 msgstr "Hantera metadata om evenemang för extern publicering"
@@ -8061,6 +8073,9 @@ msgstr ""
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Om du stöter på några problem, kontakta oss så hjälper vi dig"
+
+msgid "Indicate your legal gender as it appears on official documents"
+msgstr "Ange ditt juridiska kön så som det framgår av officiella dokument"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr "Namn på de personer eller team som organiserar och driver evenemanget"
@@ -9518,8 +9533,8 @@ msgid ""
 "A draft event matching <strong>%(event)s</strong> was found on "
 "larpdatabase.com."
 msgstr ""
-"Ett utkast till händelse som matchade <strong>%(event)s</strong> hittades på"
-" larpdatabase.com."
+"Ett utkast till händelse som matchade <strong>%(event)s</strong> hittades"
+" på larpdatabase.com."
 
 msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
@@ -10766,7 +10781,7 @@ msgid ""
 "The event <strong>%(event)s</strong> has been automatically added to "
 "larpdatabase.com as a draft."
 msgstr ""
-"Händelsen <strong>%(event)s</strong> har automatiskt lagts till i "
+"Händelsen <strong>%(händelse)s</strong> har automatiskt lagts till i "
 "larpdatabase.com som ett utkast."
 
 msgid ""
@@ -11149,6 +11164,13 @@ msgid ""
 msgstr ""
 "Visar användbar information för passagerare, t.ex. färgen på din bil, "
 "beräknad ankomsttid"
+
+msgid ""
+"It will only be used for internal bureaucratic purposes, and will NEVER be "
+"displayed to other participants"
+msgstr ""
+"Den kommer endast att användas för interna byråkratiska ändamål och kommer "
+"ALDRIG att visas för andra deltagare"
 
 msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
@@ -11860,6 +11882,13 @@ msgstr ""
 "fakturagodkännanden"
 
 msgid ""
+"If for whatever reason the first and last name shown on your documents is "
+"different from the one you prefer to use, then write it here"
+msgstr ""
+"Om det för- och efternamn som anges i dina dokument av någon anledning "
+"skiljer sig från det namn du föredrar att använda, skriv det här"
+
+msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "
 "notice any delays, write us directly, do not enter new requests"
 msgstr ""
@@ -12406,17 +12435,6 @@ msgstr ""
 "föreslå den för personalen. Var försiktig: vissa fält kanske inte längre är "
 "redigerbara. Lämna fältet tomt för att spara dina ändringar och för att "
 "kunna fortsätta med dem i framtiden."
-
-msgid ""
-"If for whatever reason the first and last name shown on your documents is "
-"different from the one you prefer to use, then write it here. It will only "
-"be used for internal bureaucratic purposes, and will NEVER be displayed to "
-"other participants."
-msgstr ""
-"Om det för- och efternamn som anges i dina handlingar av någon anledning "
-"skiljer sig från det du föredrar att använda, skriv det här. Det kommer "
-"endast att användas för interna byråkratiska ändamål och kommer ALDRIG att "
-"visas för andra deltagare."
 
 msgid ""
 "If you prefer that your real name and surname not be publicly visible, "

@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import hashlib
 import logging
 import time
 from dataclasses import dataclass, field
@@ -32,11 +33,16 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
 
-from larpmanager.cache.config import get_association_config, get_element_config, save_single_config
+from larpmanager.cache.config import (
+    get_association_config,
+    get_config,
+    get_element_config,
+    save_config,
+    save_single_config,
+)
 from larpmanager.forms.event import PublicationEventType, PublicationLanguage
 from larpmanager.models.access import EventRole
-from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member
+from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration, RegistrationTicket, TicketTier
 from larpmanager.utils.core.common import clean_html, parse_multi_config
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
@@ -52,6 +58,10 @@ ILDB_API_BASE = "https://www.larpdatabase.com/api/v1"
 ILDB_CONFIG_KEY = "ildb_api_key"
 ILDB_TEAM_CONFIG_KEY = "ildb_team_id"
 ILDB_RUN_CONFIG = "ildb"
+ILDB_EXPIRE_CONFIG = "ildb_expire"
+ILDB_KEY_HASH_CONFIG = "ildb_key_hash"
+ILDB_CREW_UUID_CONFIG = "ildb_crew"
+ILDB_CAST_UUID_CONFIG = "ildb_cast"
 
 
 def _ildb_http(method: str, url: str, api_key: str = "", **kwargs: Any) -> requests.Response:
@@ -69,27 +79,6 @@ def _ildb_http(method: str, url: str, api_key: str = "", **kwargs: Any) -> reque
     return response
 
 
-def _ildb_sync_entry(
-    base_url: str,
-    api_key: str,
-    key: tuple[str, str],
-    existing: dict[tuple[str, str], int],
-    entry: dict | None,
-) -> None:
-    """POST, PUT, or DELETE a single entry based on its presence in *existing*.
-
-    entry=None signals a deletion: the remote record is removed if present.
-    Otherwise the entry is PUT (update) when the key already exists, or POST (create).
-    """
-    if entry is None:
-        if key in existing:
-            _ildb_http("delete", f"{base_url}/{existing[key]}", api_key=api_key, timeout=30).raise_for_status()
-    elif key in existing:
-        _ildb_http("put", f"{base_url}/{existing[key]}", api_key=api_key, json=entry, timeout=30).raise_for_status()
-    else:
-        _ildb_http("post", base_url, api_key=api_key, json=entry, timeout=30).raise_for_status()
-
-
 @dataclass
 class IldbCtx:
     """Prepared ILDB context for a ready-to-publish event."""
@@ -98,6 +87,17 @@ class IldbCtx:
     team_id: str
     association: Association
     ildb_event_id: str = field(default="")
+
+
+def _ensure_ildb_expire(association: Association, api_key: str) -> None:
+    """Ensure token expiry is tracked; reset expire when the key is rotated."""
+    key_hash = hashlib.md5(api_key.encode()).hexdigest()[:8]  # noqa: S324
+    stored_hash = get_association_config(association.id, ILDB_KEY_HASH_CONFIG, default_value="")
+    expire_val = get_association_config(association.id, ILDB_EXPIRE_CONFIG, default_value="")
+    if stored_hash != key_hash or not expire_val:
+        expire_date = (timezone.now() + timedelta(days=270)).date().isoformat()
+        save_single_config(association, ILDB_EXPIRE_CONFIG, expire_date)
+        save_single_config(association, ILDB_KEY_HASH_CONFIG, key_hash)
 
 
 def _get_ildb_context(event: Event, run: Run | None = None) -> IldbCtx | None:
@@ -110,10 +110,11 @@ def _get_ildb_context(event: Event, run: Run | None = None) -> IldbCtx | None:
     team_id = get_association_config(association.id, ILDB_TEAM_CONFIG_KEY, default_value="")
     if not api_key or not team_id:
         return None
+    _ensure_ildb_expire(association, api_key)
     ildb_event_id = ""
     if run is not None:
         stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
-        if stored and stored not in ("True", "False"):
+        if stored:
             ildb_event_id = stored
     return IldbCtx(api_key=api_key, team_id=team_id, association=association, ildb_event_id=ildb_event_id)
 
@@ -189,7 +190,7 @@ def _find_event_id(run: Run, ctx: IldbCtx) -> str:
     If a matching draft event is found via the API, notifies the association by email.
     """
     stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
-    if stored and stored not in ("True", "False"):
+    if stored:
         return stored
 
     page = 1
@@ -363,69 +364,52 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
 # ---- CREW ---- #
 
 
-def _member_name_key(member: Member) -> tuple[str, str]:
-    if member.nickname:
-        return member.nickname, ""
-    return member.name, member.surname
-
-
-def _sync_crew_full(crew: list[dict], ctx: IldbCtx) -> None:
-    """Full crew sync: PUT existing, POST new, DELETE removed. Used on initial publish and role metadata changes."""
-    if not ctx.ildb_event_id:
-        return
-
+def _sync_crew_run(event_id: int, crew: list[dict], ctx: IldbCtx) -> None:
+    """Sync crew for a single ILDB event (ctx.ildb_event_id must be set)."""
     base_url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events/{ctx.ildb_event_id}/crew"
-
     response = _ildb_http("get", base_url, api_key=ctx.api_key, timeout=30)
     response.raise_for_status()
-    existing = {(e["first_name"], e["last_name"]): e["id"] for e in response.json().get("data", [])}
-    local_keys = {(e["first_name"], e["last_name"]) for e in crew}
+    crew_data = response.json().get("data", [])
+    ildb_uuids = {e["uuid"] for e in crew_data}
+    local_uuids: set[str] = set()
 
     for entry in crew:
-        _ildb_sync_entry(base_url, ctx.api_key, (entry["first_name"], entry["last_name"]), existing, entry)
+        member_id = entry.get("member_id")
+        payload = {k: v for k, v in entry.items() if k != "member_id"}
+        crew_config_key = f"{ILDB_CREW_UUID_CONFIG}_{event_id}_{member_id}" if member_id else None
+        stored_uuid = get_config(crew_config_key) if crew_config_key else ""
 
-    for key in existing:
-        if key not in local_keys:
-            _ildb_sync_entry(base_url, ctx.api_key, key, existing, None)
+        if stored_uuid and stored_uuid in ildb_uuids:
+            _ildb_http(
+                "put", f"{base_url}/{stored_uuid}", api_key=ctx.api_key, json=payload, timeout=30
+            ).raise_for_status()
+            local_uuids.add(stored_uuid)
+        else:
+            resp = _ildb_http("post", base_url, api_key=ctx.api_key, json=payload, timeout=30)
+            resp.raise_for_status()
+            new_uuid = resp.json().get("data", {}).get("uuid", "")
+            if new_uuid:
+                local_uuids.add(new_uuid)
+                if crew_config_key:
+                    save_config(crew_config_key, new_uuid)
+
+    for uuid in ildb_uuids - local_uuids:
+        _ildb_http("delete", f"{base_url}/{uuid}", api_key=ctx.api_key, timeout=30).raise_for_status()
 
 
-def sync_crew_member(event_role_id: int, member_id: int, *, delete: bool = False) -> None:
-    """POST/PUT or DELETE a single crew member on ILDB based on their current role state.
+def sync_crew(event: Event, ctx: IldbCtx) -> None:
+    """Sync all crew roles to ILDB for every active run of an event.
 
-    On delete=True, checks if the member still belongs to any role before removing.
-    If they remain in another role, their entry is updated instead of deleted.
+    Each member is uploaded once, using their first (lowest-number) role.
+    Handles POST (new), PUT (existing by UUID), and DELETE (removed members).
     """
-    role = EventRole.objects.select_related("event__association").get(pk=event_role_id)
-    ctx = _get_ildb_context(role.event)
-    if not ctx or not get_association_config(ctx.association.id, "publication_crew", default_value=False):
-        return
-
-    member = Member.objects.get(pk=member_id)
-    key = _member_name_key(member)
-
-    first_remaining = (
-        EventRole.objects.filter(event=role.event, members__id=member_id, deleted__isnull=True)
-        .order_by("number")
-        .first()
-    )
-
-    one_month_ago = timezone.now().date() - timedelta(days=30)
-    for run in role.event.runs.filter(end__gte=one_month_ago, end__lte=timezone.now().date()):
+    crew = _build_crew(event)
+    for run in event.runs.filter(development=DevelopStatus.SHOW):
         stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
-        if not stored or stored in ("True", "False"):
+        if not stored:
             continue
         ctx.ildb_event_id = stored
-
-        base_url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events/{ctx.ildb_event_id}/crew"
-        response = _ildb_http("get", base_url, api_key=ctx.api_key, timeout=30)
-        response.raise_for_status()
-        existing = {(e["first_name"], e["last_name"]): e["id"] for e in response.json().get("data", [])}
-
-        if delete and first_remaining is None:
-            _ildb_sync_entry(base_url, ctx.api_key, key, existing, None)
-        elif first_remaining is not None:
-            entry = _make_crew_entry(member, is_organizer=first_remaining.number == 1, role_name=first_remaining.name)
-            _ildb_sync_entry(base_url, ctx.api_key, key, existing, entry)
+        _sync_crew_run(event.id, crew, ctx)
 
 
 def _build_member_first_role(roles: list) -> dict[int, str]:
@@ -446,27 +430,19 @@ def _build_member_first_role(roles: list) -> dict[int, str]:
     return member_first_role
 
 
-def _make_crew_entry(member: object, *, is_organizer: bool, role_name: str) -> dict:
-    """Build a single crew entry dict for the ILDB crew API.
+def _member_display_name(member: object) -> tuple[str, str]:
+    """Return (first_name, last_name) for a member.
 
-    Uses nickname as first_name (empty last_name) when set, otherwise the
-    member's real name and surname.
-
-    Args:
-        member: Member instance.
-        is_organizer: Whether the member is an organizer.
-        role_name: Role name string (empty for players without an event role).
-
-    Returns:
-        Crew entry dict ready for POST /teams/{team}/events/{event}/crew.
-
+    Uses nickname split on the first space when set, otherwise real name/surname.
     """
     if member.nickname:  # type: ignore[attr-defined]
-        first_name = member.nickname  # type: ignore[attr-defined]
-        last_name = ""
-    else:
-        first_name = member.name  # type: ignore[attr-defined]
-        last_name = member.surname  # type: ignore[attr-defined]
+        parts = member.nickname.split(" ", 1)  # type: ignore[attr-defined]
+        return parts[0], parts[1] if len(parts) > 1 else ""
+    return member.name, member.surname  # type: ignore[attr-defined]
+
+
+def _make_crew_entry(member: object, *, is_organizer: bool, role_name: str) -> dict:
+    first_name, last_name = _member_display_name(member)
 
     return {
         "entity_type": "person",
@@ -474,6 +450,7 @@ def _make_crew_entry(member: object, *, is_organizer: bool, role_name: str) -> d
         "last_name": last_name,
         "role": role_name,
         "is_organizer": is_organizer,
+        "member_id": member.id,  # type: ignore[attr-defined]  # internal, stripped before sending to ILDB
     }
 
 
@@ -513,39 +490,56 @@ def _build_crew(event: object) -> list[dict]:
 
 
 def sync_cast(registration_id: int, _run_id: int | None = None) -> None:
-    """POST/PUT or DELETE the ILDB cast entry for a single registration.
-
-    Decides based on the registration state: if not existing / cancellation_date -> DELETE,
-    otherwise POST (new) or PUT (existing).
-    """
+    """Sync a single registration's cast entry on ILDB using UUID-based identification."""
     try:
         reg = (
             Registration.objects.select_related("run__event__association", "member", "ticket")
             .prefetch_related("rcrs__character")
             .get(pk=registration_id)
         )
+        run = reg.run
     except Registration.DoesNotExist:
-        return
-    ctx = _get_ildb_context(reg.run.event, reg.run)
+        # Registration to delete, attempt to recover run
+        reg = None
+        try:
+            run = Run.objects.get(pk=_run_id)
+        except Run.DoesNotExist:
+            return
+
+    ctx = _get_ildb_context(run.event, run)
     if not ctx or not ctx.ildb_event_id:
         return
     if not get_association_config(ctx.association.id, "publication_cast", default_value=False):
         return
 
-    key = _member_name_key(reg.member)
+    # Prepare data
+    cast_config_key = f"{ILDB_CAST_UUID_CONFIG}_{run.id}_{registration_id}"
+    stored_uuid = get_config(cast_config_key, use_cache=False)
     base_url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events/{ctx.ildb_event_id}/cast"
+
+    # If registration not found, delete from ILDB and return
+    cancelled = bool(reg.cancellation_date) or reg.ticket.tier == TicketTier.WAITING
+    if not reg or cancelled:
+        _ildb_http("delete", f"{base_url}/{stored_uuid}", api_key=ctx.api_key, timeout=30).raise_for_status()
+        return
+
+    # Check if already exist or needs to be created
+    rcr = reg.rcrs.first()
+    character_name = (rcr.custom_name or rcr.character.name) if rcr else ""
+
     response = _ildb_http("get", base_url, api_key=ctx.api_key, timeout=30)
     response.raise_for_status()
-    existing = {(e["first_name"], e["last_name"]): e["id"] for e in response.json().get("data", [])}
+    ildb_uuids = {e["uuid"] for e in response.json().get("data", [])}
+    entry = _make_cast_entry(reg.member, character_name, npc=reg.ticket.tier == TicketTier.NPC)
 
-    cancelled = bool(reg.cancellation_date) or reg.ticket.tier == TicketTier.WAITING
-    rcr = None if cancelled else reg.rcrs.first()
-    entry = (
-        None
-        if (cancelled or rcr is None)
-        else _make_cast_entry(reg.member, rcr.custom_name or rcr.character.name, npc=reg.ticket.tier == TicketTier.NPC)
-    )
-    _ildb_sync_entry(base_url, ctx.api_key, key, existing, entry)
+    if stored_uuid and stored_uuid in ildb_uuids:
+        _ildb_http("put", f"{base_url}/{stored_uuid}", api_key=ctx.api_key, json=entry, timeout=30).raise_for_status()
+    else:
+        resp = _ildb_http("post", base_url, api_key=ctx.api_key, json=entry, timeout=30)
+        resp.raise_for_status()
+        new_uuid = resp.json().get("data", {}).get("uuid", "")
+        if new_uuid:
+            save_config(cast_config_key, new_uuid, use_cache=False)
 
 
 def _make_cast_entry(member: object, character_name: str, *, npc: bool) -> dict:
@@ -560,13 +554,7 @@ def _make_cast_entry(member: object, character_name: str, *, npc: bool) -> dict:
         Cast entry dict ready for POST /teams/{team}/events/{event}/cast.
 
     """
-    if member.nickname:  # type: ignore[attr-defined]
-        first_name = member.nickname  # type: ignore[attr-defined]
-        last_name = ""
-    else:
-        first_name = member.name  # type: ignore[attr-defined]
-        last_name = member.surname  # type: ignore[attr-defined]
-
+    first_name, last_name = _member_display_name(member)
     return {
         "first_name": first_name,
         "last_name": last_name,

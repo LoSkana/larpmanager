@@ -271,7 +271,6 @@ from larpmanager.utils.io.pdf import (
 )
 from larpmanager.utils.larpmanager.tutorial import auto_assign_faq_sequential_number, generate_tutorial_url_slug
 from larpmanager.utils.publication.base import (
-    publish_crew_member,
     publish_event,
     publish_event_role,
     publish_registration,
@@ -1776,14 +1775,8 @@ m2m_changed.connect(on_event_roles_m2m_changed, sender=EventRole.members.through
 
 
 def _on_event_role_members_pub(sender: type, instance: Any, action: str, pk_set: Any, **kwargs: Any) -> None:
-    if action == "post_add":
-        for member_id in pk_set or []:
-            publish_crew_member(instance.id, member_id, delete=False)
-    elif action == "post_remove":
-        for member_id in pk_set or []:
-            publish_crew_member(instance.id, member_id, delete=True)
-    elif action == "post_clear":
-        publish_event_role(instance.id)  # pk_set is None on clear; fall back to full sync
+    """Sync crew list on event update."""
+    publish_event_role(instance.id)
 
 
 m2m_changed.connect(_on_event_role_members_pub, sender=EventRole.members.through)

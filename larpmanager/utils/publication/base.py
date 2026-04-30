@@ -20,22 +20,20 @@
 from __future__ import annotations
 
 import logging
-from datetime import timedelta
-
-from django.utils import timezone
+from typing import TYPE_CHECKING
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.access import EventRole
 from larpmanager.utils.larpmanager.tasks import background_auto
 from larpmanager.utils.publication.ildb import (
-    ILDB_RUN_CONFIG,
-    _build_crew,
     _get_ildb_context,
-    _sync_crew_full,
     sync_cast as sync_cast_ildb,
-    sync_crew_member,
+    sync_crew as sync_crew_ildb,
     sync_event as sync_event_ildb,
 )
+
+if TYPE_CHECKING:
+    from larpmanager.models.event import Run
 
 logger = logging.getLogger(__name__)
 
@@ -61,16 +59,13 @@ def publish_event_role(event_role_id: int) -> None:
     ctx = _get_ildb_context(role.event)
     if not ctx or not get_association_config(ctx.association.id, "publication_crew", default_value=False):
         return
-    crew = _build_crew(role.event)
-    one_month_ago = timezone.now().date() - timedelta(days=30)
-    for run in role.event.runs.filter(end__gte=one_month_ago, end__lte=timezone.now().date()):
-        stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
-        if stored and stored not in ("True", "False"):
-            ctx.ildb_event_id = stored
-            _sync_crew_full(crew, ctx)
+    sync_crew_ildb(role.event, ctx)
 
 
-@background_auto(queue=PUB_QUEUE)
-def publish_crew_member(event_role_id: int, member_id: int, *, delete: bool = False) -> None:
-    """Background task: sync a single crew member after an EventRole m2m add/remove."""
-    sync_crew_member(event_role_id, member_id, delete=delete)
+def publish_event_all(run: Run) -> None:
+    """Sync publication data for the event, all registrations, and all event roles."""
+    publish_event(run.event_id)
+    for reg_id in run.registrations.values_list("id", flat=True):
+        publish_registration(reg_id, run.id)
+    for role_id in run.event.eventrole_set.filter(deleted__isnull=True).values_list("id", flat=True):
+        publish_event_role(role_id)

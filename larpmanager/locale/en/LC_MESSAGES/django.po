@@ -1944,7 +1944,7 @@ msgstr ""
 msgid "External catering"
 msgstr ""
 
-msgid "Enter a valid number."
+msgid "Enter a valid number"
 msgstr ""
 
 msgid "Manage event metadata for external publication"
@@ -1973,10 +1973,10 @@ msgid "Choose the setting for the event"
 msgstr ""
 
 msgctxt "event"
-msgid "Mood"
+msgid "Style"
 msgstr ""
 
-msgid "Choose the mood / style for the event"
+msgid "Choose the style for the event"
 msgstr ""
 
 msgid "City / Place"
@@ -4017,6 +4017,11 @@ msgstr ""
 msgid "Analysis"
 msgstr ""
 
+msgid ""
+"It will only be used for internal bureaucratic purposes, and will NEVER be "
+"displayed to other participants"
+msgstr ""
+
 msgid "Male"
 msgstr ""
 
@@ -4080,9 +4085,13 @@ msgstr ""
 
 msgid ""
 "If for whatever reason the first and last name shown on your documents is "
-"different from the one you prefer to use, then write it here. It will only "
-"be used for internal bureaucratic purposes, and will NEVER be displayed to "
-"other participants."
+"different from the one you prefer to use, then write it here"
+msgstr ""
+
+msgid "Legal Gender"
+msgstr ""
+
+msgid "Indicate your legal gender as it appears on official documents"
 msgstr ""
 
 msgid "Pronouns"
@@ -4095,12 +4104,6 @@ msgid "Nationality"
 msgstr ""
 
 msgid "Indicate the country of which you are a citizen"
-msgstr ""
-
-msgid "Gender"
-msgstr ""
-
-msgid "Indicates what gender you identify yourself as"
 msgstr ""
 
 msgid "Phone contact"
@@ -5162,6 +5165,21 @@ msgid ""
 "always of the same macrotype)"
 msgstr ""
 
+msgid "You are logged in as: "
+msgstr ""
+
+msgid "Your Organizations"
+msgstr ""
+
+msgid "Your Events"
+msgstr ""
+
+msgid "Organization"
+msgstr ""
+
+msgid "You don't have any registrations yet"
+msgstr ""
+
 msgid "Tax code verification"
 msgstr ""
 
@@ -5306,9 +5324,6 @@ msgid "List"
 msgstr ""
 
 msgid "Players"
-msgstr ""
-
-msgid "Organization"
 msgstr ""
 
 msgctxt "event"
@@ -6340,6 +6355,9 @@ msgid ""
 msgstr ""
 
 msgid "Residence"
+msgstr ""
+
+msgid "Gender"
 msgstr ""
 
 msgid "Last membership date"
@@ -7460,9 +7478,6 @@ msgid "Attendance"
 msgstr ""
 
 msgid "Show all"
-msgstr ""
-
-msgid "You don't have any registrations yet"
 msgstr ""
 
 msgid "Sharing"
@@ -10627,10 +10642,6 @@ msgstr ""
 msgid "<b>%(number)s</b> members to approve"
 msgstr ""
 
-#, python-format
-msgid "Publish to ILDB: <b>%(list)s</b>."
-msgstr ""
-
 msgid "Set up payment methods for participants"
 msgstr ""
 
@@ -10638,6 +10649,13 @@ msgid "Define the data collected in the user profile form"
 msgstr ""
 
 msgid "Select and activate key features"
+msgstr ""
+
+#, python-format
+msgid "Publish to ILDB: <b>%(list)s</b>."
+msgstr ""
+
+msgid "Generate a new ILDB token"
 msgstr ""
 
 msgid "Set up the membership request text"

@@ -2212,7 +2212,7 @@ def validate_coordinate(value: str) -> None:
     try:
         float(value)
     except ValueError as err:
-        raise ValidationError(_("Enter a valid number.")) from err
+        raise ValidationError(_("Enter a valid number")) from err
 
 
 class OrgaPublicationForm(ConfigForm):
@@ -2261,8 +2261,8 @@ class OrgaPublicationForm(ConfigForm):
         self.add_configs(
             "pub_mood",
             ConfigType.MULTI_BOOL,
-            pgettext("event", "Mood"),
-            _("Choose the mood / style for the event"),
+            pgettext("event", "Style"),
+            _("Choose the style for the event"),
             PublicationMood.choices,
         )
 

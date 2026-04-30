@@ -2,6 +2,12 @@
 
 source ./scripts/venv.sh
 
+# Skip if Django detects any Python errors
+if ! python manage.py check --quiet 2>/dev/null; then
+  echo "Skipping translate: python manage.py check failed"
+  exit 0
+fi
+
 # remove show from test
 sed -i 's/page_start(\(.*\), *show=True)/page_start(\1)/' larpmanager/tests/*.py
 

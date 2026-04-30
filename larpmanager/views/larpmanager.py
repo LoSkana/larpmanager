@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import random
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -52,7 +52,7 @@ from larpmanager.mail.remind import remember_membership, remember_membership_fee
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.association import Association, AssociationPlan, AssociationTextType
 from larpmanager.models.base import Feature
-from larpmanager.models.event import Run
+from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
     LarpManagerDiscover,
@@ -60,7 +60,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerProfiler,
     LarpManagerTutorial,
 )
-from larpmanager.models.member import Member, MembershipStatus, get_user_membership
+from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.utils import my_uuid_short
 from larpmanager.utils.auth.admin import check_lm_admin
@@ -69,6 +69,7 @@ from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.larpmanager.tasks import my_send_mail, send_mail_exec
 from larpmanager.utils.services.association import _reset_all_association
+from larpmanager.views.user.event import build_registration_list, get_member_registrations
 from larpmanager.views.user.member import get_user_backend
 
 
@@ -529,6 +530,7 @@ def join(request: HttpRequest) -> Any:
     if "red" in context:
         return redirect(context["red"])
 
+    # Prepares form to join
     joined_association = _join_form(context, request)
     if joined_association:
         # send message
@@ -538,6 +540,9 @@ def join(request: HttpRequest) -> Any:
             join_email(joined_association)
         # redirect
         return redirect("after_login", subdomain=joined_association.slug, path="manage")
+
+    # Retrive personal registration, managed events / orgas (if the user is looking for that)
+    get_personal_area(context)
 
     return render(request, "larpmanager/larpmanager/join.html", context)
 
@@ -782,6 +787,55 @@ def get_lm_contact(request: HttpRequest) -> Any:
     context = get_context(request, check_main_site=True)
     context.update({"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"})
     return context
+
+
+def get_personal_area(context: dict) -> None:
+    """Retrieves infos for the user's personal registrations, managed orgs, and managed events."""
+    member = context.get("member")
+    if not member:
+        return
+
+    # Fetch all memberships in one query, keyed by association_id
+    memberships = {m.association_id: m for m in Membership.objects.filter(member=member)}
+
+    # Group registrations by association and build status-annotated list per group
+    all_regs = get_member_registrations(member).order_by("-run__start")
+    regs_by_assoc: dict = {}
+    for reg in all_regs:
+        regs_by_assoc.setdefault(reg.run.event.association_id, []).append(reg)
+
+    registration_list = []
+    for association_id, regs in regs_by_assoc.items():
+        membership = memberships.get(association_id)
+        if membership is None:
+            membership, _ = Membership.objects.get_or_create(member=member, association_id=association_id)
+        registration_list.extend(build_registration_list(member, regs, association_id, membership))
+
+    registration_list.sort(key=lambda r: r.run.start or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
+    context["registration_list"] = registration_list
+
+    # Retrieve association roles
+    assoc_roles = list(
+        AssociationRole.objects.filter(members=member).select_related("association").order_by("association__name")
+    )
+    context["assoc_roles"] = assoc_roles
+
+    # Retrieve event roles
+    event_roles = list(
+        EventRole.objects.filter(members=member).select_related("event__association").order_by("event__name")
+    )
+    event_ids = [role.event_id for role in event_roles]
+    runs_by_event: dict = {}
+    for run in (
+        Run.objects.filter(event_id__in=event_ids)
+        .exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC])
+        .order_by("-start")
+    ):
+        if run.event_id not in runs_by_event:
+            runs_by_event[run.event_id] = run
+    for role in event_roles:
+        role.latest_run = runs_by_event.get(role.event_id)
+    context["event_roles"] = event_roles
 
 
 @login_required

@@ -1315,8 +1315,38 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   width: 33%;
 }
 
-#tutorials ul li {
-  padding: 1em;
+#tutorial-descr {
+  text-align: left !important;
+}
+
+#tutorial-descr h2 {
+  text-align: center !important;
+}
+
+#tutorial-descr hr {
+  margin: 1em 0;
+}
+
+#tutorial-descr p {
+  text-align: left !important;
+  margin: 0.5em 0;
+}
+
+#tutorial-descr ul,
+#tutorial-descr ol {
+  text-align: left !important;
+  list-style-position: outside !important;
+  padding-left: 1.5em !important;
+  margin: 0.5em 0;
+}
+
+#tutorial-descr li {
+  padding: 0.5em;
+}
+
+#tutorial-descr img {
+  display: block !important;
+  margin: 0 auto !important;
 }
 
 /* ---------------------------------------------------------------------------

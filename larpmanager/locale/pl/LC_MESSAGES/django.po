@@ -194,10 +194,6 @@ msgstr "Główny"
 msgid "Male"
 msgstr "Mężczyzna"
 
-msgctxt "event"
-msgid "Mood"
-msgstr "Nastrój"
-
 msgid "Name"
 msgstr "Nazwa"
 
@@ -464,6 +460,10 @@ msgstr "Personel"
 
 msgid "Start"
 msgstr "Start"
+
+msgctxt "event"
+msgid "Style"
+msgstr "Styl"
 
 msgid "Swift"
 msgstr "Swift"
@@ -2155,6 +2155,9 @@ msgstr "Unikalny kod"
 msgid "Where it is"
 msgstr "Gdzie to jest"
 
+msgid "Your Events"
+msgstr "Twoje wydarzenia"
+
 msgid "assignments"
 msgstr "zadania"
 
@@ -2259,6 +2262,9 @@ msgstr "Raty"
 
 msgid "Instructions"
 msgstr "Instrukcje"
+
+msgid "Legal Gender"
+msgstr "Płeć prawna"
 
 msgid "Legal Notice"
 msgstr "Nota prawna"
@@ -3747,6 +3753,9 @@ msgstr "Rejestr wolontariuszy"
 msgid "Workspace selector"
 msgstr "Selektor obszaru roboczego"
 
+msgid "Your Organizations"
+msgstr "Organizacje"
+
 msgid "Your date of birth"
 msgstr "Data urodzenia"
 
@@ -3950,6 +3959,9 @@ msgstr "Wyświetlanie wysłanych wiadomości e-mail"
 
 msgid "Download light sheet"
 msgstr "Pobierz kartę podświetlenia"
+
+msgid "Enter a valid number"
+msgstr "Wprowadź prawidłowy numer"
 
 msgid "Event already played"
 msgstr "Wydarzenie już rozegrane"
@@ -4168,9 +4180,6 @@ msgstr "Wyłącz zmianę kwoty"
 
 msgid "Discover the web site"
 msgstr "Odkryj stronę internetową"
-
-msgid "Enter a valid number."
-msgstr "Wprowadź prawidłowy numer."
 
 msgid "Error uploading image"
 msgstr "Błąd przesyłania obrazu"
@@ -4471,6 +4480,9 @@ msgstr "Witamy w LarpManager"
 msgid "Workshop already done!"
 msgstr "Warsztaty już się odbyły!"
 
+msgid "You are logged in as: "
+msgstr "Jesteś zalogowany jako:"
+
 msgid "give them this address"
 msgstr "podaj im ten adres"
 
@@ -4770,6 +4782,9 @@ msgstr "Pobierz przykładowy szablon"
 
 msgid "Error reading backup file"
 msgstr "Błąd odczytu pliku kopii zapasowej"
+
+msgid "Generate a new ILDB token"
+msgstr "Generowanie nowego tokena ILDB"
 
 msgid "Go to the preferences for"
 msgstr "Przejdź do preferencji dla"
@@ -5285,6 +5300,9 @@ msgstr "Aktywacja nowych funkcji platformy"
 
 msgid "Character Inventory Pool Types"
 msgstr "Typy puli zasobów postaci"
+
+msgid "Choose the style for the event"
+msgstr "Wybierz styl dla wydarzenia"
 
 #, python-format
 msgid "Complete payment for %(event)s"
@@ -6030,9 +6048,6 @@ msgstr "Umożliwia postaciom posiadanie ekwipunku"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Sprawdź ważność kodu fiskalnego"
-
-msgid "Choose the mood / style for the event"
-msgstr "Wybierz nastrój / styl wydarzenia"
 
 msgid "End date cannot be before start date!"
 msgstr "Data końcowa nie może być wcześniejsza niż data początkowa!"
@@ -6886,9 +6901,6 @@ msgstr "Chcesz być zawsze na bieżąco z naszymi wydarzeniami"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Wskazówka: Prawidłowe odpowiedzi na to pytanie to"
-
-msgid "Indicates what gender you identify yourself as"
-msgstr "Wskazuje płeć, z którą się identyfikujesz"
 
 msgid "Manage event metadata for external publication"
 msgstr "Zarządzanie metadanymi wydarzeń na potrzeby publikacji zewnętrznych"
@@ -8090,6 +8102,9 @@ msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Jeśli napotkasz jakiekolwiek problemy, skontaktuj się z nami, a my Ci "
 "pomożemy"
+
+msgid "Indicate your legal gender as it appears on official documents"
+msgstr "Wskaż swoją płeć prawną, która widnieje w oficjalnych dokumentach"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr ""
@@ -9368,7 +9383,7 @@ msgid ""
 "panel"
 msgstr ""
 "Zaznaczenie tej opcji uniemożliwia tworzenie lub zmienianie kredytów w "
-"panelu zdarzeń"
+"panelu zdarzeń."
 
 msgid ""
 "If checked: in the public page of an user shows a list of all events "
@@ -11221,6 +11236,13 @@ msgstr ""
 "szacowany czas przyjazdu"
 
 msgid ""
+"It will only be used for internal bureaucratic purposes, and will NEVER be "
+"displayed to other participants"
+msgstr ""
+"Będą one wykorzystywane wyłącznie do wewnętrznych celów biurokratycznych i "
+"NIGDY nie będą wyświetlane innym uczestnikom"
+
+msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
 "displaying trend graphs over time"
 msgstr ""
@@ -11933,6 +11955,13 @@ msgstr ""
 "płatnościach i zatwierdzeniach faktur"
 
 msgid ""
+"If for whatever reason the first and last name shown on your documents is "
+"different from the one you prefer to use, then write it here"
+msgstr ""
+"Jeśli z jakiegokolwiek powodu imię i nazwisko widniejące w dokumentach różni"
+" się od tego, którego wolisz używać, wpisz je tutaj"
+
+msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "
 "notice any delays, write us directly, do not enter new requests"
 msgstr ""
@@ -12487,17 +12516,6 @@ msgstr ""
 "zaproponowania jej personelowi. Uwaga: niektóre pola mogą nie być już "
 "edytowalne. Pozostaw pole puste, aby zapisać zmiany i móc je kontynuować w "
 "przyszłości."
-
-msgid ""
-"If for whatever reason the first and last name shown on your documents is "
-"different from the one you prefer to use, then write it here. It will only "
-"be used for internal bureaucratic purposes, and will NEVER be displayed to "
-"other participants."
-msgstr ""
-"Jeśli z jakiegokolwiek powodu imię i nazwisko podane w dokumentach różni się"
-" od tego, którego wolisz używać, wpisz je tutaj. Zostanie ono wykorzystane "
-"wyłącznie do wewnętrznych celów biurokratycznych i NIGDY nie będzie "
-"wyświetlane innym uczestnikom."
 
 msgid ""
 "If you prefer that your real name and surname not be publicly visible, "

@@ -30,6 +30,8 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.validators import RegexValidator
 from django.db import IntegrityError, models, transaction
+from django.db.models import Q
+from django.db.models.constraints import UniqueConstraint
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -417,3 +419,31 @@ def update_model_search_field(model_instance: Any) -> None:
     if hasattr(model_instance, "search"):
         model_instance.search = None
         model_instance.search = str(model_instance)
+
+
+class Config(BaseModel):
+    """Django app configuration for Config."""
+
+    name = models.CharField(max_length=150)
+
+    value = models.CharField(max_length=1000)
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return self.name
+
+    class Meta:
+        indexes: ClassVar[list] = [
+            models.Index(fields=["name"]),
+        ]
+        constraints: ClassVar[list] = [
+            UniqueConstraint(
+                fields=["name", "deleted"],
+                name="unique_config_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["name"],
+                condition=Q(deleted=None),
+                name="unique_config_without_optional",
+            ),
+        ]

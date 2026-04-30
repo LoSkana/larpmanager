@@ -71,7 +71,6 @@ from larpmanager.utils.io.download import (
 )
 from larpmanager.utils.io.restore import execute_restore, load_restore_temp, preview_restore, save_restore_temp
 from larpmanager.utils.io.upload import go_upload
-from larpmanager.utils.publication.base import publish_event, publish_event_role, publish_registration
 from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.users.deadlines import check_run_deadlines
 
@@ -1033,14 +1032,6 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Reset everything
     reset_all_run(context["event"], context["run"])
-
-    # Sync publication data for the event, all registrations, and all event roles
-    publish_event(context["event"].id)
-    run = context["run"]
-    for reg_id in run.registrations.values_list("id", flat=True):
-        publish_registration(reg_id, run.id)
-    for role_id in context["event"].eventrole_set.filter(deleted__isnull=True).values_list("id", flat=True):
-        publish_event_role(role_id)
 
     # Notify user of successful cache reset
     messages.success(request, _("Cache reset!"))

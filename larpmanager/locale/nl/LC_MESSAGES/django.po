@@ -194,10 +194,6 @@ msgstr "Hoofd"
 msgid "Male"
 msgstr "Mannelijk"
 
-msgctxt "event"
-msgid "Mood"
-msgstr "Stemming"
-
 msgid "Name"
 msgstr "Naam"
 
@@ -464,6 +460,10 @@ msgstr "Personeel"
 
 msgid "Start"
 msgstr "Start"
+
+msgctxt "event"
+msgid "Style"
+msgstr "Stijl"
 
 msgid "Swift"
 msgstr "Snel"
@@ -2155,6 +2155,9 @@ msgstr "Unieke code"
 msgid "Where it is"
 msgstr "Waar het is"
 
+msgid "Your Events"
+msgstr "Uw evenementen"
+
 msgid "assignments"
 msgstr "opdrachten"
 
@@ -2259,6 +2262,9 @@ msgstr "Prijs"
 
 msgid "Instructions"
 msgstr "Instructies"
+
+msgid "Legal Gender"
+msgstr "Wettelijk geslacht"
 
 msgid "Legal Notice"
 msgstr "Wettelijke kennisgeving"
@@ -3747,6 +3753,9 @@ msgstr "Vrijwilligers Register"
 msgid "Workspace selector"
 msgstr "Werkruimte selecteren"
 
+msgid "Your Organizations"
+msgstr "Uw organisaties"
+
 msgid "Your date of birth"
 msgstr "Je geboortedatum"
 
@@ -3950,6 +3959,9 @@ msgstr "Verzonden e-mails weergeven"
 
 msgid "Download light sheet"
 msgstr "Download lichtblad"
+
+msgid "Enter a valid number"
+msgstr "Voer een geldig nummer in"
 
 msgid "Event already played"
 msgstr "Reeds gespeelde evenementen"
@@ -4168,9 +4180,6 @@ msgstr "Bedrag wijzigen uitschakelen"
 
 msgid "Discover the web site"
 msgstr "Ontdek de website"
-
-msgid "Enter a valid number."
-msgstr "Voer een geldig nummer in."
 
 msgid "Error uploading image"
 msgstr "Fout bij uploaden afbeelding"
@@ -4471,6 +4480,9 @@ msgstr "Welkom bij LarpManager"
 msgid "Workshop already done!"
 msgstr "Workshop al geslaagd!"
 
+msgid "You are logged in as: "
+msgstr "Je bent ingelogd als:"
+
 msgid "give them this address"
 msgstr "geef ze dit adres"
 
@@ -4770,6 +4782,9 @@ msgstr "Voorbeeldsjabloon downloaden"
 
 msgid "Error reading backup file"
 msgstr "Fout bij het lezen van back-upbestand"
+
+msgid "Generate a new ILDB token"
+msgstr "Een nieuw ILDB-token genereren"
 
 msgid "Go to the preferences for"
 msgstr "Ga naar voorkeuren voor"
@@ -5285,6 +5300,9 @@ msgstr "Nieuwe platformfuncties activeren"
 
 msgid "Character Inventory Pool Types"
 msgstr "Character Inventory Pool Types"
+
+msgid "Choose the style for the event"
+msgstr "Kies de stijl voor het evenement"
 
 #, python-format
 msgid "Complete payment for %(event)s"
@@ -6032,9 +6050,6 @@ msgstr "Laat personages inventarissen hebben"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Controleer de geldigheid van de fiscale code"
-
-msgid "Choose the mood / style for the event"
-msgstr "Kies de sfeer / stijl voor het evenement"
 
 msgid "End date cannot be before start date!"
 msgstr "Einddatum kan niet voor startdatum liggen!"
@@ -6893,9 +6908,6 @@ msgstr "Wil je op de hoogte blijven van onze evenementen"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Hint: De juiste antwoorden op deze vraag zijn"
-
-msgid "Indicates what gender you identify yourself as"
-msgstr "Geef aan met welk geslacht je je identificeert"
 
 msgid "Manage event metadata for external publication"
 msgstr "Metagegevens van evenementen beheren voor externe publicatie"
@@ -8119,6 +8131,10 @@ msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Als u problemen ondervindt, neem dan contact met ons op en wij zullen u "
 "helpen"
+
+msgid "Indicate your legal gender as it appears on official documents"
+msgstr ""
+"Vermeld uw wettelijke geslacht zoals dat op officiële documenten staat"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr ""
@@ -10936,8 +10952,8 @@ msgid ""
 "The event <strong>%(event)s</strong> has been automatically added to "
 "larpdatabase.com as a draft."
 msgstr ""
-"De gebeurtenis <strong>%(event)s</strong> is automatisch toegevoegd aan "
-"larpdatabase.com als concept."
+"De gebeurtenis <strong>%(gebeurtenis)s</strong> is automatisch toegevoegd "
+"aan larpdatabase.com als concept."
 
 msgid ""
 "Upload a custom font file for page titles to match your event's theme (TTF, "
@@ -11320,6 +11336,13 @@ msgid ""
 msgstr ""
 "Geeft nuttige informatie voor passagiers, zoals de kleur van je auto, de "
 "geschatte aankomsttijd"
+
+msgid ""
+"It will only be used for internal bureaucratic purposes, and will NEVER be "
+"displayed to other participants"
+msgstr ""
+"De gegevens worden alleen gebruikt voor interne bureaucratische doeleinden "
+"en worden NOOIT aan andere deelnemers getoond"
 
 msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
@@ -12046,6 +12069,13 @@ msgstr ""
 "van facturen"
 
 msgid ""
+"If for whatever reason the first and last name shown on your documents is "
+"different from the one you prefer to use, then write it here"
+msgstr ""
+"Als om welke reden dan ook de voor- en achternaam op je documenten anders "
+"zijn dan de naam die je wilt gebruiken, schrijf die dan hier op"
+
+msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "
 "notice any delays, write us directly, do not enter new requests"
 msgstr ""
@@ -12605,17 +12635,6 @@ msgstr ""
 "om het voor te stellen aan het personeel. Let op: sommige velden kunnen niet"
 " meer bewerkt worden. Laat het veld leeg om je wijzigingen op te slaan en er"
 " in de toekomst mee door te kunnen gaan."
-
-msgid ""
-"If for whatever reason the first and last name shown on your documents is "
-"different from the one you prefer to use, then write it here. It will only "
-"be used for internal bureaucratic purposes, and will NEVER be displayed to "
-"other participants."
-msgstr ""
-"Als om welke reden dan ook de voor- en achternaam die op je documenten staan"
-" anders zijn dan de naam die je liever gebruikt, schrijf die dan hier. De "
-"naam wordt alleen gebruikt voor interne bureaucratische doeleinden en wordt "
-"NOOIT aan andere deelnemers getoond."
 
 msgid ""
 "If you prefer that your real name and surname not be publicly visible, "
