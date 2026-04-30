@@ -2118,6 +2118,9 @@ msgstr "Yksilöllinen koodi"
 msgid "Where it is"
 msgstr "Missä se on"
 
+msgid "Your Events"
+msgstr "Tapahtumasi"
+
 msgid "assignments"
 msgstr "tehtävät"
 
@@ -3679,6 +3682,9 @@ msgstr "Vapaaehtoisten rekisteri"
 
 msgid "Workspace selector"
 msgstr "Työtilan valitsin"
+
+msgid "Your Organizations"
+msgstr "Organisaationne"
 
 msgid "Your date of birth"
 msgstr "Syntymäaikasi"

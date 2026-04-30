@@ -2118,6 +2118,9 @@ msgstr "Codice univoco"
 msgid "Where it is"
 msgstr "Dove si trova"
 
+msgid "Your Events"
+msgstr "I tuoi eventi"
+
 msgid "assignments"
 msgstr "incarichi"
 
@@ -3679,6 +3682,9 @@ msgstr "Registro Volontari"
 
 msgid "Workspace selector"
 msgstr "Selettore dello spazio di lavoro"
+
+msgid "Your Organizations"
+msgstr "Le tue organizzazioni"
 
 msgid "Your date of birth"
 msgstr "Data di nascita"

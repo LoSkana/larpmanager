@@ -20,17 +20,12 @@
                         <li>
                             <a href="{% url 'guides' %}"
                                title="See practical examples of the system"
-                               {% if request.resolver_match.url_name == "tutorials" %}class="sel"{% endif %}>Guides</a>
+                               {% if request.resolver_match.url_name == "guides" %}class="sel"{% endif %}>Guides</a>
                         </li>
                         <li>
                             <a href="{% url 'usage' %}"
                                title="Understand how to use it"
-                               {% if request.resolver_match.url_name == "usage" %}class="sel"{% endif %}>Usage</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'about_us' %}"
-                               title="Meet the team"
-                               {% if request.resolver_match.url_name == "about_us" %}class="sel"{% endif %}>About us</a>
+                               {% if request.resolver_match.url_name == "usage" %}class="sel"{% endif %}>Pricing</a>
                         </li>
                         <li>
                             <a href="{% url 'demo' %}"

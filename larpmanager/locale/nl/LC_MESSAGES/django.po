@@ -2118,6 +2118,9 @@ msgstr "Unieke code"
 msgid "Where it is"
 msgstr "Waar het is"
 
+msgid "Your Events"
+msgstr "Uw evenementen"
+
 msgid "assignments"
 msgstr "opdrachten"
 
@@ -3679,6 +3682,9 @@ msgstr "Vrijwilligers Register"
 
 msgid "Workspace selector"
 msgstr "Werkruimte selecteren"
+
+msgid "Your Organizations"
+msgstr "Uw organisaties"
 
 msgid "Your date of birth"
 msgstr "Je geboortedatum"

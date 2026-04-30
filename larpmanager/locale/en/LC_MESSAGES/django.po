@@ -5042,6 +5042,12 @@ msgid ""
 "always of the same macrotype)"
 msgstr ""
 
+msgid "Organization"
+msgstr ""
+
+msgid "You don't have any registrations yet"
+msgstr ""
+
 msgid "Tax code verification"
 msgstr ""
 
@@ -5186,9 +5192,6 @@ msgid "List"
 msgstr ""
 
 msgid "Players"
-msgstr ""
-
-msgid "Organization"
 msgstr ""
 
 msgid "Total"
@@ -6595,6 +6598,12 @@ msgstr ""
 msgid "Show inactive"
 msgstr ""
 
+msgid "Your Organizations"
+msgstr ""
+
+msgid "Your Events"
+msgstr ""
+
 msgid "With these tutorials, you can learn how to use the tool in no time"
 msgstr ""
 
@@ -7342,9 +7351,6 @@ msgid "Attendance"
 msgstr ""
 
 msgid "Show all"
-msgstr ""
-
-msgid "You don't have any registrations yet"
 msgstr ""
 
 msgid "Sharing"

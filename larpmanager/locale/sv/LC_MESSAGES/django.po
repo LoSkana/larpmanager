@@ -2118,6 +2118,9 @@ msgstr "Unik kod"
 msgid "Where it is"
 msgstr "Var det är"
 
+msgid "Your Events"
+msgstr "Dina evenemang"
+
 msgid "assignments"
 msgstr "Uppdrag"
 
@@ -3679,6 +3682,9 @@ msgstr "Frivilligregister"
 
 msgid "Workspace selector"
 msgstr "Väljare för arbetsyta"
+
+msgid "Your Organizations"
+msgstr "Dina organisationer"
 
 msgid "Your date of birth"
 msgstr "Ditt födelsedatum"

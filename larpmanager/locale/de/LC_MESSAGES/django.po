@@ -2118,6 +2118,9 @@ msgstr "Eindeutiger Code"
 msgid "Where it is"
 msgstr "Wo sie ist"
 
+msgid "Your Events"
+msgstr "Ihre Veranstaltungen"
+
 msgid "assignments"
 msgstr "Zuweisungen"
 
@@ -3679,6 +3682,9 @@ msgstr "Freiwilligen-Register"
 
 msgid "Workspace selector"
 msgstr "Arbeitsbereichswähler"
+
+msgid "Your Organizations"
+msgstr "Ihre Organisationen"
 
 msgid "Your date of birth"
 msgstr "Ihr Geburtsdatum"

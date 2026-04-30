@@ -2118,6 +2118,9 @@ msgstr "Jedinečný kód"
 msgid "Where it is"
 msgstr "Kde se nachází"
 
+msgid "Your Events"
+msgstr "Vaše události"
+
 msgid "assignments"
 msgstr "úkoly"
 
@@ -3679,6 +3682,9 @@ msgstr "Registr dobrovolníků"
 
 msgid "Workspace selector"
 msgstr "Výběr pracovního prostoru"
+
+msgid "Your Organizations"
+msgstr "Vaše organizace"
 
 msgid "Your date of birth"
 msgstr "Vaše datum narození"
