@@ -4395,6 +4395,9 @@ msgstr "Vítejte v LarpManageru"
 msgid "Workshop already done!"
 msgstr "Workshop již proběhl!"
 
+msgid "You are logged in as: "
+msgstr "Jste přihlášeni jako:"
+
 msgid "give them this address"
 msgstr "předejte jim tuto adresu"
 

@@ -6598,6 +6598,9 @@ msgstr ""
 msgid "Show inactive"
 msgstr ""
 
+msgid "You are logged in as: "
+msgstr ""
+
 msgid "Your Organizations"
 msgstr ""
 

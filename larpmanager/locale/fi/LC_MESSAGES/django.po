@@ -4395,6 +4395,9 @@ msgstr "Tervetuloa LarpManageriin"
 msgid "Workshop already done!"
 msgstr "Työpaja on jo tehty!"
 
+msgid "You are logged in as: "
+msgstr "Olet kirjautunut sisään nimellä:"
+
 msgid "give them this address"
 msgstr "anna heille tämä osoite"
 

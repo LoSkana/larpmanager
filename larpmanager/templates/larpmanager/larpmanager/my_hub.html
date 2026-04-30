@@ -1,4 +1,9 @@
 {% load i18n %}
+{% if member %}
+    <p>
+        <i>{% trans "You are logged in as: " %}{{ member }}</i>
+    </p>
+{% endif %}
 {% if assoc_roles %}
     <h3>{% trans "Your Organizations" %}</h3>
     <p>
