@@ -23,7 +23,6 @@ import hashlib
 import logging
 import re
 import traceback
-from collections import Counter
 from functools import wraps
 from typing import TYPE_CHECKING, Any
 
@@ -127,12 +126,9 @@ def mail_error(subject: Any, email_body: Any, exception: Any = None) -> None:
         my_send_simple_mail(error_notification_subject, error_notification_body, admin_email)
 
 
-def split_players(players: str) -> list:
-    """Split text by most common symbol separator."""
-    separators = [",", ";", "|"]
-    counts = Counter({sep: players.count(sep) for sep in separators})
-    sep = counts.most_common(1)[0][0]
-    return [p.strip() for p in players.split(sep) if p.strip()]
+def split_recipients(recipient_text: str) -> list:
+    """Split text by any common separator: comma, semicolon, pipe, whitespace."""
+    return [p.strip() for p in re.split(r"[,;\|\s]+", recipient_text) if p.strip()]
 
 
 def _create_bulk_recipients(email_content: Any, recipients: list, seen_emails: dict) -> list:
@@ -158,7 +154,7 @@ def _create_bulk_recipients(email_content: Any, recipients: list, seen_emails: d
 
 @background_auto()
 def send_mail_exec(
-    players: str, subj: str, body: str, association_id: int | None = None, run_id: int | None = None
+    recipient_list: str, subj: str, body: str, association_id: int | None = None, run_id: int | None = None
 ) -> None:
     """Send bulk emails to multiple recipients with batch delivery.
 
@@ -170,7 +166,7 @@ def send_mail_exec(
     objects to avoid duplicating email content in the database.
 
     Args:
-        players: Comma-separated list of email addresses to send to
+        recipient_list: Text list of email addresses to send to
         subj: Email subject line (will be prefixed with org/run name)
         body: Email body content in HTML or plain text
         association_id: Association ID for determining sender context
@@ -203,7 +199,7 @@ def send_mail_exec(
         subj = f"[{sender_context}] {subj}"
 
     # Parse symbol-separated email list
-    recipients = split_players(players)
+    recipients = split_recipients(recipient_list)
 
     max_recipients = getattr(conf_settings, "MAIL_MAX_RECIPIENTS", 2000)
     if len(recipients) > max_recipients:
