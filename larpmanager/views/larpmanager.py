@@ -789,7 +789,6 @@ def get_lm_contact(request: HttpRequest) -> Any:
     return context
 
 
-@login_required
 def get_personal_area(context: dict) -> None:
     """Retrieves infos for the user's personal registrations, managed orgs, and managed events."""
     member = context.get("member")
