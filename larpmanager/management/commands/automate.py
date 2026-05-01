@@ -179,7 +179,7 @@ class Command(BaseCommand):
         Association.objects.filter(slug__startswith=Command._TEST_SLUG_PREFIX, activated__lte=cutoff).delete()
 
         # Process inactive non-test associations
-        for association in Association.objects.exclude(slug__startswith=Command._TEST_SLUG_PREFIX):
+        for association in Association.objects.all():
             signup_count = Registration.objects.filter(run__event__association=association).count()
             if signup_count >= Command._INACTIVE_SIGNUP_THRESHOLD:
                 # Active enough: clear any pending warning
