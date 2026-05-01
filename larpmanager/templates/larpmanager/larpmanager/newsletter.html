@@ -25,7 +25,10 @@
     </form>
     {% if newsletter_list %}
         <p>
-            {% for el in newsletter_list %}{{ el.email }},{% endfor %}
+            {% for el in newsletter_list %}
+                {% include "elements/comma.html" with separator="," %}
+                {{ el.email }}
+            {% endfor %}
         </p>
     {% endif %}
     <hr>

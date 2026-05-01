@@ -239,13 +239,13 @@ class Command(BaseCommand):
         """Email association executives (or main_mail) that the org will be deleted in 7 days."""
         subject = f"[LarpManager] Are you still interested in using the platform for '{association.name}'?"
         body = f"""
-            Hello,\n\n
+            Hello,<br /><br />
             We noticed that your LarpManager organization <i>{association.name}</i> has been inactive
-            for a significant period. \n\n
+            for a significant period. <br /><br />
             <b>Action required</b>: If you wish to keep this organization and its data,
-            please reply to this email within <b>30 days</b>.\n\n
+            please reply to this email within <b>30 days</b>.<br /><br />
             If we don't hear from you, the organization and all associated data will
-            be permanently removed.\n\n
+            be permanently removed.<br /><br />
             - LarpManager Team
             """
 
