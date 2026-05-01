@@ -1347,6 +1347,14 @@ msgstr ""
 msgid "If checked, enables the reading view for writing elements"
 msgstr ""
 
+msgid "Split by participation"
+msgstr ""
+
+msgid ""
+"If checked: show two separate tables on the characters page, one for "
+"characters participating in this run and one for non-participating characters"
+msgstr ""
+
 msgid "Independent factions"
 msgstr ""
 
@@ -8450,7 +8458,7 @@ msgstr ""
 msgid "This page shows the characters of the event"
 msgstr ""
 
-msgid "Attended"
+msgid "Attending"
 msgstr ""
 
 msgid "free"
@@ -10203,6 +10211,9 @@ msgstr ""
 msgid ""
 "Number of installments to split the fee: payments and deadlines will be "
 "equally divided from the registration date"
+msgstr ""
+
+msgid "Not participating"
 msgstr ""
 
 msgid "Place of birth not included in the ISTAT list"

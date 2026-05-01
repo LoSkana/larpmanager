@@ -339,6 +339,9 @@ def writing_list(  # noqa: C901 - Complex writing list building with feature-dep
         _setup_char_finder(context, writing_type)
         _get_custom_form(context)
 
+    if "split_lists" not in context:
+        context["split_lists"] = [{"title": "", "list": context["list"]}]
+
     # Render the appropriate template based on the name parameter
     return render(request, "larpmanager/orga/writing/" + template_name + "s.html", context)
 
@@ -535,7 +538,7 @@ def writing_list_questtype(context: dict) -> None:
         quest_type.quest_rels = quest_type_relationships.get(quest_type.id, {}).get("quest_rels", [])
 
 
-def writing_list_char(context: dict) -> None:  # noqa: C901 - Complex character enhancement with multiple feature integrations
+def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex character enhancement with multiple feature integrations
     """Enhance character list with feature-specific data and relationships.
 
     This function modifies the character list in the context by adding feature-specific
@@ -600,6 +603,17 @@ def writing_list_char(context: dict) -> None:  # noqa: C901 - Complex character 
     if "prologue" in context["features"]:
         for character in context["list"]:
             character.prologue_rels = event_relationships.get(character.id, {}).get("prologue_rels", [])
+
+    context["campaign_split_registration"] = get_event_config(
+        context["event"].id, "campaign_split_registration", default_value=False, context=context
+    )
+    # Split list by registration status if config is enabled
+    if "campaign" in context["features"] and context["campaign_split_registration"]:
+        all_chars = list(context["list"])
+        context["split_lists"] = [
+            {"title": "", "list": [c for c in all_chars if c.has_registration]},
+            {"title": _("Not participating"), "list": [c for c in all_chars if not c.has_registration]},
+        ]
 
 
 def char_add_addit(context: dict) -> None:

@@ -1092,9 +1092,6 @@ msgstr "Schváleno"
 msgid "Assigned"
 msgstr "Přiřaďte"
 
-msgid "Attended"
-msgstr "Zúčastnil se"
-
 msgid "Auto buy"
 msgstr "Automatický nákup"
 
@@ -1400,6 +1397,9 @@ msgstr "Algoritmus"
 
 msgid "Approvals"
 msgstr "Schválení"
+
+msgid "Attending"
+msgstr "Účast na"
 
 msgid "Available"
 msgstr "Dostupné na"
@@ -3431,6 +3431,9 @@ msgstr "Přesun do kontejneru"
 msgid "New Registrations"
 msgstr "Nové registrace"
 
+msgid "Not participating"
+msgstr "Neúčastní se"
+
 msgid "One-Time Contents"
 msgstr "Jednorázový obsah"
 
@@ -4370,6 +4373,9 @@ msgstr "Vyberte si svou postavu!"
 
 msgid "Set up payment methods"
 msgstr "Nastavení platebních metod"
+
+msgid "Split by participation"
+msgstr "Rozdělení podle účasti"
 
 msgid "Target event not found"
 msgstr "Cílová událost nebyla nalezena"
@@ -11747,6 +11753,14 @@ msgid ""
 msgstr ""
 "Umožňuje 'výplňové' postavy: jednodušší listy postav, přidělené účastníkům, "
 "kteří jsou připraveni na poslední chvíli nahradit vypadnutí hlavních postav."
+
+msgid ""
+"If checked: show two separate tables on the characters page, one for "
+"characters participating in this run and one for non-participating "
+"characters"
+msgstr ""
+"Pokud je zaškrtnuto: zobrazí na stránce postav dvě samostatné tabulky, jednu"
+" pro postavy účastnící se tohoto běhu a druhou pro nezúčastněné postavy"
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
