@@ -1092,9 +1092,6 @@ msgstr "Godkjent"
 msgid "Assigned"
 msgstr "Tilordne"
 
-msgid "Attended"
-msgstr "Tilstede"
-
 msgid "Auto buy"
 msgstr "Autokjøp"
 
@@ -1400,6 +1397,9 @@ msgstr "Algoritme"
 
 msgid "Approvals"
 msgstr "Godkjenninger"
+
+msgid "Attending"
+msgstr "Tilstede"
 
 msgid "Available"
 msgstr "Tilgjengelig"

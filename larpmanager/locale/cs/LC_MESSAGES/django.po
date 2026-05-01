@@ -1092,9 +1092,6 @@ msgstr "Schváleno"
 msgid "Assigned"
 msgstr "Přiřaďte"
 
-msgid "Attended"
-msgstr "Zúčastnil se"
-
 msgid "Auto buy"
 msgstr "Automatický nákup"
 
@@ -1400,6 +1397,9 @@ msgstr "Algoritmus"
 
 msgid "Approvals"
 msgstr "Schválení"
+
+msgid "Attending"
+msgstr "Účast na"
 
 msgid "Available"
 msgstr "Dostupné na"

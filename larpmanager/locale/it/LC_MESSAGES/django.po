@@ -1092,9 +1092,6 @@ msgstr "Approvato"
 msgid "Assigned"
 msgstr "Assegnamento"
 
-msgid "Attended"
-msgstr "Partecipato"
-
 msgid "Auto buy"
 msgstr "Acquisto auto"
 
@@ -1400,6 +1397,9 @@ msgstr "Algoritmo"
 
 msgid "Approvals"
 msgstr "Approvazioni"
+
+msgid "Attending"
+msgstr "Partecipante"
 
 msgid "Available"
 msgstr "Disponibili"

@@ -1092,9 +1092,6 @@ msgstr "Hyväksytty"
 msgid "Assigned"
 msgstr "Myönnetty"
 
-msgid "Attended"
-msgstr "Osallistui"
-
 msgid "Auto buy"
 msgstr "Auto ostaa"
 
@@ -1400,6 +1397,9 @@ msgstr "Algoritmi"
 
 msgid "Approvals"
 msgstr "Hyväksynnät"
+
+msgid "Attending"
+msgstr "Osallistuminen"
 
 msgid "Available"
 msgstr "Saatavilla"

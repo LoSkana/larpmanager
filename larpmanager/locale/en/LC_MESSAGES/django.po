@@ -8458,7 +8458,7 @@ msgstr ""
 msgid "This page shows the characters of the event"
 msgstr ""
 
-msgid "Attended"
+msgid "Attending"
 msgstr ""
 
 msgid "free"

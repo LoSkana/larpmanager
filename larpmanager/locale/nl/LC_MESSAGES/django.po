@@ -1092,9 +1092,6 @@ msgstr "Goedgekeurd"
 msgid "Assigned"
 msgstr "Toewijzen"
 
-msgid "Attended"
-msgstr "Bijgewoond"
-
 msgid "Auto buy"
 msgstr "Auto kopen"
 
@@ -1400,6 +1397,9 @@ msgstr "Algoritme"
 
 msgid "Approvals"
 msgstr "Goedkeuringen"
+
+msgid "Attending"
+msgstr "Naar"
 
 msgid "Available"
 msgstr "Beschikbaar"

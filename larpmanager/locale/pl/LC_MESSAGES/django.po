@@ -1092,9 +1092,6 @@ msgstr "Zatwierdzony"
 msgid "Assigned"
 msgstr "Przypisany"
 
-msgid "Attended"
-msgstr "Uczestniczył"
-
 msgid "Auto buy"
 msgstr "Automatyczny zakup"
 
@@ -1400,6 +1397,9 @@ msgstr "Algorytm"
 
 msgid "Approvals"
 msgstr "Zatwierdzenia"
+
+msgid "Attending"
+msgstr "Uczestnictwo"
 
 msgid "Available"
 msgstr "Dostępne"

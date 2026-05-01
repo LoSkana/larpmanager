@@ -604,12 +604,11 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
         for character in context["list"]:
             character.prologue_rels = event_relationships.get(character.id, {}).get("prologue_rels", [])
 
+    context["campaign_split_registration"] = get_event_config(
+        context["event"].id, "campaign_split_registration", default_value=False, context=context
+    )
     # Split list by registration status if config is enabled
-    if (
-        "campaign" in context["features"]
-        and context["event"].parent
-        and get_event_config(context["event"].id, "campaign_split_registration", default_value=False, context=context)
-    ):
+    if "campaign" in context["features"] and context["campaign_split_registration"]:
         all_chars = list(context["list"])
         context["split_lists"] = [
             {"title": "", "list": [c for c in all_chars if c.has_registration]},
