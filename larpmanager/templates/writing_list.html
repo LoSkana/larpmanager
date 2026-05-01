@@ -16,7 +16,7 @@
             <a href="#" class="table_toggle" tog='stats'>Stats</a>
         </div>
         {% for item in split_lists %}
-            {% if item.title %}
+            {% if item.title and item.list %}
                 <hr />
                 <h2>{{ item.title }}</h2>
             {% endif %}
@@ -35,9 +35,11 @@
                     </tbody>
                 </table>
             {% else %}
-                <p>
-                    <i>{% trans "No elements are currently available" %}</i>
-                </p>
+                {% if not item.title %}
+                    <p>
+                        <i>{% trans "No elements are currently available" %}</i>
+                    </p>
+                {% endif %}
             {% endif %}
         {% endfor %}
         {% block additional %}
