@@ -3431,6 +3431,9 @@ msgstr "Sposta in un contenitore"
 msgid "New Registrations"
 msgstr "Nuove iscrizioni"
 
+msgid "Not participating"
+msgstr "Non partecipano"
+
 msgid "One-Time Contents"
 msgstr "Contenuti una tantum"
 
@@ -4370,6 +4373,9 @@ msgstr "Seleziona il tuo personaggio!"
 
 msgid "Set up payment methods"
 msgstr "Imposta i metodi di pagamento"
+
+msgid "Split by participation"
+msgstr "Suddivisi per partecipazione"
 
 msgid "Target event not found"
 msgstr "Evento target non trovato"
@@ -12077,6 +12083,15 @@ msgstr ""
 "Abilita i personaggi 'riempitivi': schede dei personaggi più semplici, "
 "assegnate ai partecipanti che sono pronti a sostituire i personaggi "
 "principali abbandonati all'ultimo minuto."
+
+msgid ""
+"If checked: show two separate tables on the characters page, one for "
+"characters participating in this run and one for non-participating "
+"characters"
+msgstr ""
+"Se selezionata: mostra due tabelle separate nella pagina dei personaggi, una"
+" per i personaggi che partecipano a questa manche e una per i personaggi non"
+" partecipanti"
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "

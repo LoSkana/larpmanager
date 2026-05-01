@@ -15,17 +15,28 @@
             {% endblock nav_fields %}
             <a href="#" class="table_toggle" tog='stats'>Stats</a>
         </div>
-        <table id="writing_list_{{ run.uuid }}_{{ typ }}"
-               class="que_load go_datatable writing_list {% block table_classes %}{% endblock table_classes %}">
-            <thead>
-                {% block thead %}
-                {% endblock thead %}
-            </thead>
-            <tbody>
-                {% block tbody %}
-                {% endblock tbody %}
-            </tbody>
-        </table>
+        {% for item in split_lists %}
+            {% if item.title %}<h3>{{ item.title }}</h3>{% endif %}
+            {% if item.list %}
+                <table id="writing_list_{{ run.uuid }}_{{ typ }}_{{ forloop.counter }}"
+                       class="que_load go_datatable writing_list {% block table_classes %}{% endblock table_classes %}">
+                    <thead>
+                        {% block thead %}
+                        {% endblock thead %}
+                    </thead>
+                    <tbody>
+                        {% with list=item.list %}
+                            {% block tbody %}
+                            {% endblock tbody %}
+                        {% endwith %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>
+                    <i>{% trans "No elements are currently available" %}</i>
+                </p>
+            {% endif %}
+        {% endfor %}
         {% block additional %}
         {% endblock additional %}
         <div id="excel-edit"></div>

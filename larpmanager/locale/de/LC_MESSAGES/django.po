@@ -3431,6 +3431,9 @@ msgstr "Umzug in den Container"
 msgid "New Registrations"
 msgstr "Neue Registrierungen"
 
+msgid "Not participating"
+msgstr "Nicht teilnehmend"
+
 msgid "One-Time Contents"
 msgstr "Einmaliger Inhalt"
 
@@ -4370,6 +4373,9 @@ msgstr "Wählen Sie Ihren Charakter!"
 
 msgid "Set up payment methods"
 msgstr "Zahlungsarten einrichten"
+
+msgid "Split by participation"
+msgstr "Aufteilung nach Beteiligung"
 
 msgid "Target event not found"
 msgstr "Zielereignis nicht gefunden"
@@ -12300,6 +12306,15 @@ msgstr ""
 "Ermöglicht 'Filler'-Charaktere: einfachere Charakterbögen, die Teilnehmern "
 "zugewiesen werden, die bereit sind, den Ausfall von Hauptcharakteren in "
 "letzter Minute zu ersetzen."
+
+msgid ""
+"If checked: show two separate tables on the characters page, one for "
+"characters participating in this run and one for non-participating "
+"characters"
+msgstr ""
+"Wenn angekreuzt: zeige zwei separate Tabellen auf der Charakterseite, eine "
+"für Charaktere, die an diesem Lauf teilnehmen und eine für nicht "
+"teilnehmende Charaktere"
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
