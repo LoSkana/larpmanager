@@ -489,7 +489,7 @@ def _newsletter_set(email: str, status: NewsletterStatus) -> None:
     if "demo" in email:
         return
 
-    obj, created = LarpManagerNewsletter.objects.get_or_create(
+    obj, _created = LarpManagerNewsletter.objects.get_or_create(
         email=email,
         defaults={"status": status},
     )
