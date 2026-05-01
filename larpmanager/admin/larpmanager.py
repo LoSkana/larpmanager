@@ -31,6 +31,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerFaqType,
     LarpManagerGuide,
     LarpManagerHighlight,
+    LarpManagerNewsletter,
     LarpManagerProfiler,
     LarpManagerReview,
     LarpManagerShowcase,
@@ -175,3 +176,10 @@ class PublisherApiKeyAdmin(DefModelAdmin):
     """Admin interface for PublisherApiKey model."""
 
     list_display = ("name", "key", "active", "last_used", "usage_count")
+
+
+@admin.register(LarpManagerNewsletter)
+class LarpManagerNewsletterAdmin(DefModelAdmin):
+    """Admin interface for PublisherApiKey model."""
+
+    list_display = ("email", "status")
