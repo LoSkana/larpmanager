@@ -43,7 +43,7 @@ from larpmanager.mail.remind import (
     remember_pay,
     remember_profile,
 )
-from larpmanager.models.access import get_association_executives
+from larpmanager.models.access import AssociationRole, EventRole, get_association_executives
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemMembership,
@@ -60,6 +60,7 @@ from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.io.pdf import print_run_bkg
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
+from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 
 
 class Command(BaseCommand):
@@ -175,21 +176,21 @@ class Command(BaseCommand):
         now = timezone.now()
 
         # Delete test associations older than 1 week
-        cutoff = now - timedelta(days=Command._WARNING_GRACE_DAYS)
-        Association.objects.filter(slug__startswith=Command._TEST_SLUG_PREFIX, activated__lte=cutoff).delete()
+        cutoff = now - timedelta(days=7)
+        Association.objects.filter(slug__startswith=Command._TEST_SLUG_PREFIX, created__lte=cutoff).delete()
 
         # Process inactive non-test associations
-        for association in Association.objects.all():
-            signup_count = Registration.objects.filter(run__event__association=association).count()
-            if signup_count >= Command._INACTIVE_SIGNUP_THRESHOLD:
-                # Active enough: clear any pending warning
-                AssociationConfig.objects.filter(association=association, name=Command._DELETION_WARNING_KEY).delete()
-                continue
-
-            log_cutoff = now - timedelta(days=Command._INACTIVE_LOG_DAYS)
+        log_cutoff = now - timedelta(days=Command._INACTIVE_LOG_DAYS)
+        for association in Association.objects.filter(created__lte=log_cutoff):
             has_recent_activity = Log.objects.filter(association=association, created__gte=log_cutoff).exists()
             if has_recent_activity:
                 # Recent activity: clear any pending warning
+                AssociationConfig.objects.filter(association=association, name=Command._DELETION_WARNING_KEY).delete()
+                continue
+
+            signup_count = Registration.objects.filter(run__event__association=association).count()
+            if signup_count >= Command._INACTIVE_SIGNUP_THRESHOLD:
+                # Active enough: clear any pending warning
                 AssociationConfig.objects.filter(association=association, name=Command._DELETION_WARNING_KEY).delete()
                 continue
 
@@ -207,7 +208,28 @@ class Command(BaseCommand):
             else:
                 warning_date = dateparse.parse_datetime(warning_config.value)
                 if warning_date and (now - warning_date).days >= Command._WARNING_GRACE_DAYS:
+                    Command._deactivate_organizer_newsletters(association)
                     association.delete()
+
+    @staticmethod
+    def _deactivate_organizer_newsletters(association: Association) -> None:
+        """Deactivate newsletter for all organizers (role number=1) before association deletion."""
+        emails: set[str] = set()
+
+        for email in AssociationRole.objects.filter(association=association, number=1).values_list(
+            "members__email", flat=True
+        ):
+            if email:
+                emails.add(email)
+
+        for email in EventRole.objects.filter(event__association=association, number=1).values_list(
+            "members__email", flat=True
+        ):
+            if email:
+                emails.add(email)
+
+        for email in emails:
+            _newsletter_set_non_active(email)
 
     @staticmethod
     def _send_deletion_warning(association: Association) -> None:
