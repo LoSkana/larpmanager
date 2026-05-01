@@ -79,11 +79,11 @@ def create_event_a(page: Any, live_server: Any) -> None:
 
     page.locator("#id_form2-development").select_option("1")
     page.locator("#id_form2-registration_status").select_option("o")
-    page.locator("#id_form2-start").fill("2055-06-11")
-    page.locator("#id_form2-start").click()
-    just_wait(page)
     page.locator("#id_form2-end").fill("2055-06-13")
     page.locator("#id_form2-end").click()
+    just_wait(page)
+    page.locator("#id_form2-start").fill("2055-06-11")
+    page.locator("#id_form2-start").click()
     just_wait(page)
     submit_confirm(page)
 
