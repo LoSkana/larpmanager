@@ -43,7 +43,7 @@
     {% if user_character_max %}
         <th class="player">{% trans "Player" %}</th>
     {% endif %}
-    {% if features.campaign and event.parent %}
+    {% if features.campaign and event.parent and not campaign_split_registration %}
         <th class="attended">{% trans "Attending" %}</th>
     {% endif %}
     {% if features.campaign %}
