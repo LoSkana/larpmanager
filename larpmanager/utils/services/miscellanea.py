@@ -493,6 +493,6 @@ def _newsletter_set(email: str, status: NewsletterStatus) -> None:
         email=email,
         defaults={"status": status},
     )
-    if obj.status != status:
+    if obj.status not in {NewsletterStatus.UNSUBSCRIBED, status}:
         obj.status = status
         obj.save(update_fields=["status"])

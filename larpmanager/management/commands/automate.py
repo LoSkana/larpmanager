@@ -228,6 +228,9 @@ class Command(BaseCommand):
             if email:
                 emails.add(email)
 
+        if association.main_mail:
+            emails.add(association.main_mail)
+
         for email in emails:
             _newsletter_set_non_active(email)
 
