@@ -226,10 +226,12 @@ from larpmanager.models.larpmanager import (
     LarpManagerFaq,
     LarpManagerGuide,
     LarpManagerHighlight,
+    LarpManagerNewsletter,
     LarpManagerShowcase,
     LarpManagerText,
     LarpManagerTicket,
     LarpManagerTutorial,
+    NewsletterStatus,
 )
 from larpmanager.models.member import Badge, Member, MemberConfig, Membership
 from larpmanager.models.miscellanea import ChatMessage, HelpQuestion, Log, PlayerRelationship, WarehouseItem
@@ -646,6 +648,13 @@ def post_save_association_reset_lm_home(sender: type, instance: object, **kwargs
 
     # Reset features cache for this association
     on_association_post_save_reset_features_cache(instance)
+
+    # Add main_mail to newsletter if set
+    if instance.main_mail:
+        LarpManagerNewsletter.objects.get_or_create(
+            email=instance.main_mail.lower(),
+            defaults={"status": NewsletterStatus.ACTIVE},
+        )
 
 
 @receiver(post_save, sender=AssociationConfig)

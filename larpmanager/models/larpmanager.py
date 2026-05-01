@@ -373,3 +373,27 @@ class LarpManagerTicket(UuidMixin, BaseModel):
     def __str__(self) -> str:
         """Return string representation of the ticket."""
         return f"Ticket #{self.id}: {self.reason or 'No reason'}"
+
+
+class NewsletterStatus(models.TextChoices):
+    """Status choices for LarpManagerNewsletter."""
+
+    ACTIVE = "a", "Active"
+    NON_ACTIVE = "n", "Non active"
+    UNSUBSCRIBED = "u", "Unsubscribed"
+
+
+class LarpManagerNewsletter(BaseModel):
+    """Model for managing newsletter recipients."""
+
+    email = models.EmailField(unique=True)
+
+    status = models.CharField(
+        max_length=1,
+        choices=NewsletterStatus.choices,
+        default=NewsletterStatus.NON_ACTIVE,
+    )
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.email} ({self.status})"

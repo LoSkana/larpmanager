@@ -38,6 +38,7 @@ from django.shortcuts import render
 from PIL import Image as PILImage, ImageOps
 
 from larpmanager.cache.config import get_association_config
+from larpmanager.models.larpmanager import LarpManagerNewsletter, NewsletterStatus
 from larpmanager.models.member import Badge
 from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
 from larpmanager.utils.security import safe_extract_zip
@@ -471,3 +472,27 @@ def _check_new(file_field: Any, instance: Any, sender: Any) -> bool:
 
     # Default to treating as new file upload
     return False
+
+
+def _newsletter_set_active(email: str) -> None:
+    """Prepares a newsletter email for active."""
+    _newsletter_set(email, NewsletterStatus.ACTIVE)
+
+
+def _newsletter_set_non_active(email: str) -> None:
+    """Prepares a newsletter email for inactive."""
+    _newsletter_set(email, NewsletterStatus.NON_ACTIVE)
+
+
+def _newsletter_set(email: str, status: NewsletterStatus) -> None:
+    """Prepares a newsletter email for given status."""
+    if "demo" in email:
+        return
+
+    obj, _created = LarpManagerNewsletter.objects.get_or_create(
+        email=email,
+        defaults={"status": status},
+    )
+    if obj.status not in {NewsletterStatus.UNSUBSCRIBED, status}:
+        obj.status = status
+        obj.save(update_fields=["status"])

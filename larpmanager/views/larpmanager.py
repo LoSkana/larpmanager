@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import random
+import re
 from datetime import date, timedelta
 from typing import Any
 
@@ -57,8 +58,10 @@ from larpmanager.models.larpmanager import (
     LarpManagerBlog,
     LarpManagerDiscover,
     LarpManagerGuide,
+    LarpManagerNewsletter,
     LarpManagerProfiler,
     LarpManagerTutorial,
+    NewsletterStatus,
 )
 from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
@@ -848,6 +851,52 @@ def lm_list(request: HttpRequest) -> Any:
     )
 
     return render(request, "larpmanager/larpmanager/list.html", context)
+
+
+@login_required
+def lm_newsletter(request: HttpRequest) -> Any:
+    """Manage LarpManager newsletter recipients."""
+    context = check_lm_admin(request)
+
+    if request.method == "POST":
+        emails_text = request.POST.get("emails", "")
+        status_value = request.POST.get("status_new", NewsletterStatus.NON_ACTIVE)
+        if status_value not in NewsletterStatus.values:
+            status_value = NewsletterStatus.NON_ACTIVE
+        force_status = "force_status" in request.POST
+        count = 0
+        for orig_email in re.split(r"[\s,;|]+", emails_text):
+            email = orig_email.strip().lower()
+            if not email or "@" not in email:
+                continue
+            obj, created = LarpManagerNewsletter.objects.get_or_create(
+                email=email,
+                defaults={"status": status_value},
+            )
+            if not created and force_status:
+                obj.status = status_value
+                obj.save(update_fields=["status"])
+            count += 1
+        messages.success(request, f"{count} emails updated")
+        return redirect(request.path_info)
+
+    show_active = request.GET.get("active", "1") == "1"
+    show_non_active = request.GET.get("non_active", "0") == "1"
+
+    statuses = []
+    if show_active:
+        statuses.append(NewsletterStatus.ACTIVE)
+    if show_non_active:
+        statuses.append(NewsletterStatus.NON_ACTIVE)
+
+    context["newsletter_list"] = (
+        LarpManagerNewsletter.objects.filter(status__in=statuses).order_by("email") if statuses else []
+    )
+    context["show_active"] = show_active
+    context["show_non_active"] = show_non_active
+    context["newsletter_statuses"] = NewsletterStatus.choices
+
+    return render(request, "larpmanager/larpmanager/newsletter.html", context)
 
 
 @login_required

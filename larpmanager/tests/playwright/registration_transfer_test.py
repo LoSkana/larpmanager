@@ -75,16 +75,21 @@ def create_event_a(page: Any, live_server: Any) -> None:
     """Create Event A with ticket and registration questions."""
     go_to(page, live_server, "/manage/events/")
     page.get_by_role("link", name="New event").click()
+    page.locator("#id_form1-name").click()
     page.locator("#id_form1-name").fill("Event A")
+    page.locator("#id_form1-name").press("Tab")
 
     page.locator("#id_form2-development").select_option("1")
     page.locator("#id_form2-registration_status").select_option("o")
+    just_wait(page)
+    page.locator("#id_form2-start").scroll_into_view_if_needed()
     page.locator("#id_form2-start").fill("2055-06-11")
     page.locator("#id_form2-start").click()
-    just_wait(page)
+    just_wait(page, big=True)
+    page.locator("#id_form2-end").scroll_into_view_if_needed()
     page.locator("#id_form2-end").fill("2055-06-13")
     page.locator("#id_form2-end").click()
-    just_wait(page)
+    just_wait(page, big=True)
     submit_confirm(page)
 
     # Create ticket with price and limit
@@ -172,16 +177,21 @@ def create_event_b(page: Any, live_server: Any) -> None:
     """Create Event B."""
     go_to(page, live_server, "/manage/events/")
     page.get_by_role("link", name="New event").click()
+    page.locator("#id_form1-name").click()
     page.locator("#id_form1-name").fill("Event B")
+    page.locator("#id_form1-name").press("Tab")
 
     page.locator("#id_form2-development").select_option("1")
     page.locator("#id_form2-registration_status").select_option("o")
+    just_wait(page)
+    page.locator("#id_form2-start").scroll_into_view_if_needed()
     page.locator("#id_form2-start").fill("2055-07-11")
-    just_wait(page)
     page.locator("#id_form2-start").click()
+    just_wait(page, big=True)
+    page.locator("#id_form2-end").scroll_into_view_if_needed()
     page.locator("#id_form2-end").fill("2055-07-13")
-    just_wait(page)
     page.locator("#id_form2-end").click()
+    just_wait(page, big=True)
     submit_confirm(page)
 
 
