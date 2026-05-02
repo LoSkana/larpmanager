@@ -1,26 +1,29 @@
 {% load i18n %}
 {% if member %}
     <p>
-        <i>{% trans "You are logged in as: " %}{{ member }}</i>
+        <i>{% trans "You are logged in as" %}: {{ member }}</i>
     </p>
 {% endif %}
 {% if assoc_roles %}
     <h3>{% trans "Your Organizations" %}</h3>
     <p>
         {% for role in assoc_roles %}
-            <a href="{% url 'after_login' subdomain=role.association.slug path='manage' %}">{{ role.association.name }}</a>
             {% include "elements/comma.html" %}
+            <a href="{% url 'after_login' subdomain=role.association.slug path='manage' %}">{{ role.association.name }}</a>
         {% endfor %}
     </p>
+    <hr />
 {% endif %}
 {% if event_roles %}
     <h3>{% trans "Your Events" %}</h3>
-    {% for role in event_roles %}
-        {% if role.latest_run %}
-            <a href="{% url 'after_login' subdomain=role.event.association.slug path=role.latest_run.get_slug|add:'/manage/' %}">{{ role.event.name }}</a>
-        {% endif %}
+    {% for run in event_roles %}
         {% include "elements/comma.html" %}
+        <a href="{% url 'after_login' subdomain=run.event.association.slug path=run.get_slug|add:'/manage/' %}">{{ run }}</a>
     {% endfor %}
+    <hr />
 {% endif %}
-<h3>{% trans "Registrations" %}</h3>
-{% include "elements/member/registration_list.html" with show_association=True %}
+{% if registration_list %}
+    <h3>{% trans "Registrations" %}</h3>
+    {% include "elements/member/registration_list.html" with show_association=True %}
+    <hr />
+{% endif %}

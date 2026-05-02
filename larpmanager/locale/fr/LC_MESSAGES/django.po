@@ -4051,6 +4051,9 @@ msgstr "Ce que vous débloquerez"
 msgid "Yes, keep me posted!"
 msgstr "Oui, tenez-moi au courant !"
 
+msgid "You are logged in as"
+msgstr "Vous êtes connecté en tant que"
+
 msgid "Access your character"
 msgstr "Accédez à votre personnage"
 
@@ -4374,6 +4377,9 @@ msgstr "Sélectionnez votre personnage !"
 msgid "Set up payment methods"
 msgstr "Mise en place des moyens de paiement"
 
+msgid "Show available signups"
+msgstr "Afficher les inscriptions disponibles"
+
 msgid "Split by participation"
 msgstr "Répartition par participation"
 
@@ -4400,9 +4406,6 @@ msgstr "Bienvenue à LarpManager"
 
 msgid "Workshop already done!"
 msgstr "L'atelier est déjà passé !"
-
-msgid "You are logged in as: "
-msgstr "Vous êtes connecté en tant que :"
 
 msgid "give them this address"
 msgstr "donnez-leur cette adresse"
@@ -8334,6 +8337,11 @@ msgstr ""
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr ""
 "Il manque un dernier versement à certains tickets (0 montant) : %(list)s"
+
+msgid "There are no signups for this event, so no payment can be created"
+msgstr ""
+"Il n'y a pas d'inscription pour cet événement, donc aucun paiement ne peut "
+"être créé"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

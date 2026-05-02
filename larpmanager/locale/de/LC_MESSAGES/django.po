@@ -4051,6 +4051,9 @@ msgstr "Was Sie freischalten werden"
 msgid "Yes, keep me posted!"
 msgstr "Ja, halten Sie mich auf dem Laufenden!"
 
+msgid "You are logged in as"
+msgstr "Sie sind eingeloggt als"
+
 msgid "Access your character"
 msgstr "Greifen Sie auf Ihren Charakter zu"
 
@@ -4374,6 +4377,9 @@ msgstr "Wählen Sie Ihren Charakter!"
 msgid "Set up payment methods"
 msgstr "Zahlungsarten einrichten"
 
+msgid "Show available signups"
+msgstr "Verfügbare Anmeldungen anzeigen"
+
 msgid "Split by participation"
 msgstr "Aufteilung nach Beteiligung"
 
@@ -4400,9 +4406,6 @@ msgstr "Willkommen beim LarpManager"
 
 msgid "Workshop already done!"
 msgstr "Workshop bereits bestanden!"
-
-msgid "You are logged in as: "
-msgstr "Sie sind eingeloggt als:"
 
 msgid "give them this address"
 msgstr "Geben Sie ihnen diese Adresse"
@@ -8375,6 +8378,11 @@ msgstr "Bitte geben Sie den Anlass an, für den Sie die Spende leisten möchten"
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Bei einigen Tickets fehlt eine letzte Rate (0 Betrag): %(list)s"
+
+msgid "There are no signups for this event, so no payment can be created"
+msgstr ""
+"Für diese Veranstaltung gibt es keine Anmeldungen, daher kann auch keine "
+"Zahlung erfolgen"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

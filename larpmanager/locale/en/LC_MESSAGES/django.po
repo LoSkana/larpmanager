@@ -164,6 +164,9 @@ msgstr ""
 msgid "Donations"
 msgstr ""
 
+msgid "Show available signups"
+msgstr ""
+
 msgid "Invoices"
 msgstr ""
 
@@ -944,6 +947,9 @@ msgid "Manage characters"
 msgstr ""
 
 msgid "Characters"
+msgstr ""
+
+msgid "Show available characters"
 msgstr ""
 
 msgid "--- NOT ASSIGNED ---"
@@ -5050,7 +5056,7 @@ msgid ""
 "always of the same macrotype)"
 msgstr ""
 
-msgid "You are logged in as: "
+msgid "You are logged in as"
 msgstr ""
 
 msgid "Your Organizations"
@@ -9828,9 +9834,6 @@ msgstr ""
 msgid "No elements are currently available"
 msgstr ""
 
-msgid "Show available characters"
-msgstr ""
-
 msgid "You must be logged in to view this page"
 msgstr ""
 
@@ -9913,6 +9916,9 @@ msgstr ""
 
 msgid ""
 "You must create at least one prologue type before you can create prologues"
+msgstr ""
+
+msgid "There are no signups for this event, so no payment can be created"
 msgstr ""
 
 msgid "Question saved successfully"

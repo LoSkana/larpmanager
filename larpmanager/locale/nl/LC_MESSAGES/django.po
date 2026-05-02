@@ -4051,6 +4051,9 @@ msgstr "Wat je zult ontgrendelen"
 msgid "Yes, keep me posted!"
 msgstr "Ja, hou me op de hoogte!"
 
+msgid "You are logged in as"
+msgstr "U bent aangemeld als"
+
 msgid "Access your character"
 msgstr "Toegang tot je personage"
 
@@ -4374,6 +4377,9 @@ msgstr "Selecteer je personage!"
 msgid "Set up payment methods"
 msgstr "Betaalmethoden instellen"
 
+msgid "Show available signups"
+msgstr "Toon beschikbare aanmeldingen"
+
 msgid "Split by participation"
 msgstr "Opgesplitst naar deelname"
 
@@ -4400,9 +4406,6 @@ msgstr "Welkom bij LarpManager"
 
 msgid "Workshop already done!"
 msgstr "Workshop al geslaagd!"
-
-msgid "You are logged in as: "
-msgstr "Je bent ingelogd als:"
 
 msgid "give them this address"
 msgstr "geef ze dit adres"
@@ -8236,6 +8239,11 @@ msgstr "Vul de gelegenheid in waarvoor je de donatie wilt doen"
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Sommige tickets missen een laatste termijn (0 bedrag): %(list)s"
+
+msgid "There are no signups for this event, so no payment can be created"
+msgstr ""
+"Er zijn geen inschrijvingen voor dit evenement, dus er kan geen betaling "
+"worden aangemaakt"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

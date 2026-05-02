@@ -163,7 +163,7 @@ class Command(BaseCommand):
     _TEST_SLUG_PREFIX = "test-"
     _INACTIVE_SIGNUP_THRESHOLD = 10
     _INACTIVE_LOG_DAYS = 90
-    _WARNING_GRACE_DAYS = 30
+    _WARNING_GRACE_DAYS = 15
 
     @staticmethod
     def clean_associations() -> None:
@@ -237,11 +237,11 @@ class Command(BaseCommand):
     @staticmethod
     def _send_deletion_warning(association: Association) -> None:
         """Email association executives (or main_mail) that the org will be deleted in 7 days."""
-        subject = f"[LarpManager] Are you still interested in using the platform for '{association.name}'?"
+        subject = f"[LarpManager] You've not been using '{association.name}', can we delete its data?"
         body = f"""
             Hello,<br /><br />
-            We noticed that your LarpManager organization <i>{association.name}</i> has been inactive
-            for a significant period. <br /><br />
+            We noticed that your LarpManager organization <a href='https://{association.slug}.larpmanager.com/manage'>
+            <i>{association.name}</i></a> has been inactive for a significant period. <br /><br />
             <b>Action required</b>: If you wish to keep this organization and its data,
             please reply to this email within <b>30 days</b>.<br /><br />
             If we don't hear from you, the organization and all associated data will
