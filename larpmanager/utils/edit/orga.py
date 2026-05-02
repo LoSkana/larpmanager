@@ -168,8 +168,8 @@ def validate_prologue(request: HttpRequest, context: dict, event_slug: str) -> N
 
 def validate_payments(request: HttpRequest, context: dict, event_slug: str) -> None:
     """Validate that at least one active signup exists for the run before allowing payment creation."""
-    event = context.get("event")
-    if not Registration.objects.filter(run__event=event, cancellation_date__isnull=True).exists():
+    run = context.get("run")
+    if not Registration.objects.filter(run=run, cancellation_date__isnull=True).exists():
         messages.warning(request, _("There are no signups for this event, so no payment can be created"))
         msg = "orga_payments"
         raise RedirectError(msg, args=[event_slug])

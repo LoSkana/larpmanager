@@ -243,7 +243,7 @@ class Command(BaseCommand):
             We noticed that your LarpManager organization <a href='https://{association.slug}.larpmanager.com/manage'>
             <i>{association.name}</i></a> has been inactive for a significant period. <br /><br />
             <b>Action required</b>: If you wish to keep this organization and its data,
-            please reply to this email within <b>30 days</b>.<br /><br />
+            please reply to this email within <b>15 days</b>.<br /><br />
             If we don't hear from you, the organization and all associated data will
             be permanently removed.<br /><br />
             - LarpManager Team

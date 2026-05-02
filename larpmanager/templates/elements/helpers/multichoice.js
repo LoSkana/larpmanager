@@ -26,8 +26,8 @@ window.addEventListener('DOMContentLoaded', function() {
 
             var postData_{{ cfg.link_id }} = {
                 {% for k, v in cfg.data.items %}'{{ k }}': '{{ v }}',{% endfor %}
-                {% if cfg.ctx_edit_uuid %}'edit_uuid': '{{ edit_uuid }}',{% endif %}
-                {% if cfg.form_edit_uuid %}'edit_uuid': edit_uuid_{{ cfg.link_id }},{% endif %}
+                {% if cfg.ctx_edit_uuid %}'edit_uuid': '{{ edit_uuid }}',
+                {% elif cfg.form_edit_uuid %}'edit_uuid': edit_uuid_{{ cfg.link_id }},{% endif %}
                 {% if cfg.form_orga %}'orga': orga_{{ cfg.link_id }},{% endif %}
             };
 
