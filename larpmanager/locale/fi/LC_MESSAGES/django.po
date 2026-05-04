@@ -350,6 +350,9 @@ msgstr "Sulje"
 msgid "Color"
 msgstr "Väri"
 
+msgid "Count"
+msgstr "Count"
+
 msgid "Cover"
 msgstr "Kansikuva"
 
@@ -1106,9 +1109,6 @@ msgstr "Hyväksytty"
 msgid "Assigned"
 msgstr "Myönnetty"
 
-msgid "Attended"
-msgstr "Osallistui"
-
 msgid "Auto buy"
 msgstr "Auto ostaa"
 
@@ -1422,6 +1422,9 @@ msgstr "Algoritmi"
 msgid "Approvals"
 msgstr "Hyväksynnät"
 
+msgid "Attending"
+msgstr "Osallistuminen"
+
 msgid "Available"
 msgstr "Saatavilla"
 
@@ -1487,9 +1490,6 @@ msgstr "Inventaario"
 
 msgid "Languages"
 msgstr "Kielet"
-
-msgid "Load list"
-msgstr "Latausluettelo"
 
 msgid "Longitude"
 msgstr "Pituusaste"
@@ -3503,6 +3503,9 @@ msgstr "Siirry säiliöön"
 msgid "New Registrations"
 msgstr "Uudet ilmoittautumiset"
 
+msgid "Not participating"
+msgstr "Ei osallistu"
+
 msgid "One-Time Contents"
 msgstr "Kertaluonteinen sisältö"
 
@@ -4463,6 +4466,9 @@ msgstr "Valitse hahmosi!"
 
 msgid "Set up payment methods"
 msgstr "Määritä maksutavat"
+
+msgid "Split by participation"
+msgstr "Jako osallistumisen mukaan"
 
 msgid "Target event not found"
 msgstr "Kohdetapahtumaa ei löydy"
@@ -12014,6 +12020,14 @@ msgstr ""
 "Mahdollistaa 'täytehahmot': yksinkertaisemmat hahmolomakkeet, jotka annetaan"
 " osallistujille, jotka ovat valmiita korvaamaan päähenkilöiden viime hetken "
 "poisjäännit."
+
+msgid ""
+"If checked: show two separate tables on the characters page, one for "
+"characters participating in this run and one for non-participating "
+"characters"
+msgstr ""
+"Jos valittuna: näytä kaksi erillistä taulukkoa hahmot-sivulla, toinen tähän "
+"ajoon osallistuville hahmoille ja toinen ei-osallistuville hahmoille"
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "

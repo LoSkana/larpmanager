@@ -734,6 +734,14 @@ class OrgaConfigForm(ConfigForm):
         # Configure campaign-related settings if campaign feature is enabled
         if "campaign" in self.params["features"]:
             self.set_section("campaign", _("Campaign"))
+
+            split_label = _("Split by participation")
+            split_help_text = _(
+                "If checked: show two separate tables on the characters page, one for characters "
+                "participating in this run and one for non-participating characters"
+            )
+            self.add_configs("campaign_split_registration", ConfigType.BOOL, split_label, split_help_text)
+
             independent_factions_label = _("Independent factions")
             independent_factions_help_text = _("If checked, do not use the parent event's factions")
             self.add_configs(

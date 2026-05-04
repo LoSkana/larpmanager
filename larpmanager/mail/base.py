@@ -43,6 +43,7 @@ from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.larpmanager.tasks import my_send_mail
+from larpmanager.utils.services.miscellanea import _newsletter_set_active
 
 if TYPE_CHECKING:
     from larpmanager.models.registration import Registration
@@ -102,7 +103,7 @@ def join_email(association: Any) -> None:
         my_send_mail(feedback_subject, feedback_body, executive_member, schedule=feedback_delay_seconds)
 
 
-def on_association_roles_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noqa: ARG001
+def on_association_roles_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noqa: ARG001, C901
     """Handle association role changes and send notifications.
 
     This function is triggered when members are added or removed from association roles.
@@ -159,6 +160,10 @@ def on_association_roles_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noq
         # Process each member being added to the role
         for mid in pk_set:
             _add_member_association_role(exes, instance, mid)
+            if instance.number == 1:
+                mb = Member.objects.filter(pk=mid).first()
+                if mb and mb.email:
+                    _newsletter_set_active(mb.email)
 
 
 def _add_member_association_role(exes: list[Member], instance: AssociationRole, mid: int | str) -> None:
@@ -208,7 +213,7 @@ def _add_member_association_role(exes: list[Member], instance: AssociationRole, 
         my_send_mail(subj, body, m, instance.association)
 
 
-def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: ARG001
+def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: ARG001, C901
     """Handle event role changes and send notifications.
 
     Args:
@@ -263,6 +268,8 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
             mb.join(instance.event.association)
             # Invalidate cached permissions for the member
             reset_event_links(mb.id, instance.event.association_id)
+            if instance.number == 1 and mb.email:
+                _newsletter_set_active(mb.email)
 
             # Send approval notification to the member
             # Use member's preferred language for personalized communication

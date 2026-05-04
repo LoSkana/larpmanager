@@ -10,8 +10,8 @@
     {% if user_character_max %}
         <a href="#" class="table_toggle" tog='player'>{% trans "Player" %}</a>
     {% endif %}
-    {% if features.campaign and event.parent %}
-        <a href="#" class="table_toggle" tog='attended'>{% trans "Attended" %}</a>
+    {% if features.campaign and event.parent and not campaign_split_registration %}
+        <a href="#" class="table_toggle" tog='attended'>{% trans "Attending" %}</a>
     {% endif %}
     {% if features.campaign %}
         <a href="#" class="table_toggle" tog='active'>{% trans "Active" %}</a>
@@ -43,8 +43,8 @@
     {% if user_character_max %}
         <th class="player">{% trans "Player" %}</th>
     {% endif %}
-    {% if features.campaign and event.parent %}
-        <th class="attended">{% trans "Attended" %}</th>
+    {% if features.campaign and event.parent and not campaign_split_registration %}
+        <th class="attended">{% trans "Attending" %}</th>
     {% endif %}
     {% if features.campaign %}
         <th class="active">{% trans "Active" %}</th>
@@ -136,7 +136,7 @@
                 {% endif %}
             </td>
             {% if user_character_max %}<td class="player">{{ el.player.show_nick }}</td>{% endif %}
-            {% if features.campaign and event.parent %}
+            {% if features.campaign and event.parent and not campaign_split_registration %}
                 <td class="attended">
                     {% if el.has_registration %}<i class="fa fa-check"></i>{% endif %}
                 </td>
@@ -209,19 +209,57 @@
     {% endfor %}
 {% endblock tbody %}
 {% block additional %}
-    {% if form_questions %}
+    {% if user_character_approval and character_status_choices or form_questions %}
         <br />
-        <p id="show">
-            <b>{% trans "Load list" %}</b>
-        </p>
         <div class="fields">
-            {% for key, que in form_questions.items %}
-                {% if que.typ == 's' or que.typ == 'm' %}
-                    <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
-                    <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
-                {% endif %}
-            {% endfor %}
+            {% if user_character_approval and character_status_choices %}
+                <a href="#" class="my_toggle" tog='char_status'>{% trans "Status" %}</a>
+            {% endif %}
+            {% if form_questions %}
+                {% for key, que in form_questions.items %}
+                    {% if que.typ == 's' or que.typ == 'm' %}
+                        <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
+                        <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </div>
+    {% endif %}
+    {% if user_character_approval and character_status_choices %}
+        <div class="char_status hide">
+            <br />
+            <h4>{% trans "Status" %}</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>{% trans "Status" %}</th>
+                        <th>{% trans "Count" %}</th>
+                        <th>{% trans "Emails" %}</th>
+                        <th>{% trans "Names" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for status_val, status_label in character_status_choices %}
+                        <tr>
+                            <td>{{ status_label }}</td>
+                            <td>{{ character_status_counts|get:status_val|default:"0" }}</td>
+                            <td>
+                                {% for el in list %}
+                                    {% if el.status == status_val and el.player %}{{ el.player.email }}{% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for el in list %}
+                                    {% if el.status == status_val and el.player %}{{ el.player.show_nick }}{% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% if form_questions %}
         {% for key, que in form_questions.items %}
             {% if que.typ == 's' or que.typ == 'm' %}
                 <div class="email_que_{{ key }} hide">

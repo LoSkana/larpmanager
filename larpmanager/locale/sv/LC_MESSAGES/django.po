@@ -350,6 +350,9 @@ msgstr "Stängt"
 msgid "Color"
 msgstr "Färg"
 
+msgid "Count"
+msgstr "Räkna"
+
 msgid "Cover"
 msgstr "Skydd"
 
@@ -1106,9 +1109,6 @@ msgstr "Godkänd"
 msgid "Assigned"
 msgstr "Tilldela"
 
-msgid "Attended"
-msgstr "Närvarande"
-
 msgid "Auto buy"
 msgstr "Köp av bil"
 
@@ -1422,6 +1422,9 @@ msgstr "Algoritm"
 msgid "Approvals"
 msgstr "Godkännande"
 
+msgid "Attending"
+msgstr "Närvarande"
+
 msgid "Available"
 msgstr "Tillgänglig"
 
@@ -1487,9 +1490,6 @@ msgstr "Inventarieförteckning"
 
 msgid "Languages"
 msgstr "Språk"
-
-msgid "Load list"
-msgstr "Ladda lista"
 
 msgid "Longitude"
 msgstr "Longitud"
@@ -3503,6 +3503,9 @@ msgstr "Flytta till container"
 msgid "New Registrations"
 msgstr "Nya registreringar"
 
+msgid "Not participating"
+msgstr "Deltar inte"
+
 msgid "One-Time Contents"
 msgstr "Innehåll av engångskaraktär"
 
@@ -4463,6 +4466,9 @@ msgstr "Välj din karaktär!"
 
 msgid "Set up payment methods"
 msgstr "Konfigurera betalningsmetoder"
+
+msgid "Split by participation"
+msgstr "Uppdelat efter deltagande"
 
 msgid "Target event not found"
 msgstr "Målhändelsen hittades inte"
@@ -12029,6 +12035,14 @@ msgstr ""
 "Möjliggör 'Filler'-karaktärer: enklare karaktärsformulär som tilldelas "
 "deltagare som är redo att ersätta huvudkaraktärer som hoppar av i sista "
 "minuten."
+
+msgid ""
+"If checked: show two separate tables on the characters page, one for "
+"characters participating in this run and one for non-participating "
+"characters"
+msgstr ""
+"Om markerat: visa två separata tabeller på karaktärssidan, en för karaktärer"
+" som deltar i denna körning och en för icke-deltagande karaktärer"
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "

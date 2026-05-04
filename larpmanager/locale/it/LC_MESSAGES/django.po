@@ -350,6 +350,9 @@ msgstr "Chiudi"
 msgid "Color"
 msgstr "Colore"
 
+msgid "Count"
+msgstr "Conteggio"
+
 msgid "Cover"
 msgstr "Cover"
 
@@ -1106,9 +1109,6 @@ msgstr "Approvato"
 msgid "Assigned"
 msgstr "Assegnamento"
 
-msgid "Attended"
-msgstr "Partecipato"
-
 msgid "Auto buy"
 msgstr "Acquisto auto"
 
@@ -1422,6 +1422,9 @@ msgstr "Algoritmo"
 msgid "Approvals"
 msgstr "Approvazioni"
 
+msgid "Attending"
+msgstr "Partecipante"
+
 msgid "Available"
 msgstr "Disponibili"
 
@@ -1487,9 +1490,6 @@ msgstr "Inventario"
 
 msgid "Languages"
 msgstr "Le lingue"
-
-msgid "Load list"
-msgstr "Carica lista"
 
 msgid "Longitude"
 msgstr "Longitudine"
@@ -3503,6 +3503,9 @@ msgstr "Sposta in un contenitore"
 msgid "New Registrations"
 msgstr "Nuove iscrizioni"
 
+msgid "Not participating"
+msgstr "Non partecipano"
+
 msgid "One-Time Contents"
 msgstr "Contenuti una tantum"
 
@@ -4463,6 +4466,9 @@ msgstr "Seleziona il tuo personaggio!"
 
 msgid "Set up payment methods"
 msgstr "Imposta i metodi di pagamento"
+
+msgid "Split by participation"
+msgstr "Suddivisi per partecipazione"
 
 msgid "Target event not found"
 msgstr "Evento target non trovato"
@@ -12223,6 +12229,15 @@ msgstr ""
 "Abilita i personaggi 'riempitivi': schede dei personaggi più semplici, "
 "assegnate ai partecipanti che sono pronti a sostituire i personaggi "
 "principali abbandonati all'ultimo minuto."
+
+msgid ""
+"If checked: show two separate tables on the characters page, one for "
+"characters participating in this run and one for non-participating "
+"characters"
+msgstr ""
+"Se selezionata: mostra due tabelle separate nella pagina dei personaggi, una"
+" per i personaggi che partecipano a questa manche e una per i personaggi non"
+" partecipanti"
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "

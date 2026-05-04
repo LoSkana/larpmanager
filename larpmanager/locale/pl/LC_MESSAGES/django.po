@@ -350,6 +350,9 @@ msgstr "Zamknij"
 msgid "Color"
 msgstr "Kolor"
 
+msgid "Count"
+msgstr "Liczyć"
+
 msgid "Cover"
 msgstr "Okładka"
 
@@ -1106,9 +1109,6 @@ msgstr "Zatwierdzony"
 msgid "Assigned"
 msgstr "Przypisany"
 
-msgid "Attended"
-msgstr "Uczestniczył"
-
 msgid "Auto buy"
 msgstr "Automatyczny zakup"
 
@@ -1422,6 +1422,9 @@ msgstr "Algorytm"
 msgid "Approvals"
 msgstr "Zatwierdzenia"
 
+msgid "Attending"
+msgstr "Uczestnictwo"
+
 msgid "Available"
 msgstr "Dostępne"
 
@@ -1487,9 +1490,6 @@ msgstr "Inwentaryzacja"
 
 msgid "Languages"
 msgstr "Języki"
-
-msgid "Load list"
-msgstr "Lista obciążeń"
 
 msgid "Longitude"
 msgstr "Długość geograficzna"
@@ -3503,6 +3503,9 @@ msgstr "Przeniesienie do kontenera"
 msgid "New Registrations"
 msgstr "Nowe rejestracje"
 
+msgid "Not participating"
+msgstr "Nieuczestniczący"
+
 msgid "One-Time Contents"
 msgstr "Jednorazowa zawartość"
 
@@ -4463,6 +4466,9 @@ msgstr "Wybierz swoją postać!"
 
 msgid "Set up payment methods"
 msgstr "Konfiguracja metod płatności"
+
+msgid "Split by participation"
+msgstr "Podział według uczestnictwa"
 
 msgid "Target event not found"
 msgstr "Nie znaleziono zdarzenia docelowego"
@@ -12109,6 +12115,14 @@ msgstr ""
 "Umożliwia 'wypełnianie' postaci: prostsze arkusze postaci, przydzielane "
 "uczestnikom, którzy są gotowi zastąpić porzuconych w ostatniej chwili "
 "głównych bohaterów."
+
+msgid ""
+"If checked: show two separate tables on the characters page, one for "
+"characters participating in this run and one for non-participating "
+"characters"
+msgstr ""
+"Jeśli zaznaczone: pokaż dwie oddzielne tabele na stronie postaci, jedną dla "
+"postaci uczestniczących w tym biegu, a drugą dla postaci nieuczestniczących"
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "

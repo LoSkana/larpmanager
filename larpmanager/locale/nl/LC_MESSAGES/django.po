@@ -350,6 +350,9 @@ msgstr "Gesloten"
 msgid "Color"
 msgstr "Kleur"
 
+msgid "Count"
+msgstr "Graaf"
+
 msgid "Cover"
 msgstr "Omslag"
 
@@ -1106,9 +1109,6 @@ msgstr "Goedgekeurd"
 msgid "Assigned"
 msgstr "Toewijzen"
 
-msgid "Attended"
-msgstr "Bijgewoond"
-
 msgid "Auto buy"
 msgstr "Auto kopen"
 
@@ -1422,6 +1422,9 @@ msgstr "Algoritme"
 msgid "Approvals"
 msgstr "Goedkeuringen"
 
+msgid "Attending"
+msgstr "Naar"
+
 msgid "Available"
 msgstr "Beschikbaar"
 
@@ -1487,9 +1490,6 @@ msgstr "Inventaris"
 
 msgid "Languages"
 msgstr "Talen"
-
-msgid "Load list"
-msgstr "Lijst laden"
 
 msgid "Longitude"
 msgstr "Lengte"
@@ -3503,6 +3503,9 @@ msgstr "Verplaats naar container"
 msgid "New Registrations"
 msgstr "Nieuwe registraties"
 
+msgid "Not participating"
+msgstr "Neemt niet deel"
+
 msgid "One-Time Contents"
 msgstr "Eenmalige inhoud"
 
@@ -4463,6 +4466,9 @@ msgstr "Selecteer je personage!"
 
 msgid "Set up payment methods"
 msgstr "Betaalmethoden instellen"
+
+msgid "Split by participation"
+msgstr "Opgesplitst naar deelname"
 
 msgid "Target event not found"
 msgstr "Doelgebeurtenis niet gevonden"
@@ -12223,6 +12229,15 @@ msgid ""
 msgstr ""
 "Maakt 'opvul'-personages mogelijk: eenvoudigere personagebladen, toegewezen "
 "aan deelnemers die op het laatste moment hoofdpersonages willen vervangen."
+
+msgid ""
+"If checked: show two separate tables on the characters page, one for "
+"characters participating in this run and one for non-participating "
+"characters"
+msgstr ""
+"Indien aangevinkt: toon twee aparte tabellen op de personagepagina, één voor"
+" personages die deelnemen aan deze run en één voor niet-deelnemende "
+"personages"
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "

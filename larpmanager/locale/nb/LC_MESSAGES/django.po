@@ -350,6 +350,9 @@ msgstr "Stengt"
 msgid "Color"
 msgstr "Farge"
 
+msgid "Count"
+msgstr "Telle"
+
 msgid "Cover"
 msgstr "Omslag"
 
@@ -1106,9 +1109,6 @@ msgstr "Godkjent"
 msgid "Assigned"
 msgstr "Tilordne"
 
-msgid "Attended"
-msgstr "Tilstede"
-
 msgid "Auto buy"
 msgstr "Autokjøp"
 
@@ -1422,6 +1422,9 @@ msgstr "Algoritme"
 msgid "Approvals"
 msgstr "Godkjenninger"
 
+msgid "Attending"
+msgstr "Tilstede"
+
 msgid "Available"
 msgstr "Tilgjengelig"
 
@@ -1487,9 +1490,6 @@ msgstr "Lagerbeholdning"
 
 msgid "Languages"
 msgstr "Språk"
-
-msgid "Load list"
-msgstr "Last inn liste"
 
 msgid "Longitude"
 msgstr "Lengdegrad"
@@ -3503,6 +3503,9 @@ msgstr "Flytt til container"
 msgid "New Registrations"
 msgstr "Nye registreringer"
 
+msgid "Not participating"
+msgstr "Deltar ikke"
+
 msgid "One-Time Contents"
 msgstr "Engangsinnhold"
 
@@ -4463,6 +4466,9 @@ msgstr "Velg din karakter!"
 
 msgid "Set up payment methods"
 msgstr "Konfigurer betalingsmetoder"
+
+msgid "Split by participation"
+msgstr "Fordelt etter deltakelse"
 
 msgid "Target event not found"
 msgstr "Målhendelsen ble ikke funnet"
@@ -12012,6 +12018,14 @@ msgid ""
 msgstr ""
 "Muliggjør 'Filler'-karakterer: enklere karakterark som tildeles deltakere "
 "som er klare til å erstatte frafall av hovedkarakterer i siste øyeblikk."
+
+msgid ""
+"If checked: show two separate tables on the characters page, one for "
+"characters participating in this run and one for non-participating "
+"characters"
+msgstr ""
+"Hvis avkrysset: Vis to separate tabeller på karaktersiden, én for karakterer"
+" som deltar i denne kjøringen, og én for karakterer som ikke deltar"
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "

@@ -26,7 +26,7 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 from django.db import connection
-from django.utils import timezone
+from django.utils import dateparse, timezone
 
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
 from larpmanager.accounting.token_credit import get_regs, get_regs_paying_incomplete
@@ -43,6 +43,7 @@ from larpmanager.mail.remind import (
     remember_pay,
     remember_profile,
 )
+from larpmanager.models.access import AssociationRole, EventRole, get_association_executives
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemMembership,
@@ -51,14 +52,16 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     PaymentType,
 )
-from larpmanager.models.association import Association
+from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus, get_user_membership
+from larpmanager.models.miscellanea import Log
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.io.pdf import print_run_bkg
-from larpmanager.utils.larpmanager.tasks import notify_admins
+from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 from larpmanager.utils.publication.base import publish_event_all
+from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 
 
 class Command(BaseCommand):
@@ -102,6 +105,9 @@ class Command(BaseCommand):
         """
         # Clean up database records and perform initial maintenance
         self.clean_db()
+
+        # Clean up stale test and inactive associations
+        self.clean_associations()
 
         # Update accounting for all registrations with incomplete payments
         # Process each registration to recalculate totals and payment status
@@ -167,6 +173,134 @@ class Command(BaseCommand):
         """Trigger publication sync for all visible runs."""
         for run in Run.objects.filter(event__association=association, development=DevelopStatus.SHOW):
             publish_event_all(run)
+
+    _DELETION_WARNING_KEY = "deletion_warning_sent"
+    _NO_DELETE_KEY = "no_delete"
+    _TEST_SLUG_PREFIX = "test-"
+    _INACTIVE_SIGNUP_THRESHOLD = 10
+    _INACTIVE_LOG_DAYS = 90
+    _WARNING_GRACE_DAYS = 30
+    _ADMIN_NOTICE_DAYS_BEFORE = 3
+
+    @staticmethod
+    def clean_associations() -> None:
+        """Delete test associations older than 1 week, and warn/delete inactive non-test ones.
+
+        Test associations (slug starts with 'test-') are deleted after 7 days.
+        Non-test associations with fewer than 10 signups and no log activity in
+        the last 90 days receive a warning email 7 days before deletion.
+        Associations with the 'no_delete' config key set are never deleted.
+        Admins receive a notice 7 days before an association is deleted.
+        """
+        now = timezone.now()
+
+        # Delete test associations older than 1 week
+        cutoff = now - timedelta(days=7)
+        Association.objects.filter(slug__startswith=Command._TEST_SLUG_PREFIX, created__lte=cutoff).delete()
+
+        # Process inactive non-test associations
+        log_cutoff = now - timedelta(days=Command._INACTIVE_LOG_DAYS)
+        for association in Association.objects.filter(created__lte=log_cutoff):
+            # Skip associations explicitly protected from deletion
+            if AssociationConfig.objects.filter(association=association, name=Command._NO_DELETE_KEY).exists():
+                continue
+
+            has_recent_activity = Log.objects.filter(association=association, created__gte=log_cutoff).exists()
+            if has_recent_activity:
+                # Recent activity: clear any pending warning
+                AssociationConfig.objects.filter(association=association, name=Command._DELETION_WARNING_KEY).delete()
+                continue
+
+            signup_count = Registration.objects.filter(run__event__association=association).count()
+            if signup_count >= Command._INACTIVE_SIGNUP_THRESHOLD:
+                # Active enough: clear any pending warning
+                AssociationConfig.objects.filter(association=association, name=Command._DELETION_WARNING_KEY).delete()
+                continue
+
+            warning_config = AssociationConfig.objects.filter(
+                association=association, name=Command._DELETION_WARNING_KEY
+            ).first()
+
+            if warning_config is None:
+                Command._send_deletion_warning(association)
+                AssociationConfig.objects.create(
+                    association=association,
+                    name=Command._DELETION_WARNING_KEY,
+                    value=now.isoformat(),
+                )
+            else:
+                warning_date = dateparse.parse_datetime(warning_config.value)
+                if not warning_date:
+                    continue
+                days_since_warning = (now - warning_date).days
+                admin_notice_threshold = Command._WARNING_GRACE_DAYS - Command._ADMIN_NOTICE_DAYS_BEFORE
+                if days_since_warning >= admin_notice_threshold and days_since_warning < Command._WARNING_GRACE_DAYS:
+                    Command._send_admin_deletion_notice(association, Command._ADMIN_NOTICE_DAYS_BEFORE)
+                elif days_since_warning >= Command._WARNING_GRACE_DAYS:
+                    Command._deactivate_organizer_newsletters(association)
+                    association.delete()
+
+    @staticmethod
+    def _deactivate_organizer_newsletters(association: Association) -> None:
+        """Deactivate newsletter for all organizers (role number=1) before association deletion."""
+        emails: set[str] = set()
+
+        for email in AssociationRole.objects.filter(association=association, number=1).values_list(
+            "members__email", flat=True
+        ):
+            if email:
+                emails.add(email)
+
+        for email in EventRole.objects.filter(event__association=association, number=1).values_list(
+            "members__email", flat=True
+        ):
+            if email:
+                emails.add(email)
+
+        if association.main_mail:
+            emails.add(association.main_mail)
+
+        for email in emails:
+            _newsletter_set_non_active(email)
+
+    @staticmethod
+    def _send_deletion_warning(association: Association) -> None:
+        """Email association executives (or main_mail) that the org will be deleted in 30 days."""
+        subject = f"[LarpManager] Are you still interested in using the platform for '{association.name}'?"
+        body = f"""
+            Hello,<br /><br />
+            We noticed that your LarpManager organization <i>{association.name}</i> has been inactive
+            for a significant period. <br /><br />
+            <b>Action required</b>: If you wish to keep this organization and its data,
+            please reply to this email within <b>30 days</b>.<br /><br />
+            If we don't hear from you, the organization and all associated data will
+            be permanently removed.<br /><br />
+            - LarpManager Team
+            """
+
+        recipients = list(get_association_executives(association))
+        if association.main_mail:
+            recipients.append(association.main_mail)
+        for _name, email in conf_settings.ADMINS:
+            recipients.append(email)
+
+        for recipient in recipients:
+            my_send_mail(subject, body, recipient)
+
+    @staticmethod
+    def _send_admin_deletion_notice(association: Association, days_left: int) -> None:
+        """Email system admins that an association will be deleted in the given number of days."""
+        subject = f"[LarpManager] Association '{association.name}' scheduled for deletion in {days_left} days"
+        body = f"""
+            Admin notice,<br /><br />
+            The LarpManager organization <i>{association.name}</i> (slug: <b>{association.slug}</b>) is
+            scheduled to be automatically deleted in <b>{days_left} days</b> due to inactivity.<br /><br />
+            To prevent deletion, set the <code>no_delete</code> config key on this association.<br /><br />
+            - LarpManager Automate
+            """
+
+        for _name, email in conf_settings.ADMINS:
+            my_send_mail(subject, body, email)
 
     @staticmethod
     def check_old_payments() -> None:

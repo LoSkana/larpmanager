@@ -1,0 +1,57 @@
+{% extends "utils.html" %}
+{% load i18n static %}
+{% block title %}
+    Newsletter
+{% endblock title %}
+{% block content %}
+    <form method="get" action="">
+        <label>
+            <input type="checkbox"
+                   name="active"
+                   value="1"
+                   {% if show_active %}checked{% endif %}>
+            Active
+        </label>
+        &nbsp;
+        <label>
+            <input type="checkbox"
+                   name="non_active"
+                   value="1"
+                   {% if show_non_active %}checked{% endif %}>
+            Non active
+        </label>
+        &nbsp;
+        <button type="submit">Filter</button>
+    </form>
+    {% if newsletter_list %}
+        <p>
+            {% for el in newsletter_list %}
+                {% include "elements/comma.html" with separator="," %}
+                {{ el.email }}
+            {% endfor %}
+        </p>
+    {% endif %}
+    <hr>
+    <h3>Add / update emails</h3>
+    <form method="post" action="">
+        {% csrf_token %}
+        <p>
+            <label>Status:</label>
+            <select name="status_new">
+                {% for value, label in newsletter_statuses %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+            </select>
+        </p>
+        <p>
+            <label>
+                <input type="checkbox" name="force_status" value="1">
+                Overwrite
+            </label>
+        </p>
+        <p>
+            <label>Emails:</label>
+            <br>
+            <textarea name="emails" rows="10" cols="50"></textarea>
+        </p>
+        <button type="submit">Save</button>
+    </form>
+{% endblock content %}

@@ -89,6 +89,11 @@ urlpatterns = [
         name="lm_list",
     ),
     path(
+        "lm/newsletter/",
+        views_lm.lm_newsletter,
+        name="lm_newsletter",
+    ),
+    path(
         "lm/payments/",
         views_lm.lm_payments,
         name="lm_payments",

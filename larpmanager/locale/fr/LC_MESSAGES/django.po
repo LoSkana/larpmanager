@@ -350,6 +350,9 @@ msgstr "Fermé"
 msgid "Color"
 msgstr "Couleur"
 
+msgid "Count"
+msgstr "Compter"
+
 msgid "Cover"
 msgstr "Couverture"
 
@@ -1106,9 +1109,6 @@ msgstr "Approuvé"
 msgid "Assigned"
 msgstr "Attribuer"
 
-msgid "Attended"
-msgstr "Présents"
-
 msgid "Auto buy"
 msgstr "Achat d'automobiles"
 
@@ -1422,6 +1422,9 @@ msgstr "Algorithme"
 msgid "Approvals"
 msgstr "Agréments"
 
+msgid "Attending"
+msgstr "Présence"
+
 msgid "Available"
 msgstr "Disponible"
 
@@ -1487,9 +1490,6 @@ msgstr "Inventaire"
 
 msgid "Languages"
 msgstr "Langues"
-
-msgid "Load list"
-msgstr "Liste de chargement"
 
 msgid "Longitude"
 msgstr "Longitude"
@@ -3503,6 +3503,9 @@ msgstr "Déplacer vers le conteneur"
 msgid "New Registrations"
 msgstr "Nouvelles inscriptions"
 
+msgid "Not participating"
+msgstr "Ne pas participer"
+
 msgid "One-Time Contents"
 msgstr "Contenu unique"
 
@@ -4463,6 +4466,9 @@ msgstr "Sélectionnez votre personnage !"
 
 msgid "Set up payment methods"
 msgstr "Mise en place des moyens de paiement"
+
+msgid "Split by participation"
+msgstr "Répartition par participation"
 
 msgid "Target event not found"
 msgstr "L'événement cible n'a pas été trouvé"
@@ -12379,6 +12385,15 @@ msgstr ""
 "Permet d'avoir des personnages 'bouche-trous' : des fiches de personnages "
 "plus simples, attribuées aux participants qui sont prêts à remplacer des "
 "personnages principaux qui se sont désistés à la dernière minute."
+
+msgid ""
+"If checked: show two separate tables on the characters page, one for "
+"characters participating in this run and one for non-participating "
+"characters"
+msgstr ""
+"Si coché : afficher deux tableaux distincts sur la page des personnages, "
+"l'un pour les personnages participant à cette course et l'autre pour les "
+"personnages ne participant pas à la course"
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
