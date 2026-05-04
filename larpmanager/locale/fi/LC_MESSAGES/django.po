@@ -4467,6 +4467,9 @@ msgstr "Valitse hahmosi!"
 msgid "Set up payment methods"
 msgstr "Määritä maksutavat"
 
+msgid "Show available signups"
+msgstr "Näytä käytettävissä olevat ilmoittautumiset"
+
 msgid "Split by participation"
 msgstr "Jako osallistumisen mukaan"
 
@@ -8304,6 +8307,10 @@ msgstr "Kirjoita tilaisuus, jonka vuoksi haluat tehdä lahjoituksen"
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Joistakin lipuista puuttuu viimeinen erä (0-määrä): %(list)s"
+
+msgid "There are no signups for this event, so no payment can be created"
+msgstr ""
+"Tähän tapahtumaan ei ole ilmoittautumisia, joten maksua ei voida suorittaa"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

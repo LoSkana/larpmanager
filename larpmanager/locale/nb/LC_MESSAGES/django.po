@@ -4467,6 +4467,9 @@ msgstr "Velg din karakter!"
 msgid "Set up payment methods"
 msgstr "Konfigurer betalingsmetoder"
 
+msgid "Show available signups"
+msgstr "Vis tilgjengelige påmeldinger"
+
 msgid "Split by participation"
 msgstr "Fordelt etter deltakelse"
 
@@ -8307,6 +8310,11 @@ msgstr "Vennligst oppgi anledningen du ønsker å donere til"
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Noen billetter mangler en siste delbetaling (0 beløp): %(list)s"
+
+msgid "There are no signups for this event, so no payment can be created"
+msgstr ""
+"Det er ingen påmeldinger til dette arrangementet, så ingen betaling kan "
+"opprettes"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

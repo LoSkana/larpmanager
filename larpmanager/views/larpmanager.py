@@ -814,7 +814,7 @@ def get_personal_area(context: dict) -> None:
             membership, _ = Membership.objects.get_or_create(member=member, association_id=association_id)
         registration_list.extend(build_registration_list(member, regs, association_id, membership))
 
-    registration_list.sort(key=lambda r: r.run.start or date.min, reverse=True)
+    registration_list.sort(key=lambda r: r.run.start, reverse=True)
     context["registration_list"] = registration_list
 
     # Retrieve association roles

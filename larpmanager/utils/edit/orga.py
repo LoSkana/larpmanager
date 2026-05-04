@@ -106,6 +106,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     _get_writing_mapping,
 )
+from larpmanager.models.registration import Registration
 from larpmanager.models.writing import HandoutTemplate, PlotCharacterRel, PrologueType, TextVersion, TextVersionChoices
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import compute_diff, get_element
@@ -163,6 +164,15 @@ def validate_prologue(request: HttpRequest, context: dict, event_slug: str) -> N
         # Display warning and redirect to template creation page
         messages.warning(request, _("You must create at least one prologue type before you can create prologues"))
         msg = "orga_prologue_types_new"
+        raise RedirectError(msg, args=[event_slug])
+
+
+def validate_payments(request: HttpRequest, context: dict, event_slug: str) -> None:
+    """Validate that at least one active signup exists for the run before allowing payment creation."""
+    run = context.get("run")
+    if not Registration.objects.filter(run=run, cancellation_date__isnull=True).exists():
+        messages.warning(request, _("There are no signups for this event, so no payment can be created"))
+        msg = "orga_payments"
         raise RedirectError(msg, args=[event_slug])
 
 
@@ -266,7 +276,7 @@ class OrgaAction(str, Enum):
     DISCOUNTS = ("orga_discounts", {"form": OrgaDiscountForm})
     TOKENS = ("orga_tokens", {"form": OrgaTokenForm})
     CREDITS = ("orga_credits", {"form": OrgaCreditForm})
-    PAYMENTS = ("orga_payments", {"form": OrgaPaymentForm})
+    PAYMENTS = ("orga_payments", {"form": OrgaPaymentForm, "check": validate_payments})
     INVOICES = ("orga_invoices", {"form": ExeInvoiceForm})
     OUTFLOWS = ("orga_outflows", {"form": OrgaOutflowForm})
     INFLOWS = ("orga_inflows", {"form": OrgaInflowForm})

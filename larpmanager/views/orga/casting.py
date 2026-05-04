@@ -28,7 +28,7 @@ from typing import Any
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -664,9 +664,6 @@ def orga_casting(
         HttpResponse: Rendered casting template with form and casting data,
                      or redirect response after successful assignment
 
-    Raises:
-        Http404: When the submitted form is not valid
-
     """
     # Check user permissions for accessing casting functionality
     context = check_event_context(request, event_slug, "orga_casting")
@@ -680,15 +677,14 @@ def orga_casting(
     if request.method == "POST":
         form = OrganizerCastingOptionsForm(request.POST, context=context)
 
-        # Validate form data before processing
-        if not form.is_valid():
-            msg = "form not valid"
-            raise Http404(msg)
-
-        # Process casting assignment if submit button was clicked
-        if request.POST.get("submit"):
-            assign_casting(request, context)
-            return redirect(request.path_info)
+        if form.is_valid():
+            # Process casting assignment if submit button was clicked
+            if request.POST.get("submit"):
+                assign_casting(request, context)
+                return redirect(request.path_info)
+        else:
+            # Fall back to default form on invalid POST data
+            form = OrganizerCastingOptionsForm(context=context)
     else:
         # Initialize empty form for GET requests
         form = OrganizerCastingOptionsForm(context=context)

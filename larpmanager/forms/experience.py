@@ -20,10 +20,11 @@
 from typing import Any, ClassVar
 
 from django import forms
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.forms.base import BaseForm, BaseModelForm
+from larpmanager.forms.base import BaseForm, BaseModelForm, MultichoiceMixin
 from larpmanager.forms.utils import (
     AbilityS2WidgetMulti,
     AbilityTemplateS2WidgetMulti,
@@ -80,10 +81,10 @@ class ExpBaseForm(BaseModelForm):
         return instance
 
 
-class OrgaDeliveryExpForm(ExpBaseForm):
+class OrgaDeliveryExpForm(MultichoiceMixin, ExpBaseForm):
     """Form for OrgaDeliveryExp."""
 
-    load_js: ClassVar[list] = ["characters-choices"]
+    load_js: ClassVar[list] = ["multichoice"]
 
     page_title = _("Delivery")
 
@@ -119,6 +120,17 @@ class OrgaDeliveryExpForm(ExpBaseForm):
         elif "system" in self.fields:
             self.configure_field_event("system", event)
 
+        run = self.params.get("run")
+        if run:
+            self.add_multichoice_config(
+                field_id="characters",
+                link_id="characters_available",
+                label=str(_("Show available characters")),
+                url=reverse("orga_multichoice_available", args=[run.get_slug()]),
+                data={"type": self._meta.model.__name__.lower()},
+                ctx_edit_uuid=True,
+            )
+
 
 class OrgaAbilityTemplateExpForm(BaseModelForm):
     """Form for OrgaAbilityTemplatePx."""
@@ -132,10 +144,10 @@ class OrgaAbilityTemplateExpForm(BaseModelForm):
         exclude = ("number",)
 
 
-class OrgaAbilityExpForm(ExpBaseForm):
+class OrgaAbilityExpForm(MultichoiceMixin, ExpBaseForm):
     """Form for OrgaAbilityExp."""
 
-    load_js: ClassVar[list] = ["characters-choices"]
+    load_js: ClassVar[list] = ["multichoice"]
 
     page_title = _("Ability")
 
@@ -183,6 +195,17 @@ class OrgaAbilityExpForm(ExpBaseForm):
         # Remove user-experience fields if exp_user is disabled
         if not exp_user:
             self.delete_field("visible")
+
+        run = self.params.get("run")
+        if run:
+            self.add_multichoice_config(
+                field_id="characters",
+                link_id="characters_available",
+                label=str(_("Show available characters")),
+                url=reverse("orga_multichoice_available", args=[run.get_slug()]),
+                data={"type": self._meta.model.__name__.lower()},
+                ctx_edit_uuid=True,
+            )
 
     def clean(self) -> dict:
         """Validate that the ability is not listed as its own prerequisite."""

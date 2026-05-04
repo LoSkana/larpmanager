@@ -4136,7 +4136,7 @@ msgid "Yes, keep me posted!"
 msgstr "Sì, tenetemi aggiornato!"
 
 msgid "You are logged in as"
-msgstr "L'utente ha effettuato l'accesso come"
+msgstr "Hai effettuato l'accesso come"
 
 msgid "Access your character"
 msgstr "Accedi al tuo personaggio"
@@ -4466,6 +4466,9 @@ msgstr "Seleziona il tuo personaggio!"
 
 msgid "Set up payment methods"
 msgstr "Imposta i metodi di pagamento"
+
+msgid "Show available signups"
+msgstr "Mostra le iscrizioni disponibili"
 
 msgid "Split by participation"
 msgstr "Suddivisi per partecipazione"
@@ -8368,6 +8371,11 @@ msgstr "Inserisci la occasione per cui vuoi eseguire la donazione"
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Ad alcuni biglietti manca una rata finale (importo 0): %(list)s"
+
+msgid "There are no signups for this event, so no payment can be created"
+msgstr ""
+"Non ci sono iscrizioni per questo evento, quindi non è possibile creare un "
+"pagamento"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

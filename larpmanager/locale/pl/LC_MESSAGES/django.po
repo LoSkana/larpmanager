@@ -4467,6 +4467,9 @@ msgstr "Wybierz swoją postać!"
 msgid "Set up payment methods"
 msgstr "Konfiguracja metod płatności"
 
+msgid "Show available signups"
+msgstr "Pokaż dostępne rejestracje"
+
 msgid "Split by participation"
 msgstr "Podział według uczestnictwa"
 
@@ -8335,6 +8338,9 @@ msgstr "Wprowadź okazję, na którą chcesz przekazać darowiznę"
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr ""
 "W przypadku niektórych biletów brakuje ostatniej raty (kwota 0): %(list)s"
+
+msgid "There are no signups for this event, so no payment can be created"
+msgstr "Nie ma zapisów na to wydarzenie, więc nie można utworzyć płatności"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

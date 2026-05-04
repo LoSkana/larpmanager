@@ -252,16 +252,16 @@ def _cached_slugify(name: str) -> str:
     return _slugify_cache[name]
 
 
-def regs_list_add(context_dict: Any, category_list_key: Any, category_name: Any, member: Any) -> None:
+def regs_list_add(context: Any, category_list_key: Any, category_name: Any, member: Any) -> None:
     """Add member to categorized registration lists."""
     slugified_key = _cached_slugify(category_name)
-    cat = context_dict.setdefault(category_list_key, {})
+    cat = context.setdefault(category_list_key, {})
     if slugified_key not in cat:
         cat[slugified_key] = {"name": category_name, "emails": set(), "players": []}
     entry = cat[slugified_key]
     if member.email not in entry["emails"]:
         entry["emails"].add(member.email)
-        entry["players"].append(member.display_member())
+        entry["players"].append(member.display_member(context))
 
 
 def _orga_registrations_standard(registration: Any, context: dict) -> None:
@@ -817,7 +817,7 @@ def orga_registration_form_email(request: HttpRequest, event_slug: str) -> JsonR
         if el.option_id not in res:
             res[el.option_id] = {"emails": [], "names": []}
         res[el.option_id]["emails"].append(el.registration.member.email)
-        res[el.option_id]["names"].append(el.registration.member.display_member())
+        res[el.option_id]["names"].append(el.registration.member.display_member(context))
 
     # Convert option IDs to option names in final result
     n_res = {}

@@ -34,7 +34,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.cache.rels import refresh_character_relationships_background
-from larpmanager.forms.base import BaseModelForm
+from larpmanager.forms.base import BaseModelForm, MultichoiceMixin
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     EventCharacterS2WidgetMulti,
@@ -73,7 +73,7 @@ from larpmanager.models.writing import (
 from larpmanager.utils.edit.backend import save_version
 
 
-class CharacterForm(WritingForm, BaseWritingForm):
+class CharacterForm(MultichoiceMixin, WritingForm, BaseWritingForm):
     """Form for Character."""
 
     orga = False
@@ -261,6 +261,17 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         self.show_available_factions = _("Show available factions")
 
+        run = self.params.get("run")
+        if run:
+            self.add_multichoice_config(
+                field_id="factions_list",
+                link_id="factions_available",
+                label=str(self.show_available_factions),
+                url=reverse("orga_factions_available", args=[run.get_slug()]),
+                form_edit_uuid=True,
+                form_orga=True,
+            )
+
         self.initial["factions_list"] = []
         if not self.instance.pk:
             return
@@ -356,7 +367,7 @@ class OrgaCharacterForm(CharacterForm):
 
     load_templates: ClassVar[list] = ["char"]
 
-    load_js: ClassVar[list] = ["characters-choices", "characters-relationships", "factions-choices"]
+    load_js: ClassVar[list] = ["multichoice", "characters-relationships"]
 
     load_form: ClassVar[list] = ["characters-relationships"]
 
@@ -365,6 +376,17 @@ class OrgaCharacterForm(CharacterForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with event-specific writing configuration and conditional setup."""
         super().__init__(*args, **kwargs)
+
+        run = self.params.get("run")
+        if run:
+            self.add_multichoice_config(
+                field_id="characters",
+                link_id="characters_available",
+                label=str(_("Show available characters")),
+                url=reverse("orga_multichoice_available", args=[run.get_slug()]),
+                data={"type": self._meta.model.__name__.lower()},
+                ctx_edit_uuid=True,
+            )
 
         # Init relationships
         self._init_relationships()

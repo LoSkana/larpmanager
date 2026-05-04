@@ -314,6 +314,7 @@ def get_index_event_permissions(
         is_organizer = True
     if enforce_check and not role_names and not is_organizer:
         raise UserPermissionError
+    context["is_organizer"] = is_organizer
     if role_names:
         context["role_names"] = role_names
     event_features = context.get("features") or get_event_features(context["event"].id)

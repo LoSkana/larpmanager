@@ -4467,6 +4467,9 @@ msgstr "Välj din karaktär!"
 msgid "Set up payment methods"
 msgstr "Konfigurera betalningsmetoder"
 
+msgid "Show available signups"
+msgstr "Visa tillgängliga anmälningar"
+
 msgid "Split by participation"
 msgstr "Uppdelat efter deltagande"
 
@@ -8296,6 +8299,11 @@ msgstr "Ange för vilket tillfälle du vill göra en donation"
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Vissa biljetter saknar en sista delbetalning (0 belopp): %(list)s"
+
+msgid "There are no signups for this event, so no payment can be created"
+msgstr ""
+"Det finns inga anmälningar till detta evenemang, så ingen betalning kan "
+"skapas"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

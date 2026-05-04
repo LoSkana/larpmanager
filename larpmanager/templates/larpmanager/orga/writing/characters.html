@@ -135,7 +135,7 @@
                        qtip="PDF"><i class="fa-solid fa-file-pdf"></i></a>
                 {% endif %}
             </td>
-            {% if user_character_max %}<td class="player">{{ el.player.show_nick }}</td>{% endif %}
+            {% if user_character_max %}<td class="player">{{ el.player_display }}</td>{% endif %}
             {% if features.campaign and event.parent and not campaign_split_registration %}
                 <td class="attended">
                     {% if el.has_registration %}<i class="fa fa-check"></i>{% endif %}
@@ -250,7 +250,7 @@
                             </td>
                             <td>
                                 {% for el in list %}
-                                    {% if el.status == status_val and el.player %}{{ el.player.show_nick }}{% endif %}
+                                    {% if el.status == status_val and el.player %}{{ el.player_display }}{% endif %}
                                 {% endfor %}
                             </td>
                         </tr>
