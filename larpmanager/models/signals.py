@@ -876,8 +876,9 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     # Default event setup
     create_default_event_setup(instance)
 
-    # Schedule event publication
-    publish_event(instance.id)
+    # Schedule event publication (skip if being soft-deleted)
+    if instance.deleted is None:
+        publish_event(instance.id)
 
 
 @receiver(post_delete, sender=Event)
@@ -971,8 +972,9 @@ def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any)
     for member in instance.members.all():
         reset_event_links(member.id, instance.event.association_id)
 
-    # Schedule publication crew sync
-    publish_event_role(instance.id)
+    # Schedule publication crew sync (skip if being soft-deleted)
+    if instance.deleted is None:
+        publish_event_role(instance.id)
 
 
 @receiver(pre_delete, sender=EventText)
