@@ -250,7 +250,7 @@
                             </td>
                             <td>
                                 {% for el in list %}
-                                    {% if el.status == status_val and el.player %}{{ el.player.show_nick }}{% endif %}
+                                    {% if el.status == status_val and el.player %}{{ el.player_display }}{% endif %}
                                 {% endfor %}
                             </td>
                         </tr>

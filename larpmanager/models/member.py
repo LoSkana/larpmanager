@@ -358,16 +358,23 @@ class Member(UuidMixin, BaseModel):
             return self.display_real()
         return str(self.user)
 
-    def display_member(self) -> str:
+    def display_member(self, context: dict | None = None) -> str:
         """Return a user-friendly display name for the member.
 
         Returns the member's display name in order of preference:
         nickname > real name > email > primary key.
 
+        Args:
+            context: If is organizer, we should show the full name.
+
         Returns:
             str: The display name for the member.
 
         """
+        # If organizer, return full show
+        if context and context.get("is_organizer"):
+            return str(self)
+
         # Use nickname if available
         if self.nickname:
             return str(self.nickname)
