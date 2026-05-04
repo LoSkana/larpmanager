@@ -40,19 +40,19 @@ logger = logging.getLogger(__name__)
 PUB_QUEUE = "pub"
 
 
-@background_auto(queue=PUB_QUEUE)
+@background_auto(queue=PUB_QUEUE, skip_duplicates=True)
 def publish_event(event_id: int) -> None:
     """Publish an event on all linked platforms."""
     sync_event_ildb(event_id)
 
 
-@background_auto(queue=PUB_QUEUE)
+@background_auto(queue=PUB_QUEUE, skip_duplicates=True)
 def publish_registration(registration_id: int, run_id: int | None = None) -> None:
     """Background task: sync a single cast entry on ILDB after a registration changes."""
     sync_cast_ildb(registration_id, run_id)
 
 
-@background_auto(queue=PUB_QUEUE)
+@background_auto(queue=PUB_QUEUE, skip_duplicates=True)
 def publish_event_role(event_role_id: int) -> None:
     """Background task: full crew sync after EventRole metadata changes."""
     role = EventRole.objects.select_related("event__association").get(pk=event_role_id)

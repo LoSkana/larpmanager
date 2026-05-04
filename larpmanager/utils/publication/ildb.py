@@ -119,20 +119,6 @@ def _get_ildb_context(event: Event, run: Run | None = None) -> IldbCtx | None:
     return IldbCtx(api_key=api_key, team_id=team_id, association=association, ildb_event_id=ildb_event_id)
 
 
-def _send_request(method: str, url: str, ctx: IldbCtx, payload: dict, locandina: object) -> requests.Response:
-    """Send a POST or PUT event request, using multipart when a cover image is present."""
-    if locandina:
-        data = []
-        for k, v in payload.items():
-            if isinstance(v, list):
-                data.extend((f"{k}[]", item) for item in v)
-            else:
-                data.append((k, v))
-        with locandina.open("rb") as f:
-            return _ildb_http(method, url, api_key=ctx.api_key, data=data, files={"locandina": f}, timeout=30)
-    return _ildb_http(method, url, api_key=ctx.api_key, json=payload, timeout=30)
-
-
 # ---- EVENT ---- #
 
 
@@ -213,7 +199,17 @@ def _find_event_id(run: Run, ctx: IldbCtx) -> str:
 def _create_event(ctx: IldbCtx, payload: dict, locandina: object = None) -> str:
     """POST a new event to ILDB and return its ID."""
     url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events"
-    response = _send_request("post", url, ctx, payload, locandina)
+    if locandina:
+        data = []
+        for k, v in payload.items():
+            if isinstance(v, list):
+                data.extend((f"{k}[]", item) for item in v)
+            else:
+                data.append((k, v))
+        with locandina.open("rb") as f:
+            response = _ildb_http("post", url, api_key=ctx.api_key, data=data, files={"locandina": f}, timeout=30)
+    else:
+        response = _ildb_http("post", url, api_key=ctx.api_key, json=payload, timeout=30)
     if not response.ok:
         notify_admins(f"ILDB event create failed {response.status_code}", response.text)
     response.raise_for_status()
@@ -221,12 +217,19 @@ def _create_event(ctx: IldbCtx, payload: dict, locandina: object = None) -> str:
 
 
 def _update_event(ctx: IldbCtx, payload: dict, locandina: object = None) -> None:
-    """PUT updated fields to an existing ILDB event."""
+    """PUT updated fields to an existing ILDB event, then upload poster separately."""
     url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events/{ctx.ildb_event_id}"
-    response = _send_request("put", url, ctx, payload, locandina)
+    response = _ildb_http("put", url, api_key=ctx.api_key, json=payload, timeout=30)
     if not response.ok:
         notify_admins(f"ILDB event update failed {response.status_code}", response.text)
     response.raise_for_status()
+    if locandina:
+        locandina_url = f"{url}/locandina"
+        with locandina.open("rb") as f:
+            loc_response = _ildb_http("post", locandina_url, api_key=ctx.api_key, files={"locandina": f}, timeout=30)
+        if not loc_response.ok:
+            notify_admins(f"ILDB locandina update failed {loc_response.status_code}", loc_response.text)
+        loc_response.raise_for_status()
 
 
 PLAYER_TIERS = [
