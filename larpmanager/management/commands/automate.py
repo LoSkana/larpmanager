@@ -160,10 +160,12 @@ class Command(BaseCommand):
                 print_run_bkg(run.event.association.slug, run.get_slug())
 
     _DELETION_WARNING_KEY = "deletion_warning_sent"
+    _NO_DELETE_KEY = "no_delete"
     _TEST_SLUG_PREFIX = "test-"
     _INACTIVE_SIGNUP_THRESHOLD = 10
     _INACTIVE_LOG_DAYS = 90
     _WARNING_GRACE_DAYS = 30
+    _ADMIN_NOTICE_DAYS_BEFORE = 3
 
     @staticmethod
     def clean_associations() -> None:
@@ -172,6 +174,8 @@ class Command(BaseCommand):
         Test associations (slug starts with 'test-') are deleted after 7 days.
         Non-test associations with fewer than 10 signups and no log activity in
         the last 90 days receive a warning email 7 days before deletion.
+        Associations with the 'no_delete' config key set are never deleted.
+        Admins receive a notice 7 days before an association is deleted.
         """
         now = timezone.now()
 
@@ -182,6 +186,10 @@ class Command(BaseCommand):
         # Process inactive non-test associations
         log_cutoff = now - timedelta(days=Command._INACTIVE_LOG_DAYS)
         for association in Association.objects.filter(created__lte=log_cutoff):
+            # Skip associations explicitly protected from deletion
+            if AssociationConfig.objects.filter(association=association, name=Command._NO_DELETE_KEY).exists():
+                continue
+
             has_recent_activity = Log.objects.filter(association=association, created__gte=log_cutoff).exists()
             if has_recent_activity:
                 # Recent activity: clear any pending warning
@@ -207,7 +215,13 @@ class Command(BaseCommand):
                 )
             else:
                 warning_date = dateparse.parse_datetime(warning_config.value)
-                if warning_date and (now - warning_date).days >= Command._WARNING_GRACE_DAYS:
+                if not warning_date:
+                    continue
+                days_since_warning = (now - warning_date).days
+                admin_notice_threshold = Command._WARNING_GRACE_DAYS - Command._ADMIN_NOTICE_DAYS_BEFORE
+                if days_since_warning >= admin_notice_threshold and days_since_warning < Command._WARNING_GRACE_DAYS:
+                    Command._send_admin_deletion_notice(association, Command._ADMIN_NOTICE_DAYS_BEFORE)
+                elif days_since_warning >= Command._WARNING_GRACE_DAYS:
                     Command._deactivate_organizer_newsletters(association)
                     association.delete()
 
@@ -236,7 +250,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def _send_deletion_warning(association: Association) -> None:
-        """Email association executives (or main_mail) that the org will be deleted in 7 days."""
+        """Email association executives (or main_mail) that the org will be deleted in 30 days."""
         subject = f"[LarpManager] You've not been using '{association.name}', can we delete its data?"
         body = f"""
             Hello,<br /><br />
@@ -256,7 +270,22 @@ class Command(BaseCommand):
             recipients.append(email)
 
         for recipient in recipients:
-            my_send_mail(subject, body, recipient, context_object=association)
+            my_send_mail(subject, body, recipient)
+
+    @staticmethod
+    def _send_admin_deletion_notice(association: Association, days_left: int) -> None:
+        """Email system admins that an association will be deleted in the given number of days."""
+        subject = f"[LarpManager] Association '{association.name}' scheduled for deletion in {days_left} days"
+        body = f"""
+            Admin notice,<br /><br />
+            The LarpManager organization <i>{association.name}</i> (slug: <b>{association.slug}</b>) is
+            scheduled to be automatically deleted in <b>{days_left} days</b> due to inactivity.<br /><br />
+            To prevent deletion, set the <code>no_delete</code> config key on this association.<br /><br />
+            - LarpManager Automate
+            """
+
+        for _name, email in conf_settings.ADMINS:
+            my_send_mail(subject, body, email)
 
     @staticmethod
     def check_old_payments() -> None:
