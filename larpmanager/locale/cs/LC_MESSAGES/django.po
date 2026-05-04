@@ -4051,6 +4051,9 @@ msgstr "Co odemknete"
 msgid "Yes, keep me posted!"
 msgstr "Ano, informujte mě!"
 
+msgid "You are logged in as"
+msgstr "Jste přihlášeni jako"
+
 msgid "Access your character"
 msgstr "Získejte přístup ke své postavě"
 
@@ -4374,6 +4377,9 @@ msgstr "Vyberte si svou postavu!"
 msgid "Set up payment methods"
 msgstr "Nastavení platebních metod"
 
+msgid "Show available signups"
+msgstr "Zobrazit dostupné přihlášky"
+
 msgid "Split by participation"
 msgstr "Rozdělení podle účasti"
 
@@ -4400,9 +4406,6 @@ msgstr "Vítejte v LarpManageru"
 
 msgid "Workshop already done!"
 msgstr "Workshop již proběhl!"
-
-msgid "You are logged in as: "
-msgstr "Jste přihlášeni jako:"
 
 msgid "give them this address"
 msgstr "předejte jim tuto adresu"
@@ -8134,6 +8137,11 @@ msgstr "Uveďte prosím, při jaké příležitosti si přejete dar poskytnout"
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "U některých tipů chybí poslední splátka (částka 0): %(list)s"
+
+msgid "There are no signups for this event, so no payment can be created"
+msgstr ""
+"Na tuto událost nejsou žádné přihlášky, takže není možné vytvořit žádnou "
+"platbu"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

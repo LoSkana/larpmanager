@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
@@ -32,7 +33,7 @@ from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.cache.registration import get_registration_counts, get_registration_tickets, get_ticket_form_text
-from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm, get_question_key
+from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm, MultichoiceMixin, get_question_key
 from larpmanager.forms.utils import (
     AllowedS2WidgetMulti,
     AssociationMemberS2Widget,
@@ -623,7 +624,7 @@ class RegistrationGiftForm(RegistrationForm):
         self.has_mandatory = len(self.mandatory) > 0
 
 
-class OrgaRegistrationForm(BaseRegistrationForm):
+class OrgaRegistrationForm(MultichoiceMixin, BaseRegistrationForm):
     """Form for OrgaRegistration."""
 
     page_info = _("Manage event signups")
@@ -632,7 +633,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     load_templates: ClassVar[list] = ["share"]
 
-    load_js: ClassVar[list] = ["characters-reg-choices"]
+    load_js: ClassVar[list] = ["multichoice"]
 
     class Meta:
         model = Registration
@@ -716,6 +717,16 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Control section visibility based on feature flag
         if "reg_que_sections" not in self.params["features"]:
             self.show_sections = True
+
+        run = self.params.get("run")
+        if run:
+            self.add_multichoice_config(
+                field_id="characters_new",
+                link_id="characters_reg_available",
+                label=str(_("Show available characters")),
+                url=reverse("orga_multichoice_available", args=[run.get_slug()]),
+                data={"type": "registrations"},
+            )
 
     def init_additionals(self, registration_section: Any) -> None:
         """Initialize additional tickets section if feature is enabled."""

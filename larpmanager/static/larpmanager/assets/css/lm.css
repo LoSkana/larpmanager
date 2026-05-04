@@ -859,6 +859,7 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
 }
 
 .popup,
+.popup_small,
 .popup_tutorial,
 .popup_option,
 .popup_dashboard {
@@ -874,6 +875,12 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   scrollbar-color: rgba(var(--ter-rgb), 0.5) rgba(var(--pri-rgb), 0.1);
   overflow-x: hidden;
   text-align: center;
+}
+
+.popup_small {
+  width: fit-content;
+  max-width: 50vw;
+  max-height: 60vh;
 }
 
 .popup_option,
