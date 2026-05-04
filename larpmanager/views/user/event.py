@@ -75,7 +75,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context, get_event, get_event_context
-from larpmanager.utils.core.common import get_coming_runs, get_element
+from larpmanager.utils.core.common import get_coming_runs, get_element, with_geo_configs, with_geo_configs_registrations
 from larpmanager.utils.core.exceptions import HiddenError
 from larpmanager.utils.users.registration import registration_status
 
@@ -110,7 +110,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     association_id = context["association_id"]
 
     # Get upcoming runs with optimized queries using select_related and prefetch_related
-    runs = get_coming_runs(association_id)
+    runs = with_geo_configs(get_coming_runs(association_id))
 
     # Initialize context with default user context
     context = get_context(request)
@@ -185,7 +185,7 @@ def get_member_registrations(member: Any, association_id: int | None = None) -> 
         qs = qs.filter(run__event__association_id=association_id).select_related("run__event")
     else:
         qs = qs.select_related("run__event__association")
-    return qs
+    return with_geo_configs_registrations(qs)
 
 
 def build_registration_list(member: Any, my_regs: Any, association_id: int, membership: Any) -> list:
@@ -516,7 +516,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     aid = context["association_id"]
 
     # Get all past runs for this association
-    runs = get_coming_runs(aid, future=False)
+    runs = with_geo_configs(get_coming_runs(aid, future=False))
 
     # Initialize context with user-specific data dictionaries
     context.update(

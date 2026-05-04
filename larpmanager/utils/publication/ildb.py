@@ -161,7 +161,9 @@ def _sync_run(run: Run, ctx: IldbCtx) -> None:
 
     ctx.ildb_event_id = _find_event_id(run, ctx)
     if ctx.ildb_event_id:
-        _update_event(ctx, payload, locandina)
+        no_update = ["run"]
+        clean_payload = {key: payload[key] for key in payload if key not in no_update}
+        _update_event(ctx, clean_payload, locandina)
         return
 
     # Create new event, notify association, save event_id

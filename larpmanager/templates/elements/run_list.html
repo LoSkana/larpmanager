@@ -57,6 +57,11 @@
                 {% if 'where' in association.features %}
                     <td data-title="{% trans "Location" %}">
                         {% if run.event.where %}<i>{{ run.event.where }} </i>{% endif %}
+                        {% if run.event.maps_url %}
+                            <a href="{{ run.event.maps_url }}"
+                               target="_blank"
+                               rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i></a>
+                        {% endif %}
                     </td>
                 {% endif %}
                 <td data-title="{% trans "Registrations" %}">

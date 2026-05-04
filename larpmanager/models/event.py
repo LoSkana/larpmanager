@@ -429,6 +429,20 @@ class Event(UuidMixin, BaseModel):
         """Get configuration value for this event."""
         return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
+    @property
+    def maps_url(self) -> str:
+        """Return a Google Maps URL if pub_lat/pub_lon are set, otherwise empty string."""
+        geo = getattr(self, "geo_configs", None)
+        if geo is not None:
+            lat = next((c.value for c in geo if c.name == "pub_lat"), "").strip()
+            lon = next((c.value for c in geo if c.name == "pub_lon"), "").strip()
+        else:
+            lat = get_element_config(self, "pub_lat", default_value="").strip()
+            lon = get_element_config(self, "pub_lon", default_value="").strip()
+        if lat and lon:
+            return f"https://www.google.com/maps?q={lat},{lon}"
+        return ""
+
 
 class EventConfig(BaseModel):
     """Django app configuration for Event."""
