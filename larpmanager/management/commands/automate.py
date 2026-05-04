@@ -163,7 +163,7 @@ class Command(BaseCommand):
     _TEST_SLUG_PREFIX = "test-"
     _INACTIVE_SIGNUP_THRESHOLD = 10
     _INACTIVE_LOG_DAYS = 90
-    _WARNING_GRACE_DAYS = 15
+    _WARNING_GRACE_DAYS = 30
 
     @staticmethod
     def clean_associations() -> None:
@@ -243,7 +243,7 @@ class Command(BaseCommand):
             We noticed that your LarpManager organization <a href='https://{association.slug}.larpmanager.com/manage'>
             <i>{association.name}</i></a> has been inactive for a significant period. <br /><br />
             <b>Action required</b>: If you wish to keep this organization and its data,
-            please reply to this email within <b>15 days</b>.<br /><br />
+            please reply to this email within <b>30 days</b>.<br /><br />
             If we don't hear from you, the organization and all associated data will
             be permanently removed.<br /><br />
             - LarpManager Team
