@@ -604,6 +604,13 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
         for character in context["list"]:
             character.prologue_rels = event_relationships.get(character.id, {}).get("prologue_rels", [])
 
+    # ---- MANIPULATE LIST
+
+    if "user_character" in context["features"]:
+        for character in context["list"]:
+            if character.player:
+                character.player_display = character.player.display_member(context)
+
     context["campaign_split_registration"] = get_event_config(
         context["event"].id, "campaign_split_registration", default_value=False, context=context
     )

@@ -165,7 +165,7 @@ def orga_registration_transfer_confirm(request: HttpRequest, event_slug: str) ->
         )
 
         action = _("moved") if move_registration else _("copied")
-        member_name = registration.member.display_member()
+        member_name = registration.member.display_member(context)
         messages.success(
             request,
             _("Registration for %(member)s successfully %(action)s to %(event)s")
