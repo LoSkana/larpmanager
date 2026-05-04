@@ -19,9 +19,12 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.conf import settings as conf_settings
+from django.core.cache import cache
 from django.http import HttpRequest
 
 from larpmanager.cache.config import get_association_config
+from larpmanager.models.registration import Registration
+from main.settings import CACHE_TIMEOUT_1_DAY
 
 
 def cache_association(request: HttpRequest) -> dict:
@@ -65,6 +68,19 @@ def cache_association(request: HttpRequest) -> dict:
 
     # Add tracking and analytics configuration
     context["google_tag"] = getattr(conf_settings, "GOOGLE_TAG", None)
-    context["hotjar_siteid"] = getattr(conf_settings, "HOTJAR_SITEID", None)
+    hotjar_siteid = getattr(conf_settings, "HOTJAR_SITEID", None)
+    if hotjar_siteid and hasattr(request, "association"):
+        association_id = request.association["id"]
+        cache_key = f"assoc_reg_count_gte10_{association_id}"
+        above_threshold = cache.get(cache_key)
+        max_threshold = 10
+        if above_threshold is None:
+            count = Registration.objects.filter(run__event__association_id=association_id).count()
+            above_threshold = count >= max_threshold
+            timeout = CACHE_TIMEOUT_1_DAY if above_threshold else 3600
+            cache.set(cache_key, above_threshold, timeout)
+        if above_threshold:
+            hotjar_siteid = None
+    context["hotjar_siteid"] = hotjar_siteid
 
     return context
