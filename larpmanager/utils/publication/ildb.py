@@ -29,9 +29,8 @@ from typing import TYPE_CHECKING, Any
 import requests
 from django.core.cache import cache
 from django.db.models import Max, Min
-from django.utils import timezone
+from django.utils import timezone, translation
 from django.utils.text import slugify
-from django.utils import translation
 from django.utils.translation import gettext as _
 
 from larpmanager.cache.config import (
@@ -42,11 +41,11 @@ from larpmanager.cache.config import (
     save_single_config,
 )
 from larpmanager.forms.event import PublicationEventType, PublicationLanguage
+from larpmanager.mail.digest import get_exec_language
 from larpmanager.models.access import EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration, RegistrationTicket, TicketTier
 from larpmanager.utils.core.common import clean_html, parse_multi_config
-from larpmanager.mail.digest import get_exec_language
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 
 if TYPE_CHECKING:
