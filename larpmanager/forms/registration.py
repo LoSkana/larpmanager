@@ -1164,8 +1164,10 @@ class OrgaRegistrationSectionForm(BaseModelForm):
         exclude: ClassVar[list] = ["order"]
 
 
-class OrgaRegistrationQuestionForm(BaseModelForm):
+class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
     """Form for OrgaRegistrationQuestion."""
+
+    load_js: ClassVar[list] = ["multichoice"]
 
     page_info = _("Manage signup form questions")
 
@@ -1240,6 +1242,31 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         self.fields["status"].help_text = ", ".join(
             f"<b>{choice.label}</b>: {text}" for choice, text in help_texts.items() if choice.value in visible_choices
         )
+
+        run = self.params.get("run")
+        if run:
+            self._init_multichoice(run)
+
+    def _init_multichoice(self, run: Any) -> None:
+        """Add multichoice popup configs for tickets and factions fields."""
+        if "tickets" in self.fields:
+            self.add_multichoice_config(
+                field_id="tickets",
+                link_id="question_tickets_available",
+                label=str(_("Show available tickets")),
+                url=reverse("orga_form_available", args=[run.get_slug()]),
+                data={"type": "ticket", "owner": "registrationquestion", "field": "tickets"},
+                form_edit_uuid=True,
+            )
+        if "factions" in self.fields:
+            self.add_multichoice_config(
+                field_id="factions",
+                link_id="question_factions_available",
+                label=str(_("Show available factions")),
+                url=reverse("orga_form_available", args=[run.get_slug()]),
+                data={"type": "faction", "owner": "registrationquestion", "field": "factions"},
+                form_edit_uuid=True,
+            )
 
     def _init_type(self) -> None:
         """Initialize registration question type field choices.
@@ -1341,8 +1368,10 @@ class OrgaRegistrationQuotaForm(BaseModelForm):
         return quotas
 
 
-class OrgaRegistrationInstallmentForm(BaseModelForm):
+class OrgaRegistrationInstallmentForm(MultichoiceMixin, BaseModelForm):
     """Form for OrgaRegistrationInstallment."""
+
+    load_js: ClassVar[list] = ["multichoice"]
 
     page_info = _("Manage fixed payment installments for participants")
 
@@ -1361,6 +1390,17 @@ class OrgaRegistrationInstallmentForm(BaseModelForm):
         """Initialize form and configure event-specific ticket widget."""
         super().__init__(*args, **kwargs)
         self.configure_field_event("tickets", self.params["event"])
+
+        run = self.params.get("run")
+        if run and "tickets" in self.fields:
+            self.add_multichoice_config(
+                field_id="tickets",
+                link_id="installment_tickets_available",
+                label=str(_("Show available tickets")),
+                url=reverse("orga_form_available", args=[run.get_slug()]),
+                data={"type": "ticket", "owner": "registrationinstallment", "field": "tickets"},
+                form_edit_uuid=True,
+            )
 
     def clean_order(self) -> int:
         """Validate that the order is unique for installments of this event."""

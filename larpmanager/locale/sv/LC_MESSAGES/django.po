@@ -1214,10 +1214,6 @@ msgstr "Inklusive"
 msgid "Invoices"
 msgstr "Fakturor"
 
-msgctxt "event"
-msgid "Keywords"
-msgstr "Nyckelord"
-
 msgid "Language"
 msgstr "Språk"
 
@@ -3911,6 +3907,9 @@ msgstr "Ta bort från fraktionen"
 msgid "Results not present"
 msgstr "Resultat ej presenterade"
 
+msgid "Show available tags"
+msgstr "Visa tillgängliga taggar"
+
 msgid "Signup cancellation"
 msgstr "Uppsägning av prenumeration"
 
@@ -4106,6 +4105,9 @@ msgstr "Ange teckenstatus"
 
 msgid "Set up ability types"
 msgstr "Ställ in förmågetyper"
+
+msgid "Show available items"
+msgstr "Visa tillgängliga artiklar"
 
 msgid "Sign up as a filler!"
 msgstr "Registrera dig som utfyllare!"
@@ -4467,8 +4469,14 @@ msgstr "Välj din karaktär!"
 msgid "Set up payment methods"
 msgstr "Konfigurera betalningsmetoder"
 
+msgid "Show available options"
+msgstr "Visa tillgängliga alternativ"
+
 msgid "Show available signups"
 msgstr "Visa tillgängliga anmälningar"
+
+msgid "Show available tickets"
+msgstr "Visa tillgängliga biljetter"
 
 msgid "Split by participation"
 msgstr "Uppdelat efter deltagande"
@@ -4758,6 +4766,9 @@ msgstr "Hemlig registreringskod"
 msgid "Secret registration link"
 msgstr "Hemlig registreringslänk"
 
+msgid "Show available abilities"
+msgstr "Visa tillgängliga förmågor"
+
 msgid "Target session not found"
 msgstr "Målsessionen hittades inte"
 
@@ -4888,6 +4899,9 @@ msgstr "Upprätta fasta avbetalningar"
 
 msgid "Show available characters"
 msgstr "Visa tillgängliga tecken"
+
+msgid "Show available deliveries"
+msgstr "Visa tillgängliga leveranser"
 
 msgid "Size of the file in bytes"
 msgstr "Filens storlek i byte"

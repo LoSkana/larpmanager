@@ -1214,10 +1214,6 @@ msgstr "Inclusief"
 msgid "Invoices"
 msgstr "Facturen"
 
-msgctxt "event"
-msgid "Keywords"
-msgstr "Trefwoorden"
-
 msgid "Language"
 msgstr "Taal"
 
@@ -3911,6 +3907,9 @@ msgstr "Verwijderen uit factie"
 msgid "Results not present"
 msgstr "Resultaten niet aanwezig"
 
+msgid "Show available tags"
+msgstr "Beschikbare tags tonen"
+
 msgid "Signup cancellation"
 msgstr "Abonnement opzeggen"
 
@@ -4106,6 +4105,9 @@ msgstr "Tekenstatus instellen"
 
 msgid "Set up ability types"
 msgstr "Typen vaardigheden instellen"
+
+msgid "Show available items"
+msgstr "Beschikbare items tonen"
 
 msgid "Sign up as a filler!"
 msgstr "Meld je aan als vuller!"
@@ -4467,8 +4469,14 @@ msgstr "Selecteer je personage!"
 msgid "Set up payment methods"
 msgstr "Betaalmethoden instellen"
 
+msgid "Show available options"
+msgstr "Beschikbare opties tonen"
+
 msgid "Show available signups"
 msgstr "Toon beschikbare aanmeldingen"
+
+msgid "Show available tickets"
+msgstr "Toon beschikbare tickets"
 
 msgid "Split by participation"
 msgstr "Opgesplitst naar deelname"
@@ -4758,6 +4766,9 @@ msgstr "Geheime registratiecode"
 msgid "Secret registration link"
 msgstr "Geheime registratie link"
 
+msgid "Show available abilities"
+msgstr "Beschikbare vaardigheden tonen"
+
 msgid "Target session not found"
 msgstr "Doelsessie niet gevonden"
 
@@ -4888,6 +4899,9 @@ msgstr "Vaste termijnen instellen"
 
 msgid "Show available characters"
 msgstr "Beschikbare tekens tonen"
+
+msgid "Show available deliveries"
+msgstr "Beschikbare leveringen tonen"
 
 msgid "Size of the file in bytes"
 msgstr "Grootte van het bestand in bytes"

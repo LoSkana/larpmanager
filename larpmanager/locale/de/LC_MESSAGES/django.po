@@ -1214,10 +1214,6 @@ msgstr "Einschließlich"
 msgid "Invoices"
 msgstr "Rechnungen"
 
-msgctxt "event"
-msgid "Keywords"
-msgstr "Schlüsselwörter"
-
 msgid "Language"
 msgstr "Sprache"
 
@@ -3911,6 +3907,9 @@ msgstr "Aus der Fraktion entfernen"
 msgid "Results not present"
 msgstr "Ergebnisse nicht vorhanden"
 
+msgid "Show available tags"
+msgstr "Verfügbare Tags anzeigen"
+
 msgid "Signup cancellation"
 msgstr "Kündigung des Abonnements"
 
@@ -4106,6 +4105,9 @@ msgstr "Zeichenstatus einstellen"
 
 msgid "Set up ability types"
 msgstr "Fähigkeitstypen einrichten"
+
+msgid "Show available items"
+msgstr "Verfügbare Artikel anzeigen"
 
 msgid "Sign up as a filler!"
 msgstr "Melden Sie sich als Füller an!"
@@ -4467,8 +4469,14 @@ msgstr "Wählen Sie Ihren Charakter!"
 msgid "Set up payment methods"
 msgstr "Zahlungsarten einrichten"
 
+msgid "Show available options"
+msgstr "Verfügbare Optionen anzeigen"
+
 msgid "Show available signups"
 msgstr "Verfügbare Anmeldungen anzeigen"
+
+msgid "Show available tickets"
+msgstr "Verfügbare Tickets anzeigen"
 
 msgid "Split by participation"
 msgstr "Aufteilung nach Beteiligung"
@@ -4758,6 +4766,9 @@ msgstr "Geheimer Registrierungscode"
 msgid "Secret registration link"
 msgstr "Geheimer Registrierungslink"
 
+msgid "Show available abilities"
+msgstr "Verfügbare Fähigkeiten anzeigen"
+
 msgid "Target session not found"
 msgstr "Zielsitzung nicht gefunden"
 
@@ -4888,6 +4899,9 @@ msgstr "Feste Raten einrichten"
 
 msgid "Show available characters"
 msgstr "Verfügbare Zeichen anzeigen"
+
+msgid "Show available deliveries"
+msgstr "Verfügbare Lieferungen anzeigen"
 
 msgid "Size of the file in bytes"
 msgstr "Größe der Datei in Bytes"

@@ -707,10 +707,6 @@ class RunCampaignS2:
         return Run.objects.filter(event_id__in=self.event_ids).order_by("-end")
 
 
-class RunCampaignS2WidgetMulti(RunCampaignS2, s2forms.ModelSelect2MultipleWidget):
-    """Represents RunCampaignS2WidgetMulti model."""
-
-
 class RunCampaignS2Widget(RunCampaignS2, s2forms.ModelSelect2Widget):
     """Represents RunCampaignS2Widget model."""
 
@@ -757,10 +753,6 @@ class EventTraitS2:
     def get_queryset(self) -> QuerySet[Trait]:
         """Return optimized queryset of traits for the event, ordered by number."""
         return self.event.get_elements(Trait).only("id", "name", "number", "teaser", "event_id").order_by("number")
-
-
-class EventTraitS2WidgetMulti(EventTraitS2, s2forms.ModelSelect2MultipleWidget):
-    """Represents EventTraitS2WidgetMulti model."""
 
 
 class EventTraitS2Widget(EventTraitS2, s2forms.ModelSelect2Widget):
