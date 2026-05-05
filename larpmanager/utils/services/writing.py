@@ -561,7 +561,7 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
         context["list"] = context["list"].select_related("player")
 
     # Add registration status annotation for campaign events
-    if "campaign" in context["features"] and context["event"].parent:
+    if "campaign" in context["features"]:
         # add check if the character is signed up to the event
         context["list"] = context["list"].annotate(
             has_registration=Exists(
