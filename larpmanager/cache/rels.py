@@ -430,7 +430,7 @@ def _build_plot_relations(char: Character) -> dict[str, Any]:
         Dictionary with plot relationship data including important count
     """
     related_plots = char.get_plot_characters()
-    plot_list = [(plot_rel.plot_id, plot_rel.plot.name) for plot_rel in related_plots]
+    plot_list = [(plot_rel.plot.uuid, plot_rel.plot.name) for plot_rel in related_plots]
     plot_rels = build_relationship_dict(plot_list)
 
     # Calculate important plot count (excluding $unimportant entries)
@@ -464,7 +464,7 @@ def _build_faction_relations(char: Character, event: Event) -> dict[str, Any]:
     # Build faction list based on determined event
     if faction_event_id:
         character_factions = char.factions_list.filter(event_id=faction_event_id)
-        faction_list = [(faction.id, faction.name) for faction in character_factions]
+        faction_list = [(faction.uuid, faction.name) for faction in character_factions]
     else:
         faction_list = []
 
@@ -481,7 +481,9 @@ def _build_character_relations(char: Character) -> dict[str, Any]:
         Dictionary with character relationship data including important count
     """
     character_relationships = Relationship.objects.filter(deleted=None, source=char)
-    relationship_list = [(relationship.target.id, relationship.target.name) for relationship in character_relationships]
+    relationship_list = [
+        (relationship.target.uuid, relationship.target.name) for relationship in character_relationships
+    ]
     relationships_rels = build_relationship_dict(relationship_list)
 
     # Calculate important relationship count (excluding $unimportant entries)
@@ -544,13 +546,13 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
         # Handle speedlarp relationships if speedlarp feature is enabled
         if "speedlarp" in features:
             character_speedlarps = char.speedlarps_list.all()
-            speedlarp_list = [(speedlarp.id, speedlarp.name) for speedlarp in character_speedlarps]
+            speedlarp_list = [(speedlarp.uuid, speedlarp.name) for speedlarp in character_speedlarps]
             relations["speedlarp_rels"] = build_relationship_dict(speedlarp_list)
 
         # Handle prologue relationships if prologue feature is enabled
         if "prologue" in features:
             character_prologues = char.prologues_list.all()
-            prologue_list = [(prologue.id, prologue.name) for prologue in character_prologues]
+            prologue_list = [(prologue.uuid, prologue.name) for prologue in character_prologues]
             relations["prologue_rels"] = build_relationship_dict(prologue_list)
 
     except Exception:
@@ -597,8 +599,8 @@ def get_event_faction_rels(faction: Faction) -> dict[str, Any]:
         # Get all characters associated with this faction
         faction_characters = faction.characters.all()
 
-        # Build list of character ID and name tuples
-        character_id_name_tuples = [(character.id, character.name) for character in faction_characters]
+        # Build list of character UUID and name tuples
+        character_id_name_tuples = [(character.uuid, character.name) for character in faction_characters]
 
         # Structure the relationship data using helper function
         faction_relations["character_rels"] = build_relationship_dict(character_id_name_tuples)
@@ -642,9 +644,9 @@ def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
         # Get all character relationships for this plot
         character_relationships = plot.get_plot_characters()
 
-        # Extract character ID and name tuples from relationships
+        # Extract character UUID and name tuples from relationships
         character_id_name_pairs = [
-            (relationship.character_id, relationship.character.name) for relationship in character_relationships
+            (relationship.character.uuid, relationship.character.name) for relationship in character_relationships
         ]
 
         # Build structured relationship dictionary with list and count
@@ -689,8 +691,8 @@ def get_event_speedlarp_rels(speedlarp: SpeedLarp) -> dict[str, Any]:
         # Fetch all characters associated with the speedlarp
         speedlarp_characters = speedlarp.characters.all()
 
-        # Build list of tuples containing character ID and name
-        character_id_name_pairs = [(character.id, character.name) for character in speedlarp_characters]
+        # Build list of tuples containing character UUID and name
+        character_id_name_pairs = [(character.uuid, character.name) for character in speedlarp_characters]
 
         # Structure the character data using helper function
         relationships["character_rels"] = build_relationship_dict(character_id_name_pairs)
@@ -741,8 +743,8 @@ def get_event_prologue_rels(prologue: Prologue) -> dict[str, Any]:
         # Fetch all characters associated with this prologue
         prologue_characters = prologue.characters.all()
 
-        # Build list of character ID and name tuples for template rendering
-        character_id_name_list = [(character.id, character.name) for character in prologue_characters]
+        # Build list of character UUID and name tuples for template rendering
+        character_id_name_list = [(character.uuid, character.name) for character in prologue_characters]
 
         # Format character data using helper function to create standardized structure
         relationships["character_rels"] = build_relationship_dict(character_id_name_list)
@@ -785,7 +787,7 @@ def get_event_quest_rels(quest: Quest) -> dict[str, Any]:
         associated_traits = Trait.objects.filter(quest=quest, deleted=None)
 
         # Build list of tuples containing trait ID and name pairs
-        trait_id_name_pairs = [(trait.id, trait.name) for trait in associated_traits]
+        trait_id_name_pairs = [(trait.uuid, trait.name) for trait in associated_traits]
 
         # Format trait data into standardized relationship dictionary structure
         relationships["trait_rels"] = build_relationship_dict(trait_id_name_pairs)
@@ -827,7 +829,7 @@ def get_event_questtype_rels(questtype: QuestType) -> dict[str, Any]:
         related_quests = questtype.quests.all()
 
         # Build list of tuples containing quest ID and name
-        quest_id_name_pairs = [(quest.id, quest.name) for quest in related_quests]
+        quest_id_name_pairs = [(quest.uuid, quest.name) for quest in related_quests]
 
         # Format quest relationships using helper function
         relationships["quest_rels"] = build_relationship_dict(quest_id_name_pairs)
