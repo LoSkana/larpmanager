@@ -27,11 +27,14 @@ from django.http import HttpRequest, JsonResponse
 from django.utils import timezone
 from django.views.decorators.http import require_GET
 
+from larpmanager.cache.config import get_element_config
+from larpmanager.forms.event import PublicationMood, PublicationSetting
 from larpmanager.models.association import Association
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.event import Run
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Log
+from larpmanager.utils.core.common import parse_multi_config
 from larpmanager.utils.larpmanager.tasks import notify_admins
 from larpmanager.views.manage import _get_registration_status_code
 
@@ -128,7 +131,7 @@ def validate_api_key(request: HttpRequest) -> tuple[PublisherApiKey | None, Json
 
 
 @require_GET
-def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901 - Complex event data aggregation for API
+def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR0912 - Complex event data aggregation for API
     """Get upcoming runs from associations with publisher feature enabled.
 
     This endpoint returns a list of upcoming LARP events from associations that have
@@ -196,12 +199,11 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901 - Comp
                 "additional": run_status[1],
             }
 
-            # Map optional event attributes to response fields
+            # Map optional event model attributes to response fields
             mapping = {
-                "where": "location",
                 "authors": "authors",
                 "description": "description",
-                "genre": "genre",
+                "keywords": "keywords",
                 "website": "website",
             }
 
@@ -213,6 +215,40 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901 - Comp
                 if not value:
                     continue
                 event_data[dest] = value
+
+            # Add publication metadata from EventConfig
+            pub_char_fields = ["country", "accommodation", "event_type"]
+            for field in pub_char_fields:
+                value = get_element_config(event, f"pub_{field}", default_value="")
+                if value:
+                    event_data[field] = value
+
+            if event.where:
+                event_data["place"] = event.where
+
+            for field in ["accommodation_type", "meals", "language"]:
+                raw = get_element_config(event, f"pub_{field}", default_value="")
+                parsed = parse_multi_config(raw)
+                if parsed:
+                    event_data[field] = parsed
+
+            _setting_map = {v: label.lower() for v, label in PublicationSetting.choices}
+            event_settings = [
+                _setting_map[g]
+                for g in parse_multi_config(get_element_config(event, "pub_setting", default_value=""))
+                if g in _setting_map
+            ]
+            if event_settings:
+                event_data["setting"] = event_settings
+
+            _mood_map = {v: label.lower() for v, label in PublicationMood.choices}
+            moods = [
+                _mood_map[g]
+                for g in parse_multi_config(get_element_config(event, "pub_mood", default_value=""))
+                if g in _mood_map
+            ]
+            if moods:
+                event_data["mood"] = moods
 
             # Add cover image URL if available
             if event.cover:

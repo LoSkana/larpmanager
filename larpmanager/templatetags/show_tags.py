@@ -39,9 +39,9 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.models.association import get_url
 from larpmanager.models.casting import Trait
-from larpmanager.models.utils import get_option_form_text, strip_tags
+from larpmanager.models.utils import get_option_form_text
 from larpmanager.models.writing import Character, FactionType
-from larpmanager.utils.core.common import html_clean
+from larpmanager.utils.core.common import clean_html, html_clean
 from larpmanager.utils.io.pdf import get_trait_character
 
 if TYPE_CHECKING:
@@ -70,8 +70,7 @@ def basename(file_path: str | Path) -> str:
 @register.filter
 def clean_tags(tx: str) -> str:
     """Template filter to clean HTML tags from text."""
-    tx = tx.replace("<br />", " ")
-    return strip_tags(tx)
+    return clean_html(tx)
 
 
 @register.filter

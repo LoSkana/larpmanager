@@ -8,8 +8,8 @@
                 {% if association.id == 0 %}
                     <th>{% trans "Organization" %}</th>
                 {% endif %}
-                {% if 'genre' in association.features %}
-                    <th>{% trans "Genre" context "event" %}</th>
+                {% if 'keywords' in association.features %}
+                    <th>{% trans "Keywords" context "event" %}</th>
                 {% endif %}
                 {% if 'website' in association.features %}<th></th>{% endif %}
                 <th>{% trans "Date" %}</th>
@@ -39,9 +39,9 @@
                         <b>{{ run.event.association.name }} </b>
                     </td>
                 {% endif %}
-                {% if 'genre' in association.features %}
-                    <td data-title="{% trans "Genre" context "event" %}">
-                        <i>{{ run.event.genre }} </i>
+                {% if 'keywords' in association.features %}
+                    <td data-title="{% trans "Keywords" %}">
+                        <i>{{ run.event.keywords }} </i>
                     </td>
                 {% endif %}
                 {% if 'website' in association.features %}
@@ -57,6 +57,11 @@
                 {% if 'where' in association.features %}
                     <td data-title="{% trans "Location" %}">
                         {% if run.event.where %}<i>{{ run.event.where }} </i>{% endif %}
+                        {% if run.event.maps_url %}
+                            <a href="{{ run.event.maps_url }}"
+                               target="_blank"
+                               rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i></a>
+                        {% endif %}
                     </td>
                 {% endif %}
                 <td data-title="{% trans "Registrations" %}">

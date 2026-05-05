@@ -390,6 +390,9 @@ msgstr "Graf"
 msgid "Gross"
 msgstr "Brutto"
 
+msgid "Hotel"
+msgstr "Hotell"
+
 msgid "Image"
 msgstr "Bilde"
 
@@ -401,6 +404,9 @@ msgstr "Gjenstander"
 
 msgid "Login"
 msgstr "Logg inn"
+
+msgid "Meals"
+msgstr "Måltider"
 
 msgid "Media"
 msgstr "Medier"
@@ -461,6 +467,10 @@ msgstr "Ansatte"
 
 msgid "Start"
 msgstr "Start"
+
+msgctxt "event"
+msgid "Style"
+msgstr "Stil"
 
 msgid "Swift"
 msgstr "Hurtig"
@@ -807,6 +817,9 @@ msgstr "Medier"
 msgid "Balance"
 msgstr "Lodding"
 
+msgid "Camping"
+msgstr "Camping"
+
 msgid "Casting"
 msgstr "Støping"
 
@@ -974,6 +987,10 @@ msgstr "Sendt på"
 
 msgid "Session"
 msgstr "Sesjon"
+
+msgctxt "event"
+msgid "Setting"
+msgstr "Innstilling"
 
 msgid "Sharing"
 msgstr "Deling"
@@ -1197,8 +1214,15 @@ msgstr "Inkludert"
 msgid "Invoices"
 msgstr "Fakturaer"
 
+msgctxt "event"
+msgid "Keywords"
+msgstr "Nøkkelord"
+
 msgid "Language"
 msgstr "Språk"
+
+msgid "Latitude"
+msgstr "Breddegrad"
 
 msgid "Location"
 msgstr "Beliggenhet"
@@ -1464,6 +1488,12 @@ msgstr "Grensesnitt"
 msgid "Inventory"
 msgstr "Lagerbeholdning"
 
+msgid "Languages"
+msgstr "Språk"
+
+msgid "Longitude"
+msgstr "Lengdegrad"
+
 msgid "Mandatory"
 msgstr "Obligatorisk"
 
@@ -1683,6 +1713,9 @@ msgstr "Arrangementsområde"
 msgid "Event name"
 msgstr "Navn på hendelse"
 
+msgid "Event type"
+msgstr "Type hendelse"
+
 msgid "Experience"
 msgstr "Erfaring"
 
@@ -1800,6 +1833,9 @@ msgstr "Fjern taggen"
 msgid "Repertoire"
 msgstr "Repertoar"
 
+msgid "Restaurant"
+msgstr "Restaurant"
+
 msgid "Run number"
 msgstr "Kjør nummer"
 
@@ -1905,6 +1941,9 @@ msgstr "Legg til i plottet"
 msgid "Additionals"
 msgstr "Additionals"
 
+msgid "Agritourism"
+msgstr "Landbruksturisme"
+
 msgid "Amount paid"
 msgstr "Utbetalt beløp"
 
@@ -2006,6 +2045,9 @@ msgstr "Lettvekt"
 
 msgid "Limitations"
 msgstr "Begrensninger"
+
+msgid "Lock events"
+msgstr "Lås hendelser"
 
 msgid "Nationality"
 msgstr "Nasjonalitet"
@@ -2169,6 +2211,9 @@ msgstr "Avbestilling"
 msgid "Change photo"
 msgstr "Endre bilde"
 
+msgid "City / Place"
+msgstr "By / sted"
+
 msgid "Collaborator"
 msgstr "Bidragsyter"
 
@@ -2243,6 +2288,9 @@ msgstr "Kommune"
 
 msgid "Next payment"
 msgstr "Neste betaling"
+
+msgid "Not included"
+msgstr "Ikke inkludert"
 
 msgid "Not selected"
 msgstr "Ikke valgt"
@@ -2370,6 +2418,9 @@ msgstr "De åpner kl"
 msgid "You must pay"
 msgstr "Du må betale"
 
+msgid "Your team ID"
+msgstr "Din team-ID"
+
 msgid "already used"
 msgstr "allerede brukt"
 
@@ -2388,6 +2439,9 @@ msgstr "Tilgang avslått"
 
 msgid "Accessibility"
 msgstr "Tilgjengelighet"
+
+msgid "Accommodation"
+msgstr "Overnatting"
 
 msgid "Age selection"
 msgstr "Valg av alder"
@@ -2563,6 +2617,9 @@ msgstr "Ta et skritt frem"
 msgid "Prologue type"
 msgstr "Prolog type"
 
+msgid "Publish staff"
+msgstr "Publiser ansatte"
+
 msgid "Question type"
 msgstr "Type spørsmål"
 
@@ -2580,6 +2637,9 @@ msgstr "Krever innlogging"
 
 msgid "Restore error"
 msgstr "Gjenopprett feil"
+
+msgid "Self-catering"
+msgstr "Selvhushold"
 
 msgid "Shared secret"
 msgstr "Delt hemmelighet"
@@ -2960,6 +3020,9 @@ msgstr "Tekst på flere linjer"
 msgid "Multiple choice"
 msgstr "Flere valgmuligheter"
 
+msgid "Non-residential"
+msgstr "Ikke-bolig"
+
 msgid "Overall balance"
 msgstr "Kontantbudsjett"
 
@@ -2986,6 +3049,9 @@ msgstr "Oppdatert medlemskap"
 
 msgid "Progress status"
 msgstr "Fremgang"
+
+msgid "Publish players"
+msgstr "Publiser spillere"
 
 msgid "Question saved!"
 msgstr "Underdanig spørsmål!"
@@ -3374,6 +3440,9 @@ msgstr "Opplevelsessystem"
 msgid "Experience points"
 msgstr "Erfaringspoeng"
 
+msgid "External catering"
+msgstr "Ekstern catering"
+
 msgid "Faction selection"
 msgstr "Valg av fraksjon"
 
@@ -3400,6 +3469,9 @@ msgstr "Identitetsdokument"
 
 msgid "Interface version"
 msgstr "Grensesnittversjon"
+
+msgid "Internal catering"
+msgstr "Intern catering"
 
 msgid "Invalid selection"
 msgstr "Ugyldig valg"
@@ -3584,6 +3656,9 @@ msgstr "Første registrering"
 msgid "Hide not available"
 msgstr "Skjul ikke tilgjengelig"
 
+msgid "Historic residence"
+msgstr "Historisk bolig"
+
 msgid "Informations saved"
 msgstr "Informasjon lagret"
 
@@ -3764,6 +3839,9 @@ msgstr "E-postvarsler"
 msgid "Event Configuration"
 msgstr "Hendelseskonfigurasjon"
 
+msgid "Event added to ILDB"
+msgstr "Hendelse lagt til i ILDB"
+
 msgid "Event configuration"
 msgstr "Konfigurasjon av hendelser"
 
@@ -3878,6 +3956,9 @@ msgstr "Komplett ark (Pdf)"
 msgid "Confirm your choices"
 msgstr "Bekrefter du valgene dine"
 
+msgid "Country of the event"
+msgstr "Landet der arrangementet fant sted"
+
 msgid "Create new character"
 msgstr "Opprett ny karakter"
 
@@ -3886,6 +3967,9 @@ msgstr "Vis sendte e-poster"
 
 msgid "Download light sheet"
 msgstr "Last ned lysark"
+
+msgid "Enter a valid number"
+msgstr "Skriv inn et gyldig nummer"
 
 msgid "Event already played"
 msgstr "Hendelser som allerede er spilt"
@@ -4057,6 +4141,9 @@ msgstr "Du er logget inn som"
 msgid "Access your character"
 msgstr "Få tilgang til karakteren din"
 
+msgid "Accommodation details"
+msgstr "Informasjon om innkvartering"
+
 msgid "Advanced Mode Enabled"
 msgstr "Avansert modus aktivert"
 
@@ -4065,6 +4152,9 @@ msgstr "Godkjenne refusjon"
 
 msgid "Assigned staff member"
 msgstr "Tildelt medarbeider"
+
+msgid "Category of the event"
+msgstr "Kategori for arrangementet"
 
 msgid "Character Inventories"
 msgstr "Tegnfortegnelser"
@@ -4538,6 +4628,9 @@ msgstr "Vis tilgjengelige fraksjoner"
 msgid "Thanks for your support"
 msgstr "Takk for støtten"
 
+msgid "The genre of your event"
+msgstr "Sjangeren på arrangementet ditt"
+
 msgid "The participant's email"
 msgstr "Deltakerens e-postadresse"
 
@@ -4707,6 +4800,9 @@ msgstr "Last ned eksempelmal"
 msgid "Error reading backup file"
 msgstr "Feil ved lesing av sikkerhetskopifil"
 
+msgid "Generate a new ILDB token"
+msgstr "Generer et nytt ILDB-token"
+
 msgid "Go to the preferences for"
 msgstr "Gå til innstillinger for"
 
@@ -4828,6 +4924,9 @@ msgstr "Kan ikke kopiere fra samme hendelse"
 
 msgid "Check inverse relationship"
 msgstr "sjekk det omvendte forholdet"
+
+msgid "City or place of the event"
+msgstr "By eller sted for arrangementet"
 
 msgid "Discover the game factions"
 msgstr "Oppdag spillgruppene"
@@ -4959,6 +5058,9 @@ msgstr "Administrer tegnene i arrangementet"
 
 msgid "Manage warehouse containers"
 msgstr "Administrere lagercontainere"
+
+msgid "Meals included in the event"
+msgstr "Måltider inkludert i arrangementet"
 
 msgid "Members of the Organization"
 msgstr "Medlem av foreningen"
@@ -5213,6 +5315,9 @@ msgstr "Aktiver nye plattformfunksjoner"
 msgid "Character Inventory Pool Types"
 msgstr "Typer karakterbeholdning"
 
+msgid "Choose the style for the event"
+msgstr "Velg stil for arrangementet"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Fullfør betaling for %(event)s"
@@ -5262,6 +5367,9 @@ msgstr "Vis/skjul fullførte milepæler"
 msgid "The registrations to the event"
 msgstr "Påmelding til arrangementet"
 
+msgid "Type of accommodation included"
+msgstr "Type overnatting inkludert"
+
 msgid "Upload and host files directly"
 msgstr "Last opp og host filer direkte"
 
@@ -5303,9 +5411,6 @@ msgstr "Se hvilke arrangementer som er på trappene"
 
 msgid "Filter or search the characters"
 msgstr "Filtrer eller søk i tegnene"
-
-msgid "Make credits readonly in events"
-msgstr "Gjør kreditter skrivebeskyttet i hendelser"
 
 msgid "Manage event navigation buttons"
 msgstr "Administrer navigeringsknapper for hendelser"
@@ -5404,6 +5509,9 @@ msgstr "Avbestilling på grunn av manglende profil"
 msgid "Character assigned for %(event)s"
 msgstr "Tegn tildelt for %(event)s"
 
+msgid "Choose the setting for the event"
+msgstr "Velg innstilling for arrangementet"
+
 msgid "Configure event feature settings"
 msgstr "Konfigurere innstillinger for hendelsesfunksjoner"
 
@@ -5427,6 +5535,9 @@ msgstr "Hver token kan bare brukes én gang av sikkerhetsmessige årsaker"
 
 msgid "Is it selectable by participants"
 msgstr "Kan den velges av deltakerne"
+
+msgid "Language(s) the event is held in"
+msgstr "Språk arrangementet holdes på"
 
 msgid "Manage expenses for contributors"
 msgstr "Administrere utgifter for bidragsytere"
@@ -5542,6 +5653,9 @@ msgstr "For mer informasjon, skriv til oss"
 msgid "Go to the history preferences for"
 msgstr "Gå til innstillingshistorikken for"
 
+msgid "If checked: publish staff members"
+msgstr "Hvis avkrysset: publiser ansatte"
+
 msgid "Indicate your level of experience"
 msgstr "Angi ditt erfaringsnivå"
 
@@ -5568,6 +5682,10 @@ msgstr "Nå kan du angi skattealternativene"
 
 msgid "Number of additional participants"
 msgstr "Antall ekstra deltakere"
+
+#, python-format
+msgid "Publish to ILDB: <b>%(list)s</b>."
+msgstr "Publiser til ILDB: <b>%(list)s</b>."
 
 msgid "Set the registration opening date"
 msgstr "Angi åpningsdato for registrering"
@@ -5694,14 +5812,14 @@ msgstr "Kolleksjonen er levert!"
 msgid "The form is saved every 30 seconds"
 msgstr "Skjemaet lagres hvert 30. sekund"
 
-msgid "The genre or setting of your event"
-msgstr "Sjangeren eller settingen for arrangementet ditt"
-
 msgid "The payment has not been completed"
 msgstr "Betalingen ble ikke fullført"
 
 msgid "This page shows the warehouse tags"
 msgstr "Denne siden viser lagerkodene"
+
+msgid "Type(s) of accommodation available"
+msgstr "Type(r) tilgjengelig(e) innkvartering(er)"
 
 msgid "You are about to make a payment of"
 msgstr "Du er i ferd med å foreta en betaling på"
@@ -6075,6 +6193,9 @@ msgstr "Fyll inn karakterens relasjoner"
 msgid "I confirm that I have made the payment"
 msgstr "Jeg bekrefter at jeg har foretatt betalingen"
 
+msgid "If checked: publish registered players"
+msgstr "Hvis avkrysset: publiser registrerte spillere"
+
 msgid "It will be shown to other participants"
 msgstr "Den vil bli vist til andre deltakere"
 
@@ -6083,6 +6204,9 @@ msgstr "Administrer typen karakteregenskaper"
 
 msgid "Membership of the Organization refused"
 msgstr "Medlemskap avslått"
+
+msgid "Now set the publication configurations"
+msgstr "Still nå inn publikasjonskonfigurasjonene"
 
 msgid "Now you can host files in the platform"
 msgstr "Nå kan du hoste filer i plattformen"
@@ -6369,6 +6493,9 @@ msgstr "Donasjonsbeløp valgt av deltakeren"
 msgid "I do it routinely, I have good experience"
 msgstr "Jeg gjør det regelmessig, jeg har god erfaring"
 
+msgid "Latitude coordinate of the event location"
+msgstr "Breddegradskoordinat for hendelsesstedet"
+
 msgid "Manage templates for experience abilities"
 msgstr "Administrer maler for opplevelsesevner"
 
@@ -6439,6 +6566,9 @@ msgstr "Hvis avkrysset, kan du slette elementer i bulk"
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Hvis avkrysset: viser sjangeren for hvert arrangement"
+
+msgid "Longitude coordinate of the event location"
+msgstr "Lengdegradskoordinat for hendelsesstedet"
 
 msgid "Manage configuration of activated features"
 msgstr "Administrer konfigurasjon av aktiverte funksjoner"
@@ -6539,6 +6669,9 @@ msgstr "Tillat å bytte registrering mellom arrangementer"
 msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr "Godkjenning av %(user)s som %(role)s for %(event)s"
 
+msgid "Authentication token (mark all permissions)"
+msgstr "Autentiseringstoken (merk alle tillatelser)"
+
 msgid "Characters are only visible to participants"
 msgstr "Tegnene er bare synlige for deltakerne"
 
@@ -6575,6 +6708,9 @@ msgstr "Nå kan du opprette milepæler for arrangementet"
 
 msgid "Now you can set the player editing settings"
 msgstr "Nå kan du angi innstillinger for spillerredigering"
+
+msgid "Please review and submit it for publication"
+msgstr "Vennligst les gjennom og send den inn for publisering"
 
 msgid "Text displayed alongside the carousel image"
 msgstr "Tekst som vises ved siden av karusellbildet"
@@ -6781,6 +6917,9 @@ msgstr "Vil du holde deg oppdatert om arrangementene våre"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Hint: De riktige svarene på dette spørsmålet er"
+
+msgid "Manage event metadata for external publication"
+msgstr "Administrere metadata om arrangementer for ekstern publisering"
 
 msgid "Manage your event expenses and upload receipts"
 msgstr "Administrer utgiftene til arrangementet og last opp kvitteringer"
@@ -9187,6 +9326,13 @@ msgstr ""
 "Hvis det er krysset av, kan deltakerne tilpasse navnene på karakterene sine"
 
 msgid ""
+"If checked, prevents credits from being created or changed in the event "
+"panel"
+msgstr ""
+"Hvis avkrysset, forhindrer det at kreditter opprettes eller endres i "
+"hendelsespanelet"
+
+msgid ""
 "If checked: in the public page of an user shows a list of all events "
 "attended"
 msgstr ""
@@ -10621,6 +10767,14 @@ msgstr ""
 "Hvis dette alternativet er merket av, vises alle registreringer i én tabell "
 "i stedet for å skilles etter type"
 
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically added to "
+"larpdatabase.com as a draft."
+msgstr ""
+"Hendelsen <strong>%(event)s</strong> har automatisk blitt lagt til i "
+"larpdatabase.com som en kladd."
+
 msgid ""
 "Upload a custom font file for page titles to match your event's theme (TTF, "
 "OTF, or WOFF formats)"
@@ -10882,14 +11036,6 @@ msgid ""
 msgstr ""
 "Gjør det mulig for deltakerne å sende private meldinger til hverandre uten å"
 " avsløre personlige e-postadresser"
-
-msgid ""
-"If checked, credits will be readonly in the event panel. You can modify them"
-" only in organization panel"
-msgstr ""
-"Hvis dette alternativet er merket av, vil krediteringene være "
-"skrivebeskyttet i hendelsespanelet. Du kan bare endre dem i "
-"organisasjonspanelet"
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "

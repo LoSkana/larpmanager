@@ -1521,6 +1521,11 @@ urlpatterns = [
         name="orga_appearance",
     ),
     path(
+        "<slug:event_slug>/manage/publication/",
+        views_oe.orga_publication,
+        name="orga_publication",
+    ),
+    path(
         "<slug:event_slug>/manage/config/<slug:section>/",
         views_oe.orga_config,
         name="orga_config",

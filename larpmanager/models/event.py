@@ -114,7 +114,7 @@ class Event(UuidMixin, BaseModel):
         max_length=100,
         blank=True,
         verbose_name=pgettext_lazy("event", "Genre"),
-        help_text=_("The genre or setting of your event"),
+        help_text=_("The genre of your event"),
     )
 
     visible = models.BooleanField(default=True)
@@ -359,7 +359,7 @@ class Event(UuidMixin, BaseModel):
 
         Returns:
             dict[str, str]: Dictionary containing event attributes and media URLs.
-                Keys include: slug, name, tagline, description, website, genre,
+                Keys include: slug, name, tagline, description, website, keywords,
                 where, authors, cover, cover_thumb, carousel_img, carousel_thumb,
                 font, background, background_red (when available).
 
@@ -428,6 +428,20 @@ class Event(UuidMixin, BaseModel):
     def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
         """Get configuration value for this event."""
         return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
+
+    @property
+    def maps_url(self) -> str:
+        """Return a Google Maps URL if pub_lat/pub_lon are set, otherwise empty string."""
+        geo = getattr(self, "geo_configs", None)
+        if geo is not None:
+            lat = next((c.value for c in geo if c.name == "pub_lat"), "").strip()
+            lon = next((c.value for c in geo if c.name == "pub_lon"), "").strip()
+        else:
+            lat = get_element_config(self, "pub_lat", default_value="").strip()
+            lon = get_element_config(self, "pub_lon", default_value="").strip()
+        if lat and lon:
+            return f"https://www.google.com/maps?q={lat},{lon}"
+        return ""
 
 
 class EventConfig(BaseModel):

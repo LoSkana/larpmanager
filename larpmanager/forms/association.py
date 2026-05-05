@@ -427,6 +427,7 @@ class ExeConfigForm(ConfigForm):
         # 5. Email and communications
         self.set_config_email()
         self.set_config_integration()
+        self.set_config_publisher()
 
     def set_config_interface(self) -> None:
         """Configure interface and calendar display settings."""
@@ -786,9 +787,9 @@ class ExeConfigForm(ConfigForm):
             )
 
             # Make credits readonly in events
-            label_credit_readonly_event = _("Make credits readonly in events")
+            label_credit_readonly_event = _("Lock events")
             help_text_credit_readonly_event = _(
-                "If checked, credits will be readonly in the event panel. You can modify them only in organization panel",
+                "If checked, prevents credits from being created or changed in the event panel"
             )
             self.add_configs(
                 "credit_readonly_event",
@@ -838,6 +839,34 @@ class ExeConfigForm(ConfigForm):
                 label_disable_event_approval,
                 help_text_disable_event_approval,
             )
+
+    def set_config_publisher(self) -> None:
+        """Configure external publications for associations."""
+        if "publisher" not in self.params["features"]:
+            return
+
+        self.set_section("publication", _("Publication"))
+
+        self.add_configs(
+            "publication_crew",
+            ConfigType.BOOL,
+            _("Publish staff"),
+            _("If checked: publish staff members"),
+        )
+        self.add_configs(
+            "publication_cast",
+            ConfigType.BOOL,
+            _("Publish players"),
+            _("If checked: publish registered players"),
+        )
+
+        field_label = "ILDB - API key"
+        field_help_text = _("Authentication token (mark all permissions)")
+        self.add_configs("ildb_api_key", ConfigType.CHAR, field_label, field_help_text)
+
+        field_label = "ILDB - Team ID"
+        field_help_text = _("Your team ID")
+        self.add_configs("ildb_team_id", ConfigType.CHAR, field_label, field_help_text)
 
     def set_config_integration(self) -> None:
         """Configure app integration redirect settings for associations."""

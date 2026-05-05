@@ -60,6 +60,7 @@ from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.io.pdf import print_run_bkg
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
+from larpmanager.utils.publication.base import publish_event_all
 from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 
 
@@ -119,19 +120,7 @@ class Command(BaseCommand):
         # Process feature-specific checks for each association
         # Only run checks if the association has the required features enabled
         for association in Association.objects.all():
-            enabled_features = get_association_features(association.id)
-
-            # Check if reminder notifications need to be sent
-            if "remind" in enabled_features:
-                self.check_remind(association)
-
-            # Process achievement/badge updates for members
-            if "badge" in enabled_features:
-                self.check_achievements(association)
-
-            # Validate and update accounting records
-            if "record_acc" in enabled_features:
-                check_accounting(association.id)
+            self.check_association(association)
 
         # Perform standard system-wide maintenance checks
         # These checks run regardless of feature flags
@@ -158,6 +147,32 @@ class Command(BaseCommand):
             # Generate background PDF documents for the run
             if "print_pdf" in event_features:
                 print_run_bkg(run.event.association.slug, run.get_slug())
+
+    def check_association(self, association: Association) -> None:
+        """Run all feature-specific automation checks for a single association."""
+        enabled_features = get_association_features(association.id)
+
+        # Check if reminder notifications need to be sent
+        if "remind" in enabled_features:
+            self.check_remind(association)
+
+        # Process achievement/badge updates for members
+        if "badge" in enabled_features:
+            self.check_achievements(association)
+
+        # Validate and update accounting records
+        if "record_acc" in enabled_features:
+            check_accounting(association.id)
+
+        # Sync published events to ILDB for all upcoming runs
+        if "publisher" in enabled_features:
+            self.publish_runs(association)
+
+    @staticmethod
+    def publish_runs(association: Association) -> None:
+        """Trigger publication sync for all visible runs."""
+        for run in Run.objects.filter(event__association=association, development=DevelopStatus.SHOW):
+            publish_event_all(run)
 
     _DELETION_WARNING_KEY = "deletion_warning_sent"
     _NO_DELETE_KEY = "no_delete"

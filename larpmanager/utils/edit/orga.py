@@ -48,6 +48,7 @@ from larpmanager.forms.event import (
     OrgaEventTextForm,
     OrgaPreferencesForm,
     OrgaProgressStepForm,
+    OrgaPublicationForm,
     OrgaQuickSetupForm,
     OrgaRunForm,
 )
@@ -197,6 +198,7 @@ class OrgaAction(str, Enum):
     PREFERENCES = ("", {"form": OrgaPreferencesForm, "member_form": True})
     EVENT = ("orga_event", {"form": OrgaRunForm, "event_form": True})
     CONFIG = ("orga_config", {"form": OrgaConfigForm, "event_form": True})
+    PUBLICATION = ("orga_publication", {"form": OrgaPublicationForm, "event_form": True})
     QUICK = ("orga_quick", {"form": OrgaQuickSetupForm, "event_form": True})
     APPEARANCE = ("orga_appearance", {"form": OrgaAppearanceForm, "event_form": True})
     ROLES = ("orga_roles", {"form": OrgaEventRoleForm, "can_delete": lambda _context, element: element.number != 1})

@@ -48,6 +48,18 @@
     module: event
 - model: larpmanager.eventpermission
   fields:
+    name: Publication
+    descr: Manage event metadata for external publication
+    slug: orga_publication
+    number: 45
+    config: null
+    active_if: null
+    hidden: false
+    icon: globe
+    feature: publisher
+    module: event
+- model: larpmanager.eventpermission
+  fields:
     name: Appearance
     descr: 'Set visual aspect: colors, background, cover image'
     slug: orga_appearance

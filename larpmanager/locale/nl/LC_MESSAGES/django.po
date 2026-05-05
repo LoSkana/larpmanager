@@ -390,6 +390,9 @@ msgstr "Grafiek"
 msgid "Gross"
 msgstr "Bruto"
 
+msgid "Hotel"
+msgstr "Hotel"
+
 msgid "Image"
 msgstr "Afbeelding"
 
@@ -401,6 +404,9 @@ msgstr "Items"
 
 msgid "Login"
 msgstr "Inloggen"
+
+msgid "Meals"
+msgstr "Maaltijden"
 
 msgid "Media"
 msgstr "Media"
@@ -461,6 +467,10 @@ msgstr "Personeel"
 
 msgid "Start"
 msgstr "Start"
+
+msgctxt "event"
+msgid "Style"
+msgstr "Stijl"
 
 msgid "Swift"
 msgstr "Snel"
@@ -807,6 +817,9 @@ msgstr "Media"
 msgid "Balance"
 msgstr "Soldeer"
 
+msgid "Camping"
+msgstr "Camping"
+
 msgid "Casting"
 msgstr "Gieten"
 
@@ -974,6 +987,10 @@ msgstr "Verzonden op"
 
 msgid "Session"
 msgstr "Sessie"
+
+msgctxt "event"
+msgid "Setting"
+msgstr "Instelling"
 
 msgid "Sharing"
 msgstr "Delen"
@@ -1197,8 +1214,15 @@ msgstr "Inclusief"
 msgid "Invoices"
 msgstr "Facturen"
 
+msgctxt "event"
+msgid "Keywords"
+msgstr "Trefwoorden"
+
 msgid "Language"
 msgstr "Taal"
+
+msgid "Latitude"
+msgstr "Breedte"
 
 msgid "Location"
 msgstr "Locatie"
@@ -1464,6 +1488,12 @@ msgstr "Interface"
 msgid "Inventory"
 msgstr "Inventaris"
 
+msgid "Languages"
+msgstr "Talen"
+
+msgid "Longitude"
+msgstr "Lengte"
+
 msgid "Mandatory"
 msgstr "Verplicht"
 
@@ -1683,6 +1713,9 @@ msgstr "Evenemententerrein"
 msgid "Event name"
 msgstr "Naam evenement"
 
+msgid "Event type"
+msgstr "Type evenement"
+
 msgid "Experience"
 msgstr "Ervaring"
 
@@ -1800,6 +1833,9 @@ msgstr "Tag verwijderen"
 msgid "Repertoire"
 msgstr "Repertoire"
 
+msgid "Restaurant"
+msgstr "Restaurant"
+
 msgid "Run number"
 msgstr "Runnummer"
 
@@ -1905,6 +1941,9 @@ msgstr "Toevoegen aan perceel"
 msgid "Additionals"
 msgstr "Toevoegingen"
 
+msgid "Agritourism"
+msgstr "Agrotoerisme"
+
 msgid "Amount paid"
 msgstr "Betaald bedrag"
 
@@ -2006,6 +2045,9 @@ msgstr "Lichtgewicht"
 
 msgid "Limitations"
 msgstr "Beperkingen"
+
+msgid "Lock events"
+msgstr "Gebeurtenissen vergrendelen"
 
 msgid "Nationality"
 msgstr "Nationaliteit"
@@ -2169,6 +2211,9 @@ msgstr "Annulering"
 msgid "Change photo"
 msgstr "Foto wijzigen"
 
+msgid "City / Place"
+msgstr "Stad / Plaats"
+
 msgid "Collaborator"
 msgstr "Deelnemer"
 
@@ -2243,6 +2288,9 @@ msgstr "Gemeente"
 
 msgid "Next payment"
 msgstr "Volgende betaling"
+
+msgid "Not included"
+msgstr "Niet inbegrepen"
 
 msgid "Not selected"
 msgstr "Niet geselecteerd"
@@ -2370,6 +2418,9 @@ msgstr "Ze gaan open op"
 msgid "You must pay"
 msgstr "U moet betalen"
 
+msgid "Your team ID"
+msgstr "Je team-ID"
+
 msgid "already used"
 msgstr "al gebruikt"
 
@@ -2388,6 +2439,9 @@ msgstr "Toegang geweigerd"
 
 msgid "Accessibility"
 msgstr "Toegankelijkheid"
+
+msgid "Accommodation"
+msgstr "Accommodatie"
 
 msgid "Age selection"
 msgstr "Leeftijdselectie"
@@ -2563,6 +2617,9 @@ msgstr "Stap naar voren"
 msgid "Prologue type"
 msgstr "Type proloog"
 
+msgid "Publish staff"
+msgstr "Personeel publiceren"
+
 msgid "Question type"
 msgstr "Type vraag"
 
@@ -2580,6 +2637,9 @@ msgstr "Aanmelden vereist"
 
 msgid "Restore error"
 msgstr "Fout herstellen"
+
+msgid "Self-catering"
+msgstr "Self-catering"
 
 msgid "Shared secret"
 msgstr "Gedeeld geheim"
@@ -2960,6 +3020,9 @@ msgstr "Meerregelige tekst"
 msgid "Multiple choice"
 msgstr "Meerkeuze"
 
+msgid "Non-residential"
+msgstr "Niet-residentieel"
+
 msgid "Overall balance"
 msgstr "Kasbudget"
 
@@ -2986,6 +3049,9 @@ msgstr "Bijgewerkt lidmaatschap"
 
 msgid "Progress status"
 msgstr "Vooruitgang"
+
+msgid "Publish players"
+msgstr "Spelers publiceren"
 
 msgid "Question saved!"
 msgstr "Onderdanige vraag!"
@@ -3374,6 +3440,9 @@ msgstr "Ervaringssysteem"
 msgid "Experience points"
 msgstr "Ervaringspunten"
 
+msgid "External catering"
+msgstr "Externe catering"
+
 msgid "Faction selection"
 msgstr "Factieselectie"
 
@@ -3400,6 +3469,9 @@ msgstr "Identiteitsbewijs"
 
 msgid "Interface version"
 msgstr "Interfaceversie"
+
+msgid "Internal catering"
+msgstr "Interne catering"
 
 msgid "Invalid selection"
 msgstr "Ongeldige selectie"
@@ -3584,6 +3656,9 @@ msgstr "Eerste registratie"
 msgid "Hide not available"
 msgstr "Verberg niet beschikbaar"
 
+msgid "Historic residence"
+msgstr "Historisch verblijf"
+
 msgid "Informations saved"
 msgstr "Informatie opgeslagen"
 
@@ -3764,6 +3839,9 @@ msgstr "Kennisgevingen per e-mail"
 msgid "Event Configuration"
 msgstr "Gebeurtenis Configuratie"
 
+msgid "Event added to ILDB"
+msgstr "Gebeurtenis toegevoegd aan ILDB"
+
 msgid "Event configuration"
 msgstr "Gebeurtenisconfiguratie"
 
@@ -3878,6 +3956,9 @@ msgstr "Volledig blad (Pdf)"
 msgid "Confirm your choices"
 msgstr "Bevestig je je keuzes"
 
+msgid "Country of the event"
+msgstr "Land van het evenement"
+
 msgid "Create new character"
 msgstr "Nieuw personage maken"
 
@@ -3886,6 +3967,9 @@ msgstr "Verzonden e-mails weergeven"
 
 msgid "Download light sheet"
 msgstr "Download lichtblad"
+
+msgid "Enter a valid number"
+msgstr "Voer een geldig nummer in"
 
 msgid "Event already played"
 msgstr "Reeds gespeelde evenementen"
@@ -4057,6 +4141,9 @@ msgstr "U bent aangemeld als"
 msgid "Access your character"
 msgstr "Toegang tot je personage"
 
+msgid "Accommodation details"
+msgstr "Details accommodatie"
+
 msgid "Advanced Mode Enabled"
 msgstr "Geavanceerde modus ingeschakeld"
 
@@ -4065,6 +4152,9 @@ msgstr "Terugbetaling goedkeuren"
 
 msgid "Assigned staff member"
 msgstr "Toegewezen medewerker"
+
+msgid "Category of the event"
+msgstr "Categorie van het evenement"
 
 msgid "Character Inventories"
 msgstr "Karakterinventarissen"
@@ -4538,6 +4628,9 @@ msgstr "Beschikbare facties tonen"
 msgid "Thanks for your support"
 msgstr "Bedankt voor je steun"
 
+msgid "The genre of your event"
+msgstr "Het genre van je evenement"
+
 msgid "The participant's email"
 msgstr "E-mailadres van de deelnemer"
 
@@ -4707,6 +4800,9 @@ msgstr "Voorbeeldsjabloon downloaden"
 msgid "Error reading backup file"
 msgstr "Fout bij het lezen van back-upbestand"
 
+msgid "Generate a new ILDB token"
+msgstr "Een nieuw ILDB-token genereren"
+
 msgid "Go to the preferences for"
 msgstr "Ga naar voorkeuren voor"
 
@@ -4828,6 +4924,9 @@ msgstr "Kan niet kopiëren van dezelfde gebeurtenis"
 
 msgid "Check inverse relationship"
 msgstr "controleer omgekeerde relatie"
+
+msgid "City or place of the event"
+msgstr "Stad of plaats van het evenement"
 
 msgid "Discover the game factions"
 msgstr "Ontdek de spelgroepen"
@@ -4959,6 +5058,9 @@ msgstr "De tekens van het evenement beheren"
 
 msgid "Manage warehouse containers"
 msgstr "Magazijncontainers beheren"
+
+msgid "Meals included in the event"
+msgstr "Maaltijden inbegrepen in het evenement"
 
 msgid "Members of the Organization"
 msgstr "Lid van de vereniging"
@@ -5213,6 +5315,9 @@ msgstr "Nieuwe platformfuncties activeren"
 msgid "Character Inventory Pool Types"
 msgstr "Character Inventory Pool Types"
 
+msgid "Choose the style for the event"
+msgstr "Kies de stijl voor het evenement"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Volledige betaling voor %(event)s"
@@ -5262,6 +5367,9 @@ msgstr "Voltooide mijlpalen weergeven/verbergen"
 msgid "The registrations to the event"
 msgstr "Registratie voor het evenement"
 
+msgid "Type of accommodation included"
+msgstr "Type accommodatie inbegrepen"
+
 msgid "Upload and host files directly"
 msgstr "Bestanden rechtstreeks uploaden en hosten"
 
@@ -5303,9 +5411,6 @@ msgstr "Ontdek de evenementen die op stapel staan"
 
 msgid "Filter or search the characters"
 msgstr "Filter of zoek de tekens"
-
-msgid "Make credits readonly in events"
-msgstr "Credits alleen-lezen maken in evenementen"
 
 msgid "Manage event navigation buttons"
 msgstr "Navigatietoetsen voor evenementen beheren"
@@ -5404,6 +5509,9 @@ msgstr "Annulering wegens ontbrekend profiel"
 msgid "Character assigned for %(event)s"
 msgstr "Karakter toegewezen voor %(event)s"
 
+msgid "Choose the setting for the event"
+msgstr "Kies de instelling voor het evenement"
+
 msgid "Configure event feature settings"
 msgstr "Instellingen gebeurtenisfuncties configureren"
 
@@ -5427,6 +5535,9 @@ msgstr "Om veiligheidsredenen kan elk token maar één keer worden gebruikt"
 
 msgid "Is it selectable by participants"
 msgstr "Is het selecteerbaar door deelnemers"
+
+msgid "Language(s) the event is held in"
+msgstr "Taal/talen waarin het evenement wordt gehouden"
 
 msgid "Manage expenses for contributors"
 msgstr "Beheer uitgaven voor medewerkers"
@@ -5542,6 +5653,9 @@ msgstr "Schrijf ons voor meer informatie"
 msgid "Go to the history preferences for"
 msgstr "Ga naar de voorkeurengeschiedenis voor"
 
+msgid "If checked: publish staff members"
+msgstr "Indien aangevinkt: medewerkers publiceren"
+
 msgid "Indicate your level of experience"
 msgstr "Geef je ervaringsniveau aan"
 
@@ -5568,6 +5682,10 @@ msgstr "Nu kun je de belastingopties instellen"
 
 msgid "Number of additional participants"
 msgstr "Aantal extra deelnemers"
+
+#, python-format
+msgid "Publish to ILDB: <b>%(list)s</b>."
+msgstr "Publiceren naar ILDB: <b>%(list)s</b>."
 
 msgid "Set the registration opening date"
 msgstr "Stel de openingsdatum van de registratie in"
@@ -5696,14 +5814,14 @@ msgstr "De collectie is afgeleverd!"
 msgid "The form is saved every 30 seconds"
 msgstr "Het formulier wordt elke 30 seconden opgeslagen"
 
-msgid "The genre or setting of your event"
-msgstr "Het genre of de setting van je evenement"
-
 msgid "The payment has not been completed"
 msgstr "De betaling is niet voltooid"
 
 msgid "This page shows the warehouse tags"
 msgstr "Deze pagina toont de magazijnlabels"
+
+msgid "Type(s) of accommodation available"
+msgstr "Type(n) accommodatie beschikbaar"
 
 msgid "You are about to make a payment of"
 msgstr "Je staat op het punt een betaling te doen van"
@@ -6077,6 +6195,9 @@ msgstr "Vul de relaties van je personage in"
 msgid "I confirm that I have made the payment"
 msgstr "Ik bevestig dat ik de betaling heb gedaan"
 
+msgid "If checked: publish registered players"
+msgstr "Indien aangevinkt: publiceer geregistreerde spelers"
+
 msgid "It will be shown to other participants"
 msgstr "Het wordt getoond aan andere deelnemers"
 
@@ -6085,6 +6206,9 @@ msgstr "Het type karaktervaardigheden beheren"
 
 msgid "Membership of the Organization refused"
 msgstr "Lidmaatschap geweigerd"
+
+msgid "Now set the publication configurations"
+msgstr "Stel nu de publicatieconfiguraties in"
 
 msgid "Now you can host files in the platform"
 msgstr "Nu kun je bestanden hosten in het platform"
@@ -6371,6 +6495,9 @@ msgstr "Donatiebedrag gekozen door de deelnemer"
 msgid "I do it routinely, I have good experience"
 msgstr "Ik doe het regelmatig, ik heb goede ervaring"
 
+msgid "Latitude coordinate of the event location"
+msgstr "Breedtecoördinaat van de locatie van het evenement"
+
 msgid "Manage templates for experience abilities"
 msgstr "Sjablonen voor ervaringsvaardigheden beheren"
 
@@ -6441,6 +6568,9 @@ msgstr "Als deze optie is aangevinkt, kunnen items in bulk worden verwijderd"
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Indien aangevinkt: toont het genre voor elk evenement"
+
+msgid "Longitude coordinate of the event location"
+msgstr "Lengtecoördinaat van de locatie van het voorval"
 
 msgid "Manage configuration of activated features"
 msgstr "Configuratie van geactiveerde functies beheren"
@@ -6541,6 +6671,9 @@ msgstr "Registratie schakelen tussen evenementen toestaan"
 msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr "Goedkeuring %(user)s als %(role)s voor %(event)s"
 
+msgid "Authentication token (mark all permissions)"
+msgstr "Authenticatietoken (alle rechten markeren)"
+
 msgid "Characters are only visible to participants"
 msgstr "Tekens zijn alleen zichtbaar voor deelnemers"
 
@@ -6577,6 +6710,9 @@ msgstr "Nu kun je mijlpalen voor het evenement aanmaken"
 
 msgid "Now you can set the player editing settings"
 msgstr "Nu kun je de instellingen voor het bewerken van de speler instellen"
+
+msgid "Please review and submit it for publication"
+msgstr "Bekijk het en stuur het in voor publicatie"
 
 msgid "Text displayed alongside the carousel image"
 msgstr "Tekst die naast de carrouselafbeelding wordt weergegeven"
@@ -6786,6 +6922,9 @@ msgstr "Wil je op de hoogte blijven van onze evenementen"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Hint: De juiste antwoorden op deze vraag zijn"
+
+msgid "Manage event metadata for external publication"
+msgstr "Metagegevens van evenementen beheren voor externe publicatie"
 
 msgid "Manage your event expenses and upload receipts"
 msgstr "Beheer je evenementuitgaven en upload ontvangstbewijzen"
@@ -9345,6 +9484,13 @@ msgstr ""
 "aanpassen"
 
 msgid ""
+"If checked, prevents credits from being created or changed in the event "
+"panel"
+msgstr ""
+"Indien aangevinkt, wordt voorkomen dat credits worden aangemaakt of "
+"gewijzigd in het gebeurtenissenpaneel"
+
+msgid ""
 "If checked: in the public page of an user shows a list of all events "
 "attended"
 msgstr ""
@@ -10809,6 +10955,14 @@ msgstr ""
 "Als deze optie is ingeschakeld, worden alle registraties in één tabel "
 "weergegeven in plaats van gescheiden per type"
 
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically added to "
+"larpdatabase.com as a draft."
+msgstr ""
+"De gebeurtenis <strong>%(event)s</strong> is automatisch toegevoegd aan "
+"larpdatabase.com als concept."
+
 msgid ""
 "Upload a custom font file for page titles to match your event's theme (TTF, "
 "OTF, or WOFF formats)"
@@ -11070,13 +11224,6 @@ msgid ""
 msgstr ""
 "Stelt deelnemers in staat om privéberichten naar elkaar te sturen, zonder "
 "persoonlijke e-mailadressen te onthullen"
-
-msgid ""
-"If checked, credits will be readonly in the event panel. You can modify them"
-" only in organization panel"
-msgstr ""
-"Als deze optie is aangevinkt, zijn credits alleen leesbaar in het "
-"gebeurtenissenpaneel. Je kunt ze alleen wijzigen in het organisatiepaneel"
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "

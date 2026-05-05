@@ -691,12 +691,11 @@ msgstr ""
 msgid "Name to be displayed for credits"
 msgstr ""
 
-msgid "Make credits readonly in events"
+msgid "Lock events"
 msgstr ""
 
 msgid ""
-"If checked, credits will be readonly in the event panel. You can modify them "
-"only in organization panel"
+"If checked, prevents credits from being created or changed in the event panel"
 msgstr ""
 
 msgid "Treasury"
@@ -725,6 +724,27 @@ msgstr ""
 msgid ""
 "If checked, approval of expenses can be performed only from the organization "
 "panel"
+msgstr ""
+
+msgid "Publication"
+msgstr ""
+
+msgid "Publish staff"
+msgstr ""
+
+msgid "If checked: publish staff members"
+msgstr ""
+
+msgid "Publish players"
+msgstr ""
+
+msgid "If checked: publish registered players"
+msgstr ""
+
+msgid "Authentication token (mark all permissions)"
+msgstr ""
+
+msgid "Your team ID"
 msgstr ""
 
 msgid "App Integration"
@@ -1903,6 +1923,119 @@ msgstr ""
 msgid "Prologue"
 msgstr ""
 
+msgid "Included"
+msgstr ""
+
+msgid "Not included"
+msgstr ""
+
+msgid "Non-residential"
+msgstr ""
+
+msgid "Camping"
+msgstr ""
+
+msgid "Agritourism"
+msgstr ""
+
+msgid "Historic residence"
+msgstr ""
+
+msgid "Hotel"
+msgstr ""
+
+msgid "Other"
+msgstr ""
+
+msgid "Restaurant"
+msgstr ""
+
+msgid "Self-catering"
+msgstr ""
+
+msgid "Internal catering"
+msgstr ""
+
+msgid "External catering"
+msgstr ""
+
+msgid "Enter a valid number"
+msgstr ""
+
+msgid "Manage event metadata for external publication"
+msgstr ""
+
+msgid "Informations"
+msgstr ""
+
+msgid "Languages"
+msgstr ""
+
+msgid "Language(s) the event is held in"
+msgstr ""
+
+msgid "Event type"
+msgstr ""
+
+msgid "Category of the event"
+msgstr ""
+
+msgctxt "event"
+msgid "Setting"
+msgstr ""
+
+msgid "Choose the setting for the event"
+msgstr ""
+
+msgctxt "event"
+msgid "Style"
+msgstr ""
+
+msgid "Choose the style for the event"
+msgstr ""
+
+msgid "City / Place"
+msgstr ""
+
+msgid "City or place of the event"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "Country of the event"
+msgstr ""
+
+msgid "Accommodation"
+msgstr ""
+
+msgid "Type of accommodation included"
+msgstr ""
+
+msgid "Accommodation details"
+msgstr ""
+
+msgid "Type(s) of accommodation available"
+msgstr ""
+
+msgid "Meals"
+msgstr ""
+
+msgid "Meals included in the event"
+msgstr ""
+
+msgid "Latitude"
+msgstr ""
+
+msgid "Latitude coordinate of the event location"
+msgstr ""
+
+msgid "Longitude"
+msgstr ""
+
+msgid "Longitude coordinate of the event location"
+msgstr ""
+
 msgid "Experience System"
 msgstr ""
 
@@ -2278,9 +2411,6 @@ msgstr ""
 
 msgid ""
 "Enter the order of preference of your pre-registration (1 is the maximum)"
-msgstr ""
-
-msgid "Informations"
 msgstr ""
 
 msgid "Is there anything else you would like to tell us"
@@ -3075,9 +3205,6 @@ msgstr ""
 msgid "Secretarial - stationery, printing"
 msgstr ""
 
-msgid "Other"
-msgstr ""
-
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr ""
 
@@ -3302,9 +3429,6 @@ msgstr ""
 msgid "Color for clickable links and interactive elements"
 msgstr ""
 
-msgid "Country"
-msgstr ""
-
 msgid "Your organization's country"
 msgstr ""
 
@@ -3456,7 +3580,7 @@ msgstr ""
 msgid "will be displayed on the main event page"
 msgstr ""
 
-msgid "The genre or setting of your event"
+msgid "The genre of your event"
 msgstr ""
 
 msgid "Cover image"
@@ -5217,6 +5341,13 @@ msgstr ""
 msgid "Players"
 msgstr ""
 
+msgctxt "event"
+msgid "Keywords"
+msgstr ""
+
+msgid "Keywords"
+msgstr ""
+
 msgid "Total"
 msgstr ""
 
@@ -5799,9 +5930,6 @@ msgstr ""
 msgid ""
 "If you press once, it will be *included* in the search. If a character "
 "belongs to at least one inclusion category, it will be shown in the search"
-msgstr ""
-
-msgid "Included"
 msgstr ""
 
 msgid ""
@@ -9328,10 +9456,10 @@ msgstr ""
 msgid "Now you can create the \"new player\" ticket"
 msgstr ""
 
-msgid "Publication"
+msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 
-msgid "Makes upcoming events visible to external sites through a public API"
+msgid "Now set the publication configurations"
 msgstr ""
 
 msgid ""
@@ -10112,6 +10240,18 @@ msgstr ""
 msgid "Plot Roles"
 msgstr ""
 
+msgid "Event added to ILDB"
+msgstr ""
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically added to "
+"larpdatabase.com as a draft."
+msgstr ""
+
+msgid "Please review and submit it for publication"
+msgstr ""
+
 msgid "Tutorial"
 msgstr ""
 
@@ -10521,6 +10661,13 @@ msgid "Define the data collected in the user profile form"
 msgstr ""
 
 msgid "Select and activate key features"
+msgstr ""
+
+#, python-format
+msgid "Publish to ILDB: <b>%(list)s</b>."
+msgstr ""
+
+msgid "Generate a new ILDB token"
 msgstr ""
 
 msgid "Set up the membership request text"

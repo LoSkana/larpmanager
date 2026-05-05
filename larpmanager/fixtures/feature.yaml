@@ -1444,8 +1444,8 @@
     overall: true
     placeholder: false
     order: 80
-    after_text: ''
-    after_link: ''
+    after_text: Now set the publication configurations
+    after_link: config/publication
     hidden: false
     module: events
     dependencies: []

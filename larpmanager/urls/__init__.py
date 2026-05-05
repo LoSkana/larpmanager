@@ -26,7 +26,7 @@ from django.conf import (
 from django.conf.urls.static import static
 from django.urls import path
 
-from larpmanager.views.api import published_events
+from larpmanager.utils.publication.api import published_events
 from larpmanager.views.user import event as views_ue
 
 from .event import urlpatterns as event_urls

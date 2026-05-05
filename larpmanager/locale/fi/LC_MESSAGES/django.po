@@ -390,6 +390,9 @@ msgstr "Kaavio"
 msgid "Gross"
 msgstr "Brutto"
 
+msgid "Hotel"
+msgstr "Hotelli"
+
 msgid "Image"
 msgstr "Kuva"
 
@@ -401,6 +404,9 @@ msgstr "Tuotteet"
 
 msgid "Login"
 msgstr "Kirjaudu sisään"
+
+msgid "Meals"
+msgstr "Ateriat"
 
 msgid "Media"
 msgstr "Media"
@@ -461,6 +467,10 @@ msgstr "Henkilöstö"
 
 msgid "Start"
 msgstr "Aloita"
+
+msgctxt "event"
+msgid "Style"
+msgstr "Tyyli"
 
 msgid "Swift"
 msgstr "Swift"
@@ -807,6 +817,9 @@ msgstr "Keskimääräinen"
 msgid "Balance"
 msgstr "Balance"
 
+msgid "Camping"
+msgstr "Leirintäalue"
+
 msgid "Casting"
 msgstr "Hahmojako"
 
@@ -974,6 +987,10 @@ msgstr "Lähetetty osoitteessa"
 
 msgid "Session"
 msgstr "Istunto"
+
+msgctxt "event"
+msgid "Setting"
+msgstr "Asetukset"
 
 msgid "Sharing"
 msgstr "Jakaminen"
@@ -1197,8 +1214,15 @@ msgstr "Mukana"
 msgid "Invoices"
 msgstr "Laskut"
 
+msgctxt "event"
+msgid "Keywords"
+msgstr "Avainsanat"
+
 msgid "Language"
 msgstr "Kieli"
+
+msgid "Latitude"
+msgstr "Leveysaste"
 
 msgid "Location"
 msgstr "Sijainti"
@@ -1464,6 +1488,12 @@ msgstr "Liitäntä"
 msgid "Inventory"
 msgstr "Inventaario"
 
+msgid "Languages"
+msgstr "Kielet"
+
+msgid "Longitude"
+msgstr "Pituusaste"
+
 msgid "Mandatory"
 msgstr "Pakollinen"
 
@@ -1683,6 +1713,9 @@ msgstr "Tapahtuma-alue"
 msgid "Event name"
 msgstr "Tapahtuman nimi"
 
+msgid "Event type"
+msgstr "Tapahtuman tyyppi"
+
 msgid "Experience"
 msgstr "Kokemus"
 
@@ -1800,6 +1833,9 @@ msgstr "Poista tagi"
 msgid "Repertoire"
 msgstr "Ohjelmisto"
 
+msgid "Restaurant"
+msgstr "Ravintola"
+
 msgid "Run number"
 msgstr "Juoksun numero"
 
@@ -1905,6 +1941,9 @@ msgstr "Lisää juoneen"
 msgid "Additionals"
 msgstr "Lisäaineet"
 
+msgid "Agritourism"
+msgstr "Maatilamatkailu"
+
 msgid "Amount paid"
 msgstr "Maksettu määrä"
 
@@ -2006,6 +2045,9 @@ msgstr "Kevyt"
 
 msgid "Limitations"
 msgstr "Rajoitukset"
+
+msgid "Lock events"
+msgstr "Lukitse tapahtumat"
 
 msgid "Nationality"
 msgstr "Kansalaisuus"
@@ -2169,6 +2211,9 @@ msgstr "Peruutus"
 msgid "Change photo"
 msgstr "Vaihda kuva"
 
+msgid "City / Place"
+msgstr "Kaupunki / paikka"
+
 msgid "Collaborator"
 msgstr "Yhteistyökumppani"
 
@@ -2243,6 +2288,9 @@ msgstr "Kunta"
 
 msgid "Next payment"
 msgstr "Seuraava maksu"
+
+msgid "Not included"
+msgstr "Ei sisälly"
 
 msgid "Not selected"
 msgstr "Ei valittu"
@@ -2370,6 +2418,9 @@ msgstr "Avataan klo"
 msgid "You must pay"
 msgstr "Sinun on maksettava"
 
+msgid "Your team ID"
+msgstr "Joukkueen tunnus"
+
 msgid "already used"
 msgstr "jo käytetty"
 
@@ -2388,6 +2439,9 @@ msgstr "Pääsy evätty"
 
 msgid "Accessibility"
 msgstr "Saavutettavuus"
+
+msgid "Accommodation"
+msgstr "Majoitus"
 
 msgid "Age selection"
 msgstr "Iän valinta"
@@ -2563,6 +2617,9 @@ msgstr "Edistymisvaihe"
 msgid "Prologue type"
 msgstr "Prologin tyyppi"
 
+msgid "Publish staff"
+msgstr "Julkaise henkilöstö"
+
 msgid "Question type"
 msgstr "Kysymyksen tyyppi"
 
@@ -2580,6 +2637,9 @@ msgstr "Vaadi kirjautuminen"
 
 msgid "Restore error"
 msgstr "Palauta virhe"
+
+msgid "Self-catering"
+msgstr "Self-catering"
 
 msgid "Shared secret"
 msgstr "Jaettu salaisuus"
@@ -2960,6 +3020,9 @@ msgstr "Monirivinen teksti"
 msgid "Multiple choice"
 msgstr "Monivalinta"
 
+msgid "Non-residential"
+msgstr "Muut kuin asuinrakennukset"
+
 msgid "Overall balance"
 msgstr "Yleinen tasapaino"
 
@@ -2986,6 +3049,9 @@ msgstr "Profiili päivitetty"
 
 msgid "Progress status"
 msgstr "Edistymisen tila"
+
+msgid "Publish players"
+msgstr "Julkaise pelaajat"
 
 msgid "Question saved!"
 msgstr "Kysymys pelastettu!"
@@ -3374,6 +3440,9 @@ msgstr "Kokemusjärjestelmä"
 msgid "Experience points"
 msgstr "Kokemuspisteet"
 
+msgid "External catering"
+msgstr "Ulkoinen ateriapalvelu"
+
 msgid "Faction selection"
 msgstr "Ryhmittymän valinta"
 
@@ -3400,6 +3469,9 @@ msgstr "Henkilöllisyystodistus"
 
 msgid "Interface version"
 msgstr "Käyttöliittymän versio"
+
+msgid "Internal catering"
+msgstr "Sisäinen ateriapalvelu"
 
 msgid "Invalid selection"
 msgstr "Virheellinen valinta"
@@ -3584,6 +3656,9 @@ msgstr "Ensimmäinen rekisteröinti"
 msgid "Hide not available"
 msgstr "Piilota ei saatavilla"
 
+msgid "Historic residence"
+msgstr "Historiallinen asuinpaikka"
+
 msgid "Informations saved"
 msgstr "Tallennetut tiedot"
 
@@ -3764,6 +3839,9 @@ msgstr "Sähköposti-ilmoitukset"
 msgid "Event Configuration"
 msgstr "Tapahtuman konfigurointi"
 
+msgid "Event added to ILDB"
+msgstr "Tapahtuma lisätty ILDB:hen"
+
 msgid "Event configuration"
 msgstr "Tapahtuman konfigurointi"
 
@@ -3878,6 +3956,9 @@ msgstr "Täydellinen lomake (Pdf)"
 msgid "Confirm your choices"
 msgstr "Vahvista valintasi"
 
+msgid "Country of the event"
+msgstr "Tapahtuman maa"
+
 msgid "Create new character"
 msgstr "Luo uusi hahmo"
 
@@ -3886,6 +3967,9 @@ msgstr "Näytä lähetetyt sähköpostit"
 
 msgid "Download light sheet"
 msgstr "Lataa kevytlomake"
+
+msgid "Enter a valid number"
+msgstr "Syötä kelvollinen numero"
 
 msgid "Event already played"
 msgstr "Tapahtuma on jo pelattu"
@@ -4057,6 +4141,9 @@ msgstr "Olet kirjautunut sisään nimellä"
 msgid "Access your character"
 msgstr "Pääset hahmoosi"
 
+msgid "Accommodation details"
+msgstr "Majoituksen tiedot"
+
 msgid "Advanced Mode Enabled"
 msgstr "Advanced Mode käytössä"
 
@@ -4065,6 +4152,9 @@ msgstr "Hyväksy korvaus"
 
 msgid "Assigned staff member"
 msgstr "Nimetty toimihenkilö"
+
+msgid "Category of the event"
+msgstr "Tapahtuman luokka"
 
 msgid "Character Inventories"
 msgstr "Hahmoluettelot"
@@ -4538,6 +4628,9 @@ msgstr "Näytä käytettävissä olevat ryhmittymät"
 msgid "Thanks for your support"
 msgstr "Kiitos tuestanne"
 
+msgid "The genre of your event"
+msgstr "Tapahtuman laji"
+
 msgid "The participant's email"
 msgstr "Osallistujan sähköpostiosoite"
 
@@ -4707,6 +4800,9 @@ msgstr "Lataa esimerkkimalli"
 msgid "Error reading backup file"
 msgstr "Virhe varmuuskopiotiedoston lukemisessa"
 
+msgid "Generate a new ILDB token"
+msgstr "Uuden ILDB-tunnisteen luominen"
+
 msgid "Go to the preferences for"
 msgstr "Siirry asetuksiin"
 
@@ -4828,6 +4924,9 @@ msgstr "Ei voi kopioida samasta tapahtumasta"
 
 msgid "Check inverse relationship"
 msgstr "Tarkista käänteinen suhde"
+
+msgid "City or place of the event"
+msgstr "Tapahtuman kaupunki tai paikka"
 
 msgid "Discover the game factions"
 msgstr "Tutustu pelin ryhmittymiin"
@@ -4959,6 +5058,9 @@ msgstr "Tapahtumahahmojen hallinta"
 
 msgid "Manage warehouse containers"
 msgstr "Hallitse varastokontteja"
+
+msgid "Meals included in the event"
+msgstr "Tapahtumaan sisältyvät ateriat"
 
 msgid "Members of the Organization"
 msgstr "Järjestön jäsenet"
@@ -5213,6 +5315,9 @@ msgstr "Aktivoi uudet alustan ominaisuudet"
 msgid "Character Inventory Pool Types"
 msgstr "Hahmon inventaarioallas-tyypit"
 
+msgid "Choose the style for the event"
+msgstr "Valitse tyyli tapahtumaa varten"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Täydellinen maksu tapahtumaan %(event)s"
@@ -5262,6 +5367,9 @@ msgstr "Näytä/piilota suoritetut virstanpylväät"
 msgid "The registrations to the event"
 msgstr "Ilmoittautumiset tapahtumaan"
 
+msgid "Type of accommodation included"
+msgstr "Sisältyvä majoitustyyppi"
+
 msgid "Upload and host files directly"
 msgstr "Lataa ja isännöi tiedostoja suoraan"
 
@@ -5303,9 +5411,6 @@ msgstr "Tutustu tuleviin tapahtumiin"
 
 msgid "Filter or search the characters"
 msgstr "Suodata tai etsiä merkkejä"
-
-msgid "Make credits readonly in events"
-msgstr "Tehdään hyvityksistä lukukelpoisia tapahtumissa"
 
 msgid "Manage event navigation buttons"
 msgstr "Tapahtuman navigointipainikkeiden hallinta"
@@ -5404,6 +5509,9 @@ msgstr "Peruutus puuttuvan profiilin vuoksi"
 msgid "Character assigned for %(event)s"
 msgstr "Hahmo asetettu tapahtumaan %(event)s"
 
+msgid "Choose the setting for the event"
+msgstr "Valitse tapahtuman asetukset"
+
 msgid "Configure event feature settings"
 msgstr "Tapahtumaominaisuuden asetusten määrittäminen"
 
@@ -5427,6 +5535,9 @@ msgstr "Kukin tunniste voidaan käyttää vain kerran turvallisuussyistä"
 
 msgid "Is it selectable by participants"
 msgstr "Voivatko osallistujat valita sen"
+
+msgid "Language(s) the event is held in"
+msgstr "Kieli(t), jolla(joilla) tapahtuma järjestetään"
 
 msgid "Manage expenses for contributors"
 msgstr "Hallinnoi avustajien kuluja"
@@ -5542,6 +5653,9 @@ msgstr "Lisätietoja saat kirjoittamalla meille"
 msgid "Go to the history preferences for"
 msgstr "Siirry historian asetuksiin"
 
+msgid "If checked: publish staff members"
+msgstr "Jos rasti on merkitty: julkaise henkilöstön jäsenet"
+
 msgid "Indicate your level of experience"
 msgstr "Ilmoita kokemuksesi taso"
 
@@ -5568,6 +5682,10 @@ msgstr "Nyt voit asettaa verovaihtoehdot"
 
 msgid "Number of additional participants"
 msgstr "Lisäosallistujien määrä"
+
+#, python-format
+msgid "Publish to ILDB: <b>%(list)s</b>."
+msgstr "Julkaise ILDB:hen: <b>%(list)s</b>."
 
 msgid "Set the registration opening date"
 msgstr "Aseta rekisteröinnin avaamispäivä"
@@ -5695,14 +5813,14 @@ msgstr "Koonti on jaettu!"
 msgid "The form is saved every 30 seconds"
 msgstr "Lomake tallennetaan 30 sekunnin välein"
 
-msgid "The genre or setting of your event"
-msgstr "Tapahtuman laji tai ympäristö"
-
 msgid "The payment has not been completed"
 msgstr "Maksua ei ole suoritettu"
 
 msgid "This page shows the warehouse tags"
 msgstr "Tällä sivulla näytetään varastotunnisteet"
+
+msgid "Type(s) of accommodation available"
+msgstr "Saatavilla oleva(t) majoitustyyppi(t)"
 
 msgid "You are about to make a payment of"
 msgstr "Olet suorittamassa maksun, jonka suuruus on"
@@ -6074,6 +6192,9 @@ msgstr "Täytä hahmosi suhteet"
 msgid "I confirm that I have made the payment"
 msgstr "Vahvistan, että olen suorittanut maksun"
 
+msgid "If checked: publish registered players"
+msgstr "Jos valittuna: julkaise rekisteröidyt pelaajat"
+
 msgid "It will be shown to other participants"
 msgstr "Se näytetään muille osallistujille"
 
@@ -6082,6 +6203,9 @@ msgstr "Hallitse hahmon kykyjen tyyppiä"
 
 msgid "Membership of the Organization refused"
 msgstr "Järjestön jäsenyys evättiin"
+
+msgid "Now set the publication configurations"
+msgstr "Aseta nyt julkaisun kokoonpanot"
 
 msgid "Now you can host files in the platform"
 msgstr "Nyt voit isännöidä tiedostoja alustalla"
@@ -6368,6 +6492,9 @@ msgstr "Osallistujan valitsema lahjoitussumma"
 msgid "I do it routinely, I have good experience"
 msgstr "Teen sitä rutiininomaisesti, minulla on hyviä kokemuksia"
 
+msgid "Latitude coordinate of the event location"
+msgstr "Tapahtumapaikan leveyspiiri"
+
 msgid "Manage templates for experience abilities"
 msgstr "Hallitse kokemustaitojen malleja"
 
@@ -6438,6 +6565,9 @@ msgstr "Jos valintaruutu on valittuna, voit poistaa kohteita irtotavarana"
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Jos valittuna: näyttää kunkin tapahtuman genren"
+
+msgid "Longitude coordinate of the event location"
+msgstr "Tapahtumapaikan pituuskoordinaatti"
 
 msgid "Manage configuration of activated features"
 msgstr "Aktivoitujen ominaisuuksien konfiguroinnin hallinta"
@@ -6538,6 +6668,9 @@ msgstr "Mahdollistaa ilmoittautumisen siirtämisen tapahtumien välillä"
 msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr "Hyväksyntä %(user)s %(role)s %(event)s"
 
+msgid "Authentication token (mark all permissions)"
+msgstr "Tunnistusmerkki (merkitse kaikki oikeudet)"
+
 msgid "Characters are only visible to participants"
 msgstr "Merkit näkyvät vain osallistujille"
 
@@ -6574,6 +6707,9 @@ msgstr "Nyt voit luoda virstanpylväitä tapahtumalle"
 
 msgid "Now you can set the player editing settings"
 msgstr "Nyt voit määrittää soittimen muokkausasetukset"
+
+msgid "Please review and submit it for publication"
+msgstr "Tarkista ja lähetä se julkaistavaksi"
 
 msgid "Text displayed alongside the carousel image"
 msgstr "Karusellin kuvan vieressä näkyvä teksti"
@@ -6779,6 +6915,9 @@ msgstr "Haluatko olla aina ajan tasalla tapahtumistamme"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Vihje: Oikeat vastaukset tähän kysymykseen ovat seuraavat"
+
+msgid "Manage event metadata for external publication"
+msgstr "Tapahtuman metatietojen hallinta ulkoista julkaisemista varten"
 
 msgid "Manage your event expenses and upload receipts"
 msgstr "Hallitse tapahtumakuluja ja lataa kuitteja"
@@ -9194,6 +9333,13 @@ msgid ""
 msgstr "Jos valittuna, osallistujat voivat muokata hahmojensa nimiä"
 
 msgid ""
+"If checked, prevents credits from being created or changed in the event "
+"panel"
+msgstr ""
+"Jos valintamerkki on valittuna, estetään hyvitysten luominen tai muuttaminen"
+" tapahtumapaneelissa"
+
+msgid ""
 "If checked: in the public page of an user shows a list of all events "
 "attended"
 msgstr ""
@@ -10619,6 +10765,14 @@ msgstr ""
 "Jos valittuna, kaikki ilmoittautumiset näytetään yhdessä taulukossa sen "
 "sijaan, että ne erotettaisiin toisistaan tyypin mukaan"
 
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically added to "
+"larpdatabase.com as a draft."
+msgstr ""
+"Tapahtuma <strong>%(event)s</strong> on lisätty automaattisesti "
+"larpdatabase.com-sivustolle luonnoksena."
+
 msgid ""
 "Upload a custom font file for page titles to match your event's theme (TTF, "
 "OTF, or WOFF formats)"
@@ -10877,13 +11031,6 @@ msgid ""
 msgstr ""
 "Osallistujat voivat lähettää toisilleen yksityisviestejä paljastamatta "
 "henkilökohtaisia sähköpostiosoitteita"
-
-msgid ""
-"If checked, credits will be readonly in the event panel. You can modify them"
-" only in organization panel"
-msgstr ""
-"Jos valintaruutu on valittuna, tapahtumapaneelissa on vain lukuoikeus. Voit "
-"muokata niitä vain organisaatiopaneelissa"
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "

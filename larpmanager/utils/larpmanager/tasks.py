@@ -51,7 +51,7 @@ logger = logging.getLogger(__name__)
 INTERNAL_KWARGS = {"schedule", "repeat", "repeat_until", "remove_existing_tasks"}
 
 
-def background_auto(schedule: Any = 0, **background_kwargs: Any) -> Any:
+def background_auto(schedule: Any = 0, *, skip_duplicates: bool = False, **background_kwargs: Any) -> Any:
     """Conditionally run functions as background tasks.
 
     Creates a decorator that can run functions either synchronously
@@ -59,6 +59,7 @@ def background_auto(schedule: Any = 0, **background_kwargs: Any) -> Any:
 
     Args:
         schedule (int): Seconds to delay before execution
+        skip_duplicates (bool): Skip scheduling if an identical pending task exists
         **background_kwargs: Additional arguments for background task
 
     Returns:
@@ -89,6 +90,13 @@ def background_auto(schedule: Any = 0, **background_kwargs: Any) -> Any:
                 filtered_kwargs = {key: value for key, value in kwargs.items() if key not in INTERNAL_KWARGS}
                 # Execute function directly in foreground
                 return original_function(*args, **filtered_kwargs)
+            # Skip scheduling if an identical pending task already exists
+            if skip_duplicates:
+                from background_task.models import Task  # noqa: PLC0415
+
+                filtered_kwargs = {k: v for k, v in kwargs.items() if k not in INTERNAL_KWARGS}
+                if Task.objects.get_task(background_task.name, args=list(args), kwargs=filtered_kwargs).exists():
+                    return None
             # Schedule function as background task
             return background_task(*args, **kwargs)
 

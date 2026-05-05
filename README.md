@@ -25,10 +25,10 @@ https://larpmanager.com
 
 LarpManager is distributed under a **dual license** model:
 
-- **Open Source (AGPLv3)** — Free to use under the terms of the AGPLv3 license.
+- **Open Source (AGPLv3)**: Free to use under the terms of the AGPLv3 license.
   If you host your own instance, you must publish any modifications and include a visible link to [larpmanager.com](https://larpmanager.com) on every page of the interface.
 
-- **Commercial License** — Allows private modifications and removes the attribution requirement.
+- **Commercial License**: Allows private modifications and removes the attribution requirement.
   For details or licensing inquiries, contact [commercial@larpmanager.com](mailto:commercial@larpmanager.com).
 
 Refer to the `LICENSE` file for full terms.
@@ -366,7 +366,7 @@ Thanks in advance for contributing! Here's the steps:
 ### Guidelines
 
 Pull Requests should include **only the minimal changes necessary** to achieve their goal.
-Avoid non-essential changes such as refactoring, renaming, or reformatting — **unless explicitly approved beforehand**.
+Avoid non-essential changes such as refactoring, renaming, or reformatting, **unless explicitly approved beforehand**.
 
 This helps keep code reviews focused, reduces merge conflicts, and maintains a clean commit history.
 If you believe a refactor is needed, please open an issue or start a discussion first to get approval.

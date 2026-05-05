@@ -25,6 +25,8 @@ from django.apps import apps
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
+from larpmanager.models.base import Config
+
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
 
@@ -307,6 +309,30 @@ def get_member_config(
     return _get_cached_config(
         member_id, "member", config_name, default_value=default_value, context=context, bypass_cache=bypass_cache
     )
+
+
+_GLOBAL_CONFIG_CACHE_PREFIX = "global_config_"
+
+
+def get_config(name: str, default_value: str = "", *, use_cache: bool = True) -> str:
+    """Get a value from the standalone Config table."""
+    cache_key = f"{_GLOBAL_CONFIG_CACHE_PREFIX}{name}"
+    if use_cache:
+        cached = cache.get(cache_key)
+        if cached is not None:
+            return cached
+    obj = Config.objects.filter(name=name).first()
+    value = obj.value if obj else default_value
+    if use_cache:
+        cache.set(cache_key, value, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return value
+
+
+def save_config(name: str, value: str, *, use_cache: bool = True) -> None:
+    """Save a value to the standalone Config table."""
+    Config.objects.update_or_create(name=name, defaults={"value": value})
+    if use_cache:
+        cache.delete(f"{_GLOBAL_CONFIG_CACHE_PREFIX}{name}")
 
 
 def evaluate_config(configurations: dict, configuration_name: str, default_value: any) -> any:

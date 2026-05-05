@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import ast
 import html
 import logging
 import random
@@ -38,7 +39,7 @@ from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max, QuerySet, Subquery
+from django.db.models import Max, Prefetch, QuerySet, Subquery
 from django.http import Http404, HttpRequest
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -47,7 +48,7 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import Collection, Discount
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel, Feature
-from larpmanager.models.event import DevelopStatus, Event, Run
+from larpmanager.models.event import DevelopStatus, Event, EventConfig, Run
 from larpmanager.models.member import Badge, Member
 from larpmanager.models.miscellanea import (
     Album,
@@ -778,6 +779,25 @@ def get_coming_runs(association_id: int | None, *, future: bool = True) -> Query
     return runs
 
 
+def _geo_prefetch(prefix: str = "") -> Prefetch:
+    path = f"{prefix}__configs" if prefix else "event__configs"
+    return Prefetch(
+        path,
+        queryset=EventConfig.objects.filter(name__in=["pub_lat", "pub_lon"]),
+        to_attr="geo_configs",
+    )
+
+
+def with_geo_configs(runs_qs: QuerySet) -> QuerySet:
+    """Prefetch pub_lat/pub_lon EventConfigs so Event.maps_url needs no extra queries."""
+    return runs_qs.prefetch_related(_geo_prefetch())
+
+
+def with_geo_configs_registrations(registrations_qs: QuerySet) -> QuerySet:
+    """Prefetch pub_lat/pub_lon EventConfigs through registration->run->event."""
+    return registrations_qs.prefetch_related(_geo_prefetch("run__event"))
+
+
 def _validate_and_fetch_objects(model_class: type, ids: int | list[int], model_name: str) -> list:
     """Validate IDs and fetch objects, logging warnings for missing IDs.
 
@@ -803,6 +823,23 @@ def _validate_and_fetch_objects(model_class: type, ids: int | list[int], model_n
     return list(objects)
 
 
+def clean_html(tx: str) -> str:
+    """Remove HTML tags and clean up whitespace from the given string."""
+    tx = tx.replace("<br />", " ")
+    return strip_tags(tx)
+
+
 def is_rate_limited(key: str, timeout: int = 10) -> bool:
     """Return True if the action identified by key is rate-limited."""
     return not cache.add(f"rl_{key}", 1, timeout)
+
+
+def parse_multi_config(value: str) -> list:
+    """Parse a MULTI_BOOL config string (stored as Python list repr) into a list."""
+    if not value:
+        return []
+    try:
+        result = ast.literal_eval(value)
+        return result if isinstance(result, list) else []
+    except (ValueError, SyntaxError):
+        return []

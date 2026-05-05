@@ -2,6 +2,14 @@
 
 source ./scripts/venv.sh
 
+# Check code, skip if does not compile
+python manage.py check
+CHECK_EXIT_CODE=$?
+if [ $CHECK_EXIT_CODE -ne 0 ]; then
+  echo "Skipping translate: python manage.py check failed (Exit code: $CHECK_EXIT_CODE)"
+  exit 1
+fi
+
 # remove show from test
 sed -i 's/page_start(\(.*\), *show=True)/page_start(\1)/' larpmanager/tests/*.py
 

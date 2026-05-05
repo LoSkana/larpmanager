@@ -388,6 +388,9 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
             "exe_membership",
         )
 
+    if "publisher" in association_features:
+        _exe_publisher_actions(context, actions_data)
+
     # Process accounting-specific actions
     _exe_accounting_actions(context, association_features)
 
@@ -407,6 +410,18 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
         ):
             continue
         _add_action(context, suggestion_text, permission_key)
+
+
+def _exe_publisher_actions(context: dict, actions_data: dict) -> None:
+    """Add publisher-related actions to the executive dashboard."""
+    if actions_data.get("ildb_unpublished_runs", {}).get("count", 0) > 0:
+        _add_action(
+            context,
+            _("Publish to ILDB: <b>%(list)s</b>.") % {"list": ", ".join(actions_data["ildb_unpublished_runs"]["runs"])},
+            "exe_events",
+        )
+    if actions_data.get("ildb_token_expired"):
+        _add_action(context, _("Generate a new ILDB token"), "exe_config")
 
 
 def _exe_users_actions(request: HttpRequest, context: dict, enabled_features: dict[str, Any], actions_data: dict) -> None:

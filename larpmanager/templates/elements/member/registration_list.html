@@ -31,6 +31,11 @@
                     {% endif %}
                     <td>
                         <i>{{ registration.run.pretty_dates }}</i>
+                        {% if registration.run.event.maps_url %}
+                            <a href="{{ registration.run.event.maps_url }}"
+                               target="_blank"
+                               rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i></a>
+                        {% endif %}
                     </td>
                     <td>{{ registration.run.status.text | safe }}</td>
                     <td>
