@@ -12,13 +12,14 @@
 {% block content %}
     <p class="blog-intro">{% trans "See practical examples of how LarpManager can help your event" %}!</p>
     {% if list %}
-        <div class="guide-list">
+        <div class="guide-grid">
             {% for post in list %}
-                <div class="guide-row">
+                <div class="guide-card">
                     <h3>
+                        {% if post.icon %}<i class="fa-solid fa-{{ post.icon }}"></i>{% endif %}
                         <a href="{% url 'guide' post.slug %}">{{ post.title }}</a>
                     </h3>
-                    {% if post.description %}<p class="blog-description">{{ post.description }}</p>{% endif %}
+                    {% if post.description %}<p class="guide-card-desc">{{ post.description }}</p>{% endif %}
                 </div>
             {% endfor %}
         </div>
