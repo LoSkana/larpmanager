@@ -988,6 +988,12 @@ msgstr ""
 msgid "Delivery"
 msgstr ""
 
+msgid "Show available abilities"
+msgstr ""
+
+msgid "Show available deliveries"
+msgstr ""
+
 msgid "Manage form questions for writing elements"
 msgstr ""
 
@@ -2065,6 +2071,9 @@ msgstr ""
 msgid "Manage experience point abilities"
 msgstr ""
 
+msgid "Show available options"
+msgstr ""
+
 msgid "An ability cannot be a prerequisite of itself."
 msgstr ""
 
@@ -2363,6 +2372,9 @@ msgstr ""
 msgid "--- Empty"
 msgstr ""
 
+msgid "Show available tickets"
+msgstr ""
+
 msgid "Manage signup form question options"
 msgstr ""
 
@@ -2428,6 +2440,9 @@ msgstr ""
 msgid "Warehouse items"
 msgstr ""
 
+msgid "Show available tags"
+msgstr ""
+
 msgid "Manage warehouse containers"
 msgstr ""
 
@@ -2441,6 +2456,9 @@ msgid "Warehouse tags"
 msgstr ""
 
 msgid "Items"
+msgstr ""
+
+msgid "Show available items"
 msgstr ""
 
 msgid "Manage warehouse item movements, loans, and repairs"
@@ -5339,13 +5357,6 @@ msgid "List"
 msgstr ""
 
 msgid "Players"
-msgstr ""
-
-msgctxt "event"
-msgid "Keywords"
-msgstr ""
-
-msgid "Keywords"
 msgstr ""
 
 msgid "Total"

@@ -649,6 +649,25 @@ class OrgaCharacterForm(CharacterForm):
         self.initial["exp_delivery_list"] = [d.pk for d in self.instance.exp_delivery_list.all()]
         self.show_link.append("id_exp_delivery_list")
 
+        run = self.params.get("run")
+        if run:
+            self.add_multichoice_config(
+                field_id="exp_ability_list",
+                link_id="exp_abilities_available",
+                label=str(_("Show available abilities")),
+                url=reverse("orga_exp_available", args=[run.get_slug()]),
+                data={"type": "ability", "filter_context": "character"},
+                form_edit_uuid=True,
+            )
+            self.add_multichoice_config(
+                field_id="exp_delivery_list",
+                link_id="exp_deliveries_available",
+                label=str(_("Show available deliveries")),
+                url=reverse("orga_exp_available", args=[run.get_slug()]),
+                data={"type": "delivery", "filter_context": "character"},
+                form_edit_uuid=True,
+            )
+
     def _save_exp(self, instance: Any) -> None:
         """Save EPX-related data to the instance if experience points feature is enabled."""
         # Check if feature is available

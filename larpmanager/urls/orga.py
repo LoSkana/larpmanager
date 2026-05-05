@@ -1321,6 +1321,16 @@ urlpatterns = [
         name="orga_exp_modifiers_order",
     ),
     path(
+        "<slug:event_slug>/manage/experience/available/",
+        views_ox.orga_exp_available,
+        name="orga_exp_available",
+    ),
+    path(
+        "<slug:event_slug>/manage/form/available/",
+        views_ow.orga_form_available,
+        name="orga_form_available",
+    ),
+    path(
         "<slug:event_slug>/manage/casting/toggle/",
         views_oca.orga_casting_toggle,
         name="orga_casting_toggle",

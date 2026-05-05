@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import contextlib
+
 import inflection
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
@@ -658,6 +660,41 @@ def orga_factions_available(request: HttpRequest, event_slug: str) -> JsonRespon
 
     # Convert queryset to list of tuples (uuid, name) for JSON response
     res = [(str(el.uuid), str(el)) for el in context["list"]]
+    return JsonResponse({"res": res})
+
+
+@login_required
+def orga_form_available(request: HttpRequest, event_slug: str) -> JsonResponse | Http404:
+    """Return available tickets, factions, or writing options for multichoice popups via AJAX."""
+    if request.method != "POST":
+        return Http404()
+
+    context = get_event_context(request, event_slug)
+    kind = request.POST.get("type", "")
+    edit_uuid = request.POST.get("edit_uuid", "")
+    owner_type = request.POST.get("owner", "")
+    field = request.POST.get("field", "")
+
+    model_names = {
+        "ticket": "RegistrationTicket",
+        "faction": "Faction",
+        "writing_option": "WritingOption",
+    }
+    model_name = model_names.get(kind)
+    if not model_name:
+        return JsonResponse({"res": []})
+
+    model_class = apps.get_model("larpmanager", model_name)
+    queryset = context["event"].get_elements(model_class)
+
+    if edit_uuid and owner_type and field:
+        with contextlib.suppress(Exception):
+            owner_model = apps.get_model("larpmanager", inflection.camelize(owner_type))
+            owner = owner_model.objects.get(uuid=edit_uuid)
+            taken = getattr(owner, field).values_list("id", flat=True)
+            queryset = queryset.exclude(pk__in=taken)
+
+    res = [(str(el.uuid), str(el)) for el in queryset]
     return JsonResponse({"res": res})
 
 

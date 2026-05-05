@@ -206,6 +206,24 @@ class OrgaAbilityExpForm(MultichoiceMixin, ExpBaseForm):
                 data={"type": self._meta.model.__name__.lower()},
                 ctx_edit_uuid=True,
             )
+            if "prerequisites" in self.fields:
+                self.add_multichoice_config(
+                    field_id="prerequisites",
+                    link_id="prerequisites_available",
+                    label=str(_("Show available abilities")),
+                    url=reverse("orga_exp_available", args=[run.get_slug()]),
+                    data={"type": "ability", "filter_context": "ability"},
+                    form_edit_uuid=True,
+                )
+            if "requirements" in self.fields:
+                self.add_multichoice_config(
+                    field_id="requirements",
+                    link_id="ability_requirements_available",
+                    label=str(_("Show available options")),
+                    url=reverse("orga_form_available", args=[run.get_slug()]),
+                    data={"type": "writing_option", "owner": "abilityexp", "field": "requirements"},
+                    form_edit_uuid=True,
+                )
 
     def clean(self) -> dict:
         """Validate that the ability is not listed as its own prerequisite."""
@@ -228,8 +246,10 @@ class OrgaAbilityTypeExpForm(BaseModelForm):
         exclude = ("number",)
 
 
-class OrgaRuleExpForm(BaseModelForm):
+class OrgaRuleExpForm(MultichoiceMixin, BaseModelForm):
     """Form for OrgaRuleExp."""
+
+    load_js: ClassVar[list] = ["multichoice"]
 
     page_title = _("Rule")
 
@@ -249,9 +269,21 @@ class OrgaRuleExpForm(BaseModelForm):
             # Configure abilities widget with event context
             self.configure_field_event(field, self.params.get("event"))
 
+        run = self.params.get("run")
+        if run and "abilities" in self.fields:
+            self.add_multichoice_config(
+                field_id="abilities",
+                link_id="rule_abilities_available",
+                label=str(_("Show available abilities")),
+                url=reverse("orga_exp_available", args=[run.get_slug()]),
+                data={"type": "ability"},
+            )
 
-class OrgaModifierExpForm(BaseModelForm):
+
+class OrgaModifierExpForm(MultichoiceMixin, BaseModelForm):
     """Form for OrgaModifierExp."""
+
+    load_js: ClassVar[list] = ["multichoice"]
 
     page_title = _("Rule")
 
@@ -277,6 +309,34 @@ class OrgaModifierExpForm(BaseModelForm):
         # Configure event-specific widgets
         for field in ["abilities", "prerequisites", "requirements"]:
             self.configure_field_event(field, self.params.get("event"))
+
+        run = self.params.get("run")
+        if run:
+            if "abilities" in self.fields:
+                self.add_multichoice_config(
+                    field_id="abilities",
+                    link_id="modifier_abilities_available",
+                    label=str(_("Show available abilities")),
+                    url=reverse("orga_exp_available", args=[run.get_slug()]),
+                    data={"type": "ability"},
+                )
+            if "prerequisites" in self.fields:
+                self.add_multichoice_config(
+                    field_id="prerequisites",
+                    link_id="modifier_prerequisites_available",
+                    label=str(_("Show available abilities")),
+                    url=reverse("orga_exp_available", args=[run.get_slug()]),
+                    data={"type": "ability"},
+                )
+            if "requirements" in self.fields:
+                self.add_multichoice_config(
+                    field_id="requirements",
+                    link_id="modifier_requirements_available",
+                    label=str(_("Show available options")),
+                    url=reverse("orga_form_available", args=[run.get_slug()]),
+                    data={"type": "writing_option", "owner": "modifierexp", "field": "requirements"},
+                    form_edit_uuid=True,
+                )
 
 
 class SelectNewAbility(BaseForm):

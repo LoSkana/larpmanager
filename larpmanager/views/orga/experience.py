@@ -17,12 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import contextlib
 import logging
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
@@ -42,7 +43,8 @@ from larpmanager.models.experience import (
     SystemExp,
 )
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.models.writing import Character
+from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new, orga_order
 from larpmanager.utils.io.download import export_abilities, export_modifiers, export_rules, zip_exports
@@ -401,3 +403,41 @@ def orga_exp_modifiers_order(
 ) -> HttpResponse:
     """Reorder experience modifiers in the organizer interface."""
     return orga_order(request, event_slug, OrgaAction.PX_MODIFIERS, modifier_uuid, order)
+
+
+@login_required
+def orga_exp_available(request: HttpRequest, event_slug: str) -> JsonResponse | Http404:
+    """Return available abilities or deliveries for multichoice popups via AJAX."""
+    if request.method != "POST":
+        return Http404()
+
+    context = get_event_context(request, event_slug)
+    kind = request.POST.get("type", "ability")
+    filter_context = request.POST.get("filter_context", "")
+    edit_uuid = request.POST.get("edit_uuid", "")
+
+    if kind == "delivery":
+        queryset = context["event"].get_elements(DeliveryExp).order_by("number")
+        if filter_context == "character" and edit_uuid:
+            try:
+                character = context["event"].get_elements(Character).get(uuid=edit_uuid)
+                taken = character.exp_delivery_list.values_list("id", flat=True)
+                queryset = queryset.exclude(pk__in=taken)
+            except ObjectDoesNotExist:
+                return JsonResponse({"res": "ko"})
+    else:
+        queryset = context["event"].get_elements(AbilityExp).order_by("number")
+        if filter_context == "character" and edit_uuid:
+            try:
+                character = context["event"].get_elements(Character).get(uuid=edit_uuid)
+                taken = character.exp_ability_list.values_list("id", flat=True)
+                queryset = queryset.exclude(pk__in=taken)
+            except ObjectDoesNotExist:
+                return JsonResponse({"res": "ko"})
+        elif filter_context == "ability" and edit_uuid:
+            with contextlib.suppress(ObjectDoesNotExist):
+                ability = context["event"].get_elements(AbilityExp).get(uuid=edit_uuid)
+                queryset = queryset.exclude(pk=ability.pk)
+
+    res = [(str(el.uuid), str(el)) for el in queryset]
+    return JsonResponse({"res": res})
