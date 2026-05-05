@@ -31,6 +31,7 @@ from django.core.cache import cache
 from django.db.models import Max, Min
 from django.utils import timezone
 from django.utils.text import slugify
+from django.utils import translation
 from django.utils.translation import gettext as _
 
 from larpmanager.cache.config import (
@@ -45,6 +46,7 @@ from larpmanager.models.access import EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration, RegistrationTicket, TicketTier
 from larpmanager.utils.core.common import clean_html, parse_multi_config
+from larpmanager.mail.digest import get_exec_language
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 
 if TYPE_CHECKING:
@@ -588,15 +590,16 @@ def _notify_association(association: Association, run: Run, ildb_event_id: str) 
 
     review_url = f"https://www.larpdatabase.com/events/{ildb_event_id}/review"
 
-    subject = f"[{association.name}] " + _("Event added to ILDB") + ": " + run.event.name
-    body = (
-        "<p>"
-        + _("The event <strong>%(event)s</strong> has been automatically added to larpdatabase.com as a draft.")
-        % {"event": run.search}
-        + "</p><p>"
-        + _("Please review and submit it for publication")
-        + f": <a href='{review_url}'>{review_url}</a>"
-        + "</p>"
-    )
+    with translation.override(get_exec_language(association)):
+        subject = f"[{association.name}] " + _("Event added to ILDB") + ": " + run.event.name
+        body = (
+            "<p>"
+            + _("The event <strong>%(event)s</strong> has been automatically added to larpdatabase.com as a draft.")
+            % {"event": run.search}
+            + "</p><p>"
+            + _("Please review and submit it for publication")
+            + f": <a href='{review_url}'>{review_url}</a>"
+            + "</p>"
+        )
 
     my_send_mail(subject, body, association.main_mail, association)
