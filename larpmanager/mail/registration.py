@@ -311,6 +311,7 @@ def send_pre_registration_confirmation_email(pre_registration: Any) -> None:
     """Handle pre-registration pre-save notifications."""
     context = {"event": pre_registration.event}
     if not pre_registration.pk:
+        activate(pre_registration.member.language)
         subject = hdr(pre_registration.event) + _("Pre-registration at %(event)s") % context
         body_text = _("We confirm that you have successfully pre-registered for <b>%(event)s</b>") % context + "!"
         my_send_mail(subject, body_text, pre_registration.member, pre_registration.event)

@@ -22,7 +22,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
-from django.utils import timezone
+from django.utils import timezone, translation
 from django.utils.html import escape
 from django.utils.translation import activate, gettext_lazy as _
 
@@ -253,7 +253,8 @@ def send_help_question_notification_email(instance: Any) -> None:
         elif instance.association:
             notify_organization_exe(instance.association, instance, notification_type=NotificationType.HELP_QUESTION)
         else:
-            subject, body = get_help_email(instance)
+            with translation.override(conf_settings.LANGUAGE_CODE):
+                subject, body = get_help_email(instance)
             for _name, email in conf_settings.ADMINS:
                 my_send_mail(subject, body, email, instance)
 
@@ -289,6 +290,7 @@ def send_password_reset_remainder(membership: Any) -> None:
     association = membership.association
     notify_organization_exe(association, membership, notification_type=NotificationType.PASSWORD_REMINDER)
 
+    with translation.override(conf_settings.LANGUAGE_CODE):
+        subject, body = get_password_reminder_email(membership)
     for _admin_name, admin_email in conf_settings.ADMINS:
-        (subject, body) = get_password_reminder_email(membership)
         my_send_mail(subject, body, admin_email, association)
