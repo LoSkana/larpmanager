@@ -179,7 +179,7 @@ def check_exe_config(page: Any) -> None:
     expect(page.locator("#id_calendar_website")).not_to_be_checked()
     expect(page.locator("#id_calendar_where")).not_to_be_checked()
     expect(page.locator("#id_calendar_authors")).to_be_checked()
-    expect(page.locator("#id_calendar_keywords")).not_to_be_checked()
+    expect(page.locator("#id_calendar_genre")).not_to_be_checked()
     expect(page.locator("#id_calendar_tagline")).to_be_checked()
 
 
