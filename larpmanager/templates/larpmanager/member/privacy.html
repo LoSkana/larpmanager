@@ -4,8 +4,8 @@
     {% trans "Privacy" %}
 {% endblock title %}
 {% block content %}
-    <div class="form_container auto_resize platform">
-        {% include "larpmanager/member/profile_nav.html" with active="privacy" %}
+    {% include "larpmanager/member/profile_nav.html" with active="privacy" %}
+    <div class="auto_resize platform">
         <hr />
         <i>
             {% trans "Your data will be saved in the system, which is used by several associations" %}.

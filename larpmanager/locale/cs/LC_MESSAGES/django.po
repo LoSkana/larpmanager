@@ -161,6 +161,9 @@ msgstr "Home"
 msgid "IBAN"
 msgstr "IBAN"
 
+msgid "Icon"
+msgstr "Ikona"
+
 msgid "Info"
 msgstr "Informace"
 
@@ -2182,9 +2185,6 @@ msgstr "délka textu"
 
 msgid "Ability type"
 msgstr "Typ dovednosti"
-
-msgid "Achievements"
-msgstr "Úspěchy"
 
 msgid "Activity Log"
 msgstr "Záznam o činnosti"

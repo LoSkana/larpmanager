@@ -4,8 +4,8 @@
     {% trans "Security" %}
 {% endblock title %}
 {% block content %}
-    <div class="form_container auto_resize platform">
-        {% include "larpmanager/member/profile_nav.html" with active="security" %}
+    {% include "larpmanager/member/profile_nav.html" with active="security" %}
+    <div class="auto_resize platform">
         <hr />
         <h3>{% trans "Two-Factor Authentication (TOTP)" %}</h3>
         {% if devices %}

@@ -1276,12 +1276,52 @@ class OrgaEventRoleForm(BaseModelForm):
         return instance
 
 
+_BUTTON_ICON_CHOICES = [
+    ("", "- no icon -"),
+    ("fa-solid fa-star", "Star"),
+    ("fa-solid fa-globe", "Globe"),
+    ("fa-solid fa-map", "Map"),
+    ("fa-solid fa-map-location-dot", "Map with pin"),
+    ("fa-solid fa-book", "Book"),
+    ("fa-solid fa-book-open", "Book open"),
+    ("fa-solid fa-scroll", "Scroll"),
+    ("fa-solid fa-newspaper", "Newspaper"),
+    ("fa-solid fa-users", "Users"),
+    ("fa-solid fa-people-group", "People group"),
+    ("fa-solid fa-calendar-days", "Calendar"),
+    ("fa-solid fa-clock", "Clock"),
+    ("fa-solid fa-ticket", "Ticket"),
+    ("fa-solid fa-gift", "Gift"),
+    ("fa-solid fa-trophy", "Trophy"),
+    ("fa-solid fa-medal", "Medal"),
+    ("fa-solid fa-crown", "Crown"),
+    ("fa-solid fa-flag", "Flag"),
+    ("fa-solid fa-shield-halved", "Shield"),
+    ("fa-solid fa-camera", "Camera"),
+    ("fa-solid fa-images", "Images"),
+    ("fa-solid fa-music", "Music"),
+    ("fa-solid fa-fire", "Fire"),
+    ("fa-solid fa-bolt", "Bolt"),
+    ("fa-solid fa-heart", "Heart"),
+    ("fa-solid fa-dice", "Dice"),
+    ("fa-solid fa-masks-theater", "Theater masks"),
+    ("fa-solid fa-hammer", "Hammer"),
+    ("fa-solid fa-link", "Link"),
+    ("fa-solid fa-circle-info", "Info"),
+    ("fa-solid fa-circle-question", "Question"),
+    ("fa-solid fa-comment", "Comment"),
+    ("fa-solid fa-envelope", "Envelope"),
+]
+
+
 class OrgaEventButtonForm(BaseModelForm):
     """Form for editing event navigation buttons."""
 
     page_title = _("Event Navigation")
 
     page_info = _("Manage event navigation buttons")
+
+    icon = forms.ChoiceField(choices=_BUTTON_ICON_CHOICES, required=False, label=_("Icon"))
 
     class Meta:
         model = EventButton

@@ -161,6 +161,9 @@ msgstr "Home"
 msgid "IBAN"
 msgstr "IBAN"
 
+msgid "Icon"
+msgstr "Pictogram"
+
 msgid "Info"
 msgstr "Info"
 
@@ -2182,9 +2185,6 @@ msgstr "tekstlengte"
 
 msgid "Ability type"
 msgstr "Type vaardigheid"
-
-msgid "Achievements"
-msgstr "Prestaties"
 
 msgid "Activity Log"
 msgstr "Activiteitenlogboek"

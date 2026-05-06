@@ -161,6 +161,9 @@ msgstr "Inicio"
 msgid "IBAN"
 msgstr "IBAN"
 
+msgid "Icon"
+msgstr "Icono"
+
 msgid "Info"
 msgstr "Información"
 
@@ -2182,9 +2185,6 @@ msgstr "longitud del texto"
 
 msgid "Ability type"
 msgstr "Tipo de habilidad"
-
-msgid "Achievements"
-msgstr "Logros"
 
 msgid "Activity Log"
 msgstr "Registro de actividades"

@@ -161,6 +161,9 @@ msgstr "Hjem"
 msgid "IBAN"
 msgstr "IBAN"
 
+msgid "Icon"
+msgstr "Ikon"
+
 msgid "Info"
 msgstr "Informasjon"
 
@@ -2182,9 +2185,6 @@ msgstr "tekstlengde"
 
 msgid "Ability type"
 msgstr "Ferdighetstype"
-
-msgid "Achievements"
-msgstr "Prestasjoner"
 
 msgid "Activity Log"
 msgstr "Aktivitetslogg"

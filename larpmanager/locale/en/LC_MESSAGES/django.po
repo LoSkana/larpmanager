@@ -1707,6 +1707,9 @@ msgstr ""
 msgid "Manage event navigation buttons"
 msgstr ""
 
+msgid "Icon"
+msgstr ""
+
 msgid "Session"
 msgstr ""
 
@@ -5418,7 +5421,10 @@ msgstr ""
 msgid "Messages"
 msgstr ""
 
-msgid "Achievements"
+msgid "Badges"
+msgstr ""
+
+msgid "Security"
 msgstr ""
 
 msgid "Mail"
@@ -7501,12 +7507,6 @@ msgid "It will be shown to other participants"
 msgstr ""
 
 msgid "Please choose a clear and easily recognizable photo"
-msgstr ""
-
-msgid "Badges"
-msgstr ""
-
-msgid "Security"
 msgstr ""
 
 msgid "Private message"

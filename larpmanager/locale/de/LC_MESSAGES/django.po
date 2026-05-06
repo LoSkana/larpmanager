@@ -161,6 +161,9 @@ msgstr "Startseite"
 msgid "IBAN"
 msgstr "IBAN"
 
+msgid "Icon"
+msgstr "Icon"
+
 msgid "Info"
 msgstr "Infos"
 
@@ -2182,9 +2185,6 @@ msgstr "Textlänge"
 
 msgid "Ability type"
 msgstr "Art der Fertigkeit"
-
-msgid "Achievements"
-msgstr "Errungenschaften"
 
 msgid "Activity Log"
 msgstr "Aktivitätsprotokoll"

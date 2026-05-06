@@ -29,16 +29,15 @@ def event_button_key(event_id: int) -> str:
     return f"event_button_{event_id}"
 
 
-def update_event_button(event_id: int) -> list[tuple[str, str, str]]:
+def update_event_button(event_id: int) -> list[tuple[str, str, str, str]]:
     """Update event button cache from database."""
-    # Query event buttons ordered by number field and extract button data as tuples
     return [
-        (button.name, button.tooltip, button.link)
+        (button.name, button.tooltip, button.link, button.icon)
         for button in EventButton.objects.filter(event_id=event_id).order_by("number")
     ]
 
 
-def get_event_button_cache(event_id: int) -> list[tuple[str, str, str]]:
+def get_event_button_cache(event_id: int) -> list[tuple[str, str, str, str]]:
     """Get cached event buttons, updating if needed.
 
     Retrieves event buttons from cache. If not found in cache,
@@ -48,7 +47,7 @@ def get_event_button_cache(event_id: int) -> list[tuple[str, str, str]]:
         event_id: Event ID to get buttons for.
 
     Returns:
-        List of (name, tooltip, link) tuples for event buttons.
+        List of (name, tooltip, link, icon) tuples for event buttons.
 
     """
     # Check if buttons are already cached for this event

@@ -161,6 +161,9 @@ msgstr "Etusivu"
 msgid "IBAN"
 msgstr "IBAN"
 
+msgid "Icon"
+msgstr "Kuvake"
+
 msgid "Info"
 msgstr "Info"
 
@@ -2182,9 +2185,6 @@ msgstr "tekstin pituus"
 
 msgid "Ability type"
 msgstr "Taidon tyyppi"
-
-msgid "Achievements"
-msgstr "Saavutukset"
 
 msgid "Activity Log"
 msgstr "Aktiviteettiloki"

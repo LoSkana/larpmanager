@@ -30,9 +30,12 @@
                 {% endif %}
                 {% if 'badge' in association.features %}
                     <li>
-                        <a href="{% url 'public' user.member.uuid %}"><i class="fa-solid fa-trophy"></i> {% trans "Achievements" %}</a>
+                        <a href="{% url 'badges' %}"><i class="fa-solid fa-trophy"></i> {% trans "Badges" %}</a>
                     </li>
                 {% endif %}
+                <li>
+                    <a href="{% url 'profile_otp' %}"><i class="fa-solid fa-lock"></i> {% trans "Security" %}</a>
+                </li>
             {% endif %}
             {% if user.is_authenticated %}
                 {% if reg_menu %}

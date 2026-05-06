@@ -914,6 +914,17 @@ def accounting_redirect(invoice: PaymentInvoice) -> HttpResponseRedirect:
         registration = Registration.objects.get(id=invoice.idx)
         return redirect("gallery", event_slug=registration.run.get_slug())
 
+    # Redirect after membership fee payment confirmation
+    if invoice.typ == PaymentType.MEMBERSHIP:
+        return redirect("exe_membership")
+
+    # Redirect after collection payment confirmation
+    if invoice.typ == PaymentType.COLLECTION:
+        return redirect("exe_collections")
+
+    if invoice.typ == PaymentType.DONATE:
+        return redirect("exe_donations")
+
     # Default redirect to accounting page
     return redirect("accounting")
 

@@ -1094,21 +1094,9 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   line-height: 300%;
 }
 
-@media screen and (max-width: 1000px) {
-  .nav {
-    font-size: 90%;
-  }
-}
-
-@media screen and (max-width: 840px) {
-  .nav {
-    font-size: 80%;
-  }
-}
-
 @media screen and (max-width: 736px) {
-  .nav {
-    font-size: 70%;
+  .nav .nav-label {
+    display: none;
   }
 }
 
