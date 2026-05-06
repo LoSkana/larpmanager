@@ -429,6 +429,9 @@ window.addEventListener('DOMContentLoaded', function() {
                     const cell = table.cell(update.rowSelector, update.columnClass);
                     if (cell && cell.node()) {
                         cell.data(update.value);
+                        if (update.columnClass === '.deadline' && parseInt(update.value) < 0) {
+                            $(cell.node()).addClass('redderized');
+                        }
                     }
                 });
 
