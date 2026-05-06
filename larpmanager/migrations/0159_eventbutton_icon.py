@@ -4,7 +4,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0157_alter_member_gender_alter_member_legal_name_config'),
+        ('larpmanager', '0158_add_icon_to_larpmanager_guide'),
     ]
 
     operations = [
