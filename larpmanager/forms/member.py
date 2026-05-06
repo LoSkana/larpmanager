@@ -1083,3 +1083,27 @@ class ExeProfileForm(BaseModelForm):
         instance.save()
 
         return instance
+
+
+class OTPVerifyForm(forms.Form):
+    """Single-field form for OTP verification on the login second step."""
+
+    token = forms.CharField(
+        max_length=6,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "000000", "autocomplete": "one-time-code"},
+        ),
+        label=False,
+    )
+
+
+class OTPConfirmForm(forms.Form):
+    """Single-field form for confirming a new TOTP device during profile setup."""
+
+    token = forms.CharField(
+        max_length=6,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "000000", "autocomplete": "one-time-code"},
+        ),
+        label=_("6-digit code from your authenticator app"),
+    )

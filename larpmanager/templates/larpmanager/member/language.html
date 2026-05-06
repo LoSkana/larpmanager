@@ -4,6 +4,8 @@
     {% trans "Language" %}
 {% endblock title %}
 {% block content %}
+    {% include "larpmanager/member/profile_nav.html" with active="language" %}
+    <hr />
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}

@@ -763,6 +763,9 @@ msgstr "Laad"
 msgid "VAT No"
 msgstr "BTW-nr"
 
+msgid "Verify"
+msgstr "Controleer"
+
 msgid "Voting"
 msgstr "Stemmen"
 
@@ -1336,6 +1339,9 @@ msgstr "Herziening"
 
 msgid "Sections"
 msgstr "Secties"
+
+msgid "Security"
+msgstr "Beveiliging"
 
 msgid "Selected"
 msgstr "Geselecteerd"
@@ -2694,6 +2700,9 @@ msgstr "verwijderde items"
 
 msgid "items updated"
 msgstr "items bijgewerkt"
+
+msgid "Active devices"
+msgstr "Actieve apparaten"
 
 msgid "Add to faction"
 msgstr "Toevoegen aan factie"
@@ -4909,6 +4918,9 @@ msgstr "Grootte van het bestand in bytes"
 msgid "These are our past events"
 msgstr "Dit zijn onze evenementen uit het verleden"
 
+msgid "Two-Factor Authentication"
+msgstr "Authenticatie met twee factoren"
+
 msgid "Upload of photo and video"
 msgstr "Foto's en video's uploaden"
 
@@ -5133,6 +5145,9 @@ msgstr "Het land van je organisatie"
 msgid "please fill in your profile"
 msgstr "vul je profiel in"
 
+msgid "Authenticator device removed"
+msgstr "Authenticatieapparaat verwijderd"
+
 msgid "Contents of the special page"
 msgstr "Inhoud van de speciale pagina"
 
@@ -5341,6 +5356,9 @@ msgstr "Uitstel van jaarlijkse contributie"
 
 msgid "Duration in seconds (optional)"
 msgstr "Duur in seconden (optioneel)"
+
+msgid "Invalid code, please try again"
+msgstr "Ongeldige code, probeer het opnieuw"
 
 msgid "Manage issues during the event"
 msgstr "Problemen tijdens het evenement beheren"
@@ -5606,6 +5624,9 @@ msgstr "Som van betalingen ontvangen via"
 
 msgid "Total of recorded money outflows"
 msgstr "Totaal van geregistreerde uitgaande geldstromen"
+
+msgid "Two-Factor Authentication (TOTP)"
+msgstr "Authenticatie met twee factoren (TOTP)"
 
 msgid "Verify that the data are correct"
 msgstr "Controleer of de gegevens correct zijn"
@@ -6376,6 +6397,9 @@ msgstr "U bent aangemeld met een e-mailadres"
 msgid "You must be logged in to view this page"
 msgstr "U moet ingelogd zijn om deze pagina te bekijken"
 
+msgid "6-digit code from your authenticator app"
+msgstr "6-cijferige code van je authenticator app"
+
 msgid "Characters are not visible at the moment"
 msgstr "Personages zijn momenteel niet zichtbaar"
 
@@ -6455,6 +6479,9 @@ msgstr "Wil je een ander bedrag betalen"
 msgid "Writing fields without options: %(list)s"
 msgstr "Velden schrijven zonder opties: %(list)s"
 
+msgid "You have no authenticator app configured"
+msgstr "Er is geen authenticatie-app geconfigureerd"
+
 msgid "You must be registered to view this page"
 msgstr "Je moet geregistreerd zijn om deze pagina te bekijken"
 
@@ -6487,6 +6514,9 @@ msgstr "Vermogenstypes zonder vermogens: %(list)s"
 
 msgid "Added at the top of the user profile page"
 msgstr "Toegevoegd bovenaan de gebruikersprofielpagina"
+
+msgid "Authenticator app configured successfully"
+msgstr "Authenticator-app succesvol geconfigureerd"
 
 msgid "Browser user agent string from the access"
 msgstr "Browser user agent string van de toegang"
@@ -7245,6 +7275,9 @@ msgstr "U bevat (ten minste een van) deze filters"
 msgid "You cannot create a relationship towards yourself"
 msgstr "Je kunt geen relatie met jezelf creëren"
 
+msgid "Your account is protected by an authenticator app"
+msgstr "Je account wordt beschermd door een authenticatie-app"
+
 msgid "Cancellation for missing organization registration"
 msgstr "Annulering wegens ontbrekende organisatieregistratie"
 
@@ -7253,6 +7286,9 @@ msgstr "Kleur voor klikbare links en interactieve elementen"
 
 msgid "Define the data collected in the user profile form"
 msgstr "Definieer de verzamelde gegevens in het gebruikersprofielformulier"
+
+msgid "Enter the 6-digit code from your authenticator app"
+msgstr "Voer de 6-cijferige code van uw authenticator-app in"
 
 msgid "Fill in this field if you have accessibility needs"
 msgstr "Vul dit veld in als je toegankelijkheid nodig hebt"
@@ -11746,6 +11782,13 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, is een vraag op het registratieformulier "
 "alleen zichtbaar als de deelnemer is toegewezen aan bepaalde facties."
+
+msgid ""
+"Scan this QR code with Google Authenticator, Authy, or any compatible TOTP "
+"app, then enter the 6-digit code to confirm"
+msgstr ""
+"Scan deze QR-code met Google Authenticator, Authy of een andere compatibele "
+"TOTP-app en voer de 6-cijferige code in om te bevestigen"
 
 msgid ""
 "This page shows the total membership accounts, dues, donations, expenses, "

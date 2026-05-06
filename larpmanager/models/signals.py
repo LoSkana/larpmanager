@@ -22,6 +22,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from axes.signals import user_locked_out
 from django.contrib.auth.models import User
 from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
@@ -271,6 +272,7 @@ from larpmanager.utils.io.pdf import (
     deactivate_castings_and_remove_pdfs,
     delete_character_pdf_files,
 )
+from larpmanager.utils.larpmanager.tasks import notify_admins
 from larpmanager.utils.larpmanager.tutorial import auto_assign_faq_sequential_number, generate_tutorial_url_slug
 from larpmanager.utils.publication.base import (
     publish_event,
@@ -1807,6 +1809,12 @@ m2m_changed.connect(on_modifier_requirements_m2m_changed, sender=ModifierExp.req
 m2m_changed.connect(on_rule_abilities_m2m_changed_cache, sender=RuleExp.abilities.through)
 
 m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
+
+
+@receiver(user_locked_out)
+def on_user_locked_out(sender: type, request: Any, username: str, ip_address: str, **kwargs: Any) -> None:
+    """Notify admins when an account is locked out by axes."""
+    notify_admins(f"Account locked: {username} from {ip_address}")
 
 
 @receiver(valid_ipn_received)

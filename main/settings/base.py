@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_static',
 ]
 
+OTP_TOTP_ISSUER = 'LarpManager'
+
 MIDDLEWARE = [
     # Profiling middleware first to track everything
     'larpmanager.middleware.profiler.ProfilerMiddleware',

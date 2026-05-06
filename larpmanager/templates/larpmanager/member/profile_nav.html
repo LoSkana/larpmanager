@@ -1,0 +1,25 @@
+{% load i18n %}
+{% if association %}
+    <div class="nav">
+        <a {% if active == 'profile' %}class="sel"{% endif %}
+           href="{% url 'profile' %}">{% trans "Profile" %}</a>
+        <a {% if active == 'privacy' %}class="sel"{% endif %}
+           href="{% url 'profile_privacy' %}">{% trans "Privacy" %}</a>
+        {% if 'membership' in association.features %}
+            <a {% if active == 'membership' %}class="sel"{% endif %}
+               href="{% url 'membership' %}">{% trans "Membership" %}</a>
+        {% endif %}
+        <a {% if active == 'accounting' %}class="sel"{% endif %}
+           href="{% url 'accounting' %}">{% trans "Accounting" %}</a>
+        <a {% if active == 'registrations' %}class="sel"{% endif %}
+           href="{% url 'registrations' %}">{% trans "Registrations" %}</a>
+        {% if 'badge' in association.features %}
+            <a {% if active == 'badges' %}class="sel"{% endif %}
+               href="{% url 'badges' %}">{% trans "Badges" %}</a>
+        {% endif %}
+        <a {% if active == 'language' %}class="sel"{% endif %}
+           href="{% url 'language' %}">{% trans "Language" %}</a>
+        <a {% if active == 'security' %}class="sel"{% endif %}
+           href="{% url 'profile_otp' %}">{% trans "Security" %}</a>
+    </div>
+{% endif %}

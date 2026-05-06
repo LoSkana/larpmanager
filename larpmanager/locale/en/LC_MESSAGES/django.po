@@ -2248,6 +2248,9 @@ msgid ""
 "registration"
 msgstr ""
 
+msgid "6-digit code from your authenticator app"
+msgstr ""
+
 msgid "Over"
 msgstr ""
 
@@ -7500,6 +7503,29 @@ msgstr ""
 msgid "Please choose a clear and easily recognizable photo"
 msgstr ""
 
+msgid "Badges"
+msgstr ""
+
+msgid "Security"
+msgstr ""
+
+msgid "Two-Factor Authentication (TOTP)"
+msgstr ""
+
+msgid "Your account is protected by an authenticator app"
+msgstr ""
+
+msgid "Active devices"
+msgstr ""
+
+msgid "You have no authenticator app configured"
+msgstr ""
+
+msgid ""
+"Scan this QR code with Google Authenticator, Authy, or any compatible TOTP "
+"app, then enter the 6-digit code to confirm"
+msgstr ""
+
 msgid "Private message"
 msgstr ""
 
@@ -8804,6 +8830,15 @@ msgstr ""
 msgid "Password reset"
 msgstr ""
 
+msgid "Two-Factor Authentication"
+msgstr ""
+
+msgid "Enter the 6-digit code from your authenticator app"
+msgstr ""
+
+msgid "Verify"
+msgstr ""
+
 msgid "Password changed"
 msgstr ""
 
@@ -9601,9 +9636,6 @@ msgid "Review all members"
 msgstr ""
 
 msgid "Manage votes for the assignment of roles in the organization"
-msgstr ""
-
-msgid "Badges"
 msgstr ""
 
 msgid "Manage badges and assign them to participants"
@@ -11132,6 +11164,15 @@ msgid "You are now logged in with the delegate account"
 msgstr ""
 
 msgid "New delegate user added!"
+msgstr ""
+
+msgid "Authenticator device removed"
+msgstr ""
+
+msgid "Authenticator app configured successfully"
+msgstr ""
+
+msgid "Invalid code, please try again"
 msgstr ""
 
 msgid "Question saved!"

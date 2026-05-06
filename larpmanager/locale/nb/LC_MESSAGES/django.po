@@ -763,6 +763,9 @@ msgstr "Ladning"
 msgid "VAT No"
 msgstr "MVA-nr"
 
+msgid "Verify"
+msgstr "Bekreft"
+
 msgid "Voting"
 msgstr "Stemmegivning"
 
@@ -1336,6 +1339,9 @@ msgstr "Revisjon"
 
 msgid "Sections"
 msgstr "Seksjoner"
+
+msgid "Security"
+msgstr "Sikkerhet"
 
 msgid "Selected"
 msgstr "Utvalgte"
@@ -2694,6 +2700,9 @@ msgstr "elementer slettet"
 
 msgid "items updated"
 msgstr "elementer oppdatert"
+
+msgid "Active devices"
+msgstr "Aktive enheter"
 
 msgid "Add to faction"
 msgstr "Legg til i fraksjon"
@@ -4909,6 +4918,9 @@ msgstr "Filens størrelse i byte"
 msgid "These are our past events"
 msgstr "Dette er våre tidligere arrangementer"
 
+msgid "Two-Factor Authentication"
+msgstr "To-faktor autentisering"
+
 msgid "Upload of photo and video"
 msgstr "Opplasting av bilder og videoer"
 
@@ -5133,6 +5145,9 @@ msgstr "Organisasjonens land"
 msgid "please fill in your profile"
 msgstr "vennligst fyll ut profilen din"
 
+msgid "Authenticator device removed"
+msgstr "Autentiseringsenhet fjernet"
+
 msgid "Contents of the special page"
 msgstr "Innhold på spesialsiden"
 
@@ -5341,6 +5356,9 @@ msgstr "Forsinkelse i årlig medlemsavgift"
 
 msgid "Duration in seconds (optional)"
 msgstr "Varighet i sekunder (valgfritt)"
+
+msgid "Invalid code, please try again"
+msgstr "Ugyldig kode, vennligst prøv igjen"
 
 msgid "Manage issues during the event"
 msgstr "Håndtere problemer under arrangementet"
@@ -5606,6 +5624,9 @@ msgstr "Summen av betalinger mottatt gjennom"
 
 msgid "Total of recorded money outflows"
 msgstr "Summen av registrerte pengeutbetalinger"
+
+msgid "Two-Factor Authentication (TOTP)"
+msgstr "To-faktor autentisering (TOTP)"
 
 msgid "Verify that the data are correct"
 msgstr "Kontroller at dataene er korrekte"
@@ -6374,6 +6395,9 @@ msgstr "Du er logget inn med en e-postadresse"
 msgid "You must be logged in to view this page"
 msgstr "Du må være innlogget for å se denne siden"
 
+msgid "6-digit code from your authenticator app"
+msgstr "6-sifret kode fra autentiseringsappen din"
+
 msgid "Characters are not visible at the moment"
 msgstr "Tegnene er ikke synlige for øyeblikket"
 
@@ -6453,6 +6477,9 @@ msgstr "Ønsker du å betale et annet beløp"
 msgid "Writing fields without options: %(list)s"
 msgstr "Skrive felt uten alternativer: %(list)s"
 
+msgid "You have no authenticator app configured"
+msgstr "Du har ikke konfigurert noen autentiseringsapp"
+
 msgid "You must be registered to view this page"
 msgstr "Du må være registrert for å se denne siden"
 
@@ -6485,6 +6512,9 @@ msgstr "Evnetyper uten evner: %(list)s"
 
 msgid "Added at the top of the user profile page"
 msgstr "Lagt til øverst på brukerprofilsiden"
+
+msgid "Authenticator app configured successfully"
+msgstr "Autentiseringsappen er konfigurert med suksess"
 
 msgid "Browser user agent string from the access"
 msgstr "Nettleserens brukeragentstreng fra tilgangen"
@@ -7236,6 +7266,9 @@ msgstr "Du inkluderer (minst ett av) disse filtrene"
 msgid "You cannot create a relationship towards yourself"
 msgstr "Du kan ikke skape et forhold til deg selv"
 
+msgid "Your account is protected by an authenticator app"
+msgstr "Kontoen din er beskyttet av en autentiseringsapp"
+
 msgid "Cancellation for missing organization registration"
 msgstr "Avbestilling på grunn av manglende organisasjonsregistrering"
 
@@ -7244,6 +7277,9 @@ msgstr "Farge for klikkbare lenker og interaktive elementer"
 
 msgid "Define the data collected in the user profile form"
 msgstr "Definer dataene som samles inn i brukerprofilskjemaet"
+
+msgid "Enter the 6-digit code from your authenticator app"
+msgstr "Skriv inn den sekssifrede koden fra autentiseringsappen din"
 
 msgid "Fill in this field if you have accessibility needs"
 msgstr "Fyll ut dette feltet hvis du har behov for universell utforming"
@@ -11552,6 +11588,14 @@ msgstr ""
 "Hvis dette alternativet er merket av, kan et spørsmål i "
 "registreringsskjemaet bare være synlig hvis deltakeren tilhører en bestemt "
 "fraksjon."
+
+msgid ""
+"Scan this QR code with Google Authenticator, Authy, or any compatible TOTP "
+"app, then enter the 6-digit code to confirm"
+msgstr ""
+"Skann denne QR-koden med Google Authenticator, Authy eller en hvilken som "
+"helst kompatibel TOTP-app, og skriv deretter inn den sekssifrede koden for å"
+" bekrefte"
 
 msgid ""
 "This page shows the total membership accounts, dues, donations, expenses, "

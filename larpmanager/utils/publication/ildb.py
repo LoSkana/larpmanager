@@ -444,7 +444,7 @@ def _member_display_name(member: object) -> tuple[str, str]:
     """
     if member.nickname:  # type: ignore[attr-defined]
         parts = member.nickname.split(" ", 1)  # type: ignore[attr-defined]
-        return parts[0], parts[1] if len(parts) > 1 else ""
+        return parts[0], parts[1] if len(parts) > 1 else "-"
     return member.name, member.surname  # type: ignore[attr-defined]
 
 

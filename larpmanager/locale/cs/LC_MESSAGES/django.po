@@ -763,6 +763,9 @@ msgstr "Nabíjení"
 msgid "VAT No"
 msgstr "Číslo DPH"
 
+msgid "Verify"
+msgstr "Ověřit"
+
 msgid "Voting"
 msgstr "Hlasování"
 
@@ -1336,6 +1339,9 @@ msgstr "Revize"
 
 msgid "Sections"
 msgstr "Sekce"
+
+msgid "Security"
+msgstr "Zabezpečení"
 
 msgid "Selected"
 msgstr "Vybrané stránky"
@@ -2694,6 +2700,9 @@ msgstr "odstraněné položky"
 
 msgid "items updated"
 msgstr "aktualizované položky"
+
+msgid "Active devices"
+msgstr "Aktivní zařízení"
 
 msgid "Add to faction"
 msgstr "Přidat do frakce"
@@ -4909,6 +4918,9 @@ msgstr "Velikost souboru v bytech"
 msgid "These are our past events"
 msgstr "Toto jsou naše minulé akce"
 
+msgid "Two-Factor Authentication"
+msgstr "Dvoufaktorové ověřování"
+
 msgid "Upload of photo and video"
 msgstr "Nahrávání fotografií a videí"
 
@@ -5133,6 +5145,9 @@ msgstr "Země vaší organizace"
 msgid "please fill in your profile"
 msgstr "vyplňte prosím svůj profil"
 
+msgid "Authenticator device removed"
+msgstr "Odstranění autentizačního zařízení"
+
 msgid "Contents of the special page"
 msgstr "Obsah speciální stránky"
 
@@ -5341,6 +5356,9 @@ msgstr "Zpoždění ročního členského poplatku"
 
 msgid "Duration in seconds (optional)"
 msgstr "Doba trvání v sekundách (nepovinné)"
+
+msgid "Invalid code, please try again"
+msgstr "Neplatný kód, zkuste to prosím znovu"
 
 msgid "Manage issues during the event"
 msgstr "Správa problémů během akce"
@@ -5606,6 +5624,9 @@ msgstr "Součet plateb přijatých prostřednictvím"
 
 msgid "Total of recorded money outflows"
 msgstr "Součet zaznamenaných odlivů peněz"
+
+msgid "Two-Factor Authentication (TOTP)"
+msgstr "Dvoufaktorové ověřování (TOTP)"
 
 msgid "Verify that the data are correct"
 msgstr "Zkontrolujte, zda jsou údaje správné"
@@ -6374,6 +6395,9 @@ msgstr "Jste přihlášeni pomocí e-mailové adresy"
 msgid "You must be logged in to view this page"
 msgstr "Pro zobrazení této stránky musíte být přihlášeni"
 
+msgid "6-digit code from your authenticator app"
+msgstr "6místný kód z aplikace autentizátoru"
+
 msgid "Characters are not visible at the moment"
 msgstr "Postavy nejsou v tuto chvíli viditelné"
 
@@ -6453,6 +6477,9 @@ msgstr "Chcete zaplatit jinou částku"
 msgid "Writing fields without options: %(list)s"
 msgstr "Zápis polí bez možností: %(list)s"
 
+msgid "You have no authenticator app configured"
+msgstr "Nemáte nakonfigurovanou žádnou aplikaci autentizátoru"
+
 msgid "You must be registered to view this page"
 msgstr "Pro zobrazení této stránky musíte být zaregistrováni"
 
@@ -6485,6 +6512,9 @@ msgstr "Typy schopností bez schopností: %(list)s"
 
 msgid "Added at the top of the user profile page"
 msgstr "Přidáno v horní části stránky profilu uživatele"
+
+msgid "Authenticator app configured successfully"
+msgstr "Úspěšná konfigurace aplikace Authenticator"
 
 msgid "Browser user agent string from the access"
 msgstr "Řetězec user agent prohlížeče z přístupu"
@@ -7237,6 +7267,9 @@ msgstr "Zahrnujete (alespoň jeden z) těchto filtrů"
 msgid "You cannot create a relationship towards yourself"
 msgstr "Nemůžete si vytvořit vztah sami k sobě"
 
+msgid "Your account is protected by an authenticator app"
+msgstr "Váš účet je chráněn aplikací autentizátoru"
+
 msgid "Cancellation for missing organization registration"
 msgstr "Zrušení registrace pro chybějící organizaci"
 
@@ -7245,6 +7278,9 @@ msgstr "Barva pro klikací odkazy a interaktivní prvky"
 
 msgid "Define the data collected in the user profile form"
 msgstr "Definice údajů shromažďovaných ve formuláři profilu uživatele"
+
+msgid "Enter the 6-digit code from your authenticator app"
+msgstr "Zadejte šestimístný kód z aplikace autentizátoru"
 
 msgid "Fill in this field if you have accessibility needs"
 msgstr "Toto pole vyplňte, pokud máte požadavky na přístupnost"
@@ -11443,6 +11479,13 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, umožňuje zobrazit otázku registračního formuláře pouze "
 "v případě, že je účastník přiřazen k určitým frakcím."
+
+msgid ""
+"Scan this QR code with Google Authenticator, Authy, or any compatible TOTP "
+"app, then enter the 6-digit code to confirm"
+msgstr ""
+"Naskenujte tento QR kód pomocí aplikace Google Authenticator, Authy nebo "
+"jiné kompatibilní aplikace TOTP a poté zadejte šestimístný kód pro potvrzení"
 
 msgid ""
 "This page shows the total membership accounts, dues, donations, expenses, "

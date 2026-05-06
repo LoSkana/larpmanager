@@ -4,6 +4,8 @@
     Badges
 {% endblock title %}
 {% block content %}
+    {% include "larpmanager/member/profile_nav.html" with active="badges" %}
+    <hr />
     <h2>Gonna catch 'em all!</h2>
     <p>
         {% trans "Show the" %} <a href="{% url 'leaderboard' %}">{% trans "leaderboard" %}</a>
