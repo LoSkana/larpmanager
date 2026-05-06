@@ -905,12 +905,16 @@ def pre_delete_system_exp(sender: type, instance: Any, **kwargs: Any) -> None:
 def post_save_event_button(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
     """Clear event button cache after save."""
     clear_event_button_cache(instance.event_id)
+    for run in instance.event.runs.all():
+        reset_cache_config_run(run)
 
 
 @receiver(pre_delete, sender=EventButton)
 def pre_delete_event_button(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear cache when event button is deleted."""
     clear_event_button_cache(instance.event_id)
+    for run in instance.event.runs.all():
+        reset_cache_config_run(run)
 
 
 @receiver(post_save, sender=EventConfig)
