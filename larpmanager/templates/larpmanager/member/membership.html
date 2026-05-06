@@ -4,7 +4,9 @@
     {% trans "Membership" %}
 {% endblock title %}
 {% block content %}
-    <div class="form_container auto_resize platform">
+    {% include "larpmanager/member/profile_nav.html" with active="membership" %}
+    <div class="auto_resize platform">
+        <hr />
         {% if membership_cf and error_cf %}
             <div id="membership_cf">
                 <h3>{% trans "Tax code check" %}</h3>

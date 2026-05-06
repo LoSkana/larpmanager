@@ -161,6 +161,9 @@ msgstr "Etusivu"
 msgid "IBAN"
 msgstr "IBAN"
 
+msgid "Icon"
+msgstr "Kuvake"
+
 msgid "Info"
 msgstr "Info"
 
@@ -763,6 +766,9 @@ msgstr "Lataa"
 msgid "VAT No"
 msgstr "ALV-numero"
 
+msgid "Verify"
+msgstr "Tarkista"
+
 msgid "Voting"
 msgstr "Äänestys"
 
@@ -1336,6 +1342,9 @@ msgstr "Tarkistus"
 
 msgid "Sections"
 msgstr "Osiot"
+
+msgid "Security"
+msgstr "Turvallisuus"
 
 msgid "Selected"
 msgstr "Valitut"
@@ -2177,9 +2186,6 @@ msgstr "tekstin pituus"
 msgid "Ability type"
 msgstr "Taidon tyyppi"
 
-msgid "Achievements"
-msgstr "Saavutukset"
-
 msgid "Activity Log"
 msgstr "Aktiviteettiloki"
 
@@ -2694,6 +2700,9 @@ msgstr "kohteet poistettu"
 
 msgid "items updated"
 msgstr "päivitetyt kohteet"
+
+msgid "Active devices"
+msgstr "Aktiiviset laitteet"
 
 msgid "Add to faction"
 msgstr "Lisää ryhmittymään"
@@ -4909,6 +4918,9 @@ msgstr "Tiedoston koko tavuina"
 msgid "These are our past events"
 msgstr "Nämä ovat aiemmat tapahtumamme"
 
+msgid "Two-Factor Authentication"
+msgstr "Kahden tekijän todennus"
+
 msgid "Upload of photo and video"
 msgstr "Valokuvan ja videon lataaminen"
 
@@ -5133,6 +5145,9 @@ msgstr "Organisaationne maa"
 msgid "please fill in your profile"
 msgstr "täytä profiilisi"
 
+msgid "Authenticator device removed"
+msgstr "Tunnistuslaite poistettu"
+
 msgid "Contents of the special page"
 msgstr "Erityissivun sisältö"
 
@@ -5341,6 +5356,9 @@ msgstr "Vuosittaisen jäsenmaksun viivästyminen"
 
 msgid "Duration in seconds (optional)"
 msgstr "Kesto sekunteina (valinnainen)"
+
+msgid "Invalid code, please try again"
+msgstr "Virheellinen koodi, yritä uudelleen"
 
 msgid "Manage issues during the event"
 msgstr "Tapahtuman aikana ilmenevien ongelmien hallinta"
@@ -5606,6 +5624,9 @@ msgstr "Seuraavien kautta saatujen maksujen summa"
 
 msgid "Total of recorded money outflows"
 msgstr "Kirjattujen rahavirtojen kokonaismäärä"
+
+msgid "Two-Factor Authentication (TOTP)"
+msgstr "Kahden tekijän todennus (TOTP)"
 
 msgid "Verify that the data are correct"
 msgstr "Tarkista, että tiedot ovat oikein"
@@ -6373,6 +6394,9 @@ msgstr "Olet kirjautunut sisään sähköpostiosoitteella"
 msgid "You must be logged in to view this page"
 msgstr "Sinun täytyy olla kirjautuneena sisään nähdäksesi tämän sivun"
 
+msgid "6-digit code from your authenticator app"
+msgstr "6-numeroinen koodi autentikointisovelluksesta"
+
 msgid "Characters are not visible at the moment"
 msgstr "Merkit eivät näy tällä hetkellä"
 
@@ -6452,6 +6476,9 @@ msgstr "Haluatko maksaa eri summan"
 msgid "Writing fields without options: %(list)s"
 msgstr "Kenttien kirjoittaminen ilman vaihtoehtoja: %(list)s"
 
+msgid "You have no authenticator app configured"
+msgstr "Sinulla ei ole autentikointisovellusta määritetty"
+
 msgid "You must be registered to view this page"
 msgstr "Sinun täytyy olla ilmoittautunut nähdäksesi tämän sivun"
 
@@ -6484,6 +6511,9 @@ msgstr "Kykytyypit ilman kykyjä: %(list)s"
 
 msgid "Added at the top of the user profile page"
 msgstr "Lisätty käyttäjäprofiilisivun yläosaan"
+
+msgid "Authenticator app configured successfully"
+msgstr "Todentajasovellus määritetty onnistuneesti"
 
 msgid "Browser user agent string from the access"
 msgstr "Selaimen käyttäjäagentti merkkijono käyttöoikeudesta"
@@ -7236,6 +7266,9 @@ msgstr "Sisältää (vähintään yhden näistä suodattimista)"
 msgid "You cannot create a relationship towards yourself"
 msgstr "Et voi luoda suhdetta itseesi"
 
+msgid "Your account is protected by an authenticator app"
+msgstr "Tilisi on suojattu autentikointisovelluksella"
+
 msgid "Cancellation for missing organization registration"
 msgstr "Organisaation puuttuvan rekisteröinnin peruuttaminen"
 
@@ -7244,6 +7277,9 @@ msgstr "Klikattavien linkkien ja interaktiivisten elementtien väri"
 
 msgid "Define the data collected in the user profile form"
 msgstr "Määritä käyttäjäprofiililomakkeella kerättävät tiedot"
+
+msgid "Enter the 6-digit code from your authenticator app"
+msgstr "Syötä 6-numeroinen koodi autentikointisovelluksestasi"
 
 msgid "Fill in this field if you have accessibility needs"
 msgstr "Täytä tämä kenttä, jos sinulla on esteettömyystarpeita"
@@ -11548,6 +11584,14 @@ msgid ""
 msgstr ""
 "Jos valittuna, ilmoittautumislomakkeen kysymys näkyy vain, jos osallistuja "
 "kuuluu tiettyihin ryhmittymiin."
+
+msgid ""
+"Scan this QR code with Google Authenticator, Authy, or any compatible TOTP "
+"app, then enter the 6-digit code to confirm"
+msgstr ""
+"Skannaa tämä QR-koodi Google Authenticatorilla, Authy:lla tai millä tahansa "
+"yhteensopivalla TOTP-sovelluksella ja syötä sitten 6-numeroinen koodi "
+"vahvistukseksi"
 
 msgid ""
 "This page shows the total membership accounts, dues, donations, expenses, "

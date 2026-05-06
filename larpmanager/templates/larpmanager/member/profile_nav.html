@@ -1,0 +1,33 @@
+{% load i18n %}
+{% if association %}
+    <div class="nav">
+        <a {% if active == 'profile' %}class="sel"{% endif %}
+           href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> <span class="nav-label">{% trans "Profile" %}</span></a>
+        <a {% if active == 'privacy' %}class="sel"{% endif %}
+           href="{% url 'profile_privacy' %}"><i class="fa-solid fa-shield-halved"></i> <span class="nav-label">{% trans "Privacy" %}</span></a>
+        {% if 'membership' in association.features %}
+            <a {% if active == 'membership' %}class="sel"{% endif %}
+               href="{% url 'membership' %}"><i class="fa-solid fa-id-card"></i> <span class="nav-label">{% trans "Membership" %}</span></a>
+        {% endif %}
+        <a {% if active == 'accounting' %}class="sel"{% endif %}
+           href="{% url 'accounting' %}"><i class="fa-solid fa-money-bill"></i> <span class="nav-label">{% trans "Accounting" %}</span></a>
+        <a {% if active == 'registrations' %}class="sel"{% endif %}
+           href="{% url 'registrations' %}"><i class="fa-solid fa-list-check"></i> <span class="nav-label">{% trans "Registrations" %}</span></a>
+        {% if 'badge' in association.features %}
+            <a {% if active == 'badges' %}class="sel"{% endif %}
+               href="{% url 'badges' %}"><i class="fa-solid fa-trophy"></i> <span class="nav-label">{% trans "Badges" %}</span></a>
+        {% endif %}
+        {% if 'delegated_members' in association.features %}
+            <a {% if active == 'delegated' %}class="sel"{% endif %}
+               href="{% url 'delegated' %}"><i class="fa-solid fa-user-shield"></i> <span class="nav-label">{% trans "Delegated users" %}</span></a>
+        {% endif %}
+        {% if 'chat' in association.features %}
+            <a {% if active == 'messages' %}class="sel"{% endif %}
+               href="{% url 'chats' %}"><i class="fa-solid fa-message"></i> <span class="nav-label">{% trans "Messages" %}</span></a>
+        {% endif %}
+        <a {% if active == 'language' %}class="sel"{% endif %}
+           href="{% url 'language' %}"><i class="fa-solid fa-language"></i> <span class="nav-label">{% trans "Language" %}</span></a>
+        <a {% if active == 'security' %}class="sel"{% endif %}
+           href="{% url 'profile_otp' %}"><i class="fa-solid fa-lock"></i> <span class="nav-label">{% trans "Security" %}</span></a>
+    </div>
+{% endif %}

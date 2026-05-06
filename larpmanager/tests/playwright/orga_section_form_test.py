@@ -32,7 +32,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_orga,
                                      login_user,
                                      submit_confirm,
-                                     expect_normalized, fill_tinymce, check_feature, sidebar,
+                                     expect_normalized, fill_tinymce, check_feature, sidebar, nav,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -296,7 +296,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # check it is visible
     go_to(page, live_server, "/test/register")
-    page.get_by_role("link", name="Registration", exact=True).click()
+    nav(page, "Registration")
     expect(page.get_by_role("cell", name="faaaaacc")).to_be_visible()
     expect_normalized(page, page.locator("#register_form"),
                       "ticket (*) standard depends your registration ticket faaaaacc needs preferences")

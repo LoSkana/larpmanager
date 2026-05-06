@@ -15,8 +15,8 @@
         <div {% if effective_version >= 17 %}class="grid"{% else %}class="old_dashboard"{% endif %}>
             {% include "larpmanager/manage/widgets/demo.html" %}
             {% include "larpmanager/manage/widgets/orga_event.html" %}
-            {% include "larpmanager/manage/widgets/orga_registrations.html" %}
             {% include "larpmanager/manage/widgets/orga_accounting.html" %}
+            {% include "larpmanager/manage/widgets/orga_registrations.html" %}
             {% with list=priorities typ="priorities" %}
                 {% include "larpmanager/manage/widgets/helpers.html" %}
             {% endwith %}

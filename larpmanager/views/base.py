@@ -34,6 +34,7 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django_otp import user_has_device
 
 from larpmanager.cache.config import save_single_config
 from larpmanager.forms.member import MyAuthForm
@@ -56,10 +57,12 @@ class MyLoginView(LoginView):
 
     def form_valid(self, authentication_form: Form) -> HttpResponse:
         """Handle valid login form submission."""
-        # Welcome the authenticated user and set up session state
-        welcome_user(self.request, authentication_form.get_user())
-
-        # Delegate to parent class for standard login flow completion
+        user = authentication_form.get_user()
+        if user_has_device(user):
+            self.request.session["otp_pending_user_id"] = user.pk
+            self.request.session["otp_next_url"] = self.get_success_url()
+            return redirect("otp_verify")
+        welcome_user(self.request, user)
         return super().form_valid(authentication_form)
 
 

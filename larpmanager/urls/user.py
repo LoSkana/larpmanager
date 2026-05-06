@@ -120,6 +120,11 @@ urlpatterns = [
         name="profile_privacy_rewoke",
     ),
     path(
+        "profile/otp/",
+        views_um.profile_otp,
+        name="profile_otp",
+    ),
+    path(
         "pre_register/",
         views_ur.pre_register,
         name="pre_register",
@@ -397,6 +402,7 @@ urlpatterns = [
         name="registration_register",
     ),
     path("login/", MyLoginView.as_view(), name="login"),
+    path("login/otp/", views_um.otp_verify, name="otp_verify"),
     path(
         "logout/",
         auth_views.LogoutView.as_view(next_page=conf_settings.LOGOUT_REDIRECT_URL),

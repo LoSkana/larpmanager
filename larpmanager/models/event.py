@@ -503,6 +503,8 @@ class EventButton(UuidMixin, BaseConceptModel):
 
     link = models.URLField(max_length=150)
 
+    icon = models.CharField(max_length=50, blank=True, default="")
+
     class Meta:
         indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
         constraints: ClassVar[list] = [

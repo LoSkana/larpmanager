@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, sidebar
+from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, sidebar, nav
 
 pytestmark = pytest.mark.e2e
 
@@ -167,7 +167,7 @@ def signup(page: Any, live_server: Any) -> None:
 
     # check form
     page.get_by_role("link", name="Event").click()
-    page.get_by_role("link", name="Registration", exact=True).click()
+    nav(page, "Registration")
     expect_normalized(page,
         page.locator("#register_form"),
         "(*) : These fields are mandatory Additional 0 1 2 3 4 5 Reserve additional tickets beyond your own2 Ticket (*) Standard - 5€ Your registration ticket2 Standard: sadsadsadsa Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge",
@@ -187,7 +187,7 @@ def check_filler(page: Any, live_server: Any) -> None:
 
     # check filler is not there
     go_to(page, live_server, "test/")
-    page.get_by_role("link", name="Registration", exact=True).click()
+    nav(page, "Registration")
     page.get_by_label("Ticket (*)").click()
     expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot(
         '- combobox "Ticket (*)":\n  - option "Standard - 5€" [selected]'
@@ -202,7 +202,7 @@ def check_filler(page: Any, live_server: Any) -> None:
 
     # check filler is not available
     go_to(page, live_server, "test/")
-    page.get_by_role("link", name="Registration", exact=True).click()
+    nav(page, "Registration")
     page.get_by_label("Ticket (*)").click()
     expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot(
         '- combobox "Ticket (*)":\n  - option "Standard - 5€" [selected]\n  - option "Filler"'

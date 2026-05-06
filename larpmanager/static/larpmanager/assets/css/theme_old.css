@@ -882,6 +882,11 @@ body:not(.new_form) .only_new_form {
   text-align: left;
 }
 
+.new_form .form_container table .old_delete {
+  max-width: min-content !important;
+  margin: 0 auto !important;
+}
+
 @media (max-width: 800px) {
   .new_form .form_container {
     width: 100%;

@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import base64
+import io
 import logging
 import math
 import random
@@ -26,11 +28,15 @@ from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
+import qrcode
+from axes.handlers.proxy import AxesProxyHandler
+from axes.helpers import get_lockout_response
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.contrib.auth import login, user_logged_in
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, update_last_login
+from django.contrib.auth.signals import user_login_failed
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
@@ -39,6 +45,8 @@ from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import activate, get_language, gettext_lazy as _
+from django_otp import login as otp_login, match_token
+from django_otp.plugins.otp_totp.models import TOTPDevice
 from PIL import Image, UnidentifiedImageError
 
 from larpmanager.accounting.member import info_accounting
@@ -49,6 +57,8 @@ from larpmanager.forms.member import (
     LanguageForm,
     MembershipConfirmForm,
     MembershipRequestForm,
+    OTPConfirmForm,
+    OTPVerifyForm,
     ProfileForm,
 )
 from larpmanager.mail.member import send_membership_confirm
@@ -72,7 +82,7 @@ from larpmanager.models.registration import Registration, RegistrationCharacterR
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import CharacterConfig
 from larpmanager.utils.core.base import get_context
-from larpmanager.utils.core.common import get_badge, get_channel, get_contact
+from larpmanager.utils.core.common import get_badge, get_channel, get_contact, welcome_user
 from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import get_membership_request
@@ -137,7 +147,9 @@ def language(request: HttpRequest) -> HttpResponse:
         # Display language selection form for GET requests
         form = LanguageForm(current_language=current_language)
 
-    return render(request, "larpmanager/member/language.html", {"form": form})
+    context = get_context(request) if request.user.is_authenticated else {}
+    context["form"] = form
+    return render(request, "larpmanager/member/language.html", context)
 
 
 def _save_profile(request: HttpRequest, context: dict, form: ProfileForm, member: Member) -> HttpResponseRedirect:
@@ -1116,3 +1128,92 @@ def _configs_character_rels(character_rels: list[RegistrationCharacterRel]) -> N
 
     for rel in character_rels:
         rel.character.configs_dict = configs_mapping.get(rel.character_id, {})
+
+
+@login_required
+def profile_otp(request: HttpRequest) -> HttpResponse:
+    """Manage TOTP device setup and deletion for the current user."""
+    context = get_context(request)
+
+    confirmed_devices = list(TOTPDevice.objects.filter(user=request.user, confirmed=True))
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+
+        if action == "delete":
+            device_id = request.POST.get("device_id")
+            TOTPDevice.objects.filter(pk=device_id, user=request.user).delete()
+            messages.success(request, _("Authenticator device removed"))
+            return redirect("profile_otp")
+
+        if action == "confirm":
+            pending = TOTPDevice.objects.filter(user=request.user, confirmed=False).first()
+            if pending is None:
+                return redirect("profile_otp")
+            form = OTPConfirmForm(request.POST)
+            if form.is_valid():
+                token = form.cleaned_data["token"]
+                if pending.verify_token(token):
+                    pending.confirmed = True
+                    pending.save()
+                    otp_login(request, pending)
+                    messages.success(request, _("Authenticator app configured successfully"))
+                    return redirect("profile_otp")
+                messages.error(request, _("Invalid code, please try again"))
+            context["confirm_form"] = form
+        else:
+            context["confirm_form"] = OTPConfirmForm()
+    else:
+        TOTPDevice.objects.filter(user=request.user, confirmed=False).delete()
+        context["confirm_form"] = OTPConfirmForm()
+
+    if not confirmed_devices:
+        pending = TOTPDevice.objects.get_or_create(user=request.user, name="default", confirmed=False)[0]
+        img = qrcode.make(pending.config_url)
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        qr_data = "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+        context["pending_device"] = pending
+        context["qr_code_data"] = qr_data
+
+    context["devices"] = confirmed_devices
+    return render(request, "larpmanager/member/security.html", context)
+
+
+def otp_verify(request: HttpRequest) -> HttpResponse:
+    """Second-step OTP verification after credential login."""
+    user_id = request.session.get("otp_pending_user_id")
+    if not user_id:
+        return redirect("login")
+
+    try:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        del request.session["otp_pending_user_id"]
+        return redirect("login")
+
+    credentials = {"username": user.username}
+    if not AxesProxyHandler.is_allowed(request, credentials):
+        request.session.pop("otp_pending_user_id", None)
+        request.session.pop("otp_next_url", None)
+        return get_lockout_response(request, credentials=credentials)
+
+    if request.method == "POST":
+        form = OTPVerifyForm(request.POST)
+        if form.is_valid():
+            token = form.cleaned_data["token"]
+            device = match_token(user, token)
+            if device is not None:
+                user.backend = get_user_backend()
+                login(request, user)
+                otp_login(request, device)
+                request.session.pop("otp_pending_user_id", None)
+                next_url = request.session.pop("otp_next_url", None)
+                welcome_user(request, user)
+                return redirect(next_url or conf_settings.LOGIN_REDIRECT_URL)
+            user_login_failed.send(sender=__name__, credentials=credentials, request=request)
+            form.add_error("token", _("Invalid code, please try again"))
+    else:
+        form = OTPVerifyForm()
+
+    return render(request, "registration/otp_verify.html", {"form": form})

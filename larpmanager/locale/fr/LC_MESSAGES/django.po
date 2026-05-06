@@ -161,6 +161,9 @@ msgstr "Accueil"
 msgid "IBAN"
 msgstr "IBAN"
 
+msgid "Icon"
+msgstr "Icône"
+
 msgid "Info"
 msgstr "Info"
 
@@ -763,6 +766,9 @@ msgstr "Charge"
 msgid "VAT No"
 msgstr "N° de TVA"
 
+msgid "Verify"
+msgstr "Vérifier"
+
 msgid "Voting"
 msgstr "Vote"
 
@@ -1336,6 +1342,9 @@ msgstr "Révision"
 
 msgid "Sections"
 msgstr "Sections"
+
+msgid "Security"
+msgstr "Sécurité"
 
 msgid "Selected"
 msgstr "Sélectionné"
@@ -2177,9 +2186,6 @@ msgstr "longueur du texte"
 msgid "Ability type"
 msgstr "Type de compétence"
 
-msgid "Achievements"
-msgstr "Réalisations"
-
 msgid "Activity Log"
 msgstr "Journal d'activité"
 
@@ -2694,6 +2700,9 @@ msgstr "éléments supprimés"
 
 msgid "items updated"
 msgstr "éléments mis à jour"
+
+msgid "Active devices"
+msgstr "Dispositifs actifs"
 
 msgid "Add to faction"
 msgstr "Ajouter à la faction"
@@ -4909,6 +4918,9 @@ msgstr "Taille du fichier en octets"
 msgid "These are our past events"
 msgstr "Voici nos événements passés"
 
+msgid "Two-Factor Authentication"
+msgstr "Authentification à deux facteurs"
+
 msgid "Upload of photo and video"
 msgstr "Téléchargement de photos et de vidéos"
 
@@ -5133,6 +5145,9 @@ msgstr "Pays de votre organisation"
 msgid "please fill in your profile"
 msgstr "veuillez remplir votre profil"
 
+msgid "Authenticator device removed"
+msgstr "Dispositif d'authentification retiré"
+
 msgid "Contents of the special page"
 msgstr "Contenu de la page spéciale"
 
@@ -5341,6 +5356,9 @@ msgstr "Retard dans le paiement de la cotisation annuelle"
 
 msgid "Duration in seconds (optional)"
 msgstr "Durée en secondes (facultatif)"
+
+msgid "Invalid code, please try again"
+msgstr "Code invalide, veuillez réessayer"
 
 msgid "Manage issues during the event"
 msgstr "Gérer les problèmes pendant l'événement"
@@ -5608,6 +5626,9 @@ msgstr "Somme des paiements reçus par l'intermédiaire de"
 
 msgid "Total of recorded money outflows"
 msgstr "Total des sorties d'argent enregistrées"
+
+msgid "Two-Factor Authentication (TOTP)"
+msgstr "Authentification à deux facteurs (TOTP)"
 
 msgid "Verify that the data are correct"
 msgstr "Vérifier que les données sont correctes "
@@ -6380,6 +6401,9 @@ msgstr "Vous êtes connecté avec une adresse e-mail"
 msgid "You must be logged in to view this page"
 msgstr "Vous devez être connecté pour voir cette page"
 
+msgid "6-digit code from your authenticator app"
+msgstr "Code à 6 chiffres de votre application d'authentification"
+
 msgid "Characters are not visible at the moment"
 msgstr "Les caractères ne sont pas visibles pour le moment"
 
@@ -6459,6 +6483,9 @@ msgstr "Souhaitez-vous payer un montant différent"
 msgid "Writing fields without options: %(list)s"
 msgstr "Ecriture de champs sans options : %(list)s"
 
+msgid "You have no authenticator app configured"
+msgstr "Vous n'avez pas d'application d'authentification configurée"
+
 msgid "You must be registered to view this page"
 msgstr "Vous devez être inscrit pour voir cette page"
 
@@ -6493,6 +6520,9 @@ msgstr "Types de capacités sans capacités : %(list)s"
 
 msgid "Added at the top of the user profile page"
 msgstr "Ajouté en haut de la page du profil de l'utilisateur"
+
+msgid "Authenticator app configured successfully"
+msgstr "L'application Authenticator a été configurée avec succès"
 
 msgid "Browser user agent string from the access"
 msgstr "Chaîne de l'agent utilisateur du navigateur à partir de l'accès"
@@ -7268,6 +7298,9 @@ msgstr "Vous incluez (au moins l'un de) ces filtres"
 msgid "You cannot create a relationship towards yourself"
 msgstr "Vous ne pouvez pas créer une relation avec vous-même"
 
+msgid "Your account is protected by an authenticator app"
+msgstr "Votre compte est protégé par une application d'authentification"
+
 msgid "Cancellation for missing organization registration"
 msgstr "Annulation en cas d'absence d'inscription de l'organisation"
 
@@ -7277,6 +7310,10 @@ msgstr "Couleur pour les liens cliquables et les éléments interactifs"
 msgid "Define the data collected in the user profile form"
 msgstr ""
 "Définir les données collectées dans le formulaire de profil de l'utilisateur"
+
+msgid "Enter the 6-digit code from your authenticator app"
+msgstr ""
+"Saisissez le code à 6 chiffres de votre application d'authentification"
 
 msgid "Fill in this field if you have accessibility needs"
 msgstr ""
@@ -11895,6 +11932,14 @@ msgid ""
 msgstr ""
 "Si cette option est cochée, la question du formulaire d'inscription n'est "
 "visible que si le participant est affecté à certaines factions."
+
+msgid ""
+"Scan this QR code with Google Authenticator, Authy, or any compatible TOTP "
+"app, then enter the 6-digit code to confirm"
+msgstr ""
+"Scannez ce code QR avec Google Authenticator, Authy ou toute autre "
+"application TOTP compatible, puis saisissez le code à 6 chiffres pour "
+"confirmer"
 
 msgid ""
 "This page shows the total membership accounts, dues, donations, expenses, "

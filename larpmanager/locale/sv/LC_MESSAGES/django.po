@@ -161,6 +161,9 @@ msgstr "Hem"
 msgid "IBAN"
 msgstr "IBAN"
 
+msgid "Icon"
+msgstr "Ikon"
+
 msgid "Info"
 msgstr "Info"
 
@@ -763,6 +766,9 @@ msgstr "Avgift"
 msgid "VAT No"
 msgstr "Moms nr"
 
+msgid "Verify"
+msgstr "Verifiera"
+
 msgid "Voting"
 msgstr "Omröstning"
 
@@ -1336,6 +1342,9 @@ msgstr "Revision"
 
 msgid "Sections"
 msgstr "Sektioner"
+
+msgid "Security"
+msgstr "Säkerhet"
 
 msgid "Selected"
 msgstr "Utvalda"
@@ -2177,9 +2186,6 @@ msgstr "textlängd"
 msgid "Ability type"
 msgstr "Typ av färdighet"
 
-msgid "Achievements"
-msgstr "Prestationer"
-
 msgid "Activity Log"
 msgstr "Aktivitetslogg"
 
@@ -2694,6 +2700,9 @@ msgstr "objekt raderade"
 
 msgid "items updated"
 msgstr "artiklar uppdaterade"
+
+msgid "Active devices"
+msgstr "Aktiva enheter"
 
 msgid "Add to faction"
 msgstr "Lägg till i fraktion"
@@ -4909,6 +4918,9 @@ msgstr "Filens storlek i byte"
 msgid "These are our past events"
 msgstr "Detta är våra tidigare evenemang"
 
+msgid "Two-Factor Authentication"
+msgstr "Tvåfaktorsautentisering"
+
 msgid "Upload of photo and video"
 msgstr "Ladda upp foton och videor"
 
@@ -5133,6 +5145,9 @@ msgstr "Din organisations land"
 msgid "please fill in your profile"
 msgstr "vänligen fyll i din profil"
 
+msgid "Authenticator device removed"
+msgstr "Autentiseringsenhet borttagen"
+
 msgid "Contents of the special page"
 msgstr "Innehåll i den särskilda sidan"
 
@@ -5341,6 +5356,9 @@ msgstr "Försening av årlig medlemsavgift"
 
 msgid "Duration in seconds (optional)"
 msgstr "Varaktighet i sekunder (valfritt)"
+
+msgid "Invalid code, please try again"
+msgstr "Ogiltig kod, försök igen"
 
 msgid "Manage issues during the event"
 msgstr "Hantera problem under evenemanget"
@@ -5606,6 +5624,9 @@ msgstr "Summan av betalningar som erhållits genom"
 
 msgid "Total of recorded money outflows"
 msgstr "Totalt antal registrerade penningutflöden"
+
+msgid "Two-Factor Authentication (TOTP)"
+msgstr "Tvåfaktorsautentisering (TOTP)"
 
 msgid "Verify that the data are correct"
 msgstr "Kontrollera att uppgifterna är korrekta"
@@ -6375,6 +6396,9 @@ msgstr "Du är inloggad med en e-postadress"
 msgid "You must be logged in to view this page"
 msgstr "Du måste vara inloggad för att se denna sida"
 
+msgid "6-digit code from your authenticator app"
+msgstr "6-siffrig kod från din autentiseringsapp"
+
 msgid "Characters are not visible at the moment"
 msgstr "Tecknen är inte synliga för tillfället"
 
@@ -6454,6 +6478,9 @@ msgstr "Skulle du vilja betala ett annat belopp"
 msgid "Writing fields without options: %(list)s"
 msgstr "Skriva fält utan alternativ: %(list)s"
 
+msgid "You have no authenticator app configured"
+msgstr "Du har ingen autentiseringsapp konfigurerad"
+
 msgid "You must be registered to view this page"
 msgstr "Du måste vara registrerad för att se denna sida"
 
@@ -6486,6 +6513,9 @@ msgstr "Förmågetyper utan förmågor: %(list)s"
 
 msgid "Added at the top of the user profile page"
 msgstr "Tillagd högst upp på sidan med användarprofilen"
+
+msgid "Authenticator app configured successfully"
+msgstr "Autentiseringsappen har konfigurerats framgångsrikt"
 
 msgid "Browser user agent string from the access"
 msgstr "Webbläsarens användaragentsträng från åtkomsten"
@@ -7236,6 +7266,9 @@ msgstr "Du inkluderar (minst ett av) dessa filter"
 msgid "You cannot create a relationship towards yourself"
 msgstr "Du kan inte skapa en relation till dig själv"
 
+msgid "Your account is protected by an authenticator app"
+msgstr "Ditt konto skyddas av en autentiseringsapp"
+
 msgid "Cancellation for missing organization registration"
 msgstr "Avbokning vid utebliven registrering av organisation"
 
@@ -7245,6 +7278,9 @@ msgstr "Färg för klickbara länkar och interaktiva element"
 msgid "Define the data collected in the user profile form"
 msgstr ""
 "Definiera de uppgifter som samlas in i formuläret för användarprofilen"
+
+msgid "Enter the 6-digit code from your authenticator app"
+msgstr "Ange den 6-siffriga koden från din autentiseringsapp"
 
 msgid "Fill in this field if you have accessibility needs"
 msgstr "Fyll i detta fält om du har tillgänglighetsbehov"
@@ -11570,6 +11606,13 @@ msgid ""
 msgstr ""
 "Om den är markerad kan en fråga i registreringsformuläret endast vara synlig"
 " om deltagaren tillhör vissa fraktioner."
+
+msgid ""
+"Scan this QR code with Google Authenticator, Authy, or any compatible TOTP "
+"app, then enter the 6-digit code to confirm"
+msgstr ""
+"Skanna denna QR-kod med Google Authenticator, Authy eller någon kompatibel "
+"TOTP-app och ange sedan den 6-siffriga koden för att bekräfta"
 
 msgid ""
 "This page shows the total membership accounts, dues, donations, expenses, "

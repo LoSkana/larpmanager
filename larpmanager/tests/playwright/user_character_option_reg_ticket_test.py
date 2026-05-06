@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, logout, expect_normalized, \
-    submit_confirm, new_option, submit_option, sidebar
+    submit_confirm, new_option, submit_option, sidebar, nav
 
 pytestmark = pytest.mark.e2e
 
@@ -129,13 +129,13 @@ def create_character(page: Any) -> None:
 
     # check status, resubmit reg
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
-    page.get_by_role("link", name="Registration", exact=True).click()
+    nav(page, "Registration")
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
 
     # change ticket
-    page.get_by_role("link", name="Registration", exact=True).click()
+    nav(page, "Registration")
     page.get_by_label("Ticket").select_option("u2")
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
@@ -152,7 +152,7 @@ def create_character(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")
 
     # check with registration resubmit
-    page.get_by_role("link", name="Registration", exact=True).click()
+    nav(page, "Registration")
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
     page.get_by_role("link", name="Edit").click()

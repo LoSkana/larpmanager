@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Two-Factor Authentication" %}
+{% endblock title %}
+{% block content %}
+    <div class="login">
+        <p>{% trans "Enter the 6-digit code from your authenticator app" %}.</p>
+        <form method="post">
+            {% csrf_token %}
+            <table class="mob">
+                {{ form.as_table }}
+            </table>
+            <input type="submit" class="login_go" value="{% trans "Verify" %}" />
+            <br />
+            <br />
+            <p class="password_reset">
+                <a href="{% url 'login' %}">{% trans "Cancel" %}</a>
+            </p>
+        </form>
+    </div>
+{% endblock content %}
