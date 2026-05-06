@@ -328,7 +328,11 @@ def _calculate_installment_cumulative(installment_amount: float, current_cumulat
 
 
 def _set_installment_fallback(
-    registration: Registration, cumulative_amount: float, *, has_distant_installments: bool
+    registration: Registration,
+    cumulative_amount: float,
+    *,
+    has_distant_installments: bool,
+    overdue_deadline: int | None = None,
 ) -> None:
     """Set fallback quota when no installments were processed.
 
@@ -336,13 +340,14 @@ def _set_installment_fallback(
         registration: Registration instance
         cumulative_amount: Cumulative amount from installments
         has_distant_installments: Whether installments exist but are beyond alert threshold
+        overdue_deadline: Most overdue (most negative) deadline seen, if any
 
     """
     if has_distant_installments:
         if cumulative_amount > registration.tot_payed:
             # Overdue installments exist despite distant future ones: immediate payment
             registration.quota = cumulative_amount - registration.tot_payed
-            registration.deadline = 0
+            registration.deadline = overdue_deadline if overdue_deadline is not None else 0
         else:
             # All installments are beyond alert threshold: player is OK for now
             registration.quota = 0
@@ -356,7 +361,7 @@ def _set_installment_fallback(
     elif registration.tot_iscr > registration.tot_payed and registration.quota == 0:
         # Outstanding debt but no valid installment deadline found: immediate payment
         registration.quota = registration.tot_iscr - registration.tot_payed
-        registration.deadline = 0
+        registration.deadline = overdue_deadline if overdue_deadline is not None else 0
 
 
 def installment_check(registration: Registration, alert: int, association_id: int) -> None:
@@ -379,6 +384,7 @@ def installment_check(registration: Registration, alert: int, association_id: in
 
     cumulative_amount = 0
     has_distant_installments = False
+    most_overdue_deadline = None
     installments_query = RegistrationInstallment.objects.filter(event_id=registration.run.event_id)
     installments_query = installments_query.annotate(tickets_map=ArrayAgg("tickets__id")).order_by("order")
     is_first_deadline = True
@@ -397,7 +403,13 @@ def installment_check(registration: Registration, alert: int, association_id: in
         )
 
         # Skip installments with invalid deadline
-        if not deadline_days or deadline_days < 0:
+        if not deadline_days:
+            continue
+
+        # Track the most overdue deadline if negative
+        if deadline_days < 0:
+            if most_overdue_deadline is None or deadline_days < most_overdue_deadline:
+                most_overdue_deadline = deadline_days
             continue
 
         registration.quota = max(cumulative_amount - registration.tot_payed, 0)
@@ -411,7 +423,12 @@ def installment_check(registration: Registration, alert: int, association_id: in
             registration.deadline = deadline_days
             return
 
-    _set_installment_fallback(registration, cumulative_amount, has_distant_installments=has_distant_installments)
+    _set_installment_fallback(
+        registration,
+        cumulative_amount,
+        has_distant_installments=has_distant_installments,
+        overdue_deadline=most_overdue_deadline,
+    )
 
 
 def _get_deadline_installment(

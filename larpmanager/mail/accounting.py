@@ -538,8 +538,9 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
     if "treasurer" in features:
         # Parse comma-separated list of treasurer member IDs
         treasurer_list = get_association_config(inv.association_id, "treasurer_appointees", default_value="")
+        treasurer_ids = [x for x in treasurer_list.split(",") if x.strip()]
         query = Membership.objects.filter(
-            association_id=inv.association_id, member_id__in=treasurer_list.split(",")
+            association_id=inv.association_id, member_id__in=treasurer_ids
         ).select_related("member")
         for membership in query:
             # Avoid duplicates if treasurer is also an organizer

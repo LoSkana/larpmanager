@@ -1744,12 +1744,51 @@ header.sec h1 {
    Guide & Article
    --------------------------------------------------------------------------- */
 
-.guide-list h3 a {
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .guide-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.guide-card {
+  border: 1px solid #c8e8ec;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  transition: box-shadow 0.2s;
+}
+
+.guide-card:hover {
+  box-shadow: 0 4px 12px rgba(53, 169, 183, 0.18);
+}
+
+.guide-card h3 {
+  margin: 0 0 0.5rem;
+}
+
+.guide-card h3 i {
+  color: #35a9b7;
+  margin-right: 0.45rem;
+}
+
+.guide-card h3 a {
   color: #35a9b7;
 }
 
-.guide-list h3 a:hover {
+.guide-card h3 a:hover {
   color: #a5dee5;
+}
+
+.guide-card-desc {
+  margin: 0;
+  color: #555;
+  font-size: 0.93em;
 }
 
 .guide-container {

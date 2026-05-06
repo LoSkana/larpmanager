@@ -69,6 +69,7 @@ def _ildb_http(method: str, url: str, api_key: str = "", **kwargs: Any) -> reque
     """Execute one ILDB API call and sleep 1 s to stay within the 60 req/min limit.
 
     When api_key is provided, Authorization and Accept headers are injected automatically.
+    On HTTP errors, admins are notified with the payload and response details before re-raising.
     """
     if api_key:
         headers = kwargs.pop("headers", {})
@@ -77,6 +78,15 @@ def _ildb_http(method: str, url: str, api_key: str = "", **kwargs: Any) -> reque
         kwargs["headers"] = headers
     response = getattr(requests, method)(url, **kwargs)
     time.sleep(1)
+    try:
+        response.raise_for_status()
+    except requests.exceptions.HTTPError:
+        payload = kwargs.get("json") or kwargs.get("data") or kwargs.get("files")
+        notify_admins(
+            f"ILDB {method.upper()} failed {response.status_code}",
+            f"URL: {url}\nPayload: {payload}\nResponse: {response.text}",
+        )
+        raise
     return response
 
 

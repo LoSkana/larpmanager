@@ -43,7 +43,7 @@
                         <td>{{ item_data.assigned_quantity }}</td>
                         <td>
                             {% if item_data.will_delete %}
-                                <span class="text-danger"><strong>{{ item_data.final_quantity }}</strong></span>
+                                <span class="redderized"><strong>{{ item_data.final_quantity }}</strong></span>
                             {% else %}
                                 {{ item_data.final_quantity }}
                             {% endif %}

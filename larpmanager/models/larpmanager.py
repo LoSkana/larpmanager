@@ -194,6 +194,8 @@ class LarpManagerGuide(BaseModel):
         options={"quality": 80},
     )
 
+    icon = models.CharField(max_length=100, blank=True, null=True)
+
     published = models.BooleanField(default=False)
 
     def show_thumb(self) -> Any:
