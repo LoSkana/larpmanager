@@ -9753,6 +9753,13 @@ msgstr ""
 "hallinnoinnin"
 
 msgid ""
+"Features cannot be activated in lite mode, complete the activation checklist"
+" first"
+msgstr ""
+"Ominaisuuksia ei voi aktivoida kevyessä tilassa, suorita aktivoinnin "
+"tarkistuslista ensin"
+
+msgid ""
 "If checked, approval of expenses can be performed only from the organization"
 " panel"
 msgstr ""

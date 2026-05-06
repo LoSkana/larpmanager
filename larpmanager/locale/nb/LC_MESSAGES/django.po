@@ -9752,6 +9752,13 @@ msgstr ""
 "organisasjonens finansielle instrumenter"
 
 msgid ""
+"Features cannot be activated in lite mode, complete the activation checklist"
+" first"
+msgstr ""
+"Funksjoner kan ikke aktiveres i lite-modus, fullfør aktiveringssjekklisten "
+"først"
+
+msgid ""
 "If checked, approval of expenses can be performed only from the organization"
 " panel"
 msgstr ""

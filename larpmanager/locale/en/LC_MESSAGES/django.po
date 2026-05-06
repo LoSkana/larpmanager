@@ -10556,6 +10556,11 @@ msgstr ""
 msgid "Feature %(name)s activated"
 msgstr ""
 
+msgid ""
+"Features cannot be activated in lite mode, complete the activation checklist "
+"first"
+msgstr ""
+
 #, python-format
 msgid "Feature %(name)s already activated"
 msgstr ""

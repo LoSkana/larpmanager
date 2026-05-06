@@ -1315,7 +1315,7 @@ class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
     def save(self, commit: bool = True) -> RegistrationQuestion:  # noqa: FBT001, FBT002
         """Save the instance, enforcing OPTIONAL status and clearing M2M for system types."""
         instance = super().save(commit=False)
-        if len(instance.typ) > 1:
+        if len(instance.typ) > 1 and instance.typ != RegistrationQuestionType.TICKET:
             instance.status = QuestionStatus.OPTIONAL
         if commit:
             instance.save()

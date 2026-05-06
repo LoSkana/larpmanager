@@ -605,23 +605,18 @@ def assign_previous_campaign_character(registration: Any) -> None:
     ):
         return
 
-    # Find the most recent run from the same campaign series
-    previous_campaign_run = (
-        Run.objects.filter(
-            Q(event__parent=registration.run.event.parent) | Q(event_id=registration.run.event.parent_id),
+    # Find the most recent character the member had in this campaign series
+    previous_character_relation = (
+        RegistrationCharacterRel.objects.filter(
+            Q(registration__run__event__parent=registration.run.event.parent)
+            | Q(registration__run__event_id=registration.run.event.parent_id),
+            registration__member=registration.member,
+            registration__cancellation_date__isnull=True,
         )
-        .exclude(event_id=registration.run.event_id)
-        .order_by("-end")
+        .exclude(registration__run__event_id=registration.run.event_id)
+        .order_by("-registration__run__end")
         .first()
     )
-    if not previous_campaign_run:
-        return
-
-    # Get character relationship from previous run and create new one
-    previous_character_relation = RegistrationCharacterRel.objects.filter(
-        registration__member=registration.member,
-        registration__run=previous_campaign_run,
-    ).first()
 
     # Only proceed if previous character exists and is active
     if not previous_character_relation or not previous_character_relation.character.is_active:
