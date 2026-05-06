@@ -734,6 +734,7 @@ def orga_upload_template(request: HttpRequest, event_slug: str, upload_type: str
         WritingQuestionType.HIDE: "hide (true or false)",
         WritingQuestionType.PROGRESS: "name of progress step",
         WritingQuestionType.ASSIGNED: "name of assigned staff",
+        "character_status": "character status (c/s/r/a)",
         RegistrationQuestionType.TICKET: "name of the ticket",
         RegistrationQuestionType.ADDITIONAL: "number of additional tickets",
         RegistrationQuestionType.PWYW: "amount of free donation",
