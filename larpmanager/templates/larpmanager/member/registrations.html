@@ -4,7 +4,9 @@
     {% trans "Registrations" %}
 {% endblock title %}
 {% block content %}
-    {% include "larpmanager/member/profile_nav.html" with active="registrations" %}
-    <hr />
-    {% include "elements/member/registration_list.html" %}
+    <div class="form_container auto_resize platform">
+        {% include "larpmanager/member/profile_nav.html" with active="registrations" %}
+        <hr />
+        {% include "elements/member/registration_list.html" %}
+    </div>
 {% endblock content %}

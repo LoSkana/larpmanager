@@ -4,320 +4,322 @@
     {% trans "Accounting" %}
 {% endblock title %}
 {% block content %}
-    {% include "larpmanager/member/profile_nav.html" with active="accounting" %}
-    <hr />
-    {% if association_terms_conditions %}
-        <p>
-            {% trans "You can consult" %} <a href="{% url 'register_conditions' %}">{% trans "here the conditions of registration" %}.</a>
-        </p>
+    <div class="form_container auto_resize platform">
+        {% include "larpmanager/member/profile_nav.html" with active="accounting" %}
         <hr />
-    {% endif %}
-    {% if payments_pending %}
-        <h2>{% trans "Payments in approval" %}</h2>
-        <p>
-            {% trans "These are the event signup for which you submitted a payment, and it's being reviewed by the staff. You don't have to do anything at this time" %}!
-        </p>
-        <p>
-            {% for registration in payments_pending %}
-                {% include "elements/comma.html" %}
-                <b><a href="#" class="my_toggle" tog='reg_{{ registration.uuid }}'>{{ registration.run }}</a></b>
-            {% endfor %}
-        </p>
-        <hr />
-    {% endif %}
-    {% if payments_todo %}
-        <h2>{% trans "Pending payments" %}</h2>
-        <p>{% trans "These are the event registrations for which you have to make a payment" %}.</p>
-        <p>
-            {% for registration in payments_todo %}
-                {% include "elements/comma.html" %}
-                <b>{{ registration.run }}</b> -
-                <a href="{% url 'accounting_registration' registration.uuid %}">
-                    {% trans "You must pay" %} {{ registration.quota|format_decimal }}{{ currency_symbol }}
-                    {% if registration.deadline > 0 %}
-                        {% trans "by the deadline of" %} {{ registration.deadline }} {% trans "days" %}
-                    {% else %}
-                        {% trans "immediately" %}
-                    {% endif %}
-                </a>
-                {% if registration.deadline <= 0 %}
-                    <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
-                {% endif %}
-            {% endfor %}
-        </p>
-        <hr />
-    {% endif %}
-    {% if delegated_todo %}
-        <h2>{% trans "Payments pending delegated accounts" %}</h2>
-        <p>{% trans "These are delegated account registrations for which you have to make a payment" %}.</p>
-        <p>
-            {% for del in delegated %}
-                {% for registration in del.context.payments_todo %}
-                    {% include "elements/comma.html" %}
-                    <b>{{ registration.run }}</b> ({{ del }}) - {{ registration.quota|format_decimal }}{{ currency_symbol }}
-                    {% trans "by" %} {{ registration.deadline }} {% trans "days" %}
-                {% endfor %}
-            {% endfor %}
-        </p>
-        <hr />
-    {% endif %}
-    {% if member.membership.credit %}
-        <h2>{{ credits_name }}</h2>
-        <p>
-            {% trans "Total" %}: <b>{{ member.membership.credit }}{{ currency_symbol }}</b>.
-            {% if member.membership.credit > 0 %}
-                <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
-                {% if 'refund' in association.features %}
-                    <br />
-                    {% trans "Do you wish to be reimbursed? Open a new one" %} <a href="{% url 'accounting_refund' %}">{% trans "refund request" %}</a>.
-                    {% if refunds %}
-                        <b>{% trans "Requests open" %}: </b>
-                        {% for el in refunds %}
-                            {% include "elements/comma.html" %}
-                            {{ el.details }} ({{ el.value }})
-                        {% endfor %}
-                    {% endif %}
-                {% endif %}
-            {% endif %}
-        </p>
-        <hr />
-    {% endif %}
-    {% if member.membership.tokens %}
-        <h2>{{ tokens_name }}</h2>
-        <p>
-            {% trans "Total" %}: <b>{{ member.membership.tokens }}</b>.
-            {% if member.membership.tokens > 0 %}
-                <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
-            {% endif %}
-        </p>
-        <hr />
-    {% endif %}
-    {% if 'membership' in association.features %}
-        {% if member.membership.status == 'a' %}
-            {% if year_membership_fee %}
-                {% if 'vote' in association.features and association.voting_open %}
-                    <h2>{% trans "Executive Vote" %} {{ year }}</h2>
-                    <p>
-                        <a href="{% url 'vote' %}">{% trans "Cast your vote for the new Executive" %}!</a>
-                    </p>
-                    <hr />
-                {% endif %}
-            {% else %}
-                {% if year_membership_pending %}
-                    <h2>{% trans "Membership fees in approval" %} {{ year }}</h2>
-                    <p>
-                        {% trans "You have submitted your dues payment, and it is now being approved by the staff. You don't have to do anything for the time being" %}!
-                    </p>
-                    <hr />
-                {% elif year in registration_years %}
-                    <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
-                    <p>
-                        {% trans "You are registered for an event to be held in this calendar year, but we are not aware of your dues payment. Be careful: if you don't complete it, <b>you won't be able to attend events</b>, nor vote at the Membership Meeting" %}! <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
-                    </p>
-                    <hr />
-                {% elif 'vote' in association.features and association.voting_open %}
-                    <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
-                    <p>
-                        {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
-                    </p>
-                    <hr />
-                {% elif grazing %}
-                    <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
-                    <p>
-                        {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
-                    </p>
-                    <hr />
-                {% endif %}
-            {% endif %}
-        {% elif member.membership.status == 'e' or member.membership.status == 'j' %}
-            <h2>{% trans "Membership request not submitted" %}</h2>
+        {% if association_terms_conditions %}
             <p>
-                {% trans "You have not yet submitted your application for membership to the Organization. If you are not a Member, we cannot accept payment from you, and you cannot confirm your event registrations" %}. <a href="{% url 'membership' %}">{% trans "Make the request now" %}!</a>
+                {% trans "You can consult" %} <a href="{% url 'register_conditions' %}">{% trans "here the conditions of registration" %}.</a>
             </p>
-            <hr />
-        {% elif member.membership.status == 's' %}
-            <h2>{% trans "Membership request submitted" %}</h2>
-            <p>
-                {% trans "You have submitted your application for membership in the Organization. The request will be considered at the next meeting of the Board. When it is approved, you will be able to settle payments for the events you have signed up for" %}!
-            </p>
-            <hr />
-        {% elif member.membership.status == 'r' %}
-            <h2>{% trans "Member revoked" %}</h2>
-            <p>{% trans "What are you doing here" %}?</p>
             <hr />
         {% endif %}
-    {% endif %}
-    {% if 'membership_fee' in association.features %}
-        {% if membership_fee %}
-            <h2>{% trans "Membership fee" %}</h2>
+        {% if payments_pending %}
+            <h2>{% trans "Payments in approval" %}</h2>
             <p>
-                {% trans "They are regularly paid for the following years" %}:
-                {% for el in membership_fee %}
+                {% trans "These are the event signup for which you submitted a payment, and it's being reviewed by the staff. You don't have to do anything at this time" %}!
+            </p>
+            <p>
+                {% for registration in payments_pending %}
                     {% include "elements/comma.html" %}
-                    {{ el }}
+                    <b><a href="#" class="my_toggle" tog='reg_{{ registration.uuid }}'>{{ registration.run }}</a></b>
                 {% endfor %}
             </p>
+            <hr />
         {% endif %}
-        <hr />
-    {% endif %}
-    {% if 'collection' in association.features %}
-        <h2>{% trans "Collection" %}</h2>
-        <p>
-            {% trans "Want to help one of your friends play with us? Organize a collection: you and anyone who wants to contribute will be able to donate part of their registration fees" %}! <a href="{% url 'accounting_collection' %}">{% trans "Create a new collection" %}</a>.
-            {% if collections %}
-            </p>
-            <table class="mob">
-                {% for el in collections %}
-                    <tr>
-                        <td>
-                            {{ el.name }} -
-                            {% if el.status == 'o' %}
-                                {% trans "Active collection" %}
-                            {% elif el.status == 'd' %}
-                                {% trans "Closed collection" %}
-                                - {% trans "Collection total" %}: {{ el.total }}
-                            {% elif el.status == 'p' %}
-                                {% trans "Collections delivered" %}
-                                - {% trans "Collection total" %}: {{ el.total }}
-                            {% endif %}
-                            - <a href="{% url 'accounting_collection_manage' el.contribute_code %}">{% trans "Manage it here" %}!</a>
-                        </td>
-                    </tr>
+        {% if payments_todo %}
+            <h2>{% trans "Pending payments" %}</h2>
+            <p>{% trans "These are the event registrations for which you have to make a payment" %}.</p>
+            <p>
+                {% for registration in payments_todo %}
+                    {% include "elements/comma.html" %}
+                    <b>{{ registration.run }}</b> -
+                    <a href="{% url 'accounting_registration' registration.uuid %}">
+                        {% trans "You must pay" %} {{ registration.quota|format_decimal }}{{ currency_symbol }}
+                        {% if registration.deadline > 0 %}
+                            {% trans "by the deadline of" %} {{ registration.deadline }} {% trans "days" %}
+                        {% else %}
+                            {% trans "immediately" %}
+                        {% endif %}
+                    </a>
+                    {% if registration.deadline <= 0 %}
+                        <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
+                    {% endif %}
                 {% endfor %}
-            </table>
-            {% if collection_gifts %}
-                <p>
-                    {% trans "Collection participated" %}:
-                    {% for el in collection_gifts %}
+            </p>
+            <hr />
+        {% endif %}
+        {% if delegated_todo %}
+            <h2>{% trans "Payments pending delegated accounts" %}</h2>
+            <p>{% trans "These are delegated account registrations for which you have to make a payment" %}.</p>
+            <p>
+                {% for del in delegated %}
+                    {% for registration in del.context.payments_todo %}
                         {% include "elements/comma.html" %}
-                        <i>{{ el.collection.member.display_member }}</i> ({{ el.value }}{{ currency_symbol }})
+                        <b>{{ registration.run }}</b> ({{ del }}) - {{ registration.quota|format_decimal }}{{ currency_symbol }}
+                        {% trans "by" %} {{ registration.deadline }} {% trans "days" %}
+                    {% endfor %}
+                {% endfor %}
+            </p>
+            <hr />
+        {% endif %}
+        {% if member.membership.credit %}
+            <h2>{{ credits_name }}</h2>
+            <p>
+                {% trans "Total" %}: <b>{{ member.membership.credit }}{{ currency_symbol }}</b>.
+                {% if member.membership.credit > 0 %}
+                    <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
+                    {% if 'refund' in association.features %}
+                        <br />
+                        {% trans "Do you wish to be reimbursed? Open a new one" %} <a href="{% url 'accounting_refund' %}">{% trans "refund request" %}</a>.
+                        {% if refunds %}
+                            <b>{% trans "Requests open" %}: </b>
+                            {% for el in refunds %}
+                                {% include "elements/comma.html" %}
+                                {{ el.details }} ({{ el.value }})
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </p>
+            <hr />
+        {% endif %}
+        {% if member.membership.tokens %}
+            <h2>{{ tokens_name }}</h2>
+            <p>
+                {% trans "Total" %}: <b>{{ member.membership.tokens }}</b>.
+                {% if member.membership.tokens > 0 %}
+                    <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
+                {% endif %}
+            </p>
+            <hr />
+        {% endif %}
+        {% if 'membership' in association.features %}
+            {% if member.membership.status == 'a' %}
+                {% if year_membership_fee %}
+                    {% if 'vote' in association.features and association.voting_open %}
+                        <h2>{% trans "Executive Vote" %} {{ year }}</h2>
+                        <p>
+                            <a href="{% url 'vote' %}">{% trans "Cast your vote for the new Executive" %}!</a>
+                        </p>
+                        <hr />
+                    {% endif %}
+                {% else %}
+                    {% if year_membership_pending %}
+                        <h2>{% trans "Membership fees in approval" %} {{ year }}</h2>
+                        <p>
+                            {% trans "You have submitted your dues payment, and it is now being approved by the staff. You don't have to do anything for the time being" %}!
+                        </p>
+                        <hr />
+                    {% elif year in registration_years %}
+                        <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
+                        <p>
+                            {% trans "You are registered for an event to be held in this calendar year, but we are not aware of your dues payment. Be careful: if you don't complete it, <b>you won't be able to attend events</b>, nor vote at the Membership Meeting" %}! <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
+                        </p>
+                        <hr />
+                    {% elif 'vote' in association.features and association.voting_open %}
+                        <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
+                        <p>
+                            {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
+                        </p>
+                        <hr />
+                    {% elif grazing %}
+                        <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
+                        <p>
+                            {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
+                        </p>
+                        <hr />
+                    {% endif %}
+                {% endif %}
+            {% elif member.membership.status == 'e' or member.membership.status == 'j' %}
+                <h2>{% trans "Membership request not submitted" %}</h2>
+                <p>
+                    {% trans "You have not yet submitted your application for membership to the Organization. If you are not a Member, we cannot accept payment from you, and you cannot confirm your event registrations" %}. <a href="{% url 'membership' %}">{% trans "Make the request now" %}!</a>
+                </p>
+                <hr />
+            {% elif member.membership.status == 's' %}
+                <h2>{% trans "Membership request submitted" %}</h2>
+                <p>
+                    {% trans "You have submitted your application for membership in the Organization. The request will be considered at the next meeting of the Board. When it is approved, you will be able to settle payments for the events you have signed up for" %}!
+                </p>
+                <hr />
+            {% elif member.membership.status == 'r' %}
+                <h2>{% trans "Member revoked" %}</h2>
+                <p>{% trans "What are you doing here" %}?</p>
+                <hr />
+            {% endif %}
+        {% endif %}
+        {% if 'membership_fee' in association.features %}
+            {% if membership_fee %}
+                <h2>{% trans "Membership fee" %}</h2>
+                <p>
+                    {% trans "They are regularly paid for the following years" %}:
+                    {% for el in membership_fee %}
+                        {% include "elements/comma.html" %}
+                        {{ el }}
                     {% endfor %}
                 </p>
             {% endif %}
             <hr />
         {% endif %}
-    {% endif %}
-    {% if 'donate' in association.features %}
-        <h2>{% trans "Donation" %}</h2>
-        <p>
-            {% trans "If you would like to make a donation to the Organization" %}, <a href="{% url 'accounting_donate' %}">{% trans "follow this link" %}</a>. {% trans "You will have our eternal thanks for believing in us" %}!
-        </p>
-        {% if donations %}
+        {% if 'collection' in association.features %}
+            <h2>{% trans "Collection" %}</h2>
             <p>
-                {% trans "Donations done" %}:
-                {% for el in donations %}
+                {% trans "Want to help one of your friends play with us? Organize a collection: you and anyone who wants to contribute will be able to donate part of their registration fees" %}! <a href="{% url 'accounting_collection' %}">{% trans "Create a new collection" %}</a>.
+                {% if collections %}
+                </p>
+                <table class="mob">
+                    {% for el in collections %}
+                        <tr>
+                            <td>
+                                {{ el.name }} -
+                                {% if el.status == 'o' %}
+                                    {% trans "Active collection" %}
+                                {% elif el.status == 'd' %}
+                                    {% trans "Closed collection" %}
+                                    - {% trans "Collection total" %}: {{ el.total }}
+                                {% elif el.status == 'p' %}
+                                    {% trans "Collections delivered" %}
+                                    - {% trans "Collection total" %}: {{ el.total }}
+                                {% endif %}
+                                - <a href="{% url 'accounting_collection_manage' el.contribute_code %}">{% trans "Manage it here" %}!</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                {% if collection_gifts %}
+                    <p>
+                        {% trans "Collection participated" %}:
+                        {% for el in collection_gifts %}
+                            {% include "elements/comma.html" %}
+                            <i>{{ el.collection.member.display_member }}</i> ({{ el.value }}{{ currency_symbol }})
+                        {% endfor %}
+                    </p>
+                {% endif %}
+                <hr />
+            {% endif %}
+        {% endif %}
+        {% if 'donate' in association.features %}
+            <h2>{% trans "Donation" %}</h2>
+            <p>
+                {% trans "If you would like to make a donation to the Organization" %}, <a href="{% url 'accounting_donate' %}">{% trans "follow this link" %}</a>. {% trans "You will have our eternal thanks for believing in us" %}!
+            </p>
+            {% if donations %}
+                <p>
+                    {% trans "Donations done" %}:
+                    {% for el in donations %}
+                        {% include "elements/comma.html" %}
+                        <i>{{ el.created | date:"D d M Y" }}</i> ({{ el.value }}{{ currency_symbol }})
+                    {% endfor %}
+                </p>
+                <hr />
+            {% endif %}
+        {% endif %}
+        {% if registration_list %}
+            <h2>{% trans "Registration history" %}</h2>
+            <p>
+                {% for registration in registration_list %}
                     {% include "elements/comma.html" %}
-                    <i>{{ el.created | date:"D d M Y" }}</i> ({{ el.value }}{{ currency_symbol }})
+                    <a href="#" class="my_toggle" tog='reg_{{ registration.uuid }}'>{{ registration.run.search }}
+                        {% if registration.cancellation_date %}
+                            - {% trans "Cancellation" %}
+                        {% endif %}
+                    </a>
                 {% endfor %}
+            </p>
+            {% for registration in registration_list %}
+                <div id="reg_{{ registration.uuid }}"
+                     class="hide reg_{{ registration.uuid }}">
+                    <h3>{{ registration.run.search }}</h3>
+                    {% if registration.pending %}
+                        <p>
+                            <i>{% trans "You have submitted a deposit, and it is being reviewed by the staff. You don't have to do anything for the time being, as soon as it is confirmed the accounting of the event will be updated" %}.</i>
+                        </p>
+                    {% elif registration.quota > 0 %}
+                        <p>
+                            <a href="{% url 'accounting_registration' registration.uuid %}">
+                                {% trans "You must pay" %} {{ registration.quota|format_decimal }}{{ currency_symbol }}
+                                {% if registration.deadline > 0 %}
+                                    {% trans "by the deadline of" %} {{ registration.deadline }} {% trans "days" %}
+                                {% else %}
+                                    {% trans "immediately" %}
+                                {% endif %}
+                            </a>
+                            {% if registration.deadline <= 0 %}
+                                <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                    <table class="mob">
+                        {% if registration.ticket %}
+                            <tr>
+                                <th>{% trans "Ticket chosen" %}</th>
+                                <td>
+                                    <b>{{ registration.ticket.name }}</b>
+                                    {% if registration.ticket.price %}<i><u> ({{ registration.ticket.price }}{{ currency_symbol }})</u></i>{% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% if registration.pay_what %}
+                            <tr>
+                                <th>{% trans "Donation" %}</th>
+                                <td>{{ registration.pay_what }}{{ currency_symbol }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if registration.opts %}
+                            <tr>
+                                <th>{% trans "Selected options" %}</th>
+                                <td>
+                                    {% for k, el in registration.opts.items %}
+                                        {% include "elements/comma.html" %}
+                                        <b>{{ el.question.name }}</b> -
+                                        {% for opt in el.selected_options %}
+                                            {{ opt.name }}
+                                            {% if opt.price %}<i><u>({{ opt.price }}{{ currency_symbol }})</u></i>{% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% if registration.discounts %}
+                            <tr>
+                                <th>{% trans "Discounts" %}</th>
+                                <td>
+                                    {% for el in registration.discounts %}
+                                        {% include "elements/comma.html" %}
+                                        {{ el.disc.name }} ({{ el.value }})
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% if registration.accounting_payments %}
+                            <tr>
+                                <th>{% trans "Payments" %}</th>
+                                <td>
+                                    {% for el in registration.accounting_payments %}
+                                        {% include "elements/comma.html" %}
+                                        <i><u>{{ el.value }}</u></i> ({{ el.get_pay_display }} - {{ el.created | date:"d/m/y" }})
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                </div>
+            {% endfor %}
+            <hr />
+        {% endif %}
+        {% if accounting_tokens > 0 %}
+            <h2>{% trans "History" %} {{ tokens_name }}</h2>
+            <p>
+                {% trans "To access the history" %} {{ tokens_name }}, <a href="{% url 'accounting_tokens' %}">{% trans "click here" %}</a>
             </p>
             <hr />
         {% endif %}
-    {% endif %}
-    {% if registration_list %}
-        <h2>{% trans "Registration history" %}</h2>
-        <p>
-            {% for registration in registration_list %}
-                {% include "elements/comma.html" %}
-                <a href="#" class="my_toggle" tog='reg_{{ registration.uuid }}'>{{ registration.run.search }}
-                    {% if registration.cancellation_date %}
-                        - {% trans "Cancellation" %}
-                    {% endif %}
-                </a>
-            {% endfor %}
-        </p>
-        {% for registration in registration_list %}
-            <div id="reg_{{ registration.uuid }}"
-                 class="hide reg_{{ registration.uuid }}">
-                <h3>{{ registration.run.search }}</h3>
-                {% if registration.pending %}
-                    <p>
-                        <i>{% trans "You have submitted a deposit, and it is being reviewed by the staff. You don't have to do anything for the time being, as soon as it is confirmed the accounting of the event will be updated" %}.</i>
-                    </p>
-                {% elif registration.quota > 0 %}
-                    <p>
-                        <a href="{% url 'accounting_registration' registration.uuid %}">
-                            {% trans "You must pay" %} {{ registration.quota|format_decimal }}{{ currency_symbol }}
-                            {% if registration.deadline > 0 %}
-                                {% trans "by the deadline of" %} {{ registration.deadline }} {% trans "days" %}
-                            {% else %}
-                                {% trans "immediately" %}
-                            {% endif %}
-                        </a>
-                        {% if registration.deadline <= 0 %}
-                            <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
-                        {% endif %}
-                    </p>
-                {% endif %}
-                <table class="mob">
-                    {% if registration.ticket %}
-                        <tr>
-                            <th>{% trans "Ticket chosen" %}</th>
-                            <td>
-                                <b>{{ registration.ticket.name }}</b>
-                                {% if registration.ticket.price %}<i><u> ({{ registration.ticket.price }}{{ currency_symbol }})</u></i>{% endif %}
-                            </td>
-                        </tr>
-                    {% endif %}
-                    {% if registration.pay_what %}
-                        <tr>
-                            <th>{% trans "Donation" %}</th>
-                            <td>{{ registration.pay_what }}{{ currency_symbol }}</td>
-                        </tr>
-                    {% endif %}
-                    {% if registration.opts %}
-                        <tr>
-                            <th>{% trans "Selected options" %}</th>
-                            <td>
-                                {% for k, el in registration.opts.items %}
-                                    {% include "elements/comma.html" %}
-                                    <b>{{ el.question.name }}</b> -
-                                    {% for opt in el.selected_options %}
-                                        {{ opt.name }}
-                                        {% if opt.price %}<i><u>({{ opt.price }}{{ currency_symbol }})</u></i>{% endif %}
-                                    {% endfor %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    {% endif %}
-                    {% if registration.discounts %}
-                        <tr>
-                            <th>{% trans "Discounts" %}</th>
-                            <td>
-                                {% for el in registration.discounts %}
-                                    {% include "elements/comma.html" %}
-                                    {{ el.disc.name }} ({{ el.value }})
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    {% endif %}
-                    {% if registration.accounting_payments %}
-                        <tr>
-                            <th>{% trans "Payments" %}</th>
-                            <td>
-                                {% for el in registration.accounting_payments %}
-                                    {% include "elements/comma.html" %}
-                                    <i><u>{{ el.value }}</u></i> ({{ el.get_pay_display }} - {{ el.created | date:"d/m/y" }})
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    {% endif %}
-                </table>
-            </div>
-        {% endfor %}
-        <hr />
-    {% endif %}
-    {% if accounting_tokens > 0 %}
-        <h2>{% trans "History" %} {{ tokens_name }}</h2>
-        <p>
-            {% trans "To access the history" %} {{ tokens_name }}, <a href="{% url 'accounting_tokens' %}">{% trans "click here" %}</a>
-        </p>
-        <hr />
-    {% endif %}
-    {% if accounting_credits > 0 %}
-        <h2>{% trans "History" %} {{ credits_name }}</h2>
-        <p>
-            {% trans "To access the history" %} {{ credits_name }}, <a href="{% url 'accounting_credits' %}">{% trans "click here" %}</a>
-        </p>
-        <hr />
-    {% endif %}
+        {% if accounting_credits > 0 %}
+            <h2>{% trans "History" %} {{ credits_name }}</h2>
+            <p>
+                {% trans "To access the history" %} {{ credits_name }}, <a href="{% url 'accounting_credits' %}">{% trans "click here" %}</a>
+            </p>
+            <hr />
+        {% endif %}
+    </div>
 {% endblock content %}

@@ -4,47 +4,49 @@
     {% trans "Security" %}
 {% endblock title %}
 {% block content %}
-    {% include "larpmanager/member/profile_nav.html" with active="security" %}
-    <hr />
-    <h3>{% trans "Two-Factor Authentication (TOTP)" %}</h3>
-    {% if devices %}
-        <p>{% trans "Your account is protected by an authenticator app" %}.</p>
+    <div class="form_container auto_resize platform">
+        {% include "larpmanager/member/profile_nav.html" with active="security" %}
         <hr />
-        <h4>{% trans "Active devices" %}</h4>
-        <table class="mob">
-            <tr>
-                <th>{% trans "Name" %}</th>
-                <th></th>
-            </tr>
-            {% for device in devices %}
-                <tr>
-                    <td>{{ device.name }}</td>
-                    <td>
-                        <form method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="device_id" value="{{ device.pk }}">
-                            <input type="submit" class="delete" value="{% trans "Remove" %}">
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>{% trans "You have no authenticator app configured" %}.</p>
-        <p>
-            {% trans "Scan this QR code with Google Authenticator, Authy, or any compatible TOTP app, then enter the 6-digit code to confirm" %}.
-        </p>
-        <hr />
-        <img src="{{ qr_code_data }}" alt="QR Code" />
-        <hr />
-        <form method="post">
-            {% csrf_token %}
-            <input type="hidden" name="action" value="confirm">
+        <h3>{% trans "Two-Factor Authentication (TOTP)" %}</h3>
+        {% if devices %}
+            <p>{% trans "Your account is protected by an authenticator app" %}.</p>
+            <hr />
+            <h4>{% trans "Active devices" %}</h4>
             <table class="mob">
-                {{ confirm_form.as_table }}
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th></th>
+                </tr>
+                {% for device in devices %}
+                    <tr>
+                        <td>{{ device.name }}</td>
+                        <td>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="device_id" value="{{ device.pk }}">
+                                <input type="submit" class="delete" value="{% trans "Remove" %}">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
             </table>
-            <input type="submit" value="{% trans "Confirm" %}">
-        </form>
-    {% endif %}
+        {% else %}
+            <p>{% trans "You have no authenticator app configured" %}.</p>
+            <p>
+                {% trans "Scan this QR code with Google Authenticator, Authy, or any compatible TOTP app, then enter the 6-digit code to confirm" %}.
+            </p>
+            <hr />
+            <img src="{{ qr_code_data }}" alt="QR Code" />
+            <hr />
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="confirm">
+                <table class="mob">
+                    {{ confirm_form.as_table }}
+                </table>
+                <input type="submit" value="{% trans "Confirm" %}">
+            </form>
+        {% endif %}
+    </div>
 {% endblock content %}
