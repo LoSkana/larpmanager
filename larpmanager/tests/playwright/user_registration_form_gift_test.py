@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_user,
                                      submit,
                                      submit_confirm,
-                                     expect_normalized, new_option, submit_option,
+                                     expect_normalized, new_option, submit_option, nav,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -209,7 +209,7 @@ def field_text(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("link", name="Registration", exact=True).click()
+    nav(page, "Registration")
     expect(page.get_by_label("when")).to_contain_text("sadsadsadsad")
     expect(page.get_by_label("choice")).to_contain_text("secondas")
 

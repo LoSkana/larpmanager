@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, new_option, \
-    submit_option, sidebar
+    submit_option, sidebar, nav
 
 pytestmark = pytest.mark.e2e
 
@@ -42,7 +42,7 @@ def test_user_search(pw_page: Any) -> None:
     characters(page, live_server)
 
     go_to(page, live_server, "/test/")
-    page.get_by_role("link", name="Search", exact=True).click()
+    nav(page, "Search")
 
     filter_faction(page)
 

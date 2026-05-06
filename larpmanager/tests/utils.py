@@ -353,5 +353,11 @@ def submit_option(page, iframe):
 
 
 def sidebar(page, link):
+    icon_link("#sidebar", page, link)
+
+def icon_link(container, page, link):
     pattern = re.compile(re.escape(link) + "$", re.IGNORECASE)
-    page.locator("#sidebar").get_by_role("link", name=pattern).click()
+    page.locator(container).get_by_role("link", name=pattern).click()
+
+def nav(page, link):
+    icon_link(".nav", page, link)
