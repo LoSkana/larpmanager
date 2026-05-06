@@ -276,15 +276,18 @@ def _set_filtering(
                 field_name = f"{additional_field}__{field_name}"
             # Use the constructed path directly, don't apply _get_filter_field
             filter_field = field_name
-        # Skip fields that have custom callback handlers
+            search_fields = field_map.get(filter_field, [filter_field])
+        # Check if callback field has an explicit DB path override
         elif field_name in context.get("callbacks", {}):
-            continue
+            field_db_paths = context.get("field_db_paths", {})
+            if field_name not in field_db_paths:
+                continue
+            search_fields = field_db_paths[field_name]
         else:
             # Get the correct filter path (handles related fields via selrel)
             filter_field = _get_filter_field(field_names, field_name, context)
-
-        # Map field to search fields using field_map or use as single field
-        search_fields = field_map.get(filter_field, [filter_field])
+            # Map field to search fields using field_map or use as single field
+            search_fields = field_map.get(filter_field, [filter_field])
 
         # Build OR query for all mapped fields with case-insensitive search
         q_filter = Q()
@@ -330,12 +333,15 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
             logger.debug("Column index out of bounds in _get_ordering: %s %s", column_order, context["fields"])
         field_name, _display_name = context["fields"][column_index_int - 1]
 
-        # Skip callback fields as they can't be used for database ordering
+        # Skip callback fields unless an explicit DB path override is provided
         if field_name in context.get("callbacks", {}):
-            continue
-
-        # Map field name if transformation exists, otherwise use as-is
-        mapped_fields = field_map.get(field_name, [field_name])
+            field_db_paths = context.get("field_db_paths", {})
+            if field_name not in field_db_paths:
+                continue
+            mapped_fields = field_db_paths[field_name]
+        else:
+            # Map field name if transformation exists, otherwise use as-is
+            mapped_fields = field_map.get(field_name, [field_name])
 
         # Add ordering fields with proper direction prefix
         for mapped_field in mapped_fields:

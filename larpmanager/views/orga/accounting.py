@@ -492,6 +492,13 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
                 else "",
             },
             "delete_view": "orga_payments_delete",
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {
+                "member": ["registration__member__surname", "registration__member__name"],
+                "method": ["inv__method__name"],
+                "net": ["net"],
+                "trans": ["trans"],
+            },
         },
     )
 

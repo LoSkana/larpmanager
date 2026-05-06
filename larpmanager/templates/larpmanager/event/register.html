@@ -37,6 +37,12 @@
         <p>{% trans "To register for the event, please fill in the following form and click on confirm" %}.</p>
     {% endif %}
     {% if registration or not run_status.closed %}
+        {% if limitations %}
+            <hr />
+            <p>
+                <a href="{% url 'limitations' run.get_slug %}">{% trans "View limited ticket options" %}</a>
+            </p>
+        {% endif %}
         {% if event.website %}
             <hr />
             <p>

@@ -3,12 +3,51 @@
     {% if not exe_page and not orga_page %}
         {% if run %}
             <div class="nav main_nav">
-                <a href="{% url 'home' %}" class="middlebar"><i class="fa-solid fa-house"></i> <span class="nav-label">Home</span></a>
                 <div class="lm_tooltip">
                     <a href="{% url 'event' run.get_slug %}"
                        {% if request_func_name == "event" %}class="select"{% endif %}><i class="fa-solid fa-calendar-days"></i> <span class="nav-label">{% trans "Event" %}</span></a>
                     <div class="lm_tooltiptext">{% trans "Discover what this event is about" %}!</div>
                 </div>
+                {% if event.website %}
+                    <div class="lm_tooltip">
+                        <a href="{{ event.website }}" target="_blank"><i class="fa-solid fa-globe"></i> <span class="nav-label">{% trans "Website" %}</span></a>
+                        <div class="lm_tooltiptext">{% trans "Browse the presentation website" %}!</div>
+                    </div>
+                {% endif %}
+                {% if registration %}
+                    <div class="lm_tooltip">
+                        <a href="{% url 'register' run.get_slug %}"
+                           {% if request_func_name == "register" %}class="select"{% endif %}><i class="fa-solid fa-pen-to-square"></i> <span class="nav-label">{% trans "Registration" %}</span></a>
+                        <div class="lm_tooltiptext">{% trans "Update here the registration options" %}!</div>
+                    </div>
+                    {% if registration.character %}
+                        <div class="lm_tooltip">
+                            <a href="{% url 'character_your' run.get_slug %}"
+                               {% if request_func_name == "char" %}class="select"{% endif %}><i class="fa-solid fa-person"></i> <span class="nav-label">{% trans "Your character" %}</span></a>
+                            <div class="lm_tooltiptext">{% trans "Access your character" %}!</div>
+                        </div>
+                    {% endif %}
+                    {% if features.casting and show_character and registration.ticket and registration.ticket.tier != 'w' %}
+                        <div class="lm_tooltip">
+                            <a href="{% url 'casting' run.get_slug %}"
+                               {% if request_func_name == "casting" %}class="select"{% endif %}><i class="fa-solid fa-masks-theater"></i> <span class="nav-label">{% trans "Casting" %}</span></a>
+                            <div class="lm_tooltiptext">{% trans "Select your preferences on the characters to play" %}!</div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="lm_tooltip">
+                        <a href="{% url 'register' run.get_slug %}"
+                           {% if request_func_name == "register" %}class="select"{% endif %}><i class="fa-solid fa-user-plus"></i> <span class="nav-label">{% trans "Register" %}</span></a>
+                        <div class="lm_tooltiptext">{% trans "Register to the event" %}</div>
+                    </div>
+                {% endif %}
+                {% if features.workshop and show_addit.workshop %}
+                    <div class="lm_tooltip">
+                        <a href="{% url 'workshops' run.get_slug %}"
+                           {% if request_func_name == "workshops" %}class="select"{% endif %}><i class="fa-solid fa-hammer"></i> <span class="nav-label">{% trans "Workshop" %}</span></a>
+                        <div class="lm_tooltiptext">{% trans "Fill out the event prep questions" %}!</div>
+                    </div>
+                {% endif %}
                 {% if features.character %}
                     <div class="lm_tooltip">
                         <a href="{% url 'gallery' run.get_slug %}"
@@ -27,20 +66,6 @@
                             <div class="lm_tooltiptext">{% trans "Learn all characters before the event" %}!</div>
                         </div>
                     {% endif %}
-                {% endif %}
-                {% for el in buttons %}
-                    <div class="lm_tooltip">
-                        <a href="{{ el.2 }}">
-                            {% if el.3 %}<i class="{{ el.3 }}"></i>{% endif %}
-                            <span class="nav-label">{{ el.0 }}</span></a>
-                        <div class="lm_tooltiptext">{{ el.1 }}</div>
-                    </div>
-                {% endfor %}
-                {% if event.website %}
-                    <div class="lm_tooltip">
-                        <a href="{{ event.website }}" target="_blank"><i class="fa-solid fa-globe"></i> <span class="nav-label">{% trans "Website" %}</span></a>
-                        <div class="lm_tooltiptext">{% trans "Browse the presentation website" %}!</div>
-                    </div>
                 {% endif %}
                 {% if features.faction and show_faction and has_visible_factions %}
                     <div class="lm_tooltip">
@@ -63,13 +88,6 @@
                         <div class="lm_tooltiptext">{% trans "View photos from the event" %}!</div>
                     </div>
                 {% endif %}
-                {% if limitations %}
-                    <div class="lm_tooltip">
-                        <a href="{% url 'limitations' run.get_slug %}"
-                           {% if request_func_name == "limitations" %}class="select"{% endif %}><i class="fa-solid fa-ticket"></i> <span class="nav-label">{% trans "Limitations" %}</span></a>
-                        <div class="lm_tooltiptext">{% trans "View limited ticket options" %}</div>
-                    </div>
-                {% endif %}
                 {% if features.gift %}
                     <div class="lm_tooltip">
                         <a href="{% url 'gift' run.get_slug %}"
@@ -77,21 +95,15 @@
                         <div class="lm_tooltiptext">{% trans "Give a card to your friend" %}</div>
                     </div>
                 {% endif %}
-                {% if features.workshop and show_addit.workshop %}
+                {% for el in buttons %}
                     <div class="lm_tooltip">
-                        <a href="{% url 'workshops' run.get_slug %}"
-                           {% if request_func_name == "workshops" %}class="select"{% endif %}><i class="fa-solid fa-hammer"></i> <span class="nav-label">{% trans "Workshop" %}</span></a>
-                        <div class="lm_tooltiptext">{% trans "Fill out the event prep questions" %}!</div>
+                        <a href="{{ el.2 }}">
+                            {% if el.3 %}<i class="{{ el.3 }}"></i>{% endif %}
+                            <span class="nav-label">{{ el.0 }}</span></a>
+                        <div class="lm_tooltiptext">{{ el.1 }}</div>
                     </div>
-                {% endif %}
+                {% endfor %}
                 {% if registration %}
-                    {% if features.casting and show_character and registration.ticket and registration.ticket.tier != 'w' %}
-                        <div class="lm_tooltip">
-                            <a href="{% url 'casting' run.get_slug %}"
-                               {% if request_func_name == "casting" %}class="select"{% endif %}><i class="fa-solid fa-masks-theater"></i> <span class="nav-label">{% trans "Casting" %}</span></a>
-                            <div class="lm_tooltiptext">{% trans "Select your preferences on the characters to play" %}!</div>
-                        </div>
-                    {% endif %}
                     {% if features.print_pdf and show_character %}
                         <div class="lm_tooltip">
                             <a href="{% url 'portraits' run.get_slug %}" download><i class="fa-solid fa-id-badge"></i> <span class="nav-label">{% trans "Portraits (PDF)" %}</span></a>
@@ -106,24 +118,6 @@
                             </div>
                         </div>
                     {% endif %}
-                    <div class="lm_tooltip">
-                        <a href="{% url 'register' run.get_slug %}"
-                           {% if request_func_name == "register" %}class="select"{% endif %}><i class="fa-solid fa-pen-to-square"></i> <span class="nav-label">{% trans "Registration" %}</span></a>
-                        <div class="lm_tooltiptext">{% trans "Update here the registration options" %}!</div>
-                    </div>
-                    {% if registration.character %}
-                        <div class="lm_tooltip">
-                            <a href="{% url 'character_your' run.get_slug %}"
-                               {% if request_func_name == "char" %}class="select"{% endif %}><i class="fa-solid fa-person"></i> <span class="nav-label">{% trans "Your character" %}</span></a>
-                            <div class="lm_tooltiptext">{% trans "Access your character" %}!</div>
-                        </div>
-                    {% endif %}
-                {% else %}
-                    <div class="lm_tooltip">
-                        <a href="{% url 'register' run.get_slug %}"
-                           {% if request_func_name == "register" %}class="select"{% endif %}><i class="fa-solid fa-user-plus"></i> <span class="nav-label">{% trans "Register" %}</span></a>
-                        <div class="lm_tooltiptext">{% trans "Register to the event" %}</div>
-                    </div>
                 {% endif %}
             </div>
             <hr />

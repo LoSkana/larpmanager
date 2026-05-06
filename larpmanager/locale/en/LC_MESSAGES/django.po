@@ -5870,6 +5870,9 @@ msgid ""
 "confirm"
 msgstr ""
 
+msgid "View limited ticket options"
+msgstr ""
+
 msgid "View all event information in the"
 msgstr ""
 
@@ -6827,43 +6830,7 @@ msgstr ""
 msgid "Discover what this event is about"
 msgstr ""
 
-msgid "View the list of characters and participants"
-msgstr ""
-
-msgid "Filter or search the characters"
-msgstr ""
-
-msgid "Learn all characters before the event"
-msgstr ""
-
 msgid "Browse the presentation website"
-msgstr ""
-
-msgid "Discover the game factions"
-msgstr ""
-
-msgid "Find out what quests are available"
-msgstr ""
-
-msgid "View photos from the event"
-msgstr ""
-
-msgid "View limited ticket options"
-msgstr ""
-
-msgid "Give a card to your friend"
-msgstr ""
-
-msgid "Select your preferences on the characters to play"
-msgstr ""
-
-msgid "Portraits (PDF)"
-msgstr ""
-
-msgid "Download the list of characters with their interpreters' profile images"
-msgstr ""
-
-msgid "Profiles (PDF)"
 msgstr ""
 
 msgid "Update here the registration options"
@@ -6875,7 +6842,40 @@ msgstr ""
 msgid "Access your character"
 msgstr ""
 
+msgid "Select your preferences on the characters to play"
+msgstr ""
+
 msgid "Register to the event"
+msgstr ""
+
+msgid "View the list of characters and participants"
+msgstr ""
+
+msgid "Filter or search the characters"
+msgstr ""
+
+msgid "Learn all characters before the event"
+msgstr ""
+
+msgid "Discover the game factions"
+msgstr ""
+
+msgid "Find out what quests are available"
+msgstr ""
+
+msgid "View photos from the event"
+msgstr ""
+
+msgid "Give a card to your friend"
+msgstr ""
+
+msgid "Portraits (PDF)"
+msgstr ""
+
+msgid "Download the list of characters with their interpreters' profile images"
+msgstr ""
+
+msgid "Profiles (PDF)"
 msgstr ""
 
 #, python-format
