@@ -750,9 +750,9 @@ class TestInstallmentFallbackLogic(BaseTestCase):
         # Call installment check
         installment_check(registration, alert=30, association_id=association.id)
 
-        # Should set immediate payment (deadline=0)
+        # Should set immediate payment (deadline negative)
         self.assertEqual(registration.quota, Decimal("300.00"))
-        self.assertEqual(registration.deadline, 0)
+        self.assertEqual(registration.deadline, -50)
 
     def test_installment_check_player_paid_enough(self) -> None:
         """Test installment check when player has paid enough for current installment"""
@@ -858,7 +858,7 @@ class TestInstallmentFallbackLogic(BaseTestCase):
 
         # Overdue cumulative is 275 (125 + 150); quota should reflect that debt
         self.assertEqual(registration.quota, Decimal("275.00"))
-        self.assertEqual(registration.deadline, 0)
+        self.assertEqual(registration.deadline, -200)
 
 
 class TestQuotaCheckFallbackLogic(BaseTestCase):
