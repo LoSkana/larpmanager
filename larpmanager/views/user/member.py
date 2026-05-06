@@ -1177,7 +1177,7 @@ def profile_otp(request: HttpRequest) -> HttpResponse:
         context["qr_code_data"] = qr_data
 
     context["devices"] = confirmed_devices
-    return render(request, "larpmanager/member/profile_otp.html", context)
+    return render(request, "larpmanager/member/security.html", context)
 
 
 def otp_verify(request: HttpRequest) -> HttpResponse:

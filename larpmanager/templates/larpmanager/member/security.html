@@ -25,7 +25,7 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="device_id" value="{{ device.pk }}">
-                                <input type="submit" class="delete" value="{% trans "Remove" %}">
+                                <input type="submit" class="otp_delete" value="{% trans "Remove" %}">
                             </form>
                         </td>
                     </tr>

@@ -7509,6 +7509,15 @@ msgstr ""
 msgid "Security"
 msgstr ""
 
+msgid "Private message"
+msgstr ""
+
+msgid "Attendance"
+msgstr ""
+
+msgid "Show all"
+msgstr ""
+
 msgid "Two-Factor Authentication (TOTP)"
 msgstr ""
 
@@ -7524,15 +7533,6 @@ msgstr ""
 msgid ""
 "Scan this QR code with Google Authenticator, Authy, or any compatible TOTP "
 "app, then enter the 6-digit code to confirm"
-msgstr ""
-
-msgid "Private message"
-msgstr ""
-
-msgid "Attendance"
-msgstr ""
-
-msgid "Show all"
 msgstr ""
 
 msgid "Sharing"
