@@ -94,6 +94,7 @@ MAX_CSV_ROWS = 10_000
 MAX_COMMA_VALUES = 100
 MAX_CSV_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 MAX_PROFILE_IMAGE_SIZE = 1024 * 1024  # 1MB
+MAX_PROFILE_UPLOAD_SIZE = 50 * 1024 * 1024  # 50MB: guard against decompression bombs
 _QUALITY_START = 95
 _QUALITY_STEP = 10
 _QUALITY_MIN = 20
@@ -103,10 +104,20 @@ _SCALE_MIN = 0.1
 
 def normalize_profile_image(img_data: bytes) -> bytes:
     """Normalize and reduce uploaded profile size."""
+    if len(img_data) > MAX_PROFILE_UPLOAD_SIZE:
+        msg = "Uploaded image exceeds maximum allowed size"
+        raise ValueError(msg)
+
     # Always converts to JPEG. Reduces quality in steps first, then scales down.
     with Image.open(io.BytesIO(img_data)) as im:
-        rgb = im.convert("RGB")
-        width, height = im.size
+        if im.mode in ("RGBA", "LA", "P"):
+            background = Image.new("RGB", im.size, (255, 255, 255))
+            rgba = im.convert("RGBA")
+            background.paste(rgba, mask=rgba.split()[3])
+            rgb = background
+        else:
+            rgb = im.convert("RGB")
+        width, height = rgb.size
 
         quality = _QUALITY_START
         while quality >= _QUALITY_MIN:

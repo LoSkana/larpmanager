@@ -291,7 +291,7 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
 
     try:
         img_data = normalize_profile_image(img.read())
-    except (OSError, UnidentifiedImageError):
+    except (OSError, UnidentifiedImageError, ValueError):
         logger.exception("Failed to normalize profile image")
         return JsonResponse({"res": "ko"})
 

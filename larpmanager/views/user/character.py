@@ -547,7 +547,7 @@ def character_profile_upload(request: HttpRequest, event_slug: str, character_uu
 
     try:
         img_data = normalize_profile_image(img.read())
-    except (OSError, UnidentifiedImageError):
+    except (OSError, UnidentifiedImageError, ValueError):
         logger.exception("Failed to normalize character profile image")
         return JsonResponse({"res": "ko"})
 
