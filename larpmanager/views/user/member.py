@@ -86,6 +86,7 @@ from larpmanager.utils.core.common import get_badge, get_channel, get_contact, w
 from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import get_membership_request
+from larpmanager.utils.io.upload import normalize_profile_image
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_leaderboard, get_member_uuid
 from larpmanager.views.user.event import build_registration_list, get_member_registrations
@@ -286,21 +287,19 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
     if not form.is_valid():
         return JsonResponse({"res": "ko"})
 
-    # Extract image and file extension
     img = form.cleaned_data["image"]
-    ext = img.name.split(".")[-1]
 
-    # Generate unique filename with member ID and UUID
-    n_path = f"member/{request.user.member.pk}_{uuid4().hex}.{ext}"
+    try:
+        img_data = normalize_profile_image(img.read())
+    except (OSError, UnidentifiedImageError, ValueError):
+        logger.exception("Failed to normalize profile image")
+        return JsonResponse({"res": "ko"})
 
-    # Save file to storage and get the actual path
-    path = default_storage.save(n_path, ContentFile(img.read()))
+    n_path = f"member/{request.user.member.pk}_{uuid4().hex}.jpg"
 
-    # Update member profile with new image path
+    path = default_storage.save(n_path, ContentFile(img_data))
     request.user.member.profile = path
     request.user.member.save()
-
-    # Return success response with thumbnail URL
     return JsonResponse({"res": "ok", "src": request.user.member.profile_thumb.url})
 
 
