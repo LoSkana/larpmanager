@@ -9669,6 +9669,13 @@ msgstr ""
 "Umožňuje správu výdajů hrazených pomocí finančních nástrojů organizace"
 
 msgid ""
+"Features cannot be activated in lite mode, complete the activation checklist"
+" first"
+msgstr ""
+"Funkce nelze aktivovat v režimu lite, nejprve vyplňte kontrolní seznam pro "
+"aktivaci"
+
+msgid ""
 "If checked, approval of expenses can be performed only from the organization"
 " panel"
 msgstr ""

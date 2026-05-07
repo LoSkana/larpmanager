@@ -1199,53 +1199,68 @@ class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
 
         self._init_type()
 
-        if "reg_que_sections" not in self.params["features"]:
+        if self.instance.pk and self.instance.typ and len(self.instance.typ) > 1:
+            self.delete_field("tickets")
+            self.delete_field("factions")
+            self.delete_field("status")
+
+        self._init_feature_fields()
+
+        run = self.params.get("run")
+        if run:
+            self._init_multichoice(run)
+
+    def _init_feature_fields(self) -> None:
+        """Configure fields based on active features, removing unavailable ones."""
+        features = self.params["features"]
+        event = self.params["event"]
+
+        if "reg_que_sections" not in features:
             self.delete_field("section")
         else:
-            self.configure_field_event("section", self.params["event"])
+            self.configure_field_event("section", event)
             self.fields["section"].empty_label = _("--- Empty")
             self.fields["section"].to_field_name = "uuid"
-            # Set initial value to UUID instead of ID for existing instances
             if self.instance and self.instance.pk and self.instance.section:
                 self.initial["section"] = self.instance.section.uuid
 
-        if "reg_que_allowed" not in self.params["features"]:
+        if "reg_que_allowed" not in features:
             self.delete_field("allowed")
         else:
-            self.configure_field_event("allowed", self.params["event"])
+            self.configure_field_event("allowed", event)
 
-        if "reg_que_tickets" not in self.params["features"]:
+        if "reg_que_tickets" not in features:
             self.delete_field("tickets")
         else:
-            self.configure_field_event("tickets", self.params["event"])
+            self.configure_field_event("tickets", event)
 
-        if "reg_que_faction" not in self.params["features"]:
+        if "reg_que_faction" not in features:
             self.delete_field("factions")
-        else:
+        elif "factions" in self.fields:
             self.fields["factions"].choices = [
                 (m.id, str(m)) for m in self.params["run"].event.get_elements(Faction).order_by("number")
             ]
 
-        if "gift" not in self.params["features"]:
+        if "gift" not in features:
             self.delete_field("giftable")
 
-        # Set status help
-        visible_choices = {v for v, _ in self.fields["status"].choices}
+        self._init_status_help()
 
+    def _init_status_help(self) -> None:
+        """Set descriptive help text on the status field listing each choice."""
+        if "status" not in self.fields:
+            return
+
+        visible_choices = {v for v, _ in self.fields["status"].choices}
         help_texts = {
             QuestionStatus.OPTIONAL: "The question is shown, and can be filled by the player",
             QuestionStatus.MANDATORY: "The question needs to be filled by the player",
             QuestionStatus.DISABLED: "The question is shown, but cannot be changed by the player",
             QuestionStatus.HIDDEN: "The question is not shown to the player",
         }
-
         self.fields["status"].help_text = ", ".join(
             f"<b>{choice.label}</b>: {text}" for choice, text in help_texts.items() if choice.value in visible_choices
         )
-
-        run = self.params.get("run")
-        if run:
-            self._init_multichoice(run)
 
     def _init_multichoice(self, run: Any) -> None:
         """Add multichoice popup configs for tickets and factions fields."""
@@ -1296,6 +1311,19 @@ class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
 
             available_choices.append(choice)
         self.fields["typ"].choices = available_choices
+
+    def save(self, commit: bool = True) -> RegistrationQuestion:  # noqa: FBT001, FBT002
+        """Save the instance, enforcing OPTIONAL status and clearing M2M for system types."""
+        instance = super().save(commit=False)
+        if len(instance.typ) > 1 and instance.typ != RegistrationQuestionType.TICKET:
+            instance.status = QuestionStatus.OPTIONAL
+        if commit:
+            instance.save()
+            self.save_select2_m2m(instance)
+            if len(instance.typ) > 1:
+                instance.tickets.clear()
+                instance.factions.clear()
+        return instance
 
 
 class OrgaRegistrationOptionForm(BaseModelForm):

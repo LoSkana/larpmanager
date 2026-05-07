@@ -10065,6 +10065,13 @@ msgstr ""
 "l'organisation"
 
 msgid ""
+"Features cannot be activated in lite mode, complete the activation checklist"
+" first"
+msgstr ""
+"Les fonctions ne peuvent pas être activées en mode allégé, il faut d'abord "
+"remplir la liste de contrôle de l'activation"
+
+msgid ""
 "If checked, approval of expenses can be performed only from the organization"
 " panel"
 msgstr ""

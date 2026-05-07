@@ -55,7 +55,7 @@ from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.auth.permission import get_event_roles, get_index_event_permissions
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import clear_messages, get_feature, is_rate_limited
-from larpmanager.utils.core.exceptions import UserPermissionError
+from larpmanager.utils.core.exceptions import RedirectError, UserPermissionError
 from larpmanager.utils.edit.backend import backend_edit, save_log
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.io.download import (
@@ -391,12 +391,12 @@ def orga_features(request: HttpRequest, event_slug: str) -> Any:
     return render(request, "larpmanager/orga/edit.html", context)
 
 
-def orga_features_go(request: HttpRequest, context: dict, slug: str, *, to_active: bool = True) -> Feature:
+def orga_features_go(request: HttpRequest, event_slug: str, slug: str, *, to_active: bool = True) -> Feature:
     """Toggle a feature for an event.
 
     Args:
         request: The HTTP request object
-        context: Context dictionary containing event and feature information
+        event_slug: The event slug identifier
         slug: The feature slug to toggle
         to_active: Whether to activate (True) or deactivate (False) the feature
 
@@ -405,8 +405,17 @@ def orga_features_go(request: HttpRequest, context: dict, slug: str, *, to_activ
 
     Raises:
         Http404: If the feature is an overall feature (not event-specific)
+        RedirectError: If the association is in lite/demo mode and activation is attempted
 
     """
+    context = check_event_context(request, event_slug, "orga_features")
+
+    # Block feature activation in lite/demo mode
+    if to_active and context.get("demo"):
+        messages.error(request, _("Features cannot be activated in lite mode, complete the activation checklist first"))
+        msg = "manage"
+        raise RedirectError(msg, kwargs={"event_slug": event_slug})
+
     # Get the feature from context using the slug
     get_feature(context, slug)
 
@@ -469,21 +478,14 @@ def orga_features_on(
     slug: str,
 ) -> HttpResponseRedirect:
     """Toggle feature on for an event."""
-    # Check user has permission to manage features
-    context = check_event_context(request, event_slug, "orga_features")
-
-    # Enable the feature
-    feature = orga_features_go(request, context, slug, to_active=True)
-
-    # Redirect to appropriate page
+    feature = orga_features_go(request, event_slug, slug, to_active=True)
     return redirect(_orga_feature_after_link(feature, event_slug))
 
 
 @login_required
 def orga_features_off(request: HttpRequest, event_slug: str, slug: str) -> HttpResponse:
     """Disable a feature for an event."""
-    context = check_event_context(request, event_slug, "orga_features")
-    orga_features_go(request, context, slug, to_active=False)
+    orga_features_go(request, event_slug, slug, to_active=False)
     return redirect("manage", event_slug=event_slug)
 
 

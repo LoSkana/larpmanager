@@ -9921,6 +9921,11 @@ msgstr ""
 "instrumenten van de organisatie"
 
 msgid ""
+"Features cannot be activated in lite mode, complete the activation checklist"
+" first"
+msgstr "Functies kunnen niet worden geactiveerd in de lite-modus"
+
+msgid ""
 "If checked, approval of expenses can be performed only from the organization"
 " panel"
 msgstr ""

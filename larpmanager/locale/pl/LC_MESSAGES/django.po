@@ -9830,6 +9830,13 @@ msgstr ""
 "finansowych organizacji"
 
 msgid ""
+"Features cannot be activated in lite mode, complete the activation checklist"
+" first"
+msgstr ""
+"Funkcji nie można aktywować w trybie uproszczonym, należy najpierw wypełnić "
+"listę kontrolną aktywacji"
+
+msgid ""
 "If checked, approval of expenses can be performed only from the organization"
 " panel"
 msgstr ""

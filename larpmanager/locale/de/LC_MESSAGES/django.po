@@ -10123,6 +10123,13 @@ msgstr ""
 "Organisation getätigt wurden"
 
 msgid ""
+"Features cannot be activated in lite mode, complete the activation checklist"
+" first"
+msgstr ""
+"Die Funktionen können im Lite-Modus nicht aktiviert werden, füllen Sie "
+"zuerst die Aktivierungs-Checkliste aus"
+
+msgid ""
 "If checked, approval of expenses can be performed only from the organization"
 " panel"
 msgstr ""

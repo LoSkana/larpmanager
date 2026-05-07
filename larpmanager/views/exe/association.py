@@ -43,6 +43,7 @@ from larpmanager.models.event import Run
 from larpmanager.utils.auth.permission import get_index_association_permissions
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import clear_messages, get_feature, is_rate_limited
+from larpmanager.utils.core.exceptions import RedirectError
 from larpmanager.utils.edit.backend import backend_edit
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION, VERSIONS
@@ -255,6 +256,12 @@ def exe_features_go(request: HttpRequest, slug: str, *, to_active: bool = True) 
     # Check user permissions and retrieve feature context
     context = check_association_context(request, "exe_features")
     get_feature(context, slug)
+
+    # Block feature activation in lite/demo mode
+    if to_active and context.get("demo"):
+        messages.error(request, _("Features cannot be activated in lite mode, complete the activation checklist first"))
+        msg = "manage"
+        raise RedirectError(msg)
 
     # Ensure this is an overall feature (organization-wide)
     if not context["feature"].overall:
