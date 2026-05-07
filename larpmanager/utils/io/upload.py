@@ -94,37 +94,38 @@ MAX_CSV_ROWS = 10_000
 MAX_COMMA_VALUES = 100
 MAX_CSV_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 MAX_PROFILE_IMAGE_SIZE = 1024 * 1024  # 1MB
-_RESIZE_STEP = 0.1
-_RESIZE_MIN_SCALE = 0.1
+_QUALITY_START = 95
+_QUALITY_STEP = 10
+_QUALITY_MIN = 20
+_SCALE_STEP = 0.1
+_SCALE_MIN = 0.1
 
 
-def resize_image_if_needed(img_data: bytes) -> bytes:
-    """Reduce image file size to MAX_PROFILE_IMAGE_SIZE by progressively scaling down.
-
-    Converts the image to JPEG (RGB) to ensure consistent compression across all
-    input formats (BMP, TIFF, GIF, WebP, etc.). Scales by 10% per iteration until
-    the image fits or the scale drops below 10%.
-    Returns the original bytes unchanged if already within the limit.
-
-    Raises:
-        UnidentifiedImageError: If img_data is not a valid image.
-        OSError: If PIL cannot process the image.
-    """
-    if len(img_data) <= MAX_PROFILE_IMAGE_SIZE:
-        return img_data
-
+def normalize_profile_image(img_data: bytes) -> bytes:
+    """Normalize and reduce uploaded profile size."""
+    # Always converts to JPEG. Reduces quality in steps first, then scales down.
     with Image.open(io.BytesIO(img_data)) as im:
         rgb = im.convert("RGB")
-        scale = 1.0 - _RESIZE_STEP
         width, height = im.size
-        while scale >= _RESIZE_MIN_SCALE:
+
+        quality = _QUALITY_START
+        while quality >= _QUALITY_MIN:
+            buf = io.BytesIO()
+            rgb.save(buf, format="JPEG", quality=quality)
+            if buf.tell() <= MAX_PROFILE_IMAGE_SIZE:
+                return buf.getvalue()
+            quality -= _QUALITY_STEP
+
+        scale = 1.0 - _SCALE_STEP
+        while scale >= _SCALE_MIN:
             new_size = (max(1, int(width * scale)), max(1, int(height * scale)))
             resized = rgb.resize(new_size, Image.LANCZOS)
             buf = io.BytesIO()
-            resized.save(buf, format="JPEG")
+            resized.save(buf, format="JPEG", quality=_QUALITY_MIN)
             if buf.tell() <= MAX_PROFILE_IMAGE_SIZE:
                 return buf.getvalue()
-            scale -= _RESIZE_STEP
+            scale -= _SCALE_STEP
+
         buf.seek(0)
         return buf.read()
 

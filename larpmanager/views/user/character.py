@@ -71,7 +71,7 @@ from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.common import get_element, get_element_event, get_player_relationship
 from larpmanager.utils.edit.backend import user_edit
-from larpmanager.utils.io.upload import resize_image_if_needed
+from larpmanager.utils.io.upload import normalize_profile_image
 from larpmanager.utils.services.character import (
     _get_character_cache_id,
     check_missing_mandatory,
@@ -543,22 +543,17 @@ def character_profile_upload(request: HttpRequest, event_slug: str, character_uu
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})
 
-    # Process uploaded image and generate unique filename
     img = form.cleaned_data["image"]
-    ext = img.name.split(".")[-1]
 
-    # Resize image if it exceeds 1MB
     try:
-        img_data = resize_image_if_needed(img.read())
+        img_data = normalize_profile_image(img.read())
     except (OSError, UnidentifiedImageError):
-        logger.exception("Failed to resize character profile image")
+        logger.exception("Failed to normalize character profile image")
         return JsonResponse({"res": "ko"})
 
-    # Create unique file path with registration ID and UUID
-    n_path = f"registration/{rgr.pk}_{uuid4().hex}.{ext}"
+    n_path = f"registration/{rgr.pk}_{uuid4().hex}.jpg"
     path = default_storage.save(n_path, ContentFile(img_data))
 
-    # Save profile path to database atomically
     with transaction.atomic():
         rgr.custom_profile = path
         rgr.save()
