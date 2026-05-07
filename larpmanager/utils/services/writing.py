@@ -63,6 +63,7 @@ from larpmanager.utils.edit.backend import _setup_char_finder
 from larpmanager.utils.io.download import download
 from larpmanager.utils.services.bulk import (
     handle_bulk_characters,
+    handle_bulk_factions,
     handle_bulk_plots,
     handle_bulk_quest,
     handle_bulk_trait,
@@ -355,6 +356,7 @@ def writing_bulk(context: dict, request: HttpRequest, typ: Any) -> None:
     """Handle bulk operations for different writing element types."""
     type_to_bulk_handler = {
         Character: handle_bulk_characters,
+        Faction: handle_bulk_factions,
         Plot: handle_bulk_plots,
         Quest: handle_bulk_quest,
         Trait: handle_bulk_trait,

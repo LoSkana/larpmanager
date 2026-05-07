@@ -207,6 +207,10 @@ class Operations(models.IntegerChoices):
     DEL_PLOT_CHAR = 20, _("Remove character")
     SET_PLOT_PROGRESS = 21, _("Set progress step")
     SET_PLOT_ASSIGNED = 22, _("Set assigned staff member")
+    ADD_FACT_CHAR = 23, _("Add character")
+    DEL_FACT_CHAR = 24, _("Remove character")
+    SET_FACT_PROGRESS = 25, _("Set progress step")
+    SET_FACT_ASSIGNED = 26, _("Set assigned staff member")
 
 
 def _create_bulk_logs(
@@ -601,17 +605,13 @@ def handle_bulk_plots(request: HttpRequest, context: dict) -> None:
         }
         raise ReturnNowError(exec_bulk(request, context, mapping, Plot))
 
-    context["bulk"] = []
     event = context["event"]
 
-    if "plot" in context["features"]:
-        characters = get_bulk_options_cache(event, "characters")
-        context["bulk"].extend(
-            [
-                _bulk_op(Operations.ADD_PLOT_CHAR, characters),
-                _bulk_op(Operations.DEL_PLOT_CHAR, characters),
-            ],
-        )
+    characters = get_bulk_options_cache(event, "characters")
+    context["bulk"] = [
+        _bulk_op(Operations.ADD_PLOT_CHAR, characters),
+        _bulk_op(Operations.DEL_PLOT_CHAR, characters),
+    ]
 
     if "progress" in context["features"]:
         context["bulk"].append(
@@ -621,6 +621,69 @@ def handle_bulk_plots(request: HttpRequest, context: dict) -> None:
     if "assigned" in context["features"]:
         context["bulk"].append(
             _bulk_op(Operations.SET_PLOT_ASSIGNED, get_bulk_options_cache(event, "staffers")),
+        )
+
+    _add_bulk_delete_option(request, context)
+
+
+def exec_add_faction_char(context: dict, target: str, uuids: list[str]) -> str:
+    """Add a character to selected factions."""
+    char = context["event"].get_elements(Character).get(uuid=target)
+    for faction in context["event"].get_elements(Faction).filter(uuid__in=uuids):
+        faction.characters.add(char)
+    return char.name
+
+
+def exec_del_faction_char(context: dict, target: str, uuids: list[str]) -> str:
+    """Remove a character from selected factions."""
+    char = context["event"].get_elements(Character).get(uuid=target)
+    for faction in context["event"].get_elements(Faction).filter(uuid__in=uuids):
+        faction.characters.remove(char)
+    return char.name
+
+
+def exec_set_faction_progress(context: dict, target: str, uuids: list[str]) -> str:
+    """Set progress step for selected factions."""
+    progress_step = context["event"].get_elements(ProgressStep).get(uuid=target)
+    context["event"].get_elements(Faction).filter(uuid__in=uuids).update(progress=progress_step)
+    return progress_step.name
+
+
+def exec_set_faction_assigned(context: dict, target: str, uuids: list[str]) -> str:
+    """Assign selected factions to a staff member."""
+    member = Member.objects.get(uuid=target)
+    context["event"].get_elements(Faction).filter(uuid__in=uuids).update(assigned=member)
+    return member.name
+
+
+def handle_bulk_factions(request: HttpRequest, context: dict) -> None:
+    """Handle bulk operations for faction management."""
+    if request.POST:
+        mapping = {
+            Operations.ADD_FACT_CHAR: exec_add_faction_char,
+            Operations.DEL_FACT_CHAR: exec_del_faction_char,
+            Operations.SET_FACT_PROGRESS: exec_set_faction_progress,
+            Operations.SET_FACT_ASSIGNED: exec_set_faction_assigned,
+        }
+        raise ReturnNowError(exec_bulk(request, context, mapping, Faction))
+
+    context["bulk"] = []
+    event = context["event"]
+
+    characters = get_bulk_options_cache(event, "characters")
+    context["bulk"] = [
+        _bulk_op(Operations.ADD_FACT_CHAR, characters),
+        _bulk_op(Operations.DEL_FACT_CHAR, characters),
+    ]
+
+    if "progress" in context["features"]:
+        context["bulk"].append(
+            _bulk_op(Operations.SET_FACT_PROGRESS, get_bulk_options_cache(event, "progress_steps")),
+        )
+
+    if "assigned" in context["features"]:
+        context["bulk"].append(
+            _bulk_op(Operations.SET_FACT_ASSIGNED, get_bulk_options_cache(event, "staffers")),
         )
 
     _add_bulk_delete_option(request, context)
