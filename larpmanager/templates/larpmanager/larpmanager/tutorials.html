@@ -138,10 +138,9 @@ window.addEventListener('DOMContentLoaded', function() {
 {% block js2 %}
     {% if iframe %}
         <style>
-        #header, #footer, header, #tutorials .column, #tutorials .navig, .main_nav, #topbar { display: none !important; }
+        #header, #footer, header, #tutorials .column, #tutorials .navig, .main_nav, #topbar, #sidebar { display: none !important; }
         #main { padding: 0 !important; width: 100% !important; max-width: 100% !important; }
-        #page-wrapper { padding: 0 !important; }
-        #page-wrapper.topbar { padding: 0 !important; margin-top: 0 !important; }
+        #page-wrapper, #page-wrapper.topbar, #page-wrapper.sidebar { padding: 0 !important; margin: 0 !important; width: 100% !important; }
         </style>
     {% endif %}
 {% endblock js2 %}

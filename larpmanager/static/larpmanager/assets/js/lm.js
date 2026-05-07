@@ -192,6 +192,11 @@ $(document).ready(function() {
 
     });
 
+    $('a.popup-iframe-link').on('click', function(event) {
+        event.preventDefault();
+        window.openIframeModal($(this).data('iframe-url'), 'popup_tutorial');
+    });
+
     $('.feature_checkbox a').click(function(event) {
         event.preventDefault();
 
