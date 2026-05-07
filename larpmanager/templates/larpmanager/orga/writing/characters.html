@@ -246,7 +246,11 @@
                             <td>{{ character_status_counts|get:status_val|default:"0" }}</td>
                             <td>
                                 {% for el in list %}
-                                    {% if el.status == status_val and el.player %}{{ el }}{% endif %}
+                                    {% if el.status == status_val and el.player %}
+                                        {% if writing_number %}#{{ el.number }}{% endif %}
+                                        {{ el }}
+                                        {% if el.title %}- {{ el.title }}{% endif %}
+                                    {% endif %}
                                 {% endfor %}
                             </td>
                             <td>

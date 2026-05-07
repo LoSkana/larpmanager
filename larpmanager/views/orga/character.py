@@ -52,6 +52,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
+from larpmanager.models.member import Member
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Character,
@@ -417,6 +418,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 def _process_character_choices(context: dict, event: Event, mapping: dict, question: WritingQuestion) -> dict:
     """Process all character choices for a question."""
     res = {}
+    player_ids = {}
     character_ids = Character.objects.filter(event=event).values_list("id", flat=True)
     writing_number = get_event_config(context["event"].id, "writing_number", default_value=False, context=context)
     for el in WritingChoice.objects.filter(question=question, element_id__in=character_ids):
@@ -436,9 +438,17 @@ def _process_character_choices(context: dict, event: Event, mapping: dict, quest
         if char.get("title"):
             char_label += " - " + char["title"]
         res[el.option_id]["characters"].append(char_label)
-        if char["player_uuid"]:
-            res[el.option_id]["emails"].append(char.get("player_email", ""))
-            res[el.option_id]["names"].append(char["player"])
+        if char.get("player_id"):
+            player_ids[char["player_id"]] = (el.option_id, len(res[el.option_id]["emails"]))
+            res[el.option_id]["emails"].append("")
+            res[el.option_id]["names"].append("")
+
+    members = {m.pk: m for m in Member.objects.filter(pk__in=player_ids)}
+    for member_id, (option_id, idx) in player_ids.items():
+        member = members.get(member_id)
+        if member:
+            res[option_id]["emails"][idx] = member.email
+            res[option_id]["names"][idx] = member.display_member(context)
 
     return res
 
