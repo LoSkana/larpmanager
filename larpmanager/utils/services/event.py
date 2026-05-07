@@ -26,6 +26,7 @@ from django.db.models import Prefetch, Q
 from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.accounting import clear_registration_accounting_cache
+from larpmanager.cache.bulk import reset_bulk_options_cache
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media
 from larpmanager.cache.config import reset_element_configs
@@ -694,6 +695,9 @@ def reset_all_run(event: Event, run: Run) -> None:
 
     # Clear orga config field definitions cache (derived from active features)
     reset_orga_configs_cache(event.id)
+
+    # Clear bulk
+    reset_bulk_options_cache(run.event_id)
 
 
 def on_event_features_m2m_changed(

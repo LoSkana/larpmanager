@@ -2445,6 +2445,9 @@ msgstr "Erreichbarkeit"
 msgid "Accommodation"
 msgstr "Unterkunft"
 
+msgid "Add character"
+msgstr "Zeichen hinzufügen"
+
 msgid "Age selection"
 msgstr "Auswahl des Alters"
 
@@ -3318,6 +3321,9 @@ msgstr "Zahlungserinnerung"
 
 msgid "Reminder profile"
 msgstr "Erinnerungsprofil"
+
+msgid "Remove character"
+msgstr "Zeichen entfernen"
 
 msgid "Remove from plot"
 msgstr "Aus der Handlung entfernen"

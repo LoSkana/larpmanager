@@ -35,8 +35,8 @@ if TYPE_CHECKING:
 
 import datetime
 
+from larpmanager.cache.bulk import get_bulk_options_cache
 from larpmanager.cache.config import get_association_config, get_event_config
-from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityExp, AbilityTypeExp, DeliveryExp
@@ -203,6 +203,10 @@ class Operations(models.IntegerChoices):
     SET_CHAR_ASSIGNED = 16, _("Set assigned staff member")
     SET_CHAR_STATUS = 17, _("Set character status")
     DEL_BULK = 18, _("Delete")
+    ADD_PLOT_CHAR = 19, _("Add character")
+    DEL_PLOT_CHAR = 20, _("Remove character")
+    SET_PLOT_PROGRESS = 21, _("Set progress step")
+    SET_PLOT_ASSIGNED = 22, _("Set assigned staff member")
 
 
 def _create_bulk_logs(
@@ -394,6 +398,36 @@ def exec_del_char_plot(context: dict, target: str, uuids: list[str]) -> str:
     return plot.name
 
 
+def exec_add_plot_char(context: dict, target: str, uuids: list[str]) -> str:
+    """Add a character to selected plots."""
+    char = context["event"].get_elements(Character).get(uuid=target)
+    for plot in context["event"].get_elements(Plot).filter(uuid__in=uuids):
+        plot.characters.add(char)
+    return char.name
+
+
+def exec_del_plot_char(context: dict, target: str, uuids: list[str]) -> str:
+    """Remove a character from selected plots."""
+    char = context["event"].get_elements(Character).get(uuid=target)
+    for plot in context["event"].get_elements(Plot).filter(uuid__in=uuids):
+        plot.characters.remove(char)
+    return char.name
+
+
+def exec_set_plot_progress(context: dict, target: str, uuids: list[str]) -> str:
+    """Set progress step for selected plots."""
+    progress_step = context["event"].get_elements(ProgressStep).get(uuid=target)
+    context["event"].get_elements(Plot).filter(uuid__in=uuids).update(progress=progress_step)
+    return progress_step.name
+
+
+def exec_set_plot_assigned(context: dict, target: str, uuids: list[str]) -> str:
+    """Assign selected plots to a staff member."""
+    member = Member.objects.get(uuid=target)
+    context["event"].get_elements(Plot).filter(uuid__in=uuids).update(assigned=member)
+    return member.name
+
+
 def exec_add_char_delivery(
     context: dict,
     target: str,
@@ -493,10 +527,11 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
 
     # Initialize bulk operations list for GET requests
     context["bulk"] = []
+    event = context["event"]
 
     # Add faction-related operations if faction feature is enabled
     if "faction" in context["features"]:
-        factions = context["event"].get_elements(Faction).values("uuid", "name").order_by("name")
+        factions = get_bulk_options_cache(event, "factions")
         context["bulk"].extend(
             [
                 _bulk_op(Operations.ADD_CHAR_FACT, factions),
@@ -506,7 +541,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
 
     # Add plot-related operations if plot feature is enabled
     if "plot" in context["features"]:
-        plots = context["event"].get_elements(Plot).values("uuid", "name").order_by("name")
+        plots = get_bulk_options_cache(event, "plots")
         context["bulk"].extend(
             [
                 _bulk_op(Operations.ADD_CHAR_PLOT, plots),
@@ -516,7 +551,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
 
     # Add prologue-related operations if prologue feature is enabled
     if "prologue" in context["features"]:
-        prologues = context["event"].get_elements(Prologue).values("uuid", "name").order_by("name")
+        prologues = get_bulk_options_cache(event, "prologues")
         context["bulk"].extend(
             [
                 _bulk_op(Operations.ADD_CHAR_PROLOGUE, prologues),
@@ -526,28 +561,24 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
 
     # Add XP delivery operations if experience feature is enabled
     if "experience" in context["features"]:
-        delivery = context["event"].get_elements(DeliveryExp).values("uuid", "name")
+        deliveries = get_bulk_options_cache(event, "deliveries")
         context["bulk"].extend(
             [
-                _bulk_op(Operations.ADD_CHAR_DELIVERY, delivery),
-                _bulk_op(Operations.DEL_CHAR_DELIVERY, delivery),
+                _bulk_op(Operations.ADD_CHAR_DELIVERY, deliveries),
+                _bulk_op(Operations.DEL_CHAR_DELIVERY, deliveries),
             ],
         )
 
     # Add progress step operation if progress feature is enabled
     if "progress" in context["features"]:
-        progress_steps = context["event"].get_elements(ProgressStep).values("uuid", "name").order_by("order")
         context["bulk"].append(
-            _bulk_op(Operations.SET_CHAR_PROGRESS, progress_steps),
+            _bulk_op(Operations.SET_CHAR_PROGRESS, get_bulk_options_cache(event, "progress_steps")),
         )
 
     # Add staff assignment operation if assigned feature is enabled
     if "assigned" in context["features"]:
-        # Get event staff members using the same function used in writing utils
-        event_staff = get_event_staffers(context["event"])
-        staff_members = [{"uuid": m.uuid, "name": m.show_nick()} for m in event_staff]
         context["bulk"].append(
-            _bulk_op(Operations.SET_CHAR_ASSIGNED, staff_members),
+            _bulk_op(Operations.SET_CHAR_ASSIGNED, get_bulk_options_cache(event, "staffers")),
         )
 
     # Add status assignment operation if enabled
@@ -556,6 +587,42 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
         context["bulk"].append(
             _bulk_op(Operations.SET_CHAR_STATUS, status_choices),
         )
+    _add_bulk_delete_option(request, context)
+
+
+def handle_bulk_plots(request: HttpRequest, context: dict) -> None:
+    """Handle bulk operations for plot management."""
+    if request.POST:
+        mapping = {
+            Operations.ADD_PLOT_CHAR: exec_add_plot_char,
+            Operations.DEL_PLOT_CHAR: exec_del_plot_char,
+            Operations.SET_PLOT_PROGRESS: exec_set_plot_progress,
+            Operations.SET_PLOT_ASSIGNED: exec_set_plot_assigned,
+        }
+        raise ReturnNowError(exec_bulk(request, context, mapping, Plot))
+
+    context["bulk"] = []
+    event = context["event"]
+
+    if "plot" in context["features"]:
+        characters = get_bulk_options_cache(event, "characters")
+        context["bulk"].extend(
+            [
+                _bulk_op(Operations.ADD_PLOT_CHAR, characters),
+                _bulk_op(Operations.DEL_PLOT_CHAR, characters),
+            ],
+        )
+
+    if "progress" in context["features"]:
+        context["bulk"].append(
+            _bulk_op(Operations.SET_PLOT_PROGRESS, get_bulk_options_cache(event, "progress_steps")),
+        )
+
+    if "assigned" in context["features"]:
+        context["bulk"].append(
+            _bulk_op(Operations.SET_PLOT_ASSIGNED, get_bulk_options_cache(event, "staffers")),
+        )
+
     _add_bulk_delete_option(request, context)
 
 
@@ -582,12 +649,8 @@ def handle_bulk_quest(request: HttpRequest, context: dict) -> None:
     if request.POST:
         raise ReturnNowError(exec_bulk(request, context, {Operations.SET_QUEST_TYPE: exec_set_quest_type}, Quest))
 
-    # Get available quest types for the event, ordered by name
-    quest_types = context["event"].get_elements(QuestType).values("uuid", "name").order_by("name")
-
-    # Set up bulk operation options in context
     context["bulk"] = [
-        _bulk_op(Operations.SET_QUEST_TYPE, quest_types),
+        _bulk_op(Operations.SET_QUEST_TYPE, get_bulk_options_cache(context["event"], "quest_types")),
     ]
     _add_bulk_delete_option(request, context)
 
@@ -611,12 +674,8 @@ def handle_bulk_trait(request: HttpRequest, context: dict) -> None:
         # Execute bulk operation for setting quest traits
         raise ReturnNowError(exec_bulk(request, context, {Operations.SET_TRAIT_QUEST: exec_set_quest}, Trait))
 
-    # Get available quests for the current event
-    quests = context["event"].get_elements(Quest).values("uuid", "name").order_by("name")
-
-    # Configure bulk operation options
     context["bulk"] = [
-        _bulk_op(Operations.SET_TRAIT_QUEST, quests),
+        _bulk_op(Operations.SET_TRAIT_QUEST, get_bulk_options_cache(context["event"], "quests")),
     ]
     _add_bulk_delete_option(request, context)
 
@@ -648,11 +707,7 @@ def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
             exec_bulk(request, context, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}, AbilityExp)
         )
 
-    # Get ability types for the event, ordered by name
-    ability_types = context["event"].get_elements(AbilityTypeExp).values("uuid", "name").order_by("name")
-
-    # Setup bulk operations context
     context["bulk"] = [
-        _bulk_op(Operations.SET_ABILITY_TYPE, ability_types),
+        _bulk_op(Operations.SET_ABILITY_TYPE, get_bulk_options_cache(context["event"], "ability_types")),
     ]
     _add_bulk_delete_option(request, context)

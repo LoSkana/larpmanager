@@ -60,6 +60,7 @@ from larpmanager.cache.association_text import (
     update_association_text_cache_on_save,
 )
 from larpmanager.cache.association_translation import clear_association_translation_cache
+from larpmanager.cache.bulk import on_bulk_model_changed, on_event_role_deleted, on_event_role_members_changed
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import (
     clear_event_cache_all_runs,
@@ -211,10 +212,11 @@ from larpmanager.models.event import (
     EventConfig,
     EventText,
     PreRegistration,
+    ProgressStep,
     Run,
     RunConfig,
 )
-from larpmanager.models.experience import AbilityExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
+from larpmanager.models.experience import AbilityExp, AbilityTypeExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
 from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
@@ -1813,6 +1815,16 @@ m2m_changed.connect(on_modifier_requirements_m2m_changed, sender=ModifierExp.req
 m2m_changed.connect(on_rule_abilities_m2m_changed_cache, sender=RuleExp.abilities.through)
 
 m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
+
+
+# Bulk options cache invalidation: one receiver per model, one for EventRole m2m
+_BULK_MODELS = [Character, Plot, Faction, Prologue, ProgressStep, DeliveryExp, QuestType, Quest, AbilityTypeExp]
+for _bulk_model in _BULK_MODELS:
+    post_save.connect(on_bulk_model_changed, sender=_bulk_model)
+    post_delete.connect(on_bulk_model_changed, sender=_bulk_model)
+
+m2m_changed.connect(on_event_role_members_changed, sender=EventRole.members.through)
+post_delete.connect(on_event_role_deleted, sender=EventRole)
 
 
 @receiver(user_locked_out)

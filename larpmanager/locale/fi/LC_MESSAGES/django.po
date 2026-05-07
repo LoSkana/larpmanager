@@ -2445,6 +2445,9 @@ msgstr "Saavutettavuus"
 msgid "Accommodation"
 msgstr "Majoitus"
 
+msgid "Add character"
+msgstr "Lisää hahmo"
+
 msgid "Age selection"
 msgstr "Iän valinta"
 
@@ -3318,6 +3321,9 @@ msgstr "Muistutusmaksu"
 
 msgid "Reminder profile"
 msgstr "Muistutusprofiili"
+
+msgid "Remove character"
+msgstr "Poista merkki"
 
 msgid "Remove from plot"
 msgstr "Poista juonelta"
