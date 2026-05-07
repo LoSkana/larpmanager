@@ -427,11 +427,14 @@ def _process_character_choices(context: dict, event: Event, mapping: dict, quest
         ch_num = mapping[el.element_id]
         char = context["chars"][ch_num]
         if el.option_id not in res:
-            res[el.option_id] = {"emails": [], "names": []}
+            res[el.option_id] = {"emails": [], "names": [], "characters": []}
 
-        # Add character name and player name if available
-        res[el.option_id]["emails"].append(char["name"])
+        char_label = char["name"]
+        if char.get("title"):
+            char_label += " - " + char["title"]
+        res[el.option_id]["characters"].append(char_label)
         if char["player_uuid"]:
+            res[el.option_id]["emails"].append(char.get("player_email", ""))
             res[el.option_id]["names"].append(char["player"])
 
     return res

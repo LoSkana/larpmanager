@@ -1094,6 +1094,10 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   line-height: 300%;
 }
 
+.fields a + a:not(.hide)::before {
+  content: " | ";
+}
+
 @media screen and (max-width: 736px) {
   .nav .nav-label {
     display: none;

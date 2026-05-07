@@ -8656,6 +8656,9 @@ msgstr ""
 msgid "Count"
 msgstr ""
 
+msgid "Option"
+msgstr ""
+
 msgid "This page shows the factions and plots of the indicated character"
 msgstr ""
 

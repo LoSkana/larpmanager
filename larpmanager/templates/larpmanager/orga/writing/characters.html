@@ -234,8 +234,9 @@
                     <tr>
                         <th>{% trans "Status" %}</th>
                         <th>{% trans "Count" %}</th>
+                        <th>{% trans "Characters" %}</th>
+                        <th>{% trans "Players" %}</th>
                         <th>{% trans "Emails" %}</th>
-                        <th>{% trans "Names" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -245,12 +246,17 @@
                             <td>{{ character_status_counts|get:status_val|default:"0" }}</td>
                             <td>
                                 {% for el in list %}
-                                    {% if el.status == status_val and el.player %}{{ el.player.email }}{% endif %}
+                                    {% if el.status == status_val and el.player %}{{ el }}{% endif %}
                                 {% endfor %}
                             </td>
                             <td>
                                 {% for el in list %}
                                     {% if el.status == status_val and el.player %}{{ el.player_display }}{% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for el in list %}
+                                    {% if el.status == status_val and el.player %}{{ el.player.email }}{% endif %}
                                 {% endfor %}
                             </td>
                         </tr>
@@ -268,10 +274,11 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Option</th>
-                                <th>Count</th>
-                                <th>Emails</th>
-                                <th>Names</th>
+                                <th>{% trans "Option" %}</th>
+                                <th>{% trans "Count" %}</th>
+                                <th>{% trans "Characters" %}</th>
+                                <th>{% trans "Players" %}</th>
+                                <th>{% trans "Emails" %}</th>
                             </tr>
                         </thead>
                         <tbody>

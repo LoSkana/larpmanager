@@ -682,6 +682,9 @@ msgstr "Natur"
 msgid "Number"
 msgstr "Antal"
 
+msgid "Option"
+msgstr "Alternativ"
+
 msgid "Patron"
 msgstr "Beskyddare"
 
