@@ -161,7 +161,7 @@ class MainPageError(Exception):
     def __init__(self, request: HttpRequest | None = None) -> None:
         """Initialize with request path and base domain from association."""
         super().__init__()
-        self.path = request.path
+        self.path = request.get_full_path()
         self.base_domain = request.association["main_domain"]
 
 

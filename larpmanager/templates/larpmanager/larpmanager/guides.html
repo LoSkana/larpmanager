@@ -3,6 +3,18 @@
 {% block title %}
     {% trans "Guides" %}
 {% endblock title %}
+{% block js2 %}
+    <style>#iframe-indicator { display: none; background: #e0f0ff; border-bottom: 1px solid #90c0e0; padding: 2px 8px; font-size: 11px; color: #336; }</style>
+    <div id="iframe-indicator">iframe mode active</div>
+    {% if iframe %}
+        <style>
+        #header, #footer, header, .main_nav, #topbar, #sidebar { display: none !important; }
+        #main { padding: 0 !important; width: 100% !important; max-width: 100% !important; }
+        #page-wrapper, #page-wrapper.topbar, #page-wrapper.sidebar { padding: 0 !important; margin: 0 !important; width: 100% !important; }
+        #iframe-indicator { display: block !important; }
+        </style>
+    {% endif %}
+{% endblock js2 %}
 {% block meta %}
     <meta name="keywords"
           content="larp guides, larp tutorials, event management tips, larp best practices, larp organizer resources, larp examples">
@@ -17,7 +29,7 @@
                 <div class="guide-card">
                     <h3>
                         {% if post.icon %}<i class="fa-solid fa-{{ post.icon }}"></i>{% endif %}
-                        <a href="{% url 'guide' post.slug %}">{{ post.title }}</a>
+                        <a href="{% url 'guide' post.slug %}{% if iframe %}?in_iframe=1{% endif %}">{{ post.title }}</a>
                     </h3>
                     {% if post.description %}<p class="guide-card-desc">{{ post.description }}</p>{% endif %}
                 </div>

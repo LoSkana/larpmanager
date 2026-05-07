@@ -136,12 +136,14 @@ window.addEventListener('DOMContentLoaded', function() {
     </script>
 {% endblock js %}
 {% block js2 %}
+    <style>#iframe-indicator { display: none; background: #e0f0ff; border-bottom: 1px solid #90c0e0; padding: 2px 8px; font-size: 11px; color: #336; }</style>
+    <div id="iframe-indicator">iframe mode active</div>
     {% if iframe %}
         <style>
-        #header, #footer, header, #tutorials .column, #tutorials .navig, .main_nav, #topbar { display: none !important; }
+        #header, #footer, header, #tutorials .navig, .main_nav, #topbar, #sidebar { display: none !important; }
         #main { padding: 0 !important; width: 100% !important; max-width: 100% !important; }
-        #page-wrapper { padding: 0 !important; }
-        #page-wrapper.topbar { padding: 0 !important; margin-top: 0 !important; }
+        #page-wrapper, #page-wrapper.topbar, #page-wrapper.sidebar { padding: 0 !important; margin: 0 !important; width: 100% !important; }
+        #iframe-indicator { display: block !important; }
         </style>
     {% endif %}
 {% endblock js2 %}

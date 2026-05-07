@@ -696,6 +696,7 @@ def guides(request: HttpRequest) -> Any:
     context = get_lm_contact(request)
     context["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
     context["index"] = True
+    context["iframe"] = request.GET.get("in_iframe") == "1"
     return render(request, "larpmanager/larpmanager/guides.html", context)
 
 
@@ -725,6 +726,7 @@ def guide(request: HttpRequest, slug: Any) -> Any:
     context["og_image"] = context["guide"].thumb.url
     context["og_title"] = f"{context['guide'].title} - LarpManager"
     context["og_description"] = f"{context['guide'].description} - LarpManager"
+    context["iframe"] = request.GET.get("in_iframe") == "1"
 
     return render(request, "larpmanager/larpmanager/guide.html", context)
 
