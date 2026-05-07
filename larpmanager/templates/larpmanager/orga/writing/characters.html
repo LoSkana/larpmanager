@@ -211,7 +211,7 @@
 {% block additional %}
     {% if user_character_approval and character_status_choices or form_questions %}
         <br />
-        <div class="fields">
+        <div class="fields load_list">
             {% if user_character_approval and character_status_choices %}
                 <a href="#" class="my_toggle" tog='char_status'>{% trans "Status" %}</a>
             {% endif %}

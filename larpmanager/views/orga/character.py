@@ -418,6 +418,7 @@ def _process_character_choices(context: dict, event: Event, mapping: dict, quest
     """Process all character choices for a question."""
     res = {}
     character_ids = Character.objects.filter(event=event).values_list("id", flat=True)
+    writing_number = get_event_config(context["event"].id, "writing_number", default_value=False, context=context)
     for el in WritingChoice.objects.filter(question=question, element_id__in=character_ids):
         # Skip if character not in current event mapping
         if el.element_id not in mapping:
@@ -430,6 +431,8 @@ def _process_character_choices(context: dict, event: Event, mapping: dict, quest
             res[el.option_id] = {"emails": [], "names": [], "characters": []}
 
         char_label = char["name"]
+        if writing_number:
+            char_label = f"#{char['number']} {char_label}"
         if char.get("title"):
             char_label += " - " + char["title"]
         res[el.option_id]["characters"].append(char_label)
