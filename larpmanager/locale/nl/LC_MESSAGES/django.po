@@ -2445,6 +2445,9 @@ msgstr "Toegankelijkheid"
 msgid "Accommodation"
 msgstr "Accommodatie"
 
+msgid "Add character"
+msgstr "Karakter toevoegen"
+
 msgid "Age selection"
 msgstr "Leeftijdselectie"
 
@@ -3318,6 +3321,9 @@ msgstr "Herinnering betaling"
 
 msgid "Reminder profile"
 msgstr "Herinnering profiel"
+
+msgid "Remove character"
+msgstr "Karakter verwijderen"
 
 msgid "Remove from plot"
 msgstr "Verwijderen uit perceel"

@@ -61,7 +61,13 @@ from larpmanager.utils.core.common import check_field
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.edit.backend import _setup_char_finder
 from larpmanager.utils.io.download import download
-from larpmanager.utils.services.bulk import handle_bulk_characters, handle_bulk_quest, handle_bulk_trait
+from larpmanager.utils.services.bulk import (
+    handle_bulk_characters,
+    handle_bulk_factions,
+    handle_bulk_plots,
+    handle_bulk_quest,
+    handle_bulk_trait,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -348,7 +354,13 @@ def writing_list(  # noqa: C901 - Complex writing list building with feature-dep
 
 def writing_bulk(context: dict, request: HttpRequest, typ: Any) -> None:
     """Handle bulk operations for different writing element types."""
-    type_to_bulk_handler = {Character: handle_bulk_characters, Quest: handle_bulk_quest, Trait: handle_bulk_trait}
+    type_to_bulk_handler = {
+        Character: handle_bulk_characters,
+        Faction: handle_bulk_factions,
+        Plot: handle_bulk_plots,
+        Quest: handle_bulk_quest,
+        Trait: handle_bulk_trait,
+    }
 
     if typ in type_to_bulk_handler:
         type_to_bulk_handler[typ](request, context)

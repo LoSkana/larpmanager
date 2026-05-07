@@ -10388,6 +10388,12 @@ msgstr ""
 msgid "Set character status"
 msgstr ""
 
+msgid "Add character"
+msgstr ""
+
+msgid "Remove character"
+msgstr ""
+
 msgid "Your registration ticket"
 msgstr ""
 

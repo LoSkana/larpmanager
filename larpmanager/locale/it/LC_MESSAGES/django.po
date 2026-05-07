@@ -2445,6 +2445,9 @@ msgstr "Accessibilità"
 msgid "Accommodation"
 msgstr "Sistemazione"
 
+msgid "Add character"
+msgstr "Aggiungi personaggio"
+
 msgid "Age selection"
 msgstr "Selezione dell'età"
 
@@ -3318,6 +3321,9 @@ msgstr "Promemoria di pagamento"
 
 msgid "Reminder profile"
 msgstr "Profilo di promemoria"
+
+msgid "Remove character"
+msgstr "Rimuovi personaggio"
 
 msgid "Remove from plot"
 msgstr "Rimuovi dalla trama"

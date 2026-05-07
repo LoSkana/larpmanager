@@ -2445,6 +2445,9 @@ msgstr "Přístupnost"
 msgid "Accommodation"
 msgstr "Ubytování"
 
+msgid "Add character"
+msgstr "Přidat znak"
+
 msgid "Age selection"
 msgstr "Výběr věku"
 
@@ -3318,6 +3321,9 @@ msgstr "Připomínková platba"
 
 msgid "Reminder profile"
 msgstr "Připomínkový profil"
+
+msgid "Remove character"
+msgstr "Odstranění znaku"
 
 msgid "Remove from plot"
 msgstr "Odstranění z pozemku"

@@ -2445,6 +2445,9 @@ msgstr "Tillgänglighet"
 msgid "Accommodation"
 msgstr "Boende"
 
+msgid "Add character"
+msgstr "Lägg till karaktär"
+
 msgid "Age selection"
 msgstr "Val av ålder"
 
@@ -3318,6 +3321,9 @@ msgstr "Påminnelse om betalning"
 
 msgid "Reminder profile"
 msgstr "Påminnelseprofil"
+
+msgid "Remove character"
+msgstr "Ta bort tecken"
 
 msgid "Remove from plot"
 msgstr "Ta bort från tomten"
