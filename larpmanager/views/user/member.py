@@ -86,6 +86,7 @@ from larpmanager.utils.core.common import get_badge, get_channel, get_contact, w
 from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import get_membership_request
+from larpmanager.utils.io.upload import resize_image_if_needed
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_leaderboard, get_member_uuid
 from larpmanager.views.user.event import build_registration_list, get_member_registrations
@@ -293,8 +294,15 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
     # Generate unique filename with member ID and UUID
     n_path = f"member/{request.user.member.pk}_{uuid4().hex}.{ext}"
 
+    # Resize image if it exceeds 1MB
+    try:
+        img_data = resize_image_if_needed(img.read())
+    except (OSError, UnidentifiedImageError):
+        logger.exception("Failed to resize profile image")
+        return JsonResponse({"res": "ko"})
+
     # Save file to storage and get the actual path
-    path = default_storage.save(n_path, ContentFile(img.read()))
+    path = default_storage.save(n_path, ContentFile(img_data))
 
     # Update member profile with new image path
     request.user.member.profile = path

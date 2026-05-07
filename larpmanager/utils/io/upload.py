@@ -33,6 +33,7 @@ from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
+from PIL import Image
 
 from larpmanager.cache.experience import clear_event_exp_systems_cache, get_event_exp_systems
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
@@ -92,6 +93,40 @@ logger = logging.getLogger(__name__)
 MAX_CSV_ROWS = 10_000
 MAX_COMMA_VALUES = 100
 MAX_CSV_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+MAX_PROFILE_IMAGE_SIZE = 1024 * 1024  # 1MB
+_RESIZE_STEP = 0.1
+_RESIZE_MIN_SCALE = 0.1
+
+
+def resize_image_if_needed(img_data: bytes) -> bytes:
+    """Reduce image file size to MAX_PROFILE_IMAGE_SIZE by progressively scaling down.
+
+    Converts the image to JPEG (RGB) to ensure consistent compression across all
+    input formats (BMP, TIFF, GIF, WebP, etc.). Scales by 10% per iteration until
+    the image fits or the scale drops below 10%.
+    Returns the original bytes unchanged if already within the limit.
+
+    Raises:
+        UnidentifiedImageError: If img_data is not a valid image.
+        OSError: If PIL cannot process the image.
+    """
+    if len(img_data) <= MAX_PROFILE_IMAGE_SIZE:
+        return img_data
+
+    with Image.open(io.BytesIO(img_data)) as im:
+        rgb = im.convert("RGB")
+        scale = 1.0 - _RESIZE_STEP
+        width, height = im.size
+        while scale >= _RESIZE_MIN_SCALE:
+            new_size = (max(1, int(width * scale)), max(1, int(height * scale)))
+            resized = rgb.resize(new_size, Image.LANCZOS)
+            buf = io.BytesIO()
+            resized.save(buf, format="JPEG")
+            if buf.tell() <= MAX_PROFILE_IMAGE_SIZE:
+                return buf.getvalue()
+            scale -= _RESIZE_STEP
+        buf.seek(0)
+        return buf.read()
 
 
 def _normalize_numeric(value: str) -> str:
