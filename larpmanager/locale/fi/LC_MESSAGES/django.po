@@ -682,6 +682,9 @@ msgstr "Luonto"
 msgid "Number"
 msgstr "Numero"
 
+msgid "Option"
+msgstr "Vaihtoehto"
+
 msgid "Patron"
 msgstr "Patron"
 

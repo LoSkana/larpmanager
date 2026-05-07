@@ -682,6 +682,9 @@ msgstr "Příroda"
 msgid "Number"
 msgstr "Číslo"
 
+msgid "Option"
+msgstr "Možnost"
+
 msgid "Patron"
 msgstr "Patron"
 

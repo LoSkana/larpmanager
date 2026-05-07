@@ -682,6 +682,9 @@ msgstr "Nature"
 msgid "Number"
 msgstr "Nombre"
 
+msgid "Option"
+msgstr "Option"
+
 msgid "Patron"
 msgstr "Patron"
 
