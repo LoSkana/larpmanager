@@ -5991,6 +5991,9 @@ msgstr "By og land der du ble født"
 msgid "Confirmation of registration request"
 msgstr "Bekreftelse av registreringsforespørsel"
 
+msgid "Create a character by clicking 'New'"
+msgstr "Opprett en karakter ved å klikke på \"Ny"
+
 msgid "Error processing payment, contact us"
 msgstr "Feil ved behandling av betaling, kontakt oss"
 
@@ -6228,8 +6231,14 @@ msgstr "OBS, skattekoden stemmer ikke overens"
 msgid "Charge transaction fees to participant"
 msgstr "Kreve transaksjonsgebyrer fra deltakeren"
 
+msgid "Click 'New' to create your first event"
+msgstr "Klikk på \"Ny\" for å opprette ditt første arrangement"
+
 msgid "Color used to highlight important text"
 msgstr "Farge som brukes til å fremheve viktig tekst"
+
+msgid "Create a ticket type by clicking 'New'"
+msgstr "Opprett en billettype ved å klikke på \"Ny"
 
 msgid "Fill in your character's relationships"
 msgstr "Fyll inn karakterens relasjoner"
@@ -6285,6 +6294,9 @@ msgstr "Du må fullføre betalingen av medlemskontingenten for å kunne stemme"
 
 msgid "click on the icon to open the tutorial"
 msgstr "klikk på ikonet for å åpne veiledningen"
+
+msgid "configure at least one method and save"
+msgstr "konfigurer minst én metode og lagre"
 
 msgid "we'll let you know as soon as possible"
 msgstr "vi gir deg beskjed så snart som mulig"
@@ -7382,6 +7394,9 @@ msgid "This page shows all inflows received for this event"
 msgstr ""
 "Denne siden viser alle innstrømminger som er mottatt for denne hendelsen"
 
+msgid "set the name, price, and availability, then save it"
+msgstr "angi navn, pris og tilgjengelighet, og lagre det deretter"
+
 msgid "use high-quality wide images for best visual impact"
 msgstr "bruk brede bilder av høy kvalitet for best visuell effekt"
 
@@ -7570,6 +7585,9 @@ msgstr "Du har fått en inngangsbillett til dette arrangementet av"
 
 msgid "You have granted data sharing with this organisation!"
 msgstr "Du har gitt tillatelse til datadeling med denne organisasjonen!"
+
+msgid "fill in the name, dates, and basic details, then save"
+msgstr "fyll inn navn, datoer og grunnleggende detaljer, og lagre deretter"
 
 msgid "(Optional) Prerequisite ability names, comma-separated"
 msgstr "(Valgfritt) Navn på forutsetninger, kommaseparert"
@@ -7846,6 +7864,9 @@ msgstr "Arrangementet '%(event_name)s' har blitt opprettet"
 msgid "once approved, the corresponding amounts are assigned as "
 msgstr "Når de er godkjent, blir de tilsvarende beløpene tildelt som"
 
+msgid "Add a question to your registration form by clicking 'New'"
+msgstr "Legg til et spørsmål i registreringsskjemaet ved å klikke på \"Ny"
+
 msgid "Allows you to copy any element directly from another event"
 msgstr ""
 "Gjør det mulig å kopiere et hvilket som helst element direkte fra en annen "
@@ -7968,6 +7989,9 @@ msgstr "Du kan foreta betalingen <a href='%(url)s'>på denne siden</a>"
 
 msgid "You have chosen the same option in more than one preference"
 msgstr "Du har angitt det samme alternativet i mer enn én innstilling"
+
+msgid "give it a name and fill in the character details, then save"
+msgstr "gi den et navn og fyll inn karakterdetaljene, og lagre deretter"
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr "bruk et rektangulært bilde, helst i forholdet 4:3 for best resultat"
@@ -8247,6 +8271,9 @@ msgstr ""
 
 msgid "Warning: there is already an approved member with the same name"
 msgstr "Advarsel: Det finnes allerede et godkjent medlem med samme navn"
+
+msgid "You are now seeing the registration form as a participant would"
+msgstr "Du ser nå registreringsskjemaet som en deltaker ville gjort"
 
 msgid "You can also upload a second file with the registration options"
 msgstr "Du kan også laste opp en annen fil med registreringsalternativene"
@@ -8751,6 +8778,11 @@ msgstr ""
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Du kan bruke følgende felter, de fylles ut automatisk"
+
+msgid "for example, ask for dietary requirements or emergency contact details"
+msgstr ""
+"for eksempel be om informasjon om diettbehov eller kontaktinformasjon i "
+"nødstilfeller"
 
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
@@ -9681,6 +9713,13 @@ msgid ""
 msgstr ""
 "Når du finner en slik knapp, kan du trykke på den for å utføre ytterligere "
 "filtrering"
+
+msgid ""
+"Choose how participants will pay: bank transfer, PayPal, Stripe, or other "
+"options"
+msgstr ""
+"Velg hvordan deltakerne skal betale: bankoverføring, PayPal, Stripe eller "
+"andre alternativer"
 
 msgid ""
 "Enables participants to request a refund (a money transfer from the "
@@ -10991,6 +11030,13 @@ msgstr ""
 " bli behørig registrert"
 
 msgid ""
+"Edit an existing registration and assign a character to the participant "
+"using the dropdown selection"
+msgstr ""
+"Rediger en eksisterende registrering og tilordne en karakter til deltakeren "
+"ved hjelp av rullegardinmenyen"
+
+msgid ""
 "Enables a 'campaign' style setup where multiple events share the same set of"
 " characters and factions"
 msgstr ""
@@ -11109,6 +11155,13 @@ msgid ""
 msgstr ""
 "Innfører en ny måte å vise tidligere og kommende arrangementer på, inspirert"
 " av populære strømmetjenesters layout"
+
+msgid ""
+"Select a ticket, fill in the required fields, and complete the registration "
+"to experience the full flow"
+msgstr ""
+"Velg en billett, fyll ut de obligatoriske feltene, og fullfør registreringen"
+" for å oppleve hele flyten"
 
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "

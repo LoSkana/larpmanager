@@ -507,6 +507,14 @@ def exe_activation(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
     context = check_association_context(request, "exe_activation")
     association_id = context["association_id"]
 
+    if request.method == "GET" and request.GET.get("slug"):
+        slug = request.GET["slug"]
+        checklist, _ = get_activation_checklist(association_id)
+        item = next((i for i in checklist if i["slug"] == slug), None)
+        if item:
+            messages.info(request, item["hint"])
+            return redirect(item["url"])
+
     checklist, progress = get_activation_checklist(association_id)
     progress_done = 100
     all_done = progress == progress_done

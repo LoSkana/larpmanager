@@ -28,6 +28,9 @@ from django.core.management.base import BaseCommand
 
 from larpmanager.management.commands.utils import check_virtualenv
 
+# Languages supporting formality parameter
+SUPPORTED_FORMALITY_LANGS = {"IT", "DE", "FR", "ES", "PT", "PT-BR", "PT-PT", "NL", "PL", "RU", "JA", "ZH"}
+
 
 class DeepLLimitExceededError(Exception):
     """Raised when DeepL API usage limit is exceeded."""
@@ -81,11 +84,14 @@ class Command(BaseCommand):
                 target_language = self.target[target_language]
 
             # Perform the actual translation using DeepL API
-            translation_result = self.translator.translate_text(
-                entry.msgid,
-                source_lang="EN",
-                target_lang=target_language,
-            )
+            kwargs = {
+                "source_lang": "EN",
+                "target_lang": target_language,
+            }
+            if target_language in SUPPORTED_FORMALITY_LANGS:
+                kwargs["formality"] = "less"
+
+            translation_result = self.translator.translate_text(entry.msgid, **kwargs)
             entry.msgstr = str(translation_result)
 
             # Display the translated result and add delay for API rate limiting

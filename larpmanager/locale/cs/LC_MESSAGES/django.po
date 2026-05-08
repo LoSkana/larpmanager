@@ -5993,6 +5993,9 @@ msgstr "Město a země, kde jste se narodili"
 msgid "Confirmation of registration request"
 msgstr "Potvrzení žádosti o registraci"
 
+msgid "Create a character by clicking 'New'"
+msgstr "Vytvořte postavu kliknutím na tlačítko \"Nový\""
+
 msgid "Error processing payment, contact us"
 msgstr "Chyba při zpracování platby, kontaktujte nás"
 
@@ -6228,8 +6231,14 @@ msgstr "Pozor, daňový kód nesouhlasí"
 msgid "Charge transaction fees to participant"
 msgstr "Účtování transakčních poplatků účastníkovi"
 
+msgid "Click 'New' to create your first event"
+msgstr "Kliknutím na tlačítko \"Nový\" vytvoříte svou první událost"
+
 msgid "Color used to highlight important text"
 msgstr "Barva použitá ke zvýraznění důležitého textu"
+
+msgid "Create a ticket type by clicking 'New'"
+msgstr "Vytvořte typ tipu kliknutím na tlačítko \"Nový\""
 
 msgid "Fill in your character's relationships"
 msgstr "Vyplňte vztahy své postavy"
@@ -6285,6 +6294,9 @@ msgstr "Abyste mohli hlasovat, musíte uhradit členský poplatek"
 
 msgid "click on the icon to open the tutorial"
 msgstr "kliknutím na ikonu otevřete výukový program"
+
+msgid "configure at least one method and save"
+msgstr "nakonfigurovat alespoň jednu metodu a uložit"
 
 msgid "we'll let you know as soon as possible"
 msgstr "dáme vám co nejdříve vědět"
@@ -7380,6 +7392,9 @@ msgstr "Krátké průvodce, které vám pomohou naučit se, jak systém funguje"
 msgid "This page shows all inflows received for this event"
 msgstr "Tato stránka zobrazuje všechny přítoky přijaté pro tuto událost"
 
+msgid "set the name, price, and availability, then save it"
+msgstr "nastavte název, cenu a dostupnost a uložte ji"
+
 msgid "use high-quality wide images for best visual impact"
 msgstr ""
 "použití vysoce kvalitních širokoúhlých obrázků pro nejlepší vizuální dojem"
@@ -7571,6 +7586,9 @@ msgstr "Vstup na tuto událost vám darovali"
 
 msgid "You have granted data sharing with this organisation!"
 msgstr "S touto organizací jste povolili sdílení dat!"
+
+msgid "fill in the name, dates, and basic details, then save"
+msgstr "vyplňte jméno, data a základní údaje a uložte je"
 
 msgid "(Optional) Prerequisite ability names, comma-separated"
 msgstr "(Nepovinné) Názvy předpokládaných schopností oddělené čárkami"
@@ -7846,6 +7864,9 @@ msgstr "Vaše událost '%(event_name)s' byla úspěšně vytvořena"
 msgid "once approved, the corresponding amounts are assigned as "
 msgstr "po schválení jsou příslušné částky přiděleny jako"
 
+msgid "Add a question to your registration form by clicking 'New'"
+msgstr "Přidejte otázku do registračního formuláře kliknutím na tlačítko \"Nový\""
+
 msgid "Allows you to copy any element directly from another event"
 msgstr "Umožňuje zkopírovat libovolný prvek přímo z jiné události"
 
@@ -7963,6 +7984,9 @@ msgstr "Platbu můžete provést <a href='%(url)s'>na této stránce</a>"
 
 msgid "You have chosen the same option in more than one preference"
 msgstr "Stejnou možnost jste uvedli ve více než jedné preferenci"
+
+msgid "give it a name and fill in the character details, then save"
+msgstr "pojmenujte ji a vyplňte údaje o postavě a uložte ji"
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
@@ -8219,6 +8243,9 @@ msgstr "Nahrajte fotografii nebo sken dokladu totožnosti (PDF nebo obrázek)"
 
 msgid "Warning: there is already an approved member with the same name"
 msgstr "Upozornění: již existuje schválený člen se stejným jménem"
+
+msgid "You are now seeing the registration form as a participant would"
+msgstr "Nyní se vám zobrazí registrační formulář jako účastníkovi"
 
 msgid "You can also upload a second file with the registration options"
 msgstr "Můžete také nahrát druhý soubor s možnostmi registrace"
@@ -8702,6 +8729,11 @@ msgstr ""
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Můžete použít následující pole, která se vyplní automaticky"
+
+msgid "for example, ask for dietary requirements or emergency contact details"
+msgstr ""
+"například se zeptat na požadavky na stravu nebo kontaktní údaje pro případ "
+"nouze"
 
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
@@ -9602,6 +9634,13 @@ msgid ""
 msgstr ""
 "Pokud najdete takové tlačítko, můžete jej stisknout a provést další "
 "filtrování"
+
+msgid ""
+"Choose how participants will pay: bank transfer, PayPal, Stripe, or other "
+"options"
+msgstr ""
+"Zvolte, jak budou účastníci platit: bankovním převodem, přes PayPal, Stripe "
+"nebo jinými způsoby"
 
 msgid ""
 "Enables participants to request a refund (a money transfer from the "
@@ -10883,6 +10922,13 @@ msgstr ""
 "řádně zaregistrováni"
 
 msgid ""
+"Edit an existing registration and assign a character to the participant "
+"using the dropdown selection"
+msgstr ""
+"Upravit existující registraci a přiřadit účastníkovi postavu pomocí "
+"rozevíracího seznamu"
+
+msgid ""
 "Enables a 'campaign' style setup where multiple events share the same set of"
 " characters and factions"
 msgstr ""
@@ -11000,6 +11046,13 @@ msgid ""
 msgstr ""
 "Představuje nový způsob zobrazení minulých a nadcházejících událostí, "
 "inspirovaný oblíbenými rozvrženími streamovacích služeb"
+
+msgid ""
+"Select a ticket, fill in the required fields, and complete the registration "
+"to experience the full flow"
+msgstr ""
+"Vyberte si vstupenku, vyplňte požadovaná pole a dokončete registraci, abyste"
+" si mohli vychutnat celý průběh akce"
 
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "

@@ -5992,6 +5992,9 @@ msgstr "Stad och land där du är född"
 msgid "Confirmation of registration request"
 msgstr "Bekräftelse på begäran om registrering"
 
+msgid "Create a character by clicking 'New'"
+msgstr "Skapa en karaktär genom att klicka på \"Ny"
+
 msgid "Error processing payment, contact us"
 msgstr "Fel vid betalning, kontakta oss"
 
@@ -6229,8 +6232,14 @@ msgstr "Observera att skattekoden inte stämmer överens"
 msgid "Charge transaction fees to participant"
 msgstr "Ta ut transaktionsavgifter av deltagaren"
 
+msgid "Click 'New' to create your first event"
+msgstr "Klicka på \"Ny\" för att skapa ditt första evenemang"
+
 msgid "Color used to highlight important text"
 msgstr "Färg används för att markera viktig text"
+
+msgid "Create a ticket type by clicking 'New'"
+msgstr "Skapa en ärendetyp genom att klicka på \"Ny"
 
 msgid "Fill in your character's relationships"
 msgstr "Fyll i din karaktärs relationer"
@@ -6286,6 +6295,9 @@ msgstr "Du måste ha betalat medlemsavgiften för att få rösta"
 
 msgid "click on the icon to open the tutorial"
 msgstr "klicka på ikonen för att öppna handledningen"
+
+msgid "configure at least one method and save"
+msgstr "konfigurera minst en metod och spara"
 
 msgid "we'll let you know as soon as possible"
 msgstr "vi meddelar dig så snart som möjligt"
@@ -7380,6 +7392,9 @@ msgstr "Korta guider som hjälper dig att lära dig hur systemet fungerar"
 msgid "This page shows all inflows received for this event"
 msgstr "Denna sida visar alla inflöden som mottagits för detta evenemang"
 
+msgid "set the name, price, and availability, then save it"
+msgstr "ange namn, pris och tillgänglighet och spara sedan"
+
 msgid "use high-quality wide images for best visual impact"
 msgstr "använd breda bilder av hög kvalitet för bästa visuella effekt"
 
@@ -7565,6 +7580,9 @@ msgstr "Du har begåvats med ett inträde till detta evenemang, av"
 
 msgid "You have granted data sharing with this organisation!"
 msgstr "Du har beviljat datadelning med denna organisation!"
+
+msgid "fill in the name, dates, and basic details, then save"
+msgstr "fyll i namn, datum och grundläggande uppgifter och spara sedan"
 
 msgid "(Optional) Prerequisite ability names, comma-separated"
 msgstr "(Valfritt) Namn på förkunskapskrav, kommaseparerade"
@@ -7842,6 +7860,10 @@ msgstr "Ditt event '%(event_name)s' har skapats framgångsrikt"
 msgid "once approved, the corresponding amounts are assigned as "
 msgstr "när de har godkänts, tilldelas motsvarande belopp som"
 
+msgid "Add a question to your registration form by clicking 'New'"
+msgstr ""
+"Lägg till en fråga i ditt registreringsformulär genom att klicka på \"Ny"
+
 msgid "Allows you to copy any element directly from another event"
 msgstr "Gör det möjligt att kopiera ett element direkt från en annan händelse"
 
@@ -7963,6 +7985,9 @@ msgstr "Du kan göra betalningen <a href='%(url)s'>på den här sidan</a>"
 
 msgid "You have chosen the same option in more than one preference"
 msgstr "Du har angett samma alternativ i mer än en preferens"
+
+msgid "give it a name and fill in the character details, then save"
+msgstr "ge den ett namn och fyll i karaktärsuppgifterna, spara sedan"
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
@@ -8239,6 +8264,9 @@ msgstr ""
 
 msgid "Warning: there is already an approved member with the same name"
 msgstr "Varning: det finns redan en godkänd medlem med samma namn"
+
+msgid "You are now seeing the registration form as a participant would"
+msgstr "Du ser nu registreringsformuläret som en deltagare skulle"
 
 msgid "You can also upload a second file with the registration options"
 msgstr "Du kan också ladda upp en andra fil med registreringsalternativen"
@@ -8748,6 +8776,9 @@ msgstr ""
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Du kan använda följande fält, de kommer att fyllas i automatiskt"
+
+msgid "for example, ask for dietary requirements or emergency contact details"
+msgstr "till exempel be om dietkrav eller kontaktuppgifter i nödsituationer"
 
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
@@ -9684,6 +9715,13 @@ msgid ""
 msgstr ""
 "Om du hittar en knapp som denna kan du trycka på den för att utföra "
 "ytterligare filtrering"
+
+msgid ""
+"Choose how participants will pay: bank transfer, PayPal, Stripe, or other "
+"options"
+msgstr ""
+"Välj hur deltagarna ska betala: banköverföring, PayPal, Stripe eller andra "
+"alternativ"
 
 msgid ""
 "Enables participants to request a refund (a money transfer from the "
@@ -11008,6 +11046,13 @@ msgstr ""
 "kommer då att vara vederbörligen registrerad"
 
 msgid ""
+"Edit an existing registration and assign a character to the participant "
+"using the dropdown selection"
+msgstr ""
+"Redigera en befintlig registrering och tilldela deltagaren en karaktär med "
+"hjälp av rullgardinsmenyn"
+
+msgid ""
 "Enables a 'campaign' style setup where multiple events share the same set of"
 " characters and factions"
 msgstr ""
@@ -11126,6 +11171,13 @@ msgid ""
 msgstr ""
 "Introducerar ett nytt sätt att visa tidigare och kommande evenemang, "
 "inspirerat av populära layouter för streamingtjänster"
+
+msgid ""
+"Select a ticket, fill in the required fields, and complete the registration "
+"to experience the full flow"
+msgstr ""
+"Välj en biljett, fyll i de obligatoriska fälten och slutför registreringen "
+"för att uppleva hela flödet"
 
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "

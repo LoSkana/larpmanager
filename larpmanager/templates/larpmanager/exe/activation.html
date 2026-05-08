@@ -64,7 +64,7 @@
                     </td>
                     <td>
                         {% if not item.done %}
-                            <a href="{{ item.url }}">{% trans "Go" %}</a>
+                            <a href="{% url 'exe_activation' %}?slug={{ item.slug }}">{% trans "Go" %}</a>
                         {% endif %}
                     </td>
                 </tr>
