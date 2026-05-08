@@ -10307,7 +10307,21 @@ msgstr ""
 msgid "Event creation"
 msgstr ""
 
+msgid "Click 'New' to create your first event"
+msgstr ""
+
+msgid "fill in the name, dates, and basic details, then save"
+msgstr ""
+
 msgid "Configure at least one payment method for participants"
+msgstr ""
+
+msgid ""
+"Choose how participants will pay: bank transfer, PayPal, Stripe, or other "
+"options"
+msgstr ""
+
+msgid "configure at least one method and save"
 msgstr ""
 
 msgid "Registration tickets"
@@ -10316,7 +10330,19 @@ msgstr ""
 msgid "Create at least one ticket type for event registrations"
 msgstr ""
 
+msgid "Create a ticket type by clicking 'New'"
+msgstr ""
+
+msgid "set the name, price, and availability, then save it"
+msgstr ""
+
 msgid "Define at least one question in the registration form"
+msgstr ""
+
+msgid "Add a question to your registration form by clicking 'New'"
+msgstr ""
+
+msgid "for example, ask for dietary requirements or emergency contact details"
 msgstr ""
 
 msgid "First registration"
@@ -10325,16 +10351,35 @@ msgstr ""
 msgid "Have at least one participant registered for an event"
 msgstr ""
 
+msgid "You are now seeing the registration form as a participant would"
+msgstr ""
+
+msgid ""
+"Select a ticket, fill in the required fields, and complete the registration "
+"to experience the full flow"
+msgstr ""
+
 msgid "First character"
 msgstr ""
 
 msgid "Create at least one character for one of your events"
 msgstr ""
 
+msgid "Create a character by clicking 'New'"
+msgstr ""
+
+msgid "give it a name and fill in the character details, then save"
+msgstr ""
+
 msgid "First assignment"
 msgstr ""
 
 msgid "Assign a character to a registered participant"
+msgstr ""
+
+msgid ""
+"Edit an existing registration and assign a character to the participant "
+"using the dropdown selection"
 msgstr ""
 
 msgid "Are you sure? The items might be not recoverable"

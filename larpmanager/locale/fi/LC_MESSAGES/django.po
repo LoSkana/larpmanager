@@ -5992,6 +5992,9 @@ msgstr "Syntymäpaikkakunta ja -maa"
 msgid "Confirmation of registration request"
 msgstr "Ilmoittautumispyynnön vahvistus"
 
+msgid "Create a character by clicking 'New'"
+msgstr "Luo hahmo klikkaamalla 'Uusi'"
+
 msgid "Error processing payment, contact us"
 msgstr "Virhe maksun käsittelyssä, ota yhteyttä"
 
@@ -6227,8 +6230,14 @@ msgstr "Huomio, verolainsäädäntö ei vastaa"
 msgid "Charge transaction fees to participant"
 msgstr "veloittaa osallistujalta transaktiomaksuja"
 
+msgid "Click 'New' to create your first event"
+msgstr "Klikkaa 'Uusi' luodaksesi ensimmäisen tapahtuman"
+
 msgid "Color used to highlight important text"
 msgstr "Tärkeän tekstin korostamiseen käytetty väri"
+
+msgid "Create a ticket type by clicking 'New'"
+msgstr "Luo lipputyyppi klikkaamalla 'Uusi'"
 
 msgid "Fill in your character's relationships"
 msgstr "Täytä hahmosi suhteet"
@@ -6284,6 +6293,9 @@ msgstr "Sinun on maksettava jäsenmaksusi, jotta voit äänestää"
 
 msgid "click on the icon to open the tutorial"
 msgstr "klikkaa kuvaketta avataksesi opetusohjelman"
+
+msgid "configure at least one method and save"
+msgstr "määrittää vähintään yhden menetelmän ja tallentaa"
 
 msgid "we'll let you know as soon as possible"
 msgstr "ilmoitamme sinulle mahdollisimman pian"
@@ -7382,6 +7394,9 @@ msgid "This page shows all inflows received for this event"
 msgstr ""
 "Tällä sivulla näkyvät kaikki tämän tapahtuman yhteydessä saadut tulovirrat"
 
+msgid "set the name, price, and availability, then save it"
+msgstr "aseta nimi, hinta ja saatavuus ja tallenna se sitten"
+
 msgid "use high-quality wide images for best visual impact"
 msgstr ""
 "Käytä korkealaatuisia laajakuvia parhaan visuaalisen vaikutuksen "
@@ -7572,6 +7587,9 @@ msgstr ""
 
 msgid "You have granted data sharing with this organisation!"
 msgstr "Olet antanut luvan tietojen jakamiseen tämän organisaation kanssa!"
+
+msgid "fill in the name, dates, and basic details, then save"
+msgstr "täytä nimi, päivämäärät ja perustiedot ja tallenna sitten"
 
 msgid "(Optional) Prerequisite ability names, comma-separated"
 msgstr "(Valinnainen) Edellytettyjen kykyjen nimet pilkulla eroteltuina"
@@ -7850,6 +7868,9 @@ msgstr "Tapahtumasi '%(event_name)s' on luotu onnistuneesti"
 msgid "once approved, the corresponding amounts are assigned as "
 msgstr "kun ne on hyväksytty, vastaavat määrät osoitetaan seuraavasti"
 
+msgid "Add a question to your registration form by clicking 'New'"
+msgstr "Lisää kysymys rekisteröintilomakkeeseen klikkaamalla 'Uusi'"
+
 msgid "Allows you to copy any element directly from another event"
 msgstr "Voit kopioida minkä tahansa elementin suoraan toisesta tapahtumasta"
 
@@ -7965,6 +7986,9 @@ msgstr "Voit suorittaa maksun <a href='%(url)s'>tältä sivulta</a>"
 msgid "You have chosen the same option in more than one preference"
 msgstr ""
 "Olet valinnut saman vaihtoehdon useammassa kuin yhdessä mieltymyksessä"
+
+msgid "give it a name and fill in the character details, then save"
+msgstr "anna sille nimi ja täytä hahmon tiedot ja tallenna sitten"
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
@@ -8243,6 +8267,9 @@ msgstr ""
 
 msgid "Warning: there is already an approved member with the same name"
 msgstr "Varoitus: on jo hyväksytty jäsen, jolla on sama nimi"
+
+msgid "You are now seeing the registration form as a participant would"
+msgstr "Näet nyt rekisteröintilomakkeen osallistujana"
 
 msgid "You can also upload a second file with the registration options"
 msgstr "Voit myös ladata toisen tiedoston ilmoittautumisvaihtoehtojen kanssa"
@@ -8753,6 +8780,10 @@ msgstr ""
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Voit käyttää seuraavia kenttiä, ne täytetään automaattisesti"
+
+msgid "for example, ask for dietary requirements or emergency contact details"
+msgstr ""
+"kysy esimerkiksi ruokavaliovaatimuksia tai hätätilanteen yhteystietoja"
 
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
@@ -9680,6 +9711,13 @@ msgid ""
 msgstr ""
 "Jos löydät tällaisen painikkeen, voit painaa sitä suodatuksen "
 "suorittamiseksi edelleen"
+
+msgid ""
+"Choose how participants will pay: bank transfer, PayPal, Stripe, or other "
+"options"
+msgstr ""
+"Valitse, miten osallistujat maksavat: pankkisiirto, PayPal, Stripe tai muut "
+"vaihtoehdot"
 
 msgid ""
 "Enables participants to request a refund (a money transfer from the "
@@ -10987,6 +11025,13 @@ msgstr ""
 "rekisteröidään asianmukaisesti"
 
 msgid ""
+"Edit an existing registration and assign a character to the participant "
+"using the dropdown selection"
+msgstr ""
+"Muokkaa olemassa olevaa rekisteröintiä ja määritä hahmo osallistujalle "
+"käyttämällä pudotusvalikkoa"
+
+msgid ""
 "Enables a 'campaign' style setup where multiple events share the same set of"
 " characters and factions"
 msgstr ""
@@ -11104,6 +11149,13 @@ msgid ""
 msgstr ""
 "Ottaa käyttöön uuden tavan näyttää aiemmat ja tulevat tapahtumat suosittujen"
 " suoratoistopalveluiden ulkoasujen innoittamana"
+
+msgid ""
+"Select a ticket, fill in the required fields, and complete the registration "
+"to experience the full flow"
+msgstr ""
+"Valitse lippu, täytä vaaditut kentät ja täytä rekisteröinti, jotta pääset "
+"kokemaan koko virtauksen"
 
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "

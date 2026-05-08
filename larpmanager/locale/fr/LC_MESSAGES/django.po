@@ -5996,6 +5996,9 @@ msgstr "Ville et pays de naissance"
 msgid "Confirmation of registration request"
 msgstr "Confirmation de la demande d'enregistrement"
 
+msgid "Create a character by clicking 'New'"
+msgstr "Crée un personnage en cliquant sur \"Nouveau"
+
 msgid "Error processing payment, contact us"
 msgstr "Erreur dans le traitement du paiement, contactez-nous"
 
@@ -6233,8 +6236,14 @@ msgstr "Attention, le code fiscal ne correspond pas"
 msgid "Charge transaction fees to participant"
 msgstr "Facturer des frais de transaction au participant"
 
+msgid "Click 'New' to create your first event"
+msgstr "Clique sur \"Nouveau\" pour créer ton premier événement"
+
 msgid "Color used to highlight important text"
 msgstr "Couleur utilisée pour mettre en évidence un texte important"
+
+msgid "Create a ticket type by clicking 'New'"
+msgstr "Crée un type de ticket en cliquant sur \"Nouveau"
 
 msgid "Fill in your character's relationships"
 msgstr "Complétez les relations de votre personnage"
@@ -6291,6 +6300,9 @@ msgstr ""
 
 msgid "click on the icon to open the tutorial"
 msgstr "cliquez sur l'icône pour ouvrir le tutoriel"
+
+msgid "configure at least one method and save"
+msgstr "configure au moins une méthode et enregistre"
 
 msgid "we'll let you know as soon as possible"
 msgstr "nous vous en informerons dès que possible"
@@ -7427,6 +7439,9 @@ msgstr ""
 msgid "This page shows all inflows received for this event"
 msgstr "Cette page présente tous les flux reçus pour cet événement"
 
+msgid "set the name, price, and availability, then save it"
+msgstr "Définis le nom, le prix et la disponibilité, puis enregistre-les"
+
 msgid "use high-quality wide images for best visual impact"
 msgstr ""
 "utiliser des images larges de haute qualité pour un meilleur impact visuel"
@@ -7626,6 +7641,9 @@ msgstr "Vous avez reçu une entrée pour cet événement, par"
 
 msgid "You have granted data sharing with this organisation!"
 msgstr "Vous avez autorisé le partage de données avec cette organisation !"
+
+msgid "fill in the name, dates, and basic details, then save"
+msgstr "Remplis le nom, les dates et les détails de base, puis enregistre"
 
 msgid "(Optional) Prerequisite ability names, comma-separated"
 msgstr "(Facultatif) Noms des capacités préalables, séparés par des virgules"
@@ -7940,6 +7958,11 @@ msgid "once approved, the corresponding amounts are assigned as "
 msgstr ""
 "une fois approuvés, les montants correspondants sont affectés comme suit"
 
+msgid "Add a question to your registration form by clicking 'New'"
+msgstr ""
+"Ajoute une question à ton formulaire d'inscription en cliquant sur "
+"\"Nouveau\""
+
 msgid "Allows you to copy any element directly from another event"
 msgstr ""
 "Permet de copier n'importe quel élément directement à partir d'un autre "
@@ -8077,6 +8100,10 @@ msgstr ""
 
 msgid "You have chosen the same option in more than one preference"
 msgstr "Vous avez indiqué la même option dans plus d'une préférence"
+
+msgid "give it a name and fill in the character details, then save"
+msgstr ""
+"Donne-lui un nom et remplis les détails du personnage, puis enregistre"
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
@@ -8395,6 +8422,11 @@ msgstr ""
 
 msgid "Warning: there is already an approved member with the same name"
 msgstr "Attention : il y a déjà un membre approuvé avec le même nom"
+
+msgid "You are now seeing the registration form as a participant would"
+msgstr ""
+"Tu vois maintenant le formulaire d'inscription comme le ferait un "
+"participant"
 
 msgid "You can also upload a second file with the registration options"
 msgstr ""
@@ -8981,6 +9013,11 @@ msgid "You can use the following fields, they will be filled in automatically"
 msgstr ""
 "Vous pouvez utiliser les champs suivants, ils seront remplis automatiquement"
 " "
+
+msgid "for example, ask for dietary requirements or emergency contact details"
+msgstr ""
+"Par exemple, demande des informations sur les régimes alimentaires ou les "
+"coordonnées des personnes à contacter en cas d'urgence"
 
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
@@ -9988,6 +10025,13 @@ msgid ""
 msgstr ""
 "Lorsque vous trouvez un bouton de ce type, vous pouvez appuyer dessus pour "
 "effectuer un filtrage supplémentaire"
+
+msgid ""
+"Choose how participants will pay: bank transfer, PayPal, Stripe, or other "
+"options"
+msgstr ""
+"Choisis le mode de paiement des participants : virement bancaire, PayPal, "
+"Stripe ou autres options"
 
 msgid ""
 "Enables participants to request a refund (a money transfer from the "
@@ -11323,6 +11367,13 @@ msgstr ""
 " et vous serez alors dûment inscrit(e)"
 
 msgid ""
+"Edit an existing registration and assign a character to the participant "
+"using the dropdown selection"
+msgstr ""
+"Modifie une inscription existante et attribue un personnage au participant à"
+" l'aide de la sélection déroulante"
+
+msgid ""
 "Enables a 'campaign' style setup where multiple events share the same set of"
 " characters and factions"
 msgstr ""
@@ -11443,6 +11494,13 @@ msgstr ""
 "Introduit une nouvelle façon d'afficher les événements passés et à venir, "
 "inspirée des mises en page des services de diffusion en continu les plus "
 "populaires"
+
+msgid ""
+"Select a ticket, fill in the required fields, and complete the registration "
+"to experience the full flow"
+msgstr ""
+"Choisis un billet, remplis les champs requis et complète l'inscription pour "
+"vivre l'expérience du flux complet"
 
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
