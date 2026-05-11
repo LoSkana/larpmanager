@@ -9,7 +9,7 @@
 {% endblock meta %}
 {% block content %}
     {% include "elements/member/my_hub.html" %}
-    {{ texts.join_content }}
+    {{ texts.join_content | safe }}
     <form action="{{ request.path }}"
           enctype="multipart/form-data"
           method="post">
