@@ -2273,6 +2273,9 @@ msgstr "Bewerten Sie"
 msgid "Instructions"
 msgstr "Anweisungen"
 
+msgid "Interval (s)"
+msgstr "Intervall (s)"
+
 msgid "Legal Gender"
 msgstr "Rechtliches Geschlecht"
 
@@ -6468,6 +6471,9 @@ msgstr "Ein Zeichen mehr oder weniger als erwartet"
 
 msgid "Payment currently in review by the staff"
 msgstr "Die Zahlung wird derzeit von den Mitarbeitern geprüft"
+
+msgid "Seconds to wait between each email batch"
+msgstr "Sekunden, die zwischen jedem E-Mail-Stapel gewartet werden"
 
 msgid "Set casting options in the configuration"
 msgstr "Casting-Optionen in der Konfiguration einstellen"

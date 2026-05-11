@@ -2273,6 +2273,9 @@ msgstr "Pris"
 msgid "Instructions"
 msgstr "Instruksjoner"
 
+msgid "Interval (s)"
+msgstr "Intervall (s)"
+
 msgid "Legal Gender"
 msgstr "Juridisk kjønn"
 
@@ -6463,6 +6466,9 @@ msgstr "Ett tegn mer eller mindre enn forventet"
 
 msgid "Payment currently in review by the staff"
 msgstr "Betalingen er for tiden til vurdering hos de ansatte"
+
+msgid "Seconds to wait between each email batch"
+msgstr "Sekunder å vente mellom hver e-postbatch"
 
 msgid "Set casting options in the configuration"
 msgstr "Angi støpealternativer i konfigurasjonen"

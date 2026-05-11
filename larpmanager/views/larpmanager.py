@@ -45,7 +45,7 @@ from larpmanager.cache.feature import get_association_features, get_event_featur
 from larpmanager.cache.larpmanager import get_blog_content_with_images, get_cache_lm_home, get_larpmanager_texts
 from larpmanager.forms.association import FirstAssociationForm
 from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicketForm
-from larpmanager.forms.miscellanea import SendMailForm
+from larpmanager.forms.miscellanea import LmSendMailForm
 from larpmanager.forms.utils import RedirectForm
 from larpmanager.mail.base import join_email
 from larpmanager.mail.digest import send_daily_organizer_summaries
@@ -1014,16 +1014,17 @@ def lm_send(request: HttpRequest) -> Any:
     """
     context = check_lm_admin(request)
     if request.method == "POST":
-        form = SendMailForm(request.POST)
+        form = LmSendMailForm(request.POST)
         if form.is_valid():
             players = request.POST["players"]
             subj = request.POST["subject"]
             body = request.POST["body"]
-            send_mail_exec(players, subj, body)
+            interval = int(request.POST.get("interval", 1))
+            send_mail_exec(players, subj, body, interval=interval)
             messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
-        form = SendMailForm()
+        form = LmSendMailForm()
     context["form"] = form
     return render(request, "larpmanager/exe/users/send_mail.html", context)
 

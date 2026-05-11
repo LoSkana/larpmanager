@@ -2273,6 +2273,9 @@ msgstr "Raty"
 msgid "Instructions"
 msgstr "Instrukcje"
 
+msgid "Interval (s)"
+msgstr "Interwał (s)"
+
 msgid "Legal Gender"
 msgstr "Płeć prawna"
 
@@ -6461,6 +6464,9 @@ msgstr "Jeden znak więcej lub mniej niż oczekiwano"
 
 msgid "Payment currently in review by the staff"
 msgstr "Płatność jest obecnie analizowana przez personel"
+
+msgid "Seconds to wait between each email batch"
+msgstr "Sekundy oczekiwania między poszczególnymi partiami wiadomości e-mail"
 
 msgid "Set casting options in the configuration"
 msgstr "Ustaw opcje odlewania w konfiguracji"
