@@ -18,13 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from typing import Any, ClassVar
+from typing import ClassVar
 
 from django.contrib import admin
-from tinymce.models import HTMLField
 
 from larpmanager.admin.base import CSRFTinyMCEModelAdmin, DefModelAdmin
-from larpmanager.forms.utils import InlineTinyMCE
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
@@ -154,13 +152,6 @@ class LarpManagerTextAdmin(CSRFTinyMCEModelAdmin):
 
     list_display = ("name", "value_red")
     search_fields: ClassVar[list] = ["name", "value"]
-
-    def formfield_for_dbfield(self, db_field: Any, request: Any, **kwargs: Any) -> Any:
-        """Use InlineTinyMCE for the value field to avoid automatic <p> wrapping."""
-        if isinstance(db_field, HTMLField) and db_field.name == "value":
-            kwargs["widget"] = InlineTinyMCE()
-            return db_field.formfield(**kwargs)
-        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     @staticmethod
     def value_red(instance: LarpManagerText) -> str:
