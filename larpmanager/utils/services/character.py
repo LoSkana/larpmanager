@@ -683,5 +683,7 @@ def check_missing_mandatory(context: dict) -> None:
 
 def _get_character_cache_id(context: dict) -> int:
     """Get id of loaded character in context."""
+    if "char" not in context:
+        return context["character"].id
     character_number = context["char"]["number"]
     return context["char_mapping"][character_number]
