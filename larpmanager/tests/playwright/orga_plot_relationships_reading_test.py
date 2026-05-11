@@ -135,7 +135,7 @@ def relationships(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("prova")
-    page.get_by_role("combobox").click()
+    page.locator("#select2-new_rel_select-container").click()
     searchbox = page.get_by_role("searchbox")
     searchbox.fill("tes")
     # Wait for the option to appear and click it
