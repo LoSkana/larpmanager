@@ -28,6 +28,7 @@ from typing import TYPE_CHECKING, Any
 
 from background_task import background
 from django.conf import settings as conf_settings
+from django.core import signing
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import EmailMultiAlternatives
@@ -296,7 +297,9 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
 
             # Append unsubscribe footer
             association = Association.objects.get(pk=email_content.association_id)
-            body += add_unsubscribe_body(association)
+            body += add_unsubscribe_body(association, email_recipient.recipient)
+        else:
+            body += add_unsubscribe_body(None, email_recipient.recipient)
 
         my_send_simple_mail(
             email_content.subj,
@@ -478,10 +481,16 @@ def _build_email_message(subj: str, body: str, m_email: str, metadata: dict) -> 
     return message
 
 
-def add_unsubscribe_body(association: Any) -> Any:
-    """Add unsubscribe footer to email body."""
+def add_unsubscribe_body(association: Any, recipient_email: str = "") -> str:
+    """Add unsubscribe footer to email body with a signed token link."""
+    token_data: dict[str, Any] = {"email": recipient_email}
+    if association:
+        token_data["association_slug"] = association.slug
+    token = signing.dumps(token_data, salt="unsubscribe")
+    base_url = get_url("unsubscribe", association)
+    unsubscribe_url = f"{base_url}?token={token}"
     html_footer = "<br /><br />-<br />"
-    html_footer += f"<a href='{get_url('unsubscribe', association)}'>Unsubscribe</a>"
+    html_footer += f"<a href='{unsubscribe_url}'>Unsubscribe</a>"
     return html_footer
 
 

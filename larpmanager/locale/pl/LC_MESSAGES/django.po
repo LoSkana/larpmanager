@@ -2165,6 +2165,9 @@ msgstr "Nieistotne"
 msgid "Unique code"
 msgstr "Unikalny kod"
 
+msgid "Unsubscribe"
+msgstr "Zrezygnuj z subskrypcji"
+
 msgid "Where it is"
 msgstr "Gdzie to jest"
 
@@ -3831,6 +3834,9 @@ msgstr "Przypisane postacie"
 
 msgid "Characters shortcut"
 msgstr "Skrót znaków"
+
+msgid "Confirm Unsubscribe"
+msgstr "Potwierdź rezygnację z subskrypcji"
 
 msgid "Confirmation delete"
 msgstr "Usunięcie potwierdzenia"
@@ -5908,6 +5914,9 @@ msgstr "Wstaw kod html dla stopki"
 msgid "Insert the html code for the header"
 msgstr "Wstaw kod html nagłówka"
 
+msgid "Invalid or expired unsubscribe link"
+msgstr "Nieprawidłowy lub wygasły link rezygnacji z subskrypcji"
+
 msgid "Manage date settings for this event"
 msgstr "Zarządzanie ustawieniami daty dla tego wydarzenia"
 
@@ -6386,6 +6395,9 @@ msgstr "Przeprowadzanie kontroli przydziałów magazynowych"
 msgid "Photos and videos successfully uploaded"
 msgstr "Zdjęcia i filmy zostały pomyślnie przesłane"
 
+msgid "Please use the link from a recent email"
+msgstr "Użyj linku z ostatniej wiadomości e-mail"
+
 #, python-format
 msgid "Registration cancellation for %(event)s"
 msgstr "Anulowanie rejestracji na %(event)s"
@@ -6488,6 +6500,9 @@ msgstr "Ta strona pokazuje zapisy na wydarzenie"
 
 msgid "This page shows the warehouse containers"
 msgstr "Ta strona przedstawia pojemniki magazynowe"
+
+msgid "This unsubscribe link is no longer valid"
+msgstr "Ten link do anulowania subskrypcji jest już nieaktualny"
 
 msgid "Value must be greater than or equal to 0"
 msgstr "Wartość musi być większa lub równa 0"
@@ -6819,6 +6834,9 @@ msgstr "Prześlij plik PDF lub obraz (JPG, PNG itp.)"
 
 msgid "Warehouse quantities committed successfully"
 msgstr "Rejestracja zakończona pomyślnie"
+
+msgid "You will no longer receive messages from us"
+msgstr "Nie będziesz już otrzymywać od nas wiadomości"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Twoja podarowana rejestracja została zrealizowana!"
@@ -7806,6 +7824,12 @@ msgstr ""
 "Na tej stronie wyświetlane są wszystkie pozycje wydatków zarejestrowane w "
 "systemie"
 
+msgid "This will remove you from this organization's newsletter"
+msgstr "Spowoduje to usunięcie Cię z newslettera tej organizacji"
+
+msgid "To stop receiving them, please cancel your registrations"
+msgstr "Aby przestać je otrzymywać, anuluj swoje rejestracje"
+
 msgid "Warning: Neither tokens nor credits features are enabled"
 msgstr "Ostrzeżenie: Funkcje tokenów i kredytów nie są włączone"
 
@@ -7944,12 +7968,18 @@ msgstr ""
 "Na tej stronie wyświetlane są wszystkie pozycje płatności zarejestrowane w "
 "systemie"
 
+msgid "To stop those, you would need to cancel your registrations"
+msgstr "Aby je zatrzymać, musisz anulować swoje rejestracje"
+
 #, python-format
 msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>"
 msgstr "Suma opłaty rejestracyjnej: <b>%(amount).2f %(currency)s</b>"
 
 msgid "Unique membership card number assigned by the organization"
 msgstr "Unikalny numer karty członkowskiej przypisany przez organizację"
+
+msgid "You have been unsubscribed from LarpManager communications"
+msgstr "Zostałeś wypisany z subskrypcji wiadomości LarpManager"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Przekroczono maksymalną liczbę opcji do wyboru"
@@ -8224,6 +8254,9 @@ msgid "You can give a preference to play it, as with other characters"
 msgstr ""
 "Podobnie jak w przypadku innych postaci, możesz dać jej preferencje do gry"
 
+msgid "You have been unsubscribed from this organization's newsletter"
+msgstr "Wypisano Cię z subskrypcji biuletynu tej organizacji"
+
 msgid "You must complete payment of membership dues in order to vote!"
 msgstr "Aby móc głosować, należy opłacić składki członkowskie!"
 
@@ -8308,6 +8341,11 @@ msgstr ""
 msgid "You will receive confirmation of the outcome of its  evaluation"
 msgstr "Otrzymasz potwierdzenie wyniku jego oceny"
 
+#, python-format
+msgid "Are you sure you want to unsubscribe <strong>%(email)s</strong>?"
+msgstr ""
+"Czy na pewno chcesz zrezygnować z subskrypcji <strong>%(email)s</strong>?"
+
 msgid "Content of mail reminding participants to pay the membership fee"
 msgstr ""
 "Treść wiadomości przypominającej uczestnikom o uiszczeniu opłaty "
@@ -8366,6 +8404,9 @@ msgstr ""
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
 "Przesyłany strumieniowo plik wideo lub audio (zalecane: MP4, WebM, MP3)"
+
+msgid "You still have active event registrations with this organization"
+msgstr "Użytkownik wyraził zgodę na udostępnianie danych tej organizacji"
 
 msgid "Your request will be considered at the next meeting of the Board"
 msgstr "Twój wniosek zostanie rozpatrzony na następnym posiedzeniu Zarządu"
@@ -8814,6 +8855,11 @@ msgstr "Ta strona podsumowuje reguły stosowane do obliczanych pól"
 msgid "This page summarizes the types of pools that a character inventory has"
 msgstr "Ta strona podsumowuje rodzaje pul, które posiada ekwipunek postaci"
 
+msgid "This will unsubscribe you from all LarpManager platform communications"
+msgstr ""
+"Spowoduje to wypisanie Cię z subskrypcji wszystkich wiadomości platformy "
+"LarpManager"
+
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 "Wyświetlanie szczegółowego dziennika aktywności wszystkich zmian "
@@ -8903,11 +8949,6 @@ msgstr ""
 msgid ""
 "Select a valid choice. That choice is not one of the available choices."
 msgstr "Wybierz prawidłowy wybór. Ten wybór nie jest jednym z dostępnych."
-
-msgid ""
-"The request of removal from further communication has been successfull!"
-msgstr ""
-"Wniosek o usunięcie z dalszej komunikacji został rozpatrzony pozytywnie!"
 
 msgid ""
 "This character represents the true secret identity of another character"
@@ -9215,6 +9256,10 @@ msgid ""
 "You must create at least one prologue type before you can create prologues"
 msgstr ""
 "Przed utworzeniem prologów należy utworzyć co najmniej jeden typ prologu"
+
+msgid ""
+"You will continue to receive communications related to those registrations"
+msgstr "Będziesz nadal otrzymywać wiadomości związane z tymi rejestracjami"
 
 msgid ""
 "(Optional) The character names to assign to the player, separated by commas"
@@ -11419,6 +11464,13 @@ msgid ""
 msgstr ""
 "Jeśli jest obecny, wskazuje powód płatności, który uczestnik musi umieścić "
 "na dokonywanych przez siebie płatnościach."
+
+msgid ""
+"If you have active event registrations, you will still receive "
+"communications related to those registrations"
+msgstr ""
+"Jeśli masz aktywne rejestracje na wydarzenia, nadal będziesz otrzymywać "
+"wiadomości związane z tymi rejestracjami"
 
 msgid ""
 "Note that existing registrations with the same participant email, will be "

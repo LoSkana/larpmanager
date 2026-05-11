@@ -2165,6 +2165,9 @@ msgstr "Uviktig"
 msgid "Unique code"
 msgstr "Unik kode"
 
+msgid "Unsubscribe"
+msgstr "Avslutt abonnementet"
+
 msgid "Where it is"
 msgstr "Hvor det er"
 
@@ -3831,6 +3834,9 @@ msgstr "Tildelte tegn"
 
 msgid "Characters shortcut"
 msgstr "Snarvei for tegn"
+
+msgid "Confirm Unsubscribe"
+msgstr "Bekreft avmelding"
 
 msgid "Confirmation delete"
 msgstr "Bekreftelse på sletting"
@@ -5908,6 +5914,9 @@ msgstr "Skriv inn html-koden som bunnteksten skal fylles med"
 msgid "Insert the html code for the header"
 msgstr "Skriv inn html-koden som overskriften skal fylles med"
 
+msgid "Invalid or expired unsubscribe link"
+msgstr "Ugyldig eller utløpt avmeldingslenke"
+
 msgid "Manage date settings for this event"
 msgstr "Administrer datoinnstillinger for dette arrangementet"
 
@@ -6388,6 +6397,9 @@ msgstr "Utføre kontroller av lageroppdrag"
 msgid "Photos and videos successfully uploaded"
 msgstr "Bilder og videoer er lastet opp"
 
+msgid "Please use the link from a recent email"
+msgstr "Vennligst bruk lenken fra en nylig sendt e-post"
+
 #, python-format
 msgid "Registration cancellation for %(event)s"
 msgstr "Avslutte abonnementet på %(event)s"
@@ -6490,6 +6502,9 @@ msgstr "Denne siden viser påmeldingene til arrangementet"
 
 msgid "This page shows the warehouse containers"
 msgstr "Denne siden viser lagercontainerne"
+
+msgid "This unsubscribe link is no longer valid"
+msgstr "Denne avmeldingslenken er ikke lenger gyldig"
 
 msgid "Value must be greater than or equal to 0"
 msgstr "Verdien må være større enn eller lik 0"
@@ -6822,6 +6837,9 @@ msgstr "Last opp en PDF-fil eller et bilde (JPG, PNG osv.)"
 
 msgid "Warehouse quantities committed successfully"
 msgstr "Registreringen er fullført"
+
+msgid "You will no longer receive messages from us"
+msgstr "Du vil ikke lenger motta meldinger fra oss"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Din begavede registrering har blitt innløst!"
@@ -7797,6 +7815,12 @@ msgstr "Gå gjennom deltakernes kostholdsrestriksjoner og allergier."
 msgid "This page shows all expense items recorded in the system"
 msgstr "Denne siden viser alle utgiftsposter som er registrert i systemet"
 
+msgid "This will remove you from this organization's newsletter"
+msgstr "Dette vil fjerne deg fra denne organisasjonens nyhetsbrev"
+
+msgid "To stop receiving them, please cancel your registrations"
+msgstr "For å slutte å motta dem, vennligst kanseller registreringene dine"
+
 msgid "Warning: Neither tokens nor credits features are enabled"
 msgstr "Advarsel: Verken tokens- eller kredittfunksjoner er aktivert"
 
@@ -7926,12 +7950,18 @@ msgstr "Sannsynlighet for å vise spesialsiden (av tusen)"
 msgid "This page shows all payment items registered in the system"
 msgstr "Denne siden viser alle betalingsposter som er registrert i systemet"
 
+msgid "To stop those, you would need to cancel your registrations"
+msgstr "For å stoppe disse, må du kansellere registreringene dine"
+
 #, python-format
 msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>"
 msgstr "Summen av oppføringen din: <b>%(amount).2f %(currency)s</b>"
 
 msgid "Unique membership card number assigned by the organization"
 msgstr "Unikt medlemskortnummer tildelt av organisasjonen"
+
+msgid "You have been unsubscribed from LarpManager communications"
+msgstr "Du har blitt avmeldt fra LarpManager-kommunikasjon"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Du har overskredet det maksimale antallet valgbare alternativer"
@@ -8200,6 +8230,9 @@ msgstr "Vi ber deg om å betale det beløpet vi ber om for neste avdrag"
 msgid "You can give a preference to play it, as with other characters"
 msgstr "Du kan gi en preferanse for å spille det, som med andre tegn"
 
+msgid "You have been unsubscribed from this organization's newsletter"
+msgstr "Du har blitt avregistrert fra denne organisasjonens nyhetsbrev"
+
 msgid "You must complete payment of membership dues in order to vote!"
 msgstr "Du må fullføre betalingen av medlemskontingenten for å kunne stemme!"
 
@@ -8289,6 +8322,12 @@ msgstr "Du må opprette minst ett oppdrag før du kan opprette egenskaper"
 msgid "You will receive confirmation of the outcome of its  evaluation"
 msgstr "Du vil motta en bekreftelse på resultatet av evalueringen"
 
+#, python-format
+msgid "Are you sure you want to unsubscribe <strong>%(email)s</strong>?"
+msgstr ""
+"Er du sikker på at du vil avslutte abonnementet på "
+"<strong>%(email)s</strong>?"
+
 msgid "Content of mail reminding participants to pay the membership fee"
 msgstr "Innholdet i påminnelsen om å betale medlemsavgiften"
 
@@ -8340,6 +8379,9 @@ msgstr "Bruk informasjonen nedenfor for å be om overføring fra banken din"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr "Video- eller lydfil som skal strømmes (anbefalt: MP4, WebM, MP3)"
+
+msgid "You still have active event registrations with this organization"
+msgstr "Du har gitt tillatelse til datadeling med denne organisasjonen"
 
 msgid "Your request will be considered at the next meeting of the Board"
 msgstr "Din forespørsel vil bli behandlet på neste styremøte"
@@ -8772,6 +8814,10 @@ msgid "This page summarizes the types of pools that a character inventory has"
 msgstr ""
 "Denne siden oppsummerer hvilke typer bassenger et karakterinventar har"
 
+msgid "This will unsubscribe you from all LarpManager platform communications"
+msgstr ""
+"Dette vil avmelde deg fra all kommunikasjon fra LarpManager-plattformen"
+
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 "Se detaljert aktivitetslogg over alle endringer som er gjort for denne "
@@ -8861,11 +8907,6 @@ msgid ""
 "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 "Velg et gyldig valg. Dette valget er ikke et av de tilgjengelige valgene."
-
-msgid ""
-"The request of removal from further communication has been successfull!"
-msgstr ""
-"Forespørselen din om å avslutte abonnementet på kommunikasjon var vellykket."
 
 msgid ""
 "This character represents the true secret identity of another character"
@@ -9160,6 +9201,11 @@ msgstr ""
 msgid ""
 "You must create at least one prologue type before you can create prologues"
 msgstr "Du må opprette minst én prologtype før du kan opprette prologer"
+
+msgid ""
+"You will continue to receive communications related to those registrations"
+msgstr ""
+"Du vil fortsette å motta kommunikasjon relatert til disse registreringene"
 
 msgid ""
 "(Optional) The character names to assign to the player, separated by commas"
@@ -11335,6 +11381,13 @@ msgid ""
 msgstr ""
 "Hvis den er til stede, angir den årsaken til betalingen som deltakeren må "
 "skrive på innbetalingene de gjør."
+
+msgid ""
+"If you have active event registrations, you will still receive "
+"communications related to those registrations"
+msgstr ""
+"Hvis du har aktive påmeldinger til arrangementer, vil du fortsatt motta "
+"kommunikasjon knyttet til disse påmeldingene"
 
 msgid ""
 "Note that existing registrations with the same participant email, will be "
