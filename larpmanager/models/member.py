@@ -146,8 +146,8 @@ class Member(UuidMixin, BaseModel):
         blank=True,
         null=True,
         help_text=_(
-            "If for whatever reason the first and last name shown on your documents is "
-            "different from the one you prefer to use, then write it here",
+            "If the first name shown on your documents is different from the one you prefer to use, then write "
+            "it here; otherwise leave this field empty",
         )
         + ". "
         + SENSITIVE_DISCLAIMER

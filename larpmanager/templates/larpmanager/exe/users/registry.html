@@ -27,7 +27,7 @@
             <tr>
                 <td>{{ el.membership.card_number }}</td>
                 <td>{{ el.surname }}</td>
-                <td>{{ el.name }}</td>
+                <td>{{ el.legal_name|default:el.name }}</td>
                 <td>{{ el.birth_place }}</td>
                 <td>{{ el.birth_date | date:"d/m/Y" }}</td>
                 <td>{{ el.get_residence }}</td>

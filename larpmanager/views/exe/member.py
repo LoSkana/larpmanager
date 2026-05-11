@@ -566,7 +566,6 @@ def exe_membership_registry(request: HttpRequest) -> HttpResponse:
     """
     # Check user permissions for accessing membership registry
     context = check_association_context(request, "exe_membership_registry")
-    split_two_names = 2
 
     # Initialize empty list for processed members
     context["list"] = []
@@ -578,18 +577,6 @@ def exe_membership_registry(request: HttpRequest) -> HttpResponse:
     for mb in que.select_related("member").order_by("card_number"):
         member = mb.member
         member.membership = mb
-
-        # Split legal name into first and last name components
-        if member.legal_name:
-            splitted = member.legal_name.rsplit(" ", 1)
-            if len(splitted) == split_two_names:
-                member.name, member.surname = splitted
-            else:
-                member.name = splitted[0]
-
-        # Capitalize name components for consistent formatting
-        member.name = member.name.capitalize()
-        member.surname = member.surname.capitalize()
 
         # Add processed member to context list
         context["list"].append(member)
@@ -721,7 +708,6 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_enrolment")
-    split_two_names = 2
 
     # Set current year and calculate year start date
     context["year"] = timezone.now().year
@@ -753,18 +739,6 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
         # Calculate enrollment order based on days from year start
         # Ensure both datetimes are timezone-aware for comparison
         member.order = (ensure_timezone_aware(member.last_enrolment) - start).days
-
-        # Parse and format member legal name if available
-        if member.legal_name:
-            splitted = member.legal_name.rsplit(" ", 1)
-            if len(splitted) == split_two_names:
-                member.name, member.surname = splitted
-            else:
-                member.name = splitted[0]
-
-        # Capitalize name components for display
-        member.name = member.name.capitalize()
-        member.surname = member.surname.capitalize()
 
         context["list"].append(member)
 
