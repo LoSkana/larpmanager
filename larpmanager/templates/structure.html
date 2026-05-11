@@ -177,6 +177,12 @@ window['icon_texts'] = {
             let url_tutorials = "{% url 'tutorials' %}";
         </script>
         {% include "elements/dashboard/modal.js.html" %}
+        {% if manage %}
+            <link rel="stylesheet"
+                  href="{% static 'admin/css/vendor/select2/select2.min.css' %}">
+            <script src="{% static 'admin/js/vendor/select2/select2.full.min.js' %}"></script>
+            {% include "elements/dashboard/wwyltd.js.html" %}
+        {% endif %}
         {% if association.id == 0 %}
             {% if google_tag %}
                 <!-- Google Tag Manager (noscript) -->

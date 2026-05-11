@@ -1,61 +1,70 @@
 {% load i18n static %}
 <script>
+window.addEventListener('DOMContentLoaded', function() {
+    var $sel = $('#id_wwyltd');
+    if (!$sel.length) return;
 
-// Auto-submit form when wwyltd select changes via AJAX and open in new tab
-$('#id_wwyltd').on('change', function() {
-    if (!this.value) {
-        return;
-    }
-
-    const $form = $(this).closest('form');
-    const formData = new FormData($form[0]);
-
-    // Add event_slug if available (for orga context)
     {% if run %}
-    formData.append('event_slug', '{{ run.get_slug }}');
-    {% endif %}
-
-    // Get AJAX URL
-    {% if run %}
-    const ajaxUrl = '{% url "wwyltd_ajax" run.get_slug %}';
+    var choicesUrl = '{% url "wwyltd_choices_ajax" run.get_slug %}';
+    var ajaxUrl    = '{% url "wwyltd_ajax" run.get_slug %}';
     {% else %}
-    const ajaxUrl = '{% url "wwyltd_ajax" %}';
+    var choicesUrl = '{% url "wwyltd_choices_ajax" %}';
+    var ajaxUrl    = '{% url "wwyltd_ajax" %}';
     {% endif %}
 
-    // Make AJAX POST request
-    $.ajax({
-        url: ajaxUrl,
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            if (response.success && response.url) {
-                // Open URL in new tab
-                window.open(response.url, '_blank');
+    var choicesLoaded = false;
 
-                // Reset select to placeholder
-                $('#id_wwyltd').val('').trigger('change');
-            } else {
-                console.error('Invalid response:', response);
-                if (!window.lmTesting) alert('{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}');
-            }
-        },
-        error: function(xhr) {
-            let errorMessage = '{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}';
+    $sel.select2({
+        placeholder: '{% filter escapejs %}{% trans "What would you like to do?" %}{% endfilter %}',
+        allowClear: false,
+    });
 
-            try {
-                const response = JSON.parse(xhr.responseText);
-                if (response.error) {
-                    errorMessage = response.error;
+    $sel.on('select2:opening', function(e) {
+        if (choicesLoaded) return;
+        e.preventDefault();
+        $.getJSON(choicesUrl, function(data) {
+            choicesLoaded = true;
+            data.results.forEach(function(item) {
+                $sel.append(new Option(item.text, item.id));
+            });
+            $sel.select2('open');
+        });
+    });
+
+    $sel.on('change', function() {
+        if (!this.value) return;
+
+        var $form = $(this).closest('form');
+        var formData = new FormData($form[0]);
+        {% if run %}
+        formData.append('event_slug', '{{ run.get_slug }}');
+        {% endif %}
+
+        $.ajax({
+            url: ajaxUrl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success && response.url) {
+                    window.open(response.url, '_blank');
+                    $sel.val(null).trigger('change');
+                } else {
+                    console.error('Invalid response:', response);
+                    if (!window.lmTesting) alert('{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}');
                 }
-            } catch (e) {
-                // Use default error message
-            }
-
-            console.error('AJAX error:', xhr);
-            if (!window.lmTesting) alert(errorMessage);
-        }
+            },
+            error: function(xhr) {
+                var msg = '{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}';
+                try {
+                    var r = JSON.parse(xhr.responseText);
+                    if (r.error) msg = r.error;
+                } catch(e) {}
+                console.error('AJAX error:', xhr);
+                if (!window.lmTesting) alert(msg);
+            },
+        });
     });
 });
 </script>

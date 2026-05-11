@@ -1815,4 +1815,9 @@ urlpatterns = [
         views_mg.wwyltd_ajax,
         name="wwyltd_ajax",
     ),
+    path(
+        "<slug:event_slug>/manage/wwyltd/choices/",
+        views_mg.wwyltd_choices_ajax,
+        name="wwyltd_choices_ajax",
+    ),
 ]

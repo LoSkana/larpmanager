@@ -17,7 +17,6 @@
     {% else %}
         <div id="manage">
             {% include "larpmanager/manage/sticky_messages.html" %}
-            {% include "larpmanager/manage/widgets/wwyltd.html" %}
             <div {% if effective_version >= 17 %}class="grid"{% else %}class="old_dashboard"{% endif %}>
                 {% include "larpmanager/manage/widgets/demo.html" %}
                 {% if effective_version < 17 %}
@@ -58,5 +57,4 @@
 {% block js %}
     {% include "elements/dashboard/tutorial_query.js" %}
     {% include "elements/dashboard/driver.js.html" %}
-    {% include "elements/dashboard/wwyltd.js.html" %}
 {% endblock js %}

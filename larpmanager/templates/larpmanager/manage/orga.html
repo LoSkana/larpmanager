@@ -5,13 +5,7 @@
 {% endblock title %}
 {% block content %}
     <div id="manage">
-        <div id="right_bar" class="info nav main_nav no_mobile">
-            <a href="{% url 'gallery' run.get_slug %}"
-               target="_blank"
-               qtip="User link"><i class="fa-solid fa-external-link-alt"></i> Event link</a>
-        </div>
         {% include "larpmanager/manage/sticky_messages.html" %}
-        {% include "larpmanager/manage/widgets/wwyltd.html" %}
         <div {% if effective_version >= 17 %}class="grid"{% else %}class="old_dashboard"{% endif %}>
             {% include "larpmanager/manage/widgets/demo.html" %}
             {% include "larpmanager/manage/widgets/orga_event.html" %}
@@ -60,7 +54,6 @@
 {% block js %}
     {% include "elements/dashboard/tutorial_query.js" %}
     {% include "elements/dashboard/driver.js.html" %}
-    {% include "elements/dashboard/wwyltd.js.html" %}
     <script>
     window.addEventListener('DOMContentLoaded', function() {
         $(document).ready(function() {

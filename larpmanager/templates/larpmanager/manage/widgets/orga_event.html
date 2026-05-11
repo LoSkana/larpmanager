@@ -8,6 +8,9 @@
             <th>{% trans "Name" %}</th>
             <td>
                 <b>{{ run }}</b>
+                <a href="{% url 'gallery' run.get_slug %}"
+                   target="_blank"
+                   qtip="User link"><i class="fa-solid fa-external-link-alt"></i></a>
             </td>
         </tr>
         {% if event.parent %}

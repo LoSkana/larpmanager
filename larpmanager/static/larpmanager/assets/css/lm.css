@@ -2125,15 +2125,58 @@ header.sec h1 {
   float: right;
 }
 
-#wwyltd {
-  width: 60%;
-  margin: 0 0 0 0.5em;
-  padding: 0.5em 0em;
+#topbar #wwyltd {
+  display: inline-block;
+  vertical-align: middle;
+  min-width: 240px;
+  width: 50%;
+  margin: 0 0 0 1.5em;
+  padding: 0;
   text-align: left;
 }
 
-#wwyltd .select2-selection__arrow {
+#topbar #wwyltd form {
+  margin: 0;
+}
+
+#topbar #wwyltd form select {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 2.1em !important;
+}
+
+#topbar #wwyltd .select2-selection--single {
+  height: 2em;
+  line-height: 2em;
+  padding: 0;
+  border-radius: 4px;
+}
+
+#topbar #wwyltd .select2-selection__rendered {
+  line-height: 2em;
+  padding: 0 0.5em 0 2.2em;
+}
+
+#topbar #wwyltd .select2-selection__arrow {
   display: none;
+}
+
+#topbar #wwyltd .select2-container {
+  position: relative;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+#topbar #wwyltd .select2-container::before {
+  content: "\f002";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #999;
 }
 
 #select2-id_wwyltd-container {
@@ -2149,36 +2192,9 @@ header.sec h1 {
   padding: 0.5em 1em;
 }
 
-#wwyltd form {
-  margin: 0;
-}
-
-#wwyltd form select {
-  width: 100% !important;
-}
-
-#wwyltd .select2-container {
-  position: relative;
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-#wwyltd .select2-container::before {
-  content: "\f002";
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: #999;
-}
-
-@media (max-width: 768px) {
-  #wwyltd {
-    width: 90%;
-    margin: 0 auto;
+@media (max-width: 840px) {
+  #topbar #wwyltd {
+    display: none;
   }
 }
 

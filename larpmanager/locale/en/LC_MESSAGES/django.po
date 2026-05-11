@@ -4960,6 +4960,9 @@ msgstr ""
 msgid "Closing"
 msgstr ""
 
+msgid "What would you like to do?"
+msgstr ""
+
 msgid "An error occurred"
 msgstr ""
 
@@ -10901,9 +10904,6 @@ msgid "Activate new event features"
 msgstr ""
 
 msgid "Configure event feature settings"
-msgstr ""
-
-msgid "What would you like to do?"
 msgstr ""
 
 msgid "Dashboard"
