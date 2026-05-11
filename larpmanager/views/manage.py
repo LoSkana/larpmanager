@@ -222,9 +222,6 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     context["exe_page"] = 1
     context["manage"] = 1
 
-    # Check what would you like form
-    what_would_you_like(context, request)
-
     # Get available features for this association
     features = get_association_features(context["association_id"])
 
@@ -519,9 +516,6 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["orga_page"] = 1
     context["manage"] = 1
     features = get_event_features(context["event"].id)
-
-    # Check what would you like form
-    what_would_you_like(context, request)
 
     # Ensure run dates are set
     if not context["run"].start or not context["run"].end:
@@ -1381,6 +1375,36 @@ def what_would_you_like(context: dict, request: HttpRequest) -> None:
 
     # Add form to template context
     context["form"] = form
+
+
+@login_required
+def wwyltd_choices_ajax(request: HttpRequest, event_slug: str = None) -> JsonResponse:
+    """AJAX endpoint that returns wwyltd choices for lazy Select2 loading.
+
+    Args:
+        request: HTTP request object
+        event_slug: Optional event slug (for event-specific context)
+
+    Returns:
+        JsonResponse: {"results": [{"id": "...", "text": "..."}, ...]}
+
+    """
+    context = get_context(request)
+    if event_slug:
+        context = get_event_context(request, event_slug)
+        get_index_event_permissions(request, context, event_slug)
+        context["orga_page"] = 1
+    else:
+        get_index_association_permissions(request, context, context["association_id"])
+        context["exe_page"] = 1
+
+    form = WhatWouldYouLikeForm(context=context)
+    results = [
+        {"id": value, "text": label}
+        for value, label in form.fields["wwyltd"].choices
+        if value
+    ]
+    return JsonResponse({"results": results})
 
 
 @login_required

@@ -1,8 +1,9 @@
-{% if not demo %}
+{% load i18n %}
+{% if manage and not demo %}
     <div id="wwyltd">
         <form method="post">
             {% csrf_token %}
-            {{ form.wwyltd }}
+            <select id="id_wwyltd" name="wwyltd"></select>
         </form>
     </div>
 {% endif %}
