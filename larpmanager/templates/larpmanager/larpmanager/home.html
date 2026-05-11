@@ -118,6 +118,40 @@
                 </li>
             </ul>
         </section>
+        {% if partners %}
+            <!-- Partners -->
+            <section id="partners">
+                <h5 class="centerized">{% trans "Partners" %}</h5>
+                <section id="partner-carousel" class="owl-carousel owl-theme">
+                    {% for el in partners %}
+                        <div class="item">
+                            {% if el.url %}
+                                <a href="{{ el.url }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="partner-carousel-item">
+                                {% else %}
+                                    <div class="partner-carousel-item">
+                                    {% endif %}
+                                    {% if el.profile_thumb_url %}
+                                        <img class="partner-icon"
+                                             src="{{ el.profile_thumb_url }}"
+                                             alt="{{ el.name }}">
+                                    {% endif %}
+                                    <div class="partner-info">
+                                        <span class="partner-name">{{ el.name }}</span>
+                                        {% if el.text %}<span class="partner-text">{{ el.text }}</span>{% endif %}
+                                    </div>
+                                    {% if el.url %}
+                                    </a>
+                                {% else %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </section>
+            </section>
+        {% endif %}
         <div class="row final">
             <div class="col-6 col-12-narrower">
                 <section class="box special">
@@ -258,6 +292,28 @@ window.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
+
+        if ($('#partner-carousel').length) {
+            $('#partner-carousel').owlCarousel({
+                loop: true,
+                margin: 20,
+                autoplay: true,
+                autoplayTimeout: 4000,
+                stagePadding: 0,
+                responsiveClass: true,
+                dots: false,
+                nav: true,
+                autoHeight: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    768: {
+                        items: 2
+                    }
+                }
+            });
+        }
 
     });
 

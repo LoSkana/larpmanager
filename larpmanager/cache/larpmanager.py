@@ -30,7 +30,13 @@ from django.db.models import Count
 from larpmanager.models.accounting import PaymentInvoice
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
-from larpmanager.models.larpmanager import LarpManagerHighlight, LarpManagerReview, LarpManagerShowcase, LarpManagerText
+from larpmanager.models.larpmanager import (
+    LarpManagerHighlight,
+    LarpManagerPartner,
+    LarpManagerReview,
+    LarpManagerShowcase,
+    LarpManagerText,
+)
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character
@@ -98,6 +104,7 @@ def update_cache_lm_home() -> dict[str, int | list]:
     context["promoters"] = _get_promoters()
     context["showcase"] = _get_showcases()
     context["reviews"] = _get_reviews()
+    context["partners"] = _get_partners()
 
     return context
 
@@ -145,6 +152,11 @@ def _get_showcases() -> list[dict]:
         result.append(showcase_dict)
 
     return result
+
+
+def _get_partners() -> list[dict]:
+    """Get all LarpManager partners as dictionaries."""
+    return [partner.as_dict() for partner in LarpManagerPartner.objects.all()]
 
 
 def _get_promoters() -> list[dict]:

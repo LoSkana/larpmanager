@@ -724,6 +724,58 @@ input[type="checkbox"]:checked {
   width: 100%;
 }
 
+#partners {
+  margin: 2em 0;
+}
+
+#partner-carousel {
+  margin: 1em 0;
+}
+
+#partner-carousel .partner-carousel-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #d0eef2;
+  background: #f7feff;
+  text-decoration: none;
+  color: inherit;
+  min-height: 72px;
+}
+
+#partner-carousel a.partner-carousel-item:hover {
+  background: #e8f8fb;
+  border-color: #a5dee5;
+}
+
+#partner-carousel .partner-icon {
+  width: 7em;
+  height: 7em;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+#partner-carousel .partner-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+#partner-carousel .partner-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 1.2em;
+}
+
+#partner-carousel .partner-text {
+  font-size: 0.85em;
+  color: #666;
+}
+
 #header nav {
   left: 0.75em;
 }

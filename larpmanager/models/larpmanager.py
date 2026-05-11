@@ -285,6 +285,48 @@ class LarpManagerDiscover(BaseModel):
     )
 
 
+class LarpManagerPartner(BaseModel):
+    """Model for displaying partner organizations on the home page."""
+
+    name = models.CharField(max_length=200)
+
+    text = models.TextField(blank=True)
+
+    url = models.URLField(max_length=500, blank=True)
+
+    profile = models.ImageField(
+        max_length=500,
+        upload_to=UploadToPathAndRename("partners/"),
+        verbose_name=_("Profile Image"),
+        blank=True,
+        null=True,
+    )
+
+    profile_thumb = ImageSpecField(
+        source="profile",
+        processors=[ResizeToFill(200, 200)],
+        format="JPEG",
+        options={"quality": 85},
+    )
+
+    def show_thumb(self) -> Any:
+        """Generate HTML for displaying thumbnail image."""
+        if self.profile_thumb:
+            # noinspection PyUnresolvedReferences
+            return show_thumb(100, self.profile_thumb.url)
+        return ""
+
+    def as_dict(self, *, many_to_many: bool = True) -> dict:
+        """Convert model instance to dictionary with image URL."""
+        result_dict = super().as_dict(many_to_many=many_to_many)
+
+        if self.profile_thumb:
+            # noinspection PyUnresolvedReferences
+            result_dict["profile_thumb_url"] = self.profile_thumb.url
+
+        return result_dict
+
+
 class TicketStatus(models.TextChoices):
     """Status choices for LarpManagerTicket."""
 
@@ -306,7 +348,7 @@ class LarpManagerText(BaseModel):
 
     name = models.CharField(max_length=200, unique=True, verbose_name=_("Name"), db_index=True)
 
-    value = models.TextField(verbose_name=_("Value"))
+    value = HTMLField(verbose_name=_("Value"))
 
     def __str__(self) -> str:
         """Return string representation of the text."""

@@ -1,22 +1,15 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
-    Get Started
+    {{ texts.join_page_title }}
 {% endblock title %}
 {% block meta %}
-    <meta name="keywords"
-          content="Get Started larpmanager, create larp account, start larp organization, larp registration platform, free larp signup, larp event setup">
-    <meta name="description"
-          content="Start using LarpManager today! Create your free account and begin managing your LARP events with our comprehensive platform - no installation or setup required.">
+    <meta name="keywords" content="{{ texts.join_meta_keywords }}">
+    <meta name="description" content="{{ texts.join_meta_description }}">
 {% endblock meta %}
 {% block content %}
     {% include "elements/member/my_hub.html" %}
-    <h3>Create Your Organization</h3>
-    <p>
-        Compile the information below to get started immediately with LarpManager.
-        A dedicated subdomain will be created for your LARP organization, with you as administrator.
-        You will then be guided through creating your first event.
-    </p>
+    {{ texts.join_content }}
     <form action="{{ request.path }}"
           enctype="multipart/form-data"
           method="post">
@@ -28,7 +21,7 @@
             <input type="submit" id="id_submit" value="{% trans "Submit" %}">
         </div>
     </form>
-    <p>(We strongly recommend using a desktop computer rather than a mobile device)</p>
+    {{ texts.desktop_recommendation | safe }}
 {% endblock content %}
 {% block js %}
     <script> const base_domain = ".{{ association.base_domain }}"; </script>

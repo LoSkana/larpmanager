@@ -4026,6 +4026,9 @@ msgstr ""
 msgid "Photo"
 msgstr ""
 
+msgid "Profile Image"
+msgstr ""
+
 msgid "Working"
 msgstr ""
 
@@ -6772,10 +6775,7 @@ msgid ""
 "directly"
 msgstr ""
 
-msgid "Guides"
-msgstr ""
-
-msgid "See practical examples of how LarpManager can help your event"
+msgid "Partners"
 msgstr ""
 
 msgid "Show inactive"

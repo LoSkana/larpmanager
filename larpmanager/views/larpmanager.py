@@ -96,6 +96,7 @@ def lm_home(request: HttpRequest) -> Any:
     template_context["texts"] = get_larpmanager_texts()
     random.shuffle(template_context["promoters"])
     random.shuffle(template_context["reviews"])
+    random.shuffle(template_context["partners"])
 
     return render(request, "larpmanager/larpmanager/home.html", template_context)
 
@@ -547,6 +548,7 @@ def join(request: HttpRequest) -> Any:
     # Retrive personal registration, managed events / orgas (if the user is looking for that)
     get_personal_area(context)
 
+    context["texts"] = get_larpmanager_texts()
     return render(request, "larpmanager/larpmanager/join.html", context)
 
 
@@ -697,6 +699,7 @@ def guides(request: HttpRequest) -> Any:
     context["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
     context["index"] = True
     context["iframe"] = request.GET.get("in_iframe") == "1"
+    context["texts"] = get_larpmanager_texts()
     return render(request, "larpmanager/larpmanager/guides.html", context)
 
 
@@ -776,6 +779,7 @@ def usage(request: HttpRequest) -> Any:
     """Display usage/terms page."""
     context = get_lm_contact(request)
     context["index"] = True
+    context["texts"] = get_larpmanager_texts()
     return render(request, "larpmanager/larpmanager/usage.html", context)
 
 
@@ -784,6 +788,7 @@ def about_us(request: HttpRequest) -> Any:
     """Display about us page."""
     context = get_lm_contact(request)
     context["index"] = True
+    context["texts"] = get_larpmanager_texts()
     return render(request, "larpmanager/larpmanager/about_us.html", context)
 
 
@@ -1154,7 +1159,7 @@ def demo(request: HttpRequest) -> Any:
             return _create_demo(request)
     else:
         form = LarpManagerCheck(request=request)
-    context = {"form": form}
+    context = {"form": form, "texts": get_larpmanager_texts()}
     return render(request, "larpmanager/larpmanager/demo.html", context)
 
 

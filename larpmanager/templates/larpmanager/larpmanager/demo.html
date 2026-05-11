@@ -1,14 +1,10 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
-    Demo
+    {{ texts.demo_page_title }}
 {% endblock title %}
 {% block content %}
-    <p>Click on confirm to activate a demo environment where you can freely test the system with no constraints.</p>
-    <p>
-        <i>(Note that the demo environment is temporary; to create a permanent one, <a href="{% url 'join' %}">click here to join</a>.</i>
-    </p>
-    <p>(We strongly recommend using a desktop computer rather than a mobile device.)</p>
+    {{ texts.demo_content | safe }}
     <form action="{{ request.path }}"
           method="post"
           enctype="multipart/form-data">
@@ -18,4 +14,5 @@
         </table>
         <input type="submit" id="id_submit" value="{% trans "Confirm" %}">
     </form>
+    {{ texts.desktop_recommendation | safe }}
 {% endblock content %}

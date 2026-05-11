@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
-    {% trans "Guides" %}
+    {{ texts.guides_page_title }}
 {% endblock title %}
 {% block js2 %}
     <style>#iframe-indicator { display: none; background: #e0f0ff; border-bottom: 1px solid #90c0e0; padding: 2px 8px; font-size: 11px; color: #336; }</style>
@@ -16,13 +16,11 @@
     {% endif %}
 {% endblock js2 %}
 {% block meta %}
-    <meta name="keywords"
-          content="larp guides, larp tutorials, event management tips, larp best practices, larp organizer resources, larp examples">
-    <meta name="description"
-          content="Explore practical guides and examples showing how LarpManager can help organize your LARP events. Learn tips and best practices from experienced organizers.">
+    <meta name="keywords" content="{{ texts.guides_meta_keywords }}">
+    <meta name="description" content="{{ texts.guides_meta_description }}">
 {% endblock meta %}
 {% block content %}
-    <p class="blog-intro">{% trans "See practical examples of how LarpManager can help your event" %}!</p>
+    <p class="blog-intro">{{ texts.guides_intro | safe }}</p>
     {% if list %}
         <div class="guide-grid">
             {% for post in list %}

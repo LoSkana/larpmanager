@@ -1,61 +1,12 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
-    Pricing
+    {{ texts.usage_page_title }}
 {% endblock title %}
 {% block meta %}
-    <meta name="keywords"
-          content="larp management software, free larp tools, larp event management, larp registration, hosted larp platform, open source larp">
-    <meta name="description"
-          content="LarpManager is completely free to use with no limits or hidden fees. Start managing your LARP events instantly with our hosted platform - no installation required.">
+    <meta name="keywords" content="{{ texts.usage_meta_keywords }}">
+    <meta name="description" content="{{ texts.usage_meta_description }}">
 {% endblock meta %}
 {% block content %}
-    <div id="usage">
-        <p>
-            <strong>LarpManager is free to use</strong>: no limits, no hidden fees, and no premium tiers.
-            Our mission is simple: <i>help everyone run their LARP</i>.
-        </p>
-        <h3>Get started instantly</h3>
-        <p>No installation, no configuration, no server required! Your hosted instance is ready to use immediately.</p>
-        <p>
-            The <strong>hosted version</strong> at
-            <a href="https://larpmanager.com" target="_blank">larpmanager.com</a>
-            is the primary and recommended way to use LarpManager.
-            It's fully hosted, automatically updated, and requires <strong>zero setup</strong>.
-            Start managing your LARP instantly: everything is ready out of the box.
-        </p>
-        <h3>Discord</h3>
-        <p>
-            If you need help, have questions or ideas, you're welcome to <a href="{% url 'discord' %}">join our Discord</a>!
-        </p>
-        <h3>Donate</h3>
-        <p>
-            If you'd like to contribute to the project to keep it running, you can <a href="{% url 'donate' %}">donate here</a>. Many thanks, that's super appreciated!
-        </p>
-        <h3>Support</h3>
-        <p>
-            Professional technical support (maintenance, continuous assistance, 24/7 availability, feature configuration and development) is available on request for those who need it.
-        </p>
-        <p>
-            The hosted service includes managed hosting, daily backups, automatic updates, uptime monitoring, security management, and direct technical support.
-            Service Level Agreements (SLA) with guaranteed uptime can be arranged for organizations that require higher reliability.
-        </p>
-        <h3>Content policy</h3>
-        <p>
-            We reserve the right to suspend or remove access to the hosted platform for events
-            that include offensive, discriminatory, or otherwise harmful content.
-            Let's keep LARP inclusive and respectful for everyone.
-        </p>
-        <hr />
-        <h3>Advanced option</h3>
-        <p>
-            Developers can also self-host their own instance using the open-source code available on GitHub: <a href="https://github.com/loskana/larpmanager" target="_blank">GitHub</a>.
-        </p>
-        <hr />
-        <p>
-            LARP is about storytelling, immersion, and community. We believe technology should support that, not restrict it.
-            <br>
-            This project exists thanks to our love for LARP, and we intend to keep it that way: open, accessible, and available to all.
-        </p>
-    </div>
+    <div id="usage">{{ texts.usage_content | safe }}</div>
 {% endblock content %}
