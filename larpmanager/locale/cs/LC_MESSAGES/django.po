@@ -2273,6 +2273,9 @@ msgstr "Hodnotit"
 msgid "Instructions"
 msgstr "Pokyny"
 
+msgid "Interval (s)"
+msgstr "Interval (s)"
+
 msgid "Legal Gender"
 msgstr "Právní pohlaví"
 
@@ -6463,6 +6466,9 @@ msgstr "O jeden znak více nebo méně, než se očekávalo"
 
 msgid "Payment currently in review by the staff"
 msgstr "Zaměstnanci v současné době přezkoumávají platbu"
+
+msgid "Seconds to wait between each email batch"
+msgstr "Sekundy čekání mezi jednotlivými dávkami e-mailů"
 
 msgid "Set casting options in the configuration"
 msgstr "Nastavení možností odlévání v konfiguraci"

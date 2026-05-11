@@ -90,6 +90,17 @@ class SendMailForm(BaseForm):
         self.show_link = ["id_reply_to", "id_raw"]
 
 
+class LmSendMailForm(SendMailForm):
+    """SendMailForm extended with configurable batch interval, for LM admin use."""
+
+    interval = forms.IntegerField(
+        label=_("Interval (s)"),
+        help_text=_("Seconds to wait between each email batch"),
+        initial=1500,
+        min_value=1,
+    )
+
+
 class UtilForm(BaseModelForm):
     """Form for Util."""
 

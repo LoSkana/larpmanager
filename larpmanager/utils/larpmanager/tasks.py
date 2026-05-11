@@ -162,12 +162,17 @@ def _create_bulk_recipients(email_content: Any, recipients: list, seen_emails: d
 
 @background_auto()
 def send_mail_exec(
-    recipient_list: str, subj: str, body: str, association_id: int | None = None, run_id: int | None = None
+    recipient_list: str,
+    subj: str,
+    body: str,
+    association_id: int | None = None,
+    run_id: int | None = None,
+    interval: int | None = None,
 ) -> None:
     """Send bulk emails to multiple recipients with batch delivery.
 
     Sends emails to a comma-separated list of recipients in batches of 10,
-    with 1 second delay between batches to prevent spam filtering.
+    with a configurable delay between batches to prevent spam filtering.
     Emails are prefixed with the organization/run name.
 
     This function creates a single EmailContent object and multiple EmailRecipient
@@ -179,6 +184,7 @@ def send_mail_exec(
         body: Email body content in HTML or plain text
         association_id: Association ID for determining sender context
         run_id: Run ID for determining sender context (alternative to association_id)
+        interval: Seconds to wait between each batch (defaults to MAIL_BATCH_INTERVAL)
 
     Returns:
         None
@@ -235,8 +241,9 @@ def send_mail_exec(
     ]
 
     # Schedule each batch with X second delay between batches
+    batch_interval = interval if interval is not None else conf_settings.MAIL_BATCH_INTERVAL
     for batch_index, batch in enumerate(batches):
-        my_send_mail_bkg(batch, schedule=batch_index * conf_settings.MAIL_BATCH_INTERVAL)
+        my_send_mail_bkg(batch, schedule=batch_index * batch_interval)
 
 
 @background_auto(queue="mail")

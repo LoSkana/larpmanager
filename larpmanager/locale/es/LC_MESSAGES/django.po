@@ -2273,6 +2273,9 @@ msgstr "Plazos"
 msgid "Instructions"
 msgstr "Instrucciones"
 
+msgid "Interval (s)"
+msgstr "Intervalo (s)"
+
 msgid "Legal Gender"
 msgstr "Género legal"
 
@@ -6463,6 +6466,9 @@ msgstr "Un carácter más o menos de lo esperado"
 
 msgid "Payment currently in review by the staff"
 msgstr "Pago actualmente en revisión por el personal"
+
+msgid "Seconds to wait between each email batch"
+msgstr "Segundos de espera entre cada lote de correos"
 
 msgid "Set casting options in the configuration"
 msgstr "Establecer opciones de fundición en la configuración"

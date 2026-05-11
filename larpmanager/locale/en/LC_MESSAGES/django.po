@@ -2266,6 +2266,12 @@ msgstr ""
 msgid "List of recipient email address, comma separated"
 msgstr ""
 
+msgid "Interval (s)"
+msgstr ""
+
+msgid "Seconds to wait between each email batch"
+msgstr ""
+
 msgid "Manage participant questions"
 msgstr ""
 
