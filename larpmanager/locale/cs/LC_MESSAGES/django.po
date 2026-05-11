@@ -619,9 +619,6 @@ msgstr "Přítel"
 msgid "Gender"
 msgstr "Žánr"
 
-msgid "Guides"
-msgstr "Průvodci"
-
 msgid "Header"
 msgstr "Záhlaví"
 
@@ -1264,6 +1261,9 @@ msgstr "Originál"
 
 msgid "Outflows"
 msgstr "Výstupy"
+
+msgid "Partners"
+msgstr "Partneři"
 
 msgid "Passport"
 msgstr "Pas"
@@ -2621,6 +2621,9 @@ msgstr "Předpoklady"
 
 msgid "Preview reset"
 msgstr "Obnovení náhledu"
+
+msgid "Profile Image"
+msgstr "Profilový obrázek"
 
 msgid "Progress step"
 msgstr "Krok vpřed"
@@ -8095,10 +8098,6 @@ msgstr "Všimněte si, že pokud jsou náklady 0, budou automaticky přiřazeny"
 
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Nyní mohou účastníci zasílat dary a vy si je můžete prohlédnout"
-
-msgid "See practical examples of how LarpManager can help your event"
-msgstr ""
-"Podívejte se na praktické příklady, jak může LarpManager pomoci vaší akci"
 
 msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""

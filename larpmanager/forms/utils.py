@@ -1147,3 +1147,17 @@ class WritingTinyMCE(CSRFTinyMCE):
             "content_style": ".char-marker { background: yellow !important; }",
         }
         super().__init__(attrs=mce_attrs)
+
+
+class InlineTinyMCE(CSRFTinyMCE):
+    """TinyMCE widget that does not wrap content in <p> tags.
+
+    Use this for short text snippets where block-level paragraph wrapping is
+    undesirable (e.g. page titles, labels, single-line rich-text values).
+    Setting forced_root_block to false makes TinyMCE insert <br> on Enter
+    and leaves plain text unwrapped.
+    """
+
+    def __init__(self) -> None:
+        """Initialize TinyMCE with forced_root_block disabled."""
+        super().__init__(mce_attrs={"forced_root_block": False})

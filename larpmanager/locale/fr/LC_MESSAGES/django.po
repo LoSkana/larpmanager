@@ -619,9 +619,6 @@ msgstr "Ami"
 msgid "Gender"
 msgstr "Genre"
 
-msgid "Guides"
-msgstr "Guides"
-
 msgid "Header"
 msgstr "En-tête"
 
@@ -1264,6 +1261,9 @@ msgstr "Original"
 
 msgid "Outflows"
 msgstr "Sorties"
+
+msgid "Partners"
+msgstr "Partenaires"
 
 msgid "Passport"
 msgstr "Passeport"
@@ -2621,6 +2621,9 @@ msgstr "Conditions préalables"
 
 msgid "Preview reset"
 msgstr "Réinitialisation de l'aperçu"
+
+msgid "Profile Image"
+msgstr "Image de profil"
 
 msgid "Progress step"
 msgstr "Avancer d'un pas"
@@ -8238,11 +8241,6 @@ msgid "Now participants can submit donation, and you can review them"
 msgstr ""
 "Les participants peuvent désormais soumettre des dons et vous pouvez les "
 "examiner"
-
-msgid "See practical examples of how LarpManager can help your event"
-msgstr ""
-"Voir des exemples pratiques de la façon dont LarpManager peut aider votre "
-"événement"
 
 msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""

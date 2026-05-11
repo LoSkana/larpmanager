@@ -619,9 +619,6 @@ msgstr "Ystävä"
 msgid "Gender"
 msgstr "Sukupuoli"
 
-msgid "Guides"
-msgstr "Oppaat"
-
 msgid "Header"
 msgstr "Otsikko"
 
@@ -1264,6 +1261,9 @@ msgstr "Alkuperäinen"
 
 msgid "Outflows"
 msgstr "Ulosvirtaukset"
+
+msgid "Partners"
+msgstr "Kumppanit"
 
 msgid "Passport"
 msgstr "Passi"
@@ -2621,6 +2621,9 @@ msgstr "Edellytykset"
 
 msgid "Preview reset"
 msgstr "Esikatselun nollaus"
+
+msgid "Profile Image"
+msgstr "Profiilikuva"
 
 msgid "Progress step"
 msgstr "Edistymisvaihe"
@@ -8105,10 +8108,6 @@ msgid "Now participants can submit donation, and you can review them"
 msgstr ""
 "Nyt osallistujat voivat lähettää lahjoituksen, ja sinä voit tarkastella "
 "niitä"
-
-msgid "See practical examples of how LarpManager can help your event"
-msgstr ""
-"Katso käytännön esimerkkejä siitä, miten LarpManager voi auttaa tapahtumaasi"
 
 msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""

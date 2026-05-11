@@ -1,33 +1,12 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
-    About us
+    {{ texts.team_page_title }}
 {% endblock title %}
 {% block meta %}
-    <meta name="keywords"
-          content="about larpmanager, larp organizer, mauro scanagatta, larp community, larp software developer, larp management creator">
-    <meta name="description"
-          content="Learn about LarpManager and its creator. Discover the story behind the management platform built by organizers, for organizers.">
+    <meta name="keywords" content="{{ texts.team_meta_keywords }}">
+    <meta name="description" content="{{ texts.team_meta_description }}">
 {% endblock meta %}
 {% block content %}
-    <div id="aboutus">
-        <div class="img">
-            <img src="{% static 'aboutus.jpg' %}" alt="About us, photo of the team" />
-            <p>One is glad to be of service!</p>
-        </div>
-        <div class="text">
-            <p>
-                Hello there! My name is Mauro Scanagatta. I have been programming for more than half of my age, I have a Ph.D. in Artificial Intelligence, and I love organizing LARPs.
-            </p>
-            <p>
-                You can already imagine what happened: since I hated spending time in the tedious and time-consuming tasks (like managing accounting, signups, character sheets), I started developing a software.
-            </p>
-            <p>
-                It was supposed to be a simple and easy project... but over the years, I continued adding more and more features.
-            </p>
-            <p>
-                In the end, I thought that maybe the tools that I've created for myself, could be useful also for others. So that's the story of Larp Manager!
-            </p>
-        </div>
-    </div>
+    <div id="aboutus">{{ texts.team_content | safe }}</div>
 {% endblock content %}

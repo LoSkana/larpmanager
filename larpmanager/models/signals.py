@@ -230,6 +230,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerGuide,
     LarpManagerHighlight,
     LarpManagerNewsletter,
+    LarpManagerPartner,
     LarpManagerShowcase,
     LarpManagerText,
     LarpManagerTicket,
@@ -1190,6 +1191,18 @@ def post_save_reset_lm_home_cache_highlight(sender: type, instance: object, **kw
 @receiver(post_delete, sender=LarpManagerHighlight)
 def post_delete_reset_lm_home_cache_highlight(sender: type, instance: object, **kwargs: dict) -> None:
     """Reset home cache after highlight deletion."""
+    clear_larpmanager_home_cache()
+
+
+@receiver(post_save, sender=LarpManagerPartner)
+def post_save_reset_lm_home_cache_partner(sender: type, instance: object, **kwargs: dict) -> None:
+    """Signal handler to reset home cache when partner content changes."""
+    clear_larpmanager_home_cache()
+
+
+@receiver(post_delete, sender=LarpManagerPartner)
+def post_delete_reset_lm_home_cache_partner(sender: type, instance: object, **kwargs: dict) -> None:
+    """Reset home cache after partner deletion."""
     clear_larpmanager_home_cache()
 
 
