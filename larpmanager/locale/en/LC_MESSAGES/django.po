@@ -6764,6 +6764,58 @@ msgstr ""
 msgid "Passages made"
 msgstr ""
 
+msgid "Unsubscribe"
+msgstr ""
+
+msgid "Invalid or expired unsubscribe link"
+msgstr ""
+
+msgid "This unsubscribe link is no longer valid"
+msgstr ""
+
+msgid "Please use the link from a recent email"
+msgstr ""
+
+msgid "You have been unsubscribed from this organization's newsletter"
+msgstr ""
+
+msgid "You still have active event registrations with this organization"
+msgstr ""
+
+msgid ""
+"You will continue to receive communications related to those registrations"
+msgstr ""
+
+msgid "To stop receiving them, please cancel your registrations"
+msgstr ""
+
+msgid "You have been unsubscribed from LarpManager communications"
+msgstr ""
+
+msgid "You will no longer receive messages from us"
+msgstr ""
+
+#, python-format
+msgid "Are you sure you want to unsubscribe <strong>%(email)s</strong>?"
+msgstr ""
+
+msgid "This will remove you from this organization's newsletter"
+msgstr ""
+
+msgid ""
+"If you have active event registrations, you will still receive "
+"communications related to those registrations"
+msgstr ""
+
+msgid "To stop those, you would need to cancel your registrations"
+msgstr ""
+
+msgid "This will unsubscribe you from all LarpManager platform communications"
+msgstr ""
+
+msgid "Confirm Unsubscribe"
+msgstr ""
+
 msgid ""
 "The larpmanager has a over 100 different features. There is one for every "
 "single aspect of event organising: signups, accounting, writing, logistics"
@@ -11211,9 +11263,6 @@ msgid "You can't send messages to yourself"
 msgstr ""
 
 msgid "Message sent!"
-msgstr ""
-
-msgid "The request of removal from further communication has been successfull!"
 msgstr ""
 
 msgid "You must be an approved member to vote"

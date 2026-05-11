@@ -37,6 +37,7 @@ from django.contrib.auth import login, user_logged_in
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, update_last_login
 from django.contrib.auth.signals import user_login_failed
+from django.core import signing
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
@@ -64,6 +65,7 @@ from larpmanager.forms.member import (
 from larpmanager.mail.member import send_membership_confirm
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.association import Association, AssociationTextType
+from larpmanager.models.larpmanager import LarpManagerNewsletter, NewsletterStatus
 from larpmanager.models.member import (
     Badge,
     LogOperationType,
@@ -87,6 +89,7 @@ from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import get_membership_request
 from larpmanager.utils.io.upload import normalize_profile_image
+from larpmanager.utils.publication.api import get_client_ip
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_leaderboard, get_member_uuid
 from larpmanager.views.user.event import build_registration_list, get_member_registrations
@@ -785,28 +788,88 @@ def leaderboard(request: HttpRequest, page: int = 1) -> HttpResponse:
     return render(request, "larpmanager/general/leaderboard.html", context)
 
 
-@login_required
+def _unsubscribe_org(request: HttpRequest, email: str, association: Association) -> dict:
+    member = None
+    mb = None
+    try:
+        member = Member.objects.get(email=email)
+        mb = get_user_membership(member, association.id)
+        mb.newsletter = NewsletterChoices.NO
+        mb.save()
+    except Member.DoesNotExist:
+        pass
+    has_regs = Registration.objects.filter(
+        member__email=email,
+        run__event__association=association,
+        cancellation_date__isnull=True,
+        deleted__isnull=True,
+    ).exists()
+    if member and mb:
+        save_log(
+            {"member": member, "association_id": association.id},
+            Membership,
+            mb,
+            mb.id,
+            info=f"unsubscribe ip:{get_client_ip(request)}",
+        )
+    return {"done": True, "is_org": True, "has_registrations": has_regs}
+
+
+def _unsubscribe_global(request: HttpRequest, email: str) -> dict:
+    newsletter, _ = LarpManagerNewsletter.objects.get_or_create(email=email)
+    newsletter.status = NewsletterStatus.UNSUBSCRIBED
+    newsletter.save()
+    try:
+        member = Member.objects.get(email=email)
+        save_log(
+            {"member": member, "association_id": None},
+            LarpManagerNewsletter,
+            newsletter,
+            newsletter.id,
+            info=f"unsubscribe ip:{get_client_ip(request)}",
+        )
+    except Member.DoesNotExist:
+        pass
+    return {"done": True, "is_org": False}
+
+
 def unsubscribe(request: HttpRequest) -> HttpResponse:
-    """Unsubscribe user from newsletter communications.
+    """Unsubscribe user from newsletter communications via signed token link."""
+    token = request.POST.get("token") or request.GET.get("token", "")
+    if not token:
+        return redirect("home")
 
-    Args:
-        request: HTTP request object containing user and association data
+    try:
+        data = signing.loads(token, salt="unsubscribe", max_age=86400 * 30)
+    except signing.BadSignature:
+        return render(request, "larpmanager/general/unsubscribe.html", {"error": True})
 
-    Returns:
-        Redirect response to home page
+    email = data.get("email", "")
+    association_slug = data.get("association_slug")
 
-    """
-    # Build context with user and association information
-    context = get_context(request)
+    association = None
+    if association_slug:
+        try:
+            association = Association.objects.get(slug=association_slug)
+        except Association.DoesNotExist:
+            return render(request, "larpmanager/general/unsubscribe.html", {"error": True})
 
-    # Get user membership and update newsletter preference
-    mb = get_user_membership(context["member"], context["association_id"])
-    mb.newsletter = NewsletterChoices.NO
-    mb.save()
+    if request.method == "POST" and request.POST.get("confirm"):
+        ctx = _unsubscribe_org(request, email, association) if association else _unsubscribe_global(request, email)
+        return render(request, "larpmanager/general/unsubscribe.html", ctx)
 
-    # Show success message and redirect to home
-    messages.success(request, _("The request of removal from further communication has been successfull!"))
-    return redirect("home")
+    has_regs = (
+        Registration.objects.filter(
+            member__email=email,
+            run__event__association=association,
+            cancellation_date__isnull=True,
+            deleted__isnull=True,
+        ).exists()
+        if association
+        else False
+    )
+    ctx = {"token": token, "email": email, "is_org": bool(association), "has_registrations": has_regs}
+    return render(request, "larpmanager/general/unsubscribe.html", ctx)
 
 
 @login_required

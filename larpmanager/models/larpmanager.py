@@ -348,7 +348,7 @@ class LarpManagerText(BaseModel):
 
     name = models.CharField(max_length=200, unique=True, verbose_name=_("Name"), db_index=True)
 
-    value = HTMLField(verbose_name=_("Value"))
+    value = models.TextField(verbose_name=_("Value"))
 
     def __str__(self) -> str:
         """Return string representation of the text."""
