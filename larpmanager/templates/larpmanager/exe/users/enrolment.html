@@ -17,10 +17,7 @@
                 <th>{% trans "Gender" %}</th>
                 <th>{% trans "Birth place" %}</th>
                 <th>{% trans "Birth date" %}</th>
-                <th></th>
-                <th></th>
                 <th>{% trans "Fiscal code" %}</th>
-                <th></th>
                 <th>{% trans "Last membership date" %}</th>
                 <th>{% trans "Phone contact" %}</th>
                 <th>{% trans "Email" %}</th>
@@ -39,8 +36,6 @@
                 <td>{{ el.gender }}</td>
                 <td>{{ el.birth_place }}</td>
                 <td>{{ el.birth_date }}</td>
-                <td>PROXIMA APS</td>
-                <td>Tessera B</td>
                 <td>
                     {% if el.fiscal_code %}
                         {{ el.fiscal_code }}
@@ -48,7 +43,6 @@
                         N/A
                     {% endif %}
                 </td>
-                <td>-</td>
                 <td>{{ el.last_enrolment| date:"d/m/Y" }}</td>
                 <td>{{ el.phone_contact }}</td>
                 <td>{{ el.email }}</td>
