@@ -14,32 +14,27 @@
         {% if is_org %}
             <h2>{% trans "You have been unsubscribed from this organization's newsletter" %}</h2>
             {% if has_registrations %}
-                <p>
-                    {% trans "You still have active event registrations with this organization" %}.
-                    {% trans "You will continue to receive communications related to those registrations" %}.
-                    {% trans "To stop receiving them, please cancel your registrations" %}.
-                </p>
+                <p>{% trans "You still have active event registrations with this organization" %}.</p>
+                <p>{% trans "You will continue to receive communications related to those registrations" %}.</p>
+                <p>{% trans "To stop receiving them, please cancel your registrations" %}.</p>
             {% endif %}
         {% else %}
             <h2>{% trans "You have been unsubscribed from LarpManager communications" %}</h2>
             <p>{% trans "You will no longer receive messages from us" %}.</p>
         {% endif %}
     {% else %}
-        <h2>{% trans "Unsubscribe" %}</h2>
         <p>
             {% blocktrans with email=email %}Are you sure you want to unsubscribe <strong>{{ email }}</strong>?{% endblocktrans %}
         </p>
         {% if is_org %}
+            <p>{% trans "This will remove you from this organization's newsletter" %}.</p>
             <p>
-                {% trans "This will remove you from this organization's newsletter" %}.
                 {% trans "If you have active event registrations, you will still receive communications related to those registrations" %}.
-                {% trans "To stop those, you would need to cancel your registrations" %}.
             </p>
+            <p>{% trans "To stop those, you would need to cancel your registrations" %}.</p>
         {% else %}
-            <p>
-                {% trans "This will unsubscribe you from all LarpManager platform communications" %}.
-                {% trans "You will no longer receive messages from us" %}.
-            </p>
+            <p>{% trans "This will unsubscribe you from all LarpManager platform communications" %}.</p>
+            <p>{% trans "You will no longer receive messages from us" %}.</p>
         {% endif %}
         <form action="{{ request.path }}" method="post">
             {% csrf_token %}
