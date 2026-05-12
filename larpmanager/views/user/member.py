@@ -833,13 +833,13 @@ def _unsubscribe_global(request: HttpRequest, email: str) -> dict:
     return {"done": True, "is_org": False}
 
 
-def unsubscribe(request: HttpRequest) -> HttpResponse:
+def unsubscribe(request: HttpRequest, token: str = "") -> HttpResponse:
     """Unsubscribe user from newsletter communications via signed token link."""
-    token = request.POST.get("token") or request.GET.get("token", "")
     if not token:
         return redirect("home")
 
     try:
+        token = bytes.fromhex(token).decode()
         data = signing.loads(token, salt="unsubscribe", max_age=86400 * 30)
     except signing.BadSignature:
         return render(request, "larpmanager/general/unsubscribe.html", {"error": True})
@@ -868,7 +868,7 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
         if association
         else False
     )
-    ctx = {"token": token, "email": email, "is_org": bool(association), "has_registrations": has_regs}
+    ctx = {"email": email, "is_org": bool(association), "has_registrations": has_regs}
     return render(request, "larpmanager/general/unsubscribe.html", ctx)
 
 

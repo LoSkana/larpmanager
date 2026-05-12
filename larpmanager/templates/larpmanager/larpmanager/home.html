@@ -72,16 +72,6 @@
                 </section>
             </header>
         </section>
-        <section>
-            <div class="guide-container">
-                <iframe class="guide-video"
-                        src="https://www.youtube.com/embed/ygiZq2UPl1Y"
-                        allowfullscreen="allowfullscreen">
-                </iframe>
-            </div>
-        </section>
-        <br />
-        <br />
         <p class="starter">{{ texts.showcase_intro }}</p>
         <section class="box special showcase">
             {% for el in showcase %}
@@ -107,6 +97,15 @@
                     {% endif %}
                 </div>
             {% endfor %}
+        </section>
+        <section class="video-section">
+            <p class="starter">{{ texts.video_intro }}</p>
+            <div class="guide-container">
+                <iframe class="guide-video"
+                        src="https://www.youtube.com/embed/ygiZq2UPl1Y"
+                        allowfullscreen="allowfullscreen">
+                </iframe>
+            </div>
         </section>
         <!-- CTA -->
         <section id="cta">

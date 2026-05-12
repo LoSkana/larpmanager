@@ -487,10 +487,10 @@ def add_unsubscribe_body(association: Any, recipient_email: str = "") -> str:
     if association:
         token_data["association_slug"] = association.slug
     token = signing.dumps(token_data, salt="unsubscribe")
-    base_url = get_url("unsubscribe", association)
-    unsubscribe_url = f"{base_url}?token={token}"
+    hex_token = token.encode().hex()
+    unsubscribe_url = get_url(f"unsubscribe/{hex_token}/", association)
     html_footer = "<br /><br />-<br />"
-    html_footer += f"<a href='{unsubscribe_url}'>Unsubscribe</a>"
+    html_footer += f"<a ses:no-track href='{unsubscribe_url}'>Unsubscribe</a>"
     return html_footer
 
 

@@ -160,10 +160,19 @@ h1 {
 }
 
 p.starter {
-  font-size: 2em;
+  font-size: 2.5em;
   color: #3b3b3b;
-  margin-bottom: 1em;
+  margin: 1.5em 0;
   text-align: center;
+}
+
+.video-section {
+  margin: 3em 0 2em;
+  text-align: center;
+}
+
+.video-title {
+  margin-bottom: 1em;
 }
 
 #do_for_you th {

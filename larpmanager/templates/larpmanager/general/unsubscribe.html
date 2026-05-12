@@ -43,7 +43,6 @@
         {% endif %}
         <form action="{{ request.path }}" method="post">
             {% csrf_token %}
-            <input type="hidden" name="token" value="{{ token }}">
             <input type="submit"
                    name="confirm"
                    value="{% trans "Confirm Unsubscribe" %}">
