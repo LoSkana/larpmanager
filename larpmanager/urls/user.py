@@ -195,7 +195,7 @@ urlpatterns = [
         name="vote",
     ),
     path(
-        "unsubscribe/",
+        "unsubscribe/<str:token>/",
         views_um.unsubscribe,
         name="unsubscribe",
     ),
