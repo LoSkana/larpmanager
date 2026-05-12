@@ -1507,10 +1507,19 @@ header.sec h1 {
 }
 
 .showcase .text {
-  flex: 1 1 55%;
-  padding: 1rem;
+  flex: 1 1 60%;
+  padding: 1rem 0;
   font-size: 1.3em;
   line-height: 1.5;
+  text-align: left;
+}
+
+.showcase .section:nth-child(even) .text {
+  padding-left: 2rem;
+}
+
+.showcase .section:nth-child(odd) .text {
+  padding-right: 2rem;
 }
 
 .showcase .sc_content {
@@ -1519,13 +1528,13 @@ header.sec h1 {
   align-items: flex-start;
   padding: 0px;
   width: fit-content;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .showcase .sc_content p {
   width: fit-content;
-  padding-bottom: 0.5em;
-  margin: 0;
+  margin: 0.5em 0;
+  font-size: 0.9em;
 }
 
 .showcase .button {
@@ -1540,14 +1549,15 @@ header.sec h1 {
 }
 
 .showcase .text h4 {
-  font-size: 2em;
-  line-height: 1.5;
+  font-size: 1.2em;
+  line-height: 1.4;
   color: #47787e;
 }
 
 .showcase .text h4 a {
   color: #47787e;
-  text-decoration: none;
+  text-decoration: none !important;
+  border: 0;
 }
 
 .showcase .text h4 a:hover {
@@ -1566,15 +1576,23 @@ header.sec h1 {
     font-size: 80%;
   }
   .showcase .sc_content {
-    margin: 0 auto;
+    margin: 0;
   }
 }
 
 .showcase .image-container {
-  flex: 1 1 45%;
-  padding: 1rem;
+  flex: 1 1 40%;
+  padding: 1rem 0;
   width: 100%;
   overflow: hidden;
+}
+
+.showcase .section:nth-child(even) .image-container {
+  padding-right: 2rem;
+}
+
+.showcase .section:nth-child(odd) .image-container {
+  padding-left: 2rem;
 }
 
 .showcase .image-wrapper {
