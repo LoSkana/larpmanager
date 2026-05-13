@@ -24,12 +24,13 @@ Verifies new user registration, organization creation with automatic slug genera
 profile picture upload, and organization dashboard access.
 """
 
+import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, load_image, submit, expect_normalized, login_orga
+from larpmanager.tests.utils import expect_normalized, go_to, just_wait, load_image, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -38,6 +39,7 @@ def test_exe_join(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
+
     go_to(page, live_server, "/debug")
 
     go_to(page, live_server, "/register")
@@ -80,3 +82,114 @@ def test_exe_join(pw_page: Any) -> None:
     go_to(page, live_server, "/debug/prova")
 
     expect_normalized(page, page.locator("#banner"), "prova larp")
+
+    select_language(live_server, page, "it")
+
+    go_to(page, live_server, "manage/activation/")
+    expect_normalized(page, page.locator("#banner h1"), "Attivazione")
+    expect(page.get_by_role("cell", name="Creazione eventi")).to_be_visible()
+    expect(page.get_by_role("cell", name="Metodi pagamento")).to_be_visible()
+    expect(page.get_by_role("cell", name="Biglietti di iscrizione")).to_be_visible()
+    expect(page.get_by_role("cell", name="Form iscrizione")).to_be_visible()
+    expect(page.get_by_role("cell", name="Prima iscrizione")).to_be_visible()
+
+    # Step 1: create event
+    go_to(page, live_server, "manage/events")
+    page.get_by_role("link", name="Nuovo evento").click()
+    page.locator("#id_form1-name").fill("Prova Event")
+    page.locator("#slug").fill("prova")
+    page.locator("#id_form1-max_pg").fill("10")
+    page.locator("#id_form2-development").select_option("1")
+    page.locator("#id_form2-registration_status").select_option("o")
+    page.locator("#id_form2-start").fill("2055-06-11")
+    just_wait(page)
+    page.locator("#id_form2-start").click()
+    page.locator("#id_form2-end").fill("2055-06-13")
+    just_wait(page)
+    page.locator("#id_form2-end").click()
+    just_wait(page)
+    submit_confirm(page)
+
+    go_to(page, live_server, "manage/activation/")
+    expect(page.locator("tr", has_text="Creazione eventi")).to_contain_text("Fatto")
+
+    # Step 2: payment methods
+    go_to(page, live_server, "manage/methods")
+    page.get_by_role("checkbox", name="Wire").check()
+    page.locator("#id_wire_descr").fill("test wire")
+    page.locator("#id_wire_fee").fill("0")
+    page.locator("#id_wire_payee").fill("test beneficiary")
+    page.locator("#id_wire_iban").fill("test iban")
+    page.locator("#id_wire_bic").fill("test iban")
+    submit_confirm(page)
+
+    go_to(page, live_server, "manage/activation/")
+    expect(page.locator("tr", has_text="Metodi pagamento")).to_contain_text("Fatto")
+
+    # Step 3: registration ticket
+    go_to(page, live_server, "prova/manage/tickets/")
+    page.wait_for_selector("table.go_datatable")
+    page.locator(".fa-edit").first.click(force=True)
+    page.locator("#id_price").fill("10.00")
+    submit_confirm(page)
+
+    go_to(page, live_server, "manage/activation/")
+    expect(page.locator("tr", has_text="Biglietti di iscrizione")).to_contain_text("Fatto")
+
+    # Step 4: registration form question
+    go_to(page, live_server, "prova/manage/form/")
+    page.get_by_role("link", name="Nuovo").click()
+    page.locator("#id_typ").select_option("t")
+    page.locator("#id_name").fill("Dietary restrictions")
+    submit_confirm(page)
+
+    go_to(page, live_server, "manage/activation/")
+    expect(page.locator("tr", has_text="Form iscrizione")).to_contain_text("Fatto")
+
+    # Step 5: first registration
+    go_to(page, live_server, "prova/register")
+    page.get_by_role("button", name="Continua").click()
+    submit_confirm(page)
+
+    go_to(page, live_server, "manage/activation/")
+    expect(page.locator("tr", has_text="Prima iscrizione")).to_contain_text("Fatto")
+
+    # Step 6: first character
+
+    select_language(live_server, page, "en")
+
+    go_to(page, live_server, "prova/manage/characters/")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").fill("Test Character")
+    submit_confirm(page)
+
+    select_language(live_server, page, "it")
+
+    go_to(page, live_server, "manage/activation/")
+    expect(page.locator("tr", has_text="Primo personaggio")).to_contain_text("Fatto")
+
+    # Step 7: first assignment
+    go_to(page, live_server, "prova/manage/registrations/")
+    page.locator(".fa-edit").first.click()
+    page.get_by_role("searchbox").fill("Test")
+    page.get_by_role("option", name="Test Character").click()
+    page.get_by_role("button", name="Conferma").click()
+
+    go_to(page, live_server, "manage/activation/")
+    expect(page.locator("tr", has_text="Prima assegnazione")).to_contain_text("Fatto")
+
+    # Final activation
+    page.get_by_role("button", name="Attiva la modalità avanzata").click()
+    just_wait(page)
+
+    # New sidebar items visible after activation
+    expect(page.locator("#exe_features")).to_be_visible()
+    expect(page.locator("#exe_config")).to_be_visible()
+    expect(page.locator("#exe_roles")).to_be_visible()
+    expect(page.locator("#exe_appearance")).to_be_visible()
+
+
+def select_language(live_server, page, lang):
+    go_to(page, live_server, "/language")
+    page.locator("#id_language").select_option(lang)
+    submit_confirm(page)
