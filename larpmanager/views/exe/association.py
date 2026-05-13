@@ -509,7 +509,7 @@ def exe_activation(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
 
     if request.method == "GET" and request.GET.get("slug"):
         slug = request.GET["slug"]
-        checklist, _ = get_activation_checklist(association_id)
+        checklist, _progress = get_activation_checklist(association_id)
         item = next((i for i in checklist if i["slug"] == slug), None)
         if item:
             messages.info(request, item["hint"])
