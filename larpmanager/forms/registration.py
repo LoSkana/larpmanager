@@ -727,6 +727,12 @@ class OrgaRegistrationForm(MultichoiceMixin, BaseRegistrationForm):
                 url=reverse("orga_multichoice_available", args=[run.get_slug()]),
                 data={"type": "registrations"},
             )
+            self.add_multichoice_config(
+                field_id="member",
+                link_id="member_available",
+                label=str(_("Show available members")),
+                url=reverse("orga_members_available", args=[run.get_slug()]),
+            )
 
     def init_additionals(self, registration_section: Any) -> None:
         """Initialize additional tickets section if feature is enabled."""
@@ -1263,7 +1269,7 @@ class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
         )
 
     def _init_multichoice(self, run: Any) -> None:
-        """Add multichoice popup configs for tickets and factions fields."""
+        """Add multichoice popup configs for tickets, factions, and allowed fields."""
         if "tickets" in self.fields:
             self.add_multichoice_config(
                 field_id="tickets",
@@ -1280,6 +1286,15 @@ class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
                 label=str(_("Show available factions")),
                 url=reverse("orga_form_available", args=[run.get_slug()]),
                 data={"type": "faction", "owner": "registrationquestion", "field": "factions"},
+                form_edit_uuid=True,
+            )
+        if "allowed" in self.fields:
+            self.add_multichoice_config(
+                field_id="allowed",
+                link_id="question_members_available",
+                label=str(_("Show available members")),
+                url=reverse("orga_members_available", args=[run.get_slug()]),
+                data={"type": "staff", "owner": "registrationquestion", "field": "allowed"},
                 form_edit_uuid=True,
             )
 

@@ -389,6 +389,13 @@ class OrgaCharacterForm(CharacterForm):
                 data={"type": self._meta.model.__name__.lower()},
                 ctx_edit_uuid=True,
             )
+            if "player" in self.fields:
+                self.add_multichoice_config(
+                    field_id="player",
+                    link_id="player_available",
+                    label=str(_("Show available players")),
+                    url=reverse("orga_members_available", args=[run.get_slug()]),
+                )
 
         # Init relationships
         self._init_relationships()

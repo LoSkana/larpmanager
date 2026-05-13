@@ -972,6 +972,9 @@ msgstr ""
 msgid "Show available characters"
 msgstr ""
 
+msgid "Show available players"
+msgstr ""
+
 msgid "--- NOT ASSIGNED ---"
 msgstr ""
 
@@ -2349,6 +2352,9 @@ msgid "Registration"
 msgstr ""
 
 msgid "Main"
+msgstr ""
+
+msgid "Show available members"
 msgstr ""
 
 msgid "Free donation"

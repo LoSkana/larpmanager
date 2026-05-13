@@ -4499,8 +4499,14 @@ msgstr "Selecciona tu personaje"
 msgid "Set up payment methods"
 msgstr "Establecer métodos de pago"
 
+msgid "Show available members"
+msgstr "Mostrar miembros disponibles"
+
 msgid "Show available options"
 msgstr "Mostrar opciones disponibles"
+
+msgid "Show available players"
+msgstr "Mostrar jugadores disponibles"
 
 msgid "Show available signups"
 msgstr "Mostrar inscripciones disponibles"

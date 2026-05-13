@@ -4499,8 +4499,14 @@ msgstr "Velg din karakter!"
 msgid "Set up payment methods"
 msgstr "Konfigurer betalingsmetoder"
 
+msgid "Show available members"
+msgstr "Vis tilgjengelige medlemmer"
+
 msgid "Show available options"
 msgstr "Vis tilgjengelige alternativer"
+
+msgid "Show available players"
+msgstr "Vis tilgjengelige spillere"
 
 msgid "Show available signups"
 msgstr "Vis tilgjengelige påmeldinger"
