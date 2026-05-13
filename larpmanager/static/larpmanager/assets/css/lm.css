@@ -1584,14 +1584,6 @@ header.sec h1 {
   overflow: hidden;
 }
 
-.showcase .section:nth-child(even) .image-container {
-  padding-right: 2rem;
-}
-
-.showcase .section:nth-child(odd) .image-container {
-  padding-left: 2rem;
-}
-
 .showcase .image-wrapper {
   position: relative;
   width: 100%;
