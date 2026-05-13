@@ -4499,8 +4499,14 @@ msgstr "Välj din karaktär!"
 msgid "Set up payment methods"
 msgstr "Konfigurera betalningsmetoder"
 
+msgid "Show available members"
+msgstr "Visa tillgängliga medlemmar"
+
 msgid "Show available options"
 msgstr "Visa tillgängliga alternativ"
+
+msgid "Show available players"
+msgstr "Visa tillgängliga spelare"
 
 msgid "Show available signups"
 msgstr "Visa tillgängliga anmälningar"

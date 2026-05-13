@@ -1331,6 +1331,11 @@ urlpatterns = [
         name="orga_form_available",
     ),
     path(
+        "<slug:event_slug>/manage/members/available/",
+        views_ow.orga_members_available,
+        name="orga_members_available",
+    ),
+    path(
         "<slug:event_slug>/manage/casting/toggle/",
         views_oca.orga_casting_toggle,
         name="orga_casting_toggle",

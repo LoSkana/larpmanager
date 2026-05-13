@@ -4499,8 +4499,14 @@ msgstr "Valitse hahmosi!"
 msgid "Set up payment methods"
 msgstr "Määritä maksutavat"
 
+msgid "Show available members"
+msgstr "Näytä käytettävissä olevat jäsenet"
+
 msgid "Show available options"
 msgstr "Näytä käytettävissä olevat vaihtoehdot"
+
+msgid "Show available players"
+msgstr "Näytä käytettävissä olevat pelaajat"
 
 msgid "Show available signups"
 msgstr "Näytä käytettävissä olevat ilmoittautumiset"

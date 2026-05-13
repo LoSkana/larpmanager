@@ -32,6 +32,8 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
+from larpmanager.forms.utils import get_members_queryset
+from larpmanager.models.access import EventRole
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.form import _get_writing_mapping
@@ -695,6 +697,39 @@ def orga_form_available(request: HttpRequest, event_slug: str) -> JsonResponse |
             queryset = queryset.exclude(pk__in=taken)
 
     res = [(str(el.uuid), str(el)) for el in queryset]
+    return JsonResponse({"res": res})
+
+
+@login_required
+def orga_members_available(request: HttpRequest, event_slug: str) -> JsonResponse | Http404:
+    """Return available members for multichoice popups via AJAX (if staff, only staff members)."""
+    if request.method != "POST":
+        raise Http404
+
+    context = check_event_context(request, event_slug)
+    association_id = context["association_id"]
+
+    kind = request.POST.get("type", "")
+    if kind == "staff":
+        staff_ids = (
+            EventRole.objects.filter(event_id=context["event"].id).values_list("members__id", flat=True).distinct()
+        )
+        queryset = get_members_queryset(association_id).filter(pk__in=staff_ids)
+    else:
+        queryset = get_members_queryset(association_id)
+
+    edit_uuid = request.POST.get("edit_uuid", "")
+    owner_type = request.POST.get("owner", "")
+    field = request.POST.get("field", "")
+
+    if edit_uuid and owner_type and field:
+        with contextlib.suppress(LookupError, ObjectDoesNotExist, AttributeError):
+            owner_model = apps.get_model("larpmanager", inflection.camelize(owner_type))
+            owner = owner_model.objects.get(uuid=edit_uuid)
+            taken = getattr(owner, field).values_list("id", flat=True)
+            queryset = queryset.exclude(pk__in=taken)
+
+    res = [(str(el.uuid), f"{el} - {el.email}") for el in queryset]
     return JsonResponse({"res": res})
 
 

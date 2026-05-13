@@ -4499,8 +4499,14 @@ msgstr "Selecteer je personage!"
 msgid "Set up payment methods"
 msgstr "Betaalmethoden instellen"
 
+msgid "Show available members"
+msgstr "Beschikbare leden tonen"
+
 msgid "Show available options"
 msgstr "Beschikbare opties tonen"
+
+msgid "Show available players"
+msgstr "Beschikbare spelers tonen"
 
 msgid "Show available signups"
 msgstr "Toon beschikbare aanmeldingen"

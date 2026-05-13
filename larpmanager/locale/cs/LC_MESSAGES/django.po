@@ -4499,8 +4499,14 @@ msgstr "Vyberte si svou postavu!"
 msgid "Set up payment methods"
 msgstr "Nastavení platebních metod"
 
+msgid "Show available members"
+msgstr "Zobrazit dostupné členy"
+
 msgid "Show available options"
 msgstr "Zobrazit dostupné možnosti"
+
+msgid "Show available players"
+msgstr "Zobrazit dostupné hráče"
 
 msgid "Show available signups"
 msgstr "Zobrazit dostupné přihlášky"
