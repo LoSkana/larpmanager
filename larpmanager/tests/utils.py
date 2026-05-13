@@ -220,7 +220,7 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
 
     submit_btn = scope.get_by_role(
         "button",
-        name=re.compile(r"^(Confirm|Submit)$", re.IGNORECASE)
+        name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE)
     )
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
