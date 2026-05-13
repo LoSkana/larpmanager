@@ -4924,6 +4924,9 @@ msgstr ""
 msgid "Toggle between administrative backend and public-facing pages"
 msgstr ""
 
+msgid "Open or close the sidebar to navigate management pages"
+msgstr ""
+
 msgid "Complete the setup to unlock full platform features"
 msgstr ""
 
@@ -4952,6 +4955,9 @@ msgid "Workspace selector"
 msgstr ""
 
 msgid "View Selector"
+msgstr ""
+
+msgid "Sidebar"
 msgstr ""
 
 msgid "Lite Mode active"

@@ -1004,6 +1004,9 @@ msgstr "Udostępnianie"
 msgid "Shuttle"
 msgstr "Shuttle"
 
+msgid "Sidebar"
+msgstr "Pasek boczny"
+
 msgid "Sign In"
 msgstr "Zaloguj się"
 
@@ -7669,6 +7672,10 @@ msgstr "Nie otrzymano jeszcze żadnych zgłoszeń na to wydarzenie"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Teraz można dodawać relacje podczas edycji postaci"
+
+msgid "Open or close the sidebar to navigate management pages"
+msgstr ""
+"Otwórz lub zamknij pasek boczny, aby nawigować po stronach zarządzania"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Śledzenie ilości nie jest włączone dla tej organizacji"

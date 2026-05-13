@@ -1004,6 +1004,9 @@ msgstr "Condivisione"
 msgid "Shuttle"
 msgstr "Navetta"
 
+msgid "Sidebar"
+msgstr "Barra laterale"
+
 msgid "Sign In"
 msgstr "Sign In"
 
@@ -7673,6 +7676,10 @@ msgstr "Non sono ancora pervenute iscrizioni per questo evento"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Ora puoi aggiungere relazioni quando si modifica un personaggio"
+
+msgid "Open or close the sidebar to navigate management pages"
+msgstr ""
+"Apri o chiudi la barra laterale per navigare tra le pagine di gestione"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr ""

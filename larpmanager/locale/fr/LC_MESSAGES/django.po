@@ -1004,6 +1004,9 @@ msgstr "Partage"
 msgid "Shuttle"
 msgstr "Navette"
 
+msgid "Sidebar"
+msgstr "Encadré"
+
 msgid "Sign In"
 msgstr "S'inscrire"
 
@@ -7724,6 +7727,10 @@ msgid "Now you can add relationships when editing a character"
 msgstr ""
 "Il est désormais possible d'ajouter des relations lors de la modification "
 "d'un personnage"
+
+msgid "Open or close the sidebar to navigate management pages"
+msgstr ""
+"Ouvre ou ferme la barre latérale pour naviguer dans les sections de gestion"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Le suivi des quantités n'est pas activé pour cette organisation"

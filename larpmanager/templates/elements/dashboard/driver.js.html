@@ -4,6 +4,7 @@
 {% trans "You have been redirected to the Event Dashboard" as first_event_intro %}
 {% trans "Switch between Organization and Events management" as select_workspace %}
 {% trans "Toggle between administrative backend and public-facing pages" as select_side %}
+{% trans "Open or close the sidebar to navigate management pages" as select_sidebar %}
 {% trans "Complete the setup to unlock full platform features" as lite_mode %}
 {% trans "The sidebar has expanded. New menus will continue to appear as you activate additional modules" as advanced_unlock %}
 {% trans "Enable specific features to add specialized functionalities to the platform" as features_sugg %}
@@ -47,6 +48,11 @@ window.addEventListener('DOMContentLoaded', function() {
     function driverFirstEvent() {
         const driver = window.driver.js.driver;
 
+        function visibleEl(desktopId, mobileId) {
+            const el = document.getElementById(desktopId);
+            return (el && el.offsetParent !== null) ? '#' + desktopId : '#' + mobileId;
+        }
+
         let steps = [
           {
             popover: {
@@ -55,7 +61,7 @@ window.addEventListener('DOMContentLoaded', function() {
             }
           },
           {
-            element: '#select_workspace',
+            element: visibleEl('select_workspace', 'select_workspace_mobile'),
             popover: {
               title: '{% filter escapejs %}{% trans "Workspace selector" %}{% endfilter %}',
               description: '{{ select_workspace | escapejs }}',
@@ -64,7 +70,7 @@ window.addEventListener('DOMContentLoaded', function() {
             }
           },
           {
-            element: '#select_side',
+            element: visibleEl('select_side', 'select_side_mobile'),
             popover: {
               title: '{% filter escapejs %}{% trans "View Selector" %}{% endfilter %}',
               description: '{{ select_side | escapejs }}',
@@ -72,14 +78,28 @@ window.addEventListener('DOMContentLoaded', function() {
               align: 'start'
             }
           },
-          {
+        ];
+
+        const sidebarEl = visibleEl('sidebar-open', 'sidebar-mobile-open');
+        if (document.querySelector(sidebarEl)) {
+            steps.push({
+                element: sidebarEl,
+                popover: {
+                    title: '{% filter escapejs %}{% trans "Sidebar" %}{% endfilter %}',
+                    description: '{{ select_sidebar | escapejs }}',
+                    side: 'bottom',
+                    align: 'start'
+                }
+            });
+        }
+
+        steps.push({
             element: '#lite-mode',
             popover: {
-              title: '{% filter escapejs %}{% trans "Lite Mode active" %}{% endfilter %}',
-              description: '{{ lite_mode | escapejs }}'
+                title: '{% filter escapejs %}{% trans "Lite Mode active" %}{% endfilter %}',
+                description: '{{ lite_mode | escapejs }}'
             }
-          },
-        ];
+        });
 
         const driverObj = driver({
             showProgress: true,

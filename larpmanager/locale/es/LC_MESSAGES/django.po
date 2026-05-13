@@ -1004,6 +1004,9 @@ msgstr "Compartir"
 msgid "Shuttle"
 msgstr "Lanzadera"
 
+msgid "Sidebar"
+msgstr "Barra lateral"
+
 msgid "Sign In"
 msgstr "Registrarse"
 
@@ -7690,6 +7693,10 @@ msgstr "Aún no se han recibido inscripciones para este acto"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Ahora puedes añadir relaciones al editar un personaje"
+
+msgid "Open or close the sidebar to navigate management pages"
+msgstr ""
+"Abre o cierra la barra lateral para navegar por las páginas de gestión"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "El seguimiento de cantidades no está activado para esta organización"
