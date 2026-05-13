@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import contextlib
 import re
+from datetime import UTC, datetime
 from typing import Any, ClassVar
 
 from django import forms
@@ -58,6 +59,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
+from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Character,
@@ -830,6 +832,11 @@ class OrgaCharacterForm(CharacterForm):
                 name="inactive",
                 defaults={"value": "True"},
             )
+            # Remove character assignments for runs that haven't started yet
+            RegistrationCharacterRel.objects.filter(
+                character=instance,
+                registration__run__start__gte=datetime.now(tz=UTC).date(),
+            ).delete()
         else:
             # Character is active - remove CharacterConfig if it exists
             CharacterConfig.objects.filter(character=instance, name="inactive").delete()
