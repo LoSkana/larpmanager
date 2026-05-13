@@ -1004,6 +1004,9 @@ msgstr "Teilen"
 msgid "Shuttle"
 msgstr "Shuttle"
 
+msgid "Sidebar"
+msgstr "Seitenleiste"
+
 msgid "Sign In"
 msgstr "Eintragen"
 
@@ -7732,6 +7735,11 @@ msgstr "Für diese Veranstaltung liegen noch keine Anmeldungen vor"
 msgid "Now you can add relationships when editing a character"
 msgstr ""
 "Jetzt können Sie beim Bearbeiten eines Charakters Beziehungen hinzufügen"
+
+msgid "Open or close the sidebar to navigate management pages"
+msgstr ""
+"Öffne oder schließe die Seitenleiste, um durch die Verwaltungsseiten zu "
+"navigieren"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Die Mengenverfolgung ist für diese Organisation nicht aktiviert"

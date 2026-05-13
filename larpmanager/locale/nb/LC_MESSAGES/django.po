@@ -1004,6 +1004,9 @@ msgstr "Deling"
 msgid "Shuttle"
 msgstr "Skyttelbuss"
 
+msgid "Sidebar"
+msgstr "Sidefelt"
+
 msgid "Sign In"
 msgstr "Logg inn"
 
@@ -7664,6 +7667,9 @@ msgstr "Ingen påmeldinger er mottatt til dette arrangementet ennå"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nå kan du legge til relasjoner når du redigerer et tegn"
+
+msgid "Open or close the sidebar to navigate management pages"
+msgstr "Åpne eller lukk sidefeltet for å navigere på administrasjonssidene"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Mengdesporing er ikke aktivert for denne organisasjonen"

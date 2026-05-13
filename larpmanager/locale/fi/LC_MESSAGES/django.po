@@ -1004,6 +1004,9 @@ msgstr "Jakaminen"
 msgid "Shuttle"
 msgstr "Sukkula"
 
+msgid "Sidebar"
+msgstr "Sivupalkki"
+
 msgid "Sign In"
 msgstr "Kirjaudu sisään"
 
@@ -7666,6 +7669,9 @@ msgstr "Tähän tapahtumaan ei ole vielä saatu ilmoittautumisia"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nyt voit lisätä suhteita hahmoa muokatessasi"
+
+msgid "Open or close the sidebar to navigate management pages"
+msgstr "Avaa tai sulje sivupalkki navigoidaksesi hallintasivujen välillä"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Määränseuranta ei ole käytössä tässä organisaatiossa"

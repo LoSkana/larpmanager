@@ -1004,6 +1004,9 @@ msgstr "Sdílení"
 msgid "Shuttle"
 msgstr "Kyvadlová doprava"
 
+msgid "Sidebar"
+msgstr "Postranní panel"
+
 msgid "Sign In"
 msgstr "Přihlásit se"
 
@@ -7664,6 +7667,10 @@ msgstr "Na tuto akci zatím nebyly přijaty žádné registrace"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nyní můžete při úpravě postavy přidávat vztahy"
+
+msgid "Open or close the sidebar to navigate management pages"
+msgstr ""
+"Otevření nebo zavření postranního panelu pro navigaci na stránky správy"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Sledování množství není pro tuto organizaci povoleno"

@@ -1004,6 +1004,9 @@ msgstr "Delning"
 msgid "Shuttle"
 msgstr "Skyttel"
 
+msgid "Sidebar"
+msgstr "Sidofält"
+
 msgid "Sign In"
 msgstr "Logga in"
 
@@ -7658,6 +7661,10 @@ msgstr "Inga anmälningar har ännu mottagits för detta evenemang"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nu kan du lägga till relationer när du redigerar en karaktär"
+
+msgid "Open or close the sidebar to navigate management pages"
+msgstr ""
+"Öppna eller stäng sidofältet för att navigera bland administrationssidorna"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Kvantitetsspårning är inte aktiverad för den här organisationen"
