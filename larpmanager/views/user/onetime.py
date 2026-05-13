@@ -148,7 +148,7 @@ def onetime_access(request: HttpRequest, token: Any) -> Any:
     if request.method == "POST":
         # Mark token as used and log access information
         member = request.user.member if request.user.is_authenticated and hasattr(request.user, "member") else None
-        access_token.mark_as_used(request=request, member=member)
+        access_token.mark_as_used(http_request=request, authenticated_member=member)
 
         # Render video player page
         content = access_token.content
