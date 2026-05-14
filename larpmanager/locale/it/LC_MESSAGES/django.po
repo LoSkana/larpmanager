@@ -1556,6 +1556,9 @@ msgstr "Profilazione"
 msgid "Prologues"
 msgstr "Prologhi"
 
+msgid "Promotion"
+msgstr "Promozione"
+
 msgid "Publisher"
 msgstr "Pubblicazione"
 
@@ -2092,9 +2095,6 @@ msgstr "Progressione"
 
 msgid "Provisional"
 msgstr "Provvisorie"
-
-msgid "Publication"
-msgstr "Pubblicazione"
 
 msgid "Quest types"
 msgstr "Tipi di missione"
@@ -6047,6 +6047,9 @@ msgstr "Gestisci i modelli per gli handout dell'evento"
 msgid "No registration found for this event"
 msgstr "Non è stata trovata alcuna registrazione per questo evento"
 
+msgid "Now set the promotion configurations"
+msgstr "Ora imposta le configurazioni della promozione"
+
 msgid "Now set up the credits configuration"
 msgstr "Ora imposta la configurazione dei crediti"
 
@@ -6280,9 +6283,6 @@ msgstr "Gestisci i tipi di abilità del personaggio"
 
 msgid "Membership of the Organization refused"
 msgstr "Iscrizione all'Associazione rifiutata"
-
-msgid "Now set the publication configurations"
-msgstr "Ora impostate le configurazioni di pubblicazione"
 
 msgid "Now you can host files in the platform"
 msgstr "Ora puoi ospitare i file nella piattaforma"
@@ -6879,6 +6879,9 @@ msgstr "Se hai bisogno di una mano, faccelo sapere"
 msgid "Manage character inventories and their items"
 msgstr "Gestiscigli inventari dei personaggi e i loro oggetti"
 
+msgid "Manage event metadata for external promotion"
+msgstr "Gestisci i metadati dell'evento per la promozione esterna"
+
 msgid "Manage invoices of payments and approve them"
 msgstr "Gestire le fatture dei pagamenti e approvarle"
 
@@ -7016,9 +7019,6 @@ msgstr "Desideri rimanere aggiornato sui nostri eventi"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Suggerimento: Le risposte corrette a questa domanda sono"
-
-msgid "Manage event metadata for external publication"
-msgstr "Gestire i metadati degli eventi per la pubblicazione esterna"
 
 msgid "Manage your event expenses and upload receipts"
 msgstr "Gestisci le tue spese dell'evento e carica le ricevute"

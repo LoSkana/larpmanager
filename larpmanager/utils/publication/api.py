@@ -28,7 +28,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_GET
 
 from larpmanager.cache.config import get_element_config
-from larpmanager.forms.event import PublicationMood, PublicationSetting
+from larpmanager.forms.event import PromotionMood, PromotionSetting
 from larpmanager.models.association import Association
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.event import Run
@@ -232,7 +232,7 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR09
                 if parsed:
                     event_data[field] = parsed
 
-            _setting_map = {v: label.lower() for v, label in PublicationSetting.choices}
+            _setting_map = {v: label.lower() for v, label in PromotionSetting.choices}
             event_settings = [
                 _setting_map[g]
                 for g in parse_multi_config(get_element_config(event, "pub_setting", default_value=""))
@@ -241,7 +241,7 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR09
             if event_settings:
                 event_data["setting"] = event_settings
 
-            _mood_map = {v: label.lower() for v, label in PublicationMood.choices}
+            _mood_map = {v: label.lower() for v, label in PromotionMood.choices}
             moods = [
                 _mood_map[g]
                 for g in parse_multi_config(get_element_config(event, "pub_mood", default_value=""))

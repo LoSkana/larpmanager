@@ -351,8 +351,8 @@ def orga_config(
 
 @login_required
 def orga_publication(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Manage external publication metadata for an event."""
-    return orga_edit(request, event_slug, OrgaAction.PUBLICATION)
+    """Manage external promotion metadata for an event."""
+    return orga_edit(request, event_slug, OrgaAction.PROMOTION)
 
 
 @login_required

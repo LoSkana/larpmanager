@@ -1438,13 +1438,13 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: Publication
+    name: Promotion
     descr: Makes upcoming events visible to external sites through a public API
     slug: publisher
     overall: true
     placeholder: false
     order: 80
-    after_text: Now set the publication configurations
+    after_text: Now set the promotion configurations
     after_link: config/publication
     hidden: false
     module: events
