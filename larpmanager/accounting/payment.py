@@ -41,11 +41,13 @@ from larpmanager.accounting.gateway import (
     get_stripe_form,
     get_sumup_form,
 )
-from larpmanager.accounting.registration import (
+from larpmanager.accounting.member import (
     get_membership_fee_for_reg,
     membership_fee_pending_config_name,
-    round_decimal,
     set_membership_fee_pending,
+)
+from larpmanager.accounting.registration import (
+    round_decimal,
 )
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features
@@ -824,7 +826,7 @@ def cleanup_membership_fee_reservation(instance: PaymentInvoice) -> None:
     year = registration.run.start.year
     association_id = registration.run.event.association_id
     config_name = membership_fee_pending_config_name(association_id, year)
-    deleted_count, _ = MemberConfig.objects.filter(
+    _deleted_count, _ignored = MemberConfig.objects.filter(
         member_id=instance.member_id,
         name=config_name,
         deleted__isnull=True,

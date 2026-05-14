@@ -2694,6 +2694,9 @@ msgstr "Token wygasł"
 msgid "Total members"
 msgstr "Łączna liczba członków"
 
+msgid "Total payment"
+msgstr "Całkowita płatność"
+
 msgid "URL shortener"
 msgstr "Skracacz adresów URL"
 
@@ -6389,6 +6392,10 @@ msgid "Manages events or organization revenues"
 msgstr "Zarządza wydarzeniami lub przychodami organizacji"
 
 #, python-format
+msgid "Membership fee for %(year)s: %(amount)s"
+msgstr "Składka członkowska za %(year)s: %(amount)s"
+
+#, python-format
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr "Opłata członkowska w wysokości %(user)s za %(year)s"
 
@@ -7361,6 +7368,10 @@ msgstr "Jeśli zaznaczone, nie używaj frakcji wydarzenia nadrzędnego"
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Jeśli chcesz, wskaż zaimek dla swojej postaci"
+
+#, python-format
+msgid "Includes membership fee for %(year)s of %(amount)s"
+msgstr "Obejmuje opłatę członkowską za %(year)s %(amount)s"
 
 msgid "Manage fixed payment installments for participants"
 msgstr "Zarządzanie stałymi ratami płatności dla uczestników"

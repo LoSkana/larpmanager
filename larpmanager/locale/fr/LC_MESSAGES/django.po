@@ -2694,6 +2694,9 @@ msgstr "Jeton expiré"
 msgid "Total members"
 msgstr "Nombre total de membres "
 
+msgid "Total payment"
+msgstr "Paiement total"
+
 msgid "URL shortener"
 msgstr "Raccourcisseur d'URL"
 
@@ -6397,6 +6400,10 @@ msgid "Manages events or organization revenues"
 msgstr "Gérer les recettes des événements ou de l'organisation"
 
 #, python-format
+msgid "Membership fee for %(year)s: %(amount)s"
+msgstr "Cotisation pour %(year)s : %(amount)s"
+
+#, python-format
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr "Part des %(user)s par %(year)s"
 
@@ -7395,6 +7402,10 @@ msgstr ""
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Si vous le souhaitez, indiquez un pronom pour votre personnage"
+
+#, python-format
+msgid "Includes membership fee for %(year)s of %(amount)s"
+msgstr "Comprend les frais d'adhésion pour %(year)s de %(amount)s"
 
 msgid "Manage fixed payment installments for participants"
 msgstr "Gérer les versements fixes pour les participants"

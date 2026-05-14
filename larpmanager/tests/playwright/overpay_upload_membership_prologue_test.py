@@ -197,9 +197,10 @@ def upload_membership(page: Any, live_server: Any) -> None:
     page.get_by_role("checkbox", name="Membership").check()
     submit_confirm(page)
 
-    # Set membership fee
+    # Set membership fee and explicitly mark as separated (not bundled with registration)
     page.locator("#id_membership_fee").click()
     page.locator("#id_membership_fee").fill("10")
+    page.locator("#id_membership_fee_separated").check()
     submit_confirm(page)
 
     # Upload membership

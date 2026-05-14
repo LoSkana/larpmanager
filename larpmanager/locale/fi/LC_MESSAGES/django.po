@@ -2694,6 +2694,9 @@ msgstr "Token vanhentunut"
 msgid "Total members"
 msgstr "Jäseniä yhteensä"
 
+msgid "Total payment"
+msgstr "Kokonaismaksu"
+
 msgid "URL shortener"
 msgstr "URL-osoitteen lyhentäjä"
 
@@ -6390,6 +6393,10 @@ msgid "Manages events or organization revenues"
 msgstr "Hallinnoi tapahtumia tai organisaation tuloja"
 
 #, python-format
+msgid "Membership fee for %(year)s: %(amount)s"
+msgstr "Jäsenmaksu %(year)s: %(amount)s"
+
+#, python-format
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr "Jäsenmaksu %(user)s vuoden %(year)s osalta"
 
@@ -7359,6 +7366,10 @@ msgstr "Jos valitaan, älä käytä vanhemman tapahtuman ryhmittymiä"
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Halutessasi voit ilmoittaa hahmollesi pronominin"
+
+#, python-format
+msgid "Includes membership fee for %(year)s of %(amount)s"
+msgstr "Sisältää jäsenmaksun %(year)s osalta %(amount)s osalta"
 
 msgid "Manage fixed payment installments for participants"
 msgstr "Hallinnoi kiinteitä maksueriä osallistujille"

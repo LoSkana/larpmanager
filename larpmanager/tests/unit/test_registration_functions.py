@@ -28,7 +28,6 @@ import pytest
 from larpmanager.accounting.registration import (
     cancel_reg,
     get_date_surcharge,
-    get_membership_fee_for_reg,
     get_registration_iscr,
     get_registration_payments,
     get_registration_transactions,
@@ -37,6 +36,7 @@ from larpmanager.accounting.registration import (
     registration_payments_status,
     round_to_nearest_cent,
 )
+from larpmanager.accounting.member import get_membership_fee_for_reg
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemMembership,
@@ -1325,7 +1325,7 @@ class TestProcessPaymentMembershipSplit(BaseTestCase):
         from datetime import date
         from decimal import Decimal
 
-        from larpmanager.accounting.registration import membership_fee_pending_config_name
+        from larpmanager.accounting.member import membership_fee_pending_config_name
         from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
         from larpmanager.models.base import PaymentMethod
         from larpmanager.models.member import MemberConfig
@@ -1403,7 +1403,7 @@ class TestProcessPaymentMembershipSplit(BaseTestCase):
         from django.utils import timezone
 
         from larpmanager.accounting.payment import _process_payment
-        from larpmanager.accounting.registration import membership_fee_pending_config_name
+        from larpmanager.accounting.member import membership_fee_pending_config_name
         from larpmanager.models.member import MemberConfig
 
         year = timezone.now().year

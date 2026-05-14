@@ -376,6 +376,11 @@ class AccountingItemMembership(AccountingItem):
                 condition=Q(deleted__isnull=True),
                 name="acctmem_association_year_act",
             ),
+            models.Index(
+                fields=["association", "year", "member"],
+                condition=Q(deleted__isnull=True),
+                name="acctmem_assoc_year_member_act",
+            ),
         ]
         constraints: ClassVar[list] = [
             models.UniqueConstraint(

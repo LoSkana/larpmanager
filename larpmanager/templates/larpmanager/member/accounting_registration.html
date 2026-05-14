@@ -14,6 +14,10 @@
             <p>
                 {% trans "Annual membership fee for" %} {{ year }}: <b>{{ fee }}{{ currency_symbol }}</b>
             </p>
+            <p>
+                {% trans "Total payment" %}: <b>{{ quota|format_decimal }}{{ currency_symbol }}</b>
+            </p>
+            <hr />
         {% endif %}
         {% if registration.tot_payed %}
             <p>

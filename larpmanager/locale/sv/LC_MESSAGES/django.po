@@ -2694,6 +2694,9 @@ msgstr "Token har löpt ut"
 msgid "Total members"
 msgstr "Totalt antal medlemmar"
 
+msgid "Total payment"
+msgstr "Total betalning"
+
 msgid "URL shortener"
 msgstr "URL-förkortare"
 
@@ -6392,6 +6395,10 @@ msgid "Manages events or organization revenues"
 msgstr "Hanterar intäkter från evenemang eller organisation"
 
 #, python-format
+msgid "Membership fee for %(year)s: %(amount)s"
+msgstr "Medlemsavgift för %(year)s: %(amount)s"
+
+#, python-format
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr "Andel %(user)s per %(year)s"
 
@@ -7360,6 +7367,10 @@ msgstr "Om markerat, använd inte föräldrahändelsens fraktioner"
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Om du vill, ange ett pronomen för din karaktär"
+
+#, python-format
+msgid "Includes membership fee for %(year)s of %(amount)s"
+msgstr "Inkluderar medlemsavgift för %(year)s av %(amount)s"
 
 msgid "Manage fixed payment installments for participants"
 msgstr "Hantera fasta utbetalningar för deltagare"

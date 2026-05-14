@@ -28,8 +28,9 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_registration_provisional
+from larpmanager.accounting.member import get_membership_fee_for_reg
 from larpmanager.cache.accounting import clear_registration_accounting_cache
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.cache.registration import clear_registration_counts_cache, get_registration_counts
@@ -431,6 +432,36 @@ def _status_payment(
     return False
 
 
+def _set_membership_context(context: dict, run: Run, member: Member, registration: Any) -> None:
+    """Set membership data in context for template rendering."""
+    if not run.start or "membership" not in context.get("features", {}):
+        return
+    association_id = run.event.association_id
+    event_year = run.start.year
+    context["membership_amount"] = get_association_config(association_id, "membership_fee", default_value=0)
+
+    paid_item = AccountingItemMembership.objects.filter(
+        year=event_year,
+        member=member,
+        association_id=association_id,
+    ).first()
+    if paid_item:
+        context["membership_fee"] = "done"
+        context["membership_amount_paid"] = paid_item.value
+        return
+
+    membership_fee_separated = get_association_config(association_id, "membership_fee_separated", default_value=True)
+    if membership_fee_separated:
+        if timezone.now().year != event_year:
+            context["membership_fee"] = "future"
+        else:
+            context["membership_fee"] = "todo"
+        return
+
+    if get_membership_fee_for_reg(association_id, member.id, run, registration):
+        context["membership_fee"] = "bundled"
+
+
 def registration_status(context: dict, run: Run, member: Member) -> dict:
     """Determine registration status and availability for users.
 
@@ -481,6 +512,7 @@ def registration_status(context: dict, run: Run, member: Member) -> dict:
 
         if registration:
             registration_status_signed(run, registration, member, features, register_url, run_status, context)
+            _set_membership_context(context, run, member, registration)
             return run_status
 
     if run.end and get_time_diff_today(run.end) < 0:

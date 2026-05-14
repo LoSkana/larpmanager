@@ -75,4 +75,9 @@ class Migration(migrations.Migration):
                 name="unique_active_membership_per_member_year",
             ),
         ),
+        migrations.AddIndex(
+            model_name='accountingitemmembership',
+            index=models.Index(condition=models.Q(('deleted__isnull', True)), fields=['association', 'year', 'member'],
+                               name='acctmem_assoc_year_member_act'),
+        ),
     ]

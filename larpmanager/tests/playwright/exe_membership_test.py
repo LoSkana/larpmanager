@@ -18,17 +18,17 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-"""
-Test: Membership request and approval workflow.
+"""Test: Membership request and approval workflow.
 Verifies membership application submission with document uploads, profile confirmation,
 request approval process, and membership status tracking.
 """
 
+import re
 from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm, expect_normalized
+from larpmanager.tests.utils import expect_normalized, go_to, load_image, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -40,6 +40,12 @@ def test_exe_membership(pw_page: Any) -> None:
 
     # activate members
     go_to(page, live_server, "/manage/features/membership/on")
+
+    # explicitly set membership fee as separated (not bundled with registration)
+    go_to(page, live_server, "/manage/config")
+    page.get_by_role("link", name=re.compile(r"^Members\s.+")).click()
+    page.locator("#id_membership_fee_separated").check()
+    submit_confirm(page)
 
     # register
     go_to(page, live_server, "/test/register")

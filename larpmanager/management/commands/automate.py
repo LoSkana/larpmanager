@@ -813,6 +813,7 @@ class Command(BaseCommand):
         membership_fee_already_paid = AccountingItemMembership.objects.filter(
             year=registration.run.end.year,
             member=registration.member,
+            association_id=registration.run.event.association_id,
         ).count()
         if membership_fee_already_paid > 0:
             return

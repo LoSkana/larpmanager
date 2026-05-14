@@ -5383,6 +5383,10 @@ msgstr ""
 msgid "Next payment"
 msgstr ""
 
+#, python-format
+msgid "Includes membership fee for %(year)s of %(amount)s"
+msgstr ""
+
 msgid "expected within"
 msgstr ""
 
@@ -5396,6 +5400,10 @@ msgid "No additional payments are required at this time"
 msgstr ""
 
 msgid "you can still pay the remaining amount if you wish"
+msgstr ""
+
+#, python-format
+msgid "Membership fee for %(year)s: %(amount)s"
 msgstr ""
 
 msgid "List"
@@ -7344,6 +7352,9 @@ msgid "The total registration fee is"
 msgstr ""
 
 msgid "Annual membership fee for"
+msgstr ""
+
+msgid "Total payment"
 msgstr ""
 
 msgid "So far you have paid a total of"

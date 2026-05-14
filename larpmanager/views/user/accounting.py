@@ -40,9 +40,8 @@ from larpmanager.accounting.gateway import (
     sumup_webhook,
 )
 from larpmanager.accounting.invoice import invoice_received_money
-from larpmanager.accounting.member import info_accounting
+from larpmanager.accounting.member import get_membership_fee_for_reg, info_accounting
 from larpmanager.accounting.payment import get_payment_form
-from larpmanager.accounting.registration import get_membership_fee_for_reg
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features
@@ -433,6 +432,8 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
     )
     if context["membership_fee_bundled"]:
         context["quota"] += context["membership_fee_bundled"]
+        context["year"] = registration.run.start.year
+        context["fee"] = context["membership_fee_bundled"]
 
     # Generate unique key for payment tracking
     key = f"{registration.id}_{registration.num_payments}"

@@ -18,100 +18,97 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-"""
-Test: Registration requiring membership approval and payment.
-Verifies signup blocked until membership approval, membership application workflow,
-payment after membership approval, and ticket availability updates.
+"""Test: Membership fee bundled with event registration payment.
+
+Verifies that when membership_fee_separated is disabled, the annual membership fee
+is included in the registration total shown during signup, bundled into the payment
+invoice, and recorded as a separate membership accounting item after confirmation.
 """
 
-import re
 from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import (check_download,
-                                     go_to,
-                                     load_image,
-                                     login_orga,
-                                     submit,
-                                     submit_confirm,
-                                     expect_normalized, logout,
-                                     )
+from larpmanager.tests.utils import (
+    expect_normalized,
+    go_to,
+    load_image,
+    login_orga,
+    sidebar,
+    submit,
+    submit_confirm,
+)
 
 pytestmark = pytest.mark.e2e
 
 
-def test_user_signup_membership(pw_page: Any) -> None:
+def test_membership_fee_bundled(pw_page: Any) -> None:
+    """Test that the annual membership fee is bundled with event registration payment."""
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
 
-    signup(live_server, page)
-
-    membership(live_server, page)
-
-    pay(live_server, page)
+    setup(live_server, page)
+    request_and_approve_membership(live_server, page)
+    register_and_pay_bundled(live_server, page)
 
 
-def signup(live_server: Any, page: Any) -> None:
-    # Activate payments
+def setup(live_server: Any, page: Any) -> None:
+    """Activate membership with bundled fee mode, wire payments, and set ticket price."""
+    # Activate payment
     go_to(page, live_server, "/manage/features/payment/on")
-    # Activate membership
-    go_to(page, live_server, "/manage/features/membership/on")
-    go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Members\s.+")).click()
-    # explicitly set membership fee as separated (not bundled with registration)
-    page.locator("#id_membership_fee_separated").check()
 
-    page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
-    page.locator("#id_mail_cc").check()
-    page.locator("#id_mail_signup_new").check()
-    page.locator("#id_mail_signup_update").check()
-    page.locator("#id_mail_signup_del").check()
-    page.locator("#id_mail_payment").check()
-
-    page.get_by_role("link", name=re.compile(r"^Payments ")).click()
-    page.locator("#id_payment_require_receipt").check()
-
+    # Activate membership - redirects to membership config section
+    go_to(page, live_server, "/manage")
+    sidebar(page, "Features")
+    page.get_by_role("checkbox", name="Membership").check()
     submit_confirm(page)
+
+    # Set membership fee and disable separated mode (bundle with registration)
+    page.locator("#id_membership_fee").fill("20")
+    page.locator("#id_membership_fee_separated").uncheck()
+    submit_confirm(page)
+
+    # Set up wire payment method
     go_to(page, live_server, "/manage/methods")
     page.get_by_role("checkbox", name="Wire").check()
-    page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("test wire")
     page.locator("#id_wire_fee").fill("0")
-    page.locator("#id_wire_descr").press("Tab")
     page.locator("#id_wire_payee").fill("test beneficiary")
-    page.locator("#id_wire_payee").press("Tab")
     page.locator("#id_wire_iban").fill("test iban")
-    page.locator("#id_wire_bic").fill("test iban")
+    page.locator("#id_wire_bic").fill("test bic")
     submit_confirm(page)
-    # set ticket price
+
+    # Set ticket price to 100
     go_to(page, live_server, "/test/manage/tickets")
     page.locator(".fa-edit").click()
-    page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
     submit_confirm(page)
-    # signup
+
+
+def request_and_approve_membership(live_server: Any, page: Any) -> None:
+    """Submit a membership request and approve it as organiser."""
+    # Sign up to trigger provisional registration (membership required)
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     expect_normalized(page, page.locator("#riepilogo"), "you must request to register as a member")
     submit_confirm(page)
 
-
-def membership(live_server: Any, page: Any) -> None:
-    # send membership
+    # Follow link to membership application
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "Provisional registration")
-    expect_normalized(page, page.locator("#one"), "please upload your membership application to proceed")
     page.get_by_role("link", name="please upload your membership").click()
+
+    # Confirm profile
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
-    # compile request
+
+    # Upload membership documents
     load_image(page, "#id_request")
     load_image(page, "#id_document")
-    check_download(page, "download it here")
     submit(page)
-    # confirm request
+
+    # Confirm membership request checkboxes
     page.locator("#id_confirm_1").check()
     page.get_by_text("I confirm that I have").click()
     page.locator("#id_confirm_2").check()
@@ -119,33 +116,43 @@ def membership(live_server: Any, page: Any) -> None:
     page.locator("#id_confirm_3").check()
     page.locator("#id_confirm_4").check()
     submit(page)
-    # approve request signup
+
+    # Approve request as organiser
     go_to(page, live_server, "/manage/membership/")
     page.get_by_role("link", name="Request").click()
     submit_confirm(page)
-    # check register
+    expect_normalized(page, page.locator("#one"), "Accepted")
+
+
+def register_and_pay_bundled(live_server: Any, page: Any) -> None:
+    """Pay for the event with the membership fee bundled into the invoice."""
+    # Registration now shows proceed with payment
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
     page.get_by_role("link", name="to confirm it proceed with").click()
 
-
-def pay(live_server: Any, page: Any) -> None:
-    # pay
+    # Select wire payment - total is ticket (100) + membership fee (20) = 120
     page.get_by_role("cell", name="Wire", exact=True).click()
-    expect_normalized(page, page.locator("b"), "100")
+    expect_normalized(page, page.locator("b"), "120")
+
+    # Membership fee is shown separately on the payment page
+    expect_normalized(page, page.locator("#one"), "Annual membership fee")
+    expect_normalized(page, page.locator("#one"), "20")
+
     submit(page)
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
-
     submit(page)
-    # approve payment
+
+    # Approve payment
     go_to(page, live_server, "/test/manage/invoices")
     page.get_by_role("link", name="Confirm", exact=True).click()
-    # check payment
+
+    # Registration is confirmed
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Registration confirmed (Standard)")
-    logout(page)
-    expect_normalized(page, page.locator("#one"), "Registration is open!")
-    expect_normalized(page, page.locator("#one"), "Hurry: only 9 tickets available")
-    # test mails
-    go_to(page, live_server, "/debug/mail")
+    expect_normalized(page, page.locator("#one"), "Registration confirmed")
+
+    # Membership fee was recorded: page shows fee received for this year
+    go_to(page, live_server, "/membership")
+    expect_normalized(page, page.locator("#one"), "You are a regular member")
+    expect_normalized(page, page.locator("#one"), "membership fee for this year has been received")
