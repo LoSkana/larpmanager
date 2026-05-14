@@ -1295,7 +1295,7 @@ class TestProcessPaymentMembershipSplit(BaseTestCase):
         super().setUp()
         cache.clear()
         self._features_patcher = patch(
-            "larpmanager.accounting.registration.get_association_features",
+            "larpmanager.accounting.member.get_association_features",
             return_value={"membership": 1},
         )
         self._features_patcher.start()

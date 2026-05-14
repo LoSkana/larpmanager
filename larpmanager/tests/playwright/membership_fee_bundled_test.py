@@ -21,8 +21,10 @@
 """Test: Membership fee bundled with event registration payment.
 
 Verifies that when membership_fee_separated is disabled, the annual membership fee
-is included in the registration total shown during signup, bundled into the payment
-invoice, and recorded as a separate membership accounting item after confirmation.
+is included in the registration total shown during signup for both events, bundled
+into the first payment invoice, and then excluded from the second event's total once
+the reservation is held by the first invoice. After payment confirmation the membership
+accounting entry and reg_status display are verified for both events.
 """
 
 from typing import Any
@@ -32,6 +34,7 @@ import pytest
 from larpmanager.tests.utils import (
     expect_normalized,
     go_to,
+    just_wait,
     load_image,
     login_orga,
     sidebar,
@@ -54,7 +57,7 @@ def test_membership_fee_bundled(pw_page: Any) -> None:
 
 
 def setup(live_server: Any, page: Any) -> None:
-    """Activate membership with bundled fee mode, wire payments, and set ticket price."""
+    """Activate membership with bundled fee mode, wire payments, set ticket prices, and create second event."""
     # Activate payment
     go_to(page, live_server, "/manage/features/payment/on")
 
@@ -64,9 +67,8 @@ def setup(live_server: Any, page: Any) -> None:
     page.get_by_role("checkbox", name="Membership").check()
     submit_confirm(page)
 
-    # Set membership fee and disable separated mode (bundle with registration)
+    # Set membership fee
     page.locator("#id_membership_fee").fill("20")
-    page.locator("#id_membership_fee_separated").uncheck()
     submit_confirm(page)
 
     # Set up wire payment method
@@ -79,15 +81,39 @@ def setup(live_server: Any, page: Any) -> None:
     page.locator("#id_wire_bic").fill("test bic")
     submit_confirm(page)
 
-    # Set ticket price to 100
+    # Set ticket price to 100 for first event
     go_to(page, live_server, "/test/manage/tickets")
+    page.locator(".fa-edit").click()
+    page.locator("#id_price").fill("100.00")
+    submit_confirm(page)
+
+    # Create second event (slug auto-generated as "testsecond" from "Test Second")
+    go_to(page, live_server, "/manage/events/")
+    page.get_by_role("link", name="New event").click()
+    page.locator("#id_form1-name").fill("Test Second")
+    page.locator("#id_form1-name").press("Tab")
+    page.locator("#id_form2-development").select_option("1")
+    page.locator("#id_form2-registration_status").select_option("o")
+    just_wait(page, big=True)
+    page.locator("#id_form2-start").scroll_into_view_if_needed()
+    page.locator("#id_form2-start").fill("2055-06-11")
+    page.locator("#id_form2-start").click()
+    just_wait(page, big=True)
+    page.locator("#id_form2-end").scroll_into_view_if_needed()
+    page.locator("#id_form2-end").fill("2055-06-13")
+    page.locator("#id_form2-end").click()
+    just_wait(page, big=True)
+    submit_confirm(page)
+
+    # Set ticket price to 100 for second event
+    go_to(page, live_server, "/testsecond/manage/tickets")
     page.locator(".fa-edit").click()
     page.locator("#id_price").fill("100.00")
     submit_confirm(page)
 
 
 def request_and_approve_membership(live_server: Any, page: Any) -> None:
-    """Submit a membership request and approve it as organiser."""
+    """Submit a membership request, approve it, then verify bundled-fee riepilogo behaviour."""
     # Sign up to trigger provisional registration (membership required)
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
@@ -123,36 +149,104 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Accepted")
 
+    # First event: riepilogo shows ticket 100 + membership 20 = 120, don't confirm
+    go_to(page, live_server, "/test/register")
+    page.get_by_role("button", name="Continue").click()
+    expect_normalized(page, page.locator("#riepilogo"), "120")
 
-def register_and_pay_bundled(live_server: Any, page: Any) -> None:
-    """Pay for the event with the membership fee bundled into the invoice."""
-    # Registration now shows proceed with payment
+    # Second event: riepilogo also shows 120 (membership not yet reserved by any invoice)
+    go_to(page, live_server, "/testsecond/register")
+    page.get_by_role("button", name="Continue").click()
+    expect_normalized(page, page.locator("#riepilogo"), "120")
+
+    # First event: register and confirm (creates provisional registration)
+    go_to(page, live_server, "/test/register")
+    page.get_by_role("button", name="Continue").click()
+    just_wait(page)
+    submit_confirm(page)
+
+    # Go to payment page: verify total 120 includes membership fee of 20, then submit wire
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
     page.get_by_role("link", name="to confirm it proceed with").click()
-
-    # Select wire payment - total is ticket (100) + membership fee (20) = 120
     page.get_by_role("cell", name="Wire", exact=True).click()
     expect_normalized(page, page.locator("b"), "120")
-
-    # Membership fee is shown separately on the payment page
     expect_normalized(page, page.locator("#one"), "Annual membership fee")
     expect_normalized(page, page.locator("#one"), "20")
+    submit(page)
 
+    # reg_status accounting section shows next payment 120 including membership fee 20
+    go_to(page, live_server, "/test/register")
+    page.get_by_role("link", name="Accounting").click()
+    just_wait(page)
+    expect_normalized(page, page.locator("#one"), "120")
+    expect_normalized(page, page.locator("#one"), "membership fee")
+
+    # Second event: riepilogo now shows 100 only (membership reserved by first event's invoice)
+    go_to(page, live_server, "/testsecond/register")
+    page.get_by_role("button", name="Continue").click()
+    expect_normalized(page, page.locator("#riepilogo"), "100")
+
+
+def register_and_pay_bundled(live_server: Any, page: Any) -> None:
+    """Upload wire proof for first event, verify reg_status, then register and pay second event."""
+    # First event: upload wire proof (invoice already created, re-submit wire to reach upload form)
+    go_to(page, live_server, "/test/register")
+    expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
+    page.get_by_role("link", name="to confirm it proceed with").click()
+    page.get_by_role("cell", name="Wire", exact=True).click()
     submit(page)
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
     submit(page)
 
-    # Approve payment
+    # Approve first event payment
     go_to(page, live_server, "/test/manage/invoices")
     page.get_by_role("link", name="Confirm", exact=True).click()
 
-    # Registration is confirmed
+    # First event registration is confirmed
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "Registration confirmed")
 
-    # Membership fee was recorded: page shows fee received for this year
+    # Membership fee was recorded
     go_to(page, live_server, "/membership")
     expect_normalized(page, page.locator("#one"), "You are a regular member")
     expect_normalized(page, page.locator("#one"), "membership fee for this year has been received")
+
+    # reg_status accounting section shows event fee paid 100 and membership fee 20
+    go_to(page, live_server, "/test/register")
+    page.get_by_role("link", name="Accounting").click()
+    just_wait(page)
+    expect_normalized(page, page.locator("#one"), "100")
+    expect_normalized(page, page.locator("#one"), "Membership fee")
+    expect_normalized(page, page.locator("#one"), "20")
+
+    # Second event: register (riepilogo shows 100, no membership fee since already paid)
+    go_to(page, live_server, "/testsecond/register")
+    page.get_by_role("button", name="Continue").click()
+    expect_normalized(page, page.locator("#riepilogo"), "100")
+    just_wait(page)
+    submit_confirm(page)
+
+    # Second event: proceed to wire payment (total 100, no membership shown)
+    go_to(page, live_server, "/testsecond/register")
+    expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
+    page.get_by_role("link", name="to confirm it proceed with").click()
+    page.get_by_role("cell", name="Wire", exact=True).click()
+    expect_normalized(page, page.locator("b"), "100")
+    submit(page)
+    load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+    submit(page)
+
+    # Approve second event payment
+    go_to(page, live_server, "/testsecond/manage/invoices")
+    page.get_by_role("link", name="Confirm", exact=True).click()
+
+    # reg_status for second event shows event fee 100 and membership fee 20 (already paid via first event)
+    go_to(page, live_server, "/testsecond/register")
+    page.get_by_role("link", name="Accounting").click()
+    just_wait(page)
+    expect_normalized(page, page.locator("#one"), "100")
+    expect_normalized(page, page.locator("#one"), "Membership fee")
+    expect_normalized(page, page.locator("#one"), "20")
