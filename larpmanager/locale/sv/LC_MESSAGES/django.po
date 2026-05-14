@@ -1004,6 +1004,9 @@ msgstr "Delning"
 msgid "Shuttle"
 msgstr "Skyttel"
 
+msgid "Sidebar"
+msgstr "Sidofält"
+
 msgid "Sign In"
 msgstr "Logga in"
 
@@ -1553,6 +1556,9 @@ msgstr "Profilering"
 msgid "Prologues"
 msgstr "Prologer"
 
+msgid "Promotion"
+msgstr "Marknadsföring"
+
 msgid "Publisher"
 msgstr "Utgivare"
 
@@ -2089,9 +2095,6 @@ msgstr "Progression"
 
 msgid "Provisional"
 msgstr "Provisorisk"
-
-msgid "Publication"
-msgstr "Publikation"
 
 msgid "Quest types"
 msgstr "Typer av uppdrag"
@@ -6053,6 +6056,9 @@ msgstr "Hantera modellerna för evenemangshandouts"
 msgid "No registration found for this event"
 msgstr "Ingen registrering hittades för detta evenemang"
 
+msgid "Now set the promotion configurations"
+msgstr "Ställ nu in kampanjkonfigurationerna"
+
 msgid "Now set up the credits configuration"
 msgstr "Ställ nu in konfigurationen för krediter"
 
@@ -6288,9 +6294,6 @@ msgstr "Hantera typen av karaktärsförmågor"
 
 msgid "Membership of the Organization refused"
 msgstr "Medlemskap nekat"
-
-msgid "Now set the publication configurations"
-msgstr "Ställ nu in publiceringskonfigurationerna"
 
 msgid "Now you can host files in the platform"
 msgstr "Nu kan du hosta filer i plattformen"
@@ -6889,6 +6892,9 @@ msgstr "Om du behöver hjälp är du välkommen att höra av dig till oss"
 msgid "Manage character inventories and their items"
 msgstr "Hantera karaktärernas inventarier och deras föremål"
 
+msgid "Manage event metadata for external promotion"
+msgstr "Hantera metadata för evenemang för extern marknadsföring"
+
 msgid "Manage invoices of payments and approve them"
 msgstr "Hantera fakturor och betalningar och godkänna dem"
 
@@ -7028,9 +7034,6 @@ msgstr "Ledtråd: De rätta svaren på denna fråga är"
 #, python-format
 msgid "Includes annual membership fee for %(year)s of"
 msgstr "Inkluderar årlig medlemsavgift för %(year)s av"
-
-msgid "Manage event metadata for external publication"
-msgstr "Hantera metadata om evenemang för extern publicering"
 
 msgid "Manage your event expenses and upload receipts"
 msgstr "Hantera dina evenemangskostnader och ladda upp kvitton"
@@ -7671,6 +7674,10 @@ msgstr "Inga anmälningar har ännu mottagits för detta evenemang"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nu kan du lägga till relationer när du redigerar en karaktär"
+
+msgid "Open or close the sidebar to navigate management pages"
+msgstr ""
+"Öppna eller stäng sidofältet för att navigera bland administrationssidorna"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Kvantitetsspårning är inte aktiverad för den här organisationen"

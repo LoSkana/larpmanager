@@ -1004,6 +1004,9 @@ msgstr "Delen"
 msgid "Shuttle"
 msgstr "Shuttle"
 
+msgid "Sidebar"
+msgstr "Zijbalk"
+
 msgid "Sign In"
 msgstr "Aanmelden"
 
@@ -1553,6 +1556,9 @@ msgstr "Profilering"
 msgid "Prologues"
 msgstr "Prologen"
 
+msgid "Promotion"
+msgstr "Promotie"
+
 msgid "Publisher"
 msgstr "Uitgever"
 
@@ -2089,9 +2095,6 @@ msgstr "Progressie"
 
 msgid "Provisional"
 msgstr "Voorlopig"
-
-msgid "Publication"
-msgstr "Publicatie"
 
 msgid "Quest types"
 msgstr "Typen zoektochten"
@@ -6054,6 +6057,9 @@ msgstr "De modellen voor hand-outs voor evenementen beheren"
 msgid "No registration found for this event"
 msgstr "Geen registratie gevonden voor dit evenement"
 
+msgid "Now set the promotion configurations"
+msgstr "Stel nu de promotieconfiguraties in"
+
 msgid "Now set up the credits configuration"
 msgstr "Stel nu de credits configuratie in"
 
@@ -6289,9 +6295,6 @@ msgstr "Het type karaktervaardigheden beheren"
 
 msgid "Membership of the Organization refused"
 msgstr "Lidmaatschap geweigerd"
-
-msgid "Now set the publication configurations"
-msgstr "Stel nu de publicatieconfiguraties in"
 
 msgid "Now you can host files in the platform"
 msgstr "Nu kun je bestanden hosten in het platform"
@@ -6891,6 +6894,9 @@ msgstr "Als je hulp nodig hebt, laat het ons weten"
 msgid "Manage character inventories and their items"
 msgstr "Beheer personage-inventarissen en hun items"
 
+msgid "Manage event metadata for external promotion"
+msgstr "Metagegevens van evenementen beheren voor externe promotie"
+
 msgid "Manage invoices of payments and approve them"
 msgstr "Facturen van betalingen beheren en goedkeuren"
 
@@ -7033,9 +7039,6 @@ msgstr "Hint: De juiste antwoorden op deze vraag zijn"
 #, python-format
 msgid "Includes annual membership fee for %(year)s of"
 msgstr "Inclusief jaarlijkse lidmaatschapsbijdrage voor %(year)s van"
-
-msgid "Manage event metadata for external publication"
-msgstr "Metagegevens van evenementen beheren voor externe publicatie"
 
 msgid "Manage your event expenses and upload receipts"
 msgstr "Beheer je evenementuitgaven en upload ontvangstbewijzen"
@@ -7691,6 +7694,9 @@ msgstr "Er zijn nog geen inschrijvingen ontvangen voor dit evenement"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nu kun je relaties toevoegen wanneer je een personage bewerkt"
+
+msgid "Open or close the sidebar to navigate management pages"
+msgstr "Open of sluit de zijbalk om door beheerpagina's te navigeren"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr ""

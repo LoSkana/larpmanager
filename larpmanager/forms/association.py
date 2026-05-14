@@ -850,7 +850,7 @@ class ExeConfigForm(ConfigForm):
         if "publisher" not in self.params["features"]:
             return
 
-        self.set_section("publication", _("Publication"))
+        self.set_section("publication", _("Promotion"))
 
         self.add_configs(
             "publication_crew",

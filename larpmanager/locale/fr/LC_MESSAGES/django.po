@@ -1004,6 +1004,9 @@ msgstr "Partage"
 msgid "Shuttle"
 msgstr "Navette"
 
+msgid "Sidebar"
+msgstr "Encadré"
+
 msgid "Sign In"
 msgstr "S'inscrire"
 
@@ -1553,6 +1556,9 @@ msgstr "Profilage"
 msgid "Prologues"
 msgstr "Prologues"
 
+msgid "Promotion"
+msgstr "Promotion"
+
 msgid "Publisher"
 msgstr "Éditeur"
 
@@ -2089,9 +2095,6 @@ msgstr "Progression"
 
 msgid "Provisional"
 msgstr "Provisoire"
-
-msgid "Publication"
-msgstr "Publication"
 
 msgid "Quest types"
 msgstr "Types de quêtes"
@@ -6057,6 +6060,9 @@ msgstr "Gérer les modèles de documents à distribuer lors des événements"
 msgid "No registration found for this event"
 msgstr "Aucune inscription n'a été trouvée pour cet événement"
 
+msgid "Now set the promotion configurations"
+msgstr "Définis maintenant les configurations de la promotion"
+
 msgid "Now set up the credits configuration"
 msgstr "Configurez maintenant les crédits"
 
@@ -6292,9 +6298,6 @@ msgstr "Gérer le type de capacités des personnages"
 
 msgid "Membership of the Organization refused"
 msgstr "Adhésion refusée"
-
-msgid "Now set the publication configurations"
-msgstr "Définissez maintenant les configurations de publication"
 
 msgid "Now you can host files in the platform"
 msgstr "Vous pouvez désormais héberger des fichiers dans la plate-forme"
@@ -6901,6 +6904,9 @@ msgstr ""
 msgid "Manage character inventories and their items"
 msgstr "Gérer les inventaires des personnages et leurs objets"
 
+msgid "Manage event metadata for external promotion"
+msgstr "Gérer les métadonnées des événements pour la promotion externe"
+
 msgid "Manage invoices of payments and approve them"
 msgstr "Gérer les factures et les paiements et les approuver"
 
@@ -7043,9 +7049,6 @@ msgstr "Indice : Les réponses correctes à cette question sont les suivantes"
 #, python-format
 msgid "Includes annual membership fee for %(year)s of"
 msgstr "Comprend la cotisation annuelle pour %(year)s de"
-
-msgid "Manage event metadata for external publication"
-msgstr "Gérer les métadonnées de l'événement en vue d'une publication externe"
 
 msgid "Manage your event expenses and upload receipts"
 msgstr "Gérez les dépenses liées à votre événement et téléchargez les reçus"
@@ -7737,6 +7740,10 @@ msgid "Now you can add relationships when editing a character"
 msgstr ""
 "Il est désormais possible d'ajouter des relations lors de la modification "
 "d'un personnage"
+
+msgid "Open or close the sidebar to navigate management pages"
+msgstr ""
+"Ouvre ou ferme la barre latérale pour naviguer dans les sections de gestion"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Le suivi des quantités n'est pas activé pour cette organisation"

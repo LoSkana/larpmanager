@@ -40,7 +40,7 @@ from larpmanager.cache.config import (
     save_config,
     save_single_config,
 )
-from larpmanager.forms.event import PublicationEventType, PublicationLanguage
+from larpmanager.forms.event import PromotionEventType, PromotionLanguage
 from larpmanager.mail.digest import get_exec_language
 from larpmanager.models.access import EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run
@@ -330,9 +330,9 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
     genere = sorted(genere_ids) or [genre_map.get("no-genre-specified", 27)]
 
     lingua_raw = get_element_config(event, "pub_language", default_value="")
-    lingua = parse_multi_config(lingua_raw) or [PublicationLanguage.values[0]]
+    lingua = parse_multi_config(lingua_raw) or [PromotionLanguage.values[0]]
 
-    tipologia_raw = get_element_config(event, "pub_event_type", default_value="") or PublicationEventType.values[0]
+    tipologia_raw = get_element_config(event, "pub_event_type", default_value="") or PromotionEventType.values[0]
     tipologia = _TIPOLOGIA_MAP.get(tipologia_raw, tipologia_raw)
 
     luogo = get_element_config(event, "pub_place", default_value="") or event.where or None

@@ -737,7 +737,7 @@ msgid ""
 "panel"
 msgstr ""
 
-msgid "Publication"
+msgid "Promotion"
 msgstr ""
 
 msgid "Publish staff"
@@ -1985,7 +1985,7 @@ msgstr ""
 msgid "Enter a valid number"
 msgstr ""
 
-msgid "Manage event metadata for external publication"
+msgid "Manage event metadata for external promotion"
 msgstr ""
 
 msgid "Informations"
@@ -4935,6 +4935,9 @@ msgstr ""
 msgid "Toggle between administrative backend and public-facing pages"
 msgstr ""
 
+msgid "Open or close the sidebar to navigate management pages"
+msgstr ""
+
 msgid "Complete the setup to unlock full platform features"
 msgstr ""
 
@@ -4963,6 +4966,9 @@ msgid "Workspace selector"
 msgstr ""
 
 msgid "View Selector"
+msgstr ""
+
+msgid "Sidebar"
 msgstr ""
 
 msgid "Lite Mode active"
@@ -9593,7 +9599,7 @@ msgstr ""
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 
-msgid "Now set the publication configurations"
+msgid "Now set the promotion configurations"
 msgstr ""
 
 msgid ""

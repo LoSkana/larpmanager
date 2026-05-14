@@ -221,7 +221,7 @@ Tracks writing workflow status using customizable progress steps. Organizers def
 
 The Prologue feature allows organizers to create introductory texts for each act that appear in character sheets. Using `orga_prologue_types`, organizers first define prologue types (e.g., "Act 1", "Act 2"). Then via `orga_prologues`, they create prologue content linked to a type and assign it to characters through a many-to-many relationship. When participants view their character sheet, prologues are displayed ordered by type number, with a warning not to read ahead. The system validates that at least one prologue type exists before allowing prologue creation.
 
-### Publication Feature
+### Promotion Feature
 
 Makes upcoming events visible to external sites through public API endpoints. Organizations enable publication of their event calendar data for aggregation on third-party platforms or event discovery services. Uses PublisherApiKey for secure API access with IP tracking and logging.
 

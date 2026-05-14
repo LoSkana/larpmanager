@@ -348,7 +348,7 @@ body.is-preload #header .logo img {
 }
 
 form.contact {
-  margin: 2em auto;
+  margin: 0 auto;
   max-width: 100%;
   width: 32em;
 }
@@ -384,7 +384,7 @@ p {
 
 table td,
 table th {
-  text-align: center;
+  text-align: left;
   vertical-align: middle;
   padding: 0.5em;
 }
@@ -535,6 +535,7 @@ ul.special {
 
 .contact p {
   width: 100%;
+  margin-bottom: 1.5em;
 }
 
 .contact input {

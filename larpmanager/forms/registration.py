@@ -1237,7 +1237,7 @@ class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
 
         if "reg_que_tickets" not in features:
             self.delete_field("tickets")
-        else:
+        elif "tickets" in self.fields:
             self.configure_field_event("tickets", event)
 
         if "reg_que_faction" not in features:
