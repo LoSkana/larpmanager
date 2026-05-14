@@ -133,9 +133,8 @@ def _get_ildb_context(event: Event, run: Run | None = None) -> IldbCtx | None:
 # ---- EVENT ---- #
 
 
-def sync_event(event_id: int) -> None:
+def sync_event(event: Event) -> None:
     """Create or update the ILDB entry for all eligible runs of an event."""
-    event = Event.objects.select_related("association").get(pk=event_id)
     ctx = _get_ildb_context(event)
     if not ctx:
         return
@@ -506,50 +505,36 @@ def _build_crew(event: object) -> list[dict]:
 # ---- CAST ---- #
 
 
-def sync_cast(registration_id: int, _run_id: int | None = None) -> None:
-    """Sync a single registration's cast entry on ILDB using UUID-based identification."""
-    try:
-        reg = (
-            Registration.objects.select_related("run__event__association", "member", "ticket")
-            .prefetch_related("rcrs__character")
-            .get(pk=registration_id)
-        )
-        run = reg.run
-    except Registration.DoesNotExist:
-        # Registration to delete, attempt to recover run
-        reg = None
-        try:
-            run = Run.objects.get(pk=_run_id)
-        except Run.DoesNotExist:
-            return
-
+def sync_cast(registration: Registration | None, run: Run, registration_id: int | None = None) -> None:
+    """Sync a single cast entry on ILDB. Pass None for registration on deletion path."""
     ctx = _get_ildb_context(run.event, run)
     if not ctx or not ctx.ildb_event_id:
         return
     if not get_association_config(ctx.association.id, "publication_cast", default_value=False):
         return
 
-    # Prepare data
-    cast_config_key = f"{ILDB_CAST_UUID_CONFIG}_{run.id}_{registration_id}"
-    stored_uuid = get_config(cast_config_key, use_cache=False)
     base_url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events/{ctx.ildb_event_id}/cast"
 
     response = _ildb_http("get", base_url, api_key=ctx.api_key, timeout=30)
     response.raise_for_status()
     ildb_uuids = {e["uuid"] for e in response.json().get("data", [])}
 
-    # If registration not found or cancelled/waitlisted, delete from ILDB and return
-    if not reg or reg.cancellation_date or reg.ticket.tier == TicketTier.WAITING:
+    reg_id = registration.id if registration else registration_id
+    cast_config_key = f"{ILDB_CAST_UUID_CONFIG}_{run.id}_{reg_id}" if reg_id is not None else None
+    stored_uuid = get_config(cast_config_key, use_cache=False) if cast_config_key else None
+
+    # If registration deleted, cancelled, or waitlisted, remove from ILDB and return
+    if not registration or registration.cancellation_date or registration.ticket.tier == TicketTier.WAITING:
         if stored_uuid and stored_uuid in ildb_uuids:
             _ildb_http("delete", f"{base_url}/{stored_uuid}", api_key=ctx.api_key, timeout=30).raise_for_status()
         return
 
     # Check if already exist or needs to be created
-    rcr = reg.rcrs.first()
+    rcr = registration.rcrs.first()
     if not rcr:
         return
     character_name = rcr.custom_name or rcr.character.name
-    entry = _make_cast_entry(reg.member, character_name, npc=reg.ticket.tier == TicketTier.NPC)
+    entry = _make_cast_entry(registration.member, character_name, npc=registration.ticket.tier == TicketTier.NPC)
 
     if stored_uuid and stored_uuid in ildb_uuids:
         _ildb_http("put", f"{base_url}/{stored_uuid}", api_key=ctx.api_key, json=entry, timeout=30).raise_for_status()

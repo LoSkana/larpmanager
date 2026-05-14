@@ -20,10 +20,13 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+
+from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.access import EventRole
+from larpmanager.models.event import Event, Run
+from larpmanager.models.registration import Registration
 from larpmanager.utils.larpmanager.tasks import background_auto
 from larpmanager.utils.publication.ildb import (
     _get_ildb_context,
@@ -31,9 +34,6 @@ from larpmanager.utils.publication.ildb import (
     sync_crew as sync_crew_ildb,
     sync_event as sync_event_ildb,
 )
-
-if TYPE_CHECKING:
-    from larpmanager.models.event import Run
 
 logger = logging.getLogger(__name__)
 
@@ -43,19 +43,45 @@ PUB_QUEUE = "pub"
 @background_auto(queue=PUB_QUEUE, skip_duplicates=True)
 def publish_event(event_id: int) -> None:
     """Publish an event on all linked platforms."""
-    sync_event_ildb(event_id)
+    try:
+        event = Event.objects.select_related("association").get(pk=event_id)
+    except ObjectDoesNotExist:
+        return
+
+    sync_event_ildb(event)
 
 
 @background_auto(queue=PUB_QUEUE, skip_duplicates=True)
 def publish_registration(registration_id: int, run_id: int | None = None) -> None:
     """Background task: sync a single cast entry on ILDB after a registration changes."""
-    sync_cast_ildb(registration_id, run_id)
+    try:
+        registration = (
+            Registration.objects.select_related("run__event__association", "member", "ticket")
+            .prefetch_related("rcrs__character")
+            .get(pk=registration_id)
+        )
+        run = registration.run
+    except ObjectDoesNotExist:
+        # Registration to delete, attempt to recover run
+        registration = None
+        if run_id is None:
+            return
+        try:
+            run = Run.objects.get(pk=run_id)
+        except ObjectDoesNotExist:
+            return
+
+    sync_cast_ildb(registration, run, registration_id)
 
 
 @background_auto(queue=PUB_QUEUE, skip_duplicates=True)
 def publish_event_role(event_role_id: int) -> None:
     """Background task: full crew sync after EventRole metadata changes."""
-    role = EventRole.objects.select_related("event__association").get(pk=event_role_id)
+    try:
+        role = EventRole.objects.select_related("event__association").get(pk=event_role_id)
+    except ObjectDoesNotExist:
+        return
+
     ctx = _get_ildb_context(role.event)
     if not ctx or not get_association_config(ctx.association.id, "publication_crew", default_value=False):
         return
