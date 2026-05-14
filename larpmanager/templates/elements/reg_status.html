@@ -19,27 +19,29 @@
             | <a href="{% url 'accounting_registration' registration.uuid %}">
             {% if membership_fee == 'bundled' and membership_amount %}
                 {% trans "Next payment" %}: {{ registration.quota|add:membership_amount|format_decimal }}{{ currency_symbol }}
-                ({% blocktrans with year=run.start.year %}Includes membership fee for {{ year }} of{% endblocktrans %} {{ membership_amount|format_decimal }}{{ currency_symbol }})
-            {% else %}
-                {% trans "Next payment" %}: {{ registration.quota | format_decimal }}{{ currency_symbol }},
-            {% endif %}
-            {% if registration.deadline > 0 %}
-                {% trans "expected within" %} {{ registration.deadline }} {% trans "days" %}
-            {% else %}
-                {% trans "overdue by" %} {{ registration.deadline | abs_value }} {% trans "days" %}
-            {% endif %}
-        </a>
-    {% elif registration.tot_iscr > registration.tot_payed %}
-        {% if run_status.can_pay %}
-            | {% trans "No additional payments are required at this time" %},
-            <a href="{% url 'accounting_registration' registration.uuid %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
+                ({% trans "Includes membership fee" %} {{ year }}:
+            {% endblocktrans %}
+            {{ membership_amount|format_decimal }}{{ currency_symbol }})
+        {% else %}
+            {% trans "Next payment" %}: {{ registration.quota | format_decimal }}{{ currency_symbol }},
         {% endif %}
-    {% endif %}
-    {% if membership_amount and run.start %}
-        {% if membership_fee == 'done' %}
-            | {% blocktrans with year=run.start.year amount=membership_amount_paid %}Membership fee for {{ year }}: {{ amount }}{% endblocktrans %}{{ currency_symbol }}
+        {% if registration.deadline > 0 %}
+            {% trans "expected within" %} {{ registration.deadline }} {% trans "days" %}
+        {% else %}
+            {% trans "overdue by" %} {{ registration.deadline | abs_value }} {% trans "days" %}
         {% endif %}
+    </a>
+{% elif registration.tot_iscr > registration.tot_payed %}
+    {% if run_status.can_pay %}
+        | {% trans "No additional payments are required at this time" %},
+        <a href="{% url 'accounting_registration' registration.uuid %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
     {% endif %}
+{% endif %}
+{% if membership_amount and run.start %}
+    {% if membership_fee == 'done' %}
+        | {% trans "Membership fee" %} {{ run.start.year }}: {{ membership_amount_paid|format_decimal }}{{ currency_symbol }}
+    {% endif %}
+{% endif %}
 </span>
 {% endif %}
 {% if run_status.details %}<p>{{ run_status.details | safe }}</p>{% endif %}

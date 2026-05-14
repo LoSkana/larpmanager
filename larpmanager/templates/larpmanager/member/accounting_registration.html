@@ -12,7 +12,7 @@
         </p>
         {% if membership_fee_bundled %}
             <p>
-                {% trans "Annual membership fee for" %} {{ year }}: <b>{{ fee }}{{ currency_symbol }}</b>
+                {% trans "Membership fee" %} {{ year }}: <b>{{ fee }}{{ currency_symbol }}</b>
             </p>
             <p>
                 {% trans "Total payment" %}: <b>{{ quota|format_decimal }}{{ currency_symbol }}</b>

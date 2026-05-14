@@ -4602,6 +4602,9 @@ msgstr "Link voor vroege registratie"
 msgid "Failed to add character"
 msgstr "Geen teken toegevoegd"
 
+msgid "Includes membership fee"
+msgstr "Inclusief lidmaatschapsgeld"
+
 msgid "Indicate only if rate 0"
 msgstr "Alleen aangeven als tarief 0"
 
@@ -4846,9 +4849,6 @@ msgstr "controleer rapporten minder"
 
 msgid "not visible at this time"
 msgstr "momenteel niet zichtbaar"
-
-msgid "Annual membership fee for"
-msgstr "Jaarlijkse contributie voor"
 
 msgid "Character sheet questions"
 msgstr "Karakterblad vragen"
@@ -6377,10 +6377,6 @@ msgstr "Maakt gratis voorregistratie voor evenementen mogelijk"
 msgid "If you need help, remember to check out"
 msgstr "Als je hulp nodig hebt, ga dan naar"
 
-#, python-format
-msgid "Includes membership fee for %(year)s of"
-msgstr "Inclusief lidmaatschapsgeld voor %(year)s van"
-
 msgid "Indicate the required character options"
 msgstr "Geef de vereiste tekenopties aan"
 
@@ -6398,10 +6394,6 @@ msgstr "Beheert uitgaven voor evenementen of organisatie"
 
 msgid "Manages events or organization revenues"
 msgstr "Beheert inkomsten van evenementen of organisaties"
-
-#, python-format
-msgid "Membership fee for %(year)s: %(amount)s"
-msgstr "Lidmaatschapsgeld voor %(year)s: %(amount)s"
 
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"

@@ -4602,6 +4602,9 @@ msgstr "Link per iscrizione anticipata"
 msgid "Failed to add character"
 msgstr "Impossibile aggiungere il personaggio"
 
+msgid "Includes membership fee"
+msgstr "Include la quota associativa"
+
 msgid "Indicate only if rate 0"
 msgstr "Indica solo se aliquota 0"
 
@@ -4846,9 +4849,6 @@ msgstr "check relazioni in meno"
 
 msgid "not visible at this time"
 msgstr "non visibili in questo momento"
-
-msgid "Annual membership fee for"
-msgstr "Quota associativa annuale per"
 
 msgid "Character sheet questions"
 msgstr "Domande sulla scheda del personaggio"
@@ -6374,10 +6374,6 @@ msgstr "Consente la pre-iscrizione gratuita agli eventi"
 msgid "If you need help, remember to check out"
 msgstr "Se hai bisogno di aiuto, ricordati di consultare"
 
-#, python-format
-msgid "Includes membership fee for %(year)s of"
-msgstr "Include la quota associativa per il %(year)s di"
-
 msgid "Indicate the required character options"
 msgstr "Indica le opzioni di carattere richieste"
 
@@ -6395,10 +6391,6 @@ msgstr "Gestisce le spese per gli eventi o l'organizzazione"
 
 msgid "Manages events or organization revenues"
 msgstr "Gestisci le entrate degli eventi o dell'organizzazione"
-
-#, python-format
-msgid "Membership fee for %(year)s: %(amount)s"
-msgstr "Quota associativa per %(year)s: %(amount)s"
 
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"

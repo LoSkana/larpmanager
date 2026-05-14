@@ -4602,6 +4602,9 @@ msgstr "Odkaz pro včasnou registraci"
 msgid "Failed to add character"
 msgstr "Nepodařilo se přidat znak"
 
+msgid "Includes membership fee"
+msgstr "Včetně členského příspěvku"
+
 msgid "Indicate only if rate 0"
 msgstr "Uveďte pouze v případě sazby 0"
 
@@ -4846,9 +4849,6 @@ msgstr "méně kontrolních hlášení"
 
 msgid "not visible at this time"
 msgstr "v tuto chvíli není viditelný"
-
-msgid "Annual membership fee for"
-msgstr "Roční členský poplatek pro"
 
 msgid "Character sheet questions"
 msgstr "Otázky k listu postavy"
@@ -6375,10 +6375,6 @@ msgstr "Umožňuje bezplatnou předběžnou registraci na události"
 msgid "If you need help, remember to check out"
 msgstr "Pokud potřebujete pomoc, nezapomeňte se podívat na"
 
-#, python-format
-msgid "Includes membership fee for %(year)s of"
-msgstr "Zahrnuje členský poplatek za %(year)s"
-
 msgid "Indicate the required character options"
 msgstr "Uveďte požadované možnosti znaků"
 
@@ -6396,10 +6392,6 @@ msgstr "Spravuje výdaje na události nebo organizaci"
 
 msgid "Manages events or organization revenues"
 msgstr "Spravuje příjmy z akcí nebo organizací"
-
-#, python-format
-msgid "Membership fee for %(year)s: %(amount)s"
-msgstr "Členský poplatek za %(year)s: %(amount)s"
 
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"

@@ -5383,8 +5383,7 @@ msgstr ""
 msgid "Next payment"
 msgstr ""
 
-#, python-format
-msgid "Includes membership fee for %(year)s of"
+msgid "Includes membership fee"
 msgstr ""
 
 msgid "expected within"
@@ -5402,8 +5401,7 @@ msgstr ""
 msgid "you can still pay the remaining amount if you wish"
 msgstr ""
 
-#, python-format
-msgid "Membership fee for %(year)s: %(amount)s"
+msgid "Membership fee"
 msgstr ""
 
 msgid "List"
@@ -7190,9 +7188,6 @@ msgstr ""
 msgid "What are you doing here"
 msgstr ""
 
-msgid "Membership fee"
-msgstr ""
-
 msgid "They are regularly paid for the following years"
 msgstr ""
 
@@ -7349,9 +7344,6 @@ msgid "Indicates the details of the request"
 msgstr ""
 
 msgid "The total registration fee is"
-msgstr ""
-
-msgid "Annual membership fee for"
 msgstr ""
 
 msgid "Total payment"

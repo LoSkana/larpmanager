@@ -4602,6 +4602,9 @@ msgstr "Lenke til tidlig registrering"
 msgid "Failed to add character"
 msgstr "Kunne ikke legge til tegn"
 
+msgid "Includes membership fee"
+msgstr "Inkluderer medlemsavgift"
+
 msgid "Indicate only if rate 0"
 msgstr "Angi kun hvis sats 0"
 
@@ -4846,9 +4849,6 @@ msgstr "sjekk rapporter mindre"
 
 msgid "not visible at this time"
 msgstr "ikke synlig på dette tidspunktet"
-
-msgid "Annual membership fee for"
-msgstr "Årlig medlemsavgift for"
 
 msgid "Character sheet questions"
 msgstr "Spørsmål til karakterarket"
@@ -6375,10 +6375,6 @@ msgstr "Muliggjør gratis forhåndsregistrering til arrangementer"
 msgid "If you need help, remember to check out"
 msgstr "Hvis du trenger hjelp, husk å sjekke ut"
 
-#, python-format
-msgid "Includes membership fee for %(year)s of"
-msgstr "Inkluderer medlemsavgift for %(year)s av"
-
 msgid "Indicate the required character options"
 msgstr "Angi de ønskede tegnalternativene"
 
@@ -6396,10 +6392,6 @@ msgstr "Administrerer arrangementer eller organisasjonens utgifter"
 
 msgid "Manages events or organization revenues"
 msgstr "Administrerer inntekter fra arrangementer eller organisasjoner"
-
-#, python-format
-msgid "Membership fee for %(year)s: %(amount)s"
-msgstr "Medlemskontingent for %(year)s: %(amount)s"
 
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"

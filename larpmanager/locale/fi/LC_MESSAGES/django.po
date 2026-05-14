@@ -4602,6 +4602,9 @@ msgstr "Varhaisen ilmoittautumisen linkki"
 msgid "Failed to add character"
 msgstr "Merkin lisääminen epäonnistui"
 
+msgid "Includes membership fee"
+msgstr "Sisältää jäsenmaksun"
+
 msgid "Indicate only if rate 0"
 msgstr "Ilmoitetaan vain, jos korko 0"
 
@@ -4846,9 +4849,6 @@ msgstr "tarkista puuttuvat suhteet"
 
 msgid "not visible at this time"
 msgstr "ei näy tällä hetkellä"
-
-msgid "Annual membership fee for"
-msgstr "Vuosittainen jäsenmaksu"
 
 msgid "Character sheet questions"
 msgstr "Hahmo arkki kysymyksiä"
@@ -6374,10 +6374,6 @@ msgstr "Mahdollistaa ilmaisen ennakkoilmoittautumisen tapahtumiin"
 msgid "If you need help, remember to check out"
 msgstr "Jos tarvitset apua, muista tarkistaa"
 
-#, python-format
-msgid "Includes membership fee for %(year)s of"
-msgstr "Sisältää jäsenmaksun %(year)s osalta seuraavalta vuodelta"
-
 msgid "Indicate the required character options"
 msgstr "Ilmoita vaaditut hahmovaihtoehdot"
 
@@ -6395,10 +6391,6 @@ msgstr "Hallinnoi tapahtumia tai organisaation kuluja"
 
 msgid "Manages events or organization revenues"
 msgstr "Hallinnoi tapahtumia tai organisaation tuloja"
-
-#, python-format
-msgid "Membership fee for %(year)s: %(amount)s"
-msgstr "Jäsenmaksu %(year)s: %(amount)s"
 
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"
