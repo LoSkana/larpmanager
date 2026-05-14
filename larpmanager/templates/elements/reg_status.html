@@ -14,7 +14,8 @@
         {% else %}
             {% trans "Total registration fee" %}: {{ registration.tot_iscr|format_decimal }}.
         {% endif %}
-        {% if registration.quota %}
+        {% if pending_invoices %}
+        {% elif registration.quota %}
             <a href="{% url 'accounting_registration' registration.uuid %}">
                 {% trans "Next payment" %}: {{ registration.quota | format_decimal }}{{ currency_symbol }},
                 {% if registration.deadline > 0 %}

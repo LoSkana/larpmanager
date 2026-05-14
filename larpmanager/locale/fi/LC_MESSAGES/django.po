@@ -4179,6 +4179,9 @@ msgstr "Majoituksen tiedot"
 msgid "Advanced Mode Enabled"
 msgstr "Advanced Mode käytössä"
 
+msgid "Annual membership fee"
+msgstr "Vuosittainen jäsenmaksu"
+
 msgid "Approve reimbursement"
 msgstr "Hyväksy korvaus"
 
@@ -4666,6 +4669,9 @@ msgstr "Muistutus jäsenmaksusta"
 msgid "Remove from xp delivery"
 msgstr "Poista XP-jako"
 
+msgid "Separate membership fee"
+msgstr "Erillinen jäsenmaksu"
+
 msgid "Show available factions"
 msgstr "Näytä käytettävissä olevat ryhmittymät"
 
@@ -4834,6 +4840,9 @@ msgstr "tarkista puuttuvat suhteet"
 
 msgid "not visible at this time"
 msgstr "ei näy tällä hetkellä"
+
+msgid "Annual membership fee for"
+msgstr "Vuosittainen jäsenmaksu"
 
 msgid "Character sheet questions"
 msgstr "Hahmo arkki kysymyksiä"
@@ -7013,6 +7022,10 @@ msgstr "Haluatko olla aina ajan tasalla tapahtumistamme"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Vihje: Oikeat vastaukset tähän kysymykseen ovat seuraavat"
+
+#, python-format
+msgid "Includes annual membership fee for %(year)s of"
+msgstr "Sisältää vuotuisen jäsenmaksun %(year)s osalta"
 
 msgid "Manage event metadata for external publication"
 msgstr "Tapahtuman metatietojen hallinta ulkoista julkaisemista varten"
@@ -10228,6 +10241,13 @@ msgid ""
 "meanings (msgctxt)"
 msgstr ""
 "Valinnainen konteksti, kun samalla tekstillä on eri merkityksiä (msgctxt)"
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
+msgstr ""
+"Jos rasti on merkitty, vuosittainen jäsenmaksu maksetaan erikseen tapahtuman"
+" rekisteröintimaksusta"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

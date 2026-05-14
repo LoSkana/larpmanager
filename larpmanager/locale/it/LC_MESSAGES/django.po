@@ -1497,7 +1497,7 @@ msgid "Inventory"
 msgstr "Inventario"
 
 msgid "Languages"
-msgstr "Le lingue"
+msgstr "Lingue"
 
 msgid "Longitude"
 msgstr "Longitudine"
@@ -4179,6 +4179,9 @@ msgstr "Dettagli sulla sistemazione"
 msgid "Advanced Mode Enabled"
 msgstr "Modalità avanzata abilitata"
 
+msgid "Annual membership fee"
+msgstr "Quota associativa annuale"
+
 msgid "Approve reimbursement"
 msgstr "Approva rimborso"
 
@@ -4666,6 +4669,9 @@ msgstr "Promemoria quota associativa"
 msgid "Remove from xp delivery"
 msgstr "Rimuovi dalla consegna di xp"
 
+msgid "Separate membership fee"
+msgstr "Quota associativa separata"
+
 msgid "Show available factions"
 msgstr "Mostra le fazioni disponibili"
 
@@ -4834,6 +4840,9 @@ msgstr "check relazioni in meno"
 
 msgid "not visible at this time"
 msgstr "non visibili in questo momento"
+
+msgid "Annual membership fee for"
+msgstr "Quota associativa annuale per"
 
 msgid "Character sheet questions"
 msgstr "Domande sulla scheda del personaggio"
@@ -7013,6 +7022,10 @@ msgstr "Desideri rimanere aggiornato sui nostri eventi"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Suggerimento: Le risposte corrette a questa domanda sono"
+
+#, python-format
+msgid "Includes annual membership fee for %(year)s of"
+msgstr "Include la quota associativa annuale per %(year)s di"
 
 msgid "Manage event metadata for external publication"
 msgstr "Gestire i metadati degli eventi per la pubblicazione esterna"
@@ -10429,6 +10442,13 @@ msgid ""
 msgstr ""
 "Contesto opzionale per la disambiguazione quando lo stesso testo ha "
 "significati diversi (msgctxt)"
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
+msgstr ""
+"Se l'opzione è selezionata, la quota associativa annuale viene pagata "
+"separatamente dalla quota di iscrizione all'evento"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

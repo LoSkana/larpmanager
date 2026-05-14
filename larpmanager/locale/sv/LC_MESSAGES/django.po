@@ -4179,6 +4179,9 @@ msgstr "Information om boende"
 msgid "Advanced Mode Enabled"
 msgstr "Avancerat läge aktiverat"
 
+msgid "Annual membership fee"
+msgstr "Årlig medlemsavgift"
+
 msgid "Approve reimbursement"
 msgstr "Godkänna återbetalning"
 
@@ -4666,6 +4669,9 @@ msgstr "Påminnelse medlemsavgift"
 msgid "Remove from xp delivery"
 msgstr "Ta bort från xp-leverans"
 
+msgid "Separate membership fee"
+msgstr "Separat medlemsavgift"
+
 msgid "Show available factions"
 msgstr "Visa tillgängliga fraktioner"
 
@@ -4834,6 +4840,9 @@ msgstr "kontrollera rapporter mindre"
 
 msgid "not visible at this time"
 msgstr "inte synlig för närvarande"
+
+msgid "Annual membership fee for"
+msgstr "Årlig medlemsavgift för"
 
 msgid "Character sheet questions"
 msgstr "Frågor om karaktärsblad"
@@ -7015,6 +7024,10 @@ msgstr "Vill du hålla dig uppdaterad om våra evenemang"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Ledtråd: De rätta svaren på denna fråga är"
+
+#, python-format
+msgid "Includes annual membership fee for %(year)s of"
+msgstr "Inkluderar årlig medlemsavgift för %(year)s av"
 
 msgid "Manage event metadata for external publication"
 msgstr "Hantera metadata om evenemang för extern publicering"
@@ -10246,6 +10259,13 @@ msgid ""
 msgstr ""
 "Valfri kontext för disambiguering när samma text har olika betydelser "
 "(msgctxt)"
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
+msgstr ""
+"Om krysset är markerat betalas den årliga medlemsavgiften separat från "
+"anmälningsavgiften för evenemanget"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

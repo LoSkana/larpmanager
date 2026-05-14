@@ -4179,6 +4179,9 @@ msgstr "Detalles del alojamiento"
 msgid "Advanced Mode Enabled"
 msgstr "Modo avanzado activado"
 
+msgid "Annual membership fee"
+msgstr "Cuota anual de afiliación"
+
 msgid "Approve reimbursement"
 msgstr "Aprobar reembolso"
 
@@ -4666,6 +4669,9 @@ msgstr "Recordatorio cuota de afiliación"
 msgid "Remove from xp delivery"
 msgstr "Eliminar de la entrega xp"
 
+msgid "Separate membership fee"
+msgstr "Cuota de afiliación aparte"
+
 msgid "Show available factions"
 msgstr "Mostrar facciones disponibles"
 
@@ -4834,6 +4840,9 @@ msgstr "comprobar falta de relaciones"
 
 msgid "not visible at this time"
 msgstr "no visible en este momento"
+
+msgid "Annual membership fee for"
+msgstr "Cuota anual de afiliación para"
 
 msgid "Character sheet questions"
 msgstr "Preguntas sobre la ficha de personaje"
@@ -7016,6 +7025,10 @@ msgstr "¿Quieres estar al día de nuestros eventos"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Pista: Las respuestas correctas a esta pregunta son"
+
+#, python-format
+msgid "Includes annual membership fee for %(year)s of"
+msgstr "Incluye la cuota anual de socio por %(year)s de"
 
 msgid "Manage event metadata for external publication"
 msgstr "Gestión de metadatos de eventos para su publicación externa"
@@ -10394,6 +10407,13 @@ msgid ""
 msgstr ""
 "Contexto opcional para la desambiguación cuando el mismo texto tiene "
 "significados diferentes (msgctxt)"
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
+msgstr ""
+"Si está marcada, la cuota anual de afiliación se paga aparte de la cuota de "
+"inscripción al evento"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

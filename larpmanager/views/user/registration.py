@@ -37,7 +37,7 @@ from django.views.decorators.http import require_POST
 
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.accounting.member import info_accounting
-from larpmanager.accounting.registration import cancel_reg
+from larpmanager.accounting.registration import cancel_reg, get_membership_fee_for_reg
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.event_text import get_event_text
@@ -559,20 +559,29 @@ def register_info(request: HttpRequest, context: dict, form: object, registratio
         registration.provisional = is_registration_provisional(registration)
 
     if context["run"].start and "membership" in context["features"]:
-        membership_query = AccountingItemMembership.objects.filter(
-            year=context["run"].start.year,
-            member=context["member"],
+        event_year = context["run"].start.year
+
+        membership_fee_separated = get_association_config(
+            context["association_id"], "membership_fee_separated", default_value=True
         )
-        if membership_query.exists():
-            context["membership_fee"] = "done"
-        elif timezone.now().year != context["run"].start.year:
-            context["membership_fee"] = "future"
-        else:
-            context["membership_fee"] = "todo"
 
         context["membership_amount"] = get_association_config(
             context["association_id"], "membership_fee", default_value=0
         )
+
+        if membership_fee_separated:
+            membership_query = AccountingItemMembership.objects.filter(
+                year=event_year,
+                member=context["member"],
+            )
+            if membership_query.exists():
+                context["membership_fee"] = "done"
+            elif timezone.now().year != event_year:
+                context["membership_fee"] = "future"
+            else:
+                context["membership_fee"] = "todo"
+        elif get_membership_fee_for_reg(context["association_id"], context["member"].id, context["run"], registration):
+            context["membership_fee"] = "bundled"
 
 
 def init_form_submitted(context: dict, form: object, request: HttpRequest, registration: Any = None) -> None:
@@ -829,6 +838,7 @@ def _register_prepare(context: dict, registration: Any) -> Any:
             > 0
         )
         context["payment_lock"] = has_pending_payment or registration.tot_payed > 0
+        registration.pending = has_pending_payment
 
     _add_bring_friend_discounts(context)
 

@@ -150,6 +150,10 @@ $(document).ready(function(){
            sum -= parseInt($(this).html());
         });
 
+        if (window['texts']['mem_amount']) {
+            sum += window['texts']['mem_amount'];
+        }
+
         total = sum;
 
         if (tot_payed > 0) {
@@ -172,6 +176,9 @@ $(document).ready(function(){
 
         if (total > 0)
             tx += "<tr class='riep'><td>" + window['texts']['upd'] + ": <b>" + total + "{{ currency_symbol }}</b>.";
+
+        if (window['texts']['mem'] && window['texts']['mem_amount'])
+            tx += " (" + window['texts']['mem'] + " <b>" + window['texts']['mem_amount'] + "{{ currency_symbol }}</b>)";
 
         if (tot_payed > 0)
             tx += " " + "" + window['texts']['alr'] + ": <b>" + tot_payed + "{{ currency_symbol }}</b>.";

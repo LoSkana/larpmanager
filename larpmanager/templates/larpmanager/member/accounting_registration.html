@@ -10,6 +10,11 @@
         <p>
             {% trans "The total registration fee is" %}: <b>{{ registration.tot_iscr|format_decimal }}{{ currency_symbol }}</b>
         </p>
+        {% if membership_fee_bundled %}
+            <p>
+                {% trans "Annual membership fee for" %} {{ year }}: <b>{{ fee }}{{ currency_symbol }}</b>
+            </p>
+        {% endif %}
         {% if registration.tot_payed %}
             <p>
                 {% trans "So far you have paid a total of" %}: <b>{{ registration.tot_payed|format_decimal }}{{ currency_symbol }}</b>

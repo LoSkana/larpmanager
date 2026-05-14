@@ -115,17 +115,23 @@
                             </tr>
                             {% if 'membership' in association.features %}
                                 {% if not features.laog and membership_amount %}
-                                    <tr>
-                                        <td>
-                                            {% if membership_fee == 'done' %}
-                                                {% trans "You have already paid your dues for the current year, so you are already covered for this event" %}!
-                                            {% elif membership_fee == 'future' %}
+                                    {% if membership_fee == 'done' %}
+                                        <tr>
+                                            <td>{% trans "You have already paid your dues for the current year, so you are already covered for this event" %}!</td>
+                                        </tr>
+                                    {% elif membership_fee == 'future' %}
+                                        <tr>
+                                            <td>
                                                 {% trans "To participate in this event, you will have to pay the annual membership fee of" %}: <b>{{ membership_amount }}{{ currency_symbol }}</b>.
-                                            {% else %}
+                                            </td>
+                                        </tr>
+                                    {% elif membership_fee == 'todo' %}
+                                        <tr>
+                                            <td>
                                                 {% trans "To participate in this event, you will have to pay in addition the annual membership fee of" %}: <b>{{ membership_amount }}{{ currency_symbol }}</b>.
-                                            {% endif %}
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
                                 {% endif %}
                                 {% if member.membership.status == 'e' or member.membership.status == 'j' %}
                                     <tr>

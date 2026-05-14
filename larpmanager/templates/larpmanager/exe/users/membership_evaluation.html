@@ -12,16 +12,18 @@
         <h2>{% trans "Warning: there is already an approved member with the same name" %}!</h2>
         <hr />
     {% endif %}
-    <h1>{% trans "Request for" %}: {{ member }}</h1>
-    <form action="{{ request.path }}"
-          enctype="multipart/form-data"
-          method="post">
-        {% csrf_token %}
-        <table class="mob ">
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="{% trans "Confirm" %}">
-    </form>
+    <div class="form_container auto_resize">
+        <h1>{% trans "Request for" %}: {{ member }}</h1>
+        <form action="{{ request.path }}"
+              enctype="multipart/form-data"
+              method="post">
+            {% csrf_token %}
+            <table class="mob ">
+                {{ form.as_table }}
+            </table>
+            <input type="submit" value="{% trans "Confirm" %}">
+        </form>
+    </div>
     <hr class="c" />
     {% if '.pdf' in doc_path %}
         <embed src="{{ member.membership.get_document_filepath }}"

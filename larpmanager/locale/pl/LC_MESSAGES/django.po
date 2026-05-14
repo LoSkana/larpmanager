@@ -4179,6 +4179,9 @@ msgstr "Szczegóły dotyczące zakwaterowania"
 msgid "Advanced Mode Enabled"
 msgstr "Tryb zaawansowany włączony"
 
+msgid "Annual membership fee"
+msgstr "Roczna opłata członkowska"
+
 msgid "Approve reimbursement"
 msgstr "Zatwierdzenie zwrotu kosztów"
 
@@ -4666,6 +4669,9 @@ msgstr "Przypomnienie o składce członkowskiej"
 msgid "Remove from xp delivery"
 msgstr "Usuń z dostawy xp"
 
+msgid "Separate membership fee"
+msgstr "Oddzielna opłata członkowska"
+
 msgid "Show available factions"
 msgstr "Pokaż dostępne frakcje"
 
@@ -4834,6 +4840,9 @@ msgstr "sprawdzić brak relacji"
 
 msgid "not visible at this time"
 msgstr "obecnie niewidoczne"
+
+msgid "Annual membership fee for"
+msgstr "Roczna opłata członkowska za"
 
 msgid "Character sheet questions"
 msgstr "Pytania do arkusza postaci"
@@ -7013,6 +7022,10 @@ msgstr "Chcesz być zawsze na bieżąco z naszymi wydarzeniami"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Wskazówka: Prawidłowe odpowiedzi na to pytanie to"
+
+#, python-format
+msgid "Includes annual membership fee for %(year)s of"
+msgstr "Obejmuje roczną opłatę członkowską za %(year)s"
 
 msgid "Manage event metadata for external publication"
 msgstr "Zarządzanie metadanymi wydarzeń na potrzeby publikacji zewnętrznych"
@@ -10309,6 +10322,13 @@ msgid ""
 msgstr ""
 "Opcjonalny kontekst do ujednoznaczniania, gdy ten sam tekst ma różne "
 "znaczenia (msgctxt)"
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
+msgstr ""
+"Jeśli zaznaczono, roczna opłata członkowska jest uiszczana oddzielnie od "
+"opłaty rejestracyjnej na wydarzenie"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

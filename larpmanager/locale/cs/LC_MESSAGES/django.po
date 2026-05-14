@@ -4179,6 +4179,9 @@ msgstr "Podrobnosti o ubytování"
 msgid "Advanced Mode Enabled"
 msgstr "Povolený pokročilý režim"
 
+msgid "Annual membership fee"
+msgstr "Roční členský poplatek"
+
 msgid "Approve reimbursement"
 msgstr "Schválit vrácení peněz"
 
@@ -4666,6 +4669,9 @@ msgstr "Připomenutí členského poplatku"
 msgid "Remove from xp delivery"
 msgstr "Odstranění z dodávky xp"
 
+msgid "Separate membership fee"
+msgstr "Samostatný členský poplatek"
+
 msgid "Show available factions"
 msgstr "Zobrazit dostupné frakce"
 
@@ -4834,6 +4840,9 @@ msgstr "méně kontrolních hlášení"
 
 msgid "not visible at this time"
 msgstr "v tuto chvíli není viditelný"
+
+msgid "Annual membership fee for"
+msgstr "Roční členský poplatek pro"
 
 msgid "Character sheet questions"
 msgstr "Otázky k listu postavy"
@@ -7014,6 +7023,10 @@ msgstr "Chcete být informováni o našich akcích"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Nápověda: Správné odpovědi na tuto otázku jsou tyto"
+
+#, python-format
+msgid "Includes annual membership fee for %(year)s of"
+msgstr "Zahrnuje roční členský poplatek za %(year)s"
 
 msgid "Manage event metadata for external publication"
 msgstr "Správa metadat událostí pro externí publikaci"
@@ -10130,6 +10143,13 @@ msgid ""
 msgstr ""
 "Nepovinný kontext pro disambiguaci, když má stejný text různé významy "
 "(msgctxt)"
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
+msgstr ""
+"Pokud je zaškrtnuto, roční členský poplatek se platí odděleně od "
+"registračního poplatku na akci"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

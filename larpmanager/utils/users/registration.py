@@ -402,6 +402,7 @@ def _status_payment(
     # Handle pending payment status
     if pending_invoices:
         run_status["text"] = register_text + ", " + _("payment pending confirmation")
+        context["pending_invoices"] = True
         return True
 
     # Process payment alerts for unpaid registrations
