@@ -22,6 +22,8 @@
 
 from datetime import date, timedelta
 from decimal import Decimal
+from typing import Any
+from unittest.mock import patch
 
 import pytest
 
@@ -1146,30 +1148,12 @@ class TestMembershipFeeForReg(BaseTestCase):
 
     MEMBERSHIP_FEE = 20
 
-    def setUp(self) -> None:
-        from unittest.mock import patch
-
-        from django.core.cache import cache
-
-        super().setUp()
-        cache.clear()
-        self._features_patcher = patch(
-            "larpmanager.accounting.registration.get_association_features",
-            return_value={"membership": 1},
-        )
-        self._features_patcher.start()
-
-    def tearDown(self) -> None:
-        self._features_patcher.stop()
-        super().tearDown()
-
     def _setup(self, event_year: int, separated: bool = False) -> tuple:
-        """Create association, member and registration for the given event year."""
-        from datetime import date
 
-        association = self.get_association()
         member = self.get_member()
+        association = self.get_association()
         run = self.get_run()
+
         run.start = date(event_year, 6, 1)
         run.end = date(event_year, 6, 2)
         run.save()
@@ -1200,7 +1184,8 @@ class TestMembershipFeeForReg(BaseTestCase):
         result = get_membership_fee_for_reg(association.id, registration.member_id, registration.run, registration)
         self.assertEqual(result, 0)
 
-    def test_current_year_bundled(self) -> None:
+    @patch("larpmanager.accounting.member.get_association_features", return_value={"membership": 1})
+    def test_current_year_bundled(self, mock_features: Any) -> None:
         """Event in current year with separated=False bundles the fee."""
         from django.utils import timezone
 
@@ -1209,7 +1194,8 @@ class TestMembershipFeeForReg(BaseTestCase):
         result = get_membership_fee_for_reg(association.id, registration.member_id, registration.run, registration)
         self.assertEqual(result, self.MEMBERSHIP_FEE)
 
-    def test_next_year_bundled(self) -> None:
+    @patch("larpmanager.accounting.member.get_association_features", return_value={"membership": 1})
+    def test_next_year_bundled(self, mock_features: Any) -> None:
         """Event in next year with separated=False bundles the fee."""
         from django.utils import timezone
 
@@ -1218,7 +1204,8 @@ class TestMembershipFeeForReg(BaseTestCase):
         result = get_membership_fee_for_reg(association.id, registration.member_id, registration.run, registration)
         self.assertEqual(result, self.MEMBERSHIP_FEE)
 
-    def test_future_year_bundled(self) -> None:
+    @patch("larpmanager.accounting.member.get_association_features", return_value={"membership": 1})
+    def test_future_year_bundled(self, mock_features: Any) -> None:
         """Event two years ahead is still bundled (only past years are excluded)."""
         from django.utils import timezone
 
@@ -1271,22 +1258,18 @@ class TestMembershipFeeForReg(BaseTestCase):
         result = get_registration_iscr(registration)
         self.assertEqual(result, 50)
 
-    def test_membership_feature_not_enabled_returns_zero(self) -> None:
+    @patch("larpmanager.accounting.member.get_association_features", return_value={})
+    def test_membership_feature_not_enabled_returns_zero(self, mock_features: Any) -> None:
         """When the membership feature is not enabled, fee is not bundled."""
-        from unittest.mock import patch
-
         from django.utils import timezone
 
         year = timezone.now().year
         association, _member, registration = self._setup(year, separated=False)
-        # Patch get_association_features to return dict without 'membership'
-        with patch("larpmanager.accounting.registration.get_association_features", return_value={}):
-            result = get_membership_fee_for_reg(
-                association.id, registration.member_id, registration.run, registration
-            )
+        result = get_membership_fee_for_reg(association.id, registration.member_id, registration.run, registration)
         self.assertEqual(result, 0)
 
-    def test_membership_feature_enabled_returns_fee(self) -> None:
+    @patch("larpmanager.accounting.member.get_association_features", return_value={"membership": 1})
+    def test_membership_feature_enabled_returns_fee(self, mock_features: Any) -> None:
         """When the membership feature is enabled, fee is bundled."""
         from django.utils import timezone
 
