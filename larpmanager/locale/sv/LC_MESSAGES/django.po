@@ -1556,6 +1556,9 @@ msgstr "Profilering"
 msgid "Prologues"
 msgstr "Prologer"
 
+msgid "Promotion"
+msgstr "Marknadsföring"
+
 msgid "Publisher"
 msgstr "Utgivare"
 
@@ -2092,9 +2095,6 @@ msgstr "Progression"
 
 msgid "Provisional"
 msgstr "Provisorisk"
-
-msgid "Publication"
-msgstr "Publikation"
 
 msgid "Quest types"
 msgstr "Typer av uppdrag"
@@ -6047,6 +6047,9 @@ msgstr "Hantera modellerna för evenemangshandouts"
 msgid "No registration found for this event"
 msgstr "Ingen registrering hittades för detta evenemang"
 
+msgid "Now set the promotion configurations"
+msgstr "Ställ nu in kampanjkonfigurationerna"
+
 msgid "Now set up the credits configuration"
 msgstr "Ställ nu in konfigurationen för krediter"
 
@@ -6282,9 +6285,6 @@ msgstr "Hantera typen av karaktärsförmågor"
 
 msgid "Membership of the Organization refused"
 msgstr "Medlemskap nekat"
-
-msgid "Now set the publication configurations"
-msgstr "Ställ nu in publiceringskonfigurationerna"
 
 msgid "Now you can host files in the platform"
 msgstr "Nu kan du hosta filer i plattformen"
@@ -6883,6 +6883,9 @@ msgstr "Om du behöver hjälp är du välkommen att höra av dig till oss"
 msgid "Manage character inventories and their items"
 msgstr "Hantera karaktärernas inventarier och deras föremål"
 
+msgid "Manage event metadata for external promotion"
+msgstr "Hantera metadata för evenemang för extern marknadsföring"
+
 msgid "Manage invoices of payments and approve them"
 msgstr "Hantera fakturor och betalningar och godkänna dem"
 
@@ -7018,9 +7021,6 @@ msgstr "Vill du hålla dig uppdaterad om våra evenemang"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Ledtråd: De rätta svaren på denna fråga är"
-
-msgid "Manage event metadata for external publication"
-msgstr "Hantera metadata om evenemang för extern publicering"
 
 msgid "Manage your event expenses and upload receipts"
 msgstr "Hantera dina evenemangskostnader och ladda upp kvitton"

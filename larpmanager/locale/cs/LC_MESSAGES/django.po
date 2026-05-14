@@ -1556,6 +1556,9 @@ msgstr "Profilování"
 msgid "Prologues"
 msgstr "Prology"
 
+msgid "Promotion"
+msgstr "Propagace"
+
 msgid "Publisher"
 msgstr "Vydavatel"
 
@@ -2092,9 +2095,6 @@ msgstr "Postup"
 
 msgid "Provisional"
 msgstr "Provizorní"
-
-msgid "Publication"
-msgstr "Publikace"
 
 msgid "Quest types"
 msgstr "Typy úkolů"
@@ -6048,6 +6048,9 @@ msgstr "Správa modelů pro materiály k událostem"
 msgid "No registration found for this event"
 msgstr "Pro tuto událost nebyla nalezena žádná registrace"
 
+msgid "Now set the promotion configurations"
+msgstr "Nyní nastavte konfigurace propagace"
+
 msgid "Now set up the credits configuration"
 msgstr "Nyní nastavte konfiguraci kreditů"
 
@@ -6281,9 +6284,6 @@ msgstr "Správa typu schopností postavy"
 
 msgid "Membership of the Organization refused"
 msgstr "Členství odmítnuto"
-
-msgid "Now set the publication configurations"
-msgstr "Nyní nastavte konfigurace publikace"
 
 msgid "Now you can host files in the platform"
 msgstr "Nyní můžete hostovat soubory v platformě"
@@ -6882,6 +6882,9 @@ msgstr "Pokud potřebujete pomoc, neváhejte nám dát vědět"
 msgid "Manage character inventories and their items"
 msgstr "Správa inventáře postav a jejich předmětů"
 
+msgid "Manage event metadata for external promotion"
+msgstr "Správa metadat události pro externí propagaci"
+
 msgid "Manage invoices of payments and approve them"
 msgstr "Správa faktur a jejich schvalování"
 
@@ -7017,9 +7020,6 @@ msgstr "Chcete být informováni o našich akcích"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Nápověda: Správné odpovědi na tuto otázku jsou tyto"
-
-msgid "Manage event metadata for external publication"
-msgstr "Správa metadat událostí pro externí publikaci"
 
 msgid "Manage your event expenses and upload receipts"
 msgstr "Správa výdajů na události a nahrávání účtenek"

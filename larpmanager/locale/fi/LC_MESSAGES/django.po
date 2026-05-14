@@ -1556,6 +1556,9 @@ msgstr "Profilointi"
 msgid "Prologues"
 msgstr "Prologit"
 
+msgid "Promotion"
+msgstr "Myynninedistäminen"
+
 msgid "Publisher"
 msgstr "Julkaisija"
 
@@ -2092,9 +2095,6 @@ msgstr "Edistyminen"
 
 msgid "Provisional"
 msgstr "Väliaikainen"
-
-msgid "Publication"
-msgstr "Julkaisu"
 
 msgid "Quest types"
 msgstr "Tehtävätyypit"
@@ -6047,6 +6047,9 @@ msgstr "Tapahtuman käsiohjelmien mallien hallinta"
 msgid "No registration found for this event"
 msgstr "Tälle tapahtumalle ei löytynyt rekisteröintiä"
 
+msgid "Now set the promotion configurations"
+msgstr "Aseta nyt myynninedistämiskokoonpanot"
+
 msgid "Now set up the credits configuration"
 msgstr "Määritä nyt luottojen kokoonpano"
 
@@ -6280,9 +6283,6 @@ msgstr "Hallitse hahmon kykyjen tyyppiä"
 
 msgid "Membership of the Organization refused"
 msgstr "Järjestön jäsenyys evättiin"
-
-msgid "Now set the publication configurations"
-msgstr "Aseta nyt julkaisun kokoonpanot"
 
 msgid "Now you can host files in the platform"
 msgstr "Nyt voit isännöidä tiedostoja alustalla"
@@ -6881,6 +6881,9 @@ msgstr "Jos tarvitset apua, kerro meille rohkeasti"
 msgid "Manage character inventories and their items"
 msgstr "Hallitse hahmojen varastoja ja niiden esineitä"
 
+msgid "Manage event metadata for external promotion"
+msgstr "Tapahtuman metatietojen hallinta ulkoista mainontaa varten"
+
 msgid "Manage invoices of payments and approve them"
 msgstr "Maksulaskujen hallinnointi ja hyväksyminen"
 
@@ -7016,9 +7019,6 @@ msgstr "Haluatko olla aina ajan tasalla tapahtumistamme"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Vihje: Oikeat vastaukset tähän kysymykseen ovat seuraavat"
-
-msgid "Manage event metadata for external publication"
-msgstr "Tapahtuman metatietojen hallinta ulkoista julkaisemista varten"
 
 msgid "Manage your event expenses and upload receipts"
 msgstr "Hallitse tapahtumakuluja ja lataa kuitteja"

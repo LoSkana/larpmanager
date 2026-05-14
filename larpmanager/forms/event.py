@@ -2169,7 +2169,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra_fields.append((field_id, field_label))
 
 
-class PublicationAccommodation(TextChoices):
+class PromotionAccommodation(TextChoices):
     """Accommodation type for publication."""
 
     INCLUDED = "included", _("Included")
@@ -2177,7 +2177,7 @@ class PublicationAccommodation(TextChoices):
     NON_RESIDENTIAL = "nonres", _("Non-residential")
 
 
-class PublicationAccommodationType(TextChoices):
+class PromotionAccommodationType(TextChoices):
     """Accommodation facility details for publication."""
 
     CAMPING = "camping", _("Camping")
@@ -2187,7 +2187,7 @@ class PublicationAccommodationType(TextChoices):
     OTHER = "other", _("Other")
 
 
-class PublicationMeals(TextChoices):
+class PromotionMeals(TextChoices):
     """Meals included for publication."""
 
     NOT_INCLUDED = "nope", _("Not included")
@@ -2197,7 +2197,7 @@ class PublicationMeals(TextChoices):
     EXTERNAL_CATERING = "external", _("External catering")
 
 
-class PublicationSetting(TextChoices):
+class PromotionSetting(TextChoices):
     """Event setting (world/genre) for publication. Values are lowercase slugs."""
 
     FANTASY = "fantasy", "Fantasy"
@@ -2213,7 +2213,7 @@ class PublicationSetting(TextChoices):
     WESTERN = "western", "Western"
 
 
-class PublicationMood(TextChoices):
+class PromotionMood(TextChoices):
     """Event mood/tone for publication. Values are lowercase slugs."""
 
     ADVENTURE = "adventure", "Adventure"
@@ -2223,7 +2223,7 @@ class PublicationMood(TextChoices):
     SURREAL = "surreal", "Surreal"
 
 
-class PublicationEventType(TextChoices):
+class PromotionEventType(TextChoices):
     """Event category for publication."""
 
     ONE_SHOT = "one_shot", "One shot"
@@ -2236,7 +2236,7 @@ class PublicationEventType(TextChoices):
     LAOG = "laog", "LAOG"
 
 
-class PublicationLanguage(TextChoices):
+class PromotionLanguage(TextChoices):
     """Event language for publication."""
 
     ENGLISH = "en", "English"
@@ -2263,12 +2263,12 @@ def validate_coordinate(value: str) -> None:
         raise ValidationError(_("Enter a valid number")) from err
 
 
-class OrgaPublicationForm(ConfigForm):
-    """Form for configuring ILDB publication metadata for an event."""
+class OrgaPromotionForm(ConfigForm):
+    """Form for configuring promotion metadata for an event."""
 
-    page_title = _("Publication")
+    page_title = _("Promotion")
 
-    page_info = _("Manage event metadata for external publication")
+    page_info = _("Manage event metadata for external promotion")
 
     show_sections = True
 
@@ -2287,7 +2287,7 @@ class OrgaPublicationForm(ConfigForm):
             ConfigType.MULTI_BOOL,
             _("Languages"),
             _("Language(s) the event is held in"),
-            PublicationLanguage.choices,
+            PromotionLanguage.choices,
         )
 
         self.add_configs(
@@ -2295,7 +2295,7 @@ class OrgaPublicationForm(ConfigForm):
             ConfigType.CHOICE,
             _("Event type"),
             _("Category of the event"),
-            [("", "---"), *list(PublicationEventType.choices)],
+            [("", "---"), *list(PromotionEventType.choices)],
         )
 
         self.add_configs(
@@ -2303,7 +2303,7 @@ class OrgaPublicationForm(ConfigForm):
             ConfigType.MULTI_BOOL,
             pgettext("event", "Setting"),
             _("Choose the setting for the event"),
-            PublicationSetting.choices,
+            PromotionSetting.choices,
         )
 
         self.add_configs(
@@ -2311,7 +2311,7 @@ class OrgaPublicationForm(ConfigForm):
             ConfigType.MULTI_BOOL,
             pgettext("event", "Style"),
             _("Choose the style for the event"),
-            PublicationMood.choices,
+            PromotionMood.choices,
         )
 
         self.add_configs("pub_place", ConfigType.CHAR, _("City / Place"), _("City or place of the event"))
@@ -2321,21 +2321,21 @@ class OrgaPublicationForm(ConfigForm):
             ConfigType.CHOICE,
             _("Accommodation"),
             _("Type of accommodation included"),
-            [("", "---"), *list(PublicationAccommodation.choices)],
+            [("", "---"), *list(PromotionAccommodation.choices)],
         )
         self.add_configs(
             "pub_accommodation_type",
             ConfigType.MULTI_BOOL,
             _("Accommodation details"),
             _("Type(s) of accommodation available"),
-            PublicationAccommodationType.choices,
+            PromotionAccommodationType.choices,
         )
         self.add_configs(
             "pub_meals",
             ConfigType.MULTI_BOOL,
             _("Meals"),
             _("Meals included in the event"),
-            PublicationMeals.choices,
+            PromotionMeals.choices,
         )
 
         self.add_configs(

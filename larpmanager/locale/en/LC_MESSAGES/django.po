@@ -726,7 +726,7 @@ msgid ""
 "panel"
 msgstr ""
 
-msgid "Publication"
+msgid "Promotion"
 msgstr ""
 
 msgid "Publish staff"
@@ -1974,7 +1974,7 @@ msgstr ""
 msgid "Enter a valid number"
 msgstr ""
 
-msgid "Manage event metadata for external publication"
+msgid "Manage event metadata for external promotion"
 msgstr ""
 
 msgid "Informations"
@@ -9581,7 +9581,7 @@ msgstr ""
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 
-msgid "Now set the publication configurations"
+msgid "Now set the promotion configurations"
 msgstr ""
 
 msgid ""

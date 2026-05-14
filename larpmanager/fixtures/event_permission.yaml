@@ -48,8 +48,8 @@
     module: event
 - model: larpmanager.eventpermission
   fields:
-    name: Publication
-    descr: Manage event metadata for external publication
+    name: Promotion
+    descr: Manage event metadata for external promotion
     slug: orga_publication
     number: 45
     config: null
