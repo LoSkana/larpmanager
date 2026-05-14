@@ -1451,14 +1451,12 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
 
     """
     # Validate required fields are present in the CSV row
-    for field in ["name", "question"]:
-        if field not in csv_row:
-            return f"ERR - column {field} missing"
+    if "question" not in csv_row:
+        return "ERR - column question missing"
 
-    # Extract and validate the option name
-    option_name = csv_row["name"]
-    if not option_name:
-        return "ERR - empty name"
+    option_name, err = _get_row_name(csv_row)
+    if err:
+        return err
 
     # Find the associated question by name (case-insensitive)
     question_name_lower = csv_row["question"].lower()
@@ -1628,6 +1626,19 @@ def cover_load(context: dict, z_obj: Any) -> None:
         Path(covers[num]).rename(Path(conf_settings.MEDIA_ROOT) / fn)
 
 
+def _get_row_name(csv_row: dict) -> tuple[str | None, str | None]:
+    """Extract and validate name from a CSV row. Returns (name, error) tuple."""
+    if "name" not in csv_row:
+        return None, "ERR - There is no name column"
+    name = csv_row["name"]
+    try:
+        if pd.isna(name):
+            return None, "ERR - Empty name, row skipped"
+    except (TypeError, ValueError):
+        pass
+    return str(name), None
+
+
 def tickets_load(context: dict, form: Form) -> list[str]:
     """Load tickets from uploaded file data."""
     # Extract and validate file data from form
@@ -1660,12 +1671,12 @@ def _ticket_load(context: dict, csv_row: dict) -> str:
         ValueError: When numeric conversion fails for max_available or price fields
 
     """
-    # Validate required name column exists
-    if "name" not in csv_row:
-        return "ERR - There is no name column"
+    name, err = _get_row_name(csv_row)
+    if err:
+        return err
 
     # Get or create ticket object for the event
-    (ticket, was_created) = RegistrationTicket.objects.get_or_create(event=context["event"], name=csv_row["name"])
+    (ticket, was_created) = RegistrationTicket.objects.get_or_create(event=context["event"], name=name)
 
     # Define field mappings for enumeration values
     field_value_mappings = {
@@ -1747,9 +1758,9 @@ def _ability_load(context: dict, csv_row: dict) -> str:
         AttributeError: When accessing invalid model fields
 
     """
-    # Validate required name column exists
-    if "name" not in csv_row:
-        return "ERR - There is no name column"
+    name, err = _get_row_name(csv_row)
+    if err:
+        return err
 
     event = context["event"]
     system = _resolve_ability_system(event)
@@ -1757,7 +1768,7 @@ def _ability_load(context: dict, csv_row: dict) -> str:
     # Get or create ability object using event's class parent
     (ability_element, was_created) = AbilityExp.objects.get_or_create(
         event=event.get_class_parent(AbilityExp),
-        name=csv_row["name"],
+        name=name,
         defaults={"system": system},
     )
 
@@ -1955,18 +1966,20 @@ def _apply_rule_field(context: dict, rule: RuleExp, logs: list[str], field_name:
 
 def _rule_load(context: dict, csv_row: dict) -> str:
     """Load rule data from CSV row for bulk import."""
-    if "name" not in csv_row:
-        return "ERR - There is no name column"
+    name, err = _get_row_name(csv_row)
+    if err:
+        return err
 
     event = context["event"]
     event_parent = event.get_class_parent(RuleExp)
 
-    rule = RuleExp.objects.filter(event=event_parent, name=csv_row["name"]).first()
+    rule = RuleExp.objects.filter(event=event_parent, name=name).first()
     was_created = rule is None
     if was_created:
-        rule = RuleExp(event=event_parent, name=csv_row["name"])
+        rule = RuleExp(event=event_parent, name=name)
 
     logs = []
+    abilities_value = None
 
     for field_name, field_value in csv_row.items():
         if field_value is None or field_name == "name":
@@ -1976,13 +1989,19 @@ def _rule_load(context: dict, csv_row: dict) -> str:
                 continue
         except (TypeError, ValueError):
             pass
-        _apply_rule_field(context, rule, logs, field_name, field_value)
+        if field_name == "abilities":
+            abilities_value = str(field_value)
+        else:
+            _apply_rule_field(context, rule, logs, field_name, field_value)
 
     if was_created and not rule.field_id:
-        return f"ERR - Cannot create rule '{csv_row['name']}': missing required 'field'"
+        return f"ERR - Cannot create rule '{name}': missing required 'field'"
 
     rule.save()
     save_log(context, RuleExp, rule, operation_type=LogOperationType.UPLOAD)
+
+    if abilities_value:
+        _assign_abilities(context, rule, logs, abilities_value)
 
     return f"OK - Created {rule}" if was_created else f"OK - Updated {rule}"
 
@@ -1998,14 +2017,15 @@ def modifiers_load(context: dict, form: Form) -> list[str]:
 
 def _modifier_load(context: dict, csv_row: dict) -> str:
     """Load modifier data from CSV row for bulk import."""
-    if "name" not in csv_row:
-        return "ERR - There is no name column"
+    name, err = _get_row_name(csv_row)
+    if err:
+        return err
 
     event = context["event"]
 
     (modifier, was_created) = ModifierExp.objects.get_or_create(
         event=event.get_class_parent(ModifierExp),
-        name=csv_row["name"],
+        name=name,
         defaults={"order": 0},
     )
 
