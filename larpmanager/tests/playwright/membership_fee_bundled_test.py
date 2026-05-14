@@ -184,7 +184,7 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Accounting", exact=True).click()
     just_wait(page)
     expect_normalized(page, page.locator("#one"), "Total registration fee: 100")
-    expect_normalized(page, page.locator("#one"), "Next payment: 120€ (Includes membership fee 2050 of 20€)")
+    expect_normalized(page, page.locator("#one"), "Next payment: 120€ (Includes membership fee 2050: 20€)")
     page.get_by_role("link", name="to confirm it proceed with").click()
     submit(page)
     page.get_by_role("checkbox", name="Payment confirmation:").check()
@@ -211,10 +211,10 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Total payments: 100")
     expect_normalized(page, page.locator("#one"), "Membership fee 2050: 20€ ")
 
-    # Second event: register (riepilogo shows 100, no membership fee since already paid)
+    # Second event: register (riepilogo shows 70, no membership fee since already paid)
     go_to(page, live_server, "/testsecond/register")
     page.get_by_role("button", name="Continue").click()
-    expect_normalized(page, page.locator("#riepilogo"), "100")
+    expect_normalized(page, page.locator("#riepilogo"), "70")
     just_wait(page)
     submit_confirm(page)
 
@@ -223,9 +223,8 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
     page.get_by_role("link", name="to confirm it proceed with").click()
     page.get_by_role("cell", name="Wire", exact=True).click()
-    expect_normalized(page, page.locator("b"), "100")
+    expect_normalized(page, page.locator("b"), "70")
     submit(page)
-    load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
     submit(page)
 

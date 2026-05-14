@@ -19,7 +19,7 @@
             | <a href="{% url 'accounting_registration' registration.uuid %}">
             {% if membership_fee == 'bundled' and membership_amount %}
                 {% trans "Next payment" %}: {{ registration.quota|add:membership_amount|format_decimal }}{{ currency_symbol }}
-                ({% trans "Includes membership fee" %} {{ year }}: {{ membership_amount|format_decimal }}{{ currency_symbol }})
+                ({% trans "Includes membership fee" %} {{ run.start.year }}: {{ membership_amount|format_decimal }}{{ currency_symbol }})
             {% else %}
                 {% trans "Next payment" %}: {{ registration.quota | format_decimal }}{{ currency_symbol }},
             {% endif %}
