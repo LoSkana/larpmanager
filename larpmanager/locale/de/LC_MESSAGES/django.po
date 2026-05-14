@@ -6380,6 +6380,10 @@ msgstr "Ermöglicht die kostenlose Vorregistrierung für Veranstaltungen"
 msgid "If you need help, remember to check out"
 msgstr "Wenn Sie Hilfe benötigen, besuchen Sie bitte"
 
+#, python-format
+msgid "Includes membership fee for %(year)s of"
+msgstr "Beinhaltet den Mitgliedsbeitrag für %(year)s der"
+
 msgid "Indicate the required character options"
 msgstr "Geben Sie die gewünschten Zeichenoptionen an"
 
@@ -7400,10 +7404,6 @@ msgstr ""
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Wenn Sie möchten, können Sie ein Pronomen für Ihren Charakter angeben"
-
-#, python-format
-msgid "Includes membership fee for %(year)s of %(amount)s"
-msgstr "Beinhaltet den Mitgliedsbeitrag für %(year)s von %(amount)s"
 
 msgid "Manage fixed payment installments for participants"
 msgstr "Verwaltung fester Ratenzahlungen für Teilnehmer"

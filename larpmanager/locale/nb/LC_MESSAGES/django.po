@@ -6375,6 +6375,10 @@ msgstr "Muliggjør gratis forhåndsregistrering til arrangementer"
 msgid "If you need help, remember to check out"
 msgstr "Hvis du trenger hjelp, husk å sjekke ut"
 
+#, python-format
+msgid "Includes membership fee for %(year)s of"
+msgstr "Inkluderer medlemsavgift for %(year)s av"
+
 msgid "Indicate the required character options"
 msgstr "Angi de ønskede tegnalternativene"
 
@@ -7366,10 +7370,6 @@ msgstr "Hvis avkrysset, ikke bruk den overordnede hendelsens fraksjoner"
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Hvis du ønsker det, kan du angi et pronomen for karakteren din"
-
-#, python-format
-msgid "Includes membership fee for %(year)s of %(amount)s"
-msgstr "Inkluderer medlemskontingent for %(year)s av %(amount)s"
 
 msgid "Manage fixed payment installments for participants"
 msgstr "Administrere faste betalingsrater for deltakerne"

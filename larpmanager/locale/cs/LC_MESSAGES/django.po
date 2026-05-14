@@ -6375,6 +6375,10 @@ msgstr "Umožňuje bezplatnou předběžnou registraci na události"
 msgid "If you need help, remember to check out"
 msgstr "Pokud potřebujete pomoc, nezapomeňte se podívat na"
 
+#, python-format
+msgid "Includes membership fee for %(year)s of"
+msgstr "Zahrnuje členský poplatek za %(year)s"
+
 msgid "Indicate the required character options"
 msgstr "Uveďte požadované možnosti znaků"
 
@@ -7367,10 +7371,6 @@ msgstr "Pokud je zaškrtnuto, nepoužívejte frakce nadřazené události"
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Pokud si přejete, uveďte zájmeno pro svou postavu"
-
-#, python-format
-msgid "Includes membership fee for %(year)s of %(amount)s"
-msgstr "Včetně členského příspěvku za %(year)s %(amount)s"
 
 msgid "Manage fixed payment installments for participants"
 msgstr "Správa pevných splátek pro účastníky"

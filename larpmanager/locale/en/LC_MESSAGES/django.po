@@ -5384,7 +5384,7 @@ msgid "Next payment"
 msgstr ""
 
 #, python-format
-msgid "Includes membership fee for %(year)s of %(amount)s"
+msgid "Includes membership fee for %(year)s of"
 msgstr ""
 
 msgid "expected within"

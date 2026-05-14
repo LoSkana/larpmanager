@@ -6376,6 +6376,10 @@ msgstr "Möjliggör kostnadsfri föranmälan till evenemang"
 msgid "If you need help, remember to check out"
 msgstr "Om du behöver hjälp, kom ihåg att kolla in"
 
+#, python-format
+msgid "Includes membership fee for %(year)s of"
+msgstr "Inkluderar medlemsavgift för %(year)s av"
+
 msgid "Indicate the required character options"
 msgstr "Ange de teckenalternativ som krävs"
 
@@ -7367,10 +7371,6 @@ msgstr "Om markerat, använd inte föräldrahändelsens fraktioner"
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Om du vill, ange ett pronomen för din karaktär"
-
-#, python-format
-msgid "Includes membership fee for %(year)s of %(amount)s"
-msgstr "Inkluderar medlemsavgift för %(year)s av %(amount)s"
 
 msgid "Manage fixed payment installments for participants"
 msgstr "Hantera fasta utbetalningar för deltagare"

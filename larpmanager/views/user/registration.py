@@ -84,7 +84,11 @@ from larpmanager.utils.core.exceptions import (
     check_event_feature,
 )
 from larpmanager.utils.edit.backend import user_edit
-from larpmanager.utils.users.registration import check_assign_character, get_reduced_available_count
+from larpmanager.utils.users.registration import (
+    _set_membership_context,
+    check_assign_character,
+    get_reduced_available_count,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -556,6 +560,8 @@ def register_info(request: HttpRequest, context: dict, form: object, registratio
 
     if registration:
         registration.provisional = is_registration_provisional(registration)
+
+    _set_membership_context(context, context["run"], context["member"], registration)
 
 
 def init_form_submitted(context: dict, form: object, request: HttpRequest, registration: Any = None) -> None:

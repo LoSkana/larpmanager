@@ -6374,6 +6374,10 @@ msgstr "Mahdollistaa ilmaisen ennakkoilmoittautumisen tapahtumiin"
 msgid "If you need help, remember to check out"
 msgstr "Jos tarvitset apua, muista tarkistaa"
 
+#, python-format
+msgid "Includes membership fee for %(year)s of"
+msgstr "Sisältää jäsenmaksun %(year)s osalta seuraavalta vuodelta"
+
 msgid "Indicate the required character options"
 msgstr "Ilmoita vaaditut hahmovaihtoehdot"
 
@@ -7366,10 +7370,6 @@ msgstr "Jos valitaan, älä käytä vanhemman tapahtuman ryhmittymiä"
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Halutessasi voit ilmoittaa hahmollesi pronominin"
-
-#, python-format
-msgid "Includes membership fee for %(year)s of %(amount)s"
-msgstr "Sisältää jäsenmaksun %(year)s osalta %(amount)s osalta"
 
 msgid "Manage fixed payment installments for participants"
 msgstr "Hallinnoi kiinteitä maksueriä osallistujille"

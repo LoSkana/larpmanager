@@ -6377,6 +6377,10 @@ msgstr "Maakt gratis voorregistratie voor evenementen mogelijk"
 msgid "If you need help, remember to check out"
 msgstr "Als je hulp nodig hebt, ga dan naar"
 
+#, python-format
+msgid "Includes membership fee for %(year)s of"
+msgstr "Inclusief lidmaatschapsgeld voor %(year)s van"
+
 msgid "Indicate the required character options"
 msgstr "Geef de vereiste tekenopties aan"
 
@@ -7376,10 +7380,6 @@ msgstr ""
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Als je wilt, geef dan een voornaamwoord aan voor je personage"
-
-#, python-format
-msgid "Includes membership fee for %(year)s of %(amount)s"
-msgstr "Inclusief lidmaatschapsgeld voor %(year)s van %(amount)s"
 
 msgid "Manage fixed payment installments for participants"
 msgstr "Vaste betalingstermijnen voor deelnemers beheren"

@@ -6373,6 +6373,10 @@ msgstr "Umożliwia bezpłatną wstępną rejestrację na wydarzenia"
 msgid "If you need help, remember to check out"
 msgstr "Jeśli potrzebujesz pomocy, sprawdź"
 
+#, python-format
+msgid "Includes membership fee for %(year)s of"
+msgstr "Obejmuje opłatę członkowską za %(year)s"
+
 msgid "Indicate the required character options"
 msgstr "Wskaż wymagane opcje znaków"
 
@@ -7368,10 +7372,6 @@ msgstr "Jeśli zaznaczone, nie używaj frakcji wydarzenia nadrzędnego"
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Jeśli chcesz, wskaż zaimek dla swojej postaci"
-
-#, python-format
-msgid "Includes membership fee for %(year)s of %(amount)s"
-msgstr "Obejmuje opłatę członkowską za %(year)s %(amount)s"
 
 msgid "Manage fixed payment installments for participants"
 msgstr "Zarządzanie stałymi ratami płatności dla uczestników"

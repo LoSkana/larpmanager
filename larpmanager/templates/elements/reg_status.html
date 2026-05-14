@@ -12,14 +12,14 @@
         {% if registration.tot_payed %}
             {% trans "Total registration fee" %}: {{ registration.tot_iscr|format_decimal }} | {% trans "Total payments" %}: {{ registration.tot_payed|format_decimal }}
         {% else %}
-            | {% trans "Total registration fee" %}: {{ registration.tot_iscr|format_decimal }}
+            {% trans "Total registration fee" %}: {{ registration.tot_iscr|format_decimal }}
         {% endif %}
         {% if pending_invoices %}
         {% elif registration.quota %}
             | <a href="{% url 'accounting_registration' registration.uuid %}">
             {% if membership_fee == 'bundled' and membership_amount %}
                 {% trans "Next payment" %}: {{ registration.quota|add:membership_amount|format_decimal }}{{ currency_symbol }}
-                ({% blocktrans with year=run.start.year amount=membership_amount %}Includes membership fee for {{ year }} of {{ amount }}{% endblocktrans %}{{ currency_symbol }}),
+                ({% blocktrans with year=run.start.year %}Includes membership fee for {{ year }} of{% endblocktrans %} {{ membership_amount|format_decimal }}{{ currency_symbol }})
             {% else %}
                 {% trans "Next payment" %}: {{ registration.quota | format_decimal }}{{ currency_symbol }},
             {% endif %}
