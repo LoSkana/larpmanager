@@ -46,7 +46,7 @@ pytestmark = pytest.mark.e2e
 
 
 def test_membership_fee_bundled(pw_page: Any) -> None:
-    """Test that the annual membership fee is bundled with event registration payment."""
+    """Test that the membership fee is bundled with event registration payment."""
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -119,13 +119,13 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 120")
-    expect_normalized(page, page.locator("#riepilogo"), "Includes annual membership fee 2050 of 20")
+    expect_normalized(page, page.locator("#riepilogo"), "Includes membership fee 2050: 20")
 
     # Second event: riepilogo also shows 120 (membership not yet reserved by any invoice)
     go_to(page, live_server, "/testsecond/register")
     page.get_by_role("button", name="Continue").click()
     expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 90")
-    expect_normalized(page, page.locator("#riepilogo"), "Includes annual membership fee 2050 of 20")
+    expect_normalized(page, page.locator("#riepilogo"), "Includes membership fee 2050: 20")
 
     # First event: register and confirm (creates provisional registration)
     go_to(page, live_server, "/test/register")
@@ -170,7 +170,7 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="to confirm it proceed with").click()
     page.get_by_role("cell", name="Wire", exact=True).click()
     expect_normalized(page, page.locator("#one"), "The total registration fee is: 100")
-    expect_normalized(page, page.locator("#one"), "Annual membership fee 2050: 20")
+    expect_normalized(page, page.locator("#one"), "membership fee 2050: 20")
     expect_normalized(page, page.locator("#one"), "Total payment: 120")
     submit(page)
 

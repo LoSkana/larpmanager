@@ -7039,10 +7039,6 @@ msgstr "Wil je op de hoogte blijven van onze evenementen"
 msgid "Hint: The correct answers to this question are"
 msgstr "Hint: De juiste antwoorden op deze vraag zijn"
 
-#, python-format
-msgid "Includes annual membership fee for %(year)s of"
-msgstr "Inclusief jaarlijkse lidmaatschapsbijdrage voor %(year)s van"
-
 msgid "Manage your event expenses and upload receipts"
 msgstr "Beheer je evenementuitgaven en upload ontvangstbewijzen"
 

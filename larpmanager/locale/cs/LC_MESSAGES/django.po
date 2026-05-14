@@ -7033,10 +7033,6 @@ msgstr "Chcete být informováni o našich akcích"
 msgid "Hint: The correct answers to this question are"
 msgstr "Nápověda: Správné odpovědi na tuto otázku jsou tyto"
 
-#, python-format
-msgid "Includes annual membership fee for %(year)s of"
-msgstr "Zahrnuje roční členský poplatek za %(year)s"
-
 msgid "Manage your event expenses and upload receipts"
 msgstr "Správa výdajů na události a nahrávání účtenek"
 

@@ -9,7 +9,7 @@ window['texts'] = {
     'pro': '{% filter escapejs %}{% trans "Your registration will now be saved in provisional status. It will be confirmed when your ticket payment is received" %}{% endfilter %}.',
     'payment': {{ payment_feature | yesno:"true,false" }},
     {% if membership_fee == 'bundled' %}
-    'mem': '{% filter escapejs %}{% blocktrans with year=run.start.year %}Includes annual membership fee for {{ year }} of{% endblocktrans %}{% endfilter %}',
+    'mem': '{% filter escapejs %}{% trans "Includes membership fee" %} {{ run.start.year }}: {% endfilter %}',
     'mem_amount': {{ membership_amount }}
     {% endif %}
 }

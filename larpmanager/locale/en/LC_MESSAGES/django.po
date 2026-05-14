@@ -5119,8 +5119,7 @@ msgid ""
 "confirmed when your ticket payment is received"
 msgstr ""
 
-#, python-format
-msgid "Includes annual membership fee for %(year)s of"
+msgid "Includes membership fee"
 msgstr ""
 
 msgid "(click on image to enlarge)"
@@ -5381,9 +5380,6 @@ msgid "Total payments"
 msgstr ""
 
 msgid "Next payment"
-msgstr ""
-
-msgid "Includes membership fee"
 msgstr ""
 
 msgid "expected within"
