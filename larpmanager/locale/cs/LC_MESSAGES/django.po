@@ -2971,6 +2971,9 @@ msgstr "Odstranění schopnosti"
 msgid "App Integration"
 msgstr "Integrace aplikací"
 
+msgid "Attachment Name"
+msgstr "Název přílohy"
+
 msgid "Attachment Path"
 msgstr "Cesta k příloze"
 

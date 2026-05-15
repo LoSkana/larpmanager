@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0160_larpmanagertext_value_htmlfield'),
+        ('larpmanager', '0161_membership_fee_separated_default'),
     ]
 
     operations = [

@@ -4554,6 +4554,9 @@ msgstr ""
 msgid "Attachment Path"
 msgstr ""
 
+msgid "Attachment Name"
+msgstr ""
+
 msgid "Email Content"
 msgstr ""
 

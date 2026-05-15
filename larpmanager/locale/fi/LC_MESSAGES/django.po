@@ -2971,6 +2971,9 @@ msgstr "Taito poistettu"
 msgid "App Integration"
 msgstr "Sovelluksen integrointi"
 
+msgid "Attachment Name"
+msgstr "Liitteen nimi"
+
 msgid "Attachment Path"
 msgstr "Kiinnityspolku"
 

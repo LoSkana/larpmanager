@@ -268,7 +268,7 @@ def notify_pay_money(
     # Send notification email to the member who made the payment
     activate(paying_member.language)
     subject, body = get_pay_money_email(currency_symbol, payment_instance, run)
-    my_send_mail(subject, body, paying_member, run, attachment_path=_receipt_attachment_path(payment_instance))
+    my_send_mail(subject, body, paying_member, run, **_receipt_attachment_path(payment_instance))
 
     # Send notifications to organizers/treasurers
     for organizer in get_event_organizers(run.event):
@@ -453,9 +453,7 @@ def send_donation_confirmation_email(instance: AccountingItemDonation) -> None:
         "support, and for believing in us!",
     ) % {"amount": instance.value, "currency": instance.association.get_currency_symbol()}
 
-    my_send_mail(
-        email_subject, email_body, instance.member, instance, attachment_path=_receipt_attachment_path(instance)
-    )
+    my_send_mail(email_subject, email_body, instance.member, instance, **_receipt_attachment_path(instance))
 
 
 def send_collection_activation_email(instance: AccountingItemCollection) -> None:
@@ -562,15 +560,14 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
         )
 
 
-def _receipt_attachment_path(accounting_item: Any) -> str | None:
-    """Return the PDF receipt path for the item's invoice when 'receipts' feature is active, else None."""
-    invoice = accounting_item.inv
-    if not invoice:
-        return None
+def _receipt_attachment_path(accounting_item: Any) -> dict:
+    """Return kwargs dict with attachment_path and attachment_name for the receipt PDF."""
     if "receipts" not in get_association_features(accounting_item.association_id):
-        return None
+        return {}
     try:
-        return generate_payment_receipt(invoice)
+        path, name = generate_payment_receipt(accounting_item)
     except Exception:
-        logger.exception("Failed to generate receipt PDF for invoice %s", invoice.pk)
-        return None
+        logger.exception("Failed to generate receipt PDF for accounting item %s", accounting_item.pk)
+        return {}
+    else:
+        return {"attachment_path": path, "attachment_name": name}

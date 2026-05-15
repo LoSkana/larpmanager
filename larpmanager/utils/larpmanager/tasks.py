@@ -310,6 +310,7 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
             email_content.run_id,
             email_content.reply_to,
             email_content.attachment_path,
+            email_content.attachment_name,
         )
 
         # Only mark as sent if successful
@@ -333,6 +334,7 @@ def my_send_simple_mail(
     run_id: int | None = None,
     reply_to: str | None = None,
     attachment_path: str | None = None,
+    attachment_name: str | None = None,
 ) -> None:
     """Send email with association/event-specific configuration.
 
@@ -350,6 +352,7 @@ def my_send_simple_mail(
         run_id: Run ID for event-specific SMTP settings (overrides association settings)
         reply_to: Custom Reply-To email address header
         attachment_path: Optional absolute filesystem path to a file to attach as PDF
+        attachment_name: Optional filename to use in the email attachment (overrides the on-disk name)
 
     Raises:
         Exception: Re-raises email sending exceptions after logging error details
@@ -367,7 +370,10 @@ def my_send_simple_mail(
 
         if attachment_path:
             if Path(attachment_path).exists():
-                email_message.attach_file(attachment_path, "application/pdf")
+                if attachment_name:
+                    email_message.attach(attachment_name, Path(attachment_path).read_bytes(), "application/pdf")
+                else:
+                    email_message.attach_file(attachment_path, "application/pdf")
             else:
                 logger.warning("Receipt attachment not found, sending without it: %s", attachment_path)
 
@@ -512,6 +518,7 @@ def my_send_mail(
     reply_to: str | None = None,
     schedule: int = 0,
     attachment_path: str | None = None,
+    attachment_name: str | None = None,
 ) -> None:
     """Queue email for sending with context-aware formatting.
 
@@ -527,6 +534,7 @@ def my_send_mail(
         reply_to: Custom reply-to email address
         schedule: Delay in seconds before sending email
         attachment_path: Optional absolute filesystem path to a file to attach
+        attachment_name: Optional filename to use in the email attachment (overrides the on-disk name)
 
     Returns:
         None
@@ -564,6 +572,7 @@ def my_send_mail(
         body=body_string,
         reply_to=reply_to,
         attachment_path=attachment_path,
+        attachment_name=attachment_name,
     )
 
     # Create email recipient record

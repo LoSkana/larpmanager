@@ -2971,6 +2971,9 @@ msgstr "Capacidad eliminada"
 msgid "App Integration"
 msgstr "Integración de aplicaciones"
 
+msgid "Attachment Name"
+msgstr "Nombre del archivo adjunto"
+
 msgid "Attachment Path"
 msgstr "Ruta de acceso"
 

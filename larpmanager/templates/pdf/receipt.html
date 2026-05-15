@@ -85,30 +85,31 @@
         </div>
         {% if association.main_mail %}<div class="header-details">Email: {{ association.main_mail }}</div>{% endif %}
         <hr class="divider" />
-        <div class="title">RICEVUTA N. {{ receipt_number|stringformat:"03d" }} / {{ year }}</div>
+        <div class="title">RICEVUTA N. {{ receipt_number|stringformat:"05d" }} / {{ year }}</div>
         <table class="row-date-amount">
             <tr>
                 <td>
-                    <span class="label-bold">Data emissione:</span> {{ invoice.created|date:"d/m/Y" }}
+                    <span class="label-bold">Data emissione:</span> {{ accounting_item.created|date:"d/m/Y" }}
                 </td>
                 <td style="text-align: right;">
-                    <span class="label-bold">Importo: &euro; {{ invoice.mc_gross }}</span>
+                    <span class="label-bold">Importo: &euro; {{ accounting_item.value }}</span>
                 </td>
             </tr>
         </table>
         <div class="body-text">
-            Si dichiara di aver ricevuto dal Sig./Sig.ra <strong>{{ member.get_full_name }}</strong>
+            Si dichiara di aver ricevuto dal Sig./Sig.ra <strong>{{ member.display_real }}</strong>
             {% if member.fiscal_code %}
                 ,
                 Codice Fiscale <strong>{{ member.fiscal_code }}</strong>
             {% endif %}
             {% if member.get_residence %}, residente a <strong>{{ member.get_residence }}</strong>{% endif %}
             ,
-            la somma di Euro <strong>&euro; {{ invoice.mc_gross }}</strong>
-            versata tramite <strong>{{ invoice.method.name }}</strong>.
+            la somma di Euro <strong>&euro; {{ accounting_item.value }}</strong>
+            {% if method %}versata tramite <strong>{{ method }}</strong>{% endif %}
+            .
         </div>
         <div class="causale-label">Causale:</div>
-        <div class="causale-text">{{ invoice.causal }}</div>
+        <div class="causale-text">{{ causal }}</div>
         <div class="legal-box">
             Operazione fuori campo IVA ai sensi dell&rsquo;Art. 4, comma 4, DPR 633/72.
             Documento esente da imposta di bollo ai sensi dell&rsquo;Art. 82, comma 10, D.Lgs. 117/2017 (Codice del Terzo Settore).
