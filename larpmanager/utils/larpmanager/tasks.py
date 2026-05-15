@@ -24,6 +24,7 @@ import logging
 import re
 import traceback
 from functools import wraps
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from background_task import background
@@ -365,7 +366,10 @@ def my_send_simple_mail(
         email_message = _build_email_message(subj, body, m_email, metadata)
 
         if attachment_path:
-            email_message.attach_file(attachment_path, "application/pdf")
+            if Path(attachment_path).exists():
+                email_message.attach_file(attachment_path, "application/pdf")
+            else:
+                logger.warning("Receipt attachment not found, sending without it: %s", attachment_path)
 
         # Get backend and send
         backend = EmailConnectionFactory.get_backend(association_id, run_id)
