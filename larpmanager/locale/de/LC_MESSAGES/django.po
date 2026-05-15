@@ -2971,6 +2971,9 @@ msgstr "Fähigkeit entfernt"
 msgid "App Integration"
 msgstr "App-Integration"
 
+msgid "Attachment Name"
+msgstr "Anhang Name"
+
 msgid "Attachment Path"
 msgstr "Anhängepfad"
 

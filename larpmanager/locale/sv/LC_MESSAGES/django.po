@@ -2971,6 +2971,9 @@ msgstr "Förmåga borttagen"
 msgid "App Integration"
 msgstr "App-integration"
 
+msgid "Attachment Name"
+msgstr "Namn på bifogad fil"
+
 msgid "Attachment Path"
 msgstr "Tillbehörsväg"
 

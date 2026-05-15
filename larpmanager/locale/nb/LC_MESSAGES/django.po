@@ -2971,6 +2971,9 @@ msgstr "Evne fjernet"
 msgid "App Integration"
 msgstr "App-integrasjon"
 
+msgid "Attachment Name"
+msgstr "Navn på vedlegg"
+
 msgid "Attachment Path"
 msgstr "Sti for vedlegg"
 

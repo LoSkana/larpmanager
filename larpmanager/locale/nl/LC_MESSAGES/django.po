@@ -2971,6 +2971,9 @@ msgstr "Vermogen verwijderd"
 msgid "App Integration"
 msgstr "App integratie"
 
+msgid "Attachment Name"
+msgstr "Naam bijlage"
+
 msgid "Attachment Path"
 msgstr "Bevestigingspad"
 

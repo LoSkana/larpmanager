@@ -2971,6 +2971,9 @@ msgstr "Usunięta zdolność"
 msgid "App Integration"
 msgstr "Integracja aplikacji"
 
+msgid "Attachment Name"
+msgstr "Nazwa załącznika"
+
 msgid "Attachment Path"
 msgstr "Ścieżka załącznika"
 

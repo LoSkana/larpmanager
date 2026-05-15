@@ -2971,6 +2971,9 @@ msgstr "Abilità rimossa"
 msgid "App Integration"
 msgstr "Integrazione delle app"
 
+msgid "Attachment Name"
+msgstr "Nome dell'allegato"
+
 msgid "Attachment Path"
 msgstr "Percorso allegato"
 

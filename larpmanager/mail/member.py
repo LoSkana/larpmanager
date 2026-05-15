@@ -39,6 +39,8 @@ from larpmanager.utils.larpmanager.tasks import my_send_mail
 if TYPE_CHECKING:
     from django.http import HttpRequest
 
+    from larpmanager.models.accounting import AccountingItemMembership
+
 
 def send_membership_confirm(request: HttpRequest, membership: Any) -> None:
     """Send confirmation email when membership application is submitted.
@@ -88,7 +90,7 @@ def send_membership_confirm(request: HttpRequest, membership: Any) -> None:
     my_send_mail(email_subject, email_body, member_profile, membership)
 
 
-def send_membership_payment_notification_email(membership_item: Any) -> None:
+def send_membership_payment_notification_email(membership_item: AccountingItemMembership) -> None:
     """Send notification when membership fee payment is received."""
     if membership_item.hide:
         return
@@ -98,13 +100,7 @@ def send_membership_payment_notification_email(membership_item: Any) -> None:
     activate(membership_item.member.language)
     subject = hdr(membership_item) + _("Membership fee payment %(year)s") % {"year": membership_item.year}
     body = _("The payment of your membership fee for this year has been received") + "!"
-    my_send_mail(
-        subject,
-        body,
-        membership_item.member,
-        membership_item,
-        attachment_path=_receipt_attachment_path(membership_item),
-    )
+    my_send_mail(subject, body, membership_item.member, membership_item, **_receipt_attachment_path(membership_item))
 
 
 def handle_badge_assignment_notifications(instance: Any, pk_set: Any) -> None:

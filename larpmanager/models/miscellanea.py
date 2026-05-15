@@ -819,6 +819,8 @@ class EmailContent(UuidMixin, BaseModel):
 
     attachment_path = models.CharField(max_length=500, blank=True, null=True, verbose_name=_("Attachment Path"))
 
+    attachment_name = models.CharField(max_length=500, blank=True, null=True, verbose_name=_("Attachment Name"))
+
     search = models.CharField(max_length=500, blank=True, verbose_name=_("Search"))
 
     class Meta:

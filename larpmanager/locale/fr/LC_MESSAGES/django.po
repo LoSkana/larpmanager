@@ -2971,6 +2971,9 @@ msgstr "Capacité supprimée"
 msgid "App Integration"
 msgstr "Intégration des applications"
 
+msgid "Attachment Name"
+msgstr "Nom de la pièce jointe"
+
 msgid "Attachment Path"
 msgstr "Chemin d'accès"
 
