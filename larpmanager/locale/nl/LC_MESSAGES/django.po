@@ -1316,6 +1316,9 @@ msgstr "Hoeveelheid"
 msgid "Question"
 msgstr "Vraag"
 
+msgid "Receipts"
+msgstr "Ontvangsten"
+
 msgid "Redirect"
 msgstr "omleiden"
 
@@ -1489,6 +1492,9 @@ msgstr "Eerste hulp"
 
 msgid "Frequency"
 msgstr "Frequentie"
+
+msgid "Full name"
+msgstr "Volledige naam"
 
 msgid "Important"
 msgstr "Belangrijk"
@@ -2562,6 +2568,9 @@ msgstr "Ongeldig token"
 msgid "Language Code"
 msgstr "Taalcode"
 
+msgid "Legal address"
+msgstr "Wettig adres"
+
 msgid "Manage albums"
 msgstr "Albums beheren"
 
@@ -2958,6 +2967,9 @@ msgstr "Vermogen verwijderd"
 
 msgid "App Integration"
 msgstr "App integratie"
+
+msgid "Attachment Path"
+msgstr "Bevestigingspad"
 
 msgid "Backup ZIP file"
 msgstr "Back-up ZIP-bestand"
@@ -3583,6 +3595,9 @@ msgstr "Registratieformulier"
 msgid "Registration form"
 msgstr "Registratieformulier"
 
+msgid "Registration info"
+msgstr "Registratie info"
+
 msgid "Registration mail"
 msgstr "Registratie e-mail"
 
@@ -3735,6 +3750,9 @@ msgstr "Huidige weergave afdrukken"
 
 msgid "Proposed character"
 msgstr "Voorgesteld karakter"
+
+msgid "RUNTS registration"
+msgstr "RUNTS registratie"
 
 msgid "Reason for payment"
 msgstr "Reden voor betaling"
@@ -5474,6 +5492,9 @@ msgstr "Ontdek de evenementen die op stapel staan"
 msgid "Filter or search the characters"
 msgstr "Filter of zoek de tekens"
 
+msgid "Full address of the association"
+msgstr "Volledig adres van de vereniging"
+
 msgid "Manage event navigation buttons"
 msgstr "Navigatietoetsen voor evenementen beheren"
 
@@ -5954,9 +5975,6 @@ msgstr "Er zijn momenteel geen elementen beschikbaar"
 msgid "Now set up the tokens configuration"
 msgstr "Stel nu de tokens-configuratie in"
 
-msgid "Now you can create the receipt text"
-msgstr "Nu kun je de ontvangstbevestiging maken"
-
 msgid "Now you can set the casting options"
 msgstr "Nu kun je de gietopties instellen"
 
@@ -6062,6 +6080,9 @@ msgstr "Nu kun je de kortingsopties instellen"
 
 msgid "Now you can set the reminder options"
 msgstr "Nu kun je de herinneringsopties instellen"
+
+msgid "Now you can set up the receipts data"
+msgstr "Nu kun je de ontvangstgegevens instellen"
 
 msgid "Only really important communications"
 msgstr "Alleen echt belangrijke communicatie"
@@ -6602,6 +6623,9 @@ msgstr "Sjablonen voor ervaringsvaardigheden beheren"
 msgid "Manage the pre-registration of all events"
 msgstr "De voorregistratie van alle evenementen beheren"
 
+msgid "Name as will appear on the receipt header"
+msgstr "Naam zoals die op de koptekst van de bon komt te staan"
+
 msgid "Now you can create the plots of the event"
 msgstr "Nu kun je de plots van de gebeurtenis maken"
 
@@ -6721,6 +6745,9 @@ msgstr "Reserveer extra tickets naast je eigen tickets"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Selecteer willekeurig loten om te upgraden"
+
+msgid "Tax identification code of the association"
+msgstr "Fiscale identificatiecode van de vereniging"
 
 msgid "The member associated with this membership"
 msgstr "Het lid geassocieerd met dit lidmaatschap"
@@ -9059,12 +9086,6 @@ msgstr ""
 "Kies hoe vaak je updates over evenementen en activiteiten wilt ontvangen"
 
 msgid ""
-"Content of the receipt created for each payment and sent to participants"
-msgstr ""
-"Inhoud van het ontvangstbewijs dat voor elke betaling wordt aangemaakt en "
-"naar de deelnemers wordt gestuurd"
-
-msgid ""
 "Do you want to enable a secret registration link to allow early sign-ups"
 msgstr ""
 "Wil je een geheime registratielink inschakelen om vroege inschrijvingen "
@@ -10806,13 +10827,6 @@ msgstr ""
 "configuraties worden gekopieerd"
 
 msgid ""
-"Automatically generates a customizable PDF receipt for each payment and "
-"emails it to the user"
-msgstr ""
-"Genereert automatisch een aanpasbare PDF-ontvangst voor elke betaling en "
-"mailt deze naar de gebruiker"
-
-msgid ""
 "Disable the system that finds the character number when a special reference "
 "symbol is written"
 msgstr ""
@@ -11299,6 +11313,13 @@ msgid ""
 msgstr ""
 "Om de registratie voor je evenement te bevestigen, moet je de betaling "
 "binnen een week voltooien. Je kunt dat hier doen"
+
+msgid ""
+"Automatically generates a PDF fiscal receipt for each payment, in accordance"
+" with Italian legislation"
+msgstr ""
+"Genereert automatisch een PDF fiscaal ontvangstbewijs voor elke betaling, in"
+" overeenstemming met de Italiaanse wetgeving"
 
 msgid ""
 "Enables the definition of surcharges that are added to every registration "

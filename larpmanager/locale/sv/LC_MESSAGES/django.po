@@ -1316,6 +1316,9 @@ msgstr "Kvantitet"
 msgid "Question"
 msgstr "Fråga"
 
+msgid "Receipts"
+msgstr "Kvitton"
+
 msgid "Redirect"
 msgstr "Omdirigering"
 
@@ -1489,6 +1492,9 @@ msgstr "Första hjälpen"
 
 msgid "Frequency"
 msgstr "Frekvens"
+
+msgid "Full name"
+msgstr "Fullständigt namn"
 
 msgid "Important"
 msgstr "Viktigt"
@@ -2562,6 +2568,9 @@ msgstr "Ogiltig token"
 msgid "Language Code"
 msgstr "Språk kod"
 
+msgid "Legal address"
+msgstr "Juridisk adress"
+
 msgid "Manage albums"
 msgstr "Hantera album"
 
@@ -2958,6 +2967,9 @@ msgstr "Förmåga borttagen"
 
 msgid "App Integration"
 msgstr "App-integration"
+
+msgid "Attachment Path"
+msgstr "Tillbehörsväg"
 
 msgid "Backup ZIP file"
 msgstr "Säkerhetskopiera ZIP-fil"
@@ -3583,6 +3595,9 @@ msgstr "Registreringsformulär"
 msgid "Registration form"
 msgstr "Registreringsformulär"
 
+msgid "Registration info"
+msgstr "Information om registrering"
+
 msgid "Registration mail"
 msgstr "Registreringsbrev"
 
@@ -3735,6 +3750,9 @@ msgstr "Skriv ut aktuell vy"
 
 msgid "Proposed character"
 msgstr "Föreslagen karaktär"
+
+msgid "RUNTS registration"
+msgstr "RUNTS registrering"
 
 msgid "Reason for payment"
 msgstr "Orsak till betalning"
@@ -5474,6 +5492,9 @@ msgstr "Upptäck vilka evenemang som är på gång"
 msgid "Filter or search the characters"
 msgstr "Filtrera eller sök bland karaktärerna"
 
+msgid "Full address of the association"
+msgstr "Fullständig adress till föreningen"
+
 msgid "Manage event navigation buttons"
 msgstr "Hantera navigeringsknappar för evenemang"
 
@@ -5953,9 +5974,6 @@ msgstr "Inga element är för närvarande tillgängliga"
 msgid "Now set up the tokens configuration"
 msgstr "Ställ nu in konfigurationen för tokens"
 
-msgid "Now you can create the receipt text"
-msgstr "Nu kan du skapa kvittotexten"
-
 msgid "Now you can set the casting options"
 msgstr "Nu kan du ställa in casting-alternativen"
 
@@ -6061,6 +6079,9 @@ msgstr "Nu kan du ställa in rabattalternativen"
 
 msgid "Now you can set the reminder options"
 msgstr "Nu kan du ställa in påminnelsemöjligheterna"
+
+msgid "Now you can set up the receipts data"
+msgstr "Nu kan du ställa in kvittodata"
 
 msgid "Only really important communications"
 msgstr "Endast riktigt viktig kommunikation"
@@ -6601,6 +6622,9 @@ msgstr "Hantera mallar för erfarenhetsmässiga förmågor"
 msgid "Manage the pre-registration of all events"
 msgstr "Hantera förhandsregistrering av alla evenemang"
 
+msgid "Name as will appear on the receipt header"
+msgstr "Namn som kommer att visas på kvittohuvudet"
+
 msgid "Now you can create the plots of the event"
 msgstr "Nu kan du skapa tomterna för evenemanget"
 
@@ -6720,6 +6744,9 @@ msgstr "Reservera ytterligare biljetter utöver din egen"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Välj slumpmässigt lotter för att uppgradera"
+
+msgid "Tax identification code of the association"
+msgstr "Föreningens skatteregistreringsnummer"
 
 msgid "The member associated with this membership"
 msgstr "Den medlem som är associerad med detta medlemskap"
@@ -8952,12 +8979,6 @@ msgid ""
 msgstr "Välj hur ofta du vill få uppdateringar om evenemang och aktiviteter"
 
 msgid ""
-"Content of the receipt created for each payment and sent to participants"
-msgstr ""
-"Innehållet i det kvitto som skapas för varje betalning och skickas till "
-"deltagarna"
-
-msgid ""
 "Do you want to enable a secret registration link to allow early sign-ups"
 msgstr ""
 "Vill du aktivera en hemlig registreringslänk för att möjliggöra tidiga "
@@ -10640,13 +10661,6 @@ msgstr ""
 "kommer att kopieras"
 
 msgid ""
-"Automatically generates a customizable PDF receipt for each payment and "
-"emails it to the user"
-msgstr ""
-"Genererar automatiskt ett anpassningsbart PDF-kvitto för varje betalning och"
-" skickar det till användaren via e-post"
-
-msgid ""
 "Disable the system that finds the character number when a special reference "
 "symbol is written"
 msgstr ""
@@ -11133,6 +11147,13 @@ msgid ""
 msgstr ""
 "För att bekräfta din eventregistrering, vänligen genomför din betalning inom"
 " en vecka. Du kan göra det här"
+
+msgid ""
+"Automatically generates a PDF fiscal receipt for each payment, in accordance"
+" with Italian legislation"
+msgstr ""
+"Genererar automatiskt ett skattekvitto i PDF-format för varje betalning, i "
+"enlighet med italiensk lagstiftning"
 
 msgid ""
 "Enables the definition of surcharges that are added to every registration "

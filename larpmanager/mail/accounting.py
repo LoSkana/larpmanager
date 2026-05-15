@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 from typing import Any
 
 from django.utils.translation import activate, gettext_lazy as _
@@ -50,7 +51,10 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import get_url, hdr
 from larpmanager.models.event import Run
 from larpmanager.models.member import Member, Membership, NotificationType
+from larpmanager.utils.io.pdf import generate_payment_receipt
 from larpmanager.utils.larpmanager.tasks import my_send_mail
+
+logger = logging.getLogger(__name__)
 
 
 def send_expense_notification_email(instance: AccountingItemExpense) -> None:
@@ -264,7 +268,7 @@ def notify_pay_money(
     # Send notification email to the member who made the payment
     activate(paying_member.language)
     subject, body = get_pay_money_email(currency_symbol, payment_instance, run)
-    my_send_mail(subject, body, paying_member, run)
+    my_send_mail(subject, body, paying_member, run, attachment_path=_receipt_attachment_path(payment_instance))
 
     # Send notifications to organizers/treasurers
     for organizer in get_event_organizers(run.event):
@@ -449,8 +453,9 @@ def send_donation_confirmation_email(instance: AccountingItemDonation) -> None:
         "support, and for believing in us!",
     ) % {"amount": instance.value, "currency": instance.association.get_currency_symbol()}
 
-    # Send the confirmation email to the donor
-    my_send_mail(email_subject, email_body, instance.member, instance)
+    my_send_mail(
+        email_subject, email_body, instance.member, instance, attachment_path=_receipt_attachment_path(instance)
+    )
 
 
 def send_collection_activation_email(instance: AccountingItemCollection) -> None:
@@ -555,3 +560,17 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
             instance=inv,
             notification_type=NotificationType.INVOICE_APPROVAL,
         )
+
+
+def _receipt_attachment_path(accounting_item: Any) -> str | None:
+    """Return the PDF receipt path for the item's invoice when 'receipts' feature is active, else None."""
+    invoice = accounting_item.inv
+    if not invoice:
+        return None
+    if "receipts" not in get_association_features(accounting_item.association_id):
+        return None
+    try:
+        return generate_payment_receipt(invoice)
+    except Exception:
+        logger.exception("Failed to generate receipt PDF for invoice %s", invoice.pk)
+        return None

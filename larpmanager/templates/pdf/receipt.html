@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            body {
+                font-family: Helvetica, Arial, sans-serif;
+                font-size: 10pt;
+                color: #000;
+            }
+            .header-name {
+                font-size: 18pt;
+                font-weight: bold;
+                color: #1a3a6e;
+                margin-bottom: 2px;
+            }
+            .header-details {
+                font-size: 9pt;
+                color: #444;
+                margin-bottom: 2px;
+            }
+            .divider {
+                border: none;
+                border-top: 2px solid #1a3a6e;
+                margin: 10px 0 18px 0;
+            }
+            .title {
+                text-align: center;
+                font-size: 15pt;
+                font-weight: bold;
+                text-decoration: underline;
+                margin-bottom: 20px;
+            }
+            .row-date-amount {
+                width: 100%;
+            }
+            .row-date-amount td {
+                font-size: 10pt;
+                padding-bottom: 14px;
+            }
+            .label-bold {
+                font-weight: bold;
+            }
+            .body-text {
+                margin-bottom: 18px;
+                line-height: 1.6;
+            }
+            .causale-label {
+                font-weight: bold;
+                margin-bottom: 4px;
+            }
+            .causale-text {
+                margin-bottom: 22px;
+            }
+            .legal-box {
+                border-left: 3px solid #1a3a6e;
+                padding: 6px 10px;
+                font-size: 8.5pt;
+                font-style: italic;
+                color: #333;
+                margin-bottom: 22px;
+            }
+            .signature-area {
+                text-align: right;
+                margin-top: 30px;
+                font-size: 9pt;
+                color: #555;
+                font-style: italic;
+            }
+            .donation-note {
+                font-size: 8.5pt;
+                color: #444;
+                margin-top: 30px;
+                border-top: 1px solid #ccc;
+                padding-top: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header-name">{{ receipt_legal_name }}</div>
+        <div class="header-details">Sede Legale: {{ receipt_sede_legale }}</div>
+        <div class="header-details">
+            Codice Fiscale: {{ receipt_codice_fiscale }}
+            {% if receipt_runts %}| {{ receipt_runts }}{% endif %}
+        </div>
+        {% if association.main_mail %}<div class="header-details">Email: {{ association.main_mail }}</div>{% endif %}
+        <hr class="divider" />
+        <div class="title">RICEVUTA N. {{ receipt_number|stringformat:"03d" }} / {{ year }}</div>
+        <table class="row-date-amount">
+            <tr>
+                <td>
+                    <span class="label-bold">Data emissione:</span> {{ invoice.created|date:"d/m/Y" }}
+                </td>
+                <td style="text-align: right;">
+                    <span class="label-bold">Importo: &euro; {{ invoice.mc_gross }}</span>
+                </td>
+            </tr>
+        </table>
+        <div class="body-text">
+            Si dichiara di aver ricevuto dal Sig./Sig.ra <strong>{{ member.get_full_name }}</strong>
+            {% if member.fiscal_code %}
+                ,
+                Codice Fiscale <strong>{{ member.fiscal_code }}</strong>
+            {% endif %}
+            {% if member.get_residence %}, residente a <strong>{{ member.get_residence }}</strong>{% endif %}
+            ,
+            la somma di Euro <strong>&euro; {{ invoice.mc_gross }}</strong>
+            versata tramite <strong>{{ invoice.method.name }}</strong>.
+        </div>
+        <div class="causale-label">Causale:</div>
+        <div class="causale-text">{{ invoice.causal }}</div>
+        <div class="legal-box">
+            Operazione fuori campo IVA ai sensi dell&rsquo;Art. 4, comma 4, DPR 633/72.
+            Documento esente da imposta di bollo ai sensi dell&rsquo;Art. 82, comma 10, D.Lgs. 117/2017 (Codice del Terzo Settore).
+        </div>
+        <div class="signature-area">Firma omessa ai sensi dell&rsquo;art. 3 del D.Lgs. n. 39/1993</div>
+        {% if is_donation %}
+            <div class="donation-note">
+                <em>Nota per il donatore: In caso di erogazione liberale effettuata con mezzi tracciabili, la presente ricevuta &egrave; valida ai fini delle detrazioni/deduzioni fiscali previste dall&rsquo;Art. 83 del D.Lgs. 117/2017.</em>
+            </div>
+        {% endif %}
+    </body>
+</html>

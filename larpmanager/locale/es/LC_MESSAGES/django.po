@@ -1316,6 +1316,9 @@ msgstr "Cantidad"
 msgid "Question"
 msgstr "Pregunta"
 
+msgid "Receipts"
+msgstr "Recibos"
+
 msgid "Redirect"
 msgstr "Redirigir"
 
@@ -1489,6 +1492,9 @@ msgstr "Primeros auxilios"
 
 msgid "Frequency"
 msgstr "Frecuencia"
+
+msgid "Full name"
+msgstr "Nombre y apellidos"
 
 msgid "Important"
 msgstr "Importante"
@@ -2562,6 +2568,9 @@ msgstr "Token no válido"
 msgid "Language Code"
 msgstr "Código de idioma"
 
+msgid "Legal address"
+msgstr "Domicilio legal"
+
 msgid "Manage albums"
 msgstr "Gestionar álbumes"
 
@@ -2958,6 +2967,9 @@ msgstr "Capacidad eliminada"
 
 msgid "App Integration"
 msgstr "Integración de aplicaciones"
+
+msgid "Attachment Path"
+msgstr "Ruta de acceso"
 
 msgid "Backup ZIP file"
 msgstr "Archivo ZIP de copia de seguridad"
@@ -3583,6 +3595,9 @@ msgstr "Formulario de inscripción"
 msgid "Registration form"
 msgstr "Formulario de inscripción"
 
+msgid "Registration info"
+msgstr "Información de inscripción"
+
 msgid "Registration mail"
 msgstr "Correo de inscripción"
 
@@ -3735,6 +3750,9 @@ msgstr "Imprimir vista actual"
 
 msgid "Proposed character"
 msgstr "Personaje propuesto"
+
+msgid "RUNTS registration"
+msgstr "Inscripción en RUNTS"
 
 msgid "Reason for payment"
 msgstr "Motivo del pago"
@@ -5474,6 +5492,9 @@ msgstr "¡Descubre los próximos eventos"
 msgid "Filter or search the characters"
 msgstr "Filtra o busca los personajes"
 
+msgid "Full address of the association"
+msgstr "Dirección completa de la asociación"
+
 msgid "Manage event navigation buttons"
 msgstr "Gestión de los botones de navegación del evento"
 
@@ -5954,9 +5975,6 @@ msgstr "Actualmente no hay elementos disponibles"
 msgid "Now set up the tokens configuration"
 msgstr "Ahora configure los tokens"
 
-msgid "Now you can create the receipt text"
-msgstr "Ahora puede crear el texto del recibo"
-
 msgid "Now you can set the casting options"
 msgstr "Ahora puedes configurar las opciones de casting"
 
@@ -6062,6 +6080,9 @@ msgstr "Ahora puedes configurar las opciones de descuento"
 
 msgid "Now you can set the reminder options"
 msgstr "Ahora puedes configurar las opciones de recordatorio"
+
+msgid "Now you can set up the receipts data"
+msgstr "Ahora puedes configurar los datos de los recibos"
 
 msgid "Only really important communications"
 msgstr "Sólo las comunicaciones realmente importantes"
@@ -6600,6 +6621,9 @@ msgstr "Gestionar plantillas para las capacidades de experiencia"
 msgid "Manage the pre-registration of all events"
 msgstr "Gestionar la preinscripción de todos los actos"
 
+msgid "Name as will appear on the receipt header"
+msgstr "Nombre tal y como aparecerá en la cabecera del recibo"
+
 msgid "Now you can create the plots of the event"
 msgstr "Ahora puedes crear las parcelas del evento"
 
@@ -6719,6 +6743,9 @@ msgstr "Reservar entradas adicionales"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Seleccione al azar billetes de lotería para actualizar"
+
+msgid "Tax identification code of the association"
+msgstr "Código de identificación fiscal de la asociación"
 
 msgid "The member associated with this membership"
 msgstr "El miembro asociado a esta afiliación"
@@ -9056,11 +9083,6 @@ msgstr ""
 " actividades"
 
 msgid ""
-"Content of the receipt created for each payment and sent to participants"
-msgstr ""
-"Contenido del recibo creado para cada pago y enviado a los participantes"
-
-msgid ""
 "Do you want to enable a secret registration link to allow early sign-ups"
 msgstr ""
 "¿Desea habilitar un enlace de registro secreto para permitir inscripciones "
@@ -10790,13 +10812,6 @@ msgstr ""
 "funcionalidades y configuraciones"
 
 msgid ""
-"Automatically generates a customizable PDF receipt for each payment and "
-"emails it to the user"
-msgstr ""
-"Genera automáticamente un recibo PDF personalizable para cada pago y lo "
-"envía por correo electrónico al usuario"
-
-msgid ""
 "Disable the system that finds the character number when a special reference "
 "symbol is written"
 msgstr ""
@@ -11283,6 +11298,13 @@ msgid ""
 msgstr ""
 "Para confirmar su inscripción en el evento, realice el pago en el plazo de "
 "una semana. Puede hacerlo aquí"
+
+msgid ""
+"Automatically generates a PDF fiscal receipt for each payment, in accordance"
+" with Italian legislation"
+msgstr ""
+"Genera automáticamente un recibo fiscal en PDF para cada pago, de acuerdo "
+"con la legislación italiana"
 
 msgid ""
 "Enables the definition of surcharges that are added to every registration "

@@ -139,9 +139,6 @@ class ExeAssociationTextForm(BaseModelForm):
         if "legal_notice" not in self.params.get("features"):
             delete_choice.append(AssociationTextType.LEGAL)
 
-        if "receipts" not in self.params.get("features"):
-            delete_choice.append(AssociationTextType.RECEIPT)
-
         if "membership" not in self.params.get("features"):
             delete_choice.extend([AssociationTextType.MEMBERSHIP, AssociationTextType.STATUTE])
 
@@ -175,7 +172,6 @@ class ExeAssociationTextForm(BaseModelForm):
             AssociationTextType.TOC: _(
                 "Terms and conditions of signup, shown in a page linked in the registration form",
             ),
-            AssociationTextType.RECEIPT: _("Content of the receipt created for each payment and sent to participants"),
             AssociationTextType.SIGNATURE: _("Added to the bottom of all mails sent"),
             AssociationTextType.PRIVACY: _("Content of privacy page linked at the bottom of all pages"),
             AssociationTextType.REMINDER_MEMBERSHIP: _(
@@ -421,6 +417,7 @@ class ExeConfigForm(ConfigForm):
         self.set_config_members()
 
         # 4. Miscellanea
+        self.set_config_receipts()
         self.set_config_einvoice()
         self.set_config_others()
 
@@ -892,6 +889,41 @@ class ExeConfigForm(ConfigForm):
         field_label = _("Algorithm")
         field_help_text = _("Signing algorithm for the JWT token (default: HS256)")
         self.add_configs("app_integration_algorithm", ConfigType.CHAR, field_label, field_help_text)
+
+    def set_config_receipts(self) -> None:
+        """Configure APS non-fiscal receipt header fields."""
+        if "receipts" not in self.params["features"]:
+            return
+
+        self.set_section("receipts", _("Receipts"))
+
+        self.add_configs(
+            "receipt_legal_name",
+            ConfigType.CHAR,
+            _("Full name"),
+            _("Name as will appear on the receipt header"),
+        )
+
+        self.add_configs(
+            "receipt_sede_legale",
+            ConfigType.CHAR,
+            _("Legal address"),
+            _("Full address of the association"),
+        )
+
+        self.add_configs(
+            "receipt_codice_fiscale",
+            ConfigType.CHAR,
+            _("Fiscal code"),
+            _("Tax identification code of the association"),
+        )
+
+        self.add_configs(
+            "receipt_runts",
+            ConfigType.CHAR,
+            _("RUNTS registration"),
+            _("Registration info") + ", e.g. 'Iscritta al RUNTS sez. APS'",
+        )
 
     def set_config_einvoice(self) -> None:
         """Configure electronic invoice settings for associations."""

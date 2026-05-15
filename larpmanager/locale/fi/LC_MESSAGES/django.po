@@ -1316,6 +1316,9 @@ msgstr "Määrä"
 msgid "Question"
 msgstr "Kysymys"
 
+msgid "Receipts"
+msgstr "Kuitit"
+
 msgid "Redirect"
 msgstr "Uudelleenohjaus"
 
@@ -1489,6 +1492,9 @@ msgstr "Ensiapu"
 
 msgid "Frequency"
 msgstr "Taajuus"
+
+msgid "Full name"
+msgstr "Koko nimi"
 
 msgid "Important"
 msgstr "Tärkeä"
@@ -2562,6 +2568,9 @@ msgstr "Virheellinen merkki"
 msgid "Language Code"
 msgstr "Kielikoodi"
 
+msgid "Legal address"
+msgstr "Oikeudellinen osoite"
+
 msgid "Manage albums"
 msgstr "Hallitse albumeita"
 
@@ -2958,6 +2967,9 @@ msgstr "Taito poistettu"
 
 msgid "App Integration"
 msgstr "Sovelluksen integrointi"
+
+msgid "Attachment Path"
+msgstr "Kiinnityspolku"
 
 msgid "Backup ZIP file"
 msgstr "Varmuuskopio ZIP-tiedosto"
@@ -3583,6 +3595,9 @@ msgstr "Rekisteröintilomake"
 msgid "Registration form"
 msgstr "Ilmoittautumislomake"
 
+msgid "Registration info"
+msgstr "Rekisteröintitiedot"
+
 msgid "Registration mail"
 msgstr "Ilmoittautumissähköposti"
 
@@ -3735,6 +3750,9 @@ msgstr "Tulosta nykyinen näkymä"
 
 msgid "Proposed character"
 msgstr "Ehdotettu luonne"
+
+msgid "RUNTS registration"
+msgstr "RUNTS rekisteröinti"
 
 msgid "Reason for payment"
 msgstr "Maksun syy"
@@ -5474,6 +5492,9 @@ msgstr "Tutustu tuleviin tapahtumiin"
 msgid "Filter or search the characters"
 msgstr "Suodata tai etsiä merkkejä"
 
+msgid "Full address of the association"
+msgstr "Yhdistyksen täydellinen osoite"
+
 msgid "Manage event navigation buttons"
 msgstr "Tapahtuman navigointipainikkeiden hallinta"
 
@@ -5953,9 +5974,6 @@ msgstr "Tällä hetkellä ei ole saatavilla elementtejä"
 msgid "Now set up the tokens configuration"
 msgstr "Määritä nyt tunnusten konfiguraatio"
 
-msgid "Now you can create the receipt text"
-msgstr "Nyt voit luoda kuittitekstin"
-
 msgid "Now you can set the casting options"
 msgstr "Nyt voit asettaa hahmojaon asetukset"
 
@@ -6061,6 +6079,9 @@ msgstr "Nyt voit asettaa alennusasetukset"
 
 msgid "Now you can set the reminder options"
 msgstr "Nyt voit asettaa muistutusvaihtoehdot"
+
+msgid "Now you can set up the receipts data"
+msgstr "Nyt voit määrittää kuittitiedot"
 
 msgid "Only really important communications"
 msgstr "Vain todella tärkeä viestintä"
@@ -6599,6 +6620,9 @@ msgstr "Hallitse kokemustaitojen malleja"
 msgid "Manage the pre-registration of all events"
 msgstr "hallinnoida kaikkien tapahtumien ennakkoilmoittautumista"
 
+msgid "Name as will appear on the receipt header"
+msgstr "Nimi sellaisena kuin se näkyy kuitin otsakkeessa"
+
 msgid "Now you can create the plots of the event"
 msgstr "Nyt voit luoda tapahtuman juonet"
 
@@ -6718,6 +6742,9 @@ msgstr "Varaa lisää lippuja omien lippujesi lisäksi"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Valitse satunnaisesti lottokuponkeja päivittää"
+
+msgid "Tax identification code of the association"
+msgstr "Yhdistyksen verotunnus"
 
 msgid "The member associated with this membership"
 msgstr "Tähän jäsenyyteen liittyvä jäsen"
@@ -8954,11 +8981,6 @@ msgstr ""
 "aktiviteeteista"
 
 msgid ""
-"Content of the receipt created for each payment and sent to participants"
-msgstr ""
-"Kutakin maksua varten laaditun ja osallistujille lähetetyn kuitin sisältö"
-
-msgid ""
 "Do you want to enable a secret registration link to allow early sign-ups"
 msgstr ""
 "Haluatko ottaa käyttöön salaisen ilmoittautumislinkin, jotta voit "
@@ -10614,13 +10636,6 @@ msgstr ""
 "Voit määrittää mallitapahtuman, josta toiminnot ja määritykset kopioidaan"
 
 msgid ""
-"Automatically generates a customizable PDF receipt for each payment and "
-"emails it to the user"
-msgstr ""
-"Luo automaattisesti muokattavan PDF-kuitin jokaisesta maksusta ja lähettää "
-"sen sähköpostitse käyttäjälle"
-
-msgid ""
 "Disable the system that finds the character number when a special reference "
 "symbol is written"
 msgstr ""
@@ -11105,6 +11120,13 @@ msgid ""
 msgstr ""
 "Vahvistaaksesi ilmoittautumisesi tapahtumaan, suoritathan maksun viikon "
 "kuluessa. Voit tehdä sen täällä"
+
+msgid ""
+"Automatically generates a PDF fiscal receipt for each payment, in accordance"
+" with Italian legislation"
+msgstr ""
+"Luo automaattisesti PDF-muotoisen verokuitin jokaisesta maksusta Italian "
+"lainsäädännön mukaisesti"
 
 msgid ""
 "Enables the definition of surcharges that are added to every registration "

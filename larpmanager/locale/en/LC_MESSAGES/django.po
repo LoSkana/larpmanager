@@ -278,10 +278,6 @@ msgid ""
 "form"
 msgstr ""
 
-msgid ""
-"Content of the receipt created for each payment and sent to participants"
-msgstr ""
-
 msgid "Added to the bottom of all mails sent"
 msgstr ""
 
@@ -776,13 +772,37 @@ msgstr ""
 msgid "Signing algorithm for the JWT token (default: HS256)"
 msgstr ""
 
+msgid "Receipts"
+msgstr ""
+
+msgid "Full name"
+msgstr ""
+
+msgid "Name as will appear on the receipt header"
+msgstr ""
+
+msgid "Legal address"
+msgstr ""
+
+msgid "Full address of the association"
+msgstr ""
+
+msgid "Fiscal code"
+msgstr ""
+
+msgid "Tax identification code of the association"
+msgstr ""
+
+msgid "RUNTS registration"
+msgstr ""
+
+msgid "Registration info"
+msgstr ""
+
 msgid "Electronic invoice"
 msgstr ""
 
 msgid "Name"
-msgstr ""
-
-msgid "Fiscal code"
 msgstr ""
 
 msgid "VAT No"
@@ -4518,6 +4538,9 @@ msgid "Body"
 msgstr ""
 
 msgid "Reply To"
+msgstr ""
+
+msgid "Attachment Path"
 msgstr ""
 
 msgid "Email Content"
@@ -9492,11 +9515,11 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Automatically generates a customizable PDF receipt for each payment and "
-"emails it to the user"
+"Automatically generates a PDF fiscal receipt for each payment, in accordance "
+"with Italian legislation"
 msgstr ""
 
-msgid "Now you can create the receipt text"
+msgid "Now you can set up the receipts data"
 msgstr ""
 
 msgid "Register of volunteers"
