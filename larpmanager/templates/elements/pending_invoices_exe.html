@@ -5,26 +5,29 @@
         <table class="go_datatable">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Member" %}</th>
                     <th>{% trans "Method" %}</th>
                     <th>{% trans "Amount" %}</th>
                     <th>{% trans "Details" %}</th>
                     <th>{% trans "Date" %}</th>
                     <th></th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% for inv in pending_invoices %}
                     <tr>
+                        <td>
+                            <a href="{% url 'exe_invoices_confirm' inv.uuid %}">
+                                <i class="fa-solid fa-check"></i>
+                                {% trans "Confirm" %}
+                            </a>
+                        </td>
                         <td>{{ inv.member }}</td>
                         <td>{{ inv.method }}</td>
                         <td>{{ inv.mc_gross | format_decimal }}</td>
                         <td>{{ inv.get_details | safe }}</td>
                         <td>{{ inv.created | date:"d/m/Y" }}</td>
-                        <td>
-                            <a href="{% url 'exe_invoices_confirm' inv.uuid %}">{% trans "Confirm" %}</a>
-                        </td>
                         <td>
                             <a href="{% url 'exe_invoices_delete' inv.uuid %}"
                                qtip="{% trans "Delete" %}"

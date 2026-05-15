@@ -197,7 +197,7 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
 
     # Approve first event payment
     go_to(page, live_server, "/test/manage/payments")
-    page.get_by_role("link", name="Confirm", exact=True).click()
+    page.get_by_role("link", name="Confirm").click()
 
     # First event registration is confirmed
     go_to(page, live_server, "/test/register")
@@ -230,7 +230,7 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
 
     # Approve second event payment
     go_to(page, live_server, "/testsecond/manage/payments")
-    page.get_by_role("link", name="Confirm", exact=True).click()
+    page.get_by_role("link", name="Confirm").click()
 
     # reg_status for second event shows event fee 100 and membership fee 20 (already paid via first event)
     go_to(page, live_server, "/testsecond/register")
