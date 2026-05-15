@@ -541,7 +541,7 @@ def generate_payment_receipt(accounting_item: Any) -> tuple[str, str]:
 
     receipts_dir = Path(conf_settings.MEDIA_ROOT) / "receipts" / str(association_id)
     receipts_dir.mkdir(parents=True, exist_ok=True)
-    file_path = str(receipts_dir / f"{accounting_item.cod}.pdf")
+    file_path = str(receipts_dir / f"{accounting_item.id}.pdf")
 
     xhtml_pdf(pdf_context, "pdf/receipt.html", file_path)
 
