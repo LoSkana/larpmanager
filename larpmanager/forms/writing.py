@@ -292,6 +292,7 @@ class OrgaPlotForm(MultichoiceMixin, WritingForm, BaseWritingForm):
                     "character__number",
                     "character__name",
                     "text",
+                    "character__uuid",
                 ),
             )
             self.init_characters = [ch[0] for ch in plot_characters_data]
@@ -335,7 +336,7 @@ class OrgaPlotForm(MultichoiceMixin, WritingForm, BaseWritingForm):
 
                 self.show_link.append(id_field)
                 self.add_char_finder.append(id_field)
-                reverse_args = [self.params.get("run").get_slug(), ch[0]]
+                reverse_args = [self.params.get("run").get_slug(), ch[4]]
                 self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
 
     def _save_multi(self, field: str, instance: Plot) -> None:  # noqa: ARG002
