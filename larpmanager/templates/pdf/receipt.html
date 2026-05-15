@@ -89,10 +89,10 @@
         <table class="row-date-amount">
             <tr>
                 <td>
-                    <span class="label-bold">Data emissione:</span> {{ accountig_item.created|date:"d/m/Y" }}
+                    <span class="label-bold">Data emissione:</span> {{ accounting_item.created|date:"d/m/Y" }}
                 </td>
                 <td style="text-align: right;">
-                    <span class="label-bold">Importo: &euro; {{ accountig_item.amount }}</span>
+                    <span class="label-bold">Importo: &euro; {{ accounting_item.amount }}</span>
                 </td>
             </tr>
         </table>
@@ -104,8 +104,8 @@
             {% endif %}
             {% if member.get_residence %}, residente a <strong>{{ member.get_residence }}</strong>{% endif %}
             ,
-            la somma di Euro <strong>&euro; {{ accountig_item.amount }}</strong>
-            {% if method %}versata tramite <strong>{{ invoice.method.name }}</strong>{% endif %}
+            la somma di Euro <strong>&euro; {{ accounting_item.amount }}</strong>
+            {% if method %}versata tramite <strong>{{ method }}</strong>{% endif %}
             .
         </div>
         <div class="causale-label">Causale:</div>
