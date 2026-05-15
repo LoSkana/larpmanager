@@ -28,6 +28,7 @@ from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
+from larpmanager.mail.accounting import _receipt_attachment_path
 from larpmanager.mail.base import notify_organization_exe
 from larpmanager.mail.templates import get_help_email, get_password_reminder_email
 from larpmanager.models.access import get_event_organizers
@@ -97,7 +98,13 @@ def send_membership_payment_notification_email(membership_item: Any) -> None:
     activate(membership_item.member.language)
     subject = hdr(membership_item) + _("Membership fee payment %(year)s") % {"year": membership_item.year}
     body = _("The payment of your membership fee for this year has been received") + "!"
-    my_send_mail(subject, body, membership_item.member, membership_item)
+    my_send_mail(
+        subject,
+        body,
+        membership_item.member,
+        membership_item,
+        attachment_path=_receipt_attachment_path(membership_item),
+    )
 
 
 def handle_badge_assignment_notifications(instance: Any, pk_set: Any) -> None:

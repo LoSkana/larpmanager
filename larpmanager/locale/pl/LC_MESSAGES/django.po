@@ -1316,6 +1316,9 @@ msgstr "Ilość"
 msgid "Question"
 msgstr "Pytanie"
 
+msgid "Receipts"
+msgstr "Wpływy"
+
 msgid "Redirect"
 msgstr "Przekierowanie"
 
@@ -1489,6 +1492,9 @@ msgstr "Pierwsza pomoc"
 
 msgid "Frequency"
 msgstr "Częstotliwość"
+
+msgid "Full name"
+msgstr "Imię i nazwisko"
 
 msgid "Important"
 msgstr "Ważne"
@@ -2562,6 +2568,9 @@ msgstr "Nieprawidłowy token"
 msgid "Language Code"
 msgstr "Kod języka"
 
+msgid "Legal address"
+msgstr "Adres prawny"
+
 msgid "Manage albums"
 msgstr "Zarządzanie albumami"
 
@@ -2961,6 +2970,9 @@ msgstr "Usunięta zdolność"
 
 msgid "App Integration"
 msgstr "Integracja aplikacji"
+
+msgid "Attachment Path"
+msgstr "Ścieżka załącznika"
 
 msgid "Backup ZIP file"
 msgstr "Kopia zapasowa pliku ZIP"
@@ -3586,6 +3598,9 @@ msgstr "Formularz rejestracyjny"
 msgid "Registration form"
 msgstr "Formularz rejestracyjny"
 
+msgid "Registration info"
+msgstr "Informacje o rejestracji"
+
 msgid "Registration mail"
 msgstr "Poczta rejestracyjna"
 
@@ -3738,6 +3753,9 @@ msgstr "Drukuj bieżący widok"
 
 msgid "Proposed character"
 msgstr "Proponowany charakter"
+
+msgid "RUNTS registration"
+msgstr "Rejestracja RUNTS"
 
 msgid "Reason for payment"
 msgstr "Powód płatności"
@@ -5486,6 +5504,9 @@ msgstr "Odkryj nadchodzące wydarzenia"
 msgid "Filter or search the characters"
 msgstr "Filtruj lub przeszukuj znaki"
 
+msgid "Full address of the association"
+msgstr "Pełny adres stowarzyszenia"
+
 msgid "Manage event navigation buttons"
 msgstr "Zarządzanie przyciskami nawigacji zdarzeń"
 
@@ -5964,9 +5985,6 @@ msgstr "Żadne elementy nie są obecnie dostępne"
 msgid "Now set up the tokens configuration"
 msgstr "Teraz należy ustawić konfigurację tokenów"
 
-msgid "Now you can create the receipt text"
-msgstr "Teraz można utworzyć tekst paragonu"
-
 msgid "Now you can set the casting options"
 msgstr "Teraz możesz ustawić opcje castingu"
 
@@ -6072,6 +6090,9 @@ msgstr "Teraz możesz ustawić opcje rabatu"
 
 msgid "Now you can set the reminder options"
 msgstr "Teraz możesz ustawić opcje przypomnienia"
+
+msgid "Now you can set up the receipts data"
+msgstr "Teraz możesz skonfigurować dane paragonów"
 
 msgid "Only really important communications"
 msgstr "Tylko naprawdę ważna komunikacja"
@@ -6610,6 +6631,9 @@ msgstr "Zarządzanie szablonami zdolności doświadczenia"
 msgid "Manage the pre-registration of all events"
 msgstr "Zarządzanie wstępną rejestracją wszystkich wydarzeń"
 
+msgid "Name as will appear on the receipt header"
+msgstr "Nazwa, która pojawi się w nagłówku paragonu"
+
 msgid "Now you can create the plots of the event"
 msgstr "Teraz można utworzyć wykresy zdarzenia"
 
@@ -6729,6 +6753,9 @@ msgstr "Zarezerwuj dodatkowe bilety poza własnymi"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Wybierz losowo kupony loterii do ulepszenia"
+
+msgid "Tax identification code of the association"
+msgstr "Kod identyfikacji podatkowej stowarzyszenia"
 
 msgid "The member associated with this membership"
 msgstr "Członek powiązany z tym członkostwem"
@@ -9008,12 +9035,6 @@ msgstr ""
 "aktywnościach"
 
 msgid ""
-"Content of the receipt created for each payment and sent to participants"
-msgstr ""
-"Treść pokwitowania tworzonego dla każdej płatności i wysyłanego do "
-"uczestników"
-
-msgid ""
 "Do you want to enable a secret registration link to allow early sign-ups"
 msgstr ""
 "Czy chcesz włączyć tajny link rejestracyjny, aby umożliwić wczesną "
@@ -10723,13 +10744,6 @@ msgstr ""
 "konfiguracje"
 
 msgid ""
-"Automatically generates a customizable PDF receipt for each payment and "
-"emails it to the user"
-msgstr ""
-"Automatycznie generuje konfigurowalne pokwitowanie PDF dla każdej płatności "
-"i wysyła je e-mailem do użytkownika"
-
-msgid ""
 "Disable the system that finds the character number when a special reference "
 "symbol is written"
 msgstr ""
@@ -11215,6 +11229,13 @@ msgid ""
 msgstr ""
 "Aby potwierdzić rejestrację na wydarzenie, prosimy o dokonanie płatności w "
 "ciągu tygodnia. Można to zrobić tutaj"
+
+msgid ""
+"Automatically generates a PDF fiscal receipt for each payment, in accordance"
+" with Italian legislation"
+msgstr ""
+"Automatycznie generuje paragon fiskalny w formacie PDF dla każdej płatności,"
+" zgodnie z włoskimi przepisami"
 
 msgid ""
 "Enables the definition of surcharges that are added to every registration "

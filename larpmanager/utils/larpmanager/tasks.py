@@ -24,6 +24,7 @@ import logging
 import re
 import traceback
 from functools import wraps
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from background_task import background
@@ -308,6 +309,7 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
             email_content.association_id,
             email_content.run_id,
             email_content.reply_to,
+            email_content.attachment_path,
         )
 
         # Only mark as sent if successful
@@ -330,6 +332,7 @@ def my_send_simple_mail(
     association_id: int | None = None,
     run_id: int | None = None,
     reply_to: str | None = None,
+    attachment_path: str | None = None,
 ) -> None:
     """Send email with association/event-specific configuration.
 
@@ -346,6 +349,7 @@ def my_send_simple_mail(
         association_id: Association ID for custom SMTP settings and sender configuration
         run_id: Run ID for event-specific SMTP settings (overrides association settings)
         reply_to: Custom Reply-To email address header
+        attachment_path: Optional absolute filesystem path to a file to attach as PDF
 
     Raises:
         Exception: Re-raises email sending exceptions after logging error details
@@ -360,6 +364,12 @@ def my_send_simple_mail(
 
         # Build email message
         email_message = _build_email_message(subj, body, m_email, metadata)
+
+        if attachment_path:
+            if Path(attachment_path).exists():
+                email_message.attach_file(attachment_path, "application/pdf")
+            else:
+                logger.warning("Receipt attachment not found, sending without it: %s", attachment_path)
 
         # Get backend and send
         backend = EmailConnectionFactory.get_backend(association_id, run_id)
@@ -501,6 +511,7 @@ def my_send_mail(
     context_object: Run | Event | Association | Any | None = None,
     reply_to: str | None = None,
     schedule: int = 0,
+    attachment_path: str | None = None,
 ) -> None:
     """Queue email for sending with context-aware formatting.
 
@@ -515,6 +526,7 @@ def my_send_mail(
              Supports Run, Event, Association, or objects with run_id/association_id/event_id
         reply_to: Custom reply-to email address
         schedule: Delay in seconds before sending email
+        attachment_path: Optional absolute filesystem path to a file to attach
 
     Returns:
         None
@@ -551,6 +563,7 @@ def my_send_mail(
         subj=subject_string,
         body=body_string,
         reply_to=reply_to,
+        attachment_path=attachment_path,
     )
 
     # Create email recipient record

@@ -926,16 +926,15 @@
 - model: larpmanager.feature
   fields:
     name: Receipt
-    descr: Automatically generates a customizable PDF receipt for each payment and
-      emails it to the user
+    descr: Automatically generates a PDF fiscal receipt for each payment, in accordance with Italian legislation
     slug: receipts
     overall: true
     placeholder: false
     order: 9999
-    after_text: Now you can create the receipt text
-    after_link: exe_texts
+    after_text: Now you can set up the receipts data
+    after_link: config/receipts
     hidden: false
-    module: accounting
+    module: italy
     dependencies: []
 - model: larpmanager.feature
   fields:

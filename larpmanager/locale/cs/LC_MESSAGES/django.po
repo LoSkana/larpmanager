@@ -1316,6 +1316,9 @@ msgstr "Množství"
 msgid "Question"
 msgstr "Otázka"
 
+msgid "Receipts"
+msgstr "Příjmy"
+
 msgid "Redirect"
 msgstr "Přesměrování"
 
@@ -1489,6 +1492,9 @@ msgstr "První pomoc"
 
 msgid "Frequency"
 msgstr "Frekvence"
+
+msgid "Full name"
+msgstr "Celé jméno"
 
 msgid "Important"
 msgstr "Důležité"
@@ -2562,6 +2568,9 @@ msgstr "Neplatný token"
 msgid "Language Code"
 msgstr "Kód jazyka"
 
+msgid "Legal address"
+msgstr "Právní adresa"
+
 msgid "Manage albums"
 msgstr "Správa alb"
 
@@ -2961,6 +2970,9 @@ msgstr "Odstranění schopnosti"
 
 msgid "App Integration"
 msgstr "Integrace aplikací"
+
+msgid "Attachment Path"
+msgstr "Cesta k příloze"
 
 msgid "Backup ZIP file"
 msgstr "Záložní soubor ZIP"
@@ -3586,6 +3598,9 @@ msgstr "Registrační formulář"
 msgid "Registration form"
 msgstr "Registrační formulář"
 
+msgid "Registration info"
+msgstr "Informace o registraci"
+
 msgid "Registration mail"
 msgstr "Registrační pošta"
 
@@ -3738,6 +3753,9 @@ msgstr "Tisk aktuálního zobrazení"
 
 msgid "Proposed character"
 msgstr "Navrhovaný charakter"
+
+msgid "RUNTS registration"
+msgstr "Registrace RUNTS"
 
 msgid "Reason for payment"
 msgstr "Důvod platby"
@@ -5486,6 +5504,9 @@ msgstr "Objevte připravované akce"
 msgid "Filter or search the characters"
 msgstr "Filtrujte nebo vyhledávejte postavy"
 
+msgid "Full address of the association"
+msgstr "Úplná adresa sdružení"
+
 msgid "Manage event navigation buttons"
 msgstr "Správa navigačních tlačítek událostí"
 
@@ -5966,9 +5987,6 @@ msgstr "V současné době nejsou k dispozici žádné prvky"
 msgid "Now set up the tokens configuration"
 msgstr "Nyní nastavte konfiguraci tokenů"
 
-msgid "Now you can create the receipt text"
-msgstr "Nyní můžete vytvořit text účtenky"
-
 msgid "Now you can set the casting options"
 msgstr "Nyní můžete nastavit možnosti odlévání"
 
@@ -6074,6 +6092,9 @@ msgstr "Nyní můžete nastavit možnosti slev"
 
 msgid "Now you can set the reminder options"
 msgstr "Nyní můžete nastavit možnosti připomenutí"
+
+msgid "Now you can set up the receipts data"
+msgstr "Nyní můžete nastavit údaje o účtenkách"
 
 msgid "Only really important communications"
 msgstr "Pouze skutečně důležitá sdělení"
@@ -6612,6 +6633,9 @@ msgstr "Správa šablon pro schopnosti získávání zkušeností"
 msgid "Manage the pre-registration of all events"
 msgstr "Správa předběžné registrace všech událostí"
 
+msgid "Name as will appear on the receipt header"
+msgstr "Název, který se zobrazí v záhlaví účtenky"
+
 msgid "Now you can create the plots of the event"
 msgstr "Nyní můžete vytvořit pozemky události"
 
@@ -6731,6 +6755,9 @@ msgstr "Rezervace dalších vstupenek nad rámec vlastních"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Vyberte náhodně losy pro upgrade"
+
+msgid "Tax identification code of the association"
+msgstr "Daňové identifikační číslo sdružení"
 
 msgid "The member associated with this membership"
 msgstr "Člen přidružený k tomuto členství"
@@ -8903,10 +8930,6 @@ msgstr ""
 "Zvolte si, jak často chcete dostávat aktualizace o událostech a aktivitách"
 
 msgid ""
-"Content of the receipt created for each payment and sent to participants"
-msgstr "Obsah účtenky vytvořené pro každou platbu a zaslané účastníkům"
-
-msgid ""
 "Do you want to enable a secret registration link to allow early sign-ups"
 msgstr ""
 "Chcete povolit tajný registrační odkaz, který umožní včasné přihlášení"
@@ -10531,13 +10554,6 @@ msgstr ""
 "konfigurace"
 
 msgid ""
-"Automatically generates a customizable PDF receipt for each payment and "
-"emails it to the user"
-msgstr ""
-"Pro každou platbu automaticky vygeneruje přizpůsobitelnou účtenku ve formátu"
-" PDF a odešle ji uživateli e-mailem"
-
-msgid ""
 "Disable the system that finds the character number when a special reference "
 "symbol is written"
 msgstr ""
@@ -11021,6 +11037,13 @@ msgid ""
 msgstr ""
 "Pro potvrzení registrace na akci proveďte platbu do jednoho týdne. Můžete "
 "tak učinit zde"
+
+msgid ""
+"Automatically generates a PDF fiscal receipt for each payment, in accordance"
+" with Italian legislation"
+msgstr ""
+"Automatické generování daňového dokladu ve formátu PDF pro každou platbu v "
+"souladu s italskými právními předpisy"
 
 msgid ""
 "Enables the definition of surcharges that are added to every registration "
