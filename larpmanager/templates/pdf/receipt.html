@@ -92,7 +92,7 @@
                     <span class="label-bold">Data emissione:</span> {{ accounting_item.created|date:"d/m/Y" }}
                 </td>
                 <td style="text-align: right;">
-                    <span class="label-bold">Importo: &euro; {{ accounting_item.amount }}</span>
+                    <span class="label-bold">Importo: &euro; {{ accounting_item.value }}</span>
                 </td>
             </tr>
         </table>
@@ -104,7 +104,7 @@
             {% endif %}
             {% if member.get_residence %}, residente a <strong>{{ member.get_residence }}</strong>{% endif %}
             ,
-            la somma di Euro <strong>&euro; {{ accounting_item.amount }}</strong>
+            la somma di Euro <strong>&euro; {{ accounting_item.value }}</strong>
             {% if method %}versata tramite <strong>{{ method }}</strong>{% endif %}
             .
         </div>
