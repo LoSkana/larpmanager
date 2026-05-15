@@ -35,6 +35,7 @@ from larpmanager.accounting.base import (
 )
 from larpmanager.accounting.gateway import handle_invalid_paypal_ipn, handle_valid_paypal_ipn
 from larpmanager.accounting.payment import (
+    cleanup_membership_fee_reservation,
     process_collection_status_change,
     process_payment_invoice_status_change,
     process_refund_request_status_change,
@@ -1259,6 +1260,14 @@ def post_delete_modifier_exp(sender: type, instance: object, *args: Any, **kwarg
 def pre_save_payment_invoice(sender: type[PaymentInvoice], instance: PaymentInvoice, **kwargs: Any) -> None:
     """Process payment invoice status changes before saving."""
     process_payment_invoice_status_change(instance)
+
+
+@receiver(pre_delete, sender=PaymentInvoice)
+def pre_delete_payment_invoice_membership_config(
+    sender: type[PaymentInvoice], instance: PaymentInvoice, **kwargs: Any
+) -> None:
+    """Clean up payment invoices before deleting instance."""
+    cleanup_membership_fee_reservation(instance)
 
 
 @receiver(pre_delete, sender=PlayerRelationship)

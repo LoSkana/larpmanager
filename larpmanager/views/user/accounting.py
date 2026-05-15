@@ -40,7 +40,7 @@ from larpmanager.accounting.gateway import (
     sumup_webhook,
 )
 from larpmanager.accounting.invoice import invoice_received_money
-from larpmanager.accounting.member import info_accounting
+from larpmanager.accounting.member import get_membership_fee_for_reg, info_accounting
 from larpmanager.accounting.payment import get_payment_form
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config
@@ -425,6 +425,15 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
         context["quota"] = registration.quota
     else:
         context["quota"] = registration.tot_iscr - registration.tot_payed
+
+    # Membership fee is collected in the same payment
+    context["membership_fee_bundled"] = get_membership_fee_for_reg(
+        context["association_id"], registration.member_id, registration.run, registration
+    )
+    if context["membership_fee_bundled"]:
+        context["quota"] += context["membership_fee_bundled"]
+        context["year"] = registration.run.start.year
+        context["fee"] = context["membership_fee_bundled"]
 
     # Generate unique key for payment tracking
     key = f"{registration.id}_{registration.num_payments}"

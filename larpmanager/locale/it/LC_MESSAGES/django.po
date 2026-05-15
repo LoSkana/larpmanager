@@ -1500,7 +1500,7 @@ msgid "Inventory"
 msgstr "Inventario"
 
 msgid "Languages"
-msgstr "Le lingue"
+msgstr "Lingue"
 
 msgid "Longitude"
 msgstr "Longitudine"
@@ -2693,6 +2693,9 @@ msgstr "Gettone scaduto"
 
 msgid "Total members"
 msgstr "Totale soci"
+
+msgid "Total payment"
+msgstr "Pagamento totale"
 
 msgid "URL shortener"
 msgstr "Accorcia URL"
@@ -4182,6 +4185,9 @@ msgstr "Dettagli sulla sistemazione"
 msgid "Advanced Mode Enabled"
 msgstr "Modalità avanzata abilitata"
 
+msgid "Annual membership fee"
+msgstr "Quota associativa annuale"
+
 msgid "Approve reimbursement"
 msgstr "Approva rimborso"
 
@@ -4596,6 +4602,9 @@ msgstr "Link per iscrizione anticipata"
 msgid "Failed to add character"
 msgstr "Impossibile aggiungere il personaggio"
 
+msgid "Includes membership fee"
+msgstr "Include la quota associativa"
+
 msgid "Indicate only if rate 0"
 msgstr "Indica solo se aliquota 0"
 
@@ -4668,6 +4677,9 @@ msgstr "Promemoria quota associativa"
 
 msgid "Remove from xp delivery"
 msgstr "Rimuovi dalla consegna di xp"
+
+msgid "Separate membership fee"
+msgstr "Quota associativa separata"
 
 msgid "Show available factions"
 msgstr "Mostra le fazioni disponibili"
@@ -10436,6 +10448,13 @@ msgid ""
 msgstr ""
 "Contesto opzionale per la disambiguazione quando lo stesso testo ha "
 "significati diversi (msgctxt)"
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
+msgstr ""
+"Se l'opzione è selezionata, la quota associativa annuale viene pagata "
+"separatamente dalla quota di iscrizione all'evento"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

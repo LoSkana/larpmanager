@@ -2694,6 +2694,9 @@ msgstr "Token vanhentunut"
 msgid "Total members"
 msgstr "Jäseniä yhteensä"
 
+msgid "Total payment"
+msgstr "Kokonaismaksu"
+
 msgid "URL shortener"
 msgstr "URL-osoitteen lyhentäjä"
 
@@ -4182,6 +4185,9 @@ msgstr "Majoituksen tiedot"
 msgid "Advanced Mode Enabled"
 msgstr "Advanced Mode käytössä"
 
+msgid "Annual membership fee"
+msgstr "Vuosittainen jäsenmaksu"
+
 msgid "Approve reimbursement"
 msgstr "Hyväksy korvaus"
 
@@ -4596,6 +4602,9 @@ msgstr "Varhaisen ilmoittautumisen linkki"
 msgid "Failed to add character"
 msgstr "Merkin lisääminen epäonnistui"
 
+msgid "Includes membership fee"
+msgstr "Sisältää jäsenmaksun"
+
 msgid "Indicate only if rate 0"
 msgstr "Ilmoitetaan vain, jos korko 0"
 
@@ -4668,6 +4677,9 @@ msgstr "Muistutus jäsenmaksusta"
 
 msgid "Remove from xp delivery"
 msgstr "Poista XP-jako"
+
+msgid "Separate membership fee"
+msgstr "Erillinen jäsenmaksu"
 
 msgid "Show available factions"
 msgstr "Näytä käytettävissä olevat ryhmittymät"
@@ -10234,6 +10246,13 @@ msgid ""
 "meanings (msgctxt)"
 msgstr ""
 "Valinnainen konteksti, kun samalla tekstillä on eri merkityksiä (msgctxt)"
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
+msgstr ""
+"Jos rasti on merkitty, vuosittainen jäsenmaksu maksetaan erikseen tapahtuman"
+" rekisteröintimaksusta"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

@@ -2830,7 +2830,7 @@ CREATE TABLE public.larpmanager_paymentinvoice (
     mc_fee numeric(10,2),
     idx integer NOT NULL,
     txn_id character varying(50),
-    causal character varying(200) NOT NULL,
+    causal character varying(500) NOT NULL,
     cod character varying(50) NOT NULL,
     verified boolean NOT NULL,
     hide boolean NOT NULL,
@@ -4556,6 +4556,7 @@ INSERT INTO public.django_migrations VALUES (224, 'larpmanager', '0160_add_larpm
 INSERT INTO public.django_migrations VALUES (225, 'larpmanager', '0160_larpmanagertext_value_htmlfield', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (226, 'larpmanager', '0161_larpmanagertext_value_htmlfield', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (227, 'larpmanager', '0162_page_texts', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (228, 'larpmanager', '0161_membership_fee_separated_default', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1');
 
@@ -4995,7 +4996,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 227, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 228, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -9032,4 +9033,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0160_larpmanagertext_value_htmlfield
+-- LARPMANAGER_SCHEMA_VERSION: 0161_membership_fee_separated_default

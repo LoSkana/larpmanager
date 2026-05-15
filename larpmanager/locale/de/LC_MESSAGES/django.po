@@ -2694,6 +2694,9 @@ msgstr "Token abgelaufen"
 msgid "Total members"
 msgstr "Mitglieder insgesamt"
 
+msgid "Total payment"
+msgstr "Gesamtzahlung"
+
 msgid "URL shortener"
 msgstr "URL-Verkürzer"
 
@@ -4182,6 +4185,9 @@ msgstr "Details zur Unterkunft"
 msgid "Advanced Mode Enabled"
 msgstr "Erweiterter Modus Aktiviert"
 
+msgid "Annual membership fee"
+msgstr "Jährlicher Mitgliedsbeitrag"
+
 msgid "Approve reimbursement"
 msgstr "Erstattung genehmigen"
 
@@ -4596,6 +4602,9 @@ msgstr "Link zur frühzeitigen Anmeldung"
 msgid "Failed to add character"
 msgstr "Zeichen kann nicht hinzugefügt werden"
 
+msgid "Includes membership fee"
+msgstr "Inklusive Mitgliedsbeitrag"
+
 msgid "Indicate only if rate 0"
 msgstr "Nur angeben, wenn Satz 0"
 
@@ -4668,6 +4677,9 @@ msgstr "Erinnerung an den Mitgliedsbeitrag"
 
 msgid "Remove from xp delivery"
 msgstr "Aus xp-Lieferung entfernen"
+
+msgid "Separate membership fee"
+msgstr "Separater Mitgliedsbeitrag"
 
 msgid "Show available factions"
 msgstr "Verfügbare Fraktionen anzeigen"
@@ -10628,6 +10640,13 @@ msgid ""
 msgstr ""
 "Optionaler Kontext zur Disambiguierung, wenn derselbe Text unterschiedliche "
 "Bedeutungen hat (msgctxt)"
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
+msgstr ""
+"Wenn angekreuzt, wird der jährliche Mitgliedsbeitrag getrennt von der "
+"Anmeldegebühr für die Veranstaltung gezahlt"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

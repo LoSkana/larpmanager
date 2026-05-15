@@ -67,6 +67,9 @@ msgstr ""
 msgid "Registration fee %(number)d of %(user)s per %(event)s"
 msgstr ""
 
+msgid "Annual membership fee"
+msgstr ""
+
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr ""
@@ -557,40 +560,6 @@ msgid ""
 "sent)"
 msgstr ""
 
-msgid "Members"
-msgstr ""
-
-msgid "Age"
-msgstr ""
-
-msgid "Minimum age of members (leave empty for no limit)"
-msgstr ""
-
-msgid "Annual fee"
-msgstr ""
-
-msgid ""
-"Annual fee required of members, starting from the beginning of the "
-"membership year"
-msgstr ""
-
-msgid "Start day"
-msgstr ""
-
-msgid "Day of the year from which the membership year begins, in DD-MM format"
-msgstr ""
-
-msgid "Enter a valid date in DD-MM format"
-msgstr ""
-
-msgid "Months free quota"
-msgstr ""
-
-msgid ""
-"Number of months, starting from the beginning of the membership year, for "
-"which to make free membership fee payment"
-msgstr ""
-
 msgid "Voting"
 msgstr ""
 
@@ -629,6 +598,48 @@ msgstr ""
 
 msgid ""
 "If checked: the system will send reminds the days on which holidays fall"
+msgstr ""
+
+msgid "Members"
+msgstr ""
+
+msgid "Age"
+msgstr ""
+
+msgid "Minimum age of members (leave empty for no limit)"
+msgstr ""
+
+msgid "Annual fee"
+msgstr ""
+
+msgid ""
+"Annual fee required of members, starting from the beginning of the "
+"membership year"
+msgstr ""
+
+msgid "Start day"
+msgstr ""
+
+msgid "Day of the year from which the membership year begins, in DD-MM format"
+msgstr ""
+
+msgid "Enter a valid date in DD-MM format"
+msgstr ""
+
+msgid "Months free quota"
+msgstr ""
+
+msgid ""
+"Number of months, starting from the beginning of the membership year, for "
+"which to make free membership fee payment"
+msgstr ""
+
+msgid "Separate membership fee"
+msgstr ""
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
 msgstr ""
 
 msgid "Charge transaction fees to participant"
@@ -5108,6 +5119,9 @@ msgid ""
 "confirmed when your ticket payment is received"
 msgstr ""
 
+msgid "Includes membership fee"
+msgstr ""
+
 msgid "(click on image to enlarge)"
 msgstr ""
 
@@ -5381,6 +5395,9 @@ msgid "No additional payments are required at this time"
 msgstr ""
 
 msgid "you can still pay the remaining amount if you wish"
+msgstr ""
+
+msgid "Membership fee"
 msgstr ""
 
 msgid "List"
@@ -7167,9 +7184,6 @@ msgstr ""
 msgid "What are you doing here"
 msgstr ""
 
-msgid "Membership fee"
-msgstr ""
-
 msgid "They are regularly paid for the following years"
 msgstr ""
 
@@ -7326,6 +7340,9 @@ msgid "Indicates the details of the request"
 msgstr ""
 
 msgid "The total registration fee is"
+msgstr ""
+
+msgid "Total payment"
 msgstr ""
 
 msgid "So far you have paid a total of"

@@ -28,6 +28,7 @@ from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
 from larpmanager.cache.config import get_association_config
+from larpmanager.cache.feature import get_association_features
 from larpmanager.models.accounting import (
     AccountingItemCollection,
     AccountingItemDonation,
@@ -41,9 +42,9 @@ from larpmanager.models.accounting import (
     PaymentType,
     RefundStatus,
 )
-from larpmanager.models.event import DevelopStatus
+from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.form import BaseQuestionType, RegistrationChoice, RegistrationOption, RegistrationQuestion
-from larpmanager.models.member import Member, get_user_membership
+from larpmanager.models.member import Member, MemberConfig, get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.common import get_now
 
@@ -337,3 +338,71 @@ def _info_membership(context: dict, member: Member) -> None:
 
         # Check if we're still within the grace period
         context["grazing"] = get_now() < membership_deadline_date
+
+
+def membership_fee_pending_config_name(association_id: int, year: int) -> str:
+    """Return the MemberConfig key used to reserve a pending bundled membership fee."""
+    return f"membership_fee_pending_{association_id}_{year}"
+
+
+def set_membership_fee_pending(member_id: int, association_id: int, year: int, registration_id: int) -> bool:
+    """Reserve the membership fee for a pending registration invoice.
+
+    Uses get_or_create so that if another registration already holds the reservation,
+    this call does not overwrite it. Returns True if this registration owns the reservation.
+    """
+    config_name = membership_fee_pending_config_name(association_id, year)
+    obj, created = MemberConfig.objects.get_or_create(
+        member_id=member_id,
+        name=config_name,
+        deleted=None,
+        defaults={"value": str(registration_id)},
+    )
+    return created or obj.value == str(registration_id)
+
+
+def get_membership_fee_for_reg(
+    association_id: int,
+    member_id: int,
+    run: Run,
+    registration: Registration | None = None,
+) -> int:
+    """Return membership fee to bundle with registration, or 0 if not applicable.
+
+    Bundling happens when:
+     - membership_fee_separated is False
+     - the event is not in a past year
+     - the member has not already paid the membership fee
+     - the signup is not gifted (redeem_code)
+     - no other registration's invoice already reserves the fee for the same year.
+    """
+    redeem_code = registration.redeem_code if registration else None
+    if (
+        "membership" not in get_association_features(association_id)
+        or get_association_config(association_id, "membership_fee_separated", default_value=True)
+        or redeem_code
+    ):
+        return 0
+    current_year = timezone.now().year
+    event_year = run.start.year
+    if event_year < current_year:
+        return 0
+    fee = int(get_association_config(association_id, "membership_fee", default_value=0))
+    if not fee:
+        return 0
+    already_paid = AccountingItemMembership.objects.filter(
+        member_id=member_id,
+        association_id=association_id,
+        year=event_year,
+        deleted__isnull=True,
+    ).exists()
+    if already_paid:
+        return 0
+    # If another registration's invoice already includes the fee, don't bundle again
+    config_name = membership_fee_pending_config_name(association_id, event_year)
+    qs = MemberConfig.objects.filter(member_id=member_id, name=config_name, deleted__isnull=True)
+    if registration:
+        qs = qs.exclude(value=str(registration.id))
+    if qs.exists():
+        return 0
+    return fee

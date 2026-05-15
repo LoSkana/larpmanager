@@ -97,7 +97,7 @@ class PaymentInvoice(UuidMixin, BaseModel):
 
     txn_id = models.CharField(max_length=50, null=True, blank=True)
 
-    causal = models.CharField(max_length=200)
+    causal = models.CharField(max_length=500)
 
     cod = models.CharField(max_length=50, unique=True, db_index=True)
 
@@ -375,6 +375,18 @@ class AccountingItemMembership(AccountingItem):
                 fields=["association", "year"],
                 condition=Q(deleted__isnull=True),
                 name="acctmem_association_year_act",
+            ),
+            models.Index(
+                fields=["association", "year", "member"],
+                condition=Q(deleted__isnull=True),
+                name="acctmem_assoc_year_member_act",
+            ),
+        ]
+        constraints: ClassVar[list] = [
+            models.UniqueConstraint(
+                fields=["member", "association", "year"],
+                condition=Q(deleted__isnull=True),
+                name="unique_active_membership_per_member_year",
             ),
         ]
 

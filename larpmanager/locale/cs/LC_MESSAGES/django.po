@@ -2694,6 +2694,9 @@ msgstr "Platnost tokenu vypršela"
 msgid "Total members"
 msgstr "Celkový počet členů"
 
+msgid "Total payment"
+msgstr "Celková platba"
+
 msgid "URL shortener"
 msgstr "Zkracovač URL"
 
@@ -4182,6 +4185,9 @@ msgstr "Podrobnosti o ubytování"
 msgid "Advanced Mode Enabled"
 msgstr "Povolený pokročilý režim"
 
+msgid "Annual membership fee"
+msgstr "Roční členský poplatek"
+
 msgid "Approve reimbursement"
 msgstr "Schválit vrácení peněz"
 
@@ -4596,6 +4602,9 @@ msgstr "Odkaz pro včasnou registraci"
 msgid "Failed to add character"
 msgstr "Nepodařilo se přidat znak"
 
+msgid "Includes membership fee"
+msgstr "Včetně členského příspěvku"
+
 msgid "Indicate only if rate 0"
 msgstr "Uveďte pouze v případě sazby 0"
 
@@ -4668,6 +4677,9 @@ msgstr "Připomenutí členského poplatku"
 
 msgid "Remove from xp delivery"
 msgstr "Odstranění z dodávky xp"
+
+msgid "Separate membership fee"
+msgstr "Samostatný členský poplatek"
 
 msgid "Show available factions"
 msgstr "Zobrazit dostupné frakce"
@@ -10137,6 +10149,13 @@ msgid ""
 msgstr ""
 "Nepovinný kontext pro disambiguaci, když má stejný text různé významy "
 "(msgctxt)"
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
+msgstr ""
+"Pokud je zaškrtnuto, roční členský poplatek se platí odděleně od "
+"registračního poplatku na akci"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

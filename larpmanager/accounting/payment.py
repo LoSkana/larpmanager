@@ -41,7 +41,14 @@ from larpmanager.accounting.gateway import (
     get_stripe_form,
     get_sumup_form,
 )
-from larpmanager.accounting.registration import round_decimal
+from larpmanager.accounting.member import (
+    get_membership_fee_for_reg,
+    membership_fee_pending_config_name,
+    set_membership_fee_pending,
+)
+from larpmanager.accounting.registration import (
+    round_decimal,
+)
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.accounting import AnyInvoiceSubmitForm, WireInvoiceSubmitForm
@@ -69,6 +76,7 @@ from larpmanager.models.form import (
     RegistrationChoice,
     RegistrationQuestion,
 )
+from larpmanager.models.member import MemberConfig
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.core.base import fetch_payment_details, update_payment_details
@@ -147,13 +155,29 @@ def set_data_invoice(
 
     # Handle registration payment type
     if invoice.typ == PaymentType.REGISTRATION:
+        registration = context["registration"]
         invoice.causal = _("Registration fee %(number)d of %(user)s per %(event)s") % {
             "user": member_real_display_name,
-            "event": str(context["registration"].run),
-            "number": context["registration"].num_payments,
+            "event": str(registration.run),
+            "number": registration.num_payments,
         }
-        # Apply custom registration reason if applicable
+
+        # Apply custom registration reason if applicable (only for standard causal)
         _custom_reason_reg(context, invoice, member_real_display_name)
+
+        # Check if bundle membership_fee
+        association_id = registration.run.event.association_id
+        membership_fee = get_membership_fee_for_reg(
+            association_id, registration.member_id, registration.run, registration
+        )
+        if membership_fee and set_membership_fee_pending(
+            registration.member_id,
+            association_id,
+            registration.run.start.year,
+            registration.id,
+        ):
+            text = _("Annual membership fee")
+            invoice.causal += f" - {text} {registration.run.start.year}"
 
     # Handle membership payment type
     elif invoice.typ == PaymentType.MEMBERSHIP:
@@ -538,7 +562,7 @@ def _process_payment(invoice: PaymentInvoice) -> None:
             return
 
         try:
-            registration = Registration.objects.get(pk=invoice.idx)
+            registration = Registration.objects.select_related("run", "run__event").get(pk=invoice.idx)
         except ObjectDoesNotExist:
             logger.exception("Registration not found for invoice %s with idx %s", invoice.pk, invoice.idx)
             return
@@ -550,14 +574,63 @@ def _process_payment(invoice: PaymentInvoice) -> None:
         accounting_item.inv = invoice
         accounting_item.value = invoice.mc_gross
         accounting_item.association_id = invoice.association_id
+
+        check_bundled_membership_fee(accounting_item, invoice, registration)
+
         accounting_item.save()
 
         Registration.objects.filter(pk=registration.pk).update(num_payments=F("num_payments") + 1)
         registration.refresh_from_db()
 
-        # e-invoice emission
         if "e-invoice" in get_association_features(invoice.association_id):
             process_payment(invoice.id)
+
+
+def check_bundled_membership_fee(
+    accounting_item: AccountingItemPayment, invoice: PaymentInvoice, registration: Registration
+) -> None:
+    """Handle the payment of registration fee bundled with membership fee.
+
+    If the invoice reserved a bundled membership fee, split it out now: reduce the registration payment by the
+    membership amount and create the membership fee payment.
+    """
+    association_id = invoice.association_id
+    event_year = registration.run.start.year
+    config_name = membership_fee_pending_config_name(association_id, event_year)
+    pending_config = (
+        MemberConfig.objects.select_for_update()
+        .filter(
+            member_id=invoice.member_id,
+            name=config_name,
+            deleted__isnull=True,
+            value=str(registration.id),
+        )
+        .first()
+    )
+    if not pending_config:
+        return
+
+    membership_fee = get_membership_fee_for_reg(association_id, invoice.member_id, registration.run, registration)
+    if not membership_fee:
+        return
+
+    if invoice.mc_gross < membership_fee:
+        return
+
+    # Reduce the payment for the registration fee
+    accounting_item.value = invoice.mc_gross - membership_fee
+
+    # Create the membership fee payment
+    AccountingItemMembership.objects.get_or_create(
+        member_id=registration.member_id,
+        association_id=association_id,
+        year=event_year,
+        deleted=None,
+        defaults={"value": membership_fee},
+    )
+
+    # Delete pending config
+    pending_config.delete()
 
 
 def _process_fee(fee_percentage: float, invoice: PaymentInvoice) -> None:
@@ -740,3 +813,22 @@ def process_collection_status_change(collection: Collection) -> None:
         accounting_item.oth = OtherChoices.CREDIT
         accounting_item.descr = f"Collection of {collection.organizer}"
         accounting_item.save()
+
+
+def cleanup_membership_fee_reservation(instance: PaymentInvoice) -> None:
+    """Remove membership fee reservation when a registration invoice is deleted."""
+    if instance.typ != PaymentType.REGISTRATION:
+        return
+    try:
+        registration = Registration.objects.select_related("run", "run__event").get(pk=instance.idx)
+    except Registration.DoesNotExist:
+        return
+    year = registration.run.start.year
+    association_id = registration.run.event.association_id
+    config_name = membership_fee_pending_config_name(association_id, year)
+    _deleted_count, _ignored = MemberConfig.objects.filter(
+        member_id=instance.member_id,
+        name=config_name,
+        deleted__isnull=True,
+        value=str(registration.id),
+    ).delete()

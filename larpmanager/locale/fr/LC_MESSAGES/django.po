@@ -2694,6 +2694,9 @@ msgstr "Jeton expiré"
 msgid "Total members"
 msgstr "Nombre total de membres "
 
+msgid "Total payment"
+msgstr "Paiement total"
+
 msgid "URL shortener"
 msgstr "Raccourcisseur d'URL"
 
@@ -4182,6 +4185,9 @@ msgstr "Détails de l'hébergement"
 msgid "Advanced Mode Enabled"
 msgstr "Mode avancé activé"
 
+msgid "Annual membership fee"
+msgstr "Cotisation annuelle"
+
 msgid "Approve reimbursement"
 msgstr "Approuver le remboursement"
 
@@ -4596,6 +4602,9 @@ msgstr "Lien pour l'inscription anticipée"
 msgid "Failed to add character"
 msgstr "Échec de l'ajout d'un caractère"
 
+msgid "Includes membership fee"
+msgstr "Comprend les frais d'adhésion"
+
 msgid "Indicate only if rate 0"
 msgstr "N'indiquer que si le taux est de 0"
 
@@ -4668,6 +4677,9 @@ msgstr "Rappel cotisation"
 
 msgid "Remove from xp delivery"
 msgstr "Supprimer de la livraison xp"
+
+msgid "Separate membership fee"
+msgstr "Frais d'adhésion distincts"
 
 msgid "Show available factions"
 msgstr "Afficher les factions disponibles"
@@ -10565,6 +10577,13 @@ msgid ""
 msgstr ""
 "Contexte facultatif pour la désambiguïsation lorsqu'un même texte a des "
 "significations différentes (msgctxt)"
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
+msgstr ""
+"Si la case est cochée, la cotisation annuelle est payée séparément des frais"
+" d'inscription à l'événement"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

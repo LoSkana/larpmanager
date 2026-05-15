@@ -2694,6 +2694,9 @@ msgstr "Ficha caducada"
 msgid "Total members"
 msgstr "Total de miembros"
 
+msgid "Total payment"
+msgstr "Pago total"
+
 msgid "URL shortener"
 msgstr "Acortador de URL"
 
@@ -4182,6 +4185,9 @@ msgstr "Detalles del alojamiento"
 msgid "Advanced Mode Enabled"
 msgstr "Modo avanzado activado"
 
+msgid "Annual membership fee"
+msgstr "Cuota anual de afiliación"
+
 msgid "Approve reimbursement"
 msgstr "Aprobar reembolso"
 
@@ -4596,6 +4602,9 @@ msgstr "Enlace de inscripción anticipada"
 msgid "Failed to add character"
 msgstr "Fallo al añadir personaje"
 
+msgid "Includes membership fee"
+msgstr "Incluye la cuota de afiliación"
+
 msgid "Indicate only if rate 0"
 msgstr "Indicar sólo si tasa 0"
 
@@ -4668,6 +4677,9 @@ msgstr "Recordatorio cuota de afiliación"
 
 msgid "Remove from xp delivery"
 msgstr "Eliminar de la entrega xp"
+
+msgid "Separate membership fee"
+msgstr "Cuota de afiliación aparte"
 
 msgid "Show available factions"
 msgstr "Mostrar facciones disponibles"
@@ -10401,6 +10413,13 @@ msgid ""
 msgstr ""
 "Contexto opcional para la desambiguación cuando el mismo texto tiene "
 "significados diferentes (msgctxt)"
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
+msgstr ""
+"Si está marcada, la cuota anual de afiliación se paga aparte de la cuota de "
+"inscripción al evento"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

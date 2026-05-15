@@ -51,7 +51,7 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
             <button class="modal-close-btn">
                 &times;
             </button>
-            <iframe src="${iframeUrl}" width="100%" style="border: none; height: 300px;"></iframe>
+            <iframe src="${iframeUrl}" width="100%" style="border: none; height: 400px;"></iframe>
         </div>
     `;
 

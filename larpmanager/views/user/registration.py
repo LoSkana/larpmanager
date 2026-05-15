@@ -52,7 +52,6 @@ from larpmanager.mail.base import bring_friend_instructions
 from larpmanager.mail.registration import update_registration_status_bkg
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
-    AccountingItemMembership,
     AccountingItemOther,
     Discount,
     DiscountType,
@@ -85,7 +84,11 @@ from larpmanager.utils.core.exceptions import (
     check_event_feature,
 )
 from larpmanager.utils.edit.backend import user_edit
-from larpmanager.utils.users.registration import check_assign_character, get_reduced_available_count
+from larpmanager.utils.users.registration import (
+    _set_membership_context,
+    check_assign_character,
+    get_reduced_available_count,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -558,21 +561,7 @@ def register_info(request: HttpRequest, context: dict, form: object, registratio
     if registration:
         registration.provisional = is_registration_provisional(registration)
 
-    if context["run"].start and "membership" in context["features"]:
-        membership_query = AccountingItemMembership.objects.filter(
-            year=context["run"].start.year,
-            member=context["member"],
-        )
-        if membership_query.exists():
-            context["membership_fee"] = "done"
-        elif timezone.now().year != context["run"].start.year:
-            context["membership_fee"] = "future"
-        else:
-            context["membership_fee"] = "todo"
-
-        context["membership_amount"] = get_association_config(
-            context["association_id"], "membership_fee", default_value=0
-        )
+    _set_membership_context(context, context["run"], context["member"], registration)
 
 
 def init_form_submitted(context: dict, form: object, request: HttpRequest, registration: Any = None) -> None:
@@ -829,6 +818,7 @@ def _register_prepare(context: dict, registration: Any) -> Any:
             > 0
         )
         context["payment_lock"] = has_pending_payment or registration.tot_payed > 0
+        registration.pending = has_pending_payment
 
     _add_bring_friend_discounts(context)
 

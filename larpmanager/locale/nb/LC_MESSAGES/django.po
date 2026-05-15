@@ -2694,6 +2694,9 @@ msgstr "Token utløpt"
 msgid "Total members"
 msgstr "Totalt antall medlemmer"
 
+msgid "Total payment"
+msgstr "Total betaling"
+
 msgid "URL shortener"
 msgstr "URL-forkortelse"
 
@@ -4182,6 +4185,9 @@ msgstr "Informasjon om innkvartering"
 msgid "Advanced Mode Enabled"
 msgstr "Avansert modus aktivert"
 
+msgid "Annual membership fee"
+msgstr "Årlig medlemsavgift"
+
 msgid "Approve reimbursement"
 msgstr "Godkjenne refusjon"
 
@@ -4596,6 +4602,9 @@ msgstr "Lenke til tidlig registrering"
 msgid "Failed to add character"
 msgstr "Kunne ikke legge til tegn"
 
+msgid "Includes membership fee"
+msgstr "Inkluderer medlemsavgift"
+
 msgid "Indicate only if rate 0"
 msgstr "Angi kun hvis sats 0"
 
@@ -4668,6 +4677,9 @@ msgstr "Påminnelse om medlemsavgift"
 
 msgid "Remove from xp delivery"
 msgstr "Fjern fra xp-levering"
+
+msgid "Separate membership fee"
+msgstr "Egen medlemsavgift"
 
 msgid "Show available factions"
 msgstr "Vis tilgjengelige fraksjoner"
@@ -10233,6 +10245,13 @@ msgid ""
 msgstr ""
 "Valgfri kontekst for disambiguering når samme tekst har forskjellige "
 "betydninger (msgctxt)"
+
+msgid ""
+"If checked, the annual membership fee is paid separately from the event "
+"registration fee"
+msgstr ""
+"Hvis avkrysset, betales den årlige medlemsavgiften separat fra "
+"påmeldingsavgiften til arrangementet"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

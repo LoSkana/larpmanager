@@ -86,10 +86,6 @@ def get_registration_iscr(registration: Registration) -> int:
 
     Returns:
         int: Total signup fee after applying discounts and surcharges, minimum 0
-
-    Note:
-        Discounts are not applied to registrations with redeem codes (gifted registrations).
-
     """
     # Initialize total registration fee
     total_registration_fee = 0

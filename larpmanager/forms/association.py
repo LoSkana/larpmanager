@@ -419,6 +419,7 @@ class ExeConfigForm(ConfigForm):
 
         # 3. Member
         self.set_config_members()
+        self.set_config_membership()
 
         # 4. Miscellanea
         self.set_config_einvoice()
@@ -617,38 +618,6 @@ class ExeConfigForm(ConfigForm):
             field_help_text = _("Sets how often reminder emails are sent, in days (if not set, no emails are sent)")
             self.add_configs("deadline_days", ConfigType.INT, field_label, field_help_text)
 
-        # Configure membership fee and requirements if feature is enabled
-        if "membership" in self.params["features"]:
-            self.set_section("membership", _("Members"))
-
-            # Minimum age requirement for membership
-            field_label = _("Age")
-            field_help_text = _("Minimum age of members (leave empty for no limit)")
-            self.add_configs("membership_age", ConfigType.INT, field_label, field_help_text)
-
-            # Annual membership fee amount
-            field_label = _("Annual fee")
-            field_help_text = _("Annual fee required of members, starting from the beginning of the membership year")
-            self.add_configs("membership_fee", ConfigType.INT, field_label, field_help_text)
-
-            # Membership year start date configuration
-            field_label = _("Start day")
-            field_help_text = _("Day of the year from which the membership year begins, in DD-MM format")
-            # Regex validator for DD-MM format (01-31 for day, 01-12 for month)
-            day_validator = RegexValidator(
-                regex=r"^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])$",
-                message=_("Enter a valid date in DD-MM format") + " (e.g., 01-01, 15-06, 31-12)",
-            )
-            self.add_configs("membership_day", ConfigType.CHAR, field_label, field_help_text, [day_validator])
-
-            # Grace period for membership fee payment
-            field_label = _("Months free quota")
-            field_help_text = _(
-                "Number of months, starting from the beginning of the membership year, for which "
-                "to make free membership fee payment",
-            )
-            self.add_configs("membership_grazing", ConfigType.INT, field_label, field_help_text)
-
         # Configure voting system if feature is enabled
         if "vote" in self.params["features"]:
             self.set_section("vote", _("Voting"))
@@ -685,6 +654,42 @@ class ExeConfigForm(ConfigForm):
             field_label = _("Holidays")
             field_help_text = _("If checked: the system will send reminds the days on which holidays fall")
             self.add_configs("remind_holidays", ConfigType.BOOL, field_label, field_help_text)
+
+    def set_config_membership(self) -> None:
+        """Configure membership fee fields in association settings."""
+        if "membership" not in self.params["features"]:
+            return
+
+        self.set_section("membership", _("Members"))
+
+        field_label = _("Age")
+        field_help_text = _("Minimum age of members (leave empty for no limit)")
+        self.add_configs("membership_age", ConfigType.INT, field_label, field_help_text)
+
+        field_label = _("Annual fee")
+        field_help_text = _("Annual fee required of members, starting from the beginning of the membership year")
+        self.add_configs("membership_fee", ConfigType.INT, field_label, field_help_text)
+
+        field_label = _("Start day")
+        field_help_text = _("Day of the year from which the membership year begins, in DD-MM format")
+        day_validator = RegexValidator(
+            regex=r"^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])$",
+            message=_("Enter a valid date in DD-MM format") + " (e.g., 01-01, 15-06, 31-12)",
+        )
+        self.add_configs("membership_day", ConfigType.CHAR, field_label, field_help_text, [day_validator])
+
+        field_label = _("Months free quota")
+        field_help_text = _(
+            "Number of months, starting from the beginning of the membership year, for which "
+            "to make free membership fee payment",
+        )
+        self.add_configs("membership_grazing", ConfigType.INT, field_label, field_help_text)
+
+        field_label = _("Separate membership fee")
+        field_help_text = _(
+            "If checked, the annual membership fee is paid separately from the event registration fee",
+        )
+        self.add_configs("membership_fee_separated", ConfigType.BOOL, field_label, field_help_text)
 
     def set_config_accounting_1(self) -> None:
         """Configure accounting-related form fields for association settings."""

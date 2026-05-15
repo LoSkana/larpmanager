@@ -1066,6 +1066,16 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
         AccountingItemMembership.objects.filter(association_id=context["association_id"], year=year),
     )
 
+    # Membership fees collected this year but attributed to next year (advance payments)
+    context["membership_advances"] = get_sum(
+        AccountingItemMembership.objects.filter(
+            association_id=context["association_id"],
+            year=year + 1,
+            created__gte=start,
+            created__lt=end,
+        ),
+    )
+
     # Calculate total donations received in the year
     context["donations"] = get_sum(
         AccountingItemDonation.objects.filter(
@@ -1100,8 +1110,14 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
         ),
     )
 
-    # Sum all incoming funds
-    context["in"] = context["memberships"] + context["donations"] + context["tickets"] + context["inflows"]
+    # Sum all incoming funds (advances for next year are cash received this year)
+    context["in"] = (
+        context["memberships"]
+        + context["membership_advances"]
+        + context["donations"]
+        + context["tickets"]
+        + context["inflows"]
+    )
 
     # Initialize expenditure tracking
     context["expenditure"] = {}

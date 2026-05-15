@@ -46,7 +46,7 @@ Use the `./scripts/pip_upgrade.sh` script which has been updated for uv:
 
 ## Virtual Environment
 
-**Always use the venv binaries directly for Python and ruff commands. First locate the closest `venv` or `.venv` folder in the current or parent directories, then invoke its binaries:**
+The virtual environment is located at `.venv` in the project working directory. Always use it directly for Python and ruff commands:
 ```bash
 .venv/bin/ruff check <file>
 .venv/bin/ruff format <file>
@@ -168,6 +168,10 @@ Models are organized in `larpmanager/models/` by domain:
   - `AssociationPermission` for organization dashboard
   - `EventPermission` for event dashboard
   - Both link to views via `slug` field
+
+## Code Conventions
+
+- **Never name a variable `_`** — use a descriptive name or a more specific throwaway like `_unused`.
 
 ## Contributing Workflow
 

@@ -482,10 +482,12 @@ class PaymentForm(BaseAccForm):
         self.registration = kwargs.pop("registration")
         super().__init__(*args, **kwargs)
 
-        # Configure amount field with dynamic validation based on registration balance
+        # Configure amount field with dynamic validation based on registration balance.
+        # Optionally increase it with membership bundled fee.
+        membership_fee = self.context.get("membership_fee_bundled", 0) or 0
         self.fields["amount"] = forms.DecimalField(
             min_value=0.01,
-            max_value=self.registration.tot_iscr - self.registration.tot_payed,
+            max_value=self.registration.tot_iscr - self.registration.tot_payed + membership_fee,
             decimal_places=2,
             initial=self.context["quota"],
         )

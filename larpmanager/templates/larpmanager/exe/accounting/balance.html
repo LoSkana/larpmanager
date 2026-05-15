@@ -56,4 +56,8 @@
             <td>{{ bal | floatformat:2 }}</td>
         </tr>
     </table>
+    <br />
+    {% if membership_advances %}
+        <p>Acconti da soci (quote associative anno {{ year|add:1 }}): {{ membership_advances | floatformat:2 }}</p>
+    {% endif %}
 {% endblock content %}
