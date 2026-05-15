@@ -121,7 +121,7 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 120")
     expect_normalized(page, page.locator("#riepilogo"), "Includes membership fee 2050: 20")
 
-    # Second event: riepilogo also shows 120 (membership not yet reserved by any invoice)
+    # Second event: riepilogo shows 90 (70 ticket + 20 membership, not yet reserved by any invoice)
     go_to(page, live_server, "/testsecond/register")
     page.get_by_role("button", name="Continue").click()
     expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 90")

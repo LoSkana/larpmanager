@@ -597,12 +597,16 @@ def check_bundled_membership_fee(
     association_id = invoice.association_id
     event_year = registration.run.start.year
     config_name = membership_fee_pending_config_name(association_id, event_year)
-    pending_config = MemberConfig.objects.filter(
-        member_id=invoice.member_id,
-        name=config_name,
-        deleted__isnull=True,
-        value=str(registration.id),
-    ).first()
+    pending_config = (
+        MemberConfig.objects.select_for_update()
+        .filter(
+            member_id=invoice.member_id,
+            name=config_name,
+            deleted__isnull=True,
+            value=str(registration.id),
+        )
+        .first()
+    )
     if not pending_config:
         return
 
@@ -812,11 +816,7 @@ def process_collection_status_change(collection: Collection) -> None:
 
 
 def cleanup_membership_fee_reservation(instance: PaymentInvoice) -> None:
-    """Remove membership fee reservation when a registration invoice is deleted.
-
-    Also triggers recalculation of other pending registrations for the same member/year
-    so their tot_iscr picks up the membership fee again if needed.
-    """
+    """Remove membership fee reservation when a registration invoice is deleted."""
     if instance.typ != PaymentType.REGISTRATION:
         return
     try:

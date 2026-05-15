@@ -444,6 +444,7 @@ def _set_membership_context(context: dict, run: Run, member: Member, registratio
         year=event_year,
         member=member,
         association_id=association_id,
+        deleted__isnull=True,
     ).first()
     if paid_item:
         context["membership_fee"] = "done"
