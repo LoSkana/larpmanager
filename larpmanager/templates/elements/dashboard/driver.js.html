@@ -49,8 +49,9 @@ window.addEventListener('DOMContentLoaded', function() {
         const driver = window.driver.js.driver;
 
         function visibleEl(desktopId, mobileId) {
-            const el = document.getElementById(desktopId);
-            return (el && el.offsetParent !== null) ? '#' + desktopId : '#' + mobileId;
+            if ($('#topbar-mobile').is(':visible'))
+                return '#' + mobileId;
+            return '#' + desktopId;
         }
 
         let steps = [
@@ -81,7 +82,8 @@ window.addEventListener('DOMContentLoaded', function() {
         ];
 
         const sidebarEl = visibleEl('sidebar-open', 'sidebar-mobile-open');
-        if (document.querySelector(sidebarEl)) {
+        const sidebarElObj = document.querySelector(sidebarEl);
+        if (sidebarElObj && sidebarElObj.offsetParent !== null) {
             steps.push({
                 element: sidebarEl,
                 popover: {
@@ -154,13 +156,15 @@ window.addEventListener('DOMContentLoaded', function() {
 
     }
 
-    {% if intro_driver == "welcome" %}
-    driverWelcome();
-    {% elif intro_driver == "first_event" %}
-    driverFirstEvent();
-    {% elif intro_driver == "advanced_unlock" %}
-    driverUnlocked();
-    {% endif %}
+    setTimeout(function() {
+        {% if intro_driver == "welcome" %}
+        driverWelcome();
+        {% elif intro_driver == "first_event" %}
+        driverFirstEvent();
+        {% elif intro_driver == "advanced_unlock" %}
+        driverUnlocked();
+        {% endif %}
+    }, 500);
 
 });
 

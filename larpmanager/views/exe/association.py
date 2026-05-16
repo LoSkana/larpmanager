@@ -512,8 +512,12 @@ def exe_activation(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
         checklist, _progress = get_activation_checklist(association_id)
         item = next((i for i in checklist if i["slug"] == slug), None)
         if item:
-            messages.info(request, item["hint"])
-            return redirect(item["url"])
+            url = item["url"]
+            parsed = urlparse(url)
+            params = parse_qs(parsed.query)
+            params["hint_slug"] = [slug]
+            url = urlunparse(parsed._replace(query=urlencode(params, doseq=True)))
+            return redirect(url)
 
     checklist, progress = get_activation_checklist(association_id)
     progress_done = 100

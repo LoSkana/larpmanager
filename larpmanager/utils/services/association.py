@@ -204,6 +204,37 @@ def _get_registrations_url(association_id: int) -> str:
     return reverse("exe_events")
 
 
+ACTIVATION_HINTS: dict[str, Any] = {
+    "exe_events": lambda: _("Click 'New' to create your first event")
+    + "; "
+    + _("fill in the name, dates, and basic details, then save"),
+    "exe_methods": lambda: _("Choose how participants will pay: bank transfer, PayPal, Stripe, or other options")
+    + "; "
+    + _("configure at least one method and save"),
+    "orga_registration_tickets": lambda: _("Create a ticket type by clicking 'New'")
+    + "; "
+    + _("set the name, price, and availability, then save it"),
+    "orga_registration_form": lambda: _("Add a question to your registration form by clicking 'New'")
+    + "; "
+    + _("for example, ask for dietary requirements or emergency contact details"),
+    "orga_registrations": lambda: _("You are now seeing the registration form as a participant would")
+    + "; "
+    + _("Select a ticket, fill in the required fields, and complete the registration to experience the full flow"),
+    "orga_characters": lambda: _("Create a character by clicking 'New'")
+    + "; "
+    + _("give it a name and fill in the character details, then save"),
+    "orga_casting": lambda: _(
+        "Edit an existing registration and assign a character to the participant using the dropdown selection"
+    ),
+}
+
+
+def get_hint_for_slug(slug: str) -> str:
+    """Return the translated hint text for a given activation checklist slug."""
+    factory = ACTIVATION_HINTS.get(slug)
+    return str(factory()) if factory else ""
+
+
 def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
     """Build the activation checklist and compute progress for a demo association.
 
@@ -244,9 +275,6 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "slug": "exe_events",
             "name": _("Event creation"),
             "descr": _("Create your first event"),
-            "hint": _("Click 'New' to create your first event")
-            + "; "
-            + _("fill in the name, dates, and basic details, then save"),
             "done": Event.objects.filter(association_id=association_id).exists(),
             "url": reverse("exe_events"),
         },
@@ -254,9 +282,6 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "slug": "exe_methods",
             "name": _("Payment methods"),
             "descr": _("Configure at least one payment method for participants"),
-            "hint": _("Choose how participants will pay: bank transfer, PayPal, Stripe, or other options")
-            + "; "
-            + _("configure at least one method and save"),
             "done": _done("exe_methods"),
             "url": reverse("exe_methods"),
         },
@@ -264,9 +289,6 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "slug": "orga_registration_tickets",
             "name": _("Registration tickets"),
             "descr": _("Create at least one ticket type for event registrations"),
-            "hint": _("Create a ticket type by clicking 'New'")
-            + "; "
-            + _("set the name, price, and availability, then save it"),
             "done": _done("orga_registration_tickets"),
             "url": reverse("redr", kwargs={"path": "event/manage/tickets/"}),
         },
@@ -274,9 +296,6 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "slug": "orga_registration_form",
             "name": _("Registration form"),
             "descr": _("Define at least one question in the registration form"),
-            "hint": _("Add a question to your registration form by clicking 'New'")
-            + "; "
-            + _("for example, ask for dietary requirements or emergency contact details"),
             "done": _done("orga_registration_form"),
             "url": reverse("redr", kwargs={"path": "event/manage/form/"}),
         },
@@ -284,11 +303,6 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "slug": "orga_registrations",
             "name": _("First registration"),
             "descr": _("Have at least one participant registered for an event"),
-            "hint": _("You are now seeing the registration form as a participant would")
-            + "; "
-            + _(
-                "Select a ticket, fill in the required fields, and complete the registration to experience the full flow"
-            ),
             "done": Registration.objects.filter(run__event__association_id=association_id).exists(),
             "url": _get_registrations_url(association_id),
         },
@@ -300,9 +314,6 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
                 "slug": "orga_characters",
                 "name": _("First character"),
                 "descr": _("Create at least one character for one of your events"),
-                "hint": _("Create a character by clicking 'New'")
-                + "; "
-                + _("give it a name and fill in the character details, then save"),
                 "done": _done("orga_characters"),
                 "url": reverse("redr", kwargs={"path": "event/manage/characters/"}),
             },
@@ -310,9 +321,6 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
                 "slug": "orga_casting",
                 "name": _("First assignment"),
                 "descr": _("Assign a character to a registered participant"),
-                "hint": _(
-                    "Edit an existing registration and assign a character to the participant using the dropdown selection"
-                ),
                 "done": RegistrationCharacterRel.objects.filter(
                     registration__run__event__association_id=association_id
                 ).exists(),
