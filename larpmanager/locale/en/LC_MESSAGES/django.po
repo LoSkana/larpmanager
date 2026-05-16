@@ -10414,22 +10414,10 @@ msgstr ""
 msgid "Please review and submit it for publication"
 msgstr ""
 
-msgid "Tutorial"
-msgstr ""
-
-msgid "Visit the tutorial to learn the basics"
-msgstr ""
-
-msgid "Event creation"
-msgstr ""
-
 msgid "Click 'New' to create your first event"
 msgstr ""
 
 msgid "fill in the name, dates, and basic details, then save"
-msgstr ""
-
-msgid "Configure at least one payment method for participants"
 msgstr ""
 
 msgid ""
@@ -10440,31 +10428,16 @@ msgstr ""
 msgid "configure at least one method and save"
 msgstr ""
 
-msgid "Registration tickets"
-msgstr ""
-
-msgid "Create at least one ticket type for event registrations"
-msgstr ""
-
 msgid "Create a ticket type by clicking 'New'"
 msgstr ""
 
 msgid "set the name, price, and availability, then save it"
 msgstr ""
 
-msgid "Define at least one question in the registration form"
-msgstr ""
-
 msgid "Add a question to your registration form by clicking 'New'"
 msgstr ""
 
 msgid "for example, ask for dietary requirements or emergency contact details"
-msgstr ""
-
-msgid "First registration"
-msgstr ""
-
-msgid "Have at least one participant registered for an event"
 msgstr ""
 
 msgid "You are now seeing the registration form as a participant would"
@@ -10475,27 +10448,54 @@ msgid ""
 "to experience the full flow"
 msgstr ""
 
-msgid "First character"
-msgstr ""
-
-msgid "Create at least one character for one of your events"
-msgstr ""
-
 msgid "Create a character by clicking 'New'"
 msgstr ""
 
 msgid "give it a name and fill in the character details, then save"
 msgstr ""
 
+msgid ""
+"Edit an existing registration and assign a character to the participant "
+"using the dropdown selection"
+msgstr ""
+
+msgid "Tutorial"
+msgstr ""
+
+msgid "Visit the tutorial to learn the basics"
+msgstr ""
+
+msgid "Event creation"
+msgstr ""
+
+msgid "Configure at least one payment method for participants"
+msgstr ""
+
+msgid "Registration tickets"
+msgstr ""
+
+msgid "Create at least one ticket type for event registrations"
+msgstr ""
+
+msgid "Define at least one question in the registration form"
+msgstr ""
+
+msgid "First registration"
+msgstr ""
+
+msgid "Have at least one participant registered for an event"
+msgstr ""
+
+msgid "First character"
+msgstr ""
+
+msgid "Create at least one character for one of your events"
+msgstr ""
+
 msgid "First assignment"
 msgstr ""
 
 msgid "Assign a character to a registered participant"
-msgstr ""
-
-msgid ""
-"Edit an existing registration and assign a character to the participant "
-"using the dropdown selection"
 msgstr ""
 
 msgid "Are you sure? The items might be not recoverable"

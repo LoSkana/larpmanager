@@ -43,6 +43,7 @@ from larpmanager.models.utils import get_option_form_text
 from larpmanager.models.writing import Character, FactionType
 from larpmanager.utils.core.common import clean_html, html_clean
 from larpmanager.utils.io.pdf import get_trait_character
+from larpmanager.utils.services.association import get_hint_for_slug
 
 if TYPE_CHECKING:
     from django.forms import BoundField, Form
@@ -876,3 +877,9 @@ def abs_value(value: Any) -> Any:
 def concat(val1: Any, val2: Any) -> str:
     """Template filter to concatenate two values."""
     return f"{val1}{val2}"
+
+
+@register.simple_tag
+def activation_hint(slug: str) -> str:
+    """Return the translated hint text for an activation checklist slug."""
+    return get_hint_for_slug(slug)

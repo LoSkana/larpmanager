@@ -141,7 +141,9 @@ def contact(request: HttpRequest) -> Any:
     return render(request, "larpmanager/larpmanager/contact.html", context)
 
 
-def go_redirect(request: HttpRequest, slug: Any, path: Any, base_domain: Any = "larpmanager.com") -> Any:
+def go_redirect(
+    request: HttpRequest, slug: Any, path: Any, base_domain: Any = "larpmanager.com", hint_slug: str = ""
+) -> Any:
     """Redirect user to association-specific subdomain or main domain."""
     if request.enviro in ["dev", "test"]:
         return redirect("http://127.0.0.1:8000/")
@@ -151,16 +153,20 @@ def go_redirect(request: HttpRequest, slug: Any, path: Any, base_domain: Any = "
     if path:
         new_path += path
 
+    if hint_slug:
+        new_path += ("&" if "?" in new_path else "?") + f"hint_slug={hint_slug}"
+
     return redirect(new_path)
 
 
-def choose_association(request: HttpRequest, redirect_path: Any, association_slugs: Any) -> Any:
+def choose_association(request: HttpRequest, redirect_path: Any, association_slugs: Any, hint_slug: str = "") -> Any:
     """Handle association selection when multiple associations are available.
 
     Args:
         request: Django HTTP request object
         redirect_path: URL path to redirect to after selection
         association_slugs: List of association slugs to choose from
+        hint_slug: Optional activation checklist slug to forward as URL parameter
 
     Returns:
         HttpResponse: Redirect to selected association or selection form
@@ -169,14 +175,14 @@ def choose_association(request: HttpRequest, redirect_path: Any, association_slu
     if len(association_slugs) == 0:
         return render(request, "larpmanager/larpmanager/na_assoc.html")
     if len(association_slugs) == 1:
-        return go_redirect(request, association_slugs[0], redirect_path)
+        return go_redirect(request, association_slugs[0], redirect_path, hint_slug=hint_slug)
     # show page to choose them
     if request.POST:
         form = RedirectForm(request.POST, slugs=association_slugs)
         if form.is_valid():
             selected_index = int(form.cleaned_data["slug"])
             if selected_index < len(association_slugs):
-                return go_redirect(request, association_slugs[selected_index], redirect_path)
+                return go_redirect(request, association_slugs[selected_index], redirect_path, hint_slug=hint_slug)
     else:
         form = RedirectForm(slugs=association_slugs)
     return render(
@@ -186,19 +192,22 @@ def choose_association(request: HttpRequest, redirect_path: Any, association_slu
     )
 
 
-def go_redirect_run(run: Any, path: Any) -> Any:
+def go_redirect_run(run: Any, path: Any, hint_slug: str = "") -> Any:
     """Redirect to a specific run's URL on its association's domain."""
     full_url = f"https://{run.event.association.slug}.{run.event.association.skin.domain}/{run.get_slug()}/{path}"
+    if hint_slug:
+        full_url += ("&" if "?" in full_url else "?") + f"hint_slug={hint_slug}"
     return redirect(full_url)
 
 
-def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any) -> Any:
+def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any, hint_slug: str = "") -> Any:
     """Handle run selection when multiple runs are available.
 
     Args:
         request: Django HTTP request object
         redirect_path: URL path to redirect to after selection
         event_ids: List of event IDs to get runs from
+        hint_slug: Optional activation checklist slug to forward as URL parameter
 
     Returns:
         HttpResponse: Redirect to selected run or selection form
@@ -214,7 +223,7 @@ def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any) -> Any:
     if len(run_display_names) == 0:
         return render(request, "larpmanager/larpmanager/na_event.html")
     if len(run_display_names) == 1:
-        return go_redirect_run(available_runs[0], redirect_path)
+        return go_redirect_run(available_runs[0], redirect_path, hint_slug=hint_slug)
 
     # show page to choose them
     if request.POST:
@@ -222,7 +231,7 @@ def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any) -> Any:
         if form.is_valid():
             selected_index = int(form.cleaned_data["slug"])
             if selected_index < len(run_display_names):
-                return go_redirect_run(available_runs[selected_index], redirect_path)
+                return go_redirect_run(available_runs[selected_index], redirect_path, hint_slug=hint_slug)
     else:
         form = RedirectForm(slugs=run_display_names)
     return render(
@@ -247,6 +256,8 @@ def redr(request: HttpRequest, path: Any) -> Any:
         HttpResponse: Redirect to appropriate association or event selection
 
     """
+    hint_slug = request.GET.get("hint_slug", "")
+
     if not path.startswith("event/"):
         association_slugs = set()
         for association_role in AssociationRole.objects.filter(members=request.user.member).select_related(
@@ -254,7 +265,7 @@ def redr(request: HttpRequest, path: Any) -> Any:
         ):
             association_slugs.add(association_role.association.slug)
         # get all events where they have association role
-        return choose_association(request, path, list(association_slugs))
+        return choose_association(request, path, list(association_slugs), hint_slug=hint_slug)
 
     path = path.replace("event/", "")
     event_ids = set()
@@ -262,7 +273,7 @@ def redr(request: HttpRequest, path: Any) -> Any:
         event_ids.add(event_role.event_id)
 
     # get all events where they have event role
-    return choose_run(request, path, list(event_ids))
+    return choose_run(request, path, list(event_ids), hint_slug=hint_slug)
 
 
 def activate_feature_association(

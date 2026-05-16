@@ -1,5 +1,5 @@
 {% extends "structure.html" %}
-{% load i18n static %}
+{% load i18n static show_tags %}
 {% block main %}
     {% if association.id == 0 %}
         {% block header %}
@@ -292,6 +292,20 @@
                     hideAfter: 5000   // in milli seconds
                 });
             {% endfor %}
+        {% endif %}
+
+        {% if request.GET.hint_slug %}
+            {% activation_hint request.GET.hint_slug as hint_text %}
+            {% if hint_text %}
+            $.toast({
+                text: '{{ hint_text | escapejs }}',
+                showHideTransition: 'slide',
+                icon: 'info',
+                position: 'top-center',
+                textAlign: 'center',
+                hideAfter: 8000   // in milli seconds
+            });
+            {% endif %}
         {% endif %}
 
         {% if form.errors %}
