@@ -708,6 +708,7 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_enrolment")
+    split_two_names = 2
 
     # Set current year and calculate year start date
     context["year"] = timezone.now().year
@@ -740,7 +741,31 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
         # Ensure both datetimes are timezone-aware for comparison
         member.order = (ensure_timezone_aware(member.last_enrolment) - start).days
 
+        # Parse and format member legal name if available
+        if member.legal_name:
+            splitted = member.legal_name.rsplit(",")
+            if len(splitted) == split_two_names:
+                member.name, member.surname = splitted
+            else:
+                splitted = member.legal_name.rsplit(" ")
+                if len(splitted) == split_two_names:
+                    member.name, member.surname = splitted
+                else:
+                    member.name = splitted[0]
+
+        # Capitalize name components for display
+        member.name = member.name.capitalize()
+        member.surname = member.surname.capitalize()
+
         context["list"].append(member)
+
+    # Set AICS flag
+    context["aics"] = get_association_config(
+        context["association_id"],
+        "aics",
+        default_value=False,
+        context=context,
+    )
 
     return render(request, "larpmanager/exe/users/enrolment.html", context)
 

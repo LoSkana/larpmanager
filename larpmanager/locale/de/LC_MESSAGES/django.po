@@ -92,6 +92,9 @@ msgstr "für"
 msgid "tot"
 msgstr "tot"
 
+msgid "AICS"
+msgstr "AICS"
+
 msgid "Area"
 msgstr "Bereich"
 
@@ -1985,6 +1988,9 @@ msgstr "Ort der Geburt"
 msgid "Bulk delete"
 msgstr "Massenhaftes Löschen"
 
+msgid "Bureaucracy"
+msgstr "Bürokratie"
+
 msgid "Button text"
 msgstr "Text der Schaltfläche"
 
@@ -2739,6 +2745,9 @@ msgstr "Zur Fraktion hinzufügen"
 
 msgid "Available days"
 msgstr "Verfügbare Tage"
+
+msgid "Birth province"
+msgstr "Geburtsprovinz"
 
 msgid "Bring a friend"
 msgstr "Bringen Sie einen Freund mit"
@@ -5282,6 +5291,9 @@ msgstr "Ihre Anfrage wurde protokolliert"
 msgid "payment pending confirmation"
 msgstr "Zahlung bis zur Bestätigung"
 
+msgid "Activates bureaucracy options"
+msgstr "Aktiviert Bürokratieoptionen"
+
 msgid "Already existing relationship"
 msgstr "Bereits bestehende Beziehung"
 
@@ -6327,6 +6339,9 @@ msgstr "Mitgliedschaft abgelehnt"
 
 msgid "Now you can host files in the platform"
 msgstr "Jetzt können Sie Dateien auf der Plattform hosten"
+
+msgid "Now you can manage bureaucracy options"
+msgstr "Jetzt kannst du Bürokratieoptionen verwalten"
 
 msgid "Now you can start creating speed-larps"
 msgstr "Jetzt können Sie mit der Erstellung von Speed-Larps beginnen"
@@ -8501,6 +8516,11 @@ msgstr ""
 msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
 msgstr "Hallo! Deine Anmeldung bei <b>%(event)s</b> wurde bestätigt"
 
+msgid "If checked, it will show AICS download button in Enrolment page"
+msgstr ""
+"Wenn diese Option aktiviert ist, wird auf der Anmeldeseite eine Schaltfläche"
+" zum Herunterladen von AICS angezeigt"
+
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Wenn diese Option angekreuzt ist, werden bei den Einträgen dieses "
@@ -9750,6 +9770,12 @@ msgid ""
 msgstr ""
 "Wenn Sie italienischer Staatsbürger sind, geben Sie bitte Ihre Steuernummer "
 "an; andernfalls lassen Sie das Feld frei"
+
+msgid ""
+"If you were born in Italy, indicate your birth province; otherwise insert EE"
+msgstr ""
+"Wenn du in Italien geboren bist, gib deine Geburtsprovinz an; andernfalls "
+"gib EE ein"
 
 msgid ""
 "In the faction a character has been mentioned, but it does not seem to exist"
@@ -12616,14 +12642,6 @@ msgstr ""
 "durch den Namen der Person und einen Link zu ihrem Profil ersetzt"
 
 msgid ""
-"If the first name shown on your documents is different from the one you "
-"prefer to use, then write it here; otherwise leave this field empty"
-msgstr ""
-"Wenn der Vorname, der auf deinen Dokumenten angegeben ist, von demjenigen "
-"abweicht, den du bevorzugst, dann schreibe ihn hier hin; andernfalls lass "
-"dieses Feld leer"
-
-msgid ""
 "Lets you upload and host files directly on the platform, making them "
 "available either to staff or to participants via secret external links"
 msgstr ""
@@ -13041,6 +13059,16 @@ msgstr ""
 " formatiert ist, dass sie an die Versicherungsgesellschaft gesendet werden "
 "kann. Es werden nur Mitglieder angezeigt, die ihre Mitgliedschaft in diesem "
 "Kalenderjahr erneuert haben, und zwar in der Reihenfolge der Erneuerung"
+
+msgid ""
+"If for any reason the first and last name on your documents are different "
+"from the one you prefer to use, then write them here. Use a comma(,) to "
+"separate them, especially if composed by multiple words."
+msgstr ""
+"Wenn aus irgendeinem Grund der Vor- und Nachname auf deinen Dokumenten nicht"
+" mit dem von dir bevorzugten Namen übereinstimmt, dann schreibe sie hier "
+"hin. Trenne sie mit einem Komma(,), vor allem wenn sie aus mehreren Wörtern "
+"bestehen."
 
 #, python-format
 msgid ""

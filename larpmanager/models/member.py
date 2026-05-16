@@ -146,8 +146,9 @@ class Member(UuidMixin, BaseModel):
         blank=True,
         null=True,
         help_text=_(
-            "If the first name shown on your documents is different from the one you prefer to use, then write "
-            "it here; otherwise leave this field empty",
+            "If for any reason the first and last name on your documents are "
+            "different from the one you prefer to use, then write them here. "
+            "Use a comma(,) to separate them, especially if composed by multiple words.",
         )
         + ". "
         + SENSITIVE_DISCLAIMER
@@ -225,6 +226,14 @@ class Member(UuidMixin, BaseModel):
         max_length=150,
         verbose_name=_("Birth place"),
         help_text=_("City and country where you were born"),
+        blank=True,
+        null=True,
+    )
+
+    birth_province = models.CharField(
+        max_length=2,
+        verbose_name=_("Birth province"),
+        help_text=_("If you were born in Italy, indicate your birth province; otherwise insert EE"),
         blank=True,
         null=True,
     )

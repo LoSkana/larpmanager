@@ -1440,6 +1440,7 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
                 "legal_name",
                 "birth_date",
                 "birth_place",
+                "birth_province",
                 "fiscal_code",
                 "document_type",
                 "document",

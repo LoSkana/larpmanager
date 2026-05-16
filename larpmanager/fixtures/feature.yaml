@@ -1638,3 +1638,16 @@
     hidden: true
     module: null
     dependencies: []
+- model: larpmanager.feature
+  fields:
+    name: Bureaucracy
+    descr: Activates bureaucracy options
+    slug: bureaucracy
+    overall: true
+    placeholder: false
+    order: 40
+    after_text: Now you can manage bureaucracy options
+    after_link: 'config/bureaucracy'
+    hidden: false
+    module: italy
+    dependencies: []

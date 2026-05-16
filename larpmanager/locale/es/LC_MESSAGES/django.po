@@ -92,6 +92,9 @@ msgstr "para"
 msgid "tot"
 msgstr "tot"
 
+msgid "AICS"
+msgstr "AICS"
+
 msgid "Area"
 msgstr "Zona"
 
@@ -1985,6 +1988,9 @@ msgstr "Lugar de nacimiento"
 msgid "Bulk delete"
 msgstr "Eliminación masiva"
 
+msgid "Bureaucracy"
+msgstr "Burocracia"
+
 msgid "Button text"
 msgstr "Texto del botón"
 
@@ -2739,6 +2745,9 @@ msgstr "Añadir a la facción"
 
 msgid "Available days"
 msgstr "Días disponibles"
+
+msgid "Birth province"
+msgstr "Provincia de nacimiento"
 
 msgid "Bring a friend"
 msgstr "Trae un amigo"
@@ -5282,6 +5291,9 @@ msgstr "Su solicitud ha sido registrada"
 msgid "payment pending confirmation"
 msgstr "pago pendiente de confirmación"
 
+msgid "Activates bureaucracy options"
+msgstr "Activa las opciones burocráticas"
+
 msgid "Already existing relationship"
 msgstr "Relación ya existente"
 
@@ -6323,6 +6335,9 @@ msgstr "¡Solicitud de afiliación denegada"
 
 msgid "Now you can host files in the platform"
 msgstr "Ahora puedes alojar archivos en la plataforma"
+
+msgid "Now you can manage bureaucracy options"
+msgstr "Ahora puedes gestionar las opciones burocráticas"
 
 msgid "Now you can start creating speed-larps"
 msgstr "Ya puedes empezar a crear speed-larps"
@@ -8368,6 +8383,11 @@ msgstr ""
 msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
 msgstr "¡Hola! ¡Tu inscripción en <b>%(event)s</b> ha sido confirmada"
 
+msgid "If checked, it will show AICS download button in Enrolment page"
+msgstr ""
+"Si está marcada, mostrará el botón de descarga de AICS en la página de "
+"Inscripción"
+
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Si está marcada, no se utilizarán tokens en las entradas de este evento"
@@ -9538,6 +9558,11 @@ msgid ""
 msgstr ""
 "Si es ciudadano italiano, indique su código fiscal; de lo contrario, déjelo "
 "en blanco"
+
+msgid ""
+"If you were born in Italy, indicate your birth province; otherwise insert EE"
+msgstr ""
+"Si naciste en Italia, indica tu provincia de nacimiento; si no, introduce EE"
 
 msgid ""
 "In the faction a character has been mentioned, but it does not seem to exist"
@@ -12359,13 +12384,6 @@ msgstr ""
 "automáticamente por el nombre del personaje y un enlace a su perfil"
 
 msgid ""
-"If the first name shown on your documents is different from the one you "
-"prefer to use, then write it here; otherwise leave this field empty"
-msgstr ""
-"Si el nombre de pila que aparece en tus documentos es diferente del que "
-"prefieres utilizar, escríbelo aquí; de lo contrario, deja este campo vacío"
-
-msgid ""
 "Lets you upload and host files directly on the platform, making them "
 "available either to staff or to participants via secret external links"
 msgstr ""
@@ -12769,6 +12787,15 @@ msgstr ""
 "Esta página resume la lista de afiliados, formateada y lista para ser "
 "enviada a la compañía de seguros. Sólo se muestran los afiliados que han "
 "renovado su afiliación en este año civil, por orden de renovación"
+
+msgid ""
+"If for any reason the first and last name on your documents are different "
+"from the one you prefer to use, then write them here. Use a comma(,) to "
+"separate them, especially if composed by multiple words."
+msgstr ""
+"Si por alguna razón el nombre y los apellidos que aparecen en tus documentos"
+" son diferentes de los que prefieres utilizar, escríbelos aquí. Utiliza una "
+"coma(,) para separarlos, sobre todo si están compuestos por varias palabras."
 
 #, python-format
 msgid ""

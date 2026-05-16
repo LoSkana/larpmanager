@@ -412,6 +412,7 @@ class ExeConfigForm(ConfigForm):
         # 2. Accounting
         self.set_config_accounting_1()
         self.set_config_accounting_2()
+        self.set_config_bureaucracy()
 
         # 3. Member
         self.set_config_members()
@@ -840,6 +841,24 @@ class ExeConfigForm(ConfigForm):
                 ConfigType.BOOL,
                 label_disable_event_approval,
                 help_text_disable_event_approval,
+            )
+
+    def set_config_bureaucracy(self) -> None:
+        """Configure bureaucracy settings."""
+        # Configure credit system naming and display
+        if "bureaucracy" in self.params["features"]:
+            self.set_section("bureaucracy", _("Bureaucracy"))
+
+            # Make credits readonly in events
+            label_aics = _("AICS")
+            help_text_aics = _(
+                "If checked, it will show AICS download button in Enrolment page",
+            )
+            self.add_configs(
+                "aics",
+                ConfigType.BOOL,
+                label_aics,
+                help_text_aics,
             )
 
     def set_config_publisher(self) -> None:

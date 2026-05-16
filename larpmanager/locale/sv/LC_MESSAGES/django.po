@@ -92,6 +92,9 @@ msgstr "för"
 msgid "tot"
 msgstr "tot"
 
+msgid "AICS"
+msgstr "AICS"
+
 msgid "Area"
 msgstr "Område"
 
@@ -1985,6 +1988,9 @@ msgstr "Födelseort"
 msgid "Bulk delete"
 msgstr "Bulk radering"
 
+msgid "Bureaucracy"
+msgstr "Byråkrati"
+
 msgid "Button text"
 msgstr "Knapptext"
 
@@ -2739,6 +2745,9 @@ msgstr "Lägg till i fraktion"
 
 msgid "Available days"
 msgstr "Tillgängliga dagar"
+
+msgid "Birth province"
+msgstr "Födelseprovins"
 
 msgid "Bring a friend"
 msgstr "Ta med en vän"
@@ -5282,6 +5291,9 @@ msgstr "Din förfrågan har loggats"
 msgid "payment pending confirmation"
 msgstr "bekräftelse på avvaktande betalning"
 
+msgid "Activates bureaucracy options"
+msgstr "Aktiverar alternativ för byråkrati"
+
 msgid "Already existing relationship"
 msgstr "Redan befintlig relation"
 
@@ -6324,6 +6336,9 @@ msgstr "Medlemskap nekat"
 
 msgid "Now you can host files in the platform"
 msgstr "Nu kan du hosta filer i plattformen"
+
+msgid "Now you can manage bureaucracy options"
+msgstr "Nu kan du hantera byråkratiska alternativ"
 
 msgid "Now you can start creating speed-larps"
 msgstr "Nu kan du börja skapa speed-larps"
@@ -8313,6 +8328,11 @@ msgstr ""
 msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
 msgstr "Hallå där! Din anmälan till <b>%(event)s</b> har bekräftats"
 
+msgid "If checked, it will show AICS download button in Enrolment page"
+msgstr ""
+"Om den är markerad visas knappen för nedladdning av AICS på sidan "
+"Inskrivning"
+
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Om markerat, kommer inga polletter att användas i anmälningarna till detta "
@@ -9408,6 +9428,10 @@ msgid ""
 msgstr ""
 "Om du är italiensk medborgare, ange ditt skatteregistreringsnummer; lämna "
 "annars tomt"
+
+msgid ""
+"If you were born in Italy, indicate your birth province; otherwise insert EE"
+msgstr "Om du är född i Italien, ange din födelseprovins, annars fyll i EE"
 
 msgid ""
 "In the faction a character has been mentioned, but it does not seem to exist"
@@ -12199,13 +12223,6 @@ msgstr ""
 "namn och en länk till deras profil"
 
 msgid ""
-"If the first name shown on your documents is different from the one you "
-"prefer to use, then write it here; otherwise leave this field empty"
-msgstr ""
-"Om det förnamn som anges i dina handlingar är ett annat än det du föredrar "
-"att använda, skriv det här; lämna annars fältet tomt"
-
-msgid ""
 "Lets you upload and host files directly on the platform, making them "
 "available either to staff or to participants via secret external links"
 msgstr ""
@@ -12603,6 +12620,15 @@ msgstr ""
 "På denna sida finns en sammanfattning av medlemsförteckningen, formaterad "
 "för att skickas till försäkringsbolaget. Den visar endast medlemmar som har "
 "förnyat sitt medlemskap under detta kalenderår, i förnyelseordning"
+
+msgid ""
+"If for any reason the first and last name on your documents are different "
+"from the one you prefer to use, then write them here. Use a comma(,) to "
+"separate them, especially if composed by multiple words."
+msgstr ""
+"Om för- och efternamnet på dina dokument av någon anledning skiljer sig från"
+" det du föredrar att använda, skriv dem här. Använd ett kommatecken(,) för "
+"att skilja dem åt, särskilt om de består av flera ord."
 
 #, python-format
 msgid ""

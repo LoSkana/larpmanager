@@ -733,6 +733,15 @@ msgid ""
 "panel"
 msgstr ""
 
+msgid "Bureaucracy"
+msgstr ""
+
+msgid "AICS"
+msgstr ""
+
+msgid "If checked, it will show AICS download button in Enrolment page"
+msgstr ""
+
 msgid "Promotion"
 msgstr ""
 
@@ -4169,8 +4178,9 @@ msgid "Legal name"
 msgstr ""
 
 msgid ""
-"If the first name shown on your documents is different from the one you "
-"prefer to use, then write it here; otherwise leave this field empty"
+"If for any reason the first and last name on your documents are different "
+"from the one you prefer to use, then write them here. Use a comma(,) to "
+"separate them, especially if composed by multiple words."
 msgstr ""
 
 msgid "Legal Gender"
@@ -4224,6 +4234,13 @@ msgid "Birth place"
 msgstr ""
 
 msgid "City and country where you were born"
+msgstr ""
+
+msgid "Birth province"
+msgstr ""
+
+msgid ""
+"If you were born in Italy, indicate your birth province; otherwise insert EE"
 msgstr ""
 
 msgid ""
@@ -9672,6 +9689,12 @@ msgid ""
 msgstr ""
 
 msgid "Now you can configure the ensemble page"
+msgstr ""
+
+msgid "Activates bureaucracy options"
+msgstr ""
+
+msgid "Now you can manage bureaucracy options"
 msgstr ""
 
 msgid "Manage the organization main settings"

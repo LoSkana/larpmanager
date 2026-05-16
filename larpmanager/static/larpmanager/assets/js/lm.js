@@ -522,9 +522,17 @@ function show_sidebar_active() {
 function data_tables() {
     window.datatables = window.datatables || {};
 
+    // Configure custom AICS button
+    $.fn.dataTable.ext.buttons.aics = {
+        text: 'AICS',
+        action: function(e, dt, button, config) {
+            exportAICS(dt);
+        }
+    };
+
     $('table.go_datatable').each(function() {
         const $table = $(this);
-
+        const pageType = $table.attr('data-page');
         const $tbody = $table.find('tbody');
         const rowCount = $tbody.find('tr').length;
 
@@ -575,6 +583,15 @@ function data_tables() {
         var full_layout = rowCount >= 10;
         var no_buttons = $table.attr('no_buttons') !== undefined;
 
+        //Set button list
+        let buttonList = [];
+        if (pageType === 'aics') {
+            buttonList = ['aics', 'copy', 'csv', 'excel', 'pdf', 'print'];
+        }
+        else {
+            buttonList = ['copy', 'csv', 'excel', 'pdf', 'print'];
+        }
+
         const table = new DataTable('#' + tableId, {
             scrollX: true,
             stateSave: false,
@@ -582,7 +599,7 @@ function data_tables() {
             layout: full_layout
                 ? (no_buttons
                     ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
-                    : { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } })
+                    : { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: buttonList } })
                 : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
             columnControl: ['order', 'searchDropdown'],
             lengthMenu: [[25, 50, 100, 250, 500, 1000], [25, 50, 100, 250, 500, 1000]],
@@ -698,7 +715,7 @@ function data_tables() {
                 { searcheable: false, targets: disable_sort_columns },
                 { columnControl: [], targets: disable_sort_columns }
             ],
-            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } },
+            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: buttonList } },
             /*
             initComplete: function () {
                 this.api()
@@ -1064,6 +1081,75 @@ function copyClipboardButton() {
 
 });
 
+function exportAICS(dataTable) {
+    // Get table headers
+    const headers = [];
+    dataTable.columns().header().to$().each(function(i) {
+        headers[i] = $(this).text().trim();
+    })
+
+    // Find column index based on table header
+    const columnIndexes = {
+        surname: headers.findIndex(h => h.toLowerCase().replace('toggle orderingsearch', '').trim() === 'surname'),
+        name: headers.findIndex(h => h.toLowerCase().replace('toggle orderingsearch', '').trim() === 'name'),
+        gender: headers.findIndex(h => h.toLowerCase().replace('toggle orderingsearch', '').trim() === 'gender'),
+        birthDate: headers.findIndex(h => h.toLowerCase().replace('toggle orderingsearch', '').trim() === 'birth date'),
+        birthProvince: headers.findIndex(h => h.toLowerCase().replace('toggle orderingsearch', '').trim() === 'birth province'),
+        birthPlace: headers.findIndex(h => h.toLowerCase().replace('toggle orderingsearch', '').trim() === 'birth place')
+    };
+
+    // Get data from table
+    const data = dataTable.rows({search: 'applied'}).data();
+
+    // Build CSV file
+    let csvContent = [];
+
+    data.each(function(row, index) {
+        // Get fields from row
+        let fields = [
+            columnIndexes.surname !== -1 ? row[columnIndexes.surname] : '',
+            columnIndexes.name !== -1 ? row[columnIndexes.name] || '' : '',
+            columnIndexes.gender !== -1 ? row[columnIndexes.gender] || '' : '',
+            columnIndexes.birthDate !== -1 ? row[columnIndexes.birthDate] || '' : '',
+            columnIndexes.birthProvince !== -1 ? row[columnIndexes.birthProvince] || '' : '',
+            columnIndexes.birthPlace !== -1 ? row[columnIndexes.birthPlace] || '' : ''
+        ];
+
+        // Format fields
+        fields[0] = fields[0].trim();
+        fields[1] = fields[1].trim();
+        fields[2] = fields[2].trim().toUpperCase();
+        const dateObj = new Date(fields[3]);
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        fields[3] = `${year}/${month}/${day}`;
+        fields[4] = fields[4].trim().toUpperCase();
+        fields[5] = fields[5].trim();
+
+        // Join with tilde separator
+        let record = fields.join('~');
+
+        // Add separators to get to 25 (as per AICS format)
+        // If more fields are added to the record, remember to edit this as well!
+        record += '~~~~~~~~~~~~~~~~~~~~';
+
+        csvContent.push(record);
+    });
+
+    // Create blob and download file
+    const csvBlob = new Blob([csvContent.join('\n')], {type: 'text/csv;charset=utf-8;'});
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(csvBlob);
+
+    link.setAttribute('href',url);
+    link.setAttribute('download', 'export_aics_' + new Date().toISOString().split('T')[0] + '.csv');
+    link.style.visiblity = 'hidden';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 
 //function download_csv(csv, filename) {
 //    var csvFile;

@@ -92,6 +92,9 @@ msgstr "voor"
 msgid "tot"
 msgstr "tot"
 
+msgid "AICS"
+msgstr "AICS"
+
 msgid "Area"
 msgstr "Gebied"
 
@@ -1985,6 +1988,9 @@ msgstr "Geboorteplaats"
 msgid "Bulk delete"
 msgstr "Bulk verwijderen"
 
+msgid "Bureaucracy"
+msgstr "Bureaucratie"
+
 msgid "Button text"
 msgstr "Knoptekst"
 
@@ -2739,6 +2745,9 @@ msgstr "Toevoegen aan factie"
 
 msgid "Available days"
 msgstr "Beschikbare dagen"
+
+msgid "Birth province"
+msgstr "Geboorte provincie"
 
 msgid "Bring a friend"
 msgstr "Breng een vriend mee"
@@ -5282,6 +5291,9 @@ msgstr "Uw verzoek is geregistreerd"
 msgid "payment pending confirmation"
 msgstr "betaling in afwachting van bevestiging"
 
+msgid "Activates bureaucracy options"
+msgstr "Activeert bureaucratie opties"
+
 msgid "Already existing relationship"
 msgstr "Reeds bestaande relatie"
 
@@ -6325,6 +6337,9 @@ msgstr "Lidmaatschap geweigerd"
 
 msgid "Now you can host files in the platform"
 msgstr "Nu kun je bestanden hosten in het platform"
+
+msgid "Now you can manage bureaucracy options"
+msgstr "Nu kun je bureaucratieopties beheren"
 
 msgid "Now you can start creating speed-larps"
 msgstr "Nu kun je beginnen met het maken van speed-larps"
@@ -8371,6 +8386,11 @@ msgstr ""
 msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
 msgstr "Hallo! Je inschrijving bij <b>%(event)s</b> is bevestigd"
 
+msgid "If checked, it will show AICS download button in Enrolment page"
+msgstr ""
+"Als deze optie is aangevinkt, wordt de AICS-downloadknop weergegeven op de "
+"aanmeldpagina"
+
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Als deze optie is aangevinkt, worden er geen tokens gebruikt bij de invoer "
@@ -9549,6 +9569,12 @@ msgid ""
 msgstr ""
 "Als u een Italiaans staatsburger bent, geef dan uw fiscale code aan; laat "
 "anders niets ingevuld"
+
+msgid ""
+"If you were born in Italy, indicate your birth province; otherwise insert EE"
+msgstr ""
+"Als je in Italië geboren bent, geef dan je geboorteprovincie aan; zo niet, "
+"vul dan EE in"
 
 msgid ""
 "In the faction a character has been mentioned, but it does not seem to exist"
@@ -12383,13 +12409,6 @@ msgstr ""
 "profiel"
 
 msgid ""
-"If the first name shown on your documents is different from the one you "
-"prefer to use, then write it here; otherwise leave this field empty"
-msgstr ""
-"Als de voornaam op je documenten anders is dan de voornaam die je wilt "
-"gebruiken, schrijf die dan hier; laat dit veld anders leeg"
-
-msgid ""
 "Lets you upload and host files directly on the platform, making them "
 "available either to staff or to participants via secret external links"
 msgstr ""
@@ -12797,6 +12816,15 @@ msgstr ""
 "Deze pagina geeft een overzicht van de ledenlijst, opgemaakt om naar de "
 "verzekeringsmaatschappij te sturen. Er worden alleen leden getoond die hun "
 "lidmaatschap in dit kalenderjaar hebben verlengd, in volgorde van verlenging"
+
+msgid ""
+"If for any reason the first and last name on your documents are different "
+"from the one you prefer to use, then write them here. Use a comma(,) to "
+"separate them, especially if composed by multiple words."
+msgstr ""
+"Als de voor- en achternaam op je documenten om wat voor reden dan ook anders"
+" zijn dan de naam die je liever gebruikt, schrijf ze dan hier. Gebruik een "
+"komma(,) om ze te scheiden, vooral als ze uit meerdere woorden bestaan."
 
 #, python-format
 msgid ""

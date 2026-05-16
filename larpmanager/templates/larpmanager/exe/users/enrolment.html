@@ -7,51 +7,107 @@
     {% trans "This page summarises the list of members, formatted ready to be sent to the insurance company. It only displays members who have renewed their membership in this calendar year, in order of renewal" %}
 {% endblock info %}
 {% block content %}
-    <table class="go_datatable">
-        <thead>
-            <tr>
-                <th>{% trans "Number" %}</th>
-                <th>{% trans "Surname" %}</th>
-                <th>{% trans "Name" %}</th>
-                <th>{% trans "Residence" %}</th>
-                <th>{% trans "Gender" %}</th>
-                <th>{% trans "Birth place" %}</th>
-                <th>{% trans "Birth date" %}</th>
-                <th>{% trans "Fiscal code" %}</th>
-                <th>{% trans "Last membership date" %}</th>
-                <th>{% trans "Phone contact" %}</th>
-                <th>{% trans "Email" %}</th>
-                <th>{% trans "Language" %}</th>
-                <th>{% trans "Order" %}</th>
-                <th>{% trans "Newsletter" %}</th>
-            </tr>
-        </thead>
-        {% for el in list %}
-            <tr id="{{ el.uuid }}"
-                {% if not el.last_enrolment %}class="hide n_payed"{% endif %}>
-                <td>{{ el.membership.card_number }}</td>
-                <td>{{ el.surname }}</td>
-                <td>{{ el.legal_name|default:el.name }}</td>
-                <td>{{ el.get_residence }}</td>
-                <td>{{ el.gender }}</td>
-                <td>{{ el.birth_place }}</td>
-                <td>{{ el.birth_date }}</td>
-                <td>
-                    {% if el.fiscal_code %}
-                        {{ el.fiscal_code }}
-                    {% else %}
-                        N/A
-                    {% endif %}
-                </td>
-                <td>{{ el.last_enrolment| date:"d/m/Y" }}</td>
-                <td>{{ el.phone_contact }}</td>
-                <td>{{ el.email }}</td>
-                <td>{{ el.language }}</td>
-                <td>{{ el.order }}</td>
-                <td>{{ el.membership.newsletter }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+    {% if aics %}
+        <table class="go_datatable" data-page="aics">
+            <thead>
+                <tr>
+                    <th>{% trans "Number" %}</th>
+                    <th>{% trans "Legal name" %}</th>
+                    <th>{% trans "Surname" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Residence" %}</th>
+                    <th>{% trans "Gender" %}</th>
+                    <th>{% trans "Birth date" %}</th>
+                    <th>{% trans "Birth province" %}</th>
+                    <th>{% trans "Birth place" %}</th>
+                    <th>{% trans "Fiscal code" %}</th>
+                    <th>{% trans "Last membership date" %}</th>
+                    <th>{% trans "Phone contact" %}</th>
+                    <th>{% trans "Email" %}</th>
+                    <th>{% trans "Language" %}</th>
+                    <th>{% trans "Order" %}</th>
+                    <th>{% trans "Newsletter" %}</th>
+                </tr>
+            </thead>
+            {% for el in list %}
+                <tr id="{{ el.uuid }}"
+                    {% if not el.last_enrolment %}class="hide n_payed"{% endif %}>
+                    <td>{{ el.membership.card_number }}</td>
+                    <td>{{ el.legal_name }}</td>
+                    <td>{{ el.surname }}</td>
+                    <td>{{ el.name }}</td>
+                    <td>{{ el.get_residence }}</td>
+                    <td>{{ el.gender }}</td>
+                    <td>{{ el.birth_date }}</td>
+                    <td>{{ el.birth_province }}</td>
+                    <td>{{ el.birth_place }}</td>
+                    <td>
+                        {% if el.fiscal_code %}
+                            {{ el.fiscal_code }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>{{ el.last_enrolment| date:"d/m/Y" }}</td>
+                    <td>{{ el.phone_contact }}</td>
+                    <td>{{ el.email }}</td>
+                    <td>{{ el.language }}</td>
+                    <td>{{ el.order }}</td>
+                    <td>{{ el.membership.newsletter }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <table class="go_datatable" data-page="aics">
+            <thead>
+                <tr>
+                    <th>{% trans "Number" %}</th>
+                    <th>{% trans "Legal name" %}</th>
+                    <th>{% trans "Surname" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Residence" %}</th>
+                    <th>{% trans "Gender" %}</th>
+                    <th>{% trans "Birth date" %}</th>
+                    <th>{% trans "Birth province" %}</th>
+                    <th>{% trans "Birth place" %}</th>
+                    <th>{% trans "Fiscal code" %}</th>
+                    <th>{% trans "Last membership date" %}</th>
+                    <th>{% trans "Phone contact" %}</th>
+                    <th>{% trans "Email" %}</th>
+                    <th>{% trans "Language" %}</th>
+                    <th>{% trans "Order" %}</th>
+                    <th>{% trans "Newsletter" %}</th>
+                </tr>
+            </thead>
+            {% for el in list %}
+                <tr id="{{ el.uuid }}"
+                    {% if not el.last_enrolment %}class="hide n_payed"{% endif %}>
+                    <td>{{ el.membership.card_number }}</td>
+                    <td>{{ el.legal_name }}</td>
+                    <td>{{ el.surname }}</td>
+                    <td>{{ el.name }}</td>
+                    <td>{{ el.get_residence }}</td>
+                    <td>{{ el.gender }}</td>
+                    <td>{{ el.birth_date }}</td>
+                    <td>{{ el.birth_province }}</td>
+                    <td>{{ el.birth_place }}</td>
+                    <td>
+                        {% if el.fiscal_code %}
+                            {{ el.fiscal_code }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>{{ el.last_enrolment| date:"d/m/Y" }}</td>
+                    <td>{{ el.phone_contact }}</td>
+                    <td>{{ el.email }}</td>
+                    <td>{{ el.language }}</td>
+                    <td>{{ el.order }}</td>
+                    <td>{{ el.membership.newsletter }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
 {% endblock content %}
 {% block js2 %}
     <script>window.addEventListener('DOMContentLoaded', function() {

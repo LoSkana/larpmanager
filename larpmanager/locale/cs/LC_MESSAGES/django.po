@@ -92,6 +92,9 @@ msgstr "pro"
 msgid "tot"
 msgstr "tot"
 
+msgid "AICS"
+msgstr "AICS"
+
 msgid "Area"
 msgstr "Oblast"
 
@@ -1985,6 +1988,9 @@ msgstr "Místo narození"
 msgid "Bulk delete"
 msgstr "Hromadné odstranění"
 
+msgid "Bureaucracy"
+msgstr "Byrokracie"
+
 msgid "Button text"
 msgstr "Text tlačítka"
 
@@ -2739,6 +2745,9 @@ msgstr "Přidat do frakce"
 
 msgid "Available days"
 msgstr "Dostupné dny"
+
+msgid "Birth province"
+msgstr "Rodná provincie"
 
 msgid "Bring a friend"
 msgstr "Přiveďte kamaráda"
@@ -5282,6 +5291,9 @@ msgstr "Váš požadavek byl zaznamenán"
 msgid "payment pending confirmation"
 msgstr "platba čeká na potvrzení"
 
+msgid "Activates bureaucracy options"
+msgstr "Aktivuje možnosti byrokracie"
+
 msgid "Already existing relationship"
 msgstr "Již existující vztah"
 
@@ -6323,6 +6335,9 @@ msgstr "Členství odmítnuto"
 
 msgid "Now you can host files in the platform"
 msgstr "Nyní můžete hostovat soubory v platformě"
+
+msgid "Now you can manage bureaucracy options"
+msgstr "Nyní můžete spravovat možnosti byrokracie"
 
 msgid "Now you can start creating speed-larps"
 msgstr "Nyní můžete začít vytvářet speed-larpy"
@@ -8295,6 +8310,11 @@ msgstr "Chcete, aby se uživatelé připojovali k událostem až po schválení"
 msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
 msgstr "Dobrý den! Vaše registrace na <b>%(event)s</b> byla potvrzena"
 
+msgid "If checked, it will show AICS download button in Enrolment page"
+msgstr ""
+"Pokud je zaškrtnuto, zobrazí se na stránce Registrace tlačítko pro stažení "
+"AICS"
+
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Pokud je zaškrtnuto, nebudou při zadávání této události použity žádné žetony"
@@ -9336,6 +9356,12 @@ msgid ""
 msgstr ""
 "Jste-li italský občan, uveďte své daňové identifikační číslo, jinak "
 "nevyplňujte"
+
+msgid ""
+"If you were born in Italy, indicate your birth province; otherwise insert EE"
+msgstr ""
+"Pokud jste se narodili v Itálii, uveďte svou rodnou provincii, jinak vložte "
+"EE"
 
 msgid ""
 "In the faction a character has been mentioned, but it does not seem to exist"
@@ -12061,13 +12087,6 @@ msgstr ""
 "a odkazem na její profil"
 
 msgid ""
-"If the first name shown on your documents is different from the one you "
-"prefer to use, then write it here; otherwise leave this field empty"
-msgstr ""
-"Pokud se křestní jméno uvedené v dokladech liší od jména, které chcete "
-"používat, napište ho sem; jinak nechte toto pole prázdné)"
-
-msgid ""
 "Lets you upload and host files directly on the platform, making them "
 "available either to staff or to participants via secret external links"
 msgstr ""
@@ -12449,6 +12468,15 @@ msgstr ""
 "Tato stránka shrnuje seznam členů, který je připraven k odeslání pojišťovně."
 " Zobrazuje pouze členy, kteří obnovili své členství v tomto kalendářním "
 "roce, a to v pořadí, v jakém bylo členství obnoveno"
+
+msgid ""
+"If for any reason the first and last name on your documents are different "
+"from the one you prefer to use, then write them here. Use a comma(,) to "
+"separate them, especially if composed by multiple words."
+msgstr ""
+"Pokud se jméno a příjmení v dokladech z nějakého důvodu liší od toho, které "
+"preferujete, napište je sem. K jejich oddělení použijte čárku(,), zejména "
+"pokud jsou složena z více slov."
 
 #, python-format
 msgid ""
