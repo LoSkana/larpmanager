@@ -41,6 +41,10 @@ urlpatterns = [
         'robots.txt',
         TemplateView.as_view(template_name='robots.txt', content_type='text/plain'),
     ),
+    path(
+        'llms.txt',
+        TemplateView.as_view(template_name='llms.txt', content_type='text/plain'),
+    ),
     path('__debug__/', include('debug_toolbar.urls')),
     path('', include('larpmanager.urls')),
 ]
