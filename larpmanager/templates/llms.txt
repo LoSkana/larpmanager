@@ -1,0 +1,189 @@
+# LarpManager
+
+> Free, open-source platform for managing Live Action Role-Playing (LARP) events.
+
+## Core Features
+
+- **Registrations & Ticketing**: Player sign-ups with custom ticket options, add-ons, food/sleep preferences
+- **Payment Management**: Track who paid, who owes, automated reminders, multiple payment gateways (Paypal, Stripe, SumUp, etc.)
+- **Character Sheets**: Custom fields, versioned writing, per-player access control
+- **Campaign / XP System**: Multi-session progression, skill trees, XP tracking, player-facing interface
+- **Character Assignment**: Preference-based algorithm that maximizes player satisfaction
+- **Plot & Faction Management**: Structured game design elements, parallel writing without conflicts
+- **Staff & NPC Management**: Role-based permissions, team-scoped views
+- **Player Portal**: Each player sees only their own info, real-time updates
+
+## Pricing
+
+- **Free** (€0/forever): Full access to the hosted platform, unlimited events/players/registrations, complete feature access, community support via Discord
+- **Support plan** (€1/registration or 1% on tickets sold, whichever preferred): Everything in Free plus priority technical support, SLA, 24/7 infrastructure monitoring, and custom feature development. No monthly fees — charges only when events run.
+- **Self-host** (free/open source): Full source code on GitHub, self-managed infrastructure, complete data control, all features included. No guaranteed SLA.
+
+## Links
+- Docs: https://larpmanager.com/guides/
+- Demo: https://larpmanager.com/demo/
+- GitHub: https://github.com/loskana/larpmanager
+- Contact: https://larpmanager.com/contact/
+
+---
+
+## Detailed Feature Reference
+
+Features are organized by module. Each feature can be enabled or disabled independently, either at Organization level (org-wide scope) or at Event level (per-event scope).
+
+---
+
+### Experience Points & Campaign System
+
+- **Experience Points** *(event)*: Adds support for assigning XP (experience points) to characters, which can then be used to purchase abilities. Configurable rules, modifiers, templates, and systems.
+- **Campaign** *(org)*: Enables a campaign-style setup where multiple events share the same set of characters and factions, supporting multi-session progression.
+
+---
+
+### Writing & Character Management
+
+- **Characters** *(event)*: Enables the creation, editing, and assignment of characters to registered participants. Foundation for most writing features.
+- **Character Form / Custom Fields** *(event)*: Add any number of character fields to track attributes such as group affiliation, special status, mana, etc.
+- **Character Writing** *(event)*: Staff-written characters with pre-configured fields (background, public information, secret info) and rich-text editing via TinyMCE.
+- **Character Creation / Player Editor** *(event)*: Allows participants to create and modify their own characters freely, with configurable limits on what can be edited.
+- **Character Customization** *(event)*: Enables participants to customize specific attributes (name, pronoun, public info, etc.) of the characters assigned to them.
+- **Player Relationships** *(event)*: Enables participants to write their own list of character relationships.
+- **Character Inventory** *(event)*: Allows characters to have inventories managed in game.
+- **PDF Generation** *(event)*: Automatically generates and updates PDFs of character sheets, gallery, and participant profiles.
+- **Progress** *(event)*: Adds a progress status field (e.g. draft, ready, approved) to key writing elements, enabling editorial workflow tracking.
+- **Prologues** *(event)*: Enables short introductory paragraphs for each act of the event, distributed to participants to guide them.
+- **Plots** *(event)*: Enables Plots — story arcs involving selected characters, adding extra content to their character sheets. Supports parallel writing without conflicts.
+- **Factions** *(event)*: Enables Factions to organize characters into groups (visible, transversal, or secret).
+- **Handout** *(event)*: Enables Handouts — pre-written texts providing information about a plot or lore, linked to characters.
+- **Relationships** *(event)*: Allows authors (staff) to add relationships between characters in the writing panel.
+- **Quests and Traits** *(event)*: Introduces Quests as building blocks of the character sheet, each with multiple Traits — freely combinable, player-choosable, and assignable by staff.
+- **Ensemble** *(event)*: Provides a character learning page with multiple display modes (book, cards, compact list) to help players memorise other characters before the event.
+
+---
+
+### Registration & Ticketing
+
+- **Registration Form** *(event)*: Manage custom questions players answer during registration (free text, checkboxes, dropdowns, files, etc.).
+- **Sections** *(event)*: Lets you define sections in the registration form, grouping questions to make lengthy forms clearer.
+- **Manage Tickets** *(event)*: Define ticket types with pricing, availability, open/close dates, and descriptions.
+- **Waiting List** *(event)*: Activates waiting-list style tickets, available only when all main tickets are sold out.
+- **Lottery** *(event)*: Enables lottery tickets with unlimited availability and no cost, from which a random subset is converted into normal tickets.
+- **Filler** *(event)*: Enables Filler characters — simpler character sheets assigned to participants ready to replace last-minute dropouts of main characters.
+- **Patron and Reduced** *(event)*: Adds Patron and Reduced ticket types. Each Patron ticket purchased makes one Reduced ticket available.
+- **New Player** *(event)*: Enables New Player tickets, reserved for users who have never participated in an event of the organization.
+- **Additional Tickets** *(event)*: Allows a user to reserve extra tickets in addition to their own (e.g., for family members).
+- **Secret Link** *(event)*: Generates a hidden link that lets certain participants register even if general registration is closed (e.g., early access for a specific group).
+- **Participant Cancellation** *(event)*: Allows participants to cancel their own registrations at any time.
+- **Pre-Registration** *(org)*: Enables free pre-registration to events, allowing interest tracking before registration opens.
+- **Reminder** *(org)*: Performs daily checks for upcoming payment deadlines and sends reminder emails automatically.
+- **Deadlines** *(org)*: Activates a page summarizing overdue participants and their deadlines (payments, memberships, forms, casting, etc.).
+
+---
+
+### Payments & Accounting
+
+- **Payments** *(org)*: Enables payment processing, specifying which payment methods to accept (Stripe, SumUp, PayPal, wire transfer, etc.).
+- **Registration Accounting** *(event)*: View and manage the financial status of each registration, including installments and outstanding balances.
+- **Fixed Instalments** *(event)*: Enables fixed installment deadlines for registration fees, allowing you to define multiple due dates and amounts.
+- **Dynamic Rates** *(event)*: Enables dynamic installment management — the total fee is evenly split into multiple installments, each due on a date determined by dividing the remaining days until the event.
+- **Surcharge** *(event)*: Enables surcharges added to every registration made after a specified date.
+- **Discount** *(event)*: Allows generating discount codes that participants can use to reduce their ticket price.
+- **Bring a Friend** *(event)*: Enables a bring-a-friend discount. A participant provides their unique code to a new registrant, granting both a discounted price.
+- **Pay What You Want** *(event)*: Allows participants to add an optional extra amount to their registration fee.
+- **Gift** *(event)*: Allows participants to purchase tickets as gifts. A special code is generated and provided to the gift recipient for registration.
+- **Tokens** *(org)*: Allows managing Tokens — virtual currency participants can use instead of money for registration fees.
+- **Credits** *(org)*: Allows managing Credits — virtual currency participants can use instead of money for registration fees. Credits can also be redeemed for cash.
+- **Donation** *(org)*: Adds a link on personal account pages, allowing users to donate money to the association freely.
+- **Collections** *(org)*: Allows participants to create and contribute to collections aimed at assisting another participant with event fees.
+- **Refunds** *(org)*: Enables participants to request a refund (a money transfer from the organization).
+- **Expenses** *(org)*: Lets staff upload receipts for event expenses, tracking both the event expenses and the amount to refund the staff.
+- **Outflows** *(org)*: Enables management of expenses paid using the organization's financial instruments.
+- **Inflows** *(org)*: Enables managing entry of revenue for an event that do not originate from participant registrations.
+- **Verification Payments** *(org)*: Allows uploading financial system statements (e.g., bank statements) to match and approve corresponding wire payments.
+- **Accounting Tracking** *(org)*: Keeps a daily record of the organization's and events' financial status, displaying trend graphs over time.
+- **Taxes (VAT)** *(org)*: Shows the calculated tax amount on each payment.
+- **Organisation Tax** *(org)*: Allows setting a tax percentage on event income that must be set aside for the organization.
+- **Treasurer** *(org)*: Lets you specify a set of users who receive payment confirmation emails for all events, instead of each event's organizers.
+
+---
+
+### Casting & Character Assignment
+
+- **Casting Algorithm** *(event)*: Lets participants submit character preferences, then finds the optimal overall assignment using a preference-matching algorithm that maximizes player satisfaction.
+
+---
+
+### User & Community Management
+
+- **Membership** *(org)*: Requires Executive Committee approval of membership before participating in an event.
+- **Delegated Accounts** *(org)*: Allows a user to create delegated accounts they fully manage (e.g., children), avoiding the need for separate login credentials.
+- **Chat** *(org)*: Enables participants to send private messages to each other without revealing personal email addresses.
+- **Help** *(org)*: Allows participants to submit questions, and organizers to review and organize them.
+- **Newsletter** *(org)*: Adds a page displaying participant mailing lists, sorted by participants' newsletter preferences.
+- **Vote** *(org)*: Lets participants cast votes for the election of the organization's Executive Committee.
+- **Badge** *(org)*: Allows the organization to award badges and enables a public leaderboard.
+- **Safety** *(event)*: Lets staff access safety information submitted by participants.
+- **Diet** *(event)*: Lets staff access diet information submitted by participants.
+- **Player Information** *(org)*: Collects and stores specific personal data from participants at sign-up (configurable fields).
+
+---
+
+### Event Operations & Logistics
+
+- **Speed Larp** *(event)*: Manages pre-larp mini-scenes. You can create any number of scenes and assign participants to them, with checks to avoid scheduling conflicts.
+- **Workshop** *(event)*: Adds a quiz-style system for workshop questions. Organizers can define forms, questions, and correct answers for participants to complete.
+- **Shuttle** *(org)*: Allows participants to submit shuttle requests (e.g., pickup logistics), and staff can manage the status of those requests.
+- **Problems** *(event)*: Enables a ticket-like system for issues during the event, where staff can log issues, assign severity/urgency, and track them.
+- **Milestones** *(event)*: Track event milestones and progress toward key organizational goals.
+- **One-Time Content** *(event)*: Enables secure streaming of video/audio content via one-time access tokens. Each token can only be used once and tracks who accessed the content, when, and from where.
+- **LAOG** *(event)*: Treats this event as a digital/online occurrence that does not require in-person registration.
+
+---
+
+### Organization & Event Setup
+
+- **Create Organization / Onboarding** *(org)*: Guided setup for creating a new organization. Start with basics and progressively add features to avoid being overwhelmed.
+- **Manage Events** *(org)*: Create and manage events from the organization panel. Supports multiple runs of the same event with independent registrations.
+- **Event Roles** *(event)*: Manage roles and grant permissions to other users on event functions. Default "Organizer" role has full access; custom roles can restrict access to specific areas.
+- **Organization Roles** *(org)*: Manage organization-level roles and permissions. Admin role is automatically created for the organization founder.
+- **Template** *(org)*: Lets you create template events whose configurations and settings can be used as a starting point for other events.
+- **Copy** *(event)*: Allows copying any element directly from another event (characters, tickets, form questions, etc.).
+- **Quick Setup** *(event)*: Guided wizard for initial event configuration.
+
+---
+
+### Appearance & Customization
+
+- **Organization Appearance** *(org)*: Customize logo, colors, fonts, and background images for the organization's pages.
+- **Event Appearance** *(event)*: Customize logo, colors, fonts, and background images for a specific event.
+- **Carousel** *(org)*: Introduces a new way to display past and upcoming events, inspired by popular streaming-service layouts.
+- **Translations** *(org)*: Allows fine-tuning how words and phrases are translated in the organization's space (custom terminology).
+- **Legal Notice** *(org)*: Adds a link to legal notices on every page and provides a management panel link to edit the content.
+
+---
+
+### Communications
+
+- **Mail Settings** *(org)*: Configure emails sent by the system upon player actions — registration confirmation, payment confirmation, cancellation, reminders, etc.
+- **External Mail Server** *(org)*: Allows configuring a custom external mail server (SMTP) instead of the default one.
+- **Promotion / Public API** *(org)*: Makes upcoming events visible to external sites through a public API.
+- **App Integration** *(org)*: Enables a button in the topbar to redirect authenticated users to an external application, using a configurable URL and optional JWT-based SSO.
+- **URL Shortener** *(org)*: Adds a page where you can define shorter URLs for long links.
+
+---
+
+### Miscellany
+
+- **Utility** *(event)*: Lets you upload and host files directly on the platform, making them available to staff or to participants via secret external links.
+- **Warehouse** *(org)*: Enables warehouse management for organization props and materials.
+- **Activity Log** *(org)*: Shows detailed activity log on entities created, updated, or deleted.
+- **Easter Egg** *(org)*: Occasionally shows a special page to users, based on a defined probability, and optionally assigns a result.
+
+---
+
+### Italy-Specific Compliance Features
+
+- **Fiscal Budget** *(org)*: Generates an annual summary of fiscal activity for the Italian budget report (bilancio associativo).
+- **Receipt** *(org)*: Automatically generates a PDF fiscal receipt for each payment, in accordance with Italian legislation.
+- **Register of Volunteers** *(org)*: Enables a volunteer register, as required by Italian RUNTS regulations.
+- **Fiscal Code Check** *(org)*: Checks the validity of the Italian fiscal code (codice fiscale) at membership time.
