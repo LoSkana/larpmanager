@@ -1148,9 +1148,6 @@ msgstr "Kopírovat adresu URL"
 msgid "Creation"
 msgstr "Vytvoření"
 
-msgid "Currency"
-msgstr "Měna"
-
 msgid "Deadline"
 msgstr "Termín"
 

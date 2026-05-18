@@ -1148,9 +1148,6 @@ msgstr "Kopioi URL-osoite"
 msgid "Creation"
 msgstr "Luominen"
 
-msgid "Currency"
-msgstr "Valuutta"
-
 msgid "Deadline"
 msgstr "Määräaika"
 

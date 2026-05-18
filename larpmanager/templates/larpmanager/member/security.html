@@ -5,7 +5,7 @@
 {% endblock title %}
 {% block content %}
     {% include "larpmanager/member/profile_nav.html" with active="security" %}
-    <div class="auto_resize platform">
+    <div class="user_resize platform">
         <hr />
         <h3>{% trans "Two-Factor Authentication (TOTP)" %}</h3>
         {% if devices %}

@@ -1148,9 +1148,6 @@ msgstr "Kopiera URL"
 msgid "Creation"
 msgstr "Skapande"
 
-msgid "Currency"
-msgstr "Valuta"
-
 msgid "Deadline"
 msgstr "Tidsfrist"
 

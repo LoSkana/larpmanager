@@ -5361,9 +5361,6 @@ msgid ""
 "submit the form, otherwise your payment will not be processed"
 msgstr ""
 
-msgid "Follow the steps below"
-msgstr ""
-
 msgid ""
 "Important: after completing the transfer, you must return to this page and "
 "submit the form at the bottom, otherwise your payment will not be registered"
@@ -5373,9 +5370,6 @@ msgid "Use the bank details below to make the transfer from your bank"
 msgstr ""
 
 msgid "Copy the causal exactly as shown (in coloured text)"
-msgstr ""
-
-msgid "Currency"
 msgstr ""
 
 msgid "IBAN"
@@ -5399,6 +5393,9 @@ msgstr ""
 msgid ""
 "Once the transfer is confirmed, submit the form below to notify us of your "
 "payment"
+msgstr ""
+
+msgid "Follow the steps below"
 msgstr ""
 
 msgid "Click on the image below (Paypal.me) to open the payment"

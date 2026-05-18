@@ -69,7 +69,7 @@
         <div>
             <form id="register_form" action="{{ request.path }}" method="post">
                 {% csrf_token %}
-                <div class="form_container auto_resize">
+                <div class="form_container user_resize">
                     <table>
                         {% include "elements/form/register.html" %}
                     </table>
@@ -102,9 +102,9 @@
                             </table>
                         </div>
                     {% endif %}
+                    <input type="button" id="confirm" value="{% trans "Continue" %}" />
                 </div>
-                <input type="button" id="confirm" value="{% trans "Continue" %}" />
-                <div id="riepilogo" class="hide  form_container auto_resize">
+                <div id="riepilogo" class="hide  form_container user_resize">
                     <br />
                     <table class="mob">
                         <tbody>
