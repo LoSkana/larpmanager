@@ -76,7 +76,9 @@
                         <td data-title="{% trans "Date" %}">
                             <i>{{ run.pretty_dates }} </i>
                         </td>
-                        <td data-title="{% trans "Registrations" %}">{% include "elements/reg_status.html" with run_status=run.status %}</td>
+                        <td data-title="{% trans "Registrations" %}">
+                            {% include "elements/reg_status.html" with run_status=run.status registration=run.status.registration %}
+                        </td>
                     </tr>
                 {% endfor %}
             </table>

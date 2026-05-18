@@ -10612,6 +10612,9 @@ msgstr ""
 msgid "Provisional registration"
 msgstr ""
 
+msgid "Pending payment"
+msgstr ""
+
 msgid "Upload your membership application to proceed"
 msgstr ""
 

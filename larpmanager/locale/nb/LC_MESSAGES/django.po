@@ -3076,6 +3076,9 @@ msgstr "Betalingsmetoder"
 msgid "Payment methods"
 msgstr "Betalingsmetoder"
 
+msgid "Pending payment"
+msgstr "Avventer betaling"
+
 msgid "Portraits (PDF)"
 msgstr "Portretter (PDF)"
 

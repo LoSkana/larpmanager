@@ -122,7 +122,7 @@
             </div>
             <hr />
             {% if run_status %}
-                <div class="reg_status">{% include "elements/reg_status.html" with registration=registration %}</div>
+                <div class="reg_status">{% include "elements/reg_status.html" with registration=registration reg_uuid="_main" %}</div>
                 <hr />
             {% endif %}
         {% else %}

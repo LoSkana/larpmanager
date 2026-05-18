@@ -3076,6 +3076,9 @@ msgstr "Způsoby platby"
 msgid "Payment methods"
 msgstr "Platební metody"
 
+msgid "Pending payment"
+msgstr "Čeká se na platbu"
+
 msgid "Portraits (PDF)"
 msgstr "Portréty (PDF)"
 

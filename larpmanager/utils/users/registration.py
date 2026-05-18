@@ -240,7 +240,7 @@ def _status_membership_fee(
     return True
 
 
-def registration_status_signed(  # noqa: C901 - Complex registration status logic with feature checks
+def registration_status_signed(  # noqa: C901, PLR0912 - Complex registration status logic with feature checks
     run: Run,
     registration: Registration,
     member: Member,
@@ -289,6 +289,12 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
         registration_message += f" ({registration.ticket.name})"
     registration_text = f"<a href='{register_url}'>{registration_message}</a>"
 
+    # Build a separate label for when payment is still pending
+    pending_message = _("Pending payment")
+    if registration.ticket:
+        pending_message += f" ({registration.ticket.name})"
+    pending_text = f"<a href='{register_url}'>{pending_message}</a>"
+
     # Handle membership feature requirements and status checks
     if "membership" in features:
         # Check for revoked membership status and raise error
@@ -316,7 +322,7 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
             return
 
     # Check payment status and return if payment handling is complete
-    if "payment" in features and _status_payment(registration_text, registration, run_status, context):
+    if "payment" in features and _status_payment(pending_text, registration, run_status, context):
         return
 
     # Check for missing membership fee if membership feature is enabled
@@ -505,18 +511,20 @@ def registration_status(context: dict, run: Run, member: Member) -> dict:
     if context is None:
         context = {}
 
-    run_status = {"open": True, "details": "", "text": "", "additional": "", "can_pay": True}
+    run_status = {"open": True, "details": "", "text": "", "additional": "", "can_pay": True, "registration": None}
 
     # Find user's registration if not already provided
     cached_registrations = context.get("my_regs")
     if cached_registrations is not None:
-        registration = cached_registrations.get(run.id)
+        registration = cached_registrations.get(run.id) or (registration_find(run, member) if member else None)
         context["registration"] = registration
     elif "registration" in context:
         registration = context["registration"]
     else:
         registration = registration_find(run, member)
         context["registration"] = registration
+
+    run_status["registration"] = registration
 
     features = _get_features_map(run, context)
 

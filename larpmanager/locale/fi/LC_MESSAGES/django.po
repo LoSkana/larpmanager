@@ -3076,6 +3076,9 @@ msgstr "Maksutavat"
 msgid "Payment methods"
 msgstr "Maksutavat"
 
+msgid "Pending payment"
+msgstr "Vireillä oleva maksu"
+
 msgid "Portraits (PDF)"
 msgstr "Muotokuvat (PDF)"
 
