@@ -4018,6 +4018,9 @@ msgstr "Land van het evenement"
 msgid "Create new character"
 msgstr "Nieuw personage maken"
 
+msgid "Disable cancellation"
+msgstr "Annulering uitschakelen"
+
 msgid "Display sent e-mails"
 msgstr "Verzonden e-mails weergeven"
 
@@ -4820,9 +4823,6 @@ msgstr "Nee, ik wil geen updates"
 msgid "Optional ordering number"
 msgstr "Optioneel bestelnummer"
 
-msgid "Participant cancellation"
-msgstr "Annulering door deelnemers"
-
 msgid "Provisional registration"
 msgstr "Voorlopige registratie"
 
@@ -4864,6 +4864,9 @@ msgstr "Het logo van je organisatie"
 
 msgid "Your registration ticket"
 msgstr "Je entreebewijs"
+
+msgid "cancel your registration"
+msgstr "je registratie annuleren"
 
 msgid "check lack relationships"
 msgstr "controleer rapporten minder"
@@ -5477,6 +5480,9 @@ msgstr "Uw vriendencode is gebruikt"
 msgid "commit quantities to warehouse"
 msgstr "hoeveelheden vastleggen in magazijn"
 
+msgid "please wait for their response"
+msgstr "Wacht even voordat u het opnieuw probeert"
+
 msgid "(Optional) The number of quotas"
 msgstr "(Optioneel) Het aantal quota"
 
@@ -5821,6 +5827,10 @@ msgstr "(Optioneel) De beschrijving van de vaardigheid"
 
 msgid "An error occurred while reordering"
 msgstr "Er is een fout opgetreden tijdens het opnieuw ordenen"
+
+#, python-format
+msgid "Cancellation request for %(event)s"
+msgstr "Annuleringsverzoek voor %(event)s"
 
 msgid "Date of expiration of the document"
 msgstr "Vervaldatum van het document"
@@ -6474,6 +6484,9 @@ msgstr "Deze pagina geeft een overzicht van de opdrachten van"
 
 msgid "This text will be added to the sheet of"
 msgstr "Deze tekst wordt toegevoegd aan het blad van"
+
+msgid "To process the cancellation, click here"
+msgstr "Klik hier om de annulering te verwerken"
 
 msgid "You are logged in with an email address"
 msgstr "U bent aangemeld met een e-mailadres"
@@ -7377,6 +7390,10 @@ msgstr "Je kunt geen relatie met jezelf creëren"
 msgid "Your account is protected by an authenticator app"
 msgstr "Je account wordt beschermd door een authenticatie-app"
 
+#, python-format
+msgid "Your registration to %(event)s has been cancelled"
+msgstr "Je registratie voor %(event)s is geannuleerd"
+
 msgid "Cancellation for missing organization registration"
 msgstr "Annulering wegens ontbrekende organisatieregistratie"
 
@@ -7577,6 +7594,9 @@ msgstr "Je hebt al een betaling verzonden in afwachting van verificatie"
 
 msgid "You will have our eternal thanks for believing in us"
 msgstr "We zijn je eeuwig dankbaar dat je in ons gelooft"
+
+msgid "Your cancellation request has been sent to the staff"
+msgstr "Je annuleringsverzoek is verzonden naar de medewerkers"
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Het unieke subdomein van je organisatie in het platform"
@@ -8218,6 +8238,10 @@ msgstr ""
 "Indien aangevinkt, wordt de naam van de speler naast zijn personage "
 "weergegeven"
 
+msgid "If checked: participants cannot cancel their own registration"
+msgstr ""
+"Indien aangevinkt: deelnemers kunnen hun eigen registratie niet annuleren"
+
 msgid "In this page you can mark which items to add to the game area"
 msgstr ""
 "Op deze pagina kun je aangeven welke items je wilt toevoegen aan het "
@@ -8276,6 +8300,11 @@ msgstr ""
 
 msgid "for no relationship, only to display the other character name"
 msgstr "voor geen relatie, alleen om de andere karakternaam weer te geven"
+
+msgid "A cancellation request email will be sent to the staff instead"
+msgstr ""
+"In plaats daarvan wordt er een e-mail met een annuleringsverzoek naar het "
+"personeel gestuurd"
 
 #, python-format
 msgid "A quota with %(quotas)d payments already exists for this event"
@@ -8510,9 +8539,6 @@ msgid "Your request will be considered at the next meeting of the Board"
 msgstr ""
 "Uw verzoek zal worden behandeld tijdens de volgende vergadering van de Raad "
 "van Bestuur"
-
-msgid "Allows participants to cancel their own registrations at any time"
-msgstr "Deelnemers kunnen hun eigen registratie op elk moment annuleren"
 
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr "Kopieer en plak precies alle gekleurde tekst hieronder in de notities"
@@ -8806,11 +8832,6 @@ msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
 "We sturen je een bevestigingse-mail wanneer de wijziging is doorgevoerd"
 
-#, python-format
-msgid "You have correctly cancelled the registration to the %(event)s event"
-msgstr ""
-"Je hebt de registratie voor het %(event)s-evenement correct geannuleerd"
-
 msgid "You must create at least one quest type before you can create quests"
 msgstr "Je moet minstens één questtype maken voordat je quests kunt maken"
 
@@ -8821,9 +8842,6 @@ msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr ""
 "Beschrijf het in het onderstaande veld en we zullen het zo snel mogelijk "
 "oplossen"
-
-msgid "Do you want to allow users to cancel their registrations on their own"
-msgstr "Wilt u gebruikers toestaan hun registratie zelf te annuleren"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr "Wil je de registratiekosten opsplitsen in dynamische betalingsquota"
@@ -11023,6 +11041,14 @@ msgid ""
 msgstr ""
 "Voor elk van hen ontvang je de volgende korting op de registratie voor je "
 "lidmaatschapsevenement"
+
+#, python-format
+msgid ""
+"The participant <b>%(user)s</b> has requested to cancel their registration "
+"for <b>%(event)s</b>"
+msgstr ""
+"De deelnemer <b>%(user)s</b> heeft verzocht zijn registratie voor "
+"<b>%(event)s</b> te annuleren"
 
 msgid ""
 "Unique code for internal use - not visible. Indicate a string without spaces"

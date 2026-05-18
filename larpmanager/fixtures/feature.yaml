@@ -381,19 +381,6 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: Participant cancellation
-    descr: Allows participants to cancel their own registrations at any time
-    slug: player_cancellation
-    overall: false
-    placeholder: false
-    order: 20
-    after_text: ''
-    after_link: ''
-    hidden: false
-    module: event
-    dependencies: []
-- model: larpmanager.feature
-  fields:
     name: Problems
     descr: Enables a ticket-like system for issues during the event, where staff can
       log issues, assign severity/urgency, and track them
