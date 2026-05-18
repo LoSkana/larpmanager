@@ -15,7 +15,7 @@
         </thead>
         <tbody>
             {% for registration in registration_list %}
-                <tr>
+                <tr data-assoc-slug="{{ registration.run.event.association.slug }}">
                     {% if show_association %}<td>{{ registration.run.event.association.name }}</td>{% endif %}
                     <td>
                         <b>
