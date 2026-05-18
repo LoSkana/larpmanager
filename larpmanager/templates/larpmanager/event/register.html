@@ -13,12 +13,10 @@
         <p>
             {% trans "You can update your registration by simply changing the value of the fields and clicking on confirm" %}.
         </p>
-        {% if features.player_cancellation %}
-            <hr />
-            <p>
-                {% trans "If you no longer wish to attend, you can" %} <a href="{% url 'unregister' run.get_slug %}">{% trans "cancel your registrations" %}.</a>
-            </p>
-        {% endif %}
+        <hr />
+        <p>
+            {% trans "If you no longer wish to attend, you can" %} <a href="{% url 'unregister' run.get_slug %}">{% trans "cancel your registrations" %}.</a>
+        </p>
         {% if features.bring_friend %}
             <hr />
             <h4>{% trans "Bring a friend" %}!</h4>

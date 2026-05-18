@@ -4015,6 +4015,9 @@ msgstr "Tapahtuman maa"
 msgid "Create new character"
 msgstr "Luo uusi hahmo"
 
+msgid "Disable cancellation"
+msgstr "Peruutuksen poistaminen käytöstä"
+
 msgid "Display sent e-mails"
 msgstr "Näytä lähetetyt sähköpostit"
 
@@ -4817,9 +4820,6 @@ msgstr "Ei, en halua päivityksiä"
 msgid "Optional ordering number"
 msgstr "Valinnainen tilausnumero"
 
-msgid "Participant cancellation"
-msgstr "Osallistujan peruutus"
-
 msgid "Provisional registration"
 msgstr "Väliaikainen Ilmoittautuminen"
 
@@ -4861,6 +4861,9 @@ msgstr "Organisaatiosi logo"
 
 msgid "Your registration ticket"
 msgstr "Lippusi ilmoittautumisesta"
+
+msgid "cancel your registration"
+msgstr "peruuttaa rekisteröitymisesi"
 
 msgid "check lack relationships"
 msgstr "tarkista puuttuvat suhteet"
@@ -5474,6 +5477,9 @@ msgstr "Ystäväkoodisi on käytetty"
 msgid "commit quantities to warehouse"
 msgstr "sitovat määriä varastoon"
 
+msgid "please wait for their response"
+msgstr "Odota ennen kuin yrität uudelleen"
+
 msgid "(Optional) The number of quotas"
 msgstr "(Valinnainen) Kiintiöiden määrä"
 
@@ -5818,6 +5824,10 @@ msgstr "(Valinnainen) Taidon kuvaus"
 
 msgid "An error occurred while reordering"
 msgstr "Virhe tapahtui uudelleenjärjestelyn aikana"
+
+#, python-format
+msgid "Cancellation request for %(event)s"
+msgstr "Peruutuspyyntö %(event)s"
 
 msgid "Date of expiration of the document"
 msgstr "Asiakirjan voimassaolon päättymispäivä"
@@ -6468,6 +6478,9 @@ msgstr "Tällä sivulla on yhteenveto seuraavista toimeksiannoista"
 
 msgid "This text will be added to the sheet of"
 msgstr "Tämä teksti lisätään lomakkeelle: "
+
+msgid "To process the cancellation, click here"
+msgstr "Jos haluat käsitellä peruutuksen, klikkaa tästä"
 
 msgid "You are logged in with an email address"
 msgstr "Olet kirjautunut sisään sähköpostiosoitteella"
@@ -7365,6 +7378,10 @@ msgstr "Et voi luoda suhdetta itseesi"
 msgid "Your account is protected by an authenticator app"
 msgstr "Tilisi on suojattu autentikointisovelluksella"
 
+#, python-format
+msgid "Your registration to %(event)s has been cancelled"
+msgstr "Ilmoittautumisesi %(event)s on peruutettu"
+
 msgid "Cancellation for missing organization registration"
 msgstr "Organisaation puuttuvan rekisteröinnin peruuttaminen"
 
@@ -7568,6 +7585,9 @@ msgstr "Olet jo lähettänyt maksun, joka odottaa vahvistusta"
 
 msgid "You will have our eternal thanks for believing in us"
 msgstr "Saatte ikuisen kiitoksemme siitä, että uskoitte meihin, -"
+
+msgid "Your cancellation request has been sent to the staff"
+msgstr "Peruutuspyyntösi on lähetetty henkilökunnalle"
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Organisaatiosi yksilöllinen aliverkkotunnus alustalla"
@@ -8173,6 +8193,10 @@ msgid "If checked, shows the player's name alongside their character"
 msgstr ""
 "Jos valintaruutu on valittuna, näyttää pelaajan nimen hahmonsa vieressä"
 
+msgid "If checked: participants cannot cancel their own registration"
+msgstr ""
+"Jos valitaan: osallistujat eivät voi peruuttaa omaa ilmoittautumistaan"
+
 msgid "In this page you can mark which items to add to the game area"
 msgstr "Tällä sivulla voit merkitä, mitkä kohteet haluat lisätä pelialueelle"
 
@@ -8224,6 +8248,9 @@ msgstr ""
 
 msgid "for no relationship, only to display the other character name"
 msgstr "ei ole mitään suhdetta, ainoastaan näyttää toisen merkin nimen"
+
+msgid "A cancellation request email will be sent to the staff instead"
+msgstr "Henkilökunnalle lähetetään sen sijaan peruutuspyyntö sähköpostitse"
 
 #, python-format
 msgid "A quota with %(quotas)d payments already exists for this event"
@@ -8446,9 +8473,6 @@ msgstr "Olet antanut luvan tietojen jakamiseen tämän organisaation kanssa"
 
 msgid "Your request will be considered at the next meeting of the Board"
 msgstr "Pyyntösi käsitellään seuraavassa hallintoneuvoston kokouksessa"
-
-msgid "Allows participants to cancel their own registrations at any time"
-msgstr "Osallistujat voivat peruuttaa oman ilmoittautumisensa milloin tahansa"
 
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr ""
@@ -8712,10 +8736,6 @@ msgstr ""
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Lähetämme sinulle vahvistussähköpostin, kun muutos on tehty"
 
-#, python-format
-msgid "You have correctly cancelled the registration to the %(event)s event"
-msgstr "Olet peruuttanut ilmoittautumisen tapahtumaan %(event)s"
-
 msgid "You must create at least one quest type before you can create quests"
 msgstr ""
 "Sinun on luotava vähintään yksi tehtävätyyppi ennen kuin voit luoda tehtäviä"
@@ -8727,9 +8747,6 @@ msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr ""
 "Kuvaile ongelma alla olevaan kenttään, niin korjaamme sen mahdollisimman "
 "pian"
-
-msgid "Do you want to allow users to cancel their registrations on their own"
-msgstr "Haluatko antaa käyttäjien peruuttaa ilmoittautumisensa itse"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr "Haluatko jakaa ilmoittautumismaksun dynaamisiin maksukiintiöihin"
@@ -10867,6 +10884,14 @@ msgid ""
 msgstr ""
 "Kustakin niistä saat seuraavan alennuksen jäsenyystapahtuman "
 "ilmoittautumisestasi"
+
+#, python-format
+msgid ""
+"The participant <b>%(user)s</b> has requested to cancel their registration "
+"for <b>%(event)s</b>"
+msgstr ""
+"Osallistuja <b>%(user)s</b> on pyytänyt peruuttamaan ilmoittautumisensa "
+"<b>%(event)s</b>:een"
 
 msgid ""
 "Unique code for internal use - not visible. Indicate a string without spaces"

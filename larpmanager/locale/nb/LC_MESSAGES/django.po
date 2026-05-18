@@ -4015,6 +4015,9 @@ msgstr "Landet der arrangementet fant sted"
 msgid "Create new character"
 msgstr "Opprett ny karakter"
 
+msgid "Disable cancellation"
+msgstr "Deaktiver kansellering"
+
 msgid "Display sent e-mails"
 msgstr "Vis sendte e-poster"
 
@@ -4817,9 +4820,6 @@ msgstr "Nei, jeg vil ikke ha oppdateringer"
 msgid "Optional ordering number"
 msgstr "Valgfritt bestillingsnummer"
 
-msgid "Participant cancellation"
-msgstr "Avbestilling av deltakere"
-
 msgid "Provisional registration"
 msgstr "Foreløpig registrering"
 
@@ -4861,6 +4861,9 @@ msgstr "Logoen til organisasjonen din"
 
 msgid "Your registration ticket"
 msgstr "Inngangsbilletten din"
+
+msgid "cancel your registration"
+msgstr "kansellere registreringen din"
 
 msgid "check lack relationships"
 msgstr "sjekk rapporter mindre"
@@ -5474,6 +5477,9 @@ msgstr "Din vennekode har blitt brukt"
 msgid "commit quantities to warehouse"
 msgstr "forplikte mengder til lageret"
 
+msgid "please wait for their response"
+msgstr "Vennligst vent før du prøver på nytt"
+
 msgid "(Optional) The number of quotas"
 msgstr "(Valgfritt) Antall kvoter"
 
@@ -5818,6 +5824,10 @@ msgstr "(Valgfritt) Beskrivelse av evnen"
 
 msgid "An error occurred while reordering"
 msgstr "Det oppstod en feil under omorganisering"
+
+#, python-format
+msgid "Cancellation request for %(event)s"
+msgstr "Avbestillingsforespørsel for %(event)s"
 
 msgid "Date of expiration of the document"
 msgstr "Dokumentets utløpsdato"
@@ -6469,6 +6479,9 @@ msgstr "Denne siden oppsummerer oppgavene til"
 
 msgid "This text will be added to the sheet of"
 msgstr "Denne teksten vil bli lagt til på arket med"
+
+msgid "To process the cancellation, click here"
+msgstr "For å behandle avbestillingen, klikk her"
 
 msgid "You are logged in with an email address"
 msgstr "Du er logget inn med en e-postadresse"
@@ -7365,6 +7378,10 @@ msgstr "Du kan ikke skape et forhold til deg selv"
 msgid "Your account is protected by an authenticator app"
 msgstr "Kontoen din er beskyttet av en autentiseringsapp"
 
+#, python-format
+msgid "Your registration to %(event)s has been cancelled"
+msgstr "Din påmelding til %(event)s har blitt kansellert"
+
 msgid "Cancellation for missing organization registration"
 msgstr "Avbestilling på grunn av manglende organisasjonsregistrering"
 
@@ -7568,6 +7585,9 @@ msgstr "Du har allerede sendt en betaling i påvente av bekreftelse"
 
 msgid "You will have our eternal thanks for believing in us"
 msgstr "Du skal ha vår evige takk for at du tror på oss"
+
+msgid "Your cancellation request has been sent to the staff"
+msgstr "Avbestillingsforespørselen din har blitt sendt til personalet"
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Organisasjonens unike underdomene i plattformen"
@@ -8172,6 +8192,9 @@ msgstr "Hvis avkrysset, kan et alternativ velges maksimalt antall ganger"
 msgid "If checked, shows the player's name alongside their character"
 msgstr "Hvis avkrysset, vises spillerens navn ved siden av karakteren"
 
+msgid "If checked: participants cannot cancel their own registration"
+msgstr "Hvis avkrysset: Deltakerne kan ikke avbestille sin egen registrering"
+
 msgid "In this page you can mark which items to add to the game area"
 msgstr ""
 "På denne siden kan du markere hvilke elementer som skal legges til i "
@@ -8225,6 +8248,10 @@ msgstr "Veksle mellom administrative backend-sider og offentlige sider"
 
 msgid "for no relationship, only to display the other character name"
 msgstr "for ingen relasjon, bare for å vise det andre tegnnavnet"
+
+msgid "A cancellation request email will be sent to the staff instead"
+msgstr ""
+"En e-post med avbestillingsforespørsel vil bli sendt til de ansatte i stedet"
 
 #, python-format
 msgid "A quota with %(quotas)d payments already exists for this event"
@@ -8450,11 +8477,6 @@ msgstr "Du har gitt tillatelse til datadeling med denne organisasjonen"
 
 msgid "Your request will be considered at the next meeting of the Board"
 msgstr "Din forespørsel vil bli behandlet på neste styremøte"
-
-msgid "Allows participants to cancel their own registrations at any time"
-msgstr ""
-"Gjør det mulig for deltakerne å kansellere sine egne registreringer når som "
-"helst"
 
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr "Kopier og lim inn nøyaktig all farget tekst nedenfor i notatene"
@@ -8725,11 +8747,6 @@ msgstr ""
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Vi sender deg en bekreftelse på e-post når endringen er gjennomført"
 
-#, python-format
-msgid "You have correctly cancelled the registration to the %(event)s event"
-msgstr ""
-"Du har avbestilt påmeldingen til %(event)s-arrangementet på korrekt måte"
-
 msgid "You must create at least one quest type before you can create quests"
 msgstr "Du må opprette minst én oppdragstype før du kan opprette oppdrag"
 
@@ -8740,10 +8757,6 @@ msgstr ""
 
 msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr "Beskriv det i feltet nedenfor, så ordner vi det så snart som mulig"
-
-msgid "Do you want to allow users to cancel their registrations on their own"
-msgstr ""
-"Ønsker du å tillate brukere å kansellere registreringene sine på egenhånd"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr ""
@@ -10872,6 +10885,14 @@ msgid ""
 msgstr ""
 "For hver av dem får du følgende rabatt på registreringen til "
 "medlemsarrangementet ditt"
+
+#, python-format
+msgid ""
+"The participant <b>%(user)s</b> has requested to cancel their registration "
+"for <b>%(event)s</b>"
+msgstr ""
+"Deltakeren <b>%(user)s</b> har bedt om å kansellere sin påmelding til "
+"<b>%(event)s</b>"
 
 msgid ""
 "Unique code for internal use - not visible. Indicate a string without spaces"

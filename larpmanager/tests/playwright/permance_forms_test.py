@@ -103,7 +103,7 @@ def check_orga_preferences(page: Any) -> None:
 
 def check_orga_features(page: Any) -> None:
     page.get_by_role("link", name="Features").first.click()
-    checked = ["Participant cancellation", "Character customization", "Secret link", "Sections"]
+    checked = ["Character customization", "Secret link", "Sections"]
     for s in checked:
         check_feature(page, s)
 
