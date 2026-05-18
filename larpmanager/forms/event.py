@@ -591,6 +591,22 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("registration_reg_que_age", ConfigType.BOOL, age_selection_label, age_selection_help_text)
 
+        # Disable self-service cancellation
+        disable_cancellation_label = _("Disable cancellation")
+        disable_cancellation_help_text = (
+            _("If checked: participants cannot cancel their own registration")
+            + "; "
+            + _(
+                "A cancellation request email will be sent to the staff instead",
+            )
+        )
+        self.add_configs(
+            "player_cancellation_disable",
+            ConfigType.BOOL,
+            disable_cancellation_label,
+            disable_cancellation_help_text,
+        )
+
     def set_config_char_form(self) -> None:
         """Configure character form options for events with character feature enabled.
 
@@ -1616,7 +1632,7 @@ _EVENT_TEMPLATES = [
         "campaign",
         _("Campaign"),
         _("Multi-event story with player-created characters, experience points, and a persistent world"),
-        ["character", "user_character", "experience", "campaign", "player_cancellation"],
+        ["character", "user_character", "experience", "campaign"],
     ),
     (
         "oneshot",
@@ -1624,7 +1640,7 @@ _EVENT_TEMPLATES = [
         _(
             "Single event focusing on narrative, characters written by staff and assigned via casting algorithm, with factions and plots"
         ),
-        ["character", "casting", "faction", "plot", "handout", "player_cancellation"],
+        ["character", "casting", "faction", "plot", "handout"],
     ),
     (
         "manual",
@@ -1842,11 +1858,6 @@ class OrgaQuickSetupForm(QuickSetupForm):
                     True,
                     _("Early registration link"),
                     _("Do you want to enable a secret registration link to allow early sign-ups"),
-                ),
-                "player_cancellation": (
-                    True,
-                    _("Signup cancellation"),
-                    _("Do you want to allow users to cancel their registrations on their own"),
                 ),
                 "reg_installments": (
                     True,

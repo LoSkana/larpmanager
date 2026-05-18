@@ -4018,6 +4018,9 @@ msgstr "Land där evenemanget äger rum"
 msgid "Create new character"
 msgstr "Skapa ny karaktär"
 
+msgid "Disable cancellation"
+msgstr "Inaktivera annullering"
+
 msgid "Display sent e-mails"
 msgstr "Visa skickade e-postmeddelanden"
 
@@ -4820,9 +4823,6 @@ msgstr "Nej, jag vill inte ha uppdateringar"
 msgid "Optional ordering number"
 msgstr "Valfritt beställningsnummer"
 
-msgid "Participant cancellation"
-msgstr "Avbokning av deltagare"
-
 msgid "Provisional registration"
 msgstr "Provisorisk registrering"
 
@@ -4864,6 +4864,9 @@ msgstr "Din organisations logotyp"
 
 msgid "Your registration ticket"
 msgstr "Din entrébiljett"
+
+msgid "cancel your registration"
+msgstr "avboka din registrering"
 
 msgid "check lack relationships"
 msgstr "kontrollera rapporter mindre"
@@ -5477,6 +5480,9 @@ msgstr "Din vänkod har använts"
 msgid "commit quantities to warehouse"
 msgstr "överföra kvantiteter till lagret"
 
+msgid "please wait for their response"
+msgstr "Vänligen vänta innan du försöker igen"
+
 msgid "(Optional) The number of quotas"
 msgstr "(Valfritt) Antalet kvoter"
 
@@ -5821,6 +5827,10 @@ msgstr "(Valfritt) Beskrivning av förmågan"
 
 msgid "An error occurred while reordering"
 msgstr "Ett fel inträffade vid ombeställning"
+
+#, python-format
+msgid "Cancellation request for %(event)s"
+msgstr "Avbokningsbegäran för %(event)s"
 
 msgid "Date of expiration of the document"
 msgstr "Datum då dokumentet upphör att gälla"
@@ -6473,6 +6483,9 @@ msgstr "På denna sida sammanfattas uppdragen för"
 
 msgid "This text will be added to the sheet of"
 msgstr "Denna text kommer att läggas till på arket för"
+
+msgid "To process the cancellation, click here"
+msgstr "För att hantera avbokningen, klicka här"
 
 msgid "You are logged in with an email address"
 msgstr "Du är inloggad med en e-postadress"
@@ -7368,6 +7381,10 @@ msgstr "Du kan inte skapa en relation till dig själv"
 msgid "Your account is protected by an authenticator app"
 msgstr "Ditt konto skyddas av en autentiseringsapp"
 
+#, python-format
+msgid "Your registration to %(event)s has been cancelled"
+msgstr "Din anmälan till %(event)s har avbrutits"
+
 msgid "Cancellation for missing organization registration"
 msgstr "Avbokning vid utebliven registrering av organisation"
 
@@ -7566,6 +7583,9 @@ msgstr "Du har redan skickat en betalning som väntar på verifiering"
 
 msgid "You will have our eternal thanks for believing in us"
 msgstr "Du kommer att få vårt eviga tack för att du trodde på oss"
+
+msgid "Your cancellation request has been sent to the staff"
+msgstr "Din avbokningsbegäran har skickats till personalen"
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Din organisations unika underdomän i plattformen"
@@ -8174,6 +8194,9 @@ msgstr "Om alternativet är markerat kan det väljas ett maximalt antal gånger"
 msgid "If checked, shows the player's name alongside their character"
 msgstr "Om markerad, visar spelarens namn tillsammans med karaktären"
 
+msgid "If checked: participants cannot cancel their own registration"
+msgstr "Om markerat: deltagare kan inte avboka sin egen registrering"
+
 msgid "In this page you can mark which items to add to the game area"
 msgstr ""
 "På den här sidan kan du markera vilka objekt som ska läggas till i "
@@ -8228,6 +8251,11 @@ msgstr "Växla mellan administrativa backend- och publika sidor"
 
 msgid "for no relationship, only to display the other character name"
 msgstr "utan någon relation, bara för att visa det andra karaktärsnamnet"
+
+msgid "A cancellation request email will be sent to the staff instead"
+msgstr ""
+"Ett e-postmeddelande om avbokningsbegäran kommer att skickas till personalen"
+" istället"
 
 #, python-format
 msgid "A quota with %(quotas)d payments already exists for this event"
@@ -8447,10 +8475,6 @@ msgstr "Du har beviljat datadelning med denna organisation"
 
 msgid "Your request will be considered at the next meeting of the Board"
 msgstr "Din begäran kommer att behandlas vid nästa styrelsemöte"
-
-msgid "Allows participants to cancel their own registrations at any time"
-msgstr ""
-"Möjliggör för deltagare att när som helst avboka sina egna registreringar"
 
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr "Kopiera och klistra in exakt all färgad text nedan i anteckningarna"
@@ -8721,10 +8745,6 @@ msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
 "Vi skickar ett bekräftelsemeddelande till dig när ändringen har gjorts"
 
-#, python-format
-msgid "You have correctly cancelled the registration to the %(event)s event"
-msgstr "Du har korrekt avbokat registreringen till %(event)s event"
-
 msgid "You must create at least one quest type before you can create quests"
 msgstr "Du måste skapa minst en uppdragstyp innan du kan skapa uppdrag"
 
@@ -8735,10 +8755,6 @@ msgstr ""
 
 msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr "Beskriv det i fältet nedan så åtgärdar vi det så snart som möjligt"
-
-msgid "Do you want to allow users to cancel their registrations on their own"
-msgstr ""
-"Vill du tillåta användare att avbryta sina registreringar på egen hand"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr "Vill du dela upp registreringsavgiften i dynamiska betalningskvoter"
@@ -10896,6 +10912,14 @@ msgid ""
 msgstr ""
 "För var och en av dem får du följande rabatt på din anmälan till "
 "medlemsevenemanget"
+
+#, python-format
+msgid ""
+"The participant <b>%(user)s</b> has requested to cancel their registration "
+"for <b>%(event)s</b>"
+msgstr ""
+"Deltagaren <b>%(user)s</b> har begärt att få avboka sin anmälan till "
+"<b>%(event)s</b>"
 
 msgid ""
 "Unique code for internal use - not visible. Indicate a string without spaces"

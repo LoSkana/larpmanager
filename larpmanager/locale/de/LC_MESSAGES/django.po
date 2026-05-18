@@ -4018,6 +4018,9 @@ msgstr "Land der Veranstaltung"
 msgid "Create new character"
 msgstr "Neues Zeichen erstellen"
 
+msgid "Disable cancellation"
+msgstr "Stornierung deaktivieren"
+
 msgid "Display sent e-mails"
 msgstr "Gesendete E-Mails anzeigen"
 
@@ -4820,9 +4823,6 @@ msgstr "Nein, ich möchte keine Aktualisierungen"
 msgid "Optional ordering number"
 msgstr "Optionale Bestellnummer"
 
-msgid "Participant cancellation"
-msgstr "Stornierung durch den Teilnehmer"
-
 msgid "Provisional registration"
 msgstr "Vorläufige Registrierung"
 
@@ -4864,6 +4864,9 @@ msgstr "Das Logo Ihrer Organisation"
 
 msgid "Your registration ticket"
 msgstr "Ihre Eintrittskarte"
+
+msgid "cancel your registration"
+msgstr "deine Anmeldung stornieren"
 
 msgid "check lack relationships"
 msgstr "Berichte überprüfen weniger"
@@ -5477,6 +5480,9 @@ msgstr "Ihr Freundschaftscode wurde bereits verwendet"
 msgid "commit quantities to warehouse"
 msgstr "Mengen an das Lager binden"
 
+msgid "please wait for their response"
+msgstr "Bitte warten Sie, bevor Sie es erneut versuchen"
+
 msgid "(Optional) The number of quotas"
 msgstr "(fakultativ) Die Anzahl der Kontingente"
 
@@ -5821,6 +5827,10 @@ msgstr "(Optional) Die Beschreibung der Fähigkeit"
 
 msgid "An error occurred while reordering"
 msgstr "Bei der Neubestellung ist ein Fehler aufgetreten"
+
+#, python-format
+msgid "Cancellation request for %(event)s"
+msgstr "Stornierungsanfrage für %(event)s"
 
 msgid "Date of expiration of the document"
 msgstr "Datum des Ablaufs der Gültigkeit des Dokuments"
@@ -6477,6 +6487,9 @@ msgstr "Diese Seite fasst die Aufgaben von"
 
 msgid "This text will be added to the sheet of"
 msgstr "Dieser Text wird auf dem Blatt der"
+
+msgid "To process the cancellation, click here"
+msgstr "Um die Kündigung zu bearbeiten, klicke hier"
 
 msgid "You are logged in with an email address"
 msgstr "Sie sind mit einer E-Mail-Adresse eingeloggt"
@@ -7399,6 +7412,10 @@ msgstr "Sie können keine Beziehung zu sich selbst aufbauen"
 msgid "Your account is protected by an authenticator app"
 msgstr "Ihr Konto ist durch eine Authentifizierungs-App geschützt"
 
+#, python-format
+msgid "Your registration to %(event)s has been cancelled"
+msgstr "Deine Anmeldung zu %(event)s wurde storniert"
+
 msgid "Cancellation for missing organization registration"
 msgstr "Stornierung bei fehlender Anmeldung der Organisation"
 
@@ -7625,6 +7642,9 @@ msgstr ""
 msgid "You will have our eternal thanks for believing in us"
 msgstr ""
 "Wir werden Ihnen auf ewig dafür danken, dass Sie an uns geglaubt haben"
+
+msgid "Your cancellation request has been sent to the staff"
+msgstr "Deine Stornierungsanfrage wurde an die Mitarbeiter gesendet"
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Die eindeutige Subdomain Ihrer Organisation auf der Plattform"
@@ -8331,6 +8351,10 @@ msgstr ""
 "Wenn diese Option aktiviert ist, wird der Name des Spielers neben seinem "
 "Charakter angezeigt"
 
+msgid "If checked: participants cannot cancel their own registration"
+msgstr ""
+"Wenn angekreuzt: Teilnehmer können ihre eigene Anmeldung nicht stornieren"
+
 msgid "In this page you can mark which items to add to the game area"
 msgstr ""
 "Auf dieser Seite können Sie markieren, welche Gegenstände dem Spielbereich "
@@ -8395,6 +8419,11 @@ msgstr ""
 
 msgid "for no relationship, only to display the other character name"
 msgstr "für keine Beziehung, nur um den anderen Zeichennamen anzuzeigen"
+
+msgid "A cancellation request email will be sent to the staff instead"
+msgstr ""
+"Stattdessen wird eine E-Mail mit der Bitte um Stornierung an die Mitarbeiter"
+" gesendet"
 
 #, python-format
 msgid "A quota with %(quotas)d payments already exists for this event"
@@ -8660,10 +8689,6 @@ msgstr "Sie haben dem Datenaustausch mit dieser Organisation zugestimmt"
 
 msgid "Your request will be considered at the next meeting of the Board"
 msgstr "Ihr Antrag wird in der nächsten Sitzung des Verwaltungsrats behandelt"
-
-msgid "Allows participants to cancel their own registrations at any time"
-msgstr ""
-"Ermöglicht den Teilnehmern, ihre eigenen Anmeldungen jederzeit zu stornieren"
 
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr ""
@@ -8982,11 +9007,6 @@ msgstr ""
 "Wir werden Ihnen eine Bestätigungs-E-Mail schicken, sobald die Änderung "
 "vorgenommen wurde"
 
-#, python-format
-msgid "You have correctly cancelled the registration to the %(event)s event"
-msgstr ""
-"Sie haben die Anmeldung zu der Veranstaltung von %(event)s korrekt storniert"
-
 msgid "You must create at least one quest type before you can create quests"
 msgstr ""
 "Sie müssen mindestens einen Questtyp erstellen, bevor Sie Quests erstellen "
@@ -9001,10 +9021,6 @@ msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr ""
 "Beschreiben Sie das Problem in dem unten stehenden Feld und wir werden es so"
 " schnell wie möglich beheben"
-
-msgid "Do you want to allow users to cancel their registrations on their own"
-msgstr ""
-"Möchten Sie den Nutzern erlauben, ihre Registrierungen selbst zu löschen"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr ""
@@ -11277,6 +11293,14 @@ msgid ""
 msgstr ""
 "Für jede von ihnen erhalten Sie den folgenden Rabatt auf Ihre Anmeldung zu "
 "einer Mitgliedschaftsveranstaltung"
+
+#, python-format
+msgid ""
+"The participant <b>%(user)s</b> has requested to cancel their registration "
+"for <b>%(event)s</b>"
+msgstr ""
+"Der Teilnehmer <b>%(user)s</b> hat beantragt, seine Anmeldung für "
+"<b>%(event)s</b> zu stornieren"
 
 msgid ""
 "Unique code for internal use - not visible. Indicate a string without spaces"

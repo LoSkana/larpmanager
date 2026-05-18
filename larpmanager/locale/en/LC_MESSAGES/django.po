@@ -1269,6 +1269,15 @@ msgid ""
 "participant's age"
 msgstr ""
 
+msgid "Disable cancellation"
+msgstr ""
+
+msgid "If checked: participants cannot cancel their own registration"
+msgstr ""
+
+msgid "A cancellation request email will be sent to the staff instead"
+msgstr ""
+
 msgid "Character Sheet"
 msgstr ""
 
@@ -1894,9 +1903,6 @@ msgstr ""
 
 msgid ""
 "Do you want to enable a secret registration link to allow early sign-ups"
-msgstr ""
-
-msgid "Do you want to allow users to cancel their registrations on their own"
 msgstr ""
 
 msgid "Payment installments"
@@ -2919,6 +2925,12 @@ msgstr ""
 
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
+msgstr ""
+
+msgid "cancel your registration"
+msgstr ""
+
+msgid "If you no longer wish to attend, you can"
 msgstr ""
 
 #, python-format
@@ -5940,9 +5952,6 @@ msgstr ""
 msgid ""
 "You can update your registration by simply changing the value of the fields "
 "and clicking on confirm"
-msgstr ""
-
-msgid "If you no longer wish to attend, you can"
 msgstr ""
 
 msgid "cancel your registrations"
@@ -9251,12 +9260,6 @@ msgstr ""
 msgid "Now you can create the waiting ticket"
 msgstr ""
 
-msgid "Participant cancellation"
-msgstr ""
-
-msgid "Allows participants to cancel their own registrations at any time"
-msgstr ""
-
 msgid ""
 "Enables a ticket-like system for issues during the event, where staff can "
 "log issues, assign severity/urgency, and track them"
@@ -11490,7 +11493,26 @@ msgid "Discount not combinable with other benefits"
 msgstr ""
 
 #, python-format
-msgid "You have correctly cancelled the registration to the %(event)s event"
+msgid "Cancellation request for %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"The participant <b>%(user)s</b> has requested to cancel their registration "
+"for <b>%(event)s</b>"
+msgstr ""
+
+msgid "To process the cancellation, click here"
+msgstr ""
+
+msgid "Your cancellation request has been sent to the staff"
+msgstr ""
+
+msgid "please wait for their response"
+msgstr ""
+
+#, python-format
+msgid "Your registration to %(event)s has been cancelled"
 msgstr ""
 
 msgid "Registrations not open!"
