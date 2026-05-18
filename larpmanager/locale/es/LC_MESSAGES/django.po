@@ -7454,6 +7454,9 @@ msgstr ""
 "Completa la configuración para desbloquear todas las funciones de la "
 "plataforma"
 
+msgid "Copy the causal exactly as shown (in coloured text)"
+msgstr "Copia la causal exactamente como se muestra (en texto coloreado)"
+
 msgid "From this page you can email any list of recipients"
 msgstr ""
 "Desde esta página puedes enviar por correo electrónico cualquier lista de "
@@ -8312,6 +8315,9 @@ msgstr "Descripción de este método de pago que se mostrará al usuario"
 msgid "Enables field 'number', an unique numerical ID to reference it"
 msgstr "Habilita el campo \"número\", un ID numérico único para referenciarlo"
 
+msgid "If payment is not received, your registration may be cancelled"
+msgstr "Si no se recibe el pago, tu inscripción puede ser cancelada"
+
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Si tiene algún problema, póngase en contacto con nosotros y le ayudaremos"
@@ -8332,6 +8338,11 @@ msgstr ""
 
 msgid "This content is protected and cannot be downloaded or recorded"
 msgstr "Este contenido está protegido y no puede descargarse ni grabarse"
+
+msgid "Use the bank details below to make the transfer from your bank"
+msgstr ""
+"Utiliza los siguientes datos bancarios para realizar la transferencia desde "
+"tu banco"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Le pedimos que abone el importe solicitado para el siguiente plazo"
@@ -8457,6 +8468,11 @@ msgid "Now participants can submit collections, and you can review them"
 msgstr ""
 "Ahora los participantes pueden enviar colecciones, y usted puede revisarlas"
 
+msgid "Once the transfer is confirmed, upload the payment receipt below"
+msgstr ""
+"Una vez confirmada la transferencia, sube el comprobante de pago a "
+"continuación"
+
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr ""
 "Parte de la cuota de inscripción derivada únicamente del billete elegido"
@@ -8478,6 +8494,9 @@ msgstr ""
 msgid "They will be used automatically when you sign up for a new event"
 msgstr "¡Se usarán automáticamente cuando te inscribas a un nuevo evento"
 
+msgid "This is important, otherwise your payment will not be registered"
+msgstr "Esto es importante, de lo contrario no se registrará tu pago"
+
 msgid "This page shows the settings available for the membership voting"
 msgstr ""
 "Esta página muestra los ajustes disponibles para la votación de los miembros"
@@ -8486,10 +8505,6 @@ msgstr ""
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Para completar el proceso, basta con <a href='%(url)s'>hacer clic aquí</a>"
-
-msgid "Use the information below to request the transfer from your bank"
-msgstr ""
-"Utilice la siguiente información para solicitar la transferencia a su banco"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -8584,10 +8599,6 @@ msgstr "Su dirección completa, incluyendo calle, ciudad y país"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "si el personaje conoce la identidad del otro rasgo"
-
-#, python-format
-msgid "A payment of %(amount).2f %(currency)s was received for this event"
-msgstr "Se ha recibido un pago de %(amount).2f %(currency)s por este evento"
 
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
@@ -9187,6 +9198,12 @@ msgstr ""
 "si el personaje NO pertenece a este elemento, sino que sólo se hace "
 "referencia a él"
 
+#, python-format
+msgid ""
+"A payment of <b>%(amount).2f %(currency)s</b> was received for this event"
+msgstr ""
+"Se ha recibido un pago de <b>%(amount).2f %(currency)s</b> por este evento"
+
 msgid ""
 "Activate and configure advanced features for your organization and events"
 msgstr "Active y configure funciones avanzadas para su organización y eventos"
@@ -9465,6 +9482,12 @@ msgstr ""
 "Opcional - Indica si la entrada se puede regalar a otros participantes"
 
 msgid ""
+"Please mark the payment as completed on that page once the transfer is done"
+msgstr ""
+"Marca el pago como completado en esa página una vez realizada la "
+"transferencia"
+
+msgid ""
 "This page shows the handouts (information dissemination tools) of the event"
 msgstr ""
 "Esta página muestra los documentos (elementos de juego con información: "
@@ -9566,6 +9589,12 @@ msgid ""
 msgstr ""
 "Parte de la cuota de inscripción derivada únicamente de las opciones "
 "adicionales elegidas"
+
+msgid ""
+"Please upload the payment receipt on that page once the transfer is complete"
+msgstr ""
+"Por favor, sube el recibo de pago en esa página una vez completada la "
+"transferencia"
 
 #, python-format
 msgid ""
@@ -9729,12 +9758,6 @@ msgstr ""
 "Escribe aquí tu pregunta, petición o duda. ¡Estaremos encantados de "
 "responderte!"
 
-#, python-format
-msgid ""
-"You can complete the payment in just a few minutes <a "
-"href='%(url)s'>here</a>"
-msgstr "Puede completar el pago en unos minutos <a href='%(url)s'>aquí</a>"
-
 msgid ""
 "Enables to set a character as a 'mirror' for another, to hide it's true "
 "nature"
@@ -9882,6 +9905,14 @@ msgstr ""
 "Para participar en este evento, tendrá que pagar la cuota anual de "
 "afiliación de"
 
+#, python-format
+msgid ""
+"You must pay at least <b>%(amount).2f %(currency)s</b> within %(deadline)d "
+"days"
+msgstr ""
+"Debes pagar al menos <b>%(amount).2f %(currency)s</b> en un plazo de "
+"%(deadline)d días"
+
 msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
@@ -9992,6 +10023,12 @@ msgid ""
 msgstr ""
 "Si está marcada: permite exportar los caracteres y el registro en una página"
 " fácilmente legible"
+
+msgid ""
+"If payment is not received within this period, your registration may be "
+"cancelled"
+msgstr ""
+"Si no se recibe el pago en este plazo, tu inscripción podrá ser cancelada"
 
 msgid ""
 "Sets how often reminder emails are sent, in days (if not set, no emails are "
@@ -10395,6 +10432,14 @@ msgid ""
 msgstr ""
 "los usuarios no registrados serán redirigidos aquí, mientras que los "
 "usuarios registrados tendrán acceso normal"
+
+#, python-format
+msgid ""
+"<i>Payment overdue</i>: Please pay <b>%(amount).2f %(currency)s</b> as soon "
+"as possible"
+msgstr ""
+"<i>Pago atrasado</i>: Por favor, paga <b>%(amount).2f %(currency)s</b> lo "
+"antes posible"
 
 msgid ""
 "Attention: the operation is final, please double-check the assignments "
@@ -11179,13 +11224,6 @@ msgstr ""
 "Si está marcada: Oculta la posibilidad de que el participante modifique el "
 "importe de pago de sus entradas"
 
-msgid ""
-"Once the transfer is confirmed, request the slip (the receipt of "
-"confirmation) and upload it below"
-msgstr ""
-"Una vez confirmada la transferencia, solicite el resguardo (el recibo de "
-"confirmación) y cárguelo a continuación"
-
 #, python-format
 msgid ""
 "Users can sign up to the event accessing <a href='%(signup_url)s' "
@@ -11581,6 +11619,14 @@ msgstr ""
 "Esta página muestra lo que ocurrirá cuando consigne las cantidades de "
 "almacén basándose en las asignaciones actuales"
 
+#, python-format
+msgid ""
+"You can find all the information needed to complete the transfer <a "
+"href='%(url)s'>on the payment page</a>"
+msgstr ""
+"Puedes encontrar toda la información necesaria para completar la "
+"transferencia <a href='%(url)s'>en la página de pago</a>"
+
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "
 "and optionally assigns a result"
@@ -11629,13 +11675,6 @@ msgid ""
 msgstr ""
 "Porcentaje que debe retener el sistema de pago: introduzca el valor como un "
 "número, sin el símbolo de porcentaje"
-
-msgid ""
-"Please check that you have copied the entire message for payment exactly (in"
-" coloured text), it is important"
-msgstr ""
-"Por favor asegúrate de que utilizas el concepto del pago indicado abajo en "
-"texto coloreado, ¡es importante"
 
 msgid ""
 "Time window (in hours) during which the user can revoke a chosen ability and"
@@ -12358,6 +12397,14 @@ msgstr ""
 "Cuando se muestra el texto al participante, el número se sustituye "
 "automáticamente por el nombre del personaje y un enlace a su perfil"
 
+#, python-format
+msgid ""
+"You can choose your payment method and find all the information needed to "
+"complete the transfer <a href='%(url)s'>on the payment page</a>"
+msgstr ""
+"Puedes elegir tu método de pago y encontrar toda la información necesaria "
+"para completar la transferencia <a href='%(url)s'>en la página de pago</a>"
+
 msgid ""
 "If the first name shown on your documents is different from the one you "
 "prefer to use, then write it here; otherwise leave this field empty"
@@ -12380,6 +12427,15 @@ msgstr ""
 "Normalmente se muestran todos los campos de caracteres (públicos o "
 "privados); con esta configuración puede seleccionar cuáles mostrar en cada "
 "momento"
+
+#, python-format
+msgid ""
+"To pay by bank transfer, visit the <a href='%(url)s'>payment page</a> to "
+"find all necessary details (such as the IBAN and payment reference)"
+msgstr ""
+"Para pagar por transferencia bancaria, visita la <a href='%(url)s'>página de"
+" pago</a> para encontrar todos los detalles necesarios (como el IBAN y la "
+"referencia de pago)"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "
@@ -12545,6 +12601,14 @@ msgid ""
 msgstr ""
 "Puedes insertar comandos CSS, se mostrarán en todas las páginas de tu "
 "organización. De este modo podrás personalizar libremente su apariencia."
+
+msgid ""
+"Important: after completing the transfer, you must return to this page and "
+"submit the form at the bottom, otherwise your payment will not be registered"
+msgstr ""
+"Importante: después de completar la transferencia, debes volver a esta "
+"página y enviar el formulario al final, de lo contrario tu pago no se "
+"registrará"
 
 msgid ""
 "Below you will find all the features available; you can write a search "
@@ -12770,16 +12834,6 @@ msgstr ""
 "enviada a la compañía de seguros. Sólo se muestran los afiliados que han "
 "renovado su afiliación en este año civil, por orden de renovación"
 
-#, python-format
-msgid ""
-"<i>Payment due</i> - You must pay <b>%(amount).2f %(currency)s</b> as soon "
-"as possible. Make your payment <a href='%(url)s'>on this page</a>. If we do "
-"not receive payment, your registration may be cancelled."
-msgstr ""
-"<i>Pago pendiente</i> - Debe pagar <b>%(amount).2f %(currency)s</b> lo antes"
-" posible. Realice su pago <a href='%(url)s'>en esta página</a>. Si no "
-"recibimos el pago, su afiliación podrá ser cancelada."
-
 msgid ""
 "Upload your portrait photo. It will be shown to other participants to help "
 "recognize you in the event. Choose a photo that you would put in an official"
@@ -12788,16 +12842,6 @@ msgstr ""
 "Sube tu foto de retrato. Se mostrará a los demás participantes para ayudar a"
 " reconocerle en el evento. Elige una foto que pondrías en un documento "
 "oficial (en la que estés solo, centrada en tu cara)"
-
-#, python-format
-msgid ""
-"You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days."
-" Make your payment <a href='%(url)s'>on this page</a>. If we do not receive "
-"payment by the deadline, your registration may be cancelled."
-msgstr ""
-"Debes pagar al menos <b>%(amount).2f %(currency)s</b> antes de %(deadline)d "
-"días. Realice el pago <a href='%(url)s'>en esta página</a>. Si no recibimos "
-"el pago antes de la fecha límite, su afiliación podrá ser cancelada."
 
 msgid ""
 "Indicates the ratio between reduced and patron tickets, multiplied by 10. "

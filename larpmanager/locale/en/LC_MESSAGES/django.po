@@ -3065,15 +3065,39 @@ msgid ""
 "is not permitted"
 msgstr ""
 
+msgid "Review the users that are missing the event's deadlines"
+msgstr ""
+
 #, python-format
 msgid ""
-"You can complete the payment in just a few minutes <a href='%(url)s'>here</a>"
+"You can choose your payment method and find all the information needed to "
+"complete the transfer <a href='%(url)s'>on the payment page</a>"
+msgstr ""
+
+#, python-format
+msgid ""
+"You can find all the information needed to complete the transfer <a "
+"href='%(url)s'>on the payment page</a>"
 msgstr ""
 
 msgid "Let us know if you encounter any issues or need assistance"
 msgstr ""
 
-msgid "Review the users that are missing the event's deadlines"
+#, python-format
+msgid ""
+"To pay by bank transfer, visit the <a href='%(url)s'>payment page</a> to "
+"find all necessary details (such as the IBAN and payment reference)"
+msgstr ""
+
+msgid ""
+"Please upload the payment receipt on that page once the transfer is complete"
+msgstr ""
+
+msgid ""
+"Please mark the payment as completed on that page once the transfer is done"
+msgstr ""
+
+msgid "This is important, otherwise your payment will not be registered"
 msgstr ""
 
 #, python-format
@@ -3139,7 +3163,8 @@ msgid "Payment for %(event)s"
 msgstr ""
 
 #, python-format
-msgid "A payment of %(amount).2f %(currency)s was received for this event"
+msgid ""
+"A payment of <b>%(amount).2f %(currency)s</b> was received for this event"
 msgstr ""
 
 #, python-format
@@ -3186,16 +3211,22 @@ msgstr ""
 
 #, python-format
 msgid ""
-"You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days. "
-"Make your payment <a href='%(url)s'>on this page</a>. If we do not receive "
-"payment by the deadline, your registration may be cancelled."
+"You must pay at least <b>%(amount).2f %(currency)s</b> within %(deadline)d "
+"days"
+msgstr ""
+
+msgid ""
+"If payment is not received within this period, your registration may be "
+"cancelled"
 msgstr ""
 
 #, python-format
 msgid ""
-"<i>Payment due</i> - You must pay <b>%(amount).2f %(currency)s</b> as soon "
-"as possible. Make your payment <a href='%(url)s'>on this page</a>. If we do "
-"not receive payment, your registration may be cancelled."
+"<i>Payment overdue</i>: Please pay <b>%(amount).2f %(currency)s</b> as soon "
+"as possible"
+msgstr ""
+
+msgid "If payment is not received, your registration may be cancelled"
 msgstr ""
 
 #, python-format
@@ -5333,30 +5364,15 @@ msgstr ""
 msgid "Follow the steps below"
 msgstr ""
 
-msgid "Use the information below to request the transfer from your bank"
-msgstr ""
-
 msgid ""
-"Please check that you have copied the entire message for payment exactly (in "
-"coloured text), it is important"
+"Important: after completing the transfer, you must return to this page and "
+"submit the form at the bottom, otherwise your payment will not be registered"
 msgstr ""
 
-msgid ""
-"Once the transfer is confirmed, request the slip (the receipt of "
-"confirmation) and upload it below"
+msgid "Use the bank details below to make the transfer from your bank"
 msgstr ""
 
-msgid "You can upload a file in pdf format, or an image"
-msgstr ""
-
-msgid ""
-"Once the transfer is confirmed, submit the form below to notify us of your "
-"payment"
-msgstr ""
-
-msgid ""
-"Please be careful to perform these steps - otherwise your  payment will not "
-"be processed"
+msgid "Copy the causal exactly as shown (in coloured text)"
 msgstr ""
 
 msgid "Currency"
@@ -5372,6 +5388,17 @@ msgid "Swift"
 msgstr ""
 
 msgid "Bank address"
+msgstr ""
+
+msgid "Once the transfer is confirmed, upload the payment receipt below"
+msgstr ""
+
+msgid "You can upload a file in pdf format, or an image"
+msgstr ""
+
+msgid ""
+"Once the transfer is confirmed, submit the form below to notify us of your "
+"payment"
 msgstr ""
 
 msgid "Click on the image below (Paypal.me) to open the payment"
@@ -5394,6 +5421,11 @@ msgstr ""
 msgid ""
 "Once you have made the payment, return to this page and submit the form "
 "below to notify us of your payment"
+msgstr ""
+
+msgid ""
+"Please be careful to perform these steps - otherwise your  payment will not "
+"be processed"
 msgstr ""
 
 msgid "Pending invoice approvals"
