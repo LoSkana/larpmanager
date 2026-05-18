@@ -5946,12 +5946,7 @@ msgstr ""
 msgid "Change registration"
 msgstr ""
 
-msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-
-msgid "cancel your registrations"
+msgid "To update your registration, change the fields and click confirm"
 msgstr ""
 
 msgid "Personal code"
@@ -5970,9 +5965,7 @@ msgid ""
 "event registration"
 msgstr ""
 
-msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
+msgid "Please fill out the form below and click confirm to register"
 msgstr ""
 
 msgid "View limited ticket options"

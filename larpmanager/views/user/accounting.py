@@ -41,7 +41,7 @@ from larpmanager.accounting.gateway import (
 )
 from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.accounting.member import get_membership_fee_for_reg, info_accounting
-from larpmanager.accounting.payment import get_payment_form
+from larpmanager.accounting.payment import auto_process_single_method, get_payment_form
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features
@@ -453,6 +453,15 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
             # Process payment through selected gateway
             get_payment_form(request, form, PaymentType.REGISTRATION, context, key)
     else:
+        auto_process_single_method(
+            request,
+            PaymentForm,
+            PaymentType.REGISTRATION,
+            context,
+            context["quota"],
+            invoice_key=key,
+            extra_kwargs={"registration": registration},
+        )
         form = PaymentForm(registration=registration, context=context)
     context["form"] = form
 
@@ -540,6 +549,8 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
     if method:
         context["def_method"] = method
 
+    context["membership_fee"] = get_association_config(context["association_id"], "membership_fee", default_value=0)
+
     # Process form submission or render initial form
     if request.method == "POST":
         form = MembershipForm(request.POST, context=context)
@@ -547,11 +558,17 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
             # Generate payment form for valid membership submission
             get_payment_form(request, form, PaymentType.MEMBERSHIP, context, key)
     else:
+        auto_process_single_method(
+            request,
+            MembershipForm,
+            PaymentType.MEMBERSHIP,
+            context,
+            context["membership_fee"],
+            invoice_key=key,
+        )
         form = MembershipForm(context=context)
 
-    # Add form and membership fee to context for template
     context["form"] = form
-    context["membership_fee"] = get_association_config(context["association_id"], "membership_fee", default_value=0)
 
     return render(request, "larpmanager/member/accounting_membership.html", context)
 

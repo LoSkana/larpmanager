@@ -4996,9 +4996,6 @@ msgstr "Korzystanie z aktywów stron trzecich"
 msgid "We're sorry to see you go"
 msgstr "Przykro nam, że odchodzisz"
 
-msgid "cancel your registrations"
-msgstr "anulować rejestrację"
-
 msgid "choice value not provided"
 msgstr "nie podano wartości wyboru"
 
@@ -8164,6 +8161,10 @@ msgstr ""
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Zarządzanie głosowaniami w celu przypisania ról w organizacji"
 
+msgid "Please fill out the form below and click confirm to register"
+msgstr ""
+"Wypełnij poniższy formularz i kliknij potwierdź, aby się zarejestrować"
+
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Ta postać jest nieaktywna i nie można jej przypisać do graczy"
 
@@ -8493,6 +8494,10 @@ msgstr "Ta strona pokazuje ustawienia dostępne dla głosowania członków"
 #, python-format
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr "Aby zakończyć proces, wystarczy <a href='%(url)s'>kliknąć tutaj</a>"
+
+msgid "To update your registration, change the fields and click confirm"
+msgstr ""
+"Aby zaktualizować rejestrację, zmień pola i kliknij przycisk Potwierdź"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -9966,13 +9971,6 @@ msgstr ""
 " (jeśli nie ustawiono, wiadomości nie są wysyłane)"
 
 msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
-msgstr ""
-"Aby zarejestrować się na wydarzenie, należy wypełnić poniższy formularz i "
-"kliknąć przycisk Potwierdź"
-
-msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
 " most"
 msgstr ""
@@ -11244,13 +11242,6 @@ msgid ""
 msgstr ""
 "Jesteś stałym członkiem naszej organizacji. Możesz zapisać się na wydarzenia"
 " organizowane dla naszych członków"
-
-msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-"Możesz zaktualizować swoją rejestrację, po prostu zmieniając wartość pól i "
-"klikając przycisk Potwierdź"
 
 msgid ""
 "You have requested a specific page of an organisation, but it is not "

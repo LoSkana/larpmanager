@@ -6,6 +6,15 @@
 {% block content %}
     <div class="user_resize platform">
         {% if invoice %}
+            {% if membership_fee_bundled %}
+                <p>
+                    {% trans "The total registration fee is" %}: <b>{{ registration.tot_iscr|format_decimal }}{{ currency_symbol }}</b>
+                </p>
+                <p>
+                    {% trans "Membership fee" %} {{ year }}: <b>{{ fee }}{{ currency_symbol }}</b>
+                </p>
+                <hr />
+            {% endif %}
             {% include "elements/payment_go.html" %}
         {% else %}
             <p>

@@ -4996,9 +4996,6 @@ msgstr "Kolmannen osapuolen omaisuuden käyttö"
 msgid "We're sorry to see you go"
 msgstr "Olemme pahoillamme, että lähdet"
 
-msgid "cancel your registrations"
-msgstr "peruuta ilmoittautumisesi"
-
 msgid "choice value not provided"
 msgstr "valinnan arvoa ei ole annettu"
 
@@ -8145,6 +8142,9 @@ msgid "Manage votes for the assignment of roles in the organization"
 msgstr ""
 "Hallinnoi äänestyksiä, jotka koskevat roolien jakamista organisaatiossa"
 
+msgid "Please fill out the form below and click confirm to register"
+msgstr "Täytä alla oleva lomake ja klikkaa Vahvista rekisteröityäksesi"
+
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Tämä hahmo on inaktiivinen, eikä sitä voi antaa pelaajille"
 
@@ -8463,6 +8463,11 @@ msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Saat prosessin päätökseen yksinkertaisesti <a href='%(url)s'>klikkaa "
 "tästä</a>"
+
+msgid "To update your registration, change the fields and click confirm"
+msgstr ""
+"Voit päivittää rekisteröintiäsi muuttamalla kenttiä ja napsauttamalla "
+"Vahvista"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -9890,13 +9895,6 @@ msgstr ""
 "ei ole asetettu, sähköposteja ei lähetetä)"
 
 msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
-msgstr ""
-"Voit ilmoittautua tapahtumaan täyttämällä seuraavan lomakkeen ja "
-"klikkaamalla Vahvista"
-
-msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
 " most"
 msgstr ""
@@ -11153,13 +11151,6 @@ msgid ""
 msgstr ""
 "Olet järjestömme vakituinen jäsen. Voit tilata jäsenillemme järjestettyjä "
 "tapahtumia"
-
-msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-"Voit päivittää ilmoittautumisesi yksinkertaisesti muuttamalla kenttien "
-"arvoja ja napsauttamalla vahvista"
 
 msgid ""
 "You have requested a specific page of an organisation, but it is not "

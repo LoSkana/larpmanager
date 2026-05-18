@@ -4996,9 +4996,6 @@ msgstr "Utilisation d'actifs de tiers"
 msgid "We're sorry to see you go"
 msgstr "Nous sommes désolés de vous voir partir"
 
-msgid "cancel your registrations"
-msgstr "annuler votre inscription"
-
 msgid "choice value not provided"
 msgstr "valeur de choix non fournie"
 
@@ -8268,6 +8265,10 @@ msgstr ""
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Gérer les votes pour l'attribution des rôles dans l'organisation"
 
+msgid "Please fill out the form below and click confirm to register"
+msgstr ""
+"Remplis le formulaire ci-dessous et clique sur confirmer pour t'inscrire"
+
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Ce personnage est inactif et ne peut pas être assigné à des joueurs"
 
@@ -8636,6 +8637,11 @@ msgstr ""
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Pour terminer le processus, il suffit de <a href='%(url)s'>cliquer ici</a>"
+
+msgid "To update your registration, change the fields and click confirm"
+msgstr ""
+"Pour mettre à jour ton inscription, modifie les champs et clique sur "
+"confirmer"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr "Fichier vidéo ou audio à diffuser (recommandé : MP4, WebM, MP3)"
@@ -10213,13 +10219,6 @@ msgstr ""
 "valeur n'est pas définie, aucun courriel n'est envoyé)"
 
 msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
-msgstr ""
-"Pour vous inscrire à l'événement, veuillez remplir le formulaire suivant et "
-"cliquer sur 'confirmer'"
-
-msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
 " most"
 msgstr ""
@@ -11504,13 +11503,6 @@ msgid ""
 msgstr ""
 "Vous êtes un membre enregistré de notre association. Vous pouvez vous "
 "inscrire aux événements organisés pour nos membres"
-
-msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-"Vous pouvez mettre à jour votre inscription en modifiant simplement la "
-"valeur des champs et en cliquant sur 'confirmer'"
 
 msgid ""
 "You have requested a specific page of an organisation, but it is not "

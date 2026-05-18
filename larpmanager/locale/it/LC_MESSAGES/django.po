@@ -4996,9 +4996,6 @@ msgstr "Godimento di beni di terzi"
 msgid "We're sorry to see you go"
 msgstr "Ci dispiace vederti andare via"
 
-msgid "cancel your registrations"
-msgstr "cancellala tua iscrizione"
-
 msgid "choice value not provided"
 msgstr "valore di scelta non fornito"
 
@@ -8183,6 +8180,9 @@ msgid "Manage votes for the assignment of roles in the organization"
 msgstr ""
 "Gestisci le votazioni per l'assegnazione dei ruoli nell'organizzazione"
 
+msgid "Please fill out the form below and click confirm to register"
+msgstr "Compila il modulo sottostante e clicca su conferma per registrarti"
+
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Questo personaggio è inattivo e non può essere assegnato"
 
@@ -8529,6 +8529,10 @@ msgstr ""
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Per completare il processo, è sufficiente <a href='%(url)s'>cliccare qui</a>"
+
+msgid "To update your registration, change the fields and click confirm"
+msgstr ""
+"Per aggiornare la tua registrazione, modifica i campi e clicca su conferma"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -10081,12 +10085,6 @@ msgstr ""
 "è impostata, non vengono inviate e-mail)"
 
 msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
-msgstr ""
-"Per iscriverti all'evento, compila il seguente form, e clicca su conferma"
-
-msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
 " most"
 msgstr ""
@@ -11369,13 +11367,6 @@ msgid ""
 msgstr ""
 "Sei un socio regolarmente iscritto alla nostra Associazione. Puoi iscriverti"
 " agli eventi organizzati per i nostri soci"
-
-msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-"Puoi aggiornare la tua iscrizione semplicemente modificando il valore dei "
-"campi e cliccando conferma"
 
 msgid ""
 "You have requested a specific page of an organisation, but it is not "

@@ -4996,9 +4996,6 @@ msgstr "Bruk av tredjeparts eiendeler"
 msgid "We're sorry to see you go"
 msgstr "Vi er lei oss for at du må gå"
 
-msgid "cancel your registrations"
-msgstr "avbestille registreringen"
-
 msgid "choice value not provided"
 msgstr "valgverdi ikke oppgitt"
 
@@ -8143,6 +8140,10 @@ msgstr "Administrer engangskoder for sikker tilgang til video-/lydinnhold"
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Administrere avstemninger for tildeling av roller i organisasjonen"
 
+msgid "Please fill out the form below and click confirm to register"
+msgstr ""
+"Vennligst fyll ut skjemaet nedenfor og klikk bekreft for å registrere deg"
+
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Denne karakteren er inaktiv og kan ikke tildeles spillere"
 
@@ -8468,6 +8469,9 @@ msgstr ""
 #, python-format
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr "For å fullføre prosessen, bare <a href='%(url)s'>klikk her</a>"
+
+msgid "To update your registration, change the fields and click confirm"
+msgstr "For å oppdatere registreringen, endre feltene og klikk bekreft"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr "Video- eller lydfil som skal strømmes (anbefalt: MP4, WebM, MP3)"
@@ -9887,13 +9891,6 @@ msgstr ""
 " sendes ingen e-poster)"
 
 msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
-msgstr ""
-"For å melde deg på arrangementet, vennligst fyll ut følgende skjema og klikk"
-" på bekreft"
-
-msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
 " most"
 msgstr ""
@@ -11156,13 +11153,6 @@ msgid ""
 msgstr ""
 "Du er et registrert medlem av foreningen vår. Du kan melde deg på "
 "arrangementer som arrangeres for våre medlemmer"
-
-msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-"Du kan oppdatere registreringen ved å endre verdien i feltene og klikke på "
-"bekreft"
 
 msgid ""
 "You have requested a specific page of an organisation, but it is not "

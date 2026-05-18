@@ -4996,9 +4996,6 @@ msgstr "Použití majetku třetích stran"
 msgid "We're sorry to see you go"
 msgstr "Je nám líto, že odcházíte"
 
-msgid "cancel your registrations"
-msgstr "zrušit svou registraci"
-
 msgid "choice value not provided"
 msgstr "hodnota výběru není uvedena"
 
@@ -8141,6 +8138,11 @@ msgstr ""
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Řídit hlasování o přidělování rolí v organizaci"
 
+msgid "Please fill out the form below and click confirm to register"
+msgstr ""
+"Vyplňte prosím níže uvedený formulář a kliknutím na tlačítko potvrdit se "
+"zaregistrujte"
+
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Tato postava je neaktivní a nelze ji přiřadit k hráčům"
 
@@ -8437,6 +8439,11 @@ msgstr ""
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Chcete-li proces dokončit, jednoduše <a href='%(url)s'>klikněte zde</a>"
+
+msgid "To update your registration, change the fields and click confirm"
+msgstr ""
+"Chcete-li aktualizovat svou registraci, změňte pole a klikněte na tlačítko "
+"potvrdit"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -9811,13 +9818,6 @@ msgstr ""
 "nastaveno, nejsou zasílány žádné e-maily)"
 
 msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
-msgstr ""
-"Chcete-li se na akci přihlásit, vyplňte prosím následující formulář a "
-"klikněte na tlačítko potvrdit"
-
-msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
 " most"
 msgstr ""
@@ -11051,13 +11051,6 @@ msgid ""
 msgstr ""
 "Jste registrovaným členem našeho sdružení. Můžete se registrovat na akce "
 "pořádané pro naše členy"
-
-msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-"Svou registraci můžete aktualizovat jednoduchou změnou hodnoty polí a "
-"kliknutím na tlačítko potvrdit"
 
 msgid ""
 "You have requested a specific page of an organisation, but it is not "
