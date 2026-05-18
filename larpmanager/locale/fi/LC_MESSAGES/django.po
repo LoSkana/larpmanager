@@ -7441,6 +7441,10 @@ msgstr "Myönnetty %(amount).2f %(elements)s '%(reason)s' varten"
 msgid "Complete the setup to unlock full platform features"
 msgstr "Suorita asennus loppuun, jotta voit avata kaikki alustan ominaisuudet"
 
+msgid "Copy the causal exactly as shown (in coloured text)"
+msgstr ""
+"Kopioi syy-yhteys täsmälleen kuvan mukaisesti (värillisellä tekstillä)"
+
 msgid "From this page you can email any list of recipients"
 msgstr ""
 "Tältä sivulta voit lähettää sähköpostia mille tahansa "
@@ -8258,6 +8262,9 @@ msgstr ""
 "Ottaa käyttöön kentän 'number', joka on yksilöllinen numeerinen tunnus, "
 "jolla siihen voidaan viitata"
 
+msgid "If payment is not received, your registration may be cancelled"
+msgstr "Jos maksua ei ole vastaanotettu, ilmoittautuminen voidaan peruuttaa"
+
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Jos sinulla on ongelmia, ota meihin yhteyttä, niin autamme sinua"
 
@@ -8279,6 +8286,9 @@ msgstr ""
 
 msgid "This content is protected and cannot be downloaded or recorded"
 msgstr "Tämä sisältö on suojattu, eikä sitä voi ladata tai tallentaa"
+
+msgid "Use the bank details below to make the transfer from your bank"
+msgstr "Käytä alla olevia pankkitietoja tehdäksesi siirron pankistasi"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Pyydämme sinua maksamaan pyydetyn summan seuraavaa maksuerää varten"
@@ -8398,6 +8408,9 @@ msgid "Now participants can submit collections, and you can review them"
 msgstr ""
 "Nyt osallistujat voivat lähettää kokoelmia, ja sinä voit tarkastella niitä"
 
+msgid "Once the transfer is confirmed, upload the payment receipt below"
+msgstr "Kun siirto on vahvistettu, lataa alla oleva maksukuitti"
+
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Osa ilmoittautumismaksusta on peräisin ainoastaan valitusta lipusta"
 
@@ -8415,6 +8428,9 @@ msgstr ""
 msgid "They will be used automatically when you sign up for a new event"
 msgstr "Niitä käytetään automaattisesti, kun ilmoittaudut uuteen tapahtumaan"
 
+msgid "This is important, otherwise your payment will not be registered"
+msgstr "Tämä on tärkeää, sillä muuten maksuasi ei rekisteröidä"
+
 msgid "This page shows the settings available for the membership voting"
 msgstr "Tällä sivulla näkyvät jäsenäänestyksen asetukset"
 
@@ -8423,9 +8439,6 @@ msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Saat prosessin päätökseen yksinkertaisesti <a href='%(url)s'>klikkaa "
 "tästä</a>"
-
-msgid "Use the information below to request the transfer from your bank"
-msgstr "Pyydä siirtoa pankistasi alla olevien tietojen avulla"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -8517,10 +8530,6 @@ msgstr "Täydellinen asuinosoitteesi, mukaan lukien katu, kaupunki ja maa"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "onko hahmo tietoinen toisen ominaisuuden henkilöllisyydestä"
-
-#, python-format
-msgid "A payment of %(amount).2f %(currency)s was received for this event"
-msgstr "Tapahtumaan on saatu maksusuoritus %(amount).2f %(currency)s"
 
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
@@ -9077,6 +9086,11 @@ msgid ""
 "if the character does NOT belong to this element, but is only referenced"
 msgstr "jos hahmo EI kuulu tähän elementtiin, mutta siihen viitataan"
 
+#, python-format
+msgid ""
+"A payment of <b>%(amount).2f %(currency)s</b> was received for this event"
+msgstr "Tapahtumaan on saatu maksusuoritus <b>%(amount).2f %(currency)s</b>"
+
 msgid ""
 "Activate and configure advanced features for your organization and events"
 msgstr ""
@@ -9338,6 +9352,10 @@ msgstr ""
 "Valinnainen - Ilmoittaa, voidaanko lippu lahjoittaa muille osallistujille"
 
 msgid ""
+"Please mark the payment as completed on that page once the transfer is done"
+msgstr "Merkitse maksu suoritetuksi kyseisellä sivulla, kun siirto on tehty"
+
+msgid ""
 "This page shows the handouts (information dissemination tools) of the event"
 msgstr ""
 "Tältä sivulta löytyvät tapahtuman käsiohjelmat (tiedonlevitysvälineet)"
@@ -9433,6 +9451,10 @@ msgid ""
 msgstr ""
 "Osa ilmoittautumismaksusta, joka on peräisin ainoastaan valituista "
 "lisävaihtoehdoista"
+
+msgid ""
+"Please upload the payment receipt on that page once the transfer is complete"
+msgstr "Lataa maksukuitti kyseiselle sivulle, kun siirto on suoritettu"
 
 #, python-format
 msgid ""
@@ -9585,13 +9607,6 @@ msgstr ""
 "Kirjoita kysymyksesi, pyyntösi tai huolenaiheesi tähän. Vastaamme "
 "mielellämme!"
 
-#, python-format
-msgid ""
-"You can complete the payment in just a few minutes <a "
-"href='%(url)s'>here</a>"
-msgstr ""
-"Voit suorittaa maksun muutamassa minuutissa <a href='%(url)s'>täällä</a>"
-
 msgid ""
 "Enables to set a character as a 'mirror' for another, to hide it's true "
 "nature"
@@ -9730,6 +9745,14 @@ msgstr ""
 "Osallistuaksesi tähän tapahtumaan sinun on maksettava vuotuinen jäsenmaksu, "
 "joka on seuraava"
 
+#, python-format
+msgid ""
+"You must pay at least <b>%(amount).2f %(currency)s</b> within %(deadline)d "
+"days"
+msgstr ""
+"Sinun on maksettava vähintään <b>%(amount).2f %(currency)s</b> %(deadline)d "
+"päivän kuluessa"
+
 msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
@@ -9837,6 +9860,13 @@ msgid ""
 msgstr ""
 "Jos valittuna: sallii hahmojen ja ilmoittautumisten viennin helposti "
 "luettavalla sivulla"
+
+msgid ""
+"If payment is not received within this period, your registration may be "
+"cancelled"
+msgstr ""
+"Jos maksua ei ole vastaanotettu tämän ajan kuluessa, rekisteröinti voidaan "
+"peruuttaa"
 
 msgid ""
 "Sets how often reminder emails are sent, in days (if not set, no emails are "
@@ -10231,6 +10261,14 @@ msgid ""
 msgstr ""
 "rekisteröimättömät käyttäjät ohjataan tänne, kun taas rekisteröidyt "
 "käyttäjät saavat normaalin pääsyn"
+
+#, python-format
+msgid ""
+"<i>Payment overdue</i>: Please pay <b>%(amount).2f %(currency)s</b> as soon "
+"as possible"
+msgstr ""
+"<i>Maksu myöhässä</i>: Maksakaa <b>%(amount).2f %(currency)s</b> "
+"mahdollisimman pian"
 
 msgid ""
 "Attention: the operation is final, please double-check the assignments "
@@ -11003,13 +11041,6 @@ msgstr ""
 "Jos valitaan: Piilottaa osallistujan mahdollisuuden muuttaa maksun määrää "
 "merkintöjen osalta"
 
-msgid ""
-"Once the transfer is confirmed, request the slip (the receipt of "
-"confirmation) and upload it below"
-msgstr ""
-"Kun siirto on vahvistettu, pyydä kuitti (vahvistuskuitti) ja lataa se alla "
-"olevaan osoitteeseen"
-
 #, python-format
 msgid ""
 "Users can sign up to the event accessing <a href='%(signup_url)s' "
@@ -11402,6 +11433,14 @@ msgstr ""
 "Tällä sivulla näytetään, mitä tapahtuu, kun sitoudut varastomääriin "
 "nykyisten toimeksiantojen perusteella"
 
+#, python-format
+msgid ""
+"You can find all the information needed to complete the transfer <a "
+"href='%(url)s'>on the payment page</a>"
+msgstr ""
+"Löydät kaikki siirron suorittamiseen tarvittavat tiedot <a "
+"href='%(url)s'>maksusivulta</a>"
+
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "
 "and optionally assigns a result"
@@ -11450,13 +11489,6 @@ msgid ""
 msgstr ""
 "Maksujärjestelmän pidättämä prosenttiosuus - arvo ilmoitetaan numerona ilman"
 " prosenttimerkkiä"
-
-msgid ""
-"Please check that you have copied the entire message for payment exactly (in"
-" coloured text), it is important"
-msgstr ""
-"Tarkista, että olet kopioinut koko maksuviestin tarkasti (värillisenä "
-"tekstinä), sillä se on tärkeää"
 
 msgid ""
 "Time window (in hours) during which the user can revoke a chosen ability and"
@@ -12175,6 +12207,14 @@ msgstr ""
 "Kun teksti näytetään osallistujalle, numero korvataan automaattisesti hahmon"
 " nimellä ja linkillä hänen profiiliinsa"
 
+#, python-format
+msgid ""
+"You can choose your payment method and find all the information needed to "
+"complete the transfer <a href='%(url)s'>on the payment page</a>"
+msgstr ""
+"Voit valita maksutavan ja löytää kaikki tarvittavat tiedot siirron "
+"suorittamiseksi <a href='%(url)s'>maksusivulta</a>"
+
 msgid ""
 "If the first name shown on your documents is different from the one you "
 "prefer to use, then write it here; otherwise leave this field empty"
@@ -12196,6 +12236,15 @@ msgid ""
 msgstr ""
 "Normaalisti kaikki hahmokentät (julkiset tai yksityiset) näytetään; tällä "
 "asetuksella voit valita, mitkä kentät näytetään milloinkin"
+
+#, python-format
+msgid ""
+"To pay by bank transfer, visit the <a href='%(url)s'>payment page</a> to "
+"find all necessary details (such as the IBAN and payment reference)"
+msgstr ""
+"Jos haluat maksaa pankkisiirrolla, käy <a href='%(url)s'>maksusivulla</a>, "
+"josta löydät kaikki tarvittavat tiedot (kuten IBAN-tilinumeron ja "
+"maksuviitteen)"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "
@@ -12356,6 +12405,13 @@ msgid ""
 msgstr ""
 "Lisää vapaasti CSS-komentoja, ne ilmoitetaan kaikilla sivuilla "
 "organisaatiosi tilassa. Näin voit muokata vapaasti ulkonäköä."
+
+msgid ""
+"Important: after completing the transfer, you must return to this page and "
+"submit the form at the bottom, otherwise your payment will not be registered"
+msgstr ""
+"Tärkeää: Kun olet suorittanut siirron, sinun on palattava tälle sivulle ja "
+"lähetettävä alareunassa oleva lomake, muuten maksuasi ei rekisteröidä"
 
 msgid ""
 "Below you will find all the features available; you can write a search "
@@ -12576,17 +12632,6 @@ msgstr ""
 "vakuutusyhtiölle lähetettäväksi. Se näyttää vain ne jäsenet, jotka ovat "
 "uusineet jäsenyytensä tämän kalenterivuoden aikana, uusimisjärjestyksessä"
 
-#, python-format
-msgid ""
-"<i>Payment due</i> - You must pay <b>%(amount).2f %(currency)s</b> as soon "
-"as possible. Make your payment <a href='%(url)s'>on this page</a>. If we do "
-"not receive payment, your registration may be cancelled."
-msgstr ""
-"<i>Maksun eräpäivä</i> - Sinun on maksettava <b>%(amount).2f "
-"%(currency)s</b> mahdollisimman pian. Suorita maksusi <a "
-"href='%(url)s'>tässä sivulla</a>. Jos emme saa maksua, ilmoittautumisesi "
-"voidaan peruuttaa."
-
 msgid ""
 "Upload your portrait photo. It will be shown to other participants to help "
 "recognize you in the event. Choose a photo that you would put in an official"
@@ -12595,16 +12640,6 @@ msgstr ""
 "Lataa muotokuvasi. Se näytetään muille osallistujille, jotta sinut voidaan "
 "tunnistaa tapahtumassa. Valitse valokuva, jonka laittaisit viralliseen "
 "asiakirjaan (jossa olet yksin, kasvosi keskitettyinä)"
-
-#, python-format
-msgid ""
-"You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days."
-" Make your payment <a href='%(url)s'>on this page</a>. If we do not receive "
-"payment by the deadline, your registration may be cancelled."
-msgstr ""
-"Sinun on maksettava vähintään <b>%(amount).2f %(currency)s</b> %(deadline)d "
-"päivään mennessä. Suorita maksusi <a href='%(url)s'>tässä sivulla</a>. Jos "
-"emme saa maksua määräaikaan mennessä, ilmoittautumisesi voidaan peruuttaa."
 
 msgid ""
 "Indicates the ratio between reduced and patron tickets, multiplied by 10. "
