@@ -4705,9 +4705,6 @@ msgstr "Apart lidmaatschapsgeld"
 msgid "Show available factions"
 msgstr "Beschikbare facties tonen"
 
-msgid "Thanks for your support"
-msgstr "Bedankt voor je steun"
-
 msgid "The genre of your event"
 msgstr "Het genre van je evenement"
 
@@ -5166,6 +5163,9 @@ msgstr "Naam van de badge die wordt uitgereikt"
 msgid "Now you can create outflows"
 msgstr "Nu kun je uitstromen maken"
 
+msgid "Please fill in your profile"
+msgstr "Vul je profiel in"
+
 msgid "Pre-registration cancelled!"
 msgstr "Voorinschrijving geannuleerd!"
 
@@ -5204,9 +5204,6 @@ msgstr "Wil je het veranderen"
 
 msgid "Your organization's country"
 msgstr "Het land van je organisatie"
-
-msgid "please fill in your profile"
-msgstr "vul je profiel in"
 
 msgid "Authenticator device removed"
 msgstr "Authenticatieapparaat verwijderd"
@@ -5257,6 +5254,9 @@ msgstr "Verzoek onderdanig lid"
 msgid "No accepted membership found"
 msgstr "Geen geaccepteerd lidmaatschap gevonden"
 
+msgid "Payment pending confirmation"
+msgstr "Betaling in afwachting van bevestiging"
+
 msgid "Player customisation updated"
 msgstr "Spelersaanpassing bijgewerkt"
 
@@ -5278,9 +5278,6 @@ msgstr "Afbeelding wordt geüpload, even geduld"
 
 msgid "Your request has been logged"
 msgstr "Uw verzoek is geregistreerd"
-
-msgid "payment pending confirmation"
-msgstr "betaling in afwachting van bevestiging"
 
 msgid "Already existing relationship"
 msgstr "Reeds bestaande relatie"
@@ -5935,9 +5932,6 @@ msgstr "Je organisatie is opgericht"
 
 msgid "Your updated registration total is"
 msgstr "Je bijgewerkte totaal is"
-
-msgid "to confirm it proceed with payment"
-msgstr "om te bevestigen ga verder met de betaling"
 
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
@@ -7045,6 +7039,9 @@ msgstr ""
 "Op deze pagina vindt u een overzicht van de instellingen voor het afdrukken "
 "van PDF-bestanden"
 
+msgid "Upload your membership application to proceed"
+msgstr "Upload je lidmaatschapsaanvraag om verder te gaan"
+
 msgid "keep the auto-generated value or customize it"
 msgstr "de automatisch gegenereerde waarde behouden of aanpassen"
 
@@ -7214,6 +7211,9 @@ msgstr "Krijg toegang tot je personage <a href='%(url)s'>hier</a>"
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Weet je het zeker? De items kunnen misschien niet worden teruggehaald"
 
+msgid "Awaiting member approval to proceed with payment"
+msgstr "In afwachting van goedkeuring door leden om door te gaan met betaling"
+
 msgid "Complete all steps above to unlock advanced mode"
 msgstr ""
 "Voltooi alle bovenstaande stappen om de geavanceerde modus te ontgrendelen"
@@ -7288,9 +7288,6 @@ msgstr "Je kunt een bestand in pdf-formaat of een afbeelding uploaden"
 msgid "You have already paid this year's membership fee"
 msgstr "Je hebt je lidmaatschapsgeld voor dit jaar al betaald"
 
-msgid "awaiting member approval to proceed with payment"
-msgstr "in afwachting van goedkeuring door leden om door te gaan met betaling"
-
 msgid "use a subtle pattern or texture for best results"
 msgstr "gebruik een subtiel patroon of textuur voor de beste resultaten"
 
@@ -7338,6 +7335,13 @@ msgstr "Nu kun je de geldigheidscontrole van de fiscale code uitvoeren"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nu kunt u de instellingen voor de externe mailserver instellen"
+
+msgid "Pay the annual membership fee to attend the event"
+msgstr ""
+"Betaal de jaarlijkse lidmaatschapsbijdrage om het evenement bij te wonen"
+
+msgid "Proceed with payment to confirm your registration"
+msgstr "Ga verder met betalen om je registratie te bevestigen"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Grondstoffen, verbruiksgoederen en goederen"
@@ -7580,9 +7584,6 @@ msgstr "We zijn je eeuwig dankbaar dat je in ons gelooft"
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Het unieke subdomein van je organisatie in het platform"
-
-msgid "please upload your membership application to proceed"
-msgstr "upload uw lidmaatschapsaanvraag om verder te gaan"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -7899,10 +7900,6 @@ msgstr "Waarschuwing: De functies tokens en credits zijn niet ingeschakeld"
 
 msgid "You must select at least one ticket for this installment"
 msgstr "Je moet minstens één ticket voor deze aflevering selecteren"
-
-msgid "please pay the annual membership fee to attend the event"
-msgstr ""
-"betaal de jaarlijkse lidmaatschapsbijdrage om het evenement bij te wonen"
 
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr ""

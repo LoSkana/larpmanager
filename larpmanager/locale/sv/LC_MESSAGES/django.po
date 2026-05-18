@@ -4705,9 +4705,6 @@ msgstr "Separat medlemsavgift"
 msgid "Show available factions"
 msgstr "Visa tillgängliga fraktioner"
 
-msgid "Thanks for your support"
-msgstr "Tack för ert stöd"
-
 msgid "The genre of your event"
 msgstr "Genren för ditt evenemang"
 
@@ -5166,6 +5163,9 @@ msgstr "Namn på märket som ska delas ut"
 msgid "Now you can create outflows"
 msgstr "Nu kan du skapa utflöden"
 
+msgid "Please fill in your profile"
+msgstr "Vänligen fyll i din profil"
+
 msgid "Pre-registration cancelled!"
 msgstr "Förhandsregistreringen är inställd!"
 
@@ -5204,9 +5204,6 @@ msgstr "Skulle du vilja ändra det"
 
 msgid "Your organization's country"
 msgstr "Din organisations land"
-
-msgid "please fill in your profile"
-msgstr "vänligen fyll i din profil"
 
 msgid "Authenticator device removed"
 msgstr "Autentiseringsenhet borttagen"
@@ -5257,6 +5254,9 @@ msgstr "Begäran om undergiven medlem"
 msgid "No accepted membership found"
 msgstr "Inget accepterat medlemskap hittades"
 
+msgid "Payment pending confirmation"
+msgstr "Betalning i avvaktan på bekräftelse"
+
 msgid "Player customisation updated"
 msgstr "Spelaranpassning uppdaterad"
 
@@ -5278,9 +5278,6 @@ msgstr "Laddar upp bild, vänligen vänta"
 
 msgid "Your request has been logged"
 msgstr "Din förfrågan har loggats"
-
-msgid "payment pending confirmation"
-msgstr "bekräftelse på avvaktande betalning"
 
 msgid "Already existing relationship"
 msgstr "Redan befintlig relation"
@@ -5934,9 +5931,6 @@ msgstr "Din organisation har skapats"
 
 msgid "Your updated registration total is"
 msgstr "Ditt uppdaterade antal poster är"
-
-msgid "to confirm it proceed with payment"
-msgstr "för att bekräfta det fortsätt med betalningen"
 
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
@@ -7040,6 +7034,9 @@ msgstr "Denna sida visar förhandsanmälningarna till evenemanget"
 msgid "This page shows the settings for PDF printing"
 msgstr "Denna sida sammanfattar inställningarna för PDF-utskrift"
 
+msgid "Upload your membership application to proceed"
+msgstr "Ladda upp din medlemsansökan för att fortsätta"
+
 msgid "keep the auto-generated value or customize it"
 msgstr "behålla det autogenererade värdet eller anpassa det"
 
@@ -7206,6 +7203,9 @@ msgstr "Få tillgång till din karaktär <a href='%(url)s'>här</a>"
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Är du säker på det? Föremålen kanske inte kan återställas"
 
+msgid "Awaiting member approval to proceed with payment"
+msgstr "Inväntar medlemsgodkännande för att fortsätta med betalningen"
+
 msgid "Complete all steps above to unlock advanced mode"
 msgstr "Genomför alla steg ovan för att låsa upp avancerat läge"
 
@@ -7278,9 +7278,6 @@ msgstr "Du kan ladda upp en fil i pdf-format eller en bild"
 msgid "You have already paid this year's membership fee"
 msgstr "Du har redan betalat årets medlemsavgift"
 
-msgid "awaiting member approval to proceed with payment"
-msgstr "inväntar medlemsgodkännande för att gå vidare med betalningen"
-
 msgid "use a subtle pattern or texture for best results"
 msgstr "använd ett subtilt mönster eller textur för bästa resultat"
 
@@ -7329,6 +7326,12 @@ msgstr "Nu kan du göra en kontroll av skattekodens giltighet"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nu kan du ange inställningarna för den externa e-postservern"
+
+msgid "Pay the annual membership fee to attend the event"
+msgstr "Betala den årliga medlemsavgiften för att delta i evenemanget"
+
+msgid "Proceed with payment to confirm your registration"
+msgstr "Fortsätt med betalningen för att bekräfta din registrering"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Råvaror, förbrukningsmaterial och varor"
@@ -7566,9 +7569,6 @@ msgstr "Du kommer att få vårt eviga tack för att du trodde på oss"
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Din organisations unika underdomän i plattformen"
-
-msgid "please upload your membership application to proceed"
-msgstr "vänligen ladda upp din medlemsansökan för att fortsätta"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -7875,10 +7875,6 @@ msgstr "Varning för att Varken tokens eller credits-funktioner är aktiverade"
 
 msgid "You must select at least one ticket for this installment"
 msgstr "Du måste välja minst en biljett för denna delbetalning"
-
-msgid "please pay the annual membership fee to attend the event"
-msgstr ""
-"vänligen betala den årliga medlemsavgiften för att delta i evenemanget"
 
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(Valfritt) Annan förmåga som förkunskapskrav, kommaseparerad"

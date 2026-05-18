@@ -4705,9 +4705,6 @@ msgstr "Erillinen jäsenmaksu"
 msgid "Show available factions"
 msgstr "Näytä käytettävissä olevat ryhmittymät"
 
-msgid "Thanks for your support"
-msgstr "Kiitos tuestanne"
-
 msgid "The genre of your event"
 msgstr "Tapahtuman laji"
 
@@ -5166,6 +5163,9 @@ msgstr "Myönnettävän merkin nimi"
 msgid "Now you can create outflows"
 msgstr "Nyt voit luoda ulosvirtauksia"
 
+msgid "Please fill in your profile"
+msgstr "Täytä profiilisi"
+
 msgid "Pre-registration cancelled!"
 msgstr "EnnakkoIlmoittautuminen peruutettu!"
 
@@ -5204,9 +5204,6 @@ msgstr "Haluaisitko muuttaa sen"
 
 msgid "Your organization's country"
 msgstr "Organisaationne maa"
-
-msgid "please fill in your profile"
-msgstr "täytä profiilisi"
 
 msgid "Authenticator device removed"
 msgstr "Tunnistuslaite poistettu"
@@ -5257,6 +5254,9 @@ msgstr "Jäsenyyshakemus jätetty"
 msgid "No accepted membership found"
 msgstr "Ei löydetty hyväksyttyä jäsenyyttä"
 
+msgid "Payment pending confirmation"
+msgstr "Maksu odottaa vahvistusta"
+
 msgid "Player customisation updated"
 msgstr "Pelaajan mukauttaminen päivitetty"
 
@@ -5278,9 +5278,6 @@ msgstr "Kuvan lataaminen, odota"
 
 msgid "Your request has been logged"
 msgstr "Pyyntösi on kirjattu"
-
-msgid "payment pending confirmation"
-msgstr "maksu odottaa vahvistusta"
 
 msgid "Already existing relationship"
 msgstr "Jo olemassa oleva suhde"
@@ -5934,9 +5931,6 @@ msgstr "Organisaatiosi on luotu"
 
 msgid "Your updated registration total is"
 msgstr "Päivitetty ilmoittautumisten kokonaismäärä on"
-
-msgid "to confirm it proceed with payment"
-msgstr "Vahvistaaksesi jatka maksulla"
 
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
@@ -7038,6 +7032,9 @@ msgstr "Tämä sivu näyttää tapahtuman ennakkoilmoittautumiset"
 msgid "This page shows the settings for PDF printing"
 msgstr "Tällä sivulla näytetään PDF-tulostuksen asetukset"
 
+msgid "Upload your membership application to proceed"
+msgstr "Lataa jäsenhakemuksesi jatkaaksesi"
+
 msgid "keep the auto-generated value or customize it"
 msgstr "pitää automaattisesti luodun arvon tai muokata sitä"
 
@@ -7205,6 +7202,9 @@ msgstr "Pääset hahmoosi <a href='%(url)s'>täältä</a>"
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Oletko varma? Kohteita ei ehkä voida palauttaa"
 
+msgid "Awaiting member approval to proceed with payment"
+msgstr "Odotetaan jäsenten hyväksyntää maksun suorittamiseksi"
+
 msgid "Complete all steps above to unlock advanced mode"
 msgstr "Suorita kaikki edellä mainitut vaiheet avataksesi edistyneen tilan"
 
@@ -7277,9 +7277,6 @@ msgstr "Voit ladata tiedoston pdf-muodossa tai kuvan"
 msgid "You have already paid this year's membership fee"
 msgstr "Olet jo maksanut tämän vuoden jäsenmaksun"
 
-msgid "awaiting member approval to proceed with payment"
-msgstr "odottaa jäsenten hyväksyntää maksun suorittamiseksi"
-
 msgid "use a subtle pattern or texture for best results"
 msgstr ""
 "Käytä hienovaraista kuviota tai tekstuuria saadaksesi parhaan tuloksen"
@@ -7329,6 +7326,12 @@ msgstr "Nyt voit suorittaa verokoodin voimassaolon tarkistuksen"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nyt voit määrittää ulkoisen sähköpostipalvelimen asetukset"
+
+msgid "Pay the annual membership fee to attend the event"
+msgstr "Maksa vuosittainen jäsenmaksu osallistuaksesi tapahtumaan"
+
+msgid "Proceed with payment to confirm your registration"
+msgstr "Jatka maksua vahvistaaksesi rekisteröitymisesi"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Raaka-aineet, apuaineet, tarvikkeet ja tavarat"
@@ -7570,9 +7573,6 @@ msgstr "Saatte ikuisen kiitoksemme siitä, että uskoitte meihin, -"
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Organisaatiosi yksilöllinen aliverkkotunnus alustalla"
-
-msgid "please upload your membership application to proceed"
-msgstr "lataa jäsenhakemuksesi jatkaaksesi"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -7879,9 +7879,6 @@ msgstr ""
 
 msgid "You must select at least one ticket for this installment"
 msgstr "Sinun on valittava vähintään yksi lippu tätä erää varten"
-
-msgid "please pay the annual membership fee to attend the event"
-msgstr "maksa vuosittainen jäsenmaksu osallistuaksesi tapahtumaan"
 
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(Valinnainen) Muut edellytyksenä olevat taidot, pilkulla erotettuna"

@@ -4705,9 +4705,6 @@ msgstr "Oddzielna opłata członkowska"
 msgid "Show available factions"
 msgstr "Pokaż dostępne frakcje"
 
-msgid "Thanks for your support"
-msgstr "Dziękujemy za wsparcie"
-
 msgid "The genre of your event"
 msgstr "Gatunek wydarzenia"
 
@@ -5166,6 +5163,9 @@ msgstr "Nazwa odznaki, która ma zostać przyznana"
 msgid "Now you can create outflows"
 msgstr "Teraz można tworzyć przepływy"
 
+msgid "Please fill in your profile"
+msgstr "Wypełnij swój profil"
+
 msgid "Pre-registration cancelled!"
 msgstr "Wstępna rejestracja anulowana!"
 
@@ -5204,9 +5204,6 @@ msgstr "Czy chciałbyś to zmienić"
 
 msgid "Your organization's country"
 msgstr "Kraj organizacji użytkownika"
-
-msgid "please fill in your profile"
-msgstr "wypełnij swój profil"
 
 msgid "Authenticator device removed"
 msgstr "Usunięto urządzenie uwierzytelniające"
@@ -5257,6 +5254,9 @@ msgstr "Złożono wniosek o członkostwo"
 msgid "No accepted membership found"
 msgstr "Nie znaleziono zaakceptowanego członkostwa"
 
+msgid "Payment pending confirmation"
+msgstr "Płatność oczekuje na potwierdzenie"
+
 msgid "Player customisation updated"
 msgstr "Personalizacja gracza zaktualizowana"
 
@@ -5278,9 +5278,6 @@ msgstr "Przesyłanie obrazu, proszę czekać"
 
 msgid "Your request has been logged"
 msgstr "Twoje żądanie zostało zarejestrowane"
-
-msgid "payment pending confirmation"
-msgstr "płatność oczekuje na potwierdzenie"
 
 msgid "Already existing relationship"
 msgstr "Już istniejący związek"
@@ -5933,9 +5930,6 @@ msgstr "Twoja organizacja została utworzona"
 
 msgid "Your updated registration total is"
 msgstr "Zaktualizowana suma rejestracji wynosi"
-
-msgid "to confirm it proceed with payment"
-msgstr "aby potwierdzić, przejdź do płatności"
 
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
@@ -7038,6 +7032,9 @@ msgstr "Ta strona pokazuje wstępne zapisy na wydarzenie"
 msgid "This page shows the settings for PDF printing"
 msgstr "Na tej stronie przedstawiono ustawienia drukowania plików PDF"
 
+msgid "Upload your membership application to proceed"
+msgstr "Prześlij swój wniosek o członkostwo, aby kontynuować"
+
 msgid "keep the auto-generated value or customize it"
 msgstr "zachować automatycznie wygenerowaną wartość lub ją dostosować"
 
@@ -7206,6 +7203,9 @@ msgstr "Uzyskaj dostęp do swojej postaci <a href='%(url)s'>tutaj</a>"
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Czy na pewno? Elementy mogą być niemożliwe do odzyskania"
 
+msgid "Awaiting member approval to proceed with payment"
+msgstr "Oczekiwanie na zatwierdzenie płatności przez członka"
+
 msgid "Complete all steps above to unlock advanced mode"
 msgstr "Wykonaj wszystkie powyższe kroki, aby odblokować tryb zaawansowany"
 
@@ -7280,9 +7280,6 @@ msgstr "Możesz przesłać plik w formacie pdf lub obraz"
 msgid "You have already paid this year's membership fee"
 msgstr "Opłaciłeś już tegoroczną składkę członkowską"
 
-msgid "awaiting member approval to proceed with payment"
-msgstr "oczekiwanie na zatwierdzenie płatności przez członka"
-
 msgid "use a subtle pattern or texture for best results"
 msgstr "użyj subtelnego wzoru lub tekstury, aby uzyskać najlepsze rezultaty"
 
@@ -7331,6 +7328,12 @@ msgstr "Teraz można wykonać sprawdzenie poprawności kodu fiskalnego"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Teraz można skonfigurować ustawienia zewnętrznego serwera poczty"
+
+msgid "Pay the annual membership fee to attend the event"
+msgstr "Opłać roczną składkę członkowską, aby wziąć udział w wydarzeniu"
+
+msgid "Proceed with payment to confirm your registration"
+msgstr "Dokonaj płatności, aby potwierdzić rejestrację"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Surowce, materiały pomocnicze, materiały eksploatacyjne i towary"
@@ -7574,9 +7577,6 @@ msgstr "Będziemy ci dozgonnie wdzięczni za to, że w nas uwierzyłeś"
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Unikalna subdomena organizacji na platformie"
-
-msgid "please upload your membership application to proceed"
-msgstr "Aby kontynuować, prosimy o przesłanie wniosku o członkostwo"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -7890,10 +7890,6 @@ msgstr "Ostrzeżenie: Funkcje tokenów i kredytów nie są włączone"
 
 msgid "You must select at least one ticket for this installment"
 msgstr "Musisz wybrać co najmniej jeden bilet dla tej raty"
-
-msgid "please pay the annual membership fee to attend the event"
-msgstr ""
-"Aby wziąć udział w wydarzeniu, należy uiścić roczną opłatę członkowską"
 
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr ""

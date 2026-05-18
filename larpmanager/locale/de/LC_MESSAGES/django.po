@@ -4705,9 +4705,6 @@ msgstr "Separater Mitgliedsbeitrag"
 msgid "Show available factions"
 msgstr "Verfügbare Fraktionen anzeigen"
 
-msgid "Thanks for your support"
-msgstr "Vielen Dank für Ihre Unterstützung"
-
 msgid "The genre of your event"
 msgstr "Das Genre Ihrer Veranstaltung"
 
@@ -5166,6 +5163,9 @@ msgstr "Name des zu verleihenden Abzeichens"
 msgid "Now you can create outflows"
 msgstr "Jetzt können Sie Abflüsse erstellen"
 
+msgid "Please fill in your profile"
+msgstr "Bitte fülle dein Profil aus"
+
 msgid "Pre-registration cancelled!"
 msgstr "Vorregistrierung storniert!"
 
@@ -5204,9 +5204,6 @@ msgstr "Möchten Sie es ändern"
 
 msgid "Your organization's country"
 msgstr "Das Land Ihrer Organisation"
-
-msgid "please fill in your profile"
-msgstr "Bitte füllen Sie Ihr Profil aus"
 
 msgid "Authenticator device removed"
 msgstr "Authentifizierungsgerät entfernt"
@@ -5257,6 +5254,9 @@ msgstr "Unterwürfiges Mitglied Anfrage"
 msgid "No accepted membership found"
 msgstr "Keine akzeptierte Mitgliedschaft gefunden"
 
+msgid "Payment pending confirmation"
+msgstr "Zahlung noch nicht bestätigt"
+
 msgid "Player customisation updated"
 msgstr "Spieleranpassung aktualisiert"
 
@@ -5278,9 +5278,6 @@ msgstr "Bild hochladen, bitte warten"
 
 msgid "Your request has been logged"
 msgstr "Ihre Anfrage wurde protokolliert"
-
-msgid "payment pending confirmation"
-msgstr "Zahlung bis zur Bestätigung"
 
 msgid "Already existing relationship"
 msgstr "Bereits bestehende Beziehung"
@@ -5935,9 +5932,6 @@ msgstr "Ihre Organisation wurde gegründet"
 
 msgid "Your updated registration total is"
 msgstr "Ihr aktualisierter Gesamteintrag lautet"
-
-msgid "to confirm it proceed with payment"
-msgstr "zu bestätigen, um mit der Zahlung fortzufahren"
 
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
@@ -7057,6 +7051,9 @@ msgid "This page shows the settings for PDF printing"
 msgstr ""
 "Auf dieser Seite sind die Einstellungen für den PDF-Druck zusammengefasst"
 
+msgid "Upload your membership application to proceed"
+msgstr "Lade deinen Mitgliedsantrag hoch, um fortzufahren"
+
 msgid "keep the auto-generated value or customize it"
 msgstr "den automatisch generierten Wert beibehalten oder ihn anpassen"
 
@@ -7228,6 +7225,11 @@ msgid "Are you sure? The items might be not recoverable"
 msgstr ""
 "Sind Sie sicher? Die Gegenstände sind möglicherweise nicht wiederherstellbar"
 
+msgid "Awaiting member approval to proceed with payment"
+msgstr ""
+"Wir warten auf die Zustimmung der Mitglieder, um mit der Zahlung "
+"fortzufahren"
+
 msgid "Complete all steps above to unlock advanced mode"
 msgstr ""
 "Schließen Sie alle oben genannten Schritte ab, um den erweiterten Modus "
@@ -7307,10 +7309,6 @@ msgstr "Sie können eine Datei im PDF-Format oder ein Bild hochladen"
 msgid "You have already paid this year's membership fee"
 msgstr "Sie haben den diesjährigen Mitgliedsbeitrag bereits bezahlt"
 
-msgid "awaiting member approval to proceed with payment"
-msgstr ""
-"in Erwartung der Zustimmung der Mitglieder, um mit der Zahlung fortzufahren"
-
 msgid "use a subtle pattern or texture for best results"
 msgstr ""
 "Verwenden Sie ein dezentes Muster oder eine Textur für beste Ergebnisse"
@@ -7360,6 +7358,14 @@ msgstr "Jetzt können Sie die Gültigkeit der Steuernummer prüfen"
 msgid "Now you can set the external mail server settings"
 msgstr ""
 "Jetzt können Sie die Einstellungen für den externen Mailserver festlegen"
+
+msgid "Pay the annual membership fee to attend the event"
+msgstr ""
+"Entrichte den jährlichen Mitgliedsbeitrag für die Teilnahme an der "
+"Veranstaltung"
+
+msgid "Proceed with payment to confirm your registration"
+msgstr "Fahre mit der Zahlung fort, um deine Anmeldung zu bestätigen"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Rohstoffe, Verbrauchsgüter und Waren"
@@ -7625,9 +7631,6 @@ msgstr ""
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Die eindeutige Subdomain Ihrer Organisation auf der Plattform"
-
-msgid "please upload your membership application to proceed"
-msgstr "Bitte laden Sie Ihren Mitgliedsantrag hoch, um fortzufahren"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -7978,11 +7981,6 @@ msgstr "Warnung: Weder die Token- noch die Kreditfunktionen sind aktiviert"
 
 msgid "You must select at least one ticket for this installment"
 msgstr "Sie müssen mindestens ein Ticket für diese Tranche auswählen"
-
-msgid "please pay the annual membership fee to attend the event"
-msgstr ""
-"Bitte zahlen Sie den jährlichen Mitgliedsbeitrag, um an der Veranstaltung "
-"teilnehmen zu können"
 
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(fakultativ) Andere Fähigkeit als Voraussetzung, durch Komma getrennt"

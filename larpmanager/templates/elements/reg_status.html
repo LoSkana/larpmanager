@@ -1,45 +1,70 @@
 {% load i18n show_tags %}
 {% if run_status.text %}
-    <p>
-        {{ run_status.text | safe }}
-        {% if features.payment and registration and registration.tot_iscr %}
-            (<a href="#" class="my_toggle" tog="reg_accounting">{% trans "Accounting" %}</a>)
-        {% endif %}
-    </p>
-{% endif %}
-{% if features.payment and registration and registration.tot_iscr %}
-    <span class="hide reg_accounting">
-        {% if registration.tot_payed %}
-            {% trans "Total registration fee" %}: {{ registration.tot_iscr|format_decimal }} | {% trans "Total payments" %}: {{ registration.tot_payed|format_decimal }}
-        {% else %}
-            {% trans "Total registration fee" %}: {{ registration.tot_iscr|format_decimal }}
-        {% endif %}
-        {% if pending_invoices %}
-        {% elif registration.quota %}
-            | <a href="{% url 'accounting_registration' registration.uuid %}">
-            {% if membership_fee == 'bundled' and membership_amount %}
-                {% trans "Next payment" %}: {{ registration.quota|add:membership_amount|format_decimal }}{{ currency_symbol }}
-                ({% trans "Includes membership fee" %} {{ run.start.year }}: {{ membership_amount|format_decimal }}{{ currency_symbol }})
-            {% else %}
-                {% trans "Next payment" %}: {{ registration.quota | format_decimal }}{{ currency_symbol }},
+    <div class="reg-status-block{% if run_status.status_type %} reg-{{ run_status.status_type }}{% endif %}">
+        <span class="reg-status-label">
+            {% if run_status.status_type == "confirmed" %}
+                <i class="fa-solid fa-circle-check"></i>
+            {% elif run_status.status_type == "patron" %}
+                <i class="fa-solid fa-star"></i>
+            {% elif run_status.status_type == "pending" %}
+                <i class="fa-solid fa-clock"></i>
+            {% elif run_status.status_type == "action_needed" %}
+                <i class="fa-solid fa-circle-exclamation"></i>
+            {% elif run_status.status_type == "provisional" %}
+                <i class="fa-solid fa-hourglass-half"></i>
             {% endif %}
-            {% if registration.deadline > 0 %}
-                {% trans "expected within" %} {{ registration.deadline }} {% trans "days" %}
-            {% else %}
-                {% trans "overdue by" %} {{ registration.deadline | abs_value }} {% trans "days" %}
+            {{ run_status.text | safe }}
+            {% if features.payment and registration and registration.tot_iscr %}
+                (<a href="#" class="my_toggle" tog="reg_accounting">{% trans "Accounting" %}</a>)
             {% endif %}
-        </a>
-    {% elif registration.tot_iscr > registration.tot_payed %}
-        {% if run_status.can_pay %}
-            | {% trans "No additional payments are required at this time" %},
-            <a href="{% url 'accounting_registration' registration.uuid %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
+        </span>
+        {% if run_status.action %}
+            <div class="reg-action">
+                {% if run_status.action.url %}
+                    <a href="{{ run_status.action.url }}" class="reg-action-link">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> {{ run_status.action.label }}
+                    </a>
+                {% else %}
+                    <span class="reg-action-info">{{ run_status.action.label }}</span>
+                {% endif %}
+                {% if run_status.action.note %}<span class="reg-action-note">{{ run_status.action.note }}</span>{% endif %}
+            </div>
         {% endif %}
-    {% endif %}
-    {% if membership_amount and run.start %}
-        {% if membership_fee == 'done' %}
-            | {% trans "Membership fee" %} {{ run.start.year }}: {{ membership_amount_paid|format_decimal }}{{ currency_symbol }}
+    </div>
+    {% if features.payment and registration and registration.tot_iscr %}
+        <span class="hide reg_accounting">
+            {% if registration.tot_payed %}
+                {% trans "Total registration fee" %}: {{ registration.tot_iscr|format_decimal }} | {% trans "Total payments" %}: {{ registration.tot_payed|format_decimal }}
+            {% else %}
+                {% trans "Total registration fee" %}: {{ registration.tot_iscr|format_decimal }}
+            {% endif %}
+            {% if pending_invoices %}
+            {% elif registration.quota %}
+                | <a href="{% url 'accounting_registration' registration.uuid %}">
+                {% if membership_fee == 'bundled' and membership_amount %}
+                    {% trans "Next payment" %}: {{ registration.quota|add:membership_amount|format_decimal }}{{ currency_symbol }}
+                    ({% trans "Includes membership fee" %} {{ run.start.year }}: {{ membership_amount|format_decimal }}{{ currency_symbol }})
+                {% else %}
+                    {% trans "Next payment" %}: {{ registration.quota | format_decimal }}{{ currency_symbol }},
+                {% endif %}
+                {% if registration.deadline > 0 %}
+                    {% trans "expected within" %} {{ registration.deadline }} {% trans "days" %}
+                {% else %}
+                    {% trans "overdue by" %} {{ registration.deadline | abs_value }} {% trans "days" %}
+                {% endif %}
+            </a>
+        {% elif registration.tot_iscr > registration.tot_payed %}
+            {% if run_status.can_pay %}
+                | {% trans "No additional payments are required at this time" %},
+                <a href="{% url 'accounting_registration' registration.uuid %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
+            {% endif %}
         {% endif %}
-    {% endif %}
-</span>
+        {% if membership_amount and run.start %}
+            {% if membership_fee == 'done' %}
+                | {% trans "Membership fee" %} {{ run.start.year }}: {{ membership_amount_paid|format_decimal }}{{ currency_symbol }}
+            {% endif %}
+        {% endif %}
+    </span>
 {% endif %}
-{% if run_status.details %}<p>{{ run_status.details | safe }}</p>{% endif %}
+{% endif %}
+{% if run_status.details %}<p class="reg-status-details">{{ run_status.details | safe }}</p>{% endif %}

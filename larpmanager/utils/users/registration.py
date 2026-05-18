@@ -231,9 +231,12 @@ def _status_membership_fee(
         return False
 
     membership_url = reverse("accounting_membership")
-    membership_message = _("please pay the annual membership fee to attend the event") + "."
-    text_url = f", <a href='{membership_url}'>{membership_message}</a>"
-    run_status["text"] = registration_text + text_url
+    run_status["text"] = registration_text
+    run_status["status_type"] = "action_needed"
+    run_status["action"] = {
+        "url": membership_url,
+        "label": _("Pay the annual membership fee to attend the event"),
+    }
     return True
 
 
@@ -295,15 +298,20 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
         # Handle incomplete membership applications (empty, joined, uploaded)
         if user_membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             membership_url = reverse("membership")
-            completion_message = _("please upload your membership application to proceed") + "."
-            text_url = f", <a href='{membership_url}'>{completion_message}</a>"
-            run_status["text"] = registration_text + text_url
+            run_status["text"] = registration_text
+            run_status["status_type"] = "action_needed"
+            run_status["action"] = {
+                "url": membership_url,
+                "label": _("Upload your membership application to proceed"),
+            }
             run_status["can_pay"] = False
             return
 
         # Handle pending membership approval (submitted but not approved)
         if user_membership.status in [MembershipStatus.SUBMITTED]:
-            run_status["text"] = registration_text + ", " + _("awaiting member approval to proceed with payment")
+            run_status["text"] = registration_text
+            run_status["status_type"] = "pending"
+            run_status["action"] = {"label": _("Awaiting member approval to proceed with payment")}
             run_status["can_pay"] = False
             return
 
@@ -318,22 +326,24 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
     # Check for incomplete user profile and prompt completion
     if not user_membership.compiled:
         profile_url = reverse("profile")
-        completion_message = _("please fill in your profile") + "."
-        text_url = f", <a href='{profile_url}'>{completion_message}</a>"
-        run_status["text"] = registration_text + text_url
+        run_status["text"] = registration_text
+        run_status["status_type"] = "action_needed"
+        run_status["action"] = {"url": profile_url, "label": _("Please fill in your profile")}
         return
 
     # Handle provisional registration status (no further action needed)
     if is_provisional:
         run_status["text"] = registration_text
+        run_status["status_type"] = "provisional"
         return
 
     # Set final confirmed registration status for completed registrations
     run_status["text"] = registration_text
+    run_status["status_type"] = "confirmed"
 
     # Add patron appreciation message for patron tier tickets
     if registration.ticket and registration.ticket.tier == TicketTier.PATRON:
-        run_status["text"] += " " + _("Thanks for your support") + "!"
+        run_status["status_type"] = "patron"
 
 
 def _status_payment(
@@ -402,31 +412,38 @@ def _status_payment(
 
     # Handle pending payment status
     if pending_invoices:
-        run_status["text"] = register_text + ", " + _("payment pending confirmation")
+        run_status["text"] = register_text
+        run_status["status_type"] = "pending"
+        run_status["action"] = {"label": _("Payment pending confirmation")}
         context["pending_invoices"] = True
         return True
 
     # Process payment alerts for unpaid registrations
     if registration.alert:
+        payment_url = reverse("accounting_registration", args=[registration.uuid])
+
         # Handle wire transfer specific messaging
         if wire_created_invoices:
-            payment_url = reverse("accounting_registration", args=[registration.uuid])
-            message = _("to confirm it proceed with payment") + "."
-            text_url = f", <a href='{payment_url}'>{message}</a>"
-            note = _("If you have made a transfer, please upload the receipt for it to be processed") + "!"
-            run_status["text"] = f"{register_text}{text_url} ({note})"
+            run_status["text"] = register_text
+            run_status["status_type"] = "action_needed"
+            run_status["action"] = {
+                "url": payment_url,
+                "label": _("Proceed with payment to confirm your registration"),
+                "note": _("If you have made a transfer, please upload the receipt for it to be processed"),
+            }
             return True
 
         # Handle general payment alert with deadline warning
-        payment_url = reverse("accounting_registration", args=[registration.uuid])
-        message = _("to confirm it proceed with payment") + "."
-        text_url = f", <a href='{payment_url}'>{message}</a>"
-
-        # Add cancellation warning if deadline passed
+        note = ""
         if registration.deadline < 0:
-            text_url += "<i> (" + _("If no payment is received, registration may be cancelled") + ")</i>"
-
-        run_status["text"] = register_text + text_url
+            note = _("If no payment is received, registration may be cancelled")
+        run_status["text"] = register_text
+        run_status["status_type"] = "action_needed"
+        run_status["action"] = {
+            "url": payment_url,
+            "label": _("Proceed with payment to confirm your registration"),
+            "note": note,
+        }
         return True
 
     return False

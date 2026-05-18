@@ -4705,9 +4705,6 @@ msgstr "Samostatný členský poplatek"
 msgid "Show available factions"
 msgstr "Zobrazit dostupné frakce"
 
-msgid "Thanks for your support"
-msgstr "Děkujeme vám za podporu"
-
 msgid "The genre of your event"
 msgstr "Žánr vaší akce"
 
@@ -5166,6 +5163,9 @@ msgstr "Název odznaku, který má být udělen"
 msgid "Now you can create outflows"
 msgstr "Nyní můžete vytvářet odtoky"
 
+msgid "Please fill in your profile"
+msgstr "Vyplňte prosím svůj profil"
+
 msgid "Pre-registration cancelled!"
 msgstr "Předběžná registrace zrušena!"
 
@@ -5204,9 +5204,6 @@ msgstr "Chcete to změnit"
 
 msgid "Your organization's country"
 msgstr "Země vaší organizace"
-
-msgid "please fill in your profile"
-msgstr "vyplňte prosím svůj profil"
 
 msgid "Authenticator device removed"
 msgstr "Odstranění autentizačního zařízení"
@@ -5257,6 +5254,9 @@ msgstr "Žádost o submisivní členství"
 msgid "No accepted membership found"
 msgstr "Nebylo nalezeno žádné přijaté členství"
 
+msgid "Payment pending confirmation"
+msgstr "Platba čeká na potvrzení"
+
 msgid "Player customisation updated"
 msgstr "Přizpůsobení hráče aktualizováno"
 
@@ -5278,9 +5278,6 @@ msgstr "Nahrávání obrázku, počkejte prosím"
 
 msgid "Your request has been logged"
 msgstr "Váš požadavek byl zaznamenán"
-
-msgid "payment pending confirmation"
-msgstr "platba čeká na potvrzení"
 
 msgid "Already existing relationship"
 msgstr "Již existující vztah"
@@ -5935,9 +5932,6 @@ msgstr "Vaše organizace byla vytvořena"
 
 msgid "Your updated registration total is"
 msgstr "Váš aktualizovaný celkový počet vstupů je"
-
-msgid "to confirm it proceed with payment"
-msgstr "potvrdit a provést platbu"
 
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
@@ -7039,6 +7033,9 @@ msgstr "Na této stránce jsou zobrazeny předběžné přihlášky na akci"
 msgid "This page shows the settings for PDF printing"
 msgstr "Tato stránka shrnuje nastavení pro tisk PDF"
 
+msgid "Upload your membership application to proceed"
+msgstr "Nahrajte svou žádost o členství a pokračujte"
+
 msgid "keep the auto-generated value or customize it"
 msgstr "ponechat automaticky generovanou hodnotu nebo ji přizpůsobit"
 
@@ -7206,6 +7203,9 @@ msgstr "Přístup ke své postavě <a href='%(url)s'>zde</a>"
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Jste si jistý? Položky nemusí být možné obnovit"
 
+msgid "Awaiting member approval to proceed with payment"
+msgstr "Čeká se na souhlas členů s provedením platby"
+
 msgid "Complete all steps above to unlock advanced mode"
 msgstr "Dokončením všech výše uvedených kroků odemknete pokročilý režim"
 
@@ -7280,9 +7280,6 @@ msgstr "Můžete nahrát soubor ve formátu pdf nebo obrázek"
 msgid "You have already paid this year's membership fee"
 msgstr "Již jste zaplatili letošní členský příspěvek"
 
-msgid "awaiting member approval to proceed with payment"
-msgstr "čeká na souhlas členů s platbou"
-
 msgid "use a subtle pattern or texture for best results"
 msgstr "pro dosažení nejlepších výsledků použijte jemný vzor nebo texturu"
 
@@ -7330,6 +7327,12 @@ msgstr "Nyní můžete provést kontrolu platnosti fiskálního kódu"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nyní můžete nastavit externí poštovní server"
+
+msgid "Pay the annual membership fee to attend the event"
+msgstr "Zaplatit roční členský poplatek za účast na akci"
+
+msgid "Proceed with payment to confirm your registration"
+msgstr "Proveďte platbu a potvrďte svou registraci"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Suroviny, spotřební materiál a zboží"
@@ -7569,9 +7572,6 @@ msgstr "Za to, že jste nám věřili, vám patří náš věčný dík"
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "jedinečná subdoména vaší organizace v platformě"
-
-msgid "please upload your membership application to proceed"
-msgstr "pro pokračování nahrajte svou členskou přihlášku"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -7880,10 +7880,6 @@ msgstr "Varování: Funkce žetonů ani kreditů nejsou povoleny"
 
 msgid "You must select at least one ticket for this installment"
 msgstr "Pro tuto část musíte vybrat alespoň jeden tip"
-
-msgid "please pay the annual membership fee to attend the event"
-msgstr ""
-"zaplaťte prosím roční členský poplatek, abyste se mohli akce zúčastnit"
 
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(Nepovinné) Jiná schopnost jako předpoklad, oddělená čárkou"
