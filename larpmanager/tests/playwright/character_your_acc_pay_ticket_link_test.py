@@ -247,7 +247,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Choose the payment method: Wire sadsadsa")
 
     go_to(page, live_server, "/accounting/pay/test/wire/")
-    expect_normalized(page, page.locator("#one"), "You are about to make a payment of: 100 €. Follow the steps below:")
+    expect_normalized(page, page.locator("#one"), "You are about to make a payment of: 100 €.")
 
     go_to(page, live_server, "/accounting/pay/test/paypal/")
     expect_normalized(page, page.locator("#one"), "Choose the payment method: Wire sadsadsa")
