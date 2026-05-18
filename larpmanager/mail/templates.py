@@ -71,7 +71,7 @@ def get_payment_info(association_id: int, payment_url: str) -> str:
             text += "<br /><br />" + _get_wire_payment_info(payment_url, require_receipt=require_receipt)
 
     elif "wire" in active_slugs:
-        text = _get_wire_payment_info(payment_url, require_receipt=require_receipt)
+        text += _get_wire_payment_info(payment_url, require_receipt=require_receipt)
 
     else:
         text += (
@@ -83,7 +83,7 @@ def get_payment_info(association_id: int, payment_url: str) -> str:
             + ". "
         )
 
-    text += _("Let us know if you encounter any issues or need assistance") + "!"
+    text += "<br /><br />" + _("Let us know if you encounter any issues or need assistance") + "!"
 
     return text
 
@@ -99,6 +99,7 @@ def _get_wire_payment_info(payment_url: str, *, require_receipt: bool) -> str:
         % {"url": wire_url}
         + ". "
     )
+    text += "<br /><br />"
     if require_receipt:
         text += "<i>" + _("Please upload the payment receipt on that page once the transfer is complete")
     else:
@@ -430,7 +431,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
         # Handle immediate payment requirement (no specific deadline)
         body += (
             _("<i>Payment overdue</i>: Please pay <b>%(amount).2f %(currency)s</b> as soon as possible") % template_data
-            + ". "
+            + "! "
         )
         body += _("If payment is not received, your registration may be cancelled") + ". "
 

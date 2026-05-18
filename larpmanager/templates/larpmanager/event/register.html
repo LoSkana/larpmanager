@@ -64,10 +64,10 @@
             <hr />
             {{ custom_text | safe }}
         {% endif %}
-        <div>
+        <div class="form_container user_resize">
             <form id="register_form" action="{{ request.path }}" method="post">
                 {% csrf_token %}
-                <div class="form_container user_resize">
+                <div>
                     <table>
                         {% include "elements/form/register.html" %}
                     </table>
