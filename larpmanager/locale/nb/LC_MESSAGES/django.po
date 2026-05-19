@@ -2105,6 +2105,9 @@ msgstr "Oppdragstyper"
 msgid "Quick Setup"
 msgstr "Hurtigoppsett"
 
+msgid "Redeem link"
+msgstr "Løs inn lenke"
+
 msgid "Register to"
 msgstr "Registrer deg for"
 
@@ -3193,9 +3196,6 @@ msgstr "Tegnkonfigurasjon"
 msgid "Character review"
 msgstr "Karaktergjennomgang"
 
-msgid "Collection links"
-msgstr "Lenker til samlingen"
-
 msgid "Collection total"
 msgstr "Total innsamling"
 
@@ -4002,6 +4002,9 @@ msgstr "Avansert tekstredigeringsprogram"
 
 msgid "Carousel description"
 msgstr "Beskrivelse av karusellen"
+
+msgid "Close the collection"
+msgstr "Lukk samlingen"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Komplett ark (Pdf)"
@@ -5236,9 +5239,6 @@ msgstr "Gå til organisasjonens dashbord"
 msgid "If checked: members can vote"
 msgstr "Hvis avkrysset: medlemmene kan stemme"
 
-msgid "Link to close the collection"
-msgstr "Lenke for å lukke samlingen"
-
 msgid "Manage participant questions"
 msgstr "Administrer spørsmål fra deltakerne"
 
@@ -5905,9 +5905,6 @@ msgstr "Angi ekstern lenke for registrering"
 msgid "Set up the membership request text"
 msgstr "Konfigurer teksten til medlemsforespørselen"
 
-msgid "The amount of your contribution is"
-msgstr "Størrelsen på bidraget ditt er"
-
 msgid "The collection has been activated!"
 msgstr "Samlingen har blitt aktivert!"
 
@@ -6185,6 +6182,9 @@ msgstr "Skjul deltakere uten tegn"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Hvis avkrysset, tillat billettnivå: Selger"
+
+msgid "Input the amount of your contribution"
+msgstr "Skriv inn beløpet på bidraget ditt"
 
 msgid "Learn all characters before the event"
 msgstr "Lær alle tegnene før arrangementet"
@@ -7844,6 +7844,9 @@ msgstr "Lagermengder har blitt forpliktet for dette arrangementet"
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Vi har støtt på et problem med skattekoden du oppga"
 
+msgid "When you want to close the collection, follow this link"
+msgstr "Når du vil lukke samlingen, følger du denne lenken"
+
 msgid "Your membership application was successfully submitted!"
 msgstr "Medlemskapssøknaden din ble sendt inn!"
 
@@ -9106,6 +9109,11 @@ msgid ""
 msgstr ""
 "En betaling på <b>%(amount).2f %(currency)s</b> ble mottatt for dette "
 "arrangementet"
+
+msgid ""
+"A special redemption code will be generated, to be given to the recipient"
+msgstr ""
+"En spesiell innløsningskode vil bli generert, som skal gis til mottakeren"
 
 msgid ""
 "Activate and configure advanced features for your organization and events"
@@ -11399,13 +11407,6 @@ msgid ""
 msgstr ""
 "Spørsmålet vises i den valgte seksjonen (hvis den står tom, vises den i "
 "begynnelsen av skjemaet)"
-
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
-msgstr ""
-"Når du vil avslutte samlingen, følger du lenken nedenfor. En spesiell "
-"innløsningskode vil bli generert"
 
 msgid ""
 "Every friend who registers and uses this code will receive the following "

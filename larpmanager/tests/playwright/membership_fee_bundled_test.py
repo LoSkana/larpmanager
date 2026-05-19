@@ -219,7 +219,7 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/testsecond/register")
     expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
     page.get_by_role("link", name="to confirm it proceed with").click()
-    expect_normalized(page, page.locator("b"), "70")
+    expect_normalized(page, page.locator("#one"), "70 EUR")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
     submit(page)
 

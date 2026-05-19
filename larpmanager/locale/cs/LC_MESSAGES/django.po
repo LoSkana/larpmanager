@@ -2105,6 +2105,9 @@ msgstr "Typy úkolů"
 msgid "Quick Setup"
 msgstr "Rychlé nastavení"
 
+msgid "Redeem link"
+msgstr "Odkaz na vykoupení"
+
 msgid "Register to"
 msgstr "Zaregistrujte se"
 
@@ -3193,9 +3196,6 @@ msgstr "Konfigurace postavy"
 msgid "Character review"
 msgstr "Recenze postavy"
 
-msgid "Collection links"
-msgstr "Odkazy na sbírku"
-
 msgid "Collection total"
 msgstr "Celková sbírka"
 
@@ -4002,6 +4002,9 @@ msgstr "Pokročilý textový editor"
 
 msgid "Carousel description"
 msgstr "Popis kolotoče"
+
+msgid "Close the collection"
+msgstr "Uzavření sbírky"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Kompletní list (Pdf)"
@@ -5236,9 +5239,6 @@ msgstr "Přejít na řídicí panel organizace"
 msgid "If checked: members can vote"
 msgstr "Pokud je zaškrtnuto: členové mohou hlasovat"
 
-msgid "Link to close the collection"
-msgstr "Odkaz na uzavření sbírky"
-
 msgid "Manage participant questions"
 msgstr "Správa otázek účastníků"
 
@@ -5907,9 +5907,6 @@ msgstr "Nastavení externího odkazu pro registraci"
 msgid "Set up the membership request text"
 msgstr "Nastavení textu žádosti o členství"
 
-msgid "The amount of your contribution is"
-msgstr "Výše vašeho příspěvku je"
-
 msgid "The collection has been activated!"
 msgstr "Sbírka byla aktivována!"
 
@@ -6187,6 +6184,9 @@ msgstr "Skrýt účastníky bez znaku"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Prodejce"
+
+msgid "Input the amount of your contribution"
+msgstr "Zadejte výši svého příspěvku"
 
 msgid "Learn all characters before the event"
 msgstr "Naučte se všechny znaky před akcí"
@@ -7844,6 +7844,9 @@ msgstr "Pro tuto událost bylo přiděleno skladové množství"
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Narazili jsme na problém s daňovým kódem, který jste nám poskytli"
 
+msgid "When you want to close the collection, follow this link"
+msgstr "Pokud chcete sbírku uzavřít, postupujte podle tohoto odkazu"
+
 msgid "Your membership application was successfully submitted!"
 msgstr "Vaše žádost o členství byla úspěšně odeslána!"
 
@@ -9049,6 +9052,10 @@ msgid ""
 "A payment of <b>%(amount).2f %(currency)s</b> was received for this event"
 msgstr ""
 "Za tuto událost byla přijata platba ve výši <b>%(amount).2f %(currency)s</b>"
+
+msgid ""
+"A special redemption code will be generated, to be given to the recipient"
+msgstr "Bude vygenerován speciální výkupní kód, který bude předán příjemci"
 
 msgid ""
 "Activate and configure advanced features for your organization and events"
@@ -11296,13 +11303,6 @@ msgid ""
 msgstr ""
 "Otázka se zobrazí ve vybrané části (pokud zůstane prázdná, zobrazí se na "
 "začátku formuláře)"
-
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
-msgstr ""
-"Pokud chcete sbírku uzavřít, postupujte podle níže uvedeného odkazu. Bude "
-"vygenerován speciální výkupní kód"
 
 msgid ""
 "Every friend who registers and uses this code will receive the following "

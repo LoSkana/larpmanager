@@ -354,7 +354,7 @@ form ul li input[type="checkbox"] {
 }
 
 p {
-  margin: 0.5em;
+  margin: 0.5em 0;
 }
 
 label {
@@ -463,7 +463,7 @@ input[type="datetime_p"]:focus {
 input[type="number"],
 select {
   width: auto;
-  margin: 0 auto;
+  margin: 0;
   padding: 0.5em;
 }
 

@@ -2105,6 +2105,9 @@ msgstr "Typen zoektochten"
 msgid "Quick Setup"
 msgstr "Snelle installatie"
 
+msgid "Redeem link"
+msgstr "Link inwisselen"
+
 msgid "Register to"
 msgstr "Aanmelden voor"
 
@@ -3193,9 +3196,6 @@ msgstr "Karakter configureren"
 msgid "Character review"
 msgstr "Karakter recensie"
 
-msgid "Collection links"
-msgstr "Collectie koppelingen"
-
 msgid "Collection total"
 msgstr "Totale collectie"
 
@@ -4002,6 +4002,9 @@ msgstr "Geavanceerde teksteditor"
 
 msgid "Carousel description"
 msgstr "Carrousel beschrijving"
+
+msgid "Close the collection"
+msgstr "Sluit de verzameling"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Volledig blad (Pdf)"
@@ -5236,9 +5239,6 @@ msgstr "Ga naar het dashboard van de organisatie"
 msgid "If checked: members can vote"
 msgstr "Indien aangevinkt: leden kunnen stemmen"
 
-msgid "Link to close the collection"
-msgstr "Link om de collectie te sluiten"
-
 msgid "Manage participant questions"
 msgstr "Vragen van deelnemers beheren"
 
@@ -5907,9 +5907,6 @@ msgstr "De externe link voor registratie instellen"
 msgid "Set up the membership request text"
 msgstr "De tekst voor de lidmaatschapsaanvraag instellen"
 
-msgid "The amount of your contribution is"
-msgstr "Het bedrag van je bijdrage is"
-
 msgid "The collection has been activated!"
 msgstr "De collectie is geactiveerd!"
 
@@ -6187,6 +6184,9 @@ msgstr "Deelnemers zonder teken verbergen"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Indien aangevinkt, ticketniveau toestaan: Verkoper"
+
+msgid "Input the amount of your contribution"
+msgstr "Voer het bedrag van je bijdrage in"
 
 msgid "Learn all characters before the event"
 msgstr "Leer alle personages voor het evenement"
@@ -7861,6 +7861,9 @@ msgid "We encountered a problem with the tax code you provided"
 msgstr ""
 "Er is een probleem opgetreden met de belastingcode die u hebt opgegeven"
 
+msgid "When you want to close the collection, follow this link"
+msgstr "Als je de verzameling wilt sluiten, volg dan deze link"
+
 msgid "Your membership application was successfully submitted!"
 msgstr "Je lidmaatschapsaanvraag is succesvol ingediend!"
 
@@ -9227,6 +9230,12 @@ msgid ""
 msgstr ""
 "Er is een betaling van <b>%(amount).2f %(currency)s</b> ontvangen voor dit "
 "evenement"
+
+msgid ""
+"A special redemption code will be generated, to be given to the recipient"
+msgstr ""
+"Er wordt een speciale code gegenereerd die aan de ontvanger moet worden "
+"gegeven"
 
 msgid ""
 "Activate and configure advanced features for your organization and events"
@@ -11597,13 +11606,6 @@ msgid ""
 msgstr ""
 "De vraag wordt getoond in de geselecteerde sectie (als deze leeg blijft, "
 "wordt deze aan het begin van het formulier getoond)"
-
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
-msgstr ""
-"Als je de collectie wilt sluiten, volg dan de onderstaande link. Er wordt "
-"een speciale inwisselcode gegenereerd"
 
 msgid ""
 "Every friend who registers and uses this code will receive the following "

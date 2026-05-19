@@ -2105,6 +2105,9 @@ msgstr "Typer av uppdrag"
 msgid "Quick Setup"
 msgstr "Snabbinställning"
 
+msgid "Redeem link"
+msgstr "Lös in länk"
+
 msgid "Register to"
 msgstr "Anmäl dig till"
 
@@ -3193,9 +3196,6 @@ msgstr "Teckenkonfiguration"
 msgid "Character review"
 msgstr "Karaktärsbedömning"
 
-msgid "Collection links"
-msgstr "Länkar till samlingar"
-
 msgid "Collection total"
 msgstr "Total samling"
 
@@ -4002,6 +4002,9 @@ msgstr "Avancerad textredigerare"
 
 msgid "Carousel description"
 msgstr "Beskrivning av karusellen"
+
+msgid "Close the collection"
+msgstr "Stäng samlingen"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Komplett blad (Pdf)"
@@ -5236,9 +5239,6 @@ msgstr "Gå till organisationens instrumentpanel"
 msgid "If checked: members can vote"
 msgstr "Om markerat: medlemmar kan rösta"
 
-msgid "Link to close the collection"
-msgstr "Länk för att stänga samlingen"
-
 msgid "Manage participant questions"
 msgstr "Hantera deltagarnas frågor"
 
@@ -5906,9 +5906,6 @@ msgstr "Ange den externa länken för registrering"
 msgid "Set up the membership request text"
 msgstr "Skapa en text för medlemsförfrågan"
 
-msgid "The amount of your contribution is"
-msgstr "Beloppet på ditt bidrag är"
-
 msgid "The collection has been activated!"
 msgstr "Samlingen har aktiverats!"
 
@@ -6186,6 +6183,9 @@ msgstr "Dölj deltagare utan tecken"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Om markerat, tillåt biljettnivå: Säljare"
+
+msgid "Input the amount of your contribution"
+msgstr "Ange beloppet för ditt bidrag"
 
 msgid "Learn all characters before the event"
 msgstr "Lär dig alla karaktärer före evenemanget"
@@ -7838,6 +7838,9 @@ msgstr "Lagerkvantiteter har åtagits för denna händelse"
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Vi stötte på ett problem med den skattekod du angav"
 
+msgid "When you want to close the collection, follow this link"
+msgstr "När du vill stänga samlingen följer du den här länken"
+
 msgid "Your membership application was successfully submitted!"
 msgstr "Din medlemsansökan har skickats in framgångsrikt!"
 
@@ -9108,6 +9111,11 @@ msgid ""
 msgstr ""
 "En betalning på <b>%(amount).2f %(currency)s</b> togs emot för detta "
 "evenemang"
+
+msgid ""
+"A special redemption code will be generated, to be given to the recipient"
+msgstr ""
+"En särskild inlösenkod kommer att genereras, som ska ges till mottagaren"
 
 msgid ""
 "Activate and configure advanced features for your organization and events"
@@ -11425,13 +11433,6 @@ msgid ""
 msgstr ""
 "Frågan kommer att visas i det valda avsnittet (om den lämnas tom visas den i"
 " början av formuläret)"
-
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
-msgstr ""
-"När du vill avsluta insamlingen följer du länken nedan. En särskild "
-"inlösenkod kommer att genereras"
 
 msgid ""
 "Every friend who registers and uses this code will receive the following "

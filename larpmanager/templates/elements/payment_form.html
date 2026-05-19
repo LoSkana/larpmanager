@@ -13,10 +13,7 @@
         {% if amount %}
             <input type="hidden" name="amount" id="id_amount" value="{{ amount }}" />
         {% else %}
-            <div class="form_amount">
-                {{ form.amount }}
-                <br />
-            </div>
+            <div class="form_amount">{{ form.amount }}</div>
         {% endif %}
         {% if donate %}
             <p>{% trans "Please enter the occasion for which you wish to make the donation" %}</p>

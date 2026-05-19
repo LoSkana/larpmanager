@@ -2105,6 +2105,9 @@ msgstr "Tehtävätyypit"
 msgid "Quick Setup"
 msgstr "Pika-asennus"
 
+msgid "Redeem link"
+msgstr "Lunastuslinkki"
+
 msgid "Register to"
 msgstr "ilmoittaudu"
 
@@ -3193,9 +3196,6 @@ msgstr "Hahmon konfigurointi"
 msgid "Character review"
 msgstr "Hahmon tarkastelu"
 
-msgid "Collection links"
-msgstr "Kokoelman linkit"
-
 msgid "Collection total"
 msgstr "Keräys yhteensä"
 
@@ -4002,6 +4002,9 @@ msgstr "Edistynyt tekstieditori"
 
 msgid "Carousel description"
 msgstr "Karusellin kuvaus"
+
+msgid "Close the collection"
+msgstr "Sulje kokoelma"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Täydellinen lomake (Pdf)"
@@ -5236,9 +5239,6 @@ msgstr "Siirry organisaation kojelautaan"
 msgid "If checked: members can vote"
 msgstr "Jos valitaan: jäsenet voivat äänestää"
 
-msgid "Link to close the collection"
-msgstr "Linkki kokoelman sulkemiseen"
-
 msgid "Manage participant questions"
 msgstr "Hallitse osallistujien kysymyksiä"
 
@@ -5906,9 +5906,6 @@ msgstr "Aseta rekisteröinnin ulkoinen linkki"
 msgid "Set up the membership request text"
 msgstr "Määritä jäsenyyspyynnön teksti"
 
-msgid "The amount of your contribution is"
-msgstr "Rahoitusosuutesi määrä on"
-
 msgid "The collection has been activated!"
 msgstr "Kokoelma on aktivoitu!"
 
@@ -6186,6 +6183,9 @@ msgstr "Piilota osallistujat ilman hahmoa"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Jos valittuna, salli lipputaso: Myyjä"
+
+msgid "Input the amount of your contribution"
+msgstr "Syötä rahoitusosuutesi määrä"
 
 msgid "Learn all characters before the event"
 msgstr "Opettele kaikki hahmot ennen tapahtumaa"
@@ -7843,6 +7843,9 @@ msgstr "Varastomäärät on sidottu tätä tapahtumaa varten"
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Toimittamasi verokoodin kanssa ilmeni ongelma"
 
+msgid "When you want to close the collection, follow this link"
+msgstr "Kun haluat sulkea kokoelman, seuraa tätä linkkiä"
+
 msgid "Your membership application was successfully submitted!"
 msgstr "Jäsenhakemuksesi lähetettiin onnistuneesti!"
 
@@ -9109,6 +9112,10 @@ msgstr "jos hahmo EI kuulu tähän elementtiin, mutta siihen viitataan"
 msgid ""
 "A payment of <b>%(amount).2f %(currency)s</b> was received for this event"
 msgstr "Tapahtumaan on saatu maksusuoritus <b>%(amount).2f %(currency)s</b>"
+
+msgid ""
+"A special redemption code will be generated, to be given to the recipient"
+msgstr "Saajalle annetaan erityinen lunastuskoodi"
 
 msgid ""
 "Activate and configure advanced features for your organization and events"
@@ -11396,13 +11403,6 @@ msgid ""
 msgstr ""
 "Kysymys näytetään valitussa osiossa (jos se jätetään tyhjäksi, se näytetään "
 "lomakkeen alussa)"
-
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
-msgstr ""
-"Kun haluat sulkea kokoelman, seuraa alla olevaa linkkiä. Erityinen "
-"lunastuskoodi luodaan"
 
 msgid ""
 "Every friend who registers and uses this code will receive the following "

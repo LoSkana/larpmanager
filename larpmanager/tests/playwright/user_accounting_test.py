@@ -185,6 +185,7 @@ def collections(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Link to participate in").click()
     page.locator("#id_amount").click()
     page.locator("#id_amount").fill("20")
+    page.get_by_role("cell", name="Wire", exact=True).click()
     submit(page)
 
     expect_normalized(page, page.locator("#one"), "20")
@@ -201,8 +202,8 @@ def collections(page: Any, live_server: Any) -> None:
 
     go_to(page, live_server, "/accounting")
     page.get_by_role("link", name="Manage it here!").click()
-    page.get_by_role("link", name="Link to close the collection").click()
-    page.get_by_role("link", name="Collection links").click()
+    page.get_by_role("link", name="Close the collection").click()
+    page.get_by_role("link", name="Redeem link").click()
     submit_confirm(page)
 
     go_to(page, live_server, "/accounting")
