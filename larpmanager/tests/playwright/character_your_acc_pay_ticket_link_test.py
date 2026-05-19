@@ -237,6 +237,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     page.locator("#id_wire_iban").click()
     page.locator("#id_wire_iban").fill("dsasadas")
     page.locator("#id_wire_bic").fill("test iban")
+    page.get_by_role("checkbox", name="Freeform").check()
     submit_confirm(page)
 
     # check payments
