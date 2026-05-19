@@ -4,8 +4,8 @@
     {% trans "Register" %}
 {% endblock title %}
 {% block content %}
-    <div class="new_form">
-        <div class="form_container platform">
+    <div class="new_v18">
+        <div class="form_container user_resize">
             <form id="register_form"
                   method="post"
                   action="{% url 'registration_register' %}">
@@ -14,7 +14,6 @@
                     {{ form.as_table }}
                 </table>
                 {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
-                <br />
                 <input type="submit" id="id_submit"  value="{% trans "Submit" %}" />
             </form>
         </div>

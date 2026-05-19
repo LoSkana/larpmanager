@@ -1,46 +1,27 @@
 {% load i18n %}
 <div class="calendar">
     <table class="mob">
-        <thead>
-            <tr>
-                <th>{% trans "Name" %}</th>
-                <th>{% trans "Cover" %}</th>
-                {% if association.id == 0 %}
-                    <th>{% trans "Organization" %}</th>
-                {% endif %}
-                {% if 'genre' in association.features %}
-                    <th>{% trans "Genre" context "event" %}</th>
-                {% endif %}
-                {% if 'website' in association.features %}<th></th>{% endif %}
-                <th>{% trans "Date" %}</th>
-                {% if 'where' in association.features %}
-                    <th>{% trans "Location" %}</th>
-                {% endif %}
-                <th>{% trans "Registrations" %}</th>
-                <th>{% trans "Details" %}</th>
-            </tr>
-        </thead>
         {% for run in list %}
             <tr class="gall">
-                <td data-title="{% trans "Name" %}">
+                <td>
                     <h3>
                         <a href="{% url 'gallery' run.get_slug %}">{{ run }}</a>
                     </h3>
                 </td>
                 {% if run.event.cover %}
-                    <td data-title="{% trans "Cover" %}" class="cover-container">
+                    <td class="cover-container">
                         <img src="{{ run.event.cover_thumb.url }}" alt="run cover image" />
                     </td>
                 {% else %}
                     <td></td>
                 {% endif %}
                 {% if association.id == 0 %}
-                    <td data-title="{% trans "Organization" %}">
+                    <td>
                         <b>{{ run.event.association.name }} </b>
                     </td>
                 {% endif %}
                 {% if 'genre' in association.features %}
-                    <td data-title="{% trans "Genre" context "event" %}">
+                    <td>
                         <i>{{ run.event.genre }} </i>
                     </td>
                 {% endif %}
@@ -51,11 +32,11 @@
                         {% endif %}
                     </td>
                 {% endif %}
-                <td data-title="{% trans "Date" %}">
+                <td>
                     <i>{{ run.pretty_dates }}</i>
                 </td>
                 {% if 'where' in association.features %}
-                    <td data-title="{% trans "Location" %}">
+                    <td>
                         {% if run.event.where %}<i>{{ run.event.where }} </i>{% endif %}
                         {% if run.event.maps_url %}
                             <a href="{{ run.event.maps_url }}"
@@ -64,12 +45,7 @@
                         {% endif %}
                     </td>
                 {% endif %}
-                <td data-title="{% trans "Registrations" %}">
-                    {% if run.status.text %}{{ run.status.text | safe }}{% endif %}
-                </td>
-                <td data-title="{% trans "Details" %}">
-                    {% if run.status.details %}{{ run.status.details | safe }}{% endif %}
-                </td>
+                <td>{% include "elements/reg_status.html" with run_status=run.status registration=run.status.registration %}</td>
             </tr>
         {% endfor %}
     </table>

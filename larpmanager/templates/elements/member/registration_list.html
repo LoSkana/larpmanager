@@ -1,50 +1,39 @@
 {% load i18n %}
 {% if registration_list %}
-    <table id="my_registrations" class="go_datatable">
-        <thead>
-            <tr>
-                {% if show_association %}
-                    <th>{% trans "Organization" %}</th>
-                {% endif %}
-                <th>{% trans "Event" %}</th>
-                <th>{% trans "Cover" %}</th>
-                <th>{% trans "Date" %}</th>
-                <th>{% trans "Status" %}</th>
-                <th>{% trans "Details" %}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for registration in registration_list %}
-                <tr data-assoc-slug="{{ registration.run.event.association.slug }}">
-                    {% if show_association %}<td>{{ registration.run.event.association.name }}</td>{% endif %}
-                    <td>
-                        <b>
-                            <a href="{% url 'gallery' registration.run.get_slug %}">{{ registration.run }}</a>
-                        </b>
-                    </td>
-                    {% if run.event.cover %}
-                        <td class="cover-container">
-                            <img src="{{ run.event.cover_thumb.url }}" alt="run cover image" />
+    <div class="calendar">
+        <table class="mob">
+            <tbody>
+                {% for registration in registration_list %}
+                    <tr data-assoc-slug="{{ registration.run.event.association.slug }}">
+                        {% if show_association %}<td>{{ registration.run.event.association.name }}</td>{% endif %}
+                        <td>
+                            <b>
+                                <a href="{% url 'gallery' registration.run.get_slug %}">{{ registration.run }}</a>
+                            </b>
                         </td>
-                    {% else %}
-                        <td></td>
-                    {% endif %}
-                    <td>
-                        <i>{{ registration.run.pretty_dates }}</i>
-                        {% if registration.run.event.maps_url %}
-                            <a href="{{ registration.run.event.maps_url }}"
-                               target="_blank"
-                               rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i></a>
+                        {% if not hide_cover %}
+                            {% if run.event.cover %}
+                                <td class="cover-container">
+                                    <img src="{{ run.event.cover_thumb.url }}" alt="run cover image" />
+                                </td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
                         {% endif %}
-                    </td>
-                    <td>{{ registration.run.status.text | safe }}</td>
-                    <td>
-                        {% if registration.run.status.details %}{{ registration.run.status.details | safe }}{% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                        <td>
+                            <i>{{ registration.run.pretty_dates }}</i>
+                            {% if registration.run.event.maps_url %}
+                                <a href="{{ registration.run.event.maps_url }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i></a>
+                            {% endif %}
+                        </td>
+                        <td>{% include "elements/reg_status.html" with run_status=registration.run.status registration=registration %}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% else %}
     <p>{% trans "You don't have any registrations yet" %}.</p>
 {% endif %}

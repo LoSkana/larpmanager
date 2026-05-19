@@ -410,7 +410,7 @@ urlpatterns = [
     ),
     path(
         "password_reset/",
-        auth_views.PasswordResetView.as_view(form_class=MyPasswordResetForm),
+        views_auth.MyPasswordResetView.as_view(form_class=MyPasswordResetForm),
         name="password_reset",
     ),
     path(

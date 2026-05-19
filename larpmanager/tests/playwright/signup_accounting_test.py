@@ -233,7 +233,7 @@ def signup_pay(live_server: Any, page: Any) -> None:
 
     # check pay
     go_to(page, live_server, "/test/register")
-    page.get_by_role("link", name=re.compile(r"proceed with payment")).click()
+    page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
     page.get_by_role("cell", name="Wire", exact=True).click()
     expect_normalized(page, page.locator("b"), "100")
     submit(page)

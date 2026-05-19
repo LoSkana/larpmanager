@@ -6,7 +6,7 @@
 {% block content %}
     {% include "larpmanager/member/profile_nav.html" with active="security" %}
     <div class="user_resize platform">
-        <hr />
+        <hr class="no_v20" />
         <h3>{% trans "Two-Factor Authentication (TOTP)" %}</h3>
         {% if devices %}
             <p>{% trans "Your account is protected by an authenticator app" %}.</p>

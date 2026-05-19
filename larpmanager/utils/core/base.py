@@ -144,6 +144,7 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
 def get_context_member(request: HttpRequest, context: dict) -> None:
     """Set context dict on the member, if user authenticated."""
     if not context["member"]:
+        context["effective_version"] = context.get("assoc_version", LATEST_AVAILABLE_VERSION)
         return
 
     # Get membership info

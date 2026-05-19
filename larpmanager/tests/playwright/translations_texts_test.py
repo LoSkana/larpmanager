@@ -66,19 +66,19 @@ def test_translations_text(pw_page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Hello")
 
     go_to(page, live_server, "/language")
-    page.get_by_label("Select Language:").select_option("it")
-    page.get_by_label("Select Language:").click()
+    page.get_by_label("Select Language").select_option("it")
+    page.get_by_label("Select Language").click()
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "BUONGIORNO")
     expect_normalized(page, page.locator("#topbar"), "Contabilità Profilo")
 
     go_to(page, live_server, "/language")
-    page.get_by_label("Seleziona la lingua:").select_option("fr")
+    page.get_by_label("Seleziona la lingua").select_option("fr")
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "bonjour")
     expect_normalized(page, page.locator("#topbar"), "Comptabilité Profil")
 
     go_to(page, live_server, "/language")
-    page.get_by_label("Sélectionner la langue :").select_option("de")
+    page.get_by_label("Sélectionner la langue").select_option("de")
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Hello")

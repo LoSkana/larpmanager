@@ -20,19 +20,20 @@
             {% endwith %}
         {% endfor %}
     {% endif %}
-    <input id="form_submit" type="submit" value="{% trans "Confirm" %}">
-    <br />
-    {% if add_another %}
-        <br />
-        <div class="continue">
-            <input type="checkbox"
-                   id="continue"
-                   name="continue"
-                   {% if continue_add %}checked{% endif %}>
-            <label for="continue">{% trans "After confirmation, add another" %}</label>
-        </div>
-        <br />
-    {% endif %}
+    <div class="form_container auto_resize">
+        <input id="form_submit" type="submit" value="{% trans "Confirm" %}">
+        {% if add_another %}
+            <br />
+            <br />
+            <div class="continue">
+                <input type="checkbox"
+                       id="continue"
+                       name="continue"
+                       {% if continue_add %}checked{% endif %}>
+                <label for="continue">{% trans "After confirmation, add another" %}</label>
+            </div>
+        {% endif %}
+    </div>
     {% if edit_uuid %}
         <p>{% trans "The form is saved every 30 seconds" %}.</p>
     {% endif %}

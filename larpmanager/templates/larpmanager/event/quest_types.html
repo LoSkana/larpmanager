@@ -4,29 +4,31 @@
     {% trans "Quest" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    <div>
-        <table class="mob">
-            <thead>
-                <tr>
-                    <th>{% trans "Name" %}</th>
-                    <th>{% trans "Quest" %}</th>
-                </tr>
-            </thead>
-            {% for el in list %}
-                <tr>
-                    <td>
-                        <h3>
-                            <a href="{% url 'quests' run.get_slug el.uuid %}">{{ el.name }}</a>
-                        </h3>
-                    </td>
-                    <td>
-                        {% for ch in el.quests.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'quest' run.get_slug ch.uuid %}">{{ ch.name }}</a>
-                        {% endfor %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
+    <div class="user_resize">
+        <div>
+            <table class="mob">
+                <thead>
+                    <tr>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Quest" %}</th>
+                    </tr>
+                </thead>
+                {% for el in list %}
+                    <tr>
+                        <td>
+                            <h3>
+                                <a href="{% url 'quests' run.get_slug el.uuid %}">{{ el.name }}</a>
+                            </h3>
+                        </td>
+                        <td>
+                            {% for ch in el.quests.all %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'quest' run.get_slug ch.uuid %}">{{ ch.name }}</a>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 {% endblock content %}

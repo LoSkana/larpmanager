@@ -89,6 +89,7 @@ from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import get_membership_request
 from larpmanager.utils.io.upload import normalize_profile_image
+from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 from larpmanager.utils.publication.api import get_client_ip
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_leaderboard, get_member_uuid
@@ -151,7 +152,10 @@ def language(request: HttpRequest) -> HttpResponse:
         # Display language selection form for GET requests
         form = LanguageForm(current_language=current_language)
 
-    context = get_context(request) if request.user.is_authenticated else {}
+    if request.user.is_authenticated:
+        context = get_context(request)
+    else:
+        context = {"effective_version": request.association.get("assoc_version", LATEST_AVAILABLE_VERSION)}
     context["form"] = form
     return render(request, "larpmanager/member/language.html", context)
 

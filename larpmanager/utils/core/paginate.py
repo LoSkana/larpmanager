@@ -493,7 +493,7 @@ def _prepare_data_json(
                     else reverse(delete_view, args=[context["run"].get_slug(), model_object.uuid])
                 )
                 row_data[last_column] = (
-                    f'<a href="{delete_url}" qtip="{delete_label}" class="only_new_form"><i class="fas fa-trash"></i></a>'
+                    f'<a href="{delete_url}" qtip="{delete_label}" class="only_new_v18"><i class="fas fa-trash"></i></a>'
                 )
 
         table_rows_data.append(row_data)

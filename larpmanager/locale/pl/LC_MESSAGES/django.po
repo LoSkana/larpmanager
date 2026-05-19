@@ -1094,9 +1094,6 @@ msgstr "opcje"
 msgid "seconds"
 msgstr "sekundy"
 
-msgid "website"
-msgstr "strona internetowa"
-
 msgid "Accepted"
 msgstr "Przyjęte"
 
@@ -2538,6 +2535,9 @@ msgstr "Utworzono wydarzenie"
 msgid "Event history"
 msgstr "Historia wydarzeń"
 
+msgid "Event website"
+msgstr "Strona internetowa wydarzenia"
+
 msgid "External link"
 msgstr "Link zewnętrzny"
 
@@ -3076,6 +3076,9 @@ msgstr "Metody płatności"
 msgid "Payment methods"
 msgstr "Metody płatności"
 
+msgid "Pending payment"
+msgstr "Oczekiwanie na płatność"
+
 msgid "Portraits (PDF)"
 msgstr "Portrety (PDF)"
 
@@ -3562,6 +3565,9 @@ msgstr "Płać, ile chcesz"
 msgid "Payment confirmed"
 msgstr "Płatność potwierdzona"
 
+msgid "Payment submitted"
+msgstr "Przekazana płatność"
+
 msgid "Payments Received"
 msgstr "Otrzymane płatności"
 
@@ -3840,6 +3846,9 @@ msgstr "Naprawdę jesteś pewien"
 
 msgid "Assigned character!"
 msgstr "Przydzielona postać!"
+
+msgid "Cancel registration"
+msgstr "Anuluj rejestrację"
 
 msgid "Change registration"
 msgstr "Zmiana rejestracji"
@@ -4708,9 +4717,6 @@ msgstr "Oddzielna opłata członkowska"
 msgid "Show available factions"
 msgstr "Pokaż dostępne frakcje"
 
-msgid "Thanks for your support"
-msgstr "Dziękujemy za wsparcie"
-
 msgid "The genre of your event"
 msgstr "Gatunek wydarzenia"
 
@@ -5166,6 +5172,9 @@ msgstr "Nazwa odznaki, która ma zostać przyznana"
 msgid "Now you can create outflows"
 msgstr "Teraz można tworzyć przepływy"
 
+msgid "Please fill in your profile"
+msgstr "Wypełnij swój profil"
+
 msgid "Pre-registration cancelled!"
 msgstr "Wstępna rejestracja anulowana!"
 
@@ -5204,9 +5213,6 @@ msgstr "Czy chciałbyś to zmienić"
 
 msgid "Your organization's country"
 msgstr "Kraj organizacji użytkownika"
-
-msgid "please fill in your profile"
-msgstr "wypełnij swój profil"
 
 msgid "Authenticator device removed"
 msgstr "Usunięto urządzenie uwierzytelniające"
@@ -5275,9 +5281,6 @@ msgstr "Przesyłanie obrazu, proszę czekać"
 
 msgid "Your request has been logged"
 msgstr "Twoje żądanie zostało zarejestrowane"
-
-msgid "payment pending confirmation"
-msgstr "płatność oczekuje na potwierdzenie"
 
 msgid "Already existing relationship"
 msgstr "Już istniejący związek"
@@ -5806,9 +5809,6 @@ msgstr "Niestety takie rzeczy się zdarzają"
 msgid "Verify manually approved payments"
 msgstr "Weryfikacja ręcznie zatwierdzonych płatności"
 
-msgid "View all event information in the"
-msgstr "Wyświetl wszystkie informacje o wydarzeniu w"
-
 msgid "You don't have any characters yet"
 msgstr "Nie masz jeszcze żadnych postaci"
 
@@ -5934,9 +5934,6 @@ msgstr "Twoja organizacja została utworzona"
 
 msgid "Your updated registration total is"
 msgstr "Zaktualizowana suma rejestracji wynosi"
-
-msgid "to confirm it proceed with payment"
-msgstr "aby potwierdzić, przejdź do płatności"
 
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
@@ -6101,6 +6098,9 @@ msgstr "Teraz możesz skonfigurować dane paragonów"
 msgid "Only really important communications"
 msgstr "Tylko naprawdę ważna komunikacja"
 
+msgid "Payment awaiting manual verification"
+msgstr "Płatność oczekująca na ręczną weryfikację"
+
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Typy zadań bez zadań: %(list)s"
@@ -6125,9 +6125,6 @@ msgstr "Zatwierdzenie roli %(role)s na %(event)s"
 
 msgid "Select the event of this new session"
 msgstr "Wybierz wydarzenie tej nowej sesji"
-
-msgid "Terms and Conditions of registration"
-msgstr "Warunki i zasady rejestracji"
 
 msgid "They need to complete it immediately"
 msgstr "Muszą go natychmiast ukończyć"
@@ -7045,6 +7042,9 @@ msgstr "Ta strona pokazuje wstępne zapisy na wydarzenie"
 msgid "This page shows the settings for PDF printing"
 msgstr "Na tej stronie przedstawiono ustawienia drukowania plików PDF"
 
+msgid "Upload your membership application to proceed"
+msgstr "Prześlij swój wniosek o członkostwo, aby kontynuować"
+
 msgid "keep the auto-generated value or customize it"
 msgstr "zachować automatycznie wygenerowaną wartość lub ją dostosować"
 
@@ -7213,6 +7213,9 @@ msgstr "Uzyskaj dostęp do swojej postaci <a href='%(url)s'>tutaj</a>"
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Czy na pewno? Elementy mogą być niemożliwe do odzyskania"
 
+msgid "Awaiting member approval to proceed with payment"
+msgstr "Oczekiwanie na zatwierdzenie płatności przez członka"
+
 msgid "Complete all steps above to unlock advanced mode"
 msgstr "Wykonaj wszystkie powyższe kroki, aby odblokować tryb zaawansowany"
 
@@ -7287,9 +7290,6 @@ msgstr "Możesz przesłać plik w formacie pdf lub obraz"
 msgid "You have already paid this year's membership fee"
 msgstr "Opłaciłeś już tegoroczną składkę członkowską"
 
-msgid "awaiting member approval to proceed with payment"
-msgstr "oczekiwanie na zatwierdzenie płatności przez członka"
-
 msgid "use a subtle pattern or texture for best results"
 msgstr "użyj subtelnego wzoru lub tekstury, aby uzyskać najlepsze rezultaty"
 
@@ -7338,6 +7338,12 @@ msgstr "Teraz można wykonać sprawdzenie poprawności kodu fiskalnego"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Teraz można skonfigurować ustawienia zewnętrznego serwera poczty"
+
+msgid "Pay the annual membership fee to attend the event"
+msgstr "Opłać roczną składkę członkowską, aby wziąć udział w wydarzeniu"
+
+msgid "Proceed with payment to confirm your registration"
+msgstr "Dokonaj płatności, aby potwierdzić rejestrację"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Surowce, materiały pomocnicze, materiały eksploatacyjne i towary"
@@ -7591,9 +7597,6 @@ msgstr "Twoja prośba o anulowanie została wysłana do personelu"
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Unikalna subdomena organizacji na platformie"
-
-msgid "please upload your membership application to proceed"
-msgstr "Aby kontynuować, prosimy o przesłanie wniosku o członkostwo"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -7911,10 +7914,6 @@ msgstr "Ostrzeżenie: Funkcje tokenów i kredytów nie są włączone"
 msgid "You must select at least one ticket for this installment"
 msgstr "Musisz wybrać co najmniej jeden bilet dla tej raty"
 
-msgid "please pay the annual membership fee to attend the event"
-msgstr ""
-"Aby wziąć udział w wydarzeniu, należy uiścić roczną opłatę członkowską"
-
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr ""
 "(Opcjonalnie) Inne umiejętności jako warunek wstępny, oddzielone przecinkami"
@@ -8163,10 +8162,6 @@ msgstr ""
 
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Zarządzanie głosowaniami w celu przypisania ról w organizacji"
-
-msgid "Please fill out the form below and click confirm to register"
-msgstr ""
-"Wypełnij poniższy formularz i kliknij potwierdź, aby się zarejestrować"
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Ta postać jest nieaktywna i nie można jej przypisać do graczy"
@@ -8497,10 +8492,6 @@ msgstr "Ta strona pokazuje ustawienia dostępne dla głosowania członków"
 #, python-format
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr "Aby zakończyć proces, wystarczy <a href='%(url)s'>kliknąć tutaj</a>"
-
-msgid "To update your registration, change the fields and click confirm"
-msgstr ""
-"Aby zaktualizować rejestrację, zmień pola i kliknij przycisk Potwierdź"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -9648,12 +9639,6 @@ msgstr ""
 "wszystkich wydarzeń, w których uczestniczył"
 
 msgid ""
-"If you have made a transfer, please upload the receipt for it to be "
-"processed"
-msgstr ""
-"Jeśli dokonałeś przelewu, prześlij potwierdzenie, aby został on przetworzony"
-
-msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr ""
@@ -9700,6 +9685,13 @@ msgid ""
 msgstr ""
 "Napisz tutaj swoje pytanie, prośbę lub wątpliwość. Z przyjemnością na nie "
 "odpowiemy!"
+
+msgid ""
+"You can check and edit the list of organizations that can access your data "
+"on"
+msgstr ""
+"Możesz sprawdzić i edytować listę organizacji, które mogą uzyskać dostęp do "
+"Twoich danych na stronie"
 
 msgid ""
 "Enables to set a character as a 'mirror' for another, to hide it's true "
@@ -10049,6 +10041,13 @@ msgstr ""
 "użyte w wielu umiejętnościach"
 
 msgid ""
+"If you have made a wire transfer, please upload the receipt for it to be "
+"processed"
+msgstr ""
+"Jeśli dokonałeś przelewu bankowego, prześlij potwierdzenie jego "
+"przetworzenia"
+
+msgid ""
 "Now you can configure the integration button and the external application "
 "settings"
 msgstr ""
@@ -10075,13 +10074,6 @@ msgid ""
 msgstr ""
 "Ta strona przedstawia odznaki członkowskie. Można je edytować, przypisywać i"
 " tworzyć nowe"
-
-msgid ""
-"You can check and edit the list of organizations that can access your data "
-"on your"
-msgstr ""
-"Możesz sprawdzać i edytować listę organizacji, które mogą uzyskać dostęp do "
-"Twoich danych na Twoim koncie"
 
 msgid ""
 "Additional preferences, for random assignment when no solution is found "

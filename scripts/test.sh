@@ -5,12 +5,25 @@ set -euo pipefail
 
 # Activate virtual environment if not already active
 if [[ -z "${VIRTUAL_ENV:-}" ]]; then
-  if [[ -f "venv/bin/activate" ]]; then
-    echo "==> Activating virtual environment..."
-    source venv/bin/activate
-  else
-    echo "WARNING: Virtual environment not found at venv/bin/activate" >&2
+  _venv_dir=""
+  for _candidate in .venv venv; do
+    if [[ -f "$_candidate/bin/activate" ]]; then
+      _venv_dir="$_candidate"
+      break
+    fi
+  done
+  if [[ -z "$_venv_dir" ]]; then
+    _venv_dir=$(find . -maxdepth 2 -type d -name "*venv*" 2>/dev/null | while read -r d; do
+      [[ -f "$d/bin/activate" ]] && echo "$d" && break
+    done | head -1)
   fi
+  if [[ -n "$_venv_dir" ]]; then
+    echo "==> Activating virtual environment: $_venv_dir"
+    source "$_venv_dir/bin/activate"
+  else
+    echo "WARNING: No virtual environment found (searched *venv* dirs)" >&2
+  fi
+  unset _venv_dir _candidate
 fi
 
 check_branch() {

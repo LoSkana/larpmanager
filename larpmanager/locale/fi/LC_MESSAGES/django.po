@@ -1094,9 +1094,6 @@ msgstr "vaihtoehdot"
 msgid "seconds"
 msgstr "sekuntia"
 
-msgid "website"
-msgstr "verkkosivusto"
-
 msgid "Accepted"
 msgstr "Hyväksytty"
 
@@ -2538,6 +2535,9 @@ msgstr "Tapahtuma luotu"
 msgid "Event history"
 msgstr "Tapahtumahistoria"
 
+msgid "Event website"
+msgstr "Tapahtuman verkkosivusto"
+
 msgid "External link"
 msgstr "Ulkoinen linkki"
 
@@ -3076,6 +3076,9 @@ msgstr "Maksutavat"
 msgid "Payment methods"
 msgstr "Maksutavat"
 
+msgid "Pending payment"
+msgstr "Vireillä oleva maksu"
+
 msgid "Portraits (PDF)"
 msgstr "Muotokuvat (PDF)"
 
@@ -3562,6 +3565,9 @@ msgstr "Maksa mitä haluat"
 msgid "Payment confirmed"
 msgstr "Maksu vahvistettu"
 
+msgid "Payment submitted"
+msgstr "Toimitettu maksu"
+
 msgid "Payments Received"
 msgstr "Saadut maksut"
 
@@ -3840,6 +3846,9 @@ msgstr "Oletko todella varma"
 
 msgid "Assigned character!"
 msgstr "Annettu hahmo!"
+
+msgid "Cancel registration"
+msgstr "Peruuta rekisteröinti"
 
 msgid "Change registration"
 msgstr "Muuta ilmoittautumista"
@@ -4708,9 +4717,6 @@ msgstr "Erillinen jäsenmaksu"
 msgid "Show available factions"
 msgstr "Näytä käytettävissä olevat ryhmittymät"
 
-msgid "Thanks for your support"
-msgstr "Kiitos tuestanne"
-
 msgid "The genre of your event"
 msgstr "Tapahtuman laji"
 
@@ -5166,6 +5172,9 @@ msgstr "Myönnettävän merkin nimi"
 msgid "Now you can create outflows"
 msgstr "Nyt voit luoda ulosvirtauksia"
 
+msgid "Please fill in your profile"
+msgstr "Täytä profiilisi"
+
 msgid "Pre-registration cancelled!"
 msgstr "EnnakkoIlmoittautuminen peruutettu!"
 
@@ -5204,9 +5213,6 @@ msgstr "Haluaisitko muuttaa sen"
 
 msgid "Your organization's country"
 msgstr "Organisaationne maa"
-
-msgid "please fill in your profile"
-msgstr "täytä profiilisi"
 
 msgid "Authenticator device removed"
 msgstr "Tunnistuslaite poistettu"
@@ -5275,9 +5281,6 @@ msgstr "Kuvan lataaminen, odota"
 
 msgid "Your request has been logged"
 msgstr "Pyyntösi on kirjattu"
-
-msgid "payment pending confirmation"
-msgstr "maksu odottaa vahvistusta"
 
 msgid "Already existing relationship"
 msgstr "Jo olemassa oleva suhde"
@@ -5806,9 +5809,6 @@ msgstr "Valitettavasti näitä asioita tapahtuu"
 msgid "Verify manually approved payments"
 msgstr "Tarkista manuaalisesti hyväksytyt maksut"
 
-msgid "View all event information in the"
-msgstr "Näytä tapahtuman tiedot avaamalla sen"
-
 msgid "You don't have any characters yet"
 msgstr "Sinulla ei ole vielä yhtään hahmoa"
 
@@ -5935,9 +5935,6 @@ msgstr "Organisaatiosi on luotu"
 
 msgid "Your updated registration total is"
 msgstr "Päivitetty ilmoittautumisten kokonaismäärä on"
-
-msgid "to confirm it proceed with payment"
-msgstr "Vahvistaaksesi jatka maksulla"
 
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
@@ -6102,6 +6099,9 @@ msgstr "Nyt voit määrittää kuittitiedot"
 msgid "Only really important communications"
 msgstr "Vain todella tärkeä viestintä"
 
+msgid "Payment awaiting manual verification"
+msgstr "Maksu odottaa manuaalista tarkistusta"
+
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Tehtävätyypit ilman tehtäviä: %(list)s"
@@ -6126,9 +6126,6 @@ msgstr "Roolihyväksyntä %(role)s / %(event)s"
 
 msgid "Select the event of this new session"
 msgstr "Valitse tämän uuden istunnon tapahtuma"
-
-msgid "Terms and Conditions of registration"
-msgstr "Ilmoittautumisen ehdot ja säännöt"
 
 msgid "They need to complete it immediately"
 msgstr "Niiden on saatettava se päätökseen välittömästi"
@@ -7045,6 +7042,9 @@ msgstr "Tämä sivu näyttää tapahtuman ennakkoilmoittautumiset"
 msgid "This page shows the settings for PDF printing"
 msgstr "Tällä sivulla näytetään PDF-tulostuksen asetukset"
 
+msgid "Upload your membership application to proceed"
+msgstr "Lataa jäsenhakemuksesi jatkaaksesi"
+
 msgid "keep the auto-generated value or customize it"
 msgstr "pitää automaattisesti luodun arvon tai muokata sitä"
 
@@ -7212,6 +7212,9 @@ msgstr "Pääset hahmoosi <a href='%(url)s'>täältä</a>"
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Oletko varma? Kohteita ei ehkä voida palauttaa"
 
+msgid "Awaiting member approval to proceed with payment"
+msgstr "Odotetaan jäsenten hyväksyntää maksun suorittamiseksi"
+
 msgid "Complete all steps above to unlock advanced mode"
 msgstr "Suorita kaikki edellä mainitut vaiheet avataksesi edistyneen tilan"
 
@@ -7284,9 +7287,6 @@ msgstr "Voit ladata tiedoston pdf-muodossa tai kuvan"
 msgid "You have already paid this year's membership fee"
 msgstr "Olet jo maksanut tämän vuoden jäsenmaksun"
 
-msgid "awaiting member approval to proceed with payment"
-msgstr "odottaa jäsenten hyväksyntää maksun suorittamiseksi"
-
 msgid "use a subtle pattern or texture for best results"
 msgstr ""
 "Käytä hienovaraista kuviota tai tekstuuria saadaksesi parhaan tuloksen"
@@ -7336,6 +7336,12 @@ msgstr "Nyt voit suorittaa verokoodin voimassaolon tarkistuksen"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nyt voit määrittää ulkoisen sähköpostipalvelimen asetukset"
+
+msgid "Pay the annual membership fee to attend the event"
+msgstr "Maksa vuosittainen jäsenmaksu osallistuaksesi tapahtumaan"
+
+msgid "Proceed with payment to confirm your registration"
+msgstr "Jatka maksua vahvistaaksesi rekisteröitymisesi"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Raaka-aineet, apuaineet, tarvikkeet ja tavarat"
@@ -7588,9 +7594,6 @@ msgstr "Peruutuspyyntösi on lähetetty henkilökunnalle"
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Organisaatiosi yksilöllinen aliverkkotunnus alustalla"
-
-msgid "please upload your membership application to proceed"
-msgstr "lataa jäsenhakemuksesi jatkaaksesi"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -7901,9 +7904,6 @@ msgstr ""
 msgid "You must select at least one ticket for this installment"
 msgstr "Sinun on valittava vähintään yksi lippu tätä erää varten"
 
-msgid "please pay the annual membership fee to attend the event"
-msgstr "maksa vuosittainen jäsenmaksu osallistuaksesi tapahtumaan"
-
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(Valinnainen) Muut edellytyksenä olevat taidot, pilkulla erotettuna"
 
@@ -8144,9 +8144,6 @@ msgstr ""
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr ""
 "Hallinnoi äänestyksiä, jotka koskevat roolien jakamista organisaatiossa"
-
-msgid "Please fill out the form below and click confirm to register"
-msgstr "Täytä alla oleva lomake ja klikkaa Vahvista rekisteröityäksesi"
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Tämä hahmo on inaktiivinen, eikä sitä voi antaa pelaajille"
@@ -8466,11 +8463,6 @@ msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Saat prosessin päätökseen yksinkertaisesti <a href='%(url)s'>klikkaa "
 "tästä</a>"
-
-msgid "To update your registration, change the fields and click confirm"
-msgstr ""
-"Voit päivittää rekisteröintiäsi muuttamalla kenttiä ja napsauttamalla "
-"Vahvista"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -9583,11 +9575,6 @@ msgstr ""
 "tapahtumista, joihin on osallistuttu"
 
 msgid ""
-"If you have made a transfer, please upload the receipt for it to be "
-"processed"
-msgstr "Jos olet tehnyt siirron, lataa kuitti, jotta se voidaan käsitellä"
-
-msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr ""
@@ -9632,6 +9619,13 @@ msgid ""
 msgstr ""
 "Kirjoita kysymyksesi, pyyntösi tai huolenaiheesi tähän. Vastaamme "
 "mielellämme!"
+
+msgid ""
+"You can check and edit the list of organizations that can access your data "
+"on"
+msgstr ""
+"Voit tarkistaa ja muokata luetteloa organisaatioista, jotka voivat käyttää "
+"tietojasi osoitteessa"
 
 msgid ""
 "Enables to set a character as a 'mirror' for another, to hide it's true "
@@ -9968,6 +9962,11 @@ msgstr ""
 " useissa taidoissa"
 
 msgid ""
+"If you have made a wire transfer, please upload the receipt for it to be "
+"processed"
+msgstr "Jos olet tehnyt tilisiirron, lataa kuitti, jotta se voidaan käsitellä"
+
+msgid ""
 "Now you can configure the integration button and the external application "
 "settings"
 msgstr ""
@@ -9993,13 +9992,6 @@ msgid ""
 msgstr ""
 "Tällä sivulla on jäsenmerkit. Voit muokata niitä, määrittää niitä, luoda "
 "uusia"
-
-msgid ""
-"You can check and edit the list of organizations that can access your data "
-"on your"
-msgstr ""
-"Voit tarkistaa ja muokata niiden organisaatioiden luetteloa, jotka voivat "
-"käyttää tietojasi täältä: "
 
 msgid ""
 "Additional preferences, for random assignment when no solution is found "

@@ -19,6 +19,11 @@ VERSIONS = [
         "description": "Menu appearance: more immediate and understandable",
         "available": True,
     },
+    {
+        "number": 20,
+        "description": "User interface: cleaner and focused",
+        "available": True,
+    },
 ]
 
 LATEST_AVAILABLE_VERSION = max(v["number"] for v in VERSIONS if v["available"])

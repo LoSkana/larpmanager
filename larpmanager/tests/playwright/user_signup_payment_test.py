@@ -106,11 +106,11 @@ def signup(page: Any, live_server: Any) -> None:
     # check reg status
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "Provisional registration")
-    expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
+    expect_normalized(page, page.locator("#one"), "Proceed with payment to confirm your registration")
 
     # pay
     go_to(page, live_server, "/test/register")
-    page.get_by_role("link", name=re.compile(r"proceed with payment")).click()
+    page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
     page.get_by_role("cell", name="Wire", exact=True).click()
     expect_normalized(page, page.locator("b"), "100")
     submit(page)
