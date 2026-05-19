@@ -21,11 +21,11 @@
 .user_resize input[type="confirm"],
 .user_resize button,
 .user_resize .button {
-  text-align: left;
   display: block;
+  margin: 0.5em auto;
 }
 
-.new_v20 .user_resize {
+body.association.new_v20 .user_resize {
   padding: 0.5em 1em;
   margin: 0.5em auto;
   border-radius: 8px;
@@ -1193,6 +1193,10 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
 .login input {
   text-align: center;
   width: 90%;
+}
+
+.login input[type="submit"] {
+  width: auto;
 }
 
 @media screen and (max-width: 1000) {

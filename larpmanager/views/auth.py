@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING, Any
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.contrib.auth.views import PasswordResetConfirmView
+from django.contrib.auth.views import PasswordResetConfirmView, PasswordResetView
 from django.db import IntegrityError
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -33,13 +33,14 @@ from django_registration import signals
 from django_registration.backends.one_step.views import RegistrationView
 
 from larpmanager.models.member import Member, Membership, MembershipStatus
+from larpmanager.views.base import AssocVersionMixin
 
 if TYPE_CHECKING:
     from django.forms import Form
     from django.http import HttpResponse
 
 
-class MyRegistrationView(RegistrationView):
+class MyRegistrationView(AssocVersionMixin, RegistrationView):
     """View for MyRegistration."""
 
     def form_valid(self, form: Form) -> HttpResponse:
@@ -137,7 +138,11 @@ class MyRegistrationView(RegistrationView):
         return form_kwargs
 
 
-class MyPasswordResetConfirmView(PasswordResetConfirmView):
+class MyPasswordResetView(AssocVersionMixin, PasswordResetView):
+    """View for MyPasswordReset."""
+
+
+class MyPasswordResetConfirmView(AssocVersionMixin, PasswordResetConfirmView):
     """View for MyPasswordResetConfirm."""
 
     def form_valid(self, form: Form) -> HttpResponse:

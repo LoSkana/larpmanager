@@ -4,7 +4,9 @@
     {% trans "Language" %}
 {% endblock title %}
 {% block content %}
-    {% include "larpmanager/member/profile_nav.html" with active="language" %}
+    {% if request.user.is_authenticated %}
+        {% include "larpmanager/member/profile_nav.html" with active="language" %}
+    {% endif %}
     <div class="user_resize platform form_container">
         <hr class="no_v20" />
         <form method="post">
