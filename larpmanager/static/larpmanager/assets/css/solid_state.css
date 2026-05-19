@@ -500,9 +500,6 @@ select {
   padding-left: 2em;
 }
 
-.calendar {
-  border-top: solid 1px rgba(var(--pri-rgb), 0.125);
-}
 .event {
   border-bottom: solid 1px rgba(var(--pri-rgb), 0.125);
   padding: 0.5em 1em;

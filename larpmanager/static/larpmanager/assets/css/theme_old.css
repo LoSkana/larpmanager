@@ -182,7 +182,7 @@ body {
     --topbar-height: 2em;
   }
 
-  body:not(.new_form) #topbar {
+  body:not(.new_v18) #topbar {
     margin: 0;
     padding: 0.1em 0;
     flex-shrink: 0;
@@ -207,11 +207,11 @@ body {
     text-align: center !important;
   }
 
-  .new_form {
+  .new_v18 {
     --topbar-height: 3.2em;
   }
 
-  .new_form #topbar {
+  .new_v18 #topbar {
     top: auto;
     bottom: 3vw;
     width: 94vw;
@@ -225,9 +225,9 @@ body {
     backdrop-filter: blur(10px);
   }
 
-  .new_form #sidebar.topbar,
-  .new_form #page-wrapper.topbar,
-  .new_form #page-wrapper.topbar header {
+  .new_v18 #sidebar.topbar,
+  .new_v18 #page-wrapper.topbar,
+  .new_v18 #page-wrapper.topbar header {
     margin-top: 0;
     margin-bottom: var(--topbar-height);
   }
@@ -241,13 +241,13 @@ body {
     width: auto;
   }
 
-  .new_form #topbar .mobile .el i {
+  .new_v18 #topbar .mobile .el i {
     font-size: 1.2em !important;
     margin: 0;
     display: block;
   }
 
-  .new_form #topbar .mobile .el .menu_profile {
+  .new_v18 #topbar .mobile .el .menu_profile {
     width: 1.3em;
     height: 1.3em;
     padding-bottom: 0;
@@ -255,37 +255,37 @@ body {
     margin: 0 auto;
   }
 
-  .new_form #topbar .mobile .el span.label {
+  .new_v18 #topbar .mobile .el span.label {
     font-size: 0.6em;
     display: block;
     white-space: nowrap;
   }
 
-  .new_form #topbar .dropdown {
+  .new_v18 #topbar .dropdown {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     position: relative;
   }
 
-  .new_form #topbar .dropdown > span {
+  .new_v18 #topbar .dropdown > span {
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
     gap: 0.2em;
   }
 
-  .new_form #topbar .dropdown .dropdown-button i {
+  .new_v18 #topbar .dropdown .dropdown-button i {
     font-size: 0.7em;
   }
 
-  .new_form #topbar .dropdown .dropdown-menu {
+  .new_v18 #topbar .dropdown .dropdown-menu {
     bottom: 100%;
     top: auto;
     margin-bottom: 0.5em;
   }
 
-  .new_form #topbar table.mobile {
+  .new_v18 #topbar table.mobile {
     width: 100%;
   }
 }
@@ -760,57 +760,57 @@ nav#sidebar-nav {
   background-color: #a5dee5 !important;
 }
 
-body:not(.new_form) .only_new_form {
+body:not(.new_v18) .only_new_v18 {
   display: none;
 }
 
-.new_form .no_new_form {
+.new_v18 .no_new_v18 {
   display: none;
 }
 
-.new_form .auto_resize {
+.new_v18 .auto_resize {
   width: 70%;
   margin: 0 auto;
 }
 
 @media (max-width: 1200px) {
-  .new_form .auto_resize {
+  .new_v18 .auto_resize {
     width: 80%;
   }
 }
 
 @media (max-width: 1000px) {
-  .new_form .auto_resize {
+  .new_v18 .auto_resize {
     width: 90%;
   }
 }
 
-.new_form .auto_resize table {
+.new_v18 .auto_resize table {
   width: 100%;
 }
 
-.new_form .form_container {
+.new_v18 .form_container {
   border-collapse: collapse;
   margin: 1rem auto;
 }
 
 @media (max-width: 1200px) {
-  .new_form .form_container {
+  .new_v18 .form_container {
     width: 90%;
   }
 }
 
-.new_form .form_container table {
+.new_v18 .form_container table {
   width: 100%;
 }
 
-.new_form th,
-.new_form td {
+.new_v18 th,
+.new_v18 td {
   padding: 1rem;
   text-align: left !important;
 }
 
-.new_form th label {
+.new_v18 th label {
   text-align: left !important;
 }
 
@@ -828,90 +828,90 @@ body:not(.new_form) .only_new_form {
   }
 }
 
-.new_form .form_container table input {
+.new_v18 .form_container table input {
   width: 100% !important;
   padding: 0.4rem;
   box-sizing: border-box;
 }
 
-.new_form .form_container table select {
+.new_v18 .form_container table select {
   width: 100% !important;
 }
 
-.new_form .form_container table textarea {
+.new_v18 .form_container table textarea {
   width: 100% !important;
   height: 8em;
 }
 
-.new_form .form_container table input[type="checkbox"],
-.new_form .form_container table input[type="radio"] {
+.new_v18 .form_container table input[type="checkbox"],
+.new_v18 .form_container table input[type="radio"] {
   width: 1em !important;
 }
 
-.new_form .select2-container {
+.new_v18 .select2-container {
   width: 100% !important;
 }
 
-.new_form .form_container table th {
+.new_v18 .form_container table th {
   width: 25%;
 }
 
-.new_form .grid .grid-item th {
+.new_v18 .grid .grid-item th {
   width: auto;
 }
 
-.new_form .grid .grid-item p {
+.new_v18 .grid .grid-item p {
   text-align: left;
 }
 
-.new_form form.form_container {
+.new_v18 form.form_container {
   text-align: left;
 }
 
-.new_form #search {
+.new_v18 #search {
   text-align: left;
 }
 
-.new_form .form_container table input,
-.new_form .form_container table select,
-.new_form .form_container table .tox-tinymce,
-.new_form .form_container table .select2-container,
-.new_form .form_container table textarea {
+.new_v18 .form_container table input,
+.new_v18 .form_container table select,
+.new_v18 .form_container table .tox-tinymce,
+.new_v18 .form_container table .select2-container,
+.new_v18 .form_container table textarea {
   margin: 0 !important;
   max-width: 100% !important;
   text-align: left;
 }
 
-.new_form .form_container table .old_delete {
+.new_v18 .form_container table .old_delete {
   max-width: min-content !important;
   margin: 0 auto !important;
 }
 
 @media (max-width: 800px) {
-  .new_form .form_container {
+  .new_v18 .form_container {
     width: 100%;
   }
 
-  .new_form .form_container table,
-  .new_form .form_container table tbody,
-  .new_form .form_container table tr,
-  .new_form .form_container table td,
-  .new_form .form_container table th {
+  .new_v18 .form_container table,
+  .new_v18 .form_container table tbody,
+  .new_v18 .form_container table tr,
+  .new_v18 .form_container table td,
+  .new_v18 .form_container table th {
     display: block;
     width: 100%;
   }
 
-  .new_form .form_container table th {
+  .new_v18 .form_container table th {
     padding-bottom: 0;
     margin-bottom: 0;
     font-weight: 600;
   }
 
-  .new_form .form_container table td {
+  .new_v18 .form_container table td {
     margin-bottom: 0;
   }
 
-  .new_form .form_container table .tox-tinymce {
+  .new_v18 .form_container table .tox-tinymce {
     width: 100% !important;
   }
 }
@@ -950,7 +950,7 @@ body:not(.new_form) .only_new_form {
   font-size: 1.3em;
 }
 
-.new_menu .grid .grid-item h2 {
+.new_v19 .grid .grid-item h2 {
   text-align: left;
 }
 
