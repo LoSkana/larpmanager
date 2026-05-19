@@ -310,8 +310,7 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name=re.compile(" Registrations$")).click()
 
     expect_normalized(page, page.locator("#one"),
-  """event cover date status details event cover date status details test larp 19 march 2050
-            registration confirmed (standard) your character is: my character""")
+  "test larp 19 march 2050 registration confirmed (standard) your character is: my character")
 
 
 def player_relationships(page: Any, live_server: Any) -> None:
