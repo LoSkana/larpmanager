@@ -798,6 +798,10 @@ body:not(.new_v18) .only_new_v18 {
   .new_v18 .form_container {
     width: 90%;
   }
+
+  .new_v20 .form_container {
+    width: 100% !important;
+  }
 }
 
 .new_v18 .form_container table {

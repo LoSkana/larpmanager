@@ -8,12 +8,14 @@
     <div class="user_resize platform">
         <hr class="no_v20" />
         <p>
-            {% trans "You are logged in with an email address" %}: <i>{{ member.email }}</i>. <a href="{% url 'ticket' 'email' %}">{% trans "Would you like to change it" %}?</a>
+            {% trans "You are logged in with an email address" %}: <i>{{ member.email }}</i>.
+            <a href="{% url 'ticket' 'email' %}">{% trans "Would you like to change it" %}?</a>
         </p>
         <hr />
         {% if vote_open %}
             <p>
-                {% trans "Voting for the Executive is open" %}, <a href="{% url 'vote' %}">{% trans "submit your vote here" %}!</a>.
+                {% trans "Voting for the Executive is open" %},
+                <a href="{% url 'vote' %}">{% trans "submit your vote here" %}!</a>.
             </p>
             <hr />
         {% endif %}
@@ -22,15 +24,17 @@
                 {% trans "We value the privacy of your data and will treat it with the utmost care" %}.
                 {% trans "In particular, they will only be made visible to the organisers of the events you decide to register for" %}.
                 {% trans "They will not be communicated, shared or processed in any other way" %}.
-            {% trans "You can check and edit the list of organizations that can access your data on your" %} <a href="{% url 'profile_privacy' %}">privacy</a>.</i>
+                {% trans "You can check and edit the list of organizations that can access your data on" %}
+                <a href="{% url 'profile_privacy' %}">privacy</a>.</i>
         </p>
         <hr />
         {% if custom_text %}
             {{ custom_text | safe }}
             <hr />
         {% endif %}
-        <p>(*) : {% trans "These fields are mandatory" %}</p>
-        <hr />
+        <p>
+            <i>(*) : {% trans "These fields are mandatory" %}</i>
+        </p>
         {% if avatar_form %}
             <form action="{{ request.path }}"
                   enctype="multipart/form-data"

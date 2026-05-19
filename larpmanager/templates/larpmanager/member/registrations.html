@@ -7,6 +7,6 @@
     {% include "larpmanager/member/profile_nav.html" with active="registrations" %}
     <div class="user_resize platform">
         <hr class="no_v20" />
-        {% include "elements/member/registration_list.html" %}
+        {% include "elements/member/registration_list.html" with hide_cover=True %}
     </div>
 {% endblock content %}

@@ -7,7 +7,9 @@
                     <th>{% trans "Organization" %}</th>
                 {% endif %}
                 <th>{% trans "Event" %}</th>
-                <th>{% trans "Cover" %}</th>
+                {% if not hide_cover %}
+                    <th>{% trans "Cover" %}</th>
+                {% endif %}
                 <th>{% trans "Date" %}</th>
                 <th>{% trans "Status" %}</th>
                 <th>{% trans "Details" %}</th>
@@ -22,12 +24,14 @@
                             <a href="{% url 'gallery' registration.run.get_slug %}">{{ registration.run }}</a>
                         </b>
                     </td>
-                    {% if run.event.cover %}
-                        <td class="cover-container">
-                            <img src="{{ run.event.cover_thumb.url }}" alt="run cover image" />
-                        </td>
-                    {% else %}
-                        <td></td>
+                    {% if not hide_cover %}
+                        {% if run.event.cover %}
+                            <td class="cover-container">
+                                <img src="{{ run.event.cover_thumb.url }}" alt="run cover image" />
+                            </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
                     {% endif %}
                     <td>
                         <i>{{ registration.run.pretty_dates }}</i>
