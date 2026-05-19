@@ -24,6 +24,7 @@ import re
 from datetime import date, timedelta
 from typing import Any
 
+from bs4 import BeautifulSoup
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.contrib.auth import login
@@ -33,6 +34,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Avg, Count, Min, Sum
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _, override
@@ -1237,3 +1239,71 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
     login(request, demo_user, backend=get_user_backend())
 
     return redirect("after_login", subdomain=demo_association.slug, path="manage")
+
+
+_MD_MEDIA_TAGS = frozenset({"img", "video", "audio", "iframe", "source", "picture", "figure", "figcaption"})
+_MD_HEADING_TAGS = frozenset({"h1", "h2", "h3", "h4", "h5", "h6"})
+_MD_BLOCK_TAGS = frozenset({"div", "section", "article", "ul", "ol"})
+_MD_INLINE_WRAP = {"strong": "**", "b": "**", "em": "*", "i": "*", "li": "- "}
+_MD_SIMPLE = {"p": ("\n", "\n"), "br": ("\n", ""), "li": ("- ", "\n")}
+
+
+def _md_node(node: Any) -> str:
+    """Recursively convert a BeautifulSoup node to markdown text."""
+    if isinstance(node, str):
+        return node
+    tag = node.name
+    if tag in _MD_MEDIA_TAGS:
+        return ""
+    inner = "".join(_md_node(c) for c in node.children)
+    return _md_tag(tag, inner, node)
+
+
+def _md_tag(tag: str, inner: str, node: Any) -> str:
+    """Map a single HTML tag to its markdown representation."""
+    if tag in _MD_HEADING_TAGS:
+        return f"\n{'#' * int(tag[1])} {inner.strip()}\n"
+    if tag in _MD_BLOCK_TAGS:
+        return f"\n{inner.strip()}\n"
+    if tag in _MD_INLINE_WRAP:
+        marker = _MD_INLINE_WRAP[tag]
+        return f"{marker}{inner.strip()}"
+    if tag == "a":
+        href = node.get("href", "")
+        return f"[{inner}]({href})" if href else inner
+    if tag == "p":
+        return f"\n{inner.strip()}\n"
+    return inner
+
+
+def _html_to_markdown(html: str) -> str:
+    """Convert HTML content to plain markdown text, stripping media elements."""
+    if not html:
+        return ""
+    soup = BeautifulSoup(html, "html.parser")
+    text = "".join(_md_node(child) for child in soup.children)
+    return re.sub(r"\n{3,}", "\n\n", text).strip()
+
+
+@cache_page(60 * 60)
+def llms_full(_request: HttpRequest) -> HttpResponse:
+    """Serve llms-full.txt with complete guides and tutorials in markdown."""
+    lines = [render_to_string("llms.txt")]
+
+    tutorials = LarpManagerTutorial.objects.order_by("order")
+    if tutorials.exists():
+        lines.append("\n\n---\n\n## Tutorials\n")
+        for t in tutorials:
+            lines.append(f"\n### {t.name}\n")
+            lines.append(_html_to_markdown(t.descr or ""))
+
+    guides = LarpManagerGuide.objects.filter(published=True).order_by("number")
+    if guides.exists():
+        lines.append("\n\n---\n\n## Guides\n")
+        for g in guides:
+            lines.append(f"\n### {g.title}\n")
+            if g.description:
+                lines.append(f"*{g.description}*\n")
+            lines.append(_html_to_markdown(g.text or ""))
+
+    return HttpResponse("".join(lines), content_type="text/plain; charset=utf-8")
