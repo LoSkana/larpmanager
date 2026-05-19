@@ -70,7 +70,7 @@
                 </span>
             {% endwith %}
         {% endif %}
-    {% endif %}
-    {% if run_status.details %}<p class="reg-status-details">{{ run_status.details | safe }}</p>{% endif %}
-</div>
+        {% if run_status.details %}<p class="reg-status-details">{{ run_status.details | safe }}</p>{% endif %}
+    </div>
+{% endif %}
 {% endwith %}

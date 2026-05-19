@@ -469,6 +469,8 @@ def auto_process_single_method(
     Returns:
         True if auto-processing was triggered (context["invoice"] will be set).
     """
+    if request.method != "GET":
+        return False
     if len(context.get("methods", {})) != 1:
         return False
     single_method = next(iter(context["methods"]))
