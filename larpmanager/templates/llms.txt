@@ -5,6 +5,7 @@
 ## Core Features
 
 - **Registrations & Ticketing**: Player sign-ups with custom ticket options, add-ons, food/sleep preferences
+- **QR Code Check-in**: Each registered participant receives a unique encrypted QR code tied to their profile, character, and payment status. Staff scan codes on-site to instantly validate presence, verify payment, confirm character assignment, and automatically award attendance XP. Works offline — check-ins are buffered locally and synced when connectivity is restored.
 - **Payment Management**: Track who paid, who owes, automated reminders, multiple payment gateways (Paypal, Stripe, SumUp, etc.)
 - **Character Sheets**: Custom fields, versioned writing, per-player access control
 - **Campaign / XP System**: Multi-session progression, skill trees, XP tracking, player-facing interface
@@ -130,6 +131,7 @@ Features are organized by module. Each feature can be enabled or disabled indepe
 
 ### Event Operations & Logistics
 
+- **QR Code Check-in** *(event)*: Generates a unique encrypted QR code for each registered participant, tied to their profile, selected character, and payment status. Staff use the organizer view of the app to scan codes on-site: the scan instantly validates registration status (paid/outstanding balance), checks that liability forms have been signed, confirms character and starting XP/skill assignment, and marks the participant as present. Check-ins are buffered locally when no network is available and synced automatically when connectivity is restored. A real-time dashboard shows arrival flow rates, useful for managing large events. Marking a participant as "Present" triggers automatic attendance XP credit at the end of the event.
 - **Speed Larp** *(event)*: Manages pre-larp mini-scenes. You can create any number of scenes and assign participants to them, with checks to avoid scheduling conflicts.
 - **Workshop** *(event)*: Adds a quiz-style system for workshop questions. Organizers can define forms, questions, and correct answers for participants to complete.
 - **Shuttle** *(org)*: Allows participants to submit shuttle requests (e.g., pickup logistics), and staff can manage the status of those requests.
