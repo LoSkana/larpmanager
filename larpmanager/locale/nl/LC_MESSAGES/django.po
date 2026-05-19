@@ -1148,9 +1148,6 @@ msgstr "URL kopiëren"
 msgid "Creation"
 msgstr "Schepping"
 
-msgid "Currency"
-msgstr "Valuta"
-
 msgid "Deadline"
 msgstr "Deadline"
 
@@ -2107,6 +2104,9 @@ msgstr "Typen zoektochten"
 
 msgid "Quick Setup"
 msgstr "Snelle installatie"
+
+msgid "Redeem link"
+msgstr "Link inwisselen"
 
 msgid "Register to"
 msgstr "Aanmelden voor"
@@ -3196,9 +3196,6 @@ msgstr "Karakter configureren"
 msgid "Character review"
 msgstr "Karakter recensie"
 
-msgid "Collection links"
-msgstr "Collectie koppelingen"
-
 msgid "Collection total"
 msgstr "Totale collectie"
 
@@ -4005,6 +4002,9 @@ msgstr "Geavanceerde teksteditor"
 
 msgid "Carousel description"
 msgstr "Carrousel beschrijving"
+
+msgid "Close the collection"
+msgstr "Sluit de verzameling"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Volledig blad (Pdf)"
@@ -4999,9 +4999,6 @@ msgstr "Gebruik van activa van derden"
 msgid "We're sorry to see you go"
 msgstr "We vinden het jammer dat je weggaat"
 
-msgid "cancel your registrations"
-msgstr "annuleer je registratie"
-
 msgid "choice value not provided"
 msgstr "keuzewaarde niet opgegeven"
 
@@ -5241,9 +5238,6 @@ msgstr "Ga naar het dashboard van de organisatie"
 
 msgid "If checked: members can vote"
 msgstr "Indien aangevinkt: leden kunnen stemmen"
-
-msgid "Link to close the collection"
-msgstr "Link om de collectie te sluiten"
 
 msgid "Manage participant questions"
 msgstr "Vragen van deelnemers beheren"
@@ -5913,9 +5907,6 @@ msgstr "De externe link voor registratie instellen"
 msgid "Set up the membership request text"
 msgstr "De tekst voor de lidmaatschapsaanvraag instellen"
 
-msgid "The amount of your contribution is"
-msgstr "Het bedrag van je bijdrage is"
-
 msgid "The collection has been activated!"
 msgstr "De collectie is geactiveerd!"
 
@@ -6193,6 +6184,9 @@ msgstr "Deelnemers zonder teken verbergen"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Indien aangevinkt, ticketniveau toestaan: Verkoper"
+
+msgid "Input the amount of your contribution"
+msgstr "Voer het bedrag van je bijdrage in"
 
 msgid "Learn all characters before the event"
 msgstr "Leer alle personages voor het evenement"
@@ -7867,6 +7861,9 @@ msgid "We encountered a problem with the tax code you provided"
 msgstr ""
 "Er is een probleem opgetreden met de belastingcode die u hebt opgegeven"
 
+msgid "When you want to close the collection, follow this link"
+msgstr "Als je de verzameling wilt sluiten, volg dan deze link"
+
 msgid "Your membership application was successfully submitted!"
 msgstr "Je lidmaatschapsaanvraag is succesvol ingediend!"
 
@@ -8185,6 +8182,10 @@ msgstr "Beheer eenmalige toegangstokens voor beveiligde video/audio-inhoud"
 
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Stemmen beheren voor de toewijzing van rollen in de organisatie"
+
+msgid "Please fill out the form below and click confirm to register"
+msgstr ""
+"Vul het onderstaande formulier in en klik op bevestigen om te registreren"
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Dit personage is inactief en kan niet worden toegewezen aan spelers"
@@ -8540,6 +8541,11 @@ msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Om het proces te voltooien, hoef je alleen maar <a href='%(url)s'>klik "
 "hier</a>"
+
+msgid "To update your registration, change the fields and click confirm"
+msgstr ""
+"Om je registratie bij te werken, wijzig je de velden en klik je op "
+"bevestigen"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -9224,6 +9230,12 @@ msgid ""
 msgstr ""
 "Er is een betaling van <b>%(amount).2f %(currency)s</b> ontvangen voor dit "
 "evenement"
+
+msgid ""
+"A special redemption code will be generated, to be given to the recipient"
+msgstr ""
+"Er wordt een speciale code gegenereerd die aan de ontvanger moet worden "
+"gegeven"
 
 msgid ""
 "Activate and configure advanced features for your organization and events"
@@ -10064,13 +10076,6 @@ msgid ""
 msgstr ""
 "Stelt in hoe vaak herinneringsmails worden verzonden, in dagen (als dit niet"
 " is ingesteld, worden er geen e-mails verzonden)"
-
-msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
-msgstr ""
-"Om je in te schrijven voor het evenement, vul je het volgende formulier in "
-"en klik je op bevestigen"
 
 msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
@@ -11356,13 +11361,6 @@ msgstr ""
 "voor evenementen die voor onze leden worden georganiseerd"
 
 msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-"Je kunt je registratie bijwerken door simpelweg de waarde van de velden te "
-"wijzigen en op bevestigen te klikken"
-
-msgid ""
 "You have requested a specific page of an organisation, but it is not "
 "specified in the address given"
 msgstr ""
@@ -11608,13 +11606,6 @@ msgid ""
 msgstr ""
 "De vraag wordt getoond in de geselecteerde sectie (als deze leeg blijft, "
 "wordt deze aan het begin van het formulier getoond)"
-
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
-msgstr ""
-"Als je de collectie wilt sluiten, volg dan de onderstaande link. Er wordt "
-"een speciale inwisselcode gegenereerd"
 
 msgid ""
 "Every friend who registers and uses this code will receive the following "

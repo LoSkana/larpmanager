@@ -4,10 +4,12 @@
     {% trans "Join the collection for" %} {{ coll.display_member }}
 {% endblock title %}
 {% block content %}
-    {% if invoice %}
-        {% include "elements/payment_go.html" %}
-    {% else %}
-        <p>{% trans "The amount of your contribution is" %}:</p>
-        {% include "elements/payment_form.html" %}
-    {% endif %}
+    <div class="user_resize platform">
+        {% if invoice %}
+            {% include "elements/payment_go.html" %}
+        {% else %}
+            <p>{% trans "Input the amount of your contribution" %}:</p>
+            {% include "elements/payment_form.html" %}
+        {% endif %}
+    </div>
 {% endblock content %}

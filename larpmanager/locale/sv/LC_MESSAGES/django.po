@@ -1148,9 +1148,6 @@ msgstr "Kopiera URL"
 msgid "Creation"
 msgstr "Skapande"
 
-msgid "Currency"
-msgstr "Valuta"
-
 msgid "Deadline"
 msgstr "Tidsfrist"
 
@@ -2107,6 +2104,9 @@ msgstr "Typer av uppdrag"
 
 msgid "Quick Setup"
 msgstr "Snabbinställning"
+
+msgid "Redeem link"
+msgstr "Lös in länk"
 
 msgid "Register to"
 msgstr "Anmäl dig till"
@@ -3196,9 +3196,6 @@ msgstr "Teckenkonfiguration"
 msgid "Character review"
 msgstr "Karaktärsbedömning"
 
-msgid "Collection links"
-msgstr "Länkar till samlingar"
-
 msgid "Collection total"
 msgstr "Total samling"
 
@@ -4005,6 +4002,9 @@ msgstr "Avancerad textredigerare"
 
 msgid "Carousel description"
 msgstr "Beskrivning av karusellen"
+
+msgid "Close the collection"
+msgstr "Stäng samlingen"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Komplett blad (Pdf)"
@@ -4999,9 +4999,6 @@ msgstr "Användning av tredje parts tillgångar"
 msgid "We're sorry to see you go"
 msgstr "Vi är ledsna att se dig gå"
 
-msgid "cancel your registrations"
-msgstr "avboka din registrering"
-
 msgid "choice value not provided"
 msgstr "valfritt värde anges inte"
 
@@ -5241,9 +5238,6 @@ msgstr "Gå till organisationens instrumentpanel"
 
 msgid "If checked: members can vote"
 msgstr "Om markerat: medlemmar kan rösta"
-
-msgid "Link to close the collection"
-msgstr "Länk för att stänga samlingen"
 
 msgid "Manage participant questions"
 msgstr "Hantera deltagarnas frågor"
@@ -5912,9 +5906,6 @@ msgstr "Ange den externa länken för registrering"
 msgid "Set up the membership request text"
 msgstr "Skapa en text för medlemsförfrågan"
 
-msgid "The amount of your contribution is"
-msgstr "Beloppet på ditt bidrag är"
-
 msgid "The collection has been activated!"
 msgstr "Samlingen har aktiverats!"
 
@@ -6192,6 +6183,9 @@ msgstr "Dölj deltagare utan tecken"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Om markerat, tillåt biljettnivå: Säljare"
+
+msgid "Input the amount of your contribution"
+msgstr "Ange beloppet för ditt bidrag"
 
 msgid "Learn all characters before the event"
 msgstr "Lär dig alla karaktärer före evenemanget"
@@ -7844,6 +7838,9 @@ msgstr "Lagerkvantiteter har åtagits för denna händelse"
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Vi stötte på ett problem med den skattekod du angav"
 
+msgid "When you want to close the collection, follow this link"
+msgstr "När du vill stänga samlingen följer du den här länken"
+
 msgid "Your membership application was successfully submitted!"
 msgstr "Din medlemsansökan har skickats in framgångsrikt!"
 
@@ -8145,6 +8142,11 @@ msgstr "Hantera engångsåtkomsttokens för säkert video-/audioinnehåll"
 
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Hantera röster för tilldelning av roller i organisationen"
+
+msgid "Please fill out the form below and click confirm to register"
+msgstr ""
+"Vänligen fyll i formuläret nedan och klicka på bekräfta för att registrera "
+"dig"
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Denna karaktär är inaktiv och kan inte tilldelas spelare"
@@ -8466,6 +8468,10 @@ msgstr ""
 #, python-format
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr "För att slutföra processen, bara <a href='%(url)s'>klicka här</a>"
+
+msgid "To update your registration, change the fields and click confirm"
+msgstr ""
+"För att uppdatera din registrering, ändra fälten och klicka på bekräfta"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr "Video- eller ljudfil som ska streamas (rekommenderas: MP4, WebM, MP3)"
@@ -9105,6 +9111,11 @@ msgid ""
 msgstr ""
 "En betalning på <b>%(amount).2f %(currency)s</b> togs emot för detta "
 "evenemang"
+
+msgid ""
+"A special redemption code will be generated, to be given to the recipient"
+msgstr ""
+"En särskild inlösenkod kommer att genereras, som ska ges till mottagaren"
 
 msgid ""
 "Activate and configure advanced features for your organization and events"
@@ -9901,13 +9912,6 @@ msgid ""
 msgstr ""
 "Anger hur ofta påminnelsemeddelanden ska skickas, i dagar (om inget anges "
 "skickas inga e-postmeddelanden)"
-
-msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
-msgstr ""
-"För att anmäla dig till evenemanget, vänligen fyll i följande formulär och "
-"klicka på bekräfta"
 
 msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
@@ -11185,13 +11189,6 @@ msgstr ""
 "som anordnas för våra medlemmar"
 
 msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-"Du kan uppdatera din registrering genom att helt enkelt ändra värdet i "
-"fälten och klicka på bekräfta"
-
-msgid ""
 "You have requested a specific page of an organisation, but it is not "
 "specified in the address given"
 msgstr ""
@@ -11436,13 +11433,6 @@ msgid ""
 msgstr ""
 "Frågan kommer att visas i det valda avsnittet (om den lämnas tom visas den i"
 " början av formuläret)"
-
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
-msgstr ""
-"När du vill avsluta insamlingen följer du länken nedan. En särskild "
-"inlösenkod kommer att genereras"
 
 msgid ""
 "Every friend who registers and uses this code will receive the following "

@@ -5,14 +5,16 @@
 {% endblock title %}
 {% block content %}
     {% include "larpmanager/member/profile_nav.html" with active="privacy" %}
-    <div class="auto_resize platform">
+    <div class="user_resize platform">
         <hr />
-        <i>
-            {% trans "Your data will be saved in the system, which is used by several associations" %}.
-            {% trans "We value the privacy of your data and will treat it with the utmost care" %}.
-            {% trans "In particular, they will only be made visible to the organisers of the events you decide to register for" %}.
-            {% trans "They will not be communicated, shared or processed in any other way" %}.
-        </i>
+        <p>
+            <i>
+                {% trans "Your data will be saved in the system, which is used by several associations" %}.
+                {% trans "We value the privacy of your data and will treat it with the utmost care" %}.
+                {% trans "In particular, they will only be made visible to the organisers of the events you decide to register for" %}.
+                {% trans "They will not be communicated, shared or processed in any other way" %}.
+            </i>
+        </p>
         <hr />
         <p>{% trans "Here is the complete list of all organizations that have access to your data" %}.</p>
         <p>{% trans "You can withdraw your consent to data sharing by clicking the related link" %}.</p>

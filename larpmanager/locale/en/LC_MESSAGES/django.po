@@ -5373,9 +5373,6 @@ msgid ""
 "submit the form, otherwise your payment will not be processed"
 msgstr ""
 
-msgid "Follow the steps below"
-msgstr ""
-
 msgid ""
 "Important: after completing the transfer, you must return to this page and "
 "submit the form at the bottom, otherwise your payment will not be registered"
@@ -5385,9 +5382,6 @@ msgid "Use the bank details below to make the transfer from your bank"
 msgstr ""
 
 msgid "Copy the causal exactly as shown (in coloured text)"
-msgstr ""
-
-msgid "Currency"
 msgstr ""
 
 msgid "IBAN"
@@ -5411,6 +5405,9 @@ msgstr ""
 msgid ""
 "Once the transfer is confirmed, submit the form below to notify us of your "
 "payment"
+msgstr ""
+
+msgid "Follow the steps below"
 msgstr ""
 
 msgid "Click on the image below (Paypal.me) to open the payment"
@@ -5949,12 +5946,7 @@ msgstr ""
 msgid "Change registration"
 msgstr ""
 
-msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-
-msgid "cancel your registrations"
+msgid "To update your registration, change the fields and click confirm"
 msgstr ""
 
 msgid "Personal code"
@@ -5973,9 +5965,7 @@ msgid ""
 "event registration"
 msgstr ""
 
-msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
+msgid "Please fill out the form below and click confirm to register"
 msgstr ""
 
 msgid "View limited ticket options"
@@ -7338,7 +7328,7 @@ msgid ""
 "The collection is ready to be delivered, give this link to the recipient"
 msgstr ""
 
-msgid "Collection links"
+msgid "Redeem link"
 msgstr ""
 
 msgid ""
@@ -7349,12 +7339,14 @@ msgstr ""
 msgid "Link to participate in"
 msgstr ""
 
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
+msgid "When you want to close the collection, follow this link"
 msgstr ""
 
-msgid "Link to close the collection"
+msgid ""
+"A special redemption code will be generated, to be given to the recipient"
+msgstr ""
+
+msgid "Close the collection"
 msgstr ""
 
 msgid "Number of partecipants"
@@ -7369,7 +7361,7 @@ msgstr ""
 msgid "Join the collection for"
 msgstr ""
 
-msgid "The amount of your contribution is"
+msgid "Input the amount of your contribution"
 msgstr ""
 
 msgid "Redeem collection"

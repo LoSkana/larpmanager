@@ -1148,9 +1148,6 @@ msgstr "Copier l'URL"
 msgid "Creation"
 msgstr "Création"
 
-msgid "Currency"
-msgstr "Monnaie"
-
 msgid "Deadline"
 msgstr "Date limite"
 
@@ -2107,6 +2104,9 @@ msgstr "Types de quêtes"
 
 msgid "Quick Setup"
 msgstr "Installation rapide"
+
+msgid "Redeem link"
+msgstr "Lien de remboursement"
 
 msgid "Register to"
 msgstr "S'inscrire à"
@@ -3196,9 +3196,6 @@ msgstr "Configuration des caractères"
 msgid "Character review"
 msgstr "Revue des personnages"
 
-msgid "Collection links"
-msgstr "Liens de la collection"
-
 msgid "Collection total"
 msgstr "Collection totale "
 
@@ -4005,6 +4002,9 @@ msgstr "Editeur de texte avancé"
 
 msgid "Carousel description"
 msgstr "Description du carrousel"
+
+msgid "Close the collection"
+msgstr "Ferme la collection"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Fiche complète (Pdf)"
@@ -4999,9 +4999,6 @@ msgstr "Utilisation d'actifs de tiers"
 msgid "We're sorry to see you go"
 msgstr "Nous sommes désolés de vous voir partir"
 
-msgid "cancel your registrations"
-msgstr "annuler votre inscription"
-
 msgid "choice value not provided"
 msgstr "valeur de choix non fournie"
 
@@ -5241,9 +5238,6 @@ msgstr "Accéder au tableau de bord de l'organisation"
 
 msgid "If checked: members can vote"
 msgstr "Si coché : les membres peuvent voter"
-
-msgid "Link to close the collection"
-msgstr "Lien pour fermer la collection"
 
 msgid "Manage participant questions"
 msgstr "Gérer les questions des participants"
@@ -5916,9 +5910,6 @@ msgstr "Définir le lien externe d'enregistrement"
 msgid "Set up the membership request text"
 msgstr "Configurer le texte de la demande d'adhésion"
 
-msgid "The amount of your contribution is"
-msgstr "Le montant de votre contribution est de"
-
 msgid "The collection has been activated!"
 msgstr "La collection a été activée !"
 
@@ -6196,6 +6187,9 @@ msgstr "Cacher les participants sans caractère"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Si la case est cochée, autoriser le niveau de ticket : Vendeur"
+
+msgid "Input the amount of your contribution"
+msgstr "Saisis le montant de ta contribution"
 
 msgid "Learn all characters before the event"
 msgstr "Apprendre tous les personnages avant l'événement"
@@ -7925,6 +7919,9 @@ msgid "We encountered a problem with the tax code you provided"
 msgstr ""
 "Nous avons rencontré un problème avec le code fiscal que vous avez fourni"
 
+msgid "When you want to close the collection, follow this link"
+msgstr "Lorsque tu voudras fermer la collection, suis ce lien"
+
 msgid "Your membership application was successfully submitted!"
 msgstr "Votre demande d'adhésion a été envoyée avec succès !"
 
@@ -8270,6 +8267,10 @@ msgstr ""
 
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Gérer les votes pour l'attribution des rôles dans l'organisation"
+
+msgid "Please fill out the form below and click confirm to register"
+msgstr ""
+"Remplis le formulaire ci-dessous et clique sur confirmer pour t'inscrire"
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Ce personnage est inactif et ne peut pas être assigné à des joueurs"
@@ -8639,6 +8640,11 @@ msgstr ""
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Pour terminer le processus, il suffit de <a href='%(url)s'>cliquer ici</a>"
+
+msgid "To update your registration, change the fields and click confirm"
+msgstr ""
+"Pour mettre à jour ton inscription, modifie les champs et clique sur "
+"confirmer"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr "Fichier vidéo ou audio à diffuser (recommandé : MP4, WebM, MP3)"
@@ -9360,6 +9366,11 @@ msgid ""
 msgstr ""
 "Un paiement de <b>%(amount).2f %(currency)s</b> a été reçu pour cet "
 "événement"
+
+msgid ""
+"A special redemption code will be generated, to be given to the recipient"
+msgstr ""
+"Un code de remboursement spécial sera généré, à remettre au destinataire"
 
 msgid ""
 "Activate and configure advanced features for your organization and events"
@@ -10214,13 +10225,6 @@ msgid ""
 msgstr ""
 "Définit la fréquence d'envoi des courriels de rappel, en jours (si cette "
 "valeur n'est pas définie, aucun courriel n'est envoyé)"
-
-msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
-msgstr ""
-"Pour vous inscrire à l'événement, veuillez remplir le formulaire suivant et "
-"cliquer sur 'confirmer'"
 
 msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
@@ -11509,13 +11513,6 @@ msgstr ""
 "inscrire aux événements organisés pour nos membres"
 
 msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-"Vous pouvez mettre à jour votre inscription en modifiant simplement la "
-"valeur des champs et en cliquant sur 'confirmer'"
-
-msgid ""
 "You have requested a specific page of an organisation, but it is not "
 "specified in the address given"
 msgstr ""
@@ -11763,13 +11760,6 @@ msgid ""
 msgstr ""
 "La question sera affichée dans la section sélectionnée (si elle est laissée "
 "vide, elle sera affichée au début du formulaire)"
-
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
-msgstr ""
-"Lorsque vous souhaitez clôturer la collection, suivez le lien ci-dessous. Un"
-" code de remboursement spécial sera généré"
 
 msgid ""
 "Every friend who registers and uses this code will receive the following "

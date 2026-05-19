@@ -164,15 +164,13 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Accepted")
 
-    # Go to payment page: verify total 120 includes membership fee of 20, then submit wire
+    # Go to payment page: single method auto-selected, verify total 120 includes membership fee of 20
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
     page.get_by_role("link", name="to confirm it proceed with").click()
-    page.get_by_role("cell", name="Wire", exact=True).click()
     expect_normalized(page, page.locator("#one"), "The total registration fee is: 100")
     expect_normalized(page, page.locator("#one"), "membership fee 2050: 20")
-    expect_normalized(page, page.locator("#one"), "Total payment: 120")
-    submit(page)
+    expect_normalized(page, page.locator("#one"), "you are about to make a payment of: 120 €")
 
     # Second event: riepilogo now shows 70 only (membership reserved by first event's invoice)
     go_to(page, live_server, "/testsecond/register")
@@ -186,7 +184,6 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Total registration fee: 100")
     expect_normalized(page, page.locator("#one"), "Next payment: 120€ (Includes membership fee 2050: 20€)")
     page.get_by_role("link", name="to confirm it proceed with").click()
-    submit(page)
     page.get_by_role("checkbox", name="Payment confirmation:").check()
     submit(page)
 
@@ -218,13 +215,11 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     just_wait(page)
     submit_confirm(page)
 
-    # Second event: proceed to wire payment (total 100, no membership shown)
+    # Second event: proceed to wire payment (total 70, no membership shown, single method auto-selected)
     go_to(page, live_server, "/testsecond/register")
     expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
     page.get_by_role("link", name="to confirm it proceed with").click()
-    page.get_by_role("cell", name="Wire", exact=True).click()
-    expect_normalized(page, page.locator("b"), "70")
-    submit(page)
+    expect_normalized(page, page.locator("#one"), "70 EUR")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
     submit(page)
 

@@ -1148,9 +1148,6 @@ msgstr "Kopírovat adresu URL"
 msgid "Creation"
 msgstr "Vytvoření"
 
-msgid "Currency"
-msgstr "Měna"
-
 msgid "Deadline"
 msgstr "Termín"
 
@@ -2107,6 +2104,9 @@ msgstr "Typy úkolů"
 
 msgid "Quick Setup"
 msgstr "Rychlé nastavení"
+
+msgid "Redeem link"
+msgstr "Odkaz na vykoupení"
 
 msgid "Register to"
 msgstr "Zaregistrujte se"
@@ -3196,9 +3196,6 @@ msgstr "Konfigurace postavy"
 msgid "Character review"
 msgstr "Recenze postavy"
 
-msgid "Collection links"
-msgstr "Odkazy na sbírku"
-
 msgid "Collection total"
 msgstr "Celková sbírka"
 
@@ -4005,6 +4002,9 @@ msgstr "Pokročilý textový editor"
 
 msgid "Carousel description"
 msgstr "Popis kolotoče"
+
+msgid "Close the collection"
+msgstr "Uzavření sbírky"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Kompletní list (Pdf)"
@@ -4999,9 +4999,6 @@ msgstr "Použití majetku třetích stran"
 msgid "We're sorry to see you go"
 msgstr "Je nám líto, že odcházíte"
 
-msgid "cancel your registrations"
-msgstr "zrušit svou registraci"
-
 msgid "choice value not provided"
 msgstr "hodnota výběru není uvedena"
 
@@ -5241,9 +5238,6 @@ msgstr "Přejít na řídicí panel organizace"
 
 msgid "If checked: members can vote"
 msgstr "Pokud je zaškrtnuto: členové mohou hlasovat"
-
-msgid "Link to close the collection"
-msgstr "Odkaz na uzavření sbírky"
 
 msgid "Manage participant questions"
 msgstr "Správa otázek účastníků"
@@ -5913,9 +5907,6 @@ msgstr "Nastavení externího odkazu pro registraci"
 msgid "Set up the membership request text"
 msgstr "Nastavení textu žádosti o členství"
 
-msgid "The amount of your contribution is"
-msgstr "Výše vašeho příspěvku je"
-
 msgid "The collection has been activated!"
 msgstr "Sbírka byla aktivována!"
 
@@ -6193,6 +6184,9 @@ msgstr "Skrýt účastníky bez znaku"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Prodejce"
+
+msgid "Input the amount of your contribution"
+msgstr "Zadejte výši svého příspěvku"
 
 msgid "Learn all characters before the event"
 msgstr "Naučte se všechny znaky před akcí"
@@ -7850,6 +7844,9 @@ msgstr "Pro tuto událost bylo přiděleno skladové množství"
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Narazili jsme na problém s daňovým kódem, který jste nám poskytli"
 
+msgid "When you want to close the collection, follow this link"
+msgstr "Pokud chcete sbírku uzavřít, postupujte podle tohoto odkazu"
+
 msgid "Your membership application was successfully submitted!"
 msgstr "Vaše žádost o členství byla úspěšně odeslána!"
 
@@ -8143,6 +8140,11 @@ msgstr ""
 
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Řídit hlasování o přidělování rolí v organizaci"
+
+msgid "Please fill out the form below and click confirm to register"
+msgstr ""
+"Vyplňte prosím níže uvedený formulář a kliknutím na tlačítko potvrdit se "
+"zaregistrujte"
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Tato postava je neaktivní a nelze ji přiřadit k hráčům"
@@ -8440,6 +8442,11 @@ msgstr ""
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Chcete-li proces dokončit, jednoduše <a href='%(url)s'>klikněte zde</a>"
+
+msgid "To update your registration, change the fields and click confirm"
+msgstr ""
+"Chcete-li aktualizovat svou registraci, změňte pole a klikněte na tlačítko "
+"potvrdit"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -9045,6 +9052,10 @@ msgid ""
 "A payment of <b>%(amount).2f %(currency)s</b> was received for this event"
 msgstr ""
 "Za tuto událost byla přijata platba ve výši <b>%(amount).2f %(currency)s</b>"
+
+msgid ""
+"A special redemption code will be generated, to be given to the recipient"
+msgstr "Bude vygenerován speciální výkupní kód, který bude předán příjemci"
 
 msgid ""
 "Activate and configure advanced features for your organization and events"
@@ -9812,13 +9823,6 @@ msgid ""
 msgstr ""
 "Nastavuje četnost zasílání e-mailů s připomenutím v dnech (pokud není "
 "nastaveno, nejsou zasílány žádné e-maily)"
-
-msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
-msgstr ""
-"Chcete-li se na akci přihlásit, vyplňte prosím následující formulář a "
-"klikněte na tlačítko potvrdit"
 
 msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
@@ -11056,13 +11060,6 @@ msgstr ""
 "pořádané pro naše členy"
 
 msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-"Svou registraci můžete aktualizovat jednoduchou změnou hodnoty polí a "
-"kliknutím na tlačítko potvrdit"
-
-msgid ""
 "You have requested a specific page of an organisation, but it is not "
 "specified in the address given"
 msgstr ""
@@ -11306,13 +11303,6 @@ msgid ""
 msgstr ""
 "Otázka se zobrazí ve vybrané části (pokud zůstane prázdná, zobrazí se na "
 "začátku formuláře)"
-
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
-msgstr ""
-"Pokud chcete sbírku uzavřít, postupujte podle níže uvedeného odkazu. Bude "
-"vygenerován speciální výkupní kód"
 
 msgid ""
 "Every friend who registers and uses this code will receive the following "

@@ -1148,9 +1148,6 @@ msgstr "Copia l'URL"
 msgid "Creation"
 msgstr "Creazione"
 
-msgid "Currency"
-msgstr "Valuta"
-
 msgid "Deadline"
 msgstr "Scadenza"
 
@@ -2107,6 +2104,9 @@ msgstr "Tipi di missione"
 
 msgid "Quick Setup"
 msgstr "Impostazione rapida"
+
+msgid "Redeem link"
+msgstr "Link per il riscatto"
 
 msgid "Register to"
 msgstr "Iscriviti a"
@@ -3196,9 +3196,6 @@ msgstr "Configurazione personaggio"
 msgid "Character review"
 msgstr "Personaggio revisione"
 
-msgid "Collection links"
-msgstr "Link di riscossione"
-
 msgid "Collection total"
 msgstr "Raccolta totale"
 
@@ -4005,6 +4002,9 @@ msgstr "Editor di testo avanzato"
 
 msgid "Carousel description"
 msgstr "Descrizione carousel"
+
+msgid "Close the collection"
+msgstr "Chiudi la raccolta"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Scheda completa (Pdf)"
@@ -4999,9 +4999,6 @@ msgstr "Godimento di beni di terzi"
 msgid "We're sorry to see you go"
 msgstr "Ci dispiace vederti andare via"
 
-msgid "cancel your registrations"
-msgstr "cancellala tua iscrizione"
-
 msgid "choice value not provided"
 msgstr "valore di scelta non fornito"
 
@@ -5241,9 +5238,6 @@ msgstr "Vai al cruscotto dell'organizzazione"
 
 msgid "If checked: members can vote"
 msgstr "Se selezionato: i membri possono votare"
-
-msgid "Link to close the collection"
-msgstr "Link per chiudere la colletta"
 
 msgid "Manage participant questions"
 msgstr "Gestisci le domande dei partecipanti"
@@ -5912,9 +5906,6 @@ msgstr "Imposta il link esterno di registrazione"
 msgid "Set up the membership request text"
 msgstr "Imposta il testo della richiesta di adesione"
 
-msgid "The amount of your contribution is"
-msgstr "L'importo del tuo contributo è"
-
 msgid "The collection has been activated!"
 msgstr "La colletta è stata attivata!"
 
@@ -6192,6 +6183,9 @@ msgstr "Nascondi i partecipanti senza personaggio"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Se selezionata, abilita il livello del biglietto: Venditore"
+
+msgid "Input the amount of your contribution"
+msgstr "Inserisci l'importo del tuo contributo"
 
 msgid "Learn all characters before the event"
 msgstr "Imparare tutti i personaggi prima dell'evento"
@@ -7861,6 +7855,9 @@ msgstr "Le quantità di magazzino sono state impegnate per questo evento"
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Abbiamo riscontrato un problema con il codice fiscale che hai fornito"
 
+msgid "When you want to close the collection, follow this link"
+msgstr "Quando vuoi chiudere la raccolta, segui questo link"
+
 msgid "Your membership application was successfully submitted!"
 msgstr "La tua richiesta di socio è stata inviata con successo!"
 
@@ -8185,6 +8182,9 @@ msgstr ""
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr ""
 "Gestisci le votazioni per l'assegnazione dei ruoli nell'organizzazione"
+
+msgid "Please fill out the form below and click confirm to register"
+msgstr "Compila il modulo sottostante e clicca su conferma per registrarti"
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Questo personaggio è inattivo e non può essere assegnato"
@@ -8532,6 +8532,10 @@ msgstr ""
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Per completare il processo, è sufficiente <a href='%(url)s'>cliccare qui</a>"
+
+msgid "To update your registration, change the fields and click confirm"
+msgstr ""
+"Per aggiornare la tua registrazione, modifica i campi e clicca su conferma"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -9232,6 +9236,11 @@ msgid ""
 msgstr ""
 "E' stato ricevuto il versamento di <b>%(amount).2f %(currency)s</b> per "
 "questo evento"
+
+msgid ""
+"A special redemption code will be generated, to be given to the recipient"
+msgstr ""
+"Verrà generato uno speciale codice di riscatto da consegnare al destinatario"
 
 msgid ""
 "Activate and configure advanced features for your organization and events"
@@ -10082,12 +10091,6 @@ msgid ""
 msgstr ""
 "Imposta la frequenza di invio delle e-mail di promemoria, in giorni (se non "
 "è impostata, non vengono inviate e-mail)"
-
-msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
-msgstr ""
-"Per iscriverti all'evento, compila il seguente form, e clicca su conferma"
 
 msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
@@ -11374,13 +11377,6 @@ msgstr ""
 " agli eventi organizzati per i nostri soci"
 
 msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-"Puoi aggiornare la tua iscrizione semplicemente modificando il valore dei "
-"campi e cliccando conferma"
-
-msgid ""
 "You have requested a specific page of an organisation, but it is not "
 "specified in the address given"
 msgstr ""
@@ -11625,13 +11621,6 @@ msgid ""
 msgstr ""
 "La domanda verrà visualizzata nella sezione selezionata (se lasciata vuota, "
 "verrà visualizzata all'inizio del modulo)"
-
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
-msgstr ""
-"Quando vuoi chiudere la colletta, segui il seguente link. Verrà generato un "
-"codice speciale di riscatto"
 
 msgid ""
 "Every friend who registers and uses this code will receive the following "
