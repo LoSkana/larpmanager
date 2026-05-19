@@ -108,24 +108,27 @@
             </div>
         </div>
         <div id="search-results">
-            <h3>
-                {% trans "Characters list" %} (<span class="num"></span>)
-            </h3>
-            <table>
-                <tr>
-                    <th>{% trans "You are including (at least one of these filters)" %}</th>
-                    <th>{% trans "You are excluding (none of these filters)" %}</th>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="incl"></span>
-                    </td>
-                    <td>
-                        <span class="escl"></span>
-                    </td>
-                </tr>
-            </table>
-            <div id="characters"></div>
+            <div class="user_resize">
+                <h3>
+                    {% trans "Characters list" %} (<span class="num"></span>)
+                </h3>
+                <table>
+                    <tr>
+                        <th>{% trans "You are including (at least one of these filters)" %}</th>
+                        <th>{% trans "You are excluding (none of these filters)" %}</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="incl"></span>
+                        </td>
+                        <td>
+                            <span class="escl"></span>
+                        </td>
+                    </tr>
+                </table>
+                <div id="characters"></div>
+                <div class="clearer"></div>
+            </div>
         </div>
         <div id="teasers" class="hide">
             {% for chnum, el in chars.items %}
