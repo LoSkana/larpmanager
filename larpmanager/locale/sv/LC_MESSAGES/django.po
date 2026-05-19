@@ -1094,9 +1094,6 @@ msgstr "alternativ"
 msgid "seconds"
 msgstr "sekunder"
 
-msgid "website"
-msgstr "webbplats"
-
 msgid "Accepted"
 msgstr "Godkänd"
 
@@ -2535,6 +2532,9 @@ msgstr "Händelse skapad"
 msgid "Event history"
 msgstr "Händelsehistorik"
 
+msgid "Event website"
+msgstr "Evenemangets webbplats"
+
 msgid "External link"
 msgstr "Extern webbadress"
 
@@ -3565,6 +3565,9 @@ msgstr "Betala vad du vill"
 msgid "Payment confirmed"
 msgstr "Betalning bekräftad"
 
+msgid "Payment submitted"
+msgstr "Inlämnad betalning"
+
 msgid "Payments Received"
 msgstr "Erhållna betalningar"
 
@@ -3843,6 +3846,9 @@ msgstr "Är du verkligen säker"
 
 msgid "Assigned character!"
 msgstr "Tilldelad karaktär!"
+
+msgid "Cancel registration"
+msgstr "Avbryt registrering"
 
 msgid "Change registration"
 msgstr "Redigera post"
@@ -5254,9 +5260,6 @@ msgstr "Begäran om undergiven medlem"
 msgid "No accepted membership found"
 msgstr "Inget accepterat medlemskap hittades"
 
-msgid "Payment pending confirmation"
-msgstr "Betalning i avvaktan på bekräftelse"
-
 msgid "Player customisation updated"
 msgstr "Spelaranpassning uppdaterad"
 
@@ -5806,9 +5809,6 @@ msgstr "Tyvärr är det sådant som händer"
 msgid "Verify manually approved payments"
 msgstr "Verifiera manuellt godkända betalningar"
 
-msgid "View all event information in the"
-msgstr "Se all information om evenemanget i"
-
 msgid "You don't have any characters yet"
 msgstr "Du har inga karaktärer ännu"
 
@@ -6102,6 +6102,9 @@ msgstr "Nu kan du ställa in kvittodata"
 msgid "Only really important communications"
 msgstr "Endast riktigt viktig kommunikation"
 
+msgid "Payment awaiting manual verification"
+msgstr "Betalning väntar på manuell verifiering"
+
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Uppdragstyper utan uppdrag: %(list)s"
@@ -6126,9 +6129,6 @@ msgstr "Rollgodkännande %(role)s per %(event)s"
 
 msgid "Select the event of this new session"
 msgstr "Välj evenemang för denna nya session"
-
-msgid "Terms and Conditions of registration"
-msgstr "Villkor och anvisningar för deltagande"
 
 msgid "They need to complete it immediately"
 msgstr "De måste slutföra det omedelbart"
@@ -8139,11 +8139,6 @@ msgstr "Hantera engångsåtkomsttokens för säkert video-/audioinnehåll"
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Hantera röster för tilldelning av roller i organisationen"
 
-msgid "Please fill out the form below and click confirm to register"
-msgstr ""
-"Vänligen fyll i formuläret nedan och klicka på bekräfta för att registrera "
-"dig"
-
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Denna karaktär är inaktiv och kan inte tilldelas spelare"
 
@@ -8464,10 +8459,6 @@ msgstr ""
 #, python-format
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr "För att slutföra processen, bara <a href='%(url)s'>klicka här</a>"
-
-msgid "To update your registration, change the fields and click confirm"
-msgstr ""
-"För att uppdatera din registrering, ändra fälten och klicka på bekräfta"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr "Video- eller ljudfil som ska streamas (rekommenderas: MP4, WebM, MP3)"
@@ -9580,13 +9571,6 @@ msgstr ""
 "alla evenemang som användaren deltagit i"
 
 msgid ""
-"If you have made a transfer, please upload the receipt for it to be "
-"processed"
-msgstr ""
-"Om du har gjort en överföring, vänligen ladda upp kvittot för att det ska "
-"behandlas"
-
-msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr "Ange om färdigheten är synlig för användare och kan köpas fritt"
@@ -9970,6 +9954,13 @@ msgid ""
 "abilities"
 msgstr ""
 "Om markerad, aktiverar förmågemallar som kan återanvändas för flera förmågor"
+
+msgid ""
+"If you have made a wire transfer, please upload the receipt for it to be "
+"processed"
+msgstr ""
+"Om du har gjort en banköverföring, vänligen ladda upp kvittot för att det "
+"ska behandlas"
 
 msgid ""
 "Now you can configure the integration button and the external application "

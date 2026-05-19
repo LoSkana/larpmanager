@@ -1094,9 +1094,6 @@ msgstr "options"
 msgid "seconds"
 msgstr "secondes"
 
-msgid "website"
-msgstr "site web"
-
 msgid "Accepted"
 msgstr "Accepté"
 
@@ -2535,6 +2532,9 @@ msgstr "Événement créé"
 msgid "Event history"
 msgstr "Historique des événements"
 
+msgid "Event website"
+msgstr "Site web de l'événement"
+
 msgid "External link"
 msgstr "URL externe"
 
@@ -3565,6 +3565,9 @@ msgstr "Payer ce que l'on veut"
 msgid "Payment confirmed"
 msgstr "Paiement confirmé"
 
+msgid "Payment submitted"
+msgstr "Paiement soumis"
+
 msgid "Payments Received"
 msgstr "Paiements reçus"
 
@@ -3843,6 +3846,9 @@ msgstr "Êtes-vous vraiment sûr"
 
 msgid "Assigned character!"
 msgstr "Personnage assigné !"
+
+msgid "Cancel registration"
+msgstr "Annuler l'inscription"
 
 msgid "Change registration"
 msgstr "Modifier l'entrée"
@@ -5254,9 +5260,6 @@ msgstr "Demande de membre soumis"
 msgid "No accepted membership found"
 msgstr "Aucune adhésion acceptée n'a été trouvée"
 
-msgid "Payment pending confirmation"
-msgstr "Paiement en attente de confirmation"
-
 msgid "Player customisation updated"
 msgstr "Personnalisation des joueurs mise à jour"
 
@@ -5808,10 +5811,6 @@ msgstr "Malheureusement, ce sont des choses qui arrivent"
 msgid "Verify manually approved payments"
 msgstr "Vérifier les paiements approuvés manuellement"
 
-msgid "View all event information in the"
-msgstr ""
-"Consultez toutes les informations relatives à l'événement dans la rubrique"
-
 msgid "You don't have any characters yet"
 msgstr "Vous n'avez pas encore de personnages"
 
@@ -6106,6 +6105,9 @@ msgstr "Tu peux maintenant configurer les données des reçus"
 msgid "Only really important communications"
 msgstr "Seules les communications vraiment importantes"
 
+msgid "Payment awaiting manual verification"
+msgstr "Paiement en attente de vérification manuelle"
+
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Types de quêtes sans quêtes : %(list)s"
@@ -6130,9 +6132,6 @@ msgstr "Approbation des rôles %(role)s par %(event)s"
 
 msgid "Select the event of this new session"
 msgstr "Sélectionnez l'événement de cette nouvelle session"
-
-msgid "Terms and Conditions of registration"
-msgstr "Conditions de participation"
 
 msgid "They need to complete it immediately"
 msgstr "Ils doivent l'achever immédiatement"
@@ -8265,10 +8264,6 @@ msgstr ""
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Gérer les votes pour l'attribution des rôles dans l'organisation"
 
-msgid "Please fill out the form below and click confirm to register"
-msgstr ""
-"Remplis le formulaire ci-dessous et clique sur confirmer pour t'inscrire"
-
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Ce personnage est inactif et ne peut pas être assigné à des joueurs"
 
@@ -8637,11 +8632,6 @@ msgstr ""
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Pour terminer le processus, il suffit de <a href='%(url)s'>cliquer ici</a>"
-
-msgid "To update your registration, change the fields and click confirm"
-msgstr ""
-"Pour mettre à jour ton inscription, modifie les champs et clique sur "
-"confirmer"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr "Fichier vidéo ou audio à diffuser (recommandé : MP4, WebM, MP3)"
@@ -9881,13 +9871,6 @@ msgstr ""
 "de tous les événements auxquels il a participé"
 
 msgid ""
-"If you have made a transfer, please upload the receipt for it to be "
-"processed"
-msgstr ""
-"Si vous avez effectué un virement, veuillez télécharger le reçu pour qu'il "
-"soit traité"
-
-msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr ""
@@ -10287,6 +10270,13 @@ msgid ""
 msgstr ""
 "Si cette case est cochée, les modèles d'aptitudes peuvent être réutilisés "
 "pour plusieurs aptitudes"
+
+msgid ""
+"If you have made a wire transfer, please upload the receipt for it to be "
+"processed"
+msgstr ""
+"Si tu as effectué un virement bancaire, télécharge le reçu pour qu'il soit "
+"traité"
 
 msgid ""
 "Now you can configure the integration button and the external application "

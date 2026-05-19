@@ -1094,9 +1094,6 @@ msgstr "opzioni"
 msgid "seconds"
 msgstr "secondi"
 
-msgid "website"
-msgstr "sito web"
-
 msgid "Accepted"
 msgstr "Accettato"
 
@@ -2535,6 +2532,9 @@ msgstr "Evento creato"
 msgid "Event history"
 msgstr "Storico eventi"
 
+msgid "Event website"
+msgstr "Sito web dell'evento"
+
 msgid "External link"
 msgstr "Url esterno"
 
@@ -3565,6 +3565,9 @@ msgstr "Offerta libera"
 msgid "Payment confirmed"
 msgstr "Pagamento confermato"
 
+msgid "Payment submitted"
+msgstr "Pagamento inviato"
+
 msgid "Payments Received"
 msgstr "Pagamenti ricevuti"
 
@@ -3843,6 +3846,9 @@ msgstr "Sei davvero sicuro"
 
 msgid "Assigned character!"
 msgstr "Personaggio assegnato!"
+
+msgid "Cancel registration"
+msgstr "Cancella la registrazione"
 
 msgid "Change registration"
 msgstr "Modifica iscrizione"
@@ -5254,9 +5260,6 @@ msgstr "Richiesta Socio sottomessa"
 msgid "No accepted membership found"
 msgstr "Non è stata trovata una iscrizione associativa accettata"
 
-msgid "Payment pending confirmation"
-msgstr "Pagamento in attesa di conferma"
-
 msgid "Player customisation updated"
 msgstr "Personalizzazione giocatore aggiornata"
 
@@ -5807,9 +5810,6 @@ msgstr "Purtroppo queste cose succedono"
 msgid "Verify manually approved payments"
 msgstr "Verifica i pagamenti approvati manualmente"
 
-msgid "View all event information in the"
-msgstr "Visualizza tutte le informazioni sull'evento nel"
-
 msgid "You don't have any characters yet"
 msgstr "Non hai ancora nessun personaggio"
 
@@ -6102,6 +6102,9 @@ msgstr "Ora puoi impostare i dati delle ricevute"
 msgid "Only really important communications"
 msgstr "Solo le comunicazioni veramente importanti"
 
+msgid "Payment awaiting manual verification"
+msgstr "Pagamento in attesa di verifica manuale"
+
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Tipi di quest senza quest: %(list)s"
@@ -6126,9 +6129,6 @@ msgstr "Approvazione ruolo %(role)s per %(event)s"
 
 msgid "Select the event of this new session"
 msgstr "Seleziona l'evento di questa nuova sessione"
-
-msgid "Terms and Conditions of registration"
-msgstr "Termini e condizioni di iscrizione"
 
 msgid "They need to complete it immediately"
 msgstr "Devono completarlo immediatamente"
@@ -8179,9 +8179,6 @@ msgid "Manage votes for the assignment of roles in the organization"
 msgstr ""
 "Gestisci le votazioni per l'assegnazione dei ruoli nell'organizzazione"
 
-msgid "Please fill out the form below and click confirm to register"
-msgstr "Compila il modulo sottostante e clicca su conferma per registrarti"
-
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Questo personaggio è inattivo e non può essere assegnato"
 
@@ -8528,10 +8525,6 @@ msgstr ""
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Per completare il processo, è sufficiente <a href='%(url)s'>cliccare qui</a>"
-
-msgid "To update your registration, change the fields and click confirm"
-msgstr ""
-"Per aggiornare la tua registrazione, modifica i campi e clicca su conferma"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -9749,13 +9742,6 @@ msgstr ""
 "di tutti gli eventi a cui ha partecipato"
 
 msgid ""
-"If you have made a transfer, please upload the receipt for it to be "
-"processed"
-msgstr ""
-"Se hai fatto un bonifico, per favore carica il giustificativo affinchè venga"
-" processato"
-
-msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr ""
@@ -10151,6 +10137,13 @@ msgid ""
 msgstr ""
 "Questa pagina riassume i modelli di abilità riutilizzabili che possono "
 "essere assegnati alle abilità"
+
+msgid ""
+"If you have made a wire transfer, please upload the receipt for it to be "
+"processed"
+msgstr ""
+"Se hai effettuato un bonifico bancario, carica la ricevuta per poterlo "
+"elaborare"
 
 msgid ""
 "Now you can configure the integration button and the external application "

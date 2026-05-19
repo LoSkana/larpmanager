@@ -1094,9 +1094,6 @@ msgstr "vaihtoehdot"
 msgid "seconds"
 msgstr "sekuntia"
 
-msgid "website"
-msgstr "verkkosivusto"
-
 msgid "Accepted"
 msgstr "Hyväksytty"
 
@@ -2535,6 +2532,9 @@ msgstr "Tapahtuma luotu"
 msgid "Event history"
 msgstr "Tapahtumahistoria"
 
+msgid "Event website"
+msgstr "Tapahtuman verkkosivusto"
+
 msgid "External link"
 msgstr "Ulkoinen linkki"
 
@@ -3565,6 +3565,9 @@ msgstr "Maksa mitä haluat"
 msgid "Payment confirmed"
 msgstr "Maksu vahvistettu"
 
+msgid "Payment submitted"
+msgstr "Toimitettu maksu"
+
 msgid "Payments Received"
 msgstr "Saadut maksut"
 
@@ -3843,6 +3846,9 @@ msgstr "Oletko todella varma"
 
 msgid "Assigned character!"
 msgstr "Annettu hahmo!"
+
+msgid "Cancel registration"
+msgstr "Peruuta rekisteröinti"
 
 msgid "Change registration"
 msgstr "Muuta ilmoittautumista"
@@ -5254,9 +5260,6 @@ msgstr "Jäsenyyshakemus jätetty"
 msgid "No accepted membership found"
 msgstr "Ei löydetty hyväksyttyä jäsenyyttä"
 
-msgid "Payment pending confirmation"
-msgstr "Maksu odottaa vahvistusta"
-
 msgid "Player customisation updated"
 msgstr "Pelaajan mukauttaminen päivitetty"
 
@@ -5806,9 +5809,6 @@ msgstr "Valitettavasti näitä asioita tapahtuu"
 msgid "Verify manually approved payments"
 msgstr "Tarkista manuaalisesti hyväksytyt maksut"
 
-msgid "View all event information in the"
-msgstr "Näytä tapahtuman tiedot avaamalla sen"
-
 msgid "You don't have any characters yet"
 msgstr "Sinulla ei ole vielä yhtään hahmoa"
 
@@ -6102,6 +6102,9 @@ msgstr "Nyt voit määrittää kuittitiedot"
 msgid "Only really important communications"
 msgstr "Vain todella tärkeä viestintä"
 
+msgid "Payment awaiting manual verification"
+msgstr "Maksu odottaa manuaalista tarkistusta"
+
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Tehtävätyypit ilman tehtäviä: %(list)s"
@@ -6126,9 +6129,6 @@ msgstr "Roolihyväksyntä %(role)s / %(event)s"
 
 msgid "Select the event of this new session"
 msgstr "Valitse tämän uuden istunnon tapahtuma"
-
-msgid "Terms and Conditions of registration"
-msgstr "Ilmoittautumisen ehdot ja säännöt"
 
 msgid "They need to complete it immediately"
 msgstr "Niiden on saatettava se päätökseen välittömästi"
@@ -8142,9 +8142,6 @@ msgid "Manage votes for the assignment of roles in the organization"
 msgstr ""
 "Hallinnoi äänestyksiä, jotka koskevat roolien jakamista organisaatiossa"
 
-msgid "Please fill out the form below and click confirm to register"
-msgstr "Täytä alla oleva lomake ja klikkaa Vahvista rekisteröityäksesi"
-
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Tämä hahmo on inaktiivinen, eikä sitä voi antaa pelaajille"
 
@@ -8463,11 +8460,6 @@ msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Saat prosessin päätökseen yksinkertaisesti <a href='%(url)s'>klikkaa "
 "tästä</a>"
-
-msgid "To update your registration, change the fields and click confirm"
-msgstr ""
-"Voit päivittää rekisteröintiäsi muuttamalla kenttiä ja napsauttamalla "
-"Vahvista"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -9576,11 +9568,6 @@ msgstr ""
 "tapahtumista, joihin on osallistuttu"
 
 msgid ""
-"If you have made a transfer, please upload the receipt for it to be "
-"processed"
-msgstr "Jos olet tehnyt siirron, lataa kuitti, jotta se voidaan käsitellä"
-
-msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr ""
@@ -9959,6 +9946,11 @@ msgid ""
 msgstr ""
 "Jos valittuna, otetaan käyttöön taitopohjat, joita voidaan käyttää uudelleen"
 " useissa taidoissa"
+
+msgid ""
+"If you have made a wire transfer, please upload the receipt for it to be "
+"processed"
+msgstr "Jos olet tehnyt tilisiirron, lataa kuitti, jotta se voidaan käsitellä"
 
 msgid ""
 "Now you can configure the integration button and the external application "

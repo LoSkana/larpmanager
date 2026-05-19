@@ -1094,9 +1094,6 @@ msgstr "opties"
 msgid "seconds"
 msgstr "seconden"
 
-msgid "website"
-msgstr "website"
-
 msgid "Accepted"
 msgstr "Geaccepteerd"
 
@@ -2535,6 +2532,9 @@ msgstr "Evenement gemaakt"
 msgid "Event history"
 msgstr "Gebeurtenis geschiedenis"
 
+msgid "Event website"
+msgstr "Evenement website"
+
 msgid "External link"
 msgstr "Externe url"
 
@@ -3565,6 +3565,9 @@ msgstr "Betaal wat je wilt"
 msgid "Payment confirmed"
 msgstr "Betaling bevestigd"
 
+msgid "Payment submitted"
+msgstr "Betaling ingediend"
+
 msgid "Payments Received"
 msgstr "Ontvangen betalingen"
 
@@ -3843,6 +3846,9 @@ msgstr "Weet je het echt zeker"
 
 msgid "Assigned character!"
 msgstr "Karakter toegewezen!"
+
+msgid "Cancel registration"
+msgstr "Registratie annuleren"
 
 msgid "Change registration"
 msgstr "Bericht bewerken"
@@ -5254,9 +5260,6 @@ msgstr "Verzoek onderdanig lid"
 msgid "No accepted membership found"
 msgstr "Geen geaccepteerd lidmaatschap gevonden"
 
-msgid "Payment pending confirmation"
-msgstr "Betaling in afwachting van bevestiging"
-
 msgid "Player customisation updated"
 msgstr "Spelersaanpassing bijgewerkt"
 
@@ -5806,9 +5809,6 @@ msgstr "Helaas gebeuren deze dingen"
 msgid "Verify manually approved payments"
 msgstr "Handmatig goedgekeurde betalingen verifiëren"
 
-msgid "View all event information in the"
-msgstr "Bekijk alle evenementinformatie in de"
-
 msgid "You don't have any characters yet"
 msgstr "Je hebt nog geen personages"
 
@@ -6103,6 +6103,9 @@ msgstr "Nu kun je de ontvangstgegevens instellen"
 msgid "Only really important communications"
 msgstr "Alleen echt belangrijke communicatie"
 
+msgid "Payment awaiting manual verification"
+msgstr "Betaling in afwachting van handmatige verificatie"
+
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Questtypes zonder quests: %(list)s"
@@ -6127,9 +6130,6 @@ msgstr "Rolgoedkeuring %(role)s per %(event)s"
 
 msgid "Select the event of this new session"
 msgstr "Selecteer de gebeurtenis van deze nieuwe sessie"
-
-msgid "Terms and Conditions of registration"
-msgstr "Voorwaarden en bepalingen voor deelname"
 
 msgid "They need to complete it immediately"
 msgstr "Ze moeten het onmiddellijk voltooien"
@@ -8180,10 +8180,6 @@ msgstr "Beheer eenmalige toegangstokens voor beveiligde video/audio-inhoud"
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Stemmen beheren voor de toewijzing van rollen in de organisatie"
 
-msgid "Please fill out the form below and click confirm to register"
-msgstr ""
-"Vul het onderstaande formulier in en klik op bevestigen om te registreren"
-
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Dit personage is inactief en kan niet worden toegewezen aan spelers"
 
@@ -8538,11 +8534,6 @@ msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Om het proces te voltooien, hoef je alleen maar <a href='%(url)s'>klik "
 "hier</a>"
-
-msgid "To update your registration, change the fields and click confirm"
-msgstr ""
-"Om je registratie bij te werken, wijzig je de velden en klik je op "
-"bevestigen"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -9737,13 +9728,6 @@ msgstr ""
 "met alle bezochte evenementen weergegeven"
 
 msgid ""
-"If you have made a transfer, please upload the receipt for it to be "
-"processed"
-msgstr ""
-"Als je een overschrijving hebt gedaan, upload dan het ontvangstbewijs om het"
-" te laten verwerken"
-
-msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr ""
@@ -10134,6 +10118,13 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, worden vaardigheidssjablonen ingeschakeld die "
 "kunnen worden hergebruikt voor meerdere vaardigheden"
+
+msgid ""
+"If you have made a wire transfer, please upload the receipt for it to be "
+"processed"
+msgstr ""
+"Als je een overschrijving hebt gedaan, upload dan het ontvangstbewijs zodat "
+"het verwerkt kan worden"
 
 msgid ""
 "Now you can configure the integration button and the external application "

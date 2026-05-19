@@ -1094,9 +1094,6 @@ msgstr "možnosti"
 msgid "seconds"
 msgstr "sekundy"
 
-msgid "website"
-msgstr "webové stránky"
-
 msgid "Accepted"
 msgstr "Přijato"
 
@@ -2535,6 +2532,9 @@ msgstr "Vytvořená událost"
 msgid "Event history"
 msgstr "Historie událostí"
 
+msgid "Event website"
+msgstr "Webové stránky akce"
+
 msgid "External link"
 msgstr "Externí url"
 
@@ -3565,6 +3565,9 @@ msgstr "Zaplaťte, kolik chcete"
 msgid "Payment confirmed"
 msgstr "Platba potvrzena"
 
+msgid "Payment submitted"
+msgstr "Předložená platba"
+
 msgid "Payments Received"
 msgstr "Přijaté platby"
 
@@ -3843,6 +3846,9 @@ msgstr "Jste si opravdu jistý"
 
 msgid "Assigned character!"
 msgstr "Přidělená postava!"
+
+msgid "Cancel registration"
+msgstr "Zrušení registrace"
 
 msgid "Change registration"
 msgstr "Upravit položku"
@@ -5254,9 +5260,6 @@ msgstr "Žádost o submisivní členství"
 msgid "No accepted membership found"
 msgstr "Nebylo nalezeno žádné přijaté členství"
 
-msgid "Payment pending confirmation"
-msgstr "Platba čeká na potvrzení"
-
 msgid "Player customisation updated"
 msgstr "Přizpůsobení hráče aktualizováno"
 
@@ -5806,9 +5809,6 @@ msgstr "Bohužel se to stává"
 msgid "Verify manually approved payments"
 msgstr "Ověřování ručně schválených plateb"
 
-msgid "View all event information in the"
-msgstr "Zobrazení všech informací o události v"
-
 msgid "You don't have any characters yet"
 msgstr "Zatím nemáte žádné postavy"
 
@@ -6103,6 +6103,9 @@ msgstr "Nyní můžete nastavit údaje o účtenkách"
 msgid "Only really important communications"
 msgstr "Pouze skutečně důležitá sdělení"
 
+msgid "Payment awaiting manual verification"
+msgstr "Platba čekající na ruční ověření"
+
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Typy úkolů bez úkolů: %(list)s"
@@ -6127,9 +6130,6 @@ msgstr "Schválení role %(role)s na %(event)s"
 
 msgid "Select the event of this new session"
 msgstr "Vyberte událost této nové relace"
-
-msgid "Terms and Conditions of registration"
-msgstr "Podmínky vstupu"
 
 msgid "They need to complete it immediately"
 msgstr "Musí ji okamžitě dokončit"
@@ -8137,11 +8137,6 @@ msgstr ""
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Řídit hlasování o přidělování rolí v organizaci"
 
-msgid "Please fill out the form below and click confirm to register"
-msgstr ""
-"Vyplňte prosím níže uvedený formulář a kliknutím na tlačítko potvrdit se "
-"zaregistrujte"
-
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Tato postava je neaktivní a nelze ji přiřadit k hráčům"
 
@@ -8438,11 +8433,6 @@ msgstr ""
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Chcete-li proces dokončit, jednoduše <a href='%(url)s'>klikněte zde</a>"
-
-msgid "To update your registration, change the fields and click confirm"
-msgstr ""
-"Chcete-li aktualizovat svou registraci, změňte pole a klikněte na tlačítko "
-"potvrdit"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -9502,13 +9492,6 @@ msgstr ""
 "událostí, kterých se zúčastnil"
 
 msgid ""
-"If you have made a transfer, please upload the receipt for it to be "
-"processed"
-msgstr ""
-"Pokud jste provedli převod, nahrajte prosím potvrzení o převodu, aby mohl "
-"být zpracován"
-
-msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr ""
@@ -9877,6 +9860,13 @@ msgid ""
 msgstr ""
 "Tato stránka shrnuje opakovaně použitelné šablony schopností, které lze "
 "přiřadit schopnostem"
+
+msgid ""
+"If you have made a wire transfer, please upload the receipt for it to be "
+"processed"
+msgstr ""
+"Pokud jste provedli bankovní převod, nahrajte prosím potvrzení o jeho "
+"provedení, aby mohl být zpracován"
 
 msgid ""
 "Now you can configure the integration button and the external application "

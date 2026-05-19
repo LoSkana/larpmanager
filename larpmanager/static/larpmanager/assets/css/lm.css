@@ -25,6 +25,13 @@
   display: block;
 }
 
+.new_v20 .user_resize {
+  padding: 0.5em 1em;
+  margin: 0.5em auto;
+  border-radius: 8px;
+  background-color: rgba(var(--pri-rgb), 0.04);
+}
+
 .hide {
   display: none;
 }
@@ -197,6 +204,15 @@ a label:hover {
 
 .dot_links a {
   border-bottom: dotted 1px rgba(var(--pri-rgb), 0.35);
+}
+
+.reg-links {
+  text-align: center !important;
+}
+
+.reg-links span + span::before {
+  content: " | ";
+  opacity: 0.4;
 }
 
 /* ---------------------------------------------------------------------------
@@ -1880,11 +1896,19 @@ header.sec h1 {
   display: none;
 }
 
+/* Registration status row */
+.new_v20 .reg_status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5em;
+}
+
 /* Registration status block */
 .new_v20 .reg_status .reg-status-block {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 0.35em;
+  margin: 0 auto;
+  align-items: center;
+  gap: 0.6em;
   padding: 0.45em 0.75em;
   border-radius: 5px;
   border-left: 4px solid #ccc;
@@ -1894,15 +1918,9 @@ header.sec h1 {
 
 .new_v20 .reg_status .reg-status-label {
   font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.4em;
 }
 
 .new_v20 .reg_status .reg-action {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2em;
   font-size: 0.93em;
 }
 

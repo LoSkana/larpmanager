@@ -5946,9 +5946,6 @@ msgstr ""
 msgid "Change registration"
 msgstr ""
 
-msgid "To update your registration, change the fields and click confirm"
-msgstr ""
-
 msgid "Personal code"
 msgstr ""
 
@@ -5965,19 +5962,13 @@ msgid ""
 "event registration"
 msgstr ""
 
-msgid "Please fill out the form below and click confirm to register"
+msgid "Cancel registration"
 msgstr ""
 
 msgid "View limited ticket options"
 msgstr ""
 
-msgid "View all event information in the"
-msgstr ""
-
-msgid "website"
-msgstr ""
-
-msgid "Terms and Conditions of registration"
+msgid "Event website"
 msgstr ""
 
 msgid "If you have a discount code, enter it here and press enter"
@@ -10637,9 +10628,6 @@ msgstr ""
 msgid "Provisional registration"
 msgstr ""
 
-msgid "Pending payment"
-msgstr ""
-
 msgid "Upload your membership application to proceed"
 msgstr ""
 
@@ -10649,14 +10637,21 @@ msgstr ""
 msgid "Please fill in your profile"
 msgstr ""
 
-msgid "Payment pending confirmation"
+msgid "Pending payment"
+msgstr ""
+
+msgid "Payment submitted"
+msgstr ""
+
+msgid "Payment awaiting manual verification"
 msgstr ""
 
 msgid "Proceed with payment to confirm your registration"
 msgstr ""
 
 msgid ""
-"If you have made a transfer, please upload the receipt for it to be processed"
+"If you have made a wire transfer, please upload the receipt for it to be "
+"processed"
 msgstr ""
 
 msgid "Registration is open!"

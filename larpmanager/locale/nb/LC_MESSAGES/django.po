@@ -1094,9 +1094,6 @@ msgstr "alternativer"
 msgid "seconds"
 msgstr "sekunder"
 
-msgid "website"
-msgstr "nettside"
-
 msgid "Accepted"
 msgstr "Akseptert"
 
@@ -2535,6 +2532,9 @@ msgstr "Begivenhet opprettet"
 msgid "Event history"
 msgstr "Hendelseshistorikk"
 
+msgid "Event website"
+msgstr "Nettsted for arrangementet"
+
 msgid "External link"
 msgstr "Ekstern url"
 
@@ -3565,6 +3565,9 @@ msgstr "Betal det du vil"
 msgid "Payment confirmed"
 msgstr "Betaling bekreftet"
 
+msgid "Payment submitted"
+msgstr "Innlevert betaling"
+
 msgid "Payments Received"
 msgstr "Mottatte betalinger"
 
@@ -3843,6 +3846,9 @@ msgstr "Er du virkelig sikker"
 
 msgid "Assigned character!"
 msgstr "Tildelt karakter!"
+
+msgid "Cancel registration"
+msgstr "Avbryt registrering"
 
 msgid "Change registration"
 msgstr "Rediger oppføring"
@@ -5254,9 +5260,6 @@ msgstr "Forespørsel om underdanig medlem"
 msgid "No accepted membership found"
 msgstr "Ingen akseptert medlemskap funnet"
 
-msgid "Payment pending confirmation"
-msgstr "Betaling i påvente av bekreftelse"
-
 msgid "Player customisation updated"
 msgstr "Spillertilpasning oppdatert"
 
@@ -5806,9 +5809,6 @@ msgstr "Dessverre skjer slike ting"
 msgid "Verify manually approved payments"
 msgstr "Bekreft manuelt godkjente betalinger"
 
-msgid "View all event information in the"
-msgstr "Se all informasjon om arrangementet i"
-
 msgid "You don't have any characters yet"
 msgstr "Du har ingen tegn ennå"
 
@@ -6101,6 +6101,9 @@ msgstr "Nå kan du konfigurere kvitteringsdataene"
 msgid "Only really important communications"
 msgstr "Kun virkelig viktig kommunikasjon"
 
+msgid "Payment awaiting manual verification"
+msgstr "Betaling i påvente av manuell bekreftelse"
+
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Oppdragstyper uten oppdrag: %(list)s"
@@ -6125,9 +6128,6 @@ msgstr "Rollegodkjenning %(role)s per %(event)s"
 
 msgid "Select the event of this new session"
 msgstr "Velg hendelsen for denne nye økten"
-
-msgid "Terms and Conditions of registration"
-msgstr "Vilkår og betingelser for deltakelse"
 
 msgid "They need to complete it immediately"
 msgstr "De må fullføre det umiddelbart"
@@ -8139,10 +8139,6 @@ msgstr "Administrer engangskoder for sikker tilgang til video-/lydinnhold"
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Administrere avstemninger for tildeling av roller i organisasjonen"
 
-msgid "Please fill out the form below and click confirm to register"
-msgstr ""
-"Vennligst fyll ut skjemaet nedenfor og klikk bekreft for å registrere deg"
-
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Denne karakteren er inaktiv og kan ikke tildeles spillere"
 
@@ -8468,9 +8464,6 @@ msgstr ""
 #, python-format
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr "For å fullføre prosessen, bare <a href='%(url)s'>klikk her</a>"
-
-msgid "To update your registration, change the fields and click confirm"
-msgstr "For å oppdatere registreringen, endre feltene og klikk bekreft"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr "Video- eller lydfil som skal strømmes (anbefalt: MP4, WebM, MP3)"
@@ -9568,13 +9561,6 @@ msgstr ""
 "alle arrangementer vedkommende har deltatt på"
 
 msgid ""
-"If you have made a transfer, please upload the receipt for it to be "
-"processed"
-msgstr ""
-"Hvis du har foretatt en overføring, må du laste opp kvitteringen for at den "
-"skal bli behandlet"
-
-msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr "Angi om ferdigheten er synlig for brukerne og kan kjøpes fritt"
@@ -9955,6 +9941,13 @@ msgid ""
 msgstr ""
 "Hvis avkrysset, aktiverer du evnemaler som kan gjenbrukes på tvers av flere "
 "evner"
+
+msgid ""
+"If you have made a wire transfer, please upload the receipt for it to be "
+"processed"
+msgstr ""
+"Hvis du har foretatt en bankoverføring, må du laste opp kvitteringen for at "
+"den skal bli behandlet"
 
 msgid ""
 "Now you can configure the integration button and the external application "
