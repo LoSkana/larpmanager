@@ -170,7 +170,7 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="to confirm it proceed with").click()
     expect_normalized(page, page.locator("#one"), "The total registration fee is: 100")
     expect_normalized(page, page.locator("#one"), "membership fee 2050: 20")
-    expect_normalized(page, page.locator("#one"), "Total payment: 120")
+    expect_normalized(page, page.locator("#one"), "you are about to make a payment of: 120 €")
 
     # Second event: riepilogo now shows 70 only (membership reserved by first event's invoice)
     go_to(page, live_server, "/testsecond/register")

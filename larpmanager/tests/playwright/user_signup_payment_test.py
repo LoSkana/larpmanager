@@ -74,6 +74,10 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#id_wire_iban").fill("test iban")
     page.locator("#id_wire_bic").fill("test iban")
     page.get_by_role("checkbox", name="Freeform").check()
+    page.locator("#id_any_descr").click()
+    page.locator("#id_any_descr").fill("freeeeee")
+    page.locator("#id_any_fee").click()
+    page.locator("#id_any_fee").fill("1")
     submit_confirm(page)
 
     # set ticket price
