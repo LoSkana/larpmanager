@@ -315,8 +315,13 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
             run_status["can_pay"] = False
             return
 
+    # Set base text before payment check (may be overridden for submitted/wire cases)
+    run_status["text"] = registration_text
+
     # Check payment status and return if payment handling is complete
-    if "payment" in features and _status_payment(register_url, registration, run_status, context):
+    if "payment" in features and _status_payment(
+        register_url, registration, run_status, context, is_provisional=is_provisional
+    ):
         return
 
     # Check for missing membership fee if membership feature is enabled
@@ -331,10 +336,15 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
         run_status["action"] = {"url": profile_url, "label": _("Please fill in your profile")}
         return
 
-    # Handle provisional registration status (no further action needed)
+    # Handle provisional registration status
     if is_provisional:
+        payment_url = reverse("accounting_registration", args=[registration.uuid])
         run_status["text"] = registration_text
         run_status["status_type"] = "provisional"
+        run_status["action"] = {
+            "url": payment_url,
+            "label": _("Proceed with payment to confirm your registration"),
+        }
         return
 
     # Set final confirmed registration status for completed registrations
@@ -347,7 +357,12 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
 
 
 def _status_payment(
-    register_url: str, registration: Registration, run_status: dict, context: dict | None = None
+    register_url: str,
+    registration: Registration,
+    run_status: dict,
+    context: dict | None = None,
+    *,
+    is_provisional: bool = False,
 ) -> bool:
     """Check payment status and update registration status text accordingly.
 
@@ -360,6 +375,7 @@ def _status_payment(
         run_status: Dictionary with run status
         context: Optional context dictionary containing cached data:
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
+        is_provisional: Whether the registration is still provisional (no payment made yet)
 
     Returns:
         True if payment status was processed and status text updated, False otherwise
@@ -442,10 +458,11 @@ def _status_payment(
             return True
 
         # Handle general payment alert with deadline warning
+        if not is_provisional:
+            run_status["text"] = pending_text
         note = ""
         if registration.deadline < 0:
             note = _("If no payment is received, registration may be cancelled")
-        run_status["text"] = pending_text
         run_status["status_type"] = "action_needed"
         run_status["action"] = {
             "url": payment_url,

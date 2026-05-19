@@ -99,7 +99,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     option.click()
     page.wait_for_timeout(5000)
     fill_tinymce(page, "ch_1", "prisdsa")
-    page.locator("#main_form div").filter(has_text="After confirmation, add").click()
+    page.get_by_text("After confirmation, add").click()
     submit_confirm(page)
 
     page.locator("#id_name").click()
@@ -124,7 +124,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("tes")
     page.locator(".select2-results__option").first.click()
-    page.get_by_role("checkbox", name="After confirmation, add").check()
+    page.get_by_text("After confirmation, add").click()
     submit_confirm(page)
 
     page.locator("#id_typ").select_option("g")

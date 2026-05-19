@@ -3,21 +3,14 @@
     <table class="mob">
         <thead>
             <tr>
-                <th>{% trans "Name" %}</th>
                 <th></th>
-                {% if association.id == 0 %}
-                    <th>{% trans "Organization" %}</th>
-                {% endif %}
-                {% if 'genre' in association.features %}
-                    <th>{% trans "Genre" context "event" %}</th>
-                {% endif %}
+                <th></th>
+                {% if association.id == 0 %}<th></th>{% endif %}
+                {% if 'genre' in association.features %}<th></th>{% endif %}
                 {% if 'website' in association.features %}<th></th>{% endif %}
-                <th>{% trans "Date" %}</th>
-                {% if 'where' in association.features %}
-                    <th>{% trans "Location" %}</th>
-                {% endif %}
-                <th>{% trans "Registrations" %}</th>
-                <th>{% trans "Details" %}</th>
+                <th></th>
+                {% if 'where' in association.features %}<th></th>{% endif %}
+                <th></th>
             </tr>
         </thead>
         {% for run in list %}
@@ -65,10 +58,7 @@
                     </td>
                 {% endif %}
                 <td data-title="{% trans "Registrations" %}">
-                    {% if run.status.text %}{{ run.status.text | safe }}{% endif %}
-                </td>
-                <td data-title="{% trans "Details" %}">
-                    {% if run.status.details %}{{ run.status.details | safe }}{% endif %}
+                    {% include "elements/reg_status.html" with run_status=run.status registration=run.status.registration %}
                 </td>
             </tr>
         {% endfor %}

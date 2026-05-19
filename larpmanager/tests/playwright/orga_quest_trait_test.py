@@ -64,7 +64,7 @@ def test_quest_trait(pw_page: Any) -> None:
     page.get_by_role("link", name="Another").click()
     expect_normalized(page,
         page.locator("#one"),
-        "your character is test character player: user test torta - strudel saleee test characterveronese torta - strudel test character player: admin test",
+        "your character is: test character player: user test torta - strudel saleee test characterveronese torta - strudel test character player: admin test",
     )
     page.get_by_role("heading", name="Torta - Strudel").first.click()
 
