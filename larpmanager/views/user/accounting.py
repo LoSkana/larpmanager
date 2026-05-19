@@ -452,18 +452,17 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
         if form.is_valid():
             # Process payment through selected gateway
             get_payment_form(request, form, PaymentType.REGISTRATION, context, key)
-    else:
-        auto_process_single_method(
-            request,
-            PaymentForm,
-            PaymentType.REGISTRATION,
-            context,
-            context["quota"],
-            invoice_key=key,
-            extra_kwargs={"registration": registration},
-        )
-        form = PaymentForm(registration=registration, context=context)
-    context["form"] = form
+        context["form"] = form
+    elif not auto_process_single_method(
+        request,
+        PaymentForm,
+        PaymentType.REGISTRATION,
+        context,
+        context["quota"],
+        invoice_key=key,
+        extra_kwargs={"registration": registration},
+    ):
+        context["form"] = PaymentForm(registration=registration, context=context)
 
     return render(request, "larpmanager/member/accounting_registration.html", context)
 
@@ -557,18 +556,16 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
         if form.is_valid():
             # Generate payment form for valid membership submission
             get_payment_form(request, form, PaymentType.MEMBERSHIP, context, key)
-    else:
-        auto_process_single_method(
-            request,
-            MembershipForm,
-            PaymentType.MEMBERSHIP,
-            context,
-            context["membership_fee"],
-            invoice_key=key,
-        )
-        form = MembershipForm(context=context)
-
-    context["form"] = form
+        context["form"] = form
+    elif not auto_process_single_method(
+        request,
+        MembershipForm,
+        PaymentType.MEMBERSHIP,
+        context,
+        context["membership_fee"],
+        invoice_key=key,
+    ):
+        context["form"] = MembershipForm(context=context)
 
     return render(request, "larpmanager/member/accounting_membership.html", context)
 

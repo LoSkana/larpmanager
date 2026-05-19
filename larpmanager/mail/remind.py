@@ -307,7 +307,7 @@ def get_remember_membership_fee_body(context: dict, registration: Any) -> str:
     )
 
     # Provide payment link and support information
-    membership_url = get_url("accounting", registration.run.event)
+    membership_url = get_url("accounting_membership")
     email_body += get_payment_info(registration.run.event.association_id, membership_url)
 
     return email_body

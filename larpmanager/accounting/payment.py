@@ -478,7 +478,8 @@ def auto_process_single_method(
     form = form_class({"amount": str(amount), "method": single_method}, **kwargs)
     if form.is_valid():
         get_payment_form(request, form, payment_type, context, invoice_key)
-    return True
+        return True
+    return False
 
 
 def payment_received(invoice: PaymentInvoice) -> bool:
