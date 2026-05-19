@@ -25,6 +25,8 @@ from django.shortcuts import redirect
 from django.urls import include, path
 from django.views.generic.base import TemplateView
 
+from larpmanager.views import larpmanager as views_lm
+
 def redirect_register(request):
     return redirect('/register')
 
@@ -44,6 +46,11 @@ urlpatterns = [
     path(
         'llms.txt',
         TemplateView.as_view(template_name='llms.txt', content_type='text/plain'),
+    ),
+    path(
+        'llms-full.txt',
+        views_lm.llms_full,
+        name='llms_full',
     ),
     path('__debug__/', include('debug_toolbar.urls')),
     path('', include('larpmanager.urls')),
