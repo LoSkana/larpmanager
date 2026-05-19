@@ -1896,12 +1896,17 @@ header.sec h1 {
   display: none;
 }
 
+.new_v20 hr {
+  opacity: 0.3;
+}
+
 /* Registration status row */
 .new_v20 .reg_status {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.5em;
+  padding: 0.5em;
 }
 
 /* Registration status block */
@@ -1983,10 +1988,6 @@ header.sec h1 {
 
 .reg_profile {
   width: 8em;
-}
-
-.page_gallery {
-  padding-top: 0.5em;
 }
 
 .page_gallery .title {

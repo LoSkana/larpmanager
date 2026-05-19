@@ -284,10 +284,10 @@ def character(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Your character is my character")
+    expect_normalized(page, page.locator("#one"), "Your character is: my character")
 
     go_to(page, live_server, "/test")
-    expect_normalized(page, page.locator("#one"), "Your character is my character")
+    expect_normalized(page, page.locator("#one"), "Your character is: my character")
 
 def verify_characters_shortcut(page: Any, live_server: Any) -> None:
     """Enable the user_characters_shortcut configuration."""

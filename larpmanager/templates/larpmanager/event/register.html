@@ -50,9 +50,7 @@
             <form id="register_form" action="{{ request.path }}" method="post">
                 {% csrf_token %}
                 <div>
-                    <table>
-                        {% include "elements/form/register.html" %}
-                    </table>
+                    {% include "elements/form/register.html" %}
                     {% if features.discount and 'waiting' not in run_status %}
                         <h1 class="head_discount">
                             <a href="#" class="my_toggle section-link" tog='sec_discount'>

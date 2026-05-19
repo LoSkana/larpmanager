@@ -21,7 +21,7 @@ VERSIONS = [
     },
     {
         "number": 20,
-        "description": "Registration status: visual state indicators",
+        "description": "User interface: cleaner and focused",
         "available": True,
     },
 ]

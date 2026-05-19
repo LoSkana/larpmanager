@@ -5320,9 +5320,6 @@ msgstr ""
 msgid "Your Events"
 msgstr ""
 
-msgid "Organization"
-msgstr ""
-
 msgid "You don't have any registrations yet"
 msgstr ""
 
@@ -6127,6 +6124,9 @@ msgid "These are the workshops you must complete before you can play"
 msgstr ""
 
 msgid "To be done"
+msgstr ""
+
+msgid "Organization"
 msgstr ""
 
 msgid ""
