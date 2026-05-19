@@ -77,6 +77,7 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#id_wire_payee").press("Tab")
     page.locator("#id_wire_iban").fill("test iban")
     page.locator("#id_wire_bic").fill("test iban")
+    page.get_by_role("checkbox", name="Freeform").check()
     submit_confirm(page)
 
 

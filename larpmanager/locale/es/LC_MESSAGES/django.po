@@ -1148,9 +1148,6 @@ msgstr "Copiar URL"
 msgid "Creation"
 msgstr "Creación"
 
-msgid "Currency"
-msgstr "Moneda"
-
 msgid "Deadline"
 msgstr "Fecha límite"
 
@@ -4999,9 +4996,6 @@ msgstr "Uso de recursos de terceros"
 msgid "We're sorry to see you go"
 msgstr "Sentimos que te vayas"
 
-msgid "cancel your registrations"
-msgstr "cancela tus inscripciones"
-
 msgid "choice value not provided"
 msgstr "valor de elección no proporcionado"
 
@@ -8196,6 +8190,10 @@ msgid "Manage votes for the assignment of roles in the organization"
 msgstr ""
 "Gestionar las votaciones para la asignación de funciones en la organización"
 
+msgid "Please fill out the form below and click confirm to register"
+msgstr ""
+"Rellena el siguiente formulario y haz clic en confirmar para inscribirte"
+
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Este personaje está inactivo y no puede ser asignado a jugadores"
 
@@ -8534,6 +8532,9 @@ msgstr ""
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Para completar el proceso, basta con <a href='%(url)s'>hacer clic aquí</a>"
+
+msgid "To update your registration, change the fields and click confirm"
+msgstr "Para actualizar tu inscripción, cambia los campos y pulsa confirmar"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -10054,13 +10055,6 @@ msgstr ""
 "en días (si no se establece, no se envía ningún correo electrónico)"
 
 msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
-msgstr ""
-"Para inscribirte al evento, rellena el siguiente formulario y haz clic en "
-"confirmar"
-
-msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
 " most"
 msgstr "Puedes leerlos en orden o ir directamente al que más te interese"
@@ -11340,13 +11334,6 @@ msgid ""
 msgstr ""
 "Eres miembro de nuestra organización. Puedes inscribirte en los eventos "
 "organizados para nuestros miembros"
-
-msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-"Puedes actualizar tu inscripción cambiando los valores de los campos y "
-"haciendo clic en confirmar"
 
 msgid ""
 "You have requested a specific page of an organisation, but it is not "

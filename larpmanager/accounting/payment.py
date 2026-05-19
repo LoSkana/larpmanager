@@ -452,6 +452,36 @@ def get_payment_form(
     )
 
 
+def auto_process_single_method(
+    request: HttpRequest,
+    form_class: type,
+    payment_type: str,
+    context: dict,
+    amount: Decimal,
+    invoice_key: str | None = None,
+    extra_kwargs: dict | None = None,
+) -> bool:
+    """Auto-process payment when exactly one payment method is available.
+
+    Skips the method-selection form by pre-filling it server-side and calling
+    get_payment_form directly. Only applies to GET requests with a fixed amount.
+
+    Returns:
+        True if auto-processing was triggered (context["invoice"] will be set).
+    """
+    if len(context.get("methods", {})) != 1:
+        return False
+    single_method = next(iter(context["methods"]))
+    kwargs: dict = {"context": context}
+    if extra_kwargs:
+        kwargs.update(extra_kwargs)
+    form = form_class({"amount": str(amount), "method": single_method}, **kwargs)
+    if form.is_valid():
+        get_payment_form(request, form, payment_type, context, invoice_key)
+        return True
+    return False
+
+
 def payment_received(invoice: PaymentInvoice) -> bool:
     """Process a received payment and update related records.
 

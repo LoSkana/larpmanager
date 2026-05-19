@@ -111,7 +111,6 @@
     </form>
 {% endif %}
 {% if method == 'wire' %}
-    <p>{% trans "Follow the steps below" %}:</p>
     <p>
         <b><i>{% trans "Important: after completing the transfer, you must return to this page and submit the form at the bottom, otherwise your payment will not be registered" %}!</i></b>
     </p>
@@ -122,46 +121,35 @@
     <p>
         <i>{% trans "Copy the causal exactly as shown (in coloured text)" %}!</i>
     </p>
-    <table class="mob ">
-        <tr>
-            <th>{% trans "Causal" %}</th>
-            <td class="causal">{{ invoice.causal }}</td>
-        </tr>
-        <tr>
-            <th>{% trans "Amount" %}</th>
-            <td>{{ invoice.mc_gross|format_decimal }}</td>
-        </tr>
-        <tr>
-            <th>{% trans "Currency" %}</th>
-            <td>{{ payment_currency }}</td>
-        </tr>
-        <tr>
-            <th>{% trans "Beneficiary" %}</th>
-            <td>{{ wire_payee }}</td>
-        </tr>
-        <tr>
-            <th>{% trans "IBAN" %}</th>
-            <td>{{ wire_iban }}</td>
-        </tr>
+    <ul>
+        <li>
+            <b>{% trans "Causal" %}</b>: <span class="causal">{{ invoice.causal }}</span>
+        </li>
+        <li>
+            <b>{% trans "Amount" %}</b>: {{ invoice.mc_gross|format_decimal }} {{ payment_currency }}
+        </li>
+        <li>
+            <b>{% trans "Beneficiary" %}</b>: {{ wire_payee }}
+        </li>
+        <li>
+            <b>{% trans "IBAN" %}</b>: {{ wire_iban }}
+        </li>
         {% if wire_bic %}
-            <tr>
-                <th>{% trans "BIC" %}</th>
-                <td>{{ wire_bic }}</td>
-            </tr>
+            <li>
+                <b>{% trans "BIC" %}</b>: {{ wire_bic }}
+            </li>
         {% endif %}
         {% if wire_swift %}
-            <tr>
-                <th>{% trans "Swift" %}</th>
-                <td>{{ wire_swift }}</td>
-            </tr>
+            <li>
+                <b>{% trans "Swift" %}</b>: {{ wire_swift }}
+            </li>
         {% endif %}
         {% if wire_bank_address %}
-            <tr>
-                <th>{% trans "Bank address" %}</th>
-                <td>{{ wire_bank_address }}</td>
-            </tr>
+            <li>
+                <b>{% trans "Bank address" %}</b>: {{ wire_bank_address }}
+            </li>
         {% endif %}
-    </table>
+    </ul>
     <hr />
     <p>
         <b>(2)</b>
@@ -177,7 +165,9 @@
           method="post"
           class="accounting_submit">
         {% csrf_token %}
+        <br />
         {{ wire_form.as_p }}
+        <br />
         <input type="submit" value="{% trans "Submit" %}">
     </form>
 {% endif %}

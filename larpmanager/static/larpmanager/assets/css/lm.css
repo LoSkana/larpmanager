@@ -2,6 +2,29 @@
    Global Utilities
    --------------------------------------------------------------------------- */
 
+.user_resize p,
+.user_resize ul,
+.user_resize li {
+  text-align: left;
+}
+
+.user_resize {
+  max-width: 850px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.user_resize input[type="submit"],
+.user_resize input[type="reset"],
+.user_resize input[type="button"],
+.user_resize input[type="confirm"],
+.user_resize button,
+.user_resize .button {
+  text-align: left;
+  display: block;
+}
+
 .hide {
   display: none;
 }

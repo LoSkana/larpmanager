@@ -5,7 +5,7 @@
 {% endblock title %}
 {% block content %}
     {% include "larpmanager/member/profile_nav.html" with active="profile" %}
-    <div class="auto_resize platform">
+    <div class="user_resize platform">
         <hr />
         <p>
             {% trans "You are logged in with an email address" %}: <i>{{ member.email }}</i>. <a href="{% url 'ticket' 'email' %}">{% trans "Would you like to change it" %}?</a>

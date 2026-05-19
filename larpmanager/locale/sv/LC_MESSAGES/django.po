@@ -1148,9 +1148,6 @@ msgstr "Kopiera URL"
 msgid "Creation"
 msgstr "Skapande"
 
-msgid "Currency"
-msgstr "Valuta"
-
 msgid "Deadline"
 msgstr "Tidsfrist"
 
@@ -4999,9 +4996,6 @@ msgstr "Användning av tredje parts tillgångar"
 msgid "We're sorry to see you go"
 msgstr "Vi är ledsna att se dig gå"
 
-msgid "cancel your registrations"
-msgstr "avboka din registrering"
-
 msgid "choice value not provided"
 msgstr "valfritt värde anges inte"
 
@@ -8145,6 +8139,11 @@ msgstr "Hantera engångsåtkomsttokens för säkert video-/audioinnehåll"
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Hantera röster för tilldelning av roller i organisationen"
 
+msgid "Please fill out the form below and click confirm to register"
+msgstr ""
+"Vänligen fyll i formuläret nedan och klicka på bekräfta för att registrera "
+"dig"
+
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Denna karaktär är inaktiv och kan inte tilldelas spelare"
 
@@ -8465,6 +8464,10 @@ msgstr ""
 #, python-format
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr "För att slutföra processen, bara <a href='%(url)s'>klicka här</a>"
+
+msgid "To update your registration, change the fields and click confirm"
+msgstr ""
+"För att uppdatera din registrering, ändra fälten och klicka på bekräfta"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr "Video- eller ljudfil som ska streamas (rekommenderas: MP4, WebM, MP3)"
@@ -9902,13 +9905,6 @@ msgstr ""
 "skickas inga e-postmeddelanden)"
 
 msgid ""
-"To register for the event, please fill in the following form and click on "
-"confirm"
-msgstr ""
-"För att anmäla dig till evenemanget, vänligen fyll i följande formulär och "
-"klicka på bekräfta"
-
-msgid ""
 "You can read them in order, or scroll directly to the one that interests you"
 " most"
 msgstr ""
@@ -11182,13 +11178,6 @@ msgid ""
 msgstr ""
 "Du är registrerad medlem i vår förening. Du kan anmäla dig till evenemang "
 "som anordnas för våra medlemmar"
-
-msgid ""
-"You can update your registration by simply changing the value of the fields "
-"and clicking on confirm"
-msgstr ""
-"Du kan uppdatera din registrering genom att helt enkelt ändra värdet i "
-"fälten och klicka på bekräfta"
 
 msgid ""
 "You have requested a specific page of an organisation, but it is not "
