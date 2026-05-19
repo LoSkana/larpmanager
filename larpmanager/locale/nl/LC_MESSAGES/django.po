@@ -4021,6 +4021,9 @@ msgstr "Land van het evenement"
 msgid "Create new character"
 msgstr "Nieuw personage maken"
 
+msgid "Disable cancellation"
+msgstr "Annulering uitschakelen"
+
 msgid "Display sent e-mails"
 msgstr "Verzonden e-mails weergeven"
 
@@ -4820,9 +4823,6 @@ msgstr "Nee, ik wil geen updates"
 msgid "Optional ordering number"
 msgstr "Optioneel bestelnummer"
 
-msgid "Participant cancellation"
-msgstr "Annulering door deelnemers"
-
 msgid "Provisional registration"
 msgstr "Voorlopige registratie"
 
@@ -4864,6 +4864,9 @@ msgstr "Het logo van je organisatie"
 
 msgid "Your registration ticket"
 msgstr "Je entreebewijs"
+
+msgid "cancel your registration"
+msgstr "je registratie annuleren"
 
 msgid "check lack relationships"
 msgstr "controleer rapporten minder"
@@ -5477,6 +5480,9 @@ msgstr "Uw vriendencode is gebruikt"
 msgid "commit quantities to warehouse"
 msgstr "hoeveelheden vastleggen in magazijn"
 
+msgid "please wait for their response"
+msgstr "Wacht even voordat u het opnieuw probeert"
+
 msgid "(Optional) The number of quotas"
 msgstr "(Optioneel) Het aantal quota"
 
@@ -5821,6 +5827,10 @@ msgstr "(Optioneel) De beschrijving van de vaardigheid"
 
 msgid "An error occurred while reordering"
 msgstr "Er is een fout opgetreden tijdens het opnieuw ordenen"
+
+#, python-format
+msgid "Cancellation request for %(event)s"
+msgstr "Annuleringsverzoek voor %(event)s"
 
 msgid "Date of expiration of the document"
 msgstr "Vervaldatum van het document"
@@ -6471,6 +6481,9 @@ msgstr "Deze pagina geeft een overzicht van de opdrachten van"
 
 msgid "This text will be added to the sheet of"
 msgstr "Deze tekst wordt toegevoegd aan het blad van"
+
+msgid "To process the cancellation, click here"
+msgstr "Klik hier om de annulering te verwerken"
 
 msgid "You are logged in with an email address"
 msgstr "U bent aangemeld met een e-mailadres"
@@ -7384,6 +7397,10 @@ msgstr "Je kunt geen relatie met jezelf creëren"
 msgid "Your account is protected by an authenticator app"
 msgstr "Je account wordt beschermd door een authenticatie-app"
 
+#, python-format
+msgid "Your registration to %(event)s has been cancelled"
+msgstr "Je registratie voor %(event)s is geannuleerd"
+
 msgid "Cancellation for missing organization registration"
 msgstr "Annulering wegens ontbrekende organisatieregistratie"
 
@@ -7459,6 +7476,10 @@ msgstr "Toegewezen %(amount).2f %(elements)s voor '%(reason)s'"
 msgid "Complete the setup to unlock full platform features"
 msgstr ""
 "Voltooi de installatie om alle functies van het platform te ontgrendelen"
+
+msgid "Copy the causal exactly as shown (in coloured text)"
+msgstr ""
+"Neem het oorzakelijke precies over zoals weergegeven (in gekleurde tekst)"
 
 msgid "From this page you can email any list of recipients"
 msgstr "Vanaf deze pagina kunt u een lijst met ontvangers e-mailen"
@@ -7584,6 +7605,9 @@ msgstr "Je hebt al een betaling verzonden in afwachting van verificatie"
 
 msgid "You will have our eternal thanks for believing in us"
 msgstr "We zijn je eeuwig dankbaar dat je in ons gelooft"
+
+msgid "Your cancellation request has been sent to the staff"
+msgstr "Je annuleringsverzoek is verzonden naar de medewerkers"
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Het unieke subdomein van je organisatie in het platform"
@@ -8218,6 +8242,10 @@ msgstr ""
 "Indien aangevinkt, wordt de naam van de speler naast zijn personage "
 "weergegeven"
 
+msgid "If checked: participants cannot cancel their own registration"
+msgstr ""
+"Indien aangevinkt: deelnemers kunnen hun eigen registratie niet annuleren"
+
 msgid "In this page you can mark which items to add to the game area"
 msgstr ""
 "Op deze pagina kun je aangeven welke items je wilt toevoegen aan het "
@@ -8277,6 +8305,11 @@ msgstr ""
 msgid "for no relationship, only to display the other character name"
 msgstr "voor geen relatie, alleen om de andere karakternaam weer te geven"
 
+msgid "A cancellation request email will be sent to the staff instead"
+msgstr ""
+"In plaats daarvan wordt er een e-mail met een annuleringsverzoek naar het "
+"personeel gestuurd"
+
 #, python-format
 msgid "A quota with %(quotas)d payments already exists for this event"
 msgstr ""
@@ -8311,6 +8344,10 @@ msgid "Enables field 'number', an unique numerical ID to reference it"
 msgstr ""
 "Maakt veld 'nummer' mogelijk, een unieke numerieke ID om ernaar te verwijzen"
 
+msgid "If payment is not received, your registration may be cancelled"
+msgstr ""
+"Als de betaling niet is ontvangen, kan je registratie worden geannuleerd"
+
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Als u problemen ondervindt, neem dan contact met ons op en wij zullen u "
@@ -8333,6 +8370,11 @@ msgstr "Optionele opmerking over dit token (bijv. naam ontvanger, doel)"
 
 msgid "This content is protected and cannot be downloaded or recorded"
 msgstr "Deze inhoud is beschermd en kan niet worden gedownload of opgenomen"
+
+msgid "Use the bank details below to make the transfer from your bank"
+msgstr ""
+"Gebruik de onderstaande bankgegevens om de overschrijving van je bank uit te"
+" voeren"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "We vragen u het gevraagde bedrag voor de volgende termijn te betalen"
@@ -8460,6 +8502,10 @@ msgstr "Hoofdkleur voor tekstinhoud op alle pagina's van je organisatie"
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Deelnemers kunnen nu collecties indienen en jij kunt ze bekijken"
 
+msgid "Once the transfer is confirmed, upload the payment receipt below"
+msgstr ""
+"Upload het betalingsbewijs hieronder zodra de overschrijving is bevestigd"
+
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Deel van het inschrijvingsgeld alleen afgeleid van het gekozen ticket"
 
@@ -8482,6 +8528,9 @@ msgstr ""
 "Ze worden automatisch afgetrokken wanneer je je registreert voor een nieuw "
 "evenement"
 
+msgid "This is important, otherwise your payment will not be registered"
+msgstr "Dit is belangrijk, anders wordt je betaling niet geregistreerd"
+
 msgid "This page shows the settings available for the membership voting"
 msgstr ""
 "Deze pagina toont de instellingen die beschikbaar zijn voor de ledenstemming"
@@ -8491,11 +8540,6 @@ msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
 "Om het proces te voltooien, hoef je alleen maar <a href='%(url)s'>klik "
 "hier</a>"
-
-msgid "Use the information below to request the transfer from your bank"
-msgstr ""
-"Gebruik de onderstaande informatie om de overschrijving aan te vragen bij je"
-" bank"
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -8510,9 +8554,6 @@ msgid "Your request will be considered at the next meeting of the Board"
 msgstr ""
 "Uw verzoek zal worden behandeld tijdens de volgende vergadering van de Raad "
 "van Bestuur"
-
-msgid "Allows participants to cancel their own registrations at any time"
-msgstr "Deelnemers kunnen hun eigen registratie op elk moment annuleren"
 
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr "Kopieer en plak precies alle gekleurde tekst hieronder in de notities"
@@ -8593,12 +8634,6 @@ msgstr "Je volledige woonadres inclusief straat, stad en land"
 msgid "whether the character is aware of the identity of the other trait"
 msgstr ""
 "of het personage zich bewust is van de identiteit van de andere eigenschap"
-
-#, python-format
-msgid "A payment of %(amount).2f %(currency)s was received for this event"
-msgstr ""
-"Er is een betaling van %(amount).2f %(currency)s ontvangen voor dit "
-"evenement"
 
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
@@ -8806,11 +8841,6 @@ msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
 "We sturen je een bevestigingse-mail wanneer de wijziging is doorgevoerd"
 
-#, python-format
-msgid "You have correctly cancelled the registration to the %(event)s event"
-msgstr ""
-"Je hebt de registratie voor het %(event)s-evenement correct geannuleerd"
-
 msgid "You must create at least one quest type before you can create quests"
 msgstr "Je moet minstens één questtype maken voordat je quests kunt maken"
 
@@ -8821,9 +8851,6 @@ msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr ""
 "Beschrijf het in het onderstaande veld en we zullen het zo snel mogelijk "
 "oplossen"
-
-msgid "Do you want to allow users to cancel their registrations on their own"
-msgstr "Wilt u gebruikers toestaan hun registratie zelf te annuleren"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr "Wil je de registratiekosten opsplitsen in dynamische betalingsquota"
@@ -9191,6 +9218,13 @@ msgstr ""
 "als het teken NIET tot dit element behoort, maar er alleen naar wordt "
 "verwezen"
 
+#, python-format
+msgid ""
+"A payment of <b>%(amount).2f %(currency)s</b> was received for this event"
+msgstr ""
+"Er is een betaling van <b>%(amount).2f %(currency)s</b> ontvangen voor dit "
+"evenement"
+
 msgid ""
 "Activate and configure advanced features for your organization and events"
 msgstr ""
@@ -9476,6 +9510,12 @@ msgstr ""
 "deelnemers"
 
 msgid ""
+"Please mark the payment as completed on that page once the transfer is done"
+msgstr ""
+"Markeer de betaling als voltooid op die pagina zodra de overdracht is "
+"voltooid"
+
+msgid ""
 "This page shows the handouts (information dissemination tools) of the event"
 msgstr ""
 "Op deze pagina vindt u een samenvatting van de hand-outs (hulpmiddelen voor "
@@ -9578,6 +9618,11 @@ msgid ""
 msgstr ""
 "Deel van het inschrijfgeld dat alleen is afgeleid van de gekozen extra "
 "opties"
+
+msgid ""
+"Please upload the payment receipt on that page once the transfer is complete"
+msgstr ""
+"Upload het betalingsbewijs op die pagina zodra de overdracht is voltooid"
 
 #, python-format
 msgid ""
@@ -9744,14 +9789,6 @@ msgstr ""
 "Schrijf hier je vraag, verzoek of twijfel. We zullen je met plezier "
 "antwoorden!"
 
-#, python-format
-msgid ""
-"You can complete the payment in just a few minutes <a "
-"href='%(url)s'>here</a>"
-msgstr ""
-"Je kunt de betaling in slechts een paar minuten <a href='%(url)s'>hier</a> "
-"voltooien"
-
 msgid ""
 "Enables to set a character as a 'mirror' for another, to hide it's true "
 "nature"
@@ -9897,6 +9934,14 @@ msgstr ""
 "Om deel te nemen aan dit evenement moet je de jaarlijkse "
 "lidmaatschapsbijdrage van"
 
+#, python-format
+msgid ""
+"You must pay at least <b>%(amount).2f %(currency)s</b> within %(deadline)d "
+"days"
+msgstr ""
+"Je moet ten minste <b>%(amount).2f %(currency)s</b> betalen binnen "
+"%(deadline)d dagen"
+
 msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
@@ -10005,6 +10050,13 @@ msgid ""
 msgstr ""
 "Indien aangevinkt: toestaan om tekens en registratie te exporteren in een "
 "gemakkelijk leesbare pagina"
+
+msgid ""
+"If payment is not received within this period, your registration may be "
+"cancelled"
+msgstr ""
+"Als de betaling niet binnen deze periode is ontvangen, kan je registratie "
+"worden geannuleerd"
 
 msgid ""
 "Sets how often reminder emails are sent, in days (if not set, no emails are "
@@ -10409,6 +10461,14 @@ msgid ""
 msgstr ""
 "niet-geregistreerde gebruikers worden hierheen doorgestuurd, terwijl "
 "geregistreerde gebruikers normale toegang krijgen"
+
+#, python-format
+msgid ""
+"<i>Payment overdue</i>: Please pay <b>%(amount).2f %(currency)s</b> as soon "
+"as possible"
+msgstr ""
+"<i>Betaling te laat</i>: Betaal <b>%(amount).2f %(currency)s</b> zo snel "
+"mogelijk"
 
 msgid ""
 "Attention: the operation is final, please double-check the assignments "
@@ -11024,6 +11084,14 @@ msgstr ""
 "Voor elk van hen ontvang je de volgende korting op de registratie voor je "
 "lidmaatschapsevenement"
 
+#, python-format
+msgid ""
+"The participant <b>%(user)s</b> has requested to cancel their registration "
+"for <b>%(event)s</b>"
+msgstr ""
+"De deelnemer <b>%(user)s</b> heeft verzocht zijn registratie voor "
+"<b>%(event)s</b> te annuleren"
+
 msgid ""
 "Unique code for internal use - not visible. Indicate a string without spaces"
 " or strange symbols"
@@ -11193,13 +11261,6 @@ msgid ""
 msgstr ""
 "Indien aangevinkt: Verbergt de mogelijkheid voor de deelnemer om het "
 "betalingsbedrag voor zijn vermeldingen te wijzigen"
-
-msgid ""
-"Once the transfer is confirmed, request the slip (the receipt of "
-"confirmation) and upload it below"
-msgstr ""
-"Zodra de overboeking is bevestigd, vraag je het bewijs van bevestiging op en"
-" upload je het hieronder"
 
 #, python-format
 msgid ""
@@ -11597,6 +11658,14 @@ msgstr ""
 "Deze pagina laat zien wat er gebeurt als je de magazijnhoeveelheden vastlegt"
 " op basis van de huidige toewijzingen"
 
+#, python-format
+msgid ""
+"You can find all the information needed to complete the transfer <a "
+"href='%(url)s'>on the payment page</a>"
+msgstr ""
+"Je vindt alle informatie die je nodig hebt om de overschrijving te voltooien"
+" <a href='%(url)s'>op de betaalpagina</a>"
+
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "
 "and optionally assigns a result"
@@ -11645,13 +11714,6 @@ msgid ""
 msgstr ""
 "Door het betalingssysteem in te houden percentage - voer de waarde in als "
 "een getal, zonder het procentsymbool"
-
-msgid ""
-"Please check that you have copied the entire message for payment exactly (in"
-" coloured text), it is important"
-msgstr ""
-"Controleer of je de hele reden van betaling precies hebt overgenomen (in "
-"gekleurde tekst), dat is belangrijk"
 
 msgid ""
 "Time window (in hours) during which the user can revoke a chosen ability and"
@@ -12382,6 +12444,14 @@ msgstr ""
 "automatisch vervangen door de naam van het personage en een link naar hun "
 "profiel"
 
+#, python-format
+msgid ""
+"You can choose your payment method and find all the information needed to "
+"complete the transfer <a href='%(url)s'>on the payment page</a>"
+msgstr ""
+"Je kunt je betaalmethode kiezen en alle informatie die je nodig hebt om de "
+"overschrijving te voltooien <a href='%(url)s'>op de betaalpagina</a> vinden"
+
 msgid ""
 "If the first name shown on your documents is different from the one you "
 "prefer to use, then write it here; otherwise leave this field empty"
@@ -12404,6 +12474,15 @@ msgstr ""
 "Normaal gesproken worden alle tekenvelden (openbaar of privé) weergegeven; "
 "met deze configuratie kun je kiezen welke velden op een bepaald moment "
 "worden weergegeven"
+
+#, python-format
+msgid ""
+"To pay by bank transfer, visit the <a href='%(url)s'>payment page</a> to "
+"find all necessary details (such as the IBAN and payment reference)"
+msgstr ""
+"Als je wilt betalen met een bankoverschrijving, ga dan naar de <a "
+"href='%(url)s'>betalingspagina</a> om alle benodigde gegevens te vinden "
+"(zoals IBAN en betalingskenmerk)"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "
@@ -12573,6 +12652,14 @@ msgstr ""
 "CSS-commando's kunnen vrij worden ingevoegd en worden op alle pagina's in je"
 " Association Space weergegeven. Op deze manier kun je het uiterlijk vrij "
 "aanpassen."
+
+msgid ""
+"Important: after completing the transfer, you must return to this page and "
+"submit the form at the bottom, otherwise your payment will not be registered"
+msgstr ""
+"Belangrijk: nadat je de overboeking hebt voltooid, moet je terugkeren naar "
+"deze pagina en het formulier onderaan indienen, anders wordt je betaling "
+"niet geregistreerd"
 
 msgid ""
 "Below you will find all the features available; you can write a search "
@@ -12798,16 +12885,6 @@ msgstr ""
 "verzekeringsmaatschappij te sturen. Er worden alleen leden getoond die hun "
 "lidmaatschap in dit kalenderjaar hebben verlengd, in volgorde van verlenging"
 
-#, python-format
-msgid ""
-"<i>Payment due</i> - You must pay <b>%(amount).2f %(currency)s</b> as soon "
-"as possible. Make your payment <a href='%(url)s'>on this page</a>. If we do "
-"not receive payment, your registration may be cancelled."
-msgstr ""
-"<i>Verplichte betaling</i> - U moet <b>%(amount).2f %(currency)s</b> zo snel"
-" mogelijk betalen. Doe je betaling <a href='%(url)s'>op deze pagina</a>. Als"
-" we de betaling niet ontvangen, kan je lidmaatschap worden geannuleerd."
-
 msgid ""
 "Upload your portrait photo. It will be shown to other participants to help "
 "recognize you in the event. Choose a photo that you would put in an official"
@@ -12816,17 +12893,6 @@ msgstr ""
 "Upload je portretfoto. Deze zal worden getoond aan andere deelnemers om je "
 "te herkennen tijdens het evenement. Kies een foto die je in een officieel "
 "document zou zetten (waarop je alleen staat, met je gezicht in het midden)"
-
-#, python-format
-msgid ""
-"You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days."
-" Make your payment <a href='%(url)s'>on this page</a>. If we do not receive "
-"payment by the deadline, your registration may be cancelled."
-msgstr ""
-"Je moet ten minste <b>%(amount).2f %(currency)s</b> betalen binnen "
-"%(deadline)d dagen. Doe je betaling <a href='%(url)s'>op deze pagina</a>. "
-"Als we de betaling niet op tijd ontvangen, kan je lidmaatschap worden "
-"geannuleerd."
 
 msgid ""
 "Indicates the ratio between reduced and patron tickets, multiplied by 10. "

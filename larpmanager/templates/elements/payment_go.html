@@ -113,34 +113,15 @@
 {% if method == 'wire' %}
     <p>{% trans "Follow the steps below" %}:</p>
     <p>
-        <b>(1)</b> {% trans "Use the information below to request the transfer from your bank" %}.
-    </p>
-    <p>
-        <b>(2)</b> {% trans "Please check that you have copied the entire message for payment exactly (in coloured text), it is important" %}!
-    </p>
-    <p>
-        <b>(3)</b>
-        {% if require_receipt %}
-            {% trans "Once the transfer is confirmed, request the slip (the receipt of confirmation) and upload it below" %}.
-            {% trans "You can upload a file in pdf format, or an image" %}.
-        {% else %}
-            {% trans "Once the transfer is confirmed, submit the form below to notify us of your payment" %}.
-        {% endif %}
+        <b><i>{% trans "Important: after completing the transfer, you must return to this page and submit the form at the bottom, otherwise your payment will not be registered" %}!</i></b>
     </p>
     <hr />
-    <form action="{% url 'accounting_submit' 'wire' invoice.uuid request.path %}"
-          enctype="multipart/form-data"
-          method="post"
-          class="accounting_submit">
-        {% csrf_token %}
-        {{ wire_form.as_p }}
-        <input type="submit" value="{% trans "Submit" %}">
-    </form>
-    <hr />
     <p>
-        <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed" %}!</i></b>
+        <b>(1)</b> {% trans "Use the bank details below to make the transfer from your bank" %}.
     </p>
-    <hr />
+    <p>
+        <i>{% trans "Copy the causal exactly as shown (in coloured text)" %}!</i>
+    </p>
     <table class="mob ">
         <tr>
             <th>{% trans "Causal" %}</th>
@@ -181,6 +162,24 @@
             </tr>
         {% endif %}
     </table>
+    <hr />
+    <p>
+        <b>(2)</b>
+        {% if require_receipt %}
+            {% trans "Once the transfer is confirmed, upload the payment receipt below" %}.
+            {% trans "You can upload a file in pdf format, or an image" %}.
+        {% else %}
+            {% trans "Once the transfer is confirmed, submit the form below to notify us of your payment" %}.
+        {% endif %}
+    </p>
+    <form action="{% url 'accounting_submit' 'wire' invoice.uuid request.path %}"
+          enctype="multipart/form-data"
+          method="post"
+          class="accounting_submit">
+        {% csrf_token %}
+        {{ wire_form.as_p }}
+        <input type="submit" value="{% trans "Submit" %}">
+    </form>
 {% endif %}
 {% if method == 'paypal_nf' %}
     <p>{% trans "Follow the steps below" %}:</p>

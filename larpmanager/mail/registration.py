@@ -95,6 +95,13 @@ def update_registration_status(instance: Any) -> None:
     # Append registration details to email body
     email_body += registration_options(instance)
 
+    # Add link to cancel registration
+    cancel_path = f"{instance.run.get_slug()}/unregister/"
+    cancel_label = _("cancel your registration")
+    cancel_url = get_url(cancel_path, instance.run.event)
+    email_body += "<br /><br />" + _("If you no longer wish to attend, you can")
+    email_body += f" <a href='{cancel_url}'>{cancel_label}</a>."
+
     # Add custom messages from event and association configurations
     for custom_message in [
         get_event_text(instance.run.event_id, EventTextType.SIGNUP, instance.member.language),
