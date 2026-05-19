@@ -2102,6 +2102,9 @@ msgstr "Quest-Typen"
 msgid "Quick Setup"
 msgstr "Schnelles Einrichten"
 
+msgid "Redeem link"
+msgstr "Link einlösen"
+
 msgid "Register to"
 msgstr "Registrieren Sie sich für"
 
@@ -3196,9 +3199,6 @@ msgstr "Zeichen-Konfiguration"
 msgid "Character review"
 msgstr "Überprüfung des Charakters"
 
-msgid "Collection links"
-msgstr "Links zur Sammlung"
-
 msgid "Collection total"
 msgstr "Gesamte Sammlung"
 
@@ -4011,6 +4011,9 @@ msgstr "Erweiterter Texteditor"
 
 msgid "Carousel description"
 msgstr "Carousel Beschreibung"
+
+msgid "Close the collection"
+msgstr "Die Sammlung schließen"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Vollständiger Bogen (Pdf)"
@@ -5242,9 +5245,6 @@ msgstr "Zum Dashboard der Organisation gehen"
 msgid "If checked: members can vote"
 msgstr "Wenn angekreuzt: Mitglieder können abstimmen"
 
-msgid "Link to close the collection"
-msgstr "Link zum Schließen der Sammlung"
-
 msgid "Manage participant questions"
 msgstr "Verwalten von Teilnehmerfragen"
 
@@ -5907,9 +5907,6 @@ msgstr "Setzen Sie den externen Link für die Registrierung"
 msgid "Set up the membership request text"
 msgstr "Einrichten des Textes für den Antrag auf Mitgliedschaft"
 
-msgid "The amount of your contribution is"
-msgstr "Die Höhe Ihres Beitrags beträgt"
-
 msgid "The collection has been activated!"
 msgstr "Die Sammlung ist aktiviert worden!"
 
@@ -6185,6 +6182,9 @@ msgstr "Teilnehmer ohne Zeichen ausblenden"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Wenn angekreuzt, Ticketstufe zulassen: Verkäufer"
+
+msgid "Input the amount of your contribution"
+msgstr "Gib den Betrag deines Beitrags ein"
 
 msgid "Learn all characters before the event"
 msgstr "Lernen Sie alle Zeichen vor der Veranstaltung"
@@ -7940,6 +7940,9 @@ msgid "We encountered a problem with the tax code you provided"
 msgstr ""
 "Es ist ein Problem mit dem von Ihnen angegebenen Steuercode aufgetreten"
 
+msgid "When you want to close the collection, follow this link"
+msgstr "Wenn du die Sammlung schließen willst, folge diesem Link"
+
 msgid "Your membership application was successfully submitted!"
 msgstr "Ihr Mitgliedsantrag wurde erfolgreich eingereicht!"
 
@@ -9407,6 +9410,12 @@ msgid ""
 msgstr ""
 "Für dieses Ereignis wurde eine Zahlung in Höhe von <b>%(amount).2f "
 "%(currency)s</b> geleistet"
+
+msgid ""
+"A special redemption code will be generated, to be given to the recipient"
+msgstr ""
+"Es wird ein spezieller Einlösecode generiert, der an den Empfänger "
+"weitergegeben wird"
 
 msgid ""
 "Activate and configure advanced features for your organization and events"
@@ -11802,13 +11811,6 @@ msgid ""
 msgstr ""
 "Die Frage wird in dem ausgewählten Abschnitt angezeigt (wenn sie leer "
 "bleibt, wird sie am Anfang des Formulars angezeigt)"
-
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
-msgstr ""
-"Wenn Sie die Sammlung abschließen möchten, folgen Sie dem unten stehenden "
-"Link. Es wird ein spezieller Einlösungscode generiert"
 
 msgid ""
 "Every friend who registers and uses this code will receive the following "

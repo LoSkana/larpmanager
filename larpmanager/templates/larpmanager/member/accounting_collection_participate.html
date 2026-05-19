@@ -8,7 +8,7 @@
         {% if invoice %}
             {% include "elements/payment_go.html" %}
         {% else %}
-            <p>{% trans "The amount of your contribution is" %}:</p>
+            <p>{% trans "Input the amount of your contribution" %}:</p>
             {% include "elements/payment_form.html" %}
         {% endif %}
     </div>
