@@ -15,12 +15,21 @@
   padding: 0;
 }
 
-.user_resize input[type="submit"],
-.user_resize input[type="reset"],
-.user_resize input[type="button"],
-.user_resize input[type="confirm"],
-.user_resize button,
-.user_resize .button {
+.new_v20 input[type="submit"],
+.new_v20 input[type="reset"],
+.new_v20 input[type="button"],
+.new_v20 input[type="confirm"],
+.new_v20 button,
+.new_v20 .button {
+  background: rgba(var(--ter-rgb), 0.35);
+  color: rgba(var(--pri-rgb), 0.85);
+  border-color: rgba(var(--sec-rgb), 0.85) !important;
+}
+
+.new_v20 input[type="submit"],
+.new_v20 input[type="reset"],
+.new_v20 input[type="button"],
+.new_v20 input[type="confirm"] {
   display: block;
   margin: 0.5em auto;
 }
@@ -30,6 +39,19 @@ body.association.new_v20 .user_resize {
   margin: 0.5em auto;
   border-radius: 8px;
   background-color: rgba(var(--pri-rgb), 0.04);
+}
+
+@media (max-width: 800px) {
+  body.association.new_v20 .user_resize {
+    padding: 0em 0em;
+    margin: 0.2em auto;
+    border-radius: 0px;
+    background-color: transparent;
+  }
+
+  body.association.new_v20 .user_resize table tbody tr {
+    padding: 0.5em;
+  }
 }
 
 .hide {
@@ -545,7 +567,7 @@ th select {
   }
 
   p {
-    margin: 0;
+    margin: 0.2em 0em;
   }
 
   #id_discount {
@@ -1180,6 +1202,11 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   padding-bottom: 2em !important;
 }
 
+.login table tbody tr {
+  background-color: transparent;
+  border: 0;
+}
+
 @media (max-width: 840px) {
   .login {
     max-width: 100%;
@@ -1199,9 +1226,14 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   width: auto;
 }
 
-@media screen and (max-width: 1000) {
-  .login input {
-    width: 70%;
+@media screen and (max-width: 1000px) {
+  .login input[type="submit"] {
+    width: 80% !important;
+  }
+
+  .login .registration_register,
+  .login .password_reset {
+    text-align: center;
   }
 }
 
