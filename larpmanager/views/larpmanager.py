@@ -55,7 +55,7 @@ from larpmanager.mail.remind import remember_membership, remember_membership_fee
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.association import Association, AssociationPlan, AssociationTextType
 from larpmanager.models.base import Feature
-from larpmanager.models.event import DevelopStatus, Run
+from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
     LarpManagerDiscover,
@@ -74,6 +74,7 @@ from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.larpmanager.tasks import my_send_mail, send_mail_exec
 from larpmanager.utils.services.association import _reset_all_association
+from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 from larpmanager.views.user.event import build_registration_list, get_member_registrations
 from larpmanager.views.user.member import get_user_backend
 
@@ -1103,6 +1104,42 @@ def lm_reset(request: HttpRequest) -> HttpResponse:
 
     messages.success(request, "Global cache reset")
     return HttpResponseRedirect("/")
+
+
+@login_required
+def lm_clean(request: HttpRequest, association_slug: str) -> HttpResponse:
+    """Show association deletion confirmation page and process deletion."""
+    context = check_lm_admin(request)
+    association = get_object_or_404(Association, slug=association_slug)
+
+    executives = []
+    try:
+        exe_role = AssociationRole.objects.get(association=association, number=1)
+        executives = list(exe_role.members.values("id", "user__first_name", "user__last_name", "user__email"))
+    except ObjectDoesNotExist:
+        pass
+
+    events = list(Event.objects.filter(association=association).values("name", "slug", "created"))
+    registration_count = Registration.objects.filter(run__event__association=association).count()
+
+    if request.method == "POST":
+        newsletter_emails = set(
+            AssociationRole.objects.filter(association=association, number=1).values_list("members__email", flat=True)
+        )
+        if association.main_mail:
+            newsletter_emails.add(association.main_mail)
+        for email in newsletter_emails:
+            if email:
+                _newsletter_set_non_active(email)
+        association.delete()
+        messages.success(request, f"Association '{association_slug}' deleted.")
+        return redirect("lm_list")
+
+    context["assoc"] = association
+    context["executives"] = executives
+    context["events"] = events
+    context["registration_count"] = registration_count
+    return render(request, "larpmanager/larpmanager/delete_association.html", context)
 
 
 @ratelimit(key="ip", rate="5/m", block=True)

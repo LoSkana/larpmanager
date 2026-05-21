@@ -1,0 +1,87 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    Delete Association: {{ assoc.name }}
+{% endblock title %}
+{% block content %}
+    <h2>
+        Delete Association: <strong>{{ assoc.name }}</strong>
+    </h2>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <td>{{ assoc.name }}</td>
+        </tr>
+        <tr>
+            <th>Slug</th>
+            <td>{{ assoc.slug }}</td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ assoc.created|date:"Y-m-d" }}</td>
+        </tr>
+        <tr>
+            <th>Contact email</th>
+            <td>{{ assoc.main_mail|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th>Registrations</th>
+            <td>{{ registration_count }}</td>
+        </tr>
+    </table>
+    <h3>Executive roles</h3>
+    {% if executives %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exe in executives %}
+                    <tr>
+                        <td>{{ exe.user__first_name }} {{ exe.user__last_name }}</td>
+                        <td>{{ exe.user__email }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No executive members found.</p>
+    {% endif %}
+    <h3>Events ({{ events|length }})</h3>
+    {% if events %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Slug</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td>{{ event.name }}</td>
+                        <td>{{ event.slug }}</td>
+                        <td>{{ event.created|date:"Y-m-d" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No events found.</p>
+    {% endif %}
+    <hr />
+    <p>
+        <strong>This action is irreversible.</strong> All data for this association will be permanently deleted.
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit"
+                class="btn btn-danger"
+                onclick="return confirm('Permanently delete {{ assoc.name }}?')">Delete association</button>
+        <a href="{% url 'lm_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock content %}
