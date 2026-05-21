@@ -2731,6 +2731,9 @@ msgstr "elementi eliminati"
 msgid "items updated"
 msgstr "voci aggiornate"
 
+msgid "relationships"
+msgstr "relazioni"
+
 msgid "Active devices"
 msgstr "Dispositivi attivi"
 
@@ -2956,6 +2959,9 @@ msgstr "Etichette di magazzino"
 msgid "Your character"
 msgstr "Il tuo personaggio"
 
+msgid "complete sheet"
+msgstr "foglio completo"
+
 msgid "customisations"
 msgstr "personalizzazioni"
 
@@ -3168,6 +3174,9 @@ msgstr "previsto entro"
 
 msgid "membership fees"
 msgstr "quote associative"
+
+msgid "printable sheet"
+msgstr "foglio stampabile"
 
 msgid "upcoming events"
 msgstr "Eventi in programma"
@@ -4033,9 +4042,6 @@ msgstr "Disabilita cancellazione"
 msgid "Display sent e-mails"
 msgstr "Visualizzale e-mail inviate"
 
-msgid "Download light sheet"
-msgstr "Scarica il foglio luminoso"
-
 msgid "Enter a valid number"
 msgstr "Inserisci un numero valido"
 
@@ -4345,6 +4351,9 @@ msgstr "Link pre-iscrizioni"
 msgid "Prop - weapons, props"
 msgstr "Prop - armi, oggetti di scena"
 
+msgid "Referenced Characters"
+msgstr "Personaggi di riferimento"
+
 msgid "Register to the event"
 msgstr "Iscriviti all'evento"
 
@@ -4440,9 +4449,6 @@ msgstr "Visualizza i dati di tutti gli utenti"
 
 msgid "Do you want to proceed"
 msgstr "Vuoi procedere"
-
-msgid "Download relationships"
-msgstr "Scarica le relazioni"
 
 msgid "Event deletion request"
 msgstr "Richiesta di cancellazione dell'evento"
@@ -4625,9 +4631,6 @@ msgstr "Crea il tuo primo evento"
 
 msgid "Discount code not valid"
 msgstr "Codice agevolazione non valido"
-
-msgid "Download complete sheet"
-msgstr "Scarica scheda completa"
 
 msgid "Early registration link"
 msgstr "Link per iscrizione anticipata"

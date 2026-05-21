@@ -893,7 +893,9 @@ class Relationship(BaseModel):
 
     target = models.ForeignKey(Character, related_name="target", on_delete=models.CASCADE)
 
-    text = HTMLField()
+    text = HTMLField(blank=True)
+
+    auto = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         """Return string representation."""

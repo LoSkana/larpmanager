@@ -17,11 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 import re
 from typing import Any
 
+from django.db import transaction
 from django.http import Http404
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
@@ -29,7 +31,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.registration import search_player
-from larpmanager.models.casting import Trait
+from larpmanager.models.casting import AssignmentTrait, Trait
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -44,6 +46,7 @@ from larpmanager.models.writing import Character, FactionType, PlotCharacterRel,
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.core.exceptions import NotFoundError
+from larpmanager.utils.larpmanager.tasks import background_auto
 from larpmanager.utils.services.event import has_access_character
 from larpmanager.utils.services.experience import add_char_addit
 
@@ -687,3 +690,94 @@ def _get_character_cache_id(context: dict) -> int:
         return context["character"].id
     character_number = context["char"]["number"]
     return context["char_mapping"][character_number]
+
+
+def extract_char_numbers_from_texts(texts: list[str]) -> set[int]:
+    """Extract character numbers referenced via #N or @N patterns from a list of texts."""
+    combined = strip_tags(" ".join(t for t in texts if t))
+    return {int(n) for n in re.findall(r"[#@](\d+)", combined)}
+
+
+def _collect_sources_map(character: Character) -> dict[int, set[str]]:
+    """Build mapping of referenced character numbers to source names."""
+    sources_map: dict[int, set[str]] = {}
+
+    def _add_refs(text: str, source_name: str) -> None:
+        for number in extract_char_numbers_from_texts([text]):
+            sources_map.setdefault(number, set()).add(source_name)
+
+    for number in extract_char_numbers_from_texts([character.text or ""]):
+        sources_map.setdefault(number, set())
+
+    for answer in WritingAnswer.objects.filter(element_id=character.pk, deleted__isnull=True).select_related(
+        "question"
+    ):
+        _add_refs(answer.text or "", answer.question.name)
+
+    for pcr in PlotCharacterRel.objects.filter(character=character, deleted__isnull=True).select_related("plot"):
+        _add_refs(pcr.text or "", pcr.plot.name)
+        _add_refs(pcr.plot.text or "", pcr.plot.name)
+
+    faction_event = character.event.get_class_parent("faction")
+    faction_qs = character.factions_list.filter(event=faction_event, deleted__isnull=True)
+    for faction in faction_qs:
+        _add_refs(faction.text or "", faction.name)
+
+    if character.player_id:
+        run_ids = list(character.event.runs.values_list("id", flat=True))
+        for assignment in AssignmentTrait.objects.filter(
+            member_id=character.player_id, run_id__in=run_ids, deleted__isnull=True
+        ).select_related("trait"):
+            if assignment.trait:
+                _add_refs(assignment.trait.text or "", assignment.trait.name)
+
+    sources_map.pop(character.number, None)
+    return sources_map
+
+
+def _persist_auto_relationships(character: Character, sources_map: dict[int, set[str]]) -> None:
+    """Sync auto Relationship rows for character based on sources_map."""
+    with transaction.atomic():
+        ref_chars_by_number = {
+            c.number: c
+            for c in Character.objects.filter(
+                event=character.event, number__in=sources_map.keys(), deleted__isnull=True
+            )
+        }
+
+        Relationship.objects.filter(source=character, auto=True, deleted__isnull=True).exclude(
+            target__number__in=sources_map.keys()
+        ).delete()
+
+        existing_manual_targets = set(
+            Relationship.objects.filter(source=character, auto=False, deleted__isnull=True).values_list(
+                "target__number", flat=True
+            )
+        )
+
+        for number, sources in sources_map.items():
+            if number not in ref_chars_by_number or number in existing_manual_targets:
+                continue
+            ref_char = ref_chars_by_number[number]
+            source_text = ", ".join(sorted(sources))
+            updated = Relationship.objects.filter(
+                source=character, target=ref_char, auto=True, deleted__isnull=True
+            ).update(text=source_text)
+            if not updated:
+                Relationship.objects.create(source=character, target=ref_char, auto=True, text=source_text)
+
+
+def update_character_referenced_chars(character_id: int) -> None:
+    """Compute and persist auto Relationships for all characters referenced in this character's content."""
+    try:
+        character = Character.objects.select_related("event", "player").get(pk=character_id)
+    except Character.DoesNotExist:
+        return
+    sources_map = _collect_sources_map(character)
+    _persist_auto_relationships(character, sources_map)
+
+
+@background_auto(queue="cache-rels")
+def update_character_referenced_chars_background(character_id: int) -> None:
+    """Compute and persist auto Relationships for characters referenced in a character's content."""
+    update_character_referenced_chars(character_id)
