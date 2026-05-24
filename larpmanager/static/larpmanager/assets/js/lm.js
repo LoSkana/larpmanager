@@ -522,6 +522,9 @@ function show_sidebar_active() {
 function data_tables() {
     window.datatables = window.datatables || {};
 
+    // Set button list
+    let buttonList = ['copy', 'csv', 'excel', 'pdf', 'print'];
+
     // Configure custom AICS button
     $.fn.dataTable.ext.buttons.aics = {
         text: 'AICS',
@@ -583,13 +586,9 @@ function data_tables() {
         var full_layout = rowCount >= 10;
         var no_buttons = $table.attr('no_buttons') !== undefined;
 
-        //Set button list
-        let buttonList = [];
+        // Add AICS button (if needed)
         if (pageType === 'aics') {
-            buttonList = ['aics', 'copy', 'csv', 'excel', 'pdf', 'print'];
-        }
-        else {
-            buttonList = ['copy', 'csv', 'excel', 'pdf', 'print'];
+            buttonList.push('aics');
         }
 
         const table = new DataTable('#' + tableId, {

@@ -760,12 +760,15 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
         context["list"].append(member)
 
     # Set AICS flag
-    context["aics"] = get_association_config(
+    aics = get_association_config(
         context["association_id"],
         "aics",
         default_value=False,
         context=context,
     )
+
+    if aics:
+        return render(request, "larpmanager/exe/users/enrolment_aics.html", context)
 
     return render(request, "larpmanager/exe/users/enrolment.html", context)
 
