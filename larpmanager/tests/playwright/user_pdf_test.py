@@ -161,4 +161,4 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
 
     # Go to character page and verify the relationships PDF download still works
     go_to(page, live_server, "/test/character/u1")
-    check_download(page, "Download relationships")
+    check_download(page, "relationships")
