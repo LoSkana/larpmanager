@@ -95,9 +95,9 @@ def test_user_pdf(pw_page: Any) -> None:
 
     check_download(page, "Download complete sheet")
 
-    check_download(page, "Download light sheet")
+    check_download(page, "printable sheet")
 
-    check_download(page, "Download relationships")
+    check_download(page, "relationships")
 
     # Test orga pdf page: select character and verify HTML test links produce content
     orga_characters_pdf_test(page, live_server)

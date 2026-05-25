@@ -69,8 +69,8 @@ def test_staff_unregistered_can_access_pdf(pw_page: Any) -> None:
     # Verify staff can download PDFs without being registered
     # These should all work without redirecting to registration page
     check_download(page, "Download complete sheet")
-    check_download(page, "Download light sheet")
-    check_download(page, "Download relationships")
+    check_download(page, "printable sheet")
+    check_download(page, "relationships")
 
     download_page = page.locator(f"text=Download complete sheet").get_attribute("href")
 
