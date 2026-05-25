@@ -178,7 +178,7 @@ class Command(BaseCommand):
     _NO_DELETE_KEY = "no_delete"
     _TEST_SLUG_PREFIX = "test-"
     _INACTIVE_SIGNUP_THRESHOLD = 10
-    _INACTIVE_LOG_DAYS = 90
+    _INACTIVE_LOG_DAYS = 360
     _WARNING_GRACE_DAYS = 30
     _ADMIN_NOTICE_DAYS_BEFORE = 3
 
@@ -188,7 +188,7 @@ class Command(BaseCommand):
 
         Test associations (slug starts with 'test-') are deleted after 7 days.
         Non-test associations with fewer than 10 signups and no log activity in
-        the last 90 days receive a warning email 7 days before deletion.
+        the last year receive a warning email before deletion.
         Associations with the 'no_delete' config key set are never deleted.
         Admins receive a notice 7 days before an association is deleted.
         """
