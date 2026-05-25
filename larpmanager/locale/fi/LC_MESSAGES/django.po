@@ -2731,6 +2731,9 @@ msgstr "kohteet poistettu"
 msgid "items updated"
 msgstr "päivitetyt kohteet"
 
+msgid "relationships"
+msgstr "suhteet"
+
 msgid "Active devices"
 msgstr "Aktiiviset laitteet"
 
@@ -2956,6 +2959,9 @@ msgstr "Varaston tunnisteet"
 msgid "Your character"
 msgstr "Hahmosi"
 
+msgid "complete sheet"
+msgstr "täydellinen arkki"
+
 msgid "customisations"
 msgstr "räätälöinnit"
 
@@ -3168,6 +3174,9 @@ msgstr "odotettavissa"
 
 msgid "membership fees"
 msgstr "jäsenmaksut"
+
+msgid "printable sheet"
+msgstr "tulostettava lomake"
 
 msgid "upcoming events"
 msgstr "tulevat tapahtumat"
@@ -4033,9 +4042,6 @@ msgstr "Peruutuksen poistaminen käytöstä"
 msgid "Display sent e-mails"
 msgstr "Näytä lähetetyt sähköpostit"
 
-msgid "Download light sheet"
-msgstr "Lataa kevytlomake"
-
 msgid "Enter a valid number"
 msgstr "Syötä kelvollinen numero"
 
@@ -4345,6 +4351,9 @@ msgstr "Ennakkoilmoittautumislinkki"
 msgid "Prop - weapons, props"
 msgstr "Prop - aseet, rekvisiitta"
 
+msgid "Referenced Characters"
+msgstr "Viitatut merkit"
+
 msgid "Register to the event"
 msgstr "Ilmoittaudu tapahtumaan"
 
@@ -4440,9 +4449,6 @@ msgstr "Näytä kaikkien käyttäjien tiedot"
 
 msgid "Do you want to proceed"
 msgstr "Haluatko jatkaa"
-
-msgid "Download relationships"
-msgstr "Lataa suhteet"
 
 msgid "Event deletion request"
 msgstr "Tapahtuman poistopyyntö"
@@ -4625,9 +4631,6 @@ msgstr "Luo ensimmäinen tapahtuma"
 
 msgid "Discount code not valid"
 msgstr "Alennuskoodi ei ole voimassa"
-
-msgid "Download complete sheet"
-msgstr "Lataa täydellinen lomake"
 
 msgid "Early registration link"
 msgstr "Varhaisen ilmoittautumisen linkki"

@@ -2731,6 +2731,9 @@ msgstr "Elemente gelöscht"
 msgid "items updated"
 msgstr "Artikel aktualisiert"
 
+msgid "relationships"
+msgstr "Beziehungen"
+
 msgid "Active devices"
 msgstr "Aktive Geräte"
 
@@ -2956,6 +2959,9 @@ msgstr "Lagerhaus-Tags"
 msgid "Your character"
 msgstr "Dein Charakter"
 
+msgid "complete sheet"
+msgstr "komplettes Blatt"
+
 msgid "customisations"
 msgstr "Anpassungen"
 
@@ -3168,6 +3174,9 @@ msgstr "erwartet innerhalb"
 
 msgid "membership fees"
 msgstr "Mitgliedsbeiträge"
+
+msgid "printable sheet"
+msgstr "bedruckbares Blatt"
 
 msgid "upcoming events"
 msgstr "Geplante Ereignisse"
@@ -4033,9 +4042,6 @@ msgstr "Stornierung deaktivieren"
 msgid "Display sent e-mails"
 msgstr "Gesendete E-Mails anzeigen"
 
-msgid "Download light sheet"
-msgstr "Download Lichtblatt"
-
 msgid "Enter a valid number"
 msgstr "Geben Sie eine gültige Nummer ein"
 
@@ -4345,6 +4351,9 @@ msgstr "Links zur Vorregistrierung"
 msgid "Prop - weapons, props"
 msgstr "Prop - Waffen, Requisiten"
 
+msgid "Referenced Characters"
+msgstr "Referenzierte Zeichen"
+
 msgid "Register to the event"
 msgstr "Melden Sie sich für die Veranstaltung an"
 
@@ -4440,9 +4449,6 @@ msgstr "Alle Benutzerdaten anzeigen"
 
 msgid "Do you want to proceed"
 msgstr "Möchten Sie fortfahren"
-
-msgid "Download relationships"
-msgstr "Beziehungen herunterladen"
 
 msgid "Event deletion request"
 msgstr "Antrag auf Löschung eines Ereignisses"
@@ -4625,9 +4631,6 @@ msgstr "Erstellen Sie Ihre erste Veranstaltung"
 
 msgid "Discount code not valid"
 msgstr "Ungültiger Erleichterungscode"
-
-msgid "Download complete sheet"
-msgstr "Komplettes Blatt herunterladen"
 
 msgid "Early registration link"
 msgstr "Link zur frühzeitigen Anmeldung"

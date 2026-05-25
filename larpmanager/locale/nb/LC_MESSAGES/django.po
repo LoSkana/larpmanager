@@ -2731,6 +2731,9 @@ msgstr "elementer slettet"
 msgid "items updated"
 msgstr "elementer oppdatert"
 
+msgid "relationships"
+msgstr "relasjoner"
+
 msgid "Active devices"
 msgstr "Aktive enheter"
 
@@ -2956,6 +2959,9 @@ msgstr "Lageretiketter"
 msgid "Your character"
 msgstr "Din karakter"
 
+msgid "complete sheet"
+msgstr "komplett ark"
+
 msgid "customisations"
 msgstr "tilpasninger"
 
@@ -3168,6 +3174,9 @@ msgstr "forventet innen"
 
 msgid "membership fees"
 msgstr "medlemskontingent"
+
+msgid "printable sheet"
+msgstr "utskrivbart ark"
 
 msgid "upcoming events"
 msgstr "Planlagte arrangementer"
@@ -4033,9 +4042,6 @@ msgstr "Deaktiver kansellering"
 msgid "Display sent e-mails"
 msgstr "Vis sendte e-poster"
 
-msgid "Download light sheet"
-msgstr "Last ned lysark"
-
 msgid "Enter a valid number"
 msgstr "Skriv inn et gyldig nummer"
 
@@ -4345,6 +4351,9 @@ msgstr "Lenker til forhåndsregistrering"
 msgid "Prop - weapons, props"
 msgstr "Prop - våpen, rekvisitter"
 
+msgid "Referenced Characters"
+msgstr "Refererte tegn"
+
 msgid "Register to the event"
 msgstr "Meld deg på arrangementet"
 
@@ -4440,9 +4449,6 @@ msgstr "Vis alle brukerdata"
 
 msgid "Do you want to proceed"
 msgstr "Vil du fortsette"
-
-msgid "Download relationships"
-msgstr "Last ned relasjoner"
 
 msgid "Event deletion request"
 msgstr "Forespørsel om sletting av hendelse"
@@ -4625,9 +4631,6 @@ msgstr "Opprett ditt første arrangement"
 
 msgid "Discount code not valid"
 msgstr "Ugyldig kode for tilrettelegging"
-
-msgid "Download complete sheet"
-msgstr "Last ned hele arket"
 
 msgid "Early registration link"
 msgstr "Lenke til tidlig registrering"
