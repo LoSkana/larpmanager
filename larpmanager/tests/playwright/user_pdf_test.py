@@ -97,7 +97,7 @@ def test_user_pdf(pw_page: Any) -> None:
 
     check_download(page, "printable sheet")
 
-    check_download(page, "relationships")
+    check_download(page, "relationships", page.locator("a[download]").filter(has_text="relationships"))
 
     # Test orga pdf page: select character and verify HTML test links produce content
     orga_characters_pdf_test(page, live_server)
@@ -161,4 +161,4 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
 
     # Go to character page and verify the relationships PDF download still works
     go_to(page, live_server, "/test/character/u1")
-    check_download(page, "relationships")
+    check_download(page, "relationships", page.locator("a[download]").filter(has_text="relationships"))

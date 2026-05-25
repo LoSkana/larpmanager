@@ -119,14 +119,17 @@ def ooops_check(page: Any) -> None:
             raise Exception(f"Error on {page.url}: {banner.inner_text()}")
 
 
-def check_download(page: Any, link: str) -> None:
+def check_download(page: Any, link: str, locator: Any = None) -> None:
     max_tries = 3
     current_try = 0
 
     while current_try < max_tries:
         try:
             with page.expect_download(timeout=100_000) as download_info:
-                page.click(f"text={link}")
+                if locator is not None:
+                    locator.click()
+                else:
+                    page.click(f"text={link}")
             download = download_info.value
             download_path = download.path()
             assert download_path is not None, "Download failed"
