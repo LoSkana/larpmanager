@@ -1007,9 +1007,6 @@ msgstr "Udostępnianie"
 msgid "Shuttle"
 msgstr "Shuttle"
 
-msgid "Sidebar"
-msgstr "Pasek boczny"
-
 msgid "Sign In"
 msgstr "Zaloguj się"
 

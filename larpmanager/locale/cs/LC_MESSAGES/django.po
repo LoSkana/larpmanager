@@ -1007,9 +1007,6 @@ msgstr "Sdílení"
 msgid "Shuttle"
 msgstr "Kyvadlová doprava"
 
-msgid "Sidebar"
-msgstr "Postranní panel"
-
 msgid "Sign In"
 msgstr "Přihlásit se"
 

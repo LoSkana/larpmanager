@@ -1007,9 +1007,6 @@ msgstr "Delen"
 msgid "Shuttle"
 msgstr "Shuttle"
 
-msgid "Sidebar"
-msgstr "Zijbalk"
-
 msgid "Sign In"
 msgstr "Aanmelden"
 

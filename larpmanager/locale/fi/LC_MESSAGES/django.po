@@ -1007,9 +1007,6 @@ msgstr "Jakaminen"
 msgid "Shuttle"
 msgstr "Sukkula"
 
-msgid "Sidebar"
-msgstr "Sivupalkki"
-
 msgid "Sign In"
 msgstr "Kirjaudu sisään"
 

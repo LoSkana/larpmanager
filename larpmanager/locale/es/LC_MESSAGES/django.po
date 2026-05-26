@@ -1007,9 +1007,6 @@ msgstr "Compartir"
 msgid "Shuttle"
 msgstr "Lanzadera"
 
-msgid "Sidebar"
-msgstr "Barra lateral"
-
 msgid "Sign In"
 msgstr "Registrarse"
 

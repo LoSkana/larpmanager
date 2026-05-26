@@ -111,6 +111,17 @@ function sidebar_mobile() {
     $('body').toggleClass('is-sidebar-visible');
     $('#sidebar-mobile-open').toggle();
     $('#sidebar-mobile-close').toggle();
+    if ($('body').hasClass('is-sidebar-visible')) {
+        var $active = $('.sidebar-link.select').first();
+        if ($active.length) {
+            var $sidebar = $('#sidebar');
+            var sidebarScrollTop = $sidebar.scrollTop();
+            var sidebarHeight = $sidebar.height();
+            var itemTop = $active.offset().top - $sidebar.offset().top + sidebarScrollTop;
+            var itemHeight = $active.outerHeight();
+            $sidebar.scrollTop(itemTop - (sidebarHeight - itemHeight) / 2);
+        }
+    }
 }
 
 const tinymceConfig = JSON.parse(document.getElementById('tinymce-config').textContent);

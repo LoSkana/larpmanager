@@ -5034,13 +5034,10 @@ msgstr ""
 msgid "Event created"
 msgstr ""
 
-msgid "Workspace selector"
-msgstr ""
-
 msgid "View Selector"
 msgstr ""
 
-msgid "Sidebar"
+msgid "Workspace selector"
 msgstr ""
 
 msgid "Lite Mode active"
@@ -5569,6 +5566,9 @@ msgid "Legal Notice"
 msgstr ""
 
 msgid "Privacy Policy"
+msgstr ""
+
+msgid "User"
 msgstr ""
 
 msgid "Password reset"
@@ -7438,9 +7438,6 @@ msgid "Last Event"
 msgstr ""
 
 msgid "You don't have any characters yet"
-msgstr ""
-
-msgid "User"
 msgstr ""
 
 msgid "Your messages"

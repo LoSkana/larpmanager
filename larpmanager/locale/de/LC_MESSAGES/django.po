@@ -1007,9 +1007,6 @@ msgstr "Teilen"
 msgid "Shuttle"
 msgstr "Shuttle"
 
-msgid "Sidebar"
-msgstr "Seitenleiste"
-
 msgid "Sign In"
 msgstr "Eintragen"
 

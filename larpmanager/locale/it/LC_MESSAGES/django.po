@@ -1007,9 +1007,6 @@ msgstr "Condivisione"
 msgid "Shuttle"
 msgstr "Navetta"
 
-msgid "Sidebar"
-msgstr "Barra laterale"
-
 msgid "Sign In"
 msgstr "Sign In"
 

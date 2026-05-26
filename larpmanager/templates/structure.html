@@ -145,6 +145,16 @@
             {% else %}
                 {% include "elements/structure/sidebar-user.html" %}
             {% endif %}
+            {% if effective_version >= 20 %}
+                <button id="v20-mobile-ham"
+                        onclick="toggleV20Sidebar()"
+                        type="button"
+                        aria-label="Menu">
+                    <i class="fa-solid fa-bars"></i>
+                    <span>MENU</span>
+                </button>
+                <div id="v20-mobile-overlay" onclick="closeV20Sidebar()"></div>
+            {% endif %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
                  class=" {% if manage and is_sidebar_open %}sidebar{% endif %}  {% if effective_version >= 20 %}sidebar{% endif %} {% if not frame and association.id != 0 %}topbar{% endif %}">
@@ -152,6 +162,39 @@
                 {% endblock main %}
             </div>
         </div>
+        {% if effective_version >= 20 %}
+            <script>
+        function toggleV20Sidebar() {
+            var open = document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('v20-mobile-overlay').classList.toggle('open', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+            if (open) {
+                setTimeout(function() {
+                    var $active = $('.sidebar-link.select').first();
+                    if ($active.length) {
+                        var $sidebar = $('#sidebar');
+                        var sidebarScrollTop = $sidebar.scrollTop();
+                        var sidebarHeight = $sidebar.height();
+                        var itemTop = $active.offset().top - $sidebar.offset().top + sidebarScrollTop;
+                        var itemHeight = $active.outerHeight();
+                        $sidebar.scrollTop(itemTop - (sidebarHeight - itemHeight) / 2);
+                    }
+                }, 260);
+            }
+        }
+        function closeV20Sidebar() {
+            if (document.getElementById('sidebar').classList.contains('open')) {
+                toggleV20Sidebar();
+            }
+        }
+        function openV20Sidebar() {
+            if (!document.getElementById('sidebar').classList.contains('open')) {
+                toggleV20Sidebar();
+            }
+        }
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeV20Sidebar(); });
+            </script>
+        {% endif %}
         <script>
     var set_language_url = "{% url 'set_language' %}";
     var set_internaz = {{ set_internaz | default:"null" }};

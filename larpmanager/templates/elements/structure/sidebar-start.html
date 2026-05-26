@@ -7,4 +7,84 @@
              class="platform_logo" />
         <span class="platform_name">{{ association.platform|default:"LarpManager" }}</span>
     </span>
+    {% if topbar_admin %}
+        <div id="sidebar-role" class="sidebar-role-pills">
+            {% if manage %}
+                <a href="{% if run %}{% url 'gallery' run.get_slug %}{% else %}{% url 'home' %}{% endif %}"
+                   class="sidebar-role-pill">
+                    <i class="fa-solid fa-user"></i> {% trans "User" %}
+                </a>
+                <span class="sidebar-role-pill active">
+                    <i class="fa-solid fa-gear"></i> Admin
+                </span>
+            {% else %}
+                <span class="sidebar-role-pill active">
+                    <i class="fa-solid fa-user"></i> {% trans "User" %}
+                </span>
+                {% if run %}
+                    <a href="{% url 'manage' run.get_slug %}" class="sidebar-role-pill">
+                        <i class="fa-solid fa-gear"></i> Admin
+                    </a>
+                {% elif association_role %}
+                    <a href="{% url 'manage' %}" class="sidebar-role-pill">
+                        <i class="fa-solid fa-gear"></i> Admin
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div id="sidebar-space">
+            <div class="sidebar-space-wrap" id="sidebar-space-wrap">
+                <div class="sidebar-space-row">
+                    <span class="sidebar-space-current">
+                        {% if run %}
+                            <i class="fa-solid fa-calendar-days"></i>
+                            <span class="sidebar-space-name">{{ run }}</span>
+                        {% else %}
+                            <i class="fa-solid fa-building"></i>
+                            <span class="sidebar-space-name">{{ association.name }}</span>
+                        {% endif %}
+                    </span>
+                    {% if open_runs or association_role %}
+                        <button class="sidebar-space-chevron"
+                                onclick="toggleSidebarSpace()"
+                                type="button"
+                                aria-expanded="false">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                    {% endif %}
+                </div>
+                {% if open_runs or association_role %}
+                    <div class="sidebar-space-dropdown hide" id="sidebar-space-dropdown">
+                        {% for rid, v in open_runs.items %}
+                            {% if run and run.event.slug == v.e and run.number == v.r %}
+                            {% else %}
+                                <a href="{% url 'manage' v.slug %}" class="sidebar-space-item">
+                                    <i class="fa-solid fa-calendar-days"></i>
+                                    <span>{{ v.s }}</span>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                        {% if association_role and run %}
+                            <a href="{% url 'manage' %}" class="sidebar-space-item">
+                                <i class="fa-solid fa-building"></i>
+                                <span>{{ association.name }}</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
 </div>
+<script>
+function toggleSidebarSpace() {
+    var wrap = document.getElementById('sidebar-space-wrap');
+    var dropdown = document.getElementById('sidebar-space-dropdown');
+    var btn = wrap ? wrap.querySelector('.sidebar-space-chevron') : null;
+    if (!dropdown) return;
+    var isOpen = !dropdown.classList.contains('hide');
+    dropdown.classList.toggle('hide', isOpen);
+    if (wrap) wrap.classList.toggle('open', !isOpen);
+    if (btn) btn.setAttribute('aria-expanded', String(!isOpen));
+}
+</script>

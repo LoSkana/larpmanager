@@ -11,6 +11,31 @@
                 {% endblock title %}
             </span>
         </h1>
+        {% if effective_version >= 20 %}
+            <nav id="v20-breadcrumb">
+                <a href="{% url 'home' %}">
+                    {% if association.favicon %}
+                        <img src="{{ association.favicon }}" alt="{{ association.name }}" />
+                    {% else %}
+                        <i class="fa-solid fa-house"></i>
+                    {% endif %}
+                    <span>{{ association.name }}</span>
+                </a>
+                {% if run %}
+                    {% if not manage %}
+                        <a href="{% url 'event' run.get_slug %}">
+                            <span class="v20-bc-sep">&rsaquo;</span>
+                            <span>{{ event.name }}</span>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'manage' run.get_slug %}">
+                            <span class="v20-bc-sep">&rsaquo;</span>
+                            <span>{{ event.name }}</span>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </nav>
+        {% endif %}
     </div>
 {% endblock banner %}
 {% block robots %}

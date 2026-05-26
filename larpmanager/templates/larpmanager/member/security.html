@@ -37,7 +37,7 @@
                 {% trans "Scan this QR code with Google Authenticator, Authy, or any compatible TOTP app, then enter the 6-digit code to confirm" %}.
             </p>
             <hr />
-            <img src="{{ qr_code_data }}" alt="QR Code" />
+            <img src="{{ qr_code_data }}" alt="QR Code" class="qr_code" />
             <hr />
             <form method="post">
                 {% csrf_token %}

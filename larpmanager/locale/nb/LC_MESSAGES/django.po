@@ -1007,9 +1007,6 @@ msgstr "Deling"
 msgid "Shuttle"
 msgstr "Skyttelbuss"
 
-msgid "Sidebar"
-msgstr "Sidefelt"
-
 msgid "Sign In"
 msgstr "Logg inn"
 

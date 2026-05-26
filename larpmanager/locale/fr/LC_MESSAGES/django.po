@@ -1007,9 +1007,6 @@ msgstr "Partage"
 msgid "Shuttle"
 msgstr "Navette"
 
-msgid "Sidebar"
-msgstr "Encadré"
-
 msgid "Sign In"
 msgstr "S'inscrire"
 

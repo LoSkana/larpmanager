@@ -1007,9 +1007,6 @@ msgstr "Delning"
 msgid "Shuttle"
 msgstr "Skyttel"
 
-msgid "Sidebar"
-msgstr "Sidofält"
-
 msgid "Sign In"
 msgstr "Logga in"
 

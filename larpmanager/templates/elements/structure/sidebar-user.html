@@ -3,13 +3,6 @@
     <div class="inner">
         <div class=" new-menu">
             {% include "elements/structure/sidebar-start.html" %}
-            <div class="sidebar-section">
-                <span class="sidebar-link-wrap">
-                    <a class="sidebar-link {% if request_func_name == 'home' %}select{% endif %}"
-                       href="{% url 'home' %}"
-                       data-exact-match="true"><i class="fa-solid fa-home"></i> {{ association.name }}</a>
-                </span>
-            </div>
             {% if user.is_authenticated %}
                 {% if run %}
                     <div class="sidebar-section">{% include "larpmanager/manage/nav.html" %}</div>

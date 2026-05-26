@@ -1,6 +1,6 @@
 {% load static i18n %}
 <div id="sidebar"
-     class="{% if not is_sidebar_open %}hide{% endif %} topbar">
+     class="{% if effective_version < 20 and not is_sidebar_open %}hide{% endif %} topbar">
     <div class="inner">
         {% if effective_version >= 20 %}
             {% include "elements/structure/sidebar-start.html" %}
@@ -116,7 +116,7 @@
         {% else %}
             <div class=" new-menu">
                 {% if run %}
-                    <div class="sidebar-start">
+                    <div class="sidebar-section">
                         <span class="sidebar-link-wrap">
                             <a class="sidebar-link" href="{% url 'manage' run.get_slug %}">Dashboard</a>
                         </span>
@@ -144,7 +144,7 @@
                         {% endif %}
                     {% endfor %}
                 {% else %}
-                    <div class="sidebar-start">
+                    <div class="sidebar-section">
                         <span class="sidebar-link-wrap">
                             <a class="sidebar-link" href="{% url 'manage' %}">Dashboard</a>
                         </span>
@@ -172,9 +172,9 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-                <hr />
+                <hr class="no_v20" />
                 {% if role_names %}
-                    <div class="roles">
+                    <div class="roles no_v20">
                         <i>{% trans "Role" %}:
                             {% for rn in role_names %}
                                 {% include "elements/comma.html" %}
@@ -183,28 +183,36 @@
                         </i>
                     </div>
                 {% endif %}
-                {% if association.skin_id == 1 %}
+                <div class="sidebar-section">
+                    {% if association.skin_id == 1 %}
+                        <span class="sidebar-link-wrap">
+                            <a href="https://discord.gg/C4KuyQbuft"
+                               class="sidebar-link"
+                               target="_blank"
+                               rel="noopener noreferrer">
+                                <i class="fa-brands fa-discord"></i>
+                                <span>Discord</span></a>
+                        </span>
+                        <span class="sidebar-link-wrap">
+                            <a href="{% url 'guides' %}"
+                               class="sidebar-link popup-iframe-link"
+                               data-iframe-url="{% url 'guides' %}?in_iframe=1">
+                                <i class="fa-solid fa-book"></i>
+                                <span>Guides</span></a>
+                        </span>
+                    {% endif %}
                     <span class="sidebar-link-wrap">
-                        <a href="https://discord.gg/C4KuyQbuft"
-                           class="sidebar-link"
-                           target="_blank"
-                           rel="noopener noreferrer">Discord</a>
-                    </span>
-                    <span class="sidebar-link-wrap">
-                        <a href="{% url 'guides' %}"
+                        <a href="{% url 'tutorials' %}"
                            class="sidebar-link popup-iframe-link"
-                           data-iframe-url="{% url 'guides' %}?in_iframe=1">Guides</a>
+                           data-iframe-url="{% url 'tutorials' %}?in_iframe=1">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Tutorials</span></a>
                     </span>
-                {% endif %}
-                <span class="sidebar-link-wrap">
-                    <a href="{% url 'tutorials' %}"
-                       class="sidebar-link popup-iframe-link"
-                       data-iframe-url="{% url 'tutorials' %}?in_iframe=1">Tutorials</a>
-                </span>
-            </div>
-        {% endif %}
-        {% if effective_version >= 20 %}
-            {% include "elements/structure/sidebar-end.html" %}
-        {% endif %}
+                </div>
+            {% endif %}
+            {% if effective_version >= 20 %}
+                {% include "elements/structure/sidebar-end.html" %}
+            {% endif %}
+        </div>
     </div>
 </div>

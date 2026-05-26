@@ -48,12 +48,6 @@ window.addEventListener('DOMContentLoaded', function() {
     function driverFirstEvent() {
         const driver = window.driver.js.driver;
 
-        function visibleEl(desktopId, mobileId) {
-            if ($('#topbar-mobile').is(':visible'))
-                return '#' + mobileId;
-            return '#' + desktopId;
-        }
-
         let steps = [
           {
             popover: {
@@ -62,16 +56,7 @@ window.addEventListener('DOMContentLoaded', function() {
             }
           },
           {
-            element: visibleEl('select_workspace', 'select_workspace_mobile'),
-            popover: {
-              title: '{% filter escapejs %}{% trans "Workspace selector" %}{% endfilter %}',
-              description: '{{ select_workspace | escapejs }}',
-              side: 'bottom',
-              align: 'start'
-            }
-          },
-          {
-            element: visibleEl('select_side', 'select_side_mobile'),
+            element: '#sidebar-role',
             popover: {
               title: '{% filter escapejs %}{% trans "View Selector" %}{% endfilter %}',
               description: '{{ select_side | escapejs }}',
@@ -79,21 +64,16 @@ window.addEventListener('DOMContentLoaded', function() {
               align: 'start'
             }
           },
+          {
+            element: '#sidebar-space',
+            popover: {
+              title: '{% filter escapejs %}{% trans "Workspace selector" %}{% endfilter %}',
+              description: '{{ select_workspace | escapejs }}',
+              side: 'bottom',
+              align: 'start'
+            }
+          },
         ];
-
-        const sidebarEl = visibleEl('sidebar-open', 'sidebar-mobile-open');
-        const sidebarElObj = document.querySelector(sidebarEl);
-        if (sidebarElObj && sidebarElObj.offsetParent !== null) {
-            steps.push({
-                element: sidebarEl,
-                popover: {
-                    title: '{% filter escapejs %}{% trans "Sidebar" %}{% endfilter %}',
-                    description: '{{ select_sidebar | escapejs }}',
-                    side: 'bottom',
-                    align: 'start'
-                }
-            });
-        }
 
         steps.push({
             element: '#lite-mode',
@@ -109,6 +89,13 @@ window.addEventListener('DOMContentLoaded', function() {
             allowClose: true,
             popoverClass: 'my-driverjs',
             doneBtnText: '{% filter escapejs %}{% trans "Done" %}{% endfilter %}',
+            onHighlightStarted: function(element) {
+                if (element && (element.id === 'sidebar-role' || element.id === 'sidebar-space')) {
+                    openV20Sidebar();
+                } else if (element && element.id === 'lite-mode') {
+                    closeV20Sidebar();
+                }
+            }
         });
 
         driverObj.drive();
