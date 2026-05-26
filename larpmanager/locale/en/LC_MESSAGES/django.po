@@ -5559,16 +5559,16 @@ msgstr ""
 msgid "Role"
 msgstr ""
 
-msgid "Privacy Policy"
+msgid "Tech Support"
+msgstr ""
+
+msgid "Logout"
 msgstr ""
 
 msgid "Legal Notice"
 msgstr ""
 
-msgid "Tech Support"
-msgstr ""
-
-msgid "Logout"
+msgid "Privacy Policy"
 msgstr ""
 
 msgid "Password reset"

@@ -2845,3 +2845,7 @@ body.association.new_v20 .login input {
 .new_v20 #sidebar .new-menu {
   padding-top: 0em;
 }
+
+.new_v20 textarea {
+  margin: 0;
+}

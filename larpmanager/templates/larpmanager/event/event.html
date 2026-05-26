@@ -14,6 +14,7 @@
 {% endblock media %}
 {% block content %}
     <div class="user_resize">
+        {% include "elements/reg_status.html" with registration=registration reg_uuid="_main" %}
         {% if event.cover %}
             <div id="aspect-ratio">
                 <div id="event_cover"

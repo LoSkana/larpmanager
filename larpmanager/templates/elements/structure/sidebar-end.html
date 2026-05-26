@@ -10,14 +10,6 @@
         </span>
     {% endif %}
     <span class="sidebar-link-wrap">
-        <a class="sidebar-link" href="{% url 'privacy' %}"><i class="fa-solid fa-shield-halved"></i> {% trans "Privacy Policy" %}</a>
-    </span>
-    {% if 'legal_notice' in association.features %}
-        <span class="sidebar-link-wrap">
-            <a class="sidebar-link" href="{% url 'legal_notice' %}"><i class="fa-solid fa-scale-balanced"></i> {% trans "Legal Notice" %}</a>
-        </span>
-    {% endif %}
-    <span class="sidebar-link-wrap">
         <a class="sidebar-link" href="{% url 'ticket' %}"><i class="fa-solid fa-screwdriver-wrench"></i> {% trans "Tech Support" %}</a>
     </span>
     {% if user.is_authenticated %}
@@ -29,4 +21,12 @@
             <button type="submit" id="sidebar-real-logout">logout</button>
         </form>
     {% endif %}
+    {% if 'legal_notice' in association.features %}
+        <span class="sidebar-link-wrap">
+            <a class="sidebar-link" href="{% url 'legal_notice' %}"><i class="fa-solid fa-scale-balanced"></i> {% trans "Legal Notice" %}</a>
+        </span>
+    {% endif %}
+    <span class="sidebar-link-wrap">
+        <a class="sidebar-link" href="{% url 'privacy' %}"><i class="fa-solid fa-shield-halved"></i> {% trans "Privacy Policy" %}</a>
+    </span>
 </div>
