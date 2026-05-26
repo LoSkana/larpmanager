@@ -296,7 +296,7 @@ def verify_transfer(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "User Test")
 
     # Click to edit and verify details
-    page.locator(".fa-edit").click()
+    page.locator(".fa-edit").first.click()
 
     # Verify ticket type is maintained (Standard Ticket)
     expect(page.locator("#id_ticket option:checked")).to_have_text("Standard Ticket - 50€")

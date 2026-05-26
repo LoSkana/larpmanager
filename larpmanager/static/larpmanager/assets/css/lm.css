@@ -2641,8 +2641,12 @@ body.floating_iframe .inner {
   display: none;
 }
 
+.new_v20 .staff-list {
+  text-align: left;
+}
+/*
 .new_v20 #v20-breadcrumb {
-  display: flex;
+  # display: flex;
   align-items: center;
   gap: 0.4em;
   font-size: 0.8em;
@@ -2670,7 +2674,7 @@ body.floating_iframe .inner {
 
 .new_v20 #v20-breadcrumb .v20-bc-sep {
   opacity: 0.5;
-}
+}*/
 
 .new_v20 .only_v20 {
   display: inherit !important;
@@ -2695,6 +2699,18 @@ body.floating_iframe .inner {
   align-items: flex-start;
   gap: 0.5em;
   padding: 0.5em;
+  font-size: 80%;
+}
+
+.new_v20 #sidebar .reg_status i {
+  display: inline;
+}
+
+.new_v20 #sidebar .reg_status a {
+  padding: 0;
+  margin: 0.2em;
+  display: inline;
+  transition: color 0.5s ease;
 }
 
 /* Registration status block */
@@ -2794,7 +2810,7 @@ body.floating_iframe .inner {
 }
 
 body.association.new_v20 .user_resize {
-  padding: 0.5em 1em;
+  padding: 0;
   margin: 0;
   max-width: 100%;
 }
@@ -2862,6 +2878,11 @@ body.association.new_v20 .login input {
   color: var(--ter-clr);
   background-color: transparent;
   border: none;
+  transition: color 0.5s ease;
+}
+
+.new_v20 #sidebar .sidebar-link:hover {
+  color: rgba(var(--ter-rgb), 0.3);
 }
 
 .new_v20 #sidebar .sidebar-end {
@@ -2982,8 +3003,8 @@ body.association.new_v20 .login input {
   display: flex;
   align-items: center;
   gap: 0.55em;
-  padding: 0.5em 0.65em;
-  font-size: 0.82em;
+  padding: 0.2em 0.65em;
+  font-size: 1em;
   font-weight: 600;
   color: rgba(var(--ter-rgb), 0.85);
   overflow: hidden;

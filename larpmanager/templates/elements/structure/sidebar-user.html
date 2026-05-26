@@ -5,6 +5,9 @@
             {% include "elements/structure/sidebar-start.html" %}
             {% if user.is_authenticated %}
                 {% if run %}
+                    <div class="sidebar-section reg_status">
+                        {% include "elements/reg_status.html" with registration=registration reg_uuid="_main" %}
+                    </div>
                     <div class="sidebar-section">{% include "larpmanager/manage/nav.html" %}</div>
                 {% endif %}
                 <div class="sidebar-section">{% include "larpmanager/member/profile_nav.html" %}</div>

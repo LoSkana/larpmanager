@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 """
-Test: Technical support ticket system.
+Test: Tech Support ticket system.
 Verifies ticket submission with and without login, with and without screenshots,
 and email change requests through the support system.
 """
@@ -39,7 +39,7 @@ def test_user_ticket(pw_page: Any) -> None:
     go_to(page, live_server, "/")
 
     # no member
-    page.get_by_role("link", name="Technical Support").click()
+    page.get_by_role("link", name="Tech Support").click()
     page.get_by_role("textbox", name="Email").click()
     page.get_by_role("textbox", name="Email").fill("dudi")
     page.get_by_role("textbox", name="Email").press("Tab")
@@ -49,7 +49,7 @@ def test_user_ticket(pw_page: Any) -> None:
     submit_confirm(page)
 
     # no member - screenshot
-    page.get_by_role("link", name="Technical Support").click()
+    page.get_by_role("link", name="Tech Support").click()
     page.get_by_role("textbox", name="Email").click()
     page.get_by_role("textbox", name="Email").fill("sadsa@sadsa.itsad")
     page.get_by_role("textbox", name="Request").click()
@@ -61,7 +61,7 @@ def test_user_ticket(pw_page: Any) -> None:
     login_user(page, live_server)
 
     # user
-    page.get_by_role("link", name="Technical Support").click()
+    page.get_by_role("link", name="Tech Support").click()
     page.get_by_role("textbox", name="Email").click()
     page.get_by_role("textbox", name="Email").fill("wwww@ewew.itsa")
     page.get_by_role("textbox", name="Request").click()
@@ -69,7 +69,7 @@ def test_user_ticket(pw_page: Any) -> None:
     submit_confirm(page)
 
     # user - screenshot
-    page.get_by_role("link", name="Technical Support").click()
+    page.get_by_role("link", name="Tech Support").click()
     page.get_by_role("textbox", name="Email").click()
     page.get_by_role("textbox", name="Email").fill("eee@re.it")
     page.get_by_role("textbox", name="Email").press("Tab")

@@ -68,13 +68,13 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 
     # add plot
     sidebar(page, "Plots")
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_name").fill("plot")
     submit_confirm(page)
 
     # add faction
     page.get_by_role("link", name="Factions").click()
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("faz")
     submit_confirm(page)
@@ -130,7 +130,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 
     # set quest type
     page.get_by_role("link", name="Quest type").click()
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("typ")
     submit_confirm(page)
@@ -139,11 +139,11 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 def bulk_questbuilder(live_server: Any, page: Any) -> None:
     # create quest
     sidebar(page, "Quest")
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("q1")
     submit_confirm(page)
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("q2")
     submit_confirm(page)
@@ -166,7 +166,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
 
     # create traits
     sidebar(page, "Traits")
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("t1")
     submit_confirm(page)
@@ -183,18 +183,18 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
 def bulk_exp(live_server: Any, page: Any) -> None:
     # create ability type
     page.get_by_role("link", name="Ability type").click()
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("t1")
     submit_confirm(page)
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("2")
     submit_confirm(page)
 
     # create ability
     sidebar(page, "Abilities")
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("swor")
     page.locator("#id_cost").click()
@@ -225,21 +225,21 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # add box
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("box")
     submit_confirm(page)
 
     # add tag
     page.get_by_role("link", name="Tags").click()
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("tag")
     submit_confirm(page)
 
     # add items
     page.get_by_role("link", name="Items").click()
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("item1")
     page.locator("#select2-id_container-container").click()
@@ -265,7 +265,7 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
 
     # add second container
     page.get_by_role("link", name="Containers").click()
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("box2")
     submit_confirm(page)
@@ -323,7 +323,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # add ticket
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.get_by_text("Type of ticket").click()
     page.locator("#id_tier").select_option("y")
     page.locator("#id_name").click()
@@ -364,7 +364,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # add new ticket
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New", exact=True).click()
     page.locator("#id_tier").select_option("y")
     page.locator("#id_name").click()
     page.locator("#id_name").fill("new")

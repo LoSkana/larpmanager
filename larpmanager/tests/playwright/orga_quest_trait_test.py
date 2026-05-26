@@ -55,7 +55,7 @@ def test_quest_trait(pw_page: Any) -> None:
 
     # check result
     go_to(page, live_server, "/test")
-    page.get_by_role("link", name="Test Character").nth(1).click()
+    page.get_by_role("link", name="Test Character").first.click()
     expect_normalized(page,
         page.locator("#one"),
         "player: admin test presentation test teaser text test text torta - nonna saleee anotheraliame con torta - nonna another player: user test",
