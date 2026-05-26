@@ -647,7 +647,7 @@ msgid "Log in"
 msgstr "Log in"
 
 msgid "Logout"
-msgstr "Disconnessione"
+msgstr "Logout"
 
 msgid "Manage"
 msgstr "Gestisci"
@@ -2379,7 +2379,7 @@ msgid "Subscription"
 msgstr "Abbonamento"
 
 msgid "Tech Support"
-msgstr "Assistenza tecnica"
+msgstr "Assistenza"
 
 msgid "Tell me more"
 msgstr "Scopri di più"
