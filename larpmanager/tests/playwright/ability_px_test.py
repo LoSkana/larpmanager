@@ -237,7 +237,7 @@ def rules(page: Any) -> None:
     # check value
     page.get_by_role("link", name="Characters").click()
     page.get_by_role("link", name="Hit Point").click()
-    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text 6")
+    expect_normalized(page, page.locator("#page-container"), "Test Character Test Teaser Test Text 6")
 
     # remove ability
     page.locator(".fa-edit").click()
@@ -250,7 +250,7 @@ def rules(page: Any) -> None:
     # recheck value
     page.get_by_role("link", name="Hit Point").click()
     just_wait(page)
-    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text 2")
+    expect_normalized(page, page.locator("#page-container"), "Test Character Test Teaser Test Text 2")
 
     # readd ability
     page.locator(".fa-edit").click()

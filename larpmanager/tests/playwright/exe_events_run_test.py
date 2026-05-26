@@ -58,7 +58,7 @@ def test_exe_runs_new_session(pw_page: Any) -> None:
     submit_confirm(page)
 
     # After saving, we are redirected to the events list
-    expect_normalized(page, page.locator("#one"), "Test Larp")
+    expect_normalized(page, page.locator("#page-container"), "Test Larp")
 
 
 def test_exe_events_run(pw_page: Any) -> None:
@@ -88,9 +88,9 @@ def test_exe_events_run(pw_page: Any) -> None:
     page.locator("#id_form2-end").click()
     submit_confirm(page)
 
-    expect_normalized(page, page.locator("#one"), "Prova Event")
+    expect_normalized(page, page.locator("#page-container"), "Prova Event")
     go_to(page, live_server, "/prova/manage/")
 
     expect_normalized(page, page.locator("#banner"), "Prova Event")
     go_to(page, live_server, "")
-    expect_normalized(page, page.locator("#one"), "Prova Event")
+    expect_normalized(page, page.locator("#page-container"), "Prova Event")

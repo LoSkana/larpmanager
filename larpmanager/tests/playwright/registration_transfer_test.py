@@ -220,16 +220,16 @@ def copy_tickets_and_questions(page: Any, live_server: Any) -> None:
 
     # Verify tickets were copied
     go_to(page, live_server, "/eventb/manage/tickets/")
-    expect_normalized(page, page.locator("#one"), "Premium Ticket")
-    expect_normalized(page, page.locator("#one"), "Standard Ticket")
-    expect_normalized(page, page.locator("#one"), "100")
-    expect_normalized(page, page.locator("#one"), "50")
+    expect_normalized(page, page.locator("#page-container"), "Premium Ticket")
+    expect_normalized(page, page.locator("#page-container"), "Standard Ticket")
+    expect_normalized(page, page.locator("#page-container"), "100")
+    expect_normalized(page, page.locator("#page-container"), "50")
 
     # Verify form questions were copied
     go_to(page, live_server, "/eventb/manage/form/")
-    expect_normalized(page, page.locator("#one"), "Dietary restrictions")
-    expect_normalized(page, page.locator("#one"), "T-shirt size")
-    expect_normalized(page, page.locator("#one"), "Workshop preferences")
+    expect_normalized(page, page.locator("#page-container"), "Dietary restrictions")
+    expect_normalized(page, page.locator("#page-container"), "T-shirt size")
+    expect_normalized(page, page.locator("#page-container"), "Workshop preferences")
 
 
 def create_signup_event_a(page: Any, live_server: Any) -> None:
@@ -293,7 +293,7 @@ def verify_transfer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/eventb/manage/registrations/")
 
     # Should see the transferred registration
-    expect_normalized(page, page.locator("#one"), "User Test")
+    expect_normalized(page, page.locator("#page-container"), "User Test")
 
     # Click to edit and verify details
     page.locator(".fa-edit").first.click()

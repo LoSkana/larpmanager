@@ -188,7 +188,7 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
     refund_row = page.get_by_role("row").filter(has_text="Refund")
     expect_normalized(page, refund_row, str(USER_TOKEN_REFUND))
     go_to(page, live_server, "/accounting/")
-    expect_normalized(page, page.locator("#one"), "Total: " + str(USER_TOKEN_REFUND))
+    expect_normalized(page, page.locator("#page-container"), "Total: " + str(USER_TOKEN_REFUND))
     login_orga(page, live_server)
 
 
@@ -268,5 +268,5 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
     credit_refund_row = page.get_by_role("row").filter(has_text="Refund")
     expect_normalized(page, credit_refund_row, str(ORGA_CREDIT_REFUND))
     go_to(page, live_server, "/accounting/")
-    expect_normalized(page, page.locator("#one"), "Total: " + str(ORGA_TOKEN_REFUND))
-    expect_normalized(page, page.locator("#one"), "Total: " + str(ORGA_CREDIT_REFUND))
+    expect_normalized(page, page.locator("#page-container"), "Total: " + str(ORGA_TOKEN_REFUND))
+    expect_normalized(page, page.locator("#page-container"), "Total: " + str(ORGA_CREDIT_REFUND))

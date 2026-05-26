@@ -105,7 +105,7 @@ def add_items(page: Any) -> None:
     load_image(page, "#id_photo")
     submit_confirm(page)
 
-    expect_normalized(page, page.locator("#one"), "Item 1 sadsada Box A Electrical")
+    expect_normalized(page, page.locator("#page-container"), "Item 1 sadsada Box A Electrical")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Item 2")
@@ -140,9 +140,9 @@ def bulk(page: Any) -> None:
     page.locator('[id="u1"]').get_by_role("cell", name="Box A").click()
     page.get_by_role("link", name="Execute").click()
     just_wait(page)
-    expect_normalized(page, page.locator("#one"), "item 1 sadsada boc b electrical")
-    expect_normalized(page, page.locator("#one"), "item 2 sdsadas boc b")
-    expect_normalized(page, page.locator("#one"), "item 3sa dsad box a")
+    expect_normalized(page, page.locator("#page-container"), "item 1 sadsada boc b electrical")
+    expect_normalized(page, page.locator("#page-container"), "item 2 sdsadas boc b")
+    expect_normalized(page, page.locator("#page-container"), "item 3sa dsad box a")
 
 
     page.get_by_role("link", name="Bulk").click()
@@ -153,9 +153,9 @@ def bulk(page: Any) -> None:
     page.locator("#objs_2").select_option("u2")
     page.get_by_role("link", name="Execute").click()
     just_wait(page)
-    expect_normalized(page, page.locator("#one"), "item 3sa dsad box a")
-    expect_normalized(page, page.locator("#one"), "Item 2 sdsadas Boc B Gru sad")
-    expect_normalized(page, page.locator("#one"), "Item 1 sadsada Boc B Electrical | Gru sad")
+    expect_normalized(page, page.locator("#page-container"), "item 3sa dsad box a")
+    expect_normalized(page, page.locator("#page-container"), "Item 2 sdsadas Boc B Gru sad")
+    expect_normalized(page, page.locator("#page-container"), "Item 1 sadsada Boc B Electrical | Gru sad")
 
 
     # add movement
@@ -167,7 +167,7 @@ def bulk(page: Any) -> None:
     page.locator("#id_notes").click()
     page.locator("#id_notes").fill("maintenance")
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Item 3sa maintenance")
+    expect_normalized(page, page.locator("#page-container"), "Item 3sa maintenance")
 
 
 def area_assigmenents(page: Any) -> None:
@@ -193,8 +193,8 @@ def area_assigmenents(page: Any) -> None:
     submit_confirm(page)
 
     # check
-    expect_normalized(page, page.locator("#one"), "sALOON SDsad saddsadsa Item assignments")
-    expect_normalized(page, page.locator("#one"), "Kitchen ss sds Item assignments")
+    expect_normalized(page, page.locator("#page-container"), "sALOON SDsad saddsadsa Item assignments")
+    expect_normalized(page, page.locator("#page-container"), "Kitchen ss sds Item assignments")
 
     # assign items
     page.locator('[id="u2"]').get_by_role("link", name="Item assignments").click()
@@ -232,17 +232,17 @@ def area_assigmenents(page: Any) -> None:
 def checks(page: Any) -> None:
     # check manifest
     page.get_by_role("link", name="Manifest").click()
-    expect_normalized(page, page.locator("#one"), "New Kitchen Position: ss Description: sds")
+    expect_normalized(page, page.locator("#page-container"), "New Kitchen Position: ss Description: sds")
     expect_normalized(page,
         page.locator("#one"), "Item 1 Boc B - dd Item 3sa Box A - bibi	 b sALOON Position: SDsad Description: saddsadsa "
     )
-    expect_normalized(page, page.locator("#one"), "Item 1 Boc B - dd ffff Item 3sa Box A - bibi	 sss")
+    expect_normalized(page, page.locator("#page-container"), "Item 1 Boc B - dd ffff Item 3sa Box A - bibi	 sss")
 
     # check checks
     page.get_by_role("link", name="Checks").click()
-    expect_normalized(page, page.locator("#one"), "Item 1 Description: sadsada Photo")
-    expect_normalized(page, page.locator("#one"), "Kitchen sALOON ffff Item 3sa Description: dsad")
-    expect_normalized(page, page.locator("#one"), "Kitchen b sALOON sss")
+    expect_normalized(page, page.locator("#page-container"), "Item 1 Description: sadsada Photo")
+    expect_normalized(page, page.locator("#page-container"), "Kitchen sALOON ffff Item 3sa Description: dsad")
+    expect_normalized(page, page.locator("#page-container"), "Kitchen b sALOON sss")
 
 
 def edit_loaded_deployed(page: Any) -> None:

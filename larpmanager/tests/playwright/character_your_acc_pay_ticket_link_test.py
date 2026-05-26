@@ -99,7 +99,7 @@ def ticket_link_bypasses_not_visible(live_server, page):
     new_page.get_by_role("button", name="Continue").click()
     submit_confirm(new_page)
     go_to(page, live_server, "/test/")
-    expect_normalized(page, page.locator("#one"), "Registration confirmed (Staff)")
+    expect_normalized(page, page.locator("#page-container"), "Registration confirmed (Staff)")
 
 
 def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
@@ -198,7 +198,7 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     # Go to your character, check result
     go_to(page, live_server, "/test/character/your")
     expect_normalized(page, page.locator("#banner"), "Test Character - Test Larp")
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test Presentation Test Teaser Text Test Text")
+    expect_normalized(page, page.locator("#page-container"), "Player: Admin Test Presentation Test Teaser Text Test Text")
 
 
 def check_accounting_pay_link(page: Any, live_server: Any) -> None:
@@ -249,13 +249,13 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
 
     go_to(page, live_server, "/accounting/pay/test/")
-    expect_normalized(page, page.locator("#one"), "Choose the payment method: Wire sadsadsa")
+    expect_normalized(page, page.locator("#page-container"), "Choose the payment method: Wire sadsadsa")
 
     go_to(page, live_server, "/accounting/pay/test/wire/")
-    expect_normalized(page, page.locator("#one"), "You are about to make a payment of: 100 €.")
+    expect_normalized(page, page.locator("#page-container"), "You are about to make a payment of: 100 €.")
 
     go_to(page, live_server, "/accounting/pay/test/paypal/")
-    expect_normalized(page, page.locator("#one"), "Choose the payment method: Wire sadsadsa")
+    expect_normalized(page, page.locator("#page-container"), "Choose the payment method: Wire sadsadsa")
 
 
 def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
@@ -282,7 +282,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
 
     # check result
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect_normalized(page, page.locator("#one"), "primaaa Primary Test Character tranver Transversal Test Character")
+    expect_normalized(page, page.locator("#page-container"), "primaaa Primary Test Character tranver Transversal Test Character")
 
     # add second event in campaing
     go_to(page, live_server, "/manage")
@@ -308,7 +308,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     # check we have for now the same factions
     page.get_by_role("link", name="Features").first.click()
     page.get_by_role("link", name="Factions").click()
-    expect_normalized(page, page.locator("#one"), "primaaa Primary tranver Transversal")
+    expect_normalized(page, page.locator("#page-container"), "primaaa Primary tranver Transversal")
 
     # set independ factions, check
     page.get_by_role("link", name="Configuration").first.click()
@@ -316,7 +316,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.locator("#id_campaign_faction_indep").check()
     submit_confirm(page)
     page.get_by_role("link", name="Factions").click()
-    expect_normalized(page, page.locator("#one"), "No elements are currently available")
+    expect_normalized(page, page.locator("#page-container"), "No elements are currently available")
 
     # add new factions
     page.get_by_role("link", name="New").click()
@@ -338,19 +338,19 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
 
     # check situation in second event
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect_normalized(page, page.locator("#one"), "PRIMAAAA Primary Test Character TRANVERSA Transversal Test Character")
+    expect_normalized(page, page.locator("#page-container"), "PRIMAAAA Primary Test Character TRANVERSA Transversal Test Character")
     sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
-    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text PRIMAAAA TRANVERSA")
+    expect_normalized(page, page.locator("#page-container"), "Test Character Test Teaser Test Text PRIMAAAA TRANVERSA")
 
     # check situation in first event
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Factions").click()
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect_normalized(page, page.locator("#one"), "primaaa Primary Test Character tranver Transversal Test Character")
+    expect_normalized(page, page.locator("#page-container"), "primaaa Primary Test Character tranver Transversal Test Character")
     sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
-    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text primaaa tranver")
+    expect_normalized(page, page.locator("#page-container"), "Test Character Test Teaser Test Text primaaa tranver")
 
 
 def accounting_refund(page: Any, live_server: Any) -> None:
@@ -382,12 +382,12 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     page.get_by_role("spinbutton", name="Value").click()
     page.get_by_role("spinbutton", name="Value").fill("20")
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Requests open: asdsadsadsa (20.00)")
+    expect_normalized(page, page.locator("#page-container"), "Requests open: asdsadsadsa (20.00)")
 
     go_to(page, live_server, "/manage")
     sidebar(page, "Refunds")
     just_wait(page)
-    expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 200 request done")
+    expect_normalized(page, page.locator("#page-container"), "asdsadsadsa admin test 20 200 request done")
     page.get_by_role("link", name="Done").click()
     just_wait(page)
-    expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 180 delivered")
+    expect_normalized(page, page.locator("#page-container"), "asdsadsadsa admin test 20 180 delivered")

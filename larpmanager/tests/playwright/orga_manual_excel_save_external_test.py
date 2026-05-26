@@ -78,7 +78,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 
     # check by reload
     page.get_by_role("link", name="Characters").click()
-    expect_normalized(page, page.locator("#one"), "Test Character2 Test Teaser + 2 Test Text ff")
+    expect_normalized(page, page.locator("#page-container"), "Test Character2 Test Teaser + 2 Test Text ff")
 
     # add new
     page.get_by_role("link", name="New").click()
@@ -161,7 +161,7 @@ def excel(page: Any, live_server: Any) -> None:
     # check in page
     page.locator('[id="u2"]').locator(".fa-edit").click()
     page.locator('a.my_toggle[tog="f_id_text"]').click()
-    expect_normalized(page, page.locator("#one"), "good friends with #1 ciaoooo")
+    expect_normalized(page, page.locator("#page-container"), "good friends with #1 ciaoooo")
 
 
 def external(page: Any, live_server: Any) -> None:

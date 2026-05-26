@@ -128,11 +128,11 @@ def create_character(page: Any) -> None:
     submit_confirm(page)
 
     # check status, resubmit reg
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
+    expect_normalized(page, page.locator("#page-container"), "Player: Admin Test choose: st Presentation sdsa")
     nav(page, "Registration")
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
+    expect_normalized(page, page.locator("#page-container"), "Player: Admin Test choose: st Presentation sdsa")
 
     # change ticket
     nav(page, "Registration")
@@ -141,15 +141,15 @@ def create_character(page: Any) -> None:
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
 
     # check previous option is not selected anymore
-    expect_normalized(page, page.locator("#one"), "The character have missing values in mandatory fields: choose")
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test Presentation sdsa Text asadas")
+    expect_normalized(page, page.locator("#page-container"), "The character have missing values in mandatory fields: choose")
+    expect_normalized(page, page.locator("#page-container"), "Player: Admin Test Presentation sdsa Text asadas")
     page.get_by_role("link", name="myyyy").click()
     page.get_by_role("link", name="Edit").click()
 
     # check only one option available
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")
+    expect_normalized(page, page.locator("#page-container"), "Player: Admin Test choose: bmb Presentation sdsa")
 
     # check with registration resubmit
     nav(page, "Registration")
@@ -158,4 +158,4 @@ def create_character(page: Any) -> None:
     page.get_by_role("link", name="Edit").click()
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")
+    expect_normalized(page, page.locator("#page-container"), "Player: Admin Test choose: bmb Presentation sdsa")

@@ -108,7 +108,7 @@ def check_orga_features(page: Any) -> None:
         check_feature(page, s)
 
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Now you can set customization options")
+    expect_normalized(page, page.locator("#page-container"), "Now you can set customization options")
     expect_normalized(page,
         page.locator("#one"), "You have activated the following features, for each here's the links to follow"
     )
@@ -191,7 +191,7 @@ def check_exe_features(page: Any) -> None:
         check_feature(page, s)
 
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Now you can create event templates")
+    expect_normalized(page, page.locator("#page-container"), "Now you can create event templates")
     page.get_by_role("link", name="Features").first.click()
     _check_checkboxes(checked, page, True)
 

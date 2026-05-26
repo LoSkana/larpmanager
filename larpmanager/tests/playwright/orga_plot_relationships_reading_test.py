@@ -115,7 +115,7 @@ def reading(live_server: Any, page: Any) -> None:
     # check faction main list
     page.locator("#one").get_by_role("link", name="Characters").click()
 
-    expect_normalized(page, page.locator("#one"), "only for testt Primary Test Character")
+    expect_normalized(page, page.locator("#page-container"), "only for testt Primary Test Character")
 
     # check reading for prova
     sidebar(page, "Reading")
@@ -128,7 +128,7 @@ def reading(live_server: Any, page: Any) -> None:
     # check reading plot
     sidebar(page, "Reading")
     page.locator('[id="plot_u1"]').locator(".fa-book-open").click()
-    expect_normalized(page, page.locator("#one"), "testona Text wwwww prova bruuuu")
+    expect_normalized(page, page.locator("#page-container"), "testona Text wwwww prova bruuuu")
 
 
 def relationships(live_server: Any, page: Any) -> None:
@@ -151,7 +151,7 @@ def relationships(live_server: Any, page: Any) -> None:
     # check in main list
     page.get_by_role("link", name="Relationships").click()
     just_wait(page)
-    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text prova Test Character")
+    expect_normalized(page, page.locator("#page-container"), "Test Character Test Teaser Test Text prova Test Character")
 
     # check in char
     page.locator('[id="u2"]').locator(".fa-edit").click()
@@ -172,7 +172,7 @@ def relationships(live_server: Any, page: Any) -> None:
     # check in gallery
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
-    expect_normalized(page, page.locator("#one"), "Relationships Test Character test teaser ciaaoooooo")
+    expect_normalized(page, page.locator("#page-container"), "Relationships Test Character test teaser ciaaoooooo")
 
 
 def plots(live_server: Any, page: Any) -> None:
@@ -215,7 +215,7 @@ def plots(live_server: Any, page: Any) -> None:
 
     # check in plot list - both characters should be there
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character prova")
+    expect_normalized(page, page.locator("#page-container"), "testona asadsadas wwwww Test Character prova")
 
     # check it is the same
     page.locator(".fa-edit").click()
@@ -223,7 +223,7 @@ def plots(live_server: Any, page: Any) -> None:
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect_normalized(page, page.locator("#one"), "asadsadas wwwww prova second char role")
+    expect_normalized(page, page.locator("#page-container"), "asadsadas wwwww prova second char role")
     locator.click()
 
     # change it
@@ -232,13 +232,13 @@ def plots(live_server: Any, page: Any) -> None:
 
     # check it
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character prova")
+    expect_normalized(page, page.locator("#page-container"), "testona asadsadas wwwww Test Character prova")
     page.locator(".fa-edit").click()
     # Wait for the toggle element to be ready
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect_normalized(page, page.locator("#one"), "asadsadas wwwww prova222 second char role")
+    expect_normalized(page, page.locator("#page-container"), "asadsadas wwwww prova222 second char role")
 
     # remove first char
     page.get_by_role("listitem", name="Test Character").locator("span").click()
@@ -253,7 +253,7 @@ def plots(live_server: Any, page: Any) -> None:
 
     # check
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww prova")
+    expect_normalized(page, page.locator("#page-container"), "testona asadsadas wwwww prova")
 
     # set text
     page.locator(".fa-edit").click()
@@ -263,7 +263,7 @@ def plots(live_server: Any, page: Any) -> None:
     # check in user
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
-    expect_normalized(page, page.locator("#one"), "testona wwwww bruuuu")
+    expect_normalized(page, page.locator("#page-container"), "testona wwwww bruuuu")
 
 
 def plots_character(live_server: Any, page: Any) -> None:

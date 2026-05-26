@@ -70,7 +70,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     # Check reordering
     expect_normalized(page, page.locator("#registration_sections_wrapper"), "Preferences Needs")
     page.locator(".fa-arrow-up").click()
-    expect_normalized(page, page.locator("#one"), "Needs Preferences")
+    expect_normalized(page, page.locator("#page-container"), "Needs Preferences")
 
     # Add one question for each section
     page.get_by_role("link", name="Form").click()
@@ -193,7 +193,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.get_by_role("link", name="Food").click()
     page.get_by_role("link", name="sleep").click()
     just_wait(page)
-    expect_normalized(page, page.locator("#one"), "Admin Test Depends WWWW SADSA")
+    expect_normalized(page, page.locator("#page-container"), "Admin Test Depends WWWW SADSA")
     expect(page.get_by_role("link", name="Food")).to_be_visible()
     expect(page.get_by_role("link", name="sleep")).to_be_visible()
 
@@ -219,7 +219,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     page.get_by_role("link", name="Food").click()
 
-    expect_normalized(page, page.locator("#one"), "Admin Test Depends SADSA")
+    expect_normalized(page, page.locator("#page-container"), "Admin Test Depends SADSA")
 
     page.locator(".fa-edit").click()
 

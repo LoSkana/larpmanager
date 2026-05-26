@@ -105,8 +105,8 @@ def signup(page: Any, live_server: Any) -> None:
 
     # check reg status
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Provisional registration")
-    expect_normalized(page, page.locator("#one"), "Proceed with payment to confirm your registration")
+    expect_normalized(page, page.locator("#page-container"), "Provisional registration")
+    expect_normalized(page, page.locator("#page-container"), "Proceed with payment to confirm your registration")
 
     # pay
     go_to(page, live_server, "/test/register")
@@ -126,7 +126,7 @@ def signup(page: Any, live_server: Any) -> None:
 
     # check reg status
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Registration confirmed (Standard)")
+    expect_normalized(page, page.locator("#page-container"), "Registration confirmed (Standard)")
 
 
 def characters(page: Any, live_server: Any) -> None:

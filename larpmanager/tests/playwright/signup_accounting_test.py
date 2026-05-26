@@ -92,7 +92,7 @@ def discount(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#regs_u1_Participant"), "52")
     go_to(page, live_server, "/test/register")
     page.locator("#one").get_by_role("link", name="Accounting").click()
-    expect_normalized(page, page.locator("#one"), "Total payments: 100")
+    expect_normalized(page, page.locator("#page-container"), "Total payments: 100")
 
     # update signup
     go_to(page, live_server, "/test/register")
@@ -139,9 +139,9 @@ def pay(live_server: Any, page: Any) -> None:
     # check accounting
     go_to(page, live_server, "/test/register")
     page.locator("#one").get_by_role("link", name="Accounting").click()
-    expect_normalized(page, page.locator("#one"), "Total registration fee: 100")
-    expect_normalized(page, page.locator("#one"), "Total payments: 48")
-    expect_normalized(page, page.locator("#one"), "Next payment: 52")
+    expect_normalized(page, page.locator("#page-container"), "Total registration fee: 100")
+    expect_normalized(page, page.locator("#page-container"), "Total payments: 48")
+    expect_normalized(page, page.locator("#page-container"), "Next payment: 52")
     go_to(page, live_server, "/test/manage/registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     # Check for registration accounting data in the table
@@ -151,15 +151,15 @@ def pay(live_server: Any, page: Any) -> None:
 
     # pay
     go_to(page, live_server, "/accounting/registration/u1/")
-    expect_normalized(page, page.locator("#one"), "100")
-    expect_normalized(page, page.locator("#one"), "48")
-    expect_normalized(page, page.locator("#one"), "52")
+    expect_normalized(page, page.locator("#page-container"), "100")
+    expect_normalized(page, page.locator("#page-container"), "48")
+    expect_normalized(page, page.locator("#page-container"), "52")
     page.get_by_role("cell", name="Wire", exact=True).click()
     submit(page)
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 
-    expect_normalized(page, page.locator("#one"), "52")
+    expect_normalized(page, page.locator("#page-container"), "52")
     submit(page)
 
     # confirm payment
@@ -223,13 +223,13 @@ def signup_pay(live_server: Any, page: Any) -> None:
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Provisional registration")
+    expect_normalized(page, page.locator("#page-container"), "Provisional registration")
     page.locator("#one").get_by_role("link", name="Accounting").click()
-    expect_normalized(page, page.locator("#one"), "100")
+    expect_normalized(page, page.locator("#page-container"), "100")
 
     # Check accounting
     go_to(page, live_server, "/accounting")
-    expect_normalized(page, page.locator("#one"), "100")
+    expect_normalized(page, page.locator("#page-container"), "100")
 
     # check pay
     go_to(page, live_server, "/test/register")
@@ -237,9 +237,9 @@ def signup_pay(live_server: Any, page: Any) -> None:
     page.get_by_role("cell", name="Wire", exact=True).click()
     expect_normalized(page, page.locator("b"), "100")
     submit(page)
-    expect_normalized(page, page.locator("#one"), "100")
-    expect_normalized(page, page.locator("#one"), "test beneficiary")
-    expect_normalized(page, page.locator("#one"), "test iban")
+    expect_normalized(page, page.locator("#page-container"), "100")
+    expect_normalized(page, page.locator("#page-container"), "test beneficiary")
+    expect_normalized(page, page.locator("#page-container"), "test iban")
 
 
 def setup_payment(live_server: Any, page: Any) -> None:

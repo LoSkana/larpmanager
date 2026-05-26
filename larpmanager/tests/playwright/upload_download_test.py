@@ -127,7 +127,7 @@ def relationships(page: Any) -> None:
     page.locator("#id_second").click()
     upload(page, "#id_second", get_path("relationships.csv"))
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), " OK - Relationship characcter test character")
+    expect_normalized(page, page.locator("#page-container"), " OK - Relationship characcter test character")
     page.get_by_role("link", name="Proceed").click()
     page.get_by_role("link", name="Relationships").click()
     expect_normalized(
@@ -152,7 +152,7 @@ def plots(live_server: Any, page: Any) -> None:
         "Loading performed, see logs Proceed Logs OK - Created plott OK - Plot role characcter plott",
     )
     page.get_by_role("link", name="Proceed").click()
-    expect_normalized(page, page.locator("#one"), "plott conceptt textt")
+    expect_normalized(page, page.locator("#page-container"), "plott conceptt textt")
     page.locator(".fa-edit").click()
     page.get_by_role("cell", name="Show This text will be added").get_by_role("link").click()
     expect_normalized(page, page.locator("#id_char_role_2_tr"), "characcter")
@@ -175,18 +175,18 @@ def quest_trait(page: Any) -> None:
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("quest.csv"))
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Loading performed, see logs Proceed Logs OK - Created questt")
+    expect_normalized(page, page.locator("#page-container"), "Loading performed, see logs Proceed Logs OK - Created questt")
     page.get_by_role("link", name="Proceed").click()
-    expect_normalized(page, page.locator("#one"), "Q1 questt bhbh presenttation ttext")
+    expect_normalized(page, page.locator("#page-container"), "Q1 questt bhbh presenttation ttext")
     check_download(page, "Download")
     sidebar(page, "Traits")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("trait.csv"))
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Loading performed, see logs Proceed Logs OK - Created traitt")
+    expect_normalized(page, page.locator("#page-container"), "Loading performed, see logs Proceed Logs OK - Created traitt")
     page.get_by_role("link", name="Proceed").click()
-    expect_normalized(page, page.locator("#one"), "T1 traitt Q1 questt ppresentation teeeext")
+    expect_normalized(page, page.locator("#page-container"), "T1 traitt Q1 questt ppresentation teeeext")
     check_download(page, "Download")
 
 
@@ -196,9 +196,9 @@ def registrations(page: Any) -> None:
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("registration.csv"))
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), " OK - Created User Test")
+    expect_normalized(page, page.locator("#page-container"), " OK - Created User Test")
     page.get_by_role("link", name="Proceed").click()
-    expect_normalized(page, page.locator("#one"), "User Test characcter")
+    expect_normalized(page, page.locator("#page-container"), "User Test characcter")
     check_download(page, "Download")
 
 
@@ -230,7 +230,7 @@ def characters(page: Any) -> None:
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("character.csv"))
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), " OK - Created characcter")
+    expect_normalized(page, page.locator("#page-container"), " OK - Created characcter")
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(
         page, page.locator("#one"), "Test Character Test Teaser Test Text characcter trg poor ertd fewr"
@@ -244,9 +244,9 @@ def factions(page: Any) -> None:
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("faction.csv"))
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), " OK - Created facction")
+    expect_normalized(page, page.locator("#page-container"), " OK - Created facction")
     page.get_by_role("link", name="Proceed").click()
-    expect_normalized(page, page.locator("#one"), "facction Primary gh asd oeir sdf")
+    expect_normalized(page, page.locator("#page-container"), "facction Primary gh asd oeir sdf")
     check_download(page, "Download")
 
 

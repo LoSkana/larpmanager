@@ -50,7 +50,7 @@ def test_user_signup_simple(pw_page: Any) -> None:
 def signup(live_server: Any, page: Any) -> None:
     # sign up
     go_to(page, live_server, "/")
-    expect_normalized(page, page.locator("#one"), "Registration is open!")
+    expect_normalized(page, page.locator("#page-container"), "Registration is open!")
     page.get_by_role("link", name="Registration is open!").click()
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
@@ -68,13 +68,13 @@ def signup(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Registration confirmed")
-    expect_normalized(page, page.locator("#one"), "please fill in your profile")
+    expect_normalized(page, page.locator("#page-container"), "Registration confirmed")
+    expect_normalized(page, page.locator("#page-container"), "please fill in your profile")
 
     page.locator("#one").get_by_role("link", name="Please fill in your profile").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Registration confirmed (Standard)")
+    expect_normalized(page, page.locator("#page-container"), "Registration confirmed (Standard)")
 
     # test update of signup with no payments
     go_to(page, live_server, "/test/register")
@@ -93,9 +93,9 @@ def help_questions(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # check questions
-    expect_normalized(page, page.locator("#one"), "[Test Larp] - please help me (Attachment)")
+    expect_normalized(page, page.locator("#page-container"), "[Test Larp] - please help me (Attachment)")
     go_to(page, live_server, "/manage/questions")
-    expect_normalized(page, page.locator("#one"), "please help me")
+    expect_normalized(page, page.locator("#page-container"), "please help me")
 
     page.get_by_role("link", name="Answer", exact=True).click()
     page.get_by_role("textbox", name="Text").click()
@@ -131,7 +131,7 @@ def pre_register(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/")
-    expect_normalized(page, page.locator("#one"), "Pre-register to the event!")
+    expect_normalized(page, page.locator("#page-container"), "Pre-register to the event!")
     page.get_by_role("link", name="Pre-register to the event!").click()
 
     submit_confirm(page)
@@ -140,7 +140,7 @@ def pre_register(live_server: Any, page: Any) -> None:
     page.get_by_role("textbox", name="Informations").fill("bauuu")
     page.get_by_label("Event").select_option("u1")
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "bauuu")
+    expect_normalized(page, page.locator("#page-container"), "bauuu")
 
     # Change registration_status to OPEN for normal registration
     go_to(page, live_server, "/test/manage/run")

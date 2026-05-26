@@ -233,8 +233,8 @@ def gift(page: Any, live_server: Any) -> None:
     page.get_by_role("textbox", name="when").fill("fffdsfs")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "( Standard ) wow - one | choice - prima (10.00€)")
-    expect_normalized(page, page.locator("#one"), "10€ within 8 days")
+    expect_normalized(page, page.locator("#page-container"), "( Standard ) wow - one | choice - prima (10.00€)")
+    expect_normalized(page, page.locator("#page-container"), "10€ within 8 days")
 
     # pay
     page.get_by_role("link", name="10€ within 8 days").click()
@@ -248,7 +248,7 @@ def gift(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/gift/")
-    expect_normalized(page, page.locator("#one"), "Payment currently in review by the staff.")
+    expect_normalized(page, page.locator("#page-container"), "Payment currently in review by the staff.")
 
     # approve payment
     go_to(page, live_server, "/test/manage/invoices")
@@ -256,11 +256,11 @@ def gift(page: Any, live_server: Any) -> None:
 
     # redeem
     go_to(page, live_server, "/test/gift/")
-    expect_normalized(page, page.locator("#one"), "Access link")
+    expect_normalized(page, page.locator("#page-container"), "Access link")
     href = page.get_by_role("link", name="Access link").get_attribute("href")
 
     login_user(page, live_server)
     go_to(page, live_server, href)
     expect_normalized(page, page.locator("#banner"), "Redeem registration")
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Registration confirmed")
+    expect_normalized(page, page.locator("#page-container"), "Registration confirmed")

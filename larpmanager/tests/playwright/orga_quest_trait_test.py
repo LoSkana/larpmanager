@@ -101,7 +101,7 @@ def quests(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check
-    expect_normalized(page, page.locator("#one"), "Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
+    expect_normalized(page, page.locator("#page-container"), "Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
 
 
 def traits(page: Any, live_server: Any) -> None:
@@ -155,9 +155,9 @@ def traits(page: Any, live_server: Any) -> None:
     # check how they appear on user side
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Quest").click()
-    expect_normalized(page, page.locator("#one"), "Name Quest Lore Torta | Pizza")
+    expect_normalized(page, page.locator("#page-container"), "Name Quest Lore Torta | Pizza")
     page.get_by_role("link", name="Torta").click()
-    expect_normalized(page, page.locator("#one"), "Presentation zucchero Traits Strudel - trentina Nonna - amelia")
+    expect_normalized(page, page.locator("#page-container"), "Presentation zucchero Traits Strudel - trentina Nonna - amelia")
 
 
 def signups(page: Any, live_server: Any) -> None:

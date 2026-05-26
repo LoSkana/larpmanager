@@ -53,26 +53,26 @@ def test_exe_accounting(pw_page: Any) -> None:
 
 def verify(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/accounting/")
-    expect_normalized(page, page.locator("#one"), "Realized revenue: 133.00")
-    expect_normalized(page, page.locator("#one"), "Net profit: 71.00")
-    expect_normalized(page, page.locator("#one"), "Organization tax: 17.29")
-    expect_normalized(page, page.locator("#one"), "Registrations: 70.00")
-    expect_normalized(page, page.locator("#one"), "Outflows: 62.00")
-    expect_normalized(page, page.locator("#one"), "Inflows: 63.00")
-    expect_normalized(page, page.locator("#one"), "Income: 70.00")
+    expect_normalized(page, page.locator("#page-container"), "Realized revenue: 133.00")
+    expect_normalized(page, page.locator("#page-container"), "Net profit: 71.00")
+    expect_normalized(page, page.locator("#page-container"), "Organization tax: 17.29")
+    expect_normalized(page, page.locator("#page-container"), "Registrations: 70.00")
+    expect_normalized(page, page.locator("#page-container"), "Outflows: 62.00")
+    expect_normalized(page, page.locator("#page-container"), "Inflows: 63.00")
+    expect_normalized(page, page.locator("#page-container"), "Income: 70.00")
 
     go_to(page, live_server, "/test/manage/payments/")
     # Check for payment row with value 70
     expect(page.get_by_role("row", name="Admin Test Money 70")).to_be_visible()
 
     go_to(page, live_server, "/manage/accounting/")
-    expect_normalized(page, page.locator("#one"), "20.00")
-    expect_normalized(page, page.locator("#one"), "91.00")
-    expect_normalized(page, page.locator("#one"), "70.00")
-    expect_normalized(page, page.locator("#one"), "93.00")
-    expect_normalized(page, page.locator("#one"), "72.00")
-    expect_normalized(page, page.locator("#one"), "10.00")
-    expect_normalized(page, page.locator("#one"), "30.00")
+    expect_normalized(page, page.locator("#page-container"), "20.00")
+    expect_normalized(page, page.locator("#page-container"), "91.00")
+    expect_normalized(page, page.locator("#page-container"), "70.00")
+    expect_normalized(page, page.locator("#page-container"), "93.00")
+    expect_normalized(page, page.locator("#page-container"), "72.00")
+    expect_normalized(page, page.locator("#page-container"), "10.00")
+    expect_normalized(page, page.locator("#page-container"), "30.00")
 
 
 def sign_up_pay(page: Any, live_server: Any) -> None:

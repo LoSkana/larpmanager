@@ -174,14 +174,14 @@ def test_faction_all(pw_page: Any) -> None:
     page.get_by_role("link", name="Factions").click()
 
     # Verify PRIMARY and TRANSVERSAL factions are visible
-    expect_normalized(page, page.locator("#one"),
+    expect_normalized(page, page.locator("#page-container"),
 """Primary
         Name	Presentation	Characters
         Primary Faction 1
         PF1 teaser	Character Alpha | Character Beta
         Primary Faction 2
         PF2 teaser	Character Gamma""")
-    expect_normalized(page, page.locator("#one"),
+    expect_normalized(page, page.locator("#page-container"),
 """Transversal
         Name	Presentation	Characters
         Transversal Faction 1
@@ -199,7 +199,7 @@ def test_faction_all(pw_page: Any) -> None:
     page.get_by_role("link", name="Primary Faction 1").click()
 
     # Verify PUBLIC teaser is visible
-    expect_normalized(page, page.locator("#one"),
+    expect_normalized(page, page.locator("#page-container"),
         """
         PF1 teaser
         Public Faction Question: PF1 public answer
@@ -276,7 +276,7 @@ def test_faction_all(pw_page: Any) -> None:
     page.get_by_role("link", name="Character Alpha").first.click()
 
     # Verify character info are visible
-    expect_normalized(page, page.locator("#one"),
+    expect_normalized(page, page.locator("#page-container"),
   """
       Player: User Test
         Presentation
@@ -356,7 +356,7 @@ def test_faction_all(pw_page: Any) -> None:
     page.get_by_role("link", name="Character Beta").click()
 
     # Verify Beta TEASER is visible
-    expect_normalized(page, page.locator("#one"),
+    expect_normalized(page, page.locator("#page-container"),
         """
         Presentation
         Beta teaser

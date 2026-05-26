@@ -326,7 +326,7 @@ def user_signup(live_server: Any, page: Any) -> None:
     # signup as user
     logout(page)
     login_user(page, live_server)
-    expect_normalized(page, page.locator("#one"), "Hurry: only 9 tickets available.")
+    expect_normalized(page, page.locator("#page-container"), "Hurry: only 9 tickets available.")
     go_to(page, live_server, "/test/register/")
     page.get_by_label("choice").select_option("u2")
     expect(page.get_by_label("choice")).to_have_value("u2")
