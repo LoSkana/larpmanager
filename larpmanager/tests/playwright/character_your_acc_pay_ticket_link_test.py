@@ -214,7 +214,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/")
-    page.get_by_role("link", name="please fill in your profile.").click()
+    page.get_by_role("link", name="Please fill in your profile").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
     page.get_by_role("link", name="Registration confirmed (Staff)").click()
@@ -237,17 +237,22 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     page.locator("#id_wire_iban").click()
     page.locator("#id_wire_iban").fill("dsasadas")
     page.locator("#id_wire_bic").fill("test iban")
+    page.get_by_role("checkbox", name="Freeform").check()
+    page.locator("#id_any_descr").click()
+    page.locator("#id_any_descr").fill("freeeeee")
+    page.locator("#id_any_fee").click()
+    page.locator("#id_any_fee").fill("1")
     submit_confirm(page)
 
     # check payments
     go_to(page, live_server, "/test/")
-    page.get_by_role("link", name="to confirm it proceed with").click()
+    page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
 
     go_to(page, live_server, "/accounting/pay/test/")
     expect_normalized(page, page.locator("#one"), "Choose the payment method: Wire sadsadsa")
 
     go_to(page, live_server, "/accounting/pay/test/wire/")
-    expect_normalized(page, page.locator("#one"), "You are about to make a payment of: 100 €. Follow the steps below:")
+    expect_normalized(page, page.locator("#one"), "You are about to make a payment of: 100 €.")
 
     go_to(page, live_server, "/accounting/pay/test/paypal/")
     expect_normalized(page, page.locator("#one"), "Choose the payment method: Wire sadsadsa")

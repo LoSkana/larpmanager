@@ -102,8 +102,8 @@ def membership(live_server: Any, page: Any) -> None:
     # send membership
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "Provisional registration")
-    expect_normalized(page, page.locator("#one"), "please upload your membership application to proceed")
-    page.get_by_role("link", name="please upload your membership").click()
+    expect_normalized(page, page.locator("#one"), "upload your membership application to proceed")
+    page.get_by_role("link", name="Upload your membership application to proceed").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
     # compile request
@@ -125,15 +125,13 @@ def membership(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     # check register
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
-    page.get_by_role("link", name="to confirm it proceed with").click()
+    expect_normalized(page, page.locator("#one"), "Proceed with payment to confirm your registration")
+    page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
 
 
 def pay(live_server: Any, page: Any) -> None:
-    # pay
-    page.get_by_role("cell", name="Wire", exact=True).click()
-    expect_normalized(page, page.locator("b"), "100")
-    submit(page)
+    # pay - single payment method, selection page is skipped automatically
+    expect_normalized(page, page.locator("#one"), "100")
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 

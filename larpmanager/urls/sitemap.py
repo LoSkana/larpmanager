@@ -138,8 +138,11 @@ def larpmanager_sitemap() -> list[str]:
         List of complete URLs for static pages, guides, and blog posts.
 
     """
+    # LLM context files
+    urls = ["https://larpmanager.com/llms.txt", "https://larpmanager.com/llms-full.txt"]
+
     # Static pages
-    urls = [f"https://larpmanager.com/{page_path}/" for page_path in ["", "usage", "about-us"]]
+    urls.extend([f"https://larpmanager.com/{page_path}/" for page_path in ["", "usage", "about-us"]])
 
     # Guide posts
     urls.extend(

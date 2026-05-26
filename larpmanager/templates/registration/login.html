@@ -16,13 +16,12 @@
     {% endfor %}
 {% endblock old %}
 {% block content %}
-    <div class="login">
+    <div class="login user_resize">
         {% if association.id == 0 %}
             <p>
                 <i>(We ask you to login only to link the new organization to your account, as you will be assigned an administrator role)</i>
             </p>
         {% endif %}
-        <br />
         {% if request.enviro == "prod" %}
             <div class="allauth_signin">
                 <a href="{% get_login_url 'google' %}">
@@ -42,7 +41,6 @@
                 {{ form.as_table }}
             </table>
             <input type="submit" class="login_go" value="{% trans "Submit" %}" />
-            <br />
             <br />
             <p class="registration_register">
                 {% if request.GET.next %}
@@ -84,7 +82,7 @@ window.addEventListener('DOMContentLoaded', function() {
             const domain = '{{ association.slug }}';
             let url = new URL(href || window.location.pathname, 'https://{{ association.main_domain }}');
 
-            // build the “next” target, appending any existing next-path if present
+            // build the "next" target, appending any existing next-path if present
             const existingNext = url.searchParams.get('next');
             const nextTarget = `https://{{ association.main_domain }}/after_login/${domain}`
                              + (existingNext ? `/${existingNext}` : '');

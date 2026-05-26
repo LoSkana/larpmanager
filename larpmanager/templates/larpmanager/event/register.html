@@ -9,17 +9,8 @@
     - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% if registration and not registration.provisional %}
-        <p>
-            {% trans "You can update your registration by simply changing the value of the fields and clicking on confirm" %}.
-        </p>
-        {% if features.player_cancellation %}
-            <hr />
-            <p>
-                {% trans "If you no longer wish to attend, you can" %} <a href="{% url 'unregister' run.get_slug %}">{% trans "cancel your registrations" %}.</a>
-            </p>
-        {% endif %}
-        {% if features.bring_friend %}
+    <div class="form_container user_resize">
+        {% if registration and not registration.provisional and features.bring_friend %}
             <hr />
             <h4>{% trans "Bring a friend" %}!</h4>
             <p>
@@ -33,46 +24,33 @@
                 {% trans "For each of them, you will receive the following discount on your membership event registration" %}: {{ bring_friend_discount_from|floatformat:"0" }}{{ currency_symbol_symbol }}.
             </p>
         {% endif %}
-    {% else %}
-        <p>{% trans "To register for the event, please fill in the following form and click on confirm" %}.</p>
-    {% endif %}
-    {% if registration or not run_status.closed %}
-        {% if limitations %}
-            <hr />
-            <p>
-                <a href="{% url 'limitations' run.get_slug %}">{% trans "View limited ticket options" %}</a>
-            </p>
-        {% endif %}
-        {% if event.website %}
-            <hr />
-            <p>
-                {% trans "View all event information in the" %} <a target="_blank" href="{{ event.website }}">{% trans "website" %}!</a>
-            </p>
-        {% endif %}
-        {% if not features.laog %}
-            {% if event_terms_conditions %}
-                <hr />
-                <p>
-                    <a href="{% url 'register_conditions' event.slug %}">{% trans "Terms and Conditions of registration" %}</a>
-                </p>
-            {% elif association_terms_conditions %}
-                <hr />
-                <p>
-                    <a href="{% url 'register_conditions' %}">{% trans "Terms and Conditions of registration" %}</a>
+        {% if registration or not run_status.closed %}
+            {% if registration or limitations or event.website or not features.laog and event_terms_conditions or not features.laog and association_terms_conditions %}
+                <p class="reg-links">
+                    {% if registration %}
+                        <span><a href="{% url 'unregister' run.get_slug %}">{% trans "Cancel registration" %}</a></span>
+                    {% endif %}
+                    {% if limitations %}
+                        <span><a href="{% url 'limitations' run.get_slug %}">{% trans "View limited ticket options" %}</a></span>
+                    {% endif %}
+                    {% if event.website %}
+                        <span><a target="_blank" href="{{ event.website }}">{% trans "Event website" %}</a></span>
+                    {% endif %}
+                    {% if not features.laog %}
+                        {% if event_terms_conditions %}
+                            <span><a href="{% url 'register_conditions' event.slug %}">{% trans "Terms and Conditions" %}</a></span>
+                        {% endif %}
+                        {% if association_terms_conditions and not event_terms_conditions %}
+                            <span><a href="{% url 'register_conditions' %}">{% trans "Terms and Conditions" %}</a></span>
+                        {% endif %}
+                    {% endif %}
                 </p>
             {% endif %}
-        {% endif %}
-        {% if custom_text %}
-            <hr />
-            {{ custom_text | safe }}
-        {% endif %}
-        <div>
+            {% if custom_text %}{{ custom_text | safe }}{% endif %}
             <form id="register_form" action="{{ request.path }}" method="post">
                 {% csrf_token %}
-                <div class="form_container auto_resize">
-                    <table>
-                        {% include "elements/form/register.html" %}
-                    </table>
+                <div>
+                    {% include "elements/form/register.html" %}
                     {% if features.discount and 'waiting' not in run_status %}
                         <h1 class="head_discount">
                             <a href="#" class="my_toggle section-link" tog='sec_discount'>
@@ -102,9 +80,9 @@
                             </table>
                         </div>
                     {% endif %}
+                    <input type="button" id="confirm" value="{% trans "Continue" %}" />
                 </div>
-                <input type="button" id="confirm" value="{% trans "Continue" %}" />
-                <div id="riepilogo" class="hide  form_container auto_resize">
+                <div id="riepilogo" class="hide form_container">
                     <br />
                     <table class="mob">
                         <tbody>

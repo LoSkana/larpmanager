@@ -193,4 +193,9 @@ urlpatterns = [
         views_lm.debug_user,
         name="debug_user",
     ),
+    path(
+        "lm/clean/<slug:association_slug>/",
+        views_lm.lm_clean,
+        name="lm_clean",
+    ),
 ]

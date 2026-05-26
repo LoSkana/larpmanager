@@ -41,6 +41,7 @@ from larpmanager.forms.member import MyAuthForm
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.common import welcome_user
 from larpmanager.utils.larpmanager.query import query_index
+from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 from larpmanager.utils.services.miscellanea import check_centauri
 from larpmanager.views.larpmanager import lm_home
 from larpmanager.views.user.event import calendar
@@ -49,7 +50,17 @@ if TYPE_CHECKING:
     from django.forms import Form
 
 
-class MyLoginView(LoginView):
+class AssocVersionMixin:
+    """Injects effective_version into template context for unauthenticated views."""
+
+    def get_context_data(self, **kwargs: Any) -> dict:
+        """Inject effective_version from association config."""
+        context = super().get_context_data(**kwargs)
+        context["effective_version"] = self.request.association.get("assoc_version", LATEST_AVAILABLE_VERSION)
+        return context
+
+
+class MyLoginView(AssocVersionMixin, LoginView):
     """View for MyLogin."""
 
     template_name = "registration/login.html"

@@ -4,11 +4,17 @@
     {% trans "Language" %}
 {% endblock title %}
 {% block content %}
-    {% include "larpmanager/member/profile_nav.html" with active="language" %}
-    <hr />
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
+    {% if request.user.is_authenticated %}
+        {% include "larpmanager/member/profile_nav.html" with active="language" %}
+    {% endif %}
+    <div class="user_resize platform form_container">
+        <hr class="no_v20" />
+        <form method="post">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 {% endblock content %}

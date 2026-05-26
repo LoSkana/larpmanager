@@ -5,8 +5,8 @@
 {% endblock title %}
 {% block content %}
     {% include "larpmanager/member/profile_nav.html" with active="accounting" %}
-    <div class="auto_resize platform">
-        <hr />
+    <div class="user_resize platform">
+        <hr class="no_v20" />
         {% if association_terms_conditions %}
             <p>
                 {% trans "You can consult" %} <a href="{% url 'register_conditions' %}">{% trans "here the conditions of registration" %}.</a>

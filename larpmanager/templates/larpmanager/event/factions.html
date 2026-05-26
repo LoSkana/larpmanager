@@ -4,45 +4,9 @@
     {% trans "Factions" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    <h2>{% trans "Primary" %}</h2>
-    {{ fields_name }}
-    <div>
-        <table class="mob">
-            <thead>
-                <tr>
-                    <th>{{ writing_field_names.name }}</th>
-                    {% if show_faction.teaser %}<th>{{ writing_field_names.teaser }}</th>{% endif %}
-                    <th>{% trans "Characters" %}</th>
-                </tr>
-            </thead>
-            {% for fnum in factions_typ.s %}
-                {% with factions|get:fnum as el %}
-                    {% if el.name %}
-                        <tr>
-                            <td>
-                                <h3>
-                                    <a href="{% url 'faction' run.get_slug el.uuid %}">{{ el.name }}</a>
-                                </h3>
-                            </td>
-                            {% if show_faction.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
-                            <td>
-                                {% for chnum in el.characters %}
-                                    {% include "elements/comma.html" %}
-                                    {% with chars|get:chnum as ch %}
-                                        {% if not ch.hide %}
-                                            <a href="{% url 'character' run.get_slug ch.uuid %}">{{ ch.name }}</a>
-                                        {% endif %}
-                                    {% endwith %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    {% endif %}
-                {% endwith %}
-            {% endfor %}
-        </table>
-    </div>
-    {% if factions_typ.t %}
-        <h2>{% trans "Transversal" %}</h2>
+    <div class="user_resize">
+        <h2>{% trans "Primary" %}</h2>
+        {{ fields_name }}
         <div>
             <table class="mob">
                 <thead>
@@ -52,27 +16,65 @@
                         <th>{% trans "Characters" %}</th>
                     </tr>
                 </thead>
-                {% for fnum in factions_typ.t %}
+                {% for fnum in factions_typ.s %}
                     {% with factions|get:fnum as el %}
-                        <tr>
-                            <td>
-                                <h3>
-                                    <a href="{% url 'faction' run.get_slug el.uuid %}">{{ el.name }}</a>
-                                </h3>
-                            </td>
-                            {% if show_faction.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
-                            <td>
-                                {% for chnum in el.characters %}
-                                    {% include "elements/comma.html" %}
-                                    {% with chars|get:chnum as ch %}
-                                        <a href="{% url 'character' run.get_slug ch.uuid %}">{{ ch.name }}</a>
-                                    {% endwith %}
-                                {% endfor %}
-                            </td>
-                        </tr>
+                        {% if el.name %}
+                            <tr>
+                                <td>
+                                    <h3>
+                                        <a href="{% url 'faction' run.get_slug el.uuid %}">{{ el.name }}</a>
+                                    </h3>
+                                </td>
+                                {% if show_faction.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
+                                <td>
+                                    {% for chnum in el.characters %}
+                                        {% include "elements/comma.html" %}
+                                        {% with chars|get:chnum as ch %}
+                                            {% if not ch.hide %}
+                                                <a href="{% url 'character' run.get_slug ch.uuid %}">{{ ch.name }}</a>
+                                            {% endif %}
+                                        {% endwith %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endif %}
                     {% endwith %}
                 {% endfor %}
             </table>
         </div>
-    {% endif %}
+        {% if factions_typ.t %}
+            <h2>{% trans "Transversal" %}</h2>
+            <div>
+                <table class="mob">
+                    <thead>
+                        <tr>
+                            <th>{{ writing_field_names.name }}</th>
+                            {% if show_faction.teaser %}<th>{{ writing_field_names.teaser }}</th>{% endif %}
+                            <th>{% trans "Characters" %}</th>
+                        </tr>
+                    </thead>
+                    {% for fnum in factions_typ.t %}
+                        {% with factions|get:fnum as el %}
+                            <tr>
+                                <td>
+                                    <h3>
+                                        <a href="{% url 'faction' run.get_slug el.uuid %}">{{ el.name }}</a>
+                                    </h3>
+                                </td>
+                                {% if show_faction.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
+                                <td>
+                                    {% for chnum in el.characters %}
+                                        {% include "elements/comma.html" %}
+                                        {% with chars|get:chnum as ch %}
+                                            <a href="{% url 'character' run.get_slug ch.uuid %}">{{ ch.name }}</a>
+                                        {% endwith %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endwith %}
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+    </div>
 {% endblock content %}

@@ -73,6 +73,11 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#id_wire_payee").press("Tab")
     page.locator("#id_wire_iban").fill("test iban")
     page.locator("#id_wire_bic").fill("test iban")
+    page.get_by_role("checkbox", name="Freeform").check()
+    page.locator("#id_any_descr").click()
+    page.locator("#id_any_descr").fill("freeeeee")
+    page.locator("#id_any_fee").click()
+    page.locator("#id_any_fee").fill("1")
     submit_confirm(page)
 
     # set ticket price
@@ -101,11 +106,11 @@ def signup(page: Any, live_server: Any) -> None:
     # check reg status
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "Provisional registration")
-    expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
+    expect_normalized(page, page.locator("#one"), "Proceed with payment to confirm your registration")
 
     # pay
     go_to(page, live_server, "/test/register")
-    page.get_by_role("link", name=re.compile(r"proceed with payment")).click()
+    page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
     page.get_by_role("cell", name="Wire", exact=True).click()
     expect_normalized(page, page.locator("b"), "100")
     submit(page)

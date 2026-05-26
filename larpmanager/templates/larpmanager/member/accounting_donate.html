@@ -4,10 +4,12 @@
     {% trans "Donation" %}
 {% endblock title %}
 {% block content %}
-    {% if invoice %}
-        {% include "elements/payment_go.html" %}
-    {% else %}
-        <p>{% trans "Indicate the amount of your donation" %}:</p>
-        {% include "elements/payment_form.html" %}
-    {% endif %}
+    <div class="user_resize platform">
+        {% if invoice %}
+            {% include "elements/payment_go.html" %}
+        {% else %}
+            <p>{% trans "Indicate the amount of your donation" %}:</p>
+            {% include "elements/payment_form.html" %}
+        {% endif %}
+    </div>
 {% endblock content %}

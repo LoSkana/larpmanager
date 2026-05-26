@@ -234,11 +234,8 @@ class Command(BaseCommand):
                     continue
                 days_since_warning = (now - warning_date).days
                 admin_notice_threshold = Command._WARNING_GRACE_DAYS - Command._ADMIN_NOTICE_DAYS_BEFORE
-                if days_since_warning >= admin_notice_threshold and days_since_warning < Command._WARNING_GRACE_DAYS:
-                    Command._send_admin_deletion_notice(association, Command._ADMIN_NOTICE_DAYS_BEFORE)
-                elif days_since_warning >= Command._WARNING_GRACE_DAYS:
-                    Command._deactivate_organizer_newsletters(association)
-                    association.delete()
+                if days_since_warning >= admin_notice_threshold:
+                    Command._send_admin_deletion_link(association, days_since_warning)
 
     @staticmethod
     def _deactivate_organizer_newsletters(association: Association) -> None:
@@ -266,7 +263,7 @@ class Command(BaseCommand):
     @staticmethod
     def _send_deletion_warning(association: Association) -> None:
         """Email association executives (or main_mail) that the org will be deleted in 30 days."""
-        subject = f"[LarpManager] You've not been using '{association.name}', can we delete its data?"
+        subject = f"Can we delete '{association.name}' on LarpManager, since it has been inactive?"
         body = f"""
             Hello,<br /><br />
             We noticed that your LarpManager organization <a href='https://{association.slug}.larpmanager.com/manage'>
@@ -288,13 +285,36 @@ class Command(BaseCommand):
             my_send_mail(subject, body, recipient)
 
     @staticmethod
-    def _send_admin_deletion_notice(association: Association, days_left: int) -> None:
-        """Email system admins that an association will be deleted in the given number of days."""
-        subject = f"[LarpManager] Association '{association.name}' scheduled for deletion in {days_left} days"
+    def _send_admin_deletion_link(association: Association, days_since_warning: int) -> None:
+        """Email system admins a deletion confirmation link with full association details."""
+        executives = get_association_executives(association)
+        exec_lines = "".join(f"<li>{m.user.get_full_name()} &lt;{m.user.email}&gt;</li>" for m in executives)
+        events = list(Event.objects.filter(association=association).values("name", "slug", "created"))
+        event_lines = "".join(
+            f"<li>{e['name']} ({e['slug']}) - created {e['created'].strftime('%Y-%m-%d')}</li>" for e in events
+        )
+        registration_count = Registration.objects.filter(run__event__association=association).count()
+        delete_url = f"https://larpmanager.com/lm/clean/{association.slug}/"
+
+        subject = f"[LarpManager] Action required: delete inactive association '{association.name}'"
         body = f"""
             Admin notice,<br /><br />
-            The LarpManager organization <i>{association.name}</i> (slug: <b>{association.slug}</b>) is
-            scheduled to be automatically deleted in <b>{days_left} days</b> due to inactivity.<br /><br />
+            The LarpManager organization <i>{association.name}</i> (slug: <b>{association.slug}</b>) has been
+            inactive for <b>{days_since_warning} days</b> since the deletion warning was sent.<br /><br />
+            <b>Association details:</b><br />
+            <ul>
+                <li>Name: {association.name}</li>
+                <li>Slug: {association.slug}</li>
+                <li>Created: {association.created.strftime("%Y-%m-%d")}</li>
+                <li>Contact email: {association.main_mail or "-"}</li>
+                <li>Total registrations: {registration_count}</li>
+            </ul>
+            <b>Executive members:</b><br />
+            <ul>{exec_lines or "<li>None</li>"}</ul>
+            <b>Events ({len(events)}):</b><br />
+            <ul>{event_lines or "<li>None</li>"}</ul>
+            To permanently delete this association, visit:<br />
+            <a href='{delete_url}'>{delete_url}</a><br /><br />
             To prevent deletion, set the <code>no_delete</code> config key on this association.<br /><br />
             - LarpManager Automate
             """

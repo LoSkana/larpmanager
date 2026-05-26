@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.association import get_url, hdr
+from larpmanager.models.association import Association, get_url, hdr
 from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.utils.users.registration import get_registration_options
 
@@ -47,6 +47,65 @@ def get_token_credit_name(association_id: int) -> tuple[str, str]:
         credits_name = _("Credits")
 
     return tokens_name, credits_name
+
+
+def get_payment_info(association_id: int, payment_url: str) -> str:
+    """Return an HTML block linking to payment details page, with instructions on how to proceed."""
+    association = Association.objects.only("slug", "key").prefetch_related("payment_methods").get(pk=association_id)
+    active_slugs = {m.slug for m in association.payment_methods.all()}
+
+    require_receipt: bool = get_association_config(association_id, "payment_require_receipt", default_value=False)
+
+    text = "<br /><br />"
+    if len(active_slugs) > 1:
+        text += (
+            _(
+                "You can choose your payment method and find all the information needed to complete the transfer "
+                "<a href='%(url)s'>on the payment page</a>"
+            )
+            % {"url": payment_url}
+            + ". "
+        )
+
+        if "wire" in active_slugs:
+            text += "<br /><br />" + _get_wire_payment_info(payment_url, require_receipt=require_receipt)
+
+    elif "wire" in active_slugs:
+        text += _get_wire_payment_info(payment_url, require_receipt=require_receipt)
+
+    else:
+        text += (
+            _(
+                "You can find all the information needed to complete the transfer "
+                "<a href='%(url)s'>on the payment page</a>"
+            )
+            % {"url": payment_url}
+            + ". "
+        )
+
+    text += "<br /><br />" + _("Let us know if you encounter any issues or need assistance") + "!"
+
+    return text
+
+
+def _get_wire_payment_info(payment_url: str, *, require_receipt: bool) -> str:
+    """Return info on how to pay by wire."""
+    wire_url = payment_url.rstrip("/") + "/wire"
+    text = (
+        _(
+            "To pay by bank transfer, visit the <a href='%(url)s'>payment page</a> to find all necessary details "
+            "(such as the IBAN and payment reference)"
+        )
+        % {"url": wire_url}
+        + ". "
+    )
+    text += "<br /><br />"
+    if require_receipt:
+        text += "<i>" + _("Please upload the payment receipt on that page once the transfer is complete")
+    else:
+        text += "<i>" + _("Please mark the payment as completed on that page once the transfer is done")
+    text += ". " + _("This is important, otherwise your payment will not be registered") + ". </i>"
+    return text
 
 
 def get_registration_new_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
@@ -157,7 +216,7 @@ def get_pay_money_email(curr_sym: str, instance: AccountingItemPayment, run: Run
 
     # Create email body with payment amount and currency details
     body = (
-        _("A payment of %(amount).2f %(currency)s was received for this event")
+        _("A payment of <b>%(amount).2f %(currency)s</b> was received for this event")
         % {
             "amount": instance.value,
             "currency": curr_sym,
@@ -356,34 +415,28 @@ def registration_payments(instance: Registration, currency: str) -> str:
 
     # Prepare template data for localization
     template_data = {
-        "url": payment_url,
         "amount": instance.quota,
         "currency": currency,
         "deadline": instance.deadline,
     }
 
-    # Handle case where payment has a specific deadline in days
+    body = "<br /><br />"
     if instance.deadline > 0:
-        return (
-            "<br /><br />"
-            + _(
-                "You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days. "
-                "Make your payment <a href='%(url)s'>on this page</a>. If we do not receive "
-                "payment by the deadline, your registration may be cancelled.",
-            )
-            % template_data
+        # Handle case where payment has a specific deadline in days
+        body += (
+            _("You must pay at least <b>%(amount).2f %(currency)s</b> within %(deadline)d days") % template_data + ". "
         )
+        body += _("If payment is not received within this period, your registration may be cancelled") + ". "
+    else:
+        # Handle immediate payment requirement (no specific deadline)
+        body += (
+            _("<i>Payment overdue</i>: Please pay <b>%(amount).2f %(currency)s</b> as soon as possible") % template_data
+            + "! "
+        )
+        body += _("If payment is not received, your registration may be cancelled") + ". "
 
-    # Handle immediate payment requirement (no specific deadline)
-    return (
-        "<br /><br />"
-        + _(
-            "<i>Payment due</i> - You must pay <b>%(amount).2f %(currency)s</b> as soon as "
-            "possible. Make your payment <a href='%(url)s'>on this page</a>. If we do not "
-            "receive payment, your registration may be cancelled.",
-        )
-        % template_data
-    )
+    body += get_payment_info(instance.run.event.association_id, payment_url)
+    return body
 
 
 def get_help_email(help_question: Any) -> Any:

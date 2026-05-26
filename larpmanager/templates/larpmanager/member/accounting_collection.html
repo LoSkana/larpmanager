@@ -4,19 +4,21 @@
     {% trans "Donation" %}
 {% endblock title %}
 {% block content %}
-    {% if invoice %}
-        <p>
-            {% trans "You are about to perform a donation of" %}: <b>{{ am }} {{ currency_symbol }}</b>.
-        </p>
-        {{ paypal_form.render }}
-    {% else %}
-        <p>{% trans "Indicate the name of the member for whom you want to activate a new collection" %}:</p>
-        <form action="{{ request.path }}"  method="post">
-            {% csrf_token %}
-            <table class="mob ">
-                {{ form.as_table }}
-            </table>
-            <input type="submit" value="{% trans "Submit" %}">
-        </form>
-    {% endif %}
+    <div class="form_container user_resize">
+        {% if invoice %}
+            <p>
+                {% trans "You are about to perform a donation of" %}: <b>{{ am }} {{ currency_symbol }}</b>.
+            </p>
+            {{ paypal_form.render }}
+        {% else %}
+            <p>{% trans "Indicate the name of the member for whom you want to activate a new collection" %}:</p>
+            <form action="{{ request.path }}"  method="post">
+                {% csrf_token %}
+                <table class="mob ">
+                    {{ form.as_table }}
+                </table>
+                <input type="submit" value="{% trans "Submit" %}">
+            </form>
+        {% endif %}
+    </div>
 {% endblock content %}

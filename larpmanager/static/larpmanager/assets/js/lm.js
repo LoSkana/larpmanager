@@ -593,6 +593,7 @@ function data_tables() {
 
         const table = new DataTable('#' + tableId, {
             scrollX: true,
+            responsive: window.enviro === 'prod',
             stateSave: false,
             paging: full_layout,
             layout: full_layout

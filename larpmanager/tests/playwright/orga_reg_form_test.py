@@ -163,7 +163,7 @@ def signup(page: Any, live_server: Any) -> None:
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
 
-    expect_normalized(page, page.locator("#one"), "The total registration fee is: 29€")
+    expect_normalized(page, page.locator("#one"), "you are about to make a payment of: 29 €")
 
     # check form
     page.get_by_role("link", name="Event").click()

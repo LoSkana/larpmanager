@@ -24,6 +24,7 @@ import re
 from datetime import date, timedelta
 from typing import Any
 
+from bs4 import BeautifulSoup
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.contrib.auth import login
@@ -33,6 +34,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Avg, Count, Min, Sum
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _, override
@@ -53,7 +55,7 @@ from larpmanager.mail.remind import remember_membership, remember_membership_fee
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.association import Association, AssociationPlan, AssociationTextType
 from larpmanager.models.base import Feature
-from larpmanager.models.event import DevelopStatus, Run
+from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
     LarpManagerDiscover,
@@ -72,6 +74,7 @@ from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.larpmanager.tasks import my_send_mail, send_mail_exec
 from larpmanager.utils.services.association import _reset_all_association
+from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 from larpmanager.views.user.event import build_registration_list, get_member_registrations
 from larpmanager.views.user.member import get_user_backend
 
@@ -1103,6 +1106,42 @@ def lm_reset(request: HttpRequest) -> HttpResponse:
     return HttpResponseRedirect("/")
 
 
+@login_required
+def lm_clean(request: HttpRequest, association_slug: str) -> HttpResponse:
+    """Show association deletion confirmation page and process deletion."""
+    context = check_lm_admin(request)
+    association = get_object_or_404(Association, slug=association_slug)
+
+    executives = []
+    try:
+        exe_role = AssociationRole.objects.get(association=association, number=1)
+        executives = list(exe_role.members.values("id", "user__first_name", "user__last_name", "user__email"))
+    except ObjectDoesNotExist:
+        pass
+
+    events = list(Event.objects.filter(association=association).values("name", "slug", "created"))
+    registration_count = Registration.objects.filter(run__event__association=association).count()
+
+    if request.method == "POST":
+        newsletter_emails = set(
+            AssociationRole.objects.filter(association=association, number=1).values_list("members__email", flat=True)
+        )
+        if association.main_mail:
+            newsletter_emails.add(association.main_mail)
+        for email in newsletter_emails:
+            if email:
+                _newsletter_set_non_active(email)
+        association.delete()
+        messages.success(request, f"Association '{association_slug}' deleted.")
+        return redirect("lm_list")
+
+    context["assoc"] = association
+    context["executives"] = executives
+    context["events"] = events
+    context["registration_count"] = registration_count
+    return render(request, "larpmanager/larpmanager/delete_association.html", context)
+
+
 @ratelimit(key="ip", rate="5/m", block=True)
 def donate(request: HttpRequest) -> Any:
     """Handle donation page with bot protection.
@@ -1237,3 +1276,71 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
     login(request, demo_user, backend=get_user_backend())
 
     return redirect("after_login", subdomain=demo_association.slug, path="manage")
+
+
+_MD_MEDIA_TAGS = frozenset({"img", "video", "audio", "iframe", "source", "picture", "figure", "figcaption"})
+_MD_HEADING_TAGS = frozenset({"h1", "h2", "h3", "h4", "h5", "h6"})
+_MD_BLOCK_TAGS = frozenset({"div", "section", "article", "ul", "ol"})
+_MD_INLINE_WRAP = {"strong": "**", "b": "**", "em": "*", "i": "*", "li": "- "}
+_MD_SIMPLE = {"p": ("\n", "\n"), "br": ("\n", ""), "li": ("- ", "\n")}
+
+
+def _md_node(node: Any) -> str:
+    """Recursively convert a BeautifulSoup node to markdown text."""
+    if isinstance(node, str):
+        return node
+    tag = node.name
+    if tag in _MD_MEDIA_TAGS:
+        return ""
+    inner = "".join(_md_node(c) for c in node.children)
+    return _md_tag(tag, inner, node)
+
+
+def _md_tag(tag: str, inner: str, node: Any) -> str:
+    """Map a single HTML tag to its markdown representation."""
+    if tag in _MD_HEADING_TAGS:
+        return f"\n{'#' * int(tag[1])} {inner.strip()}\n"
+    if tag in _MD_BLOCK_TAGS:
+        return f"\n{inner.strip()}\n"
+    if tag in _MD_INLINE_WRAP:
+        marker = _MD_INLINE_WRAP[tag]
+        return f"{marker}{inner.strip()}"
+    if tag == "a":
+        href = node.get("href", "")
+        return f"[{inner}]({href})" if href else inner
+    if tag == "p":
+        return f"\n{inner.strip()}\n"
+    return inner
+
+
+def _html_to_markdown(html: str) -> str:
+    """Convert HTML content to plain markdown text, stripping media elements."""
+    if not html:
+        return ""
+    soup = BeautifulSoup(html, "html.parser")
+    text = "".join(_md_node(child) for child in soup.children)
+    return re.sub(r"\n{3,}", "\n\n", text).strip()
+
+
+@cache_page(60 * 60)
+def llms_full(_request: HttpRequest) -> HttpResponse:
+    """Serve llms-full.txt with complete guides and tutorials in markdown."""
+    lines = [render_to_string("llms.txt")]
+
+    tutorials = LarpManagerTutorial.objects.order_by("order")
+    if tutorials.exists():
+        lines.append("\n\n---\n\n## Tutorials\n")
+        for t in tutorials:
+            lines.append(f"\n### {t.name}\n")
+            lines.append(_html_to_markdown(t.descr or ""))
+
+    guides = LarpManagerGuide.objects.filter(published=True).order_by("number")
+    if guides.exists():
+        lines.append("\n\n---\n\n## Guides\n")
+        for g in guides:
+            lines.append(f"\n### {g.title}\n")
+            if g.description:
+                lines.append(f"*{g.description}*\n")
+            lines.append(_html_to_markdown(g.text or ""))
+
+    return HttpResponse("".join(lines), content_type="text/plain; charset=utf-8")

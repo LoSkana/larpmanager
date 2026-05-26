@@ -4,35 +4,37 @@
     {% trans "Quest" %} {{ name }} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    <div>
-        <table class="mob">
-            <thead>
-                <tr>
-                    <th>{{ writing_field_names.name }}</th>
-                    {% if show_quest.teaser %}<th>{{ writing_field_names.teaser }}</th>{% endif %}
-                    {% if show_trait %}
-                        <th>{% trans "Traits" %}</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            {% for el in list %}
-                <tr>
-                    <td>
-                        <h3>
-                            <a href="{% url 'quest' run.get_slug el.uuid %}">{{ el.name }}</a>
-                        </h3>
-                    </td>
-                    {% if show_quest.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
-                    {% if show_trait %}
+    <div class="user_resize">
+        <div>
+            <table class="mob">
+                <thead>
+                    <tr>
+                        <th>{{ writing_field_names.name }}</th>
+                        {% if show_quest.teaser %}<th>{{ writing_field_names.teaser }}</th>{% endif %}
+                        {% if show_trait %}
+                            <th>{% trans "Traits" %}</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                {% for el in list %}
+                    <tr>
                         <td>
-                            {% for ch in el.traits %}
-                                {% include "elements/comma.html" %}
-                                {{ ch.name }}
-                            {% endfor %}
+                            <h3>
+                                <a href="{% url 'quest' run.get_slug el.uuid %}">{{ el.name }}</a>
+                            </h3>
                         </td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-        </table>
+                        {% if show_quest.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
+                        {% if show_trait %}
+                            <td>
+                                {% for ch in el.traits %}
+                                    {% include "elements/comma.html" %}
+                                    {{ ch.name }}
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 {% endblock content %}

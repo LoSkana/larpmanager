@@ -24,11 +24,7 @@
         <div class="centerized">
             <form id="main_form" action="{{ request.path }}" method="post">
                 {% csrf_token %}
-                <div>
-                    <table class="mob">
-                        {% include "elements/form/register.html" %}
-                    </table>
-                </div>
+                <div>{% include "elements/form/register.html" %}</div>
                 <input type="button" id="confirm" value="{% trans "Continue" %}" />
                 {% include "elements/form/delete.html" %}
                 <div id="riepilogo" class="hide">

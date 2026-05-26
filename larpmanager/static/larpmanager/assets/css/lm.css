@@ -2,6 +2,58 @@
    Global Utilities
    --------------------------------------------------------------------------- */
 
+.user_resize p,
+.user_resize ul,
+.user_resize li {
+  text-align: left;
+}
+
+.user_resize {
+  max-width: 850px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.new_v20 input[type="submit"],
+.new_v20 input[type="reset"],
+.new_v20 input[type="button"],
+.new_v20 input[type="confirm"],
+.new_v20 button,
+.new_v20 .button {
+  background: rgba(var(--ter-rgb), 0.35);
+  color: rgba(var(--pri-rgb), 0.85);
+  border-color: rgba(var(--sec-rgb), 0.85) !important;
+}
+
+.new_v20 input[type="submit"],
+.new_v20 input[type="reset"],
+.new_v20 input[type="button"],
+.new_v20 input[type="confirm"] {
+  display: block;
+  margin: 0.5em auto;
+}
+
+body.association.new_v20 .user_resize {
+  padding: 0.5em 1em;
+  margin: 0.5em auto;
+  border-radius: 8px;
+  background-color: rgba(var(--pri-rgb), 0.04);
+}
+
+@media (max-width: 800px) {
+  body.association.new_v20 .user_resize {
+    padding: 0em 0em;
+    margin: 0.2em auto;
+    border-radius: 0px;
+    background-color: transparent;
+  }
+
+  body.association.new_v20 .user_resize table tbody tr {
+    padding: 0.5em;
+  }
+}
+
 .hide {
   display: none;
 }
@@ -174,6 +226,15 @@ a label:hover {
 
 .dot_links a {
   border-bottom: dotted 1px rgba(var(--pri-rgb), 0.35);
+}
+
+.reg-links {
+  text-align: center !important;
+}
+
+.reg-links span + span::before {
+  content: " | ";
+  opacity: 0.4;
 }
 
 /* ---------------------------------------------------------------------------
@@ -506,7 +567,7 @@ th select {
   }
 
   p {
-    margin: 0;
+    margin: 0.2em 0em;
   }
 
   #id_discount {
@@ -1141,6 +1202,11 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   padding-bottom: 2em !important;
 }
 
+.login table tbody tr {
+  background-color: transparent;
+  border: 0;
+}
+
 @media (max-width: 840px) {
   .login {
     max-width: 100%;
@@ -1156,9 +1222,18 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   width: 90%;
 }
 
-@media screen and (max-width: 1000) {
-  .login input {
-    width: 70%;
+.login input[type="submit"] {
+  width: auto;
+}
+
+@media screen and (max-width: 1000px) {
+  .login input[type="submit"] {
+    width: 80% !important;
+  }
+
+  .login .registration_register,
+  .login .password_reset {
+    text-align: center;
   }
 }
 
@@ -1853,12 +1928,102 @@ header.sec h1 {
   display: none;
 }
 
-.reg_profile {
-  width: 8em;
+.new_v20 .no_v20 {
+  display: none;
 }
 
-.page_gallery {
-  padding-top: 0.5em;
+.new_v20 hr {
+  opacity: 0.3;
+}
+
+/* Registration status row */
+.new_v20 .reg_status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5em;
+  padding: 0.5em;
+}
+
+/* Registration status block */
+.new_v20 .reg_status .reg-status-block {
+  margin: 0 auto;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.45em 0.75em;
+  border-radius: 5px;
+  border-left: 4px solid #ccc;
+  background: rgba(0, 0, 0, 0.03);
+  text-align: left;
+}
+
+.new_v20 .reg_status .reg-status-label {
+  font-weight: 600;
+}
+
+.new_v20 .reg_status .reg-action {
+  font-size: 0.93em;
+}
+
+.new_v20 .reg_status .reg-action-link {
+  font-weight: 600;
+}
+
+.new_v20 .reg_status .reg-action-info {
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.new_v20 .reg_status .reg-action-note {
+  font-size: 0.88em;
+  opacity: 0.75;
+  font-style: italic;
+}
+
+/* State colours */
+.new_v20 .reg_status .reg-confirmed {
+  border-left-color: #28a745;
+}
+.new_v20 .reg_status .reg-confirmed .reg-status-label i {
+  color: #28a745;
+}
+
+.new_v20 .reg_status .reg-patron {
+  border-left-color: #d4a017;
+}
+.new_v20 .reg_status .reg-patron .reg-status-label i {
+  color: #d4a017;
+}
+
+.new_v20 .reg_status .reg-action_needed {
+  border-left-color: #e67e22;
+  background: rgba(230, 126, 34, 0.07);
+}
+.new_v20 .reg_status .reg-action_needed .reg-status-label i {
+  color: #e67e22;
+}
+.new_v20 .reg_status .reg-action_needed .reg-action-link {
+  color: #c0392b;
+}
+
+.new_v20 .reg_status .reg-pending {
+  border-left-color: #f0ad4e;
+  background: rgba(240, 173, 78, 0.07);
+}
+.new_v20 .reg_status .reg-pending .reg-status-label i {
+  color: #c89900;
+}
+
+.new_v20 .reg_status .reg-provisional {
+  border-left-color: #5bc0de;
+  background: rgba(91, 192, 222, 0.07);
+}
+.new_v20 .reg_status .reg-provisional .reg-status-label i {
+  color: #31b0d5;
+}
+
+.reg_profile {
+  width: 8em;
 }
 
 .page_gallery .title {
@@ -2107,8 +2272,8 @@ header.sec h1 {
   margin: 0;
 }
 
-.new_form .abilities th,
-.new_form .abilities th {
+.new_v18 .abilities th,
+.new_v18 .abilities th {
   padding: 0.5em;
 }
 

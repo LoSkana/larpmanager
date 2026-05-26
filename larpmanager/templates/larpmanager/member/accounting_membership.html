@@ -4,9 +4,11 @@
     {% trans "Payment membership fee" %} {{ year }}
 {% endblock title %}
 {% block content %}
-    {% if invoice %}
-        {% include "elements/payment_go.html" %}
-    {% else %}
-        {% include "elements/payment_form.html" with amount=membership_fee %}
-    {% endif %}
+    <div class="user_resize platform">
+        {% if invoice %}
+            {% include "elements/payment_go.html" %}
+        {% else %}
+            {% include "elements/payment_form.html" with amount=membership_fee %}
+        {% endif %}
+    </div>
 {% endblock content %}

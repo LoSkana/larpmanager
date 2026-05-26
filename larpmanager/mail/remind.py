@@ -24,6 +24,7 @@ from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.mail.templates import get_payment_info
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssociationTextType, get_url, hdr
 from larpmanager.models.registration import Registration
@@ -195,6 +196,9 @@ def get_remember_pay_body(context: dict, registration: Registration, *, is_provi
         + "!"
     )
 
+    # Add wire transfer details if active for this association
+    email_body += get_payment_info(registration.run.event.association_id, payment_url)
+
     # Add cancellation warning for non-responsive registrants
     email_body += (
         "<br /><br />"
@@ -303,14 +307,9 @@ def get_remember_membership_fee_body(context: dict, registration: Any) -> str:
     )
 
     # Provide payment link and support information
-    email_body += (
-        "<br /><br />"
-        + _("You can complete the payment in just a few minutes <a href='%(url)s'>here</a>")
-        % {"url": get_url("accounting", registration.run.event)}
-        + ". "
-        + _("Let us know if you encounter any issues or need assistance")
-        + "!"
-    )
+    membership_url = get_url("accounting_membership")
+    email_body += get_payment_info(registration.run.event.association_id, membership_url)
+
     return email_body
 
 

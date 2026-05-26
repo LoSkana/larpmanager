@@ -93,7 +93,7 @@
                         <td>
                             <a href="{% url 'orga_warehouse_assignment_item_delete' run.get_slug el.uuid %}"
                                qtip="{% trans "Delete" %}"
-                               class="only_new_form"><i class="fas fa-trash"></i></a>
+                               class="only_new_v18"><i class="fas fa-trash"></i></a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -174,7 +174,7 @@ document.getElementById('imagePopup').onclick = function() {
     }
     const tryRestore = () => {
       if (restore()) return;
-      // ritenta finché #page-wrapper non esiste
+      // retry until #page-wrapper does not exists
       setTimeout(tryRestore, 30);
     };
     tryRestore();

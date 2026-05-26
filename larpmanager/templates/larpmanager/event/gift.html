@@ -4,71 +4,73 @@
     {% trans "Gift" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    <p>
-        {% trans "On this page you can book tickets for the event; once paid, a special code will be generated" %}.
-        {% trans "A friend of yours will be able to receive the registration as a gift by accessing this special link" %}!
-    </p>
-    <div class="c nav">
-        <a href="{% url 'gift_new' run.get_slug %}">{% trans "Add new" %}</a>
-    </div>
-    <br />
-    <table class="mob ">
-        <tr>
-            <th></th>
-            <th>{% trans "Ticket" %}</th>
-            <th>{% trans "Accounting" %}</th>
-        </tr>
-        {% for registration in list %}
+    <div class="user_resize">
+        <p>
+            {% trans "On this page you can book tickets for the event; once paid, a special code will be generated" %}.
+            {% trans "A friend of yours will be able to receive the registration as a gift by accessing this special link" %}!
+        </p>
+        <div class="c nav">
+            <a href="{% url 'gift_new' run.get_slug %}">{% trans "Add new" %}</a>
+        </div>
+        <br />
+        <table class="mob ">
             <tr>
-                <td>
-                    <a href="{% url 'gift_edit' run.get_slug registration.uuid %}"
-                       qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-                </td>
-                <td>
-                    {% if registration.ticket %}
-                        (
-                        {{ registration.ticket.name }}
-                        {% if registration.ticket.price %}<i><u> {{ registration.ticket.price }}{{ currency_symbol }}</u></i>{% endif %}
-                        )
-                    {% endif %}
-                    {% if registration.info.opts %}
-                        {% for k, el in registration.info.opts.items %}
-                            {% include "elements/comma.html" %}
-                            <b>{{ el.question.name }}</b> -
-                            {% for opt in el.selected_options %}
-                                {{ opt.name }}
-                                {% if opt.price %}<i><u>({{ opt.price }}{{ currency_symbol }})</u></i>{% endif %}
+                <th></th>
+                <th>{% trans "Ticket" %}</th>
+                <th>{% trans "Accounting" %}</th>
+            </tr>
+            {% for registration in list %}
+                <tr>
+                    <td>
+                        <a href="{% url 'gift_edit' run.get_slug registration.uuid %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>
+                        {% if registration.ticket %}
+                            (
+                            {{ registration.ticket.name }}
+                            {% if registration.ticket.price %}<i><u> {{ registration.ticket.price }}{{ currency_symbol }}</u></i>{% endif %}
+                            )
+                        {% endif %}
+                        {% if registration.info.opts %}
+                            {% for k, el in registration.info.opts.items %}
+                                {% include "elements/comma.html" %}
+                                <b>{{ el.question.name }}</b> -
+                                {% for opt in el.selected_options %}
+                                    {{ opt.name }}
+                                    {% if opt.price %}<i><u>({{ opt.price }}{{ currency_symbol }})</u></i>{% endif %}
+                                {% endfor %}
                             {% endfor %}
-                        {% endfor %}
-                    {% endif %}
-                </td>
-                <td>
-                    {% if registration.payment %}
-                        {% if registration.deadline > 0 %}
-                            <a href="{% url 'accounting_registration' registration.uuid %}">
-                                {{ registration.payment.quota | format_decimal }}{{ currency_symbol }}
-                            {% trans "within" %} {{ registration.payment.deadline }} {% trans "days" %}</a>
-                        {% else %}
-                            <a href="{% url 'accounting_registration' registration.uuid %}">
-                                {{ registration.payment.quota | format_decimal }}{{ currency_symbol }}
-                                {% trans "immediately" %}</a> <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
-                            {% endif %}
-                        {% elif registration.pending %}
-                            {% trans "Payment currently in review by the staff" %}.
-                        {% else %}
-                            <a href="{% url 'gift_redeem' run.get_slug registration.redeem_code %}">{% trans "Access link" %}</a>
-                            <i> -
-                                {% trans "copy this link and give it to your friend" %}:
-                            </i>
-                            <b>
-                                {{ request.scheme }}://{{ request.get_host }}{% url 'gift_redeem' run.get_slug registration.redeem_code %}
-                            </b>
                         {% endif %}
                     </td>
-                </tr>
-            {% endfor %}
-        </table>
-        <p>
-            <i>{% trans "Note: The special code is re-generated each time you change the gift card" %}</i>
-        </p>
+                    <td>
+                        {% if registration.payment %}
+                            {% if registration.deadline > 0 %}
+                                <a href="{% url 'accounting_registration' registration.uuid %}">
+                                    {{ registration.payment.quota | format_decimal }}{{ currency_symbol }}
+                                {% trans "within" %} {{ registration.payment.deadline }} {% trans "days" %}</a>
+                            {% else %}
+                                <a href="{% url 'accounting_registration' registration.uuid %}">
+                                    {{ registration.payment.quota | format_decimal }}{{ currency_symbol }}
+                                    {% trans "immediately" %}</a> <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
+                                {% endif %}
+                            {% elif registration.pending %}
+                                {% trans "Payment currently in review by the staff" %}.
+                            {% else %}
+                                <a href="{% url 'gift_redeem' run.get_slug registration.redeem_code %}">{% trans "Access link" %}</a>
+                                <i> -
+                                    {% trans "copy this link and give it to your friend" %}:
+                                </i>
+                                <b>
+                                    {{ request.scheme }}://{{ request.get_host }}{% url 'gift_redeem' run.get_slug registration.redeem_code %}
+                                </b>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <p>
+                <i>{% trans "Note: The special code is re-generated each time you change the gift card" %}</i>
+            </p>
+        </div>
     {% endblock content %}

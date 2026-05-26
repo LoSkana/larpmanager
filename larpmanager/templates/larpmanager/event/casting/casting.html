@@ -4,7 +4,7 @@
     Casting {{ gl_name }} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    <div class="form_container auto_resize platform">
+    <div class="form_container user_resize platform">
         {% if features.questbuilder %}
             <p>
                 {% trans "Go to the casting for" %}:
@@ -91,8 +91,8 @@
                        onClick="return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Confirm your choices" %}{% endfilter %}?');">
                 <p id="err"></p>
             </form>
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
 {% endblock content %}
 {% block js %}
     <script>

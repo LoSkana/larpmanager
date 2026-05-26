@@ -50,6 +50,7 @@ from larpmanager.forms.registration import (
 )
 from larpmanager.mail.base import bring_friend_instructions
 from larpmanager.mail.registration import update_registration_status_bkg
+from larpmanager.models.access import get_event_organizers
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemOther,
@@ -60,7 +61,7 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     PaymentType,
 )
-from larpmanager.models.association import AssociationTextType
+from larpmanager.models.association import AssociationTextType, get_url, hdr
 from larpmanager.models.event import (
     DevelopStatus,
     Event,
@@ -84,6 +85,7 @@ from larpmanager.utils.core.exceptions import (
     check_event_feature,
 )
 from larpmanager.utils.edit.backend import user_edit
+from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.users.registration import (
     _set_membership_context,
     check_assign_character,
@@ -1118,15 +1120,10 @@ def discount_list(request: HttpRequest, event_slug: str) -> JsonResponse:
 
 @login_required
 def unregister(request: HttpRequest, event_slug: str) -> Any:
-    """Handle user self-unregistration from an event.
+    """Handle user cancellation from an event.
 
-    Args:
-        request: HTTP request object from authenticated user
-        event_slug: Event slug string
-
-    Returns:
-        HttpResponse: Confirmation form or redirect to accounting page after cancellation
-
+    If player_cancellation_disable is set, sends a cancellation request email to organizers
+    instead of cancelling directly, and notifies the player to wait for staff response.
     """
     context = get_event_context(request, event_slug, signup=True, include_status=True)
 
@@ -1139,10 +1136,38 @@ def unregister(request: HttpRequest, event_slug: str) -> Any:
         msg = "Registration does not exist"
         raise Http404(msg) from err
 
+    cancellation_disabled = get_event_config(
+        context["event"].id, "player_cancellation_disable", default_value=False, context=context
+    )
+
     if request.method == "POST":
-        cancel_reg(registration)
-        mes = _("You have correctly cancelled the registration to the %(event)s event") % {"event": context["event"]}
-        messages.success(request, mes)
+        if cancellation_disabled:
+            member = context["member"]
+            run = context["run"]
+            event = context["event"]
+
+            cancel_url = get_url(
+                f"{run.get_slug()}/manage/registrations/{registration.uuid}/delete/",
+                event,
+            )
+            email_context = {"event": run, "user": member}
+            email_subject = hdr(event) + _("Cancellation request for %(event)s") % email_context
+            email_body = (
+                _("The participant <b>%(user)s</b> has requested to cancel their registration for <b>%(event)s</b>")
+                % email_context
+            )
+            email_body += ".<br /><br />"
+            email_body += _("To process the cancellation, click here") + ": "
+            email_body += f"<a href='{cancel_url}'>{cancel_url}</a>"
+            for organizer in get_event_organizers(event):
+                my_send_mail(email_subject, email_body, organizer, run)
+
+            mes = _("Your cancellation request has been sent to the staff") + "; " + _("please wait for their response")
+            messages.success(request, mes)
+        else:
+            cancel_reg(registration)
+            mes = _("Your registration to %(event)s has been cancelled") % {"event": context["event"]}
+            messages.success(request, mes)
         return redirect("accounting")
 
     context["registration"] = registration

@@ -5,8 +5,8 @@
 {% endblock title %}
 {% block content %}
     {% include "larpmanager/member/profile_nav.html" with active="membership" %}
-    <div class="auto_resize platform">
-        <hr />
+    <div class="user_resize platform">
+        <hr class="no_v20" />
         {% if membership_cf and error_cf %}
             <div id="membership_cf">
                 <h3>{% trans "Tax code check" %}</h3>

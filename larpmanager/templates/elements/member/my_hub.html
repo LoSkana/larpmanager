@@ -25,5 +25,20 @@
 {% if registration_list %}
     <h3>{% trans "Registrations" %}</h3>
     {% include "elements/member/registration_list.html" with show_association=True %}
+    <script>
+        document.querySelectorAll('tr[data-assoc-slug]').forEach(function(row) {
+            var slug = row.getAttribute('data-assoc-slug');
+            row.querySelectorAll('a[href]').forEach(function(link) {
+                var href = link.getAttribute('href');
+                if (!href || href.startsWith('#') || href.startsWith('mailto:')) return;
+                try {
+                    var url = new URL(href, window.location.href);
+                    if (url.hostname !== window.location.hostname) return;
+                    url.hostname = slug + '.' + url.hostname;
+                    link.setAttribute('href', url.toString());
+                } catch(e) {}
+            });
+        });
+    </script>
     <hr />
 {% endif %}
