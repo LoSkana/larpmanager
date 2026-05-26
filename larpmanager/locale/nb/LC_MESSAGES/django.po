@@ -646,6 +646,9 @@ msgstr "Låst"
 msgid "Log in"
 msgstr "Logg inn"
 
+msgid "Logout"
+msgstr "Logg ut"
+
 msgid "Manage"
 msgstr "Administrere"
 
@@ -2374,6 +2377,9 @@ msgstr "Historisk utstilling"
 
 msgid "Subscription"
 msgstr "Abonnement"
+
+msgid "Tech Support"
+msgstr "Teknisk støtte"
 
 msgid "Tell me more"
 msgstr "Finn ut mer"

@@ -97,9 +97,11 @@
             <div id="wrapper">
                 <div id="one" class="wrapper">
                     <div class="inner">
-                        {% block nav %}
-                            {% include "larpmanager/manage/nav.html" %}
-                        {% endblock nav %}
+                        <div class="no_v20">
+                            {% block nav %}
+                                {% include "larpmanager/manage/nav.html" %}
+                            {% endblock nav %}
+                        </div>
                         <div id="right_bar" class="info nav main_nav no_mobile">
                             {% if tutorial %}
                                 <a href="#"
@@ -132,7 +134,7 @@
                             {{ association.footer | safe }}
                         </div>
                     {% endif %}
-                    <table class="mob ">
+                    <table class="mob no_v20">
                         <tr>
                             {% if 'help' in association.features %}
                                 <td>
@@ -156,7 +158,7 @@
                             </td>
                         </tr>
                     </table>
-                    <p>
+                    <p class="no_v20">
                         <!-- Please, do not remove! -->
                         Powered by <a href="https://{{ association.main_domain }}">{{ association.platform }}</a>
                     </p>
@@ -204,8 +206,7 @@
           referrerpolicy="no-referrer" />
     <link rel="stylesheet"
           href="//cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css" />
-    {% if association.id == 0 %}
-        <style>
+    <style>
             @font-face {
                 font-family: 'future_light';
                 src: url('{% static "fonts/future_light/Future_Light.otf" %}'),
@@ -213,7 +214,8 @@
 
                 font-display: swap;
             }
-        </style>
+    </style>
+    {% if association.id == 0 %}
         <link rel="preload"
               href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
               as="style"
@@ -276,6 +278,13 @@
             $('#logout').on( "click", function(event) {
                 event.preventDefault();
                 $('#real_logout').click();
+                return false;
+            });
+
+            $('#sidebar-real-logout').parent().hide();
+            $('#sidebar-logout').on( "click", function(event) {
+                event.preventDefault();
+                $('#sidebar-real-logout').click();
                 return false;
             });
 

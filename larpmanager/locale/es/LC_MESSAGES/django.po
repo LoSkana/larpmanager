@@ -646,6 +646,9 @@ msgstr "Bloqueado"
 msgid "Log in"
 msgstr "Conectarse"
 
+msgid "Logout"
+msgstr "Cerrar sesión"
+
 msgid "Manage"
 msgstr "Gestionar"
 
@@ -2374,6 +2377,9 @@ msgstr "Exposición histórica"
 
 msgid "Subscription"
 msgstr "Suscripción"
+
+msgid "Tech Support"
+msgstr "Soporte técnico"
 
 msgid "Tell me more"
 msgstr "Más información"

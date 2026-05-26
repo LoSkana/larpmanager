@@ -646,6 +646,9 @@ msgstr "Verrouillé"
 msgid "Log in"
 msgstr "Se connecter"
 
+msgid "Logout"
+msgstr "Déconnexion"
+
 msgid "Manage"
 msgstr "Gérer"
 
@@ -2374,6 +2377,9 @@ msgstr "Exposition historique"
 
 msgid "Subscription"
 msgstr "Abonnement"
+
+msgid "Tech Support"
+msgstr "Support technique"
 
 msgid "Tell me more"
 msgstr "En savoir plus"

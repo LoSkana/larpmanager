@@ -496,7 +496,9 @@ function show_sidebar_active() {
       var safeHref = linkHref.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       var regex = new RegExp('^' + safeHref + '(?:$|\\/.*)');
 
-      if (linkHref.endsWith('manage'))
+      if ($(this).data('exact-match'))
+        var match = currentUrl === linkHref;
+      else if (linkHref.endsWith('manage'))
          var match = currentUrl.endsWith('manage');
       else
         var match = regex.test(currentUrl);

@@ -1,0 +1,10 @@
+{% load static i18n %}
+<div class="sidebar-start">
+    <!-- Please, do not remove! -->
+    <span class="sidebar-link-wrap">
+        <img src="{% static 'lm_fav.png' %}"
+             alt="Platform logo"
+             class="platform_logo" />
+        <span class="platform_name">{{ association.platform|default:"LarpManager" }}</span>
+    </span>
+</div>

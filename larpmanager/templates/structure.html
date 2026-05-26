@@ -140,10 +140,14 @@
                     {% include "elements/structure/topbar.html" %}
                 {% endif %}
             {% endif %}
-            {% include "elements/structure/sidebar.html" %}
+            {% if manage %}
+                {% include "elements/structure/sidebar-admin.html" %}
+            {% else %}
+                {% include "elements/structure/sidebar-user.html" %}
+            {% endif %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class=" {% if manage and is_sidebar_open %}sidebar{% endif %} {% if not frame and association.id != 0 %}topbar{% endif %}">
+                 class=" {% if manage and is_sidebar_open %}sidebar{% endif %}  {% if effective_version >= 20 %}sidebar{% endif %} {% if not frame and association.id != 0 %}topbar{% endif %}">
                 {% block main %}
                 {% endblock main %}
             </div>

@@ -646,6 +646,9 @@ msgstr "Gesloten"
 msgid "Log in"
 msgstr "Inloggen"
 
+msgid "Logout"
+msgstr "Afmelden"
+
 msgid "Manage"
 msgstr "Beheer"
 
@@ -2374,6 +2377,9 @@ msgstr "Historische tentoonstelling"
 
 msgid "Subscription"
 msgstr "Abonnement"
+
+msgid "Tech Support"
+msgstr "Technische ondersteuning"
 
 msgid "Tell me more"
 msgstr "Lees meer"

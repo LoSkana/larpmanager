@@ -4,7 +4,7 @@
     {% trans "Accounting" %}
 {% endblock title %}
 {% block content %}
-    {% include "larpmanager/member/profile_nav.html" with active="accounting" %}
+    <div class="no_v20">{% include "larpmanager/member/profile_nav.html" with active="accounting" %}</div>
     <div class="user_resize platform">
         <hr class="no_v20" />
         {% if association_terms_conditions %}

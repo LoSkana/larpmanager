@@ -646,6 +646,9 @@ msgstr "Abgeschlossen"
 msgid "Log in"
 msgstr "Einloggen"
 
+msgid "Logout"
+msgstr "Abmelden"
+
 msgid "Manage"
 msgstr "Verwalten Sie"
 
@@ -2374,6 +2377,9 @@ msgstr "Historische Ausstellung"
 
 msgid "Subscription"
 msgstr "Abonnement"
+
+msgid "Tech Support"
+msgstr "Technische Unterstützung"
 
 msgid "Tell me more"
 msgstr "Weitere Informationen"

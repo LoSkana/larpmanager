@@ -1,0 +1,44 @@
+{% load static i18n %}
+<div id="sidebar" class="only_v20">
+    <div class="inner">
+        <div class=" new-menu">
+            {% include "elements/structure/sidebar-start.html" %}
+            <div class="sidebar-section">
+                <span class="sidebar-link-wrap">
+                    <a class="sidebar-link {% if request_func_name == 'home' %}select{% endif %}"
+                       href="{% url 'home' %}"
+                       data-exact-match="true"><i class="fa-solid fa-home"></i> {{ association.name }}</a>
+                </span>
+            </div>
+            {% if user.is_authenticated %}
+                {% if run %}
+                    <div class="sidebar-section">
+                        {% include "elements/reg_status.html" with registration=registration reg_uuid="_main" %}
+                    </div>
+                    <div class="sidebar-section">{% include "larpmanager/manage/nav.html" %}</div>
+                {% endif %}
+                <div class="sidebar-section">{% include "larpmanager/member/profile_nav.html" %}</div>
+            {% else %}
+                <div class="sidebar-section">
+                    <span class="sidebar-link-wrap">
+                        <a class="sidebar-link {% if request_func_name == 'login' %}select{% endif %}"
+                           href="{% url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                    </span>
+                    <span class="sidebar-link-wrap">
+                        <a class="sidebar-link {% if request_func_name == 'registration_register' %}select{% endif %}"
+                           href="{% url 'registration_register' %}"><i class="fa-solid fa-user-plus"></i> {% trans "Register" %}</a>
+                    </span>
+                    <span class="sidebar-link-wrap">
+                        <a class="sidebar-link {% if request_func_name == 'password_reset' %}select{% endif %}"
+                           href="{% url 'password_reset' %}"><i class="fa-solid fa-key"></i> {% trans "Password reset" %}</a>
+                    </span>
+                    <div class="sidebar-link-wrap">
+                        <a class="sidebar-link {% if active == 'language' %}sel{% endif %}"
+                           href="{% url 'language' %}"><i class="fa-solid fa-language"></i> <span class="nav-label">{% trans "Language" %}</span></a>
+                    </div>
+                </div>
+            {% endif %}
+            {% include "elements/structure/sidebar-end.html" %}
+        </div>
+    </div>
+</div>

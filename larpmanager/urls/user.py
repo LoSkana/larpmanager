@@ -110,17 +110,17 @@ urlpatterns = [
         name="profile_rotate",
     ),
     path(
-        "profile/privacy/",
+        "consent/",
         views_um.profile_privacy,
         name="profile_privacy",
     ),
     path(
-        "profile/privacy/rewoke/<slug:slug>/",
+        "consent/rewoke/<slug:slug>/",
         views_um.profile_privacy_rewoke,
         name="profile_privacy_rewoke",
     ),
     path(
-        "profile/otp/",
+        "security/",
         views_um.profile_otp,
         name="profile_otp",
     ),

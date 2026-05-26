@@ -399,15 +399,15 @@ nav#sidebar-nav {
   transition-duration: 0.3s;
 }
 
-.sidebar-link-wrap {
+#sidebar .sidebar-link-wrap {
   display: flex;
   align-items: center;
   gap: 0.3em;
   margin-left: 0.5ch;
 }
 
-.sidebar-link,
-.explain-icon {
+#sidebar .sidebar-link,
+#sidebar .explain-icon {
   display: inline-block;
   margin: 0;
 }

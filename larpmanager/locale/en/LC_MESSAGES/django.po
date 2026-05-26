@@ -5559,6 +5559,21 @@ msgstr ""
 msgid "Role"
 msgstr ""
 
+msgid "Privacy Policy"
+msgstr ""
+
+msgid "Legal Notice"
+msgstr ""
+
+msgid "Tech Support"
+msgstr ""
+
+msgid "Logout"
+msgstr ""
+
+msgid "Password reset"
+msgstr ""
+
 msgid "Hi"
 msgstr ""
 
@@ -6793,9 +6808,6 @@ msgid "Next"
 msgstr ""
 
 msgid "Last"
-msgstr ""
-
-msgid "Legal Notice"
 msgstr ""
 
 msgid "These are our past events"
@@ -8967,12 +8979,6 @@ msgid ""
 msgstr ""
 
 msgid "Manage viewing writing element"
-msgstr ""
-
-msgid "Privacy Policy"
-msgstr ""
-
-msgid "Password reset"
 msgstr ""
 
 msgid "Two-Factor Authentication"

@@ -646,6 +646,9 @@ msgstr "Uzamčené stránky"
 msgid "Log in"
 msgstr "Přihlášení"
 
+msgid "Logout"
+msgstr "Odhlášení"
+
 msgid "Manage"
 msgstr "Správa"
 
@@ -2374,6 +2377,9 @@ msgstr "Historická výstava"
 
 msgid "Subscription"
 msgstr "Předplatné"
+
+msgid "Tech Support"
+msgstr "Technická podpora"
 
 msgid "Tell me more"
 msgstr "Zjistěte více"

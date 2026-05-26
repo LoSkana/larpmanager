@@ -4,7 +4,7 @@
     {% trans "Membership" %}
 {% endblock title %}
 {% block content %}
-    {% include "larpmanager/member/profile_nav.html" with active="membership" %}
+    <div class="no_v20">{% include "larpmanager/member/profile_nav.html" with active="membership" %}</div>
     <div class="user_resize platform">
         <hr class="no_v20" />
         {% if membership_cf and error_cf %}
