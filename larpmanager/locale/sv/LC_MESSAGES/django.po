@@ -2737,6 +2737,9 @@ msgstr "objekt raderade"
 msgid "items updated"
 msgstr "artiklar uppdaterade"
 
+msgid "relationships"
+msgstr "relationer"
+
 msgid "Active devices"
 msgstr "Aktiva enheter"
 
@@ -2965,6 +2968,9 @@ msgstr "Lagertaggar"
 msgid "Your character"
 msgstr "Din karaktär"
 
+msgid "complete sheet"
+msgstr "komplett ark"
+
 msgid "customisations"
 msgstr "Anpassningar"
 
@@ -3177,6 +3183,9 @@ msgstr "förväntas inom"
 
 msgid "membership fees"
 msgstr "medlemsavgifter"
+
+msgid "printable sheet"
+msgstr "utskrivbart ark"
 
 msgid "upcoming events"
 msgstr "Planerade händelser"
@@ -4042,9 +4051,6 @@ msgstr "Inaktivera annullering"
 msgid "Display sent e-mails"
 msgstr "Visa skickade e-postmeddelanden"
 
-msgid "Download light sheet"
-msgstr "Ladda ner ljusblad"
-
 msgid "Enter a valid number"
 msgstr "Ange ett giltigt nummer"
 
@@ -4354,6 +4360,9 @@ msgstr "Länkar för förhandsregistrering"
 msgid "Prop - weapons, props"
 msgstr "Prop - vapen, rekvisita"
 
+msgid "Referenced Characters"
+msgstr "Refererade tecken"
+
 msgid "Register to the event"
 msgstr "Anmäl dig till evenemanget"
 
@@ -4449,9 +4458,6 @@ msgstr "Visa alla användares data"
 
 msgid "Do you want to proceed"
 msgstr "Vill du fortsätta"
-
-msgid "Download relationships"
-msgstr "Ladda ner relationer"
 
 msgid "Event deletion request"
 msgstr "Begäran om radering av händelse"
@@ -4634,9 +4640,6 @@ msgstr "Skapa ditt första evenemang"
 
 msgid "Discount code not valid"
 msgstr "Ogiltig kod för underlättande"
-
-msgid "Download complete sheet"
-msgstr "Ladda ner fullständigt blad"
 
 msgid "Early registration link"
 msgstr "Länk för tidig registrering"

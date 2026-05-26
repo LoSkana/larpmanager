@@ -221,6 +221,7 @@ from larpmanager.models.experience import AbilityExp, AbilityTypeExp, DeliveryEx
 from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
+    WritingAnswer,
     WritingOption,
     WritingQuestion,
 )
@@ -255,6 +256,7 @@ from larpmanager.models.writing import (
     Handout,
     HandoutTemplate,
     Plot,
+    PlotCharacterRel,
     Prologue,
     Relationship,
     SpeedLarp,
@@ -289,7 +291,7 @@ from larpmanager.utils.services.association import (
     generate_association_encryption_key,
     prepare_association_skin_features,
 )
-from larpmanager.utils.services.character import count_distinct_text_links
+from larpmanager.utils.services.character import count_distinct_text_links, update_character_referenced_chars_background
 from larpmanager.utils.services.event import (
     assign_previous_campaign_character,
     copy_parent_event_to_campaign,
@@ -557,6 +559,16 @@ def post_save_assignment_trait(
         # Remove outdated PDF files if necessary
         cleanup_pdfs_on_trait_assignment(instance)
 
+    # Recompute auto relationships for the character of this member
+    if instance.member_id and instance.run_id:
+        char_id = (
+            Character.objects.filter(player_id=instance.member_id, event=instance.run.event, deleted__isnull=True)
+            .values_list("id", flat=True)
+            .first()
+        )
+        if char_id:
+            update_character_referenced_chars_background(char_id)
+
 
 @receiver(post_delete, sender=AssignmentTrait)
 def post_delete_assignment_trait_reset(sender: type, instance: AssignmentTrait, **kwargs: Any) -> None:
@@ -747,6 +759,9 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
 
     # Refresh ability caches that show this character in their character_rels
     on_character_saved(instance.id, instance.event_id)
+
+    # Recompute auto relationships (referenced characters) for this character
+    update_character_referenced_chars_background(instance.id)
 
 
 @receiver(pre_delete, sender=Character)
@@ -1022,6 +1037,7 @@ def post_save_faction_reset_rels(sender: type, instance: Faction, **kwargs: Any)
     # Update cache for all characters belonging to this faction
     for char in instance.characters.all():
         refresh_character_relationships_background(char.id)
+        update_character_referenced_chars_background(char.id)
 
     # Clean up faction PDFs after save operation
     cleanup_faction_pdfs_on_save(instance)
@@ -1308,6 +1324,20 @@ def post_delete_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> 
 
     # Remove plot from cache
     remove_item_from_cache_section(instance.event_id, "plots", instance.id)
+
+
+@receiver(post_save, sender=PlotCharacterRel)
+def post_save_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, **kwargs: Any) -> None:
+    """Recompute auto relationships when a plot-character relation changes."""
+    if instance.character_id:
+        update_character_referenced_chars_background(instance.character_id)
+
+
+@receiver(post_delete, sender=PlotCharacterRel)
+def post_delete_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, **kwargs: Any) -> None:
+    """Recompute auto relationships when a plot-character relation is deleted."""
+    if instance.character_id:
+        update_character_referenced_chars_background(instance.character_id)
 
 
 @receiver(pre_save, sender=PreRegistration)
@@ -1601,6 +1631,15 @@ def post_save_relationship_reset_rels(sender: type, instance: Any, **kwargs: Any
     refresh_character_relationships(instance.source)
     delete_character_pdf_files(instance.source)
 
+    # When a manual relationship is saved, remove any auto relationship for the same pair
+    if not instance.auto:
+        Relationship.objects.filter(
+            source=instance.source,
+            target=instance.target,
+            auto=True,
+            deleted__isnull=True,
+        ).delete()
+
 
 @receiver(post_delete, sender=Relationship)
 def post_delete_relationship_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
@@ -1760,6 +1799,18 @@ def pre_save_warehouse_item(sender: type[WarehouseItem], instance: WarehouseItem
     auto_rotate_vertical_photos(instance, sender)
 
 
+@receiver(post_save, sender=WritingAnswer)
+def post_save_writing_answer_refs(sender: type, instance: WritingAnswer, **kwargs: Any) -> None:
+    """Recompute auto relationships when a character writing answer changes."""
+    update_character_referenced_chars_background(instance.element_id)
+
+
+@receiver(post_delete, sender=WritingAnswer)
+def post_delete_writing_answer_refs(sender: type, instance: WritingAnswer, **kwargs: Any) -> None:
+    """Recompute auto relationships when a character writing answer is deleted."""
+    update_character_referenced_chars_background(instance.element_id)
+
+
 @receiver(post_save, sender=WritingOption)
 def post_save_writing_option_reset(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear caches when WritingOption is saved."""
@@ -1800,6 +1851,38 @@ def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any)
         refresh_modifier_rels_dirty_background(modifier_ids)
 
 
+def on_faction_characters_refs_changed(
+    sender: type, instance: Any, action: str, pk_set: set | None, **kwargs: Any
+) -> None:
+    """Recompute auto relationships for characters added/removed from a faction."""
+    if action not in ("post_add", "post_remove") or not pk_set:
+        return
+    if kwargs.get("reverse"):
+        # instance is Character, pk_set is faction IDs
+        update_character_referenced_chars_background(instance.id)
+    else:
+        # instance is Faction, pk_set is character IDs: update changed chars + existing members
+        for char_id in pk_set:
+            update_character_referenced_chars_background(char_id)
+        for char_id in instance.characters.exclude(pk__in=pk_set).values_list("id", flat=True):
+            update_character_referenced_chars_background(char_id)
+
+
+def on_plot_characters_refs_changed(
+    sender: type, instance: Any, action: str, pk_set: set | None, **kwargs: Any
+) -> None:
+    """Recompute auto relationships for characters added/removed from a plot."""
+    if action not in ("post_add", "post_remove") or not pk_set:
+        return
+    if kwargs.get("reverse"):
+        # instance is Character, pk_set is plot IDs
+        update_character_referenced_chars_background(instance.id)
+    else:
+        # instance is Plot, pk_set is character IDs
+        for char_id in pk_set:
+            update_character_referenced_chars_background(char_id)
+
+
 m2m_changed.connect(on_experience_characters_m2m_changed, sender=DeliveryExp.characters.through)
 m2m_changed.connect(on_experience_characters_m2m_changed, sender=AbilityExp.characters.through)
 m2m_changed.connect(on_modifier_abilities_m2m_changed, sender=ModifierExp.abilities.through)
@@ -1807,7 +1890,9 @@ m2m_changed.connect(on_rule_abilities_m2m_changed, sender=RuleExp.abilities.thro
 
 m2m_changed.connect(on_faction_characters_m2m_changed, sender=Faction.characters.through)
 m2m_changed.connect(on_character_factions_m2m_changed, sender=Faction.characters.through)
+m2m_changed.connect(on_faction_characters_refs_changed, sender=Faction.characters.through)
 m2m_changed.connect(on_plot_characters_m2m_changed, sender=Plot.characters.through)
+m2m_changed.connect(on_plot_characters_refs_changed, sender=Plot.characters.through)
 m2m_changed.connect(on_speedlarp_characters_m2m_changed, sender=SpeedLarp.characters.through)
 m2m_changed.connect(on_prologue_characters_m2m_changed, sender=Prologue.characters.through)
 

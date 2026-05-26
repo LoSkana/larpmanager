@@ -2737,6 +2737,9 @@ msgstr "verwijderde items"
 msgid "items updated"
 msgstr "items bijgewerkt"
 
+msgid "relationships"
+msgstr "relaties"
+
 msgid "Active devices"
 msgstr "Actieve apparaten"
 
@@ -2965,6 +2968,9 @@ msgstr "Magazijn tags"
 msgid "Your character"
 msgstr "Je personage"
 
+msgid "complete sheet"
+msgstr "volledig blad"
+
 msgid "customisations"
 msgstr "aanpassingen"
 
@@ -3177,6 +3183,9 @@ msgstr "verwacht binnen"
 
 msgid "membership fees"
 msgstr "lidmaatschapsgelden"
+
+msgid "printable sheet"
+msgstr "afdrukbaar vel"
 
 msgid "upcoming events"
 msgstr "Geplande evenementen"
@@ -4042,9 +4051,6 @@ msgstr "Annulering uitschakelen"
 msgid "Display sent e-mails"
 msgstr "Verzonden e-mails weergeven"
 
-msgid "Download light sheet"
-msgstr "Download lichtblad"
-
 msgid "Enter a valid number"
 msgstr "Voer een geldig nummer in"
 
@@ -4354,6 +4360,9 @@ msgstr "Links voor voorinschrijving"
 msgid "Prop - weapons, props"
 msgstr "Prop - wapens, rekwisieten"
 
+msgid "Referenced Characters"
+msgstr "Tekens waarnaar wordt verwezen"
+
 msgid "Register to the event"
 msgstr "Meld je aan voor het evenement"
 
@@ -4449,9 +4458,6 @@ msgstr "Alle gebruikersgegevens weergeven"
 
 msgid "Do you want to proceed"
 msgstr "Wil je doorgaan"
-
-msgid "Download relationships"
-msgstr "Relaties downloaden"
 
 msgid "Event deletion request"
 msgstr "Verzoek om verwijdering van gebeurtenissen"
@@ -4634,9 +4640,6 @@ msgstr "Maak je eerste evenement"
 
 msgid "Discount code not valid"
 msgstr "Ongeldige facilitatiecode"
-
-msgid "Download complete sheet"
-msgstr "Volledig blad downloaden"
 
 msgid "Early registration link"
 msgstr "Link voor vroege registratie"

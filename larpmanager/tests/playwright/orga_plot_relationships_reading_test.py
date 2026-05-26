@@ -88,7 +88,9 @@ def reading(live_server: Any, page: Any) -> None:
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character ciaaoooooo",
+        """
+        Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character test teaser ciaaoooooo
+        """,
     )
 
     # test reading with factions
@@ -120,7 +122,7 @@ def reading(live_server: Any, page: Any) -> None:
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character Factions: only for testt ciaaoooooo",
+        "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character Factions: only for testt test teaser ciaaoooooo",
     )
 
     # check reading plot
@@ -170,7 +172,7 @@ def relationships(live_server: Any, page: Any) -> None:
     # check in gallery
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
-    expect_normalized(page, page.locator("#one"), "Relationships Test Character ciaaoooooo")
+    expect_normalized(page, page.locator("#one"), "Relationships Test Character test teaser ciaaoooooo")
 
 
 def plots(live_server: Any, page: Any) -> None:

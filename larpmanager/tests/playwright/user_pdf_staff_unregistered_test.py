@@ -66,13 +66,14 @@ def test_staff_unregistered_can_access_pdf(pw_page: Any) -> None:
     # Staff should be able to access this even without registration
     go_to(page, live_server, f"/test/character/{character_id}")
 
+    # Capture download URL before running downloads
+    download_page = page.get_by_role("link", name="complete sheet").get_attribute("href")
+
     # Verify staff can download PDFs without being registered
     # These should all work without redirecting to registration page
     check_download(page, "Download complete sheet")
-    check_download(page, "Download light sheet")
-    check_download(page, "Download relationships")
-
-    download_page = page.locator(f"text=Download complete sheet").get_attribute("href")
+    check_download(page, "printable sheet")
+    check_download(page, "relationships")
 
     # Now test that regular users without registration are redirected to registration page
     login_user(page, live_server)

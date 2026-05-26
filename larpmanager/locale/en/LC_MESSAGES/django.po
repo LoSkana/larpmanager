@@ -1812,7 +1812,7 @@ msgstr ""
 msgid "Plots"
 msgstr ""
 
-msgid "Relationships"
+msgid "Referenced Characters"
 msgstr ""
 
 msgid "Speedlarp"
@@ -1825,6 +1825,9 @@ msgid "Workshop"
 msgstr ""
 
 msgid "PDF"
+msgstr ""
+
+msgid "Relationships"
 msgstr ""
 
 msgid "Selected elements will be shown to participants"
@@ -5499,13 +5502,13 @@ msgstr ""
 msgid "View Details"
 msgstr ""
 
-msgid "Download complete sheet"
+msgid "complete sheet"
 msgstr ""
 
-msgid "Download light sheet"
+msgid "printable sheet"
 msgstr ""
 
-msgid "Download relationships"
+msgid "relationships"
 msgstr ""
 
 msgid "This character represents the true secret identity of another character"

@@ -1529,14 +1529,14 @@ class OrgaRunForm(ConfigForm):
 
         additional_elements_display = {
             "plot": _("Plots"),
-            "relationships": _("Relationships"),
+            "char_refs": _("Referenced Characters"),
             "speedlarp": _("Speedlarp"),
             "prologue": _("Prologues"),
             "workshop": _("Workshop"),
             "print_pdf": _("PDF"),
         }
 
-        additional_choices = []
+        additional_choices = [("relationships", _("Relationships"))]
         for element_key, element_display_name in additional_elements_display.items():
             if self.instance.pk and element_key in self.params["features"]:
                 additional_choices.append((element_key, element_display_name))

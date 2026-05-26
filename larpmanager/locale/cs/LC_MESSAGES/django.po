@@ -2737,6 +2737,9 @@ msgstr "odstraněné položky"
 msgid "items updated"
 msgstr "aktualizované položky"
 
+msgid "relationships"
+msgstr "vztahy"
+
 msgid "Active devices"
 msgstr "Aktivní zařízení"
 
@@ -2965,6 +2968,9 @@ msgstr "Štítky skladu"
 msgid "Your character"
 msgstr "Vaše postava"
 
+msgid "complete sheet"
+msgstr "kompletní list"
+
 msgid "customisations"
 msgstr "přizpůsobení"
 
@@ -3177,6 +3183,9 @@ msgstr "očekává se v rámci"
 
 msgid "membership fees"
 msgstr "členské příspěvky"
+
+msgid "printable sheet"
+msgstr "list k vytištění"
 
 msgid "upcoming events"
 msgstr "Naplánované události"
@@ -4042,9 +4051,6 @@ msgstr "Zakázat zrušení"
 msgid "Display sent e-mails"
 msgstr "Zobrazení odeslaných e-mailů"
 
-msgid "Download light sheet"
-msgstr "Stáhnout světelný list"
-
 msgid "Enter a valid number"
 msgstr "Zadejte platné číslo"
 
@@ -4354,6 +4360,9 @@ msgstr "Odkazy pro předběžnou registraci"
 msgid "Prop - weapons, props"
 msgstr "Rekvizity - zbraně, rekvizity"
 
+msgid "Referenced Characters"
+msgstr "Odkazované znaky"
+
 msgid "Register to the event"
 msgstr "Přihlaste se na akci"
 
@@ -4449,9 +4458,6 @@ msgstr "Zobrazení údajů všech uživatelů"
 
 msgid "Do you want to proceed"
 msgstr "Chcete pokračovat"
-
-msgid "Download relationships"
-msgstr "Vztahy ke stažení"
 
 msgid "Event deletion request"
 msgstr "Žádost o odstranění události"
@@ -4634,9 +4640,6 @@ msgstr "Vytvoření první události"
 
 msgid "Discount code not valid"
 msgstr "Neplatný kód usnadnění"
-
-msgid "Download complete sheet"
-msgstr "Stáhněte si kompletní list"
 
 msgid "Early registration link"
 msgstr "Odkaz pro včasnou registraci"

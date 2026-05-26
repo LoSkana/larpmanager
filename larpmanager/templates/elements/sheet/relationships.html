@@ -25,6 +25,9 @@
                         <b>{% trans "Factions" %}:&nbsp;{{ el.factions_list }}</b>
                     {% endif %}
                 </div>
+                {% if show_character.teaser and el.teaser %}
+                    {% show_char el.teaser run 1 %}
+                {% endif %}
                 {% show_char el.text run 1 %}
             </div>
         </div>
