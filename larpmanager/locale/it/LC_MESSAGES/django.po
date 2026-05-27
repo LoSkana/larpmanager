@@ -5286,7 +5286,7 @@ msgstr "Se selezionato: i membri possono votare"
 
 #, python-format
 msgid "Invitation sent to %(email)s"
-msgstr "Invito inviato a %(email)"
+msgstr "Invito inviato a %(email)s"
 
 msgid "Manage participant questions"
 msgstr "Gestisci le domande dei partecipanti"
