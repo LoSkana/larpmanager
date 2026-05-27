@@ -1,0 +1,42 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Accept role invitation" %}
+{% endblock title %}
+{% block info %}
+    {% trans "You have been invited to join a role" %}.
+    {% trans "Review the details below and confirm to accept" %}.
+{% endblock info %}
+{% block content %}
+    <h3>{% trans "Role invitation" %}</h3>
+    <p>
+        {% trans "You have been invited to join the role" %}: <strong>{{ role.name }}</strong>
+        {% if invite.event %}
+            {% trans "for event" %} <strong>{{ invite.event }}</strong>
+        {% else %}
+            {% trans "in the organization" %}
+        {% endif %}
+        .
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        {% if needs_consent %}
+            <br />
+            <div class="consent-block">
+                {% if privacy_text %}
+                    <div class="privacy-text">{{ privacy_text | safe }}</div>
+                {% else %}
+                    <p>
+                        <i>{% trans "By accepting this invitation, your profile data (name, email, and other information you have provided) will be shared with this organization through the LarpManager platform." %}</i>
+                    </p>
+                {% endif %}
+                <label>
+                    <input type="checkbox" name="data_sharing_consent" required />
+                    {% trans "I authorize sharing my data with this organization" %}
+                </label>
+            </div>
+        {% endif %}
+        <br />
+        <button type="submit" class="btn btn-primary">{% trans "Accept invitation" %}</button>
+    </form>
+{% endblock content %}

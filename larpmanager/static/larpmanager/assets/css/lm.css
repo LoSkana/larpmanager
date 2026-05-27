@@ -2,6 +2,11 @@
    Global Utilities
    --------------------------------------------------------------------------- */
 
+i.fa,
+i.fas {
+  font-size: 20px;
+}
+
 .user_resize p,
 .user_resize ul,
 .user_resize li {

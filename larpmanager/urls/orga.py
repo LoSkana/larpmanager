@@ -1641,6 +1641,11 @@ urlpatterns = [
         name="orga_roles_delete",
     ),
     path(
+        "<slug:event_slug>/manage/roles/<slug:role_uuid>/invite/",
+        views_oe.orga_roles_invite,
+        name="orga_roles_invite",
+    ),
+    path(
         "<slug:event_slug>/manage/lottery/",
         views_or.orga_lottery,
         name="orga_lottery",

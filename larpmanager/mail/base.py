@@ -36,7 +36,13 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.links import reset_event_links
 from larpmanager.mail.digest import my_send_digest_email_exe
-from larpmanager.models.access import AssociationRole, EventRole, get_association_executives, get_event_organizers
+from larpmanager.models.access import (
+    AssociationRole,
+    EventRole,
+    RoleInvite,
+    get_association_executives,
+    get_event_organizers,
+)
 from larpmanager.models.association import Association, get_association_maintainers, get_url, hdr
 from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventTextType
@@ -296,6 +302,20 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
                 }
                 body = _("The user has been assigned the specified role") + "."
                 my_send_mail(subj, body, m, instance.event)
+
+
+def send_role_invite_email(invite: RoleInvite) -> None:
+    """Send invitation email with redeem link to invited email address."""
+    role = invite.role()
+    association = invite.association
+    activate("en")
+    subj = hdr(association) + _("You have been invited to the role: %(role)s") % {"role": role.name}
+    redeem_url = get_url(reverse("role_invite_redeem", kwargs={"token": invite.token}), association)
+    body = _("You have been invited to join as %(role)s") % {"role": role.name}
+    body += ".<br/><br/>"
+    body += _("Click <a href='%(url)s'>here</a> to accept the invitation") % {"url": redeem_url}
+    body += "."
+    my_send_mail(subj, body, invite.email, association)
 
 
 def bring_friend_instructions(registration: Registration, context: dict) -> None:

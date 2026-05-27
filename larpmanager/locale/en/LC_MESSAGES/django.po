@@ -2701,6 +2701,18 @@ msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr ""
 
 #, python-format
+msgid "You have been invited to the role: %(role)s"
+msgstr ""
+
+#, python-format
+msgid "You have been invited to join as %(role)s"
+msgstr ""
+
+#, python-format
+msgid "Click <a href='%(url)s'>here</a> to accept the invitation"
+msgstr ""
+
+#, python-format
 msgid "Bring a friend to %(event)s"
 msgstr ""
 
@@ -5294,13 +5306,7 @@ msgid ""
 "either Required, Optional or Hidden"
 msgstr ""
 
-msgid "You can only add users who approved data sharing with the organization"
-msgstr ""
-
-msgid "If you don't see an user, ask them to access"
-msgstr ""
-
-msgid "this link"
+msgid "If you don't find an user, invite them to the role"
 msgstr ""
 
 msgid "whether the character is aware of the identity of the other trait"
@@ -6428,6 +6434,12 @@ msgstr ""
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
 "concerning the organisation"
+msgstr ""
+
+msgid "Pending invites"
+msgstr ""
+
+msgid "Invite"
 msgstr ""
 
 msgid ""
@@ -8969,6 +8981,66 @@ msgstr ""
 msgid "Manage viewing writing element"
 msgstr ""
 
+msgid "Accept role invitation"
+msgstr ""
+
+msgid "You have been invited to join a role"
+msgstr ""
+
+msgid "Review the details below and confirm to accept"
+msgstr ""
+
+msgid "Role invitation"
+msgstr ""
+
+msgid "You have been invited to join the role"
+msgstr ""
+
+msgid "for event"
+msgstr ""
+
+msgid "in the organization"
+msgstr ""
+
+msgid ""
+"By accepting this invitation, your profile data (name, email, and other "
+"information you have provided) will be shared with this organization through "
+"the LarpManager platform."
+msgstr ""
+
+msgid "I authorize sharing my data with this organization"
+msgstr ""
+
+msgid "Accept invitation"
+msgstr ""
+
+msgid "Invite to role"
+msgstr ""
+
+msgid "Send an email invitation to join this role"
+msgstr ""
+
+msgid "The recipient will receive a link to accept the invitation"
+msgstr ""
+
+msgid "Email address"
+msgstr ""
+
+msgid "Enter email address"
+msgstr ""
+
+msgid "Send invitation"
+msgstr ""
+
+msgid "Sent invitations"
+msgstr ""
+
+msgid "Sent"
+msgstr ""
+
+msgid "Redeemed"
+msgstr ""
+
 msgid "Privacy Policy"
 msgstr ""
 
@@ -10747,6 +10819,10 @@ msgid "Payment confirmed"
 msgstr ""
 
 #, python-format
+msgid "Invitation sent to %(email)s"
+msgstr ""
+
+#, python-format
 msgid "Feature %(name)s activated"
 msgstr ""
 
@@ -10821,9 +10897,6 @@ msgid "Membership fee of"
 msgstr ""
 
 msgid "Mail added to queue!"
-msgstr ""
-
-msgid "Sent"
 msgstr ""
 
 msgid "Answer submitted!"
@@ -11385,6 +11458,19 @@ msgid "New shuttle request"
 msgstr ""
 
 msgid "Modify shuttle request"
+msgstr ""
+
+msgid "This invitation has already been redeemed."
+msgstr ""
+
+msgid "This invitation has expired."
+msgstr ""
+
+msgid "You must consent to data sharing to accept this invitation."
+msgstr ""
+
+#, python-format
+msgid "You have been added to the role: %(role)s"
 msgstr ""
 
 msgid "Invalid Token"

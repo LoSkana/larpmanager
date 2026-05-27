@@ -1,0 +1,59 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Invite to role" %} - {{ role.name }}
+{% endblock title %}
+{% block info %}
+    {% trans "Send an email invitation to join this role" %}.
+    {% trans "The recipient will receive a link to accept the invitation" %}.
+{% endblock info %}
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <table class="mob">
+            <tr>
+                <th>
+                    <label for="email">{% trans "Email address" %}</label>
+                </th>
+                <td>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           required
+                           class="form-control"
+                           placeholder="{% trans "Enter email address" %}" />
+                </td>
+            </tr>
+        </table>
+        <button type="submit" class="btn btn-primary">{% trans "Send invitation" %}</button>
+    </form>
+    {% if role.invites.all %}
+        <h4>{% trans "Sent invitations" %}</h4>
+        <table class="go_datatable">
+            <thead>
+                <tr>
+                    <th>{% trans "Email" %}</th>
+                    <th>{% trans "Sent" %}</th>
+                    <th>{% trans "Status" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inv in role.invites.all %}
+                    {% if not inv.deleted %}
+                        <tr>
+                            <td>{{ inv.email }}</td>
+                            <td>{{ inv.created|date:"Y-m-d H:i" }}</td>
+                            <td>
+                                {% if inv.redeemed_by %}
+                                    {% trans "Redeemed" %} ({{ inv.redeemed_by }})
+                                {% else %}
+                                    {% trans "Pending" %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock content %}

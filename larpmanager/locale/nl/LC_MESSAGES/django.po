@@ -631,6 +631,9 @@ msgstr "Inleidingen"
 msgid "Insert"
 msgstr "Ga naar"
 
+msgid "Invite"
+msgstr "Uitnodigen"
+
 msgid "Joined"
 msgstr "Aangesloten bij"
 
@@ -1313,6 +1316,9 @@ msgstr "Vraag"
 msgid "Receipts"
 msgstr "Ontvangsten"
 
+msgid "Redeemed"
+msgstr "Verlost"
+
 msgid "Redirect"
 msgstr "omleiden"
 
@@ -1634,11 +1640,11 @@ msgstr "Workshops"
 msgid "donations"
 msgstr "donaties"
 
+msgid "for event"
+msgstr "voor evenement"
+
 msgid "negatives"
 msgstr "negatieven"
-
-msgid "this link"
-msgstr "deze link"
 
 msgid "Accounting"
 msgstr "Boekhouding"
@@ -2526,6 +2532,9 @@ msgstr "Element opgeslagen"
 msgid "Email Content"
 msgstr "Inhoud e-mail"
 
+msgid "Email address"
+msgstr "E-mailadres"
+
 msgid "Event balance"
 msgstr "Evenement balans"
 
@@ -2824,6 +2833,9 @@ msgstr "Handout Modellen"
 msgid "Help Questions"
 msgstr "Hulp Vragen"
 
+msgid "Invite to role"
+msgstr "Uitnodigen voor rol"
+
 msgid "List of voters"
 msgstr "Lijst van kiezers"
 
@@ -3082,6 +3094,9 @@ msgstr "Betaalmethoden"
 msgid "Payment methods"
 msgstr "Betaalmethoden"
 
+msgid "Pending invites"
+msgstr "In afwachting van uitnodigingen"
+
 msgid "Pending payment"
 msgstr "In afwachting van betaling"
 
@@ -3118,8 +3133,14 @@ msgstr "Namen vervangen"
 msgid "Restore Preview"
 msgstr "Voorbeeld herstellen"
 
+msgid "Role invitation"
+msgstr "Rol uitnodiging"
+
 msgid "Select Language"
 msgstr "Selecteer taal"
+
+msgid "Send invitation"
+msgstr "Uitnodiging versturen"
 
 msgid "Show statistics"
 msgstr "Statistieken tonen"
@@ -3379,6 +3400,9 @@ msgstr "Vereist kenmerk"
 msgid "Selected options"
 msgstr "Geselecteerde opties"
 
+msgid "Sent invitations"
+msgstr "Uitnodigingen versturen"
+
 msgid "Set ability type"
 msgstr "Type vaardigheid instellen"
 
@@ -3420,6 +3444,9 @@ msgstr "Vermogen Sjablonen"
 
 msgid "Ability templates"
 msgstr "Vermogen sjablonen"
+
+msgid "Accept invitation"
+msgstr "Uitnodiging accepteren"
 
 msgid "Activation failed"
 msgstr "Activering mislukt"
@@ -3904,6 +3931,9 @@ msgstr "NIET geselecteerde items"
 msgid "Email notifications"
 msgstr "Kennisgevingen per e-mail"
 
+msgid "Enter email address"
+msgstr "E-mailadres invoeren"
+
 msgid "Event Configuration"
 msgstr "Gebeurtenis Configuratie"
 
@@ -4005,6 +4035,9 @@ msgstr "Waar het zich bevindt"
 
 msgid "Your characters are"
 msgstr "Je personages zijn"
+
+msgid "in the organization"
+msgstr "in de organisatie"
 
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- NIET TOEGEWEZEN ---"
@@ -4407,6 +4440,9 @@ msgstr "U hebt al betaald"
 
 msgid "submit your vote here"
 msgstr "breng hier je stem uit"
+
+msgid "Accept role invitation"
+msgstr "Uitnodiging voor rol accepteren"
 
 msgid "Activate advanced mode"
 msgstr "Geavanceerde modus activeren"
@@ -5248,6 +5284,10 @@ msgstr "Ga naar het dashboard van de organisatie"
 msgid "If checked: members can vote"
 msgstr "Indien aangevinkt: leden kunnen stemmen"
 
+#, python-format
+msgid "Invitation sent to %(email)s"
+msgstr "Uitnodiging verstuurd naar %(email)s"
+
 msgid "Manage participant questions"
 msgstr "Vragen van deelnemers beheren"
 
@@ -5274,6 +5314,9 @@ msgstr "Toeslag kan niet negatief zijn"
 
 msgid "The only mandatory column is"
 msgstr "De enige verplichte kolom is"
+
+msgid "This invitation has expired."
+msgstr "Deze uitnodiging is verlopen."
 
 #, python-format
 msgid "Trait assigned for %(event)s"
@@ -6159,6 +6202,9 @@ msgstr "Je hebt nog geen registraties"
 msgid "You have been awarded an achievement"
 msgstr "Je hebt een prestatie geleverd"
 
+msgid "You have been invited to join a role"
+msgstr "Je bent uitgenodigd voor een rol"
+
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
 msgstr "<b>%(number)s</b> goed te keuren uitgaven"
@@ -6354,6 +6400,9 @@ msgstr "Je hebt al een toegewezen personage"
 
 msgid "You are about to perform a donation of"
 msgstr "Je doet een donatie van"
+
+msgid "You have been invited to join the role"
+msgstr "Je bent uitgenodigd voor de functie"
 
 msgid "You must be an approved member to vote"
 msgstr "Je moet je lidmaatschapsgeld betalen om te kunnen stemmen"
@@ -6666,6 +6715,14 @@ msgstr "Totaal bedrag betaald voor platformbeheer"
 msgid "You are excluding (none of these filters)"
 msgstr "Je sluit (geen van deze filters) uit"
 
+#, python-format
+msgid "You have been added to the role: %(role)s"
+msgstr "Je bent toegevoegd aan de rol: %(role)s"
+
+#, python-format
+msgid "You have been invited to join as %(role)s"
+msgstr "U bent uitgenodigd om deel te nemen als %(role)s"
+
 msgid "You have exceeded the maximum text length"
 msgstr "U hebt de maximale tekstlengte overschreden"
 
@@ -6768,6 +6825,9 @@ msgstr "Reserveer extra tickets naast je eigen tickets"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Selecteer willekeurig loten om te upgraden"
 
+msgid "Send an email invitation to join this role"
+msgstr "Stuur een uitnodiging per e-mail voor deze functie"
+
 msgid "Tax identification code of the association"
 msgstr "Fiscale identificatiecode van de vereniging"
 
@@ -6780,6 +6840,9 @@ msgstr "De som werd aan jou toegewezen als %(credits)s"
 
 msgid "There is already a member with this number"
 msgstr "Er is al een lid met dit nummer"
+
+msgid "This invitation has already been redeemed."
+msgstr "Deze uitnodiging is al ingewisseld."
 
 msgid "This page performs checks on members' data"
 msgstr "Deze pagina voert controles uit op de gegevens van leden"
@@ -6898,6 +6961,10 @@ msgstr "Upload een PDF-bestand of afbeelding (JPG, PNG, enz.)"
 msgid "Warehouse quantities committed successfully"
 msgstr "Registratie succesvol afgerond"
 
+#, python-format
+msgid "You have been invited to the role: %(role)s"
+msgstr "Je bent uitgenodigd voor de rol: %(role)s"
+
 msgid "You will no longer receive messages from us"
 msgstr "Je zult niet langer berichten van ons ontvangen"
 
@@ -6924,9 +6991,6 @@ msgstr "Indien aangevinkt: toont de tagline voor elk evenement"
 
 msgid "If checked: shows the website for each event"
 msgstr "Indien aangevinkt: toont de website voor elk evenement"
-
-msgid "If you don't see an user, ask them to access"
-msgstr "Als u geen gebruiker ziet, vraag hem dan om toegang te krijgen tot"
 
 msgid "If you need a hand, feel free to let us know"
 msgstr "Als je hulp nodig hebt, laat het ons weten"
@@ -7099,6 +7163,9 @@ msgstr "Optionele afbeelding voor homepage carrousel/slideshow"
 
 msgid "Please select both a registration and an event"
 msgstr "Selecteer zowel een registratie als een evenement"
+
+msgid "Review the details below and confirm to accept"
+msgstr "Bekijk de details hieronder en bevestig om te accepteren"
 
 msgid "Set up Patron and Reduced ticket configuration"
 msgstr "Patron en gereduceerd ticket configureren"
@@ -7413,9 +7480,16 @@ msgstr "Voer de 6-cijferige code van uw authenticator-app in"
 msgid "Fill in this field if you have accessibility needs"
 msgstr "Vul dit veld in als je toegankelijkheid nodig hebt"
 
+msgid "I authorize sharing my data with this organization"
+msgstr ""
+"Je hebt toestemming gegeven voor het delen van gegevens met deze organisatie"
+
 msgid "If checked, do not use the parent event's factions"
 msgstr ""
 "Indien aangevinkt, gebruik de facties van de bovenliggende gebeurtenis niet"
+
+msgid "If you don't find an user, invite them to the role"
+msgstr "Als je geen gebruiker vindt, nodig hem dan uit voor de rol"
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Als je wilt, geef dan een voornaamwoord aan voor je personage"
@@ -7935,6 +8009,10 @@ msgstr ""
 msgid "Available credit balance for event payments and purchases"
 msgstr "Beschikbaar kredietsaldo voor betalingen en aankopen voor evenementen"
 
+#, python-format
+msgid "Click <a href='%(url)s'>here</a> to accept the invitation"
+msgstr "Klik <a href='%(url)s'>hier</a> om de uitnodiging te accepteren"
+
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Inhoud van privacy pagina gelinkt onderaan alle pagina's"
 
@@ -8055,6 +8133,9 @@ msgid "Probability of showing the special page (out of thousands)"
 msgstr ""
 "Waarschijnlijkheid dat de speciale pagina wordt weergegeven (uit duizenden)"
 
+msgid "The recipient will receive a link to accept the invitation"
+msgstr "De ontvanger ontvangt een link om de uitnodiging te accepteren"
+
 msgid "This page shows all payment items registered in the system"
 msgstr ""
 "Deze pagina toont alle betalingsitems die in het systeem zijn geregistreerd"
@@ -8141,6 +8222,11 @@ msgstr "Je kunt de betaling doen <a href='%(url)s'>op deze pagina</a>"
 
 msgid "You have chosen the same option in more than one preference"
 msgstr "U hebt dezelfde optie in meer dan één voorkeur aangegeven"
+
+msgid "You must consent to data sharing to accept this invitation."
+msgstr ""
+"Je moet toestemming geven voor het delen van gegevens om deze uitnodiging te"
+" accepteren."
 
 msgid "give it a name and fill in the character details, then save"
 msgstr "geef het een naam en vul de karaktergegevens in, sla dan op"
@@ -9006,11 +9092,6 @@ msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 "Gedetailleerd activiteitenlogboek bekijken van alle wijzigingen die voor "
 "deze specifieke gebeurtenis zijn gemaakt"
-
-msgid "You can only add users who approved data sharing with the organization"
-msgstr ""
-"Je kunt alleen gebruikers toevoegen die het delen van gegevens met de "
-"organisatie hebben goedgekeurd"
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Je kunt de volgende velden gebruiken, ze worden automatisch ingevuld"
@@ -12796,6 +12877,15 @@ msgstr ""
 "Door op de onderstaande knop te klikken, bevestig je dat je toestemming "
 "geeft voor het delen van je persoonlijke gegevens met deze organisatie, in "
 "overeenstemming met de GDPR en ons Privacybeleid"
+
+msgid ""
+"By accepting this invitation, your profile data (name, email, and other "
+"information you have provided) will be shared with this organization through"
+" the LarpManager platform."
+msgstr ""
+"Door deze uitnodiging te accepteren, worden je profielgegevens (naam, e-mail"
+" en andere informatie die je hebt verstrekt) gedeeld met deze organisatie "
+"via het LarpManager platform."
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "
