@@ -27,7 +27,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Prefetch, QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -45,7 +45,8 @@ from larpmanager.forms.event import (
     OrgaRunRegistrationForm,
 )
 from larpmanager.forms.writing import UploadElementsForm
-from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole
+from larpmanager.mail.base import send_role_invite_email
+from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole, RoleInvite
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventButton, EventText, Run
@@ -186,6 +187,12 @@ def orga_roles(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Prepare the roles list with permissions and existing roles
     prepare_roles_list(context, EventPermission, EventRole.objects.filter(event=context["event"]), def_callback)
 
+    # Attach pending (unredeemed) invites to each role for display
+    for role in context["list"]:
+        role.pending_invites = RoleInvite.objects.filter(
+            event_role=role, redeemed_by__isnull=True, deleted__isnull=True
+        )
+
     return render(request, "larpmanager/orga/roles.html", context)
 
 
@@ -271,6 +278,29 @@ def orga_roles_delete(request: HttpRequest, event_slug: str, role_uuid: str) -> 
         OrgaAction.ROLES,
         role_uuid,
     )
+
+
+@login_required
+def orga_roles_invite(request: HttpRequest, event_slug: str, role_uuid: str) -> HttpResponse:
+    """Send email invitation to join an event role."""
+    context = check_event_context(request, event_slug, "orga_roles")
+    role = get_object_or_404(EventRole, uuid=role_uuid, event=context["event"])
+    if request.method == "POST":
+        email = request.POST.get("email", "").strip()
+        if email:
+            invite = RoleInvite.objects.create(
+                email=email,
+                association_id=context["association_id"],
+                event=context["event"],
+                event_role=role,
+                invited_by=request.user.member,
+            )
+            send_role_invite_email(invite)
+            messages.success(request, _("Invitation sent to %(email)s") % {"email": email})
+        return redirect("orga_roles", event_slug=event_slug)
+    context["role"] = role
+    context["back_url"] = reverse("orga_roles", kwargs={"event_slug": event_slug})
+    return render(request, "larpmanager/roles_invite.html", context)
 
 
 @login_required

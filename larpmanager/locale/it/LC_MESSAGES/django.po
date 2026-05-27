@@ -631,6 +631,9 @@ msgstr "Introiti"
 msgid "Insert"
 msgstr "Inserisci"
 
+msgid "Invite"
+msgstr "Invita"
+
 msgid "Joined"
 msgstr "Iscritto"
 
@@ -1313,6 +1316,9 @@ msgstr "Domanda"
 msgid "Receipts"
 msgstr "Ricevute"
 
+msgid "Redeemed"
+msgstr "Riscattato"
+
 msgid "Redirect"
 msgstr "Redirect"
 
@@ -1634,11 +1640,11 @@ msgstr "Workshops"
 msgid "donations"
 msgstr "donazioni"
 
+msgid "for event"
+msgstr "per l'evento"
+
 msgid "negatives"
 msgstr "negativi"
-
-msgid "this link"
-msgstr "questo link"
 
 msgid "Accounting"
 msgstr "Contabilità"
@@ -2526,6 +2532,9 @@ msgstr "Elemento salvato"
 msgid "Email Content"
 msgstr "Contenuto dell'e-mail"
 
+msgid "Email address"
+msgstr "Indirizzo e-mail"
+
 msgid "Event balance"
 msgstr "Bilancio dell'evento"
 
@@ -2824,6 +2833,9 @@ msgstr "Tipo di handout"
 msgid "Help Questions"
 msgstr "Domande di aiuto"
 
+msgid "Invite to role"
+msgstr "Invita al ruolo"
+
 msgid "List of voters"
 msgstr "Elenco votanti"
 
@@ -3082,6 +3094,9 @@ msgstr "Metodi pagamento"
 msgid "Payment methods"
 msgstr "Metodi pagamento"
 
+msgid "Pending invites"
+msgstr "Inviti in attesa"
+
 msgid "Pending payment"
 msgstr "In attesa di pagamento"
 
@@ -3118,8 +3133,14 @@ msgstr "Sostituzione nomi"
 msgid "Restore Preview"
 msgstr "Anteprima di ripristino"
 
+msgid "Role invitation"
+msgstr "Invito al ruolo"
+
 msgid "Select Language"
 msgstr "Seleziona la lingua"
+
+msgid "Send invitation"
+msgstr "Invia l'invito"
 
 msgid "Show statistics"
 msgstr "Mostra statistiche"
@@ -3379,6 +3400,9 @@ msgstr "Caratteristica richiesta"
 msgid "Selected options"
 msgstr "Opzioni selezionate"
 
+msgid "Sent invitations"
+msgstr "Inviti inviati"
+
 msgid "Set ability type"
 msgstr "Imposta il tipo di abilità"
 
@@ -3420,6 +3444,9 @@ msgstr "Modelli di abilità"
 
 msgid "Ability templates"
 msgstr "Modelli di abilità"
+
+msgid "Accept invitation"
+msgstr "Accetta l'invito"
 
 msgid "Activation failed"
 msgstr "Attivazione fallita"
@@ -3904,6 +3931,9 @@ msgstr "Elementi NON selezionati"
 msgid "Email notifications"
 msgstr "Notifiche email"
 
+msgid "Enter email address"
+msgstr "Inserisci l'indirizzo e-mail"
+
 msgid "Event Configuration"
 msgstr "Configurazione Evento"
 
@@ -4005,6 +4035,9 @@ msgstr "Dove si trova"
 
 msgid "Your characters are"
 msgstr "I tuoi personaggi sono"
+
+msgid "in the organization"
+msgstr "nell'organizzazione"
 
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- NON ASSEGNATO ---"
@@ -4407,6 +4440,9 @@ msgstr "Hai già versato"
 
 msgid "submit your vote here"
 msgstr "invia il tuo voto qui"
+
+msgid "Accept role invitation"
+msgstr "Accetta l'invito al ruolo"
 
 msgid "Activate advanced mode"
 msgstr "Attiva la modalità avanzata"
@@ -5248,6 +5284,10 @@ msgstr "Vai al cruscotto dell'organizzazione"
 msgid "If checked: members can vote"
 msgstr "Se selezionato: i membri possono votare"
 
+#, python-format
+msgid "Invitation sent to %(email)s"
+msgstr "Invito inviato a %(email)s"
+
 msgid "Manage participant questions"
 msgstr "Gestisci le domande dei partecipanti"
 
@@ -5274,6 +5314,9 @@ msgstr "Il sovrapprezzo non può essere negativo"
 
 msgid "The only mandatory column is"
 msgstr "L'unica colonna obbligatoria è"
+
+msgid "This invitation has expired."
+msgstr "Questo invito è scaduto."
 
 #, python-format
 msgid "Trait assigned for %(event)s"
@@ -6158,6 +6201,9 @@ msgstr "Non hai ancora nessuna iscrizione"
 msgid "You have been awarded an achievement"
 msgstr "Ti è stato assegnato un achievement"
 
+msgid "You have been invited to join a role"
+msgstr "Sei stato invitato a partecipare a un ruolo"
+
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
 msgstr "<b>%(number)s</b> spese da approvare"
@@ -6351,6 +6397,9 @@ msgstr "Hai già un personaggio assegnato"
 
 msgid "You are about to perform a donation of"
 msgstr "Stai per effettuare una donazione di"
+
+msgid "You have been invited to join the role"
+msgstr "Sei stato invitato a partecipare al ruolo"
 
 msgid "You must be an approved member to vote"
 msgstr "Devi completare il pagamento della quota sociale per poter votare"
@@ -6663,6 +6712,14 @@ msgstr "Importo totale pagato per la gestione della piattaforma"
 msgid "You are excluding (none of these filters)"
 msgstr "Stai escludendo (nessuno di questi filtri)"
 
+#, python-format
+msgid "You have been added to the role: %(role)s"
+msgstr "Sei stato aggiunto al ruolo: %(role)s"
+
+#, python-format
+msgid "You have been invited to join as %(role)s"
+msgstr "Sei stato invitato a partecipare come %(role)s"
+
 msgid "You have exceeded the maximum text length"
 msgstr "È stata superata la lunghezza massima del testo"
 
@@ -6763,6 +6820,9 @@ msgstr "Prenota altri biglietti oltre al tuo"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Seleziona in modo casuale i biglietti della lotteria da aggiornare"
 
+msgid "Send an email invitation to join this role"
+msgstr "Invia un'e-mail di invito a partecipare a questo ruolo"
+
 msgid "Tax identification code of the association"
 msgstr "Codice fiscale dell'associazione"
 
@@ -6775,6 +6835,9 @@ msgstr "La somma ti è stata assegnata come %(credits)s"
 
 msgid "There is already a member with this number"
 msgstr "C'è già un utente con questo numero"
+
+msgid "This invitation has already been redeemed."
+msgstr "Questo invito è già stato riscattato."
 
 msgid "This page performs checks on members' data"
 msgstr "Questa pagina esegue controlli sui dati dei membri"
@@ -6892,6 +6955,10 @@ msgstr "Carica un file PDF o un'immagine (JPG, PNG, ecc.)"
 msgid "Warehouse quantities committed successfully"
 msgstr "Quantità oggetti magazzino completata con successo"
 
+#, python-format
+msgid "You have been invited to the role: %(role)s"
+msgstr "Sei stato invitato al ruolo: %(role)s"
+
 msgid "You will no longer receive messages from us"
 msgstr "Non riceverai più messaggi da noi"
 
@@ -6918,9 +6985,6 @@ msgstr "Se checkato: mostra la tagline per ogni evento"
 
 msgid "If checked: shows the website for each event"
 msgstr "Se checkato: mostra il sito web per ogni evento"
-
-msgid "If you don't see an user, ask them to access"
-msgstr "Se non vedi un utente, chiedigli di accedere a"
 
 msgid "If you need a hand, feel free to let us know"
 msgstr "Se hai bisogno di una mano, faccelo sapere"
@@ -7092,6 +7156,9 @@ msgstr "Immagine opzionale per il carosello/slideshow della homepage"
 
 msgid "Please select both a registration and an event"
 msgstr "Seleziona sia una iscrizione che un evento"
+
+msgid "Review the details below and confirm to accept"
+msgstr "Controlla i dettagli qui sotto e conferma per accettare"
 
 msgid "Set up Patron and Reduced ticket configuration"
 msgstr "Configura i biglietti Patron e Ridotti"
@@ -7403,8 +7470,14 @@ msgid "Fill in this field if you have accessibility needs"
 msgstr ""
 "Compila questo campo se hai delle necessità riguardanti l'accessibilità"
 
+msgid "I authorize sharing my data with this organization"
+msgstr "Hai concesso la condivisione dei dati con questa organizzazione"
+
 msgid "If checked, do not use the parent event's factions"
 msgstr "Se selezionata, non utilizzare le fazioni dell'evento padre"
+
+msgid "If you don't find an user, invite them to the role"
+msgstr "Se non trovi un utente, invitalo a partecipare al ruolo"
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Se lo desideri, indica un pronome per il tuo personaggio"
@@ -7932,6 +8005,10 @@ msgstr "(Facoltativo) Altre abilità come prerequisito, separate da virgola"
 msgid "Available credit balance for event payments and purchases"
 msgstr "Saldo del credito disponibile per pagamenti e pagamenti di eventi"
 
+#, python-format
+msgid "Click <a href='%(url)s'>here</a> to accept the invitation"
+msgstr "Clicca su <a href='%(url)s'>qui</a> per accettare l'invito"
+
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr ""
 "Contenuto della pagina sulla privacy linkata in fondo a tutte le pagine"
@@ -8050,6 +8127,9 @@ msgstr ""
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Probabilità di mostrare la pagina speciale (su migliaia)"
 
+msgid "The recipient will receive a link to accept the invitation"
+msgstr "Il destinatario riceverà un link per accettare l'invito"
+
 msgid "This page shows all payment items registered in the system"
 msgstr ""
 "Questa pagina mostra tutte le voci di pagamento registrate nel sistema"
@@ -8132,6 +8212,9 @@ msgstr ""
 
 msgid "You have chosen the same option in more than one preference"
 msgstr "Hai indicato la stessa opzione in più di una preferenza"
+
+msgid "You must consent to data sharing to accept this invitation."
+msgstr "Per accettare l'invito devi acconsentire alla condivisione dei dati."
 
 msgid "give it a name and fill in the character details, then save"
 msgstr ""
@@ -9010,11 +9093,6 @@ msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 "Visualizza il registro dettagliato delle attività di tutte le modifiche "
 "apportate per questo evento specifico"
-
-msgid "You can only add users who approved data sharing with the organization"
-msgstr ""
-"È possibile aggiungere solo gli utenti che hanno approvato la condivisione "
-"dei dati con l'organizzazione"
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Puoi usare i seguenti campi, verranno compilati in automatico"
@@ -12802,6 +12880,15 @@ msgstr ""
 "Facendo clic sul pulsante qui sotto, confermi di acconsentire alla "
 "condivisione dei tuoi dati personali con questa organizzazione, in "
 "conformità con il GDPR e la nostra Politica sulla privacy"
+
+msgid ""
+"By accepting this invitation, your profile data (name, email, and other "
+"information you have provided) will be shared with this organization through"
+" the LarpManager platform."
+msgstr ""
+"Accettando questo invito, i dati del tuo profilo (nome, email e altre "
+"informazioni che hai fornito) saranno condivisi con questa organizzazione "
+"attraverso la piattaforma LarpManager."
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

@@ -32,6 +32,7 @@ from larpmanager.models.access import (
     EventPermission,
     EventRole,
     PermissionModule,
+    RoleInvite,
 )
 
 
@@ -107,3 +108,30 @@ class EventPermissionAdmin(ImportExportModelAdmin):
     autocomplete_fields: ClassVar[list] = ["feature", "module"]
     list_display = ("id", "name", "slug", "number", "descr", "module", "feature")
     search_fields: ClassVar[tuple] = ("id", "name")
+
+
+@admin.register(RoleInvite)
+class RoleInviteAdmin(DefModelAdmin):
+    """Django admin for RoleInvite model."""
+
+    list_display = (
+        "id",
+        "email",
+        "association",
+        "event",
+        "association_role",
+        "event_role",
+        "invited_by",
+        "redeemed_by",
+        "redeemed_at",
+    )
+    autocomplete_fields: ClassVar[list] = [
+        "association",
+        "event",
+        "association_role",
+        "event_role",
+        "invited_by",
+        "redeemed_by",
+    ]
+    search_fields: ClassVar[tuple] = ("id", "email", "token")
+    readonly_fields: ClassVar[tuple] = ("token",)

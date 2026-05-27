@@ -454,4 +454,9 @@ urlpatterns = [
         views_ums.app_integration_redirect,
         name="app_integration_redirect",
     ),
+    path(
+        "invite/role/<str:token>/",
+        views_ums.role_invite_redeem,
+        name="role_invite_redeem",
+    ),
 ]

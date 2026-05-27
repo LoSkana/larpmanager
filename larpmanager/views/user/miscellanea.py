@@ -32,12 +32,16 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config
 from larpmanager.forms.miscellanea import (
     HelpQuestionForm,
     ShuttleServiceEditForm,
     ShuttleServiceForm,
 )
+from larpmanager.models.access import RoleInvite
+from larpmanager.models.association import AssociationTextType
+from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.miscellanea import (
     Album,
     AlbumUpload,
@@ -496,3 +500,49 @@ def app_integration_redirect(request: HttpRequest) -> HttpResponse:
 
     separator = "&" if "?" in redirect_url else "?"
     return redirect(f"{redirect_url}{separator}token={token}")
+
+
+@login_required
+def role_invite_redeem(request: HttpRequest, token: str) -> HttpResponse:
+    """Allow a logged-in user to redeem a role invitation."""
+    invite = get_object_or_404(RoleInvite, token=token, deleted__isnull=True)
+
+    if invite.redeemed_by:
+        messages.error(request, _("This invitation has already been redeemed."))
+        return redirect("home")
+
+    if invite.created < timezone.now() - timedelta(days=7):
+        messages.error(request, _("This invitation has expired."))
+        return redirect("home")
+
+    role = invite.role()
+    member = request.user.member
+    membership = get_user_membership(member, invite.association_id)
+    needs_consent = membership.status == MembershipStatus.EMPTY
+
+    if request.method == "POST":
+        if needs_consent and not request.POST.get("data_sharing_consent"):
+            messages.error(request, _("You must consent to data sharing to accept this invitation."))
+        else:
+            if invite.event_role:
+                invite.event_role.members.add(member)
+            else:
+                invite.association_role.members.add(member)
+            invite.redeemed_by = member
+            invite.redeemed_at = timezone.now()
+            invite.save()
+            messages.success(request, _("You have been added to the role: %(role)s") % {"role": role.name})
+            if invite.event:
+                return redirect("manage", event_slug=invite.event.slug)
+            return redirect("manage")
+
+    context = get_context(request)
+    context["invite"] = invite
+    context["role"] = role
+    context["needs_consent"] = needs_consent
+    if needs_consent:
+        context["privacy_text"] = get_association_text(
+            invite.association_id, AssociationTextType.PRIVACY, member.language
+        )
+
+    return render(request, "larpmanager/role_invite_redeem.html", context)

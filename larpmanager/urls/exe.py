@@ -323,6 +323,11 @@ urlpatterns = [
         name="exe_roles_delete",
     ),
     path(
+        "manage/roles/<slug:role_uuid>/invite/",
+        views_eas.exe_roles_invite,
+        name="exe_roles_invite",
+    ),
+    path(
         "manage/balance/",
         views_ea.exe_balance,
         name="exe_balance",

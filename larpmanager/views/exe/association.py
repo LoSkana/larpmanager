@@ -26,7 +26,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -36,7 +36,8 @@ from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.association import (
     ExeFeatureForm,
 )
-from larpmanager.models.access import AssociationPermission, AssociationRole
+from larpmanager.mail.base import send_role_invite_email
+from larpmanager.models.access import AssociationPermission, AssociationRole, RoleInvite
 from larpmanager.models.association import Association, AssociationText, AssociationTranslation
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
@@ -76,6 +77,12 @@ def exe_roles(request: HttpRequest) -> HttpResponse:
         def_callback,
     )
 
+    # Attach pending (unredeemed) invites to each role for display
+    for role in context["list"]:
+        role.pending_invites = RoleInvite.objects.filter(
+            association_role=role, redeemed_by__isnull=True, deleted__isnull=True
+        )
+
     return render(request, "larpmanager/exe/roles.html", context)
 
 
@@ -95,6 +102,28 @@ def exe_roles_edit(request: HttpRequest, role_uuid: str) -> Any:
 def exe_roles_delete(request: HttpRequest, role_uuid: str) -> HttpResponse:
     """Delete role."""
     return exe_delete(request, ExeAction.ROLES, role_uuid)
+
+
+@login_required
+def exe_roles_invite(request: HttpRequest, role_uuid: str) -> HttpResponse:
+    """Send email invitation to join an association role."""
+    context = check_association_context(request, "exe_roles")
+    role = get_object_or_404(AssociationRole, uuid=role_uuid, association_id=context["association_id"])
+    if request.method == "POST":
+        email = request.POST.get("email", "").strip()
+        if email:
+            invite = RoleInvite.objects.create(
+                email=email,
+                association_id=context["association_id"],
+                association_role=role,
+                invited_by=request.user.member,
+            )
+            send_role_invite_email(invite)
+            messages.success(request, _("Invitation sent to %(email)s") % {"email": email})
+        return redirect("exe_roles")
+    context["role"] = role
+    context["back_url"] = reverse("exe_roles")
+    return render(request, "larpmanager/roles_invite.html", context)
 
 
 @login_required

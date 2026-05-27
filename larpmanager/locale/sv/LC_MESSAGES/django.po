@@ -631,6 +631,9 @@ msgstr "Inledning"
 msgid "Insert"
 msgstr "Ange"
 
+msgid "Invite"
+msgstr "Inbjudan"
+
 msgid "Joined"
 msgstr "Ansluten"
 
@@ -1313,6 +1316,9 @@ msgstr "Fråga"
 msgid "Receipts"
 msgstr "Kvitton"
 
+msgid "Redeemed"
+msgstr "Inlöst"
+
 msgid "Redirect"
 msgstr "Omdirigering"
 
@@ -1634,11 +1640,11 @@ msgstr "Verkstäder"
 msgid "donations"
 msgstr "donationer"
 
+msgid "for event"
+msgstr "för evenemang"
+
 msgid "negatives"
 msgstr "negativ"
-
-msgid "this link"
-msgstr "denna länk"
 
 msgid "Accounting"
 msgstr "Redovisning"
@@ -2526,6 +2532,9 @@ msgstr "Element sparat"
 msgid "Email Content"
 msgstr "Innehåll i e-post"
 
+msgid "Email address"
+msgstr "E-postadress"
+
 msgid "Event balance"
 msgstr "Balans i evenemang"
 
@@ -2824,6 +2833,9 @@ msgstr "Handout Modeller"
 msgid "Help Questions"
 msgstr "Hjälpfrågor"
 
+msgid "Invite to role"
+msgstr "Bjud in till roll"
+
 msgid "List of voters"
 msgstr "Lista över röstberättigade"
 
@@ -3082,6 +3094,9 @@ msgstr "Betalningsmetoder"
 msgid "Payment methods"
 msgstr "Betalningsmetoder"
 
+msgid "Pending invites"
+msgstr "Pågående inbjudningar"
+
 msgid "Pending payment"
 msgstr "Väntande betalning"
 
@@ -3118,8 +3133,14 @@ msgstr "Byte av namn"
 msgid "Restore Preview"
 msgstr "Återställ förhandsgranskning"
 
+msgid "Role invitation"
+msgstr "Rollinbjudan"
+
 msgid "Select Language"
 msgstr "Välj språk"
+
+msgid "Send invitation"
+msgstr "Skicka inbjudan"
 
 msgid "Show statistics"
 msgstr "Visa statistik"
@@ -3379,6 +3400,9 @@ msgstr "Obligatorisk funktion"
 msgid "Selected options"
 msgstr "Valda alternativ"
 
+msgid "Sent invitations"
+msgstr "Skickade inbjudningar"
+
 msgid "Set ability type"
 msgstr "Ange typ av förmåga"
 
@@ -3420,6 +3444,9 @@ msgstr "Mallar för förmåga"
 
 msgid "Ability templates"
 msgstr "Mallar för förmåga"
+
+msgid "Accept invitation"
+msgstr "Acceptera inbjudan"
 
 msgid "Activation failed"
 msgstr "Aktivering misslyckades"
@@ -3904,6 +3931,9 @@ msgstr "Objekt som INTE valts"
 msgid "Email notifications"
 msgstr "E-postmeddelanden"
 
+msgid "Enter email address"
+msgstr "Ange e-postadress"
+
 msgid "Event Configuration"
 msgstr "Händelsekonfiguration"
 
@@ -4005,6 +4035,9 @@ msgstr "Var den är belägen"
 
 msgid "Your characters are"
 msgstr "Dina karaktärer är"
+
+msgid "in the organization"
+msgstr "i organisationen"
 
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- INTE TILLDELAD ---"
@@ -4407,6 +4440,9 @@ msgstr "Du har redan betalat"
 
 msgid "submit your vote here"
 msgstr "lämna din röst här"
+
+msgid "Accept role invitation"
+msgstr "Acceptera inbjudan till roll"
 
 msgid "Activate advanced mode"
 msgstr "Aktivera avancerat läge"
@@ -5248,6 +5284,10 @@ msgstr "Gå till organisationens instrumentpanel"
 msgid "If checked: members can vote"
 msgstr "Om markerat: medlemmar kan rösta"
 
+#, python-format
+msgid "Invitation sent to %(email)s"
+msgstr "Inbjudan skickad till %(email)s"
+
 msgid "Manage participant questions"
 msgstr "Hantera deltagarnas frågor"
 
@@ -5274,6 +5314,9 @@ msgstr "Tilläggsavgiften kan inte vara negativ"
 
 msgid "The only mandatory column is"
 msgstr "Den enda obligatoriska kolumnen är"
+
+msgid "This invitation has expired."
+msgstr "Denna inbjudan har löpt ut."
 
 #, python-format
 msgid "Trait assigned for %(event)s"
@@ -6158,6 +6201,9 @@ msgstr "Du har inga registreringar ännu"
 msgid "You have been awarded an achievement"
 msgstr "Du har tilldelats en prestation"
 
+msgid "You have been invited to join a role"
+msgstr "Du har blivit inbjuden att delta i en roll"
+
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
 msgstr "<b>%(number)s</b> kostnader att godkänna"
@@ -6353,6 +6399,9 @@ msgstr "Du har redan en tilldelad karaktär"
 
 msgid "You are about to perform a donation of"
 msgstr "Du gör en donation på"
+
+msgid "You have been invited to join the role"
+msgstr "Du har blivit inbjuden att delta i rollen"
 
 msgid "You must be an approved member to vote"
 msgstr "Du måste ha betalat medlemsavgiften för att få rösta"
@@ -6665,6 +6714,14 @@ msgstr "Totalt belopp som betalats för plattformshantering"
 msgid "You are excluding (none of these filters)"
 msgstr "Du utesluter (inget av dessa filter)"
 
+#, python-format
+msgid "You have been added to the role: %(role)s"
+msgstr "Du har lagts till i rollen: %(role)s"
+
+#, python-format
+msgid "You have been invited to join as %(role)s"
+msgstr "Du har blivit inbjuden att delta som %(role)s"
+
 msgid "You have exceeded the maximum text length"
 msgstr "Du har överskridit den maximala textlängden"
 
@@ -6767,6 +6824,9 @@ msgstr "Reservera ytterligare biljetter utöver din egen"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Välj slumpmässigt lotter för att uppgradera"
 
+msgid "Send an email invitation to join this role"
+msgstr "Skicka en inbjudan via e-post för att gå med i denna roll"
+
 msgid "Tax identification code of the association"
 msgstr "Föreningens skatteregistreringsnummer"
 
@@ -6779,6 +6839,9 @@ msgstr "Beloppet tilldelades dig som %(credits)s"
 
 msgid "There is already a member with this number"
 msgstr "Det finns redan en medlem med detta nummer"
+
+msgid "This invitation has already been redeemed."
+msgstr "Denna inbjudan har redan lösts in."
 
 msgid "This page performs checks on members' data"
 msgstr "Denna sida utför kontroller av medlemmarnas uppgifter"
@@ -6896,6 +6959,10 @@ msgstr "Ladda upp en PDF-fil eller bild (JPG, PNG, etc.)"
 msgid "Warehouse quantities committed successfully"
 msgstr "Registreringen har slutförts framgångsrikt"
 
+#, python-format
+msgid "You have been invited to the role: %(role)s"
+msgstr "Du har blivit inbjuden till rollen: %(role)s"
+
 msgid "You will no longer receive messages from us"
 msgstr "Du kommer inte längre att få meddelanden från oss"
 
@@ -6922,9 +6989,6 @@ msgstr "Om markerat: visar tagline för varje evenemang"
 
 msgid "If checked: shows the website for each event"
 msgstr "Om markerat: visar webbplatsen för varje evenemang"
-
-msgid "If you don't see an user, ask them to access"
-msgstr "Om du inte ser någon användare, be dem att gå in på"
 
 msgid "If you need a hand, feel free to let us know"
 msgstr "Om du behöver hjälp är du välkommen att höra av dig till oss"
@@ -7094,6 +7158,9 @@ msgstr "Valfri bild för karusell/bildspel på startsidan"
 
 msgid "Please select both a registration and an event"
 msgstr "Vänligen välj både en registrering och ett evenemang"
+
+msgid "Review the details below and confirm to accept"
+msgstr "Läs igenom detaljerna nedan och bekräfta för att acceptera"
 
 msgid "Set up Patron and Reduced ticket configuration"
 msgstr "Konfigurera biljettkonfigurationen för Patron och Reduced"
@@ -7404,8 +7471,14 @@ msgstr "Ange den 6-siffriga koden från din autentiseringsapp"
 msgid "Fill in this field if you have accessibility needs"
 msgstr "Fyll i detta fält om du har tillgänglighetsbehov"
 
+msgid "I authorize sharing my data with this organization"
+msgstr "Du har beviljat datadelning med denna organisation"
+
 msgid "If checked, do not use the parent event's factions"
 msgstr "Om markerat, använd inte föräldrahändelsens fraktioner"
+
+msgid "If you don't find an user, invite them to the role"
+msgstr "Om du inte hittar någon användare kan du bjuda in dem till rollen"
 
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Om du vill, ange ett pronomen för din karaktär"
@@ -7908,6 +7981,10 @@ msgstr "(Valfritt) Annan förmåga som förkunskapskrav, kommaseparerad"
 msgid "Available credit balance for event payments and purchases"
 msgstr "Tillgängligt kreditutrymme för betalningar och köp av evenemang"
 
+#, python-format
+msgid "Click <a href='%(url)s'>here</a> to accept the invitation"
+msgstr "Klicka <a href='%(url)s'>här</a> för att acceptera inbjudan"
+
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Innehåll på integritetssidan länkad längst ner på alla sidor"
 
@@ -8018,6 +8095,9 @@ msgstr "Alternativets namn, visas i frågan (håll det kort)"
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Sannolikhet att visa den särskilda sidan (av tusentals)"
 
+msgid "The recipient will receive a link to accept the invitation"
+msgstr "Mottagaren kommer att få en länk för att acceptera inbjudan"
+
 msgid "This page shows all payment items registered in the system"
 msgstr ""
 "Denna sida visar alla betalningsobjekt som finns registrerade i systemet"
@@ -8101,6 +8181,9 @@ msgstr "Du kan göra betalningen <a href='%(url)s'>på den här sidan</a>"
 
 msgid "You have chosen the same option in more than one preference"
 msgstr "Du har angett samma alternativ i mer än en preferens"
+
+msgid "You must consent to data sharing to accept this invitation."
+msgstr "Du måste samtycka till datadelning för att acceptera denna inbjudan."
 
 msgid "give it a name and fill in the character details, then save"
 msgstr "ge den ett namn och fyll i karaktärsuppgifterna, spara sedan"
@@ -8898,11 +8981,6 @@ msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 "Visa detaljerad aktivitetslogg över alla ändringar som gjorts för den här "
 "specifika händelsen"
-
-msgid "You can only add users who approved data sharing with the organization"
-msgstr ""
-"Du kan bara lägga till användare som har godkänt datadelning med "
-"organisationen"
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Du kan använda följande fält, de kommer att fyllas i automatiskt"
@@ -12595,6 +12673,15 @@ msgstr ""
 "Genom att klicka på knappen nedan bekräftar du att du samtycker till att "
 "dina personuppgifter delas med denna organisation, i enlighet med GDPR och "
 "vår integritetspolicy"
+
+msgid ""
+"By accepting this invitation, your profile data (name, email, and other "
+"information you have provided) will be shared with this organization through"
+" the LarpManager platform."
+msgstr ""
+"Genom att acceptera denna inbjudan kommer dina profildata (namn, e-post och "
+"annan information som du har angett) att delas med denna organisation via "
+"LarpManager-plattformen."
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

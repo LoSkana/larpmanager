@@ -18,7 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from typing import ClassVar
+import secrets
+from typing import Any, ClassVar
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
@@ -84,7 +85,7 @@ class AssociationRole(UuidMixin, BaseModel):
 
     number = models.IntegerField()
 
-    members = models.ManyToManyField(Member, related_name="association_roles")
+    members = models.ManyToManyField(Member, related_name="association_roles", blank=True)
 
     permissions = models.ManyToManyField(AssociationPermission, related_name="association_roles", blank=True)
 
@@ -153,7 +154,7 @@ class EventPermission(BaseModel):
 class EventRole(UuidMixin, BaseConceptModel):
     """Represents EventRole model."""
 
-    members = models.ManyToManyField(Member, related_name="event_roles")
+    members = models.ManyToManyField(Member, related_name="event_roles", blank=True)
 
     permissions = models.ManyToManyField(EventPermission, related_name="roles", blank=True)
 
@@ -181,6 +182,42 @@ def get_event_organizers(event: Event) -> QuerySet[Member]:
         return organizer_role.members.all()
     except ObjectDoesNotExist:
         return []
+
+
+class RoleInvite(BaseModel):
+    """Tracks email invitations to join an EventRole or AssociationRole."""
+
+    token = models.CharField(max_length=100, unique=True, db_index=True, editable=False)
+
+    email = models.EmailField()
+
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="role_invites")
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="role_invites", null=True, blank=True)
+
+    association_role = models.ForeignKey(
+        AssociationRole, on_delete=models.CASCADE, related_name="invites", null=True, blank=True
+    )
+
+    event_role = models.ForeignKey(EventRole, on_delete=models.CASCADE, related_name="invites", null=True, blank=True)
+
+    invited_by = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, related_name="sent_role_invites")
+
+    redeemed_by = models.ForeignKey(
+        Member, on_delete=models.SET_NULL, null=True, blank=True, related_name="redeemed_role_invites"
+    )
+
+    redeemed_at = models.DateTimeField(null=True, blank=True)
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Generate unique token on first save."""
+        if not self.token:
+            self.token = secrets.token_urlsafe(32)
+        super().save(*args, **kwargs)
+
+    def role(self) -> AssociationRole | EventRole | None:
+        """Return the associated role object."""
+        return self.event_role or self.association_role
 
 
 def get_event_staffers(event: Event) -> list:
