@@ -1,6 +1,6 @@
 {% load show_tags i18n %}
 {% for fact in sheet_factions %}
-    <h2 class="c">{{ fact.name }}</h2>
+    {% if not fact.only_text %}<h2 class="c">{{ fact.name }}</h2>{% endif %}
     {% for idx, question in fact.questions.items %}
         {% if question.typ == 'e' %}
             {% with fact.fields|get:idx as field %}

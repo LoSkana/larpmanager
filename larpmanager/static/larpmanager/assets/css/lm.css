@@ -940,7 +940,7 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   scrollbar-width: thin;
   scrollbar-color: rgba(var(--ter-rgb), 0.5) rgba(var(--pri-rgb), 0.1);
   overflow-x: hidden;
-  text-align: center;
+  text-align: left;
 }
 
 .popup_small {

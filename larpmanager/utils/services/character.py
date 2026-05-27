@@ -460,11 +460,13 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
 
         # Merge in writing fields from pre-fetched bulk data
         faction_writing_fields = faction_answers_map.get(faction_id, {})
+        questions = fields_data.get("questions", {})
         faction_data.update(
             {
-                "questions": fields_data.get("questions", {}),
+                "questions": questions,
                 "options": fields_data.get("options", {}),
                 "fields": faction_writing_fields,
+                "only_text": bool(questions) and all(q.get("typ") == "text" for q in questions.values()),
             },
         )
 
@@ -759,7 +761,7 @@ def _persist_auto_relationships(character: Character, sources_map: dict[int, set
             if number not in ref_chars_by_number or number in existing_manual_targets:
                 continue
             ref_char = ref_chars_by_number[number]
-            source_text = ", ".join(sorted(sources))
+            source_text = ", ".join(f"<b><i>{s}</i></b>" for s in sorted(sources))
             updated = Relationship.objects.filter(
                 source=character, target=ref_char, auto=True, deleted__isnull=True
             ).update(text=source_text)
