@@ -1,21 +1,23 @@
 {% load show_tags i18n %}
-<table id="event_links">
-    <tr>
-        <td>
-            <a href="https://{{ event.association.slug }}.{{ association.main_domain }}/{{ event.slug }}/{{ run.number }}">Gallery</a>
-        </td>
-        {% if event.website %}
+{% if not light_pdf %}
+    <table id="event_links">
+        <tr>
             <td>
-                <a href="{{ event.website }}">Website</a>
+                <a href="https://{{ event.association.slug }}.{{ association.main_domain }}/{{ event.slug }}/{{ run.number }}">Gallery</a>
             </td>
-        {% endif %}
-        {% for el in buttons %}
-            <td>
-                <a href="{{ el.2 }}">{{ el.0 }}</a>
-            </td>
-        {% endfor %}
-    </tr>
-</table>
+            {% if event.website %}
+                <td>
+                    <a href="{{ event.website }}">Website</a>
+                </td>
+            {% endif %}
+            {% for el in buttons %}
+                <td>
+                    <a href="{{ el.2 }}">{{ el.0 }}</a>
+                </td>
+            {% endfor %}
+        </tr>
+    </table>
+{% endif %}
 <h1 id="char_name">{{ sheet_char.name }}</h1>
 {% include "elements/sheet/presentation.html" %}
 {% include "elements/sheet/fields.html" with char=sheet_char %}

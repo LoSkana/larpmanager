@@ -309,6 +309,8 @@ def print_character(context: dict, *, force: bool = False) -> HttpResponse:
 
     # Generate PDF if forced or if reprint is needed
     if force or reprint(file_path):
+        if context.get("writing_field_visibility"):
+            context.pop("show_all", None)
         get_character_sheet(context)
         add_pdf_instructions(context)
         xhtml_pdf(context, "pdf/sheets/auxiliary.html", file_path)
@@ -334,6 +336,9 @@ def print_character_friendly(context: dict, *, force: bool = False) -> HttpRespo
 
     # Generate PDF if forced or if file needs reprinting
     if force or reprint(file_path):
+        context["light_pdf"] = True
+        if context.get("writing_field_visibility"):
+            context.pop("show_all", None)
         get_character_sheet(context)
         xhtml_pdf(context, "pdf/sheets/friendly.html", file_path)
 
