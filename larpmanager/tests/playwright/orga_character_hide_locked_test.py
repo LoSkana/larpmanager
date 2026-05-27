@@ -148,19 +148,19 @@ def _test_character_hide(page: Any, live_server: Any, char_counter: list) -> Non
     logout(page)
     login_user(page, live_server)
     go_to(page, live_server, "test/")
-    expect(page.locator("#one")).to_contain_text("VisibleChar")
-    expect(page.locator("#one")).not_to_contain_text("HiddenChar")
+    expect(page.locator("#page-container")).to_contain_text("VisibleChar")
+    expect(page.locator("#page-container")).not_to_contain_text("HiddenChar")
 
     # Direct URL to hidden char shows "not found"
     page.goto(f"{live_server}/test/character/{hidden_uuid}/")
     page.wait_for_load_state("domcontentloaded")
-    expect(page.locator("#one")).to_contain_text("does not exist")
+    expect(page.locator("#page-container")).to_contain_text("does not exist")
 
     # As orga: hidden char is visible and accessible
     logout(page)
     login_orga(page, live_server)
     go_to(page, live_server, f"test/character/{hidden_uuid}/")
-    expect(page.locator("#one")).to_contain_text("hidden teaser")
+    expect(page.locator("#page-container")).to_contain_text("hidden teaser")
 
 
 def _test_character_locked(page: Any, live_server: Any, char_counter: list) -> None:
@@ -178,12 +178,12 @@ def _test_character_locked(page: Any, live_server: Any, char_counter: list) -> N
     logout(page)
     login_user(page, live_server)
     go_to(page, live_server, "test/")
-    expect(page.locator("#one")).to_contain_text("LockedChar")
+    expect(page.locator("#page-container")).to_contain_text("LockedChar")
 
     # Character page shows public teaser but NOT private text
     go_to(page, live_server, f"test/character/{locked_uuid}/")
-    expect(page.locator("#one")).to_contain_text("locked teaser")
-    expect(page.locator("#one")).not_to_contain_text("locked private text")
+    expect(page.locator("#page-container")).to_contain_text("locked teaser")
+    expect(page.locator("#page-container")).not_to_contain_text("locked private text")
 
     # PDF denied (Http404)
     page.goto(f"{live_server}/test/character/{locked_uuid}/pdf/sheet/")
@@ -194,7 +194,7 @@ def _test_character_locked(page: Any, live_server: Any, char_counter: list) -> N
     logout(page)
     login_orga(page, live_server)
     go_to(page, live_server, f"test/character/{locked_uuid}/")
-    expect(page.locator("#one")).to_contain_text("locked private text")
+    expect(page.locator("#page-container")).to_contain_text("locked private text")
 
     go_to(page, live_server, "test/manage/")
     sidebar(page, "Registrations")
@@ -208,8 +208,8 @@ def _test_faction_hide(page: Any, live_server: Any, char_counter: list, faction_
     logout(page)
     login_user(page, live_server)
     go_to(page, live_server, "test/character/u2/")  # VisibleChar: non-hidden, non-locked, unassigned
-    expect(page.locator("#one")).to_contain_text("visible teaser")
-    expect(page.locator("#one")).not_to_contain_text("visible text")
+    expect(page.locator("#page-container")).to_contain_text("visible teaser")
+    expect(page.locator("#page-container")).not_to_contain_text("visible text")
     logout(page)
     login_orga(page, live_server)
 
@@ -235,18 +235,18 @@ def _test_faction_hide(page: Any, live_server: Any, char_counter: list, faction_
     logout(page)
     login_user(page, live_server)
     go_to(page, live_server, "test/")
-    expect(page.locator("#one")).not_to_contain_text("FactionHiddenChar")
+    expect(page.locator("#page-container")).not_to_contain_text("FactionHiddenChar")
 
     # Direct URL shows "not found"
     page.goto(f"{live_server}/test/character/{char_uuid}/")
     page.wait_for_load_state("domcontentloaded")
-    expect(page.locator("#one")).to_contain_text("does not exist")
+    expect(page.locator("#page-container")).to_contain_text("does not exist")
 
     # As orga: character accessible
     logout(page)
     login_orga(page, live_server)
     go_to(page, live_server, f"test/character/{char_uuid}/")
-    expect(page.locator("#one")).to_contain_text("fhidden teaser")
+    expect(page.locator("#page-container")).to_contain_text("fhidden teaser")
 
 
 def _test_faction_locked(page: Any, live_server: Any, char_counter: list, faction_counter: list) -> None:
@@ -275,12 +275,12 @@ def _test_faction_locked(page: Any, live_server: Any, char_counter: list, factio
     logout(page)
     login_user(page, live_server)
     go_to(page, live_server, "test/")
-    expect(page.locator("#one")).to_contain_text("FactionLockedChar")
+    expect(page.locator("#page-container")).to_contain_text("FactionLockedChar")
 
     # Character page shows public teaser but NOT private text
     go_to(page, live_server, f"test/character/{char_uuid}/")
-    expect(page.locator("#one")).to_contain_text("flocked teaser")
-    expect(page.locator("#one")).not_to_contain_text("flocked private text")
+    expect(page.locator("#page-container")).to_contain_text("flocked teaser")
+    expect(page.locator("#page-container")).not_to_contain_text("flocked private text")
 
     # PDF denied
     page.goto(f"{live_server}/test/character/{char_uuid}/pdf/sheet/")
@@ -291,4 +291,4 @@ def _test_faction_locked(page: Any, live_server: Any, char_counter: list, factio
     logout(page)
     login_orga(page, live_server)
     go_to(page, live_server, f"test/character/{char_uuid}/")
-    expect(page.locator("#one")).to_contain_text("flocked private text")
+    expect(page.locator("#page-container")).to_contain_text("flocked private text")

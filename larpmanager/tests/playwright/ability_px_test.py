@@ -285,7 +285,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
     page.get_by_role("link", name="Abilities").click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         """
         Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
         Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
@@ -295,7 +295,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     page.locator("#ability_select").select_option("u2")
     page.get_by_role("button", name="Submit", exact=True).click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         """Obtain ability Select the new ability to get --- Select ability
         Experience points Total Used Available 12 3 9 Abilities base ability double shield (2)
         This text should show sword1 (1) sdsfdsfds Deliveries first live (2) """,
@@ -305,7 +305,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     # remove ability
     page.get_by_role("heading", name=re.compile("^double shield")).get_by_role("link").click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         """
         Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
         Experience points Total Used Available 12 1 11
@@ -334,7 +334,7 @@ def modifiers(page: Any, live_server: Any) -> None:
 
     # ability is not there
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         """
         Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
         Experience points Total Used Available 12 1 11
@@ -347,7 +347,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Abilities").click()
     # ability is there (i got the correct class)
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         """
         Obtain ability Select the new ability to get --- Select ability
         Experience points Total Used Available 12 1 11 Abilities base ability double shield (0)
@@ -360,7 +360,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Abilities").click()
     # ability is not there (changed class)
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         """
         Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
         Experience points Total Used Available 12 1 11
@@ -387,7 +387,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.locator("#ability_select").select_option("u2")
     submit_confirm(page)
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         """
         Obtain ability Select the new ability to get --- Select ability
         Experience points Total Used Available 12 4 8 Abilities base ability double shield (3)
@@ -442,7 +442,7 @@ def free_invisible_not_auto_assigned(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test")
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
     page.get_by_role("link", name="Abilities").click()
-    expect(page.locator("#one")).not_to_contain_text("hidden_zero")
+    expect(page.locator("#page-container")).not_to_contain_text("hidden_zero")
 
 
 def endpoint_test(page: Any, live_server: Any) -> None:

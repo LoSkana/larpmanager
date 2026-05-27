@@ -100,13 +100,13 @@ def abilities(page: Any) -> None:
     submit_confirm(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Loading performed, see logs Proceed Logs OK - Created sword OK - Created shield OK - Created sneak",
     )
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "sword test 2 baba True shield test 3 bibi True sword sneak test 4 bubu True sword | shield trtr | rrrrrr",
     )
     check_download(page, "Download")
@@ -132,7 +132,7 @@ def relationships(page: Any) -> None:
     page.get_by_role("link", name="Relationships").click()
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Test Character Test Teaser Test Text characcter trg poor ertd fewr Test Character",
     )
 
@@ -148,7 +148,7 @@ def plots(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Loading performed, see logs Proceed Logs OK - Created plott OK - Plot role characcter plott",
     )
     page.get_by_role("link", name="Proceed").click()
@@ -212,13 +212,13 @@ def reg_form(page: Any) -> None:
     submit_confirm(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Loading performed, see logs Proceed Logs OK - Created tbmobw OK - Created qmhcuf OK - Created holdmf OK - Created lyucez OK - Created bamkzw OK - Created npyrxd OK - Created rdtbgg OK - Created qkcyjr OK - Created fjxkum",
     )
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "tbmobw npyrxd Multiple choice Optional npyrxd | rdtbgg qmhcuf rdtbgg Multi-line text Mandatory holdmf qkcyjr Single-line text Disabled lyucez fjxkum Advanced text editor Hidden bamkzw fzynqq Single choice Optional qkcyjr | fjxkum",
     )
     check_download(page, "Download")
@@ -233,7 +233,7 @@ def characters(page: Any) -> None:
     expect_normalized(page, page.locator("#page-container"), " OK - Created characcter")
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(
-        page, page.locator("#one"), "Test Character Test Teaser Test Text characcter trg poor ertd fewr"
+        page, page.locator("#page-container"), "Test Character Test Teaser Test Text characcter trg poor ertd fewr"
     )
     check_download(page, "Download")
 
@@ -259,34 +259,34 @@ def char_form(page: Any) -> None:
     submit_confirm(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Loading performed, see logs Proceed Logs OK - Created bibi OK - Created baba OK - Created wer OK - Created asd OK - Created poi OK - Created huhu OK - Created trtr OK - Created rrrrrr OK - Created tttttt",
     )
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Name Name Presentation Presentation Text Sheet Faction Factions Hidden bibi baba Multiple choice Searchable huhu | trtr",
     )
     check_download(page, "Download")
     page.get_by_role("link", name="Plot", exact=True).click()
     expect_normalized(
-        page, page.locator("#one"), "Name Name Concept Presentation Text Sheet wer fghj Single-line text Hidden"
+        page, page.locator("#page-container"), "Name Name Concept Presentation Text Sheet wer fghj Single-line text Hidden"
     )
     page.get_by_role("link", name="Faction", exact=True).click()
     expect_normalized(
-        page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet baba bebe Multi-line text Private"
+        page, page.locator("#page-container"), "Name Name Presentation Presentation Text Sheet baba bebe Multi-line text Private"
     )
-    page.locator("#one").get_by_role("link", name="Quest").click()
+    page.locator("#page-container").get_by_role("link", name="Quest").click()
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Name Name Presentation Presentation Text Sheet asd kloi Advanced text editor Public",
     )
     page.get_by_role("link", name="Trait", exact=True).click()
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Name Name Presentation Presentation Text Sheet poi rweerw Single choice Public rrrrrr | tttttt",
     )
 

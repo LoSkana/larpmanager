@@ -82,7 +82,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     # check base
     sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    page.locator("#page-container").get_by_role("link", name="Plots").click()
     expect_normalized(page, page.locator("#page-container"), "Test Character Test Teaser Test Text")
 
     # set faction
@@ -114,7 +114,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     just_wait(page)
 
     # check result
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    page.locator("#page-container").get_by_role("link", name="Plots").click()
     expect_normalized(page, page.locator("#page-container"), "Test Character Test Teaser Test Text plot")
 
     # remove plot
@@ -125,7 +125,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     just_wait(page)
 
     # check
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    page.locator("#page-container").get_by_role("link", name="Plots").click()
     expect_normalized(page, page.locator("#page-container"), "Test Character Test Teaser Test Text")
 
     # set quest type

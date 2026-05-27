@@ -215,6 +215,6 @@ def characters(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="color").first.click()
     page.get_by_role("link", name="tag").first.click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Test Character Test Teaser Test Text fassione red zapyr another blue wunder | qerfi wheel fassione blue wunder",
     )

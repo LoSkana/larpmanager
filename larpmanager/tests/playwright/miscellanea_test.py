@@ -148,7 +148,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Should be redirected to register page with warning message
     expect_normalized(page, page.locator("body"), "Login")
-    expect(page.locator("#one")).not_to_contain_text("Test Gallery Character")
+    expect(page.locator("#page-container")).not_to_contain_text("Test Gallery Character")
 
     # Login as regular user and verify access is now allowed
     login_user(page, live_server)
@@ -172,7 +172,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Should be redirected with warning message
     expect_normalized(page, page.locator("body"), "Register")
-    expect(page.locator("#one")).not_to_contain_text("Test Gallery Character")
+    expect(page.locator("#page-container")).not_to_contain_text("Test Gallery Character")
 
     # Register the user to the event
     page.get_by_role("link", name="Register").click()
@@ -198,7 +198,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Should be redirected because user is no longer registered
     expect_normalized(page, page.locator("body"), "Register")
-    expect(page.locator("#one")).not_to_contain_text("Test Gallery Character")
+    expect(page.locator("#page-container")).not_to_contain_text("Test Gallery Character")
 
     # Test 4: Both configs enabled - must be logged in AND registered
     logout(page)
@@ -214,7 +214,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     logout(page)
     go_to(page, live_server, "/testaccess/")
     expect_normalized(page, page.locator("body"), "Login")
-    expect(page.locator("#one")).not_to_contain_text("Test Gallery Character")
+    expect(page.locator("#page-container")).not_to_contain_text("Test Gallery Character")
 
     # login as user - now without registration
     login_user(page, live_server)
@@ -222,7 +222,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Should be redirected because user is no longer registered
     expect_normalized(page, page.locator("body"), "Register")
-    expect(page.locator("#one")).not_to_contain_text("Test Gallery Character")
+    expect(page.locator("#page-container")).not_to_contain_text("Test Gallery Character")
 
     # Register again
     page.get_by_role("link", name="Register").click()
@@ -247,7 +247,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/testaccess/manage/")
     sidebar(page, "Registrations")
     # Check that "Admin Test" (orga user) is NOT in the registrations list
-    expect(page.locator("#one")).not_to_contain_text("Admin Test")
+    expect(page.locator("#page-container")).not_to_contain_text("Admin Test")
 
     # Now go to gallery - orga should have access even without being registered
     go_to(page, live_server, "/testaccess/")

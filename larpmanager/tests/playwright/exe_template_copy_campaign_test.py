@@ -69,7 +69,7 @@ def template(live_server: Any, page: Any) -> None:
     page.get_by_role("option", name="User Test - user@test.it").click()
     check_feature(page, "Texts")
     submit_confirm(page)
-    page.locator("#one").get_by_role("link", name="Configuration").click()
+    page.locator("#page-container").get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
     page.locator("#id_gallery_hide_signup").check()
     submit_confirm(page)

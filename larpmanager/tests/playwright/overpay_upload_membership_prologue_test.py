@@ -132,12 +132,12 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     # Check accounting
     go_to(page, live_server, "/accounting")
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Credits Total: 20.00€"
     )
 
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Tokens Total: 20.00"
     )
 
@@ -231,7 +231,7 @@ def upload_membership(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#page-container"), "You are a regular member of our Organization")
     expect_normalized(page, page.locator("#page-container"), "In the membership book the number of your membership card is: 0001")
     expect_normalized(page,
-        page.locator("#one"), "The payment of your membership fee for this year has NOT been receive"
+        page.locator("#page-container"), "The payment of your membership fee for this year has NOT been receive"
     )
 
 

@@ -28,7 +28,8 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import expect_normalized, go_to, just_wait, load_image, login_orga, submit_confirm, submit
+from larpmanager.tests.utils import expect_normalized, go_to, just_wait, load_image, login_orga, submit_confirm, submit, \
+    sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -85,7 +86,7 @@ def config(page: Any, live_server: Any) -> None:
     submit_confirm(page)
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#page-container"), "Provisional registration")
-    page.locator("#one").get_by_role("link", name="Accounting").click()
+    sidebar(page, "Accounting")
     expect_normalized(page, page.locator("#page-container"), "100")
 
     # pay

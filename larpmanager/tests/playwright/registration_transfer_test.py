@@ -314,4 +314,4 @@ def verify_transfer(page: Any, live_server: Any) -> None:
 
     # Verify Event A no longer has the registration
     go_to(page, live_server, "/eventa/manage/registrations/")
-    expect(page.locator("#one")).not_to_contain_text("User Test")
+    expect(page.locator("#page-container")).not_to_contain_text("User Test")

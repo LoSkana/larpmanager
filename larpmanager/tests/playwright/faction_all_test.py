@@ -193,7 +193,7 @@ def test_faction_all(pw_page: Any) -> None:
     """)
 
     # Verify SECRET factions are NOT visible
-    expect(page.locator("#one")).not_to_contain_text("Secret")
+    expect(page.locator("#page-container")).not_to_contain_text("Secret")
 
     # Open Primary Faction 1 details
     page.get_by_role("link", name="Primary Faction 1").click()
@@ -213,11 +213,11 @@ def test_faction_all(pw_page: Any) -> None:
         """)
 
     # Verify PRIVATE text is NOT visible
-    expect(page.locator("#one")).not_to_contain_text("PF1 private text")
+    expect(page.locator("#page-container")).not_to_contain_text("PF1 private text")
 
     # Verify PRIVATE WritingQuestion is NOT visible
-    expect(page.locator("#one")).not_to_contain_text("Private Faction Question")
-    expect(page.locator("#one")).not_to_contain_text("PF1 private answer")
+    expect(page.locator("#page-container")).not_to_contain_text("Private Faction Question")
+    expect(page.locator("#page-container")).not_to_contain_text("PF1 private answer")
 
     # ========== SECTION 6: Reorder Factions (as Organizer) ==========
     logout(page)
@@ -369,7 +369,7 @@ def test_faction_all(pw_page: Any) -> None:
         """)
 
     # Verify Beta PRIVATE TEXT is NOT visible (not assigned)
-    expect(page.locator("#one")).not_to_contain_text("private")
+    expect(page.locator("#page-container")).not_to_contain_text("private")
 
     # Verify that Secret Factions are never visible (except for Alpha)
     links = [
@@ -386,7 +386,7 @@ def test_faction_all(pw_page: Any) -> None:
     ]
     for link in links:
         go_to(page, live_server, link)
-        expect(page.locator("#one")).not_to_contain_text("Secret")
+        expect(page.locator("#page-container")).not_to_contain_text("Secret")
 
     # Verify faction Primary 3, or secret ones, are not visible
     links = [

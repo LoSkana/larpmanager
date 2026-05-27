@@ -66,7 +66,7 @@ def check_delete(live_server: Any, page: Any) -> None:
     just_wait(page)
     page.locator("a:has(i.fas.fa-trash)").click(force=True)
     just_wait(page)
-    expect(page.locator("#one")).not_to_contain_text("Admin Test")
+    expect(page.locator("#page-container")).not_to_contain_text("Admin Test")
 
     # delete payments
     go_to(page, live_server, "/test/manage/tokens")
@@ -91,7 +91,7 @@ def discount(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#regs_u1_Participant"), "100")
     expect_normalized(page, page.locator("#regs_u1_Participant"), "52")
     go_to(page, live_server, "/test/register")
-    page.locator("#one").get_by_role("link", name="Accounting").click()
+    sidebar(page, "Accounting")
     expect_normalized(page, page.locator("#page-container"), "Total payments: 100")
 
     # update signup
@@ -138,7 +138,7 @@ def discount(live_server: Any, page: Any) -> None:
 def pay(live_server: Any, page: Any) -> None:
     # check accounting
     go_to(page, live_server, "/test/register")
-    page.locator("#one").get_by_role("link", name="Accounting").click()
+    sidebar(page, "Accounting")
     expect_normalized(page, page.locator("#page-container"), "Total registration fee: 100")
     expect_normalized(page, page.locator("#page-container"), "Total payments: 48")
     expect_normalized(page, page.locator("#page-container"), "Next payment: 52")
@@ -224,7 +224,7 @@ def signup_pay(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#page-container"), "Provisional registration")
-    page.locator("#one").get_by_role("link", name="Accounting").click()
+    sidebar(page, "Accounting")
     expect_normalized(page, page.locator("#page-container"), "100")
 
     # Check accounting

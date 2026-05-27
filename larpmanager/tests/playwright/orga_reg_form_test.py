@@ -72,7 +72,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         """
             Ticket Your registration ticket2 Ticket Additional Reserve additional tickets beyond your
             own Additional Optional Pay what you want Freely indicate the amount of your donation Pay
@@ -80,20 +80,20 @@ def prepare_form(page: Any, live_server: Any) -> None:
              """
                       )
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
     "Rate Optional Surcharge Registration surcharge Surcharge Optional",
     )
     page.locator('[id="u4"]').locator(".fa-arrow-up").click()
     page.locator('[id="u2"]').locator(".fa-arrow-up").click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         """
             Additional Reserve additional tickets beyond your own Additional Optional Ticket Your
             registration ticket2 Ticket Rate Number of installments to split the fee: payments
         """
     )
     expect_normalized(page,
-          page.locator("#one"),
+          page.locator("#page-container"),
         """
             Rate Optional Pay what you want Freely indicate the amount of your donation Pay what you want
             Optional Surcharge Registration surcharge Surcharge Optional

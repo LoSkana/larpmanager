@@ -127,7 +127,7 @@ def create_second_char(live_server: Any, page: Any) -> None:
     page.locator("#id_que_u9").fill("asda")
     submit_confirm(page)
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Player: User Test Status: Creation available text: few multiple text: many mandatory: asda Presentation dsfdfsd Text sdfdsfds",
     )
 
@@ -200,7 +200,7 @@ def recheck_char(live_server: Any, page: Any) -> None:
     expect(page.locator("#id_que_u10")).to_have_count(0)
     expect_normalized(page, page.locator("#id_que_u10_tr"), "disabled")
     expect(page.locator("#id_que_u11")).to_have_count(0)
-    expect(page.locator("#one")).not_to_contain_text("Hidden")
+    expect(page.locator("#page-container")).not_to_contain_text("Hidden")
     submit_confirm(page)
 
 

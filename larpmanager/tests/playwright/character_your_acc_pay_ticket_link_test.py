@@ -281,7 +281,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check result
-    page.locator("#one").get_by_role("link", name="Characters").click()
+    page.locator("#page-container").get_by_role("link", name="Characters").click()
     expect_normalized(page, page.locator("#page-container"), "primaaa Primary Test Character tranver Transversal Test Character")
 
     # add second event in campaing
@@ -337,7 +337,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check situation in second event
-    page.locator("#one").get_by_role("link", name="Characters").click()
+    page.locator("#page-container").get_by_role("link", name="Characters").click()
     expect_normalized(page, page.locator("#page-container"), "PRIMAAAA Primary Test Character TRANVERSA Transversal Test Character")
     sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()
@@ -346,7 +346,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     # check situation in first event
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Factions").click()
-    page.locator("#one").get_by_role("link", name="Characters").click()
+    page.locator("#page-container").get_by_role("link", name="Characters").click()
     expect_normalized(page, page.locator("#page-container"), "primaaa Primary Test Character tranver Transversal Test Character")
     sidebar(page, "Characters")
     page.get_by_role("link", name="Faction", exact=True).click()

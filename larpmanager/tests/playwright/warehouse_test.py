@@ -127,7 +127,7 @@ def add_items(page: Any) -> None:
 
     # check items
     expect_normalized(page,
-        page.locator("#one"), "item 1 sadsada box a electrical item 2 sdsadas boc b item 3sa dsad box a"
+        page.locator("#page-container"), "item 1 sadsada box a electrical item 2 sdsadas boc b item 3sa dsad box a"
     )
 
 
@@ -234,7 +234,7 @@ def checks(page: Any) -> None:
     page.get_by_role("link", name="Manifest").click()
     expect_normalized(page, page.locator("#page-container"), "New Kitchen Position: ss Description: sds")
     expect_normalized(page,
-        page.locator("#one"), "Item 1 Boc B - dd Item 3sa Box A - bibi	 b sALOON Position: SDsad Description: saddsadsa "
+        page.locator("#page-container"), "Item 1 Boc B - dd Item 3sa Box A - bibi	 b sALOON Position: SDsad Description: saddsadsa "
     )
     expect_normalized(page, page.locator("#page-container"), "Item 1 Boc B - dd ffff Item 3sa Box A - bibi	 sss")
 

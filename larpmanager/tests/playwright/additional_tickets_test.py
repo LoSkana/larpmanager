@@ -118,7 +118,7 @@ def verify_organizer_view(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage/registrations/")
 
     # Verify additional tickets column is visible
-    page.locator("#one").get_by_role("link", name="Additional").click()
+    page.locator("#page-container").get_by_role("link", name="Additional").click()
     expect_normalized(page, page.locator("#page-container"), "3")
 
 
@@ -136,7 +136,7 @@ def edit_additionals(page: Any, live_server: Any) -> None:
 
     # Verify new price: 50€ (base) + 100€ (2 additional) = 150€
     go_to(page, live_server, "test/manage/registrations/")
-    page.locator("#one").get_by_role("link", name="Additional").click()
+    page.locator("#page-container").get_by_role("link", name="Additional").click()
     expect_normalized(page, page.locator("#page-container"), "2")
 
 
@@ -215,7 +215,7 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
 
     # Verify in organizer view
     go_to(page, live_server, "test/manage/registrations/")
-    page.locator("#one").get_by_role("link", name="Additional").click()
+    page.locator("#page-container").get_by_role("link", name="Additional").click()
     expect_normalized(page, page.locator("#page-container"), "2")
 
 
@@ -246,4 +246,4 @@ def test_additional_tickets_disabled_without_feature(pw_page: Any) -> None:
     submit_confirm(page)
 
     # Verify registration succeeded
-    expect(page.locator("#one")).to_be_visible()
+    expect(page.locator("#page-container")).to_be_visible()

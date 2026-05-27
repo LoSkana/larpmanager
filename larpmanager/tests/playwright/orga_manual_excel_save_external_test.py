@@ -112,7 +112,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     submit_confirm(page)
     just_wait(page)
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Test Character2 Test Teaser + 2 Test Text ff Another good friends with #1",
     )
 
@@ -139,7 +139,7 @@ def excel(page: Any, live_server: Any) -> None:
     # check by reload
     page.get_by_role("link", name="Characters").click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 Another good friends with #1",
     )
 
@@ -154,7 +154,7 @@ def excel(page: Any, live_server: Any) -> None:
     # check by reload
     page.get_by_role("link", name="Characters").click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 Another good friends with #1 ciaoooo",
     )
 
@@ -179,7 +179,7 @@ def external(page: Any, live_server: Any) -> None:
     logout(page)
     go_to_check(page, live_server + url)
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Presentation good friends with Test Character2 Text ciaoooo",
     )
 

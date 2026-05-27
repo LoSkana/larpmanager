@@ -71,7 +71,7 @@ def signup(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#page-container"), "Registration confirmed")
     expect_normalized(page, page.locator("#page-container"), "please fill in your profile")
 
-    page.locator("#one").get_by_role("link", name="Please fill in your profile").click()
+    page.locator("#page-container").get_by_role("link", name="Please fill in your profile").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
     expect_normalized(page, page.locator("#page-container"), "Registration confirmed (Standard)")

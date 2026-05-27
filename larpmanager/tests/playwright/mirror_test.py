@@ -132,4 +132,4 @@ def casting(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/test")
     expect_normalized(page, page.locator("#page-container"), "Test Character")
-    expect(page.locator("#one")).not_to_contain_text("Mirror")
+    expect(page.locator("#page-container")).not_to_contain_text("Mirror")

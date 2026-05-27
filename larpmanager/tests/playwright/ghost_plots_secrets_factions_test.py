@@ -151,9 +151,9 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("link", name="Experience").click()
     page.get_by_role("link", name="Faction", exact=True).click()
     page.get_by_role("link", name="teeeeest").click()
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    page.locator("#page-container").get_by_role("link", name="Plots").click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Test Character 2 1 1 Test Teaser Test Text eefqq gggerwe first qweeerr",
     )
 
@@ -167,7 +167,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
 
     page.get_by_role("link", name="eefqq").click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Characters Test Character Presentation: Test Teaser Factions: eefqq",
     )
 

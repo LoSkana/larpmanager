@@ -57,13 +57,13 @@ def test_quest_trait(pw_page: Any) -> None:
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Test Character").first.click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "player: admin test presentation test teaser text test text torta - nonna saleee anotheraliame con torta - nonna another player: user test",
     )
     go_to(page, live_server, "test/1/")
     page.get_by_role("link", name="Another").click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "your character is: test character player: user test torta - strudel saleee test characterveronese torta - strudel test character player: admin test",
     )
     page.get_by_role("heading", name="Torta - Strudel").first.click()
@@ -242,10 +242,10 @@ def casting(page: Any, live_server: Any) -> None:
     sidebar(page, "Registrations")
     page.get_by_role("link", name="Lore").click()
     expect_normalized(page,
-        page.locator("#one"), "User Test Another Standard "
+        page.locator("#page-container"), "User Test Another Standard "
     )
     expect_normalized(page,
-        page.locator("#one"), "Admin Test Test Character Torta - Nonna Standard"
+        page.locator("#page-container"), "Admin Test Test Character Torta - Nonna Standard"
     )
 
     # manual trait assignments
@@ -256,6 +256,6 @@ def casting(page: Any, live_server: Any) -> None:
     # check result
     page.get_by_role("link", name="Lore").click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "User Test Another Torta - Strudel Standard Admin Test Test Character Torta - Nonna Standard",
     )

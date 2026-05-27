@@ -87,7 +87,7 @@ def reading(live_server: Any, page: Any) -> None:
     sidebar(page, "Reading")
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         """
         Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character test teaser ciaaoooooo
         """,
@@ -113,7 +113,7 @@ def reading(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # check faction main list
-    page.locator("#one").get_by_role("link", name="Characters").click()
+    page.locator("#page-container").get_by_role("link", name="Characters").click()
 
     expect_normalized(page, page.locator("#page-container"), "only for testt Primary Test Character")
 
@@ -121,7 +121,7 @@ def reading(live_server: Any, page: Any) -> None:
     sidebar(page, "Reading")
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("#page-container"),
         "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character Factions: only for testt test teaser ciaaoooooo",
     )
 
@@ -214,7 +214,7 @@ def plots(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # check in plot list - both characters should be there
-    page.locator("#one").get_by_role("link", name="Characters").click()
+    page.locator("#page-container").get_by_role("link", name="Characters").click()
     expect_normalized(page, page.locator("#page-container"), "testona asadsadas wwwww Test Character prova")
 
     # check it is the same
@@ -231,7 +231,7 @@ def plots(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # check it
-    page.locator("#one").get_by_role("link", name="Characters").click()
+    page.locator("#page-container").get_by_role("link", name="Characters").click()
     expect_normalized(page, page.locator("#page-container"), "testona asadsadas wwwww Test Character prova")
     page.locator(".fa-edit").click()
     # Wait for the toggle element to be ready
@@ -252,7 +252,7 @@ def plots(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # check
-    page.locator("#one").get_by_role("link", name="Characters").click()
+    page.locator("#page-container").get_by_role("link", name="Characters").click()
     expect_normalized(page, page.locator("#page-container"), "testona asadsadas wwwww prova")
 
     # set text
@@ -297,7 +297,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     just_wait(page)
 
     # check there are all three
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    page.locator("#page-container").get_by_role("link", name="Plots").click()
     expect_normalized(page, page.locator('[id="u1"]'), "gaga bibi")
 
     page.locator('[id="u1"]').locator(".fa-edit").click()
@@ -316,7 +316,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#id_pl_2_tr"), "gaga ffff")
     submit_confirm(page)
 
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    page.locator("#page-container").get_by_role("link", name="Plots").click()
     expect_normalized(page, page.locator('[id="u1"]'), "gaga")
     expect(page.locator('[id="u1"]')).not_to_contain_text("bibi")
 
