@@ -296,8 +296,6 @@ def test_faction_all(pw_page: Any) -> None:
 
         Primary Faction 1
 
-        Text
-
         PF1 private text
 
         Public Faction Question: PF1 public answer
@@ -305,8 +303,6 @@ def test_faction_all(pw_page: Any) -> None:
         Private Faction Question: PF1 private answer
 
         Transversal Faction 1
-
-        Text
 
         TF1 private text
 
@@ -316,8 +312,6 @@ def test_faction_all(pw_page: Any) -> None:
 
         Transversal Faction 2
 
-        Text
-
         TF2 private text
 
         Public Faction Question: TF2 public answer
@@ -326,8 +320,6 @@ def test_faction_all(pw_page: Any) -> None:
 
         Transversal Faction 3
 
-        Text
-
         TF3 private text
 
         Public Faction Question: TF3 public answer
@@ -335,8 +327,6 @@ def test_faction_all(pw_page: Any) -> None:
         Private Faction Question: TF3 private answer
 
         Secret Faction 1
-
-        Text
 
         SF1 private text
 
