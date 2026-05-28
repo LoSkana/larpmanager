@@ -489,11 +489,12 @@ def prepare_run(context: Any) -> None:
                 run_configuration[visibility_config_name] = {}
             run_configuration[visibility_config_name].update({"name": 1, "teaser": 1, "text": 1})
 
-        additional_config_name = "show_addit"
-        if additional_config_name not in run_configuration:
-            run_configuration[additional_config_name] = {}
         for additional_feature in ["plot", "relationships", "speedlarp", "prologue", "workshop", "print_pdf"]:
-            run_configuration[additional_config_name][additional_feature] = True
+            additional_config_name = "show_addit"
+            if additional_config_name not in run_configuration:
+                run_configuration[additional_config_name] = {}
+            if additional_feature in context["features"]:
+                run_configuration[additional_config_name][additional_feature] = True
 
     context.update(run_configuration)
 
