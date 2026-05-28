@@ -144,7 +144,12 @@ function load_question_email(el) {
         for (let nm in data) {
             let vl = data[nm];
 
-            let txt = '<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>'.format(nm, vl.emails.length, vl.characters.join(", "), vl.names.join(", "), vl.emails.join(", "));
+            let txt;
+            if (vl.characters !== undefined) {
+                txt = '<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>'.format(nm, vl.emails.length, vl.characters.join(", "), vl.names.join(", "), vl.emails.join(", "));
+            } else {
+                txt = '<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>'.format(nm, vl.emails.length, vl.emails.join(", "), vl.names.join(", "));
+            }
             tbl.append(txt);
         }
 

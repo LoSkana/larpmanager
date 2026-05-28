@@ -213,6 +213,8 @@ def orga_characters_sheet_test(request: HttpRequest, event_slug: str, character_
 
     # Configure context for PDF rendering
     context["pdf"] = True
+    if context.get("writing_field_visibility"):
+        context.pop("show_all", None)
     get_character_sheet(context)
     add_pdf_instructions(context)
 
@@ -242,6 +244,8 @@ def orga_characters_friendly_test(request: HttpRequest, event_slug: str, charact
     get_char_check(request, context, character_uuid, deny_public=True)
 
     # Populate context with character sheet data
+    if context.get("writing_field_visibility"):
+        context.pop("show_all", None)
     get_character_sheet(context)
 
     return render(request, "pdf/sheets/friendly.html", context)
