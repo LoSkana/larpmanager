@@ -53,13 +53,11 @@
             td.left,
             td.right {
                 padding: 0.6em;
-                background: #f4f4f4;
                 border-radius: 10pt;
             }
 
             .char-img {
-                width: 100%;
-                border-radius: 8pt;
+                display: block;
             }
 
             .inner {
@@ -69,7 +67,7 @@
             }
 
             .img-cell {
-                width: 40%;
+                width: 20%;
                 vertical-align: top;
                 text-align: center;
                 padding: 0 6pt 0 0;
@@ -129,9 +127,9 @@
     <body>
         {% if rel %}
             <table class="outer">
-                <tr>
-                    {% for el in rel %}
-                        <td class="{% if forloop.counter|divisibleby:2 %}right{% else %}left{% endif %}">
+                {% for el in rel %}
+                    <tr>
+                        <td class="left">
                             <table class="inner">
                                 <tr>
                                     <td class="img-cell">
@@ -148,28 +146,22 @@
                                             <span class="name"><a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a></span>
                                             {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                                             {% if el.pronoun %}({{ el.pronoun }}){% endif %}
+                                            {% if el.player_uuid %}
+                                                |
+                                                <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
+                                            {% endif %}
+                                            {% if el.factions_list %}| {{ el.factions_list }}{% endif %}
                                         </p>
-                                        {% if el.player_uuid %}
-                                            <p>
-                                                <b>Player:</b> <a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
-                                            </p>
-                                        {% endif %}
-                                        {% if el.factions_list %}
-                                            <p>
-                                                <b>{% trans "Factions" %}:</b> {{ el.factions_list }}
-                                            </p>
+                                        {% if show_character.teaser and el.teaser %}
+                                            <span class="relationship">{% show_char el.teaser run 1 %}</span>
                                         {% endif %}
                                         <span class="relationship">{% show_char el.text run 1 %}</span>
                                     </td>
                                 </tr>
                             </table>
                         </td>
-                        {% if forloop.counter|divisibleby:2 and not forloop.last %}
-                        </tr>
-                        <tr>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
+                    </tr>
+                {% endfor %}
             </table>
         {% endif %}
     </body>

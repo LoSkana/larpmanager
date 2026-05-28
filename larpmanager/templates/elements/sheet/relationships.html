@@ -1,4 +1,5 @@
 {% load show_tags i18n %}
+{{ show_addit }}
 {% if rel and show_addit.relationships %}
     <h2 class="c">{% trans "Relationships" %}</h2>
     {% for el in rel %}
@@ -14,16 +15,11 @@
                     <span class="character-name"><a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a> </span>
                     {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                     {% if el.pronoun %}({{ el.pronoun }}){% endif %}
-                </div>
-                {% if el.player_uuid %}
-                    <div class="go-inline">
+                    {% if el.player_uuid %}
+                        |
                         <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
-                    </div>
-                {% endif %}
-                <div class="go-inline">
-                    {% if el.factions_list %}
-                        <b>{% trans "Factions" %}:&nbsp;{{ el.factions_list }}</b>
                     {% endif %}
+                    {% if el.factions_list %}| {{ el.factions_list }}{% endif %}
                 </div>
                 {% if show_character.teaser and el.teaser %}
                     {% show_char el.teaser run 1 %}

@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import base64
 import contextlib
 import io
 import logging
@@ -39,6 +40,7 @@ from django.template import Context, Engine
 from django.template.loader import get_template
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from PIL import Image, ImageDraw
 from xhtml2pdf import pisa
 
 from larpmanager.cache.association import get_cache_association
@@ -165,6 +167,35 @@ def link_callback(uri: str, rel: str) -> str:  # noqa: ARG001
         return ""
 
     return path
+
+
+_REL_IMAGE_SIZE = 400
+
+
+def _round_image_data_uri(url: str, radius: int = 12) -> str | None:
+    """Convert image URL to fixed-size square data URI with rounded corners via Pillow mask."""
+    file_path = link_callback(url, "")
+    if not file_path:
+        return None
+    try:
+        img = Image.open(file_path).convert("RGBA")
+        # Crop to square from center
+        w, h = img.size
+        side = min(w, h)
+        left = (w - side) // 2
+        top = (h - side) // 2
+        img = img.crop((left, top, left + side, top + side))
+        img = img.resize((_REL_IMAGE_SIZE, _REL_IMAGE_SIZE), Image.LANCZOS)
+        mask = Image.new("L", img.size, 0)
+        draw = ImageDraw.Draw(mask)
+        s = _REL_IMAGE_SIZE - 1
+        draw.rounded_rectangle([0, 0, s, s], radius=radius, fill=255)
+        img.putalpha(mask)
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+    except Exception:  # noqa: BLE001
+        return None
 
 
 def add_pdf_instructions(context: dict) -> None:
@@ -403,6 +434,11 @@ def print_character_rel(context: dict, *, force: bool = False) -> HttpResponse:
     if force or reprint(filepath):
         get_event_cache_all(context)
         get_character_relationships(context)
+        for rel_entry in context.get("rel", []):
+            if rel_entry.get("player_prof"):
+                rounded = _round_image_data_uri(rel_entry["player_prof"])
+                if rounded:
+                    rel_entry["player_prof"] = rounded
         xhtml_pdf(context, "pdf/sheets/relationships.html", filepath)
 
     # Return the PDF response with localized filename
