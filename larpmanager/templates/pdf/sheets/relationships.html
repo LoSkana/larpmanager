@@ -44,18 +44,22 @@
             }
 
             td {
-                padding: 1em 0;
-                border-bottom: 2px solid black;
+                padding: 0.4em;
+                border: none;
                 text-align: center;
-                vertical-align: middle;
+                vertical-align: top;
             }
 
-            td.left {
-                border-right: 1px solid black
+            td.left,
+            td.right {
+                padding: 0.6em;
+                background: #f4f4f4;
+                border-radius: 10pt;
             }
 
             .char-img {
-                height: 80pt;
+                width: 100%;
+                border-radius: 8pt;
             }
 
             .inner {
@@ -65,26 +69,17 @@
             }
 
             .img-cell {
-                width: 85pt;
+                width: 40%;
                 vertical-align: top;
                 text-align: center;
                 padding: 0 6pt 0 0;
                 border: none;
             }
 
-            td.right {
-                padding-left: 1em;
-                padding-right: 0em;
-            }
-
-            td.left {
-                padding-left: 0em;
-                padding-right: 1em;
-            }
-
             .relationship {
                 display: block;
                 text-align: left;
+                margin: 0 0.5em;
             }
 
             .right .relationship p {
@@ -121,14 +116,19 @@
                 page-break-inside: avoid !important;
             }
 
-            table {
+            table.outer {
+                border-collapse: separate;
+                border-spacing: 6pt;
+            }
+
+            table:not(.outer) {
                 border-collapse: collapse;
             }
         </style>
     </head>
     <body>
         {% if rel %}
-            <table>
+            <table class="outer">
                 <tr>
                     {% for el in rel %}
                         <td class="{% if forloop.counter|divisibleby:2 %}right{% else %}left{% endif %}">
@@ -159,10 +159,10 @@
                                                 <b>{% trans "Factions" %}:</b> {{ el.factions_list }}
                                             </p>
                                         {% endif %}
+                                        <span class="relationship">{% show_char el.text run 1 %}</span>
                                     </td>
                                 </tr>
                             </table>
-                            <span class="relationship">{% show_char el.text run 1 %}</span>
                         </td>
                         {% if forloop.counter|divisibleby:2 and not forloop.last %}
                         </tr>

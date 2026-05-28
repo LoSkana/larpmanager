@@ -396,6 +396,15 @@ class OrgaCharacterForm(CharacterForm):
                     label=str(_("Show available players")),
                     url=reverse("orga_members_available", args=[run.get_slug()]),
                 )
+            if "factions_list" in self.fields:
+                self.add_multichoice_config(
+                    field_id="factions_list",
+                    link_id="factions_available",
+                    label=str(_("Show available factions")),
+                    url=reverse("orga_factions_available", args=[run.get_slug()]),
+                    ctx_edit_uuid=True,
+                    form_orga=True,
+                )
 
         # Init relationships
         self._init_relationships()

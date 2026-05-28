@@ -466,7 +466,7 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
                 "questions": questions,
                 "options": fields_data.get("options", {}),
                 "fields": faction_writing_fields,
-                "only_text": bool(questions) and all(q.get("typ") == "text" for q in questions.values()),
+                "only_text": not any(q.get("typ") == "e" for q in questions.values()),
             },
         )
 
