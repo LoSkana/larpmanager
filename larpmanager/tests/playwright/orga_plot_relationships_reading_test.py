@@ -122,7 +122,7 @@ def reading(live_server: Any, page: Any) -> None:
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character Factions: only for testt test teaser ciaaoooooo",
+        "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character only for testt test teaser ciaaoooooo",
     )
 
     # check reading plot
