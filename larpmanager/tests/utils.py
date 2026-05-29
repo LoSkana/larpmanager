@@ -208,9 +208,9 @@ def _checkboxes(page: Any, check: Any = True) -> None:
         if checkbox.is_visible() and checkbox.is_enabled():
             if check:
                 if not checkbox.is_checked():
-                    checkbox.check()
+                    checkbox.check(force=True)
             elif checkbox.is_checked():
-                checkbox.uncheck()
+                checkbox.uncheck(force=True)
 
     submit_confirm(page)
 

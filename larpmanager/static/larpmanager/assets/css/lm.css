@@ -358,8 +358,8 @@ input[type="number"] {
 
 .new_v20 .my-checkbox-class > div,
 .new_v20 .my-radio-class > div {
-  display: block;
-  padding: 0.3em 0;
+  display: inline-block;
+  padding: 0.5em;
 }
 
 .opt-desc {

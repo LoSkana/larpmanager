@@ -98,6 +98,7 @@ def sign_up_pay(page: Any, live_server: Any) -> None:
     submit_option(page, iframe)
 
     go_to(page, live_server, "/test/register/")
+    page.locator('label[for="id_que_u2_0"]').click()
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
 
