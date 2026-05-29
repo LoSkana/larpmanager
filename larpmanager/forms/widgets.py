@@ -74,6 +74,7 @@ class _DescriptionOptionsMixin:
         metadata: dict | None = None,
         **kwargs: Any,
     ) -> None:
+        """Prepare widget metadata."""
         super().__init__(*args, **kwargs)
         self.descriptions = descriptions or {}
         self.metadata = metadata or {}
@@ -100,6 +101,18 @@ class _DescriptionOptionsMixin:
 class DescriptionRadioSelect(_DescriptionOptionsMixin, forms.RadioSelect):
     """RadioSelect that shows option description below each option label."""
 
+    def __init__(self, *args: object, **kwargs: object) -> None:
+        """Prepare RadioSelect metadata."""
+        super().__init__(*args, **kwargs)
+        self.attrs.setdefault("class", "")
+        self.attrs["class"] = (self.attrs["class"] + " reg-radio-class").strip()
+
 
 class DescriptionCheckboxSelectMultiple(_DescriptionOptionsMixin, forms.CheckboxSelectMultiple):
     """CheckboxSelectMultiple that shows option description below each option label."""
+
+    def __init__(self, *args: object, **kwargs: object) -> None:
+        """Prepare CheckboxSelectMultiple metadata."""
+        super().__init__(*args, **kwargs)
+        self.attrs.setdefault("class", "")
+        self.attrs["class"] = (self.attrs["class"] + " reg-checkbox-class").strip()

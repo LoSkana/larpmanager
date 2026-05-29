@@ -143,7 +143,7 @@
             {% include "elements/structure/sidebar.html" %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class=" {% if manage and is_sidebar_open %}sidebar{% endif %} {% if not frame and association.id != 0 %}topbar{% endif %}">
+                 class="{% if manage %}manage{% endif %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% if not frame and association.id != 0 %}topbar{% endif %}">
                 {% block main %}
                 {% endblock main %}
             </div>

@@ -154,9 +154,9 @@ def edit_first_character(page: Any, live_server: Any) -> None:
     # Fill all custom questions
     page.locator("#id_que_u4").fill("Text value 1")
     page.locator("#id_que_u5").fill("Paragraph value 1")
-    page.locator("#id_que_u6").select_option("u1")  # Option A
-    page.get_by_role("checkbox", name="Choice X").check()
-    page.get_by_role("checkbox", name="Choice Y").check()
+    page.locator("#id_que_u6_0").click(force=True)  # Option A
+    page.locator("#id_que_u7_0").check(force=True)
+    page.locator("#id_que_u7_1").check(force=True)
     fill_tinymce(page, "id_que_u8", "Advanced value 1")
 
     submit_confirm(page)
@@ -296,7 +296,7 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
     # Edit u1 (existing value - Option A)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Option A").dblclick()
     just_wait(page)
-    page.locator("#id_que_u6").select_option("u2")  # Option B
+    page.locator("#id_que_u6_1").click(force=True)  # Option B
     submit_confirm(page)
     just_wait(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Option B")
@@ -305,7 +305,7 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(7).dblclick()
     just_wait(page)
-    page.locator("#id_que_u6").select_option("u3")  # Option C
+    page.locator("#id_que_u6_2").click(force=True)  # Option C
     submit_confirm(page)
     just_wait(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Option C")
@@ -319,8 +319,8 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
     # Edit u1 (existing values - Choice X and Y)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Choice X").dblclick()
     just_wait(page)
-    page.get_by_role("checkbox", name="Choice X").uncheck()
-    page.get_by_role("checkbox", name="Choice Z").check()
+    page.locator("#id_que_u7_0").uncheck(force=True)
+    page.locator("#id_que_u7_2").check(force=True)
     submit_confirm(page)
     just_wait(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Choice Y")
@@ -330,7 +330,7 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(8).dblclick()
     just_wait(page)
-    page.get_by_role("checkbox", name="Choice X").check()
+    page.locator("#id_que_u7_0").check(force=True)
     submit_confirm(page)
     just_wait(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Choice X")

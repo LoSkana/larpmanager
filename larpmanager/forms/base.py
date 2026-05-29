@@ -1228,8 +1228,8 @@ class BaseRegistrationForm(BaseModelFormRun):
             # Get choice options for organizational context
             (available_choices, help_text, descriptions, metadata) = self.get_choice_options(question)
 
-            # Add default "Not selected" option if no previous selection exists
-            if question["id"] not in self.singles:
+            # Add default "Not selected" option if no previous selection exists and not using inline widgets
+            if question["id"] not in self.singles and not self._use_inline_widgets_v20:
                 available_choices.insert(0, (0, "--- " + _("Not selected")))
         else:
             # Prepare list of previously chosen options for user context

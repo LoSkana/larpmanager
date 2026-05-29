@@ -356,10 +356,10 @@ input[type="number"] {
   padding: 0.5em;
 }
 
-.new_v20 .my-checkbox-class > div,
-.new_v20 .my-radio-class > div {
-  display: inline-block;
-  padding: 0.5em;
+.reg-checkbox-class > div,
+.reg-radio-class > div {
+  display: block;
+  padding: 0.3em 0;
 }
 
 .opt-desc {
@@ -371,7 +371,9 @@ input[type="number"] {
 }
 
 .my-checkbox-class label,
-.my-radio-class label {
+.my-radio-class label,
+.reg-checkbox-class label,
+.reg-radio-class label {
   display: flex;
   align-items: flex-start;
   gap: 0.4em;
@@ -2826,4 +2828,41 @@ body.floating_iframe .inner {
 .new_v20 .form_container table input[type="checkbox"],
 .new_v20 .form_container table input[type="radio"] {
   margin-top: 0.2em !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Manage
+   --------------------------------------------------------------------------- */
+
+.new_v20 #page-wrapper.manage #banner .inner h1 {
+  text-align: left;
+  justify-content: flex-start;
+  padding-left: 0;
+}
+
+.new_v20 .manage .auto_resize {
+  width: 100%;
+}
+
+.new_v20 .manage .info_bar {
+  text-align: left;
+  font-size: 80%;
+  font-style: italic;
+}
+
+.new_v20 .manage .staff-list {
+  text-align: left;
+}
+
+.new_v20 .manage p,
+.new_v20 h1,
+.new_v20 h2,
+.new_v20 h3,
+.new_v20 h4 {
+  text-align: left;
+}
+
+.new_v20 .manage #search {
+  text-align: left;
+  margin: 0.5em 0 0 0;
 }

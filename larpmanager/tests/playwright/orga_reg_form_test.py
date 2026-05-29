@@ -170,7 +170,10 @@ def signup(page: Any, live_server: Any) -> None:
     nav(page, "Registration")
     expect_normalized(page,
         page.locator("#register_form"),
-        "(*) : These fields are mandatory Additional 0 1 2 3 4 5 Reserve additional tickets beyond your own2 Ticket (*) Standard - 5€ Your registration ticket2 Standard: sadsadsadsa Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge",
+        """
+        (*) : These fields are mandatory Additional 0 1 2 3 4 5 Reserve additional tickets beyond your own2
+        Ticket (*) Standard 5€ sadsadsadsa Your registration ticket2
+        Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge""",
     )
 
 
@@ -188,9 +191,13 @@ def check_filler(page: Any, live_server: Any) -> None:
     # check filler is not there
     go_to(page, live_server, "test/")
     nav(page, "Registration")
-    page.get_by_label("Ticket (*)").click()
-    expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot(
-        '- combobox "Ticket (*)":\n  - option "Standard - 5€" [selected]'
+    expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
+        """
+        - row "Ticket (*) Standard 5€ sadsadsadsa Your registration ticket2":
+          - cell "Ticket (*)"
+          - cell "Standard 5€ sadsadsadsa Your registration ticket2":
+            - radio "Standard 5€ sadsadsadsa" [checked]
+        """
     )
 
     # enable config
@@ -200,10 +207,15 @@ def check_filler(page: Any, live_server: Any) -> None:
     page.locator("#id_filler_always").check()
     submit_confirm(page)
 
-    # check filler is not available
+    # check filler is available
     go_to(page, live_server, "test/")
     nav(page, "Registration")
-    page.get_by_label("Ticket (*)").click()
-    expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot(
-        '- combobox "Ticket (*)":\n  - option "Standard - 5€" [selected]\n  - option "Filler"'
+    expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
+        """
+        - row "Ticket (*) Standard 5€ sadsadsadsa Filler Your registration ticket2":
+          - cell "Ticket (*)"
+          - cell "Standard 5€ sadsadsadsa Filler Your registration ticket2":
+            - radio "Standard 5€ sadsadsadsa" [checked]
+            - radio "Filler"
+        """
     )
