@@ -3043,9 +3043,6 @@ msgstr "Événement non trouvé"
 msgid "External access"
 msgstr "Accès externe"
 
-msgid "Filter factions"
-msgstr "Groupes de filtres"
-
 msgid "First character"
 msgstr "Premier caractère"
 
@@ -3429,6 +3426,9 @@ msgstr "Frais de transaction"
 
 msgid "Transfer preview"
 msgstr "Aperçu des transferts"
+
+msgid "Your preferences"
+msgstr "Tes préférences"
 
 msgid "are not yet open"
 msgstr "ne sont pas encore ouverts"
@@ -3973,6 +3973,9 @@ msgstr "Langue de navigation"
 msgid "New shuttle request"
 msgstr "Nouvelle demande de navette"
 
+msgid "No characters found"
+msgstr "Aucun personnage n'a été trouvé"
+
 msgid "Non-cumulative code"
 msgstr "Code non cumulatif"
 
@@ -4050,6 +4053,9 @@ msgstr "Comptabilité - Historique"
 
 msgid "Advanced text editor"
 msgstr "Editeur de texte avancé"
+
+msgid "Available characters"
+msgstr "Caractères disponibles"
 
 msgid "Carousel description"
 msgstr "Description du carrousel"
@@ -6357,6 +6363,9 @@ msgstr "Couleur utilisée pour mettre en évidence un texte important"
 msgid "Create a ticket type by clicking 'New'"
 msgstr "Crée un type de ticket en cliquant sur \"Nouveau"
 
+msgid "Drag items to reorder your preferences"
+msgstr "Fais glisser les éléments pour réorganiser tes préférences"
+
 msgid "Fill in your character's relationships"
 msgstr "Complétez les relations de votre personnage"
 
@@ -7220,6 +7229,9 @@ msgstr "Vos préférences ont été enregistrées dans le système"
 
 msgid "Added to the registration page, before the form"
 msgstr "Ajouté à la page d'inscription, avant le formulaire"
+
+msgid "Click a character to add it to your preferences"
+msgstr "Clique sur un personnage pour l'ajouter à tes préférences"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Personnaliser des textes spécifiques sur l'interface de l'événement"
@@ -8101,10 +8113,6 @@ msgid "Optional - Other options as requirements, comma-separated"
 msgstr ""
 "Facultatif - Autres options selon les besoins, séparées par des virgules"
 
-msgid "Select the faction on which you want to filter characters"
-msgstr ""
-"Sélectionnez les groupes sur lesquels vous souhaitez filtrer les caractères"
-
 msgid "Staff members who will receive and manage support tickets"
 msgstr ""
 "Les membres du personnel qui recevront et géreront les tickets d'assistance"
@@ -8298,9 +8306,6 @@ msgstr "Où a-t-il été placé ? Quand est-il prévu qu'il revienne ?"
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr ""
 "Vous pouvez effectuer le paiement <a href='%(url)s'>sur cette page</a>"
-
-msgid "You have chosen the same option in more than one preference"
-msgstr "Vous avez indiqué la même option dans plus d'une préférence"
 
 msgid "You must consent to data sharing to accept this invitation."
 msgstr ""

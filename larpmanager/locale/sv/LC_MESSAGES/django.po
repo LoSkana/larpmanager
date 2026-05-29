@@ -3043,9 +3043,6 @@ msgstr "Händelsen hittades inte"
 msgid "External access"
 msgstr "Extern åtkomst"
 
-msgid "Filter factions"
-msgstr "Filtrera grupper"
-
 msgid "First character"
 msgstr "Första tecknet"
 
@@ -3429,6 +3426,9 @@ msgstr "Transaktionsavgifter"
 
 msgid "Transfer preview"
 msgstr "Förhandstitt på övergångar"
+
+msgid "Your preferences"
+msgstr "Dina preferenser"
 
 msgid "are not yet open"
 msgstr "är ännu inte öppna"
@@ -3973,6 +3973,9 @@ msgstr "Språk för navigering"
 msgid "New shuttle request"
 msgstr "Ny förfrågan om skyttel"
 
+msgid "No characters found"
+msgstr "Inga tecken hittades"
+
 msgid "Non-cumulative code"
 msgstr "Icke-kumulativ kod"
 
@@ -4050,6 +4053,9 @@ msgstr "Redovisning - Historisk"
 
 msgid "Advanced text editor"
 msgstr "Avancerad textredigerare"
+
+msgid "Available characters"
+msgstr "Tillgängliga tecken"
 
 msgid "Carousel description"
 msgstr "Beskrivning av karusellen"
@@ -6354,6 +6360,9 @@ msgstr "Färg används för att markera viktig text"
 msgid "Create a ticket type by clicking 'New'"
 msgstr "Skapa en ärendetyp genom att klicka på \"Ny"
 
+msgid "Drag items to reorder your preferences"
+msgstr "Dra objekt för att ändra ordningen på dina preferenser"
+
 msgid "Fill in your character's relationships"
 msgstr "Fyll i din karaktärs relationer"
 
@@ -7204,6 +7213,9 @@ msgstr "Dina preferenser har sparats i systemet"
 msgid "Added to the registration page, before the form"
 msgstr "Tillagd på registreringssidan, före formuläret"
 
+msgid "Click a character to add it to your preferences"
+msgstr "Klicka på en karaktär för att lägga till den i dina preferenser"
+
 msgid "Customize specific texts on the event interface"
 msgstr "Anpassa specifika texter på eventgränssnittet"
 
@@ -8003,9 +8015,6 @@ msgstr "Nu kan du granska den historiska redovisningsinformationen"
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Valfritt - Andra alternativ som krav, kommaseparerade"
 
-msgid "Select the faction on which you want to filter characters"
-msgstr "Välj de grupper som du vill filtrera tecknen på"
-
 msgid "Staff members who will receive and manage support tickets"
 msgstr "Personal som ska ta emot och hantera supportärenden"
 
@@ -8178,9 +8187,6 @@ msgstr "Var har den placerats? När förväntas den komma tillbaka?"
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Du kan göra betalningen <a href='%(url)s'>på den här sidan</a>"
-
-msgid "You have chosen the same option in more than one preference"
-msgstr "Du har angett samma alternativ i mer än en preferens"
 
 msgid "You must consent to data sharing to accept this invitation."
 msgstr "Du måste samtycka till datadelning för att acceptera denna inbjudan."

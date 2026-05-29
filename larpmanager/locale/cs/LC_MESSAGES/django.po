@@ -3043,9 +3043,6 @@ msgstr "Událost nebyla nalezena"
 msgid "External access"
 msgstr "Externí přístup"
 
-msgid "Filter factions"
-msgstr "Skupiny filtrů"
-
 msgid "First character"
 msgstr "První znak"
 
@@ -3429,6 +3426,9 @@ msgstr "Transakční poplatky"
 
 msgid "Transfer preview"
 msgstr "Náhled transferu"
+
+msgid "Your preferences"
+msgstr "Vaše preference"
 
 msgid "are not yet open"
 msgstr "ještě nejsou otevřeny"
@@ -3973,6 +3973,9 @@ msgstr "Navigační jazyk"
 msgid "New shuttle request"
 msgstr "Nová žádost o kyvadlovou dopravu"
 
+msgid "No characters found"
+msgstr "Nebyly nalezeny žádné znaky"
+
 msgid "Non-cumulative code"
 msgstr "Nekumulativní kód"
 
@@ -4050,6 +4053,9 @@ msgstr "Účetnictví - historické"
 
 msgid "Advanced text editor"
 msgstr "Pokročilý textový editor"
+
+msgid "Available characters"
+msgstr "Dostupné znaky"
 
 msgid "Carousel description"
 msgstr "Popis kolotoče"
@@ -6353,6 +6359,9 @@ msgstr "Barva použitá ke zvýraznění důležitého textu"
 msgid "Create a ticket type by clicking 'New'"
 msgstr "Vytvořte typ tipu kliknutím na tlačítko \"Nový\""
 
+msgid "Drag items to reorder your preferences"
+msgstr "Přetažením položek můžete změnit pořadí předvoleb"
+
 msgid "Fill in your character's relationships"
 msgstr "Vyplňte vztahy své postavy"
 
@@ -7204,6 +7213,9 @@ msgstr "Vaše předvolby byly uloženy do systému"
 msgid "Added to the registration page, before the form"
 msgstr "Přidáno na registrační stránku před formulář"
 
+msgid "Click a character to add it to your preferences"
+msgstr "Kliknutím na postavu ji přidáte do svých předvoleb"
+
 msgid "Customize specific texts on the event interface"
 msgstr "Přizpůsobení konkrétních textů v rozhraní události"
 
@@ -8010,9 +8022,6 @@ msgstr "Nyní si můžete prohlédnout historické účetní informace"
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Nepovinné - Další možnosti podle požadavků, oddělené čárkou"
 
-msgid "Select the faction on which you want to filter characters"
-msgstr "Vyberte skupiny, podle kterých chcete filtrovat znaky"
-
 msgid "Staff members who will receive and manage support tickets"
 msgstr "Zaměstnanci, kteří budou přijímat a spravovat tikety podpory"
 
@@ -8178,9 +8187,6 @@ msgstr "Kde byl umístěn? Kdy se očekává jeho návrat?"
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Platbu můžete provést <a href='%(url)s'>na této stránce</a>"
-
-msgid "You have chosen the same option in more than one preference"
-msgstr "Stejnou možnost jste uvedli ve více než jedné preferenci"
 
 msgid "You must consent to data sharing to accept this invitation."
 msgstr ""

@@ -3043,9 +3043,6 @@ msgstr "Evenement niet gevonden"
 msgid "External access"
 msgstr "Externe toegang"
 
-msgid "Filter factions"
-msgstr "Filtergroepen"
-
 msgid "First character"
 msgstr "Eerste teken"
 
@@ -3429,6 +3426,9 @@ msgstr "Transactiekosten"
 
 msgid "Transfer preview"
 msgstr "Transfervoorbeschouwing"
+
+msgid "Your preferences"
+msgstr "Jouw voorkeuren"
 
 msgid "are not yet open"
 msgstr "zijn nog niet open"
@@ -3973,6 +3973,9 @@ msgstr "Taal voor navigatie"
 msgid "New shuttle request"
 msgstr "Nieuw shuttleverzoek"
 
+msgid "No characters found"
+msgstr "Geen tekens gevonden"
+
 msgid "Non-cumulative code"
 msgstr "Niet-cumulatieve code"
 
@@ -4050,6 +4053,9 @@ msgstr "Boekhouding - Historisch"
 
 msgid "Advanced text editor"
 msgstr "Geavanceerde teksteditor"
+
+msgid "Available characters"
+msgstr "Beschikbare tekens"
 
 msgid "Carousel description"
 msgstr "Carrousel beschrijving"
@@ -6355,6 +6361,9 @@ msgstr "Kleur gebruikt om belangrijke tekst te markeren"
 msgid "Create a ticket type by clicking 'New'"
 msgstr "Maak een type ticket door op 'Nieuw' te klikken"
 
+msgid "Drag items to reorder your preferences"
+msgstr "Sleep items om je voorkeuren te herschikken"
+
 msgid "Fill in your character's relationships"
 msgstr "Vul de relaties van je personage in"
 
@@ -7209,6 +7218,9 @@ msgstr "Uw voorkeuren zijn opgeslagen in het systeem"
 msgid "Added to the registration page, before the form"
 msgstr "Toegevoegd aan de registratiepagina, vóór het formulier"
 
+msgid "Click a character to add it to your preferences"
+msgstr "Klik op een personage om het toe te voegen aan je voorkeuren"
+
 msgid "Customize specific texts on the event interface"
 msgstr "Specifieke teksten op de evenementinterface aanpassen"
 
@@ -8033,9 +8045,6 @@ msgstr "Nu kun je de historische boekhoudgegevens bekijken"
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Optioneel - Andere opties zoals vereist, door komma's gescheiden"
 
-msgid "Select the faction on which you want to filter characters"
-msgstr "Selecteer de groepen waarop je de tekens wilt filteren"
-
 msgid "Staff members who will receive and manage support tickets"
 msgstr "Medewerkers die supporttickets ontvangen en beheren"
 
@@ -8219,9 +8228,6 @@ msgstr "Waar is het geplaatst? Wanneer wordt het terug verwacht?"
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Je kunt de betaling doen <a href='%(url)s'>op deze pagina</a>"
-
-msgid "You have chosen the same option in more than one preference"
-msgstr "U hebt dezelfde optie in meer dan één voorkeur aangegeven"
 
 msgid "You must consent to data sharing to accept this invitation."
 msgstr ""
