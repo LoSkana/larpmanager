@@ -1637,6 +1637,9 @@ msgstr "Lagerlokal"
 msgid "Workshops"
 msgstr "Verkstäder"
 
+msgid "available"
+msgstr "tillgänglig"
+
 msgid "donations"
 msgstr "donationer"
 

@@ -1637,6 +1637,9 @@ msgstr "Lager"
 msgid "Workshops"
 msgstr "Verksteder"
 
+msgid "available"
+msgstr "tilgjengelig"
+
 msgid "donations"
 msgstr "donasjoner"
 

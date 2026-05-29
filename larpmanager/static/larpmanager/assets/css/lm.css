@@ -351,9 +351,69 @@ input[type="number"] {
   }
 }
 
-.my-checkbox-class div {
+.my-checkbox-class > div {
   display: inline-block;
   padding: 0.5em;
+}
+
+.new_v20 .my-checkbox-class > div,
+.new_v20 .my-radio-class > div {
+  display: block;
+  padding: 0.3em 0;
+}
+
+.opt-desc {
+  display: block;
+  color: #888;
+  font-size: 0.85em;
+  margin-left: 1.6em;
+  margin-top: 0.1em;
+}
+
+.my-checkbox-class label,
+.my-radio-class label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4em;
+}
+
+.opt-card-body {
+  display: block;
+  flex: 1;
+}
+
+.opt-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.opt-card-name {
+  font-weight: 500;
+}
+
+.opt-card-price {
+  background: rgba(var(--ter-rgb), 0.15);
+  color: rgba(var(--ter-rgb), 0.9);
+  border-radius: 3px;
+  padding: 0 6px;
+  font-size: 0.85em;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.opt-card-desc {
+  color: #666;
+  font-size: 0.85em;
+  margin-top: 0.15em;
+}
+
+.opt-card-avail {
+  font-size: 0.8em;
+  color: #888;
+  margin-top: 0.1em;
 }
 
 #id_share {
@@ -2761,4 +2821,9 @@ body.floating_iframe .inner {
 
 .modal-close-btn:hover {
   background-color: rgba(var(--pri-rgb), 0.55);
+}
+
+.new_v20 .form_container table input[type="checkbox"],
+.new_v20 .form_container table input[type="radio"] {
+  margin-top: 0.2em !important;
 }
