@@ -91,7 +91,7 @@ class AbilityExp(UuidMixin, BaseConceptModel):
 
     system = models.ForeignKey(
         SystemExp,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="abilities",
         verbose_name=_("System"),
     )
@@ -172,7 +172,7 @@ class DeliveryExp(UuidMixin, BaseConceptModel):
 
     system = models.ForeignKey(
         SystemExp,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="deliveries",
         verbose_name=_("System"),
     )
