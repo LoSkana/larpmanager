@@ -880,8 +880,8 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     clear_event_cache_all_runs(instance)
     clear_event_features_cache(instance.id)
 
-    # Setup campaign inheritance if not explicitly skipped
-    if not getattr(instance, "_skip_campaign_setup", False):  # Internal flag to prevent recursion
+    # Setup campaign inheritance if not explicitly skipped and not being deleted
+    if not getattr(instance, "_skip_campaign_setup", False) and instance.deleted is None:
         copy_parent_event_to_campaign(instance)
 
     # Clear run and registration related caches

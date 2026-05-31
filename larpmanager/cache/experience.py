@@ -387,8 +387,10 @@ def update_cache_section(event: Event, section_name: str, section_id: int, data:
 
         if cached_event_data is None:
             logger.debug("Cache miss during %s update for event %s, reinitializing", section_name, event_id)
-            # We need to get the event to reinitialize
-            event = Event.objects.get(id=event_id)
+            event = Event.objects.filter(id=event_id).first()
+            if event is None:
+                logger.warning("Event %s not found, skipping cache reinitialization", event_id)
+                return
             init_event_exp_all(event)
             return
 
