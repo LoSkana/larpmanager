@@ -111,7 +111,10 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
         return
 
     # Get previous approval status to detect state change
-    previous_approval_status = AccountingItemExpense.objects.get(pk=expense_item.pk).is_approved
+    previous = AccountingItemExpense.objects.filter(pk=expense_item.pk).first()
+    if previous is None:
+        return
+    previous_approval_status = previous.is_approved
 
     # Only send email when item is newly approved and has an associated member
     if not (expense_item.member and expense_item.is_approved and not previous_approval_status):
