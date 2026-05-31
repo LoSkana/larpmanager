@@ -154,13 +154,14 @@ class AssociationIdentifyMiddleware:
                 # Skin found - load the associated organization
                 return cls.load_association(request, association_skin)
 
-        # Handle larpmanager.com domain redirects to ensure HTTPS (skip for bare hostnames like localhost)
-        if "." in base_domain and request.get_host().endswith(base_domain):
-            return redirect(f"https://{base_domain}{request.get_full_path()}")
-
         # Allow admin panel access without association
         if request.path.startswith("/admin"):
             return None
+
+        # Handle larpmanager.com domain redirects to ensure HTTPS
+        # Skip bare hostnames (no dot), IP address fragments (end in digit), and localhost
+        if "." in base_domain and not base_domain[-1].isdigit() and request.get_host().endswith(base_domain):
+            return redirect(f"https://{base_domain}{request.get_full_path()}")
 
         # No valid association found - render error page
         return render(request, "exception/association.html", {})
