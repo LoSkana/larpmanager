@@ -5585,6 +5585,9 @@ msgstr "Name, der für Token angezeigt werden soll"
 msgid "Password reset of user %(user)s"
 msgstr "Zurücksetzen des Passworts von Benutzer %(user)s"
 
+msgid "Please correct the error below."
+msgstr "Bitte korrigiere den Fehler unten."
+
 #, python-format
 msgid "Quests without traits: %(list)s"
 msgstr "Quests ohne Eigenschaften: %(list)s"
@@ -5715,6 +5718,9 @@ msgstr "Jetzt können Sie die Abstimmungsoptionen festlegen"
 
 msgid "Now you can verify wire payments"
 msgstr "Jetzt können Sie Überweisungszahlungen überprüfen"
+
+msgid "Please correct the errors below."
+msgstr "Bitte korrigiere die untenstehenden Fehler."
 
 msgid "Please upload your profile photo"
 msgstr "Bitte laden Sie Ihr Profilfoto hoch"
@@ -6107,6 +6113,9 @@ msgstr "Erweiterte Beschreibung - auf Englisch"
 #, python-format
 msgid "Feature %(name)s already deactivated"
 msgstr "Das Merkmal %(name)s ist bereits deaktiviert"
+
+msgid "Forgotten your password or username?"
+msgstr "Hast du dein Passwort oder deinen Benutzernamen vergessen?"
 
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Wenn angekreuzt, Ticketstufe zulassen: Personal"
@@ -12580,6 +12589,14 @@ msgid ""
 msgstr ""
 "Ihr Antrag wird in der nächsten Sitzung des Verwaltungsrats geprüft. Sie "
 "erhalten in Kürze eine Bestätigung über das Ergebnis der Prüfung"
+
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this"
+" page. Would you like to login to a different account?"
+msgstr ""
+"Du bist als %(username)s authentifiziert, hast aber keine Berechtigung, auf "
+"diese Seite zuzugreifen. Möchtest du dich mit einem anderen Konto anmelden?"
 
 msgid ""
 "This page shows the casting preferences expressed by participants, and "

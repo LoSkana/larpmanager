@@ -5585,6 +5585,9 @@ msgstr "Naam die moet worden weergegeven voor tokens"
 msgid "Password reset of user %(user)s"
 msgstr "Wachtwoord reset van gebruiker %(user)s"
 
+msgid "Please correct the error below."
+msgstr "Corrigeer de fout hieronder."
+
 #, python-format
 msgid "Quests without traits: %(list)s"
 msgstr "Quests zonder eigenschappen: %(list)s"
@@ -5715,6 +5718,9 @@ msgstr "Nu kunt u de stemopties instellen"
 
 msgid "Now you can verify wire payments"
 msgstr "Je kunt nu betalingen per bankoverschrijving verifiëren"
+
+msgid "Please correct the errors below."
+msgstr "Corrigeer de fouten hieronder."
 
 msgid "Please upload your profile photo"
 msgstr "Upload je profielfoto"
@@ -6106,6 +6112,9 @@ msgstr "Uitgebreide beschrijving - in het Engels"
 #, python-format
 msgid "Feature %(name)s already deactivated"
 msgstr "Functie %(name)s is al gedeactiveerd"
+
+msgid "Forgotten your password or username?"
+msgstr "Wachtwoord of gebruikersnaam vergeten?"
 
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Indien aangevinkt, ticketniveau toestaan: Personeel"
@@ -12359,6 +12368,14 @@ msgid ""
 msgstr ""
 "Je verzoek zal tijdens de volgende bestuursvergadering worden geëvalueerd. "
 "Je ontvangt zeer binnenkort een bevestiging van de uitkomst van de evaluatie"
+
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this"
+" page. Would you like to login to a different account?"
+msgstr ""
+"Je bent geverifieerd als %(username)s, maar je hebt geen rechten om deze "
+"pagina te openen. Wil je inloggen met een ander account?"
 
 msgid ""
 "This page shows the casting preferences expressed by participants, and "

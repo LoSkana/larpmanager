@@ -9044,6 +9044,21 @@ msgstr ""
 msgid "Privacy Policy"
 msgstr ""
 
+msgid "Please correct the error below."
+msgstr ""
+
+msgid "Please correct the errors below."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+
+msgid "Forgotten your password or username?"
+msgstr ""
+
 msgid "Password reset"
 msgstr ""
 

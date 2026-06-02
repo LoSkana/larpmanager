@@ -5585,6 +5585,9 @@ msgstr "Název, který se má zobrazit u žetonů"
 msgid "Password reset of user %(user)s"
 msgstr "Obnovení hesla uživatele %(user)s"
 
+msgid "Please correct the error below."
+msgstr "Opravte prosím níže uvedenou chybu."
+
 #, python-format
 msgid "Quests without traits: %(list)s"
 msgstr "Úkoly bez vlastností: %(list)s"
@@ -5715,6 +5718,9 @@ msgstr "Nyní můžete nastavit možnosti hlasování"
 
 msgid "Now you can verify wire payments"
 msgstr "Nyní můžete ověřit platby bankovním převodem"
+
+msgid "Please correct the errors below."
+msgstr "Opravte prosím níže uvedené chyby."
 
 msgid "Please upload your profile photo"
 msgstr "Nahrajte prosím svou profilovou fotografii"
@@ -6106,6 +6112,9 @@ msgstr "Rozšířený popis - v angličtině"
 #, python-format
 msgid "Feature %(name)s already deactivated"
 msgstr "Funkce %(name)s je již deaktivována"
+
+msgid "Forgotten your password or username?"
+msgstr "Zapomněli jste heslo nebo uživatelské jméno?"
 
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Staff"
@@ -12037,6 +12046,14 @@ msgid ""
 msgstr ""
 "Vaše žádost bude posouzena na příštím zasedání správní rady. Výsledek jejího"
 " posouzení vám bude brzy potvrzen"
+
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this"
+" page. Would you like to login to a different account?"
+msgstr ""
+"Jste ověřeni jako %(username)s, ale nemáte oprávnění k přístupu na tuto "
+"stránku. Chcete se přihlásit k jinému účtu?"
 
 msgid ""
 "This page shows the casting preferences expressed by participants, and "

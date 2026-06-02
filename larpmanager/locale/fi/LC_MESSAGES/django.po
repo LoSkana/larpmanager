@@ -5585,6 +5585,9 @@ msgstr "Tokenien näytettävä nimi"
 msgid "Password reset of user %(user)s"
 msgstr "Käyttäjän %(user)s salasanan palautus"
 
+msgid "Please correct the error below."
+msgstr "Korjaa alla oleva virhe."
+
 #, python-format
 msgid "Quests without traits: %(list)s"
 msgstr "Tehtävät ilman ominaisuuksia: %(list)s"
@@ -5715,6 +5718,9 @@ msgstr "Nyt voit asettaa äänestysvaihtoehdot"
 
 msgid "Now you can verify wire payments"
 msgstr "Nyt voit tarkistaa tilisiirtomaksut"
+
+msgid "Please correct the errors below."
+msgstr "Korjatkaa alla olevat virheet."
 
 msgid "Please upload your profile photo"
 msgstr "Lataa profiilikuvasi"
@@ -6105,6 +6111,9 @@ msgstr "Laajennettu kuvaus - kansainvälinen"
 #, python-format
 msgid "Feature %(name)s already deactivated"
 msgstr "Ominaisuus %(name)s on jo poistettu käytöstä"
+
+msgid "Forgotten your password or username?"
+msgstr "Unohditko salasanasi tai käyttäjätunnuksesi?"
 
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Jos valittuna, salli lipputaso: Henkilökunta"
@@ -12146,6 +12155,14 @@ msgid ""
 msgstr ""
 "Pyyntösi hyväksytään seuraavassa hallituksen kokouksessa. Saat vahvistuksen "
 "sen arvioinnin tuloksesta hyvin pian"
+
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this"
+" page. Would you like to login to a different account?"
+msgstr ""
+"Sinut on todennettu nimellä %(username)s, mutta sinulla ei ole valtuuksia "
+"käyttää tätä sivua. Haluaisitko kirjautua sisään toisella tilillä?"
 
 msgid ""
 "This page shows the casting preferences expressed by participants, and "

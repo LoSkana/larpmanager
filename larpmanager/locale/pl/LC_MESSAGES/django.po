@@ -5585,6 +5585,9 @@ msgstr "Nazwa wyświetlana dla tokenów"
 msgid "Password reset of user %(user)s"
 msgstr "Reset hasła użytkownika %(user)s"
 
+msgid "Please correct the error below."
+msgstr "Popraw poniższy błąd."
+
 #, python-format
 msgid "Quests without traits: %(list)s"
 msgstr "Zadania bez cech: %(list)s"
@@ -5715,6 +5718,9 @@ msgstr "Teraz możesz ustawić opcje głosowania"
 
 msgid "Now you can verify wire payments"
 msgstr "Teraz możesz weryfikować płatności przelewem"
+
+msgid "Please correct the errors below."
+msgstr "Popraw poniższe błędy."
 
 msgid "Please upload your profile photo"
 msgstr "Prześlij swoje zdjęcie profilowe"
@@ -6104,6 +6110,9 @@ msgstr "Rozszerzony opis - międzynarodowy"
 #, python-format
 msgid "Feature %(name)s already deactivated"
 msgstr "Funkcja %(name)s już nieaktywna"
+
+msgid "Forgotten your password or username?"
+msgstr "Nie pamiętasz hasła lub nazwy użytkownika?"
 
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Jeśli zaznaczone, zezwól na poziom biletu: Personel"
@@ -12240,6 +12249,14 @@ msgid ""
 msgstr ""
 "Twój wniosek zostanie zatwierdzony na następnym posiedzeniu zarządu. Wkrótce"
 " otrzymasz potwierdzenie wyniku oceny"
+
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this"
+" page. Would you like to login to a different account?"
+msgstr ""
+"Jesteś uwierzytelniony jako %(username)s, ale nie masz uprawnień dostępu do "
+"tej strony. Czy chcesz zalogować się na inne konto?"
 
 msgid ""
 "This page shows the casting preferences expressed by participants, and "
