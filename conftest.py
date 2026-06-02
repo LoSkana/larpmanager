@@ -168,15 +168,16 @@ def pw_page(
     # Check if running in CI/GitHub Actions
     is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
 
-    # Configure video recording (only if not in CI)
+    # Configure video recording (only if enabled)
     video_dir = None
-    if not is_ci:
+    record_video = os.getenv("PW_RECORD_VIDEO", "0") == "1" and not is_ci
+    if record_video:
         video_dir = Path(__file__).parent / "test_videos"
         video_dir.mkdir(exist_ok=True)
 
     browser = browser_type.launch(
         headless=not headed,
-        slow_mo=50,
+        slow_mo=0,
         args=["--disable-popup-blocking"],
     )
     context = browser.new_context(
@@ -427,9 +428,41 @@ def _load_test_db_sql() -> None:
     psql(["psql", "-v", "ON_ERROR_STOP=1", "-U", user, "-h", host, "-d", name, "-f", str(sql_path)], env)
 
 
+def _pg_restore_app_data() -> bool:
+    """Restore app table data from binary dump. Returns True on success, False if dump absent."""
+    dump_path = Path(__file__).parent / "larpmanager" / "tests" / "test_db.dump"
+    if not dump_path.exists():
+        return False
+
+    env = os.environ.copy()
+    env["PGPASSWORD"] = settings.DATABASES["default"]["PASSWORD"]
+    name = settings.DATABASES["default"]["NAME"]
+    host = settings.DATABASES["default"].get("HOST") or "localhost"
+    user = settings.DATABASES["default"]["USER"]
+    port = settings.DATABASES["default"].get("PORT") or "5432"
+
+    psql(
+        [
+            "pg_restore",
+            "--data-only",
+            "--no-owner",
+            "--no-privileges",
+            "--exit-on-error",
+            "-U", user,
+            "-h", host,
+            "-p", port,
+            "-d", name,
+            str(dump_path),
+        ],
+        env,
+    )
+    return True
+
+
 def _reload_fixtures() -> None:
     _truncate_app_tables()
-    call_command("init_db")
+    if not _pg_restore_app_data():
+        call_command("init_db")
 
 
 @pytest.fixture(autouse=True)

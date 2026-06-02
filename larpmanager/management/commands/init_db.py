@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 
+import os
+
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
@@ -49,11 +51,10 @@ class Command(BaseCommand):
             None
 
         """
-        # Ensure we're running inside a virtual environment
-        check_virtualenv()
-
-        # Ensure we're not running on main branch
-        check_branch()
+        # Skip safety checks when running inside pytest
+        if not os.getenv("PYTEST_CURRENT_TEST"):
+            check_virtualenv()
+            check_branch()
 
         # Load fixtures - import features first, then test data
         call_command("import_features")

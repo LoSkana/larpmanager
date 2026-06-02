@@ -53,6 +53,8 @@ LOGGING = {
 
 FORMS_URLFIELD_ASSUME_HTTPS = True
 
+PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+
 ADMINS = [
     ('test', 'test@test.it')
 ]
