@@ -5585,6 +5585,9 @@ msgstr "Navn som skal vises for tokens"
 msgid "Password reset of user %(user)s"
 msgstr "Tilbakestilling av passord for bruker %(user)s"
 
+msgid "Please correct the error below."
+msgstr "Vennligst rett opp feilen nedenfor."
+
 #, python-format
 msgid "Quests without traits: %(list)s"
 msgstr "Oppdrag uten egenskaper: %(list)s"
@@ -5715,6 +5718,9 @@ msgstr "Nå kan du angi stemmealternativene"
 
 msgid "Now you can verify wire payments"
 msgstr "Nå kan du verifisere bankoverføringer"
+
+msgid "Please correct the errors below."
+msgstr "Vennligst rett opp feilene nedenfor."
 
 msgid "Please upload your profile photo"
 msgstr "Vennligst last opp profilbildet ditt"
@@ -6104,6 +6110,9 @@ msgstr "Utvidet beskrivelse - på engelsk"
 #, python-format
 msgid "Feature %(name)s already deactivated"
 msgstr "Funksjonen %(name)s er allerede deaktivert"
+
+msgid "Forgotten your password or username?"
+msgstr "Har du glemt passordet eller brukernavnet ditt?"
 
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Hvis avkrysset, tillat billettnivå: Staff"
@@ -12150,6 +12159,14 @@ msgid ""
 msgstr ""
 "Forespørselen din vil bli evaluert på neste styremøte. Du vil motta en "
 "bekreftelse på resultatet av evalueringen i løpet av kort tid"
+
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this"
+" page. Would you like to login to a different account?"
+msgstr ""
+"Du er autentisert som %(username)s, men har ikke tilgang til denne siden. "
+"Ønsker du å logge inn med en annen konto?"
 
 msgid ""
 "This page shows the casting preferences expressed by participants, and "

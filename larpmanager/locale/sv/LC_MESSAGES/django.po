@@ -5585,6 +5585,9 @@ msgstr "Namn som ska visas för polletter"
 msgid "Password reset of user %(user)s"
 msgstr "Lösenordsåterställning för användare %(user)s"
 
+msgid "Please correct the error below."
+msgstr "Vänligen rätta till felet nedan."
+
 #, python-format
 msgid "Quests without traits: %(list)s"
 msgstr "Uppdrag utan egenskaper: %(list)s"
@@ -5715,6 +5718,9 @@ msgstr "Nu kan du ställa in röstningsalternativen"
 
 msgid "Now you can verify wire payments"
 msgstr "Nu kan du verifiera banköverföringar"
+
+msgid "Please correct the errors below."
+msgstr "Vänligen korrigera felen nedan."
 
 msgid "Please upload your profile photo"
 msgstr "Vänligen ladda upp ditt profilfoto"
@@ -6105,6 +6111,9 @@ msgstr "Utökad beskrivning - på engelska"
 #, python-format
 msgid "Feature %(name)s already deactivated"
 msgstr "Funktion %(name)s redan avaktiverad"
+
+msgid "Forgotten your password or username?"
+msgstr "Har du glömt ditt lösenord eller användarnamn?"
 
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Om markerat, tillåt biljettnivå: Personal"
@@ -12171,6 +12180,14 @@ msgid ""
 msgstr ""
 "Din begäran kommer att utvärderas vid nästa styrelsemöte. Du kommer att få "
 "en bekräftelse på resultatet av utvärderingen inom kort"
+
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this"
+" page. Would you like to login to a different account?"
+msgstr ""
+"Du är autentiserad som %(username)s, men har inte behörighet att komma åt "
+"den här sidan. Vill du logga in på ett annat konto?"
 
 msgid ""
 "This page shows the casting preferences expressed by participants, and "
