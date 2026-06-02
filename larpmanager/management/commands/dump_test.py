@@ -189,7 +189,7 @@ class Command(BaseCommand):
 
         # Build the MD5 hash directly
         salt = ""
-        hex_hash = hashlib.md5((salt + "banana").encode()).hexdigest()
+        hex_hash = hashlib.md5((salt + "banana").encode()).hexdigest()   # noqa: S324
         stable_hash = f"md5${salt}${hex_hash}"
         user_model = get_user_model()
         user_model.objects.update(password=stable_hash, is_active=True)
