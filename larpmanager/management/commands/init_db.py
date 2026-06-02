@@ -60,14 +60,6 @@ class Command(BaseCommand):
         call_command("import_features")
         call_command("loaddata", "test.yaml", verbosity=0)
 
-        # Re-hash user passwords to consistent test password
-        # and ensure all users are active for testing
-        user_model = get_user_model()
-        for user in user_model.objects.all():
-            user.set_password("banana")
-            user.is_active = True
-            user.save()
-
         # Add exe_events feature to all association skins
         # This enables event management functionality by default
         feature = Feature.objects.get(slug="exe_events")

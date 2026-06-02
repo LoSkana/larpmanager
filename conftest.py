@@ -24,6 +24,7 @@ import logging
 import os
 import re
 import subprocess
+import tempfile
 from collections.abc import Generator, Mapping
 from datetime import UTC, datetime
 from pathlib import Path
@@ -31,6 +32,7 @@ from typing import Any
 
 import pytest
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.core.management import call_command
 from django.db import connection, transaction
@@ -456,7 +458,19 @@ def _pg_restore_app_data() -> bool:
         ],
         env,
     )
+
+    rehash_passwords()
+
     return True
+
+def rehash_passwords():
+    # Re-hash user passwords to consistent test password
+    # and ensure all users are active for testing
+    user_model = get_user_model()
+    for user in user_model.objects.all():
+        user.set_password("banana")
+        user.is_active = True
+        user.save()
 
 
 def _reload_fixtures() -> None:
@@ -499,15 +513,18 @@ def _e2e_db_setup(request: pytest.FixtureRequest, django_db_blocker: Any) -> Non
 
 
 @pytest.fixture(autouse=True)
-def _ensure_association_skin(db: Any, _e2e_db_setup: Any) -> None:  # noqa: ARG001
+def _ensure_association_skin(django_db_blocker: Any, _e2e_db_setup: Any) -> None:  # noqa: ARG001
     """Ensure default AssociationSkin and AssociationRole exist for tests.
 
     Depends on _e2e_db_setup to ensure database schema is loaded first.
+    Uses django_db_blocker instead of db to avoid TransactionTestCase flush behavior
+    (live_server presence causes db fixture to flush after each test, wiping restored data).
     """
-    if not AssociationSkin.objects.filter(pk=1).exists():
-        AssociationSkin.objects.create(pk=1, name="LarpManager", domain="larpmanager.com")
+    with django_db_blocker.unblock():
+        if not AssociationSkin.objects.filter(pk=1).exists():
+            AssociationSkin.objects.create(pk=1, name="LarpManager", domain="larpmanager.com")
 
-    # Ensure AssociationRole with number=1 exists for all associations
-    for association in Association.objects.all():
-        if not AssociationRole.objects.filter(association=association, number=1).exists():
-            AssociationRole.objects.create(association=association, number=1, name="Executive")
+        # Ensure AssociationRole with number=1 exists for all associations
+        for association in Association.objects.all():
+            if not AssociationRole.objects.filter(association=association, number=1).exists():
+                AssociationRole.objects.create(association=association, number=1, name="Executive")

@@ -181,19 +181,6 @@ class Command(BaseCommand):
             with sql_file.open("a", encoding="utf-8") as f:
                 f.write(f"\n-- LARPMANAGER_SCHEMA_VERSION: {latest_migration}\n")
 
-        # Generate binary data-only dump for fast per-test resets in conftest.py.
-        # Passwords are normalised to a deterministic MD5 hash so the binary file
-        # is stable across re-runs (bcrypt uses a random salt, which would change
-        # the file every time and create noisy LFS diffs).
-        self.stdout.write("Normalizing passwords to MD5 for binary snapshot...")
-
-        # Build the MD5 hash directly
-        salt = ""
-        hex_hash = hashlib.md5((salt + "banana").encode()).hexdigest()   # noqa: S324
-        stable_hash = f"md5${salt}${hex_hash}"
-        user_model = get_user_model()
-        user_model.objects.update(password=stable_hash, is_active=True)
-
         reset_file = Path("larpmanager/tests/test_db.dump")
         self.stdout.write(f"Generating binary reset snapshot: {reset_file}...")
         dump_binary_cmd = [
@@ -209,6 +196,7 @@ class Command(BaseCommand):
             "--exclude-table=authtoken_*",
             "--exclude-table=sessions_*",
             "--exclude-table=admin_*",
+            "--exclude-table=debug_toolbar_*",
             "-f", str(reset_file),
         ]
         try:
