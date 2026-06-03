@@ -3151,9 +3151,6 @@ msgstr "Pendeldienst"
 msgid "Start algorithm"
 msgstr "Algoritme starten"
 
-msgid "The rule's name"
-msgstr "De naam van de regel"
-
 msgid "Ticket selected"
 msgstr "Geselecteerd ticket"
 
@@ -4017,9 +4014,6 @@ msgstr "Abonnement opzeggen"
 
 msgid "Support maintainers"
 msgstr "Ondersteunende beheerders"
-
-msgid "The modifier's name"
-msgstr "De naam van de modificator"
 
 msgid "Treasury appointees"
 msgstr "Schatkistbeambten"
@@ -6316,6 +6310,9 @@ msgstr "Leveringen voor ervaringspunten instellen"
 msgid "The question type, allowed values are"
 msgstr "Het vraagtype, toegestane waarden zijn"
 
+msgid "The rule's number (unique identifier)"
+msgstr "Het nummer van de regel (unieke identificatiecode)"
+
 msgid "This page shows cancelled enrollments"
 msgstr "Deze pagina geeft een overzicht van geannuleerde registraties"
 
@@ -6714,6 +6711,9 @@ msgstr "Aanvraag lidmaatschap vereniging"
 
 msgid "Set up the organization tax configuration"
 msgstr "De configuratie van de organisatiebelasting instellen"
+
+msgid "The modifier's number (unique identifier)"
+msgstr "Het nummer van de modificator (unieke identificatie)"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Deze pagina geeft een overzicht van de geüploade fotoalbums"

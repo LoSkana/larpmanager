@@ -10359,7 +10359,7 @@ msgstr ""
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr ""
 
-msgid "The rule's name"
+msgid "The rule's number (unique identifier)"
 msgstr ""
 
 msgid ""
@@ -10378,7 +10378,7 @@ msgstr ""
 msgid "(Optional) Display order"
 msgstr ""
 
-msgid "The modifier's name"
+msgid "The modifier's number (unique identifier)"
 msgstr ""
 
 msgid "(Optional) Ability names, comma-separated"

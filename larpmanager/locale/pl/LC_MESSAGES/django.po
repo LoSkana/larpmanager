@@ -3151,9 +3151,6 @@ msgstr "Usługi wahadłowe"
 msgid "Start algorithm"
 msgstr "Algorytm startowy"
 
-msgid "The rule's name"
-msgstr "Nazwa reguły"
-
 msgid "Ticket selected"
 msgstr "Wybrany bilet"
 
@@ -4017,9 +4014,6 @@ msgstr "Anulowanie rejestracji"
 
 msgid "Support maintainers"
 msgstr "Wsparcie dla opiekunów"
-
-msgid "The modifier's name"
-msgstr "Nazwa modyfikatora"
 
 msgid "Treasury appointees"
 msgstr "Osoby mianowane przez Ministerstwo Skarbu"
@@ -6314,6 +6308,9 @@ msgstr "Skonfiguruj dostawę punktów doświadczenia"
 msgid "The question type, allowed values are"
 msgstr "Typ pytania, dozwolone wartości to"
 
+msgid "The rule's number (unique identifier)"
+msgstr "Numer reguły (unikalny identyfikator)"
+
 msgid "This page shows cancelled enrollments"
 msgstr "Na tej stronie wyświetlane są anulowane zapisy"
 
@@ -6710,6 +6707,9 @@ msgstr "Wniosek o członkostwo w organizacji"
 
 msgid "Set up the organization tax configuration"
 msgstr "Konfiguracja podatku od organizacji"
+
+msgid "The modifier's number (unique identifier)"
+msgstr "Numer modyfikatora (unikalny identyfikator)"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Na tej stronie wyświetlane są przesłane albumy ze zdjęciami"
