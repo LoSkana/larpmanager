@@ -779,7 +779,7 @@ def update_character_referenced_chars(character_id: int) -> None:
     _persist_auto_relationships(character, sources_map)
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def update_character_referenced_chars_background(character_id: int) -> None:
     """Compute and persist auto Relationships for characters referenced in a character's content."""
     update_character_referenced_chars(character_id)

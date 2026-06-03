@@ -433,28 +433,28 @@ def refresh_rule_relationships(rule: RuleExp) -> None:
 # Background tasks for cache updates
 
 
-@background_auto(queue="cache-experience")
+@background_auto(queue="cache-experience", skip_duplicates=True)
 def refresh_ability_character_rels_background(ability_ids: int | list[int]) -> None:
     """Update ability relationships in cache (dirty-aware background task)."""
     abilities = _validate_and_fetch_objects(AbilityExp, ability_ids, "AbilityExp")
     _refresh_exp_if_dirty("abilities", abilities, refresh_ability_relationships)
 
 
-@background_auto(queue="cache-experience")
+@background_auto(queue="cache-experience", skip_duplicates=True)
 def refresh_delivery_rels_dirty_background(delivery_ids: int | list[int]) -> None:
     """Update delivery relationships in cache (dirty-aware background task)."""
     deliveries = _validate_and_fetch_objects(DeliveryExp, delivery_ids, "DeliveryExp")
     _refresh_exp_if_dirty("deliveries", deliveries, refresh_delivery_relationships)
 
 
-@background_auto(queue="cache-experience")
+@background_auto(queue="cache-experience", skip_duplicates=True)
 def refresh_modifier_rels_dirty_background(modifier_ids: int | list[int]) -> None:
     """Update modifier relationships in cache (dirty-aware background task)."""
     modifiers = _validate_and_fetch_objects(ModifierExp, modifier_ids, "ModifierExp")
     _refresh_exp_if_dirty("modifiers", modifiers, refresh_modifier_relationships)
 
 
-@background_auto(queue="cache-experience")
+@background_auto(queue="cache-experience", skip_duplicates=True)
 def refresh_rule_rels_dirty_background(rule_ids: int | list[int]) -> None:
     """Update rule relationships in cache (dirty-aware background task)."""
     rules = _validate_and_fetch_objects(RuleExp, rule_ids, "RuleExp")
