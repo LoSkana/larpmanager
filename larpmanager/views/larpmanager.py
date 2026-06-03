@@ -149,7 +149,7 @@ def go_redirect(
 ) -> Any:
     """Redirect user to association-specific subdomain or main domain."""
     if request.enviro in ["dev", "test"]:
-        return redirect("http://127.0.0.1:8000/")
+        return redirect(request.build_absolute_uri("/"))
 
     new_path = f"https://{slug}.{base_domain}/" if slug else f"https://{base_domain}/"
 
@@ -195,8 +195,10 @@ def choose_association(request: HttpRequest, redirect_path: Any, association_slu
     )
 
 
-def go_redirect_run(run: Any, path: Any, hint_slug: str = "") -> Any:
+def go_redirect_run(request: HttpRequest, run: Any, path: Any, hint_slug: str = "") -> Any:
     """Redirect to a specific run's URL on its association's domain."""
+    if request.enviro in ["dev", "test"]:
+        return redirect(request.build_absolute_uri("/"))
     full_url = f"https://{run.event.association.slug}.{run.event.association.skin.domain}/{run.get_slug()}/{path}"
     if hint_slug:
         full_url += ("&" if "?" in full_url else "?") + f"hint_slug={hint_slug}"
@@ -226,7 +228,7 @@ def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any, hint_sl
     if len(run_display_names) == 0:
         return render(request, "larpmanager/larpmanager/na_event.html")
     if len(run_display_names) == 1:
-        return go_redirect_run(available_runs[0], redirect_path, hint_slug=hint_slug)
+        return go_redirect_run(request, available_runs[0], redirect_path, hint_slug=hint_slug)
 
     # show page to choose them
     if request.POST:
@@ -234,7 +236,7 @@ def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any, hint_sl
         if form.is_valid():
             selected_index = int(form.cleaned_data["slug"])
             if selected_index < len(run_display_names):
-                return go_redirect_run(available_runs[selected_index], redirect_path, hint_slug=hint_slug)
+                return go_redirect_run(request, available_runs[selected_index], redirect_path, hint_slug=hint_slug)
     else:
         form = RedirectForm(slugs=run_display_names)
     return render(
