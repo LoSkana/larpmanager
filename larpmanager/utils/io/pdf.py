@@ -737,7 +737,7 @@ def get_fake_request(association_slug: str) -> HttpRequest:
     return request
 
 
-@background_auto(queue="pdf")
+@background_auto(queue="pdf", skip_duplicates=True)
 def print_handout_bkg(association_slug: str, event_slug: str, handout_id: int) -> None:
     """Print handout by creating a fake request and delegating to print_handout_go."""
     request = get_fake_request(association_slug)
@@ -761,7 +761,7 @@ def print_character_go(context: dict, character_uuid: str) -> None:
         pass
 
 
-@background_auto(queue="pdf")
+@background_auto(queue="pdf", skip_duplicates=True)
 def print_character_bkg(association_slug: str, event_slug: str, character_uuid: str) -> None:
     """Print character background for a given association, event slug, and character."""
     request = get_fake_request(association_slug)
@@ -769,7 +769,7 @@ def print_character_bkg(association_slug: str, event_slug: str, character_uuid: 
     print_character_go(context, character_uuid)
 
 
-@background_auto(queue="pdf")
+@background_auto(queue="pdf", skip_duplicates=True)
 def print_run_bkg(association_slug: str, event_slug: str) -> None:
     """Print all background materials for a run including gallery, profiles, characters, and handouts.
 

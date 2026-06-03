@@ -900,7 +900,7 @@ def refresh_event_questtype_relationships(quest_type: QuestType) -> None:
 # Background tasks for cache updates
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def refresh_character_relationships_background(character_ids: int | list[int]) -> None:
     """Update character relationships in cache (background task).
 
@@ -912,7 +912,7 @@ def refresh_character_relationships_background(character_ids: int | list[int]) -
         refresh_character_relationships(character)
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def refresh_event_faction_relationships_background(faction_ids: int | list[int]) -> None:
     """Update faction relationships in cache (background task).
 
@@ -924,7 +924,7 @@ def refresh_event_faction_relationships_background(faction_ids: int | list[int])
         refresh_event_faction_relationships(faction)
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def refresh_event_plot_relationships_background(plot_ids: int | list[int]) -> None:
     """Update plot relationships in cache (background task).
 
@@ -936,7 +936,7 @@ def refresh_event_plot_relationships_background(plot_ids: int | list[int]) -> No
         refresh_event_plot_relationships(plot)
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def refresh_event_speedlarp_relationships_background(speedlarp_ids: int | list[int]) -> None:
     """Update speedlarp relationships in cache (background task).
 
@@ -948,7 +948,7 @@ def refresh_event_speedlarp_relationships_background(speedlarp_ids: int | list[i
         refresh_event_speedlarp_relationships(speedlarp)
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def refresh_event_prologue_relationships_background(prologue_ids: int | list[int]) -> None:
     """Update prologue relationships in cache (background task).
 
@@ -960,7 +960,7 @@ def refresh_event_prologue_relationships_background(prologue_ids: int | list[int
         refresh_event_prologue_relationships(prologue)
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def refresh_event_quest_relationships_background(quest_ids: int | list[int]) -> None:
     """Update quest relationships in cache (background task).
 
@@ -972,7 +972,7 @@ def refresh_event_quest_relationships_background(quest_ids: int | list[int]) -> 
         refresh_event_quest_relationships(quest)
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def refresh_event_questtype_relationships_background(questtype_ids: int | list[int]) -> None:
     """Update questtype relationships in cache (background task).
 
@@ -984,7 +984,7 @@ def refresh_event_questtype_relationships_background(questtype_ids: int | list[i
         refresh_event_questtype_relationships(questtype)
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def update_event_cache_all_background(run_ids: int | list[int], character_ids: int | list[int]) -> None:
     """Update event cache for characters and runs (background task).
 
@@ -1013,35 +1013,35 @@ def update_event_cache_all_background(run_ids: int | list[int], character_ids: i
 # Dirty-aware background tasks (skip items already resolved on-demand)
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def refresh_character_rels_dirty_background(character_ids: int | list[int]) -> None:
     """Update character relationships in cache (dirty-aware background task)."""
     characters = _validate_and_fetch_objects(Character, character_ids, "Character")
     _refresh_rels_if_dirty("characters", characters, refresh_character_relationships)
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def refresh_faction_rels_dirty_background(faction_ids: int | list[int]) -> None:
     """Update faction relationships in cache (dirty-aware background task)."""
     factions = _validate_and_fetch_objects(Faction, faction_ids, "Faction")
     _refresh_rels_if_dirty("factions", factions, refresh_event_faction_relationships)
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def refresh_plot_rels_dirty_background(plot_ids: int | list[int]) -> None:
     """Update plot relationships in cache (dirty-aware background task)."""
     plots = _validate_and_fetch_objects(Plot, plot_ids, "Plot")
     _refresh_rels_if_dirty("plots", plots, refresh_event_plot_relationships)
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def refresh_speedlarp_rels_dirty_background(speedlarp_ids: int | list[int]) -> None:
     """Update speedlarp relationships in cache (dirty-aware background task)."""
     speedlarps = _validate_and_fetch_objects(SpeedLarp, speedlarp_ids, "SpeedLarp")
     _refresh_rels_if_dirty("speedlarps", speedlarps, refresh_event_speedlarp_relationships)
 
 
-@background_auto(queue="cache-rels")
+@background_auto(queue="cache-rels", skip_duplicates=True)
 def refresh_prologue_rels_dirty_background(prologue_ids: int | list[int]) -> None:
     """Update prologue relationships in cache (dirty-aware background task)."""
     prologues = _validate_and_fetch_objects(Prologue, prologue_ids, "Prologue")
