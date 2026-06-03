@@ -17,13 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import hashlib
 import os
 import re
 import subprocess
 from pathlib import Path
 
-from django.contrib.auth import get_user_model
 from django.core.management import BaseCommand, call_command
 
 from larpmanager.management.commands.utils import check_branch, check_virtualenv
