@@ -3151,9 +3151,6 @@ msgstr "Kuljetuspalvelu"
 msgid "Start algorithm"
 msgstr "Aloita algoritmi"
 
-msgid "The rule's name"
-msgstr "Säännön nimi"
-
 msgid "Ticket selected"
 msgstr "Valittu lippu"
 
@@ -4017,9 +4014,6 @@ msgstr "Rekisteröitymisen peruutus"
 
 msgid "Support maintainers"
 msgstr "Tuki ylläpitäjille"
-
-msgid "The modifier's name"
-msgstr "Muunnoksen nimi"
 
 msgid "Treasury appointees"
 msgstr "Valtiovarainministeriön nimittämät henkilöt"
@@ -6315,6 +6309,9 @@ msgstr "Kokemuspisteiden jakamisen määrittäminen"
 msgid "The question type, allowed values are"
 msgstr "Kysymystyyppi, sallitut arvot ovat"
 
+msgid "The rule's number (unique identifier)"
+msgstr "Säännön numero (yksilöllinen tunniste)"
+
 msgid "This page shows cancelled enrollments"
 msgstr "Tällä sivulla näkyvät peruutetut ilmoittautumiset"
 
@@ -6711,6 +6708,9 @@ msgstr "Järjestön jäsenyyshakemus"
 
 msgid "Set up the organization tax configuration"
 msgstr "Organisaation verokokoonpanon määrittäminen"
+
+msgid "The modifier's number (unique identifier)"
+msgstr "Muunnoksen numero (yksilöllinen tunniste)"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Tämä sivu näyttää ladatut valokuva-albumit"

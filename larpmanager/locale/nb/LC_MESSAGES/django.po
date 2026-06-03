@@ -3151,9 +3151,6 @@ msgstr "Skytteltrafikk"
 msgid "Start algorithm"
 msgstr "Start-algoritme"
 
-msgid "The rule's name"
-msgstr "Regelens navn"
-
 msgid "Ticket selected"
 msgstr "Billett valgt"
 
@@ -4017,9 +4014,6 @@ msgstr "Oppsigelse av abonnement"
 
 msgid "Support maintainers"
 msgstr "Støtte vedlikeholdere"
-
-msgid "The modifier's name"
-msgstr "Modifikatorens navn"
 
 msgid "Treasury appointees"
 msgstr "Finansdepartementet"
@@ -6314,6 +6308,9 @@ msgstr "Sett opp levering for erfaringspoeng"
 msgid "The question type, allowed values are"
 msgstr "Spørsmålstypen, tillatte verdier er"
 
+msgid "The rule's number (unique identifier)"
+msgstr "Reglens nummer (unik identifikator)"
+
 msgid "This page shows cancelled enrollments"
 msgstr "Denne siden oppsummerer kansellerte registreringer"
 
@@ -6712,6 +6709,9 @@ msgstr "Søknad om medlemskap i foreningen"
 
 msgid "Set up the organization tax configuration"
 msgstr "Konfigurer organisasjonens skattekonfigurasjon"
+
+msgid "The modifier's number (unique identifier)"
+msgstr "Modifikatorens nummer (unik identifikator)"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Denne siden oppsummerer de opplastede fotoalbumene"

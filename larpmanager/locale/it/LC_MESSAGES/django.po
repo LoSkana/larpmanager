@@ -3151,9 +3151,6 @@ msgstr "Shuttle service"
 msgid "Start algorithm"
 msgstr "Avvia algoritmo"
 
-msgid "The rule's name"
-msgstr "Il nome della regola"
-
 msgid "Ticket selected"
 msgstr "Biglietto selezionato"
 
@@ -4017,9 +4014,6 @@ msgstr "Disdetta iscrizioni"
 
 msgid "Support maintainers"
 msgstr "Manutentori di supporto"
-
-msgid "The modifier's name"
-msgstr "Il nome del modificatore"
 
 msgid "Treasury appointees"
 msgstr "Incaricati alla tesoreria"
@@ -6315,6 +6309,9 @@ msgstr "Imposta la consegna dei punti esperienza"
 msgid "The question type, allowed values are"
 msgstr "Il tipo di domanda, i valori ammessi sono"
 
+msgid "The rule's number (unique identifier)"
+msgstr "Il numero della regola (identificativo unico)"
+
 msgid "This page shows cancelled enrollments"
 msgstr "Questa pagina riepiloga le iscrizioni disdette"
 
@@ -6711,6 +6708,9 @@ msgstr "Richiesta iscrizione all'Associazione"
 
 msgid "Set up the organization tax configuration"
 msgstr "Configura la tassa organizzativa"
+
+msgid "The modifier's number (unique identifier)"
+msgstr "Il numero del modificatore (identificatore univoco)"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Questa pagina riepiloga gli album foto caricati"

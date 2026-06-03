@@ -3151,9 +3151,6 @@ msgstr "Kyvadlová doprava"
 msgid "Start algorithm"
 msgstr "Algoritmus spuštění"
 
-msgid "The rule's name"
-msgstr "Název pravidla"
-
 msgid "Ticket selected"
 msgstr "Vybraná vstupenka"
 
@@ -4017,9 +4014,6 @@ msgstr "Zrušení předplatného"
 
 msgid "Support maintainers"
 msgstr "Správci podpory"
-
-msgid "The modifier's name"
-msgstr "Název modifikátoru"
 
 msgid "Treasury appointees"
 msgstr "Úředníci ministerstva financí"
@@ -6316,6 +6310,9 @@ msgstr "Nastavení doručování zkušenostních bodů"
 msgid "The question type, allowed values are"
 msgstr "Typ otázky, povolené hodnoty jsou"
 
+msgid "The rule's number (unique identifier)"
+msgstr "Číslo pravidla (jedinečný identifikátor)"
+
 msgid "This page shows cancelled enrollments"
 msgstr "Tato stránka shrnuje zrušené registrace"
 
@@ -6712,6 +6709,9 @@ msgstr "Žádost o členství ve sdružení"
 
 msgid "Set up the organization tax configuration"
 msgstr "Nastavení konfigurace daně z příjmu organizace"
+
+msgid "The modifier's number (unique identifier)"
+msgstr "Číslo modifikátoru (jedinečný identifikátor)"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Tato stránka shrnuje nahraná fotoalba"

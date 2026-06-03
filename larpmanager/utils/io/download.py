@@ -953,7 +953,7 @@ def _get_column_names(context: dict) -> None:
     elif context["typ"] == "exp_rule":
         context["columns"] = [
             {
-                "name": _("The rule's name"),
+                "number": _("The rule's number (unique identifier)"),
                 "abilities": _("(Optional) Ability names, comma-separated - rule applies if character has any"),
                 "field": _("The character field of computed type to update"),
                 "operation": _("Operation: ADD, SUB, MUL, DIV"),
@@ -967,7 +967,7 @@ def _get_column_names(context: dict) -> None:
     elif context["typ"] == "exp_modifier":
         context["columns"] = [
             {
-                "name": _("The modifier's name"),
+                "number": _("The modifier's number (unique identifier)"),
                 "abilities": _("(Optional) Ability names, comma-separated"),
                 "cost": _("(Optional) Cost (0 = auto assigned)"),
                 "prerequisites": _("(Optional) Prerequisite ability names, comma-separated"),
@@ -1258,14 +1258,14 @@ def export_abilities(context: Any) -> Any:
 
 def export_rules(context: Any) -> Any:
     """Export rules data for an event."""
-    column_headers = ["name", "abilities", "field", "operation", "amount", "order"]
+    column_headers = ["number", "abilities", "field", "operation", "amount", "order"]
 
     rule_queryset = (
         context["event"].get_elements(RuleExp).order_by("order").select_related("field").prefetch_related("abilities")
     )
     rule_rows = [
         [
-            rule.name,
+            rule.number,
             ", ".join([ability.name for ability in rule.abilities.all()]),
             rule.field.name if rule.field else "",
             rule.operation,
@@ -1280,7 +1280,7 @@ def export_rules(context: Any) -> Any:
 
 def export_modifiers(context: Any) -> Any:
     """Export modifiers data for an event."""
-    column_headers = ["name", "abilities", "cost", "prerequisites", "requirements", "order"]
+    column_headers = ["number", "abilities", "cost", "prerequisites", "requirements", "order"]
 
     modifier_queryset = (
         context["event"]
@@ -1290,7 +1290,7 @@ def export_modifiers(context: Any) -> Any:
     )
     modifier_rows = [
         [
-            modifier.name,
+            modifier.number,
             ", ".join([ability.name for ability in modifier.abilities.all()]),
             modifier.cost,
             ", ".join([prereq.name for prereq in modifier.prerequisites.all()]),
