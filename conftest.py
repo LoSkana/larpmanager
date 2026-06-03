@@ -253,7 +253,7 @@ def _truncate_app_tables() -> None:
 
 def psql(params: list[str], env: Mapping[str, str]) -> None:
     """Performs a query on the db."""
-    subprocess.run(params, check=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL, env=env, text=True)  # noqa: S603
+    subprocess.run(params, check=True, env=env, text=True)  # noqa: S603
 
 
 def clean_db(host: str, env: Mapping[str, str], name: str, user: str) -> None:
@@ -430,6 +430,58 @@ def _load_test_db_sql() -> None:
     psql(["psql", "-v", "ON_ERROR_STOP=1", "-U", user, "-h", host, "-d", name, "-f", str(sql_path)], env)
 
 
+def _query_sequences(name: str, user: str, host: str, port: str, env: Mapping[str, str]) -> set[str] | None:
+    """Return the set of sequence names that exist in the target database."""
+    result = subprocess.run(  # noqa: S603
+        [  # noqa: S607
+            "psql", "-U", user, "-h", host, "-p", port, "-d", name,
+            "-t", "-A", "-c",
+            "SELECT sequencename FROM pg_sequences WHERE schemaname='public'",
+        ],
+        capture_output=True, text=True, env=env, check=False,
+    )
+    if result.returncode != 0:
+        return None
+    return {line.strip() for line in result.stdout.splitlines() if line.strip()}
+
+
+def _build_filtered_toc(
+    dump_path: Path,
+    env: Mapping[str, str],
+    existing_sequences: set[str] | None,
+) -> str | None:
+    """Return a temp file path with SEQUENCE SET entries filtered to existing sequences only.
+
+    Django's RenameModel renames tables but leaves old sequences dangling in the dev DB.
+    pg_dump includes setval() calls for those orphaned sequences, which fail against
+    the test DB (built from scratch via the SQL dump, no orphans there).
+    We filter by querying which sequences actually exist in the target DB.
+    """
+    result = subprocess.run(  # noqa: S603
+        ["pg_restore", "--list", str(dump_path)],  # noqa: S607
+        capture_output=True, text=True, env=env, check=False,
+    )
+    if result.returncode != 0:
+        return None
+
+    lines = result.stdout.splitlines()
+
+    # TOC format: "<id>; <oid> <fileoid> SEQUENCE SET <schema> <name> <owner>"
+    # The name is always at index 6 (after the schema at index 5).
+    filtered: list[str] = []
+    for line in lines:
+        if "SEQUENCE SET" in line and existing_sequences is not None:
+            parts = line.split()
+            if len(parts) >= 7 and parts[6] not in existing_sequences:  # noqa: PLR2004
+                filtered.append(f"; {line}")
+                continue
+        filtered.append(line)
+
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".list", delete=False) as toc_file:
+        toc_file.write("\n".join(filtered) + "\n")
+        return toc_file.name
+
+
 def _pg_restore_app_data() -> bool:
     """Restore app table data from binary dump. Returns True on success, False if dump absent."""
     dump_path = Path(__file__).parent / "larpmanager" / "tests" / "test_db.dump"
@@ -443,29 +495,69 @@ def _pg_restore_app_data() -> bool:
     user = settings.DATABASES["default"]["USER"]
     port = settings.DATABASES["default"].get("PORT") or "5432"
 
-    psql(
-        [
-            "pg_restore",
-            "--data-only",
-            "--no-owner",
-            "--no-privileges",
-            "--exit-on-error",
-            "-U", user,
-            "-h", host,
-            "-p", port,
-            "-d", name,
-            str(dump_path),
-        ],
-        env,
-    )
+    existing_sequences = _query_sequences(name, user, host, port, env)
+    toc_path = _build_filtered_toc(dump_path, env, existing_sequences)
 
+    cmd = [
+        "pg_restore",
+        "--data-only",
+        "--no-owner",
+        "--no-privileges",
+        "--exit-on-error",
+        "-U", user,
+        "-h", host,
+        "-p", port,
+        "-d", name,
+    ]
+    if toc_path:
+        cmd += ["--use-list", toc_path]
+    cmd.append(str(dump_path))
+
+    try:
+        psql(cmd, env)
+    finally:
+        if toc_path:
+            Path(toc_path).unlink(missing_ok=True)
+
+    _fix_sequences()
     rehash_passwords()
 
     return True
 
-def rehash_passwords():
-    # Re-hash user passwords to consistent test password
-    # and ensure all users are active for testing
+
+def _fix_sequences() -> None:
+    """Reset all owned sequences to max(id)+1 after data restore.
+
+    _truncate_app_tables() resets sequences via RESTART IDENTITY. The binary dump
+    may not include SEQUENCE SET for sequences that no longer exist in the dev DB
+    (e.g. when a migration removes a sequence but the test DB still has one from the
+    SQL schema dump). This re-syncs every sequence to its table's current max value.
+    """
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            DO $$
+            DECLARE r RECORD;
+            BEGIN
+              FOR r IN
+                SELECT s.relname AS seq, t.relname AS tbl, a.attname AS col
+                FROM pg_class s
+                JOIN pg_depend d ON d.objid = s.oid AND d.deptype IN ('a', 'i')
+                JOIN pg_class t ON d.refobjid = t.oid AND t.relkind = 'r'
+                JOIN pg_attribute a ON a.attrelid = t.oid AND a.attnum = d.refobjsubid
+                WHERE s.relkind = 'S'
+                AND t.relnamespace = (SELECT oid FROM pg_namespace WHERE nspname = 'public')
+              LOOP
+                EXECUTE format(
+                  'SELECT setval(%L, COALESCE((SELECT MAX(%I) FROM %I), 0) + 1, false)',
+                  r.seq, r.col, r.tbl
+                );
+              END LOOP;
+            END$$;
+        """)
+
+
+def rehash_passwords() -> None:
+    """Re-hash user passwords to consistent test password and ensure all users are active."""
     user_model = get_user_model()
     for user in user_model.objects.all():
         user.set_password("banana")
@@ -513,7 +605,7 @@ def _e2e_db_setup(request: pytest.FixtureRequest, django_db_blocker: Any) -> Non
 
 
 @pytest.fixture(autouse=True)
-def _ensure_association_skin(django_db_blocker: Any, _e2e_db_setup: Any) -> None:  # noqa: ARG001
+def _ensure_association_skin(django_db_blocker: Any, _e2e_db_setup: Any) -> None:
     """Ensure default AssociationSkin and AssociationRole exist for tests.
 
     Depends on _e2e_db_setup to ensure database schema is loaded first.
