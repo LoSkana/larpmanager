@@ -1408,7 +1408,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
             # Create new choices for added options
             for add in selected_option_ids - old:
-                self.choice_class.objects.create(
+                self.choice_class.objects.get_or_create(
                     **{"question_id": question_id, self.instance_key: instance.id, "option_id": add}
                 )
 
@@ -1420,7 +1420,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         else:
             # Create all choices from scratch if none exist
             for pkoid in selected_option_ids:
-                self.choice_class.objects.create(
+                self.choice_class.objects.get_or_create(
                     **{"question_id": question_id, self.instance_key: instance.id, "option_id": pkoid}
                 )
 
