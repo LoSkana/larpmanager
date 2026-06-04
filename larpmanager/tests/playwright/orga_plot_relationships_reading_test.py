@@ -157,7 +157,7 @@ def relationships(live_server: Any, page: Any) -> None:
     page.locator('[id="u2"]').locator(".fa-edit").click()
     just_wait(page)
     page.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
-    just_wait(page)
+    just_wait(page, big=True)
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
     # check in other char
@@ -165,8 +165,8 @@ def relationships(live_server: Any, page: Any) -> None:
     just_wait(page)
     page.locator('[id="u1"]').locator(".fa-edit").click()
     just_wait(page)
-    page.get_by_role("row", name="Inverse Show How the").get_by_role("link").click()
-    just_wait(page)
+    page.locator("a.my_toggle[tog='f_u2_inverse']").click()
+    just_wait(page, big=True)
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
     # check in gallery
