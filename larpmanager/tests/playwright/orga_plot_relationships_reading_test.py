@@ -165,7 +165,7 @@ def relationships(live_server: Any, page: Any) -> None:
     just_wait(page)
     page.locator('[id="u1"]').locator(".fa-edit").click()
     just_wait(page)
-    page.get_by_role("row", name="Inverse Show How the").get_by_role("link").click()
+    page.locator("a.my_toggle[tog='f_u2_inverse']").click()
     just_wait(page)
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
