@@ -1,0 +1,49 @@
+{% load show_tags static i18n %}
+{% if rel %}
+    <style>
+        table.rel-outer { border-collapse: separate; border-spacing: 6pt; width: 100%; }
+        table.rel-inner { border-collapse: collapse; width: 100%; }
+        td.rel-img-cell { width: 20%; vertical-align: top; text-align: center; padding: 0 6pt 0 0; border: none; }
+        td.rel-text-cell { vertical-align: top; text-align: left; padding: 0; border: none; }
+        img.rel-img { display: block; max-width: 60pt; }
+        span.rel-name { font-size: 110%; }
+        p.rel-info { line-height: 100%; margin: 0.3em 0 1em 0; }
+    </style>
+    <h2>{% trans "Relationships" %}</h2>
+    <table class="rel-outer">
+        {% for el in rel %}
+            <tr>
+                <td>
+                    <table class="rel-inner">
+                        <tr>
+                            <td class="rel-img-cell">
+                                {% if el.player_uuid and el.player_prof %}
+                                    <img class="rel-img" src="{{ el.player_prof }}" alt="player profile" />
+                                {% else %}
+                                    <img class="rel-img"
+                                         src="{% static 'larpmanager/assets/blank-avatar.png' %}"
+                                         alt="player profile" />
+                                {% endif %}
+                            </td>
+                            <td class="rel-text-cell">
+                                <p class="rel-info">
+                                    <span class="rel-name">{{ el.name }}</span>
+                                    {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
+                                    {% if el.pronoun %}({{ el.pronoun }}){% endif %}
+                                    {% if el.player_uuid %}
+                                        | <b>{% trans "Player" %}:&nbsp;</b>{{ el.player }}
+                                    {% endif %}
+                                    {% if el.factions_list %}| {{ el.factions_list }}{% endif %}
+                                </p>
+                                {% if show_character.teaser and el.teaser %}
+                                    <span style="font-size: {{ el.font_size }}%">{% show_char el.teaser run 1 %}</span>
+                                {% endif %}
+                                <span style="font-size: {{ el.font_size }}%">{% show_char el.text run 1 %}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
