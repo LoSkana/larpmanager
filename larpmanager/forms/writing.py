@@ -96,9 +96,12 @@ class WritingForm(BaseModelForm):
         if WritingQuestionType.PROGRESS in question_types:
             run_event = self.params.get("run").event
             progress_event = run_event.parent if run_event.parent else run_event
-            steps = list(ProgressStep.objects.filter(event=progress_event).order_by("order"))
-            self.fields["progress"].queryset = ProgressStep.objects.filter(event=progress_event)
-            self.fields["progress"].choices = [(step.uuid, str(step)) for step in steps]
+            self.fields["progress"].queryset = ProgressStep.objects.filter(event=progress_event).order_by("order")
+            self.fields["progress"].to_field_name = "uuid"
+            if self.instance.pk and self.instance.progress_id:
+                progress_step = ProgressStep.objects.filter(pk=self.instance.progress_id).first()
+                if progress_step:
+                    self.initial["progress"] = progress_step.uuid
         else:
             self.delete_field("progress")
 

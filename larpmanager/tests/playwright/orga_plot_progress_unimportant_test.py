@@ -51,6 +51,7 @@ def test_plot_progress_preservation(pw_page: Any) -> None:
 
     # Enable Plots and Progress features
     page.get_by_role("link", name="Features").first.click()
+    check_feature(page, "Characters")
     check_feature(page, "Plots")
     check_feature(page, "Progress")
     submit_confirm(page)
@@ -76,7 +77,7 @@ def test_plot_progress_preservation(pw_page: Any) -> None:
     sidebar(page, "Plots")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("Progress Test Plot")
-    page.locator("#id_progress").select_option(label="Final")
+    page.locator("#id_progress").select_option(label="2 - Final")
     submit_confirm(page)
 
     # Edit the plot (name change only) and save
@@ -151,14 +152,28 @@ def test_plot_unimportant_stats(pw_page: Any) -> None:
 
     submit_confirm(page)
 
-    # Show the Characters column in the plot list
+    # Show Characters column then Stats to make stats-characters cells visible in DOM
     page.locator("#one").get_by_role("link", name="Characters").click()
+    just_wait(page)
+    page.locator("#one").get_by_role("link", name="Stats").click()
     just_wait(page)
 
     # Verify count = 2 and important = 1
     stats_cells = page.locator("#one td.stats")
-    count_text = stats_cells.nth(0).text_content().strip()
-    important_text = stats_cells.nth(1).text_content().strip()
+    count_text = (
+        page.locator("table.writing_list tbody tr")
+        .nth(0)
+        .locator("td")
+        .nth(8)
+        .inner_text()
+    )
+    important_text = (
+        page.locator("table.writing_list tbody tr")
+        .nth(0)
+        .locator("td")
+        .nth(9)
+        .inner_text()
+    )
 
     assert count_text == "2", f"Expected count=2, got '{count_text}'"
     assert important_text == "1", f"Expected important=1, got '{important_text}'"
