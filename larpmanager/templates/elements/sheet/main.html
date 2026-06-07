@@ -19,8 +19,10 @@
     </table>
 {% endif %}
 <h1 id="char_name">{{ sheet_char.name }}</h1>
+<span id="char_present">
 {% include "elements/sheet/presentation.html" %}
 {% include "elements/sheet/fields.html" with char=sheet_char %}
+</span>
 {% include "elements/sheet/teaser.html" %}
 <hr />
 {% include "elements/sheet/experience.html" %}

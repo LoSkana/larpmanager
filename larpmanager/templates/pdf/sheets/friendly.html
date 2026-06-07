@@ -30,7 +30,7 @@
                 padding: 0;
             }
 
-            .pdf-inline  p { display: inline; margin: 0 10pt 0 0; }
+            .pdf-inline  p { display: inline; margin: 0; padding-right: 10pt; }
 
             h1 {
                 text-align: center;
@@ -53,7 +53,7 @@
                 color: #8b1f1f;
             }
 
-            .pdf_normal, .go-inline b {
+            .pdf_normal, .go-inline b, .rel-info b {
                  color: black;
             }
 
@@ -86,6 +86,10 @@
                 margin: 0.5em;
                 font-style: italic;
             }
+            
+            #char_present {
+				font-size: 130%; 
+			}
 
             table {
                 width: 540pt;
@@ -118,10 +122,6 @@
 
             .go-inline {
                 display: inline;
-            }
-
-            .go-inline + .go-inline::before {
-                content: " | ";
             }
 
         </style>
