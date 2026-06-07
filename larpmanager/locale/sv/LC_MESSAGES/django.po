@@ -3988,9 +3988,6 @@ msgstr "Lösa in post"
 msgid "Registration closed"
 msgstr "Registreringen stängd"
 
-msgid "Relationships (Pdf)"
-msgstr "Förhållanden (Pdf)"
-
 msgid "Remove from faction"
 msgstr "Ta bort från fraktionen"
 
@@ -4183,9 +4180,6 @@ msgstr "Biljetter till registrering"
 
 msgid "Registrations status"
 msgstr "Status för registreringar"
-
-msgid "Relationships (Test)"
-msgstr "Relationer (test)"
 
 msgid "Require registration"
 msgstr "Kräver registrering"

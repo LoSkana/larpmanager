@@ -3988,9 +3988,6 @@ msgstr "Canjear entrada"
 msgid "Registration closed"
 msgstr "Inscripción cerrada"
 
-msgid "Relationships (Pdf)"
-msgstr "Relaciones (Pdf)"
-
 msgid "Remove from faction"
 msgstr "Eliminar de la facción"
 
@@ -4183,9 +4180,6 @@ msgstr "Billetes de inscripción"
 
 msgid "Registrations status"
 msgstr "Estado de las inscripciones"
-
-msgid "Relationships (Test)"
-msgstr "Relaciones (Test)"
 
 msgid "Require registration"
 msgstr "Exigir el registro"

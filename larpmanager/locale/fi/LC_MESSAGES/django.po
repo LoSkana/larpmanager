@@ -3988,9 +3988,6 @@ msgstr "Lunasta rekisteröinti"
 msgid "Registration closed"
 msgstr "Ilmoittautuminen suljettu"
 
-msgid "Relationships (Pdf)"
-msgstr "Suhteet (Pdf)"
-
 msgid "Remove from faction"
 msgstr "Poista ryhmästä"
 
@@ -4183,9 +4180,6 @@ msgstr "Rekisteröintiliput"
 
 msgid "Registrations status"
 msgstr "Ilmoittautumisten tila"
-
-msgid "Relationships (Test)"
-msgstr "Suhteet (testi)"
 
 msgid "Require registration"
 msgstr "Edellyttää ilmoittautumista"

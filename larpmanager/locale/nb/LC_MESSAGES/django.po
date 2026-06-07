@@ -3988,9 +3988,6 @@ msgstr "Innløs oppføring"
 msgid "Registration closed"
 msgstr "Registreringen er stengt"
 
-msgid "Relationships (Pdf)"
-msgstr "Relasjoner (Pdf)"
-
 msgid "Remove from faction"
 msgstr "Fjern fra fraksjon"
 
@@ -4183,9 +4180,6 @@ msgstr "Registrering av billetter"
 
 msgid "Registrations status"
 msgstr "Status for registreringer"
-
-msgid "Relationships (Test)"
-msgstr "Relasjoner (Test)"
 
 msgid "Require registration"
 msgstr "Krev registrering"

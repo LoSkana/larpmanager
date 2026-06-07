@@ -3988,9 +3988,6 @@ msgstr "Inwisselen"
 msgid "Registration closed"
 msgstr "Registratie gesloten"
 
-msgid "Relationships (Pdf)"
-msgstr "Relaties (Pdf)"
-
 msgid "Remove from faction"
 msgstr "Verwijderen uit factie"
 
@@ -4183,9 +4180,6 @@ msgstr "Registratie tickets"
 
 msgid "Registrations status"
 msgstr "Status registraties"
-
-msgid "Relationships (Test)"
-msgstr "Relaties (Test)"
 
 msgid "Require registration"
 msgstr "Registratie verplichten"

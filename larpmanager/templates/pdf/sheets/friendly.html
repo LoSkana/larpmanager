@@ -25,10 +25,12 @@
                 line-height: 1.3;
             }
 
-           p {
+            p {
                 margin: 0.3em;
                 padding: 0;
             }
+
+            .pdf-inline  p { display: inline; margin: 0; padding-right: 10pt; }
 
             h1 {
                 text-align: center;
@@ -42,24 +44,41 @@
             }
 
             a {
-                color: inherit;
+                color: #1e4a99;
                 font-weight: bold;
                 text-decoration: none;
             }
 
+            b, strong {
+                color: #8b1f1f;
+            }
+
+            .pdf_normal, .go-inline b, .rel-info b {
+                 color: black;
+            }
+
+            h2 {
+                color: #3a7a52;
+                text-decoration: underline;
+            }
+
+            h3 {
+                color: #3a7a52;
+                text-decoration: underline;
+            }
+
             .head {
                 text-align: center;
-                font-size: 130%;
+                font-size: 150%;
                 font-weight: bold;
             }
 
+            br {
+				display: none;
+			}
+
             #event_links {
                 display: none;
-            }
-
-            br {
-                display: block;
-                margin: 1px 0;
             }
 
             #char_title {
@@ -67,6 +86,10 @@
                 margin: 0.5em;
                 font-style: italic;
             }
+            
+            #char_present {
+				font-size: 130%; 
+			}
 
             table {
                 width: 540pt;
@@ -81,10 +104,12 @@
                 clear: both;
             }
 
-            .c {
+            h2, h3, .c {
                 text-align: left;
                 margin-left: 2em;
                 font-style: italic;
+                font-weight: bold;
+                font-size: 120%;
             }
 
             #char_name {
@@ -99,22 +124,18 @@
                 display: inline;
             }
 
-            .go-inline + .go-inline::before {
-                content: " | ";
-            }
         </style>
         <style>{{ event.sheet_css | safe }}</style>
     </head>
     <body>
         <div>
             <div class="intro"></div>
-            <div class="head">{{ event.association }} - {{ event }} - {{ sheet_char.name }}</div>
             {% include "elements/sheet/main.html" %}
             {% include "elements/sheet/plots.html" %}
             {% include "elements/sheet/quests.html" %}
             {% include "elements/sheet/speedlarp.html" %}
             {% include "elements/sheet/prologue.html" %}
-            {% include "pdf/sheets/relationships_section.html" %}
+            {% include "pdf/sheets/relationships.html" %}
             <div class="outro"></div>
         </div>
     </body>

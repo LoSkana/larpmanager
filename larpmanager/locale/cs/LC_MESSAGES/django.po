@@ -3988,9 +3988,6 @@ msgstr "Uplatnit vstup"
 msgid "Registration closed"
 msgstr "Registrace uzavřena"
 
-msgid "Relationships (Pdf)"
-msgstr "Vztahy (Pdf)"
-
 msgid "Remove from faction"
 msgstr "Odstranění z frakce"
 
@@ -4183,9 +4180,6 @@ msgstr "Registrační lístky"
 
 msgid "Registrations status"
 msgstr "Stav registrací"
-
-msgid "Relationships (Test)"
-msgstr "Vztahy (test)"
 
 msgid "Require registration"
 msgstr "Vyžadovat registraci"

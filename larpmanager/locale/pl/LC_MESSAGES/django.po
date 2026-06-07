@@ -3988,9 +3988,6 @@ msgstr "Zrealizuj rejestrację"
 msgid "Registration closed"
 msgstr "Rejestracja została zamknięta"
 
-msgid "Relationships (Pdf)"
-msgstr "Relacje (Pdf)"
-
 msgid "Remove from faction"
 msgstr "Usunięcie z frakcji"
 
@@ -4183,9 +4180,6 @@ msgstr "Bilety rejestracyjne"
 
 msgid "Registrations status"
 msgstr "Status rejestracji"
-
-msgid "Relationships (Test)"
-msgstr "Relacje (test)"
 
 msgid "Require registration"
 msgstr "Wymagać rejestracji"

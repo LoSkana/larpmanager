@@ -125,7 +125,6 @@ def orga_characters_pdf_test(page: Any, live_server: Any) -> None:
     test_links = {
         "Complete sheet (Test)": page.locator("a.link", has_text="Complete sheet (Test)").get_attribute("orig"),
         "Lightweight sheet (Test)": page.locator("a.link", has_text="Lightweight sheet (Test)").get_attribute("orig"),
-        "Relationships (Test)": page.locator("a.link", has_text="Relationships (Test)").get_attribute("orig"),
     }
 
     for label, orig in test_links.items():
