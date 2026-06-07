@@ -934,7 +934,7 @@ def build_friendly_bundle_bkg(association_slug: str, event_slug: str) -> None:
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zip_file:
         for character in context["event"].get_elements(Character):
             try:
-                get_char_check(None, context, character.uuid, bypass_access_checks=True)
+                get_char_check(request, context, character.uuid, bypass_access_checks=True)
                 filepath = context["character"].get_sheet_friendly_filepath(run)
 
                 if not Path(filepath).exists() or reprint(filepath):
