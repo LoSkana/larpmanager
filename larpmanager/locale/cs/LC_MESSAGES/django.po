@@ -2081,6 +2081,9 @@ msgstr "Účastník"
 msgid "Past events"
 msgstr "Minulé události"
 
+msgid "Please wait"
+msgstr "Prosím, počkejte"
+
 msgid "Postal code"
 msgstr "Poštovní směrovací číslo"
 
@@ -2989,6 +2992,9 @@ msgstr "Cesta k příloze"
 msgid "Backup ZIP file"
 msgstr "Záložní soubor ZIP"
 
+msgid "Bundle is ready"
+msgstr "Balíček je připraven"
+
 msgid "Change password"
 msgstr "Obnovení hesla"
 
@@ -3529,6 +3535,9 @@ msgstr "Pevné splátky"
 msgid "Free registration"
 msgstr "Vstup zdarma"
 
+msgid "Generating Bundle"
+msgstr "Vytvoření balíčku"
+
 msgid "Give a new answer"
 msgstr "Odpovězte"
 
@@ -4035,6 +4044,12 @@ msgstr "Pokročilý textový editor"
 
 msgid "All printable sheets"
 msgstr "Všechny listy k vytištění"
+
+msgid "Back to PDF settings"
+msgstr "Zpět k nastavení PDF"
+
+msgid "Bundle not ready yet"
+msgstr "Balíček ještě není připraven"
 
 msgid "Carousel description"
 msgstr "Popis kolotoče"
@@ -5316,6 +5331,9 @@ msgstr "Již existující vztah"
 #, python-format
 msgid "Approval %(user)s as %(role)s"
 msgstr "Schválení %(user)s jako %(role)s"
+
+msgid "Bundle generation in progress"
+msgstr "Probíhá vytváření balíčku"
 
 msgid "Confirm and commit quantities"
 msgstr "Potvrzení a odevzdání množství"
@@ -6895,6 +6913,9 @@ msgstr "Slevu nelze kombinovat s jinými úlevami"
 msgid "Freely indicate the amount of your donation"
 msgstr "Volně uveďte výši svého daru"
 
+msgid "Generating printable character sheet bundle"
+msgstr "Vytvoření balíčku tisknutelných charakteristik postav"
+
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Spolupracovník"
 
@@ -7749,6 +7770,9 @@ msgstr "Na této stránce jsou shrnuty úkoly v rámci této akce"
 
 msgid "This page summarizes the organizations's custom texts"
 msgstr "Tato stránka shrnuje vlastní texty organizací"
+
+msgid "This page will refresh automatically every 10 seconds"
+msgstr "Tato stránka se bude automaticky aktualizovat každých 10 sekund"
 
 msgid "Warehouse quantities already committed for this event"
 msgstr "Množství skladových zásob, které již bylo pro tuto akci přiděleno"

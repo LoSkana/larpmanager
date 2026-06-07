@@ -2081,6 +2081,9 @@ msgstr "Deltagare"
 msgid "Past events"
 msgstr "Tidigare händelser"
 
+msgid "Please wait"
+msgstr "Vänligen vänta"
+
 msgid "Postal code"
 msgstr "Postnummer"
 
@@ -2989,6 +2992,9 @@ msgstr "Tillbehörsväg"
 msgid "Backup ZIP file"
 msgstr "Säkerhetskopiera ZIP-fil"
 
+msgid "Bundle is ready"
+msgstr "Paketet är klart"
+
 msgid "Change password"
 msgstr "Återställning av lösenord"
 
@@ -3529,6 +3535,9 @@ msgstr "Fasta avbetalningar"
 msgid "Free registration"
 msgstr "Fri entré"
 
+msgid "Generating Bundle"
+msgstr "Skapa paket"
+
 msgid "Give a new answer"
 msgstr "Ge ett svar"
 
@@ -4035,6 +4044,12 @@ msgstr "Avancerad textredigerare"
 
 msgid "All printable sheets"
 msgstr "Alla utskrivbara blad"
+
+msgid "Back to PDF settings"
+msgstr "Tillbaka till PDF-inställningarna"
+
+msgid "Bundle not ready yet"
+msgstr "Paketet är inte klart än"
 
 msgid "Carousel description"
 msgstr "Beskrivning av karusellen"
@@ -5316,6 +5331,9 @@ msgstr "Redan befintlig relation"
 #, python-format
 msgid "Approval %(user)s as %(role)s"
 msgstr "Godkännande av %(user)s som %(role)s"
+
+msgid "Bundle generation in progress"
+msgstr "Paketgenerering pågår"
 
 msgid "Confirm and commit quantities"
 msgstr "Bekräftelse och åtagande av kvantiteter"
@@ -6896,6 +6914,9 @@ msgstr "Rabatt som inte kan kombineras med andra förmåner"
 msgid "Freely indicate the amount of your donation"
 msgstr "Ange fritt beloppet för din donation"
 
+msgid "Generating printable character sheet bundle"
+msgstr "Skapa ett paket med utskrivbara karaktärsblad"
+
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Om markerat, tillåt biljettnivå: Samarbetspartner"
 
@@ -7742,6 +7763,9 @@ msgstr "På denna sida sammanfattas uppdragen i detta event av"
 
 msgid "This page summarizes the organizations's custom texts"
 msgstr "Denna sida sammanfattar organisationernas anpassade texter"
+
+msgid "This page will refresh automatically every 10 seconds"
+msgstr "Denna sida uppdateras automatiskt var 10:e sekund"
 
 msgid "Warehouse quantities already committed for this event"
 msgstr "Lagerkvantiteter som redan åtagits för detta evenemang"

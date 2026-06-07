@@ -2081,6 +2081,9 @@ msgstr "Participante"
 msgid "Past events"
 msgstr "Eventos pasados"
 
+msgid "Please wait"
+msgstr "Por favor, espera"
+
 msgid "Postal code"
 msgstr "Código postal"
 
@@ -2989,6 +2992,9 @@ msgstr "Ruta de acceso"
 msgid "Backup ZIP file"
 msgstr "Archivo ZIP de copia de seguridad"
 
+msgid "Bundle is ready"
+msgstr "El paquete ya está listo"
+
 msgid "Change password"
 msgstr "Recuperación de contraseñas"
 
@@ -3529,6 +3535,9 @@ msgstr "Plazos fijos"
 msgid "Free registration"
 msgstr "Entrada gratuita"
 
+msgid "Generating Bundle"
+msgstr "Generando paquete"
+
 msgid "Give a new answer"
 msgstr "Dar una nueva respuesta"
 
@@ -4035,6 +4044,12 @@ msgstr "Editor de texto avanzado"
 
 msgid "All printable sheets"
 msgstr "Todas las hojas para imprimir"
+
+msgid "Back to PDF settings"
+msgstr "Volver a la configuración del PDF"
+
+msgid "Bundle not ready yet"
+msgstr "El paquete aún no está listo"
 
 msgid "Carousel description"
 msgstr "Descripción del carrusel"
@@ -5316,6 +5331,9 @@ msgstr "Relación ya existente"
 #, python-format
 msgid "Approval %(user)s as %(role)s"
 msgstr "Aprobación %(user)s como %(role)s"
+
+msgid "Bundle generation in progress"
+msgstr "Se está generando el paquete"
 
 msgid "Confirm and commit quantities"
 msgstr "Confirmar y confirmar cantidades"
@@ -6896,6 +6914,9 @@ msgstr "Descuento no acumulable a otras promociones"
 msgid "Freely indicate the amount of your donation"
 msgstr "Indica libremente la cantidad de tu donación"
 
+msgid "Generating printable character sheet bundle"
+msgstr "Generar un paquete de hojas de personaje imprimibles"
+
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Si está marcada, permite el nivel de ticket: Colaborador"
 
@@ -7773,6 +7794,9 @@ msgstr "En esta página se resumen las asignaciones en este evento de"
 
 msgid "This page summarizes the organizations's custom texts"
 msgstr "Esta página resume los textos personalizados de las organizaciones"
+
+msgid "This page will refresh automatically every 10 seconds"
+msgstr "Esta página se actualizará automáticamente cada 10 segundos"
 
 msgid "Warehouse quantities already committed for this event"
 msgstr "Cantidades de almacén ya comprometidas para este evento"

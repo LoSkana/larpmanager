@@ -7977,6 +7977,27 @@ msgstr ""
 msgid "This page allows you to select items to bulk download"
 msgstr ""
 
+msgid "Generating Bundle"
+msgstr ""
+
+msgid "Generating printable character sheet bundle"
+msgstr ""
+
+msgid "Bundle is ready"
+msgstr ""
+
+msgid "Back to PDF settings"
+msgstr ""
+
+msgid "Bundle generation in progress"
+msgstr ""
+
+msgid "This page will refresh automatically every 10 seconds"
+msgstr ""
+
+msgid "Please wait"
+msgstr ""
+
 msgid "Character Inventories"
 msgstr ""
 
@@ -11213,6 +11234,9 @@ msgid "Updated"
 msgstr ""
 
 msgid "Regeneration pdf started"
+msgstr ""
+
+msgid "Bundle not ready yet"
 msgstr ""
 
 msgid "Provisional"

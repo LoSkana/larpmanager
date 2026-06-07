@@ -411,6 +411,16 @@ urlpatterns = [
         name="orga_characters_friendly_bundle",
     ),
     path(
+        "<slug:event_slug>/manage/pdf/friendly-bundle/build/",
+        views_op.orga_characters_friendly_bundle_build,
+        name="orga_characters_friendly_bundle_build",
+    ),
+    path(
+        "<slug:event_slug>/manage/pdf/friendly-bundle/wait/",
+        views_op.orga_characters_friendly_bundle_wait,
+        name="orga_characters_friendly_bundle_wait",
+    ),
+    path(
         "<slug:event_slug>/manage/cache/",
         larpmanager.views.orga.event.orga_reload_cache,
         name="orga_reload_cache",
