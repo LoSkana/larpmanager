@@ -91,6 +91,15 @@ def fix_filename(filename: Any) -> Any:
     return re.sub(r"[^A-Za-z0-9 ]+", "", filename)
 
 
+def has_pdf_customization(event_id: int) -> bool:
+    """Return True if event has any custom PDF styling configured."""
+    for key in ["page_css", "header_content", "footer_content"]:
+        value = get_event_config(event_id, key, default_value="")
+        if value and str(value).strip():
+            return True
+    return False
+
+
 # reprint if file not exists, older than 1 day, or debug
 def reprint(file_path: Any) -> Any:
     """Determine if PDF file should be regenerated.
@@ -340,14 +349,26 @@ def print_character(context: dict, *, force: bool = False) -> HttpResponse:
 
     # Generate PDF if forced or if reprint is needed
     if force or reprint(file_path):
-        if context.get("writing_field_visibility"):
-            context.pop("show_all", None)
-        get_character_sheet(context)
+        _get_character_pdf_data(context)
         add_pdf_instructions(context)
         xhtml_pdf(context, "pdf/sheets/auxiliary.html", file_path)
 
     # Return the PDF response
     return return_pdf(file_path, context["character"].name)
+
+
+def _get_character_pdf_data(context: dict) -> None:
+    """Add to context the data needed for pdf write of character."""
+    if context.get("writing_field_visibility"):
+        context.pop("show_all", None)
+    get_character_sheet(context)
+    get_event_cache_all(context)
+    get_character_relationships(context)
+    for rel_entry in context.get("rel", []):
+        if rel_entry.get("player_prof"):
+            rounded = _round_image_data_uri(rel_entry["player_prof"])
+            if rounded:
+                rel_entry["player_prof"] = rounded
 
 
 def print_character_friendly(context: dict, *, force: bool = False) -> HttpResponse:
@@ -368,9 +389,7 @@ def print_character_friendly(context: dict, *, force: bool = False) -> HttpRespo
     # Generate PDF if forced or if file needs reprinting
     if force or reprint(file_path):
         context["light_pdf"] = True
-        if context.get("writing_field_visibility"):
-            context.pop("show_all", None)
-        get_character_sheet(context)
+        _get_character_pdf_data(context)
         xhtml_pdf(context, "pdf/sheets/friendly.html", file_path)
 
     # Return the PDF file as HTTP response
@@ -911,6 +930,39 @@ def print_bulk(context: dict, request: HttpRequest) -> HttpResponse:
     timestamp = timezone.now().strftime("%Y%m%d_%H%M%S")
     response["Content-Disposition"] = f'attachment; filename="{context["run"].get_slug()}_pdfs_{timestamp}.zip"'
 
+    return response
+
+
+def print_all_friendly(context: dict, request: HttpRequest) -> HttpResponse:
+    """Generate a ZIP file containing printable character sheet PDFs for all characters.
+
+    Args:
+        context: Context dictionary containing event and run data
+        request: HTTP request object used for character access checks and warnings
+
+    Returns:
+        HttpResponse: ZIP file download response with timestamped filename
+
+    """
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+        for character in context["event"].get_elements(Character):
+            try:
+                get_char_check(request, context, character.uuid, deny_public=True)
+                filepath = context["character"].get_sheet_friendly_filepath(context["run"])
+
+                if not Path(filepath).exists() or reprint(filepath):
+                    print_character_friendly(context, force=True)
+
+                if Path(filepath).exists():
+                    zip_file.write(filepath, f"character_{character.number}_{character.name}.pdf")
+            except Exception as e:  # noqa: BLE001 - Batch operation must continue on any error
+                messages.warning(request, _("Failed to add character") + f" #{character.number}: {e}")
+
+    zip_buffer.seek(0)
+    response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
+    timestamp = timezone.now().strftime("%Y%m%d_%H%M%S")
+    response["Content-Disposition"] = f'attachment; filename="{context["run"].get_slug()}_printable_{timestamp}.zip"'
     return response
 
 

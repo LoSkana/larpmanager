@@ -119,9 +119,6 @@ msgstr "Kostnader"
 msgid "Date"
 msgstr "Dato"
 
-msgid "Days"
-msgstr "Dager"
-
 msgid "Diet"
 msgstr "Kosthold"
 
@@ -1934,9 +1931,6 @@ msgstr "kronologi"
 msgid "click here"
 msgstr "klikk her"
 
-msgid "no payment"
-msgstr "uten betaling"
-
 msgid "overdue by"
 msgstr "forfalt med"
 
@@ -2740,9 +2734,6 @@ msgstr "elementer slettet"
 msgid "items updated"
 msgstr "elementer oppdatert"
 
-msgid "relationships"
-msgstr "relasjoner"
-
 msgid "Active devices"
 msgstr "Aktive enheter"
 
@@ -3499,6 +3490,9 @@ msgstr "Tildeling av kreditt"
 msgid "Custom title font"
 msgstr "Tilpasset tittelfont"
 
+msgid "Days before event"
+msgstr "Noen dager før arrangementet"
+
 msgid "Default view mode"
 msgstr "Standard visningsmodus"
 
@@ -3814,9 +3808,6 @@ msgstr "Lagret vellykket"
 msgid "Set up quest types"
 msgstr "Sett opp oppdragstyper"
 
-msgid "Show cancellations"
-msgstr "Avlysninger av forestillinger"
-
 msgid "The trash is empty"
 msgstr "Søppelet er tomt"
 
@@ -4044,6 +4035,9 @@ msgstr "Regnskap - Historisk"
 
 msgid "Advanced text editor"
 msgstr "Avansert tekstredigeringsprogram"
+
+msgid "All printable sheets"
+msgstr "Alle utskriftsark"
 
 msgid "Carousel description"
 msgstr "Beskrivelse av karusellen"

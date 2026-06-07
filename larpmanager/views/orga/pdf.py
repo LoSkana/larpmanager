@@ -36,6 +36,7 @@ from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import (
     add_pdf_instructions,
+    print_all_friendly,
     print_bulk,
     print_character,
     print_character_bkg,
@@ -177,6 +178,13 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Show success message and redirect
     messages.success(request, _("Regeneration pdf started") + "!")
     return redirect("orga_characters_pdf", event_slug=context["run"].get_slug())
+
+
+@login_required
+def orga_characters_friendly_bundle(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Download a ZIP bundle of printable character sheet PDFs for all characters."""
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
+    return print_all_friendly(context, request)
 
 
 @login_required

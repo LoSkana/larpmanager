@@ -71,6 +71,7 @@ from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.common import get_element, get_element_event, get_player_relationship
 from larpmanager.utils.edit.backend import user_edit
+from larpmanager.utils.io.pdf import has_pdf_customization
 from larpmanager.utils.io.upload import normalize_profile_image
 from larpmanager.utils.services.character import (
     _get_character_cache_id,
@@ -166,6 +167,8 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
     context["approval"] = get_event_config(
         context["event"].id, "user_character_approval", default_value=False, context=context
     )
+
+    context["show_full_pdf"] = has_pdf_customization(context["event"].id)
 
     return render(request, "larpmanager/event/character.html", context)
 

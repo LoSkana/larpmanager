@@ -164,9 +164,10 @@ def relationships(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/characters/#")
     just_wait(page)
     page.locator('[id="u1"]').locator(".fa-edit").click()
-    just_wait(page)
-    page.locator("a.my_toggle[tog='f_u2_inverse']").click()
     just_wait(page, big=True)
+    page.locator("a.my_toggle[tog='f_u2_inverse']").scroll_into_view_if_needed()
+    page.locator("a.my_toggle[tog='f_u2_inverse']").click()
+    page.locator(".f_u2_inverse").wait_for(state="visible", timeout=10000)
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
     # check in gallery

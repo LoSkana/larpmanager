@@ -7,9 +7,6 @@
     {% trans "This page shows cancelled enrollments" %}
 {% endblock info %}
 {% block content %}
-    <p>
-        {% trans "Show cancellations" %} <a href="#" class="my_toggle" tog='not_payed'>{% trans "no payment" %}</a>
-    </p>
     <table id="cancellations" class="go_datatable writing">
         <thead>
             <tr>
@@ -22,17 +19,18 @@
                 {% if features.info %}
                     <th>{% trans "Info" %}</th>
                 {% endif %}
-                <th>{% trans "Days" %}</th>
+                <th>{% trans "Days before event" %}</th>
                 <th>{% trans "Cancellation date" %}</th>
-                <th>{% trans "Refunded" %}</th>
+                {% if features.credits or features.tokens %}
+                    <th>{% trans "Refunded" %}</th>
+                {% endif %}
                 {% if features.tokens %}<th>{{ tokens_name }}</th>{% endif %}
                 {% if features.credits %}<th>{{ credits_name }}</th>{% endif %}
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.uuid }}"
-                    {% if not el.tot_payed %}class="hide not_payed"{% endif %}>
+                <tr id="{{ el.uuid }}">
                     <td>
                         {% if el.tot_iscr %}{{ el.tot_iscr | floatformat:"0" }}{% endif %}
                     </td>
@@ -56,13 +54,15 @@
                     {% if features.info %}<td>{{ el.info }}</td>{% endif %}
                     <td>{{ el.days }}</td>
                     <td>{{ el.cancellation_date }}</td>
-                    <td>
-                        {% if el.refunded %}
-                            {% trans "Refunded" %}
-                        {% else %}
-                            <a href="{% url 'orga_cancellation_refund' run.get_slug el.uuid %}">{% trans "Approve reimbursement" %}</a>
-                        {% endif %}
-                    </td>
+                    {% if features.credits or features.tokens %}
+                        <td>
+                            {% if el.refunded %}
+                                {% trans "Refunded" %}
+                            {% elif el.payments.a or el.payments.b or el.payments.c %}
+                                <a href="{% url 'orga_cancellation_refund' run.get_slug el.uuid %}">{% trans "Approve reimbursement" %}</a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
                     {% if features.tokens %}
                         <td>
                             {% if el.refunds.t %}{{ el.refunds.t | floatformat:"0" }}{% endif %}

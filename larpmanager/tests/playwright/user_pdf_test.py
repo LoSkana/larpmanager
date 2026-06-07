@@ -30,6 +30,7 @@ import pytest
 
 from larpmanager.tests.utils import (
     check_download,
+    check_pdf_zip_download,
     fill_tinymce,
     go_to,
     go_to_check,
@@ -86,6 +87,11 @@ def test_user_pdf(pw_page: Any) -> None:
     fill_tinymce(page, "rel_u2", "pdf relationship text")
     submit_confirm(page)
 
+    # Set page_css so the "complete sheet" button is shown on the character page
+    go_to(page, live_server, "/test/manage/pdf/")
+    page.locator("#id_page_css").fill("/* custom css */")
+    submit_confirm(page)
+
     # Go to character, test download pdf
     go_to(page, live_server, "/test/character/u1")
 
@@ -97,9 +103,7 @@ def test_user_pdf(pw_page: Any) -> None:
 
     check_download(page, "printable sheet")
 
-    check_download(page, "relationships", page.locator("a[download]").filter(has_text="relationships"))
-
-    # Test orga pdf page: select character and verify HTML test links produce content
+    # Test orga pdf page: select character, verify HTML test links, and bundle download
     orga_characters_pdf_test(page, live_server)
 
     # Test player relationship: enable feature, delete orga relationship, add via player
@@ -117,7 +121,7 @@ def orga_characters_pdf_test(page: Any, live_server: Any) -> None:
     char_uuid = page.locator("#char option:not([disabled])").first.get_attribute("value")
     assert char_uuid, "No characters found in the PDF page dropdown"
 
-    # collect orig URLs for the three HTML test links
+    # collect orig URLs for the HTML test links
     test_links = {
         "Complete sheet (Test)": page.locator("a.link", has_text="Complete sheet (Test)").get_attribute("orig"),
         "Lightweight sheet (Test)": page.locator("a.link", has_text="Lightweight sheet (Test)").get_attribute("orig"),
@@ -130,6 +134,10 @@ def orga_characters_pdf_test(page: Any, live_server: Any) -> None:
         go_to_check(page, f"{live_server}{url}")
         body = page.locator("body")
         assert body.inner_text().strip(), f"Empty body for {label} at {url}"
+
+    # Test bundle download of all printable sheets
+    go_to(page, live_server, "/test/manage/pdf/")
+    check_pdf_zip_download(page, "All printable sheets (ZIP)")
 
 
 def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
@@ -159,6 +167,6 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
     fill_tinymce(page, "id_text", "player relationship text", show=False)
     submit_confirm(page)
 
-    # Go to character page and verify the relationships PDF download still works
+    # Go to character page and verify printable sheet (which now includes relationships) still works
     go_to(page, live_server, "/test/character/u1")
-    check_download(page, "relationships", page.locator("a[download]").filter(has_text="relationships"))
+    check_download(page, "printable sheet")
