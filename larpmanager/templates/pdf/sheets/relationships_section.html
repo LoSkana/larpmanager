@@ -30,7 +30,10 @@
                                     {% if el.factions_list %}| {{ el.factions_list }}{% endif %}
                                 </p>
                                 {% if show_character.teaser and el.teaser %}
-                                    <span style="font-size: {{ el.font_size }}%">{% show_char el.teaser run 1 %}</span>
+                                    {% with teaser=el.teaser|truncatechars:1000 %}
+                                        <span style="font-size: {{ el.font_size }}%">{% show_char teaser run 1 %}</span>
+                                    {% endwith %}
+                                    <p class="no-inline">-</p>
                                 {% endif %}
                                 <span style="font-size: {{ el.font_size }}%">{% show_char el.text run 1 %}</span>
                             </td>
