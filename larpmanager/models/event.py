@@ -34,6 +34,7 @@ from django.utils import formats
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
+from safedelete.models import SOFT_DELETE, SOFT_DELETE_CASCADE
 from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config
@@ -272,6 +273,13 @@ class Event(UuidMixin, BaseModel):
     def __str__(self) -> str:
         """Return the name of the object as a string."""
         return self.name
+
+    def delete(self, force_policy: int | None = None, **kwargs: Any) -> tuple[int, dict[str, int]]:
+        """Override delete to propagate soft-delete cascade to Runs when deleted via Association cascade."""
+        # When cascade-deleted from Association (force_policy=SOFT_DELETE), propagate cascade to Runs.
+        if force_policy == SOFT_DELETE and kwargs.get("is_cascade"):
+            force_policy = SOFT_DELETE_CASCADE
+        return super().delete(force_policy=force_policy, **kwargs)
 
     def get_elements(self, element_model_class: type[BaseModel]) -> QuerySet:
         """Get ordered elements of specified type for the parent event."""

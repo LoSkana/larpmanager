@@ -94,10 +94,11 @@ class WritingForm(BaseModelForm):
             self.delete_field("assigned")
 
         if WritingQuestionType.PROGRESS in question_types:
-            self.fields["progress"].choices = [
-                (step.uuid, str(step))
-                for step in ProgressStep.objects.filter(event=self.params.get("run").event).order_by("order")
-            ]
+            run_event = self.params.get("run").event
+            progress_event = run_event.parent if run_event.parent else run_event
+            steps = list(ProgressStep.objects.filter(event=progress_event).order_by("order"))
+            self.fields["progress"].queryset = ProgressStep.objects.filter(event=progress_event)
+            self.fields["progress"].choices = [(step.uuid, str(step)) for step in steps]
         else:
             self.delete_field("progress")
 
