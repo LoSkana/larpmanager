@@ -308,6 +308,9 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
     # Remove empty or whitespace-only <p> tags before PDF rendering
     html_content = re.sub(r"<p[^>]*>(\s|&nbsp;)*</p>", "", html_content)
 
+    # Replace <br> tags with non-breaking space for horizontal spacing
+    html_content = re.sub(r"<br\s*/?>", "&nbsp;", html_content)
+
     # Generate PDF file from rendered HTML
     with Path(output_filename).open("wb") as pdf_file:
         # Convert HTML to PDF using xhtml2pdf library
