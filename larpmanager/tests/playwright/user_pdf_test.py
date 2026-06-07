@@ -134,10 +134,6 @@ def orga_characters_pdf_test(page: Any, live_server: Any) -> None:
         body = page.locator("body")
         assert body.inner_text().strip(), f"Empty body for {label} at {url}"
 
-    # Test bundle download of all printable sheets
-    go_to(page, live_server, "/test/manage/pdf/")
-    check_pdf_zip_download(page, "All printable sheets (ZIP)")
-
 
 def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
     # Enable player relationships feature

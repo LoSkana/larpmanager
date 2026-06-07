@@ -2081,6 +2081,9 @@ msgstr "Osallistuja"
 msgid "Past events"
 msgstr "Aikaisemmat tapahtumat"
 
+msgid "Please wait"
+msgstr "Odota hetki"
+
 msgid "Postal code"
 msgstr "Postinumero"
 
@@ -2989,6 +2992,9 @@ msgstr "Kiinnityspolku"
 msgid "Backup ZIP file"
 msgstr "Varmuuskopio ZIP-tiedosto"
 
+msgid "Bundle is ready"
+msgstr "Paketti on valmis"
+
 msgid "Change password"
 msgstr "Vaihda salasana"
 
@@ -3529,6 +3535,9 @@ msgstr "Kiinteät erät"
 msgid "Free registration"
 msgstr "Ilmainen ilmoittautuminen"
 
+msgid "Generating Bundle"
+msgstr "Paketin luominen"
+
 msgid "Give a new answer"
 msgstr "Anna uusi vastaus"
 
@@ -4035,6 +4044,12 @@ msgstr "Edistynyt tekstieditori"
 
 msgid "All printable sheets"
 msgstr "Kaikki tulostettavat arkit"
+
+msgid "Back to PDF settings"
+msgstr "Takaisin PDF-asetuksiin"
+
+msgid "Bundle not ready yet"
+msgstr "Pakettia ei ole vielä valmis"
 
 msgid "Carousel description"
 msgstr "Karusellin kuvaus"
@@ -5316,6 +5331,9 @@ msgstr "Jo olemassa oleva suhde"
 #, python-format
 msgid "Approval %(user)s as %(role)s"
 msgstr "Hyväksyntä %(user)s kuin %(role)s"
+
+msgid "Bundle generation in progress"
+msgstr "Paketin luominen käynnissä"
 
 msgid "Confirm and commit quantities"
 msgstr "Vahvistetaan ja varmennetaan määrät"
@@ -6894,6 +6912,9 @@ msgstr "Alennus ei ole yhdistettävissä muihin etuuksiin"
 msgid "Freely indicate the amount of your donation"
 msgstr "Ilmoita vapaasti lahjoituksesi määrä"
 
+msgid "Generating printable character sheet bundle"
+msgstr "Tulostettavien hahmolomakkeiden paketin luominen"
+
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Jos valittuna, salli lippuluokka: Collaborator"
 
@@ -7749,6 +7770,9 @@ msgstr "Tällä sivulla on yhteenveto tämän tapahtuman toimeksiannoista"
 
 msgid "This page summarizes the organizations's custom texts"
 msgstr "Tällä sivulla on yhteenveto organisaatioiden mukautetuista teksteistä"
+
+msgid "This page will refresh automatically every 10 seconds"
+msgstr "Tämä sivu päivittyy automaattisesti 10 sekunnin välein"
 
 msgid "Warehouse quantities already committed for this event"
 msgstr "Tätä tapahtumaa varten jo sidotut varastomäärät"

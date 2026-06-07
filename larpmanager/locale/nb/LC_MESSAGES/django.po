@@ -2081,6 +2081,9 @@ msgstr "Deltaker"
 msgid "Past events"
 msgstr "Tidligere arrangementer"
 
+msgid "Please wait"
+msgstr "Vennligst vent"
+
 msgid "Postal code"
 msgstr "Postnummer"
 
@@ -2989,6 +2992,9 @@ msgstr "Sti for vedlegg"
 msgid "Backup ZIP file"
 msgstr "Sikkerhetskopier ZIP-fil"
 
+msgid "Bundle is ready"
+msgstr "Pakken er klar"
+
 msgid "Change password"
 msgstr "Gjenoppretting av passord"
 
@@ -3529,6 +3535,9 @@ msgstr "Faste avdrag"
 msgid "Free registration"
 msgstr "Gratis inngang"
 
+msgid "Generating Bundle"
+msgstr "Opprette pakke"
+
 msgid "Give a new answer"
 msgstr "Gi et svar"
 
@@ -4035,6 +4044,12 @@ msgstr "Avansert tekstredigeringsprogram"
 
 msgid "All printable sheets"
 msgstr "Alle utskriftsark"
+
+msgid "Back to PDF settings"
+msgstr "Tilbake til PDF-innstillinger"
+
+msgid "Bundle not ready yet"
+msgstr "Pakken er ikke klar ennå"
 
 msgid "Carousel description"
 msgstr "Beskrivelse av karusellen"
@@ -5316,6 +5331,9 @@ msgstr "Allerede eksisterende forhold"
 #, python-format
 msgid "Approval %(user)s as %(role)s"
 msgstr "Godkjenning %(user)s som %(role)s"
+
+msgid "Bundle generation in progress"
+msgstr "Pakken genereres nå"
 
 msgid "Confirm and commit quantities"
 msgstr "Bekreft og forplikt mengder"
@@ -6895,6 +6913,9 @@ msgstr "Rabatten kan ikke kombineres med andre rabatter"
 msgid "Freely indicate the amount of your donation"
 msgstr "Angi fritt hvor mye du vil donere"
 
+msgid "Generating printable character sheet bundle"
+msgstr "Generering av pakke med utskriftsklare karakterark"
+
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Hvis avkrysset, tillat billettnivå: Samarbeidspartner"
 
@@ -7747,6 +7768,9 @@ msgstr "Denne siden oppsummerer oppgavene i dette arrangementet av"
 
 msgid "This page summarizes the organizations's custom texts"
 msgstr "Denne siden oppsummerer organisasjonens tilpassede tekster"
+
+msgid "This page will refresh automatically every 10 seconds"
+msgstr "Denne siden oppdateres automatisk hvert 10. sekund"
 
 msgid "Warehouse quantities already committed for this event"
 msgstr "Lagermengder som allerede er forpliktet for dette arrangementet"

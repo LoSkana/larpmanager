@@ -2081,6 +2081,9 @@ msgstr "Deelnemer"
 msgid "Past events"
 msgstr "Gebeurtenissen in het verleden"
 
+msgid "Please wait"
+msgstr "Even geduld a.u.b"
+
 msgid "Postal code"
 msgstr "Postcode"
 
@@ -2989,6 +2992,9 @@ msgstr "Bevestigingspad"
 msgid "Backup ZIP file"
 msgstr "Back-up ZIP-bestand"
 
+msgid "Bundle is ready"
+msgstr "De bundel is klaar"
+
 msgid "Change password"
 msgstr "Wachtwoord herstel"
 
@@ -3529,6 +3535,9 @@ msgstr "Vaste termijnen"
 msgid "Free registration"
 msgstr "Gratis toegang"
 
+msgid "Generating Bundle"
+msgstr "Bundel genereren"
+
 msgid "Give a new answer"
 msgstr "Geef antwoord"
 
@@ -4035,6 +4044,12 @@ msgstr "Geavanceerde teksteditor"
 
 msgid "All printable sheets"
 msgstr "Alle afdrukbare bladen"
+
+msgid "Back to PDF settings"
+msgstr "Terug naar de PDF-instellingen"
+
+msgid "Bundle not ready yet"
+msgstr "De bundel is nog niet klaar"
 
 msgid "Carousel description"
 msgstr "Carrousel beschrijving"
@@ -5316,6 +5331,9 @@ msgstr "Reeds bestaande relatie"
 #, python-format
 msgid "Approval %(user)s as %(role)s"
 msgstr "Goedkeuring %(user)s als %(role)s"
+
+msgid "Bundle generation in progress"
+msgstr "Er wordt een bundel samengesteld"
 
 msgid "Confirm and commit quantities"
 msgstr "Hoeveelheden bevestigen en vastleggen"
@@ -6897,6 +6915,9 @@ msgstr "Korting niet combineerbaar met andere concessies"
 msgid "Freely indicate the amount of your donation"
 msgstr "Geef vrij het bedrag van je donatie aan"
 
+msgid "Generating printable character sheet bundle"
+msgstr "Een bundel met afdrukbare personagefiches maken"
+
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Indien aangevinkt, ticket tier toestaan: Medewerker"
 
@@ -7763,6 +7784,9 @@ msgstr ""
 
 msgid "This page summarizes the organizations's custom texts"
 msgstr "Deze pagina vat de aangepaste teksten van de organisaties samen"
+
+msgid "This page will refresh automatically every 10 seconds"
+msgstr "Deze pagina wordt elke 10 seconden automatisch vernieuwd"
 
 msgid "Warehouse quantities already committed for this event"
 msgstr "Reeds vastgelegde magazijnhoeveelheden voor dit evenement"

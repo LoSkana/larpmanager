@@ -2081,6 +2081,9 @@ msgstr "Uczestnik"
 msgid "Past events"
 msgstr "Wydarzenia z przeszłości"
 
+msgid "Please wait"
+msgstr "Proszę poczekać"
+
 msgid "Postal code"
 msgstr "Kod pocztowy"
 
@@ -2989,6 +2992,9 @@ msgstr "Ścieżka załącznika"
 msgid "Backup ZIP file"
 msgstr "Kopia zapasowa pliku ZIP"
 
+msgid "Bundle is ready"
+msgstr "Pakiet jest gotowy"
+
 msgid "Change password"
 msgstr "Zmiana hasła"
 
@@ -3529,6 +3535,9 @@ msgstr "Stałe raty"
 msgid "Free registration"
 msgstr "Bezpłatna rejestracja"
 
+msgid "Generating Bundle"
+msgstr "Tworzenie pakietu"
+
 msgid "Give a new answer"
 msgstr "Podaj nową odpowiedź"
 
@@ -4035,6 +4044,12 @@ msgstr "Zaawansowany edytor tekstu"
 
 msgid "All printable sheets"
 msgstr "Wszystkie arkusze do wydrukowania"
+
+msgid "Back to PDF settings"
+msgstr "Powrót do ustawień PDF"
+
+msgid "Bundle not ready yet"
+msgstr "Pakiet nie jest jeszcze gotowy"
 
 msgid "Carousel description"
 msgstr "Opis karuzeli"
@@ -5316,6 +5331,9 @@ msgstr "Już istniejący związek"
 #, python-format
 msgid "Approval %(user)s as %(role)s"
 msgstr "Zatwierdzenie %(user)s jako %(role)s"
+
+msgid "Bundle generation in progress"
+msgstr "Trwa tworzenie pakietu"
 
 msgid "Confirm and commit quantities"
 msgstr "Potwierdzenie i zatwierdzenie ilości"
@@ -6893,6 +6911,9 @@ msgstr "Zniżki nie można łączyć z innymi korzyściami"
 msgid "Freely indicate the amount of your donation"
 msgstr "Dowolnie wskaż kwotę darowizny"
 
+msgid "Generating printable character sheet bundle"
+msgstr "Pakiet kart postaci do wydrukowania"
+
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Jeśli zaznaczone, zezwala na poziom biletów: Współpracownik"
 
@@ -7753,6 +7774,9 @@ msgstr "Ta strona podsumowuje zadania w tym wydarzeniu dotyczące"
 
 msgid "This page summarizes the organizations's custom texts"
 msgstr "Ta strona podsumowuje niestandardowe teksty organizacji"
+
+msgid "This page will refresh automatically every 10 seconds"
+msgstr "Ta strona będzie odświeżać się automatycznie co 10 sekund"
 
 msgid "Warehouse quantities already committed for this event"
 msgstr "Ilości magazynowe już przeznaczone na to wydarzenie"
