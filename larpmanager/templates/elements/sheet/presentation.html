@@ -1,11 +1,14 @@
 {% load show_tags i18n %}
+<span class="hide-screen">{{ sheet_char.name }}</span>
 {% if char.title %}
     <div class="go-inline">
+        <span class="hide-screen">|</span>
         <b>{{ writing_fields.character.names.title }}:&nbsp;</b>{{ char.title }}
     </div>
 {% endif %}
 {% if character.mirror %}
     <div class="go-inline">
+        <span class="hide-screen">|</span>
         <b>{% trans "Mirror" %}:&nbsp;</b>
         {% trans "This character represents the true secret identity of another character" %}.
         {% trans "You can give a preference to play it, as with other characters" %}.
@@ -14,6 +17,7 @@
 {% endif %}
 {% if char.player %}
     <div class="go-inline" id="char_player">
+        <span class="hide-screen">|</span>
         <b>{% trans "Player" %}:</b><a href="{% url 'public' char.player_uuid %}">
             {% if run.id in all_runs %}
                 {{ char.player_full }}
@@ -24,32 +28,38 @@
     </div>
     {% if char.pronoun %}
         <div class="go-inline">
+            <span class="hide-screen">|</span>
             <b>{% trans "Pronoun" %}:&nbsp;</b>{{ char.pronoun }}
         </div>
     {% endif %}
     {% if char.song %}
         <div class="go-inline">
+            <span class="hide-screen">|</span>
             <b>{% trans "Song" %}:&nbsp;</b><a href="{{ char.song }}">{{ char.song }}</a>
         </div>
     {% endif %}
     {% if char.public %}
         <div class="go-inline">
+            <span class="hide-screen">|</span>
             <b>{% trans "Public informations" %}:&nbsp;</b>{{ char.public }}
         </div>
     {% endif %}
     {% if char.private and check %}
         <div class="go-inline">
+            <span class="hide-screen">|</span>
             <b>{% trans "Private" %}:&nbsp;</b>{{ char.private }}
         </div>
     {% endif %}
     {% if approval and check %}
         <div class="go-inline">
+            <span class="hide-screen">|</span>
             <b>{% trans "Status" %}:&nbsp;</b><span class="status_{{ character.status }}">{{ character.get_status_display | template_trans }}</span>
         </div>
     {% endif %}
 {% else %}
     {% if pref %}
         <div class="go-inline">
+            <span class="hide-screen">|</span>
             <b>{% trans "Casting" %}:&nbsp;</b>{% trans "Preferences - Total" %}  {{ pref.0 }} ({% trans "Average" %} {{ pref.1 }})
             {% if pref.0 > 0 %}
                 <a href="#" class="my_toggle" tog="chart">{% trans "Graph" %}</a>
@@ -66,6 +76,7 @@
 {% if check %}
     {% if character.mirror_inv and False %}
         <div class="go-inline">
+            <span class="hide-screen">|</span>
             <b>{% trans "Mirror" %}:&nbsp;</b>{{ character.mirror_inv }}
         </div>
     {% endif %}

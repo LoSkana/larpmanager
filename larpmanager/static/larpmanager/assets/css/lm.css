@@ -20,6 +20,10 @@ i.fas {
   padding: 0;
 }
 
+.hide-screen {
+  display: none;
+}
+
 .new_v20 input[type="submit"],
 .new_v20 input[type="reset"],
 .new_v20 input[type="button"],
