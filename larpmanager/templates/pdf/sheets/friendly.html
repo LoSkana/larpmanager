@@ -60,12 +60,12 @@
             }
 
             h2 {
-                color: #1e5799;
+                color: #3a7a52;
                 text-decoration: underline;
             }
 
             h3 {
-                color: #1a7068;
+                color: #3a7a52;
                 text-decoration: underline;
             }
 
@@ -126,13 +126,6 @@
                 content: " | ";
             }
 
-                    table.rel-outer { border-collapse: separate; border-spacing: 6pt 10pt; width: 100%; }
-        table.rel-inner { border-collapse: collapse; width: 100%; }
-        td.rel-img-cell { width: 20%; vertical-align: top; text-align: center; padding: 0 6pt 0 0; border: none; }
-        td.rel-text-cell { vertical-align: top; text-align: left; padding: 0; border: none; }
-        img.rel-img { display: block; max-width: 60pt; }
-        span.rel-name { font-size: 110%; }
-        p.rel-info { line-height: 100%; margin: 0.3em 0 1em 0; }
         </style>
         <style>{{ event.sheet_css | safe }}</style>
     </head>
@@ -145,7 +138,7 @@
             {% include "elements/sheet/quests.html" %}
             {% include "elements/sheet/speedlarp.html" %}
             {% include "elements/sheet/prologue.html" %}
-            {% include "pdf/sheets/relationships_section.html" %}
+            {% include "pdf/sheets/relationships.html" %}
             <div class="outro"></div>
         </div>
     </body>
