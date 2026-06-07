@@ -644,9 +644,10 @@ def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
 
         # Build structured relationship dictionary with list and count
         relationships["character_rels"] = build_relationship_dict(character_id_name_pairs)
-        relationships["character_rels"]["important"] = relationships["character_rels"]["count"] - _count_unimportant(
-            character_relationships, plot.event_id
-        )
+        if get_event_config(plot.event_id, "writing_unimportant", default_value=False):
+            relationships["character_rels"]["important"] = relationships["character_rels"][
+                "count"
+            ] - _count_unimportant(character_relationships, plot.event_id)
 
     except Exception:
         # Log error with full traceback for debugging
