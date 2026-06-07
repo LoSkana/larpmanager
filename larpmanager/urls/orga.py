@@ -426,11 +426,6 @@ urlpatterns = [
         name="orga_characters_sheet_test",
     ),
     path(
-        "<slug:event_slug>/manage/characters/<slug:character_uuid>/pdf/relationships/",
-        views_op.orga_characters_relationships_pdf,
-        name="orga_characters_relationships_pdf",
-    ),
-    path(
         "<slug:event_slug>/manage/characters/<slug:character_uuid>/pdf/relationships/test/",
         views_op.orga_characters_relationships_test,
         name="orga_characters_relationships_test",

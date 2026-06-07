@@ -1,7 +1,7 @@
 {% load show_tags static i18n %}
 {% if rel %}
     <style>
-        table.rel-outer { border-collapse: separate; border-spacing: 6pt; width: 100%; }
+        table.rel-outer { border-collapse: separate; border-spacing: 6pt 1em; width: 100%; }
         table.rel-inner { border-collapse: collapse; width: 100%; }
         td.rel-img-cell { width: 20%; vertical-align: top; text-align: center; padding: 0 6pt 0 0; border: none; }
         td.rel-text-cell { vertical-align: top; text-align: left; padding: 0; border: none; }
@@ -17,13 +17,7 @@
                     <table class="rel-inner">
                         <tr>
                             <td class="rel-img-cell">
-                                {% if el.player_uuid and el.player_prof %}
-                                    <img class="rel-img" src="{{ el.player_prof }}" alt="player profile" />
-                                {% else %}
-                                    <img class="rel-img"
-                                         src="{% static 'larpmanager/assets/blank-avatar.png' %}"
-                                         alt="player profile" />
-                                {% endif %}
+                                {% if el.player_prof %}<img class="rel-img" src="{{ el.player_prof }}" alt="player profile" />{% endif %}
                             </td>
                             <td class="rel-text-cell">
                                 <p class="rel-info">

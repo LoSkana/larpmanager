@@ -3988,9 +3988,6 @@ msgstr "Rembourser l'entrée"
 msgid "Registration closed"
 msgstr "Inscription clôturée"
 
-msgid "Relationships (Pdf)"
-msgstr "Relations (Pdf)"
-
 msgid "Remove from faction"
 msgstr "Retirer de la faction"
 
@@ -4183,9 +4180,6 @@ msgstr "Billets d'inscription"
 
 msgid "Registrations status"
 msgstr "Statut des enregistrements"
-
-msgid "Relationships (Test)"
-msgstr "Relations (Test)"
 
 msgid "Require registration"
 msgstr "Obligation d'enregistrement"

@@ -58,16 +58,6 @@
                        class="link"
                        target="_blank">{% trans "Lightweight sheet (Test)" %}</a>
                 </td>
-                <td>
-                    <a orig="{% url 'orga_characters_relationships_pdf' run.get_slug 0 %}"
-                       class="link"
-                       download>{% trans "Relationships (Pdf)" %}</a>
-                </td>
-                <td>
-                    <a orig="{% url 'orga_characters_relationships_test' run.get_slug 0 %}"
-                       class="link"
-                       target="_blank">{% trans "Relationships (Test)" %}</a>
-                </td>
             </tr>
         </table>
         {% if event.sheet_template %}

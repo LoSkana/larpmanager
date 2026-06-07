@@ -7962,12 +7962,6 @@ msgstr ""
 msgid "Lightweight sheet (Test)"
 msgstr ""
 
-msgid "Relationships (Pdf)"
-msgstr ""
-
-msgid "Relationships (Test)"
-msgstr ""
-
 msgid "Current template"
 msgstr ""
 

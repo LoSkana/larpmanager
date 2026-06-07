@@ -181,7 +181,7 @@ def link_callback(uri: str, rel: str) -> str:  # noqa: ARG001
 _REL_IMAGE_SIZE = 400
 
 
-def _round_image_data_uri(url: str, radius: int = 12) -> str | None:
+def _round_image_data_uri(url: str, radius: int = _REL_IMAGE_SIZE // 2) -> str | None:
     """Convert image URL to fixed-size square data URI with rounded corners via Pillow mask."""
     file_path = link_callback(url, "")
     if not file_path:
@@ -305,6 +305,9 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
         template = get_template(template_path)
         html_content = template.render(context)
 
+    # Remove empty or whitespace-only <p> tags before PDF rendering
+    html_content = re.sub(r"<p[^>]*>(\s|&nbsp;)*</p>", "", html_content)
+
     # Generate PDF file from rendered HTML
     with Path(output_filename).open("wb") as pdf_file:
         # Convert HTML to PDF using xhtml2pdf library
@@ -357,6 +360,15 @@ def print_character(context: dict, *, force: bool = False) -> HttpResponse:
     return return_pdf(file_path, context["character"].name)
 
 
+def _process_rel_images(context: dict) -> None:
+    blank_avatar_url = conf_settings.STATIC_URL + "larpmanager/assets/blank-avatar.png"
+    blank_avatar_uri = _round_image_data_uri(blank_avatar_url)
+    for rel_entry in context.get("rel", []):
+        url = rel_entry.get("player_prof") or blank_avatar_url
+        rounded = _round_image_data_uri(url)
+        rel_entry["player_prof"] = rounded or blank_avatar_uri
+
+
 def _get_character_pdf_data(context: dict) -> None:
     """Add to context the data needed for pdf write of character."""
     if context.get("writing_field_visibility"):
@@ -364,11 +376,7 @@ def _get_character_pdf_data(context: dict) -> None:
     get_character_sheet(context)
     get_event_cache_all(context)
     get_character_relationships(context)
-    for rel_entry in context.get("rel", []):
-        if rel_entry.get("player_prof"):
-            rounded = _round_image_data_uri(rel_entry["player_prof"])
-            if rounded:
-                rel_entry["player_prof"] = rounded
+    _process_rel_images(context)
 
 
 def print_character_friendly(context: dict, *, force: bool = False) -> HttpResponse:
@@ -433,35 +441,6 @@ def print_faction(context: dict, *, force: bool = False) -> HttpResponse:
 
     # Return the PDF file as HTTP response with faction name in filename
     return return_pdf(file_path, context["faction"].name)
-
-
-def print_character_rel(context: dict, *, force: bool = False) -> HttpResponse:
-    """Generate and return character relationships PDF.
-
-    Args:
-        context: Context dictionary containing character and run data
-        force: Whether to force regeneration of the PDF
-
-    Returns:
-        HTTP response with the relationships PDF
-
-    """
-    # Get the filepath for the character relationships PDF
-    filepath = context["character"].get_relationships_filepath(context["run"])
-
-    # Generate PDF if forced or if reprint is needed
-    if force or reprint(filepath):
-        get_event_cache_all(context)
-        get_character_relationships(context)
-        for rel_entry in context.get("rel", []):
-            if rel_entry.get("player_prof"):
-                rounded = _round_image_data_uri(rel_entry["player_prof"])
-                if rounded:
-                    rel_entry["player_prof"] = rounded
-        xhtml_pdf(context, "pdf/sheets/relationships.html", filepath)
-
-    # Return the PDF response with localized filename
-    return return_pdf(filepath, f"{context['character'].name} - " + _("Relationships"))
 
 
 def print_gallery(context: dict, *, force: bool = False) -> HttpResponse:
@@ -775,7 +754,6 @@ def print_character_go(context: dict, character_uuid: str) -> None:
         # Generate and cache character print outputs
         print_character(context, force=True)
         print_character_friendly(context, force=True)
-        print_character_rel(context, force=True)
     except Http404:
         pass
     except NotFoundError:

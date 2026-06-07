@@ -41,7 +41,6 @@ from larpmanager.utils.io.pdf import (
     print_character,
     print_character_bkg,
     print_character_friendly,
-    print_character_rel,
     print_faction,
     print_gallery,
     print_profiles,
@@ -257,19 +256,6 @@ def orga_characters_friendly_test(request: HttpRequest, event_slug: str, charact
     get_character_sheet(context)
 
     return render(request, "pdf/sheets/friendly.html", context)
-
-
-@login_required
-def orga_characters_relationships_pdf(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
-    """Generate PDF of character relationships for organization view."""
-    # Verify event permissions for PDF generation
-    context = check_event_context(request, event_slug, "orga_characters_pdf")
-
-    # Retrieve and validate character data
-    get_char_check(request, context, character_uuid, bypass_access_checks=True)
-
-    # Generate and return relationship PDF
-    return print_character_rel(context, force=True)
 
 
 @login_required

@@ -133,13 +133,7 @@
                             <table class="inner">
                                 <tr>
                                     <td class="img-cell">
-                                        {% if el.player_uuid and el.player_prof %}
-                                            <img class="char-img" src="{{ el.player_prof }}" alt="player profile" />
-                                        {% else %}
-                                            <img class="char-img"
-                                                 src="{% static 'larpmanager/assets/blank-avatar.png' %}"
-                                                 alt="player profile" />
-                                        {% endif %}
+                                        {% if el.player_prof %}<img class="char-img" src="{{ el.player_prof }}" alt="player profile" />{% endif %}
                                     </td>
                                     <td class="text-cell">
                                         <p>
