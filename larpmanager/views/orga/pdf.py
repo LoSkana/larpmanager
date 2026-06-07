@@ -35,6 +35,7 @@ from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import (
+    _get_character_pdf_data,
     add_pdf_instructions,
     print_all_friendly,
     print_bulk,
@@ -45,7 +46,7 @@ from larpmanager.utils.io.pdf import (
     print_gallery,
     print_profiles,
 )
-from larpmanager.utils.services.character import get_char_check, get_character_relationships, get_character_sheet
+from larpmanager.utils.services.character import get_char_check
 
 
 @login_required
@@ -220,9 +221,7 @@ def orga_characters_sheet_test(request: HttpRequest, event_slug: str, character_
 
     # Configure context for PDF rendering
     context["pdf"] = True
-    if context.get("writing_field_visibility"):
-        context.pop("show_all", None)
-    get_character_sheet(context)
+    _get_character_pdf_data(context)
     add_pdf_instructions(context)
 
     # Render the auxiliary PDF template
@@ -251,37 +250,9 @@ def orga_characters_friendly_test(request: HttpRequest, event_slug: str, charact
     get_char_check(request, context, character_uuid, deny_public=True)
 
     # Populate context with character sheet data
-    if context.get("writing_field_visibility"):
-        context.pop("show_all", None)
-    get_character_sheet(context)
+    _get_character_pdf_data(context)
 
     return render(request, "pdf/sheets/friendly.html", context)
-
-
-@login_required
-def orga_characters_relationships_test(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
-    """Generate character relationships test PDF for organization view.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-        character_uuid: Character uuid
-
-    Returns:
-        Rendered relationships template response
-
-    """
-    # Check organization permissions for character PDF access
-    context = check_event_context(request, event_slug, "orga_characters_pdf")
-
-    # Validate character access and retrieve character data
-    get_char_check(request, context, character_uuid, deny_public=True)
-
-    # Populate context with character sheet and relationship data
-    get_character_sheet(context)
-    get_character_relationships(context)
-
-    return render(request, "pdf/sheets/relationships.html", context)
 
 
 @login_required
