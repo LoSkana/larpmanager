@@ -181,7 +181,7 @@ def link_callback(uri: str, rel: str) -> str:  # noqa: ARG001
 _REL_IMAGE_SIZE = 400
 
 
-def _round_image_data_uri(url: str, radius: int = _REL_IMAGE_SIZE // 2) -> str | None:
+def _round_image_data_uri(url: str, radius: int = _REL_IMAGE_SIZE // 6) -> str | None:
     """Convert image URL to fixed-size square data URI with rounded corners via Pillow mask."""
     file_path = link_callback(url, "")
     if not file_path:

@@ -24,11 +24,17 @@
                 font-family: easyreading;
                 line-height: 1.3;
             }
+            
+            b, strong {
+				color: grey;
+			}
 
-           p {
+            p {
                 margin: 0.3em;
                 padding: 0;
             }
+            
+            p.rel-info { display: inline; margin: 0; }
 
             h1 {
                 text-align: center;
@@ -42,24 +48,23 @@
             }
 
             a {
-                color: inherit;
+                color: grey;
                 font-weight: bold;
                 text-decoration: none;
             }
 
             .head {
                 text-align: center;
-                font-size: 130%;
+                font-size: 150%;
                 font-weight: bold;
             }
+            
+            br {
+				display: none; 
+			}
 
             #event_links {
                 display: none;
-            }
-
-            br {
-                display: block;
-                margin: 1px 0;
             }
 
             #char_title {
@@ -85,6 +90,9 @@
                 text-align: left;
                 margin-left: 2em;
                 font-style: italic;
+                font-weight: bold;
+                font-size: 120%; 
+                color: grey;
             }
 
             #char_name {
