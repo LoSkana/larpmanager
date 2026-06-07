@@ -3,9 +3,9 @@
     <style>
         .rel-outer { width: 100%; }
         .rel-item { display: flex; margin-bottom: 14pt; page-break-inside: avoid; }
-        .rel-img-cell { width: 20%; text-align: center; padding-right: 6pt; }
-        .rel-text-cell { flex: 1; text-align: left; }
-        img.rel-img { display: block; max-width: 60pt; }
+        .rel-img-cell { flex: 0 0 70pt; max-width: 70pt; text-align: center; padding-right: 6pt; }
+        .rel-text-cell { flex: 1; min-width: 0; text-align: left; }
+        img.rel-img { display: block; width: 60pt; max-width: 60pt; height: auto; }
         span.rel-name { font-size: 110%; }
         p.rel-info { line-height: 100%; margin: 0.3em 0 1em 0; }
     </style>
@@ -22,17 +22,18 @@
                         {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                         {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                         {% if el.player_uuid %}
-                            | <b>{% trans "Player" %}:&nbsp;</b>{{ el.player }}
+                            | <b>{% trans "Player" %}:&nbsp;</b>
+                            <a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
                         {% endif %}
                         {% if el.factions_list %}| {{ el.factions_list }}{% endif %}
                     </p>
                     {% if show_character.teaser and el.teaser %}
                         {% with teaser=el.teaser|truncatechars:800 %}
-                            <span style="font-size: {{ el.font_size }}%">{% show_char teaser run 1 %}</span>
+                            <span class="pdf-inline" style="font-size: {{ el.font_size }}%">{% show_char teaser run 1 %}</span>
                         {% endwith %}
                         <p class="no-inline">-</p>
                     {% endif %}
-                    <span style="font-size: {{ el.font_size }}%">{% show_char el.text run 1 %}</span>
+                    <span class="pdf-inline" style="font-size: {{ el.font_size }}%">{% show_char el.text run 1 %}</span>
                 </div>
             </div>
         {% endfor %}
