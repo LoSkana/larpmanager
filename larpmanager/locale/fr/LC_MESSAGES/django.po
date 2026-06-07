@@ -119,9 +119,6 @@ msgstr "Coût"
 msgid "Date"
 msgstr "Date"
 
-msgid "Days"
-msgstr "Jours"
-
 msgid "Diet"
 msgstr "Régime alimentaire"
 
@@ -1934,9 +1931,6 @@ msgstr "chronologie"
 msgid "click here"
 msgstr "cliquez ici"
 
-msgid "no payment"
-msgstr "sans paiement"
-
 msgid "overdue by"
 msgstr "en retard de"
 
@@ -2740,9 +2734,6 @@ msgstr "éléments supprimés"
 msgid "items updated"
 msgstr "éléments mis à jour"
 
-msgid "relationships"
-msgstr "relations"
-
 msgid "Active devices"
 msgstr "Dispositifs actifs"
 
@@ -3499,6 +3490,9 @@ msgstr "Attribution de crédits"
 msgid "Custom title font"
 msgstr "Police de titre personnalisée"
 
+msgid "Days before event"
+msgstr "Quelques jours avant l'événement"
+
 msgid "Default view mode"
 msgstr "Mode d'affichage par défaut"
 
@@ -3814,9 +3808,6 @@ msgstr "Sauvegardé avec succès"
 msgid "Set up quest types"
 msgstr "Configurer les types de quêtes"
 
-msgid "Show cancellations"
-msgstr "Annulation d'un spectacle"
-
 msgid "The trash is empty"
 msgstr "La poubelle est vide"
 
@@ -4044,6 +4035,9 @@ msgstr "Comptabilité - Historique"
 
 msgid "Advanced text editor"
 msgstr "Editeur de texte avancé"
+
+msgid "All printable sheets"
+msgstr "Toutes les fiches à imprimer"
 
 msgid "Carousel description"
 msgstr "Description du carrousel"

@@ -119,9 +119,6 @@ msgstr "Costo"
 msgid "Date"
 msgstr "Data"
 
-msgid "Days"
-msgstr "Giorni"
-
 msgid "Diet"
 msgstr "Diet"
 
@@ -1934,9 +1931,6 @@ msgstr "cronologia"
 msgid "click here"
 msgstr "clicca qua"
 
-msgid "no payment"
-msgstr "senza pagamento"
-
 msgid "overdue by"
 msgstr "in ritardo di"
 
@@ -2740,9 +2734,6 @@ msgstr "elementi eliminati"
 msgid "items updated"
 msgstr "voci aggiornate"
 
-msgid "relationships"
-msgstr "relazioni"
-
 msgid "Active devices"
 msgstr "Dispositivi attivi"
 
@@ -3499,6 +3490,9 @@ msgstr "Assegnazione dei crediti"
 msgid "Custom title font"
 msgstr "Font del titolo personalizzato"
 
+msgid "Days before event"
+msgstr "Giorni dall'evento"
+
 msgid "Default view mode"
 msgstr "Modalità di visualizzazione predefinita"
 
@@ -3814,9 +3808,6 @@ msgstr "Salvato con successo"
 msgid "Set up quest types"
 msgstr "Imposta i tipi di missione"
 
-msgid "Show cancellations"
-msgstr "Mostra disdette"
-
 msgid "The trash is empty"
 msgstr "Il cestino è vuoto"
 
@@ -4044,6 +4035,9 @@ msgstr "Contabilità - Storico"
 
 msgid "Advanced text editor"
 msgstr "Editor di testo avanzato"
+
+msgid "All printable sheets"
+msgstr "Tutte le schede stampabili"
 
 msgid "Carousel description"
 msgstr "Descrizione carousel"

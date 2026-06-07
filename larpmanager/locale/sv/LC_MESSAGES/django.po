@@ -119,9 +119,6 @@ msgstr "Kostnad"
 msgid "Date"
 msgstr "Datum"
 
-msgid "Days"
-msgstr "Dagar"
-
 msgid "Diet"
 msgstr "Diet"
 
@@ -1934,9 +1931,6 @@ msgstr "kronologi"
 msgid "click here"
 msgstr "klicka här"
 
-msgid "no payment"
-msgstr "utan betalning"
-
 msgid "overdue by"
 msgstr "försenad av"
 
@@ -2740,9 +2734,6 @@ msgstr "objekt raderade"
 msgid "items updated"
 msgstr "artiklar uppdaterade"
 
-msgid "relationships"
-msgstr "relationer"
-
 msgid "Active devices"
 msgstr "Aktiva enheter"
 
@@ -3499,6 +3490,9 @@ msgstr "Kredituppdrag"
 msgid "Custom title font"
 msgstr "Anpassat teckensnitt för titel"
 
+msgid "Days before event"
+msgstr "Några dagar före evenemanget"
+
 msgid "Default view mode"
 msgstr "Standardläge för visning"
 
@@ -3814,9 +3808,6 @@ msgstr "Sparades framgångsrikt"
 msgid "Set up quest types"
 msgstr "Ange typer av uppdrag"
 
-msgid "Show cancellations"
-msgstr "Avbokningar av visningar"
-
 msgid "The trash is empty"
 msgstr "Papperskorgen är tom"
 
@@ -4044,6 +4035,9 @@ msgstr "Redovisning - Historisk"
 
 msgid "Advanced text editor"
 msgstr "Avancerad textredigerare"
+
+msgid "All printable sheets"
+msgstr "Alla utskrivbara blad"
 
 msgid "Carousel description"
 msgstr "Beskrivning av karusellen"

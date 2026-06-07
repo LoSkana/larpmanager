@@ -119,9 +119,6 @@ msgstr "Hinta"
 msgid "Date"
 msgstr "Päivämäärä"
 
-msgid "Days"
-msgstr "Päivät"
-
 msgid "Diet"
 msgstr "Ruokavalio"
 
@@ -1934,9 +1931,6 @@ msgstr "kronologia"
 msgid "click here"
 msgstr "klikkaa tästä"
 
-msgid "no payment"
-msgstr "ei maksua"
-
 msgid "overdue by"
 msgstr "myöhässä"
 
@@ -2740,9 +2734,6 @@ msgstr "kohteet poistettu"
 msgid "items updated"
 msgstr "päivitetyt kohteet"
 
-msgid "relationships"
-msgstr "suhteet"
-
 msgid "Active devices"
 msgstr "Aktiiviset laitteet"
 
@@ -3499,6 +3490,9 @@ msgstr "Luottotehtävä"
 msgid "Custom title font"
 msgstr "Mukautettu otsikon fontti"
 
+msgid "Days before event"
+msgstr "Tapahtumaa edeltävät päivät"
+
 msgid "Default view mode"
 msgstr "Oletusnäkymätila"
 
@@ -3814,9 +3808,6 @@ msgstr "Tallennettu onnistuneesti"
 msgid "Set up quest types"
 msgstr "Määritä tehtävätyypit"
 
-msgid "Show cancellations"
-msgstr "Näytä peruutukset"
-
 msgid "The trash is empty"
 msgstr "Roskakori on tyhjä"
 
@@ -4044,6 +4035,9 @@ msgstr "Kirjanpito - Historia"
 
 msgid "Advanced text editor"
 msgstr "Edistynyt tekstieditori"
+
+msgid "All printable sheets"
+msgstr "Kaikki tulostettavat arkit"
 
 msgid "Carousel description"
 msgstr "Karusellin kuvaus"

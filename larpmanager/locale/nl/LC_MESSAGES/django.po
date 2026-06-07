@@ -119,9 +119,6 @@ msgstr "Kosten"
 msgid "Date"
 msgstr "Datum"
 
-msgid "Days"
-msgstr "Dagen"
-
 msgid "Diet"
 msgstr "Dieet"
 
@@ -1934,9 +1931,6 @@ msgstr "chronologie"
 msgid "click here"
 msgstr "klik hier"
 
-msgid "no payment"
-msgstr "zonder betaling"
-
 msgid "overdue by"
 msgstr "achterstallig door"
 
@@ -2740,9 +2734,6 @@ msgstr "verwijderde items"
 msgid "items updated"
 msgstr "items bijgewerkt"
 
-msgid "relationships"
-msgstr "relaties"
-
 msgid "Active devices"
 msgstr "Actieve apparaten"
 
@@ -3499,6 +3490,9 @@ msgstr "Credit opdracht"
 msgid "Custom title font"
 msgstr "Aangepast titellettertype"
 
+msgid "Days before event"
+msgstr "Enkele dagen voor het evenement"
+
 msgid "Default view mode"
 msgstr "Standaard weergavemodus"
 
@@ -3814,9 +3808,6 @@ msgstr "Opgeslagen"
 msgid "Set up quest types"
 msgstr "Zoektochttypes instellen"
 
-msgid "Show cancellations"
-msgstr "Show annuleringen"
-
 msgid "The trash is empty"
 msgstr "De prullenbak is leeg"
 
@@ -4044,6 +4035,9 @@ msgstr "Boekhouding - Historisch"
 
 msgid "Advanced text editor"
 msgstr "Geavanceerde teksteditor"
+
+msgid "All printable sheets"
+msgstr "Alle afdrukbare bladen"
 
 msgid "Carousel description"
 msgstr "Carrousel beschrijving"

@@ -119,9 +119,6 @@ msgstr "Náklady"
 msgid "Date"
 msgstr "Datum"
 
-msgid "Days"
-msgstr "Dny"
-
 msgid "Diet"
 msgstr "Dieta"
 
@@ -1934,9 +1931,6 @@ msgstr "chronologie"
 msgid "click here"
 msgstr "klikněte zde"
 
-msgid "no payment"
-msgstr "bez platby"
-
 msgid "overdue by"
 msgstr "zpoždění o"
 
@@ -2740,9 +2734,6 @@ msgstr "odstraněné položky"
 msgid "items updated"
 msgstr "aktualizované položky"
 
-msgid "relationships"
-msgstr "vztahy"
-
 msgid "Active devices"
 msgstr "Aktivní zařízení"
 
@@ -3499,6 +3490,9 @@ msgstr "Přiřazení zápočtu"
 msgid "Custom title font"
 msgstr "Vlastní písmo názvu"
 
+msgid "Days before event"
+msgstr "Několik dní před akcí"
+
 msgid "Default view mode"
 msgstr "Výchozí režim zobrazení"
 
@@ -3814,9 +3808,6 @@ msgstr "Úspěšně uloženo"
 msgid "Set up quest types"
 msgstr "Nastavení typů úkolů"
 
-msgid "Show cancellations"
-msgstr "Zrušení výstavy"
-
 msgid "The trash is empty"
 msgstr "Koš je prázdný"
 
@@ -4044,6 +4035,9 @@ msgstr "Účetnictví - historické"
 
 msgid "Advanced text editor"
 msgstr "Pokročilý textový editor"
+
+msgid "All printable sheets"
+msgstr "Všechny listy k vytištění"
 
 msgid "Carousel description"
 msgstr "Popis kolotoče"

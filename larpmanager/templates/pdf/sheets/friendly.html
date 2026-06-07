@@ -41,7 +41,7 @@
                 margin-bottom: 1em;
             }
 
-    a {
+            a {
                 color: inherit;
                 font-weight: bold;
                 text-decoration: none;
@@ -49,8 +49,12 @@
 
             .head {
                 text-align: center;
-                font-size: 120%;
+                font-size: 130%;
                 font-weight: bold;
+            }
+
+            #event_links {
+                display: none;
             }
 
             br {
@@ -77,29 +81,40 @@
                 clear: both;
             }
 
-            #char_name,
             .c {
-                text-align: center;
+                text-align: left;
+                margin-left: 2em;
+                font-style: italic;
+            }
+
+            #char_name {
+                display: none;
             }
 
             .show_char {
                 display: none;
             }
 
+            .go-inline {
+                display: inline;
+            }
 
+            .go-inline + .go-inline::before {
+                content: " | ";
+            }
         </style>
         <style>{{ event.sheet_css | safe }}</style>
     </head>
     <body>
         <div>
             <div class="intro"></div>
-            <div class="head">{{ event.association }} - {{ event }}</div>
-            <br />
+            <div class="head">{{ event.association }} - {{ event }} - {{ sheet_char.name }}</div>
             {% include "elements/sheet/main.html" %}
             {% include "elements/sheet/plots.html" %}
             {% include "elements/sheet/quests.html" %}
             {% include "elements/sheet/speedlarp.html" %}
             {% include "elements/sheet/prologue.html" %}
+            {% include "pdf/sheets/relationships_section.html" %}
             <div class="outro"></div>
         </div>
     </body>

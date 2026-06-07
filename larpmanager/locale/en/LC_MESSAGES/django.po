@@ -5497,9 +5497,6 @@ msgstr ""
 msgid "printable sheet"
 msgstr ""
 
-msgid "relationships"
-msgstr ""
-
 msgid "This character represents the true secret identity of another character"
 msgstr ""
 
@@ -7787,13 +7784,7 @@ msgstr ""
 msgid "This page shows cancelled enrollments"
 msgstr ""
 
-msgid "Show cancellations"
-msgstr ""
-
-msgid "no payment"
-msgstr ""
-
-msgid "Days"
+msgid "Days before event"
 msgstr ""
 
 msgid "Cancellation date"
@@ -7951,6 +7942,9 @@ msgid "PDF Profiles"
 msgstr ""
 
 msgid "Bulk download"
+msgstr ""
+
+msgid "All printable sheets"
 msgstr ""
 
 msgid "Try the sheet generation"
@@ -10482,13 +10476,13 @@ msgstr ""
 msgid "Profiles"
 msgstr ""
 
+msgid "Failed to add character"
+msgstr ""
+
 msgid "Failed to add handout"
 msgstr ""
 
 msgid "Failed to add faction"
-msgstr ""
-
-msgid "Failed to add character"
 msgstr ""
 
 msgid "Failed to add profiles"

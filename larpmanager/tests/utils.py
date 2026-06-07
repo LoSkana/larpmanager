@@ -167,6 +167,34 @@ def check_download(page: Any, link: str, locator: Any = None) -> None:
                 raise
 
 
+def check_pdf_zip_download(page: Any, link: str, locator: Any = None) -> None:
+    """Download a ZIP and verify it contains at least one PDF file."""
+    max_tries = 3
+    current_try = 0
+    while current_try < max_tries:
+        try:
+            with page.expect_download(timeout=100_000) as download_info:
+                if locator is not None:
+                    locator.click()
+                else:
+                    page.click(f"text={link}")
+            download = download_info.value
+            download_path = download.path()
+            assert download_path is not None, "Download failed"
+            with open(download_path, "rb") as f:
+                content = f.read()
+            assert zipfile.is_zipfile(io.BytesIO(content)), "Downloaded file is not a ZIP"
+            with zipfile.ZipFile(io.BytesIO(content)) as zf:
+                pdf_members = [m for m in zf.namelist() if m.lower().endswith(".pdf")]
+                assert pdf_members, "ZIP contains no PDF files"
+            return
+        except Exception as err:
+            logger.warning("PDF zip download attempt %s/%s failed: %s", current_try + 1, max_tries, err)
+            current_try += 1
+            if current_try >= max_tries:
+                raise
+
+
 def fill_tinymce(page, iframe_id, text, show = True, timeout = 10000) -> None:
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
