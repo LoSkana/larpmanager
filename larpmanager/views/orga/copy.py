@@ -558,7 +558,9 @@ def copy_character_config(e_id: Any, p_id: Any) -> None:
         configs_by_character[config.character_id].append(config)
 
     for parent_character in Character.objects.filter(event_id=p_id):
-        target_character_id = character_id_by_number[parent_character.number]
+        target_character_id = character_id_by_number.get(parent_character.number)
+        if target_character_id is None:
+            continue
         for config in configs_by_character[parent_character.id]:
             for retry_attempt in range(2):
                 try:

@@ -524,6 +524,8 @@ def copy_class(target_event_id: int, source_event_id: int, model_class: type) ->
             # Regenerate unique fields that need new values for the copy
             if hasattr(source_object, "uuid"):
                 source_object.uuid = None  # Let UuidMixin.save() regenerate with retry logic
+            if hasattr(source_object, "media_token"):
+                source_object.media_token = ""  # Let auto_set_media_token signal regenerate
             for field_name, generation_function in {"access_token": my_uuid_short}.items():
                 if not hasattr(source_object, field_name):
                     continue
