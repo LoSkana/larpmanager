@@ -1343,6 +1343,8 @@ def post_delete_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> 
 @receiver(post_save, sender=PlotCharacterRel)
 def post_save_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, **kwargs: Any) -> None:
     """Recompute auto relationships when a plot-character relation changes."""
+    if instance.plot_id:
+        refresh_event_plot_relationships_background(instance.plot_id)
     if instance.character_id:
         update_character_referenced_chars_background(instance.character_id)
 
@@ -1350,6 +1352,8 @@ def post_save_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, 
 @receiver(post_delete, sender=PlotCharacterRel)
 def post_delete_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, **kwargs: Any) -> None:
     """Recompute auto relationships when a plot-character relation is deleted."""
+    if instance.plot_id:
+        refresh_event_plot_relationships_background(instance.plot_id)
     if instance.character_id:
         update_character_referenced_chars_background(instance.character_id)
 

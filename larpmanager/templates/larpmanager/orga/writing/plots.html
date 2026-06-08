@@ -22,6 +22,11 @@
     <th class="stats stats-characters">
         <i class="fa fa-hashtag"></i>
     </th>
+    {% if writing_unimportant %}
+        <th class="stats stats-characters">
+            <i class="fa fa-hashtag"></i> {% trans "Important" %}
+        </th>
+    {% endif %}
     <th></th>
     <th></th>
     <th></th>
@@ -48,6 +53,7 @@
                 {% endfor %}
             </td>
             <td class="stats">{{ el.character_rels.count }}</td>
+            {% if writing_unimportant %}<td class="stats">{{ el.character_rels.important }}</td>{% endif %}
             <td>
                 {% if not forloop.first %}
                     <a href="{% url 'orga_plots_order' run.get_slug el.uuid 0 %}">

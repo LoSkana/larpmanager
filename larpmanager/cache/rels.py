@@ -420,6 +420,13 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
         clear_event_relationships_cache(event.id)
 
 
+def _count_unimportant(rels: Any, event_id: int) -> int:
+    """Count rels whose text starts with $unimportant, when feature enabled."""
+    if not get_event_config(event_id, "writing_unimportant", default_value=False):
+        return 0
+    return sum(1 for rel in rels if strip_tags(rel.text).lstrip().startswith("$unimportant"))
+
+
 def _build_plot_relations(char: Character) -> dict[str, Any]:
     """Build plot relationships for a character.
 
@@ -432,14 +439,7 @@ def _build_plot_relations(char: Character) -> dict[str, Any]:
     related_plots = char.get_plot_characters()
     plot_list = [(plot_rel.plot.uuid, plot_rel.plot.name) for plot_rel in related_plots]
     plot_rels = build_relationship_dict(plot_list)
-
-    # Calculate important plot count (excluding $unimportant entries)
-    unimportant_plot_count = 0
-    if get_event_config(char.event_id, "writing_unimportant", default_value=False):
-        unimportant_plot_count = sum(
-            1 for plot_rel in related_plots if strip_tags(plot_rel.text).lstrip().startswith("$unimportant")
-        )
-    plot_rels["important"] = plot_rels["count"] - unimportant_plot_count
+    plot_rels["important"] = plot_rels["count"] - _count_unimportant(related_plots, char.event_id)
     return plot_rels
 
 
@@ -485,16 +485,9 @@ def _build_character_relations(char: Character) -> dict[str, Any]:
         (relationship.target.uuid, relationship.target.name) for relationship in character_relationships
     ]
     relationships_rels = build_relationship_dict(relationship_list)
-
-    # Calculate important relationship count (excluding $unimportant entries)
-    unimportant_relationship_count = 0
-    if get_event_config(char.event_id, "writing_unimportant", default_value=False):
-        unimportant_relationship_count = sum(
-            1
-            for relationship in character_relationships
-            if strip_tags(relationship.text).lstrip().startswith("$unimportant")
-        )
-    relationships_rels["important"] = relationships_rels["count"] - unimportant_relationship_count
+    relationships_rels["important"] = relationships_rels["count"] - _count_unimportant(
+        character_relationships, char.event_id
+    )
     return relationships_rels
 
 
@@ -651,6 +644,10 @@ def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
 
         # Build structured relationship dictionary with list and count
         relationships["character_rels"] = build_relationship_dict(character_id_name_pairs)
+        if get_event_config(plot.event_id, "writing_unimportant", default_value=False):
+            relationships["character_rels"]["important"] = relationships["character_rels"][
+                "count"
+            ] - _count_unimportant(character_relationships, plot.event_id)
 
     except Exception:
         # Log error with full traceback for debugging
