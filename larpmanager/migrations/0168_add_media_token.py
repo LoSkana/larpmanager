@@ -79,6 +79,8 @@ def populate_tokens_and_rename_pdfs(apps, schema_editor):
 
     Character = apps.get_model("larpmanager", "Character")
     for char in Character.objects.select_related("event").iterator():
+        if not char.event or not char.event.slug:
+            continue
         event_dir = _event_media(char.event.slug)
         for run in Run.objects.filter(event_id=char.event_id).iterator():
             char_dir = event_dir / "characters" / str(run.number)
@@ -90,6 +92,8 @@ def populate_tokens_and_rename_pdfs(apps, schema_editor):
                 _rename(char_dir / old_name, char_dir / new_name)
 
     for run in Run.objects.select_related("event").iterator():
+        if not run.event or not run.event.slug:
+            continue
         event_dir = _event_media(run.event.slug)
         old_char_dir = event_dir / "characters" / str(run.number)
         new_char_dir = event_dir / f"{run.number}-{run.media_token}" / "characters"
@@ -103,6 +107,8 @@ def populate_tokens_and_rename_pdfs(apps, schema_editor):
 
     Faction = apps.get_model("larpmanager", "Faction")
     for faction in Faction.objects.select_related("event").iterator():
+        if not faction.event or not faction.event.slug:
+            continue
         event_dir = _event_media(faction.event.slug)
         for run in Run.objects.filter(event_id=faction.event_id).iterator():
             faction_dir = event_dir / "factions" / str(run.number)
@@ -112,6 +118,8 @@ def populate_tokens_and_rename_pdfs(apps, schema_editor):
             )
 
     for run in Run.objects.select_related("event").iterator():
+        if not run.event or not run.event.slug:
+            continue
         event_dir = _event_media(run.event.slug)
         old_faction_dir = event_dir / "factions" / str(run.number)
         new_faction_dir = event_dir / f"{run.number}-{run.media_token}" / "factions"
@@ -125,6 +133,8 @@ def populate_tokens_and_rename_pdfs(apps, schema_editor):
 
     Handout = apps.get_model("larpmanager", "Handout")
     for handout in Handout.objects.select_related("event").iterator():
+        if not handout.event or not handout.event.slug:
+            continue
         handouts_dir = _event_media(handout.event.slug) / "handouts"
         _rename(handouts_dir / f"H{handout.number}.pdf", handouts_dir / f"{handout.number}-{handout.media_token}.pdf")
 
@@ -133,6 +143,8 @@ def populate_tokens_and_rename_pdfs(apps, schema_editor):
     # so move files from the old {run.number}/ directory into the new token-named directory.
 
     for run in Run.objects.select_related("event").iterator():
+        if not run.event or not run.event.slug:
+            continue
         event_dir = _event_media(run.event.slug)
         old_run_dir = event_dir / str(run.number)
         new_run_dir = event_dir / f"{run.number}-{run.media_token}"
