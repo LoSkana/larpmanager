@@ -72,6 +72,8 @@ class MediaTokenMixin(models.Model):
         editable=False,
     )
 
+    _clone_excluded_fields: ClassVar[list[str]] = ["media_token"]
+
     class Meta:
         abstract = True
 
