@@ -804,7 +804,7 @@ class Run(MediaTokenMixin, UuidMixin, BaseModel):
         """Return the media file path for this run, creating the directory if needed."""
         # Build path by combining event media path with run number
         # noinspection PyUnresolvedReferences
-        run_media_path = str(Path(self.event.get_media_filepath()) / f"{self.media_token}/")
+        run_media_path = str(Path(self.event.get_media_filepath()) / f"{self.number}-{self.media_token}/")
 
         # Ensure directory exists
         Path(run_media_path).mkdir(parents=True, exist_ok=True)

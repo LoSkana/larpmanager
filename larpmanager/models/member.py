@@ -413,7 +413,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
     def get_member_filepath(self) -> str:
         """Get the file path for member PDF storage."""
         # Build base PDF members directory path
-        member_pdf_directory = str(Path(conf_settings.MEDIA_ROOT) / "pdf/members" / str(self.media_token))
+        member_pdf_directory = str(Path(conf_settings.MEDIA_ROOT) / "pdf/members" / f"{self.id}-{self.media_token}")
         # Ensure directory exists
         Path(member_pdf_directory).mkdir(parents=True, exist_ok=True)
         return member_pdf_directory

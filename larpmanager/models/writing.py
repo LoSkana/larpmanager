@@ -333,24 +333,26 @@ class Character(Writing):
     @staticmethod
     def get_character_filepath(run: Run) -> str:
         """Get the directory path for storing character files for a given run."""
-        # Build the path to the characters directory for this run
-        directory_path = str(Path(run.event.get_media_filepath()) / "characters" / f"{run.number}/")
-        # Ensure the directory exists
+        directory_path = str(Path(run.get_media_filepath()) / "characters/")
         Path(directory_path).mkdir(parents=True, exist_ok=True)
         return directory_path
 
+    def get_media_filepath(self, run: Run, descr: str) -> str:
+        """Get the base path to this character's PDF files."""
+        character_directory = self.get_character_filepath(run)
+        return str(Path(character_directory) / f"{self.number}-{self.media_token}-{descr}.pdf")
+
     def get_sheet_filepath(self, run: Run) -> str:
         """Get the path to this character's PDF sheet file."""
-        character_directory = self.get_character_filepath(run)
-        return str(Path(character_directory) / f"{self.media_token}.pdf")
+        return self.get_media_filepath(run, "full")
 
-    def get_sheet_friendly_filepath(self, character_run: Any = None) -> Any:
+    def get_sheet_friendly_filepath(self, run: Run) -> str:
         """Return filepath for the light PDF version of the character sheet."""
-        return str(Path(self.get_character_filepath(character_run)) / f"{self.media_token}-light.pdf")
+        return self.get_media_filepath(run, "light")
 
-    def get_relationships_filepath(self, run: Any = None) -> Any:
+    def get_relationships_filepath(self, run: Run) -> str:
         """Return filepath for the relationships PDF."""
-        return str(Path(self.get_character_filepath(run)) / f"{self.media_token}-rels.pdf")
+        return self.get_media_filepath(run, "rels")
 
     def show_thumb(self) -> Any:
         """Return HTML for displaying character thumbnail image if available."""
@@ -541,18 +543,14 @@ class Faction(Writing):
     @staticmethod
     def get_faction_filepath(run: Run) -> str:
         """Get the directory path for storing faction PDF files for a specific run."""
-        # Build directory path: event_media/factions/run_number/
-        directory_path = str(Path(run.event.get_media_filepath()) / "factions" / f"{run.number}/")
-
-        # Ensure directory exists, creating parent directories as needed
+        directory_path = str(Path(run.get_media_filepath()) / "factions/")
         Path(directory_path).mkdir(parents=True, exist_ok=True)
-
         return directory_path
 
     def get_sheet_filepath(self, run: Run) -> str:
         """Get the complete file path for this faction's PDF sheet."""
         faction_directory = self.get_faction_filepath(run)
-        return str(Path(faction_directory) / f"{self.media_token}.pdf")
+        return str(Path(faction_directory) / f"{self.number}-{self.media_token}.pdf")
 
     def show_red(self) -> dict:
         """Update JavaScript response with 'typ' and 'teaser' attributes."""
@@ -682,7 +680,7 @@ class Handout(Writing):
         """Build the file path for this handout's PDF within the event's media directory."""
         handouts_directory = str(Path(run.event.get_media_filepath()) / "handouts")
         Path(handouts_directory).mkdir(parents=True, exist_ok=True)
-        return str(Path(handouts_directory) / f"{self.media_token}.pdf")
+        return str(Path(handouts_directory) / f"{self.number}-{self.media_token}.pdf")
 
 
 class TextVersionChoices(models.TextChoices):

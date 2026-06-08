@@ -409,13 +409,12 @@ def auto_set_media_token(instance: Any) -> None:
     if not hasattr(instance, "media_token") or instance.media_token:
         return
 
+    model_cls = type(instance)
     for _try in range(UUID_RETRY_LIMIT):
-        instance.media_token = my_uuid(32)
-        try:
-            with transaction.atomic():
-                return
-        except IntegrityError:
-            instance.media_token = None
+        token = my_uuid(32)
+        if not model_cls.objects.filter(media_token=token).exists():
+            instance.media_token = token
+            return
 
     msg = "media_token collision after retries"
     raise RuntimeError(msg)
