@@ -37,7 +37,7 @@ from pilkit.processors import ResizeToFill
 
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel, UuidMixin
+from larpmanager.models.base import BaseModel, MediaTokenMixin, UuidMixin
 from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
 from larpmanager.utils.core.codes import countries
 
@@ -78,7 +78,7 @@ class DocumentChoices(models.TextChoices):
     PASS = "s", _("Passport")
 
 
-class Member(UuidMixin, BaseModel):
+class Member(MediaTokenMixin, UuidMixin, BaseModel):
     """Represents Member model."""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
@@ -413,7 +413,7 @@ class Member(UuidMixin, BaseModel):
     def get_member_filepath(self) -> str:
         """Get the file path for member PDF storage."""
         # Build base PDF members directory path
-        member_pdf_directory = str(Path(conf_settings.MEDIA_ROOT) / "pdf/members" / str(self.id))
+        member_pdf_directory = str(Path(conf_settings.MEDIA_ROOT) / "pdf/members" / f"{self.id}-{self.media_token}")
         # Ensure directory exists
         Path(member_pdf_directory).mkdir(parents=True, exist_ok=True)
         return member_pdf_directory

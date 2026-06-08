@@ -41,7 +41,7 @@ from pilkit.processors import ResizeToFill
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 from tinymce.models import HTMLField
 
-from larpmanager.models.utils import UploadToPathAndRename, get_attr, my_uuid_short
+from larpmanager.models.utils import UploadToPathAndRename, get_attr, my_uuid, my_uuid_short
 
 AlphanumericValidator = RegexValidator(r"^[0-9a-z_-]*$", "Only characters allowed are: 0-9, a-z, _, -.")
 
@@ -57,6 +57,22 @@ class UuidMixin(models.Model):
         db_index=True,
         editable=False,
     )
+
+    class Meta:
+        abstract = True
+
+
+class MediaTokenMixin(models.Model):
+    """Adds a hidden random token used for PDF file paths."""
+
+    media_token = models.CharField(
+        max_length=32,
+        unique=True,
+        db_index=True,
+        editable=False,
+    )
+
+    _clone_excluded_fields: ClassVar[list[str]] = ["media_token"]
 
     class Meta:
         abstract = True
@@ -387,6 +403,22 @@ def auto_set_uuid(instance: Any) -> None:
             instance.uuid = None
 
     msg = "UUID collision after retries"
+    raise RuntimeError(msg)
+
+
+def auto_set_media_token(instance: Any) -> None:
+    """Set media_token field if missing value."""
+    if not hasattr(instance, "media_token") or instance.media_token:
+        return
+
+    model_cls = type(instance)
+    for _try in range(UUID_RETRY_LIMIT):
+        token = my_uuid(32)
+        if not model_cls.objects.filter(media_token=token).exists():
+            instance.media_token = token
+            return
+
+    msg = "media_token collision after retries"
     raise RuntimeError(msg)
 
 
