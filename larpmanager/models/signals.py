@@ -202,6 +202,7 @@ from larpmanager.models.base import (
     Feature,
     FeatureModule,
     auto_assign_sequential_numbers,
+    auto_set_media_token,
     auto_set_uuid,
     debug_set_uuid,
     update_model_search_field,
@@ -356,6 +357,9 @@ def pre_save_callback(sender: type, instance: object, *args: Any, **kwargs: Any)
 
     # Assign uuid for models that has it
     auto_set_uuid(instance)
+
+    # Assign media_token for models that has it
+    auto_set_media_token(instance)
 
     if isinstance(instance, RESET_WIDGETS_TYPES):
         reset_widgets(instance)

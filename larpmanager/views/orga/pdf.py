@@ -19,11 +19,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 
-from pathlib import Path
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpRequest, HttpResponse
+from django.http import FileResponse, Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -188,16 +186,18 @@ def orga_characters_friendly_bundle(request: HttpRequest, event_slug: str) -> Ht
     """Download a ZIP bundle of printable character sheet PDFs."""
     context = check_event_context(request, event_slug, "orga_characters_pdf")
     run = context["run"]
-    zip_path = Path(get_friendly_bundle_filepath(run))
+    zip_path = get_friendly_bundle_filepath(run)
 
     if not zip_path.exists():
         messages.warning(request, _("Bundle not ready yet"))
         return redirect("orga_characters_friendly_bundle_wait", event_slug=run.get_slug())
 
-    with zip_path.open("rb") as f:
-        response = HttpResponse(f.read(), content_type="application/zip")
-    response["Content-Disposition"] = f'attachment; filename="{run.get_slug()}_printable.zip"'
-    return response
+    return FileResponse(
+        zip_path.open("rb"),
+        content_type="application/zip",
+        as_attachment=True,
+        filename=f"{run.get_slug()}_printable.zip",
+    )
 
 
 @login_required
@@ -205,10 +205,9 @@ def orga_characters_friendly_bundle_build(request: HttpRequest, event_slug: str)
     """Queue background regeneration of the printable character sheet ZIP bundle."""
     context = check_event_context(request, event_slug, "orga_characters_pdf")
     run = context["run"]
-    zip_path = Path(get_friendly_bundle_filepath(run))
+    zip_path = get_friendly_bundle_filepath(run)
 
-    if zip_path.exists():
-        zip_path.unlink()
+    zip_path.unlink(missing_ok=True)
 
     build_friendly_bundle_bkg(context["association_slug"], event_slug)
     return redirect("orga_characters_friendly_bundle_wait", event_slug=run.get_slug())
@@ -219,7 +218,7 @@ def orga_characters_friendly_bundle_wait(request: HttpRequest, event_slug: str) 
     """Show bundle generation status page; auto-refreshes until ZIP is ready."""
     context = check_event_context(request, event_slug, "orga_characters_pdf")
     run = context["run"]
-    context["bundle_ready"] = Path(get_friendly_bundle_filepath(run)).exists()
+    context["bundle_ready"] = get_friendly_bundle_filepath(run).exists()
     return render(request, "larpmanager/orga/characters/pdf_bundle_wait.html", context)
 
 

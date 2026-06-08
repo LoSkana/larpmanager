@@ -914,9 +914,9 @@ def print_bulk(context: dict, request: HttpRequest) -> HttpResponse:
     return response
 
 
-def get_friendly_bundle_filepath(run: Run) -> str:
+def get_friendly_bundle_filepath(run: Run) -> Path:
     """Return the filesystem path for the pre-built printable bundle ZIP."""
-    return str(Path(conf_settings.MEDIA_ROOT) / "bundles" / f"{run.get_slug()}_printable.zip")
+    return Path(conf_settings.MEDIA_ROOT) / "bundles" / f"{run.media_token}_printable.zip"
 
 
 @background_auto(queue="pdf", skip_duplicates=True)
@@ -928,24 +928,30 @@ def build_friendly_bundle_bkg(association_slug: str, event_slug: str) -> None:
     context = get_event_context(request, event_slug, check_visibility=False)
     run = context["run"]
 
-    zip_path = Path(get_friendly_bundle_filepath(run))
+    zip_path = get_friendly_bundle_filepath(run)
     zip_path.parent.mkdir(parents=True, exist_ok=True)
+    zip_path_tmp = zip_path.with_suffix(".tmp")
 
-    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zip_file:
-        for character in context["event"].get_elements(Character):
-            try:
-                get_char_check(request, context, character.uuid, bypass_access_checks=True)
-                filepath = context["character"].get_sheet_friendly_filepath(run)
+    try:
+        with zipfile.ZipFile(zip_path_tmp, "w", zipfile.ZIP_DEFLATED) as zip_file:
+            for character in context["event"].get_elements(Character):
+                try:
+                    get_char_check(request, context, character.uuid, bypass_access_checks=True)
+                    filepath = context["character"].get_sheet_friendly_filepath(run)
 
-                if not Path(filepath).exists() or reprint(filepath):
-                    print_character_friendly(context, force=True)
+                    if not Path(filepath).exists():
+                        print_character_friendly(context, force=True)
 
-                if Path(filepath).exists():
-                    zip_file.write(filepath, f"character_{character.number}_{character.name}.pdf")
-            except (Http404, NotFoundError):
-                pass
-            except Exception:  # noqa: BLE001, S110
-                pass
+                    if Path(filepath).exists():
+                        zip_file.write(filepath, f"character_{character.number}_{character.name}.pdf")
+                except (Http404, NotFoundError):
+                    pass
+                except Exception:  # noqa: BLE001, S110
+                    pass
+        zip_path_tmp.rename(zip_path)
+    except Exception:
+        zip_path_tmp.unlink(missing_ok=True)
+        raise
 
 
 def print_all_friendly(context: dict, request: HttpRequest) -> HttpResponse:

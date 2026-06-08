@@ -73,12 +73,14 @@ for file in $STAGED_FILES; do
         continue
     fi
 
-    # Check for non-ASCII characters (excluding currency symbols)
-    # Currency symbols to allow: € £ ¥ ¢ ₹ ₽ ₩ ₪ ₦ ₨ ₱ ₴ ₵ ₸ ₺ ₼ ₾
-    if grep -P -n '[^\x00-\x7F]' "$file" | grep -Pv '[€£¥¢₹₽₩₪₦₨₱₴₵₸₺₼₾]' > /dev/null 2>&1; then
+    # Check for non-ASCII characters (excluding allowed symbols)
+    # Currency: € £ ¥ ¢ ₹ ₽ ₩ ₪ ₦ ₨ ₱ ₴ ₵ ₸ ₺ ₼ ₾
+    # Italian accented vowels: à è é ì í î ò ó ù ú À È É Ì Í Î Ò Ó Ù Ú
+    ALLOWED_CHARS='[€£¥¢₹₽₩₪₦₨₱₴₵₸₺₼₾àèéìíîòóùúÀÈÉÌÍÎÒÓÙÚ]'
+    if grep -P -n '[^\x00-\x7F]' "$file" | grep -Pv "$ALLOWED_CHARS" > /dev/null 2>&1; then
         echo "Non-ASCII characters found in: $file"
-        grep -P -n '[^\x00-\x7F]' "$file" | grep -Pv '[€£¥¢₹₽₩₪₦₨₱₴₵₸₺₼₾]' | head -5
-        if [ $(grep -P -c '[^\x00-\x7F]' "$file" | grep -Pv '[€£¥¢₹₽₩₪₦₨₱₴₵₸₺₼₾]') -gt 5 ]; then
+        grep -P -n '[^\x00-\x7F]' "$file" | grep -Pv "$ALLOWED_CHARS" | head -5
+        if [ $(grep -P -c '[^\x00-\x7F]' "$file" | grep -Pv "$ALLOWED_CHARS") -gt 5 ]; then
             echo "   ... and more"
         fi
         FOUND_NON_ASCII=1
