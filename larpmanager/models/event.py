@@ -277,7 +277,8 @@ class Event(UuidMixin, BaseModel):
     def delete(self, force_policy: int | None = None, **kwargs: Any) -> tuple[int, dict[str, int]]:
         """Override delete to propagate soft-delete cascade to Runs when deleted via Association cascade."""
         # When cascade-deleted from Association (force_policy=SOFT_DELETE), propagate cascade to Runs.
-        if force_policy == SOFT_DELETE and kwargs.get("is_cascade"):
+        is_cascade = kwargs.pop("is_cascade", False)
+        if force_policy == SOFT_DELETE and is_cascade:
             force_policy = SOFT_DELETE_CASCADE
         return super().delete(force_policy=force_policy, **kwargs)
 
