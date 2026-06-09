@@ -204,6 +204,10 @@ def _status_membership_fee(
     if user_membership.status != MembershipStatus.ACCEPTED:
         return False
 
+    fee = int(get_association_config(run.event.association_id, "membership_fee", default_value=0))
+    if not fee:
+        return False
+
     current_year = timezone.now().year
     # Check if event is in current year and if membership fee has been paid
     if not run.start or run.start.year != current_year:
