@@ -76,7 +76,7 @@ for file in $STAGED_FILES; do
     # Check for non-ASCII characters (excluding allowed symbols)
     # Currency: € £ ¥ ¢ ₹ ₽ ₩ ₪ ₦ ₨ ₱ ₴ ₵ ₸ ₺ ₼ ₾
     # Italian accented vowels: à è é ì í î ò ó ù ú À È É Ì Í Î Ò Ó Ù Ú
-    ALLOWED_CHARS='[€£¥¢₹₽₩₪₦₨₱₴₵₸₺₼₾àèéìíîòóùúÀÈÉÌÍÎÒÓÙÚ]'
+    ALLOWED_CHARS='[€£¥¢₹₽₩₪₦₨₱₴₵₸₺₼₾àèéìíîòóùúÀÈÉÌÍÎÒÓÙÚ•]'
     if grep -P -n '[^\x00-\x7F]' "$file" | grep -Pv "$ALLOWED_CHARS" > /dev/null 2>&1; then
         echo "Non-ASCII characters found in: $file"
         grep -P -n '[^\x00-\x7F]' "$file" | grep -Pv "$ALLOWED_CHARS" | head -5
