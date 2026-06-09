@@ -313,6 +313,11 @@ msgstr ""
 msgid "Manage association roles"
 msgstr ""
 
+msgid ""
+"If you don't find an user, you can save the role, and then invite them "
+"clicking on"
+msgstr ""
+
 msgid "Appearance"
 msgstr ""
 
@@ -5306,9 +5311,6 @@ msgid ""
 "either Required, Optional or Hidden"
 msgstr ""
 
-msgid "If you don't find an user, invite them to the role"
-msgstr ""
-
 msgid "whether the character is aware of the identity of the other trait"
 msgstr ""
 
@@ -6440,10 +6442,10 @@ msgid ""
 "granted to each role"
 msgstr ""
 
-msgid "Pending invites"
+msgid "Invite"
 msgstr ""
 
-msgid "Invite"
+msgid "Pending invites"
 msgstr ""
 
 msgid ""

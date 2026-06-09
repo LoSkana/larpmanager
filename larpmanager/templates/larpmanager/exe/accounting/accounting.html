@@ -4,7 +4,7 @@
     {% trans "Accounting" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "Review the organization's overall financial position" %}.
+    {% trans "Review the organization's overall financial position" %}
 {% endblock info %}
 {% block content %}
     <h2>
@@ -12,13 +12,145 @@
     </h2>
     <p>
         <i>({% trans "This is the associative positive operating margin, taking into account the budgets of completed events, minus credits or tokens issued" %})</i>
-        </p>
+    </p>
+    <table>
+        {% if features.membership %}
+            <tr>
+                <td>{% trans "Membership fees" %}</td>
+                <td>
+                    <b>{{ membership_sum }}</b>
+                </td>
+            </tr>
+        {% endif %}
+        {% if features.donate %}
+            <tr>
+                <td>{% trans "Donations" %}</td>
+                <td>
+                    <b>{{ donations_sum }}</b>
+                </td>
+            </tr>
+        {% endif %}
+        {% if features.inflow %}
+            <tr>
+                <td>{% trans "Organization inflows" %}</td>
+                <td>
+                    <b>{{ inflow_exec_sum }}</b>
+                </td>
+            </tr>
+        {% endif %}
+        {% if features.outflow %}
+            <tr>
+                <td>{% trans "Outflows" %}</td>
+                <td>
+                    <b>{{ outflow_exec_sum }}</b>
+                </td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td>{% trans "Event balance" %}</td>
+            <td>
+                <b>{{ balance_sum }}</b>
+            </td>
+        </tr>
+        {% if features.tokens %}
+            <tr>
+                <td>{{ tokens_name }} {% trans "issued" %}</td>
+                <td>
+                    <b>{{ tokens_sum }}</b>
+                </td>
+            </tr>
+        {% endif %}
+        {% if features.credits %}
+            <tr>
+                <td>{{ credits_name }} {% trans "issued" %}</td>
+                <td>
+                    <b>{{ credits_sum }}</b>
+                </td>
+            </tr>
+        {% endif %}
+    </table>
+    <h2>
+        {% trans "Overall balance" %}: <b>{{ bank_sum }}</b>
+    </h2>
+    <p>
+        <i>({% trans "This is the overall amount that should be held in the organization's bank and financial accounts" %})</i>
+    </p>
+    <table>
+        {% if features.membership %}
+            <tr>
+                <td>{% trans "Membership fees" %}</td>
+                <td>
+                    <b>{{ membership_sum }}</b>
+                </td>
+            </tr>
+        {% endif %}
+        {% if features.donate %}
+            <tr>
+                <td>{% trans "Donations" %}</td>
+                <td>
+                    <b>{{ donations_sum }}</b>
+                </td>
+            </tr>
+        {% endif %}
+        {% if features.payment %}
+            <tr>
+                <td>{% trans "Total payments" %}</td>
+                <td>
+                    <b>{{ pay_money_sum }}</b>
+                </td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td>{% trans "Transaction totals" %}</td>
+            <td>
+                <b>{{ transactions_sum }}</b>
+            </td>
+        </tr>
+        {% if features.inflow %}
+            <tr>
+                <td>{% trans "Inflows total" %}</td>
+                <td>
+                    <b>{{ inflow_sum }}</b>
+                </td>
+            </tr>
+        {% endif %}
+        {% if features.outflow %}
+            <tr>
+                <td>{% trans "Outflows total" %}</td>
+                <td>
+                    <b>{{ outflow_sum }}</b>
+                </td>
+            </tr>
+        {% endif %}
+        {% if features.refund %}
+            <tr>
+                <td>{% trans "Refund given" %}</td>
+                <td>
+                    <b>{{ refund_sum }}</b>
+                </td>
+            </tr>
+        {% endif %}
+    </table>
+    <p>
+        {% trans "Show" %}:
+        {% for year in sum_year %}
+            <a href="#" class="summary" tog='{{ year }}'>{% trans "Summary" %} {{ year }}</a>,
+            <a href="#" class="my_toggle hide" tog='sum_{{ year }}'>hidden</a>
+        {% endfor %}
+        {% if features.tokens %}<a href="#" class="my_toggle" tog='tokens'>{{ tokens_name }}</a>,{% endif %}
+        {% if features.credits %}<a href="#" class="my_toggle" tog='credits'>{{ credits_name }}</a>,{% endif %}
+        <a href="#" class="my_toggle" tog='runs'>{% trans "Event balance" %}</a>
+    </p>
+    {% for year in sum_year %}
+        <div class="hide sum_{{ year }}">
+            <h2>{% trans "Summary" %} {{ year }}</h2>
+            <br />
             <table>
                 {% if features.membership %}
                     <tr>
                         <td>{% trans "Membership fees" %}</td>
                         <td>
-                            <b>{{ membership_sum }}</b>
+                            <b class="membership_sum"></b>
                         </td>
                     </tr>
                 {% endif %}
@@ -26,69 +158,7 @@
                     <tr>
                         <td>{% trans "Donations" %}</td>
                         <td>
-                            <b>{{ donations_sum }}</b>
-                        </td>
-                    </tr>
-                {% endif %}
-                {% if features.inflow %}
-                    <tr>
-                        <td>{% trans "Organization inflows" %}</td>
-                        <td>
-                            <b>{{ inflow_exec_sum }}</b>
-                        </td>
-                    </tr>
-                {% endif %}
-                {% if features.outflow %}
-                    <tr>
-                        <td>{% trans "Outflows" %}</td>
-                        <td>
-                            <b>{{ outflow_exec_sum }}</b>
-                        </td>
-                    </tr>
-                {% endif %}
-                <tr>
-                    <td>{% trans "Event balance" %}</td>
-                    <td>
-                        <b>{{ balance_sum }}</b>
-                    </td>
-                </tr>
-                {% if features.tokens %}
-                    <tr>
-                        <td>{{ tokens_name }} {% trans "issued" %}</td>
-                        <td>
-                            <b>{{ tokens_sum }}</b>
-                        </td>
-                    </tr>
-                {% endif %}
-                {% if features.credits %}
-                    <tr>
-                        <td>{{ credits_name }} {% trans "issued" %}</td>
-                        <td>
-                            <b>{{ credits_sum }}</b>
-                        </td>
-                    </tr>
-                {% endif %}
-            </table>
-            <h2>
-                {% trans "Overall balance" %}: <b>{{ bank_sum }}</b>
-            </h2>
-            <p>
-                <i>({% trans "This is the overall amount that should be held in the organization's bank and financial accounts" %})</i>
-            </p>
-            <table>
-                {% if features.membership %}
-                    <tr>
-                        <td>{% trans "Membership fees" %}</td>
-                        <td>
-                            <b>{{ membership_sum }}</b>
-                        </td>
-                    </tr>
-                {% endif %}
-                {% if features.donate %}
-                    <tr>
-                        <td>{% trans "Donations" %}</td>
-                        <td>
-                            <b>{{ donations_sum }}</b>
+                            <b class="donations_sum"></b>
                         </td>
                     </tr>
                 {% endif %}
@@ -96,21 +166,21 @@
                     <tr>
                         <td>{% trans "Total payments" %}</td>
                         <td>
-                            <b>{{ pay_money_sum }}</b>
+                            <b class="pay_money_sum"></b>
                         </td>
                     </tr>
                 {% endif %}
                 <tr>
                     <td>{% trans "Transaction totals" %}</td>
                     <td>
-                        <b>{{ transactions_sum }}</b>
+                        <b class="transactions_sum"></b>
                     </td>
                 </tr>
                 {% if features.inflow %}
                     <tr>
                         <td>{% trans "Inflows total" %}</td>
                         <td>
-                            <b>{{ inflow_sum }}</b>
+                            <b class="inflow_sum"></b>
                         </td>
                     </tr>
                 {% endif %}
@@ -118,7 +188,7 @@
                     <tr>
                         <td>{% trans "Outflows total" %}</td>
                         <td>
-                            <b>{{ outflow_sum }}</b>
+                            <b class="outflow_sum"></b>
                         </td>
                     </tr>
                 {% endif %}
@@ -126,161 +196,91 @@
                     <tr>
                         <td>{% trans "Refund given" %}</td>
                         <td>
-                            <b>{{ refund_sum }}</b>
+                            <b class="refund_sum"></b>
                         </td>
                     </tr>
                 {% endif %}
             </table>
-            <p>
-                {% trans "Show" %}:
-                {% for year in sum_year %}
-                    <a href="#" class="summary" tog='{{ year }}'>{% trans "Summary" %} {{ year }}</a>,
-                    <a href="#" class="my_toggle hide" tog='sum_{{ year }}'>hidden</a>
+        </div>
+    {% endfor %}
+    {% if features.tokens %}
+        <div class="hide tokens">
+            <h2>{{ tokens_name }}</h2>
+            <table id="member_tokens" class="go_datatable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>{% trans "Participant" %}</th>
+                        <th>{{ tokens_name }}</th>
+                    </tr>
+                </thead>
+                {% for el in list %}
+                    {% if el.tokens %}
+                        <tr id="tokens_{{ el.uuid }}">
+                            <td>
+                                <a href="{% url 'exe_member' el.uuid %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                            </td>
+                            <td>{{ el }}</td>
+                            <td>{{ el.tokens }}</td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
-                {% if features.tokens %}<a href="#" class="my_toggle" tog='tokens'>{{ tokens_name }}</a>,{% endif %}
-                {% if features.credits %}<a href="#" class="my_toggle" tog='credits'>{{ credits_name }}</a>,{% endif %}
-                <a href="#" class="my_toggle" tog='runs'>{% trans "Event balance" %}</a>
-            </p>
-            {% for year in sum_year %}
-                <div class="hide sum_{{ year }}">
-                    <h2>{% trans "Summary" %} {{ year }}</h2>
-                    <br />
-                    <table>
-                        {% if features.membership %}
-                            <tr>
-                                <td>{% trans "Membership fees" %}</td>
-                                <td>
-                                    <b class="membership_sum"></b>
-                                </td>
-                            </tr>
-                        {% endif %}
-                        {% if features.donate %}
-                            <tr>
-                                <td>{% trans "Donations" %}</td>
-                                <td>
-                                    <b class="donations_sum"></b>
-                                </td>
-                            </tr>
-                        {% endif %}
-                        {% if features.payment %}
-                            <tr>
-                                <td>{% trans "Total payments" %}</td>
-                                <td>
-                                    <b class="pay_money_sum"></b>
-                                </td>
-                            </tr>
-                        {% endif %}
-                        <tr>
-                            <td>{% trans "Transaction totals" %}</td>
+            </table>
+        </div>
+    {% endif %}
+    {% if features.credits %}
+        <div class="hide credits">
+            <h2>{{ credits_name }}</h2>
+            <table id="member_credits" class="go_datatable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>{% trans "Participant" %}</th>
+                        <th>{{ credits_name }}</th>
+                    </tr>
+                </thead>
+                {% for el in list %}
+                    {% if el.credits %}
+                        <tr id="credits_{{ el.uuid }}">
                             <td>
-                                <b class="transactions_sum"></b>
+                                <a href="{% url 'exe_member' el.uuid %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                             </td>
+                            <td>{{ el }}</td>
+                            <td>{{ el.credits }}</td>
                         </tr>
-                        {% if features.inflow %}
-                            <tr>
-                                <td>{% trans "Inflows total" %}</td>
-                                <td>
-                                    <b class="inflow_sum"></b>
-                                </td>
-                            </tr>
-                        {% endif %}
-                        {% if features.outflow %}
-                            <tr>
-                                <td>{% trans "Outflows total" %}</td>
-                                <td>
-                                    <b class="outflow_sum"></b>
-                                </td>
-                            </tr>
-                        {% endif %}
-                        {% if features.refund %}
-                            <tr>
-                                <td>{% trans "Refund given" %}</td>
-                                <td>
-                                    <b class="refund_sum"></b>
-                                </td>
-                            </tr>
-                        {% endif %}
-                    </table>
-                </div>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+    <div class="hide runs">
+        <h2>{% trans "Event balance" %}</h2>
+        <table id="run_balance" class="go_datatable">
+            <thead>
+                <tr>
+                    <th>{% trans "Event" %}</th>
+                    <th>{% trans "Balance" %}</th>
+                    <th>{% trans "Close" %}</th>
+                    <th>{% trans "Start date" %}</th>
+                </tr>
+            </thead>
+            {% for el in runs %}
+                <tr>
+                    <td>
+                        <a href="{% url 'exe_run_accounting' el.uuid %}">{{ el }}</a>
+                    </td>
+                    <td>{{ el.balance }}</td>
+                    <td>
+                        {% if el.development != '9' %}NO{% endif %}
+                    </td>
+                    <td>{{ el.start | date:"Y/m/d" }}</td>
+                </tr>
             {% endfor %}
-            {% if features.tokens %}
-                <div class="hide tokens">
-                    <h2>{{ tokens_name }}</h2>
-                    <table id="member_tokens" class="go_datatable">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>{% trans "Participant" %}</th>
-                                <th>{{ tokens_name }}</th>
-                            </tr>
-                        </thead>
-                        {% for el in list %}
-                            {% if el.tokens %}
-                                <tr id="tokens_{{ el.uuid }}">
-                                    <td>
-                                        <a href="{% url 'exe_member' el.uuid %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-                                    </td>
-                                    <td>{{ el }}</td>
-                                    <td>{{ el.tokens }}</td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </table>
-                </div>
-            {% endif %}
-            {% if features.credits %}
-                <div class="hide credits">
-                    <h2>{{ credits_name }}</h2>
-                    <table id="member_credits" class="go_datatable">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>{% trans "Participant" %}</th>
-                                <th>{{ credits_name }}</th>
-                            </tr>
-                        </thead>
-                        {% for el in list %}
-                            {% if el.credits %}
-                                <tr id="credits_{{ el.uuid }}">
-                                    <td>
-                                        <a href="{% url 'exe_member' el.uuid %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-                                    </td>
-                                    <td>{{ el }}</td>
-                                    <td>{{ el.credits }}</td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </table>
-                </div>
-            {% endif %}
-            <div class="hide runs">
-                <h2>{% trans "Event balance" %}</h2>
-                <table id="run_balance" class="go_datatable">
-                    <thead>
-                        <tr>
-                            <th>{% trans "Event" %}</th>
-                            <th>{% trans "Balance" %}</th>
-                            <th>{% trans "Close" %}</th>
-                            <th>{% trans "Start date" %}</th>
-                        </tr>
-                    </thead>
-                    {% for el in runs %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'exe_run_accounting' el.uuid %}">{{ el }}</a>
-                            </td>
-                            <td>{{ el.balance }}</td>
-                            <td>
-                                {% if el.development != '9' %}NO{% endif %}
-                            </td>
-                            <td>{{ el.start | date:"Y/m/d" }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        {% endblock content %}
-        {% block js %}
-            <script>
+        </table>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script>
     window.addEventListener('DOMContentLoaded', function() {
         $(function() {
 
@@ -308,5 +308,5 @@
             });
         });
     });
-            </script>
-        {% endblock js %}
+    </script>
+{% endblock js %}

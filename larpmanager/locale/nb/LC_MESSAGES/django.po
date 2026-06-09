@@ -7387,9 +7387,6 @@ msgstr "Du har gitt tillatelse til datadeling med denne organisasjonen"
 msgid "If checked, do not use the parent event's factions"
 msgstr "Hvis avkrysset, ikke bruk den overordnede hendelsens fraksjoner"
 
-msgid "If you don't find an user, invite them to the role"
-msgstr "Hvis du ikke finner en bruker, kan du invitere vedkommende til rollen"
-
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Hvis du ønsker det, kan du angi et pronomen for karakteren din"
 
@@ -10001,6 +9998,13 @@ msgid ""
 msgstr ""
 "Hvis avkrysset, aktiverer du evnemaler som kan gjenbrukes på tvers av flere "
 "evner"
+
+msgid ""
+"If you don't find an user, you can save the role, and then invite them "
+"clicking on"
+msgstr ""
+"Hvis du ikke finner en bruker, kan du lagre rollen og deretter invitere "
+"vedkommende ved å klikke på"
 
 msgid ""
 "If you have made a wire transfer, please upload the receipt for it to be "

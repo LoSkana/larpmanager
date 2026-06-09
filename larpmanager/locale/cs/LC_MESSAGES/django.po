@@ -7387,9 +7387,6 @@ msgstr "S touto organizací jste povolili sdílení dat"
 msgid "If checked, do not use the parent event's factions"
 msgstr "Pokud je zaškrtnuto, nepoužívejte frakce nadřazené události"
 
-msgid "If you don't find an user, invite them to the role"
-msgstr "Pokud uživatele nenajdete, pozvěte ho do role"
-
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Pokud si přejete, uveďte zájmeno pro svou postavu"
 
@@ -9897,6 +9894,13 @@ msgid ""
 msgstr ""
 "Tato stránka shrnuje opakovaně použitelné šablony schopností, které lze "
 "přiřadit schopnostem"
+
+msgid ""
+"If you don't find an user, you can save the role, and then invite them "
+"clicking on"
+msgstr ""
+"Pokud daného uživatele nenajdete, můžete roli uložit a poté ho pozvat "
+"kliknutím na"
 
 msgid ""
 "If you have made a wire transfer, please upload the receipt for it to be "

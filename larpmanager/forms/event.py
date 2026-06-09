@@ -1270,8 +1270,6 @@ class OrgaEventRoleForm(BaseModelForm):
 
     page_info = _("Manage event access roles")
 
-    load_templates: ClassVar[list] = ["share"]
-
     class Meta:
         model = EventRole
         fields = ("name", "members", "event")
@@ -1284,6 +1282,10 @@ class OrgaEventRoleForm(BaseModelForm):
         self.configure_field_association("members", self.params["association_id"])
         # Prepare permission-based role selection for event permissions
         prepare_permissions_role(self, EventPermission)
+        self.fields["members"].help_text = (
+            _("If you don't find an user, you can save the role, and then invite them clicking on")
+            + " <i class='fas fa-envelope'></i>"
+        )
 
     def save(self, commit: bool = True) -> EventRole:  # noqa: FBT001, FBT002, ARG002
         """Save form instance and update role permissions."""

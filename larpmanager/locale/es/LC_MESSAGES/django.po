@@ -7399,9 +7399,6 @@ msgstr "Has autorizado el intercambio de datos con esta organización"
 msgid "If checked, do not use the parent event's factions"
 msgstr "Si está marcada, no usar las facciones del evento padre"
 
-msgid "If you don't find an user, invite them to the role"
-msgstr "Si no encuentras ningún usuario, invítale al rol"
-
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Si lo deseas, indica un pronombre para tu personaje"
 
@@ -10179,6 +10176,13 @@ msgid ""
 msgstr ""
 "Si está marcada, activa las plantillas de habilidades que se pueden "
 "reutilizar en varias habilidades"
+
+msgid ""
+"If you don't find an user, you can save the role, and then invite them "
+"clicking on"
+msgstr ""
+"Si no encuentras a un usuario, puedes guardar el rol y, a continuación, "
+"invitarlo haciendo clic en"
 
 msgid ""
 "If you have made a wire transfer, please upload the receipt for it to be "

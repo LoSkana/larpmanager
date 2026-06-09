@@ -7420,9 +7420,6 @@ msgid "If checked, do not use the parent event's factions"
 msgstr ""
 "Si cette case est cochée, ne pas utiliser les factions de l'événement parent"
 
-msgid "If you don't find an user, invite them to the role"
-msgstr "Si tu ne trouves pas d'utilisateur, invite-le à jouer un rôle"
-
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Si vous le souhaitez, indiquez un pronom pour votre personnage"
 
@@ -10324,6 +10321,13 @@ msgid ""
 msgstr ""
 "Si cette case est cochée, les modèles d'aptitudes peuvent être réutilisés "
 "pour plusieurs aptitudes"
+
+msgid ""
+"If you don't find an user, you can save the role, and then invite them "
+"clicking on"
+msgstr ""
+"Si tu ne trouves pas l'utilisateur, tu peux enregistrer le rôle, puis "
+"l'inviter en cliquant sur"
 
 msgid ""
 "If you have made a wire transfer, please upload the receipt for it to be "

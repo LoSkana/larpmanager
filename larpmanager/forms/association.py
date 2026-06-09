@@ -270,8 +270,6 @@ class ExeAssociationRoleForm(BaseModelForm):
 
     page_info = _("Manage association roles")
 
-    load_templates: ClassVar[list] = ["share"]
-
     class Meta:
         model = AssociationRole
         fields = ("name", "members", "association")
@@ -284,6 +282,10 @@ class ExeAssociationRoleForm(BaseModelForm):
         self.configure_field_association("members", self.params.get("association_id"))
         # Prepare role-based permissions for association
         prepare_permissions_role(self, AssociationPermission)
+        self.fields["members"].help_text = (
+            _("If you don't find an user, you can save the role, and then invite them clicking on")
+            + " <i class='fas fa-envelope'></i>"
+        )
 
     def save(self, commit: bool = True) -> AssociationRole:  # noqa: FBT001, FBT002
         """Save form instance and update related role permissions."""

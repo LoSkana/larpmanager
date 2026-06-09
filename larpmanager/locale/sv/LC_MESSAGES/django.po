@@ -7390,9 +7390,6 @@ msgstr "Du har beviljat datadelning med denna organisation"
 msgid "If checked, do not use the parent event's factions"
 msgstr "Om markerat, använd inte föräldrahändelsens fraktioner"
 
-msgid "If you don't find an user, invite them to the role"
-msgstr "Om du inte hittar någon användare kan du bjuda in dem till rollen"
-
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Om du vill, ange ett pronomen för din karaktär"
 
@@ -10000,6 +9997,13 @@ msgid ""
 "abilities"
 msgstr ""
 "Om markerad, aktiverar förmågemallar som kan återanvändas för flera förmågor"
+
+msgid ""
+"If you don't find an user, you can save the role, and then invite them "
+"clicking on"
+msgstr ""
+"Om du inte hittar en användare kan du spara rollen och sedan bjuda in "
+"personen genom att klicka på"
 
 msgid ""
 "If you have made a wire transfer, please upload the receipt for it to be "

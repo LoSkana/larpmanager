@@ -2682,7 +2682,7 @@ table.dataTable.dtr-inline.collapsed
 }
 
 .new_v20 .only_v20 {
-  display: initial;
+  display: block;
 }
 
 .new_v20 hr {
@@ -2693,9 +2693,13 @@ table.dataTable.dtr-inline.collapsed
   width: auto;
 }
 
-body.new_v20 #banner h1 {
+body.manage.new_v20 #banner h1 {
   display: block;
   margin: 0;
+  text-align: left;
+}
+
+body.manage.new_v20 #one .inner {
   text-align: left;
 }
 
@@ -2705,9 +2709,23 @@ body.new_v20 #banner h1 {
 }
 
 .new_v20 .manage p,
+.new_v20 .manage h1,
 .new_v20 .manage h2,
 .new_v20 .manage h3,
 .new_v20 .manage h4 {
+  text-align: left;
+}
+
+.new_v20 .manage h1 {
+  margin-left: 2em;
+}
+
+.new_v20 .manage input {
+  margin: 0;
+}
+
+.new_v20 .manage #search {
+  margin: 0;
   text-align: left;
 }
 
@@ -2845,7 +2863,6 @@ body.association.new_v20 .user_resize {
 }
 
 #info_bar {
-  float: left;
   font-style: italic;
   font-size: 85%;
   margin-bottom: 1em;

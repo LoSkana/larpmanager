@@ -7387,9 +7387,6 @@ msgstr "Użytkownik wyraził zgodę na udostępnianie danych tej organizacji"
 msgid "If checked, do not use the parent event's factions"
 msgstr "Jeśli zaznaczone, nie używaj frakcji wydarzenia nadrzędnego"
 
-msgid "If you don't find an user, invite them to the role"
-msgstr "Jeśli nie znajdziesz użytkownika, zaproś go do roli"
-
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Jeśli chcesz, wskaż zaimek dla swojej postaci"
 
@@ -10081,6 +10078,13 @@ msgid ""
 msgstr ""
 "Jeśli zaznaczone, włącza szablony umiejętności, które mogą być ponownie "
 "użyte w wielu umiejętnościach"
+
+msgid ""
+"If you don't find an user, you can save the role, and then invite them "
+"clicking on"
+msgstr ""
+"Jeśli nie znajdziesz użytkownika, możesz zapisać rolę, a następnie zaprosić "
+"go, klikając"
 
 msgid ""
 "If you have made a wire transfer, please upload the receipt for it to be "

@@ -7398,9 +7398,6 @@ msgid "If checked, do not use the parent event's factions"
 msgstr ""
 "Indien aangevinkt, gebruik de facties van de bovenliggende gebeurtenis niet"
 
-msgid "If you don't find an user, invite them to the role"
-msgstr "Als je geen gebruiker vindt, nodig hem dan uit voor de rol"
-
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Als je wilt, geef dan een voornaamwoord aan voor je personage"
 
@@ -10170,6 +10167,13 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, worden vaardigheidssjablonen ingeschakeld die "
 "kunnen worden hergebruikt voor meerdere vaardigheden"
+
+msgid ""
+"If you don't find an user, you can save the role, and then invite them "
+"clicking on"
+msgstr ""
+"Als je een gebruiker niet kunt vinden, kun je de rol opslaan en hem of haar "
+"vervolgens uitnodigen door op"
 
 msgid ""
 "If you have made a wire transfer, please upload the receipt for it to be "

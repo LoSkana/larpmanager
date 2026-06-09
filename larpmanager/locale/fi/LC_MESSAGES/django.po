@@ -7388,9 +7388,6 @@ msgstr "Olet antanut luvan tietojen jakamiseen tämän organisaation kanssa"
 msgid "If checked, do not use the parent event's factions"
 msgstr "Jos valitaan, älä käytä vanhemman tapahtuman ryhmittymiä"
 
-msgid "If you don't find an user, invite them to the role"
-msgstr "Jos et löydä käyttäjää, kutsu hänet rooliin"
-
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Halutessasi voit ilmoittaa hahmollesi pronominin"
 
@@ -10005,6 +10002,12 @@ msgid ""
 msgstr ""
 "Jos valittuna, otetaan käyttöön taitopohjat, joita voidaan käyttää uudelleen"
 " useissa taidoissa"
+
+msgid ""
+"If you don't find an user, you can save the role, and then invite them "
+"clicking on"
+msgstr ""
+"Jos et löydä käyttäjää, voit tallentaa roolin ja kutsua hänet napsauttamalla"
 
 msgid ""
 "If you have made a wire transfer, please upload the receipt for it to be "

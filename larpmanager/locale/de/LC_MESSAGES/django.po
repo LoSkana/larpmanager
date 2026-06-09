@@ -7414,9 +7414,6 @@ msgstr ""
 "Wenn diese Option aktiviert ist, werden die Fraktionen des übergeordneten "
 "Ereignisses nicht verwendet"
 
-msgid "If you don't find an user, invite them to the role"
-msgstr "Wenn du keinen Benutzer findest, lade ihn in die Rolle ein"
-
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Wenn Sie möchten, können Sie ein Pronomen für Ihren Charakter angeben"
 
@@ -10358,6 +10355,13 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist, werden Fähigkeitsvorlagen aktiviert, die "
 "für mehrere Fähigkeiten wiederverwendet werden können"
+
+msgid ""
+"If you don't find an user, you can save the role, and then invite them "
+"clicking on"
+msgstr ""
+"Wenn du einen Benutzer nicht findest, kannst du die Rolle speichern und ihn "
+"dann einladen, indem du auf"
 
 msgid ""
 "If you have made a wire transfer, please upload the receipt for it to be "

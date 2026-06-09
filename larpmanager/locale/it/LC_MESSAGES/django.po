@@ -7391,9 +7391,6 @@ msgstr "Hai concesso la condivisione dei dati con questa organizzazione"
 msgid "If checked, do not use the parent event's factions"
 msgstr "Se selezionata, non utilizzare le fazioni dell'evento padre"
 
-msgid "If you don't find an user, invite them to the role"
-msgstr "Se non trovi un utente, invitalo a partecipare al ruolo"
-
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Se lo desideri, indica un pronome per il tuo personaggio"
 
@@ -10197,6 +10194,12 @@ msgid ""
 msgstr ""
 "Questa pagina riassume i modelli di abilità riutilizzabili che possono "
 "essere assegnati alle abilità"
+
+msgid ""
+"If you don't find an user, you can save the role, and then invite them "
+"clicking on"
+msgstr ""
+"Se non trovi un utente, puoi salvare il ruolo e poi invitarlo cliccando su"
 
 msgid ""
 "If you have made a wire transfer, please upload the receipt for it to be "
