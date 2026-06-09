@@ -9,7 +9,7 @@
     {% endif %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows an email sent by the system" %}
+    {% trans "View the full content of an archived email sent by the system" %}.
 {% endblock info %}
 {% block content %}
     {{ email.body | sanitize_html }}

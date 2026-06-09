@@ -4,7 +4,7 @@
     {% trans "Pdf bulk" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page allows you to select items to bulk download" %}
+    {% trans "Select characters, factions, and handouts to download as a bulk ZIP of PDFs" %}.
 {% endblock info %}
 {% block content %}
     <form action="{{ request.path }}"

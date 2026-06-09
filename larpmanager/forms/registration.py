@@ -631,8 +631,6 @@ class OrgaRegistrationForm(MultichoiceMixin, BaseRegistrationForm):
 
     page_title = _("Registrations")
 
-    load_templates: ClassVar[list] = ["share"]
-
     load_js: ClassVar[list] = ["multichoice"]
 
     class Meta:

@@ -4,30 +4,32 @@
     {% trans "Messages" %}
 {% endblock title %}
 {% block content %}
-    <table class="mob">
-        <thead>
-            <tr>
-                <th>{% trans "User" %}</th>
-                <th>{% trans "Your messages" %}</th>
-                <th>{% trans "Unread" %}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for el in list %}
+    <div class="user_resize platform">
+        <table class="mob">
+            <thead>
                 <tr>
-                    <td>
-                        <a href="{% url 'public' el.you.uuid %}">{{ el.you.display_member }}</a>
-                    </td>
-                    <td>{{ el.last_message }}</td>
-                    <td>
-                        {% if el.num_unread > 0 %}{{ el.num_unread }}{% endif %}
-                    </td>
-                    <td>
-                        <a href="{% url 'chat' el.you.uuid %}">Chat</a>
-                    </td>
+                    <th>{% trans "User" %}</th>
+                    <th>{% trans "Your messages" %}</th>
+                    <th>{% trans "Unread" %}</th>
+                    <th></th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for el in list %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'public' el.you.uuid %}">{{ el.you.display_member }}</a>
+                        </td>
+                        <td>{{ el.last_message }}</td>
+                        <td>
+                            {% if el.num_unread > 0 %}{{ el.num_unread }}{% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'chat' el.you.uuid %}">Chat</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock content %}

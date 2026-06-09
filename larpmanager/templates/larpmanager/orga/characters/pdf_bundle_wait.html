@@ -4,25 +4,25 @@
     {% trans "Generating Bundle" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
-    {% trans "Generating printable character sheet bundle" %}
+    {% trans "Track the progress of the printable character sheet ZIP bundle being generated in the background" %}.
 {% endblock info %}
 {% block meta %}
     {{ block.super }}
-    {% if not bundle_ready %}
-        <meta http-equiv="refresh" content="10">
-    {% endif %}
+    {% if not bundle_ready %}<meta http-equiv="refresh" content="10">{% endif %}
 {% endblock meta %}
 {% block content %}
     <div id="bundle_wait">
         {% if bundle_ready %}
             <p>{% trans "Bundle is ready" %}!</p>
-            <a href="{% url 'orga_characters_friendly_bundle' run.get_slug %}" download class="button">
-                {% trans "Download" %} (ZIP)
-            </a>
+            <a href="{% url 'orga_characters_friendly_bundle' run.get_slug %}"
+               download
+               class="button">{% trans "Download" %} (ZIP)</a>
             &nbsp;
             <a href="{% url 'orga_characters_pdf' run.get_slug %}">{% trans "Back to PDF settings" %}</a>
         {% else %}
-            <p>{% trans "Bundle generation in progress" %}. {% trans "This page will refresh automatically every 10 seconds" %}.</p>
+            <p>
+                {% trans "Bundle generation in progress" %}. {% trans "This page will refresh automatically every 10 seconds" %}.
+            </p>
             <p>{% trans "Please wait" %}...</p>
             <a href="{% url 'orga_characters_pdf' run.get_slug %}">{% trans "Back to PDF settings" %}</a>
         {% endif %}
