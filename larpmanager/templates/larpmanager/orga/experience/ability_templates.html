@@ -3,9 +3,6 @@
 {% block title %}
     {% trans "Ability Templates" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
-{% block info %}
-    {% trans "Define reusable ability templates that can be assigned to individual abilities" %}
-{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
     <table id="ability_templates" class="go_datatable writing">

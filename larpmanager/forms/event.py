@@ -135,7 +135,7 @@ class OrgaEventForm(BaseModelForm):
 
     page_title = _("Event")
 
-    page_info = _("Manage event settings")
+    page_info = _("Edit the basic settings of this event")
 
     load_templates: ClassVar[list] = ["event"]
 
@@ -268,7 +268,7 @@ class OrgaFeatureForm(FeatureForm):
     page_title = _("Event features")
 
     page_info = _(
-        "Manage features activated for this event and all its runs (click on a feature to show its description)",
+        "Enable or disable features for this event and all its runs; click a feature name to read its description"
     )
 
     load_js: ClassVar[list] = ["feature-search"]
@@ -301,7 +301,7 @@ class OrgaConfigForm(ConfigForm):
 
     page_title = _("Event Configuration")
 
-    page_info = _("Manage configuration of activated features")
+    page_info = _("View and adjust configuration options for each feature activated on this event")
 
     section_replace = True
 
@@ -1074,7 +1074,7 @@ class OrgaAppearanceForm(BaseModelCssForm):
 
     page_title = _("Event Appearance")
 
-    page_info = _("Manage appearance and presentation of the event")
+    page_info = _("Customize the visual appearance of the event")
 
     load_js: ClassVar[list] = ["appearance-colors"]
 
@@ -1167,7 +1167,7 @@ class OrgaEventTextForm(BaseModelForm):
 
     page_title = _("Event Texts")
 
-    page_info = _("Manage event texts")
+    page_info = _("Manage custom text entries used across different sections of this event")
 
     class Meta:
         abstract = True
@@ -1268,7 +1268,7 @@ class OrgaEventRoleForm(BaseModelForm):
 
     page_title = _("Roles")
 
-    page_info = _("Manage event access roles")
+    page_info = _("Manage organizer roles and assign permissions to staff members for this event")
 
     class Meta:
         model = EventRole
@@ -1337,7 +1337,7 @@ class OrgaEventButtonForm(BaseModelForm):
 
     page_title = _("Event Navigation")
 
-    page_info = _("Manage event navigation buttons")
+    page_info = _("Manage custom navigation buttons displayed to participants for this event")
 
     icon = forms.ChoiceField(choices=_BUTTON_ICON_CHOICES, required=False, label=_("Icon"))
 
@@ -1392,9 +1392,9 @@ class OrgaRunForm(ConfigForm):
             self.fields["event"].help_text = _("Select the event of this new session")
             self.fields["event"].to_field_name = None
             self.choose_event = True
-            self.page_info = _("Manage new session for an existing event")
+            self.page_info = _("Create a new session for an existing event")
         else:
-            self.page_info = _("Manage date settings for this event")
+            self.page_info = _("Edit the dates, status, and registration settings for this event session")
             self.delete_field("event")
 
         # do not show cancelled or done options for development if date are not set
@@ -1753,7 +1753,7 @@ class ExeTemplateForm(FeatureForm):
 
     page_title = _("Event Template")
 
-    page_info = _("Manage template features (click on a feature to show its description)")
+    page_info = _("Manage event templates used as the basis for new events, including their roles and configuration")
 
     class Meta:
         model = Event
@@ -1808,7 +1808,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
     page_title = _("Quick Setup")
 
-    page_info = _("Select the features you want to activate for this event")
+    page_info = _("Quickly enable or disable key features for this event using a simplified checklist")
 
     class Meta:
         model = Event
@@ -2281,7 +2281,9 @@ class OrgaPromotionForm(ConfigForm):
 
     page_title = _("Promotion")
 
-    page_info = _("Manage event metadata for external promotion")
+    page_info = _(
+        "Fill in the public metadata used to promote this event externally, including language, type, setting, location, and style"
+    )
 
     show_sections = True
 

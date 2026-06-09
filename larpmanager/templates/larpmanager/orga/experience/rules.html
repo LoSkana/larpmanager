@@ -3,9 +3,6 @@
 {% block title %}
     {% trans "Rules" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
-{% block info %}
-    {% trans "Define rules that determine how abilities modify computed character fields" %}
-{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
     <table id="rules" class="go_datatable writing">

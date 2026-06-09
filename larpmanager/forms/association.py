@@ -57,7 +57,7 @@ class ExeAssociationForm(BaseModelForm):
 
     page_title = _("Settings")
 
-    page_info = _("Manage main organization settings")
+    page_info = _("Edit the core settings for your organization")
 
     class Meta:
         model = Association
@@ -109,7 +109,7 @@ class ExeAssociationTextForm(BaseModelForm):
 
     page_title = _("Texts")
 
-    page_info = _("Manage organization-specific texts")
+    page_info = _("Manage custom text blocks displayed on pages and in emails")
 
     class Meta:
         abstract = True
@@ -251,7 +251,7 @@ class ExeAssociationTranslationForm(BaseModelForm):
 
     page_title = _("Translations")
 
-    page_info = _("Manage organization-specific translation overrides for customizing terminology and text")
+    page_info = _("Manage custom translation overrides that replace default interface strings for this organization")
 
     class Meta:
         abstract = True
@@ -268,7 +268,7 @@ class ExeAssociationRoleForm(BaseModelForm):
 
     page_title = _("Roles")
 
-    page_info = _("Manage association roles")
+    page_info = _("Manage organization roles, assign members, and configure the permissions granted to each role")
 
     class Meta:
         model = AssociationRole
@@ -299,7 +299,7 @@ class ExeAppearanceForm(BaseModelCssForm):
 
     page_title = _("Appearance")
 
-    page_info = _("Manage appearance settings and presentation of the organization")
+    page_info = _("Customize the visual appearance of your organization by selecting a theme, colors, font, background")
 
     load_js: ClassVar[list] = ["appearance-colors"]
 
@@ -356,9 +356,7 @@ class ExeFeatureForm(FeatureForm):
 
     page_title = _("Features")
 
-    page_info = _(
-        "Manage features activated for the organization and all its events (click on a feature to show its description)",
-    )
+    page_info = _("Enable or disable features for your organization and all its events")
 
     load_js: ClassVar[list] = ["feature-search"]
 
@@ -388,7 +386,7 @@ class ExeConfigForm(ConfigForm):
 
     page_title = _("Configuration")
 
-    page_info = _("Manage configuration of activated features")
+    page_info = _("Fine-tune the behavior of each activated feature by adjusting its configuration options")
 
     section_replace = True
 
@@ -1036,7 +1034,7 @@ class ExeQuickSetupForm(QuickSetupForm):
 
     page_title = _("Quick Setup")
 
-    page_info = _("You are choosing the most common features to activate for your organization")
+    page_info = _("Select which common features to activate for your organization to get started quickly")
 
     class Meta:
         model = Association
@@ -1112,7 +1110,11 @@ class ExePreferencesForm(ConfigForm):
 
     page_title = _("Personal preferences")
 
-    page_info = _("Manage your personal interface preferences")
+    page_info = (
+        _("Set your personal theme, notification digest mode, and interface version")
+        + "; "
+        + _("these settings override the organization defaults for your account only")
+    )
 
     load_js: ClassVar[list] = ["appearance-colors"]
 

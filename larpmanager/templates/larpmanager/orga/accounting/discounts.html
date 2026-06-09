@@ -3,9 +3,6 @@
 {% block title %}
     {% trans "Discounts" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
-{% block info %}
-    {% trans "Manage discounts configured for this event, including type, value, and redemption codes" %}
-{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
     <table id="discounts" class="go_datatable writing">

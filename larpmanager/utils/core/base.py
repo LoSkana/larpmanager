@@ -243,6 +243,14 @@ def check_association_context(request: HttpRequest, permission_slug: str | list[
     if config_slug and has_association_permission(request, context, "exe_config"):
         context["config"] = reverse("exe_config", args=[config_slug])
 
+    # Inject page_info from the corresponding form class if available
+    if permission_slug and isinstance(permission_slug, str):
+        from larpmanager.utils.edit.exe import ExeAction  # noqa: PLC0415
+
+        action = ExeAction.from_string(permission_slug)
+        if action and "form" in action.config and hasattr(action.config["form"], "page_info"):
+            context["page_info"] = action.config["form"].page_info
+
     return context
 
 
@@ -300,6 +308,13 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
 
         # Mark active sidebar entry for redirect-style views
         context["sidebar_active"] = permission_slug
+
+        # Inject page_info from the corresponding form class if available
+        from larpmanager.utils.edit.orga import OrgaAction  # noqa: PLC0415
+
+        action = OrgaAction.from_string(permission_slug)
+        if action and "form" in action.config and hasattr(action.config["form"], "page_info"):
+            context["page_info"] = action.config["form"].page_info
 
     # Load additional event permissions and management context
     get_index_event_permissions(request, context, event_slug)

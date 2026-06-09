@@ -3,9 +3,6 @@
 {% block title %}
     {% trans "Modifiers" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
-{% block info %}
-    {% trans "Configure cost modifiers that adjust ability prices based on prerequisites or character fields" %}
-{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
     <table id="modifiers" class="go_datatable writing">

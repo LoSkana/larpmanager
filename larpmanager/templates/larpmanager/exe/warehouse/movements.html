@@ -3,9 +3,6 @@
 {% block title %}
     {% trans "Warehouse assignments" %}  - {{ run.search | truncatechars:50 }}
 {% endblock title %}
-{% block info %}
-    {% trans "Track the assignment of warehouse items to event areas for each run" %}
-{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
     <table id="inv_movements" class="go_datatable dot_links">

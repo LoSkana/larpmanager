@@ -2183,9 +2183,6 @@ msgstr "Où il se trouve"
 msgid "Your Events"
 msgstr "Vos événements"
 
-msgid "assignments"
-msgstr "les missions"
-
 msgid "collections"
 msgstr "collections"
 
@@ -2576,9 +2573,6 @@ msgstr "Code langue"
 
 msgid "Legal address"
 msgstr "Adresse légale"
-
-msgid "Manage albums"
-msgstr "Gérer les albums"
 
 msgid "Manage events"
 msgstr "Gérer les événements"
@@ -3058,9 +3052,6 @@ msgstr "Chargement à partir d'un événement"
 msgid "Mail assignment"
 msgstr "Affectation du courrier"
 
-msgid "Manage invoices"
-msgstr "Gérer les factures"
-
 msgid "Maximum fillers"
 msgstr "Remplissage maximal"
 
@@ -3294,9 +3285,6 @@ msgstr "Affectation des postes"
 
 msgid "Lite Mode active"
 msgstr "Mode \"Lite\" actif"
-
-msgid "Manage discounts"
-msgstr "Gérer les réductions"
 
 msgid "May the best win"
 msgstr "Que le meilleur gagne"
@@ -3559,9 +3547,6 @@ msgstr "Sélection non valide"
 msgid "Invoice not found"
 msgstr "Facture non trouvée"
 
-msgid "Manage characters"
-msgstr "Gérer les personnages"
-
 msgid "Maximum available"
 msgstr "Maximum disponible"
 
@@ -3747,12 +3732,6 @@ msgstr "Résidence historique"
 
 msgid "Informations saved"
 msgstr "Information sauvegardée"
-
-msgid "Manage event areas"
-msgstr "Gérer les espaces événementiels"
-
-msgid "Manage event texts"
-msgstr "Gérer les textes des événements"
 
 msgid "Member Data Checks"
 msgstr "Contrôle des données des membres"
@@ -3949,9 +3928,6 @@ msgstr "Pas intéressé"
 msgid "List of other users"
 msgstr "Liste des autres utilisateurs "
 
-msgid "Manage competencies"
-msgstr "Gérer les compétences"
-
 msgid "Manage url shortner"
 msgstr "Gérer les raccourcis d'url"
 
@@ -4110,12 +4086,6 @@ msgstr "Courrier ajouté à la file d'attente !"
 
 msgid "Make the request now"
 msgstr "Postulez maintenant"
-
-msgid "Manage event signups"
-msgstr "Gérer les inscriptions aux événements"
-
-msgid "Manage payment items"
-msgstr "Gérer les éléments de paiement"
 
 msgid "Manual configuration"
 msgstr "Configuration manuelle"
@@ -4329,12 +4299,6 @@ msgstr "En cas d'absence, indiquer 0"
 msgid "Invalid choice format"
 msgstr "Format de choix non valide"
 
-msgid "Manage URL shorteners"
-msgstr "Gérer les raccourcisseurs d'URL"
-
-msgid "Manage event settings"
-msgstr "Gérer les paramètres de l'événement"
-
 msgid "Manage warehouse tags"
 msgstr "Gestion des étiquettes d'entrepôt"
 
@@ -4506,12 +4470,6 @@ msgstr "Rejoignez la liste d'attente !"
 
 msgid "Link to participate in"
 msgstr "Liens pour participer"
-
-msgid "Manage member profiles"
-msgstr "Gérer les profils des membres"
-
-msgid "Manage payment methods"
-msgstr "Gérer les modes de paiement"
 
 msgid "Manage refund requests"
 msgstr "Gérer les demandes de remboursement"
@@ -4828,15 +4786,6 @@ msgstr "Feuille légère (Test)"
 msgid "Manage area of the event"
 msgstr "Gérer la zone de l'événement"
 
-msgid "Manage association roles"
-msgstr "Gérer les rôles des associations"
-
-msgid "Manage reported problems"
-msgstr "Gérer les problèmes signalés"
-
-msgid "Manage volunteer entries"
-msgstr "Gérer les inscriptions des volontaires"
-
 msgid "Manages event's expenses"
 msgstr "Gestion des dépenses liées à l'événement"
 
@@ -4942,12 +4891,6 @@ msgstr "Facture déjà confirmée"
 
 msgid "Kitchen - food, tableware"
 msgstr "Cuisine - nourriture, vaisselle"
-
-msgid "Manage credit assignments"
-msgstr "Gérer les affectations de crédit"
-
-msgid "Manage event access roles"
-msgstr "Gérer les rôles d'accès aux événements"
 
 msgid "Manage experience systems"
 msgstr "Gérer les systèmes d'expérience"
@@ -5075,9 +5018,6 @@ msgstr "Factures en attente d'approbation"
 msgid "Manage the event prologues"
 msgstr "Gérer les prologues des événements"
 
-msgid "Manage warehouse item tags"
-msgstr "Gérer les étiquettes des articles de l'entrepôt"
-
 msgid "Manage warehouse movements"
 msgstr "Gérer les mouvements de l'entrepôt"
 
@@ -5174,9 +5114,6 @@ msgstr "Gérer les modificateurs d'expérience"
 
 msgid "Manage quiz-style workshops"
 msgstr "Gérer des ateliers sous forme de quiz"
-
-msgid "Manage signup form sections"
-msgstr "Gérer les sections du formulaire d'inscription"
 
 msgid "Manage the event characters"
 msgstr "Gérer les personnages de l'événement"
@@ -5279,12 +5216,6 @@ msgstr "Si coché : les membres peuvent voter"
 msgid "Invitation sent to %(email)s"
 msgstr "Invitation envoyée à %(email)s"
 
-msgid "Manage participant questions"
-msgstr "Gérer les questions des participants"
-
-msgid "Manage signup form questions"
-msgstr "Gérer les questions du formulaire d'inscription"
-
 msgid "Manage the event speed-larps"
 msgstr "Gérer les ralentissements de l'événement"
 
@@ -5343,9 +5274,6 @@ msgstr "Je comprends - Accéder au contenu"
 
 msgid "Indicate the outflow category"
 msgstr "Indiquer la catégorie dans laquelle la production est comptabilisée"
-
-msgid "Manage expense items incurred"
-msgstr "Gérer les dépenses engagées"
 
 msgid "Manages modules for workshops"
 msgstr "Gestion des modules pour les ateliers"
@@ -5463,6 +5391,9 @@ msgstr "Durée en secondes (facultatif)"
 msgid "Invalid code, please try again"
 msgstr "Code invalide, veuillez réessayer"
 
+msgid "Manage characters of the event"
+msgstr "Gérer les personnages de l'événement"
+
 msgid "Manage issues during the event"
 msgstr "Gérer les problèmes pendant l'événement"
 
@@ -5471,9 +5402,6 @@ msgstr "Gérer la comptabilité de l'organisation"
 
 msgid "Manage questions for workshops"
 msgstr "Gérer les questions pour les ateliers"
-
-msgid "Manage registration surcharges"
-msgstr "Gérer les surtaxes d'enregistrement"
 
 msgid "Password reset request url for"
 msgstr "URL de demande de réinitialisation du mot de passe pour"
@@ -5552,15 +5480,6 @@ msgstr "Gérer toutes les parcelles pour cet événement"
 
 msgid "Manage all quests for the event"
 msgstr "Gérer toutes les quêtes de l'événement"
-
-msgid "Manage event navigation buttons"
-msgstr "Gérer les boutons de navigation des événements"
-
-msgid "Manage experience point systems"
-msgstr "Gérer les systèmes de points d'expérience"
-
-msgid "Manage member membership status"
-msgstr "Gérer le statut des membres"
 
 msgid "Manage the registration tickets"
 msgstr "Gérer les tickets d'inscription"
@@ -5680,14 +5599,8 @@ msgstr "Peut-elle être sélectionnée par les participants "
 msgid "Language(s) the event is held in"
 msgstr "Langue(s) dans laquelle/lesquelles la manifestation est organisée"
 
-msgid "Manage expenses for contributors"
-msgstr "Gérer les dépenses des contributeurs"
-
 msgid "Manage participant registrations"
 msgstr "Gérer les inscriptions des participants"
-
-msgid "Manage rules for computed fields"
-msgstr "Gérer les règles pour les champs calculés"
 
 msgid "Manage the registration sections"
 msgstr "Gérer les sections d'inscription"
@@ -5809,15 +5722,6 @@ msgstr "Indiquez votre niveau d'expérience"
 msgid "Lottery tickets currently present"
 msgstr "Il existe des billets de loterie"
 
-msgid "Manage experience point abilities"
-msgstr "Gérer les capacités des points d'expérience"
-
-msgid "Manage main organization settings"
-msgstr "Gérer les principaux paramètres de l'organisation"
-
-msgid "Manage membership document upload"
-msgstr "Gérer le téléchargement des documents d'adhésion"
-
 msgid "No character found for this event"
 msgstr "Aucun personnage n'a été trouvé pour cet événement"
 
@@ -5888,20 +5792,8 @@ msgstr "Découvrez les quêtes disponibles"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Si cette case est cochée, le niveau de ticket est autorisé : PNJ"
 
-msgid "Manage all characters of the event"
-msgstr "Gérer tous les personnages de l'événement"
-
 msgid "Manage all handouts for this event"
 msgstr "Gérer tous les documents à distribuer pour cet événement"
-
-msgid "Manage badges and user assignments"
-msgstr "Gérer les badges et les affectations d'utilisateurs"
-
-msgid "Manage experience point deliveries"
-msgstr "Gérer les livraisons de points d'expérience"
-
-msgid "Manage organization-specific texts"
-msgstr "Gérer les textes spécifiques à l'organisation"
 
 msgid "Manage the registration surcharges"
 msgstr "Gérer les surtaxes d'enregistrement"
@@ -6005,12 +5897,6 @@ msgstr "Lien de désinscription invalide ou expiré"
 msgid "Manage all prologues for this event"
 msgstr "Gérer tous les prologues de cet événement"
 
-msgid "Manage date settings for this event"
-msgstr "Gérer les paramètres de date pour cet événement"
-
-msgid "Manage signup form question options"
-msgstr "Gérer les options des questions du formulaire d'inscription"
-
 #, python-format
 msgid "Mark as completed: <b>%(list)s</b>."
 msgstr "Marquer comme terminé : <b>%(list)s</b>."
@@ -6113,9 +5999,6 @@ msgstr "Indiquez le montant de votre don"
 msgid "Indicates the details of the request"
 msgstr "Indique les détails de la demande"
 
-msgid "Manage membership fee invoice upload"
-msgstr "Gérer le téléchargement des factures de cotisation"
-
 msgid "Manage the models for event handouts"
 msgstr "Gérer les modèles de documents à distribuer lors des événements"
 
@@ -6213,6 +6096,9 @@ msgstr "Permet aux personnages d'avoir des inventaires"
 msgid "Check the validity of the fiscal code"
 msgstr "Vérifier la validité du code fiscal"
 
+msgid "Edit the basic settings of this event"
+msgstr "Modifie les paramètres de base de cet événement"
+
 msgid "End date cannot be before start date!"
 msgstr "La date de fin ne peut pas être antérieure à la date de début !"
 
@@ -6236,12 +6122,6 @@ msgstr "Gérer les réponses aux questions des ateliers"
 
 msgid "Manage character inventory pool types"
 msgstr "Gérer les types de pools d'inventaire des personnages"
-
-msgid "Manage expense items for contributors"
-msgstr "Gérer les postes de dépenses des contributeurs"
-
-msgid "Manage experience point ability types"
-msgstr "Gérer les types d'aptitude des points d'expérience"
 
 msgid "Manage the organization main settings"
 msgstr "Gérer les paramètres principaux de l'organisation"
@@ -6559,9 +6439,6 @@ msgstr "Gérer les collections auxquelles participent les utilisateurs"
 msgid "Manage incoming revenue linked to events"
 msgstr "Gérer les recettes liées aux événements"
 
-msgid "Manage new session for an existing event"
-msgstr "Gérer une nouvelle session pour un événement existant"
-
 msgid "Name of the ticket into which to convert"
 msgstr "Nom du billet à convertir"
 
@@ -6736,6 +6613,9 @@ msgstr "Cliquez sur un nom pour le consulter directement"
 msgid "Confirmation of registration for %(event)s"
 msgstr "Confirmation de l'inscription à %(event)s"
 
+msgid "Create a new session for an existing event"
+msgstr "Créer une nouvelle session pour un événement existant"
+
 #, python-format
 msgid "Details: %(details)s (<b>%(amount).2f</b>)"
 msgstr "Détails : %(details)s (<b>%(amount).2f</b>)"
@@ -6760,20 +6640,11 @@ msgstr "Coordonnées de longitude du lieu de l'événement"
 msgid "Manage all character factions of the event"
 msgstr "Gérer toutes les factions de personnages de l'événement"
 
-msgid "Manage configuration of activated features"
-msgstr "Gérer la configuration des fonctions activées"
-
 msgid "Manage donations performed by participants"
 msgstr "Gérer les dons effectués par les participants"
 
-msgid "Manage form questions for writing elements"
-msgstr "Gérer les questions de formulaire pour les éléments d'écriture"
-
 msgid "Manage questions asked by the participants"
 msgstr "Gérer les questions posées par les participants"
-
-msgid "Manage your personal interface preferences"
-msgstr "Gérer vos préférences personnelles en matière d'interface"
 
 msgid "Now you can create discounts for the event"
 msgstr "Vous pouvez maintenant créer des réductions pour l'événement"
@@ -6933,8 +6804,14 @@ msgstr "(Facultatif) Nombre maximal de places disponibles"
 msgid "Cancellation for missing profile compilation"
 msgstr "Annulation pour absence de compilation de profil"
 
+msgid "Customize the visual appearance of the event"
+msgstr "Personnalise l'apparence de l'événement"
+
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Souhaitez-vous être remboursé ? Ouvrez un nouveau"
+
+msgid "Edit the core settings for your organization"
+msgstr "Modifie les paramètres de base de ton organisation"
 
 msgid "Elements you wish to avoid in the assignment"
 msgstr "Les éléments que vous souhaitez éviter dans la mission "
@@ -6963,9 +6840,6 @@ msgstr "Gérer les factures et les paiements et les approuver"
 
 msgid "Manage participant questions and answer them"
 msgstr "Gérer les questions des participants et y répondre"
-
-msgid "Manage tokens to access the one-time content"
-msgstr "Gérer les jetons pour accéder au contenu unique"
 
 msgid "Now you can create the factions of the event"
 msgstr "Vous pouvez maintenant créer les factions de l'événement"
@@ -7167,9 +7041,6 @@ msgstr "Si coché : Ajouter un champ pour suivre la quantité des articles"
 msgid "Indicate the country of which you are a citizen"
 msgstr "Indiquez le pays dont vous êtes ressortissant"
 
-msgid "Manage appearance and presentation of the event"
-msgstr "Gérer l'apparence et la présentation de l'événement"
-
 msgid "Manage the traits available in the event quests"
 msgstr "Gérer les traits disponibles dans les quêtes événementielles"
 
@@ -7256,12 +7127,6 @@ msgid "List of recipient email address, comma separated"
 msgstr ""
 "Liste des adresses électroniques des destinataires, séparées par des "
 "virgules"
-
-msgid "Manage ticket types for participant registration"
-msgstr "Gérer les types de billets pour l'inscription des participants"
-
-msgid "Manage warehouse item assignments to event areas"
-msgstr "Gérer l'affectation des articles de l'entrepôt aux zones d'événements"
 
 msgid "No additional payments are required at this time"
 msgstr "Aucun paiement supplémentaire n'est requis pour le moment"
@@ -7423,9 +7288,6 @@ msgstr ""
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Si vous le souhaitez, indiquez un pronom pour votre personnage"
 
-msgid "Manage fixed payment installments for participants"
-msgstr "Gérer les versements fixes pour les participants"
-
 msgid "Manage the configuration of the activated features"
 msgstr "Gérer la configuration des fonctionnalités activées"
 
@@ -7446,11 +7308,6 @@ msgstr "Merci d'avoir choisi de faire partie de notre communauté"
 
 msgid "The registration for this event has been cancelled"
 msgstr "L'inscription à l'événement a été annulée"
-
-msgid "This page allows you to add or edit a ci pool type"
-msgstr ""
-"Cette page vous permet d'ajouter ou de modifier un type de piscine "
-"communautaire"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Total des frais de participation réduits par des remises"
@@ -7485,11 +7342,6 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Rejoignez notre Discord pour obtenir de l'aide, des idées ou pour signaler "
 "des bugs"
-
-msgid "Manage warehouse item movements, loans, and repairs"
-msgstr ""
-"Gérer les mouvements, les prêts et les réparations des articles de "
-"l'entrepôt"
 
 msgid "Now you can define custom organization translations"
 msgstr ""
@@ -7556,9 +7408,6 @@ msgstr "Saisir le nom d'un élément pour insérer son code de référence"
 
 msgid "Last step, please upload your membership application"
 msgstr "Dernière étape, veuillez télécharger votre demande d'adhésion"
-
-msgid "Manage dynamic payment installments for participants"
-msgstr "Gérer des versements dynamiques pour les participants"
 
 msgid "Manages fixed installment payments for registrations"
 msgstr "Gestion des paiements échelonnés pour les enregistrements"
@@ -7631,11 +7480,6 @@ msgstr "Valeur initiale des points d'expérience pour tous les personnages"
 
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Gestion des paiements échelonnés dynamiques pour les inscriptions"
-
-msgid "Manage options in form questions for writing elements"
-msgstr ""
-"Gérer les options dans les questions de formulaire pour les éléments "
-"d'écriture"
 
 msgid "Manage photo and video albums uploaded for this event"
 msgstr "Gérer les albums photo et vidéo publiés pour cet événement"
@@ -7809,11 +7653,6 @@ msgstr ""
 "Passer en revue les utilisateurs qui ne respectent pas les délais de "
 "l'événement"
 
-msgid "Select the features you want to activate for this event"
-msgstr ""
-"Sélectionnez les fonctionnalités que vous souhaitez activer pour cet "
-"événement"
-
 msgid "Select the table rows and choose the operation to apply"
 msgstr ""
 "Sélectionnez les lignes du tableau et choisissez l'opération à appliquer"
@@ -7823,9 +7662,6 @@ msgstr "Mode d'affichage initial lors de l'ouverture de la page d'ensemble"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Le lien sera valable pendant le nombre de jours suivant "
-
-msgid "This page allows you to add or edit an ability template"
-msgstr "Cette page vous permet d'ajouter ou de modifier un modèle de capacité"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Total de ce qui a déjà été payé à la date actuelle"
@@ -7961,10 +7797,6 @@ msgstr ""
 "La devise que vous souhaitez utiliser pour tous les paiements et la "
 "tarification"
 
-msgid "This page allows you to add or edit a character inventory"
-msgstr ""
-"Cette page vous permet d'ajouter ou de modifier l'inventaire d'un personnage"
-
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
 msgstr "Pour le confirmer, veuillez payer %(amount)s dans %(days)s jours"
@@ -8043,6 +7875,11 @@ msgid "Make sure you have time to watch/listen to the content now"
 msgstr ""
 "Assurez-vous d'avoir le temps de regarder/écouter le contenu dès maintenant"
 
+msgid "Manage custom text blocks displayed on pages and in emails"
+msgstr ""
+"Gérer les blocs de texte personnalisés affichés sur les pages et dans les "
+"e-mails"
+
 msgid "Manage problems reported by contributors during this event"
 msgstr ""
 "Gérer les problèmes signalés par les contributeurs pendant cet événement"
@@ -8114,6 +7951,10 @@ msgstr ""
 msgid "The question visibility to participants, allowed values are"
 msgstr ""
 "La question de la visibilité aux participants, les valeurs autorisées sont"
+
+msgid "Upload membership documents to complete a member's approval"
+msgstr ""
+"Télécharge les documents d'adhésion pour finaliser l'approbation d'un membre"
 
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Où a-t-il été placé ? Quand est-il prévu qu'il revienne ?"
@@ -8445,16 +8286,8 @@ msgstr ""
 "Indiquer la date à laquelle le mouvement a été effectué dans l'instrument "
 "financier"
 
-msgid "Manage appearance settings and presentation of the organization"
-msgstr "Gérer l'apparence et la présentation de l'organisation"
-
 msgid "Manage credit assignments issued to participants for this event"
 msgstr "Gérer les crédits attribués aux participants pour cet événement"
-
-msgid "Manage event revenue other than participants' registration fees"
-msgstr ""
-"Gérer les recettes de l'événement autres que les frais d'inscription des "
-"participants"
 
 msgid "Manage staff expenses based on receipts uploaded for all events"
 msgstr ""
@@ -8721,6 +8554,11 @@ msgstr ""
 "Grâce à ces tutoriels, vous apprendrez à utiliser l'outil en un rien de "
 "temps"
 
+msgid "Enable or disable features for your organization and all its events"
+msgstr ""
+"Activer ou désactiver des fonctionnalités pour ton organisation et tous ses "
+"événements"
+
 msgid "How the relationship is described from this character's perspective"
 msgstr "Comment la relation est décrite du point de vue de ce personnage"
 
@@ -8912,11 +8750,6 @@ msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
 "Si vous devez joindre un fichier, indiquez-le ici, sinon laissez le champ "
 "vide"
-
-msgid "Manage template features (click on a feature to show its description)"
-msgstr ""
-"Gérer les caractéristiques du modèle (cliquer sur une caractéristique pour "
-"afficher sa description)"
 
 msgid "Now participants can submit preregistrations, and you can review them"
 msgstr ""
@@ -9163,6 +8996,12 @@ msgstr ""
 "l'examinera manuellement"
 
 msgid ""
+"these settings override the organization defaults for your account only"
+msgstr ""
+"Ces paramètres remplacent les paramètres par défaut de l'organisation "
+"uniquement pour ton compte"
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
 msgstr ""
 "Permet à l'organisation d'attribuer des badges et d'activer un classement "
@@ -9185,6 +9024,10 @@ msgid ""
 msgstr ""
 "Souhaitez-vous activer un lien d'inscription secret pour permettre des "
 "inscriptions anticipées"
+
+msgid ""
+"Edit the dates, status, and registration settings for this event session"
+msgstr "L'utilisateur est déjà inscrit à cet événement "
 
 msgid ""
 "How the relationship is described from the other character's perspective"
@@ -9254,6 +9097,12 @@ msgid ""
 msgstr ""
 "Définir la longueur maximale des relations de caractères (par défaut 10000 "
 "caractères)"
+
+msgid ""
+"Set your personal theme, notification digest mode, and interface version"
+msgstr ""
+"Définis ton thème personnel, le mode de regroupement des notifications et la"
+" version de l'interface"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"
@@ -9465,12 +9314,6 @@ msgstr ""
 "pronoms de leurs personnages"
 
 msgid ""
-"Manage content that should be accessed only one time with a specific token"
-msgstr ""
-"Gérer les contenus qui ne doivent être accessibles qu'une seule fois à "
-"l'aide d'un jeton spécifique"
-
-msgid ""
 "On this page you can filter characters and directly view their information"
 msgstr ""
 "Sur cette page, vous pouvez filtrer les personnages et consulter directement"
@@ -9611,12 +9454,6 @@ msgid ""
 msgstr ""
 "Suis tes demandes de remboursement de frais personnels soumises pour cet "
 "événement"
-
-msgid ""
-"You are choosing the most common features to activate for your organization"
-msgstr ""
-"Vous choisissez les fonctionnalités les plus courantes à activer pour votre "
-"organisation"
 
 msgid ""
 "only lowercase letters and numbers allowed, no spaces or special characters"
@@ -10021,6 +9858,13 @@ msgstr ""
 "usage unique dans cet événement"
 
 msgid ""
+"View and adjust configuration options for each feature activated on this "
+"event"
+msgstr ""
+"Afficher et modifier les options de configuration pour chaque fonctionnalité"
+" activée lors de cet événement"
+
+msgid ""
 "View the yearly enrollment list of members with card numbers and renewal "
 "dates"
 msgstr ""
@@ -10358,6 +10202,13 @@ msgstr ""
 " informer de votre paiement"
 
 msgid ""
+"Quickly enable or disable key features for this event using a simplified "
+"checklist"
+msgstr ""
+"Active ou désactive rapidement les fonctionnalités clés de cet événement à "
+"l'aide d'une liste de contrôle simplifiée"
+
+msgid ""
 "Theoretical total of income due to participation fees selected by the "
 "participants"
 msgstr ""
@@ -10590,11 +10441,11 @@ msgstr ""
 " les quantités et les remarques pour chacun"
 
 msgid ""
-"Select the personal data fields to be requested from participants during "
-"registration"
+"Select which common features to activate for your organization to get "
+"started quickly"
 msgstr ""
-"Sélectionner les champs de données personnelles à demander aux participants "
-"lors de l'inscription"
+"Choisis les fonctionnalités standard que tu souhaites activer pour ton "
+"organisation afin de démarrer rapidement"
 
 msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
@@ -10707,6 +10558,13 @@ msgstr ""
 "Vous souhaitez que vos événements à venir soient visibles par des sites "
 "externes au moyen d'une API publique "
 
+msgid ""
+"Fine-tune the behavior of each activated feature by adjusting its "
+"configuration options"
+msgstr ""
+"Affine le comportement de chaque fonctionnalité activée en modifiant ses "
+"options de configuration"
+
 #, python-format
 msgid ""
 "Hello! We are reaching out regarding your provisional registration for "
@@ -10728,13 +10586,6 @@ msgid ""
 msgstr ""
 "Gère les réductions configurées pour cet événement, notamment leur type, "
 "leur montant et les codes promotionnels"
-
-msgid ""
-"Manage organization-specific translation overrides for customizing "
-"terminology and text"
-msgstr ""
-"Gérer les dérogations de traduction propres à l'organisation pour "
-"personnaliser la terminologie et le texte"
 
 msgid ""
 "Manage the answer options for each workshop question, marking which answers "
@@ -11578,6 +11429,13 @@ msgstr ""
 "Effectue des vérifications de cohérence sur les fiches de personnages pour "
 "détecter les relations manquantes, invalides ou asymétriques"
 
+msgid ""
+"The member must have already confirmed their consent to share personal data "
+"with your organization"
+msgstr ""
+"Le membre doit avoir déjà donné son accord pour le partage de ses données "
+"personnelles avec ton organisation"
+
 #, python-format
 msgid ""
 "Users can sign up to the event accessing <a href='%(signup_url)s' "
@@ -11628,6 +11486,13 @@ msgid ""
 msgstr ""
 "Consulte le registre officiel des membres, qui contient les numéros de carte"
 " et les données personnelles de tous les membres de l'association"
+
+msgid ""
+"Customize the visual appearance of your organization by selecting a theme, "
+"colors, font, background"
+msgstr ""
+"Personnalise l'apparence visuelle de ton organisation en choisissant un "
+"thème, des couleurs, une police et un arrière-plan"
 
 msgid ""
 "Enables field 'locked', to prevent players from viewing the full character "
@@ -11771,6 +11636,13 @@ msgstr ""
 " le texte de la faction"
 
 msgid ""
+"Upload a membership fee invoice for a member to record and confirm their "
+"payment for the current year"
+msgstr ""
+"Télécharge une facture de cotisation pour qu'un membre puisse enregistrer et"
+" confirmer son paiement pour l'année en cours"
+
+msgid ""
 "Verify pending payments by uploading a CSV from your bank to match "
 "transactions against registrations"
 msgstr ""
@@ -11804,20 +11676,6 @@ msgid ""
 msgstr ""
 "Permet de gérer l'entrée de recettes pour un événement qui ne proviennent "
 "pas des inscriptions des participants"
-
-msgid ""
-"Manage features activated for this event and all its runs (click on a "
-"feature to show its description)"
-msgstr ""
-"Gérer les fonctionnalités activées pour cet événement et toutes ses éditions"
-" (cliquer sur une fonctionnalité pour afficher sa description)"
-
-msgid ""
-"Please note that the user must have confirmed their consent to share their "
-"data with your organization"
-msgstr ""
-"Veuillez noter que l'utilisateur doit avoir confirmé son consentement à "
-"partager ses données avec votre organisation"
 
 msgid ""
 "Pre-registration is free. It does not guarantee a spot, but gives you "
@@ -11897,6 +11755,13 @@ msgid ""
 msgstr ""
 "Afin de garantir un contrôle total sur vos revenus, cette plateforme ne gère"
 " ni ne collecte jamais de fonds en votre nom"
+
+msgid ""
+"Enable or disable features for this event and all its runs; click a feature "
+"name to read its description"
+msgstr ""
+"Active ou désactive les fonctionnalités pour cet événement et toutes ses "
+"exécutions ; clique sur le nom d'une fonctionnalité pour lire sa description"
 
 msgid ""
 "Enables 'New player' tickets, reserved for users that never participated in "
@@ -12206,13 +12071,6 @@ msgstr ""
 "l'attribution des rôles, les types de billets et l'état des paiements"
 
 msgid ""
-"Manage features activated for the organization and all its events (click on "
-"a feature to show its description)"
-msgstr ""
-"Gérer les fonctionnalités activées pour l'organisation et tous ses "
-"événements (cliquer sur une fonctionnalité pour afficher sa description)"
-
-msgid ""
 "Set up installment quota plans that divide ticket prices into equal portions"
 " for participants to pay over time"
 msgstr ""
@@ -12328,6 +12186,13 @@ msgid ""
 msgstr ""
 "Permet aux participants de créer et de contribuer à des collections visant à"
 " aider un autre participant à payer les frais de l'événement"
+
+msgid ""
+"Enable or disable payment methods available at checkout, and configure "
+"credentials for each active payment gateway"
+msgstr ""
+"Active ou désactive les modes de paiement disponibles lors du paiement, et "
+"configure les identifiants pour chaque passerelle de paiement active"
 
 msgid ""
 "For your convenience, this page only shows questions from the last 3 months."
@@ -12543,6 +12408,13 @@ msgstr ""
 "correspondants"
 
 msgid ""
+"Fill in the public metadata used to promote this event externally, including"
+" language, type, setting, location, and style"
+msgstr ""
+"Remplis les métadonnées publiques utilisées pour promouvoir cet événement à "
+"l'extérieur, notamment la langue, le type, le cadre, le lieu et le style"
+
+msgid ""
 "Allows participants to submit shuttle requests (e.g., pickup logistics), and"
 " staff can manage the status of those requests"
 msgstr ""
@@ -12617,6 +12489,14 @@ msgstr ""
 "Événement unique axé sur la narration, avec des personnages écrits par le "
 "personnel et attribués par un algorithme de casting, avec des factions et "
 "des intrigues"
+
+msgid ""
+"Configure which personal data fields are collected during registration, "
+"setting each field as mandatory, optional, or absent"
+msgstr ""
+"Définis les champs de données personnelles à collecter lors de "
+"l'inscription, en indiquant si chaque champ est obligatoire, facultatif ou "
+"absent"
 
 #, python-format
 msgid ""
@@ -13145,15 +13025,6 @@ msgstr ""
 "Génère un lien spécial et caché qui permet à certains participants de "
 "s'inscrire même si l'inscription générale est fermée (par exemple, accès "
 "anticipé pour un groupe spécifique)"
-
-msgid ""
-"Manage ability modifiers. Modifiers are triggered only if all prerequisites "
-"and requirements are met. If multiple modifiers apply, only the first is "
-"used"
-msgstr ""
-"Gérer les modificateurs de capacité. Les modificateurs ne sont déclenchés "
-"que si tous les prérequis et exigences sont remplis. Si plusieurs "
-"modificateurs s'appliquent, seul le premier est utilisé"
 
 msgid ""
 "This is the information with which your character will begin each act. We "

@@ -3,9 +3,6 @@
 {% block title %}
     {% trans "Expenses" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
-{% block info %}
-    {% trans "Track your personal expense reimbursement requests submitted for this event" %}
-{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
     <table id="expenses" class="go_datatable mob">

@@ -3,9 +3,6 @@
 {% block title %}
     {% trans "Expenses" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
-{% block info %}
-    {% trans "Review and approve expense reimbursement requests submitted by collaborators for this event" %}
-{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
     {% include "elements/paginate.html" %}

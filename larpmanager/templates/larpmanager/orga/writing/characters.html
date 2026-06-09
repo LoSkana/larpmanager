@@ -3,9 +3,6 @@
 {% block title %}
     {% trans "Characters" %} - {{ event.name }}
 {% endblock title %}
-{% block info %}
-    {% trans "Manage all characters of the event" %}
-{% endblock info %}
 {% block nav_fields %}
     {% if user_character_max %}
         <a href="#" class="table_toggle" tog='player'>{% trans "Player" %}</a>

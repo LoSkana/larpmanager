@@ -363,7 +363,7 @@ class CharacterForm(MultichoiceMixin, WritingForm, BaseWritingForm):
 class OrgaCharacterForm(CharacterForm):
     """Form for OrgaCharacter."""
 
-    page_info = _("Manage characters")
+    page_info = _("Manage characters of the event")
 
     page_title = _("Characters")
 
@@ -861,7 +861,7 @@ class OrgaCharacterForm(CharacterForm):
 class OrgaWritingQuestionForm(BaseModelForm):
     """Form for OrgaWritingQuestion."""
 
-    page_info = _("Manage form questions for writing elements")
+    page_info = _("Manage the questions displayed in the character writing form")
 
     page_title = _("Sheet")
 
@@ -1035,7 +1035,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
 class OrgaWritingOptionForm(BaseModelForm):
     """Form for OrgaWritingOption."""
 
-    page_info = _("Manage options in form questions for writing elements")
+    page_info = _("Manage the selectable options for a character form question")
 
     page_title = _("Writing options")
 

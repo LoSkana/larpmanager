@@ -3,9 +3,6 @@
 {% block title %}
     {% trans "Delivery" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
-{% block info %}
-    {% trans "Manage experience point deliveries awarded to characters" %}
-{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
     <table id="deliveries" class="go_datatable writing">
