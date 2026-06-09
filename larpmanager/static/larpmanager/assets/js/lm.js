@@ -421,6 +421,8 @@ $(document).ready(function() {
 
     setupConditionalFields();
 
+    replaceNewUrl();
+
     // remove empty pageinfo
     var $pageInfo = $('#page-info');
     if ($pageInfo.length && !$pageInfo.attr('qtip').trim()) {
@@ -429,6 +431,16 @@ $(document).ready(function() {
 
     $(document).trigger("lm_ready");
 });
+
+function replaceNewUrl() {
+    $('a.new').on('click', function(event) {
+        event.preventDefault();
+        let currentUrl = window.location.href;
+        let cleanedUrl = currentUrl.split('#')[0];
+        let newUrl = cleanedUrl + 'new/';
+        window.location.href = newUrl;
+    });
+}
 
 /**
  * Sets up conditional field visibility based on data attributes.

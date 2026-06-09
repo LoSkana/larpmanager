@@ -6,15 +6,6 @@
                 <i class="fas fa-plus"></i>
                 {% trans "New" %}
             </a>
-            <script>
-            document.querySelector('a.new').addEventListener('click', function(event) {
-                event.preventDefault();
-                let currentUrl = window.location.href;
-                let cleanedUrl = currentUrl.split('#')[0];
-                let newUrl = cleanedUrl + 'new/';
-                window.location.href = newUrl;
-            });
-            </script>
         {% endif %}
         {% if upload %}
             <a class="new button" href="{% url 'orga_upload' run.get_slug upload %}">
