@@ -4,78 +4,80 @@
     {{ member_public.display_member }}
 {% endblock title %}
 {% block content %}
-    <div class="gallery single">
-        <div class="el">
-            <div class="icon">
-                {% if member_public.profile_thumb %}
-                    <img src="{{ member_public.profile_thumb.url }}" alt="player profile" />
-                {% else %}
-                    <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}"
-                         alt="player profile" />
-                {% endif %}
-            </div>
-        </div>
-        <div class="text">
-            {% if member_public.nick %}
-                <p>
-                    <b>Nick: </b> {{ member_public.nick }}
-                </p>
-            {% endif %}
-            {% if 'chat' in association.features %}
-                <p>
-                    <b>{% trans "Private message" %}: </b> <a href="{% url 'chat' member_public.uuid %}">Chat</a>
-                </p>
-            {% endif %}
-            {% if member_public.pronoun %}
-                <p>
-                    <b>{% trans "Pronouns" %}: </b>
-                    {{ member_public.pronoun }}
-                </p>
-            {% endif %}
-            {% if member_public.social_contact %}
-                <p>
-                    <b>{% trans "Contact" %}: </b>
-                    {% if member_public.contact_url %}
-                        <a href="{{ member_public.social_contact }}">{{ member_public.social_contact }}</a>
+    <div class="user_resize platform">
+        <div class="gallery single">
+            <div class="el">
+                <div class="icon">
+                    {% if member_public.profile_thumb %}
+                        <img src="{{ member_public.profile_thumb.url }}" alt="player profile" />
                     {% else %}
-                        {{ member_public.social_contact }}
+                        <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}"
+                             alt="player profile" />
                     {% endif %}
-                </p>
-            {% endif %}
-            {% if regs %}
+                </div>
+            </div>
+            <div class="text">
+                {% if member_public.nick %}
+                    <p>
+                        <b>Nick: </b> {{ member_public.nick }}
+                    </p>
+                {% endif %}
+                {% if 'chat' in association.features %}
+                    <p>
+                        <b>{% trans "Private message" %}: </b> <a href="{% url 'chat' member_public.uuid %}">Chat</a>
+                    </p>
+                {% endif %}
+                {% if member_public.pronoun %}
+                    <p>
+                        <b>{% trans "Pronouns" %}: </b>
+                        {{ member_public.pronoun }}
+                    </p>
+                {% endif %}
+                {% if member_public.social_contact %}
+                    <p>
+                        <b>{% trans "Contact" %}: </b>
+                        {% if member_public.contact_url %}
+                            <a href="{{ member_public.social_contact }}">{{ member_public.social_contact }}</a>
+                        {% else %}
+                            {{ member_public.social_contact }}
+                        {% endif %}
+                    </p>
+                {% endif %}
+                {% if regs %}
+                    <hr />
+                    <h2>{% trans "Attendance" %}</h2>
+                    <table class="mob">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Event" %}</th>
+                                <th>{% trans "Character" %}</th>
+                            </tr>
+                        </thead>
+                        {% for el in regs %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'gallery' el.run.get_slug %}">{{ el.run }}</a>
+                                </td>
+                                <td>
+                                    {% for uuid, name in el.chars.items %}
+                                        {% include "elements/comma.html" %}
+                                        <a href="{% url 'character' el.run.get_slug uuid %}">{{ name }}</a>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+                {% if 'badge' in association.features %}
+                    <hr />
+                    <h2>Achievements</h2>
+                    <p class="c">
+                        <a href="{% url 'badges' %}">{% trans "Show all" %}</a>
+                    </p>
+                    {% include "elements/badges.html" %}
+                {% endif %}
                 <hr />
-                <h2>{% trans "Attendance" %}</h2>
-                <table class="mob">
-                    <thead>
-                        <tr>
-                            <th>{% trans "Event" %}</th>
-                            <th>{% trans "Character" %}</th>
-                        </tr>
-                    </thead>
-                    {% for el in regs %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'gallery' el.run.get_slug %}">{{ el.run }}</a>
-                            </td>
-                            <td>
-                                {% for uuid, name in el.chars.items %}
-                                    {% include "elements/comma.html" %}
-                                    <a href="{% url 'character' el.run.get_slug uuid %}">{{ name }}</a>
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            {% endif %}
-            {% if 'badge' in association.features %}
-                <hr />
-                <h2>Achievements</h2>
-                <p class="c">
-                    <a href="{% url 'badges' %}">{% trans "Show all" %}</a>
-                </p>
-                {% include "elements/badges.html" %}
-            {% endif %}
-            <hr />
+            </div>
         </div>
     </div>
 {% endblock content %}

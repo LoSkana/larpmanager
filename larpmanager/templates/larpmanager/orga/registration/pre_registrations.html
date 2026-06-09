@@ -4,7 +4,7 @@
     {% trans "Pre registrations" %} - {{ run.search }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the pre-signups for the event" %}
+    {% trans "Review pre-registered members and track which ones have not yet completed a full registration" %}
 {% endblock info %}
 {% block content %}
     <a href="{% url 'pre_register' run.event.slug %}">{% trans "Pre-registration link" %}</a>

@@ -52,7 +52,7 @@ class OrgaSystemExpForm(BaseModelForm):
 
     page_title = _("Experience System")
 
-    page_info = _("Manage experience point systems")
+    page_info = _("Manage the experience point systems available for this event")
 
     class Meta:
         model = SystemExp
@@ -88,7 +88,7 @@ class OrgaDeliveryExpForm(MultichoiceMixin, ExpBaseForm):
 
     page_title = _("Delivery")
 
-    page_info = _("Manage experience point deliveries")
+    page_info = _("Manage experience point deliveries awarded to characters")
 
     auto_populate_run = forms.ModelChoiceField(
         queryset=Run.objects.none(),
@@ -137,7 +137,7 @@ class OrgaAbilityTemplateExpForm(BaseModelForm):
 
     page_title = _("Ability Template")
 
-    page_info = _("This page allows you to add or edit an ability template")
+    page_info = _("Define reusable ability templates that can be assigned to individual abilities")
 
     class Meta:
         model = AbilityTemplateExp
@@ -151,7 +151,7 @@ class OrgaAbilityExpForm(MultichoiceMixin, ExpBaseForm):
 
     page_title = _("Ability")
 
-    page_info = _("Manage experience point abilities")
+    page_info = _("Manage the abilities participants can purchase with experience points for this event")
 
     class Meta:
         model = AbilityExp
@@ -239,7 +239,7 @@ class OrgaAbilityTypeExpForm(BaseModelForm):
 
     page_title = _("Ability type")
 
-    page_info = _("Manage experience point ability types")
+    page_info = _("Organize purchasable abilities into categories by managing ability types")
 
     class Meta:
         model = AbilityTypeExp
@@ -253,7 +253,7 @@ class OrgaRuleExpForm(MultichoiceMixin, BaseModelForm):
 
     page_title = _("Rule")
 
-    page_info = _("Manage rules for computed fields")
+    page_info = _("Define rules that determine how abilities modify computed character fields")
 
     class Meta:
         model = RuleExp
@@ -287,10 +287,7 @@ class OrgaModifierExpForm(MultichoiceMixin, BaseModelForm):
 
     page_title = _("Rule")
 
-    page_info = _(
-        "Manage ability modifiers. Modifiers are triggered only if all prerequisites "
-        "and requirements are met. If multiple modifiers apply, only the first is used",
-    )
+    page_info = _("Configure cost modifiers that adjust ability prices based on prerequisites or character fields")
 
     class Meta:
         model = ModifierExp

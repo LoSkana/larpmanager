@@ -627,11 +627,11 @@ class RegistrationGiftForm(RegistrationForm):
 class OrgaRegistrationForm(MultichoiceMixin, BaseRegistrationForm):
     """Form for OrgaRegistration."""
 
-    page_info = _("Manage event signups")
+    page_info = _(
+        "Manage all active participant registrations, including character assignments, ticket types, and payment status"
+    )
 
     page_title = _("Registrations")
-
-    load_templates: ClassVar[list] = ["share"]
 
     load_js: ClassVar[list] = ["multichoice"]
 
@@ -1067,7 +1067,7 @@ class RegistrationCharacterRelForm(BaseModelForm):
 class OrgaRegistrationTicketForm(BaseModelForm):
     """Form for OrgaRegistrationTicket."""
 
-    page_info = _("Manage ticket types for participant registration")
+    page_info = _("Define the ticket types participants can select when registering, including pricing and tiers")
 
     page_title = _("Tickets")
 
@@ -1161,7 +1161,7 @@ class OrgaRegistrationTicketForm(BaseModelForm):
 class OrgaRegistrationSectionForm(BaseModelForm):
     """Form for OrgaRegistrationSection."""
 
-    page_info = _("Manage signup form sections")
+    page_info = _("Organize registration form questions into named sections to group related fields together")
 
     page_title = _("Form section")
 
@@ -1175,7 +1175,7 @@ class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
 
     load_js: ClassVar[list] = ["multichoice"]
 
-    page_info = _("Manage signup form questions")
+    page_info = _("Manage the custom questions participants must answer when registering for this event")
 
     page_title = _("Registration form")
 
@@ -1344,7 +1344,7 @@ class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
 class OrgaRegistrationOptionForm(BaseModelForm):
     """Form for OrgaRegistrationOption."""
 
-    page_info = _("Manage signup form question options")
+    page_info = _("Manage the selectable options available for a registration form question")
 
     page_title = _("Registration options")
 
@@ -1367,7 +1367,9 @@ class OrgaRegistrationOptionForm(BaseModelForm):
 class OrgaRegistrationQuotaForm(BaseModelForm):
     """Form for OrgaRegistrationQuota."""
 
-    page_info = _("Manage dynamic payment installments for participants")
+    page_info = _(
+        "Set up installment quota plans that divide ticket prices into equal portions for participants to pay over time"
+    )
 
     page_title = _("Dynamic rates")
 
@@ -1416,7 +1418,9 @@ class OrgaRegistrationInstallmentForm(MultichoiceMixin, BaseModelForm):
 
     load_js: ClassVar[list] = ["multichoice"]
 
-    page_info = _("Manage fixed payment installments for participants")
+    page_info = _(
+        "Define installment schedules that split ticket costs into multiple payment deadlines for participants"
+    )
 
     page_title = _("Fixed instalments")
 
@@ -1519,7 +1523,7 @@ class OrgaRegistrationInstallmentForm(MultichoiceMixin, BaseModelForm):
 class OrgaRegistrationSurchargeForm(BaseModelForm):
     """Form for OrgaRegistrationSurcharge."""
 
-    page_info = _("Manage registration surcharges")
+    page_info = _("Configure date-based surcharges that add extra fees to registrations after a specified deadline")
 
     page_title = _("Surcharge")
 

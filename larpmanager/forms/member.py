@@ -712,7 +712,9 @@ class ExeVolunteerRegistryForm(BaseModelForm):
 
     page_title = _("Volounteer data")
 
-    page_info = _("Manage volunteer entries")
+    page_info = _(
+        "Manage the volunteer registry: view, add, and edit volunteer records, and print an official PDF copy"
+    )
 
     class Meta:
         model = VolunteerRegistry
@@ -751,7 +753,9 @@ class MembershipForm(BaseAccForm):
 class ExeMemberForm(BaseProfileForm):
     """Form for ExeMember."""
 
-    page_info = _("Manage member profiles")
+    page_info = _(
+        "View and edit a member's profile, including personal data, membership documents, and links to their registrations and accounting"
+    )
 
     class Meta:
         model = Member
@@ -770,7 +774,9 @@ class ExeMemberForm(BaseProfileForm):
 class ExeMembershipForm(BaseModelForm):
     """Form for ExeMembership."""
 
-    page_info = _("Manage member membership status")
+    page_info = _(
+        "Manage association memberships: review applicants, approve or reject requests, and track renewal status for the current year"
+    )
 
     load_templates: ClassVar[list] = ["membership"]
 
@@ -789,7 +795,9 @@ class ExeMembershipForm(BaseModelForm):
 class ExeMembershipFeeForm(BaseForm):
     """Form for ExeMembershipFee."""
 
-    page_info = _("Manage membership fee invoice upload")
+    page_info = _(
+        "Upload a membership fee invoice for a member to record and confirm their payment for the current year"
+    )
 
     page_title = _("Upload membership fee")
 
@@ -850,9 +858,9 @@ class ExeMembershipDocumentForm(BaseForm):
     """Form for ExeMembershipDocument."""
 
     page_info = (
-        _("Manage membership document upload")
+        _("Upload membership documents to complete a member's approval")
         + " - "
-        + _("Please note that the user must have confirmed their consent to share their data with your organization")
+        + _("The member must have already confirmed their consent to share personal data with your organization")
     )
 
     page_title = _("Upload membership document")
@@ -934,7 +942,9 @@ class ExeMembershipDocumentForm(BaseForm):
 class ExeBadgeForm(BaseModelForm):
     """Form for ExeBadge."""
 
-    page_info = _("Manage badges and user assignments")
+    page_info = _(
+        "Manage association badges: view, create, edit, and track how many members each badge has been assigned to"
+    )
 
     page_title = _("Badge")
 
@@ -957,7 +967,9 @@ class ExeProfileForm(BaseModelForm):
 
     page_title = _("Profile")
 
-    page_info = _("Select the personal data fields to be requested from participants during registration")
+    page_info = _(
+        "Configure which personal data fields are collected during registration, setting each field as mandatory, optional, or absent"
+    )
 
     load_templates: ClassVar[list] = ["profile"]
 

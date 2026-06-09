@@ -69,7 +69,7 @@ class OrgaPersonalExpenseForm(BaseModelFormRun):
     based on enabled features.
     """
 
-    page_info = _("Manage expense items for contributors")
+    page_info = _("Track your personal expense reimbursement requests submitted for this event")
 
     page_title = _("Expenses")
 
@@ -96,7 +96,7 @@ class OrgaExpenseForm(BaseModelFormRun):
 
     page_title = _("Expenses collaborators")
 
-    page_info = _("Manage expenses for contributors")
+    page_info = _("Review and approve expense reimbursement requests submitted by collaborators for this event")
 
     class Meta:
         model = AccountingItemExpense
@@ -129,6 +129,8 @@ class OrgaTokenForm(BaseModelFormRun):
     within the event accounting system.
     """
 
+    page_info = _("Manage token assignments issued to participants for this event")
+
     class Meta:
         model = AccountingItemOther
         exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
@@ -139,7 +141,7 @@ class OrgaTokenForm(BaseModelFormRun):
         super().__init__(*args, **kwargs)
 
         # Set page metadata with token name
-        self.page_info = _("Manage") + f" {self.params['tokens_name']} " + _("assignments")
+        self.page_info = _("Manage token assignments issued to participants for this event")
         self.page_title = self.params.get("tokens_name")
 
         # Configure field widget
@@ -158,7 +160,7 @@ class OrgaTokenForm(BaseModelFormRun):
 class OrgaCreditForm(BaseModelFormRun):
     """Form for OrgaCredit."""
 
-    page_info = _("Manage credit assignments")
+    page_info = _("Manage credit assignments issued to participants for this event")
 
     class Meta:
         model = AccountingItemOther
@@ -193,7 +195,9 @@ class ExePaymentForm(BaseModelForm):
 
     page_title = _("Payments")
 
-    page_info = _("Manage payment items")
+    page_info = _(
+        "Track all member payments across events, review amounts and statuses, and confirm pending registration invoices"
+    )
 
     class Meta:
         model = AccountingItemPayment
@@ -234,7 +238,7 @@ class ExeOutflowForm(BaseModelForm):
 
     page_title = _("Outflows")
 
-    page_info = _("Manage expense items incurred")
+    page_info = _("Manage outgoing payments linked to events")
 
     class Meta:
         model = AccountingItemOutflow
@@ -278,7 +282,7 @@ class ExeInflowForm(BaseModelForm):
 
     page_title = _("Inflows")
 
-    page_info = _("Manage event revenue other than participants' registration fees")
+    page_info = _("Manage incoming revenue linked to events")
 
     class Meta:
         model = AccountingItemInflow
@@ -362,7 +366,7 @@ class ExeInvoiceForm(BaseModelForm):
 
     page_title = _("Invoices")
 
-    page_info = _("Manage invoices")
+    page_info = _("Browse all payment invoices and confirm submitted ones to update their status")
 
     class Meta:
         model = PaymentInvoice
@@ -372,7 +376,7 @@ class ExeInvoiceForm(BaseModelForm):
 class ExeCreditForm(BaseModelForm):
     """Form for ExeCredit."""
 
-    page_info = _("Manage credit assignments")
+    page_info = _("Manage all credit assignments issued to members across events")
 
     class Meta:
         model = AccountingItemOther
@@ -404,6 +408,8 @@ class ExeCreditForm(BaseModelForm):
 class ExeTokenForm(BaseModelForm):
     """Form for ExeToken."""
 
+    page_info = _("Manage all token assignments issued to members across events")
+
     class Meta:
         model = AccountingItemOther
         exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
@@ -415,7 +421,6 @@ class ExeTokenForm(BaseModelForm):
 
         # Set page title and info with token name
         self.page_title = _("Assignment") + f" {self.params['tokens_name']}"
-        self.page_info = _("Manage") + f" {self.params['tokens_name']} " + _("assignments")
 
         # Configure run choices and association filtering
         get_run_choices(self)
@@ -437,7 +442,7 @@ class ExeExpenseForm(BaseModelForm):
 
     page_title = _("Expenses")
 
-    page_info = _("Manage expense items for contributors")
+    page_info = _("Review and approve expense claims submitted by collaborators")
 
     class Meta:
         model = AccountingItemExpense
@@ -533,7 +538,7 @@ class ExeCollectionForm(CollectionNewForm):
 class OrgaDiscountForm(BaseModelForm):
     """Form for OrgaDiscount."""
 
-    page_info = _("Manage discounts")
+    page_info = _("Manage discounts configured for this event, including type, value, and redemption codes")
 
     page_title = _("Discount")
 
@@ -677,7 +682,9 @@ class ExePaymentSettingsForm(BaseModelForm):
 
     page_title = _("Payment Methods")
 
-    page_info = _("Manage payment methods")
+    page_info = _(
+        "Enable or disable payment methods available at checkout, and configure credentials for each active payment gateway"
+    )
 
     load_templates: ClassVar[list] = ["payment-details"]
 

@@ -3,9 +3,6 @@
 {% block title %}
     {% trans "Experience Systems" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
-{% block info %}
-    {% trans "This page lists experience systems defined for this event" %}
-{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
     <table id="systems" class="go_datatable writing">

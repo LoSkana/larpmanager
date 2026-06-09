@@ -4,9 +4,6 @@
     {% trans label_typ as name %}
     {{ name }} {% trans "Sheet" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
-{% block info %}
-    {% trans "This page summarises the available questions of the character form" %}
-{% endblock info %}
 {% block content %}
     {% if available_typ|length > 1 %}
         <p>

@@ -140,7 +140,7 @@ class HelpQuestionForm(BaseModelForm):
 class OrgaHelpQuestionForm(BaseModelForm):
     """Form for OrgaHelpQuestion."""
 
-    page_info = _("Manage participant questions")
+    page_info = _("Manage participant questions by answering or closing each one")
 
     page_title = _("Participant questions")
 
@@ -196,7 +196,7 @@ class WorkshopOptionForm(BaseModelForm):
 class OrgaAlbumForm(BaseModelForm):
     """Form for OrgaAlbum."""
 
-    page_info = _("Manage albums")
+    page_info = _("Manage photo and video albums uploaded for this event")
 
     page_title = _("Album")
 
@@ -217,7 +217,7 @@ class OrgaAlbumForm(BaseModelForm):
 class OrgaProblemForm(BaseModelForm):
     """Form for OrgaProblem."""
 
-    page_info = _("Manage reported problems")
+    page_info = _("Manage problems reported by contributors during this event")
 
     page_title = _("Problems")
 
@@ -265,7 +265,7 @@ class CompetencesForm(BaseForm):
 class ExeUrlShortnerForm(BaseModelForm):
     """Form for ExeUrlShortner."""
 
-    page_info = _("Manage URL shorteners")
+    page_info = _("Manage URL shorteners that redirect custom short codes to external links for sharing")
 
     page_title = _("Shorten URL")
 
@@ -289,7 +289,7 @@ def _delete_optionals_warehouse(warehouse_form: BaseModelForm) -> None:
 class ExeCompetenceForm(BaseModelForm):
     """Form for ExeCompetence."""
 
-    page_info = _("Manage competencies")
+    page_info = _("Manage the organization's competences, defining skill areas that contributors can self-assess")
 
     class Meta:
         model = Competence
@@ -531,7 +531,7 @@ def unique_util_cod() -> str:
 class OneTimeContentForm(BaseModelForm):
     """Form for OneTimeContent."""
 
-    page_info = _("Manage content that should be accessed only one time with a specific token")
+    page_info = _("Manage secure video and audio content protected by one-time access tokens for this event")
 
     page_title = _("One-time content")
 
@@ -547,7 +547,7 @@ class OneTimeContentForm(BaseModelForm):
 class OneTimeAccessTokenForm(BaseModelForm):
     """Form for OneTimeAccessToken."""
 
-    page_info = _("Manage tokens to access the one-time content")
+    page_info = _("View all single-use access tokens generated for one-time content in this event")
 
     page_title = _("One-time token")
 

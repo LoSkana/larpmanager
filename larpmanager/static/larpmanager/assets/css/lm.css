@@ -24,45 +24,6 @@ i.fas {
   display: none;
 }
 
-.new_v20 input[type="submit"],
-.new_v20 input[type="reset"],
-.new_v20 input[type="button"],
-.new_v20 input[type="confirm"],
-.new_v20 button,
-.new_v20 .button {
-  background: rgba(var(--ter-rgb), 0.35);
-  color: rgba(var(--pri-rgb), 0.85);
-  border-color: rgba(var(--sec-rgb), 0.85) !important;
-}
-
-.new_v20 input[type="submit"],
-.new_v20 input[type="reset"],
-.new_v20 input[type="button"],
-.new_v20 input[type="confirm"] {
-  display: block;
-  margin: 0.5em auto;
-}
-
-body.association.new_v20 .user_resize {
-  padding: 0.5em 1em;
-  margin: 0.5em auto;
-  border-radius: 8px;
-  background-color: rgba(var(--pri-rgb), 0.04);
-}
-
-@media (max-width: 800px) {
-  body.association.new_v20 .user_resize {
-    padding: 0em 0em;
-    margin: 0.2em auto;
-    border-radius: 0px;
-    background-color: transparent;
-  }
-
-  body.association.new_v20 .user_resize table tbody tr {
-    padding: 0.5em;
-  }
-}
-
 .hide {
   display: none;
 }
@@ -1926,7 +1887,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Registration
+   Application - Registration
    --------------------------------------------------------------------------- */
 
 .reg_status {
@@ -1935,100 +1896,6 @@ header.sec h1 {
 
 .reg_status br {
   display: none;
-}
-
-.new_v20 .no_v20 {
-  display: none;
-}
-
-.new_v20 hr {
-  opacity: 0.3;
-}
-
-/* Registration status row */
-.new_v20 .reg_status {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5em;
-  padding: 0.5em;
-}
-
-/* Registration status block */
-.new_v20 .reg_status .reg-status-block {
-  margin: 0 auto;
-  align-items: center;
-  gap: 0.6em;
-  padding: 0.45em 0.75em;
-  border-radius: 5px;
-  border-left: 4px solid #ccc;
-  background: rgba(0, 0, 0, 0.03);
-  text-align: left;
-}
-
-.new_v20 .reg_status .reg-status-label {
-  font-weight: 600;
-}
-
-.new_v20 .reg_status .reg-action {
-  font-size: 0.93em;
-}
-
-.new_v20 .reg_status .reg-action-link {
-  font-weight: 600;
-}
-
-.new_v20 .reg_status .reg-action-info {
-  font-style: italic;
-  opacity: 0.85;
-}
-
-.new_v20 .reg_status .reg-action-note {
-  font-size: 0.88em;
-  opacity: 0.75;
-  font-style: italic;
-}
-
-/* State colours */
-.new_v20 .reg_status .reg-confirmed {
-  border-left-color: #28a745;
-}
-.new_v20 .reg_status .reg-confirmed .reg-status-label i {
-  color: #28a745;
-}
-
-.new_v20 .reg_status .reg-patron {
-  border-left-color: #d4a017;
-}
-.new_v20 .reg_status .reg-patron .reg-status-label i {
-  color: #d4a017;
-}
-
-.new_v20 .reg_status .reg-action_needed {
-  border-left-color: #e67e22;
-  background: rgba(230, 126, 34, 0.07);
-}
-.new_v20 .reg_status .reg-action_needed .reg-status-label i {
-  color: #e67e22;
-}
-.new_v20 .reg_status .reg-action_needed .reg-action-link {
-  color: #c0392b;
-}
-
-.new_v20 .reg_status .reg-pending {
-  border-left-color: #f0ad4e;
-  background: rgba(240, 173, 78, 0.07);
-}
-.new_v20 .reg_status .reg-pending .reg-status-label i {
-  color: #c89900;
-}
-
-.new_v20 .reg_status .reg-provisional {
-  border-left-color: #5bc0de;
-  background: rgba(91, 192, 222, 0.07);
-}
-.new_v20 .reg_status .reg-provisional .reg-status-label i {
-  color: #31b0d5;
 }
 
 .reg_profile {
@@ -2061,7 +1928,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Character & Profile
+   Application - Character & Profile
    --------------------------------------------------------------------------- */
 
 .character-cover {
@@ -2108,7 +1975,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Membership
+   Application - Membership
    --------------------------------------------------------------------------- */
 
 .membership_request {
@@ -2124,7 +1991,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Accounting & Payment
+   Application - Accounting & Payment
    --------------------------------------------------------------------------- */
 
 .accounting_record {
@@ -2161,7 +2028,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Casting
+   Application - Casting
    --------------------------------------------------------------------------- */
 
 #main_casting hr {
@@ -2169,7 +2036,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Features & Permissions
+   Application - Features & Permissions
    --------------------------------------------------------------------------- */
 
 #id_members_info div,
@@ -2212,7 +2079,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Misc
+   Application - Misc
    --------------------------------------------------------------------------- */
 
 #err {
@@ -2668,7 +2535,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Floating Iframe – Hide structural chrome
+   Floating Iframe - Hide structural chrome
    --------------------------------------------------------------------------- */
 
 body.floating_iframe {
@@ -2768,7 +2635,7 @@ body.floating_iframe .inner {
 }
 
 /* ---------------------------------------------------------------------------
-   DataTables Responsive – inline expand control
+   DataTables Responsive - inline expand control
    --------------------------------------------------------------------------- */
 
 table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
@@ -2800,4 +2667,203 @@ table.dataTable.dtr-inline.collapsed
   border-left: 5px solid transparent;
   border-bottom: 0px solid transparent;
   border-right: 5px solid transparent;
+}
+
+/* ---------------------------------------------------------------------------
+   Version 20 interface
+   --------------------------------------------------------------------------- */
+
+.new_v20 .no_v20 {
+  display: none;
+}
+
+.only_v20 {
+  display: none;
+}
+
+.new_v20 .only_v20 {
+  display: block;
+}
+
+.new_v20 hr {
+  opacity: 0.3;
+}
+
+.new_v20 .auto_resize {
+  width: auto;
+}
+
+body.manage.new_v20 #banner h1 {
+  display: block;
+  margin: 0;
+  text-align: left;
+}
+
+body.manage.new_v20 #one .inner {
+  text-align: left;
+}
+
+.new_v20 .staff-list {
+  text-align: left;
+  clear: both;
+}
+
+.new_v20 .manage p,
+.new_v20 .manage h1,
+.new_v20 .manage h2,
+.new_v20 .manage h3,
+.new_v20 .manage h4 {
+  text-align: left;
+}
+
+.new_v20 .manage h1 {
+  margin-left: 2em;
+}
+
+.new_v20 .manage input {
+  margin: 0;
+}
+
+.new_v20 .manage #search {
+  margin: 0;
+  text-align: left;
+}
+
+.new_v20 input[type="submit"],
+.new_v20 input[type="reset"],
+.new_v20 input[type="button"],
+.new_v20 input[type="confirm"],
+.new_v20 button,
+.new_v20 .button {
+  background: rgba(var(--ter-rgb), 0.35);
+  color: rgba(var(--pri-rgb), 0.85);
+  border-color: rgba(var(--sec-rgb), 0.85) !important;
+}
+
+.new_v20 textarea {
+  margin: 0;
+}
+
+.new_v20 #payment_form {
+  width: 100%;
+}
+
+.new_v20 input[type="submit"],
+.new_v20 input[type="reset"],
+.new_v20 input[type="button"],
+.new_v20 input[type="confirm"] {
+  display: block;
+  margin: 0.5em auto;
+}
+
+body.association.new_v20 .user_resize {
+  padding: 0.5em 1em;
+  margin: 0.5em auto;
+  border-radius: 8px;
+  background-color: rgba(var(--pri-rgb), 0.04);
+}
+
+@media (max-width: 800px) {
+  body.association.new_v20 .user_resize {
+    padding: 0em 0em;
+    margin: 0.2em auto;
+    border-radius: 0px;
+    background-color: transparent;
+  }
+
+  body.association.new_v20 .user_resize table tbody tr {
+    padding: 0.5em;
+  }
+}
+
+/* Registration status row */
+.new_v20 .reg_status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5em;
+  padding: 0.5em;
+}
+
+/* Registration status block */
+.new_v20 .reg_status .reg-status-block {
+  margin: 0 auto;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.45em 0.75em;
+  border-radius: 5px;
+  border-left: 4px solid #ccc;
+  background: rgba(0, 0, 0, 0.03);
+  text-align: left;
+}
+
+.new_v20 .reg_status .reg-status-label {
+  font-weight: 600;
+}
+
+.new_v20 .reg_status .reg-action {
+  font-size: 0.93em;
+}
+
+.new_v20 .reg_status .reg-action-link {
+  font-weight: 600;
+}
+
+.new_v20 .reg_status .reg-action-info {
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.new_v20 .reg_status .reg-action-note {
+  font-size: 0.88em;
+  opacity: 0.75;
+  font-style: italic;
+}
+
+/* State colours */
+.new_v20 .reg_status .reg-confirmed {
+  border-left-color: #28a745;
+}
+.new_v20 .reg_status .reg-confirmed .reg-status-label i {
+  color: #28a745;
+}
+
+.new_v20 .reg_status .reg-patron {
+  border-left-color: #d4a017;
+}
+.new_v20 .reg_status .reg-patron .reg-status-label i {
+  color: #d4a017;
+}
+
+.new_v20 .reg_status .reg-action_needed {
+  border-left-color: #e67e22;
+  background: rgba(230, 126, 34, 0.07);
+}
+.new_v20 .reg_status .reg-action_needed .reg-status-label i {
+  color: #e67e22;
+}
+.new_v20 .reg_status .reg-action_needed .reg-action-link {
+  color: #c0392b;
+}
+
+.new_v20 .reg_status .reg-pending {
+  border-left-color: #f0ad4e;
+  background: rgba(240, 173, 78, 0.07);
+}
+.new_v20 .reg_status .reg-pending .reg-status-label i {
+  color: #c89900;
+}
+
+.new_v20 .reg_status .reg-provisional {
+  border-left-color: #5bc0de;
+  background: rgba(91, 192, 222, 0.07);
+}
+.new_v20 .reg_status .reg-provisional .reg-status-label i {
+  color: #31b0d5;
+}
+
+#info_bar {
+  font-style: italic;
+  font-size: 85%;
+  margin-bottom: 1em;
 }

@@ -3,10 +3,6 @@
 {% block title %}
     {% trans "One-Time Access Tokens" %} - {{ event.name }}
 {% endblock title %}
-{% block info %}
-    {% trans "This page shows all access tokens for one-time content" %}.
-    {% trans "Each token can only be used once" %}.
-{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
     <table id="onetimes_tokens" class="go_datatable writing">
