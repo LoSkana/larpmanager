@@ -433,7 +433,7 @@ $(document).ready(function() {
 });
 
 function replaceNewUrl() {
-    $('a.new').on('click', function(event) {
+    $('a.form-new').on('click', function(event) {
         event.preventDefault();
         let currentUrl = window.location.href;
         let cleanedUrl = currentUrl.split('#')[0];

@@ -275,4 +275,4 @@ def reset_caches(live_server, page):
     go_to(page, live_server, "/manage/")
 
     page.get_by_role("link", name="Reset Cache").click()
-    expect_normalized(page, page.locator("#banner"), "Dashboard")
+    expect_normalized(page, page.locator("#banner"),"Dashboard")
