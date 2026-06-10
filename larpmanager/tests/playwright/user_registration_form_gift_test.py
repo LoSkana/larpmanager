@@ -168,10 +168,12 @@ def field_multiple(page: Any, live_server: Any) -> None:
         options_frame.locator('[id="u4"]').locator("xpath=preceding-sibling::tr[1]")
     )
     just_wait(page)
+    just_wait(page)
     submit_confirm(page)
     page.locator('[id="u3"]').locator("td.reorder-handle").drag_to(
         page.locator('[id="u3"]').locator("xpath=preceding-sibling::tr[1]")
     )
+    just_wait(page)
     page.get_by_role("link", name="New").click()
 
 

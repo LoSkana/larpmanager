@@ -72,6 +72,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.locator("#registration_sections tbody tr").nth(1).locator("td.reorder-handle").drag_to(
         page.locator("#registration_sections tbody tr").first
     )
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Needs Preferences")
 
     # Add one question for each section
@@ -123,7 +124,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.locator("#registration_sections tbody tr").nth(1).locator("td.reorder-handle").drag_to(
         page.locator("#registration_sections tbody tr").first
     )
-    page.wait_for_load_state("networkidle")
+    just_wait(page)
 
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"^Needs ")).click()
@@ -187,7 +188,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.locator("#registration_sections tbody tr").nth(1).locator("td.reorder-handle").drag_to(
         page.locator("#registration_sections tbody tr").first
     )
-    page.wait_for_load_state("networkidle")
+    just_wait(page)
 
     sidebar(page, "Form")
     page.locator("#registration_questions_needs").locator(".fa-edit").click()

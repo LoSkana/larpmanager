@@ -29,6 +29,7 @@ from typing import Any
 
 import pytest
 
+from build.lib.larpmanager.tests.utils import just_wait
 from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, sidebar
 
 pytestmark = pytest.mark.e2e
@@ -60,6 +61,7 @@ def feature_fields(page: Any) -> None:
     page.locator('[id="u3"]').locator("td.reorder-handle").drag_to(
         page.locator('[id="u3"]').locator("xpath=preceding-sibling::tr[1]")
     )
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation")
 
     # add config fields - title

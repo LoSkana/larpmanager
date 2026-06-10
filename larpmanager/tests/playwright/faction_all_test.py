@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (
     login_orga,
     login_user,
     logout,
-    submit_confirm, sidebar,
+    submit_confirm, sidebar, just_wait,
 )
 
 pytestmark = pytest.mark.e2e
@@ -231,7 +231,7 @@ def test_faction_all(pw_page: Any) -> None:
     page.locator(".writing_list tbody tr").nth(1).locator("td.reorder-handle").drag_to(
         page.locator(".writing_list tbody tr").first
     )
-    page.wait_for_load_state("networkidle")
+    just_wait(page)
 
     # Verify order changed - Primary Faction 2 should now be first
     go_to(page, live_server, "test/manage/factions")

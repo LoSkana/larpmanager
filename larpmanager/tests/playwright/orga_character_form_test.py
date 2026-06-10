@@ -335,12 +335,14 @@ def add_field_restricted(page: Any) -> None:
     page.locator('[id="u8"]').locator("td.reorder-handle").drag_to(
         page.locator('[id="u8"]').locator("xpath=preceding-sibling::tr[1]")
     )
+    just_wait(page)
     page.locator('[id="u8"]').locator(".fa-edit").click()
 
     options_frame = page.locator("#options-iframe").content_frame
     options_frame.locator("tbody tr").nth(1).locator("td.reorder-handle").drag_to(
         options_frame.locator("tbody tr").first
     )
+    just_wait(page)
     page.locator("#options-iframe").content_frame.locator('[id="u7"]').locator(".fa-edit").click()
     just_wait(page, big=True)
     iframe = page.locator("#uglipop_popbox iframe").content_frame
