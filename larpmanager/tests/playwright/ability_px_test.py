@@ -194,7 +194,7 @@ def delivery(live_server: Any, page: Any) -> None:
     page.locator(".fa-edit").click()
     page.wait_for_load_state("load")
     just_wait(page)
-    row = page.get_by_role("row", name="Abilities Show")
+    row = page.get_by_role("row", name="Abilities")
     row.get_by_role("link").click()
     row.get_by_role("searchbox").click()
     row.get_by_role("searchbox").fill("swo")
@@ -241,7 +241,7 @@ def rules(page: Any) -> None:
 
     # remove ability
     page.locator(".fa-edit").click()
-    page.get_by_role("row", name="Abilities Show").get_by_role("link").click()
+    page.get_by_role("row", name="Abilities").get_by_role("link").click()
     just_wait(page)
     btn = page.locator(".select2-selection__choice:has-text('sword1') .select2-selection__choice__remove")
     btn.evaluate("el => el.click()")
@@ -256,7 +256,7 @@ def rules(page: Any) -> None:
     page.locator(".fa-edit").click()
     page.wait_for_load_state("load")
     just_wait(page)
-    row = page.get_by_role("row", name="Abilities Show")
+    row = page.get_by_role("row", name="Abilities")
     row.get_by_role("link").click()
     row.get_by_role("searchbox").click()
     row.get_by_role("searchbox").fill("swo")
