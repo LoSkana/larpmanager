@@ -52,7 +52,7 @@
             }
 
             .teaser {
-                font-size: 80%
+                font-size: 90%
             }
         </style>
     </head>
@@ -75,23 +75,11 @@
                                 {% if el.title and show_character.title %}- <b>{{ el.title }}</b>{% endif %}
                                 {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                                 {% if el.player_uuid %}
-                                    <p>
-                                        <a href="{% url 'public' el.player_uuid %}"><b>{{ el.player }}</b></a>
-                                    </p>
+                                    |
+                                    <a href="{% url 'public' el.player_uuid %}"><b>{{ el.player }}</b></a>
                                 {% endif %}
+                                {% if el.factions_list %}| {{ el.factions_list }}{% endif %}
                             </p>
-                            {% if el.factions %}
-                                <p>
-                                    {% for fnum in el.factions %}
-                                        {% with factions|get:fnum as g %}
-                                            {% if not g.typ == 'g' %}
-                                                {% include "elements/comma.html" %}
-                                                {{ g.name }}
-                                            {% endif %}
-                                        {% endwith %}
-                                    {% endfor %}
-                                </p>
-                            {% endif %}
                             <p class="teaser">
                                 {% if show_character.teaser and el.teaser %}
                                     <span class="teaser">{% replace_chars el.teaser 500 %}</span>
