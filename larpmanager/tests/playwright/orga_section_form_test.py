@@ -69,7 +69,9 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Check reordering
     expect_normalized(page, page.locator("#registration_sections_wrapper"), "Preferences Needs")
-    page.locator(".fa-arrow-up").click()
+    page.locator("#registration_sections tbody tr").nth(1).locator("td.reorder-handle").drag_to(
+        page.locator("#registration_sections tbody tr").first
+    )
     expect_normalized(page, page.locator("#one"), "Needs Preferences")
 
     # Add one question for each section
@@ -118,7 +120,10 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Reorder sections, check they are updated
     page.get_by_role("link", name="Sections").click()
-    page.locator(".fa-arrow-up").click()
+    page.locator("#registration_sections tbody tr").nth(1).locator("td.reorder-handle").drag_to(
+        page.locator("#registration_sections tbody tr").first
+    )
+    page.wait_for_load_state("networkidle")
 
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"^Needs ")).click()
@@ -179,7 +184,10 @@ def test_orga_section_form(pw_page: Any) -> None:
     # check allowed
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Sections").click()
-    page.locator(".fa-arrow-up").click()
+    page.locator("#registration_sections tbody tr").nth(1).locator("td.reorder-handle").drag_to(
+        page.locator("#registration_sections tbody tr").first
+    )
+    page.wait_for_load_state("networkidle")
 
     sidebar(page, "Form")
     page.locator("#registration_questions_needs").locator(".fa-edit").click()

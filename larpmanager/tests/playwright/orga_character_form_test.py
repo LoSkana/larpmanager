@@ -332,10 +332,15 @@ def add_field_restricted(page: Any) -> None:
 
     submit_confirm(page)
 
-    page.locator('[id="u8"]').locator(".fa-arrow-up").click()
+    page.locator('[id="u8"]').locator("td.reorder-handle").drag_to(
+        page.locator('[id="u8"]').locator("xpath=preceding-sibling::tr[1]")
+    )
     page.locator('[id="u8"]').locator(".fa-edit").click()
 
-    page.locator("#options-iframe").content_frame.locator(".fa-arrow-up").click()
+    options_frame = page.locator("#options-iframe").content_frame
+    options_frame.locator("tbody tr").nth(1).locator("td.reorder-handle").drag_to(
+        options_frame.locator("tbody tr").first
+    )
     page.locator("#options-iframe").content_frame.locator('[id="u7"]').locator(".fa-edit").click()
     just_wait(page, big=True)
     iframe = page.locator("#uglipop_popbox iframe").content_frame

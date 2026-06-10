@@ -228,9 +228,9 @@ def test_faction_all(pw_page: Any) -> None:
     first_row = page.locator(".writing_list tbody tr").first
     expect(first_row).to_contain_text("Primary Faction 1")
 
-    page.locator(".writing_list tbody tr").locator(".fa-arrow-up").first.click()
-
-    # Wait for page reload
+    page.locator(".writing_list tbody tr").nth(1).locator("td.reorder-handle").drag_to(
+        page.locator(".writing_list tbody tr").first
+    )
     page.wait_for_load_state("networkidle")
 
     # Verify order changed - Primary Faction 2 should now be first

@@ -163,10 +163,15 @@ def field_multiple(page: Any, live_server: Any) -> None:
     iframe.locator("#id_description").fill("sarrrr")
     submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.locator('[id="u4"]').locator(".fa-arrow-up").click()
+    options_frame = page.locator("#options-iframe").content_frame
+    options_frame.locator('[id="u4"]').locator("td.reorder-handle").drag_to(
+        options_frame.locator('[id="u4"]').locator("xpath=preceding-sibling::tr[1]")
+    )
     just_wait(page)
     submit_confirm(page)
-    page.locator('[id="u3"]').locator(".fa-arrow-up").click()
+    page.locator('[id="u3"]').locator("td.reorder-handle").drag_to(
+        page.locator('[id="u3"]').locator("xpath=preceding-sibling::tr[1]")
+    )
     page.get_by_role("link", name="New").click()
 
 
