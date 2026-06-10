@@ -6,13 +6,14 @@
 {% block content %}
     {% include "elements/header/edit.html" %}
     <table id="registration_sections"
-           class="go_datatable writing ordering_arrow">
+           class="go_datatable writing row_reorder"
+           data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
+           data-reorder-model="registration_sections">
         <thead>
             <tr>
                 <th></th>
+                <th></th>
                 <th>{% trans "Name" %}</th>
-                <th></th>
-                <th></th>
                 <th></th>
                 <th></th>
             </tr>
@@ -20,6 +21,9 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td class="reorder-handle">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                    </td>
                     <td>
                         <a href="{% url 'orga_registration_sections_edit' run.get_slug el.uuid %}">
                             <i class="fas fa-edit"></i>
@@ -31,20 +35,6 @@
                             {% include "elements/comma.html" %}
                             <a href="{% url 'orga_registration_form_edit' run.get_slug ch.uuid %}">{{ ch.name }}</a>
                         {% endfor %}
-                    </td>
-                    <td>
-                        {% if not forloop.first %}
-                            <a href="{% url 'orga_registration_sections_order' run.get_slug el.uuid 0 %}">
-                                <i class="fa-solid fa-arrow-up"></i>
-                            </a>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if not forloop.last %}
-                            <a href="{% url 'orga_registration_sections_order' run.get_slug el.uuid 1 %}">
-                                <i class="fa-solid fa-arrow-down"></i>
-                            </a>
-                        {% endif %}
                     </td>
                     <td>
                         <a href="{% url 'orga_registration_sections_delete' run.get_slug el.uuid %}"

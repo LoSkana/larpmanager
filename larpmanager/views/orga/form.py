@@ -19,26 +19,36 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import json
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, QuerySet
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.urls import reverse
+from django.views.decorators.http import require_POST
 
-from larpmanager.cache.registration import get_registration_tickets
+from larpmanager.cache.bulk import reset_bulk_cache
+from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
+from larpmanager.cache.registration import clear_registration_tickets_cache, get_registration_tickets
 from larpmanager.forms.registration import OrgaRegistrationTicketForm
-from larpmanager.models.form import RegistrationOption, RegistrationQuestion
+from larpmanager.models.event import ProgressStep
+from larpmanager.models.experience import ModifierExp, RuleExp
+from larpmanager.models.form import RegistrationOption, RegistrationQuestion, WritingOption, WritingQuestion
 from larpmanager.models.registration import (
     RegistrationInstallment,
     RegistrationQuota,
     RegistrationSection,
     RegistrationSurcharge,
+    RegistrationTicket,
 )
+from larpmanager.models.writing import Faction, Plot
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_element
-from larpmanager.utils.edit.backend import (
-    backend_order,
-)
+from larpmanager.utils.edit.backend import backend_set_order
 from larpmanager.utils.edit.orga import (
     OrgaAction,
     form_edit_handler,
@@ -46,7 +56,6 @@ from larpmanager.utils.edit.orga import (
     orga_delete,
     orga_edit,
     orga_new,
-    orga_order,
 )
 from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
 
@@ -105,14 +114,6 @@ def orga_registration_tickets_delete(request: HttpRequest, event_slug: str, tick
 
 
 @login_required
-def orga_registration_tickets_order(
-    request: HttpRequest, event_slug: str, ticket_uuid: str, order: int
-) -> HttpResponse:
-    """Reorder registration tickets for an event."""
-    return orga_order(request, event_slug, OrgaAction.REGISTRATION_TICKETS, ticket_uuid, order)
-
-
-@login_required
 def orga_registration_sections(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display registration sections for an event."""
     # Check permissions and get event context
@@ -140,17 +141,6 @@ def orga_registration_sections_edit(request: HttpRequest, event_slug: str, secti
 def orga_registration_sections_delete(request: HttpRequest, event_slug: str, section_uuid: str) -> HttpResponse:
     """Delete section for event."""
     return orga_delete(request, event_slug, OrgaAction.REGISTRATION_SECTIONS, section_uuid)
-
-
-@login_required
-def orga_registration_sections_order(
-    request: HttpRequest,
-    event_slug: str,
-    section_uuid: str,
-    order: int,
-) -> HttpResponse:
-    """Reorder registration sections within an event."""
-    return orga_order(request, event_slug, OrgaAction.REGISTRATION_SECTIONS, section_uuid, order)
 
 
 def get_ordered_registration_questions(context: dict) -> QuerySet[RegistrationQuestion]:
@@ -225,12 +215,6 @@ def orga_registration_form_delete(request: HttpRequest, event_slug: str, questio
 
 
 @login_required
-def orga_registration_form_order(request: HttpRequest, event_slug: str, question_uuid: str, order: int) -> HttpResponse:
-    """Reorders registration form questions for an event."""
-    return orga_order(request, event_slug, OrgaAction.REGISTRATION_FORM, question_uuid, order)
-
-
-@login_required
 def orga_registration_options_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new registration option."""
     return options_edit_handler(request, event_slug, "orga_registration_form", None)
@@ -272,42 +256,6 @@ def orga_registration_options_list(
         context["list"] = options_queryset.order_by("order")
 
     return render(request, "larpmanager/orga/registration/options_list.html", context)
-
-
-@login_required
-def orga_registration_options_order(
-    request: HttpRequest,
-    event_slug: str,
-    option_uuid: str,
-    order: int,
-) -> HttpResponse:
-    """Reorder registration options within a form question.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event/run slug identifier
-        option_uuid: Option UUID to reorder
-        order: Direction to move the option (1 or 0)
-
-    Returns:
-        Redirect to the registration form edit page
-
-    """
-    # Check user permissions and get event context
-    context = check_event_context(request, event_slug, "orga_registration_form")
-
-    # Exchange the order of registration options
-    backend_order(context, RegistrationOption, option_uuid, order)
-
-    # Redirect back to the form edit page
-    url = reverse(
-        "orga_registration_form_edit",
-        kwargs={
-            "event_slug": context["run"].get_slug(),
-            "question_uuid": context["current"].question.uuid,
-        },
-    )
-    return HttpResponseRedirect(url)
 
 
 @login_required
@@ -404,3 +352,54 @@ def orga_registration_surcharges_edit(request: HttpRequest, event_slug: str, sur
 def orga_registration_surcharges_delete(request: HttpRequest, event_slug: str, surcharge_uuid: str) -> HttpResponse:
     """Delete surcharge for event."""
     return orga_delete(request, event_slug, OrgaAction.REGISTRATION_SURCHARGES, surcharge_uuid)
+
+
+_REORDER_MODEL_MAP: dict[str, tuple[type, str, Callable | None]] = {
+    "registration_tickets": (
+        RegistrationTicket,
+        "orga_registration_tickets",
+        lambda e: clear_registration_tickets_cache(e.id),
+    ),
+    "registration_sections": (
+        RegistrationSection,
+        "orga_registration_sections",
+        lambda e: clear_registration_questions_cache(e.id),
+    ),
+    "registration_form": (
+        RegistrationQuestion,
+        "orga_registration_form",
+        lambda e: clear_registration_questions_cache(e.id),
+    ),
+    "registration_options": (
+        RegistrationOption,
+        "orga_registration_form",
+        lambda e: clear_registration_questions_cache(e.id),
+    ),
+    "factions": (Faction, "orga_factions", None),
+    "plots": (Plot, "orga_plots", None),
+    "progress_steps": (ProgressStep, "orga_progress_steps", lambda e: reset_bulk_cache(e.id, "progress_steps")),
+    "character_form": (WritingQuestion, "orga_character_form", lambda e: clear_writing_questions_cache(e.id)),
+    "character_options": (WritingOption, "orga_character_form", lambda e: clear_writing_questions_cache(e.id)),
+    "exp_rules": (RuleExp, "orga_exp_rules", None),
+    "exp_modifiers": (ModifierExp, "orga_exp_modifiers", None),
+}
+
+
+@login_required
+@require_POST
+def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
+    """Bulk-reorder items via drag-and-drop from DataTables RowReorder."""
+    data = json.loads(request.body)
+    model_name = data.get("model", "")
+    uuids = data.get("uuids", [])
+
+    entry = _REORDER_MODEL_MAP.get(model_name)
+    if not entry:
+        return JsonResponse({"error": "unknown model"}, status=400)
+
+    model_class, permission, cache_clear = entry
+    context = check_event_context(request, event_slug, permission)
+    backend_set_order(model_class, uuids, context["event"])
+    if cache_clear:
+        cache_clear(context["event"])
+    return JsonResponse({"ok": True})

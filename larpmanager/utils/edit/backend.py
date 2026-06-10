@@ -925,3 +925,16 @@ def backend_order(
     current_element.save()
     adjacent_element.save()
     context["current"] = current_element
+
+
+def backend_set_order(model_class: type, uuids: list[str], event: object) -> None:
+    """Bulk-set order field values from a UUID list.
+
+    Args:
+        model_class: Model class to update.
+        uuids: List of UUIDs in desired order.
+        event: Event instance used as the ownership filter.
+
+    """
+    for i, uuid in enumerate(uuids):
+        model_class.objects.filter(uuid=uuid, event=event).update(order=i * 10)

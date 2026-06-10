@@ -2867,3 +2867,7 @@ body.association.new_v20 .user_resize {
   font-size: 85%;
   margin-bottom: 1em;
 }
+
+.floating_iframe #info_bar {
+  display: none;
+}

@@ -46,7 +46,7 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character
 from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.exceptions import ReturnNowError
-from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new, orga_order
+from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.io.download import export_abilities, export_modifiers, export_rules, zip_exports
 from larpmanager.utils.services.bulk import handle_bulk_ability
 
@@ -340,17 +340,6 @@ def orga_exp_rules_delete(request: HttpRequest, event_slug: str, rule_uuid: str)
 
 
 @login_required
-def orga_exp_rules_order(
-    request: HttpRequest,
-    event_slug: str,
-    rule_uuid: str,
-    order: int,
-) -> HttpResponse:
-    """Reorder EXP rules for an event."""
-    return orga_order(request, event_slug, OrgaAction.PX_RULES, rule_uuid, order)
-
-
-@login_required
 def orga_exp_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display and manage experience modifiers for an event."""
     # Check permissions and get event context
@@ -392,17 +381,6 @@ def orga_exp_modifiers_edit(request: HttpRequest, event_slug: str, modifier_uuid
 def orga_exp_modifiers_delete(request: HttpRequest, event_slug: str, modifier_uuid: str) -> HttpResponse:
     """Delete modifier for event."""
     return orga_delete(request, event_slug, OrgaAction.PX_MODIFIERS, modifier_uuid)
-
-
-@login_required
-def orga_exp_modifiers_order(
-    request: HttpRequest,
-    event_slug: str,
-    modifier_uuid: str,
-    order: int,
-) -> HttpResponse:
-    """Reorder experience modifiers in the organizer interface."""
-    return orga_order(request, event_slug, OrgaAction.PX_MODIFIERS, modifier_uuid, order)
 
 
 @login_required

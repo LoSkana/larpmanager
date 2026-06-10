@@ -584,7 +584,8 @@ function data_tables() {
             });
         }
 
-        var full_layout = rowCount >= 10;
+        var is_ordering = $table.hasClass('row_reorder');
+        var full_layout = rowCount >= 10 && !is_ordering;
         var no_buttons = $table.attr('no_buttons') !== undefined;
 
         const table = new DataTable('#' + tableId, {
@@ -592,6 +593,7 @@ function data_tables() {
             responsive: window.enviro === 'prod',
             stateSave: false,
             paging: full_layout,
+            rowReorder: is_ordering ? { selector: 'td.reorder-handle', snapX: true, update: false } : false,
             layout: full_layout
                 ? (no_buttons
                     ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
@@ -618,6 +620,23 @@ function data_tables() {
               })
             }
         });
+
+        if (is_ordering) {
+            const reorderUrl = $table.data('reorderUrl');
+            const reorderModel = $table.data('reorderModel');
+            table.on('row-reorder', function() {
+                const uuids = [];
+                $table.find('tbody tr').each(function() {
+                    if (this.id) uuids.push(this.id);
+                });
+                $.ajax({
+                    url: reorderUrl,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ model: reorderModel, uuids: uuids }),
+                });
+            });
+        }
 
         table.on('draw.dt', function() {
             // Add tooltips to edit icons first

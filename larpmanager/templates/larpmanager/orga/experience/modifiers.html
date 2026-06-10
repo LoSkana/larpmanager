@@ -5,22 +5,27 @@
 {% endblock title %}
 {% block content %}
     {% include "elements/header/edit.html" %}
-    <table id="modifiers" class="go_datatable writing">
+    <table id="modifiers"
+           class="go_datatable writing row_reorder"
+           data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
+           data-reorder-model="exp_modifiers">
         <thead>
             <tr>
+                <th></th>
                 <th></th>
                 <th>{% trans "Abilities" %}</th>
                 <th>{% trans "New cost" %}</th>
                 <th>{% trans "Prerequisites" %}</th>
                 <th>{% trans "Requirements" %}</th>
                 <th></th>
-                <th></th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td class="reorder-handle">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                    </td>
                     <td>
                         <a href="{% url 'orga_exp_modifiers_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
@@ -48,20 +53,6 @@
                                 {% include "elements/comma.html" %}
                                 <a href="{% url 'orga_writing_options_edit' run.get_slug 'character' req_uuid %}">{{ req_name }}</a>
                             {% endfor %}
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if not forloop.first %}
-                            <a href="{% url 'orga_exp_modifiers_order' run.get_slug el.uuid 0 %}">
-                                <i class="fa-solid fa-arrow-up"></i>
-                            </a>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if not forloop.last %}
-                            <a href="{% url 'orga_exp_modifiers_order' run.get_slug el.uuid 1 %}">
-                                <i class="fa-solid fa-arrow-down"></i>
-                            </a>
                         {% endif %}
                     </td>
                     <td>

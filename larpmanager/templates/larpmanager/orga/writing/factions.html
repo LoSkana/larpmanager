@@ -7,13 +7,17 @@
     {% trans "Manage all character factions of the event" %}
 {% endblock info %}
 {% block table_classes %}
-    ordering_arrow
+    row_reorder
 {% endblock table_classes %}
+{% block table_reorder_attrs %}
+    data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}" data-reorder-model="factions"
+{% endblock table_reorder_attrs %}
 {% block nav_fields %}
     {% include "elements/writing/questions_nav.html" %}
     <a href="#" class="table_toggle" tog='characters'>{% trans "Characters" %}</a>
 {% endblock nav_fields %}
 {% block thead %}
+    <th></th>
     <th></th>
     <th>{{ fields_name.name }}</th>
     <th></th>
@@ -30,12 +34,13 @@
         <i class="fa fa-hashtag"></i> {% trans "Characters" %}
     </th>
     <th></th>
-    <th></th>
-    <th></th>
 {% endblock thead %}
 {% block tbody %}
     {% for el in list %}
         <tr id="{{ el.uuid }}">
+            <td class="reorder-handle">
+                <i class="fa-solid fa-grip-vertical"></i>
+            </td>
             <td>
                 <a href="{% url 'orga_factions_edit' run.get_slug el.uuid %}"
                    qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
@@ -76,20 +81,6 @@
                 {% endfor %}
             </td>
             <td class="stats">{{ el.character_rels.count }}</td>
-            <td>
-                {% if not forloop.first %}
-                    <a href="{% url 'orga_factions_order' run.get_slug el.uuid 0 %}">
-                        <i class="fa-solid fa-arrow-up"></i>
-                    </a>
-                {% endif %}
-            </td>
-            <td>
-                {% if not forloop.last %}
-                    <a href="{% url 'orga_factions_order' run.get_slug el.uuid 1 %}">
-                        <i class="fa-solid fa-arrow-down"></i>
-                    </a>
-                {% endif %}
-            </td>
             <td>
                 <a href="{% url 'orga_factions_delete' run.get_slug el.uuid %}"
                    qtip="{% trans "Delete" %}"
