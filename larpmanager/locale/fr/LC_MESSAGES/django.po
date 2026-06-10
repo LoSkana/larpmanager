@@ -1088,6 +1088,9 @@ msgstr "Rédaction"
 msgid "XP used"
 msgstr "Px utilisé"
 
+msgid "maximum"
+msgstr "maximum"
+
 msgid "options"
 msgstr "options"
 
@@ -2222,9 +2225,6 @@ msgstr "Réinitialisation du cache !"
 msgid "Cancellation"
 msgstr "Annulation"
 
-msgid "Change photo"
-msgstr "Changer de photo"
-
 msgid "City / Place"
 msgstr "Ville / Lieu"
 
@@ -2639,6 +2639,9 @@ msgstr "Réinitialisation de l'aperçu"
 
 msgid "Profile Image"
 msgstr "Image de profil"
+
+msgid "Profile image"
+msgstr "Photo de profil"
 
 msgid "Progress step"
 msgstr "Avancer d'un pas"
@@ -4263,9 +4266,6 @@ msgstr "Feuille complète (Test)"
 msgid "Create your character"
 msgstr "Créez votre personnage"
 
-msgid "Current profile image"
-msgstr "Image du profil actuel"
-
 msgid "Disable amount change"
 msgstr "Désactiver la modification du montant"
 
@@ -4749,6 +4749,9 @@ msgstr "Vérifier les doublons de speed larp"
 
 msgid "Check missing speed larp"
 msgstr "Check speed larp manquant"
+
+msgid "Click or drag photo here"
+msgstr "Clique ou fais glisser une photo ici"
 
 msgid "Code of the box or shelf"
 msgstr "Code de la boîte ou de l'étagère"
@@ -5408,9 +5411,6 @@ msgstr "URL de demande de réinitialisation du mot de passe pour"
 
 msgid "Registrations on external link"
 msgstr "Inscriptions sur lien externe"
-
-msgid "Select the new photo to upload"
-msgstr "Sélectionnez la nouvelle photo à télécharger"
 
 msgid "Set up the taxes configuration"
 msgstr "Configuration des taxes"
@@ -8044,6 +8044,10 @@ msgid "Track all personal expenses directly incurred for this event"
 msgstr ""
 "Note toutes les dépenses personnelles directement liées à cet événement"
 
+msgid "Upload a photo of your character specifically for this event"
+msgstr ""
+"Télécharge une photo de ton personnage spécialement pour cet événement"
+
 msgid "Upload the signed membership application form (PDF or image)"
 msgstr "Télécharger le formulaire de demande d'adhésion signé (PDF ou image)"
 
@@ -10460,13 +10464,6 @@ msgid ""
 msgstr ""
 "Téléchargez une photo du document d'identité que vous avez mentionné dans la"
 " demande (image ou pdf)"
-
-msgid ""
-"Upload a photo of yourself associated with your character specifically for "
-"this event"
-msgstr ""
-"Téléchargez une photo de vous associée à votre personnage spécialement pour "
-"cet événement"
 
 msgid ""
 "Enables the creation, editing, and assignment of characters to registered "

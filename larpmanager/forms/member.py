@@ -1044,6 +1044,7 @@ class ExeProfileForm(BaseModelForm):
             "language",
             "newsletter",
             "parent",
+            "media_token",
         ]
 
         available_fields: list[tuple[str, str, str]] = []

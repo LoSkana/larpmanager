@@ -1088,6 +1088,9 @@ msgstr "Skrivande"
 msgid "XP used"
 msgstr "Px används"
 
+msgid "maximum"
+msgstr "högsta"
+
 msgid "options"
 msgstr "alternativ"
 
@@ -2222,9 +2225,6 @@ msgstr "Cache återställd!"
 msgid "Cancellation"
 msgstr "Avbokning"
 
-msgid "Change photo"
-msgstr "Ändra foto"
-
 msgid "City / Place"
 msgstr "Stad / plats"
 
@@ -2638,6 +2638,9 @@ msgid "Preview reset"
 msgstr "Återställning av förhandsgranskning"
 
 msgid "Profile Image"
+msgstr "Profilbild"
+
+msgid "Profile image"
 msgstr "Profilbild"
 
 msgid "Progress step"
@@ -4263,9 +4266,6 @@ msgstr "Komplett ark (Test)"
 msgid "Create your character"
 msgstr "Skapa din karaktär"
 
-msgid "Current profile image"
-msgstr "Aktuell profilbild"
-
 msgid "Disable amount change"
 msgstr "Inaktivera ändring av belopp"
 
@@ -4749,6 +4749,9 @@ msgstr "Kontrollera hastighet larp dubbletter"
 
 msgid "Check missing speed larp"
 msgstr "Kontrollera hastighet larp saknas"
+
+msgid "Click or drag photo here"
+msgstr "Klicka eller dra hit en bild"
 
 msgid "Code of the box or shelf"
 msgstr "Kod för lådan eller hyllan"
@@ -5408,9 +5411,6 @@ msgstr "URL för begäran om återställning av lösenord för"
 
 msgid "Registrations on external link"
 msgstr "Registreringar på extern länk"
-
-msgid "Select the new photo to upload"
-msgstr "Välj det nya foto som ska laddas upp"
 
 msgid "Set up the taxes configuration"
 msgstr "Ställ in skattekonfigurationen"
@@ -7921,6 +7921,9 @@ msgstr ""
 "Registrera alla personliga utgifter som uppkommit direkt i samband med detta"
 " evenemang"
 
+msgid "Upload a photo of your character specifically for this event"
+msgstr "Ladda upp en bild på din karaktär speciellt för detta evenemang"
+
 msgid "Upload the signed membership application form (PDF or image)"
 msgstr ""
 "Ladda upp det undertecknade formuläret för medlemsansökan (PDF eller bild)"
@@ -10143,13 +10146,6 @@ msgid ""
 msgstr ""
 "Ladda upp ett foto av den identitetshandling som du angav i begäran (bild "
 "eller pdf)"
-
-msgid ""
-"Upload a photo of yourself associated with your character specifically for "
-"this event"
-msgstr ""
-"Ladda upp ett foto av dig själv tillsammans med din karaktär specifikt för "
-"detta evenemang"
 
 msgid ""
 "Enables the creation, editing, and assignment of characters to registered "

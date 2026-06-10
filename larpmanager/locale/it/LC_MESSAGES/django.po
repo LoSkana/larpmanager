@@ -1088,6 +1088,9 @@ msgstr "Scrittura"
 msgid "XP used"
 msgstr "Px usati"
 
+msgid "maximum"
+msgstr "massimo"
+
 msgid "options"
 msgstr "opzioni"
 
@@ -2222,9 +2225,6 @@ msgstr "Cache resettata!"
 msgid "Cancellation"
 msgstr "Disdetta"
 
-msgid "Change photo"
-msgstr "Cambia foto"
-
 msgid "City / Place"
 msgstr "Città / Luogo"
 
@@ -2639,6 +2639,9 @@ msgstr "Reset anteprima"
 
 msgid "Profile Image"
 msgstr "Immagine del profilo"
+
+msgid "Profile image"
+msgstr "Immagine profilo"
 
 msgid "Progress step"
 msgstr "Step avanzamento"
@@ -4263,9 +4266,6 @@ msgstr "Scheda completa (Test)"
 msgid "Create your character"
 msgstr "Crea il tuo personaggio"
 
-msgid "Current profile image"
-msgstr "Immagine profilo attuale"
-
 msgid "Disable amount change"
 msgstr "Disabilita cambio ammontare"
 
@@ -4749,6 +4749,9 @@ msgstr "Check speed larp duplicati"
 
 msgid "Check missing speed larp"
 msgstr "Check speed larp mancanti"
+
+msgid "Click or drag photo here"
+msgstr "Clicca o trascina la foto qui"
 
 msgid "Code of the box or shelf"
 msgstr "Codice della scatola o dello scaffale"
@@ -5408,9 +5411,6 @@ msgstr "URL di richiesta di reimpostazione della password per"
 
 msgid "Registrations on external link"
 msgstr "Iscrizoni su link esterno"
-
-msgid "Select the new photo to upload"
-msgstr "Seleziona la nuova foto da caricare"
 
 msgid "Set up the taxes configuration"
 msgstr "Configura le imposte"
@@ -7970,6 +7970,10 @@ msgstr ""
 "Tieni traccia di tutte le spese personali sostenute direttamente per questo "
 "evento"
 
+msgid "Upload a photo of your character specifically for this event"
+msgstr ""
+"Carica una foto del tuo personaggio pensata appositamente per questo evento"
+
 msgid "Upload the signed membership application form (PDF or image)"
 msgstr "Caricail modulo di richiesta di adesione firmato (PDF o immagine)"
 
@@ -10340,12 +10344,6 @@ msgid ""
 msgstr ""
 "Caricare una foto del documento d'identità indicato nella richiesta "
 "(immagine o pdf)"
-
-msgid ""
-"Upload a photo of yourself associated with your character specifically for "
-"this event"
-msgstr ""
-"Carica una tua foto associata al tuo personaggio specifica per questo evento"
 
 msgid ""
 "Enables the creation, editing, and assignment of characters to registered "

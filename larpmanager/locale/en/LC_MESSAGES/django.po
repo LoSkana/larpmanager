@@ -5074,6 +5074,30 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
+msgid "Click or drag photo here"
+msgstr ""
+
+msgid "maximum"
+msgstr ""
+
+msgid "Uploading"
+msgstr ""
+
+msgid "Uploading image, please wait"
+msgstr ""
+
+msgid "Rotate left"
+msgstr ""
+
+msgid "Rotate right"
+msgstr ""
+
+msgid "Error uploading image"
+msgstr ""
+
+msgid "Please retry or use a smaller file"
+msgstr ""
+
 msgid "Coming soon"
 msgstr ""
 
@@ -5791,33 +5815,7 @@ msgstr ""
 msgid "Character profile"
 msgstr ""
 
-msgid ""
-"Upload a photo of yourself associated with your character specifically for "
-"this event"
-msgstr ""
-
-msgid "Change photo"
-msgstr ""
-
-msgid "Rotate left"
-msgstr ""
-
-msgid "Rotate right"
-msgstr ""
-
-msgid "Select the new photo to upload"
-msgstr ""
-
-msgid "Uploading"
-msgstr ""
-
-msgid "Uploading image, please wait"
-msgstr ""
-
-msgid "Error uploading image"
-msgstr ""
-
-msgid "Please retry or use a smaller file"
+msgid "Upload a photo of your character specifically for this event"
 msgstr ""
 
 msgid "Your characters"
@@ -7678,7 +7676,7 @@ msgid ""
 "You can check and edit the list of organizations that can access your data on"
 msgstr ""
 
-msgid "Current profile image"
+msgid "Profile image"
 msgstr ""
 
 msgid "Upload your profile photo"
