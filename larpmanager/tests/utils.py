@@ -287,6 +287,15 @@ def load_image(page: Any, element_id: Any) -> None:
     upload(page, element_id, image_path)
 
 
+def load_image_hidden(page: Any, element_id: str) -> None:
+    """Set files on a hidden file input (e.g. inside an avatar dropzone widget)."""
+    image_path = Path(__file__).parent / "image.jpg"
+    sel = element_id.lstrip("#")
+    page.evaluate(f"document.getElementById('{sel}').style.display = 'block'")
+    inp = page.locator(element_id)
+    inp.set_input_files(str(image_path))
+
+
 def upload(page: Any, element_id: Any, image_path: Any) -> None:
     inp = page.locator(element_id)
     inp.scroll_into_view_if_needed()

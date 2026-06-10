@@ -1088,6 +1088,9 @@ msgstr "Pisanie"
 msgid "XP used"
 msgstr "Używany XP"
 
+msgid "maximum"
+msgstr "maksymalny"
+
 msgid "options"
 msgstr "opcje"
 
@@ -2222,9 +2225,6 @@ msgstr "Reset pamięci podręcznej!"
 msgid "Cancellation"
 msgstr "Anulowanie"
 
-msgid "Change photo"
-msgstr "Zmień zdjęcie"
-
 msgid "City / Place"
 msgstr "Miasto / miejsce"
 
@@ -2639,6 +2639,9 @@ msgstr "Reset podglądu"
 
 msgid "Profile Image"
 msgstr "Obraz profilu"
+
+msgid "Profile image"
+msgstr "Zdjęcie profilowe"
 
 msgid "Progress step"
 msgstr "Krok postępu"
@@ -4263,9 +4266,6 @@ msgstr "Kompletny arkusz (test)"
 msgid "Create your character"
 msgstr "Stwórz swoją postać"
 
-msgid "Current profile image"
-msgstr "Aktualne zdjęcie profilowe"
-
 msgid "Disable amount change"
 msgstr "Wyłącz zmianę kwoty"
 
@@ -4749,6 +4749,9 @@ msgstr "Sprawdź larpy o podwójnej prędkości"
 
 msgid "Check missing speed larp"
 msgstr "Sprawdź brakującą prędkość larpa"
+
+msgid "Click or drag photo here"
+msgstr "Kliknij lub przeciągnij zdjęcie tutaj"
 
 msgid "Code of the box or shelf"
 msgstr "Kod pudełka lub półki"
@@ -5408,9 +5411,6 @@ msgstr "Adres URL żądania zresetowania hasła dla"
 
 msgid "Registrations on external link"
 msgstr "Rejestracje przez łącze zewnętrzne"
-
-msgid "Select the new photo to upload"
-msgstr "Wybierz nowe zdjęcie do przesłania"
 
 msgid "Set up the taxes configuration"
 msgstr "Konfiguracja podatków"
@@ -7941,6 +7941,9 @@ msgstr ""
 "Śledź wszystkie wydatki osobiste poniesione bezpośrednio w związku z tym "
 "wydarzeniem"
 
+msgid "Upload a photo of your character specifically for this event"
+msgstr "Prześlij zdjęcie swojej postaci specjalnie na tę okazję"
+
 msgid "Upload the signed membership application form (PDF or image)"
 msgstr "Prześlij podpisany formularz wniosku o członkostwo (PDF lub obraz)"
 
@@ -10218,11 +10221,6 @@ msgid ""
 msgstr ""
 "Prześlij zdjęcie dokumentu tożsamości wymienionego we wniosku (obraz lub "
 "plik PDF)"
-
-msgid ""
-"Upload a photo of yourself associated with your character specifically for "
-"this event"
-msgstr "Prześlij swoje zdjęcie z postacią specjalnie na to wydarzenie"
 
 msgid ""
 "Enables the creation, editing, and assignment of characters to registered "

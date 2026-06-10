@@ -35,7 +35,7 @@ from larpmanager.tests.utils import (
     expect_normalized,
     go_to,
     just_wait,
-    load_image,
+    load_image_hidden,
     login_orga,
     login_user,
     submit_confirm, logout,
@@ -148,8 +148,7 @@ def fill_customization_form(page: Any, live_server: Any) -> None:
     page.locator("#id_custom_private").fill("This is my private character note. Only I and organizers can see this.")
 
     # Upload character profile image
-    page.locator("#change_photo").click(force=True)
-    load_image(page, "#id_image")
+    load_image_hidden(page, "#id_image")
 
     # Wait for AJAX upload to complete
     page.wait_for_load_state("networkidle")

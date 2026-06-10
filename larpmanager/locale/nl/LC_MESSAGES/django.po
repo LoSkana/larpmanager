@@ -1088,6 +1088,9 @@ msgstr "Schrijven"
 msgid "XP used"
 msgstr "Gebruikte Px"
 
+msgid "maximum"
+msgstr "maximaal"
+
 msgid "options"
 msgstr "opties"
 
@@ -2222,9 +2225,6 @@ msgstr "Cache opnieuw ingesteld!"
 msgid "Cancellation"
 msgstr "Annulering"
 
-msgid "Change photo"
-msgstr "Foto wijzigen"
-
 msgid "City / Place"
 msgstr "Stad / Plaats"
 
@@ -2639,6 +2639,9 @@ msgstr "Voorbeeld reset"
 
 msgid "Profile Image"
 msgstr "Profiel afbeelding"
+
+msgid "Profile image"
+msgstr "Profielfoto"
 
 msgid "Progress step"
 msgstr "Stap naar voren"
@@ -4263,9 +4266,6 @@ msgstr "Volledig blad (Test)"
 msgid "Create your character"
 msgstr "Creëer je personage"
 
-msgid "Current profile image"
-msgstr "Huidige profielafbeelding"
-
 msgid "Disable amount change"
 msgstr "Bedrag wijzigen uitschakelen"
 
@@ -4749,6 +4749,9 @@ msgstr "Controleer snelheid larp duplicaten"
 
 msgid "Check missing speed larp"
 msgstr "Controle snelheid larp ontbreekt"
+
+msgid "Click or drag photo here"
+msgstr "Klik of sleep de foto hierheen"
 
 msgid "Code of the box or shelf"
 msgstr "Code van de doos of plank"
@@ -5408,9 +5411,6 @@ msgstr "Wachtwoord reset verzoek url voor"
 
 msgid "Registrations on external link"
 msgstr "Registraties op externe link"
-
-msgid "Select the new photo to upload"
-msgstr "Selecteer de nieuwe foto die u wilt uploaden"
 
 msgid "Set up the taxes configuration"
 msgstr "De belastingconfiguratie instellen"
@@ -7967,6 +7967,9 @@ msgstr ""
 "Houd alle persoonlijke uitgaven bij die rechtstreeks voor dit evenement zijn"
 " gemaakt"
 
+msgid "Upload a photo of your character specifically for this event"
+msgstr "Upload een foto van je personage speciaal voor dit evenement"
+
 msgid "Upload the signed membership application form (PDF or image)"
 msgstr ""
 "Upload het ondertekende lidmaatschapsaanvraagformulier (PDF of afbeelding)"
@@ -10318,13 +10321,6 @@ msgid ""
 msgstr ""
 "Upload een foto van het identiteitsbewijs dat je in de aanvraag hebt vermeld"
 " (afbeelding of pdf)"
-
-msgid ""
-"Upload a photo of yourself associated with your character specifically for "
-"this event"
-msgstr ""
-"Upload een foto van jezelf in combinatie met je personage speciaal voor dit "
-"evenement"
 
 msgid ""
 "Enables the creation, editing, and assignment of characters to registered "
