@@ -219,7 +219,10 @@ def profile(request: HttpRequest) -> Any:
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=member, context=context)
         if form.is_valid():
-            return _save_profile(request, context, form, member)
+            if "profile" in members_fields and not member.profile_thumb:
+                form.add_error(None, _("A profile image is required."))
+            else:
+                return _save_profile(request, context, form, member)
 
     # Handle GET request (display form)
     else:

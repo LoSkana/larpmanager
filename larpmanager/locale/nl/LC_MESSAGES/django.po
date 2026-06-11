@@ -5138,6 +5138,9 @@ msgstr "houd het kort en boeiend"
 msgid "(click on image to enlarge)"
 msgstr "(klik op de afbeelding om te vergroten)"
 
+msgid "A profile image is required"
+msgstr "Een profielfoto is verplicht"
+
 msgid "Activate new event features"
 msgstr "Nieuwe evenementfuncties activeren"
 
@@ -5246,6 +5249,9 @@ msgstr "Wil je het veranderen"
 
 msgid "Your organization's country"
 msgstr "Het land van je organisatie"
+
+msgid "A profile image is required."
+msgstr "Een profielfoto is verplicht."
 
 msgid "Authenticator device removed"
 msgstr "Authenticatieapparaat verwijderd"

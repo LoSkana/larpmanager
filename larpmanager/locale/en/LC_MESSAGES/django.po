@@ -7663,6 +7663,9 @@ msgstr ""
 msgid "Please choose a clear and easily recognizable photo"
 msgstr ""
 
+msgid "A profile image is required"
+msgstr ""
+
 msgid "Private message"
 msgstr ""
 
@@ -11418,6 +11421,9 @@ msgid "Last step, please upload your membership application"
 msgstr ""
 
 msgid "To confirm your registration, please pay the amount indicated"
+msgstr ""
+
+msgid "A profile image is required."
 msgstr ""
 
 msgid "Data share removed successfully"

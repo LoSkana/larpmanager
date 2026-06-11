@@ -5138,6 +5138,9 @@ msgstr "krátký a poutavý"
 msgid "(click on image to enlarge)"
 msgstr "(kliknutím na obrázek jej zvětšíte)"
 
+msgid "A profile image is required"
+msgstr "Je nutné zadat profilový obrázek"
+
 msgid "Activate new event features"
 msgstr "Aktivace nových funkcí události"
 
@@ -5246,6 +5249,9 @@ msgstr "Chcete to změnit"
 
 msgid "Your organization's country"
 msgstr "Země vaší organizace"
+
+msgid "A profile image is required."
+msgstr "Je nutné zadat profilový obrázek."
 
 msgid "Authenticator device removed"
 msgstr "Odstranění autentizačního zařízení"

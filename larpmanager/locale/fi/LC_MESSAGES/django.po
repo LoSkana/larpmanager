@@ -5138,6 +5138,9 @@ msgstr "Pidä se lyhyenä ja mukaansatempaavana"
 msgid "(click on image to enlarge)"
 msgstr "(klikkaa kuvaa suurentaaksesi)"
 
+msgid "A profile image is required"
+msgstr "Profiilikuva on pakollinen"
+
 msgid "Activate new event features"
 msgstr "Aktivoi uudet tapahtumaominaisuudet"
 
@@ -5246,6 +5249,9 @@ msgstr "Haluaisitko muuttaa sen"
 
 msgid "Your organization's country"
 msgstr "Organisaationne maa"
+
+msgid "A profile image is required."
+msgstr "Profiilikuva on pakollinen."
 
 msgid "Authenticator device removed"
 msgstr "Tunnistuslaite poistettu"

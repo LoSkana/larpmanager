@@ -39,7 +39,8 @@
             <form action="{{ request.path }}"
                   enctype="multipart/form-data"
                   method="post"
-                  id="avatar_form">
+                  id="avatar_form"
+                  novalidate>
                 {% csrf_token %}
                 <div class="centerized">
                     <h4>{% trans "Current profile image" %}:</h4>
@@ -155,6 +156,13 @@
                 {% if not profile %}
                 $('#change_photo').trigger('click');
                 {% endif %}
+
+                $('form:not(#avatar_form)').on('submit', function(e) {
+                    if (!$('#profile').attr('src')) {
+                        e.preventDefault();
+                        if (!window.lmTesting) alert('{% filter escapejs %}{% trans "A profile image is required" %}{% endfilter %}');
+                    }
+                });
 
                 $('#id_image').change(function() {
 

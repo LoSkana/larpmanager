@@ -5138,6 +5138,9 @@ msgstr "håll det kort och engagerande"
 msgid "(click on image to enlarge)"
 msgstr "(klicka på bilden för att förstora den)"
 
+msgid "A profile image is required"
+msgstr "En profilbild krävs"
+
 msgid "Activate new event features"
 msgstr "Aktivera nya evenemangsfunktioner"
 
@@ -5246,6 +5249,9 @@ msgstr "Skulle du vilja ändra det"
 
 msgid "Your organization's country"
 msgstr "Din organisations land"
+
+msgid "A profile image is required."
+msgstr "En profilbild krävs."
 
 msgid "Authenticator device removed"
 msgstr "Autentiseringsenhet borttagen"
