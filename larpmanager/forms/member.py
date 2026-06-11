@@ -316,7 +316,7 @@ class MyPasswordResetForm(PasswordResetForm):
 class AvatarForm(BaseForm):
     """Form for uploading user avatar images."""
 
-    image = forms.ImageField(label="Select an image")
+    image = forms.ImageField(label="Select an image", required=False)
 
 
 class LanguageForm(BaseForm):
