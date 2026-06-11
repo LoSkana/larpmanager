@@ -424,13 +424,6 @@ class OrgaCharacterForm(CharacterForm):
         if "relationships" not in self.params.get("features"):
             return
 
-        # Skip if AJAX auto-save
-        if self.params.get("request") and self.params["request"].POST.get("ajax") == "1":
-            return
-
-        # Process character relationships for display and validation
-        self._characters_relationships()
-
         # Load relationship field max length from event configuration
         self.relationship_max_length = int(
             get_event_config(
@@ -438,11 +431,35 @@ class OrgaCharacterForm(CharacterForm):
             ),
         )
 
+        # For AJAX auto-save: skip widget setup but still load relationship data for saving
+        if self.params.get("request") and self.params["request"].POST.get("ajax") == "1":
+            self._load_relationships_data()
+            return
+
+        # Process character relationships for display and validation
+        self._characters_relationships()
+
+    def _load_relationships_data(self) -> None:
+        """Load relationship data from DB into params (needed for saving)."""
+        self.params["relationships"] = {}
+        if not self.instance.pk:
+            return
+        rel_by_uuid: dict[str, dict] = {}
+        for relationship in self.instance.source.all():
+            other_char = relationship.target
+            if other_char.uuid not in rel_by_uuid:
+                rel_by_uuid[other_char.uuid] = {"char": other_char}
+            rel_by_uuid[other_char.uuid]["direct"] = relationship.text
+        for relationship in self.instance.target.all():
+            other_char = relationship.source
+            if other_char.uuid not in rel_by_uuid:
+                rel_by_uuid[other_char.uuid] = {"char": other_char}
+            rel_by_uuid[other_char.uuid]["inverse"] = relationship.text
+        self.params["relationships"] = rel_by_uuid
+
     def _characters_relationships(self) -> None:
         """Set up character relationships data and widgets for editing."""
         context = self.params
-
-        context["relationships"] = {}
 
         cache_key = "feature_tutorial_relationships"
         rel_tutorial = cache.get(cache_key)
@@ -459,28 +476,14 @@ class OrgaCharacterForm(CharacterForm):
         widget.set_event(context["event"])
         context["new_rel"] = widget.render(name="new_rel_select", value="")
 
+        # Load relationship data from DB (also populates self.params["relationships"])
+        self._load_relationships_data()
+
         if not self.instance.pk:
             return
 
-        relationships_by_character_uuid = {}
-
-        # Use prefetched reverse relations from backend_get (avoids extra DB queries)
-        for relationship in self.instance.source.all():
-            # Direct relationship: current character is source, target is prefetched
-            other_char = relationship.target
-            if other_char.uuid not in relationships_by_character_uuid:
-                relationships_by_character_uuid[other_char.uuid] = {"char": other_char}
-            relationships_by_character_uuid[other_char.uuid]["direct"] = relationship.text
-
-        for relationship in self.instance.target.all():
-            # Inverse relationship: current character is target, source is prefetched
-            other_char = relationship.source
-            if other_char.uuid not in relationships_by_character_uuid:
-                relationships_by_character_uuid[other_char.uuid] = {"char": other_char}
-            relationships_by_character_uuid[other_char.uuid]["inverse"] = relationship.text
-
         sorted_relationships = sorted(
-            relationships_by_character_uuid.items(),
+            self.params["relationships"].items(),
             key=lambda character_entry: len(character_entry[1].get("direct", ""))
             + len(character_entry[1].get("inverse", "")),
             reverse=True,
