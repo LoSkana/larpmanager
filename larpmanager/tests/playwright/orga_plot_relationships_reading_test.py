@@ -314,7 +314,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     # check
     page.locator('[id="u1"]').locator(".fa-edit").click()
     page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show")
-    expect_normalized(page, page.locator("#id_pl_2_tr"), "gaga ffff")
+    expect_normalized(page, page.locator("#id_pl_2_tr"), "gaga <p>ffff</p> ffff")
     submit_confirm(page)
 
     page.locator("#one").get_by_role("link", name="Plots").click()

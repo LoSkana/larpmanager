@@ -81,7 +81,7 @@ function flashSaved($row) {
             const url = uuid ? saveUuidUrl.replace('OPTUUID', uuid) : saveUrl;
             clearErrors($row);
 
-            $.post(url, data)
+            $.ajax({ url: url, type: 'POST', data: data, traditional: true })
                 .done(function(response) {
                     if (response.success) {
                         $row.attr('data-uuid', response.option.uuid);
