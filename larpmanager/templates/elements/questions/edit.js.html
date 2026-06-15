@@ -29,7 +29,10 @@ window.addEventListener('DOMContentLoaded', function() {
     // Exposed globally: the inline options editor uses it when the question is new.
     window.lmEnsureQuestionSaved = function(callback) {
         const $mainForm = $('#main_form');
+        const $optionInputs = $('#inline-options').find('input, textarea, select');
+        $optionInputs.prop('disabled', true);
         const formData = new FormData($mainForm[0]);
+        $optionInputs.prop('disabled', false);
 
         makeAjaxRequest({
             url: window.location.pathname,
@@ -127,6 +130,11 @@ window.addEventListener('DOMContentLoaded', function() {
     $(document).ready(function() {
         // Move options section before submit button
         $('#options').insertBefore('#form_submit');
+
+        // Prevent inline-option inputs from being submitted with the question form
+        $('#main_form').on('submit', function() {
+            $('#inline-options').find('input, textarea, select').prop('disabled', true);
+        });
 
         // Initialize visibility toggle
         setTimeout(toggleOptions, 10);
