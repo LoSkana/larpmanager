@@ -8641,6 +8641,10 @@ msgstr "Den engelske originalteksten slik den vises i koden (msgid i gettext)"
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Dette er de arrangementspåmeldingene som du må betale for"
 
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr ""
+"Denne rabattkoden er allerede brukt i ett eller flere av de valgte kjøpene"
+
 msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
 "Dette trekkes automatisk fra ved påmelding til et fremtidig arrangement"
