@@ -1065,6 +1065,8 @@ class OrgaWritingOptionForm(BaseModelForm):
 
         if "wri_que_max" not in self.params["features"]:
             self.delete_field("max_available")
+        elif "max_available" in self.fields:
+            self.fields["max_available"].required = False
 
         if "wri_que_tickets" not in self.params["features"]:
             self.delete_field("tickets")
@@ -1075,6 +1077,11 @@ class OrgaWritingOptionForm(BaseModelForm):
             self.delete_field("requirements")
         else:
             self.configure_field_event("requirements", self.params["event"])
+
+    def clean_max_available(self) -> int:
+        """Treat blank max_available as 0."""
+        value = self.cleaned_data.get("max_available")
+        return value if value is not None else 0
 
     def save(self, commit: bool = True) -> WritingOption:  # noqa: FBT001, FBT002
         """Save the form instance, setting question for new instances."""

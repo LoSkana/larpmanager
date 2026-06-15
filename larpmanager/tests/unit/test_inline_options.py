@@ -107,6 +107,20 @@ class TestInlineOptionsEndpoints(BaseTestCase):
         assert payload["success"] is False
         assert "name" in payload["errors"]
 
+    def test_inline_save_blank_price_and_max_treated_as_zero(self) -> None:
+        question = self._question()
+
+        response = self._call(
+            options_inline_save,
+            {"question_uuid": str(question.uuid), "name": "Tenda", "price": "", "max_available": ""},
+        )
+
+        payload = json.loads(response.content)
+        assert payload["success"] is True, payload
+        option = RegistrationOption.objects.get(uuid=payload["option"]["uuid"])
+        assert option.price == 0
+        assert option.max_available == 0
+
     def test_inline_reorder(self) -> None:
         question = self._question()
         first = RegistrationOption.objects.create(event=self.get_event(), question=question, name="A", price=0, order=1)

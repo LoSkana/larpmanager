@@ -92,7 +92,6 @@ def sign_up_pay(page: Any, live_server: Any) -> None:
     iframe = new_option(page)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("ff")
-    iframe.locator("#id_description").click()
     iframe.locator("#id_price").click()
     iframe.locator("#id_price").fill("20")
     submit_option(page, iframe)
