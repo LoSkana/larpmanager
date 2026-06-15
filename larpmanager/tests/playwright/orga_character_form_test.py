@@ -338,7 +338,7 @@ def add_field_restricted(page: Any) -> None:
     page.locator("#options-iframe").content_frame.locator(".fa-arrow-up").click()
     page.locator("#options-iframe").content_frame.locator('[id="u7"]').locator(".fa-edit").click()
     just_wait(page, big=True)
-    iframe = page.locator("#uglipop_popbox iframe").content_frame
+    iframe = page.locator("#lm-modal iframe").content_frame
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("w")
     iframe.locator("#id_name").press("Home")

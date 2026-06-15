@@ -3793,9 +3793,6 @@ msgstr "Herstel voltooid!"
 msgid "Review all members"
 msgstr "Alle leden beoordelen"
 
-msgid "Saved successfully"
-msgstr "Opgeslagen"
-
 msgid "Set up quest types"
 msgstr "Zoektochttypes instellen"
 

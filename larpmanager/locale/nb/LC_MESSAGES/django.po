@@ -3793,9 +3793,6 @@ msgstr "Gjenoppretting fullført!"
 msgid "Review all members"
 msgstr "Gjennomgå alle medlemmer"
 
-msgid "Saved successfully"
-msgstr "Lagret vellykket"
-
 msgid "Set up quest types"
 msgstr "Sett opp oppdragstyper"
 

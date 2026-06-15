@@ -34,10 +34,7 @@ window.addEventListener('DOMContentLoaded', function() {
      * Close the modal and reload the dashboard
      */
     function closeDashboardModal() {
-        const overlay = document.getElementById('uglipop_overlay');
-        if (overlay) {
-            overlay.click();
-        }
+        window.closeLmModal();
     }
 
     /**
@@ -72,13 +69,13 @@ window.addEventListener('DOMContentLoaded', function() {
 
         switch(e.data.type) {
             case 'dashboard_form_saved':
-                // Form was saved successfully
-                closeDashboardModal();
-
-                // Reload dashboard after a short delay to show success message
-                setTimeout(function() {
-                    reloadDashboard();
-                }, 300);
+                // Only handle if a popup_dashboard iframe is open (not v20 popup_option popups)
+                if (document.querySelector('#lm-modal.popup_dashboard iframe')) {
+                    closeDashboardModal();
+                    setTimeout(function() {
+                        reloadDashboard();
+                    }, 300);
+                }
                 break;
 
             case 'dashboard_form_cancelled':
@@ -86,10 +83,6 @@ window.addEventListener('DOMContentLoaded', function() {
                 closeDashboardModal();
                 break;
 
-            case 'iframe_resize':
-                // Resize iframe based on content
-                // Note: We rely on uglipop's default handling for this
-                break;
         }
     });
 

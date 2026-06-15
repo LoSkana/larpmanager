@@ -3793,9 +3793,6 @@ msgstr "Obnova dokončena!"
 msgid "Review all members"
 msgstr "Přezkoumání všech členů"
 
-msgid "Saved successfully"
-msgstr "Úspěšně uloženo"
-
 msgid "Set up quest types"
 msgstr "Nastavení typů úkolů"
 

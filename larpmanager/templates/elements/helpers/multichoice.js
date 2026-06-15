@@ -44,7 +44,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 for (let index in res) {
                     html += "{1}<br /><br />".format(res[index][0], res[index][1]);
                 }
-                uglipop({class:'popup_small', source:'html', content: html});
+                window.openLmModal(html, 'popup_small');
             });
 
             return false;

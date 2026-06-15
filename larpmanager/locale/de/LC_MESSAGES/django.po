@@ -3793,9 +3793,6 @@ msgstr "Wiederherstellung abgeschlossen!"
 msgid "Review all members"
 msgstr "Überprüfung aller Mitglieder"
 
-msgid "Saved successfully"
-msgstr "Erfolgreich gespeichert"
-
 msgid "Set up quest types"
 msgstr "Questtypen einrichten"
 

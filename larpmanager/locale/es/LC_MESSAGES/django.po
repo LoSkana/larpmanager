@@ -3793,9 +3793,6 @@ msgstr "Restauración completada."
 msgid "Review all members"
 msgstr "Revisar a todos los miembros"
 
-msgid "Saved successfully"
-msgstr "Guardado correctamente"
-
 msgid "Set up quest types"
 msgstr "Establecer tipos de búsqueda"
 

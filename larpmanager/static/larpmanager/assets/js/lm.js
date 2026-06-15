@@ -37,8 +37,34 @@ window.jump_to = function(target) {
     }, 0);
 }
 
+// ========== Dialog Modal System ==========
+
+window.openLmModal = function(content, cssClass) {
+    const dialog = document.getElementById('lm-modal');
+    dialog.className = cssClass || 'popup';
+    document.getElementById('lm-modal-content').innerHTML = content;
+    dialog.showModal();
+};
+
+window.closeLmModal = function() {
+    const dialog = document.getElementById('lm-modal');
+    if (dialog && dialog.open) dialog.close();
+};
+
+(function() {
+    const dialog = document.getElementById('lm-modal');
+    if (!dialog) return;
+    dialog.addEventListener('click', function(e) {
+        const rect = dialog.getBoundingClientRect();
+        if (e.clientX < rect.left || e.clientX > rect.right ||
+            e.clientY < rect.top || e.clientY > rect.bottom) {
+            window.closeLmModal();
+        }
+    });
+})();
+
 /**
- * Open an uglipop modal with an iframe and a close button
+ * Open a dialog modal with an iframe and a close button
  * @param {string} iframeUrl - The URL to load in the iframe
  * @param {string} modalClass - CSS class for the modal (default: 'popup_option')
  * @param {function} onClose - Optional callback function to call when modal is closed
@@ -48,25 +74,45 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
 
     const frame = `
         <div class="frame-container">
-            <button class="modal-close-btn">
-                &times;
-            </button>
-            <iframe src="${iframeUrl}" width="100%" style="border: none; height: 400px;"></iframe>
+            <button class="modal-close-btn">&times;</button>
+            <div class="frame-loading"></div>
+            <iframe src="${iframeUrl}" width="100%" style="border: none; height: 0; visibility: hidden;"></iframe>
         </div>
     `;
 
-    uglipop({
-        class: modalClass,
-        source: 'html',
-        content: frame
+    window.openLmModal(frame, modalClass);
+
+    const dialog = document.getElementById('lm-modal');
+    const iframe = dialog.querySelector('iframe');
+    let revealed = false;
+
+    function revealIframe(height) {
+        if (revealed) return;
+        revealed = true;
+        iframe.style.height = height + 'px';
+        iframe.style.visibility = 'visible';
+        const loading = dialog.querySelector('.frame-loading');
+        if (loading) loading.style.display = 'none';
+    }
+
+    iframe.addEventListener('load', function() {
+        if (revealed) return;
+        try {
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            const height = Math.max(doc.body.scrollHeight || 0, doc.documentElement.scrollHeight || 0) || 400;
+            revealIframe(height);
+        } catch (err) {
+            revealIframe(400);
+        }
     });
 
-    // Auto-resize: update iframe height when the modal's own iframe sends its size
     function onIframeMessage(e) {
+        if (!e.data || !e.source || e.source !== iframe.contentWindow) return;
 
-        if (e.data && e.data.type === 'iframe_resize') {
-            const iframe = document.querySelector('.' + modalClass + ' iframe');
-            if (iframe && e.data.height && e.source === iframe.contentWindow) {
+        if (e.data.type === 'iframe_resize') {
+            if (!revealed) {
+                revealIframe(e.data.height);
+            } else {
                 const newHeight = e.data.height;
                 const currentHeight = parseFloat(iframe.style.height) || 0;
                 if (newHeight > currentHeight) {
@@ -74,37 +120,23 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
                 }
             }
         }
+
+        if (e.data.type === 'dashboard_form_saved') {
+            window.closeLmModal();
+            if (typeof onClose === 'function') setTimeout(onClose, 300);
+        }
     }
     window.addEventListener('message', onIframeMessage);
 
-    // Attach click handler to close button after modal is opened
-    setTimeout(function() {
-        $('.modal-close-btn').on('click', function(e) {
-            e.preventDefault();
-            window.removeEventListener('message', onIframeMessage);
+    dialog.querySelector('.modal-close-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.closeLmModal();
+        if (typeof onClose === 'function') onClose();
+    });
 
-            // Close the popup by clicking overlay
-            const overlay = document.getElementById('uglipop_overlay');
-            if (overlay) {
-                overlay.click();
-            }
-
-            // Call optional callback
-            if (onClose && typeof onClose === 'function') {
-                onClose();
-            }
-
-            return false;
-        });
-
-        // Clean up listener when overlay is clicked directly
-        const overlay = document.getElementById('uglipop_overlay');
-        if (overlay) {
-            overlay.addEventListener('click', function() {
-                window.removeEventListener('message', onIframeMessage);
-            }, { once: true });
-        }
-    }, 100);
+    dialog.addEventListener('close', function() {
+        window.removeEventListener('message', onIframeMessage);
+    }, { once: true });
 }
 
 function sidebar_mobile() {
@@ -210,7 +242,7 @@ $(document).ready(function() {
         request.done(function(data) {
             if (data["res"] != 'ok') return;
 
-            uglipop({class:'popup', source:'html', content: data['txt']});
+            window.openLmModal(data['txt'], 'popup');
 
         });
 
@@ -363,11 +395,9 @@ $(document).ready(function() {
 
         el = $('#' + num).find('.popup_text.' + tp).first();
 
-        uglipop({class:'popup', //styling class for Modal
-            source:'html',
-            content: el.html()});
+        window.openLmModal(el.html(), 'popup');
 
-        $('.popup').scrollTop( 0 );
+        $('#lm-modal').scrollTop( 0 );
 
         reload_has_char();
 
@@ -438,7 +468,37 @@ function replaceNewUrl() {
         let currentUrl = window.location.href;
         let cleanedUrl = currentUrl.split('#')[0];
         let newUrl = cleanedUrl + 'new/';
-        window.location.href = newUrl;
+        if ($('body').hasClass('new_v21')) {
+            openIframeModal(newUrl + '?frame=1', 'popup_option', refreshDatatables);
+        } else {
+            window.location.href = newUrl;
+        }
+    });
+
+    if ($('body').hasClass('new_v21')) {
+        $(document).on('click', 'table.go_datatable a:has(i.fa-edit)', function(e) {
+            e.preventDefault();
+            openIframeModal(this.href + '?frame=1', 'popup_option', refreshDatatables);
+            return false;
+        });
+    }
+}
+
+function refreshDatatables() {
+    $.get(window.location.href, function(html) {
+        const $newDoc = $($.parseHTML(html));
+        $('table.go_datatable').each(function() {
+            const tableId = $(this).attr('id');
+            if (tableId && window.datatables && window.datatables[tableId]) {
+                window.datatables[tableId].destroy();
+                delete window.datatables[tableId];
+            }
+            const $newTable = $newDoc.find('#' + tableId);
+            if ($newTable.length) {
+                $(this).find('tbody').html($newTable.find('tbody').html());
+            }
+        });
+        data_tables();
     });
 }
 
@@ -776,12 +836,12 @@ function post_popup() {
 
             if (res.k == 0) return;
 
-            uglipop({class:'popup', source:'html', content: res.v});
+            window.openLmModal(res.v, 'popup');
 
 			reload_has_char();
 
-            $('.popup').scrollTop( 0 );
-            $(".popup .hide").hide();
+            $('#lm-modal').scrollTop( 0 );
+            $('#lm-modal .hide').hide();
         });
 
         request.fail(function(res) {

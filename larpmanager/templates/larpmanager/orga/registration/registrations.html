@@ -483,10 +483,10 @@ window.addEventListener('DOMContentLoaded', function() {
                     if (res.k == 0) return;
                     stop_spinner();
 
-                    uglipop({class:'popup', source:'html', content: res.v});
+                    window.openLmModal(res.v, 'popup');
 
-                    $('.popup').scrollTop( 0 );
-                    $(".popup .hide").hide();
+                    $('#lm-modal').scrollTop( 0 );
+                    $('#lm-modal .hide').hide();
                 });
 
                 return false;

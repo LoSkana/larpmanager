@@ -153,7 +153,7 @@ def verify_reg_editor_popup(page: Any, live_server: Any) -> None:
     eye_icon.wait_for(state="visible", timeout=10000)
     eye_icon.click()
     # Popup shows full content
-    popup = page.locator("#uglipop_popbox")
+    popup = page.locator("#lm-modal")
     popup.wait_for(state="visible", timeout=10000)
     expect(popup).to_contain_text(LONG_TEXT_REG_EDITOR[:80])
 
@@ -188,7 +188,7 @@ def verify_reg_paragraph_popup(page: Any, live_server: Any) -> None:
     eye_icon.wait_for(state="visible", timeout=10000)
     eye_icon.click()
     # Popup shows full content
-    popup = page.locator("#uglipop_popbox")
+    popup = page.locator("#lm-modal")
     popup.wait_for(state="visible", timeout=10000)
     expect(popup).to_contain_text(LONG_TEXT_REG_PARA[:80])
 
@@ -227,7 +227,7 @@ def verify_char_editor_popup(page: Any, live_server: Any) -> None:
     eye_icon.wait_for(state="visible", timeout=10000)
     eye_icon.click()
     # Popup shows full content
-    popup = page.locator("#uglipop_popbox")
+    popup = page.locator("#lm-modal")
     popup.wait_for(state="visible", timeout=10000)
     expect(popup).to_contain_text(LONG_TEXT_CHAR_EDITOR[:80])
 
@@ -265,6 +265,6 @@ def verify_char_paragraph_popup(page: Any, live_server: Any) -> None:
     eye_icon.wait_for(state="visible", timeout=10000)
     eye_icon.click()
     # Popup shows full content
-    popup = page.locator("#uglipop_popbox")
+    popup = page.locator("#lm-modal")
     popup.wait_for(state="visible", timeout=10000)
     expect(popup).to_contain_text(LONG_TEXT_CHAR_PARA[:80])

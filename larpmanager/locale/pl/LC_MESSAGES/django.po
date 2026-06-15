@@ -3793,9 +3793,6 @@ msgstr "Przywracanie zakończone!"
 msgid "Review all members"
 msgstr "Przegląd wszystkich członków"
 
-msgid "Saved successfully"
-msgstr "Zapisane pomyślnie"
-
 msgid "Set up quest types"
 msgstr "Konfigurowanie typów zadań"
 

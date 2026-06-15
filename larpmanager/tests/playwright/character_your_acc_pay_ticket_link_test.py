@@ -192,7 +192,7 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     # Checkout member data
     page.locator(".fa-eye").click()
     just_wait(page)
-    expect_normalized(page, page.locator("#uglipop_content_fixed"), "Admin Test Email: orga@test.it")
+    expect_normalized(page, page.locator("#lm-modal-content"), "Admin Test Email: orga@test.it")
 
 
     # Go to your character, check result

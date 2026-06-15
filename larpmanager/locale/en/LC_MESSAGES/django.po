@@ -5182,12 +5182,6 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
-msgid "Saved successfully"
-msgstr ""
-
-msgid "Closing"
-msgstr ""
-
 msgid "What would you like to do?"
 msgstr ""
 
@@ -5457,6 +5451,9 @@ msgid "The tax code matches"
 msgstr ""
 
 msgid "Option saved successfully"
+msgstr ""
+
+msgid "Closing"
 msgstr ""
 
 msgid "An error occurred while reordering"

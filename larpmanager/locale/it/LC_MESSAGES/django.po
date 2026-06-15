@@ -3793,9 +3793,6 @@ msgstr "Ripristino completato!"
 msgid "Review all members"
 msgstr "Esamina tutti i membri"
 
-msgid "Saved successfully"
-msgstr "Salvato con successo"
-
 msgid "Set up quest types"
 msgstr "Imposta i tipi di missione"
 

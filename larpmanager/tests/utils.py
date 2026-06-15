@@ -385,7 +385,7 @@ def just_wait(page, big=False):
 def new_option(page):
     page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
     just_wait(page, big=True)
-    return page.locator("#uglipop_popbox iframe").content_frame
+    return page.locator("#lm-modal iframe").content_frame
 
 def submit_option(page, iframe):
     iframe.get_by_role("button", name="Confirm").click()

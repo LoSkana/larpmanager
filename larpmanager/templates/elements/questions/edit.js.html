@@ -141,11 +141,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // Close option modal popup
     function closeOptionModal() {
-        // Simulate click on overlay to close uglipop properly
-        const overlay = document.getElementById('uglipop_overlay');
-        if (overlay) {
-            overlay.click();
-        }
+        window.closeLmModal();
     }
 
     // Open option modal with form in iframe

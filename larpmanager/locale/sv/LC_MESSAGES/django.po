@@ -3793,9 +3793,6 @@ msgstr "Återställning slutförd!"
 msgid "Review all members"
 msgstr "Granska alla medlemmar"
 
-msgid "Saved successfully"
-msgstr "Sparades framgångsrikt"
-
 msgid "Set up quest types"
 msgstr "Ange typer av uppdrag"
 
