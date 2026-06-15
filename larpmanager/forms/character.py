@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import contextlib
+import html
 import re
 from datetime import UTC, datetime
 from typing import Any, ClassVar
@@ -445,12 +446,12 @@ class OrgaCharacterForm(CharacterForm):
         if not self.instance.pk:
             return
         rel_by_uuid: dict[str, dict] = {}
-        for relationship in self.instance.source.all():
+        for relationship in self.instance.source.select_related("target").all():
             other_char = relationship.target
             if other_char.uuid not in rel_by_uuid:
                 rel_by_uuid[other_char.uuid] = {"char": other_char}
             rel_by_uuid[other_char.uuid]["direct"] = relationship.text
-        for relationship in self.instance.target.all():
+        for relationship in self.instance.target.select_related("source").all():
             other_char = relationship.source
             if other_char.uuid not in rel_by_uuid:
                 rel_by_uuid[other_char.uuid] = {"char": other_char}
@@ -760,8 +761,16 @@ class OrgaCharacterForm(CharacterForm):
 
             character_id = uuid_to_id[ch_uuid]
 
-            # if value is empty
-            if not value:
+            # Strip surrounding whitespace from template indentation (e.g. when TinyMCE
+            # initializes on a hidden textarea and does not normalize the surrounding newlines)
+            clean_value = value.strip()
+
+            # Decode HTML entities (e.g. &nbsp; → \xa0) so that TinyMCE's empty-field
+            # placeholder <p>&nbsp;</p> is correctly detected as whitespace-only.
+            plain_text = html.unescape(strip_tags(clean_value)).strip()
+
+            # if value is empty or contains only HTML whitespace (e.g. <p></p>, <p>&nbsp;</p>)
+            if not clean_value or not plain_text:
                 # if wasn't present, do nothing
                 if ch_uuid not in self.params["relationships"] or rel_type not in self.params["relationships"][ch_uuid]:
                     continue
@@ -775,13 +784,11 @@ class OrgaCharacterForm(CharacterForm):
             if (
                 ch_uuid in self.params["relationships"]
                 and rel_type in self.params["relationships"][ch_uuid]
-                and value == self.params["relationships"][ch_uuid][rel_type]
+                and clean_value == self.params["relationships"][ch_uuid][rel_type]
             ):
                 continue
 
             # Check text length against configuration using centralized value
-            # Use strip_tags to get plain text length from HTML content
-            plain_text = strip_tags(value)
             if len(plain_text) > self.relationship_max_length:
                 msg = f"Relationship text for character {ch_uuid} exceeds maximum length of {self.relationship_max_length} characters. Current length: {len(plain_text)}"
                 raise ValidationError(
@@ -789,7 +796,9 @@ class OrgaCharacterForm(CharacterForm):
                 )
 
             rel = self._get_rel(character_id, instance, rel_type)
-            rel.text = value
+            rel.text = clean_value
+            rel.auto = False
+            save_version(rel, TextVersionChoices.RELATIONSHIP, self.params["member"])
             rel.save()
 
     @staticmethod
