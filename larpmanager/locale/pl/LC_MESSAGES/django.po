@@ -1652,6 +1652,9 @@ msgstr "Księgowość"
 msgid "Activation"
 msgstr "Aktywacja"
 
+msgid "Add option"
+msgstr "Dodaj opcję"
+
 msgid "Additional"
 msgstr "Dodatkowe"
 
@@ -3294,6 +3297,9 @@ msgstr "Niech wygra najlepszy"
 
 msgid "Member approved!"
 msgstr "Członek zatwierdzony!"
+
+msgid "Missing question"
+msgstr "Brakujące pytanie"
 
 msgid "Multiple systems"
 msgstr "Wiele systemów"

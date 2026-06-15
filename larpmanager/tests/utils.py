@@ -350,6 +350,19 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
     # testo elemento principale
     raw_parts.append(locator.inner_text() or "")
 
+    # valori dei campi (l'editor inline mostra i dati dentro input/textarea/select)
+    try:
+        field_values = locator.evaluate(
+            """(el) => Array.from(el.querySelectorAll('input, textarea, select'))
+                .map(f => f.tagName === 'SELECT'
+                    ? Array.from(f.selectedOptions).map(o => o.text).join(' ')
+                    : f.value)
+                .join(' ')"""
+        )
+        raw_parts.append(field_values or "")
+    except:
+        pass
+
     # iframe discendenti (same-origin)
     iframes = locator.locator("iframe")
     count = iframes.count()
@@ -382,13 +395,77 @@ def just_wait(page, big=False):
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
 
-def new_option(page):
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page, big=True)
-    return page.locator("#uglipop_popbox iframe").content_frame
+class InlineOptionRow:
+    """Compatibility wrapper for the inline options editor.
 
-def submit_option(page, iframe):
-    iframe.get_by_role("button", name="Confirm").click()
+    Exposes the same selector API (#id_name, #id_price, ...) that tests used
+    with the old modal-iframe flow, mapping it onto one row of the inline
+    editor. Fields living in the expandable details row are reached by
+    expanding it on demand.
+    """
+
+    PRIMARY_FIELDS = {
+        "#id_name": "input[name=name]",
+        "#id_price": "input[name=price]",
+        "#id_max_available": "input[name=max_available]",
+    }
+    DETAILS_FIELDS = {
+        "#id_description": "textarea[name=description]",
+    }
+
+    def __init__(self, page, row):
+        self.page = page
+        self.row = row
+        self.details = row.locator("xpath=following-sibling::tr[1]")
+
+    def _ensure_details(self):
+        if "hide" in (self.details.get_attribute("class") or ""):
+            self.row.locator(".io-toggle-details").click()
+            self.page.wait_for_timeout(200)
+
+    def locator(self, selector):
+        if selector in self.PRIMARY_FIELDS:
+            return self.row.locator(self.PRIMARY_FIELDS[selector])
+        # The select2 dropdown is portaled to the page body
+        if "select2-results" in selector or "select2-dropdown" in selector:
+            return self.page.locator(selector)
+        self._ensure_details()
+        if selector in self.DETAILS_FIELDS:
+            return self.details.locator(self.DETAILS_FIELDS[selector])
+        return self.details.locator(selector)
+
+    def get_by_role(self, role, *args, **kwargs):
+        # The select2 dropdown is portaled to the page body
+        if role == "option":
+            return self.page.get_by_role(role, *args, **kwargs)
+        self._ensure_details()
+        return self.details.get_by_role(role, *args, **kwargs)
+
+    def searchbox(self, field):
+        """Return the select2 search field of an M2M column (requirements / tickets)."""
+        self._ensure_details()
+        container = self.details.locator(
+            f"select[name={field}] ~ .select2"
+        )
+        return container.get_by_role("searchbox")
+
+
+def new_option(page):
+    page.locator("#inline-options .add-inline-option").click()
+    just_wait(page)
+    row = page.locator("#inline-options-body tr.inline-option").last
+    return InlineOptionRow(page, row)
+
+def get_option(page, uuid):
+    """Return the inline editor row for an existing option."""
+    row = page.locator(f'#inline-options-body tr.inline-option[data-uuid="{uuid}"]')
+    return InlineOptionRow(page, row)
+
+def submit_option(page, option):
+    # The inline editor autosaves: blur the fields and wait for the row
+    # to receive its uuid (i.e. for the server to confirm the save)
+    page.keyboard.press("Tab")
+    expect(option.row).to_have_attribute("data-uuid", re.compile(".+"), timeout=10000)
     just_wait(page)
 
 

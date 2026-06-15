@@ -1652,6 +1652,9 @@ msgstr "Comptabilité"
 msgid "Activation"
 msgstr "Activation"
 
+msgid "Add option"
+msgstr "Ajouter une option"
+
 msgid "Additional"
 msgstr "Supplémentaire"
 
@@ -3294,6 +3297,9 @@ msgstr "Que le meilleur gagne"
 
 msgid "Member approved!"
 msgstr "Approuvé par les membres !"
+
+msgid "Missing question"
+msgstr "Question manquante"
 
 msgid "Multiple systems"
 msgstr "Systèmes multiples"
