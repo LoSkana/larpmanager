@@ -3512,6 +3512,9 @@ msgid ""
 "it can be used by already registered participants."
 msgstr ""
 
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr ""
+
 msgid "Open"
 msgstr ""
 

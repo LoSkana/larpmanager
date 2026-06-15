@@ -21,6 +21,7 @@
 from decimal import Decimal
 from typing import Any, ClassVar
 
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models, transaction
 from django.db.models import Q
@@ -662,6 +663,17 @@ class Discount(UuidMixin, BaseModel):
     def show_event(self) -> str:
         """Return comma-separated list of all associated runs."""
         return ", ".join([str(c) for c in self.runs.all()])
+
+    def clean(self) -> None:
+        """Check uniqueness of discount code across runs."""
+        if self.pk:
+            conflict = (
+                Discount.objects.filter(cod=self.cod, runs__in=self.runs.all()).exclude(pk=self.pk).distinct().exists()
+            )
+            if conflict:
+                raise ValidationError(
+                    {"cod": _("This discount code is already used in one or more of the selected runs")}
+                )
 
 
 class AccountingItemDiscount(AccountingItem):

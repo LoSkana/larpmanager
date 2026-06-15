@@ -8631,6 +8631,10 @@ msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Detta är de evenemangsregistreringar för vilka du måste göra en betalning"
 
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr ""
+"Denna rabattkod har redan använts i en eller flera av de valda omgångarna"
+
 msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
 "Detta dras automatiskt av från registreringen av ett framtida evenemang"

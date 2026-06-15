@@ -8679,6 +8679,11 @@ msgstr ""
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Są to rejestracje wydarzeń, za które należy dokonać płatności"
 
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr ""
+"Ten kod rabatowy został już wykorzystany w co najmniej jednej z wybranych "
+"serii"
+
 msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
 "Jest ona automatycznie odliczana od kwoty rejestracji na przyszłe wydarzenie"
