@@ -20,7 +20,6 @@
 
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import make_password
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
@@ -63,12 +62,10 @@ class Command(BaseCommand):
         # Re-hash user passwords to consistent test password
         # and ensure all users are active for testing
         user_model = get_user_model()
-        users = list(user_model.objects.all())
-        hashed_password = make_password("banana")
-        for user in users:
-            user.password = hashed_password
+        for user in user_model.objects.all():
+            user.set_password("banana")
             user.is_active = True
-        user_model.objects.bulk_update(users, ["password", "is_active"])
+            user.save()
 
         # Add exe_events feature to all association skins
         # This enables event management functionality by default
