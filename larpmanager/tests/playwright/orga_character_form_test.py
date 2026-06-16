@@ -335,7 +335,7 @@ def add_field_restricted(page: Any) -> None:
     page.locator('[id="u8"]').locator(".fa-arrow-up").click()
     page.locator('[id="u8"]').locator(".fa-edit").click()
 
-    page.locator("#inline-options .io-move-up").first.click()
+    page.locator("#inline-options .io-move-up").nth(1).click()
     just_wait(page)
     iframe = get_option(page, "u7")
     iframe.locator("#id_name").click()
