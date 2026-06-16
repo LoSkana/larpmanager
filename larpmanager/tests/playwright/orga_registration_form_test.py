@@ -350,10 +350,8 @@ def user_signup(live_server: Any, page: Any) -> None:
     expect(page.get_by_label("rescrited")).to_match_aria_snapshot(
         '- combobox "rescrited":\n  - option "all" [selected]\n  - option /only \\(\\d+€\\)/ [disabled]'
     )
-    expect(page.get_by_role("checkbox", name="few (30€)")).to_be_disabled()
-    page.get_by_role("checkbox", name="many (20€) - (Available 1)").check()
-    page.get_by_role("checkbox", name="many (20€) - (Available 1)").press("s")
-    page.get_by_role("checkbox", name="many (20€) - (Available 1)").press("d")
+    expect(page.get_by_role("checkbox", name="few (30€)")).not_to_be_checked()
+    page.get_by_role("checkbox", name="many (20€)").check()
     page.get_by_role("textbox", name="mandatory (*)").click()
     page.get_by_role("textbox", name="mandatory (*)").fill("aaaa")
     page.get_by_label("rescrited").click()
