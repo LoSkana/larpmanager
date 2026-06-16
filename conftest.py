@@ -114,9 +114,10 @@ def _make_iframe_aware(page: Page) -> None:
     Rather than rewriting every test, we look inside that iframe whenever a
     lookup on the main page comes up empty.
     """
+    original_locator = page.locator
 
     def iframe_scope() -> Any:
-        if page.locator("#lm-modal[open] iframe").count() > 0:
+        if original_locator("#lm-modal[open] iframe").count() > 0:
             return page.frame_locator("#lm-modal iframe")
         return None
 
