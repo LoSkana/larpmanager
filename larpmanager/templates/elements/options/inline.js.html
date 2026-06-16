@@ -69,7 +69,22 @@ function flashSaved($row) {
             return data;
         }
 
+        // Per-row save state: a row can only have one save in flight at a time.
+        // While a "create" request is pending (no uuid yet), further save
+        // triggers must not fire another create - they're queued and re-run
+        // once the current request resolves, by which point data-uuid is set
+        // and the retry correctly becomes an update instead of a duplicate create.
+        const saveState = new WeakMap();
+
         function saveRow($row) {
+            const row = $row[0];
+            const state = saveState.get(row) || { inFlight: false, pending: false };
+            if (state.inFlight) {
+                state.pending = true;
+                saveState.set(row, state);
+                return;
+            }
+
             // The name is the only required field: skip empty new rows
             const name = $row.find('input[name=name]').val().trim();
             const uuid = rowUuid($row);
@@ -80,6 +95,9 @@ function flashSaved($row) {
 
             const url = uuid ? saveUuidUrl.replace('OPTUUID', uuid) : saveUrl;
             clearErrors($row);
+
+            state.inFlight = true;
+            saveState.set(row, state);
 
             $.ajax({ url: url, type: 'POST', data: data, traditional: true })
                 .done(function(response) {
@@ -94,6 +112,13 @@ function flashSaved($row) {
                         showErrors($row, errors);
                     } else if (!window.lmTesting) {
                         alert('{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}');
+                    }
+                })
+                .always(function() {
+                    state.inFlight = false;
+                    if (state.pending) {
+                        state.pending = false;
+                        saveRow($row);
                     }
                 });
         }
