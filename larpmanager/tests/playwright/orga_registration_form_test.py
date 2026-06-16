@@ -321,6 +321,21 @@ def orga_check(live_server: Any, page: Any) -> None:
     expect(page.locator("#id_que_u7")).to_have_value("dsadsadsa")
     expect(page.locator("#id_que_u8")).to_have_value("asdsadsa")
 
+    # orga removes a multiple choice selection
+    page.get_by_role("checkbox", name="many (20€)").uncheck()
+    submit_confirm(page)
+    page.locator(".fa-edit").click()
+    expect(page.get_by_role("checkbox", name="many (20€)")).not_to_be_checked()
+    expect(page.get_by_role("checkbox", name="few (30€)")).to_be_checked()
+
+    # orga removes all multiple choice selections
+    page.get_by_role("checkbox", name="few (30€)").uncheck()
+    submit_confirm(page)
+    page.locator(".fa-edit").click()
+    expect(page.get_by_role("checkbox", name="all (10€)")).not_to_be_checked()
+    expect(page.get_by_role("checkbox", name="many (20€)")).not_to_be_checked()
+    expect(page.get_by_role("checkbox", name="few (30€)")).not_to_be_checked()
+
 
 def user_signup(live_server: Any, page: Any) -> None:
     # signup as user
@@ -347,3 +362,14 @@ def user_signup(live_server: Any, page: Any) -> None:
     page.get_by_role("button", name="Continue").click()
     expect_normalized(page, page.locator("#riepilogo"), "40€")
     submit_confirm(page)
+
+    # user removes all multiple choice selections
+    go_to(page, live_server, "/test/register/")
+    expect(page.get_by_role("checkbox", name="many (20€)")).to_be_checked()
+    page.get_by_role("checkbox", name="many (20€)").uncheck()
+    page.get_by_role("button", name="Continue").click()
+    submit_confirm(page)
+    go_to(page, live_server, "/test/register/")
+    expect(page.get_by_role("checkbox", name="all (10€)")).not_to_be_checked()
+    expect(page.get_by_role("checkbox", name="many (20€)")).not_to_be_checked()
+    expect(page.get_by_role("checkbox", name="few (30€)")).not_to_be_checked()
