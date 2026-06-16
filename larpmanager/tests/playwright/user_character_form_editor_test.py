@@ -138,8 +138,8 @@ def field_multiple(page: Any, live_server: Any) -> None:
     iframe.locator("#id_name").fill("14")
     iframe.locator("#id_max_available").click()
     iframe.locator("#id_max_available").fill("3")
-    iframe.get_by_role("row", name="Prerequisites").get_by_role("searchbox").fill("ww")
-    iframe.get_by_role("option", name="Test Larp - single wwww").click()
+    iframe.searchbox("requirements").fill("ww")
+    iframe.get_by_role("option", name="single - wwww").click()
     submit_option(page, iframe)
 
     submit_confirm(page)
@@ -200,8 +200,8 @@ def field_single_req(page: Any, live_server: Any) -> None:
 
     iframe = new_option(page)
     iframe.locator("#id_name").fill("dep_b")
-    iframe.get_by_role("row", name="Prerequisites").get_by_role("searchbox").fill("ww")
-    iframe.get_by_role("option", name="Test Larp - single wwww").click()
+    iframe.searchbox("requirements").fill("ww")
+    iframe.get_by_role("option", name="single - wwww").click()
     submit_option(page, iframe)
 
     submit_confirm(page)

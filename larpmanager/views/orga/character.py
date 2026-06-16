@@ -68,6 +68,11 @@ from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import _process_working_ticket, backend_order
+from larpmanager.utils.edit.options_inline import (
+    options_inline_delete,
+    options_inline_reorder,
+    options_inline_save,
+)
 from larpmanager.utils.edit.orga import (
     OrgaAction,
     check_writing_form_type,
@@ -690,6 +695,34 @@ def orga_writing_options_delete(
 ) -> HttpResponse:
     """Delete writing option for an event."""
     return orga_delete(request, event_slug, OrgaAction.CHARACTER_FORM_OPTION, option_uuid)
+
+
+@login_required
+def orga_writing_options_inline_save(
+    request: HttpRequest,
+    event_slug: str,
+    writing_type: str,
+    option_uuid: str | None = None,
+) -> HttpResponse:
+    """Create or update a writing option from the inline editor (AJAX)."""
+    return options_inline_save(request, event_slug, "orga_character_form", option_uuid, writing_type=writing_type)
+
+
+@login_required
+def orga_writing_options_inline_reorder(request: HttpRequest, event_slug: str, writing_type: str) -> HttpResponse:
+    """Persist the full ordering of a question's options (AJAX)."""
+    return options_inline_reorder(request, event_slug, "orga_character_form", writing_type=writing_type)
+
+
+@login_required
+def orga_writing_options_inline_delete(
+    request: HttpRequest,
+    event_slug: str,
+    writing_type: str,
+    option_uuid: str,
+) -> HttpResponse:
+    """Delete a writing option from the inline editor (AJAX)."""
+    return options_inline_delete(request, event_slug, "orga_character_form", option_uuid, writing_type=writing_type)
 
 
 @login_required

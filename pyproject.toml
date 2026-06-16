@@ -105,7 +105,7 @@ dependencies = [
 include = ["larpmanager*", "main*"]
 
 [tool.djlint]
-ignore="H006"
+ignore="H006,T002"
 extend_exclude="static/,larpmanager/static/"
 
 [tool.ruff]

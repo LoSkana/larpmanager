@@ -281,6 +281,26 @@ urlpatterns = [
         name="orga_registration_options_delete",
     ),
     path(
+        "<slug:event_slug>/manage/options/inline/save/",
+        views_of.orga_registration_options_inline_save,
+        name="orga_registration_options_inline_save",
+    ),
+    path(
+        "<slug:event_slug>/manage/options/inline/<slug:option_uuid>/save/",
+        views_of.orga_registration_options_inline_save,
+        name="orga_registration_options_inline_save",
+    ),
+    path(
+        "<slug:event_slug>/manage/options/inline/reorder/",
+        views_of.orga_registration_options_inline_reorder,
+        name="orga_registration_options_inline_reorder",
+    ),
+    path(
+        "<slug:event_slug>/manage/options/inline/<slug:option_uuid>/delete/",
+        views_of.orga_registration_options_inline_delete,
+        name="orga_registration_options_inline_delete",
+    ),
+    path(
         "<slug:event_slug>/manage/quotas/",
         views_of.orga_registration_quotas,
         name="orga_registration_quotas",
@@ -584,6 +604,26 @@ urlpatterns = [
         "<slug:event_slug>/manage/writing/<slug:writing_type>/options/<slug:option_uuid>/delete/",
         views_oc.orga_writing_options_delete,
         name="orga_writing_options_delete",
+    ),
+    path(
+        "<slug:event_slug>/manage/writing/<slug:writing_type>/options/inline/save/",
+        views_oc.orga_writing_options_inline_save,
+        name="orga_writing_options_inline_save",
+    ),
+    path(
+        "<slug:event_slug>/manage/writing/<slug:writing_type>/options/inline/<slug:option_uuid>/save/",
+        views_oc.orga_writing_options_inline_save,
+        name="orga_writing_options_inline_save",
+    ),
+    path(
+        "<slug:event_slug>/manage/writing/<slug:writing_type>/options/inline/reorder/",
+        views_oc.orga_writing_options_inline_reorder,
+        name="orga_writing_options_inline_reorder",
+    ),
+    path(
+        "<slug:event_slug>/manage/writing/<slug:writing_type>/options/inline/<slug:option_uuid>/delete/",
+        views_oc.orga_writing_options_inline_delete,
+        name="orga_writing_options_inline_delete",
     ),
     path(
         "<slug:event_slug>/manage/writing/<slug:writing_type>/edit/",

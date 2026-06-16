@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import contextlib
+import html
 import re
 from datetime import UTC, datetime
 from typing import Any, ClassVar
@@ -424,13 +425,6 @@ class OrgaCharacterForm(CharacterForm):
         if "relationships" not in self.params.get("features"):
             return
 
-        # Skip if AJAX auto-save
-        if self.params.get("request") and self.params["request"].POST.get("ajax") == "1":
-            return
-
-        # Process character relationships for display and validation
-        self._characters_relationships()
-
         # Load relationship field max length from event configuration
         self.relationship_max_length = int(
             get_event_config(
@@ -438,11 +432,35 @@ class OrgaCharacterForm(CharacterForm):
             ),
         )
 
+        # For AJAX auto-save: skip widget setup but still load relationship data for saving
+        if self.params.get("request") and self.params["request"].POST.get("ajax") == "1":
+            self._load_relationships_data()
+            return
+
+        # Process character relationships for display and validation
+        self._characters_relationships()
+
+    def _load_relationships_data(self) -> None:
+        """Load relationship data from DB into params (needed for saving)."""
+        self.params["relationships"] = {}
+        if not self.instance.pk:
+            return
+        rel_by_uuid: dict[str, dict] = {}
+        for relationship in self.instance.source.select_related("target").all():
+            other_char = relationship.target
+            if other_char.uuid not in rel_by_uuid:
+                rel_by_uuid[other_char.uuid] = {"char": other_char}
+            rel_by_uuid[other_char.uuid]["direct"] = relationship.text
+        for relationship in self.instance.target.select_related("source").all():
+            other_char = relationship.source
+            if other_char.uuid not in rel_by_uuid:
+                rel_by_uuid[other_char.uuid] = {"char": other_char}
+            rel_by_uuid[other_char.uuid]["inverse"] = relationship.text
+        self.params["relationships"] = rel_by_uuid
+
     def _characters_relationships(self) -> None:
         """Set up character relationships data and widgets for editing."""
         context = self.params
-
-        context["relationships"] = {}
 
         cache_key = "feature_tutorial_relationships"
         rel_tutorial = cache.get(cache_key)
@@ -459,28 +477,14 @@ class OrgaCharacterForm(CharacterForm):
         widget.set_event(context["event"])
         context["new_rel"] = widget.render(name="new_rel_select", value="")
 
+        # Load relationship data from DB (also populates self.params["relationships"])
+        self._load_relationships_data()
+
         if not self.instance.pk:
             return
 
-        relationships_by_character_uuid = {}
-
-        # Use prefetched reverse relations from backend_get (avoids extra DB queries)
-        for relationship in self.instance.source.all():
-            # Direct relationship: current character is source, target is prefetched
-            other_char = relationship.target
-            if other_char.uuid not in relationships_by_character_uuid:
-                relationships_by_character_uuid[other_char.uuid] = {"char": other_char}
-            relationships_by_character_uuid[other_char.uuid]["direct"] = relationship.text
-
-        for relationship in self.instance.target.all():
-            # Inverse relationship: current character is target, source is prefetched
-            other_char = relationship.source
-            if other_char.uuid not in relationships_by_character_uuid:
-                relationships_by_character_uuid[other_char.uuid] = {"char": other_char}
-            relationships_by_character_uuid[other_char.uuid]["inverse"] = relationship.text
-
         sorted_relationships = sorted(
-            relationships_by_character_uuid.items(),
+            self.params["relationships"].items(),
             key=lambda character_entry: len(character_entry[1].get("direct", ""))
             + len(character_entry[1].get("inverse", "")),
             reverse=True,
@@ -757,8 +761,16 @@ class OrgaCharacterForm(CharacterForm):
 
             character_id = uuid_to_id[ch_uuid]
 
-            # if value is empty
-            if not value:
+            # Strip surrounding whitespace from template indentation (e.g. when TinyMCE
+            # initializes on a hidden textarea and does not normalize the surrounding newlines)
+            clean_value = value.strip()
+
+            # Decode HTML entities (e.g. &nbsp; → \xa0) so that TinyMCE's empty-field
+            # placeholder <p>&nbsp;</p> is correctly detected as whitespace-only.
+            plain_text = html.unescape(strip_tags(clean_value)).strip()
+
+            # if value is empty or contains only HTML whitespace (e.g. <p></p>, <p>&nbsp;</p>)
+            if not clean_value or not plain_text:
                 # if wasn't present, do nothing
                 if ch_uuid not in self.params["relationships"] or rel_type not in self.params["relationships"][ch_uuid]:
                     continue
@@ -772,13 +784,11 @@ class OrgaCharacterForm(CharacterForm):
             if (
                 ch_uuid in self.params["relationships"]
                 and rel_type in self.params["relationships"][ch_uuid]
-                and value == self.params["relationships"][ch_uuid][rel_type]
+                and clean_value == self.params["relationships"][ch_uuid][rel_type]
             ):
                 continue
 
             # Check text length against configuration using centralized value
-            # Use strip_tags to get plain text length from HTML content
-            plain_text = strip_tags(value)
             if len(plain_text) > self.relationship_max_length:
                 msg = f"Relationship text for character {ch_uuid} exceeds maximum length of {self.relationship_max_length} characters. Current length: {len(plain_text)}"
                 raise ValidationError(
@@ -786,7 +796,9 @@ class OrgaCharacterForm(CharacterForm):
                 )
 
             rel = self._get_rel(character_id, instance, rel_type)
-            rel.text = value
+            rel.text = clean_value
+            rel.auto = False
+            save_version(rel, TextVersionChoices.RELATIONSHIP, self.params["member"])
             rel.save()
 
     @staticmethod
@@ -1062,6 +1074,8 @@ class OrgaWritingOptionForm(BaseModelForm):
 
         if "wri_que_max" not in self.params["features"]:
             self.delete_field("max_available")
+        elif "max_available" in self.fields:
+            self.fields["max_available"].required = False
 
         if "wri_que_tickets" not in self.params["features"]:
             self.delete_field("tickets")
@@ -1072,6 +1086,11 @@ class OrgaWritingOptionForm(BaseModelForm):
             self.delete_field("requirements")
         else:
             self.configure_field_event("requirements", self.params["event"])
+
+    def clean_max_available(self) -> int:
+        """Treat blank max_available as 0."""
+        value = self.cleaned_data.get("max_available")
+        return value if value is not None else 0
 
     def save(self, commit: bool = True) -> WritingOption:  # noqa: FBT001, FBT002
         """Save the form instance, setting question for new instances."""

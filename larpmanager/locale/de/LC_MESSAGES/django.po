@@ -1652,6 +1652,9 @@ msgstr "Buchhaltung"
 msgid "Activation"
 msgstr "Freischaltung"
 
+msgid "Add option"
+msgstr "Option hinzufügen"
+
 msgid "Additional"
 msgstr "Zusätzliche"
 
@@ -3294,6 +3297,9 @@ msgstr "Möge der beste Mann gewinnen"
 
 msgid "Member approved!"
 msgstr "Mitglied genehmigt!"
+
+msgid "Missing question"
+msgstr "Fehlende Frage"
 
 msgid "Multiple systems"
 msgstr "Mehrere Systeme"
@@ -8890,6 +8896,11 @@ msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Dies sind die Anmeldungen zu Veranstaltungen, für die Sie eine Zahlung "
 "leisten müssen"
+
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr ""
+"Dieser Rabattcode wurde bereits in einem oder mehreren der ausgewählten "
+"Durchläufe verwendet"
 
 msgid "This is automatically deducted from the registration of a future event"
 msgstr ""

@@ -559,10 +559,6 @@ def backend_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonResponse
     # Initialize default success response
     res = {"res": "ok"}
 
-    # Superusers bypass all validation checks
-    if is_lm_admin(request):
-        return JsonResponse(res)
-
     # Extract and validate element ID from POST data
     edit_uuid = request.POST.get("edit_uuid", "")
     if not edit_uuid:

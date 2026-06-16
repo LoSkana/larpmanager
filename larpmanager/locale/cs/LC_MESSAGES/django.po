@@ -1652,6 +1652,9 @@ msgstr "Účetnictví"
 msgid "Activation"
 msgstr "Aktivace"
 
+msgid "Add option"
+msgstr "Přidat možnost"
+
 msgid "Additional"
 msgstr "Další"
 
@@ -3294,6 +3297,9 @@ msgstr "Ať vyhraje ten nejlepší"
 
 msgid "Member approved!"
 msgstr "Člen schválen!"
+
+msgid "Missing question"
+msgstr "Chybějící otázka"
 
 msgid "Multiple systems"
 msgstr "Více systémů"
@@ -8580,6 +8586,9 @@ msgstr "Původní anglický text, jak je uveden v kódu (msgid v gettext)"
 
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Jedná se o registrace událostí, za které je třeba zaplatit"
+
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr "Tento slevový kód již byl použit v jednom nebo více vybraných bězích"
 
 msgid "This is automatically deducted from the registration of a future event"
 msgstr "Tato částka se automaticky odečte z registrace budoucí akce"

@@ -713,7 +713,37 @@ def form_edit_handler(
         redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_context or {})}
         return redirect(redirect_list_view_name, **redirect_kwargs)
 
+    # Prepare context for the inline (no-modal) options editor
+    _prepare_inline_options(context, permission, option_model, writing_type)
+
     return render(request, template_name, context)
+
+
+def _prepare_inline_options(
+    context: dict,
+    permission: str,
+    option_model: type,
+    writing_type: str | None,
+) -> None:
+    """Load the data needed by the inline options editor into the context.
+
+    Args:
+        context: Template context (may contain "el", the question being edited)
+        permission: Permission type, switches registration vs writing
+        option_model: Option model class (RegistrationOption or WritingOption)
+        writing_type: Writing form type, when editing a writing question
+    """
+    from larpmanager.utils.edit.options_inline import inline_options_config  # noqa: PLC0415
+
+    context["inline_cfg"] = inline_options_config(context, permission)
+    context["inline_writing_type"] = writing_type
+
+    question = context.get("el")
+    if question and question.pk:
+        queryset = option_model.objects.filter(question=question).order_by("order")
+        if permission == "orga_character_form":
+            queryset = queryset.prefetch_related("requirements", "tickets")
+        context["inline_options"] = queryset
 
 
 def options_edit_handler(

@@ -1652,6 +1652,9 @@ msgstr "Boekhouding"
 msgid "Activation"
 msgstr "Activering"
 
+msgid "Add option"
+msgstr "Optie toevoegen"
+
 msgid "Additional"
 msgstr "Extra"
 
@@ -3294,6 +3297,9 @@ msgstr "Moge de beste winnen"
 
 msgid "Member approved!"
 msgstr "Lid goedgekeurd!"
+
+msgid "Missing question"
+msgstr "Ontbrekende vraag"
 
 msgid "Multiple systems"
 msgstr "Meerdere systemen"
@@ -8734,6 +8740,11 @@ msgstr ""
 
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Dit zijn de evenementregistraties waarvoor je moet betalen"
+
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr ""
+"Deze kortingscode is al gebruikt in een of meer van de geselecteerde "
+"bestellingen"
 
 msgid "This is automatically deducted from the registration of a future event"
 msgstr ""

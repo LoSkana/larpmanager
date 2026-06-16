@@ -1652,6 +1652,9 @@ msgstr "Contabilidad"
 msgid "Activation"
 msgstr "Activación"
 
+msgid "Add option"
+msgstr "Añadir opción"
+
 msgid "Additional"
 msgstr "Más información en"
 
@@ -3294,6 +3297,9 @@ msgstr "¡Que gane el mejor"
 
 msgid "Member approved!"
 msgstr "¡Miembro aprobado!"
+
+msgid "Missing question"
+msgstr "Falta una pregunta"
 
 msgid "Multiple systems"
 msgstr "Múltiples sistemas"
@@ -8740,6 +8746,11 @@ msgstr ""
 msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Estas son las inscripciones a eventos por las que tiene que efectuar un pago"
+
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr ""
+"Este código de descuento ya se ha utilizado en una o varias de las tiradas "
+"seleccionadas"
 
 msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
