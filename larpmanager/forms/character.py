@@ -389,6 +389,7 @@ class OrgaCharacterForm(CharacterForm):
                 data={"type": self._meta.model.__name__.lower()},
                 ctx_edit_uuid=True,
             )
+
             if "player" in self.fields:
                 self.add_multichoice_config(
                     field_id="player",
@@ -396,6 +397,7 @@ class OrgaCharacterForm(CharacterForm):
                     label=str(_("Show available players")),
                     url=reverse("orga_members_available", args=[run.get_slug()]),
                 )
+
             if "factions_list" in self.fields:
                 self.add_multichoice_config(
                     field_id="factions_list",
@@ -572,6 +574,7 @@ class OrgaCharacterForm(CharacterForm):
                 % {"name": plot_name},
                 required=False,
             )
+
             if plot_character.text:
                 self.initial[plot_field_name] = plot_character.text
 
