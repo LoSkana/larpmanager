@@ -104,6 +104,38 @@ def _save_html_content(page: Page, base_filename: str, screenshot_dir: Path) -> 
         logger.warning("Failed to save HTML content: %s", e)
 
 
+def _make_iframe_aware(page: Page) -> None:
+    """Make page.locator/get_by_* transparently fall through to the form iframe.
+
+    The iframe is opened by ``openIframeModal`` (see lm.js) for "New"/"Edit" actions.
+
+    Tests were written against the old flow where forms lived directly on
+    the page. They now open in an `#lm-modal` dialog containing an iframe.
+    Rather than rewriting every test, we look inside that iframe whenever a
+    lookup on the main page comes up empty.
+    """
+
+    def iframe_scope() -> Any:
+        if page.locator("#lm-modal[open] iframe").count() > 0:
+            return page.frame_locator("#lm-modal iframe")
+        return None
+
+    def wrap(method_name: str) -> None:
+        original = getattr(page, method_name)
+
+        def wrapped(*args: Any, **kwargs: Any) -> Any:
+            result = original(*args, **kwargs)
+            frame = iframe_scope()
+            if frame is not None and result.count() == 0:
+                return getattr(frame, method_name)(*args, **kwargs)
+            return result
+
+        setattr(page, method_name, wrapped)
+
+    for method_name in ("locator", "get_by_role", "get_by_label", "get_by_text", "get_by_placeholder"):
+        wrap(method_name)
+
+
 def _save_video(video_obj: Any, base_filename: str, screenshot_dir: Path) -> None:
     """Move and save the video recording."""
     logger = logging.getLogger(__name__)
@@ -191,6 +223,7 @@ def pw_page(
     page = context.new_page()
     base_url = live_server.url
     page.set_default_timeout(60000)
+    _make_iframe_aware(page)
 
     def on_response(response: Response) -> None:
         error_status = 500
