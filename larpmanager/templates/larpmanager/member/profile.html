@@ -37,7 +37,8 @@
         </p>
         <form action="{{ request.path }}"
               enctype="multipart/form-data"
-              method="post">
+              method="post"
+              id="profile_form">
             {% csrf_token %}
             <div class="form_container">
                 <table>
@@ -57,6 +58,7 @@
                                     {% trans "It will be shown to other participants" %}.
                                     {% trans "Please choose a clear and easily recognizable photo" %}!
                                 </div>
+                                {% if 'profile' in form.mandatory %}<div id="avatar_error"></div>{% endif %}
                             </td>
                         </tr>
                     {% endif %}
@@ -110,6 +112,17 @@
                 {% endif %}
 
                 $('#id_residence_address_0').on('change', province_update);
+            {% endif %}
+
+            {% if 'profile' in form.mandatory %}
+                $('#profile_form').on('submit', function(e) {
+                    $('#avatar_error').empty();
+                    if ($('#profile').hasClass('hide')) {
+                        e.preventDefault();
+                        $('#avatar_error').html("<p><b class='form-error' style='color: var(--ter-clr);'>{% trans "Please upload your profile photo" %}!</b></p>");
+                        window.jump_to('#avatar_dropzone');
+                    }
+                });
             {% endif %}
 
         });
