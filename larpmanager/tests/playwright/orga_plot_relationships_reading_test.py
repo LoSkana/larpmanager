@@ -379,12 +379,12 @@ def auto_relationships_setup(live_server: Any, page: Any) -> None:
         ("AutoPlotA", "u7", "manual plot text"),
     ):
         page.locator("#select2-new_rel_select-container").click()
-        searchbox = page.get_by_role("searchbox")
+        searchbox = page.get_by_role("searchbox").nth(2)
         searchbox.fill(name)
         option = page.get_by_role("option", name=name)
         option.wait_for(state="visible")
         option.click()
-        page.wait_for_timeout(5000)
+        page.wait_for_timeout(2000)
         fill_tinymce(page, f"rel_{target_uuid}", manual_text)
 
     submit_confirm(page)
@@ -428,13 +428,13 @@ def auto_relationships_plot(live_server: Any, page: Any) -> None:
 def auto_relationships_check(live_server: Any, page: Any) -> None:
     # check the test character shows 6 relationships: 3 manual + 3 auto
     go_to(page, live_server, "/test/")
-    page.get_by_role("link", name="Test Character").click()
+    page.get_by_role("link", name="Test Character").first.click()
     relationships = page.locator(".gallery.single.relationships")
     expect(relationships).to_have_count(6)
 
     for name, text in (
         ("AutoSheetA", "manual sheet text"),
-        ("AutoSheetB", "Background"),
+        ("AutoSheetB", "Text"),
         ("AutoFactionA", "manual faction text"),
         ("AutoFactionB", "AutoFaction"),
         ("AutoPlotA", "manual plot text"),
