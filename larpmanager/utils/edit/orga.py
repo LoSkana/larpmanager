@@ -376,6 +376,7 @@ def _evaluate_action_result(
         return redirect(redirect_view, context["run"].get_slug())
 
     # Edit operation failed or is initial load - render appropriate template
+    context["frame"] = is_frame
 
     # Writing elements use a different template
     if context.get("is_writing"):
@@ -618,6 +619,20 @@ def orga_order(
     return _orga_actions(request, event_slug, permission, Action.ORDER, element_uuid, additional)
 
 
+def _form_edit_list_response(
+    request: HttpRequest,
+    context: dict,
+    is_frame: bool,  # noqa: FBT001
+    redirect_list_view_name: str,
+    extra_context: dict | None,
+) -> HttpResponse:
+    """Return the form_edit_handler list response, closing the dialog when in frame mode."""
+    if is_frame:
+        return render(request, "elements/dashboard/form_success.html", context)
+    redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_context or {})}
+    return redirect(redirect_list_view_name, **redirect_kwargs)
+
+
 def form_edit_handler(
     request: HttpRequest,
     event_slug: str,
@@ -638,19 +653,19 @@ def form_edit_handler(
         HttpResponse: Rendered template or redirect
     """
     context = check_event_context(request, event_slug, permission)
+    context["frame"] = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
 
     option_model = RegistrationOption
     form_class = OrgaRegistrationQuestionForm
     redirect_view_name = "orga_registration_form_edit"
     redirect_list_view_name = "orga_registration_form"
-    template_name = "larpmanager/orga/registration/form_edit.html"
+    template_name = "elements/form/question_form_edit.html"
 
     if permission == "orga_character_form":
         option_model = WritingOption
         form_class = OrgaWritingQuestionForm
         redirect_view_name = "orga_writing_form_edit"
         redirect_list_view_name = "orga_writing_form"
-        template_name = "larpmanager/orga/characters/form_edit.html"
 
     writing_type = extra_context.get("writing_type") if extra_context else None
     if writing_type:
@@ -659,6 +674,7 @@ def form_edit_handler(
 
     # Check if this is an AJAX request
     is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+    is_frame = context["frame"]
 
     # Process form submission using backend edit utility
     if backend_edit(request, context, form_class, question_uuid, quiet=True):
@@ -668,8 +684,7 @@ def form_edit_handler(
         # If item was deleted, redirect to list view
         if request.POST.get("delete") == "1":
             messages.success(request, _("Operation completed") + "!")
-            redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_context or {})}
-            return redirect(redirect_list_view_name, **redirect_kwargs)
+            return _form_edit_list_response(request, context, is_frame, redirect_list_view_name, extra_context)
 
         # If AJAX request, return JSON with question UUID
         if is_ajax:
@@ -710,8 +725,7 @@ def form_edit_handler(
             return redirect(redirect_view_name, **redirect_kwargs)
 
         messages.success(request, _("Operation completed") + "!")
-        redirect_kwargs = {"event_slug": context["run"].get_slug(), **(extra_context or {})}
-        return redirect(redirect_list_view_name, **redirect_kwargs)
+        return _form_edit_list_response(request, context, is_frame, redirect_list_view_name, extra_context)
 
     # Prepare context for the inline (no-modal) options editor
     _prepare_inline_options(context, permission, option_model, writing_type)

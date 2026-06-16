@@ -167,6 +167,7 @@ function flashSaved($row) {
             const $row = $('#inline-options-body .inline-option').last();
             initM2M(detailsRow($row));
             $row.find('input[name=name]').focus();
+            if (window.lmResizeIframe) window.lmResizeIframe();
         }
 
         function addRow() {
@@ -185,6 +186,7 @@ function flashSaved($row) {
 
         $root.on('click', '.add-inline-option', function(e) {
             e.preventDefault();
+            if ($(this).hasClass('disabled')) return false;
             addRow();
             return false;
         });
@@ -198,6 +200,7 @@ function flashSaved($row) {
             $details.toggleClass('hide');
             $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up');
             if (!$details.hasClass('hide')) initM2M($details);
+            if (window.lmResizeIframe) window.lmResizeIframe();
             return false;
         });
 
@@ -213,6 +216,7 @@ function flashSaved($row) {
             if (!uuid) {
                 detailsRow($row).remove();
                 $row.remove();
+                if (window.lmResizeIframe) window.lmResizeIframe();
                 return false;
             }
 
@@ -228,6 +232,7 @@ function flashSaved($row) {
                 .done(function() {
                     detailsRow($row).remove();
                     $row.remove();
+                    if (window.lmResizeIframe) window.lmResizeIframe();
                 })
                 .fail(function() {
                     if (!window.lmTesting) alert('{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}');

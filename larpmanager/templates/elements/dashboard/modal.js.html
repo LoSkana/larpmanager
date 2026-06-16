@@ -69,7 +69,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         switch(e.data.type) {
             case 'dashboard_form_saved':
-                // Only handle if a popup_dashboard iframe is open (not v20 popup_option popups)
+                // Only handle if a popup_dashboard iframe is open
                 if (document.querySelector('#lm-modal.popup_dashboard iframe')) {
                     closeDashboardModal();
                     setTimeout(function() {

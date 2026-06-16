@@ -66,17 +66,17 @@ window.closeLmModal = function() {
 /**
  * Open a dialog modal with an iframe and a close button
  * @param {string} iframeUrl - The URL to load in the iframe
- * @param {string} modalClass - CSS class for the modal (default: 'popup_option')
+ * @param {string} modalClass - CSS class for the modal (default: 'popup_dashboard')
  * @param {function} onClose - Optional callback function to call when modal is closed
  */
 window.openIframeModal = function(iframeUrl, modalClass, onClose) {
-    modalClass = modalClass || 'popup_option';
+    modalClass = modalClass || 'popup_dashboard';
 
     const frame = `
         <div class="frame-container">
             <button class="modal-close-btn">&times;</button>
             <div class="frame-loading"></div>
-            <iframe src="${iframeUrl}" width="100%" style="border: none; height: 0; visibility: hidden;"></iframe>
+            <iframe src="${iframeUrl}" width="100%" style="border: none; visibility: hidden;"></iframe>
         </div>
     `;
 
@@ -86,39 +86,19 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
     const iframe = dialog.querySelector('iframe');
     let revealed = false;
 
-    function revealIframe(height) {
+    function revealIframe() {
         if (revealed) return;
         revealed = true;
-        iframe.style.height = height + 'px';
         iframe.style.visibility = 'visible';
         const loading = dialog.querySelector('.frame-loading');
         if (loading) loading.style.display = 'none';
     }
 
-    iframe.addEventListener('load', function() {
-        if (revealed) return;
-        try {
-            const doc = iframe.contentDocument || iframe.contentWindow.document;
-            const height = Math.max(doc.body.scrollHeight || 0, doc.documentElement.scrollHeight || 0) || 400;
-            revealIframe(height);
-        } catch (err) {
-            revealIframe(400);
-        }
-    });
-
     function onIframeMessage(e) {
         if (!e.data || !e.source || e.source !== iframe.contentWindow) return;
 
         if (e.data.type === 'iframe_resize') {
-            if (!revealed) {
-                revealIframe(e.data.height);
-            } else {
-                const newHeight = e.data.height;
-                const currentHeight = parseFloat(iframe.style.height) || 0;
-                if (newHeight > currentHeight) {
-                    iframe.style.height = newHeight + 'px';
-                }
-            }
+            revealIframe();
         }
 
         if (e.data.type === 'dashboard_form_saved') {
@@ -465,11 +445,17 @@ $(document).ready(function() {
 function replaceNewUrl() {
     $('a.form-new').on('click', function(event) {
         event.preventDefault();
-        let currentUrl = window.location.href;
-        let cleanedUrl = currentUrl.split('#')[0];
-        let newUrl = cleanedUrl + 'new/';
+        let href = $(this).attr('href');
+        let newUrl;
+        if (href && href !== '#') {
+            newUrl = href;
+        } else {
+            let currentUrl = window.location.href;
+            let cleanedUrl = currentUrl.split('#')[0];
+            newUrl = cleanedUrl + 'new/';
+        }
         if ($('body').hasClass('new_v21')) {
-            openIframeModal(newUrl + '?frame=1', 'popup_option', refreshDatatables);
+            openIframeModal(newUrl + '?frame=1', 'popup_edit', refreshDatatables);
         } else {
             window.location.href = newUrl;
         }
@@ -478,7 +464,7 @@ function replaceNewUrl() {
     if ($('body').hasClass('new_v21')) {
         $(document).on('click', 'table.go_datatable a:has(i.fa-edit)', function(e) {
             e.preventDefault();
-            openIframeModal(this.href + '?frame=1', 'popup_option', refreshDatatables);
+            openIframeModal(this.href + '?frame=1', 'popup_edit', refreshDatatables);
             return false;
         });
     }

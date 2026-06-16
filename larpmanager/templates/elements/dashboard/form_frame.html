@@ -22,27 +22,6 @@
         </div>
     </form>
 {% endblock content %}
-{% block css %}
-    <style>
-            html, #page-wrapper {
-                overflow: hidden !important;
-            }
-    </style>
-{% endblock css %}
 {% block js2 %}
-    <script>
-    $(document).ready(function() {
-        function sendHeight() {
-            if (window.parent && window.parent !== window) {
-                const form = document.querySelector('form');
-                const height = form ? form.scrollHeight : document.body.scrollHeight;
-                window.parent.postMessage({
-                    type: 'iframe_resize',
-                    height: height + 50
-                }, '*');
-            }
-        }
-        setTimeout(sendHeight, 100);
-    });
-    </script>
+    {% include "elements/helpers/iframe_resize.js" %}
 {% endblock js2 %}

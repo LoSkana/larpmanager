@@ -892,12 +892,12 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
 .popup,
 .popup_small,
 .popup_tutorial,
-.popup_option,
-.popup_dashboard {
+.popup_dashboard,
+.popup_edit {
   border-radius: 2em;
   background-color: var(--sec-clr);
   color: var(--pri-clr) !important;
-  padding: 1em;
+  padding: 0 1em;
   -webkit-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
@@ -914,28 +914,28 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   max-height: 60vh;
 }
 
-.popup_option,
-.popup_dashboard {
+.popup_edit {
   width: 70vw;
+  height: 80vh;
 }
 
-.popup_option,
 .popup_dashboard {
-  height: auto;
+  width: 60vw;
+  height: 50vh;
   min-height: 200px;
   max-height: 85vh;
 }
 
 @media (max-width: 1200px) {
-  .popup_option,
-  .popup_dashboard {
+  .popup_dashboard,
+  .popup_edit {
     width: 80vw;
   }
 }
 
 @media (max-width: 1000px) {
-  .popup_option,
-  .popup_dashboard {
+  .popup_dashboard,
+  .popup_edit {
     width: 90vw;
   }
 }
@@ -976,7 +976,6 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
 @media (max-width: 800px) {
   .popup,
   .popup_tutorial,
-  .popup_option,
   .popup_query,
   .popup_dashboard {
     width: 95vw;
@@ -1487,6 +1486,7 @@ header.sec h1 {
 
   #lm-modal-content {
     width: 95%;
+    height: 100%;
   }
 
   .info {
@@ -2546,9 +2546,19 @@ header.sec h1 {
    Floating Iframe - Hide structural chrome
    --------------------------------------------------------------------------- */
 
+html:has(body.floating_iframe) {
+  overflow: hidden !important;
+}
+
 body.floating_iframe {
   background: transparent !important;
   padding: 0px;
+}
+
+body.floating_iframe #page-wrapper {
+  overflow-y: auto !important;
+  height: 100vh;
+  scrollbar-color: rgba(var(--ter-rgb), 0.5) rgba(var(--pri-rgb), 0.1);
 }
 
 body.floating_iframe #header,
@@ -2608,6 +2618,10 @@ body.floating_iframe .inner {
   width: 100% !important;
 }
 
+.floating_iframe .auto_resize table {
+  width: 100%;
+}
+
 #options-iframe {
   width: 100%;
   border: none;
@@ -2615,13 +2629,19 @@ body.floating_iframe .inner {
   transition: opacity 0.2s ease-in-out;
 }
 
+#lm-modal-content {
+  height: 100%;
+}
+
 .frame-container {
   position: relative;
   width: 100%;
+  height: 100%;
 }
 
 .frame-container iframe {
   transition: height 0.2s ease;
+  height: 100%;
 }
 
 .frame-loading {

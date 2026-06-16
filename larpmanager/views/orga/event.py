@@ -88,6 +88,48 @@ def orga_event(request: HttpRequest, event_slug: str) -> HttpResponse:
     return full_event_edit(context, request, context["event"], context["run"], is_executive=False)
 
 
+def _save_event_run(
+    context: dict,
+    run: Run | None,
+    run_form: OrgaRunForm,
+    saved_event: Event,
+    on_created_callback: callable | None,
+) -> Run:
+    """Save the run for a created or edited event, returning the saved run."""
+    if context["is_creation"]:
+        # Get the run created automatically, and update it with form data
+        saved_run = saved_event.runs.first()
+        for field in run_form.cleaned_data:
+            setattr(saved_run, field, run_form.cleaned_data[field])
+        saved_run.save()
+        save_log(context, Run, saved_run, None)
+        if on_created_callback:
+            on_created_callback(saved_event)
+    else:
+        # For editing, just save the run form normally
+        saved_run = run_form.save()
+        save_log(context, Run, saved_run, run.uuid)
+    return saved_run
+
+
+def _full_event_edit_success_response(
+    request: HttpRequest,
+    context: dict,
+    saved_run: Run,
+    is_frame: bool,  # noqa: FBT001
+    *,
+    is_executive: bool,
+) -> HttpResponse:
+    """Return the response for a successful full_event_edit save."""
+    if is_frame:
+        return render(request, "elements/dashboard/form_success.html", context)
+
+    if is_executive and not context.get("is_creation"):
+        return redirect("manage")
+
+    return redirect("manage", event_slug=saved_run.get_slug())
+
+
 def full_event_edit(
     context: dict,
     request: HttpRequest,
@@ -116,6 +158,9 @@ def full_event_edit(
         redirect response after successful form submission
 
     """
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+    context["frame"] = is_frame
+
     if event:
         context["is_creation"] = False
         context["num"] = event.uuid
@@ -140,26 +185,11 @@ def full_event_edit(
             saved_event = event_form.save()
             save_log(context, Event, saved_event, event.uuid if event else None)
 
-            if context["is_creation"]:
-                # Get the run created automatically, and update it with form data
-                saved_run = saved_event.runs.first()
-                for field in run_form.cleaned_data:
-                    setattr(saved_run, field, run_form.cleaned_data[field])
-                saved_run.save()
-                save_log(context, Run, saved_run, None)
-                if on_created_callback:
-                    on_created_callback(saved_event)
-            else:
-                # For editing, just save the run form normally
-                saved_run = run_form.save()
-                save_log(context, Run, saved_run, run.uuid)
+            saved_run = _save_event_run(context, run, run_form, saved_event, on_created_callback)
 
             # Show success message and redirect based on access level
             messages.success(request, _("Operation completed") + "!")
-            if is_executive and not context.get("is_creation"):
-                return redirect("manage")
-
-            return redirect("manage", event_slug=saved_run.get_slug())
+            return _full_event_edit_success_response(request, context, saved_run, is_frame, is_executive=is_executive)
     else:
         # Create empty forms for GET requests
         event_form = event_form_class(instance=event, context=context, prefix="form1")
