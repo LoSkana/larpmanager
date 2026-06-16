@@ -1652,6 +1652,9 @@ msgstr "Boekhouding"
 msgid "Activation"
 msgstr "Activering"
 
+msgid "Add option"
+msgstr "Optie toevoegen"
+
 msgid "Additional"
 msgstr "Extra"
 
@@ -3294,6 +3297,9 @@ msgstr "Moge de beste winnen"
 
 msgid "Member approved!"
 msgstr "Lid goedgekeurd!"
+
+msgid "Missing question"
+msgstr "Ontbrekende vraag"
 
 msgid "Multiple systems"
 msgstr "Meerdere systemen"

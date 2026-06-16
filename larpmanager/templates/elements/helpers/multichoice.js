@@ -4,7 +4,10 @@
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
         {% for cfg in form.multichoice_configs %}
-        $('#id_{{ cfg.field_id }}_tr td').append("<br class='show' /><br class='show' /><a id='{{ cfg.link_id }}'>{{ cfg.label }}</a>");
+        $('#id_{{ cfg.field_id }}_tr td').append("<span id='{{ cfg.link_id }}_wrap'><br class='show' /><br class='show' /><a id='{{ cfg.link_id }}'>{{ cfg.label }}</a></span>");
+        if ($('[tog="f_id_{{ cfg.field_id }}"]').length) {
+            $('#{{ cfg.link_id }}_wrap').hide().addClass('f_id_{{ cfg.field_id }}');
+        }
         $('#{{ cfg.link_id }}').click(function(event) {
             event.preventDefault();
 

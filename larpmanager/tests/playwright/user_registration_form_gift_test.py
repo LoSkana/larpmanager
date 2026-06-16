@@ -163,7 +163,7 @@ def field_multiple(page: Any, live_server: Any) -> None:
     iframe.locator("#id_description").fill("sarrrr")
     submit_option(page, iframe)
 
-    page.locator("#options-iframe").content_frame.locator('[id="u4"]').locator(".fa-arrow-up").click()
+    page.locator('#inline-options tr.inline-option[data-uuid="u4"] .io-move-up').click()
     just_wait(page)
     submit_confirm(page)
     page.locator('[id="u3"]').locator(".fa-arrow-up").click()

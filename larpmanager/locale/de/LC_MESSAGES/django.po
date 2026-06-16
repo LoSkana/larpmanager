@@ -1652,6 +1652,9 @@ msgstr "Buchhaltung"
 msgid "Activation"
 msgstr "Freischaltung"
 
+msgid "Add option"
+msgstr "Option hinzufügen"
+
 msgid "Additional"
 msgstr "Zusätzliche"
 
@@ -3294,6 +3297,9 @@ msgstr "Möge der beste Mann gewinnen"
 
 msgid "Member approved!"
 msgstr "Mitglied genehmigt!"
+
+msgid "Missing question"
+msgstr "Fehlende Frage"
 
 msgid "Multiple systems"
 msgstr "Mehrere Systeme"

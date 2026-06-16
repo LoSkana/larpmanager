@@ -5462,6 +5462,18 @@ msgstr ""
 msgid "Option saved successfully"
 msgstr ""
 
+msgid "Add option"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Move up"
+msgstr ""
+
+msgid "Move down"
+msgstr ""
+
 msgid "An error occurred while reordering"
 msgstr ""
 
@@ -5948,9 +5960,6 @@ msgid ""
 msgstr ""
 
 msgid "Here are the sign up options with limited number"
-msgstr ""
-
-msgid "Maximum"
 msgstr ""
 
 msgid "Question"
@@ -9046,12 +9055,6 @@ msgstr ""
 msgid "Sign In"
 msgstr ""
 
-msgid "Move up"
-msgstr ""
-
-msgid "Move down"
-msgstr ""
-
 msgid "Writing"
 msgstr ""
 
@@ -10263,6 +10266,12 @@ msgstr ""
 msgid "List of other users"
 msgstr ""
 
+msgid "Invalid request"
+msgstr ""
+
+msgid "Missing question"
+msgstr ""
+
 msgid ""
 "You must create at least one ability type before you can create abilities"
 msgstr ""
@@ -11203,9 +11212,6 @@ msgid "Registration cancelled"
 msgstr ""
 
 msgid "Player customisation updated"
-msgstr ""
-
-msgid "Invalid request"
 msgstr ""
 
 msgid "Please select both a registration and an event"

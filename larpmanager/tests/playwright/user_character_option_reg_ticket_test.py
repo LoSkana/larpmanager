@@ -100,7 +100,7 @@ def prepare(page: Any) -> None:
     iframe.locator(".select2-results__option").first.click()
     submit_option(page, iframe)
 
-    expect_normalized(page, page.locator("#options"), "st Standard bmb bambi")
+    expect_normalized(page, page.locator("#options"), "bmb test larp (standard) bambi")
     submit_confirm(page)
 
 

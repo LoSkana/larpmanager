@@ -1652,6 +1652,9 @@ msgstr "Kirjanpito"
 msgid "Activation"
 msgstr "Aktivointi"
 
+msgid "Add option"
+msgstr "Lisää vaihtoehto"
+
 msgid "Additional"
 msgstr "Lisätiedot"
 
@@ -3294,6 +3297,9 @@ msgstr "Paras voittakoon"
 
 msgid "Member approved!"
 msgstr "Jäsen hyväksytty!"
+
+msgid "Missing question"
+msgstr "Puuttuva kysymys"
 
 msgid "Multiple systems"
 msgstr "Useita järjestelmiä"

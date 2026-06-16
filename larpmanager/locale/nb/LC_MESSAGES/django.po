@@ -1652,6 +1652,9 @@ msgstr "Regnskap"
 msgid "Activation"
 msgstr "Aktivering"
 
+msgid "Add option"
+msgstr "Legg til alternativ"
+
 msgid "Additional"
 msgstr "Ytterligere"
 
@@ -3294,6 +3297,9 @@ msgstr "Måtte den beste vinne"
 
 msgid "Member approved!"
 msgstr "Medlem godkjent!"
+
+msgid "Missing question"
+msgstr "Manglende spørsmål"
 
 msgid "Multiple systems"
 msgstr "Flere systemer"

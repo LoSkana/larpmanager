@@ -1652,6 +1652,9 @@ msgstr "Redovisning"
 msgid "Activation"
 msgstr "Aktivering"
 
+msgid "Add option"
+msgstr "Lägg till alternativ"
+
 msgid "Additional"
 msgstr "Ytterligare"
 
@@ -3294,6 +3297,9 @@ msgstr "Må den bästa mannen vinna"
 
 msgid "Member approved!"
 msgstr "Godkänd av medlem!"
+
+msgid "Missing question"
+msgstr "Frågan saknas"
 
 msgid "Multiple systems"
 msgstr "Flera system"

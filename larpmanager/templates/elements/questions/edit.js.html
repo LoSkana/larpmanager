@@ -2,167 +2,6 @@
 <script>
 window.addEventListener('DOMContentLoaded', function() {
 
-    // ========== Context Detection ==========
-
-    // Detect if we're in writing or registration context
-    function isWritingContext() {
-        return window.location.pathname.indexOf('/writing/') > -1;
-    }
-
-    // Extract writing type from URL (for writing forms)
-    function getWritingType() {
-        const pathParts = window.location.pathname.split('/');
-        const formIndex = pathParts.indexOf('form');
-        return formIndex >= 0 ? pathParts[formIndex - 1] : null;
-    }
-
-    // Extract question UUID from current URL path
-    function getQuestionUuidFromUrl() {
-        const pathParts = window.location.pathname.split('/');
-        const questionUuidIndex = pathParts.indexOf('edit') + 1;
-        return pathParts[questionUuidIndex];
-    }
-
-    // Build base path up to /manage/
-    function getBasePath() {
-        const pathParts = window.location.pathname.split('/');
-        const manageIndex = pathParts.indexOf('manage');
-        return pathParts.slice(0, manageIndex + 1).join('/');
-    }
-
-
-    // ========== URL Building ==========
-
-    // Build URL for options AJAX endpoint
-    function buildOptionsAjaxUrl(optionUuid, questionUuid) {
-        const basePath = getBasePath();
-
-        if (isWritingContext()) {
-            const writingType = getWritingType();
-            return `${basePath}/writing/${writingType}/options/${optionUuid}/edit/`;
-        } else {
-            return `${basePath}/options/${optionUuid}/edit/`;
-        }
-    }
-
-    // Build URL for options edit endpoint
-    function buildOptionsEditUrl(optionUuid) {
-        const basePath = getBasePath();
-
-        if (isWritingContext()) {
-            const writingType = getWritingType();
-            path = `${basePath}/writing/${writingType}/options/`;
-        } else {
-            path = `${basePath}/options/`;
-        }
-
-        if (optionUuid) {
-            path += `${optionUuid}/edit/`;
-        } else {
-            path += `new/`;
-        }
-
-        return path;
-    }
-
-
-    // ========== Page Navigation ==========
-
-    // Reload only the options iframe
-    function reloadOptionsIframe() {
-        const iframe = document.getElementById('options-iframe');
-        if (iframe) {
-            // Fade out iframe before reload to avoid flickering
-            iframe.style.opacity = '0';
-
-            // Reset height to min-height before reload to avoid accumulation
-            iframe.style.height = '400px';
-
-            // Add load event listener to fade in when content is ready
-            const onLoad = function() {
-                iframe.style.opacity = '1';
-                iframe.removeEventListener('load', onLoad);
-            };
-            iframe.addEventListener('load', onLoad);
-
-            // Trigger reload
-            iframe.src = iframe.src;
-        }
-    }
-
-    // Create or update iframe for options list
-    function createOrUpdateOptionsIframe(questionUuid) {
-        const optionsDiv = document.getElementById('options');
-        const existingIframe = document.getElementById('options-iframe');
-
-        if (!optionsDiv || !questionUuid) return;
-
-        // Build iframe URL
-        const basePath = getBasePath();
-        let iframeUrl;
-
-        if (isWritingContext()) {
-            const writingType = getWritingType();
-            iframeUrl = `${basePath}/writing/${writingType}/options/list/${questionUuid}/`;
-        } else {
-            iframeUrl = `${basePath}/options/list/${questionUuid}/`;
-        }
-
-        if (existingIframe) {
-            // Update existing iframe src with new question UUID
-            // Fade out iframe before reload to avoid flickering
-            existingIframe.style.opacity = '0';
-            existingIframe.style.height = '400px'; // Reset height
-
-            // Add load event listener to fade in when content is ready
-            const onLoad = function() {
-                existingIframe.style.opacity = '1';
-                existingIframe.removeEventListener('load', onLoad);
-            };
-            existingIframe.addEventListener('load', onLoad);
-
-            existingIframe.src = iframeUrl;
-        } else {
-            // Create new iframe element
-            const iframe = document.createElement('iframe');
-            iframe.id = 'options-iframe';
-            iframe.src = iframeUrl;
-            iframe.style.width = '100%';
-            iframe.style.border = 'none';
-            iframe.style.minHeight = '400px';
-
-            // Clear any placeholder content
-            optionsDiv.innerHTML = '';
-            optionsDiv.appendChild(iframe);
-        }
-    }
-
-    // ========== Modal Management ==========
-
-    // Close option modal popup
-    function closeOptionModal() {
-        // Simulate click on overlay to close uglipop properly
-        const overlay = document.getElementById('uglipop_overlay');
-        if (overlay) {
-            overlay.click();
-        }
-    }
-
-    // Open option modal with form in iframe
-    function openOptionModal(optionUuid, questionUuid) {
-        let editUrl = buildOptionsEditUrl(optionUuid);
-
-        if (!optionUuid) {
-            editUrl += `?question_uuid=${questionUuid}&frame=1`;
-        } else {
-            editUrl += '?frame=1';
-        }
-
-        // Use common iframe modal function from lm.js
-        window.openIframeModal(editUrl, 'popup_option');
-    }
-
-
     // ========== AJAX Utilities ==========
 
     // Make AJAX request with common error handling
@@ -186,10 +25,14 @@ window.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Save question via AJAX before adding options
-    function saveQuestionBeforeAddingOption(callback) {
+    // Save question via AJAX, so options can be added before the page is submitted.
+    // Exposed globally: the inline options editor uses it when the question is new.
+    window.lmEnsureQuestionSaved = function(callback) {
         const $mainForm = $('#main_form');
+        const $optionInputs = $('#inline-options').find('input, textarea, select');
+        $optionInputs.prop('disabled', true);
         const formData = new FormData($mainForm[0]);
+        $optionInputs.prop('disabled', false);
 
         makeAjaxRequest({
             url: window.location.pathname,
@@ -208,9 +51,6 @@ window.addEventListener('DOMContentLoaded', function() {
                     // Update form action to new UUID path
                     $mainForm.attr('action', newUrl);
 
-                    // Create iframe if it doesn't exist yet
-                    createOrUpdateOptionsIframe(response.question_uuid);
-
                     // Execute callback with question UUID
                     if (callback) {
                         callback(response.question_uuid);
@@ -227,7 +67,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 $mainForm.submit();
             }
         });
-    }
+    };
 
 
     // ========== Form Field Visibility ==========
@@ -285,77 +125,16 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    // ========== Event Handlers ==========
-
-    // Handle "New Option" button click
-    function handleNewOptionClick(e) {
-        e.preventDefault();
-        const questionUuid = getQuestionUuidFromUrl();
-
-        // If question hasn't been saved yet, save it first
-        if (!questionUuid) {
-            saveQuestionBeforeAddingOption(function(savedQuestionUuid) {
-                openOptionModal('', savedQuestionUuid);
-            });
-        } else {
-            openOptionModal('', questionUuid);
-        }
-
-        return false;
-    }
-
-    // Handle edit option link click
-    function handleEditOptionClick(e) {
-        e.preventDefault();
-        const optionUuid = $(this).data('option-uuid');
-        const questionUuid = getQuestionUuidFromUrl();
-        openOptionModal(optionUuid, questionUuid);
-        return false;
-    }
-
-    // Listen for messages from iframe to close modal when option is saved or cancelled
-    window.addEventListener('message', function(e) {
-        // Check if message is from our option form
-        if (e.data && e.data.type === 'option_saved') {
-            closeOptionModal();
-
-            // Get current question UUID from URL
-            const questionUuid = getQuestionUuidFromUrl();
-
-            // Create iframe if it doesn't exist yet (for newly saved questions)
-            createOrUpdateOptionsIframe(questionUuid);
-
-            // Reload iframe if it already exists
-            reloadOptionsIframe();
-        } else if (e.data && e.data.type === 'option_cancelled') {
-            closeOptionModal();
-        } else if (e.data && e.data.type === 'open_option_modal') {
-            // Message from options list iframe to open option modal on parent
-            const currentQuestionUuid = getQuestionUuidFromUrl();
-
-            // If question hasn't been saved yet, save it first
-            if (!currentQuestionUuid) {
-                saveQuestionBeforeAddingOption(function(savedQuestionUuid) {
-                    openOptionModal(e.data.optionUuid, savedQuestionUuid);
-                });
-            } else {
-                openOptionModal(e.data.optionUuid, e.data.questionUuid);
-            }
-        } else if (e.data && e.data.type === 'iframe_resize') {
-            // Update iframe height based on content
-            const iframe = document.getElementById('options-iframe');
-            if (iframe && e.data.height) {
-                iframe.style.height = e.data.height + 'px';
-            }
-        }
-    });
-
-
     // ========== Initialization ==========
 
     $(document).ready(function() {
         // Move options section before submit button
         $('#options').insertBefore('#form_submit');
+
+        // Prevent inline-option inputs from being submitted with the question form
+        $('#main_form').on('submit', function() {
+            $('#inline-options').find('input, textarea, select').prop('disabled', true);
+        });
 
         // Initialize visibility toggle
         setTimeout(toggleOptions, 10);
@@ -363,10 +142,6 @@ window.addEventListener('DOMContentLoaded', function() {
         // Bind event handlers for question type changes
         $('#id_typ').on('change', toggleOptions);
         $('#id_status').on('change', toggleOptions);
-
-        // Bind event handlers for option management
-        $('.new-option').on('click', handleNewOptionClick);
-        $(document).on('click', '.edit-option-ajax', handleEditOptionClick);
     });
 
 });

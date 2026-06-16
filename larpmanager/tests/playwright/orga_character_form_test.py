@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_user,
                                      logout,
                                      submit_confirm,
-                                     expect_normalized, new_option, submit_option,
+                                     expect_normalized, new_option, submit_option, get_option,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -335,10 +335,9 @@ def add_field_restricted(page: Any) -> None:
     page.locator('[id="u8"]').locator(".fa-arrow-up").click()
     page.locator('[id="u8"]').locator(".fa-edit").click()
 
-    page.locator("#options-iframe").content_frame.locator(".fa-arrow-up").click()
-    page.locator("#options-iframe").content_frame.locator('[id="u7"]').locator(".fa-edit").click()
-    just_wait(page, big=True)
-    iframe = page.locator("#uglipop_popbox iframe").content_frame
+    page.locator("#inline-options .io-move-up").nth(1).click()
+    just_wait(page)
+    iframe = get_option(page, "u7")
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("w")
     iframe.locator("#id_name").press("Home")

@@ -1355,6 +1355,19 @@ class OrgaRegistrationOptionForm(BaseModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set question field from params if provided."""
         super().__init__(*args, **kwargs)
+        for field in ("price", "max_available"):
+            if field in self.fields:
+                self.fields[field].required = False
+
+    def clean_price(self) -> Any:
+        """Treat blank price as 0."""
+        value = self.cleaned_data.get("price")
+        return value if value is not None else 0
+
+    def clean_max_available(self) -> int:
+        """Treat blank max_available as 0."""
+        value = self.cleaned_data.get("max_available")
+        return value if value is not None else 0
 
     def save(self, commit: bool = True) -> RegistrationOption:  # noqa: FBT001, FBT002
         """Save the form instance, setting question for new instances."""

@@ -1,0 +1,275 @@
+{% load i18n %}
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
+
+        const $root = $('#inline-options');
+        if (!$root.length) return;
+
+        const saveUrl = $root.data('save-url');
+        const saveUuidUrl = $root.data('save-uuid-url');
+        const reorderUrl = $root.data('reorder-url');
+        const deleteUrl = $root.data('delete-url');
+        const SAVE_DEBOUNCE = 600;
+
+        // ========== Helpers ==========
+
+        function questionUuid() {
+            return $root.attr('data-question-uuid') || '';
+        }
+
+        function rowUuid($row) {
+            return $row.attr('data-uuid') || '';
+        }
+
+        function detailsRow($row) {
+            return $row.next('.inline-option-details');
+        }
+
+        function initM2M($scope) {
+            if ($.fn.select2) {
+                $scope.find('select.io-m2m').select2({ width: '100%' });
+            }
+        }
+
+function flashSaved($row) {
+            const $ok = $row.find('.io-saved');
+            $ok.addClass('show');
+            setTimeout(function() { $ok.removeClass('show'); }, 1200);
+        }
+
+        function clearErrors($row) {
+            const $details = detailsRow($row);
+            $row.add($details).find('.io-error').removeClass('io-error');
+            $row.add($details).find('.io-error-msg').text('');
+        }
+
+        function showErrors($row, errors) {
+            const $details = detailsRow($row);
+            const $scope = $row.add($details);
+            Object.keys(errors).forEach(function(field) {
+                $scope.find('[name="' + field + '"]').addClass('io-error');
+                $scope.find('.io-error-msg[data-field="' + field + '"]').text(errors[field].join(' '));
+            });
+        }
+
+        // ========== Saving ==========
+
+        function collectRowData($row) {
+            const $details = detailsRow($row);
+            const data = {};
+            $row.add($details).find('input[name], textarea[name]').each(function() {
+                data[$(this).attr('name')] = $(this).val();
+            });
+            $details.find('select.io-m2m').each(function() {
+                const name = $(this).attr('name');
+                data[name] = $(this).val() || [];
+                data['__present_' + name] = '1';
+            });
+            return data;
+        }
+
+        // Per-row save state: a row can only have one save in flight at a time.
+        // While a "create" request is pending (no uuid yet), further save
+        // triggers must not fire another create - they're queued and re-run
+        // once the current request resolves, by which point data-uuid is set
+        // and the retry correctly becomes an update instead of a duplicate create.
+        const saveState = new WeakMap();
+
+        function saveRow($row) {
+            const row = $row[0];
+            const state = saveState.get(row) || { inFlight: false, pending: false };
+            if (state.inFlight) {
+                state.pending = true;
+                saveState.set(row, state);
+                return;
+            }
+
+            // The name is the only required field: skip empty new rows
+            const name = $row.find('input[name=name]').val().trim();
+            const uuid = rowUuid($row);
+            if (!uuid && !name) return;
+
+            const data = collectRowData($row);
+            if (!uuid) data['question_uuid'] = questionUuid();
+
+            const url = uuid ? saveUuidUrl.replace('OPTUUID', uuid) : saveUrl;
+            clearErrors($row);
+
+            state.inFlight = true;
+            saveState.set(row, state);
+
+            $.ajax({ url: url, type: 'POST', data: data, traditional: true })
+                .done(function(response) {
+                    if (response.success) {
+                        $row.attr('data-uuid', response.option.uuid);
+                        flashSaved($row);
+                    }
+                })
+                .fail(function(xhr) {
+                    const errors = (xhr.responseJSON && xhr.responseJSON.errors) || {};
+                    if (Object.keys(errors).length) {
+                        showErrors($row, errors);
+                    } else if (!window.lmTesting) {
+                        alert('{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}');
+                    }
+                })
+                .always(function() {
+                    state.inFlight = false;
+                    if (state.pending) {
+                        state.pending = false;
+                        saveRow($row);
+                    }
+                });
+        }
+
+        const saveTimers = new WeakMap();
+        function scheduleSave($row) {
+            const row = $row[0];
+            clearTimeout(saveTimers.get(row));
+            saveTimers.set(row, setTimeout(function() { saveRow($row); }, SAVE_DEBOUNCE));
+        }
+
+        function ownerRow($el) {
+            const $tr = $el.closest('tr');
+            return $tr.hasClass('inline-option-details') ? $tr.prev('.inline-option') : $tr;
+        }
+
+        $root.on('input', 'input[name], textarea[name]', function() {
+            scheduleSave(ownerRow($(this)));
+        });
+        $root.on('change', 'select.io-m2m', function() {
+            saveRow(ownerRow($(this)));
+        });
+        $root.on('blur', 'input[name], textarea[name]', function() {
+            const $row = ownerRow($(this));
+            clearTimeout(saveTimers.get($row[0]));
+            saveRow($row);
+        });
+
+        // Enter on the name field: save and jump to a fresh row
+        $root.on('keydown', 'input[name=name]', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const $row = ownerRow($(this));
+                clearTimeout(saveTimers.get($row[0]));
+                saveRow($row);
+                addRow();
+            }
+        });
+
+        // ========== Add row ==========
+
+        function appendRow() {
+            const template = document.getElementById('inline-option-template');
+            const $rows = $(template.content.cloneNode(true)).children();
+            $('#inline-options-body').append($rows);
+            const $row = $('#inline-options-body .inline-option').last();
+            initM2M(detailsRow($row));
+            $row.find('input[name=name]').focus();
+        }
+
+        function addRow() {
+            if (questionUuid()) {
+                appendRow();
+                return;
+            }
+            // Question not saved yet: save it first (exposed by questions/edit.js)
+            if (window.lmEnsureQuestionSaved) {
+                window.lmEnsureQuestionSaved(function(savedQuestionUuid) {
+                    $root.attr('data-question-uuid', savedQuestionUuid);
+                    appendRow();
+                });
+            }
+        }
+
+        $root.on('click', '.add-inline-option', function(e) {
+            e.preventDefault();
+            addRow();
+            return false;
+        });
+
+        // ========== Details toggle ==========
+
+        $root.on('click', '.io-toggle-details', function(e) {
+            e.preventDefault();
+            const $row = ownerRow($(this));
+            const $details = detailsRow($row);
+            $details.toggleClass('hide');
+            $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up');
+            if (!$details.hasClass('hide')) initM2M($details);
+            return false;
+        });
+
+        // ========== Delete (two-step inline confirmation) ==========
+
+        $root.on('click', '.io-delete', function(e) {
+            e.preventDefault();
+            const $link = $(this);
+            const $row = ownerRow($link);
+            const uuid = rowUuid($row);
+
+            // Unsaved row: just remove it
+            if (!uuid) {
+                detailsRow($row).remove();
+                $row.remove();
+                return false;
+            }
+
+            if (!$link.hasClass('io-confirm-delete')) {
+                $link.addClass('io-confirm-delete').attr('title', '{% filter escapejs %}{% trans "Confirm" %}{% endfilter %}?');
+                setTimeout(function() {
+                    $link.removeClass('io-confirm-delete').attr('title', '{% filter escapejs %}{% trans "Delete" %}{% endfilter %}');
+                }, 3000);
+                return false;
+            }
+
+            $.post(deleteUrl.replace('OPTUUID', uuid))
+                .done(function() {
+                    detailsRow($row).remove();
+                    $row.remove();
+                })
+                .fail(function() {
+                    if (!window.lmTesting) alert('{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}');
+                });
+            return false;
+        });
+
+        // ========== Reorder (move row, then persist the full order) ==========
+
+        function persistOrder() {
+            const uuids = [];
+            $('#inline-options-body .inline-option').each(function() {
+                const uuid = rowUuid($(this));
+                if (uuid) uuids.push(uuid);
+            });
+            if (uuids.length) $.post(reorderUrl, { 'uuids': uuids });
+        }
+
+        function moveRow($row, direction) {
+            const $details = detailsRow($row);
+            const $pair = $row.add($details);
+            if (direction < 0) {
+                const $prev = $row.prevAll('.inline-option').first();
+                if ($prev.length) $pair.insertBefore($prev);
+            } else {
+                const $next = $row.nextAll('.inline-option').first();
+                if ($next.length) $pair.insertAfter(detailsRow($next));
+            }
+            persistOrder();
+        }
+
+        $root.on('click', '.io-move-up', function(e) {
+            e.preventDefault();
+            moveRow(ownerRow($(this)), -1);
+            return false;
+        });
+        $root.on('click', '.io-move-down', function(e) {
+            e.preventDefault();
+            moveRow(ownerRow($(this)), 1);
+            return false;
+        });
+
+    });
+});
+</script>
